@@ -42,6 +42,7 @@ public class ModStrayModels {
     public static KillerQueenArmsPart killerQueenArmsPart;
     public static StarPlatinumArmsPart starPlatinumArmsPart;
     public static TheWorldArmsPart theWorldArmsPart;
+    public static SilverChariotArmsPart silverChariotArmsPart;
     public static ChestPart ChestPart;
     public static SmallChestPart SmallChestPart;
     public static BodySpikePart bodySpikePart;

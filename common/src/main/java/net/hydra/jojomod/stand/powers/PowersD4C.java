@@ -2451,11 +2451,16 @@ public class PowersD4C extends NewPunchingStand {
                 if (mei != null){
                     effectLevel = mei.getAmplifier()+1;
                 }
-                self.addEffect(new MobEffectInstance(ModEffects.IMPRINTING, 100, 0), self);
+                int length = 100;
+                self.addEffect(new MobEffectInstance(ModEffects.IMPRINTING, length, 0), self);
                 self.addEffect(new MobEffectInstance(ModEffects.SWAPPED, 1800, effectLevel), self);
                 self.setHealth(self.getMaxHealth());
                 self.stopUsingItem();
-                setCooldown(PowerIndex.SKILL_2_SNEAK,100);
+                this.animateStand(D4CEntity.BODY_LEAP);
+                setActivePower(PowerIndex.POWER_2_SNEAK);
+                setAttackTimeDuring(-length);
+                setCooldown(PowerIndex.SKILL_2_SNEAK,length);
+                this.poseStand(OffsetIndex.BEHIND);
                 playStandUserOnlySoundsIfNearby(FUSE, 27, false, false);
 //                if (Math.random() < 0.5F){
 //                    playSoundsIfNearby(DOJONE, 27, false, true);
