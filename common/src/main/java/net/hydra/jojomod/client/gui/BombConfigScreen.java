@@ -63,8 +63,8 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
         if (SU.roundabout$getStandPowers() instanceof PowersKillerQueen PA) {
             int offsetCenter = 32;
         	
-        	ToggableIcon leftIcon = new ToggableIcon((byte)BLOCK_DESTRUCTION, this.width / 2 - 13 - offsetCenter, this.height / 2 + 31 - 44);
-        	ToggableIcon rightIcon = new ToggableIcon((byte)ON_CONTACT, this.width / 2 - 13 + offsetCenter, this.height / 2 + 31 - 44);
+        	ToggableIcon leftIcon = new ToggableIcon((byte)BLOCK_DESTRUCTION, this.width / 2 - 13 - offsetCenter, this.height / 2 + 31 - 44, Component.translatable("roundabout.bomb_config.block_destruction"));
+        	ToggableIcon rightIcon = new ToggableIcon((byte)ON_CONTACT, this.width / 2 - 13 + offsetCenter, this.height / 2 + 31 - 44, Component.translatable("roundabout.bomb_config.contact_explosion"));
         	
             this.slots.add(leftIcon);
             this.slots.add(rightIcon);
@@ -73,21 +73,48 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
 
     }
 
+    public class switchSelect extends AbstractWidget {
+        public byte context;
+        public int xoff;
+        public int yoff;
+
+        public switchSelect(byte context, int xoff, int yoff) {
+            super(xoff, yoff, 26, 26, Component.literal(""));
+            this.context = context;
+            this.xoff = xoff;
+            this.yoff = yoff;
+        }
+
+        @Override
+        protected void renderWidget(GuiGraphics guiGraphics, int i, int i1, float v) {
+
+        }
+
+        @Override
+        protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
+            this.defaultButtonNarrationText(narrationElementOutput);
+        }
+    }
+
     public class ToggableIcon extends AbstractWidget {
     	public byte context;
         public int xoff;
         public int yoff;
         private boolean isSelected;
+        final Component name;
         
-        public ToggableIcon(byte context, int xoff, int yoff) {
-        	super(xoff, yoff, 26, 26, Component.literal(""));
+        public ToggableIcon(byte context, int xoff, int yoff, Component name) {
+        	super(xoff, yoff, 26, 26, name);
             this.context = context;
             this.xoff = xoff;
             this.yoff = yoff;
+            this.name = name;
         }
         
         public int getMode() {return getMode(false);}
-        
+
+        public Component getName() {return name; }
+
         public int getMode(boolean invert) {
         	ClientConfig clientConfig = ConfigManager.getClientConfig();
             Player p = Minecraft.getInstance().player;
@@ -187,6 +214,8 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
        
        guiGraphics.drawCenteredString(this.font, str , this.width / 2, this.height / 2 - 31 - 32+8, -1);
 
+        guiGraphics.blit(KILLER_QUEEN_BOMB_LOCATION, this.width / 2 - 32, this.height / 2  - 31 + 48, 64f /* * ConfigManager.getClientConfig().dynamicSettings.killerQueenCurrentBombSize */, 125f, 64, 24, 192, 192);
+
         if (!this.setFirstMousePos) {
             this.firstMouseX = i;
             this.firstMouseY = j;
@@ -211,6 +240,10 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
         if (shouldPlaySound) {
             SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
             soundmanager.play(SimpleSoundInstance.forUI(ModSounds.KILLER_QUEEN_DETONATE_EVENT, (float) (0.95 + (Math.random() * 0.1F))));
+        }
+
+        if (this.currentlyHovered != -1) {
+            guiGraphics.drawCenteredString(this.font, slots.get(currentlyHovered).getName(), this.width / 2, this.height / 2 - 31 + 80, -1);
         }
         
     }
