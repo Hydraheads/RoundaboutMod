@@ -66,21 +66,28 @@ public class CatchTheRainbowModel extends PsuedoHierarchicalModel {
 
 	public static ResourceLocation base = new ResourceLocation(Roundabout.MOD_ID,
 			"textures/stand/catch_the_rainbow/base.png");
-	public static ResourceLocation warm = new ResourceLocation(Roundabout.MOD_ID,
-			"textures/stand/catch_the_rainbow/warm.png");
 	public static ResourceLocation ghast_dry = new ResourceLocation(Roundabout.MOD_ID,
 			"textures/stand/catch_the_rainbow/ghast_dry.png");
 	public static ResourceLocation ghast_happy = new ResourceLocation(Roundabout.MOD_ID,
 			"textures/stand/catch_the_rainbow/ghast_happy.png");
+	public static ResourceLocation lali_ho = new ResourceLocation(Roundabout.MOD_ID,
+			"textures/stand/catch_the_rainbow/lali_ho.png");
+	public static ResourceLocation eye_white = new ResourceLocation(Roundabout.MOD_ID,
+			"textures/stand/catch_the_rainbow/eye_white.png");
+	public static ResourceLocation eye_red = new ResourceLocation(Roundabout.MOD_ID,
+			"textures/stand/catch_the_rainbow/eye_red.png");
 
 	public ResourceLocation getTextureLocation(Entity context, byte skin) {
 		if (!context.isInWaterOrRain()) {
 			switch (skin) {
-				case PowersCatchTheRainbow.WARM -> {
-					return warm;
-				}
 				case PowersCatchTheRainbow.GHAST -> {
 					return ghast_dry;
+				}
+				case PowersCatchTheRainbow.LALI_HO -> {
+					return lali_ho;
+				}
+				case PowersCatchTheRainbow.EYE -> {
+					return eye_white;
 				}
 				default -> {
 					return base;
@@ -89,11 +96,14 @@ public class CatchTheRainbowModel extends PsuedoHierarchicalModel {
 		}
 		else {
 			switch (skin) {
-				case PowersCatchTheRainbow.WARM -> {
-					return warm;
-				}
 				case PowersCatchTheRainbow.GHAST -> {
 					return ghast_happy;
+				}
+				case PowersCatchTheRainbow.LALI_HO -> {
+					return lali_ho;
+				}
+				case PowersCatchTheRainbow.EYE -> {
+					return eye_red;
 				}
 				default -> {
 					return base;
