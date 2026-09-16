@@ -16,6 +16,7 @@ import net.hydra.jojomod.client.DiverDownControlsClient;
 import net.hydra.jojomod.client.KeyboardPilotInput;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.projectile.BoneProjectileEntity;
 import net.hydra.jojomod.entity.stand.DiverDownEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -1626,7 +1627,7 @@ public class PowersDiverDown extends NewPunchingStand {
     @Override
     public int getMaxPilotRange() {
         // (this is in blocks)
-        return 10;
+        return 13;
     }
 
     @Override
@@ -2569,6 +2570,13 @@ public class PowersDiverDown extends NewPunchingStand {
                 return true;
             }
             case BONE_BOMB -> {
+                triggerBoneExplosion();
+                return true;
+            }
+            case RIBCAGE_TRAP -> {
+                return true;
+            }
+            case SPRING_LEGS -> {
                 return true;
             }
             default -> {
@@ -2578,6 +2586,62 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     // bone bomb start
+
+    public void triggerBoneExplosion() {
+        if (this.self.level().isClientSide()) return;
+        if (!(this.submergedTarget instanceof LivingEntity host) || !host.isAlive()) return;
+
+        // Detonation: kill normal mobs; invisible blindness to players & bosses
+        if (host instanceof Player || MainUtil.isBossMob(host)) {
+            host.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 300, 0, false, false, false));
+            // 20 second blindness
+        } else {
+            Level level = host.level();
+            Vec3 spawnPos = MainUtil.getMobCenter(host, 0.5F);
+            // Find nearest entity within 25 blocks
+            List<LivingEntity> nearby = level.getEntitiesOfClass(
+                    LivingEntity.class,
+                    host.getBoundingBox().inflate(25),
+                    e -> e != host
+                            && e != this.self
+                            && !(e instanceof StandEntity)
+                            && e.isAlive()
+                            && !e.isSpectator()
+            );
+
+            LivingEntity closestTarget = null;
+            double minDistanceSq = 25*25;
+            for (LivingEntity entity : nearby) {
+                double distSq = host.distanceToSqr(entity);
+                if (distSq < minDistanceSq) {
+                    minDistanceSq = distSq;
+                    closestTarget = entity;
+                }
+            }
+            // Shotgun blast towards nearest target
+            if (closestTarget != null) {
+                Vec3 targetCenter = MainUtil.getMobCenter(closestTarget, 0.5F);
+                Vec3 toTarget = targetCenter.subtract(spawnPos);
+
+                for (int i = 0; i < 8; i++) {
+                    BoneProjectileEntity bone = new BoneProjectileEntity(level, host);
+                    bone.setOwner(this.self);
+                    bone.setPos(spawnPos.x, spawnPos.y, spawnPos.z);
+                    // sets the gravity to false so it goes in a straight line like star platinum throw until 25 blocks pass
+                    bone.setNoGravity(true);
+                    //last number represents the spread
+                    bone.shoot(toTarget.x, toTarget.y, toTarget.z, 3F, 18F);
+                    level.addFreshEntity(bone);
+                }
+            }
+
+            // sounds and animations and stuff. probably no anims though, just gonna leave behind a blood splatter.
+
+            DamageHandler.StandDamageEntity(host, Float.MAX_VALUE, this.self);
+        }
+
+        emergeServer();
+    }
 
     // bone bomb end
 
