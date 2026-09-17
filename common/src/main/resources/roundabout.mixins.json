@@ -9,6 +9,7 @@
     "AbsurdPiglinAiFix",
     "AbsurdPiglinBruteAiFix",
     "ContainerPilotMixin",
+    "ContainerOpenersPilotMixin",
     "EntityAndData",
     "PlayerEntity",
     "PlayerEntityServer",

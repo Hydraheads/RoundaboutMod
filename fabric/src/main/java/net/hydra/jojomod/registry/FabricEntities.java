@@ -697,6 +697,13 @@ public class FabricEntities {
                         EntityType.Builder.of(DiverDownEntity::new, MobCategory.MISC).
                                 sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":diver_down")
                 );
+        public static final EntityType<BoneProjectileEntity> BONE_PROJECTILE =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "bone_projectile"),
+                    EntityType.Builder.<BoneProjectileEntity>of(BoneProjectileEntity::new, MobCategory.MISC).
+                            sized(0.5f, 0.5f).clientTrackingRange(16).build(Roundabout.MOD_ID + ":bone_projectile")
+            );
         public static final EntityType<SilverChariotEntity> SILVER_CHARIOT =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -709,7 +716,7 @@ public class FabricEntities {
                         BuiltInRegistries.ENTITY_TYPE,
                         Roundabout.location("silver_chariot_rapier"),
                         EntityType.Builder.<SilverChariotRapierShotEntity>of(SilverChariotRapierShotEntity::new, MobCategory.MISC).
-                                sized(0.2f, 0.2f).clientTrackingRange(16).build(Roundabout.MOD_ID+":silver_chariot_rapier")
+                                sized(0.5f, 0.5f).clientTrackingRange(16).build(Roundabout.MOD_ID+":silver_chariot_rapier")
                 );
     public static final EntityType<SilverChariotRapierPlatformEntity> SILVER_CHARIOT_RAPIER_PLATFORM =
             Registry.register(
@@ -1273,6 +1280,7 @@ public class FabricEntities {
                 ModEntities.ROUNDABOUT_BULLET_ENTITY = ROUNDABOUT_BULLET_ENTITY;
                 ModEntities.THROWN_KNIFE = THROWN_KNIFE;
                 ModEntities.PH_CAPSULE = PH_CAPSULE;
+                ModEntities.BONE_PROJECTILE = BONE_PROJECTILE;
                 ModEntities.BLOCK_WALL = BLOCK_WALL;
                 ModEntities.PARALLEL_CHEST = PARALLEL_CHEST;
                 ModEntities.D4C_BLOCK = D4C_BLOCK;

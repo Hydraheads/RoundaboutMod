@@ -221,6 +221,8 @@ public class FabricEntityClient {
         
         EntityRendererRegistry.register(FabricEntities.METALLICA_KNIFE, KnifeRenderer::new);
 
+        EntityRendererRegistry.register(FabricEntities.BONE_PROJECTILE, BoneProjectileRenderer::new);
+
         /*Models*/
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.WOLF_LAYER, TerrierEntityModel::createBodyLayerTerrier);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ZOMBIEFISH_LAYER, SilverfishModel::createBodyLayer);
@@ -375,6 +377,7 @@ public class FabricEntityClient {
         ModStrayModels.killerQueenArmsPart = new KillerQueenArmsPart();
         ModStrayModels.theWorldArmsPart = new TheWorldArmsPart();
         ModStrayModels.starPlatinumArmsPart = new StarPlatinumArmsPart();
+        ModStrayModels.silverChariotArmsPart = new SilverChariotArmsPart();
         ModStrayModels.ChestPart = new ChestPart();
         ModStrayModels.SmallChestPart = new SmallChestPart();
         ModStrayModels.bodySpikePart = new BodySpikePart();

@@ -769,6 +769,7 @@ public class ForgeEvents {
         ModEffects.INFINITE_SPIN = ForgeEffects.INFINITE_SPIN.get();
         ModEffects.IMPRINTING = ForgeEffects.IMPRINTING.get();
         ModEffects.SWAPPED = ForgeEffects.SWAPPED.get();
+        ModEffects.FORTIFICATION = ForgeEffects.FORTIFICATION.get();
 
         ModEffects.HAZE_VIRUS = ForgeEffects.HAZE_VIRUS.get();
         ModEffects.DISTORTION_VIRUS = ForgeEffects.DISTORTION_VIRUS.get();
@@ -831,6 +832,7 @@ public class ForgeEvents {
         ModEntities.ANUBIS = ForgeEntities.ANUBIS.get();
         ModEntities.STAR_PLATINUM_BASEBALL = ForgeEntities.STAR_PLATINUM_BASEBALL.get();
         ModEntities.DIVER_DOWN = ForgeEntities.DIVER_DOWN.get();
+        ModEntities.BONE_PROJECTILE = ForgeEntities.BONE_PROJECTILE.get();
         ModEntities.SILVER_CHARIOT = ForgeEntities.SILVER_CHARIOT.get();
         ModEntities.SILVER_CHARIOT_RAPIER = ForgeEntities.SILVER_CHARIOT_RAPIER.get();
         ModEntities.SILVER_CHARIOT_RAPIER_PLATFORM = ForgeEntities.SILVER_CHARIOT_RAPIER_PLATFORM.get();

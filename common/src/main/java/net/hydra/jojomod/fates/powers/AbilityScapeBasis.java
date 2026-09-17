@@ -419,7 +419,8 @@ public class AbilityScapeBasis {
             GUARD = 32,
             VAULT = 33,
             MINING = 34,
-            MELT_DODGE_ANIM = 35;
+            MELT_DODGE_ANIM = 35,
+            SWITCH_INTO_BODY = 36;
 
     public float guardMod(){
         return 0.2f;

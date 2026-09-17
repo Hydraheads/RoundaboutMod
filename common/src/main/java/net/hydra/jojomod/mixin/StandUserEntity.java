@@ -3956,6 +3956,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DISGUISE_ID, Optional.empty());
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DISGUISE_NAME, "");
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DIVER_LEGS, false);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$RIBCAGE_TRAP, false);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$SPRING_LEGS, false);
         }
     }
 
@@ -5291,8 +5293,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             damageAmount = (damageAmount - (damageAmount * 0.3F));
             modified = true;
         }
-        if (this.hasEffect(ModEffects.SWITCH)) {
-            damageAmount = (damageAmount + (damageAmount * 0.3F));
+
+        if (source != null && source.getEntity() instanceof LivingEntity sl &&
+                sl.hasEffect(ModEffects.SWAPPED) && !source.is(ModDamageTypes.BLOOD_DRAIN)
+                && !source.is(ModDamageTypes.EXPLOSIVE_STAND)
+                && source.getDirectEntity() != null && source.getDirectEntity().getId() == sl.getId()) {
+            damageAmount = (damageAmount - (damageAmount * 0.5F));
             modified = true;
         }
         float changeDamage = FateTypes.getDamageResist(rdbt$this(), source, damageAmount);
@@ -6970,6 +6976,44 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public PowersDiverDown roundabout$getDiverUser() {
         return this.diverSubmergedUser;
     }
+
+    @Unique
+    private static final EntityDataAccessor<Boolean> ROUNDABOUT$RIBCAGE_TRAP = SynchedEntityData.defineId(
+            LivingEntity.class, EntityDataSerializers.BOOLEAN);
+
+    @Unique
+    private static final EntityDataAccessor<Boolean> ROUNDABOUT$SPRING_LEGS = SynchedEntityData.defineId(
+            LivingEntity.class, EntityDataSerializers.BOOLEAN);
+
+    @Override
+    public boolean roundabout$hasDiverLegs() {
+        return this.entityData.get(ROUNDABOUT$DIVER_LEGS);
+    }
+
+    @Override
+    public void roundabout$setDiverLegs(boolean legs) {
+        this.entityData.set(ROUNDABOUT$DIVER_LEGS, legs);
+    }
+
+    @Override
+    public boolean roundabout$hasRibcageTrap() {
+        return this.entityData.get(ROUNDABOUT$RIBCAGE_TRAP);
+    }
+
+    @Override
+    public void roundabout$setRibcageTrap(boolean trap) {
+        this.entityData.set(ROUNDABOUT$RIBCAGE_TRAP, trap);
+    }
+
+    @Override
+    public boolean roundabout$hasSpringLegs() {
+        return this.entityData.get(ROUNDABOUT$SPRING_LEGS);
+    }
+
+    @Override
+    public void roundabout$setSpringLegs(boolean spring) {
+        this.entityData.set(ROUNDABOUT$SPRING_LEGS, spring);
+    }
     // for diver down end
 
 
@@ -7017,15 +7061,5 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$clearDisguise() {
         this.entityData.set(ROUNDABOUT$DISGUISE_ID, Optional.empty());
         this.entityData.set(ROUNDABOUT$DISGUISE_NAME, "");
-    }
-
-    @Override
-    public boolean roundabout$hasDiverLegs() {
-        return this.entityData.get(ROUNDABOUT$DIVER_LEGS);
-    }
-
-    @Override
-    public void roundabout$setDiverLegs(boolean legs) {
-        this.entityData.set(ROUNDABOUT$DIVER_LEGS, legs);
     }
 }

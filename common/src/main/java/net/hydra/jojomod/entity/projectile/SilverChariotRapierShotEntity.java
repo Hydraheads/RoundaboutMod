@@ -1,7 +1,9 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.UnburnableProjectile;
+import net.hydra.jojomod.entity.stand.SilverChariotEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -32,6 +34,7 @@ import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
 
 import java.util.UUID;
@@ -51,7 +54,9 @@ public class SilverChariotRapierShotEntity extends AbstractArrow implements Unbu
         this.setPos($$1, $$2, $$3);
     }
 
-    public SilverChariotRapierShotEntity(LivingEntity $$0, double $$1, double $$2, double $$3, Level $$4, byte type) {
+    public SilverChariotEntity silverChariot = null;
+
+    public SilverChariotRapierShotEntity(LivingEntity $$0, double $$1, double $$2, double $$3, Level $$4, byte type, SilverChariotEntity silverChariot) {
         this(ModEntities.SILVER_CHARIOT_RAPIER, $$1, $$2, $$3, $$4);
         this.setRapierShotType(type);
         if (type == BASE) {
@@ -59,6 +64,7 @@ public class SilverChariotRapierShotEntity extends AbstractArrow implements Unbu
         } else  {
             this.setBounces(0);
         }
+        this.silverChariot = silverChariot;
     }
 
     public final float speed = 3.0F;
@@ -193,30 +199,41 @@ public class SilverChariotRapierShotEntity extends AbstractArrow implements Unbu
                 Vec3 reflected = velocity.subtract(normal.scale(2 * velocity.dot(normal)));
                 reflected = reflected.scale(1.0);
 
-                Vec3 hitLoc = $$0.getLocation();
-                Vec3 pushOut = normal.scale(0.02);
-                this.setPos(hitLoc.x + pushOut.x, hitLoc.y + pushOut.y, hitLoc.z + pushOut.z);
-
                 this.setDeltaMovement(reflected);
+
+                Vec3 hitLoc = $$0.getLocation();
+                Vec3 pushOut = normal.scale(0.5);
+                this.setPos(hitLoc.x + pushOut.x, hitLoc.y + pushOut.y, hitLoc.z + pushOut.z);
 
                 this.playSound(ModSounds.SILVER_CHARIOT_RAPIER_SHOT_REDIRECT_EVENT, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
 
                 this.setBounces(this.getBounces() - 1);
-
-                this.inGround = false;
-                this.shakeTime = 0;
             } else {
+                ((IAbstractArrowAccess)this).roundabout$setLastState(this.level().getBlockState($$0.getBlockPos()));
+                BlockState BSS = this.level().getBlockState($$0.getBlockPos());
+                BSS.onProjectileHit(this.level(), BSS, $$0, this);
+                Vec3 $$1 = $$0.getLocation().subtract(this.getX(), this.getY(), this.getZ());
+                this.setDeltaMovement($$1);
+                Vec3 $$2 = $$1.normalize().scale(1.0F);
+                this.setPosRaw(this.getX() - $$2.x, this.getY() - $$2.y, this.getZ() - $$2.z);
                 this.playSound(ModSounds.SILVER_CHARIOT_RAPIER_SHOT_BLOCK_IMPACT_EVENT, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
+                this.inGround = true;
+                this.shakeTime = 7;
             }
         }
     }
 
     private void createPlatform(BlockHitResult $$0) {
         SilverChariotRapierPlatformEntity platform = new SilverChariotRapierPlatformEntity(
-                this.level()
+                this.level(),
+                silverChariot
         );
 
-        platform.setPos($$0.getLocation());
+        Direction hitDir = $$0.getDirection();
+        Vec3 normal = Vec3.atLowerCornerOf(hitDir.getNormal());
+        Vec3 hitLoc = $$0.getLocation();
+        Vec3 pushOut = normal.scale(0.5);
+        platform.setPos(hitLoc.x + pushOut.x, hitLoc.y + pushOut.y, hitLoc.z + pushOut.z);
 
         platform.setYRot(this.getYRot());
         platform.setXRot(this.getXRot());
@@ -501,23 +518,23 @@ public class SilverChariotRapierShotEntity extends AbstractArrow implements Unbu
         this.pickup = Pickup.DISALLOWED;
 
         Vec3 delta =  getDeltaMovement();
-
-        this.inGround = false;
+        if (inGroundTime >= 160) {
+            this.remove(RemovalReason.DISCARDED);
+        }
 
         super.tick();
 
         if (!level().isClientSide()){
-            if (inGround){
-                discard();
-            }
+
         }
 
         this.tickRotateFromVelocity();
 
         this.setDeltaMovement(this.getDeltaMovement());
 
+        this.life += 1;
         if (this.getRapierShotType() == BASE) {
-            if (this.tickCount > 300) {
+            if (this.life > 300) {
                 this.discard();
             }
         }

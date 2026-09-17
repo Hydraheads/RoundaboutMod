@@ -108,7 +108,10 @@ public class ForgeEffects{
                     new Effect(MobEffectCategory.NEUTRAL, 16134815).
                             addAttributeModifier(Attributes.MAX_HEALTH,"6107DE5A-7CE8-4030-940E-514C1F160890",-2, AttributeModifier.Operation.ADDITION)
             );
-
+    public static final RegistryObject<MobEffect> FORTIFICATION =
+            POTION_EFFECTS.register("fortification", () ->
+                    new Effect(MobEffectCategory.BENEFICIAL, 3137792)
+            );
 
     public static class Effect extends MobEffect{
         public Effect(MobEffectCategory typeIn, int liquidColorIn) {
