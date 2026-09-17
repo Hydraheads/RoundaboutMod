@@ -2841,4 +2841,13 @@ public class ClientUtil {
         }
         return false;
     }
+
+    // this is here to prevent moves that speed the user up from going too fast when diagonal keys are stacked.
+    public static boolean isMovingDiagonally() {
+        Minecraft client = Minecraft.getInstance();
+        if (client == null || client.options == null) return false;
+        boolean forwardOrBack = client.options.keyUp.isDown() || client.options.keyDown.isDown();
+        boolean strafe = client.options.keyLeft.isDown() || client.options.keyRight.isDown();
+        return forwardOrBack && strafe;
+    }
 }

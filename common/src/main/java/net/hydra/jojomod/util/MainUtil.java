@@ -4032,6 +4032,14 @@ public class MainUtil {
                 pw.toggleSpikes(true);
                 pw.setHeelDirection(cd);
                 pw.justFlippedTicks = 7;
+            } else if (powers instanceof PowersDiverDown pdd) {
+                if (!player.level().isClientSide()) {
+                    player.level().playSound(null, player.blockPosition(), ModSounds.WALL_LATCH_EVENT,
+                            SoundSource.PLAYERS, 1F, 1f);
+                }
+                pdd.toggleZip(true);
+                pdd.setHeelDirection(cd);
+                pdd.justFlippedTicks = 10;
             }
             ((IGravityEntity) player).roundabout$setGravityDirection(cd);
         } else if (context == PacketDataIndex.INT_GRAVITY_FLIP_3) {
