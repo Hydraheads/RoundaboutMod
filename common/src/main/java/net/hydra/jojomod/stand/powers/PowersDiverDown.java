@@ -58,6 +58,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -205,6 +206,11 @@ public class PowersDiverDown extends NewPunchingStand {
     public boolean hasDiverLegs = false;
     public static final int TRANSFER_WINDUP_MAX = 40;
     private static final double TRANSFER_RANGE = 4.0;
+    public LivingEntity ribcageTarget = null;
+    public Vec3 ribcageWalkDirection = null;
+    public int ribcageTrapTicks = 0;
+    public static final int RIBCAGE_MAX_DURATION = 200; // 10 seconds max duration
+    public static final double HOSTILE_DETECTION_RANGE = 16.0; // non-zombie hostile detection range
 
     // stand creation model floaty creation whatever thingy.
     @Override
@@ -1467,6 +1473,7 @@ public class PowersDiverDown extends NewPunchingStand {
         // server side ticks
         else {
             if (!this.self.level().isClientSide()) {
+                tickRibcageTrap();
                 // recall stand if target dies, or if they go too far
                 if (isDiveActive()) {
                     if (!this.submergedTarget.isAlive()
@@ -1581,7 +1588,7 @@ public class PowersDiverDown extends NewPunchingStand {
                             } else if (this.barrageTicksLeft == 9) {
                                 // BIG FINAL PUNCH!!! (does bleed)
                                 DamageHandler.StandDamageEntity(living, 7.0F, this.self);
-                                MainUtil.makeBleed(target, 1, 1000, stand);
+                                MainUtil.makeBleed(target, 0, 300, stand);
                                 living.setDeltaMovement(living.getDeltaMovement().x * 0.3, 1.35D,
                                         living.getDeltaMovement().z * 0.3);
                                 living.hurtMarked = true;
@@ -2574,6 +2581,7 @@ public class PowersDiverDown extends NewPunchingStand {
                 return true;
             }
             case RIBCAGE_TRAP -> {
+                applyRibcageTrap();
                 return true;
             }
             case SPRING_LEGS -> {
@@ -2584,6 +2592,143 @@ public class PowersDiverDown extends NewPunchingStand {
             }
         }
     }
+
+    // ribcage trap start
+
+    public void applyRibcageTrap() {
+        if (this.self.level().isClientSide()) return;
+        if (!(this.submergedTarget instanceof LivingEntity host) || !host.isAlive()) return;
+
+        this.ribcageTarget = host;
+        this.ribcageTrapTicks = RIBCAGE_MAX_DURATION;
+
+        // for disabling keys
+        if (host instanceof StandUser su) {
+            su.roundabout$setRibcageTrap(true);
+        }
+
+        // entity will start walking where the user is looking
+        Vec3 look = host.getLookAngle();
+        Vec3 horizontalLook = new Vec3(look.x, 0, look.z);
+        if (horizontalLook.lengthSqr() < 1.0E-4) {
+            this.ribcageWalkDirection = new Vec3(0, 0, 1);
+        } else {
+            this.ribcageWalkDirection = horizontalLook.normalize();
+        }
+        emergeServer();
+    }
+
+    public void tickRibcageTrap() {
+        if (this.ribcageTarget == null) return;
+
+        LivingEntity host = this.ribcageTarget;
+        if (!host.isAlive() || host.isRemoved()) {
+            clearRibcageTrap();
+            return;
+        }
+
+        //only tick down if it's a player or a boss, otherwise the effect lasts forever
+        boolean isPlayerOrBoss = host instanceof Player || MainUtil.isBossMob(host);
+        if (isPlayerOrBoss) {
+            if (--this.ribcageTrapTicks <= 0) {
+                clearRibcageTrap();
+                return;
+            }
+        }
+
+        Level level = host.level();
+
+        // forced forward walking for players and bosses
+        if (host instanceof Player player) {
+            if (player.isSprinting()) {
+                player.setSprinting(false);
+            }
+            Vec3 forward = player.getForward();
+            double walkSpeed = 0.4317D;
+            player.setDeltaMovement(forward.x * walkSpeed, player.getDeltaMovement().y, forward.z * walkSpeed);
+            player.hurtMarked = true;
+            return;
+        } else if (MainUtil.isBossMob(host)) {
+            Vec3 forward = host.getForward();
+            double walkSpeed = 0.4317D;
+            host.setDeltaMovement(forward.x * walkSpeed, host.getDeltaMovement().y, forward.z * walkSpeed);
+            host.hurtMarked = true;
+            return;
+        }
+
+        // normal mobs lose all control
+        if (host instanceof Mob mob) {
+            // make them walk in a straight line. find the closest enemy
+            List<LivingEntity> potentialVictims = level.getEntitiesOfClass(
+                    LivingEntity.class,
+                    host.getBoundingBox().inflate(HOSTILE_DETECTION_RANGE),
+                    e -> e != host
+                            && e != this.self
+                            && !(e instanceof StandEntity)
+                            && e.isAlive()
+                            && !e.isSpectator()
+                            && host.hasLineOfSight(e)
+            );
+
+            //find the closest enemy within detection range
+            LivingEntity nearestTarget = null;
+            double minDistanceSq = HOSTILE_DETECTION_RANGE * HOSTILE_DETECTION_RANGE;
+            for (LivingEntity e : potentialVictims) {
+                double distSq = host.distanceToSqr(e);
+                if (distSq < minDistanceSq) {
+                    minDistanceSq = distSq;
+                    nearestTarget = e;
+                }
+            }
+
+            if (nearestTarget != null) {
+                //if they see something, pathfind to them
+                mob.getNavigation().moveTo(nearestTarget, 1.0D);
+                mob.getLookControl().setLookAt(nearestTarget, 30.0F, 30.0F);
+
+                // collision check
+                if (host.distanceTo(nearestTarget) < 1.5D) {
+                    triggerRibcageSnap(host, nearestTarget);
+                    return;
+                }
+            } else {
+                // keep walking
+                if (this.ribcageWalkDirection != null) {
+                    Vec3 targetWalkPos = host.position().add(this.ribcageWalkDirection.scale(3.0D));
+                    mob.getNavigation().moveTo(targetWalkPos.x, targetWalkPos.y, targetWalkPos.z, 1.0D);
+                }
+            }
+        }
+    }
+
+    private void triggerRibcageSnap(LivingEntity host, LivingEntity victim) {
+        Level level = host.level();
+        Vec3 pos = host.position();
+
+        // sounds and animation here
+
+        DamageHandler.StandDamageEntity(victim, 12.0F, this.self);
+        MainUtil.makeBleed(victim, 1, 1200, this.self);
+
+        // The host mob with the ribcage trap dies
+        DamageHandler.StandDamageEntity(host, Float.MAX_VALUE, this.self);
+
+        clearRibcageTrap();
+    }
+
+    public void clearRibcageTrap() {
+        if (this.ribcageTarget instanceof StandUser su) {
+            su.roundabout$setRibcageTrap(false);
+        }
+        if (this.ribcageTarget instanceof Mob mob) {
+            mob.getNavigation().stop();
+        }
+        this.ribcageTarget = null;
+        this.ribcageWalkDirection = null;
+        this.ribcageTrapTicks = 0;
+    }
+
+    // ribcage trap end
 
     // bone bomb start
 
@@ -2630,14 +2775,15 @@ public class PowersDiverDown extends NewPunchingStand {
                     // sets the gravity to false so it goes in a straight line like star platinum throw until 25 blocks pass
                     bone.setNoGravity(true);
                     //last number represents the spread
-                    bone.shoot(toTarget.x, toTarget.y, toTarget.z, 3F, 18F);
+                    bone.shoot(toTarget.x, toTarget.y, toTarget.z, 3F, 6F);
                     level.addFreshEntity(bone);
                 }
             }
 
             // sounds and animations and stuff. probably no anims though, just gonna leave behind a blood splatter.
 
-            DamageHandler.StandDamageEntity(host, Float.MAX_VALUE, this.self);
+            //20F one shots normal mobs like villagers, zombies and stuff, but keeps bigger mobs alive.
+            DamageHandler.StandDamageEntity(host, 20.0F, this.self);
         }
 
         emergeServer();

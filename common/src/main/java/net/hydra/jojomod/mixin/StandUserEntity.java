@@ -3956,6 +3956,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DISGUISE_ID, Optional.empty());
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DISGUISE_NAME, "");
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DIVER_LEGS, false);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$RIBCAGE_TRAP, false);
         }
     }
 
@@ -6970,6 +6971,30 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public PowersDiverDown roundabout$getDiverUser() {
         return this.diverSubmergedUser;
     }
+
+    @Unique
+    private static final EntityDataAccessor<Boolean> ROUNDABOUT$RIBCAGE_TRAP = SynchedEntityData.defineId(
+            LivingEntity.class, EntityDataSerializers.BOOLEAN);
+
+    @Override
+    public boolean roundabout$hasDiverLegs() {
+        return this.entityData.get(ROUNDABOUT$DIVER_LEGS);
+    }
+
+    @Override
+    public void roundabout$setDiverLegs(boolean legs) {
+        this.entityData.set(ROUNDABOUT$DIVER_LEGS, legs);
+    }
+
+    @Override
+    public boolean roundabout$hasRibcageTrap() {
+        return this.entityData.get(ROUNDABOUT$RIBCAGE_TRAP);
+    }
+
+    @Override
+    public void roundabout$setRibcageTrap(boolean trap) {
+        this.entityData.set(ROUNDABOUT$RIBCAGE_TRAP, trap);
+    }
     // for diver down end
 
 
@@ -7017,15 +7042,5 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$clearDisguise() {
         this.entityData.set(ROUNDABOUT$DISGUISE_ID, Optional.empty());
         this.entityData.set(ROUNDABOUT$DISGUISE_NAME, "");
-    }
-
-    @Override
-    public boolean roundabout$hasDiverLegs() {
-        return this.entityData.get(ROUNDABOUT$DIVER_LEGS);
-    }
-
-    @Override
-    public void roundabout$setDiverLegs(boolean legs) {
-        this.entityData.set(ROUNDABOUT$DIVER_LEGS, legs);
     }
 }
