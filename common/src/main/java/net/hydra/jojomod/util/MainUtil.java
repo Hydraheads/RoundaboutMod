@@ -3802,7 +3802,20 @@ public class MainUtil {
 
         return 5;
     }
-
+    public static boolean getIsGamemodeApproriateForObtainment(Entity Li) {
+        if (Li != null && !Li.level().isClientSide()) {
+            if ((!(Li instanceof Player) || (((ServerPlayer) Li).gameMode.getGameModeForPlayer() != GameType.SPECTATOR
+                    && ((ServerPlayer) Li).gameMode.getGameModeForPlayer() != GameType.ADVENTURE))
+                    && Li.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)
+                    && Li.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING_OBTAINMENT)) {
+                if (PowerTypes.isExistentiallyElsewhere(Li) && !PowerTypes.canInteractInExistence(Li)) {
+                    return false;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
     public static boolean getIsGamemodeApproriateForGrief(Entity Li) {
         if (Li != null && !Li.level().isClientSide()) {
             if ((!(Li instanceof Player) || (((ServerPlayer) Li).gameMode.getGameModeForPlayer() != GameType.SPECTATOR
