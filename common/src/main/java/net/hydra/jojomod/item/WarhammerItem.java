@@ -51,7 +51,7 @@ public class WarhammerItem extends DiggerItem  {
     @Override
     public boolean isCorrectToolForDrops(BlockState blockState) {
         if (MainUtil.confirmIsOre(blockState)){
-            return true;
+            return super.isCorrectToolForDrops(blockState);
         }
         return false;
     }
