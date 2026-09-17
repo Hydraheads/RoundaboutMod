@@ -3957,6 +3957,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DISGUISE_NAME, "");
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DIVER_LEGS, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$RIBCAGE_TRAP, false);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$SPRING_LEGS, false);
         }
     }
 
@@ -6980,6 +6981,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$RIBCAGE_TRAP = SynchedEntityData.defineId(
             LivingEntity.class, EntityDataSerializers.BOOLEAN);
 
+    @Unique
+    private static final EntityDataAccessor<Boolean> ROUNDABOUT$SPRING_LEGS = SynchedEntityData.defineId(
+            LivingEntity.class, EntityDataSerializers.BOOLEAN);
+
     @Override
     public boolean roundabout$hasDiverLegs() {
         return this.entityData.get(ROUNDABOUT$DIVER_LEGS);
@@ -6998,6 +7003,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public void roundabout$setRibcageTrap(boolean trap) {
         this.entityData.set(ROUNDABOUT$RIBCAGE_TRAP, trap);
+    }
+
+    @Override
+    public boolean roundabout$hasSpringLegs() {
+        return this.entityData.get(ROUNDABOUT$SPRING_LEGS);
+    }
+
+    @Override
+    public void roundabout$setSpringLegs(boolean spring) {
+        this.entityData.set(ROUNDABOUT$SPRING_LEGS, spring);
     }
     // for diver down end
 

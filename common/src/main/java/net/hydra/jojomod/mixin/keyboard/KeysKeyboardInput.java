@@ -38,7 +38,8 @@ public abstract class KeysKeyboardInput extends Input {
                     || (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy CB && CB.invincibleState)
                     || (user.roundabout$getStandPowers() instanceof PowersCream PC && PC.getTransformTimer() > 0)
                     || (user.roundabout$getStandPowers() instanceof PowersTusk PT && PT.getActivePower() == PowersTusk.FLATTEN)
-                    || user.roundabout$hasRibcageTrap();
+                    || user.roundabout$hasRibcageTrap()
+                    || user.roundabout$hasSpringLegs();
 
 
             if (user.roundabout$getStandPowers().isPiloting()){

@@ -211,6 +211,9 @@ public class PowersDiverDown extends NewPunchingStand {
     public int ribcageTrapTicks = 0;
     public static final int RIBCAGE_MAX_DURATION = 200; // 10 seconds max duration
     public static final double HOSTILE_DETECTION_RANGE = 16.0; // non-zombie hostile detection range
+    public LivingEntity springTarget = null;
+    public int springLegsTicks = 0;
+    public static final int SPRING_LEGS_MAX_DURATION = 300; // 15 seconds max duration
 
     // stand creation model floaty creation whatever thingy.
     @Override
@@ -1474,6 +1477,7 @@ public class PowersDiverDown extends NewPunchingStand {
         else {
             if (!this.self.level().isClientSide()) {
                 tickRibcageTrap();
+                tickSpringLegs();
                 // recall stand if target dies, or if they go too far
                 if (isDiveActive()) {
                     if (!this.submergedTarget.isAlive()
@@ -2585,6 +2589,7 @@ public class PowersDiverDown extends NewPunchingStand {
                 return true;
             }
             case SPRING_LEGS -> {
+                applySpringLegs();
                 return true;
             }
             default -> {
@@ -2592,6 +2597,70 @@ public class PowersDiverDown extends NewPunchingStand {
             }
         }
     }
+
+    // spring legs start
+
+    public void applySpringLegs() {
+        if (this.self.level().isClientSide()) return;
+        if (!(this.submergedTarget instanceof LivingEntity host) || !host.isAlive()) return;
+
+        this.springTarget = host;
+        this.springLegsTicks = SPRING_LEGS_MAX_DURATION;
+
+        // for disabling keys
+        if (host instanceof StandUser su) {
+            // just need this for the key disabling, nothing else
+            su.roundabout$setSpringLegs(true);
+        }
+        emergeServer();
+    }
+
+    public void tickSpringLegs() {
+        if (this.springTarget == null) return;
+
+        LivingEntity host = this.springTarget;
+        if (!host.isAlive() || host.isRemoved()) {
+            clearSpringLegs();
+            return;
+        }
+
+        //only tick down if it's a player or a boss, otherwise the effect lasts forever
+        boolean isPlayerOrBoss = host instanceof Player || MainUtil.isBossMob(host);
+        if (isPlayerOrBoss) {
+            if (--this.springLegsTicks <= 0) {
+                clearSpringLegs();
+                return;
+            }
+        } else {
+            //extra 5 seconds for mobs
+            if (--this.springLegsTicks <= -100) {
+                clearSpringLegs();
+                return;
+            }
+        }
+
+        if(!host.onGround()) return;
+        Level level = host.level();
+            if (host.isSprinting()) {
+                host.setSprinting(false);
+            }
+        double randomY = 0.7D + host.getRandom().nextDouble() * 0.3D;
+        double randomX = (host.getRandom().nextDouble() - 0.5) * 2.5;
+        double randomZ = (host.getRandom().nextDouble() - 0.5) * 2.5;
+        host.setDeltaMovement(randomX, randomY, randomZ);
+            host.hurtMarked = true;
+            return;
+    }
+
+    public void clearSpringLegs() {
+        if (this.springTarget instanceof StandUser su) {
+            su.roundabout$setSpringLegs(false);
+        }
+        this.springTarget = null;
+        this.springLegsTicks = 0;
+    }
+
+    // spring legs end
 
     // ribcage trap start
 
