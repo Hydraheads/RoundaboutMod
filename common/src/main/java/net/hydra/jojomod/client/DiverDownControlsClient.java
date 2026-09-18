@@ -24,7 +24,7 @@ public final class DiverDownControlsClient {
             previousCameraType = mc.options.getCameraType();
         }
 
-        mc.options.setCameraType(CameraType.THIRD_PERSON_BACK);
+        mc.options.setCameraType(CameraType.FIRST_PERSON);
 
         if (mc.player != null && mc.getCameraEntity() != mc.player) {
             mc.setCameraEntity(mc.player);
@@ -51,18 +51,6 @@ public final class DiverDownControlsClient {
     // failsafe just in case
     public static void clear() {
         exit();
-    }
-
-    // keep camera in third person while diving
-    public static void enforceCamera(Entity stand) {
-        if (stand == null) return;
-        Minecraft mc = Minecraft.getInstance();
-
-        ClientUtil.synchToCamera(stand);
-
-        if (mc.options.getCameraType() != CameraType.THIRD_PERSON_BACK) {
-            mc.options.setCameraType(CameraType.THIRD_PERSON_BACK);
-        }
     }
 
     // checks for containers that are currently open
