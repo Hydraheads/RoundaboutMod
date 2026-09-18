@@ -64,7 +64,6 @@ public class PowersPearlJam extends NewDashPreset {
     public List<LivingEntity> palmReadOrder = new ArrayList<>();
     public Map<LivingEntity, Integer> tickOffsets = new HashMap<>();
 
-
     public static final byte PALM_READ_SOUND = 123;
 
     public static final List<PowersPearlJam> INSTANCES = new ArrayList<>();

@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.navigation.StandEntityNavigation;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -900,7 +901,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 			MobType mobType = LE.getMobType();
 			if (ClientNetworking.getAppropriateConfig().killerQueenSettings.sheerHeartAttackSeenUndeadAndArthropod
-					&& (mobType.equals(MobType.UNDEAD) || mobType.equals(MobType.ARTHROPOD) )
+					&& (mobType.equals(MobType.UNDEAD) || mobType.equals(MobType.ARTHROPOD)
+					|| (LE instanceof FallenMob) )
 					|| FateTypes.isVampire(LE) || FateTypes.isZombie(LE)) { points -= 30;}
 		}
 
