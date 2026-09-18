@@ -82,6 +82,7 @@ import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.*;
@@ -4780,12 +4781,16 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
             }
 
-            if(target != null && !target.isRemoved() && !target.isAlive() && !MainUtil.isBossMob(target)
+            if(target != null && !target.isRemoved() && !target.isAlive()
                     || (target instanceof Projectile)){
-                target.discard();
+                spawnLingeringCloud(target);
+
+                if (!MainUtil.isBossMob(target)) {
+                    target.discard();
+                }
             }
 
-            float hRange = 0.20f + (0.25f*bombSize);
+            float hRange = 0.15f + (0.30f*bombSize);
             float vRange = 0.35f + (0.5f*bombSize);
 
             ExplosionUtil.explodeEffects(vPos, level, getExplosionParticle(), new Vec3(hRange, vRange, hRange), 6 + 12*bombSize);
@@ -4822,6 +4827,32 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
     	
     	return true;
+    }
+
+    private void spawnLingeringCloud(Entity entity) {
+        Collection<MobEffectInstance> $$0;
+        if (entity instanceof LivingEntity LE) {
+            $$0 = LE.getActiveEffects();
+        }else if (entity instanceof BombPlantedArrow AR){
+            $$0 = AR.getEffects();
+        }else {
+            return;
+        }
+
+        if (!$$0.isEmpty()) {
+            AreaEffectCloud $$1 = new AreaEffectCloud(entity.level(), entity.getX(), entity.getY(), entity.getZ());
+            $$1.setRadius(2.5F);
+            $$1.setRadiusOnUse(-0.5F);
+            $$1.setWaitTime(10);
+            $$1.setDuration($$1.getDuration() / 2);
+            $$1.setRadiusPerTick(-$$1.getRadius() / (float) $$1.getDuration());
+
+            for (MobEffectInstance $$2 : $$0) {
+                $$1.addEffect(new MobEffectInstance($$2));
+            }
+
+            entity.level().addFreshEntity($$1);
+        }
     }
 
     public void checkForSkinUnlock(Level level, BlockPos pos, boolean destruction) {
