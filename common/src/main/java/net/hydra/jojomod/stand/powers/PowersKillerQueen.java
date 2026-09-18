@@ -2407,25 +2407,26 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public boolean defuseServer() {
-        if (!this.isClient()) {
-            if (isEntityBomb(currentBombStatus) && bombEntity instanceof LivingEntity) {
-                ((StandUser)bombEntity).roundabout$setExplosionInflation(-1);
-            }
-            if (getStandEntity(getSelf()) instanceof FollowingStandEntity standEntity && standEntity.isAlive() && !standEntity.isRemoved() &&
-                    !standEntity.getHeldItem().isEmpty()) {
-                if (standEntity.canAcquireHeldItem) {
-                    this.addItem(standEntity);
-                }
-                standEntity.setHeldItem(ItemStack.EMPTY);
-                if (this.getSelf() instanceof Player) {
-                    S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) this.getSelf()),
-                            PacketDataIndex.S2C_INT_ATD, -10);
-                }
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                animateStand(StandEntity.IDLE);
-                this.setAttackTimeDuring(-10);
-            }
+        if (this.isClient()) { return true; }
+
+        if (isEntityBomb(currentBombStatus) && bombEntity instanceof LivingEntity) {
+            ((StandUser)bombEntity).roundabout$setExplosionInflation(-1);
         }
+        if (getStandEntity(getSelf()) instanceof FollowingStandEntity standEntity && standEntity.isAlive() && !standEntity.isRemoved() &&
+                !standEntity.getHeldItem().isEmpty()) {
+            if (standEntity.canAcquireHeldItem) {
+                this.addItem(standEntity);
+            }
+            standEntity.setHeldItem(ItemStack.EMPTY);
+            if (this.getSelf() instanceof Player) {
+                S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) this.getSelf()),
+                        PacketDataIndex.S2C_INT_ATD, -10);
+            }
+            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+            animateStand(StandEntity.IDLE);
+            this.setAttackTimeDuring(-10);
+        }
+
 
 
         if (currentBombStatus == BOMB_BLOCK) {
