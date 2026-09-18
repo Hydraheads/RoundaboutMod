@@ -27,6 +27,7 @@ public class ModStrayModels {
     public static FirstPersonJackalRifleModel FirstPersonJackalRifleModel;
     public static HeyYaModel HEY_YA;
     public static CenturyBoyModel CENTURY_BOY;
+    public static CatchTheRainbowModel CATCH_THE_RAINBOW;
     public static BowlerHatModel BOWLER_HAT;
     public static UVBlasterModel UV_BLASTER;
     public static WornStoneMaskModel WORN_STONE_MASK;

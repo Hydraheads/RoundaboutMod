@@ -164,6 +164,7 @@
   "item.roundabout.green_day_disc": "Stand Disc",
   "item.roundabout.soft_and_wet_disc": "Stand Disc",
   "item.roundabout.cinderella_disc": "Stand Disc",
+  "item.roundabout.catch_the_rainbow_disc": "Stand Disc",
   "item.roundabout.california_king_bed_disc": "Stand Disc",
   "item.roundabout.survivor_disc": "Stand Disc",
   "item.roundabout.emperor_disc": "Stand Disc",
@@ -225,6 +226,7 @@
   "item.roundabout.max_oasis_disc.desc": "Oasis",
   "item.roundabout.justice_disc.desc": "Justice",
   "item.roundabout.cinderella_disc.desc": "Cinderella",
+  "item.roundabout.catch_the_rainbow_disc.desc": "Catch The Rainbow",
   "item.roundabout.max_ratt_disc.desc": "Ratt",
   "item.roundabout.ratt_disc.desc": "Ratt",
   "item.roundabout.purple_haze_disc.desc": "Purple Haze",
@@ -2640,6 +2642,10 @@
   "idle.roundabout.century_boy2": "Unlatched",
   "idle.roundabout.century_boy3": "Hat",
 
+  "idle.roundabout.catch_the_rainbow1": "Masked",
+  "idle.roundabout.catch_the_rainbow2": "HangingRight",
+  "idle.roundabout.catch_the_rainbow3": "HangingLeft",
+
   "idle.roundabout.ckb_1": "Fun",
   "idle.roundabout.ckb_2": "Dangle",
 
@@ -2996,6 +3002,13 @@
   "skins.roundabout.20_centuryboy.ghost": "Ghost",
   "skins.roundabout.20_centuryboy.wandering": "Wandering",
 
+  "skins.roundabout.catch_the_rainbow.base": "Part 7",
+  "skins.roundabout.catch_the_rainbow.warm": "Warm",
+  "skins.roundabout.catch_the_rainbow.ghast_dry": "Ghast",
+  "skins.roundabout.catch_the_rainbow.ghast_happy": "Ghast",
+  "skins.roundabout.catch_the_rainbow.lali_ho": "Lali-Ho!",
+  "skins.roundabout.catch_the_rainbow.eye_white": "Eye",
+  "skins.roundabout.catch_the_rainbow.eye_red": "Eye",
 
   "skins.roundabout.manhattan_transfer.manhattan_part_6": "Part 6",
   "skins.roundabout.manhattan_transfer.manhattan_manga_part_6": "Manga",
