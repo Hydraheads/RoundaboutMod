@@ -468,6 +468,9 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     private boolean setAutoFollow(boolean enabled) {
         if (!autoMode) return false;
+        if (self instanceof ServerPlayer player && autoFollow != enabled) {
+            S2CPacketUtil.sendIntPowerDataPacket(player, AUTO_MODE_FOLLOW, enabled ? 1 : 0);
+        }
         autoFollow = enabled;
         if (autoFollow) {
             clearAutoModeTargets();
@@ -477,19 +480,16 @@ public class PowersWhitesnake extends BlockGrabPreset {
             StandEntity stand = getStandEntity(self);
             if (stand != null) stand.getNavigation().stop();
         }
-        if (self instanceof ServerPlayer player) {
-            S2CPacketUtil.sendIntPowerDataPacket(player, AUTO_MODE_FOLLOW, autoFollow ? 1 : 0);
-        }
         return true;
     }
 
     private boolean setAutoAttack(boolean enabled) {
         if (!autoMode) return false;
+        if (self instanceof ServerPlayer player && autoAttack != enabled) {
+            S2CPacketUtil.sendIntPowerDataPacket(player, AUTO_MODE_ATTACK_TOGGLE, enabled ? 1 : 0);
+        }
         autoAttack = enabled;
         if (!autoAttack && manualAutoTargetId < 0) stopAutoModeAttack();
-        if (self instanceof ServerPlayer player) {
-            S2CPacketUtil.sendIntPowerDataPacket(player, AUTO_MODE_ATTACK_TOGGLE, autoAttack ? 1 : 0);
-        }
         return true;
     }
 
@@ -2056,7 +2056,9 @@ public class PowersWhitesnake extends BlockGrabPreset {
         if (target == null && manualAutoTargetId < 0 && autoAttack) target = self.getLastHurtMob();
         StandEntity stand = getStandEntity(self);
         if (target == null || stand == null || !target.isAlive() || target.isRemoved()
-                || target.level() != stand.level() || target.is(self) || target.is(stand)) {
+                || target.level() != stand.level() || target.is(self) || target.is(stand)
+                || MainUtil.cheapDistanceTo2(target.getX(), target.getZ(), self.getX(), self.getZ()) > getMaxPilotRange()
+                || Math.abs(target.getY() - self.getY()) > getMaxPilotVerticalRange()) {
             return null;
         }
         return target;
