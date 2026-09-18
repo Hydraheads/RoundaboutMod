@@ -3123,6 +3123,9 @@
   "roundabout.killer_queen.bomb_config": "Bomb Config",
   "roundabout.bomb_config.contact_explosion": "Explosions when contacting",
   "roundabout.bomb_config.block_destruction": "Explosions destroy blocks",
+  "roundabout.bomb_config.explosion_size_0": "Small explosion",
+  "roundabout.bomb_config.explosion_size_1": "Medium explosion",
+  "roundabout.bomb_config.explosion_size_2": "Big explosion",
 
   "skins.roundabout.green_day.part_five_green_day": "Part 5",
   "skins.roundabout.green_day.red_day": "Red Day",
