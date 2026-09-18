@@ -1,9 +1,11 @@
 package net.hydra.jojomod.item;
 
 import com.mojang.authlib.GameProfile;
+import net.hydra.jojomod.block.ChessPieceBlockEntity;
 import net.hydra.jojomod.block.FancyLighterBlock;
 import net.hydra.jojomod.block.FancyLighterBlockEntity;
 import net.hydra.jojomod.block.handBlock.AbstractHandBlock;
+import net.hydra.jojomod.block.handBlock.HandBlockEntity;
 import net.minecraft.Util;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -24,12 +26,14 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.SkullBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.gameevent.GameEvent;
 
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 public class HandBlockItem extends BlockItem {
@@ -37,6 +41,18 @@ public class HandBlockItem extends BlockItem {
         super($$1, $$2);
     }
 
+    @Override
+    protected boolean updateCustomBlockEntityTag(BlockPos pos, Level level,
+                                                 @Nullable Player player, ItemStack stack, BlockState state) {
+
+        BlockEntity be = level.getBlockEntity(pos);
+
+        if (be instanceof HandBlockEntity hand) {
+            hand.setStoredStack(stack);
+        }
+
+        return super.updateCustomBlockEntityTag(pos, level, player, stack, state);
+    }
 
     public Component getName(ItemStack p_42977_) {
         if (p_42977_.is(Items.PLAYER_HEAD) && p_42977_.hasTag()) {
@@ -67,6 +83,7 @@ public class HandBlockItem extends BlockItem {
                 p_151179_.put("HandOwner", NbtUtils.writeGameProfile(new CompoundTag(), p_151177_));
             });
         }
-
     }
+
+
 }

@@ -2,6 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 
+import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -54,6 +55,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -92,6 +94,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.TntBlock;
+import net.minecraft.world.level.block.entity.SkullBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.*;
@@ -707,7 +710,6 @@ public class PowersKillerQueen extends NewPunchingStand {
             } else {
                 setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD,true);
             }
-            //setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_PLANT_BOMB_ITEM, PowerIndex.SKILL_2_SNEAK);
         } else {
             setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_PLANT_BOMB_MOB, PowerIndex.SKILL_2);
         }
@@ -4745,17 +4747,21 @@ public class PowersKillerQueen extends NewPunchingStand {
                         else { pl.hurt(desintegrationDmg, hitPoints); }
                     }
 
-                    /*
+                    ///*
                     if (!pl.isAlive()) {
                         ItemStack skull = new ItemStack(ModItems.HAND);
                         skull.setTag(new CompoundTag());
                         //PlayerHeadItem
-                        CompoundTag tag = skull.getTag();
-                        tag.putString("HandOwner",pl.getName().getString());
+                        CompoundTag tag = skull.getOrCreateTag();
+                        GameProfile gameprofile = new GameProfile((UUID)null, pl.getName().getString());
+                        SkullBlockEntity.updateGameprofile(gameprofile, (p_151177_) -> {
+                            tag.put("HandOwner", NbtUtils.writeGameProfile(new CompoundTag(), p_151177_));
+                        });
+                        //tag.putString("HandOwner",pl.getName().getString());
                         skull.setTag(tag);
                         target.spawnAtLocation(skull);
                     }
-                    */
+                    //*/
 
                 } else {
                     if ((mobsHitkill && !isBoss && target instanceof LivingEntity LE)) { LE.hurt(desintegrationDmg, LE.getMaxHealth());}
@@ -4831,14 +4837,14 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     private void spawnLingeringCloud(Entity entity) {
-        Collection<MobEffectInstance> $$0;
+        Collection<MobEffectInstance> $$0 = null;
         if (entity instanceof LivingEntity LE) {
             $$0 = LE.getActiveEffects();
         }else if (entity instanceof BombPlantedArrow AR){
             $$0 = AR.getEffects();
-        }else {
-            return;
         }
+
+        if ($$0 == null) { return; }
 
         if (!$$0.isEmpty()) {
             AreaEffectCloud $$1 = new AreaEffectCloud(entity.level(), entity.getX(), entity.getY(), entity.getZ());
