@@ -536,32 +536,49 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
             }
 
             IPermaCasting icast = ((IPermaCasting) this.level());
+            boolean isDiverActive = ((StandUser) this).roundabout$isDisguised() || ((StandUser) this).roundabout$hasRibcageTrap();
             if (!getActivated()) {
-                if (this.getSelected()){
-                    this.setSelected(false);
-                }
-                if (ticksThroughPhases >= 10) {
-                    LivingEntity pcaster = icast.roundabout$inPermaCastRangeEntityJustice(this, this.getOnPos());
-                    if (pcaster != null && !pcaster.isRemoved() && pcaster.isAlive()) {
-                        if (((StandUser) pcaster).roundabout$getStandPowers() instanceof PowersJustice PJ) {
-                            setActivated(true);
-                            this.setController(pcaster);
-                            PJ.addJusticeEntities(this);
+                // for diver down corpse activation
+                if (isDiverActive) {
+                    setActivated(true);
+                    if (((StandUser) this).roundabout$isDisguised()) {
+                        setTargetTactic(Tactics.PEACEFUL.id);
+                        setMovementTactic(Tactics.ROAM.id);
+                    }
+                } else {
+                    if (this.getSelected()) {
+                        this.setSelected(false);
+                    }
+                    if (ticksThroughPhases >= 10) {
+                        LivingEntity pcaster = icast.roundabout$inPermaCastRangeEntityJustice(this, this.getOnPos());
+                        if (pcaster != null && !pcaster.isRemoved() && pcaster.isAlive()) {
+                            if (((StandUser) pcaster).roundabout$getStandPowers() instanceof PowersJustice PJ) {
+                                setActivated(true);
+                                this.setController(pcaster);
+                                PJ.addJusticeEntities(this);
+                            }
                         }
                     }
-                }
-                if (this.getTarget() != null){
-                    setLastHurtByPlayer(null);
-                    setLastHurtByMob(null);
-                    setTarget(null);
-                }
+                    if (this.getTarget() != null) {
+                        setLastHurtByPlayer(null);
+                        setLastHurtByMob(null);
+                        setTarget(null);
+                    }
 
-                this.moveControl.setWantedPosition(this.getX(),this.getY(),this.getZ(),0);
-                if (this.getNavigation().getPath() != null){
-                    this.getNavigation().stop();
+                    this.moveControl.setWantedPosition(this.getX(), this.getY(), this.getZ(), 0);
+                    if (this.getNavigation().getPath() != null) {
+                        this.getNavigation().stop();
+                    }
                 }
             } else {
-                if (controller == null || controller.isRemoved() || !controller.isAlive() ||
+                // for diver down disguise controls
+                if (isDiverActive) {
+                    if (((StandUser) this).roundabout$isDisguised()) {
+                        if (getTargetTactic() != Tactics.PEACEFUL.id) setTargetTactic(Tactics.PEACEFUL.id);
+                        if (getMovementTactic() != Tactics.ROAM.id) setMovementTactic(Tactics.ROAM.id);
+                        if (this.getTarget() != null) setTarget(null);
+                    }
+                } else if (controller == null || controller.isRemoved() || !controller.isAlive() ||
                         !icast.roundabout$inPermaCastFogRange(this) ||  (controller instanceof LivingEntity LE &&
                         !icast.roundabout$isPermaCastingEntity(LE))){
                     setActivated(false);

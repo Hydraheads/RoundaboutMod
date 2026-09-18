@@ -221,6 +221,8 @@ public class FabricEntityClient {
         
         EntityRendererRegistry.register(FabricEntities.METALLICA_KNIFE, KnifeRenderer::new);
 
+        EntityRendererRegistry.register(FabricEntities.BONE_PROJECTILE, BoneProjectileRenderer::new);
+
         /*Models*/
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.WOLF_LAYER, TerrierEntityModel::createBodyLayerTerrier);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ZOMBIEFISH_LAYER, SilverfishModel::createBodyLayer);

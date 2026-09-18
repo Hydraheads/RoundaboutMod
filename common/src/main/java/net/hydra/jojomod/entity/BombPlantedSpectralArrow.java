@@ -38,15 +38,12 @@ public class BombPlantedSpectralArrow extends SpectralArrow {
     }
 
     @Override
-    protected void onHitEntity(EntityHitResult result) {
-        super.onHitEntity(result);
-        Entity target = result.getEntity();
-        if (target != getOwner() && (getOwner() != null && ((StandUser)getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ)
+    protected void doPostHurtEffects(LivingEntity target) {
+        if (target != getOwner() && getOwner() instanceof LivingEntity LE && ((StandUser) LE).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ
                 && PKQ.bombEntity.getId() == getId()) {
             PKQ.contactDetonate(target);
         }
     }
-
     public void defuse() {
         if (getOwner() instanceof Player) {
             this.pickup = AbstractArrow.Pickup.ALLOWED;

@@ -626,6 +626,12 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "d4c").toString())
             );
+    public static final RegistryObject<EntityType<BoneProjectileEntity>> BONE_PROJECTILE = ENTITY_TYPES.register("bone_projectile",
+            () -> EntityType.Builder.<BoneProjectileEntity>of(BoneProjectileEntity::new, MobCategory.MISC)
+                    .sized(0.5F, 0.5F)
+                    .clientTrackingRange(4)
+                    .updateInterval(20)
+                    .build(new ResourceLocation(Roundabout.MOD_ID, "bone_projectile").toString()));
     public static final RegistryObject<EntityType<SilverChariotEntity>> SILVER_CHARIOT =
             ENTITY_TYPES.register("silver_chariot", () ->
                     EntityType.Builder.of(SilverChariotEntity::new, MobCategory.MISC).sized(0.75f, 2.05f).

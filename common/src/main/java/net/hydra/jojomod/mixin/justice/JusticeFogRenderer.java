@@ -45,6 +45,36 @@ public class JusticeFogRenderer {
 
     @Inject(method = "setupFog(Lnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/FogRenderer$FogMode;FZF)V", at = @At(value = "HEAD"),cancellable = true)
     private static void roundabout$setupFog(Camera $$0, FogRenderer.FogMode $$1, float $$2, boolean $$3, float $$4, CallbackInfo ci) {
+        //i needed an anti-xray for diver down and justice fog was literally perfect for this because it uses fog rendering
+        //thanks hydra!
+        if (net.hydra.jojomod.client.DiverDownControlsClient.isDiving()) {
+            net.minecraft.client.multiplayer.ClientLevel clientLevel = Minecraft.getInstance().level;
+            if (clientLevel != null) {
+                net.minecraft.world.phys.Vec3 pos = $$0.getPosition();
+                //make a bounding box around the camera, so that no clipping shenanigans occur
+                net.minecraft.world.phys.AABB camBox = new net.minecraft.world.phys.AABB(
+                        pos.x - 0.1, pos.y - 0.1, pos.z - 0.1,
+                        pos.x + 0.1, pos.y + 0.1, pos.z + 0.1
+                );
+                boolean isSolid = false;
+                for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(
+                        net.minecraft.util.Mth.floor(camBox.minX), net.minecraft.util.Mth.floor(camBox.minY), net.minecraft.util.Mth.floor(camBox.minZ),
+                        net.minecraft.util.Mth.floor(camBox.maxX), net.minecraft.util.Mth.floor(camBox.maxY), net.minecraft.util.Mth.floor(camBox.maxZ))) {
+                    if (clientLevel.getBlockState(p).isSolidRender(clientLevel, p)) {
+                        isSolid = true;
+                        break;
+                    }
+                }
+
+                if (isSolid) {
+                    RenderSystem.setShaderFogStart(0.0F);
+                    RenderSystem.setShaderFogEnd(0.0F);
+                    RenderSystem.setShaderFogShape(FogShape.SPHERE);
+                    ci.cancel();
+                    return;
+                }
+            }
+        }
         if (Minecraft.getInstance().player != null){
             Level lvl = Minecraft.getInstance().player.level();
             IClientLevel icl = ((IClientLevel) lvl);
@@ -221,5 +251,32 @@ public class JusticeFogRenderer {
         fogRed = r;
         fogGreen = g;
         fogBlue =b;
+    }
+    @Inject(method = "setupColor", at = @At("HEAD"), cancellable = true)
+    private static void roundabout$diverDownXrayColorBlock(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, CallbackInfo ci) {
+        if (net.hydra.jojomod.client.DiverDownControlsClient.isDiving() && level != null) {
+            net.minecraft.world.phys.Vec3 pos = camera.getPosition();
+            net.minecraft.world.phys.AABB camBox = new net.minecraft.world.phys.AABB(
+                    pos.x - 0.1, pos.y - 0.1, pos.z - 0.1,
+                    pos.x + 0.1, pos.y + 0.1, pos.z + 0.1
+            );
+            boolean isSolid = false;
+            for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(
+                    net.minecraft.util.Mth.floor(camBox.minX), net.minecraft.util.Mth.floor(camBox.minY), net.minecraft.util.Mth.floor(camBox.minZ),
+                    net.minecraft.util.Mth.floor(camBox.maxX), net.minecraft.util.Mth.floor(camBox.maxY), net.minecraft.util.Mth.floor(camBox.maxZ))) {
+                if (level.getBlockState(p).isSolidRender(level, p)) {
+                    isSolid = true;
+                    break;
+                }
+            }
+            if (isSolid) {
+                // black fog, completely block everything
+                RenderSystem.clearColor(0.0F, 0.0F, 0.0F, 1.0F);
+                fogRed = 0.0F;
+                fogGreen = 0.0F;
+                fogBlue = 0.0F;
+                ci.cancel();
+            }
+        }
     }
 }
