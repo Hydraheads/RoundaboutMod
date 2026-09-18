@@ -59,6 +59,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -181,18 +182,21 @@ public class PowersDiverDown extends NewPunchingStand {
     public static class KickTrap {
         public int ticks;
         public Direction face;
+        public Vec3 launchVector;
         public int playerContactTicks = 0;
 
-        public KickTrap(int ticks, Direction face) {
+        public KickTrap(int ticks, Direction face, Vec3 launchVector) {
             this.ticks = ticks;
             this.face = face;
+            this.launchVector = launchVector;
         }
     }
 
     public final Map<BlockPos, KickTrap> storedKickTraps = new LinkedHashMap<>();
     private static final int MAX_TRAP_DURATION = 2400; // 2 minute lifetime
-    private static final float TRAP_RANGE = 4.5f;
+    private static final float TRAP_RANGE = 5.5f;
     private static final int MAX_NUMBER_OF_TRAPS = 10;
+    public static final int KICK_TRAP_WINDUP_MAX = 10;
     public final Map<BlockPos, Integer> releasingLimbs = new HashMap<>();
     // water bucket
 
@@ -585,7 +589,7 @@ public class PowersDiverDown extends NewPunchingStand {
         }
         // does the store kick thing
         else if (move == STORE_KICK_TRAP) {
-            return plantKickTrap();
+            return startKickTrapWindup();
         }
         // releases/deletes traps
         else if (move == MANUAL_TRAP_RELEASE) {
@@ -804,6 +808,9 @@ public class PowersDiverDown extends NewPunchingStand {
         if (this.getActivePower() == TRANSFER) {
             triggerTransfer();
         }
+        if (this.getActivePower() == STORE_KICK_TRAP) {
+            completeKickTrap();
+        }
         super.updateUniqueMoves();
     }
 
@@ -812,6 +819,10 @@ public class PowersDiverDown extends NewPunchingStand {
         // let transfer be cancellable
         if (this.getActivePower() == TRANSFER) {
             cancelTransfer();
+        }
+        // let store kick be cancellable
+        if (this.getActivePower() == STORE_KICK_TRAP) {
+            cancelStore();
         }
         return super.interceptIncomingHarm(source, amount);
     }
@@ -1630,7 +1641,7 @@ public class PowersDiverDown extends NewPunchingStand {
                                         victims.removeIf(v -> v instanceof Player);
                                     }
                                     if (!victims.isEmpty()) {
-                                        triggerKickTrap(victims, trapPos, trap.face);
+                                        triggerKickTrap(victims, trapPos, trap);
                                         it.remove(); // delete the triggered trap
                                     }
                                 }
@@ -1775,9 +1786,6 @@ public class PowersDiverDown extends NewPunchingStand {
     public void synchToCamera() {
         if (isPiloting()) {
             LivingEntity stand = getPilotingStand();
-            if (stand != null) {
-                DiverDownControlsClient.enforceCamera(stand);
-            }
         }
     }
 
@@ -2221,7 +2229,7 @@ public class PowersDiverDown extends NewPunchingStand {
      * enabled in config
      */
     public boolean canCutCorners() {
-        return inZipMode() && canWallZipConfig();
+        return false;
     }
 
     public boolean tryCut(Vec3 cutPos) {
@@ -2340,6 +2348,41 @@ public class PowersDiverDown extends NewPunchingStand {
 
     // kick storage start
 
+    private void cancelStore () {
+        this.setPowerNone();
+    }
+
+    public boolean startKickTrapWindup() {
+        if (this.self.level().isClientSide()) {
+            return true;
+        }
+        Vec3 eyePos = this.self.getEyePosition(0);
+        Vec3 lookVec = this.self.getViewVector(0);
+        Vec3 reachVec = eyePos.add(lookVec.scale(TRAP_RANGE));
+
+        BlockHitResult blockHit = this.self.level().clip(
+                new ClipContext(eyePos, reachVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.self));
+
+        if (blockHit.getType() != HitResult.Type.BLOCK) {
+            return false;
+        }
+
+        // startup timer
+        this.setActivePower(STORE_KICK_TRAP);
+        this.setAttackTimeDuring(0);
+
+        // animations and sounds and stuff
+
+        return true;
+    }
+
+    public void completeKickTrap() {
+        if (this.getAttackTimeDuring() >= KICK_TRAP_WINDUP_MAX) {
+            plantKickTrap();
+            this.setPowerNone();
+        }
+    }
+
     //copied from sendParticlesIfPossible, but added a blacklist.
     private void sendKickTrapParticles(double px, double py, double pz) {
         Level level = this.self.level();
@@ -2421,8 +2464,13 @@ public class PowersDiverDown extends NewPunchingStand {
             }
         }
 
+        // mirror the angle at which the player looked at the block
+        Vec3 normal = new Vec3(face.getStepX(), face.getStepY(), face.getStepZ());
+        double dot = lookVec.dot(normal);
+        Vec3 reflection = lookVec.subtract(normal.scale(2.0 * dot)).normalize();
+
         // store the trap
-        this.storedKickTraps.put(hitPos, new KickTrap(MAX_TRAP_DURATION, face));
+        this.storedKickTraps.put(hitPos, new KickTrap(MAX_TRAP_DURATION, face, reflection));
 
         // animation here
         // Sounds & ground impact particles here
@@ -2449,49 +2497,46 @@ public class PowersDiverDown extends NewPunchingStand {
         return victims;
     }
 
-    private void triggerKickTrap(List<LivingEntity> victims, BlockPos pos, Direction face) {
+    private void triggerKickTrap(List<LivingEntity> victims, BlockPos pos, KickTrap trap) {
+        Direction face = trap.face;
         Level level = this.self.level();
         StandEntity stand = this.getStandEntity(this.self);
         BlockPos spawnPos = pos.relative(face);
 
-        // Spawn Diver Down's leg
-        if (level.getBlockState(spawnPos).canBeReplaced()) {
-            BlockState limbState = ModBlocks.DIVER_LIMB.defaultBlockState();
-            level.setBlockAndUpdate(spawnPos, limbState);
-            if (level.getBlockEntity(spawnPos) instanceof DiverLimbBlockEntity be) {
-                be.ownerUUID = this.self.getUUID();
-                be.limbIndex = 2; // 2 = Right Leg (kick)
-                be.facing = face.getOpposite(); // Attaches back onto the wall/floor block
-                be.standSkin = ((StandUser) this.self).roundabout$getStandSkin();
-                be.setChanged();
-                level.sendBlockUpdated(spawnPos, limbState, limbState, 3);
-            }
-            // Keep the leg visible for a while (~0.6s)
-            this.releasingLimbs.put(spawnPos, 12);
-        }
-
         for (LivingEntity victim : victims) {
-            // damage the enemy
             DamageHandler.StandDamageEntity(victim, 8.0F, this.self);
+            Vec3 dir = trap.launchVector != null ? trap.launchVector : new Vec3(face.getStepX(), face.getStepY(), face.getStepZ());
 
-            // launch the poor sod
-            if (face == Direction.UP) {
-                // launches up
-                victim.setDeltaMovement(
-                        face.getStepX() * 0.7D,
-                        1.35D,
-                        face.getStepZ() * 0.7D);
-            } else if (face.getAxis().isHorizontal()) {
-                // launches sideways
-                victim.setDeltaMovement(
-                        face.getStepX() * 1.2D,
-                        0.85D,
-                        face.getStepZ() * 1.2D);
+            double launchX = dir.x;
+            double launchY = dir.y;
+            double launchZ = dir.z;
+            if (face == Direction.DOWN) {
+                launchX *= 1.2D;
+                launchZ *= 1.2D;
+                launchY = Math.min(-0.8D, launchY * 1.5D);
+            } else if (face == Direction.UP) {
+                double horizScale = Math.max(1.1D,2D * (1.0D - Math.abs(launchY)));
+                launchX *= horizScale;
+                launchZ *= horizScale;
+                launchY = Math.max(0.70D, launchY * 1D);
             } else {
-                // for ceiling traps
-                victim.setDeltaMovement(0.0D, -1.0D, 0.0D);
+                launchX *= 1.8D;
+                launchZ *= 1.8D;
+                launchY = Math.max(0.60D, launchY * 1.3D);
             }
+            if (victim instanceof net.minecraft.world.entity.player.Player) {
+                launchX *= 1.45D;
+                launchZ *= 1.45D;
+                // Give a tiny bit more air time to players so drag doesn't stop them
+                launchY += 0.15D;
+            }
+
+            launchX = Math.min(2.9D, Math.max(-2.9D, launchX));
+            launchZ = Math.min(2.9D, Math.max(-2.9D, launchZ));
+            net.hydra.jojomod.util.MainUtil.takeLiteralUnresistableKnockbackWithY(victim, launchX, launchY, launchZ);
+
             victim.hurtMarked = true;
+            victim.hasImpulse = true;
 
             // play effects sounds and stuff here
         }
@@ -2529,7 +2574,7 @@ public class PowersDiverDown extends NewPunchingStand {
             // players
             List<LivingEntity> victims = detectTrapTrigger(trapPos, trap.face);
             if (!victims.isEmpty()) {
-                triggerKickTrap(victims, trapPos, trap.face);
+                triggerKickTrap(victims, trapPos, trap);
                 it.remove(); // Consume trap
                 triggeredAny = true;
             }
@@ -2935,22 +2980,28 @@ public class PowersDiverDown extends NewPunchingStand {
             }
 
             if (nearestTarget != null) {
-                //if they see something, pathfind to them
-                mob.getNavigation().moveTo(nearestTarget, 1.0D);
+                // need this desiredSpeed thing because villagers zoom away when yuo use ribcage trap on them
+                double desiredSpeed = 0.23D;
+                double baseSpeed = mob.getAttributeValue(Attributes.MOVEMENT_SPEED);
+                double speedModifier = baseSpeed > 0 ? (desiredSpeed / baseSpeed) : 1.0D;
+
+                mob.getNavigation().moveTo(nearestTarget, speedModifier);
                 mob.getLookControl().setLookAt(nearestTarget, 30.0F, 30.0F);
 
-                // collision check
+                // collision check, stolen from d4c
                 if (host.distanceTo(nearestTarget) < 1.5D) {
                     triggerRibcageSnap(host, nearestTarget);
                     return;
                 }
             } else {
-                // keep walking
+                // keep walking forward in straight line
                 if (this.ribcageWalkDirection != null) {
+                    double desiredSpeed = 0.23D;
+                    double baseSpeed = mob.getAttributeValue(Attributes.MOVEMENT_SPEED);
+                    double speedModifier = baseSpeed > 0 ? (desiredSpeed / baseSpeed) : 1.0D;
+
                     Vec3 targetWalkPos = host.position().add(this.ribcageWalkDirection.scale(3.0D));
-                    if (mob.getNavigation().isDone()) {
-                        mob.getNavigation().moveTo(targetWalkPos.x, targetWalkPos.y, targetWalkPos.z, 1.0D);
-                    }
+                    mob.getNavigation().moveTo(targetWalkPos.x, targetWalkPos.y, targetWalkPos.z, speedModifier);
                 }
             }
         }
@@ -3058,7 +3109,7 @@ public class PowersDiverDown extends NewPunchingStand {
         this.setAttackTimeDuring(0);
 
         //test message
-        this.self.sendSystemMessage(Component.literal("it's transfering windup time"));
+        //this.self.sendSystemMessage(Component.literal("it's transfering windup time"));
 
         //play the animation and sounds here
     }
