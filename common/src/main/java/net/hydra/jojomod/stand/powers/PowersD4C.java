@@ -3063,7 +3063,7 @@ public class PowersD4C extends NewPunchingStand {
     @Override
     public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.87F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.72F));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(5.5F));
         }
