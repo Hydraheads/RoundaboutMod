@@ -115,9 +115,6 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override public boolean canUseStandArrow() { return !canBitesTheDust(); }
 
 	// TODO Make bomb item (WIP)
-	// TODO Bites The Dust (WIP)
-	
-	// TODO Audio Translations (WIP)
 	
 	private static final byte
 		PLANTED=53,
@@ -1690,7 +1687,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100, false);
             }
             if (this.getActivePower() == PowerIndex.POWER_2_BLOCK && move != PowerIndex.POWER_2_BLOCK && move != PowerIndex.POWER_2_EXTRA
-                    && currentBombStatus != BOMB_BUBBLE && currentBombStatus != BUBBLE_CONTACT && attackTimeDuring <= -1) {
+                    && currentBombStatus != BOMB_BUBBLE && currentBombStatus != BUBBLE_CONTACT) {
                 this.stopSoundsIfNearby(AIRBUBBLE, 100, false);
             }
 
@@ -2861,7 +2858,6 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         if (this.self instanceof ServerPlayer pl) {
             S2CPacketUtil.sendCancelSoundPacket(pl, this.self.getId(), BTD_PLANT);
-            S2CPacketUtil.sendPlaySoundPacket(pl, this.self.getId(), getBitesTheDustCombatByte());
         }
 
         saveCombatEntitiesSeconds(target.position());
@@ -2870,9 +2866,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public boolean bitesTheDustDayActivate() {
-        if (!canBitesTheDustDay()) {
-            return false;
-        }
+        if (!canBitesTheDustDay()) { return false; }
 
         if (this.isClient()) {
             btdTicks = 0;
@@ -2954,7 +2948,10 @@ public class PowersKillerQueen extends NewPunchingStand {
                         }
                     }
 
-                    if (ent instanceof ServerPlayer SP) { packetDayMode(SP); }
+                    if (ent instanceof ServerPlayer SP) {
+                        packetDayMode(SP);
+                        S2CPacketUtil.sendPlaySoundPacket(SP, this.self.getId(), getBitesTheDustDayByte());
+                    }
                 }
             }
         }
@@ -2969,7 +2966,6 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         if (this.self instanceof ServerPlayer pl) {
             S2CPacketUtil.sendCancelSoundPacket(pl, this.self.getId(), BTD_PLANT);
-            S2CPacketUtil.sendPlaySoundPacket(pl, this.self.getId(), getBitesTheDustDayByte());
         }
 
         syncBombStatus(BITES_THE_DUST_BIGGER);
@@ -3067,7 +3063,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (blockHit.getType() != HitResult.Type.BLOCK) { return true; }
 
             if ( self instanceof Player player
-                    && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof KiraPartFourVoice voice) {
+                    && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof KiraPartFourVoice voice && !hasHandsOut()) {
                 voice.playPrimaryBomb();
             }
 
@@ -3442,6 +3438,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 BlockPos blockPos = serverPlayerEntity.blockPosition();
                 if (blockPos.closerToCenterThan(userLocation, 100)) {
                     S2CPacketUtil.sendBlipPacket(serverPlayerEntity, (byte) 2, entId,blip);
+                    S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, this.self.getId(), getBitesTheDustCombatByte());
                 }
             }
         }
@@ -3467,7 +3464,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
     public final void packetDayMode(ServerPlayer serverPlayerEntity) {
         ServerLevel serverWorld = ((ServerLevel) this.self.level());
-        if (((ServerLevel) serverPlayerEntity.level()) == serverWorld) {
+        if (( serverPlayerEntity.level()) == serverWorld) {
             S2CPacketUtil.sendSimpleByteToClientPacket(serverPlayerEntity,PacketDataIndex.BITES_THE_DUST);
         }
     }
@@ -3748,6 +3745,10 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public void detectBitedTheDustDay() {
         dayBitedTheDustinit();
+        float multiplier = 1.0f;
+
+        multiplier = 0.1f + 0.9f * (Math.min((float)this.btdTicks / (float)1000, 1.0f));
+
         if (!dayBitedTheDust.isEmpty()) {
             HashSet<Integer> toRemoveFromList = new HashSet<>();
             for (int id : dayBitedTheDust.keySet()) {
@@ -3771,10 +3772,10 @@ public class PowersKillerQueen extends NewPunchingStand {
                         if(target != null) {
                             if (MainUtil.getReducedDamage(target)) {
                                 target.hurt(dmg,
-                                        ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustDayPlayersDamage);
+                                        multiplier * ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustDayPlayersDamage);
                             } else {
                                 target.hurt(dmg,
-                                        ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustDayMobsDamage);
+                                        multiplier * ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustDayMobsDamage);
                             }
 
                             ExplosionUtil.explodeEffects(target.position(), target.level(), getExplosionParticle(), 0.35f);
@@ -3849,7 +3850,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             return;
         }
 
-        if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof KiraPartFourVoice JV){
+        if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof KiraPartFourVoice JV ){
             JV.playSummon();
         }
         playStandUserOnlySoundsIfNearby(this.getSummonSound(), 10, false,false);
@@ -4691,7 +4692,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
 
             if (canDestroyBlocks) {
-                float range = 0.6f + bombSize * 0.65f;
+                float range = 0.5f + bombSize * 0.45f;
 
                 ExplosionUtil.explodeBlocksBase(bPos, level, range, true, self);
             }
