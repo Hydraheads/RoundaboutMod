@@ -2081,8 +2081,10 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if (stack.getItem() instanceof SpectralArrowItem) {
                     arrow = new BombPlantedSpectralArrow(self.level(), self);
                 } else {
-                    arrow = new BombPlantedArrow(self.level(), self);
-                    ((BombPlantedArrow) arrow).setEffectsFromItem(stack);
+                    BombPlantedArrow bArrow = new BombPlantedArrow(self.level(), self);
+                    bArrow.setEffectsFromItem(stack);
+
+                    arrow = bArrow;
                 }
 
                 if (!(self instanceof Player PL && PL.getAbilities().instabuild)) {
