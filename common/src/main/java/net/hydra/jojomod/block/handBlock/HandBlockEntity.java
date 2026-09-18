@@ -167,10 +167,6 @@ public class HandBlockEntity extends BlockEntity {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
-    public CompoundTag getUpdateTag() {
-        return this.saveWithoutMetadata();
-    }
-
     public void setOwner(@Nullable GameProfile $$0) {
         synchronized(this) {
             this.owner = $$0;

@@ -55,7 +55,7 @@ public class HandBlockItem extends BlockItem {
     }
 
     public Component getName(ItemStack p_42977_) {
-        if (p_42977_.is(Items.PLAYER_HEAD) && p_42977_.hasTag()) {
+        if (p_42977_.is(ModItems.HAND) && p_42977_.hasTag()) {
             String s = null;
             CompoundTag compoundtag = p_42977_.getTag();
             if (compoundtag.contains("HandOwner", 8)) {
