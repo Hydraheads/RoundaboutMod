@@ -56,6 +56,8 @@ public class FabricEffects extends MobEffect{
             register("swapped", new FabricEffects(MobEffectCategory.NEUTRAL, 16134815)
                     .addAttributeModifier(Attributes.MAX_HEALTH,"6107DE5A-7CE8-4030-940E-514C1F160890",-2, AttributeModifier.Operation.ADDITION)
             );
+    public static final MobEffect FORTIFICATION =
+            register("fortification", new FabricEffects(MobEffectCategory.BENEFICIAL, 3137792));
 
 
     public static final MobEffect HALLUCINATION = register("hallucination", new HallucinationEffect());
@@ -108,5 +110,6 @@ public class FabricEffects extends MobEffect{
         ModEffects.VIRUS_IMMUNITY = VIRUS_IMMUNITY;
         ModEffects.IMPRINTING = IMPRINTING;
         ModEffects.SWAPPED = SWAPPED;
+        ModEffects.FORTIFICATION = FORTIFICATION;
     }
 }

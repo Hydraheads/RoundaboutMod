@@ -249,6 +249,12 @@ public class PowersKingCrimson extends BlockGrabPreset {
         isRenderingArms = false;
         saveDiscAndSync();
     }
+
+    //slower melee attacks so people stop being rushdown goblins
+    @Override
+    public int getMeltLevel(){
+        return super.getMeltLevel()+1;
+    }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
         super.readAdditionalSaveData($$0);
@@ -4156,9 +4162,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (this.getReducedDamage(entity)){
             if (entity instanceof KingCrimsonCloneEntity &&
                     ClientNetworking.getAppropriateConfig().kingCrimsonSettings.nerfedTEDamage){
-                return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.1F));
+                return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.02F));
             } else {
-                return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.35F));
+                return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.28F));
             }
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(5));
@@ -4169,9 +4175,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (this.getReducedDamage(entity)){
             if (entity instanceof KingCrimsonCloneEntity &&
                     ClientNetworking.getAppropriateConfig().kingCrimsonSettings.nerfedTEDamage){
-                return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.6F));
+                return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.5F));
             } else {
-                return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.89F));
+                return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.73F));
             }
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(6F));

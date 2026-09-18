@@ -43,7 +43,6 @@ public class ExplosionUtil {
 	}
 	public static void explodeEffects(Vec3 pos, Level level, SimpleParticleType particle, float range) {
 		explodeEffects(pos, level, particle, new Vec3(range, range+0.3f, range), 18);
-
 	}
 
     public static void explodeEffects(Vec3 pos, Level level, SimpleParticleType particle, float range, int amount) {

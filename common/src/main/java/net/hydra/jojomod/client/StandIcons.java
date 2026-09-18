@@ -27,6 +27,10 @@ public class StandIcons {
     public static final ResourceLocation WHITESNAKE_AUTO_MODE = whitesnakeIcon("auto_mode");
     public static final ResourceLocation WHITESNAKE_AUTO_MODE_MOVE = whitesnakeIcon("auto_mode_move");
     public static final ResourceLocation WHITESNAKE_AUTO_MODE_ATTACK = whitesnakeIcon("auto_mode_attack");
+    public static final ResourceLocation WHITESNAKE_AUTOFOLLOW_ON = whitesnakeIcon("autofollow_on");
+    public static final ResourceLocation WHITESNAKE_AUTOFOLLOW_OFF = whitesnakeIcon("autofollow_off");
+    public static final ResourceLocation WHITESNAKE_AUTOATTACK_ON = whitesnakeIcon("autoattack_on");
+    public static final ResourceLocation WHITESNAKE_AUTOATTACK_OFF = whitesnakeIcon("autoattack_off");
     public static final ResourceLocation WHITESNAKE_HALLUCINATORY_DISGUISE = whitesnakeIcon("hallucinatory_disguise");
     public static final ResourceLocation WHITESNAKE_HALLUCINATION_1 = whitesnakeIcon("hallucination_1");
     public static final ResourceLocation WHITESNAKE_HALLUCINATION_2 = whitesnakeIcon("hallucination_2");

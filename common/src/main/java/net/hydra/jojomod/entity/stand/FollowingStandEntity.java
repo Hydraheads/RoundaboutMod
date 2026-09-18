@@ -97,7 +97,7 @@ public class FollowingStandEntity extends StandEntity{
     public final float getIdleYOffset() {
         if (getOffsetType() == OffsetIndex.BEHIND){
             if (getUser() != null && getUser().isCrouching()){
-                return 0.2F;
+                return 0.25F;
             } else {
                 return 0.7F;
             }
