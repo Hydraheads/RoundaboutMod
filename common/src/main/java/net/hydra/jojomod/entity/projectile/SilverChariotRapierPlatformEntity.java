@@ -8,6 +8,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 
 public class SilverChariotRapierPlatformEntity extends Entity {
     // private static final EntityDataAccessor<Byte> SKIN = SynchedEntityData.defineId(SilverChariotRapierPlatformEntity.class, EntityDataSerializers.BYTE);
