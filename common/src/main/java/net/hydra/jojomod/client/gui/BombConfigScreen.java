@@ -51,43 +51,70 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
     private boolean setFirstMousePos;
     public boolean zHeld;
     private final List<ToggableIcon> slots = Lists.newArrayList();
-    
+    private final List<SwitchSelect> sizes = Lists.newArrayList();
+
     @Override
     protected void init() {
         super.init();
         zHeld = true;
-        Player pl = Minecraft.getInstance().player;
-        StandUser SU = (StandUser) pl;
 
         this.currentlyHovered = (byte)-1;
-        if (SU.roundabout$getStandPowers() instanceof PowersKillerQueen PA) {
-            int offsetCenter = 32;
-        	
-        	ToggableIcon leftIcon = new ToggableIcon((byte)BLOCK_DESTRUCTION, this.width / 2 - 13 - offsetCenter, this.height / 2 + 31 - 44, Component.translatable("roundabout.bomb_config.block_destruction"));
-        	ToggableIcon rightIcon = new ToggableIcon((byte)ON_CONTACT, this.width / 2 - 13 + offsetCenter, this.height / 2 + 31 - 44, Component.translatable("roundabout.bomb_config.contact_explosion"));
-        	
-            this.slots.add(leftIcon);
-            this.slots.add(rightIcon);
 
-        }
+        int offsetCenter = 32;
+
+        this.slots.add(new ToggableIcon((byte)BLOCK_DESTRUCTION, this.width / 2 - 13 - offsetCenter, this.height / 2 + 31 - 44, Component.translatable("roundabout.bomb_config.block_destruction")));
+        this.slots.add(new ToggableIcon((byte)ON_CONTACT, this.width / 2 - 13 + offsetCenter, this.height / 2 + 31 - 44, Component.translatable("roundabout.bomb_config.contact_explosion")));
+
+        this.sizes.add(new SwitchSelect(0, this.width / 2 - 33, this.height / 2 - 32 + 48, Component.translatable("roundabout.bomb_config.explosion_size_0")));
+        this.sizes.add(new SwitchSelect(1, this.width / 2 - 33 + 20, this.height / 2 - 32 + 48, Component.translatable("roundabout.bomb_config.explosion_size_1")));
+        this.sizes.add(new SwitchSelect(2, this.width / 2 - 33 + 40, this.height / 2 - 32 + 48, Component.translatable("roundabout.bomb_config.explosion_size_2")));
+
 
     }
 
-    public class switchSelect extends AbstractWidget {
-        public byte context;
+    public class SwitchSelect extends AbstractWidget {
+        public int context;
         public int xoff;
         public int yoff;
+        private boolean isSelected;
+        final Component name;
 
-        public switchSelect(byte context, int xoff, int yoff) {
-            super(xoff, yoff, 26, 26, Component.literal(""));
+        public SwitchSelect(int context, int xoff, int yoff, Component name) {
+            super(xoff, yoff, 26, 26, name);
             this.context = context;
             this.xoff = xoff;
             this.yoff = yoff;
+            this.name = name;
         }
+
+        public Component getName() {return name; }
 
         @Override
         protected void renderWidget(GuiGraphics guiGraphics, int i, int i1, float v) {
+            if (isSelected) {
+                guiGraphics.blit(KILLER_QUEEN_BOMB_LOCATION, this.getX() + 4, this.getY()+4, 54, 51, 18, 18, 192, 192);
+            }
 
+            guiGraphics.blit(KILLER_QUEEN_BOMB_LOCATION, this.getX() + 4, this.getY()+4, this.context*18, 69, 18, 18, 192, 192);
+        }
+
+        public void setSelected(boolean bl) {
+            this.isSelected = bl;
+        }
+
+        public int getMode() {
+            ClientConfig clientConfig = ConfigManager.getClientConfig();
+            Player p = Minecraft.getInstance().player;
+            if (p != null) {
+                StandUser SU = (StandUser) p;
+                if (SU.roundabout$getStandPowers() instanceof PowersKillerQueen) {
+                    int conf = clientConfig.dynamicSettings.killerQueenCurrentBombSize;
+
+                    return conf == context ? ENABLED : DISABLED;
+
+                }
+            }
+            return DISABLED;
         }
 
         @Override
@@ -110,34 +137,30 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
             this.yoff = yoff;
             this.name = name;
         }
-        
-        public int getMode() {return getMode(false);}
 
         public Component getName() {return name; }
 
         public int getMode(boolean invert) {
         	ClientConfig clientConfig = ConfigManager.getClientConfig();
-            Player p = Minecraft.getInstance().player;
-            StandUser SU = (StandUser) p;
-            if (SU.roundabout$getStandPowers() instanceof PowersKillerQueen PA) {
-            	int conf = clientConfig.dynamicSettings.killerQueenCurrentBombConfig;
-            	if (this.context == BLOCK_DESTRUCTION) {
-            		if (conf == 1 || conf == 3) {
-	                	return (invert) ? DISABLED : ENABLED;
-	                }
-            	}else {
-            		if (conf == 2 || conf == 3) {
-	                	return (invert) ? DISABLED : ENABLED;
-	                }
-            	}
+
+            int conf = clientConfig.dynamicSettings.killerQueenCurrentBombConfig;
+            if (this.context == BLOCK_DESTRUCTION) {
+                if (conf == 1 || conf == 3) {
+                    return (invert && isHoveredOrFocused()) ? DISABLED : ENABLED;
+                }
+            } else {
+                if (conf == 2 || conf == 3) {
+                    return (invert && isHoveredOrFocused()) ? DISABLED : ENABLED;
+                }
             }
-            return (invert) ? ENABLED : DISABLED;
+
+            return (invert && isHoveredOrFocused()) ? ENABLED : DISABLED;
         }
 
 		@Override
 		public void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
 			guiGraphics.setColor(1f, 1f, 1f, 1f);
-			int status = this.getMode()*2;
+			int status = this.getMode(false)*2;
 			if (this.isSelected) {status = 1;}
 
             Level level = Minecraft.getInstance().player.level();
@@ -168,7 +191,7 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
 		}
 		
 		private void drawIcon(GuiGraphics guiGraphics) {
-			int status = getMode();
+			int status = getMode(false);
 			if (this.context == BLOCK_DESTRUCTION && !ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction) {status = 2;}
 			guiGraphics.blit(KILLER_QUEEN_BOMB_LOCATION, this.getX() + 4, this.getY()+4, status*18, 26+7 + this.context*18, 18, 18, 192, 192);
 
@@ -177,7 +200,11 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
 
     @Override
     public boolean mouseReleased(double $$0, double $$1, int $$2) {
-        this.exitBombConfig();
+        if ($$2 == 0) {
+            updateConfigs();
+        }else {
+            this.exitBombConfig();
+        }
 
         return super.mouseReleased($$0, $$1, $$2);
     }
@@ -187,10 +214,12 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
         this.minecraft.setScreen(null);
 
         Player pl = Minecraft.getInstance().player;
-        StandUser SU = (StandUser) pl;
+        if (pl != null) {
+            StandUser SU = (StandUser) pl;
 
-        if (SU.roundabout$getStandPowers() instanceof PowersKillerQueen PK) {
-            PK.bombConfigPacket();
+            if (SU.roundabout$getStandPowers() instanceof PowersKillerQueen PK) {
+                PK.bombConfigPacket();
+            }
         }
     }
 
@@ -212,10 +241,16 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
 
        Component str = Component.translatable("roundabout.killer_queen.bomb_config");
        
-       guiGraphics.drawCenteredString(this.font, str , this.width / 2, this.height / 2 - 31 - 32+8, -1);
+        guiGraphics.drawCenteredString(this.font, str , this.width / 2, this.height / 2 - 31 - 32+8, -1);
 
-        guiGraphics.blit(KILLER_QUEEN_BOMB_LOCATION, this.width / 2 - 32, this.height / 2  - 31 + 48, 64f /* * ConfigManager.getClientConfig().dynamicSettings.killerQueenCurrentBombSize */, 125f, 64, 24, 192, 192);
-
+        if (Minecraft.getInstance().player != null) {
+            ClientConfig clientConfig = ConfigManager.getClientConfig();
+            int context = 1;
+            if (clientConfig != null) {
+                context = clientConfig.dynamicSettings.killerQueenCurrentBombSize;
+            }
+            guiGraphics.blit(KILLER_QUEEN_BOMB_LOCATION, this.width / 2 - 32, this.height / 2 - 31 + 48, 64f * context, 125f, 64, 24, 192, 192);
+        }
         if (!this.setFirstMousePos) {
             this.firstMouseX = i;
             this.firstMouseY = j;
@@ -223,54 +258,62 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
         }
        
         //boolean bl = this.firstMouseX == i && this.firstMouseY == j;
-       
+
+        int lastState = currentlyHovered;
+
+
         this.currentlyHovered = -1;
         if (this.slots.get(0).isHoveredOrFocused()) {this.currentlyHovered = 0;}
         if (this.slots.get(1).isHoveredOrFocused()) {this.currentlyHovered = 1;}
+        if (this.sizes.get(0).isHoveredOrFocused()) {this.currentlyHovered = 2;}
+        if (this.sizes.get(1).isHoveredOrFocused()) {this.currentlyHovered = 3;}
+        if (this.sizes.get(2).isHoveredOrFocused()) {this.currentlyHovered = 4;}
 
-        boolean shouldPlaySound = false;
 
         for (ToggableIcon MobSlot : this.slots) {
             MobSlot.render(guiGraphics, i, j, f);
-            boolean lastState = MobSlot.isSelected;
             MobSlot.setSelected(this.currentlyHovered == MobSlot.context);
-            shouldPlaySound = ((MobSlot.isSelected && lastState != MobSlot.isSelected) || shouldPlaySound);
+        }
+        for (SwitchSelect MobSlot : this.sizes) {
+            MobSlot.render(guiGraphics, i, j, f);
+            MobSlot.setSelected((this.currentlyHovered-2) == MobSlot.context);
         }
 
-        if (shouldPlaySound) {
+        if (currentlyHovered != -1 && lastState != currentlyHovered) {
             SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
             soundmanager.play(SimpleSoundInstance.forUI(ModSounds.KILLER_QUEEN_DETONATE_EVENT, (float) (0.95 + (Math.random() * 0.1F))));
         }
 
         if (this.currentlyHovered != -1) {
-            guiGraphics.drawCenteredString(this.font, slots.get(currentlyHovered).getName(), this.width / 2, this.height / 2 - 31 + 80, -1);
+            Component text;
+            if (currentlyHovered < 2) {
+                text = slots.get(currentlyHovered).getName();
+            }else {
+                text = sizes.get(currentlyHovered - 2).getName();
+            }
+
+            guiGraphics.drawCenteredString(this.font, text, this.width / 2, this.height / 2 - 31 + 80, -1);
         }
         
+    }
+
+    private void updateConfigs() {
+        if (currentlyHovered != -1) {
+            ClientConfig clientConfig = ConfigManager.getClientConfig();
+            int value = this.slots.get(0).getMode(true) + (this.slots.get(1).getMode(true) * 2);
+
+            clientConfig.dynamicSettings.killerQueenCurrentBombConfig = value;
+
+            if (currentlyHovered >= 2) {
+                clientConfig.dynamicSettings.killerQueenCurrentBombSize = currentlyHovered - 2;
+            }
+
+            ConfigManager.saveClientConfig();
+        }
     }
 
     private void switchToHoveredGameMode() {
-    	if (this.currentlyHovered != -1) {
-    		switchToHoveredGameMode(this.minecraft,slots.get(this.currentlyHovered));
-       }
-    }
-
-    private void switchToHoveredGameMode(Minecraft minecraft, ToggableIcon pIcon) {
-        if (minecraft.gameMode == null || minecraft.player == null) {
-            return;
-        }
-        Player pl = Minecraft.getInstance().player;
-        StandUser SU = (StandUser) pl;
-        
-        if (SU.roundabout$getStandPowers() instanceof PowersKillerQueen PA) {
-            
-            ClientConfig clientConfig = ConfigManager.getClientConfig();
-            int conf = this.slots.get(0).getMode(this.currentlyHovered == 0);
-            conf += this.slots.get(1).getMode(this.currentlyHovered == 1)*2;
-            
-            clientConfig.dynamicSettings.killerQueenCurrentBombConfig = conf;
-            ConfigManager.saveClientConfig();
-            
-        }
+    	updateConfigs();
     }
     
     public boolean roundabout$sameKeyOne(KeyMapping key1){

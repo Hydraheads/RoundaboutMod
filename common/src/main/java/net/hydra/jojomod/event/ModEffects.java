@@ -26,6 +26,7 @@ public class ModEffects {
     public static MobEffect DREAMING;
     public static MobEffect REFRESHED;
     public static MobEffect INFINITE_SPIN;
+    public static MobEffect FORTIFICATION;
 
 
     public static MobEffect IMPRINTING;

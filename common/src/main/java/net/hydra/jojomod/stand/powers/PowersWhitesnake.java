@@ -466,6 +466,45 @@ public class PowersWhitesnake extends BlockGrabPreset {
         manualAutoTargetId = -1;
     }
 
+    private boolean setAutoFollow(boolean enabled) {
+        if (!autoMode) return false;
+        if (self instanceof ServerPlayer player && autoFollow != enabled) {
+            S2CPacketUtil.sendIntPowerDataPacket(player, AUTO_MODE_FOLLOW, enabled ? 1 : 0);
+        }
+        autoFollow = enabled;
+        if (autoFollow) {
+            clearAutoModeTargets();
+            if (!self.level().isClientSide()) self.setLastHurtMob(null);
+            stopAutoModeAttack();
+        } else {
+            StandEntity stand = getStandEntity(self);
+            if (stand != null) stand.getNavigation().stop();
+        }
+        return true;
+    }
+
+    private boolean setAutoAttack(boolean enabled) {
+        if (!autoMode) return false;
+        if (self instanceof ServerPlayer player && autoAttack != enabled) {
+            S2CPacketUtil.sendIntPowerDataPacket(player, AUTO_MODE_ATTACK_TOGGLE, enabled ? 1 : 0);
+        }
+        autoAttack = enabled;
+        if (!autoAttack && manualAutoTargetId < 0) stopAutoModeAttack();
+        return true;
+    }
+
+    private void stopAutoModeAttack() {
+        if (getActivePower() == PowerIndex.ATTACK || getActivePower() == PowerIndex.POWER_1_SNEAK
+                || isBarraging()) {
+            tryPower(PowerIndex.NONE, true);
+        }
+        StandEntity stand = getStandEntity(self);
+        if (stand != null) {
+            stand.setTarget(null);
+            stand.getNavigation().stop();
+        }
+    }
+
     @Override
     public void setPiloting(int id) {
         if (!(self instanceof Player player)) return;
@@ -982,14 +1021,14 @@ public class PowersWhitesnake extends BlockGrabPreset {
                         autoModeMoveClient();
                 case SKILL_1_CROUCH, SKILL_1_CROUCH_GUARD -> {
                     int value = autoFollow ? 0 : 1;
-                    tryIntPower(AUTO_MODE_FOLLOW, true, value);
+                    setAutoFollow(value != 0);
                     tryIntPowerPacket(AUTO_MODE_FOLLOW, value);
                 }
                 case SKILL_2_NORMAL, SKILL_2_GUARD ->
                         autoModeAttackClient();
                 case SKILL_2_CROUCH, SKILL_2_CROUCH_GUARD -> {
                     int value = autoAttack ? 0 : 1;
-                    tryIntPower(AUTO_MODE_ATTACK_TOGGLE, true, value);
+                    setAutoAttack(value != 0);
                     tryIntPowerPacket(AUTO_MODE_ATTACK_TOGGLE, value);
                 }
                 case SKILL_3_NORMAL -> tryToDashClient();
@@ -1584,46 +1623,8 @@ public class PowersWhitesnake extends BlockGrabPreset {
         if (move == TIME_SPARK) return useTimeSpark(value);
         if (move == ENTER_CONTROL_MODE) return enterControlModeAtCurrentPosition(value, false);
         if (move == CONTROL_MODE_FROM_AUTO) return enterControlModeAtCurrentPosition(value, true);
-        if (move == AUTO_MODE_FOLLOW) {
-            if (!autoMode) return false;
-            autoFollow = value != 0;
-            if (autoFollow) {
-                clearAutoModeTargets();
-                if (!self.level().isClientSide()) self.setLastHurtMob(null);
-                if (getActivePower() == PowerIndex.ATTACK || getActivePower() == PowerIndex.POWER_1_SNEAK
-                        || isBarraging()) {
-                    tryPower(PowerIndex.NONE, true);
-                }
-            }
-            StandEntity stand = getStandEntity(self);
-            if (stand != null) {
-                if (autoFollow) stand.setTarget(null);
-                stand.getNavigation().stop();
-            }
-            if (self instanceof ServerPlayer player) {
-                S2CPacketUtil.sendIntPowerDataPacket(player, AUTO_MODE_FOLLOW, autoFollow ? 1 : 0);
-            }
-            return true;
-        }
-        if (move == AUTO_MODE_ATTACK_TOGGLE) {
-            if (!autoMode) return false;
-            autoAttack = value != 0;
-            if (!autoAttack && manualAutoTargetId < 0) {
-                if (getActivePower() == PowerIndex.ATTACK || getActivePower() == PowerIndex.POWER_1_SNEAK
-                        || isBarraging()) {
-                    tryPower(PowerIndex.NONE, true);
-                }
-                StandEntity stand = getStandEntity(self);
-                if (stand != null) {
-                    stand.setTarget(null);
-                    stand.getNavigation().stop();
-                }
-            }
-            if (self instanceof ServerPlayer player) {
-                S2CPacketUtil.sendIntPowerDataPacket(player, AUTO_MODE_ATTACK_TOGGLE, autoAttack ? 1 : 0);
-            }
-            return true;
-        }
+        if (move == AUTO_MODE_FOLLOW) return setAutoFollow(value != 0);
+        if (move == AUTO_MODE_ATTACK_TOGGLE) return setAutoAttack(value != 0);
         if (move == AUTO_MODE_ATTACK) {
             if (!autoMode) return false;
             Entity target = self.level().getEntity(value);
@@ -1631,7 +1632,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
             double range = getMaxPilotRange() + 2.0D;
             if (!(target instanceof LivingEntity living) || !living.isAlive() || living.isRemoved()
                     || target.is(self) || target.is(stand) || self.distanceToSqr(target) > range * range) return false;
-            tryIntPower(AUTO_MODE_FOLLOW, true, 0);
+            setAutoFollow(false);
             autoMoveTarget = null;
             manualAutoTargetId = target.getId();
             if (!self.level().isClientSide()) self.setLastHurtMob(null);
@@ -1976,6 +1977,9 @@ public class PowersWhitesnake extends BlockGrabPreset {
             return;
         }
 
+        LivingEntity target = getAutoAttackTarget();
+        if (target != null) autoMoveTarget = null;
+
         if (autoMoveTarget != null) {
             stand.setTarget(null);
             double distance = stand.position().distanceTo(autoMoveTarget);
@@ -1994,8 +1998,6 @@ public class PowersWhitesnake extends BlockGrabPreset {
             return;
         }
 
-        LivingEntity target = getAutoAttackTarget();
-
         if (target == null) {
             stand.setTarget(null);
             if (autoFollow && stand.distanceTo(self) > 3.0F) {
@@ -2012,7 +2014,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
             return;
         }
 
-        if (autoFollow) tryIntPower(AUTO_MODE_FOLLOW, true, 0);
+        if (autoFollow) setAutoFollow(false);
         stand.setTarget(target);
         stand.getLookControl().setLookAt(target, 30.0F, 30.0F);
         rotateAutoStandToward(stand, target);
@@ -2054,7 +2056,9 @@ public class PowersWhitesnake extends BlockGrabPreset {
         if (target == null && manualAutoTargetId < 0 && autoAttack) target = self.getLastHurtMob();
         StandEntity stand = getStandEntity(self);
         if (target == null || stand == null || !target.isAlive() || target.isRemoved()
-                || target.level() != stand.level() || target.is(self) || target.is(stand)) {
+                || target.level() != stand.level() || target.is(self) || target.is(stand)
+                || MainUtil.cheapDistanceTo2(target.getX(), target.getZ(), self.getX(), self.getZ()) > getMaxPilotRange()
+                || Math.abs(target.getY() - self.getY()) > getMaxPilotVerticalRange()) {
             return null;
         }
         return target;
@@ -2212,7 +2216,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         if (move == AUTO_MODE_MOVE) {
             double range = getMaxPilotRange() + 2.0D;
             if (!autoMode || self.distanceToSqr(Vec3.atCenterOf(blockPos)) > range * range) return false;
-            tryIntPower(AUTO_MODE_FOLLOW, true, 0);
+            setAutoFollow(false);
             autoMoveTarget = Vec3.atBottomCenterOf(blockPos);
             manualAutoTargetId = -1;
             if (!self.level().isClientSide()) self.setLastHurtMob(null);
