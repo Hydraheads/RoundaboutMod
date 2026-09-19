@@ -368,6 +368,7 @@ public class FabricItems {
     public static Item GUCCIO_MASK = registerItem("guccio_mask", new MaskItem(new Item.Properties().stacksTo(1), new GuccioVisage(null)));
     public static Item ANASUI_MASK = registerItem("anasui_mask", new MaskItem(new Item.Properties().stacksTo(1), new AnasuiVisage(null)));
     public static Item FEM_ANASUI_MASK = registerItem("fem_anasui_mask", new MaskItem(new Item.Properties().stacksTo(1), new FemAnasuiVisage(null)));
+    public static Item ANAKISS_MASK = registerItem("anakiss_mask", new MaskItem(new Item.Properties().stacksTo(1), new AnakissVisage(null)));
     public static Item HATO_MASK = registerItem("hato_mask", new MaskItem(new Item.Properties().stacksTo(1), new HatoVisage(null)));
     public static Item SHIZUKA_MASK = registerItem("shizuka_mask", new MaskItem(new Item.Properties().stacksTo(1), new ShizukaVisage(null)));
     public static Item CHAKA_MASK = registerItem("chaka_mask", new MaskItem(new Item.Properties().stacksTo(1), new ChakaVisage(null)));
@@ -779,6 +780,7 @@ public class FabricItems {
                         entries.accept(KIRA_PART_EIGHT_MASK);
                         entries.accept(ANASUI_MASK);
                         entries.accept(FEM_ANASUI_MASK);
+                        entries.accept(ANAKISS_MASK);
                         entries.accept(STAND_DISC_EMPEROR);
                         entries.accept(MAX_STAND_DISC_EMPEROR);
                         entries.accept(STAND_DISC_PLANET_WAVES);
