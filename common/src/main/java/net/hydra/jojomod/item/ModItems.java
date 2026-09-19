@@ -248,6 +248,8 @@ public class ModItems {
     public static Item AESTHETICIAN_MASK_ZOMBIE;
     public static Item POCOLOCO_MASK;
     public static Item RINGO_MASK;
+    public static Item ANASUI_MASK;
+    public static Item FEM_ANASUI_MASK;
     public static Item GUCCIO_MASK;
     public static Item HATO_MASK;
     public static Item SHIZUKA_MASK;

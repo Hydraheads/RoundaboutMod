@@ -948,6 +948,10 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new AyaVisage(null))));
     public static final RegistryObject<Item> MISTA_MASK = addToTab(ITEMS.register("mista_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new MistaVisage(null))));
+    public static final RegistryObject<Item> ANASUI_MASK = addToWIPTab(ITEMS.register("anasui_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new AnasuiVisage(null))));
+    public static final RegistryObject<Item> FEM_ANASUI_MASK = addToWIPTab(ITEMS.register("fem_anasui_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new FemAnasuiVisage(null))));
     public static final RegistryObject<Item> GUCCIO_MASK = addToTab(ITEMS.register("guccio_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new GuccioVisage(null))));
     public static final RegistryObject<Item> VALENTINE_MASK = addToTab(ITEMS.register("valentine_mask",

@@ -24,8 +24,6 @@ public final class DiverDownControlsClient {
             previousCameraType = mc.options.getCameraType();
         }
 
-        mc.options.setCameraType(CameraType.FIRST_PERSON);
-
         if (mc.player != null && mc.getCameraEntity() != mc.player) {
             mc.setCameraEntity(mc.player);
         }
@@ -43,7 +41,6 @@ public final class DiverDownControlsClient {
             mc.setCameraEntity(mc.player);
         }
 
-        restoreCameraType(mc);
         cameraActive = false;
         isChestScreenCurrentlyOpen = false;
     }
@@ -72,12 +69,6 @@ public final class DiverDownControlsClient {
                 mc.player.playSound(closeSound, 1.0F, 1.0F);
             }
         }
-    }
-
-    private static void restoreCameraType(Minecraft mc) {
-        CameraType restore = (previousCameraType != null) ? previousCameraType : CameraType.FIRST_PERSON;
-        mc.options.setCameraType(restore);
-        previousCameraType = null;
     }
 
     public static boolean isDiving() {
