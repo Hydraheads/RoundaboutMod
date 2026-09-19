@@ -6947,6 +6947,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     @Override
+    public PowersKillerQueen rdbt$GetBtdPlantedUser() {
+        return BtdPlantedUser;
+    }
+
+    @Override
     public void rdbt$SetBtdPlantedUser(PowersKillerQueen e) {
         if (!this.level().isClientSide) {
             BtdPlantedUser = e;

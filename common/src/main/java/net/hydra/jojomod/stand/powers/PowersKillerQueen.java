@@ -1137,7 +1137,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             return false;
         }
 
-        return !(((StandUser)targetEntity).roundabout$hasAStand());
+        return !(((StandUser)targetEntity).roundabout$hasAStand()) && ((StandUser)targetEntity).rdbt$GetBtdPlantedUser() == null;
     }
 
     public boolean canBubbleTarget(Entity target) {
@@ -2695,8 +2695,14 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             this.syncBombStatus(BITES_THE_DUST);
 
-            this.setCooldown(PowerIndex.SKILL_EXTRA_2, ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatActivationCooldown);
-            this.setCooldown(PowerIndex.SKILL_EXTRA, ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatActivationCooldown);
+            int cooldown = ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatActivationCooldown;
+
+            if (!(onCooldown(PowerIndex.SKILL_EXTRA_2) && getCooldown(PowerIndex.SKILL_EXTRA_2).time > cooldown)) {
+                this.setCooldown(PowerIndex.SKILL_EXTRA_2, cooldown);
+            }
+            if (!(onCooldown(PowerIndex.SKILL_EXTRA) && getCooldown(PowerIndex.SKILL_EXTRA).time > cooldown)) {
+                this.setCooldown(PowerIndex.SKILL_EXTRA, cooldown);
+            }
 
             this.setPowerNone();
             syncActivePower();
@@ -2850,6 +2856,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                             if (!(PKQ.onCooldown(PowerIndex.SKILL_EXTRA) && PKQ.getCooldown(PowerIndex.SKILL_EXTRA).time > btdDayCooldown)) {
                                 PKQ.setCooldown(PowerIndex.SKILL_EXTRA, btdDayCooldown);
                             }
+                            PKQ.combatActivations++;
 
                         }
                     }
