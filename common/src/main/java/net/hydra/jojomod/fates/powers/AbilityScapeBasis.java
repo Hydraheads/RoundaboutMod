@@ -18,6 +18,7 @@ import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
@@ -207,6 +208,9 @@ public class AbilityScapeBasis {
 
     /** Make a stand ability cancel you using items */
     public boolean cancelItemUse() {
+        if (self.hasEffect(ModEffects.IMPRINTING)){
+            return true;
+        }
         return false;
     }
 
@@ -415,7 +419,8 @@ public class AbilityScapeBasis {
             GUARD = 32,
             VAULT = 33,
             MINING = 34,
-            MELT_DODGE_ANIM = 35;
+            MELT_DODGE_ANIM = 35,
+            SWITCH_INTO_BODY = 36;
 
     public float guardMod(){
         return 0.2f;

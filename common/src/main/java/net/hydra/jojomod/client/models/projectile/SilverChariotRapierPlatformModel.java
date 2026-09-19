@@ -16,20 +16,29 @@ import net.minecraft.client.renderer.RenderType;
 public class SilverChariotRapierPlatformModel<T extends SilverChariotRapierPlatformEntity> extends EntityModel<T> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
 	// public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "unknown"), "main");
-	private final ModelPart sword;
+	// private final ModelPart sword;
+	private final ModelPart blade;
+	private final ModelPart tip;
 
 	public SilverChariotRapierPlatformModel(ModelPart root) {
 		super(RenderType::entitySolid);
-		this.sword = root.getChild("sword");
+		// this.sword = root.getChild("sword");
+		this.blade = root.getChild("blade");
+		this.tip = this.blade.getChild("tip");
 	}
 
 	public static LayerDefinition createBodyLayer() {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
-		PartDefinition sword = partdefinition.addOrReplaceChild("sword", CubeListBuilder.create().texOffs(0, 0).addBox(-0.5F, -0.5F, -12.0F, 1.0F, 1.0F, 12.0F, new CubeDeformation(0.0F)), PartPose.offset(-0.5F, -0.5F, 8.0F));
+		// PartDefinition sword = partdefinition.addOrReplaceChild("sword", CubeListBuilder.create().texOffs(0, 0).addBox(-0.5F, -0.5F, -12.0F, 1.0F, 1.0F, 12.0F, new CubeDeformation(0.0F)), PartPose.offset(-0.5F, -0.5F, 8.0F));
+		// return LayerDefinition.create(meshdefinition, 32, 32);
 
-		return LayerDefinition.create(meshdefinition, 32, 32);
+		PartDefinition blade = partdefinition.addOrReplaceChild("blade", CubeListBuilder.create().texOffs(92, 107).addBox(0.0F, -2.5F, 7.0F, 0.0F, 5.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -2.5F, -4.0F));
+
+		PartDefinition tip = blade.addOrReplaceChild("tip", CubeListBuilder.create().texOffs(97, 110).addBox(0.0F, -2.5F, 0.0F, 0.0F, 5.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+		return LayerDefinition.create(meshdefinition, 128, 128);
 	}
 
 	@Override
@@ -38,6 +47,7 @@ public class SilverChariotRapierPlatformModel<T extends SilverChariotRapierPlatf
 
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		sword.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		// sword.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		blade.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
 	}
 }

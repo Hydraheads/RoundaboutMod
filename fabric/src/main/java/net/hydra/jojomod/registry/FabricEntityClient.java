@@ -145,6 +145,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.GENTLY_WEEPS, GentlyWeepsRenderer::new);
         EntityRendererRegistry.register(FabricEntities.STAND_ARROW, StandArrowRenderer::new);
         EntityRendererRegistry.register(FabricEntities.BOMB_PLANTED_ARROW, BombPlantedArrowRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.BOMB_PLANTED_ENDERPEARL, ThrownItemRenderer::new);
         EntityRendererRegistry.register(FabricEntities.BOMB_PLANTED_SPECTRAL_ARROW, BombPlantedArrowRenderer::new);
         EntityRendererRegistry.register(FabricEntities.IRON_BALL, IronBallRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_OBJECT, ThrownObjectRenderer::new);
@@ -219,6 +220,8 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.SHEER_HEART_ATTACK, SheerHeartAttackRenderer::new);
         
         EntityRendererRegistry.register(FabricEntities.METALLICA_KNIFE, KnifeRenderer::new);
+
+        EntityRendererRegistry.register(FabricEntities.BONE_PROJECTILE, BoneProjectileRenderer::new);
 
         /*Models*/
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.WOLF_LAYER, TerrierEntityModel::createBodyLayerTerrier);
@@ -374,6 +377,7 @@ public class FabricEntityClient {
         ModStrayModels.killerQueenArmsPart = new KillerQueenArmsPart();
         ModStrayModels.theWorldArmsPart = new TheWorldArmsPart();
         ModStrayModels.starPlatinumArmsPart = new StarPlatinumArmsPart();
+        ModStrayModels.silverChariotArmsPart = new SilverChariotArmsPart();
         ModStrayModels.ChestPart = new ChestPart();
         ModStrayModels.SmallChestPart = new SmallChestPart();
         ModStrayModels.bodySpikePart = new BodySpikePart();

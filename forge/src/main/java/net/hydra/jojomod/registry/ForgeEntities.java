@@ -626,6 +626,12 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "d4c").toString())
             );
+    public static final RegistryObject<EntityType<BoneProjectileEntity>> BONE_PROJECTILE = ENTITY_TYPES.register("bone_projectile",
+            () -> EntityType.Builder.<BoneProjectileEntity>of(BoneProjectileEntity::new, MobCategory.MISC)
+                    .sized(0.5F, 0.5F)
+                    .clientTrackingRange(4)
+                    .updateInterval(20)
+                    .build(new ResourceLocation(Roundabout.MOD_ID, "bone_projectile").toString()));
     public static final RegistryObject<EntityType<SilverChariotEntity>> SILVER_CHARIOT =
             ENTITY_TYPES.register("silver_chariot", () ->
                     EntityType.Builder.of(SilverChariotEntity::new, MobCategory.MISC).sized(0.75f, 2.05f).
@@ -634,13 +640,13 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<SilverChariotRapierShotEntity>> SILVER_CHARIOT_RAPIER =
             ENTITY_TYPES.register("silver_chariot_rapier", () ->
-                    EntityType.Builder.<SilverChariotRapierShotEntity>of(SilverChariotRapierShotEntity::new, MobCategory.MISC).sized(0.2f, 0.2f).
+                    EntityType.Builder.<SilverChariotRapierShotEntity>of(SilverChariotRapierShotEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).
                             clientTrackingRange(16).
                             build(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_rapier").toString())
             );
     public static final RegistryObject<EntityType<SilverChariotRapierPlatformEntity>> SILVER_CHARIOT_RAPIER_PLATFORM =
             ENTITY_TYPES.register("silver_chariot_rapier_platform", () ->
-                    EntityType.Builder.<SilverChariotRapierPlatformEntity>of(SilverChariotRapierPlatformEntity::new, MobCategory.MISC).sized(2.0f, 0.2f).
+                    EntityType.Builder.<SilverChariotRapierPlatformEntity>of(SilverChariotRapierPlatformEntity::new, MobCategory.MISC).sized(1.0f, 0.2f).
                             clientTrackingRange(16).
                             build(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_rapier_platform").toString())
             );
@@ -844,6 +850,12 @@ public class ForgeEntities {
                     EntityType.Builder.<BombPlantedSpectralArrow>of(BombPlantedSpectralArrow::new, MobCategory.MISC).sized(0.7f, 0.7f).
                             clientTrackingRange(6).
                             build(new ResourceLocation(Roundabout.MOD_ID, "bomb_planted_spectral_arrow").toString())
+            );
+    public static final RegistryObject<EntityType<BombPlantedEnderpearl>> BOMB_PLANTED_ENDERPEARL =
+            ENTITY_TYPES.register("bomb_planted_enderpearl", () ->
+                    EntityType.Builder.<BombPlantedEnderpearl>of(BombPlantedEnderpearl::new, MobCategory.MISC).sized(0.7f, 0.7f).
+                            clientTrackingRange(6).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "bomb_planted_enderpearl").toString())
             );
     public static final RegistryObject<EntityType<IronBallEntity>> IRON_BALL =
             ENTITY_TYPES.register("iron_ball", () ->

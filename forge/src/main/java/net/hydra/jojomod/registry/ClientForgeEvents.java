@@ -125,6 +125,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.TUSK_A3.get(), TuskAct3Renderer::new);
         event.registerEntityRenderer(ForgeEntities.TUSK_A4.get(), TuskAct4Renderer::new);
         event.registerEntityRenderer(ForgeEntities.DIVER_DOWN.get(), DiverDownRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.BONE_PROJECTILE.get(), BoneProjectileRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT.get(), SilverChariotRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT_RAPIER.get(), SilverChariotRapierRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT_RAPIER_PLATFORM.get(), SilverChariotRapierPlatformRenderer::new);
@@ -148,6 +149,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.STAND_ARROW.get(), StandArrowRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BOMB_PLANTED_ARROW.get(), BombPlantedArrowRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BOMB_PLANTED_SPECTRAL_ARROW.get(), BombPlantedArrowRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.BOMB_PLANTED_ENDERPEARL.get(), ThrownItemRenderer::new);
         event.registerEntityRenderer(ForgeEntities.IRON_BALL.get(), IronBallRenderer::new);
         event.registerEntityRenderer(ForgeEntities.CROSSFIRE_HURRICANE.get(), CrossfireHurricaneRenderer::new);
         event.registerEntityRenderer(ForgeEntities.LIFE_TRACKER.get(), LifeTrackerRenderer::new);
@@ -387,6 +389,7 @@ public class ClientForgeEvents {
         ModStrayModels.killerQueenArmsPart = new KillerQueenArmsPart();
         ModStrayModels.theWorldArmsPart = new TheWorldArmsPart();
         ModStrayModels.starPlatinumArmsPart = new StarPlatinumArmsPart();
+        ModStrayModels.silverChariotArmsPart = new SilverChariotArmsPart();
         ModStrayModels.MoldSpine = new MoldSpineModel();
         ModStrayModels.MoldRightArm = new MoldRightArm<>();
         ModStrayModels.MoldLeftArm = new MoldLeftArm();

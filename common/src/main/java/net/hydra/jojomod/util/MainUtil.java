@@ -42,6 +42,7 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampiricFate;
+import net.hydra.jojomod.fates.powers.ZombieFate;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.item.*;
@@ -2723,6 +2724,7 @@ public class MainUtil {
         return value.equals(ModEffects.BLEED) || value.equals(ModEffects.FACELESS)
                 || value.equals(ModEffects.BANISH) || value.equals(ModEffects.WARDING) || value.equals(ModEffects.HEX)
                 || value.equals(ModEffects.SWITCH) || value.equals(ModEffects.STAND_VIRUS) ||
+                value.equals(ModEffects.IMPRINTING) || value.equals(ModEffects.SWAPPED) ||
                 value.equals(ModEffects.SINGE)
                 || value.equals(ModEffects.STAND_MELTING) ||
                 value.equals(ModEffects.CAPTURING_LOVE) || value.equals(ModEffects.MELTING)
@@ -2733,7 +2735,8 @@ public class MainUtil {
         return value.equals(ModEffects.BLEED) || value.equals(ModEffects.CAPTURING_LOVE)
                 || value.equals(ModEffects.FACELESS)
                 || value.equals(ModEffects.BANISH) || value.equals(ModEffects.WARDING) || value.equals(ModEffects.HEX)
-                || value.equals(ModEffects.SWITCH) || value.equals(ModEffects.MELTING)
+                || value.equals(ModEffects.SWITCH) || value.equals(ModEffects.MELTING) ||
+                value.equals(ModEffects.IMPRINTING) || value.equals(ModEffects.SWAPPED)
                 || value.equals(ModEffects.STAND_MELTING) ||
                 value.equals(ModEffects.SINGE);
     }
@@ -3799,7 +3802,20 @@ public class MainUtil {
 
         return 5;
     }
-
+    public static boolean getIsGamemodeApproriateForObtainment(Entity Li) {
+        if (Li != null && !Li.level().isClientSide()) {
+            if ((!(Li instanceof Player) || (((ServerPlayer) Li).gameMode.getGameModeForPlayer() != GameType.SPECTATOR
+                    && ((ServerPlayer) Li).gameMode.getGameModeForPlayer() != GameType.ADVENTURE))
+                    && Li.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)
+                    && Li.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING_OBTAINMENT)) {
+                if (PowerTypes.isExistentiallyElsewhere(Li) && !PowerTypes.canInteractInExistence(Li)) {
+                    return false;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
     public static boolean getIsGamemodeApproriateForGrief(Entity Li) {
         if (Li != null && !Li.level().isClientSide()) {
             if ((!(Li instanceof Player) || (((ServerPlayer) Li).gameMode.getGameModeForPlayer() != GameType.SPECTATOR
@@ -4016,6 +4032,14 @@ public class MainUtil {
                 pw.toggleSpikes(true);
                 pw.setHeelDirection(cd);
                 pw.justFlippedTicks = 7;
+            } else if (powers instanceof PowersDiverDown pdd) {
+                if (!player.level().isClientSide()) {
+                    player.level().playSound(null, player.blockPosition(), ModSounds.WALL_LATCH_EVENT,
+                            SoundSource.PLAYERS, 1F, 1f);
+                }
+                pdd.toggleZip(true);
+                pdd.setHeelDirection(cd);
+                pdd.justFlippedTicks = 10;
             }
             ((IGravityEntity) player).roundabout$setGravityDirection(cd);
         } else if (context == PacketDataIndex.INT_GRAVITY_FLIP_3) {

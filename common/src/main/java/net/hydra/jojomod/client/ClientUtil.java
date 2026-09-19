@@ -8,7 +8,7 @@ import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.gui.*;
-import net.hydra.jojomod.client.gui.diverdown.DiverDownWorkbenchSelect;
+import net.hydra.jojomod.client.gui.diverdown.*;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.client.models.visages.parts.FirstPersonArmsModel;
 import net.hydra.jojomod.client.models.visages.parts.FirstPersonArmsSlimModel;
@@ -1718,6 +1718,8 @@ public class ClientUtil {
 
     //Diver Down UI start
     public static void openWorkbenchSelect() {Minecraft.getInstance().setScreen(new DiverDownWorkbenchSelect());}
+    public static void openAfflictionSelect() {Minecraft.getInstance().setScreen(new DiverDownAfflictionSelection());}
+    public static void openDisguiseScreen() {Minecraft.getInstance().setScreen(new DiverDownDisguiseScreen());}
     //Diver Down UI end
 
     public static void strikePose(Player player, Minecraft C, boolean keyIsDown, Options option) {
@@ -2384,6 +2386,8 @@ public class ClientUtil {
                         r, g, b, opacity, 0.89F);
                 ModStrayModels.killerQueenArmsPart.render(cameraEnt, cameraEnt.tickCount + getFrameTime(), stack, source, light,
                         r, g, b, opacity, 0.89F);
+                ModStrayModels.silverChariotArmsPart.render(cameraEnt, cameraEnt.tickCount + getFrameTime(), stack, source, light,
+                        r, g, b, opacity, 0.89F);
                 stack.popPose();
             }
             if (ClientUtil.isRenderingFlag(play)) {
@@ -2836,5 +2840,14 @@ public class ClientUtil {
             return ((IInputEvents) m).getSwitchTick() == m.player.tickCount;
         }
         return false;
+    }
+
+    // this is here to prevent moves that speed the user up from going too fast when diagonal keys are stacked.
+    public static boolean isMovingDiagonally() {
+        Minecraft client = Minecraft.getInstance();
+        if (client == null || client.options == null) return false;
+        boolean forwardOrBack = client.options.keyUp.isDown() || client.options.keyDown.isDown();
+        boolean strafe = client.options.keyLeft.isDown() || client.options.keyRight.isDown();
+        return forwardOrBack && strafe;
     }
 }
