@@ -1031,7 +1031,7 @@ public class StandPowers extends AbilityScapeBasis {
     }
     public float getSoundVolumeFromByte(byte soundChoice){
         if (soundChoice == SoundIndex.BITES_THE_DUST_COMBAT || soundChoice == SoundIndex.BITES_THE_DUST_DAY) {
-            return 0.7f;
+            return 0.5f;
         }
         if (soundChoice == TIME_STOP_NOISE) {
             return 0.7f;

@@ -2860,6 +2860,10 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                         }
                     }
+
+                    if (ent instanceof Player PL) {
+                        S2CPacketUtil.sendPlaySoundPacket(PL, self.getId(), getBitesTheDustCombatByte());
+                    }
                 }
             }
             packetNearby2();
@@ -3447,7 +3451,6 @@ public class PowersKillerQueen extends NewPunchingStand {
                 BlockPos blockPos = serverPlayerEntity.blockPosition();
                 if (blockPos.closerToCenterThan(userLocation, 100)) {
                     S2CPacketUtil.sendBlipPacket(serverPlayerEntity, (byte) 2, entId,blip);
-                    S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, this.self.getId(), getBitesTheDustCombatByte());
                 }
             }
         }

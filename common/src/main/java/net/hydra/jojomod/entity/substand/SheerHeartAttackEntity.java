@@ -830,7 +830,6 @@ public class SheerHeartAttackEntity extends StandEntity {
 				BlockState BS = this.level().getBlockState(this.blockTarget);
 				if (BS.isPathfindable(this.level(), this.blockTarget, PathComputationType.LAND)) {
 					newPath = this.getNavigation().createPath(this.blockTarget.below(), 0);
-					//this.level().getBlockState(this.blockTarget);
 				}else {
 					newPath = this.getNavigation().createPath(this.blockTarget, 0);
 				}
@@ -851,7 +850,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 
 	public int getBlockWarm(BlockPos pos, Level level) {
-		if (explodedBlocks.contains(new Vec3(blockTarget.getX(), blockTarget.getY(), blockTarget.getZ()))) {
+		if (explodedBlocks.contains(new Vec3(pos.getX(), pos.getY(), pos.getZ()))) {
 			return -1;
 		}
 
