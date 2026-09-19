@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.navigation.StandEntityNavigation;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -379,7 +380,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 						stunTicks = 40;
 					}else {
 						throwDamageCooldown--;
-						AABB bb = this.getBoundingBox().inflate(1.5);
+						AABB bb = this.getBoundingBox().inflate(0.15);
 						List<Entity> SHAAA = this.level().getEntities(this, bb);
 						for (Entity ent : SHAAA) {
 							if (ent.getId() == user.getId() || ent instanceof StandEntity) {
@@ -610,7 +611,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		if (this.getTargetType() == BLOCK) {
 			minDist = 1.4f;
 		}else if (getTargetType() == ENTITY && entityTarget != null) {
-			AABB bb = this.getBoundingBox().inflate(1.2);
+			AABB bb = this.getBoundingBox().inflate(0.15);
 			List<Entity> SHAAA = this.level().getEntities(this, bb);
 			for (Entity ent : SHAAA) {
 				if (ent == entityTarget) {
@@ -900,7 +901,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 			MobType mobType = LE.getMobType();
 			if (ClientNetworking.getAppropriateConfig().killerQueenSettings.sheerHeartAttackSeenUndeadAndArthropod
-					&& (mobType.equals(MobType.UNDEAD) || mobType.equals(MobType.ARTHROPOD) )
+					&& (mobType.equals(MobType.UNDEAD) || mobType.equals(MobType.ARTHROPOD)
+					|| (LE instanceof FallenMob) )
 					|| FateTypes.isVampire(LE) || FateTypes.isZombie(LE)) { points -= 30;}
 		}
 

@@ -5,21 +5,28 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.properties.Property;
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.Services;
 import net.minecraft.server.players.GameProfileCache;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.StringUtil;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -42,6 +49,7 @@ public class HandBlockEntity extends BlockEntity {
     private int animationTickCount;
     private boolean isAnimating;
 
+
     public HandBlockEntity(BlockPos $$0, BlockState $$1) {
         super(ModBlocks.HAND_BLOCK_ENTITY, $$0, $$1);
     }
@@ -58,32 +66,81 @@ public class HandBlockEntity extends BlockEntity {
         mainThreadExecutor = null;
     }
 
+    private ItemStack storedStack = ItemStack.EMPTY;
+
+    public void setStoredStack(ItemStack stack) {
+        this.storedStack = stack.copy();
+        setChanged();
+    }
+
+    public ItemStack getStoredStack() {
+        return storedStack;
+    }
+
+    public void popOutRecord() {
+        if (this.level == null || this.level.isClientSide) {
+            return;
+        }
+        BlockPos blockPos = this.getBlockPos();
+        ItemStack itemStack = this.getStoredStack();
+        if (itemStack.isEmpty()) {
+            return;
+        }
+
+        storedStack = null;
+        Vec3 vec3 = Vec3.atLowerCornerWithOffset(blockPos, 0.5, 0.3, 0.5);
+        ItemStack itemStack2 = itemStack.copy();
+        ItemEntity itemEntity = new ItemEntity(this.level, vec3.x(), vec3.y(), vec3.z(), itemStack2);
+        itemEntity.setPickUpDelay(2);
+        itemEntity.setDeltaMovement(0,0.1F,0);
+        this.level.addFreshEntity(itemEntity);
+        /*level.playSound(null, vec3.x(), vec3.y(), vec3.z(),
+                ModSounds.CHESS_BREAK_EVENT, SoundSource.PLAYERS, 1F,
+                (float) (1.00f + Math.random() * 0.01f));*/
+    }
+
     protected void saveAdditional(CompoundTag $$0) {
         super.saveAdditional($$0);
-        if (this.owner != null) {
+        /*if (this.owner != null) {
             CompoundTag $$1 = new CompoundTag();
             NbtUtils.writeGameProfile($$1, this.owner);
             $$0.put("HandOwner", $$1);
-        }
+        }*/
 
         if (this.noteBlockSound != null) {
             $$0.putString("note_block_sound", this.noteBlockSound.toString());
         }
 
+        if (!storedStack.isEmpty()) {
+            $$0.put("StoredStack", storedStack.save(new CompoundTag()));
+        }
+
     }
     public void load(CompoundTag $$0) {
         super.load($$0);
-        if ($$0.contains("HandOwner", 10)) {
+        /*if ($$0.contains("HandOwner", 10)) {
             this.setOwner(NbtUtils.readGameProfile($$0.getCompound("HandOwner")));
-        } else if ($$0.contains("ExtraType", 8)) {
+        } else /if ($$0.contains("ExtraType", 8)) {
             String $$1 = $$0.getString("ExtraType");
             if (!StringUtil.isNullOrEmpty($$1)) {
                 this.setOwner(new GameProfile((UUID)null, $$1));
             }
-        }
+        }*/
 
         if ($$0.contains("note_block_sound", 8)) {
             this.noteBlockSound = ResourceLocation.tryParse($$0.getString("note_block_sound"));
+        }
+
+        if ($$0.contains("StoredStack")) {
+            storedStack = ItemStack.of($$0.getCompound("StoredStack"));
+            if (storedStack.hasTag()) {
+                CompoundTag compoundtag = storedStack.getTag();
+                if (compoundtag.contains("HandOwner")) {
+                    this.setOwner(NbtUtils.readGameProfile(compoundtag.getCompound("HandOwner")));
+                }
+            }
+        } else {
+            storedStack = ItemStack.EMPTY;
         }
 
     }
@@ -108,10 +165,6 @@ public class HandBlockEntity extends BlockEntity {
 
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);
-    }
-
-    public CompoundTag getUpdateTag() {
-        return this.saveWithoutMetadata();
     }
 
     public void setOwner(@Nullable GameProfile $$0) {

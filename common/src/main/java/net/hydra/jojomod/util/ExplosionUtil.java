@@ -5,11 +5,13 @@ import java.util.List;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import org.joml.Vector3f;
@@ -152,9 +154,9 @@ public class ExplosionUtil {
 	public static void explodeBlocksBase(BlockPos location, Level level, Float range, boolean ignoreOres, Entity causer) {
 		Vec3 center = new Vec3(location.getX(), location.getY(), location.getZ());
 
-		int intSize = (int) Math.floor(range);
+		int intSize = (int) Math.round(range);
 
-		double explosionDistanceMax = Math.pow(range + 0.5, 2);
+		double explosionDistanceMax = Math.pow(range + 0.45, 2);
 
 		for (BlockPos pos : BlockPos.betweenClosed(location.offset(intSize, intSize, intSize), location.offset(-intSize, -intSize, -intSize))) {
 			BlockState info = level.getBlockState(pos);
@@ -170,7 +172,7 @@ public class ExplosionUtil {
 			Double dist2 = center.distanceToSqr(pos.getX(), pos.getY(), pos.getZ());
 
 			if (dist2 <= explosionDistance && !(causer instanceof Player PL && !MainUtil.canPlaceOnClaim(PL, pos))) {
-				boolean shouldDrop = !info.requiresCorrectToolForDrops();
+				boolean shouldDrop = !info.requiresCorrectToolForDrops() && level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING_OBTAINMENT);
 				level.destroyBlock(pos, shouldDrop);
 			}
 		}

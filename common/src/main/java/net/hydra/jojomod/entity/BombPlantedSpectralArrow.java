@@ -39,6 +39,7 @@ public class BombPlantedSpectralArrow extends SpectralArrow {
 
     @Override
     protected void doPostHurtEffects(LivingEntity target) {
+        super.doPostHurtEffects(target);
         if (target != getOwner() && getOwner() instanceof LivingEntity LE && ((StandUser) LE).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ
                 && PKQ.bombEntity.getId() == getId()) {
             PKQ.contactDetonate(target);

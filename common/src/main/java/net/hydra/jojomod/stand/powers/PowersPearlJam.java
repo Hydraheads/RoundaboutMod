@@ -64,7 +64,6 @@ public class PowersPearlJam extends NewDashPreset {
     public List<LivingEntity> palmReadOrder = new ArrayList<>();
     public Map<LivingEntity, Integer> tickOffsets = new HashMap<>();
 
-
     public static final byte PALM_READ_SOUND = 123;
 
     public static final List<PowersPearlJam> INSTANCES = new ArrayList<>();
@@ -391,7 +390,7 @@ public class PowersPearlJam extends NewDashPreset {
     public boolean isWip() {return true;}
 
     @Override
-    public Component ifWipListDevStatus() {return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.RED);}
+    public Component ifWipListDevStatus() {return Component.translatable(  "roundabout.dev_status.paused").withStyle(ChatFormatting.RED);}
 
     @Override
     public Component ifWipListDev() {return Component.literal(  "Victor Bryan").withStyle(ChatFormatting.DARK_RED);}
