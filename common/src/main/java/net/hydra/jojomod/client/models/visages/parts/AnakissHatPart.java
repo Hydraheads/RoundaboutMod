@@ -33,9 +33,9 @@ public class AnakissHatPart extends PsuedoHierarchicalModel {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition hat = partdefinition.addOrReplaceChild("hat", CubeListBuilder.create().texOffs(-14, 0).addBox(-8.0F, -29.075F, -7.0F, 16.0F, 0.0F, 14.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 24.0F, 0.0F));
+        PartDefinition hat = partdefinition.addOrReplaceChild("hat", CubeListBuilder.create().texOffs(-14, 0).addBox(-8.0F, -29.075F, -7.0F, 16.0F, 0.05F, 14.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 24.0F, 0.0F));
 
-        PartDefinition feather_r1 = hat.addOrReplaceChild("feather_r1", CubeListBuilder.create().texOffs(-4, 16).addBox(-5.0F, 0.0F, -2.0F, 5.0F, 0.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-4.25F, -29.075F, -2.0F, 0.0F, 0.0F, 1.1345F));
+        PartDefinition feather_r1 = hat.addOrReplaceChild("feather_r1", CubeListBuilder.create().texOffs(-4, 16).addBox(-5.0F, 0.0F, -2.0F, 5.0F, 0.05F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-4.25F, -29.075F, -2.0F, 0.0F, 0.0F, 1.1345F));
 
         return LayerDefinition.create(meshdefinition, 32, 32);
     }

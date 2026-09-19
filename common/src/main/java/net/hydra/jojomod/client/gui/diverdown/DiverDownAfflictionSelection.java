@@ -90,9 +90,8 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
     @Override
     public boolean keyReleased(int $$0, int $$1, int $$2) {
         if (this.minecraft != null && !roundabout$sameKeyOne(KeyInputRegistry.abilityTwoKey)) {
-            boolean isDisguise = this.currentlyHovered == AfflictionType.DISGUISE_ID;
             this.selectHoveredAffliction();
-            if (!isDisguise) {
+            if (this.minecraft.screen == this) {
                 this.minecraft.setScreen(null);
             }
             if (this.minecraft.player != null){
@@ -119,9 +118,8 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
     @Override
     public boolean mouseReleased(double $$0, double $$1, int $$2) {
         if ($$2 == 0 && (this.currentlyHovered != AfflictionType.NONE)) {
-            boolean isDisguise = this.currentlyHovered == AfflictionType.DISGUISE_ID;
             this.selectHoveredAffliction();
-            if (!isDisguise) {
+            if (this.minecraft.screen == this) {
                 this.minecraft.setScreen(null);
             }
             this.minecraft.options.keyUse.setDown(false);

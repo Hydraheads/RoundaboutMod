@@ -59,19 +59,15 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.ExperienceOrb;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.inventory.LoomMenu;
 import net.minecraft.world.inventory.StonecutterMenu;
@@ -140,7 +136,8 @@ public class PowersDiverDown extends NewPunchingStand {
             TRANSFER = 75,
             RIBCAGE_TRAP = 76,
             BONE_BOMB = 77,
-            SPRING_LEGS = 78;
+            SPRING_LEGS = 78,
+            TOGGLE_DAMAGE_REDIRECT = 79;
 
     // for all the move ids accessed elsewhere.
     public static final byte
@@ -165,6 +162,7 @@ public class PowersDiverDown extends NewPunchingStand {
     public volatile List<BlockPos> detectedOres = new ArrayList<>();
     private int oreScanCooldown = 0;
     public boolean isOpeningRemoteChest = false;
+    public boolean oreDetectionEnabled = false;
 
     // used for ground barrage
     private int MAX_GROUND_BARRAGE_TICKS = 20; // will count down from 10 ticks AKA half a second + 1 for the final hit
@@ -208,7 +206,8 @@ public class PowersDiverDown extends NewPunchingStand {
     public Entity submergedTarget = null;
     public static final int DIVE_WINDUP_MAX = 30; // 1.5 seconds uncancellable windup
     public static final float DIVE_REACH = 4.0f; // how far it goes
-    public boolean isTransferringDamage = false; // recursion guard, prevents things like 2 DDs repeatedly protecting
+    public boolean isTransferringDamage = false; // recursion guard, prevents things like 2 DDs repeatedly protecting each other
+    public boolean damageRedirectionEnabled = true;
     // each other
     public boolean hasDiverLegs = false;
     public static final int TRANSFER_WINDUP_MAX = 40;
@@ -406,7 +405,9 @@ public class PowersDiverDown extends NewPunchingStand {
             return false;
         if (forceBlock())
             return false;
-        if (this.self.onGround())
+        if ((this.self.onGround() && !inZipMode()) || (!this.self.onGround() && inZipMode()))
+            return false;
+        if (areStandMovesDisabled())
             return false;
 
         Vec3 mpos = this.self.getPosition(1F);
@@ -505,7 +506,9 @@ public class PowersDiverDown extends NewPunchingStand {
                 // stops everything else from working
                 return;
             } else if (isPiloting()) {
-                if (context == PowerContext.SKILL_4_NORMAL) {
+                if (context == PowerContext.SKILL_1_NORMAL) {
+                    toggleOreDetection();
+                } else if (context == PowerContext.SKILL_4_NORMAL) {
                     exitGroundDive();
                     // note: still not sure about the heirarchy for sneak + guard moves. Replace
                     // this when known.
@@ -517,7 +520,10 @@ public class PowersDiverDown extends NewPunchingStand {
                 // stops everything else from working
                 return;
             } else if (isDiveActive()) {
-                if(context == PowerContext.SKILL_3_NORMAL)
+                if (context == PowerContext.SKILL_1_NORMAL){
+                    tryToggleDamageRedirect();
+                }
+                else if(context == PowerContext.SKILL_3_NORMAL)
                     tryToDashClient();
                 else if (context == PowerContext.SKILL_4_NORMAL) {
                     tryEmergeClient();
@@ -582,6 +588,10 @@ public class PowersDiverDown extends NewPunchingStand {
         // does the submerge
         if (move == DIVER_SUBMERGE_START) {
             return startDiveWindupServer();
+        }
+        // toggles damage redirection
+        else if (move == TOGGLE_DAMAGE_REDIRECT) {
+            return toggleDamageRedirectServer();
         }
         // recalls stand
         else if (move == DIVER_EMERGE) {
@@ -1460,12 +1470,17 @@ public class PowersDiverDown extends NewPunchingStand {
                         }
                     }
                 }
-                if (this.oreScanCooldown <= 0) {
-                    scoutForOresBeneathClient();
-                    //prevents the person's pc from exploding by scanning too many highlights at once
-                    this.oreScanCooldown = 5;
+                if (this.oreDetectionEnabled) {
+                    if (this.oreScanCooldown <= 0) {
+                        scoutForOresBeneathClient();
+                        this.oreScanCooldown = 3;
+                    } else {
+                        this.oreScanCooldown--;
+                    }
                 } else {
-                    this.oreScanCooldown--;
+                    if (!this.detectedOres.isEmpty()) {
+                        this.detectedOres = Collections.emptyList();
+                    }
                 }
             } else if (wasPilotingClient) {
                 // if this runs again, it ends early.
@@ -1621,7 +1636,8 @@ public class PowersDiverDown extends NewPunchingStand {
                                 for (LivingEntity v : victims) {
                                     if (v instanceof Player) {
                                         hasPlayer = true;
-                                    } else {
+                                    // doesn't trigger if it's a pet
+                                    } else if (!(v instanceof TamableAnimal TA && TA.getOwner() != null && TA.getOwner().is(this.getSelf()))){
                                         hasMob = true;
                                     }
                                 }
@@ -2058,6 +2074,13 @@ public class PowersDiverDown extends NewPunchingStand {
             }
         }
         this.detectedOres = found;
+    }
+
+    public void toggleOreDetection() {
+        this.oreDetectionEnabled = !this.oreDetectionEnabled;
+        if (!this.oreDetectionEnabled) {
+            this.detectedOres = Collections.emptyList();
+        }
     }
 
     // walking heart autostep works on the player, not on the stand. i can't copy
@@ -2504,6 +2527,9 @@ public class PowersDiverDown extends NewPunchingStand {
         BlockPos spawnPos = pos.relative(face);
 
         for (LivingEntity victim : victims) {
+            if (victim instanceof TamableAnimal TA && TA.getOwner() != null && TA.getOwner().is(this.getSelf())) {
+                continue;
+            }
             DamageHandler.StandDamageEntity(victim, 8.0F, this.self);
             Vec3 dir = trap.launchVector != null ? trap.launchVector : new Vec3(face.getStepX(), face.getStepY(), face.getStepZ());
 
@@ -2706,7 +2732,7 @@ public class PowersDiverDown extends NewPunchingStand {
      * handles the damage transfer ability
      */
     public void onSubmergedTargetHurt(DamageSource source, float amount) {
-        if (this.isTransferringDamage || !isDiveActive() || isSelfDive())
+        if (!this.damageRedirectionEnabled || this.isTransferringDamage || !isDiveActive() || isSelfDive())
             return;
         this.isTransferringDamage = true;
         try {
@@ -2762,6 +2788,17 @@ public class PowersDiverDown extends NewPunchingStand {
         return isDiveActive() && this.submergedTarget == this.self;
     }
 
+    private void tryToggleDamageRedirect() {
+        if (!isDiveActive() || isSelfDive()) return;
+        this.tryPower(TOGGLE_DAMAGE_REDIRECT, true);
+        tryPowerPacket(TOGGLE_DAMAGE_REDIRECT);
+    }
+
+    public boolean toggleDamageRedirectServer() {
+        this.damageRedirectionEnabled = !this.damageRedirectionEnabled;
+        return true;
+    }
+
     // dive end
 
     // dive afflictions start
@@ -2786,9 +2823,10 @@ public class PowersDiverDown extends NewPunchingStand {
 
         switch (afflictionId) {
             case DISGUISE -> {
-                // test message, comment this out once done
-                // serverPlayer.displayClientMessage(Component.literal("SERVER: calling
-                // crafting"), false);
+                if (this.submergedTarget instanceof StandUser su && su.roundabout$isDisguised()) {
+                    su.roundabout$clearDisguise();
+                    return true;
+                }
                 tryDisguiseClient();
                 return true;
             }
