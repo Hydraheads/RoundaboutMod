@@ -5245,6 +5245,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             $$1 /= 2;
             adj = true;
         }
+        if (this.roundabout$hasDiverLegs()) {
+            $$0 = Math.max(0, $$0 - 2.5F);
+            $$1 *= 0.67F;
+            adj = true;
+        }
         int yesInt = roundabout$getAdjustedGravity();
         if (yesInt > 0 || adj) {
             cir.setReturnValue(roundabout$calculateFallDamage($$0, $$1, yesInt));

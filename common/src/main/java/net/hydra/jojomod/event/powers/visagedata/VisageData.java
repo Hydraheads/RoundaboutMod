@@ -140,6 +140,9 @@ public class VisageData {
     public boolean rendersGyroHat(){
         return false;
     }
+    public boolean rendersAnakissHat(){
+        return false;
+    }
     public boolean rendersSchoolHat(){
         return false;
     }

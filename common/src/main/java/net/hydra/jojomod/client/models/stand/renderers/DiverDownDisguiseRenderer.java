@@ -17,7 +17,13 @@ import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CrossbowItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Map;
@@ -31,6 +37,7 @@ public final class DiverDownDisguiseRenderer extends LivingEntityRenderer<Living
 
     private final PlayerModel<LivingEntity> regularModel;
     private final PlayerModel<LivingEntity> slimModel;
+    private final HumanoidArmorLayer<LivingEntity, PlayerModel<LivingEntity>, HumanoidArmorModel<LivingEntity>> armorLayer;
     private final Map<UUID, SkinData> skins = new ConcurrentHashMap<>();
     private final Set<UUID> requestedSkins = ConcurrentHashMap.newKeySet();
     private SkinData currentSkin = null;
@@ -39,12 +46,13 @@ public final class DiverDownDisguiseRenderer extends LivingEntityRenderer<Living
         super(context, new PlayerModel<>(context.bakeLayer(ModelLayers.PLAYER), false), 0.5F);
         this.regularModel = this.model;
         this.slimModel = new PlayerModel<>(context.bakeLayer(ModelLayers.PLAYER_SLIM), true);
-
-        // armor and everything else compatability
-        this.addLayer(new HumanoidArmorLayer<>(this,
+        this.armorLayer = new HumanoidArmorLayer<>(
+                this,
                 new HumanoidArmorModel<>(context.bakeLayer(ModelLayers.PLAYER_INNER_ARMOR)),
                 new HumanoidArmorModel<>(context.bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR)),
-                context.getModelManager()));
+                context.getModelManager()
+        );
+        this.addLayer(this.armorLayer);
         this.addLayer(new ItemInHandLayer<>(this, context.getItemInHandRenderer()));
         this.addLayer(new CustomHeadLayer<>(this, context.getModelSet(), context.getItemInHandRenderer()));
         this.addLayer(new ElytraLayer<>(this, context.getModelSet()));
@@ -56,15 +64,63 @@ public final class DiverDownDisguiseRenderer extends LivingEntityRenderer<Living
         this.model = this.currentSkin.slim ? this.slimModel : this.regularModel;
         this.model.setAllVisible(true);
         this.model.crouching = entity.isCrouching();
-        this.model.rightArmPose = entity.getMainHandItem().isEmpty() ? HumanoidModel.ArmPose.EMPTY : HumanoidModel.ArmPose.ITEM;
-        this.model.leftArmPose = entity.getOffhandItem().isEmpty() ? HumanoidModel.ArmPose.EMPTY : HumanoidModel.ArmPose.ITEM;
-
-        if (entity.isBlocking()) {
-            if (!entity.getOffhandItem().isEmpty()) this.model.leftArmPose = HumanoidModel.ArmPose.BLOCK;
-            if (!entity.getMainHandItem().isEmpty()) this.model.rightArmPose = HumanoidModel.ArmPose.BLOCK;
-        }
+        setupModelArmPoses(entity, this.model);
 
         super.render(entity, entityYaw, partialTick, poseStack, buffers, packedLight);
+    }
+
+    private void setupModelArmPoses(LivingEntity entity, PlayerModel<LivingEntity> model) {
+        ItemStack mainHand = entity.getMainHandItem();
+        ItemStack offHand = entity.getOffhandItem();
+
+        HumanoidModel.ArmPose mainPose = getArmPose(entity, InteractionHand.MAIN_HAND, mainHand);
+        HumanoidModel.ArmPose offPose = getArmPose(entity, InteractionHand.OFF_HAND, offHand);
+
+        if (entity.getMainArm() == HumanoidArm.RIGHT) {
+            model.rightArmPose = mainPose;
+            model.leftArmPose = offPose;
+        } else {
+            model.rightArmPose = offPose;
+            model.leftArmPose = mainPose;
+        }
+    }
+
+    private HumanoidModel.ArmPose getArmPose(LivingEntity entity, InteractionHand hand, ItemStack stack) {
+        if (stack.isEmpty()) {
+            return HumanoidModel.ArmPose.EMPTY;
+        }
+
+        if (entity.getUsedItemHand() == hand && entity.getUseItemRemainingTicks() > 0) {
+            UseAnim anim = stack.getUseAnimation();
+            switch (anim) {
+                case BLOCK -> {
+                    return HumanoidModel.ArmPose.BLOCK;
+                }
+                case BOW -> {
+                    return HumanoidModel.ArmPose.BOW_AND_ARROW;
+                }
+                case SPEAR -> {
+                    return HumanoidModel.ArmPose.THROW_SPEAR;
+                }
+                case CROSSBOW -> {
+                    return HumanoidModel.ArmPose.CROSSBOW_CHARGE;
+                }
+                case SPYGLASS -> {
+                    return HumanoidModel.ArmPose.SPYGLASS;
+                }
+                case TOOT_HORN -> {
+                    return HumanoidModel.ArmPose.TOOT_HORN;
+                }
+                case BRUSH -> {
+                    return HumanoidModel.ArmPose.BRUSH;
+                }
+                default -> {}
+            }
+        } else if (!entity.swinging && stack.getItem() instanceof CrossbowItem && CrossbowItem.isCharged(stack)) {
+            return HumanoidModel.ArmPose.CROSSBOW_HOLD;
+        }
+
+        return HumanoidModel.ArmPose.ITEM;
     }
 
     @Override
