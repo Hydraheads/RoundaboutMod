@@ -833,6 +833,8 @@ public class Config implements Cloneable {
         public Boolean ThirdPunchCapsuleBreak;
         @BooleanOption(group = "inherit", value = false)
         public Boolean forwardBarrageCanSteer;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean HazeMelts;
     }
     public static class HeyYaSettings {
         @BooleanOption(group = "inherit", value = true)
