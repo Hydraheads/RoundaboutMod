@@ -4747,21 +4747,21 @@ public class PowersKillerQueen extends NewPunchingStand {
                         else { pl.hurt(desintegrationDmg, hitPoints); }
                     }
 
-                    ///*
+
+                    // /*
                     if (!pl.isAlive()) {
-                        ItemStack skull = new ItemStack(ModItems.HAND);
-                        skull.setTag(new CompoundTag());
-                        //PlayerHeadItem
-                        CompoundTag tag = skull.getOrCreateTag();
-                        GameProfile gameprofile = new GameProfile((UUID)null, pl.getName().getString());
-                        SkullBlockEntity.updateGameprofile(gameprofile, (p_151177_) -> {
-                            tag.put("HandOwner", NbtUtils.writeGameProfile(new CompoundTag(), p_151177_));
-                        });
-                        //tag.putString("HandOwner",pl.getName().getString());
-                        skull.setTag(tag);
-                        target.spawnAtLocation(skull);
+                        ItemStack hand = new ItemStack(ModItems.HAND);
+
+                        CompoundTag tag = hand.getOrCreateTag();
+                        tag.putString("HandOwner",pl.getName().getString());
+                        hand.getItem().verifyTagAfterLoad(tag);
+                        tag.put("SkullOwner", NbtUtils.writeGameProfile(new CompoundTag(), pl.getGameProfile()));
+
+                        hand.setTag(tag);
+                        pl.spawnAtLocation(hand);
                     }
                     //*/
+
 
                 } else {
                     if ((mobsHitkill && !isBoss && target instanceof LivingEntity LE)) { LE.hurt(desintegrationDmg, LE.getMaxHealth());}
@@ -4797,7 +4797,23 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
             }
 
-            float hRange = 0.15f + (0.30f*bombSize);
+            if (self instanceof Player pl) {
+                // /*
+                //if (!pl.isAlive()) {
+                ItemStack hand = new ItemStack(ModItems.HAND);
+
+                CompoundTag tag = hand.getOrCreateTag();
+                tag.putString("HandOwner",pl.getName().getString());
+                hand.getItem().verifyTagAfterLoad(tag);
+                tag.put("SkullOwner", NbtUtils.writeGameProfile(new CompoundTag(), pl.getGameProfile()));
+
+                hand.setTag(tag);
+                pl.spawnAtLocation(hand);
+                //}
+                //*/
+            }
+
+            float hRange = 0.15f + (0.33f*bombSize);
             float vRange = 0.35f + (0.5f*bombSize);
 
             ExplosionUtil.explodeEffects(vPos, level, getExplosionParticle(), new Vec3(hRange, vRange, hRange), 6 + 12*bombSize);

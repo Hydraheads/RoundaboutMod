@@ -120,12 +120,12 @@ public class HandBlockEntity extends BlockEntity {
         super.load($$0);
         /*if ($$0.contains("HandOwner", 10)) {
             this.setOwner(NbtUtils.readGameProfile($$0.getCompound("HandOwner")));
-        } else */if ($$0.contains("ExtraType", 8)) {
+        } else /if ($$0.contains("ExtraType", 8)) {
             String $$1 = $$0.getString("ExtraType");
             if (!StringUtil.isNullOrEmpty($$1)) {
                 this.setOwner(new GameProfile((UUID)null, $$1));
             }
-        }
+        }*/
 
         if ($$0.contains("note_block_sound", 8)) {
             this.noteBlockSound = ResourceLocation.tryParse($$0.getString("note_block_sound"));

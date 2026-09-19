@@ -17,10 +17,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -68,7 +65,7 @@ public class HandBlockItem extends BlockItem {
             }
 
             if (s != null) {
-                return Component.translatable(this.getDescriptionId() + ".named", s);
+                return Component.translatable(this.getDescriptionId() + ".named", new Object[]{s});
             }
         }
 
