@@ -209,6 +209,12 @@
       "roundabout:diver_down_dive2"
     ]
   },
+  "diver_down_barrage": {
+    "subtitle": "sounds.roundabout.diver_down_barrage",
+    "sounds": [
+      "roundabout:diver_down_barrage"
+    ]
+  },
   "summon_king_crimson": {
     "subtitle": "sounds.roundabout.summon_king_crimson",
     "sounds": [

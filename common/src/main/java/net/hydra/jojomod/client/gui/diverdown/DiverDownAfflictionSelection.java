@@ -37,7 +37,7 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
             EMBED_POTION = 72,
             DIVER_LEGS = 73,
             EFFECT_CURE = 74,
-            COUNTER = 75,
+            TRANSFER = 75,
             RIBCAGE_TRAP = 76,
             BONE_BOMB = 77,
             SPRING_LEGS = 78;
@@ -51,7 +51,7 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
     private byte selectedAffliction = 0;
 
     //Check out GamemodeSwitcherScreen
-    static final ResourceLocation WORKBENCH_SELECT_GUI = new ResourceLocation(Roundabout.MOD_ID,
+    static final private ResourceLocation AFFLICTION_SELECT_GUI = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/diver_down/diver_gui.png");
     private AfflictionType currentlyHovered;
     private int firstMouseX;
@@ -84,7 +84,7 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
         this.currentlyHovered = AfflictionType.NONE;
             for (int i = 0; i < AfflictionType.VALUES.length; ++i) {
                 AfflictionType affliction = AfflictionType.VALUES[i];
-                this.slots.add(new AfflictionSlot(affliction, this.width / 2 + affliction.xoff - 13, this.height / 2 + affliction.yoff - 44));
+                this.slots.add(new AfflictionSlot(affliction, this.width / 2 + affliction.xoff - 16, this.height / 2 + affliction.yoff - 44));
             }
     }
     @Override
@@ -137,8 +137,8 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
         guiGraphics.pose().pushPose();
         RenderSystem.enableBlend();
         int k = this.width / 2 - 135/2;
-        int l = this.height / 2 - 100;
-        guiGraphics.blit(WORKBENCH_SELECT_GUI, k, l, 117.0f, 5.0f, 135, 38, 256, 256);
+        int l = this.height / 2 - 103;
+        guiGraphics.blit(AFFLICTION_SELECT_GUI, k, l, 117.0f, 5.0f, 135, 38, 256, 256);
         guiGraphics.pose().popPose();
         super.render(guiGraphics, i, j, f);
         if (this.currentlyHovered != null) {
@@ -299,9 +299,9 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
         DIVER_LEGS_ID(Component.translatable("roundabout.diver_affliction.diver_legs"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/diver_down/affliction_icons/diver_legs.png"), DIVER_LEGS, -43, 31, Component.translatable("roundabout.diver_affliction.diver_legs.desc"), CircleColor.GREEN),
         EFFECT_CURE_ID(Component.translatable("roundabout.diver_affliction.effect_cure"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/diver_down/affliction_icons/placeholder.png"), EFFECT_CURE, -28, 1, Component.translatable("roundabout.diver_affliction.effect_cure.desc"), CircleColor.GREEN),
-        COUNTER_ID(Component.translatable("roundabout.diver_affliction.transfer"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/diver_down/affliction_icons/counter.png"), COUNTER, -28, 61, Component.translatable("roundabout.diver_affliction.transfer.desc"), CircleColor.GREEN),
+                "textures/gui/diver_down/affliction_icons/effect_cure.png"), EFFECT_CURE, -28, 1, Component.translatable("roundabout.diver_affliction.effect_cure.desc"), CircleColor.GREEN),
+        TRANSFER_ID(Component.translatable("roundabout.diver_affliction.transfer"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/diver_down/affliction_icons/transfer.png"), TRANSFER, -28, 61, Component.translatable("roundabout.diver_affliction.transfer.desc"), CircleColor.GREEN),
 
         // TOP & BOTTOM (Neutral)
         DISGUISE_ID(Component.translatable("roundabout.diver_affliction.disguise"), new ResourceLocation(Roundabout.MOD_ID,
@@ -311,11 +311,11 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
 
         // RIGHT (Negative)
         RIBCAGE_TRAP_ID(Component.translatable("roundabout.diver_affliction.ribcage_trap"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/diver_down/affliction_icons/placeholder.png"), RIBCAGE_TRAP, 28, 1, Component.translatable("roundabout.diver_affliction.ribcage_trap.desc"), CircleColor.RED),
+                "textures/gui/diver_down/affliction_icons/ribcage_trap.png"), RIBCAGE_TRAP, 28, 1, Component.translatable("roundabout.diver_affliction.ribcage_trap.desc"), CircleColor.RED),
         BONE_BOMB_ID(Component.translatable("roundabout.diver_affliction.bone_bomb"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/diver_down/affliction_icons/placeholder.png"), BONE_BOMB, 28, 61, Component.translatable("roundabout.diver_affliction.bone_bomb.desc"), CircleColor.RED),
+                "textures/gui/diver_down/affliction_icons/bone_bomb.png"), BONE_BOMB, 28, 61, Component.translatable("roundabout.diver_affliction.bone_bomb.desc"), CircleColor.RED),
         SPRING_LEGS_ID(Component.translatable("roundabout.diver_affliction.spring_legs"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/diver_down/affliction_icons/placeholder.png"), SPRING_LEGS, 43, 31, Component.translatable("roundabout.diver_affliction.spring_legs.desc"), CircleColor.RED),
+                "textures/gui/diver_down/affliction_icons/spring_legs.png"), SPRING_LEGS, 43, 31, Component.translatable("roundabout.diver_affliction.spring_legs.desc"), CircleColor.RED),
 
         NONE(Component.translatable("roundabout.diver_affliction.none"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/plunder_icons/main_stand.png"), (byte) 0, 0, 75, Component.translatable("roundabout.stand_switch.main.desc"), CircleColor.NEUTRAL);
@@ -351,7 +351,7 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
             VALUES = new AfflictionType[]{
                     DIVER_LEGS_ID,
                     EFFECT_CURE_ID,
-                    COUNTER_ID,
+                    TRANSFER_ID,
                     DISGUISE_ID,
                     RIBCAGE_TRAP_ID,
                     BONE_BOMB_ID,
@@ -386,7 +386,7 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
         private boolean isSelected;
 
         public AfflictionSlot(AfflictionType affliction, int i, int j) {
-            super(i, j, 22, 22, affliction.getName());
+            super(i, j, 26, 26, affliction.getName());
             this.icon = affliction;
         }
 
@@ -399,7 +399,7 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
                     } else {
                         this.drawSlot(guiGraphics, this.icon.circleColor);
                     }
-                this.icon.drawIcon(guiGraphics, this.getX() + 4, this.getY() + 4);
+                this.icon.drawIcon(guiGraphics, this.getX() + 5, this.getY() + 5);
             }
             RenderSystem.disableBlend();
         }
@@ -415,8 +415,9 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
 
         private void drawSlot(GuiGraphics guiGraphics, CircleColor color) {
             guiGraphics.blit(
-                    WORKBENCH_SELECT_GUI,
+                    AFFLICTION_SELECT_GUI,
                     this.getX(), this.getY(),
+                    26, 26,
                     color.normalU, color.normalV,
                     22, 22,
                     256, 256
@@ -425,8 +426,9 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
 
         private void drawSlot2(GuiGraphics guiGraphics, CircleColor color) {
             guiGraphics.blit(
-                    WORKBENCH_SELECT_GUI,
-                    this.getX() - 2, this.getY() - 2,
+                    AFFLICTION_SELECT_GUI,
+                    this.getX() - 3, this.getY() - 3,
+                    32, 32,
                     color.hoveredU, color.hoveredV,
                     26, 26,
                     256, 256
@@ -434,7 +436,7 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
         }
 
         private void drawSelection(GuiGraphics guiGraphics) {
-            guiGraphics.blit(WORKBENCH_SELECT_GUI, this.getX(), this.getY(), 170.0f, 0.0f, 26, 26, 256, 256);
+            guiGraphics.blit(AFFLICTION_SELECT_GUI, this.getX(), this.getY(), 170.0f, 0.0f, 26, 26, 256, 256);
         }
     }
 
