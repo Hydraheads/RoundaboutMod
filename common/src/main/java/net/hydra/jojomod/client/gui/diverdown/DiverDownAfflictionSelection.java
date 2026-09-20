@@ -52,7 +52,7 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
 
     //Check out GamemodeSwitcherScreen
     static final ResourceLocation WORKBENCH_SELECT_GUI = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/diver_down/workbench_icons/placeholder.png");
+            "textures/gui/diver_down/diver_gui.png");
     private AfflictionType currentlyHovered;
     private int firstMouseX;
     private int firstMouseY;
@@ -136,13 +136,15 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
         }
         guiGraphics.pose().pushPose();
         RenderSystem.enableBlend();
-        int k = this.width / 2 - 62;
-        int l = this.height / 2 - 90;
-        guiGraphics.blit(WORKBENCH_SELECT_GUI, k, l, 0.0f, 63.0f, 125, 22, 256, 256);
+        int k = this.width / 2 - 135/2;
+        int l = this.height / 2 - 100;
+        guiGraphics.blit(WORKBENCH_SELECT_GUI, k, l, 117.0f, 5.0f, 135, 38, 256, 256);
         guiGraphics.pose().popPose();
         super.render(guiGraphics, i, j, f);
         if (this.currentlyHovered != null) {
-            guiGraphics.drawCenteredString(this.font, this.currentlyHovered.getName(), this.width / 2, l+7, -1);
+            // Vertically centered inside the banner: l + (bannerHeight / 2) - (font.lineHeight / 2)
+            int textY = l + (38 - this.font.lineHeight) / 2;
+            guiGraphics.drawCenteredString(this.font, this.currentlyHovered.getName(), this.width / 2, textY+8, -1);
             if (this.currentlyHovered.id != 0) {
                 List<Component> compList = Lists.newArrayList();
                 String[] strung2 = splitIntoLine(this.currentlyHovered.desc.getString(), 30);
@@ -293,52 +295,57 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
      * is for the description box.
      */
     public enum AfflictionType {
-        DIVER_LEGS_ID(Component.translatable("roundabout.diver_affliction.crafting"), new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/diver_down/affliction_icons/diver_legs.png"),DIVER_LEGS,-43,31, Component.translatable("roundabout.diver_affliction.crafting.desc")),
-        EFFECT_CURE_ID(Component.translatable("roundabout.diver_affliction.loom"), new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/diver_down/affliction_icons/placeholder.png"),EFFECT_CURE,-28,1, Component.translatable("roundabout.diver_affliction.loom.desc")),
-        COUNTER_ID(Component.translatable("roundabout.diver_affliction.stonecutter"), new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/diver_down/affliction_icons/counter.png"),COUNTER,-28,61, Component.translatable("roundabout.diver_affliction.stonecutter.desc")),
-        DISGUISE_ID(Component.translatable("roundabout.diver_affliction.anvil"), new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/diver_down/affliction_icons/disguise.png"),DISGUISE,0,-16, Component.translatable("roundabout.diver_affliction.anvil.desc")),
-        RIBCAGE_TRAP_ID(Component.translatable("roundabout.diver_affliction.smithing"), new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/diver_down/affliction_icons/placeholder.png"),RIBCAGE_TRAP,28,1, Component.translatable("roundabout.diver_affliction.smithing.desc")),
-        BONE_BOMB_ID(Component.translatable("roundabout.diver_affliction.stonecutter"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/diver_down/affliction_icons/placeholder.png"),BONE_BOMB,28,61, Component.translatable("roundabout.diver_affliction.stonecutter.desc")),
-        SPRING_LEGS_ID(Component.translatable("roundabout.diver_affliction.anvil"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/diver_down/affliction_icons/placeholder.png"),SPRING_LEGS,43,31, Component.translatable("roundabout.diver_affliction.anvil.desc")),
-        EMBED_POTION_ID(Component.translatable("roundabout.diver_affliction.smithing"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/diver_down/affliction_icons/effects.png"),EMBED_POTION,0,78, Component.translatable("roundabout.diver_affliction.smithing.desc")),
+        // LEFT (Positive)
+        DIVER_LEGS_ID(Component.translatable("roundabout.diver_affliction.diver_legs"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/diver_down/affliction_icons/diver_legs.png"), DIVER_LEGS, -43, 31, Component.translatable("roundabout.diver_affliction.diver_legs.desc"), CircleColor.GREEN),
+        EFFECT_CURE_ID(Component.translatable("roundabout.diver_affliction.effect_cure"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/diver_down/affliction_icons/placeholder.png"), EFFECT_CURE, -28, 1, Component.translatable("roundabout.diver_affliction.effect_cure.desc"), CircleColor.GREEN),
+        COUNTER_ID(Component.translatable("roundabout.diver_affliction.transfer"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/diver_down/affliction_icons/counter.png"), COUNTER, -28, 61, Component.translatable("roundabout.diver_affliction.transfer.desc"), CircleColor.GREEN),
+
+        // TOP & BOTTOM (Neutral)
+        DISGUISE_ID(Component.translatable("roundabout.diver_affliction.disguise"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/diver_down/affliction_icons/disguise.png"), DISGUISE, 0, -16, Component.translatable("roundabout.diver_affliction.disguise.desc"), CircleColor.NEUTRAL),
+        EMBED_POTION_ID(Component.translatable("roundabout.diver_affliction.embed_potion"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/diver_down/affliction_icons/effects.png"), EMBED_POTION, 0, 78, Component.translatable("roundabout.diver_affliction.embed_potion.desc"), CircleColor.NEUTRAL),
+
+        // RIGHT (Negative)
+        RIBCAGE_TRAP_ID(Component.translatable("roundabout.diver_affliction.ribcage_trap"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/diver_down/affliction_icons/placeholder.png"), RIBCAGE_TRAP, 28, 1, Component.translatable("roundabout.diver_affliction.ribcage_trap.desc"), CircleColor.RED),
+        BONE_BOMB_ID(Component.translatable("roundabout.diver_affliction.bone_bomb"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/diver_down/affliction_icons/placeholder.png"), BONE_BOMB, 28, 61, Component.translatable("roundabout.diver_affliction.bone_bomb.desc"), CircleColor.RED),
+        SPRING_LEGS_ID(Component.translatable("roundabout.diver_affliction.spring_legs"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/diver_down/affliction_icons/placeholder.png"), SPRING_LEGS, 43, 31, Component.translatable("roundabout.diver_affliction.spring_legs.desc"), CircleColor.RED),
+
         NONE(Component.translatable("roundabout.diver_affliction.none"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/plunder_icons/main_stand.png"),(byte)0,0,75, Component.translatable("roundabout.stand_switch.main.desc"));
+                "textures/gui/plunder_icons/main_stand.png"), (byte) 0, 0, 75, Component.translatable("roundabout.stand_switch.main.desc"), CircleColor.NEUTRAL);
 
         protected static final AfflictionType[] VALUES;
-        protected static final int ICON_TOP_LEFT = 5;
         final Component name;
         final Component desc;
         final ResourceLocation rl;
         final byte id;
-
         final int xoff;
         final int yoff;
+        public final CircleColor circleColor;
 
-        private AfflictionType(Component component, ResourceLocation rl, byte id, int xoff, int yoff, Component desc) {
+        private AfflictionType(Component component, ResourceLocation rl, byte id, int xoff, int yoff, Component desc, CircleColor circleColor) {
             this.name = component;
             this.rl = rl;
             this.id = id;
             this.xoff = xoff;
             this.yoff = yoff;
             this.desc = desc;
+            this.circleColor = circleColor;
         }
 
         void drawIcon(GuiGraphics guiGraphics, int i, int j) {
-            guiGraphics.blit(rl, i-1, j-1, 0, 0, 18, 18, 18, 18);
+            guiGraphics.blit(rl, i - 1, j - 1, 0, 0, 18, 18, 18, 18);
         }
 
         Component getName() {
             return this.name;
         }
-
 
         static {
             VALUES = new AfflictionType[]{
@@ -354,13 +361,32 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
         }
     }
 
+    public enum CircleColor {
+        // (normalU, normalV, hoveredU, hoveredV)
+        GREEN(176.0f, 52.0f, 174.0f, 76.0f),
+        NEUTRAL(202.0f, 52.0f, 200.0f, 76.0f),
+        RED(228.0f, 52.0f, 226.0f, 76.0f);
+
+        final float normalU;
+        final float normalV;
+        final float hoveredU;
+        final float hoveredV;
+
+        CircleColor(float normalU, float normalV, float hoveredU, float hoveredV) {
+            this.normalU = normalU;
+            this.normalV = normalV;
+            this.hoveredU = hoveredU;
+            this.hoveredV = hoveredV;
+        }
+    }
+
     public class AfflictionSlot
             extends AbstractWidget {
         final AfflictionType icon;
         private boolean isSelected;
 
         public AfflictionSlot(AfflictionType affliction, int i, int j) {
-            super(i, j, 26, 26, affliction.getName());
+            super(i, j, 22, 22, affliction.getName());
             this.icon = affliction;
         }
 
@@ -368,20 +394,11 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
         public void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
             RenderSystem.enableBlend();
             if (!this.icon.equals(AfflictionType.NONE)) {
-
-                if (this.icon.id == getSelectedAffliction()){
                     if (this.isSelected) {
-                        this.drawSlot4(guiGraphics);
+                        this.drawSlot2(guiGraphics, this.icon.circleColor);
                     } else {
-                        this.drawSlot3(guiGraphics);
+                        this.drawSlot(guiGraphics, this.icon.circleColor);
                     }
-                } else {
-                    if (this.isSelected) {
-                        this.drawSlot2(guiGraphics);
-                    } else {
-                        this.drawSlot(guiGraphics);
-                    }
-                }
                 this.icon.drawIcon(guiGraphics, this.getX() + 4, this.getY() + 4);
             }
             RenderSystem.disableBlend();
@@ -396,18 +413,24 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
             this.isSelected = bl;
         }
 
-        private void drawSlot(GuiGraphics guiGraphics) {
-            guiGraphics.blit(WORKBENCH_SELECT_GUI, this.getX(), this.getY(), 133.0f, 63.0f, 26, 26, 256, 256);
-        }
-        private void drawSlot2(GuiGraphics guiGraphics) {
-            guiGraphics.blit(WORKBENCH_SELECT_GUI, this.getX()-3, this.getY()-3, 160.0f, 60.0f, 32, 32, 256, 256);
+        private void drawSlot(GuiGraphics guiGraphics, CircleColor color) {
+            guiGraphics.blit(
+                    WORKBENCH_SELECT_GUI,
+                    this.getX(), this.getY(),
+                    color.normalU, color.normalV,
+                    22, 22,
+                    256, 256
+            );
         }
 
-        private void drawSlot3(GuiGraphics guiGraphics) {
-            guiGraphics.blit(WORKBENCH_SELECT_GUI, this.getX(), this.getY(), 196.0f, 63.0f, 26, 26, 256, 256);
-        }
-        private void drawSlot4(GuiGraphics guiGraphics) {
-            guiGraphics.blit(WORKBENCH_SELECT_GUI, this.getX()-3, this.getY()-3, 223.0f, 60.0f, 32, 32, 256, 256);
+        private void drawSlot2(GuiGraphics guiGraphics, CircleColor color) {
+            guiGraphics.blit(
+                    WORKBENCH_SELECT_GUI,
+                    this.getX() - 2, this.getY() - 2,
+                    color.hoveredU, color.hoveredV,
+                    26, 26,
+                    256, 256
+            );
         }
 
         private void drawSelection(GuiGraphics guiGraphics) {

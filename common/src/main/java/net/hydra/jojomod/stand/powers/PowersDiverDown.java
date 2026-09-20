@@ -1071,27 +1071,16 @@ public class PowersDiverDown extends NewPunchingStand {
 
     public void openLoom(ServerPlayer serverPlayer) {
         serverPlayer.openMenu(new SimpleMenuProvider(
-                (containerId, inventory, player) -> new LoomMenu(containerId, inventory,
-                        ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
-                    @Override
-                    public boolean stillValid(Player player) {
-                        return true;
-                    }
-                },
+                (containerId, inventory, player) -> new DiverDownLoomMenu(containerId, inventory,
+                        ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())),
                 Component.translatable("container.loom")));
     }
 
     public void openStonecutter(ServerPlayer serverPlayer) {
-        serverPlayer.openMenu(
-                new SimpleMenuProvider(
-                        (containerId, inventory, player) -> new StonecutterMenu(containerId, inventory,
-                                ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
-                            @Override
-                            public boolean stillValid(Player player) {
-                                return true;
-                            }
-                        },
-                        Component.translatable("container.stonecutter")));
+        serverPlayer.openMenu(new SimpleMenuProvider(
+                (containerId, inventory, player) -> new DiverDownStonecutterMenu(containerId, inventory,
+                        ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())),
+                Component.translatable("container.stonecutter")));
     }
 
     public void openAnvil(ServerPlayer serverPlayer) {
