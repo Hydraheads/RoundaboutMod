@@ -555,6 +555,9 @@ public class FabricItems {
                         entries.accept(GHIACCIO_MASK);
                         entries.accept(JOTARO_6_MASK);
                         entries.accept(JOHNGALLIA_MASK);
+                        entries.accept(ANASUI_MASK);
+                        entries.accept(FEM_ANASUI_MASK);
+                        entries.accept(ANAKISS_MASK);
                         entries.accept(GUCCIO_MASK);
                         entries.accept(JOHNNY_MASK);
                         entries.accept(GYRO_MASK);
@@ -778,9 +781,6 @@ public class FabricItems {
                         entries.accept(KIRASAKU_MASK);
                         entries.accept(HAYATO_KAWAJIRI_MASK);
                         entries.accept(KIRA_PART_EIGHT_MASK);
-                        entries.accept(ANASUI_MASK);
-                        entries.accept(FEM_ANASUI_MASK);
-                        entries.accept(ANAKISS_MASK);
                         entries.accept(STAND_DISC_EMPEROR);
                         entries.accept(MAX_STAND_DISC_EMPEROR);
                         entries.accept(STAND_DISC_PLANET_WAVES);
@@ -1065,6 +1065,9 @@ public class FabricItems {
         ModItems.DOT_HAN_MASK = DOT_HAN_MASK;
         ModItems.AVDUL_MASK = AVDUL_MASK;
         ModItems.JOSUKE_PART_EIGHT_MASK = JOSUKE_PART_EIGHT_MASK;
+        ModItems.ANASUI_MASK = ANASUI_MASK;
+        ModItems.FEM_ANASUI_MASK = FEM_ANASUI_MASK;
+        ModItems.ANAKISS_MASK = ANAKISS_MASK;
         ModItems.GUCCIO_MASK = GUCCIO_MASK;
         ModItems.HATO_MASK = HATO_MASK;
         ModItems.SHIZUKA_MASK = SHIZUKA_MASK;

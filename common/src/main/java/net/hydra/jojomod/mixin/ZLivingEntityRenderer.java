@@ -386,7 +386,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
     // diver down disguise
     @Inject(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At("HEAD"), cancellable = true)
     private void roundabout$renderDiverDownDisguise(T entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight, CallbackInfo ci) {
-        if ((Object) this instanceof DiverDownDisguiseRenderer) {
+        if ((Object) this instanceof AbstractDisguiseRenderer) {
             return;
         }
 

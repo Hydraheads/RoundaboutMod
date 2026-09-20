@@ -6,6 +6,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.client.KeyInputRegistry;
+import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.gui.NoCancelInputScreen;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
@@ -48,8 +49,8 @@ public class DiverDownWorkbenchSelect extends Screen implements NoCancelInputScr
     private byte selectedWorkbench = 0;
 
     //Check out GamemodeSwitcherScreen
-    static final ResourceLocation WORKBENCH_SELECT_GUI = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/diver_down/workbench_icons/placeholder.png");
+    static final private ResourceLocation WORKBENCH_SELECT_GUI = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/diver_down/diver_gui.png");
     private WorkbenchType currentlyHovered;
     private int firstMouseX;
     private int firstMouseY;
@@ -81,7 +82,7 @@ public class DiverDownWorkbenchSelect extends Screen implements NoCancelInputScr
         this.currentlyHovered = WorkbenchType.NONE;
             for (int i = 0; i < WorkbenchType.VALUES.length; ++i) {
                 WorkbenchType workbench = WorkbenchType.VALUES[i];
-                this.slots.add(new WorkbenchSlot(workbench, this.width / 2 + workbench.xoff - 13, this.height / 2 + workbench.yoff - 44));
+                this.slots.add(new WorkbenchSlot(workbench, this.width / 2 + workbench.xoff - 18, this.height / 2 + workbench.yoff - 44));
             }
     }
     @Override
@@ -129,18 +130,38 @@ public class DiverDownWorkbenchSelect extends Screen implements NoCancelInputScr
         }
         guiGraphics.pose().pushPose();
         RenderSystem.enableBlend();
-        int k = this.width / 2 - 62;
-        int l = this.height / 2 - 90;
-        guiGraphics.blit(WORKBENCH_SELECT_GUI, k, l, 0.0f, 63.0f, 125, 22, 256, 256);
+        int k = this.width / 2 - 135/2;
+        int l = this.height / 2 - 103;
+        guiGraphics.blit(WORKBENCH_SELECT_GUI, k, l, 117.0f, 5.0f, 135, 38, 256, 256);
         guiGraphics.pose().popPose();
         super.render(guiGraphics, i, j, f);
         if (this.currentlyHovered != null) {
-            guiGraphics.drawCenteredString(this.font, this.currentlyHovered.getName(), this.width / 2, l+7, -1);
-            if (this.currentlyHovered.id != 0) {
+            int textY = l + (38 - this.font.lineHeight) / 2;
+            Component name = this.currentlyHovered.getName();
+            boolean isUnlocked = true;
+            int reqLevel = 0;
+
+            Player player = Minecraft.getInstance().player;
+            if (player != null && ((StandUser) player).roundabout$getStandPowers() instanceof PowersDiverDown powers) {
+                reqLevel = this.currentlyHovered.getRequiredLevel(powers);
+                isUnlocked = powers.canExecuteMoveWithLevel(reqLevel);
+                if (!isUnlocked) {
+                    name = Component.translatable("ability.roundabout.locked");
+                }
+            }
+
+            guiGraphics.drawCenteredString(this.font, name, this.width / 2, textY + 8, -1);
+
+            // for the tooltip
+            if (this.currentlyHovered != WorkbenchType.NONE) {
                 List<Component> compList = Lists.newArrayList();
-                String[] strung2 = splitIntoLine(this.currentlyHovered.desc.getString(), 30);
-                for (String s : strung2) {
-                    compList.add(Component.literal(s));
+                if (!isUnlocked) {
+                    compList.add(Component.translatable("ability.roundabout.locked.desc", reqLevel));
+                } else {
+                    String[] descLines = splitIntoLine(this.currentlyHovered.desc.getString(), 30);
+                    for (String s : descLines) {
+                        compList.add(Component.literal(s));
+                    }
                 }
                 guiGraphics.renderTooltip(this.font, compList, Optional.empty(), i, j);
             }
@@ -219,15 +240,14 @@ public class DiverDownWorkbenchSelect extends Screen implements NoCancelInputScr
             return;
         }
 
-        if (((StandUser) minecraft.player).roundabout$getStandPowers()instanceof PowersDiverDown powers) {
+        if (((StandUser) minecraft.player).roundabout$getStandPowers() instanceof PowersDiverDown powers) {
+            if (!powers.canExecuteMoveWithLevel(workbench.getRequiredLevel(powers))) {
+                return;
+            }
+
             powers.tryIntPower(PowersDiverDown.ACCESS_WORKBENCH, true, workbench.id);
             powers.tryIntPowerPacket(PowersDiverDown.ACCESS_WORKBENCH, workbench.id);
         }
-        /**
-         * test to see if the selection even works in the first place.
-         * comment this out when unneeded anymore :thumbsup:
-         */
-        //minecraft.player.displayClientMessage(Component.literal("Selection menu works :thumbsup:"),false);
     }
 
     public boolean roundabout$sameKeyOne(KeyMapping key1){
@@ -292,10 +312,10 @@ public class DiverDownWorkbenchSelect extends Screen implements NoCancelInputScr
             "textures/gui/diver_down/workbench_icons/loom.png"),LOOM,40,18, Component.translatable("roundabout.diver_workbench.loom.desc")),
         STONECUTTER_ID(Component.translatable("roundabout.diver_workbench.stonecutter"), new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/diver_down/workbench_icons/stonecutter.png"),STONECUTTER,25,65, Component.translatable("roundabout.diver_workbench.stonecutter.desc")),
-        ANVIL_ID(Component.translatable("roundabout.diver_workbench.anvil"), new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/diver_down/workbench_icons/anvil.png"),ANVIL,-25,65, Component.translatable("roundabout.diver_workbench.anvil.desc")),
         SMITHING_TABLE_ID(Component.translatable("roundabout.diver_workbench.smithing"), new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/diver_down/workbench_icons/smithing_table.png"),SMITHING_TABLE,-40,18, Component.translatable("roundabout.diver_workbench.smithing.desc")),
+                "textures/gui/diver_down/workbench_icons/smithing_table.png"),SMITHING_TABLE,-25,65, Component.translatable("roundabout.diver_workbench.smithing.desc")),
+        ANVIL_ID(Component.translatable("roundabout.diver_workbench.anvil"), new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/diver_down/workbench_icons/anvil.png"),ANVIL,-40,18, Component.translatable("roundabout.diver_workbench.anvil.desc")),
 
         NONE(Component.translatable("roundabout.diver_workbench.none"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/plunder_icons/main_stand.png"),(byte)0,0,75, Component.translatable("roundabout.stand_switch.main.desc"));
@@ -310,6 +330,17 @@ public class DiverDownWorkbenchSelect extends Screen implements NoCancelInputScr
         final int xoff;
         final int yoff;
 
+        public int getRequiredLevel(PowersDiverDown powers) {
+            return switch (this) {
+                case CRAFTING_TABLE_ID -> powers.getWorkbenchLevel(); // Or whatever minimum level you want for base crafting table
+                case LOOM_ID -> powers.getLoomLevel();
+                case STONECUTTER_ID -> powers.getStonecutterLevel();
+                case SMITHING_TABLE_ID -> powers.getSmithingTableLevel();
+                case ANVIL_ID -> powers.getAnvilLevel();
+                default -> 0;
+            };
+        }
+
         private WorkbenchType(Component component, ResourceLocation rl, byte id, int xoff, int yoff, Component desc) {
             this.name = component;
             this.rl = rl;
@@ -319,8 +350,9 @@ public class DiverDownWorkbenchSelect extends Screen implements NoCancelInputScr
             this.desc = desc;
         }
 
-        void drawIcon(GuiGraphics guiGraphics, int i, int j) {
-            guiGraphics.blit(rl, i-1, j-1, 0, 0, 24, 24, 24, 24);
+        void drawIcon(GuiGraphics guiGraphics, int i, int j, boolean isUnlocked) {
+            ResourceLocation texture = isUnlocked ? this.rl : StandIcons.LOCKED;
+            guiGraphics.blit(texture, i-1, j-1, 0, 0, 24, 24, 24, 24);
         }
 
         Component getName() {
@@ -345,7 +377,7 @@ public class DiverDownWorkbenchSelect extends Screen implements NoCancelInputScr
         private boolean isSelected;
 
         public WorkbenchSlot(WorkbenchType workbench, int i, int j) {
-            super(i, j, 26, 26, workbench.getName());
+            super(i, j, 36, 36, workbench.getName());
             this.icon = workbench;
         }
 
@@ -353,21 +385,17 @@ public class DiverDownWorkbenchSelect extends Screen implements NoCancelInputScr
         public void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
             RenderSystem.enableBlend();
             if (!this.icon.equals(WorkbenchType.NONE)) {
-
-                if (this.icon.id == getSelectedWorkbench()){
-                    if (this.isSelected) {
-                        this.drawSlot4(guiGraphics);
-                    } else {
-                        this.drawSlot3(guiGraphics);
-                    }
+                if (this.isSelected) {
+                    this.drawSlot2(guiGraphics);
                 } else {
-                    if (this.isSelected) {
-                        this.drawSlot2(guiGraphics);
-                    } else {
-                        this.drawSlot(guiGraphics);
-                    }
+                    this.drawSlot(guiGraphics);
                 }
-                this.icon.drawIcon(guiGraphics, this.getX() + 4, this.getY() + 4);
+                boolean isUnlocked = true;
+                Player player = Minecraft.getInstance().player;
+                if (player != null && ((StandUser) player).roundabout$getStandPowers() instanceof PowersDiverDown powers) {
+                    isUnlocked = powers.canExecuteMoveWithLevel(this.icon.getRequiredLevel(powers));
+                }
+                this.icon.drawIcon(guiGraphics, this.getX() + 7, this.getY() + 6, isUnlocked);
             }
             RenderSystem.disableBlend();
         }
@@ -382,21 +410,10 @@ public class DiverDownWorkbenchSelect extends Screen implements NoCancelInputScr
         }
 
         private void drawSlot(GuiGraphics guiGraphics) {
-            guiGraphics.blit(WORKBENCH_SELECT_GUI, this.getX(), this.getY(), 133.0f, 63.0f, 26, 26, 256, 256);
+            guiGraphics.blit(WORKBENCH_SELECT_GUI, this.getX(), this.getY(), 36, 36, 202.0f, 52.0f, 22, 22, 256, 256);
         }
         private void drawSlot2(GuiGraphics guiGraphics) {
-            guiGraphics.blit(WORKBENCH_SELECT_GUI, this.getX()-3, this.getY()-3, 160.0f, 60.0f, 32, 32, 256, 256);
-        }
-
-        private void drawSlot3(GuiGraphics guiGraphics) {
-            guiGraphics.blit(WORKBENCH_SELECT_GUI, this.getX(), this.getY(), 196.0f, 63.0f, 26, 26, 256, 256);
-        }
-        private void drawSlot4(GuiGraphics guiGraphics) {
-            guiGraphics.blit(WORKBENCH_SELECT_GUI, this.getX()-3, this.getY()-3, 223.0f, 60.0f, 32, 32, 256, 256);
-        }
-
-        private void drawSelection(GuiGraphics guiGraphics) {
-            guiGraphics.blit(WORKBENCH_SELECT_GUI, this.getX(), this.getY(), 170.0f, 0.0f, 26, 26, 256, 256);
+            guiGraphics.blit(WORKBENCH_SELECT_GUI, this.getX()-3, this.getY()-3, 42, 42, 200.0f, 76.0f, 26, 26, 256, 256);
         }
     }
 
@@ -411,8 +428,5 @@ public class DiverDownWorkbenchSelect extends Screen implements NoCancelInputScr
      */
     public void setSelectedWorkbench(byte id){
         this.selectedWorkbench = id;
-    }
-    public byte getSelectedWorkbench(){
-        return this.selectedWorkbench;
     }
 }

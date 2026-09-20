@@ -3,25 +3,25 @@ package net.hydra.jojomod.client.gui.diverdown.custom_workbench_code;
 import net.hydra.jojomod.client.gui.ModMenus;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.SmithingMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.LoomMenu;
 import net.minecraft.world.inventory.MenuType;
 
-public class DiverDownSmithingMenu extends SmithingMenu {
+public class DiverDownLoomMenu extends LoomMenu {
 
-    //Constructor called on the client side by MenuType.create
-    public DiverDownSmithingMenu(int containerId, Inventory inventory) {
+    // Constructor called on the client side by MenuType.create
+    public DiverDownLoomMenu(int containerId, Inventory inventory) {
         this(containerId, inventory, ContainerLevelAccess.NULL);
     }
 
-    //Constructor called on the server side when opening the menu
-    public DiverDownSmithingMenu(int containerId, Inventory inventory, ContainerLevelAccess access) {
+    // Constructor called on the server side when opening the menu
+    public DiverDownLoomMenu(int containerId, Inventory inventory, ContainerLevelAccess access) {
         super(containerId, inventory, access);
     }
 
     @Override
     public MenuType<?> getType() {
-        return ModMenus.DIVER_DOWN_SMITHING;
+        return ModMenus.DIVER_DOWN_LOOM;
     }
 
     @Override
