@@ -154,7 +154,7 @@ public class ExplosionUtil {
 	public static void explodeBlocksBase(BlockPos location, Level level, Float range, boolean ignoreOres, Entity causer) {
 		Vec3 center = new Vec3(location.getX(), location.getY(), location.getZ());
 
-		int intSize = (int) Math.round(range);
+		int intSize = Math.round(range) + 1;
 
 		double explosionDistanceMax = Math.pow(range + 0.45, 2);
 
@@ -167,7 +167,7 @@ public class ExplosionUtil {
 			}
 
 			// Simulate natural explosions
-			Double explosionDistance = explosionDistanceMax + ((double) level.getRandom().nextIntBetweenInclusive(-intSize * 2, intSize * 2) / 7.5);
+			Double explosionDistance = explosionDistanceMax + ((double) level.getRandom().nextIntBetweenInclusive(-intSize, intSize) / 7.5);
 
 			Double dist2 = center.distanceToSqr(pos.getX(), pos.getY(), pos.getZ());
 

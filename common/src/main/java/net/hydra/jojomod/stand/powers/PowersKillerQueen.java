@@ -3474,6 +3474,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
         }
     }
+
     public final void packetDayMode(ServerPlayer serverPlayerEntity) {
         ServerLevel serverWorld = ((ServerLevel) this.self.level());
         if (( serverPlayerEntity.level()) == serverWorld) {
@@ -4704,7 +4705,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
 
             if (canDestroyBlocks) {
-                float range = 0.5f + bombSize * 0.45f;
+                float range = 0.4f + bombSize * 0.55f;
 
                 ExplosionUtil.explodeBlocksBase(bPos, level, range, true, self);
             }
@@ -4765,7 +4766,9 @@ public class PowersKillerQueen extends NewPunchingStand {
                         CompoundTag tag = hand.getOrCreateTag();
                         tag.putString("HandOwner",pl.getName().getString());
                         hand.getItem().verifyTagAfterLoad(tag);
-                        tag.put("SkullOwner", NbtUtils.writeGameProfile(new CompoundTag(), pl.getGameProfile()));
+                        tag.put("HandOwner", NbtUtils.writeGameProfile(new CompoundTag(), pl.getGameProfile()));
+                        tag.put("HandProfile", NbtUtils.writeGameProfile(new CompoundTag(), pl.getGameProfile()));
+
 
                         hand.setTag(tag);
                         pl.spawnAtLocation(hand);
@@ -4808,22 +4811,23 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
 
             if (self instanceof Player pl) {
-                // /*
+                /*
                 //if (!pl.isAlive()) {
                 ItemStack hand = new ItemStack(ModItems.HAND);
 
                 CompoundTag tag = hand.getOrCreateTag();
                 tag.putString("HandOwner",pl.getName().getString());
                 hand.getItem().verifyTagAfterLoad(tag);
-                tag.put("SkullOwner", NbtUtils.writeGameProfile(new CompoundTag(), pl.getGameProfile()));
+                tag.put("HandOwner", NbtUtils.writeGameProfile(new CompoundTag(), pl.getGameProfile()));
+                tag.put("HandProfile", NbtUtils.writeGameProfile(new CompoundTag(), pl.getGameProfile()));
 
                 hand.setTag(tag);
                 pl.spawnAtLocation(hand);
                 //}
-                //*/
+                */
             }
 
-            float hRange = 0.15f + (0.33f*bombSize);
+            float hRange = 0.15f + (0.37f*bombSize);
             float vRange = 0.35f + (0.5f*bombSize);
 
             ExplosionUtil.explodeEffects(vPos, level, getExplosionParticle(), new Vec3(hRange, vRange, hRange), 6 + 12*bombSize);

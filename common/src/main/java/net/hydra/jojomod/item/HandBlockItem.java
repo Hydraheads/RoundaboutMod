@@ -8,6 +8,7 @@ import net.hydra.jojomod.block.handBlock.AbstractHandBlock;
 import net.hydra.jojomod.block.handBlock.HandBlockEntity;
 import net.minecraft.Util;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.client.renderer.blockentity.SkullBlockRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -31,6 +32,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.gameevent.GameEvent;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 import java.util.UUID;
 
 public class HandBlockItem extends BlockItem {
@@ -82,5 +84,18 @@ public class HandBlockItem extends BlockItem {
         }
     }
 
+    public GameProfile getProfile(ItemStack stack) {
+        if (stack.hasTag()) {
+            CompoundTag tag = stack.getTag();
+            if (tag.contains("OwnerName") && tag.contains("OwnerUUID")) {
+                Optional<UUID> id = Optional.of(UUID.fromString(tag.getString("OwnerUUID")));
+                String name = tag.getString("OwnerName");
+                return id.isPresent() && !name.isEmpty() ? new GameProfile(id.get(), name) : null;
+            }else {
+                return null;
+            }
+        }
+        return null;
+    }
 
 }

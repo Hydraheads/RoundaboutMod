@@ -4,6 +4,7 @@ import com.google.common.collect.Iterables;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.properties.Property;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.Util;
@@ -66,7 +67,7 @@ public class HandBlockEntity extends BlockEntity {
         mainThreadExecutor = null;
     }
 
-    private ItemStack storedStack = ItemStack.EMPTY;
+    public ItemStack storedStack = ItemStack.EMPTY;
 
     public void setStoredStack(ItemStack stack) {
         this.storedStack = stack.copy();
@@ -101,11 +102,6 @@ public class HandBlockEntity extends BlockEntity {
 
     protected void saveAdditional(CompoundTag $$0) {
         super.saveAdditional($$0);
-        /*if (this.owner != null) {
-            CompoundTag $$1 = new CompoundTag();
-            NbtUtils.writeGameProfile($$1, this.owner);
-            $$0.put("HandOwner", $$1);
-        }*/
 
         if (this.noteBlockSound != null) {
             $$0.putString("note_block_sound", this.noteBlockSound.toString());
@@ -118,14 +114,6 @@ public class HandBlockEntity extends BlockEntity {
     }
     public void load(CompoundTag $$0) {
         super.load($$0);
-        /*if ($$0.contains("HandOwner", 10)) {
-            this.setOwner(NbtUtils.readGameProfile($$0.getCompound("HandOwner")));
-        } else /if ($$0.contains("ExtraType", 8)) {
-            String $$1 = $$0.getString("ExtraType");
-            if (!StringUtil.isNullOrEmpty($$1)) {
-                this.setOwner(new GameProfile((UUID)null, $$1));
-            }
-        }*/
 
         if ($$0.contains("note_block_sound", 8)) {
             this.noteBlockSound = ResourceLocation.tryParse($$0.getString("note_block_sound"));
@@ -135,8 +123,15 @@ public class HandBlockEntity extends BlockEntity {
             storedStack = ItemStack.of($$0.getCompound("StoredStack"));
             if (storedStack.hasTag()) {
                 CompoundTag compoundtag = storedStack.getTag();
-                if (compoundtag.contains("HandOwner")) {
+                /*if (compoundtag.contains("HandOwner")) {
                     this.setOwner(NbtUtils.readGameProfile(compoundtag.getCompound("HandOwner")));
+                }else {
+                    Roundabout.LOGGER.info("itemStack did not contain the HandOwner GameProfile!");
+                }*/
+                if (compoundtag.contains("HandProfie")) {
+                    this.setOwner(NbtUtils.readGameProfile(compoundtag.getCompound("HandProfie")));
+                }else {
+                    Roundabout.LOGGER.info("itemStack did not contain the HandProfile GameProfile!");
                 }
             }
         } else {
