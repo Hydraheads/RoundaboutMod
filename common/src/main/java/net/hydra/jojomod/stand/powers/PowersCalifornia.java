@@ -654,6 +654,10 @@ public class PowersCalifornia extends NewDashPreset {
         clearLeadAndPunish();
     }
 
+    public void onEnderPearlLand(){
+        clearLeadAndPunish();
+    }
+
     public void doTheStepRule(){
         if (!this.self.level().isClientSide()){
             if (!onCooldown(PowerIndex.SKILL_EXTRA)) {
