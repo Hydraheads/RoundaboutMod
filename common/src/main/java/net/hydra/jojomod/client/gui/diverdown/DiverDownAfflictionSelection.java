@@ -51,7 +51,7 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
     private byte selectedAffliction = 0;
 
     //Check out GamemodeSwitcherScreen
-    static final ResourceLocation WORKBENCH_SELECT_GUI = new ResourceLocation(Roundabout.MOD_ID,
+    static final private ResourceLocation AFFLICTION_SELECT_GUI = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/diver_down/diver_gui.png");
     private AfflictionType currentlyHovered;
     private int firstMouseX;
@@ -84,7 +84,7 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
         this.currentlyHovered = AfflictionType.NONE;
             for (int i = 0; i < AfflictionType.VALUES.length; ++i) {
                 AfflictionType affliction = AfflictionType.VALUES[i];
-                this.slots.add(new AfflictionSlot(affliction, this.width / 2 + affliction.xoff - 13, this.height / 2 + affliction.yoff - 44));
+                this.slots.add(new AfflictionSlot(affliction, this.width / 2 + affliction.xoff - 16, this.height / 2 + affliction.yoff - 44));
             }
     }
     @Override
@@ -138,7 +138,7 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
         RenderSystem.enableBlend();
         int k = this.width / 2 - 135/2;
         int l = this.height / 2 - 103;
-        guiGraphics.blit(WORKBENCH_SELECT_GUI, k, l, 117.0f, 5.0f, 135, 38, 256, 256);
+        guiGraphics.blit(AFFLICTION_SELECT_GUI, k, l, 117.0f, 5.0f, 135, 38, 256, 256);
         guiGraphics.pose().popPose();
         super.render(guiGraphics, i, j, f);
         if (this.currentlyHovered != null) {
@@ -415,7 +415,7 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
 
         private void drawSlot(GuiGraphics guiGraphics, CircleColor color) {
             guiGraphics.blit(
-                    WORKBENCH_SELECT_GUI,
+                    AFFLICTION_SELECT_GUI,
                     this.getX(), this.getY(),
                     26, 26,
                     color.normalU, color.normalV,
@@ -426,7 +426,7 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
 
         private void drawSlot2(GuiGraphics guiGraphics, CircleColor color) {
             guiGraphics.blit(
-                    WORKBENCH_SELECT_GUI,
+                    AFFLICTION_SELECT_GUI,
                     this.getX() - 3, this.getY() - 3,
                     32, 32,
                     color.hoveredU, color.hoveredV,
@@ -436,7 +436,7 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
         }
 
         private void drawSelection(GuiGraphics guiGraphics) {
-            guiGraphics.blit(WORKBENCH_SELECT_GUI, this.getX(), this.getY(), 170.0f, 0.0f, 26, 26, 256, 256);
+            guiGraphics.blit(AFFLICTION_SELECT_GUI, this.getX(), this.getY(), 170.0f, 0.0f, 26, 26, 256, 256);
         }
     }
 
