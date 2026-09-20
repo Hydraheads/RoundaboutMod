@@ -49,7 +49,7 @@ public class DiverDownWorkbenchSelect extends Screen implements NoCancelInputScr
 
     //Check out GamemodeSwitcherScreen
     static final ResourceLocation WORKBENCH_SELECT_GUI = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/diver_down/workbench_icons/placeholder.png");
+            "textures/gui/diver_down/diver_gui.png");
     private WorkbenchType currentlyHovered;
     private int firstMouseX;
     private int firstMouseY;
@@ -129,13 +129,15 @@ public class DiverDownWorkbenchSelect extends Screen implements NoCancelInputScr
         }
         guiGraphics.pose().pushPose();
         RenderSystem.enableBlend();
-        int k = this.width / 2 - 62;
-        int l = this.height / 2 - 90;
-        guiGraphics.blit(WORKBENCH_SELECT_GUI, k, l, 0.0f, 63.0f, 125, 22, 256, 256);
+        int k = this.width / 2 - 135/2;
+        int l = this.height / 2 - 100;
+        guiGraphics.blit(WORKBENCH_SELECT_GUI, k, l, 117.0f, 5.0f, 135, 38, 256, 256);
         guiGraphics.pose().popPose();
         super.render(guiGraphics, i, j, f);
         if (this.currentlyHovered != null) {
-            guiGraphics.drawCenteredString(this.font, this.currentlyHovered.getName(), this.width / 2, l+7, -1);
+            // Vertically centered inside the banner: l + (bannerHeight / 2) - (font.lineHeight / 2)
+            int textY = l + (38 - this.font.lineHeight) / 2;
+            guiGraphics.drawCenteredString(this.font, this.currentlyHovered.getName(), this.width / 2, textY+8, -1);
             if (this.currentlyHovered.id != 0) {
                 List<Component> compList = Lists.newArrayList();
                 String[] strung2 = splitIntoLine(this.currentlyHovered.desc.getString(), 30);
@@ -345,7 +347,7 @@ public class DiverDownWorkbenchSelect extends Screen implements NoCancelInputScr
         private boolean isSelected;
 
         public WorkbenchSlot(WorkbenchType workbench, int i, int j) {
-            super(i, j, 26, 26, workbench.getName());
+            super(i, j, 22, 22, workbench.getName());
             this.icon = workbench;
         }
 
@@ -353,21 +355,12 @@ public class DiverDownWorkbenchSelect extends Screen implements NoCancelInputScr
         public void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
             RenderSystem.enableBlend();
             if (!this.icon.equals(WorkbenchType.NONE)) {
-
-                if (this.icon.id == getSelectedWorkbench()){
-                    if (this.isSelected) {
-                        this.drawSlot4(guiGraphics);
-                    } else {
-                        this.drawSlot3(guiGraphics);
-                    }
-                } else {
                     if (this.isSelected) {
                         this.drawSlot2(guiGraphics);
                     } else {
                         this.drawSlot(guiGraphics);
                     }
-                }
-                this.icon.drawIcon(guiGraphics, this.getX() + 4, this.getY() + 4);
+                this.icon.drawIcon(guiGraphics, this.getX()+1, this.getY());
             }
             RenderSystem.disableBlend();
         }
@@ -382,21 +375,10 @@ public class DiverDownWorkbenchSelect extends Screen implements NoCancelInputScr
         }
 
         private void drawSlot(GuiGraphics guiGraphics) {
-            guiGraphics.blit(WORKBENCH_SELECT_GUI, this.getX(), this.getY(), 133.0f, 63.0f, 26, 26, 256, 256);
+            guiGraphics.blit(WORKBENCH_SELECT_GUI, this.getX(), this.getY(), 202.0f, 52.0f, 22, 22, 256, 256);
         }
         private void drawSlot2(GuiGraphics guiGraphics) {
-            guiGraphics.blit(WORKBENCH_SELECT_GUI, this.getX()-3, this.getY()-3, 160.0f, 60.0f, 32, 32, 256, 256);
-        }
-
-        private void drawSlot3(GuiGraphics guiGraphics) {
-            guiGraphics.blit(WORKBENCH_SELECT_GUI, this.getX(), this.getY(), 196.0f, 63.0f, 26, 26, 256, 256);
-        }
-        private void drawSlot4(GuiGraphics guiGraphics) {
-            guiGraphics.blit(WORKBENCH_SELECT_GUI, this.getX()-3, this.getY()-3, 223.0f, 60.0f, 32, 32, 256, 256);
-        }
-
-        private void drawSelection(GuiGraphics guiGraphics) {
-            guiGraphics.blit(WORKBENCH_SELECT_GUI, this.getX(), this.getY(), 170.0f, 0.0f, 26, 26, 256, 256);
+            guiGraphics.blit(WORKBENCH_SELECT_GUI, this.getX()-2, this.getY()-2, 200.0f, 76.0f, 26, 26, 256, 256);
         }
     }
 
@@ -411,8 +393,5 @@ public class DiverDownWorkbenchSelect extends Screen implements NoCancelInputScr
      */
     public void setSelectedWorkbench(byte id){
         this.selectedWorkbench = id;
-    }
-    public byte getSelectedWorkbench(){
-        return this.selectedWorkbench;
     }
 }

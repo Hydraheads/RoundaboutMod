@@ -4099,7 +4099,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         // diver down damage redirection
         if (!this.level().isClientSide() && !this.rdbt$isRedirectingDamage && this.diverSubmergedUser != null
-                && this.diverSubmergedUser.isDiveActive()) {
+                && this.diverSubmergedUser.isDiveActive()
+                && !this.diverSubmergedUser.isSelfDive()
+                && this.diverSubmergedUser.damageRedirectionEnabled) {
             this.rdbt$isRedirectingDamage = true;
             try {
                 this.diverSubmergedUser.onSubmergedTargetHurt($$0, $$1);
@@ -6949,6 +6951,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
 
         return false;
+    }
+
+    @Override
+    public PowersKillerQueen rdbt$GetBtdPlantedUser() {
+        return BtdPlantedUser;
     }
 
     @Override

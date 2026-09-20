@@ -389,6 +389,8 @@
     "gravity.client.GravityScreenEffectRenderer",
     "green_day.GreenDayArmourLayer",
     "gui.ConfigOptionsScreen",
+    "gui.DiverDownLoomScreenMixin",
+    "gui.DiverDownStonecutterScreenMixin",
     "items.ArmorStandNitpickMixin",
     "items.BowlerHatItemInHandLayerMixin",
     "items.BowlerHatItemRendererMixin",

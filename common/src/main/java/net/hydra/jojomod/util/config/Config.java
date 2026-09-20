@@ -512,19 +512,19 @@ public class Config implements Cloneable {
         public Integer bitesTheDustPlantCooldown;
         @IntOption(group = "inherit", value = 70, min = 0, max = 72000)
         public Integer bitesTheDustCombatActivationCooldown;
-        @IntOption(group = "inherit", value = 160, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 360, min = 0, max = 72000)
         public Integer bitesTheDustCombatCooldownBonus;
-        @IntOption(group = "inherit", value = 8200, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 13200, min = 0, max = 72000)
         public Integer bitesTheDustDayCooldownBonus;
-        @FloatOption(group = "inherit", value = 16.5F, min = 0, max = 200F)
+        @FloatOption(group = "inherit", value = 21.5F, min = 0, max = 200F)
         public Float bitesTheDustCombatMobsDamage;
-        @FloatOption(group = "inherit", value = 12.5F, min = 0, max = 200F)
+        @FloatOption(group = "inherit", value = 17.5F, min = 0, max = 200F)
         public Float bitesTheDustCombatPlayersDamage;
         @FloatOption(group = "inherit", value = 38.5F, min = 0, max = 200F)
         public Float bitesTheDustDayMobsDamage;
-        @FloatOption(group = "inherit", value = 18.5F, min = 0, max = 200F)
+        @FloatOption(group = "inherit", value = 24.5F, min = 0, max = 200F)
         public Float bitesTheDustDayPlayersDamage;
-        @IntOption(group = "inherit", value = 12, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 14, min = 0, max = 72000)
         public Integer bitesTheDustCombatMinimunForFullBlow;
         @FloatOption(group = "inherit", value = 75, min = 0, max = 72000)
         public Float bitesTheDustRewindRange;
@@ -833,6 +833,8 @@ public class Config implements Cloneable {
         public Boolean ThirdPunchCapsuleBreak;
         @BooleanOption(group = "inherit", value = false)
         public Boolean forwardBarrageCanSteer;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean HazeMelts;
     }
     public static class HeyYaSettings {
         @BooleanOption(group = "inherit", value = true)

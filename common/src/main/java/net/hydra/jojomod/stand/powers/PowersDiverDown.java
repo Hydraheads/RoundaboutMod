@@ -208,8 +208,8 @@ public class PowersDiverDown extends NewPunchingStand {
     public static final float DIVE_REACH = 4.0f; // how far it goes
     public boolean isTransferringDamage = false; // recursion guard, prevents things like 2 DDs repeatedly protecting each other
     public boolean damageRedirectionEnabled = true;
-    // each other
     public boolean hasDiverLegs = false;
+    public boolean showDisguiseArmor = true;
     public static final int TRANSFER_WINDUP_MAX = 40;
     private static final double TRANSFER_RANGE = 4.0;
     public LivingEntity ribcageTarget = null;
@@ -1071,27 +1071,16 @@ public class PowersDiverDown extends NewPunchingStand {
 
     public void openLoom(ServerPlayer serverPlayer) {
         serverPlayer.openMenu(new SimpleMenuProvider(
-                (containerId, inventory, player) -> new LoomMenu(containerId, inventory,
-                        ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
-                    @Override
-                    public boolean stillValid(Player player) {
-                        return true;
-                    }
-                },
+                (containerId, inventory, player) -> new DiverDownLoomMenu(containerId, inventory,
+                        ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())),
                 Component.translatable("container.loom")));
     }
 
     public void openStonecutter(ServerPlayer serverPlayer) {
-        serverPlayer.openMenu(
-                new SimpleMenuProvider(
-                        (containerId, inventory, player) -> new StonecutterMenu(containerId, inventory,
-                                ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
-                            @Override
-                            public boolean stillValid(Player player) {
-                                return true;
-                            }
-                        },
-                        Component.translatable("container.stonecutter")));
+        serverPlayer.openMenu(new SimpleMenuProvider(
+                (containerId, inventory, player) -> new DiverDownStonecutterMenu(containerId, inventory,
+                        ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())),
+                Component.translatable("container.stonecutter")));
     }
 
     public void openAnvil(ServerPlayer serverPlayer) {
@@ -3343,6 +3332,14 @@ public class PowersDiverDown extends NewPunchingStand {
     //potion end
 
     //disguise start
+
+    public boolean shouldShowDisguiseArmor() {
+        return this.showDisguiseArmor;
+    }
+
+    public void setShowDisguiseArmor(boolean show) {
+        this.showDisguiseArmor = show;
+    }
 
     private void tryDisguiseClient(){
         if(this.self.level().isClientSide())

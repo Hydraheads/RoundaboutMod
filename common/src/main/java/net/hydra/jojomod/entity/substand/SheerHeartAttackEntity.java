@@ -69,6 +69,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
+import java.util.HashSet;
 import java.util.List;
 
 
@@ -141,6 +142,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	public static float width = 0.5f;
 	public static float height = 0.3f;
+
+	private HashSet<Vec3> explodedBlocks = new HashSet<Vec3>();
 
 	@Override
 	protected PathNavigation createNavigation(Level $$0) {
@@ -712,7 +715,11 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 					boolean shouldDrop = !info.requiresCorrectToolForDrops();
 					this.level().destroyBlock(this.blockTarget, shouldDrop);
+				}else {
+					explodedBlocks.add(new Vec3(blockTarget.getX(), blockTarget.getY(), blockTarget.getZ()));
 				}
+			}else {
+				explodedBlocks.add(new Vec3(blockTarget.getX(), blockTarget.getY(), blockTarget.getZ()));
 			}
 			this.blockTarget = null;
 			this.setTargetType(NONE);
@@ -823,7 +830,6 @@ public class SheerHeartAttackEntity extends StandEntity {
 				BlockState BS = this.level().getBlockState(this.blockTarget);
 				if (BS.isPathfindable(this.level(), this.blockTarget, PathComputationType.LAND)) {
 					newPath = this.getNavigation().createPath(this.blockTarget.below(), 0);
-					//this.level().getBlockState(this.blockTarget);
 				}else {
 					newPath = this.getNavigation().createPath(this.blockTarget, 0);
 				}
@@ -844,6 +850,10 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 
 	public int getBlockWarm(BlockPos pos, Level level) {
+		if (explodedBlocks.contains(new Vec3(pos.getX(), pos.getY(), pos.getZ()))) {
+			return -1;
+		}
+
 		BlockState info = level.getBlockState(pos);
 
 		if (ExplosionUtil.isBlockBlackListed(info) || (MainUtil.confirmIsOre(info))
