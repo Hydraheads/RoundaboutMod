@@ -3722,13 +3722,17 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
         if (isUsingTimeErase()){
             soften = true;
-            Roundabout.LOGGER.info("yes");
             timeErase();
             soften = false;
         }
 
 
         return super.setPowerAttack();
+    }
+
+    @Override
+    public int getExtraPunchTime(){
+        return 0;
     }
 
     @Override

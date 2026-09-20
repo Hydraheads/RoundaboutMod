@@ -248,6 +248,10 @@ public class NewPunchingStand extends NewDashPreset {
         return getReach();
     }
 
+    public int getExtraPunchTime(){
+        return 0;
+    }
+
     public int getMeltLevel(){
         int mult = 0;
         if (self.hasEffect(ModEffects.STAND_MELTING)) {
@@ -270,10 +274,10 @@ public class NewPunchingStand extends NewDashPreset {
             this.activePowerPhase++;
             if (this.activePowerPhase == 3) {
                 this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.finalStandPunchInStringCooldown
-                + getMeltLevel()*3;
+                + (getMeltLevel()*3) + getExtraPunchTime();
             } else {
                 this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.standPunchCooldown
-                        + getMeltLevel()*3;
+                        + (getMeltLevel()*3) + getExtraPunchTime();
             }
 
         }

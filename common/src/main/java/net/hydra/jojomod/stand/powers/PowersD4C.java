@@ -560,6 +560,18 @@ public class PowersD4C extends NewPunchingStand {
         return 100;
     }
     public int rech = 0;
+    D4CCloneEntity cloneInReach = null;
+    @Override
+    public boolean highlightsEntity(Entity ent,Player player){
+        if (cloneInReach != null && ent != null && cloneInReach.getUUID().equals(ent.getUUID())){
+            return true;
+        }
+        return false;
+    }
+    @Override
+    public int highlightsEntityColor(Entity ent, Player player){
+        return 15151775;
+    }
     @Override
     public void tickPower() {
         super.tickPower();
@@ -572,6 +584,26 @@ public class PowersD4C extends NewPunchingStand {
                 ticksSinceSwitch = 0;
             } else {
                 ticksSinceSwitch++;
+            }
+
+            if (isGuarding()){
+                Entity jentity = getTargetEntity(self,12);
+                if (jentity instanceof D4CCloneEntity d4cclone){
+                    Optional<UUID> uuid = d4cclone.getPlayerUUID();
+                    if (uuid != null && uuid.isPresent()){
+                        if (uuid.get().equals(self.getUUID())){
+                            cloneInReach = d4cclone;
+                        } else {
+                            cloneInReach = null;
+                        }
+                    } else {
+                        cloneInReach = null;
+                    }
+                } else {
+                    cloneInReach = null;
+                }
+            } else {
+                cloneInReach = null;
             }
         }
         if (!this.self.level().isClientSide() && self instanceof ServerPlayer sp){
@@ -3051,7 +3083,10 @@ public class PowersD4C extends NewPunchingStand {
         return $$1;
     }
 
-
+    @Override
+    public int getExtraPunchTime(){
+        return 2;
+    }
     @Override
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
