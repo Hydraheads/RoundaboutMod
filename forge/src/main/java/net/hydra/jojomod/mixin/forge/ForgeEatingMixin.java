@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin.forge;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.util.MainUtil;
@@ -25,7 +26,9 @@ public abstract class ForgeEatingMixin {
 
     @Inject(method = "eat(Lnet/minecraft/world/item/Item;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/LivingEntity;)V", at = @At(value = "HEAD"),remap = false,require = 0, cancellable = true)
     protected void roundabout$eatForge(Item item, ItemStack stack, LivingEntity entity, CallbackInfo ci) {
+        Roundabout.LOGGER.info("1");
         if (entity != null) {
+            Roundabout.LOGGER.info("2");
             if (stack.hasTag()) {
                 if (stack.getOrCreateTag().contains("pearljamfood")) {
                     FoodProperties props = stack.getFoodProperties(entity);
@@ -39,14 +42,20 @@ public abstract class ForgeEatingMixin {
                         ci.cancel();
                     }
                 }
-                if (PowerTypes.isErasingTime(entity)) {
+            }
+
+            if (PowerTypes.isErasingTime(entity)) {
+                ci.cancel();
+                return;
+            }
+            Roundabout.LOGGER.info("3");
+            if (FateTypes.hasBloodHunger(entity)) {
+                Roundabout.LOGGER.info("4");
+                if (item.isEdible()) {
+                    this.eat(MainUtil.getBloodAmount(stack), MainUtil.getSaturationAmount(stack));
+                    Roundabout.LOGGER.info("5");
                     ci.cancel();
                     return;
-                }
-                if (FateTypes.hasBloodHunger(entity)) {
-                    if (item.isEdible()) {
-                        this.eat(MainUtil.getBloodAmount(stack), MainUtil.getSaturationAmount(stack));
-                    }
                 }
             }
         }
