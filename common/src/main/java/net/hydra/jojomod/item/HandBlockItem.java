@@ -1,35 +1,25 @@
 package net.hydra.jojomod.item;
 
 import com.mojang.authlib.GameProfile;
-import net.hydra.jojomod.block.ChessPieceBlockEntity;
-import net.hydra.jojomod.block.FancyLighterBlock;
-import net.hydra.jojomod.block.FancyLighterBlockEntity;
-import net.hydra.jojomod.block.handBlock.AbstractHandBlock;
+
 import net.hydra.jojomod.block.handBlock.HandBlockEntity;
 import net.minecraft.Util;
-import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.client.renderer.blockentity.SkullBlockRenderer;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionResult;
+
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.item.context.UseOnContext;
+
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SoundType;
+
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.SkullBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.level.gameevent.GameEvent;
+
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -82,20 +72,6 @@ public class HandBlockItem extends BlockItem {
                 p_151179_.put("HandOwner", NbtUtils.writeGameProfile(new CompoundTag(), p_151177_));
             });
         }
-    }
-
-    public GameProfile getProfile(ItemStack stack) {
-        if (stack.hasTag()) {
-            CompoundTag tag = stack.getTag();
-            if (tag.contains("OwnerName") && tag.contains("OwnerUUID")) {
-                Optional<UUID> id = Optional.of(UUID.fromString(tag.getString("OwnerUUID")));
-                String name = tag.getString("OwnerName");
-                return id.isPresent() && !name.isEmpty() ? new GameProfile(id.get(), name) : null;
-            }else {
-                return null;
-            }
-        }
-        return null;
     }
 
 }

@@ -156,7 +156,7 @@ public class ExplosionUtil {
 
 		int intSize = Math.round(range) + 1;
 
-		double explosionDistanceMax = Math.pow(range + 0.45, 2);
+		double explosionDistanceMax = Math.pow(range + 0.5, 2);
 
 		for (BlockPos pos : BlockPos.betweenClosed(location.offset(intSize, intSize, intSize), location.offset(-intSize, -intSize, -intSize))) {
 			BlockState info = level.getBlockState(pos);

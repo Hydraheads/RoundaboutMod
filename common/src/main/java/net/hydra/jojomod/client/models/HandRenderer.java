@@ -32,6 +32,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.SkullBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.SkullBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RotationSegment;
 
@@ -93,7 +94,8 @@ public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer
             $$2.translate(0F, -1F, 0F);
             VertexConsumer vertexConsumer;
 
-            GameProfile pfp = ((HandBlockEntity) $$0).getOwnerProfile();
+            //GameProfile pfp = ((HandBlockEntity) $$0).getOwnerProfile();
+            GameProfile pfp = ((HandBlockEntity) $$0).getProfile();
 
             vertexConsumer = $$3.getBuffer(getRenderType(HandBlock$type, pfp));
 
@@ -106,6 +108,8 @@ public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer
                         part = hand_slim;
                     }
                 }
+            }else {
+
             }
 
             //if (HandBlock$type == AbstractHandBlock.Types.PLAYER_SLIM) {
@@ -129,13 +133,19 @@ public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer
         if ($$1 != null) {
             Minecraft $$3 = Minecraft.getInstance();
             Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> $$4 = $$3.getSkinManager().getInsecureSkinInformation($$1);
-            Roundabout.LOGGER.info("GameProfile was non null when rendering!");
 
             return $$4.containsKey(MinecraftProfileTexture.Type.SKIN) ? RenderType.entityTranslucent($$3.getSkinManager().registerTexture((MinecraftProfileTexture)$$4.get(MinecraftProfileTexture.Type.SKIN), MinecraftProfileTexture.Type.SKIN)) : RenderType.entityCutoutNoCull(DefaultPlayerSkin.getDefaultSkin(UUIDUtil.getOrCreatePlayerUUID($$1)));
         } else {
             return RenderType.entityCutoutNoCullZOffset(resourcelocation);
         }
 
+    }
+
+    public static boolean getSlim(GameProfile pfp) {
+        if (pfp != null) {
+            return "slim".equals(DefaultPlayerSkin.getSkinModelName(pfp.getId()));
+        }
+        return false;
     }
 
 }

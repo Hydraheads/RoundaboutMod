@@ -6,6 +6,7 @@ import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.properties.Property;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -13,6 +14,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.Services;
 import net.minecraft.server.players.GameProfileCache;
@@ -28,13 +32,17 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import org.spongepowered.asm.mixin.Unique;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
 public class HandBlockEntity extends BlockEntity {
+
+
     public static final String TAG_SKULL_OWNER = "HandOwner";
     public static final String TAG_NOTE_BLOCK_SOUND = "note_block_sound";
     @Nullable
@@ -72,6 +80,13 @@ public class HandBlockEntity extends BlockEntity {
     public void setStoredStack(ItemStack stack) {
         this.storedStack = stack.copy();
         setChanged();
+
+        CompoundTag compoundtag = storedStack.getTag();
+
+        if (compoundtag != null && compoundtag.contains("HandProfie")) {
+            this.setOwner(NbtUtils.readGameProfile(compoundtag.getCompound("HandProfie")));
+        }
+
     }
 
     public ItemStack getStoredStack() {
@@ -213,5 +228,25 @@ public class HandBlockEntity extends BlockEntity {
         } else {
             $$1.accept($$0);
         }
+    }
+
+    public GameProfile getProfile() {
+        if (storedStack == null) {
+            return null;
+        }
+        if (storedStack.hasTag()) {
+            CompoundTag tag = storedStack.getTag();
+            /*if (tag.contains("OwnerName") && tag.contains("OwnerUUID")) {
+                Optional<UUID> id = Optional.of(UUID.fromString(tag.getString("OwnerUUID")));
+                String name = tag.getString("OwnerName");
+                return id.isPresent() && !name.isEmpty() ? new GameProfile(id.get(), name) : null;
+            }else {
+                return null;
+            }*/
+            if (tag != null && tag.contains("HandProfile")) {
+                return NbtUtils.readGameProfile(tag.getCompound("HandProfile"));
+            }
+        }
+        return null;
     }
 }
