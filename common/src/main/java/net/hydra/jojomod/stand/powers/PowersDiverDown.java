@@ -221,6 +221,41 @@ public class PowersDiverDown extends NewPunchingStand {
     public int springLegsTicks = 0;
     public static final int SPRING_LEGS_MAX_DURATION = 300; // 15 seconds max duration
 
+    // move levels
+
+    public int getGroundDiveLevel(){
+        return 7;
+    }
+    public int getDiverZipLevel(){
+        return 6;
+    }
+    public int getDiverLimbLevel(){
+        return 5;
+    }
+    public int getBlockDisassemblyLevel(){
+        return 4;
+    }
+    public int getWorkbenchLevel(){
+        return 3;
+    }
+    public int getKickStorageLevel(){
+        return 2;
+    }
+    //workbench levels
+    public int getAnvilLevel(){
+        return 7;
+    }
+    public int getSmithingTableLevel(){
+        return 6;
+    }
+    public int getStonecutterLevel(){
+        return 5;
+    }
+    public int getLoomLevel(){
+        return 4;
+    }
+
+
     // stand creation model floaty creation whatever thingy.
     @Override
     public StandPowers generateStandPowers(LivingEntity entity) {
@@ -257,7 +292,11 @@ public class PowersDiverDown extends NewPunchingStand {
     public void renderIcons(GuiGraphics context, int x, int y) {
         // Ability 1 (Z)
         if (isHoldingSneak()) {
-            setSkillIcon(context, x, y, 1, StandIcons.DIVER_DOWN_DISASSEMBLE, PowerIndex.SKILL_1_SNEAK);
+            if (canExecuteMoveWithLevel(getBlockDisassemblyLevel())) {
+                setSkillIcon(context, x, y, 1, StandIcons.DIVER_DOWN_DISASSEMBLE, PowerIndex.SKILL_1_SNEAK);
+            } else {
+                setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+            }
         } else if (isGuarding()) {
             setSkillIcon(context, x, y, 1, StandIcons.DIVER_DOWN_SELF_SUBMERGE, PowerIndex.SKILL_1_GUARD);
         } else {
@@ -268,26 +307,46 @@ public class PowersDiverDown extends NewPunchingStand {
         if (isDiveActive()) {
             setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_AFFLICTION, PowerIndex.SKILL_2);
         } else if (isGuarding()) {
-            // isAutoRelease will be true if auto, false if manual
-            if (this.isAutoRelease)
-                setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_TOGGLE_AUTO, PowerIndex.SKILL_2_GUARD);
-            else
-                setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_TOGGLE_MANUAL, PowerIndex.SKILL_2_GUARD);
+            if (canExecuteMoveWithLevel(getKickStorageLevel())) {
+                // isAutoRelease will be true if auto, false if manual
+                if (this.isAutoRelease)
+                    setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_TOGGLE_AUTO, PowerIndex.SKILL_2_GUARD);
+                else
+                    setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_TOGGLE_MANUAL, PowerIndex.SKILL_2_GUARD);
+            } else {
+                setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+            }
         } else if (isHoldingSneak()) {
-            // changes the icons for deletion vs releation (real)
-            if (this.isAutoRelease)
-                setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_CANCEL_STORE, PowerIndex.SKILL_2_SNEAK);
-            else
-                setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_RELEASE_MANUAL, PowerIndex.SKILL_2_SNEAK);
+            if (canExecuteMoveWithLevel(getKickStorageLevel())) {
+                // changes the icons for deletion vs releation (real)
+                if (this.isAutoRelease)
+                    setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_CANCEL_STORE, PowerIndex.SKILL_2_SNEAK);
+                else
+                    setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_RELEASE_MANUAL, PowerIndex.SKILL_2_SNEAK);
+            } else {
+                setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+            }
         } else {
-            setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_STORE, PowerIndex.SKILL_2);
+            if (canExecuteMoveWithLevel(getKickStorageLevel())) {
+                setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_STORE, PowerIndex.SKILL_2);
+            } else {
+                setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+            }
         }
 
         // Ability 3 (C)
         if (isHoldingSneak()) {
-            setSkillIcon(context, x, y, 3, StandIcons.DIVER_DOWN_ZIP, PowerIndex.SKILL_3);
+            if(canExecuteMoveWithLevel(getDiverZipLevel())){
+                setSkillIcon(context, x, y, 3, StandIcons.DIVER_DOWN_ZIP, PowerIndex.SKILL_3);
+            } else {
+                setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+            }
         } else if (canLatchOntoWall()) {
-            setSkillIcon(context, x, y, 3, StandIcons.DIVER_DOWN_VAULT, PowerIndex.GLOBAL_DASH);
+            if(canExecuteMoveWithLevel(getDiverZipLevel())){
+                setSkillIcon(context, x, y, 3, StandIcons.DIVER_DOWN_VAULT, PowerIndex.GLOBAL_DASH);
+            } else {
+                setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+            }
         } else {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         }
@@ -301,11 +360,23 @@ public class PowersDiverDown extends NewPunchingStand {
             }
         } else {
             if (isGuarding()) {
-                setSkillIcon(context, x, y, 4, StandIcons.DIVER_DOWN_WORKSTATION, PowerIndex.SKILL_4_GUARD);
+                if(canExecuteMoveWithLevel(getWorkbenchLevel())){
+                    setSkillIcon(context, x, y, 4, StandIcons.DIVER_DOWN_WORKSTATION, PowerIndex.SKILL_4_GUARD);
+                } else {
+                    setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+                }
             } else if (isHoldingSneak()) {
-                setSkillIcon(context, x, y, 4, StandIcons.DIVER_DOWN_PLATFORM, PowerIndex.SKILL_4_SNEAK);
+                if (canExecuteMoveWithLevel(getDiverLimbLevel())) {
+                    setSkillIcon(context, x, y, 4, StandIcons.DIVER_DOWN_PLATFORM, PowerIndex.SKILL_4_SNEAK);
+                } else {
+                    setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+                }
             } else {
-                setSkillIcon(context, x, y, 4, StandIcons.DIVER_DOWN_GROUND_DIVE, PowerIndex.SKILL_4);
+                if (canExecuteMoveWithLevel(getGroundDiveLevel())) {
+                    setSkillIcon(context, x, y, 4, StandIcons.DIVER_DOWN_GROUND_DIVE, PowerIndex.SKILL_4);
+                } else {
+                    setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+                }
             }
         }
     }
@@ -386,6 +457,41 @@ public class PowersDiverDown extends NewPunchingStand {
             return ModSounds.DIVER_DOWN_CHARGE_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
+    }
+
+    @Override
+    public float getPunchLandPitch(){
+        return 1.1F + 0.05F * activePowerPhase;
+    }
+
+    @Override
+    public float getPunchLandLastPitch(){
+        return 1.2F;
+    }
+
+    @Override
+    public SoundEvent getPunchLandSound(){
+        return ModSounds.DIVER_DOWN_HIT_EVENT;
+    }
+
+    @Override
+    public SoundEvent getPunchLandLastSound(){
+        return ModSounds.DIVER_DOWN_HIT_HEAVY_EVENT;
+    }
+
+    @Override
+    public void playBarrageEndNoise(float mod, Entity entity){
+        if (!this.self.level().isClientSide()) {
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.DIVER_DOWN_HIT_HEAVY_EVENT, SoundSource.PLAYERS, 0.95F+mod, 1F);
+        }
+    }
+
+    @Override
+    public void playBarrageNoise(int hitNumber, Entity entity){
+        if (!this.self.level().isClientSide()) {
+            if (hitNumber % 3 == 0)
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.DIVER_DOWN_BARRAGE_EVENT, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
+        }
     }
 
     // START OF ACTUAL MOVE METHODS
@@ -706,7 +812,9 @@ public class PowersDiverDown extends NewPunchingStand {
 
     public void tryToDashClient() {
         if (canLatchOntoWall() && canWallZipConfig()) {
-            doWallLatchClient();
+            if(canExecuteMoveWithLevel(getDiverZipLevel())) {
+                doWallLatchClient();
+            }
         } else if (!inZipMode()) {
             dash();
         }
@@ -717,12 +825,14 @@ public class PowersDiverDown extends NewPunchingStand {
      * tryLimbClimb is the client side activation for the limb move.
      */
     private void tryLimbClimb() {
-        if (this.self.level().isClientSide()) {
-            if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK)) {
-                // literally just to prevent the move from being spammed
-                this.setCooldown(PowerIndex.SKILL_4_SNEAK, 10);
-                ((StandUser) this.getSelf()).roundabout$tryPower(LIMB_SCAFFOLD, true);
-                tryPowerPacket(LIMB_SCAFFOLD);
+        if (canExecuteMoveWithLevel(getDiverLimbLevel())) {
+            if (this.self.level().isClientSide()) {
+                if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK)) {
+                    // literally just to prevent the move from being spammed
+                    this.setCooldown(PowerIndex.SKILL_4_SNEAK, 10);
+                    ((StandUser) this.getSelf()).roundabout$tryPower(LIMB_SCAFFOLD, true);
+                    tryPowerPacket(LIMB_SCAFFOLD);
+                }
             }
         }
     }
@@ -1008,7 +1118,9 @@ public class PowersDiverDown extends NewPunchingStand {
      * workbench they want to access.
      */
     private void tryWorkbenchSelectionClient() {
-        ClientUtil.openWorkbenchSelect();
+        if(canExecuteMoveWithLevel(getWorkbenchLevel())){
+            ClientUtil.openWorkbenchSelect();
+        }
     }
 
     /**
@@ -1234,6 +1346,7 @@ public class PowersDiverDown extends NewPunchingStand {
                                         SoundSource.PLAYERS, 0.85F, 1);
                                 // finally despawns the stand once it's inside the block
                                 stand.forceDespawn(true);
+                                addEXP(1);
                             }
                         }
                         // subsequent usages
@@ -1312,19 +1425,21 @@ public class PowersDiverDown extends NewPunchingStand {
     // Ground dive move here
 
     private void tryGroundDive() {
-        if (this.self.level().isClientSide() && GravityAPI.getGravityDirection(this.self) == Direction.DOWN) {
-            StandEntity stand = getStandEntity(this.self);
-            if (stand != null && stand.isAlive()) {
-                DiverDownControlsClient.enter(stand);
-                setPiloting(stand.getId());
-                tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, stand.getId());
-                // the 0.05 is there to fix the pilot enter bug, so it can enter pilot inside
-                // walls
-                stand.setPos(stand.getX(), stand.getY() + 0.05, stand.getZ());
-                // note to self: get the last survivor ult sound effect for this. this is a
-                // placeholder for now
-                playSoundIfPossible(self.level(), null, stand.blockPosition(),
-                        ModSounds.DIVER_DOWN_DIVE_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+        if (canExecuteMoveWithLevel(getGroundDiveLevel())) {
+            if (this.self.level().isClientSide() && GravityAPI.getGravityDirection(this.self) == Direction.DOWN) {
+                StandEntity stand = getStandEntity(this.self);
+                if (stand != null && stand.isAlive()) {
+                    DiverDownControlsClient.enter(stand);
+                    setPiloting(stand.getId());
+                    tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, stand.getId());
+                    // the 0.05 is there to fix the pilot enter bug, so it can enter pilot inside
+                    // walls
+                    stand.setPos(stand.getX(), stand.getY() + 0.05, stand.getZ());
+                    // note to self: get the last survivor ult sound effect for this. this is a
+                    // placeholder for now
+                    playSoundIfPossible(self.level(), null, stand.blockPosition(),
+                            ModSounds.DIVER_DOWN_DIVE_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+                }
             }
         }
     }
@@ -2085,11 +2200,13 @@ public class PowersDiverDown extends NewPunchingStand {
     // heel plant 2.0 start
 
     public void tryDiverZip() {
-        if (!self.isInWater()) {
-            if (forceBlock())
-                return;
-            ((StandUser) this.getSelf()).roundabout$tryPower(DIVER_ZIP, true);
-            tryPowerPacket(DIVER_ZIP);
+        if(canExecuteMoveWithLevel(getDiverZipLevel())) {
+            if (!self.isInWater()) {
+                if (forceBlock())
+                    return;
+                ((StandUser) this.getSelf()).roundabout$tryPower(DIVER_ZIP, true);
+                tryPowerPacket(DIVER_ZIP);
+            }
         }
     }
 
@@ -2442,9 +2559,11 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     public void tryPlantKickTrap() {
-        if (this.canAttack() && !this.areStandMovesDisabled()) {
-            this.tryPower(STORE_KICK_TRAP, true);
-            tryPowerPacket(STORE_KICK_TRAP);
+        if(canExecuteMoveWithLevel(getKickStorageLevel())) {
+            if (this.canAttack() && !this.areStandMovesDisabled()) {
+                this.tryPower(STORE_KICK_TRAP, true);
+                tryPowerPacket(STORE_KICK_TRAP);
+            }
         }
     }
 
@@ -2677,6 +2796,7 @@ public class PowersDiverDown extends NewPunchingStand {
                     stand.discard();
                 }
             }
+            addEXP(3);
             // sounds and particles here
         }
     }
@@ -3452,19 +3572,21 @@ public class PowersDiverDown extends NewPunchingStand {
 
     //checks for a block to disassemble
     private void tryDisassembleBlockClient() {
-        if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
-            Vec3 eyePos = this.self.getEyePosition(0);
-            Vec3 viewVec = this.self.getViewVector(0);
-            Vec3 targetVec = eyePos.add(viewVec.x * 6.0, viewVec.y * 6.0, viewVec.z * 6.0);
+        if(canExecuteMoveWithLevel(getBlockDisassemblyLevel())) {
+            if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
+                Vec3 eyePos = this.self.getEyePosition(0);
+                Vec3 viewVec = this.self.getViewVector(0);
+                Vec3 targetVec = eyePos.add(viewVec.x * 6.0, viewVec.y * 6.0, viewVec.z * 6.0);
 
-            BlockHitResult hit = this.self.level().clip(new ClipContext(
-                    eyePos, targetVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.self));
+                BlockHitResult hit = this.self.level().clip(new ClipContext(
+                        eyePos, targetVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.self));
 
-            if (hit.getType() == HitResult.Type.BLOCK) {
-                BlockPos pos = hit.getBlockPos();
-                if (canDisassembleBlock(pos)) {
-                    ((StandUser) this.getSelf()).roundabout$tryBlockPosPower(DISASSEMBLE_BLOCK, true, pos);
-                    tryBlockPosPowerPacket(DISASSEMBLE_BLOCK, pos);
+                if (hit.getType() == HitResult.Type.BLOCK) {
+                    BlockPos pos = hit.getBlockPos();
+                    if (canDisassembleBlock(pos)) {
+                        ((StandUser) this.getSelf()).roundabout$tryBlockPosPower(DISASSEMBLE_BLOCK, true, pos);
+                        tryBlockPosPowerPacket(DISASSEMBLE_BLOCK, pos);
+                    }
                 }
             }
         }
@@ -3504,6 +3626,7 @@ public class PowersDiverDown extends NewPunchingStand {
             itemEntity.setDefaultPickUpDelay();
             this.self.level().addFreshEntity(itemEntity);
         }
+        addEXP(1);
     }
 
     // disassembly end
@@ -3612,6 +3735,41 @@ public class PowersDiverDown extends NewPunchingStand {
             return;
         }
         super.buttonInputBarrage(keyIsDown, options);
+    }
+
+    // for levels
+
+    @Override
+    public byte getMaxLevel(){
+        return 7;
+    }
+
+    @Override
+    public void levelUp(){
+        if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE){
+            IPlayerEntity ipe = ((IPlayerEntity) PE);
+            byte level = ipe.roundabout$getStandLevel();
+            if (level == 7) {
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.max.both").
+                        withStyle(ChatFormatting.AQUA), true);
+            } else {
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.both").
+                        withStyle(ChatFormatting.AQUA), true);
+            }
+        }
+        super.levelUp();
+    }
+
+    @Override
+    public int getExpForLevelUp(int currentLevel) {
+        int amt;
+        if (currentLevel == 1) {
+            amt = 100;
+        } else {
+            amt = (100 + ((currentLevel - 1) * 65));
+        }
+        amt = (int) (amt * getLevelMultiplier());
+        return amt;
     }
 
     /*
