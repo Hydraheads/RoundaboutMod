@@ -27,6 +27,10 @@ public class StandIcons {
     public static final ResourceLocation WHITESNAKE_AUTO_MODE = whitesnakeIcon("auto_mode");
     public static final ResourceLocation WHITESNAKE_AUTO_MODE_MOVE = whitesnakeIcon("auto_mode_move");
     public static final ResourceLocation WHITESNAKE_AUTO_MODE_ATTACK = whitesnakeIcon("auto_mode_attack");
+    public static final ResourceLocation WHITESNAKE_AUTOFOLLOW_ON = whitesnakeIcon("autofollow_on");
+    public static final ResourceLocation WHITESNAKE_AUTOFOLLOW_OFF = whitesnakeIcon("autofollow_off");
+    public static final ResourceLocation WHITESNAKE_AUTOATTACK_ON = whitesnakeIcon("autoattack_on");
+    public static final ResourceLocation WHITESNAKE_AUTOATTACK_OFF = whitesnakeIcon("autoattack_off");
     public static final ResourceLocation WHITESNAKE_HALLUCINATORY_DISGUISE = whitesnakeIcon("hallucinatory_disguise");
     public static final ResourceLocation WHITESNAKE_HALLUCINATION_1 = whitesnakeIcon("hallucination_1");
     public static final ResourceLocation WHITESNAKE_HALLUCINATION_2 = whitesnakeIcon("hallucination_2");
@@ -829,6 +833,7 @@ public class StandIcons {
     public static final ResourceLocation D4C_DIMENSION_KIDNAP = Roundabout.location("textures/gui/icons/d4c/dimension_kidnap.png");
     public static final ResourceLocation D4C_CLONE_SUMMON = Roundabout.location("textures/gui/icons/d4c/clone_summon.png");
     public static final ResourceLocation D4C_CLONE_SWAP = Roundabout.location("textures/gui/icons/d4c/clone_swap.png");
+    public static final ResourceLocation D4C_CLONE_SWAP_2 = Roundabout.location("textures/gui/icons/d4c/clone_swap_2.png");
     public static final ResourceLocation D4C_MELT_DODGE = Roundabout.location("textures/gui/icons/d4c/melt_dodge.png");
     public static final ResourceLocation D4C_BLOCK_COPY = Roundabout.location("textures/gui/icons/d4c/block_copy.png");
     public static final ResourceLocation D4C_BLOCK_MERGE = Roundabout.location("textures/gui/icons/d4c/block_merge.png");
@@ -1049,25 +1054,25 @@ public class StandIcons {
         public static final ResourceLocation DIVER_DOWN_SUBMERGE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/diver_down/diver_dive.png");
         public static final ResourceLocation DIVER_DOWN_DISASSEMBLE = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/diver_down/placeholder.png");
+            "textures/gui/icons/diver_down/disassemble.png");
         public static final ResourceLocation DIVER_DOWN_SELF_SUBMERGE = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/diver_down/placeholder.png");
+            "textures/gui/icons/diver_down/self_dive.png");
         public static final ResourceLocation DIVER_DOWN_STORE = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/diver_down/placeholder.png");
+            "textures/gui/icons/diver_down/store_kick.png");
         public static final ResourceLocation DIVER_DOWN_ZIP = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/diver_down/diver_zip.png");
         public static final ResourceLocation DIVER_DOWN_WORKSTATION = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/diver_down/diver_workstation.png");
         public static final ResourceLocation DIVER_DOWN_AFFLICTION = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/diver_down/placeholder.png");
-        public static final ResourceLocation DIVER_DOWN_RELEASE_AUTO = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/diver_down/placeholder.png");
+        public static final ResourceLocation DIVER_DOWN_TOGGLE_AUTO = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/diver_down/toggle_automatic.png");
+        public static final ResourceLocation DIVER_DOWN_TOGGLE_MANUAL = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/diver_down/toggle_manual.png");
         public static final ResourceLocation DIVER_DOWN_RELEASE_MANUAL = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/diver_down/placeholder.png");
-        public static final ResourceLocation DIVER_DOWN_SELECTION = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/diver_down/placeholder.png");
+            "textures/gui/icons/diver_down/manual_release.png");
         public static final ResourceLocation DIVER_DOWN_CANCEL_STORE = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/diver_down/placeholder.png");
+            "textures/gui/icons/diver_down/delete_traps.png");
         public static final ResourceLocation DIVER_DOWN_PLATFORM = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/diver_down/diver_climb.png");
         public static final ResourceLocation DIVER_DOWN_GROUND_DIVE = new ResourceLocation(Roundabout.MOD_ID,

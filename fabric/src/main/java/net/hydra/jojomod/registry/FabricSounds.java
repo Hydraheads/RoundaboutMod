@@ -356,6 +356,11 @@ public class FabricSounds {
         addSound(ModSounds.TUSK_HOLE_MOVE_ID, ModSounds.TUSK_HOLE_MOVE_EVENT);
         addSound(ModSounds.TUSK_GRAB_ID, ModSounds.TUSK_GRAB_EVENT);
         addSound(ModSounds.TUSK_HOLE_IMPACT_ID, ModSounds.TUSK_HOLE_IMPACT_EVENT);
+        addSound(ModSounds.TUSK_REVERSE_ID, ModSounds.TUSK_REVERSE_EVENT);
+        addSound(ModSounds.TUSK_ORA_RUSH_ID, ModSounds.TUSK_ORA_RUSH_EVENT);
+        addSound(ModSounds.TUSK_FINAL_ORA_ID, ModSounds.TUSK_FINAL_ORA_EVENT);
+        addSound(ModSounds.TUSK_WALL_BREAK_ID, ModSounds.TUSK_WALL_BREAK_EVENT);
+        addSound(ModSounds.TUSK_ADVANCE_ID, ModSounds.TUSK_ADVANCE_EVENT);
 
 
         addSound(ModSounds.SUMMON_PEARL_JAM_ID, ModSounds.SUMMON_PEARL_JAM_EVENT);
@@ -519,6 +524,7 @@ public class FabricSounds {
         addSound(ModSounds.DIVER_DOWN_CHARGE_ID, ModSounds.DIVER_DOWN_CHARGE_EVENT);
         addSound(ModSounds.DIVER_DOWN_DIVE_ID, ModSounds.DIVER_DOWN_DIVE_EVENT);
         addSound(ModSounds.DIVER_DOWN_DIVE2_ID, ModSounds.DIVER_DOWN_DIVE2_EVENT);
+        addSound(ModSounds.DIVER_DOWN_BARRAGE_ID, ModSounds.DIVER_DOWN_BARRAGE_EVENT);
 
         addSound(ModSounds.SUMMON_GREEN_DAY_ID, ModSounds.SUMMON_GREEN_DAY_EVENT);
         addSound(ModSounds.SUMMON_WALKING_ID, ModSounds.SUMMON_WALKING_EVENT);

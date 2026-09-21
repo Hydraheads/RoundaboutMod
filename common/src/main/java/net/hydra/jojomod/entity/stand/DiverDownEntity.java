@@ -95,7 +95,7 @@ public class DiverDownEntity extends FollowingStandEntity {
      */
     @Override
     public float maxUpStep() {
-        return 3.0F;
+        return 2.0F;
     }
 
     /*

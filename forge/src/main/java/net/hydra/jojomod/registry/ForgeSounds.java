@@ -790,6 +790,16 @@ public class ForgeSounds {
             register(ModSounds.TUSK_GRAB, ModSounds.TUSK_GRAB_ID);
     public static final RegistryObject<SoundEvent> TUSK_HOLE_IMPACT =
             register(ModSounds.TUSK_HOLE_IMPACT, ModSounds.TUSK_HOLE_IMPACT_ID);
+    public static final RegistryObject<SoundEvent> TUSK_REVERSE =
+            register(ModSounds.TUSK_REVERSE, ModSounds.TUSK_REVERSE_ID);
+    public static final RegistryObject<SoundEvent> TUSK_ORA_RUSH =
+            register(ModSounds.TUSK_ORA_RUSH, ModSounds.TUSK_ORA_RUSH_ID);
+    public static final RegistryObject<SoundEvent> TUSK_FINAL_ORA =
+            register(ModSounds.TUSK_FINAL_ORA, ModSounds.TUSK_FINAL_ORA_ID);
+    public static final RegistryObject<SoundEvent> TUSK_WALL_BREAK =
+            register(ModSounds.TUSK_WALL_BREAK, ModSounds.TUSK_WALL_BREAK_ID);
+    public static final RegistryObject<SoundEvent> TUSK_ADVANCE =
+            register(ModSounds.TUSK_ADVANCE, ModSounds.TUSK_ADVANCE_ID);
 
 
     public static final RegistryObject<SoundEvent> SUMMON_PEARL_JAM =
@@ -955,6 +965,8 @@ public class ForgeSounds {
             register(ModSounds.DIVER_DOWN_DIVE, ModSounds.DIVER_DOWN_DIVE_ID);
         public static final RegistryObject<SoundEvent> DIVER_DOWN_DIVE2 =
             register(ModSounds.DIVER_DOWN_DIVE2, ModSounds.DIVER_DOWN_DIVE2_ID);
+    public static final RegistryObject<SoundEvent> DIVER_DOWN_BARRAGE =
+            register(ModSounds.DIVER_DOWN_BARRAGE, ModSounds.DIVER_DOWN_BARRAGE_ID);
 
     public static final RegistryObject<SoundEvent> SUMMON_GREEN_DAY =
             register(ModSounds.SUMMON_GREEN_DAY, ModSounds.SUMMON_GREEN_DAY_ID);

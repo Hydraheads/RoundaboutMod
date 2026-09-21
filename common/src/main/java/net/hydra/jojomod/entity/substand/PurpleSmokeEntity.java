@@ -66,6 +66,7 @@ public class PurpleSmokeEntity extends StandEntity {
         SKIN_COLORS.put(PurpleHazeEntity.BLAZING_HAZE, 0xA62AAD);
         SKIN_COLORS.put(PurpleHazeEntity.MIRROR_BATTLE, 0xA62AAD);
         SKIN_COLORS.put(PurpleHazeEntity.ROTT, 0x4e1c1c);//
+        SKIN_COLORS.put(PurpleHazeEntity.PEPPERMINT, 0xc7fcff);//
     }
     public static final int DEFAULT_HAZE_COLOR = 0xA62AAD;
 
@@ -271,6 +272,9 @@ public class PurpleSmokeEntity extends StandEntity {
                 if (!isSelf && !alreadyHasVirus && expGrantedTo.add(living.getId())) {
                     ((StandUser) user).roundabout$getStandPowers().addEXP(2);
                 }
+                if (ClientNetworking.getAppropriateConfig().PurpleHazeSettings.HazeMelts) {
+                    living.addEffect(new MobEffectInstance(ModEffects.MELTING, 300, 2));
+                }
             } else {
                 boolean alreadyHasVirus = living.hasEffect(ModEffects.HAZE_VIRUS);
                 ((StandUser) living).SetInPurpleHazeTicks(5);
@@ -279,6 +283,9 @@ public class PurpleSmokeEntity extends StandEntity {
 
                 if (!isSelf && !alreadyHasVirus && expGrantedTo.add(living.getId())) {
                     ((StandUser) user).roundabout$getStandPowers().addEXP(3);
+                }
+                if (ClientNetworking.getAppropriateConfig().PurpleHazeSettings.HazeMelts) {
+                    living.addEffect(new MobEffectInstance(ModEffects.MELTING, 300, 1));
                 }
             }
         }

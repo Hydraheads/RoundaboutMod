@@ -42,6 +42,7 @@ public class ModStrayModels {
     public static KillerQueenArmsPart killerQueenArmsPart;
     public static StarPlatinumArmsPart starPlatinumArmsPart;
     public static TheWorldArmsPart theWorldArmsPart;
+    public static SilverChariotArmsPart silverChariotArmsPart;
     public static ChestPart ChestPart;
     public static SmallChestPart SmallChestPart;
     public static BodySpikePart bodySpikePart;
@@ -50,6 +51,7 @@ public class ModStrayModels {
     public static BigHairPart BigHairPart;
     public static KakyoinHairPart KakyoinHairPart;
     public static GyroHatPart gyroHatPart;
+    public static AnakissHatPart anakissHatPart;
     public static SteelBallsPart steelBallsPart;
     public static DiegoHatPart DiegoHatPart;
     public static KosakuHairPart kosakuHairPart;

@@ -15,6 +15,7 @@ import net.hydra.jojomod.entity.paintings.BirthOfVenusPainting;
 import net.hydra.jojomod.entity.paintings.MonaLisaPainting;
 import net.hydra.jojomod.entity.paintings.VanGoughPainting;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
+import net.hydra.jojomod.entity.pathfinding.CommandDiscPossession;
 import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
@@ -625,6 +626,12 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "d4c").toString())
             );
+    public static final RegistryObject<EntityType<BoneProjectileEntity>> BONE_PROJECTILE = ENTITY_TYPES.register("bone_projectile",
+            () -> EntityType.Builder.<BoneProjectileEntity>of(BoneProjectileEntity::new, MobCategory.MISC)
+                    .sized(0.5F, 0.5F)
+                    .clientTrackingRange(4)
+                    .updateInterval(20)
+                    .build(new ResourceLocation(Roundabout.MOD_ID, "bone_projectile").toString()));
     public static final RegistryObject<EntityType<SilverChariotEntity>> SILVER_CHARIOT =
             ENTITY_TYPES.register("silver_chariot", () ->
                     EntityType.Builder.of(SilverChariotEntity::new, MobCategory.MISC).sized(0.75f, 2.05f).
@@ -633,13 +640,13 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<SilverChariotRapierShotEntity>> SILVER_CHARIOT_RAPIER =
             ENTITY_TYPES.register("silver_chariot_rapier", () ->
-                    EntityType.Builder.<SilverChariotRapierShotEntity>of(SilverChariotRapierShotEntity::new, MobCategory.MISC).sized(0.2f, 0.2f).
+                    EntityType.Builder.<SilverChariotRapierShotEntity>of(SilverChariotRapierShotEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).
                             clientTrackingRange(16).
                             build(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_rapier").toString())
             );
     public static final RegistryObject<EntityType<SilverChariotRapierPlatformEntity>> SILVER_CHARIOT_RAPIER_PLATFORM =
             ENTITY_TYPES.register("silver_chariot_rapier_platform", () ->
-                    EntityType.Builder.<SilverChariotRapierPlatformEntity>of(SilverChariotRapierPlatformEntity::new, MobCategory.MISC).sized(2.0f, 0.2f).
+                    EntityType.Builder.<SilverChariotRapierPlatformEntity>of(SilverChariotRapierPlatformEntity::new, MobCategory.MISC).sized(1.0f, 0.2f).
                             clientTrackingRange(16).
                             build(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_rapier_platform").toString())
             );
@@ -844,6 +851,12 @@ public class ForgeEntities {
                             clientTrackingRange(6).
                             build(new ResourceLocation(Roundabout.MOD_ID, "bomb_planted_spectral_arrow").toString())
             );
+    public static final RegistryObject<EntityType<BombPlantedEnderpearl>> BOMB_PLANTED_ENDERPEARL =
+            ENTITY_TYPES.register("bomb_planted_enderpearl", () ->
+                    EntityType.Builder.<BombPlantedEnderpearl>of(BombPlantedEnderpearl::new, MobCategory.MISC).sized(0.7f, 0.7f).
+                            clientTrackingRange(6).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "bomb_planted_enderpearl").toString())
+            );
     public static final RegistryObject<EntityType<IronBallEntity>> IRON_BALL =
             ENTITY_TYPES.register("iron_ball", () ->
                     EntityType.Builder.<IronBallEntity>of(IronBallEntity::new, MobCategory.MISC).sized(0.9f, 0.9f).
@@ -855,6 +868,12 @@ public class ForgeEntities {
                     EntityType.Builder.<ThrownObjectEntity>of(ThrownObjectEntity::new, MobCategory.MISC).sized(1f, 1f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "thrown_object").toString())
+            );
+    public static final RegistryObject<EntityType<ReturningObjectEntity>> RETURNING_OBJECT =
+            ENTITY_TYPES.register("returning_object", () ->
+                    EntityType.Builder.<ReturningObjectEntity>of(ReturningObjectEntity::new, MobCategory.MISC).sized(1f, 1f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "returning_object").toString())
             );
     public static final RegistryObject<EntityType<ThrownAnubisEntity>> THROWN_ANUBIS =
             ENTITY_TYPES.register("thrown_anubis", () ->
@@ -926,6 +945,12 @@ public class ForgeEntities {
                     EntityType.Builder.<AnubisPossessorEntity>of(AnubisPossessorEntity::new, MobCategory.MISC).sized(0.6f, 2f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "anubis_possessor").toString())
+            );
+    public static final RegistryObject<EntityType<CommandDiscPossession>> COMMAND_DISC_POSSESSION =
+            ENTITY_TYPES.register("command_disc_possession", () ->
+                    EntityType.Builder.<CommandDiscPossession>of(CommandDiscPossession::new, MobCategory.MISC).sized(0.6f, 2f).
+                            clientTrackingRange(10).noSave().
+                            build(new ResourceLocation(Roundabout.MOD_ID, "command_disc_possession").toString())
             );
     public static final RegistryObject<EntityType<AnubisSlipstreamEntity>> ANUBIS_SLIPSTREAM =
             ENTITY_TYPES.register("anubis_slipstream", () ->

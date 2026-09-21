@@ -5,11 +5,13 @@ import java.util.List;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import org.joml.Vector3f;
@@ -43,7 +45,6 @@ public class ExplosionUtil {
 	}
 	public static void explodeEffects(Vec3 pos, Level level, SimpleParticleType particle, float range) {
 		explodeEffects(pos, level, particle, new Vec3(range, range+0.3f, range), 18);
-
 	}
 
     public static void explodeEffects(Vec3 pos, Level level, SimpleParticleType particle, float range, int amount) {
@@ -153,7 +154,7 @@ public class ExplosionUtil {
 	public static void explodeBlocksBase(BlockPos location, Level level, Float range, boolean ignoreOres, Entity causer) {
 		Vec3 center = new Vec3(location.getX(), location.getY(), location.getZ());
 
-		int intSize = (int) Math.floor(range);
+		int intSize = Math.round(range) + 1;
 
 		double explosionDistanceMax = Math.pow(range + 0.5, 2);
 
@@ -166,12 +167,12 @@ public class ExplosionUtil {
 			}
 
 			// Simulate natural explosions
-			Double explosionDistance = explosionDistanceMax + ((double) level.getRandom().nextIntBetweenInclusive(-intSize * 2, intSize * 2) / 7.5);
+			Double explosionDistance = explosionDistanceMax + ((double) level.getRandom().nextIntBetweenInclusive(-intSize, intSize) / 7.5);
 
 			Double dist2 = center.distanceToSqr(pos.getX(), pos.getY(), pos.getZ());
 
 			if (dist2 <= explosionDistance && !(causer instanceof Player PL && !MainUtil.canPlaceOnClaim(PL, pos))) {
-				boolean shouldDrop = !info.requiresCorrectToolForDrops();
+				boolean shouldDrop = !info.requiresCorrectToolForDrops() && level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING_OBTAINMENT);
 				level.destroyBlock(pos, shouldDrop);
 			}
 		}

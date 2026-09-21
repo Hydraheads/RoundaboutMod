@@ -1527,6 +1527,21 @@ public class ModSounds {
     public static final String TUSK_HOLE_IMPACT = "tusk_hole_impact";
     public static final ResourceLocation TUSK_HOLE_IMPACT_ID = new ResourceLocation(Roundabout.MOD_ID,TUSK_HOLE_IMPACT);
     public static SoundEvent TUSK_HOLE_IMPACT_EVENT = SoundEvent.createVariableRangeEvent(TUSK_HOLE_IMPACT_ID);
+    public static final String TUSK_REVERSE = "tusk_reverse";
+    public static final ResourceLocation TUSK_REVERSE_ID = new ResourceLocation(Roundabout.MOD_ID,TUSK_REVERSE);
+    public static SoundEvent TUSK_REVERSE_EVENT = SoundEvent.createVariableRangeEvent(TUSK_REVERSE_ID);
+    public static final String TUSK_ORA_RUSH = "tusk_ora_rush";
+    public static final ResourceLocation TUSK_ORA_RUSH_ID = new ResourceLocation(Roundabout.MOD_ID,TUSK_ORA_RUSH);
+    public static SoundEvent TUSK_ORA_RUSH_EVENT = SoundEvent.createVariableRangeEvent(TUSK_ORA_RUSH_ID);
+    public static final String TUSK_FINAL_ORA = "tusk_final_ora";
+    public static final ResourceLocation TUSK_FINAL_ORA_ID = new ResourceLocation(Roundabout.MOD_ID,TUSK_FINAL_ORA);
+    public static SoundEvent TUSK_FINAL_ORA_EVENT = SoundEvent.createVariableRangeEvent(TUSK_FINAL_ORA_ID);
+    public static final String TUSK_WALL_BREAK = "tusk_wall_break";
+    public static final ResourceLocation TUSK_WALL_BREAK_ID = new ResourceLocation(Roundabout.MOD_ID,TUSK_WALL_BREAK);
+    public static SoundEvent TUSK_WALL_BREAK_EVENT = SoundEvent.createVariableRangeEvent(TUSK_WALL_BREAK_ID);
+    public static final String TUSK_ADVANCE = "tusk_advance";
+    public static final ResourceLocation TUSK_ADVANCE_ID = new ResourceLocation(Roundabout.MOD_ID,TUSK_ADVANCE);
+    public static SoundEvent TUSK_ADVANCE_EVENT = SoundEvent.createVariableRangeEvent(TUSK_ADVANCE_ID);
 
 
 
@@ -1733,6 +1748,9 @@ public class ModSounds {
     public static final String DIVER_DOWN_DIVE2 = "diver_down_dive2";
     public static final ResourceLocation DIVER_DOWN_DIVE2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIVER_DOWN_DIVE2);
     public static SoundEvent DIVER_DOWN_DIVE2_EVENT = SoundEvent.createVariableRangeEvent(DIVER_DOWN_DIVE2_ID);
+    public static final String DIVER_DOWN_BARRAGE = "diver_down_barrage";
+    public static final ResourceLocation DIVER_DOWN_BARRAGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIVER_DOWN_BARRAGE);
+    public static SoundEvent DIVER_DOWN_BARRAGE_EVENT = SoundEvent.createVariableRangeEvent(DIVER_DOWN_BARRAGE_ID);
 
     public static final String SUMMON_GREEN_DAY = "summon_green_day";
     public static final ResourceLocation SUMMON_GREEN_DAY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_GREEN_DAY);

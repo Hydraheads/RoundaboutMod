@@ -17,13 +17,17 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.Util;
 
 import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
 
 public final class WhitesnakeDisguiseService {
     private static final int DISGUISE_COOLDOWN = 100;
     private static final Pattern USERNAME = Pattern.compile("[A-Za-z0-9_]{3,16}");
+    private static final Set<UUID> pendingRequests = ConcurrentHashMap.newKeySet();
 
     private WhitesnakeDisguiseService() {
     }
@@ -36,9 +40,13 @@ public final class WhitesnakeDisguiseService {
         }
         if (!canDisguise(player)) return;
         MinecraftServer server = player.getServer();
-        if (server == null) return;
+        if (server == null || !pendingRequests.add(player.getUUID())) return;
         CompletableFuture.supplyAsync(() -> findProfile(server, name), Util.backgroundExecutor())
-                .thenAccept(result -> server.execute(() -> apply(player, result)));
+                .exceptionally(error -> Optional.empty())
+                .thenAcceptAsync(result -> {
+                    if (server.getPlayerList().getPlayer(player.getUUID()) == player) apply(player, result);
+                }, server)
+                .whenComplete((result, error) -> pendingRequests.remove(player.getUUID()));
     }
 
     private static boolean canDisguise(ServerPlayer player) {

@@ -1,35 +1,28 @@
 package net.hydra.jojomod.item;
 
 import com.mojang.authlib.GameProfile;
-import net.hydra.jojomod.block.FancyLighterBlock;
-import net.hydra.jojomod.block.FancyLighterBlockEntity;
-import net.hydra.jojomod.block.handBlock.AbstractHandBlock;
+
+import net.hydra.jojomod.block.handBlock.HandBlockEntity;
 import net.minecraft.Util;
-import net.minecraft.advancements.CriteriaTriggers;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionResult;
+
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.item.*;
+
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SoundType;
+
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.SkullBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.level.gameevent.GameEvent;
 
+
+import javax.annotation.Nullable;
+import java.util.Optional;
 import java.util.UUID;
 
 public class HandBlockItem extends BlockItem {
@@ -37,9 +30,21 @@ public class HandBlockItem extends BlockItem {
         super($$1, $$2);
     }
 
+    @Override
+    protected boolean updateCustomBlockEntityTag(BlockPos pos, Level level,
+                                                 @Nullable Player player, ItemStack stack, BlockState state) {
+
+        BlockEntity be = level.getBlockEntity(pos);
+
+        if (be instanceof HandBlockEntity hand) {
+            hand.setStoredStack(stack);
+        }
+
+        return super.updateCustomBlockEntityTag(pos, level, player, stack, state);
+    }
 
     public Component getName(ItemStack p_42977_) {
-        if (p_42977_.is(Items.PLAYER_HEAD) && p_42977_.hasTag()) {
+        if (p_42977_.is(ModItems.HAND) && p_42977_.hasTag()) {
             String s = null;
             CompoundTag compoundtag = p_42977_.getTag();
             if (compoundtag.contains("HandOwner", 8)) {
@@ -52,7 +57,7 @@ public class HandBlockItem extends BlockItem {
             }
 
             if (s != null) {
-                return Component.translatable(this.getDescriptionId() + ".named", s);
+                return Component.translatable(this.getDescriptionId() + ".named", new Object[]{s});
             }
         }
 
@@ -67,6 +72,6 @@ public class HandBlockItem extends BlockItem {
                 p_151179_.put("HandOwner", NbtUtils.writeGameProfile(new CompoundTag(), p_151177_));
             });
         }
-
     }
+
 }

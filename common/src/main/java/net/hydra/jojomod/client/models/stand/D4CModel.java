@@ -158,6 +158,7 @@ public class D4CModel<T extends D4CEntity> extends StandModel<T> {
         this.animate(pEntity.impale2, KingCrimsonAnimations.Chop_Start, pAgeInTicks, 1.4f);
         this.animate(pEntity.chop, KingCrimsonAnimations.Chop_Attack, pAgeInTicks, 1.7f);
         this.animate(pEntity.finalPunchWindup, D4CAnimations.CrossPunch_WindUp, pAgeInTicks, 0.6f);
+        this.animate(pEntity.bodyLeap, D4CAnimations.BODY_LEAP, pAgeInTicks, 0.75f);
         this.animate(pEntity.finalPunch, D4CAnimations.CrossPunch_Release_V2, pAgeInTicks, 1.4f);
         this.animate(pEntity.finalPunch2, D4CAnimations.CrossPunch_Release, pAgeInTicks, 1.4f);
         this.animate(pEntity.finalPunch3, D4CAnimations.CrossPunch_Release, pAgeInTicks, 1.4f);
