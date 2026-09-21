@@ -534,6 +534,8 @@ public class AbilityScapeBasis {
     }
     public void onEnderPearlThrow(){
     }
+    public void onEnderPearlLand(){
+    }
     public byte getActivePower(){
         return this.activePower;
     }
