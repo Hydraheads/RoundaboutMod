@@ -32,6 +32,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.SkullBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.SkullBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RotationSegment;
 
@@ -93,7 +94,8 @@ public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer
             $$2.translate(0F, -1F, 0F);
             VertexConsumer vertexConsumer;
 
-            GameProfile pfp = ((HandBlockEntity) $$0).getOwnerProfile();
+            //GameProfile pfp = ((HandBlockEntity) $$0).getOwnerProfile();
+            GameProfile pfp = ((HandBlockEntity) $$0).getProfile();
 
             vertexConsumer = $$3.getBuffer(getRenderType(HandBlock$type, pfp));
 
@@ -106,6 +108,8 @@ public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer
                         part = hand_slim;
                     }
                 }
+            }else if (getSlim(pfp)){
+                part = hand_slim;
             }
 
             //if (HandBlock$type == AbstractHandBlock.Types.PLAYER_SLIM) {
@@ -122,21 +126,25 @@ public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer
         $$2.render($$0, $$1, $$6, $$7);
     }
 
-
-
-
-    public static RenderType getRenderType(HandBlock.Type type, @Nullable GameProfile p_112525_) {
-        ResourceLocation resourcelocation = WIDE_BASE;
+    public static RenderType getRenderType(HandBlock.Type type, @Nullable GameProfile $$1) {
 
         //if (/*p_112524_ == SkullBlock.Types.PLAYER &&*/ p_112525_ != null) {
-        if (p_112525_ != null) {
-            Minecraft minecraft = Minecraft.getInstance();
-            Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = minecraft.getSkinManager().getInsecureSkinInformation(p_112525_);
-            return map.containsKey(MinecraftProfileTexture.Type.SKIN) ? RenderType.entityTranslucent(minecraft.getSkinManager().registerTexture(map.get(MinecraftProfileTexture.Type.SKIN), MinecraftProfileTexture.Type.SKIN)) : RenderType.entityCutoutNoCull(DefaultPlayerSkin.getDefaultSkin(UUIDUtil.getOrCreatePlayerUUID(p_112525_)));
+        if ($$1 != null) {
+            Minecraft $$3 = Minecraft.getInstance();
+            Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> $$4 = $$3.getSkinManager().getInsecureSkinInformation($$1);
+
+            return $$4.containsKey(MinecraftProfileTexture.Type.SKIN) ? RenderType.entityTranslucent($$3.getSkinManager().registerTexture((MinecraftProfileTexture)$$4.get(MinecraftProfileTexture.Type.SKIN), MinecraftProfileTexture.Type.SKIN)) : RenderType.entityCutoutNoCull(DefaultPlayerSkin.getDefaultSkin(UUIDUtil.getOrCreatePlayerUUID($$1)));
         } else {
-            return RenderType.entityCutoutNoCullZOffset(resourcelocation);
+            return RenderType.entityCutoutNoCullZOffset(WIDE_BASE);
         }
 
+    }
+
+    public static boolean getSlim(GameProfile pfp) {
+        if (pfp != null) {
+            return "slim".equals(DefaultPlayerSkin.getSkinModelName(pfp.getId()));
+        }
+        return false;
     }
 
 }
