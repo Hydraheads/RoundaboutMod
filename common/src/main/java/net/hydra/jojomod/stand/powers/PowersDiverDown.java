@@ -35,6 +35,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.client.gui.diverdown.custom_workbench_code.*;
 import net.hydra.jojomod.client.hud.StandHudRender;
+import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
@@ -65,20 +66,18 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.inventory.LoomMenu;
 import net.minecraft.world.inventory.StonecutterMenu;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.PotionItem;
-import net.minecraft.world.item.SplashPotionItem;
-import net.minecraft.world.item.LingeringPotionItem;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeManager;
@@ -3189,7 +3188,7 @@ public class PowersDiverDown extends NewPunchingStand {
         if (this.self.level().isClientSide()) return;
         if (!(this.submergedTarget instanceof LivingEntity host) || !host.isAlive()) return;
 
-        // Detonation: kill normal mobs; invisible blindness to players & bosses
+        // kill normal mobs; blindness to players & bosses
         if (host instanceof Player || MainUtil.isBossMob(host)) {
             host.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 300, 0, false, false, false));
             emergeServer();
@@ -3385,31 +3384,68 @@ public class PowersDiverDown extends NewPunchingStand {
 
     // potion start
 
-    private void embedPotion(){
+    private void embedPotion() {
         if (this.self.level().isClientSide()) return;
         if (!(this.submergedTarget instanceof LivingEntity targetLiving) || !targetLiving.isAlive()) return;
         if (!(this.self instanceof Player player)) return;
 
-        // check for potions in both on and offhand
+        // Check for potions or mob buckets in both main hand and off hand
         InteractionHand hand = InteractionHand.MAIN_HAND;
         ItemStack stack = player.getMainHandItem();
+        boolean isMobBucket = stack.getItem() instanceof MobBucketItem;
         List<MobEffectInstance> effects = PotionUtils.getMobEffects(stack);
 
-        if (effects.isEmpty()) {
+        if (effects.isEmpty() && !isMobBucket) {
             hand = InteractionHand.OFF_HAND;
             stack = player.getOffhandItem();
+            isMobBucket = stack.getItem() instanceof MobBucketItem;
             effects = PotionUtils.getMobEffects(stack);
         }
 
-        // If neither hand is holding an item with potion effects, do nothing
+        // mob bucket stuff
+        if (isMobBucket) {
+            // turn mobs passive
+            if (targetLiving instanceof Mob mob && !MainUtil.isBossMob(targetLiving)) {
+                mob.removeAllGoals(goal -> goal instanceof TargetGoal || goal instanceof MeleeAttackGoal || goal instanceof RangedAttackGoal);
+                mob.setTarget(null);
+                mob.setLastHurtByMob(null);
+                mob.setAggressive(false);
+            }
+
+            // prevent players and bosses passive from attacking for 5 seconds
+            if (targetLiving instanceof Player) {
+                targetLiving.addEffect(new MobEffectInstance(ModEffects.IMPRINTING, 100, 0, false, true, true), this.self);
+                targetLiving.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 100, 4, false, false, false), this.self);
+            } else if (MainUtil.isBossMob(targetLiving)) {
+                targetLiving.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 100, 2, false, false, false), this.self);
+            }
+
+            // return empty bucket to inventory
+            if (!player.getAbilities().instabuild) {
+                stack.shrink(1);
+                if (stack.isEmpty()) {
+                    player.setItemInHand(hand, new ItemStack(Items.WATER_BUCKET));
+                } else {
+                    if (!player.getInventory().add(new ItemStack(Items.WATER_BUCKET))) {
+                        player.drop(new ItemStack(Items.WATER_BUCKET), false);
+                    }
+                }
+            }
+
+            // sound effects and stuff here
+            return;
+        }
+
+        // potion stuff
         if (effects.isEmpty()) return;
-        List<MobEffect> negativeEffects = new ArrayList<>();
+
         for (MobEffectInstance instance : effects) {
             MobEffect effect = instance.getEffect();
             if (effect.getCategory() == MobEffectCategory.HARMFUL) {
                 emergeServer();
             }
         }
+
         // apply the potion effect
         for (MobEffectInstance effect : effects) {
             int newDuration = effect.getDuration();
@@ -3430,10 +3466,7 @@ public class PowersDiverDown extends NewPunchingStand {
             targetLiving.addEffect(boostedEffect, this.self);
         }
 
-        // sounds and animations here
-
-        // KILL the potion
-        //somebody wanted the bottle to return to your inventory so i guess we're doing that
+        // Consume potion and return bottle
         if (!player.getAbilities().instabuild) {
             Item item = stack.getItem();
             stack.shrink(1);
