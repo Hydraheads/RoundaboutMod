@@ -4418,7 +4418,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (standOn && this.getActivePower() == ITEM_HOLDING) {
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
         }
-
+        /*
         if (hasArmsOut){
             int barTexture = 0;
             Entity TE = getTargetEntity(playerEntity, 3, getBrawlPunchAngle());
@@ -4450,7 +4450,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     }
                 }
             }
-        } else if (standOn && this.getActivePower() == ITEM_CHARGE) {
+        } else */if (standOn && this.getActivePower() == ITEM_CHARGE) {
             int ClashTime = Math.min(15, Math.round(((float) attackTimeDuring / getArrowThrowChargeMax()) * 15));
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             if (ClashTime == 15) {
