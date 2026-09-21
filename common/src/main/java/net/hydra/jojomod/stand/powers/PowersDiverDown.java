@@ -293,15 +293,11 @@ public class PowersDiverDown extends NewPunchingStand {
         if (areStandMovesDisabled() && !(this.getActivePower() == DIVER_SUBMERGE_START)) {
             // submerge
             if(isDiveActive()) {
-                if(!isSelfDive()) {
                     if (damageRedirectionEnabled) {
                         setSkillIcon(context, x, y, 1, StandIcons.REDIRECTION_ENABLED, PowerIndex.SKILL_1);
                     } else {
                         setSkillIcon(context, x, y, 1, StandIcons.REDIRECTION_DISABLED, PowerIndex.SKILL_1);
                     }
-                } else {
-                    setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD, true);
-                }
                 setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_AFFLICTION, PowerIndex.SKILL_2);
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
                 setSkillIcon(context, x, y, 4, StandIcons.DIVER_DOWN_RECALL, PowerIndex.SKILL_4);
@@ -428,48 +424,48 @@ public class PowersDiverDown extends NewPunchingStand {
                 "instruction.roundabout.press_attack", StandIcons.DIVER_DOWN_PUNCH, 0, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20 + startPos, topPos + 99, 0, "ability.roundabout.guard",
                 "instruction.roundabout.hold_block", StandIcons.DIVER_DOWN_GUARD, 0, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20 + startPos, topPos + 118, 0,
-                "ability.roundabout.diver_phase_punch",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20 + startPos, topPos + 118, 0, "ability.roundabout.diver_phase_punch",
                 "instruction.roundabout.hold_attack_crouch", StandIcons.DIVER_DOWN_PHASE_PUNCH, 0, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39 + startPos, topPos + 80, 0,
-                "ability.roundabout.barrage",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39 + startPos, topPos + 80, 0, "ability.roundabout.barrage",
                 "instruction.roundabout.barrage", StandIcons.DIVER_DOWN_BARRAGE, 0, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39 + startPos, topPos + 99, 0,
-                "ability.roundabout.diver_submerge",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39 + startPos, topPos + 99, 0, "ability.roundabout.diver_submerge",
                 "instruction.roundabout.press_skill", StandIcons.DIVER_DOWN_SUBMERGE, 1, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39 + startPos, topPos + 118, 0,
-                "ability.roundabout.diver_disassemble",
-                "instruction.roundabout.press_skill_block", StandIcons.DIVER_DOWN_DISASSEMBLE, 1, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58 + startPos, topPos + 80, 0,
-                "ability.roundabout.diver_self_submerge",
-                "instruction.roundabout.press_skill_crouch", StandIcons.DIVER_DOWN_SELF_SUBMERGE, 1, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58 + startPos, topPos + 99, 0,
-                "ability.roundabout.diver_selection",
-                "instruction.roundabout.press_skill", StandIcons.DIVER_DOWN_AFFLICTION, 2, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58 + startPos, topPos + 118, 0,
-                "ability.roundabout.diver_store",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39 + startPos, topPos + 118, 0, "ability.roundabout.diver_self_submerge",
+                "instruction.roundabout.press_skill_block", StandIcons.DIVER_DOWN_SELF_SUBMERGE, 1, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58 + startPos, topPos + 80, getBlockDisassemblyLevel(), "ability.roundabout.diver_disassemble",
+                "instruction.roundabout.press_skill_crouch", StandIcons.DIVER_DOWN_DISASSEMBLE, 1, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58 + startPos, topPos + 99, 0, "ability.roundabout.diver_redirection",
+                "instruction.roundabout.press_skill_submerged", StandIcons.REDIRECTION_ENABLED, 1, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58 + startPos, topPos + 118, 0, "ability.roundabout.diver_selection",
+                "instruction.roundabout.press_skill_submerged", StandIcons.DIVER_DOWN_AFFLICTION, 2, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77 + startPos, topPos + 80, getKickStorageLevel(), "ability.roundabout.diver_store",
                 "instruction.roundabout.press_skill", StandIcons.DIVER_DOWN_STORE, 2, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77 + startPos, topPos + 80, 0,
-                "ability.roundabout.diver_release_toggle",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77 + startPos, topPos + 99, getKickStorageLevel(), "ability.roundabout.diver_release_toggle",
                 "instruction.roundabout.press_skill_block", StandIcons.DIVER_DOWN_TOGGLE_AUTO, 2, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77 + startPos, topPos + 99, 0,
-                "ability.roundabout.diver_cancel_store",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77 + startPos, topPos + 118, getKickStorageLevel(), "ability.roundabout.diver_cancel_store",
                 "instruction.roundabout.press_skill_crouch", StandIcons.DIVER_DOWN_CANCEL_STORE, 2, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 96 + startPos, topPos + 80, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE, 3, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 96 + startPos, topPos + 99, 0, "ability.roundabout.vault",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 96 + startPos, topPos + 99, getDiverZipLevel(), "ability.roundabout.diver_wall_zip",
                 "instruction.roundabout.press_skill_air", StandIcons.DIVER_DOWN_VAULT, 3, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 96 + startPos, topPos + 118, 0, "ability.roundabout.diver_zip",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 96 + startPos, topPos + 118, getDiverZipLevel(), "ability.roundabout.diver_zip",
                 "instruction.roundabout.press_skill_crouch", StandIcons.DIVER_DOWN_ZIP, 3, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115 + startPos, topPos + 80, 0,
-                "ability.roundabout.diver_limb_platform",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115 + startPos, topPos + 80, getDiverLimbLevel(), "ability.roundabout.diver_limb_platform",
                 "instruction.roundabout.press_skill_crouch", StandIcons.DIVER_DOWN_PLATFORM, 4, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115 + startPos, topPos + 99, 0,
-                "ability.roundabout.diver_workstation",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115 + startPos, topPos + 99, getWorkbenchLevel(), "ability.roundabout.diver_workstation",
                 "instruction.roundabout.press_skill_block", StandIcons.DIVER_DOWN_WORKSTATION, 4, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115 + startPos, topPos + 118, 0,
-                "ability.roundabout.diver_ground_dive",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115 + startPos, topPos + 118, getGroundDiveLevel(), "ability.roundabout.diver_ground_dive",
                 "instruction.roundabout.press_skill", StandIcons.DIVER_DOWN_GROUND_DIVE, 4, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 134 + startPos, topPos + 80, getGroundDiveLevel(), "ability.roundabout.diver_detection",
+                "instruction.roundabout.press_skill_submerged", StandIcons.ORE_DETECTION_ENABLED, 1, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 134 + startPos, topPos + 99, getGroundDiveLevel(), "ability.roundabout.diver_grab",
+                "instruction.roundabout.press_skill_submerged", StandIcons.DIVER_DOWN_GRAB, 2, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 134 + startPos, topPos + 118, getGroundDiveLevel(), "ability.roundabout.diver_chest",
+                "instruction.roundabout.press_skill_submerged", StandIcons.DIVER_DOWN_CHEST, 3, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 153 + startPos, topPos + 80, 0, "ability.roundabout.diver_recall",
+                "instruction.roundabout.press_skill_submerged", StandIcons.DIVER_DOWN_RECALL, 4, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 153 + startPos, topPos + 99, 0, "ability.roundabout.mining",
+                "instruction.roundabout.hold_attack", StandIcons.DIVER_DOWN_MINING, 0, level, bypas));
         return $$1;
     }
 
@@ -2725,7 +2721,7 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     private void tryToggleTrapMode() {
-        this.isAutoRelease = !this.isAutoRelease; // Immediate client-side update for GUI icon
+        this.isAutoRelease = !this.isAutoRelease;
         this.tryPower(TOGGLE_TRAP_MODE, true);
         tryPowerPacket(TOGGLE_TRAP_MODE);
     }

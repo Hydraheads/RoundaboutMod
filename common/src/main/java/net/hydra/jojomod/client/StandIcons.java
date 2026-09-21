@@ -1072,11 +1072,13 @@ public class StandIcons {
     public static final ResourceLocation ORE_DETECTION_DISABLED = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/diver_down/detection_off.png");
     public static final ResourceLocation DIVER_DOWN_GRAB = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/diver_down/diving_grab.png");
+            "textures/gui/icons/diver_down/diving_item.png");
     public static final ResourceLocation DIVER_DOWN_CHEST = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/diver_down/diving_chest.png");
         public static final ResourceLocation DIVER_DOWN_RECALL = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/diver_down/stand_recall.png");
+    public static final ResourceLocation DIVER_DOWN_MINING = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/diver_down/mining.png");
         //Diver Down icons end
 
     public static final ResourceLocation EMPEROR_SPEED_UP = new ResourceLocation(Roundabout.MOD_ID,
