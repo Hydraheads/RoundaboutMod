@@ -108,8 +108,8 @@ public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer
                         part = hand_slim;
                     }
                 }
-            }else {
-
+            }else if (getSlim(pfp)){
+                part = hand_slim;
             }
 
             //if (HandBlock$type == AbstractHandBlock.Types.PLAYER_SLIM) {
@@ -127,7 +127,6 @@ public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer
     }
 
     public static RenderType getRenderType(HandBlock.Type type, @Nullable GameProfile $$1) {
-        ResourceLocation resourcelocation = WIDE_BASE;
 
         //if (/*p_112524_ == SkullBlock.Types.PLAYER &&*/ p_112525_ != null) {
         if ($$1 != null) {
@@ -136,7 +135,7 @@ public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer
 
             return $$4.containsKey(MinecraftProfileTexture.Type.SKIN) ? RenderType.entityTranslucent($$3.getSkinManager().registerTexture((MinecraftProfileTexture)$$4.get(MinecraftProfileTexture.Type.SKIN), MinecraftProfileTexture.Type.SKIN)) : RenderType.entityCutoutNoCull(DefaultPlayerSkin.getDefaultSkin(UUIDUtil.getOrCreatePlayerUUID($$1)));
         } else {
-            return RenderType.entityCutoutNoCullZOffset(resourcelocation);
+            return RenderType.entityCutoutNoCullZOffset(WIDE_BASE);
         }
 
     }
