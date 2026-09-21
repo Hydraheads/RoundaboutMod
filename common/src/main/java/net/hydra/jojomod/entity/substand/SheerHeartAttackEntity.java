@@ -883,7 +883,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 		}
 
 
-		if (!entity.isAttackable()
+		if (!entity.isAttackable() || (entity instanceof LivingEntity LE && !LE.canBeSeenAsEnemy())
+				|| (entity instanceof Player PL && PL.isCreative())
 				|| PowerTypes.isInADifferentExistence(entity,this)
 				|| entity instanceof StandEntity || entity.is(this.getUser())) { return -1; }
 

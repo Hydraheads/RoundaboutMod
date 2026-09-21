@@ -78,7 +78,9 @@ public class HandBlockEntity extends BlockEntity {
     public ItemStack storedStack = ItemStack.EMPTY;
 
     public void setStoredStack(ItemStack stack) {
-        this.storedStack = stack.copy();
+        synchronized(this) {
+            this.storedStack = stack.copy();
+        }
         setChanged();
 
         CompoundTag compoundtag = storedStack.getTag();
@@ -145,8 +147,6 @@ public class HandBlockEntity extends BlockEntity {
                 }*/
                 if (compoundtag.contains("HandProfie")) {
                     this.setOwner(NbtUtils.readGameProfile(compoundtag.getCompound("HandProfie")));
-                }else {
-                    Roundabout.LOGGER.info("itemStack did not contain the HandProfile GameProfile!");
                 }
             }
         } else {
