@@ -580,7 +580,8 @@ public class PowersD4C extends NewPunchingStand {
                 tickBetween();
             }
 
-            if (getActivePower() != PowerIndex.POWER_2_SNEAK){
+            byte sam = ((StandUser)self).roundabout$getStandAnimation();
+            if (sam != StandPowers.SWITCH_INTO_BODY){
                 ticksSinceSwitch = 0;
             } else {
                 ticksSinceSwitch++;
