@@ -123,6 +123,10 @@ public abstract class EntityAndData implements IEntityAndData {
     public void roundabout$setLastDamageTaken(float amount) {
         this.roundabout$lastDirectDamage = amount;
     }
+    @Override
+    public void roundabout$refreshBoardingCooldown() {
+        this.boardingCooldown = 0;
+    }
 
     @Override
     public float roundabout$getLastDamageTaken() {
@@ -933,6 +937,8 @@ public abstract class EntityAndData implements IEntityAndData {
     @Shadow
     public abstract void discard();
 
+    @Shadow
+    protected int boardingCooldown;
     @Unique
     private int rdbt$inForeignWorld = 0;
     @Unique
