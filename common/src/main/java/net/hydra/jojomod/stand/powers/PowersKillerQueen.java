@@ -985,7 +985,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override
     public boolean interceptAttack(){
-        return !inBitesTheDustMode() && !hasHandsOut();
+        return !inBitesTheDustMode() && (!hasHandsOut() || (hasHandsOut() && activePower == PowerIndex.GUARD));
     }
 
     @Override
@@ -1329,7 +1329,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                         this.tryPower(PowerIndex.SNEAK_ATTACK_CHARGE, true);
                         holdDownClick = true;
                         tryPowerPacket(PowerIndex.SNEAK_ATTACK_CHARGE);
-                    } else {
+                    } else if(!hasHandsOut()) {
                         super.buttonInputAttack(keyIsDown, options);
                     }
                 }
@@ -3003,7 +3003,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public void detectWhoBitedTheDust(Entity target, boolean dayMode) {
-        Vec3 pos = target.position();
+        Vec3 pos = target.getPosition(1);
 
         List<Entity> entities = MainUtil.genHitbox(target.level(),
                 pos.x(), pos.y(), pos.z(), btdRange, btdRange, btdRange);
@@ -4668,12 +4668,12 @@ public class PowersKillerQueen extends NewPunchingStand {
                     if (target instanceof LivingEntity) {
                         ((StandUser) target).roundabout$setExplosionInflation(-1);
                     }
-                    vPos = target.position();
+                    vPos = target.getPosition(1);
                     bPos = new BlockPos(target.getBlockX(), target.getBlockY(), target.getBlockZ());
                     level = target.level();
 
                     if (target instanceof LivingEntity LE && bStatus == BOMB_ENTITY ) {
-                        addEXP(6, LE);
+                        addEXP(4, LE);
                     }
 
                     this.bombEntity = null;
