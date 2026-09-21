@@ -592,7 +592,7 @@ public class PowersD4C extends NewPunchingStand {
                 if (jentity instanceof D4CCloneEntity d4cclone){
                     Optional<UUID> uuid = d4cclone.getPlayerUUID();
                     if (uuid != null && uuid.isPresent()){
-                        if (uuid.get().equals(self.getUUID())){
+                        if (uuid.get().equals(self.getUUID()) && jentity.isAlive()){
                             cloneInReach = d4cclone;
                         } else {
                             cloneInReach = null;
@@ -1809,6 +1809,9 @@ public class PowersD4C extends NewPunchingStand {
             return;
         }
 
+        if (cloneInReach != null){
+
+        }
     }
     public void replaceBodyClient(){
         if (PowerTypes.isInD4CWorld(self)){
@@ -1979,12 +1982,14 @@ public class PowersD4C extends NewPunchingStand {
             setSkillIcon(context, x, y, 1, StandIcons.D4C_PARALLEL_GRAB, PowerIndex.SKILL_1_SNEAK);
         }
 
-        if (PowerTypes.isInD4CWorld(self)){
-            LockedOrNot(context, x, y, 2, StandIcons.D4C_PARALLEL_GRAB_2, PowerIndex.SKILL_EXTRA_2,0);
+        if (PowerTypes.isInD4CWorld(self)) {
+            LockedOrNot(context, x, y, 2, StandIcons.D4C_PARALLEL_GRAB_2, PowerIndex.SKILL_EXTRA_2, 0);
+        } else if (isGuarding()){
+            LockedOrNot(context, x, y, 2, StandIcons.D4C_CLONE_SWAP, PowerIndex.SKILL_EXTRA_2, 0);
         } else if (!isHoldingSneak()){
             LockedOrNot(context, x, y, 2, StandIcons.D4C_CLONE_SUMMON, PowerIndex.SKILL_2,0);
         } else {
-            LockedOrNot(context, x, y, 2, StandIcons.D4C_CLONE_SWAP, PowerIndex.SKILL_2_SNEAK,0);
+            LockedOrNot(context, x, y, 2, StandIcons.D4C_CLONE_SWAP_2, PowerIndex.SKILL_2_SNEAK,0);
         }
 
         if (isGuarding()){
@@ -2016,6 +2021,10 @@ public class PowersD4C extends NewPunchingStand {
     public boolean isAttackIneptVisually(byte activeP, int slot){
         boolean dworld = PowerTypes.isInD4CWorld(self);
         if (!(slot == 2 && dworld)){
+            if (slot == 2 && isGuarding()){
+                return cloneInReach == null || super.isAttackIneptVisually(activeP,slot);
+            }
+
             if ((slot == 1 && !isGuarding()) || slot == 2 || (slot == 4 && altBlockPos == null) || (slot == 3 && isGuarding())){
                 if (slot == 1 && !isGuarding() && dworld){
                     return !isEligableForExit() || super.isAttackIneptVisually(activeP,slot);
