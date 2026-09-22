@@ -170,7 +170,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	int explosionMiningIntervalTicks = explosionMiningIntervalTicksMax;
 	static final int explosionMiningIntervalTicksMax = 45;
 
-	final float jumpMaxHeight = 0.9f;
+	final float jumpMaxHeight = 0.6f;
 	int stunTicks = 15;
 
 	public int struckTicks = 0;
@@ -383,7 +383,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 						stunTicks = 40;
 					}else {
 						throwDamageCooldown--;
-						AABB bb = this.getBoundingBox().inflate(0.15);
+						AABB bb = this.getBoundingBox().expandTowards(getDeltaMovement()).inflate(0.15);
 						List<Entity> SHAAA = this.level().getEntities(this, bb);
 						for (Entity ent : SHAAA) {
 							if (ent.getId() == user.getId() || ent instanceof StandEntity) {
@@ -740,7 +740,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			this.level().playSound(null, this.blockPosition(), ModSounds.SHA_JUMP_EVENT, SoundSource.PLAYERS, 0.25F, 1.0f);
 			this.lookAt(EntityAnchorArgument.Anchor.EYES, jumpT0Pos);
 			this.jumpTick = jumpTickMax;
-			Vec3 movement = (this.getLookAngle().multiply(1.1, 0.54, 1.1)).add(0, 0.4, 0);
+			Vec3 movement = (this.getLookAngle().multiply(1.1, 0.54, 1.1)).add(0, 0.3, 0);
 			this.setDeltaMovement(movement.x(), Math.min(movement.y(), jumpMaxHeight), movement.z());
 		}
 	}
@@ -753,7 +753,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	public void shoot(Vec3 shootToPos){
 		this.throwStatus = THROWED;
 		this.lookAt(EntityAnchorArgument.Anchor.EYES,shootToPos);
-		this.setDeltaMovement((this.getLookAngle().multiply(1.6,1.6,1.6)).add(0,0.001,0));
+		this.setDeltaMovement((this.getLookAngle().multiply(1.8,1.8,1.8)).add(0,0.001,0));
 	}
 
 	public boolean shaIsNear() {

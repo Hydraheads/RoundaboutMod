@@ -995,7 +995,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override
     public boolean isMiningStand() {
-        return !inBitesTheDustMode();
+        return !inBitesTheDustMode() && !hasHandsOut();
     }
 
     @Override
@@ -3196,7 +3196,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     bombPlantedItem.setItem(stack.copyWithCount(1));
 
                     bombPlantedItem.setPos(self.getEyePosition());
-                    bombPlantedItem.setDeltaMovement(self.getViewVector(1).scale(0.6f).add(0, 0.1, 0));
+                    bombPlantedItem.setDeltaMovement(self.getViewVector(1).scale(0.4f).add(0, 0.1, 0));
 
                     bombPlantedItem.host = (Player) self;
 
@@ -4410,17 +4410,15 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         if (inBitesTheDustMode()) { return; }
 
-        StandUser standUser = ((StandUser) playerEntity);
-        StandPowers powers = standUser.roundabout$getStandPowers();
         boolean standOn = PowerTypes.hasStandActive(playerEntity);
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
         if (standOn && this.getActivePower() == ITEM_HOLDING) {
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
         }
-        /*
+
         if (hasArmsOut){
-            int barTexture = 0;
+            /*int barTexture = 0;
             Entity TE = getTargetEntity(playerEntity, 3, getBrawlPunchAngle());
             float attackTimeMax = getAttackTimeMax();
             if (attackTimeMax > 0) {
@@ -4449,8 +4447,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                         context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
                     }
                 }
-            }
-        } else */if (standOn && this.getActivePower() == ITEM_CHARGE) {
+            }*/
+        } else if (standOn && this.getActivePower() == ITEM_CHARGE) {
             int ClashTime = Math.min(15, Math.round(((float) attackTimeDuring / getArrowThrowChargeMax()) * 15));
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             if (ClashTime == 15) {
@@ -4709,7 +4707,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (canDestroyBlocks) {
                 float range = 0.1f + bombSize * 0.9f;
 
-                ExplosionUtil.explodeBlocksBase(bPos, level, range > 1.8f ? 1.8f : range, true, self);
+                ExplosionUtil.explodeBlocksBase(bPos, level, Math.min(range, 1.8f), true, self);
             }
 
             if (bStatus != BOMB_ENTITY) {
@@ -4720,7 +4718,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             float damage = config.explosionDetonateMaxDamage;
 
-            damage = damage * (0.5f + (0.5f*bombSize));
+            damage = damage * (bombSize == 0 ? 0.3f : (0.75f + (0.25f*bombSize)));
 
             if (bStatus == ARROW_CONTACT || bStatus == BLOCK_CONTACT || bStatus == ITEM_CONTACT) {
                 damage = damage * 0.8f;
@@ -4818,34 +4816,18 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             if(target != null && !target.isRemoved() && !target.isAlive()
                     || (target instanceof Projectile)){
-                spawnLingeringCloud(target);
-
                 if (!MainUtil.isBossMob(target)) {
                     target.discard();
                 }
+
+                spawnLingeringCloud(target);
             }
 
-            /*if (self instanceof Player pl) {
-                // /*
-                //if (!pl.isAlive()) {
-                ItemStack hand = new ItemStack(ModItems.HAND);
-
-                CompoundTag tag = hand.getOrCreateTag();
-                tag.putString("HandOwner",pl.getName().getString());
-                hand.getItem().verifyTagAfterLoad(tag);
-                tag.put("HandOwner", NbtUtils.writeGameProfile(new CompoundTag(), pl.getGameProfile()));
-                tag.put("HandProfile", NbtUtils.writeGameProfile(new CompoundTag(), pl.getGameProfile()));
-
-                hand.setTag(tag);
-                pl.spawnAtLocation(hand);
-                //}
-                //
-            }*/
-
-            float hRange = 0.15f + (0.37f*bombSize);
+            float hRange = 0.15f + (0.4f*bombSize);
             float vRange = 0.35f + (0.5f*bombSize);
 
-            ExplosionUtil.explodeEffects(vPos, level, getExplosionParticle(), new Vec3(hRange, vRange, hRange), 6 + 12*bombSize);
+            ExplosionUtil.explodeEffects(vPos, level, getExplosionParticle(), new Vec3(hRange, vRange, hRange),
+                    4 + 13*bombSize);
             //ExplosionUtil.explodeEffects(vPos, level, getExplosionParticle(), 0.55f);
             if (this.self instanceof ServerPlayer pl) {
                 S2CPacketUtil.sendPlaySoundPacket(pl, this.self.getId(), getExplosionByteSound());
@@ -4892,6 +4874,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         if ($$0 == null) { return; }
 
         if (!$$0.isEmpty()) {
+
             AreaEffectCloud $$1 = new AreaEffectCloud(entity.level(), entity.getX(), entity.getY(), entity.getZ());
             $$1.setRadius(2.5F);
             $$1.setRadiusOnUse(-0.5F);
@@ -4900,7 +4883,9 @@ public class PowersKillerQueen extends NewPunchingStand {
             $$1.setRadiusPerTick(-$$1.getRadius() / (float) $$1.getDuration());
 
             for (MobEffectInstance $$2 : $$0) {
-                $$1.addEffect(new MobEffectInstance($$2));
+                if (!MainUtil.isSpecialEffect($$2)) {
+                    $$1.addEffect(new MobEffectInstance($$2));
+                }
             }
 
             entity.level().addFreshEntity($$1);

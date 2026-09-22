@@ -470,7 +470,7 @@ public class Config implements Cloneable {
         public Boolean bitesTheDustDayModeAffectGlobalTime;
     	@BooleanOption(group = "inherit", value = true)
         public Boolean blocksDestruction;
-    	@FloatOption(group = "inherit", value = 7.2F, min = 0, max = 200F)
+    	@FloatOption(group = "inherit", value = 6.85F, min = 0, max = 200F)
         public Float explosionDetonateMaxDamage;
         @FloatOption(group = "inherit", value = 3.75F, min = 0, max = 200F)
         public Float SheerHeartAttackMaxDamage;
@@ -508,7 +508,7 @@ public class Config implements Cloneable {
         public Integer maxAirBubbleTravelDistanceBeforePopping;
         @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
         public Integer airBubbleGuardIncrease;
-        @IntOption(group = "inherit", value = 500, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 800, min = 0, max = 72000)
         public Integer bitesTheDustPlantCooldown;
         @IntOption(group = "inherit", value = 70, min = 0, max = 72000)
         public Integer bitesTheDustCombatActivationCooldown;
