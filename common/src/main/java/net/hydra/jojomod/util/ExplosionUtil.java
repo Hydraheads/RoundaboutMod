@@ -1,6 +1,7 @@
 package net.hydra.jojomod.util;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import net.hydra.jojomod.Roundabout;
@@ -69,34 +70,36 @@ public class ExplosionUtil {
 
     }
 
-	public static int explosionHurtWithMulti(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range, float mobMult, float playerMult) {
+	public static HashSet<LivingEntity> explosionHurtWithMulti(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range, float mobMult, float playerMult) {
 		return explosionHurtBaseWithMulti(false, pos, dmgSource, level, damage, knockBack, range, mobMult, playerMult);
 	}
 
-	public static int explosionHurtSneakyWithMulti(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range, float mobMult, float playerMult) {
+	public static HashSet<LivingEntity> explosionHurtSneakyWithMulti(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range, float mobMult, float playerMult) {
 		return explosionHurtBaseWithMulti(true, pos, dmgSource, level, damage, knockBack, range, mobMult, playerMult);
 	}
 
-	public static int explosionHurt(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range) {
+	public static HashSet<LivingEntity> explosionHurt(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range) {
 		return explosionHurtBase(false, pos, dmgSource, level, damage, knockBack, range);
 	}
 
-	public static int explosionHurtSneaky(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range) {
+	public static HashSet<LivingEntity> explosionHurtSneaky(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range) {
 		return explosionHurtBase(true, pos, dmgSource, level, damage, knockBack, range);
 	}
 
-	public static int explosionHurtBase(Boolean sneaky, Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range) {
+	public static HashSet<LivingEntity> explosionHurtBase(Boolean sneaky, Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range) {
 		return explosionHurtBaseWithMulti(sneaky, pos, dmgSource, level, damage, knockBack, range, 1.0f, 1.0f);
     }
 
-	public static int explosionHurtBaseWithMulti(Boolean sneaky, Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range, float mobMult, float playerMult) {
+	public static HashSet<LivingEntity> explosionHurtBaseWithMulti(Boolean sneaky, Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range, float mobMult, float playerMult) {
 		List<Entity> damages = MainUtil.genHitbox(level, pos.x(), pos.y(), pos.z(), range, range, range);
 
 		Entity causer = dmgSource.getEntity();
 
 		DamageSource notSeenDamage =  ModDamageTypes.of(level, ModDamageTypes.EXPLOSIVE_STAND, null);
 
-		int amountOfVictims = 0;
+		HashSet<LivingEntity> victims = new HashSet<LivingEntity>();
+
+		//int amountOfVictims = 0;
 
 		for(int j = 0;j<damages.size();j++) {
 			Entity entity = damages.get(j);
@@ -107,7 +110,10 @@ public class ExplosionUtil {
 				continue;
 			}
 
-			if (entity instanceof LivingEntity) { amountOfVictims++; }
+			if (entity instanceof LivingEntity LE) {
+				victims.add(LE);
+				//amountOfVictims++;
+			}
 
 			double dist = entity.distanceToSqr(pos);
 			float percUnhand = ((float)dist/ (range * range * range));
@@ -140,7 +146,7 @@ public class ExplosionUtil {
 			MainUtil.takeLiteralUnresistableKnockbackWithY(entity, knockback.x, knockback.y, knockback.z);
 		}
 
-		return amountOfVictims;
+		return victims;
 	}
 
 	public static void explodeBlocks(BlockPos location, Level level, Float range, Entity causer) {
@@ -167,7 +173,7 @@ public class ExplosionUtil {
 			}
 
 			// Simulate natural explosions
-			Double explosionDistance = explosionDistanceMax + ((double) level.getRandom().nextIntBetweenInclusive(-intSize, intSize) / 7.5);
+			Double explosionDistance = explosionDistanceMax + ((double) level.getRandom().nextIntBetweenInclusive(-intSize*2, intSize*2) / 7.5);
 
 			Double dist2 = center.distanceToSqr(pos.getX(), pos.getY(), pos.getZ());
 

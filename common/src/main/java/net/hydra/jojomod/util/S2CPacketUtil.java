@@ -126,6 +126,13 @@ public class S2CPacketUtil {
             );
         }
     }
+    public static void sendMusicDiscPacket(Player player, int entId, String soundId) {
+        if (player instanceof ServerPlayer serverPlayer) {
+            ModMessageEvents.sendToPlayer(serverPlayer,
+                    ServerToClientPackets.S2CPackets.MESSAGES.MusicDisc.value, entId, soundId);
+        }
+    }
+
     public static void updateBarrageClashS2C(Player player, int id, float clashProgress){
         if (player instanceof ServerPlayer SP) {
             ModMessageEvents.sendToPlayer(SP,

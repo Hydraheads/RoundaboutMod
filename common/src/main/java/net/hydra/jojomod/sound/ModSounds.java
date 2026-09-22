@@ -1751,6 +1751,21 @@ public class ModSounds {
     public static final String DIVER_DOWN_BARRAGE = "diver_down_barrage";
     public static final ResourceLocation DIVER_DOWN_BARRAGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIVER_DOWN_BARRAGE);
     public static SoundEvent DIVER_DOWN_BARRAGE_EVENT = SoundEvent.createVariableRangeEvent(DIVER_DOWN_BARRAGE_ID);
+    public static final String DIVER_DOWN_GROUND_BARRAGE = "diver_down_ground_barrage";
+    public static final ResourceLocation DIVER_DOWN_GROUND_BARRAGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIVER_DOWN_GROUND_BARRAGE);
+    public static SoundEvent DIVER_DOWN_GROUND_BARRAGE_EVENT = SoundEvent.createVariableRangeEvent(DIVER_DOWN_GROUND_BARRAGE_ID);
+    public static final String DIVER_DOWN_GROUND_DIVE = "diver_down_ground_dive";
+    public static final ResourceLocation DIVER_DOWN_GROUND_DIVE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIVER_DOWN_GROUND_DIVE);
+    public static SoundEvent DIVER_DOWN_GROUND_DIVE_EVENT = SoundEvent.createVariableRangeEvent(DIVER_DOWN_GROUND_DIVE_ID);
+    public static final String DIVER_DOWN_BUBBLING = "diver_down_bubbling";
+    public static final ResourceLocation DIVER_DOWN_BUBBLING_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIVER_DOWN_BUBBLING);
+    public static SoundEvent DIVER_DOWN_BUBBLING_EVENT = SoundEvent.createVariableRangeEvent(DIVER_DOWN_BUBBLING_ID);
+    public static final String DIVER_DOWN_ZIP = "diver_down_zip";
+    public static final ResourceLocation DIVER_DOWN_ZIP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIVER_DOWN_ZIP);
+    public static SoundEvent DIVER_DOWN_ZIP_EVENT = SoundEvent.createVariableRangeEvent(DIVER_DOWN_ZIP_ID);
+    public static final String DIVER_DOWN_TRANSFER = "diver_down_transfer";
+    public static final ResourceLocation DIVER_DOWN_TRANSFER_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIVER_DOWN_TRANSFER);
+    public static SoundEvent DIVER_DOWN_TRANSFER_EVENT = SoundEvent.createVariableRangeEvent(DIVER_DOWN_TRANSFER_ID);
 
     public static final String SUMMON_GREEN_DAY = "summon_green_day";
     public static final ResourceLocation SUMMON_GREEN_DAY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_GREEN_DAY);

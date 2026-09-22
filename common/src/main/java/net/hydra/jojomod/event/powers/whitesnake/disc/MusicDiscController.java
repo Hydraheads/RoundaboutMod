@@ -1,10 +1,11 @@
 package net.hydra.jojomod.event.powers.whitesnake.disc;
 
 import net.hydra.jojomod.access.DiscBearer;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.protocol.game.ClientboundStopSoundPacket;
-import net.minecraft.resources.ResourceLocation;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersWhitesnake;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -61,16 +62,24 @@ public final class MusicDiscController {
     }
 
     private static void start(LivingEntity entity, ItemStack stack) {
-        if (!(stack.getItem() instanceof RecordItem record)) return;
-        entity.level().playSound(null, entity, record.getSound(), SoundSource.RECORDS, 4.0F, 1.0F);
+        if (!(entity.level() instanceof ServerLevel server) || !(stack.getItem() instanceof RecordItem record)) return;
+        SoundEvent sound = record.getSound();
+        double range = sound.getRange(4.0F);
+        for (ServerPlayer player : server.players()) {
+            if (player.distanceToSqr(entity) > range * range) {
+                if (!(((StandUser) player).roundabout$getStandPowers() instanceof PowersWhitesnake powers)
+                        || !powers.isPiloting()) continue;
+                LivingEntity stand = powers.getPilotingStand();
+                if (stand == null || !stand.isAlive() || stand.isRemoved()
+                        || stand.distanceToSqr(entity) > range * range) continue;
+            }
+            S2CPacketUtil.sendMusicDiscPacket(player, entity.getId(), sound.getLocation().toString());
+        }
         PLAYING.put(entity, stack.getItem());
     }
 
     private static void stop(LivingEntity entity, ItemStack stack) {
-        if (!(entity.level() instanceof ServerLevel server) || !(stack.getItem() instanceof RecordItem record)) return;
-        SoundEvent sound = record.getSound();
-        ResourceLocation soundId = BuiltInRegistries.SOUND_EVENT.getKey(sound);
-        ClientboundStopSoundPacket packet = new ClientboundStopSoundPacket(soundId, SoundSource.RECORDS);
-        server.players().forEach(player -> player.connection.send(packet));
+        if (!(entity.level() instanceof ServerLevel server) || !(stack.getItem() instanceof RecordItem)) return;
+        server.players().forEach(player -> S2CPacketUtil.sendMusicDiscPacket(player, entity.getId(), ""));
     }
 }

@@ -4,10 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.ILevelAccess;
-import net.hydra.jojomod.client.ClientUtil;
-import net.hydra.jojomod.client.PlayedSoundInstance;
-import net.hydra.jojomod.client.QueueSoundInstance;
-import net.hydra.jojomod.client.WhiteAlbumSkatingSound;
+import net.hydra.jojomod.client.*;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerAmbientSound;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
@@ -15,6 +12,7 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersDiverDown;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.RotationAnimation;
 import net.minecraft.client.Minecraft;
@@ -118,6 +116,8 @@ public abstract class StandUserClientOnly extends Entity implements StandUserCli
 
     @Unique
     public WhiteAlbumSkatingSound rdbt$whiteSkate = null;
+    @Unique
+    public DiverDownZipSound rdbt$diverZipSound = null;
 
     @Inject(method = "tick", at = @At(value = "TAIL"))
     public void roundabout$soundTick(CallbackInfo ci) {
@@ -131,6 +131,21 @@ public abstract class StandUserClientOnly extends Entity implements StandUserCli
                                 ModSounds.ICE_SKATING_EVENT,
                                 SoundSource.PLAYERS, 1, 1, this);
                         Minecraft.getInstance().getSoundManager().play(rdbt$whiteSkate);
+                    }
+                }
+            }
+            if (((StandUser) this).roundabout$getStandPowers() instanceof PowersDiverDown pdd
+                    && pdd.inZipMode()
+                    && !this.isInWater()
+                    && !((StandUser) this).roundabout$isDazed()) {
+                if (!PowerTypes.isInADifferentExistenceNoTE(ClientUtil.getPlayer(), this)) {
+                    if (rdbt$diverZipSound == null || rdbt$diverZipSound.isStopped()) {
+                        rdbt$diverZipSound = new DiverDownZipSound(
+                                ModSounds.DIVER_DOWN_ZIP_EVENT,
+                                SoundSource.PLAYERS,
+                                0.8F, 1.0F,this
+                        );
+                        Minecraft.getInstance().getSoundManager().play(rdbt$diverZipSound);
                     }
                 }
             }
