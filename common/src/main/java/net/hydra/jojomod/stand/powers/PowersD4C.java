@@ -585,7 +585,7 @@ public class PowersD4C extends NewPunchingStand {
             }
 
             if (isGuarding()){
-                Entity jentity = getTargetEntity(self,12);
+                Entity jentity = getTargetEntity(self,15);
                 if (jentity instanceof D4CCloneEntity d4cclone){
                     Optional<UUID> uuid = d4cclone.getPlayerUUID();
                     if (uuid != null && uuid.isPresent()){
