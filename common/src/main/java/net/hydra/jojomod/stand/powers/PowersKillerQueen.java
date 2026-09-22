@@ -181,6 +181,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         ARROW_BOMB = 10,
         ARROW_CONTACT = 11,
         BULLET_CONTACT = 12,
+        ENTITY_CONTACT = 13,
 
     // Sheer Heart Attack Status things
         SHA_NONE = 0,
@@ -567,7 +568,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         return bStatus == BOMB_ENTITY || bStatus == BUBBLE_CONTACT
                 || bStatus == BLOCK_CONTACT || bStatus == ITEM_CONTACT
                 || bStatus == BULLET_CONTACT || bStatus == ARROW_CONTACT
-                || bStatus == ARROW_BOMB;
+                || bStatus == ARROW_BOMB || bStatus == ENTITY_CONTACT;
     }
 
     public boolean isItemSpecialBombOnly(byte bStatus) {
@@ -2444,7 +2445,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (this.getSelf() instanceof Player P) {
                 S2CPacketUtil.sendCooldownSyncPacket(P, PowerIndex.SKILL_1, cooldownAmount);
             }
-        }else if (currentBombStatus == BOMB_ENTITY || isItemSpecialBombOnly(currentBombStatus)) {
+        }else if (currentBombStatus == ENTITY_CONTACT || currentBombStatus == BOMB_ENTITY || isItemSpecialBombOnly(currentBombStatus)) {
             if (bombEntity instanceof BombPlantedArrow AR) { AR.defuse(); }
             if (bombEntity instanceof BombPlantedSpectralArrow AR) { AR.defuse(); }
             if (bombEntity instanceof KnifeEntity KN) {
@@ -2461,7 +2462,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), ENTITY_BOMB, -1);
             }
 
-            if (currentBombStatus == BOMB_ENTITY) {
+            if (currentBombStatus == BOMB_ENTITY || currentBombStatus == ENTITY_CONTACT) {
                 //int cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.mobPlantCooldown;
                 int cooldownAmount = 60;
                 this.setCooldown(PowerIndex.SKILL_2, cooldownAmount);
@@ -3596,6 +3597,10 @@ public class PowersKillerQueen extends NewPunchingStand {
                                     }
                                 }
 
+                                if (currentBombStatus == BOMB_ENTITY) {
+                                    syncBombStatus(ENTITY_CONTACT);
+                                }
+
                                 this.bombEntity = contact;
                                 this.detonate();
 
@@ -4547,7 +4552,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 S2CPacketUtil.sendCooldownSyncPacket(P, PowerIndex.SKILL_1, cooldownAmount);
             }
         }
-        if (bStatus != BOMB_ENTITY) {
+        if (!(bStatus == BOMB_ENTITY || bStatus == ENTITY_CONTACT)) {
             int cooldownAmount = (int)(ClientNetworking.getAppropriateConfig().killerQueenSettings.mobPlantCooldown / 2.0f);
             cooldownAmount = (int)(cooldownMultiplier *cooldownAmount);
 
@@ -4593,7 +4598,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if (this.getSelf() instanceof Player P) {
                     S2CPacketUtil.sendCooldownSyncPacket(P, PowerIndex.SKILL_1, cooldownAmount);
                 }
-            }else if (bStatus == BOMB_ENTITY) {
+            }else if (bStatus == BOMB_ENTITY || bStatus == ENTITY_CONTACT) {
                 cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.mobPlantCooldown;
 
                 cooldownAmount = (int)(cooldownMultiplier *cooldownAmount);
@@ -4670,7 +4675,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     bPos = new BlockPos(target.getBlockX(), target.getBlockY(), target.getBlockZ());
                     level = target.level();
 
-                    if (target instanceof LivingEntity LE && bStatus == BOMB_ENTITY ) {
+                    if (target instanceof LivingEntity LE && (bStatus == BOMB_ENTITY || bStatus == ENTITY_CONTACT) ) {
                         addEXP(4, LE);
                     }
 
@@ -4710,7 +4715,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 ExplosionUtil.explodeBlocksBase(bPos, level, Math.min(range, 1.8f), true, self);
             }
 
-            if (bStatus != BOMB_ENTITY) {
+            if (bStatus != BOMB_ENTITY && bStatus != ENTITY_CONTACT) {
                 addEXP(2);
             }
 
@@ -4720,7 +4725,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             damage = damage * (bombSize == 0 ? 0.3f : (0.75f + (0.25f*bombSize)));
 
-            if (bStatus == ARROW_CONTACT || bStatus == BLOCK_CONTACT || bStatus == ITEM_CONTACT) {
+            if (bStatus == ARROW_CONTACT || bStatus == BLOCK_CONTACT || bStatus == ITEM_CONTACT || bStatus == ENTITY_CONTACT) {
                 damage = damage * 0.8f;
             }
             if (bStatus == BULLET_CONTACT) {
