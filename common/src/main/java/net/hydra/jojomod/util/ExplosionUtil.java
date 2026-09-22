@@ -167,7 +167,7 @@ public class ExplosionUtil {
 			}
 
 			// Simulate natural explosions
-			Double explosionDistance = explosionDistanceMax + ((double) level.getRandom().nextIntBetweenInclusive(-intSize, intSize) / 7.5);
+			Double explosionDistance = explosionDistanceMax + ((double) level.getRandom().nextIntBetweenInclusive(-intSize*2, intSize*2) / 7.5);
 
 			Double dist2 = center.distanceToSqr(pos.getX(), pos.getY(), pos.getZ());
 
