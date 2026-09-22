@@ -4083,7 +4083,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (soundChoice == BUBBLE_TARGET) { return 0.3f; }
 
         if (soundChoice >= MINESWEEPER_EXPLOSION && soundChoice <= BASE_EXPLOSION_4) {
-            return 0.8f;
+            return 0.2f + 3f * bombSize;
         }
 
         return super.getSoundVolumeFromByte(soundChoice);
