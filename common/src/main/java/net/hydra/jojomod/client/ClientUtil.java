@@ -708,6 +708,9 @@ public class ClientUtil {
                     else if (type == WhitesnakeDiscUtil.MEMORY) bearer.roundabout$setHasMemoryDisc(present);
                     else if (type == WhitesnakeDiscUtil.HEARING) bearer.roundabout$setHasHearingDisc(present);
                     bearer.roundabout$setDiscSeal(type, sealTicks, sealMaxTicks);
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.MusicDisc.value)) {
+                    Entity entity = player.level().getEntity((int) vargs[0]);
+                    if (entity instanceof LivingEntity) MusicDiscClient.play(entity, (String) vargs[1]);
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.UpdateBarrageClash.value)) {
                     /**Barrage Clash S2C Packet*/
                     int clashOpID = (int)vargs[0];

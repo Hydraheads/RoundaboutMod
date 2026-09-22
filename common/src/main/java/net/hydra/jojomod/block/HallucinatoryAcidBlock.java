@@ -124,9 +124,9 @@ public final class HallucinatoryAcidBlock extends BaseEntityBlock implements Sim
         int layers = state.getValue(LAYERS);
         if (entity.getY() - pos.getY() > SHAPES[layers].bounds().getYsize()) return;
         double strength = layers / 4.0D;
-        double fullHeightMultiplier = entity instanceof Player ? 0.5D : 0.75D;
+        double fullHeightMultiplier = entity instanceof Player ? 0.9D : 0.9D;
         double horizontalMultiplier = 1.0D - (1.0D - fullHeightMultiplier) * strength;
-        double verticalMultiplier = 1.0D - 0.9D * strength;
+        double verticalMultiplier = 1.0D - 0.1D * strength;
         entity.makeStuckInBlock(state,
                 new Vec3(horizontalMultiplier, verticalMultiplier, horizontalMultiplier));
     }
@@ -136,7 +136,7 @@ public final class HallucinatoryAcidBlock extends BaseEntityBlock implements Sim
         if (((StandUser) player).roundabout$getStandPowers().getActivePower() == PowerIndex.MINING) {
             return super.getDestroyProgress(state, player, level, pos);
         }
-        return 1.0F / 300.0F;
+        return 1.0F / 60.0F;
     }
 
     @Override
