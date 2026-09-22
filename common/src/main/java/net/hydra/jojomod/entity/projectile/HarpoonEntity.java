@@ -5,7 +5,10 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.ISuperThrownAbstractArrow;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenPhantom;
+import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
@@ -15,22 +18,26 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ambient.Bat;
 import net.minecraft.world.entity.monster.Phantom;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.ThrownTrident;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 /**Harpoons use retooled/edited trident code, so they can function similarly, but they have anti-air properties
  * such as damaging airborne mobs more based on airtime, and sniping elytra users/phantoms.
@@ -109,8 +116,40 @@ public class HarpoonEntity extends AbstractArrow {
 
                     this.discard();
                 } else {
+                    StandEntity stand = ((StandUser)this.getOwner()).roundabout$getStand();
+                    if(isBlackSabbathShot && stand != null && stand instanceof BlackSabbathEntity be) {
+                        AABB beHitbox = be.getBoundingBox().inflate(1.5, 1.5, 1.5);
+                        List<HarpoonEntity> tr = this.level().getEntitiesOfClass(HarpoonEntity.class, beHitbox, (livingEntity) -> {
+                            return true;
+                        });
+                        if (tr.contains(this)) {
+                            if (be.getUser() instanceof Player pl) {
+                                ItemStack tridentCopy = this.getPickupItem().copy();
+                                IPlayerEntity play = ((IPlayerEntity) pl);
+                                play.roundabout$getBlckSabbathPlayerInventory().setItem(0, tridentCopy);
+                                this.level()
+                                        .playSound(
+                                                null,
+                                                this.getX(),
+                                                this.getY(),
+                                                this.getZ(),
+                                                SoundEvents.ITEM_PICKUP,
+                                                SoundSource.PLAYERS,
+                                                0.2F,
+                                                ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.0F) * 2.0F
+                                        );
+                            }
+                            this.discard();
+                            return;
+                        }
+                    }
                     this.setNoPhysics(true);
-                    Vec3 $$2 = $$0.getEyePosition().subtract(this.position());
+                    Vec3 $$2 = Vec3.ZERO;
+                    if(isBlackSabbathShot && this.getOwner() instanceof Player p && ((StandUser)p).roundabout$getStand() instanceof BlackSabbathEntity be){
+                        $$2 = be.getEyePosition().subtract(this.position());
+                    } else {
+                        $$2 = $$0.getEyePosition().subtract(this.position());
+                    }
                     this.setPosRaw(this.getX(), this.getY() + $$2.y * 0.015 * (double)$$1, this.getZ());
                     if (this.level().isClientSide) {
                         this.yOld = this.getY();
@@ -128,6 +167,8 @@ public class HarpoonEntity extends AbstractArrow {
 
             super.tick();
         }
+
+        public boolean isBlackSabbathShot = false;
 
         private boolean isAcceptibleReturnOwner() {
             Entity $$0 = this.getOwner();
@@ -285,7 +326,7 @@ public class HarpoonEntity extends AbstractArrow {
 
         @Override
         protected boolean tryPickup(Player $$0) {
-            return super.tryPickup($$0) || this.isNoPhysics() && this.ownedBy($$0) && $$0.getInventory().add(this.getPickupItem());
+            return isBlackSabbathShot ? false : super.tryPickup($$0) || this.isNoPhysics() && this.ownedBy($$0) && $$0.getInventory().add(this.getPickupItem());
         }
 
         @Override
