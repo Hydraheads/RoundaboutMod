@@ -2475,7 +2475,7 @@
   "ability.roundabout.diver_wall_zip": "Wall Zip",
   "ability.roundabout.diver_wall_zip.desc": "Attach to a wall and zip around. While in this mode, you can't do anything but move around and 1 hit knocks you out.",
   "ability.roundabout.diver_workstation": "Workstation Emulation",
-  "ability.roundabout.diver_workstation.desc": "Your stand dives into your items and changes them from the inside out, allowing it emulate the functions of various workstations. More workstations are unlocked the higher your level is.",
+  "ability.roundabout.diver_workstation.desc": "Your stand dives into your items and changes them, allowing it emulate the functions of various workstations.",
   "ability.roundabout.diver_limb_platform": "Limb Platform",
   "ability.roundabout.diver_limb_platform.desc": "Limbs emerge from the walls and ground as your stand dives inside them. This move allows you to climb on the limbs of your stand, and lets others do the same. The limbs also reduce fall damage, and up to 4 can be placed at a time.",
   "ability.roundabout.diver_ground_dive": "Ground Dive",
