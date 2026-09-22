@@ -171,7 +171,7 @@ public abstract class EntityAndData implements IEntityAndData {
         $$0.putByte("nativeToWorld",rdbt$nativeTo);
         $$0.putByte("originWorld",rdbt$originWorld);
         if (rdbt$nativeCopy != null){
-            $$0.putUUID("rdbt$nativeCopy",rdbt$nativeCopy);
+            $$0.putUUID("nativeToWorldCopy",rdbt$nativeCopy);
         }
     }
 
@@ -185,9 +185,9 @@ public abstract class EntityAndData implements IEntityAndData {
         } if ($$0.contains("nativeToWorld")) {
             rdbt$nativeTo = $$0.getByte("nativeToWorld");
         } if ($$0.hasUUID("nativeToWorldCopy")) {
-            rdbt$nativeCopy = $$0.getUUID("nativeToWorld");
-        } if ($$0.hasUUID("rdbt$originWorld")) {
-            rdbt$nativeCopy = $$0.getUUID("rdbt$originWorld");
+            rdbt$nativeCopy = $$0.getUUID("nativeToWorldCopy");
+        } if ($$0.hasUUID("originWorld")) {
+            rdbt$nativeCopy = $$0.getUUID("originWorld");
         }
 
     }
