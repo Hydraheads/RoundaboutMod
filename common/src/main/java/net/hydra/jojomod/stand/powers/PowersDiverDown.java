@@ -1124,7 +1124,7 @@ public class PowersDiverDown extends NewPunchingStand {
 
         if (!this.self.level().isClientSide()) {
             playSoundIfPossible(self.level(), null, this.self.blockPosition(), SE,
-                    SoundSource.PLAYERS, 0.85F, pitch);
+                    SoundSource.PLAYERS, 0.9F, pitch);
         }
     }
 
@@ -1387,7 +1387,7 @@ public class PowersDiverDown extends NewPunchingStand {
                                 // phase sound, or the rephase sound
                                 playSoundIfPossible(self.level(), null, this.self.blockPosition(),
                                         ModSounds.DIVER_DOWN_DIVE_EVENT,
-                                        SoundSource.PLAYERS, 0.85F, 1);
+                                        SoundSource.PLAYERS, 0.7F, 1);
                                 // finally despawns the stand once it's inside the block
                                 stand.forceDespawn(true);
                                 addEXP(1);
@@ -1399,7 +1399,7 @@ public class PowersDiverDown extends NewPunchingStand {
                             // play a sound
                             playSoundIfPossible(self.level(), null, this.self.blockPosition(),
                                     ModSounds.DIVER_DOWN_DIVE2_EVENT,
-                                    SoundSource.PLAYERS, 0.85F, 1);
+                                    SoundSource.PLAYERS, 0.7F, (float) (0.9 + (Math.random() * 0.25)));
                         }
                     }
                     return true;
@@ -1479,10 +1479,6 @@ public class PowersDiverDown extends NewPunchingStand {
                     // the 0.05 is there to fix the pilot enter bug, so it can enter pilot inside
                     // walls
                     stand.setPos(stand.getX(), stand.getY() + 0.05, stand.getZ());
-                    // note to self: get the last survivor ult sound effect for this. this is a
-                    // placeholder for now
-                    playSoundIfPossible(self.level(), null, stand.blockPosition(),
-                            ModSounds.DIVER_DOWN_DIVE_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
                 }
             }
         }
@@ -1528,6 +1524,9 @@ public class PowersDiverDown extends NewPunchingStand {
             }
             if (entering) {
                 this.diveTicksLeft = MAX_DIVE_TICKS;
+                //put animation here
+                playSoundIfPossible(self.level(), null, getStandEntity(this.self).blockPosition(),
+                        ModSounds.DIVER_DOWN_GROUND_DIVE_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
             } else {
                 // move returns camera as a failsafe.
                 this.diveTicksLeft = 0;
@@ -1895,6 +1894,8 @@ public class PowersDiverDown extends NewPunchingStand {
                                 living.setDeltaMovement(motion);
                                 hitParticles(living);
                                 // animate the barrage and also sound here
+                                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.DIVER_DOWN_GROUND_BARRAGE_EVENT,
+                                        SoundSource.PLAYERS, 0.55F, (float) (0.9 + (Math.random() * 0.30)));
                             } else if (this.barrageTicksLeft == 9) {
                                 // BIG FINAL PUNCH!!! (does bleed)
                                 DamageHandler.StandDamageEntity(living, 7.0F, this.self);
@@ -1904,6 +1905,7 @@ public class PowersDiverDown extends NewPunchingStand {
                                 living.hurtMarked = true;
                                 MainUtil.knockShieldPlusStand(living, 60); // 60 ticks = 3 seconds
                                 // big final punch anim and sound here
+                                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.DIVER_DOWN_HIT_HEAVY_EVENT, SoundSource.PLAYERS, 0.95F, 1F);
                                 hitParticlesCenter(living);
                                 sendParticlesIfPossible(this.self.level(), ModParticles.AIR_CRACKLE,
                                         living.getX(), living.getY() + (living.getBbHeight() * 0.5), living.getZ(),
@@ -1937,6 +1939,7 @@ public class PowersDiverDown extends NewPunchingStand {
                     toggleZip(false);
                 }
             }
+
         }
     }
 
@@ -2290,6 +2293,9 @@ public class PowersDiverDown extends NewPunchingStand {
             if (toggle != getTog) {
                 if (toggle) {
                     // put sound here
+                    playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                            ModSounds.DIVER_DOWN_TRANSFER_EVENT,
+                            SoundSource.PLAYERS, 0.9F, 0.9F);
                 } else {
                     Direction gf = ((IGravityEntity) self).roundabout$getGravityDirection();
                     if (gf != getIntendedDirection()) {
@@ -2302,6 +2308,9 @@ public class PowersDiverDown extends NewPunchingStand {
                     }
                     // put cooldown here
                     // put sound here
+                    playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                            ModSounds.DIVER_DOWN_DIVE_EVENT,
+                            SoundSource.PLAYERS, 0.5F, 1.3F);
                 }
             }
         }
@@ -2545,7 +2554,9 @@ public class PowersDiverDown extends NewPunchingStand {
         this.setAttackTimeDuring(0);
 
         // animations and sounds and stuff
-
+        playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                ModSounds.DIVER_DOWN_TRANSFER_EVENT,
+                SoundSource.PLAYERS, 0.7F, 1);
         return true;
     }
 
@@ -2717,6 +2728,12 @@ public class PowersDiverDown extends NewPunchingStand {
             victim.hasImpulse = true;
 
             // play effects sounds and stuff here
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                    ModSounds.DIVER_DOWN_HIT_EVENT,
+                    SoundSource.PLAYERS, 0.6F, 0.7F);
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                    ModSounds.DIVER_DOWN_TRANSFER_EVENT,
+                    SoundSource.PLAYERS, 0.8F, 1);
         }
     }
 
@@ -2776,6 +2793,9 @@ public class PowersDiverDown extends NewPunchingStand {
         this.storedKickTraps.clear();
 
         // sound here
+        playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                ModSounds.DIVER_DOWN_TRANSFER_EVENT,
+                SoundSource.PLAYERS, 0.5F, 1.5F);
 
         return true;
     }
@@ -2842,6 +2862,9 @@ public class PowersDiverDown extends NewPunchingStand {
             }
             addEXP(3);
             // sounds and particles here
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                    ModSounds.DIVER_DOWN_DIVE_EVENT,
+                    SoundSource.PLAYERS, 0.8F, 1F);
         }
     }
 
@@ -2851,7 +2874,6 @@ public class PowersDiverDown extends NewPunchingStand {
         removeDiverLegsFromTarget();
         if (this.submergedTarget != null) {
             ((StandUser) this.submergedTarget).roundabout$SetDiverUser(null);
-            //play sounds and effects here
             this.submergedTarget = null;
         }
         this.setPowerNone();
@@ -2862,6 +2884,9 @@ public class PowersDiverDown extends NewPunchingStand {
         // Resummon stand to user
         if (!this.self.level().isClientSide() && hasStandActive(this.self)) {
             ((StandUser) this.self).roundabout$summonStand(this.self.level(), true, false);
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                    ModSounds.SUMMON_DIVER_DOWN_EVENT,
+                    SoundSource.PLAYERS, 0.85F, 1);
         }
         return true;
     }
@@ -2932,7 +2957,9 @@ public class PowersDiverDown extends NewPunchingStand {
         }
 
         //play sounds and animations here
-
+        playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                ModSounds.DIVER_DOWN_DIVE_EVENT,
+                SoundSource.PLAYERS, 0.7F, 1);
         return true;
     }
 
@@ -2997,7 +3024,7 @@ public class PowersDiverDown extends NewPunchingStand {
             }
             case TRANSFER -> {
                 //comment out when tested
-                this.self.sendSystemMessage(Component.literal("it's transfering get update from affliciton screen time"));
+                //this.self.sendSystemMessage(Component.literal("it's transfering get update from affliciton screen time"));
                 prepareTransfer();
                 return true;
             }
@@ -3303,11 +3330,14 @@ public class PowersDiverDown extends NewPunchingStand {
         //this.self.sendSystemMessage(Component.literal("it's transfering windup time"));
 
         //play the animation and sounds here
+        playSoundIfPossible(self.level(), null, submergedTarget.blockPosition(),
+                ModSounds.DIVER_DOWN_CHARGE_EVENT,
+                SoundSource.PLAYERS, 0.8F, 0.8F);
     }
 
     public void triggerTransfer() {
         if(getAttackTimeDuring() >= TRANSFER_WINDUP_MAX) {
-            this.self.sendSystemMessage(Component.literal("it's transfering time"));
+            //this.self.sendSystemMessage(Component.literal("it's transfering time"));
             LivingEntity host = (this.submergedTarget instanceof LivingEntity living) ? living : null;
             if (host == null || !host.isAlive()) {
                 cancelTransfer();
@@ -3358,6 +3388,9 @@ public class PowersDiverDown extends NewPunchingStand {
             this.setPowerNone();
 
             // animation and sounds here
+            playSoundIfPossible(self.level(), null, submergedTarget.blockPosition(),
+                    ModSounds.DIVER_DOWN_DIVE_EVENT,
+                    SoundSource.PLAYERS, 0.8F, 1);
         }
     }
 
@@ -3398,6 +3431,9 @@ public class PowersDiverDown extends NewPunchingStand {
         }
 
         // sounds here
+        playSoundIfPossible(self.level(), null, targetLiving.blockPosition(),
+                SoundEvents.ZOMBIE_VILLAGER_CURE,
+                SoundSource.PLAYERS, 0.7F, 1.3F);
     }
 
     // cleanse negative effects end
@@ -3412,6 +3448,9 @@ public class PowersDiverDown extends NewPunchingStand {
         ((StandUser) this.submergedTarget).roundabout$setDiverLegs(true);
 
         //play sound here, replace entity legs with diver down legs
+        playSoundIfPossible(self.level(), null, submergedTarget.blockPosition(),
+                ModSounds.DIVER_DOWN_TRANSFER_EVENT,
+                SoundSource.PLAYERS, 0.8F, 1.2F);
     }
 
     private void removeDiverLegsFromTarget() {
@@ -3478,6 +3517,9 @@ public class PowersDiverDown extends NewPunchingStand {
             }
 
             // sound effects and stuff here
+            playSoundIfPossible(self.level(), null, targetLiving.blockPosition(),
+                    ModSounds.DIVER_DOWN_TRANSFER_EVENT,
+                    SoundSource.PLAYERS, 0.8F, 1.1F);
             return;
         }
 
@@ -3685,6 +3727,9 @@ public class PowersDiverDown extends NewPunchingStand {
         if (!removed) return;
 
         // animate stand and sounds and stuff here
+        playSoundIfPossible(self.level(), null, pos,
+                ModSounds.DIVER_DOWN_DIVE_EVENT,
+                SoundSource.PLAYERS, 0.6F, 1.5F);
 
         if (this.getSelf() instanceof ServerPlayer pl) {
             S2CPacketUtil.sendCooldownSyncPacket(pl, PowerIndex.SKILL_1_SNEAK, 60);
