@@ -2693,7 +2693,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             bitesTheDustPlantedEntity = target;
             ((StandUser)target).rdbt$SetBtdPlantedUser(this);
-            saveCombatEntitiesSeconds(target.position());
+            saveCombatEntitiesSeconds(target.getPosition(1));
             btdTicks = 0;
 
             this.syncBombStatus(BITES_THE_DUST);
@@ -2876,7 +2876,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             S2CPacketUtil.sendCancelSoundPacket(pl, this.self.getId(), BTD_PLANT);
         }
 
-        saveCombatEntitiesSeconds(target.position());
+        saveCombatEntitiesSeconds(target.getPosition(1));
 
         return true;
     }
@@ -3152,7 +3152,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 stand.setXRot(twoVec.y);
                 moveVec = DamageHandler.getRotationVector(
                         twoVecGrav.y, (float) (twoVecGrav.x)).scale(1.8).add(threeVec.x, threeVec.y, threeVec.z);
-                stand.setPos(this.getSelf().position().add(moveVec));
+                stand.setPos(this.getSelf().getPosition(1).add(moveVec));
                 return true;
             }
         }
@@ -3507,7 +3507,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (inBitesTheDustMode() && bitesTheDustPlantedEntity != null) {
                 if ( self instanceof Player player
                         && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof KiraPartFourVoice voice && !voice.inTheMiddleOfTalking()) {
-                    Vec3 pos = bitesTheDustPlantedEntity.position();
+                    Vec3 pos = bitesTheDustPlantedEntity.getPosition(1);
 
                     if (!MainUtil.genHitbox(bitesTheDustPlantedEntity.level(),
                             pos.x(), pos.y(), pos.z(), btdRange, btdRange, btdRange).isEmpty()) {
@@ -3608,7 +3608,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                         }
                     }
                 }else if (this.currentBombStatus == BOMB_ITEM) {
-                    if(Objects.nonNull(bombPlantedItem)) {
+                    if(Objects.nonNull(bombPlantedItem) && bombPlantedItem.safeContactTicks <= 0) {
                         Entity contact = detectContact(bombPlantedItem, 0.2);
                         if (contact != null) {
                             syncBombStatus(ITEM_CONTACT);
@@ -3747,7 +3747,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                         if(!target.isAlive() && !MainUtil.isBossMob(target)){ target.discard(); }
 
-                        ExplosionUtil.explodeEffects(target.position(), target.level(), getExplosionParticle(), 0.35f);
+                        ExplosionUtil.explodeEffects(target.getPosition(1), target.level(), getExplosionParticle(), 0.35f);
                         if (this.self instanceof ServerPlayer pl) {
                             S2CPacketUtil.sendPlaySoundPacket(pl, this.self.getId(), getExplosionByteSound());
                         }
@@ -3798,7 +3798,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                                         multiplier * ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustDayMobsDamage);
                             }
 
-                            ExplosionUtil.explodeEffects(target.position(), target.level(), getExplosionParticle(), 0.35f);
+                            ExplosionUtil.explodeEffects(target.getPosition(1), target.level(), getExplosionParticle(), 0.35f);
                             if (this.self instanceof ServerPlayer pl) {
                                 S2CPacketUtil.sendPlaySoundPacket(pl, this.self.getId(), getExplosionByteSound());
                             }
@@ -4685,7 +4685,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
             }else if (bStatus == BOMB_BUBBLE) {
                 if (this.bombBubble != null) {
-                    vPos = this.bombBubble.position();
+                    vPos = this.bombBubble.getPosition(1);
                     bPos = new BlockPos(this.bombBubble.getBlockX(), this.bombBubble.getBlockY(), this.bombBubble.getBlockZ());
                     level = this.bombBubble.level();
                     this.bombBubble.discard();
@@ -4693,7 +4693,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
             }else if (bStatus == BOMB_ITEM) {
                 if (bombPlantedItem != null) {
-                    vPos = bombPlantedItem.position();
+                    vPos = bombPlantedItem.getPosition(1);
                     bPos = new BlockPos(bombPlantedItem.getBlockX(), bombPlantedItem.getBlockY(), bombPlantedItem.getBlockZ());
                     level = bombPlantedItem.level();
                     bombPlantedItem.discard();
