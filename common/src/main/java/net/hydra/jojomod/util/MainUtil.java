@@ -833,7 +833,7 @@ public class MainUtil {
     public static double getWorthyOdds(Mob mob) {
         if ((isBossMob(mob)
                 && !ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.bossMobsCanNaturallyHaveStands)
-                || mob instanceof JojoNPC || mob instanceof CloneEntity || isMobStandUserBlacklisted(mob)) {
+                || mob instanceof JojoNPC || mob instanceof FallenMob || mob instanceof CloneEntity || isMobStandUserBlacklisted(mob)) {
             return 0;
         }
         return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.worthyMobOdds;
@@ -857,7 +857,7 @@ public class MainUtil {
     public static double getStandUserOdds(Mob mob) {
         if ((isBossMob(mob)
                 && !ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.bossMobsCanNaturallyHaveStands)
-                || mob instanceof JojoNPC || mob instanceof CloneEntity || mob instanceof ZombieAesthetician
+                || mob instanceof JojoNPC || mob instanceof FallenMob || mob instanceof CloneEntity || mob instanceof ZombieAesthetician
                 || isMobStandUserBlacklisted(mob)) {
             return 0;
         } else if (mob instanceof AbstractVillager) {

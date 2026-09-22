@@ -1316,7 +1316,7 @@ public class Config implements Cloneable {
         public Integer hallucinationAllowsDiscSteal;
         @BooleanOption(group = "inherit", value = true)
         public Boolean stealDiscWhenLowHealth;
-        @BooleanOption(group = "inherit", value = false)
+        @BooleanOption(group = "inherit", value = true)
         public Boolean stealPlayerDiscs;
         @IntOption(group = "inherit", value = 1, min = 1, max = 2)
         public Integer ejectType;
@@ -1340,9 +1340,9 @@ public class Config implements Cloneable {
         public Boolean hallucinationHidesEffects;
         @IntOption(group = "inherit", value = 400, min = 1, max = 72000)
         public Integer hallucinatoryAcidStageUpTime;
-        @IntOption(group = "inherit", value = 400, min = 20, max = 72000)
+        @IntOption(group = "inherit", value = 600, min = 20, max = 72000)
         public Integer hallucinatoryAcidDespawnTime;
-        @FloatOption(group = "inherit", value = 3.0F, min = 0.0F, max = 64.0F)
+        @FloatOption(group = "inherit", value = 1.0F, min = 0.0F, max = 64.0F)
         public Float hallucinatoryAcidEffectRange;
         @FloatOption(group = "inherit", value = 20.0F, min = 0.0F, max = 256.0F)
         public Float hallucinatoryAcidDespawnPauseRange;
