@@ -103,7 +103,7 @@ public final class HallucinatoryAcidWallBlock extends BaseEntityBlock implements
         if (((StandUser) player).roundabout$getStandPowers().getActivePower() == PowerIndex.MINING) {
             return super.getDestroyProgress(state, player, level, pos);
         }
-        return 1.0F / 300.0F;
+        return 1.0F / 60.0F;
     }
 
     @Override
