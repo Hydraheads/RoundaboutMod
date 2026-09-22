@@ -4541,7 +4541,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public void resetBombsCooldowns(byte bStatus) {
-        float cooldownMultiplier = 0.5f + 0.5f * bombSize;
+        float cooldownMultiplier = 0.3f + 0.7f * bombSize;
 
         if (!(bStatus == BOMB_BLOCK || bStatus == BLOCK_CONTACT)) {
             int cooldownAmount = (int)(ClientNetworking.getAppropriateConfig().killerQueenSettings.blockPlantCooldown / 2.0f);
@@ -4587,7 +4587,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             int cooldownAmount;
             byte bStatus = this.currentBombStatus;
 
-            float cooldownMultiplier = 0.5f + 0.5f * bombSize;
+            float cooldownMultiplier = 0.3f + 0.7f * bombSize;
 
             if (bStatus == BOMB_BLOCK || bStatus == BLOCK_CONTACT) {
                 cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.blockPlantCooldown;
@@ -4710,7 +4710,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
 
             if (canDestroyBlocks) {
-                float range = 0.1f + bombSize * 0.9f;
+                float range = 0.2f + bombSize * 0.85f;
 
                 ExplosionUtil.explodeBlocksBase(bPos, level, Math.min(range, 1.8f), true, self);
             }
