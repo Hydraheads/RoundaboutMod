@@ -26,6 +26,7 @@ public final class HallucinatoryAcidBlockEntity extends BlockEntity {
             Roundabout.location("acid_dissolvable_wood"));
     private UUID owner;
     private long expiresAt;
+    private boolean acidTossAlwaysExpires;
     private int dissolveProgress;
     private double dissolveAccumulator;
     private long dissolveTarget = Long.MIN_VALUE;
@@ -34,26 +35,29 @@ public final class HallucinatoryAcidBlockEntity extends BlockEntity {
         super(ModBlocks.HALLUCINATORY_ACID_BLOCK_ENTITY, pos, state);
     }
 
-    public void initialize(UUID owner, long expiresAt) {
+    public void initialize(UUID owner, long expiresAt, boolean acidTossAlwaysExpires) {
         this.owner = owner;
         this.expiresAt = expiresAt;
+        this.acidTossAlwaysExpires = acidTossAlwaysExpires;
         setChanged();
     }
 
     public void copyLifetimeTo(HallucinatoryAcidBlockEntity other) {
-        other.initialize(owner, expiresAt);
+        other.initialize(owner, expiresAt, acidTossAlwaysExpires);
     }
 
     public CompoundTag saveTransferData() {
         CompoundTag tag = new CompoundTag();
         if (owner != null) tag.putUUID("Owner", owner);
         tag.putLong("ExpiresAt", expiresAt);
+        tag.putBoolean("AcidTossAlwaysExpires", acidTossAlwaysExpires);
         return tag;
     }
 
     public void loadTransferData(CompoundTag tag) {
         owner = tag.hasUUID("Owner") ? tag.getUUID("Owner") : null;
         expiresAt = tag.getLong("ExpiresAt");
+        acidTossAlwaysExpires = tag.getBoolean("AcidTossAlwaysExpires");
         setChanged();
     }
 
@@ -148,6 +152,8 @@ public final class HallucinatoryAcidBlockEntity extends BlockEntity {
     }
 
     private boolean ownerWithinPauseRange(ServerLevel server, BlockPos pos) {
+        if (acidTossAlwaysExpires
+                && ClientNetworking.getAppropriateConfig().whitesnakeSettings.acidTossAlwaysExpires) return false;
         double range = ClientNetworking.getAppropriateConfig().whitesnakeSettings.hallucinatoryAcidDespawnPauseRange;
         if (owner == null || range <= 0.0D) return false;
         Entity entity = server.getEntity(owner);
@@ -166,6 +172,7 @@ public final class HallucinatoryAcidBlockEntity extends BlockEntity {
         super.saveAdditional(tag);
         if (owner != null) tag.putUUID("Owner", owner);
         tag.putLong("ExpiresAt", expiresAt);
+        tag.putBoolean("AcidTossAlwaysExpires", acidTossAlwaysExpires);
         tag.putInt("DissolveProgress", dissolveProgress);
         tag.putDouble("DissolveAccumulator", dissolveAccumulator);
         if (dissolveTarget != Long.MIN_VALUE) tag.putLong("DissolveTarget", dissolveTarget);
@@ -176,6 +183,7 @@ public final class HallucinatoryAcidBlockEntity extends BlockEntity {
         super.load(tag);
         owner = tag.hasUUID("Owner") ? tag.getUUID("Owner") : null;
         expiresAt = tag.getLong("ExpiresAt");
+        acidTossAlwaysExpires = tag.getBoolean("AcidTossAlwaysExpires");
         dissolveProgress = tag.getInt("DissolveProgress");
         dissolveAccumulator = tag.getDouble("DissolveAccumulator");
         dissolveTarget = tag.contains("DissolveTarget")

@@ -1342,6 +1342,8 @@ public class Config implements Cloneable {
         public Integer hallucinatoryAcidStageUpTime;
         @IntOption(group = "inherit", value = 600, min = 20, max = 72000)
         public Integer hallucinatoryAcidDespawnTime;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean acidTossAlwaysExpires;
         @FloatOption(group = "inherit", value = 1.0F, min = 0.0F, max = 64.0F)
         public Float hallucinatoryAcidEffectRange;
         @FloatOption(group = "inherit", value = 20.0F, min = 0.0F, max = 256.0F)
