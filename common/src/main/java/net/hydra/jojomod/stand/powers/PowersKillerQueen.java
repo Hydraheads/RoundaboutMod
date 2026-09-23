@@ -4083,7 +4083,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (soundChoice == BUBBLE_TARGET) { return 0.3f; }
 
         if (soundChoice >= MINESWEEPER_EXPLOSION && soundChoice <= BASE_EXPLOSION_4) {
-            return 0.8f;
+            return 0.2f + 3f * bombSize;
         }
 
         return super.getSoundVolumeFromByte(soundChoice);
@@ -4676,7 +4676,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     level = target.level();
 
                     if (target instanceof LivingEntity LE && (bStatus == BOMB_ENTITY || bStatus == ENTITY_CONTACT) ) {
-                        addEXP(4, LE);
+                        addEXP(3, LE);
                     }
 
                     this.bombEntity = null;
@@ -4716,7 +4716,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
 
             if (bStatus != BOMB_ENTITY && bStatus != ENTITY_CONTACT) {
-                addEXP(2);
+                addEXP(1);
             }
 
             Config.KillerQueenSettings config = ClientNetworking.getAppropriateConfig().killerQueenSettings;
@@ -4734,9 +4734,19 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             DamageSource dmg = ModDamageTypes.of(level, ModDamageTypes.EXPLOSIVE_STAND, this.getSelf());
 
-            ExplosionUtil.explosionHurtSneakyWithMulti(vPos, dmg, level, damage,
+            for (LivingEntity LE : ExplosionUtil.explosionHurtSneakyWithMulti(vPos, dmg, level, damage,
                     0.1f + (0.3f * bombSize), 0.6f + (float)bombSize * 0.9f,
-                    multiplyPowerByStandConfigMobs(1.5f), multiplyPowerByStandConfigPlayers(1));
+                    multiplyPowerByStandConfigMobs(1.5f), multiplyPowerByStandConfigPlayers(1))) {
+                if (target != null) {
+                    if (LE.getId() == target.getId()) {
+                        continue;
+                    }
+                }
+
+                addEXP(1, LE);
+            }
+
+
 
             if (target != null && bStatus == BOMB_ENTITY) {
                 float hitPoints = multiplyPowerByStandConfigMobs(config.mobPlantDesintegrationDamage);
