@@ -8,6 +8,7 @@ import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.navigation.StandEntityNavigation;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.FateTypes;
@@ -435,6 +436,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		} else if (this.hasTarget() && stunTicks <= 0 && attackTick <= 0) {
 			Vec3 pos = this.getTargetPosition();
+
 			if (this.shouldExplode(pos)) {
 				this.attack();
 				this.shaStopMove();
@@ -711,7 +713,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 				BlockState info =this.level().getBlockState(this.blockTarget);
 				if (!(ExplosionUtil.isBlockBlackListed(info) || (MainUtil.confirmIsOre(info))
 						|| info.isAir() || info.is(Blocks.BARRIER) || info.is(Blocks.BEDROCK)
-						|| !MainUtil.isDestructible(level(), this.blockTarget, info))) {
+						|| !MainUtil.isDestructible2(level(), this.blockTarget, info))) {
 
 					boolean shouldDrop = !info.requiresCorrectToolForDrops();
 					this.level().destroyBlock(this.blockTarget, shouldDrop);
@@ -858,7 +860,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		if (ExplosionUtil.isBlockBlackListed(info) || (MainUtil.confirmIsOre(info))
 				|| info.isAir() || info.is(Blocks.BARRIER) || info.is(Blocks.BEDROCK)
-				|| !MainUtil.isDestructible(level, pos, info))  {
+				|| !MainUtil.isDestructible2(level, pos, info))  {
 			return 0;
 		}
 
@@ -866,8 +868,15 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		String tag = key.toString();
         if (MainUtil.SHA_CUSTOM_BLOCK_HEAT.containsKey(tag)) {
-            return MainUtil.SHA_CUSTOM_BLOCK_HEAT.get(tag);
-        }
+			if (tag.contains("roundabout")) {
+				Roundabout.LOGGER.info("block Tag with info: " + tag);
+			}
+			return MainUtil.SHA_CUSTOM_BLOCK_HEAT.get(tag);
+        }else {
+			if (tag.contains("roundabout")) {
+				Roundabout.LOGGER.info("block Tag with no info: " + tag);
+			}
+		}
 
 		int light = info.getLightEmission();
 		if (light <= 7) { return 0; }
@@ -878,15 +887,11 @@ public class SheerHeartAttackEntity extends StandEntity {
 	public int getEntityWarm(Entity entity) {
 		int points = 0;
 
-		if (entity instanceof TamableAnimal TM) {
-			if (TM.getOwner() == getUser()) { return -1; }
-		}
-
-
 		if (!entity.isAttackable() || (entity instanceof LivingEntity LE && !LE.canBeSeenAsEnemy())
 				|| (entity instanceof Player PL && PL.isCreative())
 				|| PowerTypes.isInADifferentExistence(entity,this)
-				|| entity instanceof StandEntity || entity.is(this.getUser())) { return -1; }
+				|| entity instanceof StandEntity || isUserAlliedTo(getUser(), entity)
+		) { return -1; }
 
 		ResourceLocation key = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType());
 
@@ -918,6 +923,49 @@ public class SheerHeartAttackEntity extends StandEntity {
 		}
 
 		return points;
+	}
+
+
+	public boolean isUserAlliedTo(Entity Owner, Entity target) {
+		if (target.is(this.getUser())) {
+			return true;
+		}
+
+		if (this.getTargetType() == ENTITY) {
+
+			if (Owner instanceof AbstractVillager || Owner instanceof IronGolem) {
+				if (target instanceof AbstractVillager || target instanceof IronGolem) {
+					return true;
+				}
+			}
+
+			if (Owner instanceof Raider) {
+				if (target instanceof Raider) {
+					return true;
+				}
+			}
+
+			if (Owner instanceof AbstractPiglin) {
+				if (target instanceof AbstractPiglin) {
+					return true;
+				}
+			}
+
+			if (Owner instanceof JojoNPC JNPC) {
+				if (target instanceof Mob M) {
+					if (M.getTarget() == JNPC.getTarget()) {
+						return true;
+					}
+				}
+			}
+		}
+
+		if ((target instanceof TamableAnimal TM && TM.getOwner() == Owner)
+				|| target.isAlliedTo(Owner)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override
@@ -974,28 +1022,6 @@ public class SheerHeartAttackEntity extends StandEntity {
 		return 1.0f;
 	}
 
-	public boolean mobAiShouldRetreactDetect(Entity Owner) {
-		if (this.getTargetType() == ENTITY) {
-			Entity target = entityTarget;
-
-			if (Owner instanceof AbstractVillager || Owner instanceof IronGolem) {
-				if (target instanceof AbstractVillager || target instanceof IronGolem) {
-					return true;
-				}
-			}
-			if (Owner instanceof Raider || Owner instanceof AbstractVillager) {
-				if (target instanceof Raider || target instanceof AbstractVillager) {
-					return true;
-				}
-			}
-			if (Owner instanceof AbstractPiglin) {
-				if (target instanceof AbstractPiglin) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
 
     @Override public boolean hurt(DamageSource source, float amount) {
         if (source.is(DamageTypes.GENERIC_KILL) || source.is(DamageTypes.FELL_OUT_OF_WORLD)){

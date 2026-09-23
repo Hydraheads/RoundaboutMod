@@ -117,7 +117,7 @@ public class ExplosionUtil {
 
 			double dist = entity.distanceToSqr(pos);
 			float percUnhand = ((float)dist/ (range * range * range));
-			float perc = 1.0f - (percUnhand*0.75f);
+			float perc = 1.0f - (percUnhand*0.85f);
 			float percKnockback = 1.0f - (percUnhand*0.5f);
 
 			boolean hasSeen = true;

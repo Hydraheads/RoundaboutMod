@@ -464,7 +464,9 @@ public class PowersKillerQueen extends NewPunchingStand {
         return str;
     }
 
-    public float getKickAttackKnockback(){ return (((float)this.chargedFinal/(float)getMaxKickTime())*1.3F); }
+    public float getKickAttackKnockback(){
+        return (1.2f + ((float)this.chargedFinal/(float)getMaxKickTime())*1.6F);
+    }
     public int getKickAttackKnockShieldTime(){ return 40; }
 
     public float getKickAttackStrength(Entity entity){
@@ -3337,12 +3339,12 @@ public class PowersKillerQueen extends NewPunchingStand {
                         || dist <= 5){
                     rotateMobHead(attackTarget);
                 }
-                if (this.currentShaStatus == SHA_SEND && this.SHA != null && !this.SHA.isRemoved()) {
+                /*if (this.currentShaStatus == SHA_SEND && this.SHA != null && !this.SHA.isRemoved()) {
                     if (this.SHA.mobAiShouldRetreactDetect(this.self)){
                         SHA.setHaveToReturn(!SHA.getHaveToReturn());
                         this.currentShaStatus = SHA_RETREAT;
                     }
-                }
+                }*/
 
                 if (this.attackTimeDuring == -1 || (this.attackTimeDuring < -1 && this.activePower == PowerIndex.ATTACK)) {
                     Entity targetEntity = getTargetEntity(this.self, -1);
@@ -3824,7 +3826,9 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             if (entity.equals(this.self) || entity.equals(bomb)
                     || entity instanceof StandEntity || !entity.isAlive() || entity.isDeadOrDying()
-                    || PowerTypes.isInADifferentExistence(entity, bomb)) {
+                    || PowerTypes.isInADifferentExistence(entity, bomb)
+                    || entity.isAlliedTo(self) || (entity instanceof TamableAnimal TA && TA.getOwner() == self)
+            ) {
                 continue;
             }
 
@@ -4709,12 +4713,6 @@ public class PowersKillerQueen extends NewPunchingStand {
                 return true;
             }
 
-            if (canDestroyBlocks) {
-                float range = 0.2f + bombSize * 0.85f;
-
-                ExplosionUtil.explodeBlocksBase(bPos, level, Math.min(range, 1.8f), true, self);
-            }
-
             if (bStatus != BOMB_ENTITY && bStatus != ENTITY_CONTACT) {
                 addEXP(1);
             }
@@ -4722,20 +4720,33 @@ public class PowersKillerQueen extends NewPunchingStand {
             Config.KillerQueenSettings config = ClientNetworking.getAppropriateConfig().killerQueenSettings;
 
             float damage = config.explosionDetonateMaxDamage;
+            float rangeModifier = 1.0f;
 
             damage = damage * (bombSize == 0 ? 0.3f : (0.75f + (0.25f*bombSize)));
 
-            if (bStatus == ARROW_CONTACT || bStatus == BLOCK_CONTACT || bStatus == ITEM_CONTACT || bStatus == ENTITY_CONTACT) {
+            if (bStatus == ARROW_CONTACT || bStatus == BLOCK_CONTACT || bStatus == ENTITY_CONTACT) {
                 damage = damage * 0.8f;
             }
-            if (bStatus == BULLET_CONTACT) {
-                damage = damage * 0.65f;
+
+            if (bStatus == BULLET_CONTACT || bStatus == ITEM_CONTACT) {
+                damage = damage * 0.6f;
+                rangeModifier = 0.7f;
+            }
+
+            if (bStatus == BOMB_ITEM || bStatus == ARROW_BOMB) {
+                rangeModifier = 0.7f;
+            }
+
+            if (canDestroyBlocks) {
+                float range = 0.2f + bombSize * 0.85f;
+
+                ExplosionUtil.explodeBlocksBase(bPos, level, Math.min(range, 1.8f) * rangeModifier, true, self);
             }
 
             DamageSource dmg = ModDamageTypes.of(level, ModDamageTypes.EXPLOSIVE_STAND, this.getSelf());
 
             for (LivingEntity LE : ExplosionUtil.explosionHurtSneakyWithMulti(vPos, dmg, level, damage,
-                    0.1f + (0.3f * bombSize), 0.6f + (float)bombSize * 0.9f,
+                    0.1f + (0.3f * bombSize), (0.6f + (float)bombSize * 0.9f) * rangeModifier,
                     multiplyPowerByStandConfigMobs(1.5f), multiplyPowerByStandConfigPlayers(1))) {
                 if (target != null) {
                     if (LE.getId() == target.getId()) {
@@ -4841,7 +4852,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             float hRange = 0.15f + (0.4f*bombSize);
             float vRange = 0.35f + (0.5f*bombSize);
 
-            ExplosionUtil.explodeEffects(vPos, level, getExplosionParticle(), new Vec3(hRange, vRange, hRange),
+            ExplosionUtil.explodeEffects(vPos, level, getExplosionParticle(), new Vec3(hRange * rangeModifier, vRange * rangeModifier, hRange * rangeModifier),
                     4 + 13*bombSize);
             //ExplosionUtil.explodeEffects(vPos, level, getExplosionParticle(), 0.55f);
             if (this.self instanceof ServerPlayer pl) {

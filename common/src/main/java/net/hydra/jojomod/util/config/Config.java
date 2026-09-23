@@ -470,7 +470,7 @@ public class Config implements Cloneable {
         public Boolean bitesTheDustDayModeAffectGlobalTime;
     	@BooleanOption(group = "inherit", value = true)
         public Boolean blocksDestruction;
-    	@FloatOption(group = "inherit", value = 6.85F, min = 0, max = 200F)
+    	@FloatOption(group = "inherit", value = 4.55F, min = 0, max = 200F)
         public Float explosionDetonateMaxDamage;
         @FloatOption(group = "inherit", value = 3.75F, min = 0, max = 200F)
         public Float SheerHeartAttackMaxDamage;
@@ -484,7 +484,7 @@ public class Config implements Cloneable {
         public Integer itemPlantCooldown;
         @IntOption(group = "inherit", value = 220, min = 0, max = 72000)
         public Integer mobPlantCooldown;
-    	@IntOption(group = "inherit", value = 8, min = 0, max = 72000)
+    	@IntOption(group = "inherit", value = 11, min = 0, max = 72000)
         public Integer explosionActivationCooldown;
     	@IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer kickMinimumCooldown;
@@ -1342,6 +1342,8 @@ public class Config implements Cloneable {
         public Integer hallucinatoryAcidStageUpTime;
         @IntOption(group = "inherit", value = 600, min = 20, max = 72000)
         public Integer hallucinatoryAcidDespawnTime;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean acidTossAlwaysExpires;
         @FloatOption(group = "inherit", value = 1.0F, min = 0.0F, max = 64.0F)
         public Float hallucinatoryAcidEffectRange;
         @FloatOption(group = "inherit", value = 20.0F, min = 0.0F, max = 256.0F)

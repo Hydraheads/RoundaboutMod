@@ -33,6 +33,7 @@ import java.util.UUID;
 public final class HallucinatoryAcidProjectile extends ThrowableItemProjectile {
     public static final String SKIN_TAG = "WhitesnakeAcidSkin";
     private int puddleAmount = 8;
+    public boolean acidTossAlwaysExpires;
 
     public HallucinatoryAcidProjectile(EntityType<? extends HallucinatoryAcidProjectile> type, Level level) {
         super(type, level);
@@ -85,12 +86,14 @@ public final class HallucinatoryAcidProjectile extends ThrowableItemProjectile {
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("PuddleAmount", puddleAmount);
+        tag.putBoolean("AcidTossAlwaysExpires", acidTossAlwaysExpires);
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         if (tag.contains("PuddleAmount")) puddleAmount = Mth.clamp(tag.getInt("PuddleAmount"), 1, 8);
+        acidTossAlwaysExpires = tag.getBoolean("AcidTossAlwaysExpires");
     }
 
     private void placePuddle(BlockPos impact, int amount) {
@@ -148,7 +151,7 @@ public final class HallucinatoryAcidProjectile extends ThrowableItemProjectile {
                                 old.getFluidState().is(Fluids.WATER)));
             }
             if (level().getBlockEntity(pos) instanceof HallucinatoryAcidBlockEntity acid) {
-                acid.initialize(ownerId, expiry);
+                acid.initialize(ownerId, expiry, acidTossAlwaysExpires);
             }
             remaining--;
         }
@@ -185,7 +188,7 @@ public final class HallucinatoryAcidProjectile extends ThrowableItemProjectile {
                 .setValue(HallucinatoryAcidBlock.WATERLOGGED,
                         old.getFluidState().is(Fluids.WATER)));
         if (level().getBlockEntity(pos) instanceof HallucinatoryAcidBlockEntity acid) {
-            acid.initialize(ownerId, expiry);
+            acid.initialize(ownerId, expiry, acidTossAlwaysExpires);
         }
     }
 
@@ -223,7 +226,7 @@ public final class HallucinatoryAcidProjectile extends ThrowableItemProjectile {
         if (level.getBlockEntity(selected) instanceof HallucinatoryAcidBlockEntity acid) {
             UUID ownerId = owner == null ? null : owner.getUUID();
             acid.initialize(ownerId, level.getGameTime()
-                    + ClientNetworking.getAppropriateConfig().whitesnakeSettings.hallucinatoryAcidDespawnTime);
+                    + ClientNetworking.getAppropriateConfig().whitesnakeSettings.hallucinatoryAcidDespawnTime, false);
         }
         return true;
     }
@@ -248,7 +251,7 @@ public final class HallucinatoryAcidProjectile extends ThrowableItemProjectile {
         if (level.getBlockEntity(origin) instanceof HallucinatoryAcidBlockEntity acid) {
             UUID ownerId = owner == null ? null : owner.getUUID();
             acid.initialize(ownerId, level.getGameTime()
-                    + ClientNetworking.getAppropriateConfig().whitesnakeSettings.hallucinatoryAcidDespawnTime);
+                    + ClientNetworking.getAppropriateConfig().whitesnakeSettings.hallucinatoryAcidDespawnTime, false);
         }
         return true;
     }
