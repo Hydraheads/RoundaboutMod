@@ -1,8 +1,8 @@
 package net.hydra.jojomod.mixin.whitesnake.control;
 
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.platform.Services;
 import net.hydra.jojomod.util.MainUtil;
-import net.hydra.jojomod.access.WhitesnakePilotMiningHandler;
 import net.hydra.jojomod.stand.powers.PowersWhitesnake;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Objects;
 
 @Mixin(value = ServerPlayerGameMode.class, priority = 2000)
-public abstract class WhitesnakePilotMiningMixin implements WhitesnakePilotMiningHandler {
+public abstract class WhitesnakePilotMiningMixin {
     @Inject(method = "handleBlockBreakAction(Lnet/minecraft/core/BlockPos;Lnet/minecraft/network/protocol/game/ServerboundPlayerActionPacket$Action;Lnet/minecraft/core/Direction;II)V", at = @At("HEAD"), cancellable = true)
     private void roundaboutWhitesnake$handleMining(BlockPos pos, ServerboundPlayerActionPacket.Action action,
                                                    Direction direction, int buildHeight, int sequence,
@@ -35,19 +35,20 @@ public abstract class WhitesnakePilotMiningMixin implements WhitesnakePilotMinin
         LivingEntity stand = powers.getPilotingStand();
         if (stand == null || !stand.isAlive() || stand.isRemoved()) return;
         ci.cancel();
-        roundaboutWhitesnake$handleMining(pos, action, direction, buildHeight, sequence);
-    }
-
-    @Override
-    public void roundaboutWhitesnake$handleMining(BlockPos pos, ServerboundPlayerActionPacket.Action action,
-                                                  Direction direction, int buildHeight, int sequence) {
-        PowersWhitesnake powers = (PowersWhitesnake) ((StandUser) player).roundabout$getStandPowers();
-        LivingEntity stand = powers.getPilotingStand();
         if (stand.getEyePosition().distanceToSqr(Vec3.atCenterOf(pos)) > 36.0D) {
             player.connection.send(new ClientboundBlockUpdatePacket(pos, level.getBlockState(pos)));
             return;
         }
         if (pos.getY() >= buildHeight) {
+            player.connection.send(new ClientboundBlockUpdatePacket(pos, level.getBlockState(pos)));
+            return;
+        }
+
+        if (!Services.PLATFORM.canControlMineBlock(player, pos, direction, action)) {
+            isDestroyingBlock = false;
+            hasDelayedDestroy = false;
+            level.destroyBlockProgress(player.getId(), destroyPos, -1);
+            level.destroyBlockProgress(player.getId(), pos, -1);
             player.connection.send(new ClientboundBlockUpdatePacket(pos, level.getBlockState(pos)));
             return;
         }

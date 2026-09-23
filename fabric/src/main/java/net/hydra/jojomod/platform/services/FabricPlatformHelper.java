@@ -1,10 +1,17 @@
 package net.hydra.jojomod.platform.services;
 
+import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalEntityTypeTags;
 import net.fabricmc.fabric.impl.datagen.FabricTagBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
@@ -14,6 +21,14 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 
 public class FabricPlatformHelper implements IPlatformHelper {
+
+    @Override
+    public boolean canControlMineBlock(ServerPlayer player, BlockPos pos, Direction direction,
+                                       ServerboundPlayerActionPacket.Action action) {
+        return action != ServerboundPlayerActionPacket.Action.START_DESTROY_BLOCK
+                || AttackBlockCallback.EVENT.invoker().interact(player, player.level(),
+                InteractionHand.MAIN_HAND, pos, direction) == InteractionResult.PASS;
+    }
 
     @Override
     public String getPlatformName() {
