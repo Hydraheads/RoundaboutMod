@@ -3279,6 +3279,10 @@ public class PowersDiverDown extends NewPunchingStand {
         double randomZ = (host.getRandom().nextDouble() - 0.5) * 2.5;
         host.setDeltaMovement(randomX, randomY, randomZ);
         host.hurtMarked = true;
+        //sound here
+        playSoundIfPossible(self.level(), null, host.blockPosition(),
+                ModSounds.DIVER_DOWN_SPRING_EVENT,
+                SoundSource.PLAYERS, 0.9F, 1);
         return;
     }
 
@@ -3420,6 +3424,10 @@ public class PowersDiverDown extends NewPunchingStand {
         // The host mob with the ribcage trap dies (if it's a cannon fodder entity)
         DamageHandler.StandDamageEntity(host, 20, this.self);
 
+        playSoundIfPossible(self.level(), null, host.blockPosition(),
+                ModSounds.DIVER_DOWN_RIBCAGE_EVENT,
+                SoundSource.PLAYERS, 0.8F, 1);
+
         clearRibcageTrap();
     }
 
@@ -3489,6 +3497,10 @@ public class PowersDiverDown extends NewPunchingStand {
             }
 
             // sounds and animations and stuff. probably no anims though, just gonna leave behind a blood splatter.
+            playSoundIfPossible(self.level(), null, host.blockPosition(),
+                    ModSounds.DIVER_DOWN_BOMB_EVENT,
+                    SoundSource.PLAYERS, 0.8F, 1);
+
             LivingEntity hostStorage = host;
             emergeServer();
             //20F one shots normal mobs like villagers, zombies and stuff, but keeps bigger mobs alive.

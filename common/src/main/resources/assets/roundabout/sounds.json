@@ -245,6 +245,24 @@
       "roundabout:diver_down_transfer"
     ]
   },
+  "diver_down_spring": {
+    "subtitle": "sounds.roundabout.diver_down_spring",
+    "sounds": [
+      "roundabout:diver_down_spring"
+    ]
+  },
+  "diver_down_ribcage": {
+    "subtitle": "sounds.roundabout.diver_down_ribcage",
+    "sounds": [
+      "roundabout:diver_down_ribcage"
+    ]
+  },
+  "diver_down_bomb": {
+    "subtitle": "sounds.roundabout.diver_down_bomb",
+    "sounds": [
+      "roundabout:diver_down_bomb"
+    ]
+  },
   "summon_king_crimson": {
     "subtitle": "sounds.roundabout.summon_king_crimson",
     "sounds": [

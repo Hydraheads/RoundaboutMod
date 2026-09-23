@@ -530,6 +530,9 @@ public class FabricSounds {
         addSound(ModSounds.DIVER_DOWN_BUBBLING_ID, ModSounds.DIVER_DOWN_BUBBLING_EVENT);
         addSound(ModSounds.DIVER_DOWN_ZIP_ID, ModSounds.DIVER_DOWN_ZIP_EVENT);
         addSound(ModSounds.DIVER_DOWN_TRANSFER_ID, ModSounds.DIVER_DOWN_TRANSFER_EVENT);
+        addSound(ModSounds.DIVER_DOWN_SPRING_ID, ModSounds.DIVER_DOWN_SPRING_EVENT);
+        addSound(ModSounds.DIVER_DOWN_RIBCAGE_ID, ModSounds.DIVER_DOWN_RIBCAGE_EVENT);
+        addSound(ModSounds.DIVER_DOWN_BOMB_ID, ModSounds.DIVER_DOWN_BOMB_EVENT);
 
         addSound(ModSounds.SUMMON_GREEN_DAY_ID, ModSounds.SUMMON_GREEN_DAY_EVENT);
         addSound(ModSounds.SUMMON_WALKING_ID, ModSounds.SUMMON_WALKING_EVENT);
