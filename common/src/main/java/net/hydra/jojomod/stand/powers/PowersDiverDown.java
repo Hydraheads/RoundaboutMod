@@ -293,12 +293,12 @@ public class PowersDiverDown extends NewPunchingStand {
 
     // mob AI here
 
+    private int creeperDodgeTimer = 0;
+    private float creeperStrafeDir = 1.0F; // 1.0F = left, -1.0F = right
+
     @Override
     public void tickMobAI(LivingEntity attackTarget) {
         if (this.self.level().isClientSide()) return;
-
-        int creeperDodgeTimer = 0;
-        float creeperStrafeDir = 1.0F; // 1.0F = left, -1.0F = right
         // creepers use Diver Zip to close the distance, then blow up
         if (this.self instanceof Creeper creeper) {
             if (attackTarget != null && attackTarget.isAlive()) {
@@ -332,13 +332,25 @@ public class PowersDiverDown extends NewPunchingStand {
         if (this.self instanceof AbstractSkeleton skeleton) {
             if (attackTarget != null && attackTarget.isAlive()) {
                 double dist = this.self.distanceTo(attackTarget);
-                // When target tries to get close (within 8 blocks), plant a trap between them
+                // When target tries to get close (within 8 blocks), plant a trap
                 if (dist <= 8.0 && !this.onCooldown(PowerIndex.SKILL_2) && !areStandMovesDisabled()) {
-                    //store a max of 4 traps
+                    // Max of 4 traps
                     if (this.storedKickTraps.size() < 4) {
-                        BlockPos trapPos = this.self.blockPosition().relative(this.self.getDirection());
-                        if (this.self.level().getBlockState(trapPos.below()).isSolid()) {
-                            plantKickTrap();
+                        // Find the block on the ground 2 blocks toward the player
+                        Vec3 dirToTarget = attackTarget.position().subtract(this.self.position()).normalize();
+                        BlockPos trapGroundPos = BlockPos.containing(this.self.position().add(dirToTarget.scale(2.0))).below();
+
+                        if (this.self.level().getBlockState(trapGroundPos).isSolid()) {
+                            if (!this.storedKickTraps.containsKey(trapGroundPos)) {
+                                while (this.storedKickTraps.size() >= MAX_NUMBER_OF_TRAPS) {
+                                    BlockPos oldest = this.storedKickTraps.keySet().iterator().next();
+                                    this.storedKickTraps.remove(oldest);
+                                }
+                            }
+
+                            // Launch upwards and slightly outward towards the target
+                            Vec3 reflection = new Vec3(dirToTarget.x * 0.5, 1.0, dirToTarget.z * 0.5).normalize();
+                            this.storedKickTraps.put(trapGroundPos, new KickTrap(MAX_TRAP_DURATION, Direction.UP, reflection));
                             setCooldown(PowerIndex.SKILL_2, 100);
                         }
                     }
@@ -374,7 +386,9 @@ public class PowersDiverDown extends NewPunchingStand {
                     if (distToPlayer < 8.0 || distToPlayer <= allyDistToPlayer) {
                         // Face the player and back up
                         zombie.getLookControl().setLookAt(attackTarget, 30.0F, 30.0F);
-                        zombie.getMoveControl().strafe(-0.8F, 0.0F); // -0.8F = move backwards
+                        Vec3 awayDir = frontlineAlly.position().subtract(attackTarget.position()).normalize();
+                        Vec3 backPos = frontlineAlly.position().add(awayDir.scale(2.0D));
+                        zombie.getNavigation().moveTo(backPos.x, backPos.y, backPos.z, 1.2D);
                     } else {
                         // Follow slightly behind the ally
                         zombie.getNavigation().moveTo(frontlineAlly, 0.9D);
@@ -382,7 +396,10 @@ public class PowersDiverDown extends NewPunchingStand {
                 } else if (distToPlayer < 6.0) {
                     // No allies left nearby, keep distance if possible
                     zombie.getLookControl().setLookAt(attackTarget, 30.0F, 30.0F);
-                    zombie.getMoveControl().strafe(-0.6F, 0.0F);
+                    Vec3 awayPos = net.minecraft.world.entity.ai.util.DefaultRandomPos.getPosAway(zombie, 8, 4, attackTarget.position());
+                    if (awayPos != null) {
+                        zombie.getNavigation().moveTo(awayPos.x, awayPos.y, awayPos.z, 1.25D);
+                    }
                 }
                 //throw out some moves just in case
                 if (distToPlayer <= 4 && canAttack() && !areStandMovesDisabled()) {
@@ -408,12 +425,13 @@ public class PowersDiverDown extends NewPunchingStand {
                 // dive into an ally within 6 blocks to buff/protect them
                 if (!allies.isEmpty()) {
                     Zombie ally = allies.get(0);
-                    if (this.self.distanceTo(ally) <= 6.0) {
+                    if (this.self.distanceTo(ally) <= 6.0 && ((StandUser) ally).roundabout$getDiverUser() == null) {
                         this.submergedTarget = ally;
                         ((StandUser) ally).roundabout$SetDiverUser(this);
                         if (hasStandEntity(this.self)) {
                             StandEntity stand = this.getStandEntity(this.self);
                             if (stand != null) stand.discard();
+                            setCooldown(PowerIndex.SKILL_1, 300);
                         }
                     }
                 }
@@ -441,7 +459,7 @@ public class PowersDiverDown extends NewPunchingStand {
                     } else {
                         openAfflictions(SPRING_LEGS);
                     }
-                    setCooldown(PowerIndex.GENERAL_1, 200);
+                    setCooldown(PowerIndex.GENERAL_1, 300);
                     emergeServer();
                 }
             } else if (!areStandMovesDisabled()) {
@@ -454,9 +472,12 @@ public class PowersDiverDown extends NewPunchingStand {
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.ATTACK, true);
                 }
                 // close the distance with diver zip
-                else if (dist > 8.0 && !inZipMode() && !this.onCooldown(PowerIndex.SKILL_3) && Math.random() < 0.1) {
+                else if (dist > 5.0 && !inZipMode() && !this.onCooldown(PowerIndex.SKILL_3) && Math.random() < 0.1) {
                     toggleZip(true);
                 }
+            }
+            if (inZipMode() && dist <= 5) {
+                toggleZip(false);
             }
         }
     }
@@ -2451,6 +2472,7 @@ public class PowersDiverDown extends NewPunchingStand {
         if (!toggle) {
             ((StandUser) this.self).rdbt$SetCrawlTicks(0);
             this.self.setSwimming(false);
+            this.self.setPose(Pose.STANDING);
             if (inZipMode())
                 setCooldown(PowerIndex.SKILL_3,180);
         } else {this.self.setSprinting(false);}
@@ -3274,11 +3296,15 @@ public class PowersDiverDown extends NewPunchingStand {
         if (host.isSprinting()) {
             host.setSprinting(false);
         }
-        double randomY = 0.7D + host.getRandom().nextDouble() * 0.3D;
-        double randomX = (host.getRandom().nextDouble() - 0.5) * 2.5;
-        double randomZ = (host.getRandom().nextDouble() - 0.5) * 2.5;
+        double randomY = 0.5D + host.getRandom().nextDouble() * 0.3D;
+        double randomX = (host.getRandom().nextDouble() - 0.5) * 2.7;
+        double randomZ = (host.getRandom().nextDouble() - 0.5) * 2.7;
         host.setDeltaMovement(randomX, randomY, randomZ);
         host.hurtMarked = true;
+        //sound here
+        playSoundIfPossible(self.level(), null, host.blockPosition(),
+                ModSounds.DIVER_DOWN_SPRING_EVENT,
+                SoundSource.PLAYERS, 0.9F, 1);
         return;
     }
 
@@ -3420,6 +3446,10 @@ public class PowersDiverDown extends NewPunchingStand {
         // The host mob with the ribcage trap dies (if it's a cannon fodder entity)
         DamageHandler.StandDamageEntity(host, 20, this.self);
 
+        playSoundIfPossible(self.level(), null, host.blockPosition(),
+                ModSounds.DIVER_DOWN_RIBCAGE_EVENT,
+                SoundSource.PLAYERS, 0.8F, 1);
+
         clearRibcageTrap();
     }
 
@@ -3489,6 +3519,10 @@ public class PowersDiverDown extends NewPunchingStand {
             }
 
             // sounds and animations and stuff. probably no anims though, just gonna leave behind a blood splatter.
+            playSoundIfPossible(self.level(), null, host.blockPosition(),
+                    ModSounds.DIVER_DOWN_BOMB_EVENT,
+                    SoundSource.PLAYERS, 0.8F, 1);
+
             LivingEntity hostStorage = host;
             emergeServer();
             //20F one shots normal mobs like villagers, zombies and stuff, but keeps bigger mobs alive.
