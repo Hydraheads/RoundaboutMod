@@ -233,6 +233,8 @@ public class ClientConfig implements Cloneable {
     public static class KillerQueenSettings {
     	@BooleanOption(group = "inherit", value = true)
         public Boolean bombOverlayHideOnF1;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean bombConfigTogglesOnLeave;
     }
     public static class WhitesnakeSettings {
         @BooleanOption(group = "inherit", value = false)

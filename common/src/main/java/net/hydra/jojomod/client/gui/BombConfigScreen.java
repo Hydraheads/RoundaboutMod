@@ -210,7 +210,10 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
     }
 
     public void exitBombConfig() {
-        this.switchToHoveredGameMode();
+
+        if (ConfigManager.getClientConfig().killerQueenSettings.bombConfigTogglesOnLeave) {
+            updateConfigs();
+        }
         this.minecraft.setScreen(null);
 
         Player pl = Minecraft.getInstance().player;
