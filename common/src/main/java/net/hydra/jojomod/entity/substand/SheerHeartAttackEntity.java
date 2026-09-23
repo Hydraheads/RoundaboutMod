@@ -939,8 +939,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 				}
 			}
 
-			if (Owner instanceof Raider || Owner instanceof AbstractVillager) {
-				if (target instanceof Raider || target instanceof AbstractVillager) {
+			if (Owner instanceof Raider) {
+				if (target instanceof Raider) {
 					return true;
 				}
 			}
