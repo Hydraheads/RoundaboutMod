@@ -117,6 +117,7 @@ public class PowersD4C extends NewPunchingStand {
     public static final byte BLOCK_ATTRACT = 111;
     public static final byte DOJONE = 112;
     public static final byte DOJTWO = 113;
+    public static final byte D4C_CLONE = 114;
     @Override
     public float getSoundPitchFromByte(byte soundChoice){
         if (soundChoice == IMPALE_NOISE) {
@@ -147,6 +148,8 @@ public class PowersD4C extends NewPunchingStand {
             return ModSounds.DOJYAN_2_EVENT;
         } else if (soundChoice == MELT_DODGE) {
             return ModSounds.MELT_DODGE_EVENT;
+        } else if (soundChoice == D4C_CLONE) {
+            return ModSounds.D4C_CLONE_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
@@ -803,7 +806,7 @@ public class PowersD4C extends NewPunchingStand {
                     }
                 }
 
-                if (createParallelPlayerCopy(sl, pl, spawnPos, worldId)) {
+                if (createParallelPlayerCopy(sl, pl, spawnPos, worldId,false)) {
                     copied++;
                 }
                 copiedPlayers++;
@@ -1122,7 +1125,8 @@ public class PowersD4C extends NewPunchingStand {
             ServerLevel level,
             Player original,
             Vec3 spawnPos,
-            byte worldId
+            byte worldId,
+            boolean isDuplicated
     ) {
         Entity copyEntity = ModEntities.D4C_CLONE.create(this.getSelf().level());
 
@@ -1193,7 +1197,13 @@ public class PowersD4C extends NewPunchingStand {
         // Alternate universe
         ((IEntityAndData)copy).rdbt$setNativeCopy(original.getUUID());
         PowerTypes.setPlaneOfExisting(copy, worldId);
-        PowerTypes.setTicksUntilGone(copy, PowerTypes.getForeignWorldMaxTime(worldId),worldId);
+        if (isDuplicated){
+            copy.setSpawned(true);
+            ((IEntityAndData)copy).rdbt$setNativeTo((byte) 3);
+            ((IEntityAndData)copy).rdbt$setOriginWorld((byte) 3);
+        } else {
+            PowerTypes.setTicksUntilGone(copy, PowerTypes.getForeignWorldMaxTime(worldId),worldId);
+        }
 
 
         level.addFreshEntity(copy);
@@ -1547,8 +1557,20 @@ public class PowersD4C extends NewPunchingStand {
         }
     }
     public void spawnCloneServer(){
-        if (isEligable()){
-            enactEligability();
+        if (isEligable() && self instanceof ServerPlayer sp){
+            if (createParallelPlayerCopy((ServerLevel) sp.level(),
+                    sp, sp.getPosition(1f), (byte)0,true)) {
+                Vector3f color = new Vector3f(0.97F, 1F, 0.3F);
+                MainUtil.sendParticlesIfPossible(self,self.level(),
+                        new DustParticleOptions(
+                                color,
+                                1.0F
+                        ), sp.getEyePosition().x,
+                        sp.getEyePosition().y, sp.getEyePosition().z,
+                        20, 0.3, 0.3, 0.3, 0.3);
+                playStandUserOnlySoundsIfNearby(D4C_CLONE, 27, false, false);
+                enactEligability();
+            }
         }
     }
     public void useUpBanner(ItemStack banner){
@@ -2602,7 +2624,6 @@ public class PowersD4C extends NewPunchingStand {
 
                         this.animateStand(D4CEntity.BODY_LEAP);
                 setActivePower(PowerIndex.POWER_2_SNEAK);
-                getStandUserSelf().roundabout$setStandAnimation(SWITCH_INTO_BODY);
                 setAttackTimeDuring(-length);
                 setCooldown(PowerIndex.SKILL_2_SNEAK,length);
                 this.poseStand(OffsetIndex.BEHIND);
