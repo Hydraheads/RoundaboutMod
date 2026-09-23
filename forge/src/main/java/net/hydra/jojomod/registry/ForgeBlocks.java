@@ -38,11 +38,11 @@ public class ForgeBlocks {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Roundabout.MOD_ID);
     public static final RegistryObject<HallucinatoryAcidBlock> HALLUCINATORY_ACID = BLOCKS.register(
             "hallucinatory_acid", () -> new HallucinatoryAcidBlock(BlockBehaviour.Properties.of()
-                    .noCollission().noOcclusion().strength(3.0F, 6.0F).noLootTable().randomTicks()
+                    .noCollission().noOcclusion().strength(1.0F, 6.0F).noLootTable().randomTicks()
                     .sound(SoundType.MUD).pushReaction(PushReaction.BLOCK)));
     public static final RegistryObject<HallucinatoryAcidWallBlock> HALLUCINATORY_ACID_WALL = BLOCKS.register(
             "hallucinatory_acid_wall", () -> new HallucinatoryAcidWallBlock(BlockBehaviour.Properties.of()
-                    .noCollission().noOcclusion().strength(3.0F, 6.0F).noLootTable().randomTicks()
+                    .noCollission().noOcclusion().strength(1.0F, 6.0F).noLootTable().randomTicks()
                     .sound(SoundType.MUD).pushReaction(PushReaction.BLOCK)));
     public static final RegistryObject<BlockEntityType<HallucinatoryAcidBlockEntity>> HALLUCINATORY_ACID_BLOCK_ENTITY =
             BLOCK_ENTITIES.register("hallucinatory_acid", () -> BlockEntityType.Builder.of(

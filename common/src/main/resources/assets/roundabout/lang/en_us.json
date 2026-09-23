@@ -4876,6 +4876,8 @@
   "config.roundabout.hallucinatoryAcidStageUpTime.desc": "Ticks of acid exposure needed to increase Hallucination by one level.",
   "config.roundabout.hallucinatoryAcidDespawnTime.name": "Acid Despawn Time",
   "config.roundabout.hallucinatoryAcidDespawnTime.desc": "Hallucinatory acid lifetime in ticks.",
+  "config.roundabout.acidTossAlwaysExpires.name": "Acid Toss Always Expires",
+  "config.roundabout.acidTossAlwaysExpires.desc": "Acid created by Acid Toss outside Melting Mode expires even while its user is nearby.",
   "config.roundabout.hallucinatoryAcidEffectRange.name": "Acid Effect Range",
   "config.roundabout.hallucinatoryAcidEffectRange.desc": "Radius in blocks where acid applies Hallucination.",
   "config.roundabout.hallucinatoryAcidDespawnPauseRange.name": "Acid Despawn Pause Range",
