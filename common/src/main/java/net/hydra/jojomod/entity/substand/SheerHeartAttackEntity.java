@@ -435,6 +435,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		} else if (this.hasTarget() && stunTicks <= 0 && attackTick <= 0) {
 			Vec3 pos = this.getTargetPosition();
+
 			if (this.shouldExplode(pos)) {
 				this.attack();
 				this.shaStopMove();
@@ -857,7 +858,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		BlockState info = level.getBlockState(pos);
 
 		if (ExplosionUtil.isBlockBlackListed(info) || (MainUtil.confirmIsOre(info))
-				|| info.isAir() || info.is(Blocks.BARRIER) || info.is(Blocks.BEDROCK)
+				/*|| info.isAir()*/ || info.is(Blocks.BARRIER) || info.is(Blocks.BEDROCK)
 				|| !MainUtil.isDestructible(level, pos, info))  {
 			return 0;
 		}
@@ -866,8 +867,15 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		String tag = key.toString();
         if (MainUtil.SHA_CUSTOM_BLOCK_HEAT.containsKey(tag)) {
-            return MainUtil.SHA_CUSTOM_BLOCK_HEAT.get(tag);
-        }
+			if (tag.contains("roundabout")) {
+				Roundabout.LOGGER.info("block Tag with info: " + tag);
+			}
+			return MainUtil.SHA_CUSTOM_BLOCK_HEAT.get(tag);
+        }else {
+			if (tag.contains("roundabout")) {
+				Roundabout.LOGGER.info("block Tag with no info: " + tag);
+			}
+		}
 
 		int light = info.getLightEmission();
 		if (light <= 7) { return 0; }

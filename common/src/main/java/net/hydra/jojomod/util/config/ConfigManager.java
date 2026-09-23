@@ -222,9 +222,9 @@ public abstract class ConfigManager {
             MainUtil.standBlockExplosionBlacklist.clear();
             MainUtil.standBlockExplosionBlacklist.addAll(getAdvancedConfig().standBlockExplosionBlacklist);
         }
-        if (getAdvancedConfig().sheerHeartAttackCustomBlockHeatV3 != null)
+        if (getAdvancedConfig().sheerHeartAttackCustomBlockHeatV4 != null)
         {
-            for (String entry : getAdvancedConfig().sheerHeartAttackCustomBlockHeatV3) {
+            for (String entry : getAdvancedConfig().sheerHeartAttackCustomBlockHeatV4) {
                 try {
                     String[] split = entry.split(":");
 
