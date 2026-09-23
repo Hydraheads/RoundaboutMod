@@ -8,6 +8,7 @@ import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.navigation.StandEntityNavigation;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.FateTypes;
@@ -886,15 +887,11 @@ public class SheerHeartAttackEntity extends StandEntity {
 	public int getEntityWarm(Entity entity) {
 		int points = 0;
 
-		if (entity instanceof TamableAnimal TM) {
-			if (TM.getOwner() == getUser()) { return -1; }
-		}
-
-
 		if (!entity.isAttackable() || (entity instanceof LivingEntity LE && !LE.canBeSeenAsEnemy())
 				|| (entity instanceof Player PL && PL.isCreative())
 				|| PowerTypes.isInADifferentExistence(entity,this)
-				|| entity instanceof StandEntity || entity.is(this.getUser())) { return -1; }
+				|| entity instanceof StandEntity || isUserAlliedTo(getUser(), entity)
+		) { return -1; }
 
 		ResourceLocation key = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType());
 
@@ -926,6 +923,49 @@ public class SheerHeartAttackEntity extends StandEntity {
 		}
 
 		return points;
+	}
+
+
+	public boolean isUserAlliedTo(Entity Owner, Entity target) {
+		if (target.is(this.getUser())) {
+			return true;
+		}
+
+		if (this.getTargetType() == ENTITY) {
+
+			if (Owner instanceof AbstractVillager || Owner instanceof IronGolem) {
+				if (target instanceof AbstractVillager || target instanceof IronGolem) {
+					return true;
+				}
+			}
+
+			if (Owner instanceof Raider || Owner instanceof AbstractVillager) {
+				if (target instanceof Raider || target instanceof AbstractVillager) {
+					return true;
+				}
+			}
+
+			if (Owner instanceof AbstractPiglin) {
+				if (target instanceof AbstractPiglin) {
+					return true;
+				}
+			}
+
+			if (Owner instanceof JojoNPC JNPC) {
+				if (target instanceof Mob M) {
+					if (M.getTarget() == JNPC.getTarget()) {
+						return true;
+					}
+				}
+			}
+		}
+
+		if ((target instanceof TamableAnimal TM && TM.getOwner() == Owner)
+				|| target.isAlliedTo(Owner)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override
@@ -982,28 +1022,6 @@ public class SheerHeartAttackEntity extends StandEntity {
 		return 1.0f;
 	}
 
-	public boolean mobAiShouldRetreactDetect(Entity Owner) {
-		if (this.getTargetType() == ENTITY) {
-			Entity target = entityTarget;
-
-			if (Owner instanceof AbstractVillager || Owner instanceof IronGolem) {
-				if (target instanceof AbstractVillager || target instanceof IronGolem) {
-					return true;
-				}
-			}
-			if (Owner instanceof Raider || Owner instanceof AbstractVillager) {
-				if (target instanceof Raider || target instanceof AbstractVillager) {
-					return true;
-				}
-			}
-			if (Owner instanceof AbstractPiglin) {
-				if (target instanceof AbstractPiglin) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
 
     @Override public boolean hurt(DamageSource source, float amount) {
         if (source.is(DamageTypes.GENERIC_KILL) || source.is(DamageTypes.FELL_OUT_OF_WORLD)){

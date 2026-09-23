@@ -3339,12 +3339,12 @@ public class PowersKillerQueen extends NewPunchingStand {
                         || dist <= 5){
                     rotateMobHead(attackTarget);
                 }
-                if (this.currentShaStatus == SHA_SEND && this.SHA != null && !this.SHA.isRemoved()) {
+                /*if (this.currentShaStatus == SHA_SEND && this.SHA != null && !this.SHA.isRemoved()) {
                     if (this.SHA.mobAiShouldRetreactDetect(this.self)){
                         SHA.setHaveToReturn(!SHA.getHaveToReturn());
                         this.currentShaStatus = SHA_RETREAT;
                     }
-                }
+                }*/
 
                 if (this.attackTimeDuring == -1 || (this.attackTimeDuring < -1 && this.activePower == PowerIndex.ATTACK)) {
                     Entity targetEntity = getTargetEntity(this.self, -1);
