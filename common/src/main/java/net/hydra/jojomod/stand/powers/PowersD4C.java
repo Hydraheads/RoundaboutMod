@@ -1198,6 +1198,7 @@ public class PowersD4C extends NewPunchingStand {
         ((IEntityAndData)copy).rdbt$setNativeCopy(original.getUUID());
         PowerTypes.setPlaneOfExisting(copy, worldId);
         if (isDuplicated){
+            copy.setSpawned(true);
             ((IEntityAndData)copy).rdbt$setNativeTo((byte) 3);
             ((IEntityAndData)copy).rdbt$setOriginWorld((byte) 3);
         } else {
@@ -1559,6 +1560,14 @@ public class PowersD4C extends NewPunchingStand {
         if (isEligable() && self instanceof ServerPlayer sp){
             if (createParallelPlayerCopy((ServerLevel) sp.level(),
                     sp, sp.getPosition(1f), (byte)0,true)) {
+                Vector3f color = new Vector3f(0.97F, 1F, 0.3F);
+                MainUtil.sendParticlesIfPossible(self,self.level(),
+                        new DustParticleOptions(
+                                color,
+                                1.0F
+                        ), sp.getEyePosition().x,
+                        sp.getEyePosition().y, sp.getEyePosition().z,
+                        20, 0.3, 0.3, 0.3, 0.3);
                 playStandUserOnlySoundsIfNearby(D4C_CLONE, 27, false, false);
                 enactEligability();
             }
@@ -2615,7 +2624,6 @@ public class PowersD4C extends NewPunchingStand {
 
                         this.animateStand(D4CEntity.BODY_LEAP);
                 setActivePower(PowerIndex.POWER_2_SNEAK);
-                getStandUserSelf().roundabout$setStandAnimation(SWITCH_INTO_BODY);
                 setAttackTimeDuring(-length);
                 setCooldown(PowerIndex.SKILL_2_SNEAK,length);
                 this.poseStand(OffsetIndex.BEHIND);

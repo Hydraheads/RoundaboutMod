@@ -3,6 +3,7 @@ package net.hydra.jojomod.client.models.substand.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.entity.D4CCloneEntity;
+import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -16,6 +17,17 @@ public class D4CCloneRenderer<T extends D4CCloneEntity> extends CloneRenderer<T>
     public D4CCloneRenderer(EntityRendererProvider.Context $$0) {
         super($$0);
     }
-
+    @Override
+    protected void scale(T entity, PoseStack $$1, float $$2) {
+        if (entity.getSpawned()) {
+            float ticksSince = ((entity.ticksSinceSwitch + $$2) * 0.1F) + 0.01F;
+            ticksSince = Math.min(ticksSince, 1F);
+            $$1.scale(
+                    ticksSince,
+                    ticksSince,
+                    ticksSince
+            );
+        }
+    }
 }
 
