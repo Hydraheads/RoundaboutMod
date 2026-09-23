@@ -712,7 +712,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 				BlockState info =this.level().getBlockState(this.blockTarget);
 				if (!(ExplosionUtil.isBlockBlackListed(info) || (MainUtil.confirmIsOre(info))
 						|| info.isAir() || info.is(Blocks.BARRIER) || info.is(Blocks.BEDROCK)
-						|| !MainUtil.isDestructible(level(), this.blockTarget, info))) {
+						|| !MainUtil.isDestructible2(level(), this.blockTarget, info))) {
 
 					boolean shouldDrop = !info.requiresCorrectToolForDrops();
 					this.level().destroyBlock(this.blockTarget, shouldDrop);
@@ -858,8 +858,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 		BlockState info = level.getBlockState(pos);
 
 		if (ExplosionUtil.isBlockBlackListed(info) || (MainUtil.confirmIsOre(info))
-				/*|| info.isAir()*/ || info.is(Blocks.BARRIER) || info.is(Blocks.BEDROCK)
-				|| !MainUtil.isDestructible(level, pos, info))  {
+				|| info.isAir() || info.is(Blocks.BARRIER) || info.is(Blocks.BEDROCK)
+				|| !MainUtil.isDestructible2(level, pos, info))  {
 			return 0;
 		}
 
