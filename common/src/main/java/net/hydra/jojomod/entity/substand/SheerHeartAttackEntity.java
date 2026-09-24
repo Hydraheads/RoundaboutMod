@@ -81,6 +81,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	public SheerHeartAttackEntity(EntityType<? extends StandEntity> $$0, Level $$1) {
 		super($$0, $$1);
+		this.setMaxUpStep(1.4F);
 	}
 
 	@Override
@@ -232,13 +233,17 @@ public class SheerHeartAttackEntity extends StandEntity {
 		return ClientNetworking.getAppropriateConfig().killerQueenSettings.sheerHeartAttackMaxExplosions;
 	}
 
+	public boolean hasReachMaximunExplosions() {
+		return (this.explosions >= getMaxExplosions() && getMaxExplosions() != 0);
+	}
+
 	public boolean getHaveToReturn() {
-		return this.haveToReturn || (this.explosions >= getMaxExplosions() && getMaxExplosions() != 0)
+		return this.haveToReturn || hasReachMaximunExplosions()
 				|| (this.inativeTicks >= inativeMaxTicks && !getTorchStatus());
 	}
 
 	public void setHaveToReturn(boolean value) {
-		this.haveToReturn = value || (this.explosions >= getMaxExplosions() && getMaxExplosions() != 0);
+		this.haveToReturn = value || hasReachMaximunExplosions();
 		if (!this.haveToReturn) {
 			this.returnTicks = 0;
 		}
@@ -246,7 +251,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	public static AttributeSupplier.Builder createStandAttributes() {
 		return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED,
-				0.5F).add(Attributes.MAX_HEALTH, 20.0).add(Attributes.ATTACK_DAMAGE, 5.0);
+				0.5F).add(Attributes.MAX_HEALTH, 20.0).add(Attributes.ATTACK_DAMAGE, 5.0).add(Attributes.JUMP_STRENGTH, 2.3);
 	}
 
 	@Override
@@ -620,7 +625,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	}
 
 	public boolean shouldExplode(Vec3 targetPos) {
-		if (this.attackTick > 0) {
+		if (this.attackTick > 0 || hasReachMaximunExplosions()) {
 			return false;
 		}
 

@@ -1770,6 +1770,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         switch (activePower) {
             case BTD_ACTIVATIONS -> {
                 combatActivations = data;
+                btdTicks = 0;
             }
             case PowersKillerQueen.PLANTED-> {
                this.currentBombStatus = (byte)data;
