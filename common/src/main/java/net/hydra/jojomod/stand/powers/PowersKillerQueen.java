@@ -2181,7 +2181,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public boolean canBitesTheDustCombat() {
-        return currentBombStatus != BITES_THE_DUST_BIGGER && combatActivations < getMaxBitesTheDustDetonations();
+        return currentBombStatus != BITES_THE_DUST_BIGGER && combatActivations <= getMaxBitesTheDustDetonations();
     }
 
     
@@ -2394,6 +2394,10 @@ public class PowersKillerQueen extends NewPunchingStand {
             btdTicks = -1;
             combatActivations = 0;
 
+            if (self instanceof ServerPlayer PL) {
+                S2CPacketUtil.sendIntPowerDataPacket(PL, BTD_ACTIVATIONS, combatActivations);
+            }
+
             if (inBitesTheDustMode()) {
                 int cooldownBase = ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustPlantCooldown;
 
@@ -2412,7 +2416,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
 
                 if (self instanceof ServerPlayer pl) {
-                    S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowersKillerQueen.BTD_ENTITY, -1);
+                    S2CPacketUtil.sendIntPowerDataPacket(pl, PowersKillerQueen.BTD_ENTITY, -1);
                 }
                 syncBombStatus(BOMB_NONE);
                 this.setPowerNone();

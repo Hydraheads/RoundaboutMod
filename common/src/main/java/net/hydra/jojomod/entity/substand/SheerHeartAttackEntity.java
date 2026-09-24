@@ -639,7 +639,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			if (type == BLOCK) {
 				targetPos = this.blockTarget.getCenter();
 			}else {
-				targetPos = getEntityTarget().position();
+				targetPos = getEntityTarget().getPosition(1);
 			}
 
 			return targetPos;
@@ -653,26 +653,30 @@ public class SheerHeartAttackEntity extends StandEntity {
 		if (!(SP instanceof PowersKillerQueen)) { return; }
 		PowersKillerQueen KQ = (PowersKillerQueen)SP;
 
-
 		Vec3 pos = this.position().add(this.getForward().scale(0.3));
 		float damage = ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage;
 
-		ExplosionUtil.explosionHurtWithMulti(pos, dmg, this.level(), damage, 0.3f, explosionRadius,
+		float warm = getEntityWarm(target);
+
+		float range = explosionRadius;
+		if (warm > 50) {
+			range += Math.min(0.8f * ((warm - 50) / 100), 2.25f);
+		}
+
+		ExplosionUtil.explosionHurtWithMulti(pos, dmg, this.level(), damage, 0.3f, range,
 				KQ.multiplyPowerByStandConfigMobs(1.3f), KQ.multiplyPowerByStandConfigPlayers(1.0f));
 
-		ExplosionUtil.explodeEffects(pos, this.level(), KQ.getExplosionParticle(), new Vec3(0.25f, 0.25f, 0.25f), 8);
-
+		ExplosionUtil.explodeEffects(pos, this.level(), KQ.getExplosionParticle(), new Vec3(range*0.4f, range*0.5f, range*0.4f), 18);
 
 		this.level().playSound(null, this.blockPosition(), KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
 
-		if (target != null) {
 
-			if (target instanceof LivingEntity LE) {
-				double $$11 = Math.max(0.0, 1.0 - LE.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
-				Vec3 $$12 = (LE.getPosition(1).subtract(getPosition(1))).multiply(1.0, 0.0, 1.0).normalize().scale((double) 0.55 * $$11);
-				if ($$12.lengthSqr() > 0.0) { LE.push($$12.x, 0.32, $$12.z); }
-			}
+		if (target instanceof LivingEntity LE) {
+			double $$11 = Math.max(0.0, 1.0 - LE.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
+			Vec3 $$12 = (LE.getPosition(1).subtract(getPosition(1))).multiply(1.0, 0.0, 1.0).normalize().scale((double) 0.55 * $$11);
+			if ($$12.lengthSqr() > 0.0) { LE.push($$12.x, 0.32, $$12.z); }
 		}
+
 	}
 
 	public void attack() {
@@ -700,10 +704,20 @@ public class SheerHeartAttackEntity extends StandEntity {
 				}
 			}
 		}else if(this.getTargetType() == BLOCK){
-			ExplosionUtil.explosionHurt(this.blockTarget.getCenter(), dmg, this.level(),
-					ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage, 0.3f, explosionRadius);
 
-			ExplosionUtil.explodeEffects(this.blockTarget.getCenter(), this.level(), KQ.getExplosionParticle(), new Vec3(0.12f, 0.12f, 0.12f), 4);
+
+			float warm = getBlockWarm(blockTarget, level());
+
+			float range = explosionRadius;
+			if (warm > 50) {
+				range += Math.min(0.8f * ((warm - 50) / 100), 2.25f);
+			}
+
+			
+			ExplosionUtil.explosionHurt(this.blockTarget.getCenter(), dmg, this.level(),
+					ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage, 0.3f, range);
+
+			ExplosionUtil.explodeEffects(this.blockTarget.getCenter(), this.level(), KQ.getExplosionParticle(), new Vec3(range*0.4f, range*0.5f, range*0.4f), 8);
 			level().playSound(null, this.blockTarget, KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
 
 			if (ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction &&
@@ -868,15 +882,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		String tag = key.toString();
         if (MainUtil.SHA_CUSTOM_BLOCK_HEAT.containsKey(tag)) {
-			if (tag.contains("roundabout")) {
-				Roundabout.LOGGER.info("block Tag with info: " + tag);
-			}
 			return MainUtil.SHA_CUSTOM_BLOCK_HEAT.get(tag);
-        }else {
-			if (tag.contains("roundabout")) {
-				Roundabout.LOGGER.info("block Tag with no info: " + tag);
-			}
-		}
+        }
 
 		int light = info.getLightEmission();
 		if (light <= 7) { return 0; }
