@@ -402,7 +402,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
                 if (entity != Minecraft.getInstance().player && !entity.isInvisible()) {
                     String disguiseName = profile.getName();
                     if (disguiseName != null && !disguiseName.isEmpty()) {
-                        float targetY = (entity.isCrouching() ? 1.9F : 2.25F);
+                        float targetY = (entity.isCrouching() ? 2.0F : 2.3F);
                         float yDiff = targetY - entity.getNameTagOffsetY();
 
                         poseStack.pushPose();

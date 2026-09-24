@@ -3733,11 +3733,11 @@ public class PowersDiverDown extends NewPunchingStand {
             double rng = Math.random();
             MobEffectInstance witchEffect;
             if (rng < 0.35) {
-                witchEffect = new MobEffectInstance(MobEffects.POISON, 300, 1); // Poison II for 15s
+                witchEffect = new MobEffectInstance(MobEffects.POISON, 200, 1); // Poison II for 10s
             } else if (rng < 0.70) {
-                witchEffect = new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 400, 1); // Slowness II for 20s
+                witchEffect = new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 300, 1); // Slowness II for 15s
             } else {
-                witchEffect = new MobEffectInstance(MobEffects.WEAKNESS, 400, 1); // Weakness II for 20s
+                witchEffect = new MobEffectInstance(MobEffects.WEAKNESS, 300, 1); // Weakness II for 15s
             }
 
             targetLiving.addEffect(witchEffect, this.self);
