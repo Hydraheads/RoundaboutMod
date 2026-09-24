@@ -4579,6 +4579,9 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public void resetBombsCooldowns(byte bStatus) {
         float cooldownMultiplier = 0.3f + 0.7f * bombSize;
+        if (bombSize >= 2) {
+            cooldownMultiplier += 0.4f;
+        }
 
         if (!(bStatus == BOMB_BLOCK || bStatus == BLOCK_CONTACT)) {
             int cooldownAmount = (int)(ClientNetworking.getAppropriateConfig().killerQueenSettings.blockPlantCooldown / 2.0f);
@@ -4625,6 +4628,9 @@ public class PowersKillerQueen extends NewPunchingStand {
             byte bStatus = this.currentBombStatus;
 
             float cooldownMultiplier = 0.3f + 0.7f * bombSize;
+            if (bombSize >= 2) {
+                cooldownMultiplier += 0.4f;
+            }
 
             if (bStatus == BOMB_BLOCK || bStatus == BLOCK_CONTACT) {
                 cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.blockPlantCooldown;
@@ -4755,7 +4761,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             float damage = config.explosionDetonateMaxDamage;
             float rangeModifier = 1.0f;
 
-            damage = damage * (bombSize == 0 ? 0.3f : (0.75f + (0.25f*bombSize)));
+            damage = damage * (bombSize == 0 ? 0.35f : (0.7f + (0.3f*bombSize)));
 
             if (bStatus == ARROW_CONTACT || bStatus == BLOCK_CONTACT || bStatus == ENTITY_CONTACT) {
                 damage = damage * 0.8f;
