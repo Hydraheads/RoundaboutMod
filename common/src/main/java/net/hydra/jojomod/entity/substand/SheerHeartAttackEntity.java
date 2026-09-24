@@ -171,7 +171,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	int explosionMiningIntervalTicks = explosionMiningIntervalTicksMax;
 	static final int explosionMiningIntervalTicksMax = 45;
 
-	final float jumpMaxHeight = 0.6f;
+	final float jumpMaxHeight = 0.45f;
 	int stunTicks = 15;
 
 	public int struckTicks = 0;
@@ -441,6 +441,10 @@ public class SheerHeartAttackEntity extends StandEntity {
 				this.attack();
 				this.shaStopMove();
 			} else if (this.shouldJump(pos)) {
+				if (getTargetType() == ENTITY && getEntityTarget() != null) {
+					pos = getEntityTarget().getEyePosition();
+				}
+
 				this.jump(pos);
 				this.shaStopMove();
 			} else {
@@ -616,7 +620,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		if (this.getTargetType() == BLOCK) {
 			minDist = 1.4f;
 		}else if (getTargetType() == ENTITY && entityTarget != null) {
-			AABB bb = this.getBoundingBox().inflate(0.15);
+			AABB bb = this.getBoundingBox().expandTowards(getDeltaMovement()).inflate(0.15);
 			List<Entity> SHAAA = this.level().getEntities(this, bb);
 			for (Entity ent : SHAAA) {
 				if (ent == entityTarget) {
@@ -646,6 +650,16 @@ public class SheerHeartAttackEntity extends StandEntity {
 		}
 		return null;
 	}
+
+	public float getRangeByWarm(float warm) {
+		float range = explosionRadius;
+		if (warm > 60) {
+			range += Math.min(0.8f * ((warm - 60) / 80), 2.35f);
+		}
+
+		return range;
+	}
+
 	public void attackAt(Entity target) {
 		DamageSource dmg = ModDamageTypes.of(this.level(), ModDamageTypes.EXPLOSIVE_STAND, this.getUser());
 
@@ -656,12 +670,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		Vec3 pos = this.position().add(this.getForward().scale(0.3));
 		float damage = ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage;
 
-		float warm = getEntityWarm(target);
-
-		float range = explosionRadius;
-		if (warm > 50) {
-			range += Math.min(0.8f * ((warm - 50) / 100), 2.25f);
-		}
+		float range = getRangeByWarm(getEntityWarm(target));
 
 		ExplosionUtil.explosionHurtWithMulti(pos, dmg, this.level(), damage, 0.3f, range,
 				KQ.multiplyPowerByStandConfigMobs(1.3f), KQ.multiplyPowerByStandConfigPlayers(1.0f));
@@ -704,16 +713,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 				}
 			}
 		}else if(this.getTargetType() == BLOCK){
+			float range = getRangeByWarm(getBlockWarm(blockTarget, level()));
 
-
-			float warm = getBlockWarm(blockTarget, level());
-
-			float range = explosionRadius;
-			if (warm > 50) {
-				range += Math.min(0.8f * ((warm - 50) / 100), 2.25f);
-			}
-
-			
 			ExplosionUtil.explosionHurt(this.blockTarget.getCenter(), dmg, this.level(),
 					ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage, 0.3f, range);
 
@@ -756,7 +757,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			this.level().playSound(null, this.blockPosition(), ModSounds.SHA_JUMP_EVENT, SoundSource.PLAYERS, 0.25F, 1.0f);
 			this.lookAt(EntityAnchorArgument.Anchor.EYES, jumpT0Pos);
 			this.jumpTick = jumpTickMax;
-			Vec3 movement = (this.getLookAngle().multiply(1.1, 0.54, 1.1)).add(0, 0.3, 0);
+			Vec3 movement = (this.getLookAngle().multiply(1.1, 0.2, 1.1)).add(0, 0.2, 0);
 			this.setDeltaMovement(movement.x(), Math.min(movement.y(), jumpMaxHeight), movement.z());
 		}
 	}
