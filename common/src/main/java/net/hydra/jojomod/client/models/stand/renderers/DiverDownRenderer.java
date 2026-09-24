@@ -15,6 +15,7 @@ public class DiverDownRenderer extends StandRenderer<DiverDownEntity>{
 
     public DiverDownRenderer(EntityRendererProvider.Context context) {
         super(context, new DiverDownModel<>(context.bakeLayer(ModEntityRendererClient.DIVER_DOWN_LAYER)), 0f);
+        DiverDownDisguiseRenderer.INSTANCE = new DiverDownDisguiseRenderer(context);
     }
 
     @Override public ResourceLocation getTextureLocation(DiverDownEntity entity) {

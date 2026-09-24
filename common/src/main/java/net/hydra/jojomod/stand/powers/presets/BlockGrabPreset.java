@@ -1072,6 +1072,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                     if (this.getSelf().level().getBlockEntity(this.grabBlock) == null) {
                         if ((this.getSelf() instanceof ServerPlayer PE &&
                                 this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)
+                                && this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING_OBTAINMENT)
                                 && !(PE).blockActionRestricted(PE.level(), this.grabBlock, PE.gameMode.getGameModeForPlayer()))
                                 && PE.level().mayInteract(PE, this.grabBlock)) {
                             /*This is the code where blocks that are removable are grabbed*/
@@ -1084,7 +1085,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                         } else {
                             standEntity.canAcquireHeldItem = false;
                         }
-                        if(this.getSelf().level().getBlockState(this.grabBlock).isAir() || !MainUtil.getIsGamemodeApproriateForGrief(this.getSelf())) {
+                        if(this.getSelf().level().getBlockState(this.grabBlock).isAir() || !MainUtil.getIsGamemodeApproriateForObtainment(this.getSelf())) {
 
                             standEntity.setHeldItem(state.getBlock().asItem().getDefaultInstance());
                             playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);

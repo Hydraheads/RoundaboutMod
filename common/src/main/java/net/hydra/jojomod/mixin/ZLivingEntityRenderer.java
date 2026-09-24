@@ -40,6 +40,7 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
@@ -385,12 +386,18 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
     // diver down disguise
     @Inject(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At("HEAD"), cancellable = true)
     private void roundabout$renderDiverDownDisguise(T entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight, CallbackInfo ci) {
+        if ((Object) this instanceof DiverDownDisguiseRenderer) {
+            return;
+        }
+
         StandUser su = (StandUser) entity;
         if (su.roundabout$isDisguised()) {
             GameProfile profile = su.roundabout$getDisguiseProfile();
             if (profile != null) {
                 //disguises with skin
-                DiverDownDisguiseRenderer.render(entity, profile, entityYaw, partialTicks, poseStack, buffer, packedLight);
+                if (DiverDownDisguiseRenderer.INSTANCE != null) {
+                    DiverDownDisguiseRenderer.INSTANCE.renderDisguise(entity, profile, entityYaw, partialTicks, poseStack, buffer, packedLight);
+                }
                 //adds the nametag
                 if (entity != Minecraft.getInstance().player && !entity.isInvisible()) {
                     String disguiseName = profile.getName();

@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.SilverChariotAfterimageState;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.stand.SilverChariotModel;
 import net.hydra.jojomod.entity.stand.SilverChariotEntity;
@@ -17,8 +18,10 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 public class SilverChariotRenderer<T extends StandEntity> extends StandRenderer<SilverChariotEntity> {
@@ -122,7 +125,7 @@ public class SilverChariotRenderer<T extends StandEntity> extends StandRenderer<
 
     @Override
     public void render(SilverChariotEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
-        super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
+        // super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
         float factor = 0.5F + (mobEntity.getSizePercent()/2);
         if (mobEntity.isBaby()) {
             matrixStack.scale(0.5f*factor, 0.5f*factor, 0.5f*factor);
@@ -150,13 +153,15 @@ public class SilverChariotRenderer<T extends StandEntity> extends StandRenderer<
                 this.model.getHead().visible = true;
             }
         }
+        float alpha = 0.30F;
         if (!mobEntity.getArmoured()) {
-            // renderAfterimage(mobEntity, f, g, matrixStack, vertexConsumerProvider, i, 0.30F, 2.5D, -2.0D, -1.5D);
-            renderAfterimage(mobEntity, f, g, matrixStack, vertexConsumerProvider, i, 0.30F, 1.5D, -2.0D, 3.5D);
-            renderAfterimage(mobEntity, f, g, matrixStack, vertexConsumerProvider, i, 0.30F, -1.5D, -2.0D, 3.5D);
-            // renderAfterimage(mobEntity, f, g, matrixStack, vertexConsumerProvider, i, 0.30F, -2.5D, -2.0D, -1.5D);
+            // renderAfterimage(mobEntity, f, g, matrixStack, vertexConsumerProvider, i, alpha, 2.5D, -2.0D, -1.5D);
+            // renderAfterimage(mobEntity, f, g, matrixStack, vertexConsumerProvider, i, alpha, 1.5D, -2.0D, 3.5D);
+            // renderAfterimage(mobEntity, f, g, matrixStack, vertexConsumerProvider, i, alpha, -1.5D, -2.0D, 3.5D);
+            // renderAfterimage(mobEntity, f, g, matrixStack, vertexConsumerProvider, i, alpha, -2.5D, -2.0D, -1.5D);
+            this.renderAfterimages(mobEntity, f, g, matrixStack, vertexConsumerProvider, i, alpha);
         }
-        // super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
+        super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
         // this.model.getHead().visible = true;
     }
 
@@ -172,6 +177,31 @@ public class SilverChariotRenderer<T extends StandEntity> extends StandRenderer<
         VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderType.entityTranslucent(getTextureLocation(mobEntity)));
         this.model.renderToBuffer(matrixStack, vertexConsumer, i, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, alpha);
         matrixStack.popPose();
+    }
+
+    public void renderAfterimages(SilverChariotEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i, float alpha) {
+        Vec3 currentPos = mobEntity.position();
+        for (SilverChariotAfterimageState state : mobEntity.getAfterimageStates()) {
+            Vec3 prevPos = state.getPos();
+            float prevXRot = state.getXRot();
+            float prevYRot = state.getYRot();
+
+            Vec3 relativePos = prevPos.subtract(currentPos);
+
+            matrixStack.pushPose();
+            matrixStack.translate(
+                    relativePos.x,
+                    relativePos.y + 1.5,
+                    relativePos.z
+            );
+            this.setupRotations(mobEntity, matrixStack, mobEntity.tickCount + g, f, g);
+            matrixStack.mulPose((Axis.ZP.rotationDegrees(180.0F)));
+            this.scale(mobEntity, matrixStack, g);
+
+            VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderType.entityTranslucent(getTextureLocation(mobEntity)));
+            this.model.renderToBuffer(matrixStack, vertexConsumer, i, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, alpha);
+            matrixStack.popPose();
+        }
     }
 
     @Nullable

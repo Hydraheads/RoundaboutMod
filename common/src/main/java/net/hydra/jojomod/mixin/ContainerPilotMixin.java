@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin;
 
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.world.entity.player.Player;
@@ -17,7 +18,10 @@ public abstract class ContainerPilotMixin {
         if (player instanceof StandUser user) {
             StandPowers powers = user.roundabout$getStandPowers();
             if (powers != null && powers.isPiloting()) {
-                cir.setReturnValue(true);
+                StandEntity stand = powers.getStandEntity(player);
+                if (stand != null) {
+                    cir.setReturnValue(true);
+                }
             }
         }
     }

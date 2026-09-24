@@ -207,6 +207,9 @@ public class SilverChariotRapierShotEntity extends AbstractArrow implements Unbu
 
                 this.playSound(ModSounds.SILVER_CHARIOT_RAPIER_SHOT_REDIRECT_EVENT, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
 
+                this.inGround = false;
+                this.shakeTime = 0;
+
                 this.setBounces(this.getBounces() - 1);
             } else {
                 ((IAbstractArrowAccess)this).roundabout$setLastState(this.level().getBlockState($$0.getBlockPos()));
@@ -513,24 +516,18 @@ public class SilverChariotRapierShotEntity extends AbstractArrow implements Unbu
         }
         */
 
-        // this.tickRotateFromVelocity();
+        this.tickRotateFromVelocity();
 
-        this.pickup = Pickup.DISALLOWED;
-
-        Vec3 delta =  getDeltaMovement();
+        // Vec3 delta =  getDeltaMovement();
         if (inGroundTime >= 160) {
             this.remove(RemovalReason.DISCARDED);
         }
 
         super.tick();
 
-        if (!level().isClientSide()){
+        // this.tickRotateFromVelocity();
 
-        }
-
-        this.tickRotateFromVelocity();
-
-        this.setDeltaMovement(this.getDeltaMovement());
+        // this.setDeltaMovement(this.getDeltaMovement());
 
         this.life += 1;
         if (this.getRapierShotType() == BASE) {

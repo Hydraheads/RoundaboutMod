@@ -406,7 +406,10 @@ public interface StandUser {
     void roundabout$clearDisguise();
     boolean roundabout$hasDiverLegs();
     void roundabout$setDiverLegs(boolean legs);
-
+    boolean roundabout$hasRibcageTrap();
+    void roundabout$setRibcageTrap(boolean trap);
+    boolean roundabout$hasSpringLegs();
+    void roundabout$setSpringLegs(boolean legs);
     boolean roundabout$hasInfiniteSpin();
     void roundabout$clearInfiniteSpin();
 }
