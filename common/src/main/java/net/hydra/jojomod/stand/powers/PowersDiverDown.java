@@ -69,6 +69,7 @@ import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -334,8 +335,8 @@ public class PowersDiverDown extends NewPunchingStand {
                 double dist = this.self.distanceTo(attackTarget);
                 // When target tries to get close (within 8 blocks), plant a trap
                 if (dist <= 8.0 && !this.onCooldown(PowerIndex.SKILL_2) && !areStandMovesDisabled()) {
-                    // Max of 4 traps
-                    if (this.storedKickTraps.size() < 4) {
+                    // Max of 6 traps
+                    if (this.storedKickTraps.size() < 6) {
                         // Find the block on the ground 2 blocks toward the player
                         Vec3 dirToTarget = attackTarget.position().subtract(this.self.position()).normalize();
                         BlockPos trapGroundPos = BlockPos.containing(this.self.position().add(dirToTarget.scale(2.0))).below();
@@ -378,27 +379,37 @@ public class PowersDiverDown extends NewPunchingStand {
                 double distToPlayer = this.self.distanceTo(attackTarget);
 
                 if (!allies.isEmpty()) {
-                    // Pick the closest frontline ally
+                    // pick the closest frontline ally
                     Zombie frontlineAlly = allies.get(0);
                     double allyDistToPlayer = frontlineAlly.distanceTo(attackTarget);
 
-                    // If this zombie is closer to the player than its ally, or too close (< 8 blocks), NIGERUNDAYO!!!
+                    // if this zombie is closer to the player than its ally, or too close (< 8 blocks), NIGERUNDAYO!!!
                     if (distToPlayer < 8.0 || distToPlayer <= allyDistToPlayer) {
-                        // Face the player and back up
-                        zombie.getLookControl().setLookAt(attackTarget, 30.0F, 30.0F);
+                        // Force facing the target
+                        rotateMobHead(attackTarget);
+                        float yaw = getLookAtEntityYaw(this.self, attackTarget);
+                        zombie.setYRot(yaw);
+                        zombie.setYHeadRot(yaw);
+                        zombie.setYBodyRot(yaw);
+
                         Vec3 awayDir = frontlineAlly.position().subtract(attackTarget.position()).normalize();
                         Vec3 backPos = frontlineAlly.position().add(awayDir.scale(2.0D));
-                        zombie.getNavigation().moveTo(backPos.x, backPos.y, backPos.z, 1.2D);
+                        zombie.getNavigation().moveTo(backPos.x, backPos.y, backPos.z, 1D);
                     } else {
-                        // Follow slightly behind the ally
-                        zombie.getNavigation().moveTo(frontlineAlly, 0.9D);
+                        // follow slightly behind the ally
+                        zombie.getNavigation().moveTo(frontlineAlly, 1D);
                     }
-                } else if (distToPlayer < 6.0) {
-                    // No allies left nearby, keep distance if possible
-                    zombie.getLookControl().setLookAt(attackTarget, 30.0F, 30.0F);
+                } else if (distToPlayer < 9.0) {
+                    // no allies left nearby, keep distance if possible
+                    rotateMobHead(attackTarget);
+                    float yaw = getLookAtEntityYaw(this.self, attackTarget);
+                    zombie.setYRot(yaw);
+                    zombie.setYHeadRot(yaw);
+                    zombie.setYBodyRot(yaw);
+
                     Vec3 awayPos = net.minecraft.world.entity.ai.util.DefaultRandomPos.getPosAway(zombie, 8, 4, attackTarget.position());
                     if (awayPos != null) {
-                        zombie.getNavigation().moveTo(awayPos.x, awayPos.y, awayPos.z, 1.25D);
+                        zombie.getNavigation().moveTo(awayPos.x, awayPos.y, awayPos.z, 1D);
                     }
                 }
                 //throw out some moves just in case
@@ -413,7 +424,9 @@ public class PowersDiverDown extends NewPunchingStand {
                 if (this.submergedTarget instanceof Zombie friendly && friendly.isAlive()) {
                     if (!this.onCooldown(PowerIndex.GENERAL_1)) {
                         cureNegativeEffects();
-                        diverLegs();
+                        if (!this.hasDiverLegs && !((StandUser) friendly).roundabout$hasDiverLegs()) {
+                            diverLegs();
+                        }
                         setCooldown(PowerIndex.GENERAL_1, 200);
                     }
                 } else if (this.submergedTarget == attackTarget) {
@@ -433,6 +446,28 @@ public class PowersDiverDown extends NewPunchingStand {
                             if (stand != null) stand.discard();
                             setCooldown(PowerIndex.SKILL_1, 300);
                         }
+                    }
+                }
+            }
+            return;
+        }
+
+        // witches will use embed potion instead if they're close enough
+        if (this.self instanceof Witch witch) {
+            if (attackTarget != null && attackTarget.isAlive()) {
+                double dist = this.self.distanceTo(attackTarget);
+                // embed a potion
+                if (isDiveActive()) {
+                    // it's negative afflicting time
+                    if (!this.onCooldown(PowerIndex.GENERAL_1)) {
+                        openAfflictions(EMBED_POTION);
+                        setCooldown(PowerIndex.GENERAL_1, 300);
+                        emergeServer();
+                    }
+                } else if (!areStandMovesDisabled()) {
+                    // dive if in reach
+                    if (dist <= DIVE_REACH && !this.onCooldown(PowerIndex.SKILL_1)) {
+                        startDiveWindupServer();
                     }
                 }
             }
@@ -2490,7 +2525,7 @@ public class PowersDiverDown extends NewPunchingStand {
                     // put sound here
                     playSoundIfPossible(self.level(), null, this.self.blockPosition(),
                             ModSounds.DIVER_DOWN_TRANSFER_EVENT,
-                            SoundSource.PLAYERS, 0.9F, 0.9F);
+                            SoundSource.PLAYERS, 0.9F, 1.2F);
                 } else {
                     Direction gf = ((IGravityEntity) self).roundabout$getGravityDirection();
                     if (gf != getIntendedDirection()) {
@@ -3693,6 +3728,27 @@ public class PowersDiverDown extends NewPunchingStand {
     private void embedPotion() {
         if (this.self.level().isClientSide()) return;
         if (!(this.submergedTarget instanceof LivingEntity targetLiving) || !targetLiving.isAlive()) return;
+
+        if (this.self instanceof Witch) {
+            double rng = Math.random();
+            MobEffectInstance witchEffect;
+            if (rng < 0.35) {
+                witchEffect = new MobEffectInstance(MobEffects.POISON, 200, 1); // Poison II for 10s
+            } else if (rng < 0.70) {
+                witchEffect = new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 300, 1); // Slowness II for 15s
+            } else {
+                witchEffect = new MobEffectInstance(MobEffects.WEAKNESS, 300, 1); // Weakness II for 15s
+            }
+
+            targetLiving.addEffect(witchEffect, this.self);
+            playSoundIfPossible(self.level(), null, targetLiving.blockPosition(),
+                    ModSounds.DIVER_DOWN_TRANSFER_EVENT,
+                    SoundSource.HOSTILE, 0.9F, 1.5F);
+            setCooldown(PowerIndex.GENERAL_1, getAfflictionCooldown());
+            emergeServer();
+            return;
+        }
+
         if (!(this.self instanceof Player player)) return;
 
         // Check for potions or mob buckets in both main hand and off hand
@@ -3741,7 +3797,7 @@ public class PowersDiverDown extends NewPunchingStand {
             // sound effects and stuff here
             playSoundIfPossible(self.level(), null, targetLiving.blockPosition(),
                     ModSounds.DIVER_DOWN_TRANSFER_EVENT,
-                    SoundSource.PLAYERS, 0.8F, 1.1F);
+                    SoundSource.PLAYERS, 0.9F, 1.5F);
             emergeServer();
             return;
         }
@@ -3791,6 +3847,9 @@ public class PowersDiverDown extends NewPunchingStand {
                 }
             }
         }
+        playSoundIfPossible(self.level(), null, targetLiving.blockPosition(),
+                ModSounds.DIVER_DOWN_TRANSFER_EVENT,
+                SoundSource.PLAYERS, 0.9F, 1.5F);
     }
 
     //potion end
