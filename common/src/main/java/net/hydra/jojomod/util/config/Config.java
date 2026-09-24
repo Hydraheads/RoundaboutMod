@@ -116,6 +116,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public D4CSettings d4cSettings;
     @NestedOption(group = "modded")
+    public DiverDownSettings diverDownSettings;
+    @NestedOption(group = "modded")
     public WhitesnakeSettings whitesnakeSettings;
     @NestedOption(group = "modded")
     public SilverChariotSettings silverChariotSettings;
@@ -1290,6 +1292,20 @@ public class Config implements Cloneable {
         public Integer blitzAttackCooldown;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer starFingerInterruptCooldown;
+    }
+    public static class DiverDownSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableDiverDown;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer diverDownAttackMultOnMobs;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer diverDownAttackMultOnPlayers;
+        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        public Integer diverDownGuardPoints;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer miningSpeedMultiplierDiverDown;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
+        public Integer getMiningTierDiverDown;
     }
     public static class WhitesnakeSettings {
         @BooleanOption(group = "inherit", value = true)

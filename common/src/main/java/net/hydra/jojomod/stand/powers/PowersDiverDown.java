@@ -292,6 +292,23 @@ public class PowersDiverDown extends NewPunchingStand {
         return ClientNetworking.getAppropriateConfig().miscellaneousSettings.enableWallWalking;
     }
 
+    @Override
+    /**Override to add disable config*/
+    public boolean isStandEnabled(){
+        return ClientNetworking.getAppropriateConfig().diverDownSettings.enableDiverDown;
+    }
+
+    @Override
+    public int getMaxGuardPoints(){
+        return ClientNetworking.getAppropriateConfig().diverDownSettings.diverDownGuardPoints;
+    }
+
+    @Override
+    public float getMiningMultiplier() {
+        return (float) (1F*(ClientNetworking.getAppropriateConfig().
+                diverDownSettings.miningSpeedMultiplierDiverDown *0.01));
+    }
+
     // mob AI here
 
     private int creeperDodgeTimer = 0;
@@ -719,12 +736,6 @@ public class PowersDiverDown extends NewPunchingStand {
 
     // icons and ability list end
 
-    @Override
-    public int getMaxGuardPoints() {
-        // change later to replace with the config.
-        return 15;
-    }
-
     // th...thank you soundman...
     // *sound*
     // soundman????
@@ -772,8 +783,8 @@ public class PowersDiverDown extends NewPunchingStand {
     @Override
     public void playBarrageNoise(int hitNumber, Entity entity){
         if (!this.self.level().isClientSide()) {
-            if (hitNumber % 3 == 0)
-                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.DIVER_DOWN_BARRAGE_EVENT, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
+            if (hitNumber % 2 == 0)
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.DIVER_DOWN_BARRAGE_EVENT, SoundSource.PLAYERS, 0.85F, (float) (0.9 + (Math.random() * 0.25)));
         }
     }
 
@@ -1844,8 +1855,8 @@ public class PowersDiverDown extends NewPunchingStand {
                         return true;
                     }
                 },
-                Component.translatable("container.crafting")));/**
-         * test to see if the selection even works in the first
+                Component.translatable("container.crafting")));
+        /* test to see if the selection even works in the first
          * place.
          * comment this out when unneeded anymore :thumbsup:
          */
