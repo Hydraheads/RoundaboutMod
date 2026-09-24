@@ -1,10 +1,12 @@
 package net.hydra.jojomod.stand.powers;
 
-import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
-import net.hydra.jojomod.entity.stand.SoftAndWetEntity;
+import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
+import net.hydra.jojomod.entity.substand.SeperatedLegsEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -24,17 +26,16 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -42,12 +43,19 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.AirItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.Vec3;
 import org.apache.commons.compress.utils.Lists;
+import org.joml.Vector3f;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static net.hydra.jojomod.event.index.PowerIndex.POWER_2;
 
 public class PowersCatchTheRainbow extends NewDashPreset {
     public PowersCatchTheRainbow(LivingEntity self) {
@@ -75,6 +83,45 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     @Override
     public StandPowers generateStandPowers(LivingEntity entity) {
         return new PowersCatchTheRainbow(entity);
+    }
+
+    @Override
+    public boolean isStandEnabled() {
+        // turn this into a config
+        return true;
+    }
+
+    //cool summon vfx sfx
+    @Override
+    public void playSummonEffects(boolean forced) {
+        if (!this.getSelf().level().isClientSide()) {
+            for(int i = 0; i < 23; i = i + 1) {
+                double randX = Roundabout.RANDOM.nextDouble(-1, 1);
+                double randY = Roundabout.RANDOM.nextDouble(-1, 2);
+                double randZ = Roundabout.RANDOM.nextDouble(-1, 1);
+                sendParticlesIfPossible(self.level(),new DustParticleOptions(new Vector3f(0.76F, 1.0F, 0.9F
+                        ), 2f),
+                        this.getSelf().getX() + randX,
+                        this.getSelf().getY() + randY,
+                        this.getSelf().getZ() + randZ,
+                        0,0,0.2,0,0);
+
+            }
+        }
+    }
+    @Override
+    protected Byte getSummonSound() {return SoundIndex.SUMMON_SOUND;
+    }
+    @Override
+    public SoundEvent getSoundFromByte(byte soundChoice){
+        switch (soundChoice)
+        {
+            case SoundIndex.SUMMON_SOUND -> {
+                //change
+                return ModSounds.GREEN_DAY_MOLD_SPREAD_EVENT;
+            }
+        }
+        return super.getSoundFromByte(soundChoice);
     }
 
     //poses
@@ -204,6 +251,10 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         }
         if (slot == 1 && !canUseRainMend())
             return true;
+        if (slot == 2 && HasOffHand && isHoldingSneak()){
+                return true;
+        } else if (slot == 2 && !HasOffHand && !isHoldingSneak())
+                return true;
 
         return super.isAttackIneptVisually(activeP, slot);
     }
@@ -211,7 +262,9 @@ public class PowersCatchTheRainbow extends NewDashPreset {
 
     private static final byte
     RAINMEND = 53,
-    DROPDOWN = 54;
+    DROPDOWN = 54,
+    OFF_HAND_THROW_SLIM = 55,
+    RETURN = 56;
 
     @Override
     public void powerActivate(PowerContext context){
@@ -228,6 +281,15 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             case SKILL_3_CROUCH -> {
                 if  (!this.getSelf().onGround() && isInRain())
                 {dropDownClient();}
+            }
+
+            case SKILL_2_NORMAL -> {
+                if (isInRain())
+                    {OffHandThrow();}
+            }
+            case SKILL_2_CROUCH -> {
+                if (isInRain())
+                {OffHandReturn();}
             }
         }
     }
@@ -252,10 +314,29 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             useRainMend();
         }
         else if (move == DROPDOWN) {
-            return this.dropDown();
+            dropDown();
+        }
+        else if (move == POWER_2) {
+            return OffHandThrowServer(ModEntities.LEFT_SEPERATED_ARM.create(this.self.level()));
+        }
+        else if (move == OFF_HAND_THROW_SLIM) {
+            return OffHandThrowServer(ModEntities.LEFT_SEPERATED_ARM_SLIM.create(this.self.level()));
+        }
+        else if (move == RETURN) {
+            return OffHandReturnServer();
         }
         return super.setPowerOther(move,lastMove);
     }
+    @Override
+    public void updatePowerInt(byte activePower, int data) {
+        switch (activePower) {
+            case PowerIndex.POWER_2 -> {
+                LeftArmState = data;
+            }
+        }
+        super.updatePowerInt(activePower,data);
+    }
+    public int LeftArmState = 0;
 
     public boolean isInRain() {
         BlockPos $$0 = this.self.blockPosition();
@@ -285,7 +366,64 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         if (isInRain() && hasStandActive(self)) {
             this.getSelf().resetFallDistance();
         }
+        if(this.self instanceof Player) {
+            if (!this.self.level().isClientSide) {
+                if (HasOffHand) {
+                    LeftArmState = 0;
+                } else {
+                    LeftArmState = 1;
+                }
+                this.updatePowerInt(PowerIndex.POWER_2, LeftArmState);
+                S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowerIndex.POWER_2, LeftArmState);
+
+                if(Off_hand_entity == null){
+                    HasOffHand = true;
+                }
+            }else{
+                if(LeftArmState == 0){
+                    HasOffHand = true;
+                }else{
+                    HasOffHand = false;
+                }
+            }
+        }
+        if(!(currentarm == null)) {
+            if(!(armGoneTicks>0)) {
+                if (!this.self.level().isClientSide()) {
+                    currentarm.discard();
+                }
+            }else{
+                if (!this.self.level().isClientSide()) {
+                    if(MainUtil.cheapDistanceTo(this.self.getX(),this.self.getY(),this.self.getZ(),currentarm.getX(),currentarm.getY(),currentarm.getZ())<1 && currentarm.StartupTicks == 0) {
+                        armGoneTicks = 0;
+                        playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.GREEN_DAY_STITCH_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+
+                        double Xangle = Math.toRadians(this.self.getLookAngle().x);
+                        double Zangle = Math.toRadians(this.self.getLookAngle().z);
+                        double diameter = 0.4d;
+                        for (int i = 0; i < 11; i = i + 1) {
+                            sendParticlesIfPossible(self.level(),ParticleTypes.SPLASH,
+                                    this.getSelf().getX() + (diameter * Math.sin(i * 4)) * Math.cos(Xangle),
+                                    this.getSelf().getY() + 0.5,
+                                    this.getSelf().getZ() + (diameter * Math.cos(i * 4)) * Math.cos(Zangle),
+                                    0, 0, 0, 0, 0);
+                        }
+                    }
+                }else{
+                    if(MainUtil.cheapDistanceTo(this.self.getX(),this.self.getY(),this.self.getZ(),currentarm.getX(),currentarm.getY(),currentarm.getZ())<1.5 && currentarm.StartupTicks == 0 ) {
+                        armGoneTicks = 0;
+                    }
+                }
+            }
+
+            if (currentarm.position() == this.getSelf().position()){
+                OffHandReturn();
+            }
+        }
     }
+
+    public SeperatedArmEntity currentarm;
+    public int armGoneTicks = 0;
 
     @Override
     public boolean cheatDeath(DamageSource dsource){
@@ -348,6 +486,19 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                         LV.removeEffect(bleed.getEffect());
                     }
                 }
+
+                double Xangle = Math.toRadians(this.self.getLookAngle().x);
+                double Pitch = Math.toRadians(this.self.getLookAngle().y);
+                double Zangle = Math.toRadians(this.self.getLookAngle().z);
+                double diameter = 0.6d;
+                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GREEN_DAY_STITCH_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+                for (int i = 0; i < 11; i = i + 1) {
+                    sendParticlesIfPossible(self.level(), ParticleTypes.SPLASH,
+                            this.getSelf().getX() + (diameter * Math.sin(i * 4)) * Math.cos(Xangle),
+                            this.getSelf().getY() + (this.getSelf().getEyeHeight() * 0.7),
+                            this.getSelf().getZ() + (diameter * Math.cos(i * 4)) * Math.cos(Zangle),
+                            0, 0, 0, 0, 0);
+                }
             }
         }
     }
@@ -361,15 +512,150 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         }
     }
 
-    public boolean dropDown(){
+    public void dropDown(){
         if (!this.self.level().isClientSide() && !this.onCooldown(PowerIndex.GLOBAL_DASH)) {
             this.setCooldown(PowerIndex.GLOBAL_DASH, 20);
-            MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 1F,
+            MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 2F,
                     0,
                     3,
                     0);
         }
-        return false;
+    }
+
+    //choke
+
+    public Vec3 rayCastFromSelf(double dist){
+        int steps = (int) (Math.round(dist * 6) + 1);
+        Vec3 CurrentCheckPos = this.self.getEyePosition();
+        double xstep = (this.self.getLookAngle().x)/6 ;
+        double ystep = (self.getLookAngle().y)/6 ;
+        double zstep = (self.getLookAngle().z)/6 ;
+
+        for(int i = 0; i < steps ;i ++){
+            CurrentCheckPos = CurrentCheckPos.add(xstep,ystep,zstep);
+
+            // if(!this.self.level().isClientSide) {
+            //     sendParticlesIfPossible(self.level(),ParticleTypes.END_ROD, CurrentCheckPos.x, CurrentCheckPos.y, CurrentCheckPos.z, 1, 0, 0, 0, 0);
+            // }
+            BlockPos bp = (BlockPos.containing(CurrentCheckPos));
+            if(this.self.level().getBlockState(bp).getBlock() != Blocks.AIR
+                    && this.self.level().getBlockState(bp).getBlock()!=Blocks.WATER
+                    && this.self.level().getBlockState(bp).getBlock()!=Blocks.LAVA
+                    && !this.self.level().getBlockState(bp).canBeReplaced()
+            ) {
+                // if(!this.self.level().isClientSide) {
+
+                //     sendParticlesIfPossible(self.level(),ParticleTypes.END_ROD, bp.getCenter().x, bp.getCenter().y, bp.getCenter().z, 1, 0, 0, 0, 0);
+                // }
+                return CurrentCheckPos;
+            }
+        }
+        return CurrentCheckPos;
+    }
+
+    public SeperatedArmEntity Off_hand_entity = null;
+    public boolean HasOffHandCharge = true;
+    public boolean HasOffHand = true;
+
+    public ItemStack OffhandItemToReturn;
+
+    public boolean OffHandThrowServer(SeperatedArmEntity SAE){
+
+        if (Off_hand_entity == null) {
+            if (SAE != null) {
+                Off_hand_entity = SAE;
+                SAE.setUser(this.self);
+                SAE.setXRot(this.self.getXRot());
+                PowerTypes.copyPlaneOfExisting(self, SAE);
+                SAE.setYRot(this.self.getYRot());
+                SAE.setPos(getRayBlock(this.self, 0.5f).add(0, -0.3, 0));
+                SAE.setItemInHand(InteractionHand.MAIN_HAND, this.self.getItemInHand(InteractionHand.OFF_HAND).copy());
+                this.self.level().addFreshEntity(SAE);
+                SAE.jump(rayCastFromSelf(20));
+                Off_hand_entity = SAE;
+                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GREEN_DAY_SPLIT_EVENT, SoundSource.PLAYERS, 1.0F, 2.0F);
+            }
+            HasOffHand = false;
+            this.self.getItemInHand(InteractionHand.OFF_HAND).setCount(0);
+            Vec3 location = getRayBlock(this.self, 1f);
+
+        }
+        return true;
+    }
+
+    public void OffHandThrow(){
+        if (!this.onCooldown(PowerIndex.SKILL_2) && isInRain()) {
+
+                if (HasOffHandCharge && !HasOffHand) {
+                    HasOffHandCharge = false;
+                } else {
+                    this.setCooldown(PowerIndex.SKILL_2, 60);
+                    HasOffHandCharge = true;
+                }
+                if (isClient()) {
+                    AbstractClientPlayer abstractClientPlayer = (AbstractClientPlayer) this.self;
+                    if ((abstractClientPlayer).getModelName().equals("default")) {
+                        tryPowerPacket(POWER_2);
+                    } else {
+                        tryPowerPacket(OFF_HAND_THROW_SLIM);
+                    }
+                }
+                //HasOffHand = false;
+        }
+    }
+
+    public void OffHandReturn(){
+        if(!HasOffHand && !this.onCooldown(PowerIndex.SKILL_2) && isInRain()){
+            this.setCooldown(PowerIndex.SKILL_2, 200);
+            //HasOffHand = true;
+            tryPowerPacket(RETURN);
+        }
+    }
+
+    public boolean OffHandReturnServer() {
+        if(!HasOffHand) {
+            ItemEntity $$2 = new ItemEntity(this.self.level(), this.self.getX(), this.self.getY() + 1, this.self.getZ(), Off_hand_entity.getMainHandItem());
+            //this.self.level().addFreshEntity($$2);
+            Player player = (Player) this.self;
+            if (this.self.getOffhandItem().getItem() instanceof AirItem) {
+                OffhandItemToReturn = Off_hand_entity.getMainHandItem();
+            } else {
+                OffhandItemToReturn = Off_hand_entity.getMainHandItem();
+                // ItemEntity item = new ItemEntity(this.self.level(), this.self.getX(), this.self.getY() + 2, this.self.getZ(), Off_hand_entity.getMainHandItem());
+                //$$2.setPickUpDelay(1);
+                // this.self.level().addFreshEntity($$2);
+            }
+
+            Off_hand_entity.setUser(null);
+            Off_hand_entity.discard();
+            Off_hand_entity = null;
+            HasOffHand = true;
+            double Xangle = Math.toRadians(this.self.getLookAngle().x);
+            double Pitch = Math.toRadians(this.self.getLookAngle().y);
+            double Zangle = Math.toRadians(this.self.getLookAngle().z);
+            double diameter = 0.6d;
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GREEN_DAY_STITCH_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            for (int i = 0; i < 11; i = i + 1) {
+                sendParticlesIfPossible(self.level(), ParticleTypes.SPLASH,
+                        this.getSelf().getX() + (diameter * Math.sin(i * 4)) * Math.cos(Xangle),
+                        this.getSelf().getY() + (this.getSelf().getEyeHeight() * 0.7),
+                        this.getSelf().getZ() + (diameter * Math.cos(i * 4)) * Math.cos(Zangle),
+                        0, 0, 0, 0, 0);
+            }
+        }
+        return true;
+    }
+
+    public void addAdditionalSaveData(CompoundTag $$0) {
+        super.addAdditionalSaveData($$0);
+        $$0.putBoolean("hasoffhand",HasOffHand);
+    }
+    @Override
+    public void readAdditionalSaveData(CompoundTag $$0) {
+        super.readAdditionalSaveData($$0);
+        if ($$0.contains("hasoffhand")) {
+            HasOffHand = $$0.getBoolean("hasoffhand");
+        }
     }
 
     //rain dodge
