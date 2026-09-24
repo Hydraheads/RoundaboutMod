@@ -2395,7 +2395,9 @@ public class PowersKillerQueen extends NewPunchingStand {
             combatActivations = 0;
 
             if (inBitesTheDustMode()) {
-                this.setCooldown(PowerIndex.SKILL_4, ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustPlantCooldown);
+                int cooldownBase = ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustPlantCooldown;
+
+                this.setCooldown(PowerIndex.SKILL_4, (cooldownBase / (getMaxBitesTheDustDetonations() + 2)) + ((cooldownBase / (getMaxBitesTheDustDetonations() + 2)) * combatActivations));
                 StandEntity stand = getStandEntity(this.self);
                 if (Objects.nonNull(stand) && stand instanceof KillerQueenEntity KQE ){
                     KQE.setPlantedBitesTheDust(false);
