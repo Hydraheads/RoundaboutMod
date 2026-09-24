@@ -27,6 +27,7 @@ import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 
 import net.hydra.jojomod.util.gravity.RotationUtil;
+import net.minecraft.client.model.FoxModel;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -39,6 +40,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -47,6 +49,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;;
+import net.minecraft.world.entity.animal.Fox;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
@@ -266,7 +269,6 @@ public class SheerHeartAttackEntity extends StandEntity {
 		}else {
 			hideTorch.startIfStopped(this.tickCount);
 		}
-
 	}
 
 	@Override
@@ -303,6 +305,15 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		boolean client = this.level().isClientSide();
 		LivingEntity user = this.getUser();
+
+		Vec3 $$1 = getDeltaMovement();
+		if ($$1.y * $$1.y < (double)0.03F && getXRot() != 0.0F) {
+			setXRot(Mth.rotLerp(0.2F, getXRot(), 0.0F));
+		} else {
+			double $$2 = $$1.horizontalDistance();
+			double $$3 = Math.signum(-$$1.y) * Math.acos($$2 / $$1.length()) * (double)(180F / (float)Math.PI);
+			setXRot((float)$$3);
+		}
 
 		if (!client) {
 			if(user == null){
@@ -653,8 +664,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	public float getRangeByWarm(float warm) {
 		float range = explosionRadius;
-		if (warm > 60) {
-			range += Math.min(0.8f * ((warm - 60) / 80), 2.35f);
+		float cap = 45;
+		if (warm > cap) {
+			range += Math.min(2.25f * ((warm - cap) / 40), 3.25f);
 		}
 
 		return range;
@@ -763,9 +775,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	}
 
 	@Override
-	public boolean onClimbable() {
-		return this.isClimbing();
-	}
+	public boolean onClimbable() { return this.isClimbing(); }
 
 	public void shoot(Vec3 shootToPos){
 		this.throwStatus = THROWED;
@@ -873,18 +883,18 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		BlockState info = level.getBlockState(pos);
 
-		if (ExplosionUtil.isBlockBlackListed(info) || (MainUtil.confirmIsOre(info))
-				|| info.isAir() || info.is(Blocks.BARRIER) || info.is(Blocks.BEDROCK)
-				|| !MainUtil.isDestructible2(level, pos, info))  {
-			return 0;
-		}
-
 		ResourceLocation key = BuiltInRegistries.BLOCK.getKey(info.getBlock());
 
 		String tag = key.toString();
         if (MainUtil.SHA_CUSTOM_BLOCK_HEAT.containsKey(tag)) {
 			return MainUtil.SHA_CUSTOM_BLOCK_HEAT.get(tag);
         }
+
+		if (ExplosionUtil.isBlockBlackListed(info) || (MainUtil.confirmIsOre(info))
+				|| info.isAir() || info.is(Blocks.BARRIER) || info.is(Blocks.BEDROCK)
+				|| !MainUtil.isDestructible2(level, pos, info))  {
+			return 0;
+		}
 
 		int light = info.getLightEmission();
 		if (light <= 7) { return 0; }
@@ -912,7 +922,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			points += 20;
 			points += HeatUtil.getHeat(LE);
 
-			if (LE.isOnFire() || LE.wasOnFire || HeatUtil.isHot(LE)) { points += 70;}
+			if (LE.isOnFire() || LE.wasOnFire || HeatUtil.isHot(LE)) { points += 75;}
 			if (LE.isFullyFrozen()) { points -= 80;
 			}else if (LE.isFreezing()) { points -= 40;}
 			
