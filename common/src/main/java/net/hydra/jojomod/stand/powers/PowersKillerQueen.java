@@ -3720,7 +3720,6 @@ public class PowersKillerQueen extends NewPunchingStand {
             else if (inBitesTheDustMode()) {
                 StandEntity stand = this.getStandEntity(this.getSelf());
 
-
                 if ((bitesTheDustPlantedEntity != null && !bitesTheDustPlantedEntity.isRemoved() && bitesTheDustPlantedEntity.isAlive()
                         && !((StandUser)bitesTheDustPlantedEntity).roundabout$hasAStand()) && canExecuteMoveWithLevel(getBitesTheDustLevel())
                         && (canExecuteMoveWithLevel(getBitesTheDustDayLevel()) || currentBombStatus != BITES_THE_DUST_BIGGER)
