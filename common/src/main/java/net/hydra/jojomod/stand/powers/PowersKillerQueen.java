@@ -118,7 +118,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override public boolean canUseStandArrow() { return !canBitesTheDust(); }
 
-	// TODO Make bomb item (WIP)
+	// TODO Balance changes to bites the dust
 	
 	private static final byte
 		PLANTED=53,
@@ -145,6 +145,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         HANDS_COOLDOWN = 75,
         BOMB_SIZE = 77,
+        BTD_ACTIVATIONS = 78,
 
     // COOLDOWN INDEXES
         BUBBLE_SEND_COOLDOWN = PowerIndex.SKILL_4_SNEAK,
@@ -1120,6 +1121,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                         ((BlockItem)stack.getItem()).getBlock() instanceof ShulkerBoxBlock || ((BlockItem)stack.getItem()).getBlock() instanceof FancyLighterBlock)));
     }
 
+    public float getMaxBTDHostHealth() { return 25.0f; }
+
     public boolean canBitesTheDustPlant(Entity targetEntity) {
         if (targetEntity == null) {
             return false;
@@ -1129,15 +1132,17 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
         if (targetEntity instanceof Mob || targetEntity instanceof Player) {
             LivingEntity LE = (LivingEntity)targetEntity;
-            if (LE.isDeadOrDying()) {
+            if (LE.isDeadOrDying() || LE.getMaxHealth() > getMaxBTDHostHealth()) {
                 return false;
             }
+
             if (LE.is(this.getSelf()) || !LE.showVehicleHealth() ||
                     LE.isInvulnerable() || (this.self.isPassenger() &&
                     this.self.getVehicle() == LE) || !this.self.hasLineOfSight(LE)
                     || PowerTypes.isInADifferentExistence(self, LE)) {
                 return false;
             }
+
         }else {
             return false;
         }
@@ -1763,6 +1768,9 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override
     public void updatePowerInt(byte activePower, int data) {
         switch (activePower) {
+            case BTD_ACTIVATIONS -> {
+                combatActivations = data;
+            }
             case PowersKillerQueen.PLANTED-> {
                this.currentBombStatus = (byte)data;
                if (data == BOMB_NONE) {
@@ -2173,7 +2181,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public boolean canBitesTheDustCombat() {
-        return currentBombStatus != BITES_THE_DUST_BIGGER;
+        return currentBombStatus != BITES_THE_DUST_BIGGER && combatActivations < getMaxBitesTheDustDetonations();
     }
 
     
@@ -2781,7 +2789,17 @@ public class PowersKillerQueen extends NewPunchingStand {
         this.combatSavedBTD.clear();
     }
 
+    public int getMaxBitesTheDustDetonations() {
+        return 2;
+    }
+
     public int combatActivations = 0;
+
+    public void bitesTheDustCombatActivateSafe() {
+        if (!onCooldown(PowerIndex.SKILL_EXTRA_2)) {
+            bitesTheDustCombatActivate();
+        }
+    }
 
     public boolean bitesTheDustCombatActivate() {
         if (this.isClient()) {
@@ -2789,7 +2807,12 @@ public class PowersKillerQueen extends NewPunchingStand {
             return true;
         }
 
-        if (combatActivations < 12)  { combatActivations++; }
+        if (combatActivations < getMaxBitesTheDustDetonations())  {
+            combatActivations++;
+            if (self instanceof ServerPlayer PL) {
+                S2CPacketUtil.sendIntPowerDataPacket(PL, BTD_ACTIVATIONS, combatActivations);
+            }
+        }else {return false;}
 
         int btdCombatActivationCooldown = ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatActivationCooldown;
         int btdCombatExtraCooldown = ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatCooldownBonus;
@@ -2803,7 +2826,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         Entity target = bitesTheDustPlantedEntity;
 
-        if (target == null || target.isRemoved() || !target.isAlive()) {
+        if (target == null || target.isRemoved()) {
             btdDefuseServer();
             return false;
         }
@@ -2878,7 +2901,11 @@ public class PowersKillerQueen extends NewPunchingStand {
             S2CPacketUtil.sendCancelSoundPacket(pl, this.self.getId(), BTD_PLANT);
         }
 
-        saveCombatEntitiesSeconds(target.getPosition(1));
+        if (!target.isAlive()) {
+            btdDefuseServer();
+        }else {
+            saveCombatEntitiesSeconds(target.getPosition(1));
+        }
 
         return true;
     }
@@ -4784,23 +4811,17 @@ public class PowersKillerQueen extends NewPunchingStand {
                         else { pl.hurt(desintegrationDmg, hitPoints); }
                     }
 
-
-                    // /*
                     if (!pl.isAlive()) {
                         ItemStack hand = new ItemStack(ModItems.HAND);
 
                         CompoundTag tag = hand.getOrCreateTag();
                         tag.putString("HandOwner",pl.getName().getString());
                         hand.getItem().verifyTagAfterLoad(tag);
-                        //tag.put("HandOwner", NbtUtils.writeGameProfile(new CompoundTag(), pl.getGameProfile()));
                         tag.put("HandProfile", NbtUtils.writeGameProfile(new CompoundTag(), pl.getGameProfile()));
-
 
                         hand.setTag(tag);
                         pl.spawnAtLocation(hand);
                     }
-                    //*/
-
 
                 } else {
                     if ((mobsHitkill && !isBoss && target instanceof LivingEntity LE)) { LE.hurt(desintegrationDmg, LE.getMaxHealth());}
@@ -4813,7 +4834,6 @@ public class PowersKillerQueen extends NewPunchingStand {
                         CompoundTag tag = hand.getOrCreateTag();
                         tag.putString("HandOwner",pl.getName().getString());
                         hand.getItem().verifyTagAfterLoad(tag);
-                        //tag.put("HandOwner", NbtUtils.writeGameProfile(new CompoundTag(), pl.getGameProfile()));
                         tag.put("HandProfile", NbtUtils.writeGameProfile(new CompoundTag(), pl.getDisguiseProfile()));
 
                         hand.setTag(tag);
@@ -4976,6 +4996,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     public void btdGuardDamage(float amount) {
         if (btdShieldCooldown > 0) { return; }
         bitesTheDustPlantedEntity.level().playSound(null,bitesTheDustPlantedEntity.blockPosition(),SoundEvents.SHIELD_BLOCK,SoundSource.NEUTRAL,1F,1F);
+        bitesTheDustCombatActivateSafe();
         float finalValue = btdShieldPoints - amount;
         if (finalValue <= 0) {
             btdShieldPoints = 0;

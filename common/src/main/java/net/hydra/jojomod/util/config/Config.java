@@ -508,7 +508,7 @@ public class Config implements Cloneable {
         public Integer maxAirBubbleTravelDistanceBeforePopping;
         @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
         public Integer airBubbleGuardIncrease;
-        @IntOption(group = "inherit", value = 800, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 1200, min = 0, max = 72000)
         public Integer bitesTheDustPlantCooldown;
         @IntOption(group = "inherit", value = 70, min = 0, max = 72000)
         public Integer bitesTheDustCombatActivationCooldown;

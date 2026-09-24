@@ -5387,6 +5387,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "die", at = @At("HEAD"))
     protected void roundabout$die(DamageSource $$0, CallbackInfo ci) {
+        if (rdbt$GetBtdPlantedUser() != null && rdbt$GetBtdPlantedUser().btdTicks > 2) {
+            rdbt$GetBtdPlantedUser().bitesTheDustCombatActivate();
+        }
+
         if ($$0.getEntity() instanceof FallenMob fm) {
             Entity ent2 = fm;
             if (fm.getController() > 0 && fm.getController() != fm.getId()) {
@@ -5415,6 +5419,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 this.setRemainingFireTicks(1);
             }
         }
+
         MainUtil.onDeath(this, $$0);
     }
 
