@@ -4109,7 +4109,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         // diver down damage redirection
         if (!this.level().isClientSide() && !this.rdbt$isRedirectingDamage && this.diverSubmergedUser != null
-                && this.diverSubmergedUser.isDiveActive()) {
+                && this.diverSubmergedUser.isDiveActive()
+                && !this.diverSubmergedUser.isSelfDive()
+                && this.diverSubmergedUser.damageRedirectionEnabled) {
             this.rdbt$isRedirectingDamage = true;
             try {
                 this.diverSubmergedUser.onSubmergedTargetHurt($$0, $$1);
@@ -5255,6 +5257,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             $$1 /= 2;
             adj = true;
         }
+        if (this.roundabout$hasDiverLegs()) {
+            $$0 = Math.max(0, $$0 - 2.5F);
+            $$1 *= 0.67F;
+            adj = true;
+        }
         int yesInt = roundabout$getAdjustedGravity();
         if (yesInt > 0 || adj) {
             cir.setReturnValue(roundabout$calculateFallDamage($$0, $$1, yesInt));
@@ -5390,6 +5397,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "die", at = @At("HEAD"))
     protected void roundabout$die(DamageSource $$0, CallbackInfo ci) {
+        if (rdbt$GetBtdPlantedUser() != null && rdbt$GetBtdPlantedUser().btdTicks > 2) {
+            rdbt$GetBtdPlantedUser().bitesTheDustCombatActivate();
+        }
+
         if ($$0.getEntity() instanceof FallenMob fm) {
             Entity ent2 = fm;
             if (fm.getController() > 0 && fm.getController() != fm.getId()) {
@@ -5418,6 +5429,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 this.setRemainingFireTicks(1);
             }
         }
+
         MainUtil.onDeath(this, $$0);
     }
 
@@ -6959,6 +6971,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
 
         return false;
+    }
+
+    @Override
+    public PowersKillerQueen rdbt$GetBtdPlantedUser() {
+        return BtdPlantedUser;
     }
 
     @Override

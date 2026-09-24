@@ -13,9 +13,11 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersDiverDown;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
@@ -175,54 +177,55 @@ public int speedActivated = 0;
                     }
                 }
 
-                if (isPlantedInWall() && !getStandUserSelf().rdbt$getJumping()) {
-                    if (!self.onGround()) {
-                        if (this.self.getDeltaMovement().y < 0) {
-                            this.self.setDeltaMovement(this.self.getDeltaMovement().add(0, -0.14, 0));
-                        }
-                    }
-                }
+                StandPowers sp = ((StandUser) self).roundabout$getStandPowers();
+                boolean hasWallStand = (sp instanceof PowersWalkingHeart pw && pw.hasExtendedHeelsForWalking())
+                        || (sp instanceof PowersDiverDown dd && dd.inZipMode());
 
-                if (self.isSwimming()) {
-                    setWallWalkDirection(getIntendedDirection());
-                    ((IGravityEntity) this.self).roundabout$setGravityDirection(getIntendedDirection());
-                    C2SPacketUtil.intToServerPacket(
-                            PacketDataIndex.INT_GRAVITY_FLIP_4, MainUtil.getIntFromDirection(getIntendedDirection())
-                    );
-                }
-
-                if (isPlantedInWall()) {
-                    if (justFlippedTicks > 0) {
-                        justFlippedTicks--;
-                    } else {
-
-                        if (self.onGround()) {
-                            mercyTicks = 5;
-                        } else {
-                            if (
-                                    (
-                                            MainUtil.isBlockWalkable(self.level().getBlockState(pos))
-                                                    || MainUtil.isBlockWalkable(self.level().getBlockState(pos2))
-                                                    || MainUtil.isBlockWalkable(self.level().getBlockState(pos4))
-                                                    || MainUtil.isBlockWalkable(self.level().getBlockState(pos5))
-                                    )) {
-                                mercyTicks--;
-                            } else {
-                                mercyTicks = 0;
+                if (!hasWallStand) {
+                    if (isPlantedInWall() && !getStandUserSelf().rdbt$getJumping()) {
+                        if (!self.onGround()) {
+                            if (this.self.getDeltaMovement().y < 0) {
+                                this.self.setDeltaMovement(this.self.getDeltaMovement().add(0, -0.14, 0));
                             }
                         }
-                        if (self.isSleeping() || ((!self.onGround()) && mercyTicks <= 0) || self.getRootVehicle() != this.self) {
-                            wallWalkDirection = getIntendedDirection();
-                            ((IGravityEntity) this.self).roundabout$setGravityDirection(wallWalkDirection);
-                            setWallWalkDirection(wallWalkDirection);
-                            C2SPacketUtil.intToServerPacket(
-                                    PacketDataIndex.INT_GRAVITY_FLIP_4, MainUtil.getIntFromDirection(wallWalkDirection)
-                            );
-                        }
                     }
 
-                } else {
-                    setWallWalkDirection(getIntendedDirection());
+                    if (self.isSwimming()) {
+                        setWallWalkDirection(getIntendedDirection());
+                        ((IGravityEntity) this.self).roundabout$setGravityDirection(getIntendedDirection());
+                        C2SPacketUtil.intToServerPacket(
+                                PacketDataIndex.INT_GRAVITY_FLIP_4, MainUtil.getIntFromDirection(getIntendedDirection())
+                        );
+                    }
+
+                    if (isPlantedInWall()) {
+                        if (justFlippedTicks > 0) {
+                            justFlippedTicks--;
+                        } else {
+                            if (self.onGround()) {
+                                mercyTicks = 5;
+                            } else {
+                                if (MainUtil.isBlockWalkable(self.level().getBlockState(pos))
+                                        || MainUtil.isBlockWalkable(self.level().getBlockState(pos2))
+                                        || MainUtil.isBlockWalkable(self.level().getBlockState(pos4))
+                                        || MainUtil.isBlockWalkable(self.level().getBlockState(pos5))) {
+                                    mercyTicks--;
+                                } else {
+                                    mercyTicks = 0;
+                                }
+                            }
+                            if (self.isSleeping() || ((!self.onGround()) && mercyTicks <= 0) || self.getRootVehicle() != this.self) {
+                                wallWalkDirection = getIntendedDirection();
+                                ((IGravityEntity) this.self).roundabout$setGravityDirection(wallWalkDirection);
+                                setWallWalkDirection(wallWalkDirection);
+                                C2SPacketUtil.intToServerPacket(
+                                        PacketDataIndex.INT_GRAVITY_FLIP_4, MainUtil.getIntFromDirection(wallWalkDirection)
+                                );
+                            }
+                        }
+                    } else {
+                        setWallWalkDirection(getIntendedDirection());
+                    }
                 }
             }
         } else {
@@ -607,8 +610,16 @@ public int speedActivated = 0;
         }
     }
 
-    public boolean isPlantedInWall(){
-        return isOnWrongAxis() && !(((StandUser)self).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.hasExtendedHeelsForWalking());
+    public boolean isPlantedInWall() {
+        //reworked this code because it was starting get really long and confusing. this lets future people understand it easier without having to read a bunch of and statements -88superguy
+        net.hydra.jojomod.event.powers.StandPowers standPowers = ((StandUser) self).roundabout$getStandPowers();
+        if (standPowers instanceof PowersWalkingHeart PW && PW.hasExtendedHeelsForWalking()) {
+            return false;
+        }
+        if (standPowers instanceof PowersDiverDown DD && DD.inZipMode()) {
+            return false;
+        }
+        return isOnWrongAxis();
     }
 
 

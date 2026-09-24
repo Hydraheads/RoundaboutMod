@@ -76,6 +76,8 @@ public class RoundaboutFabricClient implements ClientModInitializer {
         net.minecraft.client.gui.screens.MenuScreens.register(FabricMenus.DIVER_DOWN_CRAFTING, DiverDownCraftingScreen::new);
         net.minecraft.client.gui.screens.MenuScreens.register(FabricMenus.DIVER_DOWN_ANVIL, DiverDownAnvilScreen::new);
         net.minecraft.client.gui.screens.MenuScreens.register(FabricMenus.DIVER_DOWN_SMITHING, DiverDownSmithingScreen::new);
+        net.minecraft.client.gui.screens.MenuScreens.register(FabricMenus.DIVER_DOWN_STONECUTTER, DiverDownStonecutterScreen::new);
+        net.minecraft.client.gui.screens.MenuScreens.register(FabricMenus.DIVER_DOWN_LOOM, DiverDownLoomScreen::new);
         //DD menus end
         registerWhitesnakeClient();
         ClientPlayConnectionEvents.JOIN.register((clientPlayNetworkHandler, packetSender, minecraftClient) -> ClientNetworking.sendHandshake());

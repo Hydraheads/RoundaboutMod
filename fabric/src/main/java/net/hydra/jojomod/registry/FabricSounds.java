@@ -68,6 +68,7 @@ public class FabricSounds {
         addSound(ModSounds.OVA_PLATINUM_ORA_4_ID, ModSounds.OVA_PLATINUM_ORA_4_EVENT);
         addSound(ModSounds.DSP_SUMMON_ID, ModSounds.DSP_SUMMON_EVENT);
         addSound(ModSounds.SUMMON_D4C_ID, ModSounds.SUMMON_D4C_EVENT);
+        addSound(ModSounds.D4C_CLONE_ID, ModSounds.D4C_CLONE_EVENT);
         addSound(ModSounds.SPECIAL_CHEST_ID, ModSounds.SPECIAL_CHEST_EVENT);
         addSound(ModSounds.D4C_PORTAL_ID, ModSounds.D4C_PORTAL_EVENT);
         addSound(ModSounds.BLOCK_ATTRACT_ID, ModSounds.BLOCK_ATTRACT_EVENT);
@@ -524,6 +525,15 @@ public class FabricSounds {
         addSound(ModSounds.DIVER_DOWN_CHARGE_ID, ModSounds.DIVER_DOWN_CHARGE_EVENT);
         addSound(ModSounds.DIVER_DOWN_DIVE_ID, ModSounds.DIVER_DOWN_DIVE_EVENT);
         addSound(ModSounds.DIVER_DOWN_DIVE2_ID, ModSounds.DIVER_DOWN_DIVE2_EVENT);
+        addSound(ModSounds.DIVER_DOWN_BARRAGE_ID, ModSounds.DIVER_DOWN_BARRAGE_EVENT);
+        addSound(ModSounds.DIVER_DOWN_GROUND_BARRAGE_ID, ModSounds.DIVER_DOWN_GROUND_BARRAGE_EVENT);
+        addSound(ModSounds.DIVER_DOWN_GROUND_DIVE_ID, ModSounds.DIVER_DOWN_GROUND_DIVE_EVENT);
+        addSound(ModSounds.DIVER_DOWN_BUBBLING_ID, ModSounds.DIVER_DOWN_BUBBLING_EVENT);
+        addSound(ModSounds.DIVER_DOWN_ZIP_ID, ModSounds.DIVER_DOWN_ZIP_EVENT);
+        addSound(ModSounds.DIVER_DOWN_TRANSFER_ID, ModSounds.DIVER_DOWN_TRANSFER_EVENT);
+        addSound(ModSounds.DIVER_DOWN_SPRING_ID, ModSounds.DIVER_DOWN_SPRING_EVENT);
+        addSound(ModSounds.DIVER_DOWN_RIBCAGE_ID, ModSounds.DIVER_DOWN_RIBCAGE_EVENT);
+        addSound(ModSounds.DIVER_DOWN_BOMB_ID, ModSounds.DIVER_DOWN_BOMB_EVENT);
 
         addSound(ModSounds.SUMMON_GREEN_DAY_ID, ModSounds.SUMMON_GREEN_DAY_EVENT);
         addSound(ModSounds.SUMMON_WALKING_ID, ModSounds.SUMMON_WALKING_EVENT);

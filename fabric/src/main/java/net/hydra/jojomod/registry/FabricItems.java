@@ -373,6 +373,9 @@ public class FabricItems {
     public static Item JOSUKE_PART_EIGHT_MASK = registerItem("josuke_part_eight_mask", new MaskItem(new Item.Properties().stacksTo(1), new JosukePartEightVisage(null)));
     public static Item KIRA_PART_EIGHT_MASK = registerItem("kira_part_eight_mask", new MaskItem(new Item.Properties().stacksTo(1), new KiraPartEightVisage(null)));
     public static Item GUCCIO_MASK = registerItem("guccio_mask", new MaskItem(new Item.Properties().stacksTo(1), new GuccioVisage(null)));
+    public static Item ANASUI_MASK = registerItem("anasui_mask", new MaskItem(new Item.Properties().stacksTo(1), new AnasuiVisage(null)));
+    public static Item FEM_ANASUI_MASK = registerItem("fem_anasui_mask", new MaskItem(new Item.Properties().stacksTo(1), new FemAnasuiVisage(null)));
+    public static Item ANAKISS_MASK = registerItem("anakiss_mask", new MaskItem(new Item.Properties().stacksTo(1), new AnakissVisage(null)));
     public static Item HATO_MASK = registerItem("hato_mask", new MaskItem(new Item.Properties().stacksTo(1), new HatoVisage(null)));
     public static Item SHIZUKA_MASK = registerItem("shizuka_mask", new MaskItem(new Item.Properties().stacksTo(1), new ShizukaVisage(null)));
     public static Item CHAKA_MASK = registerItem("chaka_mask", new MaskItem(new Item.Properties().stacksTo(1), new ChakaVisage(null)));
@@ -559,6 +562,9 @@ public class FabricItems {
                         entries.accept(GHIACCIO_MASK);
                         entries.accept(JOTARO_6_MASK);
                         entries.accept(JOHNGALLIA_MASK);
+                        entries.accept(ANASUI_MASK);
+                        entries.accept(FEM_ANASUI_MASK);
+                        entries.accept(ANAKISS_MASK);
                         entries.accept(GUCCIO_MASK);
                         entries.accept(JOHNNY_MASK);
                         entries.accept(GYRO_MASK);
@@ -1068,6 +1074,9 @@ public class FabricItems {
         ModItems.DOT_HAN_MASK = DOT_HAN_MASK;
         ModItems.AVDUL_MASK = AVDUL_MASK;
         ModItems.JOSUKE_PART_EIGHT_MASK = JOSUKE_PART_EIGHT_MASK;
+        ModItems.ANASUI_MASK = ANASUI_MASK;
+        ModItems.FEM_ANASUI_MASK = FEM_ANASUI_MASK;
+        ModItems.ANAKISS_MASK = ANAKISS_MASK;
         ModItems.GUCCIO_MASK = GUCCIO_MASK;
         ModItems.HATO_MASK = HATO_MASK;
         ModItems.SHIZUKA_MASK = SHIZUKA_MASK;

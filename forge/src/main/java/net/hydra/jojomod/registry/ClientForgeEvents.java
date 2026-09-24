@@ -65,6 +65,8 @@ public class ClientForgeEvents {
             MenuScreens.register(ForgeMenus.DIVER_DOWN_CRAFTING.get(), DiverDownCraftingScreen::new);
             MenuScreens.register(ForgeMenus.DIVER_DOWN_ANVIL.get(), DiverDownAnvilScreen::new);
             MenuScreens.register(ForgeMenus.DIVER_DOWN_SMITHING.get(), DiverDownSmithingScreen::new);
+            MenuScreens.register(ForgeMenus.DIVER_DOWN_STONECUTTER.get(), DiverDownStonecutterScreen::new);
+            MenuScreens.register(ForgeMenus.DIVER_DOWN_LOOM.get(), DiverDownLoomScreen::new);
             //DD workbench registry end
             ItemBlockRenderTypes.setRenderLayer(ForgeBlocks.HALLUCINATORY_ACID.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(ForgeBlocks.HALLUCINATORY_ACID_WALL.get(), RenderType.translucent());
@@ -402,6 +404,7 @@ public class ClientForgeEvents {
         ModStrayModels.BigHairPart = new BigHairPart();
         ModStrayModels.KakyoinHairPart = new KakyoinHairPart();
         ModStrayModels.gyroHatPart = new GyroHatPart();
+        ModStrayModels.anakissHatPart = new AnakissHatPart();
         ModStrayModels.steelBallsPart = new SteelBallsPart();
         ModStrayModels.DiegoHatPart = new DiegoHatPart();
         ModStrayModels.Diego2HatPart = new Diego2HatPart();

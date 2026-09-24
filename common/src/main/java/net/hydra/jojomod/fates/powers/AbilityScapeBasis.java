@@ -534,6 +534,10 @@ public class AbilityScapeBasis {
     }
     public void onEnderPearlThrow(){
     }
+    public void onEnderPearlLand(){
+    }
+    public void onSpinAttackStart(){
+    }
     public byte getActivePower(){
         return this.activePower;
     }
@@ -2584,6 +2588,7 @@ public class AbilityScapeBasis {
             distMax = this.getDistanceOut(User, distMax, false);
             distMax = Math.min(this.getDistanceOut(User, distMax, false),distMax);
         }
+
         Entity targetEntity = this.rayCastEntity(User,distMax);
 
         if ((targetEntity != null && User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(targetEntity))

@@ -37,10 +37,7 @@ import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
-import net.minecraft.core.Vec3i;
+import net.minecraft.core.*;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -120,6 +117,7 @@ public class PowersD4C extends NewPunchingStand {
     public static final byte BLOCK_ATTRACT = 111;
     public static final byte DOJONE = 112;
     public static final byte DOJTWO = 113;
+    public static final byte D4C_CLONE = 114;
     @Override
     public float getSoundPitchFromByte(byte soundChoice){
         if (soundChoice == IMPALE_NOISE) {
@@ -150,6 +148,8 @@ public class PowersD4C extends NewPunchingStand {
             return ModSounds.DOJYAN_2_EVENT;
         } else if (soundChoice == MELT_DODGE) {
             return ModSounds.MELT_DODGE_EVENT;
+        } else if (soundChoice == D4C_CLONE) {
+            return ModSounds.D4C_CLONE_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
@@ -560,6 +560,18 @@ public class PowersD4C extends NewPunchingStand {
         return 100;
     }
     public int rech = 0;
+    D4CCloneEntity cloneInReach = null;
+    @Override
+    public boolean highlightsEntity(Entity ent,Player player){
+        if (cloneInReach != null && ent != null && cloneInReach.getUUID().equals(ent.getUUID())){
+            return true;
+        }
+        return false;
+    }
+    @Override
+    public int highlightsEntityColor(Entity ent, Player player){
+        return 15151775;
+    }
     @Override
     public void tickPower() {
         super.tickPower();
@@ -568,10 +580,31 @@ public class PowersD4C extends NewPunchingStand {
                 tickBetween();
             }
 
-            if (getActivePower() != PowerIndex.POWER_2_SNEAK){
+            byte sam = ((StandUser)self).roundabout$getStandAnimation();
+            if (sam != StandPowers.SWITCH_INTO_BODY){
                 ticksSinceSwitch = 0;
             } else {
                 ticksSinceSwitch++;
+            }
+
+            if (isGuarding()){
+                Entity jentity = getTargetEntity(self,15);
+                if (jentity instanceof D4CCloneEntity d4cclone){
+                    Optional<UUID> uuid = d4cclone.getPlayerUUID();
+                    if (uuid != null && uuid.isPresent()){
+                        if (uuid.get().equals(self.getUUID()) && jentity.isAlive()){
+                            cloneInReach = d4cclone;
+                        } else {
+                            cloneInReach = null;
+                        }
+                    } else {
+                        cloneInReach = null;
+                    }
+                } else {
+                    cloneInReach = null;
+                }
+            } else {
+                cloneInReach = null;
             }
         }
         if (!this.self.level().isClientSide() && self instanceof ServerPlayer sp){
@@ -773,7 +806,7 @@ public class PowersD4C extends NewPunchingStand {
                     }
                 }
 
-                if (createParallelPlayerCopy(sl, pl, spawnPos, worldId)) {
+                if (createParallelPlayerCopy(sl, pl, spawnPos, worldId,false)) {
                     copied++;
                 }
                 copiedPlayers++;
@@ -1092,7 +1125,8 @@ public class PowersD4C extends NewPunchingStand {
             ServerLevel level,
             Player original,
             Vec3 spawnPos,
-            byte worldId
+            byte worldId,
+            boolean isDuplicated
     ) {
         Entity copyEntity = ModEntities.D4C_CLONE.create(this.getSelf().level());
 
@@ -1163,7 +1197,13 @@ public class PowersD4C extends NewPunchingStand {
         // Alternate universe
         ((IEntityAndData)copy).rdbt$setNativeCopy(original.getUUID());
         PowerTypes.setPlaneOfExisting(copy, worldId);
-        PowerTypes.setTicksUntilGone(copy, PowerTypes.getForeignWorldMaxTime(worldId),worldId);
+        if (isDuplicated){
+            copy.setSpawned(true);
+            ((IEntityAndData)copy).rdbt$setNativeTo((byte) 3);
+            ((IEntityAndData)copy).rdbt$setOriginWorld((byte) 3);
+        } else {
+            PowerTypes.setTicksUntilGone(copy, PowerTypes.getForeignWorldMaxTime(worldId),worldId);
+        }
 
 
         level.addFreshEntity(copy);
@@ -1517,8 +1557,20 @@ public class PowersD4C extends NewPunchingStand {
         }
     }
     public void spawnCloneServer(){
-        if (isEligable()){
-            enactEligability();
+        if (isEligable() && self instanceof ServerPlayer sp){
+            if (createParallelPlayerCopy((ServerLevel) sp.level(),
+                    sp, sp.getPosition(1f), (byte)0,true)) {
+                Vector3f color = new Vector3f(0.97F, 1F, 0.3F);
+                MainUtil.sendParticlesIfPossible(self,self.level(),
+                        new DustParticleOptions(
+                                color,
+                                1.0F
+                        ), sp.getEyePosition().x,
+                        sp.getEyePosition().y, sp.getEyePosition().z,
+                        20, 0.3, 0.3, 0.3, 0.3);
+                playStandUserOnlySoundsIfNearby(D4C_CLONE, 27, false, false);
+                enactEligability();
+            }
         }
     }
     public void useUpBanner(ItemStack banner){
@@ -1776,6 +1828,9 @@ public class PowersD4C extends NewPunchingStand {
             return;
         }
 
+        if (cloneInReach != null){
+            tryIntPowerPacket(PowerIndex.POWER_2_BLOCK, cloneInReach.getId());
+        }
     }
     public void replaceBodyClient(){
         if (PowerTypes.isInD4CWorld(self)){
@@ -1946,12 +2001,14 @@ public class PowersD4C extends NewPunchingStand {
             setSkillIcon(context, x, y, 1, StandIcons.D4C_PARALLEL_GRAB, PowerIndex.SKILL_1_SNEAK);
         }
 
-        if (PowerTypes.isInD4CWorld(self)){
-            LockedOrNot(context, x, y, 2, StandIcons.D4C_PARALLEL_GRAB_2, PowerIndex.SKILL_EXTRA_2,0);
+        if (PowerTypes.isInD4CWorld(self)) {
+            LockedOrNot(context, x, y, 2, StandIcons.D4C_PARALLEL_GRAB_2, PowerIndex.SKILL_EXTRA_2, 0);
+        } else if (isGuarding()){
+            LockedOrNot(context, x, y, 2, StandIcons.D4C_CLONE_SWAP, PowerIndex.SKILL_EXTRA_2, 0);
         } else if (!isHoldingSneak()){
             LockedOrNot(context, x, y, 2, StandIcons.D4C_CLONE_SUMMON, PowerIndex.SKILL_2,0);
         } else {
-            LockedOrNot(context, x, y, 2, StandIcons.D4C_CLONE_SWAP, PowerIndex.SKILL_2_SNEAK,0);
+            LockedOrNot(context, x, y, 2, StandIcons.D4C_CLONE_SWAP_2, PowerIndex.SKILL_2_SNEAK,0);
         }
 
         if (isGuarding()){
@@ -1983,6 +2040,10 @@ public class PowersD4C extends NewPunchingStand {
     public boolean isAttackIneptVisually(byte activeP, int slot){
         boolean dworld = PowerTypes.isInD4CWorld(self);
         if (!(slot == 2 && dworld)){
+            if (slot == 2 && isGuarding()){
+                return cloneInReach == null || super.isAttackIneptVisually(activeP,slot);
+            }
+
             if ((slot == 1 && !isGuarding()) || slot == 2 || (slot == 4 && altBlockPos == null) || (slot == 3 && isGuarding())){
                 if (slot == 1 && !isGuarding() && dworld){
                     return !isEligableForExit() || super.isAttackIneptVisually(activeP,slot);
@@ -2435,10 +2496,166 @@ public class PowersD4C extends NewPunchingStand {
         if (move == PowerIndex.SNEAK_ATTACK) {
             this.dragTarget = chargeTime;
         }
+        if (move == PowerIndex.POWER_2_BLOCK) {
+            Entity cloneInSight = self.level().getEntity(chargeTime);
+            if (cloneInSight instanceof D4CCloneEntity d4c){
+                cloneInReach = d4c;
+            } else {
+                cloneInReach = null;
+            }
+        }
         return super.tryIntPower(move, forced, chargeTime);
     }
 
     public int ticksSinceSwitch = 0;
+
+    public void replaceBodySwap(){
+        if (!onCooldown(PowerIndex.SKILL_2_SNEAK) && cloneInReach != null && cloneInReach.isAlive()) {
+            if (self.level() instanceof ServerLevel sl) {
+                MobEffectInstance mei = self.getEffect(ModEffects.SWAPPED);
+                Vector3f color = new Vector3f(0.97F, 1F, 0.3F);
+
+                sl.sendParticles(new DustParticleOptions(
+                                color,
+                                1.0F
+                        ), cloneInReach.getX(),
+                        cloneInReach.getY() + cloneInReach.getEyeHeight(), cloneInReach.getZ(),
+                        20, 0.3, 0.3, 0.3, 0.3);
+                sl.sendParticles(new DustParticleOptions(
+                                color,
+                                1.0F
+                        ), self.getX(),
+                        self.getY() + self.getEyeHeight(), self.getZ(),
+                        20, 0.3, 0.3, 0.3, 0.3);
+                if (self instanceof Player pl){
+                    pl.getFoodData().setFoodLevel(20);
+                    pl.getFoodData().setSaturation(5.4F);
+                    int heat = getStandUserSelf().roundabout$getHeat();
+                    ((StandUser) pl).roundabout$setHeat(((StandUser)cloneInReach).roundabout$getHeat());
+                    ((StandUser)cloneInReach).roundabout$setHeat(heat);
+                }
+                int effectLevel = 0;
+                if (mei != null){
+                    effectLevel = mei.getAmplifier()+1;
+                }
+                int length = 100;
+                self.addEffect(new MobEffectInstance(ModEffects.IMPRINTING, length, 0), self);
+                self.addEffect(new MobEffectInstance(ModEffects.SWAPPED, 1800, effectLevel), self);
+
+
+
+                List<MobEffectInstance> selfEffects = self.getActiveEffects().stream()
+                        .filter(effect -> effect.getEffect() != ModEffects.IMPRINTING)
+                        .filter(effect -> effect.getEffect() != ModEffects.SWAPPED)
+                        .map(MobEffectInstance::new)
+                        .toList();
+
+                List<MobEffectInstance> cloneEffects = cloneInReach.getActiveEffects().stream()
+                        .filter(effect -> effect.getEffect() != ModEffects.IMPRINTING)
+                        .filter(effect -> effect.getEffect() != ModEffects.SWAPPED)
+                        .map(MobEffectInstance::new)
+                        .toList();
+
+                for (MobEffectInstance effect : selfEffects) {
+                    self.removeEffect(effect.getEffect());
+                }
+
+                for (MobEffectInstance effect : cloneEffects) {
+                    cloneInReach.removeEffect(effect.getEffect());
+                }
+
+                for (MobEffectInstance effect : cloneEffects) {
+                    self.addEffect(effect);
+                }
+
+                for (MobEffectInstance effect : selfEffects) {
+                    cloneInReach.addEffect(effect);
+                }
+
+
+                float ogHealth = self.getHealth();
+                float swapHealth = cloneInReach.getHealth();
+                cloneInReach.setHealth(ogHealth);
+                self.setHealth(swapHealth);
+                self.stopUsingItem();
+
+                cloneInReach.stopUsingItem();
+
+                Entity mount1 =cloneInReach.getVehicle();
+                Entity mount2 =self.getVehicle();
+
+
+                Position lastpos = self.getPosition(1f);
+                float yrot = self.getYRot();
+                float xrot = self.getXRot();
+
+                packetNearby(new Vector3f((float) cloneInReach.getX(),
+                                (float) cloneInReach.getY(),
+                                (float) cloneInReach.getZ()),
+                        self.getId());
+                self.teleportTo((sl), cloneInReach.getX(),
+                        cloneInReach.getY(),
+                        cloneInReach.getZ(),
+                        EnumSet.noneOf(RelativeMovement.class),
+                        cloneInReach.getYRot(), cloneInReach.getXRot());
+                self.setYRot(cloneInReach.getYRot());
+                self.setYHeadRot(cloneInReach.getYHeadRot());
+
+                packetNearby(new Vector3f((float) lastpos.x(),
+                                (float) lastpos.y(),
+                                (float) lastpos.z()),
+                        cloneInReach.getId());
+                cloneInReach.teleportTo((sl), lastpos.x(),
+                        lastpos.y(),
+                        lastpos.z(),
+                        EnumSet.noneOf(RelativeMovement.class),
+                        yrot, xrot);
+
+                if (mount1 != null){
+                    cloneInReach.stopRiding();
+                    ((IEntityAndData)self).roundabout$refreshBoardingCooldown();
+                    self.startRiding(mount1);
+                }
+                if (mount2 != null){
+                    self.stopRiding();
+                    ((IEntityAndData)cloneInReach).roundabout$refreshBoardingCooldown();
+                    cloneInReach.startRiding(mount2);
+                }
+
+                        this.animateStand(D4CEntity.BODY_LEAP);
+                setActivePower(PowerIndex.POWER_2_SNEAK);
+                setAttackTimeDuring(-length);
+                setCooldown(PowerIndex.SKILL_2_SNEAK,length);
+                this.poseStand(OffsetIndex.BEHIND);
+                playStandUserOnlySoundsIfNearby(FUSE, 27, false, false);
+//                if (Math.random() < 0.5F){
+//                    playSoundsIfNearby(DOJONE, 27, false, true);
+//                } else {
+//                    playSoundsIfNearby(DOJTWO, 27, false, true);
+//                }
+
+            }
+        }
+    }
+
+    public final void packetNearby(Vector3f blip, int entId) {
+        if (!this.self.level().isClientSide) {
+            ServerLevel serverWorld = ((ServerLevel) this.self.level());
+            Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
+
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.blockPosition();
+                if (blockPos.closerToCenterThan(userLocation, 100)) {
+                    S2CPacketUtil.sendBlipPacket(serverPlayerEntity, (byte) 2, entId,blip);
+                }
+            }
+        }
+    }
 
     public void replaceBody(){
         if (!onCooldown(PowerIndex.SKILL_2_SNEAK)) {
@@ -2533,6 +2750,9 @@ public class PowersD4C extends NewPunchingStand {
             return this.setPowerFinalAttack();
         } else if (move == PowerIndex.SNEAK_ATTACK) {
             return this.setPowerSuperHit();
+        } else if (move == PowerIndex.POWER_2_BLOCK) {
+            this.replaceBodySwap();
+            return false;
         } else if (move == PowerIndex.POWER_2_BONUS) {
             this.grabMobIntoWorld();
             return false;
@@ -3051,7 +3271,10 @@ public class PowersD4C extends NewPunchingStand {
         return $$1;
     }
 
-
+    @Override
+    public int getExtraPunchTime(){
+        return 2;
+    }
     @Override
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){

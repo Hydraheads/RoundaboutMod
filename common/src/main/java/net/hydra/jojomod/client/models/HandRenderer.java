@@ -13,12 +13,12 @@ import net.hydra.jojomod.block.handBlock.AbstractHandBlock;
 import net.hydra.jojomod.block.handBlock.HandBlock;
 import net.hydra.jojomod.block.handBlock.HandBlockEntity;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
+import net.hydra.jojomod.util.SkinUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.multiplayer.PlayerInfo;
-import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -32,15 +32,22 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.SkullBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.SkullBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RotationSegment;
 
 import javax.annotation.Nullable;
 import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer<T> {
     private final ModelPart hand;
     private final ModelPart hand_slim;
+
+    private final Map<UUID, SkinData> skins = new ConcurrentHashMap<>();
+    private final Set<UUID> requestedSkins = ConcurrentHashMap.newKeySet();
 
     private static final ResourceLocation WIDE_BASE = new ResourceLocation("textures/entity/player/wide/steve.png");
     private static final ResourceLocation SLIM_BASE = new ResourceLocation("textures/entity/player/slim/alex.png");
@@ -81,7 +88,7 @@ public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer
         Level $$6 = $$0.getLevel();
         boolean $$7 = $$6 != null;
         BlockState $$8 = $$7 ? $$0.getBlockState() : ModBlocks.HAND_BLOCK.defaultBlockState();
-        //if ($$8.getBlock() instanceof AbstractHandBlock $$11 && $$0 instanceof HandBlockEntity cbe) {
+        if ($$8.getBlock() instanceof AbstractHandBlock $$11 && $$0 instanceof HandBlockEntity hbe) {
 
             AbstractHandBlock.Type HandBlock$type = ((AbstractHandBlock) $$8.getBlock()).getType();
 
@@ -93,50 +100,83 @@ public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer
             $$2.translate(0F, -1F, 0F);
             VertexConsumer vertexConsumer;
 
-            GameProfile pfp = ((HandBlockEntity) $$0).getOwnerProfile();
+            //GameProfile pfp = ((HandBlockEntity) $$0).getOwnerProfile();
+            GameProfile pfp = hbe.getProfile();
 
             vertexConsumer = $$3.getBuffer(getRenderType(HandBlock$type, pfp));
+            boolean slim = getSlim(pfp);
 
-            ModelPart part = hand;
 
-            if (Minecraft.getInstance().getConnection() != null && pfp != null) {
-                PlayerInfo playerInfo = Minecraft.getInstance().getConnection().getPlayerInfo(pfp.getId());
-                if (playerInfo != null) {
-                    if (!playerInfo.getModelName().equals("default")) {
-                        part = hand_slim;
-                    }
+
+            if (Minecraft.getInstance().getConnection() != null) {
+                SkinUtil.SkinData skinInfo = SkinUtil.getSkin(pfp);
+                if (skinInfo != null) {
+                    vertexConsumer = $$3.getBuffer(RenderType.entityTranslucent(skinInfo.texture()));
+                    slim = skinInfo.slim();
                 }
             }
 
-            //if (HandBlock$type == AbstractHandBlock.Types.PLAYER_SLIM) {
+            ModelPart part = slim ? hand_slim : hand;
 
-            //}
 
             this.render($$2, vertexConsumer, part, $$4, $$5);
 
             $$2.popPose();
-        //}
+        }
     }
 
     private void render(PoseStack $$0, VertexConsumer $$1, ModelPart $$2,  int $$6, int $$7) {
         $$2.render($$0, $$1, $$6, $$7);
     }
 
-
-
-
-    public static RenderType getRenderType(HandBlock.Type type, @Nullable GameProfile p_112525_) {
-        ResourceLocation resourcelocation = WIDE_BASE;
+    public static RenderType getRenderType(HandBlock.Type type, @Nullable GameProfile $$1) {
 
         //if (/*p_112524_ == SkullBlock.Types.PLAYER &&*/ p_112525_ != null) {
-        if (p_112525_ != null) {
-            Minecraft minecraft = Minecraft.getInstance();
-            Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = minecraft.getSkinManager().getInsecureSkinInformation(p_112525_);
-            return map.containsKey(MinecraftProfileTexture.Type.SKIN) ? RenderType.entityTranslucent(minecraft.getSkinManager().registerTexture(map.get(MinecraftProfileTexture.Type.SKIN), MinecraftProfileTexture.Type.SKIN)) : RenderType.entityCutoutNoCull(DefaultPlayerSkin.getDefaultSkin(UUIDUtil.getOrCreatePlayerUUID(p_112525_)));
+        if ($$1 != null) {
+            Minecraft $$3 = Minecraft.getInstance();
+            Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> $$4 = $$3.getSkinManager().getInsecureSkinInformation($$1);
+
+            return $$4.containsKey(MinecraftProfileTexture.Type.SKIN) ? RenderType.entityTranslucent($$3.getSkinManager().registerTexture((MinecraftProfileTexture)$$4.get(MinecraftProfileTexture.Type.SKIN), MinecraftProfileTexture.Type.SKIN)) : RenderType.entityCutoutNoCull(DefaultPlayerSkin.getDefaultSkin(UUIDUtil.getOrCreatePlayerUUID($$1)));
         } else {
-            return RenderType.entityCutoutNoCullZOffset(resourcelocation);
+            return RenderType.entityCutoutNoCullZOffset(WIDE_BASE);
         }
 
+    }
+
+    public static boolean getSlim(GameProfile pfp) {
+        if (pfp != null) {
+            return getModelFromUUID(pfp.getId());
+        }
+        return false;
+    }
+
+    public static boolean getModelFromUUID(UUID uuid){
+        if (uuid == null){
+            return false;
+        }
+        if (DefaultPlayerSkin.getDefaultSkin(uuid).getPath().contains("wide")){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public record SkinData(ResourceLocation texture, boolean slim) {
+    }
+    private SkinData getSkin(GameProfile profile) {
+
+        if (profile == null) return new SkinData(WIDE_BASE, false);
+        UUID id = profile.getId();
+        SkinData current = skins.computeIfAbsent(id, ignored -> new SkinData(
+                DefaultPlayerSkin.getDefaultSkin(id), "slim".equals(DefaultPlayerSkin.getSkinModelName(id))));
+        if (requestedSkins.add(id)) {
+            Minecraft.getInstance().getSkinManager().registerSkins(profile, (type, location, texture) -> {
+                if (type == MinecraftProfileTexture.Type.SKIN) {
+                    skins.put(id, new SkinData(location, "slim".equals(texture.getMetadata("model"))));
+                }
+            }, false);
+        }
+        return current;
     }
 
 }

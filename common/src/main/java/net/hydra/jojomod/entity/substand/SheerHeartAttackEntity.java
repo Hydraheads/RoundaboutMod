@@ -8,6 +8,7 @@ import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.navigation.StandEntityNavigation;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.FateTypes;
@@ -69,6 +70,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
+import java.util.HashSet;
 import java.util.List;
 
 
@@ -142,6 +144,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 	public static float width = 0.5f;
 	public static float height = 0.3f;
 
+	private HashSet<Vec3> explodedBlocks = new HashSet<Vec3>();
+
 	@Override
 	protected PathNavigation createNavigation(Level $$0) {
 		StandEntityNavigation nav = new StandEntityNavigation(this, $$0);
@@ -167,7 +171,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	int explosionMiningIntervalTicks = explosionMiningIntervalTicksMax;
 	static final int explosionMiningIntervalTicksMax = 45;
 
-	final float jumpMaxHeight = 0.9f;
+	final float jumpMaxHeight = 0.6f;
 	int stunTicks = 15;
 
 	public int struckTicks = 0;
@@ -380,7 +384,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 						stunTicks = 40;
 					}else {
 						throwDamageCooldown--;
-						AABB bb = this.getBoundingBox().inflate(1.5);
+						AABB bb = this.getBoundingBox().expandTowards(getDeltaMovement()).inflate(0.15);
 						List<Entity> SHAAA = this.level().getEntities(this, bb);
 						for (Entity ent : SHAAA) {
 							if (ent.getId() == user.getId() || ent instanceof StandEntity) {
@@ -432,6 +436,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		} else if (this.hasTarget() && stunTicks <= 0 && attackTick <= 0) {
 			Vec3 pos = this.getTargetPosition();
+
 			if (this.shouldExplode(pos)) {
 				this.attack();
 				this.shaStopMove();
@@ -611,7 +616,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		if (this.getTargetType() == BLOCK) {
 			minDist = 1.4f;
 		}else if (getTargetType() == ENTITY && entityTarget != null) {
-			AABB bb = this.getBoundingBox().inflate(1.2);
+			AABB bb = this.getBoundingBox().inflate(0.15);
 			List<Entity> SHAAA = this.level().getEntities(this, bb);
 			for (Entity ent : SHAAA) {
 				if (ent == entityTarget) {
@@ -708,11 +713,15 @@ public class SheerHeartAttackEntity extends StandEntity {
 				BlockState info =this.level().getBlockState(this.blockTarget);
 				if (!(ExplosionUtil.isBlockBlackListed(info) || (MainUtil.confirmIsOre(info))
 						|| info.isAir() || info.is(Blocks.BARRIER) || info.is(Blocks.BEDROCK)
-						|| !MainUtil.isDestructible(level(), this.blockTarget, info))) {
+						|| !MainUtil.isDestructible2(level(), this.blockTarget, info))) {
 
 					boolean shouldDrop = !info.requiresCorrectToolForDrops();
 					this.level().destroyBlock(this.blockTarget, shouldDrop);
+				}else {
+					explodedBlocks.add(new Vec3(blockTarget.getX(), blockTarget.getY(), blockTarget.getZ()));
 				}
+			}else {
+				explodedBlocks.add(new Vec3(blockTarget.getX(), blockTarget.getY(), blockTarget.getZ()));
 			}
 			this.blockTarget = null;
 			this.setTargetType(NONE);
@@ -733,7 +742,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			this.level().playSound(null, this.blockPosition(), ModSounds.SHA_JUMP_EVENT, SoundSource.PLAYERS, 0.25F, 1.0f);
 			this.lookAt(EntityAnchorArgument.Anchor.EYES, jumpT0Pos);
 			this.jumpTick = jumpTickMax;
-			Vec3 movement = (this.getLookAngle().multiply(1.1, 0.54, 1.1)).add(0, 0.4, 0);
+			Vec3 movement = (this.getLookAngle().multiply(1.1, 0.54, 1.1)).add(0, 0.3, 0);
 			this.setDeltaMovement(movement.x(), Math.min(movement.y(), jumpMaxHeight), movement.z());
 		}
 	}
@@ -746,7 +755,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	public void shoot(Vec3 shootToPos){
 		this.throwStatus = THROWED;
 		this.lookAt(EntityAnchorArgument.Anchor.EYES,shootToPos);
-		this.setDeltaMovement((this.getLookAngle().multiply(1.6,1.6,1.6)).add(0,0.001,0));
+		this.setDeltaMovement((this.getLookAngle().multiply(1.8,1.8,1.8)).add(0,0.001,0));
 	}
 
 	public boolean shaIsNear() {
@@ -823,7 +832,6 @@ public class SheerHeartAttackEntity extends StandEntity {
 				BlockState BS = this.level().getBlockState(this.blockTarget);
 				if (BS.isPathfindable(this.level(), this.blockTarget, PathComputationType.LAND)) {
 					newPath = this.getNavigation().createPath(this.blockTarget.below(), 0);
-					//this.level().getBlockState(this.blockTarget);
 				}else {
 					newPath = this.getNavigation().createPath(this.blockTarget, 0);
 				}
@@ -844,11 +852,15 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 
 	public int getBlockWarm(BlockPos pos, Level level) {
+		if (explodedBlocks.contains(new Vec3(pos.getX(), pos.getY(), pos.getZ()))) {
+			return -1;
+		}
+
 		BlockState info = level.getBlockState(pos);
 
 		if (ExplosionUtil.isBlockBlackListed(info) || (MainUtil.confirmIsOre(info))
 				|| info.isAir() || info.is(Blocks.BARRIER) || info.is(Blocks.BEDROCK)
-				|| !MainUtil.isDestructible(level, pos, info))  {
+				|| !MainUtil.isDestructible2(level, pos, info))  {
 			return 0;
 		}
 
@@ -856,8 +868,15 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		String tag = key.toString();
         if (MainUtil.SHA_CUSTOM_BLOCK_HEAT.containsKey(tag)) {
-            return MainUtil.SHA_CUSTOM_BLOCK_HEAT.get(tag);
-        }
+			if (tag.contains("roundabout")) {
+				Roundabout.LOGGER.info("block Tag with info: " + tag);
+			}
+			return MainUtil.SHA_CUSTOM_BLOCK_HEAT.get(tag);
+        }else {
+			if (tag.contains("roundabout")) {
+				Roundabout.LOGGER.info("block Tag with no info: " + tag);
+			}
+		}
 
 		int light = info.getLightEmission();
 		if (light <= 7) { return 0; }
@@ -868,14 +887,11 @@ public class SheerHeartAttackEntity extends StandEntity {
 	public int getEntityWarm(Entity entity) {
 		int points = 0;
 
-		if (entity instanceof TamableAnimal TM) {
-			if (TM.getOwner() == getUser()) { return -1; }
-		}
-
-
-		if (!entity.isAttackable()
+		if (!entity.isAttackable() || (entity instanceof LivingEntity LE && !LE.canBeSeenAsEnemy())
+				|| (entity instanceof Player PL && PL.isCreative())
 				|| PowerTypes.isInADifferentExistence(entity,this)
-				|| entity instanceof StandEntity || entity.is(this.getUser())) { return -1; }
+				|| entity instanceof StandEntity || isUserAlliedTo(getUser(), entity)
+		) { return -1; }
 
 		ResourceLocation key = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType());
 
@@ -907,6 +923,49 @@ public class SheerHeartAttackEntity extends StandEntity {
 		}
 
 		return points;
+	}
+
+
+	public boolean isUserAlliedTo(Entity Owner, Entity target) {
+		if (target.is(this.getUser())) {
+			return true;
+		}
+
+		if (this.getTargetType() == ENTITY) {
+
+			if (Owner instanceof AbstractVillager || Owner instanceof IronGolem) {
+				if (target instanceof AbstractVillager || target instanceof IronGolem) {
+					return true;
+				}
+			}
+
+			if (Owner instanceof Raider) {
+				if (target instanceof Raider) {
+					return true;
+				}
+			}
+
+			if (Owner instanceof AbstractPiglin) {
+				if (target instanceof AbstractPiglin) {
+					return true;
+				}
+			}
+
+			if (Owner instanceof JojoNPC JNPC) {
+				if (target instanceof Mob M) {
+					if (M.getTarget() == JNPC.getTarget()) {
+						return true;
+					}
+				}
+			}
+		}
+
+		if ((target instanceof TamableAnimal TM && TM.getOwner() == Owner)
+				|| target.isAlliedTo(Owner)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override
@@ -963,28 +1022,6 @@ public class SheerHeartAttackEntity extends StandEntity {
 		return 1.0f;
 	}
 
-	public boolean mobAiShouldRetreactDetect(Entity Owner) {
-		if (this.getTargetType() == ENTITY) {
-			Entity target = entityTarget;
-
-			if (Owner instanceof AbstractVillager || Owner instanceof IronGolem) {
-				if (target instanceof AbstractVillager || target instanceof IronGolem) {
-					return true;
-				}
-			}
-			if (Owner instanceof Raider || Owner instanceof AbstractVillager) {
-				if (target instanceof Raider || target instanceof AbstractVillager) {
-					return true;
-				}
-			}
-			if (Owner instanceof AbstractPiglin) {
-				if (target instanceof AbstractPiglin) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
 
     @Override public boolean hurt(DamageSource source, float amount) {
         if (source.is(DamageTypes.GENERIC_KILL) || source.is(DamageTypes.FELL_OUT_OF_WORLD)){

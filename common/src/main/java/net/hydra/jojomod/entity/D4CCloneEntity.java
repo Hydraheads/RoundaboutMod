@@ -42,6 +42,8 @@ public class D4CCloneEntity extends CloneEntity {
 
     protected static final EntityDataAccessor<Integer> STRATEGY = SynchedEntityData.defineId(D4CCloneEntity.class,
             EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Boolean> SPAWNED = SynchedEntityData.defineId(D4CCloneEntity.class,
+            EntityDataSerializers.BOOLEAN);
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(
@@ -149,10 +151,19 @@ public class D4CCloneEntity extends CloneEntity {
     @Nullable
     private UUID learnedAnnihilator;
 
-
-
+    public int ticksSinceSwitch = 0;
     @Override
     public void tick() {
+        if (this.level().isClientSide) {
+            if (getSpawned()){
+                ticksSinceSwitch++;
+            }
+        } else {
+            if (getSpawned()){
+                ticksSinceSwitch++;
+            }
+        }
+
         super.tick();
 
         if (this.level().isClientSide) {
@@ -479,9 +490,15 @@ public class D4CCloneEntity extends CloneEntity {
         if (!this.entityData.hasItem(STRATEGY)) {
             super.defineSynchedData();
             this.entityData.define(STRATEGY, 0);
+            this.entityData.define(SPAWNED, false);
         }
     }
-
+    public boolean getSpawned(){
+        return entityData.get(SPAWNED);
+    }
+    public void setSpawned(boolean spawned){
+        entityData.set(SPAWNED,spawned);
+    }
     public int getStrategy(){
         return entityData.get(STRATEGY);
     }

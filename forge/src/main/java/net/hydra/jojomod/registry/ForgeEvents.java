@@ -592,6 +592,9 @@ public class ForgeEvents {
         ModItems.SHADOW_DIO_MASK = ForgeItems.SHADOW_DIO_MASK.get();
         ModItems.DIO_VAMPIRE_MASK = ForgeItems.DIO_VAMPIRE_MASK.get();
         ModItems.GUCCIO_MASK = ForgeItems.GUCCIO_MASK.get();
+        ModItems.ANASUI_MASK = ForgeItems.ANASUI_MASK.get();
+        ModItems.FEM_ANASUI_MASK = ForgeItems.FEM_ANASUI_MASK.get();
+        ModItems.ANAKISS_MASK = ForgeItems.ANAKISS_MASK.get();
         ModItems.ENYA_MASK = ForgeItems.ENYA_MASK.get();
         ModItems.DAIYA_MASK = ForgeItems.DAIYA_MASK.get();
         ModItems.DAIYA_2_MASK = ForgeItems.DAIYA_2_MASK.get();
