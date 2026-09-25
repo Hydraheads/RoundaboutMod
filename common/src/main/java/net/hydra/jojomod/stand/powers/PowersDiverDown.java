@@ -288,6 +288,14 @@ public class PowersDiverDown extends NewPunchingStand {
 
     // configs here
 
+    public int getAttackMultOnPlayers() {
+        return ClientNetworking.getAppropriateConfig().diverDownSettings.diverDownAttackMultOnPlayers;
+    }
+
+    public int getAttackMultOnMobs() {
+        return ClientNetworking.getAppropriateConfig().diverDownSettings.diverDownAttackMultOnMobs;
+    }
+
     public boolean canWallZipConfig() {
         return ClientNetworking.getAppropriateConfig().miscellaneousSettings.enableWallWalking;
     }
@@ -307,6 +315,59 @@ public class PowersDiverDown extends NewPunchingStand {
     public float getMiningMultiplier() {
         return (float) (1F*(ClientNetworking.getAppropriateConfig().
                 diverDownSettings.miningSpeedMultiplierDiverDown *0.01));
+    }
+
+    @Override
+    public int getMiningLevel() {
+        return ClientNetworking.getAppropriateConfig().diverDownSettings.getMiningTierDiverDown;
+    }
+
+    private float getGroundBarrageStrength(Entity entity) {
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(0.25F * this.getAttackMultOnPlayers() * 0.01F * 0.75F);
+        } else {
+            return levelupDamageMod(0.75F * this.getAttackMultOnMobs() * 0.01F * 0.75F);
+        }
+    }
+
+    private float getGroundFinisherStrength(Entity entity) {
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(5F * this.getAttackMultOnPlayers() * 0.01F * 0.75F);
+        } else {
+            return levelupDamageMod(8F * this.getAttackMultOnMobs() * 0.01F * 0.75F);
+        }
+    }
+
+    private float getKickTrapStrength(Entity entity) {
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(4F * this.getAttackMultOnPlayers() * 0.01F * 0.75F);
+        } else {
+            return levelupDamageMod(7F * this.getAttackMultOnMobs() * 0.01F * 0.75F);
+        }
+    }
+
+    private float getRibcageSnapStrength(Entity entity) {
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(8F * this.getAttackMultOnPlayers() * 0.01F * 0.75F);
+        } else {
+            return levelupDamageMod(12F * this.getAttackMultOnMobs() * 0.01F * 0.75F);
+        }
+    }
+
+    private float getRibcageHostStrength(Entity entity) {
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(6F * this.getAttackMultOnPlayers() * 0.01F * 0.75F);
+        } else {
+            return levelupDamageMod(20F * this.getAttackMultOnMobs() * 0.01F * 0.75F);
+        }
+    }
+
+    private float getBoneBombHostStrength(Entity entity) {
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(6F * this.getAttackMultOnPlayers() * 0.01F * 0.75F);
+        } else {
+            return levelupDamageMod(20F * this.getAttackMultOnMobs() * 0.01F * 0.75F);
+        }
     }
 
     // mob AI here
@@ -1115,7 +1176,7 @@ public class PowersDiverDown extends NewPunchingStand {
                                 // this ensures that enemies can still run around while the move is hitting them
                                 // whilst also making sure that the move doesn't send them flying away
                                 Vec3 motion = living.getDeltaMovement();
-                                DamageHandler.StandDamageEntity(living, 0.25F, this.self);
+                                DamageHandler.StandDamageEntity(living, getGroundBarrageStrength(living), this.self);
                                 living.setDeltaMovement(motion);
                                 hitParticles(living);
                                 // animate the barrage and also sound here
@@ -1123,7 +1184,7 @@ public class PowersDiverDown extends NewPunchingStand {
                                         SoundSource.PLAYERS, 0.55F, (float) (0.9 + (Math.random() * 0.30)));
                             } else if (this.barrageTicksLeft == 9) {
                                 // BIG FINAL PUNCH!!! (does bleed)
-                                DamageHandler.StandDamageEntity(living, 7.0F, this.self);
+                                DamageHandler.StandDamageEntity(living, getGroundFinisherStrength(living), this.self);
                                 MainUtil.makeBleed(target, 0, 300, stand);
                                 //can't use StandDamageEntityAttack because i need it to be going mostly straight up
                                 living.setDeltaMovement(living.getDeltaMovement().x * 0.3, 1.35D,
@@ -2935,7 +2996,7 @@ public class PowersDiverDown extends NewPunchingStand {
             if (victim instanceof TamableAnimal TA && TA.getOwner() != null && TA.getOwner().is(this.getSelf())) {
                 continue;
             }
-            DamageHandler.StandDamageEntity(victim, 8.0F, this.self);
+            DamageHandler.StandDamageEntity(victim, getKickTrapStrength(victim), this.self);
             Vec3 dir = trap.launchVector != null ? trap.launchVector : new Vec3(face.getStepX(), face.getStepY(), face.getStepZ());
 
             double launchX = dir.x;
@@ -3486,11 +3547,11 @@ public class PowersDiverDown extends NewPunchingStand {
 
         // sounds and animation here
 
-        DamageHandler.StandDamageEntity(victim, 12.0F, this.self);
+        DamageHandler.StandDamageEntity(victim, getRibcageSnapStrength(victim), this.self);
         MainUtil.makeBleed(victim, 1, 1200, this.self);
 
         // The host mob with the ribcage trap dies (if it's a cannon fodder entity)
-        DamageHandler.StandDamageEntity(host, 20, this.self);
+        DamageHandler.StandDamageEntity(host, getRibcageHostStrength(host), this.self);
 
         playSoundIfPossible(self.level(), null, host.blockPosition(),
                 ModSounds.DIVER_DOWN_RIBCAGE_EVENT,
