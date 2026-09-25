@@ -103,6 +103,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.TUSK_A4.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.ANUBIS.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.DIVER_DOWN.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.DIVER_DOWN_BETA.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SILVER_CHARIOT.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.OVA_ENYA.get(), OVAEnyaNPC.createAttributes().build());
         event.put(ForgeEntities.ENYA.get(), OVAEnyaNPC.createAttributes().build());
@@ -836,6 +837,7 @@ public class ForgeEvents {
         ModEntities.ANUBIS = ForgeEntities.ANUBIS.get();
         ModEntities.STAR_PLATINUM_BASEBALL = ForgeEntities.STAR_PLATINUM_BASEBALL.get();
         ModEntities.DIVER_DOWN = ForgeEntities.DIVER_DOWN.get();
+        ModEntities.DIVER_DOWN_BETA = ForgeEntities.DIVER_DOWN_BETA.get();
         ModEntities.BONE_PROJECTILE = ForgeEntities.BONE_PROJECTILE.get();
         ModEntities.SILVER_CHARIOT = ForgeEntities.SILVER_CHARIOT.get();
         ModEntities.SILVER_CHARIOT_RAPIER = ForgeEntities.SILVER_CHARIOT_RAPIER.get();

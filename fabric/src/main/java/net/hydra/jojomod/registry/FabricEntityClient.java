@@ -37,9 +37,7 @@ import net.hydra.jojomod.client.models.npcs.ZombieAestheticianModel;
 import net.hydra.jojomod.client.models.npcs.renderers.ZombieAestheticianRenderer;
 import net.minecraft.client.model.SilverfishModel;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
-import net.minecraft.client.renderer.entity.SpectralArrowRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
-import net.minecraft.client.renderer.entity.TippableArrowRenderer;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -109,6 +107,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.TUSK_A4, TuskAct4Renderer::new);
         EntityRendererRegistry.register(FabricEntities.ANUBIS, AnubisRenderer::new);
         EntityRendererRegistry.register(FabricEntities.DIVER_DOWN, DiverDownRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.DIVER_DOWN_BETA, DiverDownBetaRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SILVER_CHARIOT, SilverChariotRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SILVER_CHARIOT_RAPIER, SilverChariotRapierRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SILVER_CHARIOT_RAPIER_PLATFORM, SilverChariotRapierPlatformRenderer::new);
@@ -295,6 +294,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.TUSK_A4_LAYER, TuskAct4Model::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ANUBIS, AnubisHumanoidModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DIVER_DOWN_LAYER, DiverDownModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DIVER_DOWN_BETA_LAYER, DiverDownBetaModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SILVER_CHARIOT_LAYER, SilverChariotModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SILVER_CHARIOT_RAPIER_LAYER, SilverChariotRapierModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SILVER_CHARIOT_RAPIER_PLATFORM_LAYER, SilverChariotRapierPlatformModel::createBodyLayer);

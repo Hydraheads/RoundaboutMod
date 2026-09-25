@@ -36,12 +36,7 @@ import java.util.ArrayList;
 
 public class DiverLimbBlockEntityRenderer implements BlockEntityRenderer<DiverLimbBlockEntity> {
     private static final ResourceLocation PART_6 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/base.png");
-    private static final ResourceLocation LAVA_DIVER = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/lavadiver.png");
-    private static final ResourceLocation RED_DIVER = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/reddiver.png");
-    private static final ResourceLocation ORANGE_DIVER = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/orangediver.png");
-    private static final ResourceLocation TREASURE_DIVER = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/treasurediver.png");
-    private static final ResourceLocation BIRTHDAY_DIVER = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/birthdaydiver.png");
-    private static final ResourceLocation FIRE_DIVER = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/firedown.png");
+    private static final ResourceLocation BETA_DIVER = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/beta.png");
 
     //for all the limbs
     private final ModelPart rightArm;
@@ -139,12 +134,7 @@ public class DiverLimbBlockEntityRenderer implements BlockEntityRenderer<DiverLi
 
     public ResourceLocation getSkinLocation(byte skin) {
         return switch (skin) {
-            case DiverDownEntity.LAVA_DIVER -> LAVA_DIVER;
-            case DiverDownEntity.RED_DIVER -> RED_DIVER;
-            case DiverDownEntity.ORANGE_DIVER -> ORANGE_DIVER;
-            case DiverDownEntity.TREASURE_DIVER -> TREASURE_DIVER;
-            case DiverDownEntity.BIRTHDAY_DIVER -> BIRTHDAY_DIVER;
-            case DiverDownEntity.FIRE_DIVER -> FIRE_DIVER;
+            case DiverDownEntity.BETA_DIVER -> BETA_DIVER;
             default -> PART_6;
         };
     }
