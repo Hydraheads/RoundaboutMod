@@ -37,6 +37,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.hydra.jojomod.util.MainUtil;
@@ -74,8 +75,7 @@ import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.inventory.LoomMenu;
-import net.minecraft.world.inventory.StonecutterMenu;
+import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -92,9 +92,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ChestMenu;
-import net.minecraft.world.inventory.ContainerLevelAccess;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -147,6 +144,9 @@ public class PowersDiverDown extends NewPunchingStand {
     // NOISES GO BELOW HERE, starting from 120. I think that should be more than
     // enough.
     public static final byte CHARGE_NOISE = 120;
+
+    //used for workbench
+    private boolean customWorkbenchEnabled = true;
 
     // used for limb scaffolds
     private int MAX_LIMB_DISTANCE = 3;
@@ -320,6 +320,13 @@ public class PowersDiverDown extends NewPunchingStand {
     @Override
     public int getMiningLevel() {
         return ClientNetworking.getAppropriateConfig().diverDownSettings.getMiningTierDiverDown;
+    }
+
+    private void isCustomWorkbenchEnabled(){
+        if(ConfigManager.getClientConfig().diverDownSettings.customDiverDownWorkbench)
+            customWorkbenchEnabled = true;
+        else
+            customWorkbenchEnabled = false;
     }
 
     private float getGroundBarrageStrength(Entity entity) {
@@ -1908,15 +1915,26 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     public void openCraftingTable(ServerPlayer serverPlayer) {
-        serverPlayer.openMenu(new SimpleMenuProvider(
-                (containerId, inventory, player) -> new DiverDownCraftingMenu(containerId, inventory,
-                        ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
+        if (customWorkbenchEnabled) {
+            serverPlayer.openMenu(new SimpleMenuProvider(
+                    (containerId, inventory, player) -> new DiverDownCraftingMenu(containerId, inventory,
+                            ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
+                        @Override
+                        public boolean stillValid(Player player) {
+                            return true;
+                        }
+                    },
+                    Component.translatable("container.crafting")));
+        }
+        else {
+            serverPlayer.openMenu(new SimpleMenuProvider(
+                    (containerId, inventory, player) -> new CraftingMenu(containerId, inventory,
+                            ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
                     @Override
-                    public boolean stillValid(Player player) {
-                        return true;
-                    }
+                    public boolean stillValid(Player player) {return true;}
                 },
-                Component.translatable("container.crafting")));
+                    Component.translatable("container.crafting")));
+        }
         /* test to see if the selection even works in the first
          * place.
          * comment this out when unneeded anymore :thumbsup:
@@ -1926,43 +1944,87 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     public void openLoom(ServerPlayer serverPlayer) {
-        serverPlayer.openMenu(new SimpleMenuProvider(
-                (containerId, inventory, player) -> new DiverDownLoomMenu(containerId, inventory,
-                        ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())),
-                Component.translatable("container.loom")));
+        if(customWorkbenchEnabled) {
+            serverPlayer.openMenu(new SimpleMenuProvider(
+                    (containerId, inventory, player) -> new DiverDownLoomMenu(containerId, inventory,
+                            ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())),
+                    Component.translatable("container.loom")));
+        }
+        else {
+            serverPlayer.openMenu(new SimpleMenuProvider(
+                    (containerId, inventory, player) -> new LoomMenu(containerId, inventory,
+                            ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())),
+                    Component.translatable("container.loom")));
+        }
     }
 
     public void openStonecutter(ServerPlayer serverPlayer) {
-        serverPlayer.openMenu(new SimpleMenuProvider(
-                (containerId, inventory, player) -> new DiverDownStonecutterMenu(containerId, inventory,
-                        ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())),
-                Component.translatable("container.stonecutter")));
+        if(customWorkbenchEnabled) {
+            serverPlayer.openMenu(new SimpleMenuProvider(
+                    (containerId, inventory, player) -> new DiverDownStonecutterMenu(containerId, inventory,
+                            ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())),
+                    Component.translatable("container.stonecutter")));
+        }
+        else {
+            serverPlayer.openMenu(new SimpleMenuProvider(
+                    (containerId, inventory, player) -> new StonecutterMenu(containerId, inventory,
+                            ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())),
+                    Component.translatable("container.stonecutter")));
+        }
     }
 
     public void openAnvil(ServerPlayer serverPlayer) {
-        serverPlayer.openMenu(
-                new SimpleMenuProvider(
-                        (containerId, inventory, player) -> new DiverDownAnvilMenu(containerId, inventory,
-                                ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
-                            @Override
-                            public boolean stillValid(Player player) {
-                                return true;
-                            }
-                        },
-                        Component.translatable("container.repair")));
+        if(customWorkbenchEnabled) {
+            serverPlayer.openMenu(
+                    new SimpleMenuProvider(
+                            (containerId, inventory, player) -> new DiverDownAnvilMenu(containerId, inventory,
+                                    ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
+                                @Override
+                                public boolean stillValid(Player player) {
+                                    return true;
+                                }
+                            },
+                            Component.translatable("container.repair")));
+        }
+        else{
+            serverPlayer.openMenu(
+                    new SimpleMenuProvider(
+                            (containerId, inventory, player) -> new AnvilMenu(containerId, inventory,
+                                    ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
+                                @Override
+                                public boolean stillValid(Player player) {
+                                    return true;
+                                }
+                            },
+                            Component.translatable("container.repair")));
+        }
     }
 
     public void openSmithingTable(ServerPlayer serverPlayer) {
-        serverPlayer.openMenu(
-                new SimpleMenuProvider(
-                        (containerId, inventory, player) -> new DiverDownSmithingMenu(containerId, inventory,
-                                ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
-                            @Override
-                            public boolean stillValid(Player player) {
-                                return true;
-                            }
-                        },
-                        Component.translatable("container.upgrade")));
+        if(customWorkbenchEnabled) {
+            serverPlayer.openMenu(
+                    new SimpleMenuProvider(
+                            (containerId, inventory, player) -> new DiverDownSmithingMenu(containerId, inventory,
+                                    ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
+                                @Override
+                                public boolean stillValid(Player player) {
+                                    return true;
+                                }
+                            },
+                            Component.translatable("container.upgrade")));
+        }
+        else{
+            serverPlayer.openMenu(
+                    new SimpleMenuProvider(
+                            (containerId, inventory, player) -> new SmithingMenu(containerId, inventory,
+                                    ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
+                                @Override
+                                public boolean stillValid(Player player) {
+                                    return true;
+                                }
+                            },
+                            Component.translatable("container.upgrade")));
+        }
     }
 
     // Workbench code end
@@ -3125,6 +3187,9 @@ public class PowersDiverDown extends NewPunchingStand {
             return false;
         }
         // the windup
+        playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                ModSounds.DIVER_DOWN_CHARGE_EVENT,
+                SoundSource.PLAYERS, 0.8F, 0.9F);
         this.setActivePower(DIVER_SUBMERGE_START);
         this.setAttackTimeDuring(0);
         // do animations and stuff here
