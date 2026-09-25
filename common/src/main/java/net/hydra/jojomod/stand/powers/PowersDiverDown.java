@@ -37,6 +37,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.hydra.jojomod.util.MainUtil;
@@ -74,8 +75,7 @@ import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.inventory.LoomMenu;
-import net.minecraft.world.inventory.StonecutterMenu;
+import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -92,9 +92,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ChestMenu;
-import net.minecraft.world.inventory.ContainerLevelAccess;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -147,6 +144,9 @@ public class PowersDiverDown extends NewPunchingStand {
     // NOISES GO BELOW HERE, starting from 120. I think that should be more than
     // enough.
     public static final byte CHARGE_NOISE = 120;
+
+    //used for workbench
+    private boolean customWorkbenchEnabled = true;
 
     // used for limb scaffolds
     private int MAX_LIMB_DISTANCE = 3;
@@ -288,8 +288,86 @@ public class PowersDiverDown extends NewPunchingStand {
 
     // configs here
 
+    public int getAttackMultOnPlayers() {
+        return ClientNetworking.getAppropriateConfig().diverDownSettings.diverDownAttackMultOnPlayers;
+    }
+
+    public int getAttackMultOnMobs() {
+        return ClientNetworking.getAppropriateConfig().diverDownSettings.diverDownAttackMultOnMobs;
+    }
+
     public boolean canWallZipConfig() {
         return ClientNetworking.getAppropriateConfig().miscellaneousSettings.enableWallWalking;
+    }
+
+    @Override
+    /**Override to add disable config*/
+    public boolean isStandEnabled(){
+        return ClientNetworking.getAppropriateConfig().diverDownSettings.enableDiverDown;
+    }
+
+    @Override
+    public int getMaxGuardPoints(){
+        return ClientNetworking.getAppropriateConfig().diverDownSettings.diverDownGuardPoints;
+    }
+
+    @Override
+    public float getMiningMultiplier() {
+        return (float) (1F*(ClientNetworking.getAppropriateConfig().
+                diverDownSettings.miningSpeedMultiplierDiverDown *0.01));
+    }
+
+    @Override
+    public int getMiningLevel() {
+        return ClientNetworking.getAppropriateConfig().diverDownSettings.getMiningTierDiverDown;
+    }
+
+    private float getGroundBarrageStrength(Entity entity) {
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(0.25F * this.getAttackMultOnPlayers() * 0.01F * 0.75F);
+        } else {
+            return levelupDamageMod(0.75F * this.getAttackMultOnMobs() * 0.01F * 0.75F);
+        }
+    }
+
+    private float getGroundFinisherStrength(Entity entity) {
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(5F * this.getAttackMultOnPlayers() * 0.01F * 0.75F);
+        } else {
+            return levelupDamageMod(8F * this.getAttackMultOnMobs() * 0.01F * 0.75F);
+        }
+    }
+
+    private float getKickTrapStrength(Entity entity) {
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(4F * this.getAttackMultOnPlayers() * 0.01F * 0.75F);
+        } else {
+            return levelupDamageMod(7F * this.getAttackMultOnMobs() * 0.01F * 0.75F);
+        }
+    }
+
+    private float getRibcageSnapStrength(Entity entity) {
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(8F * this.getAttackMultOnPlayers() * 0.01F * 0.75F);
+        } else {
+            return levelupDamageMod(12F * this.getAttackMultOnMobs() * 0.01F * 0.75F);
+        }
+    }
+
+    private float getRibcageHostStrength(Entity entity) {
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(6F * this.getAttackMultOnPlayers() * 0.01F * 0.75F);
+        } else {
+            return levelupDamageMod(20F * this.getAttackMultOnMobs() * 0.01F * 0.75F);
+        }
+    }
+
+    private float getBoneBombHostStrength(Entity entity) {
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(6F * this.getAttackMultOnPlayers() * 0.01F * 0.75F);
+        } else {
+            return levelupDamageMod(20F * this.getAttackMultOnMobs() * 0.01F * 0.75F);
+        }
     }
 
     // mob AI here
@@ -719,12 +797,6 @@ public class PowersDiverDown extends NewPunchingStand {
 
     // icons and ability list end
 
-    @Override
-    public int getMaxGuardPoints() {
-        // change later to replace with the config.
-        return 15;
-    }
-
     // th...thank you soundman...
     // *sound*
     // soundman????
@@ -772,8 +844,8 @@ public class PowersDiverDown extends NewPunchingStand {
     @Override
     public void playBarrageNoise(int hitNumber, Entity entity){
         if (!this.self.level().isClientSide()) {
-            if (hitNumber % 3 == 0)
-                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.DIVER_DOWN_BARRAGE_EVENT, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
+            if (hitNumber % 2 == 0)
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.DIVER_DOWN_BARRAGE_EVENT, SoundSource.PLAYERS, 0.85F, (float) (0.9 + (Math.random() * 0.25)));
         }
     }
 
@@ -1104,7 +1176,7 @@ public class PowersDiverDown extends NewPunchingStand {
                                 // this ensures that enemies can still run around while the move is hitting them
                                 // whilst also making sure that the move doesn't send them flying away
                                 Vec3 motion = living.getDeltaMovement();
-                                DamageHandler.StandDamageEntity(living, 0.25F, this.self);
+                                DamageHandler.StandDamageEntity(living, getGroundBarrageStrength(living), this.self);
                                 living.setDeltaMovement(motion);
                                 hitParticles(living);
                                 // animate the barrage and also sound here
@@ -1112,7 +1184,7 @@ public class PowersDiverDown extends NewPunchingStand {
                                         SoundSource.PLAYERS, 0.55F, (float) (0.9 + (Math.random() * 0.30)));
                             } else if (this.barrageTicksLeft == 9) {
                                 // BIG FINAL PUNCH!!! (does bleed)
-                                DamageHandler.StandDamageEntity(living, 7.0F, this.self);
+                                DamageHandler.StandDamageEntity(living, getGroundFinisherStrength(living), this.self);
                                 MainUtil.makeBleed(target, 0, 300, stand);
                                 //can't use StandDamageEntityAttack because i need it to be going mostly straight up
                                 living.setDeltaMovement(living.getDeltaMovement().x * 0.3, 1.35D,
@@ -1805,7 +1877,10 @@ public class PowersDiverDown extends NewPunchingStand {
             return false;
         }
 
-        switch (workbenchId) {
+        this.customWorkbenchEnabled = workbenchId > 0;
+        int actualId = Math.abs(workbenchId);
+
+        switch (actualId) {
             case CRAFTING_TABLE -> {
                 // test message, comment this out once done
                 // serverPlayer.displayClientMessage(Component.literal("SERVER: calling
@@ -1836,16 +1911,27 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     public void openCraftingTable(ServerPlayer serverPlayer) {
-        serverPlayer.openMenu(new SimpleMenuProvider(
-                (containerId, inventory, player) -> new DiverDownCraftingMenu(containerId, inventory,
-                        ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
+        if (customWorkbenchEnabled) {
+            serverPlayer.openMenu(new SimpleMenuProvider(
+                    (containerId, inventory, player) -> new DiverDownCraftingMenu(containerId, inventory,
+                            ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
+                        @Override
+                        public boolean stillValid(Player player) {
+                            return true;
+                        }
+                    },
+                    Component.translatable("container.crafting")));
+        }
+        else {
+            serverPlayer.openMenu(new SimpleMenuProvider(
+                    (containerId, inventory, player) -> new CraftingMenu(containerId, inventory,
+                            ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
                     @Override
-                    public boolean stillValid(Player player) {
-                        return true;
-                    }
+                    public boolean stillValid(Player player) {return true;}
                 },
-                Component.translatable("container.crafting")));/**
-         * test to see if the selection even works in the first
+                    Component.translatable("container.crafting")));
+        }
+        /* test to see if the selection even works in the first
          * place.
          * comment this out when unneeded anymore :thumbsup:
          */
@@ -1854,43 +1940,107 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     public void openLoom(ServerPlayer serverPlayer) {
-        serverPlayer.openMenu(new SimpleMenuProvider(
-                (containerId, inventory, player) -> new DiverDownLoomMenu(containerId, inventory,
-                        ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())),
-                Component.translatable("container.loom")));
+        if(customWorkbenchEnabled) {
+            serverPlayer.openMenu(new SimpleMenuProvider(
+                    (containerId, inventory, player) -> new DiverDownLoomMenu(containerId, inventory,
+                            ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
+                        @Override
+                        public boolean stillValid(Player player) {
+                            return true;
+                        }
+                    },
+                    Component.translatable("container.loom")));
+        }
+        else {
+            serverPlayer.openMenu(new SimpleMenuProvider(
+                    (containerId, inventory, player) -> new LoomMenu(containerId, inventory,
+                            ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
+                        @Override
+                        public boolean stillValid(Player player) {
+                            return true;
+                        }
+                    },
+                    Component.translatable("container.loom")));
+        }
     }
 
     public void openStonecutter(ServerPlayer serverPlayer) {
-        serverPlayer.openMenu(new SimpleMenuProvider(
-                (containerId, inventory, player) -> new DiverDownStonecutterMenu(containerId, inventory,
-                        ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())),
-                Component.translatable("container.stonecutter")));
+        if(customWorkbenchEnabled) {
+            serverPlayer.openMenu(new SimpleMenuProvider(
+                    (containerId, inventory, player) -> new DiverDownStonecutterMenu(containerId, inventory,
+                            ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
+                        @Override
+                        public boolean stillValid(Player player) {
+                            return true;
+                        }
+                    },
+                    Component.translatable("container.stonecutter")));
+        }
+        else {
+            serverPlayer.openMenu(new SimpleMenuProvider(
+                    (containerId, inventory, player) -> new StonecutterMenu(containerId, inventory,
+                            ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
+                        @Override
+                        public boolean stillValid(Player player) {
+                            return true;
+                        }
+                    },
+                    Component.translatable("container.stonecutter")));
+        }
     }
 
     public void openAnvil(ServerPlayer serverPlayer) {
-        serverPlayer.openMenu(
-                new SimpleMenuProvider(
-                        (containerId, inventory, player) -> new DiverDownAnvilMenu(containerId, inventory,
-                                ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
-                            @Override
-                            public boolean stillValid(Player player) {
-                                return true;
-                            }
-                        },
-                        Component.translatable("container.repair")));
+        if(customWorkbenchEnabled) {
+            serverPlayer.openMenu(
+                    new SimpleMenuProvider(
+                            (containerId, inventory, player) -> new DiverDownAnvilMenu(containerId, inventory,
+                                    ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
+                                @Override
+                                public boolean stillValid(Player player) {
+                                    return true;
+                                }
+                            },
+                            Component.translatable("container.repair")));
+        }
+        else{
+            serverPlayer.openMenu(
+                    new SimpleMenuProvider(
+                            (containerId, inventory, player) -> new AnvilMenu(containerId, inventory,
+                                    ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
+                                @Override
+                                public boolean stillValid(Player player) {
+                                    return true;
+                                }
+                            },
+                            Component.translatable("container.repair")));
+        }
     }
 
     public void openSmithingTable(ServerPlayer serverPlayer) {
-        serverPlayer.openMenu(
-                new SimpleMenuProvider(
-                        (containerId, inventory, player) -> new DiverDownSmithingMenu(containerId, inventory,
-                                ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
-                            @Override
-                            public boolean stillValid(Player player) {
-                                return true;
-                            }
-                        },
-                        Component.translatable("container.upgrade")));
+        if(customWorkbenchEnabled) {
+            serverPlayer.openMenu(
+                    new SimpleMenuProvider(
+                            (containerId, inventory, player) -> new DiverDownSmithingMenu(containerId, inventory,
+                                    ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
+                                @Override
+                                public boolean stillValid(Player player) {
+                                    return true;
+                                }
+                            },
+                            Component.translatable("container.upgrade")));
+        }
+        else{
+            serverPlayer.openMenu(
+                    new SimpleMenuProvider(
+                            (containerId, inventory, player) -> new SmithingMenu(containerId, inventory,
+                                    ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
+                                @Override
+                                public boolean stillValid(Player player) {
+                                    return true;
+                                }
+                            },
+                            Component.translatable("container.upgrade")));
+        }
     }
 
     // Workbench code end
@@ -2316,6 +2466,9 @@ public class PowersDiverDown extends NewPunchingStand {
             return false;
         }
         if (chestPos == null) {
+            return false;
+        }
+        if (!MainUtil.canPlaceOnClaim(serverPlayer, chestPos)) {
             return false;
         }
         StandEntity stand = getStandEntity(this.self);
@@ -2924,7 +3077,7 @@ public class PowersDiverDown extends NewPunchingStand {
             if (victim instanceof TamableAnimal TA && TA.getOwner() != null && TA.getOwner().is(this.getSelf())) {
                 continue;
             }
-            DamageHandler.StandDamageEntity(victim, 8.0F, this.self);
+            DamageHandler.StandDamageEntity(victim, getKickTrapStrength(victim), this.self);
             Vec3 dir = trap.launchVector != null ? trap.launchVector : new Vec3(face.getStepX(), face.getStepY(), face.getStepZ());
 
             double launchX = dir.x;
@@ -3053,6 +3206,9 @@ public class PowersDiverDown extends NewPunchingStand {
             return false;
         }
         // the windup
+        playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                ModSounds.DIVER_DOWN_CHARGE_EVENT,
+                SoundSource.PLAYERS, 0.8F, 0.9F);
         this.setActivePower(DIVER_SUBMERGE_START);
         this.setAttackTimeDuring(0);
         // do animations and stuff here
@@ -3475,11 +3631,11 @@ public class PowersDiverDown extends NewPunchingStand {
 
         // sounds and animation here
 
-        DamageHandler.StandDamageEntity(victim, 12.0F, this.self);
+        DamageHandler.StandDamageEntity(victim, getRibcageSnapStrength(victim), this.self);
         MainUtil.makeBleed(victim, 1, 1200, this.self);
 
         // The host mob with the ribcage trap dies (if it's a cannon fodder entity)
-        DamageHandler.StandDamageEntity(host, 20, this.self);
+        DamageHandler.StandDamageEntity(host, getRibcageHostStrength(host), this.self);
 
         playSoundIfPossible(self.level(), null, host.blockPosition(),
                 ModSounds.DIVER_DOWN_RIBCAGE_EVENT,
@@ -3900,7 +4056,7 @@ public class PowersDiverDown extends NewPunchingStand {
         if (state.getBlock().defaultDestroyTime() < 0) return false;
 
         // Server config block blacklist check
-        if (MainUtil.isBlockBlacklisted(state)) return false;
+        if (MainUtil.isBlockDisassemblyBlacklisted(state)) return false;
 
         // check for distance (like BlockGrabPreset.getGrabRange())
         if (this.self.distanceToSqr(Vec3.atCenterOf(pos)) > 30.0) return false; // 30/6 = 5 blocks max
@@ -3910,6 +4066,7 @@ public class PowersDiverDown extends NewPunchingStand {
             if (!level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) return false;
             if (PE.blockActionRestricted(PE.serverLevel(), pos, PE.gameMode.getGameModeForPlayer())) return false;
             if (!level.mayInteract(PE, pos)) return false;
+            if (!MainUtil.canPlaceOnClaim(PE, pos)) return false;
         }
 
         // must have an associated Item
