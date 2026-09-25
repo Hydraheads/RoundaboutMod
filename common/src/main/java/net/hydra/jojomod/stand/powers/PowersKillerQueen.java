@@ -85,7 +85,6 @@ import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.*;
@@ -2704,8 +2703,8 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         if (target != null && stand instanceof KillerQueenEntity KQE) {
             KQE.setPlantedBitesTheDust(true);
-
-            timeOfPlanting = (int)((IDayInterpolationClientLevelData) self.level().getLevelData()).roundabout$getRoundaboutDayTimeMinecraft();
+            
+            timeOfPlanting = (int)(self.level().getLevelData()).getDayTime();
 
             if ( self instanceof Player player
                     && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof KiraPartFourVoice voice) {
@@ -4420,60 +4419,13 @@ public class PowersKillerQueen extends NewPunchingStand {
     public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x,
                                   boolean removeNum) {
         if (inBitesTheDustMode()) {
-            renderBitesTheDustTimer(context, Minecraft.getInstance(), screenWidth, screenHeight, x,
-                    btdTicks + disabledBTDTicks, Math.max(this.btdTicksMax, btdTicks));
+            StandHudRender.renderBitesTheDustTimer(context, Minecraft.getInstance(), screenWidth, screenHeight, x,
+                    btdTicks + disabledBTDTicks, Math.max(this.btdTicksMax, btdTicks), this);
         }else if (this.SHA != null && !this.SHA.isRemoved()) {
             double distance = SHA.distanceTo(getSelf());
             StandHudRender.renderNumberHUD(context, Minecraft.getInstance(), screenWidth, screenHeight, x, distance, 100, StandIcons.JOJO_ICONS, 0, 161, 0xe2badf);
         }
     }
-
-    public static void renderBitesTheDustTimer(GuiGraphics context, Minecraft client, int scaledWidth, int scaledHeight,
-                                       int x, double value, double max) {
-
-        ResourceLocation file = StandIcons.JOJO_ICONS;
-        int bx = 0;
-        int by = 70;
-        int color = 0xab93e0;
-
-        int minSecs = ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatMinimunForFullBlow * 20;
-
-        if (value >= minSecs) {
-            by = 161;
-            color = 0xb161a9;
-        }else if (value < 0) {
-            by = 60;
-            color = 0x80a09f;
-            max = 0;
-        }
-
-        int l;
-        int blt;
-
-        if (max <= 1) {
-            blt = (int) value;
-        }else {
-            blt = (int) Math.floor(((double) 182 / max) * (value));
-        }
-
-        l = scaledHeight - 32 + 3;
-        context.blit(file, x, l, bx, by, 182, 5);
-        if (blt > 0) {
-            context.blit(file, x, l, bx, by+5, blt, 5);
-        }
-
-        int y = color;
-        Font renderer = client.font;
-        String $$6 = (int)(value / 20.0) + "";
-        int $$7 = (scaledWidth - renderer.width($$6)) / 2;
-        int $$8 = scaledHeight - 31 - 4;
-        context.drawString(renderer, $$6, $$7 + 1, $$8, 0, false);
-        context.drawString(renderer, $$6, $$7 - 1, $$8, 0, false);
-        context.drawString(renderer, $$6, $$7, $$8 + 1, 0, false);
-        context.drawString(renderer, $$6, $$7, $$8 - 1, 0, false);
-        context.drawString(renderer, $$6, $$7, $$8, y, false);
-    }
-
     @Override
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
