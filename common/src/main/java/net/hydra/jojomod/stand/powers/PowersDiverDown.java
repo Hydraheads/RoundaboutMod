@@ -274,6 +274,10 @@ public class PowersDiverDown extends NewPunchingStand {
 
     @Override
     public StandEntity getNewStandEntity() {
+        byte skin = ((StandUser) this.getSelf()).roundabout$getStandSkin();
+        if (skin == DiverDownEntity.BETA_DIVER) {
+            return ModEntities.DIVER_DOWN_BETA.create(this.getSelf().level());
+        }
         return ModEntities.DIVER_DOWN.create(this.getSelf().level());
     }
 
@@ -4392,23 +4396,8 @@ public class PowersDiverDown extends NewPunchingStand {
             case DiverDownEntity.PART_6 -> {
                 return Component.translatable("skins.roundabout.diver_down.base");
             }
-            case DiverDownEntity.LAVA_DIVER -> {
-                return Component.translatable("skins.roundabout.diver_down.lavadiver");
-            }
-            case DiverDownEntity.RED_DIVER -> {
-                return Component.translatable("skins.roundabout.diver_down.reddiver");
-            }
-            case DiverDownEntity.ORANGE_DIVER -> {
-                return Component.translatable("skins.roundabout.diver_down.orangediver");
-            }
-            case DiverDownEntity.TREASURE_DIVER -> {
-                return Component.translatable("skins.roundabout.diver_down.treasurediver");
-            }
-            case DiverDownEntity.BIRTHDAY_DIVER -> {
-                return Component.translatable("skins.roundabout.diver_down.birthdaydiver");
-            }
-            case DiverDownEntity.FIRE_DIVER -> {
-                return Component.translatable("skins.roundabout.diver_down.firediver");
+            case DiverDownEntity.BETA_DIVER -> {
+                return Component.translatable("skins.roundabout.diver_down.betadiver");
             }
             default -> {
                 return Component.translatable("skins.roundabout.diver_down.base");
@@ -4420,12 +4409,7 @@ public class PowersDiverDown extends NewPunchingStand {
     public List<Byte> getSkinList() {
         return Arrays.asList(
                 DiverDownEntity.PART_6,
-                DiverDownEntity.LAVA_DIVER,
-                DiverDownEntity.RED_DIVER,
-                DiverDownEntity.ORANGE_DIVER,
-                DiverDownEntity.TREASURE_DIVER,
-                DiverDownEntity.BIRTHDAY_DIVER,
-                DiverDownEntity.FIRE_DIVER);
+                DiverDownEntity.BETA_DIVER);
     }
 
     // skins end

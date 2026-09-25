@@ -21,12 +21,7 @@ public class DiverDownEntity extends FollowingStandEntity {
     }
 
     public static final byte PART_6 = 0,
-            LAVA_DIVER = 1,
-            RED_DIVER = 2,
-            ORANGE_DIVER = 3,
-            TREASURE_DIVER = 4,
-            BIRTHDAY_DIVER = 5,
-            FIRE_DIVER = 6;
+            BETA_DIVER = 1;
 
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState hideLeg = new AnimationState();
