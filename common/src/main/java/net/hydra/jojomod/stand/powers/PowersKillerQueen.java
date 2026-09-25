@@ -2682,6 +2682,8 @@ public class PowersKillerQueen extends NewPunchingStand {
         syncBTDMaxTicks(record);
     }
 
+    public int timeOfPlanting = 0;
+
     public void tryBitesTheDustPlant(StandEntity stand, AABB bb1, AABB bb2) {
         bb1 = bb1.inflate(1.2F);
         bb2 = bb2.inflate(1.2F);
@@ -2702,6 +2704,8 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         if (target != null && stand instanceof KillerQueenEntity KQE) {
             KQE.setPlantedBitesTheDust(true);
+
+            timeOfPlanting = (int)((IDayInterpolationClientLevelData) self.level().getLevelData()).roundabout$getRoundaboutDayTimeMinecraft();
 
             if ( self instanceof Player player
                     && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof KiraPartFourVoice voice) {
@@ -2813,6 +2817,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             btdTicks = 0;
             return true;
         }
+        if (disabledBTDTicks < 0) { return false; }
 
         if (combatActivations <= getMaxBitesTheDustDetonations() || getMaxBitesTheDustDetonations() == 0)  {
             combatActivations++;
@@ -2891,8 +2896,6 @@ public class PowersKillerQueen extends NewPunchingStand {
                             if (!(PKQ.onCooldown(PowerIndex.SKILL_EXTRA) && PKQ.getCooldown(PowerIndex.SKILL_EXTRA).time > btdDayCooldown)) {
                                 PKQ.setCooldown(PowerIndex.SKILL_EXTRA, btdDayCooldown);
                             }
-                            PKQ.combatActivations++;
-
                         }
                     }
 
@@ -3023,6 +3026,20 @@ public class PowersKillerQueen extends NewPunchingStand {
         syncBombStatus(BITES_THE_DUST_BIGGER);
 
         return true;
+    }
+
+    public int disabledBTDTicks = 0;
+
+    public void translateBitesTheDustTime(int otherBitesTheDust) {
+        if (currentBombStatus == BITES_THE_DUST) {
+            int difference = timeOfPlanting - otherBitesTheDust;
+            if (difference >= 0) {
+                btdTicks = difference;
+            }else {
+                disabledBTDTicks = difference;
+                btdTicks = 0;
+            }
+        }
     }
 
     public void convertBitedTheDustCombatToDay() {
@@ -3526,7 +3543,10 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         if (mobPlantTicks > 0){ mobPlantTicks--; }
         if (impaleTicks > 0){ impaleTicks--; }
-        if (btdTicks >= 0) { btdTicks++; }
+        if (btdTicks >= 0 && disabledBTDTicks >= 0) { btdTicks++; }
+        else if(disabledBTDTicks < 0) {
+            disabledBTDTicks++;
+        }
 
         if (!isClient()) {
             StandEntity SE = this.getStandEntity(this.self);
@@ -4401,7 +4421,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                                   boolean removeNum) {
         if (inBitesTheDustMode()) {
             renderBitesTheDustTimer(context, Minecraft.getInstance(), screenWidth, screenHeight, x,
-                    btdTicks, Math.max(this.btdTicksMax, btdTicks));
+                    btdTicks + disabledBTDTicks, Math.max(this.btdTicksMax, btdTicks));
         }else if (this.SHA != null && !this.SHA.isRemoved()) {
             double distance = SHA.distanceTo(getSelf());
             StandHudRender.renderNumberHUD(context, Minecraft.getInstance(), screenWidth, screenHeight, x, distance, 100, StandIcons.JOJO_ICONS, 0, 161, 0xe2badf);
@@ -4410,7 +4430,6 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public static void renderBitesTheDustTimer(GuiGraphics context, Minecraft client, int scaledWidth, int scaledHeight,
                                        int x, double value, double max) {
-        // Letting this here for possible improvements on the timer? (time marks)
 
         ResourceLocation file = StandIcons.JOJO_ICONS;
         int bx = 0;
@@ -4422,12 +4441,21 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (value >= minSecs) {
             by = 161;
             color = 0xb161a9;
+        }else if (value < 0) {
+            by = 60;
+            color = 0x80a09f;
+            max = 0;
         }
 
-
         int l;
+        int blt;
 
-        int blt = (int) Math.floor(((double) 182 / max)*(value));
+        if (max <= 1) {
+            blt = (int) value;
+        }else {
+            blt = (int) Math.floor(((double) 182 / max) * (value));
+        }
+
         l = scaledHeight - 32 + 3;
         context.blit(file, x, l, bx, by, 182, 5);
         if (blt > 0) {
