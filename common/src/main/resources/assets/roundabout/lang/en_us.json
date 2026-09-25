@@ -4624,6 +4624,8 @@
   "config.roundabout.bitesTheDustDayMobsDamage.desc": "How much does bites the dust hurt mobs?",
   "config.roundabout.bitesTheDustDayPlayersDamage.name":"BTD Player Damage",
   "config.roundabout.bitesTheDustDayPlayersDamage.desc": "How much does bites the dust hurt players?",
+  "config.roundabout.maximunBiteTheDustCombatActivations.name": "Amount of bites the dust combat detonations",
+  "config.roundabout.maximunBiteTheDustCombatActivations.desc": "Set how much detonations bites the dust combat can make. 0 means no limit.",
 
 
   "config.roundabout.theWorldAttackMultOnPlayers.name": "Player Damage Multiplier",

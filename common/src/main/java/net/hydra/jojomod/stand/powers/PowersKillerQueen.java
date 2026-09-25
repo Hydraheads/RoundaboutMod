@@ -2182,7 +2182,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public boolean canBitesTheDustCombat() {
-        return currentBombStatus != BITES_THE_DUST_BIGGER && combatActivations <= getMaxBitesTheDustDetonations();
+        return currentBombStatus != BITES_THE_DUST_BIGGER && (combatActivations <= getMaxBitesTheDustDetonations() || getMaxBitesTheDustDetonations() == 0);
     }
 
     
@@ -2402,7 +2402,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (inBitesTheDustMode()) {
                 int cooldownBase = ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustPlantCooldown;
 
-                this.setCooldown(PowerIndex.SKILL_4, (cooldownBase / (getMaxBitesTheDustDetonations() + 2)) + ((cooldownBase / (getMaxBitesTheDustDetonations() + 2)) * combatActivations));
+                this.setCooldown(PowerIndex.SKILL_4, (cooldownBase / (getMaxBitesTheDustDetonations()+1)) + ((cooldownBase / (getMaxBitesTheDustDetonations() + 1)) * combatActivations));
                 StandEntity stand = getStandEntity(this.self);
                 if (Objects.nonNull(stand) && stand instanceof KillerQueenEntity KQE ){
                     KQE.setPlantedBitesTheDust(false);
@@ -2481,13 +2481,13 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             if (currentBombStatus == BOMB_ENTITY || currentBombStatus == ENTITY_CONTACT) {
                 //int cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.mobPlantCooldown;
-                int cooldownAmount = 60;
+                int cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.mobPlantCooldown/2;
                 this.setCooldown(PowerIndex.SKILL_2, cooldownAmount);
                 if (this.getSelf() instanceof Player P) {
                     S2CPacketUtil.sendCooldownSyncPacket(P, PowerIndex.SKILL_2, cooldownAmount);
                 }
             }else {
-                //int cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.itemPlantCooldown + 40;
+
                 int cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.itemPlantCooldown;
                 this.setCooldown(PowerIndex.SKILL_2_SNEAK, cooldownAmount);
                 if (this.getSelf() instanceof Player P) {
@@ -2501,7 +2501,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 this.bombBubble.setIsPlanted(false);
             }
             this.bombBubble = null;
-            int cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.bubbleShootCooldown;
+            int cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.bubbleShootCooldown/2;
             this.setCooldown(BUBBLE_SEND_COOLDOWN, cooldownAmount);
             if (this.getSelf() instanceof Player P) {
                 S2CPacketUtil.sendCooldownSyncPacket(P, BUBBLE_SEND_COOLDOWN, cooldownAmount);
@@ -2511,7 +2511,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 bombPlantedItem.defuse();
                 bombPlantedItem = null;
             }
-            int cooldownAmount = 70;
+            int cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.itemPlantCooldown/2;
 
             this.setCooldown(PowerIndex.SKILL_2_SNEAK, cooldownAmount);
             if (this.getSelf() instanceof Player P) {
@@ -2797,7 +2797,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public int getMaxBitesTheDustDetonations() {
-        return 2;
+        return ClientNetworking.getAppropriateConfig().killerQueenSettings.maximunBiteTheDustCombatActivations;
     }
 
     public int combatActivations = 0;
@@ -2814,7 +2814,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             return true;
         }
 
-        if (combatActivations < getMaxBitesTheDustDetonations())  {
+        if (combatActivations <= getMaxBitesTheDustDetonations() || getMaxBitesTheDustDetonations() == 0)  {
             combatActivations++;
             if (self instanceof ServerPlayer PL) {
                 S2CPacketUtil.sendIntPowerDataPacket(PL, BTD_ACTIVATIONS, combatActivations);
