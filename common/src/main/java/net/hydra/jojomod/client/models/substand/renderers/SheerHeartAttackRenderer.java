@@ -1,33 +1,19 @@
 package net.hydra.jojomod.client.models.substand.renderers;
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.stand.renderers.StandRenderer;
 import net.hydra.jojomod.client.models.substand.SheerHeartAttackModel;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
-import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.entity.substand.SheerHeartAttackEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
-import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
-import net.hydra.jojomod.util.config.ClientConfig;
-import net.hydra.jojomod.util.config.ConfigManager;
-import net.hydra.jojomod.util.MainUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.resources.DefaultPlayerSkin;
-import net.minecraft.client.resources.SkinManager;
-import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
+
 
 
 public class SheerHeartAttackRenderer extends StandRenderer<SheerHeartAttackEntity> {
@@ -109,6 +95,8 @@ public class SheerHeartAttackRenderer extends StandRenderer<SheerHeartAttackEnti
     }
     
     public void render(SheerHeartAttackEntity sha, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
+
+
 
         super.render(sha, entityYaw, partialTicks, matrixStack, vertexConsumerProvider, i);
         	

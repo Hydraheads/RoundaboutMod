@@ -91,7 +91,7 @@ public class VirusSpitEntity extends ThrowableProjectile {
             if (isRemoved())
                 return;
             if (getSplatterType() != 2) {
-                ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.BLOOD_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
+                ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.VIRUS_SPIT_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
                         15, 0.4, 0.4, 0.25, 0.4);
                 SoundEvent $$6 = SoundEvents.GENERIC_SPLASH;
                 this.playSound($$6, 1F, 1.5F);
@@ -104,7 +104,7 @@ public class VirusSpitEntity extends ThrowableProjectile {
     @Override
     public void tick(){
         if (!this.level().isClientSide){
-            ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.BLOOD_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
+            ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.VIRUS_SPIT_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
                     15, 0.4, 0.4, 0.25, 0.4);
         }
         super.tick();
@@ -121,7 +121,7 @@ public class VirusSpitEntity extends ThrowableProjectile {
                 ((IEnderMan) em).roundabout$teleport();
                 return;
             }
-            ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.BLOOD_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
+            ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.VIRUS_SPIT_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
                     15, 0.4, 0.4, 0.25, 0.4);
 
             SoundEvent $$6 = SoundEvents.GENERIC_SPLASH;

@@ -338,7 +338,7 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:barrier"
             )
     );
-    public Set<String> sheerHeartAttackCustomBlockHeatV4 = new HashSet<>(
+    public Set<String> sheerHeartAttackCustomBlockHeatV6 = new HashSet<>(
             Arrays.asList(
                     "minecraft:torch:4",
                     "minecraft:soul_torch:3",
@@ -354,14 +354,15 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:magma_block:18",
                     "minecraft:sea_lantern:0",
                     "minecraft:glowstone:0",
-                    "minecraft:fire:200",
-                    "roundabout:stand_fire:200",
-                    "roundabout:colored_fire_orange:200",
-                    "roundabout:colored_fire_blue:200",
-                    "roundabout:colored_fire_green:200",
-                    "roundabout:colored_fire_purple:300",
-                    "roundabout:colored_fire_dread:200",
-                    "roundabout:colored_fire_cream:200"
+                    "minecraft:lava:180",
+                    "minecraft:fire:80",
+                    "roundabout:stand_fire:80",
+                    "roundabout:colored_fire_orange:80",
+                    "roundabout:colored_fire_blue:80",
+                    "roundabout:colored_fire_green:80",
+                    "roundabout:colored_fire_purple:80",
+                    "roundabout:colored_fire_dread:80",
+                    "roundabout:colored_fire_cream:80"
             )
     );
     public Set<String> sheerHeartAttackCustomEntityHeatV2 = new HashSet<>(
