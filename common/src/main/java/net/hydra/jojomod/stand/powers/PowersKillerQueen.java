@@ -2703,7 +2703,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         if (target != null && stand instanceof KillerQueenEntity KQE) {
             KQE.setPlantedBitesTheDust(true);
-            
+
             timeOfPlanting = (int)(self.level().getLevelData()).getDayTime();
 
             if ( self instanceof Player player
@@ -2895,6 +2895,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                             if (!(PKQ.onCooldown(PowerIndex.SKILL_EXTRA) && PKQ.getCooldown(PowerIndex.SKILL_EXTRA).time > btdDayCooldown)) {
                                 PKQ.setCooldown(PowerIndex.SKILL_EXTRA, btdDayCooldown);
                             }
+                            
+                            PKQ.translateBitesTheDustTime(timeOfPlanting);
                         }
                     }
 
@@ -2998,7 +3000,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                             if (!(PKQ.onCooldown(PowerIndex.SKILL_EXTRA) && PKQ.getCooldown(PowerIndex.SKILL_EXTRA).time > btdDayCooldown)) {
                                 PKQ.setCooldown(PowerIndex.SKILL_EXTRA, btdDayCooldown);
                             }
-
+                            PKQ.translateBitesTheDustTime(timeOfPlanting);
                         }
                     }
 
