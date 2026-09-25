@@ -510,7 +510,20 @@ public class StandHudRender {
     public static void renderBitesTheDustTimer(GuiGraphics context, Minecraft client, int scaledWidth, int scaledHeight,
                                                int x, double value, double max, PowersKillerQueen PW) {
 
+        int l;
+        int blt;
+
         ResourceLocation file = StandIcons.JOJO_ICONS;
+        int u = 183;
+        int k = scaledWidth/2 - 5;
+        l = scaledHeight - 31 - 5;
+
+        if (PW.disabledBTDTicks < 0){
+            context.blit(StandIcons.JOJO_ICONS, k, l, u, 110, 9, 9);
+        } else {
+            context.blit(StandIcons.JOJO_ICONS, k, l, u, 100, 9, 9);
+        }
+
         int bx = 0;
         int by = 70;
         int color = 0xab93e0;
@@ -526,8 +539,7 @@ public class StandHudRender {
             max = 0;
         }
 
-        int l;
-        int blt;
+
 
         if (max <= 1) {
             blt = (int) value;
@@ -552,14 +564,8 @@ public class StandHudRender {
         context.drawString(renderer, $$6, $$7, $$8 - 1, 0, false);
         context.drawString(renderer, $$6, $$7, $$8, y, false);
 
-        int u = 183;
-        int k = scaledWidth/2 - 5;
-        l = scaledHeight - 31 - 10;
-        if (PW.disabledBTDTicks < 0){
-            context.blit(StandIcons.JOJO_ICONS, k, l, u, 110, 9, 9);
-        } else {
-            context.blit(StandIcons.JOJO_ICONS, k, l, u, 100, 9, 9);
-        }
+
+
     }
 
     public static void renderShootModeEmperor(
