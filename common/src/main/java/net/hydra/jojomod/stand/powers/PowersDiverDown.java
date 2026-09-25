@@ -4056,7 +4056,7 @@ public class PowersDiverDown extends NewPunchingStand {
         if (state.getBlock().defaultDestroyTime() < 0) return false;
 
         // Server config block blacklist check
-        if (MainUtil.isBlockBlacklisted(state)) return false;
+        if (MainUtil.isBlockDisassemblyBlacklisted(state)) return false;
 
         // check for distance (like BlockGrabPreset.getGrabRange())
         if (this.self.distanceToSqr(Vec3.atCenterOf(pos)) > 30.0) return false; // 30/6 = 5 blocks max

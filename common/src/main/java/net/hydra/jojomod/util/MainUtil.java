@@ -224,6 +224,7 @@ public class MainUtil {
     public static ArrayList<String> walkableBlocks = Lists.newArrayList();
     public static ArrayList<String> expLessBlocks = Lists.newArrayList();
     public static ArrayList<String> standBlockGrabBlacklist = Lists.newArrayList();
+    public static ArrayList<String> standDisassemblyBlacklist = Lists.newArrayList();
     public static ArrayList<String> standDestructionBlacklist = Lists.newArrayList();
     public static ArrayList<String> standBlockExplosionBlacklist = Lists.newArrayList();
     public static ArrayList<String> occultChargeEffectsToBanish = Lists.newArrayList();
@@ -321,6 +322,15 @@ public class MainUtil {
         ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
         if (standBlockGrabBlacklist != null && !standBlockGrabBlacklist.isEmpty() && rl != null
                 && standBlockGrabBlacklist.contains(rl.toString())) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isBlockDisassemblyBlacklisted(BlockState bs) {
+        ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
+        if (standDisassemblyBlacklist != null && !standDisassemblyBlacklist.isEmpty() && rl != null
+                && standDisassemblyBlacklist.contains(rl.toString())) {
             return true;
         }
         return false;
