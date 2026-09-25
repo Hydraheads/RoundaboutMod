@@ -2182,7 +2182,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public boolean canBitesTheDustCombat() {
-        return currentBombStatus != BITES_THE_DUST_BIGGER && combatActivations <= getMaxBitesTheDustDetonations();
+        return currentBombStatus != BITES_THE_DUST_BIGGER && (combatActivations <= getMaxBitesTheDustDetonations() || getMaxBitesTheDustDetonations() == 0);
     }
 
     
@@ -2797,7 +2797,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public int getMaxBitesTheDustDetonations() {
-        return 3;
+        return ClientNetworking.getAppropriateConfig().killerQueenSettings.maximunBiteTheDustCombatActivations;
     }
 
     public int combatActivations = 0;
@@ -2814,7 +2814,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             return true;
         }
 
-        if (combatActivations < getMaxBitesTheDustDetonations())  {
+        if (combatActivations <= getMaxBitesTheDustDetonations() || getMaxBitesTheDustDetonations() == 0)  {
             combatActivations++;
             if (self instanceof ServerPlayer PL) {
                 S2CPacketUtil.sendIntPowerDataPacket(PL, BTD_ACTIVATIONS, combatActivations);

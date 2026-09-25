@@ -532,6 +532,8 @@ public class Config implements Cloneable {
         public Float bitesTheDustRewindRange;
         @BooleanOption(group = "inherit", value = false)
         public Boolean bitesTheDustDayGlobalRewind;
+        @IntOption(group = "inherit", value = 3, min = 0, max = 72000)
+        public Integer maximunBiteTheDustCombatActivations;
     }
     
     public static class SoftAndWetSettings {
