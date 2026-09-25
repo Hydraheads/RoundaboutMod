@@ -322,13 +322,6 @@ public class PowersDiverDown extends NewPunchingStand {
         return ClientNetworking.getAppropriateConfig().diverDownSettings.getMiningTierDiverDown;
     }
 
-    private void isCustomWorkbenchEnabled(){
-        if(ConfigManager.getClientConfig().diverDownSettings.customDiverDownWorkbench)
-            customWorkbenchEnabled = true;
-        else
-            customWorkbenchEnabled = false;
-    }
-
     private float getGroundBarrageStrength(Entity entity) {
         if (this.getReducedDamage(entity)){
             return levelupDamageMod(0.25F * this.getAttackMultOnPlayers() * 0.01F * 0.75F);
@@ -1884,7 +1877,10 @@ public class PowersDiverDown extends NewPunchingStand {
             return false;
         }
 
-        switch (workbenchId) {
+        this.customWorkbenchEnabled = workbenchId > 0;
+        int actualId = Math.abs(workbenchId);
+
+        switch (actualId) {
             case CRAFTING_TABLE -> {
                 // test message, comment this out once done
                 // serverPlayer.displayClientMessage(Component.literal("SERVER: calling
@@ -1947,13 +1943,23 @@ public class PowersDiverDown extends NewPunchingStand {
         if(customWorkbenchEnabled) {
             serverPlayer.openMenu(new SimpleMenuProvider(
                     (containerId, inventory, player) -> new DiverDownLoomMenu(containerId, inventory,
-                            ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())),
+                            ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
+                        @Override
+                        public boolean stillValid(Player player) {
+                            return true;
+                        }
+                    },
                     Component.translatable("container.loom")));
         }
         else {
             serverPlayer.openMenu(new SimpleMenuProvider(
                     (containerId, inventory, player) -> new LoomMenu(containerId, inventory,
-                            ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())),
+                            ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
+                        @Override
+                        public boolean stillValid(Player player) {
+                            return true;
+                        }
+                    },
                     Component.translatable("container.loom")));
         }
     }
@@ -1962,13 +1968,23 @@ public class PowersDiverDown extends NewPunchingStand {
         if(customWorkbenchEnabled) {
             serverPlayer.openMenu(new SimpleMenuProvider(
                     (containerId, inventory, player) -> new DiverDownStonecutterMenu(containerId, inventory,
-                            ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())),
+                            ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
+                        @Override
+                        public boolean stillValid(Player player) {
+                            return true;
+                        }
+                    },
                     Component.translatable("container.stonecutter")));
         }
         else {
             serverPlayer.openMenu(new SimpleMenuProvider(
                     (containerId, inventory, player) -> new StonecutterMenu(containerId, inventory,
-                            ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())),
+                            ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
+                        @Override
+                        public boolean stillValid(Player player) {
+                            return true;
+                        }
+                    },
                     Component.translatable("container.stonecutter")));
         }
     }
@@ -2450,6 +2466,9 @@ public class PowersDiverDown extends NewPunchingStand {
             return false;
         }
         if (chestPos == null) {
+            return false;
+        }
+        if (!MainUtil.canPlaceOnClaim(serverPlayer, chestPos)) {
             return false;
         }
         StandEntity stand = getStandEntity(this.self);
@@ -4047,6 +4066,7 @@ public class PowersDiverDown extends NewPunchingStand {
             if (!level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) return false;
             if (PE.blockActionRestricted(PE.serverLevel(), pos, PE.gameMode.getGameModeForPlayer())) return false;
             if (!level.mayInteract(PE, pos)) return false;
+            if (!MainUtil.canPlaceOnClaim(PE, pos)) return false;
         }
 
         // must have an associated Item

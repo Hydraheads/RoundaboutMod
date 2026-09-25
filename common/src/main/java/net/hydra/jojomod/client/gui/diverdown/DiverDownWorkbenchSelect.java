@@ -11,6 +11,7 @@ import net.hydra.jojomod.client.gui.NoCancelInputScreen;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersDiverDown;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -244,9 +245,14 @@ public class DiverDownWorkbenchSelect extends Screen implements NoCancelInputScr
             if (!powers.canExecuteMoveWithLevel(workbench.getRequiredLevel(powers))) {
                 return;
             }
+            boolean custom = ConfigManager.getClientConfig() != null
+                    && ConfigManager.getClientConfig().diverDownSettings.customDiverDownWorkbench;
 
-            powers.tryIntPower(PowersDiverDown.ACCESS_WORKBENCH, true, workbench.id);
-            powers.tryIntPowerPacket(PowersDiverDown.ACCESS_WORKBENCH, workbench.id);
+            // Positive ID (55) = Custom Menu | Negative ID (-55) = Vanilla Menu
+            int idToSend = custom ? workbench.id : -workbench.id;
+
+            powers.tryIntPower(PowersDiverDown.ACCESS_WORKBENCH, true, idToSend);
+            powers.tryIntPowerPacket(PowersDiverDown.ACCESS_WORKBENCH, idToSend);
         }
     }
 
