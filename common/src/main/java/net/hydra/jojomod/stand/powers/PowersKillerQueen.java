@@ -145,6 +145,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         HANDS_COOLDOWN = 75,
         BOMB_SIZE = 77,
         BTD_ACTIVATIONS = 78,
+        BTD_TICKS_DESACTIVATED = 79,
 
     // COOLDOWN INDEXES
         BUBBLE_SEND_COOLDOWN = PowerIndex.SKILL_4_SNEAK,
@@ -1767,6 +1768,16 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override
     public void updatePowerInt(byte activePower, int data) {
         switch (activePower) {
+            case BTD_TICKS_DESACTIVATED -> {
+                if (data < 0) {
+                    btdTicks = 0;
+                    disabledBTDTicks = data;
+                }else {
+                    btdTicks = data;
+                    disabledBTDTicks = 0;
+                }
+
+            }
             case BTD_ACTIVATIONS -> {
                 combatActivations = data;
                 btdTicks = 0;
@@ -3040,6 +3051,9 @@ public class PowersKillerQueen extends NewPunchingStand {
                 disabledBTDTicks = difference;
                 btdTicks = 0;
             }
+            if (self instanceof ServerPlayer PL) {
+                S2CPacketUtil.sendIntPowerDataPacket(PL, BTD_TICKS_DESACTIVATED, btdTicks - disabledBTDTicks);
+            }
         }
     }
 
@@ -3054,6 +3068,21 @@ public class PowersKillerQueen extends NewPunchingStand {
                 dayBitedTheDust.put(id, conversionResult);
             }
             bitedTheDust.clear();
+        }
+    }
+
+    public void mandomInteraction() {
+        if (inBitesTheDustMode()) {
+            int difference = btdTicks - 100 - disabledBTDTicks;
+            if (difference >= 0) {
+                btdTicks = difference;
+            }else {
+                disabledBTDTicks = difference;
+                btdTicks = 0;
+            }
+            if (self instanceof ServerPlayer PL) {
+                S2CPacketUtil.sendIntPowerDataPacket(PL, BTD_TICKS_DESACTIVATED, btdTicks - disabledBTDTicks);
+            }
         }
     }
 

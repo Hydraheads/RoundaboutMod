@@ -377,6 +377,9 @@ public class PowersMandom extends NewDashPreset {
                             if (powers instanceof PowersMandom PM && !(PM.onCooldown(PowerIndex.SKILL_2) && PM.getCooldown(PowerIndex.SKILL_2).time > rewindCooldown)){
                                 PM.setCooldown(PowerIndex.SKILL_2,rewindCooldown);
                             }
+                            if (powers instanceof PowersKillerQueen KQ) {
+                                KQ.mandomInteraction();
+                            }
                         }
                     }
                 }
