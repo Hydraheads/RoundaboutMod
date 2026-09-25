@@ -3280,6 +3280,7 @@ public class PowersDiverDown extends NewPunchingStand {
                     SoundSource.PLAYERS, 0.85F, 1);
         }
         setCooldown(PowerIndex.SKILL_1,300);
+        setCooldown(PowerIndex.SKILL_1_GUARD,300);
         return true;
     }
 

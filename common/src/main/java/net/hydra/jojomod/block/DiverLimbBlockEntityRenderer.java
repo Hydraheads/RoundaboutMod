@@ -77,7 +77,7 @@ public class DiverLimbBlockEntityRenderer implements BlockEntityRenderer<DiverLi
 
             //omg push and pop queues hiiii!!!!
             //needed to revert all poses back to normal later since the limbs are gonna be rendred in a bunch of different directions
-            //roundabout has it's own push and pop queue for posing and debugging, so i'm using that instead of poseStack.pushPose();
+            //roundabout has its own push and pop queue for posing and debugging, so i'm using that instead of poseStack.pushPose();
             ClientUtil.pushPoseAndCooperate(poseStack,7);
 
             //puts the limbs at the center of the block
