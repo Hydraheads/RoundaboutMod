@@ -14,12 +14,11 @@ import net.minecraft.world.entity.Entity;
 
 public class DiverDownModel<T extends DiverDownEntity> extends StandModel<T>{
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "diver_down"), "main");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "unknown"), "main");
     private final ModelPart stand2;
     private final ModelPart head2;
-    private final ModelPart divingequip_left;
-    private final ModelPart divingequip_right;
     private final ModelPart eyebrows;
+    private final ModelPart diverequip;
     private final ModelPart body2;
     private final ModelPart torso;
     private final ModelPart upper_chest;
@@ -53,9 +52,8 @@ public class DiverDownModel<T extends DiverDownEntity> extends StandModel<T>{
         this.stand2 = this.stand.getChild("stand2");
         this.head = this.stand2.getChild("head");
         this.head2 = this.head.getChild("head2");
-        this.divingequip_left = this.head2.getChild("divingequip_left");
-        this.divingequip_right = this.head2.getChild("divingequip_right");
         this.eyebrows = this.head2.getChild("eyebrows");
+        this.diverequip = this.head2.getChild("diverequip");
         this.body = this.stand2.getChild("body");
         this.body2 = this.body.getChild("body2");
         this.torso = this.body2.getChild("torso");
@@ -100,19 +98,20 @@ public class DiverDownModel<T extends DiverDownEntity> extends StandModel<T>{
                 .texOffs(24, 53).addBox(4.0F, -6.85F, -1.0F, 1.0F, 3.0F, 3.0F, new CubeDeformation(0.1F))
                 .texOffs(56, 10).addBox(4.0F, -10.85F, 0.0F, 1.0F, 4.0F, 1.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 0).addBox(-4.0F, -7.85F, -4.0F, 8.0F, 9.0F, 8.0F, new CubeDeformation(0.25F))
+                .texOffs(16, 59).addBox(-4.0F, -0.894F, -4.0F, 8.0F, 1.0F, 8.0F, new CubeDeformation(0.25F))
                 .texOffs(56, 0).addBox(-2.0F, 0.15F, -4.0F, 4.0F, 1.0F, 1.0F, new CubeDeformation(0.1F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition divingequip_left = head2.addOrReplaceChild("divingequip_left", CubeListBuilder.create().texOffs(32, 20).addBox(2.0F, -1.5F, -0.5F, 1.0F, 1.0F, 8.0F, new CubeDeformation(0.0F))
-                .texOffs(56, 15).addBox(2.0F, -0.5F, -0.5F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(56, 36).addBox(0.0F, -0.5F, -0.5F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(56, 6).addBox(0.0F, -1.5F, 7.5F, 3.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(2.0F, 0.65F, -3.5F));
-
-        PartDefinition divingequip_right = head2.addOrReplaceChild("divingequip_right", CubeListBuilder.create().texOffs(50, 36).addBox(-2.0F, -0.5F, -0.5F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(56, 8).addBox(-3.0F, -1.5F, 7.5F, 3.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(32, 29).addBox(-3.0F, -1.5F, -0.5F, 1.0F, 1.0F, 8.0F, new CubeDeformation(0.0F))
-                .texOffs(48, 56).addBox(-3.0F, -0.5F, -0.5F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(-2.0F, 0.65F, -3.5F));
-
         PartDefinition eyebrows = head2.addOrReplaceChild("eyebrows", CubeListBuilder.create().texOffs(8, 11).addBox(-4.0F, -29.0F, -3.2F, 8.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 24.15F, -1.0F));
+
+        PartDefinition diverequip = head2.addOrReplaceChild("diverequip", CubeListBuilder.create().texOffs(32, 20).addBox(4.0F, -0.85F, -4.0F, 1.0F, 1.0F, 8.0F, new CubeDeformation(0.0F))
+                .texOffs(56, 15).addBox(4.0F, 0.15F, -4.0F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(56, 36).addBox(2.0F, 0.15F, -4.0F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(56, 6).addBox(2.0F, -0.85F, 4.0F, 3.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(64, 6).addBox(-2.0F, -0.85F, 4.0F, 4.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(50, 36).addBox(-4.0F, 0.15F, -4.0F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(56, 8).addBox(-5.0F, -0.85F, 4.0F, 3.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(32, 29).addBox(-5.0F, -0.85F, -4.0F, 1.0F, 1.0F, 8.0F, new CubeDeformation(0.0F))
+                .texOffs(48, 56).addBox(-5.0F, 0.15F, -4.0F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         PartDefinition body = stand2.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, -24.0F, 0.0F));
 
@@ -125,9 +124,7 @@ public class DiverDownModel<T extends DiverDownEntity> extends StandModel<T>{
         PartDefinition upper_chest_only = upper_chest.addOrReplaceChild("upper_chest_only", CubeListBuilder.create().texOffs(32, 0).addBox(-4.0F, -6.0F, -2.0F, 8.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         PartDefinition tanks = upper_chest_only.addOrReplaceChild("tanks", CubeListBuilder.create().texOffs(12, 53).addBox(-4.0F, -25.0F, -2.0F, 3.0F, 7.0F, 3.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 53).addBox(1.0F, -25.0F, -2.0F, 3.0F, 7.0F, 3.0F, new CubeDeformation(0.0F))
-                .texOffs(56, 18).addBox(2.0F, -26.0F, 0.0F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-                .texOffs(52, 56).addBox(-3.0F, -26.0F, 0.0F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 20.0F, 4.0F));
+                .texOffs(0, 53).addBox(1.0F, -25.0F, -2.0F, 3.0F, 7.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 20.0F, 4.0F));
 
         PartDefinition right_arm = upper_chest.addOrReplaceChild("right_arm", CubeListBuilder.create(), PartPose.offset(-4.0F, -5.25F, 0.0F));
 

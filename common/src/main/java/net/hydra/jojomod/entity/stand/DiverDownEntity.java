@@ -16,12 +16,16 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class DiverDownEntity extends FollowingStandEntity {
+
     public DiverDownEntity(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
     }
 
     public static final byte PART_6 = 0,
-            BETA_DIVER = 1;
+            BETA_DIVER = 1,
+            KELP = 2,
+                    //replace this later with whatever final number it gets
+            HOLY_DIVER = 10;
 
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState hideLeg = new AnimationState();
