@@ -3073,7 +3073,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public void mandomInteraction() {
         if (inBitesTheDustMode()) {
-            int difference = btdTicks - 100 - disabledBTDTicks;
+            int difference = btdTicks - 120 - disabledBTDTicks;
             if (difference >= 0) {
                 btdTicks = difference;
             }else {
