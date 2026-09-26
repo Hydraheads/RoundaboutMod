@@ -860,7 +860,7 @@ public class PowersDiverDown extends NewPunchingStand {
     public boolean isServerControlledCooldown(byte num){
         if (num == PowerIndex.SKILL_1 || num == PowerIndex.SKILL_1_SNEAK
                 || num == PowerIndex.SKILL_2 || num == PowerIndex.GENERAL_1
-                || num == PowerIndex.SKILL_3 || num == PowerIndex.SKILL_4_SNEAK) {
+                || num == PowerIndex.SKILL_3) {
             return true;
         }
         return super.isServerControlledCooldown(num);
@@ -2060,7 +2060,7 @@ public class PowersDiverDown extends NewPunchingStand {
      * active.
      */
     private boolean hasLimbsDeployed() {
-        if (this.self.level() != null) {
+        if (this.self.level() != null && !this.self.level().isClientSide) {
             this.activeLimbs.removeIf(pos -> !this.self.level().getBlockState(pos).is(ModBlocks.DIVER_LIMB));
         }
         return !this.activeLimbs.isEmpty();
@@ -2235,7 +2235,9 @@ public class PowersDiverDown extends NewPunchingStand {
                     ModSounds.SUMMON_DIVER_DOWN_EVENT,
                     SoundSource.PLAYERS, 0.85F, 1);
         }
-        this.setCooldown(PowerIndex.SKILL_4_SNEAK, 60);
+        if (this.self instanceof ServerPlayer sp) {
+            S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.SKILL_4_SNEAK, 50);
+        }
         return true;
     }
 
