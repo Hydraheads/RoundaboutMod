@@ -4159,10 +4159,10 @@
       "roundabout:kira4_kq_btd_1"
     ]
   },
-  "kira4_kq_btd_2": {
-    "subtitle": "sounds.roundabout.kira4_kq_btd",
+  "kira4_kq_bomb_2": {
+    "subtitle": "sounds.roundabout.kira4_kq_bomb",
     "sounds" : [
-      "roundabout:kira4_kq_btd_2"
+      "roundabout:kira4_kq_bomb_2"
     ]
   },
   "kira4_btd_range": {
