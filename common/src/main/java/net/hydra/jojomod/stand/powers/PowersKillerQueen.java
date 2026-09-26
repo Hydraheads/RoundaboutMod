@@ -4316,9 +4316,9 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public void bitesTheDustRender(LivingEntity LE, PoseStack matrixStack, MultiBufferSource bufferSource) {
-        if (LE != null) {
+        if (LE != null && LE.getId() != this.getSelf().getId()) {
             Minecraft mc = Minecraft.getInstance();
-            if (LE != this.getSelf() && this.getSelf() instanceof Player && this.getSelf().distanceToSqr(LE) <= 1024
+            if (this.getSelf() instanceof Player && this.getSelf().distanceToSqr(LE) <= 1024
                     && bitesTheDustPlantedEntity != null && (LE instanceof Mob || LE instanceof Player) && !(LE instanceof StandEntity)) {
 
                 float size = 0.3f;
