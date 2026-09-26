@@ -44,6 +44,8 @@ import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
@@ -3698,6 +3700,17 @@ public class PowersDiverDown extends NewPunchingStand {
 
         DamageHandler.StandDamageEntity(victim, getRibcageSnapStrength(victim), this.self);
         MainUtil.makeBleed(victim, 1, 1200, this.self);
+        MainUtil.makeMobBleed(victim);
+        MainUtil.makeMobBleed(host);
+        SimpleParticleType bloodType = ModParticles.BLOOD;
+        if (MainUtil.hasBlueBlood(victim)) {
+            bloodType = ModParticles.BLUE_BLOOD;
+        } else if (MainUtil.hasEnderBlood(victim)) {
+            bloodType = ModParticles.ENDER_BLOOD;
+        }
+        sendParticlesIfPossible(level, bloodType,
+                victim.getX(), victim.getY() + (victim.getBbHeight() * 0.5), victim.getZ(),
+                15, 0.35, 0.35, 0.35, 0.15);
 
         // The host mob with the ribcage trap dies (if it's a cannon fodder entity)
         DamageHandler.StandDamageEntity(host, getRibcageHostStrength(host), this.self);
@@ -4504,9 +4517,9 @@ public class PowersDiverDown extends NewPunchingStand {
                         ipe.roundabout$setUnlockedBonusSkin(true);
                         playSoundIfPossible(self.level(), null, PE.getX(), PE.getY(),
                                 PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
-                        sendParticlesIfPossible(self.level(), ModParticles.CLOCK, PE.getX(),
+                        sendParticlesIfPossible(self.level(), ModParticles.WARDEN_CLOCK, PE.getX(),
                                 PE.getY() + PE.getEyeHeight(), PE.getZ(),
-                                10, 0.5, 0.5, 0.5, 0.2);
+                                7, 0.4, 0.4, 0.4, 0.2);
                         user.roundabout$setStandSkin(DiverDownEntity.HOLY_DIVER);
                         user.roundabout$summonStand(this.getSelf().level(), true, false);
                         ((ServerPlayer) ipe).displayClientMessage(

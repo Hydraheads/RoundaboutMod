@@ -8,6 +8,7 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.ILivingEntityRenderer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.DiverDownPointerRenderer;
 import net.hydra.jojomod.client.HallucinationIndicatorRenderer;
 import net.hydra.jojomod.client.models.layers.BigBubbleLayer;
 import net.hydra.jojomod.client.models.layers.FrozenLayer;
@@ -158,6 +159,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
             PKQ.bitesTheDustRender(entity, matrixStack, buffer);
         }
         HallucinationIndicatorRenderer.render(entity, matrixStack, buffer);
+        DiverDownPointerRenderer.render(entity, matrixStack, buffer);
     }
 
     @Inject(method = "shouldShowName(Lnet/minecraft/world/entity/LivingEntity;)Z", at=@At("HEAD"), cancellable = true)
