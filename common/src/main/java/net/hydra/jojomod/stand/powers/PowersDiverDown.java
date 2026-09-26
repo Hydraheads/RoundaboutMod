@@ -1089,7 +1089,7 @@ public class PowersDiverDown extends NewPunchingStand {
             tickRibcageTrap();
             tickSpringLegs();
             // recall stand if target dies, or if they go too far
-            if (isDiveActive()) {
+            if (this.submergedTarget != null) {
                 if (!this.submergedTarget.isAlive()
                         || this.submergedTarget.isRemoved()
                         || this.self.distanceTo(this.submergedTarget) > (getMaxPilotRange())) {
@@ -3252,7 +3252,7 @@ public class PowersDiverDown extends NewPunchingStand {
     // dive start
 
     private void tryStartDiveClient() {
-        if (!areStandMovesDisabled() && !isDiveActive() && !this.onCooldown(PowerIndex.SKILL_1)) {
+        if (!areStandMovesDisabled() && !isDiveActive() && !this.onCooldown(PowerIndex.SKILL_1) && this.getActivePower() != DIVER_SUBMERGE_START) {
             this.tryPower(DIVER_SUBMERGE_START, true);
             tryPowerPacket(DIVER_SUBMERGE_START);
         }
@@ -3322,7 +3322,7 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     public boolean emergeServer() {
-        if (!isDiveActive())
+        if (this.submergedTarget == null)
             return false;
         removeDiverLegsFromTarget();
         if (this.submergedTarget != null) {
@@ -3381,6 +3381,8 @@ public class PowersDiverDown extends NewPunchingStand {
             // sounds here if possible, to showcase the target absorbing damage
             // if user dies from the damage transfer, emerge immediately
             if (!this.self.isAlive()) {
+                clearRibcageTrap();
+                clearSpringLegs();
                 emergeServer();
             }
         } finally {
@@ -3529,6 +3531,12 @@ public class PowersDiverDown extends NewPunchingStand {
     public void tickSpringLegs() {
         if (this.springTarget == null) return;
 
+        if (!this.self.isAlive() || this.self.isRemoved()
+                || !this.springTarget.isAlive() || this.springTarget.isRemoved()) {
+            clearSpringLegs();
+            return;
+        }
+
         LivingEntity host = this.springTarget;
         if (!host.isAlive() || host.isRemoved()) {
             clearSpringLegs();
@@ -3603,6 +3611,12 @@ public class PowersDiverDown extends NewPunchingStand {
 
     public void tickRibcageTrap() {
         if (this.ribcageTarget == null) return;
+
+        if (!this.self.isAlive() || this.self.isRemoved()
+                || !this.ribcageTarget.isAlive() || this.ribcageTarget.isRemoved()) {
+            clearRibcageTrap();
+            return;
+        }
 
         LivingEntity host = this.ribcageTarget;
         if (!host.isAlive() || host.isRemoved()) {
