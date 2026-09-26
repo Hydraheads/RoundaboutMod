@@ -539,8 +539,6 @@ public class StandHudRender {
             max = 0;
         }
 
-
-
         if (max <= 1) {
             blt = (int) value;
         }else {
@@ -557,15 +555,12 @@ public class StandHudRender {
         Font renderer = client.font;
         String $$6 = (int)(value / 20.0) + "";
         int $$7 = (scaledWidth - renderer.width($$6)) / 2;
-        int $$8 = scaledHeight - 31 - 4;
+        int $$8 = scaledHeight - 31 - 12;
         context.drawString(renderer, $$6, $$7 + 1, $$8, 0, false);
         context.drawString(renderer, $$6, $$7 - 1, $$8, 0, false);
         context.drawString(renderer, $$6, $$7, $$8 + 1, 0, false);
         context.drawString(renderer, $$6, $$7, $$8 - 1, 0, false);
         context.drawString(renderer, $$6, $$7, $$8, y, false);
-
-
-
     }
 
     public static void renderShootModeEmperor(

@@ -989,7 +989,7 @@ public class ModSounds {
     public static final String KIRA4_ATTACK_4 = "kira4_attack_4";
     public static final ResourceLocation KIRA4_ATTACK_4_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_ATTACK_4);
     public static SoundEvent KIRA4_ATTACK_4_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_ATTACK_4_ID);
-    public static final String KIRA4_SHIBO = "kira4_shibo";
+    public static final String KIRA4_SHIBO = "kira4_shiba";
     public static final ResourceLocation KIRA4_SHIBO_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_SHIBO);
     public static SoundEvent KIRA4_SHIBO_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_SHIBO_ID);
 
