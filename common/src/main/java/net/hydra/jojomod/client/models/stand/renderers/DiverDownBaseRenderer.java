@@ -15,8 +15,6 @@ import org.jetbrains.annotations.Nullable;
 public class DiverDownBaseRenderer extends StandRenderer<DiverDownEntity> {
     public static final ResourceLocation PART_6 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/base.png");
     public static final ResourceLocation BETA_DIVER = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/beta.png");
-    public static final ResourceLocation HOLY_DIVER = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/beta.png");
-    public static final ResourceLocation KELP = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/kelp.png");
 
     public DiverDownBaseRenderer(EntityRendererProvider.Context context, StandModel<DiverDownEntity> entityModel, float f) {
         super(context, entityModel, f);
@@ -26,12 +24,6 @@ public class DiverDownBaseRenderer extends StandRenderer<DiverDownEntity> {
     public static ResourceLocation getSkin(byte bt) {
         if (bt == DiverDownEntity.BETA_DIVER) {
             return BETA_DIVER;
-        }
-        if (bt == DiverDownEntity.HOLY_DIVER) {
-            return HOLY_DIVER;
-        }
-        if (bt == DiverDownEntity.KELP) {
-            return KELP;
         }
         return PART_6;
     }
