@@ -37,4 +37,13 @@ public final class PucciVoice extends VoiceData {
         };
         playSound(sound, 30);
     }
+
+    @Override
+    public void respondToChallenge(){
+        if (challengeNumber == 1){
+            playSoundChallenge(ModSounds.PUCCI_RESPONSE_ANASUI_1_EVENT,154);
+        } if (challengeNumber == 2){
+            playSoundChallenge(ModSounds.PUCCI_RESPONSE_ANASUI_2_EVENT,129);
+        }
+    }
 }

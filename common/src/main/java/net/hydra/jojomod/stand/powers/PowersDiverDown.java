@@ -32,6 +32,8 @@ import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.client.gui.diverdown.custom_workbench_code.*;
 import net.hydra.jojomod.client.hud.StandHudRender;
+import net.hydra.jojomod.event.powers.visagedata.voicedata.AnasuiVoice;
+import net.hydra.jojomod.event.powers.visagedata.voicedata.KiraPartFourVoice;
 import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
@@ -853,6 +855,16 @@ public class PowersDiverDown extends NewPunchingStand {
         }
     }
 
+    @Override
+    public void playSummonSound() {
+        if (self.isCrouching()) return;
+        if (self instanceof Player player
+                && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof AnasuiVoice voice) {
+            voice.playSummon();
+        }
+        playStandUserOnlySoundsIfNearby(getSummonSound(), 10, false, false);
+    }
+
     // START OF ACTUAL MOVE METHODS
 
     //for cooldowns, like D4C
@@ -1013,7 +1025,7 @@ public class PowersDiverDown extends NewPunchingStand {
                                 ((IGravityEntity) self).roundabout$getGravityDirection());
                         BlockPos pos5 = BlockPos.containing(self.getPosition(1).add(newVec5));
                         if (self.onGround() && MainUtil.isBlockWalkableSimplified(self.getBlockStateOn())) {
-                            mercyTicks = 5; // needs lots of coyote time for sprinting
+                            mercyTicks = 4; // needs lots of coyote time for sprinting
                             lastGroundPosition = self.position();
                         } else {
                             // If ANY block directly beneath your rotated feet is solid, you are still on a
@@ -1027,7 +1039,7 @@ public class PowersDiverDown extends NewPunchingStand {
                                 // Only attempt to cut the corner when all probe blocks are AIR (stepped off
                                 // edge)
                                 if (self.onGround() && MainUtil.isBlockWalkableSimplified(self.getBlockStateOn())) {
-                                    mercyTicks = 5;
+                                    mercyTicks = 4;
                                     lastGroundPosition = self.position();
                                 } else {
                                     mercyTicks--;
@@ -1705,6 +1717,9 @@ public class PowersDiverDown extends NewPunchingStand {
         float defaultAngle = 25F;
 
         if (this.self instanceof Player) {
+            if (self instanceof Player player && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof AnasuiVoice voice) {
+                voice.playPhasePunch();
+            }
             if (isPacketPlayer()) {
                 this.attackTimeDuring = -10;
                 if (!isFullyCharged) {
@@ -1753,17 +1768,20 @@ public class PowersDiverDown extends NewPunchingStand {
                         tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK, -1);
                     }
                 }
+            } else if (!this.self.level().isClientSide()){
+                /* Caps how far out the punch goes */
+                Entity targetEntity = getTargetEntity(this.self, -1);
+                phasePunchImpact(targetEntity);
             }
-        } else {
-            /* Caps how far out the punch goes */
-            Entity targetEntity = getTargetEntity(this.self, -1);
-            phasePunchImpact(targetEntity);
         }
     }
 
     @Override
     public void handleStandAttack(Player player, Entity target) {
         if (this.getActivePower() == PowerIndex.SNEAK_ATTACK) {
+            if (((IPlayerEntity) player).roundabout$getVoiceData() instanceof AnasuiVoice voice) {
+                voice.playPhasePunch();
+            }
             phasePunchImpact(target);
         }
     }
@@ -1849,7 +1867,7 @@ public class PowersDiverDown extends NewPunchingStand {
         setHeelDirection(gd);
         ((IGravityEntity) this.self).roundabout$setGravityDirection(gd);
         this.justFlippedTicks = 7;
-        this.mercyTicks = 5;
+        this.mercyTicks = 4;
         if (self.level().isClientSide()) {
             C2SPacketUtil.intToServerPacket(
                     PacketDataIndex.INT_GRAVITY_FLIP_2, MainUtil.getIntFromDirection(gd)
@@ -2312,6 +2330,9 @@ public class PowersDiverDown extends NewPunchingStand {
                 //put animation here
                 playSoundIfPossible(self.level(), null, getStandEntity(this.self).blockPosition(),
                         ModSounds.DIVER_DOWN_GROUND_DIVE_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+                if (!this.self.level().isClientSide() && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof AnasuiVoice voice) {
+                    voice.playGroundDive();
+                }
             } else {
                 // move returns camera as a failsafe.
                 this.diveTicksLeft = 0;
@@ -2685,6 +2706,9 @@ public class PowersDiverDown extends NewPunchingStand {
                     playSoundIfPossible(self.level(), null, this.self.blockPosition(),
                             ModSounds.DIVER_DOWN_TRANSFER_EVENT,
                             SoundSource.PLAYERS, 0.9F, 1.2F);
+                    if ( self instanceof Player player && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof AnasuiVoice voice) {
+                        voice.playDiverZip();
+                    }
                 } else {
                     Direction gf = ((IGravityEntity) self).roundabout$getGravityDirection();
                     if (gf != getIntendedDirection()) {
@@ -3050,6 +3074,9 @@ public class PowersDiverDown extends NewPunchingStand {
         playSoundIfPossible(self.level(), null, this.self.blockPosition(),
                 ModSounds.DIVER_DOWN_TRANSFER_EVENT,
                 SoundSource.PLAYERS, 0.7F, 1);
+        if (self instanceof Player player && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof AnasuiVoice voice) {
+            voice.playTrap();
+        }
 
         // cooldown here
 
@@ -3124,6 +3151,9 @@ public class PowersDiverDown extends NewPunchingStand {
             playSoundIfPossible(self.level(), null, this.self.blockPosition(),
                     ModSounds.DIVER_DOWN_TRANSFER_EVENT,
                     SoundSource.PLAYERS, 0.8F, 1);
+            if (self instanceof Player player && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof AnasuiVoice voice) {
+                voice.playTrapTrigger();
+            }
         }
     }
 
@@ -3258,6 +3288,9 @@ public class PowersDiverDown extends NewPunchingStand {
             playSoundIfPossible(self.level(), null, this.self.blockPosition(),
                     ModSounds.DIVER_DOWN_DIVE_EVENT,
                     SoundSource.PLAYERS, 0.8F, 1F);
+            if (self instanceof Player player && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof AnasuiVoice voice) {
+                voice.playSubmerge();
+            }
         }
     }
 

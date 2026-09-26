@@ -269,6 +269,216 @@
       "roundabout:diver_down_bomb"
     ]
   },
+  "anasui_visage_equip": {
+    "subtitle": "sounds.roundabout.anasui_visage_equip",
+    "sounds": [
+      "roundabout:anasui_visage_equip"
+    ]
+  },
+  "anasui_hurt_1": {
+    "subtitle": "sounds.roundabout.anasui_hurt_1",
+    "sounds": [
+      "roundabout:anasui_hurt_1"
+    ]
+  },
+  "anasui_hurt_2": {
+    "subtitle": "sounds.roundabout.anasui_hurt_2",
+    "sounds": [
+      "roundabout:anasui_hurt_2"
+    ]
+  },
+  "anasui_hurt_3": {
+    "subtitle": "sounds.roundabout.anasui_hurt_3",
+    "sounds": [
+      "roundabout:anasui_hurt_3"
+    ]
+  },
+  "anasui_stand_summon_1": {
+    "subtitle": "sounds.roundabout.anasui_stand_summon_1",
+    "sounds": [
+      "roundabout:anasui_stand_summon_1"
+    ]
+  },
+  "anasui_stand_summon_2": {
+    "subtitle": "sounds.roundabout.anasui_stand_summon_2",
+    "sounds": [
+      "roundabout:anasui_stand_summon_2"
+    ]
+  },
+  "anasui_kill_1": {
+    "subtitle": "sounds.roundabout.anasui_kill_1",
+    "sounds": [
+      "roundabout:anasui_kill_1"
+    ]
+  },
+  "anasui_kill_2": {
+    "subtitle": "sounds.roundabout.anasui_kill_2",
+    "sounds": [
+      "roundabout:anasui_kill_2"
+    ]
+  },
+  "anasui_kill_3": {
+    "subtitle": "sounds.roundabout.anasui_kill_3",
+    "sounds": [
+      "roundabout:anasui_kill_3"
+    ]
+  },
+  "anasui_kill_4": {
+    "subtitle": "sounds.roundabout.anasui_kill_4",
+    "sounds": [
+      "roundabout:anasui_kill_4"
+    ]
+  },
+  "anasui_kill_5": {
+    "subtitle": "sounds.roundabout.anasui_kill_5",
+    "sounds": [
+      "roundabout:anasui_kill_5"
+    ]
+  },
+  "anasui_kill_6": {
+    "subtitle": "sounds.roundabout.anasui_kill_6",
+    "sounds": [
+      "roundabout:anasui_kill_6"
+    ]
+  },
+  "anasui_idle_1": {
+    "subtitle": "sounds.roundabout.anasui_idle_1",
+    "sounds": [
+      "roundabout:anasui_idle_1"
+    ]
+  },
+  "anasui_idle_2": {
+    "subtitle": "sounds.roundabout.anasui_idle_2",
+    "sounds": [
+      "roundabout:anasui_idle_2"
+    ]
+  },
+  "anasui_idle_3": {
+    "subtitle": "sounds.roundabout.anasui_idle_3",
+    "sounds": [
+      "roundabout:anasui_idle_3"
+    ]
+  },
+  "anasui_idle_4": {
+    "subtitle": "sounds.roundabout.anasui_idle_4",
+    "sounds": [
+      "roundabout:anasui_idle_4"
+    ]
+  },
+  "anasui_idle_5": {
+    "subtitle": "sounds.roundabout.anasui_idle_5",
+    "sounds": [
+      "roundabout:anasui_idle_5"
+    ]
+  },
+  "anasui_idle_6": {
+    "subtitle": "sounds.roundabout.anasui_idle_6",
+    "sounds": [
+      "roundabout:anasui_idle_6"
+    ]
+  },
+  "anasui_idle_7": {
+    "subtitle": "sounds.roundabout.anasui_idle_7",
+    "sounds": [
+      "roundabout:anasui_idle_7"
+    ]
+  },
+  "anasui_death_1": {
+    "subtitle": "sounds.roundabout.anasui_death_1",
+    "sounds": [
+      "roundabout:anasui_death_1"
+    ]
+  },
+  "anasui_death_2": {
+    "subtitle": "sounds.roundabout.anasui_death_2",
+    "sounds": [
+      "roundabout:anasui_death_2"
+    ]
+  },
+  "anasui_phase_punch": {
+    "subtitle": "sounds.roundabout.anasui_phase_punch",
+    "sounds": [
+      "roundabout:anasui_phase_punch"
+    ]
+  },
+  "anasui_zip_1": {
+    "subtitle": "sounds.roundabout.anasui_zip_1",
+    "sounds": [
+      "roundabout:anasui_zip_1"
+    ]
+  },
+  "anasui_zip_2": {
+    "subtitle": "sounds.roundabout.anasui_zip_2",
+    "sounds": [
+      "roundabout:anasui_zip_2"
+    ]
+  },
+  "anasui_zip_3": {
+    "subtitle": "sounds.roundabout.anasui_zip_3",
+    "sounds": [
+      "roundabout:anasui_zip_3"
+    ]
+  },
+  "anasui_submerge": {
+    "subtitle": "sounds.roundabout.anasui_submerge",
+    "sounds": [
+      "roundabout:anasui_submerge"
+    ]
+  },
+  "anasui_trap_trigger_1": {
+    "subtitle": "sounds.roundabout.anasui_trap_trigger_1",
+    "sounds": [
+      "roundabout:anasui_trap_trigger_1"
+    ]
+  },
+  "anasui_trap_trigger_2": {
+    "subtitle": "sounds.roundabout.anasui_trap_trigger_2",
+    "sounds": [
+      "roundabout:anasui_trap_trigger_2"
+    ]
+  },
+  "anasui_trap": {
+    "subtitle": "sounds.roundabout.anasui_trap",
+    "sounds": [
+      "roundabout:anasui_trap"
+    ]
+  },
+  "anasui_ground_dive_1": {
+    "subtitle": "sounds.roundabout.anasui_ground_dive_1",
+    "sounds": [
+      "roundabout:anasui_ground_dive_1"
+    ]
+  },
+  "anasui_ground_dive_2": {
+    "subtitle": "sounds.roundabout.anasui_ground_dive_2",
+    "sounds": [
+      "roundabout:anasui_ground_dive_2"
+    ]
+  },
+  "anasui_jotaro_1": {
+    "subtitle": "sounds.roundabout.anasui_jotaro_1",
+    "sounds": [
+      "roundabout:anasui_jotaro_1"
+    ]
+  },
+  "anasui_jotaro_2": {
+    "subtitle": "sounds.roundabout.anasui_jotaro_2",
+    "sounds": [
+      "roundabout:anasui_jotaro_2"
+    ]
+  },
+  "anasui_pucci_1": {
+    "subtitle": "sounds.roundabout.anasui_pucci_1",
+    "sounds": [
+      "roundabout:anasui_pucci_1"
+    ]
+  },
+  "anasui_pucci_2": {
+    "subtitle": "sounds.roundabout.anasui_pucci_2",
+    "sounds": [
+      "roundabout:anasui_pucci_2"
+    ]
+  },
   "summon_king_crimson": {
     "subtitle": "sounds.roundabout.summon_king_crimson",
     "sounds": [
@@ -2115,6 +2325,18 @@
     "subtitle": "sounds.roundabout.jotaro_getting_closer",
     "sounds": [
       "roundabout:jotaro_getting_closer"
+    ]
+  },
+  "jotaro_response_anasui_1": {
+    "subtitle": "sounds.roundabout.jotaro_response_anasui_1",
+    "sounds": [
+      "roundabout:jotaro_response_anasui_1"
+    ]
+  },
+  "jotaro_response_anasui_2": {
+    "subtitle": "sounds.roundabout.jotaro_response_anasui_2",
+    "sounds": [
+      "roundabout:jotaro_response_anasui_2"
     ]
   },
   "fire_whoosh": {
@@ -4073,6 +4295,18 @@
     "subtitle": "sounds.roundabout.pucci_hurt_4",
     "sounds": [
       "roundabout:pucci_hurt_4"
+    ]
+  },
+  "pucci_response_anasui_1": {
+    "subtitle": "sounds.roundabout.pucci_response_anasui_1",
+    "sounds": [
+      "roundabout:pucci_response_anasui_1"
+    ]
+  },
+  "pucci_response_anasui_2": {
+    "subtitle": "sounds.roundabout.pucci_response_anasui_2",
+    "sounds": [
+      "roundabout:pucci_response_anasui_2"
     ]
   },
   "silver_chariot_summon": {
