@@ -268,6 +268,7 @@ public class BlockGrabPreset extends NewPunchingStand {
         super.tickPower();
 
         if (!this.getSelf().level().isClientSide) {
+
                 StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
                 if (standEntity != null) {
                     if (!standEntity.getHeldItem().isEmpty() && ((getActivePower() != PowerIndex.POWER_2 && getActivePower() != PowerIndex.POWER_2_SNEAK
@@ -290,7 +291,8 @@ public class BlockGrabPreset extends NewPunchingStand {
                     if (standEntity.getFirstPassenger() instanceof LivingEntity LE && LE.distanceTo(standEntity) > 40){
                         standEntity.ejectPassengers();
                     }
-                    if ((getActivePower() != PowerIndex.POWER_2_EXTRA)) {
+                    if ((getActivePower() != PowerIndex.POWER_2_EXTRA) ||
+                    !isGravityNormal(self)) {
                           standEntity.ejectPassengers();
                     }
                 }
@@ -1034,6 +1036,9 @@ public class BlockGrabPreset extends NewPunchingStand {
     }
 
     public boolean canGrab(Entity entity){
+        if (!isGravityNormal(self)){
+            return false;
+        }
         if (entity.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_ALLOW_ENTITY_GRAB)
                 && !(entity instanceof LivingEntity ent && MainUtil.isBossMob(ent))
                 && !(entity instanceof Player pl && pl.isCreative())
