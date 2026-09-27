@@ -4591,14 +4591,14 @@ public class PowersKillerQueen extends NewPunchingStand {
         switch (this.getStandUserSelf().roundabout$getStandSkin())
         {
             case KillerQueenEntity.MANGA, KillerQueenEntity.NOTW,
-                 KillerQueenEntity.GOGO, KillerQueenEntity.CREEPER -> {return 1;}
-            case KillerQueenEntity.LIMBUSMORTIS,
-                 KillerQueenEntity.TAMA, KillerQueenEntity.STRAY-> {return 2;}
+                 KillerQueenEntity.GOGO, KillerQueenEntity.CREEPER -> {return 1;} // Green
+            case KillerQueenEntity.LIMBUSMORTIS, KillerQueenEntity.GREY,
+                 KillerQueenEntity.TAMA, KillerQueenEntity.STRAY-> {return 2;} // Cyan
             case KillerQueenEntity.FINAL, KillerQueenEntity.YELLOW,
                  KillerQueenEntity.ARTWORK, KillerQueenEntity.GUNPOWDER,
                  KillerQueenEntity.UMBRA, KillerQueenEntity.MINUET,
-                 KillerQueenEntity.STARDUST-> {return 3;}
-            case KillerQueenEntity.MINESWEEPER -> {return 4;}
+                 KillerQueenEntity.STARDUST, KillerQueenEntity.BROWN-> {return 3;} // Yellow
+            case KillerQueenEntity.MINESWEEPER -> {return 4;} // Pink
             
             default -> {return 0;}
         }
