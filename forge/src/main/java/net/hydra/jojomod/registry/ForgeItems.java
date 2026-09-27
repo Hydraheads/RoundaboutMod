@@ -1029,6 +1029,9 @@ public class ForgeItems {
     public static final RegistryObject<Item> EXP_BISHOP = addToTab(ITEMS.register("exp_bishop",
             () -> new ExperienceBishopItem(ForgeBlocks.CHESS_PIECE.get(),new Item.Properties())));
 
+    public static final RegistryObject<BlockItem> GAMBLING_TABLE_ITEM = addToWIPTab(ITEMS.register("gambling_table",
+            () -> new BlockItem(ForgeBlocks.GAMBLING_TABLE.get(), new Item.Properties())));
+
     public static void assignStupidForge(){
         DispenserBlock.registerBehavior(ForgeItems.KNIFE.get(), DispenserRegistry.KNIFE);
 
