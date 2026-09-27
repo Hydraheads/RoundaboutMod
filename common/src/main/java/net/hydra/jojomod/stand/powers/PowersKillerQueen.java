@@ -18,6 +18,7 @@ import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
 import net.hydra.jojomod.entity.projectile.StrayCatAirBubble;
+import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.substand.SheerHeartAttackEntity;
@@ -609,11 +610,21 @@ public class PowersKillerQueen extends NewPunchingStand {
 		NOTW = 17,
 		MEMENTO = 18,
 		STARDUST = 19,
-        MINUET = 20;
-    
+        MINUET = 20,
+        BROWN = 21,
+        GREY = 22;
+
     @Override
     public List<Byte> getSkinList() {
         List<Byte> l = Lists.newArrayList();
+        if (inBitesTheDustMode()) {
+            if (getStandEntity(this.getSelf()) instanceof KillerQueenEntity KQE) {
+                l.add(KQE.getSkin());
+                return l;
+            }
+            return null;
+        }
+
         l.add(PART_4);
         if (this.getSelf() instanceof Player PE) {
             byte Level = ((IPlayerEntity) PE).roundabout$getStandLevel();
@@ -629,11 +640,13 @@ public class PowersKillerQueen extends NewPunchingStand {
                 l.add(ARTWORK);
                 l.add(FINAL);
                 l.add(YELLOW);
+                l.add(BROWN);
             }
             if (Level > 3 || bypass){
                 l.add(CRACKED);
                 l.add(DEADLY);
                 l.add(CREEPER);
+                l.add(GREY);
             }
             if (Level > 4 || bypass){
                 l.add(UMBRA);
@@ -4567,6 +4580,8 @@ public class PowersKillerQueen extends NewPunchingStand {
             case KillerQueenEntity.MEMENTO -> {return Component.translatable("skins.roundabout.killer_queen.memento");}
             case KillerQueenEntity.STARDUST -> {return Component.translatable("skins.roundabout.killer_queen.stardust");}
             case KillerQueenEntity.MINUET -> {return Component.translatable("skins.roundabout.killer_queen.minuet");}
+            case KillerQueenEntity.BROWN -> {return Component.translatable("skins.roundabout.killer_queen.brown");}
+            case KillerQueenEntity.GREY -> {return Component.translatable("skins.roundabout.killer_queen.grey");}
         }
         return Component.translatable("skins.roundabout.killer_queen.anime");
     }
@@ -4589,6 +4604,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
     }
 
+    // unused, maybe delete the particles, I doubt that it would be needed in the future anyways
     public SimpleParticleType getBubbleParticle() {
         byte bubble = this.getBubbleSkin();
         switch (bubble) {
