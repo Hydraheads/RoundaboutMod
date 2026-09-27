@@ -714,6 +714,7 @@ public class ForgeEvents {
         ModParticles.AIRBUBBLE_CYAN = ForgeParticles.AIRBUBBLE_CYAN.get();
         ModParticles.AIRBUBBLE_BOMB = ForgeParticles.AIRBUBBLE_BOMB.get();
         ModParticles.AIRBUBBLE_YELLOW = ForgeParticles.AIRBUBBLE_YELLOW.get();
+        ModParticles.ENERGY_RIPPLE_SURFACE = ForgeParticles.ENERGY_RIPPLE_SURFACE.get();
         ModParticles.ENERGY_RIPPLE = ForgeParticles.ENERGY_RIPPLE.get();
         ModParticles.DIVER_DOWN_FINAL = ForgeParticles.DIVER_DOWN_FINAL.get();
         ModParticles.HYPNO_SWIRL = ForgeParticles.HYPNO_SWIRL.get();
