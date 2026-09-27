@@ -8,14 +8,9 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.layers.animations.CatchTheRainbowAnimations;
-import net.hydra.jojomod.client.models.layers.animations.CenturyBoyAnimations;
-import net.hydra.jojomod.client.models.layers.animations.HeyYaAnimations;
-import net.hydra.jojomod.client.models.layers.animations.MandomAnimations;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
 import net.hydra.jojomod.stand.powers.PowersCatchTheRainbow;
-import net.hydra.jojomod.stand.powers.PowersHeyYa;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -23,9 +18,7 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -76,6 +69,24 @@ public class CatchTheRainbowModel extends PsuedoHierarchicalModel {
 			"textures/stand/catch_the_rainbow/eye_white.png");
 	public static ResourceLocation eye_red = new ResourceLocation(Roundabout.MOD_ID,
 			"textures/stand/catch_the_rainbow/eye_red.png");
+	public static ResourceLocation skeletonctr = new ResourceLocation(Roundabout.MOD_ID,
+			"textures/stand/catch_the_rainbow/skeleton.png");
+	public static ResourceLocation neon_on = new ResourceLocation(Roundabout.MOD_ID,
+			"textures/stand/catch_the_rainbow/neon_on.png");
+	public static ResourceLocation neon_off = new ResourceLocation(Roundabout.MOD_ID,
+			"textures/stand/catch_the_rainbow/neon_off.png");
+	public static ResourceLocation pride_bi = new ResourceLocation(Roundabout.MOD_ID,
+			"textures/stand/catch_the_rainbow/pride_bi.png");
+	public static ResourceLocation pride_gay = new ResourceLocation(Roundabout.MOD_ID,
+			"textures/stand/catch_the_rainbow/pride_gay.png");
+	public static ResourceLocation pride_lesbian = new ResourceLocation(Roundabout.MOD_ID,
+			"textures/stand/catch_the_rainbow/pride_lesbian.png");
+	public static ResourceLocation pride_nb = new ResourceLocation(Roundabout.MOD_ID,
+			"textures/stand/catch_the_rainbow/pride_nb.png");
+	public static ResourceLocation pride_pan = new ResourceLocation(Roundabout.MOD_ID,
+			"textures/stand/catch_the_rainbow/pride_pan.png");
+	public static ResourceLocation pride_trans = new ResourceLocation(Roundabout.MOD_ID,
+			"textures/stand/catch_the_rainbow/pride_trans.png");
 
 	public ResourceLocation getTextureLocation(Entity context, byte skin) {
 		if (!context.isInWaterOrRain()) {
@@ -88,6 +99,30 @@ public class CatchTheRainbowModel extends PsuedoHierarchicalModel {
 				}
 				case PowersCatchTheRainbow.EYE -> {
 					return eye_white;
+				}
+				case PowersCatchTheRainbow.SKELETONCTR -> {
+					return skeletonctr;
+				}
+				case PowersCatchTheRainbow.NEON -> {
+					return neon_off;
+				}
+				case PowersCatchTheRainbow.GAY -> {
+					return pride_gay;
+				}
+				case PowersCatchTheRainbow.LESBIAN -> {
+					return pride_lesbian;
+				}
+				case PowersCatchTheRainbow.BISEXUAL -> {
+					return pride_bi;
+				}
+				case PowersCatchTheRainbow.PAN -> {
+					return pride_pan;
+				}
+				case PowersCatchTheRainbow.NB -> {
+					return pride_nb;
+				}
+				case PowersCatchTheRainbow.TRANS -> {
+					return pride_trans;
 				}
 				default -> {
 					return base;
@@ -105,12 +140,35 @@ public class CatchTheRainbowModel extends PsuedoHierarchicalModel {
 				case PowersCatchTheRainbow.EYE -> {
 					return eye_red;
 				}
+				case PowersCatchTheRainbow.SKELETONCTR -> {
+					return skeletonctr;
+				}
+				case PowersCatchTheRainbow.NEON -> {
+					return neon_on;
+				}
+				case PowersCatchTheRainbow.GAY -> {
+					return pride_gay;
+				}
+				case PowersCatchTheRainbow.LESBIAN -> {
+					return pride_lesbian;
+				}
+				case PowersCatchTheRainbow.BISEXUAL -> {
+					return pride_bi;
+				}
+				case PowersCatchTheRainbow.PAN -> {
+					return pride_pan;
+				}
+				case PowersCatchTheRainbow.NB -> {
+					return pride_nb;
+				}
+				case PowersCatchTheRainbow.TRANS -> {
+					return pride_trans;
+				}
 				default -> {
 					return base;
 				}
 			}
 		}
-
 	}
 
 	public void render(Entity context, PoseStack poseStack, MultiBufferSource bufferSource, int light) {

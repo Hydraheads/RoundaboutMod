@@ -28,15 +28,21 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -48,6 +54,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AirItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.apache.commons.compress.utils.Lists;
 import org.joml.Vector3f;
@@ -99,8 +107,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                 double randX = Roundabout.RANDOM.nextDouble(-1, 1);
                 double randY = Roundabout.RANDOM.nextDouble(-1, 2);
                 double randZ = Roundabout.RANDOM.nextDouble(-1, 1);
-                sendParticlesIfPossible(self.level(),new DustParticleOptions(new Vector3f(0.76F, 1.0F, 0.9F
-                        ), 2f),
+                sendParticlesIfPossible(self.level(),ParticleTypes.SPLASH,
                         this.getSelf().getX() + randX,
                         this.getSelf().getY() + randY,
                         this.getSelf().getZ() + randZ,
@@ -146,17 +153,34 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     //skins
     public static final byte
             BASE = 1,
-            GHAST = 2,
-            LALI_HO = 3,
-            EYE = 4;
+            NEON = 2,
+            SKELETONCTR = 3,
+            GHAST = 4,
+            LALI_HO = 5,
+            EYE = 6,
+            GAY = 7,
+            LESBIAN = 8,
+            BISEXUAL = 9,
+            PAN = 10,
+            TRANS = 11,
+            NB = 12;
+
 
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
                 BASE,
+                NEON,
+                SKELETONCTR,
                 GHAST,
                 LALI_HO,
-                EYE
+                EYE,
+                GAY,
+                LESBIAN,
+                BISEXUAL,
+                PAN,
+                TRANS,
+                NB
         );
     }
 
@@ -167,6 +191,14 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                     case GHAST -> Component.translatable("skins.roundabout.catch_the_rainbow.ghast_dry");
                     case LALI_HO -> Component.translatable("skins.roundabout.catch_the_rainbow.lali_ho");
                     case EYE -> Component.translatable("skins.roundabout.catch_the_rainbow.eye_white");
+                    case NEON -> Component.translatable("skins.roundabout.catch_the_rainbow.neon_off");
+                    case SKELETONCTR -> Component.translatable("skins.roundabout.catch_the_rainbow.skeleton");
+                    case GAY -> Component.translatable("skins.roundabout.catch_the_rainbow.pride_gay");
+                    case BISEXUAL -> Component.translatable("skins.roundabout.catch_the_rainbow.pride_bi");
+                    case LESBIAN -> Component.translatable("skins.roundabout.catch_the_rainbow.pride_lesbian");
+                    case PAN -> Component.translatable("skins.roundabout.catch_the_rainbow.pride_pan");
+                    case NB -> Component.translatable("skins.roundabout.catch_the_rainbow.pride_nb");
+                    case TRANS -> Component.translatable("skins.roundabout.catch_the_rainbow.pride_trans");
                     default -> Component.translatable("skins.roundabout.catch_the_rainbow.base");
                 };
             } else {
@@ -174,6 +206,14 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                     case GHAST -> Component.translatable("skins.roundabout.catch_the_rainbow.ghast_happy");
                     case LALI_HO -> Component.translatable("skins.roundabout.catch_the_rainbow.lali_ho");
                     case EYE -> Component.translatable("skins.roundabout.catch_the_rainbow.eye_red");
+                    case NEON -> Component.translatable("skins.roundabout.catch_the_rainbow.neon_on");
+                    case SKELETONCTR -> Component.translatable("skins.roundabout.catch_the_rainbow.skeleton");
+                    case GAY -> Component.translatable("skins.roundabout.catch_the_rainbow.pride_gay");
+                    case BISEXUAL -> Component.translatable("skins.roundabout.catch_the_rainbow.pride_bi");
+                    case LESBIAN -> Component.translatable("skins.roundabout.catch_the_rainbow.pride_lesbian");
+                    case PAN -> Component.translatable("skins.roundabout.catch_the_rainbow.pride_pan");
+                    case NB -> Component.translatable("skins.roundabout.catch_the_rainbow.pride_nb");
+                    case TRANS -> Component.translatable("skins.roundabout.catch_the_rainbow.pride_trans");
                     default -> Component.translatable("skins.roundabout.catch_the_rainbow.base");
                 };
             }
@@ -183,6 +223,14 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                 case GHAST -> Component.translatable("skins.roundabout.catch_the_rainbow.ghast_dry");
                 case LALI_HO -> Component.translatable("skins.roundabout.catch_the_rainbow.lali_ho");
                 case EYE -> Component.translatable("skins.roundabout.catch_the_rainbow.eye_white");
+                case NEON -> Component.translatable("skins.roundabout.catch_the_rainbow.neon_off");
+                case SKELETONCTR -> Component.translatable("skins.roundabout.catch_the_rainbow.skeleton");
+                case GAY -> Component.translatable("skins.roundabout.catch_the_rainbow.pride_gay");
+                case BISEXUAL -> Component.translatable("skins.roundabout.catch_the_rainbow.pride_bi");
+                case LESBIAN -> Component.translatable("skins.roundabout.catch_the_rainbow.pride_lesbian");
+                case PAN -> Component.translatable("skins.roundabout.catch_the_rainbow.pride_pan");
+                case NB -> Component.translatable("skins.roundabout.catch_the_rainbow.pride_nb");
+                case TRANS -> Component.translatable("skins.roundabout.catch_the_rainbow.pride_trans");
                 default -> Component.translatable("skins.roundabout.catch_the_rainbow.base");
             };
         }
@@ -200,6 +248,14 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             setSkillIcon(context, x, y, 1, StandIcons.CATCH_THE_RAINBOW_RAIN_MEND, PowerIndex.SKILL_1_SNEAK);
         setSkillIcon(context, x, y, 2, StandIcons.CATCH_THE_RAINBOW_CHOKE, PowerIndex.SKILL_2);
         setSkillIcon(context, x, y, 4, StandIcons.CATCH_THE_RAINBOW_FULL_DODGE, PowerIndex.SKILL_4);
+    }
+
+    @Override
+    public ResourceLocation getIconYes(int slot){
+        if (slot == 4 && deathTimer == 0 && isInRain()){
+            return StandIcons.SQUARE_GOLD;
+        }
+        return super.getIconYes(slot);
     }
 
     @Override
@@ -332,6 +388,10 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         switch (activePower) {
             case PowerIndex.POWER_2 -> {
                 LeftArmState = data;
+                armGoneTicks = data;
+            }
+            case PowerIndex.POWER_4 -> {
+                deathTimer = data;
             }
         }
         super.updatePowerInt(activePower,data);
@@ -355,19 +415,53 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         return super.inputSpeedModifiers(basis);
     }
 
-    //life clutch
     public int deathTimer = 0;
+    public int dropTimer = 0;
 
     @Override
     public void tickPower() {
         super.tickPower();
         if (deathTimer != 0) deathTimer --;
 
+        if (self.onGround())
+            dropTimer = 0;
+
+        if (dropTimer > 0) {
+            dropTimer--;
+
+            List<Entity> getNearEntity = MainUtil.getEntitiesInRange(this.self.level(), this.getSelf().blockPosition(), 2F, this.self);
+            AABB dropHitbox = this.self.getBoundingBox().move(0,0.4,0).inflate(0.4F);
+
+            for (Entity ent : getNearEntity){
+                if (dropHitbox.intersects(ent.getBoundingBox())) {
+                    MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 0.8F,
+                            0,
+                            -1,
+                            0);
+                    ent.hurt(ModDamageTypes.of(this.self.level(), DamageTypes.PLAYER_ATTACK, self, self), 5);
+                }
+            }
+
+            double randX = Roundabout.RANDOM.nextDouble(-0.3, 0.3);
+            double randY = Roundabout.RANDOM.nextDouble(-0.2, 0.2);
+            double randZ = Roundabout.RANDOM.nextDouble(-0.3, 0.3);
+            ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.SPLASH,
+                    this.self.getX() + randX,
+                    this.self.getY() + randY + 0.15,
+                    this.self.getZ() + randZ,
+                    1, 0, 0, 0, 0);
+        }
+
         if (isInRain() && hasStandActive(self)) {
             this.getSelf().resetFallDistance();
         }
         if(this.self instanceof Player) {
+            if(armGoneTicks>0) {
+                armGoneTicks = armGoneTicks - 1;
+            }
             if (!this.self.level().isClientSide) {
+                this.updatePowerInt(PowerIndex.POWER_2, armGoneTicks);
+                S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowerIndex.POWER_2, armGoneTicks);
                 if (HasOffHand) {
                     LeftArmState = 0;
                 } else {
@@ -375,6 +469,9 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                 }
                 this.updatePowerInt(PowerIndex.POWER_2, LeftArmState);
                 S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowerIndex.POWER_2, LeftArmState);
+
+                this.updatePowerInt(PowerIndex.POWER_4, deathTimer);
+                S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowerIndex.POWER_4, deathTimer);
 
                 if(Off_hand_entity == null){
                     HasOffHand = true;
@@ -390,7 +487,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         if(!(currentarm == null)) {
             if(!(armGoneTicks>0)) {
                 if (!this.self.level().isClientSide()) {
-                    currentarm.discard();
+                    currentarm.removearm();
                 }
             }else{
                 if (!this.self.level().isClientSide()) {
@@ -403,21 +500,25 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                         double diameter = 0.4d;
                         for (int i = 0; i < 11; i = i + 1) {
                             sendParticlesIfPossible(self.level(),ParticleTypes.SPLASH,
-                                    this.getSelf().getX() + (diameter * Math.sin(i * 4)) * Math.cos(Xangle),
+                                    this.getSelf().getX() + (diameter * Math.sin(i * 6)) * Math.cos(Xangle),
                                     this.getSelf().getY() + 0.5,
-                                    this.getSelf().getZ() + (diameter * Math.cos(i * 4)) * Math.cos(Zangle),
+                                    this.getSelf().getZ() + (diameter * Math.cos(i * 6)) * Math.cos(Zangle),
                                     0, 0, 0, 0, 0);
                         }
+                    }
+                    if(OffhandItemToReturn != null){
+                        if(this.self.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof AirItem){
+                            this.self.setItemInHand(InteractionHand.OFF_HAND,OffhandItemToReturn);
+                        }else {
+                            this.self.spawnAtLocation(OffhandItemToReturn);
+                        }
+                        OffhandItemToReturn = null;
                     }
                 }else{
                     if(MainUtil.cheapDistanceTo(this.self.getX(),this.self.getY(),this.self.getZ(),currentarm.getX(),currentarm.getY(),currentarm.getZ())<1.5 && currentarm.StartupTicks == 0 ) {
                         armGoneTicks = 0;
                     }
                 }
-            }
-
-            if (currentarm.position() == this.getSelf().position()){
-                OffHandReturn();
             }
         }
     }
@@ -494,16 +595,16 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                 playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GREEN_DAY_STITCH_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
                 for (int i = 0; i < 11; i = i + 1) {
                     sendParticlesIfPossible(self.level(), ParticleTypes.SPLASH,
-                            this.getSelf().getX() + (diameter * Math.sin(i * 4)) * Math.cos(Xangle),
+                            this.getSelf().getX() + (diameter * Math.sin(i * 6)) * Math.cos(Xangle),
                             this.getSelf().getY() + (this.getSelf().getEyeHeight() * 0.7),
-                            this.getSelf().getZ() + (diameter * Math.cos(i * 4)) * Math.cos(Zangle),
+                            this.getSelf().getZ() + (diameter * Math.cos(i * 6)) * Math.cos(Zangle),
                             0, 0, 0, 0, 0);
                 }
             }
         }
     }
 
-    //drop down (add damage)
+    //drop down
 
     public void dropDownClient(){
         if (!this.onCooldown(PowerIndex.GLOBAL_DASH)) {
@@ -519,6 +620,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                     0,
                     3,
                     0);
+            dropTimer = 20;
         }
     }
 
@@ -563,6 +665,10 @@ public class PowersCatchTheRainbow extends NewDashPreset {
 
         if (Off_hand_entity == null) {
             if (SAE != null) {
+                armGoneTicks = 240;
+                if(!(currentarm == null)){
+                    currentarm.discard();
+                }
                 Off_hand_entity = SAE;
                 SAE.setUser(this.self);
                 SAE.setXRot(this.self.getXRot());
@@ -584,13 +690,15 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     }
 
     public void OffHandThrow(){
-        if (!this.onCooldown(PowerIndex.SKILL_2) && isInRain()) {
+        if (!this.onCooldown(PowerIndex.SKILL_2) && isInRain() && !this.self.isUsingItem()) {
 
                 if (HasOffHandCharge && !HasOffHand) {
                     HasOffHandCharge = false;
                 } else {
-                    this.setCooldown(PowerIndex.SKILL_2, 60);
-                    HasOffHandCharge = true;
+                    if (HasOffHand) {
+                        this.setCooldown(PowerIndex.SKILL_2, 60);
+                        HasOffHandCharge = true;
+                    }
                 }
                 if (isClient()) {
                     AbstractClientPlayer abstractClientPlayer = (AbstractClientPlayer) this.self;
@@ -617,13 +725,10 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             ItemEntity $$2 = new ItemEntity(this.self.level(), this.self.getX(), this.self.getY() + 1, this.self.getZ(), Off_hand_entity.getMainHandItem());
             //this.self.level().addFreshEntity($$2);
             Player player = (Player) this.self;
-            if (this.self.getOffhandItem().getItem() instanceof AirItem) {
-                OffhandItemToReturn = Off_hand_entity.getMainHandItem();
+            if (this.self.getMainHandItem().getItem() instanceof AirItem) {
+                this.self.setItemInHand(InteractionHand.OFF_HAND, Off_hand_entity.getMainHandItem());
             } else {
-                OffhandItemToReturn = Off_hand_entity.getMainHandItem();
-                // ItemEntity item = new ItemEntity(this.self.level(), this.self.getX(), this.self.getY() + 2, this.self.getZ(), Off_hand_entity.getMainHandItem());
-                //$$2.setPickUpDelay(1);
-                // this.self.level().addFreshEntity($$2);
+                this.self.spawnAtLocation(Off_hand_entity.getMainHandItem());
             }
 
             Off_hand_entity.setUser(null);
@@ -637,9 +742,9 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GREEN_DAY_STITCH_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
             for (int i = 0; i < 11; i = i + 1) {
                 sendParticlesIfPossible(self.level(), ParticleTypes.SPLASH,
-                        this.getSelf().getX() + (diameter * Math.sin(i * 4)) * Math.cos(Xangle),
+                        this.getSelf().getX() + (diameter * Math.sin(i * 6)) * Math.cos(Xangle),
                         this.getSelf().getY() + (this.getSelf().getEyeHeight() * 0.7),
-                        this.getSelf().getZ() + (diameter * Math.cos(i * 4)) * Math.cos(Zangle),
+                        this.getSelf().getZ() + (diameter * Math.cos(i * 6)) * Math.cos(Zangle),
                         0, 0, 0, 0, 0);
             }
         }
