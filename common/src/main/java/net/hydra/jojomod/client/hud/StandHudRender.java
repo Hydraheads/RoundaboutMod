@@ -514,15 +514,6 @@ public class StandHudRender {
         int blt;
 
         ResourceLocation file = StandIcons.JOJO_ICONS;
-        int u = 183;
-        int k = scaledWidth/2 - 5;
-        l = scaledHeight - 31 - 5;
-
-        if (PW.disabledBTDTicks < 0){
-            context.blit(StandIcons.JOJO_ICONS, k, l, u, 110, 9, 9);
-        } else {
-            context.blit(StandIcons.JOJO_ICONS, k, l, u, 100, 9, 9);
-        }
 
         int bx = 0;
         int by = 70;
@@ -551,11 +542,21 @@ public class StandHudRender {
             context.blit(file, x, l, bx, by+5, blt, 5);
         }
 
+        int u = 183;
+        int k = scaledWidth/2 - 5;
+        l = scaledHeight - 31 - 12;
+
+        if (PW.disabledBTDTicks < 0){
+            context.blit(StandIcons.JOJO_ICONS, k, l, u, 110, 9, 9);
+        } else {
+            context.blit(StandIcons.JOJO_ICONS, k, l, u, 100, 9, 9);
+        }
+
         int y = color;
         Font renderer = client.font;
         String $$6 = (int)(value / 20.0) + "";
         int $$7 = (scaledWidth - renderer.width($$6)) / 2;
-        int $$8 = scaledHeight - 31 - 12;
+        int $$8 = scaledHeight - 31 - 4;
         context.drawString(renderer, $$6, $$7 + 1, $$8, 0, false);
         context.drawString(renderer, $$6, $$7 - 1, $$8, 0, false);
         context.drawString(renderer, $$6, $$7, $$8 + 1, 0, false);
