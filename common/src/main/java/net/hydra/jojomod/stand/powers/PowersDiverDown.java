@@ -920,7 +920,7 @@ public class PowersDiverDown extends NewPunchingStand {
                         shouldRecall = true;
                         break;
                     }
-                    if (this.self.tickCount % 26 == 0) {
+                    if (this.self.tickCount % 18 == 0) {
                         if (level.getBlockEntity(limbPos) instanceof DiverLimbBlockEntity be) {
                             // be.facing is the direction the limb is facing outwards
                             Direction surfaceFace = be.facing.getOpposite();
@@ -1126,7 +1126,7 @@ public class PowersDiverDown extends NewPunchingStand {
                         continue;
                     }
 
-                    if (trap.ticks % 26 == 0) {
+                    if (trap.ticks % 18 == 0) {
                         double px = trapPos.getX() + 0.5 + trap.face.getStepX() * 0.51;
                         double py = trapPos.getY() + 0.5 + trap.face.getStepY() * 0.51;
                         double pz = trapPos.getZ() + 0.5 + trap.face.getStepZ() * 0.51;
