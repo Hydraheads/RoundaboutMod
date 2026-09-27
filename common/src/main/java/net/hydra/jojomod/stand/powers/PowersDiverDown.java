@@ -3393,6 +3393,13 @@ public class PowersDiverDown extends NewPunchingStand {
             // S2C means server to client, for updating client/server desyncs
             S2CPacketUtil.sendIntPowerDataPacket(player, DIVER_EMERGE, -1);
         }
+
+        // fix for the diver down disappearing but nothing happening hopefully
+        if (!this.self.level().isClientSide() && hasStandActive(this.self)) {
+            if (!hasStandEntity(this.self) || getStandEntity(this.self) == null || !getStandEntity(this.self).isAlive()) {
+                ((StandUser) this.self).roundabout$summonStand(this.self.level(), true, false);
+            }
+        }
     }
 
     public boolean isDiveActive() {
