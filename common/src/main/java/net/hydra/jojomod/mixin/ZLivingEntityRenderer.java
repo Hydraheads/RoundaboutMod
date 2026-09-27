@@ -401,7 +401,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
                     DiverDownDisguiseRenderer.INSTANCE.renderDisguise(entity, profile, entityYaw, partialTicks, poseStack, buffer, packedLight);
                 }
                 //adds the nametag
-                if (entity != Minecraft.getInstance().player && !entity.isInvisible()) {
+                if (entity != Minecraft.getInstance().player && !entity.isInvisible() && !Minecraft.getInstance().options.hideGui) {
                     String disguiseName = profile.getName();
                     if (disguiseName != null && !disguiseName.isEmpty()) {
                         float targetY = (entity.isCrouching() ? 2.0F : 2.3F);

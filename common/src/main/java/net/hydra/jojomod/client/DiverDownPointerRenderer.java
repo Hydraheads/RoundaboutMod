@@ -31,10 +31,10 @@ public final class DiverDownPointerRenderer {
 
         if (((StandUser) viewer).roundabout$getStandPowers() instanceof PowersDiverDown dd) {
             if (dd.isDiveActive() && !dd.isSelfDive() && dd.submergedTarget == entity) {
-                float size = 0.35F;
+                float size = 0.30F;
 
                 poseStack.pushPose();
-                poseStack.translate(0, entity.getBbHeight() + 0.5F, 0);
+                poseStack.translate(0, entity.getBbHeight() + 0.86F, 0);
                 poseStack.mulPose(Minecraft.getInstance().getEntityRenderDispatcher().cameraOrientation());
                 poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
 

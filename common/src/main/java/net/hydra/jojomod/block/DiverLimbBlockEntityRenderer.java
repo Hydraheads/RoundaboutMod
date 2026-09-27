@@ -66,8 +66,8 @@ public class DiverLimbBlockEntityRenderer implements BlockEntityRenderer<DiverLi
         this.rightLeg = legs.getChild("right_leg");
         this.leftLeg = legs.getChild("left_leg");
         // center each limb
-        this.rightArm.setPos(0.0F, -7.0F, 0.0F);
-        this.leftArm.setPos(0.0F, -7.0F, 0.0F);
+        this.rightArm.setPos(2.0F, -7.0F, 0.0F);
+        this.leftArm.setPos(-2.0F, -7.0F, 0.0F);
         this.rightLeg.setPos(0.0F, -9.0F, 0.0F);
         this.leftLeg.setPos(0.0F, -9.0F, 0.0F);
 
@@ -80,8 +80,8 @@ public class DiverLimbBlockEntityRenderer implements BlockEntityRenderer<DiverLi
         this.betaRightLeg = betaLegs.getChild("right_leg");
         this.betaLeftLeg = betaLegs.getChild("left_leg");
 
-        this.betaRightArm.setPos(0.0F, -7.0F, 0.0F);
-        this.betaLeftArm.setPos(0.0F, -7.0F, 0.0F);
+        this.betaRightArm.setPos(2.0F, -7.0F, 0.0F);
+        this.betaLeftArm.setPos(-2.0F, -7.0F, 0.0F);
         this.betaRightLeg.setPos(0.0F, -9.0F, 0.0F);
         this.betaLeftLeg.setPos(0.0F, -9.0F, 0.0F);
     }
