@@ -1121,13 +1121,18 @@ public class PowersKillerQueen extends NewPunchingStand {
                         ((BlockItem)stack.getItem()).getBlock() instanceof ShulkerBoxBlock || ((BlockItem)stack.getItem()).getBlock() instanceof FancyLighterBlock)));
     }
 
-    public float getMaxBTDHostHealth() { return 25.0f; }
+    public float getMaxBTDHostHealth() { return 40.0f; }
+
+    public boolean isAffectedByBitesTheDust(Entity ent) {
+        return (ent instanceof Player || ent instanceof Mob)
+                && !(ent instanceof FallenMob || ent instanceof StandEntity);
+    }
 
     public boolean canBitesTheDustPlant(Entity targetEntity) {
         if (targetEntity == null) {
             return false;
-        } else if (!targetEntity.isAlive() || targetEntity instanceof StandEntity || MainUtil.isBossMob(targetEntity)
-                || targetEntity instanceof FallenMob || targetEntity instanceof StrayCatEntity) {
+        } else if (!targetEntity.isAlive() || MainUtil.isBossMob(targetEntity)
+                || !isAffectedByBitesTheDust(targetEntity) || targetEntity instanceof StrayCatEntity) {
             return false;
         }
         if (targetEntity instanceof Mob || targetEntity instanceof Player) {
@@ -4245,7 +4250,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     // hightlights entity things :0
     public boolean highlightsEntity(Entity ent,Player player){
         if (inBitesTheDustMode() && bitesTheDustPlantedEntity != null) {
-            if ((ent instanceof Mob || ent instanceof Player) && !(ent instanceof StandEntity)
+            if (isAffectedByBitesTheDust(ent) && self != ent
                     && ent.distanceTo(bitesTheDustPlantedEntity) < btdRange && bitesTheDustPlantedEntity != ent) {
                 LivingEntity LE = (LivingEntity) ent;
 
@@ -4330,7 +4335,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (LE != null && LE.getId() != this.getSelf().getId()) {
             Minecraft mc = Minecraft.getInstance();
             if (this.getSelf() instanceof Player && this.getSelf().distanceToSqr(LE) <= 1024
-                    && bitesTheDustPlantedEntity != null && (LE instanceof Mob || LE instanceof Player) && !(LE instanceof StandEntity)) {
+                    && bitesTheDustPlantedEntity != null && isAffectedByBitesTheDust(LE)) {
 
                 float size = 0.3f;
                 ResourceLocation icon = StandIcons.BITES_THE_DUST_TARGET;
