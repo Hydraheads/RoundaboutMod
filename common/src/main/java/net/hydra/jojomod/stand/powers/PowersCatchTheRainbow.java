@@ -244,16 +244,20 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             setSkillIcon(context, x, y, 3, StandIcons.CATCH_THE_RAINBOW_DROP_DOWN, PowerIndex.GLOBAL_DASH);
         else
             setSkillIcon(context, x, y, 3, StandIcons.CATCH_THE_RAINBOW_RAIN_DASH, PowerIndex.GLOBAL_DASH);
-        if (isHoldingSneak())
+        if (isHoldingSneak()) {
             setSkillIcon(context, x, y, 1, StandIcons.CATCH_THE_RAINBOW_RAIN_MEND, PowerIndex.SKILL_1_SNEAK);
-        setSkillIcon(context, x, y, 2, StandIcons.CATCH_THE_RAINBOW_CHOKE, PowerIndex.SKILL_2);
+            setSkillIcon(context, x, y, 2, StandIcons.CATCH_THE_RAINBOW_CHOKE_RETURN, PowerIndex.SKILL_2_SNEAK);
+        }else {
+            setSkillIcon(context, x, y, 1, StandIcons.CATCH_THE_RAINBOW_BARRIER, PowerIndex.SKILL_1);
+            setSkillIcon(context, x, y, 2, StandIcons.CATCH_THE_RAINBOW_CHOKE, PowerIndex.SKILL_2);
+        }
         setSkillIcon(context, x, y, 4, StandIcons.CATCH_THE_RAINBOW_FULL_DODGE, PowerIndex.SKILL_4);
     }
 
     @Override
     public ResourceLocation getIconYes(int slot){
-        if (slot == 4 && deathTimer == 0 && isInRain()){
-            return StandIcons.SQUARE_GOLD;
+        if ((slot == 1 || slot == 2 || slot == 3 || slot == 4) && deathTimer == 0 && isInRain()){
+            return StandIcons.SQUARE_CYAN;
         }
         return super.getIconYes(slot);
     }
@@ -262,33 +266,33 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas){
         List<AbilityIconInstance> $$1 = com.google.common.collect.Lists.newArrayList();
 
-        // manual scope
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,0, "ability.roundabout.ratt_scope",
-                "instruction.roundabout.press_skill", StandIcons.RATT_SCOPE_IN,1,level,bypas));
-        // charge fire
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+118,0, "ability.roundabout.ratt_fire",
-                "instruction.roundabout.hold_block", StandIcons.RATT_BURST,0,level,bypas));
-        // burst fire
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+99,0, "ability.roundabout.ratt_mode_change",
-                "instruction.roundabout.press_skill", StandIcons.RATT_SINGLE,2,level,bypas));
-        // place ratt
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.ratt_place",
-                "instruction.roundabout.press_skill", StandIcons.RATT_PLACE,2,level,bypas));
-        // place burst
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.ratt_place_burst",
-                "instruction.roundabout.press_skill", StandIcons.RATT_BURST,1,level,bypas));
-        // place auto
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.ratt_auto",
-                "instruction.roundabout.press_skill_crouch", StandIcons.RATT_AUTO,1,level,bypas));
-        // dodge
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,0, "ability.roundabout.dodge",
-                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
-        // passive
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.ratt_flesh",
-                "instruction.roundabout.passive", StandIcons.RATT_BLOB,3,level,bypas));
-        // bucket passive
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.ratt_bucket",
-                "instruction.roundabout.passive", StandIcons.RATT_BUCKET,3,level,bypas));
+
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,0, "ability.roundabout.ctr_passives",
+                "instruction.roundabout.passive", StandIcons.CATCH_THE_RAINBOW_PASSIVES,1,level,bypas));
+
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+118,0, "ability.roundabout.ctr_rain_platform",
+                "instruction.roundabout.crouch_air", StandIcons.CATCH_THE_RAINBOW_RAIN_PLATFORM,0,level,bypas));
+
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+99,0, "ability.roundabout.ctr_life_clutch",
+                "instruction.roundabout.passive", StandIcons.CATCH_THE_RAINBOW_LIFE_CLUTCH,0,level,bypas));
+
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.ctr_barrier",
+                "instruction.roundabout.press_skill", StandIcons.CATCH_THE_RAINBOW_BARRIER,1,level,bypas));
+
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.ctr_rain_mend",
+                "instruction.roundabout.press_skill_crouch", StandIcons.CATCH_THE_RAINBOW_RAIN_MEND,1,level,bypas));
+
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.ctr_choke",
+                "instruction.roundabout.press_skill", StandIcons.CATCH_THE_RAINBOW_CHOKE,2,level,bypas));
+
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,0, "ability.roundabout.ctr_rain_dash",
+                "instruction.roundabout.press_skill", StandIcons.CATCH_THE_RAINBOW_RAIN_DASH,3,level,bypas));
+
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.ctr_drop_down",
+                "instruction.roundabout.press_skill_air_crouch", StandIcons.CATCH_THE_RAINBOW_DROP_DOWN,3,level,bypas));
+
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.ctr_full_dodge",
+                "instruction.roundabout.press_skill", StandIcons.CATCH_THE_RAINBOW_FULL_DODGE,4,level,bypas));
 
         return $$1;
     }

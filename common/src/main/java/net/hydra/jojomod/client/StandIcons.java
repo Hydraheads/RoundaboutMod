@@ -77,6 +77,8 @@ public class StandIcons {
             "textures/gui/move_square4.png");
     public static final ResourceLocation NOVELTY_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/move_square_novelty.png");
+    public static final ResourceLocation SQUARE_CYAN = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/move_square_cyan.png");
     public static final ResourceLocation LOCKED_SQUARE_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/move_square3.png");
     public static final ResourceLocation UNLOCK_SQUARE_ICON = new ResourceLocation(Roundabout.MOD_ID,
@@ -293,6 +295,16 @@ public class StandIcons {
             "textures/gui/icons/catch_the_rainbow/drop_down.png");
     public static final ResourceLocation CATCH_THE_RAINBOW_FULL_DODGE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/catch_the_rainbow/full_dodge.png");
+    public static final ResourceLocation CATCH_THE_RAINBOW_BARRIER = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/catch_the_rainbow/barrier.png");
+    public static final ResourceLocation CATCH_THE_RAINBOW_PASSIVES = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/catch_the_rainbow/passives.png");
+    public static final ResourceLocation CATCH_THE_RAINBOW_LIFE_CLUTCH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/catch_the_rainbow/life_clutch.png");
+    public static final ResourceLocation CATCH_THE_RAINBOW_RAIN_PLATFORM = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/catch_the_rainbow/rain_platform.png");
+    public static final ResourceLocation CATCH_THE_RAINBOW_CHOKE_RETURN = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/catch_the_rainbow/choke_return.png");
 
     public static final ResourceLocation MUSCLE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/other_layers/muscle_full.png");
