@@ -27,6 +27,7 @@ public abstract class LayerHumanoidMobRendererMixin<T extends Mob, M extends Hum
         this.addLayer(new RattShoulderLayer<>($$0, this));
         this.addLayer(new AnubisLayer<>($$0, this));
         this.addLayer(new VisagePartLayer2<>($$0, this));
+        this.addLayer(new DiverLegsLayer<>($$0, this));
     }
 
     /**Shadows, ignore

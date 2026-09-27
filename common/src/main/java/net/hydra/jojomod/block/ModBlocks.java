@@ -203,6 +203,8 @@ public class ModBlocks {
 
     public static Block MELON_PARFAIT;
 
+    public static Block GAMBLING_TABLE;
+
     public static BlockEntityType<OasisMudBlockEntity> OASIS_MUD_BLOCK_ENTITY;
     public static BlockEntityType<StandFireBlockEntity> STAND_FIRE_BLOCK_ENTITY;
     public static BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY;
@@ -1034,6 +1036,14 @@ public class ModBlocks {
                     .ignitedByLava()
                     .instabreak()
                     .pushReaction(PushReaction.DESTROY)
+    );
+    public static Block GAMBLING_TABLE_PROPERTIES = new GamblingTableBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .instrument(NoteBlockInstrument.BASS)
+                    .strength(2.5F)
+                    .sound(SoundType.WOOD)
+                    .ignitedByLava()
     );
 
     public static List<String> dontGenState = new ArrayList<String>();

@@ -46,6 +46,7 @@ public abstract class LayerPlayerRendererMixin<T extends LivingEntity, M extends
         this.addLayer(new MoldSpineLayer<>($$0, this));
         this.addLayer(new MoldRightArmLayer<>($$0, this));
         this.addLayer(new MoldLeftArmLayer<>($$0, this));
+        this.addLayer(new DiverLegsLayer<>($$0, this));
     }
 
     /**Shadows, ignore

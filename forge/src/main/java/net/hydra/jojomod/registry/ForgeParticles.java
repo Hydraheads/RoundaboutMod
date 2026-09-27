@@ -265,6 +265,10 @@ public class ForgeParticles {
             "airbubble_bomb",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> ENERGY_RIPPLE_SURFACE = PARTICLES.register(
+            "energy_ripple_surface",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> ENERGY_RIPPLE = PARTICLES.register(
             "energy_ripple",
             () -> new SimpleParticleType(true)

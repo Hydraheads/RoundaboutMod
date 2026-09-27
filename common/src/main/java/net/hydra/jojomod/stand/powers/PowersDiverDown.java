@@ -1,13 +1,10 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
-import com.ibm.icu.number.Precision;
 import com.mojang.authlib.GameProfile;
 
-import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.block.DiverLimbBlock;
 import net.hydra.jojomod.block.DiverLimbBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -31,21 +28,16 @@ import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.client.gui.diverdown.custom_workbench_code.*;
 import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.AnasuiVoice;
-import net.hydra.jojomod.event.powers.visagedata.voicedata.KiraPartFourVoice;
-import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.particles.EnergyRippleParticle;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.C2SPacketUtil;
-import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.ChatFormatting;
@@ -78,7 +70,6 @@ import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.monster.Zombie;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.inventory.*;
@@ -98,9 +89,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Vector3f;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.HashMap;
@@ -383,9 +372,9 @@ public class PowersDiverDown extends NewPunchingStand {
 
     private float getRibcageHostStrength(Entity entity) {
         if (this.getReducedDamage(entity)) {
-            return levelupDamageMod(6F * this.getAttackMultOnPlayers() * 0.01F * 0.75F);
+            return levelupDamageMod(8F * this.getAttackMultOnPlayers() * 0.01F * 0.75F);
         } else {
-            return levelupDamageMod(20F * this.getAttackMultOnMobs() * 0.01F * 0.75F);
+            return levelupDamageMod(22F * this.getAttackMultOnMobs() * 0.01F * 0.75F);
         }
     }
 
@@ -886,6 +875,20 @@ public class PowersDiverDown extends NewPunchingStand {
         playStandUserOnlySoundsIfNearby(getSummonSound(), 10, false, false);
     }
 
+    // particles and stuff
+
+    private void diverHitParticlesCenter(Entity entity){
+        Vec3 centerOffset = new Vec3(0, (entity.getBbHeight() * 0.65), 0);
+        Direction gd = ((IGravityEntity) entity).roundabout$getGravityDirection();
+        if (gd != Direction.DOWN) {
+            centerOffset = RotationUtil.vecPlayerToWorld(centerOffset, gd);
+        }
+        sendParticlesIfPossible(
+                this.self.level(), ModParticles.DIVER_DOWN_FINAL,
+                entity.getX() + centerOffset.x, entity.getY() + centerOffset.y, entity.getZ() + centerOffset.z,
+                1, 0.0, 0.0, 0.0, 0.0);
+    }
+
     // START OF ACTUAL MOVE METHODS
 
     //for cooldowns, like D4C
@@ -917,7 +920,7 @@ public class PowersDiverDown extends NewPunchingStand {
                         shouldRecall = true;
                         break;
                     }
-                    if (this.self.tickCount % 26 == 0) {
+                    if (this.self.tickCount % 18 == 0) {
                         if (level.getBlockEntity(limbPos) instanceof DiverLimbBlockEntity be) {
                             // be.facing is the direction the limb is facing outwards
                             Direction surfaceFace = be.facing.getOpposite();
@@ -925,7 +928,7 @@ public class PowersDiverDown extends NewPunchingStand {
                             double py = limbPos.getY() + 0.5 - surfaceFace.getStepY() * 0.49;
                             double pz = limbPos.getZ() + 0.5 - surfaceFace.getStepZ() * 0.49;
                             sendParticlesIfPossible(
-                                    level, ModParticles.ENERGY_RIPPLE, px, py, pz,
+                                    level, ModParticles.ENERGY_RIPPLE_SURFACE, px, py, pz,
                                     1, 0, 0, 0, 0
                             );
                         }
@@ -1092,6 +1095,15 @@ public class PowersDiverDown extends NewPunchingStand {
         else {
             tickRibcageTrap();
             tickSpringLegs();
+            if (this.hasDiverLegs && this.submergedTarget instanceof LivingEntity target && target.isAlive()) {
+                double px = target.getX() + (Math.random() - 0.5) * 0.4;
+                double py = target.getY() + 0.35; // At the legs
+                double pz = target.getZ() + (Math.random() - 0.5) * 0.4;
+
+                sendParticlesIfPossible(
+                        this.self.level(), ModParticles.ICE_SPARKLE, px, py, pz,
+                            2, 0.05, 0.05, 0.05, 0.08);
+            }
             // recall stand if target dies, or if they go too far
             if (this.submergedTarget != null) {
                 if (!this.submergedTarget.isAlive()
@@ -1114,7 +1126,7 @@ public class PowersDiverDown extends NewPunchingStand {
                         continue;
                     }
 
-                    if (trap.ticks % 26 == 0) {
+                    if (trap.ticks % 18 == 0) {
                         double px = trapPos.getX() + 0.5 + trap.face.getStepX() * 0.51;
                         double py = trapPos.getY() + 0.5 + trap.face.getStepY() * 0.51;
                         double pz = trapPos.getZ() + 0.5 + trap.face.getStepZ() * 0.51;
@@ -1232,10 +1244,7 @@ public class PowersDiverDown extends NewPunchingStand {
                             MainUtil.knockShieldPlusStand(living, 80); // 80 ticks = 4 seconds
                             // big final punch anim and sound here
                             playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.DIVER_DOWN_HIT_HEAVY_EVENT, SoundSource.PLAYERS, 0.95F, 1F);
-                            hitParticlesCenter(living);
-                            sendParticlesIfPossible(this.self.level(), ModParticles.DIVER_DOWN_FINAL,
-                                    living.getX(), living.getY() + (living.getBbHeight() * 0.5), living.getZ(),
-                                    1, 0.0, 0.0, 0.0, 0);
+                            diverHitParticlesCenter(living);
                             exitGroundDive();
                         } else {
                             // do nothing, wait for animation to finish
@@ -1835,15 +1844,7 @@ public class PowersDiverDown extends NewPunchingStand {
             knockbackStrength = getPhasePunchKnockback();
             boolean hitSuccess;
             if (isFullyCharged) {
-                Vec3 centerOffset = new Vec3(0, (entity.getBbHeight() * 0.65), 0);
-                Direction gd = ((IGravityEntity) entity).roundabout$getGravityDirection();
-                if (gd != Direction.DOWN) {
-                    centerOffset = RotationUtil.vecPlayerToWorld(centerOffset, gd);
-                }
-                sendParticlesIfPossible(
-                        this.self.level(), ModParticles.DIVER_DOWN_FINAL,
-                        entity.getX() + centerOffset.x, entity.getY() + centerOffset.y, entity.getZ() + centerOffset.z,
-                        1, 0.0, 0.0, 0.0, 0.0);
+                diverHitParticlesCenter(entity);
                 hitSuccess = DamageHandler.PenetratingStandDamageEntity(entity, pow, this.self);
             } else {
                 hitParticlesCenter(entity);
@@ -3065,7 +3066,7 @@ public class PowersDiverDown extends NewPunchingStand {
                 if (isUser || canOtherSee) {
                     sl.sendParticles(
                             player,
-                            ModParticles.ENERGY_RIPPLE,
+                            ModParticles.ENERGY_RIPPLE_SURFACE,
                             false,
                             px, py, pz,
                             1,
@@ -3340,6 +3341,15 @@ public class PowersDiverDown extends NewPunchingStand {
             }
             addEXP(3);
             // sounds and particles here
+            Vec3 centerOffset = new Vec3(0, (submergedTarget.getBbHeight() * 0.65), 0);
+            Direction gd = ((IGravityEntity) submergedTarget).roundabout$getGravityDirection();
+            if (gd != Direction.DOWN) {
+                centerOffset = RotationUtil.vecPlayerToWorld(centerOffset, gd);
+            }
+            sendParticlesIfPossible(
+                    this.self.level(), ModParticles.ENERGY_RIPPLE,
+                    submergedTarget.getX() + centerOffset.x, submergedTarget.getY() + centerOffset.y, submergedTarget.getZ() + centerOffset.z,
+                    0, 0.0, 0.0, 0.0, 0.0);
             playSoundIfPossible(self.level(), null, this.self.blockPosition(),
                     ModSounds.DIVER_DOWN_DIVE_EVENT,
                     SoundSource.PLAYERS, 0.8F, 1F);
@@ -3382,6 +3392,13 @@ public class PowersDiverDown extends NewPunchingStand {
         if (this.self instanceof Player player) {
             // S2C means server to client, for updating client/server desyncs
             S2CPacketUtil.sendIntPowerDataPacket(player, DIVER_EMERGE, -1);
+        }
+
+        // fix for the diver down disappearing but nothing happening hopefully
+        if (!this.self.level().isClientSide() && hasStandActive(this.self)) {
+            if (!hasStandEntity(this.self) || getStandEntity(this.self) == null || !getStandEntity(this.self).isAlive()) {
+                ((StandUser) this.self).roundabout$summonStand(this.self.level(), true, false);
+            }
         }
     }
 
@@ -3451,6 +3468,15 @@ public class PowersDiverDown extends NewPunchingStand {
         playSoundIfPossible(self.level(), null, this.self.blockPosition(),
                 ModSounds.DIVER_DOWN_DIVE_EVENT,
                 SoundSource.PLAYERS, 0.7F, 1);
+        Vec3 centerOffset = new Vec3(0, (submergedTarget.getBbHeight() * 0.65), 0);
+        Direction gd = ((IGravityEntity) submergedTarget).roundabout$getGravityDirection();
+        if (gd != Direction.DOWN) {
+            centerOffset = RotationUtil.vecPlayerToWorld(centerOffset, gd);
+        }
+        sendParticlesIfPossible(
+                this.self.level(), ModParticles.ENERGY_RIPPLE,
+                submergedTarget.getX() + centerOffset.x, submergedTarget.getY() + centerOffset.y, submergedTarget.getZ() + centerOffset.z,
+                0, 0.0, 0.0, 0.0, 0.0);
         return true;
     }
 
