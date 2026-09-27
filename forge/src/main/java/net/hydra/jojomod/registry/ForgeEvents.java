@@ -270,6 +270,8 @@ public class ForgeEvents {
         ModBlocks.CHESS_PIECE = ForgeBlocks.CHESS_PIECE.get();
         ModBlocks.CHESS_PIECE_BLOCK_ENTITY = ForgeBlocks.CHESS_PIECE_BLOCK_ENTITY.get();
 
+        ModBlocks.GAMBLING_TABLE = ForgeBlocks.GAMBLING_TABLE.get();
+
         ModBlocks.WIRE_TRAP = ForgeBlocks.WIRE_TRAP.get();
         ModBlocks.BARBED_WIRE = ForgeBlocks.BARBED_WIRE.get();
         ModBlocks.BARBED_WIRE_BUNDLE = ForgeBlocks.BARBED_WIRE_BUNDLE.get();

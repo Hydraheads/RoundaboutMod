@@ -78,7 +78,7 @@ public class DiverDownBaseRenderer extends StandRenderer<DiverDownEntity> {
     }
 
     private void renderHitboxCircle(int tickCount, PoseStack matrixStack, MultiBufferSource bufferSource) {
-        float radius = 2.0F;
+        float radius = 1.8F;
 
         int ticksPerFrame = 3;
 

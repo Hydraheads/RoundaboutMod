@@ -6,85 +6,67 @@ import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
-import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
-import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
+import net.hydra.jojomod.client.models.stand.renderers.DiverDownBaseRenderer;
 import net.hydra.jojomod.entity.stand.DiverDownEntity;
-import net.hydra.jojomod.event.index.PlunderTypes;
-import net.hydra.jojomod.event.powers.TimeStop;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.ItemDisplayContext;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.phys.Vec3;
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DiverLimbBlockEntityRenderer implements BlockEntityRenderer<DiverLimbBlockEntity> {
-    private static final ResourceLocation PART_6 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/base.png");
-    private static final ResourceLocation BETA_DIVER = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/beta.png");
 
-    // Default Part 6 limbs
-    private final ModelPart rightArm;
-    private final ModelPart leftArm;
-    private final ModelPart rightLeg;
-    private final ModelPart leftLeg;
+    private record DiverLimbs(ModelPart rightArm, ModelPart leftArm, ModelPart rightLeg, ModelPart leftLeg) {
+        public ModelPart getLimb(int index) {
+            return switch (index) {
+                case 0 -> rightArm;
+                case 1 -> leftArm;
+                case 2 -> rightLeg;
+                case 3 -> leftLeg;
+                default -> rightArm;
+            };
+        }
+    }
 
-    // Beta Diver limbs
-    private final ModelPart betaRightArm;
-    private final ModelPart betaLeftArm;
-    private final ModelPart betaRightLeg;
-    private final ModelPart betaLeftLeg;
+    private final Map<Byte, DiverLimbs> skinLimbs = new HashMap<>();
+    private final DiverLimbs defaultLimbs;
 
-    //TEMPORARILY rendering soft and wet bubbles to make sure that the move works. can update with limbs later.
     public DiverLimbBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
         super();
+        this.defaultLimbs = bakeLimbs(context, ModEntityRendererClient.DIVER_DOWN_LAYER);
+        this.skinLimbs.put((byte) 0, this.defaultLimbs);
+        this.skinLimbs.put(DiverDownEntity.BETA_DIVER, bakeLimbs(context, ModEntityRendererClient.DIVER_DOWN_BETA_LAYER));
+        // for the future, when adding more models, follow this template:
+        // this.skinLimbs.put(DiverDownEntity.[MODEL_NAME], bakeLimbs(context, ModEntityRendererClient.[MODEL_NAME]_LAYER));
+    }
+
+    private static DiverLimbs bakeLimbs(BlockEntityRendererProvider.Context context, ModelLayerLocation layer) {
         //gets the default diver down model
-        ModelPart root = context.bakeLayer(ModEntityRendererClient.DIVER_DOWN_LAYER);
+        ModelPart root = context.bakeLayer(layer);
         //gets the chest for the arms
         ModelPart chest = root.getChild("stand").getChild("stand2").getChild("body").getChild("body2").getChild("torso").getChild("upper_chest");
         //arms
-        this.rightArm = chest.getChild("right_arm");
-        this.leftArm = chest.getChild("left_arm");
+        ModelPart rArm = chest.getChild("right_arm");
+        ModelPart lArm = chest.getChild("left_arm");
         //gets the legs portion for left and right leg
         ModelPart legs = root.getChild("stand").getChild("stand2").getChild("body").getChild("body2").getChild("legs");
         //left and right legs
-        this.rightLeg = legs.getChild("right_leg");
-        this.leftLeg = legs.getChild("left_leg");
+        ModelPart rLeg = legs.getChild("right_leg");
+        ModelPart lLeg = legs.getChild("left_leg");
         // center each limb
-        this.rightArm.setPos(2.0F, -7.0F, 0.0F);
-        this.leftArm.setPos(-2.0F, -7.0F, 0.0F);
-        this.rightLeg.setPos(0.0F, -9.0F, 0.0F);
-        this.leftLeg.setPos(0.0F, -9.0F, 0.0F);
+        rArm.setPos(2.0F, -7.0F, 0.0F);
+        lArm.setPos(-2.0F, -7.0F, 0.0F);
+        rLeg.setPos(0.0F, -9.0F, 0.0F);
+        lLeg.setPos(0.0F, -9.0F, 0.0F);
 
-        // beta skin limbs
-        ModelPart betaRoot = context.bakeLayer(ModEntityRendererClient.DIVER_DOWN_BETA_LAYER);
-        ModelPart betaChest = betaRoot.getChild("stand").getChild("stand2").getChild("body").getChild("body2").getChild("torso").getChild("upper_chest");
-        this.betaRightArm = betaChest.getChild("right_arm");
-        this.betaLeftArm = betaChest.getChild("left_arm");
-        ModelPart betaLegs = betaRoot.getChild("stand").getChild("stand2").getChild("body").getChild("body2").getChild("legs");
-        this.betaRightLeg = betaLegs.getChild("right_leg");
-        this.betaLeftLeg = betaLegs.getChild("left_leg");
-
-        this.betaRightArm.setPos(2.0F, -7.0F, 0.0F);
-        this.betaLeftArm.setPos(-2.0F, -7.0F, 0.0F);
-        this.betaRightLeg.setPos(0.0F, -9.0F, 0.0F);
-        this.betaLeftLeg.setPos(0.0F, -9.0F, 0.0F);
+        return new DiverLimbs(rArm, lArm, rLeg, lLeg);
     }
+
     public int limbCount = 4;
 
     public void render(DiverLimbBlockEntity DiverLimbBlockEntity, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
@@ -132,41 +114,17 @@ public class DiverLimbBlockEntityRenderer implements BlockEntityRenderer<DiverLi
             // Flip Y and Z because notch doesn't know basic math
             poseStack.scale(1.0F, -1.0F, -1.0F);
             // Get the stand skin
-            VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityCutoutNoCull(getSkinLocation(DiverLimbBlockEntity.standSkin)));
+            VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityCutoutNoCull(DiverDownBaseRenderer.getSkin(DiverLimbBlockEntity.standSkin)));
 
             // Select the limb model according to limbIndex
-            ModelPart limb;
-            if (DiverLimbBlockEntity.standSkin == DiverDownEntity.BETA_DIVER) {
-                limb = switch (DiverLimbBlockEntity.limbIndex) {
-                    case 0 -> this.betaRightArm;
-                    case 1 -> this.betaLeftArm;
-                    case 2 -> this.betaRightLeg;
-                    case 3 -> this.betaLeftLeg;
-                    default -> this.betaRightArm;
-                };
-            } else {
-                limb = switch (DiverLimbBlockEntity.limbIndex) {
-                    case 0 -> this.rightArm;
-                    case 1 -> this.leftArm;
-                    case 2 -> this.rightLeg;
-                    case 3 -> this.leftLeg;
-                    default -> this.rightArm;
-                };
-            }
+            DiverLimbs limbs = this.skinLimbs.getOrDefault(DiverLimbBlockEntity.standSkin, this.defaultLimbs);
+            ModelPart limb = limbs.getLimb(DiverLimbBlockEntity.limbIndex);
 
             // Render the limbs
             limb.render(poseStack, vertexConsumer, packedLight, packedOverlay);
-            
+
             //returns every pose change back to normal
             ClientUtil.popPoseAndCooperate(poseStack,6);
         }
-    }
-
-
-    public ResourceLocation getSkinLocation(byte skin) {
-        return switch (skin) {
-            case DiverDownEntity.BETA_DIVER -> BETA_DIVER;
-            default -> PART_6;
-        };
     }
 }
