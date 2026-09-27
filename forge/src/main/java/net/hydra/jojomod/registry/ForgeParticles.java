@@ -265,6 +265,14 @@ public class ForgeParticles {
             "airbubble_bomb",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> ENERGY_RIPPLE = PARTICLES.register(
+            "energy_ripple",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> DIVER_DOWN_FINAL = PARTICLES.register(
+            "diver_down_final",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> HYPNO_SWIRL = PARTICLES.register(
             "hypno_swirl",
             () -> new SimpleParticleType(true)

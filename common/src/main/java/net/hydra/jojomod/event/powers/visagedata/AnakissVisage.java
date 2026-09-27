@@ -2,6 +2,8 @@ package net.hydra.jojomod.event.powers.visagedata;
 
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.visages.JojoNPC;
+import net.hydra.jojomod.event.powers.visagedata.voicedata.AnasuiVoice;
+import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.LivingEntity;
@@ -31,4 +33,13 @@ public class AnakissVisage extends VisageData {
     }
 
     @Override public boolean rendersAnakissHat() {return true;}
+
+    @Override
+    public boolean hasVoices(){
+        return true;
+    }
+    @Override
+    public VoiceData voiceData(LivingEntity self){
+        return new AnasuiVoice(self);
+    }
 }

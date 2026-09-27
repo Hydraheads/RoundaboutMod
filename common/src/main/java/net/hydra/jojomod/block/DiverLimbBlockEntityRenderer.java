@@ -36,23 +36,24 @@ import java.util.ArrayList;
 
 public class DiverLimbBlockEntityRenderer implements BlockEntityRenderer<DiverLimbBlockEntity> {
     private static final ResourceLocation PART_6 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/base.png");
-    private static final ResourceLocation LAVA_DIVER = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/lavadiver.png");
-    private static final ResourceLocation RED_DIVER = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/reddiver.png");
-    private static final ResourceLocation ORANGE_DIVER = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/orangediver.png");
-    private static final ResourceLocation TREASURE_DIVER = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/treasurediver.png");
-    private static final ResourceLocation BIRTHDAY_DIVER = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/birthdaydiver.png");
-    private static final ResourceLocation FIRE_DIVER = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/firedown.png");
+    private static final ResourceLocation BETA_DIVER = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/beta.png");
 
-    //for all the limbs
+    // Default Part 6 limbs
     private final ModelPart rightArm;
     private final ModelPart leftArm;
     private final ModelPart rightLeg;
     private final ModelPart leftLeg;
 
+    // Beta Diver limbs
+    private final ModelPart betaRightArm;
+    private final ModelPart betaLeftArm;
+    private final ModelPart betaRightLeg;
+    private final ModelPart betaLeftLeg;
+
     //TEMPORARILY rendering soft and wet bubbles to make sure that the move works. can update with limbs later.
     public DiverLimbBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
         super();
-        //gets the diver down model
+        //gets the default diver down model
         ModelPart root = context.bakeLayer(ModEntityRendererClient.DIVER_DOWN_LAYER);
         //gets the chest for the arms
         ModelPart chest = root.getChild("stand").getChild("stand2").getChild("body").getChild("body2").getChild("torso").getChild("upper_chest");
@@ -65,10 +66,24 @@ public class DiverLimbBlockEntityRenderer implements BlockEntityRenderer<DiverLi
         this.rightLeg = legs.getChild("right_leg");
         this.leftLeg = legs.getChild("left_leg");
         // center each limb
-        this.rightArm.setPos(0.0F, -7.0F, 0.0F);
-        this.leftArm.setPos(0.0F, -7.0F, 0.0F);
+        this.rightArm.setPos(2.0F, -7.0F, 0.0F);
+        this.leftArm.setPos(-2.0F, -7.0F, 0.0F);
         this.rightLeg.setPos(0.0F, -9.0F, 0.0F);
         this.leftLeg.setPos(0.0F, -9.0F, 0.0F);
+
+        // beta skin limbs
+        ModelPart betaRoot = context.bakeLayer(ModEntityRendererClient.DIVER_DOWN_BETA_LAYER);
+        ModelPart betaChest = betaRoot.getChild("stand").getChild("stand2").getChild("body").getChild("body2").getChild("torso").getChild("upper_chest");
+        this.betaRightArm = betaChest.getChild("right_arm");
+        this.betaLeftArm = betaChest.getChild("left_arm");
+        ModelPart betaLegs = betaRoot.getChild("stand").getChild("stand2").getChild("body").getChild("body2").getChild("legs");
+        this.betaRightLeg = betaLegs.getChild("right_leg");
+        this.betaLeftLeg = betaLegs.getChild("left_leg");
+
+        this.betaRightArm.setPos(2.0F, -7.0F, 0.0F);
+        this.betaLeftArm.setPos(-2.0F, -7.0F, 0.0F);
+        this.betaRightLeg.setPos(0.0F, -9.0F, 0.0F);
+        this.betaLeftLeg.setPos(0.0F, -9.0F, 0.0F);
     }
     public int limbCount = 4;
 
@@ -82,7 +97,7 @@ public class DiverLimbBlockEntityRenderer implements BlockEntityRenderer<DiverLi
 
             //omg push and pop queues hiiii!!!!
             //needed to revert all poses back to normal later since the limbs are gonna be rendred in a bunch of different directions
-            //roundabout has it's own push and pop queue for posing and debugging, so i'm using that instead of poseStack.pushPose();
+            //roundabout has its own push and pop queue for posing and debugging, so i'm using that instead of poseStack.pushPose();
             ClientUtil.pushPoseAndCooperate(poseStack,7);
 
             //puts the limbs at the center of the block
@@ -120,13 +135,24 @@ public class DiverLimbBlockEntityRenderer implements BlockEntityRenderer<DiverLi
             VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityCutoutNoCull(getSkinLocation(DiverLimbBlockEntity.standSkin)));
 
             // Select the limb model according to limbIndex
-            ModelPart limb = switch (DiverLimbBlockEntity.limbIndex) {
-                case 0 -> this.rightArm;
-                case 1 -> this.leftArm;
-                case 2 -> this.rightLeg;
-                case 3 -> this.leftLeg;
-                default -> this.rightArm;
-            };
+            ModelPart limb;
+            if (DiverLimbBlockEntity.standSkin == DiverDownEntity.BETA_DIVER) {
+                limb = switch (DiverLimbBlockEntity.limbIndex) {
+                    case 0 -> this.betaRightArm;
+                    case 1 -> this.betaLeftArm;
+                    case 2 -> this.betaRightLeg;
+                    case 3 -> this.betaLeftLeg;
+                    default -> this.betaRightArm;
+                };
+            } else {
+                limb = switch (DiverLimbBlockEntity.limbIndex) {
+                    case 0 -> this.rightArm;
+                    case 1 -> this.leftArm;
+                    case 2 -> this.rightLeg;
+                    case 3 -> this.leftLeg;
+                    default -> this.rightArm;
+                };
+            }
 
             // Render the limbs
             limb.render(poseStack, vertexConsumer, packedLight, packedOverlay);
@@ -139,12 +165,7 @@ public class DiverLimbBlockEntityRenderer implements BlockEntityRenderer<DiverLi
 
     public ResourceLocation getSkinLocation(byte skin) {
         return switch (skin) {
-            case DiverDownEntity.LAVA_DIVER -> LAVA_DIVER;
-            case DiverDownEntity.RED_DIVER -> RED_DIVER;
-            case DiverDownEntity.ORANGE_DIVER -> ORANGE_DIVER;
-            case DiverDownEntity.TREASURE_DIVER -> TREASURE_DIVER;
-            case DiverDownEntity.BIRTHDAY_DIVER -> BIRTHDAY_DIVER;
-            case DiverDownEntity.FIRE_DIVER -> FIRE_DIVER;
+            case DiverDownEntity.BETA_DIVER -> BETA_DIVER;
             default -> PART_6;
         };
     }

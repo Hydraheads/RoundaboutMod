@@ -320,18 +320,11 @@ public class KillerQueenEntity extends FollowingStandEntity {
     }
 
 
-    /** unused, unless someone fix the followOffset to work with following
-    /*
-    @Override
-    public Vec3 getStandOffsetVector(LivingEntity standUser){
-
-        if (((StandUser)standUser).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && KQ.inBitesTheDustMode()) {
-            /**
-             * For some reason the "this.getFollowing()" will always return null
-             *
-            return getIdleOffset(this.getFollowing());
+    public LivingEntity getFollowingAggressive() {
+        if ((getUser() != null) && (((StandUser)getUser()).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ) && PKQ.inBitesTheDustMode()) {
+            return PKQ.bitesTheDustPlantedEntity;
         }
 
-        return super.getStandOffsetVector(standUser);
-    }*/
+        return super.getFollowingAggressive();
+    }
 }

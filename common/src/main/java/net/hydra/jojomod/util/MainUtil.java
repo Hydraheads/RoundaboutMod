@@ -224,6 +224,7 @@ public class MainUtil {
     public static ArrayList<String> walkableBlocks = Lists.newArrayList();
     public static ArrayList<String> expLessBlocks = Lists.newArrayList();
     public static ArrayList<String> standBlockGrabBlacklist = Lists.newArrayList();
+    public static ArrayList<String> standDisassemblyBlacklist = Lists.newArrayList();
     public static ArrayList<String> standDestructionBlacklist = Lists.newArrayList();
     public static ArrayList<String> standBlockExplosionBlacklist = Lists.newArrayList();
     public static ArrayList<String> occultChargeEffectsToBanish = Lists.newArrayList();
@@ -321,6 +322,15 @@ public class MainUtil {
         ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
         if (standBlockGrabBlacklist != null && !standBlockGrabBlacklist.isEmpty() && rl != null
                 && standBlockGrabBlacklist.contains(rl.toString())) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isBlockDisassemblyBlacklisted(BlockState bs) {
+        ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
+        if (standDisassemblyBlacklist != null && !standDisassemblyBlacklist.isEmpty() && rl != null
+                && standDisassemblyBlacklist.contains(rl.toString())) {
             return true;
         }
         return false;
@@ -1571,6 +1581,7 @@ public class MainUtil {
         playerNames.put("TheChaseyOne", UUID.fromString("8e86263a-2740-4d0f-a83f-afe0e6fd3c3d"));
         playerNames.put("FieldstormDapper", UUID.fromString("4813e816-05b2-438b-8c59-5bfe9d78aa01"));
         playerNames.put("NashorSenpai", UUID.fromString("e7d78d2b-01c8-4e46-ae87-9905d1261847"));
+        playerNames.put("DOGaelArts", UUID.fromString("c300afba-ba4b-40e0-82fc-da4ef159a42c"));
     }
 
     public static void makeMobBleed(Entity target) {

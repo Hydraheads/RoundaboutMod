@@ -94,6 +94,7 @@ public class ModBlocks {
     public static HallucinatoryAcidBlock HALLUCINATORY_ACID;
     public static HallucinatoryAcidWallBlock HALLUCINATORY_ACID_WALL;
     public static Block POISON_TRAIL_MUSHROOM;
+    public static Block VIRUS_SPIT_SPLATTER;
 
     public static Block WIRE_TRAP;
 
@@ -602,6 +603,15 @@ public class ModBlocks {
                     .speedFactor(0.3F)
     );
     public static BloodBlock BLOOD_SPLATTER_PROPERTIES = new BloodBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_RED)
+                    .instrument(NoteBlockInstrument.SNARE)
+                    .strength(0.01F, 0.5F)
+                    .sound(SoundType.EMPTY)
+                    .replaceable()
+                    .pushReaction(PushReaction.DESTROY)
+    );
+    public static BloodBlock VIRUS_SPIT_SPLATTER_PROPERTIES = new BloodBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_RED)
                     .instrument(NoteBlockInstrument.SNARE)

@@ -184,6 +184,8 @@ public class FabricBlocks {
     );
     public static final Block BLOOD_SPLATTER = registerBlockItemless("blood_splatter", ModBlocks.BLOOD_SPLATTER_PROPERTIES
     );
+    public static final Block VIRUS_SPIT_SPLATTER = registerBlockItemless("virus_spit_splatter", ModBlocks.VIRUS_SPIT_SPLATTER_PROPERTIES
+    );
     public static final Block ACID_PUDDLE = registerBlockItemless("acid_puddle", ModBlocks.ACID_PUDDLE_PROPERTIES
     );
     public static final Block POISON_TRAIL_MUSHROOM = registerBlockItemless("poison_trail_mushroom", ModBlocks.POISON_TRAIL_MUSHROOM_PROPERTIES
@@ -451,6 +453,7 @@ public class FabricBlocks {
         ModBlocks.NEW_LOCACACA_BLOCK = NEW_LOCACACA_BLOCK;
         ModBlocks.GASOLINE_SPLATTER = GASOLINE_SPLATTER;
         ModBlocks.BLOOD_SPLATTER = BLOOD_SPLATTER;
+        ModBlocks.VIRUS_SPIT_SPLATTER = VIRUS_SPIT_SPLATTER;
         ModBlocks.ACID_PUDDLE = ACID_PUDDLE;
         ModBlocks.POISON_TRAIL_MUSHROOM = POISON_TRAIL_MUSHROOM;
         ModBlocks.BLUE_BLOOD_SPLATTER = BLUE_BLOOD_SPLATTER;

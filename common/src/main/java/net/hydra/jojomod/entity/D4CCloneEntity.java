@@ -19,6 +19,7 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -100,7 +101,8 @@ public class D4CCloneEntity extends CloneEntity {
         }
 
         // Normal enemies
-        if (entity instanceof Enemy && !(entity instanceof Creeper)) {
+        if (entity instanceof Enemy && !(entity instanceof Creeper)
+                && !(entity instanceof EnderMan)) {
             return true;
         }
 

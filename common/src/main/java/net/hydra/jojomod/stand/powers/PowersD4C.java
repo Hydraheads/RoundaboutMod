@@ -557,7 +557,7 @@ public class PowersD4C extends NewPunchingStand {
     }
 
     public int getRechargeTime(){
-        return 100;
+        return 120;
     }
     public int rech = 0;
     D4CCloneEntity cloneInReach = null;
@@ -1557,19 +1557,22 @@ public class PowersD4C extends NewPunchingStand {
         }
     }
     public void spawnCloneServer(){
-        if (isEligable() && self instanceof ServerPlayer sp){
-            if (createParallelPlayerCopy((ServerLevel) sp.level(),
-                    sp, sp.getPosition(1f), (byte)0,true)) {
-                Vector3f color = new Vector3f(0.97F, 1F, 0.3F);
-                MainUtil.sendParticlesIfPossible(self,self.level(),
-                        new DustParticleOptions(
-                                color,
-                                1.0F
-                        ), sp.getEyePosition().x,
-                        sp.getEyePosition().y, sp.getEyePosition().z,
-                        20, 0.3, 0.3, 0.3, 0.3);
-                playStandUserOnlySoundsIfNearby(D4C_CLONE, 27, false, false);
-                enactEligability();
+        if (!onCooldown(PowerIndex.SKILL_2)) {
+            if (isEligable() && self instanceof ServerPlayer sp) {
+                if (createParallelPlayerCopy((ServerLevel) sp.level(),
+                        sp, sp.getPosition(1f), (byte) 0, true)) {
+                    setCooldown(PowerIndex.SKILL_2,40);
+                    Vector3f color = new Vector3f(0.97F, 1F, 0.3F);
+                    MainUtil.sendParticlesIfPossible(self, self.level(),
+                            new DustParticleOptions(
+                                    color,
+                                    1.0F
+                            ), sp.getEyePosition().x,
+                            sp.getEyePosition().y, sp.getEyePosition().z,
+                            20, 0.3, 0.3, 0.3, 0.3);
+                    playStandUserOnlySoundsIfNearby(D4C_CLONE, 27, false, false);
+                    enactEligability();
+                }
             }
         }
     }

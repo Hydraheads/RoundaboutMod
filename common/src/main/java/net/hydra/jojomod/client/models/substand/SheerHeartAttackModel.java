@@ -72,6 +72,12 @@ public class SheerHeartAttackModel<T extends SheerHeartAttackEntity> extends Sta
 	public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
 		super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
 
+		if (pEntity.isClimbing()) {
+			getHead().xRot = 90 * ((float) Math.PI / 180F);
+		}else if (!pEntity.onGround()) {
+			getHead().xRot = pEntity.getXRot();
+		}
+
 		this.animate(pEntity.moving, SheerHeartAttackAnimations.MOVING, pAgeInTicks, 0.8f);
 		this.animate(pEntity.idle, SheerHeartAttackAnimations.IDLE, pAgeInTicks, 1.0f);
 		this.animate(pEntity.hideTorch, SheerHeartAttackAnimations.hideTorch, pAgeInTicks, 1.0f);

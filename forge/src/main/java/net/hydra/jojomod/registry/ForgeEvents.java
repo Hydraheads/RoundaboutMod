@@ -103,6 +103,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.TUSK_A4.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.ANUBIS.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.DIVER_DOWN.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.DIVER_DOWN_BETA.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SILVER_CHARIOT.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.OVA_ENYA.get(), OVAEnyaNPC.createAttributes().build());
         event.put(ForgeEntities.ENYA.get(), OVAEnyaNPC.createAttributes().build());
@@ -260,6 +261,7 @@ public class ForgeEvents {
         ModBlocks.NEW_LOCACACA_BLOCK = ForgeBlocks.NEW_LOCACACA_BLOCK.get();
         ModBlocks.GASOLINE_SPLATTER = ForgeBlocks.GASOLINE_SPLATTER.get();
         ModBlocks.BLOOD_SPLATTER = ForgeBlocks.BLOOD_SPLATTER.get();
+        ModBlocks.VIRUS_SPIT_SPLATTER = ForgeBlocks.VIRUS_SPIT_SPLATTER.get();
         ModBlocks.ACID_PUDDLE = ForgeBlocks.ACID_PUDDLE.get();
         ModBlocks.POISON_TRAIL_MUSHROOM = ForgeBlocks.POISON_TRAIL_MUSHROOM.get();
         ModBlocks.BLUE_BLOOD_SPLATTER = ForgeBlocks.BLUE_BLOOD_SPLATTER.get();
@@ -714,6 +716,8 @@ public class ForgeEvents {
         ModParticles.AIRBUBBLE_CYAN = ForgeParticles.AIRBUBBLE_CYAN.get();
         ModParticles.AIRBUBBLE_BOMB = ForgeParticles.AIRBUBBLE_BOMB.get();
         ModParticles.AIRBUBBLE_YELLOW = ForgeParticles.AIRBUBBLE_YELLOW.get();
+        ModParticles.ENERGY_RIPPLE = ForgeParticles.ENERGY_RIPPLE.get();
+        ModParticles.DIVER_DOWN_FINAL = ForgeParticles.DIVER_DOWN_FINAL.get();
         ModParticles.HYPNO_SWIRL = ForgeParticles.HYPNO_SWIRL.get();
         ModParticles.TUSK_VORTEX = ForgeParticles.TUSK_VORTEX.get();
         ModParticles.METALLICA_NAIL = ForgeParticles.METALLICA_NAIL.get();
@@ -837,6 +841,7 @@ public class ForgeEvents {
         ModEntities.ANUBIS = ForgeEntities.ANUBIS.get();
         ModEntities.STAR_PLATINUM_BASEBALL = ForgeEntities.STAR_PLATINUM_BASEBALL.get();
         ModEntities.DIVER_DOWN = ForgeEntities.DIVER_DOWN.get();
+        ModEntities.DIVER_DOWN_BETA = ForgeEntities.DIVER_DOWN_BETA.get();
         ModEntities.BONE_PROJECTILE = ForgeEntities.BONE_PROJECTILE.get();
         ModEntities.SILVER_CHARIOT = ForgeEntities.SILVER_CHARIOT.get();
         ModEntities.SILVER_CHARIOT_RAPIER = ForgeEntities.SILVER_CHARIOT_RAPIER.get();

@@ -73,7 +73,7 @@ public class BoneProjectileEntity extends AbstractArrow {
     protected void onHitEntity(EntityHitResult result) {
         if (!this.level().isClientSide() && result.getEntity() instanceof LivingEntity target) {
             // Stand damage
-            DamageHandler.StandDamageEntity(target, 1.5F, this.getOwner() != null ? this.getOwner() : this);
+            DamageHandler.StandDamageEntity(target, 1F, this.getOwner() != null ? this.getOwner() : this);
             this.playSound(SoundEvents.ARROW_HIT, 1.0F, 1.2F);
             this.discard(); // Bone shatters on impact
         }

@@ -83,6 +83,8 @@ public class FabricParticles {
     public static final SimpleParticleType AIRBUBBLE_YELLOW = FabricParticleTypes.simple();
     public static final SimpleParticleType AIRBUBBLE_BOMB = FabricParticleTypes.simple();
     public static final SimpleParticleType AIRBUBBLE_CYAN = FabricParticleTypes.simple();
+    public static final SimpleParticleType ENERGY_RIPPLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType DIVER_DOWN_FINAL = FabricParticleTypes.simple();
     public static final SimpleParticleType HYPNO_SWIRL = FabricParticleTypes.simple();
     public static final SimpleParticleType TUSK_VORTEX = FabricParticleTypes.simple();
     public static final SimpleParticleType MOLD = FabricParticleTypes.simple();
@@ -184,6 +186,8 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("airbubble_bomb"), AIRBUBBLE_BOMB);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("airbubble_yellow"), AIRBUBBLE_YELLOW);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("airbubble_green"), AIRBUBBLE_GREEN);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("energy_ripple"), ENERGY_RIPPLE);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("diver_down_final"), DIVER_DOWN_FINAL);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("mold"), MOLD);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("raging_light"), RAGING_LIGHT);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("alluring_light"), ALLURING_LIGHT);
@@ -299,6 +303,8 @@ public class FabricParticles {
         ModParticles.AIRBUBBLE_CYAN = AIRBUBBLE_CYAN;
         ModParticles.AIRBUBBLE_YELLOW = AIRBUBBLE_YELLOW;
         ModParticles.AIRBUBBLE_BOMB = AIRBUBBLE_BOMB;
+        ModParticles.ENERGY_RIPPLE = ENERGY_RIPPLE;
+        ModParticles.DIVER_DOWN_FINAL = DIVER_DOWN_FINAL;
         ModParticles.HYPNO_SWIRL = HYPNO_SWIRL;
         ModParticles.TUSK_VORTEX = TUSK_VORTEX;
         ModParticles.MOLD = MOLD;
