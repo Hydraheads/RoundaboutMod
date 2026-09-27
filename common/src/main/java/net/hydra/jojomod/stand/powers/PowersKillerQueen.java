@@ -4250,7 +4250,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     // hightlights entity things :0
     public boolean highlightsEntity(Entity ent,Player player){
         if (inBitesTheDustMode() && bitesTheDustPlantedEntity != null) {
-            if ((ent instanceof Mob || ent instanceof Player) && !(ent instanceof StandEntity)
+            if (isAffectedByBitesTheDust(ent) && self != ent
                     && ent.distanceTo(bitesTheDustPlantedEntity) < btdRange && bitesTheDustPlantedEntity != ent) {
                 LivingEntity LE = (LivingEntity) ent;
 
