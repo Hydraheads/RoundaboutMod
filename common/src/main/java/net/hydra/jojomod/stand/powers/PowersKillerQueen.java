@@ -1121,7 +1121,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                         ((BlockItem)stack.getItem()).getBlock() instanceof ShulkerBoxBlock || ((BlockItem)stack.getItem()).getBlock() instanceof FancyLighterBlock)));
     }
 
-    public float getMaxBTDHostHealth() { return 25.0f; }
+    public float getMaxBTDHostHealth() { return 40.0f; }
 
     public boolean canBitesTheDustPlant(Entity targetEntity) {
         if (targetEntity == null) {
