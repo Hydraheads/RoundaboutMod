@@ -35,6 +35,7 @@ import net.hydra.jojomod.event.powers.visagedata.voicedata.KiraPartFourVoice;
 import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.particles.EnergyRippleParticle;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
@@ -97,6 +98,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -183,6 +185,7 @@ public class PowersDiverDown extends NewPunchingStand {
     private Direction cutDirection;
 
     // used for traps
+    public record BlockFace(BlockPos pos, Direction face) {}
     public static class KickTrap {
         public int ticks;
         public Direction face;
@@ -196,7 +199,7 @@ public class PowersDiverDown extends NewPunchingStand {
         }
     }
 
-    public final Map<BlockPos, KickTrap> storedKickTraps = new LinkedHashMap<>();
+    public final Map<BlockFace, KickTrap> storedKickTraps = new LinkedHashMap<>();
     private static final int MAX_TRAP_DURATION = 2400; // 2 minute lifetime
     private static final float TRAP_RANGE = 5.5f;
     private static final int MAX_NUMBER_OF_TRAPS = 10;
@@ -444,16 +447,16 @@ public class PowersDiverDown extends NewPunchingStand {
                         BlockPos trapGroundPos = BlockPos.containing(this.self.position().add(dirToTarget.scale(2.0))).below();
 
                         if (this.self.level().getBlockState(trapGroundPos).isSolid()) {
-                            if (!this.storedKickTraps.containsKey(trapGroundPos)) {
+                            BlockFace key = new BlockFace(trapGroundPos, Direction.UP);
+                            if (!this.storedKickTraps.containsKey(key)) {
                                 while (this.storedKickTraps.size() >= MAX_NUMBER_OF_TRAPS) {
-                                    BlockPos oldest = this.storedKickTraps.keySet().iterator().next();
+                                    BlockFace oldest = this.storedKickTraps.keySet().iterator().next();
                                     this.storedKickTraps.remove(oldest);
                                 }
                             }
-
                             // Launch upwards and slightly outward towards the target
                             Vec3 reflection = new Vec3(dirToTarget.x * 0.5, 1.0, dirToTarget.z * 0.5).normalize();
-                            this.storedKickTraps.put(trapGroundPos, new KickTrap(MAX_TRAP_DURATION, Direction.UP, reflection));
+                            this.storedKickTraps.put(key, new KickTrap(MAX_TRAP_DURATION, Direction.UP, reflection));
                             setCooldown(PowerIndex.SKILL_2, 100);
                         }
                     }
@@ -904,35 +907,36 @@ public class PowersDiverDown extends NewPunchingStand {
             if (!this.activeLimbs.isEmpty()) {
                 Level level = this.self.level();
                 double maxRangeSq = (double) getMaxPilotRange() * getMaxPilotRange();
-                boolean changed = false;
+                boolean shouldRecall = false;
 
-                java.util.Iterator<BlockPos> iterator = this.activeLimbs.iterator();
-                while (iterator.hasNext()) {
-                    BlockPos limbPos = iterator.next();
+                for (BlockPos limbPos : this.activeLimbs) {
                     boolean isLimbStillThere = level.getBlockState(limbPos).is(ModBlocks.DIVER_LIMB);
                     boolean isOutOfRange = this.self.distanceToSqr(Vec3.atCenterOf(limbPos)) > maxRangeSq;
 
                     if (!isLimbStillThere || isOutOfRange) {
-                        if (isLimbStillThere) {
-                            level.removeBlock(limbPos, false);
+                        shouldRecall = true;
+                        break;
+                    }
+                    if (this.self.tickCount % 26 == 0) {
+                        if (level.getBlockEntity(limbPos) instanceof DiverLimbBlockEntity be) {
+                            // be.facing is the direction the limb is facing outwards
+                            Direction surfaceFace = be.facing.getOpposite();
+                            double px = limbPos.getX() + 0.5 - surfaceFace.getStepX() * 0.49;
+                            double py = limbPos.getY() + 0.5 - surfaceFace.getStepY() * 0.49;
+                            double pz = limbPos.getZ() + 0.5 - surfaceFace.getStepZ() * 0.49;
+                            sendParticlesIfPossible(
+                                    level, ModParticles.ENERGY_RIPPLE, px, py, pz,
+                                    1, 0, 0, 0, 0
+                            );
                         }
-                        iterator.remove();
-                        changed = true;
                     }
                 }
 
-                // If all limbs are gone, resummon Diver Down
-                if (changed && this.activeLimbs.isEmpty()) {
-                    this.currentLimbIndex = 0;
-                    //sync with client
+                if (shouldRecall) {
+                    recallLimbs();
+                    // sync with client
                     if (this.self instanceof Player player) {
                         S2CPacketUtil.sendIntPowerDataPacket(player, LIMB_RECALL, -1);
-                    }
-                    if (hasStandActive(this.self)) {
-                        ((StandUser) this.self).roundabout$summonStand(level, true, false);
-                        playSoundIfPossible(self.level(), null, this.self.blockPosition(),
-                                ModSounds.SUMMON_DIVER_DOWN_EVENT,
-                                SoundSource.PLAYERS, 0.85F, 1);
                     }
                 }
             }
@@ -1098,23 +1102,22 @@ public class PowersDiverDown extends NewPunchingStand {
             }
             // trap detection
             if (!this.storedKickTraps.isEmpty()) {
-                Iterator<Map.Entry<BlockPos, KickTrap>> it = this.storedKickTraps.entrySet().iterator();
+                Iterator<Map.Entry<BlockFace, KickTrap>> it = this.storedKickTraps.entrySet().iterator();
                 while (it.hasNext()) {
-                    Map.Entry<BlockPos, KickTrap> entry = it.next();
-                    BlockPos trapPos = entry.getKey();
+                    Map.Entry<BlockFace, KickTrap> entry = it.next();
+                    BlockFace blockFace = entry.getKey();
+                    BlockPos trapPos = blockFace.pos();
                     KickTrap trap = entry.getValue();
 
-                    // remove the traps if the timer runs out
                     if (--trap.ticks <= 0 || this.self.level().getBlockState(trapPos).isAir()) {
                         it.remove();
                         continue;
                     }
 
-                    // particle effects
-                    if (trap.ticks % 10 == 0) {
-                        double px = trapPos.getX() + 0.5 + trap.face.getStepX() * 0.52;
-                        double py = trapPos.getY() + 0.5 + trap.face.getStepY() * 0.52;
-                        double pz = trapPos.getZ() + 0.5 + trap.face.getStepZ() * 0.52;
+                    if (trap.ticks % 26 == 0) {
+                        double px = trapPos.getX() + 0.5 + trap.face.getStepX() * 0.51;
+                        double py = trapPos.getY() + 0.5 + trap.face.getStepY() * 0.51;
+                        double pz = trapPos.getZ() + 0.5 + trap.face.getStepZ() * 0.51;
                         sendKickTrapParticles(px, py, pz);
                     }
 
@@ -1211,10 +1214,13 @@ public class PowersDiverDown extends NewPunchingStand {
                             Vec3 motion = living.getDeltaMovement();
                             DamageHandler.StandDamageEntity(living, getGroundBarrageStrength(living), this.self);
                             living.setDeltaMovement(motion);
-                            hitParticles(living);
                             // animate the barrage and also sound here
                             playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.DIVER_DOWN_GROUND_BARRAGE_EVENT,
                                     SoundSource.PLAYERS, 0.55F, (float) (0.9 + (Math.random() * 0.30)));
+                            Vec3 hitPos = getRandPos(living);
+                            sendParticlesIfPossible(
+                                    this.self.level(), ModParticles.ICE_SPARKLE, hitPos.x, hitPos.y, hitPos.z,
+                                    1, 0.0, 0.0, 0.0, 0.0);
                         } else if (this.barrageTicksLeft == 9) {
                             // BIG FINAL PUNCH!!! (does bleed)
                             DamageHandler.StandDamageEntity(living, getGroundFinisherStrength(living), this.self);
@@ -2104,7 +2110,20 @@ public class PowersDiverDown extends NewPunchingStand {
      */
     private boolean hasLimbsDeployed() {
         if (this.self.level() != null && !this.self.level().isClientSide) {
-            this.activeLimbs.removeIf(pos -> !this.self.level().getBlockState(pos).is(ModBlocks.DIVER_LIMB));
+            boolean broken = false;
+            for (BlockPos pos : this.activeLimbs) {
+                if (!this.self.level().getBlockState(pos).is(ModBlocks.DIVER_LIMB)) {
+                    broken = true;
+                    break;
+                }
+            }
+            if (broken) {
+                recallLimbs();
+                if (this.self instanceof Player player) {
+                    S2CPacketUtil.sendIntPowerDataPacket(player, LIMB_RECALL, -1);
+                }
+                return false;
+            }
         }
         return !this.activeLimbs.isEmpty();
     }
@@ -3037,12 +3056,11 @@ public class PowersDiverDown extends NewPunchingStand {
                 if (isUser || canOtherSee) {
                     sl.sendParticles(
                             player,
-                            //replace this with whatever new particles i get for the thing
-                            ModParticles.ENERGY_DISTORTION,
+                            ModParticles.ENERGY_RIPPLE,
                             false,
                             px, py, pz,
                             1,
-                            0.02, 0.02, 0.02,
+                            0, 0, 0,
                             0.0
                     );
                 }
@@ -3079,10 +3097,11 @@ public class PowersDiverDown extends NewPunchingStand {
 
         BlockPos hitPos = blockHit.getBlockPos();
         Direction face = blockHit.getDirection();
+        BlockFace key = new BlockFace(hitPos, face);
 
-        if (!this.storedKickTraps.containsKey(hitPos)) {
+        if (!this.storedKickTraps.containsKey(key)) {
             while (this.storedKickTraps.size() >= MAX_NUMBER_OF_TRAPS) {
-                BlockPos oldest = this.storedKickTraps.keySet().iterator().next();
+                BlockFace oldest = this.storedKickTraps.keySet().iterator().next();
                 this.storedKickTraps.remove(oldest);
             }
         }
@@ -3093,7 +3112,7 @@ public class PowersDiverDown extends NewPunchingStand {
         Vec3 reflection = lookVec.subtract(normal.scale(2.0 * dot)).normalize();
 
         // store the trap
-        this.storedKickTraps.put(hitPos, new KickTrap(MAX_TRAP_DURATION, face, reflection));
+        this.storedKickTraps.put(key, new KickTrap(MAX_TRAP_DURATION, face, reflection));
         setCooldown(PowerIndex.SKILL_2, 100);
 
         // animation here
@@ -3207,13 +3226,13 @@ public class PowersDiverDown extends NewPunchingStand {
             return false;
         }
         boolean triggeredAny = false;
-        Iterator<Map.Entry<BlockPos, KickTrap>> it = this.storedKickTraps.entrySet().iterator();
+        Iterator<Map.Entry<BlockFace, KickTrap>> it = this.storedKickTraps.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry<BlockPos, KickTrap> entry = it.next();
-            BlockPos trapPos = entry.getKey();
+            Map.Entry<BlockFace, KickTrap> entry = it.next();
+            BlockFace blockFace = entry.getKey();
+            BlockPos trapPos = blockFace.pos();
             KickTrap trap = entry.getValue();
-            // Detect any entity on the trap, used to instantly activate, even against
-            // players
+            // Detect any entity on the trap, used to instantly activate, even against players
             List<LivingEntity> victims = detectTrapTrigger(trapPos, trap.face);
             if (!victims.isEmpty()) {
                 triggerKickTrap(victims, trapPos, trap);
