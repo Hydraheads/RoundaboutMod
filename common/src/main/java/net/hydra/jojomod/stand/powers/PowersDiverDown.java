@@ -340,49 +340,49 @@ public class PowersDiverDown extends NewPunchingStand {
 
     private float getGroundBarrageStrength(Entity entity) {
         if (this.getReducedDamage(entity)) {
-            return levelupDamageMod(0.25F * this.getAttackMultOnPlayers() * 0.01F * 0.75F);
+            return levelupDamageMod(0.25F * this.getAttackMultOnPlayers() * 0.01F);
         } else {
-            return levelupDamageMod(0.75F * this.getAttackMultOnMobs() * 0.01F * 0.75F);
+            return levelupDamageMod(0.75F * this.getAttackMultOnMobs() * 0.01F);
         }
     }
 
     private float getGroundFinisherStrength(Entity entity) {
         if (this.getReducedDamage(entity)) {
-            return levelupDamageMod(5F * this.getAttackMultOnPlayers() * 0.01F * 0.75F);
+            return levelupDamageMod(5F * this.getAttackMultOnPlayers() * 0.01F);
         } else {
-            return levelupDamageMod(8F * this.getAttackMultOnMobs() * 0.01F * 0.75F);
+            return levelupDamageMod(8F * this.getAttackMultOnMobs() * 0.01F);
         }
     }
 
     private float getKickTrapStrength(Entity entity) {
         if (this.getReducedDamage(entity)) {
-            return levelupDamageMod(4F * this.getAttackMultOnPlayers() * 0.01F * 0.75F);
+            return levelupDamageMod(4F * this.getAttackMultOnPlayers() * 0.01F);
         } else {
-            return levelupDamageMod(7F * this.getAttackMultOnMobs() * 0.01F * 0.75F);
+            return levelupDamageMod(7F * this.getAttackMultOnMobs() * 0.01F);
         }
     }
 
     private float getRibcageSnapStrength(Entity entity) {
         if (this.getReducedDamage(entity)) {
-            return levelupDamageMod(8F * this.getAttackMultOnPlayers() * 0.01F * 0.75F);
+            return levelupDamageMod(8F * this.getAttackMultOnPlayers() * 0.01F);
         } else {
-            return levelupDamageMod(12F * this.getAttackMultOnMobs() * 0.01F * 0.75F);
+            return levelupDamageMod(12F * this.getAttackMultOnMobs() * 0.01F);
         }
     }
 
     private float getRibcageHostStrength(Entity entity) {
         if (this.getReducedDamage(entity)) {
-            return levelupDamageMod(8F * this.getAttackMultOnPlayers() * 0.01F * 0.75F);
+            return levelupDamageMod(8F * this.getAttackMultOnPlayers() * 0.01F);
         } else {
-            return levelupDamageMod(22F * this.getAttackMultOnMobs() * 0.01F * 0.75F);
+            return levelupDamageMod(20F * this.getAttackMultOnMobs() * 0.01F);
         }
     }
 
     private float getBoneBombHostStrength(Entity entity) {
         if (this.getReducedDamage(entity)) {
-            return levelupDamageMod(6F * this.getAttackMultOnPlayers() * 0.01F * 0.75F);
+            return levelupDamageMod(6F * this.getAttackMultOnPlayers() * 0.01F);
         } else {
-            return levelupDamageMod(20F * this.getAttackMultOnMobs() * 0.01F * 0.75F);
+            return levelupDamageMod(20F * this.getAttackMultOnMobs() * 0.01F);
         }
     }
 
@@ -805,8 +805,19 @@ public class PowersDiverDown extends NewPunchingStand {
         if (slot == 3 && isHoldingSneak() && this.self.isInWater() && !areStandMovesDisabled()) {
             return true;
         }
+        //ground dive
         if (slot == 4 && !isHoldingSneak() && !isGuarding() && !(GravityAPI.getGravityDirection(this.self) == Direction.DOWN) && !areStandMovesDisabled()) {
             return true;
+        }
+        if(isPiloting()){
+            //item grab
+            if (slot == 2 && !hasItemsInHitbox()) {
+                return true;
+            }
+            //chest open
+            if (slot == 3 && getClosestChest() == null) {
+                return true;
+            }
         }
         return super.isAttackIneptVisually(activeP, slot);
     }
@@ -1595,8 +1606,7 @@ public class PowersDiverDown extends NewPunchingStand {
             if (!this.self.level().isClientSide) {
                 StandEntity stand = getStandEntity(this.self);
                 if (stand != null) {
-                    // Teleport the server stand to where the client actually is!
-                    stand.setPos(pos.x, pos.y, pos.z);
+                    stand.moveTo(pos.x, pos.y, pos.z);
                 }
                 diveGetItems();
             }
@@ -1604,7 +1614,7 @@ public class PowersDiverDown extends NewPunchingStand {
         } else if (move == GROUND_DIVE_BARRAGE) {
             StandEntity stand = getStandEntity(this.self);
             if (stand != null) {
-                stand.setPos(pos.x, pos.y, pos.z);
+                stand.moveTo(pos.x, pos.y, pos.z);
             }
             this.barrageTicksLeft = MAX_GROUND_BARRAGE_TICKS;
             this.setActivePower(GROUND_DIVE_BARRAGE);
@@ -2323,7 +2333,7 @@ public class PowersDiverDown extends NewPunchingStand {
 
     // Limb scaffold climb move end
 
-    // Ground dive move here
+    // Ground dive start
 
     private void tryGroundDive() {
         if (canExecuteMoveWithLevel(getGroundDiveLevel()) && !this.onCooldown(PowerIndex.SKILL_4) && canChangePower(PowerIndex.SKILL_4, false)) {
@@ -2695,6 +2705,45 @@ public class PowersDiverDown extends NewPunchingStand {
         }
     }
 
+    private boolean hasItemsInHitbox() {
+        StandEntity stand = getStandEntity(this.self);
+        if (stand == null) return false;
+        AABB box = stand.getBoundingBox().inflate(2.0, 2.0, 2.0);
+        List<Entity> entities = this.self.level().getEntities(stand, box);
+        for (Entity e : entities) {
+            if ((e instanceof ItemEntity || e instanceof ExperienceOrb) && e.isAlive()) {
+                if (isInDiveHitbox(e.getX(), e.getY(), e.getZ())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean highlightsEntity(Entity entity, Player player) {
+        if (isPiloting() && entity instanceof LivingEntity living) {
+            if (!living.isAlive() || living == this.self) return false;
+
+            StandEntity stand = getStandEntity(this.self);
+            if (stand == null || living == stand) return false;
+
+            if (isInDiveHitbox(living.getX(), living.getY(), living.getZ())) {
+                if (!ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxesOnBosses
+                        && MainUtil.isBossMob(living)) {
+                    return MainUtil.canActuallyHitInvolved(living, this.self);
+                }
+                return true;
+            }
+        }
+        return super.highlightsEntity(entity, player);
+    }
+
+    @Override
+    public int highlightsEntityColor(Entity entity, Player player) {
+        return 0x00E6D9;
+    }
+
     // walking heart autostep works on the player, not on the stand. i can't copy
     // that for this, unfortunately.
 
@@ -2703,7 +2752,7 @@ public class PowersDiverDown extends NewPunchingStand {
     // i just need to use the camera third person thing though, so I'll just
     // transfer that here instead of making a new file.
 
-    // Ground dive move end
+    // Ground dive end
 
     // heel plant 2.0 start
 
@@ -3863,7 +3912,7 @@ public class PowersDiverDown extends NewPunchingStand {
             LivingEntity hostStorage = host;
             emergeServer();
             //20F one shots normal mobs like villagers, zombies and stuff, but keeps bigger mobs alive.
-            DamageHandler.StandDamageEntity(hostStorage, 20.0F, this.self);
+            DamageHandler.StandDamageEntity(hostStorage, getBoneBombHostStrength(hostStorage), this.self);
         }
     }
 
