@@ -10,14 +10,12 @@ import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.ModGamerules;
-import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.item.StrayCatItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
 import net.hydra.jojomod.stand.powers.PowersKingCrimson;
@@ -25,13 +23,9 @@ import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.ExplosionUtil;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
-
 import net.hydra.jojomod.util.gravity.RotationUtil;
-import net.minecraft.client.model.FoxModel;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -400,7 +394,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 						stunTicks = 40;
 					}else {
 						throwDamageCooldown--;
-						AABB bb = this.getBoundingBox().expandTowards(getDeltaMovement()).inflate(0.15);
+						AABB bb = this.getBoundingBox().expandTowards(getDeltaMovement()).inflate(0.2);
 						List<Entity> SHAAA = this.level().getEntities(this, bb);
 						for (Entity ent : SHAAA) {
 							if (ent.getId() == user.getId() || ent instanceof StandEntity) {
@@ -636,7 +630,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		if (this.getTargetType() == BLOCK) {
 			minDist = 1.4f;
 		}else if (getTargetType() == ENTITY && entityTarget != null) {
-			AABB bb = this.getBoundingBox().expandTowards(getDeltaMovement()).inflate(0.15);
+			AABB bb = this.getBoundingBox().expandTowards(getDeltaMovement()).inflate(0.2);
 			List<Entity> SHAAA = this.level().getEntities(this, bb);
 			for (Entity ent : SHAAA) {
 				if (ent == entityTarget) {

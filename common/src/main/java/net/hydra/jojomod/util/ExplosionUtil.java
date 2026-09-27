@@ -158,10 +158,6 @@ public class ExplosionUtil {
 	}
 
 	public static void explodeBlocksBase(BlockPos location, Level level, Float range, boolean ignoreOres, Entity causer) {
-		Player PL = null;
-		if (causer instanceof Player pl) {
-			PL = pl;
-		}
 
 		Vec3 center = new Vec3(location.getX(), location.getY(), location.getZ());
 
@@ -184,7 +180,7 @@ public class ExplosionUtil {
 
 			if (dist2 <= explosionDistance) {
 				boolean shouldDrop = !info.requiresCorrectToolForDrops() && level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING_OBTAINMENT);
-				level.destroyBlock(pos, shouldDrop, PL);
+				level.destroyBlock(pos, shouldDrop, causer);
 			}
 		}
 	}

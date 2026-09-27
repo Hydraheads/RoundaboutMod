@@ -385,8 +385,7 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
             Entity attacker = DMG.getEntity();
 
             if (attacker instanceof LivingEntity LE
-                    && (DMG.is(DamageTypes.MOB_ATTACK) || DMG.is(DamageTypes.PLAYER_ATTACK)
-                    || DMG.is(DamageTypes.MOB_ATTACK_NO_AGGRO))) {
+                    && (LE.distanceTo(this) < 0.45f)) {
 
                 double $$11 = Math.max(0.0, 1.0 - LE.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
                 Vec3 $$12 = (LE.getPosition(1).subtract(getPosition(1))).multiply(1.0, 0.0, 1.0).normalize().scale((double) 0.5 * $$11);
