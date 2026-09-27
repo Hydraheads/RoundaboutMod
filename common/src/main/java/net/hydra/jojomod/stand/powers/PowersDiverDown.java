@@ -1233,7 +1233,7 @@ public class PowersDiverDown extends NewPunchingStand {
                             // big final punch anim and sound here
                             playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.DIVER_DOWN_HIT_HEAVY_EVENT, SoundSource.PLAYERS, 0.95F, 1F);
                             hitParticlesCenter(living);
-                            sendParticlesIfPossible(this.self.level(), ModParticles.AIR_CRACKLE,
+                            sendParticlesIfPossible(this.self.level(), ModParticles.DIVER_DOWN_FINAL,
                                     living.getX(), living.getY() + (living.getBbHeight() * 0.5), living.getZ(),
                                     1, 0.0, 0.0, 0.0, 0);
                             exitGroundDive();
@@ -1829,15 +1829,24 @@ public class PowersDiverDown extends NewPunchingStand {
             entity = null;
         }
         if (entity != null) {
-            hitParticlesCenter(entity);
             float pow;
             float knockbackStrength;
             pow = getPhasePunchStrength(entity);
             knockbackStrength = getPhasePunchKnockback();
             boolean hitSuccess;
             if (isFullyCharged) {
+                Vec3 centerOffset = new Vec3(0, (entity.getBbHeight() * 0.65), 0);
+                Direction gd = ((IGravityEntity) entity).roundabout$getGravityDirection();
+                if (gd != Direction.DOWN) {
+                    centerOffset = RotationUtil.vecPlayerToWorld(centerOffset, gd);
+                }
+                sendParticlesIfPossible(
+                        this.self.level(), ModParticles.DIVER_DOWN_FINAL,
+                        entity.getX() + centerOffset.x, entity.getY() + centerOffset.y, entity.getZ() + centerOffset.z,
+                        1, 0.0, 0.0, 0.0, 0.0);
                 hitSuccess = DamageHandler.PenetratingStandDamageEntity(entity, pow, this.self);
             } else {
+                hitParticlesCenter(entity);
                 hitSuccess = StandDamageEntityAttack(entity, pow, 0, this.self);
             }
 

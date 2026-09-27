@@ -560,6 +560,7 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.AIRBUBBLE_BOMB.get(), AirBubbleParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.AIRBUBBLE_GREEN.get(), AirBubbleParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.ENERGY_RIPPLE.get(), EnergyRippleParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.DIVER_DOWN_FINAL.get(), DiverDownFinalParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.METALLICA_NAIL.get(), net.minecraft.client.particle.CritParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.METALLICA_RAZOR.get(), net.minecraft.client.particle.CritParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.METALLICA_SCISSORS.get(), net.minecraft.client.particle.CritParticle.Provider::new);
