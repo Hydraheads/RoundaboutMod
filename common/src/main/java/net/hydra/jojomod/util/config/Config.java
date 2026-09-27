@@ -462,6 +462,8 @@ public class Config implements Cloneable {
     public static class KillerQueenSettings {
     	@BooleanOption(group = "inherit", value = true)
         public Boolean enableKillerQueen;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean sneakyKilling;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer killerQueenAttackMultOnPlayers;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
