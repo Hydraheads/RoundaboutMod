@@ -995,7 +995,7 @@ public class ForgeSounds {
     public static final RegistryObject<SoundEvent> ANASUI_STAND_SUMMON_1 =
             register(ModSounds.ANASUI_STAND_SUMMON_1, ModSounds.ANASUI_HURT_1_ID);
     public static final RegistryObject<SoundEvent> ANASUI_STAND_SUMMON_2 =
-            register(ModSounds.ANASUI_STAND_SUMMON_1, ModSounds.ANASUI_STAND_SUMMON_1_ID);
+            register(ModSounds.ANASUI_STAND_SUMMON_2, ModSounds.ANASUI_STAND_SUMMON_2_ID);
     public static final RegistryObject<SoundEvent> ANASUI_KILL_1 =
             register(ModSounds.ANASUI_KILL_1, ModSounds.ANASUI_KILL_1_ID);
     public static final RegistryObject<SoundEvent> ANASUI_KILL_2 =
