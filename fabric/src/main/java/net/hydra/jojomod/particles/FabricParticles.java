@@ -86,6 +86,7 @@ public class FabricParticles {
     public static final SimpleParticleType ENERGY_RIPPLE = FabricParticleTypes.simple();
     public static final SimpleParticleType WAKE_RIPPLE = FabricParticleTypes.simple();
     public static final SimpleParticleType DIVER_DOWN_FINAL = FabricParticleTypes.simple();
+    public static final SimpleParticleType RIBCAGE = FabricParticleTypes.simple();
     public static final SimpleParticleType HYPNO_SWIRL = FabricParticleTypes.simple();
     public static final SimpleParticleType TUSK_VORTEX = FabricParticleTypes.simple();
     public static final SimpleParticleType MOLD = FabricParticleTypes.simple();
@@ -190,6 +191,7 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("energy_ripple_surface"), ENERGY_RIPPLE_SURFACE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("energy_ripple"), ENERGY_RIPPLE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("wake_ripple"), WAKE_RIPPLE);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("ribcage"), RIBCAGE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("diver_down_final"), DIVER_DOWN_FINAL);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("mold"), MOLD);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("raging_light"), RAGING_LIGHT);
@@ -310,6 +312,7 @@ public class FabricParticles {
         ModParticles.ENERGY_RIPPLE = ENERGY_RIPPLE;
         ModParticles.WAKE_RIPPLE = WAKE_RIPPLE;
         ModParticles.DIVER_DOWN_FINAL = DIVER_DOWN_FINAL;
+        ModParticles.RIBCAGE = RIBCAGE;
         ModParticles.HYPNO_SWIRL = HYPNO_SWIRL;
         ModParticles.TUSK_VORTEX = TUSK_VORTEX;
         ModParticles.MOLD = MOLD;

@@ -281,6 +281,10 @@ public class ForgeParticles {
             "diver_down_final",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> RIBCAGE = PARTICLES.register(
+            "ribcage",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> HYPNO_SWIRL = PARTICLES.register(
             "hypno_swirl",
             () -> new SimpleParticleType(true)

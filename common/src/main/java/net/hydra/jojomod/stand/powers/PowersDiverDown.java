@@ -1057,7 +1057,7 @@ public class PowersDiverDown extends NewPunchingStand {
                                 if (MainUtil.isBlockWalkable(this.self.level().getBlockState(wallPos))) {
                                     ((IGravityEntity) this.self).roundabout$setGravityDirection(facing);
                                     setHeelDirection(facing);
-                                    justFlippedTicks = 7;
+                                    justFlippedTicks = 4;
                                     C2SPacketUtil.intToServerPacket(
                                             PacketDataIndex.INT_GRAVITY_FLIP, MainUtil.getIntFromDirection(facing));
                                 }
@@ -1109,7 +1109,7 @@ public class PowersDiverDown extends NewPunchingStand {
 
                             // Reset gravity direction to DOWN
                             ((IGravityEntity) this.self).roundabout$setGravityDirection(feetDirection);
-                            justFlippedTicks = 5;
+                            justFlippedTicks = 4;
                             C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_GRAVITY_FLIP,
                                     MainUtil.getIntFromDirection(feetDirection));
                         }
@@ -1250,6 +1250,7 @@ public class PowersDiverDown extends NewPunchingStand {
             }
         }
         LivingEntity stand = getPilotingStand();
+        Entity attackerEntity = (stand != null) ? stand : this.self;
         if (this.getActivePower() == GROUND_DIVE_BARRAGE && !this.self.level().isClientSide) {
             if (this.barrageTicksLeft > 0) {
                 this.barrageTicksLeft--;
@@ -1264,7 +1265,7 @@ public class PowersDiverDown extends NewPunchingStand {
                         filteredEntities.add(target);
                     } else if (MainUtil.isBossMob(target)) {
                         // Bosses require direct line of sight
-                        if (MainUtil.canActuallyHitInvolved(target, this.self)) {
+                        if (MainUtil.canActuallyHitInvolved(target, attackerEntity)) {
                             filteredEntities.add(target);
                         }
                     } else {
@@ -1965,7 +1966,7 @@ public class PowersDiverDown extends NewPunchingStand {
         Direction gd = RotationUtil.getRealFacingDirection2(this.self);
         setHeelDirection(gd);
         ((IGravityEntity) this.self).roundabout$setGravityDirection(gd);
-        this.justFlippedTicks = 7;
+        this.justFlippedTicks = 4;
         this.mercyTicks = 4;
         if (self.level().isClientSide()) {
             C2SPacketUtil.intToServerPacket(
@@ -2776,7 +2777,7 @@ public class PowersDiverDown extends NewPunchingStand {
             if (isInDiveHitbox(living.getX(), living.getY(), living.getZ())) {
                 if (!ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxesOnBosses
                         && MainUtil.isBossMob(living)) {
-                    return MainUtil.canActuallyHitInvolved(living, this.self);
+                    return MainUtil.canActuallyHitInvolved(living, stand);
                 }
                 return true;
             }
@@ -3873,6 +3874,19 @@ public class PowersDiverDown extends NewPunchingStand {
         sendParticlesIfPossible(level, bloodType,
                 victim.getX(), victim.getY() + (victim.getBbHeight() * 0.5), victim.getZ(),
                 15, 0.35, 0.35, 0.35, 0.15);
+        float yawRad = (float) Math.toRadians(host.yBodyRot);
+        double backDist = 0.35;
+        double spawnX = host.getX() + Math.sin(yawRad) * backDist;
+        double spawnY = host.getY() + host.getBbHeight() * 0.6;
+        double spawnZ = host.getZ() - Math.cos(yawRad) * backDist;
+        sendParticlesIfPossible(
+                this.self.level(),
+                ModParticles.RIBCAGE,
+                spawnX,
+                spawnY,
+                spawnZ,
+                0, 0.0, 0.0, 0.0, 1.0
+        );
 
         // The host mob with the ribcage trap dies (if it's a cannon fodder entity)
         DamageHandler.StandDamageEntity(host, getRibcageHostStrength(host), this.self);
@@ -3953,7 +3967,9 @@ public class PowersDiverDown extends NewPunchingStand {
             playSoundIfPossible(self.level(), null, host.blockPosition(),
                     ModSounds.DIVER_DOWN_BOMB_EVENT,
                     SoundSource.PLAYERS, 0.8F, 1);
-
+            sendParticlesIfPossible(level, ModParticles.BLOOD_MIST,
+                    host.getX(), host.getY() + host.getBbHeight() * 0.8, host.getZ(),
+                    6, 0.04, 0.04, 0.04, 0.02);
             LivingEntity hostStorage = host;
             emergeServer();
             //20F one shots normal mobs like villagers, zombies and stuff, but keeps bigger mobs alive.

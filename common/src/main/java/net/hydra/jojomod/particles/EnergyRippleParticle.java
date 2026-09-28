@@ -29,6 +29,7 @@ public class EnergyRippleParticle extends TextureSheetParticle {
         this.setSprite(this.sprites.get(0, 7));
     }
 
+    @Override
     public void render(VertexConsumer $$0, Camera $$1, float $$2) {
         Vec3 $$3 = $$1.getPosition();
         float $$4 = (float)(Mth.lerp((double)$$2, this.xo, this.x) - $$3.x());
