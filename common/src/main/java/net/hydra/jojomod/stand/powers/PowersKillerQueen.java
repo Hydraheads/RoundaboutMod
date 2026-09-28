@@ -1427,9 +1427,8 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
             if (entity != null) {
                 if (entity instanceof LivingEntity LE) {
-                    addEXP(5, LE);
+                    addEXP(1, LE);
                 }
-
 
                 this.bombEntity = entity;
                 this.currentBombStatus = BOMB_ENTITY;
