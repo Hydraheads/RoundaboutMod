@@ -1140,6 +1140,11 @@ public class PowersDiverDown extends NewPunchingStand {
                         || this.self.distanceTo(this.submergedTarget) > (getMaxPilotRange())) {
                     emergeServer();
                 }
+            } else if (this.getActivePower() != DIVER_SUBMERGE_START && hasStandActive(this.self)) {
+                // failsafe just in case the last second whiff happens
+                if (!hasStandEntity(this.self) || getStandEntity(this.self) == null || !getStandEntity(this.self).isAlive() || getStandEntity(this.self).isRemoved()) {
+                    ((StandUser) this.self).roundabout$summonStand(this.self.level(), true, false);
+                }
             }
             // trap detection
             if (!this.storedKickTraps.isEmpty()) {
@@ -4740,7 +4745,6 @@ public class PowersDiverDown extends NewPunchingStand {
             if (Level > 3 || bypass) {
                 l.add(DiverDownEntity.YELLOW);
                 l.add(DiverDownEntity.BLUE);
-                l.add(DiverDownEntity.ORANGE);
             }
             if (Level > 4 || bypass) {
                 l.add(DiverDownEntity.ORANGE);
@@ -4787,6 +4791,28 @@ public class PowersDiverDown extends NewPunchingStand {
                 }
             }
         }
+    }
+
+    //stolen from black sabbath tee hee
+    @Override
+    public boolean returnFakeStandForHud(){
+        if(this.self != null) {
+           // return !(this.getStandEntity(this.self) != null);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public StandEntity getStandForHUDIfFake(){
+        if (displayStand == null){
+            displayStand = this.getNewStandEntity();
+        }
+        if (this.self instanceof Player PL && ((IPlayerEntity) PL).roundabout$getStandSkin() != displayStand.getSkin()) {
+            displayStand = this.getNewStandEntity();
+            displayStand.setSkin(((IPlayerEntity) PL).roundabout$getStandSkin());
+        }
+        return displayStand;
     }
 
     // skins end
