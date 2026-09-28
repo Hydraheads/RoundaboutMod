@@ -342,6 +342,8 @@ public class Config implements Cloneable {
         public Integer bloodSpeedCooldown;
         @BooleanOption(group = "inherit", value = true)
         public Boolean antiCheapShot;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableUVCounter;
     }
     public static class StandLevelingSettings {
         @BooleanOption(group = "inherit", value = true)
@@ -1141,6 +1143,8 @@ public class Config implements Cloneable {
         public Integer anubisBackflipCooldown;
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer anubisMaxMemory;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableSpecialRaids;
     }
 
     public static class EmperorSettings {
