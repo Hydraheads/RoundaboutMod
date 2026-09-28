@@ -33,12 +33,13 @@ public final class CommandDiscController {
     public static void storeCommandDisc(LivingEntity commanded, CommandDiscItem.Command command, ItemStack stack) {
         if (commanded.level().isClientSide()) return;
         ejectCommandDisc(commanded, command);
+        if (command == CommandDiscItem.Command.JUMP_BACK || command == CommandDiscItem.Command.FORGET) {
+            WhitesnakeDiscUtil.ejectCommandDisc(commanded, stack);
+            return;
+        }
         if (!stack.isEmpty()) {
             COMMAND_DISCS.computeIfAbsent(commanded, target -> new EnumMap<>(CommandDiscItem.Command.class))
                     .put(command, stack);
-        }
-        if (command == CommandDiscItem.Command.JUMP_BACK || command == CommandDiscItem.Command.FORGET) {
-            ejectCommandDisc(commanded, command);
         }
     }
 
@@ -143,6 +144,7 @@ public final class CommandDiscController {
 
     public static void tick(LivingEntity commanded) {
         if (commanded.level().isClientSide()) return;
+        if (!ATTACK_COMMANDS.containsKey(commanded) && !COMMAND_DISCS.containsKey(commanded)) return;
         ejectCommandDisc(commanded, CommandDiscItem.Command.JUMP_BACK);
         ejectCommandDisc(commanded, CommandDiscItem.Command.FORGET);
         if (!commanded.isAlive()) {
