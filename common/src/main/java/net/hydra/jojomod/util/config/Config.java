@@ -276,8 +276,6 @@ public class Config implements Cloneable {
         public Boolean bleedRemovesStrength;
         @BooleanOption(group = "inherit", value = true)
         public Boolean hexTwoSealsPotions;
-        @BooleanOption(group = "inherit", value = true)
-        public Boolean enableSpecialRaids;
     }
     public static class VampireSettings {
         @BooleanOption(group = "inherit", value = true)
@@ -1143,6 +1141,8 @@ public class Config implements Cloneable {
         public Integer anubisBackflipCooldown;
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer anubisMaxMemory;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableSpecialRaids;
     }
 
     public static class EmperorSettings {

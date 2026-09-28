@@ -69,7 +69,7 @@ public abstract class AnubisRaidMixin {
     private void roundabout$replaceFinalWave(BlockPos $$0, CallbackInfo ci) {
         if (this.getGroupsSpawned() == 2) {
             if (!this.level.getBiome(this.center).value().hasPrecipitation()) {
-                if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.enableSpecialRaids) {
+                if (ClientNetworking.getAppropriateConfig().anubisSettings.enableSpecialRaids) {
                     AnubisGuardian anubisGuardian = ModEntities.ANUBIS_GUARDIAN.spawn(this.level, $$0, MobSpawnType.TRIGGERED);
                     joinRaid(this.groupsSpawned + 1, anubisGuardian, $$0, false);
                     anubisGuardian.addEffect(new MobEffectInstance(MobEffects.GLOWING, 400));
