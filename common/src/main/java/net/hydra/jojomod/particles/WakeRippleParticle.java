@@ -59,12 +59,17 @@ public class WakeRippleParticle extends TextureSheetParticle {
             case EAST -> new Quaternionf().fromAxisAngleDeg(0, 1, 0, 90);
         };
 
+        float ageOffset = (this.age + partialTicks) * -0.002F;
+        float normalX = this.face.getStepX() * ageOffset;
+        float normalY = this.face.getStepY() * ageOffset;
+        float normalZ = this.face.getStepZ() * ageOffset;
+
         for (int i = 0; i < 4; i++) {
             Vector3f uv = uvList[i];
             uv.mul(quadSize);
             uv.mul(0.5f, 0.5f, 0.5f);
             uv.rotate(rotation);
-            uv.add(lerpX, lerpY, lerpZ);
+            uv.add(lerpX + normalX, lerpY + normalY, lerpZ + normalZ);
         }
 
         float u0 = this.getU0();

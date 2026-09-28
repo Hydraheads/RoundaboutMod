@@ -161,6 +161,7 @@ public class PowersDiverDown extends NewPunchingStand {
     public boolean isOpeningRemoteChest = false;
     public boolean chestScreenEverOpened = false;
     public boolean oreDetectionEnabled = false;
+    private Vec3 groundBarragePos = null;
 
     // used for ground barrage
     private int MAX_GROUND_BARRAGE_TICKS = 20; // will count down from 10 ticks AKA half a second + 1 for the final hit
@@ -1254,6 +1255,9 @@ public class PowersDiverDown extends NewPunchingStand {
         if (this.getActivePower() == GROUND_DIVE_BARRAGE && !this.self.level().isClientSide) {
             if (this.barrageTicksLeft > 0) {
                 this.barrageTicksLeft--;
+                if (this.groundBarragePos != null && stand != null) {
+                    stand.setPos(this.groundBarragePos.x, this.groundBarragePos.y, this.groundBarragePos.z);
+                }
                 // need to filter targets still to account for that pesky boss immunity
                 List<Entity> unfilteredTargets = getEntitiesBox();
                 // for boss filtering function, taken from walking heart. It took me a while to
@@ -1658,9 +1662,11 @@ public class PowersDiverDown extends NewPunchingStand {
             }
             return true;
         } else if (move == GROUND_DIVE_BARRAGE) {
+            this.groundBarragePos = pos;
             StandEntity stand = getStandEntity(this.self);
             if (stand != null) {
                 stand.moveTo(pos.x, pos.y, pos.z);
+                stand.setPos(pos.x, pos.y, pos.z);
             }
             this.barrageTicksLeft = MAX_GROUND_BARRAGE_TICKS;
             this.setActivePower(GROUND_DIVE_BARRAGE);
@@ -2536,24 +2542,24 @@ public class PowersDiverDown extends NewPunchingStand {
      * @param targetY Target Y coordinate
      * @param targetZ Target Z coordinate
      */
+    private boolean isInDiveHitbox(double targetX, double targetY, double targetZ, double centerX, double centerY, double centerZ) {
+        double dx = Math.abs(targetX - centerX);
+        double dy = Math.abs(targetY - centerY);
+        double dz = Math.abs(targetZ - centerZ);
+        if (dy > 3)
+            return false;
+        if (dx > 2.0 || dz > 2.0)
+            return false;
+        if (dx > 1.0 && dz > 1.0)
+            return false;
+        return true;
+    }
+
     private boolean isInDiveHitbox(double targetX, double targetY, double targetZ) {
         StandEntity stand = getStandEntity(this.self);
         if (stand == null)
             return false;
-        double dx = Math.abs(targetX - stand.getX());
-        double dy = Math.abs(targetY - stand.getY());
-        double dz = Math.abs(targetZ - stand.getZ());
-        // Vertical check. 3 represents the height of the hitbox. edit this number to
-        // change it.
-        if (dy > 3)
-            return false;
-        // check for if entity is with the 2 block radius.
-        if (dx > 2.0 || dz > 2.0)
-            return false;
-        // cut out the 4 corners
-        if (dx > 1.0 && dz > 1.0)
-            return false;
-        return true;
+        return isInDiveHitbox(targetX, targetY, targetZ, stand.getX(), stand.getY(), stand.getZ());
     }
 
     // Gets chest to open.
@@ -2702,13 +2708,19 @@ public class PowersDiverDown extends NewPunchingStand {
      */
     private List<Entity> getEntitiesBox() {
         StandEntity stand = getStandEntity(this.self);
-        AABB box = stand.getBoundingBox().inflate(2.0, 2.0, 2.0);
-        List<Entity> allTargets = this.self.level().getEntities(stand, box);
-        // filter entities even more so it only counts those inside the ACTUAL hitbox
+        Vec3 center = (this.getActivePower() == GROUND_DIVE_BARRAGE && this.groundBarragePos != null)
+                ? this.groundBarragePos
+                : (stand != null ? stand.position() : this.self.position());
+
+        AABB box = new AABB(
+                center.x - 2.0, center.y - 3.0, center.z - 2.0,
+                center.x + 2.0, center.y + 3.0, center.z + 2.0
+        );
+        List<Entity> allTargets = this.self.level().getEntities(this.self, box);
         List<Entity> filteredTargets = new ArrayList<>();
         for (Entity target : allTargets) {
             if (target != null && target.isAlive() && target != this.self && target != stand) {
-                if (isInDiveHitbox(target.getX(), target.getY(), target.getZ())) {
+                if (isInDiveHitbox(target.getX(), target.getY(), target.getZ(), center.x, center.y, center.z)) {
                     filteredTargets.add(target);
                 }
             }
