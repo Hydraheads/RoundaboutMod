@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin.anubis;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.minecraft.core.BlockPos;
@@ -68,19 +69,20 @@ public abstract class AnubisRaidMixin {
     private void roundabout$replaceFinalWave(BlockPos $$0, CallbackInfo ci) {
         if (this.getGroupsSpawned() == 2) {
             if (!this.level.getBiome(this.center).value().hasPrecipitation()) {
+                if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.enableSpecialRaids) {
+                    AnubisGuardian anubisGuardian = ModEntities.ANUBIS_GUARDIAN.spawn(this.level, $$0, MobSpawnType.TRIGGERED);
+                    joinRaid(this.groupsSpawned + 1, anubisGuardian, $$0, false);
+                    anubisGuardian.addEffect(new MobEffectInstance(MobEffects.GLOWING, 400));
 
-                AnubisGuardian anubisGuardian = ModEntities.ANUBIS_GUARDIAN.spawn(this.level, $$0, MobSpawnType.TRIGGERED);
-                joinRaid(this.groupsSpawned + 1, anubisGuardian, $$0, false);
-                anubisGuardian.addEffect(new MobEffectInstance(MobEffects.GLOWING, 400));
-
-                this.totalHealth = anubisGuardian.getMaxHealth();
+                    this.totalHealth = anubisGuardian.getMaxHealth();
 
 
-                this.waveSpawnPos = Optional.empty();
-                ++this.groupsSpawned;
-                this.updateBossbar();
-                this.setDirty();
-                ci.cancel();
+                    this.waveSpawnPos = Optional.empty();
+                    ++this.groupsSpawned;
+                    this.updateBossbar();
+                    this.setDirty();
+                    ci.cancel();
+                }
             }
         }
     }

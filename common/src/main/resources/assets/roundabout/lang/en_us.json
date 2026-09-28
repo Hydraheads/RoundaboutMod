@@ -5203,6 +5203,9 @@
   "config.roundabout.alternateShaderEntry.name": "Alternate Shader Entry",
   "config.roundabout.alternateShaderEntry.desc": "If the time stop shader does not work in your modpack, try turning this on/off, in case other mods break the other entry point. Note this with this enabled, ground lines sweep through entities, otherwise they go underneath them.",
 
+  "config.roundabout.enableSpecialRaids.name": "Enable Special Raids",
+  "config.roundabout.enableSpecialRaids.desc": "Whether or not special raids happen like the final wave in hot biomes replaced by anubis guardians.",
+
 
   "config.roundabout.walkingHeartMaxHits.name": "Max Planted Hits",
   "config.roundabout.walkingHeartMaxHits.desc": "How many hits can you take in heel planted/wall walking mode before you are knocked out of that state.",
