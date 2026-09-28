@@ -271,6 +271,7 @@ public class ForgeEvents {
         ModBlocks.CHESS_PIECE_BLOCK_ENTITY = ForgeBlocks.CHESS_PIECE_BLOCK_ENTITY.get();
 
         ModBlocks.GAMBLING_TABLE = ForgeBlocks.GAMBLING_TABLE.get();
+        ModBlocks.GAMBLING_TABLE_BLOCK_ENTITY = ForgeBlocks.GAMBLING_TABLE_BLOCK_ENTITY.get();
 
         ModBlocks.WIRE_TRAP = ForgeBlocks.WIRE_TRAP.get();
         ModBlocks.BARBED_WIRE = ForgeBlocks.BARBED_WIRE.get();
@@ -718,7 +719,9 @@ public class ForgeEvents {
         ModParticles.AIRBUBBLE_YELLOW = ForgeParticles.AIRBUBBLE_YELLOW.get();
         ModParticles.ENERGY_RIPPLE_SURFACE = ForgeParticles.ENERGY_RIPPLE_SURFACE.get();
         ModParticles.ENERGY_RIPPLE = ForgeParticles.ENERGY_RIPPLE.get();
+        ModParticles.WAKE_RIPPLE = ForgeParticles.WAKE_RIPPLE.get();
         ModParticles.DIVER_DOWN_FINAL = ForgeParticles.DIVER_DOWN_FINAL.get();
+        ModParticles.RIBCAGE = ForgeParticles.RIBCAGE.get();
         ModParticles.HYPNO_SWIRL = ForgeParticles.HYPNO_SWIRL.get();
         ModParticles.TUSK_VORTEX = ForgeParticles.TUSK_VORTEX.get();
         ModParticles.METALLICA_NAIL = ForgeParticles.METALLICA_NAIL.get();

@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.*;
 import net.hydra.jojomod.client.gui.diverdown.custom_workbench_texture.*;
+import net.hydra.jojomod.client.gui.gamblingtable.GamblingTableScreen;
 import net.hydra.jojomod.client.models.*;
 import net.hydra.jojomod.client.models.corpses.renderers.*;
 import net.hydra.jojomod.client.models.minions.*;
@@ -66,6 +67,7 @@ public class ClientForgeEvents {
             MenuScreens.register(ForgeMenus.DIVER_DOWN_STONECUTTER.get(), DiverDownStonecutterScreen::new);
             MenuScreens.register(ForgeMenus.DIVER_DOWN_LOOM.get(), DiverDownLoomScreen::new);
             //DD workbench registry end
+            MenuScreens.register(ForgeMenus.GAMBLING_TABLE.get(), GamblingTableScreen::new);
             ItemBlockRenderTypes.setRenderLayer(ForgeBlocks.HALLUCINATORY_ACID.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(ForgeBlocks.HALLUCINATORY_ACID_WALL.get(), RenderType.translucent());
         });
@@ -561,7 +563,9 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.AIRBUBBLE_GREEN.get(), AirBubbleParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.ENERGY_RIPPLE_SURFACE.get(), EnergyRippleSurfaceParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.ENERGY_RIPPLE.get(), EnergyRippleParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.WAKE_RIPPLE.get(), WakeRippleParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.DIVER_DOWN_FINAL.get(), DiverDownFinalParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.RIBCAGE.get(), RibcageParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.METALLICA_NAIL.get(), net.minecraft.client.particle.CritParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.METALLICA_RAZOR.get(), net.minecraft.client.particle.CritParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.METALLICA_SCISSORS.get(), net.minecraft.client.particle.CritParticle.Provider::new);

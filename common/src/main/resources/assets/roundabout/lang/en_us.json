@@ -150,6 +150,7 @@
   "block.roundabout.hand_block.named": "'%1$s' Hand",
   "block.roundabout.chess_piece": "Chess Piece",
   "block.roundabout.gambling_table": "Gambling Table",
+  "container.roundabout.gambling_table": "Gambling Table",
 
   "item.roundabout.exp_bishop": "Experience Bishop",
 
@@ -406,8 +407,8 @@
   "item.roundabout.anasui_mask.desc": "Anasui",
   "item.roundabout.anasui_mask.tag": "Anasui",
   "item.roundabout.fem_anasui_mask": "Anasui Visage",
-  "item.roundabout.fem_anasui_mask.desc": "Female Anasui",
-  "item.roundabout.fem_anasui_mask.tag": "Female Anasui",
+  "item.roundabout.fem_anasui_mask.desc": "Anasui (Original Design / Female)",
+  "item.roundabout.fem_anasui_mask.tag": "Anasui",
   "item.roundabout.anakiss_mask": "Anasui Visage",
   "item.roundabout.anakiss_mask.desc": "Anakiss",
   "item.roundabout.anakiss_mask.tag": "Anakiss",
@@ -3043,6 +3044,19 @@
   "skins.roundabout.diver_down.base": "Part 6",
   "skins.roundabout.diver_down.betadiver": "Beta",
   "skins.roundabout.diver_down.kelp": "Kelp",
+  "skins.roundabout.diver_down.gray": "Gray",
+  "skins.roundabout.diver_down.white": "White",
+  "skins.roundabout.diver_down.purple": "Purple",
+  "skins.roundabout.diver_down.khaki": "Khaki",
+  "skins.roundabout.diver_down.yellow": "Yellow",
+  "skins.roundabout.diver_down.blue": "Blue",
+  "skins.roundabout.diver_down.orange": "Orange",
+  "skins.roundabout.diver_down.pink": "Pink",
+  "skins.roundabout.diver_down.inversion": "Inversion",
+  "skins.roundabout.diver_down.figure": "Figure",
+  "skins.roundabout.diver_down.eyecatch": "Eyecatch",
+  "skins.roundabout.diver_down.artwork": "Artwork",
+  "skins.roundabout.diver_down.manga": "Manga",
   "skins.roundabout.diver_down.holy_diver": "Holy Diver",
 
   "skins.roundabout.20_centuryboy.manga": "Manga",
@@ -5188,6 +5202,12 @@
 
   "config.roundabout.alternateShaderEntry.name": "Alternate Shader Entry",
   "config.roundabout.alternateShaderEntry.desc": "If the time stop shader does not work in your modpack, try turning this on/off, in case other mods break the other entry point. Note this with this enabled, ground lines sweep through entities, otherwise they go underneath them.",
+
+  "config.roundabout.enableSpecialRaids.name": "Enable Special Raids",
+  "config.roundabout.enableSpecialRaids.desc": "Whether or not special raids happen like the final wave in hot biomes replaced by anubis guardians.",
+
+  "config.roundabout.enableUVCounter.name": "Enable UV Counter",
+  "config.roundabout.enableUVCounter.desc": "Whether or not the UV blasters nuke vampires who don't have powers equipped.",
 
 
   "config.roundabout.walkingHeartMaxHits.name": "Max Planted Hits",
