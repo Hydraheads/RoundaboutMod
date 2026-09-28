@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
@@ -12,43 +11,28 @@ import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-public class EnergyRippleSurfaceParticle extends SimpleAnimatedParticle {
-    public static final Map<ParticleKey, EnergyRippleSurfaceParticle> ACTIVE_RIPPLES = new ConcurrentHashMap<>();
-
+public class WakeRippleParticle extends TextureSheetParticle {
     private final SpriteSet sprites;
     private final Direction face;
-    public record ParticleKey(BlockPos pos, Direction face) {}
 
-    public EnergyRippleSurfaceParticle(ClientLevel clientLevel, double d, double e, double f, double g, double h, double i, SpriteSet spriteSet) {
-        super(clientLevel, d, e, f, spriteSet, 1f);
+    protected WakeRippleParticle(ClientLevel level, double x, double y, double z, double xd, double yd, double zd, SpriteSet spriteSet) {
+        super(level, x, y, z, 0.0, 0.0, 0.0);
         this.sprites = spriteSet;
-        this.xd = 0;
-        this.yd = 0;
-        this.zd = 0;
-        this.friction = 1.0F;
-        this.gravity = 0;
-        this.quadSize = 0.95F;
-        this.hasPhysics = false;
-        this.lifetime = 28;
-        this.setAlpha(0.35F);
+        this.age = 0;
+        this.lifetime = 6;
+        this.quadSize = 1.5F;
+        this.setSpriteFromAge(spriteSet);
 
-        // for orientation
-        double fracX = Math.abs(d - (Math.floor(d) + 0.5));
-        double fracY = Math.abs(e - (Math.floor(e) + 0.5));
-        double fracZ = Math.abs(f - (Math.floor(f) + 0.5));
-
-        if (fracY > fracX && fracY > fracZ) {
-            this.face = (e > Math.floor(e) + 0.5) ? Direction.UP : Direction.DOWN;
-        } else if (fracX > fracY && fracX > fracZ) {
-            this.face = (d > Math.floor(d) + 0.5) ? Direction.EAST : Direction.WEST;
+        // Detect surface normal from xd, yd, zd, or default to UP (horizontal ground)
+        if (Math.abs(yd) > 0.5) {
+            this.face = yd > 0 ? Direction.UP : Direction.DOWN;
+        } else if (Math.abs(xd) > 0.5) {
+            this.face = xd > 0 ? Direction.EAST : Direction.WEST;
+        } else if (Math.abs(zd) > 0.5) {
+            this.face = zd > 0 ? Direction.SOUTH : Direction.NORTH;
         } else {
-            this.face = (f > Math.floor(f) + 0.5) ? Direction.SOUTH : Direction.NORTH;
+            this.face = Direction.UP;
         }
-
-        this.setSprite(this.sprites.get(0, 6));
     }
 
     @Override
@@ -59,7 +43,10 @@ public class EnergyRippleSurfaceParticle extends SimpleAnimatedParticle {
         float lerpZ = (float)(Mth.lerp(partialTicks, this.zo, this.z) - cameraPosition.z());
 
         Vector3f[] uvList = new Vector3f[]{
-                new Vector3f(-1.0F, -1.0F, 0.0F), new Vector3f(-1.0F, 1.0F, 0.0F), new Vector3f(1.0F, 1.0F, 0.0F), new Vector3f(1.0F, -1.0F, 0.0F)
+                new Vector3f(-1.0F, -1.0F, 0.0F),
+                new Vector3f(-1.0F, 1.0F, 0.0F),
+                new Vector3f(1.0F, 1.0F, 0.0F),
+                new Vector3f(1.0F, -1.0F, 0.0F)
         };
         float quadSize = this.getQuadSize(partialTicks);
 
@@ -75,7 +62,7 @@ public class EnergyRippleSurfaceParticle extends SimpleAnimatedParticle {
         for (int i = 0; i < 4; i++) {
             Vector3f uv = uvList[i];
             uv.mul(quadSize);
-            uv.mul(0.5f,0.5f,0.5f);
+            uv.mul(0.5f, 0.5f, 0.5f);
             uv.rotate(rotation);
             uv.add(lerpX, lerpY, lerpZ);
         }
@@ -104,30 +91,51 @@ public class EnergyRippleSurfaceParticle extends SimpleAnimatedParticle {
         this.xo = this.x;
         this.yo = this.y;
         this.zo = this.z;
-
         if (this.age++ >= this.lifetime) {
             this.remove();
-            return;
-        }
-
-        int ticksPerFrame = 2;
-        int step = this.age / ticksPerFrame;
-        int holdSteps = 2;
-
-        int frameIndex;
-        if (step <= 6) {
-            frameIndex = step;
-        } else if (step <= 6 + holdSteps) {
-            frameIndex = 6;
         } else {
-            frameIndex = Math.max(0, 6 - (step - (6 + holdSteps)));
+            this.setSpriteFromAge(this.sprites);
         }
-
-        this.setSprite(this.sprites.get(frameIndex, 6));
+        this.alpha = Math.max(0.10F, this.alpha - 0.15F);
     }
+
+    @Override
+    public int getLightColor(float partialTick) {
+        float factor = ((float)this.age + partialTick) / (float)this.lifetime;
+        factor = Mth.clamp(factor, 0.0F, 1.0F);
+        int light = super.getLightColor(partialTick);
+        int blockLight = light & 0xFF;
+        int skyLight = light >> 16 & 0xFF;
+        blockLight += (int)(factor * 15.0F * 16.0F);
+        if (blockLight > 240) {
+            blockLight = 240;
+        }
+        return blockLight | skyLight << 16;
+    }
+
     @Override
     public ParticleRenderType getRenderType() {
         return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+    }
+
+    @Override
+    protected float getU0() {
+        return this.sprite.getU0();
+    }
+
+    @Override
+    protected float getU1() {
+        return this.sprite.getU1();
+    }
+
+    @Override
+    protected float getV0() {
+        return this.sprite.getV0();
+    }
+
+    @Override
+    protected float getV1() {
+        return this.sprite.getV1();
     }
 
     public static class Provider implements ParticleProvider<SimpleParticleType> {
@@ -137,8 +145,11 @@ public class EnergyRippleSurfaceParticle extends SimpleAnimatedParticle {
             this.sprites = sprites;
         }
 
+        @Override
         public Particle createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double xd, double yd, double zd) {
-            return new EnergyRippleSurfaceParticle(level, x, y, z, xd, yd, zd, this.sprites);
+            WakeRippleParticle part = new WakeRippleParticle(level, x, y, z, xd, yd, zd, this.sprites);
+            part.setColor(0.99F, 0.99F, 0.99F);
+            return part;
         }
     }
 }

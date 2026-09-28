@@ -76,6 +76,7 @@ public class ModParticles {
     public static SimpleParticleType AIRBUBBLE_BOMB;
     public static SimpleParticleType ENERGY_RIPPLE_SURFACE;
     public static SimpleParticleType ENERGY_RIPPLE;
+    public static SimpleParticleType WAKE_RIPPLE;
     public static SimpleParticleType DIVER_DOWN_FINAL;
 
     public static SimpleParticleType OCCULT;

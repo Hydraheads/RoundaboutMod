@@ -273,6 +273,10 @@ public class ForgeParticles {
             "energy_ripple",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> WAKE_RIPPLE = PARTICLES.register(
+            "wake_ripple",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> DIVER_DOWN_FINAL = PARTICLES.register(
             "diver_down_final",
             () -> new SimpleParticleType(true)

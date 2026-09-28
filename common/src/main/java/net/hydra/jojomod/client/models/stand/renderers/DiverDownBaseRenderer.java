@@ -54,17 +54,8 @@ public class DiverDownBaseRenderer extends StandRenderer<DiverDownEntity> {
     @Override
     public void render(DiverDownEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         if (mobEntity.getUser() instanceof StandUser su && su.roundabout$getStandPowers() instanceof PowersDiverDown dd) {
-            if (dd.isPiloting()) {
-                LocalPlayer viewer = Minecraft.getInstance().player;
-                boolean isOwner = viewer != null && mobEntity.getUser().is(viewer);
-
-                if (isOwner && !dd.oreDetectionEnabled) {
-                    renderHitboxCircle(mobEntity.tickCount, matrixStack, vertexConsumerProvider);
-                }
-
-                if (PowersDiverDown.MAX_DIVE_TICKS - dd.diveTicksLeft > 3) {
-                    return;
-                }
+            if (dd.isPiloting() && (PowersDiverDown.MAX_DIVE_TICKS - dd.diveTicksLeft > 3)) {
+                return;
             }
         }
 
@@ -75,31 +66,6 @@ public class DiverDownBaseRenderer extends StandRenderer<DiverDownEntity> {
             matrixStack.scale(0.87f * factor, 0.87f * factor, 0.87f * factor);
         }
         super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
-    }
-
-    private void renderHitboxCircle(int tickCount, PoseStack matrixStack, MultiBufferSource bufferSource) {
-        float radius = 1.8F;
-
-        int ticksPerFrame = 3;
-
-        int frameIndex = (tickCount / ticksPerFrame) % 3;
-
-        ResourceLocation currentFrameTexture = RIPPLE_FRAMES[frameIndex];
-
-        matrixStack.pushPose();
-        matrixStack.translate(0.0D, 0.02D, 0.0D);
-        matrixStack.mulPose(Axis.XP.rotationDegrees(90.0F));
-
-        VertexConsumer consumer = bufferSource.getBuffer(RenderType.energySwirl(currentFrameTexture, 0.0f, 0.0f));
-        Matrix4f matrix = matrixStack.last().pose();
-        Matrix3f normal = matrixStack.last().normal();
-
-        consumer.vertex(matrix, -radius, -radius, 0.0F).color(110, 160, 255, 200).uv(0.0F, 0.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(normal, 0, 0, 1).endVertex();
-        consumer.vertex(matrix, -radius, radius, 0.0F).color(110, 160, 255, 200).uv(0.0F, 1.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(normal, 0, 0, 1).endVertex();
-        consumer.vertex(matrix, radius, radius, 0.0F).color(110, 160, 255, 200).uv(1.0F, 1.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(normal, 0, 0, 1).endVertex();
-        consumer.vertex(matrix, radius, -radius, 0.0F).color(110, 160, 255, 200).uv(1.0F, 0.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(normal, 0, 0, 1).endVertex();
-
-        matrixStack.popPose();
     }
 
     @Nullable

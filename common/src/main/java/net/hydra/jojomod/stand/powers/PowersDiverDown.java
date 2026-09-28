@@ -38,6 +38,7 @@ import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.ChatFormatting;
@@ -634,15 +635,15 @@ public class PowersDiverDown extends NewPunchingStand {
             }
             // diver zip
             else if (inZipMode()) {
-                setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD, true);
-                setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+                setSkillIcon(context, x, y, 1, StandIcons.UNUSABLE, PowerIndex.NO_CD);
+                setSkillIcon(context, x, y, 2, StandIcons.UNUSABLE, PowerIndex.NO_CD);
                 setSkillIcon(context, x, y, 3, StandIcons.DIVER_DOWN_ZIP, PowerIndex.SKILL_3);
-                setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+                setSkillIcon(context, x, y, 4, StandIcons.UNUSABLE, PowerIndex.NO_CD);
             }
             // diver limb scaffold
             else if (hasLimbsDeployed()) {
-                setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD, true);
-                setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+                setSkillIcon(context, x, y, 1, StandIcons.UNUSABLE, PowerIndex.NO_CD);
+                setSkillIcon(context, x, y, 2, StandIcons.UNUSABLE, PowerIndex.NO_CD);
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
                 if (isHoldingSneak()) {
                     setSkillIcon(context, x, y, 4, StandIcons.DIVER_DOWN_PLATFORM, PowerIndex.SKILL_4);
@@ -916,6 +917,22 @@ public class PowersDiverDown extends NewPunchingStand {
     @Override
     public void tickPower() {
         super.tickPower();
+        if (isPiloting() && this.self.level().isClientSide()) {
+            Minecraft mc = Minecraft.getInstance();
+            boolean isMoving = mc.options.keyUp.isDown() || mc.options.keyDown.isDown()
+                    || mc.options.keyLeft.isDown() || mc.options.keyRight.isDown();
+
+            if (isMoving) {
+                StandEntity stand = getStandEntity(this.self);
+                this.self.level().addParticle(
+                        ModParticles.WAKE_RIPPLE,
+                        stand.getX(),
+                        stand.getY() + 0.05,
+                        stand.getZ(),
+                        0.0, 0.0, 0.0
+                );
+            }
+        }
         if (!this.self.level().isClientSide()) {
             // deletes limbs that are out of range
             if (!this.activeLimbs.isEmpty()) {
@@ -1202,6 +1219,34 @@ public class PowersDiverDown extends NewPunchingStand {
                         entry.setValue(remaining);
                     }
                 }
+            }
+        }
+        if (inZipMode() && !this.self.level().isClientSide()) {
+            //checks if the player moved by comparing currentPos to lastPos
+            Vec3 currentPos = this.self.position();
+            boolean isMoving = this.lastGroundPosition != null && currentPos.distanceToSqr(this.lastGroundPosition) > 0.003;
+            this.lastGroundPosition = currentPos;
+
+            if (isMoving) {
+                Direction grav = ((IGravityEntity) this.self).roundabout$getGravityDirection();
+                Direction surfaceNormal = grav.getOpposite();
+
+                double ox = surfaceNormal.getStepX() * 0.1;
+                double oy = surfaceNormal.getStepY() * 0.1;
+                double oz = surfaceNormal.getStepZ() * 0.1;
+
+                sendParticlesIfPossible(
+                        this.self.level(),
+                        ModParticles.WAKE_RIPPLE,
+                        currentPos.x + ox,
+                        currentPos.y + oy,
+                        currentPos.z + oz,
+                        0,
+                        (double) surfaceNormal.getStepX(),
+                        (double) surfaceNormal.getStepY(),
+                        (double) surfaceNormal.getStepZ(),
+                        1.0
+                );
             }
         }
         LivingEntity stand = getPilotingStand();
@@ -3398,7 +3443,7 @@ public class PowersDiverDown extends NewPunchingStand {
             sendParticlesIfPossible(
                     this.self.level(), ModParticles.ENERGY_RIPPLE,
                     submergedTarget.getX() + centerOffset.x, submergedTarget.getY() + centerOffset.y, submergedTarget.getZ() + centerOffset.z,
-                    0, 0.0, 0.0, 0.0, 0.0);
+                    0, 1.0, 1.0, 0.0, 1.0);
             playSoundIfPossible(self.level(), null, this.self.blockPosition(),
                     ModSounds.DIVER_DOWN_DIVE_EVENT,
                     SoundSource.PLAYERS, 0.8F, 1F);
@@ -3525,7 +3570,7 @@ public class PowersDiverDown extends NewPunchingStand {
         sendParticlesIfPossible(
                 this.self.level(), ModParticles.ENERGY_RIPPLE,
                 submergedTarget.getX() + centerOffset.x, submergedTarget.getY() + centerOffset.y, submergedTarget.getZ() + centerOffset.z,
-                0, 0.0, 0.0, 0.0, 0.0);
+                0, 1.0, 1.0, 0.0, 1.0);
         return true;
     }
 
@@ -4365,6 +4410,10 @@ public class PowersDiverDown extends NewPunchingStand {
         playSoundIfPossible(self.level(), null, pos,
                 ModSounds.DIVER_DOWN_DIVE_EVENT,
                 SoundSource.PLAYERS, 0.6F, 1.5F);
+        sendParticlesIfPossible(
+                this.self.level(), ModParticles.ENERGY_RIPPLE,
+                pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+                0, 1.0, 0.0, 0.0, 1.0);
 
         if (this.getSelf() instanceof ServerPlayer pl) {
             S2CPacketUtil.sendCooldownSyncPacket(pl, PowerIndex.SKILL_1_SNEAK, 60);

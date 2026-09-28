@@ -671,6 +671,8 @@ public class StandIcons {
 
     public static final ResourceLocation LOCKED = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/locked_2.png");
+    public static final ResourceLocation UNUSABLE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/unusable.png");
     public static final ResourceLocation STAR_PLATINUM_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/star_platinum/punch.png");
     public static final ResourceLocation STAR_PLATINUM_FINAL_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
