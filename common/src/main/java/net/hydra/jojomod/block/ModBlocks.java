@@ -204,6 +204,7 @@ public class ModBlocks {
     public static Block MELON_PARFAIT;
 
     public static Block GAMBLING_TABLE;
+    public static BlockEntityType<GamblingTableBlockEntity> GAMBLING_TABLE_BLOCK_ENTITY;
 
     public static BlockEntityType<OasisMudBlockEntity> OASIS_MUD_BLOCK_ENTITY;
     public static BlockEntityType<StandFireBlockEntity> STAND_FIRE_BLOCK_ENTITY;

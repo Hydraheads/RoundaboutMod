@@ -150,6 +150,7 @@
   "block.roundabout.hand_block.named": "'%1$s' Hand",
   "block.roundabout.chess_piece": "Chess Piece",
   "block.roundabout.gambling_table": "Gambling Table",
+  "container.roundabout.gambling_table": "Gambling Table",
 
   "item.roundabout.exp_bishop": "Experience Bishop",
 

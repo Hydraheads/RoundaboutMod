@@ -298,7 +298,8 @@ public class FabricBlocks {
 
     public static final Block GAMBLING_TABLE =
             registerBlock("gambling_table", ModBlocks.GAMBLING_TABLE_PROPERTIES);
-
+    public static final BlockEntityType<GamblingTableBlockEntity> GAMBLING_TABLE_BLOCK_ENTITY =
+            registerBE("gambling_table", BlockEntityType.Builder.of(GamblingTableBlockEntity::new, GAMBLING_TABLE));
 
     public static final BlockEntityType<KingBedBlockEntity> KING_BED_BLOCK_ENTITY =
             registerBE("king_bed_block",BlockEntityType.Builder.of(KingBedBlockEntity::new, KING_BED_BLOCK) );
@@ -519,6 +520,7 @@ public class FabricBlocks {
         ModBlocks.CHESS_PIECE_BLOCK_ENTITY = CHESS_PIECE_BLOCK_ENTITY;
 
         ModBlocks.GAMBLING_TABLE = GAMBLING_TABLE;
+        ModBlocks.GAMBLING_TABLE_BLOCK_ENTITY = GAMBLING_TABLE_BLOCK_ENTITY;
 
         ModBlocks.FOG_TRAP_BLOCK_ENTITY = FOGTRAP_BLOCKENTITY;
         ModBlocks.COFFIN_BLOCK_ENTITY = COFFIN_BLOCK_ENTITY;
