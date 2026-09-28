@@ -73,7 +73,7 @@ public class SheerHeartAttackModel<T extends SheerHeartAttackEntity> extends Sta
 		super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
 
 		if (pEntity.isClimbing()) {
-			getHead().xRot = 90 * ((float) Math.PI / 180F);
+			getHead().xRot = -90 * ((float) Math.PI / 180F);
 		}else if (!pEntity.onGround()) {
 			getHead().xRot = pEntity.getXRot();
 		}

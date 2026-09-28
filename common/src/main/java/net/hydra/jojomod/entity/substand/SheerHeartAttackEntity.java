@@ -305,6 +305,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		boolean client = this.level().isClientSide();
 		LivingEntity user = this.getUser();
 
+		/* No funny spinning when jumping XD
 		Vec3 $$1 = getDeltaMovement();
 		if ($$1.y * $$1.y < (double)0.03F && getXRot() != 0.0F) {
 			setXRot(Mth.rotLerp(0.2F, getXRot(), 0.0F));
@@ -312,7 +313,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			double $$2 = $$1.horizontalDistance();
 			double $$3 = Math.signum(-$$1.y) * Math.acos($$2 / $$1.length()) * (double)(180F / (float)Math.PI);
 			setXRot((float)$$3);
-		}
+		}*/
 
 		if (!client) {
 			if(user == null){
