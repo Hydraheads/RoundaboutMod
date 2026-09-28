@@ -544,7 +544,7 @@ public class StandHudRender {
 
         int u = 183;
         int k = scaledWidth/2 - 5;
-        l = scaledHeight - 31 - 12;
+        l = scaledHeight - 31 - 8;
 
         if (PW.disabledBTDTicks < 0){
             context.blit(StandIcons.JOJO_ICONS, k, l, u, 110, 9, 9);

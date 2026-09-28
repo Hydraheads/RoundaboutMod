@@ -38,7 +38,9 @@ public class SheerHeartAttackRenderer extends StandRenderer<SheerHeartAttackEnti
     private static final ResourceLocation NOTW_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/sheer_heart_attack/notw.png");
     private static final ResourceLocation MEMENTO_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/sheer_heart_attack/mementomorioh.png");
     private static final ResourceLocation STARDUST_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/sheer_heart_attack/stardust.png");
-	
+    private static final ResourceLocation BROWN_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/sheer_heart_attack/brown.png");
+    private static final ResourceLocation GREY_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/sheer_heart_attack/grey.png");
+
     public SheerHeartAttackRenderer(EntityRendererProvider.Context context) {
         super(context, new SheerHeartAttackModel<>(context.bakeLayer(ModEntityRendererClient.SHEER_HEART_ATTACK_LAYER)), 0f);
     }
@@ -79,7 +81,7 @@ public class SheerHeartAttackRenderer extends StandRenderer<SheerHeartAttackEnti
                 return DEADLY_SKIN;
             } else if (BT == KillerQueenEntity.YELLOW) {
                 return YELLOW_SKIN;
-            } else if (BT == KillerQueenEntity.TAMA) {
+            } else if (BT == KillerQueenEntity.TAMA || BT == KillerQueenEntity.MINUET) {
                 return TAMA_SKIN;
             } else if (BT == KillerQueenEntity.MINESWEEPER) {
                 return MINESWEEPER_SKIN;
@@ -89,6 +91,10 @@ public class SheerHeartAttackRenderer extends StandRenderer<SheerHeartAttackEnti
                 //return MEMENTO_SKIN;
             } else if (BT == KillerQueenEntity.STARDUST) {
                 return STARDUST_SKIN;
+            } else if (BT == KillerQueenEntity.BROWN) {
+                return GREY_SKIN;
+            } else if (BT == KillerQueenEntity.GREY) {
+                return BROWN_SKIN;
             }
         }
         return PART_4_SKIN;
