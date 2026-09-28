@@ -535,17 +535,9 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
     @Override public void push(Entity ent) { }
     @Override public void doPush(Entity ent) { }
 
-    public boolean shouldSleep() {
-        /*boolean lastState = this.getSleeping();
-        if (!lastState && this.getTarget() != null) {
-            return false;
-        }*/
-
-        return !isUnderLight(this);
-    }
+    public boolean shouldSleep() { return !isUnderLight(this); }
 
     public static boolean isUnderLight(LivingEntity LE){
-        BlockPos pos = LE.blockPosition();
         Level level = LE.level();
         if (level == null) { return true; }
 
@@ -554,7 +546,7 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
         BlockPos atVec = BlockPos.containing(yes);
         boolean isDay = timeOfDay < 12555L || timeOfDay > 23470;
 
-        if ((level.isRaining() || level.isThundering() || (level.getBrightness(LightLayer.SKY, atVec) - level.getSkyDarken()) < 10)) {
+        if ((level.isThundering() || (level.getBrightness(LightLayer.SKY, atVec) - level.getSkyDarken()) < 10)) {
             return false;
         } else {
             return isDay;
