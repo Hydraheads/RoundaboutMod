@@ -150,10 +150,10 @@ public class UltravioletProjectile extends RoundaboutGeneralProjectile{
                         ((IPowersPlayer)pl).rdbt$getPowers() instanceof VampireGeneralPowers vgp) &&
                                 !(pl.hasEffect(ModEffects.SWITCH));
 
-                if (!isFullVampire){
+                if (!isFullVampire && ClientNetworking.getAppropriateConfig().vampireSettings.enableUVCounter){
                     if (DamageHandler.UVDamage(entity, power, getOwner())) {
-                        lv.addEffect(new MobEffectInstance(ModEffects.SINGE, 200, 0));
                     }
+                    lv.addEffect(new MobEffectInstance(ModEffects.SINGE, 200, 0));
                 } else {
                     lv.addEffect(new MobEffectInstance(ModEffects.SINGE, 100, 0));
                 }

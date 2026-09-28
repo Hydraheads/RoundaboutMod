@@ -342,6 +342,8 @@ public class Config implements Cloneable {
         public Integer bloodSpeedCooldown;
         @BooleanOption(group = "inherit", value = true)
         public Boolean antiCheapShot;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableUVCounter;
     }
     public static class StandLevelingSettings {
         @BooleanOption(group = "inherit", value = true)

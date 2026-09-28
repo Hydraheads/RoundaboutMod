@@ -5206,6 +5206,9 @@
   "config.roundabout.enableSpecialRaids.name": "Enable Special Raids",
   "config.roundabout.enableSpecialRaids.desc": "Whether or not special raids happen like the final wave in hot biomes replaced by anubis guardians.",
 
+  "config.roundabout.enableUVCounter.name": "Enable UV Counter",
+  "config.roundabout.enableUVCounter.desc": "Whether or not the UV blasters nuke vampires who don't have powers equipped.",
+
 
   "config.roundabout.walkingHeartMaxHits.name": "Max Planted Hits",
   "config.roundabout.walkingHeartMaxHits.desc": "How many hits can you take in heel planted/wall walking mode before you are knocked out of that state.",
