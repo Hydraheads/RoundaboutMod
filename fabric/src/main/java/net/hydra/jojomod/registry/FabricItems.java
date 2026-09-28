@@ -91,13 +91,13 @@ public class FabricItems {
     public static final Item HEARING_DISC = registerItem("hearing_disc",
             new HearingDiscItem(new Item.Properties().stacksTo(1)));
     public static final Item JUMP_BACK_COMMAND_DISC = registerItem("jump_back_command_disc",
-            new CommandDiscItem(new Item.Properties().stacksTo(1), CommandDiscItem.Command.JUMP_BACK));
+            new CommandDiscItem(new Item.Properties().durability(3), CommandDiscItem.Command.JUMP_BACK));
     public static final Item ATTACK_COMMAND_DISC = registerItem("attack_command_disc",
-            new CommandDiscItem(new Item.Properties().stacksTo(1), CommandDiscItem.Command.ATTACK));
+            new CommandDiscItem(new Item.Properties().durability(3), CommandDiscItem.Command.ATTACK));
     public static final Item FORGET_COMMAND_DISC = registerItem("forget_command_disc",
-            new CommandDiscItem(new Item.Properties().stacksTo(1), CommandDiscItem.Command.FORGET));
+            new CommandDiscItem(new Item.Properties().durability(3), CommandDiscItem.Command.FORGET));
     public static final Item EXPLOSIVE_COMMAND_DISC = registerItem("explosive_command_disc",
-            new CommandDiscItem(new Item.Properties().stacksTo(1), CommandDiscItem.Command.EXPLOSIVE));
+            new CommandDiscItem(new Item.Properties().durability(3), CommandDiscItem.Command.EXPLOSIVE));
     public static final Item HALLUCINATORY_ACID_HEIGHT_1 = registerItem("hallucinatory_acid_height_1",
             new HallucinatoryAcidDebugItem(FabricBlocks.HALLUCINATORY_ACID, 1, new Item.Properties()));
     public static final Item HALLUCINATORY_ACID_HEIGHT_2 = registerItem("hallucinatory_acid_height_2",
