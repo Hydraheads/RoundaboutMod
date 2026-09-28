@@ -95,7 +95,7 @@ public class KiraPartFourVoice extends VoiceData{
         if (self.getDeltaMovement().lengthSqr() > 0.075f) {
             lastTarget = -1;
             staringTicks = 0;
-        }else if (staringTicks >= 400 && self.tickCount % 11 == 0) {
+        }else if (staringTicks >= 550 && self.tickCount % 11 == 0) {
             playSoundChallenge(ModSounds.KIRA4_MONOLOGUE_EVENT,1484);
         }else {
             Entity target = MainUtil.getTargetEntity(this.self, 9);
