@@ -875,7 +875,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         }
     }
 
-    //TODO: make it so BS teleports if it's too far from it's target
     @Nullable
     public Vec3 findBlackSabbathSpawnPosition(
             ServerLevel level,
@@ -1005,7 +1004,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                   }
               }
               if(this.getStandEntity(self) != null && entity.is(this.getStandEntity(self))){
-                  return true;
+                 // return true;
               }
           }
         return false;

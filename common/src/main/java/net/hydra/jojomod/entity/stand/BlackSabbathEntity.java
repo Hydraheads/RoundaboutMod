@@ -105,6 +105,8 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     public final AnimationState burningDive = new AnimationState();
     public final AnimationState walk = new AnimationState();
     public final AnimationState stando = new AnimationState();
+    public final AnimationState strafeWalk = new AnimationState();
+    public final AnimationState strafeEmerge = new AnimationState();
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
@@ -210,8 +212,12 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                             stando.stop();
                                         }
                                     }
+                                    strafeEmerge.stop();
+                                    strafeWalk.stop();
                                 } else {
                                     if (lungeTicks <= 50 && lungeTicks > 35) {
+                                        strafeEmerge.stop();
+                                        strafeWalk.stop();
                                         if (burningCripple.isStarted() || burningStart.isStarted() || isOnFire()) {
                                             if (!diving.isStarted()) {
                                                 diving.stop();
@@ -236,6 +242,26 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                         diving.stop();
                                         emerge.stop();
                                     }
+                                        if (getStrafing()) {
+                                            chest_close.stop();
+                                            if (animationTick2 > 0) {
+                                                animationTick2--;
+                                                strafeWalk.stop();
+                                                strafeEmerge.startIfStopped(this.tickCount);
+                                            } else {
+                                                strafeEmerge.stop();
+                                                strafeWalk.startIfStopped(this.tickCount);
+                                            }
+                                        } else {
+                                            if (!(getTridentLoyalty() && this.getHeldItemSabbath().is(ItemStack.EMPTY.getItem()))) {
+                                                if (animationTick2 < 14) {
+                                                    animationTick2++;
+                                                }
+                                                strafeEmerge.stop();
+                                                strafeWalk.stop();
+                                                chest_close.startIfStopped(this.tickCount);
+                                            }
+                                        }
                                     burningCripple.stop();
                                     burningStart.stop();
                                     emerge.stop();
@@ -244,6 +270,8 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                     stando.stop();
                                 }
                             } else {
+                                strafeEmerge.stop();
+                                strafeWalk.stop();
                                 catching.stop();
                                 this.emerge.stop();
                                 burningDive.stop();
@@ -263,6 +291,8 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                 }
                             }
                         } else {
+                            strafeEmerge.stop();
+                            strafeWalk.stop();
                             catching.stop();
                             this.emerge.stop();
                             this.diving.stop();
@@ -282,6 +312,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             this.coat_open.startIfStopped(this.tickCount);
         }
     }
+    int animationTick2 = 20;
     @Override
     public boolean canStandBeHurt(){
         return getHunting() && !getUnrender();
@@ -949,12 +980,13 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             if(pbs.blackSabbathTargets != null){
                 if(!this.level().isClientSide) {
                     if(securityTicks < 1 && lungeTicks < 1) {
+                        if(!getStrafing()){
                         if (this.getNavigation().getPath() != null && this.getNavigation().getPath().isDone() && targetSabbath() != null && !isNearTarget(targetSabbath()) || isUnderSunlight(targetSabbath()) && this.getNavigation().getPath() != null && this.getNavigation().getPath().isDone()) {
                             if (shadowHidTarget() != null) {
                                 if (ridingEntity == null) {
-                                    if(pbs.blackSabbathTargets != null && !pbs.blackSabbathTargets.isEmpty()) {
+                                    if (pbs.blackSabbathTargets != null && !pbs.blackSabbathTargets.isEmpty()) {
                                         if (!pbs.blackSabbathTargets.contains(shadowHidTarget())) {
-                                            if(!isBlackSabbathUnderLight()) {
+                                            if (!isBlackSabbathUnderLight()) {
                                                 setRidingEntity(shadowHidTarget());
                                                 setRiding(true);
                                                 setSecondsOnFire(0);
@@ -964,6 +996,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                     }
                                 }
                             }
+                        }
                         }
                         if (ridingEntity != null && (!isUnderSunlight(ridingEntity) || ridingEntity.isDeadOrDying() || ridingEntity.isRemoved())) {
                             absMoveTo(ridingEntity.getX(), ridingEntity.getY(), ridingEntity.getZ());
@@ -980,10 +1013,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                 if(!getThrowable()) {
                     if (lungeTicks >= 1) {
                         lungeTicks--;
-                    }
-                } else {
-                    if(lungeTicks >= 52){
-
                     }
                 }
                 String test = "";
@@ -1083,15 +1112,25 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                             if(!this.level().isClientSide()) {
                                 if(targetSabbath() != null) {
                                     if (!(getTridentLoyalty() && this.getHeldItemSabbath().is(ItemStack.EMPTY.getItem()))) {
-                                        if ((!this.level().isClientSide() && seeTime > 0) && MainUtil.cheapDistanceTo2(this.getX(), this.getZ(), targetSabbath().getX(), targetSabbath().getZ()) < 8.5) {
+                                        if ((!this.level().isClientSide() && seeTime > 0) && (MainUtil.cheapDistanceTo2(this.getX(), this.getZ(), targetSabbath().getX(), targetSabbath().getZ()) < 8.5 || this.getY() - targetSabbath().getY() > 12)) {
                                             if(getUnrender()) {
                                                 setUnrender(false);
                                                 this.level().playSound(null, this, ModSounds.BLACK_SABBATH_SUMMON_EVENT, SoundSource.HOSTILE, 0.95F, 1.0F);
                                             }
+                                            if(animationTick2 > 0) {
+                                                animationTick2--;
+                                            }
                                         } else {
-                                            if (MainUtil.cheapDistanceTo2(this.getX(), this.getZ(), targetSabbath().getX(), targetSabbath().getZ()) > 12.5 || (!this.level().isClientSide() && seeTime < 0)) {
-                                                setUnrender(true);
-                                                setSecondsOnFire(0);
+                                            if (MainUtil.cheapDistanceTo2(this.getX(), this.getZ(), targetSabbath().getX(), targetSabbath().getZ()) > 12.5 || this.getY() - targetSabbath().getY() > 12 || (!this.level().isClientSide() && seeTime < 0)) {
+                                                if(animationTick2 >= 0 && animationTick2 < 14){
+                                                    animationTick2++;
+                                                    getNavigation().setSpeedModifier(0.25);
+                                                }else if(animationTick2 >= 14) {
+                                                    if(!strafeEmerge.isStarted()) {
+                                                        setUnrender(true);
+                                                        setSecondsOnFire(0);
+                                                    }
+                                                }
                                             }
                                         }
                                     } else {
