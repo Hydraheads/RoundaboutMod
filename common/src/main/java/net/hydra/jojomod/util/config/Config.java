@@ -380,6 +380,8 @@ public class Config implements Cloneable {
         public Boolean barrageDeflectsArrows;
         @BooleanOption(group = "inherit", value = false)
         public Boolean standPunchesGoThroughDoorsAndCorners;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean standGrabRequiresTool;
         @IntOption(group = "inherit", value = 3, min = 0, max = 72000)
         public Integer standGuardDelayTicks;
         @IntOption(group = "inherit", value = 100, min = 1, max = 72000)
