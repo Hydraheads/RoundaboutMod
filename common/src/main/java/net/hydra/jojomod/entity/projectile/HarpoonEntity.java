@@ -142,6 +142,10 @@ public class HarpoonEntity extends AbstractArrow {
                             this.discard();
                             return;
                         }
+                    } else {
+                        if(isBlackSabbathShot){
+                            isBlackSabbathShot = false;
+                        }
                     }
                     this.setNoPhysics(true);
                     Vec3 $$2 = Vec3.ZERO;

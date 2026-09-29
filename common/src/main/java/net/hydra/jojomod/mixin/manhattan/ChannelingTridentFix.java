@@ -153,18 +153,20 @@ import java.util.List;
                                 if(be.getUser() instanceof Player pl) {
                                     ItemStack tridentCopy = this.getPickupItem().copy();
                                     IPlayerEntity play = ((IPlayerEntity)pl);
-                                    play.roundabout$getBlckSabbathPlayerInventory().setItem(0, tridentCopy);
-                                    this.level()
-                                            .playSound(
-                                                    null,
-                                                    this.getX(),
-                                                    this.getY(),
-                                                    this.getZ(),
-                                                    SoundEvents.ITEM_PICKUP,
-                                                    SoundSource.PLAYERS,
-                                                    0.2F,
-                                                    ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.0F) * 2.0F
-                                            );
+                                    if(!this.level().isClientSide()) {
+                                        play.roundabout$getBlckSabbathPlayerInventory().setItem(0, tridentCopy);
+                                        this.level()
+                                                .playSound(
+                                                        null,
+                                                        this.getX(),
+                                                        this.getY(),
+                                                        this.getZ(),
+                                                        SoundEvents.ITEM_PICKUP,
+                                                        SoundSource.PLAYERS,
+                                                        0.2F,
+                                                        ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.0F) * 2.0F
+                                                );
+                                    }
                                 }
                                 thrownTr.discard();
                                 return;

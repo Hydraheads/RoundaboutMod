@@ -32,6 +32,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
@@ -447,9 +448,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                     }
             }
         }
-       // System.out.println(damageImmunityTicks);
-      //  System.out.println(this.getHealth());
-     //   System.out.println(isUnderSunlight());
         if(getRiding()){
             if(this.getY() < this.level().getMinBuildHeight()) {
                 setDeltaMovement(this.getDeltaMovement().x, 0, this.getDeltaMovement().z);
@@ -464,17 +462,26 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         if(this.getUser() != null && this.getUser() instanceof Player pl){
             IPlayerEntity play = ((IPlayerEntity)pl);
             ItemStack blackSabbathFirstSlot = play.roundabout$getBlckSabbathPlayerInventory().getItem(0);
-            if(!this.level().isClientSide()){
                 if(blackSabbathFirstSlot != getHeldItemSabbath()){
-                    setHeldItemSabbath(blackSabbathFirstSlot);
-                    MutableComponent message = Component.literal("Your held item is " + getHeldItemSabbath().getCount() + " ");
-                    MutableComponent message2 = Component.translatable(getHeldItemSabbath().getItem().getDescription().getString());
-                    if(getHunting()) {
-                        pl.sendSystemMessage(message.append(message2).append("."));
+                    if(!this.level().isClientSide()) {
+                        setHeldItemSabbath(blackSabbathFirstSlot);
+                        if (blackSabbathFirstSlot.getItem() instanceof TridentItem tr && EnchantmentHelper.getLoyalty(blackSabbathFirstSlot) > 0 || blackSabbathFirstSlot.getItem() instanceof HarpoonItem) {
+                            setTridentLoyalty(true);
+                        } else if (blackSabbathFirstSlot.getItem() instanceof HarpoonItem){
+                            setTridentLoyalty(true);
+                        }
+                        /*Yo, see this as an example to put a message into chat*/
+                        /*MutableComponent message = Component.literal("Your held item is " + getHeldItemSabbath().getCount() + " ");
+                        MutableComponent message2 = Component.translatable(getHeldItemSabbath().getItem().getDescription().getString());
+                        if(getHunting()) {
+                        pl.sendSystemMessage(message.append(message2).append(".")); }*/
                     }
                 }
-            }
+           // System.out.println(getHeldItemSabbath() + " " + this.level());
+            //System.out.println(blackSabbathFirstSlot + " " + this.level());
         }
+
+
         if(getHunting()){
             huntingTick();
             hurtBlackSabbath();
@@ -526,6 +533,8 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             }
         }
     }
+    /*Sync Data slop*/
+
     protected static final EntityDataAccessor<ItemStack> HELD_ITEM_BLACK_SABBATH = SynchedEntityData.defineId(BlackSabbathEntity.class,
             EntityDataSerializers.ITEM_STACK);
     public final ItemStack getHeldItemSabbath() {
@@ -568,6 +577,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     }
     private static final EntityDataAccessor<Boolean> IS_GRABBING =
             SynchedEntityData.defineId(BlackSabbathEntity.class, EntityDataSerializers.BOOLEAN);
+
     public final Boolean getGrabbing() {
         return this.entityData.get(IS_GRABBING);
     }
@@ -582,6 +592,14 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     public final void setStrafing(Boolean bool) {
         this.entityData.set(IS_STRAFING, bool);
     }
+    public final Boolean getTridentLoyalty() {
+        return this.entityData.get(IS_TRIDENT);
+    }
+    public final void setTridentLoyalty(Boolean bool) {
+        this.entityData.set(IS_TRIDENT, bool);
+    }
+    private static final EntityDataAccessor<Boolean> IS_TRIDENT =
+            SynchedEntityData.defineId(BlackSabbathEntity.class, EntityDataSerializers.BOOLEAN);
     public final Boolean getThrowable() {
         return (this.getHeldItemSabbath().getItem() instanceof ArrowItem || this.getHeldItemSabbath().getItem() instanceof KnifeItem
                 || this.getHeldItemSabbath().is(ModItems.KNIFE_BUNDLE) || this.getHeldItemSabbath().getItem() instanceof TridentItem && EnchantmentHelper.getRiptide(getHeldItemSabbath()) <= 0
@@ -600,6 +618,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             this.entityData.define(MUST_UNRENDER, false);
             this.entityData.define(IS_GRABBING, false);
             this.entityData.define(IS_STRAFING, false);
+            this.entityData.define(IS_TRIDENT, false);
             this.entityData.define(HELD_ITEM_BLACK_SABBATH, ItemStack.EMPTY);
         }
     }
@@ -980,15 +999,13 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                     if(tickShootCooldown < 1){
                         if(targetSabbath() != null && !getUnrender() && ((!this.level().isClientSide() && seeTime >= 59))) {
                             if(getHeldItemSabbath().is(Items.ENDER_PEARL)){
-                                if(hasLineOfSight(targetSabbath())) {
+                                if(hasLineOfSight(targetSabbath()) && MainUtil.cheapDistanceTo(this.getUser().getX(), this.getUser().getY(), this.getUser().getZ(), targetSabbath().getX(), targetSabbath().getY(), targetSabbath().getZ()) > 15) {
                                     tickShootCooldown = 200;
                                     performRangedAttackUnique(this, targetSabbath());
                                 }
                             } else if (getHeldItemSabbath().getItem() instanceof TridentItem || getHeldItemSabbath().getItem() instanceof HarpoonItem){
-                                if(getHeldItemSabbath().getDamageValue() > 1){
                                     tickShootCooldown = 50;
                                     performRangedAttackUnique(this, targetSabbath());
-                                }
                             } else {
                                 tickShootCooldown = 50;
                                 performRangedAttackUnique(this, targetSabbath());
@@ -1008,13 +1025,18 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                         createShadowParticles();
                     }
                 }
+                if(getUnrender() && shouldReattemptSpawn < 0){
+                    isStuck = true;
+                } else {
+                    isStuck = false;
+                }
                 if(targetSabbath() != null) {
                     if (!isBlackSabbathUnderLight()) {
                         if (isWalking) {
                             isWalking = false;
                             lungeTicks = 51;
                         }
-                        if(!getThrowable()) {
+                        if(!getThrowable() && !getTridentLoyalty()) {
                             if (lungeTicks < 1) {
                                 if (MainUtil.cheapDistanceTo2(this.getX(), this.getZ(), targetSabbath().getX(), targetSabbath().getZ()) > 2.5 || !hasLineOfSight(targetSabbath())) {
                                     setUnrender(true);
@@ -1025,13 +1047,19 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                         setSecondsOnFire(0);
                                     } else {
                                         if (lungeTicks < 1) {
-                                            setUnrender(false);
+                                            if(getUnrender()) {
+                                                setUnrender(false);
+                                                this.level().playSound(null, this, ModSounds.BLACK_SABBATH_SUMMON_EVENT, SoundSource.HOSTILE, 0.95F, 1.0F);
+                                            }
                                             attemptGrab();
                                         }
                                     }
                                 }
                             }
                             if (lungeTicks < 215 && this.emerge.isStarted() || lungeTicks > 207 && walk.isStarted()) {
+                                if(getUnrender()) {
+                                    this.level().playSound(null, this, ModSounds.BLACK_SABBATH_SUMMON_EVENT, SoundSource.HOSTILE, 0.95F, 1.0F);
+                                }
                                 setUnrender(false);
                             }
                             if (lungeTicks > 200) {
@@ -1052,15 +1080,27 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                 }
                             }
                         } else {
-                            if(!this.level().isClientSide){
-                                System.out.println(seeTime);
-                            }
-                            if((!this.level().isClientSide() && seeTime > 0) && MainUtil.cheapDistanceTo2(this.getX(), this.getZ(), targetSabbath().getX(), targetSabbath().getZ()) < 8.5){
-                                setUnrender(false);
-                            } else {
-                                if (MainUtil.cheapDistanceTo2(this.getX(), this.getZ(), targetSabbath().getX(), targetSabbath().getZ()) > 12.5 || (!this.level().isClientSide() && seeTime < 0)) {
-                                    setUnrender(true);
-                                    setSecondsOnFire(0);
+                            if(!this.level().isClientSide()) {
+                                if(targetSabbath() != null) {
+                                    if (!(getTridentLoyalty() && this.getHeldItemSabbath().is(ItemStack.EMPTY.getItem()))) {
+                                        if ((!this.level().isClientSide() && seeTime > 0) && MainUtil.cheapDistanceTo2(this.getX(), this.getZ(), targetSabbath().getX(), targetSabbath().getZ()) < 8.5) {
+                                            if(getUnrender()) {
+                                                setUnrender(false);
+                                                this.level().playSound(null, this, ModSounds.BLACK_SABBATH_SUMMON_EVENT, SoundSource.HOSTILE, 0.95F, 1.0F);
+                                            }
+                                        } else {
+                                            if (MainUtil.cheapDistanceTo2(this.getX(), this.getZ(), targetSabbath().getX(), targetSabbath().getZ()) > 12.5 || (!this.level().isClientSide() && seeTime < 0)) {
+                                                setUnrender(true);
+                                                setSecondsOnFire(0);
+                                            }
+                                        }
+                                    } else {
+                                        setUnrender(false);
+                                        this.setDeltaMovement(0, this.getDeltaMovement().y, 0);
+                                        if (this.getNavigation() != null) {
+                                            getNavigation().setSpeedModifier(1);
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -1070,26 +1110,50 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                         lungeTicks = 51;
                     }
                 } else {
-                    if (!isBlackSabbathUnderLight()) {
-                        if(!isWalking){
-                            isWalking = true;
-                        }
-                        if(lungeTicks < 15){
-                            setUnrender(true);
-                            if(isWalking){
+                    if(!pbs.blackSabbathTargets.isEmpty()) {
+                        if (!isBlackSabbathUnderLight()) {
+                            if (!isWalking) {
+                                isWalking = true;
+                            }
+                            if (lungeTicks < 15) {
+                                setUnrender(true);
+                                if (isWalking) {
+                                    isWalking = false;
+                                }
+                            }
+                        } else {
+                            if (isWalking) {
                                 isWalking = false;
                             }
+                            setUnrender(false);
+                            lungeTicks = 51;
                         }
                     } else {
-                        if(isWalking){
-                            isWalking = false;
-                        }
                         setUnrender(false);
-                        lungeTicks = 51;
+                        if(this.getNavigation() != null) {
+                            this.getNavigation().setSpeedModifier(0);
+                        }
                     }
                 }
             }
+            if(getUnrender()) {
+                isPathfindingStuckBlackSabbath();
+            }
         }
+    }
+    public boolean isStuck = false;
+    private Vec3 lastPos = Vec3.ZERO;
+    public int shouldReattemptSpawn = 100;
+    private void isPathfindingStuckBlackSabbath(){
+        Vec3 position =  getPosition(1);
+        if(getUnrender()) {
+            if (lastPos != null && lastPos.distanceToSqr(position) > 0.01F) {
+                shouldReattemptSpawn = 100;
+            } else {
+                    shouldReattemptSpawn--;
+            }
+        }
+        lastPos = position;
     }
     boolean isWalking = false;
     protected void createShadowParticles() {
@@ -1151,7 +1215,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             if(!getThrowable() && targetSabbath() != null && hasLineOfSight(targetSabbath())) {
                 this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(this.moveControl.getWantedX(), this.moveControl.getWantedY(), this.moveControl.getWantedZ()));
             }
-           // this.getLookControl().setLookAt(this.moveControl.getWantedX(), this.moveControl.getWantedY(), this.moveControl.getWantedZ());
             if (!this.getNavigation().moveTo(newPath, 1.6f))
                 ticksUntilNextPathRecalculation += 5;
         }
@@ -1213,7 +1276,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                             bs.level().playSound(null, $$7, ModSounds.HARPOON_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
                             $$7.pickup = AbstractArrow.Pickup.ALLOWED;
                         }
-                    bs.getHeldItemSabbath().shrink(1);
                 } else if (item.getItem() instanceof KnifeItem) {
                     int knifeCount = 1;
                     boolean bundle = item.is(ModItems.KNIFE_BUNDLE);
@@ -1284,16 +1346,18 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             }
         }
         ItemStack item = bs.getHeldItemSabbath();
-        if(!(item.getItem() instanceof TridentItem || item.getItem() instanceof HarpoonItem)) {
             if (!(item.getItem() instanceof GasolineBucketItem || item.getItem() instanceof FleshBucketItem)) {
-                bs.getHeldItemSabbath().shrink(1);
+               // bs.getHeldItemSabbath().shrink(1);
+                if (bs.getUser() instanceof Player pl) {
+                    IPlayerEntity play = ((IPlayerEntity) pl);
+                    play.roundabout$getBlckSabbathPlayerInventory().getItem(0).shrink(1);
+                }
             } else {
                 if (bs.getUser() instanceof Player pl) {
                     IPlayerEntity play = ((IPlayerEntity) pl);
                     play.roundabout$getBlckSabbathPlayerInventory().setItem(0, new ItemStack(Items.BUCKET));
                 }
             }
-        }
         return true;
     }
 
