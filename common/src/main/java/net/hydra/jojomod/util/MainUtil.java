@@ -1535,6 +1535,38 @@ public class MainUtil {
         return false;
     }
 
+    public static boolean canMineWithAnyInventoryTool(LivingEntity LE, BlockState state) {
+        if (!ClientNetworking.getAppropriateConfig().generalStandSettings.standGrabRequiresTool){
+            return true;
+        }
+        if (LE instanceof Player player) {
+            // Blocks that don't require a correct tool can be mined without one.
+            if (!state.requiresCorrectToolForDrops()) {
+                return true;
+            }
+            ItemStack shears = new ItemStack(Items.SHEARS);
+            ItemStack pick = new ItemStack(Items.WOODEN_PICKAXE);
+            if (shears.isCorrectToolForDrops(state)) {
+                return true;
+            }
+            if (pick.isCorrectToolForDrops(state)) {
+                return true;
+            }
+            if (state.is(Blocks.DIRT_PATH)){
+                return true;
+            }
+
+
+            for (ItemStack stack : player.getInventory().items) {
+                if (!stack.isEmpty() && stack.isCorrectToolForDrops(state)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public static void makeFaceless(Entity entity, int ticks, int power, Entity user) {
         if (entity instanceof LivingEntity LE) {
             if (((LivingEntity) entity).hasEffect(ModEffects.FACELESS)) {
@@ -4577,6 +4609,7 @@ public class MainUtil {
                 && !user.hasEffect(MobEffects.DIG_SLOWDOWN)
                 && !(state.getBlock() instanceof SlabBlock)
                 && !(state.getBlock() instanceof FrostedIceBlock)
+                && MainUtil.canMineWithAnyInventoryTool(user,state)
                 && !(state.getBlock() instanceof BuddingAmethystBlock)
                 && state.getBlock().defaultDestroyTime() >= 0 && state.getBlock() != Blocks.NETHERITE_BLOCK;
 
