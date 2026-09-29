@@ -398,6 +398,10 @@ public class PowersTusk extends NewDashPreset {
                     } else {
                         shootNailBurst();
                     }
+                } else {
+                    if (this.getAct() == 3 && isInHole()) {
+                        this.shootNail(this.getAttackTimeDuring());
+                    }
                 }
                 nailFireDelay = this.getAct() == 1 ? 10 : 6;
                 this.setActivePower(PowersTusk.FIRE_NAIL);
@@ -542,6 +546,25 @@ public class PowersTusk extends NewDashPreset {
         }
 
         return super.setPowerOther(move,lastMove);
+    }
+
+    @Override
+    public boolean tryPosPower(int move, boolean forced, Vec3 pos) {
+        switch (move) {
+            case PowersTusk.FIRE_NAIL -> {
+                Roundabout.LOGGER.info(""+pos);
+                if (!isClient()) {
+                    TuskNailEntity tuskNailEntity = new TuskNailEntity(this.getSelf(), this.getSelf().level(), (byte) this.getAct());
+                    float time = getChargeScale(this.getAttackTimeDuring());
+                    tuskNailEntity.shootFromRotation(this.getPilotingStand(), (float) pos.x, (float) pos.y, -0.5F, Mth.lerp(time, 1.2F, 2F), 0.1F);
+                    tuskNailEntity.setPos(this.getPilotingStand().getPosition(0).add(0, 0.2, 0));
+                    this.getSelf().level().addFreshEntity(tuskNailEntity);
+                } else {
+                    Roundabout.LOGGER.error("TUSK HOLE NAIL NOT CLIENTSIDE");
+                }
+            }
+        }
+        return super.tryPosPower(move, forced, pos);
     }
 
     @Override
@@ -2083,7 +2106,7 @@ public class PowersTusk extends NewDashPreset {
     @Override
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
         if (keyIsDown) {
-            if (isGunMode() ) {
+            if (isGunMode() && this.getActivePower() != PowersTusk.DEATH_PUNCH ) {
                 tryPower(PowersTusk.SHOOT_MODE);
                 tryPowerPacket(PowersTusk.SHOOT_MODE);
             } else {
@@ -2188,25 +2211,27 @@ public class PowersTusk extends NewDashPreset {
     }
     public TuskNailEntity shootNail(float force, float accuracy) {return shootNail(force,accuracy,false,TuskNailEntity.NONE);}
     public TuskNailEntity shootNail(float force, float accuracy, boolean toes, byte extra) {
-        TuskNailEntity tuskNailEntity = new TuskNailEntity(this.getSelf(),this.getSelf().level(),(byte)this.getAct());
-        tuskNailEntity.setExtra(extra);
 
 
-        Vec3 firingPos;
         if (isInHole()) {
-            firingPos = this.getPilotingStand().getPosition(0).add(0,0.2,0);
-            Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
-            tuskNailEntity.shootFromRotation(this.getPilotingStand(), camera.getXRot(), camera.getYRot(), -0.5F, force, accuracy);
+            if (isClient()) {
+                Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
+                tryPosPowerPacket(PowersTusk.FIRE_NAIL,new Vec3(camera.getXRot(),camera.getYRot(),0));
+            }
+            return null;
         } else {
+            TuskNailEntity tuskNailEntity = new TuskNailEntity(this.getSelf(),this.getSelf().level(),(byte)this.getAct());
+            tuskNailEntity.setExtra(extra);
+
             tuskNailEntity.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -0.5F, force, accuracy);
-            firingPos = this.getSelf().getPosition(0).add(new Vec3(0,this.getSelf().getEyeHeight()*0.75F,0));
+            Vec3 firingPos = this.getSelf().getPosition(0).add(new Vec3(0,this.getSelf().getEyeHeight()*0.75F,0));
             if (toes) {
                 firingPos = this.getSelf().getPosition(0).add(0, 0.2, 0);
             }
+            tuskNailEntity.setPos(firingPos);
+            this.getSelf().level().addFreshEntity(tuskNailEntity);
+            return tuskNailEntity;
         }
-        tuskNailEntity.setPos(firingPos);
-        this.getSelf().level().addFreshEntity(tuskNailEntity);
-        return tuskNailEntity;
     }
 
     @Override

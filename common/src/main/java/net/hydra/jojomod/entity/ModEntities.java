@@ -74,6 +74,7 @@ public class ModEntities {
     public static EntityType<KillerQueenEntity> KILLER_QUEEN;
     private static EntityType<BlockBombEntity> BLOCK_BOMB;
     public static EntityType<SheerHeartAttackEntity> SHEER_HEART_ATTACK;
+    public static EntityType<SheerTeapotAttackEntity> SHEER_TEAPOT_ATTACK;
     public static EntityType<CinderellaEntity> CINDERELLA;
     public static EntityType<CaliforniaKingBedEntity> CALIFORNIA_KING_BED;
     public static EntityType<PlanetWavesEntity> PLANET_WAVES;
@@ -103,6 +104,8 @@ public class ModEntities {
 
     public static EntityType<StarPlatinumBaseballEntity> STAR_PLATINUM_BASEBALL;
     public static EntityType<DiverDownEntity> DIVER_DOWN;
+    public static EntityType<DiverDownBetaEntity> DIVER_DOWN_BETA;
+    public static EntityType<BoneProjectileEntity> BONE_PROJECTILE;
     public static EntityType<SilverChariotEntity> SILVER_CHARIOT;
     public static EntityType<SilverChariotRapierShotEntity> SILVER_CHARIOT_RAPIER;
     public static EntityType<SilverChariotRapierPlatformEntity> SILVER_CHARIOT_RAPIER_PLATFORM;

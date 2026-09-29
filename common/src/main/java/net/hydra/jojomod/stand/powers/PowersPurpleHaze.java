@@ -80,6 +80,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             case PurpleHazeEntity.NETHERITE -> {return Component.translatable("skins.roundabout.purple_haze.netherite");}
             case PurpleHazeEntity.MIRROR_BATTLE -> {return Component.translatable("skins.roundabout.purple_haze.mirror_battle");}
             case PurpleHazeEntity.ROTT -> {return Component.translatable("skins.roundabout.purple_haze.rott_haze");}
+            case PurpleHazeEntity.PEPPERMINT -> {return Component.translatable("skins.roundabout.purple_haze.peppermint");}
             default -> {
                 return Component.translatable("skins.roundabout.purple_haze.anime");
             }
@@ -121,6 +122,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 $$1.add(PurpleHazeEntity.MIRROR_BATTLE);
             } if (Level > 3 || bypass) {
                 $$1.add(PurpleHazeEntity.ROTT);
+                $$1.add(PurpleHazeEntity.PEPPERMINT);
             }
         }
         return $$1;
@@ -367,6 +369,15 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     @Override
     public void barrageImpact(Entity entity, int hitNumber) {
+        if (entity != null && moveStarted){
+            moveStarted = false;
+            StandEntity stand = getStandEntity(this.self);
+            if (Objects.nonNull(stand)){
+                stand.setXRot(getLookAtEntityPitch(stand, entity));
+                stand.setYRot(getLookAtEntityYaw(stand, entity));
+            }
+        }
+
         super.barrageImpact(entity, hitNumber);
 
         int actualHitNumber = hitNumber;
@@ -412,6 +423,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             }
             if (!forwardBarrage) {
                 forwardBarrage = true;
+                captureForwardBarrageDirection();
                 C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_FORWARD_BARRAGE);
             }
             return true;
@@ -959,9 +971,18 @@ public class PowersPurpleHaze extends NewPunchingStand {
             if (!this.getSelf().level().isClientSide()) {
                 StandEntity stand = getStandEntity(this.self);
                 if (Objects.nonNull(stand)) {
-                    stand.setPos(stand.getPosition(1).add(stand.getForward().scale(0.12)));
-                    if (stand.isTechnicallyInWall() ||
-                            stand.position().distanceTo(this.getSelf().position()) > getFloatOutRange()) {
+                    faceForwardBarrageDirection(stand);
+
+                    Entity target = getTargetEntity(stand, 2.7F, 50);
+                    boolean blockedByWall = stand.isTechnicallyInWall();
+                    boolean tooCloseToTarget = target != null
+                            && stand.position().distanceTo(target.position()) < 1.0;
+
+                    if (!blockedByWall && !tooCloseToTarget) {
+                        stand.setPos(stand.getPosition(1).add(stand.getForward().scale(0.12)));
+                    }
+
+                    if (stand.position().distanceTo(this.getSelf().position()) > 15F) {
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                     }
                 }
@@ -1283,6 +1304,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         super.tickPower();
         if (this.forwardBarrage && !this.isBarraging()){
             this.forwardBarrage = false;
+            forwardBarrageLockedRot = null;
         }
         if (!self.level().isClientSide) {
             tickPodReset();

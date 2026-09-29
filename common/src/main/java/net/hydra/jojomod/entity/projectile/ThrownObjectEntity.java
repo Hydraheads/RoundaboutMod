@@ -984,7 +984,7 @@ private void bridgePlace(BlockHitResult $$0,Player P) {
             if (targetEntity instanceof LivingEntity target && stack.getItem() instanceof AbstractBodyDiscItem disc) {
                 applied = disc.implantFromThrow(stack, target, thrower);
             } else if (stack.getItem() instanceof CommandDiscItem commandDisc) {
-                applied = commandDisc.applyCommand(targetEntity, thrower);
+                applied = commandDisc.applyCommand(targetEntity, thrower, stack);
             } else if (targetEntity instanceof LivingEntity target && musicDisc) {
                 applied = MusicDiscController.implant(stack, target, thrower);
             }

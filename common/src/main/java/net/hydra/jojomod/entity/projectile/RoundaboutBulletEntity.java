@@ -145,7 +145,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
             }
         }
 
-        if (getOwner() != null && ((StandUser)getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && KQ.bombEntity == this && KQ.getCurrentBombStatus() == 10) {
+        if (getOwner() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && KQ.bombEntity == this && KQ.getCurrentBombStatus() == 10) {
             KQ.bulletContacted(target);
         }
     }

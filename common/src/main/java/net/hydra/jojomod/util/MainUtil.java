@@ -224,6 +224,7 @@ public class MainUtil {
     public static ArrayList<String> walkableBlocks = Lists.newArrayList();
     public static ArrayList<String> expLessBlocks = Lists.newArrayList();
     public static ArrayList<String> standBlockGrabBlacklist = Lists.newArrayList();
+    public static ArrayList<String> standDisassemblyBlacklist = Lists.newArrayList();
     public static ArrayList<String> standDestructionBlacklist = Lists.newArrayList();
     public static ArrayList<String> standBlockExplosionBlacklist = Lists.newArrayList();
     public static ArrayList<String> occultChargeEffectsToBanish = Lists.newArrayList();
@@ -321,6 +322,15 @@ public class MainUtil {
         ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
         if (standBlockGrabBlacklist != null && !standBlockGrabBlacklist.isEmpty() && rl != null
                 && standBlockGrabBlacklist.contains(rl.toString())) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isBlockDisassemblyBlacklisted(BlockState bs) {
+        ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
+        if (standDisassemblyBlacklist != null && !standDisassemblyBlacklist.isEmpty() && rl != null
+                && standDisassemblyBlacklist.contains(rl.toString())) {
             return true;
         }
         return false;
@@ -833,7 +843,7 @@ public class MainUtil {
     public static double getWorthyOdds(Mob mob) {
         if ((isBossMob(mob)
                 && !ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.bossMobsCanNaturallyHaveStands)
-                || mob instanceof JojoNPC || mob instanceof CloneEntity || isMobStandUserBlacklisted(mob)) {
+                || mob instanceof JojoNPC || mob instanceof FallenMob || mob instanceof CloneEntity || isMobStandUserBlacklisted(mob)) {
             return 0;
         }
         return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.worthyMobOdds;
@@ -857,7 +867,7 @@ public class MainUtil {
     public static double getStandUserOdds(Mob mob) {
         if ((isBossMob(mob)
                 && !ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.bossMobsCanNaturallyHaveStands)
-                || mob instanceof JojoNPC || mob instanceof CloneEntity || mob instanceof ZombieAesthetician
+                || mob instanceof JojoNPC || mob instanceof FallenMob || mob instanceof CloneEntity || mob instanceof ZombieAesthetician
                 || isMobStandUserBlacklisted(mob)) {
             return 0;
         } else if (mob instanceof AbstractVillager) {
@@ -1525,6 +1535,38 @@ public class MainUtil {
         return false;
     }
 
+    public static boolean canMineWithAnyInventoryTool(LivingEntity LE, BlockState state) {
+        if (!ClientNetworking.getAppropriateConfig().generalStandSettings.standGrabRequiresTool){
+            return true;
+        }
+        if (LE instanceof Player player) {
+            // Blocks that don't require a correct tool can be mined without one.
+            if (!state.requiresCorrectToolForDrops()) {
+                return true;
+            }
+            ItemStack shears = new ItemStack(Items.SHEARS);
+            ItemStack pick = new ItemStack(Items.WOODEN_PICKAXE);
+            if (shears.isCorrectToolForDrops(state)) {
+                return true;
+            }
+            if (pick.isCorrectToolForDrops(state)) {
+                return true;
+            }
+            if (state.is(Blocks.DIRT_PATH)){
+                return true;
+            }
+
+
+            for (ItemStack stack : player.getInventory().items) {
+                if (!stack.isEmpty() && stack.isCorrectToolForDrops(state)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public static void makeFaceless(Entity entity, int ticks, int power, Entity user) {
         if (entity instanceof LivingEntity LE) {
             if (((LivingEntity) entity).hasEffect(ModEffects.FACELESS)) {
@@ -1571,6 +1613,7 @@ public class MainUtil {
         playerNames.put("TheChaseyOne", UUID.fromString("8e86263a-2740-4d0f-a83f-afe0e6fd3c3d"));
         playerNames.put("FieldstormDapper", UUID.fromString("4813e816-05b2-438b-8c59-5bfe9d78aa01"));
         playerNames.put("NashorSenpai", UUID.fromString("e7d78d2b-01c8-4e46-ae87-9905d1261847"));
+        playerNames.put("DOGaelArts", UUID.fromString("c300afba-ba4b-40e0-82fc-da4ef159a42c"));
     }
 
     public static void makeMobBleed(Entity target) {
@@ -3802,7 +3845,20 @@ public class MainUtil {
 
         return 5;
     }
-
+    public static boolean getIsGamemodeApproriateForObtainment(Entity Li) {
+        if (Li != null && !Li.level().isClientSide()) {
+            if ((!(Li instanceof Player) || (((ServerPlayer) Li).gameMode.getGameModeForPlayer() != GameType.SPECTATOR
+                    && ((ServerPlayer) Li).gameMode.getGameModeForPlayer() != GameType.ADVENTURE))
+                    && Li.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)
+                    && Li.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING_OBTAINMENT)) {
+                if (PowerTypes.isExistentiallyElsewhere(Li) && !PowerTypes.canInteractInExistence(Li)) {
+                    return false;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
     public static boolean getIsGamemodeApproriateForGrief(Entity Li) {
         if (Li != null && !Li.level().isClientSide()) {
             if ((!(Li instanceof Player) || (((ServerPlayer) Li).gameMode.getGameModeForPlayer() != GameType.SPECTATOR
@@ -4019,6 +4075,14 @@ public class MainUtil {
                 pw.toggleSpikes(true);
                 pw.setHeelDirection(cd);
                 pw.justFlippedTicks = 7;
+            } else if (powers instanceof PowersDiverDown pdd) {
+                if (!player.level().isClientSide()) {
+                    player.level().playSound(null, player.blockPosition(), ModSounds.WALL_LATCH_EVENT,
+                            SoundSource.PLAYERS, 1F, 1f);
+                }
+                pdd.toggleZip(true);
+                pdd.setHeelDirection(cd);
+                pdd.justFlippedTicks = 10;
             }
             ((IGravityEntity) player).roundabout$setGravityDirection(cd);
         } else if (context == PacketDataIndex.INT_GRAVITY_FLIP_3) {
@@ -4292,17 +4356,16 @@ public class MainUtil {
     }
 
     public static Entity pick(Entity self, double distance) {
-        double $$2 = distance;
         float choose = 1;
         if (self.level().isClientSide()) {
             choose = ClientUtil.getFrameTime() % 1;
         }
-        HitResult pick = self.pick($$2, choose, false);
+        HitResult pick = self.pick(distance, choose, false);
         Vec3 $$3 = self.getEyePosition(choose);
         boolean $$4 = false;
         int $$5 = 3;
-        double $$6 = $$2;
-        if ($$2 > 3.0) {
+        double $$6 = distance;
+        if (distance > 3.0) {
             $$4 = true;
         }
 
@@ -4312,8 +4375,8 @@ public class MainUtil {
         }
 
         Vec3 $$7 = self.getViewVector(1.0F);
-        Vec3 $$8 = $$3.add($$7.x * $$2, $$7.y * $$2, $$7.z * $$2);
-        AABB $$10 = self.getBoundingBox().expandTowards($$7.scale($$2)).inflate(1.0, 1.0, 1.0);
+        Vec3 $$8 = $$3.add($$7.x * distance, $$7.y * distance, $$7.z * distance);
+        AABB $$10 = self.getBoundingBox().expandTowards($$7.scale(distance)).inflate(1.0, 1.0, 1.0);
         EntityHitResult $$11 = ProjectileUtil.getEntityHitResult(self, $$3, $$8, $$10,
                 $$0x -> !$$0x.isSpectator() && MainUtil.isStandPickable($$0x) && !$$0x.isInvulnerable()
                         && !$$0x.hasPassenger(self),
@@ -4322,7 +4385,7 @@ public class MainUtil {
             Entity $$12 = $$11.getEntity();
             Vec3 $$13 = $$11.getLocation();
             double $$14 = $$3.distanceToSqr($$13);
-            if ($$4 && $$14 > 9.0) {
+            if ($$4 && $$14 > distance*distance) {
                 pick = BlockHitResult.miss($$13, Direction.getNearest($$7.x, $$7.y, $$7.z), BlockPos.containing($$13));
             } else if ($$14 < $$6 || pick == null) {
                 return $$12;
@@ -4546,6 +4609,7 @@ public class MainUtil {
                 && !user.hasEffect(MobEffects.DIG_SLOWDOWN)
                 && !(state.getBlock() instanceof SlabBlock)
                 && !(state.getBlock() instanceof FrostedIceBlock)
+                && MainUtil.canMineWithAnyInventoryTool(user,state)
                 && !(state.getBlock() instanceof BuddingAmethystBlock)
                 && state.getBlock().defaultDestroyTime() >= 0 && state.getBlock() != Blocks.NETHERITE_BLOCK;
 

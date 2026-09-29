@@ -268,6 +268,7 @@ public class BlockGrabPreset extends NewPunchingStand {
         super.tickPower();
 
         if (!this.getSelf().level().isClientSide) {
+
                 StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
                 if (standEntity != null) {
                     if (!standEntity.getHeldItem().isEmpty() && ((getActivePower() != PowerIndex.POWER_2 && getActivePower() != PowerIndex.POWER_2_SNEAK
@@ -290,7 +291,8 @@ public class BlockGrabPreset extends NewPunchingStand {
                     if (standEntity.getFirstPassenger() instanceof LivingEntity LE && LE.distanceTo(standEntity) > 40){
                         standEntity.ejectPassengers();
                     }
-                    if ((getActivePower() != PowerIndex.POWER_2_EXTRA)) {
+                    if ((getActivePower() != PowerIndex.POWER_2_EXTRA) ||
+                    !isGravityNormal(self)) {
                           standEntity.ejectPassengers();
                     }
                 }
@@ -1034,6 +1036,9 @@ public class BlockGrabPreset extends NewPunchingStand {
     }
 
     public boolean canGrab(Entity entity){
+        if (!isGravityNormal(self)){
+            return false;
+        }
         if (entity.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_ALLOW_ENTITY_GRAB)
                 && !(entity instanceof LivingEntity ent && MainUtil.isBossMob(ent))
                 && !(entity instanceof Player pl && pl.isCreative())
@@ -1072,7 +1077,9 @@ public class BlockGrabPreset extends NewPunchingStand {
                     if (this.getSelf().level().getBlockEntity(this.grabBlock) == null) {
                         if ((this.getSelf() instanceof ServerPlayer PE &&
                                 this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)
+                                && this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING_OBTAINMENT)
                                 && !(PE).blockActionRestricted(PE.level(), this.grabBlock, PE.gameMode.getGameModeForPlayer()))
+
                                 && PE.level().mayInteract(PE, this.grabBlock)) {
                             /*This is the code where blocks that are removable are grabbed*/
                             boolean $$4 = this.getSelf().level().destroyBlock(this.grabBlock, false,this.getSelf());
@@ -1084,7 +1091,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                         } else {
                             standEntity.canAcquireHeldItem = false;
                         }
-                        if(this.getSelf().level().getBlockState(this.grabBlock).isAir() || !MainUtil.getIsGamemodeApproriateForGrief(this.getSelf())) {
+                        if(this.getSelf().level().getBlockState(this.grabBlock).isAir() || !MainUtil.getIsGamemodeApproriateForObtainment(this.getSelf())) {
 
                             standEntity.setHeldItem(state.getBlock().asItem().getDefaultInstance());
                             playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);

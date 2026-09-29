@@ -21,10 +21,17 @@ public class BombPlantedEnderpearl extends ThrownEnderpearl {
     @Override
     protected void onHitEntity(EntityHitResult result) {
         super.onHitEntity(result);
+
         Entity target = result.getEntity();
-        if (target != getOwner() && (getOwner() != null && ((StandUser)getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ)
+        if (target != getOwner() && (getOwner() != null && ((StandUser) getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ)
                 && PKQ.bombEntity.getId() == getId()) {
-            PKQ.contactExplode(target);
+            boolean success = target.hurt(this.damageSources().thrown(this, this.getOwner()), 0.0F);
+
+            if (success) {
+                PKQ.contactExplode(target);
+            }else {
+                PKQ.defuseServer();
+            }
         }
     }
 }

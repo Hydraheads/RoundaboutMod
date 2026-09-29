@@ -37,7 +37,9 @@ public class WarhammerItem extends DiggerItem  {
     public float getDestroySpeed(ItemStack itemStack, BlockState blockState) {
         float spd = super.getDestroySpeed(itemStack,blockState);
         if (spd > 1 || blockState.getBlock() instanceof StoneMaskBlock){
-            spd*=3f;
+            if (!MainUtil.confirmIsOre(blockState)) {
+                spd *= 3f;
+            }
         }
         return spd;
     }
@@ -48,6 +50,9 @@ public class WarhammerItem extends DiggerItem  {
     }
     @Override
     public boolean isCorrectToolForDrops(BlockState blockState) {
+        if (MainUtil.confirmIsOre(blockState)){
+            return super.isCorrectToolForDrops(blockState);
+        }
         return false;
     }
 }

@@ -1,8 +1,11 @@
 package net.hydra.jojomod.entity.stand;
 
 import java.util.List;
+
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -16,17 +19,29 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class DiverDownEntity extends FollowingStandEntity {
+
     public DiverDownEntity(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
     }
 
     public static final byte PART_6 = 0,
-            LAVA_DIVER = 1,
-            RED_DIVER = 2,
-            ORANGE_DIVER = 3,
-            TREASURE_DIVER = 4,
-            BIRTHDAY_DIVER = 5,
-            FIRE_DIVER = 6;
+            BETA_DIVER = 1,
+            KELP = 2,
+            GRAY = 3,
+            WHITE = 4,
+            PURPLE = 5,
+            KHAKI = 6,
+            YELLOW = 7,
+            BLUE = 8,
+            ORANGE = 9,
+            PINK = 10,
+            INVERSION = 11,
+            FIGURE = 12,
+            EYECATCH = 13,
+            ARTWORK = 14,
+            MANGA = 15,
+                    //replace this later with whatever final number it gets
+            HOLY_DIVER = 16;
 
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState hideLeg = new AnimationState();
@@ -95,7 +110,7 @@ public class DiverDownEntity extends FollowingStandEntity {
      */
     @Override
     public float maxUpStep() {
-        return 3.0F;
+        return 2.0F;
     }
 
     /*

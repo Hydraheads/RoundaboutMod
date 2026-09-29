@@ -1,6 +1,7 @@
 package net.hydra.jojomod.block.handBlock;
 
 import net.hydra.jojomod.access.CancelDataDrivenDropLimits;
+import net.hydra.jojomod.block.ChessPieceBlockEntity;
 import net.hydra.jojomod.block.FancyLighterBlock;
 import net.hydra.jojomod.block.FancyLighterBlockEntity;
 import net.hydra.jojomod.item.FancyLighterItem;
@@ -34,7 +35,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AbstractHandBlock extends BaseEntityBlock implements CancelDataDrivenDropLimits {
+public class AbstractHandBlock extends BaseEntityBlock {
     public static final int MAX = RotationSegment.getMaxSegmentIndex();
     private static final int ROTATIONS;
     public static final IntegerProperty ROTATION;
@@ -107,39 +108,28 @@ public class AbstractHandBlock extends BaseEntityBlock implements CancelDataDriv
         return false;
     }
 
-    public List<ItemStack> dropGen(BlockState state, ServerLevel sl, BlockPos bpos, @Nullable BlockEntity be){
-        if (state.getBlock() instanceof AbstractHandBlock) {
-            List<ItemStack> drops = new ArrayList<>();
-            ItemStack stack = referenceItem.copy();
 
-            if (sl.getBlockEntity(bpos) instanceof HandBlockEntity FE) {
-                CompoundTag compoundtag = stack.getTagElement("ownerInfo");
-                if (!stack.hasTag()) {
-                    if(compoundtag == null || !compoundtag.contains("HandOwner")) {
-                        if (FE.getOwnerProfile() != null) {
-                            CompoundTag $$1 = new CompoundTag();
-                            NbtUtils.writeGameProfile($$1, FE.getOwnerProfile());
-                            compoundtag.put("HandOwner", $$1);
-                        }
-                    }
-                }
+    @Override
+    public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
+        if (level.getBlockEntity(pos) instanceof HandBlockEntity $$5) {
+            ItemStack stack = $$5.getStoredStack();
+            if (stack != null){
+                return stack;
+            }
+        }
+        return super.getCloneItemStack(level,pos,state);
+
+    }
+
+    @Override
+    public void onRemove(BlockState $$0, Level $$1, BlockPos $$2, BlockState $$3, boolean $$4) {
+        if (!$$0.is($$3.getBlock())) {
+            if ($$1.getBlockEntity($$2) instanceof HandBlockEntity $$5) {
+                $$5.popOutRecord();
             }
 
-            drops.add(stack);
-            return drops;
+            super.onRemove($$0, $$1, $$2, $$3, $$4);
         }
-        return new ArrayList<>();
     }
-
-    @Override
-    public List<ItemStack> getRealDrops(BlockState state, ServerLevel sl, BlockPos bpos, @Nullable BlockEntity be) {
-        return dropGen(state,sl,bpos,be);
-    }
-
-    @Override
-    public List<ItemStack> getRealDrops(BlockState state, ServerLevel sl, BlockPos bpos, @Nullable BlockEntity be, @Nullable Entity p_49879_, ItemStack p_49880_) {
-        return dropGen(state,sl,bpos,be);
-    }
-
 }
 

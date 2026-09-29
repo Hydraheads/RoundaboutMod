@@ -708,6 +708,9 @@ public class ClientUtil {
                     else if (type == WhitesnakeDiscUtil.MEMORY) bearer.roundabout$setHasMemoryDisc(present);
                     else if (type == WhitesnakeDiscUtil.HEARING) bearer.roundabout$setHasHearingDisc(present);
                     bearer.roundabout$setDiscSeal(type, sealTicks, sealMaxTicks);
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.MusicDisc.value)) {
+                    Entity entity = player.level().getEntity((int) vargs[0]);
+                    if (entity instanceof LivingEntity) MusicDiscClient.play(entity, (String) vargs[1]);
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.UpdateBarrageClash.value)) {
                     /**Barrage Clash S2C Packet*/
                     int clashOpID = (int)vargs[0];
@@ -2386,6 +2389,8 @@ public class ClientUtil {
                         r, g, b, opacity, 0.89F);
                 ModStrayModels.killerQueenArmsPart.render(cameraEnt, cameraEnt.tickCount + getFrameTime(), stack, source, light,
                         r, g, b, opacity, 0.89F);
+                ModStrayModels.silverChariotArmsPart.render(cameraEnt, cameraEnt.tickCount + getFrameTime(), stack, source, light,
+                        r, g, b, opacity, 0.89F);
                 stack.popPose();
             }
             if (ClientUtil.isRenderingFlag(play)) {
@@ -2838,5 +2843,14 @@ public class ClientUtil {
             return ((IInputEvents) m).getSwitchTick() == m.player.tickCount;
         }
         return false;
+    }
+
+    // this is here to prevent moves that speed the user up from going too fast when diagonal keys are stacked.
+    public static boolean isMovingDiagonally() {
+        Minecraft client = Minecraft.getInstance();
+        if (client == null || client.options == null) return false;
+        boolean forwardOrBack = client.options.keyUp.isDown() || client.options.keyDown.isDown();
+        boolean strafe = client.options.keyLeft.isDown() || client.options.keyRight.isDown();
+        return forwardOrBack && strafe;
     }
 }

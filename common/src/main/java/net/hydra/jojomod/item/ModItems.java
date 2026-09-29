@@ -248,6 +248,9 @@ public class ModItems {
     public static Item AESTHETICIAN_MASK_ZOMBIE;
     public static Item POCOLOCO_MASK;
     public static Item RINGO_MASK;
+    public static Item ANASUI_MASK;
+    public static Item FEM_ANASUI_MASK;
+    public static Item ANAKISS_MASK;
     public static Item GUCCIO_MASK;
     public static Item HATO_MASK;
     public static Item SHIZUKA_MASK;
@@ -337,6 +340,9 @@ public class ModItems {
         addToVisageStore(DOPPIO_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(JOTARO_6_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(JOHNGALLIA_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(ANASUI_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(FEM_ANASUI_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(ANAKISS_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(GUCCIO_MASK,page, characterCostExp, characterCostEmerald);
 
         page++;

@@ -45,5 +45,10 @@ public class JotaroVoice extends VoiceData{
         } if (challengeNumber == 3) {
             playSoundChallenge(ModSounds.KIRA4_JOTARO_WATCH_EVENT,88);
         }
+        if (challengeNumber == 4){
+            playSoundChallenge(ModSounds.JOTARO_RESPONSE_ANASUI_1_EVENT,78);
+        } if (challengeNumber == 5) {
+            playSoundChallenge(ModSounds.JOTARO_RESPONSE_ANASUI_2_EVENT,80);
+        }
     }
 }

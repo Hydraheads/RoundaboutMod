@@ -103,6 +103,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.TUSK_A4.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.ANUBIS.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.DIVER_DOWN.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.DIVER_DOWN_BETA.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SILVER_CHARIOT.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.OVA_ENYA.get(), OVAEnyaNPC.createAttributes().build());
         event.put(ForgeEntities.ENYA.get(), OVAEnyaNPC.createAttributes().build());
@@ -157,6 +158,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.MOLD_SPORE.get(), MoldSporesEntity.createStandAttributes().build());
         event.put(ForgeEntities.PURPLE_SMOKE.get(), PurpleSmokeEntity.createStandAttributes().build());
         event.put(ForgeEntities.SHEER_HEART_ATTACK.get(), SheerHeartAttackEntity.createStandAttributes().build());
+        event.put(ForgeEntities.SHEER_TEAPOT_ATTACK.get(), SheerTeapotAttackEntity.createStandAttributes().build());
     }
 
     @SubscribeEvent
@@ -260,6 +262,7 @@ public class ForgeEvents {
         ModBlocks.NEW_LOCACACA_BLOCK = ForgeBlocks.NEW_LOCACACA_BLOCK.get();
         ModBlocks.GASOLINE_SPLATTER = ForgeBlocks.GASOLINE_SPLATTER.get();
         ModBlocks.BLOOD_SPLATTER = ForgeBlocks.BLOOD_SPLATTER.get();
+        ModBlocks.VIRUS_SPIT_SPLATTER = ForgeBlocks.VIRUS_SPIT_SPLATTER.get();
         ModBlocks.ACID_PUDDLE = ForgeBlocks.ACID_PUDDLE.get();
         ModBlocks.POISON_TRAIL_MUSHROOM = ForgeBlocks.POISON_TRAIL_MUSHROOM.get();
         ModBlocks.BLUE_BLOOD_SPLATTER = ForgeBlocks.BLUE_BLOOD_SPLATTER.get();
@@ -267,6 +270,9 @@ public class ForgeEvents {
 
         ModBlocks.CHESS_PIECE = ForgeBlocks.CHESS_PIECE.get();
         ModBlocks.CHESS_PIECE_BLOCK_ENTITY = ForgeBlocks.CHESS_PIECE_BLOCK_ENTITY.get();
+
+        ModBlocks.GAMBLING_TABLE = ForgeBlocks.GAMBLING_TABLE.get();
+        ModBlocks.GAMBLING_TABLE_BLOCK_ENTITY = ForgeBlocks.GAMBLING_TABLE_BLOCK_ENTITY.get();
 
         ModBlocks.WIRE_TRAP = ForgeBlocks.WIRE_TRAP.get();
         ModBlocks.BARBED_WIRE = ForgeBlocks.BARBED_WIRE.get();
@@ -590,6 +596,9 @@ public class ForgeEvents {
         ModItems.SHADOW_DIO_MASK = ForgeItems.SHADOW_DIO_MASK.get();
         ModItems.DIO_VAMPIRE_MASK = ForgeItems.DIO_VAMPIRE_MASK.get();
         ModItems.GUCCIO_MASK = ForgeItems.GUCCIO_MASK.get();
+        ModItems.ANASUI_MASK = ForgeItems.ANASUI_MASK.get();
+        ModItems.FEM_ANASUI_MASK = ForgeItems.FEM_ANASUI_MASK.get();
+        ModItems.ANAKISS_MASK = ForgeItems.ANAKISS_MASK.get();
         ModItems.ENYA_MASK = ForgeItems.ENYA_MASK.get();
         ModItems.DAIYA_MASK = ForgeItems.DAIYA_MASK.get();
         ModItems.DAIYA_2_MASK = ForgeItems.DAIYA_2_MASK.get();
@@ -709,6 +718,11 @@ public class ForgeEvents {
         ModParticles.AIRBUBBLE_CYAN = ForgeParticles.AIRBUBBLE_CYAN.get();
         ModParticles.AIRBUBBLE_BOMB = ForgeParticles.AIRBUBBLE_BOMB.get();
         ModParticles.AIRBUBBLE_YELLOW = ForgeParticles.AIRBUBBLE_YELLOW.get();
+        ModParticles.ENERGY_RIPPLE_SURFACE = ForgeParticles.ENERGY_RIPPLE_SURFACE.get();
+        ModParticles.ENERGY_RIPPLE = ForgeParticles.ENERGY_RIPPLE.get();
+        ModParticles.WAKE_RIPPLE = ForgeParticles.WAKE_RIPPLE.get();
+        ModParticles.DIVER_DOWN_FINAL = ForgeParticles.DIVER_DOWN_FINAL.get();
+        ModParticles.RIBCAGE = ForgeParticles.RIBCAGE.get();
         ModParticles.HYPNO_SWIRL = ForgeParticles.HYPNO_SWIRL.get();
         ModParticles.TUSK_VORTEX = ForgeParticles.TUSK_VORTEX.get();
         ModParticles.METALLICA_NAIL = ForgeParticles.METALLICA_NAIL.get();
@@ -769,6 +783,7 @@ public class ForgeEvents {
         ModEffects.INFINITE_SPIN = ForgeEffects.INFINITE_SPIN.get();
         ModEffects.IMPRINTING = ForgeEffects.IMPRINTING.get();
         ModEffects.SWAPPED = ForgeEffects.SWAPPED.get();
+        ModEffects.FORTIFICATION = ForgeEffects.FORTIFICATION.get();
 
         ModEffects.HAZE_VIRUS = ForgeEffects.HAZE_VIRUS.get();
         ModEffects.DISTORTION_VIRUS = ForgeEffects.DISTORTION_VIRUS.get();
@@ -808,6 +823,7 @@ public class ForgeEvents {
         ModEntities.KILLER_QUEEN = ForgeEntities.KILLER_QUEEN.get();
         ModEntities.setBlockBomb(ForgeEntities.BLOCK_BOMB.get());
         ModEntities.SHEER_HEART_ATTACK = ForgeEntities.SHEER_HEART_ATTACK.get();
+        ModEntities.SHEER_TEAPOT_ATTACK = ForgeEntities.SHEER_TEAPOT_ATTACK.get();
         ModEntities.CINDERELLA = ForgeEntities.CINDERELLA.get();
         ModEntities.CALIFORNIA_KING_BED = ForgeEntities.CALIFORNIA_KING_BED.get();
         ModEntities.PEARL_JAM = ForgeEntities.PEARL_JAM.get();
@@ -831,6 +847,8 @@ public class ForgeEvents {
         ModEntities.ANUBIS = ForgeEntities.ANUBIS.get();
         ModEntities.STAR_PLATINUM_BASEBALL = ForgeEntities.STAR_PLATINUM_BASEBALL.get();
         ModEntities.DIVER_DOWN = ForgeEntities.DIVER_DOWN.get();
+        ModEntities.DIVER_DOWN_BETA = ForgeEntities.DIVER_DOWN_BETA.get();
+        ModEntities.BONE_PROJECTILE = ForgeEntities.BONE_PROJECTILE.get();
         ModEntities.SILVER_CHARIOT = ForgeEntities.SILVER_CHARIOT.get();
         ModEntities.SILVER_CHARIOT_RAPIER = ForgeEntities.SILVER_CHARIOT_RAPIER.get();
         ModEntities.SILVER_CHARIOT_RAPIER_PLATFORM = ForgeEntities.SILVER_CHARIOT_RAPIER_PLATFORM.get();

@@ -87,6 +87,7 @@ public abstract class LivingEntityDiscData extends Entity implements DiscBearer 
 
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
     private void roundabout$saveDiscData(CompoundTag tag, CallbackInfo ci) {
+        CommandDiscController.save((LivingEntity) (Object) this, tag);
         if (WhitesnakeDiscUtil.isDiscBlacklisted((LivingEntity) (Object) this)) return;
         CompoundTag discs = new CompoundTag();
         discs.putBoolean("HasMemory", roundabout$ownsMemoryDisc());
@@ -129,6 +130,7 @@ public abstract class LivingEntityDiscData extends Entity implements DiscBearer 
 
     @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
     private void roundabout$loadDiscData(CompoundTag tag, CallbackInfo ci) {
+        CommandDiscController.load((LivingEntity) (Object) this, tag);
         if (WhitesnakeDiscUtil.isDiscBlacklisted((LivingEntity) (Object) this)) return;
         if (!tag.contains("roundabout.WhitesnakeDiscs", 10)) {
             return;
@@ -184,7 +186,10 @@ public abstract class LivingEntityDiscData extends Entity implements DiscBearer 
     @Inject(method = "tick", at = @At("TAIL"))
     private void roundabout$tickDiscEffects(CallbackInfo ci) {
         LivingEntity living = (LivingEntity) (Object) this;
-        if (WhitesnakeDiscUtil.isDiscBlacklisted(living)) return;
+        if (WhitesnakeDiscUtil.isDiscBlacklisted(living)) {
+            CommandDiscController.ejectCommandDisc(living);
+            return;
+        }
         if (!level().isClientSide() && living instanceof ServerPlayer player) {
             WhitesnakeDiscUtil.ejectMobMemoryFromPlayer(player);
         }
@@ -215,7 +220,7 @@ public abstract class LivingEntityDiscData extends Entity implements DiscBearer 
             MemoryAiController.tick(living);
         }
         CommandDiscController.tickExplosion(living);
-        if (roundabout$hasMemoryDisc()) CommandDiscController.tick(living);
+        CommandDiscController.tick(living);
         MusicDiscController.tick(living);
         if (living instanceof ServerPlayer player) {
             roundabout$updateMemoryDevelopment(player);
@@ -245,6 +250,7 @@ public abstract class LivingEntityDiscData extends Entity implements DiscBearer 
     @Inject(method = "die", at = @At("TAIL"))
     private void roundabout$dropForeignDiscs(DamageSource source, CallbackInfo ci) {
         LivingEntity living = (LivingEntity) (Object) this;
+        CommandDiscController.ejectCommandDisc(living);
         if (roundabout$foreignDiscsDropped || living.level().isClientSide()
                 || WhitesnakeDiscUtil.isDiscBlacklisted(living)) return;
         roundabout$foreignDiscsDropped = true;

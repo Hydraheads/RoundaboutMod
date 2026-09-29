@@ -1,13 +1,10 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
-import com.ibm.icu.number.Precision;
 import com.mojang.authlib.GameProfile;
 
-import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.block.DiverLimbBlock;
 import net.hydra.jojomod.block.DiverLimbBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -16,9 +13,8 @@ import net.hydra.jojomod.client.DiverDownControlsClient;
 import net.hydra.jojomod.client.KeyboardPilotInput;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.stand.DiverDownEntity;
-import net.hydra.jojomod.entity.stand.FollowingStandEntity;
-import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.projectile.BoneProjectileEntity;
+import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModGamerules;
@@ -28,12 +24,12 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.SoundIndex;
-import net.hydra.jojomod.event.powers.DamageHandler;
-import net.hydra.jojomod.event.powers.ModDamageTypes;
-import net.hydra.jojomod.event.powers.StandPowers;
-import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.client.gui.diverdown.custom_workbench_code.*;
 import net.hydra.jojomod.client.hud.StandHudRender;
+import net.hydra.jojomod.event.powers.visagedata.voicedata.AnasuiVoice;
+import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
@@ -42,6 +38,9 @@ import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
@@ -49,36 +48,36 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.ExperienceOrb;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.monster.AbstractSkeleton;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Witch;
+import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.inventory.LoomMenu;
-import net.minecraft.world.inventory.StonecutterMenu;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.PotionItem;
-import net.minecraft.world.item.SplashPotionItem;
-import net.minecraft.world.item.LingeringPotionItem;
+import net.minecraft.world.inventory.*;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeManager;
@@ -92,11 +91,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ChestMenu;
-import net.minecraft.world.inventory.ContainerLevelAccess;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.HashMap;
@@ -111,14 +106,14 @@ public class PowersDiverDown extends NewPunchingStand {
     private static final byte
             LIMB_SCAFFOLD = 53,
             LIMB_RECALL = 54,
-            // Workbench move ids start here
-            CRAFTING_TABLE = 55,
+    // Workbench move ids start here
+    CRAFTING_TABLE = 55,
             LOOM = 56,
             STONECUTTER = 57,
             ANVIL = 58,
             SMITHING_TABLE = 59,
-            //workbench ID end
-            OPEN_CHEST = 60,
+    //workbench ID end
+    OPEN_CHEST = 60,
             GROUND_GET_ITEMS = 61,
             GROUND_DIVE_BARRAGE = 62,
             DIVER_ZIP = 63,
@@ -133,10 +128,11 @@ public class PowersDiverDown extends NewPunchingStand {
             EMBED_POTION = 72,
             DIVER_LEGS = 73,
             EFFECT_CURE = 74,
-            COUNTER = 75,
+            TRANSFER = 75,
             RIBCAGE_TRAP = 76,
             BONE_BOMB = 77,
-            SPRING_LEGS = 78;
+            SPRING_LEGS = 78,
+            TOGGLE_DAMAGE_REDIRECT = 79;
 
     // for all the move ids accessed elsewhere.
     public static final byte
@@ -146,6 +142,9 @@ public class PowersDiverDown extends NewPunchingStand {
     // NOISES GO BELOW HERE, starting from 120. I think that should be more than
     // enough.
     public static final byte CHARGE_NOISE = 120;
+
+    //used for workbench
+    private boolean customWorkbenchEnabled = true;
 
     // used for limb scaffolds
     private int MAX_LIMB_DISTANCE = 3;
@@ -160,6 +159,10 @@ public class PowersDiverDown extends NewPunchingStand {
     private boolean isBarrel = false;
     public volatile List<BlockPos> detectedOres = new ArrayList<>();
     private int oreScanCooldown = 0;
+    public boolean isOpeningRemoteChest = false;
+    public boolean chestScreenEverOpened = false;
+    public boolean oreDetectionEnabled = false;
+    private Vec3 groundBarragePos = null;
 
     // used for ground barrage
     private int MAX_GROUND_BARRAGE_TICKS = 20; // will count down from 10 ticks AKA half a second + 1 for the final hit
@@ -174,20 +177,25 @@ public class PowersDiverDown extends NewPunchingStand {
     private Direction cutDirection;
 
     // used for traps
+    public record BlockFace(BlockPos pos, Direction face) {}
     public static class KickTrap {
         public int ticks;
         public Direction face;
+        public Vec3 launchVector;
+        public int playerContactTicks = 0;
 
-        public KickTrap(int ticks, Direction face) {
+        public KickTrap(int ticks, Direction face, Vec3 launchVector) {
             this.ticks = ticks;
             this.face = face;
+            this.launchVector = launchVector;
         }
     }
 
-    public final Map<BlockPos, KickTrap> storedKickTraps = new LinkedHashMap<>();
+    public final Map<BlockFace, KickTrap> storedKickTraps = new LinkedHashMap<>();
     private static final int MAX_TRAP_DURATION = 2400; // 2 minute lifetime
-    private static final float TRAP_RANGE = 4.5f;
+    private static final float TRAP_RANGE = 5.5f;
     private static final int MAX_NUMBER_OF_TRAPS = 10;
+    public static final int KICK_TRAP_WINDUP_MAX = 10;
     public final Map<BlockPos, Integer> releasingLimbs = new HashMap<>();
     // water bucket
 
@@ -197,12 +205,81 @@ public class PowersDiverDown extends NewPunchingStand {
 
     // used for dive
     public Entity submergedTarget = null;
-    public int diveWindupTicks = 0; // tracks current tick
+    public int submergedTargetId = -1; //for client/server desynchronization fix
     public static final int DIVE_WINDUP_MAX = 30; // 1.5 seconds uncancellable windup
-    public static final float DIVE_REACH = 5.0f; // how far it goes
-    public boolean isTransferringDamage = false; // recursion guard, prevents things like 2 DDs repeatedly protecting
-    // each other
+    public static final float DIVE_REACH = 4.0f; // how far it goes
+    public boolean isTransferringDamage = false; // recursion guard, prevents things like 2 DDs repeatedly protecting each other
+    public boolean damageRedirectionEnabled = true;
     public boolean hasDiverLegs = false;
+    public boolean showDisguiseArmor = true;
+    public static final int TRANSFER_WINDUP_MAX = 40;
+    private static final double TRANSFER_RANGE = 4.0;
+    public LivingEntity ribcageTarget = null;
+    public Vec3 ribcageWalkDirection = null;
+    public int ribcageTrapTicks = 0;
+    public static final int RIBCAGE_MAX_DURATION = 200; // 10 seconds max duration
+    public static final double HOSTILE_DETECTION_RANGE = 16.0; // non-zombie hostile detection range
+    public LivingEntity springTarget = null;
+    public int springLegsTicks = 0;
+    public static final int SPRING_LEGS_MAX_DURATION = 300; // 15 seconds max duration
+
+    // for secret skin
+    public int underwaterTicks = 0;
+    public static final int REQUIRED_UNDERWATER_TICKS = 1800; // 90 seconds
+
+    // for cooldowns
+    private final int getAfflictionCooldown() {
+        return 200;
+    }
+
+    ;
+    /* TAKING NOTE OF GENERAL COOLDOWNS HERE:
+        GENERAL_1 = AFFLICTION SELECTION
+     */
+
+    // move levels
+
+    public int getGroundDiveLevel() {
+        return 7;
+    }
+
+    public int getDiverZipLevel() {
+        return 6;
+    }
+
+    public int getDiverLimbLevel() {
+        return 5;
+    }
+
+    public int getBlockDisassemblyLevel() {
+        return 4;
+    }
+
+    public int getWorkbenchLevel() {
+        return 3;
+    }
+
+    public int getKickStorageLevel() {
+        return 2;
+    }
+
+    //workbench levels
+    public int getAnvilLevel() {
+        return 7;
+    }
+
+    public int getSmithingTableLevel() {
+        return 6;
+    }
+
+    public int getStonecutterLevel() {
+        return 5;
+    }
+
+    public int getLoomLevel() {
+        return 4;
+    }
+
 
     // stand creation model floaty creation whatever thingy.
     @Override
@@ -212,6 +289,10 @@ public class PowersDiverDown extends NewPunchingStand {
 
     @Override
     public StandEntity getNewStandEntity() {
+        byte skin = ((StandUser) this.getSelf()).roundabout$getStandSkin();
+        if (skin == DiverDownEntity.BETA_DIVER) {
+            return ModEntities.DIVER_DOWN_BETA.create(this.getSelf().level());
+        }
         return ModEntities.DIVER_DOWN.create(this.getSelf().level());
     }
 
@@ -226,8 +307,311 @@ public class PowersDiverDown extends NewPunchingStand {
 
     // configs here
 
+    public int getAttackMultOnPlayers() {
+        return ClientNetworking.getAppropriateConfig().diverDownSettings.diverDownAttackMultOnPlayers;
+    }
+
+    public int getAttackMultOnMobs() {
+        return ClientNetworking.getAppropriateConfig().diverDownSettings.diverDownAttackMultOnMobs;
+    }
+
     public boolean canWallZipConfig() {
         return ClientNetworking.getAppropriateConfig().miscellaneousSettings.enableWallWalking;
+    }
+
+    @Override
+    /**Override to add disable config*/
+    public boolean isStandEnabled() {
+        return ClientNetworking.getAppropriateConfig().diverDownSettings.enableDiverDown;
+    }
+
+    @Override
+    public int getMaxGuardPoints() {
+        return ClientNetworking.getAppropriateConfig().diverDownSettings.diverDownGuardPoints;
+    }
+
+    @Override
+    public float getMiningMultiplier() {
+        return (float) (1F * (ClientNetworking.getAppropriateConfig().
+                diverDownSettings.miningSpeedMultiplierDiverDown * 0.01));
+    }
+
+    @Override
+    public int getMiningLevel() {
+        return ClientNetworking.getAppropriateConfig().diverDownSettings.getMiningTierDiverDown;
+    }
+
+    private float getGroundBarrageStrength(Entity entity) {
+        if (this.getReducedDamage(entity)) {
+            return levelupDamageMod(0.25F * this.getAttackMultOnPlayers() * 0.01F);
+        } else {
+            return levelupDamageMod(0.75F * this.getAttackMultOnMobs() * 0.01F);
+        }
+    }
+
+    private float getGroundFinisherStrength(Entity entity) {
+        if (this.getReducedDamage(entity)) {
+            return levelupDamageMod(5F * this.getAttackMultOnPlayers() * 0.01F);
+        } else {
+            return levelupDamageMod(8F * this.getAttackMultOnMobs() * 0.01F);
+        }
+    }
+
+    private float getKickTrapStrength(Entity entity) {
+        if (this.getReducedDamage(entity)) {
+            return levelupDamageMod(4F * this.getAttackMultOnPlayers() * 0.01F);
+        } else {
+            return levelupDamageMod(7F * this.getAttackMultOnMobs() * 0.01F);
+        }
+    }
+
+    private float getRibcageSnapStrength(Entity entity) {
+        if (this.getReducedDamage(entity)) {
+            return levelupDamageMod(8F * this.getAttackMultOnPlayers() * 0.01F);
+        } else {
+            return levelupDamageMod(12F * this.getAttackMultOnMobs() * 0.01F);
+        }
+    }
+
+    private float getRibcageHostStrength(Entity entity) {
+        if (this.getReducedDamage(entity)) {
+            return levelupDamageMod(8F * this.getAttackMultOnPlayers() * 0.01F);
+        } else {
+            return levelupDamageMod(20F * this.getAttackMultOnMobs() * 0.01F);
+        }
+    }
+
+    private float getBoneBombHostStrength(Entity entity) {
+        if (this.getReducedDamage(entity)) {
+            return levelupDamageMod(6F * this.getAttackMultOnPlayers() * 0.01F);
+        } else {
+            return levelupDamageMod(20F * this.getAttackMultOnMobs() * 0.01F);
+        }
+    }
+
+    // mob AI here
+
+    private int creeperDodgeTimer = 0;
+    private float creeperStrafeDir = 1.0F; // 1.0F = left, -1.0F = right
+
+    @Override
+    public void tickMobAI(LivingEntity attackTarget) {
+        if (this.self.level().isClientSide()) return;
+        // creepers use Diver Zip to close the distance, then blow up
+        if (this.self instanceof Creeper creeper) {
+            if (attackTarget != null && attackTarget.isAlive()) {
+                double dist = this.self.distanceTo(attackTarget);
+                // if far away, use zip and start juking to avoid being hit
+                if (dist > 8.0 && !inZipMode() && !this.onCooldown(PowerIndex.SKILL_3)) {
+                    toggleZip(true);
+                    if (--creeperDodgeTimer <= 0) {
+                        // Switch direction every 0.5 to 1 seconds
+                        creeperDodgeTimer = 10 + this.self.getRandom().nextInt(15);
+                        // Randomly pick left or right
+                        creeperStrafeDir = this.self.getRandom().nextBoolean() ? 1.0F : -1.0F;
+                    }
+                    // Keep moving forward at full speed whilst strafing
+                    creeper.getMoveControl().strafe(1.0F, creeperStrafeDir);
+                }
+                // If medium distance, stop juking and zoom in
+                else if (dist > 3.0 && dist <= 8.0 && !inZipMode() && !this.onCooldown(PowerIndex.SKILL_3)) {
+                    toggleZip(true);
+                } else if (dist <= 3.0 && inZipMode()) {
+                    // IT'S BLOW UP TIME
+                    toggleZip(false);
+                }
+            } else if (inZipMode()) {
+                toggleZip(false);
+            }
+            return;
+        }
+
+        // Skeletons focus on trapping so players can't get close while they shoot
+        if (this.self instanceof AbstractSkeleton skeleton) {
+            if (attackTarget != null && attackTarget.isAlive()) {
+                double dist = this.self.distanceTo(attackTarget);
+                // When target tries to get close (within 8 blocks), plant a trap
+                if (dist <= 8.0 && !this.onCooldown(PowerIndex.SKILL_2) && !areStandMovesDisabled()) {
+                    // Max of 6 traps
+                    if (this.storedKickTraps.size() < 6) {
+                        // Find the block on the ground 2 blocks toward the player
+                        Vec3 dirToTarget = attackTarget.position().subtract(this.self.position()).normalize();
+                        BlockPos trapGroundPos = BlockPos.containing(this.self.position().add(dirToTarget.scale(2.0))).below();
+
+                        if (this.self.level().getBlockState(trapGroundPos).isSolid()) {
+                            BlockFace key = new BlockFace(trapGroundPos, Direction.UP);
+                            if (!this.storedKickTraps.containsKey(key)) {
+                                while (this.storedKickTraps.size() >= MAX_NUMBER_OF_TRAPS) {
+                                    BlockFace oldest = this.storedKickTraps.keySet().iterator().next();
+                                    this.storedKickTraps.remove(oldest);
+                                }
+                            }
+                            // Launch upwards and slightly outward towards the target
+                            Vec3 reflection = new Vec3(dirToTarget.x * 0.5, 1.0, dirToTarget.z * 0.5).normalize();
+                            this.storedKickTraps.put(key, new KickTrap(MAX_TRAP_DURATION, Direction.UP, reflection));
+                            setCooldown(PowerIndex.SKILL_2, 100);
+                        }
+                    }
+                }
+            }
+            return;
+        }
+
+        // Zombies stay back and support other zombies with positive afflictions
+        // If health gets too low, disable damage redirection
+        if (this.self instanceof Zombie zombie) {
+            // Check self health to toggle damage redirection off if too low (< 40%)
+            if (this.self.getHealth() < this.self.getMaxHealth() * 0.4F && this.damageRedirectionEnabled) {
+                this.damageRedirectionEnabled = false;
+            }
+
+            // Keep away from target, stay behind other zombies.
+            List<Zombie> allies = this.self.level().getEntitiesOfClass(
+                    Zombie.class,
+                    this.self.getBoundingBox().inflate(12.0),
+                    z -> z != this.self && z.isAlive()
+            );
+
+            if (attackTarget != null && attackTarget.isAlive()) {
+                double distToPlayer = this.self.distanceTo(attackTarget);
+
+                if (!allies.isEmpty()) {
+                    // pick the closest frontline ally
+                    Zombie frontlineAlly = allies.get(0);
+                    double allyDistToPlayer = frontlineAlly.distanceTo(attackTarget);
+
+                    // if this zombie is closer to the player than its ally, or too close (< 8 blocks), NIGERUNDAYO!!!
+                    if (distToPlayer < 8.0 || distToPlayer <= allyDistToPlayer) {
+                        // Force facing the target
+                        rotateMobHead(attackTarget);
+                        float yaw = getLookAtEntityYaw(this.self, attackTarget);
+                        zombie.setYRot(yaw);
+                        zombie.setYHeadRot(yaw);
+                        zombie.setYBodyRot(yaw);
+
+                        Vec3 awayDir = frontlineAlly.position().subtract(attackTarget.position()).normalize();
+                        Vec3 backPos = frontlineAlly.position().add(awayDir.scale(2.0D));
+                        zombie.getNavigation().moveTo(backPos.x, backPos.y, backPos.z, 1D);
+                    } else {
+                        // follow slightly behind the ally
+                        zombie.getNavigation().moveTo(frontlineAlly, 1D);
+                    }
+                } else if (distToPlayer < 9.0) {
+                    // no allies left nearby, keep distance if possible
+                    rotateMobHead(attackTarget);
+                    float yaw = getLookAtEntityYaw(this.self, attackTarget);
+                    zombie.setYRot(yaw);
+                    zombie.setYHeadRot(yaw);
+                    zombie.setYBodyRot(yaw);
+
+                    Vec3 awayPos = net.minecraft.world.entity.ai.util.DefaultRandomPos.getPosAway(zombie, 8, 4, attackTarget.position());
+                    if (awayPos != null) {
+                        zombie.getNavigation().moveTo(awayPos.x, awayPos.y, awayPos.z, 1D);
+                    }
+                }
+                //throw out some moves just in case
+                if (distToPlayer <= 4 && canAttack() && !areStandMovesDisabled()) {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.ATTACK, true);
+                }
+            }
+
+            // buff allies, nerf enemies
+            if (isDiveActive()) {
+                // submerged in a friendly mob, apply buffs/cures
+                if (this.submergedTarget instanceof Zombie friendly && friendly.isAlive()) {
+                    if (!this.onCooldown(PowerIndex.GENERAL_1)) {
+                        cureNegativeEffects();
+                        if (!this.hasDiverLegs && !((StandUser) friendly).roundabout$hasDiverLegs()) {
+                            diverLegs();
+                        }
+                        setCooldown(PowerIndex.GENERAL_1, 200);
+                    }
+                } else if (this.submergedTarget == attackTarget) {
+                    // submerged in an enemy, blind them and emerge
+                    openAfflictions(BONE_BOMB);
+                    emergeServer();
+                }
+            } else if (!areStandMovesDisabled() && !this.onCooldown(PowerIndex.SKILL_1)) {
+                // dive into an ally within 6 blocks to buff/protect them
+                if (!allies.isEmpty()) {
+                    Zombie ally = allies.get(0);
+                    if (this.self.distanceTo(ally) <= 6.0 && ((StandUser) ally).roundabout$getDiverUser() == null) {
+                        this.submergedTarget = ally;
+                        ((StandUser) ally).roundabout$SetDiverUser(this);
+                        if (hasStandEntity(this.self)) {
+                            StandEntity stand = this.getStandEntity(this.self);
+                            if (stand != null) stand.discard();
+                            setCooldown(PowerIndex.SKILL_1, 300);
+                        }
+                    }
+                }
+            }
+            return;
+        }
+
+        // witches will use embed potion instead if they're close enough
+        if (this.self instanceof Witch witch) {
+            if (attackTarget != null && attackTarget.isAlive()) {
+                double dist = this.self.distanceTo(attackTarget);
+                // embed a potion
+                if (isDiveActive()) {
+                    // it's negative afflicting time
+                    if (!this.onCooldown(PowerIndex.GENERAL_1)) {
+                        openAfflictions(EMBED_POTION);
+                        setCooldown(PowerIndex.GENERAL_1, 300);
+                        emergeServer();
+                    }
+                } else if (!areStandMovesDisabled()) {
+                    // dive if in reach
+                    if (dist <= DIVE_REACH && !this.onCooldown(PowerIndex.SKILL_1)) {
+                        startDiveWindupServer();
+                    }
+                }
+            }
+            return;
+        }
+
+        // generic mob ai
+        if (attackTarget != null && attackTarget.isAlive()) {
+            // Disable redirection so they don't absorb damage for the player
+            if (this.damageRedirectionEnabled) {
+                this.damageRedirectionEnabled = false;
+            }
+
+            double dist = this.self.distanceTo(attackTarget);
+
+            if (isDiveActive()) {
+                // randomly choose a negative affliction
+                if (!this.onCooldown(PowerIndex.GENERAL_1)) {
+                    double rng = Math.random();
+                    if (rng < 0.35) {
+                        openAfflictions(BONE_BOMB);
+                    } else if (rng < 0.70) {
+                        openAfflictions(RIBCAGE_TRAP);
+                    } else {
+                        openAfflictions(SPRING_LEGS);
+                    }
+                    setCooldown(PowerIndex.GENERAL_1, 300);
+                    emergeServer();
+                }
+            } else if (!areStandMovesDisabled()) {
+                // dive if in reach
+                if (dist <= DIVE_REACH && !this.onCooldown(PowerIndex.SKILL_1)) {
+                    startDiveWindupServer();
+                }
+                // randomly chooses to phase punch with a 30% chance
+                else if (dist <= 4.0 && canAttack() && Math.random() < 0.3) {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.ATTACK, true);
+                }
+                // close the distance with diver zip
+                else if (dist > 5.0 && !inZipMode() && !this.onCooldown(PowerIndex.SKILL_3) && Math.random() < 0.1) {
+                    toggleZip(true);
+                }
+            }
+            if (inZipMode() && dist <= 5) {
+                toggleZip(false);
+            }
+        }
     }
 
     // icons and ability list here
@@ -238,57 +622,129 @@ public class PowersDiverDown extends NewPunchingStand {
      */
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        // Ability 1 (Z)
-        if (isHoldingSneak()) {
-            setSkillIcon(context, x, y, 1, StandIcons.DIVER_DOWN_DISASSEMBLE, PowerIndex.SKILL_1_SNEAK);
-        } else if (isGuarding()) {
-            setSkillIcon(context, x, y, 1, StandIcons.DIVER_DOWN_SELF_SUBMERGE, PowerIndex.SKILL_1_GUARD);
-        } else {
-            setSkillIcon(context, x, y, 1, StandIcons.DIVER_DOWN_SUBMERGE, PowerIndex.SKILL_1);
-        }
-
-        // Ability 2 (X)
-        if (isDiveActive()) {
-            setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_AFFLICTION, PowerIndex.SKILL_2);
-        } else if (isGuarding()) {
-            // isAutoRelease will be true if auto, false if manual
-            if (this.isAutoRelease)
-                setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_TOGGLE_AUTO, PowerIndex.SKILL_2_GUARD);
-            else
-                setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_TOGGLE_MANUAL, PowerIndex.SKILL_2_GUARD);
-        } else if (isHoldingSneak()) {
-            // changes the icons for deletion vs releation (real)
-            if (this.isAutoRelease)
-                setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_CANCEL_STORE, PowerIndex.SKILL_2_SNEAK);
-            else
-                setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_RELEASE_MANUAL, PowerIndex.SKILL_2_SNEAK);
-        } else {
-            setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_STORE, PowerIndex.SKILL_2);
-        }
-
-        // Ability 3 (C)
-        if (isHoldingSneak()) {
-            setSkillIcon(context, x, y, 3, StandIcons.DIVER_DOWN_ZIP, PowerIndex.SKILL_3);
-        } else if (canVault()) {
-            setSkillIcon(context, x, y, 3, StandIcons.DIVER_DOWN_VAULT, PowerIndex.GLOBAL_DASH);
-        } else {
-            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
-        }
-
-        // Ability 4 (V)
-        if (areStandMovesDisabled()) {
-            if (isHoldingSneak()) {
-                setSkillIcon(context, x, y, 4, StandIcons.DIVER_DOWN_PLATFORM, PowerIndex.SKILL_4_SNEAK);
-            } else {
-                setSkillIcon(context, x, y, 4, StandIcons.DIVER_DOWN_RECALL, PowerIndex.SKILL_4);
+        // other modes
+        if (areStandMovesDisabled() && !(this.getActivePower() == DIVER_SUBMERGE_START)) {
+            // submerge
+            if (isDiveActive()) {
+                if (damageRedirectionEnabled) {
+                    setSkillIcon(context, x, y, 1, StandIcons.REDIRECTION_ENABLED, PowerIndex.NO_CD);
+                } else {
+                    setSkillIcon(context, x, y, 1, StandIcons.REDIRECTION_DISABLED, PowerIndex.NO_CD);
+                }
+                setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_AFFLICTION, PowerIndex.GENERAL_1);
+                setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+                setSkillIcon(context, x, y, 4, StandIcons.DIVER_DOWN_RECALL, PowerIndex.NO_CD);
             }
-        } else {
-            if (isGuarding()) {
-                setSkillIcon(context, x, y, 4, StandIcons.DIVER_DOWN_WORKSTATION, PowerIndex.SKILL_4_GUARD);
-            } else if (isHoldingSneak()) {
-                setSkillIcon(context, x, y, 4, StandIcons.DIVER_DOWN_PLATFORM, PowerIndex.SKILL_4_SNEAK);
+            // diver zip
+            else if (inZipMode()) {
+                setSkillIcon(context, x, y, 1, StandIcons.UNUSABLE, PowerIndex.NO_CD);
+                setSkillIcon(context, x, y, 2, StandIcons.UNUSABLE, PowerIndex.NO_CD);
+                setSkillIcon(context, x, y, 3, StandIcons.DIVER_DOWN_ZIP, PowerIndex.SKILL_3);
+                setSkillIcon(context, x, y, 4, StandIcons.UNUSABLE, PowerIndex.NO_CD);
+            }
+            // diver limb scaffold
+            else if (hasLimbsDeployed()) {
+                setSkillIcon(context, x, y, 1, StandIcons.UNUSABLE, PowerIndex.NO_CD);
+                setSkillIcon(context, x, y, 2, StandIcons.UNUSABLE, PowerIndex.NO_CD);
+                setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+                if (isHoldingSneak()) {
+                    setSkillIcon(context, x, y, 4, StandIcons.DIVER_DOWN_PLATFORM, PowerIndex.SKILL_4);
+                } else {
+                    setSkillIcon(context, x, y, 4, StandIcons.DIVER_DOWN_RECALL, PowerIndex.NO_CD);
+                }
+            }
+            // ground dive
+            else if (isPiloting()) {
+                if (oreDetectionEnabled) {
+                    setSkillIcon(context, x, y, 1, StandIcons.ORE_DETECTION_ENABLED, PowerIndex.NO_CD);
+                } else {
+                    setSkillIcon(context, x, y, 1, StandIcons.ORE_DETECTION_DISABLED, PowerIndex.NO_CD);
+                }
+                setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_GRAB, PowerIndex.NO_CD);
+                setSkillIcon(context, x, y, 3, StandIcons.DIVER_DOWN_CHEST, PowerIndex.NO_CD);
+                setSkillIcon(context, x, y, 4, StandIcons.DIVER_DOWN_RECALL, PowerIndex.NO_CD);
+            }
+        }
+
+        // Ability 1 (Z)
+        else {
+            if (isHoldingSneak()) {
+                if (canExecuteMoveWithLevel(getBlockDisassemblyLevel())) {
+                    setSkillIcon(context, x, y, 1, StandIcons.DIVER_DOWN_DISASSEMBLE, PowerIndex.SKILL_1_SNEAK);
+                } else {
+                    setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+                }
+            } else if (isGuarding()) {
+                setSkillIcon(context, x, y, 1, StandIcons.DIVER_DOWN_SELF_SUBMERGE, PowerIndex.SKILL_1_GUARD);
             } else {
-                setSkillIcon(context, x, y, 4, StandIcons.DIVER_DOWN_GROUND_DIVE, PowerIndex.SKILL_4);
+                setSkillIcon(context, x, y, 1, StandIcons.DIVER_DOWN_SUBMERGE, PowerIndex.SKILL_1);
+            }
+
+            // Ability 2 (X)
+            if (isGuarding()) {
+                if (canExecuteMoveWithLevel(getKickStorageLevel())) {
+                    // isAutoRelease will be true if auto, false if manual
+                    if (this.isAutoRelease)
+                        setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_TOGGLE_AUTO, PowerIndex.NO_CD);
+                    else
+                        setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_TOGGLE_MANUAL, PowerIndex.NO_CD);
+                } else {
+                    setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+                }
+            } else if (isHoldingSneak()) {
+                if (canExecuteMoveWithLevel(getKickStorageLevel())) {
+                    // changes the icons for deletion vs releation (real)
+                    if (this.isAutoRelease)
+                        setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_CANCEL_STORE, PowerIndex.SKILL_2_SNEAK);
+                    else
+                        setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_RELEASE_MANUAL, PowerIndex.SKILL_2_SNEAK);
+                } else {
+                    setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+                }
+            } else {
+                if (canExecuteMoveWithLevel(getKickStorageLevel())) {
+                    setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_STORE, PowerIndex.SKILL_2);
+                } else {
+                    setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+                }
+            }
+
+            // Ability 3 (C)
+            if (isHoldingSneak()) {
+                if (canExecuteMoveWithLevel(getDiverZipLevel())) {
+                    setSkillIcon(context, x, y, 3, StandIcons.DIVER_DOWN_ZIP, PowerIndex.SKILL_3);
+                } else {
+                    setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+                }
+            } else if (canLatchOntoWall()) {
+                if (canExecuteMoveWithLevel(getDiverZipLevel())) {
+                    setSkillIcon(context, x, y, 3, StandIcons.DIVER_DOWN_VAULT, PowerIndex.SKILL_3);
+                } else {
+                    setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+                }
+            } else {
+                setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+            }
+
+            // Ability 4 (V)
+            if (isGuarding()) {
+                if (canExecuteMoveWithLevel(getWorkbenchLevel())) {
+                    setSkillIcon(context, x, y, 4, StandIcons.DIVER_DOWN_WORKSTATION, PowerIndex.NO_CD);
+                } else {
+                    setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+                }
+            } else if (isHoldingSneak()) {
+                if (canExecuteMoveWithLevel(getDiverLimbLevel())) {
+                    setSkillIcon(context, x, y, 4, StandIcons.DIVER_DOWN_PLATFORM, PowerIndex.SKILL_4_SNEAK);
+                } else {
+                    setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+                }
+            } else {
+                if (canExecuteMoveWithLevel(getGroundDiveLevel())) {
+                    setSkillIcon(context, x, y, 4, StandIcons.DIVER_DOWN_GROUND_DIVE, PowerIndex.SKILL_4);
+                } else {
+                    setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+                }
             }
         }
     }
@@ -301,58 +757,75 @@ public class PowersDiverDown extends NewPunchingStand {
                 "instruction.roundabout.press_attack", StandIcons.DIVER_DOWN_PUNCH, 0, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20 + startPos, topPos + 99, 0, "ability.roundabout.guard",
                 "instruction.roundabout.hold_block", StandIcons.DIVER_DOWN_GUARD, 0, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20 + startPos, topPos + 118, 0,
-                "ability.roundabout.diver_phase_punch",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20 + startPos, topPos + 118, 0, "ability.roundabout.diver_phase_punch",
                 "instruction.roundabout.hold_attack_crouch", StandIcons.DIVER_DOWN_PHASE_PUNCH, 0, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39 + startPos, topPos + 80, 0,
-                "ability.roundabout.barrage",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39 + startPos, topPos + 80, 0, "ability.roundabout.barrage",
                 "instruction.roundabout.barrage", StandIcons.DIVER_DOWN_BARRAGE, 0, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39 + startPos, topPos + 99, 0,
-                "ability.roundabout.diver_submerge",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39 + startPos, topPos + 99, 0, "ability.roundabout.diver_submerge",
                 "instruction.roundabout.press_skill", StandIcons.DIVER_DOWN_SUBMERGE, 1, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39 + startPos, topPos + 118, 0,
-                "ability.roundabout.diver_disassemble",
-                "instruction.roundabout.press_skill_block", StandIcons.DIVER_DOWN_DISASSEMBLE, 1, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58 + startPos, topPos + 80, 0,
-                "ability.roundabout.diver_self_submerge",
-                "instruction.roundabout.press_skill_crouch", StandIcons.DIVER_DOWN_SELF_SUBMERGE, 1, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58 + startPos, topPos + 99, 0,
-                "ability.roundabout.diver_selection",
-                "instruction.roundabout.press_skill", StandIcons.DIVER_DOWN_AFFLICTION, 2, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58 + startPos, topPos + 118, 0,
-                "ability.roundabout.diver_store",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39 + startPos, topPos + 118, 0, "ability.roundabout.diver_self_submerge",
+                "instruction.roundabout.press_skill_block", StandIcons.DIVER_DOWN_SELF_SUBMERGE, 1, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58 + startPos, topPos + 80, getBlockDisassemblyLevel(), "ability.roundabout.diver_disassemble",
+                "instruction.roundabout.press_skill_crouch", StandIcons.DIVER_DOWN_DISASSEMBLE, 1, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58 + startPos, topPos + 99, 0, "ability.roundabout.diver_redirection",
+                "instruction.roundabout.press_skill_submerged", StandIcons.REDIRECTION_ENABLED, 1, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58 + startPos, topPos + 118, 0, "ability.roundabout.diver_selection",
+                "instruction.roundabout.press_skill_submerged", StandIcons.DIVER_DOWN_AFFLICTION, 2, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77 + startPos, topPos + 80, getKickStorageLevel(), "ability.roundabout.diver_store",
                 "instruction.roundabout.press_skill", StandIcons.DIVER_DOWN_STORE, 2, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77 + startPos, topPos + 80, 0,
-                "ability.roundabout.diver_release_toggle",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77 + startPos, topPos + 99, getKickStorageLevel(), "ability.roundabout.diver_release_toggle",
                 "instruction.roundabout.press_skill_block", StandIcons.DIVER_DOWN_TOGGLE_AUTO, 2, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77 + startPos, topPos + 99, 0,
-                "ability.roundabout.diver_cancel_store",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77 + startPos, topPos + 118, getKickStorageLevel(), "ability.roundabout.diver_cancel_store",
                 "instruction.roundabout.press_skill_crouch", StandIcons.DIVER_DOWN_CANCEL_STORE, 2, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 96 + startPos, topPos + 80, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE, 3, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 96 + startPos, topPos + 99, 0, "ability.roundabout.vault",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 96 + startPos, topPos + 99, getDiverZipLevel(), "ability.roundabout.diver_wall_zip",
                 "instruction.roundabout.press_skill_air", StandIcons.DIVER_DOWN_VAULT, 3, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 96 + startPos, topPos + 118, 0, "ability.roundabout.diver_zip",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 96 + startPos, topPos + 118, getDiverZipLevel(), "ability.roundabout.diver_zip",
                 "instruction.roundabout.press_skill_crouch", StandIcons.DIVER_DOWN_ZIP, 3, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115 + startPos, topPos + 80, 0,
-                "ability.roundabout.diver_limb_platform",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115 + startPos, topPos + 80, getDiverLimbLevel(), "ability.roundabout.diver_limb_platform",
                 "instruction.roundabout.press_skill_crouch", StandIcons.DIVER_DOWN_PLATFORM, 4, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115 + startPos, topPos + 99, 0,
-                "ability.roundabout.diver_workstation",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115 + startPos, topPos + 99, getWorkbenchLevel(), "ability.roundabout.diver_workstation",
                 "instruction.roundabout.press_skill_block", StandIcons.DIVER_DOWN_WORKSTATION, 4, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115 + startPos, topPos + 118, 0,
-                "ability.roundabout.diver_ground_dive",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115 + startPos, topPos + 118, getGroundDiveLevel(), "ability.roundabout.diver_ground_dive",
                 "instruction.roundabout.press_skill", StandIcons.DIVER_DOWN_GROUND_DIVE, 4, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 134 + startPos, topPos + 80, getGroundDiveLevel(), "ability.roundabout.diver_detection",
+                "instruction.roundabout.press_skill_submerged", StandIcons.ORE_DETECTION_ENABLED, 1, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 134 + startPos, topPos + 99, getGroundDiveLevel(), "ability.roundabout.diver_grab",
+                "instruction.roundabout.press_skill_submerged", StandIcons.DIVER_DOWN_GRAB, 2, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 134 + startPos, topPos + 118, getGroundDiveLevel(), "ability.roundabout.diver_chest",
+                "instruction.roundabout.press_skill_submerged", StandIcons.DIVER_DOWN_CHEST, 3, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 153 + startPos, topPos + 80, 0, "ability.roundabout.diver_recall",
+                "instruction.roundabout.press_skill_submerged", StandIcons.DIVER_DOWN_RECALL, 4, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 153 + startPos, topPos + 99, 0, "ability.roundabout.mining",
+                "instruction.roundabout.hold_attack", StandIcons.DIVER_DOWN_MINING, 0, level, bypas));
         return $$1;
     }
 
-    // icons and ability list end
-
     @Override
-    public int getMaxGuardPoints() {
-        // change later to replace with the config.
-        return 15;
+    public boolean isAttackIneptVisually(byte activeP, int slot) {
+        // slot 3 == ability 3 (diver zip)
+        if (slot == 3 && isHoldingSneak() && this.self.isInWater() && !areStandMovesDisabled()) {
+            return true;
+        }
+        //ground dive
+        if (slot == 4 && !isHoldingSneak() && !isGuarding() && !(GravityAPI.getGravityDirection(this.self) == Direction.DOWN) && !areStandMovesDisabled()) {
+            return true;
+        }
+        if(isPiloting()){
+            //item grab
+            if (slot == 2 && !hasItemsInHitbox()) {
+                return true;
+            }
+            //chest open
+            if (slot == 3 && getClosestChest() == null) {
+                return true;
+            }
+        }
+        return super.isAttackIneptVisually(activeP, slot);
     }
+
+    // icons and ability list end
 
     // th...thank you soundman...
     // *sound*
@@ -371,7 +844,560 @@ public class PowersDiverDown extends NewPunchingStand {
         return super.getSoundFromByte(soundChoice);
     }
 
+    @Override
+    public float getPunchLandPitch() {
+        return 1.1F + 0.05F * activePowerPhase;
+    }
+
+    @Override
+    public float getPunchLandLastPitch() {
+        return 1.2F;
+    }
+
+    @Override
+    public SoundEvent getPunchLandSound() {
+        return ModSounds.DIVER_DOWN_HIT_EVENT;
+    }
+
+    @Override
+    public SoundEvent getPunchLandLastSound() {
+        return ModSounds.DIVER_DOWN_HIT_HEAVY_EVENT;
+    }
+
+    @Override
+    public void playBarrageEndNoise(float mod, Entity entity) {
+        if (!this.self.level().isClientSide()) {
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.DIVER_DOWN_HIT_HEAVY_EVENT, SoundSource.PLAYERS, 0.95F + mod, 1F);
+        }
+    }
+
+    @Override
+    public void playBarrageNoise(int hitNumber, Entity entity) {
+        if (!this.self.level().isClientSide()) {
+            if (hitNumber % 2 == 0)
+                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.DIVER_DOWN_BARRAGE_EVENT, SoundSource.PLAYERS, 0.85F, (float) (0.9 + (Math.random() * 0.25)));
+        }
+    }
+
+    @Override
+    public void playSummonSound() {
+        if (self.isCrouching()) return;
+        if (self instanceof Player player
+                && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof AnasuiVoice voice) {
+            voice.playSummon();
+        }
+        playStandUserOnlySoundsIfNearby(getSummonSound(), 10, false, false);
+    }
+
+    // particles and stuff
+
+    private void diverHitParticlesCenter(Entity entity){
+        Vec3 centerOffset = new Vec3(0, (entity.getBbHeight() * 0.65), 0);
+        Direction gd = ((IGravityEntity) entity).roundabout$getGravityDirection();
+        if (gd != Direction.DOWN) {
+            centerOffset = RotationUtil.vecPlayerToWorld(centerOffset, gd);
+        }
+        sendParticlesIfPossible(
+                this.self.level(), ModParticles.DIVER_DOWN_FINAL,
+                entity.getX() + centerOffset.x, entity.getY() + centerOffset.y, entity.getZ() + centerOffset.z,
+                1, 0.0, 0.0, 0.0, 0.0);
+    }
+
     // START OF ACTUAL MOVE METHODS
+
+    //for cooldowns, like D4C
+    @Override
+    public boolean isServerControlledCooldown(byte num) {
+        if (num == PowerIndex.SKILL_1 || num == PowerIndex.SKILL_1_SNEAK
+                || num == PowerIndex.SKILL_2 || num == PowerIndex.GENERAL_1
+                || num == PowerIndex.SKILL_3) {
+            return true;
+        }
+        return super.isServerControlledCooldown(num);
+    }
+
+    @Override
+    public void tickPower() {
+        super.tickPower();
+        if (isPiloting() && this.self.level().isClientSide()) {
+            Minecraft mc = Minecraft.getInstance();
+            boolean isMoving = mc.options.keyUp.isDown() || mc.options.keyDown.isDown()
+                    || mc.options.keyLeft.isDown() || mc.options.keyRight.isDown();
+
+            if (isMoving) {
+                StandEntity stand = getStandEntity(this.self);
+                this.self.level().addParticle(
+                        ModParticles.WAKE_RIPPLE,
+                        stand.getX(),
+                        stand.getY() + 0.05,
+                        stand.getZ(),
+                        0.0, 0.0, 0.0
+                );
+            }
+        }
+        if (!this.self.level().isClientSide()) {
+            // deletes limbs that are out of range
+            if (!this.activeLimbs.isEmpty()) {
+                Level level = this.self.level();
+                double maxRangeSq = (double) getMaxPilotRange() * getMaxPilotRange();
+                boolean shouldRecall = false;
+
+                for (BlockPos limbPos : this.activeLimbs) {
+                    boolean isLimbStillThere = level.getBlockState(limbPos).is(ModBlocks.DIVER_LIMB);
+                    boolean isOutOfRange = this.self.distanceToSqr(Vec3.atCenterOf(limbPos)) > maxRangeSq;
+
+                    if (!isLimbStillThere || isOutOfRange) {
+                        shouldRecall = true;
+                        break;
+                    }
+                    if (this.self.tickCount % 18 == 0) {
+                        if (level.getBlockEntity(limbPos) instanceof DiverLimbBlockEntity be) {
+                            // be.facing is the direction the limb is facing outwards
+                            Direction surfaceFace = be.facing.getOpposite();
+                            double px = limbPos.getX() + 0.5 - surfaceFace.getStepX() * 0.49;
+                            double py = limbPos.getY() + 0.5 - surfaceFace.getStepY() * 0.49;
+                            double pz = limbPos.getZ() + 0.5 - surfaceFace.getStepZ() * 0.49;
+                            sendParticlesIfPossible(
+                                    level, ModParticles.ENERGY_RIPPLE_SURFACE, px, py, pz,
+                                    1, 0, 0, 0, 0
+                            );
+                        }
+                    }
+                }
+
+                if (shouldRecall) {
+                    recallLimbs();
+                    // sync with client
+                    if (this.self instanceof Player player) {
+                        S2CPacketUtil.sendIntPowerDataPacket(player, LIMB_RECALL, -1);
+                    }
+                }
+            }
+        }
+        // force crawl mode in zippy time
+        if (inZipMode()) {
+            this.self.setSprinting(false);
+            ((StandUser) this.self).rdbt$SetCrawlTicks(5);
+            this.self.setPose(Pose.SWIMMING);
+            this.self.setSwimming(true);
+        }
+        // timer for the pilot, kicks you out once it hits 0, all that good stuff.
+        if (this.self.level().isClientSide()) {
+            if (this.getActivePower() == GROUND_DIVE_BARRAGE) {
+                if (this.barrageTicksLeft > 0) {
+                    this.barrageTicksLeft--;
+                } else {
+                    this.setPowerNone();
+                    exitGroundDive();
+                }
+            }
+            boolean pilotingNow = isPiloting();
+            if (pilotingNow) {
+                wasPilotingClient = true;
+                DiverDownControlsClient.handleChestAudio(this.isBarrel);
+                if (this.diveTicksLeft > 0) {
+                    this.diveTicksLeft--;
+                }
+                if (this.isOpeningRemoteChest) {
+                    //keep diver down out while in a chest
+                    if (DiverDownControlsClient.isScreenOpen()) {
+                        this.chestScreenEverOpened = true;
+                    } else if (this.chestScreenEverOpened) {
+                        this.isOpeningRemoteChest = false;
+                        this.chestScreenEverOpened = false;
+                        setCooldown(PowerIndex.SKILL_4, 100);
+                        exitGroundDive();
+                    }
+                } else if (this.diveTicksLeft <= 0) {
+                    exitGroundDive();
+                }
+                if (this.oreDetectionEnabled) {
+                    if (this.oreScanCooldown <= 0) {
+                        scoutForOresBeneathClient();
+                        this.oreScanCooldown = 3;
+                    } else {
+                        this.oreScanCooldown--;
+                    }
+                } else {
+                    if (!this.detectedOres.isEmpty()) {
+                        this.detectedOres = Collections.emptyList();
+                    }
+                }
+            } else if (wasPilotingClient) {
+                // if this runs again, it ends early.
+                wasPilotingClient = false;
+                exitGroundDive();
+            }
+            if (isPacketPlayer()) {
+                // pull down in air
+                if (inZipMode() && !getStandUserSelf().rdbt$getJumping()) {
+                    if (!self.onGround()) {
+                        if (this.self.getDeltaMovement().y < 0) {
+                            if (!(canCutCorners() && justFlippedTicks > 0)) {
+                                this.self.setDeltaMovement(this.self.getDeltaMovement().add(0, -0.14, 0));
+                            }
+                        }
+                    }
+                }
+                // disengage if swimming
+                if (self.isInWater() && inZipMode()) {
+                    toggleZip(false);
+                    C2SPacketUtil.trySingleBytePacket(PacketDataIndex.QUERY_STAND_UPDATE_2);
+                }
+                // Check for ground/ledge with mercyTicks(coyote time) grace period
+                if (inZipMode()) {
+                    if (justFlippedTicks > 0) {
+                        justFlippedTicks--;
+                    } else {
+                        if (this.self.horizontalCollision && canCutCorners() && justFlippedTicks <= 0) {
+                            Direction facing = RotationUtil.getRealFacingDirection2(this.self);
+                            Direction grav = ((IGravityEntity) this.self).roundabout$getGravityDirection();
+                            if (facing != grav && facing != grav.getOpposite()) {
+                                Vec3 mpos = this.self.getPosition(1F);
+                                // Check if there is a walkable block in front of the player
+                                BlockPos wallPos = BlockPos.containing(mpos).relative(facing);
+                                if (MainUtil.isBlockWalkable(this.self.level().getBlockState(wallPos))) {
+                                    ((IGravityEntity) this.self).roundabout$setGravityDirection(facing);
+                                    setHeelDirection(facing);
+                                    justFlippedTicks = 4;
+                                    C2SPacketUtil.intToServerPacket(
+                                            PacketDataIndex.INT_GRAVITY_FLIP, MainUtil.getIntFromDirection(facing));
+                                }
+                            }
+                        }
+                        // Check block probe positions beneath player relative to gravity
+                        Vec3 newVec = RotationUtil.vecPlayerToWorld(new Vec3(0, -0.2, 0),
+                                ((IGravityEntity) self).roundabout$getGravityDirection());
+                        BlockPos pos = BlockPos.containing(self.getPosition(1).add(newVec));
+                        Vec3 newVec2 = RotationUtil.vecPlayerToWorld(new Vec3(0, -1.0, 0),
+                                ((IGravityEntity) self).roundabout$getGravityDirection());
+                        BlockPos pos2 = BlockPos.containing(self.getPosition(1).add(newVec2));
+                        Vec3 newVec4 = RotationUtil.vecPlayerToWorld(new Vec3(0, -0.5, 0),
+                                ((IGravityEntity) self).roundabout$getGravityDirection());
+                        BlockPos pos4 = BlockPos.containing(self.getPosition(1).add(newVec4));
+                        Vec3 newVec5 = RotationUtil.vecPlayerToWorld(new Vec3(0, -1.1, 0),
+                                ((IGravityEntity) self).roundabout$getGravityDirection());
+                        BlockPos pos5 = BlockPos.containing(self.getPosition(1).add(newVec5));
+                        if (self.onGround() && MainUtil.isBlockWalkableSimplified(self.getBlockStateOn())) {
+                            mercyTicks = 4; // needs lots of coyote time for sprinting
+                            lastGroundPosition = self.position();
+                        } else {
+                            // If ANY block directly beneath your rotated feet is solid, you are still on a
+                            // surface
+                            if (MainUtil.isBlockWalkable(self.level().getBlockState(pos))
+                                    || MainUtil.isBlockWalkable(self.level().getBlockState(pos2))
+                                    || MainUtil.isBlockWalkable(self.level().getBlockState(pos4))
+                                    || MainUtil.isBlockWalkable(self.level().getBlockState(pos5))) {
+                                mercyTicks--;
+                            } else {
+                                // Only attempt to cut the corner when all probe blocks are AIR (stepped off
+                                // edge)
+                                if (self.onGround() && MainUtil.isBlockWalkableSimplified(self.getBlockStateOn())) {
+                                    mercyTicks = 4;
+                                    lastGroundPosition = self.position();
+                                } else {
+                                    mercyTicks--;
+                                }
+                            }
+                        }
+                        // cancel power if something bad happens
+                        if (getStandUserSelf().rdbt$getJumping() || self.isSleeping()
+                                || (!self.onGround() && !this.getStandUserSelf().roundabout$isPossessed()
+                                && mercyTicks <= 0)
+                                || self.getRootVehicle() != this.self) {
+                            feetDirection = Direction.DOWN;
+                            toggleZip(false);
+                            C2SPacketUtil.trySingleBytePacket(PacketDataIndex.QUERY_STAND_UPDATE_2);
+
+                            // Reset gravity direction to DOWN
+                            ((IGravityEntity) this.self).roundabout$setGravityDirection(feetDirection);
+                            justFlippedTicks = 4;
+                            C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_GRAVITY_FLIP,
+                                    MainUtil.getIntFromDirection(feetDirection));
+                        }
+                    }
+                } else {
+                    feetDirection = Direction.DOWN;
+                }
+            }
+        }
+        // server side ticks
+        else {
+            tickRibcageTrap();
+            tickSpringLegs();
+            if (this.hasDiverLegs && this.submergedTarget instanceof LivingEntity target && target.isAlive()) {
+                double px = target.getX() + (Math.random() - 0.5) * 0.4;
+                double py = target.getY() + 0.35; // At the legs
+                double pz = target.getZ() + (Math.random() - 0.5) * 0.4;
+
+                sendParticlesIfPossible(
+                        this.self.level(), ModParticles.ICE_SPARKLE, px, py, pz,
+                            2, 0.05, 0.05, 0.05, 0.08);
+            }
+            // recall stand if target dies, or if they go too far
+            if (this.submergedTarget != null) {
+                if (!this.submergedTarget.isAlive()
+                        || this.submergedTarget.isRemoved()
+                        || this.self.distanceTo(this.submergedTarget) > (getMaxPilotRange())) {
+                    emergeServer();
+                }
+            } else if (this.getActivePower() != DIVER_SUBMERGE_START && hasStandActive(this.self)) {
+                // failsafe just in case the last second whiff happens
+                if (!hasStandEntity(this.self) || getStandEntity(this.self) == null || !getStandEntity(this.self).isAlive() || getStandEntity(this.self).isRemoved()) {
+                    ((StandUser) this.self).roundabout$summonStand(this.self.level(), true, false);
+                }
+            }
+            // trap detection
+            if (!this.storedKickTraps.isEmpty()) {
+                Iterator<Map.Entry<BlockFace, KickTrap>> it = this.storedKickTraps.entrySet().iterator();
+                while (it.hasNext()) {
+                    Map.Entry<BlockFace, KickTrap> entry = it.next();
+                    BlockFace blockFace = entry.getKey();
+                    BlockPos trapPos = blockFace.pos();
+                    KickTrap trap = entry.getValue();
+
+                    if (--trap.ticks <= 0 || this.self.level().getBlockState(trapPos).isAir()) {
+                        it.remove();
+                        continue;
+                    }
+
+                    if (trap.ticks % 18 == 0) {
+                        double px = trapPos.getX() + 0.5 + trap.face.getStepX() * 0.51;
+                        double py = trapPos.getY() + 0.5 + trap.face.getStepY() * 0.51;
+                        double pz = trapPos.getZ() + 0.5 + trap.face.getStepZ() * 0.51;
+                        sendKickTrapParticles(px, py, pz);
+                    }
+
+                    // check if something touches the trap
+                    if (this.isAutoRelease) {
+                        List<LivingEntity> victims = detectTrapTrigger(trapPos, trap.face);
+                        if (!victims.isEmpty()) {
+                            boolean hasPlayer = false;
+                            boolean hasMob = false;
+
+                            for (LivingEntity v : victims) {
+                                if (v instanceof Player) {
+                                    hasPlayer = true;
+                                    // doesn't trigger if it's a pet
+                                } else if (!(v instanceof TamableAnimal TA && TA.getOwner() != null && TA.getOwner().is(this.getSelf()))) {
+                                    hasMob = true;
+                                }
+                            }
+
+                            if (hasPlayer) {
+                                trap.playerContactTicks++;
+                            } else {
+                                trap.playerContactTicks = 0;
+                            }
+
+                            // trigger the traps auto on mobs, or after 1 second has passed for players
+                            boolean shouldTrigger = hasMob || (trap.playerContactTicks >= 20);
+
+                            if (shouldTrigger) {
+                                // remove players from the victim list, in case they were standing with mobs
+                                if (trap.playerContactTicks < 20) {
+                                    victims.removeIf(v -> v instanceof Player);
+                                }
+                                if (!victims.isEmpty()) {
+                                    triggerKickTrap(victims, trapPos, trap);
+                                    it.remove(); // delete the triggered trap
+                                }
+                            }
+                        } else {
+                            // reset timer if player leaves the trap block
+                            trap.playerContactTicks = 0;
+                        }
+                    }
+                }
+            }
+            // cleanup the limbs if they expire
+            if (!this.releasingLimbs.isEmpty()) {
+                Iterator<Map.Entry<BlockPos, Integer>> limbIt = this.releasingLimbs.entrySet().iterator();
+                while (limbIt.hasNext()) {
+                    Map.Entry<BlockPos, Integer> entry = limbIt.next();
+                    int remaining = entry.getValue() - 1;
+                    if (remaining <= 0) {
+                        BlockPos pos = entry.getKey();
+                        if (this.self.level().getBlockState(pos).is(ModBlocks.DIVER_LIMB)) {
+                            this.self.level().removeBlock(pos, false);
+                        }
+                        limbIt.remove();
+                    } else {
+                        entry.setValue(remaining);
+                    }
+                }
+            }
+        }
+        if (inZipMode() && !this.self.level().isClientSide()) {
+            //checks if the player moved by comparing currentPos to lastPos
+            Vec3 currentPos = this.self.position();
+            boolean isMoving = this.lastGroundPosition != null && currentPos.distanceToSqr(this.lastGroundPosition) > 0.003;
+            this.lastGroundPosition = currentPos;
+
+            if (isMoving) {
+                Direction grav = ((IGravityEntity) this.self).roundabout$getGravityDirection();
+                Direction surfaceNormal = grav.getOpposite();
+
+                double ox = surfaceNormal.getStepX() * 0.1;
+                double oy = surfaceNormal.getStepY() * 0.1;
+                double oz = surfaceNormal.getStepZ() * 0.1;
+
+                sendParticlesIfPossible(
+                        this.self.level(),
+                        ModParticles.WAKE_RIPPLE,
+                        currentPos.x + ox,
+                        currentPos.y + oy,
+                        currentPos.z + oz,
+                        0,
+                        (double) surfaceNormal.getStepX(),
+                        (double) surfaceNormal.getStepY(),
+                        (double) surfaceNormal.getStepZ(),
+                        1.0
+                );
+            }
+        }
+        LivingEntity stand = getPilotingStand();
+        Entity attackerEntity = (stand != null) ? stand : this.self;
+        if (this.getActivePower() == GROUND_DIVE_BARRAGE && !this.self.level().isClientSide) {
+            if (this.barrageTicksLeft > 0) {
+                this.barrageTicksLeft--;
+                if (this.groundBarragePos != null && stand != null) {
+                    stand.setPos(this.groundBarragePos.x, this.groundBarragePos.y, this.groundBarragePos.z);
+                }
+                // need to filter targets still to account for that pesky boss immunity
+                List<Entity> unfilteredTargets = getEntitiesBox();
+                // for boss filtering function, taken from walking heart. It took me a while to
+                // figure out that FE meant "Filtered Entities," so im leaving this variable as
+                // the whole thing for future reference.
+                List<Entity> filteredEntities = new ArrayList<>();
+                for (Entity target : unfilteredTargets) {
+                    if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxesOnBosses) {
+                        filteredEntities.add(target);
+                    } else if (MainUtil.isBossMob(target)) {
+                        // Bosses require direct line of sight
+                        if (MainUtil.canActuallyHitInvolved(target, attackerEntity)) {
+                            filteredEntities.add(target);
+                        }
+                    } else {
+                        // Regular mobs can be hit through walls
+                        filteredEntities.add(target);
+                    }
+                }
+                // filter end
+                for (Entity target : filteredEntities) {
+                    if (target instanceof LivingEntity living) {
+                        if (this.barrageTicksLeft > 11) {
+                            // motion stores the knockback from the move then immediately deletes it
+                            // this ensures that enemies can still run around while the move is hitting them
+                            // whilst also making sure that the move doesn't send them flying away
+                            Vec3 motion = living.getDeltaMovement();
+                            DamageHandler.StandDamageEntity(living, getGroundBarrageStrength(living), this.self);
+                            living.setDeltaMovement(motion);
+                            // animate the barrage and also sound here
+                            playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.DIVER_DOWN_GROUND_BARRAGE_EVENT,
+                                    SoundSource.PLAYERS, 0.55F, (float) (0.9 + (Math.random() * 0.30)));
+                            Vec3 hitPos = getRandPos(living);
+                            sendParticlesIfPossible(
+                                    this.self.level(), ModParticles.ICE_SPARKLE, hitPos.x, hitPos.y, hitPos.z,
+                                    1, 0.0, 0.0, 0.0, 0.0);
+                        } else if (this.barrageTicksLeft == 9) {
+                            // BIG FINAL PUNCH!!! (does bleed)
+                            DamageHandler.StandDamageEntity(living, getGroundFinisherStrength(living), this.self);
+                            MainUtil.makeBleed(target, 0, 300, stand);
+                            //can't use StandDamageEntityAttack because i need it to be going mostly straight up
+                            living.setDeltaMovement(living.getDeltaMovement().x * 0.3, 1.35D,
+                                    living.getDeltaMovement().z * 0.3);
+                            living.hurtMarked = true;
+                            MainUtil.knockShieldPlusStand(living, 80); // 80 ticks = 4 seconds
+                            // big final punch anim and sound here
+                            playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.DIVER_DOWN_HIT_HEAVY_EVENT, SoundSource.PLAYERS, 0.95F, 1F);
+                            diverHitParticlesCenter(living);
+                            exitGroundDive();
+                        } else {
+                            // do nothing, wait for animation to finish
+                            // revisit this with animated to adjust ticks based on animation
+                        }
+                    }
+                }
+            } else {
+                this.setPowerNone();
+                exitGroundDive();
+            }
+        }
+        if (!inZipMode()) {
+            feetDirection = Direction.DOWN;
+        } else if (justFlippedTicks <= 0) {
+            Vec3 newVec = new Vec3(0, -0.2, 0);
+            Vec3 newVec4 = new Vec3(0, -0.5, 0);
+            newVec = RotationUtil.vecPlayerToWorld(newVec, ((IGravityEntity) self).roundabout$getGravityDirection());
+            BlockPos pos = BlockPos.containing(self.getPosition(1).add(newVec));
+            newVec4 = RotationUtil.vecPlayerToWorld(newVec4, ((IGravityEntity) self).roundabout$getGravityDirection());
+            BlockPos pos4 = BlockPos.containing(self.getPosition(1).add(newVec4));
+            BlockState state1 = self.level().getBlockState(pos);
+            BlockState state4 = self.level().getBlockState(pos4);
+            boolean isOnValidBlock = MainUtil.isBlockWalkableSimplified(state1)
+                    && MainUtil.isBlockWalkableSimplified(state4);
+            if (!isOnValidBlock && !this.self.onGround()) {
+                toggleZip(false);
+            }
+        }
+        if (this.self.isAlive() && this.self.isEyeInFluid(FluidTags.WATER)) {
+            this.underwaterTicks++;
+            // 1 minute without dying/leaving the water
+            if (this.underwaterTicks >= REQUIRED_UNDERWATER_TICKS) {
+                if (this.self instanceof Player player) {
+                    IPlayerEntity ipe = (IPlayerEntity) player;
+                    if (!ipe.roundabout$getUnlockedBonusSkin()) {
+                        unlockSkin();
+                    }
+                }
+            }
+        } else {
+            // skill issue
+            this.underwaterTicks = 0;
+        }
+    }
+
+    @Override
+    public boolean canVault() {
+        return false; // Disable normal vaulting so zip takes over
+    }
+
+    /*
+    like walking heart, this stand won't have a vault. instead, you will have a wall latch that lets you enter zip mode.
+     */
+    public boolean canLatchOntoWall() {
+        if (self.isInWater())
+            return false;
+        if (MainUtil.isStandingInBlock(self))
+            return false;
+        if (forceBlock())
+            return false;
+        if ((this.self.onGround() && !inZipMode()) || (!this.self.onGround() && inZipMode()))
+            return false;
+        if (areStandMovesDisabled())
+            return false;
+
+        Vec3 mpos = this.self.getPosition(1F);
+        Direction gravdir = ((IGravityEntity) this.self).roundabout$getGravityDirection();
+        switch (gravdir) {
+            case DOWN -> mpos = mpos.add(0, 0.1F, 0);
+            case UP -> mpos = mpos.add(0, -0.1F, 0);
+            case NORTH -> mpos = mpos.add(0, 0, 0.1F);
+            case SOUTH -> mpos = mpos.add(0, 0, -0.1F);
+            case WEST -> mpos = mpos.add(0.1F, 0, 0);
+            case EAST -> mpos = mpos.add(-0.1F, 0, 0);
+        }
+        Direction rd = RotationUtil.getRealFacingDirection2(this.self);
+        if (rd == gravdir || rd == gravdir.getOpposite())
+            return false;
+
+        BlockPos feetWall = BlockPos.containing(mpos).relative(rd);
+        BlockPos eyeWall = BlockPos.containing(this.self.getEyePosition()).relative(rd);
+
+        return MainUtil.isBlockWalkable(this.self.level().getBlockState(feetWall))
+                || MainUtil.isBlockWalkable(this.self.level().getBlockState(eyeWall));
+    }
 
     /**
      * (non-Javadoc)
@@ -430,13 +1456,15 @@ public class PowersDiverDown extends NewPunchingStand {
         if (areStandMovesDisabled()) {
             if (inZipMode()) {
                 // allows toggling the mode and that's it
-                if (context == PowerContext.SKILL_3_CROUCH) {
+                if (context == PowerContext.SKILL_3_CROUCH || context == PowerContext.SKILL_3_NORMAL) {
                     tryDiverZip();
                 }
                 return;
             } else if (hasLimbsDeployed()) {
                 // pressing V recalls limbs if limb move is active
-                if (context == PowerContext.SKILL_4_NORMAL) {
+                if (context == PowerContext.SKILL_3_NORMAL)
+                    tryToDashClient();
+                else if (context == PowerContext.SKILL_4_NORMAL) {
                     tryRecallLimbs();
                     // note: still not sure about the heirarchy for sneak + guard moves. Replace
                     // this when known.
@@ -446,10 +1474,11 @@ public class PowersDiverDown extends NewPunchingStand {
                 // stops everything else from working
                 return;
             } else if (isPiloting()) {
-                if (context == PowerContext.SKILL_4_NORMAL) {
+                if (context == PowerContext.SKILL_1_NORMAL) {
+                    toggleOreDetection();
+                } else if (context == PowerContext.SKILL_4_NORMAL) {
+                    setCooldown(PowerIndex.SKILL_4, 100);
                     exitGroundDive();
-                    // note: still not sure about the heirarchy for sneak + guard moves. Replace
-                    // this when known.
                 } else if (context == PowerContext.SKILL_3_NORMAL) {
                     tryOpenChest();
                 } else if (context == PowerContext.SKILL_2_NORMAL) {
@@ -458,10 +1487,13 @@ public class PowersDiverDown extends NewPunchingStand {
                 // stops everything else from working
                 return;
             } else if (isDiveActive()) {
-                if (context == PowerContext.SKILL_4_NORMAL) {
+                if (context == PowerContext.SKILL_1_NORMAL || context == PowerContext.SKILL_1_CROUCH) {
+                    tryToggleDamageRedirect();
+                } else if (context == PowerContext.SKILL_3_NORMAL)
+                    tryToDashClient();
+                else if (context == PowerContext.SKILL_4_NORMAL || context == PowerContext.SKILL_4_CROUCH) {
                     tryEmergeClient();
-                }
-                if (context == PowerContext.SKILL_2_NORMAL) {
+                } else if (context == PowerContext.SKILL_2_NORMAL || context == PowerContext.SKILL_2_CROUCH) {
                     tryAfflictionSelectionClient();
                 }
                 return;
@@ -480,6 +1512,9 @@ public class PowersDiverDown extends NewPunchingStand {
             case SKILL_1_GUARD -> {
                 tryStartSelfDiveClient();
             }
+            case SKILL_1_CROUCH_GUARD -> {
+                tryStartSelfDiveClient();
+            }
             // kick storage
             case SKILL_2_NORMAL -> {
                 tryPlantKickTrap();
@@ -490,6 +1525,9 @@ public class PowersDiverDown extends NewPunchingStand {
             }
             // toggle between auto and manual
             case SKILL_2_GUARD -> {
+                tryToggleTrapMode();
+            }
+            case SKILL_2_CROUCH_GUARD -> {
                 tryToggleTrapMode();
             }
             // dash, need to figure out how other moves will work.
@@ -508,6 +1546,9 @@ public class PowersDiverDown extends NewPunchingStand {
             case SKILL_4_GUARD -> {
                 tryWorkbenchSelectionClient();
             }
+            case SKILL_4_CROUCH_GUARD -> {
+                tryWorkbenchSelectionClient();
+            }
             // limb climbing move
             case SKILL_4_CROUCH -> {
                 tryLimbClimb();
@@ -522,13 +1563,17 @@ public class PowersDiverDown extends NewPunchingStand {
         if (move == DIVER_SUBMERGE_START) {
             return startDiveWindupServer();
         }
+        // toggles damage redirection
+        else if (move == TOGGLE_DAMAGE_REDIRECT) {
+            return toggleDamageRedirectServer();
+        }
         // recalls stand
         else if (move == DIVER_EMERGE) {
             return emergeServer();
         }
         // does the store kick thing
         else if (move == STORE_KICK_TRAP) {
-            return plantKickTrap();
+            return startKickTrapWindup();
         }
         // releases/deletes traps
         else if (move == MANUAL_TRAP_RELEASE) {
@@ -564,12 +1609,14 @@ public class PowersDiverDown extends NewPunchingStand {
     @Override
     public void updatePowerInt(byte activePower, int data) {
         if (activePower == DIVER_SUBMERGE_START) {
+            this.submergedTargetId = data;
             if (data == -1) {
                 this.submergedTarget = null;
             } else {
                 this.submergedTarget = this.self.level().getEntity(data);
             }
         } else if (activePower == DIVER_EMERGE) {
+            this.submergedTargetId = -1;
             this.submergedTarget = null;
             this.hasDiverLegs = false;
         } else if (activePower == LIMB_RECALL) {
@@ -588,6 +1635,9 @@ public class PowersDiverDown extends NewPunchingStand {
         switch (move) {
             case DIVER_ZIP -> {
                 activateZip();
+            }
+            case PowerIndex.POWER_3 -> {
+                wallLatch();
             }
             case DIVER_SELF_SUBMERGE -> {
                 startSelfDiveServer();
@@ -612,15 +1662,16 @@ public class PowersDiverDown extends NewPunchingStand {
             if (!this.self.level().isClientSide) {
                 StandEntity stand = getStandEntity(this.self);
                 if (stand != null) {
-                    // Teleport the server stand to where the client actually is!
-                    stand.setPos(pos.x, pos.y, pos.z);
+                    stand.moveTo(pos.x, pos.y, pos.z);
                 }
                 diveGetItems();
             }
             return true;
         } else if (move == GROUND_DIVE_BARRAGE) {
+            this.groundBarragePos = pos;
             StandEntity stand = getStandEntity(this.self);
             if (stand != null) {
+                stand.moveTo(pos.x, pos.y, pos.z);
                 stand.setPos(pos.x, pos.y, pos.z);
             }
             this.barrageTicksLeft = MAX_GROUND_BARRAGE_TICKS;
@@ -631,7 +1682,11 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     public void tryToDashClient() {
-        if (vaultOrFallBraceFails()) {
+        if (canLatchOntoWall() && canWallZipConfig()) {
+            if (canExecuteMoveWithLevel(getDiverZipLevel())) {
+                doWallLatchClient();
+            }
+        } else if (!inZipMode()) {
             dash();
         }
     }
@@ -641,12 +1696,14 @@ public class PowersDiverDown extends NewPunchingStand {
      * tryLimbClimb is the client side activation for the limb move.
      */
     private void tryLimbClimb() {
-        if (this.self.level().isClientSide()) {
-            if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK)) {
-                // literally just to prevent the move from being spammed
-                this.setCooldown(PowerIndex.SKILL_4_SNEAK, 10);
-                ((StandUser) this.getSelf()).roundabout$tryPower(LIMB_SCAFFOLD, true);
-                tryPowerPacket(LIMB_SCAFFOLD);
+        if (canExecuteMoveWithLevel(getDiverLimbLevel())) {
+            if (this.self.level().isClientSide()) {
+                if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK)) {
+                    // literally just to prevent the move from being spammed
+                    this.setCooldown(PowerIndex.SKILL_4_SNEAK, 10);
+                    ((StandUser) this.getSelf()).roundabout$tryPower(LIMB_SCAFFOLD, true);
+                    tryPowerPacket(LIMB_SCAFFOLD);
+                }
             }
         }
     }
@@ -674,11 +1731,9 @@ public class PowersDiverDown extends NewPunchingStand {
             // ID
             // AKA what workbench is being accessed
             return openWorkbench(chargeTime);
-        }
-        else if (move == ACCESS_AFFLICTIONS) {
+        } else if (move == ACCESS_AFFLICTIONS) {
             return openAfflictions(chargeTime);
-        }
-        else if (move == PowerIndex.SNEAK_ATTACK) {
+        } else if (move == PowerIndex.SNEAK_ATTACK) {
             this.chargedPhasePunch = chargeTime;
         }
         return super.tryIntPower(move, forced, chargeTime);
@@ -716,10 +1771,14 @@ public class PowersDiverDown extends NewPunchingStand {
             } else {
                 basis *= 5.503F; // 1.295 base crawl speed * 5.303 modifier = ~7.127 m/s
             }
+            if (this.self.level().isClientSide() && ClientUtil.isMovingDiagonally()) {
+                basis *= 0.7071F;
+            }
         }
         return super.inputSpeedModifiers(basis);
     }
 
+    //used with attackTimeDuring to activate moves when it hits 0
     @Override
     public void updateUniqueMoves() {
         // this is specifically to destroy all limbs if the user dies while still having
@@ -732,8 +1791,29 @@ public class PowersDiverDown extends NewPunchingStand {
         } else if (this.getActivePower() == PowerIndex.SNEAK_ATTACK) {
             updatePhasePunch();
         }
-
+        if (this.getActivePower() == DIVER_SUBMERGE_START) {
+            completeDiveServer();
+        }
+        if (this.getActivePower() == TRANSFER) {
+            triggerTransfer();
+        }
+        if (this.getActivePower() == STORE_KICK_TRAP) {
+            completeKickTrap();
+        }
         super.updateUniqueMoves();
+    }
+
+    @Override
+    public boolean interceptIncomingHarm(DamageSource source, float amount) {
+        // let transfer be cancellable
+        if (this.getActivePower() == TRANSFER) {
+            cancelTransfer();
+        }
+        // let store kick be cancellable
+        if (this.getActivePower() == STORE_KICK_TRAP) {
+            cancelStore();
+        }
+        return super.interceptIncomingHarm(source, amount);
     }
 
     public void standPhasePunch() {
@@ -748,6 +1828,9 @@ public class PowersDiverDown extends NewPunchingStand {
         float defaultAngle = 25F;
 
         if (this.self instanceof Player) {
+            if (self instanceof Player player && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof AnasuiVoice voice) {
+                voice.playPhasePunch();
+            }
             if (isPacketPlayer()) {
                 this.attackTimeDuring = -10;
                 if (!isFullyCharged) {
@@ -796,17 +1879,20 @@ public class PowersDiverDown extends NewPunchingStand {
                         tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK, -1);
                     }
                 }
+            } else if (!this.self.level().isClientSide()) {
+                /* Caps how far out the punch goes */
+                Entity targetEntity = getTargetEntity(this.self, -1);
+                phasePunchImpact(targetEntity);
             }
-        } else {
-            /* Caps how far out the punch goes */
-            Entity targetEntity = getTargetEntity(this.self, -1);
-            phasePunchImpact(targetEntity);
         }
     }
 
     @Override
     public void handleStandAttack(Player player, Entity target) {
         if (this.getActivePower() == PowerIndex.SNEAK_ATTACK) {
+            if (((IPlayerEntity) player).roundabout$getVoiceData() instanceof AnasuiVoice voice) {
+                voice.playPhasePunch();
+            }
             phasePunchImpact(target);
         }
     }
@@ -820,15 +1906,16 @@ public class PowersDiverDown extends NewPunchingStand {
             entity = null;
         }
         if (entity != null) {
-            hitParticlesCenter(entity);
             float pow;
             float knockbackStrength;
             pow = getPhasePunchStrength(entity);
             knockbackStrength = getPhasePunchKnockback();
             boolean hitSuccess;
             if (isFullyCharged) {
+                diverHitParticlesCenter(entity);
                 hitSuccess = DamageHandler.PenetratingStandDamageEntity(entity, pow, this.self);
             } else {
+                hitParticlesCenter(entity);
                 hitSuccess = StandDamageEntityAttack(entity, pow, 0, this.self);
             }
 
@@ -869,9 +1956,38 @@ public class PowersDiverDown extends NewPunchingStand {
 
         if (!this.self.level().isClientSide()) {
             playSoundIfPossible(self.level(), null, this.self.blockPosition(), SE,
-                    SoundSource.PLAYERS, 0.85F, pitch);
+                    SoundSource.PLAYERS, 0.9F, pitch);
         }
     }
+
+    // wall latch start
+
+    public void doWallLatchClient() {
+        if (!this.onCooldown(PowerIndex.SKILL_3)) {
+            if (canLatchOntoWall() && canWallZipConfig()) {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
+            }
+        }
+    }
+
+    public void wallLatch() {
+        if (!(self.level().isClientSide())) {
+            this.setCooldown(PowerIndex.SKILL_3, 10);
+        }
+        toggleZip(true);
+        Direction gd = RotationUtil.getRealFacingDirection2(this.self);
+        setHeelDirection(gd);
+        ((IGravityEntity) this.self).roundabout$setGravityDirection(gd);
+        this.justFlippedTicks = 4;
+        this.mercyTicks = 4;
+        if (self.level().isClientSide()) {
+            C2SPacketUtil.intToServerPacket(
+                    PacketDataIndex.INT_GRAVITY_FLIP_2, MainUtil.getIntFromDirection(gd)
+            );
+        }
+    }
+
+    // wall latch end
 
     // Workbench code start
 
@@ -880,7 +1996,9 @@ public class PowersDiverDown extends NewPunchingStand {
      * workbench they want to access.
      */
     private void tryWorkbenchSelectionClient() {
-        ClientUtil.openWorkbenchSelect();
+        if (canExecuteMoveWithLevel(getWorkbenchLevel()) && !this.onCooldown(PowerIndex.SKILL_4_GUARD)) {
+            ClientUtil.openWorkbenchSelect();
+        }
     }
 
     /**
@@ -893,7 +2011,10 @@ public class PowersDiverDown extends NewPunchingStand {
             return false;
         }
 
-        switch (workbenchId) {
+        this.customWorkbenchEnabled = workbenchId > 0;
+        int actualId = Math.abs(workbenchId);
+
+        switch (actualId) {
             case CRAFTING_TABLE -> {
                 // test message, comment this out once done
                 // serverPlayer.displayClientMessage(Component.literal("SERVER: calling
@@ -924,16 +2045,28 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     public void openCraftingTable(ServerPlayer serverPlayer) {
-        serverPlayer.openMenu(new SimpleMenuProvider(
-                (containerId, inventory, player) -> new DiverDownCraftingMenu(containerId, inventory,
-                        ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
-                    @Override
-                    public boolean stillValid(Player player) {
-                        return true;
-                    }
-                },
-                Component.translatable("container.crafting")));/**
-         * test to see if the selection even works in the first
+        if (customWorkbenchEnabled) {
+            serverPlayer.openMenu(new SimpleMenuProvider(
+                    (containerId, inventory, player) -> new DiverDownCraftingMenu(containerId, inventory,
+                            ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
+                        @Override
+                        public boolean stillValid(Player player) {
+                            return true;
+                        }
+                    },
+                    Component.translatable("container.crafting")));
+        } else {
+            serverPlayer.openMenu(new SimpleMenuProvider(
+                    (containerId, inventory, player) -> new CraftingMenu(containerId, inventory,
+                            ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
+                        @Override
+                        public boolean stillValid(Player player) {
+                            return true;
+                        }
+                    },
+                    Component.translatable("container.crafting")));
+        }
+        /* test to see if the selection even works in the first
          * place.
          * comment this out when unneeded anymore :thumbsup:
          */
@@ -942,54 +2075,103 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     public void openLoom(ServerPlayer serverPlayer) {
-        serverPlayer.openMenu(new SimpleMenuProvider(
-                (containerId, inventory, player) -> new LoomMenu(containerId, inventory,
-                        ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
-                    @Override
-                    public boolean stillValid(Player player) {
-                        return true;
-                    }
-                },
-                Component.translatable("container.loom")));
+        if (customWorkbenchEnabled) {
+            serverPlayer.openMenu(new SimpleMenuProvider(
+                    (containerId, inventory, player) -> new DiverDownLoomMenu(containerId, inventory,
+                            ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
+                        @Override
+                        public boolean stillValid(Player player) {
+                            return true;
+                        }
+                    },
+                    Component.translatable("container.loom")));
+        } else {
+            serverPlayer.openMenu(new SimpleMenuProvider(
+                    (containerId, inventory, player) -> new LoomMenu(containerId, inventory,
+                            ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
+                        @Override
+                        public boolean stillValid(Player player) {
+                            return true;
+                        }
+                    },
+                    Component.translatable("container.loom")));
+        }
     }
 
     public void openStonecutter(ServerPlayer serverPlayer) {
-        serverPlayer.openMenu(
-                new SimpleMenuProvider(
-                        (containerId, inventory, player) -> new StonecutterMenu(containerId, inventory,
-                                ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
-                            @Override
-                            public boolean stillValid(Player player) {
-                                return true;
-                            }
-                        },
-                        Component.translatable("container.stonecutter")));
+        if (customWorkbenchEnabled) {
+            serverPlayer.openMenu(new SimpleMenuProvider(
+                    (containerId, inventory, player) -> new DiverDownStonecutterMenu(containerId, inventory,
+                            ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
+                        @Override
+                        public boolean stillValid(Player player) {
+                            return true;
+                        }
+                    },
+                    Component.translatable("container.stonecutter")));
+        } else {
+            serverPlayer.openMenu(new SimpleMenuProvider(
+                    (containerId, inventory, player) -> new StonecutterMenu(containerId, inventory,
+                            ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
+                        @Override
+                        public boolean stillValid(Player player) {
+                            return true;
+                        }
+                    },
+                    Component.translatable("container.stonecutter")));
+        }
     }
 
     public void openAnvil(ServerPlayer serverPlayer) {
-        serverPlayer.openMenu(
-                new SimpleMenuProvider(
-                        (containerId, inventory, player) -> new DiverDownAnvilMenu(containerId, inventory,
-                                ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
-                            @Override
-                            public boolean stillValid(Player player) {
-                                return true;
-                            }
-                        },
-                        Component.translatable("container.repair")));
+        if (customWorkbenchEnabled) {
+            serverPlayer.openMenu(
+                    new SimpleMenuProvider(
+                            (containerId, inventory, player) -> new DiverDownAnvilMenu(containerId, inventory,
+                                    ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
+                                @Override
+                                public boolean stillValid(Player player) {
+                                    return true;
+                                }
+                            },
+                            Component.translatable("container.repair")));
+        } else {
+            serverPlayer.openMenu(
+                    new SimpleMenuProvider(
+                            (containerId, inventory, player) -> new AnvilMenu(containerId, inventory,
+                                    ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
+                                @Override
+                                public boolean stillValid(Player player) {
+                                    return true;
+                                }
+                            },
+                            Component.translatable("container.repair")));
+        }
     }
 
     public void openSmithingTable(ServerPlayer serverPlayer) {
-        serverPlayer.openMenu(
-                new SimpleMenuProvider(
-                        (containerId, inventory, player) -> new DiverDownSmithingMenu(containerId, inventory,
-                                ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
-                            @Override
-                            public boolean stillValid(Player player) {
-                                return true;
-                            }
-                        },
-                        Component.translatable("container.upgrade")));
+        if (customWorkbenchEnabled) {
+            serverPlayer.openMenu(
+                    new SimpleMenuProvider(
+                            (containerId, inventory, player) -> new DiverDownSmithingMenu(containerId, inventory,
+                                    ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
+                                @Override
+                                public boolean stillValid(Player player) {
+                                    return true;
+                                }
+                            },
+                            Component.translatable("container.upgrade")));
+        } else {
+            serverPlayer.openMenu(
+                    new SimpleMenuProvider(
+                            (containerId, inventory, player) -> new SmithingMenu(containerId, inventory,
+                                    ContainerLevelAccess.create(serverPlayer.level(), serverPlayer.blockPosition())) {
+                                @Override
+                                public boolean stillValid(Player player) {
+                                    return true;
+                                }
+                            },
+                            Component.translatable("container.upgrade")));
+        }
     }
 
     // Workbench code end
@@ -1005,8 +2187,21 @@ public class PowersDiverDown extends NewPunchingStand {
      * active.
      */
     private boolean hasLimbsDeployed() {
-        if (this.self.level() != null && !(this.self.level().isClientSide())) {
-            this.activeLimbs.removeIf(pos -> !this.self.level().getBlockState(pos).is(ModBlocks.DIVER_LIMB));
+        if (this.self.level() != null && !this.self.level().isClientSide) {
+            boolean broken = false;
+            for (BlockPos pos : this.activeLimbs) {
+                if (!this.self.level().getBlockState(pos).is(ModBlocks.DIVER_LIMB)) {
+                    broken = true;
+                    break;
+                }
+            }
+            if (broken) {
+                recallLimbs();
+                if (this.self instanceof Player player) {
+                    S2CPacketUtil.sendIntPowerDataPacket(player, LIMB_RECALL, -1);
+                }
+                return false;
+            }
         }
         return !this.activeLimbs.isEmpty();
     }
@@ -1114,9 +2309,10 @@ public class PowersDiverDown extends NewPunchingStand {
                                 // phase sound, or the rephase sound
                                 playSoundIfPossible(self.level(), null, this.self.blockPosition(),
                                         ModSounds.DIVER_DOWN_DIVE_EVENT,
-                                        SoundSource.PLAYERS, 0.85F, 1);
+                                        SoundSource.PLAYERS, 0.7F, 1);
                                 // finally despawns the stand once it's inside the block
                                 stand.forceDespawn(true);
+                                addEXP(1);
                             }
                         }
                         // subsequent usages
@@ -1125,7 +2321,7 @@ public class PowersDiverDown extends NewPunchingStand {
                             // play a sound
                             playSoundIfPossible(self.level(), null, this.self.blockPosition(),
                                     ModSounds.DIVER_DOWN_DIVE2_EVENT,
-                                    SoundSource.PLAYERS, 0.85F, 1);
+                                    SoundSource.PLAYERS, 0.7F, (float) (0.9 + (Math.random() * 0.25)));
                         }
                     }
                     return true;
@@ -1179,6 +2375,9 @@ public class PowersDiverDown extends NewPunchingStand {
                     ModSounds.SUMMON_DIVER_DOWN_EVENT,
                     SoundSource.PLAYERS, 0.85F, 1);
         }
+        if (this.self instanceof ServerPlayer sp) {
+            S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.SKILL_4_SNEAK, 50);
+        }
         return true;
     }
 
@@ -1192,22 +2391,20 @@ public class PowersDiverDown extends NewPunchingStand {
 
     // Limb scaffold climb move end
 
-    // Ground dive move here
+    // Ground dive start
 
     private void tryGroundDive() {
-        if (this.self.level().isClientSide() && GravityAPI.getGravityDirection(this.self) == Direction.DOWN) {
-            StandEntity stand = getStandEntity(this.self);
-            if (stand != null && stand.isAlive()) {
-                DiverDownControlsClient.enter(stand);
-                setPiloting(stand.getId());
-                tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, stand.getId());
-                // the 0.05 is there to fix the pilot enter bug, so it can enter pilot inside
-                // walls
-                stand.setPos(stand.getX(), stand.getY() + 0.05, stand.getZ());
-                // note to self: get the last survivor ult sound effect for this. this is a
-                // placeholder for now
-                playSoundIfPossible(self.level(), null, stand.blockPosition(),
-                        ModSounds.DIVER_DOWN_DIVE_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+        if (canExecuteMoveWithLevel(getGroundDiveLevel()) && !this.onCooldown(PowerIndex.SKILL_4) && canChangePower(PowerIndex.SKILL_4, false)) {
+            if (this.self.level().isClientSide() && GravityAPI.getGravityDirection(this.self) == Direction.DOWN) {
+                StandEntity stand = getStandEntity(this.self);
+                if (stand != null && stand.isAlive()) {
+                    DiverDownControlsClient.enter(stand);
+                    setPiloting(stand.getId());
+                    tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, stand.getId());
+                    // the 0.05 is there to fix the pilot enter bug, so it can enter pilot inside
+                    // walls
+                    stand.setPos(stand.getX(), stand.getY() + 0.05, stand.getZ());
+                }
             }
         }
     }
@@ -1252,6 +2449,12 @@ public class PowersDiverDown extends NewPunchingStand {
             }
             if (entering) {
                 this.diveTicksLeft = MAX_DIVE_TICKS;
+                //put animation here
+                playSoundIfPossible(self.level(), null, getStandEntity(this.self).blockPosition(),
+                        ModSounds.DIVER_DOWN_GROUND_DIVE_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+                if (!this.self.level().isClientSide() && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof AnasuiVoice voice) {
+                    voice.playGroundDive();
+                }
             } else {
                 // move returns camera as a failsafe.
                 this.diveTicksLeft = 0;
@@ -1263,368 +2466,15 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     @Override
-    public void tickPower() {
-        super.tickPower();
-        if (!this.self.level().isClientSide()) {
-            // deletes limbs that are out of range
-            if (!this.activeLimbs.isEmpty()) {
-                Level level = this.self.level();
-                double maxRangeSq = (double) getMaxPilotRange() * getMaxPilotRange();
-                boolean changed = false;
-
-                java.util.Iterator<BlockPos> iterator = this.activeLimbs.iterator();
-                while (iterator.hasNext()) {
-                    BlockPos limbPos = iterator.next();
-                    boolean isLimbStillThere = level.getBlockState(limbPos).is(ModBlocks.DIVER_LIMB);
-                    boolean isOutOfRange = this.self.distanceToSqr(Vec3.atCenterOf(limbPos)) > maxRangeSq;
-
-                    if (!isLimbStillThere || isOutOfRange) {
-                        if (isLimbStillThere) {
-                            level.removeBlock(limbPos, false);
-                        }
-                        iterator.remove();
-                        changed = true;
-                    }
-                }
-
-                // If all limbs are gone, resummon Diver Down
-                if (changed && this.activeLimbs.isEmpty()) {
-                    this.currentLimbIndex = 0;
-                    //sync with client
-                    if (this.self instanceof Player player) {
-                        S2CPacketUtil.sendIntPowerDataPacket(player, LIMB_RECALL, -1);
-                    }
-                    if (hasStandActive(this.self)) {
-                        ((StandUser) this.self).roundabout$summonStand(level, true, false);
-                        playSoundIfPossible(self.level(), null, this.self.blockPosition(),
-                                ModSounds.SUMMON_DIVER_DOWN_EVENT,
-                                SoundSource.PLAYERS, 0.85F, 1);
-                    }
-                }
-            }
-        }
-        // force crawl mode in zippy time
-        if (inZipMode()) {
-            ((StandUser) this.self).rdbt$SetCrawlTicks(5);
-            this.self.setPose(Pose.SWIMMING);
-            this.self.setSwimming(true);
-        }
-        // timer for the pilot, kicks you out once it hits 0, all that good stuff.
-        if (this.self.level().isClientSide()) {
-            if (this.getActivePower() == GROUND_DIVE_BARRAGE) {
-                if (this.barrageTicksLeft > 0) {
-                    this.barrageTicksLeft--;
-                } else {
-                    this.setPowerNone();
-                }
-            }
-            boolean pilotingNow = isPiloting();
-            if (pilotingNow) {
-                wasPilotingClient = true;
-                // plays chest closing noise if chest closes
-                DiverDownControlsClient.handleChestAudio(this.isBarrel);
-                if (this.diveTicksLeft > 0) {
-                    this.diveTicksLeft--;
-                } else if (this.diveTicksLeft <= 0) {
-                    // make sure that the chest screen isn't open if player used open chest
-                    if (!DiverDownControlsClient.isScreenOpen()) {
-                        exitGroundDive();
-                    }
-                }
-                if (this.oreScanCooldown <= 0) {
-                    scoutForOresBeneathClient();
-                    //prevents the person's pc from exploding by scanning too many highlights at once
-                    this.oreScanCooldown = 5;
-                } else {
-                    this.oreScanCooldown--;
-                }
-            } else if (wasPilotingClient) {
-                // if this runs again, it ends early.
-                wasPilotingClient = false;
-                exitGroundDive();
-            }
-            if (isPacketPlayer()) {
-                // pull down in air
-                if (inZipMode() && !getStandUserSelf().rdbt$getJumping()) {
-                    if (!self.onGround()) {
-                        if (this.self.getDeltaMovement().y < 0) {
-                            if (!(canCutCorners() && justFlippedTicks > 0)) {
-                                this.self.setDeltaMovement(this.self.getDeltaMovement().add(0, -0.14, 0));
-                            }
-                        }
-                    }
-                }
-                // disengage if swimming
-                if (self.isInWater()) {
-                    toggleZip(false);
-                    C2SPacketUtil.trySingleBytePacket(PacketDataIndex.QUERY_STAND_UPDATE_2);
-                }
-                // Check for ground/ledge with mercyTicks(coyote time) grace period
-                if (inZipMode()) {
-                    if (justFlippedTicks > 0) {
-                        justFlippedTicks--;
-                    } else {
-                        if (this.self.horizontalCollision && canCutCorners() && justFlippedTicks <= 0) {
-                            Direction facing = RotationUtil.getRealFacingDirection2(this.self);
-                            Direction grav = ((IGravityEntity) this.self).roundabout$getGravityDirection();
-                            if (facing != grav && facing != grav.getOpposite()) {
-                                Vec3 mpos = this.self.getPosition(1F);
-                                // Check if there is a walkable block in front of the player
-                                BlockPos wallPos = BlockPos.containing(mpos).relative(facing);
-                                if (MainUtil.isBlockWalkable(this.self.level().getBlockState(wallPos))) {
-                                    ((IGravityEntity) this.self).roundabout$setGravityDirection(facing);
-                                    setHeelDirection(facing);
-                                    justFlippedTicks = 7;
-                                    C2SPacketUtil.intToServerPacket(
-                                            PacketDataIndex.INT_GRAVITY_FLIP, MainUtil.getIntFromDirection(facing));
-                                }
-                            }
-                        }
-                        // Check block probe positions beneath player relative to gravity
-                        Vec3 newVec = RotationUtil.vecPlayerToWorld(new Vec3(0, -0.2, 0),
-                                ((IGravityEntity) self).roundabout$getGravityDirection());
-                        BlockPos pos = BlockPos.containing(self.getPosition(1).add(newVec));
-                        Vec3 newVec2 = RotationUtil.vecPlayerToWorld(new Vec3(0, -1.0, 0),
-                                ((IGravityEntity) self).roundabout$getGravityDirection());
-                        BlockPos pos2 = BlockPos.containing(self.getPosition(1).add(newVec2));
-                        Vec3 newVec4 = RotationUtil.vecPlayerToWorld(new Vec3(0, -0.5, 0),
-                                ((IGravityEntity) self).roundabout$getGravityDirection());
-                        BlockPos pos4 = BlockPos.containing(self.getPosition(1).add(newVec4));
-                        Vec3 newVec5 = RotationUtil.vecPlayerToWorld(new Vec3(0, -1.1, 0),
-                                ((IGravityEntity) self).roundabout$getGravityDirection());
-                        BlockPos pos5 = BlockPos.containing(self.getPosition(1).add(newVec5));
-                        if (self.onGround() && MainUtil.isBlockWalkableSimplified(self.getBlockStateOn())) {
-                            mercyTicks = 12; // needs lots of coyote time for sprinting
-                            lastGroundPosition = self.position();
-                        } else {
-                            // If ANY block directly beneath your rotated feet is solid, you are still on a
-                            // surface
-                            if (MainUtil.isBlockWalkable(self.level().getBlockState(pos))
-                                    || MainUtil.isBlockWalkable(self.level().getBlockState(pos2))
-                                    || MainUtil.isBlockWalkable(self.level().getBlockState(pos4))
-                                    || MainUtil.isBlockWalkable(self.level().getBlockState(pos5))) {
-                                mercyTicks--;
-                            } else {
-                                // Only attempt to cut the corner when all probe blocks are AIR (stepped off
-                                // edge)
-                                if (canCutCorners()) {
-                                    if (mercyTicks > 8) {
-                                        mercyTicks = 8;
-                                    }
-                                    mercyTicks -= 1;
-                                    if (canCut() && cutDirection != ((IGravityEntity) this.self)
-                                            .roundabout$getGravityDirection()) {
-                                        ((IGravityEntity) this.self).roundabout$setGravityDirection(cutDirection);
-                                        setHeelDirection(cutDirection);
-                                        justFlippedTicks = 5;
-                                        C2SPacketUtil.intToServerPacket(
-                                                PacketDataIndex.INT_GRAVITY_FLIP,
-                                                MainUtil.getIntFromDirection(feetDirection));
-                                    }
-                                } else {
-                                    mercyTicks = 0;
-                                }
-                            }
-                        }
-                        // cancel power if something bad happens
-                        if (getStandUserSelf().rdbt$getJumping() || self.isSleeping()
-                                || (!self.onGround() && !this.getStandUserSelf().roundabout$isPossessed()
-                                && mercyTicks <= 0)
-                                || self.getRootVehicle() != this.self) {
-                            feetDirection = Direction.DOWN;
-                            toggleZip(false);
-                            C2SPacketUtil.trySingleBytePacket(PacketDataIndex.QUERY_STAND_UPDATE_2);
-
-                            // Reset gravity direction to DOWN
-                            ((IGravityEntity) this.self).roundabout$setGravityDirection(feetDirection);
-                            justFlippedTicks = 5;
-                            C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_GRAVITY_FLIP,
-                                    MainUtil.getIntFromDirection(feetDirection));
-                        }
-                    }
-                } else {
-                    feetDirection = Direction.DOWN;
-                }
-            }
-        } else {
-            if (!this.self.level().isClientSide()) {
-                // dive windup
-                if (this.diveWindupTicks > 0) {
-                    this.diveWindupTicks--;
-                    if (this.diveWindupTicks == 0) {
-                        completeDiveServer();
-                    }
-                }
-                // recall stand if target dies, or if they go too far
-                if (isDiveActive()) {
-                    if (!this.submergedTarget.isAlive()
-                            || this.submergedTarget.isRemoved()
-                            || this.self.distanceTo(this.submergedTarget) > (getMaxPilotRange())) {
-                        emergeServer();
-                    }
-                }
-                // trap detection
-                if (!this.storedKickTraps.isEmpty()) {
-                    Iterator<Map.Entry<BlockPos, KickTrap>> it = this.storedKickTraps.entrySet().iterator();
-                    while (it.hasNext()) {
-                        Map.Entry<BlockPos, KickTrap> entry = it.next();
-                        BlockPos trapPos = entry.getKey();
-                        KickTrap trap = entry.getValue();
-
-                        // remove the traps if the timer runs out
-                        if (--trap.ticks <= 0 || this.self.level().getBlockState(trapPos).isAir()) {
-                            it.remove();
-                            continue;
-                        }
-
-                        // particle effects
-                        if (trap.ticks % 10 == 0) {
-                            double px = trapPos.getX() + 0.5 + trap.face.getStepX() * 0.52;
-                            double py = trapPos.getY() + 0.5 + trap.face.getStepY() * 0.52;
-                            double pz = trapPos.getZ() + 0.5 + trap.face.getStepZ() * 0.52;
-                            sendParticlesIfPossible(this.self.level(), ModParticles.ENERGY_DISTORTION,
-                                    px, py, pz, 1, 0.02, 0.02, 0.02, 0.0);
-                        }
-
-                        // check if something touches the trap
-                        if (this.isAutoRelease) {
-                            List<LivingEntity> victims = detectTrapTrigger(trapPos, trap.face);
-                            if (!victims.isEmpty()) {
-                                // trigger traps for players after 1 second, mobs trigger immediately
-                                if (trap.ticks > (MAX_TRAP_DURATION - 20)) {
-                                    victims.removeIf(v -> v instanceof Player);
-                                }
-                                if (!victims.isEmpty()) {
-                                    triggerKickTrap(victims, trapPos, trap.face);
-                                    it.remove(); // delete the triggered trap
-                                }
-                            }
-                        }
-                    }
-                }
-                // cleanup the limbs if they expire
-                if (!this.releasingLimbs.isEmpty()) {
-                    Iterator<Map.Entry<BlockPos, Integer>> limbIt = this.releasingLimbs.entrySet().iterator();
-                    while (limbIt.hasNext()) {
-                        Map.Entry<BlockPos, Integer> entry = limbIt.next();
-                        int remaining = entry.getValue() - 1;
-                        if (remaining <= 0) {
-                            BlockPos pos = entry.getKey();
-                            if (this.self.level().getBlockState(pos).is(ModBlocks.DIVER_LIMB)) {
-                                this.self.level().removeBlock(pos, false);
-                            }
-                            limbIt.remove();
-                        } else {
-                            entry.setValue(remaining);
-                        }
-                    }
-                }
-            }
-            if (isPiloting()) {
-                if (this.diveTicksLeft > 0) {
-                    this.diveTicksLeft--;
-                } else if (this.diveTicksLeft <= 0) {
-                    // same as earlier, if the player's container becomes their inventory
-                    // then we know that they have exited the chest.
-                    if (this.self instanceof ServerPlayer sp && sp.containerMenu == sp.inventoryMenu) {
-                        exitGroundDive();
-                    }
-                }
-            }
-            LivingEntity stand = getPilotingStand();
-            if (this.getActivePower() == GROUND_DIVE_BARRAGE && !this.self.level().isClientSide) {
-                if (this.barrageTicksLeft > 0) {
-                    this.barrageTicksLeft--;
-                    // need to filter targets still to account for that pesky boss immunity
-                    List<Entity> unfilteredTargets = getEntitiesBox();
-                    // for boss filtering function, taken from walking heart. It took me a while to
-                    // figure out that FE meant "Filtered Entities," so im leaving this variable as
-                    // the whole thing for future reference.
-                    List<Entity> filteredEntities = new ArrayList<>();
-                    for (Entity target : unfilteredTargets) {
-                        if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxesOnBosses) {
-                            filteredEntities.add(target);
-                        } else if (MainUtil.isBossMob(target)) {
-                            // Bosses require direct line of sight
-                            if (MainUtil.canActuallyHitInvolved(target, this.self)) {
-                                filteredEntities.add(target);
-                            }
-                        } else {
-                            // Regular mobs can be hit through walls
-                            filteredEntities.add(target);
-                        }
-                    }
-                    // filter end
-                    for (Entity target : filteredEntities) {
-                        if (target instanceof LivingEntity living) {
-                            if (this.barrageTicksLeft > 11) {
-                                // motion stores the knockback from the move then immediately deletes it
-                                // this ensures that enemies can still run around while the move is hitting them
-                                // whilst also making sure that the move doesn't send them flying away
-                                Vec3 motion = living.getDeltaMovement();
-                                DamageHandler.StandDamageEntity(living, 0.25F, this.self);
-                                living.setDeltaMovement(motion);
-                                hitParticles(living);
-                                // animate the barrage and also sound here
-                            } else if (this.barrageTicksLeft == 9) {
-                                // BIG FINAL PUNCH!!! (does bleed)
-                                DamageHandler.StandDamageEntity(living, 7.0F, this.self);
-                                MainUtil.makeBleed(target, 1, 1000, stand);
-                                living.setDeltaMovement(living.getDeltaMovement().x * 0.3, 1.35D,
-                                        living.getDeltaMovement().z * 0.3);
-                                living.hurtMarked = true;
-                                MainUtil.knockShieldPlusStand(living, 60); // 60 ticks = 3 seconds
-                                // big final punch anim and sound here
-                                hitParticlesCenter(living);
-                                sendParticlesIfPossible(this.self.level(), ModParticles.AIR_CRACKLE,
-                                        living.getX(), living.getY() + (living.getBbHeight() * 0.5), living.getZ(),
-                                        1, 0.0, 0.0, 0.0, 0);
-                                exitGroundDive();
-                            } else {
-                                // do nothing, wait for animation to finish
-                                // revisit this with animated to adjust ticks based on animation
-                            }
-                        }
-                    }
-                } else {
-                    this.setPowerNone();
-                    exitGroundDive();
-                }
-            }
-            if (!inZipMode()) {
-                feetDirection = Direction.DOWN;
-            } else {
-                // Server verifies the surface beneath the player is still valid
-                Vec3 newVec = RotationUtil.vecPlayerToWorld(new Vec3(0, -0.2, 0),
-                        ((IGravityEntity) self).roundabout$getGravityDirection());
-                BlockPos pos = BlockPos.containing(self.getPosition(1).add(newVec));
-                Vec3 newVec4 = RotationUtil.vecPlayerToWorld(new Vec3(0, -0.5, 0),
-                        ((IGravityEntity) self).roundabout$getGravityDirection());
-                BlockPos pos4 = BlockPos.containing(self.getPosition(1).add(newVec4));
-                BlockState state1 = self.level().getBlockState(pos);
-                BlockState state4 = self.level().getBlockState(pos4);
-                boolean isOnValidBlock = MainUtil.isBlockWalkableSimplified(state1)
-                        && MainUtil.isBlockWalkableSimplified(state4);
-                if (!isOnValidBlock) {
-                    toggleZip(false);
-                }
-            }
-        }
-    }
-
-    @Override
     public int getMaxPilotRange() {
         // (this is in blocks)
-        return 10;
+        return 13;
     }
 
     @Override
     public void synchToCamera() {
         if (isPiloting()) {
             LivingEntity stand = getPilotingStand();
-            if (stand != null) {
-                DiverDownControlsClient.enforceCamera(stand);
-            }
         }
     }
 
@@ -1642,6 +2492,11 @@ public class PowersDiverDown extends NewPunchingStand {
             float yawRad = diver.getYRot() * ((float) Math.PI / 180F);
             double forward = kpi.forwardImpulse;
             double strafe = kpi.leftImpulse;
+            if (forward != 0.0 && strafe != 0.0) {
+                double length = Math.hypot(forward, strafe);
+                forward /= length;
+                strafe /= length;
+            }
             double motionX = (-Math.sin(yawRad) * forward + Math.cos(yawRad) * strafe) * speed;
             double motionZ = (Math.cos(yawRad) * forward + Math.sin(yawRad) * strafe) * speed;
             // stops movement when reaching max range
@@ -1693,24 +2548,24 @@ public class PowersDiverDown extends NewPunchingStand {
      * @param targetY Target Y coordinate
      * @param targetZ Target Z coordinate
      */
+    private boolean isInDiveHitbox(double targetX, double targetY, double targetZ, double centerX, double centerY, double centerZ) {
+        double dx = Math.abs(targetX - centerX);
+        double dy = Math.abs(targetY - centerY);
+        double dz = Math.abs(targetZ - centerZ);
+        if (dy > 3)
+            return false;
+        if (dx > 2.0 || dz > 2.0)
+            return false;
+        if (dx > 1.0 && dz > 1.0)
+            return false;
+        return true;
+    }
+
     private boolean isInDiveHitbox(double targetX, double targetY, double targetZ) {
         StandEntity stand = getStandEntity(this.self);
         if (stand == null)
             return false;
-        double dx = Math.abs(targetX - stand.getX());
-        double dy = Math.abs(targetY - stand.getY());
-        double dz = Math.abs(targetZ - stand.getZ());
-        // Vertical check. 3 represents the height of the hitbox. edit this number to
-        // change it.
-        if (dy > 3)
-            return false;
-        // check for if entity is with the 2 block radius.
-        if (dx > 2.0 || dz > 2.0)
-            return false;
-        // cut out the 4 corners
-        if (dx > 1.0 && dz > 1.0)
-            return false;
-        return true;
+        return isInDiveHitbox(targetX, targetY, targetZ, stand.getX(), stand.getY(), stand.getZ());
     }
 
     // Gets chest to open.
@@ -1743,13 +2598,11 @@ public class PowersDiverDown extends NewPunchingStand {
     private void tryOpenChest() {
         BlockPos chestPos = this.getClosestChest();
         if (chestPos != null) {
-            // plays whatever container open sound, also updates the variables so closing
-            // sound can be played
             if (this.self.level().isClientSide()) {
                 BlockState state = this.self.level().getBlockState(chestPos);
                 this.isBarrel = state.getBlock() instanceof BarrelBlock;
-                SoundEvent openSound = this.isBarrel ? SoundEvents.BARREL_OPEN : SoundEvents.CHEST_OPEN;
-                // Minecraft.getInstance().player.playSound(openSound, 1.0F, 1.0F);
+                this.isOpeningRemoteChest = true;
+                this.chestScreenEverOpened = false;
             }
             tryBlockPosPower(OPEN_CHEST, true, chestPos);
             tryBlockPosPowerPacket(OPEN_CHEST, chestPos);
@@ -1764,21 +2617,19 @@ public class PowersDiverDown extends NewPunchingStand {
         if (chestPos == null) {
             return false;
         }
-        //sets the stand on the server
+        if (!MainUtil.canPlaceOnClaim(serverPlayer, chestPos)) {
+            return false;
+        }
         StandEntity stand = getStandEntity(this.self);
         if (stand != null && !isPiloting()) {
             setPiloting(stand.getId());
         }
+        this.isOpeningRemoteChest = true;
+
         BlockState state = this.self.level().getBlockState(chestPos);
         MenuProvider menuProvider = state.getMenuProvider(this.self.level(), chestPos);
         if (menuProvider != null) {
             serverPlayer.openMenu(menuProvider);
-            // test message, comment out once done
-            /*
-             * if (this.self instanceof Player player) {
-             * player.sendSystemMessage(Component.literal("it's chesting time"));
-             * }
-             */
         }
         return true;
     }
@@ -1810,16 +2661,20 @@ public class PowersDiverDown extends NewPunchingStand {
                 // method to copy as that drags in ALL items, not just one
                 // unlike phase grab
                 boolean collected = false;
-                if (target instanceof ItemEntity || target instanceof ExperienceOrb) {
-                    // bring items to player yippee
-                    target.playerTouch(player);
+                if (target instanceof ItemEntity itemEntity) {
+                    // fix is here in case, for some reason, you decide to drop an item only to immediately grab it with X
+                    itemEntity.setPickUpDelay(0);
+                    itemEntity.playerTouch(player);
                     collected = true;
-                    // only trigger this once because otherwise it will get spammed and be really
-                    // annoying
-                    if (collected) {
-                        playSoundIfPossible(this.self.level(), null, stand.blockPosition(),
-                                SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.85F, 1.0F);
-                    }
+                } else if (target instanceof ExperienceOrb xpOrb) {
+                    xpOrb.playerTouch(player);
+                    collected = true;
+                }
+                if (collected) {
+                    playSoundIfPossible(this.self.level(), null, stand.blockPosition(),
+                            SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.85F, 1.0F);
+                    setCooldown(PowerIndex.SKILL_4, 100);
+                    S2CPacketUtil.sendCooldownSyncPacket(player, PowerIndex.SKILL_4, 100);
                     exitGroundDive();
                 }
             }
@@ -1848,6 +2703,7 @@ public class PowersDiverDown extends NewPunchingStand {
             Vec3 pos = stand.position();
             tryPosPower(GROUND_DIVE_BARRAGE, true, pos);
             tryPosPowerPacket(GROUND_DIVE_BARRAGE, pos);
+            setCooldown(PowerIndex.SKILL_4, 360);
         }
     }
 
@@ -1858,13 +2714,19 @@ public class PowersDiverDown extends NewPunchingStand {
      */
     private List<Entity> getEntitiesBox() {
         StandEntity stand = getStandEntity(this.self);
-        AABB box = stand.getBoundingBox().inflate(2.0, 2.0, 2.0);
-        List<Entity> allTargets = this.self.level().getEntities(stand, box);
-        // filter entities even more so it only counts those inside the ACTUAL hitbox
+        Vec3 center = (this.getActivePower() == GROUND_DIVE_BARRAGE && this.groundBarragePos != null)
+                ? this.groundBarragePos
+                : (stand != null ? stand.position() : this.self.position());
+
+        AABB box = new AABB(
+                center.x - 2.0, center.y - 3.0, center.z - 2.0,
+                center.x + 2.0, center.y + 3.0, center.z + 2.0
+        );
+        List<Entity> allTargets = this.self.level().getEntities(this.self, box);
         List<Entity> filteredTargets = new ArrayList<>();
         for (Entity target : allTargets) {
             if (target != null && target.isAlive() && target != this.self && target != stand) {
-                if (isInDiveHitbox(target.getX(), target.getY(), target.getZ())) {
+                if (isInDiveHitbox(target.getX(), target.getY(), target.getZ(), center.x, center.y, center.z)) {
                     filteredTargets.add(target);
                 }
             }
@@ -1900,6 +2762,52 @@ public class PowersDiverDown extends NewPunchingStand {
         this.detectedOres = found;
     }
 
+    public void toggleOreDetection() {
+        this.oreDetectionEnabled = !this.oreDetectionEnabled;
+        if (!this.oreDetectionEnabled) {
+            this.detectedOres = Collections.emptyList();
+        }
+    }
+
+    private boolean hasItemsInHitbox() {
+        StandEntity stand = getStandEntity(this.self);
+        if (stand == null) return false;
+        AABB box = stand.getBoundingBox().inflate(2.0, 2.0, 2.0);
+        List<Entity> entities = this.self.level().getEntities(stand, box);
+        for (Entity e : entities) {
+            if ((e instanceof ItemEntity || e instanceof ExperienceOrb) && e.isAlive()) {
+                if (isInDiveHitbox(e.getX(), e.getY(), e.getZ())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean highlightsEntity(Entity entity, Player player) {
+        if (isPiloting() && entity instanceof LivingEntity living) {
+            if (!living.isAlive() || living == this.self) return false;
+
+            StandEntity stand = getStandEntity(this.self);
+            if (stand == null || living == stand) return false;
+
+            if (isInDiveHitbox(living.getX(), living.getY(), living.getZ())) {
+                if (!ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxesOnBosses
+                        && MainUtil.isBossMob(living)) {
+                    return MainUtil.canActuallyHitInvolved(living, stand);
+                }
+                return true;
+            }
+        }
+        return super.highlightsEntity(entity, player);
+    }
+
+    @Override
+    public int highlightsEntityColor(Entity entity, Player player) {
+        return 0x00E6D9;
+    }
+
     // walking heart autostep works on the player, not on the stand. i can't copy
     // that for this, unfortunately.
 
@@ -1908,16 +2816,18 @@ public class PowersDiverDown extends NewPunchingStand {
     // i just need to use the camera third person thing though, so I'll just
     // transfer that here instead of making a new file.
 
-    // Ground dive move end
+    // Ground dive end
 
     // heel plant 2.0 start
 
     public void tryDiverZip() {
-        if (!self.isInWater()) {
-            if (forceBlock())
-                return;
-            ((StandUser) this.getSelf()).roundabout$tryPower(DIVER_ZIP, true);
-            tryPowerPacket(DIVER_ZIP);
+        if (canExecuteMoveWithLevel(getDiverZipLevel()) && !this.onCooldown(PowerIndex.SKILL_3)) {
+            if (!self.isInWater()) {
+                if (forceBlock())
+                    return;
+                ((StandUser) this.getSelf()).roundabout$tryPower(DIVER_ZIP, true);
+                tryPowerPacket(DIVER_ZIP);
+            }
         }
     }
 
@@ -1944,6 +2854,11 @@ public class PowersDiverDown extends NewPunchingStand {
         if (!toggle) {
             ((StandUser) this.self).rdbt$SetCrawlTicks(0);
             this.self.setSwimming(false);
+            this.self.setPose(Pose.STANDING);
+            if (inZipMode())
+                setCooldown(PowerIndex.SKILL_3, 180);
+        } else {
+            this.self.setSprinting(false);
         }
         if (!this.self.level().isClientSide()) {
             // test message, comment out when done
@@ -1957,6 +2872,12 @@ public class PowersDiverDown extends NewPunchingStand {
             if (toggle != getTog) {
                 if (toggle) {
                     // put sound here
+                    playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                            ModSounds.DIVER_DOWN_TRANSFER_EVENT,
+                            SoundSource.PLAYERS, 0.9F, 1.2F);
+                    if (self instanceof Player player && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof AnasuiVoice voice) {
+                        voice.playDiverZip();
+                    }
                 } else {
                     Direction gf = ((IGravityEntity) self).roundabout$getGravityDirection();
                     if (gf != getIntendedDirection()) {
@@ -1969,6 +2890,9 @@ public class PowersDiverDown extends NewPunchingStand {
                     }
                     // put cooldown here
                     // put sound here
+                    playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                            ModSounds.DIVER_DOWN_DIVE_EVENT,
+                            SoundSource.PLAYERS, 0.5F, 1.3F);
                 }
             }
         }
@@ -2042,6 +2966,16 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     @Override
+    public boolean cancelSprint() {
+        return super.cancelSprint() || inZipMode();
+    }
+
+    @Override
+    public boolean cancelSprintParticles() {
+        return super.cancelSprintParticles() || inZipMode();
+    }
+
+    @Override
     public float getStepHeightAddon() {
         if (inZipMode()) {
             if (canWallZipConfig())
@@ -2059,7 +2993,7 @@ public class PowersDiverDown extends NewPunchingStand {
      * enabled in config
      */
     public boolean canCutCorners() {
-        return inZipMode() && canWallZipConfig();
+        return false;
     }
 
     public boolean tryCut(Vec3 cutPos) {
@@ -2178,10 +3112,91 @@ public class PowersDiverDown extends NewPunchingStand {
 
     // kick storage start
 
+    private void cancelStore() {
+        this.setPowerNone();
+    }
+
+    public boolean startKickTrapWindup() {
+        if (this.self.level().isClientSide()) {
+            return true;
+        }
+        Vec3 eyePos = this.self.getEyePosition(0);
+        Vec3 lookVec = this.self.getViewVector(0);
+        Vec3 reachVec = eyePos.add(lookVec.scale(TRAP_RANGE));
+
+        BlockHitResult blockHit = this.self.level().clip(
+                new ClipContext(eyePos, reachVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.self));
+
+        if (blockHit.getType() != HitResult.Type.BLOCK) {
+            return false;
+        }
+
+        // startup timer
+        this.setActivePower(STORE_KICK_TRAP);
+        this.setAttackTimeDuring(0);
+
+        // animations and sounds and stuff
+        return true;
+    }
+
+    public void completeKickTrap() {
+        if (this.getAttackTimeDuring() >= KICK_TRAP_WINDUP_MAX) {
+            plantKickTrap();
+            this.setPowerNone();
+        }
+    }
+
+    //copied from sendParticlesIfPossible, but added a blacklist.
+    private void sendKickTrapParticles(double px, double py, double pz) {
+        Level level = this.self.level();
+        if (level instanceof ServerLevel sl && level.getServer() != null) {
+            if (PowerTypes.isErasingTime(this.self)) {
+                return;
+            }
+
+            double range = 64.0D;
+            double rangeSq = range * range;
+
+            for (ServerPlayer player : level.getServer().getPlayerList().getPlayers()) {
+                if (player.level() != sl) {
+                    continue;
+                }
+                if (PowerTypes.isInADifferentExistenceNoTE(this.self, player)) {
+                    continue;
+                }
+                if (player.distanceToSqr(px, py, pz) > rangeSq) {
+                    continue;
+                }
+                boolean isUser = player.equals(this.self);
+
+                // blacklist of interactions
+                boolean canOtherSee = !player.isSprinting()
+                        && !player.isUsingItem()
+                        && !player.isSwimming()
+                        && !player.isFallFlying()
+                        && !player.isPassenger();
+
+                if (isUser || canOtherSee) {
+                    sl.sendParticles(
+                            player,
+                            ModParticles.ENERGY_RIPPLE_SURFACE,
+                            false,
+                            px, py, pz,
+                            1,
+                            0, 0, 0,
+                            0.0
+                    );
+                }
+            }
+        }
+    }
+
     public void tryPlantKickTrap() {
-        if (this.canAttack() && !this.areStandMovesDisabled()) {
-            this.tryPower(STORE_KICK_TRAP, true);
-            tryPowerPacket(STORE_KICK_TRAP);
+        if (canExecuteMoveWithLevel(getKickStorageLevel()) && !this.onCooldown(PowerIndex.SKILL_2)) {
+            if (this.canAttack() && !this.areStandMovesDisabled()) {
+                this.tryPower(STORE_KICK_TRAP, true);
+                tryPowerPacket(STORE_KICK_TRAP);
+            }
         }
     }
 
@@ -2205,19 +3220,32 @@ public class PowersDiverDown extends NewPunchingStand {
 
         BlockPos hitPos = blockHit.getBlockPos();
         Direction face = blockHit.getDirection();
+        BlockFace key = new BlockFace(hitPos, face);
 
-        if (!this.storedKickTraps.containsKey(hitPos)) {
+        if (!this.storedKickTraps.containsKey(key)) {
             while (this.storedKickTraps.size() >= MAX_NUMBER_OF_TRAPS) {
-                BlockPos oldest = this.storedKickTraps.keySet().iterator().next();
+                BlockFace oldest = this.storedKickTraps.keySet().iterator().next();
                 this.storedKickTraps.remove(oldest);
             }
         }
 
+        // mirror the angle at which the player looked at the block
+        Vec3 normal = new Vec3(face.getStepX(), face.getStepY(), face.getStepZ());
+        double dot = lookVec.dot(normal);
+        Vec3 reflection = lookVec.subtract(normal.scale(2.0 * dot)).normalize();
+
         // store the trap
-        this.storedKickTraps.put(hitPos, new KickTrap(MAX_TRAP_DURATION, face));
+        this.storedKickTraps.put(key, new KickTrap(MAX_TRAP_DURATION, face, reflection));
+        setCooldown(PowerIndex.SKILL_2, 100);
 
         // animation here
         // Sounds & ground impact particles here
+        playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                ModSounds.DIVER_DOWN_TRANSFER_EVENT,
+                SoundSource.PLAYERS, 0.7F, 1);
+        if (self instanceof Player player && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof AnasuiVoice voice) {
+            voice.playTrap();
+        }
 
         // cooldown here
 
@@ -2241,56 +3269,65 @@ public class PowersDiverDown extends NewPunchingStand {
         return victims;
     }
 
-    private void triggerKickTrap(List<LivingEntity> victims, BlockPos pos, Direction face) {
+    private void triggerKickTrap(List<LivingEntity> victims, BlockPos pos, KickTrap trap) {
+        Direction face = trap.face;
         Level level = this.self.level();
         StandEntity stand = this.getStandEntity(this.self);
         BlockPos spawnPos = pos.relative(face);
 
-        // Spawn Diver Down's leg
-        if (level.getBlockState(spawnPos).canBeReplaced()) {
-            BlockState limbState = ModBlocks.DIVER_LIMB.defaultBlockState();
-            level.setBlockAndUpdate(spawnPos, limbState);
-            if (level.getBlockEntity(spawnPos) instanceof DiverLimbBlockEntity be) {
-                be.ownerUUID = this.self.getUUID();
-                be.limbIndex = 2; // 2 = Right Leg (kick)
-                be.facing = face.getOpposite(); // Attaches back onto the wall/floor block
-                be.standSkin = ((StandUser) this.self).roundabout$getStandSkin();
-                be.setChanged();
-                level.sendBlockUpdated(spawnPos, limbState, limbState, 3);
-            }
-            // Keep the leg visible for a while (~0.6s)
-            this.releasingLimbs.put(spawnPos, 12);
-        }
-
         for (LivingEntity victim : victims) {
-            // damage the enemy
-            DamageHandler.StandDamageEntity(victim, 8.0F, this.self);
-
-            // launch the poor sod
-            if (face == Direction.UP) {
-                // launches up
-                victim.setDeltaMovement(
-                        face.getStepX() * 0.7D,
-                        1.35D,
-                        face.getStepZ() * 0.7D);
-            } else if (face.getAxis().isHorizontal()) {
-                // launches sideways
-                victim.setDeltaMovement(
-                        face.getStepX() * 1.2D,
-                        0.85D,
-                        face.getStepZ() * 1.2D);
-            } else {
-                // for ceiling traps
-                victim.setDeltaMovement(0.0D, -1.0D, 0.0D);
+            if (victim instanceof TamableAnimal TA && TA.getOwner() != null && TA.getOwner().is(this.getSelf())) {
+                continue;
             }
+            DamageHandler.StandDamageEntity(victim, getKickTrapStrength(victim), this.self);
+            Vec3 dir = trap.launchVector != null ? trap.launchVector : new Vec3(face.getStepX(), face.getStepY(), face.getStepZ());
+
+            double launchX = dir.x;
+            double launchY = dir.y;
+            double launchZ = dir.z;
+            if (face == Direction.DOWN) {
+                launchX *= 1.2D;
+                launchZ *= 1.2D;
+                launchY = Math.min(-0.8D, launchY * 1.5D);
+            } else if (face == Direction.UP) {
+                double horizScale = Math.max(1.1D, 2D * (1.0D - Math.abs(launchY)));
+                launchX *= horizScale;
+                launchZ *= horizScale;
+                launchY = Math.max(0.70D, launchY * 1D);
+            } else {
+                launchX *= 1.8D;
+                launchZ *= 1.8D;
+                launchY = Math.max(0.60D, launchY * 1.3D);
+            }
+            if (victim instanceof net.minecraft.world.entity.player.Player) {
+                launchX *= 1.45D;
+                launchZ *= 1.45D;
+                // Give a tiny bit more air time to players so drag doesn't stop them
+                launchY += 0.15D;
+            }
+
+            launchX = Math.min(2.9D, Math.max(-2.9D, launchX));
+            launchZ = Math.min(2.9D, Math.max(-2.9D, launchZ));
+            net.hydra.jojomod.util.MainUtil.takeLiteralUnresistableKnockbackWithY(victim, launchX, launchY, launchZ);
+
             victim.hurtMarked = true;
+            victim.hasImpulse = true;
 
             // play effects sounds and stuff here
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                    ModSounds.DIVER_DOWN_HIT_EVENT,
+                    SoundSource.PLAYERS, 0.6F, 0.7F);
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                    ModSounds.DIVER_DOWN_TRANSFER_EVENT,
+                    SoundSource.PLAYERS, 0.8F, 1);
+            if (self instanceof Player player && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof AnasuiVoice voice) {
+                voice.playTrapTrigger();
+            }
         }
     }
 
     private void tryToggleTrapMode() {
-        this.isAutoRelease = !this.isAutoRelease; // Immediate client-side update for GUI icon
+        this.isAutoRelease = !this.isAutoRelease;
         this.tryPower(TOGGLE_TRAP_MODE, true);
         tryPowerPacket(TOGGLE_TRAP_MODE);
     }
@@ -2312,16 +3349,16 @@ public class PowersDiverDown extends NewPunchingStand {
             return false;
         }
         boolean triggeredAny = false;
-        Iterator<Map.Entry<BlockPos, KickTrap>> it = this.storedKickTraps.entrySet().iterator();
+        Iterator<Map.Entry<BlockFace, KickTrap>> it = this.storedKickTraps.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry<BlockPos, KickTrap> entry = it.next();
-            BlockPos trapPos = entry.getKey();
+            Map.Entry<BlockFace, KickTrap> entry = it.next();
+            BlockFace blockFace = entry.getKey();
+            BlockPos trapPos = blockFace.pos();
             KickTrap trap = entry.getValue();
-            // Detect any entity on the trap, used to instantly activate, even against
-            // players
+            // Detect any entity on the trap, used to instantly activate, even against players
             List<LivingEntity> victims = detectTrapTrigger(trapPos, trap.face);
             if (!victims.isEmpty()) {
-                triggerKickTrap(victims, trapPos, trap.face);
+                triggerKickTrap(victims, trapPos, trap);
                 it.remove(); // Consume trap
                 triggeredAny = true;
             }
@@ -2345,6 +3382,9 @@ public class PowersDiverDown extends NewPunchingStand {
         this.storedKickTraps.clear();
 
         // sound here
+        playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                ModSounds.DIVER_DOWN_TRANSFER_EVENT,
+                SoundSource.PLAYERS, 0.5F, 1.5F);
 
         return true;
     }
@@ -2354,7 +3394,7 @@ public class PowersDiverDown extends NewPunchingStand {
     // dive start
 
     private void tryStartDiveClient() {
-        if (!areStandMovesDisabled() && !isDiveActive()) {
+        if (!areStandMovesDisabled() && !isDiveActive() && !this.onCooldown(PowerIndex.SKILL_1) && this.getActivePower() != DIVER_SUBMERGE_START) {
             this.tryPower(DIVER_SUBMERGE_START, true);
             tryPowerPacket(DIVER_SUBMERGE_START);
         }
@@ -2371,49 +3411,73 @@ public class PowersDiverDown extends NewPunchingStand {
             return false;
         }
         // the windup
-        this.diveWindupTicks = DIVE_WINDUP_MAX;
-        this.setAttackTimeDuring(-DIVE_WINDUP_MAX);
+        playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                ModSounds.DIVER_DOWN_CHARGE_EVENT,
+                SoundSource.PLAYERS, 0.8F, 0.9F);
+        this.setActivePower(DIVER_SUBMERGE_START);
+        this.setAttackTimeDuring(0);
         // do animations and stuff here
         return true;
     }
 
     //actually does the dive
     public void completeDiveServer() {
-        // run the get target method to find a target
-        Entity target = getTargetEntity(self, 5.5F);
-        if (!(target instanceof LivingEntity) || target instanceof StandEntity || target == null) {
-            return;
-        }
-        this.submergedTarget = target;
-        if (this.submergedTarget == null || !this.submergedTarget.isAlive()) {
-            cancelDiveServer();
-            return;
-        }
-        // Goes through shields: break/bypass shield if holding one
-        MainUtil.knockShieldPlusStand(this.submergedTarget, 40);
-        // Attach to target entity
-        ((StandUser) this.submergedTarget).roundabout$SetDiverUser(this);
-        // sync with the client for isDiveActive
-        if (this.self instanceof Player player) {
-            S2CPacketUtil.sendIntPowerDataPacket(player, DIVER_SUBMERGE_START, this.submergedTarget.getId());
-        }
-        // desummon stand
-        if (hasStandEntity(this.self)) {
-            StandEntity stand = this.getStandEntity(this.self);
-            if (stand != null) {
-                stand.discard();
+        if (this.getAttackTimeDuring() >= DIVE_WINDUP_MAX) {
+            // run the get target method to find a target
+            Entity target = getTargetEntity(self, DIVE_REACH);
+            if (target instanceof StandEntity stand && stand.getUser() != null) {
+                target = stand.getUser();
+            }
+            if (!(target instanceof LivingEntity) || target instanceof StandEntity || target == null) {
+                cancelDiveServer();
+                this.setAttackTimeDuring(-5);
+                return;
+            }
+            this.submergedTarget = target;
+            if (this.submergedTarget == null || !this.submergedTarget.isAlive()) {
+                cancelDiveServer(); //.25 second cooldown
+                return;
+            }
+            this.setPowerNone();
+            // Attach to target entity
+            ((StandUser) this.submergedTarget).roundabout$SetDiverUser(this);
+            // sync with the client for isDiveActive
+            if (this.self instanceof Player player) {
+                S2CPacketUtil.sendIntPowerDataPacket(player, DIVER_SUBMERGE_START, this.submergedTarget.getId());
+            }
+            // desummon stand
+            if (hasStandEntity(this.self)) {
+                StandEntity stand = this.getStandEntity(this.self);
+                if (stand != null) {
+                    stand.discard();
+                }
+            }
+            addEXP(3);
+            // sounds and particles here
+            Vec3 centerOffset = new Vec3(0, (submergedTarget.getBbHeight() * 0.65), 0);
+            Direction gd = ((IGravityEntity) submergedTarget).roundabout$getGravityDirection();
+            if (gd != Direction.DOWN) {
+                centerOffset = RotationUtil.vecPlayerToWorld(centerOffset, gd);
+            }
+            sendParticlesIfPossible(
+                    this.self.level(), ModParticles.ENERGY_RIPPLE,
+                    submergedTarget.getX() + centerOffset.x, submergedTarget.getY() + centerOffset.y, submergedTarget.getZ() + centerOffset.z,
+                    0, 1.0, 1.0, 0.0, 1.0);
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                    ModSounds.DIVER_DOWN_DIVE_EVENT,
+                    SoundSource.PLAYERS, 0.8F, 1F);
+            if (self instanceof Player player && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof AnasuiVoice voice) {
+                voice.playSubmerge();
             }
         }
-        // sounds and particles here
     }
 
     public boolean emergeServer() {
-        if (!isDiveActive())
+        if (this.submergedTarget == null)
             return false;
         removeDiverLegsFromTarget();
         if (this.submergedTarget != null) {
             ((StandUser) this.submergedTarget).roundabout$SetDiverUser(null);
-            //play sounds and effects here
             this.submergedTarget = null;
         }
         this.setPowerNone();
@@ -2424,12 +3488,16 @@ public class PowersDiverDown extends NewPunchingStand {
         // Resummon stand to user
         if (!this.self.level().isClientSide() && hasStandActive(this.self)) {
             ((StandUser) this.self).roundabout$summonStand(this.self.level(), true, false);
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                    ModSounds.SUMMON_DIVER_DOWN_EVENT,
+                    SoundSource.PLAYERS, 0.85F, 1);
         }
+        setCooldown(PowerIndex.SKILL_1, 300);
+        setCooldown(PowerIndex.SKILL_1_GUARD, 300);
         return true;
     }
 
     public void cancelDiveServer() {
-        this.diveWindupTicks = 0;
         removeDiverLegsFromTarget();
         this.submergedTarget = null;
         this.setPowerNone();
@@ -2438,9 +3506,22 @@ public class PowersDiverDown extends NewPunchingStand {
             // S2C means server to client, for updating client/server desyncs
             S2CPacketUtil.sendIntPowerDataPacket(player, DIVER_EMERGE, -1);
         }
+
+        // fix for the diver down disappearing but nothing happening hopefully
+        if (!this.self.level().isClientSide() && hasStandActive(this.self)) {
+            if (!hasStandEntity(this.self) || getStandEntity(this.self) == null || !getStandEntity(this.self).isAlive()) {
+                ((StandUser) this.self).roundabout$summonStand(this.self.level(), true, false);
+            }
+        }
     }
 
     public boolean isDiveActive() {
+        if (this.self.level().isClientSide()) {
+            if (this.submergedTarget == null && this.submergedTargetId != -1) {
+                this.submergedTarget = this.self.level().getEntity(this.submergedTargetId);
+            }
+            return this.submergedTargetId != -1;
+        }
         return this.submergedTarget != null && this.submergedTarget.isAlive() && !this.submergedTarget.isRemoved();
     }
 
@@ -2448,7 +3529,7 @@ public class PowersDiverDown extends NewPunchingStand {
      * handles the damage transfer ability
      */
     public void onSubmergedTargetHurt(DamageSource source, float amount) {
-        if (this.isTransferringDamage || !isDiveActive() || isSelfDive())
+        if (!this.damageRedirectionEnabled || this.isTransferringDamage || !isDiveActive() || isSelfDive())
             return;
         this.isTransferringDamage = true;
         try {
@@ -2458,6 +3539,8 @@ public class PowersDiverDown extends NewPunchingStand {
             // sounds here if possible, to showcase the target absorbing damage
             // if user dies from the damage transfer, emerge immediately
             if (!this.self.isAlive()) {
+                clearRibcageTrap();
+                clearSpringLegs();
                 emergeServer();
             }
         } finally {
@@ -2479,6 +3562,7 @@ public class PowersDiverDown extends NewPunchingStand {
 
         // Set target as self
         this.submergedTarget = this.self;
+        ((StandUser) this.self).roundabout$SetDiverUser(this);
 
         // Desummon stand into player
         if (hasStandEntity(this.self)) {
@@ -2494,13 +3578,35 @@ public class PowersDiverDown extends NewPunchingStand {
         }
 
         //play sounds and animations here
-
+        playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                ModSounds.DIVER_DOWN_DIVE_EVENT,
+                SoundSource.PLAYERS, 0.7F, 1);
+        Vec3 centerOffset = new Vec3(0, (submergedTarget.getBbHeight() * 0.65), 0);
+        Direction gd = ((IGravityEntity) submergedTarget).roundabout$getGravityDirection();
+        if (gd != Direction.DOWN) {
+            centerOffset = RotationUtil.vecPlayerToWorld(centerOffset, gd);
+        }
+        sendParticlesIfPossible(
+                this.self.level(), ModParticles.ENERGY_RIPPLE,
+                submergedTarget.getX() + centerOffset.x, submergedTarget.getY() + centerOffset.y, submergedTarget.getZ() + centerOffset.z,
+                0, 1.0, 1.0, 0.0, 1.0);
         return true;
     }
 
     // simple check for self dive, will be used in afflictions wheel
     public boolean isSelfDive() {
         return isDiveActive() && this.submergedTarget == this.self;
+    }
+
+    private void tryToggleDamageRedirect() {
+        if (!isDiveActive()) return;
+        this.tryPower(TOGGLE_DAMAGE_REDIRECT, true);
+        tryPowerPacket(TOGGLE_DAMAGE_REDIRECT);
+    }
+
+    public boolean toggleDamageRedirectServer() {
+        this.damageRedirectionEnabled = !this.damageRedirectionEnabled;
+        return true;
     }
 
     // dive end
@@ -2512,7 +3618,9 @@ public class PowersDiverDown extends NewPunchingStand {
      * affliction they want to access.
      */
     private void tryAfflictionSelectionClient() {
-        ClientUtil.openAfflictionSelect();
+        if (!this.onCooldown(PowerIndex.GENERAL_1)) {
+            ClientUtil.openAfflictionSelect();
+        }
     }
 
     /**
@@ -2527,9 +3635,10 @@ public class PowersDiverDown extends NewPunchingStand {
 
         switch (afflictionId) {
             case DISGUISE -> {
-                // test message, comment this out once done
-                // serverPlayer.displayClientMessage(Component.literal("SERVER: calling
-                // crafting"), false);
+                if (this.submergedTarget instanceof StandUser su && su.roundabout$isDisguised()) {
+                    su.roundabout$clearDisguise();
+                    return true;
+                }
                 tryDisguiseClient();
                 return true;
             }
@@ -2545,11 +3654,434 @@ public class PowersDiverDown extends NewPunchingStand {
                 cureNegativeEffects();
                 return true;
             }
+            case TRANSFER -> {
+                //comment out when tested
+                //this.self.sendSystemMessage(Component.literal("it's transfering get update from affliciton screen time"));
+                prepareTransfer();
+                return true;
+            }
+            case BONE_BOMB -> {
+                triggerBoneExplosion();
+                return true;
+            }
+            case RIBCAGE_TRAP -> {
+                applyRibcageTrap();
+                return true;
+            }
+            case SPRING_LEGS -> {
+                applySpringLegs();
+                return true;
+            }
             default -> {
                 return false;
             }
         }
     }
+
+    // spring legs start
+
+    public void applySpringLegs() {
+        if (this.self.level().isClientSide()) return;
+        if (!(this.submergedTarget instanceof LivingEntity host) || !host.isAlive()) return;
+
+        this.springTarget = host;
+        this.springLegsTicks = SPRING_LEGS_MAX_DURATION;
+
+        // for disabling keys
+        if (host instanceof StandUser su) {
+            // just need this for the key disabling, nothing else
+            su.roundabout$setSpringLegs(true);
+        }
+        emergeServer();
+    }
+
+    public void tickSpringLegs() {
+        if (this.springTarget == null) return;
+
+        if (!this.self.isAlive() || this.self.isRemoved()
+                || !this.springTarget.isAlive() || this.springTarget.isRemoved()) {
+            clearSpringLegs();
+            return;
+        }
+
+        LivingEntity host = this.springTarget;
+        if (!host.isAlive() || host.isRemoved()) {
+            clearSpringLegs();
+            return;
+        }
+
+        boolean isPlayerOrBoss = host instanceof Player || MainUtil.isBossMob(host);
+        if (isPlayerOrBoss) {
+            if (--this.springLegsTicks <= 0) {
+                clearSpringLegs();
+                return;
+            }
+        } else {
+            //extra 5 seconds for mobs
+            if (--this.springLegsTicks <= -100) {
+                clearSpringLegs();
+                return;
+            }
+        }
+
+        if (!host.onGround()) return;
+        Level level = host.level();
+        if (host.isSprinting()) {
+            host.setSprinting(false);
+        }
+        double randomY = 0.5D + host.getRandom().nextDouble() * 0.3D;
+        double randomX = (host.getRandom().nextDouble() - 0.5) * 2.7;
+        double randomZ = (host.getRandom().nextDouble() - 0.5) * 2.7;
+        host.setDeltaMovement(randomX, randomY, randomZ);
+        host.hurtMarked = true;
+        //sound here
+        playSoundIfPossible(self.level(), null, host.blockPosition(),
+                ModSounds.DIVER_DOWN_SPRING_EVENT,
+                SoundSource.PLAYERS, 0.9F, 1);
+        return;
+    }
+
+    public void clearSpringLegs() {
+        if (this.springTarget instanceof StandUser su) {
+            su.roundabout$setSpringLegs(false);
+        }
+        this.springTarget = null;
+        this.springLegsTicks = 0;
+    }
+
+    // spring legs end
+
+    // ribcage trap start
+
+    public void applyRibcageTrap() {
+        if (this.self.level().isClientSide()) return;
+        if (!(this.submergedTarget instanceof LivingEntity host) || !host.isAlive()) return;
+
+        this.ribcageTarget = host;
+        this.ribcageTrapTicks = RIBCAGE_MAX_DURATION;
+
+        // for disabling keys
+        if (host instanceof StandUser su) {
+            su.roundabout$setRibcageTrap(true);
+        }
+
+        // entity will start walking where the user is looking
+        Vec3 look = host.getLookAngle();
+        Vec3 horizontalLook = new Vec3(look.x, 0, look.z);
+        if (horizontalLook.lengthSqr() < 1.0E-4) {
+            this.ribcageWalkDirection = new Vec3(0, 0, 1);
+        } else {
+            this.ribcageWalkDirection = horizontalLook.normalize();
+        }
+        emergeServer();
+    }
+
+    public void tickRibcageTrap() {
+        if (this.ribcageTarget == null) return;
+
+        if (!this.self.isAlive() || this.self.isRemoved()
+                || !this.ribcageTarget.isAlive() || this.ribcageTarget.isRemoved()) {
+            clearRibcageTrap();
+            return;
+        }
+
+        LivingEntity host = this.ribcageTarget;
+        if (!host.isAlive() || host.isRemoved()) {
+            clearRibcageTrap();
+            return;
+        }
+
+        //only tick down if it's a player or a boss, otherwise the effect lasts forever
+        boolean isPlayerOrBoss = host instanceof Player || MainUtil.isBossMob(host);
+        if (isPlayerOrBoss) {
+            if (--this.ribcageTrapTicks <= 0) {
+                clearRibcageTrap();
+                return;
+            }
+        }
+
+        Level level = host.level();
+
+        // forced forward walking for players and bosses
+        if (host instanceof Player player) {
+            if (player.isSprinting()) {
+                player.setSprinting(false);
+            }
+            Vec3 forward = player.getForward();
+            double walkSpeed = 0.4317D;
+            player.setDeltaMovement(forward.x * walkSpeed, player.getDeltaMovement().y, forward.z * walkSpeed);
+            player.hurtMarked = true;
+            return;
+        } else if (MainUtil.isBossMob(host)) {
+            Vec3 forward = host.getForward();
+            double walkSpeed = 0.4317D;
+            host.setDeltaMovement(forward.x * walkSpeed, host.getDeltaMovement().y, forward.z * walkSpeed);
+            host.hurtMarked = true;
+            return;
+        }
+
+        // normal mobs lose all control
+        if (host instanceof Mob mob) {
+            // make them walk in a straight line. find the closest enemy
+            List<LivingEntity> potentialVictims = level.getEntitiesOfClass(
+                    LivingEntity.class,
+                    host.getBoundingBox().inflate(HOSTILE_DETECTION_RANGE),
+                    e -> e != host
+                            && e != this.self
+                            && !(e instanceof StandEntity)
+                            && e.isAlive()
+                            && !e.isSpectator()
+                            && host.hasLineOfSight(e)
+            );
+
+            //find the closest enemy within detection range
+            LivingEntity nearestTarget = null;
+            double minDistanceSq = HOSTILE_DETECTION_RANGE * HOSTILE_DETECTION_RANGE;
+            for (LivingEntity e : potentialVictims) {
+                double distSq = host.distanceToSqr(e);
+                if (distSq < minDistanceSq) {
+                    minDistanceSq = distSq;
+                    nearestTarget = e;
+                }
+            }
+
+            if (nearestTarget != null) {
+                // need this desiredSpeed thing because villagers zoom away when yuo use ribcage trap on them
+                double desiredSpeed = 0.23D;
+                double baseSpeed = mob.getAttributeValue(Attributes.MOVEMENT_SPEED);
+                double speedModifier = baseSpeed > 0 ? (desiredSpeed / baseSpeed) : 1.0D;
+
+                mob.getNavigation().moveTo(nearestTarget, speedModifier);
+                mob.getLookControl().setLookAt(nearestTarget, 30.0F, 30.0F);
+
+                // collision check, stolen from d4c
+                if (host.distanceTo(nearestTarget) < 1.5D) {
+                    triggerRibcageSnap(host, nearestTarget);
+                    return;
+                }
+            } else {
+                // keep walking forward in straight line
+                if (this.ribcageWalkDirection != null) {
+                    double desiredSpeed = 0.23D;
+                    double baseSpeed = mob.getAttributeValue(Attributes.MOVEMENT_SPEED);
+                    double speedModifier = baseSpeed > 0 ? (desiredSpeed / baseSpeed) : 1.0D;
+
+                    Vec3 targetWalkPos = host.position().add(this.ribcageWalkDirection.scale(3.0D));
+                    mob.getNavigation().moveTo(targetWalkPos.x, targetWalkPos.y, targetWalkPos.z, speedModifier);
+                }
+            }
+        }
+    }
+
+    private void triggerRibcageSnap(LivingEntity host, LivingEntity victim) {
+        Level level = host.level();
+        Vec3 pos = host.position();
+
+        // sounds and animation here
+
+        DamageHandler.StandDamageEntity(victim, getRibcageSnapStrength(victim), this.self);
+        MainUtil.makeBleed(victim, 1, 1200, this.self);
+        MainUtil.makeMobBleed(victim);
+        MainUtil.makeMobBleed(host);
+        SimpleParticleType bloodType = ModParticles.BLOOD;
+        if (MainUtil.hasBlueBlood(victim)) {
+            bloodType = ModParticles.BLUE_BLOOD;
+        } else if (MainUtil.hasEnderBlood(victim)) {
+            bloodType = ModParticles.ENDER_BLOOD;
+        }
+        sendParticlesIfPossible(level, bloodType,
+                victim.getX(), victim.getY() + (victim.getBbHeight() * 0.5), victim.getZ(),
+                15, 0.35, 0.35, 0.35, 0.15);
+        float yawRad = (float) Math.toRadians(host.yBodyRot);
+        double backDist = 0.35;
+        double spawnX = host.getX() + Math.sin(yawRad) * backDist;
+        double spawnY = host.getY() + host.getBbHeight() * 0.6;
+        double spawnZ = host.getZ() - Math.cos(yawRad) * backDist;
+        sendParticlesIfPossible(
+                this.self.level(),
+                ModParticles.RIBCAGE,
+                spawnX,
+                spawnY,
+                spawnZ,
+                0, 0.0, 0.0, 0.0, 1.0
+        );
+
+        // The host mob with the ribcage trap dies (if it's a cannon fodder entity)
+        DamageHandler.StandDamageEntity(host, getRibcageHostStrength(host), this.self);
+
+        playSoundIfPossible(self.level(), null, host.blockPosition(),
+                ModSounds.DIVER_DOWN_RIBCAGE_EVENT,
+                SoundSource.PLAYERS, 0.8F, 1);
+
+        clearRibcageTrap();
+    }
+
+    public void clearRibcageTrap() {
+        if (this.ribcageTarget instanceof StandUser su) {
+            su.roundabout$setRibcageTrap(false);
+        }
+        if (this.ribcageTarget instanceof Mob mob) {
+            mob.getNavigation().stop();
+        }
+        this.ribcageTarget = null;
+        this.ribcageWalkDirection = null;
+        this.ribcageTrapTicks = 0;
+    }
+
+    // ribcage trap end
+
+    // bone bomb start
+
+    public void triggerBoneExplosion() {
+        if (this.self.level().isClientSide()) return;
+        if (!(this.submergedTarget instanceof LivingEntity host) || !host.isAlive()) return;
+
+        // kill normal mobs; blindness to players & bosses
+        if (host instanceof Player || MainUtil.isBossMob(host)) {
+            host.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 300, 0, false, false, false));
+            emergeServer();
+            // 20 second blindness
+        } else {
+            Level level = host.level();
+            Vec3 spawnPos = MainUtil.getMobCenter(host, 0.5F);
+            // Find nearest entity within 25 blocks
+            List<LivingEntity> nearby = level.getEntitiesOfClass(
+                    LivingEntity.class,
+                    host.getBoundingBox().inflate(25),
+                    e -> e != host
+                            && e != this.self
+                            && !(e instanceof StandEntity)
+                            && e.isAlive()
+                            && !e.isSpectator()
+            );
+
+            LivingEntity closestTarget = null;
+            double minDistanceSq = 25 * 25;
+            for (LivingEntity entity : nearby) {
+                double distSq = host.distanceToSqr(entity);
+                if (distSq < minDistanceSq) {
+                    minDistanceSq = distSq;
+                    closestTarget = entity;
+                }
+            }
+            // Shotgun blast towards nearest target
+            if (closestTarget != null) {
+                Vec3 targetCenter = MainUtil.getMobCenter(closestTarget, 0.5F);
+                Vec3 toTarget = targetCenter.subtract(spawnPos);
+
+                for (int i = 0; i < 8; i++) {
+                    BoneProjectileEntity bone = new BoneProjectileEntity(level, host);
+                    bone.setOwner(this.self);
+                    bone.setPos(spawnPos.x, spawnPos.y, spawnPos.z);
+                    // sets the gravity to false so it goes in a straight line like star platinum throw until 25 blocks pass
+                    bone.setNoGravity(true);
+                    //last number represents the spread
+                    bone.shoot(toTarget.x, toTarget.y, toTarget.z, 3F, 6F);
+                    level.addFreshEntity(bone);
+                }
+            }
+
+            // sounds and animations and stuff. probably no anims though, just gonna leave behind a blood splatter.
+            playSoundIfPossible(self.level(), null, host.blockPosition(),
+                    ModSounds.DIVER_DOWN_BOMB_EVENT,
+                    SoundSource.PLAYERS, 0.8F, 1);
+            sendParticlesIfPossible(level, ModParticles.BLOOD_MIST,
+                    host.getX(), host.getY() + host.getBbHeight() * 0.8, host.getZ(),
+                    6, 0.04, 0.04, 0.04, 0.02);
+            LivingEntity hostStorage = host;
+            emergeServer();
+            //20F one shots normal mobs like villagers, zombies and stuff, but keeps bigger mobs alive.
+            DamageHandler.StandDamageEntity(hostStorage, getBoneBombHostStrength(hostStorage), this.self);
+        }
+    }
+
+    // bone bomb end
+
+    // transfer start
+
+    private void prepareTransfer() {
+        if (this.self.level().isClientSide()) return;
+        if (this.submergedTarget == null || !this.submergedTarget.isAlive()) return;
+
+        // startup time
+        this.setActivePower(TRANSFER);
+        this.setAttackTime(0);
+        this.setAttackTimeDuring(0);
+
+        //test message
+        //this.self.sendSystemMessage(Component.literal("it's transfering windup time"));
+
+        //play the animation and sounds here
+        playSoundIfPossible(self.level(), null, submergedTarget.blockPosition(),
+                ModSounds.DIVER_DOWN_CHARGE_EVENT,
+                SoundSource.PLAYERS, 0.8F, 0.8F);
+    }
+
+    public void triggerTransfer() {
+        if (getAttackTimeDuring() >= TRANSFER_WINDUP_MAX) {
+            //this.self.sendSystemMessage(Component.literal("it's transfering time"));
+            LivingEntity host = (this.submergedTarget instanceof LivingEntity living) ? living : null;
+            if (host == null || !host.isAlive()) {
+                cancelTransfer();
+                return;
+            }
+
+            //makes a bounding box to find entities withing it
+            List<LivingEntity> nearby = host.level().getEntitiesOfClass(
+                    LivingEntity.class,
+                    host.getBoundingBox().inflate(TRANSFER_RANGE),
+                    e -> e != host
+                            && e != this.self
+                            && !(e instanceof StandEntity)
+                            && e.isAlive()
+                            && !e.isSpectator()
+            );
+
+            //gets the closest one
+            LivingEntity closestTarget = null;
+            double minDistanceSq = TRANSFER_RANGE * TRANSFER_RANGE;
+            for (LivingEntity entity : nearby) {
+                double distSq = host.distanceToSqr(entity);
+                if (distSq < minDistanceSq) {
+                    minDistanceSq = distSq;
+                    closestTarget = entity;
+                }
+            }
+
+            if (closestTarget == null) {
+                setCooldown(PowerIndex.GENERAL_1, 100);
+                cancelTransfer();
+                return;
+            }
+
+            //transfer process
+            removeDiverLegsFromTarget();
+            if (this.submergedTarget != null) {
+                ((StandUser) this.submergedTarget).roundabout$SetDiverUser(null);
+            }
+            this.submergedTarget = closestTarget;
+            ((StandUser) this.submergedTarget).roundabout$SetDiverUser(this);
+
+            // sync with client
+            if (this.self instanceof Player player) {
+                S2CPacketUtil.sendIntPowerDataPacket(player, DIVER_SUBMERGE_START, closestTarget.getId());
+            }
+
+            // sets activate power back to 0
+            this.setPowerNone();
+
+            // animation and sounds here
+            playSoundIfPossible(self.level(), null, submergedTarget.blockPosition(),
+                    ModSounds.DIVER_DOWN_DIVE_EVENT,
+                    SoundSource.PLAYERS, 0.8F, 1);
+            setCooldown(PowerIndex.GENERAL_1, 100);
+        }
+    }
+
+    private void cancelTransfer() {
+        this.setPowerNone();
+    }
+    // transfer end
 
     // cleanse negative effects start
 
@@ -2562,7 +4094,7 @@ public class PowersDiverDown extends NewPunchingStand {
         List<MobEffect> negativeEffects = new ArrayList<>();
         for (MobEffectInstance instance : targetLiving.getActiveEffects()) {
             MobEffect effect = instance.getEffect();
-            if (effect.getCategory() == MobEffectCategory.HARMFUL) {
+            if (effect.getCategory() == MobEffectCategory.HARMFUL && !MainUtil.isSpecialEffect(effect)) {
                 negativeEffects.add(effect);
                 if (effect == MobEffects.MOVEMENT_SLOWDOWN) {
                     hadSlowness = true;
@@ -2578,11 +4110,16 @@ public class PowersDiverDown extends NewPunchingStand {
 
         // special turtle master cleanse like what is in the pearl jam docs
         if (hadSlowness) {
-            targetLiving.removeEffect(MobEffects.DAMAGE_BOOST);      // Clears Strength
-            targetLiving.removeEffect(MobEffects.DAMAGE_RESISTANCE); // Clears Resistance (Turtle Master)
+            targetLiving.removeEffect(MobEffects.DAMAGE_BOOST);
+            targetLiving.removeEffect(MobEffects.DAMAGE_RESISTANCE);
         }
 
         // sounds here
+        playSoundIfPossible(self.level(), null, targetLiving.blockPosition(),
+                SoundEvents.ZOMBIE_VILLAGER_CURE,
+                SoundSource.PLAYERS, 0.7F, 1.3F);
+
+        setCooldown(PowerIndex.GENERAL_1, getAfflictionCooldown());
     }
 
     // cleanse negative effects end
@@ -2597,6 +4134,10 @@ public class PowersDiverDown extends NewPunchingStand {
         ((StandUser) this.submergedTarget).roundabout$setDiverLegs(true);
 
         //play sound here, replace entity legs with diver down legs
+        playSoundIfPossible(self.level(), null, submergedTarget.blockPosition(),
+                ModSounds.DIVER_DOWN_TRANSFER_EVENT,
+                SoundSource.PLAYERS, 0.8F, 1.2F);
+        setCooldown(PowerIndex.GENERAL_1, getAfflictionCooldown());
     }
 
     private void removeDiverLegsFromTarget() {
@@ -2614,47 +4155,144 @@ public class PowersDiverDown extends NewPunchingStand {
 
     // potion start
 
-    private void embedPotion(){
+    private void embedPotion() {
         if (this.self.level().isClientSide()) return;
         if (!(this.submergedTarget instanceof LivingEntity targetLiving) || !targetLiving.isAlive()) return;
+
+        if (this.self instanceof Witch) {
+            double rng = Math.random();
+            MobEffectInstance witchEffect;
+            if (rng < 0.35) {
+                witchEffect = new MobEffectInstance(MobEffects.POISON, 200, 1); // Poison II for 10s
+            } else if (rng < 0.70) {
+                witchEffect = new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 300, 1); // Slowness II for 15s
+            } else {
+                witchEffect = new MobEffectInstance(MobEffects.WEAKNESS, 300, 1); // Weakness II for 15s
+            }
+
+            targetLiving.addEffect(witchEffect, this.self);
+            playSoundIfPossible(self.level(), null, targetLiving.blockPosition(),
+                    ModSounds.DIVER_DOWN_TRANSFER_EVENT,
+                    SoundSource.HOSTILE, 0.9F, 1.5F);
+            setCooldown(PowerIndex.GENERAL_1, getAfflictionCooldown());
+            emergeServer();
+            return;
+        }
+
         if (!(this.self instanceof Player player)) return;
 
-        // check for potions in both on and offhand
+        // Check for potions or mob buckets in both main hand and off hand
         InteractionHand hand = InteractionHand.MAIN_HAND;
         ItemStack stack = player.getMainHandItem();
+        boolean isMobBucket = stack.getItem() instanceof MobBucketItem;
         List<MobEffectInstance> effects = PotionUtils.getMobEffects(stack);
 
-        if (effects.isEmpty()) {
+        if (effects.isEmpty() && !isMobBucket) {
             hand = InteractionHand.OFF_HAND;
             stack = player.getOffhandItem();
+            isMobBucket = stack.getItem() instanceof MobBucketItem;
             effects = PotionUtils.getMobEffects(stack);
         }
 
-        // If neither hand is holding an item with potion effects, do nothing
+        // mob bucket stuff
+        if (isMobBucket) {
+            // turn mobs passive
+            if (targetLiving instanceof Mob mob && !MainUtil.isBossMob(targetLiving)) {
+                mob.removeAllGoals(goal -> goal instanceof TargetGoal || goal instanceof MeleeAttackGoal || goal instanceof RangedAttackGoal);
+                mob.setTarget(null);
+                mob.setLastHurtByMob(null);
+                mob.setAggressive(false);
+            }
+
+            // prevent players and bosses passive from attacking for 3 seconds
+            if (targetLiving instanceof Player) {
+                targetLiving.addEffect(new MobEffectInstance(ModEffects.IMPRINTING, 60, 0, false, true, true), this.self);
+                targetLiving.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 60, 4, false, false, false), this.self);
+            } else if (MainUtil.isBossMob(targetLiving)) {
+                targetLiving.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 60, 2, false, false, false), this.self);
+            }
+
+            // return empty bucket to inventory
+            if (!player.getAbilities().instabuild) {
+                stack.shrink(1);
+                if (stack.isEmpty()) {
+                    player.setItemInHand(hand, new ItemStack(Items.WATER_BUCKET));
+                } else {
+                    if (!player.getInventory().add(new ItemStack(Items.WATER_BUCKET))) {
+                        player.drop(new ItemStack(Items.WATER_BUCKET), false);
+                    }
+                }
+            }
+
+            // sound effects and stuff here
+            playSoundIfPossible(self.level(), null, targetLiving.blockPosition(),
+                    ModSounds.DIVER_DOWN_TRANSFER_EVENT,
+                    SoundSource.PLAYERS, 0.9F, 1.5F);
+            emergeServer();
+            return;
+        }
+
+        // potion stuff
         if (effects.isEmpty()) return;
+
+        // banish check
+        if (targetLiving.hasEffect(ModEffects.BANISH) && ClientNetworking.getAppropriateConfig().miscellaneousSettings.hexTwoSealsPotions) {
+            if (this.self.level() instanceof ServerLevel sl) {
+                sl.playSound(null, targetLiving.blockPosition(), SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundSource.PLAYERS, 1F, (float) (1 + (Math.random() * 0.04)));
+                sl.sendParticles(ParticleTypes.SMOKE, targetLiving.getEyePosition().x,
+                        targetLiving.getEyePosition().y, targetLiving.getEyePosition().z,
+                        6, 0.35, 0.35, 0.35, 0.01);
+            }
+            if (!player.getAbilities().instabuild) {
+                Item item = stack.getItem();
+                stack.shrink(1);
+                if (item instanceof PotionItem && !(item instanceof SplashPotionItem) && !(item instanceof LingeringPotionItem)) {
+                    if (stack.isEmpty()) {
+                        player.setItemInHand(hand, new ItemStack(Items.GLASS_BOTTLE));
+                    } else {
+                        if (!player.getInventory().add(new ItemStack(Items.GLASS_BOTTLE))) {
+                            player.drop(new ItemStack(Items.GLASS_BOTTLE), false);
+                        }
+                    }
+                }
+            }
+            setCooldown(PowerIndex.GENERAL_1, getAfflictionCooldown());
+            return;
+        }
+
+        for (MobEffectInstance instance : effects) {
+            MobEffect effect = instance.getEffect();
+            if (effect.getCategory() == MobEffectCategory.HARMFUL) {
+                emergeServer();
+            }
+        }
 
         // apply the potion effect
         for (MobEffectInstance effect : effects) {
             int newDuration = effect.getDuration();
             // make potions with durations longer
             if (!effect.getEffect().isInstantenous()) {
-                newDuration = (int) (effect.getDuration() + 1200); // extra 60 seconds
+                newDuration = (int) (effect.getDuration() + 300); // extra 15 seconds
             }
+            int newAmplifier = effect.getAmplifier() + 1;
+            if (newAmplifier > 3) {
+                newAmplifier = 3;
+            }
+
             MobEffectInstance boostedEffect = new MobEffectInstance(
                     effect.getEffect(),
                     newDuration,
-                    effect.getAmplifier() + 1, // extra potion amplifier
+                    newAmplifier,
                     effect.isAmbient(),
                     effect.isVisible(),
                     effect.showIcon()
             );
+
             targetLiving.addEffect(boostedEffect, this.self);
+            setCooldown(PowerIndex.GENERAL_1, getAfflictionCooldown());
         }
 
-        // sounds and animations here
-
-        // KILL the potion
-        //somebody wanted the bottle to return to your inventory so i guess we're doing that
+        // Consume potion and return bottle
         if (!player.getAbilities().instabuild) {
             Item item = stack.getItem();
             stack.shrink(1);
@@ -2668,20 +4306,31 @@ public class PowersDiverDown extends NewPunchingStand {
                 }
             }
         }
+        playSoundIfPossible(self.level(), null, targetLiving.blockPosition(),
+                ModSounds.DIVER_DOWN_TRANSFER_EVENT,
+                SoundSource.PLAYERS, 0.9F, 1.5F);
     }
 
     //potion end
 
     //disguise start
 
-    private void tryDisguiseClient(){
-        if(this.self.level().isClientSide())
+    public boolean shouldShowDisguiseArmor() {
+        return this.showDisguiseArmor;
+    }
+
+    public void setShowDisguiseArmor(boolean show) {
+        this.showDisguiseArmor = show;
+    }
+
+    private void tryDisguiseClient() {
+        if (this.self.level().isClientSide())
             ClientUtil.openDisguiseScreen();
     }
 
     public void applyDisguiseToTarget(Entity target, GameProfile profile) {
         if (this.self.level().isClientSide()) return;
-
+        setCooldown(PowerIndex.GENERAL_1, getAfflictionCooldown());
         // it's testing time
         /*if (this.self instanceof ServerPlayer serverPlayer) {
             serverPlayer.sendSystemMessage(Component.literal("it's disguising time as " + profile.getName()));
@@ -2710,7 +4359,7 @@ public class PowersDiverDown extends NewPunchingStand {
         if (state.getBlock().defaultDestroyTime() < 0) return false;
 
         // Server config block blacklist check
-        if (MainUtil.isBlockBlacklisted(state)) return false;
+        if (MainUtil.isBlockDisassemblyBlacklisted(state)) return false;
 
         // check for distance (like BlockGrabPreset.getGrabRange())
         if (this.self.distanceToSqr(Vec3.atCenterOf(pos)) > 30.0) return false; // 30/6 = 5 blocks max
@@ -2720,6 +4369,7 @@ public class PowersDiverDown extends NewPunchingStand {
             if (!level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) return false;
             if (PE.blockActionRestricted(PE.serverLevel(), pos, PE.gameMode.getGameModeForPlayer())) return false;
             if (!level.mayInteract(PE, pos)) return false;
+            if (!MainUtil.canPlaceOnClaim(PE, pos)) return false;
         }
 
         // must have an associated Item
@@ -2752,6 +4402,10 @@ public class PowersDiverDown extends NewPunchingStand {
                 if (ingredient.getItems().length != 1) {
                     return false;
                 }
+                // don't allow recipes that return items (lilke cakes or honey blocks)
+                if (ingredient.getItems()[0].getItem().hasCraftingRemainingItem()) {
+                    return false;
+                }
             }
         }
 
@@ -2781,19 +4435,21 @@ public class PowersDiverDown extends NewPunchingStand {
 
     //checks for a block to disassemble
     private void tryDisassembleBlockClient() {
-        if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
-            Vec3 eyePos = this.self.getEyePosition(0);
-            Vec3 viewVec = this.self.getViewVector(0);
-            Vec3 targetVec = eyePos.add(viewVec.x * 6.0, viewVec.y * 6.0, viewVec.z * 6.0);
+        if (canExecuteMoveWithLevel(getBlockDisassemblyLevel())) {
+            if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
+                Vec3 eyePos = this.self.getEyePosition(0);
+                Vec3 viewVec = this.self.getViewVector(0);
+                Vec3 targetVec = eyePos.add(viewVec.x * 6.0, viewVec.y * 6.0, viewVec.z * 6.0);
 
-            BlockHitResult hit = this.self.level().clip(new ClipContext(
-                    eyePos, targetVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.self));
+                BlockHitResult hit = this.self.level().clip(new ClipContext(
+                        eyePos, targetVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.self));
 
-            if (hit.getType() == HitResult.Type.BLOCK) {
-                BlockPos pos = hit.getBlockPos();
-                if (canDisassembleBlock(pos)) {
-                    ((StandUser) this.getSelf()).roundabout$tryBlockPosPower(DISASSEMBLE_BLOCK, true, pos);
-                    tryBlockPosPowerPacket(DISASSEMBLE_BLOCK, pos);
+                if (hit.getType() == HitResult.Type.BLOCK) {
+                    BlockPos pos = hit.getBlockPos();
+                    if (canDisassembleBlock(pos)) {
+                        ((StandUser) this.getSelf()).roundabout$tryBlockPosPower(DISASSEMBLE_BLOCK, true, pos);
+                        tryBlockPosPowerPacket(DISASSEMBLE_BLOCK, pos);
+                    }
                 }
             }
         }
@@ -2814,11 +4470,18 @@ public class PowersDiverDown extends NewPunchingStand {
         if (!removed) return;
 
         // animate stand and sounds and stuff here
+        playSoundIfPossible(self.level(), null, pos,
+                ModSounds.DIVER_DOWN_DIVE_EVENT,
+                SoundSource.PLAYERS, 0.6F, 1.5F);
+        sendParticlesIfPossible(
+                this.self.level(), ModParticles.ENERGY_RIPPLE,
+                pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+                0, 1.0, 0.0, 0.0, 1.0);
 
         if (this.getSelf() instanceof ServerPlayer pl) {
             S2CPacketUtil.sendCooldownSyncPacket(pl, PowerIndex.SKILL_1_SNEAK, 60);
         }
-        this.setCooldown(PowerIndex.SKILL_1_SNEAK, 60);
+        this.setCooldown(PowerIndex.SKILL_1_SNEAK, 20);
 
         // run the drops list
         for (ItemStack drop : drops) {
@@ -2833,6 +4496,7 @@ public class PowersDiverDown extends NewPunchingStand {
             itemEntity.setDefaultPickUpDelay();
             this.self.level().addFreshEntity(itemEntity);
         }
+        addEXP(1);
     }
 
     // disassembly end
@@ -2847,7 +4511,7 @@ public class PowersDiverDown extends NewPunchingStand {
      * @return true if the stand moves are disabled, false otherwise
      */
     public boolean areStandMovesDisabled() {
-        return hasLimbsDeployed() || isDiveActive() || isPiloting() || inZipMode() || this.diveWindupTicks > 0;
+        return hasLimbsDeployed() || isDiveActive() || isPiloting() || inZipMode() || this.getActivePower() == DIVER_SUBMERGE_START;
     }
 
     //enables player attacks while DD is diving somewhere
@@ -2928,6 +4592,11 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     @Override
+    public boolean isMiningStand() {
+        return !areStandMovesDisabled() && super.isMiningStand();
+    }
+
+    @Override
     public boolean canGuard() {
         if (areStandMovesDisabled()) {
             return false;
@@ -2943,6 +4612,41 @@ public class PowersDiverDown extends NewPunchingStand {
         super.buttonInputBarrage(keyIsDown, options);
     }
 
+    // for levels
+
+    @Override
+    public byte getMaxLevel() {
+        return 7;
+    }
+
+    @Override
+    public void levelUp() {
+        if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE) {
+            IPlayerEntity ipe = ((IPlayerEntity) PE);
+            byte level = ipe.roundabout$getStandLevel();
+            if (level == 7) {
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.max.both").
+                        withStyle(ChatFormatting.AQUA), true);
+            } else {
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.both").
+                        withStyle(ChatFormatting.AQUA), true);
+            }
+        }
+        super.levelUp();
+    }
+
+    @Override
+    public int getExpForLevelUp(int currentLevel) {
+        int amt;
+        if (currentLevel == 1) {
+            amt = 100;
+        } else {
+            amt = (100 + ((currentLevel - 1) * 65));
+        }
+        amt = (int) (amt * getLevelMultiplier());
+        return amt;
+    }
+
     /*
      * this override goes here cuz it goes with the rest of the overrides
      * This will be used for recalling "pilot" moves, such as the limb move,
@@ -2953,6 +4657,7 @@ public class PowersDiverDown extends NewPunchingStand {
         if (desummon) {
             removeDiverLegsFromTarget();
             recallLimbs();
+            toggleZip(false);
             if (isDiveActive()) {
                 emergeServer();
             }
@@ -2994,23 +4699,53 @@ public class PowersDiverDown extends NewPunchingStand {
             case DiverDownEntity.PART_6 -> {
                 return Component.translatable("skins.roundabout.diver_down.base");
             }
-            case DiverDownEntity.LAVA_DIVER -> {
-                return Component.translatable("skins.roundabout.diver_down.lavadiver");
+            case DiverDownEntity.BETA_DIVER -> {
+                return Component.translatable("skins.roundabout.diver_down.betadiver");
             }
-            case DiverDownEntity.RED_DIVER -> {
-                return Component.translatable("skins.roundabout.diver_down.reddiver");
+            case DiverDownEntity.HOLY_DIVER -> {
+                return Component.translatable("skins.roundabout.diver_down.holy_diver");
             }
-            case DiverDownEntity.ORANGE_DIVER -> {
-                return Component.translatable("skins.roundabout.diver_down.orangediver");
+            case DiverDownEntity.KELP -> {
+                return Component.translatable("skins.roundabout.diver_down.kelp");
             }
-            case DiverDownEntity.TREASURE_DIVER -> {
-                return Component.translatable("skins.roundabout.diver_down.treasurediver");
+            case DiverDownEntity.GRAY -> {
+                return Component.translatable("skins.roundabout.diver_down.gray");
             }
-            case DiverDownEntity.BIRTHDAY_DIVER -> {
-                return Component.translatable("skins.roundabout.diver_down.birthdaydiver");
+            case DiverDownEntity.WHITE -> {
+                return Component.translatable("skins.roundabout.diver_down.white");
             }
-            case DiverDownEntity.FIRE_DIVER -> {
-                return Component.translatable("skins.roundabout.diver_down.firediver");
+            case DiverDownEntity.PURPLE -> {
+                return Component.translatable("skins.roundabout.diver_down.purple");
+            }
+            case DiverDownEntity.KHAKI -> {
+                return Component.translatable("skins.roundabout.diver_down.khaki");
+            }
+            case DiverDownEntity.YELLOW -> {
+                return Component.translatable("skins.roundabout.diver_down.yellow");
+            }
+            case DiverDownEntity.BLUE -> {
+                return Component.translatable("skins.roundabout.diver_down.blue");
+            }
+            case DiverDownEntity.ORANGE -> {
+                return Component.translatable("skins.roundabout.diver_down.orange");
+            }
+            case DiverDownEntity.PINK -> {
+                return Component.translatable("skins.roundabout.diver_down.pink");
+            }
+            case DiverDownEntity.INVERSION -> {
+                return Component.translatable("skins.roundabout.diver_down.inversion");
+            }
+            case DiverDownEntity.FIGURE -> {
+                return Component.translatable("skins.roundabout.diver_down.figure");
+            }
+            case DiverDownEntity.EYECATCH -> {
+                return Component.translatable("skins.roundabout.diver_down.eyecatch");
+            }
+            case DiverDownEntity.ARTWORK -> {
+                return Component.translatable("skins.roundabout.diver_down.artwork");
+            }
+            case DiverDownEntity.MANGA -> {
+                return Component.translatable("skins.roundabout.diver_down.manga");
             }
             default -> {
                 return Component.translatable("skins.roundabout.diver_down.base");
@@ -3020,14 +4755,94 @@ public class PowersDiverDown extends NewPunchingStand {
 
     @Override
     public List<Byte> getSkinList() {
-        return Arrays.asList(
-                DiverDownEntity.PART_6,
-                DiverDownEntity.LAVA_DIVER,
-                DiverDownEntity.RED_DIVER,
-                DiverDownEntity.ORANGE_DIVER,
-                DiverDownEntity.TREASURE_DIVER,
-                DiverDownEntity.BIRTHDAY_DIVER,
-                DiverDownEntity.FIRE_DIVER);
+        List<Byte> l = Lists.newArrayList();
+        l.add(DiverDownEntity.PART_6);
+        l.add(DiverDownEntity.BETA_DIVER);
+        if (this.getSelf() instanceof Player PE) {
+            byte Level = ((IPlayerEntity) PE).roundabout$getStandLevel();
+            ItemStack goldDisc = ((StandUser) PE).roundabout$getStandDisc();
+            boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
+            if (Level > 1 || bypass) {
+                l.add(DiverDownEntity.KELP);
+                l.add(DiverDownEntity.MANGA);
+                l.add(DiverDownEntity.GRAY);
+            }
+            if (Level > 2 || bypass) {
+                l.add(DiverDownEntity.WHITE);
+                l.add(DiverDownEntity.PURPLE);
+                l.add(DiverDownEntity.KHAKI);
+            }
+            if (Level > 3 || bypass) {
+                l.add(DiverDownEntity.YELLOW);
+                l.add(DiverDownEntity.BLUE);
+            }
+            if (Level > 4 || bypass) {
+                l.add(DiverDownEntity.ORANGE);
+                l.add(DiverDownEntity.PINK);
+            }
+            if (Level > 5 || bypass) {
+                l.add(DiverDownEntity.INVERSION);
+                l.add(DiverDownEntity.FIGURE);
+            }
+            if (Level > 6 || bypass) {
+                l.add(DiverDownEntity.EYECATCH);
+            }
+            if (Level > 7 || bypass) {
+                l.add(DiverDownEntity.ARTWORK);
+            }
+            if (((IPlayerEntity) PE).roundabout$getUnlockedBonusSkin() || bypass) {
+                l.add(DiverDownEntity.HOLY_DIVER);
+            }
+        }
+
+        return l;
+    }
+
+    public void unlockSkin() {
+        Level lv = this.getSelf().level();
+        if ((this.getSelf()) instanceof Player PE) {
+            StandUser user = ((StandUser) PE);
+            ItemStack stack = user.roundabout$getStandDisc();
+            if (!stack.isEmpty() && stack.is(ModItems.STAND_DISC_DIVER_DOWN)) {
+                IPlayerEntity ipe = ((IPlayerEntity) PE);
+                if (!ipe.roundabout$getUnlockedBonusSkin()) {
+                    if (!lv.isClientSide()) {
+                        ipe.roundabout$setUnlockedBonusSkin(true);
+                        playSoundIfPossible(self.level(), null, PE.getX(), PE.getY(),
+                                PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
+                        sendParticlesIfPossible(self.level(), ModParticles.WARDEN_CLOCK, PE.getX(),
+                                PE.getY() + PE.getEyeHeight(), PE.getZ(),
+                                7, 0.4, 0.4, 0.4, 0.2);
+                        user.roundabout$setStandSkin(DiverDownEntity.HOLY_DIVER);
+                        user.roundabout$summonStand(this.getSelf().level(), true, false);
+                        ((ServerPlayer) ipe).displayClientMessage(
+                                Component.translatable("unlock_skin.roundabout.diver_down.holy_diver"), true);
+                    }
+                }
+            }
+        }
+    }
+
+    //stolen from black sabbath tee hee
+    @Override
+    public boolean returnFakeStandForHud(){
+        if(this.self != null) {
+           // return !(this.getStandEntity(this.self) != null);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public StandEntity getStandForHUDIfFake(){
+        if (displayStand == null){
+            displayStand = this.getNewStandEntity();
+        }
+        if (this.self instanceof Player PL && ((IPlayerEntity) PL).roundabout$getStandSkin() != displayStand.getSkin()) {
+            displayStand = this.getNewStandEntity();
+            displayStand.setSkin(((IPlayerEntity) PL).roundabout$getStandSkin());
+        }
+        return displayStand;
     }
 
     // skins end

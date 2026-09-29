@@ -468,6 +468,12 @@ public class ForgeEntities {
                             sized(SheerHeartAttackEntity.width, SheerHeartAttackEntity.height).clientTrackingRange(15).
                             build(new ResourceLocation(Roundabout.MOD_ID, "sheer_heart_attack").toString())
             );
+    public static final RegistryObject<EntityType<SheerTeapotAttackEntity>> SHEER_TEAPOT_ATTACK =
+            ENTITY_TYPES.register("sheer_teapot_attack", () ->
+                    EntityType.Builder.of(SheerTeapotAttackEntity::new, MobCategory.MISC).
+                            sized(SheerTeapotAttackEntity.width, SheerTeapotAttackEntity.height).clientTrackingRange(15).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "sheer_teapot_attack").toString())
+            );
     public static final RegistryObject<EntityType<CinderellaEntity>> CINDERELLA =
             ENTITY_TYPES.register("cinderella", () ->
                     EntityType.Builder.of(CinderellaEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
@@ -624,8 +630,20 @@ public class ForgeEntities {
             ENTITY_TYPES.register("diver_down", () ->
                     EntityType.Builder.of(DiverDownEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
                             clientTrackingRange(14).
-                            build(new ResourceLocation(Roundabout.MOD_ID, "d4c").toString())
+                            build(new ResourceLocation(Roundabout.MOD_ID, "diver_down").toString())
             );
+    public static final RegistryObject<EntityType<DiverDownBetaEntity>> DIVER_DOWN_BETA =
+            ENTITY_TYPES.register("diver_down_beta", () ->
+                    EntityType.Builder.of(DiverDownBetaEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "diver_down_beta").toString())
+            );
+    public static final RegistryObject<EntityType<BoneProjectileEntity>> BONE_PROJECTILE = ENTITY_TYPES.register("bone_projectile",
+            () -> EntityType.Builder.<BoneProjectileEntity>of(BoneProjectileEntity::new, MobCategory.MISC)
+                    .sized(0.5F, 0.5F)
+                    .clientTrackingRange(4)
+                    .updateInterval(20)
+                    .build(new ResourceLocation(Roundabout.MOD_ID, "bone_projectile").toString()));
     public static final RegistryObject<EntityType<SilverChariotEntity>> SILVER_CHARIOT =
             ENTITY_TYPES.register("silver_chariot", () ->
                     EntityType.Builder.of(SilverChariotEntity::new, MobCategory.MISC).sized(0.75f, 2.05f).
@@ -634,13 +652,13 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<SilverChariotRapierShotEntity>> SILVER_CHARIOT_RAPIER =
             ENTITY_TYPES.register("silver_chariot_rapier", () ->
-                    EntityType.Builder.<SilverChariotRapierShotEntity>of(SilverChariotRapierShotEntity::new, MobCategory.MISC).sized(0.2f, 0.2f).
+                    EntityType.Builder.<SilverChariotRapierShotEntity>of(SilverChariotRapierShotEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).
                             clientTrackingRange(16).
                             build(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_rapier").toString())
             );
     public static final RegistryObject<EntityType<SilverChariotRapierPlatformEntity>> SILVER_CHARIOT_RAPIER_PLATFORM =
             ENTITY_TYPES.register("silver_chariot_rapier_platform", () ->
-                    EntityType.Builder.<SilverChariotRapierPlatformEntity>of(SilverChariotRapierPlatformEntity::new, MobCategory.MISC).sized(2.0f, 0.2f).
+                    EntityType.Builder.<SilverChariotRapierPlatformEntity>of(SilverChariotRapierPlatformEntity::new, MobCategory.MISC).sized(1.0f, 0.2f).
                             clientTrackingRange(16).
                             build(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_rapier_platform").toString())
             );
