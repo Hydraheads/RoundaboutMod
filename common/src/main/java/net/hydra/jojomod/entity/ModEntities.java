@@ -74,6 +74,7 @@ public class ModEntities {
     public static EntityType<KillerQueenEntity> KILLER_QUEEN;
     private static EntityType<BlockBombEntity> BLOCK_BOMB;
     public static EntityType<SheerHeartAttackEntity> SHEER_HEART_ATTACK;
+    public static EntityType<SheerTeapotAttackEntity> SHEER_TEAPOT_ATTACK;
     public static EntityType<CinderellaEntity> CINDERELLA;
     public static EntityType<CaliforniaKingBedEntity> CALIFORNIA_KING_BED;
     public static EntityType<PlanetWavesEntity> PLANET_WAVES;

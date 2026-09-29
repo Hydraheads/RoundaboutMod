@@ -468,6 +468,12 @@ public class ForgeEntities {
                             sized(SheerHeartAttackEntity.width, SheerHeartAttackEntity.height).clientTrackingRange(15).
                             build(new ResourceLocation(Roundabout.MOD_ID, "sheer_heart_attack").toString())
             );
+    public static final RegistryObject<EntityType<SheerTeapotAttackEntity>> SHEER_TEAPOT_ATTACK =
+            ENTITY_TYPES.register("sheer_teapot_attack", () ->
+                    EntityType.Builder.of(SheerTeapotAttackEntity::new, MobCategory.MISC).
+                            sized(SheerTeapotAttackEntity.width, SheerTeapotAttackEntity.height).clientTrackingRange(15).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "sheer_teapot_attack").toString())
+            );
     public static final RegistryObject<EntityType<CinderellaEntity>> CINDERELLA =
             ENTITY_TYPES.register("cinderella", () ->
                     EntityType.Builder.of(CinderellaEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
