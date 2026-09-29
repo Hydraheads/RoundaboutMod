@@ -76,6 +76,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation ANUBIS = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "anubis"), "main");
     public static final ModelLayerLocation STAR_PLATINUM_BASEBALL_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "star_platinum_baseball"), "main");
     public static final ModelLayerLocation DIVER_DOWN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "diver_down"), "main");
+    public static final ModelLayerLocation DIVER_DOWN_BETA_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "diver_down_beta"), "main");
     public static final ModelLayerLocation SILVER_CHARIOT_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot"), "main");
     public static final ModelLayerLocation SILVER_CHARIOT_RAPIER_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_rapier"), "main");
     public static final ModelLayerLocation SILVER_CHARIOT_RAPIER_PLATFORM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_rapier_platform"), "main");

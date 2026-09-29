@@ -287,7 +287,6 @@
     "whitesnake.control.WhitesnakeControlChatMixin",
     "whitesnake.control.WhitesnakeControlMobTargetingMixin",
     "whitesnake.control.WhitesnakePilotMiningMixin",
-    "whitesnake.control.WhitesnakePlayerActionMiningMixin",
     "whitesnake.control.WhitesnakeSoundBroadcastMixin",
     "whitesnake.hallucination.HallucinationDamageMixin",
     "whitesnake.inventory.InventorySelectedItemMixin",

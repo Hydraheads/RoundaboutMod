@@ -697,6 +697,13 @@ public class FabricEntities {
                         EntityType.Builder.of(DiverDownEntity::new, MobCategory.MISC).
                                 sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":diver_down")
                 );
+    public static final EntityType<DiverDownBetaEntity> DIVER_DOWN_BETA =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    Roundabout.location("diver_down_beta"),
+                    EntityType.Builder.of(DiverDownBetaEntity::new, MobCategory.MISC).
+                            sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":diver_down_beta")
+            );
         public static final EntityType<BoneProjectileEntity> BONE_PROJECTILE =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
@@ -1218,7 +1225,7 @@ public class FabricEntities {
                     EntityType.Builder.of(SheerHeartAttackEntity::new, MobCategory.CREATURE).
                             sized(SheerHeartAttackEntity.width, SheerHeartAttackEntity.height).clientTrackingRange(15).build(Roundabout.MOD_ID+":sheer_heart_attack")
             );
-    
+
     public static void register() {
                 /*Common Code Bridge*/
                 ModEntities.THE_WORLD = THE_WORLD;
@@ -1274,6 +1281,7 @@ public class FabricEntities {
                 ModEntities.TUSK_A4 = TUSK_A4;
                 ModEntities.ANUBIS = ANUBIS;
                 ModEntities.DIVER_DOWN = DIVER_DOWN;
+                ModEntities.DIVER_DOWN_BETA = DIVER_DOWN_BETA;
                 ModEntities.SILVER_CHARIOT = SILVER_CHARIOT;
                 ModEntities.THROWN_HARPOON = THROWN_HARPOON;
                 ModEntities.BLADED_BOWLER_HAT = BLADED_BOWLER_HAT;
@@ -1487,6 +1495,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(COWBOY_SABBATH, BlackSabbathEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(WALKING_HEART, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(DIVER_DOWN, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(DIVER_DOWN_BETA, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SILVER_CHARIOT, StandEntity.createStandAttributes());
 
 

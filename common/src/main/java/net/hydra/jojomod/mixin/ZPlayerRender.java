@@ -745,6 +745,16 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     }
     @Inject(method = "renderNameTag(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$renderNameTag(AbstractClientPlayer $$0, Component $$1, PoseStack $$2, MultiBufferSource $$3, int $$4, CallbackInfo ci) {
+        //deletes original nametag
+        if ($$0 instanceof StandUser su && su.roundabout$isDisguised()) {
+            com.mojang.authlib.GameProfile profile = su.roundabout$getDisguiseProfile();
+            if (profile != null && profile.getName() != null) {
+                if (!$$1.getString().equals(profile.getName())) {
+                    ci.cancel();
+                    return;
+                }
+            }
+        }
         IPlayerEntity ple = ((IPlayerEntity) $$0);
         byte shape = ple.roundabout$getShapeShift();
         ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);

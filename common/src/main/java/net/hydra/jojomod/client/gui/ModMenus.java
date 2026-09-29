@@ -1,6 +1,7 @@
 package net.hydra.jojomod.client.gui;
 
 import net.hydra.jojomod.client.gui.diverdown.custom_workbench_code.DiverDownCraftingMenu;
+import net.hydra.jojomod.client.gui.gamblingtable.GamblingTableMenu;
 import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.inventory.LoomMenu;
 import net.minecraft.world.inventory.MenuType;
@@ -13,6 +14,7 @@ public final class ModMenus {
     public static MenuType<SmithingMenu> DIVER_DOWN_SMITHING;
     public static MenuType<StonecutterMenu> DIVER_DOWN_STONECUTTER;
     public static MenuType<LoomMenu> DIVER_DOWN_LOOM;
+    public static MenuType<GamblingTableMenu> GAMBLING_TABLE;
 
     private ModMenus() {
     }

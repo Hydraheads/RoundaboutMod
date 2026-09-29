@@ -13,6 +13,7 @@ import net.hydra.jojomod.block.handBlock.AbstractHandBlock;
 import net.hydra.jojomod.block.handBlock.HandBlock;
 import net.hydra.jojomod.block.handBlock.HandBlockEntity;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
+import net.hydra.jojomod.util.SkinUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -105,15 +106,15 @@ public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer
             vertexConsumer = $$3.getBuffer(getRenderType(HandBlock$type, pfp));
             boolean slim = getSlim(pfp);
 
-            /// temporally commented until clone render skins info be put in a static class that I could use here.
 
-            /*if (Minecraft.getInstance().getConnection() != null) {
-                SkinData skinInfo = getSkin(pfp);
+
+            if (Minecraft.getInstance().getConnection() != null) {
+                SkinUtil.SkinData skinInfo = SkinUtil.getSkin(pfp);
                 if (skinInfo != null) {
-                    vertexConsumer = $$3.getBuffer(RenderType.entityTranslucent(skinInfo.texture));
-                    slim = skinInfo.slim;
+                    vertexConsumer = $$3.getBuffer(RenderType.entityTranslucent(skinInfo.texture()));
+                    slim = skinInfo.slim();
                 }
-            }*/
+            }
 
             ModelPart part = slim ? hand_slim : hand;
 

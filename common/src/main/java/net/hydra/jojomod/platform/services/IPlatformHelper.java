@@ -1,6 +1,10 @@
 package net.hydra.jojomod.platform.services;
 
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.BlockTags;
@@ -42,6 +46,9 @@ public interface IPlatformHelper {
     TagKey<Block> getOreTag();
 
     boolean getFluidTagPushCode(Entity ent, TagKey<Fluid> $$0, double $$1);
+
+    boolean canControlMineBlock(ServerPlayer player, BlockPos pos, Direction direction,
+                                ServerboundPlayerActionPacket.Action action);
     /**
      * Gets the name of the environment type as a string.
      *

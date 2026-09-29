@@ -3,6 +3,7 @@ package net.hydra.jojomod.registry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.gui.ModMenus;
 import net.hydra.jojomod.client.gui.diverdown.custom_workbench_code.*;
+import net.hydra.jojomod.client.gui.gamblingtable.GamblingTableMenu;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.inventory.LoomMenu;
@@ -37,6 +38,8 @@ public final class ForgeMenus {
     public static final RegistryObject<MenuType<LoomMenu>> DIVER_DOWN_LOOM =
             MENUS.register("diver_down_loom", () ->
                     new MenuType<>(DiverDownLoomMenu::new, FeatureFlags.DEFAULT_FLAGS));
+    public static final RegistryObject<MenuType<GamblingTableMenu>> GAMBLING_TABLE =
+            MENUS.register("gambling_table", () -> new MenuType<>(GamblingTableMenu::new, FeatureFlags.DEFAULT_FLAGS));
 
     private ForgeMenus() {
     }
@@ -45,5 +48,8 @@ public final class ForgeMenus {
         ModMenus.DIVER_DOWN_CRAFTING = DIVER_DOWN_CRAFTING.get();
         ModMenus.DIVER_DOWN_ANVIL = DIVER_DOWN_ANVIL.get();
         ModMenus.DIVER_DOWN_SMITHING = DIVER_DOWN_SMITHING.get();
+        ModMenus.DIVER_DOWN_STONECUTTER = DIVER_DOWN_STONECUTTER.get();
+        ModMenus.DIVER_DOWN_LOOM = DIVER_DOWN_LOOM.get();
+        ModMenus.GAMBLING_TABLE = GAMBLING_TABLE.get();
     }
 }

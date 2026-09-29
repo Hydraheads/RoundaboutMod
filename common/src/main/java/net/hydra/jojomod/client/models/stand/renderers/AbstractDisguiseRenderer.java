@@ -81,6 +81,15 @@ public abstract class AbstractDisguiseRenderer extends LivingEntityRenderer<Livi
     }
 
     /**
+     * Sets the scale of the disguise. Override this to make the disguise VISUALLY bigger/smaller.
+     * Could be useful for Yellow Temperance
+     */
+    @Override
+    protected void scale(LivingEntity entity, PoseStack poseStack, float partialTick) {
+        poseStack.scale(0.9375F, 0.9375F, 0.9375F);
+    }
+
+    /**
      * Subclasses can override this to control when armor is rendered for disguised entities.
      */
     protected boolean shouldShowArmor(LivingEntity entity) {

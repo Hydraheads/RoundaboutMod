@@ -118,6 +118,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public D4CSettings d4cSettings;
     @NestedOption(group = "modded")
+    public DiverDownSettings diverDownSettings;
+    @NestedOption(group = "modded")
     public WhitesnakeSettings whitesnakeSettings;
     @NestedOption(group = "modded")
     public SilverChariotSettings silverChariotSettings;
@@ -342,6 +344,8 @@ public class Config implements Cloneable {
         public Integer bloodSpeedCooldown;
         @BooleanOption(group = "inherit", value = true)
         public Boolean antiCheapShot;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableUVCounter;
     }
     public static class StandLevelingSettings {
         @BooleanOption(group = "inherit", value = true)
@@ -378,6 +382,8 @@ public class Config implements Cloneable {
         public Boolean barrageDeflectsArrows;
         @BooleanOption(group = "inherit", value = false)
         public Boolean standPunchesGoThroughDoorsAndCorners;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean standGrabRequiresTool;
         @IntOption(group = "inherit", value = 3, min = 0, max = 72000)
         public Integer standGuardDelayTicks;
         @IntOption(group = "inherit", value = 100, min = 1, max = 72000)
@@ -462,6 +468,8 @@ public class Config implements Cloneable {
     public static class KillerQueenSettings {
     	@BooleanOption(group = "inherit", value = true)
         public Boolean enableKillerQueen;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean sneakyKilling;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer killerQueenAttackMultOnPlayers;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
@@ -472,7 +480,7 @@ public class Config implements Cloneable {
         public Boolean bitesTheDustDayModeAffectGlobalTime;
     	@BooleanOption(group = "inherit", value = true)
         public Boolean blocksDestruction;
-    	@FloatOption(group = "inherit", value = 6.85F, min = 0, max = 200F)
+    	@FloatOption(group = "inherit", value = 6.75F, min = 0, max = 200F)
         public Float explosionDetonateMaxDamage;
         @FloatOption(group = "inherit", value = 3.75F, min = 0, max = 200F)
         public Float SheerHeartAttackMaxDamage;
@@ -486,7 +494,7 @@ public class Config implements Cloneable {
         public Integer itemPlantCooldown;
         @IntOption(group = "inherit", value = 220, min = 0, max = 72000)
         public Integer mobPlantCooldown;
-    	@IntOption(group = "inherit", value = 8, min = 0, max = 72000)
+    	@IntOption(group = "inherit", value = 11, min = 0, max = 72000)
         public Integer explosionActivationCooldown;
     	@IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer kickMinimumCooldown;
@@ -510,7 +518,7 @@ public class Config implements Cloneable {
         public Integer maxAirBubbleTravelDistanceBeforePopping;
         @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
         public Integer airBubbleGuardIncrease;
-        @IntOption(group = "inherit", value = 800, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 1200, min = 0, max = 72000)
         public Integer bitesTheDustPlantCooldown;
         @IntOption(group = "inherit", value = 70, min = 0, max = 72000)
         public Integer bitesTheDustCombatActivationCooldown;
@@ -532,6 +540,8 @@ public class Config implements Cloneable {
         public Float bitesTheDustRewindRange;
         @BooleanOption(group = "inherit", value = false)
         public Boolean bitesTheDustDayGlobalRewind;
+        @IntOption(group = "inherit", value = 3, min = 0, max = 72000)
+        public Integer maximunBiteTheDustCombatActivations;
     }
     
     public static class SoftAndWetSettings {
@@ -1144,6 +1154,8 @@ public class Config implements Cloneable {
         public Integer anubisBackflipCooldown;
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer anubisMaxMemory;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableSpecialRaids;
     }
 
     public static class EmperorSettings {
@@ -1300,6 +1312,20 @@ public class Config implements Cloneable {
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer starFingerInterruptCooldown;
     }
+    public static class DiverDownSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableDiverDown;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer diverDownAttackMultOnMobs;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer diverDownAttackMultOnPlayers;
+        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        public Integer diverDownGuardPoints;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer miningSpeedMultiplierDiverDown;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
+        public Integer getMiningTierDiverDown;
+    }
     public static class WhitesnakeSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableWhitesnake;
@@ -1351,6 +1377,8 @@ public class Config implements Cloneable {
         public Integer hallucinatoryAcidStageUpTime;
         @IntOption(group = "inherit", value = 600, min = 20, max = 72000)
         public Integer hallucinatoryAcidDespawnTime;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean acidTossAlwaysExpires;
         @FloatOption(group = "inherit", value = 1.0F, min = 0.0F, max = 64.0F)
         public Float hallucinatoryAcidEffectRange;
         @FloatOption(group = "inherit", value = 20.0F, min = 0.0F, max = 256.0F)

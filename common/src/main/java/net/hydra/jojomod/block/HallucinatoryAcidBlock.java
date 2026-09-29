@@ -136,7 +136,7 @@ public final class HallucinatoryAcidBlock extends BaseEntityBlock implements Sim
         if (((StandUser) player).roundabout$getStandPowers().getActivePower() == PowerIndex.MINING) {
             return super.getDestroyProgress(state, player, level, pos);
         }
-        return 1.0F / 60.0F;
+        return 1.0F / 30.0F;
     }
 
     @Override

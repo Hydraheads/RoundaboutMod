@@ -1345,6 +1345,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         if (!self.level().isClientSide()) {
             LivingEntity origin = isPiloting() ? actionOrigin() : self;
             HallucinatoryAcidProjectile projectile = new HallucinatoryAcidProjectile(self, self.level());
+            projectile.acidTossAlwaysExpires = !meltingMode;
             projectile.setPos(origin.getX(), origin.getEyeY() - 0.1D, origin.getZ());
             projectile.shootFromRotation(origin, origin.getXRot(), origin.getYRot(), -7.0F, 0.6F, 1.0F);
             self.level().addFreshEntity(projectile);

@@ -25,6 +25,7 @@ import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.ModificationMaskItem;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
+import net.hydra.jojomod.util.SkinUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidArmorModel;
@@ -156,7 +157,8 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
 
         Minecraft mc = Minecraft.getInstance();
 
-        SkinData skin = getSkin(entity);
+        SkinUtil.SkinData skin = SkinUtil.getSkin(entity.getDisguiseProfile());
+        //SkinData skin = getSkin(entity);
         if (skin != null) {
             return skin.texture();
         }
@@ -208,9 +210,10 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
             UUID uuid = entity.getPlayerUUID().orElse(null);
 
             if (uuid != null && Minecraft.getInstance().getConnection() != null) {
-                SkinData info = getSkin(entity);
+                SkinUtil.SkinData info = SkinUtil.getSkin(entity.getDisguiseProfile());
+                //SkinData info = getSkin(entity);
                 if (info != null) {
-                    this.model = info.slim ? slim : bulk;
+                    this.model = info.slim() ? slim : bulk;
                 } else {
                     Player pl = entity.getPlayer();
                     if (pl instanceof AbstractClientPlayer acp) {

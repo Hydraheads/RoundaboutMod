@@ -117,7 +117,7 @@ public class ExplosionUtil {
 
 			double dist = entity.distanceToSqr(pos);
 			float percUnhand = ((float)dist/ (range * range * range));
-			float perc = 1.0f - (percUnhand*0.75f);
+			float perc = 1.0f - (percUnhand*0.85f);
 			float percKnockback = 1.0f - (percUnhand*0.5f);
 
 			boolean hasSeen = true;
@@ -158,6 +158,7 @@ public class ExplosionUtil {
 	}
 
 	public static void explodeBlocksBase(BlockPos location, Level level, Float range, boolean ignoreOres, Entity causer) {
+
 		Vec3 center = new Vec3(location.getX(), location.getY(), location.getZ());
 
 		int intSize = Math.round(range) + 1;
@@ -177,9 +178,9 @@ public class ExplosionUtil {
 
 			Double dist2 = center.distanceToSqr(pos.getX(), pos.getY(), pos.getZ());
 
-			if (dist2 <= explosionDistance && !(causer instanceof Player PL && !MainUtil.canPlaceOnClaim(PL, pos))) {
+			if (dist2 <= explosionDistance) {
 				boolean shouldDrop = !info.requiresCorrectToolForDrops() && level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING_OBTAINMENT);
-				level.destroyBlock(pos, shouldDrop);
+				level.destroyBlock(pos, shouldDrop, causer);
 			}
 		}
 	}

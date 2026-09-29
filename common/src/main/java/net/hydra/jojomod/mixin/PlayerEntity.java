@@ -256,6 +256,14 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
 
     }
+    @Inject(
+            method = "startAutoSpinAttack(I)V",
+            at = @At("HEAD"),
+            cancellable = true, require = 0
+    )
+    public void rdbt$startAutoSpinAttackP(int $$0, CallbackInfo ci){
+        ((StandUser)this).roundabout$getStandPowers().onSpinAttackStart();
+    }
 
 
     //0.00392156862

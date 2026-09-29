@@ -12,7 +12,10 @@ import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -100,7 +103,7 @@ public class HandBlockEntity extends BlockEntity {
 
     }
     public void load(CompoundTag $$0) {
-
+        super.load($$0);
         if ($$0.contains("note_block_sound", 8)) {
             this.noteBlockSound = ResourceLocation.tryParse($$0.getString("note_block_sound"));
         }
@@ -112,18 +115,20 @@ public class HandBlockEntity extends BlockEntity {
         } else {
             storedStack = ItemStack.EMPTY;
         }
-        super.load($$0);
-    }
-
-    public static void animation(Level $$0, BlockPos $$1, BlockState $$2, HandBlockEntity $$3) {
 
     }
 
+    @Override
+    public CompoundTag getUpdateTag() {
+        CompoundTag tag = super.getUpdateTag();
+        saveAdditional(tag);
+        return tag;
+    }
 
-    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+    @Override
+    public Packet<ClientGamePacketListener> getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);
     }
-
 
 
     public GameProfile getProfile() {
@@ -132,16 +137,12 @@ public class HandBlockEntity extends BlockEntity {
         }
         if (storedStack.hasTag()) {
             CompoundTag tag = storedStack.getTag();
-            /*if (tag.contains("OwnerName") && tag.contains("OwnerUUID")) {
-                Optional<UUID> id = Optional.of(UUID.fromString(tag.getString("OwnerUUID")));
-                String name = tag.getString("OwnerName");
-                return id.isPresent() && !name.isEmpty() ? new GameProfile(id.get(), name) : null;
-            }else {
-                return null;
-            }*/
+
             if (tag != null && tag.contains("HandProfile")) {
                 return NbtUtils.readGameProfile(tag.getCompound("HandProfile"));
             }
+
+            setChanged();
         }
         return null;
     }
