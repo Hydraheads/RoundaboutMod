@@ -214,7 +214,7 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
         if (ConfigManager.getClientConfig().killerQueenSettings.bombConfigFastToggle) {
             updateConfigs();
         }
-        
+
         this.minecraft.setScreen(null);
 
         Player pl = Minecraft.getInstance().player;
