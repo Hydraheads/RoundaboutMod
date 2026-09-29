@@ -1079,6 +1079,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                                 this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)
                                 && this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING_OBTAINMENT)
                                 && !(PE).blockActionRestricted(PE.level(), this.grabBlock, PE.gameMode.getGameModeForPlayer()))
+
                                 && PE.level().mayInteract(PE, this.grabBlock)) {
                             /*This is the code where blocks that are removable are grabbed*/
                             boolean $$4 = this.getSelf().level().destroyBlock(this.grabBlock, false,this.getSelf());
