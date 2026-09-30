@@ -15,8 +15,7 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.item.FancyLighterItem;
-import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
@@ -46,7 +45,8 @@ import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.dimension.DimensionType;
@@ -68,7 +68,8 @@ public class PowersBlackSabbath extends NewDashPreset {
     CLIENT_SYNC_TARGET_LIGHTER = 102,
     CLIENT_SYNC_REMOVE_TARGET = 103,
     CLIENT_SYNC_REMOVE_TARGET_LIST = 104,
-    C2S_SYNC_DESTROY_LIST = 105;
+    C2S_SYNC_DESTROY_LIST = 105,
+    S2C_CLOSE_CHEST = 106;
 
     public int moveMode = 0;
     public int tickBeforeHunt = -1;
@@ -132,6 +133,11 @@ public class PowersBlackSabbath extends NewDashPreset {
                 if(self.level().getEntity(data) instanceof LivingEntity LE) {
                     this.addTargetEntities(LE);
                 }
+            }
+            case PowersBlackSabbath.S2C_CLOSE_CHEST -> {
+                active = false;
+                sharedChestSelectCooldown();
+                RecallClient();
             }
             case PowersBlackSabbath.C2S_SYNC_DESTROY_LIST -> {
                 this.clearTargetEntities();
@@ -347,10 +353,11 @@ public class PowersBlackSabbath extends NewDashPreset {
     public void confirmListClient(){
         tryPower(PowerIndex.POWER_2_EXTRA, true);
         tryPowerPacket(PowerIndex.POWER_2_EXTRA);
-    }
-    public void setNullUniversal(){
-        tryPower(PowerIndex.POWER_2_BONUS, true);
-        tryPowerPacket(PowerIndex.POWER_2_BONUS);
+        if (moveMode == 2 && !blackSabbathTargets.isEmpty()) {
+            if (this.isClient()) {
+                this.self.playSound(ModSounds.BLACK_SABBATH_SELECT_CONFIRM_EVENT, 10F, 0.85F);
+            }
+        }
     }
     public void blackChestClient(){
         sharedChestSelectCooldown();
@@ -416,7 +423,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         if(moveMode == 0) {
             if (!this.getSelf().level().isClientSide()) {
                 if (blackSelect == null || blackSelect.isRemoved()){
-                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.FIRE_WHOOSH_EVENT, SoundSource.PLAYERS, 1F, 0.8F);
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.BLACK_SABBATH_SUMMON_EVENT, SoundSource.PLAYERS, 0.9F, 0.75F);
                     StandEntity stand = this.getNewStandEntity();
                     if (stand != null) {
                         blackSelect = stand;
@@ -442,7 +449,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             if (!this.getSelf().level().isClientSide()) {
                 blackSelect.forceDespawnSet = true;
                 playSoundIfPossible(self.level(),null, this.self.getX(), this.self.getY(),
-                        this.self.getZ(), ModSounds.SNAP_EVENT, this.self.getSoundSource(), 1F, 1.1F);
+                        this.self.getZ(), ModSounds.RATT_DEPLACE_EVENT, this.self.getSoundSource(), 1F, 1.1F);
             }
         }
         return true;
@@ -775,6 +782,8 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                 }
                 if(selecting){
                     if(!checkIfYouAreInDark()){
+                        playSoundIfPossible(self.level(),null, this.self.getX(), this.self.getY(),
+                                this.self.getZ(), ModSounds.RATT_DEPLACE_EVENT, this.self.getSoundSource(), 1F, 1.1F);
                         this.selecting = false;
                         BSE.forceDespawn(true);
                     }
@@ -940,6 +949,16 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         }
         return null;
     }
+    public final Boolean getThrowable(Player pl) {
+        IPlayerEntity play = ((IPlayerEntity) pl);
+        ItemStack blackFS = play.roundabout$getBlckSabbathPlayerInventory().getItem(0);
+        return (blackFS.getItem() instanceof ArrowItem || blackFS.getItem() instanceof KnifeItem
+                || blackFS.is(ModItems.KNIFE_BUNDLE) || blackFS.getItem() instanceof TridentItem && EnchantmentHelper.getRiptide(blackFS) <= 0
+                || blackFS.getItem() instanceof EggItem || blackFS.getItem() instanceof SnowballItem || blackFS.getItem() instanceof ThrowablePotionItem
+                || blackFS.getItem() instanceof EnderpearlItem || blackFS.getItem() instanceof GasolineBucketItem || blackFS.getItem() instanceof GasolineCanItem
+                || blackFS.getItem() instanceof MatchItem || blackFS.is(ModItems.MATCH_BUNDLE) || blackFS.getItem() instanceof FleshBucketItem
+                ||blackFS.getItem() instanceof HarpoonItem) && !(blackFS.is(ItemStack.EMPTY.getItem()));
+    }
     public void createTheMightyHunterOfTheShadows(Vec3 pos){
         if(isHunting()) {
             Random bandom = new Random();
@@ -963,6 +982,18 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                             BE.setShouldSelect(false);
                             PowerTypes.copyPlaneOfExisting(self,BE);
                             BE.setUnrender(true);
+                            if(BE.getUser() != null && BE.getUser() instanceof Player pl) {
+                                IPlayerEntity play = ((IPlayerEntity) pl);
+                                ItemStack blackFS = play.roundabout$getBlckSabbathPlayerInventory().getItem(0);
+                                BE.setHeldItemSabbath(blackFS);
+                                if(blackFS.is(ItemStack.EMPTY.getItem())){
+                                    BE.setMoveMode(0);
+                                } else if (getThrowable(pl)){
+                                    BE.setMoveMode(1);
+                                } else {
+                                    BE.setMoveMode(2);
+                                }
+                            }
                             this.self.level().addFreshEntity(BE);
                         }
                     }
@@ -1114,6 +1145,11 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         }
         return super.tryIntPower(move, forced, value);
     }
+    public void syncClose(){
+        if (this.getSelf() instanceof Player) {
+            S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(),PowersBlackSabbath.S2C_CLOSE_CHEST, 0);
+        }
+    }
     private Entity getTarget() {
         Entity target = MainUtil.getTargetEntity(this.getSelf(),100,10);
         if (target instanceof LivingEntity LE) {
@@ -1135,7 +1171,9 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                     this.removeTargetEntities(LE);
                     tryIntPower(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET, true, LE.getId());
                     tryIntPowerPacket(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET, LE.getId());
-                    this.self.playSound(ModSounds.CKB_NO_EVENT, 10F, 1F);
+                    if(this.isClient()) {
+                        this.self.playSound(ModSounds.BLACK_SABBATH_SELECT_REMOVE_EVENT, 1F, 0.8F);
+                        }
                 }
             }
         }
@@ -1146,7 +1184,9 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             setTickDown2(40);
             tryIntPower(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET_LIST, true, 0);
             tryIntPowerPacket(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET_LIST, 0);
-            this.self.playSound(ModSounds.CKB_NO_EVENT, 10F, 0.75F);
+            if(this.isClient()) {
+                this.self.playSound(ModSounds.BLACK_SABBATH_SELECT_CANCEL_EVENT, 1F, 0.8F);
+            }
         }
     }
     public void selectTargetClient(){
@@ -1158,7 +1198,9 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                     int id = LE.getId();
                     tryIntPower(PowersBlackSabbath.CLIENT_SYNC_TARGET, true, id);
                     tryIntPowerPacket(PowersBlackSabbath.CLIENT_SYNC_TARGET, id);
-                    this.self.playSound(ModSounds.CKB_YES_EVENT, 10F, 1F);
+                    if(this.isClient()) {
+                        this.self.playSound(ModSounds.BLACK_SABBATH_SELECT_ADD_EVENT, 1F, 0.8F);
+                    }
                 }
             }
         }

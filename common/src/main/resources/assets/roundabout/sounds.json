@@ -1337,6 +1337,36 @@
       "roundabout:black_sabbath_chest_open"
     ]
   },
+  "black_sabbath_emerge": {
+    "subtitle": "sounds.roundabout.black_sabbath_emerge",
+    "sounds": [
+      "roundabout:black_sabbath_emerge"
+    ]
+  },
+  "bs_select_add": {
+    "subtitle": "sounds.roundabout.bs_select_add",
+    "sounds": [
+      "roundabout:bs_select_add"
+    ]
+  },
+  "bs_select_remove": {
+    "subtitle": "sounds.roundabout.bs_select_remove",
+    "sounds": [
+      "roundabout:bs_select_remove"
+    ]
+  },
+  "bs_select_cancel": {
+    "subtitle": "sounds.roundabout.bs_select_cancel",
+    "sounds": [
+      "roundabout:bs_select_cancel"
+    ]
+  },
+  "bs_select_confirm": {
+    "subtitle": "sounds.roundabout.bs_select_confirm",
+    "sounds": [
+      "roundabout:bs_select_confirm"
+    ]
+  },
   "century_boy_summon": {
     "subtitle": "sounds.roundabout.century_boy_summon",
     "sounds": [
