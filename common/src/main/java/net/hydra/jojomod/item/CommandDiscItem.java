@@ -44,17 +44,26 @@ public final class CommandDiscItem extends Item {
         this.command = command;
     }
 
-    public boolean applyCommand(Entity target, LivingEntity whitesnakeUser) {
-        if (!(target instanceof LivingEntity living) || WhitesnakeDiscUtil.isDiscBlacklisted(living)) return false;
+    public Command getCommand() {
+        return command;
+    }
+
+    public boolean applyCommand(Entity target, LivingEntity whitesnakeUser, ItemStack stack) {
+        if (target.level().isClientSide() || stack.isEmpty()
+                || !(target instanceof LivingEntity living) || WhitesnakeDiscUtil.isDiscBlacklisted(living)) return false;
         boolean applied = switch (command) {
             case JUMP_BACK -> applyJumpBack(living, whitesnakeUser);
             case ATTACK -> applyAttack(living, whitesnakeUser);
             case FORGET -> applyForget(living, whitesnakeUser);
             case EXPLOSIVE -> applyExplosionCommand(living, whitesnakeUser);
         };
-        if (applied && !target.level().isClientSide()) {
+        if (applied) {
             target.level().playSound(null, target.blockPosition(), ModSounds.WHITESNAKE_DISC_INSERT_EVENT,
                     SoundSource.PLAYERS, 1.0F, 1.0F);
+            stack = stack.split(1);
+            stack.setDamageValue(stack.getDamageValue() + 1);
+            if (stack.getDamageValue() >= stack.getMaxDamage()) stack.shrink(1);
+            CommandDiscController.storeCommandDisc(living, command, stack);
         }
         if (applied && target instanceof ServerPlayer player) {
             String message = switch (command) {
@@ -140,7 +149,7 @@ public final class CommandDiscItem extends Item {
                                                    InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (!player.isShiftKeyDown()) return InteractionResultHolder.pass(stack);
-        if (!level.isClientSide() && applyCommand(player, player) && !player.isCreative()) stack.shrink(1);
+        if (!level.isClientSide()) applyCommand(player, player, stack);
         return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
     }
 

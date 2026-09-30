@@ -158,6 +158,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.MOLD_SPORE.get(), MoldSporesEntity.createStandAttributes().build());
         event.put(ForgeEntities.PURPLE_SMOKE.get(), PurpleSmokeEntity.createStandAttributes().build());
         event.put(ForgeEntities.SHEER_HEART_ATTACK.get(), SheerHeartAttackEntity.createStandAttributes().build());
+        event.put(ForgeEntities.SHEER_TEAPOT_ATTACK.get(), SheerTeapotAttackEntity.createStandAttributes().build());
     }
 
     @SubscribeEvent
@@ -822,6 +823,7 @@ public class ForgeEvents {
         ModEntities.KILLER_QUEEN = ForgeEntities.KILLER_QUEEN.get();
         ModEntities.setBlockBomb(ForgeEntities.BLOCK_BOMB.get());
         ModEntities.SHEER_HEART_ATTACK = ForgeEntities.SHEER_HEART_ATTACK.get();
+        ModEntities.SHEER_TEAPOT_ATTACK = ForgeEntities.SHEER_TEAPOT_ATTACK.get();
         ModEntities.CINDERELLA = ForgeEntities.CINDERELLA.get();
         ModEntities.CALIFORNIA_KING_BED = ForgeEntities.CALIFORNIA_KING_BED.get();
         ModEntities.PEARL_JAM = ForgeEntities.PEARL_JAM.get();
