@@ -72,8 +72,11 @@ public class FabricParticlesClient {
         ParticleFactoryRegistry.getInstance().register(FabricParticles.AIRBUBBLE_CYAN, AirBubbleParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.AIRBUBBLE_YELLOW, AirBubbleParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.AIRBUBBLE_BOMB, AirBubbleParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.ENERGY_RIPPLE_SURFACE, EnergyRippleSurfaceParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.ENERGY_RIPPLE, EnergyRippleParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.WAKE_RIPPLE, WakeRippleParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.DIVER_DOWN_FINAL, DiverDownFinalParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.RIBCAGE, RibcageParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.HYPNO_SWIRL, HypnoSwirlParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.TUSK_VORTEX, TuskVortexParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.MOLD, MoldParticle.Provider::new);

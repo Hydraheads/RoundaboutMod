@@ -57,10 +57,10 @@ public class BlockBombRenderer extends StandRenderer<BlockBombEntity> {
             switch (BT) {
                 case KillerQueenEntity.GOGO, KillerQueenEntity.NOTW, KillerQueenEntity.CREEPER -> {return GREEN;}
                 case KillerQueenEntity.GUNPOWDER, KillerQueenEntity.FINAL, KillerQueenEntity.YELLOW,
-                     KillerQueenEntity.ARTWORK-> {return GOLD;}
+                     KillerQueenEntity.ARTWORK, KillerQueenEntity.BROWN-> {return GOLD;}
                 case KillerQueenEntity.NIGHTMARE, KillerQueenEntity.UMBRA, KillerQueenEntity.MINUET,
                      KillerQueenEntity.LIMBUSMORTIS, KillerQueenEntity.DEADLY -> {return NUMBRA;}
-                case KillerQueenEntity.STRAY, KillerQueenEntity.TAMA -> {return BLUE;}
+                case KillerQueenEntity.STRAY, KillerQueenEntity.TAMA, KillerQueenEntity.GREY -> {return BLUE;}
                 case KillerQueenEntity.MINESWEEPER -> {return MINESWEEPER;}
             }
         }

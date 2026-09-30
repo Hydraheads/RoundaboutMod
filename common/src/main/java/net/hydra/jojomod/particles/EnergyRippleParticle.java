@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
@@ -12,91 +11,114 @@ import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-public class EnergyRippleParticle extends SimpleAnimatedParticle {
-    public static final Map<ParticleKey, EnergyRippleParticle> ACTIVE_RIPPLES = new ConcurrentHashMap<>();
-
+public class EnergyRippleParticle extends TextureSheetParticle {
     private final SpriteSet sprites;
-    private final Direction face;
-    public record ParticleKey(BlockPos pos, Direction face) {}
+    private boolean inverted;
+    private boolean pullCam;
 
     public EnergyRippleParticle(ClientLevel clientLevel, double d, double e, double f, double g, double h, double i, SpriteSet spriteSet) {
-        super(clientLevel, d, e, f, spriteSet, 1f);
+        super(clientLevel, d, e, f, 0.0, 0.0, 0.0);
         this.sprites = spriteSet;
-        this.xd = 0;
-        this.yd = 0;
-        this.zd = 0;
-        this.friction = 1.0F;
-        this.gravity = 0;
-        this.quadSize = 0.95F;
-        this.hasPhysics = false;
-        this.lifetime = 28;
-        this.setAlpha(0.35F);
+        this.age = 0;
+        this.quadSize = 0.7F;
+        this.lifetime = 7;
+        //set count to 0 if you want to toggle these
+        this.inverted = (g == 1);
+        this.pullCam = (h == 1);
 
-        // for orientation
-        double fracX = Math.abs(d - (Math.floor(d) + 0.5));
-        double fracY = Math.abs(e - (Math.floor(e) + 0.5));
-        double fracZ = Math.abs(f - (Math.floor(f) + 0.5));
-
-        if (fracY > fracX && fracY > fracZ) {
-            this.face = (e > Math.floor(e) + 0.5) ? Direction.UP : Direction.DOWN;
-        } else if (fracX > fracY && fracX > fracZ) {
-            this.face = (d > Math.floor(d) + 0.5) ? Direction.EAST : Direction.WEST;
-        } else {
-            this.face = (f > Math.floor(f) + 0.5) ? Direction.SOUTH : Direction.NORTH;
-        }
-
-        this.setSprite(this.sprites.get(0, 6));
+        this.setSprite(this.sprites.get(0, 7));
     }
 
     @Override
-    public void render(VertexConsumer vertexConsumer, Camera camera, float partialTicks) {
-        Vec3 cameraPosition = camera.getPosition();
-        float lerpX = (float)(Mth.lerp(partialTicks, this.xo, this.x) - cameraPosition.x());
-        float lerpY = (float)(Mth.lerp(partialTicks, this.yo, this.y) - cameraPosition.y());
-        float lerpZ = (float)(Mth.lerp(partialTicks, this.zo, this.z) - cameraPosition.z());
-
-        Vector3f[] uvList = new Vector3f[]{
-                new Vector3f(-1.0F, -1.0F, 0.0F), new Vector3f(-1.0F, 1.0F, 0.0F), new Vector3f(1.0F, 1.0F, 0.0F), new Vector3f(1.0F, -1.0F, 0.0F)
-        };
-        float quadSize = this.getQuadSize(partialTicks);
-
-        Quaternionf rotation = switch (this.face) {
-            case UP -> new Quaternionf().fromAxisAngleDeg(1, 0, 0, 90);
-            case DOWN -> new Quaternionf().fromAxisAngleDeg(1, 0, 0, -90);
-            case NORTH -> new Quaternionf().fromAxisAngleDeg(0, 1, 0, 180);
-            case SOUTH -> new Quaternionf();
-            case WEST -> new Quaternionf().fromAxisAngleDeg(0, 1, 0, -90);
-            case EAST -> new Quaternionf().fromAxisAngleDeg(0, 1, 0, 90);
-        };
-
-        for (int i = 0; i < 4; i++) {
-            Vector3f uv = uvList[i];
-            uv.mul(quadSize);
-            uv.mul(0.5f,0.5f,0.5f);
-            uv.rotate(rotation);
-            uv.add(lerpX, lerpY, lerpZ);
+    public void render(VertexConsumer $$0, Camera $$1, float $$2) {
+        Vec3 $$3 = $$1.getPosition();
+        float $$4 = (float)(Mth.lerp((double)$$2, this.xo, this.x) - $$3.x());
+        float $$5 = (float)(Mth.lerp((double)$$2, this.yo, this.y) - $$3.y());
+        float $$6 = (float)(Mth.lerp((double)$$2, this.zo, this.z) - $$3.z());
+        // need to offset the particle so that it renders over entities and doesn't sink into them
+        if(this.pullCam) {
+            float dist = Mth.sqrt($$4 * $$4 + $$5 * $$5 + $$6 * $$6);
+            if (dist > 0.4F) {
+                float bias = 0.35F;
+                $$4 -= ($$4 / dist) * bias;
+                $$5 -= ($$5 / dist) * bias;
+                $$6 -= ($$6 / dist) * bias;
+            }
+        }
+        Quaternionf $$7;
+        if (this.roll == 0.0F) {
+            $$7 = $$1.rotation();
+        } else {
+            $$7 = new Quaternionf($$1.rotation());
+            $$7.rotateZ(Mth.lerp($$2, this.oRoll, this.roll));
         }
 
-        float u0 = this.getU0();
-        float u1 = this.getU1();
-        float v0 = this.getV0();
-        float v1 = this.getV1();
-        int lightColor = this.getLightColor(partialTicks);
+        Vector3f[] $$9 = new Vector3f[]{
+                new Vector3f(-1.0F, -1.0F, 0.0F), new Vector3f(-1.0F, 1.0F, 0.0F), new Vector3f(1.0F, 1.0F, 0.0F), new Vector3f(1.0F, -1.0F, 0.0F)
+        };
+        float $$10 = this.getQuadSize($$2);
 
-        // Front face
-        vertexConsumer.vertex(uvList[0].x(), uvList[0].y(), uvList[0].z()).uv(u1, v1).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(lightColor).endVertex();
-        vertexConsumer.vertex(uvList[1].x(), uvList[1].y(), uvList[1].z()).uv(u1, v0).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(lightColor).endVertex();
-        vertexConsumer.vertex(uvList[2].x(), uvList[2].y(), uvList[2].z()).uv(u0, v0).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(lightColor).endVertex();
-        vertexConsumer.vertex(uvList[3].x(), uvList[3].y(), uvList[3].z()).uv(u0, v1).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(lightColor).endVertex();
+        for (int $$11 = 0; $$11 < 4; $$11++) {
+            Vector3f $$12 = $$9[$$11];
+            $$12.rotate($$7);
+            $$12.mul($$10);
+            $$12.add($$4, $$5, $$6);
+        }
 
-        // Back face
-        vertexConsumer.vertex(uvList[3].x(), uvList[3].y(), uvList[3].z()).uv(u0, v1).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(lightColor).endVertex();
-        vertexConsumer.vertex(uvList[2].x(), uvList[2].y(), uvList[2].z()).uv(u0, v0).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(lightColor).endVertex();
-        vertexConsumer.vertex(uvList[1].x(), uvList[1].y(), uvList[1].z()).uv(u1, v0).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(lightColor).endVertex();
-        vertexConsumer.vertex(uvList[0].x(), uvList[0].y(), uvList[0].z()).uv(u1, v1).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(lightColor).endVertex();
+        float $$13 = this.getU0();
+        float $$14 = this.getU1();
+        float $$15 = this.getV0();
+        float $$16 = this.getV1();
+        int $$17 = this.getLightColor($$2);
+
+        $$0.vertex((double)$$9[0].x(), (double)$$9[0].y(), (double)$$9[0].z())
+                .uv($$14, $$16)
+                .color(this.rCol, this.gCol, this.bCol, this.alpha)
+                .uv2($$17)
+                .endVertex();
+
+        $$0.vertex((double)$$9[1].x(), (double)$$9[1].y(), (double)$$9[1].z())
+                .uv($$14, $$15)
+                .color(this.rCol, this.gCol, this.bCol, this.alpha)
+                .uv2($$17)
+                .endVertex();
+
+        $$0.vertex((double)$$9[2].x(), (double)$$9[2].y(), (double)$$9[2].z())
+                .uv($$13, $$15)
+                .color(this.rCol, this.gCol, this.bCol, this.alpha)
+                .uv2($$17)
+                .endVertex();
+
+        $$0.vertex((double)$$9[3].x(), (double)$$9[3].y(), (double)$$9[3].z())
+                .uv($$13, $$16)
+                .color(this.rCol, this.gCol, this.bCol, this.alpha)
+                .uv2($$17)
+                .endVertex();
+    }
+
+    @Override
+    public ParticleRenderType getRenderType() {
+        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+    }
+
+    @Override
+    protected float getU0() {
+        return this.sprite.getU0();
+    }
+
+    @Override
+    protected float getU1() {
+        return this.sprite.getU1();
+    }
+
+    @Override
+    protected float getV0() {
+        return this.sprite.getV0();
+    }
+
+    @Override
+    protected float getV1() {
+        return this.sprite.getV1();
     }
 
     @Override
@@ -104,30 +126,18 @@ public class EnergyRippleParticle extends SimpleAnimatedParticle {
         this.xo = this.x;
         this.yo = this.y;
         this.zo = this.z;
-
         if (this.age++ >= this.lifetime) {
             this.remove();
             return;
         }
-
-        int ticksPerFrame = 2;
-        int step = this.age / ticksPerFrame;
-        int holdSteps = 2;
-
-        int frameIndex;
-        if (step <= 6) {
-            frameIndex = step;
-        } else if (step <= 6 + holdSteps) {
-            frameIndex = 6;
+        if (this.inverted) {
+            int frame = Math.max(0, 6 - (this.age * 7 / this.lifetime));
+            this.setSprite(this.sprites.get(frame, 6));
         } else {
-            frameIndex = Math.max(0, 6 - (step - (6 + holdSteps)));
+            int frame = Math.min(6, (this.age * 7 / this.lifetime));
+            this.setSprite(this.sprites.get(frame, 6));
         }
-
-        this.setSprite(this.sprites.get(frameIndex, 6));
-    }
-    @Override
-    public ParticleRenderType getRenderType() {
-        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        this.alpha = Math.max(0.10F, this.alpha - 0.15F);
     }
 
     public static class Provider implements ParticleProvider<SimpleParticleType> {
