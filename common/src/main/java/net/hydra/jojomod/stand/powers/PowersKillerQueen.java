@@ -3349,7 +3349,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     bombPlantedItem.setItem(stack.copyWithCount(1));
 
                     bombPlantedItem.setPos(self.getEyePosition());
-                    bombPlantedItem.setDeltaMovement(self.getViewVector(1).scale(0.4f).add(0, 0.1, 0));
+                    bombPlantedItem.setDeltaMovement(self.getViewVector(1).scale(0.35f).add(0, 0.1, 0));
 
                     bombPlantedItem.host = (Player) self;
 
