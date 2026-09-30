@@ -37,7 +37,8 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
             EMBED_POTION = 72,
             DIVER_LEGS = 73,
             EFFECT_CURE = 74,
-            TRANSFER = 75,
+            //due to the removal of transfer, this id is actually uesd for diver arms, i just don't want to rename everything in fear of breaking something.
+            TRANSFER = 82,
             RIBCAGE_TRAP = 76,
             BONE_BOMB = 77,
             SPRING_LEGS = 78;
@@ -300,8 +301,8 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
                 "textures/gui/diver_down/affliction_icons/diver_legs.png"), DIVER_LEGS, -43, 31, Component.translatable("roundabout.diver_affliction.diver_legs.desc"), CircleColor.GREEN),
         EFFECT_CURE_ID(Component.translatable("roundabout.diver_affliction.effect_cure"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/diver_down/affliction_icons/effect_cure.png"), EFFECT_CURE, -28, 1, Component.translatable("roundabout.diver_affliction.effect_cure.desc"), CircleColor.GREEN),
-        TRANSFER_ID(Component.translatable("roundabout.diver_affliction.transfer"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/diver_down/affliction_icons/transfer.png"), TRANSFER, -28, 61, Component.translatable("roundabout.diver_affliction.transfer.desc"), CircleColor.GREEN),
+        TRANSFER_ID(Component.translatable("roundabout.diver_affliction.diver_arms"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/diver_down/affliction_icons/diver_arms.png"), TRANSFER, -28, 61, Component.translatable("roundabout.diver_affliction.diver_arms.desc"), CircleColor.GREEN),
 
         // TOP & BOTTOM (Neutral)
         DISGUISE_ID(Component.translatable("roundabout.diver_affliction.disguise"), new ResourceLocation(Roundabout.MOD_ID,
