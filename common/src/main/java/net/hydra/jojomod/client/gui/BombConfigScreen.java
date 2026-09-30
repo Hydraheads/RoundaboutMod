@@ -46,6 +46,7 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
     public boolean isPauseScreen() { return false;}
 
     public byte currentlyHovered;
+    public byte lastChangedConfig = -1;
     private int firstMouseX;
     private int firstMouseY;
     private boolean setFirstMousePos;
@@ -58,7 +59,8 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
         super.init();
         zHeld = true;
 
-        this.currentlyHovered = (byte)-1;
+        currentlyHovered = (byte)-1;
+        lastChangedConfig = (byte)-1;
 
         int offsetCenter = 32;
 
@@ -68,8 +70,6 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
         this.sizes.add(new SwitchSelect(0, this.width / 2 - 33, this.height / 2 - 32 + 48, Component.translatable("roundabout.bomb_config.explosion_size_0")));
         this.sizes.add(new SwitchSelect(1, this.width / 2 - 33 + 20, this.height / 2 - 32 + 48, Component.translatable("roundabout.bomb_config.explosion_size_1")));
         this.sizes.add(new SwitchSelect(2, this.width / 2 - 33 + 40, this.height / 2 - 32 + 48, Component.translatable("roundabout.bomb_config.explosion_size_2")));
-
-
     }
 
     public class SwitchSelect extends AbstractWidget {
@@ -141,20 +141,23 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
         public Component getName() {return name; }
 
         public int getMode(boolean invert) {
+            return getMode(invert, false);
+        }
+        public int getMode(boolean invert, boolean safeToggle) {
         	ClientConfig clientConfig = ConfigManager.getClientConfig();
 
             int conf = clientConfig.dynamicSettings.killerQueenCurrentBombConfig;
             if (this.context == BLOCK_DESTRUCTION) {
                 if (conf == 1 || conf == 3) {
-                    return (invert && isHoveredOrFocused()) ? DISABLED : ENABLED;
+                    return (invert && isHoveredOrFocused() && (lastChangedConfig != context || !safeToggle)) ? DISABLED : ENABLED;
                 }
             } else {
                 if (conf == 2 || conf == 3) {
-                    return (invert && isHoveredOrFocused()) ? DISABLED : ENABLED;
+                    return (invert && isHoveredOrFocused() && (lastChangedConfig != context || !safeToggle)) ? DISABLED : ENABLED;
                 }
             }
 
-            return (invert && isHoveredOrFocused()) ? ENABLED : DISABLED;
+            return (invert && isHoveredOrFocused() && (lastChangedConfig != context || !safeToggle)) ? ENABLED : DISABLED;
         }
 
 		@Override
@@ -200,8 +203,8 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
 
     @Override
     public boolean mouseReleased(double $$0, double $$1, int $$2) {
-        if ($$2 == 0 && !ConfigManager.getClientConfig().killerQueenSettings.bombConfigFastToggle) {
-            updateConfigs();
+        if ($$2 == 0) {
+            updateConfigs(false);
         }else {
             this.exitBombConfig();
         }
@@ -212,7 +215,7 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
     public void exitBombConfig() {
 
         if (ConfigManager.getClientConfig().killerQueenSettings.bombConfigFastToggle) {
-            updateConfigs();
+            updateConfigs(true);
         }
 
         this.minecraft.setScreen(null);
@@ -301,10 +304,21 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
         
     }
 
-    private void updateConfigs() {
+    private void updateConfigs(boolean safeToggle) {
         if (currentlyHovered != -1) {
             ClientConfig clientConfig = ConfigManager.getClientConfig();
-            int value = this.slots.get(0).getMode(true) + (this.slots.get(1).getMode(true) * 2);
+            int value = slots.get(0).getMode(true, safeToggle) + (slots.get(1).getMode(true, safeToggle) * 2);
+
+            for (ToggableIcon MobSlot : this.slots) {
+                if (MobSlot.isHoveredOrFocused()) {
+                    lastChangedConfig = MobSlot.context;
+                }
+            }
+            for (SwitchSelect MobSlot : this.sizes) {
+                if (MobSlot.isHoveredOrFocused()) {
+                    lastChangedConfig = (byte) (MobSlot.context+2);
+                }
+            }
 
             clientConfig.dynamicSettings.killerQueenCurrentBombConfig = value;
 
@@ -316,9 +330,6 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
         }
     }
 
-    private void switchToHoveredGameMode() {
-    	updateConfigs();
-    }
     
     public boolean roundabout$sameKeyOne(KeyMapping key1){
         return (key1.isDown() || (key1.same(this.minecraft.options.keyLoadHotbarActivator) && this.minecraft.options.keyLoadHotbarActivator.isDown())

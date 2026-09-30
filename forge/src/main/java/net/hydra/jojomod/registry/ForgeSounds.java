@@ -388,6 +388,12 @@ public class ForgeSounds {
         register(ModSounds.BITES_THE_DUST_DAY, ModSounds.BITES_THE_DUST_DAY_ID);
     public static final RegistryObject<SoundEvent> BITES_THE_DUST_ARROW =
         register(ModSounds.BITES_THE_DUST_ARROW, ModSounds.BITES_THE_DUST_ARROW_ID);
+    public static final RegistryObject<SoundEvent> KQ_MOB_PLANT_EVENT =
+        register(ModSounds.KQ_MOB_PLANT, ModSounds.KQ_MOB_PLANT_ID);
+    public static final RegistryObject<SoundEvent> KQ_BLOCK_PLANT_EVENT =
+        register(ModSounds.KQ_BLOCK_PLANT, ModSounds.KQ_BLOCK_PLANT_ID);
+    public static final RegistryObject<SoundEvent> KQ_PLANT_WINDUP_EVENT =
+        register(ModSounds.KQ_PLANT_WINDUP, ModSounds.KQ_PLANT_WINDUP_ID);
 
     public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_PUNCH_1_EVENT =
             register(ModSounds.KQ_MINESWEEPER_PUNCH_1, ModSounds.KQ_MINESWEEPER_PUNCH_1_ID);
