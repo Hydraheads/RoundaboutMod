@@ -46,6 +46,7 @@ public class BombPlantedItemEntity extends Entity implements TraceableEntity {
     private UUID target;
     public final float bobOffs;
 
+    public int safeContactTicks = 13;
 
     public BombPlantedItemEntity(EntityType<? extends BombPlantedItemEntity> type, Level level) {
         super(type, level);
@@ -150,6 +151,10 @@ public class BombPlantedItemEntity extends Entity implements TraceableEntity {
 
     @Override
     public void tick() {
+        if (safeContactTicks > 0) {
+            safeContactTicks--;
+        }
+
         if (!level().isClientSide()) {
             if (host == null || !(host.isAlive() && ((StandUser)host).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ
                     /*&& PKQ.getCurrentBombStatus() == (byte)2*/ && PKQ.bombPlantedItem == this)) {

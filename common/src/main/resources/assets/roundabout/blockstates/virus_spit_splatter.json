@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "level=0": {
+      "model": "roundabout:block/virus_spit_splatter_1"
+    },
+    "level=1": {
+      "model": "roundabout:block/virus_spit_splatter_2"
+    },
+    "level=2": {
+      "model": "roundabout:block/virus_spit_splatter_3"
+    },
+    "level=3": {
+      "model": "roundabout:block/virus_spit_splatter_4"
+    },
+    "level=4": {
+      "model": "roundabout:block/virus_spit_splatter_5"
+    },
+    "level=5": {
+      "model": "roundabout:block/virus_spit_splatter_6"
+    }
+  }
+}

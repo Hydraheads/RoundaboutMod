@@ -753,16 +753,16 @@ public class ForgeItems {
     public static final RegistryObject<Item> HEARING_DISC = ITEMS.register(
             "hearing_disc", () -> new HearingDiscItem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> JUMP_BACK_COMMAND_DISC = addToWIPTab(ITEMS.register(
-            "jump_back_command_disc", () -> new CommandDiscItem(new Item.Properties().stacksTo(1),
+            "jump_back_command_disc", () -> new CommandDiscItem(new Item.Properties().durability(3),
                     CommandDiscItem.Command.JUMP_BACK)));
     public static final RegistryObject<Item> ATTACK_COMMAND_DISC = addToWIPTab(ITEMS.register(
-            "attack_command_disc", () -> new CommandDiscItem(new Item.Properties().stacksTo(1),
+            "attack_command_disc", () -> new CommandDiscItem(new Item.Properties().durability(3),
                     CommandDiscItem.Command.ATTACK)));
     public static final RegistryObject<Item> FORGET_COMMAND_DISC = addToWIPTab(ITEMS.register(
-            "forget_command_disc", () -> new CommandDiscItem(new Item.Properties().stacksTo(1),
+            "forget_command_disc", () -> new CommandDiscItem(new Item.Properties().durability(3),
                     CommandDiscItem.Command.FORGET)));
     public static final RegistryObject<Item> EXPLOSIVE_COMMAND_DISC = addToWIPTab(ITEMS.register(
-            "explosive_command_disc", () -> new CommandDiscItem(new Item.Properties().stacksTo(1),
+            "explosive_command_disc", () -> new CommandDiscItem(new Item.Properties().durability(3),
                     CommandDiscItem.Command.EXPLOSIVE)));
     public static final RegistryObject<Item> HALLUCINATORY_ACID_HEIGHT_1 = addToWIPTab(ITEMS.register(
             "hallucinatory_acid_height_1", () -> new HallucinatoryAcidDebugItem(
@@ -948,11 +948,11 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new AyaVisage(null))));
     public static final RegistryObject<Item> MISTA_MASK = addToTab(ITEMS.register("mista_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new MistaVisage(null))));
-    public static final RegistryObject<Item> ANASUI_MASK = addToWIPTab(ITEMS.register("anasui_mask",
+    public static final RegistryObject<Item> ANASUI_MASK = addToTab(ITEMS.register("anasui_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new AnasuiVisage(null))));
-    public static final RegistryObject<Item> FEM_ANASUI_MASK = addToWIPTab(ITEMS.register("fem_anasui_mask",
+    public static final RegistryObject<Item> FEM_ANASUI_MASK = addToTab(ITEMS.register("fem_anasui_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new FemAnasuiVisage(null))));
-    public static final RegistryObject<Item> ANAKISS_MASK = addToWIPTab(ITEMS.register("anakiss_mask",
+    public static final RegistryObject<Item> ANAKISS_MASK = addToTab(ITEMS.register("anakiss_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new AnakissVisage(null))));
     public static final RegistryObject<Item> GUCCIO_MASK = addToTab(ITEMS.register("guccio_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new GuccioVisage(null))));
@@ -1028,6 +1028,9 @@ public class ForgeItems {
             () -> new MemoryChessPieceItem(ForgeBlocks.CHESS_PIECE.get(),new Item.Properties())));
     public static final RegistryObject<Item> EXP_BISHOP = addToTab(ITEMS.register("exp_bishop",
             () -> new ExperienceBishopItem(ForgeBlocks.CHESS_PIECE.get(),new Item.Properties())));
+
+    public static final RegistryObject<BlockItem> GAMBLING_TABLE_ITEM = addToWIPTab(ITEMS.register("gambling_table",
+            () -> new BlockItem(ForgeBlocks.GAMBLING_TABLE.get(), new Item.Properties())));
 
     public static void assignStupidForge(){
         DispenserBlock.registerBehavior(ForgeItems.KNIFE.get(), DispenserRegistry.KNIFE);

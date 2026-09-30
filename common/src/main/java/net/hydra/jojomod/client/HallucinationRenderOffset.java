@@ -1,7 +1,6 @@
 package net.hydra.jojomod.client;
 
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.whitesnake.HallucinationEffect;
 import net.hydra.jojomod.event.ModEffects;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -24,9 +23,9 @@ public final class HallucinationRenderOffset {
         if (ClientUtil.checkIfClientCanSeeMobsForWindVision()) return Vec3.ZERO;
         if (((StandUser) minecraft.player).roundabout$getStand() == rendered) return Vec3.ZERO;
         MobEffectInstance effect = minecraft.player.getEffect(ModEffects.HALLUCINATION);
-        if (!HallucinationEffect.hasDistortion(effect)) return Vec3.ZERO;
+        if (effect == null || effect.getAmplifier() < 1) return Vec3.ZERO;
 
-        double maximumDistance = effect.getAmplifier() >= 1 ? 2.0D : 1.0D;
+        double maximumDistance = 2.0D;
         long interval = minecraft.level.getGameTime() / 100L;
         long seed = interval * 341873128712L ^ (long) rendered.getId() * 132897987541L
                 ^ minecraft.player.getUUID().getLeastSignificantBits();

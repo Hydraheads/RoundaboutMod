@@ -46,6 +46,7 @@ import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.dimension.DimensionType;
@@ -92,12 +93,6 @@ public class PowersBlackSabbath extends NewDashPreset {
         return moveMode == 3;
     }
 
-    public List<LivingEntity> queryTargetEntities(){
-        if (blackSabbathTargets == null){
-            blackSabbathTargets = new ArrayList<>();
-        }
-        return blackSabbathTargets;
-    }
     public List<LivingEntity> addTargetEntities(LivingEntity LE){
         if (blackSabbathTargets == null){
             blackSabbathTargets = new ArrayList<>();
@@ -632,6 +627,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
     public int tickDown2 = -10;
     public void setTickDown2(int ta){tickDown2 = ta;}
     public int visionTicks = 10;
+    int tooFarTicks = 0;
     @Override
     public void tickPower() {
         if(fingerEatingTick > 0){
@@ -819,11 +815,56 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                 this.getStandEntity(this.getSelf()).discard();
                 setNull();
             }
+
+            if(this.getStandEntity(this.getSelf()) instanceof BlackSabbathEntity BE){
+                if(BE.targetSabbath() != null && (MainUtil.cheapDistanceTo(BE.getX(), BE.getY(), BE.getZ(), BE.targetSabbath().getX(), BE.targetSabbath().getY(), BE.targetSabbath().getZ()) > 30 || BE.isStuck)){
+                    if(BE.getUnrender()){
+                        if(tooFarTicks <= 100) {
+                            tooFarTicks++;
+                            if(tooFarTicks == 99) {
+                                LivingEntity ts = null;
+                                if(BE.targetSabbath() != null) {
+                                    ts = BE.targetSabbath();
+                                }
+                                if(!this.isClient() && this.self.level() instanceof ServerLevel sl) {
+                                    spawnTp(ts);
+                                }
+                            }
+                        }
+                        if(BE.isStuck){
+                            LivingEntity ts = null;
+                            if(BE.targetSabbath() != null) {
+                                ts = BE.targetSabbath();
+                            } else if (!this.blackSabbathTargets.isEmpty()){
+                               ts =  spawnTarget();
+                            }
+                            if(ts != null) {
+                                if (!this.isClient() && this.self.level() instanceof ServerLevel sl) {
+                                    spawnTp(ts);
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    if(tooFarTicks != 0){
+                        tooFarTicks = 0;
+                    }
+                }
+            }
         }
 
         getValidPlacement();
         cycleThroughBlackSabbathTargets();
         super.tickPower();
+    }
+
+    void spawnTp(LivingEntity le){
+        if(!this.isClient() && this.self.level() instanceof ServerLevel sl) {
+            if(this.getStandEntity(this.getSelf()) != null && this.getStandEntity(this.getSelf()) instanceof BlackSabbathEntity BE) {
+                BE.discard();
+            }
+            createTheMightyHunterOfTheShadows((findBlackSabbathSpawnPosition(sl, le, 20D)));
+        }
     }
 
     public void tickPowerEnd() {
@@ -841,9 +882,9 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             double radius
     ) {
         int attempts = 100;
-        double minDistance = 2.5D+ (0.5);
+        double minDistance = 1D;
 
-        for (int yOffset = -1; yOffset <= 10; yOffset++) {
+        for (int yOffset = 0; yOffset <= 13; yOffset++) {
             for (int i = 0; i < attempts; i++) {
                 double angle = Math.random() * Math.PI * 2.0D;
                 double distance = minDistance
@@ -855,18 +896,17 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                 Vec3 candidate = new Vec3(x, y, z);
                 BlockPos bpos = BlockPos.containing(x, y - 0.1, z);
                 var blockState = this.self.level().getBlockState(bpos);
-                AABB yesbox = ModEntities.BLACK_SABBATH.getAABB(lent.getX(), lent.getY(), lent.getZ());
+                AABB yesbox = ModEntities.BLACK_SABBATH.getAABB(lent.getX(), Mth.floor(lent.getY()), lent.getZ());
                 AABB testBox = yesbox.move(
                         candidate.x - lent.getX(),
                         candidate.y - lent.getY(),
                         candidate.z - lent.getZ()
-                );
+                );;
                 if (level.noCollision(lent, testBox) && !blockState.is(Blocks.LAVA) && !blockState.isAir() && checkIfBposIsInDark(candidate)) {
                     return candidate;
-                } else if(y == 9){
-                    for (int yOffset2 = -2; yOffset2 >= -8; yOffset2--) {
+                } else if(yOffset == 13){
+                    for (int yOffset2 = 0; yOffset2 >= -13; yOffset2--) {
                     for (int i2 = 0; i2 < attempts; i2++) {
-                        System.out.println(attempts + " / " + yOffset2);
                         double distance2 = minDistance
                                 + Math.sqrt(Math.random()) * (radius - minDistance);
                         double x2 = lent.getX() + Math.cos(angle) * distance2;
@@ -881,8 +921,9 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                                 candidate2.y - lent.getY(),
                                 candidate2.z - lent.getZ()
                         );
+                       // System.out.print(candidate2 + " a ");
                         if (level.noCollision(lent, testBox2) && !blockState.is(Blocks.LAVA) && !blockState2.isAir() && checkIfBposIsInDark(candidate)) {
-                            return candidate2;
+                        return candidate2;
                         }
                     }
                     }
@@ -921,6 +962,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                             BE.setShouldFloat(false);
                             BE.setShouldSelect(false);
                             PowerTypes.copyPlaneOfExisting(self,BE);
+                            BE.setUnrender(true);
                             this.self.level().addFreshEntity(BE);
                         }
                     }
@@ -962,7 +1004,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                   }
               }
               if(this.getStandEntity(self) != null && entity.is(this.getStandEntity(self))){
-                  return true;
+                 // return true;
               }
           }
         return false;

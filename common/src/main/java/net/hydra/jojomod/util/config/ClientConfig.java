@@ -108,6 +108,8 @@ public class ClientConfig implements Cloneable {
     public ClientConfig.KillerQueenSettings killerQueenSettings;
     @NestedOption(group = "modded")
     public ClientConfig.WhitesnakeSettings whitesnakeSettings;
+    @NestedOption(group = "modded")
+    public ClientConfig.DiverDownSettings diverDownSettings;
   /*  @NestedOption(group = "modded")
     public ClientConfig.StandTweakSettings standTweakSettings; */
 
@@ -233,12 +235,18 @@ public class ClientConfig implements Cloneable {
     public static class KillerQueenSettings {
     	@BooleanOption(group = "inherit", value = true)
         public Boolean bombOverlayHideOnF1;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean bombConfigFastToggle;
     }
     public static class WhitesnakeSettings {
         @BooleanOption(group = "inherit", value = false)
         public Boolean forceThirdPersonInControlMode;
         @BooleanOption(group = "inherit", value = true)
         public Boolean hallucinationIndicator;
+    }
+    public static class DiverDownSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean customDiverDownWorkbench;
     }
     public static class AnubisSettings {
         @BooleanOption(group = "inherit", value = false)

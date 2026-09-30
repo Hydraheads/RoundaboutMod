@@ -1345,6 +1345,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         if (!self.level().isClientSide()) {
             LivingEntity origin = isPiloting() ? actionOrigin() : self;
             HallucinatoryAcidProjectile projectile = new HallucinatoryAcidProjectile(self, self.level());
+            projectile.acidTossAlwaysExpires = !meltingMode;
             projectile.setPos(origin.getX(), origin.getEyeY() - 0.1D, origin.getZ());
             projectile.shootFromRotation(origin, origin.getXRot(), origin.getYRot(), -7.0F, 0.6F, 1.0F);
             self.level().addFreshEntity(projectile);
@@ -2690,7 +2691,12 @@ public class PowersWhitesnake extends BlockGrabPreset {
         boolean standOn = PowerTypes.hasStandActive(playerEntity);
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
-        if (standOn && getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+        if (this.getActivePower() == PowerIndex.POWER_1_SNEAK || this.getActivePower() == DISC_STEAL){
+            Entity TE = this.getTargetEntity(playerEntity, impaleRange);
+            if (TE != null) {
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
+            }
+        }else if (standOn && getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
             float charge = (float) attackTimeDuring / getMaxSuperHitTime();
             int barWidth = Math.min(15, Math.round(charge * 15));
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 111, 15, 6);

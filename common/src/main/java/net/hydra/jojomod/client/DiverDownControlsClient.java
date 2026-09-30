@@ -1,9 +1,11 @@
 package net.hydra.jojomod.client;
 
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 
 public final class DiverDownControlsClient {
@@ -11,6 +13,7 @@ public final class DiverDownControlsClient {
     private static boolean cameraActive = false;
     private static boolean isChestScreenCurrentlyOpen = false;
     private static boolean chestScreenWasOpen = false;
+    private static DiverDownGroundDiveSound diveSoundInstance = null;
 
     private DiverDownControlsClient() {
     }
@@ -30,6 +33,17 @@ public final class DiverDownControlsClient {
 
         ClientUtil.setCameraEntity(stand);
         cameraActive = true;
+
+        if (diveSoundInstance == null || diveSoundInstance.isStopped()) {
+            diveSoundInstance = new DiverDownGroundDiveSound(
+                    ModSounds.DIVER_DOWN_BUBBLING_EVENT,
+                    SoundSource.PLAYERS,
+                    0.85F, // volume
+                    1.0F,  // pitch
+                    stand
+            );
+            mc.getSoundManager().play(diveSoundInstance);
+        }
     }
 
     // restore the previous camera state
@@ -43,6 +57,11 @@ public final class DiverDownControlsClient {
 
         cameraActive = false;
         isChestScreenCurrentlyOpen = false;
+
+        if (diveSoundInstance != null) {
+            Minecraft.getInstance().getSoundManager().stop(diveSoundInstance);
+            diveSoundInstance = null;
+        }
     }
 
     // failsafe just in case

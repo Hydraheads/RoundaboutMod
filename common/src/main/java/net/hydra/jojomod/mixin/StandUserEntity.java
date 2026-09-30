@@ -3956,6 +3956,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DISGUISE_ID, Optional.empty());
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DISGUISE_NAME, "");
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DIVER_LEGS, false);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DIVER_ARMS, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$RIBCAGE_TRAP, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$SPRING_LEGS, false);
         }
@@ -4099,7 +4100,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         // diver down damage redirection
         if (!this.level().isClientSide() && !this.rdbt$isRedirectingDamage && this.diverSubmergedUser != null
-                && this.diverSubmergedUser.isDiveActive()) {
+                && this.diverSubmergedUser.isDiveActive()
+                && !this.diverSubmergedUser.isSelfDive()
+                && this.diverSubmergedUser.damageRedirectionEnabled) {
             this.rdbt$isRedirectingDamage = true;
             try {
                 this.diverSubmergedUser.onSubmergedTargetHurt($$0, $$1);
@@ -5385,6 +5388,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "die", at = @At("HEAD"))
     protected void roundabout$die(DamageSource $$0, CallbackInfo ci) {
+        if (rdbt$GetBtdPlantedUser() != null && rdbt$GetBtdPlantedUser().btdTicks > 8) {
+            rdbt$GetBtdPlantedUser().bitesTheDustCombatActivate();
+        }
+
         if ($$0.getEntity() instanceof FallenMob fm) {
             Entity ent2 = fm;
             if (fm.getController() > 0 && fm.getController() != fm.getId()) {
@@ -5413,6 +5420,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 this.setRemainingFireTicks(1);
             }
         }
+
         MainUtil.onDeath(this, $$0);
     }
 
@@ -6934,7 +6942,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$DIVER_LEGS = SynchedEntityData.defineId(
             LivingEntity.class, EntityDataSerializers.BOOLEAN);
-
+    private static final EntityDataAccessor<Boolean> ROUNDABOUT$DIVER_ARMS = SynchedEntityData.defineId(
+            StandUserEntity.class, EntityDataSerializers.BOOLEAN);
     public PowersKillerQueen BtdPlantedUser = null;
 
     @Override
@@ -6949,6 +6958,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
 
         return false;
+    }
+
+    @Override
+    public PowersKillerQueen rdbt$GetBtdPlantedUser() {
+        return BtdPlantedUser;
     }
 
     @Override
@@ -6999,6 +7013,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$setDiverLegs(boolean legs) {
         this.entityData.set(ROUNDABOUT$DIVER_LEGS, legs);
     }
+
+    @Unique
+    @Override
+    public boolean roundabout$hasDiverArms() {return this.entityData.get(ROUNDABOUT$DIVER_ARMS);}
+
+    @Unique
+    @Override
+    public void roundabout$setDiverArms(boolean arms) {this.entityData.set(ROUNDABOUT$DIVER_ARMS, arms);}
 
     @Override
     public boolean roundabout$hasRibcageTrap() {

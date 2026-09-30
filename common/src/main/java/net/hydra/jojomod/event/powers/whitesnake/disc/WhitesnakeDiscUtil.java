@@ -196,26 +196,33 @@ public final class WhitesnakeDiscUtil {
 
     private static void drop(LivingEntity target, LivingEntity user, ItemStack stack) {
         if (!target.level().isClientSide()) {
-            target.level().playSound(null, target.blockPosition(), ModSounds.WHITESNAKE_DISC_EJECT_EVENT,
-                    SoundSource.PLAYERS, 1.0F, 1.0F);
             if (user instanceof Player && ((StandUser) user).roundabout$getStandPowers().isPiloting()) {
                 ((StandUser) user).roundabout$getStandPowers().playSoundsIfNearby(
                         PowersWhitesnake.WSVOICE_DISC_STEAL, 27, false, true);
             }
             if (ClientNetworking.getAppropriateConfig().whitesnakeSettings.ejectType == 2
                     && user instanceof Player player && player.getInventory().add(stack)) {
+                target.level().playSound(null, target.blockPosition(), ModSounds.WHITESNAKE_DISC_EJECT_EVENT,
+                        SoundSource.PLAYERS, 1.0F, 1.0F);
                 return;
             }
-            ItemEntity disc = target.spawnAtLocation(stack, 0.35F);
-            if (disc == null) return;
-            double angle = target.getRandom().nextDouble() * Math.PI * 2.0D;
-            disc.setDeltaMovement(
-                    Math.cos(angle) * EJECT_HORIZONTAL_SPEED,
-                    EJECT_VERTICAL_SPEED,
-                    Math.sin(angle) * EJECT_HORIZONTAL_SPEED
-            );
-            disc.hurtMarked = true;
+            ejectCommandDisc(target, stack);
         }
+    }
+
+    public static void ejectCommandDisc(LivingEntity target, ItemStack stack) {
+        if (target.level().isClientSide() || stack == null || stack.isEmpty()) return;
+        target.level().playSound(null, target.blockPosition(), ModSounds.WHITESNAKE_DISC_EJECT_EVENT,
+                SoundSource.PLAYERS, 1.0F, 1.0F);
+        ItemEntity disc = target.spawnAtLocation(stack, 0.35F);
+        if (disc == null) return;
+        double angle = target.getRandom().nextDouble() * Math.PI * 2.0D;
+        disc.setDeltaMovement(
+                Math.cos(angle) * EJECT_HORIZONTAL_SPEED,
+                EJECT_VERTICAL_SPEED,
+                Math.sin(angle) * EJECT_HORIZONTAL_SPEED
+        );
+        disc.hurtMarked = true;
     }
 
     private static boolean dropExtracted(LivingEntity target, LivingEntity user, ItemStack stack) {

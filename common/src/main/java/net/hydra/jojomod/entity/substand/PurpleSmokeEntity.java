@@ -272,6 +272,9 @@ public class PurpleSmokeEntity extends StandEntity {
                 if (!isSelf && !alreadyHasVirus && expGrantedTo.add(living.getId())) {
                     ((StandUser) user).roundabout$getStandPowers().addEXP(2);
                 }
+                if (ClientNetworking.getAppropriateConfig().PurpleHazeSettings.HazeMelts) {
+                    living.addEffect(new MobEffectInstance(ModEffects.MELTING, 300, 2));
+                }
             } else {
                 boolean alreadyHasVirus = living.hasEffect(ModEffects.HAZE_VIRUS);
                 ((StandUser) living).SetInPurpleHazeTicks(5);
@@ -280,6 +283,9 @@ public class PurpleSmokeEntity extends StandEntity {
 
                 if (!isSelf && !alreadyHasVirus && expGrantedTo.add(living.getId())) {
                     ((StandUser) user).roundabout$getStandPowers().addEXP(3);
+                }
+                if (ClientNetworking.getAppropriateConfig().PurpleHazeSettings.HazeMelts) {
+                    living.addEffect(new MobEffectInstance(ModEffects.MELTING, 300, 1));
                 }
             }
         }

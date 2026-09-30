@@ -340,6 +340,9 @@ public class ModItems {
         addToVisageStore(DOPPIO_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(JOTARO_6_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(JOHNGALLIA_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(ANASUI_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(FEM_ANASUI_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(ANAKISS_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(GUCCIO_MASK,page, characterCostExp, characterCostEmerald);
 
         page++;

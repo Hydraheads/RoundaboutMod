@@ -388,6 +388,7 @@ public interface StandUser {
     boolean rdbt$isForceCrawl();
     int rdbt$getCrawlTicks();
 
+    PowersKillerQueen rdbt$GetBtdPlantedUser();
     void rdbt$SetBtdPlantedUser(PowersKillerQueen e);
     boolean rdbt$interceptIncomingHarmIfBTD(DamageSource source);
 
@@ -404,6 +405,8 @@ public interface StandUser {
     void roundabout$clearDisguise();
     boolean roundabout$hasDiverLegs();
     void roundabout$setDiverLegs(boolean legs);
+    boolean roundabout$hasDiverArms();
+    void roundabout$setDiverArms(boolean arms);
     boolean roundabout$hasRibcageTrap();
     void roundabout$setRibcageTrap(boolean trap);
     boolean roundabout$hasSpringLegs();

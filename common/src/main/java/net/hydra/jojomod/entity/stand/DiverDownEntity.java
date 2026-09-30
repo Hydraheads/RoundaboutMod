@@ -1,8 +1,14 @@
 package net.hydra.jojomod.entity.stand;
 
 import java.util.List;
+
 import net.hydra.jojomod.util.C2SPacketUtil;
-import net.hydra.jojomod.event.powers.StandUser;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -16,57 +22,166 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class DiverDownEntity extends FollowingStandEntity {
+
     public DiverDownEntity(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
     }
 
     public static final byte PART_6 = 0,
-            LAVA_DIVER = 1,
-            RED_DIVER = 2,
-            ORANGE_DIVER = 3,
-            TREASURE_DIVER = 4,
-            BIRTHDAY_DIVER = 5,
-            FIRE_DIVER = 6;
+            BETA_DIVER = 1,
+            KELP = 2,
+            GRAY = 3,
+            WHITE = 4,
+            PURPLE = 5,
+            KHAKI = 6,
+            YELLOW = 7,
+            BLUE = 8,
+            ORANGE = 9,
+            PINK = 10,
+            INVERSION = 11,
+            FIGURE = 12,
+            EYECATCH = 13,
+            ARTWORK = 14,
+            MANGA = 15,
+            VOLUME_4 = 16,
+            SPINE_ART = 17,
+                    //replace this later with whatever final number it gets
+            HOLY_DIVER = 18;
 
     public final AnimationState hideFists = new AnimationState();
-    public final AnimationState hideLeg = new AnimationState();
-    public final AnimationState kick_barrage = new AnimationState();
-    public final AnimationState kick_barrage_end = new AnimationState();
-    public final AnimationState kick_barrage_windup = new AnimationState();
-    public final AnimationState diverzip = new AnimationState();
-    public final AnimationState hideLegEntirely = new AnimationState();
+    public final AnimationState mobDive = new AnimationState();
+    public final AnimationState mobDiveWindup = new AnimationState();
+    public final AnimationState energyStorage = new AnimationState();
+    public final AnimationState energyStorageWindup = new AnimationState();
+    public final AnimationState phasePunchWindup = new AnimationState();
+    public final AnimationState phasePunch = new AnimationState();
+    public final AnimationState groundBarrage = new AnimationState();
+    public final AnimationState chestRummage = new AnimationState();
+    public final AnimationState transferWindup = new AnimationState();
+    public final AnimationState transfer = new AnimationState();
+    public final AnimationState groundDive = new AnimationState();
+    public final AnimationState diverZip = new AnimationState();
+    public final AnimationState diverZipIdle = new AnimationState();
 
+    private static final float DIVER_ZIP_BLEND_STEP = 0.25F;
+    private float diverZipBlend = 0.0F;
+    private float diverZipBlendOld = 0.0F;
+
+    public float getDiverZipBlend(float partialTick) {
+        return Mth.lerp(partialTick, this.diverZipBlendOld, this.diverZipBlend);
+    }
+
+    public static final byte
+            MOB_DIVE = 51,
+            ENERGY_STORAGE_WINDUP = 52,
+            ENERGY_STORAGE = 53,
+            PHASE_PUNCH_WINDUP = 54,
+            PHASE_PUNCH = 55,
+            GROUND_BARRAGE = 56,
+            CHEST_RUMMAGE = 57,
+            TRANSFER_WINDUP = 58,
+            TRANSFER = 59,
+            GROUND_DIVE = 60,
+            DIVER_ZIP_IDLE = 61,
+            DIVER_ZIP = 62;
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
-        if (this.getUser() != null) {
-
-            if (this.getAnimation() != 12) {
-                this.hideFists.startIfStopped(this.tickCount);
-            } else {
-                this.hideFists.stop();
-            }
-
-            if (this.getAnimation() != 80) {
-                this.hideLeg.startIfStopped(this.tickCount);
-                this.kick_barrage.stop();
-            } else {
-                this.hideLeg.stop();
-                this.kick_barrage.startIfStopped(this.tickCount);
-            }
-
-            if (this.getAnimation() == 42) {
-                this.kick_barrage_windup.startIfStopped(this.tickCount);
-            } else {
-                this.kick_barrage_windup.stop();
-            }
-
-            if (this.getAnimation() == 43) {
-                this.kick_barrage_end.startIfStopped(this.tickCount);
-            } else {
-                this.kick_barrage_end.stop();
-            }
+        byte animation = getAnimation();
+        if (animation != BARRAGE && animation != GROUND_BARRAGE) {
+            this.hideFists.startIfStopped(this.tickCount);
+        } else {
+            this.hideFists.stop();
         }
+        if (animation == MOB_DIVE) {
+            this.mobDive.startIfStopped(this.tickCount);
+        } else {
+            this.mobDive.stop();
+        }
+        if (animation == ENERGY_STORAGE_WINDUP) {
+            this.energyStorageWindup.startIfStopped(this.tickCount);
+        } else {
+            this.energyStorageWindup.stop();
+        }
+        if (animation == ENERGY_STORAGE) {
+            this.energyStorage.startIfStopped(this.tickCount);
+        } else {
+            this.energyStorage.stop();
+        }
+        if (animation == PHASE_PUNCH_WINDUP) {
+            this.phasePunchWindup.startIfStopped(this.tickCount);
+        } else {
+            this.phasePunchWindup.stop();
+        }
+        if (animation == PHASE_PUNCH) {
+            this.phasePunch.startIfStopped(this.tickCount);
+        } else {
+            this.phasePunch.stop();
+        }
+        if (animation == GROUND_BARRAGE) {
+            this.groundBarrage.startIfStopped(this.tickCount);
+        } else {
+            this.groundBarrage.stop();
+        }
+        if (this.getAnimation() == CHEST_RUMMAGE) {
+            this.chestRummage.startIfStopped(this.tickCount);
+        } else {
+            this.chestRummage.stop();
+        }
+        if (this.getAnimation() == TRANSFER_WINDUP) {
+            this.transferWindup.startIfStopped(this.tickCount);
+        } else {
+            this.transferWindup.stop();
+        }
+        if (this.getAnimation() == TRANSFER) {
+            this.transfer.startIfStopped(this.tickCount);
+        } else {
+            this.transfer.stop();
+        }
+        if (this.getAnimation() == GROUND_DIVE) {
+            this.groundDive.startIfStopped(this.tickCount);
+        } else {
+            this.groundDive.stop();
+        }
+        boolean isZipping = this.getAnimation() == DIVER_ZIP_IDLE || this.getAnimation() == DIVER_ZIP;
+        boolean isMoving = false;
+        if (getUser() != null) {
+            isMoving = Math.abs(getUser().xxa) > 0.01F || Math.abs(getUser().zza) > 0.01F;
+        }
+
+        diverZipBlendOld = diverZipBlend;
+        if (!isZipping) {
+            diverZipBlend = 0.0F;
+            this.diverZipIdle.stop();
+            this.diverZip.stop();
+        } else {
+            float target = isMoving ? 1.0F : 0.0F;
+            diverZipBlend = Mth.clamp(diverZipBlend + Mth.clamp(target - diverZipBlend, -DIVER_ZIP_BLEND_STEP, DIVER_ZIP_BLEND_STEP), 0.0F, 1.0F);
+
+            this.diverZipIdle.startIfStopped(this.tickCount);
+            this.diverZip.startIfStopped(this.tickCount);
+        }
+    }
+
+    @Override
+    public boolean isInvulnerable() {
+        // Invulnerable in pilot unless rummaging a chest
+        if (isRemoteControlled() && this.getAnimation() != CHEST_RUMMAGE) {
+            return true;
+        }
+        return super.isInvulnerable();
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if (source.is(DamageTypes.FELL_OUT_OF_WORLD) || source.is(DamageTypes.GENERIC_KILL)) {
+            return super.hurt(source, amount);
+        }
+        // Blocks any incoming damage/transfer to user while in pilot unless rummaging
+        if (isRemoteControlled() && this.getAnimation() != CHEST_RUMMAGE) {
+            return false;
+        }
+        return super.hurt(source, amount);
     }
 
     @Override
@@ -198,5 +313,22 @@ public class DiverDownEntity extends FollowingStandEntity {
                 C2SPacketUtil.updatePilot(this);
             }
         }
+    }
+
+    protected static final EntityDataAccessor<Boolean> SUBMERGED = SynchedEntityData.defineId(
+            DiverDownEntity.class, EntityDataSerializers.BOOLEAN);
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(SUBMERGED, false);
+    }
+
+    public void setSubmerged(boolean submerged) {
+        this.entityData.set(SUBMERGED, submerged);
+    }
+
+    public boolean isSubmerged() {
+        return this.entityData.get(SUBMERGED);
     }
 }
