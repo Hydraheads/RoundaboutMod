@@ -4252,6 +4252,16 @@ public class PowersKillerQueen extends NewPunchingStand {
             return 0.2f + 0.3f * bombSize;
         }
 
+        if (soundChoice == BLOCK_PLANT) {
+            return 0.55f;
+        }
+        if (soundChoice == MOB_PLANT) {
+            return  1.45f;
+        }
+        if (soundChoice == MOB_PLANT_WINDUP) {
+            return 0.8f;
+        }
+
         return super.getSoundVolumeFromByte(soundChoice);
     }
 
