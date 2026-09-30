@@ -4599,7 +4599,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             } else {
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 18, ClashTime, 6);
             }
-            
+
         }  else {
         	super.renderAttackHud(context, playerEntity,
                     scaledWidth, scaledHeight, ticks, vehicleHeartCount,

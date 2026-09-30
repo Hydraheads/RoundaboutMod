@@ -417,12 +417,12 @@ public class SheerHeartAttackEntity extends StandEntity {
 									if (user instanceof Player && ((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ) {
 										KQ.levelupDamageMod(KQ.multiplyPowerByStandConfigPlayers(0.25f));
 									}
-									LE.hurt(dmg, 0.25f);
+									LE.hurt(dmg, 1.25f);
 								}else {
 									if (user instanceof Player && ((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ) {
 										KQ.levelupDamageMod(KQ.multiplyPowerByStandConfigMobs(0.35f));
 									}
-									LE.hurt(dmg, 0.35f);
+									LE.hurt(dmg, 2.35f);
 								}
 							}
 						}
