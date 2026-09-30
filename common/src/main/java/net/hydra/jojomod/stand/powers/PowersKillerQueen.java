@@ -4595,10 +4595,11 @@ public class PowersKillerQueen extends NewPunchingStand {
             int ClashTime = Math.min(15, Math.round(((float) attackTimeDuring / getMobPlantWindup()) * 15));
 
             if (TE != null) {
-                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 18, ClashTime, 6);
-            } else {
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+            } else {
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 18, ClashTime, 6);
             }
+            
         }  else {
         	super.renderAttackHud(context, playerEntity,
                     scaledWidth, scaledHeight, ticks, vehicleHeartCount,
