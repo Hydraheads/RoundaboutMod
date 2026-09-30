@@ -219,7 +219,6 @@ public class DiverDownModel<T extends DiverDownEntity> extends StandModel<T>{
         defaultModifiers(pEntity);
         defaultAnimations(pEntity, pAgeInTicks, 1/((float) Power.getBarrageWindup() /20));
 
-        this.animate(pEntity.mobDiveWindup, DiverDownAnimations.mob_dive_windup, pAgeInTicks, 1F);
         this.animate(pEntity.mobDive, DiverDownAnimations.mob_dive, pAgeInTicks, 1F);
         this.animate(pEntity.energyStorageWindup, DiverDownAnimations.energy_storage_windup, pAgeInTicks, 1F);
         this.animate(pEntity.energyStorage, DiverDownAnimations.energy_storage, pAgeInTicks, 1F);
@@ -230,8 +229,10 @@ public class DiverDownModel<T extends DiverDownEntity> extends StandModel<T>{
         this.animate(pEntity.transferWindup, DiverDownAnimations.transfer_windup, pAgeInTicks, 1F);
         this.animate(pEntity.transfer, DiverDownAnimations.transfer, pAgeInTicks, 1F);
         this.animate(pEntity.groundDive, DiverDownAnimations.diverdive, pAgeInTicks, 1F);
-        this.animate(pEntity.diverZip, DiverDownAnimations.diverzip_moving, pAgeInTicks, 1F);
-        this.animate(pEntity.diverZipIdle, DiverDownAnimations.diverzip_idle, pAgeInTicks, 1F);
+        if (pEntity.getAnimation() == DiverDownEntity.DIVER_ZIP_IDLE || pEntity.getAnimation() == DiverDownEntity.DIVER_ZIP) {
+            this.animate(pEntity.diverZipIdle, DiverDownAnimations.diverzip_idle, pAgeInTicks, 1F);
+            this.animateWalk(DiverDownAnimations.diverzip_moving, pLimbSwing, pLimbSwingAmount, 2.0F, 1.0F);
+        }
 
         this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1F);
     }

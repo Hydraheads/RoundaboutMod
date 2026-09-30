@@ -61,7 +61,6 @@ public class DiverDownEntity extends FollowingStandEntity {
     public final AnimationState diverZipIdle = new AnimationState();
 
     public static final byte
-            MOB_DIVE_WINDUP = 50,
             MOB_DIVE = 51,
             ENERGY_STORAGE_WINDUP = 52,
             ENERGY_STORAGE = 53,
@@ -82,11 +81,6 @@ public class DiverDownEntity extends FollowingStandEntity {
             this.hideFists.startIfStopped(this.tickCount);
         } else {
             this.hideFists.stop();
-        }
-        if (animation == MOB_DIVE_WINDUP) {
-            this.mobDiveWindup.startIfStopped(this.tickCount);
-        } else {
-            this.mobDiveWindup.stop();
         }
         if (animation == MOB_DIVE) {
             this.mobDive.startIfStopped(this.tickCount);
@@ -138,14 +132,11 @@ public class DiverDownEntity extends FollowingStandEntity {
         } else {
             this.groundDive.stop();
         }
-        if (this.getAnimation() == DIVER_ZIP_IDLE) {
+        if (this.getAnimation() == DIVER_ZIP_IDLE || this.getAnimation() == DIVER_ZIP) {
             this.diverZipIdle.startIfStopped(this.tickCount);
-        } else {
-            this.diverZipIdle.stop();
-        }
-        if (this.getAnimation() == DIVER_ZIP) {
             this.diverZip.startIfStopped(this.tickCount);
         } else {
+            this.diverZipIdle.stop();
             this.diverZip.stop();
         }
     }

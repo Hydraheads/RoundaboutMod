@@ -213,7 +213,6 @@ public class DiverDownBetaModel<T extends DiverDownEntity> extends StandModel<T>
         defaultModifiers(pEntity);
         defaultAnimations(pEntity, pAgeInTicks, 1/((float) Power.getBarrageWindup() /20));
 
-        this.animate(pEntity.mobDiveWindup, DiverDownAnimations.mob_dive_windup, pAgeInTicks, 1F);
         this.animate(pEntity.mobDive, DiverDownAnimations.mob_dive, pAgeInTicks, 1F);
         this.animate(pEntity.energyStorageWindup, DiverDownAnimations.energy_storage_windup, pAgeInTicks, 1F);
         this.animate(pEntity.energyStorage, DiverDownAnimations.energy_storage, pAgeInTicks, 1F);

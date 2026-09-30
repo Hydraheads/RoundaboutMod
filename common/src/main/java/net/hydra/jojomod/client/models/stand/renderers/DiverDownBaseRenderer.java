@@ -117,7 +117,7 @@ public class DiverDownBaseRenderer extends StandRenderer<DiverDownEntity> {
 
             // Hide while ground piloting (except during ground barrage)
             if (mobEntity.getUser() instanceof IPlayerEntity player && player.roundabout$getControlling() == mobEntity.getId()) {
-                if (mobEntity.getAnimation() != DiverDownEntity.GROUND_BARRAGE) {
+                if (mobEntity.getAnimation() != DiverDownEntity.GROUND_BARRAGE && mobEntity.getAnimation() != DiverDownEntity.CHEST_RUMMAGE) {
                     if (mobEntity.getAnimation() != DiverDownEntity.GROUND_DIVE ||
                             (mobEntity.groundDive.isStarted() && mobEntity.groundDive.getAccumulatedTime() >= 333L)) {
                         return;
