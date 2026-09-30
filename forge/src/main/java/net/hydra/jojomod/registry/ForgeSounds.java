@@ -43,6 +43,18 @@ public class ForgeSounds {
             register(ModSounds.TERRIER_SOUND, ModSounds.TERRIER_SOUND_ID);
     public static final RegistryObject<SoundEvent> WORLD_SUMMON_SOUND_EVENT =
             register(ModSounds.WORLD_SUMMON_SOUND, ModSounds.WORLD_SUMMON_SOUND_ID);
+    public static final RegistryObject<SoundEvent> J_ANUBIS_HIT_1_EVENT =
+            register(ModSounds.J_ANUBIS_HIT_1, ModSounds.J_ANUBIS_HIT_1_ID);
+    public static final RegistryObject<SoundEvent> J_ANUBIS_HIT_2_EVENT =
+            register(ModSounds.J_ANUBIS_HIT_2, ModSounds.J_ANUBIS_HIT_2_ID);
+    public static final RegistryObject<SoundEvent> J_ANUBIS_HIT_3_EVENT =
+            register(ModSounds.J_ANUBIS_HIT_3, ModSounds.J_ANUBIS_HIT_3_ID);
+    public static final RegistryObject<SoundEvent> J_ANUBIS_MISS_1_EVENT =
+            register(ModSounds.J_ANUBIS_MISS_1, ModSounds.J_ANUBIS_MISS_1_ID);
+    public static final RegistryObject<SoundEvent> J_ANUBIS_MISS_2_EVENT =
+            register(ModSounds.J_ANUBIS_MISS_2, ModSounds.J_ANUBIS_MISS_2_ID);
+    public static final RegistryObject<SoundEvent> J_ANUBIS_MISS_3_EVENT =
+            register(ModSounds.J_ANUBIS_MISS_3, ModSounds.J_ANUBIS_MISS_3_ID);
     public static final RegistryObject<SoundEvent> SUMMON_D4C_EVENT =
             register(ModSounds.SUMMON_D4C, ModSounds.SUMMON_D4C_ID);
     public static final RegistryObject<SoundEvent> D4C_CLONE =

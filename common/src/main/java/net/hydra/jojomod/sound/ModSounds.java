@@ -150,9 +150,30 @@ public class ModSounds {
     public static final ResourceLocation DSP_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DSP_SUMMON);
     public static SoundEvent DSP_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(DSP_SUMMON_ID);
 
+
     public static final String SUMMON_D4C = "summon_d4c";
     public static final ResourceLocation SUMMON_D4C_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_D4C);
     public static SoundEvent SUMMON_D4C_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_D4C_ID);
+
+
+    public static final String J_ANUBIS_HIT_1 = "j_anubis_hit_1";
+    public static final ResourceLocation J_ANUBIS_HIT_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+J_ANUBIS_HIT_1);
+    public static SoundEvent J_ANUBIS_HIT_1_EVENT = SoundEvent.createVariableRangeEvent(J_ANUBIS_HIT_1_ID);
+    public static final String J_ANUBIS_HIT_2 = "j_anubis_hit_2";
+    public static final ResourceLocation J_ANUBIS_HIT_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+J_ANUBIS_HIT_2);
+    public static SoundEvent J_ANUBIS_HIT_2_EVENT = SoundEvent.createVariableRangeEvent(J_ANUBIS_HIT_2_ID);
+    public static final String J_ANUBIS_HIT_3 = "j_anubis_hit_3";
+    public static final ResourceLocation J_ANUBIS_HIT_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+J_ANUBIS_HIT_3);
+    public static SoundEvent J_ANUBIS_HIT_3_EVENT = SoundEvent.createVariableRangeEvent(J_ANUBIS_HIT_3_ID);
+    public static final String J_ANUBIS_MISS_1 = "j_anubis_miss_1";
+    public static final ResourceLocation J_ANUBIS_MISS_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+J_ANUBIS_MISS_1);
+    public static SoundEvent J_ANUBIS_MISS_1_EVENT = SoundEvent.createVariableRangeEvent(J_ANUBIS_MISS_1_ID);
+    public static final String J_ANUBIS_MISS_2 = "j_anubis_miss_2";
+    public static final ResourceLocation J_ANUBIS_MISS_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+J_ANUBIS_MISS_2);
+    public static SoundEvent J_ANUBIS_MISS_2_EVENT = SoundEvent.createVariableRangeEvent(J_ANUBIS_MISS_2_ID);
+    public static final String J_ANUBIS_MISS_3 = "j_anubis_miss_3";
+    public static final ResourceLocation J_ANUBIS_MISS_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+J_ANUBIS_MISS_3);
+    public static SoundEvent J_ANUBIS_MISS_3_EVENT = SoundEvent.createVariableRangeEvent(J_ANUBIS_MISS_3_ID);
 
     public static final String D4C_CLONE = "d4c_clone";
     public static final ResourceLocation D4C_CLONE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+D4C_CLONE);

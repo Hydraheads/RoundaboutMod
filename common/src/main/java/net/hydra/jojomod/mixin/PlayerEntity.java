@@ -971,6 +971,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         if (bpow != 1){
             modifier*= bpow;
         }
+        if (((StandUser) this).roundabout$hasDiverArms()) {
+            modifier *= 1.20F;
+        }
         if (modifier != 1){
             cir.setReturnValue((float)(1.0D / (this.getAttributeValue(Attributes.ATTACK_SPEED)*modifier) * 20.0D));
         }
@@ -1020,6 +1023,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 if (bpow != 1){
                     dSpeed*= bpow;
                 }
+            }
+            if (((StandUser) this).roundabout$hasDiverArms()) {
+                dSpeed *= 1.25F;
             }
             cir.setReturnValue(dSpeed);
         }

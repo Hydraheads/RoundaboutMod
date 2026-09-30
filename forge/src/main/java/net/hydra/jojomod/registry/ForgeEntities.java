@@ -638,6 +638,12 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "diver_down_beta").toString())
             );
+    public static final RegistryObject<EntityType<DiverKickEntity>> DIVER_KICK =
+            ENTITY_TYPES.register("diver_kick", () ->
+                    EntityType.Builder.<DiverKickEntity>of(DiverKickEntity::new, MobCategory.MISC).sized(0.1F, 0.1f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "diver_kick").toString())
+            );
     public static final RegistryObject<EntityType<BoneProjectileEntity>> BONE_PROJECTILE = ENTITY_TYPES.register("bone_projectile",
             () -> EntityType.Builder.<BoneProjectileEntity>of(BoneProjectileEntity::new, MobCategory.MISC)
                     .sized(0.5F, 0.5F)
