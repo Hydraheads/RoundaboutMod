@@ -43,6 +43,9 @@ public class GamblingTableBlock extends Block implements EntityBlock {
         if (!state.is(newState.getBlock())) {
             BlockEntity blockEntity = level.getBlockEntity(pos);
             if (blockEntity instanceof GamblingTableBlockEntity tableEntity) {
+                //oops have to do more diver down work, will return to this later and make it so only entities that
+                //aren't players return all items
+                tableEntity.returnAllItems();
                 Containers.dropContents(level, pos, tableEntity);
                 level.updateNeighbourForOutputSignal(pos, this);
             }
