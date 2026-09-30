@@ -200,7 +200,7 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
 
     @Override
     public boolean mouseReleased(double $$0, double $$1, int $$2) {
-        if ($$2 == 0) {
+        if ($$2 == 0 && !ConfigManager.getClientConfig().killerQueenSettings.bombConfigFastToggle) {
             updateConfigs();
         }else {
             this.exitBombConfig();
@@ -211,9 +211,10 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
 
     public void exitBombConfig() {
 
-        if (ConfigManager.getClientConfig().killerQueenSettings.bombConfigTogglesOnLeave) {
+        if (ConfigManager.getClientConfig().killerQueenSettings.bombConfigFastToggle) {
             updateConfigs();
         }
+
         this.minecraft.setScreen(null);
 
         Player pl = Minecraft.getInstance().player;

@@ -14,7 +14,9 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -72,18 +74,25 @@ public class DiverLimbBlockEntityRenderer implements BlockEntityRenderer<DiverLi
     public void render(DiverLimbBlockEntity DiverLimbBlockEntity, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
         //only renders the limbs if the client can see stands
         if (ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
-            //can repurpose tihs code later for when diving ripple effect is added
-            /*if (((TimeStop)DiverLimbBlockEntity.getLevel()).inTimeStopRange(DiverLimbBlockEntity.getBlockPos())){
-                partialTick = 0;
-            }*/
-
             //omg push and pop queues hiiii!!!!
             //needed to revert all poses back to normal later since the limbs are gonna be rendred in a bunch of different directions
             //roundabout has its own push and pop queue for posing and debugging, so i'm using that instead of poseStack.pushPose();
             ClientUtil.pushPoseAndCooperate(poseStack,7);
 
-            //puts the limbs at the center of the block
-            poseStack.translate(0.5D,0.5D,0.5D);
+            // Duration in ticks (lower = faster)
+            float emergeTicks = 3.0F;
+            float progress = Mth.clamp((DiverLimbBlockEntity.clientAge + partialTick) / emergeTicks, 0.0F, 1.0F);
+
+            // Change this variable if the limb start too deep into a wall which causes it to bleed into other walls
+            float startDepth = 0.3F;
+            float depth = (1.0F - progress) * startDepth;
+            Direction wallDir = DiverLimbBlockEntity.facing != null ? DiverLimbBlockEntity.facing : Direction.NORTH;
+            double offsetX = wallDir.getStepX() * depth;
+            double offsetY = wallDir.getStepY() * depth;
+            double offsetZ = wallDir.getStepZ() * depth;
+
+            // Position at block center + emergence offset
+            poseStack.translate(0.5D + offsetX, 0.5D + offsetY, 0.5D + offsetZ);
 
             // Orient the texture
             // Diver Down specific: need to have the limb face the right way based on the directions found in DiverLimbBlockEntity

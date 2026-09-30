@@ -342,6 +342,8 @@ public class Config implements Cloneable {
         public Integer bloodSpeedCooldown;
         @BooleanOption(group = "inherit", value = true)
         public Boolean antiCheapShot;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableUVCounter;
     }
     public static class StandLevelingSettings {
         @BooleanOption(group = "inherit", value = true)
@@ -378,6 +380,8 @@ public class Config implements Cloneable {
         public Boolean barrageDeflectsArrows;
         @BooleanOption(group = "inherit", value = false)
         public Boolean standPunchesGoThroughDoorsAndCorners;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean standGrabRequiresTool;
         @IntOption(group = "inherit", value = 3, min = 0, max = 72000)
         public Integer standGuardDelayTicks;
         @IntOption(group = "inherit", value = 100, min = 1, max = 72000)
@@ -1141,6 +1145,8 @@ public class Config implements Cloneable {
         public Integer anubisBackflipCooldown;
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer anubisMaxMemory;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableSpecialRaids;
     }
 
     public static class EmperorSettings {

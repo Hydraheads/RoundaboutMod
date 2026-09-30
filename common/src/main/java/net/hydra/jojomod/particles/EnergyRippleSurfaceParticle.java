@@ -92,7 +92,7 @@ public class EnergyRippleSurfaceParticle extends SimpleAnimatedParticle {
         vertexConsumer.vertex(uvList[2].x(), uvList[2].y(), uvList[2].z()).uv(u0, v0).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(lightColor).endVertex();
         vertexConsumer.vertex(uvList[3].x(), uvList[3].y(), uvList[3].z()).uv(u0, v1).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(lightColor).endVertex();
 
-        // Back face
+        // Back face (so ripples are visible from any angle)
         vertexConsumer.vertex(uvList[3].x(), uvList[3].y(), uvList[3].z()).uv(u0, v1).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(lightColor).endVertex();
         vertexConsumer.vertex(uvList[2].x(), uvList[2].y(), uvList[2].z()).uv(u0, v0).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(lightColor).endVertex();
         vertexConsumer.vertex(uvList[1].x(), uvList[1].y(), uvList[1].z()).uv(u1, v0).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(lightColor).endVertex();

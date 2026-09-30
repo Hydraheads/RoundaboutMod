@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.*;
 import net.hydra.jojomod.client.gui.diverdown.custom_workbench_texture.*;
+import net.hydra.jojomod.client.gui.gamblingtable.GamblingTableScreen;
 import net.hydra.jojomod.client.models.*;
 import net.hydra.jojomod.client.models.corpses.renderers.*;
 import net.hydra.jojomod.client.models.minions.*;
@@ -66,6 +67,7 @@ public class ClientForgeEvents {
             MenuScreens.register(ForgeMenus.DIVER_DOWN_STONECUTTER.get(), DiverDownStonecutterScreen::new);
             MenuScreens.register(ForgeMenus.DIVER_DOWN_LOOM.get(), DiverDownLoomScreen::new);
             //DD workbench registry end
+            MenuScreens.register(ForgeMenus.GAMBLING_TABLE.get(), GamblingTableScreen::new);
             ItemBlockRenderTypes.setRenderLayer(ForgeBlocks.HALLUCINATORY_ACID.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(ForgeBlocks.HALLUCINATORY_ACID_WALL.get(), RenderType.translucent());
         });
@@ -104,6 +106,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.KILLER_QUEEN.get(), KillerQueenRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BLOCK_BOMB.get(), BlockBombRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SHEER_HEART_ATTACK.get(), SheerHeartAttackRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.SHEER_TEAPOT_ATTACK.get(), SheerTeapotAttackRenderer::new);
         event.registerEntityRenderer(ForgeEntities.CINDERELLA.get(), CinderellaRenderer::new);
         event.registerEntityRenderer(ForgeEntities.CALIFORNIA_KING_BED.get(), CaliforniaRenderer::new);
         event.registerEntityRenderer(ForgeEntities.PLANET_WAVES.get(), PlanetWavesRenderer::new);
@@ -126,6 +129,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.TUSK_A4.get(), TuskAct4Renderer::new);
         event.registerEntityRenderer(ForgeEntities.DIVER_DOWN.get(), DiverDownRenderer::new);
         event.registerEntityRenderer(ForgeEntities.DIVER_DOWN_BETA.get(), DiverDownBetaRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.DIVER_KICK.get(), DiverKickEntityRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BONE_PROJECTILE.get(), BoneProjectileRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT.get(), SilverChariotRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT_RAPIER.get(), SilverChariotRapierRenderer::new);
@@ -303,6 +307,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.KILLER_QUEEN_BLOCKBOMB, BlockBombModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.STEP_RULE, StepRuleModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.SHEER_HEART_ATTACK_LAYER, SheerHeartAttackModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.SHEER_TEAPOT_ATTACK_LAYER, SheerTeapotAttackModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.SOFT_AND_WET_KILLER_QUEEN_LAYER, SoftAndWetKillerQueenModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.CINDERELLA_LAYER, CinderellaModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.PEARL_JAM_LAYER, PearlJamModel::getTexturedModelData);
@@ -562,7 +567,9 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.AIRBUBBLE_GREEN.get(), AirBubbleParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.ENERGY_RIPPLE_SURFACE.get(), EnergyRippleSurfaceParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.ENERGY_RIPPLE.get(), EnergyRippleParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.WAKE_RIPPLE.get(), WakeRippleParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.DIVER_DOWN_FINAL.get(), DiverDownFinalParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.RIBCAGE.get(), RibcageParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.METALLICA_NAIL.get(), net.minecraft.client.particle.CritParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.METALLICA_RAZOR.get(), net.minecraft.client.particle.CritParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.METALLICA_SCISSORS.get(), net.minecraft.client.particle.CritParticle.Provider::new);

@@ -14,6 +14,7 @@ import org.joml.Vector3f;
 public class EnergyRippleParticle extends TextureSheetParticle {
     private final SpriteSet sprites;
     private boolean inverted;
+    private boolean pullCam;
 
     public EnergyRippleParticle(ClientLevel clientLevel, double d, double e, double f, double g, double h, double i, SpriteSet spriteSet) {
         super(clientLevel, d, e, f, 0.0, 0.0, 0.0);
@@ -21,24 +22,28 @@ public class EnergyRippleParticle extends TextureSheetParticle {
         this.age = 0;
         this.quadSize = 0.7F;
         this.lifetime = 7;
-        //set count to 0 if you want to invert the animation
-        this.inverted = (g == 0);
+        //set count to 0 if you want to toggle these
+        this.inverted = (g == 1);
+        this.pullCam = (h == 1);
 
         this.setSprite(this.sprites.get(0, 7));
     }
 
+    @Override
     public void render(VertexConsumer $$0, Camera $$1, float $$2) {
         Vec3 $$3 = $$1.getPosition();
         float $$4 = (float)(Mth.lerp((double)$$2, this.xo, this.x) - $$3.x());
         float $$5 = (float)(Mth.lerp((double)$$2, this.yo, this.y) - $$3.y());
         float $$6 = (float)(Mth.lerp((double)$$2, this.zo, this.z) - $$3.z());
         // need to offset the particle so that it renders over entities and doesn't sink into them
-        float dist = Mth.sqrt($$4 * $$4 + $$5 * $$5 + $$6 * $$6);
-        if (dist > 0.4F) {
-            float bias = 0.35F;
-            $$4 -= ($$4 / dist) * bias;
-            $$5 -= ($$5 / dist) * bias;
-            $$6 -= ($$6 / dist) * bias;
+        if(this.pullCam) {
+            float dist = Mth.sqrt($$4 * $$4 + $$5 * $$5 + $$6 * $$6);
+            if (dist > 0.4F) {
+                float bias = 0.35F;
+                $$4 -= ($$4 / dist) * bias;
+                $$5 -= ($$5 / dist) * bias;
+                $$6 -= ($$6 / dist) * bias;
+            }
         }
         Quaternionf $$7;
         if (this.roll == 0.0F) {

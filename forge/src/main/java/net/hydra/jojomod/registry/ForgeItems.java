@@ -753,16 +753,16 @@ public class ForgeItems {
     public static final RegistryObject<Item> HEARING_DISC = ITEMS.register(
             "hearing_disc", () -> new HearingDiscItem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> JUMP_BACK_COMMAND_DISC = addToWIPTab(ITEMS.register(
-            "jump_back_command_disc", () -> new CommandDiscItem(new Item.Properties().stacksTo(1),
+            "jump_back_command_disc", () -> new CommandDiscItem(new Item.Properties().durability(3),
                     CommandDiscItem.Command.JUMP_BACK)));
     public static final RegistryObject<Item> ATTACK_COMMAND_DISC = addToWIPTab(ITEMS.register(
-            "attack_command_disc", () -> new CommandDiscItem(new Item.Properties().stacksTo(1),
+            "attack_command_disc", () -> new CommandDiscItem(new Item.Properties().durability(3),
                     CommandDiscItem.Command.ATTACK)));
     public static final RegistryObject<Item> FORGET_COMMAND_DISC = addToWIPTab(ITEMS.register(
-            "forget_command_disc", () -> new CommandDiscItem(new Item.Properties().stacksTo(1),
+            "forget_command_disc", () -> new CommandDiscItem(new Item.Properties().durability(3),
                     CommandDiscItem.Command.FORGET)));
     public static final RegistryObject<Item> EXPLOSIVE_COMMAND_DISC = addToWIPTab(ITEMS.register(
-            "explosive_command_disc", () -> new CommandDiscItem(new Item.Properties().stacksTo(1),
+            "explosive_command_disc", () -> new CommandDiscItem(new Item.Properties().durability(3),
                     CommandDiscItem.Command.EXPLOSIVE)));
     public static final RegistryObject<Item> HALLUCINATORY_ACID_HEIGHT_1 = addToWIPTab(ITEMS.register(
             "hallucinatory_acid_height_1", () -> new HallucinatoryAcidDebugItem(
