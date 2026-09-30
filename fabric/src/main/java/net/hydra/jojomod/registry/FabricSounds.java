@@ -416,6 +416,9 @@ public class FabricSounds {
         addSound(ModSounds.BITES_THE_DUST_ARROW_ID, ModSounds.BITES_THE_DUST_ARROW_EVENT);
         addSound(ModSounds.BITES_THE_DUST_COMBAT_ID, ModSounds.BITES_THE_DUST_COMBAT_EVENT);
         addSound(ModSounds.BITES_THE_DUST_DAY_ID, ModSounds.BITES_THE_DUST_DAY_EVENT);
+        addSound(ModSounds.KQ_PLANT_WINDUP_ID, ModSounds.KQ_PLANT_WINDUP_EVENT);
+        addSound(ModSounds.KQ_MOB_PLANT_ID, ModSounds.KQ_MOB_PLANT_EVENT);
+        addSound(ModSounds.KQ_BLOCK_PLANT_ID, ModSounds.KQ_BLOCK_PLANT_EVENT);
 
         addSound(ModSounds.STRAY_CAT_BUBBLE_POP_ID, ModSounds.STRAY_CAT_BUBBLE_POP_EVENT);
         addSound(ModSounds.STRAY_CAT_BUBBLE_SOUND_1_ID, ModSounds.STRAY_CAT_BUBBLE_SOUND_1_EVENT);

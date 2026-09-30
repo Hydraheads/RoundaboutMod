@@ -1610,6 +1610,9 @@
   "sounds.roundabout.stray_cat_sound_1": "Stray Cat Hiss",
   "sounds.roundabout.stray_cat_sound_3": "Stray Cat Hiss",
   "sounds.roundabout.stray_cat_sound_2": "Stray Cat Interest",
+  "sounds.roundabout.kq_block_plant": "Block planted",
+  "sounds.roundabout.kq_mob_plant": "Mob planted",
+  "sounds.roundabout.kq_plant_windup": "Mob plant windup...",
 
   "sounds.roundabout.btd_normal_reset": "Bites the dust Combat",
   "sounds.roundabout.btd_full_reset": "Bites the dust Day",
@@ -4039,6 +4042,8 @@
 
   "config.roundabout.killerQueenCurrentBombConfig.name":"Bomb Config",
   "config.roundabout.killerQueenCurrentBombConfig.desc":"Current Bomb Settings.",
+  "config.roundabout.killerQueenCurrentBombSize.name":"Bomb Explosion Size",
+  "config.roundabout.killerQueenCurrentBombSize.desc":"Current selected explosion size.",
 
 
   "config.roundabout.chessMultOnMobs.name": "Chess Player Dmg Mult",
@@ -4628,7 +4633,7 @@
   "config.roundabout.bombOverlayHideOnF1.name": "Bomb Overlays hides on F1",
   "config.roundabout.bombOverlayHideOnF1.desc": "Turn on/off the action of hiding the bomb overlay when pressing F1",
   "config.roundabout.bombConfigFastToggle.name": "Bomb Config fast toggle",
-  "config.roundabout.bombConfigFastToggle.desc": "If you leave bomb config with the mouse hovering a option it will be toggle or press it.",
+  "config.roundabout.bombConfigFastToggle.desc": "If you leave bomb config with the mouse hovering a option it will trigger a click on it.",
   "config.roundabout.blocksDestruction.name": "Blocks Explode",
   "config.roundabout.blocksDestruction.desc": "Turn on/off the action of blocks destruction",
   "config.roundabout.explosionDetonateMaxDamage.name": "Explosion maximum damage",

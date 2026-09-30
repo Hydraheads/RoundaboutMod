@@ -779,6 +779,15 @@ public class ModSounds {
     public static final String KQ_MINESWEEPER_AIRBUBBLE_REDIRECT = "kq_minesweeper_redirect";
     public static final ResourceLocation KQ_MINESWEEPER_AIRBUBBLE_REDIRECT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KQ_MINESWEEPER_AIRBUBBLE_REDIRECT);
     public static SoundEvent KQ_MINESWEEPER_AIRBUBBLE_REDIRECT_EVENT = SoundEvent.createVariableRangeEvent(KQ_MINESWEEPER_AIRBUBBLE_REDIRECT_ID);
+    public static final String KQ_PLANT_WINDUP = "kq_plant_windup";
+    public static final ResourceLocation KQ_PLANT_WINDUP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KQ_PLANT_WINDUP);
+    public static SoundEvent KQ_PLANT_WINDUP_EVENT = SoundEvent.createVariableRangeEvent(KQ_PLANT_WINDUP_ID);
+    public static final String KQ_BLOCK_PLANT = "kq_block_plant";
+    public static final ResourceLocation KQ_BLOCK_PLANT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KQ_BLOCK_PLANT);
+    public static SoundEvent KQ_BLOCK_PLANT_EVENT = SoundEvent.createVariableRangeEvent(KQ_BLOCK_PLANT_ID);
+    public static final String KQ_MOB_PLANT = "kq_mob_plant";
+    public static final ResourceLocation KQ_MOB_PLANT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KQ_MOB_PLANT);
+    public static SoundEvent KQ_MOB_PLANT_EVENT = SoundEvent.createVariableRangeEvent(KQ_MOB_PLANT_ID);
 
     public static final String KILLER_QUEEN_PUNCH_1 = "killer_queen_punch_1";
     public static final ResourceLocation KILLER_QUEEN_PUNCH_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_PUNCH_1);

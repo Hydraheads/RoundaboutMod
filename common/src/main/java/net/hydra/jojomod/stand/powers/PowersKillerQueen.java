@@ -163,6 +163,9 @@ public class PowersKillerQueen extends NewPunchingStand {
         BASE_EXPLOSION_2 = 120,
         BASE_EXPLOSION_3 = 121,
         BASE_EXPLOSION_4 = 122,
+        BLOCK_PLANT = 123,
+        MOB_PLANT = 124,
+        MOB_PLANT_WINDUP = 125,
 
     // Bomb Status things
 		BOMB_NONE=0,
@@ -1448,8 +1451,9 @@ public class PowersKillerQueen extends NewPunchingStand {
                 int entID = entity.getId();
                 this.bombEntityID = entID;
 
-                if (this.self instanceof Player) {
-                    S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowersKillerQueen.ENTITY_BOMB, entID);
+                if (this.self instanceof Player pl) {
+                    S2CPacketUtil.sendIntPowerDataPacket(pl, PowersKillerQueen.ENTITY_BOMB, entID);
+                    S2CPacketUtil.sendPlaySoundPacket(pl, this.self.getId(), MOB_PLANT);
                 }
             }
             if (this.getSelf() instanceof Player) {
@@ -3246,6 +3250,10 @@ public class PowersKillerQueen extends NewPunchingStand {
             this.setAttackTimeDuring(-blockPlantMaxTicks);
             this.setActivePower(PowerIndex.POWER_1);
 
+            if (this.self instanceof ServerPlayer pl) {
+                S2CPacketUtil.sendPlaySoundPacket(pl, this.self.getId(), BLOCK_PLANT);
+            }
+
             return true;
     	}
     	return true;
@@ -3258,7 +3266,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (Objects.nonNull(stand) || hasHandsOut()){
             this.setAttackTimeDuring(0);
             this.setActivePower(PowerIndex.POWER_2);
-            playSoundsIfNearby(IMPALE_NOISE, 27, false);
+            playSoundsIfNearby(MOB_PLANT_WINDUP, 27, false);
             if (hasHandsOut()) {
                 getStandUserSelf().roundabout$setStandAnimation(KillerQueenEntity.MOB_PLANT);
             }else {
@@ -4253,6 +4261,8 @@ public class PowersKillerQueen extends NewPunchingStand {
             return 1.6F;
         }else if (soundChoice == BUBBLE_TARGET) {
             return (float)(1.1+Math.random()*0.2);
+        }else if (soundChoice == BLOCK_PLANT) {
+            return (float)(0.95+Math.random()*0.1);
         }
 
         return super.getSoundPitchFromByte(soundChoice);
@@ -4296,6 +4306,12 @@ public class PowersKillerQueen extends NewPunchingStand {
             return ModSounds.SUMMON_SOUND_EVENT;
         }else if (soundChoice >= MINESWEEPER_EXPLOSION && soundChoice <= BASE_EXPLOSION_4) {
             return getExplosionSoundFromByte(soundChoice);
+        }else if (soundChoice == MOB_PLANT) {
+            return ModSounds.KQ_MOB_PLANT_EVENT;
+        }else if (soundChoice == BLOCK_PLANT) {
+            return ModSounds.KQ_BLOCK_PLANT_EVENT;
+        }else if (soundChoice == MOB_PLANT_WINDUP) {
+            return ModSounds.KQ_PLANT_WINDUP_EVENT;
         }
 
         return super.getSoundFromByte(soundChoice);
