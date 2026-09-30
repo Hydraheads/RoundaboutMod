@@ -704,6 +704,15 @@ public class FabricEntities {
                     EntityType.Builder.of(DiverDownBetaEntity::new, MobCategory.MISC).
                             sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":diver_down_beta")
             );
+    public static final EntityType<DiverKickEntity> DIVER_KICK =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "diver_kick"),
+                    EntityType.Builder.<DiverKickEntity>of(DiverKickEntity::new, MobCategory.MISC)
+                            .sized(0.1F, 0.1F)
+                            .clientTrackingRange(8)
+                            .build(Roundabout.MOD_ID + ":diver_kick")
+            );
         public static final EntityType<BoneProjectileEntity> BONE_PROJECTILE =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
@@ -1289,6 +1298,7 @@ public class FabricEntities {
                 ModEntities.ANUBIS = ANUBIS;
                 ModEntities.DIVER_DOWN = DIVER_DOWN;
                 ModEntities.DIVER_DOWN_BETA = DIVER_DOWN_BETA;
+                ModEntities.DIVER_KICK = DIVER_KICK;
                 ModEntities.SILVER_CHARIOT = SILVER_CHARIOT;
                 ModEntities.THROWN_HARPOON = THROWN_HARPOON;
                 ModEntities.BLADED_BOWLER_HAT = BLADED_BOWLER_HAT;
