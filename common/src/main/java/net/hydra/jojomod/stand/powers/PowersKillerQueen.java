@@ -106,11 +106,12 @@ import java.util.*;
 public class PowersKillerQueen extends NewPunchingStand {
 	public PowersKillerQueen(LivingEntity self) {super(self);}
 
-    @Override public boolean isStandEnabled(){ return ClientNetworking.getAppropriateConfig().killerQueenSettings.enableKillerQueen; }
-    @Override public boolean isWip(){return true;}
-    @Override public Component ifWipListDevStatus(){ return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);}
-    @Override public Component ifWipListDev(){ return Component.literal("DOGael Arts").withStyle(ChatFormatting.AQUA);}
+    //@Override public boolean isWip(){return true;}
+    //@Override public Component ifWipListDevStatus(){ return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);}
+    //@Override public Component ifWipListDev(){ return Component.literal("DOGael Arts").withStyle(ChatFormatting.AQUA);}
+
     @Override public StandPowers generateStandPowers(LivingEntity entity){ return new PowersKillerQueen(entity);}
+    @Override public boolean isStandEnabled(){ return ClientNetworking.getAppropriateConfig().killerQueenSettings.enableKillerQueen; }
     @Override public StandEntity getNewStandEntity(){ return ModEntities.KILLER_QUEEN.create(this.getSelf().level());}
 
     @Override public boolean canUseStandArrow() { return !canBitesTheDust(); }
@@ -1707,7 +1708,10 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (move == BITES_THE_DUST_DEFUSE) { btdTicksMax = 0; }
 
         if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.POWER_2) {
-            this.stopSoundsIfNearby(IMPALE_NOISE, 100,true);
+            this.stopSoundsIfNearby(MOB_PLANT_WINDUP, 100,true);
+        }
+        if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.POWER_1_SNEAK) {
+            this.stopSoundsIfNearby(IMPALE_NOISE, 100, true);
         }
 
         if (hasArmsOut && (move == PowerIndex.BARRAGE || move == PowerIndex.BARRAGE_CHARGE
@@ -4259,7 +4263,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             return  1.45f;
         }
         if (soundChoice == MOB_PLANT_WINDUP) {
-            return 0.8f;
+            return 0.7f;
         }
 
         return super.getSoundVolumeFromByte(soundChoice);

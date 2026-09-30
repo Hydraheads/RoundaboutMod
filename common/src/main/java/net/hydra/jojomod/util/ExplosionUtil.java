@@ -6,6 +6,7 @@ import java.util.List;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -14,6 +15,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.phys.BlockHitResult;
 import org.joml.Vector3f;
 
 //import net.hydra.jojomod.client.ClientNetworking;
@@ -187,6 +189,12 @@ public class ExplosionUtil {
 	}
 
 	public static void destroyBlockHandled(Level level, BlockPos $$0, boolean $$1, @Nullable Entity $$2) {
+		if ($$2 instanceof Player p) {
+			if (!MainUtil.canPlaceOnClaim(p, new BlockHitResult(new Vec3($$0.relative(Direction.DOWN).getX(),$$0.relative(Direction.DOWN).getY(),$$0.relative(Direction.DOWN).getZ()), Direction.UP,$$0.relative(Direction.DOWN),false))) {
+				return;
+			}
+		}
+
 		BlockState $$4 = level.getBlockState($$0);
 		if (!$$4.isAir()) {
 			FluidState $$5 = level.getFluidState($$0);
