@@ -978,11 +978,16 @@ public class SheerHeartAttackEntity extends StandEntity {
 			}
 		}
 
-		if ((target instanceof TamableAnimal TM && TM.getOwner() == Owner)
-				|| target.isAlliedTo(Owner)) {
+		if (target.isAlliedTo(Owner)) {
 			return true;
 		}
 
+		if (target instanceof LivingEntity LE && Owner instanceof LivingEntity LE2) {
+
+            return (LE instanceof TamableAnimal TM && TM.isOwnedBy(LE2))
+                    || ((LE2 instanceof TamableAnimal TM1) && (TM1.isOwnedBy(LE)));
+
+		}
 		return false;
 	}
 
