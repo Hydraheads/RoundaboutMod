@@ -935,6 +935,14 @@
   "sounds.roundabout.hologram_end": "Blip",
   "sounds.roundabout.king_hologram": "Projection",
 
+
+  "sounds.roundabout.j_anubis_hit_1": "Sword hit",
+  "sounds.roundabout.j_anubis_hit_2": "Sword hit",
+  "sounds.roundabout.j_anubis_hit_3": "Sword hit",
+  "sounds.roundabout.j_anubis_miss_1": "Sword miss",
+  "sounds.roundabout.j_anubis_miss_2": "Sword miss",
+  "sounds.roundabout.j_anubis_miss_3": "Sword miss",
+
   "sounds.roundabout.iron_ball_impact": "Iron ball impact",
   "sounds.roundabout.iron_ball_bounce": "Iron ball bounce",
   "sounds.roundabout.anubis_unsheathe": "Unsheathe",
