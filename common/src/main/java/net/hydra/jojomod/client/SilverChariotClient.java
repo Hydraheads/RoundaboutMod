@@ -104,14 +104,7 @@ public final class SilverChariotClient {
 
     public static void exit() {
         if (!cameraActive) return;
-        stopMining();
-        cameraActive = false;
-        pendingTicks = 0;
-        lookInitialized = false;
-        ClientUtil.setCameraEntity(null);
-        Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.player != null) minecraft.setCameraEntity(minecraft.player);
-        restoreCameraType(minecraft);
+        clear();
     }
 
     public static void clear() {

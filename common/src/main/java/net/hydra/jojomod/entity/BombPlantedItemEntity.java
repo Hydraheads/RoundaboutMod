@@ -46,7 +46,7 @@ public class BombPlantedItemEntity extends Entity implements TraceableEntity {
     private UUID target;
     public final float bobOffs;
 
-    public int safeContactTicks = 13;
+    public int safeContactTicks = 25;
 
     public BombPlantedItemEntity(EntityType<? extends BombPlantedItemEntity> type, Level level) {
         super(type, level);

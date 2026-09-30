@@ -995,6 +995,24 @@
       "roundabout:killer_queen_select"
     ]
   },
+  "kq_block_plant" : {
+    "subtitle": "sounds.roundabout.kq_block_plant",
+    "sounds": [
+      "roundabout:kq_block_plant"
+    ]
+  },
+  "kq_mob_plant" : {
+    "subtitle": "sounds.roundabout.kq_mob_plant",
+    "sounds": [
+      "roundabout:kq_mob_plant"
+    ]
+  },
+  "kq_plant_windup" : {
+    "subtitle": "sounds.roundabout.kq_plant_windup",
+    "sounds": [
+      "roundabout:kq_plant_windup"
+    ]
+  },
   "kq_minesweeper_detonate": {
     "subtitle": "sounds.roundabout.kq_minesweeper_detonate",
     "sounds": [

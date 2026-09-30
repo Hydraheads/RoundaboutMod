@@ -106,11 +106,12 @@ import java.util.*;
 public class PowersKillerQueen extends NewPunchingStand {
 	public PowersKillerQueen(LivingEntity self) {super(self);}
 
-    @Override public boolean isStandEnabled(){ return ClientNetworking.getAppropriateConfig().killerQueenSettings.enableKillerQueen; }
     @Override public boolean isWip(){return true;}
     @Override public Component ifWipListDevStatus(){ return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);}
     @Override public Component ifWipListDev(){ return Component.literal("DOGael Arts").withStyle(ChatFormatting.AQUA);}
+
     @Override public StandPowers generateStandPowers(LivingEntity entity){ return new PowersKillerQueen(entity);}
+    @Override public boolean isStandEnabled(){ return ClientNetworking.getAppropriateConfig().killerQueenSettings.enableKillerQueen; }
     @Override public StandEntity getNewStandEntity(){ return ModEntities.KILLER_QUEEN.create(this.getSelf().level());}
 
     @Override public boolean canUseStandArrow() { return !canBitesTheDust(); }
@@ -163,6 +164,9 @@ public class PowersKillerQueen extends NewPunchingStand {
         BASE_EXPLOSION_2 = 120,
         BASE_EXPLOSION_3 = 121,
         BASE_EXPLOSION_4 = 122,
+        BLOCK_PLANT = 123,
+        MOB_PLANT = 124,
+        MOB_PLANT_WINDUP = 125,
 
     // Bomb Status things
 		BOMB_NONE=0,
@@ -1448,8 +1452,9 @@ public class PowersKillerQueen extends NewPunchingStand {
                 int entID = entity.getId();
                 this.bombEntityID = entID;
 
-                if (this.self instanceof Player) {
-                    S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowersKillerQueen.ENTITY_BOMB, entID);
+                if (this.self instanceof Player pl) {
+                    S2CPacketUtil.sendIntPowerDataPacket(pl, PowersKillerQueen.ENTITY_BOMB, entID);
+                    S2CPacketUtil.sendPlaySoundPacket(pl, this.self.getId(), MOB_PLANT);
                 }
             }
             if (this.getSelf() instanceof Player) {
@@ -1703,7 +1708,10 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (move == BITES_THE_DUST_DEFUSE) { btdTicksMax = 0; }
 
         if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.POWER_2) {
-            this.stopSoundsIfNearby(IMPALE_NOISE, 100,true);
+            this.stopSoundsIfNearby(MOB_PLANT_WINDUP, 100,true);
+        }
+        if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.POWER_1_SNEAK) {
+            this.stopSoundsIfNearby(IMPALE_NOISE, 100, true);
         }
 
         if (hasArmsOut && (move == PowerIndex.BARRAGE || move == PowerIndex.BARRAGE_CHARGE
@@ -3246,6 +3254,10 @@ public class PowersKillerQueen extends NewPunchingStand {
             this.setAttackTimeDuring(-blockPlantMaxTicks);
             this.setActivePower(PowerIndex.POWER_1);
 
+            if (this.self instanceof ServerPlayer pl) {
+                S2CPacketUtil.sendPlaySoundPacket(pl, this.self.getId(), BLOCK_PLANT);
+            }
+
             return true;
     	}
     	return true;
@@ -3258,7 +3270,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (Objects.nonNull(stand) || hasHandsOut()){
             this.setAttackTimeDuring(0);
             this.setActivePower(PowerIndex.POWER_2);
-            playSoundsIfNearby(IMPALE_NOISE, 27, false);
+            playSoundsIfNearby(MOB_PLANT_WINDUP, 27, false);
             if (hasHandsOut()) {
                 getStandUserSelf().roundabout$setStandAnimation(KillerQueenEntity.MOB_PLANT);
             }else {
@@ -3337,7 +3349,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     bombPlantedItem.setItem(stack.copyWithCount(1));
 
                     bombPlantedItem.setPos(self.getEyePosition());
-                    bombPlantedItem.setDeltaMovement(self.getViewVector(1).scale(0.4f).add(0, 0.1, 0));
+                    bombPlantedItem.setDeltaMovement(self.getViewVector(1).scale(0.35f).add(0, 0.1, 0));
 
                     bombPlantedItem.host = (Player) self;
 
@@ -4244,6 +4256,16 @@ public class PowersKillerQueen extends NewPunchingStand {
             return 0.2f + 0.3f * bombSize;
         }
 
+        if (soundChoice == BLOCK_PLANT) {
+            return 0.55f;
+        }
+        if (soundChoice == MOB_PLANT) {
+            return  1.45f;
+        }
+        if (soundChoice == MOB_PLANT_WINDUP) {
+            return 0.7f;
+        }
+
         return super.getSoundVolumeFromByte(soundChoice);
     }
 
@@ -4253,6 +4275,8 @@ public class PowersKillerQueen extends NewPunchingStand {
             return 1.6F;
         }else if (soundChoice == BUBBLE_TARGET) {
             return (float)(1.1+Math.random()*0.2);
+        }else if (soundChoice == BLOCK_PLANT) {
+            return (float)(0.95+Math.random()*0.1);
         }
 
         return super.getSoundPitchFromByte(soundChoice);
@@ -4296,6 +4320,12 @@ public class PowersKillerQueen extends NewPunchingStand {
             return ModSounds.SUMMON_SOUND_EVENT;
         }else if (soundChoice >= MINESWEEPER_EXPLOSION && soundChoice <= BASE_EXPLOSION_4) {
             return getExplosionSoundFromByte(soundChoice);
+        }else if (soundChoice == MOB_PLANT) {
+            return ModSounds.KQ_MOB_PLANT_EVENT;
+        }else if (soundChoice == BLOCK_PLANT) {
+            return ModSounds.KQ_BLOCK_PLANT_EVENT;
+        }else if (soundChoice == MOB_PLANT_WINDUP) {
+            return ModSounds.KQ_PLANT_WINDUP_EVENT;
         }
 
         return super.getSoundFromByte(soundChoice);
@@ -4565,10 +4595,11 @@ public class PowersKillerQueen extends NewPunchingStand {
             int ClashTime = Math.min(15, Math.round(((float) attackTimeDuring / getMobPlantWindup()) * 15));
 
             if (TE != null) {
-                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 18, ClashTime, 6);
-            } else {
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+            } else {
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 18, ClashTime, 6);
             }
+
         }  else {
         	super.renderAttackHud(context, playerEntity,
                     scaledWidth, scaledHeight, ticks, vehicleHeartCount,

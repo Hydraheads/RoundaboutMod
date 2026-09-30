@@ -46,6 +46,13 @@ public class DiverDownBaseRenderer extends StandRenderer<DiverDownEntity> {
     public static final ResourceLocation VOLUME_4 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/volume_4.png");
     public static final ResourceLocation SPINE_ART = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/spine_art.png");
 
+    /*UPDATE THE FOLLOWING FILES AS WELL WHENEVER ADDING NEW MODELS:
+    DiverKickEntityRenderer
+    DiverLimbBlockEntityRenderer
+    DiverLegsLayer
+    DiverArmsLayer
+    */
+
     public DiverDownBaseRenderer(EntityRendererProvider.Context context, StandModel<DiverDownEntity> entityModel, float f) {
         super(context, entityModel, f);
         DiverDownDisguiseRenderer.INSTANCE = new DiverDownDisguiseRenderer(context);

@@ -15,6 +15,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.BoneProjectileEntity;
 import net.hydra.jojomod.entity.stand.*;
+import net.hydra.jojomod.entity.substand.DiverKickEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModGamerules;
@@ -1694,7 +1695,12 @@ public class PowersDiverDown extends NewPunchingStand {
     @Override
     public boolean tryBlockPosPower(int move, boolean forced, BlockPos blockPos) {
         if (move == OPEN_CHEST) {
+            StandEntity stand = getStandEntity(this.self);
+            if (stand != null) {
+                turnStandTowards(stand, blockPos);
+            }
             openChest(blockPos);
+            return true;
         } else if (move == DISASSEMBLE_BLOCK) {
             disassembleBlock(blockPos);
         }
@@ -2468,6 +2474,7 @@ public class PowersDiverDown extends NewPunchingStand {
         setPiloting(0);
         tryPowerPacket(GROUND_DIVE_EXIT);
         StandEntity stand = getStandEntity(this.self);
+        this.setPowerNone();
         if (stand != null) {
             // Bring stand back to user
             stand.setPos(this.self.getX(), this.self.getY(), this.self.getZ());
@@ -2674,9 +2681,11 @@ public class PowersDiverDown extends NewPunchingStand {
             return false;
         }
         StandEntity stand = getStandEntity(this.self);
-        if (stand != null && !isPiloting()) {
-            setPiloting(stand.getId());
-            stand.setPos(chestPos.getX() + 0.5, chestPos.getY(), chestPos.getZ() + 0.5);
+        if (stand != null) {
+            if (!isPiloting()) {
+                setPiloting(stand.getId());
+            }
+            turnStandTowards(stand, chestPos);
             animateStand(DiverDownEntity.CHEST_RUMMAGE);
         }
         this.isOpeningRemoteChest = true;
@@ -2687,6 +2696,19 @@ public class PowersDiverDown extends NewPunchingStand {
             serverPlayer.openMenu(menuProvider);
         }
         return true;
+    }
+
+    private void turnStandTowards(StandEntity stand, BlockPos targetPos) {
+        double dx = (targetPos.getX() + 0.5) - stand.getX();
+        double dz = (targetPos.getZ() + 0.5) - stand.getZ();
+        float yaw = (float) (Mth.atan2(dz, dx) * (180.0D / Math.PI)) - 90.0F;
+
+        stand.setYRot(yaw);
+        stand.setYHeadRot(yaw);
+        stand.setYBodyRot(yaw);
+        stand.yRotO = yaw;
+        stand.yHeadRotO = yaw;
+        stand.yBodyRotO = yaw;
     }
 
     // runs get items code on client and server
@@ -3335,7 +3357,10 @@ public class PowersDiverDown extends NewPunchingStand {
         Level level = this.self.level();
         StandEntity stand = this.getStandEntity(this.self);
         BlockPos spawnPos = pos.relative(face);
-
+        if (!level.isClientSide()) {
+            DiverKickEntity kick = new DiverKickEntity(level, pos, trap.face, ((StandUser) this.self).roundabout$getStandSkin());
+            level.addFreshEntity(kick);
+        }
         for (LivingEntity victim : victims) {
             if (victim instanceof TamableAnimal TA && TA.getOwner() != null && TA.getOwner().is(this.getSelf())) {
                 continue;
