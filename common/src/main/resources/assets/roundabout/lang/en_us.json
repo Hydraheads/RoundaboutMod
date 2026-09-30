@@ -3312,7 +3312,7 @@
   "roundabout.diver_affliction.diver_arms": "Diver Arms",
   "roundabout.diver_affliction.diver_arms.desc": "Diver Down replaces the arms of the target. While Diver Down is submerged inside the target, they will gain increased mining speed and faster attack cooldowns.",
   "roundabout.diver_affliction.disguise": "Disguise",
-  "roundabout.diver_affliction.disguise.desc": "Change the bone structure of the current target, disguising them into whatever user you want. You can toggle showing armor on or off, and the move also works on corpses.",
+  "roundabout.diver_affliction.disguise.desc": "Change the bone structure of the current target, disguising them into whatever user you want. You can toggle showing armor on or off, and the move also works on corpses. Using this move again clears the disguise.",
   "roundabout.diver_affliction.embed_potion": "Embed Item",
   "roundabout.diver_affliction.embed_potion.desc": "Use a currently held potion or bucketed mob and embed it directly inside the target. Potions last longer and have their strength increased, while bucketed mobs pacify enemies.",
   "roundabout.diver_affliction.ribcage_trap": "Ribcage Trap",
