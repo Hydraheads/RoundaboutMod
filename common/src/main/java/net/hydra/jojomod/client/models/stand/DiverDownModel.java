@@ -219,18 +219,21 @@ public class DiverDownModel<T extends DiverDownEntity> extends StandModel<T>{
         defaultModifiers(pEntity);
         defaultAnimations(pEntity, pAgeInTicks, 1/((float) Power.getBarrageWindup() /20));
 
-        this.animate(pEntity.diverzip, DiverDownAnimations.DIVER_ZIP, pAgeInTicks, 1F);
+        this.animate(pEntity.mobDiveWindup, DiverDownAnimations.mob_dive_windup, pAgeInTicks, 1F);
+        this.animate(pEntity.mobDive, DiverDownAnimations.mob_dive, pAgeInTicks, 1F);
+        this.animate(pEntity.energyStorageWindup, DiverDownAnimations.energy_storage_windup, pAgeInTicks, 1F);
+        this.animate(pEntity.energyStorage, DiverDownAnimations.energy_storage, pAgeInTicks, 1F);
+        this.animate(pEntity.phasePunchWindup, DiverDownAnimations.phase_punch_windup, pAgeInTicks, 1F);
+        this.animate(pEntity.phasePunch, DiverDownAnimations.phase_punch, pAgeInTicks, 1F);
+        this.animate(pEntity.groundBarrage, DiverDownAnimations.DD_Barrage, pAgeInTicks, 1.37F);
+        this.animate(pEntity.chestRummage, DiverDownAnimations.chest_rummage, pAgeInTicks, 1F);
+        this.animate(pEntity.transferWindup, DiverDownAnimations.transfer_windup, pAgeInTicks, 1F);
+        this.animate(pEntity.transfer, DiverDownAnimations.transfer, pAgeInTicks, 1F);
+        this.animate(pEntity.groundDive, DiverDownAnimations.diverdive, pAgeInTicks, 1F);
+        this.animate(pEntity.diverZip, DiverDownAnimations.diverzip_moving, pAgeInTicks, 1F);
+        this.animate(pEntity.diverZipIdle, DiverDownAnimations.diverzip_idle, pAgeInTicks, 1F);
+
         this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1F);
-        this.animate(pEntity.miningBarrageAnimationState, DiverDownAnimations.Barrage, pAgeInTicks, 1f);
-        this.animate(pEntity.barrageHurtAnimationState, DiverDownAnimations.BarrageDamage, pAgeInTicks, 2.5f);
-        this.animate(pEntity.brokenBlockAnimationState, StandAnimations.BLOCKBREAK, pAgeInTicks, 1.8f);
-        this.animate(pEntity.idleAnimationState, DiverDownAnimations.Idle, pAgeInTicks, 1f);
-        this.animate(pEntity.idleAnimationState2, StandAnimations.FLOATY_IDLE, pAgeInTicks, 1f);
-        this.animate(pEntity.blockAnimationState, DiverDownAnimations.BLOCK, pAgeInTicks, 1f);
-        this.animate(pEntity.kick_barrage_windup, StandAnimations.KICK_BARRAGE_CHARGE, pAgeInTicks, 1f);
-        this.animate(pEntity.kick_barrage, StandAnimations.KICK_BARRAGE, pAgeInTicks, 1.25f);
-        this.animate(pEntity.kick_barrage_end, StandAnimations.KICK_BARRAGE_END, pAgeInTicks, 1f);
-        this.animate(pEntity.hideLegEntirely, StandAnimations.HIDE_LEGS_ENTIRELY, pAgeInTicks, 1.25f);
     }
 
     @Override
