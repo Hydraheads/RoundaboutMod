@@ -662,7 +662,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                         }
                 }
             }
-
         }
 
         if(tickBeforeHunt > 0){
@@ -675,13 +674,26 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         }
 
         if(this.getStandEntity(self) != null){
-        if(moveMode == 3 && this.blackSabbathTargets.isEmpty()){
-            if(tickDown2 == -10) {
-                if (this.getStandEntity(self) instanceof BlackSabbathEntity bs) {
+            /*if(moveMode == 3 && this.blackSabbathTargets.isEmpty()){
+                if(tickDown2 == -10) {
+                    if (this.getStandEntity(self) instanceof BlackSabbathEntity bs) {
                         bs.setHunting(false);
                         setTickDown2(40);
                     }
-            }
+                }*/
+            if (this.getStandEntity(self) instanceof BlackSabbathEntity bs) {
+                System.out.println(moveMode);
+                    if (moveMode == 3 && bs.getMoveMode() == 1 && (!this.isClient() && !bs.getThrowable())) {
+                        if (!bs.getTridentLoyalty()) {
+                            killTargetListServerToClient();
+                        }
+                    }
+                    if (moveMode == 3 && (this.blackSabbathTargets.isEmpty())) {
+                        if (tickDown2 == -10) {
+                                bs.setHunting(false);
+                                setTickDown2(40);
+                        }
+                    }
             }
         }
         if(moveMode == 3){
@@ -1187,6 +1199,13 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             if(this.isClient()) {
                 this.self.playSound(ModSounds.BLACK_SABBATH_SELECT_CANCEL_EVENT, 1F, 0.8F);
             }
+        }
+    }
+    public void killTargetListServerToClient(){
+        if(!blackSabbathTargets.isEmpty()) {
+            this.clearTargetEntities();
+            setTickDown2(40);
+            clearTargetEntitiesOnStandDeath();
         }
     }
     public void selectTargetClient(){
