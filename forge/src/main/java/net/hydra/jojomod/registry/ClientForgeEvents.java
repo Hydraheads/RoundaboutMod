@@ -59,7 +59,6 @@ public class ClientForgeEvents {
         // This runs on client during mod loading (after registries)
         MainUtil.setClient();
         event.enqueueWork(() -> {
-            ForgeMenus.initialize();
             //Diver Down custom workbenches registry
             MenuScreens.register(ForgeMenus.DIVER_DOWN_CRAFTING.get(), DiverDownCraftingScreen::new);
             MenuScreens.register(ForgeMenus.DIVER_DOWN_ANVIL.get(), DiverDownAnvilScreen::new);

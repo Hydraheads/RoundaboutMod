@@ -2468,6 +2468,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public void roundabout$setStandDisc(ItemStack stack) {
         if (!(this.level().isClientSide)) {
+            //disguise clear logic, so players can't just disguise and then swap stands.
+            if (this.roundabout$isDisguised()) {
+                this.roundabout$clearDisguise();
+            }
+
+            if (this.roundabout$getStandPowers() instanceof PowersDiverDown dd) {
+                if (dd.submergedTarget instanceof StandUser targetSu && targetSu.roundabout$isDisguised()) {
+                    targetSu.roundabout$clearDisguise();
+                }
+            }
+
             this.getEntityData().set(ROUNDABOUT$STAND_DISC, stack);
             if (stack.getItem() instanceof StandDiscItem SD) {
                 SD.generateStandPowers(rdbt$this());

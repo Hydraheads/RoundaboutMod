@@ -1196,11 +1196,11 @@ public class DiverDownAnimations {
 					new Keyframe(0.0F, KeyframeAnimations.degreeVec(52.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
 			))
 			.addAnimation("stand2", new AnimationChannel(AnimationChannel.Targets.POSITION,
-					new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 16.0F), AnimationChannel.Interpolations.CATMULLROM),
-					new Keyframe(0.25F, KeyframeAnimations.posVec(0.0F, -0.3F, 16.0F), AnimationChannel.Interpolations.CATMULLROM),
-					new Keyframe(0.5F, KeyframeAnimations.posVec(0.0F, 0.0F, 16.0F), AnimationChannel.Interpolations.CATMULLROM),
-					new Keyframe(0.75F, KeyframeAnimations.posVec(0.0F, -0.3F, 16.0F), AnimationChannel.Interpolations.CATMULLROM),
-					new Keyframe(1.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 16.0F), AnimationChannel.Interpolations.CATMULLROM)
+					new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 2.0F, 16.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(0.25F, KeyframeAnimations.posVec(0.0F, 0.3F, 16.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(0.5F, KeyframeAnimations.posVec(0.0F, 2.0F, 16.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(0.75F, KeyframeAnimations.posVec(0.0F, 0.3F, 16.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.0F, KeyframeAnimations.posVec(0.0F, 2.0F, 16.0F), AnimationChannel.Interpolations.CATMULLROM)
 			))
 			.addAnimation("head2", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 					new Keyframe(0.0F, KeyframeAnimations.degreeVec(-47.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
