@@ -172,11 +172,13 @@ public class KillerQueenArmsPart extends PsuedoHierarchicalModel {
                     } else if (animation == StandPowers.MINING) {
                         this.animate(user.roundabout$getWornStandActiveAnimation(), StandAnimations.MINING_BARRAGE, partialTicks, 1);
                     } else if (animation == KillerQueenEntity.SHA_SEND) {
-                        this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.shaArmsSend, partialTicks, 0.75f);
+                        this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.shaArmsSend, partialTicks, 0.8f);
                     } else if (animation == KillerQueenEntity.SHA_SHOOT) {
-                        this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.shaArmsShoot, partialTicks, 0.75f);
+                        this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.shaArmsShoot, partialTicks, 1.1f);
                     } else if (animation == KillerQueenEntity.BTD_DETONATION) {
                         this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.btdDetonation, partialTicks, 1);
+                    } else {
+                        //user.roundabout$getWornStandActiveAnimation().stop();
                     }
 
                 }
