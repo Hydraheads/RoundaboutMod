@@ -1694,7 +1694,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     || (this.rdbt$GetBtdPlantedUser().self != null && !this.rdbt$GetBtdPlantedUser().self.isAlive())
             ) {
                 this.rdbt$SetBtdPlantedUser(null);
-                Roundabout.LOGGER.info("unplant on tick? " + level().isClientSide);
+
             }
         }
 
@@ -5419,7 +5419,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
 
         if (this.roundabout$getStandPowers() instanceof PowersKillerQueen PKQ) {
-            Roundabout.LOGGER.info("unplant on die? " + level().isClientSide);
             PKQ.btdDefuseServer();
         }
 

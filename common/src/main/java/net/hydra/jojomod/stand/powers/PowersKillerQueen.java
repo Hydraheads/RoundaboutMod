@@ -2467,7 +2467,6 @@ public class PowersKillerQueen extends NewPunchingStand {
             btdShieldBroken = false;
 
             if (bitesTheDustPlantedEntity != null) {
-                Roundabout.LOGGER.info("btdDefuseServer set null");
                 ((StandUser)bitesTheDustPlantedEntity).rdbt$SetBtdPlantedUser(null);
                 bitesTheDustPlantedEntity = null;
             }
