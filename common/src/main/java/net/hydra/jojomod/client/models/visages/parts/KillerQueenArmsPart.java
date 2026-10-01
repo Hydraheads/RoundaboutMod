@@ -145,7 +145,7 @@ public class KillerQueenArmsPart extends PsuedoHierarchicalModel {
                 if (animation == StandPowers.GUARD) {
                     this.animate(user.roundabout$getWornStandActiveAnimation(), KingCrimsonAnimations.block, context.tickCount+fixedPartial, 1f);
                 } else {
-                    if (animation == StandPowers.PUNCH_LEFT || animation == StandPowers.VAULT) {
+                    if (animation == KillerQueenEntity.SHA_SEND || animation == KillerQueenEntity.SHA_SHOOT) {
                         if (lastWasOnlyRight) {
                             lastWasOnlyRight = false;
                             user.roundabout$getWornStandIdleAnimation().stop();
@@ -162,7 +162,7 @@ public class KillerQueenArmsPart extends PsuedoHierarchicalModel {
                     }
 
                     if (animation == KillerQueenEntity.MOB_PLANT) {
-                        this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.mobPlantArms, partialTicks, (1/(Math.max(0.1f, (float) (PowersKillerQueen.getMobPlantWindup()) /20)) * 1.364f));
+                        this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.mobPlantArmsMode, partialTicks, (1/(Math.max(0.1f, (float) (PowersKillerQueen.getMobPlantWindup()) / 60))));
                     } else if (animation == KillerQueenEntity.BLOCK_PLANT || animation == KillerQueenEntity.ITEM_THROW) {
                         this.animate(user.roundabout$getWornStandActiveAnimation(), KingCrimsonAnimations.right_punch, partialTicks, speed);
                     } else if (animation == KillerQueenEntity.DETONATE) {
@@ -171,8 +171,12 @@ public class KillerQueenArmsPart extends PsuedoHierarchicalModel {
                         this.animate(user.roundabout$getWornStandActiveAnimation(), StandAnimations.BLOCKBREAK, partialTicks, 1);
                     } else if (animation == StandPowers.MINING) {
                         this.animate(user.roundabout$getWornStandActiveAnimation(), StandAnimations.MINING_BARRAGE, partialTicks, 1);
-                    } else if (animation == StandPowers.PUNCH_LEFT) {
-                        this.animate(user.roundabout$getWornStandActiveAnimation(), KingCrimsonAnimations.left_punch, partialTicks, 1);
+                    } else if (animation == KillerQueenEntity.SHA_SEND) {
+                        this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.shaArmsSend, partialTicks, 0.75f);
+                    } else if (animation == KillerQueenEntity.SHA_SHOOT) {
+                        this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.shaArmsShoot, partialTicks, 0.75f);
+                    } else if (animation == KillerQueenEntity.BTD_DETONATION) {
+                        this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.btdDetonation, partialTicks, 1);
                     }
 
                 }
