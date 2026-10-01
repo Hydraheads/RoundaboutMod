@@ -124,6 +124,9 @@ public class BombPlantedItemEntity extends Entity implements TraceableEntity {
     public void defuse() {
         ItemEntity $$2 = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), getItem(), 0, 0, 0);
         $$2.setDefaultPickUpDelay();
+        CompoundTag tag = new CompoundTag();
+        addAdditionalSaveData(tag);
+        $$2.readAdditionalSaveData(tag);
         this.level().addFreshEntity($$2);
         discard();
     }
