@@ -121,7 +121,9 @@ public class KillerQueenEntity extends FollowingStandEntity {
             SHA_SEND = 88,
     	    HEAVY_STRIKE = 26,
             ARROW_CHARGE = 89,
-            ARROW_THROW = 90;
+            ARROW_THROW = 90,
+            SHA_SHOOT = 91,
+            BTD_DETONATION = 92;
 
 
 
@@ -223,7 +225,7 @@ public class KillerQueenEntity extends FollowingStandEntity {
                 this.itemGrabAnimation.stop();
             }
 
-            if (animation == ARROW_THROW) {
+            if (animation == ARROW_THROW || animation == SHA_SHOOT) {
                 this.arrowThrow.startIfStopped(this.tickCount);
             } else {
                 this.arrowThrow.stop();

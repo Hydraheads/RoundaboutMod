@@ -203,6 +203,17 @@ public class ForgeSounds {
             register(ModSounds.TURNING_ON_LIGHTER, ModSounds.TURNING_ON_LIGHTER_ID);
     public static final RegistryObject<SoundEvent> OPEN_CHEST_EVENT =
             register(ModSounds.OPEN_BLACK_SABBATH_CHEST, ModSounds.OPEN_BLACK_SABBATH_CHEST_ID);
+    public static final RegistryObject<SoundEvent> BLACK_SABBATH_EMERGE_EVENT =
+            register(ModSounds.BLACK_SABBATH_EMERGE, ModSounds.BLACK_SABBATH_EMERGE_ID);
+    public static final RegistryObject<SoundEvent> BLACK_SABBATH_SELECT_ADD_EVENT =
+            register(ModSounds.BLACK_SABBATH_SELECT_ADD, ModSounds.BLACK_SABBATH_SELECT_ADD_ID);
+    public static final RegistryObject<SoundEvent> BLACK_SABBATH_SELECT_REMOVE_EVENT =
+            register(ModSounds.BLACK_SABBATH_SELECT_REMOVE, ModSounds.BLACK_SABBATH_SELECT_REMOVE_ID);
+    public static final RegistryObject<SoundEvent> BLACK_SABBATH_SELECT_CANCEL_EVENT =
+            register(ModSounds.BLACK_SABBATH_SELECT_CANCEL, ModSounds.BLACK_SABBATH_SELECT_CANCEL_ID);
+    public static final RegistryObject<SoundEvent> BLACK_SABBATH_SELECT_CONFIRM_EVENT =
+            register(ModSounds.BLACK_SABBATH_SELECT_CONFIRM, ModSounds.BLACK_SABBATH_SELECT_CONFIRM_ID);
+
 
     public static final RegistryObject<SoundEvent> CENTURY_BOY_SUMMON_EVENT =
             register(ModSounds.CENTURY_BOY_SUMMON, ModSounds.CENTURY_BOY_SUMMON_ID);
