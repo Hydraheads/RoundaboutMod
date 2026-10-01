@@ -1831,9 +1831,12 @@ public class PowersKillerQueen extends NewPunchingStand {
             	   this.setPowerNone();
                    this.bombEntity = null;
                }
-               if (inBitesTheDustMode()) { this.btdTicks = 0; }
+               if (inBitesTheDustMode()) {
+                   this.btdTicks = 0;
+               }
                else {
                    btdTicks = -1;
+                   btdTicksMax = 0;
                    bitesTheDustPlantedEntity = null;
                }
             }
@@ -2459,8 +2462,15 @@ public class PowersKillerQueen extends NewPunchingStand {
             clearBitedTheDust();
             clearDayBitedTheDust();
             btdTicks = -1;
+            btdTicksMax = 0;
             btdShieldPoints = maximunBtdShieldPoints;
             btdShieldBroken = false;
+
+            if (bitesTheDustPlantedEntity != null) {
+                Roundabout.LOGGER.info("btdDefuseServer set null");
+                ((StandUser)bitesTheDustPlantedEntity).rdbt$SetBtdPlantedUser(null);
+                bitesTheDustPlantedEntity = null;
+            }
 
             if (self instanceof ServerPlayer PL) {
                 S2CPacketUtil.sendIntPowerDataPacket(PL, BTD_ACTIVATIONS, 0);
@@ -2477,11 +2487,6 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if (Objects.nonNull(stand) && stand instanceof KillerQueenEntity KQE ){
                     KQE.setPlantedBitesTheDust(false);
                     stand.setFadePercent(100);
-                }
-
-                if (bitesTheDustPlantedEntity != null) {
-                    ((StandUser)bitesTheDustPlantedEntity).rdbt$SetBtdPlantedUser(null);
-                    bitesTheDustPlantedEntity = null;
                 }
 
                 if (self instanceof ServerPlayer pl) {
@@ -2787,6 +2792,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             ((StandUser)target).rdbt$SetBtdPlantedUser(this);
             saveCombatEntitiesSeconds(target.getPosition(1));
             btdTicks = 0;
+            btdTicksMax = 0;
 
             this.syncBombStatus(BITES_THE_DUST);
 
@@ -2888,6 +2894,8 @@ public class PowersKillerQueen extends NewPunchingStand {
             btdTicks = 0;
             return true;
         }
+        if (!inBitesTheDustMode()) { return false; }
+
         if (disabledBTDTicks < 0) { return false; }
 
         if (combatActivations < getMaxBitesTheDustDetonations() || getMaxBitesTheDustDetonations() == 0)  {
@@ -3112,7 +3120,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             }else {
                 //disabledBTDTicks = difference;
                 //btdTicks = 0;
-                defuseServer();
+                btdDefuseServer();
                 btdTicks = -1;
             }
 
@@ -3145,7 +3153,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 //disabledBTDTicks = difference;
                 //btdTicks = 0;
                 btdTicks = -1;
-                defuseServer();
+                btdDefuseServer();
             }
             if (self instanceof ServerPlayer PL) {
                 S2CPacketUtil.sendIntPowerDataPacket(PL, BTD_TICKS_DESACTIVATED, btdTicks + disabledBTDTicks);

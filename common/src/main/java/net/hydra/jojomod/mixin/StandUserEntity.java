@@ -1688,10 +1688,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
 
-        if (BtdPlantedUser != null) {
-            if (roundabout$hasAStand() || BtdPlantedUser.bitesTheDustPlantedEntity != rdbt$this() || !BtdPlantedUser.inBitesTheDustMode()) {
-                BtdPlantedUser.bitesTheDustPlantedEntity = null;
-                BtdPlantedUser = null;
+        if (this.rdbt$GetBtdPlantedUser() != null && !level().isClientSide) {
+            if (roundabout$hasAStand() || !this.rdbt$GetBtdPlantedUser().inBitesTheDustMode()
+                    || this.rdbt$GetBtdPlantedUser().bitesTheDustPlantedEntity != this.rdbt$this()) {
+                this.rdbt$SetBtdPlantedUser(null);
+                Roundabout.LOGGER.info("unplant on tick? " + level().isClientSide);
             }
         }
 
@@ -4097,7 +4098,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
         if (rdbt$interceptIncomingHarmIfBTD($$0)) {
-            BtdPlantedUser.btdGuardDamage($$1);
+            this.BtdPlantedUser.btdGuardDamage($$1);
             ci.setReturnValue(false);
             return;
         }
@@ -5391,8 +5392,22 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "die", at = @At("HEAD"))
     protected void roundabout$die(DamageSource $$0, CallbackInfo ci) {
-        if (rdbt$GetBtdPlantedUser() != null && rdbt$GetBtdPlantedUser().btdTicks > 8) {
-            rdbt$GetBtdPlantedUser().bitesTheDustCombatActivate();
+
+        if (rdbt$GetBtdPlantedUser() != null) {
+            if (rdbt$GetBtdPlantedUser().btdTicks > 8
+                    && rdbt$GetBtdPlantedUser().bitesTheDustPlantedEntity == rdbt$this()
+                    && rdbt$GetBtdPlantedUser().inBitesTheDustMode()) {
+
+                rdbt$GetBtdPlantedUser().bitesTheDustCombatActivate();
+            } else {
+
+                rdbt$SetBtdPlantedUser(null);
+            }
+        }
+
+        if (this.roundabout$getStandPowers() instanceof PowersKillerQueen PKQ) {
+            Roundabout.LOGGER.info("unplant on die? " + level().isClientSide);
+            PKQ.btdDefuseServer();
         }
 
         if ($$0.getEntity() instanceof FallenMob fm) {
@@ -6947,14 +6962,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             LivingEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$DIVER_ARMS = SynchedEntityData.defineId(
             StandUserEntity.class, EntityDataSerializers.BOOLEAN);
+
+    @Unique
     public PowersKillerQueen BtdPlantedUser = null;
 
     @Override
     public boolean rdbt$interceptIncomingHarmIfBTD(DamageSource source) {
-        if (!this.level().isClientSide() && BtdPlantedUser != null && BtdPlantedUser.catBtdShield()
+        if (!this.level().isClientSide() && this.rdbt$GetBtdPlantedUser() != null && this.rdbt$GetBtdPlantedUser().catBtdShield()
+                && this.rdbt$GetBtdPlantedUser().bitesTheDustPlantedEntity.getId() == rdbt$this().getId()
                 && !((TimeStop) rdbt$this().level()).inTimeStopRange(rdbt$this())
                 && !source.is(DamageTypeTags.BYPASSES_SHIELD)
-                && !MainUtil.isArmorBypassingButNotShieldBypassing(source, rdbt$this())
+                && !MainUtil.isArmorBypassingButNotShieldBypassing(source, rdbt$this()
+        )
         /* && !($$1 instanceof AbstractArrow $$3 && $$3.getPierceLevel() > 0) */) {
 
             return true;
@@ -6964,14 +6983,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     @Override
-    public PowersKillerQueen rdbt$GetBtdPlantedUser() {
-        return BtdPlantedUser;
+    @Nullable public PowersKillerQueen rdbt$GetBtdPlantedUser() {
+        return this.BtdPlantedUser;
     }
 
     @Override
-    public void rdbt$SetBtdPlantedUser(PowersKillerQueen e) {
+    public void rdbt$SetBtdPlantedUser(@Nullable PowersKillerQueen e) {
         if (!this.level().isClientSide) {
-            BtdPlantedUser = e;
+            this.BtdPlantedUser = e;
         }
     }
 
