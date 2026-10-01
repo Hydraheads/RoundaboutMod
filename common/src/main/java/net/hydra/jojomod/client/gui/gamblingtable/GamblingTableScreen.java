@@ -1,6 +1,7 @@
 package net.hydra.jojomod.client.gui.gamblingtable;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.menu.GamblingTableMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
