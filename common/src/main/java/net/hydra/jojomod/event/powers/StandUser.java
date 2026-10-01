@@ -388,8 +388,8 @@ public interface StandUser {
     boolean rdbt$isForceCrawl();
     int rdbt$getCrawlTicks();
 
-    PowersKillerQueen rdbt$GetBtdPlantedUser();
-    void rdbt$SetBtdPlantedUser(PowersKillerQueen e);
+    @Nullable PowersKillerQueen rdbt$GetBtdPlantedUser();
+    void rdbt$SetBtdPlantedUser(@Nullable PowersKillerQueen e);
     boolean rdbt$interceptIncomingHarmIfBTD(DamageSource source);
 
     List<CooldownInstance> rdbt$initPowerCooldowns();

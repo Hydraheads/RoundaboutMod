@@ -3083,6 +3083,7 @@ public class PowersSilverChariot extends NewPunchingStand {
                 // mountedEntity.absMoveTo(this.self.getX(), this.self.getY(), this.self.getZ());
                 // this.self.level().addFreshEntity(mountedEntity);
                 // this.self.startRiding(this.mountedEntity, true);
+                // standEntity.ejectPassengers();
                 // this.self.startRiding(standEntity, true);
                 // silverChariot.mount();
             }
