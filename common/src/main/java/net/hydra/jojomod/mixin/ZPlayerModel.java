@@ -12,6 +12,7 @@ import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisAnimations;
 import net.hydra.jojomod.client.models.layers.animations.FirstPersonLayerAnimations;
+import net.hydra.jojomod.client.models.stand.animations.DiverDownAnimations;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.pathfinding.CommandDiscPossession;
 import net.hydra.jojomod.entity.visages.CloneEntity;
@@ -452,6 +453,18 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         this.roundabout$animate(SU.roundabout$getWornStandAnimation(),anim,$$3,1F);
                     } else {
                         SU.roundabout$getWornStandAnimation().stop();
+                    }
+                }
+                if (SU.roundabout$hasSpringLegs() && !P.isPassenger() && !P.isSleeping()) {
+                    this.leftLeg.resetPose();
+                    this.rightLeg.resetPose();
+                    if ($$0.onGround()) {
+                        SU.roundabout$getWornStandAnimation().stop();
+                        SU.roundabout$getWornStandAnimation().start($$0.tickCount);
+                    }
+                    if (SU.roundabout$getWornStandAnimation().isStarted()) {
+                        this.roundabout$animate(
+                                SU.roundabout$getWornStandAnimation(), DiverDownAnimations.spring_legs, $$3, 1.0F);
                     }
                 }
 

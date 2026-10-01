@@ -1,9 +1,9 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.client.gui.ModMenus;
-import net.hydra.jojomod.client.gui.diverdown.custom_workbench_code.*;
-import net.hydra.jojomod.client.gui.gamblingtable.GamblingTableMenu;
+import net.hydra.jojomod.menu.ModMenus;
+import net.hydra.jojomod.menu.GamblingTableMenu;
+import net.hydra.jojomod.menu.diverdown.*;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.inventory.LoomMenu;

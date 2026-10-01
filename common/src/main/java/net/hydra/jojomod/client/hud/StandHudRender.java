@@ -864,6 +864,35 @@ public class StandHudRender {
         context.drawString(renderer, $$6, $$7, $$8 - 1, 0, false);
         context.drawString(renderer, $$6, $$7, $$8, y, false);
     }
+    //like pilot hud, except for the dive/submerge move for diver down.
+    public static void renderDistanceHUDDive(GuiGraphics context, Minecraft client, Player playerEntity,
+                                             int scaledWidth, int scaledHeight, int x, PowersDiverDown pdd) {
+        Entity target = pdd.submergedTarget;
+        if (target == null) return;
+
+        int maxDistance = pdd.getMaxPilotRange();
+        int distance = (int) Math.round(target.position().distanceTo(playerEntity.position()));
+
+        int blt = (int) Math.floor(((double) 182 / maxDistance) * distance);
+        int l = scaledHeight - 32 + 3;
+
+        context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 86, 182, 5);
+        if (blt > 0) {
+            context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 76, Math.min(blt, 182), 5);
+        }
+
+        int y = 0x55FFFF;
+        Font renderer = client.font;
+        String text = String.valueOf(distance);
+        int textX = (scaledWidth - renderer.width(text)) / 2;
+        int textY = scaledHeight - 31 - 4;
+
+        context.drawString(renderer, text, textX + 1, textY, 0, false);
+        context.drawString(renderer, text, textX - 1, textY, 0, false);
+        context.drawString(renderer, text, textX, textY + 1, 0, false);
+        context.drawString(renderer, text, textX, textY - 1, 0, false);
+        context.drawString(renderer, text, textX, textY, y, false);
+    }
     public static void renderEpitaph(GuiGraphics context, Player playerEntity,
                                          int scaledWidth, int scaledHeight, int x, PowersKingCrimson pkc) {
         Minecraft client = Minecraft.getInstance();

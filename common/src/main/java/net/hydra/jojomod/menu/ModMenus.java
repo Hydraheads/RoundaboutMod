@@ -1,7 +1,6 @@
-package net.hydra.jojomod.client.gui;
+package net.hydra.jojomod.menu;
 
-import net.hydra.jojomod.client.gui.diverdown.custom_workbench_code.DiverDownCraftingMenu;
-import net.hydra.jojomod.client.gui.gamblingtable.GamblingTableMenu;
+import net.hydra.jojomod.menu.diverdown.DiverDownCraftingMenu;
 import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.inventory.LoomMenu;
 import net.minecraft.world.inventory.MenuType;
