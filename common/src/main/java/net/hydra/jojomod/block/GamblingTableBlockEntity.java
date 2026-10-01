@@ -1,6 +1,6 @@
 package net.hydra.jojomod.block;
 
-import net.hydra.jojomod.client.gui.gamblingtable.GamblingTableMenu;
+import net.hydra.jojomod.menu.GamblingTableMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;

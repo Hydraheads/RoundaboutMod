@@ -56,7 +56,7 @@ public class DiverKickEntityRenderer extends EntityRenderer<DiverKickEntity> {
         } else if (progress <= 0.80F) {
             kickFactor = 1.0F;
         } else {
-            // for reference, the formula is: progress - retract start F / kick end F
+            // for reference, the formula is: (progress - retract start F) / kick end F
             kickFactor = 1.0F - ((progress - 0.8F) / 0.2F);
         }
 

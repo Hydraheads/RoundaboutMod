@@ -26,11 +26,11 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.*;
-import net.hydra.jojomod.client.gui.diverdown.custom_workbench_code.*;
 import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.AnasuiVoice;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.menu.diverdown.*;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
@@ -68,7 +68,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
-import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.monster.Creeper;
@@ -223,7 +222,7 @@ public class PowersDiverDown extends NewPunchingStand {
     public LivingEntity ribcageTarget = null;
     public Vec3 ribcageWalkDirection = null;
     public int ribcageTrapTicks = 0;
-    public static final int RIBCAGE_MAX_DURATION = 200; // 10 seconds max duration
+    public static final int RIBCAGE_MAX_DURATION = 160; // 8 seconds max duration
     public static final double HOSTILE_DETECTION_RANGE = 16.0; // non-zombie hostile detection range
     public LivingEntity springTarget = null;
     public int springLegsTicks = 0;
@@ -349,31 +348,31 @@ public class PowersDiverDown extends NewPunchingStand {
 
     private float getGroundBarrageStrength(Entity entity) {
         if (this.getReducedDamage(entity)) {
-            return levelupDamageMod(0.25F * this.getAttackMultOnPlayers() * 0.01F);
+            return levelupDamageMod(0.1F * this.getAttackMultOnPlayers() * 0.01F);
         } else {
-            return levelupDamageMod(0.75F * this.getAttackMultOnMobs() * 0.01F);
+            return levelupDamageMod(0.5F * this.getAttackMultOnMobs() * 0.01F);
         }
     }
 
     private float getGroundFinisherStrength(Entity entity) {
         if (this.getReducedDamage(entity)) {
-            return levelupDamageMod(5F * this.getAttackMultOnPlayers() * 0.01F);
+            return levelupDamageMod(3F * this.getAttackMultOnPlayers() * 0.01F);
         } else {
-            return levelupDamageMod(8F * this.getAttackMultOnMobs() * 0.01F);
+            return levelupDamageMod(6F * this.getAttackMultOnMobs() * 0.01F);
         }
     }
 
     private float getKickTrapStrength(Entity entity) {
         if (this.getReducedDamage(entity)) {
-            return levelupDamageMod(4F * this.getAttackMultOnPlayers() * 0.01F);
+            return levelupDamageMod(3F * this.getAttackMultOnPlayers() * 0.01F);
         } else {
-            return levelupDamageMod(7F * this.getAttackMultOnMobs() * 0.01F);
+            return levelupDamageMod(6F * this.getAttackMultOnMobs() * 0.01F);
         }
     }
 
     private float getRibcageSnapStrength(Entity entity) {
         if (this.getReducedDamage(entity)) {
-            return levelupDamageMod(8F * this.getAttackMultOnPlayers() * 0.01F);
+            return levelupDamageMod(6F * this.getAttackMultOnPlayers() * 0.01F);
         } else {
             return levelupDamageMod(12F * this.getAttackMultOnMobs() * 0.01F);
         }
@@ -381,7 +380,7 @@ public class PowersDiverDown extends NewPunchingStand {
 
     private float getRibcageHostStrength(Entity entity) {
         if (this.getReducedDamage(entity)) {
-            return levelupDamageMod(8F * this.getAttackMultOnPlayers() * 0.01F);
+            return levelupDamageMod(6F * this.getAttackMultOnPlayers() * 0.01F);
         } else {
             return levelupDamageMod(20F * this.getAttackMultOnMobs() * 0.01F);
         }
@@ -1656,6 +1655,11 @@ public class PowersDiverDown extends NewPunchingStand {
             this.submergedTarget = null;
             this.hasDiverLegs = false;
             this.hasDiverArms = false;
+            this.setPowerNone();
+            StandEntity stand = this.getStandEntity(this.self);
+            if (stand instanceof DiverDownEntity ddEntity) {
+                ddEntity.setSubmerged(false);
+            }
         } else if (activePower == LIMB_RECALL) {
             this.activeLimbs.clear();
             this.currentLimbIndex = 0;
@@ -2585,7 +2589,7 @@ public class PowersDiverDown extends NewPunchingStand {
     // replaces hud when piloting
     @Override
     public boolean replaceHudActively() {
-        return isPiloting();
+        return isPiloting() || (isDiveActive() && !isSelfDive());
     }
 
     // replaces the exp bar with the timer
@@ -2596,6 +2600,16 @@ public class PowersDiverDown extends NewPunchingStand {
             // shows the timer for how long diver down pilot is active for
             StandHudRender.renderGroundDiveHud(context, cameraPlayer, screenWidth, screenHeight, x, this);
             return;
+        }
+        if (isDiveActive() && !isSelfDive()) {
+            // shows dive distance
+            if (this.submergedTarget == null && this.submergedTargetId != -1) {
+                this.submergedTarget = this.self.level().getEntity(this.submergedTargetId);
+            }
+            if (this.submergedTarget != null) {
+                StandHudRender.renderDistanceHUDDive(context, Minecraft.getInstance(), cameraPlayer, screenWidth, screenHeight, x, this);
+                return;
+            }
         }
         super.getReplacementHUD(context, cameraPlayer, screenWidth, screenHeight, x, removeNum);
     }
@@ -3785,7 +3799,11 @@ public class PowersDiverDown extends NewPunchingStand {
         if (!(this.submergedTarget instanceof LivingEntity host) || !host.isAlive()) return;
 
         this.springTarget = host;
-        this.springLegsTicks = SPRING_LEGS_MAX_DURATION;
+        if (this.getReducedDamage(host)) {
+            this.springLegsTicks = SPRING_LEGS_MAX_DURATION-5;
+        } else {
+            this.springLegsTicks = SPRING_LEGS_MAX_DURATION;
+        }
 
         // for disabling keys
         if (host instanceof StandUser su) {
@@ -4038,7 +4056,7 @@ public class PowersDiverDown extends NewPunchingStand {
 
         // kill normal mobs; blindness to players & bosses
         if (host instanceof Player || MainUtil.isBossMob(host)) {
-            host.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 300, 0, false, false, false));
+            host.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 260, 0, false, false, false));
             emergeServer();
             // 20 second blindness
         } else {
@@ -4709,7 +4727,7 @@ public class PowersDiverDown extends NewPunchingStand {
 
     @Override
     public boolean canSummonStandAsEntity() {
-        if (areStandMovesDisabled()) {
+        if (areStandMovesDisabled() && !inZipMode()) {
             return false;
         }
         return super.canSummonStandAsEntity();
@@ -4980,6 +4998,25 @@ public class PowersDiverDown extends NewPunchingStand {
             displayStand = this.getNewStandEntity();
             displayStand.setSkin(((IPlayerEntity) PL).roundabout$getStandSkin());
         }
+
+        // All of this is code to have the idle animation appear.
+        if (displayStand != null && this.self != null) {
+            StandUser su = (StandUser) this.self;
+            displayStand.setUser(this.self);
+            displayStand.tickCount = this.self.tickCount;
+
+            displayStand.setAnimation(su.roundabout$getStandAnimation());
+            displayStand.setIdleAnimation(su.roundabout$getIdlePos());
+
+            StandEntity realStand = this.getStandEntity(this.self);
+            if (realStand != null) {
+                displayStand.setPose(realStand.getPose());
+                displayStand.setIdleAnimation(realStand.getIdleAnimation());
+            }
+
+            displayStand.setupAnimationStates();
+        }
+
         return displayStand;
     }
 
