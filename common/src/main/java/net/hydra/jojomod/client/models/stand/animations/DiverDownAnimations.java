@@ -1224,4 +1224,26 @@ public class DiverDownAnimations {
 					new Keyframe(0.0F, KeyframeAnimations.degreeVec(-30.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
 			))
 			.build();
+	public static final AnimationDefinition spring_legs = AnimationDefinition.Builder.withLength(0.75F)
+			.addAnimation("left_leg", new AnimationChannel(AnimationChannel.Targets.SCALE,
+					new Keyframe(0.0F, KeyframeAnimations.scaleVec(1.0F, 1.0F, 1.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.0417F, KeyframeAnimations.scaleVec(1.2F, 0.7F, 1.2F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.0833F, KeyframeAnimations.scaleVec(0.9F, 1.1F, 0.9F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.1667F, KeyframeAnimations.scaleVec(1.05F, 0.85F, 1.05F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.2917F, KeyframeAnimations.scaleVec(0.95F, 1.05F, 0.95F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.4167F, KeyframeAnimations.scaleVec(1.02F, 0.95F, 1.02F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.5417F, KeyframeAnimations.scaleVec(0.98F, 1.02F, 0.98F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.6667F, KeyframeAnimations.scaleVec(1.0F, 1.0F, 1.0F), AnimationChannel.Interpolations.LINEAR)
+			))
+			.addAnimation("right_leg", new AnimationChannel(AnimationChannel.Targets.SCALE,
+					new Keyframe(0.0F, KeyframeAnimations.scaleVec(1.0F, 1.0F, 1.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.0417F, KeyframeAnimations.scaleVec(1.2F, 0.7F, 1.2F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.0833F, KeyframeAnimations.scaleVec(0.9F, 1.1F, 0.9F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.1667F, KeyframeAnimations.scaleVec(1.05F, 0.85F, 1.05F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.2917F, KeyframeAnimations.scaleVec(0.95F, 1.05F, 0.95F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.4167F, KeyframeAnimations.scaleVec(1.02F, 0.95F, 1.02F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.5417F, KeyframeAnimations.scaleVec(0.98F, 1.02F, 0.98F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.6667F, KeyframeAnimations.scaleVec(1.0F, 1.0F, 1.0F), AnimationChannel.Interpolations.LINEAR)
+			))
+			.build();
 }
