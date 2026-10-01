@@ -1,6 +1,7 @@
 package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.menu.GamblingTableMenu;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -29,6 +30,8 @@ public class GamblingTableBlockEntity extends BlockEntity implements Container, 
     private UUID challengerUUID;
     private final Set<UUID> activeViewers = new HashSet<>();
     private boolean gameInProgress = false;
+    private boolean hostAccepted = false;
+    private boolean challengerAccepted = false;
 
     public enum Role { HOST, CHALLENGER, SPECTATOR }
 
@@ -188,6 +191,34 @@ public class GamblingTableBlockEntity extends BlockEntity implements Container, 
     public void clearContent() {
         this.items.clear();
         this.setChanged();
+    }
+
+    // accepting and starting the game
+
+    public void setPlayerAccepted(Player player, boolean accepted) {
+        Role role = getPlayerRole(player);
+        if (role == Role.HOST) {
+            this.hostAccepted = accepted;
+        } else if (role == Role.CHALLENGER) {
+            this.challengerAccepted = accepted;
+        }
+        this.setChanged();
+
+        if (this.hostAccepted && this.challengerAccepted) {
+            startGamble();
+        }
+    }
+
+    public void resetAcceptances() {
+        this.hostAccepted = false;
+        this.challengerAccepted = false;
+        this.setChanged();
+    }
+
+    private void startGamble() {
+        this.gameInProgress = true;
+        // IT'S GAMBLING TIME!!!!
+        this.level.getServer().getPlayerList().broadcastSystemMessage(Component.literal("IT'S GAMBLING TIME!!!!!"), false);
     }
 
     // saves and loads whatever is in storage

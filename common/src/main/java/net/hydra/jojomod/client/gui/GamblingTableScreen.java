@@ -122,11 +122,18 @@ public class GamblingTableScreen extends AbstractContainerScreen<GamblingTableMe
         );
     }
 
+    // handleInventoryButtonClick syncs the server with the client
+
     private void onAcceptClicked() {
-        // TO DO: send a packet to the server saying "HEY SERVER!!! IT'S GAMBLING TIME!!!!"
+        if (this.minecraft != null && this.minecraft.gameMode != null) {
+            this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, GamblingTableMenu.BUTTON_ACCEPT);
+        }
     }
 
     private void onDenyClicked() {
+        if (this.minecraft != null && this.minecraft.gameMode != null) {
+            this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, GamblingTableMenu.BUTTON_DENY);
+        }
         this.onClose();
     }
 

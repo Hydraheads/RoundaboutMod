@@ -15,6 +15,8 @@ public class GamblingTableMenu extends AbstractContainerMenu {
     private final Container betContainer;
     private final ContainerLevelAccess access;
     private final Player player;
+    public static final int BUTTON_ACCEPT = 0;
+    public static final int BUTTON_DENY = 1;
 
     // Client-side constructor called by MenuType
     public GamblingTableMenu(int containerId, Inventory playerInventory) {
@@ -108,6 +110,22 @@ public class GamblingTableMenu extends AbstractContainerMenu {
     public void removed(Player player) {
         super.removed(player);
         this.betContainer.stopOpen(player);
+    }
+
+    // tells the table "hey table!! this player clicked accept!!"
+
+    @Override
+    public boolean clickMenuButton(Player player, int id) {
+        if (this.betContainer instanceof GamblingTableBlockEntity table) {
+            if (id == BUTTON_ACCEPT) {
+                table.setPlayerAccepted(player, true);
+                return true;
+            } else if (id == BUTTON_DENY) {
+                table.setPlayerAccepted(player, false);
+                return true;
+            }
+        }
+        return false;
     }
 
     public Container getBetContainer() {
