@@ -35,7 +35,7 @@ public class GamblingTableMenu extends AbstractContainerMenu {
         // Top row is for the host bet slots
         for (int col = 0; col < 9; ++col) {
             int slotIndex = col;
-            this.addSlot(new Slot(this.betContainer, slotIndex, 8 + col * 18, 18) {
+            this.addSlot(new Slot(this.betContainer, slotIndex, 8 + col * 18, 16) {
                 @Override
                 public boolean mayPlace(ItemStack stack) {
                     return isHost(player);
@@ -50,7 +50,7 @@ public class GamblingTableMenu extends AbstractContainerMenu {
         // Bottom rows are for challenger betting slots
         for (int col = 0; col < 9; ++col) {
             int slotIndex = col + 9;
-            this.addSlot(new Slot(this.betContainer, slotIndex, 8 + col * 18, 54) {
+            this.addSlot(new Slot(this.betContainer, slotIndex, 8 + col * 18, 52) {
                 @Override
                 public boolean mayPlace(ItemStack stack) {
                     return isChallenger(player);

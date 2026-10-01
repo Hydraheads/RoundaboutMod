@@ -7,7 +7,7 @@ import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
-import net.hydra.jojomod.client.gui.gamblingtable.GamblingTableScreen;
+import net.hydra.jojomod.client.gui.GamblingTableScreen;
 import net.hydra.jojomod.item.FancyLighterItem;
 import net.hydra.jojomod.item.StrayCatItem;
 import net.hydra.jojomod.particles.FabricParticlesClient;
