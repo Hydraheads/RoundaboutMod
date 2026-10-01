@@ -938,7 +938,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
             case SKILL_2_CROUCH -> {
                 if (!this.inBitesTheDustMode()) {
-                    
+
                     if (this.currentBombStatus == BOMB_NONE) {
                         if (this.canItemPlantBomb()) {
                             tryItemPlantBomb();
