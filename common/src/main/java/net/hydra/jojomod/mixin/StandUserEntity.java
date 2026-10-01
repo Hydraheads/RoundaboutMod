@@ -1690,7 +1690,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         if (this.rdbt$GetBtdPlantedUser() != null && !level().isClientSide) {
             if (roundabout$hasAStand() || !this.rdbt$GetBtdPlantedUser().inBitesTheDustMode()
-                    || this.rdbt$GetBtdPlantedUser().bitesTheDustPlantedEntity != this.rdbt$this()) {
+                    || this.rdbt$GetBtdPlantedUser().bitesTheDustPlantedEntity != this.rdbt$this()
+                    || (this.rdbt$GetBtdPlantedUser().self != null && !this.rdbt$GetBtdPlantedUser().self.isAlive())
+            ) {
                 this.rdbt$SetBtdPlantedUser(null);
                 Roundabout.LOGGER.info("unplant on tick? " + level().isClientSide);
             }
