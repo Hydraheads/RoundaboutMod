@@ -1271,9 +1271,9 @@ public class Config implements Cloneable {
         public Integer getMiningTierTheWorld;
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer oxygenTankAdditionalTicks;
-        @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
-        public Integer assaultCooldown;
-        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 70, min = 0, max = 72000)
+        public Integer assaultCooldownv2;
+        @IntOption(group = "inherit", value = 70, min = 0, max = 72000)
         public Integer assaultInterruptCooldown;
     }
 
