@@ -132,5 +132,4 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation BIRTH_OF_VENUS_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "venus"), "main");
 
     public static final ModelLayerLocation SHEER_HEART_ATTACK_LAYER =  new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "sheer_heart_attack"), "main");
-    public static final ModelLayerLocation SHEER_TEAPOT_ATTACK_LAYER =  new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "sheer_teapot_attack"), "main");
 }

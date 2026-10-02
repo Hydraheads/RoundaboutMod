@@ -42,6 +42,7 @@ public class BlockBombRenderer extends StandRenderer<BlockBombEntity> {
 	private static final ResourceLocation GREEN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/blockbombs/green.png");
 	private static final ResourceLocation GOLD = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/blockbombs/gold.png");
 	private static final ResourceLocation NUMBRA = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/blockbombs/numbra.png");
+	private static final ResourceLocation ONIBIS = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/blockbombs/onibis.png");
 
 	
     public BlockBombRenderer(EntityRendererProvider.Context context) {
@@ -62,6 +63,7 @@ public class BlockBombRenderer extends StandRenderer<BlockBombEntity> {
                      KillerQueenEntity.LIMBUSMORTIS, KillerQueenEntity.DEADLY -> {return NUMBRA;}
                 case KillerQueenEntity.STRAY, KillerQueenEntity.TAMA, KillerQueenEntity.GREY -> {return BLUE;}
                 case KillerQueenEntity.MINESWEEPER -> {return MINESWEEPER;}
+                case KillerQueenEntity.SAMURAI, KillerQueenEntity.SPIRIT -> {return ONIBIS;}
             }
         }
 
