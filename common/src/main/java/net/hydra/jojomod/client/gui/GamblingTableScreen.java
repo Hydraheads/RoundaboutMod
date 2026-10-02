@@ -47,6 +47,14 @@ public class GamblingTableScreen extends AbstractContainerScreen<GamblingTableMe
         this.inventoryLabelY = this.imageHeight - 94;
     }
 
+    @Override
+    protected void containerTick() {
+        super.containerTick();
+        if (this.menu.isHost(this.minecraft.player) && !this.menu.hasGameStarted()) {
+            this.minecraft.setScreen(new GamblingGameSelectionScreen(this.menu));
+        }
+    }
+
     protected boolean isHovering(int btnRelX, int btnRelY, int width, int height, double mouseX, double mouseY) {
         int screenBtnX = this.leftPos + btnRelX;
         int screenBtnY = this.topPos + btnRelY;
@@ -75,6 +83,14 @@ public class GamblingTableScreen extends AbstractContainerScreen<GamblingTableMe
         } else if (!denyHovered) {
             graphics.blit(TEXTURE, x + DENY_X, y + DENY_Y, DENY_IDLE_U, DENY_IDLE_V, BTN_WIDTH, BTN_HEIGHT);
         }
+    }
+
+    // Puts the game name under the host slots so the players know what game was selected
+    @Override
+    protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
+        super.renderLabels(graphics, mouseX, mouseY);
+        Component gameTitle = this.menu.getGameName();
+        graphics.drawString(this.font, gameTitle, 8, 38, 0x404040, false);
     }
 
     @Override

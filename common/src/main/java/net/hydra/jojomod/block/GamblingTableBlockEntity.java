@@ -13,6 +13,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -24,6 +25,19 @@ import java.util.Set;
 import java.util.UUID;
 
 public class GamblingTableBlockEntity extends BlockEntity implements Container, MenuProvider {
+    // byte list for all the games, when adding a game, be sure to update the bytes here.
+    /* list of all classes you need to change whenever adding a game:
+    This one
+    GamblingTableMenu
+    GamblingGameSelectionScreen
+    en_us json
+     */
+    public static final byte
+            WAITING = 0,
+            COIN_DROP = 1;
+
+    private int selectedGame = WAITING;
+
     private NonNullList<ItemStack> items = NonNullList.withSize(GamblingTableMenu.BET_SLOT_COUNT, ItemStack.EMPTY);
     // UUIDs are used for tracking the players
     private UUID hostUUID;
@@ -54,7 +68,7 @@ public class GamblingTableBlockEntity extends BlockEntity implements Container, 
         if (!this.remove && !player.isSpectator()) {
             this.activeViewers.remove(player.getUUID());
 
-            // If nobody is interacting with the table at the time of betting:
+            // If nobody is interacting with the table at the time of betting
             if (this.activeViewers.isEmpty() && !this.gameInProgress && this.level != null && !this.level.isClientSide()) {
                 returnAllItems();
                 resetGame();
@@ -124,6 +138,7 @@ public class GamblingTableBlockEntity extends BlockEntity implements Container, 
     public void resetGame() {
         this.hostUUID = null;
         this.challengerUUID = null;
+        this.selectedGame = WAITING;
         setChanged();
     }
 
@@ -131,14 +146,51 @@ public class GamblingTableBlockEntity extends BlockEntity implements Container, 
         this.gameInProgress = inProgress;
         this.setChanged();
     }
-    @Override
-    public @NotNull Component getDisplayName() {
-        return Component.translatable("container.roundabout.gambling_table");
-    }
 
+    // For game selection
+
+    public final ContainerData dataAccess = new ContainerData() {
+        @Override
+        public int get(int index) {
+            return index == 0 ? selectedGame : 0;
+        }
+
+        @Override
+        public void set(int index, int value) {
+            if (index == 0) {
+                selectedGame = value;
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return 1;
+        }
+    };
+
+    // creates the gambling menu
     @Override
     public AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player) {
-        return new GamblingTableMenu(containerId, playerInventory, this, ContainerLevelAccess.create(this.level, this.worldPosition));
+        Role role = getPlayerRole(player);
+        ContainerData menuData = new ContainerData() {
+            @Override
+            public int get(int index) {
+                if (index == 0) return selectedGame;
+                if (index == 1) return role == Role.HOST ? 1 : 0;
+                return 0;
+            }
+
+            @Override
+            public void set(int index, int value) {
+                if (index == 0) selectedGame = value;
+            }
+
+            @Override
+            public int getCount() {
+                return 2;
+            }
+        };
+        return new GamblingTableMenu(containerId, playerInventory, this, ContainerLevelAccess.create(this.level, this.worldPosition), menuData);
     }
 
     @Override
@@ -152,11 +204,6 @@ public class GamblingTableBlockEntity extends BlockEntity implements Container, 
             if (!stack.isEmpty()) return false;
         }
         return true;
-    }
-
-    @Override
-    public @NotNull ItemStack getItem(int slot) {
-        return this.items.get(slot);
     }
 
     @Override
@@ -209,16 +256,10 @@ public class GamblingTableBlockEntity extends BlockEntity implements Container, 
         }
     }
 
-    public void resetAcceptances() {
-        this.hostAccepted = false;
-        this.challengerAccepted = false;
-        this.setChanged();
-    }
-
     private void startGamble() {
         this.gameInProgress = true;
         // IT'S GAMBLING TIME!!!!
-        this.level.getServer().getPlayerList().broadcastSystemMessage(Component.literal("IT'S GAMBLING TIME!!!!!"), false);
+        this.level.getServer().getPlayerList().broadcastSystemMessage(Component.literal("IT'S GAMBLING TIME!!!!! game: " + this.selectedGame), false);
     }
 
     // saves and loads whatever is in storage
@@ -233,5 +274,25 @@ public class GamblingTableBlockEntity extends BlockEntity implements Container, 
     protected void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
         ContainerHelper.saveAllItems(tag, this.items);
+    }
+
+    // simple getters and setters
+
+    public int getSelectedGame() {
+        return this.selectedGame;
+    }
+
+    public void setSelectedGame(int game) {
+        this.selectedGame = game;
+        this.setChanged();
+    }
+
+    @Override
+    public @NotNull ItemStack getItem(int slot) {
+        return this.items.get(slot);
+    }
+    @Override
+    public @NotNull Component getDisplayName() {
+        return Component.translatable("container.roundabout.gambling_table");
     }
 }
