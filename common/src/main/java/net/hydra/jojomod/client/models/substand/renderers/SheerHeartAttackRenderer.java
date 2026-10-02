@@ -46,8 +46,8 @@ public class SheerHeartAttackRenderer extends StandRenderer<SheerHeartAttackEnti
     private static final ResourceLocation TEAPOT_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/sheer_heart_attack/teapot.png");
     private static final ResourceLocation SPIRIT_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/sheer_heart_attack/spirit.png");
 
-    public SheerHeartAttackRenderer(EntityRendererProvider.Context context, StandModel root) {
-        super(context, root,0f);
+    public SheerHeartAttackRenderer(EntityRendererProvider.Context context) {
+        super(context, new SheerHeartAttackModel<>(context.bakeLayer(ModEntityRendererClient.SHEER_HEART_ATTACK_LAYER)), 0f);
     }
 
     @Override
