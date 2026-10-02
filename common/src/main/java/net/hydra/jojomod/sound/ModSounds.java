@@ -455,7 +455,21 @@ public class ModSounds {
     public static final String OPEN_BLACK_SABBATH_CHEST = "black_sabbath_chest_open";
     public static final ResourceLocation OPEN_BLACK_SABBATH_CHEST_ID = new ResourceLocation(Roundabout.MOD_ID+":"+OPEN_BLACK_SABBATH_CHEST);
     public static SoundEvent OPEN_BLACK_SABBATH_CHEST_EVENT = SoundEvent.createVariableRangeEvent(OPEN_BLACK_SABBATH_CHEST_ID);
-
+    public static final String BLACK_SABBATH_EMERGE = "black_sabbath_emerge";
+    public static final ResourceLocation BLACK_SABBATH_EMERGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BLACK_SABBATH_EMERGE);
+    public static SoundEvent BLACK_SABBATH_EMERGE_EVENT = SoundEvent.createVariableRangeEvent(BLACK_SABBATH_EMERGE_ID);
+    public static final String BLACK_SABBATH_SELECT_ADD = "bs_select_add";
+    public static final ResourceLocation BLACK_SABBATH_SELECT_ADD_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BLACK_SABBATH_SELECT_ADD);
+    public static SoundEvent BLACK_SABBATH_SELECT_ADD_EVENT = SoundEvent.createVariableRangeEvent(BLACK_SABBATH_SELECT_ADD_ID);
+    public static final String BLACK_SABBATH_SELECT_REMOVE = "bs_select_remove";
+    public static final ResourceLocation BLACK_SABBATH_SELECT_REMOVE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BLACK_SABBATH_SELECT_REMOVE);
+    public static SoundEvent BLACK_SABBATH_SELECT_REMOVE_EVENT = SoundEvent.createVariableRangeEvent(BLACK_SABBATH_SELECT_REMOVE_ID);
+    public static final String BLACK_SABBATH_SELECT_CANCEL = "bs_select_cancel";
+    public static final ResourceLocation BLACK_SABBATH_SELECT_CANCEL_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BLACK_SABBATH_SELECT_CANCEL);
+    public static SoundEvent BLACK_SABBATH_SELECT_CANCEL_EVENT = SoundEvent.createVariableRangeEvent(BLACK_SABBATH_SELECT_CANCEL_ID);
+    public static final String BLACK_SABBATH_SELECT_CONFIRM = "bs_select_confirm";
+    public static final ResourceLocation BLACK_SABBATH_SELECT_CONFIRM_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BLACK_SABBATH_SELECT_CONFIRM);
+    public static SoundEvent BLACK_SABBATH_SELECT_CONFIRM_EVENT = SoundEvent.createVariableRangeEvent(BLACK_SABBATH_SELECT_CONFIRM_ID);
 
     public static final String CENTURY_BOY_SUMMON = "century_boy_summon";
     public static final ResourceLocation CENTURY_BOY_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CENTURY_BOY_SUMMON);

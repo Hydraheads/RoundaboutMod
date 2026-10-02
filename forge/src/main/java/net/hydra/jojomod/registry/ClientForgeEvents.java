@@ -4,7 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.*;
 import net.hydra.jojomod.client.gui.diverdown.custom_workbench_texture.*;
-import net.hydra.jojomod.client.gui.gamblingtable.GamblingTableScreen;
+import net.hydra.jojomod.client.gui.GamblingTableScreen;
 import net.hydra.jojomod.client.models.*;
 import net.hydra.jojomod.client.models.corpses.renderers.*;
 import net.hydra.jojomod.client.models.minions.*;
