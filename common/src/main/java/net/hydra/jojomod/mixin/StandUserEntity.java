@@ -1041,12 +1041,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (getDistortionHazeTicks() > 0) {
             SetInDistortionHazeTicks(getDistortionHazeTicks() - 1);
         }
-        if (BtdPlantedUser != null) {
-            if (roundabout$hasAStand() || BtdPlantedUser.bitesTheDustPlantedEntity != rdbt$this()) {
-                BtdPlantedUser.bitesTheDustPlantedEntity = null;
-                BtdPlantedUser = null;
-            }
-        }
+
         if (!(((LivingEntity) (Object) this) instanceof Player)) {
             this.roundabout$getStandPowers().tickPowerEnd();
         }
@@ -1692,6 +1687,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
             }
         }
+
+        if (this.rdbt$GetBtdPlantedUser() != null && !level().isClientSide) {
+            if (roundabout$hasAStand() || !this.rdbt$GetBtdPlantedUser().inBitesTheDustMode()
+                    || this.rdbt$GetBtdPlantedUser().bitesTheDustPlantedEntity != this.rdbt$this()
+                    || (this.rdbt$GetBtdPlantedUser().self != null && !this.rdbt$GetBtdPlantedUser().self.isAlive())
+            ) {
+                this.rdbt$SetBtdPlantedUser(null);
+
+            }
+        }
+
         LivingEntity terg2 = getLastHurtMob();
         LivingEntity terg3 = lastHurtByMob;
         if (terg2 != null && PowerTypes.isInADifferentExistence(terg2, this)) {
@@ -2464,6 +2470,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public void roundabout$setStandDisc(ItemStack stack) {
         if (!(this.level().isClientSide)) {
+            //disguise clear logic, so players can't just disguise and then swap stands.
+            if (this.roundabout$isDisguised()) {
+                this.roundabout$clearDisguise();
+            }
+
+            if (this.roundabout$getStandPowers() instanceof PowersDiverDown dd) {
+                if (dd.submergedTarget instanceof StandUser targetSu && targetSu.roundabout$isDisguised()) {
+                    targetSu.roundabout$clearDisguise();
+                }
+            }
+
             this.getEntityData().set(ROUNDABOUT$STAND_DISC, stack);
             if (stack.getItem() instanceof StandDiscItem SD) {
                 SD.generateStandPowers(rdbt$this());
@@ -4094,7 +4111,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
         if (rdbt$interceptIncomingHarmIfBTD($$0)) {
-            BtdPlantedUser.btdGuardDamage($$1);
+            this.BtdPlantedUser.btdGuardDamage($$1);
             ci.setReturnValue(false);
             return;
         }
@@ -5388,8 +5405,21 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "die", at = @At("HEAD"))
     protected void roundabout$die(DamageSource $$0, CallbackInfo ci) {
-        if (rdbt$GetBtdPlantedUser() != null && rdbt$GetBtdPlantedUser().btdTicks > 8) {
-            rdbt$GetBtdPlantedUser().bitesTheDustCombatActivate();
+
+        if (rdbt$GetBtdPlantedUser() != null) {
+            if (rdbt$GetBtdPlantedUser().btdTicks > 8
+                    && rdbt$GetBtdPlantedUser().bitesTheDustPlantedEntity == rdbt$this()
+                    && rdbt$GetBtdPlantedUser().inBitesTheDustMode()) {
+
+                rdbt$GetBtdPlantedUser().bitesTheDustCombatActivate();
+            } else {
+
+                rdbt$SetBtdPlantedUser(null);
+            }
+        }
+
+        if (this.roundabout$getStandPowers() instanceof PowersKillerQueen PKQ) {
+            PKQ.btdDefuseServer();
         }
 
         if ($$0.getEntity() instanceof FallenMob fm) {
@@ -6944,14 +6974,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             LivingEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$DIVER_ARMS = SynchedEntityData.defineId(
             StandUserEntity.class, EntityDataSerializers.BOOLEAN);
+
+    @Unique
     public PowersKillerQueen BtdPlantedUser = null;
 
     @Override
     public boolean rdbt$interceptIncomingHarmIfBTD(DamageSource source) {
-        if (!this.level().isClientSide() && BtdPlantedUser != null && BtdPlantedUser.catBtdShield()
+        if (!this.level().isClientSide() && this.rdbt$GetBtdPlantedUser() != null && this.rdbt$GetBtdPlantedUser().catBtdShield()
+                && this.rdbt$GetBtdPlantedUser().bitesTheDustPlantedEntity.getId() == rdbt$this().getId()
                 && !((TimeStop) rdbt$this().level()).inTimeStopRange(rdbt$this())
                 && !source.is(DamageTypeTags.BYPASSES_SHIELD)
-                && !MainUtil.isArmorBypassingButNotShieldBypassing(source, rdbt$this())
+                && !MainUtil.isArmorBypassingButNotShieldBypassing(source, rdbt$this()
+        )
         /* && !($$1 instanceof AbstractArrow $$3 && $$3.getPierceLevel() > 0) */) {
 
             return true;
@@ -6961,14 +6995,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     @Override
-    public PowersKillerQueen rdbt$GetBtdPlantedUser() {
-        return BtdPlantedUser;
+    @Nullable public PowersKillerQueen rdbt$GetBtdPlantedUser() {
+        return this.BtdPlantedUser;
     }
 
     @Override
-    public void rdbt$SetBtdPlantedUser(PowersKillerQueen e) {
+    public void rdbt$SetBtdPlantedUser(@Nullable PowersKillerQueen e) {
         if (!this.level().isClientSide) {
-            BtdPlantedUser = e;
+            this.BtdPlantedUser = e;
         }
     }
 

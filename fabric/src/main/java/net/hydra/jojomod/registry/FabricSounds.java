@@ -302,6 +302,11 @@ public class FabricSounds {
         addSound(ModSounds.BLACK_SABBATH_SUMMON_ID, ModSounds.BLACK_SABBATH_SUMMON_EVENT);
         addSound(ModSounds.OPEN_BLACK_SABBATH_CHEST_ID, ModSounds.OPEN_BLACK_SABBATH_CHEST_EVENT);
         addSound(ModSounds.TURNING_ON_LIGHTER_ID, ModSounds.TURNING_ON_LIGHTER_EVENT);
+        addSound(ModSounds.BLACK_SABBATH_SELECT_ADD_ID, ModSounds.BLACK_SABBATH_SELECT_ADD_EVENT);
+        addSound(ModSounds.BLACK_SABBATH_EMERGE_ID, ModSounds.BLACK_SABBATH_EMERGE_EVENT);
+        addSound(ModSounds.BLACK_SABBATH_SELECT_REMOVE_ID, ModSounds.BLACK_SABBATH_SELECT_REMOVE_EVENT);
+        addSound(ModSounds.BLACK_SABBATH_SELECT_CANCEL_ID, ModSounds.BLACK_SABBATH_SELECT_CANCEL_EVENT);
+        addSound(ModSounds.BLACK_SABBATH_SELECT_CONFIRM_ID, ModSounds.BLACK_SABBATH_SELECT_CONFIRM_EVENT);
 
         addSound(ModSounds.CENTURY_BOY_SUMMON_ID, ModSounds.CENTURY_BOY_SUMMON_EVENT);
         addSound(ModSounds.CENTURY_BOY_HIT_ID, ModSounds.CENTURY_BOY_HIT_EVENT);
@@ -422,6 +427,9 @@ public class FabricSounds {
         addSound(ModSounds.BITES_THE_DUST_ARROW_ID, ModSounds.BITES_THE_DUST_ARROW_EVENT);
         addSound(ModSounds.BITES_THE_DUST_COMBAT_ID, ModSounds.BITES_THE_DUST_COMBAT_EVENT);
         addSound(ModSounds.BITES_THE_DUST_DAY_ID, ModSounds.BITES_THE_DUST_DAY_EVENT);
+        addSound(ModSounds.KQ_PLANT_WINDUP_ID, ModSounds.KQ_PLANT_WINDUP_EVENT);
+        addSound(ModSounds.KQ_MOB_PLANT_ID, ModSounds.KQ_MOB_PLANT_EVENT);
+        addSound(ModSounds.KQ_BLOCK_PLANT_ID, ModSounds.KQ_BLOCK_PLANT_EVENT);
 
         addSound(ModSounds.STRAY_CAT_BUBBLE_POP_ID, ModSounds.STRAY_CAT_BUBBLE_POP_EVENT);
         addSound(ModSounds.STRAY_CAT_BUBBLE_SOUND_1_ID, ModSounds.STRAY_CAT_BUBBLE_SOUND_1_EVENT);

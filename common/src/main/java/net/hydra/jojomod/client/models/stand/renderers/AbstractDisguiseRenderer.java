@@ -3,6 +3,7 @@ package net.hydra.jojomod.client.models.stand.renderers;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidArmorModel;
 import net.minecraft.client.model.HumanoidModel;
@@ -17,12 +18,14 @@ import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Map;
 import java.util.Set;
@@ -166,6 +169,38 @@ public abstract class AbstractDisguiseRenderer extends LivingEntityRenderer<Livi
         public SkinData(ResourceLocation texture, boolean slim) {
             this.texture = texture;
             this.slim = slim;
+        }
+    }
+
+    @Override
+    protected void setupRotations(LivingEntity entity, PoseStack poseStack, float ageInTicks, float rotationYaw, float partialTicks) {
+        float swimAmount = entity.getSwimAmount(partialTicks);
+        if (entity.isFallFlying()) {
+            super.setupRotations(entity, poseStack, ageInTicks, rotationYaw, partialTicks);
+            float fallFlyingTicks = (float) entity.getFallFlyingTicks() + partialTicks;
+            float progress = Mth.clamp(fallFlyingTicks * fallFlyingTicks / 100.0F, 0.0F, 1.0F);
+            if (!entity.isAutoSpinAttack()) {
+                poseStack.mulPose(Axis.XP.rotationDegrees(progress * (-90.0F - entity.getXRot())));
+            }
+            Vec3 viewVec = entity.getViewVector(partialTicks);
+            Vec3 deltaMovement = entity.getDeltaMovement();
+            double d = deltaMovement.horizontalDistanceSqr();
+            double e = viewVec.horizontalDistanceSqr();
+            if (d > 0.0 && e > 0.0) {
+                double l = (deltaMovement.x * viewVec.x + deltaMovement.z * viewVec.z) / Math.sqrt(d * e);
+                double m = deltaMovement.x * viewVec.z - deltaMovement.z * viewVec.x;
+                poseStack.mulPose(Axis.YP.rotation((float) (Math.signum(m) * Math.acos(l))));
+            }
+        } else if (swimAmount > 0.0F) {
+            super.setupRotations(entity, poseStack, ageInTicks, rotationYaw, partialTicks);
+            float pitch = entity.isInWater() ? -90.0F - entity.getXRot() : -90.0F;
+            float lean = Mth.lerp(swimAmount, 0.0F, pitch);
+            poseStack.mulPose(Axis.XP.rotationDegrees(lean));
+            if (entity.isVisuallySwimming()) {
+                poseStack.translate(0.0F, -1.0F, 0.3F);
+            }
+        } else {
+            super.setupRotations(entity, poseStack, ageInTicks, rotationYaw, partialTicks);
         }
     }
 }

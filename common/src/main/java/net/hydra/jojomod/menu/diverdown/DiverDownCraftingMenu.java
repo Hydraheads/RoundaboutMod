@@ -1,6 +1,6 @@
-package net.hydra.jojomod.client.gui.diverdown.custom_workbench_code;
+package net.hydra.jojomod.menu.diverdown;
 
-import net.hydra.jojomod.client.gui.ModMenus;
+import net.hydra.jojomod.menu.ModMenus;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.Container;

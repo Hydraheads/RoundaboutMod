@@ -108,6 +108,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.ANUBIS, AnubisRenderer::new);
         EntityRendererRegistry.register(FabricEntities.DIVER_DOWN, DiverDownRenderer::new);
         EntityRendererRegistry.register(FabricEntities.DIVER_DOWN_BETA, DiverDownBetaRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.DIVER_KICK, DiverKickEntityRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SILVER_CHARIOT, SilverChariotRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SILVER_CHARIOT_RAPIER, SilverChariotRapierRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SILVER_CHARIOT_RAPIER_PLATFORM, SilverChariotRapierPlatformRenderer::new);

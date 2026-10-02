@@ -26,6 +26,7 @@ import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.sound.ModSounds;
@@ -123,10 +124,63 @@ public class PowersPurpleHaze extends NewPunchingStand {
             } if (Level > 3 || bypass) {
                 $$1.add(PurpleHazeEntity.ROTT);
                 $$1.add(PurpleHazeEntity.PEPPERMINT);
-            }
+            }/*if (((IPlayerEntity) PE).roundabout$getUnlockedBonusSkin() || bypass) {
+                $$1.add(PurpleHazeEntity.PLAGUE);}*/
         }
         return $$1;
     }
+    private static final int SECRET_SKIN_TICKS = 40;
+    private int secretSkinTicks = 0;
+    private boolean secretSkinObtained = false;
+
+    private boolean hasSecretSkinCondition() {
+        return self.hasEffect(ModEffects.DISTORTION_VIRUS)
+                && self.hasEffect(MobEffects.POISON)
+                && self.hasEffect(MobEffects.WITHER);
+    }
+    private void tickSecretSkinObtaining() {
+        if (self == null || self.level().isClientSide()) {
+            return;
+        }
+
+        if (!(self instanceof Player player)) {
+            return;
+        }
+
+
+        if (hasSecretSkinCondition()) {
+            secretSkinTicks++;
+
+            if (secretSkinTicks >= SECRET_SKIN_TICKS) {
+                obtainSecretSkin();
+            }
+        } else {
+            secretSkinTicks = 0;
+        }
+    }
+    private void obtainSecretSkin() {
+        if (this.getSelf() instanceof Player PE) {
+            Level lv = this.getSelf().level();
+            ItemStack goldDisc = ((StandUser) PE).roundabout$getStandDisc();
+            StandUser user = (StandUser) PE;
+            IPlayerEntity ipe = (IPlayerEntity) PE;
+            boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
+
+            if (!ipe.roundabout$getUnlockedBonusSkin() && !bypass) {
+                ipe.roundabout$setUnlockedBonusSkin(true);
+                playSoundIfPossible(self.level(),null, PE.getX(), PE.getY(),
+                        PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
+                sendParticlesIfPossible(self.level(),ParticleTypes.END_ROD, PE.getX(),
+                        PE.getY() + PE.getEyeHeight(), PE.getZ(),
+                        10, 0.5, 0.5, 0.5, 0.2);
+                user.roundabout$setStandSkin(PurpleHazeEntity.GREEN);
+                ((ServerPlayer) PE).displayClientMessage(
+                        Component.translatable("unlock_skin.roundabout.purple_haze_plague"), true);
+                user.roundabout$summonStand(lv, true, false);
+            }
+        }
+    }
+
     @Override
     public boolean canSummonStand() {
         return true;
@@ -1309,6 +1363,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         if (!self.level().isClientSide) {
             tickPodReset();
             tickPodRecharge();
+            tickSecretSkinObtaining();
 
             if (!podsSyncedOnJoin && self instanceof ServerPlayer sp) {
                 podsSyncedOnJoin = true;

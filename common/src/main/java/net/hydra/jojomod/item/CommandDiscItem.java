@@ -1,6 +1,7 @@
 package net.hydra.jojomod.item;
 
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.pathfinding.CommandDiscPossession;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -27,6 +28,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.List;
 
 public final class CommandDiscItem extends Item {
@@ -156,6 +158,9 @@ public final class CommandDiscItem extends Item {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> lines, TooltipFlag flag) {
         DiscItemData.addOwnerTooltip(stack, lines, false);
-        lines.add(Component.translatable(getDescriptionId() + ".desc"));
+
+        for (String str : ClientUtil.splitIntoLine(Component.translatable(getDescriptionId() + ".desc").getString(), 40)) {
+            lines.add(Component.literal(str));
+        }
     }
 }

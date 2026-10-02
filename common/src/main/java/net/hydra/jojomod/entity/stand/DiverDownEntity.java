@@ -6,6 +6,9 @@ import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -59,6 +62,14 @@ public class DiverDownEntity extends FollowingStandEntity {
     public final AnimationState groundDive = new AnimationState();
     public final AnimationState diverZip = new AnimationState();
     public final AnimationState diverZipIdle = new AnimationState();
+
+    private static final float DIVER_ZIP_BLEND_STEP = 0.25F;
+    private float diverZipBlend = 0.0F;
+    private float diverZipBlendOld = 0.0F;
+
+    public float getDiverZipBlend(float partialTick) {
+        return Mth.lerp(partialTick, this.diverZipBlendOld, this.diverZipBlend);
+    }
 
     public static final byte
             MOB_DIVE = 51,
@@ -132,13 +143,45 @@ public class DiverDownEntity extends FollowingStandEntity {
         } else {
             this.groundDive.stop();
         }
-        if (this.getAnimation() == DIVER_ZIP_IDLE || this.getAnimation() == DIVER_ZIP) {
-            this.diverZipIdle.startIfStopped(this.tickCount);
-            this.diverZip.startIfStopped(this.tickCount);
-        } else {
+        boolean isZipping = this.getAnimation() == DIVER_ZIP_IDLE || this.getAnimation() == DIVER_ZIP;
+        boolean isMoving = false;
+        if (getUser() != null) {
+            isMoving = Math.abs(getUser().xxa) > 0.01F || Math.abs(getUser().zza) > 0.01F;
+        }
+
+        diverZipBlendOld = diverZipBlend;
+        if (!isZipping) {
+            diverZipBlend = 0.0F;
             this.diverZipIdle.stop();
             this.diverZip.stop();
+        } else {
+            float target = isMoving ? 1.0F : 0.0F;
+            diverZipBlend = Mth.clamp(diverZipBlend + Mth.clamp(target - diverZipBlend, -DIVER_ZIP_BLEND_STEP, DIVER_ZIP_BLEND_STEP), 0.0F, 1.0F);
+
+            this.diverZipIdle.startIfStopped(this.tickCount);
+            this.diverZip.startIfStopped(this.tickCount);
         }
+    }
+
+    @Override
+    public boolean isInvulnerable() {
+        // Invulnerable in pilot unless rummaging a chest
+        if (isRemoteControlled() && this.getAnimation() != CHEST_RUMMAGE) {
+            return true;
+        }
+        return super.isInvulnerable();
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if (source.is(DamageTypes.FELL_OUT_OF_WORLD) || source.is(DamageTypes.GENERIC_KILL)) {
+            return super.hurt(source, amount);
+        }
+        // Blocks any incoming damage/transfer to user while in pilot unless rummaging
+        if (isRemoteControlled() && this.getAnimation() != CHEST_RUMMAGE) {
+            return false;
+        }
+        return super.hurt(source, amount);
     }
 
     @Override
