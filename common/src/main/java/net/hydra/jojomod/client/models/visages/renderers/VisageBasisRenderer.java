@@ -69,6 +69,7 @@ public class VisageBasisRenderer extends LivingEntityRenderer<JojoNPC, PlayerMod
         this.addLayer(new HeyYaLayer<>($$0, this));
         this.addLayer(new MandomLayer<>($$0, this));
         this.addLayer(new CenturyBoyLayer<>($$0, this));
+        this.addLayer(new CatchTheRainbowLayer<>($$0, this));
         this.addLayer(new AnubisLayer<>($$0, this));
         this.addLayer(new VisagePartLayer<>($$0, this));
         this.addLayer(new MoldSpineLayer<>($$0, this));

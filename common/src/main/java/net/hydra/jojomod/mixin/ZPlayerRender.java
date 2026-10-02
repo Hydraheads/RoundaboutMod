@@ -463,6 +463,18 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                 }
             }
 
+            if (standUser.roundabout$getStandPowers() instanceof PowersCatchTheRainbow PCTR){
+
+                if(!PCTR.HasOffHand && (PCTR.self.getMainArm() ==HumanoidArm.RIGHT)){
+                    playerModel.leftArm.visible=false;
+                    playerModel.leftSleeve.visible=false;
+                }
+                if(!PCTR.HasOffHand && (PCTR.self.getMainArm() ==HumanoidArm.LEFT)){
+                    playerModel.rightArm.visible=false;
+                    playerModel.rightSleeve.visible=false;
+                }
+            }
+
 
             if (!(ClientUtil.checkIfFirstPerson() && $$0.is(ClientUtil.getPlayer()))
             || !((IEntityAndData)$$0).roundabout$getExclusiveLayers()){

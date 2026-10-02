@@ -11,6 +11,7 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.KnifeItem;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersCatchTheRainbow;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.MainUtil;
@@ -104,11 +105,19 @@ public class SeperatedArmEntity extends StandEntity {
 
     public void jump(Vec3 jumpT0Pos){
         Vec3 location = new Vec3(this.getX(),this.getY(),this.getZ());
-        ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST, location.x,
-                location.y, location.z,
-                24,
-                0.005, 0.005, 0.005,
-                0.1);
+        if ((((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersGreenDay)) {
+            ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST, location.x,
+                    location.y, location.z,
+                    24,
+                    0.005, 0.005, 0.005,
+                    0.1);
+        } else {
+            ((ServerLevel) this.level()).sendParticles(ParticleTypes.SPLASH, location.x,
+                    location.y, location.z,
+                    24,
+                    0.005, 0.005, 0.005,
+                    0.1);
+        }
         //this.setDeltaMovement(jumpT0Pos);
         this.lookAt(EntityAnchorArgument.Anchor.EYES,jumpT0Pos);
         if(this.getMainHandItem().getItem() instanceof FireworkRocketItem FRE){
@@ -132,11 +141,19 @@ public class SeperatedArmEntity extends StandEntity {
 
     public void jump2(Vec3 jumpT0Pos){
         Vec3 location = new Vec3(this.getX(),this.getY(),this.getZ());
-        ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST, location.x,
-                location.y, location.z,
-                24,
-                0.005, 0.005, 0.005,
-                0.1);
+        if ((((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersGreenDay)) {
+            ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST, location.x,
+                    location.y, location.z,
+                    24,
+                    0.005, 0.005, 0.005,
+                    0.1);
+        } else {
+            ((ServerLevel) this.level()).sendParticles(ParticleTypes.SPLASH, location.x,
+                    location.y, location.z,
+                    24,
+                    0.005, 0.005, 0.005,
+                    0.1);
+        }
         //this.setDeltaMovement(jumpT0Pos);
         this.lookAt(EntityAnchorArgument.Anchor.EYES,jumpT0Pos);
         if(this.getMainHandItem().getItem() instanceof FireworkRocketItem FRE){
@@ -216,10 +233,27 @@ public class SeperatedArmEntity extends StandEntity {
         return false;
     }
 
+    public int StartupTicks = 80;
+
     @Override
     public void tick() {
         this.entityData.set(HELD_ITEM,this.getMainHandItem());
         tickeffects();
+
+        if (((((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersCatchTheRainbow))) {
+            if (!this.level().isClientSide) {
+                if (StartupTicks == 0) {
+                    if ((!(this.getUser() == null) && (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersCatchTheRainbow))) {
+                            this.lookAt(EntityAnchorArgument.Anchor.EYES, User.getEyePosition());
+                            this.setDeltaMovement(this.getLookAngle().multiply(0.2, 0.2, 0.2));
+                    } else {
+                        this.discard();
+                    }
+                } else {
+                    StartupTicks--;
+                }
+            }
+        }
     }
 
     public void tickeffects() {
@@ -235,21 +269,28 @@ public class SeperatedArmEntity extends StandEntity {
 
                 if (user == null) {
                     removearm();
-                } else if ((!(((StandUser) user).roundabout$getStandPowers() instanceof PowersGreenDay)) || (!user.isAlive())) {
+                } else if (((!(((StandUser) user).roundabout$getStandPowers() instanceof PowersGreenDay)) && (!(((StandUser) user).roundabout$getStandPowers() instanceof PowersCatchTheRainbow))) || (!user.isAlive())) {
                     removearm();
                 } else if (user != null) {
-
-                    if ((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity != null) && (((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm != null)) {
-                        if (!((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm.equals(this)) || (((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity.equals(this)))) {
-                            removearm();
+                    if ((((StandUser) user).roundabout$getStandPowers() instanceof PowersGreenDay)) {
+                        if ((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity != null) && (((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm != null)) {
+                            if (!((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm.equals(this)) || (((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity.equals(this)))) {
+                                removearm();
+                            }
+                        } else if ((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm != null)) {
+                            if (!((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm.equals(this)))) {
+                                removearm();
+                            }
+                        } else if ((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity != null)) {
+                            if (!((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity.equals(this)))) {
+                                removearm();
+                            }
                         }
-                    } else if ((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm != null)) {
-                        if (!((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm.equals(this)))) {
-                            removearm();
-                        }
-                    } else if ((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity != null)) {
-                        if (!((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity.equals(this)))) {
-                            removearm();
+                    } else if ((((StandUser) user).roundabout$getStandPowers() instanceof PowersCatchTheRainbow)){
+                        if ((((PowersCatchTheRainbow) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity != null)) {
+                            if (!((((PowersCatchTheRainbow) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity.equals(this)))) {
+                                removearm();
+                            }
                         }
                     }
                 }
@@ -347,18 +388,34 @@ public class SeperatedArmEntity extends StandEntity {
                     double randX = Roundabout.RANDOM.nextDouble(-0.2, 0.2);
                     double randY = Roundabout.RANDOM.nextDouble(-0.1, 0.1);
                     double randZ = Roundabout.RANDOM.nextDouble(-0.2, 0.2);
-                    ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD,
-                            this.getX() + randX,
-                            this.getY() + randY + 0.15,
-                            this.getZ() + randZ,
-                            1, 0, 0, 0, 0);
+                    if ((((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersGreenDay)) {
+                        ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD,
+                                this.getX() + randX,
+                                this.getY() + randY + 0.15,
+                                this.getZ() + randZ,
+                                1, 0, 0, 0, 0);
+                    } else {
+                        ((ServerLevel) this.level()).sendParticles(ParticleTypes.SPLASH,
+                                this.getX() + randX,
+                                this.getY() + randY + 0.15,
+                                this.getZ() + randZ,
+                                1, 0, 0, 0, 0);
+                    }
                 }
                 if (Can_activate && !onGround()) {
-                    ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST,
-                            this.getX(),
-                            this.getY() + 0.15,
-                            this.getZ(),
-                            1, 0, 0, 0, 0);
+                    if ((((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersGreenDay)) {
+                        ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST,
+                                this.getX(),
+                                this.getY() + 0.15,
+                                this.getZ(),
+                                1, 0, 0, 0, 0);
+                    } else {
+                        ((ServerLevel) this.level()).sendParticles(ParticleTypes.SPLASH,
+                                this.getX(),
+                                this.getY() + 0.15,
+                                this.getZ(),
+                                1, 0, 0, 0, 0);
+                    }
                 }
             }
         }
