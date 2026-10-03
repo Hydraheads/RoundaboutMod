@@ -28,6 +28,7 @@ public class StrayCatAirBubbleRenderer extends EntityRenderer<StrayCatAirBubble>
     private static final ResourceLocation CYAN_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/killer_queen/projectiles/cyan.png");
     private static final ResourceLocation YELLOW_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/killer_queen/projectiles/yellow.png");
     private static final ResourceLocation BOMB_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/killer_queen/projectiles/bomb.png");
+    private static final ResourceLocation ONIBI_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/killer_queen/projectiles/onibis.png");
 
     private final float scale;
 
@@ -103,6 +104,7 @@ public class StrayCatAirBubbleRenderer extends EntityRenderer<StrayCatAirBubble>
             case 2 -> CYAN_BUBBLE;
             case 3 -> YELLOW_BUBBLE;
             case 4 -> BOMB_BUBBLE;
+            case 5 -> ONIBI_BUBBLE;
             default -> PINK_BUBBLE;
         };
     }

@@ -151,6 +151,9 @@
   "block.roundabout.chess_piece": "Chess Piece",
   "block.roundabout.gambling_table": "Gambling Table",
   "container.roundabout.gambling_table": "Gambling Table",
+  "gui.roundabout.gambling_table.select_game": "Select a game",
+  "gui.roundabout.gambling_table.game.coin_drop": "Coin Drop",
+  "gui.roundabout.gambling_table.game.waiting": "Waiting for host",
 
   "item.roundabout.exp_bishop": "Experience Bishop",
 
@@ -3051,6 +3054,8 @@
   "skins.roundabout.killer_queen.minuet": "Minuet",
   "skins.roundabout.killer_queen.grey": "Grey",
   "skins.roundabout.killer_queen.brown": "Brown",
+  "skins.roundabout.killer_queen.samurai": "Samurai",
+  "skins.roundabout.killer_queen.spirit": "Spirit",
 
   "skins.roundabout.diver_down.base": "Part 6",
   "skins.roundabout.diver_down.betadiver": "Beta",
@@ -3070,7 +3075,7 @@
   "skins.roundabout.diver_down.manga": "Manga",
   "skins.roundabout.diver_down.volume_4": "Volume 4",
   "skins.roundabout.diver_down.spine_art": "Spine Art",
-  "skins.roundabout.diver_down.holy_diver": "Holy Diver",
+  "skins.roundabout.diver_down.world_diver": "The World",
 
   "skins.roundabout.20_centuryboy.manga": "Manga",
   "skins.roundabout.20_centuryboy.bedrock": "Bedrock",
@@ -3283,7 +3288,7 @@
   "unlock_skin.roundabout.green_day.silence": "Silence Skin Absorbed",
   "unlock_skin.roundabout.planet_waves_cosmic": "Cosmic Skin Unlocked",
   "unlock_skin.roundabout.killer_queen.minesweeper": "Killer Queen: Minesweeper Skin Unlocked",
-  "unlock_skin.roundabout.diver_down.holy_diver": "Diver Down: Holy Diver Skin Unlocked",
+  "unlock_skin.roundabout.diver_down.scuba_diver": "Diver Down: Scuba Diver Skin Unlocked",
   "unlock_skin.roundabout.purple_haze.plague": "Purple Haze: Plague Skin Unlocked",
 
   "justice.morph.player": "Player",
@@ -4717,8 +4722,8 @@
   "config.roundabout.getMiningTierTheWorld.desc": "Tier 0 is the default, it does not replace tools for harvesting blocks. Tier 1 is wood tier, tier 2 is stone tier, tier 3 is iron tier, and tier 4 is diamond tier.",
   "config.roundabout.oxygenTankAdditionalTicks.name": "Oxygen Tank Ticks",
   "config.roundabout.oxygenTankAdditionalTicks.desc": "How many ticks of oxygen do you want saved in The World's tank? The default, 300, is 15 seconds worth of extra underwater breathing.",
-  "config.roundabout.assaultCooldown.name": "Assault Cooldown",
-  "config.roundabout.assaultCooldown.desc": "After assault hits its target, set the resulting cooldown. (default is 40 ticks or 2 seconds)",
+  "config.roundabout.assaultCooldownv2.name": "Assault Cooldown",
+  "config.roundabout.assaultCooldownv2.desc": "After assault hits its target, set the resulting cooldown. (default is 40 ticks or 2 seconds)",
   "config.roundabout.assaultInterruptCooldown.name": "Assault Interrupt Cooldown",
   "config.roundabout.assaultInterruptCooldown.desc": "If you are hit before assault connects, this cooldown is incurred. (default is 60 ticks or 3 seconds)",
 
