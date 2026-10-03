@@ -89,6 +89,7 @@ public class KillerQueenEntity extends FollowingStandEntity {
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState hideBubble = new AnimationState();
     public final AnimationState hideExtra = new AnimationState();
+    public final AnimationState hideSwordInHand = new AnimationState();
     public final AnimationState bubbleSpin = new AnimationState();
     public final AnimationState kick_barrage_windup = new AnimationState();
     public final AnimationState finalKickWindup = new AnimationState();
@@ -136,11 +137,23 @@ public class KillerQueenEntity extends FollowingStandEntity {
         if (this.getUser() != null) {
             byte animation = this.getAnimation();
 
-            if (getSkin() == SAMURAI || getSkin() == SPIRIT) {
+            boolean isSamurai = getSkin() == SAMURAI || getSkin() == SPIRIT;
+
+            if (isSamurai) {
                 hideExtra.stop();
+
+                if (getAnimation() != IMPALE && getAnimation() != KICK_CHARGE
+                        && getAnimation() != KICK && getAnimation() !=HEAVY_STRIKE) {
+                    hideSwordInHand.startIfStopped(tickCount);
+                }else {
+                    hideSwordInHand.stop();
+                }
+
             }else {
                 hideExtra.startIfStopped(tickCount);
             }
+
+
 
             if (getBubbleShieldActive()) {
                 bubbleSpin.startIfStopped(tickCount);

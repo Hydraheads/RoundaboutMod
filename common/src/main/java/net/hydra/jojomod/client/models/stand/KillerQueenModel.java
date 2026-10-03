@@ -336,32 +336,47 @@ public class KillerQueenModel<T extends KillerQueenEntity> extends StandModel<T>
         super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
         defaultModifiers(pEntity);
         defaultAnimations(pEntity, pAgeInTicks, 1/((float) Power.getBarrageWindup() /20));
-        this.animate(pEntity.finalKickWindup, KillerQueenAnimations.HeavyKickWindup, pAgeInTicks, 1f);
-        this.animate(pEntity.finalKick, KillerQueenAnimations.HeavyKick, pAgeInTicks, 0.8f);
         this.animate(pEntity.finalPunch, StarPlatinumAnimations.FINAL_PUNCH, pAgeInTicks, 1.4f);
-        this.animate(pEntity.lid_open, KillerQueenAnimations.bubbleShieldAnim, pAgeInTicks, 1f);
-        this.animate(pEntity.bubbleSpin, KillerQueenAnimations.bubblespin, pAgeInTicks, 1f);
-        this.animate(pEntity.hideBubble, KillerQueenAnimations.hideBubble, pAgeInTicks, 1f);
-        this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1F);
-        this.animate(pEntity.blockPlant, KillerQueenAnimations.BombPlant, pAgeInTicks, 1.4F);
-        this.animate(pEntity.itemGrab, KillerQueenAnimations.Item_Grab, pAgeInTicks, 1F);
-        this.animate(pEntity.itemThrow, StandAnimations.THROW_ITEM, pAgeInTicks, 1F);
-        this.animate(pEntity.detonate, KillerQueenAnimations.detonate, pAgeInTicks, 1F);
-        this.animate(pEntity.thirdBomb, KillerQueenAnimations.TertiaryBomb, pAgeInTicks, 1F);
-        this.animate(pEntity.mobBombPlant, KillerQueenAnimations.FirstBombTouchMob,   pAgeInTicks, (1/(Math.max(0.1f, (float) (PowersKillerQueen.getMobPlantWindup()) / 60))));
-        this.animate(pEntity.mobBombPlant2, KillerQueenAnimations.FirstBombTouchMob2, pAgeInTicks, (1/(Math.max(0.1f, (float) (PowersKillerQueen.getMobPlantWindup()) / 60))));
-        this.animate(pEntity.bubbleLaunch, KillerQueenAnimations.bubble_launch, pAgeInTicks, 0.9F);
-        this.animate(pEntity.bubbleRedirect, KillerQueenAnimations.bubble_redirection, pAgeInTicks, 1F);
-        this.animate(pEntity.heavyStrike, KillerQueenAnimations.HeavyStrike, pAgeInTicks, 1F);
+		this.animate(pEntity.lid_open, KillerQueenAnimations.bubbleShieldAnim, pAgeInTicks, 1f);
+		this.animate(pEntity.bubbleSpin, KillerQueenAnimations.bubblespin, pAgeInTicks, 1f);
+		this.animate(pEntity.hideBubble, KillerQueenAnimations.hideBubble, pAgeInTicks, 1f);
+		this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1F);
+		this.animate(pEntity.blockPlant, KillerQueenAnimations.BombPlant, pAgeInTicks, 1.4F);
+		this.animate(pEntity.itemGrab, KillerQueenAnimations.Item_Grab, pAgeInTicks, 1F);
+		this.animate(pEntity.itemThrow, StandAnimations.THROW_ITEM, pAgeInTicks, 1F);
+		this.animate(pEntity.detonate, KillerQueenAnimations.detonate, pAgeInTicks, 1F);
+		this.animate(pEntity.thirdBomb, KillerQueenAnimations.TertiaryBomb, pAgeInTicks, 1F);
+		this.animate(pEntity.mobBombPlant, KillerQueenAnimations.FirstBombTouchMob,   pAgeInTicks, (1/(Math.max(0.1f, (float) (PowersKillerQueen.getMobPlantWindup()) / 60))));
+		this.animate(pEntity.mobBombPlant2, KillerQueenAnimations.FirstBombTouchMob2, pAgeInTicks, (1/(Math.max(0.1f, (float) (PowersKillerQueen.getMobPlantWindup()) / 60))));
+		this.animate(pEntity.bubbleLaunch, KillerQueenAnimations.bubble_launch, pAgeInTicks, 0.9F);
+		this.animate(pEntity.bubbleRedirect, KillerQueenAnimations.bubble_redirection, pAgeInTicks, 1F);
 		this.animate(pEntity.shaSend, KillerQueenAnimations.sha_deploy, pAgeInTicks, 2F);
-		this.animate(pEntity.impale, KillerQueenAnimations.Impale, pAgeInTicks, 1.04F);
 		this.animate(pEntity.bitesTheDust, KillerQueenAnimations.TertiaryBomb, pAgeInTicks, 1.04F);
 		this.animate(pEntity.itemThrowCharge, StarPlatinumAnimations.ItemGrab, pAgeInTicks, (1/((float) (Power.getArrowThrowChargeMax()) / 20.0f)) * 0.29f);
 		this.animate(pEntity.arrowThrow, StarPlatinumAnimations.ItemThrow, pAgeInTicks, 1F);
 		this.animate(pEntity.itemGrabAnimation, StandAnimations.GRAB_ITEM, pAgeInTicks, 1f);
 		this.animate(pEntity.itemRetractAnimation, StandAnimations.RETRACT_ITEM, pAgeInTicks, 1.25f);
 		this.animate(pEntity.hideExtra, KillerQueenAnimations.hideExtra, pAgeInTicks, 1f);
-    }
+		this.animate(pEntity.hideSwordInHand, KillerQueenAnimations.hideSwordInHand, pAgeInTicks, 1f);
+
+		boolean isSamurai = false;
+		if (pEntity.getUser() != null) {
+
+			isSamurai = pEntity.getSkin() == KillerQueenEntity.SAMURAI || pEntity.getSkin() == KillerQueenEntity.SPIRIT;
+		}
+
+		if (isSamurai) {
+			this.animate(pEntity.finalKickWindup, KillerQueenAnimations.HeavyKickWindupSamurai, pAgeInTicks, 1f);
+			this.animate(pEntity.finalKick, KillerQueenAnimations.HeavyKickSamurai, pAgeInTicks, 0.8f);
+			this.animate(pEntity.impale, KillerQueenAnimations.ImpaleSamurai, pAgeInTicks, 1.04F);
+			this.animate(pEntity.heavyStrike, KillerQueenAnimations.HeavyStrikeSamurai, pAgeInTicks, 1F);
+		}else {
+			this.animate(pEntity.finalKickWindup, KillerQueenAnimations.HeavyKickWindup, pAgeInTicks, 1f);
+			this.animate(pEntity.finalKick, KillerQueenAnimations.HeavyKick, pAgeInTicks, 0.8f);
+			this.animate(pEntity.impale, KillerQueenAnimations.Impale, pAgeInTicks, 1.04F);
+			this.animate(pEntity.heavyStrike, KillerQueenAnimations.HeavyStrike, pAgeInTicks, 1F);
+		}
+	}
 
 
 	@Override
