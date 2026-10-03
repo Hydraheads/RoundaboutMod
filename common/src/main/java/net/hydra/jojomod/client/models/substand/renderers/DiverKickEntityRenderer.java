@@ -32,6 +32,9 @@ public class DiverKickEntityRenderer extends EntityRenderer<DiverKickEntity> {
         this.defaultLeg = bakeLeg(context, ModEntityRendererClient.DIVER_DOWN_LAYER);
         this.skinLegs.put((byte) 0, this.defaultLeg);
         this.skinLegs.put(DiverDownEntity.BETA_DIVER, bakeLeg(context, ModEntityRendererClient.DIVER_DOWN_BETA_LAYER));
+        this.skinLegs.put(DiverDownEntity.WORLD_DIVER, bakeLeg(context, ModEntityRendererClient.DIVER_DOWN_WORLD_LAYER));
+        // for the future:
+        // this.skinLegs.put(DiverDownEntity.MODEL_NAME, bakeLeg(context, ModEntityRendererClient.MODEL_NAME_LAYER));
     }
 
     private static ModelPart bakeLeg(EntityRendererProvider.Context context, ModelLayerLocation layer) {
