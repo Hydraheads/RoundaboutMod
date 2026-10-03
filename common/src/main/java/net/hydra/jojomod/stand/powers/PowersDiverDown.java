@@ -1062,7 +1062,7 @@ public class PowersDiverDown extends NewPunchingStand {
                                 Vec3 mpos = this.self.getPosition(1F);
                                 // Check if there is a walkable block in front of the player
                                 BlockPos wallPos = BlockPos.containing(mpos).relative(facing);
-                                if (MainUtil.isBlockWalkable(this.self.level().getBlockState(wallPos))) {
+                                if (MainUtil.isBlockWalkableSimplified(this.self.level().getBlockState(wallPos))) {
                                     ((IGravityEntity) this.self).roundabout$setGravityDirection(facing);
                                     setHeelDirection(facing);
                                     justFlippedTicks = 4;
@@ -1090,10 +1090,10 @@ public class PowersDiverDown extends NewPunchingStand {
                         } else {
                             // If ANY block directly beneath your rotated feet is solid, you are still on a
                             // surface
-                            if (MainUtil.isBlockWalkable(self.level().getBlockState(pos))
-                                    || MainUtil.isBlockWalkable(self.level().getBlockState(pos2))
-                                    || MainUtil.isBlockWalkable(self.level().getBlockState(pos4))
-                                    || MainUtil.isBlockWalkable(self.level().getBlockState(pos5))) {
+                            if (MainUtil.isBlockWalkableSimplified(self.level().getBlockState(pos))
+                                    || MainUtil.isBlockWalkableSimplified(self.level().getBlockState(pos2))
+                                    || MainUtil.isBlockWalkableSimplified(self.level().getBlockState(pos4))
+                                    || MainUtil.isBlockWalkableSimplified(self.level().getBlockState(pos5))) {
                                 mercyTicks--;
                             } else {
                                 // Only attempt to cut the corner when all probe blocks are AIR (stepped off
@@ -1373,8 +1373,11 @@ public class PowersDiverDown extends NewPunchingStand {
             BlockState state4 = self.level().getBlockState(pos4);
             boolean isOnValidBlock = MainUtil.isBlockWalkableSimplified(state1)
                     && MainUtil.isBlockWalkableSimplified(state4);
-            if (!isOnValidBlock && !this.self.onGround()) {
+            if (!isOnValidBlock || forceBlock()) {
                 toggleZip(false);
+                if (this.self.level().isClientSide()) {
+                    C2SPacketUtil.trySingleBytePacket(PacketDataIndex.QUERY_STAND_UPDATE_2);
+                }
             }
         }
         if (this.self.isAlive() && this.self.isEyeInFluid(FluidTags.WATER)) {
@@ -1431,8 +1434,8 @@ public class PowersDiverDown extends NewPunchingStand {
         BlockPos feetWall = BlockPos.containing(mpos).relative(rd);
         BlockPos eyeWall = BlockPos.containing(this.self.getEyePosition()).relative(rd);
 
-        return MainUtil.isBlockWalkable(this.self.level().getBlockState(feetWall))
-                || MainUtil.isBlockWalkable(this.self.level().getBlockState(eyeWall));
+        return MainUtil.isBlockWalkableSimplified(this.self.level().getBlockState(feetWall))
+                || MainUtil.isBlockWalkableSimplified(this.self.level().getBlockState(eyeWall));
     }
 
     /**
@@ -3094,7 +3097,7 @@ public class PowersDiverDown extends NewPunchingStand {
     public boolean tryCut(Vec3 cutPos) {
         BlockPos pos1 = BlockPos.containing(cutPos);
         BlockState bs = this.self.level().getBlockState(pos1);
-        return MainUtil.isBlockWalkable(bs);
+        return MainUtil.isBlockWalkableSimplified(bs);
     }
 
     public boolean tryCutEast(Vec3 mpos) {
