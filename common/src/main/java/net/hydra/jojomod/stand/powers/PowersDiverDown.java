@@ -240,6 +240,7 @@ public class PowersDiverDown extends NewPunchingStand {
     ;
     /* TAKING NOTE OF GENERAL COOLDOWNS HERE:
         GENERAL_1 = AFFLICTION SELECTION
+        GENERAL_2 = SELF DIVE
      */
 
     // move levels
@@ -680,7 +681,7 @@ public class PowersDiverDown extends NewPunchingStand {
                     setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD, true);
                 }
             } else if (isGuarding()) {
-                setSkillIcon(context, x, y, 1, StandIcons.DIVER_DOWN_SELF_SUBMERGE, PowerIndex.SKILL_1_GUARD);
+                setSkillIcon(context, x, y, 1, StandIcons.DIVER_DOWN_SELF_SUBMERGE, PowerIndex.SKILL_EXTRA);
             } else {
                 setSkillIcon(context, x, y, 1, StandIcons.DIVER_DOWN_SUBMERGE, PowerIndex.SKILL_1);
             }
@@ -913,7 +914,7 @@ public class PowersDiverDown extends NewPunchingStand {
     //for cooldowns, like D4C
     @Override
     public boolean isServerControlledCooldown(byte num) {
-        if (num == PowerIndex.SKILL_1 || num == PowerIndex.SKILL_1_SNEAK
+        if (num == PowerIndex.SKILL_1 || num == PowerIndex.SKILL_EXTRA || num == PowerIndex.SKILL_1_SNEAK
                 || num == PowerIndex.SKILL_2 || num == PowerIndex.GENERAL_1
                 || num == PowerIndex.SKILL_3) {
             return true;
@@ -3533,6 +3534,8 @@ public class PowersDiverDown extends NewPunchingStand {
                 this.setAttackTimeDuring(-15);
                 this.setAttackTime(-15);
                 this.poseStand(OffsetIndex.ATTACK);
+                setCooldown(PowerIndex.SKILL_1, 200);
+                setCooldown(PowerIndex.SKILL_EXTRA, 200);
                 return;
             }
             this.submergedTarget = target;
@@ -3598,8 +3601,8 @@ public class PowersDiverDown extends NewPunchingStand {
                     ModSounds.SUMMON_DIVER_DOWN_EVENT,
                     SoundSource.PLAYERS, 0.85F, 1);
         }
-        setCooldown(PowerIndex.SKILL_1, 300);
-        setCooldown(PowerIndex.SKILL_1_GUARD, 300);
+        setCooldown(PowerIndex.SKILL_1, 200);
+        setCooldown(PowerIndex.SKILL_EXTRA, 200);
         return true;
     }
 
@@ -3659,7 +3662,7 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     private void tryStartSelfDiveClient() {
-        if (!areStandMovesDisabled() && !isDiveActive()) {
+        if (!areStandMovesDisabled() && !isDiveActive() && !this.onCooldown(PowerIndex.SKILL_EXTRA)) {
             this.tryPower(DIVER_SELF_SUBMERGE, true);
             tryPowerPacket(DIVER_SELF_SUBMERGE);
         }
@@ -4122,6 +4125,7 @@ public class PowersDiverDown extends NewPunchingStand {
         if (this.self.level().isClientSide()) return;
         if (this.submergedTarget == null || !this.submergedTarget.isAlive()) return;
 
+        removeDiverLegsFromTarget();
         this.hasDiverArms = true;
         ((StandUser) this.submergedTarget).roundabout$setDiverArms(true); // <-- Changed to arms
 
@@ -4235,6 +4239,10 @@ public class PowersDiverDown extends NewPunchingStand {
     private void cureNegativeEffects() {
         if (this.self.level().isClientSide()) return;
         if (!(this.submergedTarget instanceof LivingEntity targetLiving) || !targetLiving.isAlive()) return;
+
+        removeDiverLegsFromTarget();
+        removeDiverArmsFromTarget();
+
         boolean hadSlowness = false;
 
         // get all the harmful effects
@@ -4277,6 +4285,7 @@ public class PowersDiverDown extends NewPunchingStand {
         if (this.self.level().isClientSide()) return;
         if (this.submergedTarget == null || !this.submergedTarget.isAlive()) return;
 
+        removeDiverArmsFromTarget();
         this.hasDiverLegs = true;
         ((StandUser) this.submergedTarget).roundabout$setDiverLegs(true);
 
