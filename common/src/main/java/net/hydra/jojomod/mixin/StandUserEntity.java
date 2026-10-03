@@ -5066,6 +5066,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (this.roundabout$hasDiverLegs()) {
             basis *= 1.2F; //20%, same as a speed 1 pot
         }
+        if(this.roundabout$getGrabbedSoul()){
+            basis *= 0.025F;
+        }
         return basis;
     }
 
@@ -7013,6 +7016,21 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 cir.setReturnValue(false);
             }
         }
+    }
+
+    //black sabbath soul methods
+    private boolean roundabout$grabbedSoul = false;
+
+    @Unique
+    @Override
+    public void roundabout$setGrabbedSoul(boolean boleean) {
+        roundabout$grabbedSoul = boleean;
+    }
+
+    @Unique
+    @Override
+    public boolean roundabout$getGrabbedSoul() {
+        return roundabout$grabbedSoul;
     }
 
     // for diver down
