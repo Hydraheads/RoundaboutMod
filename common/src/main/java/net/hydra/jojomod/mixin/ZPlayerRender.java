@@ -1288,6 +1288,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         jj.TORTURE_DANCE.stop();
         jj.OH_NO.stop();
         jj.WAMUU.stop();
+            jj.ANASUI.stop();
             jj.VAMPIRE.stop();
     }
 

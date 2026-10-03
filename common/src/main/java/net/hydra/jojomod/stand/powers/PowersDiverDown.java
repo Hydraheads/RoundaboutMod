@@ -294,18 +294,6 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     @Override
-    public StandEntity getNewStandEntity() {
-        byte skin = ((StandUser) this.getSelf()).roundabout$getStandSkin();
-        if (skin == DiverDownEntity.BETA_DIVER) {
-            return ModEntities.DIVER_DOWN_BETA.create(this.getSelf().level());
-        }
-        if (skin == DiverDownEntity.WORLD_DIVER) {
-            return ModEntities.DIVER_DOWN_WORLD.create(this.getSelf().level());
-        }
-        return ModEntities.DIVER_DOWN.create(this.getSelf().level());
-    }
-
-    @Override
     protected Byte getSummonSound() {
         return SoundIndex.SUMMON_SOUND;
     }
@@ -4968,6 +4956,18 @@ public class PowersDiverDown extends NewPunchingStand {
         }
 
         return l;
+    }
+
+    @Override
+    public StandEntity getNewStandEntity() {
+        byte skin = ((StandUser) this.getSelf()).roundabout$getStandSkin();
+        if (skin == DiverDownEntity.BETA_DIVER) {
+            return ModEntities.DIVER_DOWN_BETA.create(this.getSelf().level());
+        }
+        if (skin == DiverDownEntity.WORLD_DIVER) {
+            return ModEntities.DIVER_DOWN_WORLD.create(this.getSelf().level());
+        }
+        return ModEntities.DIVER_DOWN.create(this.getSelf().level());
     }
 
     public void unlockSkin() {
