@@ -1241,13 +1241,6 @@ public class FabricEntities {
                     EntityType.Builder.of(SheerHeartAttackEntity::new, MobCategory.CREATURE).
                             sized(SheerHeartAttackEntity.width, SheerHeartAttackEntity.height).clientTrackingRange(15).build(Roundabout.MOD_ID+":sheer_heart_attack")
             );
-    public static final EntityType<SheerTeapotAttackEntity> SHEER_TEAPOT_ATTACK =
-            Registry.register(
-                    BuiltInRegistries.ENTITY_TYPE,
-                    new ResourceLocation(Roundabout.MOD_ID, "sheer_teapot_attack"),
-                    EntityType.Builder.of(SheerTeapotAttackEntity::new, MobCategory.CREATURE).
-                            sized(SheerTeapotAttackEntity.width, SheerTeapotAttackEntity.height).clientTrackingRange(15).build(Roundabout.MOD_ID+":sheer_teapot_attack")
-            );
 
     public static void register() {
                 /*Common Code Bridge*/
@@ -1423,7 +1416,6 @@ public class FabricEntities {
 
                 ModEntities.METALLICA_KNIFE = METALLICA_KNIFE;
                 ModEntities.SHEER_HEART_ATTACK = SHEER_HEART_ATTACK;
-                ModEntities.SHEER_TEAPOT_ATTACK = SHEER_TEAPOT_ATTACK;
 
                 /*Attributes*/
                 FabricDefaultAttributeRegistry.register(TERRIER_DOG, Wolf.createAttributes());
@@ -1541,7 +1533,6 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(PURPLE_SMOKE, PurpleSmokeEntity.createStandAttributes());
                 
                 FabricDefaultAttributeRegistry.register(SHEER_HEART_ATTACK, SheerHeartAttackEntity.createStandAttributes());
-                FabricDefaultAttributeRegistry.register(SHEER_TEAPOT_ATTACK, SheerTeapotAttackEntity.createStandAttributes());
 
                 /*Spawn Weights and Biomes*/
                 BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.DESERT), MobCategory.CREATURE,

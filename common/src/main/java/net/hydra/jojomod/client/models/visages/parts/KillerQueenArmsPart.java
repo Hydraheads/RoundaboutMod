@@ -145,7 +145,7 @@ public class KillerQueenArmsPart extends PsuedoHierarchicalModel {
                 if (animation == StandPowers.GUARD) {
                     this.animate(user.roundabout$getWornStandActiveAnimation(), KingCrimsonAnimations.block, context.tickCount+fixedPartial, 1f);
                 } else {
-                    if (animation == KillerQueenEntity.SHA_SEND || animation == KillerQueenEntity.SHA_SHOOT) {
+                    if (animation == KillerQueenEntity.SHA_SEND || animation == KillerQueenEntity.SHA_SHOOT || animation == StandPowers.VAULT) {
                         if (lastWasOnlyRight) {
                             lastWasOnlyRight = false;
                             user.roundabout$getWornStandIdleAnimation().stop();
@@ -174,11 +174,11 @@ public class KillerQueenArmsPart extends PsuedoHierarchicalModel {
                     } else if (animation == KillerQueenEntity.SHA_SEND) {
                         this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.shaArmsSend, partialTicks, 0.8f);
                     } else if (animation == KillerQueenEntity.SHA_SHOOT) {
-                        this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.shaArmsShoot, partialTicks, 1.1f);
+                        this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.shaArmsShoot, partialTicks, 1.5f);
                     } else if (animation == KillerQueenEntity.BTD_DETONATION) {
                         this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.btdDetonation, partialTicks, 1);
                     } else {
-                        //user.roundabout$getWornStandActiveAnimation().stop();
+                        user.roundabout$getWornStandActiveAnimation().stop();
                     }
 
                 }

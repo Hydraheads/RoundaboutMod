@@ -2796,6 +2796,12 @@ public class KillerQueenAnimations {
 			.addAnimation("BAM", new AnimationChannel(AnimationChannel.Targets.SCALE, 
 				new Keyframe(0.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
 			))
+			.addAnimation("sword", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+					new Keyframe(0.0F, KeyframeAnimations.degreeVec(188.0578F, -11.9272F, 18.7871F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(0.0417F, KeyframeAnimations.degreeVec(130.9187F, -28.1185F, 6.0833F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.0833F, KeyframeAnimations.degreeVec(38.5532F, -83.4377F, 46.7472F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.125F, KeyframeAnimations.degreeVec(33.5532F, -83.4377F, 46.7472F), AnimationChannel.Interpolations.LINEAR)
+			))
 			.build();
 
 	public static final AnimationDefinition ArrowCharge = AnimationDefinition.Builder.withLength(0.2865F)
@@ -2917,9 +2923,9 @@ public class KillerQueenAnimations {
 					new Keyframe(1.5833F, KeyframeAnimations.degreeVec(-144.8974F, 4.0941F, 2.8728F), AnimationChannel.Interpolations.CATMULLROM),
 					new Keyframe(2.875F, KeyframeAnimations.degreeVec(-155.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
 					new Keyframe(3.0F, KeyframeAnimations.degreeVec(-80.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-					new Keyframe(3.125F, KeyframeAnimations.degreeVec(-82.1548F, 14.7668F, 2.664F), AnimationChannel.Interpolations.CATMULLROM),
-					new Keyframe(3.2083F, KeyframeAnimations.degreeVec(-74.6548F, 14.7668F, 2.664F), AnimationChannel.Interpolations.CATMULLROM),
-					new Keyframe(3.2917F, KeyframeAnimations.degreeVec(-79.6548F, 14.7668F, 2.664F), AnimationChannel.Interpolations.CATMULLROM)
+					new Keyframe(3.125F, KeyframeAnimations.degreeVec(-82.1548F, 14.7668F, 2.664F - 15F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(3.2083F, KeyframeAnimations.degreeVec(-74.6548F, 14.7668F, 2.664F - 15F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(3.2917F, KeyframeAnimations.degreeVec(-79.6548F, 14.7668F, 2.664F - 15F), AnimationChannel.Interpolations.CATMULLROM)
 			))
 			.addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.POSITION,
 					new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
@@ -2965,8 +2971,8 @@ public class KillerQueenAnimations {
 	public static final AnimationDefinition shaArmsShoot = AnimationDefinition.Builder.withLength(0.7917F)
 			.addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 					new Keyframe(0.0F, KeyframeAnimations.degreeVec(-5.0F, 0.0F, 10.0F), AnimationChannel.Interpolations.LINEAR),
-					new Keyframe(0.1667F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 10.0F), AnimationChannel.Interpolations.LINEAR),
-					new Keyframe(0.375F, KeyframeAnimations.degreeVec(25.0F, 0.0F, 25.0F), AnimationChannel.Interpolations.LINEAR)
+					new Keyframe(0.1667F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 00.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.375F, KeyframeAnimations.degreeVec(25.0F, 0.0F, 15.0F), AnimationChannel.Interpolations.LINEAR)
 			))
 			.addAnimation("lower_right_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 					new Keyframe(0.0F, KeyframeAnimations.degreeVec(-20.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
@@ -2976,8 +2982,8 @@ public class KillerQueenAnimations {
 			.addAnimation("left_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 					new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
 					new Keyframe(0.1667F, KeyframeAnimations.degreeVec(46.2409F, 6.6078F, -44.0561F), AnimationChannel.Interpolations.LINEAR),
-					new Keyframe(0.3333F, KeyframeAnimations.degreeVec(-68.2593F, -4.6024F, -16.185F), AnimationChannel.Interpolations.LINEAR),
-					new Keyframe(0.4583F, KeyframeAnimations.degreeVec(-64.1196F, -7.984F, -14.9395F), AnimationChannel.Interpolations.LINEAR)
+					new Keyframe(0.3333F, KeyframeAnimations.degreeVec(-68.2593F, -4.6024F, -06.185F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.4583F, KeyframeAnimations.degreeVec(-64.1196F, -7.984F, -04.9395F), AnimationChannel.Interpolations.LINEAR)
 			))
 			.addAnimation("lower_left_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 					new Keyframe(0.0F, KeyframeAnimations.degreeVec(-7.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
@@ -3001,6 +3007,24 @@ public class KillerQueenAnimations {
 					new Keyframe(1.3333F, KeyframeAnimations.degreeVec(-30.0F, 0.0F, -17.5F), AnimationChannel.Interpolations.LINEAR),
 					new Keyframe(1.4583F, KeyframeAnimations.degreeVec(-15.0F, 0.0F, -17.5F), AnimationChannel.Interpolations.LINEAR),
 					new Keyframe(1.5417F, KeyframeAnimations.degreeVec(-25.0F, 0.0F, -17.5F), AnimationChannel.Interpolations.LINEAR)
+			))
+			.build();
+
+	public static final AnimationDefinition hideExtra = AnimationDefinition.Builder.withLength(0.4167F)
+			.addAnimation("extras", new AnimationChannel(AnimationChannel.Targets.SCALE,
+					new Keyframe(0.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+			))
+			.addAnimation("extra", new AnimationChannel(AnimationChannel.Targets.SCALE,
+					new Keyframe(0.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+			))
+			.addAnimation("extra2", new AnimationChannel(AnimationChannel.Targets.SCALE,
+					new Keyframe(0.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+			))
+			.addAnimation("sword", new AnimationChannel(AnimationChannel.Targets.SCALE,
+					new Keyframe(0.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+			))
+			.addAnimation("swordHolder", new AnimationChannel(AnimationChannel.Targets.SCALE,
+					new Keyframe(0.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
 			))
 			.build();
 }
