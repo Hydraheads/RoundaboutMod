@@ -235,6 +235,14 @@ public class SeperatedArmEntity extends StandEntity {
 
     public int StartupTicks = 80;
 
+    Entity grabbedEntity = null;
+
+    public boolean isInRain() {
+        BlockPos $$0 = this.blockPosition();
+        return this.level().isRainingAt($$0)
+                || this.level().isRainingAt(BlockPos.containing((double)$$0.getX(), this.getBoundingBox().maxY, (double)$$0.getZ()));
+    }
+
     @Override
     public void tick() {
         this.entityData.set(HELD_ITEM,this.getMainHandItem());
@@ -242,15 +250,26 @@ public class SeperatedArmEntity extends StandEntity {
 
         if (((((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersCatchTheRainbow))) {
             if (!this.level().isClientSide) {
-                if (StartupTicks == 0) {
-                    if ((!(this.getUser() == null) && (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersCatchTheRainbow))) {
-                            this.lookAt(EntityAnchorArgument.Anchor.EYES, User.getEyePosition());
-                            this.setDeltaMovement(this.getLookAngle().multiply(0.2, 0.2, 0.2));
-                    } else {
-                        this.discard();
+                if (grabbedEntity != null){
+                    if (isInRain() && this.getBoundingBox().inflate(2).intersects(grabbedEntity.getBoundingBox())) {
+                        this.setPos(grabbedEntity.getX(), grabbedEntity.getEyeY() - 0.3, grabbedEntity.getZ());
+                    }else{
+                        grabbedEntity = null;
                     }
                 } else {
-                    StartupTicks--;
+                    if (StartupTicks == 0) {
+                        if (!(this.getUser() == null)) {
+                            this.lookAt(EntityAnchorArgument.Anchor.EYES, User.getEyePosition());
+                            this.setDeltaMovement(this.getLookAngle().multiply(0.4, 0.4, 0.4));
+                        } else {
+                            this.discard();
+                        }
+                    } else {
+                        if (isInRain())
+                            StartupTicks--;
+                        else
+                            StartupTicks = 0;
+                    }
                 }
             }
         }
@@ -701,6 +720,9 @@ public class SeperatedArmEntity extends StandEntity {
                                     entity.hurt(ModDamageTypes.of(level(), DamageTypes.PLAYER_ATTACK, this.getUser(), user), (Double.valueOf(this.getAttributeValue(Attributes.ATTACK_DAMAGE)).floatValue()) * 1f);
                                 }
                             }
+                            if (((((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersCatchTheRainbow))){
+                                grabbedEntity = entity;
+                            }
                         }
                     }
                 }
@@ -747,7 +769,9 @@ public class SeperatedArmEntity extends StandEntity {
 
     @Override
     public boolean hasNoPhysics() {
+        if (StartupTicks != 0)
         return false;
+        else return true;
     }
 
     @Override

@@ -75,18 +75,10 @@ public class CatchTheRainbowModel extends PsuedoHierarchicalModel {
 			"textures/stand/catch_the_rainbow/neon_on.png");
 	public static ResourceLocation neon_off = new ResourceLocation(Roundabout.MOD_ID,
 			"textures/stand/catch_the_rainbow/neon_off.png");
-	public static ResourceLocation pride_bi = new ResourceLocation(Roundabout.MOD_ID,
-			"textures/stand/catch_the_rainbow/pride_bi.png");
-	public static ResourceLocation pride_gay = new ResourceLocation(Roundabout.MOD_ID,
-			"textures/stand/catch_the_rainbow/pride_gay.png");
-	public static ResourceLocation pride_lesbian = new ResourceLocation(Roundabout.MOD_ID,
-			"textures/stand/catch_the_rainbow/pride_lesbian.png");
-	public static ResourceLocation pride_nb = new ResourceLocation(Roundabout.MOD_ID,
-			"textures/stand/catch_the_rainbow/pride_nb.png");
-	public static ResourceLocation pride_pan = new ResourceLocation(Roundabout.MOD_ID,
-			"textures/stand/catch_the_rainbow/pride_pan.png");
-	public static ResourceLocation pride_trans = new ResourceLocation(Roundabout.MOD_ID,
-			"textures/stand/catch_the_rainbow/pride_trans.png");
+	public static ResourceLocation strider_healthy = new ResourceLocation(Roundabout.MOD_ID,
+			"textures/stand/catch_the_rainbow/strider_healthy.png");
+	public static ResourceLocation strider_sick = new ResourceLocation(Roundabout.MOD_ID,
+			"textures/stand/catch_the_rainbow/strider_sick.png");
 
 	public ResourceLocation getTextureLocation(Entity context, byte skin) {
 		if (!context.isInWaterOrRain()) {
@@ -106,23 +98,8 @@ public class CatchTheRainbowModel extends PsuedoHierarchicalModel {
 				case PowersCatchTheRainbow.NEON -> {
 					return neon_off;
 				}
-				case PowersCatchTheRainbow.GAY -> {
-					return pride_gay;
-				}
-				case PowersCatchTheRainbow.LESBIAN -> {
-					return pride_lesbian;
-				}
-				case PowersCatchTheRainbow.BISEXUAL -> {
-					return pride_bi;
-				}
-				case PowersCatchTheRainbow.PAN -> {
-					return pride_pan;
-				}
-				case PowersCatchTheRainbow.NB -> {
-					return pride_nb;
-				}
-				case PowersCatchTheRainbow.TRANS -> {
-					return pride_trans;
+				case PowersCatchTheRainbow.STRIDER -> {
+					return strider_sick;
 				}
 				default -> {
 					return base;
@@ -146,23 +123,8 @@ public class CatchTheRainbowModel extends PsuedoHierarchicalModel {
 				case PowersCatchTheRainbow.NEON -> {
 					return neon_on;
 				}
-				case PowersCatchTheRainbow.GAY -> {
-					return pride_gay;
-				}
-				case PowersCatchTheRainbow.LESBIAN -> {
-					return pride_lesbian;
-				}
-				case PowersCatchTheRainbow.BISEXUAL -> {
-					return pride_bi;
-				}
-				case PowersCatchTheRainbow.PAN -> {
-					return pride_pan;
-				}
-				case PowersCatchTheRainbow.NB -> {
-					return pride_nb;
-				}
-				case PowersCatchTheRainbow.TRANS -> {
-					return pride_trans;
+				case PowersCatchTheRainbow.STRIDER -> {
+					return strider_healthy;
 				}
 				default -> {
 					return base;
