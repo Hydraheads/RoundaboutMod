@@ -194,7 +194,7 @@ public class FabricItems {
     public static Item STAND_DISC_ACHTUNG = registerItem("achtung_baby_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAchtungBaby(null)));
 
-    public static Item STAND_DISC_DIVER_DOWN = registerItem("diver_down_disc",
+        public static Item STAND_DISC_DIVER_DOWN = registerItem("diver_down_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null)));
     public static Item MAX_STAND_DISC_DIVER_DOWN = registerItem("max_diver_down_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null)));

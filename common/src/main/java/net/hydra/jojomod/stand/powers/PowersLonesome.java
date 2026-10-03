@@ -5,6 +5,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IBlockState;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.projectile.MetallicaKnifeEntity;
+import net.hydra.jojomod.entity.stand.LonesomeRopeEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -21,7 +23,9 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -30,18 +34,27 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static net.hydra.jojomod.util.MainUtil.raytraceEntity;
 
 public class PowersLonesome extends NewDashPreset {
     public PowersLonesome(LivingEntity self) {
         super(self);
+    }
+
+    boolean isPhaseable(String blockName){
+        System.out.println(Objects.equals(blockName, "minecraft:iron_bars"));
+        return (Objects.equals(blockName, "minecraft:iron_bars"));
     }
 
     @Override
@@ -54,6 +67,9 @@ public class PowersLonesome extends NewDashPreset {
     public StandPowers generateStandPowers(LivingEntity entity) {
         return new PowersLonesome(entity);
     }
+    public boolean ropeExists = false;
+
+
 
     public boolean canSummonStandAsEntity(){
         return false;
@@ -154,66 +170,62 @@ public class PowersLonesome extends NewDashPreset {
         }
     }
 
-    public List rayCastBlockOrEntity(LivingEntity player){ // I KNOW THAT EVERYONE AND THEIR MOTHER HAS MADE ONE OF THESE, BUT IT'S GOOD PRACTICE!
-        BlockHitResult rayBlock = getRayBlockHit(player, 20f);
-        Entity rayEntity = raytraceEntity(player.level(), player, 2000f);
-        return Arrays.asList(rayBlock, rayEntity); //i HATE java, WHY do i have to smuggle out my variables :sob:
-    }
-
     public boolean crawlingOn(){
         return getStandUserSelf().roundabout$getUniqueStandModeToggle();
     }
 
     public boolean switchCrawlMode(){
-        getStandUserSelf().roundabout$setUniqueStandModeToggle(!crawlingOn());
         LivingEntity player = this.self;
-        return true;
-    }
-
-    public boolean armLaunch(){
-        if(!this.onCooldown(PowerIndex.SKILL_1)) {
-            LivingEntity player = this.self;
-            List rayCast = rayCastBlockOrEntity(player);
-            BlockHitResult rayBlock = (BlockHitResult) rayCast.get(0);
-            Entity rayEntity = (Entity) rayCast.get(1);
-            float entityDistance = 400;
-            if (rayEntity != null) {
-                entityDistance = rayEntity.distanceTo(player);
-            }
-
-            float blockDistance = 400;
-            if (rayBlock != null) { // I HATE NULLCHECKS
-                blockDistance = (float) rayBlock.distanceTo(player);
-            }
-
-            System.out.println(blockDistance);
-            System.out.println(entityDistance);
-
-            if ( blockDistance <= entityDistance ) { //if the block is closer than the entity
-                System.out.println(rayBlock.getBlockPos());
-            } else {
-                System.out.println(rayEntity);
-            }
+        if (isPhaseable(getLookingAt(player))) {
+            Vec3 blockPos = getRayBlockHit(player, 2f).getBlockPos().getCenter();
+            player.setPos(blockPos);
+            System.out.println(getRayBlockHit(player, 2f));
+        } else {
+            getStandUserSelf().roundabout$setUniqueStandModeToggle(!crawlingOn());
         }
         return true;
     }
 
-    public boolean renderRopeOnPlayer(){
-        PoseStack poseStack;
+    public boolean armLaunch(){
+        if (onCooldown(PowerIndex.SKILL_1)) return false;
+        self.swing(InteractionHand.MAIN_HAND, true);
 
-        return false;
+        if(!self.level().isClientSide){
+            if (!ropeExists) {
+                Vec3 eyePos = self.getEyePosition();
+
+                createRopeEntity(eyePos.x, eyePos.y, eyePos.z);
+
+                //playSoundIfPossible(self.level(),null, pos, SoundEvents.HOE_TILL, SoundSource.PLAYERS, 0.5f, 1.0f);
+                ropeExists = true;
+            }
+        }
+
+
+
+
+        return true;
+    }
+    private void createRopeEntity(double x, double y, double z) {
+        LonesomeRopeEntity rope = new LonesomeRopeEntity(self.level(), self);
+        rope.setPos(x, y, z);
+        rope.setStopped(false);
+        rope.setInvisible(false);
+        self.level().addFreshEntity(rope);
     }
 
-    public String getBlockNameAtWorldPos(BlockPos blockPos){
-        return this.self.level().getBlockState(blockPos).getBlock().getName().toString(); // proof that i don't use ai :sob:
+    public String getLookingAt(LivingEntity player){
+        Level level = this.self.level();
+        BlockPos blockPos = getRayBlockHit(player, 2f).getBlockPos();
+        String blockName = level.getBlockState(blockPos).getBlock().getName().toString();
+        return blockName;
     }
 
     public boolean crawl(){
         LivingEntity player = this.self;
+        Level level = this.self.level();
         if (crawlingOn()){
             ((StandUser) player).rdbt$SetCrawlTicks(1);
-            System.out.println(player.level().getBlockState(getRayBlockHit(player, 1f).getBlockPos()));
-            // for future me, i'm trying to find the name of the block at the player raytrace
         }
         return true;
     }
@@ -225,8 +237,7 @@ public class PowersLonesome extends NewDashPreset {
                 player.setHealth(1);
                 player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 2), player);
                 player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 200, 0), player);
-                switchCrawlMode();
-
+                getStandUserSelf().roundabout$setUniqueStandModeToggle(true);
                 getStandUserSelf().roundabout$setDazed((byte)0);
                 this.setCooldown(PowerIndex.EXTRA, ClientNetworking.getAppropriateConfig().ohLonesomeMeSettings.endOfYourRopeCooldown);
                 System.out.println(PowerIndex.EXTRA);

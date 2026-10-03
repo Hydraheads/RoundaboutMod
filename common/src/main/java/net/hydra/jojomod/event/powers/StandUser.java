@@ -369,6 +369,11 @@ public interface StandUser {
 
     boolean GoingDown();
 
+    /**OLM stuff**/
+    void rdbt$setOmgSoUnique(boolean mode);
+    boolean getOmgSoUnique();
+
+
     /** Green Day stuff**/
 
     void DoMoldTick();

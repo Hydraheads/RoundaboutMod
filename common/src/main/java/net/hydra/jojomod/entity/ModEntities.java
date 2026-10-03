@@ -31,7 +31,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import org.joml.Vector2f;
+import net.minecraft.world.entity.projectile.AbstractArrow;import org.joml.Vector2f;
 
 public class ModEntities {
     /** Entities are referenced in these files, but forge and fabric need to update
@@ -116,6 +116,7 @@ public class ModEntities {
     public static EntityType<RattDartEntity> RATT_DART;
     public static EntityType<KnifeEntity> THROWN_KNIFE;
     public static EntityType<MetallicaKnifeEntity> METALLICA_KNIFE;
+    public static EntityType<LonesomeRopeEntity> LONESOME_ROPE;
     public static EntityType<MatchEntity> THROWN_MATCH;
     public static EntityType<ThrownWaterBottleEntity> THROWN_WATER_BOTTLE;
     public static EntityType<CrossfireHurricaneEntity> CROSSFIRE_HURRICANE;
@@ -230,6 +231,7 @@ public class ModEntities {
     public static final ResourceLocation ROAD_ROLLER_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/road_roller.png");
     public static final ResourceLocation ROAD_ROLLER_TEXTURE_CRACKED_MEDIUM = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/road_roller_cracked_medium.png");
     public static final ResourceLocation ROAD_ROLLER_TEXTURE_CRACKED_HIGH = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/road_roller_cracked_high.png");
+    public static final ResourceLocation ROPE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/lonesome/rope_texture.png");
 
 
     /// Creates and registers the stand entity
