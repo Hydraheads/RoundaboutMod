@@ -2944,11 +2944,12 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public boolean bitesTheDustCombatActivate() {
+        if (!canBitesTheDustCombat() || !inBitesTheDustMode()) { return false; }
+
         if (this.isClient()) {
             btdTicks = 0;
             return true;
         }
-        if (!inBitesTheDustMode()) { return false; }
 
         if (disabledBTDTicks < 0) { return false; }
 
