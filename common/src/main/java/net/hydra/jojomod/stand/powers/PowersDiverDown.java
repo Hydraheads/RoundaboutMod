@@ -299,6 +299,9 @@ public class PowersDiverDown extends NewPunchingStand {
         if (skin == DiverDownEntity.BETA_DIVER) {
             return ModEntities.DIVER_DOWN_BETA.create(this.getSelf().level());
         }
+        if (skin == DiverDownEntity.WORLD_DIVER) {
+            return ModEntities.DIVER_DOWN_WORLD.create(this.getSelf().level());
+        }
         return ModEntities.DIVER_DOWN.create(this.getSelf().level());
     }
 
