@@ -156,6 +156,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	public final AnimationState idle = new AnimationState();
 	public final AnimationState moving = new AnimationState();
 	public final AnimationState hideTorch = new AnimationState();
+	public final AnimationState lowerTorch = new AnimationState();
 
 	int tickTargetFindCount = 0;
 	static final int tickTargetFindMax = 2;
@@ -265,6 +266,16 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		if (getTorchStatus()) {
 			hideTorch.stop();
+			LivingEntity user = getUser();
+			if (user != null && ((StandUser)user).roundabout$getStandPowers() instanceof PowersKillerQueen) {
+				byte BT = ((StandUser) user).roundabout$getStandSkin();
+				if (BT == KillerQueenEntity.SAMURAI || BT == KillerQueenEntity.SPIRIT) {
+					lowerTorch.stop();
+				}else{
+					lowerTorch.startIfStopped(tickCount);
+				}
+			}
+
 		}else {
 			hideTorch.startIfStopped(this.tickCount);
 		}

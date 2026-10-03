@@ -240,6 +240,7 @@ public class PowersDiverDown extends NewPunchingStand {
     ;
     /* TAKING NOTE OF GENERAL COOLDOWNS HERE:
         GENERAL_1 = AFFLICTION SELECTION
+        GENERAL_2 = SELF DIVE
      */
 
     // move levels
@@ -680,7 +681,7 @@ public class PowersDiverDown extends NewPunchingStand {
                     setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD, true);
                 }
             } else if (isGuarding()) {
-                setSkillIcon(context, x, y, 1, StandIcons.DIVER_DOWN_SELF_SUBMERGE, PowerIndex.SKILL_1_GUARD);
+                setSkillIcon(context, x, y, 1, StandIcons.DIVER_DOWN_SELF_SUBMERGE, PowerIndex.SKILL_EXTRA);
             } else {
                 setSkillIcon(context, x, y, 1, StandIcons.DIVER_DOWN_SUBMERGE, PowerIndex.SKILL_1);
             }
@@ -913,7 +914,7 @@ public class PowersDiverDown extends NewPunchingStand {
     //for cooldowns, like D4C
     @Override
     public boolean isServerControlledCooldown(byte num) {
-        if (num == PowerIndex.SKILL_1 || num == PowerIndex.SKILL_1_SNEAK
+        if (num == PowerIndex.SKILL_1 || num == PowerIndex.SKILL_EXTRA || num == PowerIndex.SKILL_1_SNEAK
                 || num == PowerIndex.SKILL_2 || num == PowerIndex.GENERAL_1
                 || num == PowerIndex.SKILL_3) {
             return true;
@@ -1061,7 +1062,7 @@ public class PowersDiverDown extends NewPunchingStand {
                                 Vec3 mpos = this.self.getPosition(1F);
                                 // Check if there is a walkable block in front of the player
                                 BlockPos wallPos = BlockPos.containing(mpos).relative(facing);
-                                if (MainUtil.isBlockWalkable(this.self.level().getBlockState(wallPos))) {
+                                if (MainUtil.isBlockWalkableSimplified(this.self.level().getBlockState(wallPos))) {
                                     ((IGravityEntity) this.self).roundabout$setGravityDirection(facing);
                                     setHeelDirection(facing);
                                     justFlippedTicks = 4;
@@ -1089,10 +1090,10 @@ public class PowersDiverDown extends NewPunchingStand {
                         } else {
                             // If ANY block directly beneath your rotated feet is solid, you are still on a
                             // surface
-                            if (MainUtil.isBlockWalkable(self.level().getBlockState(pos))
-                                    || MainUtil.isBlockWalkable(self.level().getBlockState(pos2))
-                                    || MainUtil.isBlockWalkable(self.level().getBlockState(pos4))
-                                    || MainUtil.isBlockWalkable(self.level().getBlockState(pos5))) {
+                            if (MainUtil.isBlockWalkableSimplified(self.level().getBlockState(pos))
+                                    || MainUtil.isBlockWalkableSimplified(self.level().getBlockState(pos2))
+                                    || MainUtil.isBlockWalkableSimplified(self.level().getBlockState(pos4))
+                                    || MainUtil.isBlockWalkableSimplified(self.level().getBlockState(pos5))) {
                                 mercyTicks--;
                             } else {
                                 // Only attempt to cut the corner when all probe blocks are AIR (stepped off
@@ -1372,8 +1373,11 @@ public class PowersDiverDown extends NewPunchingStand {
             BlockState state4 = self.level().getBlockState(pos4);
             boolean isOnValidBlock = MainUtil.isBlockWalkableSimplified(state1)
                     && MainUtil.isBlockWalkableSimplified(state4);
-            if (!isOnValidBlock && !this.self.onGround()) {
+            if (!isOnValidBlock || forceBlock()) {
                 toggleZip(false);
+                if (this.self.level().isClientSide()) {
+                    C2SPacketUtil.trySingleBytePacket(PacketDataIndex.QUERY_STAND_UPDATE_2);
+                }
             }
         }
         if (this.self.isAlive() && this.self.isEyeInFluid(FluidTags.WATER)) {
@@ -1430,8 +1434,8 @@ public class PowersDiverDown extends NewPunchingStand {
         BlockPos feetWall = BlockPos.containing(mpos).relative(rd);
         BlockPos eyeWall = BlockPos.containing(this.self.getEyePosition()).relative(rd);
 
-        return MainUtil.isBlockWalkable(this.self.level().getBlockState(feetWall))
-                || MainUtil.isBlockWalkable(this.self.level().getBlockState(eyeWall));
+        return MainUtil.isBlockWalkableSimplified(this.self.level().getBlockState(feetWall))
+                || MainUtil.isBlockWalkableSimplified(this.self.level().getBlockState(eyeWall));
     }
 
     /**
@@ -3093,7 +3097,7 @@ public class PowersDiverDown extends NewPunchingStand {
     public boolean tryCut(Vec3 cutPos) {
         BlockPos pos1 = BlockPos.containing(cutPos);
         BlockState bs = this.self.level().getBlockState(pos1);
-        return MainUtil.isBlockWalkable(bs);
+        return MainUtil.isBlockWalkableSimplified(bs);
     }
 
     public boolean tryCutEast(Vec3 mpos) {
@@ -3533,6 +3537,8 @@ public class PowersDiverDown extends NewPunchingStand {
                 this.setAttackTimeDuring(-15);
                 this.setAttackTime(-15);
                 this.poseStand(OffsetIndex.ATTACK);
+                setCooldown(PowerIndex.SKILL_1, 200);
+                setCooldown(PowerIndex.SKILL_EXTRA, 200);
                 return;
             }
             this.submergedTarget = target;
@@ -3598,8 +3604,8 @@ public class PowersDiverDown extends NewPunchingStand {
                     ModSounds.SUMMON_DIVER_DOWN_EVENT,
                     SoundSource.PLAYERS, 0.85F, 1);
         }
-        setCooldown(PowerIndex.SKILL_1, 300);
-        setCooldown(PowerIndex.SKILL_1_GUARD, 300);
+        setCooldown(PowerIndex.SKILL_1, 200);
+        setCooldown(PowerIndex.SKILL_EXTRA, 200);
         return true;
     }
 
@@ -3659,7 +3665,7 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     private void tryStartSelfDiveClient() {
-        if (!areStandMovesDisabled() && !isDiveActive()) {
+        if (!areStandMovesDisabled() && !isDiveActive() && !this.onCooldown(PowerIndex.SKILL_EXTRA)) {
             this.tryPower(DIVER_SELF_SUBMERGE, true);
             tryPowerPacket(DIVER_SELF_SUBMERGE);
         }
@@ -3678,7 +3684,7 @@ public class PowersDiverDown extends NewPunchingStand {
         if (hasStandEntity(this.self)) {
             StandEntity stand = this.getStandEntity(this.self);
             if (stand != null) {
-                stand.forceDespawn(true);
+                stand.discard();
             }
         }
 
@@ -4122,6 +4128,7 @@ public class PowersDiverDown extends NewPunchingStand {
         if (this.self.level().isClientSide()) return;
         if (this.submergedTarget == null || !this.submergedTarget.isAlive()) return;
 
+        removeDiverLegsFromTarget();
         this.hasDiverArms = true;
         ((StandUser) this.submergedTarget).roundabout$setDiverArms(true); // <-- Changed to arms
 
@@ -4235,6 +4242,10 @@ public class PowersDiverDown extends NewPunchingStand {
     private void cureNegativeEffects() {
         if (this.self.level().isClientSide()) return;
         if (!(this.submergedTarget instanceof LivingEntity targetLiving) || !targetLiving.isAlive()) return;
+
+        removeDiverLegsFromTarget();
+        removeDiverArmsFromTarget();
+
         boolean hadSlowness = false;
 
         // get all the harmful effects
@@ -4277,6 +4288,7 @@ public class PowersDiverDown extends NewPunchingStand {
         if (this.self.level().isClientSide()) return;
         if (this.submergedTarget == null || !this.submergedTarget.isAlive()) return;
 
+        removeDiverArmsFromTarget();
         this.hasDiverLegs = true;
         ((StandUser) this.submergedTarget).roundabout$setDiverLegs(true);
 
@@ -4850,8 +4862,8 @@ public class PowersDiverDown extends NewPunchingStand {
             case DiverDownEntity.BETA_DIVER -> {
                 return Component.translatable("skins.roundabout.diver_down.betadiver");
             }
-            case DiverDownEntity.HOLY_DIVER -> {
-                return Component.translatable("skins.roundabout.diver_down.holy_diver");
+            case DiverDownEntity.WORLD_DIVER -> {
+                return Component.translatable("skins.roundabout.diver_down.world_diver");
             }
             case DiverDownEntity.KELP -> {
                 return Component.translatable("skins.roundabout.diver_down.kelp");
@@ -4942,12 +4954,13 @@ public class PowersDiverDown extends NewPunchingStand {
             }
             if (Level > 6 || bypass) {
                 l.add(DiverDownEntity.EYECATCH);
-            }
-            if (Level > 7 || bypass) {
                 l.add(DiverDownEntity.ARTWORK);
             }
+            if (Level > 7 || bypass) {
+                l.add(DiverDownEntity.WORLD_DIVER);
+            }
             if (((IPlayerEntity) PE).roundabout$getUnlockedBonusSkin() || bypass) {
-                l.add(DiverDownEntity.HOLY_DIVER);
+                //add scuba diver skin here
             }
         }
 
@@ -4966,13 +4979,14 @@ public class PowersDiverDown extends NewPunchingStand {
                         ipe.roundabout$setUnlockedBonusSkin(true);
                         playSoundIfPossible(self.level(), null, PE.getX(), PE.getY(),
                                 PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
-                        sendParticlesIfPossible(self.level(), ModParticles.WARDEN_CLOCK, PE.getX(),
-                                PE.getY() + PE.getEyeHeight(), PE.getZ(),
-                                7, 0.4, 0.4, 0.4, 0.2);
-                        user.roundabout$setStandSkin(DiverDownEntity.HOLY_DIVER);
+                        sendParticlesIfPossible(self.level(),ParticleTypes.END_ROD, self.getX(),
+                                self.getY() + self.getEyeHeight(), self.getZ(),
+                                10, 0.5, 0.5, 0.5, 0.2);
+                        //uncomment this once added
+                        //user.roundabout$setStandSkin(DiverDownEntity.SCUBA_DIVER);
                         user.roundabout$summonStand(this.getSelf().level(), true, false);
                         ((ServerPlayer) ipe).displayClientMessage(
-                                Component.translatable("unlock_skin.roundabout.diver_down.holy_diver"), true);
+                                Component.translatable("unlock_skin.roundabout.diver_down.scuba_diver"), true);
                     }
                 }
             }
