@@ -46,8 +46,10 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -628,9 +630,11 @@ public class PowersWalkingHeart extends NewDashPreset {
                 useSpikeAttack2();
             }
             case PowerIndex.POWER_1_BONUS -> {
+                catchItems();
                 missSound();
             }
             case PowerIndex.POWER_1_SNEAK -> {
+                catchItems();
                 hitSound();
             }
 
@@ -644,6 +648,16 @@ public class PowersWalkingHeart extends NewDashPreset {
 
         }
         return super.tryPower(move,forced);
+    }
+
+    public void catchItems(){
+        List<ItemEntity> TE;
+        TE = this.getItemTargetEntityList(self, 7F, 10);
+        if (!TE.isEmpty()) {
+            for (Entity value : TE) {
+                value.setPos(self.position());
+            }
+        }
     }
 
     /**If the standard left click input should be canceled while your stand is active*/
@@ -804,7 +818,7 @@ public class PowersWalkingHeart extends NewDashPreset {
         this.setAttackTimeDuring(-10);
         this.setActivePower(PowerIndex.POWER_4_EXTRA);
         MainUtil.playPop(self);
-
+        //
         if (this.self.level().isClientSide()){
             List<Entity> TE;
             if (!ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxes){

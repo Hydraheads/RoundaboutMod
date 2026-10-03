@@ -151,6 +151,9 @@
   "block.roundabout.chess_piece": "Chess Piece",
   "block.roundabout.gambling_table": "Gambling Table",
   "container.roundabout.gambling_table": "Gambling Table",
+  "gui.roundabout.gambling_table.select_game": "Select a game",
+  "gui.roundabout.gambling_table.game.coin_drop": "Coin Drop",
+  "gui.roundabout.gambling_table.game.waiting": "Waiting for host",
 
   "item.roundabout.exp_bishop": "Experience Bishop",
 
@@ -1152,6 +1155,7 @@
   "death.attack.distortion_virus": "%1$s was consumed by the Distortion Virus.",
   "death.attack.diver_redirection": "%1$s died for the sake of others",
   "death.attack.diver_redirection.player": "%1$s died for the sake of %2$s",
+  "death.attack.brain_dead": "%1$s stopped thinking",
 
   "item.glaive.charge_power": "Charge Attack",
 
@@ -1620,6 +1624,9 @@
   "sounds.roundabout.stray_cat_sound_1": "Stray Cat Hiss",
   "sounds.roundabout.stray_cat_sound_3": "Stray Cat Hiss",
   "sounds.roundabout.stray_cat_sound_2": "Stray Cat Interest",
+  "sounds.roundabout.kq_block_plant": "Block planted",
+  "sounds.roundabout.kq_mob_plant": "Mob planted",
+  "sounds.roundabout.kq_plant_windup": "Mob plant windup...",
 
   "sounds.roundabout.btd_normal_reset": "Bites the dust Combat",
   "sounds.roundabout.btd_full_reset": "Bites the dust Day",
@@ -3073,6 +3080,8 @@
   "skins.roundabout.killer_queen.minuet": "Minuet",
   "skins.roundabout.killer_queen.grey": "Grey",
   "skins.roundabout.killer_queen.brown": "Brown",
+  "skins.roundabout.killer_queen.samurai": "Samurai",
+  "skins.roundabout.killer_queen.spirit": "Spirit",
 
   "skins.roundabout.diver_down.base": "Part 6",
   "skins.roundabout.diver_down.betadiver": "Beta",
@@ -3092,7 +3101,7 @@
   "skins.roundabout.diver_down.manga": "Manga",
   "skins.roundabout.diver_down.volume_4": "Volume 4",
   "skins.roundabout.diver_down.spine_art": "Spine Art",
-  "skins.roundabout.diver_down.holy_diver": "Holy Diver",
+  "skins.roundabout.diver_down.world_diver": "The World",
 
   "skins.roundabout.20_centuryboy.manga": "Manga",
   "skins.roundabout.20_centuryboy.bedrock": "Bedrock",
@@ -3317,7 +3326,8 @@
   "unlock_skin.roundabout.green_day.silence": "Silence Skin Absorbed",
   "unlock_skin.roundabout.planet_waves_cosmic": "Cosmic Skin Unlocked",
   "unlock_skin.roundabout.killer_queen.minesweeper": "Killer Queen: Minesweeper Skin Unlocked",
-  "unlock_skin.roundabout.diver_down.holy_diver": "Diver Down: Holy Diver Skin Unlocked",
+  "unlock_skin.roundabout.diver_down.scuba_diver": "Diver Down: Scuba Diver Skin Unlocked",
+  "unlock_skin.roundabout.purple_haze.plague": "Purple Haze: Plague Skin Unlocked",
 
   "justice.morph.player": "Player",
   "justice.morph.villager": "Villager",
@@ -3349,7 +3359,7 @@
   "roundabout.diver_affliction.diver_arms": "Diver Arms",
   "roundabout.diver_affliction.diver_arms.desc": "Diver Down replaces the arms of the target. While Diver Down is submerged inside the target, they will gain increased mining speed and faster attack cooldowns.",
   "roundabout.diver_affliction.disguise": "Disguise",
-  "roundabout.diver_affliction.disguise.desc": "Change the bone structure of the current target, disguising them into whatever user you want. You can toggle showing armor on or off, and the move also works on corpses.",
+  "roundabout.diver_affliction.disguise.desc": "Change the bone structure of the current target, disguising them into whatever user you want. You can toggle showing armor on or off, and the move also works on corpses. Using this move again clears the disguise.",
   "roundabout.diver_affliction.embed_potion": "Embed Item",
   "roundabout.diver_affliction.embed_potion.desc": "Use a currently held potion or bucketed mob and embed it directly inside the target. Potions last longer and have their strength increased, while bucketed mobs pacify enemies.",
   "roundabout.diver_affliction.ribcage_trap": "Ribcage Trap",
@@ -3369,6 +3379,7 @@
   "roundabout.pose.jotaro": "Stand Proud",
   "roundabout.pose.jonathan": "The Hero",
   "roundabout.pose.sitting": "Sitting",
+  "roundabout.pose.anasui": "The Diver",
   "roundabout.pose.none": "Strike Pose!",
 
   "roundabout.soft_and_wet_plunder.none": "Plunder",
@@ -4086,6 +4097,8 @@
 
   "config.roundabout.killerQueenCurrentBombConfig.name":"Bomb Config",
   "config.roundabout.killerQueenCurrentBombConfig.desc":"Current Bomb Settings.",
+  "config.roundabout.killerQueenCurrentBombSize.name":"Bomb Explosion Size",
+  "config.roundabout.killerQueenCurrentBombSize.desc":"Current selected explosion size.",
 
 
   "config.roundabout.chessMultOnMobs.name": "Chess Player Dmg Mult",
@@ -4143,6 +4156,8 @@
   "config.roundabout.getMiningTierDiverDown.desc": "Tier 0 is the default, it does not replace tools for harvesting blocks. Tier 1 is wood tier, tier 2 is stone tier, tier 3 is iron tier, and tier 4 is diamond tier.",
   "config.roundabout.customDiverDownWorkbench.name": "Custom Workbench Textures",
   "config.roundabout.customDiverDownWorkbench.desc": "Enables the custom wokrbench textures, disable this if something breaks.",
+  "config.roundabout.forceThirdPersonInGroundDive.name": "Force Third Person in Ground Dive",
+  "config.roundabout.forceThirdPersonInGroundDive.desc": "Automatically switches to third person while in ground dive.",
 
   "config.roundabout.rattAttackBonusOnMobs.name": "Bonus Mob Damage",
   "config.roundabout.rattAttackBonusOnMobs.desc": "How much bonus damage Ratt darts deal to a mob.",
@@ -4675,7 +4690,7 @@
   "config.roundabout.bombOverlayHideOnF1.name": "Bomb Overlays hides on F1",
   "config.roundabout.bombOverlayHideOnF1.desc": "Turn on/off the action of hiding the bomb overlay when pressing F1",
   "config.roundabout.bombConfigFastToggle.name": "Bomb Config fast toggle",
-  "config.roundabout.bombConfigFastToggle.desc": "If you leave bomb config with the mouse hovering a option it will be toggle or press it.",
+  "config.roundabout.bombConfigFastToggle.desc": "If you leave bomb config with the mouse hovering a option it will trigger a click on it.",
   "config.roundabout.blocksDestruction.name": "Blocks Explode",
   "config.roundabout.blocksDestruction.desc": "Turn on/off the action of blocks destruction",
   "config.roundabout.explosionDetonateMaxDamage.name": "Explosion maximum damage",
@@ -4748,8 +4763,8 @@
   "config.roundabout.getMiningTierTheWorld.desc": "Tier 0 is the default, it does not replace tools for harvesting blocks. Tier 1 is wood tier, tier 2 is stone tier, tier 3 is iron tier, and tier 4 is diamond tier.",
   "config.roundabout.oxygenTankAdditionalTicks.name": "Oxygen Tank Ticks",
   "config.roundabout.oxygenTankAdditionalTicks.desc": "How many ticks of oxygen do you want saved in The World's tank? The default, 300, is 15 seconds worth of extra underwater breathing.",
-  "config.roundabout.assaultCooldown.name": "Assault Cooldown",
-  "config.roundabout.assaultCooldown.desc": "After assault hits its target, set the resulting cooldown. (default is 40 ticks or 2 seconds)",
+  "config.roundabout.assaultCooldownv2.name": "Assault Cooldown",
+  "config.roundabout.assaultCooldownv2.desc": "After assault hits its target, set the resulting cooldown. (default is 40 ticks or 2 seconds)",
   "config.roundabout.assaultInterruptCooldown.name": "Assault Interrupt Cooldown",
   "config.roundabout.assaultInterruptCooldown.desc": "If you are hit before assault connects, this cooldown is incurred. (default is 60 ticks or 3 seconds)",
 

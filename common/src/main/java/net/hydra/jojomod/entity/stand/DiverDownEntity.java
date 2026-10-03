@@ -45,8 +45,7 @@ public class DiverDownEntity extends FollowingStandEntity {
             MANGA = 15,
             VOLUME_4 = 16,
             SPINE_ART = 17,
-                    //replace this later with whatever final number it gets
-            HOLY_DIVER = 18;
+            WORLD_DIVER = 18;
 
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState mobDive = new AnimationState();

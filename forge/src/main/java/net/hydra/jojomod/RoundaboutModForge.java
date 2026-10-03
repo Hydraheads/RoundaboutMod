@@ -76,7 +76,10 @@ public class RoundaboutModForge {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event){
-        event.enqueueWork(ForgeNetworkHandler::register);
+        event.enqueueWork(() -> {
+            ForgeNetworkHandler.register();
+            ForgeMenus.initialize();
+        });
     }
 
     @Mod.EventBusSubscriber(modid = Roundabout.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)

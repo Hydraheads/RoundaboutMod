@@ -203,6 +203,17 @@ public class ForgeSounds {
             register(ModSounds.TURNING_ON_LIGHTER, ModSounds.TURNING_ON_LIGHTER_ID);
     public static final RegistryObject<SoundEvent> OPEN_CHEST_EVENT =
             register(ModSounds.OPEN_BLACK_SABBATH_CHEST, ModSounds.OPEN_BLACK_SABBATH_CHEST_ID);
+    public static final RegistryObject<SoundEvent> BLACK_SABBATH_EMERGE_EVENT =
+            register(ModSounds.BLACK_SABBATH_EMERGE, ModSounds.BLACK_SABBATH_EMERGE_ID);
+    public static final RegistryObject<SoundEvent> BLACK_SABBATH_SELECT_ADD_EVENT =
+            register(ModSounds.BLACK_SABBATH_SELECT_ADD, ModSounds.BLACK_SABBATH_SELECT_ADD_ID);
+    public static final RegistryObject<SoundEvent> BLACK_SABBATH_SELECT_REMOVE_EVENT =
+            register(ModSounds.BLACK_SABBATH_SELECT_REMOVE, ModSounds.BLACK_SABBATH_SELECT_REMOVE_ID);
+    public static final RegistryObject<SoundEvent> BLACK_SABBATH_SELECT_CANCEL_EVENT =
+            register(ModSounds.BLACK_SABBATH_SELECT_CANCEL, ModSounds.BLACK_SABBATH_SELECT_CANCEL_ID);
+    public static final RegistryObject<SoundEvent> BLACK_SABBATH_SELECT_CONFIRM_EVENT =
+            register(ModSounds.BLACK_SABBATH_SELECT_CONFIRM, ModSounds.BLACK_SABBATH_SELECT_CONFIRM_ID);
+
 
     public static final RegistryObject<SoundEvent> CENTURY_BOY_SUMMON_EVENT =
             register(ModSounds.CENTURY_BOY_SUMMON, ModSounds.CENTURY_BOY_SUMMON_ID);
@@ -388,6 +399,12 @@ public class ForgeSounds {
         register(ModSounds.BITES_THE_DUST_DAY, ModSounds.BITES_THE_DUST_DAY_ID);
     public static final RegistryObject<SoundEvent> BITES_THE_DUST_ARROW =
         register(ModSounds.BITES_THE_DUST_ARROW, ModSounds.BITES_THE_DUST_ARROW_ID);
+    public static final RegistryObject<SoundEvent> KQ_MOB_PLANT_EVENT =
+        register(ModSounds.KQ_MOB_PLANT, ModSounds.KQ_MOB_PLANT_ID);
+    public static final RegistryObject<SoundEvent> KQ_BLOCK_PLANT_EVENT =
+        register(ModSounds.KQ_BLOCK_PLANT, ModSounds.KQ_BLOCK_PLANT_ID);
+    public static final RegistryObject<SoundEvent> KQ_PLANT_WINDUP_EVENT =
+        register(ModSounds.KQ_PLANT_WINDUP, ModSounds.KQ_PLANT_WINDUP_ID);
 
     public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_PUNCH_1_EVENT =
             register(ModSounds.KQ_MINESWEEPER_PUNCH_1, ModSounds.KQ_MINESWEEPER_PUNCH_1_ID);

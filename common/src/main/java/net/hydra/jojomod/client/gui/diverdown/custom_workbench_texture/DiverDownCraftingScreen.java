@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.gui.diverdown.custom_workbench_texture;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.client.gui.diverdown.custom_workbench_code.DiverDownCraftingMenu;
+import net.hydra.jojomod.menu.diverdown.DiverDownCraftingMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;

@@ -108,6 +108,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.ANUBIS, AnubisRenderer::new);
         EntityRendererRegistry.register(FabricEntities.DIVER_DOWN, DiverDownRenderer::new);
         EntityRendererRegistry.register(FabricEntities.DIVER_DOWN_BETA, DiverDownBetaRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.DIVER_DOWN_WORLD, DiverDownWorldRenderer::new);
         EntityRendererRegistry.register(FabricEntities.DIVER_KICK, DiverKickEntityRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SILVER_CHARIOT, SilverChariotRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SILVER_CHARIOT_RAPIER, SilverChariotRapierRenderer::new);
@@ -218,7 +219,6 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.LEFT_SEPERATED_ARM, LeftSeperatedArmRenderer::new);
         EntityRendererRegistry.register(FabricEntities.LEFT_SEPERATED_ARM_SLIM, LeftSeperatedArmSlimRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SHEER_HEART_ATTACK, SheerHeartAttackRenderer::new);
-        EntityRendererRegistry.register(FabricEntities.SHEER_TEAPOT_ATTACK, SheerTeapotAttackRenderer::new);
 
         EntityRendererRegistry.register(FabricEntities.METALLICA_KNIFE, KnifeRenderer::new);
 
@@ -276,7 +276,6 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.KILLER_QUEEN_BLOCKBOMB, BlockBombModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.STEP_RULE, StepRuleModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SHEER_HEART_ATTACK_LAYER, SheerHeartAttackModel::createBodyLayer);
-        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SHEER_TEAPOT_ATTACK_LAYER, SheerTeapotAttackModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SOFT_AND_WET_KILLER_QUEEN_LAYER, SoftAndWetKillerQueenModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.CINDERELLA_LAYER, CinderellaModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.CALIFORNIA_LAYER, CaliforniaKingBedModel::getTexturedModelData);
@@ -298,6 +297,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ANUBIS, AnubisHumanoidModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DIVER_DOWN_LAYER, DiverDownModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DIVER_DOWN_BETA_LAYER, DiverDownBetaModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DIVER_DOWN_WORLD_LAYER, DiverDownWorldModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SILVER_CHARIOT_LAYER, SilverChariotModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SILVER_CHARIOT_RAPIER_LAYER, SilverChariotRapierModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SILVER_CHARIOT_RAPIER_PLATFORM_LAYER, SilverChariotRapierPlatformModel::createBodyLayer);
