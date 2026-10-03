@@ -10,6 +10,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
+import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.substand.PurpleSmokeEntity;
 import net.hydra.jojomod.event.ModEffects;
@@ -757,6 +758,9 @@ public abstract class HudRendering implements IHudAccess {
                     && (user.roundabout$getStandPowers().getActivePower() == PowerIndex.SPECIAL) ||  user.roundabout$getStandPowers().getActivePower() == PowerIndex.LEAD_IN)) {
 
                 StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha, true, this.getFont());
+                return true;
+            }else if (user.roundabout$getGrabbedSoul() || user.roundabout$getStand() instanceof BlackSabbathEntity){
+                StandHudRender.renderBlockedStandHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha);
                 return true;
             } else if (minecraft.player.getVehicle() != null && minecraft.player.getVehicle() instanceof StandEntity SE && SE.canRestrainWhileMounted()){
 

@@ -103,6 +103,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     public final AnimationState stando = new AnimationState();
     public final AnimationState strafeWalk = new AnimationState();
     public final AnimationState strafeEmerge = new AnimationState();
+    public final AnimationState grabOne = new AnimationState();
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
@@ -134,9 +135,9 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                 }
                                 if (!getThrowable()) {
                                     if(meleeInteractionTicks < 1) {
-                                    this.coat_open.stop();
-
-                                    if ((targetSabbath() != null && !isUnderSunlight(targetSabbath()))) {
+                                        this.grabOne.stop();
+                                        this.coat_open.stop();
+                                        if ((targetSabbath() != null && !isUnderSunlight(targetSabbath()))) {
                                             if (lungeTicks < 10) {
                                                 burningDive.stop();
                                                 diving.startIfStopped(this.tickCount);
@@ -173,7 +174,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                                 emerge.stop();
                                                 catching.stop();
                                             }
-                                    } else {
+                                        } else {
                                         catching.stop();
                                         this.emerge.stop();
                                         coat_open.stop();
@@ -214,14 +215,27 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                     strafeWalk.stop();
                                 } else {
                                         if (this.level().getEntity(this.getGrabbing()) != null) {
-                                            burningDive.stop();
-                                            burningCripple.stop();
-                                            burningStart.stop();
-                                            walk.stop();
-                                            stando.stop();
-                                            diving.stop();
-                                            catching.stop();
-                                            emerge.stop();
+                                            if(meleeInteractionTicks > 20) {
+                                                burningDive.stop();
+                                                burningCripple.stop();
+                                                burningStart.stop();
+                                                walk.stop();
+                                                stando.stop();
+                                                diving.stop();
+                                                catching.stop();
+                                                emerge.stop();
+                                                grabOne.startIfStopped(this.tickCount);
+                                            } else {
+                                                burningDive.stop();
+                                                burningCripple.stop();
+                                                burningStart.stop();
+                                                walk.stop();
+                                                stando.stop();
+                                                diving.stop();
+                                                catching.stop();
+                                                emerge.stop();
+                                                grabOne.stop();
+                                            }
                                         }
                                     }
                             }else {
@@ -280,6 +294,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                     stando.stop();
                                 }
                             } else {
+                                grabOne.stop();
                                 strafeEmerge.stop();
                                 strafeWalk.stop();
                                 catching.stop();
@@ -310,6 +325,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                             this.coat_open.stop();
                             walk.stop();
                             stando.stop();
+                            grabOne.stop();
                             this.chest_close.startIfStopped(this.tickCount);
                         }
                         this.chest_open.stop();
@@ -986,24 +1002,26 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         }
         if(!isBlackSabbathUnderLight()) {
             if (this.targetSabbath() != null) {
-                if (!this.level().isClientSide) {
-                    if (pause >= 1) {
-                        pause--;
-                    }
-                    if (!isBlackSabbathUnderLight()) {
-                        if (isUnderSunlight(targetSabbath())) {
-                            if (pause < 20) {
-                                if (pause < 1) {
-                                    pause = 100;
+                if(meleeInteractionTicks < 1) {
+                    if (!this.level().isClientSide) {
+                        if (pause >= 1) {
+                            pause--;
+                        }
+                        if (!isBlackSabbathUnderLight()) {
+                            if (isUnderSunlight(targetSabbath())) {
+                                if (pause < 20) {
+                                    if (pause < 1) {
+                                        pause = 100;
+                                    }
+                                    moveRandom();
+                                    this.getNavigation().setSpeedModifier(0.65);
                                 }
-                                moveRandom();
-                                this.getNavigation().setSpeedModifier(0.65);
+                            } else {
+                                this.moveToTarget();
                             }
-                        } else {
-                            this.moveToTarget();
                         }
                     }
-                }
+                } else {}
             } else {
                 moveRandom();
                 this.getNavigation().setSpeedModifier(0.65);
@@ -1141,6 +1159,13 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                         if (!isBlackSabbathUnderLight()) {
                                             if (!this.level().isClientSide()) {
                                                 setGrabbing(targetSabbath().getId());
+                                                if(((StandUser)targetSabbath()).roundabout$getStandPowers() != null){
+                                                    if(level().getEntity(getGrabbing()) instanceof LivingEntity e){
+                                                        if(((StandUser)e).roundabout$getStandPowers() != null){
+
+                                                        }
+                                                    }
+                                                }
                                                 if(level().getEntity(getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(true);}
                                                 this.level().playSound(null, this, ModSounds.ARCADE_TIMESTOP_2_EVENT, SoundSource.HOSTILE, 0.95F, 1.0F);
                                             }
@@ -1516,16 +1541,23 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     private void soulGrabbingTick(){
         ItemStack i = this.getHeldItemSabbath();
         Entity le = this.level().getEntity(getGrabbing());
-        int it = this.meleeInteractionTicks;
+        System.out.println(meleeInteractionTicks);
 
-        if(meleeInteractionTicks > 0){
-            if(le instanceof LivingEntity e){
-               if(meleeInteractionTicks > 1){
-                   ((StandUser)e).roundabout$setGrabbedSoul(true);
-               } else {
-                   ((StandUser)e).roundabout$setGrabbedSoul(false);
-               }
+        if(this.getUser() != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pbs){
+        if(meleeInteractionTicks > 0) {
+            if (le instanceof LivingEntity e) {
+                if (targetSabbath() != null && pbs.blackSabbathTargets.contains(e)) {
+                    if (meleeInteractionTicks > 1) {
+                        ((StandUser) e).roundabout$setGrabbedSoul(true);
+                    } else {
+                        ((StandUser) e).roundabout$setGrabbedSoul(false);
+                    }
+                } else {
+                    meleeInteractionTicks = 0;
+                    setGrabbing(0);
+                }
             }
+        }
         }
     }
 
