@@ -28,7 +28,7 @@ import static net.hydra.jojomod.stand.powers.PowersDiverDown.GROUND_DIVE_BARRAGE
 public class DiverDownBaseRenderer extends StandRenderer<DiverDownEntity> {
     public static final ResourceLocation PART_6 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/base.png");
     public static final ResourceLocation BETA_DIVER = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/beta.png");
-    public static final ResourceLocation HOLY_DIVER = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/beta.png");
+    public static final ResourceLocation WORLD_DIVER = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/world.png");
     public static final ResourceLocation KELP = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/kelp.png");
     public static final ResourceLocation GRAY = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/gray_diver.png");
     public static final ResourceLocation WHITE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/white_diver.png");
@@ -62,8 +62,8 @@ public class DiverDownBaseRenderer extends StandRenderer<DiverDownEntity> {
         if (bt == DiverDownEntity.BETA_DIVER) {
             return BETA_DIVER;
         }
-        if (bt == DiverDownEntity.HOLY_DIVER) {
-            return HOLY_DIVER;
+        if (bt == DiverDownEntity.WORLD_DIVER) {
+            return WORLD_DIVER;
         }
         if (bt == DiverDownEntity.KELP) {
             return KELP;

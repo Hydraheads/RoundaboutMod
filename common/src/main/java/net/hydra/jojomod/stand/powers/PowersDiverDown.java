@@ -3678,7 +3678,7 @@ public class PowersDiverDown extends NewPunchingStand {
         if (hasStandEntity(this.self)) {
             StandEntity stand = this.getStandEntity(this.self);
             if (stand != null) {
-                stand.forceDespawn(true);
+                stand.discard();
             }
         }
 
@@ -4850,8 +4850,8 @@ public class PowersDiverDown extends NewPunchingStand {
             case DiverDownEntity.BETA_DIVER -> {
                 return Component.translatable("skins.roundabout.diver_down.betadiver");
             }
-            case DiverDownEntity.HOLY_DIVER -> {
-                return Component.translatable("skins.roundabout.diver_down.holy_diver");
+            case DiverDownEntity.WORLD_DIVER -> {
+                return Component.translatable("skins.roundabout.diver_down.world_diver");
             }
             case DiverDownEntity.KELP -> {
                 return Component.translatable("skins.roundabout.diver_down.kelp");
@@ -4942,12 +4942,13 @@ public class PowersDiverDown extends NewPunchingStand {
             }
             if (Level > 6 || bypass) {
                 l.add(DiverDownEntity.EYECATCH);
-            }
-            if (Level > 7 || bypass) {
                 l.add(DiverDownEntity.ARTWORK);
             }
+            if (Level > 7 || bypass) {
+                l.add(DiverDownEntity.WORLD_DIVER);
+            }
             if (((IPlayerEntity) PE).roundabout$getUnlockedBonusSkin() || bypass) {
-                l.add(DiverDownEntity.HOLY_DIVER);
+                //add scuba diver skin here
             }
         }
 
@@ -4966,13 +4967,14 @@ public class PowersDiverDown extends NewPunchingStand {
                         ipe.roundabout$setUnlockedBonusSkin(true);
                         playSoundIfPossible(self.level(), null, PE.getX(), PE.getY(),
                                 PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
-                        sendParticlesIfPossible(self.level(), ModParticles.WARDEN_CLOCK, PE.getX(),
-                                PE.getY() + PE.getEyeHeight(), PE.getZ(),
-                                7, 0.4, 0.4, 0.4, 0.2);
-                        user.roundabout$setStandSkin(DiverDownEntity.HOLY_DIVER);
+                        sendParticlesIfPossible(self.level(),ParticleTypes.END_ROD, self.getX(),
+                                self.getY() + self.getEyeHeight(), self.getZ(),
+                                10, 0.5, 0.5, 0.5, 0.2);
+                        //uncomment this once added
+                        //user.roundabout$setStandSkin(DiverDownEntity.SCUBA_DIVER);
                         user.roundabout$summonStand(this.getSelf().level(), true, false);
                         ((ServerPlayer) ipe).displayClientMessage(
-                                Component.translatable("unlock_skin.roundabout.diver_down.holy_diver"), true);
+                                Component.translatable("unlock_skin.roundabout.diver_down.scuba_diver"), true);
                     }
                 }
             }
