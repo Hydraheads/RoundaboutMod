@@ -1067,6 +1067,10 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override
     public boolean canInterruptPower(DamageSource sauce, Entity interrupter){
+        if (getActivePower() == BITES_THE_DUST_DAY) {
+            return true;
+        }
+
         if (this.getActivePower() == ITEM_CHARGE || this.getActivePower() == ITEM_HOLDING) {
             StandEntity standEntity = this.getStandEntity(getSelf());
             if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved() &&
@@ -5154,11 +5158,6 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
             }
         }
-    }
-
-    @Override
-    public void onHitGuard(float amt, DamageSource sauce){
-        super.onHitGuard(amt, sauce);
     }
 
     private final float maximunBtdShieldPoints = getNormalMaxGuardPoints() + 2.5f;
