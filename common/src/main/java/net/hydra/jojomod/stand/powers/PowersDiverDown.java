@@ -819,6 +819,12 @@ public class PowersDiverDown extends NewPunchingStand {
                 return true;
             }
         }
+        // block disassembly
+        if (slot == 1 && isHoldingSneak() && !isGuarding() && !areStandMovesDisabled()) {
+            if (!canTargetDisassembleBlock()) {
+                return true;
+            }
+        }
         return super.isAttackIneptVisually(activeP, slot);
     }
 
@@ -4527,11 +4533,14 @@ public class PowersDiverDown extends NewPunchingStand {
         if (targetItem == net.minecraft.world.item.Items.AIR) return false;
 
         // check for recipes
-        // On server side, check the RecipeManager
+        RecipeManager recipeManager = null;
         if (!level.isClientSide() && this.self.getServer() != null) {
-            RecipeManager recipeManager = this.self.getServer().getRecipeManager();
+            recipeManager = this.self.getServer().getRecipeManager();
+        } else if (level.isClientSide() && Minecraft.getInstance().getConnection() != null) {
+            recipeManager = Minecraft.getInstance().getConnection().getRecipeManager();
+        }
 
-            java.util.List<CraftingRecipe> matchingRecipes = new java.util.ArrayList<>();
+        if (recipeManager != null) {java.util.List<CraftingRecipe> matchingRecipes = new java.util.ArrayList<>();
             for (CraftingRecipe recipe : recipeManager.getAllRecipesFor(RecipeType.CRAFTING)) {
                 if (recipe.getResultItem(level.registryAccess()).getItem() == targetItem) {
                     matchingRecipes.add(recipe);
@@ -4560,6 +4569,23 @@ public class PowersDiverDown extends NewPunchingStand {
         }
 
         return true;
+    }
+
+    // sorta like tryDisassembleBlock, except this is only to make the move visually inept.
+    public boolean canTargetDisassembleBlock() {
+        if (this.self == null || this.self.level() == null) return false;
+
+        Vec3 eyePos = this.self.getEyePosition(0);
+        Vec3 viewVec = this.self.getViewVector(0);
+        Vec3 targetVec = eyePos.add(viewVec.x * 6.0, viewVec.y * 6.0, viewVec.z * 6.0);
+
+        BlockHitResult hit = this.self.level().clip(new ClipContext(
+                eyePos, targetVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.self));
+
+        if (hit.getType() == HitResult.Type.BLOCK) {
+            return canDisassembleBlock(hit.getBlockPos());
+        }
+        return false;
     }
 
     //gets the block drops
@@ -4812,6 +4838,7 @@ public class PowersDiverDown extends NewPunchingStand {
             if (isDiveActive()) {
                 emergeServer();
             }
+            setPiloting(0);
         }
         super.onStandSummon(desummon);
     }
