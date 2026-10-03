@@ -3341,6 +3341,7 @@
   "roundabout.pose.jotaro": "Stand Proud",
   "roundabout.pose.jonathan": "The Hero",
   "roundabout.pose.sitting": "Sitting",
+  "roundabout.pose.anasui": "The Diver",
   "roundabout.pose.none": "Strike Pose!",
 
   "roundabout.soft_and_wet_plunder.none": "Plunder",
@@ -4117,6 +4118,8 @@
   "config.roundabout.getMiningTierDiverDown.desc": "Tier 0 is the default, it does not replace tools for harvesting blocks. Tier 1 is wood tier, tier 2 is stone tier, tier 3 is iron tier, and tier 4 is diamond tier.",
   "config.roundabout.customDiverDownWorkbench.name": "Custom Workbench Textures",
   "config.roundabout.customDiverDownWorkbench.desc": "Enables the custom wokrbench textures, disable this if something breaks.",
+  "config.roundabout.forceThirdPersonInGroundDive.name": "Force Third Person in Ground Dive",
+  "config.roundabout.forceThirdPersonInGroundDive.desc": "Automatically switches to third person while in ground dive.",
 
   "config.roundabout.rattAttackBonusOnMobs.name": "Bonus Mob Damage",
   "config.roundabout.rattAttackBonusOnMobs.desc": "How much bonus damage Ratt darts deal to a mob.",
