@@ -2581,7 +2581,9 @@ public class PowersKillerQueen extends NewPunchingStand {
                 self.level().addFreshEntity(stray);
 
                 hasStrayCat = false;
+                strayCatData = null;
                 syncCanStrayCatStatus(false);
+
                 this.saveDiscAndSync();
             }
         }
