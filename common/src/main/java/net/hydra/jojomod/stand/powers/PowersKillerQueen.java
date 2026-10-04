@@ -145,6 +145,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         BOMB_SIZE = 77,
         BTD_ACTIVATIONS = 78,
         BTD_TICKS_DESACTIVATED = 79,
+        REMOVE_STRAY_CAT = 80,
 
     // COOLDOWN INDEXES
         BUBBLE_SEND_COOLDOWN = PowerIndex.SKILL_4_SNEAK,
@@ -265,7 +266,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public void syncCanStrayCatStatus(boolean strayCat) {
-        byte status = (byte) (strayCat ? 1 : 0);
+        int status = (strayCat ? 1 : 0);
 
         this.updatePowerInt(PowersKillerQueen.STRAY_CAT, status);
         if (this.getSelf() instanceof Player) {
@@ -314,13 +315,17 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public int plantInventorySlot=1;
 
-	private boolean hasStrayCat = false;
+	public boolean hasStrayCat = false;
     private CompoundTag strayCatData = null;
 
     public boolean canUseStrayCat() {
         return this.hasStrayCat
                 || (((StandUser) self).roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem)
                 || (self instanceof Player PL && PL.isCreative());
+    }
+
+    public void removeStrayCatClient() {
+        tryPowerPacket(REMOVE_STRAY_CAT);
     }
 
 
@@ -493,6 +498,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     static final String strayCatTag = "strayCatData";/// Old stray cat save system
     static final String strayCatBreed = "breed";
     static final String strayCatCustomName = "customName";
+    static final String strayCatItemTag = "itemTagInfo";
     //static final String strayCatPotted = "potted";
     static final String BitesTheDustTag = "hasBTD";
 
@@ -1753,6 +1759,13 @@ public class PowersKillerQueen extends NewPunchingStand {
     public boolean tryPower(int move, boolean forced) {
         if (move == BITES_THE_DUST_DEFUSE) { btdTicksMax = 0; }
 
+        if (move == REMOVE_STRAY_CAT) {
+            if (hasStrayCat) {
+                removeStrayCat();
+            }
+        }
+
+
         if (!this.getSelf().level().isClientSide && (this.getActivePower() == PowerIndex.POWER_2 || this.getActivePower() == BITES_THE_DUST_DAY)) {
             this.stopSoundsIfNearby(MOB_PLANT_WINDUP, 100,true);
         }
@@ -1895,9 +1908,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
             }
             case PowersKillerQueen.STRAY_CAT-> {
-                if (data == 1) {
-                    this.hasStrayCat = true;
-                }
+                this.hasStrayCat = data == 1;
             }
             case PowersKillerQueen.BTD_POWER-> {
                 if (data == 1) {
@@ -2475,11 +2486,14 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if (StrayCatForSure.isTame() && !dontOwn && !this.hasStrayCat) {
                     this.hasStrayCat = true;
                     CompoundTag data = new CompoundTag();
-                    data.putByte(strayCatBreed, StrayCatForSure.getBreed());
+                    /*data.putByte(strayCatBreed, StrayCatForSure.getBreed());
                     //data.putBoolean(strayCatPotted, StrayCatForSure.getPotted());
                     if (StrayCatForSure.hasCustomName()) {
                         data.putString(strayCatCustomName, StrayCatForSure.getCustomName().getString());
-                    }
+                    }*/
+
+                    StrayCatItem.getCompoundTagSave(data, StrayCatForSure);
+
                     strayCatData = data;
                     syncCanStrayCatStatus(true);
                     this.saveDiscAndSync();
@@ -2496,8 +2510,10 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (item.getItem() instanceof StrayCatItem) {
                 dontOwn = !(item.hasTag() && StrayCatItem.validateStrayCatOwner(item, self));
                 if (!dontOwn) {
-                    CompoundTag itemTag = item.getTag();
                     CompoundTag data = new CompoundTag();
+                    StrayCatItem.getCompoundTagSave(data, item);
+                    /*
+                    CompoundTag itemTag = item.getTag();
                     if (itemTag.contains(StrayCatItem.SKIN_TAG)) {
                         data.putByte(strayCatBreed, itemTag.getByte(StrayCatItem.SKIN_TAG));
                     }
@@ -2505,17 +2521,15 @@ public class PowersKillerQueen extends NewPunchingStand {
                     if (item.hasCustomHoverName()) {
                         data.putString(strayCatCustomName, item.getHoverName().getString());
                     }
+                    */
 
                     strayCatData = data;
                     hasStrayCat = true;
 
-
-
                     if (!PL.getAbilities().instabuild) {
                         item.shrink(1);
                     }
-
-                    this.hasStrayCat = true;
+                    syncCanStrayCatStatus(true);
                     this.saveDiscAndSync();
 
                     playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.KILLER_QUEEN_BTD_PLANTED_EVENT, SoundSource.PLAYERS, 0.75F, 1.0f);
@@ -2529,6 +2543,48 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
         
         return this.canAddStrayCatto();
+    }
+
+    public void removeStrayCat() {
+        if (strayCatData != null) {
+            StrayCatEntity stray = ModEntities.STRAY_CAT.create(self.level());
+            if (stray != null) {
+
+                /*if (tag.contains(NEW_DATA_SAVE)) {
+                    stray.readAdditionalSaveData(tag.getCompound(NEW_DATA_SAVE));
+                }*/
+
+                if (strayCatData.contains(StrayCatItem.OWNER_UUID_TAG)) {
+                    stray.setOwnerUUID(strayCatData.getUUID(StrayCatItem.OWNER_UUID_TAG));
+                    stray.setTame(true);
+                }
+                if (strayCatData.contains(StrayCatItem.HEALTH_TAG)) {
+                    stray.setHealth(strayCatData.getFloat(StrayCatItem.HEALTH_TAG));
+                }
+                if (strayCatData.contains(StrayCatItem.SKIN_TAG)) {
+                    stray.setBreed(strayCatData.getByte(StrayCatItem.SKIN_TAG));
+                }
+                //stray.setBreed(breed);
+
+                if (strayCatData.contains(StrayCatItem.CUSTOM_NAME, 8)) {
+                    String string = strayCatData.getString(StrayCatItem.CUSTOM_NAME);
+                    try {
+                        stray.setCustomName(Component.Serializer.fromJson(string));
+                    } catch (Exception exception) {
+                        //LOGGER.warn("Failed to parse entity custom name {}", (Object)string, (Object)exception);
+                    }
+                }
+
+                stray.setPotted(true);
+
+                stray.moveTo(self.getPosition(1).x, self.getPosition(1).y, self.getPosition(1).z, self.getYRot(), 0.0F);
+                self.level().addFreshEntity(stray);
+
+                hasStrayCat = false;
+                syncCanStrayCatStatus(false);
+                this.saveDiscAndSync();
+            }
+        }
     }
 
     @Override
