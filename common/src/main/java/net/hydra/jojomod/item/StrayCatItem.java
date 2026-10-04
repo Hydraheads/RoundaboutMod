@@ -9,6 +9,7 @@ import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -41,6 +42,8 @@ public class StrayCatItem extends Item {
     public static final String OWNER_UUID_TAG = "owner";
     public static final String SKIN_TAG = "skin";
     public static final String HEALTH_TAG = "health";
+    public static final String CUSTOM_NAME = "custom_name";
+    public static final String NEW_DATA_SAVE = "ENTITY_INFO";
 
     private static final float SPEED = 0.4f;
     public byte getBubbleSkin() {
@@ -56,17 +59,56 @@ public class StrayCatItem extends Item {
         CompoundTag tag = stack.getOrCreateTag();
         //tag.putString(NAME_TAG, stray.get);
 
-        if (stray.isTame() && stray.getOwnerUUID() != null) {
+        getCompoundTagSave(tag, stray);
+
+        /*if (stray.isTame() && stray.getOwnerUUID() != null) {
             tag.putUUID(OWNER_UUID_TAG, stray.getOwnerUUID());
             tag.putByte(SKIN_TAG, stray.getBreed());
         }
         tag.putFloat(HEALTH_TAG, stray.getHealth());
-
+        */
         if (stray.hasCustomName()) {
             stack.setHoverName(stray.getCustomName());
         }
 
         stack.setTag(tag);
+    }
+
+    static public void getCompoundTagSave(CompoundTag tag, StrayCatEntity stray) {
+
+        if (stray.isTame() && stray.getOwnerUUID() != null) {
+            tag.putUUID(OWNER_UUID_TAG, stray.getOwnerUUID());
+            tag.putByte(SKIN_TAG, stray.getBreed());
+        }
+        tag.putFloat(HEALTH_TAG, stray.getHealth());
+        if (stray.getCustomName() != null) {
+            tag.putString(CUSTOM_NAME, Component.Serializer.toJson(stray.getCustomName()));
+        }
+
+        /*CompoundTag entityData = new CompoundTag();
+        stray.addAdditionalSaveData(entityData);
+
+        tag.put(NEW_DATA_SAVE, entityData);*/
+    }
+
+    static public void getCompoundTagSave(CompoundTag tag, ItemStack stray) {
+
+        if (stray.hasTag()) {
+            CompoundTag itag = stray.getTag();
+            if (itag.contains(OWNER_UUID_TAG)) {
+                tag.putUUID(OWNER_UUID_TAG, itag.getUUID(OWNER_UUID_TAG));
+            }
+            if (itag.contains(SKIN_TAG)) {
+                tag.putByte(SKIN_TAG, itag.getByte(SKIN_TAG));
+            }
+            if (itag.contains(HEALTH_TAG)) {
+                tag.putFloat(HEALTH_TAG, itag.getFloat(HEALTH_TAG));
+            }
+        }
+        /*CompoundTag entityData = new CompoundTag();
+        stray.addAdditionalSaveData(entityData);
+
+        tag.put(NEW_DATA_SAVE, entityData);*/
     }
 
 
@@ -148,6 +190,11 @@ public class StrayCatItem extends Item {
             if (stray != null) {
                 ItemStack item = context.getItemInHand();
                 CompoundTag tag = item.getOrCreateTag();
+
+                /*if (tag.contains(NEW_DATA_SAVE)) {
+                    stray.readAdditionalSaveData(tag.getCompound(NEW_DATA_SAVE));
+                }*/
+
                 if (tag.contains(OWNER_UUID_TAG)) {
                     stray.setOwnerUUID(tag.getUUID(OWNER_UUID_TAG));
                     stray.setTame(true);

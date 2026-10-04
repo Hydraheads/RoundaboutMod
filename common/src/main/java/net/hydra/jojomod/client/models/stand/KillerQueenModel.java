@@ -344,8 +344,7 @@ public class KillerQueenModel<T extends KillerQueenEntity> extends StandModel<T>
 		this.animate(pEntity.blockPlant, KillerQueenAnimations.BombPlant, pAgeInTicks, 1.4F);
 		this.animate(pEntity.itemGrab, KillerQueenAnimations.Item_Grab, pAgeInTicks, 1F);
 		this.animate(pEntity.itemThrow, StandAnimations.THROW_ITEM, pAgeInTicks, 1F);
-		this.animate(pEntity.detonate, KillerQueenAnimations.detonate, pAgeInTicks, 1F);
-		this.animate(pEntity.thirdBomb, KillerQueenAnimations.TertiaryBomb, pAgeInTicks, 1F);
+		this.animate(pEntity.detonate, KillerQueenAnimations.detonate, pAgeInTicks, 1.5F);
 		this.animate(pEntity.mobBombPlant, KillerQueenAnimations.FirstBombTouchMob,   pAgeInTicks, (1/(Math.max(0.1f, (float) (PowersKillerQueen.getMobPlantWindup()) / 60))));
 		this.animate(pEntity.mobBombPlant2, KillerQueenAnimations.FirstBombTouchMob2, pAgeInTicks, (1/(Math.max(0.1f, (float) (PowersKillerQueen.getMobPlantWindup()) / 60))));
 		this.animate(pEntity.bubbleLaunch, KillerQueenAnimations.bubble_launch, pAgeInTicks, 0.9F);
