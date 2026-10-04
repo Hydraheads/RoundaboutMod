@@ -457,6 +457,7 @@ public class ForgeEvents {
         ModItems.STAND_DISC_PEARL_JAM = ForgeItems.STAND_DISC_PEARL_JAM.get();
 
         ModItems.STAND_DISC_CINDERELLA = ForgeItems.STAND_DISC_CINDERELLA.get();
+        ModItems.STAND_DISC_KHNUM = ForgeItems.STAND_DISC_KHNUM.get();
         ModItems.STAND_DISC_CALIFORNIA_KING_BED = ForgeItems.STAND_DISC_CALIFORNIA_KING_BED.get();
         ModItems.STAND_DISC_MANHATTAN_TRANSFER = ForgeItems.STAND_DISC_MANHATTAN_TRANSFER.get();
         ModItems.STAND_DISC_BLACK_SABBATH = ForgeItems.STAND_DISC_BLACK_SABBATH.get();
