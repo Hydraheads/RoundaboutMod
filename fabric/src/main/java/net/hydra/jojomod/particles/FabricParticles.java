@@ -17,6 +17,9 @@ public class FabricParticles {
     public static final SimpleParticleType PUNCH_IMPACT_B = FabricParticleTypes.simple();
     public static final SimpleParticleType PUNCH_IMPACT_C = FabricParticleTypes.simple();
     public static final SimpleParticleType DISC_STEAL_HIT = FabricParticleTypes.simple();
+    public static final SimpleParticleType GOLD_PUNCH_IMPACT_A = FabricParticleTypes.simple();
+    public static final SimpleParticleType GOLD_PUNCH_IMPACT_B = FabricParticleTypes.simple();
+    public static final SimpleParticleType GOLD_PUNCH_IMPACT_C = FabricParticleTypes.simple();
     public static final SimpleParticleType MELTING = FabricParticleTypes.simple();
     public static final SimpleParticleType BLOOD = FabricParticleTypes.simple();
     public static final SimpleParticleType POINTER = FabricParticleTypes.simple();
@@ -135,6 +138,9 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("punch_impact_b"), PUNCH_IMPACT_B);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("punch_impact_c"), PUNCH_IMPACT_C);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("disc_steal_hit"), DISC_STEAL_HIT);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("gold_punch_impact_a"), GOLD_PUNCH_IMPACT_A);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("gold_punch_impact_b"), GOLD_PUNCH_IMPACT_B);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("gold_punch_impact_c"), GOLD_PUNCH_IMPACT_C);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("melting"), MELTING);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("blood"), BLOOD);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("pointer"), POINTER);
@@ -247,6 +253,9 @@ public class FabricParticles {
         ModParticles.PUNCH_IMPACT_B = PUNCH_IMPACT_B;
         ModParticles.PUNCH_IMPACT_C = PUNCH_IMPACT_C;
         ModParticles.DISC_STEAL_HIT = DISC_STEAL_HIT;
+        ModParticles.GOLD_PUNCH_IMPACT_A = GOLD_PUNCH_IMPACT_A;
+        ModParticles.GOLD_PUNCH_IMPACT_B = GOLD_PUNCH_IMPACT_B;
+        ModParticles.GOLD_PUNCH_IMPACT_C = GOLD_PUNCH_IMPACT_C;
         ModParticles.PUNCH_MISS = PUNCH_MISS;
         ModParticles.VACUUM = VACUUM;
         ModParticles.STAR = STAR;
