@@ -35,6 +35,7 @@ public class DiverLegsLayer<T extends LivingEntity, A extends HumanoidModel<T>> 
         this.defaultLegs = bakeDiverLegs(context, ModEntityRendererClient.DIVER_DOWN_LAYER);
         this.skinLegModels.put((byte) 0, this.defaultLegs);
         this.skinLegModels.put(DiverDownEntity.BETA_DIVER, bakeDiverLegs(context, ModEntityRendererClient.DIVER_DOWN_BETA_LAYER));
+        this.skinLegModels.put(DiverDownEntity.WORLD_DIVER, bakeDiverLegs(context, ModEntityRendererClient.DIVER_DOWN_WORLD_LAYER));
         // In the future, follow this template to add more
         // this.skinLegModels.put(DiverDownEntity.[MODEL_NAME], bakeDiverLegs(context, ModEntityRendererClient.[MODEL_NAME]_LAYER));
     }

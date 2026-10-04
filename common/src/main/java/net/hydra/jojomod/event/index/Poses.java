@@ -16,6 +16,7 @@ public enum Poses {
     WAMUU((byte) 7,PoseAnimations.Wamuu),
     JOTARO((byte) 8, PoseAnimations.JOTARO),
     JONATHAN((byte) 9, PoseAnimations.Jonathan),
+    ANASUI((byte) 38, PoseAnimations.Anasui),
 
     WATCH((byte) 10, PoseAnimations.watch),
     SITTING((byte) 11, PoseAnimations.SITTING),
@@ -79,6 +80,8 @@ public enum Poses {
             return JOTARO;
         } if (bt== JONATHAN.id){
             return JONATHAN;
+        } if (bt== ANASUI.id){
+            return ANASUI;
         } if (bt== WATCH.id){
             return WATCH;
         } if (bt== SITTING.id) {
@@ -159,6 +162,8 @@ public enum Poses {
             emote = Poses.JOTARO.ad;
         } else if (Poses.JONATHAN.id == poseEmote) {
             emote = Poses.JONATHAN.ad;
+        } else if (Poses.ANASUI.id == poseEmote) {
+            emote = Poses.ANASUI.ad;
         } else if (Poses.WATCH.id == poseEmote) {
             emote = Poses.WATCH.ad;
         } else if (Poses.SITTING.id == poseEmote) {

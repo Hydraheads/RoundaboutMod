@@ -236,7 +236,7 @@ public class ClientConfig implements Cloneable {
     	@BooleanOption(group = "inherit", value = true)
         public Boolean bombOverlayHideOnF1;
         @BooleanOption(group = "inherit", value = true)
-        public Boolean bombConfigTogglesOnLeave;
+        public Boolean bombConfigFastToggle;
     }
     public static class WhitesnakeSettings {
         @BooleanOption(group = "inherit", value = false)
@@ -247,6 +247,8 @@ public class ClientConfig implements Cloneable {
     public static class DiverDownSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean customDiverDownWorkbench;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean forceThirdPersonInGroundDive;
     }
     public static class AnubisSettings {
         @BooleanOption(group = "inherit", value = false)

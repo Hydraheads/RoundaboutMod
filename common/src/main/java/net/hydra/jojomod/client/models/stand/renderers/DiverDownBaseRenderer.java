@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.DiverDownEntity;
@@ -21,10 +22,13 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
+import static net.hydra.jojomod.entity.stand.DiverDownEntity.TRANSFER;
+import static net.hydra.jojomod.stand.powers.PowersDiverDown.GROUND_DIVE_BARRAGE;
+
 public class DiverDownBaseRenderer extends StandRenderer<DiverDownEntity> {
     public static final ResourceLocation PART_6 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/base.png");
     public static final ResourceLocation BETA_DIVER = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/beta.png");
-    public static final ResourceLocation HOLY_DIVER = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/beta.png");
+    public static final ResourceLocation WORLD_DIVER = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/world.png");
     public static final ResourceLocation KELP = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/kelp.png");
     public static final ResourceLocation GRAY = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/gray_diver.png");
     public static final ResourceLocation WHITE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/white_diver.png");
@@ -39,6 +43,16 @@ public class DiverDownBaseRenderer extends StandRenderer<DiverDownEntity> {
     public static final ResourceLocation EYECATCH = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/eyecatch.png");
     public static final ResourceLocation ARTWORK = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/artwork.png");
     public static final ResourceLocation MANGA = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/manga.png");
+    public static final ResourceLocation VOLUME_4 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/volume_4.png");
+    public static final ResourceLocation SPINE_ART = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/spine_art.png");
+
+    /*UPDATE THE FOLLOWING FILES AS WELL WHENEVER ADDING NEW MODELS:
+    DiverKickEntityRenderer
+    DiverLimbBlockEntityRenderer
+    DiverLegsLayer
+    DiverArmsLayer
+    getNewStandEntity() in PowersDiverDown
+    */
 
     public DiverDownBaseRenderer(EntityRendererProvider.Context context, StandModel<DiverDownEntity> entityModel, float f) {
         super(context, entityModel, f);
@@ -49,8 +63,8 @@ public class DiverDownBaseRenderer extends StandRenderer<DiverDownEntity> {
         if (bt == DiverDownEntity.BETA_DIVER) {
             return BETA_DIVER;
         }
-        if (bt == DiverDownEntity.HOLY_DIVER) {
-            return HOLY_DIVER;
+        if (bt == DiverDownEntity.WORLD_DIVER) {
+            return WORLD_DIVER;
         }
         if (bt == DiverDownEntity.KELP) {
             return KELP;
@@ -94,6 +108,12 @@ public class DiverDownBaseRenderer extends StandRenderer<DiverDownEntity> {
         if (bt == DiverDownEntity.MANGA) {
             return MANGA;
         }
+        if (bt == DiverDownEntity.SPINE_ART) {
+            return SPINE_ART;
+        }
+        if (bt == DiverDownEntity.VOLUME_4) {
+            return VOLUME_4;
+        }
         return PART_6;
     }
 
@@ -101,10 +121,22 @@ public class DiverDownBaseRenderer extends StandRenderer<DiverDownEntity> {
     public void render(DiverDownEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         if (!mobEntity.getDisplay()
                 && mobEntity.getUser() instanceof StandUser su
-                && su.roundabout$getStandPowers() instanceof PowersDiverDown dd
-                && dd.isPiloting()
-                && (PowersDiverDown.MAX_DIVE_TICKS - dd.diveTicksLeft > 3)) {
-            return;
+                && su.roundabout$getStandPowers() instanceof PowersDiverDown dd) {
+
+            // Hide while ground piloting (except during ground barrage)
+            if (mobEntity.getUser() instanceof IPlayerEntity player && player.roundabout$getControlling() == mobEntity.getId()) {
+                if (mobEntity.getAnimation() != DiverDownEntity.GROUND_BARRAGE && mobEntity.getAnimation() != DiverDownEntity.CHEST_RUMMAGE) {
+                    if (mobEntity.getAnimation() != DiverDownEntity.GROUND_DIVE ||
+                            (mobEntity.groundDive.isStarted() && mobEntity.groundDive.getAccumulatedTime() >= 333L)) {
+                        return;
+                    }
+                }
+            }
+
+            // Hide while submerged inside a mob
+            if (mobEntity.isSubmerged()) {
+                return;
+            }
         }
 
         float factor = 1;

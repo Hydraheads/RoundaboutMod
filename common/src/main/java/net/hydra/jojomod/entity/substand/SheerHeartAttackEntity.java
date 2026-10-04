@@ -156,6 +156,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	public final AnimationState idle = new AnimationState();
 	public final AnimationState moving = new AnimationState();
 	public final AnimationState hideTorch = new AnimationState();
+	public final AnimationState lowerTorch = new AnimationState();
 
 	int tickTargetFindCount = 0;
 	static final int tickTargetFindMax = 2;
@@ -265,6 +266,16 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		if (getTorchStatus()) {
 			hideTorch.stop();
+			LivingEntity user = getUser();
+			if (user != null && ((StandUser)user).roundabout$getStandPowers() instanceof PowersKillerQueen) {
+				byte BT = ((StandUser) user).roundabout$getStandSkin();
+				if (BT == KillerQueenEntity.SAMURAI || BT == KillerQueenEntity.SPIRIT) {
+					lowerTorch.stop();
+				}else{
+					lowerTorch.startIfStopped(tickCount);
+				}
+			}
+
 		}else {
 			hideTorch.startIfStopped(this.tickCount);
 		}
@@ -417,12 +428,12 @@ public class SheerHeartAttackEntity extends StandEntity {
 									if (user instanceof Player && ((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ) {
 										KQ.levelupDamageMod(KQ.multiplyPowerByStandConfigPlayers(0.25f));
 									}
-									LE.hurt(dmg, 0.25f);
+									LE.hurt(dmg, 1.25f);
 								}else {
 									if (user instanceof Player && ((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ) {
 										KQ.levelupDamageMod(KQ.multiplyPowerByStandConfigMobs(0.35f));
 									}
-									LE.hurt(dmg, 0.35f);
+									LE.hurt(dmg, 2.35f);
 								}
 							}
 						}
@@ -666,7 +677,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		float range = explosionRadius;
 		float cap = 45;
 		if (warm > cap) {
-			range += Math.min(2.25f * ((warm - cap) / 40), 3.25f);
+			range += Math.min(2.55f * ((warm - cap) / 40), 3.05f);
 		}
 
 		return range;
@@ -687,7 +698,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		ExplosionUtil.explosionHurtWithMulti(pos, dmg, this.level(), damage, 0.3f, range,
 				KQ.multiplyPowerByStandConfigMobs(1.3f), KQ.multiplyPowerByStandConfigPlayers(1.0f));
 
-		ExplosionUtil.explodeEffects(pos, this.level(), KQ.getExplosionParticle(), new Vec3(range*0.4f, range*0.5f, range*0.4f), 18);
+		ExplosionUtil.explodeEffects(pos, this.level(), KQ.getExplosionParticle(), new Vec3(range*0.4f, range*0.5f, range*0.4f), (int)(14*range));
 
 		this.level().playSound(null, this.blockPosition(), KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
 
@@ -730,7 +741,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			ExplosionUtil.explosionHurt(this.blockTarget.getCenter(), dmg, this.level(),
 					ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage, 0.3f, range);
 
-			ExplosionUtil.explodeEffects(this.blockTarget.getCenter(), this.level(), KQ.getExplosionParticle(), new Vec3(range*0.4f, range*0.5f, range*0.4f), 8);
+			ExplosionUtil.explodeEffects(this.blockTarget.getCenter(), this.level(), KQ.getExplosionParticle(), new Vec3(range*0.4f, range*0.5f, range*0.4f), (int)(12*range));
 			level().playSound(null, this.blockTarget, KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
 
 			if (ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction &&
@@ -978,11 +989,16 @@ public class SheerHeartAttackEntity extends StandEntity {
 			}
 		}
 
-		if ((target instanceof TamableAnimal TM && TM.getOwner() == Owner)
-				|| target.isAlliedTo(Owner)) {
+		if (target.isAlliedTo(Owner)) {
 			return true;
 		}
 
+		if (target instanceof LivingEntity LE && Owner instanceof LivingEntity LE2) {
+
+            return (LE instanceof TamableAnimal TM && TM.isOwnedBy(LE2))
+                    || ((LE2 instanceof TamableAnimal TM1) && (TM1.isOwnedBy(LE)));
+
+		}
 		return false;
 	}
 

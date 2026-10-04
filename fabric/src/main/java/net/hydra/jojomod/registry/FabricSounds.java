@@ -67,6 +67,12 @@ public class FabricSounds {
         addSound(ModSounds.OVA_PLATINUM_ORA_3_ID, ModSounds.OVA_PLATINUM_ORA_3_EVENT);
         addSound(ModSounds.OVA_PLATINUM_ORA_4_ID, ModSounds.OVA_PLATINUM_ORA_4_EVENT);
         addSound(ModSounds.DSP_SUMMON_ID, ModSounds.DSP_SUMMON_EVENT);
+        addSound(ModSounds.J_ANUBIS_HIT_1_ID, ModSounds.J_ANUBIS_HIT_1_EVENT);
+        addSound(ModSounds.J_ANUBIS_HIT_2_ID, ModSounds.J_ANUBIS_HIT_2_EVENT);
+        addSound(ModSounds.J_ANUBIS_HIT_3_ID, ModSounds.J_ANUBIS_HIT_3_EVENT);
+        addSound(ModSounds.J_ANUBIS_MISS_1_ID, ModSounds.J_ANUBIS_MISS_1_EVENT);
+        addSound(ModSounds.J_ANUBIS_MISS_2_ID, ModSounds.J_ANUBIS_MISS_2_EVENT);
+        addSound(ModSounds.J_ANUBIS_MISS_3_ID, ModSounds.J_ANUBIS_MISS_3_EVENT);
         addSound(ModSounds.SUMMON_D4C_ID, ModSounds.SUMMON_D4C_EVENT);
         addSound(ModSounds.D4C_CLONE_ID, ModSounds.D4C_CLONE_EVENT);
         addSound(ModSounds.SPECIAL_CHEST_ID, ModSounds.SPECIAL_CHEST_EVENT);
@@ -296,6 +302,11 @@ public class FabricSounds {
         addSound(ModSounds.BLACK_SABBATH_SUMMON_ID, ModSounds.BLACK_SABBATH_SUMMON_EVENT);
         addSound(ModSounds.OPEN_BLACK_SABBATH_CHEST_ID, ModSounds.OPEN_BLACK_SABBATH_CHEST_EVENT);
         addSound(ModSounds.TURNING_ON_LIGHTER_ID, ModSounds.TURNING_ON_LIGHTER_EVENT);
+        addSound(ModSounds.BLACK_SABBATH_SELECT_ADD_ID, ModSounds.BLACK_SABBATH_SELECT_ADD_EVENT);
+        addSound(ModSounds.BLACK_SABBATH_EMERGE_ID, ModSounds.BLACK_SABBATH_EMERGE_EVENT);
+        addSound(ModSounds.BLACK_SABBATH_SELECT_REMOVE_ID, ModSounds.BLACK_SABBATH_SELECT_REMOVE_EVENT);
+        addSound(ModSounds.BLACK_SABBATH_SELECT_CANCEL_ID, ModSounds.BLACK_SABBATH_SELECT_CANCEL_EVENT);
+        addSound(ModSounds.BLACK_SABBATH_SELECT_CONFIRM_ID, ModSounds.BLACK_SABBATH_SELECT_CONFIRM_EVENT);
 
         addSound(ModSounds.CENTURY_BOY_SUMMON_ID, ModSounds.CENTURY_BOY_SUMMON_EVENT);
         addSound(ModSounds.CENTURY_BOY_HIT_ID, ModSounds.CENTURY_BOY_HIT_EVENT);
@@ -416,12 +427,25 @@ public class FabricSounds {
         addSound(ModSounds.BITES_THE_DUST_ARROW_ID, ModSounds.BITES_THE_DUST_ARROW_EVENT);
         addSound(ModSounds.BITES_THE_DUST_COMBAT_ID, ModSounds.BITES_THE_DUST_COMBAT_EVENT);
         addSound(ModSounds.BITES_THE_DUST_DAY_ID, ModSounds.BITES_THE_DUST_DAY_EVENT);
+        addSound(ModSounds.KQ_PLANT_WINDUP_ID, ModSounds.KQ_PLANT_WINDUP_EVENT);
+        addSound(ModSounds.KQ_MOB_PLANT_ID, ModSounds.KQ_MOB_PLANT_EVENT);
+        addSound(ModSounds.KQ_BLOCK_PLANT_ID, ModSounds.KQ_BLOCK_PLANT_EVENT);
 
         addSound(ModSounds.STRAY_CAT_BUBBLE_POP_ID, ModSounds.STRAY_CAT_BUBBLE_POP_EVENT);
         addSound(ModSounds.STRAY_CAT_BUBBLE_SOUND_1_ID, ModSounds.STRAY_CAT_BUBBLE_SOUND_1_EVENT);
         addSound(ModSounds.STRAY_CAT_BUBBLE_SOUND_2_ID, ModSounds.STRAY_CAT_BUBBLE_SOUND_2_EVENT);
         addSound(ModSounds.STRAY_CAT_BUBBLE_REDIRECT_1_ID, ModSounds.STRAY_CAT_BUBBLE_REDIRECT_1_EVENT);
         addSound(ModSounds.STRAY_CAT_BUBBLE_REDIRECT_2_ID, ModSounds.STRAY_CAT_BUBBLE_REDIRECT_2_EVENT);
+        addSound(ModSounds.KQ_SAMURAI_MOB_PLANT_ID, ModSounds.KQ_SAMURAI_MOB_PLANT_EVENT);
+        addSound(ModSounds.KQ_SAMURAI_BLOCK_PLANT_ID, ModSounds.KQ_SAMURAI_BLOCK_PLANT_EVENT);
+        addSound(ModSounds.KQ_SAMURAI_SUMMON_ID, ModSounds.KQ_SAMURAI_SUMMON_EVENT);
+        addSound(ModSounds.KQ_SAMURAI_BTD_NOISE_ID, ModSounds.KQ_SAMURAI_BTD_NOISE_EVENT);
+        addSound(ModSounds.KQ_SAMURAI_STAB_ID, ModSounds.KQ_SAMURAI_STAB_EVENT);
+        addSound(ModSounds.KQ_SAMURAI_SLASH_ID, ModSounds.KQ_SAMURAI_SLASH_EVENT);
+        addSound(ModSounds.KQ_SAMURAI_WHOOSH_1_ID, ModSounds.KQ_SAMURAI_WHOOSH_1_EVENT);
+        addSound(ModSounds.KQ_SAMURAI_WHOOSH_2_ID, ModSounds.KQ_SAMURAI_WHOOSH_2_EVENT);
+        addSound(ModSounds.KQ_SAMURAI_TEAPOT_ID, ModSounds.KQ_SAMURAI_TEAPOT_EVENT);
+        addSound(ModSounds.KQ_SAMURAI_SHEATHE_ID, ModSounds.KQ_SAMURAI_SHEATHE_EVENT);
 
         addSound(ModSounds.KIRA4_DAMAGE_1_ID, ModSounds.KIRA4_DAMAGE_1_EVENT);
         addSound(ModSounds.KIRA4_DAMAGE_2_ID, ModSounds.KIRA4_DAMAGE_2_EVENT);

@@ -15,8 +15,7 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.item.FancyLighterItem;
-import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
@@ -46,12 +45,15 @@ import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.material.LavaFluid;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.apache.logging.log4j.core.pattern.AbstractStyleNameConverter;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -67,7 +69,8 @@ public class PowersBlackSabbath extends NewDashPreset {
     CLIENT_SYNC_TARGET_LIGHTER = 102,
     CLIENT_SYNC_REMOVE_TARGET = 103,
     CLIENT_SYNC_REMOVE_TARGET_LIST = 104,
-    C2S_SYNC_DESTROY_LIST = 105;
+    C2S_SYNC_DESTROY_LIST = 105,
+    S2C_CLOSE_CHEST = 106;
 
     public int moveMode = 0;
     public int tickBeforeHunt = -1;
@@ -92,12 +95,6 @@ public class PowersBlackSabbath extends NewDashPreset {
         return moveMode == 3;
     }
 
-    public List<LivingEntity> queryTargetEntities(){
-        if (blackSabbathTargets == null){
-            blackSabbathTargets = new ArrayList<>();
-        }
-        return blackSabbathTargets;
-    }
     public List<LivingEntity> addTargetEntities(LivingEntity LE){
         if (blackSabbathTargets == null){
             blackSabbathTargets = new ArrayList<>();
@@ -137,6 +134,11 @@ public class PowersBlackSabbath extends NewDashPreset {
                 if(self.level().getEntity(data) instanceof LivingEntity LE) {
                     this.addTargetEntities(LE);
                 }
+            }
+            case PowersBlackSabbath.S2C_CLOSE_CHEST -> {
+                active = false;
+                sharedChestSelectCooldown();
+                RecallClient();
             }
             case PowersBlackSabbath.C2S_SYNC_DESTROY_LIST -> {
                 this.clearTargetEntities();
@@ -352,10 +354,11 @@ public class PowersBlackSabbath extends NewDashPreset {
     public void confirmListClient(){
         tryPower(PowerIndex.POWER_2_EXTRA, true);
         tryPowerPacket(PowerIndex.POWER_2_EXTRA);
-    }
-    public void setNullUniversal(){
-        tryPower(PowerIndex.POWER_2_BONUS, true);
-        tryPowerPacket(PowerIndex.POWER_2_BONUS);
+        if (moveMode == 2 && !blackSabbathTargets.isEmpty()) {
+            if (this.isClient()) {
+                this.self.playSound(ModSounds.BLACK_SABBATH_SELECT_CONFIRM_EVENT, 10F, 0.85F);
+            }
+        }
     }
     public void blackChestClient(){
         sharedChestSelectCooldown();
@@ -421,7 +424,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         if(moveMode == 0) {
             if (!this.getSelf().level().isClientSide()) {
                 if (blackSelect == null || blackSelect.isRemoved()){
-                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.FIRE_WHOOSH_EVENT, SoundSource.PLAYERS, 1F, 0.8F);
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.BLACK_SABBATH_SUMMON_EVENT, SoundSource.PLAYERS, 0.9F, 0.75F);
                     StandEntity stand = this.getNewStandEntity();
                     if (stand != null) {
                         blackSelect = stand;
@@ -447,7 +450,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             if (!this.getSelf().level().isClientSide()) {
                 blackSelect.forceDespawnSet = true;
                 playSoundIfPossible(self.level(),null, this.self.getX(), this.self.getY(),
-                        this.self.getZ(), ModSounds.SNAP_EVENT, this.self.getSoundSource(), 1F, 1.1F);
+                        this.self.getZ(), ModSounds.RATT_DEPLACE_EVENT, this.self.getSoundSource(), 1F, 1.1F);
             }
         }
         return true;
@@ -632,6 +635,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
     public int tickDown2 = -10;
     public void setTickDown2(int ta){tickDown2 = ta;}
     public int visionTicks = 10;
+    int tooFarTicks = 0;
     @Override
     public void tickPower() {
         if(fingerEatingTick > 0){
@@ -659,7 +663,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                         }
                 }
             }
-
         }
 
         if(tickBeforeHunt > 0){
@@ -672,13 +675,18 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         }
 
         if(this.getStandEntity(self) != null){
-        if(moveMode == 3 && this.blackSabbathTargets.isEmpty()){
-            if(tickDown2 == -10) {
-                if (this.getStandEntity(self) instanceof BlackSabbathEntity bs) {
-                        bs.setHunting(false);
-                        setTickDown2(40);
+            if (this.getStandEntity(self) instanceof BlackSabbathEntity bs) {
+                    if (moveMode == 3 && bs.getMoveMode() == 1 && (!this.isClient() && !bs.getThrowable())) {
+                        if (!bs.getTridentLoyalty()) {
+                            killTargetListServerToClient();
+                        }
                     }
-            }
+                    if (moveMode == 3 && (this.blackSabbathTargets.isEmpty())) {
+                        if (tickDown2 == -10) {
+                                bs.setHunting(false);
+                                setTickDown2(40);
+                        }
+                    }
             }
         }
         if(moveMode == 3){
@@ -748,11 +756,25 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                 }
             }
         }
+        if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){
+            if(be.getGrabbing() != null) {
+                if (getGrabbed() != be.level().getEntity(be.getGrabbing())) {
+                    if (be.level().getEntity(be.getGrabbing()) instanceof LivingEntity l){
+                        setGrabbed(l);
+                }
+                }
+            }
+        }
 
         if(this.getStandEntity(self) == null){
             if(moveMode != 0 && moveMode != 3) {
                 setNull();
                 active = false;
+            }
+
+            if(this.getGrabbed() != null){
+                ((StandUser)getGrabbed()).roundabout$setGrabbedSoul(false);
+                setGrabbed(null);
             }
         } else {
             if(active && moveMode == 0){
@@ -779,6 +801,8 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                 }
                 if(selecting){
                     if(!checkIfYouAreInDark()){
+                        playSoundIfPossible(self.level(),null, this.self.getX(), this.self.getY(),
+                                this.self.getZ(), ModSounds.RATT_DEPLACE_EVENT, this.self.getSoundSource(), 1F, 1.1F);
                         this.selecting = false;
                         BSE.forceDespawn(true);
                     }
@@ -819,11 +843,63 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                 this.getStandEntity(this.getSelf()).discard();
                 setNull();
             }
+
+            if(this.getStandEntity(this.getSelf()) instanceof BlackSabbathEntity BE){
+                if(BE.targetSabbath() != null && (MainUtil.cheapDistanceTo(BE.getX(), BE.getY(), BE.getZ(), BE.targetSabbath().getX(), BE.targetSabbath().getY(), BE.targetSabbath().getZ()) > 30 || BE.isStuck)){
+                    if(BE.getUnrender()){
+                        if(tooFarTicks <= 100) {
+                            tooFarTicks++;
+                            if(tooFarTicks == 99) {
+                                LivingEntity ts = null;
+                                if(BE.targetSabbath() != null) {
+                                    ts = BE.targetSabbath();
+                                }
+                                if(!this.isClient() && this.self.level() instanceof ServerLevel sl) {
+                                    spawnTp(ts);
+                                }
+                            }
+                        }
+                        if(BE.isStuck){
+                            LivingEntity ts = null;
+                            if(BE.targetSabbath() != null) {
+                                ts = BE.targetSabbath();
+                            } else if (!this.blackSabbathTargets.isEmpty()){
+                               ts =  spawnTarget();
+                            }
+                            if(ts != null) {
+                                if (!this.isClient() && this.self.level() instanceof ServerLevel sl) {
+                                    spawnTp(ts);
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    if(tooFarTicks != 0){
+                        tooFarTicks = 0;
+                    }
+                }
+            }
         }
 
         getValidPlacement();
         cycleThroughBlackSabbathTargets();
         super.tickPower();
+    }
+    LivingEntity grabbed = null;
+    private LivingEntity getGrabbed(){
+        return grabbed;
+    }
+    private void setGrabbed(Entity ent){
+        if(ent instanceof LivingEntity lent){grabbed = lent;}else if (ent == null){grabbed = null;}
+    }
+
+    void spawnTp(LivingEntity le){
+        if(!this.isClient() && this.self.level() instanceof ServerLevel sl) {
+            if(this.getStandEntity(this.getSelf()) != null && this.getStandEntity(this.getSelf()) instanceof BlackSabbathEntity BE) {
+                BE.discard();
+            }
+            createTheMightyHunterOfTheShadows((findBlackSabbathSpawnPosition(sl, le, 20D)));
+        }
     }
 
     public void tickPowerEnd() {
@@ -841,9 +917,9 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             double radius
     ) {
         int attempts = 100;
-        double minDistance = 2.5D+ (0.5);
+        double minDistance = 1D;
 
-        for (int yOffset = -1; yOffset <= 10; yOffset++) {
+        for (int yOffset = 0; yOffset <= 13; yOffset++) {
             for (int i = 0; i < attempts; i++) {
                 double angle = Math.random() * Math.PI * 2.0D;
                 double distance = minDistance
@@ -855,18 +931,17 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                 Vec3 candidate = new Vec3(x, y, z);
                 BlockPos bpos = BlockPos.containing(x, y - 0.1, z);
                 var blockState = this.self.level().getBlockState(bpos);
-                AABB yesbox = ModEntities.BLACK_SABBATH.getAABB(lent.getX(), lent.getY(), lent.getZ());
+                AABB yesbox = ModEntities.BLACK_SABBATH.getAABB(lent.getX(), Mth.floor(lent.getY()), lent.getZ());
                 AABB testBox = yesbox.move(
                         candidate.x - lent.getX(),
                         candidate.y - lent.getY(),
                         candidate.z - lent.getZ()
-                );
+                );;
                 if (level.noCollision(lent, testBox) && !blockState.is(Blocks.LAVA) && !blockState.isAir() && checkIfBposIsInDark(candidate)) {
                     return candidate;
-                } else if(y == 9){
-                    for (int yOffset2 = -2; yOffset2 >= -8; yOffset2--) {
+                } else if(yOffset == 13){
+                    for (int yOffset2 = 0; yOffset2 >= -13; yOffset2--) {
                     for (int i2 = 0; i2 < attempts; i2++) {
-                        System.out.println(attempts + " / " + yOffset2);
                         double distance2 = minDistance
                                 + Math.sqrt(Math.random()) * (radius - minDistance);
                         double x2 = lent.getX() + Math.cos(angle) * distance2;
@@ -881,8 +956,9 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                                 candidate2.y - lent.getY(),
                                 candidate2.z - lent.getZ()
                         );
+                       // System.out.print(candidate2 + " a ");
                         if (level.noCollision(lent, testBox2) && !blockState.is(Blocks.LAVA) && !blockState2.isAir() && checkIfBposIsInDark(candidate)) {
-                            return candidate2;
+                        return candidate2;
                         }
                     }
                     }
@@ -898,6 +974,16 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             return lv;
         }
         return null;
+    }
+    public final Boolean getThrowable(Player pl) {
+        IPlayerEntity play = ((IPlayerEntity) pl);
+        ItemStack blackFS = play.roundabout$getBlckSabbathPlayerInventory().getItem(0);
+        return (blackFS.getItem() instanceof ArrowItem || blackFS.getItem() instanceof KnifeItem
+                || blackFS.is(ModItems.KNIFE_BUNDLE) || blackFS.getItem() instanceof TridentItem && EnchantmentHelper.getRiptide(blackFS) <= 0
+                || blackFS.getItem() instanceof EggItem || blackFS.getItem() instanceof SnowballItem || blackFS.getItem() instanceof ThrowablePotionItem
+                || blackFS.getItem() instanceof EnderpearlItem || blackFS.getItem() instanceof GasolineBucketItem || blackFS.getItem() instanceof GasolineCanItem
+                || blackFS.getItem() instanceof MatchItem || blackFS.is(ModItems.MATCH_BUNDLE) || blackFS.getItem() instanceof FleshBucketItem
+                ||blackFS.getItem() instanceof HarpoonItem) && !(blackFS.is(ItemStack.EMPTY.getItem()));
     }
     public void createTheMightyHunterOfTheShadows(Vec3 pos){
         if(isHunting()) {
@@ -921,6 +1007,19 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                             BE.setShouldFloat(false);
                             BE.setShouldSelect(false);
                             PowerTypes.copyPlaneOfExisting(self,BE);
+                            BE.setUnrender(true);
+                            if(BE.getUser() != null && BE.getUser() instanceof Player pl) {
+                                IPlayerEntity play = ((IPlayerEntity) pl);
+                                ItemStack blackFS = play.roundabout$getBlckSabbathPlayerInventory().getItem(0);
+                                BE.setHeldItemSabbath(blackFS);
+                                if(blackFS.is(ItemStack.EMPTY.getItem())){
+                                    BE.setMoveMode(0);
+                                } else if (getThrowable(pl)){
+                                    BE.setMoveMode(1);
+                                } else {
+                                    BE.setMoveMode(2);
+                                }
+                            }
                             this.self.level().addFreshEntity(BE);
                         }
                     }
@@ -962,7 +1061,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                   }
               }
               if(this.getStandEntity(self) != null && entity.is(this.getStandEntity(self))){
-                  return true;
+                 // return true;
               }
           }
         return false;
@@ -1072,6 +1171,11 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         }
         return super.tryIntPower(move, forced, value);
     }
+    public void syncClose(){
+        if (this.getSelf() instanceof Player) {
+            S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(),PowersBlackSabbath.S2C_CLOSE_CHEST, 0);
+        }
+    }
     private Entity getTarget() {
         Entity target = MainUtil.getTargetEntity(this.getSelf(),100,10);
         if (target instanceof LivingEntity LE) {
@@ -1093,7 +1197,9 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                     this.removeTargetEntities(LE);
                     tryIntPower(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET, true, LE.getId());
                     tryIntPowerPacket(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET, LE.getId());
-                    this.self.playSound(ModSounds.CKB_NO_EVENT, 10F, 1F);
+                    if(this.isClient()) {
+                        this.self.playSound(ModSounds.BLACK_SABBATH_SELECT_REMOVE_EVENT, 1F, 0.8F);
+                        }
                 }
             }
         }
@@ -1104,7 +1210,16 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             setTickDown2(40);
             tryIntPower(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET_LIST, true, 0);
             tryIntPowerPacket(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET_LIST, 0);
-            this.self.playSound(ModSounds.CKB_NO_EVENT, 10F, 0.75F);
+            if(this.isClient()) {
+                this.self.playSound(ModSounds.BLACK_SABBATH_SELECT_CANCEL_EVENT, 1F, 0.8F);
+            }
+        }
+    }
+    public void killTargetListServerToClient(){
+        if(!blackSabbathTargets.isEmpty()) {
+            this.clearTargetEntities();
+            setTickDown2(40);
+            clearTargetEntitiesOnStandDeath();
         }
     }
     public void selectTargetClient(){
@@ -1116,7 +1231,9 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                     int id = LE.getId();
                     tryIntPower(PowersBlackSabbath.CLIENT_SYNC_TARGET, true, id);
                     tryIntPowerPacket(PowersBlackSabbath.CLIENT_SYNC_TARGET, id);
-                    this.self.playSound(ModSounds.CKB_YES_EVENT, 10F, 1F);
+                    if(this.isClient()) {
+                        this.self.playSound(ModSounds.BLACK_SABBATH_SELECT_ADD_EVENT, 1F, 0.8F);
+                    }
                 }
             }
         }

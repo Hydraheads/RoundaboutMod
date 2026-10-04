@@ -995,6 +995,85 @@
       "roundabout:killer_queen_select"
     ]
   },
+  "kq_block_plant" : {
+    "subtitle": "sounds.roundabout.kq_block_plant",
+    "sounds": [
+      "roundabout:kq_block_plant"
+    ]
+  },
+  "kq_mob_plant" : {
+    "subtitle": "sounds.roundabout.kq_mob_plant",
+    "sounds": [
+      "roundabout:kq_mob_plant"
+    ]
+  },
+  "kq_samurai_summon" : {
+    "subtitle": "sounds.roundabout.summon_samurai_queen",
+    "sounds": [
+      "roundabout:kq_samurai_summon"
+    ]
+  },
+  "kq_samurai_block" : {
+    "subtitle": "sounds.roundabout.kq_block_plant",
+    "sounds": [
+      "roundabout:kq_samurai_block"
+    ]
+  },
+  "kq_samurai_mob" : {
+    "subtitle": "sounds.roundabout.kq_mob_plant",
+    "sounds": [
+      "roundabout:kq_samurai_mob"
+    ]
+  },
+  "kq_samurai_btd_noise" : {
+    "subtitle": "sounds.roundabout.bites_the_dust_noise",
+    "sounds": [
+      "roundabout:kq_samurai_btd_noise"
+    ]
+  },
+  "kq_samurai_sheathe" : {
+    "subtitle": "sounds.roundabout.kq_samurai_sheathe",
+    "sounds": [
+      "roundabout:kq_samurai_sheathe"
+    ]
+  },
+  "kq_samurai_stab" : {
+    "subtitle": "sounds.roundabout.kq_samurai_stab",
+    "sounds": [
+      "roundabout:kq_samurai_stab"
+    ]
+  },
+  "kq_samurai_slash" : {
+    "subtitle": "sounds.roundabout.kq_samurai_slash",
+    "sounds": [
+      "roundabout:kq_samurai_slash"
+    ]
+  },
+  "kq_samurai_whoosh_1" : {
+    "subtitle": "sounds.roundabout.kq_samurai_whoosh",
+    "sounds": [
+      "roundabout:kq_samurai_whoosh_1"
+    ]
+  },
+  "kq_samurai_whoosh_2" : {
+    "subtitle": "sounds.roundabout.kq_samurai_whoosh",
+    "sounds": [
+      "roundabout:kq_samurai_whoosh_2"
+    ]
+  },
+  "kq_samurai_sha" : {
+    "subtitle": "sounds.roundabout.kq_samurai_sha",
+    "sounds": [
+      "roundabout:kq_samurai_sha"
+    ]
+  },
+
+  "kq_plant_windup" : {
+    "subtitle": "sounds.roundabout.kq_plant_windup",
+    "sounds": [
+      "roundabout:kq_plant_windup"
+    ]
+  },
   "kq_minesweeper_detonate": {
     "subtitle": "sounds.roundabout.kq_minesweeper_detonate",
     "sounds": [
@@ -1335,6 +1414,36 @@
     "subtitle": "sounds.roundabout.black_sabbath_chest_open",
     "sounds": [
       "roundabout:black_sabbath_chest_open"
+    ]
+  },
+  "black_sabbath_emerge": {
+    "subtitle": "sounds.roundabout.black_sabbath_emerge",
+    "sounds": [
+      "roundabout:black_sabbath_emerge"
+    ]
+  },
+  "bs_select_add": {
+    "subtitle": "sounds.roundabout.bs_select_add",
+    "sounds": [
+      "roundabout:bs_select_add"
+    ]
+  },
+  "bs_select_remove": {
+    "subtitle": "sounds.roundabout.bs_select_remove",
+    "sounds": [
+      "roundabout:bs_select_remove"
+    ]
+  },
+  "bs_select_cancel": {
+    "subtitle": "sounds.roundabout.bs_select_cancel",
+    "sounds": [
+      "roundabout:bs_select_cancel"
+    ]
+  },
+  "bs_select_confirm": {
+    "subtitle": "sounds.roundabout.bs_select_confirm",
+    "sounds": [
+      "roundabout:bs_select_confirm"
     ]
   },
   "century_boy_summon": {

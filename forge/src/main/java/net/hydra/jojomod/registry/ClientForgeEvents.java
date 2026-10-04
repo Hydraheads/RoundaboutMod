@@ -4,7 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.*;
 import net.hydra.jojomod.client.gui.diverdown.custom_workbench_texture.*;
-import net.hydra.jojomod.client.gui.gamblingtable.GamblingTableScreen;
+import net.hydra.jojomod.client.gui.GamblingTableScreen;
 import net.hydra.jojomod.client.models.*;
 import net.hydra.jojomod.client.models.corpses.renderers.*;
 import net.hydra.jojomod.client.models.minions.*;
@@ -59,7 +59,6 @@ public class ClientForgeEvents {
         // This runs on client during mod loading (after registries)
         MainUtil.setClient();
         event.enqueueWork(() -> {
-            ForgeMenus.initialize();
             //Diver Down custom workbenches registry
             MenuScreens.register(ForgeMenus.DIVER_DOWN_CRAFTING.get(), DiverDownCraftingScreen::new);
             MenuScreens.register(ForgeMenus.DIVER_DOWN_ANVIL.get(), DiverDownAnvilScreen::new);
@@ -128,6 +127,8 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.TUSK_A4.get(), TuskAct4Renderer::new);
         event.registerEntityRenderer(ForgeEntities.DIVER_DOWN.get(), DiverDownRenderer::new);
         event.registerEntityRenderer(ForgeEntities.DIVER_DOWN_BETA.get(), DiverDownBetaRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.DIVER_DOWN_WORLD.get(), DiverDownWorldRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.DIVER_KICK.get(), DiverKickEntityRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BONE_PROJECTILE.get(), BoneProjectileRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT.get(), SilverChariotRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT_RAPIER.get(), SilverChariotRapierRenderer::new);
@@ -327,6 +328,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.ANUBIS, AnubisHumanoidModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.DIVER_DOWN_LAYER, DiverDownModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.DIVER_DOWN_BETA_LAYER, DiverDownBetaModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.DIVER_DOWN_WORLD_LAYER, DiverDownWorldModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.SILVER_CHARIOT_LAYER, SilverChariotModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.SILVER_CHARIOT_RAPIER_LAYER, SilverChariotRapierModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.SILVER_CHARIOT_RAPIER_PLATFORM_LAYER, SilverChariotRapierPlatformModel::createBodyLayer);

@@ -311,6 +311,9 @@ public interface StandUser {
     void roundabout$setLocacacaCurse(byte locacacaCurse);
     byte roundabout$getLocacacaCurse();
 
+    void roundabout$setGrabbedSoul(boolean grabbedSoul);
+    boolean roundabout$getGrabbedSoul();
+
     byte roundabout$getStandSkin();
     byte roundabout$getLastStandSkin();
     void roundabout$setLastStandSkin(byte lastStandSkin);
@@ -388,8 +391,8 @@ public interface StandUser {
     boolean rdbt$isForceCrawl();
     int rdbt$getCrawlTicks();
 
-    PowersKillerQueen rdbt$GetBtdPlantedUser();
-    void rdbt$SetBtdPlantedUser(PowersKillerQueen e);
+    @Nullable PowersKillerQueen rdbt$GetBtdPlantedUser();
+    void rdbt$SetBtdPlantedUser(@Nullable PowersKillerQueen e);
     boolean rdbt$interceptIncomingHarmIfBTD(DamageSource source);
 
     List<CooldownInstance> rdbt$initPowerCooldowns();
@@ -405,6 +408,8 @@ public interface StandUser {
     void roundabout$clearDisguise();
     boolean roundabout$hasDiverLegs();
     void roundabout$setDiverLegs(boolean legs);
+    boolean roundabout$hasDiverArms();
+    void roundabout$setDiverArms(boolean arms);
     boolean roundabout$hasRibcageTrap();
     void roundabout$setRibcageTrap(boolean trap);
     boolean roundabout$hasSpringLegs();

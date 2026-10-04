@@ -2,6 +2,7 @@ package net.hydra.jojomod.registry;
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistry;
+import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.handBlock.AbstractHandBlock;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -943,6 +944,8 @@ public class FabricItems {
         ModItems.SACRIFICIAL_DAGGER = SACRIFICIAL_DAGGER;
         ModItems.WOODEN_GLAIVE = WOODEN_GLAIVE;
         ModItems.WOODEN_WAR_HAMMER = WOODEN_WAR_HAMMER;
+        FuelRegistry.INSTANCE.add(ModItems.WOODEN_WAR_HAMMER,200);
+        FuelRegistry.INSTANCE.add(ModItems.WOODEN_GLAIVE,200);
         ModItems.STONE_GLAIVE = STONE_GLAIVE;
         ModItems.STONE_WAR_HAMMER = STONE_WAR_HAMMER;
         ModItems.IRON_GLAIVE = IRON_GLAIVE;

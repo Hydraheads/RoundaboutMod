@@ -22,6 +22,7 @@ public class DiverLimbBlockEntity extends BlockEntity {
     public Direction facing = Direction.NORTH;
     public int limbIndex = 0;
     public byte standSkin = 0;
+    public int clientAge = 0;
 
     public DiverLimbBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlocks.DIVER_LIMB_BLOCK_ENTITY, pos, state);
@@ -63,6 +64,10 @@ public class DiverLimbBlockEntity extends BlockEntity {
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, DiverLimbBlockEntity limb) {
+        if (level.isClientSide()) {
+            limb.clientAge++;
+            return;
+        }
         if (!level.isClientSide()) {
             // Additional checks for a null UUID, just in case
             if (limb.ownerUUID == null) {
