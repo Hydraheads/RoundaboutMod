@@ -1297,10 +1297,12 @@ public class PowersWhitesnake extends BlockGrabPreset {
                 ? ClientNetworking.getAppropriateConfig().generalStandSettings.jumpingDashCooldown
                 : ClientNetworking.getAppropriateConfig().generalStandSettings.dashCooldown;
         setCooldown(PowerIndex.GLOBAL_DASH, cooldown);
-        MainUtil.takeUnresistableKnockbackWithY(stand, 0.91F,
-                Mth.sin(degrees * ((float) Math.PI / 180)),
-                Mth.sin(-20 * ((float) Math.PI / 180)),
-                -Mth.cos(degrees * ((float) Math.PI / 180)));
+        if (self.level().isClientSide()) {
+            MainUtil.takeUnresistableKnockbackWithY(stand, 0.91F,
+                    Mth.sin(degrees * ((float) Math.PI / 180)),
+                    Mth.sin(-20 * ((float) Math.PI / 180)),
+                    -Mth.cos(degrees * ((float) Math.PI / 180)));
+        }
         if (!self.level().isClientSide()) {
             playSoundIfPossible(self.level(),null, stand.blockPosition(), ModSounds.DODGE_EVENT,
                     SoundSource.PLAYERS, 1.5F, (float) (0.98 + Math.random() * 0.04));
