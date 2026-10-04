@@ -1067,6 +1067,8 @@ public class Config implements Cloneable {
         public Integer walkingHeartMaxHits;
         @BooleanOption(group = "inherit", value = false)
         public Boolean fallProtectionOnRelease;
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        public Integer spikeDiveAttackCooldown;
     }
 
     public static class RattSettings {
