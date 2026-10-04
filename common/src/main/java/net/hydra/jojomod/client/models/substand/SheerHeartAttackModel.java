@@ -49,21 +49,33 @@ public class SheerHeartAttackModel<T extends SheerHeartAttackEntity> extends Sta
 
 		PartDefinition stand2 = stand.addOrReplaceChild("stand2", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition head = stand2.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 21).addBox(-1.5F, -4.0F, -4.0F, 3.0F, 4.0F, 1.0F, new CubeDeformation(0.0F))
-		.texOffs(24, 6).addBox(-1.5F, -5.0F, -3.0F, 3.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
-		.texOffs(0, 0).addBox(-3.0F, -4.0F, -3.0F, 6.0F, 4.0F, 6.0F, new CubeDeformation(0.0F))
-		.texOffs(0, 10).addBox(-4.0F, -3.0F, -4.0F, 1.0F, 3.0F, 8.0F, new CubeDeformation(0.0F))
-		.texOffs(18, 10).addBox(3.0F, -3.0F, -4.0F, 1.0F, 3.0F, 8.0F, new CubeDeformation(0.0F))
-		.texOffs(24, 0).addBox(-1.0F, -6.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
-		.texOffs(24, 4).addBox(-2.0F, -5.0F, -2.0F, 4.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
-		.texOffs(24, 5).addBox(-2.0F, -5.0F, 2.0F, 4.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
-		.texOffs(8, 21).addBox(2.0F, -5.0F, -2.0F, 0.0F, 1.0F, 4.0F, new CubeDeformation(0.0F))
-		.texOffs(16, 21).addBox(-2.0F, -5.0F, -2.0F, 0.0F, 1.0F, 4.0F, new CubeDeformation(0.0F))
-		.texOffs(0, 29).addBox(-0.5F, -2.0F, -5.0F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition head = stand2.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-3.0F, -4.0F, -3.0F, 6.0F, 4.0F, 6.0F, new CubeDeformation(0.0F))
+				.texOffs(0, 10).addBox(-4.0F, -3.0F, -4.0F, 1.0F, 3.0F, 8.0F, new CubeDeformation(0.0F))
+				.texOffs(18, 10).addBox(3.0F, -3.0F, -4.0F, 1.0F, 3.0F, 8.0F, new CubeDeformation(0.0F))
+				.texOffs(24, 4).addBox(-2.0F, -5.0F, -2.0F, 4.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
+				.texOffs(24, 5).addBox(-2.0F, -5.0F, 2.0F, 4.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
+				.texOffs(8, 21).addBox(2.0F, -5.0F, -2.0F, 0.0F, 1.0F, 4.0F, new CubeDeformation(0.0F))
+				.texOffs(16, 21).addBox(-2.0F, -5.0F, -2.0F, 0.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition torch = head.addOrReplaceChild("torch", CubeListBuilder.create(), PartPose.offset(0.0F, -5.0F, 0.0F));
+		PartDefinition head2 = head.addOrReplaceChild("head2", CubeListBuilder.create().texOffs(0, 29).addBox(-0.5F, -2.0F, -5.0F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
+				.texOffs(0, 21).addBox(-1.5F, -4.0F, -4.0F, 3.0F, 4.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition cube_r1 = torch.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(35, 0).addBox(-1.0F, -10.0F, -1.0F, 2.0F, 10.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -2.0F, 3.0F, 1.5708F, 0.0F, 0.0F));
+		PartDefinition torch = head.addOrReplaceChild("torch", CubeListBuilder.create(), PartPose.offset(0.0F, -5.01F, 0.0F));
+
+		PartDefinition cube_r1 = torch.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(35, 0).addBox(-1.0F, -10.0F, -1.0F, 2.0F, 10.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -3.0F, 3.0F, 1.5708F, 0.0F, 0.0F));
+
+		PartDefinition details = head.addOrReplaceChild("details", CubeListBuilder.create().texOffs(37, 6).addBox(-1.0F, -7.0F, -3.0F, 2.0F, 4.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+		PartDefinition spout = head.addOrReplaceChild("spout", CubeListBuilder.create(), PartPose.offsetAndRotation(0.0F, -2.75F, -3.75F, 0.2182F, 0.0F, 0.0F));
+
+		PartDefinition cube_r2 = spout.addOrReplaceChild("cube_r2", CubeListBuilder.create().texOffs(15, 28).addBox(-1.0F, -2.0F, -1.0F, 2.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -1.25F, 0.75F, 1.5708F, 0.0F, 0.0F));
+
+		PartDefinition cube_r3 = spout.addOrReplaceChild("cube_r3", CubeListBuilder.create().texOffs(7, 28).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.75F, 0.75F, -1.5708F, 0.0F, 0.0F));
+
+		PartDefinition normal = head.addOrReplaceChild("normal", CubeListBuilder.create().texOffs(24, 0).addBox(-1.0F, -6.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
+				.texOffs(24, 6).addBox(-1.5F, -5.0F, -3.0F, 3.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
+				.texOffs(0, 21).addBox(-1.5F, -4.0F, -4.0F, 3.0F, 4.0F, 1.0F, new CubeDeformation(0.0F))
+				.texOffs(0, 29).addBox(-0.5F, -2.0F, -5.0F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
 		return LayerDefinition.create(meshdefinition, 64, 64);
 	}
@@ -72,9 +84,16 @@ public class SheerHeartAttackModel<T extends SheerHeartAttackEntity> extends Sta
 	public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
 		super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
 
+		if (pEntity.isClimbing()) {
+			getHead().xRot = -90 * ((float) Math.PI / 180F);
+		}/*else if (!pEntity.onGround()) {
+			getHead().xRot = pEntity.getXRot();
+		}*/
+
 		this.animate(pEntity.moving, SheerHeartAttackAnimations.MOVING, pAgeInTicks, 0.8f);
 		this.animate(pEntity.idle, SheerHeartAttackAnimations.IDLE, pAgeInTicks, 1.0f);
 		this.animate(pEntity.hideTorch, SheerHeartAttackAnimations.hideTorch, pAgeInTicks, 1.0f);
+		this.animate(pEntity.lowerTorch, SheerHeartAttackAnimations.lowerTorch, pAgeInTicks, 1.0f);
 	}
 
 	@Override

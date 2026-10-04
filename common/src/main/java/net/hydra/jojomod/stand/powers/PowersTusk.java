@@ -45,6 +45,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -168,7 +169,7 @@ public class PowersTusk extends NewDashPreset {
 
     @Override
     public boolean canSummonStandAsEntity() {
-        return this.getSelf() instanceof Player P && ((IPlayerEntity)P).roundabout$getStandLevel() != 1 && this.getActivePower() != PowersTusk.DEATH_NAIL && this.getActivePower() != PowersTusk.DEATH_PUNCH && !(this.deathShot != null && !this.deathShot.isRemoved());
+        return this.getSelf() instanceof Player P && ( ((IPlayerEntity)P).roundabout$getStandLevel() != 1 || P.isCreative() || this.getStandUserSelf().roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem)&& this.getActivePower() != PowersTusk.DEATH_NAIL && this.getActivePower() != PowersTusk.DEATH_PUNCH && !(this.deathShot != null && !this.deathShot.isRemoved());
     }
 
     @Override
@@ -398,6 +399,10 @@ public class PowersTusk extends NewDashPreset {
                     } else {
                         shootNailBurst();
                     }
+                } else {
+                    if (this.getAct() == 3 && isInHole()) {
+                        this.shootNail(this.getAttackTimeDuring());
+                    }
                 }
                 nailFireDelay = this.getAct() == 1 ? 10 : 6;
                 this.setActivePower(PowersTusk.FIRE_NAIL);
@@ -542,6 +547,24 @@ public class PowersTusk extends NewDashPreset {
         }
 
         return super.setPowerOther(move,lastMove);
+    }
+
+    @Override
+    public boolean tryPosPower(int move, boolean forced, Vec3 pos) {
+        switch (move) {
+            case PowersTusk.FIRE_NAIL -> {
+                if (!isClient()) {
+                    TuskNailEntity tuskNailEntity = new TuskNailEntity(this.getSelf(), this.getSelf().level(), (byte) this.getAct());
+                    float time = getChargeScale(this.getAttackTimeDuring());
+                    tuskNailEntity.shootFromRotation(this.getPilotingStand(), (float) pos.x, (float) pos.y, -0.5F, Mth.lerp(time, 1.2F, 2F), 0.1F);
+                    tuskNailEntity.setPos(this.getPilotingStand().getPosition(0).add(0, 0.2, 0));
+                    this.getSelf().level().addFreshEntity(tuskNailEntity);
+                } else {
+                    Roundabout.LOGGER.error("TUSK HOLE NAIL NOT CLIENTSIDE");
+                }
+            }
+        }
+        return super.tryPosPower(move, forced, pos);
     }
 
     @Override
@@ -1523,7 +1546,7 @@ public class PowersTusk extends NewDashPreset {
         if (this.getAct() == 3) {
             if (isInHole() && this.getPilotingStand() instanceof TuskHoleEntity THE) {
                 if (THE.getTimeInHole() > 10 + THE.distanceTo(this.getSelf())*1.5) {
-                    return THE.level().getBlockState(THE.blockPosition()).isAir();
+                    return true; /// FIX
                 }
             }
         }
@@ -1747,6 +1770,9 @@ public class PowersTusk extends NewDashPreset {
                             Vec3 blockCenterPlus = blockHit.getBlockPos().getCenter();
 
 
+                            if (advanceVec == null) {
+                                advanceVec = this.getSelf().getPosition(0);
+                            }
                             advanceVec = advanceVec.add(
                                     blockCenterPlus.subtract(
                                             this.getSelf().position().add(
@@ -1824,6 +1850,20 @@ public class PowersTusk extends NewDashPreset {
         return null;
     }
 
+    @Override
+    public SimpleParticleType getImpactParticle() {
+        SimpleParticleType punchpart;
+        float random = (float) (Math.random()*3);
+        if (random > 2){
+            punchpart = ModParticles.GOLD_PUNCH_IMPACT_A;
+        } else if (random > 1){
+            punchpart = ModParticles.GOLD_PUNCH_IMPACT_B;
+        } else {
+            punchpart = ModParticles.GOLD_PUNCH_IMPACT_C;
+        }
+        return punchpart;
+    }
+
     public void tickBarrage() {
         if (this.getAttackTimeDuring() == 20) {
             this.playBarrageCrySound();
@@ -1886,7 +1926,9 @@ public class PowersTusk extends NewDashPreset {
             boolean lastHit = (hitNumber >= this.getBarrageLength());
 
             if (entity != null) {
-                hitParticles(entity);
+                if (!isClient()) {
+                    hitParticles(entity);
+                }
 
                 float pow;
                 float knockbackStrength = 0;
@@ -2043,6 +2085,7 @@ public class PowersTusk extends NewDashPreset {
 
                 if (deathTarget.getPosition(0).add(new Vec3(0,deathTarget.getEyeHeight()*0.5F,0)).distanceTo(stand.getPosition(0)) < 3) {
                     if (deathTarget.hurt(ModDamageTypes.of(this.getSelf().level(), ModDamageTypes.INFINITE_SPIN, this.getSelf()), 1)) {
+                        hitParticles(deathTarget);
                         Vec3 dir = deathTarget.getPosition(0).subtract(stand.getPosition(0)).normalize().reverse();
                         MainUtil.takeKnockbackWithY(deathTarget,0.2F,dir.x,dir.y-0.1F,dir.z);
                         if (deathTarget instanceof LivingEntity LE) {
@@ -2083,7 +2126,7 @@ public class PowersTusk extends NewDashPreset {
     @Override
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
         if (keyIsDown) {
-            if (isGunMode() ) {
+            if (isGunMode() && this.getActivePower() != PowersTusk.DEATH_PUNCH ) {
                 tryPower(PowersTusk.SHOOT_MODE);
                 tryPowerPacket(PowersTusk.SHOOT_MODE);
             } else {
@@ -2168,7 +2211,7 @@ public class PowersTusk extends NewDashPreset {
         int nails = extra ? extraCharge : nailCharge;
         for(int i = 0; i<nails; i++) {
             float accuracy = (float) Math.pow(i*0.35,2.3);
-            float force = this.getAct() == 1 ? 1.0F : 1.2F;
+            float force = this.getAct() == 1 ? 1.5F : 1.2F;
             shootNail(force,accuracy,extra, !extra && nailCharge == 10 ? TuskNailEntity.GUARD_BREAK : TuskNailEntity.NONE);
         }
         if (!extra) {
@@ -2188,25 +2231,27 @@ public class PowersTusk extends NewDashPreset {
     }
     public TuskNailEntity shootNail(float force, float accuracy) {return shootNail(force,accuracy,false,TuskNailEntity.NONE);}
     public TuskNailEntity shootNail(float force, float accuracy, boolean toes, byte extra) {
-        TuskNailEntity tuskNailEntity = new TuskNailEntity(this.getSelf(),this.getSelf().level(),(byte)this.getAct());
-        tuskNailEntity.setExtra(extra);
 
 
-        Vec3 firingPos;
         if (isInHole()) {
-            firingPos = this.getPilotingStand().getPosition(0).add(0,0.2,0);
-            Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
-            tuskNailEntity.shootFromRotation(this.getPilotingStand(), camera.getXRot(), camera.getYRot(), -0.5F, force, accuracy);
+            if (isClient()) {
+                Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
+                tryPosPowerPacket(PowersTusk.FIRE_NAIL,new Vec3(camera.getXRot(),camera.getYRot(),0));
+            }
+            return null;
         } else {
+            TuskNailEntity tuskNailEntity = new TuskNailEntity(this.getSelf(),this.getSelf().level(),(byte)this.getAct());
+            tuskNailEntity.setExtra(extra);
+
             tuskNailEntity.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -0.5F, force, accuracy);
-            firingPos = this.getSelf().getPosition(0).add(new Vec3(0,this.getSelf().getEyeHeight()*0.75F,0));
+            Vec3 firingPos = this.getSelf().getPosition(0).add(new Vec3(0,this.getSelf().getEyeHeight()*0.75F,0));
             if (toes) {
                 firingPos = this.getSelf().getPosition(0).add(0, 0.2, 0);
             }
+            tuskNailEntity.setPos(firingPos);
+            this.getSelf().level().addFreshEntity(tuskNailEntity);
+            return tuskNailEntity;
         }
-        tuskNailEntity.setPos(firingPos);
-        this.getSelf().level().addFreshEntity(tuskNailEntity);
-        return tuskNailEntity;
     }
 
     @Override

@@ -7,10 +7,13 @@ import net.hydra.jojomod.client.models.stand.KillerQueenModel;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersKillerQueen;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 
 public class KillerQueenRenderer extends StandRenderer<KillerQueenEntity>{
@@ -36,6 +39,10 @@ public class KillerQueenRenderer extends StandRenderer<KillerQueenEntity>{
     private static final ResourceLocation MEMENTO_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/mementomorioh.png");
     private static final ResourceLocation STARDUST_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/stardust.png");
     private static final ResourceLocation MINUET_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/minuet.png");
+    private static final ResourceLocation BROWN_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/brown.png");
+    private static final ResourceLocation GREY_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/grey.png");
+    private static final ResourceLocation SAMURAI_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/samurai.png");
+    private static final ResourceLocation SPIRIT_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/spirit.png");
 
     static public ResourceLocation getSkin(byte BT) {
         if (BT == KillerQueenEntity.PART_4) {
@@ -80,6 +87,14 @@ public class KillerQueenRenderer extends StandRenderer<KillerQueenEntity>{
             return STARDUST_SKIN;
         } else if (BT == KillerQueenEntity.MINUET) {
             return MINUET_SKIN;
+        } else if (BT == KillerQueenEntity.BROWN) {
+            return BROWN_SKIN;
+        } else if (BT == KillerQueenEntity.GREY) {
+            return GREY_SKIN;
+        } else if (BT == KillerQueenEntity.SAMURAI) {
+            return SAMURAI_SKIN;
+        } else if (BT == KillerQueenEntity.SPIRIT) {
+            return SPIRIT_SKIN;
         }
 
         return PART_4_SKIN;
@@ -103,7 +118,14 @@ public class KillerQueenRenderer extends StandRenderer<KillerQueenEntity>{
         } else {
             matrixStack.scale(0.87f * factor, 0.87f * factor, 0.87f * factor);
         }
-        if (!mobEntity.getPlantedBitesTheDust()|| ClientUtil.getPlayer() == mobEntity.getUser())super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
+
+
+        if (!mobEntity.getPlantedBitesTheDust()|| ClientUtil.getPlayer() == mobEntity.getUser()) {
+            if (!(mobEntity.getUser() != null && ((StandUser)mobEntity.getUser()).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ && PKQ.getActivePower() == 61)) {
+                super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
+            }
+        }
+
     }
     @Nullable
     @Override

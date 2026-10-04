@@ -267,6 +267,13 @@ public class StepRuleEntity extends Entity {
         DATA_START_POS = SynchedEntityData.defineId(StepRuleEntity.class, EntityDataSerializers.BLOCK_POS);
     }
 
+
+    @Override
+    public boolean canChangeDimensions() {
+        return false;
+    }
+
+
     public boolean fireImmune() {
         return true;
     }

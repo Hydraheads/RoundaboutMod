@@ -233,7 +233,11 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
                     cRX = 0;
                 }
             } else if (animationStyle == OffsetIndex.LOOSE_STYLE || animationNumber == OffsetIndex.GUARD_AND_TRACE) {
-                cRX = (mobEntity.getViewXRot(tickDelta) % 360) * Mth.DEG_TO_RAD;
+                if (animationNumber == OffsetIndex.LOOSE_NOLEAN) {
+                    cRX = 0; // for stands like diver down where you don't need the stand to rotate up and down
+                } else {
+                    cRX = (mobEntity.getViewXRot(tickDelta) % 360) * Mth.DEG_TO_RAD;
+                }
             }
             rotX = MainUtil.controlledLerpRadianDegrees(tickDelta, rotX, cRX, 0.8f);
             rotY = MainUtil.controlledLerpRadianDegrees(tickDelta, rotY, cRY, 0.8f);

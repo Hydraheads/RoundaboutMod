@@ -58,34 +58,6 @@ public class KillerQueenEntity extends FollowingStandEntity {
     }
 
 
-    public static Component getSkinNameT(byte skinId) {
-        switch (skinId)
-        {
-	        case KillerQueenEntity.PART_4 -> {return Component.translatable("skins.roundabout.killer_queen.anime");}
-	        case KillerQueenEntity.GOGO -> {return Component.translatable("skins.roundabout.killer_queen.agogo");}
-	        case KillerQueenEntity.MANGA -> {return Component.translatable("skins.roundabout.killer_queen.manga");}
-	        case KillerQueenEntity.UMBRA -> {return Component.translatable("skins.roundabout.killer_queen.umbra");}
-	        case KillerQueenEntity.ARTWORK -> {return Component.translatable("skins.roundabout.killer_queen.artwork");}
-	        case KillerQueenEntity.CRACKED -> {return Component.translatable("skins.roundabout.killer_queen.cracked");}
-	        case KillerQueenEntity.CREEPER -> {return Component.translatable("skins.roundabout.killer_queen.creeper");}
-	        case KillerQueenEntity.STRAY -> {return Component.translatable("skins.roundabout.killer_queen.stray");}
-	        case KillerQueenEntity.NIGHTMARE -> {return Component.translatable("skins.roundabout.killer_queen.nightmare");}
-	        case KillerQueenEntity.LIMBUSMORTIS -> {return Component.translatable("skins.roundabout.killer_queen.mortis");}
-	        case KillerQueenEntity.JOJOLION -> {return Component.translatable("skins.roundabout.killer_queen.jojolion");}
-	        case KillerQueenEntity.GUNPOWDER -> {return Component.translatable("skins.roundabout.killer_queen.gunpowder");}
-	        case KillerQueenEntity.FINAL -> {return Component.translatable("skins.roundabout.killer_queen.final");}
-	        case KillerQueenEntity.DEADLY -> {return Component.translatable("skins.roundabout.killer_queen.deadly");}
-	        case KillerQueenEntity.YELLOW -> {return Component.translatable("skins.roundabout.killer_queen.yellow");}
-	        case KillerQueenEntity.TAMA -> {return Component.translatable("skins.roundabout.killer_queen.tama");}
-	        case KillerQueenEntity.MINESWEEPER -> {return Component.translatable("skins.roundabout.killer_queen.minesweeper");}
-	        case KillerQueenEntity.NOTW -> {return Component.translatable("skins.roundabout.killer_queen.notw");}
-	        case KillerQueenEntity.MEMENTO -> {return Component.translatable("skins.roundabout.killer_queen.memento");}
-	        case KillerQueenEntity.STARDUST -> {return Component.translatable("skins.roundabout.killer_queen.stardust");}
-	        case KillerQueenEntity.MINUET -> {return Component.translatable("skins.roundabout.killer_queen.minuet");}
-	    }
-        return Component.translatable("skins.roundabout.killer_queen.anime");
-    }
-
     public static final byte
             PART_4 = 0,
     		MANGA = 1,
@@ -107,11 +79,17 @@ public class KillerQueenEntity extends FollowingStandEntity {
     		NOTW = 17,
     		MEMENTO = 18,
     		STARDUST = 19,
-            MINUET = 20;
+            MINUET = 20,
+            BROWN = 21,
+            GREY = 22,
+            SAMURAI = 23,
+            SPIRIT = 24;
 
     public final AnimationState lid_open = new AnimationState();
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState hideBubble = new AnimationState();
+    public final AnimationState hideExtra = new AnimationState();
+    public final AnimationState hideSwordInHand = new AnimationState();
     public final AnimationState bubbleSpin = new AnimationState();
     public final AnimationState kick_barrage_windup = new AnimationState();
     public final AnimationState finalKickWindup = new AnimationState();
@@ -121,7 +99,6 @@ public class KillerQueenEntity extends FollowingStandEntity {
     public final AnimationState itemGrab = new AnimationState();
     public final AnimationState itemThrow = new AnimationState();
     public final AnimationState detonate = new AnimationState();
-    public final AnimationState thirdBomb = new AnimationState();
     public final AnimationState mobBombPlant= new AnimationState();
     public final AnimationState mobBombPlant2 = new AnimationState();
     public final AnimationState bubbleLaunch = new AnimationState();
@@ -147,7 +124,9 @@ public class KillerQueenEntity extends FollowingStandEntity {
             SHA_SEND = 88,
     	    HEAVY_STRIKE = 26,
             ARROW_CHARGE = 89,
-            ARROW_THROW = 90;
+            ARROW_THROW = 90,
+            SHA_SHOOT = 91,
+            BTD_DETONATION = 92;
 
 
 
@@ -156,6 +135,24 @@ public class KillerQueenEntity extends FollowingStandEntity {
         super.setupAnimationStates();
         if (this.getUser() != null) {
             byte animation = this.getAnimation();
+
+            boolean isSamurai = getSkin() == SAMURAI || getSkin() == SPIRIT;
+
+            if (isSamurai) {
+                hideExtra.stop();
+
+                if (getAnimation() != IMPALE && getAnimation() != KICK_CHARGE
+                        && getAnimation() != KICK && getAnimation() !=HEAVY_STRIKE) {
+                    hideSwordInHand.startIfStopped(tickCount);
+                }else {
+                    hideSwordInHand.stop();
+                }
+
+            }else {
+                hideExtra.startIfStopped(tickCount);
+            }
+
+
 
             if (getBubbleShieldActive()) {
                 bubbleSpin.startIfStopped(tickCount);
@@ -249,7 +246,7 @@ public class KillerQueenEntity extends FollowingStandEntity {
                 this.itemGrabAnimation.stop();
             }
 
-            if (animation == ARROW_THROW) {
+            if (animation == ARROW_THROW || animation == SHA_SHOOT) {
                 this.arrowThrow.startIfStopped(this.tickCount);
             } else {
                 this.arrowThrow.stop();
@@ -320,18 +317,11 @@ public class KillerQueenEntity extends FollowingStandEntity {
     }
 
 
-    /** unused, unless someone fix the followOffset to work with following
-    /*
-    @Override
-    public Vec3 getStandOffsetVector(LivingEntity standUser){
-
-        if (((StandUser)standUser).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && KQ.inBitesTheDustMode()) {
-            /**
-             * For some reason the "this.getFollowing()" will always return null
-             *
-            return getIdleOffset(this.getFollowing());
+    public LivingEntity getFollowingAggressive() {
+        if ((getUser() != null) && (((StandUser)getUser()).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ) && PKQ.inBitesTheDustMode()) {
+            return PKQ.bitesTheDustPlantedEntity;
         }
 
-        return super.getStandOffsetVector(standUser);
-    }*/
+        return super.getFollowingAggressive();
+    }
 }

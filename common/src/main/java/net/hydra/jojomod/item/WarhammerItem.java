@@ -22,9 +22,12 @@ import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+
+import javax.annotation.Nullable;
 
 public class WarhammerItem extends DiggerItem  {
     /**The hammer joseph uses against wamuu in the chariot fight
@@ -37,17 +40,24 @@ public class WarhammerItem extends DiggerItem  {
     public float getDestroySpeed(ItemStack itemStack, BlockState blockState) {
         float spd = super.getDestroySpeed(itemStack,blockState);
         if (spd > 1 || blockState.getBlock() instanceof StoneMaskBlock){
-            spd*=3f;
+            if (!MainUtil.confirmIsOre(blockState)) {
+                spd *= 3f;
+            }
         }
         return spd;
     }
-
+    public int getBurnTime(ItemStack stack, @Nullable RecipeType<?> recipeType) {
+        return 200;
+    }
     @Override
     public boolean canAttackBlock(BlockState $$0, Level $$1, BlockPos $$2, Player $$3) {
         return !$$3.isCreative();
     }
     @Override
     public boolean isCorrectToolForDrops(BlockState blockState) {
+        if (MainUtil.confirmIsOre(blockState)){
+            return super.isCorrectToolForDrops(blockState);
+        }
         return false;
     }
 }

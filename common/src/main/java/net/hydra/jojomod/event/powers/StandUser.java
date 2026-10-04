@@ -1,5 +1,6 @@
 package net.hydra.jojomod.event.powers;
 
+import com.mojang.authlib.GameProfile;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -310,6 +311,9 @@ public interface StandUser {
     void roundabout$setLocacacaCurse(byte locacacaCurse);
     byte roundabout$getLocacacaCurse();
 
+    void roundabout$setGrabbedSoul(boolean grabbedSoul);
+    boolean roundabout$getGrabbedSoul();
+
     byte roundabout$getStandSkin();
     byte roundabout$getLastStandSkin();
     void roundabout$setLastStandSkin(byte lastStandSkin);
@@ -387,7 +391,8 @@ public interface StandUser {
     boolean rdbt$isForceCrawl();
     int rdbt$getCrawlTicks();
 
-    void rdbt$SetBtdPlantedUser(PowersKillerQueen e);
+    @Nullable PowersKillerQueen rdbt$GetBtdPlantedUser();
+    void rdbt$SetBtdPlantedUser(@Nullable PowersKillerQueen e);
     boolean rdbt$interceptIncomingHarmIfBTD(DamageSource source);
 
     List<CooldownInstance> rdbt$initPowerCooldowns();
@@ -397,7 +402,18 @@ public interface StandUser {
     /* diver down diving down */
     void roundabout$SetDiverUser(PowersDiverDown powers);
     PowersDiverDown roundabout$getDiverUser();
-
+    boolean roundabout$isDisguised();
+    @Nullable GameProfile roundabout$getDisguiseProfile();
+    void roundabout$setDisguise(GameProfile profile);
+    void roundabout$clearDisguise();
+    boolean roundabout$hasDiverLegs();
+    void roundabout$setDiverLegs(boolean legs);
+    boolean roundabout$hasDiverArms();
+    void roundabout$setDiverArms(boolean arms);
+    boolean roundabout$hasRibcageTrap();
+    void roundabout$setRibcageTrap(boolean trap);
+    boolean roundabout$hasSpringLegs();
+    void roundabout$setSpringLegs(boolean legs);
     boolean roundabout$hasInfiniteSpin();
     void roundabout$clearInfiniteSpin();
 }

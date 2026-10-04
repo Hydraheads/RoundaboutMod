@@ -332,6 +332,11 @@ public class WhitesnakeModel extends StandModel<WhitesnakeEntity> {
             super.rotateHead(entity, head, tickDelta);
             return;
         }
+        if (entity.blockAnimationState.isStarted() || entity.barrageChargeAnimationState.isStarted()
+                || entity.barrageAnimationState.isStarted() || entity.miningBarrageAnimationState.isStarted()) {
+            setHeadRotations(0.0F, 0.0F);
+            return;
+        }
         float pitch = Mth.clamp(controlHeadPitch, -90.0F, 90.0F) * Mth.DEG_TO_RAD;
         float yaw = Mth.clamp(Mth.wrapDegrees(controlHeadYaw), -85.0F, 85.0F) * Mth.DEG_TO_RAD;
         setHeadRotations(pitch, yaw);

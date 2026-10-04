@@ -256,6 +256,14 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
 
     }
+    @Inject(
+            method = "startAutoSpinAttack(I)V",
+            at = @At("HEAD"),
+            cancellable = true, require = 0
+    )
+    public void rdbt$startAutoSpinAttackP(int $$0, CallbackInfo ci){
+        ((StandUser)this).roundabout$getStandPowers().onSpinAttackStart();
+    }
 
 
     //0.00392156862
@@ -963,6 +971,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         if (bpow != 1){
             modifier*= bpow;
         }
+        if (((StandUser) this).roundabout$hasDiverArms()) {
+            modifier *= 1.30F;
+        }
         if (modifier != 1){
             cir.setReturnValue((float)(1.0D / (this.getAttributeValue(Attributes.ATTACK_SPEED)*modifier) * 20.0D));
         }
@@ -1012,6 +1023,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 if (bpow != 1){
                     dSpeed*= bpow;
                 }
+            }
+            if (((StandUser) this).roundabout$hasDiverArms()) {
+                dSpeed *= 1.35F;
             }
             cir.setReturnValue(dSpeed);
         }
@@ -1599,8 +1613,18 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             }
             return;
         }
-        if (this.inventory.getSelected().getItem() instanceof WarhammerItem) {
-            cir.setReturnValue(!$$0.requiresCorrectToolForDrops() && !($$0.getBlock() instanceof StoneMaskBlock));
+        if (this.inventory.getSelected().getItem() instanceof WarhammerItem wi) {
+            if ($$0.getBlock() instanceof StoneMaskBlock){
+                cir.setReturnValue(false);
+                return;
+            }
+            if ($$0.requiresCorrectToolForDrops() && MainUtil.confirmIsOre($$0) &&
+            wi.isCorrectToolForDrops($$0)){
+                cir.setReturnValue(true);
+                return;
+            } else {
+                cir.setReturnValue(!$$0.requiresCorrectToolForDrops() && !($$0.getBlock() instanceof StoneMaskBlock));
+            }
             return;
         }
     }

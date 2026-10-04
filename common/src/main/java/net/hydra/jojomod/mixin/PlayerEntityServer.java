@@ -8,10 +8,12 @@ import net.hydra.jojomod.client.gui.BlackSabbathPlayerInventoryMenu;
 import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.platform.Services;
 import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
+import net.hydra.jojomod.stand.powers.PowersDiverDown;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.BlockPos;
@@ -19,6 +21,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.Container;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -196,4 +199,16 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
         this.initMenu(this.containerMenu);
     }
 
+    @Inject(method = "die", at = @At("HEAD"))
+    public void roundabout$onServerPlayerDie(DamageSource $$0, CallbackInfo ci) {
+        if (((StandUser) this).roundabout$getStandPowers() instanceof PowersDiverDown dd
+                && dd.isTransferringDamage && dd.submergedTarget != null) {
+            DamageSource customSource = ModDamageTypes.of(
+                    this.level(),
+                    ModDamageTypes.DIVER_REDIRECTION,
+                    dd.submergedTarget
+            );
+            this.getCombatTracker().recordDamage(customSource, 0);
+        }
+    }
 }

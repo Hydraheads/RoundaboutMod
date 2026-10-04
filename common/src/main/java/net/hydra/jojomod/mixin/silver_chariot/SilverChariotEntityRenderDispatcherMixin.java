@@ -45,6 +45,10 @@ public class SilverChariotEntityRenderDispatcherMixin {
             return;
         }
 
+        if (SCE.getUser() == entity) {
+            return;
+        }
+
         if (!(entity instanceof LivingEntity livingEntity)) {
             return;
         }

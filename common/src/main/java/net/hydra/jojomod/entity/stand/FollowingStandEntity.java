@@ -71,6 +71,9 @@ public class FollowingStandEntity extends StandEntity{
         this.entityData.set(DISTANCE_OUT, blocks);
     }
     public final float getDistanceOut() {
+        if (getOffsetType() == OffsetIndex.BEHIND){
+            return 0.2F;
+        }
         return this.entityData.get(DISTANCE_OUT);
     }
     public final void setSizePercent(float blocks) {
@@ -83,12 +86,22 @@ public class FollowingStandEntity extends StandEntity{
         this.entityData.set(IDLE_ROTATION, blocks);
     }
     public final float getIdleRotation() {
+        if (getOffsetType() == OffsetIndex.BEHIND){
+            return 0;
+        }
         return this.entityData.get(IDLE_ROTATION);
     }
     public final void setIdleYOffset(float blocks) {
         this.entityData.set(IDLE_Y_OFFSET, blocks);
     }
     public final float getIdleYOffset() {
+        if (getOffsetType() == OffsetIndex.BEHIND){
+            if (getUser() != null && getUser().isCrouching()){
+                return 0.25F;
+            } else {
+                return 0.7F;
+            }
+        }
         return this.entityData.get(IDLE_Y_OFFSET);
     }
 
@@ -220,6 +233,7 @@ public class FollowingStandEntity extends StandEntity{
             float standrotDir = (float) getPunchYaw(this.getAnchorPlaceAttack(),
                     1);
             if (standrotDir >0){standrotDir2=90;} else if (standrotDir < 0) {standrotDir2=-90;}
+
             float addY = 0.3F;
             float addXYZ = 0.3F;
             float addXZ = 0.7F;
@@ -256,7 +270,13 @@ public class FollowingStandEntity extends StandEntity{
     ///  lets you modify the values, since they're otherwise final functions
     public float getDistanceOutModified() {return getDistanceOut();}
     public float getIdleYOffsetModified() {return getIdleYOffset();}
-    public float getAnchorPlaceModified() {return getAnchorPlace();}
+    public float getAnchorPlaceModified() {
+
+        if (getOffsetType() == OffsetIndex.BEHIND){
+            return 180;
+        }
+
+        return getAnchorPlace();}
 
     /**This is the way a stand looks when it is passively floating by you*/
     public Vec3 getIdleOffset(LivingEntity standUser) {
@@ -267,6 +287,7 @@ public class FollowingStandEntity extends StandEntity{
         }
         double yawfix = standUser.getYRot();
         yawfix += this.getAnchorPlaceModified();
+
         if (yawfix > 360) {
             yawfix -= 360;
         } else if (yawfix < 0) {

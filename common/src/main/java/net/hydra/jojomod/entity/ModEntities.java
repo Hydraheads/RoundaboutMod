@@ -103,6 +103,10 @@ public class ModEntities {
 
     public static EntityType<StarPlatinumBaseballEntity> STAR_PLATINUM_BASEBALL;
     public static EntityType<DiverDownEntity> DIVER_DOWN;
+    public static EntityType<DiverDownBetaEntity> DIVER_DOWN_BETA;
+    public static EntityType<DiverDownWorldEntity> DIVER_DOWN_WORLD;
+    public static EntityType<DiverKickEntity> DIVER_KICK;
+    public static EntityType<BoneProjectileEntity> BONE_PROJECTILE;
     public static EntityType<SilverChariotEntity> SILVER_CHARIOT;
     public static EntityType<SilverChariotRapierShotEntity> SILVER_CHARIOT_RAPIER;
     public static EntityType<SilverChariotRapierPlatformEntity> SILVER_CHARIOT_RAPIER_PLATFORM;
@@ -130,6 +134,7 @@ public class ModEntities {
     public static EntityType<HallucinatoryAcidProjectile> HALLUCINATORY_ACID_PROJECTILE;
     public static EntityType<BombPlantedItemEntity> BOMB_PLANTED_ITEM;
     public static EntityType<BombPlantedArrow> BOMB_PLANTED_ARROW;
+    public static EntityType<BombPlantedEnderpearl> BOMB_PLANTED_ENDERPEARL;
     public static EntityType<BombPlantedSpectralArrow> BOMB_PLANTED_SPECTRAL_ARROW;
     public static EntityType<VirusSpitEntity> VIRUS_SPIT;
 

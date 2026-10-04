@@ -37,6 +37,7 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ClipContext;
@@ -130,6 +131,7 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
             this.setBreed(tag.getByte(TAG_SKIN));
         }
     }
+
     @Override
     public boolean isInLove() {
         return false;
@@ -282,6 +284,9 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
     }
 
     public static void tryToSpawnStrayCat(Cat entity) {
+        if (entity == null){
+            return;
+        }
         Level level = entity.level();
         BlockPos bPos = entity.getOnPos();
 
@@ -384,7 +389,8 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
         if (this.getBubbleShield() && canBubbleShieldProtect(DMG)) {
             Entity attacker = DMG.getEntity();
 
-            if (attacker instanceof LivingEntity LE) {
+            if (attacker instanceof LivingEntity LE
+                    && (LE.distanceTo(this) < 0.45f && !(DMG.getDirectEntity() instanceof Projectile))) {
 
                 double $$11 = Math.max(0.0, 1.0 - LE.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
                 Vec3 $$12 = (LE.getPosition(1).subtract(getPosition(1))).multiply(1.0, 0.0, 1.0).normalize().scale((double) 0.5 * $$11);
@@ -533,17 +539,9 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
     @Override public void push(Entity ent) { }
     @Override public void doPush(Entity ent) { }
 
-    public boolean shouldSleep() {
-        /*boolean lastState = this.getSleeping();
-        if (!lastState && this.getTarget() != null) {
-            return false;
-        }*/
-
-        return !isUnderLight(this);
-    }
+    public boolean shouldSleep() { return !isUnderLight(this); }
 
     public static boolean isUnderLight(LivingEntity LE){
-        BlockPos pos = LE.blockPosition();
         Level level = LE.level();
         if (level == null) { return true; }
 
@@ -552,7 +550,7 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
         BlockPos atVec = BlockPos.containing(yes);
         boolean isDay = timeOfDay < 12555L || timeOfDay > 23470;
 
-        if ((level.isRaining() || level.isThundering() || (level.getBrightness(LightLayer.SKY, atVec) - level.getSkyDarken()) < 10)) {
+        if ((level.isThundering() || (level.getBrightness(LightLayer.SKY, atVec) - level.getSkyDarken()) < 10)) {
             return false;
         } else {
             return isDay;
@@ -563,7 +561,7 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
 
     @Override
     public void performRangedAttack(LivingEntity livingEntity, float v) {
-        if (this.getSleeping() || this.getInterested()) {
+        if (this.getSleeping() || this.getInterested() || livingEntity == null) {
             return;
         }
 
@@ -571,7 +569,9 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
                 && (this.isOwnedBy(livingEntity) || this.getOwner().isAlliedTo(livingEntity)
                 || livingEntity instanceof OwnableEntity OE && OE.getOwner() != null && this.getOwner().is(OE.getOwner()))) {
             this.setTarget(null);
-            if (this.getLastAttacker().is(livingEntity)) {
+
+            LivingEntity lastAt = this.getLastAttacker();
+            if (lastAt !=null && lastAt.is(livingEntity)) {
                 this.setLastHurtByMob(null);
             }
 

@@ -38,11 +38,11 @@ public class ForgeBlocks {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Roundabout.MOD_ID);
     public static final RegistryObject<HallucinatoryAcidBlock> HALLUCINATORY_ACID = BLOCKS.register(
             "hallucinatory_acid", () -> new HallucinatoryAcidBlock(BlockBehaviour.Properties.of()
-                    .noCollission().noOcclusion().strength(3.0F, 6.0F).noLootTable().randomTicks()
+                    .noCollission().noOcclusion().strength(1.0F, 6.0F).noLootTable().randomTicks()
                     .sound(SoundType.MUD).pushReaction(PushReaction.BLOCK)));
     public static final RegistryObject<HallucinatoryAcidWallBlock> HALLUCINATORY_ACID_WALL = BLOCKS.register(
             "hallucinatory_acid_wall", () -> new HallucinatoryAcidWallBlock(BlockBehaviour.Properties.of()
-                    .noCollission().noOcclusion().strength(3.0F, 6.0F).noLootTable().randomTicks()
+                    .noCollission().noOcclusion().strength(1.0F, 6.0F).noLootTable().randomTicks()
                     .sound(SoundType.MUD).pushReaction(PushReaction.BLOCK)));
     public static final RegistryObject<BlockEntityType<HallucinatoryAcidBlockEntity>> HALLUCINATORY_ACID_BLOCK_ENTITY =
             BLOCK_ENTITIES.register("hallucinatory_acid", () -> BlockEntityType.Builder.of(
@@ -332,6 +332,8 @@ public class ForgeBlocks {
             () -> ModBlocks.GASOLINE_SPLATTER_PROPERTIES);
     public static final RegistryObject<Block> BLOOD_SPLATTER = BLOCKS.register("blood_splatter",
             () -> ModBlocks.BLOOD_SPLATTER_PROPERTIES);
+    public static final RegistryObject<Block> VIRUS_SPIT_SPLATTER = BLOCKS.register("virus_spit_splatter",
+            () -> ModBlocks.VIRUS_SPIT_SPLATTER_PROPERTIES);
     public static final RegistryObject<Block> ACID_PUDDLE = BLOCKS.register("acid_puddle",
             () -> ModBlocks.ACID_PUDDLE_PROPERTIES);
     public static final RegistryObject<Block> POISON_TRAIL_MUSHROOM = BLOCKS.register("poison_trail_mushroom",
@@ -412,6 +414,10 @@ public class ForgeBlocks {
             () -> ModBlocks.CREAM_FIRE_PROPERTIES);
     public static final RegistryObject<Block> FANCY_LIGHTER_BLOCK = BLOCKS.register("fancy_lighter_block",
             () -> ModBlocks.FANCY_LIGHTER_PROPRETIES);
+    public static final RegistryObject<Block> GAMBLING_TABLE = BLOCKS.register("gambling_table",
+            () -> ModBlocks.GAMBLING_TABLE_PROPERTIES);
+    public static final RegistryObject<BlockEntityType<GamblingTableBlockEntity>> GAMBLING_TABLE_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("gambling_table", () -> BlockEntityType.Builder.of(GamblingTableBlockEntity::new, GAMBLING_TABLE.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<OasisMudBlockEntity>> OASIS_MUD_BLOCK_ENTITY = BLOCK_ENTITIES.register("oasis_mud_block",
             () -> BlockEntityType.Builder.of(OasisMudBlockEntity::new, OASIS_MUD_BLOCK.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "oasis_mud_block")));

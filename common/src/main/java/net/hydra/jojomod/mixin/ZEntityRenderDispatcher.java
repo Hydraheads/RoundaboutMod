@@ -11,6 +11,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.objects.GentlyWeepsEntity;
 import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
+import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
@@ -43,6 +44,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EntityRenderDispatcher.class)
@@ -142,6 +144,9 @@ public abstract class ZEntityRenderDispatcher {
             }
         }
         if($$2 instanceof BlackSabbathEntity bs && bs.getRiding()){
+            ci.cancel();
+        }
+        if($$2 instanceof KillerQueenEntity kq && kq.getPlantedBitesTheDust()) {
             ci.cancel();
         }
     }

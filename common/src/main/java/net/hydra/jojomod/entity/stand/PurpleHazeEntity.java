@@ -18,7 +18,8 @@ public class PurpleHazeEntity extends FollowingStandEntity{
             NETHERITE = 5,
             MANGA = 6,
             MIRROR_BATTLE = 7,
-            ROTT = 8;
+            ROTT = 8,
+            PEPPERMINT = 9;
 
 
     public final AnimationState hideFists = new AnimationState();

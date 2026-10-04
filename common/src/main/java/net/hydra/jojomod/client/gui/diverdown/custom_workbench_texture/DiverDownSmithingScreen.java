@@ -10,7 +10,7 @@ import net.minecraft.world.entity.player.Inventory;
 
 public class DiverDownSmithingScreen extends SmithingScreen {
     private static final ResourceLocation TEXTURE =
-        new ResourceLocation(Roundabout.MOD_ID, "textures/gui/diver_down/workbench_ui/anvil.png");
+        new ResourceLocation(Roundabout.MOD_ID, "textures/gui/diver_down/workbench_ui/smithing_table.png");
 
     public DiverDownSmithingScreen(SmithingMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
@@ -24,7 +24,6 @@ public class DiverDownSmithingScreen extends SmithingScreen {
         // Custom background texture
         graphics.blit(TEXTURE, x, y, 0, 0, this.imageWidth, this.imageHeight);
 
-        // Vanilla overlay for text field box and hammer / error cross
         graphics.blit(TEXTURE, x + 59, y + 20, 0, this.imageHeight + (this.menu.getSlot(0).hasItem() ? 0 : 16), 110, 16);
         if ((this.menu.getSlot(0).hasItem() || this.menu.getSlot(1).hasItem()) && !this.menu.getSlot(2).hasItem()) {
             graphics.blit(TEXTURE, x + 99, y + 45, this.imageWidth, 0, 28, 21);
