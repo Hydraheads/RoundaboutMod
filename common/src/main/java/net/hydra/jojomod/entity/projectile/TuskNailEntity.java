@@ -106,7 +106,7 @@ public class TuskNailEntity extends AbstractArrow {
     public void tick() {
         super.tick();
         this.life += 1;
-        if (this.life > 200) {
+        if (this.life > 100 || (this.getAct() == 1 && life > 7) ) {
             this.discard();
         }
         if (!this.level().isClientSide() && this.getOwner() != null && this.getOwner() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersTusk PT) {
