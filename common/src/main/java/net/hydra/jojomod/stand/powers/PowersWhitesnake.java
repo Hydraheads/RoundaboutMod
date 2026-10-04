@@ -514,7 +514,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         boolean entering = stand != null && selected != null && selected.is(stand);
         boolean leavingAutoMode = entering && autoMode;
         if (entering && getActivePower() == PowerIndex.POWER_2_BLOCK) {
-            stopPhaseGrabAtCurrentPosition(stand);
+            stopPowerAtCurrentPosition(stand);
         }
         if (entering) prepareStandForRemoteControl(stand);
         ((IPlayerEntity) player).roundabout$setIsControlling(entering ? id : 0);
@@ -597,10 +597,6 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     private static boolean isUsableStand(StandEntity stand) {
         return stand != null && stand.isAlive() && !stand.isRemoved();
-    }
-
-    private void stopPhaseGrabAtCurrentPosition(StandEntity stand) {
-        stopPowerAtCurrentPosition(stand);
     }
 
     private void stopPowerAtCurrentPosition(StandEntity stand) {
@@ -1944,8 +1940,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         stand.setTarget(null);
         double distance = stand.distanceTo(self);
         boolean sprinting = distance > 3.0D;
-        stand.setSprinting(sprinting);
-        stand.setSpeed(sprinting ? 0.3F : 0.2F);
+        updateAutoModeSpeed(stand, sprinting);
 
         retreatTicks++;
 
