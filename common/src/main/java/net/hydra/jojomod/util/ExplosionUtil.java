@@ -1,22 +1,22 @@
 package net.hydra.jojomod.util;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.GameRules;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.phys.BlockHitResult;
 import org.joml.Vector3f;
-
-import com.google.common.collect.Lists;
 
 //import net.hydra.jojomod.client.ClientNetworking;
 //import net.hydra.jojomod.event.ModParticles;
@@ -32,6 +32,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+
+import javax.annotation.Nullable;
 
 public class ExplosionUtil {
 	
@@ -69,34 +71,36 @@ public class ExplosionUtil {
 
     }
 
-	public static int explosionHurtWithMulti(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range, float mobMult, float playerMult) {
+	public static HashSet<LivingEntity> explosionHurtWithMulti(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range, float mobMult, float playerMult) {
 		return explosionHurtBaseWithMulti(false, pos, dmgSource, level, damage, knockBack, range, mobMult, playerMult);
 	}
 
-	public static int explosionHurtSneakyWithMulti(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range, float mobMult, float playerMult) {
+	public static HashSet<LivingEntity> explosionHurtSneakyWithMulti(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range, float mobMult, float playerMult) {
 		return explosionHurtBaseWithMulti(true, pos, dmgSource, level, damage, knockBack, range, mobMult, playerMult);
 	}
 
-	public static int explosionHurt(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range) {
+	public static HashSet<LivingEntity> explosionHurt(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range) {
 		return explosionHurtBase(false, pos, dmgSource, level, damage, knockBack, range);
 	}
 
-	public static int explosionHurtSneaky(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range) {
+	public static HashSet<LivingEntity> explosionHurtSneaky(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range) {
 		return explosionHurtBase(true, pos, dmgSource, level, damage, knockBack, range);
 	}
 
-	public static int explosionHurtBase(Boolean sneaky, Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range) {
+	public static HashSet<LivingEntity> explosionHurtBase(Boolean sneaky, Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range) {
 		return explosionHurtBaseWithMulti(sneaky, pos, dmgSource, level, damage, knockBack, range, 1.0f, 1.0f);
     }
 
-	public static int explosionHurtBaseWithMulti(Boolean sneaky, Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range, float mobMult, float playerMult) {
+	public static HashSet<LivingEntity> explosionHurtBaseWithMulti(Boolean sneaky, Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range, float mobMult, float playerMult) {
 		List<Entity> damages = MainUtil.genHitbox(level, pos.x(), pos.y(), pos.z(), range, range, range);
 
 		Entity causer = dmgSource.getEntity();
 
 		DamageSource notSeenDamage =  ModDamageTypes.of(level, ModDamageTypes.EXPLOSIVE_STAND, null);
 
-		int amountOfVictims = 0;
+		HashSet<LivingEntity> victims = new HashSet<LivingEntity>();
+
+		//int amountOfVictims = 0;
 
 		for(int j = 0;j<damages.size();j++) {
 			Entity entity = damages.get(j);
@@ -107,11 +111,14 @@ public class ExplosionUtil {
 				continue;
 			}
 
-			if (entity instanceof LivingEntity) { amountOfVictims++; }
+			if (entity instanceof LivingEntity LE) {
+				victims.add(LE);
+				//amountOfVictims++;
+			}
 
 			double dist = entity.distanceToSqr(pos);
 			float percUnhand = ((float)dist/ (range * range * range));
-			float perc = 1.0f - (percUnhand*0.75f);
+			float perc = 1.0f - (percUnhand*0.85f);
 			float percKnockback = 1.0f - (percUnhand*0.5f);
 
 			boolean hasSeen = true;
@@ -140,7 +147,7 @@ public class ExplosionUtil {
 			MainUtil.takeLiteralUnresistableKnockbackWithY(entity, knockback.x, knockback.y, knockback.z);
 		}
 
-		return amountOfVictims;
+		return victims;
 	}
 
 	public static void explodeBlocks(BlockPos location, Level level, Float range, Entity causer) {
@@ -152,11 +159,12 @@ public class ExplosionUtil {
 	}
 
 	public static void explodeBlocksBase(BlockPos location, Level level, Float range, boolean ignoreOres, Entity causer) {
+
 		Vec3 center = new Vec3(location.getX(), location.getY(), location.getZ());
 
-		int intSize = (int) Math.round(range);
+		int intSize = Math.round(range) + 1;
 
-		double explosionDistanceMax = Math.pow(range + 0.45, 2);
+		double explosionDistanceMax = Math.pow(range + 0.5, 2);
 
 		for (BlockPos pos : BlockPos.betweenClosed(location.offset(intSize, intSize, intSize), location.offset(-intSize, -intSize, -intSize))) {
 			BlockState info = level.getBlockState(pos);
@@ -167,13 +175,38 @@ public class ExplosionUtil {
 			}
 
 			// Simulate natural explosions
-			Double explosionDistance = explosionDistanceMax + ((double) level.getRandom().nextIntBetweenInclusive(-intSize * 2, intSize * 2) / 7.5);
+			Double explosionDistance = explosionDistanceMax + ((double) level.getRandom().nextIntBetweenInclusive(-intSize*2, intSize*2) / 7.5);
 
 			Double dist2 = center.distanceToSqr(pos.getX(), pos.getY(), pos.getZ());
 
-			if (dist2 <= explosionDistance && !(causer instanceof Player PL && !MainUtil.canPlaceOnClaim(PL, pos))) {
+			if (dist2 <= explosionDistance) {
 				boolean shouldDrop = !info.requiresCorrectToolForDrops() && level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING_OBTAINMENT);
-				level.destroyBlock(pos, shouldDrop);
+
+				destroyBlockHandled(level, pos, shouldDrop, causer);
+
+			}
+		}
+	}
+
+	public static void destroyBlockHandled(Level level, BlockPos $$0, boolean $$1, @Nullable Entity $$2) {
+		if ($$2 instanceof Player p) {
+			if (!MainUtil.canPlaceOnClaim(p, new BlockHitResult(new Vec3($$0.relative(Direction.DOWN).getX(),$$0.relative(Direction.DOWN).getY(),$$0.relative(Direction.DOWN).getZ()), Direction.UP,$$0.relative(Direction.DOWN),false))) {
+				return;
+			}
+		}
+
+		BlockState $$4 = level.getBlockState($$0);
+		if (!$$4.isAir()) {
+			FluidState $$5 = level.getFluidState($$0);
+
+			if ($$1) {
+				BlockEntity $$6 = $$4.hasBlockEntity() ? level.getBlockEntity($$0) : null;
+				Block.dropResources($$4, level, $$0, $$6, $$2, ItemStack.EMPTY);
+			}
+
+			boolean $$7 = level.setBlock($$0, $$5.createLegacyBlock(), 3, 512);
+			if ($$7) {
+				level.gameEvent(GameEvent.BLOCK_DESTROY, $$0, GameEvent.Context.of($$2, $$4));
 			}
 		}
 	}

@@ -611,6 +611,10 @@ public abstract class InputEvents implements IInputEvents {
             } else if (player.getOffhandItem().getItem() instanceof FirearmItem) {
                 fireArm = player.getOffhandItem();
             }
+
+            if (roundabout$sameKeyTwo(KeyInputRegistry.guardKey)){
+                fireArm = null;
+            }
             if (fireArm != null) {
                 if (standComp.roundabout$getEffectiveCombatMode() && PowerTypes.hasStandActivelyEquipped(player)) {
                     if (standComp.roundabout$getStandPowers() != null) {

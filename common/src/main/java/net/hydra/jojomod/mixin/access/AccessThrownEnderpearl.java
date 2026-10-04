@@ -31,6 +31,10 @@ public abstract class AccessThrownEnderpearl extends ThrowableItemProjectile {
 
     @Inject(method = "onHit", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$onHit(HitResult $$0, CallbackInfo ci) {
+        if (getOwner() instanceof LivingEntity LE){
+            ((StandUser)LE).roundabout$getStandPowers().onEnderPearlLand();
+        }
+
         HitResult.Type $$1 = $$0.getType();
         if ($$1 == HitResult.Type.ENTITY) {
             Entity $$2x = ((EntityHitResult) $$0).getEntity();

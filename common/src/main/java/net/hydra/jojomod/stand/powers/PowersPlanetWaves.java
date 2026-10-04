@@ -1119,7 +1119,7 @@ public class PowersPlanetWaves extends NewDashPreset {
                 double tpZ = standTargetPos.z;
 
                 if (standHitDirection == net.minecraft.core.Direction.UP) {
-                    tpY += 0.5;
+                    tpY += 0.3;
                     if (standApproachDir != null) {
                         double offsetDist = 0.75; // 1.0 = mob más alejado del stand
                         tpX += standApproachDir.x * offsetDist;
@@ -1130,6 +1130,13 @@ public class PowersPlanetWaves extends NewDashPreset {
 
                     if (standApproachDir != null) {
                         double offsetDist = 0.75;
+                        tpX += standApproachDir.x * offsetDist;
+                        tpZ += standApproachDir.z * offsetDist;
+                    }
+                }else {
+                    tpY += 0.3;
+                    if (standApproachDir != null) {
+                        double offsetDist = 1.5;
                         tpX += standApproachDir.x * offsetDist;
                         tpZ += standApproachDir.z * offsetDist;
                     }

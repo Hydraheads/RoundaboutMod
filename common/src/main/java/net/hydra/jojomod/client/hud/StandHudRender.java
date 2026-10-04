@@ -376,9 +376,9 @@ public class StandHudRender {
             sc = Mth.clamp(sc, 0, st);
             int blt2 = 182 - (int) Math.floor(((double) 182 / st) * (sc));
 
-            int bleh = 10;
+            int bleh = 71;
             if (!PW.inCombatMode()){
-                bleh+=10;
+                bleh = 10;
             }
 
             context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, bleh, 182, 5);
@@ -396,6 +396,46 @@ public class StandHudRender {
             } else {
                 context.blit(StandIcons.JOJO_ICONS_2, k, l, u, 10, 9, 9);
             }
+        }
+
+    }
+    public static void renderCenturyBoyHud(GuiGraphics context, Player playerEntity,
+                                             int scaledWidth, int scaledHeight, int x) {
+
+        StandUser standUser = ((StandUser) playerEntity);
+        if (standUser.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB) {
+
+            int l;
+            int k;
+            l = scaledHeight - 32 + 3;
+
+            int st = PCB.getMaxDefenceTicks();
+            int sc = PCB.getDefenceTicks();
+            sc = Mth.clamp(sc, 0, st);
+            int blt2 = 182 - (int) Math.floor(((double) 182 / st) * (sc));
+
+            int bleh = 71;
+            if (!PCB.invincibleState){
+                bleh+=5;
+            }
+
+           //context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, bleh, 182, 5);
+            if (blt2 > 0) {
+                bleh+=5;
+                context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, bleh, blt2, 5);
+            }
+
+            int u = 182;
+            k = scaledWidth / 2 - 5;
+            l = scaledHeight - 31 - 8;
+
+            context.blit(StandIcons.JOJO_ICONS_2, k, l, u, 40, 9, 11);
+
+            /*if (st >= sc) {
+                context.blit(StandIcons.JOJO_ICONS_2, k, l, u, 0, 9, 9);
+            } else {
+                context.blit(StandIcons.JOJO_ICONS_2, k, l, u, 0, 9, 9);
+            }*/
         }
 
     }
@@ -505,6 +545,63 @@ public class StandHudRender {
             context.blit(StandIcons.JOJO_ICONS, k, l, u, 90, 9, 9);
         }
 
+    }
+
+    public static void renderBitesTheDustTimer(GuiGraphics context, Minecraft client, int scaledWidth, int scaledHeight,
+                                               int x, double value, double max, PowersKillerQueen PW) {
+
+        int l;
+        int blt;
+
+        ResourceLocation file = StandIcons.JOJO_ICONS;
+
+        int bx = 0;
+        int by = 70;
+        int color = 0xab93e0;
+
+        int minSecs = ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatMinimunForFullBlow * 20;
+
+        if (value >= minSecs) {
+            by = 161;
+            color = 0xb161a9;
+        }else if (value < 0) {
+            by = 60;
+            color = 0x80a09f;
+            max = 0;
+        }
+
+        if (max <= 1) {
+            blt = (int) value;
+        }else {
+            blt = (int) Math.floor(((double) 182 / max) * (value));
+        }
+
+        l = scaledHeight - 32 + 3;
+        context.blit(file, x, l, bx, by, 182, 5);
+        if (blt > 0) {
+            context.blit(file, x, l, bx, by+5, blt, 5);
+        }
+
+        int u = 183;
+        int k = scaledWidth/2 - 5;
+        l = scaledHeight - 31 - 10; // maybe 8 is better
+
+        if (PW.disabledBTDTicks < 0){
+            context.blit(StandIcons.JOJO_ICONS, k, l, u, 110, 9, 9);
+        } else {
+            context.blit(StandIcons.JOJO_ICONS, k, l, u, 100, 9, 9);
+        }
+
+        int y = color;
+        Font renderer = client.font;
+        String $$6 = (int)(value / 20.0) + "";
+        int $$7 = (scaledWidth - renderer.width($$6)) / 2;
+        int $$8 = scaledHeight - 31 - 4;
+        context.drawString(renderer, $$6, $$7 + 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7 - 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 + 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 - 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8, y, false);
     }
 
     public static void renderShootModeEmperor(
@@ -806,6 +903,35 @@ public class StandHudRender {
         context.drawString(renderer, $$6, $$7, $$8 + 1, 0, false);
         context.drawString(renderer, $$6, $$7, $$8 - 1, 0, false);
         context.drawString(renderer, $$6, $$7, $$8, y, false);
+    }
+    //like pilot hud, except for the dive/submerge move for diver down.
+    public static void renderDistanceHUDDive(GuiGraphics context, Minecraft client, Player playerEntity,
+                                             int scaledWidth, int scaledHeight, int x, PowersDiverDown pdd) {
+        Entity target = pdd.submergedTarget;
+        if (target == null) return;
+
+        int maxDistance = pdd.getMaxPilotRange();
+        int distance = (int) Math.round(target.position().distanceTo(playerEntity.position()));
+
+        int blt = (int) Math.floor(((double) 182 / maxDistance) * distance);
+        int l = scaledHeight - 32 + 3;
+
+        context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 86, 182, 5);
+        if (blt > 0) {
+            context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 76, Math.min(blt, 182), 5);
+        }
+
+        int y = 0x55FFFF;
+        Font renderer = client.font;
+        String text = String.valueOf(distance);
+        int textX = (scaledWidth - renderer.width(text)) / 2;
+        int textY = scaledHeight - 31 - 4;
+
+        context.drawString(renderer, text, textX + 1, textY, 0, false);
+        context.drawString(renderer, text, textX - 1, textY, 0, false);
+        context.drawString(renderer, text, textX, textY + 1, 0, false);
+        context.drawString(renderer, text, textX, textY - 1, 0, false);
+        context.drawString(renderer, text, textX, textY, y, false);
     }
     public static void renderEpitaph(GuiGraphics context, Player playerEntity,
                                          int scaledWidth, int scaledHeight, int x, PowersKingCrimson pkc) {

@@ -46,6 +46,7 @@ public class BombPlantedItemEntity extends Entity implements TraceableEntity {
     private UUID target;
     public final float bobOffs;
 
+    public int safeContactTicks = 25;
 
     public BombPlantedItemEntity(EntityType<? extends BombPlantedItemEntity> type, Level level) {
         super(type, level);
@@ -123,6 +124,9 @@ public class BombPlantedItemEntity extends Entity implements TraceableEntity {
     public void defuse() {
         ItemEntity $$2 = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), getItem(), 0, 0, 0);
         $$2.setDefaultPickUpDelay();
+        CompoundTag tag = new CompoundTag();
+        addAdditionalSaveData(tag);
+        $$2.readAdditionalSaveData(tag);
         this.level().addFreshEntity($$2);
         discard();
     }
@@ -150,6 +154,10 @@ public class BombPlantedItemEntity extends Entity implements TraceableEntity {
 
     @Override
     public void tick() {
+        if (safeContactTicks > 0) {
+            safeContactTicks--;
+        }
+
         if (!level().isClientSide()) {
             if (host == null || !(host.isAlive() && ((StandUser)host).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ
                     /*&& PKQ.getCurrentBombStatus() == (byte)2*/ && PKQ.bombPlantedItem == this)) {

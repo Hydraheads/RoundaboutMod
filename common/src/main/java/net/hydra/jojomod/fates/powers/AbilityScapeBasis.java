@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
@@ -223,7 +224,7 @@ public class AbilityScapeBasis {
 
     public boolean getReducedDamage(Entity entity){
         return (entity instanceof Player || entity instanceof StandEntity ||
-                entity instanceof CloneEntity ||
+                (entity instanceof CloneEntity && !(entity instanceof D4CCloneEntity)) ||
                 ((entity instanceof LivingEntity LE && !((StandUser)LE).roundabout$getStandDisc().isEmpty()) &&
                         ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.standUserMobsTakePlayerDamageMultipliers)
         );
@@ -533,6 +534,10 @@ public class AbilityScapeBasis {
         return this.attackTimeDuring;
     }
     public void onEnderPearlThrow(){
+    }
+    public void onEnderPearlLand(){
+    }
+    public void onSpinAttackStart(){
     }
     public byte getActivePower(){
         return this.activePower;
@@ -2492,6 +2497,21 @@ public class AbilityScapeBasis {
         return listE;
     }
 
+    public List<ItemEntity> getItemTargetEntityList(LivingEntity User, float distMax, float angle){
+        /*First, attempts to hit what you are looking at*/
+        if (!(distMax >= 0)) {
+            distMax = this.getDistanceOut(User, this.getReach(), false);
+        }
+
+        /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
+        float halfReach = (float) (distMax*0.5);
+        Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
+        List<ItemEntity> listE = ItemStandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
+                pointVec.z, halfReach, halfReach, halfReach), distMax);
+        storeEnt = null;
+
+        return listE;
+    }
     public Entity getTargetEntityThroughWalls(LivingEntity User, float distMax, float angle){
         /*First, attempts to hit what you are looking at*/
         if (!(distMax >= 0)) {
@@ -2584,6 +2604,7 @@ public class AbilityScapeBasis {
             distMax = this.getDistanceOut(User, distMax, false);
             distMax = Math.min(this.getDistanceOut(User, distMax, false),distMax);
         }
+
         Entity targetEntity = this.rayCastEntity(User,distMax);
 
         if ((targetEntity != null && User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(targetEntity))
@@ -2940,6 +2961,40 @@ public class AbilityScapeBasis {
                         hitEntities.remove(value);
                     }
                 }
+            }
+        }
+        return hitEntities;
+    }
+
+    public List<ItemEntity> ItemStandGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance){
+        return ItemStandGrabHitbox(User,entities,maxDistance,25);
+    }
+    public List<ItemEntity> ItemStandGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance, float angle){
+        return ItemStandGrabHitbox(User,entities,maxDistance,angle,false);
+    }
+    public List<ItemEntity> ItemStandGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance, float angle, boolean throughWalls){
+        List<ItemEntity> hitEntities = new ArrayList<>() {
+        };
+
+        for (Entity value : entities) {
+            if (value instanceof ItemEntity IE && !value.isRemoved()){
+                Direction gravD = ((IGravityEntity)User).roundabout$getGravityDirection();
+                Vec2 lookVec = new Vec2(getLookAtEntityYaw(User, value), getLookAtEntityPitch(User, value));
+                if (gravD != Direction.DOWN) {
+                    lookVec = RotationUtil.rotPlayerToWorld(lookVec.x, lookVec.y, gravD);
+                }
+                if (!(angleDistance(lookVec.x, (User.getYHeadRot()%360f)) <= angle && angleDistance(lookVec.y, User.getXRot()) <= angle)){
+                    continue;
+                } else if (!canActuallyHit(value)){
+                    if (throughWalls) {
+                        if (!MainUtil.allowThruWalls(value)){
+                            continue;
+                        }
+                    } else {
+                        continue;
+                    }
+                }
+                hitEntities.add(IE);
             }
         }
         return hitEntities;

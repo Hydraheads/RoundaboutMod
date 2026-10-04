@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin.forge;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.util.MainUtil;
@@ -39,14 +40,17 @@ public abstract class ForgeEatingMixin {
                         ci.cancel();
                     }
                 }
-                if (PowerTypes.isErasingTime(entity)) {
+            }
+
+            if (PowerTypes.isErasingTime(entity)) {
+                ci.cancel();
+                return;
+            }
+            if (FateTypes.hasBloodHunger(entity)) {
+                if (item.isEdible()) {
+                    this.eat(MainUtil.getBloodAmount(stack), MainUtil.getSaturationAmount(stack));
                     ci.cancel();
                     return;
-                }
-                if (FateTypes.hasBloodHunger(entity)) {
-                    if (item.isEdible()) {
-                        this.eat(MainUtil.getBloodAmount(stack), MainUtil.getSaturationAmount(stack));
-                    }
                 }
             }
         }

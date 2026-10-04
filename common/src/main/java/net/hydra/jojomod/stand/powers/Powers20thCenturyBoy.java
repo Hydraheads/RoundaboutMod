@@ -1,9 +1,11 @@
 package net.hydra.jojomod.stand.powers;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.client.models.layers.animations.CenturyBoyAnimations;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.Poses;
@@ -15,11 +17,13 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
+import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -29,6 +33,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -45,6 +50,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 import org.apache.commons.compress.utils.Lists;
 
+import java.lang.module.ModuleDescriptor;
 import java.util.*;
 
 public class Powers20thCenturyBoy extends NewDashPreset {
@@ -53,7 +59,12 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     public boolean invincibleState = false;
     public int staticMode = 0;
     public int mode = 1;
-    private int wardenMunches = 0;
+    public int currentDefenseTicks = 0;
+    public int chargingDefenseTicks = 3;
+    public int maxDefenceTicks = 400;
+    public boolean shouldDefenceTick = false;
+    private int waitTicks = 0;
+
 
     /** general definition stuff **/
     @Override
@@ -342,8 +353,9 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     /// this is soo shit dont use this for reference use WA or something
     public boolean interceptIncomingHarm(DamageSource source, float amount) {
         if (invincibleState) {
-            if (source.getEntity() instanceof Warden warden && source.is(DamageTypes.MOB_ATTACK)) {
-                getEaten(warden);
+            if (source.getEntity() instanceof Player || MainUtil.isBossMob(source.getEntity())){
+                waitTicks = 200;
+                shouldDefenceTick = true;
             }
             StandUser user = getStandUserSelf();
 
@@ -374,7 +386,10 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                         source.is(DamageTypes.WITHER) ||
                         source.is(DamageTypes.DRAGON_BREATH) ||
                         source.is(ModDamageTypes.GO_BEYOND) ||
-                        source.is(DamageTypes.GENERIC_KILL)
+                        source.is(DamageTypes.GENERIC_KILL) ||
+                        source.is(ModDamageTypes.INFINITE_SPIN) ||
+                        source.is(ModDamageTypes.BRAIN_DEAD)
+
                 ) {
                     return false;
                 }
@@ -532,7 +547,9 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                         source.is(DamageTypes.WITHER) ||
                         source.is(DamageTypes.DRAGON_BREATH) ||
                         source.is(ModDamageTypes.GO_BEYOND) ||
-                        source.is(DamageTypes.GENERIC_KILL)
+                        source.is(DamageTypes.GENERIC_KILL) ||
+                        source.is(ModDamageTypes.INFINITE_SPIN) ||
+                        source.is(ModDamageTypes.BRAIN_DEAD)
                 ) {
                     return false;
                 } else {
@@ -561,9 +578,27 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             if (invincibleState){
                 this.setCooldown(PowerIndex.SKILL_2, 80);
                 invincibleState = false;
-                wardenMunches = 0;
             }
             staticMode = 0;
+        }
+        if (!invincibleState){
+            if (currentDefenseTicks < maxDefenceTicks){
+                currentDefenseTicks += chargingDefenseTicks;
+            }
+            if (shouldDefenceTick && waitTicks > 0){
+                waitTicks--;
+            }
+        } else {
+            if (shouldDefenceTick){
+                currentDefenseTicks--;
+            }
+            if (currentDefenseTicks < 1){
+                this.getSelf().hurt(ModDamageTypes.of(self.level(), ModDamageTypes.BRAIN_DEAD, this.self),
+                        1000);
+            }
+        }
+        if (waitTicks < 0){
+            shouldDefenceTick = false;
         }
     }
 
@@ -606,15 +641,6 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     @Override
     public boolean disableMobAiAttack() {
         return invincibleState;
-    }
-
-    public void getEaten(Warden warden){
-        if (wardenMunches < 3){
-            wardenMunches++;
-        }else {
-            warden.playSound(SoundEvents.GENERIC_EAT, 15F, 1F);
-            this.self.hurt(this.self.level().damageSources().genericKill(), 7);
-        }
     }
 
     @Override
@@ -663,10 +689,11 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     @Override
     public Component getPosName(byte posID) {
         switch (posID){
-            case 1 -> {return Component.translatable("idle.roundabout.century_boy2"); }
-            case 2 -> {return Component.translatable("idle.roundabout.century_boy3"); }
+            case (byte) 1 -> {return Component.translatable("idle.roundabout.century_boy2"); }
+            case (byte) 2 -> {return Component.translatable("idle.roundabout.century_boy3"); }
+            default -> {return Component.translatable("idle.roundabout.century_boy1");}
         }
-        return Component.translatable("idle.roundabout.century_boy1");
+
     }
 
     @Override
@@ -706,5 +733,23 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             }
             level.playSound(null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_HIT_EVENT, SoundSource.PLAYERS, 3F, 1.0F);
         }
+    }
+
+    /** hud **/
+    @Override
+    public boolean replaceHudActively() {
+        return (invincibleState || currentDefenseTicks < maxDefenceTicks);
+    }
+    public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x,
+                                  boolean removeNum){
+        StandHudRender.renderCenturyBoyHud(context,cameraPlayer,screenWidth,screenHeight,x);
+    }
+
+
+    public int getMaxDefenceTicks() {
+        return maxDefenceTicks;
+    }
+    public int getDefenceTicks() {
+        return currentDefenseTicks;
     }
 }

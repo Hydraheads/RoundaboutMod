@@ -184,6 +184,8 @@ public class FabricBlocks {
     );
     public static final Block BLOOD_SPLATTER = registerBlockItemless("blood_splatter", ModBlocks.BLOOD_SPLATTER_PROPERTIES
     );
+    public static final Block VIRUS_SPIT_SPLATTER = registerBlockItemless("virus_spit_splatter", ModBlocks.VIRUS_SPIT_SPLATTER_PROPERTIES
+    );
     public static final Block ACID_PUDDLE = registerBlockItemless("acid_puddle", ModBlocks.ACID_PUDDLE_PROPERTIES
     );
     public static final Block POISON_TRAIL_MUSHROOM = registerBlockItemless("poison_trail_mushroom", ModBlocks.POISON_TRAIL_MUSHROOM_PROPERTIES
@@ -255,12 +257,12 @@ public class FabricBlocks {
     public static final Block OASIS_MUD_BLOCK = registerBlockItemless("oasis_mud_block", OASIS_MUD_BLOCK_PROPERTIES);
     public static final HallucinatoryAcidBlock HALLUCINATORY_ACID = (HallucinatoryAcidBlock) registerBlockItemless(
             "hallucinatory_acid", new HallucinatoryAcidBlock(BlockBehaviour.Properties.of()
-                    .noCollission().noOcclusion().strength(3.0F, 6.0F).noLootTable().randomTicks().sound(SoundType.MUD)
+                    .noCollission().noOcclusion().strength(1.0F, 6.0F).noLootTable().randomTicks().sound(SoundType.MUD)
                     .pushReaction(PushReaction.BLOCK)));
     public static final HallucinatoryAcidWallBlock HALLUCINATORY_ACID_WALL =
             (HallucinatoryAcidWallBlock) registerBlockItemless("hallucinatory_acid_wall",
                     new HallucinatoryAcidWallBlock(BlockBehaviour.Properties.of()
-                            .noCollission().noOcclusion().strength(3.0F, 6.0F).noLootTable().randomTicks().sound(SoundType.MUD)
+                            .noCollission().noOcclusion().strength(1.0F, 6.0F).noLootTable().randomTicks().sound(SoundType.MUD)
                             .pushReaction(PushReaction.BLOCK)));
     //public static final Block CHESSBOARD_BLOCK = registerChessBoardBlock("chessboard_block", CHESSBOARD_BLOCK_PROPERTIES);
 
@@ -294,6 +296,10 @@ public class FabricBlocks {
     public static final BlockEntityType<ChessPieceBlockEntity> CHESS_PIECE_BLOCK_ENTITY =
             registerBE("chess_piece",BlockEntityType.Builder.of(ChessPieceBlockEntity::new, CHESS_PIECE) );
 
+    public static final Block GAMBLING_TABLE =
+            registerBlock("gambling_table", ModBlocks.GAMBLING_TABLE_PROPERTIES);
+    public static final BlockEntityType<GamblingTableBlockEntity> GAMBLING_TABLE_BLOCK_ENTITY =
+            registerBE("gambling_table", BlockEntityType.Builder.of(GamblingTableBlockEntity::new, GAMBLING_TABLE));
 
     public static final BlockEntityType<KingBedBlockEntity> KING_BED_BLOCK_ENTITY =
             registerBE("king_bed_block",BlockEntityType.Builder.of(KingBedBlockEntity::new, KING_BED_BLOCK) );
@@ -451,6 +457,7 @@ public class FabricBlocks {
         ModBlocks.NEW_LOCACACA_BLOCK = NEW_LOCACACA_BLOCK;
         ModBlocks.GASOLINE_SPLATTER = GASOLINE_SPLATTER;
         ModBlocks.BLOOD_SPLATTER = BLOOD_SPLATTER;
+        ModBlocks.VIRUS_SPIT_SPLATTER = VIRUS_SPIT_SPLATTER;
         ModBlocks.ACID_PUDDLE = ACID_PUDDLE;
         ModBlocks.POISON_TRAIL_MUSHROOM = POISON_TRAIL_MUSHROOM;
         ModBlocks.BLUE_BLOOD_SPLATTER = BLUE_BLOOD_SPLATTER;
@@ -511,6 +518,9 @@ public class FabricBlocks {
 
         ModBlocks.CHESS_PIECE = CHESS_PIECE;
         ModBlocks.CHESS_PIECE_BLOCK_ENTITY = CHESS_PIECE_BLOCK_ENTITY;
+
+        ModBlocks.GAMBLING_TABLE = GAMBLING_TABLE;
+        ModBlocks.GAMBLING_TABLE_BLOCK_ENTITY = GAMBLING_TABLE_BLOCK_ENTITY;
 
         ModBlocks.FOG_TRAP_BLOCK_ENTITY = FOGTRAP_BLOCKENTITY;
         ModBlocks.COFFIN_BLOCK_ENTITY = COFFIN_BLOCK_ENTITY;

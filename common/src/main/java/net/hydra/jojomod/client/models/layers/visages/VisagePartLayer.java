@@ -292,6 +292,11 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             renderGyroHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
+                        if (vd.rendersAnakissHat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !isHoldingBowlerHat
+                                && !hideExtraPartsWithSuit) {
+                            renderAnakissHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                    r, g, b);
+                        }
                         if (vd.rendersSchoolHat() && !isBodyFrozen /*&& !MainUtil.isWearingEitherStoneMask(entity)*/ && !isHoldingBowlerHat
                                 && !hideExtraPartsWithSuit) {
                             renderSchoolHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
@@ -833,6 +838,15 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         ClientUtil.pushPoseAndCooperate(poseStack,36);
         getParentModel().head.translateAndRotate(poseStack);
         ModStrayModels.gyroHatPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderAnakissHat(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                              float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.anakissHatPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
         ClientUtil.popPoseAndCooperate(poseStack,36);
     }

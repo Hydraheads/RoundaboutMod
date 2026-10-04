@@ -514,7 +514,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         boolean entering = stand != null && selected != null && selected.is(stand);
         boolean leavingAutoMode = entering && autoMode;
         if (entering && getActivePower() == PowerIndex.POWER_2_BLOCK) {
-            stopPhaseGrabAtCurrentPosition(stand);
+            stopPowerAtCurrentPosition(stand);
         }
         if (entering) prepareStandForRemoteControl(stand);
         ((IPlayerEntity) player).roundabout$setIsControlling(entering ? id : 0);
@@ -597,10 +597,6 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     private static boolean isUsableStand(StandEntity stand) {
         return stand != null && stand.isAlive() && !stand.isRemoved();
-    }
-
-    private void stopPhaseGrabAtCurrentPosition(StandEntity stand) {
-        stopPowerAtCurrentPosition(stand);
     }
 
     private void stopPowerAtCurrentPosition(StandEntity stand) {
@@ -1301,10 +1297,12 @@ public class PowersWhitesnake extends BlockGrabPreset {
                 ? ClientNetworking.getAppropriateConfig().generalStandSettings.jumpingDashCooldown
                 : ClientNetworking.getAppropriateConfig().generalStandSettings.dashCooldown;
         setCooldown(PowerIndex.GLOBAL_DASH, cooldown);
-        MainUtil.takeUnresistableKnockbackWithY(stand, 0.91F,
-                Mth.sin(degrees * ((float) Math.PI / 180)),
-                Mth.sin(-20 * ((float) Math.PI / 180)),
-                -Mth.cos(degrees * ((float) Math.PI / 180)));
+        if (self.level().isClientSide()) {
+            MainUtil.takeUnresistableKnockbackWithY(stand, 0.91F,
+                    Mth.sin(degrees * ((float) Math.PI / 180)),
+                    Mth.sin(-20 * ((float) Math.PI / 180)),
+                    -Mth.cos(degrees * ((float) Math.PI / 180)));
+        }
         if (!self.level().isClientSide()) {
             playSoundIfPossible(self.level(),null, stand.blockPosition(), ModSounds.DODGE_EVENT,
                     SoundSource.PLAYERS, 1.5F, (float) (0.98 + Math.random() * 0.04));
@@ -1345,6 +1343,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         if (!self.level().isClientSide()) {
             LivingEntity origin = isPiloting() ? actionOrigin() : self;
             HallucinatoryAcidProjectile projectile = new HallucinatoryAcidProjectile(self, self.level());
+            projectile.acidTossAlwaysExpires = !meltingMode;
             projectile.setPos(origin.getX(), origin.getEyeY() - 0.1D, origin.getZ());
             projectile.shootFromRotation(origin, origin.getXRot(), origin.getYRot(), -7.0F, 0.6F, 1.0F);
             self.level().addFreshEntity(projectile);
@@ -1943,8 +1942,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         stand.setTarget(null);
         double distance = stand.distanceTo(self);
         boolean sprinting = distance > 3.0D;
-        stand.setSprinting(sprinting);
-        stand.setSpeed(sprinting ? 0.3F : 0.2F);
+        updateAutoModeSpeed(stand, sprinting);
 
         retreatTicks++;
 
@@ -2690,7 +2688,12 @@ public class PowersWhitesnake extends BlockGrabPreset {
         boolean standOn = PowerTypes.hasStandActive(playerEntity);
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
-        if (standOn && getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+        if (this.getActivePower() == PowerIndex.POWER_1_SNEAK || this.getActivePower() == DISC_STEAL){
+            Entity TE = this.getTargetEntity(playerEntity, impaleRange);
+            if (TE != null) {
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
+            }
+        }else if (standOn && getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
             float charge = (float) attackTimeDuring / getMaxSuperHitTime();
             int barWidth = Math.min(15, Math.round(charge * 15));
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 111, 15, 6);

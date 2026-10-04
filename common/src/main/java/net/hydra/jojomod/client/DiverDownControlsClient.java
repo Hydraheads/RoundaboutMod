@@ -1,9 +1,11 @@
 package net.hydra.jojomod.client;
 
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 
 public final class DiverDownControlsClient {
@@ -11,6 +13,7 @@ public final class DiverDownControlsClient {
     private static boolean cameraActive = false;
     private static boolean isChestScreenCurrentlyOpen = false;
     private static boolean chestScreenWasOpen = false;
+    private static DiverDownGroundDiveSound diveSoundInstance = null;
 
     private DiverDownControlsClient() {
     }
@@ -20,11 +23,12 @@ public final class DiverDownControlsClient {
         if (stand == null) return;
         Minecraft mc = Minecraft.getInstance();
 
-        if (previousCameraType == null) {
+        if (net.hydra.jojomod.util.config.ConfigManager.getClientConfig().diverDownSettings.forceThirdPersonInGroundDive) {
             previousCameraType = mc.options.getCameraType();
+            mc.options.setCameraType(CameraType.THIRD_PERSON_BACK);
+        } else {
+            previousCameraType = null;
         }
-
-        mc.options.setCameraType(CameraType.FIRST_PERSON);
 
         if (mc.player != null && mc.getCameraEntity() != mc.player) {
             mc.setCameraEntity(mc.player);
@@ -32,6 +36,17 @@ public final class DiverDownControlsClient {
 
         ClientUtil.setCameraEntity(stand);
         cameraActive = true;
+
+        if (diveSoundInstance == null || diveSoundInstance.isStopped()) {
+            diveSoundInstance = new DiverDownGroundDiveSound(
+                    ModSounds.DIVER_DOWN_BUBBLING_EVENT,
+                    SoundSource.PLAYERS,
+                    0.85F, // volume
+                    1.0F,  // pitch
+                    stand
+            );
+            mc.getSoundManager().play(diveSoundInstance);
+        }
     }
 
     // restore the previous camera state
@@ -43,9 +58,18 @@ public final class DiverDownControlsClient {
             mc.setCameraEntity(mc.player);
         }
 
-        restoreCameraType(mc);
         cameraActive = false;
         isChestScreenCurrentlyOpen = false;
+
+        if (diveSoundInstance != null) {
+            Minecraft.getInstance().getSoundManager().stop(diveSoundInstance);
+            diveSoundInstance = null;
+        }
+
+        if (previousCameraType != null) {
+            mc.options.setCameraType(previousCameraType);
+            previousCameraType = null;
+        }
     }
 
     // failsafe just in case
@@ -72,12 +96,6 @@ public final class DiverDownControlsClient {
                 mc.player.playSound(closeSound, 1.0F, 1.0F);
             }
         }
-    }
-
-    private static void restoreCameraType(Minecraft mc) {
-        CameraType restore = (previousCameraType != null) ? previousCameraType : CameraType.FIRST_PERSON;
-        mc.options.setCameraType(restore);
-        previousCameraType = null;
     }
 
     public static boolean isDiving() {
