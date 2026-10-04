@@ -467,6 +467,27 @@ public class ForgeSounds {
     public static final RegistryObject<SoundEvent> STRAY_CAT_BUBBLE_REDIRECT_2_EVENT =
             register(ModSounds.STRAY_CAT_BUBBLE_REDIRECT_2, ModSounds.STRAY_CAT_BUBBLE_REDIRECT_2_ID);
 
+    public static final RegistryObject<SoundEvent> KQ_SAMURAI_SUMMON_EVENT =
+            register(ModSounds.KQ_SAMURAI_SUMMON, ModSounds.KQ_SAMURAI_SUMMON_ID);
+    public static final RegistryObject<SoundEvent> KQ_SAMURAI_BLOCK_PLANT_EVENT =
+            register(ModSounds.KQ_SAMURAI_BLOCK_PLANT, ModSounds.KQ_SAMURAI_BLOCK_PLANT_ID);
+    public static final RegistryObject<SoundEvent> KQ_SAMURAI_MOB_PLANT_EVENT =
+            register(ModSounds.KQ_SAMURAI_MOB_PLANT, ModSounds.KQ_SAMURAI_MOB_PLANT_ID);
+    public static final RegistryObject<SoundEvent> KQ_SAMURAI_BTD_NOISE_EVENT =
+            register(ModSounds.KQ_SAMURAI_BTD_NOISE, ModSounds.KQ_SAMURAI_BTD_NOISE_ID);
+    public static final RegistryObject<SoundEvent> KQ_SAMURAI_STAB_EVENT =
+            register(ModSounds.KQ_SAMURAI_STAB, ModSounds.KQ_SAMURAI_STAB_ID);
+    public static final RegistryObject<SoundEvent> KQ_SAMURAI_SLASH_EVENT =
+            register(ModSounds.KQ_SAMURAI_SLASH, ModSounds.KQ_SAMURAI_SLASH_ID);
+    public static final RegistryObject<SoundEvent> KQ_SAMURAI_WHOOSH_1_EVENT =
+            register(ModSounds.KQ_SAMURAI_WHOOSH_1, ModSounds.KQ_SAMURAI_WHOOSH_1_ID);
+    public static final RegistryObject<SoundEvent> KQ_SAMURAI_WHOOSH_2_EVENT =
+            register(ModSounds.KQ_SAMURAI_WHOOSH_2, ModSounds.KQ_SAMURAI_WHOOSH_2_ID);
+    public static final RegistryObject<SoundEvent> KQ_SAMURAI_TEAPOT_EVENT =
+            register(ModSounds.KQ_SAMURAI_TEAPOT, ModSounds.KQ_SAMURAI_TEAPOT_ID);
+    public static final RegistryObject<SoundEvent> KQ_SAMURAI_SHEATHE_EVENT =
+            register(ModSounds.KQ_SAMURAI_SHEATHE, ModSounds.KQ_SAMURAI_SHEATHE_ID);
+
     public static final RegistryObject<SoundEvent> KIRA4_DAMAGE_1_EVENT =
             register(ModSounds.KIRA4_DAMAGE_1, ModSounds.KIRA4_DAMAGE_1_ID);
     public static final RegistryObject<SoundEvent> KIRA4_DAMAGE_2_EVENT =

@@ -1153,6 +1153,7 @@
   "death.attack.distortion_virus": "%1$s was consumed by the Distortion Virus.",
   "death.attack.diver_redirection": "%1$s died for the sake of others",
   "death.attack.diver_redirection.player": "%1$s died for the sake of %2$s",
+  "death.attack.brain_dead": "%1$s stopped thinking",
 
   "item.glaive.charge_power": "Charge Attack",
 
@@ -1575,6 +1576,7 @@
 
   "sounds.roundabout.summon_killer_queen": "Stand summoned",
   "sounds.roundabout.summon_creeper_queen": "Creeper Queen Summon",
+  "sounds.roundabout.summon_samurai_queen": "Samurai Summon",
   "sounds.roundabout.kq_minesweeper_redirect": "[Bomb Redirecting]",
   "sounds.roundabout.kq_minesweeper_start": "[MINESWEEPER START]",
   "sounds.roundabout.killer_queen_barrage": "Shibabababa!",
@@ -1624,6 +1626,11 @@
   "sounds.roundabout.kq_block_plant": "Block planted",
   "sounds.roundabout.kq_mob_plant": "Mob planted",
   "sounds.roundabout.kq_plant_windup": "Mob plant windup...",
+  "sounds.roundabout.kq_samurai_whoosh": "Whoosh",
+  "sounds.roundabout.kq_samurai_slash": "Sword Hit",
+  "sounds.roundabout.kq_samurai_stab": "Sword Impale",
+  "sounds.roundabout.kq_samurai_sheathe": "Sword unsheathe",
+  "sounds.roundabout.kq_samurai_sha": "Teapot release",
 
   "sounds.roundabout.btd_normal_reset": "Bites the dust Combat",
   "sounds.roundabout.btd_full_reset": "Bites the dust Day",
@@ -3344,6 +3351,7 @@
   "roundabout.pose.jotaro": "Stand Proud",
   "roundabout.pose.jonathan": "The Hero",
   "roundabout.pose.sitting": "Sitting",
+  "roundabout.pose.anasui": "The Diver",
   "roundabout.pose.none": "Strike Pose!",
 
   "roundabout.soft_and_wet_plunder.none": "Plunder",
@@ -4120,6 +4128,8 @@
   "config.roundabout.getMiningTierDiverDown.desc": "Tier 0 is the default, it does not replace tools for harvesting blocks. Tier 1 is wood tier, tier 2 is stone tier, tier 3 is iron tier, and tier 4 is diamond tier.",
   "config.roundabout.customDiverDownWorkbench.name": "Custom Workbench Textures",
   "config.roundabout.customDiverDownWorkbench.desc": "Enables the custom wokrbench textures, disable this if something breaks.",
+  "config.roundabout.forceThirdPersonInGroundDive.name": "Force Third Person in Ground Dive",
+  "config.roundabout.forceThirdPersonInGroundDive.desc": "Automatically switches to third person while in ground dive.",
 
   "config.roundabout.rattAttackBonusOnMobs.name": "Bonus Mob Damage",
   "config.roundabout.rattAttackBonusOnMobs.desc": "How much bonus damage Ratt darts deal to a mob.",

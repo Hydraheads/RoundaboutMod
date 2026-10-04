@@ -51,6 +51,7 @@ public class DiverDownBaseRenderer extends StandRenderer<DiverDownEntity> {
     DiverLimbBlockEntityRenderer
     DiverLegsLayer
     DiverArmsLayer
+    getNewStandEntity() in PowersDiverDown
     */
 
     public DiverDownBaseRenderer(EntityRendererProvider.Context context, StandModel<DiverDownEntity> entityModel, float f) {
