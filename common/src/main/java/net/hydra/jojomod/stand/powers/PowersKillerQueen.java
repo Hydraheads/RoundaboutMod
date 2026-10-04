@@ -670,9 +670,9 @@ public class PowersKillerQueen extends NewPunchingStand {
                 l.add(STRAY);
                 l.add(NOTW);
                 l.add(STARDUST);
+                l.add(MINESWEEPER);
             }
             if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
-                l.add(MINESWEEPER);
                 l.add(SAMURAI);
                 l.add(SPIRIT);
             }
@@ -1684,6 +1684,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 FSE.setOffsetType(OffsetIndex.LOOSE);
             }
         }
+        getStandUserSelf().roundabout$setStandAnimation(NONE);
 
 
         return result;
@@ -3444,6 +3445,9 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                     animateStand(StandEntity.ITEM_GRAB);
                 }else {
+
+                    checkForSkinUnlock(stack);
+
                     bombPlantedItem = new BombPlantedItemEntity(
                             ModEntities.BOMB_PLANTED_ITEM,
                             self.level()
@@ -4917,8 +4921,6 @@ public class PowersKillerQueen extends NewPunchingStand {
                     vPos = bPos.getCenter();
                     level = this.bombBlock.level();
 
-                    checkForSkinUnlock(level, bPos, canDestroyBlocks);
-
                     this.bombBlock.discard();
                     this.bombBlock = null;
                     success = true;
@@ -5177,46 +5179,62 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
     }
 
-    public void checkForSkinUnlock(Level level, BlockPos pos, boolean destruction) {
+    public void checkForSkinUnlock(ItemStack stack) {
         if (getSelf() instanceof Player PE) {
             StandUser user = ((StandUser) PE);
             IPlayerEntity ipe = ((IPlayerEntity) PE);
 
-            BlockState info = level.getBlockState(pos);
-            if (info.is(Blocks.TNT)) {
-                if (!destruction && info.getBlock() instanceof TntBlock TNT) {
-                    PrimedTnt $$3 = new PrimedTnt(level, (double)pos.getX() + (double)0.5F, (double)pos.getY(), (double)pos.getZ() + (double)0.5F, PE);
-                    level.addFreshEntity($$3);
-                    playSoundIfPossible(self.level(),(Player)null, $$3.getX(), $$3.getY(), $$3.getZ(), SoundEvents.TNT_PRIMED, SoundSource.BLOCKS, 1.0F, 1.0F);
-                    level.gameEvent(PE, GameEvent.PRIME_FUSE, pos);
-                    level.setBlock(pos, Blocks.AIR.defaultBlockState(), 11);
+
+            if (!ipe.roundabout$getUnlockedBonusSkin()) {
+
+                if (stack.is(ModItems.ANUBIS_ITEM)) {
+                    ipe.roundabout$setUnlockedBonusSkin(true);
+                    playSoundIfPossible(self.level(),null, self.getX(), self.getY(),
+                            self.getZ(), ModSounds.UNLOCK_SKIN_EVENT, self.getSoundSource(), 2.0F, 1.0F);
+                    /*sendParticlesIfPossible(self.level(),ModParticles.SMALL_EXPLOSION, self.getX(),
+                            self.getY() + self.getEyeHeight(), self.getZ(),
+                            10, 0.5, 0.5, 0.5, 0.2);
+                    sendParticlesIfPossible(self.level(),ModParticles.AIRBUBBLE_BOMB, self.getX(),
+                            self.getY() + self.getEyeHeight(), self.getZ(),
+                            10, 0.5, 0.5, 0.5, 0.01);
+                    */
+                    sendParticlesIfPossible(self.level(), ParticleTypes.SOUL_FIRE_FLAME, self.getX(),
+                            self.getY() + self.getEyeHeight(), self.getZ(),
+                            19, 0.3, 0.3, 0.3, 0.01);
+                    sendParticlesIfPossible(self.level(), ParticleTypes.CHERRY_LEAVES, self.getX(),
+                            self.getY() + self.getEyeHeight(), self.getZ(),
+                            15, 0.3, 0.3, 0.3, 0.02);
+
+                    user.roundabout$setStandSkin(KillerQueenEntity.SAMURAI);
+
+                    ((ServerPlayer) ipe).displayClientMessage(
+                            Component.translatable("unlock_skin.roundabout.killer_queen.samurai"), true);
+                    user.roundabout$summonStand(self.level(), true, false);
                 }
 
-                if (!ipe.roundabout$getUnlockedBonusSkin()) {
-                    tntSweeped++;
-                    if (tntSweeped > 2) {
-                        ipe.roundabout$setUnlockedBonusSkin(true);
-                        playSoundIfPossible(self.level(),null, self.getX(), self.getY(),
-                                self.getZ(), ModSounds.UNLOCK_SKIN_EVENT, self.getSoundSource(), 2.0F, 1.0F);
-                        sendParticlesIfPossible(self.level(),ModParticles.SMALL_EXPLOSION, self.getX(),
-                                self.getY() + self.getEyeHeight(), self.getZ(),
-                                10, 0.5, 0.5, 0.5, 0.2);
-                        sendParticlesIfPossible(self.level(),ModParticles.AIRBUBBLE_BOMB, self.getX(),
-                                self.getY() + self.getEyeHeight(), self.getZ(),
-                                10, 0.5, 0.5, 0.5, 0.01);
-                        user.roundabout$setStandSkin(KillerQueenEntity.MINESWEEPER);
-                        ((ServerPlayer) ipe).displayClientMessage(
-                                Component.translatable("unlock_skin.roundabout.killer_queen.minesweeper"), true);
-                        user.roundabout$summonStand(self.level(), true, false);
-                    }else {
-                        sendParticlesIfPossible(self.level(),ModParticles.AIRBUBBLE_BOMB, self.getX(),
-                                self.getY() + self.getEyeHeight(), self.getZ(),
-                                10+(tntSweeped * 8), 0.5, 0.5, 0.5, 0.01);
-                        playSoundIfPossible(self.level(),null, this.self.blockPosition(),
-                                ModSounds.KQ_MINESWEEPER_BTD_NOISE_EVENT,
-                                SoundSource.PLAYERS, 2.2F, (float) (1.5F + Math.random() * 0.02));
-                    }
-                }
+                /*tntSweeped++;
+                 if (tntSweeped > 2) {
+                    ipe.roundabout$setUnlockedBonusSkin(true);
+                    playSoundIfPossible(self.level(),null, self.getX(), self.getY(),
+                            self.getZ(), ModSounds.UNLOCK_SKIN_EVENT, self.getSoundSource(), 2.0F, 1.0F);
+                    sendParticlesIfPossible(self.level(),ModParticles.SMALL_EXPLOSION, self.getX(),
+                            self.getY() + self.getEyeHeight(), self.getZ(),
+                            10, 0.5, 0.5, 0.5, 0.2);
+                    sendParticlesIfPossible(self.level(),ModParticles.AIRBUBBLE_BOMB, self.getX(),
+                            self.getY() + self.getEyeHeight(), self.getZ(),
+                            10, 0.5, 0.5, 0.5, 0.01);
+                    user.roundabout$setStandSkin(KillerQueenEntity.MINESWEEPER);
+                    ((ServerPlayer) ipe).displayClientMessage(
+                            Component.translatable("unlock_skin.roundabout.killer_queen.minesweeper"), true);
+                    user.roundabout$summonStand(self.level(), true, false);
+                }else {
+                    sendParticlesIfPossible(self.level(),ModParticles.AIRBUBBLE_BOMB, self.getX(),
+                            self.getY() + self.getEyeHeight(), self.getZ(),
+                            10+(tntSweeped * 8), 0.5, 0.5, 0.5, 0.01);
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(),
+                            ModSounds.KQ_MINESWEEPER_BTD_NOISE_EVENT,
+                            SoundSource.PLAYERS, 2.2F, (float) (1.5F + Math.random() * 0.02));
+                }*/
             }
         }
     }
