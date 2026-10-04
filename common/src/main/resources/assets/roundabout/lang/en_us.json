@@ -1575,6 +1575,7 @@
 
   "sounds.roundabout.summon_killer_queen": "Stand summoned",
   "sounds.roundabout.summon_creeper_queen": "Creeper Queen Summon",
+  "sounds.roundabout.summon_samurai_queen": "Samurai Summon",
   "sounds.roundabout.kq_minesweeper_redirect": "[Bomb Redirecting]",
   "sounds.roundabout.kq_minesweeper_start": "[MINESWEEPER START]",
   "sounds.roundabout.killer_queen_barrage": "Shibabababa!",
@@ -1624,6 +1625,11 @@
   "sounds.roundabout.kq_block_plant": "Block planted",
   "sounds.roundabout.kq_mob_plant": "Mob planted",
   "sounds.roundabout.kq_plant_windup": "Mob plant windup...",
+  "sounds.roundabout.kq_samurai_whoosh": "Whoosh",
+  "sounds.roundabout.kq_samurai_slash": "Sword Hit",
+  "sounds.roundabout.kq_samurai_stab": "Sword Impale",
+  "sounds.roundabout.kq_samurai_sheathe": "Sword unsheathe",
+  "sounds.roundabout.kq_samurai_sha": "Teapot release",
 
   "sounds.roundabout.btd_normal_reset": "Bites the dust Combat",
   "sounds.roundabout.btd_full_reset": "Bites the dust Day",

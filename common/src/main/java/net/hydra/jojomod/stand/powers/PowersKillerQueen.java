@@ -1451,7 +1451,22 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public SoundEvent getImpaleSound(){
+        byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+
+        if (skn == SAMURAI || skn == SPIRIT) {
+            return ModSounds.KQ_SAMURAI_STAB_EVENT;
+        }
+
         return ModSounds.KILLER_QUEEN_IMPALE_EVENT;
+    }
+    public SoundEvent getImpaleMissSound() {
+        byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+
+        if (skn == SAMURAI || skn == SPIRIT) {
+            return ModSounds.KQ_SAMURAI_WHOOSH_1_EVENT;
+        }
+
+        return super.getImpaleMissSound();
     }
 
     public void mobPlantImpact(Entity entity) {
@@ -1627,7 +1642,13 @@ public class PowersKillerQueen extends NewPunchingStand {
              }
              pitch = 1.2F;
          } else {
-             SE = ModSounds.PUNCH_2_SOUND_EVENT;
+             byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+
+             if (skn == SAMURAI || skn == SPIRIT) {
+                 SE = ModSounds.KQ_SAMURAI_WHOOSH_2_EVENT;
+             }else {
+                 SE = ModSounds.PUNCH_2_SOUND_EVENT;
+             }
          }
          if (chargedFinal >= getMaxKickTime()) {
              soundShiba = SHIBABA;
@@ -2043,10 +2064,10 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public int getBTDDayActivationWindup() {
-        return 35;
+        return 80;
     }
     public int getBTDIFramesMinimun() {
-        return 25;
+        return 70;
     }
 
     public void updateBTDDayActivation() {
@@ -2080,6 +2101,14 @@ public class PowersKillerQueen extends NewPunchingStand {
                                 1, 0.2, 0.2, 0.2, 0.05);
                     }
                 }
+                if (attackTimeDuring == 6) {
+                    byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+
+                    if (skn == SAMURAI || skn == SPIRIT) {
+
+                        playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.KQ_SAMURAI_SHEATHE_EVENT, SoundSource.PLAYERS, 1.0f, 0.7f);
+                    }
+                }
             }
         }
     }
@@ -2092,6 +2121,15 @@ public class PowersKillerQueen extends NewPunchingStand {
                 ((StandUser) this.getSelf()).roundabout$tryIntPower(PowerIndex.SNEAK_ATTACK, true, getMaxKickTime());
                 if (this.self.level().isClientSide()){
                     tryIntPowerPacket(PowerIndex.SNEAK_ATTACK,atd);
+                }
+            }
+
+            if (attackTimeDuring == 6) {
+                byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+
+                if (skn == SAMURAI || skn == SPIRIT) {
+
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.KQ_SAMURAI_SHEATHE_EVENT, SoundSource.PLAYERS, 1.0f, 0.7f);
                 }
             }
         }
@@ -4147,6 +4185,10 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (skn == KillerQueenEntity.MINESWEEPER) {
             return ModSounds.KQ_MINESWEEPER_BTD_NOISE_EVENT;
         }
+        if (skn == SAMURAI || skn == SPIRIT) {
+            return ModSounds.KQ_SAMURAI_BTD_NOISE_EVENT;
+        }
+
         return ModSounds.KILLER_QUEEN_BTD_NOISE_EVENT;
     }
 
@@ -4178,6 +4220,9 @@ public class PowersKillerQueen extends NewPunchingStand {
         byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
         if (skn == KillerQueenEntity.MINESWEEPER) {
             return ModSounds.KQ_MINESWEEPER_HEAVY_PUNCH_EVENT;
+        }
+        if (skn == SAMURAI || skn == SPIRIT) {
+            return ModSounds.KQ_SAMURAI_SLASH_EVENT;
         }
         return ModSounds.KILLER_QUEEN_HEAVY_PUNCH_EVENT;
     }
@@ -4218,6 +4263,9 @@ public class PowersKillerQueen extends NewPunchingStand {
         byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
         if (skn == KillerQueenEntity.MINESWEEPER) {
             return ModSounds.KILLER_QUEEN_SHA_ALT_KOCCHI_EVENT;
+        }
+        if (skn == SAMURAI || skn == SPIRIT) {
+            return ModSounds.KQ_SAMURAI_TEAPOT_EVENT;
         }
         return ModSounds.KILLER_QUEEN_SHA_KOCCHI_EVENT;
     }
@@ -4355,18 +4403,22 @@ public class PowersKillerQueen extends NewPunchingStand {
     public SoundEvent getSoundFromByte(byte soundChoice){
         byte skin = ((StandUser)this.getSelf()).roundabout$getStandSkin();
 
+        boolean samurai = skin == SAMURAI || skin == SPIRIT;
+
         if (soundChoice == SoundIndex.BARRAGE_CRY_SOUND) {
            return getBarrageSound();
         }else if (soundChoice == SoundIndex.SUMMON_SOUND) {
-           if (skin == DEADLY || skin == NIGHTMARE) {
+            if (samurai) {
+               return ModSounds.KQ_SAMURAI_SUMMON_EVENT;
+            }else if (skin == DEADLY || skin == NIGHTMARE) {
                return ModSounds.KILLER_QUEEN_SUMMON_DARK_EVENT;
-           } else if (skin == CREEPER) {
+            } else if (skin == CREEPER) {
                return ModSounds.CREEPER_QUEEN_SUMMON_EVENT;
-           } else if (skin == MINESWEEPER) {
+            } else if (skin == MINESWEEPER) {
                return ModSounds.KQ_MINESWEEPER_START_EVENT;
-           }else {
+            }else {
                return ModSounds.KILLER_QUEEN_SUMMON_EVENT;
-           }
+            }
        }else if (soundChoice == DETONATE_NOISE) {
     	   return getDetonateSound();
        }else if (soundChoice == IMPALE_NOISE) {
@@ -4390,8 +4442,16 @@ public class PowersKillerQueen extends NewPunchingStand {
         }else if (soundChoice >= MINESWEEPER_EXPLOSION && soundChoice <= BASE_EXPLOSION_4) {
             return getExplosionSoundFromByte(soundChoice);
         }else if (soundChoice == MOB_PLANT) {
+            if (samurai) {
+                return ModSounds.KQ_SAMURAI_MOB_PLANT_EVENT;
+            }
+
             return ModSounds.KQ_MOB_PLANT_EVENT;
         }else if (soundChoice == BLOCK_PLANT) {
+            if (samurai) {
+                return ModSounds.KQ_SAMURAI_BLOCK_PLANT_EVENT;
+            }
+
             return ModSounds.KQ_BLOCK_PLANT_EVENT;
         }else if (soundChoice == MOB_PLANT_WINDUP) {
             return ModSounds.KQ_PLANT_WINDUP_EVENT;
