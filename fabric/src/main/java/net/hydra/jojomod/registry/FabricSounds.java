@@ -436,6 +436,16 @@ public class FabricSounds {
         addSound(ModSounds.STRAY_CAT_BUBBLE_SOUND_2_ID, ModSounds.STRAY_CAT_BUBBLE_SOUND_2_EVENT);
         addSound(ModSounds.STRAY_CAT_BUBBLE_REDIRECT_1_ID, ModSounds.STRAY_CAT_BUBBLE_REDIRECT_1_EVENT);
         addSound(ModSounds.STRAY_CAT_BUBBLE_REDIRECT_2_ID, ModSounds.STRAY_CAT_BUBBLE_REDIRECT_2_EVENT);
+        addSound(ModSounds.KQ_SAMURAI_MOB_PLANT_ID, ModSounds.KQ_SAMURAI_MOB_PLANT_EVENT);
+        addSound(ModSounds.KQ_SAMURAI_BLOCK_PLANT_ID, ModSounds.KQ_SAMURAI_BLOCK_PLANT_EVENT);
+        addSound(ModSounds.KQ_SAMURAI_SUMMON_ID, ModSounds.KQ_SAMURAI_SUMMON_EVENT);
+        addSound(ModSounds.KQ_SAMURAI_BTD_NOISE_ID, ModSounds.KQ_SAMURAI_BTD_NOISE_EVENT);
+        addSound(ModSounds.KQ_SAMURAI_STAB_ID, ModSounds.KQ_SAMURAI_STAB_EVENT);
+        addSound(ModSounds.KQ_SAMURAI_SLASH_ID, ModSounds.KQ_SAMURAI_SLASH_EVENT);
+        addSound(ModSounds.KQ_SAMURAI_WHOOSH_1_ID, ModSounds.KQ_SAMURAI_WHOOSH_1_EVENT);
+        addSound(ModSounds.KQ_SAMURAI_WHOOSH_2_ID, ModSounds.KQ_SAMURAI_WHOOSH_2_EVENT);
+        addSound(ModSounds.KQ_SAMURAI_TEAPOT_ID, ModSounds.KQ_SAMURAI_TEAPOT_EVENT);
+        addSound(ModSounds.KQ_SAMURAI_SHEATHE_ID, ModSounds.KQ_SAMURAI_SHEATHE_EVENT);
 
         addSound(ModSounds.KIRA4_DAMAGE_1_ID, ModSounds.KIRA4_DAMAGE_1_EVENT);
         addSound(ModSounds.KIRA4_DAMAGE_2_ID, ModSounds.KIRA4_DAMAGE_2_EVENT);

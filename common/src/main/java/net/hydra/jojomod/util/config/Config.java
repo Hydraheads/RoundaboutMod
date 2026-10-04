@@ -532,7 +532,7 @@ public class Config implements Cloneable {
         public Float bitesTheDustDayMobsDamage;
         @FloatOption(group = "inherit", value = 24.5F, min = 0, max = 200F)
         public Float bitesTheDustDayPlayersDamage;
-        @IntOption(group = "inherit", value = 14, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer bitesTheDustCombatMinimunForFullBlow;
         @FloatOption(group = "inherit", value = 75, min = 0, max = 72000)
         public Float bitesTheDustRewindRange;
