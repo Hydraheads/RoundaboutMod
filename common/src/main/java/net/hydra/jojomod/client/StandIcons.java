@@ -771,6 +771,8 @@ public class StandIcons {
             "textures/gui/icons/walking_heart/wall_walk_pass.png");
     public static final ResourceLocation WALL_CUT = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/walking_heart/wall_walk_cut.png");
+    public static final ResourceLocation WALKING_STOMP = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/walking_heart/walking_stomp.png");
 
     public static final ResourceLocation CINDERELLA_SCALP = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/cinderella/deface.png");

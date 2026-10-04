@@ -1909,6 +1909,9 @@
   "ability.roundabout.sweep_kick": "Sweep/Stomp",
   "ability.roundabout.sweep_kick.desc": "Throws a kick in a short range directly in front of you. The knockback is quite high. If used in the air, it instead makes you slam into the ground, briefly dazing mobs it hits.",
 
+  "ability.roundabout.spike_stomp": "Spike Stomp",
+  "ability.roundabout.spike_stomp.desc": "After falling for enough time, activating this skill makes you slam into the ground, briefly dazing mobs it hits and inflicting bleed.",
+
   "ability.roundabout.hair_grab": "Hair Grab",
   "ability.roundabout.hair_grab.desc": "Pulls a mob in towards you.",
   "ability.roundabout.hair_spikes": "Hair Spikes",
