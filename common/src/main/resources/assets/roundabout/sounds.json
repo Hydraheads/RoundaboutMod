@@ -1746,6 +1746,18 @@
       "roundabout:extend_spikes"
     ]
   },
+  "wh_pull": {
+    "subtitle": "sounds.roundabout.wh_pull",
+    "sounds": [
+      "roundabout:wh_pull"
+    ]
+  },
+  "wh_push": {
+    "subtitle": "sounds.roundabout.wh_push",
+    "sounds": [
+      "roundabout:wh_push"
+    ]
+  },
   "firestorm": {
     "subtitle": "sounds.roundabout.firestorm",
     "sounds": [
