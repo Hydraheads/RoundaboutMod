@@ -106,7 +106,7 @@ public class PowersKhnum extends NewDashPreset {
 
     @Override
     public Component ifWipListDev() {
-        return Component.literal("Kalee").withStyle(ChatFormatting.WHITE);
+        return Component.literal("Kalee").withStyle(ChatFormatting.PINK);
     }
 
     @Override
