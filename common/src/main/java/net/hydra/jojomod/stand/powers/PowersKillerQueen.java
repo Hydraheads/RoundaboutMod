@@ -2743,9 +2743,6 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public boolean defuseServer() {
-        return defuseServer(false);
-    }
-    public boolean defuseServer(boolean preBTD) {
         if (this.isClient()) { return true; }
 
         if (isEntityBomb(currentBombStatus) && bombEntity instanceof LivingEntity) {
@@ -3022,7 +3019,6 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
 
         if (target != null && stand instanceof KillerQueenEntity KQE) {
-            defuseServer(true);
             KQE.setPlantedBitesTheDust(true);
 
             timeOfPlanting = (int)(self.level().getLevelData()).getDayTime();
@@ -3544,6 +3540,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (this.canBitesTheDust() && !this.onCooldown(PowerIndex.SKILL_4)) {
             StandEntity stand = getStandEntity(this.self);
             if (Objects.nonNull(stand)) {
+                defuseServer();
                 animateStand(KillerQueenEntity.BITES_THE_DUST_FOLLOW);
                 this.attackTimeDuring = 0;
                 playSoundsIfNearby(BTD_NOISE, 27, false);
