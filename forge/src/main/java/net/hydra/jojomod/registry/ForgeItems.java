@@ -808,7 +808,7 @@ public class ForgeItems {
 
     public static final RegistryObject<Item> STAND_DISC_CINDERELLA = addToDiscTab(ITEMS.register("cinderella_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCinderella(null))));
-    public static final RegistryObject<Item> STAND_DISC_KHNUM = addToDiscTab(ITEMS.register("khnum_disc",
+    public static final RegistryObject<Item> STAND_DISC_KHNUM = addToWIPTab(ITEMS.register("khnum_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersKhnum(null))));
 
 

@@ -750,7 +750,6 @@ public class FabricItems {
                         entries.accept(STAND_DISC_WALKING_HEART);
                         entries.accept(MAX_STAND_DISC_WALKING_HEART);
                         entries.accept(STAND_DISC_CINDERELLA);
-                        entries.accept(STAND_DISC_KHNUM);
                         entries.accept(STAND_DISC_ACHTUNG);
                         entries.accept(STAND_DISC_MANHATTAN_TRANSFER);
                         entries.accept(STAND_DISC_SURVIVOR);
@@ -778,6 +777,7 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_METALLICA);
                         entries.accept(STAND_DISC_PURPLE_HAZE);
                         entries.accept(MAX_STAND_DISC_PURPLE_HAZE);
+                        entries.accept(STAND_DISC_KHNUM);
                         entries.accept(STAND_DISC_KILLER_QUEEN);
                         entries.accept(MAX_STAND_DISC_KILLER_QUEEN);
                         entries.accept(KIRA_PART_FOUR_MASK);
