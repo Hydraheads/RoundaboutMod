@@ -1431,8 +1431,8 @@ public class PowersDiverDown extends NewPunchingStand {
         BlockPos feetWall = BlockPos.containing(mpos).relative(rd);
         BlockPos eyeWall = BlockPos.containing(this.self.getEyePosition()).relative(rd);
 
-        return MainUtil.isBlockWalkableSimplified(this.self.level().getBlockState(feetWall))
-                || MainUtil.isBlockWalkableSimplified(this.self.level().getBlockState(eyeWall));
+        return MainUtil.isBlockWalkable(this.self.level().getBlockState(feetWall))
+                || MainUtil.isBlockWalkable(this.self.level().getBlockState(eyeWall));
     }
 
     /**
