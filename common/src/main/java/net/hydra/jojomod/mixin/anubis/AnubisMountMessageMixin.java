@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin.anubis;
 
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
+import net.hydra.jojomod.entity.pathfinding.CommandDiscPossession;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.protocol.game.ClientboundSetPassengersPacket;
@@ -20,7 +21,7 @@ public class AnubisMountMessageMixin {
     @Inject(method = "handleSetEntityPassengersPacket",at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/Component;translatable(Ljava/lang/String;[Ljava/lang/Object;)Lnet/minecraft/network/chat/MutableComponent;"),cancellable = true)
     private void roundabout$cancelMountMessage(ClientboundSetPassengersPacket $$0, CallbackInfo ci) {
         Entity entity = this.level.getEntity($$0.getVehicle());
-        if (entity instanceof AnubisPossessorEntity) {
+        if (entity instanceof AnubisPossessorEntity || entity instanceof CommandDiscPossession) {
             ci.cancel();
         }
     }

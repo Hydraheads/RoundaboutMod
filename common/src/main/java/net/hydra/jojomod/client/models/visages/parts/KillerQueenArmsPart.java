@@ -53,6 +53,10 @@ public class KillerQueenArmsPart extends PsuedoHierarchicalModel {
                 .texOffs(-2, -2).mirror().addBox(-4.0F, -0.75F, -2.0F, 0.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false)
                 .texOffs(67, 49).mirror().addBox(-2.75F, 3.25F, 2.25F, 2.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(0.0F, 0.0F, 0.0F));
 
+        PartDefinition extra2 = upper_right_arm.addOrReplaceChild("extra2", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        PartDefinition ShoulderPad_r1 = extra2.addOrReplaceChild("ShoulderPad_r1", CubeListBuilder.create().texOffs(0, 112).addBox(-4.0F, 0.0F, -3.0F, 7.0F, 3.0F, 5.0F, new CubeDeformation(0.2F)), PartPose.offsetAndRotation(-4.75F, 1.25F, 0.5F, 0.0F, 0.0F, -1.5708F));
+
         PartDefinition lower_right_arm = right_arm.addOrReplaceChild("lower_right_arm",  CubeListBuilder.create().texOffs(0, 26).addBox(-1.75F, -0.25F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(-0.001F)),
                 PartPose.offset(-2.0F, 5.5F, 0.0F));
 
@@ -63,6 +67,10 @@ public class KillerQueenArmsPart extends PsuedoHierarchicalModel {
                 .texOffs(-2, -2).addBox(4.0F, -0.75F, -2.0F, 0.0F, 4.0F, 4.0F, new CubeDeformation(0.0F))
                 .texOffs(67, 49).addBox(0.75F, 3.25F, 2.25F, 2.0F, 2.0F, 0.0F, new CubeDeformation(0.0F))
                 .texOffs(-2, -2).addBox(-0.25F, -0.75F, -2.0F, 0.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        PartDefinition extra = upper_left_arm.addOrReplaceChild("extra", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        PartDefinition LeftShoulderPad_r1 = extra.addOrReplaceChild("LeftShoulderPad_r1", CubeListBuilder.create().texOffs(0, 112).addBox(-3.5F, -1.5F, -2.5F, 7.0F, 3.0F, 5.0F, new CubeDeformation(0.2F)), PartPose.offsetAndRotation(3.25F, 1.75F, 0.0F, 3.1416F, 0.0F, -1.5708F));
 
         PartDefinition lower_left_arm = left_arm.addOrReplaceChild("lower_left_arm", CubeListBuilder.create().texOffs(32, 0).addBox(-2.25F, -0.25F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(-0.001F)),
                 PartPose.offset(2.0F, 5.5F, 0.0F));
@@ -145,7 +153,7 @@ public class KillerQueenArmsPart extends PsuedoHierarchicalModel {
                 if (animation == StandPowers.GUARD) {
                     this.animate(user.roundabout$getWornStandActiveAnimation(), KingCrimsonAnimations.block, context.tickCount+fixedPartial, 1f);
                 } else {
-                    if (animation == StandPowers.PUNCH_LEFT || animation == StandPowers.VAULT) {
+                    if (animation == KillerQueenEntity.SHA_SEND || animation == KillerQueenEntity.SHA_SHOOT || animation == StandPowers.VAULT) {
                         if (lastWasOnlyRight) {
                             lastWasOnlyRight = false;
                             user.roundabout$getWornStandIdleAnimation().stop();
@@ -162,7 +170,7 @@ public class KillerQueenArmsPart extends PsuedoHierarchicalModel {
                     }
 
                     if (animation == KillerQueenEntity.MOB_PLANT) {
-                        this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.mobPlantArms, partialTicks, (1/((float) (PowersKillerQueen.getMobPlantWindup()) /20)) * 1.364f);
+                        this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.mobPlantArmsMode, partialTicks, (1/(Math.max(0.1f, (float) (PowersKillerQueen.getMobPlantWindup()) / 60))));
                     } else if (animation == KillerQueenEntity.BLOCK_PLANT || animation == KillerQueenEntity.ITEM_THROW) {
                         this.animate(user.roundabout$getWornStandActiveAnimation(), KingCrimsonAnimations.right_punch, partialTicks, speed);
                     } else if (animation == KillerQueenEntity.DETONATE) {
@@ -171,8 +179,14 @@ public class KillerQueenArmsPart extends PsuedoHierarchicalModel {
                         this.animate(user.roundabout$getWornStandActiveAnimation(), StandAnimations.BLOCKBREAK, partialTicks, 1);
                     } else if (animation == StandPowers.MINING) {
                         this.animate(user.roundabout$getWornStandActiveAnimation(), StandAnimations.MINING_BARRAGE, partialTicks, 1);
-                    } else if (animation == StandPowers.PUNCH_LEFT) {
-                        this.animate(user.roundabout$getWornStandActiveAnimation(), KingCrimsonAnimations.left_punch, partialTicks, 1);
+                    } else if (animation == KillerQueenEntity.SHA_SEND) {
+                        this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.shaArmsSend, partialTicks, 0.8f);
+                    } else if (animation == KillerQueenEntity.SHA_SHOOT) {
+                        this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.shaArmsShoot, partialTicks, 1.5f);
+                    } else if (animation == KillerQueenEntity.BTD_DETONATION) {
+                        this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.btdDetonation, partialTicks, 1.01f);
+                    } else {
+                        user.roundabout$getWornStandActiveAnimation().stop();
                     }
 
                 }

@@ -15,6 +15,7 @@ public interface IEntityAndData {
     int roundabout$getBleedLevel();
     void roundabout$setBleedLevel(int val);
     void roundabout$setLastDamageTaken(float amount);
+    void roundabout$refreshBoardingCooldown();
     float roundabout$getLastDamageTaken();
     void rdbt$forceDeltaMovement(Vec3 $$0);
     float roundabout$getPreTSTick();

@@ -1,6 +1,7 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.particles.HazeColorParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.registries.DeferredRegister;
@@ -136,6 +137,18 @@ public class ForgeParticles {
             "punch_impact_c",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> GOLD_PUNCH_IMPACT_A = PARTICLES.register(
+            "gold_punch_impact_a",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> GOLD_PUNCH_IMPACT_B = PARTICLES.register(
+            "gold_punch_impact_b",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> GOLD_PUNCH_IMPACT_C = PARTICLES.register(
+            "gold_punch_impact_c",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> DISC_STEAL_HIT = PARTICLES.register(
             "disc_steal_hit",
             () -> new SimpleParticleType(true)
@@ -264,6 +277,26 @@ public class ForgeParticles {
             "airbubble_bomb",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> ENERGY_RIPPLE_SURFACE = PARTICLES.register(
+            "energy_ripple_surface",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> ENERGY_RIPPLE = PARTICLES.register(
+            "energy_ripple",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> WAKE_RIPPLE = PARTICLES.register(
+            "wake_ripple",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> DIVER_DOWN_FINAL = PARTICLES.register(
+            "diver_down_final",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> RIBCAGE = PARTICLES.register(
+            "ribcage",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> HYPNO_SWIRL = PARTICLES.register(
             "hypno_swirl",
             () -> new SimpleParticleType(true)
@@ -309,15 +342,25 @@ public class ForgeParticles {
             () -> new SimpleParticleType(true)
     );
 
-    public static final RegistryObject<SimpleParticleType> PURPLE_HAZE_SMOKE = PARTICLES.register(
-            "purple_haze_smoke",
-            () -> new SimpleParticleType(true)
-    );
+    public static final RegistryObject<ParticleType<HazeColorParticleOptions>> PURPLE_HAZE_SMOKE =
+            PARTICLES.register("purple_haze_smoke", () -> new ParticleType<>(false, HazeColorParticleOptions.DESERIALIZER) {
+                @Override
+                public com.mojang.serialization.Codec<HazeColorParticleOptions> codec() {
+                    return HazeColorParticleOptions.codec(this);
+                }
+            });
 
     public static final RegistryObject<SimpleParticleType> DISTORTION_SMOKE = PARTICLES.register(
             "distortion_smoke",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<ParticleType<HazeColorParticleOptions>> PURPLE_HAZE_BLASTWAVE =
+            PARTICLES.register("purple_haze_blastwave", () -> new ParticleType<>(false, HazeColorParticleOptions.DESERIALIZER) {
+                @Override
+                public com.mojang.serialization.Codec<HazeColorParticleOptions> codec() {
+                    return HazeColorParticleOptions.codec(this);
+                }
+            });
     public static final RegistryObject<SimpleParticleType> RAGING_LIGHT = PARTICLES.register(
             "raging_light",
             () -> new SimpleParticleType(true)

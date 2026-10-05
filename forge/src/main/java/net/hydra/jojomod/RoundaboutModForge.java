@@ -48,6 +48,7 @@ public class RoundaboutModForge {
         ForgeItems.POTIONS.register(bus);
         ForgeCreativeTab.TABS.register(bus);
         ForgeParticles.PARTICLES.register(bus);
+        ForgeMenus.MENUS.register(bus);
         ForgeGamerules.registerGamerules();
 
         //
@@ -75,7 +76,10 @@ public class RoundaboutModForge {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event){
-        event.enqueueWork(ForgeNetworkHandler::register);
+        event.enqueueWork(() -> {
+            ForgeNetworkHandler.register();
+            ForgeMenus.initialize();
+        });
     }
 
     @Mod.EventBusSubscriber(modid = Roundabout.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)

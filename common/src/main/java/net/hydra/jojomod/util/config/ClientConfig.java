@@ -108,6 +108,8 @@ public class ClientConfig implements Cloneable {
     public ClientConfig.KillerQueenSettings killerQueenSettings;
     @NestedOption(group = "modded")
     public ClientConfig.WhitesnakeSettings whitesnakeSettings;
+    @NestedOption(group = "modded")
+    public ClientConfig.DiverDownSettings diverDownSettings;
   /*  @NestedOption(group = "modded")
     public ClientConfig.StandTweakSettings standTweakSettings; */
 
@@ -209,6 +211,8 @@ public class ClientConfig implements Cloneable {
         public Integer currentPowerInventoryTab;
         @IntOption(group = "inherit", value = 2, min = 0, max = 3)
         public Integer killerQueenCurrentBombConfig;
+        @IntOption(group = "inherit", value = 1, min = 0, max = 2)
+        public Integer killerQueenCurrentBombSize;
     }
     public static class VanillaMCTweaks {
         @BooleanOption(group = "inherit", value = true)
@@ -231,12 +235,22 @@ public class ClientConfig implements Cloneable {
     public static class KillerQueenSettings {
     	@BooleanOption(group = "inherit", value = true)
         public Boolean bombOverlayHideOnF1;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean bombConfigFastToggle;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean itemToolsProtection;
     }
     public static class WhitesnakeSettings {
         @BooleanOption(group = "inherit", value = false)
         public Boolean forceThirdPersonInControlMode;
         @BooleanOption(group = "inherit", value = true)
         public Boolean hallucinationIndicator;
+    }
+    public static class DiverDownSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean customDiverDownWorkbench;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean forceThirdPersonInGroundDive;
     }
     public static class AnubisSettings {
         @BooleanOption(group = "inherit", value = false)

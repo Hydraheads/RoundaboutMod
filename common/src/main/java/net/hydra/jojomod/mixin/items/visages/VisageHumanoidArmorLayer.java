@@ -62,7 +62,8 @@ public abstract class VisageHumanoidArmorLayer<T extends LivingEntity, M extends
         if ($$3 instanceof Player PE) {
             if (!((IPlayerEntity)PE).roundabout$getMaskSlot().isEmpty()
                     && ((IPlayerEntity)PE).roundabout$getMaskSlot().getItem() instanceof MaskItem ME
-                    && !ME.visageData.generateVisageData(PE).rendersArmor() &&
+                    && !ME.visageData.generateVisageData(PE).rendersArmor()
+                    && !((StandUser) PE).roundabout$isDisguised() &&
                     !($$3.isInvisible() && ((IEntityAndData) $$3).roundabout$getTrueInvisibility() <= -1)
             ){
                 ci.cancel();

@@ -325,6 +325,11 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:ancient_debris"
             )
     );
+    public Set<String> standDisassemblyBlacklist = new HashSet<>(
+            Arrays.asList(
+                    "roundabout:melon_parfait"
+            )
+    );
     public Set<String> standBlockExplosionBlacklist = new HashSet<>(
             Arrays.asList(
                     "minecraft:bedrock",
@@ -333,7 +338,7 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:barrier"
             )
     );
-    public Set<String> sheerHeartAttackCustomBlockHeatV2 = new HashSet<>(
+    public Set<String> sheerHeartAttackCustomBlockHeatV6 = new HashSet<>(
             Arrays.asList(
                     "minecraft:torch:4",
                     "minecraft:soul_torch:3",
@@ -346,7 +351,18 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:end_portal:0",
                     "minecraft:enchanting_table:0",
                     "minecraft:oxeye_daisy:0",
-                    "minecraft:magma_block:18"
+                    "minecraft:magma_block:18",
+                    "minecraft:sea_lantern:0",
+                    "minecraft:glowstone:0",
+                    "minecraft:lava:180",
+                    "minecraft:fire:80",
+                    "roundabout:stand_fire:80",
+                    "roundabout:colored_fire_orange:80",
+                    "roundabout:colored_fire_blue:80",
+                    "roundabout:colored_fire_green:80",
+                    "roundabout:colored_fire_purple:80",
+                    "roundabout:colored_fire_dread:80",
+                    "roundabout:colored_fire_cream:80"
             )
     );
     public Set<String> sheerHeartAttackCustomEntityHeatV2 = new HashSet<>(
@@ -372,6 +388,25 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:end_portal",
                     "roundabout:d4c_portal",
                     "minecraft:light_block"
+            )
+    );
+    public Set<String> lootPoolForD4CChests = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:iron_ingot:1:2",
+                    "minecraft:slime_ball:1:5",
+                    "minecraft:apple:1:5",
+                    "minecraft:apple:1:5",
+                    "minecraft:cactus:1:5",
+                    "minecraft:leather:1:10",
+                    "minecraft:leather:1:10",
+                    "minecraft:sugar_cane:1:10",
+                    "minecraft:sugar_cane:1:10",
+                    "minecraft:lapis_lazuli:1:2",
+                    "roundabout:gasoline_can:1:3",
+                    "roundabout:gasoline_can:1:3",
+                    "roundabout:knife_bundle:1:3",
+                    "roundabout:knife_bundle:1:3",
+                    "minecraft:oak_sapling:1:2"
             )
     );
     public Set<String> unbreakableThrownItems = new HashSet<>(

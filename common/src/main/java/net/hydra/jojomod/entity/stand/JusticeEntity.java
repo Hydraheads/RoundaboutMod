@@ -115,6 +115,10 @@ public class JusticeEntity extends FollowingStandEntity {
         return true;
     }
 
+    @Override
+    public void makeStuckInBlock(BlockState $$0, Vec3 $$1) {
+
+    }
 
     public void inhaleTick() {
             int perc = getJusticeSize() - 2;

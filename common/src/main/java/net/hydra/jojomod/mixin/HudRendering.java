@@ -8,8 +8,10 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
+import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.substand.PurpleSmokeEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
@@ -172,7 +174,7 @@ public abstract class HudRendering implements IHudAccess {
                     this.renderTextureOverlay($$1, StandIcons.RATT_SCOPE_OVERLAY, 0.99F);
                 }
             }
-            if (user.roundabout$isPossessed()) {
+            if (user.roundabout$getPossessor() instanceof AnubisPossessorEntity) {
                 roundabout$renderTextureOverlay($$1, StandIcons.ANUBIS_POSSESSION_OVERLAY, 0.8F,1F,1F,1F);
             }
             if (this.minecraft.options.getCameraType().isFirstPerson()) {
@@ -232,8 +234,10 @@ public abstract class HudRendering implements IHudAccess {
                 //Purple Haze overlay
                 if (MainUtil.isInPurpleHaze(this.minecraft.player)) {
                     RenderSystem.enableBlend();
+                    float[] roundabout$hazeTint = roundabout$getPurpleHazeTint(MainUtil.getPurpleHazeSkin(this.minecraft.player));
                     roundabout$renderTextureOverlay($$1, new ResourceLocation(Roundabout.MOD_ID,
-                            "textures/misc/purple_overlay/purple_overlay" + (minecraft.player.tickCount / 3 % 10) + ".png"), 0.7F, 1F, 1F, 1F);
+                                    "textures/misc/purple_overlay/purple_overlay" + (minecraft.player.tickCount / 3 % 10) + ".png"),
+                            0.7F, roundabout$hazeTint[0], roundabout$hazeTint[1], roundabout$hazeTint[2]);
                 }
                 //Distortion Haze overlay
                 if (MainUtil.isInDistortionHaze(this.minecraft.player)) {
@@ -376,6 +380,14 @@ public abstract class HudRendering implements IHudAccess {
         RenderSystem.enableDepthTest();
         $$0.setColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
+    @Unique
+    private static float[] roundabout$getPurpleHazeTint(byte skin) {
+        int color = PurpleSmokeEntity.SKIN_COLORS.getOrDefault(skin, PurpleSmokeEntity.DEFAULT_HAZE_COLOR);
+        float r = ((color >> 16) & 0xFF) / 255.0F;
+        float g = ((color >> 8) & 0xFF) / 255.0F;
+        float b = (color & 0xFF) / 255.0F;
+        return new float[]{r, g, b};
+    }
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderEffects(Lnet/minecraft/client/gui/GuiGraphics;)V"))
     private void roundabout$renderOverlay(GuiGraphics $$0, float $$1, CallbackInfo ci) {
         /*This does not work on forge becasue the forcefully overwrite this function*/
@@ -473,6 +485,7 @@ public abstract class HudRendering implements IHudAccess {
             roundabout$RenderHeatBars($$0, $$1);
             ci.cancel();
         }
+        roundabout$infiniteSpinHud($$0,$$1);
     }
     @Inject(method = "renderJumpMeter", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$RenderMountJumpBar(PlayerRideableJumping $$0, GuiGraphics $$1, int $$2, CallbackInfo ci){
@@ -480,15 +493,29 @@ public abstract class HudRendering implements IHudAccess {
             roundabout$RenderHeatBars($$1, $$2);
             ci.cancel();
         }
+        roundabout$infiniteSpinHud($$1,$$2);
+
+    }
+
+    @Unique
+    private void roundabout$infiniteSpinHud(GuiGraphics graphics, int x) {
+        StandUser user = ((StandUser) minecraft.player);
+        StandPowers standPowers = user.roundabout$getStandPowers();
+        GeneralPowers powers = ((IPowersPlayer) minecraft.player).rdbt$getPowers();
+        if (standPowers != null && standPowers.getInfiniteSpin() > 0 ) {
+            StandHudRender.renderInfiniteSpinHUD(graphics,screenWidth,screenHeight,x,standPowers);
+        }
     }
 
     @Inject(method = "renderExperienceBar", at = @At(value = "TAIL"), cancellable = true)
     public void roundabout$RenderExperienceBar2(GuiGraphics $$0, int $$1, CallbackInfo ci){
-            roundabout$RenderHeatBars($$0, $$1);
+        roundabout$RenderHeatBars($$0, $$1);
+        roundabout$infiniteSpinHud($$0,$$1);
     }
     @Inject(method = "renderJumpMeter", at = @At(value = "TAIL"), cancellable = true)
     public void roundabout$RenderMountJumpBar2(PlayerRideableJumping $$0, GuiGraphics $$1, int $$2, CallbackInfo ci){
-            roundabout$RenderHeatBars($$1, $$2);
+        roundabout$RenderHeatBars($$1, $$2);
+        roundabout$infiniteSpinHud($$1,$$2);
     }
 
 
@@ -701,7 +728,7 @@ public abstract class HudRendering implements IHudAccess {
 
                 StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha, false, this.getFont());
                 return true;
-            } if (user.roundabout$isPossessed() && user.roundabout$getPossessor() != null && user.roundabout$getPossessor().getTarget() != null) {
+            } if (user.roundabout$getPossessor() instanceof AnubisPossessorEntity possessor && possessor.getTarget() != null) {
                 StandHudRender.renderPossessionHud(context,minecraft,getCameraPlayer(),screenWidth,screenHeight,x);
                 return true;
             } else if (user.roundabout$getStandPowers() instanceof PowersAnubis PA && PA.playTime > 0) {

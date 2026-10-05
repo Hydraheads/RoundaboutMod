@@ -23,6 +23,12 @@ public final class PucciVoice extends VoiceData {
         playEquipVoice();
     }
 
+    public void playDiscToss() {
+        if (attackCooldown > -1 || inTheMiddleOfTalking()) return;
+
+        playSoundAttack(ModSounds.PUCCI_VISAGE_WHITESNAKE_DISC_TOSS_EVENT, 30);
+    }
+
     private void playEquipVoice() {
         SoundEvent sound = switch (self.getRandom().nextInt(3)) {
             case 1 -> ModSounds.PUCCI_VISAGE_EQUIP_2_EVENT;
@@ -30,5 +36,14 @@ public final class PucciVoice extends VoiceData {
             default -> ModSounds.PUCCI_VISAGE_EQUIP_1_EVENT;
         };
         playSound(sound, 30);
+    }
+
+    @Override
+    public void respondToChallenge(){
+        if (challengeNumber == 1){
+            playSoundChallenge(ModSounds.PUCCI_RESPONSE_ANASUI_1_EVENT,154);
+        } if (challengeNumber == 2){
+            playSoundChallenge(ModSounds.PUCCI_RESPONSE_ANASUI_2_EVENT,129);
+        }
     }
 }

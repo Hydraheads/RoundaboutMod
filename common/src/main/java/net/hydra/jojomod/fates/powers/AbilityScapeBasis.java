@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
@@ -18,6 +19,7 @@ import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
@@ -64,6 +66,7 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -206,6 +209,9 @@ public class AbilityScapeBasis {
 
     /** Make a stand ability cancel you using items */
     public boolean cancelItemUse() {
+        if (self.hasEffect(ModEffects.IMPRINTING)){
+            return true;
+        }
         return false;
     }
 
@@ -218,7 +224,7 @@ public class AbilityScapeBasis {
 
     public boolean getReducedDamage(Entity entity){
         return (entity instanceof Player || entity instanceof StandEntity ||
-                entity instanceof CloneEntity ||
+                (entity instanceof CloneEntity && !(entity instanceof D4CCloneEntity)) ||
                 ((entity instanceof LivingEntity LE && !((StandUser)LE).roundabout$getStandDisc().isEmpty()) &&
                         ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.standUserMobsTakePlayerDamageMultipliers)
         );
@@ -414,7 +420,9 @@ public class AbilityScapeBasis {
             GUARD = 32,
             VAULT = 33,
             MINING = 34,
-            MELT_DODGE_ANIM = 35;
+            MELT_DODGE_ANIM = 35,
+            SWITCH_INTO_BODY = 36,
+            HEEL_RAISE = 37;
 
     public float guardMod(){
         return 0.2f;
@@ -528,6 +536,10 @@ public class AbilityScapeBasis {
     }
     public void onEnderPearlThrow(){
     }
+    public void onEnderPearlLand(){
+    }
+    public void onSpinAttackStart(){
+    }
     public byte getActivePower(){
         return this.activePower;
     }
@@ -633,6 +645,8 @@ public class AbilityScapeBasis {
         self.level().isClientSide()){
             kickStarted = true;
         }
+
+        tickInfiniteSpin();
     }
 
 
@@ -2197,6 +2211,8 @@ public class AbilityScapeBasis {
                             );
                         }
                     }
+                } else if ($$4 != null) {
+
                 }
             } else {
                 level.playSound($$0, $$1, $$2, $$3, $$4, $$5, $$6, $$7);
@@ -2482,6 +2498,21 @@ public class AbilityScapeBasis {
         return listE;
     }
 
+    public List<ItemEntity> getItemTargetEntityList(LivingEntity User, float distMax, float angle){
+        /*First, attempts to hit what you are looking at*/
+        if (!(distMax >= 0)) {
+            distMax = this.getDistanceOut(User, this.getReach(), false);
+        }
+
+        /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
+        float halfReach = (float) (distMax*0.5);
+        Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
+        List<ItemEntity> listE = ItemStandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
+                pointVec.z, halfReach, halfReach, halfReach), distMax);
+        storeEnt = null;
+
+        return listE;
+    }
     public Entity getTargetEntityThroughWalls(LivingEntity User, float distMax, float angle){
         /*First, attempts to hit what you are looking at*/
         if (!(distMax >= 0)) {
@@ -2574,6 +2605,7 @@ public class AbilityScapeBasis {
             distMax = this.getDistanceOut(User, distMax, false);
             distMax = Math.min(this.getDistanceOut(User, distMax, false),distMax);
         }
+
         Entity targetEntity = this.rayCastEntity(User,distMax);
 
         if ((targetEntity != null && User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(targetEntity))
@@ -2930,6 +2962,40 @@ public class AbilityScapeBasis {
                         hitEntities.remove(value);
                     }
                 }
+            }
+        }
+        return hitEntities;
+    }
+
+    public List<ItemEntity> ItemStandGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance){
+        return ItemStandGrabHitbox(User,entities,maxDistance,25);
+    }
+    public List<ItemEntity> ItemStandGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance, float angle){
+        return ItemStandGrabHitbox(User,entities,maxDistance,angle,false);
+    }
+    public List<ItemEntity> ItemStandGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance, float angle, boolean throughWalls){
+        List<ItemEntity> hitEntities = new ArrayList<>() {
+        };
+
+        for (Entity value : entities) {
+            if (value instanceof ItemEntity IE && !value.isRemoved()){
+                Direction gravD = ((IGravityEntity)User).roundabout$getGravityDirection();
+                Vec2 lookVec = new Vec2(getLookAtEntityYaw(User, value), getLookAtEntityPitch(User, value));
+                if (gravD != Direction.DOWN) {
+                    lookVec = RotationUtil.rotPlayerToWorld(lookVec.x, lookVec.y, gravD);
+                }
+                if (!(angleDistance(lookVec.x, (User.getYHeadRot()%360f)) <= angle && angleDistance(lookVec.y, User.getXRot()) <= angle)){
+                    continue;
+                } else if (!canActuallyHit(value)){
+                    if (throughWalls) {
+                        if (!MainUtil.allowThruWalls(value)){
+                            continue;
+                        }
+                    } else {
+                        continue;
+                    }
+                }
+                hitEntities.add(IE);
             }
         }
         return hitEntities;
@@ -3653,5 +3719,48 @@ public class AbilityScapeBasis {
         }
     }
     public void onJump(){
+    }
+
+
+    public boolean ableToSpin() {return false;}
+
+    private int infinite_spin = 0;
+    private boolean infinite_spinning = false;
+    public int getInfiniteSpin() {return infinite_spin;}
+    public void setInfiniteSpin(int value) {infinite_spin = Mth.clamp(value,0,getMaxInfiniteSpin());}
+    public int getMaxInfiniteSpin() {return 40*20;} // can be overridden for balance etc.
+
+    public boolean isInfiniteSpinning() {return infinite_spinning;}
+    public void tryInfiniteSpin(boolean forced) {
+        if ( (getInfiniteSpin() >= getMaxInfiniteSpin() && !infinite_spinning) || forced) {
+            onInfiniteSpinActivate(); // particles!
+            infinite_spinning = true;
+        }
+    }
+    public void onInfiniteSpinActivate() {
+        this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.LEVELUP_EVENT,SoundSource.PLAYERS,1F,1F);
+        sendParticlesIfPossible(self.level(),ParticleTypes.END_ROD,
+                this.getSelf().getEyePosition().x, this.getSelf().getEyePosition().y, this.getSelf().getEyePosition().z,
+                20, 0.4, 0.4, 0.4, 0.4);
+    }
+    public void tickInfiniteSpin() {
+        if (ableToSpin()) {
+            int delta = isInfiniteSpinning() ? -2 : -1;
+            if (this.getSelf().isPassenger() && this.getSelf().getVehicle() instanceof AbstractHorse AH) {
+                if (AH.hurtTime == 0) {
+                    if (AH.isTamed() && AH.isSaddled() && (true /* is moving around */)) {
+                        delta = 20;
+                    }
+                } else {
+                    delta = -4;
+                }
+            }
+            this.setInfiniteSpin(infinite_spin + delta);
+            if (this.getInfiniteSpin() == 0) {
+                this.infinite_spinning = false;
+            } else {
+                tryInfiniteSpin(false);
+            }
+        }
     }
 }

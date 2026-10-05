@@ -2,6 +2,7 @@ package net.hydra.jojomod.registry;
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistry;
+import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.handBlock.AbstractHandBlock;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -17,10 +18,6 @@ import net.hydra.jojomod.item.paintings.MonaLisaPaintingItem;
 import net.hydra.jojomod.item.paintings.VanGoughPaintingItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.*;
-import net.hydra.jojomod.item.CommandDiscItem;
-import net.hydra.jojomod.item.HearingDiscItem;
-import net.hydra.jojomod.item.MemoryDiscItem;
-import net.hydra.jojomod.item.SightDiscItem;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -95,13 +92,13 @@ public class FabricItems {
     public static final Item HEARING_DISC = registerItem("hearing_disc",
             new HearingDiscItem(new Item.Properties().stacksTo(1)));
     public static final Item JUMP_BACK_COMMAND_DISC = registerItem("jump_back_command_disc",
-            new CommandDiscItem(new Item.Properties().stacksTo(1), CommandDiscItem.Command.JUMP_BACK));
+            new CommandDiscItem(new Item.Properties().durability(3), CommandDiscItem.Command.JUMP_BACK));
     public static final Item ATTACK_COMMAND_DISC = registerItem("attack_command_disc",
-            new CommandDiscItem(new Item.Properties().stacksTo(1), CommandDiscItem.Command.ATTACK));
+            new CommandDiscItem(new Item.Properties().durability(3), CommandDiscItem.Command.ATTACK));
     public static final Item FORGET_COMMAND_DISC = registerItem("forget_command_disc",
-            new CommandDiscItem(new Item.Properties().stacksTo(1), CommandDiscItem.Command.FORGET));
+            new CommandDiscItem(new Item.Properties().durability(3), CommandDiscItem.Command.FORGET));
     public static final Item EXPLOSIVE_COMMAND_DISC = registerItem("explosive_command_disc",
-            new CommandDiscItem(new Item.Properties().stacksTo(1), CommandDiscItem.Command.EXPLOSIVE));
+            new CommandDiscItem(new Item.Properties().durability(3), CommandDiscItem.Command.EXPLOSIVE));
     public static final Item HALLUCINATORY_ACID_HEIGHT_1 = registerItem("hallucinatory_acid_height_1",
             new HallucinatoryAcidDebugItem(FabricBlocks.HALLUCINATORY_ACID, 1, new Item.Properties()));
     public static final Item HALLUCINATORY_ACID_HEIGHT_2 = registerItem("hallucinatory_acid_height_2",
@@ -196,10 +193,10 @@ public class FabricItems {
     public static Item STAND_DISC_ACHTUNG = registerItem("achtung_baby_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAchtungBaby(null)));
 
-   /* public static Item STAND_DISC_DIVER_DOWN = registerItem("diver_down_disc",
+    public static Item STAND_DISC_DIVER_DOWN = registerItem("diver_down_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null)));
     public static Item MAX_STAND_DISC_DIVER_DOWN = registerItem("max_diver_down_disc",
-            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null))); */
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null)));
 
  /*   public static Item STAND_DISC_CREAM = registerItem("cream_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCream(null)));
@@ -266,6 +263,7 @@ public class FabricItems {
     public static Item HAIRSPRAY = registerItem("hairspray", new HairsprayItem(new Item.Properties().stacksTo(64)));
 
     public static Item OCCULT_CHARGE = registerItem("occult_charge", new OccultChargeItem(new Item.Properties().stacksTo(16)));
+    public static Item TOTEM_OF_DOOM = registerItem("totem_of_doom", new TotemOfDoomItem(new Item.Properties().stacksTo(1)));
 
     public static Item MATCH = registerItem("match", new MatchItem(new Item.Properties().stacksTo(64)));
     public static Item MATCH_BUNDLE = registerItem("match_bundle", new MatchItem(new Item.Properties().stacksTo(16)));
@@ -370,6 +368,9 @@ public class FabricItems {
     public static Item JOSUKE_PART_EIGHT_MASK = registerItem("josuke_part_eight_mask", new MaskItem(new Item.Properties().stacksTo(1), new JosukePartEightVisage(null)));
     public static Item KIRA_PART_EIGHT_MASK = registerItem("kira_part_eight_mask", new MaskItem(new Item.Properties().stacksTo(1), new KiraPartEightVisage(null)));
     public static Item GUCCIO_MASK = registerItem("guccio_mask", new MaskItem(new Item.Properties().stacksTo(1), new GuccioVisage(null)));
+    public static Item ANASUI_MASK = registerItem("anasui_mask", new MaskItem(new Item.Properties().stacksTo(1), new AnasuiVisage(null)));
+    public static Item FEM_ANASUI_MASK = registerItem("fem_anasui_mask", new MaskItem(new Item.Properties().stacksTo(1), new FemAnasuiVisage(null)));
+    public static Item ANAKISS_MASK = registerItem("anakiss_mask", new MaskItem(new Item.Properties().stacksTo(1), new AnakissVisage(null)));
     public static Item HATO_MASK = registerItem("hato_mask", new MaskItem(new Item.Properties().stacksTo(1), new HatoVisage(null)));
     public static Item SHIZUKA_MASK = registerItem("shizuka_mask", new MaskItem(new Item.Properties().stacksTo(1), new ShizukaVisage(null)));
     public static Item CHAKA_MASK = registerItem("chaka_mask", new MaskItem(new Item.Properties().stacksTo(1), new ChakaVisage(null)));
@@ -556,6 +557,9 @@ public class FabricItems {
                         entries.accept(GHIACCIO_MASK);
                         entries.accept(JOTARO_6_MASK);
                         entries.accept(JOHNGALLIA_MASK);
+                        entries.accept(ANASUI_MASK);
+                        entries.accept(FEM_ANASUI_MASK);
+                        entries.accept(ANAKISS_MASK);
                         entries.accept(GUCCIO_MASK);
                         entries.accept(JOHNNY_MASK);
                         entries.accept(GYRO_MASK);
@@ -788,7 +792,8 @@ public class FabricItems {
                         entries.accept(STAND_DISC_OASIS);
                         entries.accept(MAX_STAND_DISC_OASIS);
                         entries.accept(STAND_DISC_PEARL_JAM);
-
+                        entries.accept(STAND_DISC_DIVER_DOWN);
+                        entries.accept(MAX_STAND_DISC_DIVER_DOWN);
                         entries.accept(STAND_DISC_SILVER_CHARIOT);
                         entries.accept(MAX_STAND_DISC_SILVER_CHARIOT);
                         entries.accept(STAND_DISC_WHITESNAKE);
@@ -811,7 +816,8 @@ public class FabricItems {
                         entries.accept(HALLUCINATORY_ACID_HEIGHT_3);
                         entries.accept(HALLUCINATORY_ACID_HEIGHT_4);
                         entries.accept(HALLUCINATORY_ACID_WALL);
-
+                        entries.accept(ModBlocks.GAMBLING_TABLE);
+                        entries.accept(TOTEM_OF_DOOM);
                     }).build());
     public static final CreativeModeTab FOG_BLOCK_ITEMS = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
             new ResourceLocation(Roundabout.MOD_ID, "justice_fog_items"),
@@ -923,9 +929,9 @@ public class FabricItems {
         ModItems.STAND_DISC_WALKING_HEART = STAND_DISC_WALKING_HEART;
         ModItems.MAX_STAND_DISC_WALKING_HEART = MAX_STAND_DISC_WALKING_HEART;
         ((MaxStandDiscItem)MAX_STAND_DISC_WALKING_HEART).baseDisc = ((StandDiscItem)STAND_DISC_WALKING_HEART);
-      /*  ModItems.STAND_DISC_DIVER_DOWN = STAND_DISC_DIVER_DOWN;
+        ModItems.STAND_DISC_DIVER_DOWN = STAND_DISC_DIVER_DOWN;
         ((MaxStandDiscItem)MAX_STAND_DISC_DIVER_DOWN).baseDisc = ((StandDiscItem)STAND_DISC_DIVER_DOWN);
-        ModItems.MAX_STAND_DISC_DIVER_DOWN = MAX_STAND_DISC_DIVER_DOWN; */
+        ModItems.MAX_STAND_DISC_DIVER_DOWN = MAX_STAND_DISC_DIVER_DOWN;
        /* ModItems.STAND_DISC_CREAM = STAND_DISC_CREAM;
         ((MaxStandDiscItem)MAX_STAND_DISC_CREAM).baseDisc = ((StandDiscItem)STAND_DISC_CREAM);
         ModItems.MAX_STAND_DISC_CREAM = MAX_STAND_DISC_CREAM;*/
@@ -935,11 +941,14 @@ public class FabricItems {
         ModItems.LUCK_UPGRADE = LUCK_UPGRADE;
         ModItems.EXECUTION_UPGRADE = EXECUTION_UPGRADE;
         ModItems.OCCULT_CHARGE = OCCULT_CHARGE;
+        ModItems.TOTEM_OF_DOOM = TOTEM_OF_DOOM;
         ModItems.LUCK_SWORD = LUCK_SWORD;
         ModItems.SCISSORS = SCISSORS;
         ModItems.SACRIFICIAL_DAGGER = SACRIFICIAL_DAGGER;
         ModItems.WOODEN_GLAIVE = WOODEN_GLAIVE;
         ModItems.WOODEN_WAR_HAMMER = WOODEN_WAR_HAMMER;
+        FuelRegistry.INSTANCE.add(ModItems.WOODEN_WAR_HAMMER,200);
+        FuelRegistry.INSTANCE.add(ModItems.WOODEN_GLAIVE,200);
         ModItems.STONE_GLAIVE = STONE_GLAIVE;
         ModItems.STONE_WAR_HAMMER = STONE_WAR_HAMMER;
         ModItems.IRON_GLAIVE = IRON_GLAIVE;
@@ -1062,6 +1071,9 @@ public class FabricItems {
         ModItems.DOT_HAN_MASK = DOT_HAN_MASK;
         ModItems.AVDUL_MASK = AVDUL_MASK;
         ModItems.JOSUKE_PART_EIGHT_MASK = JOSUKE_PART_EIGHT_MASK;
+        ModItems.ANASUI_MASK = ANASUI_MASK;
+        ModItems.FEM_ANASUI_MASK = FEM_ANASUI_MASK;
+        ModItems.ANAKISS_MASK = ANAKISS_MASK;
         ModItems.GUCCIO_MASK = GUCCIO_MASK;
         ModItems.HATO_MASK = HATO_MASK;
         ModItems.SHIZUKA_MASK = SHIZUKA_MASK;

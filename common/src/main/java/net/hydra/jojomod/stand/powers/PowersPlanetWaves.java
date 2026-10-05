@@ -4,10 +4,10 @@ import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
-import net.hydra.jojomod.entity.stand.FollowingStandEntity;
-import net.hydra.jojomod.entity.stand.WalkingHeartEntity;
+import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -29,8 +29,6 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.PWBigMeteorEntity;
 import net.hydra.jojomod.entity.projectile.PWMeteorEntity;
-import net.hydra.jojomod.entity.stand.PlanetWavesEntity;
-import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -91,28 +89,40 @@ public class PowersPlanetWaves extends NewDashPreset {
     }
     @Override
     public List<Byte> getSkinList(){
-        List<Byte> $$1 = Lists.newArrayList();
-        $$1.add(PlanetWavesEntity.PART_6_SKIN);
-        $$1.add(PlanetWavesEntity.MANGA_SKIN);
-        if (this.getSelf() instanceof Player PE){
-            byte Level = ((IPlayerEntity)PE).roundabout$getStandLevel();
-            ItemStack goldDisc = ((StandUser)PE).roundabout$getStandDisc();
-            boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
-            if (Level > 1 || bypass){
-                $$1.add(PlanetWavesEntity.BLUE_SKIN);
-                $$1.add(PlanetWavesEntity.PURPLE_SKIN);
-                $$1.add(PlanetWavesEntity.GREEN_SKIN);
-                $$1.add(PlanetWavesEntity.HALLOWEEN);
-            } if (Level > 2 || bypass){
-                $$1.add(PlanetWavesEntity.GRAPESODA);
-                $$1.add(PlanetWavesEntity.OCEAN_WAVES);
-                $$1.add(PlanetWavesEntity.SYMPHONY_WAVES);
-            }if (Level > 3 || bypass){
-                $$1.add(PlanetWavesEntity.SPARTA);
-                $$1.add(PlanetWavesEntity.SPARTA2);
-            }if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
-                $$1.add(PlanetWavesEntity.COSMIC);
-            }/* if (Level > 4 || bypass){
+
+        if (isTravelling || isPreSinking || isSinking || targetingstand) {
+            if (getStandEntity(this.getSelf()) instanceof PlanetWavesEntity BE) {
+                List<Byte> list = Lists.newArrayList();
+                list.add(BE.getSkin());
+                return list;
+            }
+        } else {
+
+            List<Byte> $$1 = Lists.newArrayList();
+            $$1.add(PlanetWavesEntity.PART_6_SKIN);
+            $$1.add(PlanetWavesEntity.MANGA_SKIN);
+            if (this.getSelf() instanceof Player PE) {
+                byte Level = ((IPlayerEntity) PE).roundabout$getStandLevel();
+                ItemStack goldDisc = ((StandUser) PE).roundabout$getStandDisc();
+                boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
+                if (Level > 1 || bypass) {
+                    $$1.add(PlanetWavesEntity.BLUE_SKIN);
+                    $$1.add(PlanetWavesEntity.PURPLE_SKIN);
+                    $$1.add(PlanetWavesEntity.GREEN_SKIN);
+                    $$1.add(PlanetWavesEntity.HALLOWEEN);
+                }
+                if (Level > 2 || bypass) {
+                    $$1.add(PlanetWavesEntity.GRAPESODA);
+                    $$1.add(PlanetWavesEntity.OCEAN_WAVES);
+                    $$1.add(PlanetWavesEntity.SYMPHONY_WAVES);
+                }
+                if (Level > 3 || bypass) {
+                    $$1.add(PlanetWavesEntity.SPARTA);
+                    $$1.add(PlanetWavesEntity.SPARTA2);
+                }
+                if (((IPlayerEntity) PE).roundabout$getUnlockedBonusSkin() || bypass) {
+                    $$1.add(PlanetWavesEntity.COSMIC);
+                }/* if (Level > 4 || bypass){
                 $$1.add(MagiciansRedEntity.GREEN_SKIN);
                 $$1.add(MagiciansRedEntity.GREEN_ABLAZE);
             } if (Level > 5 || bypass){
@@ -131,8 +141,11 @@ public class PowersPlanetWaves extends NewDashPreset {
                 $$1.add(MagiciansRedEntity.DREAD_SKIN);
                 $$1.add(MagiciansRedEntity.DREAD_ABLAZE);
             }*/
+            }
+
+            return $$1;
         }
-        return $$1;
+        return null;
     }
 
     @Override public Component getSkinName(byte skinId) {
@@ -1106,7 +1119,7 @@ public class PowersPlanetWaves extends NewDashPreset {
                 double tpZ = standTargetPos.z;
 
                 if (standHitDirection == net.minecraft.core.Direction.UP) {
-                    tpY += 0.5;
+                    tpY += 0.3;
                     if (standApproachDir != null) {
                         double offsetDist = 0.75; // 1.0 = mob más alejado del stand
                         tpX += standApproachDir.x * offsetDist;
@@ -1117,6 +1130,13 @@ public class PowersPlanetWaves extends NewDashPreset {
 
                     if (standApproachDir != null) {
                         double offsetDist = 0.75;
+                        tpX += standApproachDir.x * offsetDist;
+                        tpZ += standApproachDir.z * offsetDist;
+                    }
+                }else {
+                    tpY += 0.3;
+                    if (standApproachDir != null) {
+                        double offsetDist = 1.5;
                         tpX += standApproachDir.x * offsetDist;
                         tpZ += standApproachDir.z * offsetDist;
                     }

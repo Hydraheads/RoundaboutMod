@@ -1030,6 +1030,9 @@ public class StandPowers extends AbilityScapeBasis {
         }
     }
     public float getSoundVolumeFromByte(byte soundChoice){
+        if (soundChoice == SoundIndex.BITES_THE_DUST_COMBAT || soundChoice == SoundIndex.BITES_THE_DUST_DAY) {
+            return 0.5f;
+        }
         if (soundChoice == TIME_STOP_NOISE) {
             return 0.7f;
         } else if (soundChoice == SoundIndex.CACKLE) {
@@ -1047,7 +1050,7 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
     public void playSummonSound() {
-        if (this.self.isCrouching()){
+        if (this.self.isCrouching() || hasHandsOut()){
             return;
         }
         if (PowerTypes.isErasingTime(self)){
@@ -2017,6 +2020,10 @@ public class StandPowers extends AbilityScapeBasis {
                     if (getActivePower() != PowerIndex.MINING) {
                         userSelf.roundabout$setStandAnimation(NONE);
                     }
+                } else if (animationType == HEEL_RAISE) {
+                    if (getActivePower() != PowerIndex.POWER_3_SNEAK) {
+                        userSelf.roundabout$setStandAnimation(NONE);
+                    }
                 } else if (animationType == PUNCH_LEFT || animationType == PUNCH_RIGHT) {
                     if ((activePower != PowerIndex.NONE || attackTimeDuring > attackTimeMax) || !PowerTypes.hasHandsActive(self)) {
                         userSelf.roundabout$setStandAnimation(NONE);
@@ -2027,6 +2034,10 @@ public class StandPowers extends AbilityScapeBasis {
                     }
                 } else if (animationType == MELT_DODGE_ANIM) {
                     if (activePower != PowerIndex.POWER_3_BLOCK){
+                        userSelf.roundabout$setStandAnimation(NONE);
+                    }
+                } else if (animationType == SWITCH_INTO_BODY) {
+                    if (activePower != PowerIndex.POWER_2_SNEAK){
                         userSelf.roundabout$setStandAnimation(NONE);
                     }
                 }

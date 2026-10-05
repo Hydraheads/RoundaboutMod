@@ -1,22 +1,30 @@
 package net.hydra.jojomod.entity.stand;
 
 import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.client.SilverChariotAfterimageState;
+import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
 import net.hydra.jojomod.stand.powers.PowersSilverChariot;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.*;
 
 public class SilverChariotEntity extends FollowingStandEntity {
     public SilverChariotEntity(EntityType<? extends Mob> entityType, Level world) {
@@ -24,16 +32,87 @@ public class SilverChariotEntity extends FollowingStandEntity {
     }
 
     public static final byte
-            DEFAULT_SILVER_CHARIOT = 1;
+            PART_3 = 1,
+            PART_3_GREY = 2,
+            PART_3_MANGA = 3,
+            PART_5 = 4,
+            AQUA = 5,
+            AZURE = 6,
+            BLUE = 7,
+            CRYSTAL = 8,
+            END_OF_THE_WORLD = 9,
+            GENESIS_OF_THE_UNIVERSE = 10,
+            JOJONIUM_A = 11,
+            JOJONIUM_B = 12,
+            JOJONIUM_C = 13,
+            NIGHTMARE = 14,
+            ORANGE = 15,
+            PASSIONE = 16,
+            PURPLE = 17,
+            SANDY = 18,
+            TURQUOISE = 19,
+            YELLOW = 20;
 
     public static final byte
-            CONTROL_MODE_NONE = 0,
-            CONTROL_MODE_SELF_CARRY = 1,
-            CONTROL_MODE_REMOTE = 2;
+            IS_PART_3_SKIN = 1,
+            IS_PART_5_SKIN = 2;
 
-    private static final EntityDataAccessor<Byte> CONTROL_MODE = SynchedEntityData.defineId(
+    public boolean isPart5Skin() {
+        byte skin = this.getSkin();
+        return skin == PART_5;
+    }
+
+    private static final EntityDataAccessor<Boolean> IS_CARRYING_USER = SynchedEntityData.defineId(
+            SilverChariotEntity.class, EntityDataSerializers.BOOLEAN
+    );
+
+    public void setIsCarryingUser(boolean isCarryingUser) {
+        if (this.entityData.hasItem(IS_CARRYING_USER)) {
+            this.entityData.set(IS_CARRYING_USER, isCarryingUser);
+        }
+    }
+
+    public boolean getIsCarryingUser() {
+        if (this.entityData.hasItem(IS_CARRYING_USER)) {
+            return this.entityData.get(IS_CARRYING_USER);
+        }
+        return false;
+    }
+
+    private static final EntityDataAccessor<Byte> REMOTE_MODE = SynchedEntityData.defineId(
             SilverChariotEntity.class, EntityDataSerializers.BYTE
     );
+
+    public static final byte
+            REMOTE_MODE_NONE = 0,
+            REMOTE_MODE_SELF_CARRY = 1,
+            REMOTE_MODE_CONTROL = 2;
+
+    public void setControlMode(boolean active) {
+        if (active) setRemoteMode(REMOTE_MODE_CONTROL);
+        else if (entityData.get(REMOTE_MODE) == REMOTE_MODE_CONTROL) setRemoteMode(REMOTE_MODE_NONE);
+    }
+
+    public void setSelfCarryMode(boolean active) {
+        if (active) setRemoteMode(REMOTE_MODE_SELF_CARRY);
+        else if (entityData.get(REMOTE_MODE) == REMOTE_MODE_SELF_CARRY) setRemoteMode(REMOTE_MODE_NONE);
+    }
+
+    private void setRemoteMode(byte remoteMode) {
+        if (entityData.get(REMOTE_MODE) ==  remoteMode) {
+            return;
+        }
+        entityData.set(REMOTE_MODE, remoteMode);
+    }
+
+    public boolean isControlModeActive() {
+        return entityData.get(REMOTE_MODE) == REMOTE_MODE_CONTROL;
+    }
+
+    public boolean isSelfCarryModeActive() {
+        return entityData.get(REMOTE_MODE) == REMOTE_MODE_SELF_CARRY;
+    }
+
     private static final EntityDataAccessor<Boolean> IS_ARMOURED = SynchedEntityData.defineId(
             SilverChariotEntity.class, EntityDataSerializers.BOOLEAN
     );
@@ -41,10 +120,79 @@ public class SilverChariotEntity extends FollowingStandEntity {
             SilverChariotEntity.class, EntityDataSerializers.BOOLEAN
     );
 
+    public void setHasRapier(boolean hasRapier) {
+        if (this.entityData.hasItem(HAS_RAPIER)) {
+            this.entityData.set(HAS_RAPIER, hasRapier);
+        }
+    }
+
+    public boolean getHasRapier() {
+        if (this.entityData.hasItem(HAS_RAPIER)) {
+            return this.entityData.get(HAS_RAPIER);
+        }
+        return true;
+    }
+
+    private static final EntityDataAccessor<Boolean> IS_FAKE = SynchedEntityData.defineId(
+            SilverChariotEntity.class, EntityDataSerializers.BOOLEAN
+    );
+
+    public void setIsFake(boolean value) {
+        if (this.entityData.hasItem(IS_FAKE)) {
+            this.entityData.set(IS_FAKE, value);
+        }
+    }
+
+    public boolean getIsFake() {
+        if (this.entityData.hasItem(IS_FAKE)) {
+            return this.entityData.get(IS_FAKE);
+        }
+        return false;
+    }
+
+    private static final EntityDataAccessor<Boolean> IS_DUAL_WIELDING = SynchedEntityData.defineId(
+            SilverChariotEntity.class, EntityDataSerializers.BOOLEAN
+    );
+
+    public static final byte
+            RIGHT_HAND = 1,
+            LEFT_HAND = 2,
+            DUAL_WIELD = 3;
+
+    private static final EntityDataAccessor<Byte> ACTIVE_HAND = SynchedEntityData.defineId(
+            SilverChariotEntity.class, EntityDataSerializers.BYTE
+    );
+
+    public void setActiveHand(byte handValue) {
+        if (this.entityData.hasItem(ACTIVE_HAND)) {
+            this.entityData.set(ACTIVE_HAND, handValue);
+        }
+    }
+
+    public byte getActiveHand() {
+        if (this.entityData.hasItem(ACTIVE_HAND)) {
+            return this.entityData.get(ACTIVE_HAND);
+        }
+        return RIGHT_HAND;
+    }
+
+    public void setArmoured(boolean armoured) {
+        if (this.entityData.hasItem(IS_ARMOURED)) {
+            this.entityData.set(IS_ARMOURED, armoured);
+        }
+    }
+
+    public boolean getArmoured() {
+        if (this.entityData.hasItem(IS_ARMOURED)) {
+            return this.entityData.get(IS_ARMOURED);
+        }
+        return true;
+    }
+
     private boolean armoured;
     private boolean isCarryingUser;
-    private final int maxGravityFreeCarryTicks = 100;
-    private int gravityFreeCarryTicks = 0;
+    private final int maxNoGravityCarryTicks = 100;
+    private int noGravityCarryTicks = 0;
 
     public boolean isCarryingUser() {
         return isCarryingUser;
@@ -52,83 +200,141 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     @Override
     public boolean standHasGravity() {
-        return !isCarryingUser || gravityFreeCarryTicks > maxGravityFreeCarryTicks;
+        return isSelfCarryModeActive() && noGravityCarryTicks > maxNoGravityCarryTicks;
     }
 
     private boolean controlDimensionsActive;
 
     public final AnimationState sc = new AnimationState();
-    public final AnimationState scBarrageCharge = new AnimationState();
-    public final AnimationState scBarrage = new AnimationState();
+    // public final AnimationState scBarrageCharge = new AnimationState();
+    // public final AnimationState scBarrage = new AnimationState();
     public final AnimationState scBarrageDamage = new AnimationState();
-    public final AnimationState scBlock = new AnimationState();
+    // public final AnimationState scGuard = new AnimationState();
     public final AnimationState scFallBrace = new AnimationState();
+    public final AnimationState scPart3Pose = new AnimationState();
+    public final AnimationState scPart5Pose = new AnimationState();
+    public final AnimationState scIdleArmoured = new AnimationState();
+    public final AnimationState scIdleNotArmoured = new AnimationState();
+    public final AnimationState scArmourShed = new AnimationState();
+    public final AnimationState scToggleNotArmouredState = new AnimationState();
+    public final AnimationState scToggleNoRapier = new AnimationState();
+    public final AnimationState scToggleRightSword = new AnimationState();
+    public final AnimationState scToggleLeftSword = new AnimationState();
+    public final AnimationState scGuardRightStart = new AnimationState();
+    public final AnimationState scGuardRightHit = new AnimationState();
+    public final AnimationState scGuardRightBreak = new AnimationState();
+    public final AnimationState scGuardLeftStart = new AnimationState();
+    public final AnimationState scGuardLeftHit = new AnimationState();
+    public final AnimationState scGuardLeftBreak = new AnimationState();
+    public final AnimationState scRightBarrageWindup = new AnimationState();
+    public final AnimationState scRightBarrage = new AnimationState();
+    public final AnimationState scLeftBarrageWindup = new AnimationState();
+    public final AnimationState scLeftBarrage = new AnimationState();
+    public final AnimationState scRightCombo = new AnimationState();
+    public final AnimationState scRightHit1 = new AnimationState();
+    public final AnimationState scRightHit2 = new AnimationState();
+    public final AnimationState scRightHit3 = new AnimationState();
+    public final AnimationState scLeftCombo = new AnimationState();
+    public final AnimationState scLeftHit1 = new AnimationState();
+    public final AnimationState scLeftHit2 = new AnimationState();
+    public final AnimationState scLeftHit3 = new AnimationState();
+    public final AnimationState scHideRapiers = new AnimationState();
+    public final AnimationState scRightRapierSpin = new AnimationState();
+    public final AnimationState scLeftRapierSpin = new AnimationState();
+    public final AnimationState scDualRapierSpin = new AnimationState();
+    public final AnimationState scRightRapierSlash = new AnimationState();
+    public final AnimationState scLeftRapierSlash = new AnimationState();
+    // public final AnimationState scDualRapierSlash = new AnimationState();
+    public final AnimationState scLeftStatueCutting = new AnimationState();
+    public final AnimationState scRightStatueCutting = new AnimationState();
+    public final AnimationState scRightRapierShotHold = new AnimationState();
+    public final AnimationState scRightRapierShotRelease = new AnimationState();
+    public final AnimationState scLeftRapierShotHold = new AnimationState();
+    public final AnimationState scLeftRapierShotRelease = new AnimationState();
+    public final AnimationState scLeftVault = new AnimationState();
+    public final AnimationState scRightVault = new AnimationState();
+    public final AnimationState scRightOffhandSwipe = new AnimationState();
+    public final AnimationState scLeftOffhandSwipe = new AnimationState();
+    public final AnimationState scUserCarry = new AnimationState();
+    public final AnimationState scUserCarryIdle = new AnimationState();
+    public final AnimationState scUserThrow = new AnimationState();
+    public final AnimationState scArmIdle = new AnimationState();
+    public final AnimationState scHideRightArm = new AnimationState();
+    public final AnimationState scHideLeftArm = new AnimationState();
 
     public static final byte
             SC_ = 40,
-            SC_BARRAGE_CHARGE = 42,
-            SC_BARRAGE = 43,
-            SC_ATTACK_1 = 44,
-            SC_ATTACK_2 = 45,
-            SC_ATTACK_3 = 46,
-            SC_IDLE_1 = 47,
-            SC_IDLE_2 = 48,
-            SC_IDLE_3 = 49,
-            SC_IDLE_4 = 50,
-            SC_BARRAGE_DAMAGE = 52,
-            SC_MINING = 53,
-            SC_ARMOR_SHED = 54,
-            SC_RAPIER_SHOT = 55,
-            SC_FALL_BRACE = 56,
-            SC_ARMOR_SHED_GUARD_BROKEN = 57,
-            SC_VAULT = 58,
-            SC_SELF_GRAB = 59,
-            SC_SELF_THROW = 60,
-            SC_RAPIER_SHOT_CHARGE = 61,
-            SC_OFFHAND_WEAPON_SWIPE = 62;
+            SC_ARMOUR_SHED = 41,
+            SC_RAPIER_SHOT_HOLD = 42,
+            SC_RAPIER_SHOT_RELASE = 43,
+            SC_FALL_BRACE = 44,
+            SC_ARMOUR_SHED_GUARD_BROKEN = 45,
+            SC_VAULT = 46,
+            SC_USER_CARRY = 47,
+            SC_USER_THROW = 48,
+            SC_TOGGLE_ACTIVE_HAND = 49,
+            SC_OFFHAND_WEAPON_SWIPE = 50,
+            SC_TOGGLE_ARMOUR_OFF = 51,
+            SC_TOGGLE_ARMOUR_ON = 52,
+            SC_TOGGLE_NO_RAPIER = 53,
+            SC_TOGGLE_RIGHT_RAPIER = 54,
+            SC_TOGGLE_LEFT_RAPIER = 55,
+            SC_GUARD_HIT = 56,
+            SC_IDLE = 57,
+            SC_ARM_SUMMON = 58,
+            SC_RAPIER_SPIN = 59,
+            SC_RAPIER_SLASH = 60,
+            SC_STATUE_CUTTING = 61,
+            SC_SLAB_CUTTING = 62,
+            SC_USER_CARRY_IDLE = 63,
+            SC_HIDE_RIGHT_ARM = 64,
+            SC_HIDE_LEFT_ARM = 65;
 
     public boolean isArmored = false;
 
     @Override
     public void setupAnimationStates() {
-        super.setupAnimationStates();
         byte animationState = getAnimation();
+        byte idle = getIdleAnimation();
+        boolean isPart3Skin = getSkin() != PART_5;
+        byte activeHand = getActiveHand();
 
         if (this.getUser() != null) {
-            if (animationState == BLOCK) {
-                this.scBlock.startIfStopped(this.tickCount);
-            } else {
-                this.scBlock.stop();
-            }
-            if (animationState == BARRAGE_CHARGE) {
-                this.scBarrageCharge.startIfStopped(this.tickCount);
-            } else {
-                this.scBarrageCharge.stop();
-            }
             if (animationState == BARRAGE) {
-                this.scBarrage.startIfStopped(this.tickCount);
+                if (isPart3Skin) {
+                    this.scRightBarrage.startIfStopped(this.tickCount);
+                } else {
+                    this.scLeftBarrage.startIfStopped(this.tickCount);
+                }
+                this.scHideRapiers.stop();
             } else {
-                this.scBarrage.stop();
+                if (isPart3Skin) {
+                    this.scRightBarrage.stop();
+                } else {
+                    this.scLeftBarrage.stop();
+                }
+                this.scHideRapiers.startIfStopped(this.tickCount);
             }
-            if (animationState == HURT_BY_BARRAGE) {
-                this.scBarrageDamage.startIfStopped(this.tickCount);
+
+            if (animationState == IDLE && idle == 0 && this.getArmoured()) {
+                this.scIdleArmoured.startIfStopped(this.tickCount);
             } else {
-                this.scBarrageDamage.stop();
+                this.scIdleArmoured.stop();
             }
-            if (animationState == MINING_BARRAGE) {
-
+            if (animationState == IDLE && idle == 0 && !this.getArmoured()) {
+                this.scIdleNotArmoured.startIfStopped(this.tickCount);
             } else {
-
+                this.scIdleNotArmoured.stop();
             }
-            if (animationState == BROKEN_GUARD) {
-
+            if (animationState == IDLE && idle == 1) {
+                this.scPart3Pose.startIfStopped(this.tickCount);
             } else {
-
+                this.scPart3Pose.stop();
             }
-            if (animationState == SC_FALL_BRACE) {
-                this.scFallBrace.startIfStopped(this.tickCount);
+            if (animationState == IDLE && idle == 2) {
+                this.scPart5Pose.startIfStopped(this.tickCount);
             } else {
-                this.scFallBrace.stop();
+                this.scPart5Pose.stop();
             }
 
             if (animationState == SC_) {
@@ -137,40 +343,249 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
             }
 
+            if (animationState == SC_RAPIER_SPIN) {
+                if (isPart3Skin) {
+                    this.scRightRapierSpin.startIfStopped(this.tickCount);
+                } else {
+                    this.scLeftRapierSpin.startIfStopped(this.tickCount);
+                }
+            } else {
+                this.scRightRapierSpin.stop();
+                this.scLeftRapierSpin.stop();
+            }
+            if (animationState == SC_RAPIER_SLASH) {
+                if (isPart3Skin) {
+                    this.scRightRapierSlash.startIfStopped(this.tickCount);
+                } else {
+                    this.scLeftRapierSlash.startIfStopped(this.tickCount);
+                }
+            } else {
+                this.scRightRapierSlash.stop();
+                this.scLeftRapierSlash.stop();
+            }
+            if (animationState == SC_OFFHAND_WEAPON_SWIPE) {
+                if (isPart3Skin) {
+                    this.scRightOffhandSwipe.startIfStopped(this.tickCount);
+                } else {
+                    this.scToggleLeftSword.stop();
+                    this.scRightOffhandSwipe.startIfStopped(this.tickCount);
+                }
+            } else {
+                this.scRightOffhandSwipe.stop();
+                if (!isPart3Skin) {
+                    this.scToggleLeftSword.start(this.tickCount);
+                }
+            }
+            if (animationState == SC_ARM_SUMMON) {
+                this.scArmIdle.startIfStopped(this.tickCount);
+            } else {
+                this.scArmIdle.stop();
+            }
+            if (animationState == SC_STATUE_CUTTING) {
+                if (isPart3Skin) {
+                    this.scRightStatueCutting.startIfStopped(this.tickCount);
+                } else {
+                    this.scLeftStatueCutting.startIfStopped(this.tickCount);
+                }
+            } else {
+                if (isPart3Skin) {
+                    this.scRightStatueCutting.stop();
+                } else {
+                    this.scLeftStatueCutting.stop();
+                }
+            }
+            if (animationState == SC_SLAB_CUTTING) {
+                if (isPart3Skin) {
+                    this.scRightRapierSlash.startIfStopped(this.tickCount);
+                } else {
+                    this.scLeftRapierSlash.startIfStopped(this.tickCount);
+                }
+            } else {
+                if (isPart3Skin) {
+                    this.scRightRapierSlash.stop();
+                } else {
+                    this.scLeftRapierSlash.stop();
+                }
+            }
+            if (animationState == SC_TOGGLE_ARMOUR_ON) {
+                this.scToggleNotArmouredState.stop();
+            }
+
+            if (animationState == SC_GUARD_HIT) {
+                if (isPart3Skin) {
+                    this.scGuardRightHit.startIfStopped(this.tickCount);
+                } else {
+                    this.scGuardLeftHit.startIfStopped(this.tickCount);
+                }
+            } else {
+                if (isPart3Skin) {
+                    this.scGuardRightHit.stop();
+                } else {
+                    this.scGuardLeftHit.stop();
+                }
+            }
+            if (animationState == FIRST_PUNCH) {
+                if (isPart3Skin) {
+                    this.scRightHit1.startIfStopped(this.tickCount);
+                } else {
+                    this.scLeftHit1.startIfStopped(this.tickCount);
+                }
+            } else {
+                if (isPart3Skin) {
+                    this.scRightHit1.stop();
+                } else {
+                    this.scLeftHit1.stop();
+                }
+            }
+            if (animationState == SECOND_PUNCH) {
+                if (isPart3Skin) {
+                    this.scRightHit2.startIfStopped(this.tickCount);
+                } else {
+                    this.scLeftHit2.startIfStopped(this.tickCount);
+                }
+            } else {
+                if (isPart3Skin) {
+                    this.scRightHit2.stop();
+                } else {
+                    this.scLeftHit2.stop();
+                }
+            }
+            if (animationState == THIRD_PUNCH) {
+                if (isPart3Skin) {
+                    this.scRightHit3.startIfStopped(this.tickCount);
+                } else {
+                    this.scLeftHit3.startIfStopped(this.tickCount);
+                }
+            } else {
+                if (isPart3Skin) {
+                    this.scRightHit3.stop();
+                } else {
+                    this.scLeftHit3.stop();
+                }
+            }
+            if (animationState == BLOCK) {
+                if (isPart3Skin) {
+                    this.scGuardRightStart.startIfStopped(this.tickCount);
+                } else {
+                    this.scGuardLeftStart.startIfStopped(this.tickCount);
+                }
+            } else {
+                if (isPart3Skin) {
+                    this.scGuardRightStart.stop();
+                } else  {
+                    this.scGuardLeftStart.stop();
+                }
+            }
+            if (animationState == BARRAGE_CHARGE) {
+                if (isPart3Skin) {
+                    this.scRightBarrageWindup.startIfStopped(this.tickCount);
+                } else {
+                    this.scLeftBarrageWindup.startIfStopped(this.tickCount);
+                }
+            } else {
+                if (isPart3Skin) {
+                    this.scRightBarrageWindup.stop();
+                } else {
+                    this.scLeftBarrageWindup.stop();
+                }
+            }
+            if (animationState == HURT_BY_BARRAGE) {
+                this.scBarrageDamage.startIfStopped(this.tickCount);
+            } else {
+                this.scBarrageDamage.stop();
+            }
+            if (animationState == BROKEN_GUARD) {
+                if (!this.getArmoured()) {
+                    this.scIdleNotArmoured.startIfStopped(this.tickCount);
+                } else {
+                    this.scIdleNotArmoured.stop();
+                }
+                if (isPart3Skin && this.getArmoured()) {
+                    this.scGuardRightBreak.startIfStopped(this.tickCount);
+                } else if (!isPart3Skin && this.getArmoured()) {
+                    this.scGuardLeftBreak.startIfStopped(this.tickCount);
+                }
+            } else {
+                if (isPart3Skin) {
+                    this.scGuardRightBreak.stop();
+                } else {
+                    this.scGuardLeftBreak.stop();
+                }
+            }
+            if (animationState == SC_FALL_BRACE) {
+                this.scFallBrace.startIfStopped(this.tickCount);
+            } else {
+                this.scFallBrace.stop();
+            }
+
             if (animationState == SC_VAULT) {
-
+                if (isPart3Skin) {
+                    this.scRightVault.startIfStopped(this.tickCount);
+                } else {
+                    this.scLeftVault.startIfStopped(this.tickCount);
+                }
             } else {
-
+                if (isPart3Skin) {
+                    this.scRightVault.stop();
+                } else {
+                    this.scLeftVault.stop();
+                }
             }
-            if (animationState == SC_SELF_GRAB) {
-
+            if (animationState == SC_USER_CARRY) {
+                this.scUserCarry.startIfStopped(this.tickCount);
             } else {
-
+                this.scUserCarry.stop();
             }
-            if (animationState == SC_SELF_THROW) {
-
+            if (animationState == SC_USER_CARRY_IDLE) {
+                this.scUserCarryIdle.startIfStopped(this.tickCount);
             } else {
-
+                this.scUserCarryIdle.stop();
             }
-            if (animationState == SC_ARMOR_SHED) {
-
+            if (animationState == SC_USER_THROW) {
+                this.scUserThrow.startIfStopped(this.tickCount);
             } else {
-
+                this.scUserThrow.stop();
             }
-            if (animationState == SC_ARMOR_SHED_GUARD_BROKEN) {
 
+            if (animationState == SC_ARMOUR_SHED) {
+                this.scArmourShed.startIfStopped(this.tickCount);
             } else {
-
+                this.scArmourShed.stop();
             }
-            if (animationState == SC_RAPIER_SHOT) {
-
+            if (animationState == SC_RAPIER_SHOT_HOLD) {
+                if (isPart3Skin) {
+                    this.scRightRapierShotHold.startIfStopped(this.tickCount);
+                } else {
+                    this.scLeftRapierShotHold.startIfStopped(this.tickCount);
+                }
             } else {
-
+                this.scRightRapierShotHold.stop();
+                this.scLeftRapierShotHold.stop();
             }
-            if (animationState == SC_RAPIER_SHOT_CHARGE) {
-
+            if (animationState == SC_RAPIER_SHOT_RELASE) {
+                if (isPart3Skin) {
+                    this.scRightRapierShotRelease.startIfStopped(this.tickCount);
+                } else {
+                    this.scLeftRapierShotRelease.startIfStopped(this.tickCount);
+                }
+                this.scToggleNoRapier.startIfStopped(this.tickCount);
             } else {
+                this.scRightRapierShotRelease.stop();
+                this.scLeftRapierShotRelease.stop();
+            }
 
+            if (isPart3Skin) {
+                this.scToggleRightSword.start(this.tickCount);
+                this.scToggleLeftSword.stop();
+            } else {
+                this.scToggleLeftSword.start(this.tickCount);
+                this.scToggleRightSword.stop();
+            }
+
+            if (!this.getArmoured()) {
+                this.scToggleNotArmouredState.startIfStopped(this.tickCount);
+            } else {
+                this.scToggleNotArmouredState.stop();
             }
         }
     }
@@ -178,10 +593,24 @@ public class SilverChariotEntity extends FollowingStandEntity {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        entityData.define(CONTROL_MODE, CONTROL_MODE_NONE);
+        entityData.define(REMOTE_MODE, REMOTE_MODE_NONE);
         entityData.define(IS_ARMOURED, true);
         entityData.define(HAS_RAPIER, true);
+        entityData.define(ACTIVE_HAND, RIGHT_HAND);
+        entityData.define(IS_FAKE, false);
+        entityData.define(IS_DUAL_WIELDING, false);
+        entityData.define(IS_CARRYING_USER, false);
+        entityData.define(HELD_ITEM_SILVER_CHARIOT, ItemStack.EMPTY);
+    }
 
+    @Override
+    public void addAdditionalSaveData(CompoundTag $$0) {
+        super.addAdditionalSaveData($$0);
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag $$0) {
+        super.readAdditionalSaveData($$0);
     }
 
     private float controlStrafe;
@@ -214,11 +643,92 @@ public class SilverChariotEntity extends FollowingStandEntity {
     public void travel(Vec3 vec3) {
         // TODO: Remove the teleporting camera for control mode when moving out of max range, as suggested by DOGael.
         super.travel(vec3);
+        if (this.isControlledByLocalInstance()) {
+            if (this.getUser() instanceof Player PE && this.level().isClientSide()) {
+                C2SPacketUtil.updatePilot(this);
+            }
+        }
+    }
+
+    // Custom mounting system for Silver Chariot to carry the user
+    private Vec3 userOffsetFromStand;
+    private Vec3 previousCarryPosition;
+    private SilverChariotEntity mountedEntity;
+
+    private final static Vec3 USER_CARRY_OFFSET = new Vec3(0.0D, 1.9D, 0.0D);
+
+    public void mount() {
+        if (this.isSelfCarryModeActive()) {
+            return;
+        }
+        this.noGravityCarryTicks = 0;
+        this.setSelfCarryMode(true);
+    }
+
+    public void dismount() {
+        if (!this.isSelfCarryModeActive()) {
+            return;
+        }
+        mountedEntity.discard();
+        this.setSelfCarryMode(false);
+    }
+
+    private void updateSelfCarry() {
+        Vec3 rotatedOffset = USER_CARRY_OFFSET.yRot(
+                -this.getYRot() * Mth.DEG_TO_RAD
+        );
+
+        Vec3 carryPos = mountedEntity.position().add(rotatedOffset);
+
+        if (previousCarryPosition == null) {
+            previousCarryPosition = carryPos;
+            return;
+        }
+
+        Vec3 delta = carryPos.subtract(previousCarryPosition);
+
+        // this.getUser().absMoveTo(delta.x, delta.y, delta.z);
+
+        previousCarryPosition = carryPos;
     }
 
     @Override
     public void tick() {
         super.tick();
+        Vec3 oldPosition = this.position();
+
+        if (this.level().isClientSide()) {
+            this.addCurrentPositionAndRoationToQueue();
+        }
+
+        if (!this.level().isClientSide()) {
+            if (this.isSelfCarryModeActive()) {
+
+                this.noGravityCarryTicks += 1;
+                // updateSelfCarry();
+            }
+        }
+    }
+
+    private void tickControlBodyRotation() {
+        if (!controlBodyRotationActive) {
+            controlBodyYaw = yBodyRot;
+            controlBodyRotationActive = true;
+        }
+        double xMovement = getX() - xo;
+        double zMovement = getZ() - zo;
+        if (xMovement * xMovement + zMovement * zMovement > 0.0025D) {
+            float movementYaw = (float) (Mth.atan2(zMovement, xMovement) * Mth.RAD_TO_DEG) - 90.0F;
+            if (Math.abs(Mth.wrapDegrees(getYRot() - movementYaw)) > 95.0F) {
+                movementYaw += 180.0F;
+            }
+            controlBodyYaw = Mth.rotLerp(0.3F, controlBodyYaw, movementYaw);
+        }
+        float headDifference = Mth.wrapDegrees(getYRot() - controlBodyYaw);
+        if (Math.abs(headDifference) > 50.0F) {
+            controlBodyYaw += headDifference - Math.copySign(50.0F, headDifference);
+        }
+        setYBodyRot(controlBodyYaw);
     }
 
     @Override
@@ -242,8 +752,11 @@ public class SilverChariotEntity extends FollowingStandEntity {
     }
 
     @Override
-    protected boolean canRide(Entity $$0) {
-        return super.canRide($$0);
+    protected void removePassenger(Entity $$0) {
+        if (isSelfCarryModeActive()) {
+            return;
+        }
+        super.removePassenger($$0);
     }
 
     @Override
@@ -296,13 +809,9 @@ public class SilverChariotEntity extends FollowingStandEntity {
         return super.skipAttackInteraction(attacker);
     }
 
-    public boolean isControlModeActive() {
-        return entityData.get(CONTROL_MODE) == CONTROL_MODE_REMOTE;
-    }
-
     @Override
     public boolean hasNoPhysics() {
-        return false;
+        return !isRemoteControlled();
     }
 
     @Override
@@ -315,9 +824,31 @@ public class SilverChariotEntity extends FollowingStandEntity {
         return isRemoteControlled() || super.isAttackable();
     }
 
+    private static final EntityDataAccessor<ItemStack> HELD_ITEM_SILVER_CHARIOT = SynchedEntityData.defineId(
+            SilverChariotEntity.class, EntityDataSerializers.ITEM_STACK
+    );
+
+    public void setSilverChariotOffhandItem(ItemStack itemStack) {
+        if (this.entityData.hasItem(SilverChariotEntity.HELD_ITEM_SILVER_CHARIOT)) {
+            this.entityData.set(SilverChariotEntity.HELD_ITEM_SILVER_CHARIOT, itemStack);
+        }
+    }
+
+    public ItemStack getSilverChariotOffhandItem() {
+        if (this.entityData.hasItem(SilverChariotEntity.HELD_ITEM_SILVER_CHARIOT)) {
+            return this.entityData.get(SilverChariotEntity.HELD_ITEM_SILVER_CHARIOT);
+        }
+        return ItemStack.EMPTY;
+    }
+
     @Override
     public HumanoidArm getMainArm() {
         return super.getMainArm();
+    }
+
+    @Override
+    public ItemStack getItemInHand(InteractionHand $$0) {
+        return super.getItemInHand($$0);
     }
 
     @Override
@@ -349,11 +880,20 @@ public class SilverChariotEntity extends FollowingStandEntity {
         // }
         // }
         // }
-        return isRemoteControlled() || super.canBeHitByProjectile();
+        return isRemoteControlled() && super.canBeHitByProjectile();
     }
 
     @Override
     public boolean isControlledByLocalInstance() {
+        LivingEntity user = getUser();
+        if (user instanceof Player player) {
+            if (((StandUser) player).roundabout$getStandPowers().isPiloting()) {
+                LivingEntity controlled = ((StandUser) player).roundabout$getStandPowers().getPilotingStand();
+                if (controlled != null && controlled.is(this)) {
+                    return player.isLocalPlayer();
+                }
+            }
+        }
         return super.isControlledByLocalInstance();
     }
 
@@ -365,5 +905,42 @@ public class SilverChariotEntity extends FollowingStandEntity {
     @Override
     public boolean hurt(DamageSource source, float amount) {
         return super.hurt(source, amount);
+    }
+
+    @Override
+    public boolean canBeAffected(MobEffectInstance $$0) {
+        return isRemoteControlled() && super.canBeAffected($$0);
+    }
+
+    @Override
+    public boolean isPushedByFluid() {
+        return isRemoteControlled();
+    }
+
+    private Deque<SilverChariotAfterimageState> silverChariotAfterimageStates = new ArrayDeque<>();
+
+    private Random rand = new Random();
+
+    private void addCurrentPositionAndRoationToQueue() {
+        this.silverChariotAfterimageStates.addFirst(
+                new SilverChariotAfterimageState(
+                        this.position(),
+                        this.getXRot(),
+                        this.getYRot()
+                )
+        );
+
+        while (silverChariotAfterimageStates.size() > 4) {
+            this.silverChariotAfterimageStates.removeLast();
+        }
+    }
+
+    @Override
+    public boolean canRestrainWhileMounted() {
+        return false;
+    }
+
+    public Deque<SilverChariotAfterimageState> getAfterimageStates() {
+        return this.silverChariotAfterimageStates;
     }
 }

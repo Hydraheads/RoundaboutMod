@@ -10,6 +10,8 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersWhitesnake;
 import net.hydra.jojomod.event.powers.whitesnake.WhitesnakeControlInventory;
 import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -20,14 +22,7 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.AnimationState;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -85,6 +80,7 @@ public class WhitesnakeEntity extends FollowingStandEntity {
     private static final byte REMOTE_MODE_NONE = 0;
     private static final byte REMOTE_MODE_CONTROL = 1;
     private static final byte REMOTE_MODE_AUTO = 2;
+    private static final byte REMOTE_MODE_RETREAT = 3;
     private static final float MELTING_ANIMATION_BLEND_STEP = 0.2F;
     private boolean controlDimensionsActive;
     private boolean meltingDimensionsActive;
@@ -126,7 +122,7 @@ public class WhitesnakeEntity extends FollowingStandEntity {
         goalSelector.addGoal(0, new FloatGoal(this) {
             @Override
             public boolean canUse() {
-                return isAutoModeActive() && super.canUse();
+                return (isRetreatActive() || isAutoModeActive()) && super.canUse();
             }
         });
     }
@@ -202,6 +198,15 @@ public class WhitesnakeEntity extends FollowingStandEntity {
         else if (isAutoModeActive()) setRemoteMode(REMOTE_MODE_NONE);
     }
 
+    public boolean isRetreatActive() {
+        return entityData.get(REMOTE_MODE) == REMOTE_MODE_RETREAT;
+    }
+
+    public void setRetreatMode(boolean active) {
+        if (active) setRemoteMode(REMOTE_MODE_RETREAT);
+        else if (isRetreatActive()) setRemoteMode(REMOTE_MODE_NONE);
+    }
+
     public void setControlMode(boolean active) {
         if (active) setRemoteMode(REMOTE_MODE_CONTROL);
         else if (entityData.get(REMOTE_MODE) == REMOTE_MODE_CONTROL) setRemoteMode(REMOTE_MODE_NONE);
@@ -210,7 +215,7 @@ public class WhitesnakeEntity extends FollowingStandEntity {
     private void setRemoteMode(byte mode) {
         if (entityData.get(REMOTE_MODE) == mode) return;
         entityData.set(REMOTE_MODE, mode);
-        boolean controlled = mode != REMOTE_MODE_NONE;
+        boolean controlled = mode != REMOTE_MODE_NONE || mode == REMOTE_MODE_RETREAT;
         if (controlled) ((IGravityEntity) this).roundabout$setGravityDirection(Direction.DOWN);
         controlDimensionsActive = controlled;
         meltingDimensionsActive = controlled && isMeltingModeActive();
@@ -639,12 +644,55 @@ public class WhitesnakeEntity extends FollowingStandEntity {
 
     @Override
     public boolean isEffectiveAi() {
-        return isAutoModeActive() ? !level().isClientSide() : !isRemoteControlled() && super.isEffectiveAi();
+        return (isRetreatActive() || isAutoModeActive()) ? !level().isClientSide() : !isRemoteControlled() && super.isEffectiveAi();
+    }
+
+    public Vec3 threatMovement(Vec3 move) {
+        if ((getUser() != null) && (((StandUser) getUser()).roundabout$getStandPowers() instanceof PowersWhitesnake PW)) {
+            // stops movement when reaching max range
+            double nextX = getX() + move.x;
+            double nextZ = getZ() + move.z;
+            int maxRange = PW.getMaxPilotRange();
+
+            double moveX = move.x;
+            double moveZ = move.z;
+
+            if (moveX != 0 && Math.abs(nextX - getUser().getX()) > maxRange) {
+                double stopX = Mth.clamp(nextX, getUser().getX() - maxRange, getUser().getX() + maxRange);
+                moveX = Mth.clamp(stopX - getX(), Math.min(0.0D, moveX), Math.max(0.0D, moveX));
+            }
+
+            if (moveZ != 0 && Math.abs(nextZ - getUser().getZ()) > maxRange) {
+                double stopZ = Mth.clamp(nextZ, getUser().getZ() - maxRange, getUser().getZ() + maxRange);
+                moveZ = Mth.clamp(stopZ - getZ(), Math.min(0.0D, moveZ), Math.max(0.0D, moveZ));
+            }
+
+            return new Vec3(moveX, move.y, moveZ);
+        }
+        return move;
+    }
+
+    @Override
+    public void move(MoverType moverType, Vec3 movement) {
+        if (isControlModeActive()) {
+            Direction gravity = ((IGravityEntity) this).roundabout$getGravityDirection();
+            Vec3 move = RotationUtil.vecPlayerToWorld(movement, gravity);
+            Vec3 vec3 = threatMovement(move);
+            if (vec3.x != move.x || vec3.z != move.z) {
+                Vec3 velocity = RotationUtil.vecPlayerToWorld(getDeltaMovement(), gravity);
+                setDeltaMovement(RotationUtil.vecWorldToPlayer(new Vec3(
+                        vec3.x != move.x ? 0.0D : velocity.x,
+                        velocity.y,
+                        vec3.z != move.z ? 0.0D : velocity.z), gravity));
+                movement = RotationUtil.vecWorldToPlayer(vec3, gravity);
+            }
+        }
+        super.move(moverType, movement);
     }
 
     @Override
     public void travel(Vec3 movement) {
-        if (isAutoModeActive()) {
+        if ((isRetreatActive() || isAutoModeActive())) {
             super.travel(movement);
             return;
         }
@@ -658,6 +706,29 @@ public class WhitesnakeEntity extends FollowingStandEntity {
             return;
         }
         super.travel(movement);
+    }
+
+    @Override
+    public void moveRelative(float p_19921_, Vec3 p_19922_) {
+        if (isAutoModeActive() && getUser() instanceof StandUser user
+                && user.roundabout$getStandPowers() instanceof PowersWhitesnake powers) {
+            p_19921_ = powers.inputSpeedModifiers(p_19921_);
+        }
+        Vec3 vec3 = getInputVector(p_19922_, p_19921_, this.getYRot());
+        if (!isControlModeActive()) vec3 = threatMovement(vec3);
+        this.setDeltaMovement(this.getDeltaMovement().add(vec3));
+    }
+
+    private static Vec3 getInputVector(Vec3 p_20016_, float p_20017_, float p_20018_) {
+        double d0 = p_20016_.lengthSqr();
+        if (d0 < 1.0E-7D) {
+            return Vec3.ZERO;
+        } else {
+            Vec3 vec3 = (d0 > 1.0D ? p_20016_.normalize() : p_20016_).scale((double)p_20017_);
+            float f = Mth.sin(p_20018_ * ((float)Math.PI / 180F));
+            float f1 = Mth.cos(p_20018_ * ((float)Math.PI / 180F));
+            return new Vec3(vec3.x * (double)f1 - vec3.z * (double)f, vec3.y, vec3.z * (double)f1 + vec3.x * (double)f);
+        }
     }
 
     @Override

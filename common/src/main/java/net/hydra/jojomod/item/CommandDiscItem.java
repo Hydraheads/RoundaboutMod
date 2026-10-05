@@ -1,16 +1,16 @@
 package net.hydra.jojomod.item;
 
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.pathfinding.CommandDiscPossession;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.whitesnake.disc.CommandDiscController;
 import net.hydra.jojomod.event.powers.whitesnake.disc.DiscItemData;
-import net.hydra.jojomod.event.powers.whitesnake.disc.MemoryAiController;
 import net.hydra.jojomod.event.powers.whitesnake.disc.WhitesnakeDiscUtil;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.ExplosionUtil;
-import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -28,6 +28,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.List;
 
 public final class CommandDiscItem extends Item {
@@ -45,17 +46,26 @@ public final class CommandDiscItem extends Item {
         this.command = command;
     }
 
-    public boolean applyCommand(Entity target, LivingEntity whitesnakeUser) {
-        if (!(target instanceof LivingEntity living) || WhitesnakeDiscUtil.isDiscBlacklisted(living)) return false;
+    public Command getCommand() {
+        return command;
+    }
+
+    public boolean applyCommand(Entity target, LivingEntity whitesnakeUser, ItemStack stack) {
+        if (target.level().isClientSide() || stack.isEmpty()
+                || !(target instanceof LivingEntity living) || WhitesnakeDiscUtil.isDiscBlacklisted(living)) return false;
         boolean applied = switch (command) {
             case JUMP_BACK -> applyJumpBack(living, whitesnakeUser);
             case ATTACK -> applyAttack(living, whitesnakeUser);
             case FORGET -> applyForget(living, whitesnakeUser);
             case EXPLOSIVE -> applyExplosionCommand(living, whitesnakeUser);
         };
-        if (applied && !target.level().isClientSide()) {
+        if (applied) {
             target.level().playSound(null, target.blockPosition(), ModSounds.WHITESNAKE_DISC_INSERT_EVENT,
                     SoundSource.PLAYERS, 1.0F, 1.0F);
+            stack = stack.split(1);
+            stack.setDamageValue(stack.getDamageValue() + 1);
+            if (stack.getDamageValue() >= stack.getMaxDamage()) stack.shrink(1);
+            CommandDiscController.storeCommandDisc(living, command, stack);
         }
         if (applied && target instanceof ServerPlayer player) {
             String message = switch (command) {
@@ -107,15 +117,13 @@ public final class CommandDiscItem extends Item {
             mob.setTarget(commandedTarget);
             mob.getLookControl().setLookAt(commandedTarget, 30.0F, 30.0F);
             mob.getNavigation().moveTo(commandedTarget, 1.15D);
-            CommandDiscController.commandAttack(target, commandedTarget);
+            CommandDiscController.commandAttack(mob, commandedTarget);
             return true;
         }
         if (target instanceof ServerPlayer player) {
-            player.lookAt(EntityAnchorArgument.Anchor.EYES,
-                    commandedTarget.getEyePosition());
-            CommandDiscController.commandAttack(target, commandedTarget);
-            MemoryAiController.forcePlayerAttack(player, commandedTarget);
-            return true;
+            if (commandedTarget.isRemoved() || commandedTarget.level() != player.level()
+                    || player.distanceToSqr(commandedTarget) > CommandDiscPossession.MAX_TARGET_DISTANCE_SQR) return false;
+            return CommandDiscController.commandAttack(player, commandedTarget);
         }
         return false;
     }
@@ -143,13 +151,16 @@ public final class CommandDiscItem extends Item {
                                                    InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (!player.isShiftKeyDown()) return InteractionResultHolder.pass(stack);
-        if (!level.isClientSide() && applyCommand(player, player) && !player.isCreative()) stack.shrink(1);
+        if (!level.isClientSide()) applyCommand(player, player, stack);
         return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
     }
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> lines, TooltipFlag flag) {
         DiscItemData.addOwnerTooltip(stack, lines, false);
-        lines.add(Component.translatable(getDescriptionId() + ".desc"));
+
+        for (String str : ClientUtil.splitIntoLine(Component.translatable(getDescriptionId() + ".desc").getString(), 40)) {
+            lines.add(Component.literal(str));
+        }
     }
 }

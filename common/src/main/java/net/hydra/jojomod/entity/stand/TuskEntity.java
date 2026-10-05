@@ -1,6 +1,10 @@
 package net.hydra.jojomod.entity.stand;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.entity.projectile.TuskNailEntity;
+import net.hydra.jojomod.event.index.OffsetIndex;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -23,16 +27,58 @@ public class TuskEntity extends FollowingStandEntity {
         return -1;
     }
 
+    public static final byte DEATH_PUNCH = 50;
+    public static final byte SHRINK = 51;
+
     public final AnimationState hideFists = new AnimationState();
+    public final AnimationState deathPunch = new AnimationState();
+    public final AnimationState shrink = new AnimationState();
 
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
-        if (this.getAnimation() != BARRAGE) {
-            this.hideFists.startIfStopped(this.tickCount);
-        } else {
-            this.hideFists.stop();
+
+        this.hideFists.animateWhen(this.getAnimation() != BARRAGE,this.tickCount);
+        this.barrageAnimationState.animateWhen(this.getAnimation() == BARRAGE,this.tickCount);
+        this.barrageChargeAnimationState.animateWhen(this.getAnimation() == BARRAGE_CHARGE,this.tickCount);
+        this.deathPunch.animateWhen(this.getAnimation() == DEATH_PUNCH,this.tickCount);
+        this.shrink.animateWhen(this.getAnimation() == SHRINK,this.tickCount);
+    }
+
+    @Override
+    public boolean canBeHitByStands() {
+        return this.getAct() == 4 && this.getOffsetType() == OffsetIndex.LOOSE;
+    }
+
+    @Override
+    public boolean canStandBeHurt() {
+        return this.getAct() == 4 && this.getOffsetType() == OffsetIndex.LOOSE;
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (this.getAnimation() == SHRINK && this.hurtTime == 0 && !this.level().isClientSide()) {
+            this.discard();
+            TuskNailEntity tuskNailEntity = new TuskNailEntity(this.getUser(),this.level(),(byte)4);
+            tuskNailEntity.shootFromRotation(this,
+                    redirectX,redirectY,-0.5F,1,0.05F);
+            this.level().addFreshEntity(tuskNailEntity);
         }
+    }
+
+
+    private float redirectX = 0;
+    private float redirectY = 0;
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if (source.getEntity() != null && source.equals(ModDamageTypes.STAND)) {
+            this.setAnimation(SHRINK);
+            redirectX = source.getEntity().getViewXRot(0);
+            redirectY = source.getEntity().getViewYRot(0);
+        }
+        return super.hurt(source, amount);
     }
 
     @Override

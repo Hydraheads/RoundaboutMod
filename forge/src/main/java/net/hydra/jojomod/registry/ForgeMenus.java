@@ -1,0 +1,51 @@
+package net.hydra.jojomod.registry;
+
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.menu.ModMenus;
+import net.hydra.jojomod.menu.GamblingTableMenu;
+import net.hydra.jojomod.menu.diverdown.*;
+import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.inventory.*;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
+
+public final class ForgeMenus {
+        //there's no registry yet for custom UI that doesn't use the default minecraft abstract menu, so I had to make one for the custom Diver Down workbenches textures.
+        //If somebody has a better way to do this, please message me on discord- 88superguy
+        public static final DeferredRegister<MenuType<?>> MENUS =
+                DeferredRegister.create(ForgeRegistries.MENU_TYPES, Roundabout.MOD_ID);
+
+        //Diver Down Crafting Table registry
+        public static final RegistryObject<MenuType<CraftingMenu>> DIVER_DOWN_CRAFTING =
+                MENUS.register("diver_down_crafting", () ->
+                        new MenuType<>(DiverDownCraftingMenu::new, FeatureFlags.DEFAULT_FLAGS));
+        //Diver Down Anvil register
+        public static final RegistryObject<MenuType<AnvilMenu>> DIVER_DOWN_ANVIL =
+                MENUS.register("diver_down_anvil", () ->
+                        new MenuType<>(DiverDownAnvilMenu::new, FeatureFlags.DEFAULT_FLAGS));
+        //Diver Down Smithing Table registry
+        public static final RegistryObject<MenuType<SmithingMenu>> DIVER_DOWN_SMITHING =
+                MENUS.register("diver_down_smithing", () ->
+                        new MenuType<>(DiverDownSmithingMenu::new, FeatureFlags.DEFAULT_FLAGS));
+    public static final RegistryObject<MenuType<StonecutterMenu>> DIVER_DOWN_STONECUTTER =
+            MENUS.register("diver_down_stonecutter", () ->
+                    new MenuType<>(DiverDownStonecutterMenu::new, FeatureFlags.DEFAULT_FLAGS));
+    public static final RegistryObject<MenuType<LoomMenu>> DIVER_DOWN_LOOM =
+            MENUS.register("diver_down_loom", () ->
+                    new MenuType<>(DiverDownLoomMenu::new, FeatureFlags.DEFAULT_FLAGS));
+    public static final RegistryObject<MenuType<GamblingTableMenu>> GAMBLING_TABLE =
+            MENUS.register("gambling_table", () -> new MenuType<>(GamblingTableMenu::new, FeatureFlags.DEFAULT_FLAGS));
+
+    private ForgeMenus() {
+    }
+
+    public static void initialize() {
+        ModMenus.DIVER_DOWN_CRAFTING = DIVER_DOWN_CRAFTING.get();
+        ModMenus.DIVER_DOWN_ANVIL = DIVER_DOWN_ANVIL.get();
+        ModMenus.DIVER_DOWN_SMITHING = DIVER_DOWN_SMITHING.get();
+        ModMenus.DIVER_DOWN_STONECUTTER = DIVER_DOWN_STONECUTTER.get();
+        ModMenus.DIVER_DOWN_LOOM = DIVER_DOWN_LOOM.get();
+        ModMenus.GAMBLING_TABLE = GAMBLING_TABLE.get();
+    }
+}

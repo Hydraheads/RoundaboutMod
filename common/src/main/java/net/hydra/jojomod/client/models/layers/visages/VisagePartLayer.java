@@ -115,7 +115,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 float b = isHurt ? 0.6F : 1.0F;
                 StandUser user = ((StandUser) entity);
 
-                if (user.roundabout$getStandPowers() instanceof PowersWalkingHeart PW && (PW.inCombatMode() || PW.hasExtendedHeelsForWalking())){
+                if (user.roundabout$getStandPowers() instanceof PowersWalkingHeart PW && (PW.rendersInCombatMode() || PW.hasExtendedHeelsForWalking())){
                     if (user instanceof AbstractClientPlayer PE) {
                         renderRightHeelPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, PE.getSkinTextureLocation(),
                                 r, g, b);
@@ -290,6 +290,11 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                         if (vd.rendersGyroHat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !isHoldingBowlerHat
                                 && !hideExtraPartsWithSuit) {
                             renderGyroHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                    r, g, b);
+                        }
+                        if (vd.rendersAnakissHat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !isHoldingBowlerHat
+                                && !hideExtraPartsWithSuit) {
+                            renderAnakissHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
                         if (vd.rendersSchoolHat() && !isBodyFrozen /*&& !MainUtil.isWearingEitherStoneMask(entity)*/ && !isHoldingBowlerHat
@@ -749,6 +754,8 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 r, g, b, 1, 1);
         ModStrayModels.starPlatinumArmsPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, 1);
+        ModStrayModels.silverChariotArmsPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, 1);
         ClientUtil.popPoseAndCooperate(poseStack,32);
     }
     public void renderNormalBreast(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
@@ -831,6 +838,15 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         ClientUtil.pushPoseAndCooperate(poseStack,36);
         getParentModel().head.translateAndRotate(poseStack);
         ModStrayModels.gyroHatPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderAnakissHat(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                              float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.anakissHatPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
         ClientUtil.popPoseAndCooperate(poseStack,36);
     }

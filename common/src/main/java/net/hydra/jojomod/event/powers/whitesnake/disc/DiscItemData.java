@@ -1,6 +1,8 @@
 package net.hydra.jojomod.event.powers.whitesnake.disc;
 
 import net.hydra.jojomod.access.DiscBearer;
+import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.item.MemoryDiscItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -207,6 +209,11 @@ public final class DiscItemData {
                 && "minecraft:slime".equals(getMemoryEntityType(stack));
     }
 
+    public static boolean isWolfMemory(ItemStack stack) {
+        return stack.getItem() instanceof MemoryDiscItem
+                && "minecraft:wolf".equals(getMemoryEntityType(stack));
+    }
+
     private static ListTag captureInventory(Inventory inventory) {
         ListTag list = new ListTag();
         for (int slot = 0; slot < inventory.items.size(); slot++) {
@@ -259,8 +266,9 @@ public final class DiscItemData {
     }
 
     public static boolean isLobotomized(LivingEntity entity) {
-        return !((DiscBearer) entity).roundabout$hasMemoryDisc()
-                && !WhitesnakeDiscUtil.hasUsableStandDisc(entity);
+        return (!((DiscBearer) entity).roundabout$hasMemoryDisc()
+                && !WhitesnakeDiscUtil.hasUsableStandDisc(entity))
+                || (entity instanceof Mob mob && mob.hasEffect(ModEffects.DOOMED) && !MainUtil.isBossMob(mob));
     }
 
     public static boolean isMemoryDevelopmentLimited(LivingEntity entity) {

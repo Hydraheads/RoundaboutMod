@@ -222,6 +222,16 @@ public abstract class ConfigManager {
             MainUtil.standBlockGrabBlacklist.clear();
             MainUtil.standBlockGrabBlacklist.addAll(getAdvancedConfig().standBlockGrabBlacklist);
         }
+        if (getAdvancedConfig().standDisassemblyBlacklist != null)
+        {
+            MainUtil.standDisassemblyBlacklist.clear();
+            MainUtil.standDisassemblyBlacklist.addAll(getAdvancedConfig().standDisassemblyBlacklist);
+        }
+        if (getAdvancedConfig().lootPoolForD4CChests != null)
+        {
+            MainUtil.lootPoolForD4CChests.clear();
+            MainUtil.lootPoolForD4CChests.addAll(getAdvancedConfig().lootPoolForD4CChests);
+        }
         if (getAdvancedConfig().standDestructionBlacklistv2 != null)
         {
             MainUtil.standDestructionBlacklist.clear();
@@ -232,9 +242,9 @@ public abstract class ConfigManager {
             MainUtil.standBlockExplosionBlacklist.clear();
             MainUtil.standBlockExplosionBlacklist.addAll(getAdvancedConfig().standBlockExplosionBlacklist);
         }
-        if (getAdvancedConfig().sheerHeartAttackCustomBlockHeatV2 != null)
+        if (getAdvancedConfig().sheerHeartAttackCustomBlockHeatV6 != null)
         {
-            for (String entry : getAdvancedConfig().sheerHeartAttackCustomBlockHeatV2) {
+            for (String entry : getAdvancedConfig().sheerHeartAttackCustomBlockHeatV6) {
                 try {
                     String[] split = entry.split(":");
 

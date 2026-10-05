@@ -400,6 +400,13 @@ public class C2SPacketUtil {
         );
     }
 
+    public static void diverDownDisguise(String name) {
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.DiverDownDisguise.value,
+                name
+        );
+    }
+
     /**Request a dimension hop with d4c*/
     public static void d4cDimensionHopRegistryPacket(){
         ModMessageEvents.sendToServer(

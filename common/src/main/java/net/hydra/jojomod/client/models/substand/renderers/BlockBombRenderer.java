@@ -42,6 +42,7 @@ public class BlockBombRenderer extends StandRenderer<BlockBombEntity> {
 	private static final ResourceLocation GREEN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/blockbombs/green.png");
 	private static final ResourceLocation GOLD = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/blockbombs/gold.png");
 	private static final ResourceLocation NUMBRA = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/blockbombs/numbra.png");
+	//private static final ResourceLocation ONIBIS = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/blockbombs/samurai.png");
 
 	
     public BlockBombRenderer(EntityRendererProvider.Context context) {
@@ -57,11 +58,13 @@ public class BlockBombRenderer extends StandRenderer<BlockBombEntity> {
             switch (BT) {
                 case KillerQueenEntity.GOGO, KillerQueenEntity.NOTW, KillerQueenEntity.CREEPER -> {return GREEN;}
                 case KillerQueenEntity.GUNPOWDER, KillerQueenEntity.FINAL, KillerQueenEntity.YELLOW,
-                     KillerQueenEntity.ARTWORK-> {return GOLD;}
+                     KillerQueenEntity.ARTWORK, KillerQueenEntity.BROWN-> {return GOLD;}
                 case KillerQueenEntity.NIGHTMARE, KillerQueenEntity.UMBRA, KillerQueenEntity.MINUET,
                      KillerQueenEntity.LIMBUSMORTIS, KillerQueenEntity.DEADLY -> {return NUMBRA;}
-                case KillerQueenEntity.STRAY, KillerQueenEntity.TAMA -> {return BLUE;}
+                case KillerQueenEntity.STRAY, KillerQueenEntity.TAMA, KillerQueenEntity.GREY,
+                     KillerQueenEntity.SAMURAI, KillerQueenEntity.SPIRIT-> {return BLUE;}
                 case KillerQueenEntity.MINESWEEPER -> {return MINESWEEPER;}
+                //case KillerQueenEntity.SAMURAI, KillerQueenEntity.SPIRIT -> {return ONIBIS;}
             }
         }
 
@@ -71,22 +74,23 @@ public class BlockBombRenderer extends StandRenderer<BlockBombEntity> {
     public void render(BlockBombEntity blockBombEntity, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         Player ClientPlayer = Minecraft.getInstance().player;
         boolean hidesOnF1 = ConfigManager.getClientConfig().killerQueenSettings.bombOverlayHideOnF1;
-
-        //matrixStack.scale(0.95f, 0.95f, 0.95f);
         
     	if (ClientUtil.canSeeStands(ClientPlayer) && !(Minecraft.getInstance().options.hideGui && hidesOnF1)) {
         	Player UserPlayer =((Player)blockBombEntity.getUser());
         	if (UserPlayer == ClientPlayer) {
-                matrixStack.pushPose();
+                float fade = (((float) blockBombEntity.renderFadeIn) / blockBombEntity.renderFadeInMax);
+                if (fade > 0) {
+                    matrixStack.pushPose();
 
-                VertexConsumer vertex = vertexConsumerProvider.getBuffer(RenderType.entityTranslucent(getTextureLocation(blockBombEntity)));
+                    VertexConsumer vertex = vertexConsumerProvider.getBuffer(RenderType.entityTranslucent(getTextureLocation(blockBombEntity)));
 
-                matrixStack.mulPose(Axis.ZP.rotationDegrees(180f));
-                matrixStack.translate(0,-1.5,0);
+                    matrixStack.mulPose(Axis.ZP.rotationDegrees(180f));
+                    matrixStack.translate(0, -1.5, 0);
 
-                model.renderToBuffer(matrixStack, vertex, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F,
-                        0.75f*Math.min((((float) blockBombEntity.renderFadeIn) / 12) + (partialTicks * 0.05F), 1f));
-                matrixStack.popPose();
+                    model.renderToBuffer(matrixStack, vertex, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F,
+                            0.75f * Math.min(fade + (partialTicks * 0.05F), 1f));
+                    matrixStack.popPose();
+                }
         	}
         }
     }

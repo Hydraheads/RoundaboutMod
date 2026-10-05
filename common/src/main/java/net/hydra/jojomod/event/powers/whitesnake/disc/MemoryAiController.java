@@ -3,7 +3,6 @@ package net.hydra.jojomod.event.powers.whitesnake.disc;
 import net.hydra.jojomod.access.DiscBearer;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -19,23 +18,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.UUID;
 
 public final class MemoryAiController {
-    private static final ThreadLocal<Boolean> AI_ATTACK = ThreadLocal.withInitial(() -> false);
-
     private MemoryAiController() {
-    }
-
-    public static boolean isAiAttack() {
-        return AI_ATTACK.get();
-    }
-
-    public static void forcePlayerAttack(ServerPlayer player, LivingEntity target) {
-        AI_ATTACK.set(true);
-        try {
-            player.swing(InteractionHand.MAIN_HAND, true);
-            player.attack(target);
-        } finally {
-            AI_ATTACK.set(false);
-        }
     }
 
     public static void tick(LivingEntity entity) {

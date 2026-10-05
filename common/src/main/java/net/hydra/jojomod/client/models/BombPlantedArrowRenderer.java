@@ -1,5 +1,6 @@
 package net.hydra.jojomod.client.models;
 
+import net.hydra.jojomod.entity.BombPlantedArrow;
 import net.minecraft.client.renderer.entity.ArrowRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
@@ -17,7 +18,7 @@ public class BombPlantedArrowRenderer extends ArrowRenderer<AbstractArrow> {
 
     @Override
     public ResourceLocation getTextureLocation(AbstractArrow abstractArrow) {
-        if (abstractArrow instanceof Arrow AR) {
+        if (abstractArrow instanceof BombPlantedArrow AR) {
             return AR.getColor() > 0 ? TIPPED_ARROW_LOCATION : NORMAL_ARROW_LOCATION;
         }else {
             return SPECTRAL_ARROW_LOCATION;

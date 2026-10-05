@@ -30,6 +30,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.EndGatewayBlock;
+import net.minecraft.world.level.block.NetherPortalBlock;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -56,7 +58,9 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 	private int tickIndicator = maxTickIndicator;
 	private Vec3 blockSize = new Vec3(1.0f, 1.0f, 1.0f);
 	private AABB blockBB = null;
-	public int renderFadeIn = 1;
+	public int renderFadeIn = 0;
+	public int renderFadeInMax = 12;
+	public int renderFadeCooldown = 7;
 
 	@Override
 	protected void defineSynchedData() {
@@ -77,7 +81,7 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 		super($$0, $$1);
 	}
 
-	public static final float dimensions = 1F;
+	public static final float dimensions = 0.9F;
 
 	@Override
 	public void push(Entity $$0) {
@@ -132,7 +136,9 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 		BlockState state = this.level().getBlockState(this.bombPos);
 		return state.isAir();
 	}
-	
+
+
+
 	@Override
     public void tick() {
 		this.setFadeOut((byte)1);
@@ -173,8 +179,11 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 						0, 1.2, 0);
 				this.tickIndicator--;
 			}
-			if (this.renderFadeIn < 12) {
+			if (this.renderFadeIn < renderFadeInMax && renderFadeCooldown <= 0) {
 				this.renderFadeIn++;
+			}
+			if (renderFadeCooldown > 0) {
+				renderFadeCooldown--;
 			}
 		}
         super.tick();
@@ -205,6 +214,11 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 	}
 
 	@Override
+	public boolean canChangeDimensions() {
+		return false;
+	}
+
+	@Override
 	public boolean canAttack(LivingEntity le){
 		return false;
 	}
@@ -219,9 +233,6 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 	@Override
     public boolean isPickable() {
 		return false;
-
-		/// sadly no explode by interact
-		//return (getUser() != null && getOnContact());
 	}
 
     @Override

@@ -104,6 +104,9 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         if (AnubisLayer.shouldRender(player) != null){
             return;
         }
+        if (((StandUser)player).roundabout$getStandPowers() instanceof Powers20thCenturyBoy CB && CB.invincibleState && PowerTypes.isUsingStand(player)) {
+            return;
+        }
         byte curse = ((StandUser) player).roundabout$getLocacacaCurse();
         float delta = ClientUtil.getDelta();
         if (((TimeStop) player.level()).CanTimeStopEntity(player)) {
@@ -199,6 +202,10 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
 
     @Inject(method = "renderLeftHand", at = @At(value = "TAIL"))
     public void roundabout$renderLeftHand(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, AbstractClientPlayer player, CallbackInfo ci) {
+        if (((StandUser)player).roundabout$getStandPowers() instanceof Powers20thCenturyBoy CB && CB.invincibleState && PowerTypes.isUsingStand(player)) {
+            return;
+        }
+
         byte curse = ((StandUser) player).roundabout$getLocacacaCurse();
         float delta = ClientUtil.getDelta();
         if (((TimeStop) player.level()).CanTimeStopEntity(player)) {
@@ -568,7 +575,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             return;
         }
 
-        if (acl != null && ((StandUser)acl).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.inCombatMode()
+        if (acl != null && ((StandUser)acl).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.rendersInCombatMode()
         ) {
 
             $$6.rightLeg.copyFrom($$6.rightArm);
@@ -591,7 +598,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                                                                                                     AbstractClientPlayer acl, ModelPart $$4, ModelPart $$5,
                                                                                                     CallbackInfo ci) {
         PlayerModel<AbstractClientPlayer> $$6 = this.getModel();
-        if (acl != null && ((StandUser)acl).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.inCombatMode()){
+        if (acl != null && ((StandUser)acl).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.rendersInCombatMode()){
             $$6.rightLeg.xRot = 0.2F;
             $$6.rightPants.copyFrom($$6.rightLeg);
             $$6.leftLeg.xRot = 0.2F;
@@ -604,7 +611,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                                                                                                               CallbackInfo ci) {
 
         PlayerModel<AbstractClientPlayer> $$6 = this.getModel();
-        if (acl != null && ((StandUser)acl).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.inCombatMode()) {
+        if (acl != null && ((StandUser)acl).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.rendersInCombatMode()) {
 
             boolean isHurt = acl.hurtTime > 0;
             float r = 1;
@@ -679,7 +686,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     @Inject(method = "renderRightHand", at = @At(value = "HEAD"), cancellable = true)
     private  <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderRightHandX(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, CallbackInfo ci) {
 
-        if ($$3 != null && ((StandUser)$$3).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.inCombatMode()){
+        if ($$3 != null && ((StandUser)$$3).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.rendersInCombatMode()){
             this.renderHand($$0, $$1, $$2, $$3, this.model.rightLeg, this.model.rightLeg);
             ci.cancel();
             return;
@@ -702,7 +709,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
 
     @Inject(method = "renderLeftHand", at = @At(value = "HEAD"), cancellable = true)
     private <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderLeftHandX(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, CallbackInfo ci) {
-        if ($$3 != null && ((StandUser)$$3).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.inCombatMode()){
+        if ($$3 != null && ((StandUser)$$3).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.rendersInCombatMode()){
             this.renderHand($$0, $$1, $$2, $$3, this.model.leftLeg, this.model.leftLeg);
             ci.cancel();
             return;
@@ -738,6 +745,16 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     }
     @Inject(method = "renderNameTag(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$renderNameTag(AbstractClientPlayer $$0, Component $$1, PoseStack $$2, MultiBufferSource $$3, int $$4, CallbackInfo ci) {
+        //deletes original nametag
+        if ($$0 instanceof StandUser su && su.roundabout$isDisguised()) {
+            com.mojang.authlib.GameProfile profile = su.roundabout$getDisguiseProfile();
+            if (profile != null && profile.getName() != null) {
+                if (!$$1.getString().equals(profile.getName())) {
+                    ci.cancel();
+                    return;
+                }
+            }
+        }
         IPlayerEntity ple = ((IPlayerEntity) $$0);
         byte shape = ple.roundabout$getShapeShift();
         ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
@@ -1271,6 +1288,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         jj.TORTURE_DANCE.stop();
         jj.OH_NO.stop();
         jj.WAMUU.stop();
+            jj.ANASUI.stop();
             jj.VAMPIRE.stop();
     }
 

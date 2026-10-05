@@ -15,6 +15,7 @@ import net.hydra.jojomod.entity.paintings.BirthOfVenusPainting;
 import net.hydra.jojomod.entity.paintings.MonaLisaPainting;
 import net.hydra.jojomod.entity.paintings.VanGoughPainting;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
+import net.hydra.jojomod.entity.pathfinding.CommandDiscPossession;
 import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
@@ -102,6 +103,10 @@ public class ModEntities {
 
     public static EntityType<StarPlatinumBaseballEntity> STAR_PLATINUM_BASEBALL;
     public static EntityType<DiverDownEntity> DIVER_DOWN;
+    public static EntityType<DiverDownBetaEntity> DIVER_DOWN_BETA;
+    public static EntityType<DiverDownWorldEntity> DIVER_DOWN_WORLD;
+    public static EntityType<DiverKickEntity> DIVER_KICK;
+    public static EntityType<BoneProjectileEntity> BONE_PROJECTILE;
     public static EntityType<SilverChariotEntity> SILVER_CHARIOT;
     public static EntityType<SilverChariotRapierShotEntity> SILVER_CHARIOT_RAPIER;
     public static EntityType<SilverChariotRapierPlatformEntity> SILVER_CHARIOT_RAPIER_PLATFORM;
@@ -129,6 +134,7 @@ public class ModEntities {
     public static EntityType<HallucinatoryAcidProjectile> HALLUCINATORY_ACID_PROJECTILE;
     public static EntityType<BombPlantedItemEntity> BOMB_PLANTED_ITEM;
     public static EntityType<BombPlantedArrow> BOMB_PLANTED_ARROW;
+    public static EntityType<BombPlantedEnderpearl> BOMB_PLANTED_ENDERPEARL;
     public static EntityType<BombPlantedSpectralArrow> BOMB_PLANTED_SPECTRAL_ARROW;
     public static EntityType<VirusSpitEntity> VIRUS_SPIT;
 
@@ -143,6 +149,7 @@ public class ModEntities {
     public static EntityType<StandArrowEntity> STAND_ARROW;
     public static EntityType<IronBallEntity> IRON_BALL;
     public static EntityType<ThrownObjectEntity> THROWN_OBJECT;
+    public static EntityType<ReturningObjectEntity> RETURNING_OBJECT;
     public static EntityType<ThrownAnubisEntity> THROWN_ANUBIS;
     public static EntityType<CinderellaVisageDisplayEntity> CINDERELLA_VISAGE_DISPLAY;
     public static EntityType<ConcealedFlameObjectEntity> CONCEALED_FLAME_OBJECT;
@@ -152,6 +159,7 @@ public class ModEntities {
     public static EntityType<SoftAndWetExplosiveBubbleEntity> EXPLOSIVE_BUBBLE;
     public static EntityType<SoftAndWetItemLaunchingBubbleEntity> ITEM_LAUNCHING_BUBBLE_ENTITY;
     public static EntityType<AnubisPossessorEntity> ANUBIS_POSSESSOR;
+    public static EntityType<CommandDiscPossession> COMMAND_DISC_POSSESSION;
     public static EntityType<AnubisSlipstreamEntity> ANUBIS_SLIPSTREAM;
     public static EntityType<TuskNailEntity> TUSK_NAIL;
     public static EntityType<TuskHoleEntity> TUSK_HOLE;
@@ -166,6 +174,7 @@ public class ModEntities {
     public static EntityType<EnyaNPC> ENYA;
 
     public static EntityType<JotaroNPC> JOTARO;
+    public static EntityType<KiraPartFourNPC> KIRA4;
     public static EntityType<PucciNPC> PUCCI;
 
     public static EntityType<VanGoughPainting> VAN_GOUGH_PAINTING;
@@ -193,7 +202,6 @@ public class ModEntities {
     public static EntityType<KingCrimsonCloneEntity> KING_CRIMSON_CLONE;
     public static EntityType<D4CCloneEntity> D4C_CLONE;
     public static EntityType<KingCrimsonProjectionEntity> KING_CRIMSON_PROJECTION;
-    public static EntityType<SilverChariotAfterimageEntity> SILVER_CHARIOT_AFTERIMAGE;
     public static EntityType<FallenZombie> FALLEN_ZOMBIE;
     public static EntityType<FallenSkeleton> FALLEN_SKELETON;
     public static EntityType<FallenSpider> FALLEN_SPIDER;
@@ -201,6 +209,8 @@ public class ModEntities {
     public static EntityType<FallenPhantom> FALLEN_PHANTOM;
     public static EntityType<FallenCreeper> FALLEN_CREEPER;
 
+
+    public static EntityType<ParallelChestEntity> PARALLEL_CHEST;
     public static EntityType<BlockWallEntity> BLOCK_WALL;
     public static EntityType<BlockD4CEntity> D4C_BLOCK;
     public static EntityType<StepRuleEntity> STEP_RULE;

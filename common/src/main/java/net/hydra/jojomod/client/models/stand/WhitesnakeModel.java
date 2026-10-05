@@ -278,7 +278,7 @@ public class WhitesnakeModel extends StandModel<WhitesnakeEntity> {
         this.animate(entity.hideFists, StandAnimations.HIDE_FISTS, ageInTicks, 1.0F);
         this.head.visible = !(!entity.isAutoModeActive() && entity.isRemoteControlled()
                 && entity.getUser() == minecraft.player
-                && minecraft.options.getCameraType().isFirstPerson());
+                && minecraft.options.getCameraType().isFirstPerson() && !entity.isRetreatActive());
         this.animate(entity.finalChopWindup, KingCrimsonAnimations.Chop_Start, ageInTicks, 0.8F);
         this.animate(entity.finalChop, StarPlatinumAnimations.FINAL_PUNCH, ageInTicks, 1.4F);
         this.animate(entity.finalChopHalf, KingCrimsonAnimations.Chop_Attack, ageInTicks, 1.0F);
@@ -330,6 +330,11 @@ public class WhitesnakeModel extends StandModel<WhitesnakeEntity> {
     public void rotateHead(WhitesnakeEntity entity, ModelPart head, float tickDelta) {
         if (!entity.isRemoteControlled()) {
             super.rotateHead(entity, head, tickDelta);
+            return;
+        }
+        if (entity.blockAnimationState.isStarted() || entity.barrageChargeAnimationState.isStarted()
+                || entity.barrageAnimationState.isStarted() || entity.miningBarrageAnimationState.isStarted()) {
+            setHeadRotations(0.0F, 0.0F);
             return;
         }
         float pitch = Mth.clamp(controlHeadPitch, -90.0F, 90.0F) * Mth.DEG_TO_RAD;

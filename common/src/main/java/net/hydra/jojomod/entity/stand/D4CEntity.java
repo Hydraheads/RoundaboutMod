@@ -42,6 +42,7 @@ public class D4CEntity extends FollowingStandEntity {
     public final AnimationState impale2 = new AnimationState();
     public final AnimationState drag = new AnimationState();
     public final AnimationState drag2 = new AnimationState();
+    public final AnimationState bodyLeap = new AnimationState();
 
     public final AnimationState hideFists = new AnimationState();
 
@@ -51,7 +52,8 @@ public class D4CEntity extends FollowingStandEntity {
             IMPALE_2 = 50,
             CHOP = 51,
             DRAG = 52,
-            DRAG_2 = 53;
+            DRAG_2 = 53,
+            BODY_LEAP = 54;
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
@@ -70,6 +72,11 @@ public class D4CEntity extends FollowingStandEntity {
             this.finalPunch.startIfStopped(this.tickCount);
         } else {
             this.finalPunch.stop();
+        }
+        if (anim == BODY_LEAP) {
+            this.bodyLeap.startIfStopped(this.tickCount);
+        } else {
+            this.bodyLeap.stop();
         }
         if (anim == DRAG) {
             this.drag.startIfStopped(this.tickCount);

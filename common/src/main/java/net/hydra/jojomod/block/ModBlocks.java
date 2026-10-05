@@ -94,6 +94,7 @@ public class ModBlocks {
     public static HallucinatoryAcidBlock HALLUCINATORY_ACID;
     public static HallucinatoryAcidWallBlock HALLUCINATORY_ACID_WALL;
     public static Block POISON_TRAIL_MUSHROOM;
+    public static Block VIRUS_SPIT_SPLATTER;
 
     public static Block WIRE_TRAP;
 
@@ -137,6 +138,7 @@ public class ModBlocks {
 
     public static Block MINING_ALERT_BLOCK;
     public static Block BUBBLE_SCAFFOLD;
+    public static Block DIVER_LIMB;
     public static Block INVISIBLOCK;
     public static Block D4C_PORTAL;
 
@@ -201,12 +203,16 @@ public class ModBlocks {
 
     public static Block MELON_PARFAIT;
 
+    public static Block GAMBLING_TABLE;
+    public static BlockEntityType<GamblingTableBlockEntity> GAMBLING_TABLE_BLOCK_ENTITY;
+
     public static BlockEntityType<OasisMudBlockEntity> OASIS_MUD_BLOCK_ENTITY;
     public static BlockEntityType<StandFireBlockEntity> STAND_FIRE_BLOCK_ENTITY;
     public static BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY;
     public static BlockEntityType<FancyLighterBlockEntity> FANCY_LIGHTER_BLOCK_ENTITY;
     public static BlockEntityType<MirrorBlockEntity> MIRROR_BLOCK_ENTITY;
     public static BlockEntityType<BubbleScaffoldBlockEntity> BUBBLE_SCAFFOLD_BLOCK_ENTITY;
+    public static BlockEntityType<DiverLimbBlockEntity> DIVER_LIMB_BLOCK_ENTITY;
     public static BlockEntityType<InvisiBlockEntity> INVISIBLE_BLOCK_ENTITY;
     public static BlockEntityType<D4CPortalBlockEntity> D4C_PORTAL_BLOCK_ENTITY;
     public static BlockEntityType<CoffinBlockEntity> COFFIN_BLOCK_ENTITY;
@@ -608,6 +614,15 @@ public class ModBlocks {
                     .replaceable()
                     .pushReaction(PushReaction.DESTROY)
     );
+    public static BloodBlock VIRUS_SPIT_SPLATTER_PROPERTIES = new BloodBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_RED)
+                    .instrument(NoteBlockInstrument.SNARE)
+                    .strength(0.01F, 0.5F)
+                    .sound(SoundType.EMPTY)
+                    .replaceable()
+                    .pushReaction(PushReaction.DESTROY)
+    );
     public static AcidBlock ACID_PUDDLE_PROPERTIES = new AcidBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_GREEN)
@@ -823,6 +838,11 @@ public class ModBlocks {
             BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).noCollission().dynamicShape().speedFactor(0.7F).replaceable().instabreak().lightLevel((p_152607_) -> {
                 return 1;
             }).noParticlesOnBreak().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY));
+        //copying the bubble scaffold code for diver down's limb, but removing the speed reducer since the tradeoff is that you're only limited to 4, and it's only placable on walls/floor.
+        public static DiverLimbBlock DIVER_LIMB_BLOCK_PROPERTIES = new DiverLimbBlock(
+            BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).noCollission().dynamicShape().instabreak().lightLevel((p_152607_) -> {
+                return 1;
+            }).noParticlesOnBreak().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY));
     public static StandFireBlock STAND_FIRE_PROPERTIES = new StandFireBlock(
             BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).replaceable().noCollission().instabreak().lightLevel((p_152607_) -> {
                 return 15;
@@ -1017,6 +1037,14 @@ public class ModBlocks {
                     .ignitedByLava()
                     .instabreak()
                     .pushReaction(PushReaction.DESTROY)
+    );
+    public static Block GAMBLING_TABLE_PROPERTIES = new GamblingTableBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .instrument(NoteBlockInstrument.BASS)
+                    .strength(2.5F)
+                    .sound(SoundType.WOOD)
+                    .ignitedByLava()
     );
 
     public static List<String> dontGenState = new ArrayList<String>();

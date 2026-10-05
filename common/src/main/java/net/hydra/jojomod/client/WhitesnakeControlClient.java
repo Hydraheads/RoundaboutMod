@@ -119,14 +119,7 @@ public final class WhitesnakeControlClient {
 
     public static void exit() {
         if (!cameraActive) return;
-        stopMining();
-        cameraActive = false;
-        pendingTicks = 0;
-        lookInitialized = false;
-        ClientUtil.setCameraEntity(null);
-        Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.player != null) minecraft.setCameraEntity(minecraft.player);
-        restoreCameraType(minecraft);
+        clear();
     }
 
     public static void clear() {
@@ -151,15 +144,16 @@ public final class WhitesnakeControlClient {
     public static boolean handleMining(Minecraft minecraft, boolean attackHeld) {
         PowersWhitesnake powers = getControlPowers(minecraft);
         if (powers == null) return false;
-        updateMining(minecraft, powers, attackHeld);
+        updateMining(minecraft, powers, attackHeld ? getMiningHit(minecraft, powers) : null, true);
         return true;
     }
 
     public static boolean tryMining(Minecraft minecraft) {
         PowersWhitesnake powers = getControlPowers(minecraft);
         if (powers == null) return false;
-        boolean blockTargeted = hasMiningTarget(minecraft, powers);
-        updateMining(minecraft, powers, true);
+        BlockHitResult hit = getMiningHit(minecraft, powers);
+        boolean blockTargeted = hasMiningTarget(minecraft, hit);
+        updateMining(minecraft, powers, hit, false);
         return blockTargeted;
     }
 
@@ -177,9 +171,8 @@ public final class WhitesnakeControlClient {
         return null;
     }
 
-    private static boolean hasMiningTarget(Minecraft minecraft, PowersWhitesnake powers) {
+    private static boolean hasMiningTarget(Minecraft minecraft, BlockHitResult hit) {
         if (((StandUser) minecraft.player).roundabout$isGuardInput()) return false;
-        BlockHitResult hit = getMiningHit(minecraft, powers);
         return hit != null && !minecraft.level.getBlockState(hit.getBlockPos()).isAir();
     }
 
@@ -200,42 +193,32 @@ public final class WhitesnakeControlClient {
         return eye.distanceToSqr(entityHit.getLocation()) <= eye.distanceToSqr(blockHit.getLocation());
     }
 
-    private static boolean updateMining(Minecraft minecraft, PowersWhitesnake powers, boolean attackHeld) {
-        if (!attackHeld) {
-            stopMining();
-            if (powers.getActivePower() == PowerIndex.MINING) {
-                powers.tryPower(PowerIndex.NONE, true);
-                powers.tryPowerPacket(PowerIndex.NONE);
-            }
-            return false;
-        }
-        BlockHitResult hit = getMiningHit(minecraft, powers);
-        if (hit == null || ((StandUser) minecraft.player).roundabout$isGuardInput()) {
+    private static void updateMining(Minecraft minecraft, PowersWhitesnake powers, BlockHitResult hit,
+                                     boolean continueMining) {
+        if (!hasMiningTarget(minecraft, hit)) {
             if (miningActive || powers.getActivePower() == PowerIndex.MINING) {
                 stopMining();
                 powers.tryPower(PowerIndex.NONE, true);
                 powers.tryPowerPacket(PowerIndex.NONE);
             }
-            return false;
+            return;
         }
         BlockPos pos = hit.getBlockPos();
-        if (minecraft.level.getBlockState(pos).isAir()) return false;
         if (!miningActive || !pos.equals(miningPos)) {
             if (miningActive) stopMining();
             if (!powers.canUseMiningStand()
                     || (powers.getActivePower() != PowerIndex.NONE
                     && powers.getActivePower() != PowerIndex.MINING
-                    && powers.getAttackTimeDuring() != -1)) return false;
+                    && powers.getAttackTimeDuring() != -1)) return;
             if (powers.getActivePower() != PowerIndex.MINING) {
                 ((StandUser) minecraft.player).roundabout$tryPower(PowerIndex.MINING, true);
                 powers.tryPowerPacket(PowerIndex.MINING);
             }
             miningActive = minecraft.gameMode.startDestroyBlock(pos, hit.getDirection());
             miningPos = miningActive ? pos.immutable() : null;
-        } else if (minecraft.gameMode.continueDestroyBlock(pos, hit.getDirection())) {
+        } else if (continueMining && minecraft.gameMode.continueDestroyBlock(pos, hit.getDirection())) {
             minecraft.particleEngine.crack(pos, hit.getDirection());
         }
-        return true;
     }
 
     private static void stopMining() {

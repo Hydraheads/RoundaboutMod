@@ -22,6 +22,7 @@ public class FabricEffects extends MobEffect{
     public static final MobEffect BLEED = register("bleed", new FabricEffects(MobEffectCategory.HARMFUL, 11994666));
     public static final MobEffect HEX = register("hex", new FabricEffects(MobEffectCategory.HARMFUL, 11606258)); //old color 16762706
     public static final MobEffect BANISH = register("banish", new FabricEffects(MobEffectCategory.NEUTRAL, 15099838)); //old color 16762706
+    public static final MobEffect DOOMED = register("doom", new FabricEffects(MobEffectCategory.HARMFUL, 0));
     public static final MobEffect STAND_VIRUS = register("stand_virus", new FabricEffects(MobEffectCategory.HARMFUL, 9979490));
     public static final MobEffect CAPTURING_LOVE = register("capturing_love", new FabricEffects(MobEffectCategory.BENEFICIAL, 16772988));
     public static final MobEffect FACELESS = register("faceless", new FabricEffects(MobEffectCategory.HARMFUL, 10329495));
@@ -49,17 +50,30 @@ public class FabricEffects extends MobEffect{
     public static final MobEffect CRIPPLED = register("crippled", new FabricEffects(MobEffectCategory.HARMFUL, 725255)
             .addAttributeModifier(Attributes.MOVEMENT_SPEED,"6107DE5E-7CE8-4030-940E-514C1F160890",-0.3, AttributeModifier.Operation.MULTIPLY_TOTAL)
     );
+
+    public static final MobEffect IMPRINTING =
+            register("imprinting", new FabricEffects(MobEffectCategory.NEUTRAL, 16134815));
+    public static final MobEffect SWAPPED =
+            register("swapped", new FabricEffects(MobEffectCategory.NEUTRAL, 16134815)
+                    .addAttributeModifier(Attributes.MAX_HEALTH,"6107DE5A-7CE8-4030-940E-514C1F160890",-2, AttributeModifier.Operation.ADDITION)
+            );
+    public static final MobEffect FORTIFICATION =
+            register("fortification", new FabricEffects(MobEffectCategory.BENEFICIAL, 3137792));
+
+
     public static final MobEffect HALLUCINATION = register("hallucination", new HallucinationEffect());
     public static final MobEffect OLD = register("old", new OldEffect());
     public static final MobEffect DREAMING = register("dreaming", new DreamingEffect());
     public static final MobEffect REFRESHED =
             register("refreshed", new FabricEffects(MobEffectCategory.BENEFICIAL, 13302495));
+    public static final MobEffect INFINITE_SPIN =
+            register("infinite_spin", new FabricEffects(MobEffectCategory.HARMFUL, 16411584));
     public static final MobEffect HAZE_VIRUS =
-            register("haze_virus", new FabricEffects(MobEffectCategory.HARMFUL, 8388863));
+            register("haze_virus", new FabricEffects(MobEffectCategory.HARMFUL, 10824365));
     public static final MobEffect DISTORTION_VIRUS =
-            register("distortion_virus", new FabricEffects(MobEffectCategory.HARMFUL, 8388863));
+            register("distortion_virus", new FabricEffects(MobEffectCategory.HARMFUL, 10824365));
     public static final MobEffect VIRUS_IMMUNITY =
-            register("virus_immunity", new FabricEffects(MobEffectCategory.BENEFICIAL, 8388863));
+            register("virus_immunity", new FabricEffects(MobEffectCategory.BENEFICIAL, 10824365));
 
     protected FabricEffects(MobEffectCategory mobEffectCategory, int i) {
         super(mobEffectCategory, i);
@@ -74,6 +88,7 @@ public class FabricEffects extends MobEffect{
         ModEffects.BLEED = BLEED;
         ModEffects.HEX = HEX;
         ModEffects.BANISH = BANISH;
+        ModEffects.DOOMED = DOOMED;
         ModEffects.STAND_VIRUS = STAND_VIRUS;
         ModEffects.CAPTURING_LOVE = CAPTURING_LOVE;
         ModEffects.FACELESS = FACELESS;
@@ -91,8 +106,12 @@ public class FabricEffects extends MobEffect{
         ModEffects.OLD = OLD;
         ModEffects.DREAMING = DREAMING;
         ModEffects.REFRESHED = REFRESHED;
+        ModEffects.INFINITE_SPIN = INFINITE_SPIN;
         ModEffects.HAZE_VIRUS = HAZE_VIRUS;
         ModEffects.DISTORTION_VIRUS = DISTORTION_VIRUS;
         ModEffects.VIRUS_IMMUNITY = VIRUS_IMMUNITY;
+        ModEffects.IMPRINTING = IMPRINTING;
+        ModEffects.SWAPPED = SWAPPED;
+        ModEffects.FORTIFICATION = FORTIFICATION;
     }
 }

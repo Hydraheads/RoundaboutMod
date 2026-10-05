@@ -1,24 +1,23 @@
 package net.hydra.jojomod.event.powers;
 
+import com.mojang.authlib.GameProfile;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.stand.powers.PowersKillerQueen;
+import net.hydra.jojomod.stand.powers.PowersDiverDown;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
-import org.spongepowered.asm.mixin.Unique;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -312,6 +311,9 @@ public interface StandUser {
     void roundabout$setLocacacaCurse(byte locacacaCurse);
     byte roundabout$getLocacacaCurse();
 
+    void roundabout$setGrabbedSoul(boolean grabbedSoul);
+    boolean roundabout$getGrabbedSoul();
+
     byte roundabout$getStandSkin();
     byte roundabout$getLastStandSkin();
     void roundabout$setLastStandSkin(byte lastStandSkin);
@@ -383,16 +385,35 @@ public interface StandUser {
     int getPurpleHazeTicks();
     void SetInDistortionHazeTicks(int e);
     int getDistortionHazeTicks();
-
+    byte getPurpleHazeSkin();
+    void SetPurpleHazeSkin(byte skin);
 
     boolean rdbt$isForceCrawl();
     int rdbt$getCrawlTicks();
 
-    void rdbt$SetBtdPlantedTicks(int e);
+    @Nullable PowersKillerQueen rdbt$GetBtdPlantedUser();
+    void rdbt$SetBtdPlantedUser(@Nullable PowersKillerQueen e);
     boolean rdbt$interceptIncomingHarmIfBTD(DamageSource source);
 
     List<CooldownInstance> rdbt$initPowerCooldowns();
     List<CooldownInstance> rdbt$getPowerCooldowns();
     void rdbt$setPowerCooldowns(List<CooldownInstance> cdi);
 
+    /* diver down diving down */
+    void roundabout$SetDiverUser(PowersDiverDown powers);
+    PowersDiverDown roundabout$getDiverUser();
+    boolean roundabout$isDisguised();
+    @Nullable GameProfile roundabout$getDisguiseProfile();
+    void roundabout$setDisguise(GameProfile profile);
+    void roundabout$clearDisguise();
+    boolean roundabout$hasDiverLegs();
+    void roundabout$setDiverLegs(boolean legs);
+    boolean roundabout$hasDiverArms();
+    void roundabout$setDiverArms(boolean arms);
+    boolean roundabout$hasRibcageTrap();
+    void roundabout$setRibcageTrap(boolean trap);
+    boolean roundabout$hasSpringLegs();
+    void roundabout$setSpringLegs(boolean legs);
+    boolean roundabout$hasInfiniteSpin();
+    void roundabout$clearInfiniteSpin();
 }

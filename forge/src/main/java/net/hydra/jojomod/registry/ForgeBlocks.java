@@ -13,6 +13,7 @@ import net.minecraft.util.datafix.fixes.References;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.PushReaction;
@@ -37,12 +38,12 @@ public class ForgeBlocks {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Roundabout.MOD_ID);
     public static final RegistryObject<HallucinatoryAcidBlock> HALLUCINATORY_ACID = BLOCKS.register(
             "hallucinatory_acid", () -> new HallucinatoryAcidBlock(BlockBehaviour.Properties.of()
-                    .noCollission().noOcclusion().strength(3.0F, 6.0F).noLootTable().randomTicks()
-                    .pushReaction(PushReaction.BLOCK)));
+                    .noCollission().noOcclusion().strength(1.0F, 6.0F).noLootTable().randomTicks()
+                    .sound(SoundType.MUD).pushReaction(PushReaction.BLOCK)));
     public static final RegistryObject<HallucinatoryAcidWallBlock> HALLUCINATORY_ACID_WALL = BLOCKS.register(
             "hallucinatory_acid_wall", () -> new HallucinatoryAcidWallBlock(BlockBehaviour.Properties.of()
-                    .noCollission().noOcclusion().strength(3.0F, 6.0F).noLootTable().randomTicks()
-                    .pushReaction(PushReaction.BLOCK)));
+                    .noCollission().noOcclusion().strength(1.0F, 6.0F).noLootTable().randomTicks()
+                    .sound(SoundType.MUD).pushReaction(PushReaction.BLOCK)));
     public static final RegistryObject<BlockEntityType<HallucinatoryAcidBlockEntity>> HALLUCINATORY_ACID_BLOCK_ENTITY =
             BLOCK_ENTITIES.register("hallucinatory_acid", () -> BlockEntityType.Builder.of(
                     HallucinatoryAcidBlockEntity::new, HALLUCINATORY_ACID.get(), HALLUCINATORY_ACID_WALL.get())
@@ -331,6 +332,8 @@ public class ForgeBlocks {
             () -> ModBlocks.GASOLINE_SPLATTER_PROPERTIES);
     public static final RegistryObject<Block> BLOOD_SPLATTER = BLOCKS.register("blood_splatter",
             () -> ModBlocks.BLOOD_SPLATTER_PROPERTIES);
+    public static final RegistryObject<Block> VIRUS_SPIT_SPLATTER = BLOCKS.register("virus_spit_splatter",
+            () -> ModBlocks.VIRUS_SPIT_SPLATTER_PROPERTIES);
     public static final RegistryObject<Block> ACID_PUDDLE = BLOCKS.register("acid_puddle",
             () -> ModBlocks.ACID_PUDDLE_PROPERTIES);
     public static final RegistryObject<Block> POISON_TRAIL_MUSHROOM = BLOCKS.register("poison_trail_mushroom",
@@ -389,6 +392,8 @@ public class ForgeBlocks {
             () -> ModBlocks.STAND_FIRE_PROPERTIES);
     public static final RegistryObject<Block> BUBBLE_SCAFFOLD = BLOCKS.register("bubble_scaffold",
             () -> ModBlocks.BUBBLE_SCAFFOLD_BLOCK_PROPERTIES);
+            public static final RegistryObject<Block> DIVER_LIMB = BLOCKS.register("diver_limb",
+                () -> ModBlocks.DIVER_LIMB_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> INVISIBLOCK = BLOCKS.register("invisible_block",
             () -> ModBlocks.INVISIBLE_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> D4C_PORTAL = BLOCKS.register("d4c_portal",
@@ -409,6 +414,10 @@ public class ForgeBlocks {
             () -> ModBlocks.CREAM_FIRE_PROPERTIES);
     public static final RegistryObject<Block> FANCY_LIGHTER_BLOCK = BLOCKS.register("fancy_lighter_block",
             () -> ModBlocks.FANCY_LIGHTER_PROPRETIES);
+    public static final RegistryObject<Block> GAMBLING_TABLE = BLOCKS.register("gambling_table",
+            () -> ModBlocks.GAMBLING_TABLE_PROPERTIES);
+    public static final RegistryObject<BlockEntityType<GamblingTableBlockEntity>> GAMBLING_TABLE_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("gambling_table", () -> BlockEntityType.Builder.of(GamblingTableBlockEntity::new, GAMBLING_TABLE.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<OasisMudBlockEntity>> OASIS_MUD_BLOCK_ENTITY = BLOCK_ENTITIES.register("oasis_mud_block",
             () -> BlockEntityType.Builder.of(OasisMudBlockEntity::new, OASIS_MUD_BLOCK.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "oasis_mud_block")));
@@ -422,6 +431,8 @@ public class ForgeBlocks {
             () -> BlockEntityType.Builder.of(StandFireBlockEntity::new, STAND_FIRE.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "stand_fire")));
     public static final RegistryObject<BlockEntityType<BubbleScaffoldBlockEntity>> BUBBLE_SCAFFOLD_BLOCK_ENTITY = BLOCK_ENTITIES.register("block_scaffold",
             () -> BlockEntityType.Builder.of(BubbleScaffoldBlockEntity::new, BUBBLE_SCAFFOLD.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "block_scaffold")));
+        public static final RegistryObject<BlockEntityType<DiverLimbBlockEntity>> DIVER_LIMB_BLOCK_ENTITY = BLOCK_ENTITIES.register("diver_limb",
+            () -> BlockEntityType.Builder.of(DiverLimbBlockEntity::new, DIVER_LIMB.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "diver_limb")));
     public static final RegistryObject<BlockEntityType<InvisiBlockEntity>> INVISIBLE_BLOCK_ENTITY = BLOCK_ENTITIES.register("invisible_block",
             () -> BlockEntityType.Builder.of(InvisiBlockEntity::new, INVISIBLOCK.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "invisible_block")));
     public static final RegistryObject<BlockEntityType<D4CPortalBlockEntity>> D4C_PORTAL_BLOCK_ENTITY = BLOCK_ENTITIES.register("d4c_portal",

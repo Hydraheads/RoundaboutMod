@@ -208,6 +208,16 @@ public class BeachSabbathModel<T extends BeachSabbathEntity> extends StandModel<
         this.animate(pEntity.chest_open, BlackSabbathAnimations.Chest_Open, pAgeInTicks, 1f);
         this.animate(pEntity.chest_close, BlackSabbathAnimations.Chest_Close, pAgeInTicks, 1f);
         this.animate(pEntity.floating, BlackSabbathAnimations.Float, pAgeInTicks, 1f);
+        this.animate(pEntity.diving, BlackSabbathAnimations.Dive, pAgeInTicks, 1f);
+        this.animate(pEntity.emerge, BlackSabbathAnimations.Emerge, pAgeInTicks, 1f);
+        this.animate(pEntity.catching, BlackSabbathAnimations.CatchAttempt, pAgeInTicks, 1f);
+        this.animate(pEntity.burningStart, BlackSabbathAnimations.burningStart, pAgeInTicks, 1f);
+        this.animate(pEntity.burningCripple, BlackSabbathAnimations.burningCripple, pAgeInTicks, 1f);
+        this.animate(pEntity.burningDive, BlackSabbathAnimations.burningDive, pAgeInTicks, 1f);
+        this.animate(pEntity.walk, BlackSabbathAnimations.ArmedWalk, pAgeInTicks, 1f);
+        this.animate(pEntity.stando, BlackSabbathAnimations.ArmedStand, pAgeInTicks, 1f);
+        this.animate(pEntity.strafeWalk, BlackSabbathAnimations.StrafeWalk, pAgeInTicks, 1f);
+        this.animate(pEntity.strafeEmerge, BlackSabbathAnimations.StrafeEmerge, pAgeInTicks, 1f);
 	}
 
 	@Override

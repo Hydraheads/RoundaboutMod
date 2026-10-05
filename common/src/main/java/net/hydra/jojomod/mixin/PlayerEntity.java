@@ -9,6 +9,7 @@ import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StoneMaskBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -240,6 +241,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 && PW.hasExtendedHeelsForWalking()){
             cir.setReturnValue(false);
         }
+        if (((StandUser)this).roundabout$getStandPowers() instanceof PowersDiverDown PDD && PDD.inZipMode()){
+            cir.setReturnValue(false);
+        }
     }
     @Inject(
             method = "touch",
@@ -251,6 +255,14 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             ci.cancel();
         }
 
+    }
+    @Inject(
+            method = "startAutoSpinAttack(I)V",
+            at = @At("HEAD"),
+            cancellable = true, require = 0
+    )
+    public void rdbt$startAutoSpinAttackP(int $$0, CallbackInfo ci){
+        ((StandUser)this).roundabout$getStandPowers().onSpinAttackStart();
     }
 
 
@@ -756,7 +768,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         if (SU.roundabout$getStandPowers().forceCrit()){
             return true;
         }
-        if ( SU.roundabout$isPossessed() ) {
+        if (SU.roundabout$getPossessor() instanceof AnubisPossessorEntity) {
             return true;
         }
         return value;
@@ -959,6 +971,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         if (bpow != 1){
             modifier*= bpow;
         }
+        if (((StandUser) this).roundabout$hasDiverArms()) {
+            modifier *= 1.30F;
+        }
         if (modifier != 1){
             cir.setReturnValue((float)(1.0D / (this.getAttributeValue(Attributes.ATTACK_SPEED)*modifier) * 20.0D));
         }
@@ -1008,6 +1023,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 if (bpow != 1){
                     dSpeed*= bpow;
                 }
+            }
+            if (((StandUser) this).roundabout$hasDiverArms()) {
+                dSpeed *= 1.35F;
             }
             cir.setReturnValue(dSpeed);
         }
@@ -1595,8 +1613,18 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             }
             return;
         }
-        if (this.inventory.getSelected().getItem() instanceof WarhammerItem) {
-            cir.setReturnValue(!$$0.requiresCorrectToolForDrops() && !($$0.getBlock() instanceof StoneMaskBlock));
+        if (this.inventory.getSelected().getItem() instanceof WarhammerItem wi) {
+            if ($$0.getBlock() instanceof StoneMaskBlock){
+                cir.setReturnValue(false);
+                return;
+            }
+            if ($$0.requiresCorrectToolForDrops() && MainUtil.confirmIsOre($$0) &&
+            wi.isCorrectToolForDrops($$0)){
+                cir.setReturnValue(true);
+                return;
+            } else {
+                cir.setReturnValue(!$$0.requiresCorrectToolForDrops() && !($$0.getBlock() instanceof StoneMaskBlock));
+            }
             return;
         }
     }

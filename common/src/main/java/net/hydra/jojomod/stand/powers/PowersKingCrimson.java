@@ -91,6 +91,7 @@ import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CarpetBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.level.border.WorldBorder;
@@ -247,6 +248,12 @@ public class PowersKingCrimson extends BlockGrabPreset {
         handTicks = 0;
         isRenderingArms = false;
         saveDiscAndSync();
+    }
+
+    //slower melee attacks so people stop being rushdown goblins
+    @Override
+    public int getMeltLevel(){
+        return super.getMeltLevel()+1;
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
@@ -2108,10 +2115,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
             );
             targetBox = RotationUtil.boxPlayerToWorld(targetBox, ((IGravityEntity) entity).roundabout$getGravityDirection());
 
-        for(VoxelShape $$2 : level.getBlockCollisions(entity, targetBox)) {
-            if (!$$2.isEmpty()) {
-                return;
-            }
+        if (level.collidesWithSuffocatingBlock(entity, targetBox)) {
+            return;
         }
 
             boolean deviousStratBlocker = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindStopsDeviousStrategies;
@@ -3717,13 +3722,17 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
         if (isUsingTimeErase()){
             soften = true;
-            Roundabout.LOGGER.info("yes");
             timeErase();
             soften = false;
         }
 
 
         return super.setPowerAttack();
+    }
+
+    @Override
+    public int getExtraPunchTime(){
+        return 0;
     }
 
     @Override
@@ -4157,9 +4166,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (this.getReducedDamage(entity)){
             if (entity instanceof KingCrimsonCloneEntity &&
                     ClientNetworking.getAppropriateConfig().kingCrimsonSettings.nerfedTEDamage){
-                return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.1F));
+                return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.02F));
             } else {
-                return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.35F));
+                return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.28F));
             }
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(5));
@@ -4170,9 +4179,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (this.getReducedDamage(entity)){
             if (entity instanceof KingCrimsonCloneEntity &&
                     ClientNetworking.getAppropriateConfig().kingCrimsonSettings.nerfedTEDamage){
-                return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.6F));
+                return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.5F));
             } else {
-                return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.89F));
+                return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.73F));
             }
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(6F));

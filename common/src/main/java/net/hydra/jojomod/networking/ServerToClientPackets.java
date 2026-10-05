@@ -19,6 +19,7 @@ public class ServerToClientPackets {
             SyncDaze("sync_daze"),
             SyncGuard("sync_guard"),
             SyncWhitesnakeDisc("sync_whitesnake_disc"),
+            MusicDisc("music_disc"),
             UpdateBarrageClash("update_barrage_clash_s2c"),
             SendConfig("send_config"),
             PlaySound("play_sound"),

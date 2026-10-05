@@ -114,15 +114,7 @@ public class GroundPathfindingStandAttackEntity extends PathfinderMob {
                         || !this.getUser().isAlive() || this.getUser().isRemoved()) {
                     this.discard();
                 } else {
-                    LivingEntity ent = null;
-                    LivingEntity hurt = $$0.getLastHurtMob();
-                    LivingEntity hurtBy = $$0.getLastHurtByMob();
-                    if (hurt != null && !hurt.isRemoved() && hurt.isAlive()){
-                        ent = hurt;
-                    } else if (hurtBy != null && !hurtBy.isRemoved() && hurtBy.isAlive()){
-                        ent = hurtBy;
-                    }
-                   this.setTarget(ent);
+                    this.setTarget(findTarget($$0));
                     if (lifeSpan > 0){
                         lifeSpan--;
                     } else {
@@ -135,6 +127,14 @@ public class GroundPathfindingStandAttackEntity extends PathfinderMob {
             }
         }
         super.tick();
+    }
+
+    @Nullable
+    protected LivingEntity findTarget(LivingEntity user) {
+        LivingEntity hurt = user.getLastHurtMob();
+        if (hurt != null && !hurt.isRemoved() && hurt.isAlive()) return hurt;
+        LivingEntity hurtBy = user.getLastHurtByMob();
+        return hurtBy != null && !hurtBy.isRemoved() && hurtBy.isAlive() ? hurtBy : null;
     }
 
 

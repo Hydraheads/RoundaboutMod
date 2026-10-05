@@ -1,6 +1,10 @@
 package net.hydra.jojomod.platform.services;
 
 import net.hydra.jojomod.Roundabout;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.FluidTags;
@@ -10,12 +14,25 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.registries.ForgeRegistries;
 
 
 public class ForgePlatformHelper implements IPlatformHelper {
+
+    @Override
+    public boolean canControlMineBlock(ServerPlayer player, BlockPos pos, Direction direction,
+                                       ServerboundPlayerActionPacket.Action action) {
+        PlayerInteractEvent.LeftClickBlock event = ForgeHooks.onLeftClickBlock(player, pos, direction, action);
+        return !event.isCanceled() && (player.isCreative()
+                || event.getResult() != Event.Result.DENY
+                && event.getUseBlock() != Event.Result.DENY
+                && event.getUseItem() != Event.Result.DENY);
+    }
 
     public String getPlatformName() {
         return "Forge";

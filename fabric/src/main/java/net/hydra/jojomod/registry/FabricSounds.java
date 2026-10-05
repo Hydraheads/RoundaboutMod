@@ -67,7 +67,15 @@ public class FabricSounds {
         addSound(ModSounds.OVA_PLATINUM_ORA_3_ID, ModSounds.OVA_PLATINUM_ORA_3_EVENT);
         addSound(ModSounds.OVA_PLATINUM_ORA_4_ID, ModSounds.OVA_PLATINUM_ORA_4_EVENT);
         addSound(ModSounds.DSP_SUMMON_ID, ModSounds.DSP_SUMMON_EVENT);
+        addSound(ModSounds.J_ANUBIS_HIT_1_ID, ModSounds.J_ANUBIS_HIT_1_EVENT);
+        addSound(ModSounds.J_ANUBIS_HIT_2_ID, ModSounds.J_ANUBIS_HIT_2_EVENT);
+        addSound(ModSounds.J_ANUBIS_HIT_3_ID, ModSounds.J_ANUBIS_HIT_3_EVENT);
+        addSound(ModSounds.J_ANUBIS_MISS_1_ID, ModSounds.J_ANUBIS_MISS_1_EVENT);
+        addSound(ModSounds.J_ANUBIS_MISS_2_ID, ModSounds.J_ANUBIS_MISS_2_EVENT);
+        addSound(ModSounds.J_ANUBIS_MISS_3_ID, ModSounds.J_ANUBIS_MISS_3_EVENT);
         addSound(ModSounds.SUMMON_D4C_ID, ModSounds.SUMMON_D4C_EVENT);
+        addSound(ModSounds.D4C_CLONE_ID, ModSounds.D4C_CLONE_EVENT);
+        addSound(ModSounds.SPECIAL_CHEST_ID, ModSounds.SPECIAL_CHEST_EVENT);
         addSound(ModSounds.D4C_PORTAL_ID, ModSounds.D4C_PORTAL_EVENT);
         addSound(ModSounds.BLOCK_ATTRACT_ID, ModSounds.BLOCK_ATTRACT_EVENT);
         addSound(ModSounds.D4C_COPY_BLOCK_ID, ModSounds.D4C_COPY_BLOCK_EVENT);
@@ -294,6 +302,11 @@ public class FabricSounds {
         addSound(ModSounds.BLACK_SABBATH_SUMMON_ID, ModSounds.BLACK_SABBATH_SUMMON_EVENT);
         addSound(ModSounds.OPEN_BLACK_SABBATH_CHEST_ID, ModSounds.OPEN_BLACK_SABBATH_CHEST_EVENT);
         addSound(ModSounds.TURNING_ON_LIGHTER_ID, ModSounds.TURNING_ON_LIGHTER_EVENT);
+        addSound(ModSounds.BLACK_SABBATH_SELECT_ADD_ID, ModSounds.BLACK_SABBATH_SELECT_ADD_EVENT);
+        addSound(ModSounds.BLACK_SABBATH_EMERGE_ID, ModSounds.BLACK_SABBATH_EMERGE_EVENT);
+        addSound(ModSounds.BLACK_SABBATH_SELECT_REMOVE_ID, ModSounds.BLACK_SABBATH_SELECT_REMOVE_EVENT);
+        addSound(ModSounds.BLACK_SABBATH_SELECT_CANCEL_ID, ModSounds.BLACK_SABBATH_SELECT_CANCEL_EVENT);
+        addSound(ModSounds.BLACK_SABBATH_SELECT_CONFIRM_ID, ModSounds.BLACK_SABBATH_SELECT_CONFIRM_EVENT);
 
         addSound(ModSounds.CENTURY_BOY_SUMMON_ID, ModSounds.CENTURY_BOY_SUMMON_EVENT);
         addSound(ModSounds.CENTURY_BOY_HIT_ID, ModSounds.CENTURY_BOY_HIT_EVENT);
@@ -355,6 +368,11 @@ public class FabricSounds {
         addSound(ModSounds.TUSK_HOLE_MOVE_ID, ModSounds.TUSK_HOLE_MOVE_EVENT);
         addSound(ModSounds.TUSK_GRAB_ID, ModSounds.TUSK_GRAB_EVENT);
         addSound(ModSounds.TUSK_HOLE_IMPACT_ID, ModSounds.TUSK_HOLE_IMPACT_EVENT);
+        addSound(ModSounds.TUSK_REVERSE_ID, ModSounds.TUSK_REVERSE_EVENT);
+        addSound(ModSounds.TUSK_ORA_RUSH_ID, ModSounds.TUSK_ORA_RUSH_EVENT);
+        addSound(ModSounds.TUSK_FINAL_ORA_ID, ModSounds.TUSK_FINAL_ORA_EVENT);
+        addSound(ModSounds.TUSK_WALL_BREAK_ID, ModSounds.TUSK_WALL_BREAK_EVENT);
+        addSound(ModSounds.TUSK_ADVANCE_ID, ModSounds.TUSK_ADVANCE_EVENT);
 
 
         addSound(ModSounds.SUMMON_PEARL_JAM_ID, ModSounds.SUMMON_PEARL_JAM_EVENT);
@@ -409,12 +427,67 @@ public class FabricSounds {
         addSound(ModSounds.BITES_THE_DUST_ARROW_ID, ModSounds.BITES_THE_DUST_ARROW_EVENT);
         addSound(ModSounds.BITES_THE_DUST_COMBAT_ID, ModSounds.BITES_THE_DUST_COMBAT_EVENT);
         addSound(ModSounds.BITES_THE_DUST_DAY_ID, ModSounds.BITES_THE_DUST_DAY_EVENT);
+        addSound(ModSounds.KQ_PLANT_WINDUP_ID, ModSounds.KQ_PLANT_WINDUP_EVENT);
+        addSound(ModSounds.KQ_MOB_PLANT_ID, ModSounds.KQ_MOB_PLANT_EVENT);
+        addSound(ModSounds.KQ_BLOCK_PLANT_ID, ModSounds.KQ_BLOCK_PLANT_EVENT);
+        addSound(ModSounds.KQ_BTD_WINDUP_ID, ModSounds.KQ_BTD_WINDUP_EVENT);
+        addSound(ModSounds.KQ_BTD_WINDUP_LINE_ID, ModSounds.KQ_BTD_WINDUP_LINE_EVENT);
+        addSound(ModSounds.KIRA4_BTD_ACTIVATION_ID, ModSounds.KIRA4_BTD_ACTIVATION_EVENT);
+        addSound(ModSounds.ADD_STRAY_CAT_ID, ModSounds.ADD_STRAY_CAT_EVENT);
 
         addSound(ModSounds.STRAY_CAT_BUBBLE_POP_ID, ModSounds.STRAY_CAT_BUBBLE_POP_EVENT);
         addSound(ModSounds.STRAY_CAT_BUBBLE_SOUND_1_ID, ModSounds.STRAY_CAT_BUBBLE_SOUND_1_EVENT);
         addSound(ModSounds.STRAY_CAT_BUBBLE_SOUND_2_ID, ModSounds.STRAY_CAT_BUBBLE_SOUND_2_EVENT);
         addSound(ModSounds.STRAY_CAT_BUBBLE_REDIRECT_1_ID, ModSounds.STRAY_CAT_BUBBLE_REDIRECT_1_EVENT);
         addSound(ModSounds.STRAY_CAT_BUBBLE_REDIRECT_2_ID, ModSounds.STRAY_CAT_BUBBLE_REDIRECT_2_EVENT);
+        addSound(ModSounds.KQ_SAMURAI_MOB_PLANT_ID, ModSounds.KQ_SAMURAI_MOB_PLANT_EVENT);
+        addSound(ModSounds.KQ_SAMURAI_BLOCK_PLANT_ID, ModSounds.KQ_SAMURAI_BLOCK_PLANT_EVENT);
+        addSound(ModSounds.KQ_SAMURAI_SUMMON_ID, ModSounds.KQ_SAMURAI_SUMMON_EVENT);
+        addSound(ModSounds.KQ_SAMURAI_BTD_NOISE_ID, ModSounds.KQ_SAMURAI_BTD_NOISE_EVENT);
+        addSound(ModSounds.KQ_SAMURAI_STAB_ID, ModSounds.KQ_SAMURAI_STAB_EVENT);
+        addSound(ModSounds.KQ_SAMURAI_SLASH_ID, ModSounds.KQ_SAMURAI_SLASH_EVENT);
+        addSound(ModSounds.KQ_SAMURAI_WHOOSH_1_ID, ModSounds.KQ_SAMURAI_WHOOSH_1_EVENT);
+        addSound(ModSounds.KQ_SAMURAI_WHOOSH_2_ID, ModSounds.KQ_SAMURAI_WHOOSH_2_EVENT);
+        addSound(ModSounds.KQ_SAMURAI_TEAPOT_ID, ModSounds.KQ_SAMURAI_TEAPOT_EVENT);
+        addSound(ModSounds.KQ_SAMURAI_SHEATHE_ID, ModSounds.KQ_SAMURAI_SHEATHE_EVENT);
+
+        addSound(ModSounds.KIRA4_DAMAGE_1_ID, ModSounds.KIRA4_DAMAGE_1_EVENT);
+        addSound(ModSounds.KIRA4_DAMAGE_2_ID, ModSounds.KIRA4_DAMAGE_2_EVENT);
+        addSound(ModSounds.KIRA4_DAMAGE_3_ID, ModSounds.KIRA4_DAMAGE_3_EVENT);
+        addSound(ModSounds.KIRA4_DAMAGE_4_ID, ModSounds.KIRA4_DAMAGE_4_EVENT);
+        addSound(ModSounds.KIRA4_DAMAGE_5_ID, ModSounds.KIRA4_DAMAGE_5_EVENT);
+        addSound(ModSounds.KIRA4_DAMAGE_6_ID, ModSounds.KIRA4_DAMAGE_6_EVENT);
+        addSound(ModSounds.KIRA4_DAMAGE_7_ID, ModSounds.KIRA4_DAMAGE_7_EVENT);
+
+        addSound(ModSounds.KIRA4_DEATH_1_ID, ModSounds.KIRA4_DEATH_1_EVENT);
+        addSound(ModSounds.KIRA4_DEATH_2_ID, ModSounds.KIRA4_DEATH_2_EVENT);
+        addSound(ModSounds.KIRA4_DEATH_3_ID, ModSounds.KIRA4_DEATH_3_EVENT);
+
+        addSound(ModSounds.KIRA4_LIVE_HAPPY_ID, ModSounds.KIRA4_LIVE_HAPPY_EVENT);
+        addSound(ModSounds.KIRA4_I_BEAT_THEM_ID, ModSounds.KIRA4_I_BEAT_THEM_EVENT);
+        addSound(ModSounds.KIRA4_ATTACK_1_ID, ModSounds.KIRA4_ATTACK_1_EVENT);
+        addSound(ModSounds.KIRA4_ATTACK_2_ID, ModSounds.KIRA4_ATTACK_2_EVENT);
+        addSound(ModSounds.KIRA4_ATTACK_3_ID, ModSounds.KIRA4_ATTACK_3_EVENT);
+        addSound(ModSounds.KIRA4_ATTACK_4_ID, ModSounds.KIRA4_ATTACK_4_EVENT);
+        addSound(ModSounds.KIRA4_SHIBO_ID, ModSounds.KIRA4_SHIBO_EVENT);
+
+        addSound(ModSounds.KIRA4_KILLER_QUEEN_1_ID, ModSounds.KIRA4_KILLER_QUEEN_1_EVENT);
+        addSound(ModSounds.KIRA4_KILLER_QUEEN_2_ID, ModSounds.KIRA4_KILLER_QUEEN_2_EVENT);
+        addSound(ModSounds.KIRA4_KILLER_QUEEN_3_ID, ModSounds.KIRA4_KILLER_QUEEN_3_EVENT);
+        addSound(ModSounds.KIRA4_KILLER_QUEEN_4_ID, ModSounds.KIRA4_KILLER_QUEEN_4_EVENT);
+
+        addSound(ModSounds.KIRA4_MONOLOGUE_ID, ModSounds.KIRA4_MONOLOGUE_EVENT);
+        addSound(ModSounds.KIRA4_HAYATO_ID, ModSounds.KIRA4_HAYATO_EVENT);
+        addSound(ModSounds.KIRA4_JOTARO_ID, ModSounds.KIRA4_JOTARO_EVENT);
+        addSound(ModSounds.KIRA4_KOICHI_1_ID, ModSounds.KIRA4_KOICHI_1_EVENT);
+        addSound(ModSounds.KIRA4_KOICHI_2_ID, ModSounds.KIRA4_KOICHI_2_EVENT);
+        addSound(ModSounds.KIRA4_JOTARO_WATCH_ID, ModSounds.KIRA4_JOTARO_WATCH_EVENT);
+        addSound(ModSounds.KIRA4_JOTARO_STAND_ID, ModSounds.KIRA4_JOTARO_STAND_EVENT);
+        addSound(ModSounds.KIRA4_JOTARO_SEE_ID, ModSounds.KIRA4_JOTARO_SEE_EVENT);
+        addSound(ModSounds.KIRA4_PRIMARY_BOMB_ID, ModSounds.KIRA4_PRIMARY_BOMB_EVENT);
+        addSound(ModSounds.KIRA4_BTD_1_ID, ModSounds.KIRA4_BTD_1_EVENT);
+        addSound(ModSounds.KIRA4_PRIMARY_BOMB_2_ID, ModSounds.KIRA4_PRIMARY_BOMB_2_EVENT);
+        addSound(ModSounds.KIRA4_BTD_RANGE_ID, ModSounds.KIRA4_BTD_RANGE_EVENT);
 
         addSound(ModSounds.THE_WORLD_OVER_HEAVEN_ID, ModSounds.THE_WORLD_OVER_HEAVEN_EVENT);
         addSound(ModSounds.UNLOCK_SKIN_ID, ModSounds.UNLOCK_SKIN_EVENT);
@@ -472,7 +545,59 @@ public class FabricSounds {
         addSound(ModSounds.RIPPER_EYES_CHARGE_ID, ModSounds.RIPPER_EYES_CHARGE_EVENT);
         addSound(ModSounds.RIPPER_EYES_SHORT_ID, ModSounds.RIPPER_EYES_SHORT_EVENT);
         addSound(ModSounds.SUMMON_ACHTUNG_ID, ModSounds.SUMMON_ACHTUNG_EVENT);
+        
         addSound(ModSounds.SUMMON_DIVER_DOWN_ID, ModSounds.SUMMON_DIVER_DOWN_EVENT);
+        addSound(ModSounds.DIVER_DOWN_HIT_ID, ModSounds.DIVER_DOWN_HIT_EVENT);
+        addSound(ModSounds.DIVER_DOWN_HIT_HEAVY_ID, ModSounds.DIVER_DOWN_HIT_HEAVY_EVENT);
+        addSound(ModSounds.DIVER_DOWN_UI_SELECT_ID, ModSounds.DIVER_DOWN_UI_SELECT_EVENT);
+        addSound(ModSounds.DIVER_DOWN_CHARGE_ID, ModSounds.DIVER_DOWN_CHARGE_EVENT);
+        addSound(ModSounds.DIVER_DOWN_DIVE_ID, ModSounds.DIVER_DOWN_DIVE_EVENT);
+        addSound(ModSounds.DIVER_DOWN_DIVE2_ID, ModSounds.DIVER_DOWN_DIVE2_EVENT);
+        addSound(ModSounds.DIVER_DOWN_BARRAGE_ID, ModSounds.DIVER_DOWN_BARRAGE_EVENT);
+        addSound(ModSounds.DIVER_DOWN_GROUND_BARRAGE_ID, ModSounds.DIVER_DOWN_GROUND_BARRAGE_EVENT);
+        addSound(ModSounds.DIVER_DOWN_GROUND_DIVE_ID, ModSounds.DIVER_DOWN_GROUND_DIVE_EVENT);
+        addSound(ModSounds.DIVER_DOWN_BUBBLING_ID, ModSounds.DIVER_DOWN_BUBBLING_EVENT);
+        addSound(ModSounds.DIVER_DOWN_ZIP_ID, ModSounds.DIVER_DOWN_ZIP_EVENT);
+        addSound(ModSounds.DIVER_DOWN_TRANSFER_ID, ModSounds.DIVER_DOWN_TRANSFER_EVENT);
+        addSound(ModSounds.DIVER_DOWN_SPRING_ID, ModSounds.DIVER_DOWN_SPRING_EVENT);
+        addSound(ModSounds.DIVER_DOWN_RIBCAGE_ID, ModSounds.DIVER_DOWN_RIBCAGE_EVENT);
+        addSound(ModSounds.DIVER_DOWN_BOMB_ID, ModSounds.DIVER_DOWN_BOMB_EVENT);
+        addSound(ModSounds.ANASUI_VISAGE_EQUIP_ID, ModSounds.ANASUI_VISAGE_EQUIP_EVENT);
+        addSound(ModSounds.ANASUI_HURT_1_ID, ModSounds.ANASUI_HURT_1_EVENT);
+        addSound(ModSounds.ANASUI_HURT_2_ID, ModSounds.ANASUI_HURT_2_EVENT);
+        addSound(ModSounds.ANASUI_HURT_3_ID, ModSounds.ANASUI_HURT_3_EVENT);
+        addSound(ModSounds.ANASUI_STAND_SUMMON_1_ID, ModSounds.ANASUI_STAND_SUMMON_1_EVENT);
+        addSound(ModSounds.ANASUI_STAND_SUMMON_2_ID, ModSounds.ANASUI_STAND_SUMMON_2_EVENT);
+        addSound(ModSounds.ANASUI_KILL_1_ID, ModSounds.ANASUI_KILL_1_EVENT);
+        addSound(ModSounds.ANASUI_KILL_2_ID, ModSounds.ANASUI_KILL_2_EVENT);
+        addSound(ModSounds.ANASUI_KILL_3_ID, ModSounds.ANASUI_KILL_3_EVENT);
+        addSound(ModSounds.ANASUI_KILL_4_ID, ModSounds.ANASUI_KILL_4_EVENT);
+        addSound(ModSounds.ANASUI_KILL_5_ID, ModSounds.ANASUI_KILL_5_EVENT);
+        addSound(ModSounds.ANASUI_KILL_6_ID, ModSounds.ANASUI_KILL_6_EVENT);
+        addSound(ModSounds.ANASUI_IDLE_1_ID, ModSounds.ANASUI_IDLE_1_EVENT);
+        addSound(ModSounds.ANASUI_IDLE_2_ID, ModSounds.ANASUI_IDLE_2_EVENT);
+        addSound(ModSounds.ANASUI_IDLE_3_ID, ModSounds.ANASUI_IDLE_3_EVENT);
+        addSound(ModSounds.ANASUI_IDLE_4_ID, ModSounds.ANASUI_IDLE_4_EVENT);
+        addSound(ModSounds.ANASUI_IDLE_5_ID, ModSounds.ANASUI_IDLE_5_EVENT);
+        addSound(ModSounds.ANASUI_IDLE_6_ID, ModSounds.ANASUI_IDLE_6_EVENT);
+        addSound(ModSounds.ANASUI_IDLE_7_ID, ModSounds.ANASUI_IDLE_7_EVENT);
+        addSound(ModSounds.ANASUI_DEATH_1_ID, ModSounds.ANASUI_DEATH_1_EVENT);
+        addSound(ModSounds.ANASUI_DEATH_2_ID, ModSounds.ANASUI_DEATH_2_EVENT);
+        addSound(ModSounds.ANASUI_PHASE_PUNCH_ID, ModSounds.ANASUI_PHASE_PUNCH_EVENT);
+        addSound(ModSounds.ANASUI_ZIP_1_ID, ModSounds.ANASUI_ZIP_1_EVENT);
+        addSound(ModSounds.ANASUI_ZIP_2_ID, ModSounds.ANASUI_ZIP_2_EVENT);
+        addSound(ModSounds.ANASUI_ZIP_3_ID, ModSounds.ANASUI_ZIP_3_EVENT);
+        addSound(ModSounds.ANASUI_SUBMERGE_ID, ModSounds.ANASUI_SUBMERGE_EVENT);
+        addSound(ModSounds.ANASUI_TRAP_TRIGGER_1_ID, ModSounds.ANASUI_TRAP_TRIGGER_1_EVENT);
+        addSound(ModSounds.ANASUI_TRAP_TRIGGER_2_ID, ModSounds.ANASUI_TRAP_TRIGGER_2_EVENT);
+        addSound(ModSounds.ANASUI_TRAP_ID, ModSounds.ANASUI_TRAP_EVENT);
+        addSound(ModSounds.ANASUI_GROUND_DIVE_1_ID, ModSounds.ANASUI_GROUND_DIVE_1_EVENT);
+        addSound(ModSounds.ANASUI_GROUND_DIVE_2_ID, ModSounds.ANASUI_GROUND_DIVE_2_EVENT);
+        addSound(ModSounds.ANASUI_JOTARO_1_ID, ModSounds.ANASUI_JOTARO_1_EVENT);
+        addSound(ModSounds.ANASUI_JOTARO_2_ID, ModSounds.ANASUI_JOTARO_2_EVENT);
+        addSound(ModSounds.ANASUI_PUCCI_1_ID, ModSounds.ANASUI_PUCCI_1_EVENT);
+        addSound(ModSounds.ANASUI_PUCCI_2_ID, ModSounds.ANASUI_PUCCI_2_EVENT);
+
         addSound(ModSounds.SUMMON_GREEN_DAY_ID, ModSounds.SUMMON_GREEN_DAY_EVENT);
         addSound(ModSounds.SUMMON_WALKING_ID, ModSounds.SUMMON_WALKING_EVENT);
         addSound(ModSounds.HEEL_RAISE_ID, ModSounds.HEEL_RAISE_EVENT);
@@ -573,6 +698,8 @@ public class FabricSounds {
         addSound(ModSounds.JOTARO_FINISHER_ID, ModSounds.JOTARO_FINISHER_EVENT);
         addSound(ModSounds.JOTARO_DIO_ID, ModSounds.JOTARO_DIO_EVENT);
         addSound(ModSounds.JOTARO_GETING_CLOSER_ID, ModSounds.JOTARO_GETING_CLOSER_EVENT);
+        addSound(ModSounds.JOTARO_RESPONSE_ANASUI_1_ID, ModSounds.JOTARO_RESPONSE_ANASUI_1_EVENT);
+        addSound(ModSounds.JOTARO_RESPONSE_ANASUI_2_ID, ModSounds.JOTARO_RESPONSE_ANASUI_2_EVENT);
         addSound(ModSounds.FEMALE_ZOMBIE_AMBIENT_ID, ModSounds.FEMALE_ZOMBIE_AMBIENT_EVENT);
         addSound(ModSounds.FEMALE_ZOMBIE_HURT_ID, ModSounds.FEMALE_ZOMBIE_HURT_EVENT);
         addSound(ModSounds.FEMALE_ZOMBIE_DEATH_ID, ModSounds.FEMALE_ZOMBIE_DEATH_EVENT);
@@ -638,6 +765,7 @@ public class FabricSounds {
         addSound(ModSounds.WHITESNAKE_INVENTORY_CLOSE_ID, ModSounds.WHITESNAKE_INVENTORY_CLOSE_EVENT);
         addSound(ModSounds.PUCCI_STAND_SUMMON_1_ID, ModSounds.PUCCI_STAND_SUMMON_1_EVENT);
         addSound(ModSounds.PUCCI_STAND_SUMMON_2_ID, ModSounds.PUCCI_STAND_SUMMON_2_EVENT);
+        addSound(ModSounds.PUCCI_VISAGE_WHITESNAKE_DISC_TOSS_ID, ModSounds.PUCCI_VISAGE_WHITESNAKE_DISC_TOSS_EVENT);
         addSound(ModSounds.PUCCI_VISAGE_EQUIP_1_ID, ModSounds.PUCCI_VISAGE_EQUIP_1_EVENT);
         addSound(ModSounds.PUCCI_VISAGE_EQUIP_2_ID, ModSounds.PUCCI_VISAGE_EQUIP_2_EVENT);
         addSound(ModSounds.PUCCI_VISAGE_EQUIP_3_ID, ModSounds.PUCCI_VISAGE_EQUIP_3_EVENT);
@@ -645,6 +773,8 @@ public class FabricSounds {
         addSound(ModSounds.PUCCI_HURT_2_ID, ModSounds.PUCCI_HURT_2_EVENT);
         addSound(ModSounds.PUCCI_HURT_3_ID, ModSounds.PUCCI_HURT_3_EVENT);
         addSound(ModSounds.PUCCI_HURT_4_ID, ModSounds.PUCCI_HURT_4_EVENT);
+        addSound(ModSounds.PUCCI_RESPONSE_ANASUI_1_ID, ModSounds.PUCCI_RESPONSE_ANASUI_1_EVENT);
+        addSound(ModSounds.PUCCI_RESPONSE_ANASUI_2_ID, ModSounds.PUCCI_RESPONSE_ANASUI_2_EVENT);
 
         addSound(ModSounds.PLANET_WAVES_SUMMON_ID,ModSounds.PLANET_WAVES_SUMMON_EVENT);
         addSound(ModSounds.PLANET_WAVES_METEOR_SHOWER_ID,ModSounds.PLANET_WAVES_METEOR_SHOWER_EVENT);
