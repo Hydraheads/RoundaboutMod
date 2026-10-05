@@ -15,6 +15,7 @@ import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.ServerPlayerGameMode;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -34,6 +35,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -41,6 +43,16 @@ import java.util.Objects;
 
 @Mixin(ServerPlayerGameMode.class)
 public abstract class PilotingServerPlayerGameMode {
+
+    @Redirect(method = "handleBlockBreakAction(Lnet/minecraft/core/BlockPos;Lnet/minecraft/network/protocol/game/ServerboundPlayerActionPacket$Action;Lnet/minecraft/core/Direction;II)V",
+            at = @At(value = "FIELD", target = "Lnet/minecraft/server/network/ServerGamePacketListenerImpl;MAX_INTERACTION_DISTANCE:D",
+                    opcode = 178))
+    private double roundabout$khnumTallMiningReach() {
+        if (this.player instanceof StandUser user && user.roundabout$getKhnumForm() == 1) {
+            return ServerGamePacketListenerImpl.MAX_INTERACTION_DISTANCE + 6.25D;
+        }
+        return ServerGamePacketListenerImpl.MAX_INTERACTION_DISTANCE;
+    }
 
     /**Piloting changes the item use function so that it instead checks for distance from the piloting entity
      * rather than from the player*/

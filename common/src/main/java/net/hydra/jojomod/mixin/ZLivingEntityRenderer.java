@@ -68,7 +68,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
             switch (user.roundabout$getKhnumForm()) {
                 case 1 -> poseStack.scale(0.85F, 1.3F, 0.85F);
                 case 2 -> poseStack.scale(1.65F, 1.0F, 1.65F);
-                case 3 -> poseStack.scale(0.75F, 0.75F, 0.75F);
+                case 3 -> poseStack.scale(0.75F, 0.62F, 0.75F);
             }
         }
     }

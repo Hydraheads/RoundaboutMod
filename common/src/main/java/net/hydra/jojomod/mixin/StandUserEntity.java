@@ -125,6 +125,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private static final AttributeModifier ROUNDABOUT$KHNUM_SMALL_SPEED = new AttributeModifier(
             ROUNDABOUT$KHNUM_SMALL_SPEED_UUID, "Khnum short form slowdown", -0.12D,
             AttributeModifier.Operation.MULTIPLY_TOTAL);
+    @Unique
+    private static final UUID ROUNDABOUT$KHNUM_SMALL_DAMAGE_UUID = UUID.fromString("a1200000-0000-0000-0000-000000000004");
+    @Unique
+    private static final AttributeModifier ROUNDABOUT$KHNUM_SMALL_DAMAGE = new AttributeModifier(
+            ROUNDABOUT$KHNUM_SMALL_DAMAGE_UUID, "Khnum short form reduced damage", -0.2D,
+            AttributeModifier.Operation.MULTIPLY_TOTAL);
 
     @Shadow
     public abstract ItemStack getItemInHand(InteractionHand $$0);
@@ -4011,7 +4017,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         switch (roundabout$getKhnumForm()) {
             case 1 -> { widthScale = 0.85F; heightScale = 1.3F; }
             case 2 -> widthScale = 1.65F;
-            case 3 -> { widthScale = 0.75F; heightScale = 0.75F; }
+            case 3 -> { widthScale = 0.75F; heightScale = 0.62F; }
         }
         if (widthScale != 1.0F || heightScale != 1.0F) {
             cir.setReturnValue(EntityDimensions.scalable(dimensions.width * widthScale,
@@ -4178,8 +4184,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 this.rdbt$isRedirectingDamage = false;
             }
         }
-        // diver down damage breaking disguise
-        if (!entity.level().isClientSide() && $$1 > 0 && this.roundabout$isDisguised()) {
+        // Diver Down disguises break when hit; Khnum's self-disguise persists until reset or stand change.
+        if (!entity.level().isClientSide() && $$1 > 0 && this.roundabout$isDisguised()
+                && !(this.roundabout$getStandPowers() instanceof PowersKhnum)) {
             this.roundabout$clearDisguise();
         }
         if ($$0.getEntity() instanceof Player pe) {
@@ -7218,6 +7225,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             movementSpeed.removeModifier(ROUNDABOUT$KHNUM_SMALL_SPEED_UUID);
             if (clampedForm == 3) {
                 movementSpeed.addTransientModifier(ROUNDABOUT$KHNUM_SMALL_SPEED);
+            }
+        }
+        AttributeInstance attackDamage = living.getAttribute(Attributes.ATTACK_DAMAGE);
+        if (attackDamage != null) {
+            attackDamage.removeModifier(ROUNDABOUT$KHNUM_SMALL_DAMAGE_UUID);
+            if (clampedForm == 3) {
+                attackDamage.addTransientModifier(ROUNDABOUT$KHNUM_SMALL_DAMAGE);
             }
         }
         living.refreshDimensions();

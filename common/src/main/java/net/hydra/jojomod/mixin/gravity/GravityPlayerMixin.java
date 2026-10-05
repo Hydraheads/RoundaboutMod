@@ -68,7 +68,7 @@ public abstract class GravityPlayerMixin extends LivingEntity {
                                                  CallbackInfoReturnable<Float> cir) {
         float heightScale = switch (((StandUser) (Object) this).roundabout$getKhnumForm()) {
             case 1 -> 1.3F;
-            case 3 -> 0.75F;
+            case 3 -> 0.62F;
             default -> 1.0F;
         };
         if (heightScale != 1.0F) {
@@ -85,7 +85,7 @@ public abstract class GravityPlayerMixin extends LivingEntity {
         switch (form) {
             case 1 -> { widthScale = 0.85F; heightScale = 1.3F; }
             case 2 -> widthScale = 1.65F;
-            case 3 -> { widthScale = 0.75F; heightScale = 0.75F; }
+            case 3 -> { widthScale = 0.75F; heightScale = 0.62F; }
         }
         if (widthScale != 1.0F || heightScale != 1.0F) {
             EntityDimensions dimensions = cir.getReturnValue();
