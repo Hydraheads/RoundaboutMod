@@ -113,6 +113,16 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
 
+    public int getPullLevel(){
+        return 2;
+    }
+    public int getPushLevel(){
+        return 3;
+    }
+    public int getStompLevel(){
+        return 4;
+    }
+
     @Override
     public boolean interceptSuccessfulDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
         if ((hasStandActive(this.getSelf()) && $$0.is(DamageTypes.PLAYER_ATTACK)) && hasExtendedHeelsForWalking()){
@@ -147,10 +157,10 @@ public class PowersWalkingHeart extends NewDashPreset {
             IPlayerEntity ipe = ((IPlayerEntity) PE);
             byte level = ipe.roundabout$getStandLevel();
             if (level == 4){
-                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.max.skins").
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.max.both").
                         withStyle(ChatFormatting.AQUA), true);
             } else if (level == 2 || level == 3){
-                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.skins").
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.both").
                         withStyle(ChatFormatting.AQUA), true);
             }
         }
@@ -204,10 +214,14 @@ public class PowersWalkingHeart extends NewDashPreset {
                 }
 
                 if (isHoldingSneak()) {
-                    clientPush();
+                    if (canExecuteMoveWithLevel(getPushLevel())){
+                        clientPush();
+                    }
                 } else if (canUseAirAttack() && !onCooldown(PowerIndex.SKILL_2_SNEAK)){
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
-                    tryPowerPacket(PowerIndex.POWER_2_SNEAK);
+                    if (canExecuteMoveWithLevel(getStompLevel())) {
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
+                        tryPowerPacket(PowerIndex.POWER_2_SNEAK);
+                    }
                 } else {
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
                     tryPowerPacket(PowerIndex.POWER_2);
@@ -228,6 +242,7 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
     public void clientPull(){
+        if (canExecuteMoveWithLevel(getPullLevel())){
         if (!onCooldown(PowerIndex.GLOBAL_DASH) && hasWalkingSpot()) {
             clientBoth();
             //((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_EXTRA, true);
@@ -239,6 +254,7 @@ public class PowersWalkingHeart extends NewDashPreset {
                     db.y * -0.25,
                     db.z * -0.25
             );
+        }
         }
     }
     public void clientPush(){
@@ -542,16 +558,19 @@ public class PowersWalkingHeart extends NewDashPreset {
         if (hasExtendedHeelsForWalking())
             setSkillIcon(context, x, y, 2, StandIcons.GROUND_IMPLANT, PowerIndex.SKILL_2);
         else if (isHoldingSneak())
-            setSkillIcon(context, x, y, 2, StandIcons.PUSH_SPIKE, PowerIndex.GLOBAL_DASH);
+            LockedOrNot(context, x, y, 2, StandIcons.PUSH_SPIKE, PowerIndex.GLOBAL_DASH,
+                    getPushLevel());
         else if (canUseAirAttack())
-            setSkillIcon(context, x, y, 2, StandIcons.WALKING_STOMP, PowerIndex.SKILL_2_SNEAK);
+            LockedOrNot(context, x, y, 2, StandIcons.WALKING_STOMP, PowerIndex.SKILL_2_SNEAK,
+                    getStompLevel());
         else
             setSkillIcon(context, x, y, 2, StandIcons.GROUND_IMPLANT_OUT, PowerIndex.SKILL_2);
 
         if ((canLatchOntoWall() || hasExtendedHeelsForWalking()) && canWallWalkConfig())
             setSkillIcon(context, x, y, 3, StandIcons.WALL_WALK, PowerIndex.SKILL_3);
         else if (isHoldingSneak())
-            setSkillIcon(context, x, y, 3, StandIcons.PULL_SPIKE, PowerIndex.GLOBAL_DASH);
+            LockedOrNot(context, x, y, 3, StandIcons.PULL_SPIKE, PowerIndex.GLOBAL_DASH,
+                    getPullLevel());
         else
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
 
@@ -680,12 +699,7 @@ public class PowersWalkingHeart extends NewDashPreset {
             if (Level > 3 || bypass) {
                 return 10000;
             }
-            if (Level > 2) {
-                return 10000-getUseTicks();
-            }if (Level > 1) {
-                return 10000-getUseTicks()-getUseTicks();
-            }
-            return 10000-getUseTicks()-getUseTicks()-getUseTicks()-getUseTicks();
+            return 10000-getUseTicks();
         }
         return 10000;
     }
@@ -1629,13 +1643,13 @@ public class PowersWalkingHeart extends NewDashPreset {
                 "instruction.roundabout.press_skill", StandIcons.SPIKE_ATTACK_MODE, 1, level, bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.heel_plant",
                 "instruction.roundabout.press_skill", StandIcons.GROUND_IMPLANT,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.spike_stomp",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, getStompLevel(), "ability.roundabout.spike_stomp",
                 "instruction.roundabout.press_skill_air", StandIcons.WALKING_STOMP,2,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.spike_push",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, getPushLevel(), "ability.roundabout.spike_push",
                 "instruction.roundabout.press_skill_crouch", StandIcons.PUSH_SPIKE,3,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.spike_pull",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, getPullLevel(), "ability.roundabout.spike_pull",
                 "instruction.roundabout.press_skill_crouch", StandIcons.PULL_SPIKE,3,level,bypass));
         if (canWallWalkConfig()) {
             $$1.add(drawSingleGUIIcon(context, 18, leftPos + 57, topPos + 80, 0, "ability.roundabout.wall_walk_move",
