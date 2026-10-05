@@ -213,7 +213,7 @@ public class PowersWalkingHeart extends NewDashPreset {
                     return;
                 }
 
-                if (isHoldingSneak()) {
+                if (isHoldingSneak() && !hasExtendedHeelsForWalking()) {
                     if (canExecuteMoveWithLevel(getPushLevel())){
                         clientPush();
                     }
@@ -235,7 +235,7 @@ public class PowersWalkingHeart extends NewDashPreset {
             return;
         if (canLatchOntoWall() && canWallWalkConfig())
             doWallLatchClient();
-        else if (isHoldingSneak())
+        else if (isHoldingSneak() && !hasExtendedHeelsForWalking())
             clientPull();
         else if (!hasExtendedHeelsForWalking())
             dash();
