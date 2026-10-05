@@ -2159,7 +2159,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             } else {
                 refreshArms();
 
-                if (attackTimeDuring == 10 && !(this.getSelf() instanceof Player PE &&
+                if (attackTimeDuring == 6 && !(this.getSelf() instanceof Player PE &&
                         ((IPlayerEntity)PE).roundabout$getMaskInventory().getItem(1).is(ModItems.BLANK_MASK))) {
                     playSoundsIfNearby(BTD_DAY_WINDUP_LINE, 32, false);
 
@@ -3332,6 +3332,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     }
                 }
             }
+
         }
 
         long dayTime = ((ServerLevel) this.self.level()).getDayTime();
@@ -4552,6 +4553,9 @@ public class PowersKillerQueen extends NewPunchingStand {
             return  1.45f;
         }
         if (soundChoice == MOB_PLANT_WINDUP) {
+            return 0.8f;
+        }
+        if (soundChoice == BTD_DAY_WINDUP_LINE) {
             return 0.8f;
         }
 
