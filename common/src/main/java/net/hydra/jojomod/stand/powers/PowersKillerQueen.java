@@ -2763,8 +2763,6 @@ public class PowersKillerQueen extends NewPunchingStand {
             this.setAttackTimeDuring(-10);
         }
 
-
-
         if (currentBombStatus == BOMB_BLOCK) {
             if (this.bombBlock != null) {
                 this.bombBlock.discard();
