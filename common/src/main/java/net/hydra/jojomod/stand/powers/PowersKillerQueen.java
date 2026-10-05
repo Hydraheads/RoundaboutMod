@@ -723,7 +723,11 @@ public class PowersKillerQueen extends NewPunchingStand {
         boolean holdingItem = (getActivePower() == ITEM_HOLDING || getActivePower() == ITEM_CHARGE);
 
     	if (inBitesTheDustMode()) {
-            setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_BTD_DAY, PowerIndex.SKILL_EXTRA);
+            if (canExecuteMoveWithLevel(getBitesTheDustDayLevel())) {
+                setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_BTD_DAY, PowerIndex.SKILL_EXTRA);
+            }else {
+                setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+            }
         } else if (canAddStrayCatto() && !holdingItem) {
             setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_ADD_STRAY_CAT, PowerIndex.NO_CD);
     	} else if (isGuarding()) {
@@ -1072,6 +1076,9 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override
     public boolean canInterruptPower(DamageSource sauce, Entity interrupter){
         if (getActivePower() == BITES_THE_DUST_DAY) {
+            int cdr = ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatActivationCooldown;
+            
+            this.setCooldown(PowerIndex.SKILL_2, cdr);
             return true;
         }
 
