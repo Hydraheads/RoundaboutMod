@@ -698,8 +698,10 @@ public class PowersWalkingHeart extends NewDashPreset {
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
             if (Level > 3 || bypass) {
                 return 10000;
+            } if (Level > 1) {
+                return 10000-getUseTicks();
             }
-            return 10000-getUseTicks();
+            return 10000-getUseTicks()-getUseTicks();
         }
         return 10000;
     }
