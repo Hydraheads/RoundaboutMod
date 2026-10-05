@@ -3034,8 +3034,8 @@ public class PowersKillerQueen extends NewPunchingStand {
             btdTicks = 0;
             btdTicksMax = 0;
 
-            this.syncBombStatus(BITES_THE_DUST);
             defuseServer();
+            this.syncBombStatus(BITES_THE_DUST);
 
             int cooldown = ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatActivationCooldown;
 
