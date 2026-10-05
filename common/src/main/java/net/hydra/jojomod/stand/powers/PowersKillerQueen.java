@@ -1252,8 +1252,10 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     @Override
-    public float inputSpeedModifiers(float basis){
-        if (this.activePower == ITEM_HOLDING) {
+    public float inputSpeedModifiers(float basis) {
+        if (activePower == BITES_THE_DUST_DAY){
+            basis*=0.6f;
+        }else if (this.activePower == ITEM_HOLDING) {
             basis*=0.7f;
         }else if (this.activePower == ITEM_CHARGE) {
             basis*=0.5f;
