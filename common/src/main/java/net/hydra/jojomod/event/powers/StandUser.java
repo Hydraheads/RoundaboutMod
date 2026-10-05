@@ -406,6 +406,12 @@ public interface StandUser {
     @Nullable GameProfile roundabout$getDisguiseProfile();
     void roundabout$setDisguise(GameProfile profile);
     void roundabout$clearDisguise();
+    byte roundabout$getKhnumForm();
+    void roundabout$setKhnumForm(byte form);
+    int roundabout$getKhnumHeight();
+    int roundabout$getKhnumWidth();
+    int roundabout$getKhnumHead();
+    void roundabout$setKhnumVisage(int height, int width, int head);
     boolean roundabout$hasDiverLegs();
     void roundabout$setDiverLegs(boolean legs);
     boolean roundabout$hasDiverArms();

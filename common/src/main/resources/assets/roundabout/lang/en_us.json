@@ -5292,5 +5292,10 @@
   "config.roundabout.z.name": "",
   "config.roundabout.z.desc": "",
   "config.roundabout.x.name": "Applies Invis Potion",
-  "config.roundabout.x.desc": "of everything beneath this being translated, it is a lot of work. But if you really"
+  "config.roundabout.x.desc": "of everything beneath this being translated, it is a lot of work. But if you really",
+  "roundabout.khnum.disguise.title": "Khnum Disguise",
+  "roundabout.khnum.disguise.username": "Minecraft username",
+  "roundabout.khnum.disguise.invalid": "That is not a valid Minecraft username.",
+  "roundabout.khnum.disguise.not_found": "No Minecraft player was found with that username.",
+  "roundabout.khnum.visage.title": "Khnum Appearance"
 }
