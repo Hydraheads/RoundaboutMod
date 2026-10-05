@@ -823,6 +823,19 @@ public class ModSounds {
     public static final String KQ_MOB_PLANT = "kq_mob_plant";
     public static final ResourceLocation KQ_MOB_PLANT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KQ_MOB_PLANT);
     public static SoundEvent KQ_MOB_PLANT_EVENT = SoundEvent.createVariableRangeEvent(KQ_MOB_PLANT_ID);
+    public static final String KQ_BTD_WINDUP = "btd_windup";
+    public static final ResourceLocation KQ_BTD_WINDUP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KQ_BTD_WINDUP);
+    public static SoundEvent KQ_BTD_WINDUP_EVENT = SoundEvent.createVariableRangeEvent(KQ_BTD_WINDUP_ID);
+    public static final String KQ_BTD_WINDUP_LINE = "btd_windup_line";
+    public static final ResourceLocation KQ_BTD_WINDUP_LINE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KQ_BTD_WINDUP_LINE);
+    public static SoundEvent KQ_BTD_WINDUP_LINE_EVENT = SoundEvent.createVariableRangeEvent(KQ_BTD_WINDUP_LINE_ID);
+    public static final String KIRA4_BTD_ACTIVATION = "kira4_btd_activation";
+    public static final ResourceLocation KIRA4_BTD_ACTIVATION_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_BTD_ACTIVATION);
+    public static SoundEvent KIRA4_BTD_ACTIVATION_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_BTD_ACTIVATION_ID);
+    public static final String ADD_STRAY_CAT = "add_stray_cat_sfx";
+    public static final ResourceLocation ADD_STRAY_CAT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ADD_STRAY_CAT);
+    public static SoundEvent ADD_STRAY_CAT_EVENT = SoundEvent.createVariableRangeEvent(ADD_STRAY_CAT_ID);
+
 
     public static final String KILLER_QUEEN_PUNCH_1 = "killer_queen_punch_1";
     public static final ResourceLocation KILLER_QUEEN_PUNCH_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_PUNCH_1);
