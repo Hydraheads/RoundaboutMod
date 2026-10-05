@@ -349,6 +349,7 @@ public class ForgeEvents {
         ModItems.LUCK_UPGRADE = ForgeItems.LUCK_UPGRADE.get();
         ModItems.EXECUTION_UPGRADE = ForgeItems.EXECUTION_UPGRADE.get();
         ModItems.OCCULT_CHARGE = ForgeItems.OCCULT_CHARGE.get();
+        ModItems.TOTEM_OF_DOOM = ForgeItems.TOTEM_OF_DOOM.get();
         ModItems.HAIRSPRAY = ForgeItems.HAIRSPRAY.get();
         ModItems.LUCK_SWORD = ForgeItems.LUCK_SWORD.get();
         ModItems.WOODEN_GLAIVE = ForgeItems.WOODEN_GLAIVE.get();
@@ -695,6 +696,9 @@ public class ForgeEvents {
         ModParticles.PUNCH_IMPACT_A = ForgeParticles.PUNCH_IMPACT_A.get();
         ModParticles.PUNCH_IMPACT_B = ForgeParticles.PUNCH_IMPACT_B.get();
         ModParticles.PUNCH_IMPACT_C = ForgeParticles.PUNCH_IMPACT_C.get();
+        ModParticles.GOLD_PUNCH_IMPACT_A = ForgeParticles.GOLD_PUNCH_IMPACT_A.get();
+        ModParticles.GOLD_PUNCH_IMPACT_B = ForgeParticles.GOLD_PUNCH_IMPACT_B.get();
+        ModParticles.GOLD_PUNCH_IMPACT_C = ForgeParticles.GOLD_PUNCH_IMPACT_C.get();
         ModParticles.DISC_STEAL_HIT = ForgeParticles.DISC_STEAL_HIT.get();
         ModParticles.PUNCH_MISS = ForgeParticles.PUNCH_MISS.get();
         ModParticles.BUBBLE_TRAIL = ForgeParticles.BUBBLE_TRAIL.get();
@@ -773,6 +777,7 @@ public class ForgeEvents {
         ModEffects.BLEED = ForgeEffects.BLEED.get();
         ModEffects.HEX = ForgeEffects.HEX.get();
         ModEffects.BANISH = ForgeEffects.BANISH.get();
+        ModEffects.DOOMED = ForgeEffects.DOOMED.get();
         ModEffects.STAND_VIRUS = ForgeEffects.STAND_VIRUS.get();
         ModEffects.CAPTURING_LOVE = ForgeEffects.CAPTURING_LOVE.get();
         ModEffects.FACELESS = ForgeEffects.FACELESS.get();
