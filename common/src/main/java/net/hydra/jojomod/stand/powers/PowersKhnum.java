@@ -54,7 +54,7 @@ public class PowersKhnum extends NewDashPreset {
     }
 
     private void setFormClient(byte form) {
-        int move = form == WIDE ? PowerIndex.POWER_2_SNEAK : PowerIndex.POWER_2;
+        byte move = form == WIDE ? PowerIndex.POWER_2_SNEAK : PowerIndex.POWER_2;
         ((StandUser) self).roundabout$tryPower(move, true);
         tryPowerPacket(move);
     }
