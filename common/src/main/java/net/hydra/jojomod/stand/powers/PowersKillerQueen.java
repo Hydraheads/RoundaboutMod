@@ -321,7 +321,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     public boolean canUseStrayCat() {
         return this.hasStrayCat
                 || (((StandUser) self).roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem)
-                || (self instanceof Player PL && PL.isCreative());
+                || (self instanceof Player PL && PL.isCreative()) || !(self instanceof Player);
     }
 
     public void removeStrayCatClient() {
@@ -3795,9 +3795,15 @@ public class PowersKillerQueen extends NewPunchingStand {
                             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
                         }
 
-                    } else if (this.currentBombStatus != BOMB_NONE && this.currentBombStatus != BOMB_BUBBLE) {
-                        if (dist > 1.4 && !wentForCharge) {
+                    } else if (this.currentBombStatus != BOMB_NONE) {
+
+                        if (dist > 1.4 && !wentForCharge && this.currentBombStatus != BOMB_BUBBLE ) {
                             ((StandUser) this.getSelf()).roundabout$tryPower(DETONATE, true);
+                        }else {
+                            if (bombBubble.distanceTo(targetEntity) < 1.3f) {
+
+                                ((StandUser) this.getSelf()).roundabout$tryPower(DETONATE, true);
+                            }
                         }
                     }
                 }
