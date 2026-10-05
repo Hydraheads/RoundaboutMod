@@ -2743,6 +2743,9 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public boolean defuseServer() {
+        return defuseServer(false);
+    }
+    public boolean defuseServer(boolean preBTD) {
         if (this.isClient()) { return true; }
 
         if (isEntityBomb(currentBombStatus) && bombEntity instanceof LivingEntity) {
@@ -2833,7 +2836,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
         }
 
-        if (!inBitesTheDustMode()) {
+        if (!preBTD) {
             this.syncBombStatus(BOMB_NONE);
         }
 
@@ -3001,8 +3004,8 @@ public class PowersKillerQueen extends NewPunchingStand {
     public int timeOfPlanting = 0;
 
     public void tryBitesTheDustPlant(StandEntity stand, AABB bb1, AABB bb2) {
-        bb1 = bb1.inflate(1.2F);
-        bb2 = bb2.inflate(1.2F);
+        bb1 = bb1.inflate(0.8F);
+        bb2 = bb2.inflate(0.8F);
 
         AABB $$2 = bb1.minmax(bb2);
         List<Entity> $$3 = stand.level().getEntities(stand, $$2);
@@ -3019,6 +3022,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
 
         if (target != null && stand instanceof KillerQueenEntity KQE) {
+            defuseServer(true);
             KQE.setPlantedBitesTheDust(true);
 
             timeOfPlanting = (int)(self.level().getLevelData()).getDayTime();
@@ -3034,7 +3038,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             btdTicks = 0;
             btdTicksMax = 0;
 
-            defuseServer();
+
             this.syncBombStatus(BITES_THE_DUST);
 
             int cooldown = ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatActivationCooldown;
