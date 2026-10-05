@@ -4491,6 +4491,8 @@
 
   "config.roundabout.diveAttackCooldown.name": "Dive Cooldown",
   "config.roundabout.diveAttackCooldown.desc": "The cooldown of vampire powers dive attack.",
+  "config.roundabout.spikeDiveAttackCooldown.name": "Dive Cooldown",
+  "config.roundabout.spikeDiveAttackCooldown.desc": "The cooldown of Walking Heart's dive attack.",
   "config.roundabout.hairGrabCooldown.name": "Hair Grab Cooldown",
   "config.roundabout.hairGrabCooldown.desc": "The cooldown of vampire hair grab.",
   "config.roundabout.spikeAttackCooldown.name": "Spike Attack Cooldown",

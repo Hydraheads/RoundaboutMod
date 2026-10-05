@@ -202,7 +202,7 @@ public class PowersWalkingHeart extends NewDashPreset {
                     return;
                 }
 
-                if (canUseAirAttack()){
+                if (canUseAirAttack() && !onCooldown(PowerIndex.SKILL_2_SNEAK)){
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
                     tryPowerPacket(PowerIndex.POWER_2_SNEAK);
                 } else {
@@ -621,25 +621,27 @@ public class PowersWalkingHeart extends NewDashPreset {
 //    }
 
     public void walkingStomp(){
-        this.attackTimeMax= 5;
-        this.attackTimeDuring = 0;
-        setActivePower(PowerIndex.POWER_2_SNEAK);
-        if (!self.level().isClientSide()) {
-            for (int i = 0; i < 3; i++){
-                Vec3 cvec = new Vec3(Math.random()*0.2 - 0.1,1,Math.random()*0.2 - 0.1);
-                Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
-                if (gravD != Direction.DOWN){
-                    cvec = RotationUtil.vecPlayerToWorld(cvec,gravD);
-                }
+        if (!onCooldown(PowerIndex.SKILL_2_SNEAK)) {
+            this.attackTimeMax = 5;
+            this.attackTimeDuring = 0;
+            setActivePower(PowerIndex.POWER_2_SNEAK);
+            if (!self.level().isClientSide()) {
+                for (int i = 0; i < 3; i++) {
+                    Vec3 cvec = new Vec3(Math.random() * 0.2 - 0.1, 1, Math.random() * 0.2 - 0.1);
+                    Direction gravD = ((IGravityEntity) this.self).roundabout$getGravityDirection();
+                    if (gravD != Direction.DOWN) {
+                        cvec = RotationUtil.vecPlayerToWorld(cvec, gravD);
+                    }
 
-                sendParticlesIfPossible(self.level(),ParticleTypes.CLOUD,
-                        this.getSelf().getX()+cvec.x, this.getSelf().getY()+cvec.y, this.getSelf().getZ()+cvec.z,
-                        0, cvec.x, cvec.y, cvec.z, 0.8);
+                    sendParticlesIfPossible(self.level(), ParticleTypes.CLOUD,
+                            this.getSelf().getX() + cvec.x, this.getSelf().getY() + cvec.y, this.getSelf().getZ() + cvec.z,
+                            0, cvec.x, cvec.y, cvec.z, 0.8);
+                }
+                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.VAMPIRE_DIVE_EVENT, SoundSource.PLAYERS, 1F, (float) (0.96f + Math.random() * 0.08f));
+            } else {
+                Vec3 lower = self.getDeltaMovement();
+                self.setDeltaMovement(lower.x(), -1.8, lower.z());
             }
-            playSoundIfPossible(self.level(),null, this.self.blockPosition(),ModSounds.VAMPIRE_DIVE_EVENT, SoundSource.PLAYERS, 1F, (float) (0.96f + Math.random() * 0.08f));
-        } else {
-            Vec3 lower = self.getDeltaMovement();
-            self.setDeltaMovement(lower.x(),-1.8,lower.z());
         }
     }
     @Override
@@ -723,12 +725,14 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
     public void diveImpact(Entity entity) {
-        if (!onCooldown(PowerIndex.GENERAL_1)) {
+        if (!onCooldown(PowerIndex.SKILL_2_SNEAK)) {
             if (!this.self.level().isClientSide()) {
                 if (entity != null) {
                     if (entity.distanceTo(self) > 3.5){
                         return;
                     }
+                    this.setCooldown(PowerIndex.SKILL_2_SNEAK, ClientNetworking.getAppropriateConfig().walkingHeartSettings.spikeDiveAttackCooldown);
+
                     self.fallDistance = 0;
                     attackTargetId = 0;
                     float pow;
@@ -738,10 +742,6 @@ public class PowersWalkingHeart extends NewDashPreset {
                         MainUtil.makeBleed(LE,0,300,this.self);
                     }
                     knockbackStrength = 0.10F;
-                    int diveCooldown = ClientNetworking.getAppropriateConfig().vampireSettings.diveAttackCooldown;
-                    setCooldown(PowerIndex.GENERAL_1, diveCooldown);
-                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
-                            PowerIndex.GENERAL_1, diveCooldown);
 
                     hitParticles(entity);
                     if (DamageHandler.StandDamageEntity(entity, pow, this.self)) {
@@ -801,7 +801,13 @@ public class PowersWalkingHeart extends NewDashPreset {
             }
         }
     }
-
+    @Override
+    public boolean isServerControlledCooldown(byte num){
+        if (num == PowerIndex.SKILL_2_SNEAK) {
+            return true;
+        }
+        return super.isServerControlledCooldown(num);
+    }
     @Override
     public boolean tryIntPower(int move, boolean forced, int chargeTime){
         if (move == PowerIndex.POWER_1_BLOCK) {
@@ -844,7 +850,6 @@ public class PowersWalkingHeart extends NewDashPreset {
             return false;
 
         hitParticlesCenter(target);
-
         if (attacker instanceof TamableAnimal TA){
             if (target instanceof TamableAnimal TT && TT.getOwner() != null
                     && TA.getOwner() != null && TT.getOwner().is(TA.getOwner())){
