@@ -491,6 +491,8 @@ public class FabricSounds {
 
         addSound(ModSounds.THE_WORLD_OVER_HEAVEN_ID, ModSounds.THE_WORLD_OVER_HEAVEN_EVENT);
         addSound(ModSounds.UNLOCK_SKIN_ID, ModSounds.UNLOCK_SKIN_EVENT);
+        addSound(ModSounds.WH_PULL_ID, ModSounds.WH_PULL_EVENT);
+        addSound(ModSounds.WH_PUSH_ID, ModSounds.WH_PUSH_EVENT);
 
         addSound(ModSounds.TIME_STOP_TICKING_ID, ModSounds.TIME_STOP_TICKING_EVENT);
         addSound(ModSounds.CAN_BOUNCE_ID, ModSounds.CAN_BOUNCE_EVENT);

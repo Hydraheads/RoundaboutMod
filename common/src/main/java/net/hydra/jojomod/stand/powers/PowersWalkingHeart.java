@@ -249,14 +249,19 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
     public void serverPull(){
         serverBoth();
+        playSoundIfPossible(self.level(),null, self.getX(), self.getY(),
+                self.getZ(), ModSounds.WH_PULL_EVENT, self.getSoundSource(), 2F, 1.0F);
     }
     public void serverPush(){
         serverBoth();
+        playSoundIfPossible(self.level(),null, self.getX(), self.getY(),
+                self.getZ(), ModSounds.WH_PUSH_EVENT, self.getSoundSource(), 2F, 1.0F);
     }
 
     public void serverBoth(){
         setCooldown(PowerIndex.GLOBAL_DASH,ClientNetworking.getAppropriateConfig().walkingHeartSettings.spikePullCooldown);
         setActivePower(PowerIndex.POWER_3_SNEAK);
+        addEXP(1);
         attackTimeDuring = -10;
         getStandUserSelf().roundabout$setStandAnimation(HEEL_RAISE);
         sendHeelPacket(120);

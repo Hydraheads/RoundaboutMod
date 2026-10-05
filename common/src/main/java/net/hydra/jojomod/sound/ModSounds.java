@@ -1296,6 +1296,13 @@ public class ModSounds {
     public static SoundEvent THE_WORLD_OVER_HEAVEN_EVENT = SoundEvent.createVariableRangeEvent(THE_WORLD_OVER_HEAVEN_ID);
 
 
+    public static final String WH_PULL = "wh_pull";
+    public static final ResourceLocation WH_PULL_ID = new ResourceLocation(Roundabout.MOD_ID+":"+WH_PULL);
+    public static SoundEvent WH_PULL_EVENT = SoundEvent.createVariableRangeEvent(WH_PULL_ID);
+    public static final String WH_PUSH = "wh_push";
+    public static final ResourceLocation WH_PUSH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+WH_PUSH);
+    public static SoundEvent WH_PUSH_EVENT = SoundEvent.createVariableRangeEvent(WH_PUSH_ID);
+
     public static final String  ARCADE_TIMESTOP = "arcade_timestop";
     public static final ResourceLocation ARCADE_TIMESTOP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ARCADE_TIMESTOP);
     public static SoundEvent ARCADE_TIMESTOP_EVENT = SoundEvent.createVariableRangeEvent(ARCADE_TIMESTOP_ID);
