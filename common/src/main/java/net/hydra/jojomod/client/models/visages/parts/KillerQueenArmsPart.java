@@ -184,7 +184,7 @@ public class KillerQueenArmsPart extends PsuedoHierarchicalModel {
                     } else if (animation == KillerQueenEntity.SHA_SHOOT) {
                         this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.shaArmsShoot, partialTicks, 1.5f);
                     } else if (animation == KillerQueenEntity.BTD_DETONATION) {
-                        this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.btdDetonation, partialTicks, 1);
+                        this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.btdDetonation, partialTicks, 1.01f);
                     } else {
                         user.roundabout$getWornStandActiveAnimation().stop();
                     }

@@ -405,6 +405,14 @@ public class ForgeSounds {
         register(ModSounds.KQ_BLOCK_PLANT, ModSounds.KQ_BLOCK_PLANT_ID);
     public static final RegistryObject<SoundEvent> KQ_PLANT_WINDUP_EVENT =
         register(ModSounds.KQ_PLANT_WINDUP, ModSounds.KQ_PLANT_WINDUP_ID);
+    public static final RegistryObject<SoundEvent> KQ_BTD_WINDUP_EVENT =
+        register(ModSounds.KQ_BTD_WINDUP, ModSounds.KQ_BTD_WINDUP_ID);
+    public static final RegistryObject<SoundEvent> KQ_BTD_WINDUP_LINE_EVENT =
+        register(ModSounds.KQ_BTD_WINDUP_LINE, ModSounds.KQ_BTD_WINDUP_LINE_ID);
+    public static final RegistryObject<SoundEvent> KIRA4_BTD_ACTIVATION_EVENT =
+        register(ModSounds.KIRA4_BTD_ACTIVATION, ModSounds.KIRA4_BTD_ACTIVATION_ID);
+    public static final RegistryObject<SoundEvent> ADD_STRAY_CAT_EVENT =
+        register(ModSounds.ADD_STRAY_CAT, ModSounds.ADD_STRAY_CAT_ID);
 
     public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_PUNCH_1_EVENT =
             register(ModSounds.KQ_MINESWEEPER_PUNCH_1, ModSounds.KQ_MINESWEEPER_PUNCH_1_ID);
@@ -466,6 +474,27 @@ public class ForgeSounds {
             register(ModSounds.STRAY_CAT_BUBBLE_REDIRECT_1, ModSounds.STRAY_CAT_BUBBLE_REDIRECT_1_ID);
     public static final RegistryObject<SoundEvent> STRAY_CAT_BUBBLE_REDIRECT_2_EVENT =
             register(ModSounds.STRAY_CAT_BUBBLE_REDIRECT_2, ModSounds.STRAY_CAT_BUBBLE_REDIRECT_2_ID);
+
+    public static final RegistryObject<SoundEvent> KQ_SAMURAI_SUMMON_EVENT =
+            register(ModSounds.KQ_SAMURAI_SUMMON, ModSounds.KQ_SAMURAI_SUMMON_ID);
+    public static final RegistryObject<SoundEvent> KQ_SAMURAI_BLOCK_PLANT_EVENT =
+            register(ModSounds.KQ_SAMURAI_BLOCK_PLANT, ModSounds.KQ_SAMURAI_BLOCK_PLANT_ID);
+    public static final RegistryObject<SoundEvent> KQ_SAMURAI_MOB_PLANT_EVENT =
+            register(ModSounds.KQ_SAMURAI_MOB_PLANT, ModSounds.KQ_SAMURAI_MOB_PLANT_ID);
+    public static final RegistryObject<SoundEvent> KQ_SAMURAI_BTD_NOISE_EVENT =
+            register(ModSounds.KQ_SAMURAI_BTD_NOISE, ModSounds.KQ_SAMURAI_BTD_NOISE_ID);
+    public static final RegistryObject<SoundEvent> KQ_SAMURAI_STAB_EVENT =
+            register(ModSounds.KQ_SAMURAI_STAB, ModSounds.KQ_SAMURAI_STAB_ID);
+    public static final RegistryObject<SoundEvent> KQ_SAMURAI_SLASH_EVENT =
+            register(ModSounds.KQ_SAMURAI_SLASH, ModSounds.KQ_SAMURAI_SLASH_ID);
+    public static final RegistryObject<SoundEvent> KQ_SAMURAI_WHOOSH_1_EVENT =
+            register(ModSounds.KQ_SAMURAI_WHOOSH_1, ModSounds.KQ_SAMURAI_WHOOSH_1_ID);
+    public static final RegistryObject<SoundEvent> KQ_SAMURAI_WHOOSH_2_EVENT =
+            register(ModSounds.KQ_SAMURAI_WHOOSH_2, ModSounds.KQ_SAMURAI_WHOOSH_2_ID);
+    public static final RegistryObject<SoundEvent> KQ_SAMURAI_TEAPOT_EVENT =
+            register(ModSounds.KQ_SAMURAI_TEAPOT, ModSounds.KQ_SAMURAI_TEAPOT_ID);
+    public static final RegistryObject<SoundEvent> KQ_SAMURAI_SHEATHE_EVENT =
+            register(ModSounds.KQ_SAMURAI_SHEATHE, ModSounds.KQ_SAMURAI_SHEATHE_ID);
 
     public static final RegistryObject<SoundEvent> KIRA4_DAMAGE_1_EVENT =
             register(ModSounds.KIRA4_DAMAGE_1, ModSounds.KIRA4_DAMAGE_1_ID);

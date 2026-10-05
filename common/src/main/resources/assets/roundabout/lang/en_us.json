@@ -244,6 +244,7 @@
   "item.roundabout.max_anubis_disc.desc": "Anubis",
   "item.roundabout.tusk_disc.desc": "Tusk",
   "text.roundabout.tusk_nail_color": "Change Nail Color",
+  "text.roundabout.killer_queen_remove_stray_cat": "Remove Stray Cat",
   "item.roundabout.max_tusk_disc.desc": "Tusk",
   "item.roundabout.achtung_baby_disc.desc": "Achtung Baby",
   "item.roundabout.survivor_disc.desc": "Survivor",
@@ -1153,6 +1154,7 @@
   "death.attack.distortion_virus": "%1$s was consumed by the Distortion Virus.",
   "death.attack.diver_redirection": "%1$s died for the sake of others",
   "death.attack.diver_redirection.player": "%1$s died for the sake of %2$s",
+  "death.attack.brain_dead": "%1$s stopped thinking",
 
   "item.glaive.charge_power": "Charge Attack",
 
@@ -1575,6 +1577,7 @@
 
   "sounds.roundabout.summon_killer_queen": "Stand summoned",
   "sounds.roundabout.summon_creeper_queen": "Creeper Queen Summon",
+  "sounds.roundabout.summon_samurai_queen": "Samurai Summon",
   "sounds.roundabout.kq_minesweeper_redirect": "[Bomb Redirecting]",
   "sounds.roundabout.kq_minesweeper_start": "[MINESWEEPER START]",
   "sounds.roundabout.killer_queen_barrage": "Shibabababa!",
@@ -1624,6 +1627,11 @@
   "sounds.roundabout.kq_block_plant": "Block planted",
   "sounds.roundabout.kq_mob_plant": "Mob planted",
   "sounds.roundabout.kq_plant_windup": "Mob plant windup...",
+  "sounds.roundabout.kq_samurai_whoosh": "Whoosh",
+  "sounds.roundabout.kq_samurai_slash": "Sword Hit",
+  "sounds.roundabout.kq_samurai_stab": "Sword Impale",
+  "sounds.roundabout.kq_samurai_sheathe": "Sword unsheathe",
+  "sounds.roundabout.kq_samurai_sha": "Teapot release",
 
   "sounds.roundabout.btd_normal_reset": "Bites the dust Combat",
   "sounds.roundabout.btd_full_reset": "Bites the dust Day",
@@ -1749,6 +1757,10 @@
   "sounds.roundabout.kira4_sha": "Sheer Heart Attack",
   "sounds.roundabout.kira4_kq_btd": "Bites the Dust!",
   "sounds.roundabout.kira4_btd_range": "Killer Queen is in your eyes...",
+  "sounds.roundabout.kira4_btd_activation": "Yes I activated it",
+  "sounds.roundabout.btd_windup_line": "THAT'S IT I'M ACTIVATING IT",
+  "sounds.roundabout.btd_windup": "Bites the Dust Day windup...",
+  "sounds.roundabout.add_stray_cat_sfx": "Stray Cat added",
 
   "sounds.roundabout.whitesnake_pucci_stand_summon_1": "Whitesnake",
   "sounds.roundabout.whitesnake_pucci_stand_summon_2": "Whitesnake",
@@ -1901,6 +1913,9 @@
 
   "ability.roundabout.sweep_kick": "Sweep/Stomp",
   "ability.roundabout.sweep_kick.desc": "Throws a kick in a short range directly in front of you. The knockback is quite high. If used in the air, it instead makes you slam into the ground, briefly dazing mobs it hits.",
+
+  "ability.roundabout.spike_stomp": "Spike Stomp",
+  "ability.roundabout.spike_stomp.desc": "After falling for enough time, activating this skill makes you slam into the ground, briefly dazing mobs it hits and inflicting bleed.",
 
   "ability.roundabout.hair_grab": "Hair Grab",
   "ability.roundabout.hair_grab.desc": "Pulls a mob in towards you.",
@@ -3287,7 +3302,7 @@
   "unlock_skin.roundabout.white_album.yuki": "Yuki-onna Skin Unlocked!",
   "unlock_skin.roundabout.green_day.silence": "Silence Skin Absorbed",
   "unlock_skin.roundabout.planet_waves_cosmic": "Cosmic Skin Unlocked",
-  "unlock_skin.roundabout.killer_queen.minesweeper": "Killer Queen: Minesweeper Skin Unlocked",
+  "unlock_skin.roundabout.killer_queen.samurai": "Samurai Skins Unlocked!",
   "unlock_skin.roundabout.diver_down.scuba_diver": "Diver Down: Scuba Diver Skin Unlocked",
   "unlock_skin.roundabout.purple_haze.plague": "Purple Haze: Plague Skin Unlocked",
 
@@ -4477,6 +4492,8 @@
 
   "config.roundabout.diveAttackCooldown.name": "Dive Cooldown",
   "config.roundabout.diveAttackCooldown.desc": "The cooldown of vampire powers dive attack.",
+  "config.roundabout.spikeDiveAttackCooldown.name": "Dive Cooldown",
+  "config.roundabout.spikeDiveAttackCooldown.desc": "The cooldown of Walking Heart's dive attack.",
   "config.roundabout.hairGrabCooldown.name": "Hair Grab Cooldown",
   "config.roundabout.hairGrabCooldown.desc": "The cooldown of vampire hair grab.",
   "config.roundabout.spikeAttackCooldown.name": "Spike Attack Cooldown",

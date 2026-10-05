@@ -53,6 +53,7 @@ import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.material.LavaFluid;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.apache.logging.log4j.core.pattern.AbstractStyleNameConverter;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -674,15 +675,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         }
 
         if(this.getStandEntity(self) != null){
-            /*if(moveMode == 3 && this.blackSabbathTargets.isEmpty()){
-                if(tickDown2 == -10) {
-                    if (this.getStandEntity(self) instanceof BlackSabbathEntity bs) {
-                        bs.setHunting(false);
-                        setTickDown2(40);
-                    }
-                }*/
             if (this.getStandEntity(self) instanceof BlackSabbathEntity bs) {
-                System.out.println(moveMode);
                     if (moveMode == 3 && bs.getMoveMode() == 1 && (!this.isClient() && !bs.getThrowable())) {
                         if (!bs.getTridentLoyalty()) {
                             killTargetListServerToClient();
@@ -763,11 +756,25 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                 }
             }
         }
+        if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){
+            if(be.getGrabbing() != null) {
+                if (getGrabbed() != be.level().getEntity(be.getGrabbing())) {
+                    if (be.level().getEntity(be.getGrabbing()) instanceof LivingEntity l){
+                        setGrabbed(l);
+                }
+                }
+            }
+        }
 
         if(this.getStandEntity(self) == null){
             if(moveMode != 0 && moveMode != 3) {
                 setNull();
                 active = false;
+            }
+
+            if(this.getGrabbed() != null){
+                ((StandUser)getGrabbed()).roundabout$setGrabbedSoul(false);
+                setGrabbed(null);
             }
         } else {
             if(active && moveMode == 0){
@@ -877,6 +884,13 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         getValidPlacement();
         cycleThroughBlackSabbathTargets();
         super.tickPower();
+    }
+    LivingEntity grabbed = null;
+    private LivingEntity getGrabbed(){
+        return grabbed;
+    }
+    private void setGrabbed(Entity ent){
+        if(ent instanceof LivingEntity lent){grabbed = lent;}else if (ent == null){grabbed = null;}
     }
 
     void spawnTp(LivingEntity le){

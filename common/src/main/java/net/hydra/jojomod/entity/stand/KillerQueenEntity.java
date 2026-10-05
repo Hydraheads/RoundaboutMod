@@ -99,7 +99,6 @@ public class KillerQueenEntity extends FollowingStandEntity {
     public final AnimationState itemGrab = new AnimationState();
     public final AnimationState itemThrow = new AnimationState();
     public final AnimationState detonate = new AnimationState();
-    public final AnimationState thirdBomb = new AnimationState();
     public final AnimationState mobBombPlant= new AnimationState();
     public final AnimationState mobBombPlant2 = new AnimationState();
     public final AnimationState bubbleLaunch = new AnimationState();

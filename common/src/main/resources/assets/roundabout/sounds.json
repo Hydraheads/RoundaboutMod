@@ -947,6 +947,18 @@
       "roundabout:killer_queen_explosion_3"
     ]
   },
+  "btd_windup" : {
+    "subtitle": "sounds.roundabout.btd_windup",
+    "sounds": [
+      "roundabout:btd_windup"
+    ]
+  },
+  "btd_windup_line" : {
+    "subtitle": "sounds.roundabout.btd_windup_line",
+    "sounds": [
+      "roundabout:btd_windup_line"
+    ]
+  },
   "btd_normal_reset": {
     "subtitle": "sounds.roundabout.btd_normal_reset",
     "sounds": [
@@ -1007,6 +1019,67 @@
       "roundabout:kq_mob_plant"
     ]
   },
+  "kq_samurai_summon" : {
+    "subtitle": "sounds.roundabout.summon_samurai_queen",
+    "sounds": [
+      "roundabout:kq_samurai_summon"
+    ]
+  },
+  "kq_samurai_block" : {
+    "subtitle": "sounds.roundabout.kq_block_plant",
+    "sounds": [
+      "roundabout:kq_samurai_block"
+    ]
+  },
+  "kq_samurai_mob" : {
+    "subtitle": "sounds.roundabout.kq_mob_plant",
+    "sounds": [
+      "roundabout:kq_samurai_mob"
+    ]
+  },
+  "kq_samurai_btd_noise" : {
+    "subtitle": "sounds.roundabout.bites_the_dust_noise",
+    "sounds": [
+      "roundabout:kq_samurai_btd_noise"
+    ]
+  },
+  "kq_samurai_sheathe" : {
+    "subtitle": "sounds.roundabout.kq_samurai_sheathe",
+    "sounds": [
+      "roundabout:kq_samurai_sheathe"
+    ]
+  },
+  "kq_samurai_stab" : {
+    "subtitle": "sounds.roundabout.kq_samurai_stab",
+    "sounds": [
+      "roundabout:kq_samurai_stab"
+    ]
+  },
+  "kq_samurai_slash" : {
+    "subtitle": "sounds.roundabout.kq_samurai_slash",
+    "sounds": [
+      "roundabout:kq_samurai_slash"
+    ]
+  },
+  "kq_samurai_whoosh_1" : {
+    "subtitle": "sounds.roundabout.kq_samurai_whoosh",
+    "sounds": [
+      "roundabout:kq_samurai_whoosh_1"
+    ]
+  },
+  "kq_samurai_whoosh_2" : {
+    "subtitle": "sounds.roundabout.kq_samurai_whoosh",
+    "sounds": [
+      "roundabout:kq_samurai_whoosh_2"
+    ]
+  },
+  "kq_samurai_sha" : {
+    "subtitle": "sounds.roundabout.kq_samurai_sha",
+    "sounds": [
+      "roundabout:kq_samurai_sha"
+    ]
+  },
+
   "kq_plant_windup" : {
     "subtitle": "sounds.roundabout.kq_plant_windup",
     "sounds": [
@@ -3985,6 +4058,13 @@
       "roundabout:wsvoice_acid_toss"
     ]
   },
+  "kira4_btd_activation": {
+    "subtitle": "sounds.roundabout.kira4_btd_activation",
+    "sounds" : [
+      "roundabout:kira4_btd_activation"
+    ]
+  },
+
   "kira4_damage_1": {
     "subtitle": "sounds.roundabout.kira4_damage",
     "sounds" : [
@@ -4007,6 +4087,12 @@
     "subtitle": "sounds.roundabout.kira4_damage",
     "sounds" : [
       "roundabout:kira4_damage_4"
+    ]
+  },
+  "add_stray_cat_sfx": {
+    "subtitle": "sounds.roundabout.add_stray_cat_sfx",
+    "sounds" : [
+      "roundabout:add_stray_cat_sfx"
     ]
   },
   "kira4_damage_5": {

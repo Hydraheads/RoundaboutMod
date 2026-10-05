@@ -131,6 +131,7 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
             this.setBreed(tag.getByte(TAG_SKIN));
         }
     }
+
     @Override
     public boolean isInLove() {
         return false;
