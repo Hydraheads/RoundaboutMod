@@ -2159,9 +2159,8 @@ public class PowersKillerQueen extends NewPunchingStand {
             } else {
                 refreshArms();
 
-                if (attackTimeDuring == 6 && !(this.getSelf() instanceof Player PE &&
+                if (attackTimeDuring == 4 && !(this.getSelf() instanceof Player PE &&
                         ((IPlayerEntity)PE).roundabout$getMaskInventory().getItem(1).is(ModItems.BLANK_MASK))) {
-                    playSoundsIfNearby(BTD_DAY_WINDUP_LINE, 32, false);
 
                     if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof KiraPartFourVoice KV) {
                         if (!KV.inTheMiddleOfTalking()) {
@@ -4555,7 +4554,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             return 0.8f;
         }
         if (soundChoice == BTD_DAY_WINDUP_LINE) {
-            return 0.8f;
+            //return 0.9f;
         }
 
         return super.getSoundVolumeFromByte(soundChoice);
