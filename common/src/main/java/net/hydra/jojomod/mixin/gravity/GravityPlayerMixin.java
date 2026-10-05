@@ -62,6 +62,20 @@ public abstract class GravityPlayerMixin extends LivingEntity {
 
     @Shadow public abstract void awardStat(ResourceLocation resourceLocation, int i);
 
+    @Inject(method = "getStandingEyeHeight(Lnet/minecraft/world/entity/Pose;Lnet/minecraft/world/entity/EntityDimensions;)F",
+            at = @At("RETURN"), cancellable = true)
+    private void roundabout$khnumPlayerEyeHeight(Pose pose, EntityDimensions dimensions,
+                                                 CallbackInfoReturnable<Float> cir) {
+        float heightScale = switch (((StandUser) (Object) this).roundabout$getKhnumForm()) {
+            case 1 -> 1.3F;
+            case 3 -> 0.75F;
+            default -> 1.0F;
+        };
+        if (heightScale != 1.0F) {
+            cir.setReturnValue(cir.getReturnValue() * heightScale);
+        }
+    }
+
     @Inject(method = "getDimensions(Lnet/minecraft/world/entity/Pose;)Lnet/minecraft/world/entity/EntityDimensions;",
             at = @At("RETURN"), cancellable = true)
     private void roundabout$khnumPlayerDimensions(Pose pose, CallbackInfoReturnable<EntityDimensions> cir) {
