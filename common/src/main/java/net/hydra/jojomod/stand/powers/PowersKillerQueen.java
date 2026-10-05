@@ -1077,7 +1077,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     public boolean canInterruptPower(DamageSource sauce, Entity interrupter){
         if (getActivePower() == BITES_THE_DUST_DAY) {
             int cdr = ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatActivationCooldown;
-            
+
             this.setCooldown(PowerIndex.SKILL_2, cdr);
             return true;
         }
@@ -1252,8 +1252,10 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     @Override
-    public float inputSpeedModifiers(float basis){
-        if (this.activePower == ITEM_HOLDING) {
+    public float inputSpeedModifiers(float basis) {
+        if (activePower == BITES_THE_DUST_DAY){
+            basis*=0.6f;
+        }else if (this.activePower == ITEM_HOLDING) {
             basis*=0.7f;
         }else if (this.activePower == ITEM_CHARGE) {
             basis*=0.5f;
@@ -4648,6 +4650,11 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     // hightlights entity things :0
     public boolean highlightsEntity(Entity ent,Player player){
+        if (MainUtil.getEntityIsTrulyInvisible(ent) || (ent instanceof LivingEntity LE
+                && LE.getEffect(MobEffects.INVISIBILITY) != null)) {
+            return false;
+        }
+
         if (inBitesTheDustMode() && bitesTheDustPlantedEntity != null) {
             if (isAffectedByBitesTheDust(ent) && self != ent
                     && ent.distanceTo(bitesTheDustPlantedEntity) < btdRange && bitesTheDustPlantedEntity != ent) {
@@ -4670,7 +4677,10 @@ public class PowersKillerQueen extends NewPunchingStand {
                     }
                 } else { return ent == this.getBombEntity() && PowerTypes.isExistentiallyElsewhereTogether(ent, self); }
             }
-            if (this.currentBombStatus == BOMB_BUBBLE && this.isGuarding() || this.activePower == PowerIndex.POWER_2_BLOCK) {
+            boolean shouldRenderBubbleTarget = (currentBombStatus == BOMB_BUBBLE && this.isGuarding() || this.activePower == PowerIndex.POWER_2_BLOCK)
+                    && this.bombBubble != null && !bombBubble.isRemoved();
+
+            if (shouldRenderBubbleTarget) {
                 Entity target = MainUtil.getTargetEntity(this.self, 40);
                 if (this.canBubbleTarget(target)) {
                     return ent == target && !(ent instanceof StandEntity);
@@ -4688,10 +4698,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
             }
 
-            return ent == targetBuffer && ent.isAlive() && !(ent instanceof StandEntity)
-                    || (this.bombBubble != null && this.bombBubble.getTarget() == ent && this.bombBubble.getTarget().isAlive()
-                    && !(MainUtil.getEntityIsTrulyInvisible(ent) || (ent instanceof LivingEntity LE
-                    && LE.getEffect(MobEffects.INVISIBILITY) != null)));
+            return (ent == targetBuffer && ent.isAlive() && !(ent instanceof StandEntity) && shouldRenderBubbleTarget
+                    || (this.bombBubble != null && this.bombBubble.getTarget() == ent && this.bombBubble.getTarget().isAlive()));
         }
         return false;
     }
