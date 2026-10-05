@@ -51,6 +51,14 @@ public abstract class PowersMultiPlayerGameMode implements IMultiplayerGameMode 
         }
 
     }
+
+    @Inject(method = "getPickRange()F", at = @At("RETURN"), cancellable = true)
+    private void roundabout$khnumTallMiningReach(CallbackInfoReturnable<Float> cir) {
+        if (this.minecraft.player instanceof StandUser user && user.roundabout$getKhnumForm() == 1) {
+            cir.setReturnValue(cir.getReturnValue() + 0.5F);
+        }
+    }
+
     /**Prevents stand mining from making your vanilla attack cooldown reset*/
     @Inject(method = "stopDestroyBlock()V", at = @At("HEAD"), cancellable = true)
     public void roundabout$stopDestroyBlock(CallbackInfo ci) {

@@ -1505,7 +1505,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                 byte form = khnumUser.roundabout$getKhnumForm();
                 if (form == 1) $$1.scale(0.85F, 1.3F, 0.85F);
                 else if (form == 2) $$1.scale(1.65F, 1.0F, 1.65F);
-                else if (form == 3) $$1.scale(0.75F, 0.75F, 0.75F);
+                else if (form == 3) $$1.scale(0.75F, 0.62F, 0.75F);
                 ci.cancel();
 
             }
@@ -1517,7 +1517,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         float bodyHeight = 1.0F + (height - 237) * 0.001F;
         if (form == 1) { bodyWidth *= 0.85F; bodyHeight *= 1.3F; }
         else if (form == 2) bodyWidth *= 1.65F;
-        else if (form == 3) { bodyWidth *= 0.75F; bodyHeight *= 0.75F; }
+        else if (form == 3) { bodyWidth *= 0.75F; bodyHeight *= 0.62F; }
         if (bodyWidth != 1.0F || bodyHeight != 1.0F) {
             $$1.scale(bodyWidth, bodyHeight, bodyWidth);
         }
