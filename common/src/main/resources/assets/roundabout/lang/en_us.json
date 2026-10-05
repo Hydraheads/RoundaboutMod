@@ -1916,6 +1916,11 @@
 
   "ability.roundabout.spike_stomp": "Spike Stomp",
   "ability.roundabout.spike_stomp.desc": "After falling for enough time, activating this skill makes you slam into the ground, briefly dazing mobs it hits and inflicting bleed.",
+  "ability.roundabout.spike_push": "Spike Push",
+  "ability.roundabout.spike_push.desc": "If facing a  block, pushes you in the direction opposite the block.",
+  "ability.roundabout.spike_pull": "Spike Pull",
+  "ability.roundabout.spike_pull.desc": "If facing a  block, pulls you towards the block.",
+
 
   "ability.roundabout.hair_grab": "Hair Grab",
   "ability.roundabout.hair_grab.desc": "Pulls a mob in towards you.",
@@ -4490,6 +4495,8 @@
   "config.roundabout.getMiningTierVampire.name": "Mining Tier",
   "config.roundabout.getMiningTierVampire.desc": "Tier 0 is the default, it does not replace tools for harvesting blocks. Tier 1 is wood tier, tier 2 is stone tier, tier 3 is iron tier, and tier 4 is diamond tier.",
 
+  "config.roundabout.spikePullCooldown.name": "Push/Pull Cooldown",
+  "config.roundabout.spikePullCooldown.desc": "The cooldown of walking heart's movement ability with spikes.",
   "config.roundabout.diveAttackCooldown.name": "Dive Cooldown",
   "config.roundabout.diveAttackCooldown.desc": "The cooldown of vampire powers dive attack.",
   "config.roundabout.spikeDiveAttackCooldown.name": "Dive Cooldown",
