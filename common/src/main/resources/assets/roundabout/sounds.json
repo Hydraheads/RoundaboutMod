@@ -947,6 +947,18 @@
       "roundabout:killer_queen_explosion_3"
     ]
   },
+  "btd_windup" : {
+    "subtitle": "sounds.roundabout.btd_windup",
+    "sounds": [
+      "roundabout:btd_windup"
+    ]
+  },
+  "btd_windup_line" : {
+    "subtitle": "sounds.roundabout.btd_windup_line",
+    "sounds": [
+      "roundabout:btd_windup_line"
+    ]
+  },
   "btd_normal_reset": {
     "subtitle": "sounds.roundabout.btd_normal_reset",
     "sounds": [
@@ -4046,6 +4058,13 @@
       "roundabout:wsvoice_acid_toss"
     ]
   },
+  "kira4_btd_activation": {
+    "subtitle": "sounds.roundabout.kira4_btd_activation",
+    "sounds" : [
+      "roundabout:kira4_btd_activation"
+    ]
+  },
+
   "kira4_damage_1": {
     "subtitle": "sounds.roundabout.kira4_damage",
     "sounds" : [
