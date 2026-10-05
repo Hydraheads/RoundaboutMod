@@ -18,6 +18,7 @@ import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.ModificationMaskItem;
 import net.hydra.jojomod.stand.powers.*;
+import net.hydra.jojomod.util.SkinUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.ModelLayers;
@@ -1475,6 +1476,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$scale(AbstractClientPlayer $$0, PoseStack $$1, float $$2, CallbackInfo ci) {
         IPlayerEntity ple = ((IPlayerEntity) $$0);
+        StandUser khnumUser = (StandUser) $$0;
         ItemStack visage = ple.roundabout$getMaskSlot();
         ShapeShifts shift = ShapeShifts.getShiftFromByte(ple.roundabout$getShapeShift());
         if (shift == ShapeShifts.OVA) {
@@ -1500,14 +1502,32 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                     Vector3f scale =vd.scale();
                     $$1.scale(scale.x, scale.y, scale.z);
                 }
+                byte form = khnumUser.roundabout$getKhnumForm();
+                if (form == 1) $$1.scale(0.85F, 1.3F, 0.85F);
+                else if (form == 2) $$1.scale(1.65F, 1.0F, 1.65F);
+                else if (form == 3) $$1.scale(0.75F, 0.75F, 0.75F);
                 ci.cancel();
 
             }
+        }
+        byte form = khnumUser.roundabout$getKhnumForm();
+        int height = khnumUser.roundabout$getKhnumHeight();
+        int width = khnumUser.roundabout$getKhnumWidth();
+        float bodyWidth = 1.0F + (width - 135) * 0.001F;
+        float bodyHeight = 1.0F + (height - 237) * 0.001F;
+        if (form == 1) { bodyWidth *= 0.85F; bodyHeight *= 1.3F; }
+        else if (form == 2) bodyWidth *= 1.65F;
+        else if (form == 3) { bodyWidth *= 0.75F; bodyHeight *= 0.75F; }
+        if (bodyWidth != 1.0F || bodyHeight != 1.0F) {
+            $$1.scale(bodyWidth, bodyHeight, bodyWidth);
         }
     }
     @Inject(method = "getTextureLocation(Lnet/minecraft/client/player/AbstractClientPlayer;)Lnet/minecraft/resources/ResourceLocation;",
             at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$getTextureLocation(AbstractClientPlayer $$0, CallbackInfoReturnable<ResourceLocation> cir) {
+        if ($$0 instanceof StandUser user && user.roundabout$isDisguised()) {
+            cir.setReturnValue(SkinUtil.getSkin(user.roundabout$getDisguiseProfile()).texture());
+        }
     }
     @Shadow
     public ResourceLocation getTextureLocation(AbstractClientPlayer var1) {

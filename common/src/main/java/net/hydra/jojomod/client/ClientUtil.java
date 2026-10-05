@@ -1715,6 +1715,8 @@ public class ClientUtil {
     public static void openNailScreen(){Minecraft.getInstance().setScreen(new NailColorChangeScreen());}
     public static void openDiscStealScreen(){Minecraft.getInstance().setScreen(new DiscStealScreen());}
     public static void openWhitesnakeDisguiseScreen(){Minecraft.getInstance().setScreen(new WhitesnakeDisguiseScreen());}
+    public static void openKhnumDisguiseScreen(){Minecraft.getInstance().setScreen(new KhnumDisguiseScreen());}
+    public static void openKhnumVisageScreen(){Minecraft.getInstance().setScreen(new ModificationVisageScreen(true));}
     public static void openMemoryReadingScreen(ItemStack stack, InteractionHand hand){
         Minecraft.getInstance().setScreen(new MemoryReadingScreen(stack, hand));
     }

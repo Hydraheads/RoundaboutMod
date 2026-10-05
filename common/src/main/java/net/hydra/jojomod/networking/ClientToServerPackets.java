@@ -16,12 +16,14 @@ import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersKingCrimson;
+import net.hydra.jojomod.stand.powers.PowersKhnum;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.event.powers.DiverDownDisguiseService;
 import net.hydra.jojomod.event.powers.whitesnake.disc.MemoryDiscConversionService;
 import net.hydra.jojomod.event.powers.whitesnake.WhitesnakeControlInventory;
 import net.hydra.jojomod.event.powers.whitesnake.WhitesnakeDisguiseService;
+import net.hydra.jojomod.event.powers.khnum.KhnumDisguiseService;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -93,6 +95,7 @@ public class ClientToServerPackets {
             HandshakeCooldowns("handshake_cooldowns"),
             GunShot("gun_shot"),
             WhitesnakeDisguise("whitesnake_disguise"),
+            KhnumDisguise("khnum_disguise"),
             WhitesnakeGunReload("whitesnake_gun_reload"),
             WhitesnakeMemoryDiscConversion("whitesnake_memory_disc_conversion"),
             DiverDownDisguise("diver_down_disguise"),
@@ -448,7 +451,9 @@ public class ClientToServerPackets {
                         Vector3f vec = (Vector3f) vargs[1];
                         ItemStack stack = sender.getMainHandItem();
 
-                        if (stack.getItem() instanceof ModificationMaskItem) {
+                        if (((StandUser) sender).roundabout$getStandPowers() instanceof PowersKhnum) {
+                            ((StandUser) sender).roundabout$setKhnumVisage((int) vec.x, (int) vec.y, (int) vec.z);
+                        } else if (stack.getItem() instanceof ModificationMaskItem) {
                             stack.getOrCreateTagElement("modifications").putInt("height", (int) vec.x);
                             stack.getOrCreateTagElement("modifications").putInt("width", (int) vec.y);
                             stack.getOrCreateTagElement("modifications").putInt("head", (int) vec.z);
@@ -677,6 +682,9 @@ public class ClientToServerPackets {
                 }
                 if (message.equals(MESSAGES.WhitesnakeDisguise.value)) {
                     WhitesnakeDisguiseService.request(sender, (String) vargs[0]);
+                }
+                if (message.equals(MESSAGES.KhnumDisguise.value)) {
+                    KhnumDisguiseService.request(sender, (String) vargs[0]);
                 }
                 if (message.equals(MESSAGES.WhitesnakeGunReload.value)) {
                     WhitesnakeControlInventory.reload(sender);

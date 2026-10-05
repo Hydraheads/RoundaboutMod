@@ -10,6 +10,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.visages.mobs.PlayerModifiedNPC;
 import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.VisageStoreEntry;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.ModificationMaskItem;
@@ -59,17 +60,32 @@ public class ModificationVisageScreen extends Screen {
     public boolean zHeld;
 
     public ItemStack visage;
+    private final boolean khnumMode;
 
     private final List<CorpseBagScreen.PoseSlot> slots = Lists.newArrayList();
 
     public ModificationVisageScreen() {
         super(GameNarrator.NO_TITLE);
         this.currentlyHovered = null;
+        this.khnumMode = false;
+    }
+    public ModificationVisageScreen(boolean khnumMode) {
+        super(GameNarrator.NO_TITLE);
+        this.currentlyHovered = null;
+        this.khnumMode = khnumMode;
+        Player player = Minecraft.getInstance().player;
+        if (khnumMode && player != null) {
+            StandUser user = (StandUser) player;
+            visageHeight = user.roundabout$getKhnumHeight();
+            visageWidth = user.roundabout$getKhnumWidth();
+            visageHeadSize = user.roundabout$getKhnumHead();
+        }
     }
     int slot = 0;
     public ModificationVisageScreen(ItemStack stack, int slot) {
         super(GameNarrator.NO_TITLE);
         this.currentlyHovered = null;
+        this.khnumMode = false;
         visage = stack;
         slot = slot;
 
@@ -157,6 +173,19 @@ public class ModificationVisageScreen extends Screen {
         int l;
 
         if (isSurelyHovering( this.width / 2-30,  this.height / 2 + 40, 60, 8, mouseX, mouseY)) {
+
+            if (khnumMode) {
+                Player player = Minecraft.getInstance().player;
+                if (player != null) {
+                    ModMessageEvents.sendToServer(
+                            ClientToServerPackets.StandPowerPackets.MESSAGES.ModVisageConfigure.value,
+                            (byte) 0,
+                            new Vector3f(visageHeight, visageWidth, visageHeadSize)
+                    );
+                    this.minecraft.setScreen(null);
+                }
+                return true;
+            }
 
             ItemStack delStack = this.visage.copy();
             if (!delStack.getOrCreateTagElement("modifications").contains("height")){
@@ -340,7 +369,9 @@ public class ModificationVisageScreen extends Screen {
         guiGraphics.blit(CORPSE_CHOOSER_LOCATION, k, l, 0.0f, 0.0f, 113, 26, 256, 256);
         guiGraphics.pose().popPose();
         super.render(guiGraphics, mouseX, mouseY, delta);
-        guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.mod_visage_gui"), this.width / 2 -2, this.height / 2 - 31 - 76, -1);
+        guiGraphics.drawCenteredString(this.font, Component.translatable(khnumMode
+                ? "roundabout.khnum.visage.title" : "roundabout.cinderella.mod_visage_gui"),
+                this.width / 2 -2, this.height / 2 - 31 - 76, -1);
 
 
 
@@ -560,4 +591,3 @@ public class ModificationVisageScreen extends Screen {
     }
 
 }
-

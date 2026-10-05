@@ -387,6 +387,13 @@ public class C2SPacketUtil {
         );
     }
 
+    public static void khnumDisguise(String name) {
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.KhnumDisguise.value,
+                name
+        );
+    }
+
     public static void whitesnakeGunReload() {
         ModMessageEvents.sendToServer(
                 ClientToServerPackets.StandPowerPackets.MESSAGES.WhitesnakeGunReload.value
