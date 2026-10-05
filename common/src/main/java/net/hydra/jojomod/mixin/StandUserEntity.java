@@ -4184,8 +4184,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 this.rdbt$isRedirectingDamage = false;
             }
         }
-        // diver down damage breaking disguise
-        if (!entity.level().isClientSide() && $$1 > 0 && this.roundabout$isDisguised()) {
+        // Diver Down disguises break when hit; Khnum's self-disguise persists until reset or stand change.
+        if (!entity.level().isClientSide() && $$1 > 0 && this.roundabout$isDisguised()
+                && !(this.roundabout$getStandPowers() instanceof PowersKhnum)) {
             this.roundabout$clearDisguise();
         }
         if ($$0.getEntity() instanceof Player pe) {
