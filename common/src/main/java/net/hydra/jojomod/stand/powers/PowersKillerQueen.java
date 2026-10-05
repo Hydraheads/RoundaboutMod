@@ -2833,9 +2833,9 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
         }
 
-        if (!preBTD) {
-            this.syncBombStatus(BOMB_NONE);
-        }
+
+        this.syncBombStatus(BOMB_NONE);
+
 
     	return true;
     }
