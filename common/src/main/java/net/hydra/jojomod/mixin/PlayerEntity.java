@@ -987,11 +987,11 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                     roundabout$getVoiceData().playIfHurt($$0);
                 }
             }
-            if (this.getUseItem() != null && this.getUseItem().is(ModItems.NEW_LOCACACA)){
-                if ($$0.getEntity() != null){
-                    stopUsingItem();
-                }
-            }
+//            if (this.getUseItem() != null && this.getUseItem().is(ModItems.NEW_LOCACACA)){
+//                if ($$0.getEntity() != null){
+//                    stopUsingItem();
+//                }
+//            }
         }
     }
 

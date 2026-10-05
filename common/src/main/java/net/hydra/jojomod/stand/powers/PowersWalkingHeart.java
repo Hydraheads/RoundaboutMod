@@ -1683,11 +1683,13 @@ public class PowersWalkingHeart extends NewDashPreset {
             if (Level > 1 || bypass) {
                 $$1.add(WalkingHeartEntity.MODEL_SKIN);
                 $$1.add(WalkingHeartEntity.PURPLE_SKIN);
+                $$1.add(WalkingHeartEntity.MELON_SKIN);
             }if (Level > 2 || bypass) {
                 $$1.add(WalkingHeartEntity.SCARECROW_SKIN);
                 $$1.add(WalkingHeartEntity.VALENTINE_SKIN);
                 $$1.add(WalkingHeartEntity.VERDANT_SKIN);
             }if (Level > 3 || bypass) {
+                $$1.add(WalkingHeartEntity.ABYSSAL_SKIN);
                 $$1.add(WalkingHeartEntity.PALE_SKIN);
                 $$1.add(WalkingHeartEntity.GOTHIC_SKIN);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
@@ -1721,6 +1723,10 @@ public class PowersWalkingHeart extends NewDashPreset {
             return Component.translatable(  "skins.roundabout.walking_heart.spider");
         } else if (skinId == WalkingHeartEntity.SCARECROW_SKIN){
             return Component.translatable(  "skins.roundabout.walking_heart.scarecrow");
+        } else if (skinId == WalkingHeartEntity.ABYSSAL_SKIN){
+            return Component.translatable(  "skins.roundabout.walking_heart.abyssal");
+        } else if (skinId == WalkingHeartEntity.MELON_SKIN){
+            return Component.translatable(  "skins.roundabout.walking_heart.melon");
         }
         return Component.translatable(  "skins.roundabout.walking_heart.base");
     }
