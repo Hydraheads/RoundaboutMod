@@ -754,14 +754,13 @@ public class SheerHeartAttackEntity extends StandEntity {
 			ExplosionUtil.explodeEffects(this.blockTarget.getCenter(), this.level(), KQ.getExplosionParticle(), new Vec3(range*0.8f, range*0.9f, range*0.8f), (int)(22*range));
 			level().playSound(null, this.blockTarget, KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
 
-			if (ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction &&
-					this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) &&
-					this.getUser() instanceof Player) {
-
+			if (canDestroyBlocks()) {
 				BlockState info =this.level().getBlockState(this.blockTarget);
 				if (!(ExplosionUtil.isBlockBlackListed(info) || (MainUtil.confirmIsOre(info))
 						|| info.isAir() || info.is(Blocks.BARRIER) || info.is(Blocks.BEDROCK)
-						|| !MainUtil.isDestructible2(level(), this.blockTarget, info))) {
+						|| !MainUtil.isDestructible2(level(), this.blockTarget, info)
+						|| MainUtil.isBlockDestructionBlacklisted(info))
+				) {
 
 					boolean shouldDrop = !info.requiresCorrectToolForDrops();
 					this.level().destroyBlock(this.blockTarget, shouldDrop);
@@ -830,6 +829,12 @@ public class SheerHeartAttackEntity extends StandEntity {
 		this.getNavigation().stop();
 	}
 
+	public boolean canDestroyBlocks() {
+		return ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction &&
+				level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) &&
+				this.getUser() instanceof Player PL && MainUtil.getIsGamemodeApproriateForGrief(PL);
+	}
+
 	public void shaMiningMove() {
 		if (explosionMiningTicks > 16) {
 			shaStopMove();
@@ -858,7 +863,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 				ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
 		if (hitResult.getType() == HitResult.Type.BLOCK && explosionMiningTicks <= 0) {
 			ExplosionUtil.explodeEffects(hitResult.getBlockPos().getCenter(), this.level(), KQ.getExplosionParticle(), new Vec3(0.8f, 0.8f, 0.8f), 8);
-			ExplosionUtil.explodeBlocksBase(hitResult.getBlockPos().above(), level(), 1.2f, true, getUser());
+			if (canDestroyBlocks()) {
+				ExplosionUtil.explodeBlocksBase(hitResult.getBlockPos().above(), level(), 1.2f, true, getUser());
+			}
 			level().playSound(null, hitResult.getBlockPos(), KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
 			explosionMiningTicks = explosionMiningTicksMax;
 			explosions++;
@@ -867,7 +874,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 			explosionMiningIntervalTicks--;
 			if (explosionMiningIntervalTicks <= 0) {
 				ExplosionUtil.explodeEffects(hitResult.getBlockPos().getCenter(), this.level(), KQ.getExplosionParticle(), new Vec3(0.8f, 0.8f, 0.8f), 6);
-				ExplosionUtil.explodeBlocksBase(hitResult.getBlockPos().above(), level(), 1.2f, true, getUser());
+				if (canDestroyBlocks()) {
+					ExplosionUtil.explodeBlocksBase(hitResult.getBlockPos().above(), level(), 1.2f, true, getUser());
+				}
 				level().playSound(null, hitResult.getBlockPos(), KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
 				explosions++;
 				explosionMiningIntervalTicks = explosionMiningIntervalTicksMax;
