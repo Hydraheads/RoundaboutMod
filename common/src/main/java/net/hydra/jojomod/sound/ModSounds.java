@@ -832,6 +832,9 @@ public class ModSounds {
     public static final String KIRA4_BTD_ACTIVATION = "kira4_btd_activation";
     public static final ResourceLocation KIRA4_BTD_ACTIVATION_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_BTD_ACTIVATION);
     public static SoundEvent KIRA4_BTD_ACTIVATION_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_BTD_ACTIVATION_ID);
+    public static final String ADD_STRAY_CAT = "add_stray_cat_sfx";
+    public static final ResourceLocation ADD_STRAY_CAT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ADD_STRAY_CAT);
+    public static SoundEvent ADD_STRAY_CAT_EVENT = SoundEvent.createVariableRangeEvent(ADD_STRAY_CAT_ID);
 
 
     public static final String KILLER_QUEEN_PUNCH_1 = "killer_queen_punch_1";

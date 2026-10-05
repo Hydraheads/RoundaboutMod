@@ -2576,7 +2576,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     this.saveDiscAndSync();
 
                     StrayCatForSure.discard();
-                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.KILLER_QUEEN_BTD_PLANTED_EVENT, SoundSource.PLAYERS, 1.0F, 1.0f);
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.ADD_STRAY_CAT_EVENT, SoundSource.PLAYERS, 0.9F, 1.0f);
                     return true;
                 }
             }
@@ -2609,7 +2609,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     syncCanStrayCatStatus(true);
                     this.saveDiscAndSync();
 
-                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.KILLER_QUEEN_BTD_PLANTED_EVENT, SoundSource.PLAYERS, 1.0F, 1.0f);
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.ADD_STRAY_CAT_EVENT, SoundSource.PLAYERS, 1.0F, 1.0f);
                     return true;
                 }
             }

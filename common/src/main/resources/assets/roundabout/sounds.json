@@ -4089,6 +4089,12 @@
       "roundabout:kira4_damage_4"
     ]
   },
+  "add_stray_cat_sfx": {
+    "subtitle": "sounds.roundabout.add_stray_cat_sfx",
+    "sounds" : [
+      "roundabout:add_stray_cat_sfx"
+    ]
+  },
   "kira4_damage_5": {
     "subtitle": "sounds.roundabout.kira4_damage",
     "sounds" : [

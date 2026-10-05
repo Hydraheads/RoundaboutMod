@@ -411,6 +411,8 @@ public class ForgeSounds {
         register(ModSounds.KQ_BTD_WINDUP_LINE, ModSounds.KQ_BTD_WINDUP_LINE_ID);
     public static final RegistryObject<SoundEvent> KIRA4_BTD_ACTIVATION_EVENT =
         register(ModSounds.KIRA4_BTD_ACTIVATION, ModSounds.KIRA4_BTD_ACTIVATION_ID);
+    public static final RegistryObject<SoundEvent> ADD_STRAY_CAT_EVENT =
+        register(ModSounds.ADD_STRAY_CAT, ModSounds.ADD_STRAY_CAT_ID);
 
     public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_PUNCH_1_EVENT =
             register(ModSounds.KQ_MINESWEEPER_PUNCH_1, ModSounds.KQ_MINESWEEPER_PUNCH_1_ID);
