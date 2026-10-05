@@ -687,7 +687,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		float range = explosionRadius;
 		float cap = 45;
 		if (warm > cap) {
-			range += Math.min(0.60f * ((warm - cap) / 40), 1.25f);
+			range += Math.min(0.70f * ((warm - cap) / 60), 1.45f);
 		}
 
 		return range;
