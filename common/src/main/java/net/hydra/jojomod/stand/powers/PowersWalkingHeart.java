@@ -56,6 +56,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
@@ -227,16 +228,31 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
     public void clientPull(){
-        if (!onCooldown(PowerIndex.GLOBAL_DASH)) {
+        if (!onCooldown(PowerIndex.GLOBAL_DASH) && hasWalkingSpot()) {
             clientBoth();
             //((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_EXTRA, true);
             tryPowerPacket(PowerIndex.POWER_2_EXTRA);
+            BlockHitResult result = getWalkingSpot();
+            Vec3 db = RotationUtil.distanceBetween(result.getLocation().subtract(0,0.001,0),self).normalize().scale(3);;
+            self.setDeltaMovement(
+                    db.x * -0.25,
+                    db.y * -0.25,
+                    db.z * -0.25
+            );
         }
     }
     public void clientPush(){
-        if (!onCooldown(PowerIndex.GLOBAL_DASH)) {
+        if (!onCooldown(PowerIndex.GLOBAL_DASH) && hasWalkingSpot()) {
             clientBoth();
             tryPowerPacket(PowerIndex.POWER_3_EXTRA);
+            BlockHitResult result = getWalkingSpot();
+
+            Vec3 db = RotationUtil.distanceBetween(result.getLocation().subtract(0,0.2,0),self).normalize().scale(3);
+            self.setDeltaMovement(
+                    db.x * 0.25,
+                    db.y * 0.25,
+                    db.z * 0.25
+            );
         }
     }
     public void clientBoth(){
@@ -256,6 +272,19 @@ public class PowersWalkingHeart extends NewDashPreset {
         serverBoth();
         playSoundIfPossible(self.level(),null, self.getX(), self.getY(),
                 self.getZ(), ModSounds.WH_PUSH_EVENT, self.getSoundSource(), 2F, 1.0F);
+    }
+
+
+    public BlockHitResult getWalkingSpot(){
+        return MainUtil.getAheadVecRender(self, 7, 1F);
+    }
+    public boolean hasWalkingSpot(){
+        BlockHitResult result = MainUtil.getAheadVecRender(self, 7, 1F);
+        BlockState state = self.level().getBlockState(result.getBlockPos());
+        if (state.isSolid()){
+            return true;
+        }
+        return false;
     }
 
     public void serverBoth(){
@@ -566,6 +595,11 @@ public class PowersWalkingHeart extends NewDashPreset {
         if (slot == 1 && (isBlockedByStone()  || (getShootTicks() > 0 && !inCombatMode())))
             return true;
         if ((slot == 2 || slot == 3) && inCombatMode())
+            return true;
+        if (((slot == 2 && !hasExtendedHeelsForWalking())
+                ||
+                (slot == 3 && !((canLatchOntoWall() || hasExtendedHeelsForWalking()) && canWallWalkConfig())))
+        && isHoldingSneak() && !hasWalkingSpot())
             return true;
         return super.isAttackIneptVisually(activeP, slot);
     }
