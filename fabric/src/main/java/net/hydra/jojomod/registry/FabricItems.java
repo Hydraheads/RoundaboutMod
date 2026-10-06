@@ -4,8 +4,6 @@ import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistry;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.chocolatedisco.PowersChocolateDisco;
-import net.hydra.jojomod.chocolatedisco.visage.DiscoVisage;
 import net.hydra.jojomod.block.handBlock.AbstractHandBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.block.FancyLighterBlock;
@@ -118,9 +116,9 @@ public class FabricItems {
     public static final Item KIRA_PART_FOUR_MASK = registerItem("kira_part_four_mask",
             new MaskItem(new Item.Properties().stacksTo(1), new KiraPartFourVisage(null)));
     public static final Item KOSAKU_MASK = registerItem("kosaku_mask",
-            new MaskItem(new Item.Properties().stacksTo(1), new KosakuVisage(null)));
+        new MaskItem(new Item.Properties().stacksTo(1), new KosakuVisage(null)));
     public static final Item KIRASAKU_MASK = registerItem("kirasaku_mask",
-            new MaskItem(new Item.Properties().stacksTo(1), new KirasakuVisage(null)));
+        new MaskItem(new Item.Properties().stacksTo(1), new KirasakuVisage(null)));
     public static final Item HAYATO_KAWAJIRI_MASK = registerItem("hayato_kawajiri_mask",
             new MaskItem(new Item.Properties().stacksTo(1), new HayatoVisage(null)));
 
@@ -213,7 +211,7 @@ public class FabricItems {
     );
 
     public static Item LUCK_UPGRADE = registerItem("luck_upgrade",
-            new SmithingTemplateItem(SmithingTemplates.LUCK_UPGRADE_APPLIES_TO, SmithingTemplates.LUCK_UPGRADE_INGREDIENTS, SmithingTemplates.LUCK_UPGRADE, SmithingTemplates.LUCK_UPGRADE_BASE_SLOT_DESCRIPTION, SmithingTemplates.LUCK_UPGRADE_ADDITIONS_SLOT_DESCRIPTION, SmithingTemplates.createLuckUpgradeIconList(), SmithingTemplates.createLuckMatIconList())
+        new SmithingTemplateItem(SmithingTemplates.LUCK_UPGRADE_APPLIES_TO, SmithingTemplates.LUCK_UPGRADE_INGREDIENTS, SmithingTemplates.LUCK_UPGRADE, SmithingTemplates.LUCK_UPGRADE_BASE_SLOT_DESCRIPTION, SmithingTemplates.LUCK_UPGRADE_ADDITIONS_SLOT_DESCRIPTION, SmithingTemplates.createLuckUpgradeIconList(), SmithingTemplates.createLuckMatIconList())
     );
     public static Item EXECUTION_UPGRADE = registerItem("execution_upgrade",
             new SmithingTemplateItem(SmithingTemplates.EXECUTION_UPGRADE_APPLIES_TO, SmithingTemplates.EXECUTION_UPGRADE_INGREDIENTS, SmithingTemplates.EXECUTION_UPGRADE, SmithingTemplates.EXECUTION_UPGRADE_BASE_SLOT_DESCRIPTION, SmithingTemplates.EXECUTION_UPGRADE_ADDITIONS_SLOT_DESCRIPTION, SmithingTemplates.createExecutionUpgradeIconList(), SmithingTemplates.createLuckMatIconList())
@@ -265,6 +263,7 @@ public class FabricItems {
     public static Item HAIRSPRAY = registerItem("hairspray", new HairsprayItem(new Item.Properties().stacksTo(64)));
 
     public static Item OCCULT_CHARGE = registerItem("occult_charge", new OccultChargeItem(new Item.Properties().stacksTo(16)));
+    public static Item TOTEM_OF_DOOM = registerItem("totem_of_doom", new TotemOfDoomItem(new Item.Properties().stacksTo(1)));
 
     public static Item MATCH = registerItem("match", new MatchItem(new Item.Properties().stacksTo(64)));
     public static Item MATCH_BUNDLE = registerItem("match_bundle", new MatchItem(new Item.Properties().stacksTo(16)));
@@ -413,7 +412,7 @@ public class FabricItems {
     public static Item FOG_DIRT_COATING = registerItem("fog_dirt_coating", (Item) new FogCoatBlockItem(ModBlocks.FOG_DIRT_COATING, new Item.Properties(), Blocks.DIRT));
     public static Item FOG_TRAP = registerItem("fog_trap", (Item) new FogBlockItem(ModBlocks.FOG_TRAP, new Item.Properties(), Blocks.TRIPWIRE));
 
-    // public static Item INTERDIMENSIONAL_KEY = registerItem("interdimensional_key", new InterdimensionalKeyItem(new Item.Properties().stacksTo(1)));
+   // public static Item INTERDIMENSIONAL_KEY = registerItem("interdimensional_key", new InterdimensionalKeyItem(new Item.Properties().stacksTo(1)));
 
     public static Item FLESH_BUCKET = registerItem("flesh_bucket", new FleshBucketItem(new Item.Properties().stacksTo(1).durability(16)));
     public static final FoodProperties CHERRY =new FoodProperties.Builder().nutrition(1).saturationMod(0.0F).alwaysEat()
@@ -462,12 +461,6 @@ public class FabricItems {
     private static Item registerItem(String name, Item item){
         return Registry.register(BuiltInRegistries.ITEM, Roundabout.location(name), item);
     }
-
-    public static final Item STAND_DISC_CHOCOLATE_DISCO =
-            ModItems.registerStand(new PowersChocolateDisco(null), Roundabout.location("chocolate_disco_disc"), false).get(0);
-    public static final Item DISCO_MASK =
-            Registry.register(BuiltInRegistries.ITEM, Roundabout.location("disco_mask"),
-                    new MaskItem(new Item.Properties().stacksTo(1), new DiscoVisage(null)));
 
     public static final CreativeModeTab JOJO_GROUP = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
             new ResourceLocation(Roundabout.MOD_ID, "jojo"),
@@ -770,7 +763,7 @@ public class FabricItems {
             FabricItemGroup.builder().title(Component.translatable("itemgroup.jojo_wip_features"))
                     .icon(() -> new ItemStack(AJA)).displayItems((displayContext, entries) -> {
                         //Add all items from the Jojo mod tab here
-                        //entries.accept(ModBlocks.CHESSBOARD_BLOCK);
+                    	//entries.accept(ModBlocks.CHESSBOARD_BLOCK);
                         //entries.accept(ModBlocks.HAND_BLOCK);
                         entries.accept(STAND_DISC_D4C);
                         entries.accept(MAX_STAND_DISC_D4C);
@@ -824,8 +817,7 @@ public class FabricItems {
                         entries.accept(HALLUCINATORY_ACID_HEIGHT_4);
                         entries.accept(HALLUCINATORY_ACID_WALL);
                         entries.accept(ModBlocks.GAMBLING_TABLE);
-                        entries.accept(STAND_DISC_CHOCOLATE_DISCO);
-                        entries.accept(DISCO_MASK);
+                        entries.accept(TOTEM_OF_DOOM);
                     }).build());
     public static final CreativeModeTab FOG_BLOCK_ITEMS = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
             new ResourceLocation(Roundabout.MOD_ID, "justice_fog_items"),
@@ -949,6 +941,7 @@ public class FabricItems {
         ModItems.LUCK_UPGRADE = LUCK_UPGRADE;
         ModItems.EXECUTION_UPGRADE = EXECUTION_UPGRADE;
         ModItems.OCCULT_CHARGE = OCCULT_CHARGE;
+        ModItems.TOTEM_OF_DOOM = TOTEM_OF_DOOM;
         ModItems.LUCK_SWORD = LUCK_SWORD;
         ModItems.SCISSORS = SCISSORS;
         ModItems.SACRIFICIAL_DAGGER = SACRIFICIAL_DAGGER;
@@ -1109,7 +1102,7 @@ public class FabricItems {
         ModItems.MUSIC_DISC_TORTURE_DANCE = MUSIC_DISC_TORTURE_DANCE;
         ModItems.MUSIC_DISC_HALLELUJAH = MUSIC_DISC_HALLELUJAH;
         ModItems.FOG_BLOCK_ITEMS = FOG_BLOCK_ITEMS;
-        //   ModItems.INTERDIMENSIONAL_KEY = INTERDIMENSIONAL_KEY;
+     //   ModItems.INTERDIMENSIONAL_KEY = INTERDIMENSIONAL_KEY;
         ModItems.FLESH_BUCKET = FLESH_BUCKET;
         ModItems.CHERRIES = CHERRIES;
 

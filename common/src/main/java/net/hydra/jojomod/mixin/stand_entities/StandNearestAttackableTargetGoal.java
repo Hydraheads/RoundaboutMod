@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin.stand_entities;
 
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.WhitesnakeEntity;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -21,6 +22,7 @@ public abstract class StandNearestAttackableTargetGoal<T extends LivingEntity> e
 
     @Inject(method = "findTarget", at = @At(value = "TAIL"))
     protected void roundabout$findTarget(CallbackInfo ci) {
+        if (this.target instanceof WhitesnakeEntity stand && stand.isControlModeActive()) return;
         if (this.target instanceof StandEntity SE) {
             if(SE.getUser() != null && !(SE.getUser() instanceof StandEntity)){
                 if (SE.getUser() instanceof ServerPlayer PE && !PE.gameMode.isCreative() && !PE.isSpectator()){

@@ -7,31 +7,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 
 public class ModSounds {
-    public static final String DISCO_SUMMON = "disco_summon";
-    public static final ResourceLocation DISCO_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID, DISCO_SUMMON);
-    public static SoundEvent DISCO_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(DISCO_SUMMON_ID);
-    public static final String DISCO_MENU = "disco_menu";
-    public static final ResourceLocation DISCO_MENU_ID = new ResourceLocation(Roundabout.MOD_ID, DISCO_MENU);
-    public static SoundEvent DISCO_MENU_EVENT = SoundEvent.createVariableRangeEvent(DISCO_MENU_ID);
-    public static final String DISCO_SELECT = "disco_select";
-    public static final ResourceLocation DISCO_SELECT_ID = new ResourceLocation(Roundabout.MOD_ID, DISCO_SELECT);
-    public static SoundEvent DISCO_SELECT_EVENT = SoundEvent.createVariableRangeEvent(DISCO_SELECT_ID);
-    public static final String DISCO_TELEPORT = "disco_teleport";
-    public static final ResourceLocation DISCO_TELEPORT_ID = new ResourceLocation(Roundabout.MOD_ID, DISCO_TELEPORT);
-    public static SoundEvent DISCO_TELEPORT_EVENT = SoundEvent.createVariableRangeEvent(DISCO_TELEPORT_ID);
-    public static final String BUILDING_MODE = "building_mode";
-    public static final ResourceLocation BUILDING_MODE_ID = new ResourceLocation(Roundabout.MOD_ID, BUILDING_MODE);
-    public static SoundEvent BUILDING_MODE_EVENT = SoundEvent.createVariableRangeEvent(BUILDING_MODE_ID);
-    public static final String QUEUE_ITEM = "queue_item";
-    public static final ResourceLocation QUEUE_ITEM_ID = new ResourceLocation(Roundabout.MOD_ID, QUEUE_ITEM);
-    public static SoundEvent QUEUE_ITEM_EVENT = SoundEvent.createVariableRangeEvent(QUEUE_ITEM_ID);
-    public static final String QUEUE_EMPTY = "queue_empty";
-    public static final ResourceLocation QUEUE_EMPTY_ID = new ResourceLocation(Roundabout.MOD_ID, QUEUE_EMPTY);
-    public static SoundEvent QUEUE_EMPTY_EVENT = SoundEvent.createVariableRangeEvent(QUEUE_EMPTY_ID);
-    public static final String DISCO_LOCK = "disco_lock";
-    public static final ResourceLocation DISCO_LOCK_ID = new ResourceLocation(Roundabout.MOD_ID, DISCO_LOCK);
-    public static SoundEvent DISCO_LOCK_EVENT = SoundEvent.createVariableRangeEvent(DISCO_LOCK_ID);
-
 
     /** Defines sound files... but JSON files are still needed to complete registration!
      * Also, forge and Fabric must register the sounds.*/
@@ -848,6 +823,19 @@ public class ModSounds {
     public static final String KQ_MOB_PLANT = "kq_mob_plant";
     public static final ResourceLocation KQ_MOB_PLANT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KQ_MOB_PLANT);
     public static SoundEvent KQ_MOB_PLANT_EVENT = SoundEvent.createVariableRangeEvent(KQ_MOB_PLANT_ID);
+    public static final String KQ_BTD_WINDUP = "btd_windup";
+    public static final ResourceLocation KQ_BTD_WINDUP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KQ_BTD_WINDUP);
+    public static SoundEvent KQ_BTD_WINDUP_EVENT = SoundEvent.createVariableRangeEvent(KQ_BTD_WINDUP_ID);
+    public static final String KQ_BTD_WINDUP_LINE = "btd_windup_line";
+    public static final ResourceLocation KQ_BTD_WINDUP_LINE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KQ_BTD_WINDUP_LINE);
+    public static SoundEvent KQ_BTD_WINDUP_LINE_EVENT = SoundEvent.createVariableRangeEvent(KQ_BTD_WINDUP_LINE_ID);
+    public static final String KIRA4_BTD_ACTIVATION = "kira4_btd_activation";
+    public static final ResourceLocation KIRA4_BTD_ACTIVATION_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_BTD_ACTIVATION);
+    public static SoundEvent KIRA4_BTD_ACTIVATION_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_BTD_ACTIVATION_ID);
+    public static final String ADD_STRAY_CAT = "add_stray_cat_sfx";
+    public static final ResourceLocation ADD_STRAY_CAT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ADD_STRAY_CAT);
+    public static SoundEvent ADD_STRAY_CAT_EVENT = SoundEvent.createVariableRangeEvent(ADD_STRAY_CAT_ID);
+
 
     public static final String KILLER_QUEEN_PUNCH_1 = "killer_queen_punch_1";
     public static final ResourceLocation KILLER_QUEEN_PUNCH_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_PUNCH_1);
@@ -1307,6 +1295,13 @@ public class ModSounds {
     public static final ResourceLocation THE_WORLD_OVER_HEAVEN_ID = new ResourceLocation(Roundabout.MOD_ID+":"+THE_WORLD_OVER_HEAVEN);
     public static SoundEvent THE_WORLD_OVER_HEAVEN_EVENT = SoundEvent.createVariableRangeEvent(THE_WORLD_OVER_HEAVEN_ID);
 
+
+    public static final String WH_PULL = "wh_pull";
+    public static final ResourceLocation WH_PULL_ID = new ResourceLocation(Roundabout.MOD_ID+":"+WH_PULL);
+    public static SoundEvent WH_PULL_EVENT = SoundEvent.createVariableRangeEvent(WH_PULL_ID);
+    public static final String WH_PUSH = "wh_push";
+    public static final ResourceLocation WH_PUSH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+WH_PUSH);
+    public static SoundEvent WH_PUSH_EVENT = SoundEvent.createVariableRangeEvent(WH_PUSH_ID);
 
     public static final String  ARCADE_TIMESTOP = "arcade_timestop";
     public static final ResourceLocation ARCADE_TIMESTOP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ARCADE_TIMESTOP);

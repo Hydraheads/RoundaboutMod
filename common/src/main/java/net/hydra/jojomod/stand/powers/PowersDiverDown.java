@@ -1431,8 +1431,8 @@ public class PowersDiverDown extends NewPunchingStand {
         BlockPos feetWall = BlockPos.containing(mpos).relative(rd);
         BlockPos eyeWall = BlockPos.containing(this.self.getEyePosition()).relative(rd);
 
-        return MainUtil.isBlockWalkableSimplified(this.self.level().getBlockState(feetWall))
-                || MainUtil.isBlockWalkableSimplified(this.self.level().getBlockState(eyeWall));
+        return MainUtil.isBlockWalkable(this.self.level().getBlockState(feetWall))
+                || MainUtil.isBlockWalkable(this.self.level().getBlockState(eyeWall));
     }
 
     /**
@@ -5069,6 +5069,18 @@ public class PowersDiverDown extends NewPunchingStand {
         }
 
         return displayStand;
+    }
+
+    // for the unique idles
+    @Override
+    public Component getPosName(byte posID){
+        if (posID == 2){
+            return Component.translatable(  "idle.roundabout.diver_down_1");
+        } else if (posID == 3) {
+            return Component.translatable(  "idle.roundabout.diver_down_2");
+        } else {
+            return super.getPosName(posID);
+        }
     }
 
     // skins end
