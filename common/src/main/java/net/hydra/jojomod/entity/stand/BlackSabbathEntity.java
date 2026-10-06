@@ -1113,6 +1113,10 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                         createShadowParticles();
                     }
                 }
+                if(targetSabbath() != null) {
+                   // System.out.println(((StandUser) targetSabbath()).roundabout$getSealedTicks());
+                    System.out.println(((StandUser) targetSabbath()).roundabout$isSealed());
+                }
                 if(getUnrender() && shouldReattemptSpawn < 0){
                     isStuck = true;
                 } else {
@@ -1162,7 +1166,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                                 if(((StandUser)targetSabbath()).roundabout$getStandPowers() != null){
                                                     if(level().getEntity(getGrabbing()) instanceof LivingEntity e){
                                                         if(((StandUser)e).roundabout$getStandPowers() != null){
-
                                                         }
                                                     }
                                                 }
@@ -1171,6 +1174,9 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                             }
                                             lungeTicks = 51;
                                             setMeleeInteractionTicks(220);
+                                            if(!this.level().isClientSide) {
+                                                ((StandUser) targetSabbath()).roundabout$setSealedTicks(220);
+                                            }
                                         }
                                     }
                                 } else if (lungeTicks < 185 && lungeTicks > 40) {
@@ -1223,7 +1229,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                             }
                         }
                     } else {
-                        if(level().getEntity(getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);}
+                        if(level().getEntity(getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser)e).roundabout$setSealedTicks(0);}
                         setGrabbing(0);
                         setMeleeInteractionTicks(0);
                         setUnrender(false);
@@ -1243,7 +1249,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                 }
                             }
                         } else {
-                            if(level().getEntity(getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);}
+                            if(level().getEntity(getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser)e).roundabout$setSealedTicks(0);}
                             setGrabbing(0);
                             setMeleeInteractionTicks(0);
                             if (isWalking) {

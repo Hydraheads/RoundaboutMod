@@ -1073,15 +1073,17 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
             if (!((StandUser) this).roundabout$getStandDisc().isEmpty()) {
                 if (!this.roundabout$getFightOrFlight()) {
-                    if (this.getTarget() != null){
-                        if (this.getVehicle() != null && (this.getVehicle() instanceof Boat ||
-                                this.getVehicle() instanceof Minecart)){
-                            Vec3 vec = this.getVehicle().getDismountLocationForPassenger(this);
-                            this.stopRiding();
-                            this.dismountTo(vec.x,vec.y,vec.z);
+                    if (!((StandUser) this).roundabout$getGrabbedSoul() && !(((StandUser) this).roundabout$getSealedTicks() > -1)) {
+                        if (this.getTarget() != null) {
+                            if (this.getVehicle() != null && (this.getVehicle() instanceof Boat ||
+                                    this.getVehicle() instanceof Minecart)) {
+                                Vec3 vec = this.getVehicle().getDismountLocationForPassenger(this);
+                                this.stopRiding();
+                                this.dismountTo(vec.x, vec.y, vec.z);
+                            }
                         }
+                        ((StandUser) this).roundabout$getStandPowers().tickMobAI(this.getTarget());
                     }
-                    ((StandUser) this).roundabout$getStandPowers().tickMobAI(this.getTarget());
                 }
             }
         }
