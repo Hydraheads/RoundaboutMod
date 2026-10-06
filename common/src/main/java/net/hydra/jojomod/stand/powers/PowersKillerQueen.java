@@ -3809,13 +3809,14 @@ public class PowersKillerQueen extends NewPunchingStand {
                             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
                         }
 
-                    } else if (this.currentBombStatus != BOMB_NONE) {
+                    } else if (dist > 1.4 && !wentForCharge && this.currentBombStatus != BOMB_NONE) {
 
-                        if (dist > 1.4 && !wentForCharge && this.currentBombStatus != BOMB_BUBBLE ) {
+                        if (this.currentBombStatus != BOMB_BUBBLE ) {
                             ((StandUser) this.getSelf()).roundabout$tryPower(DETONATE, true);
-                        }else {
-                            if (bombBubble.distanceTo(targetEntity) < 1.3f) {
-
+                        }else if (currentBombStatus == BOMB_BUBBLE) {
+                            if (bombBubble == null) {
+                                defuseServer();
+                            }else if (bombBubble.distanceTo(targetEntity) < 1.3f) {
                                 ((StandUser) this.getSelf()).roundabout$tryPower(DETONATE, true);
                             }
                         }
