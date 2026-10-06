@@ -1078,7 +1078,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (getActivePower() == BITES_THE_DUST_DAY) {
             int cdr = ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatActivationCooldown;
 
-            this.setCooldown(PowerIndex.SKILL_2, cdr);
+            this.setCooldown(PowerIndex.SKILL_EXTRA, cdr + 70);
             return true;
         }
 
