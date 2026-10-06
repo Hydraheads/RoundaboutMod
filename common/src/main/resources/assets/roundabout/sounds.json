@@ -2682,6 +2682,42 @@
       "roundabout:anubis_alluring"
     ]
   },
+  "j_anubis_hit_1": {
+    "subtitle": "sounds.roundabout.j_anubis_hit_1",
+    "sounds": [
+      "roundabout:j_anubis_hit_1"
+    ]
+  },
+  "j_anubis_hit_2": {
+    "subtitle": "sounds.roundabout.j_anubis_hit_2",
+    "sounds": [
+      "roundabout:j_anubis_hit_2"
+    ]
+  },
+  "j_anubis_hit_3": {
+    "subtitle": "sounds.roundabout.j_anubis_hit_3",
+    "sounds": [
+      "roundabout:j_anubis_hit_3"
+    ]
+  },
+  "j_anubis_miss_1": {
+    "subtitle": "sounds.roundabout.j_anubis_miss_1",
+    "sounds": [
+      "roundabout:j_anubis_miss_1"
+    ]
+  },
+  "j_anubis_miss_2": {
+    "subtitle": "sounds.roundabout.j_anubis_miss_2",
+    "sounds": [
+      "roundabout:j_anubis_miss_2"
+    ]
+  },
+  "j_anubis_miss_3": {
+    "subtitle": "sounds.roundabout.j_anubis_miss_3",
+    "sounds": [
+      "roundabout:j_anubis_miss_3"
+    ]
+  },
   "anubis_raging": {
     "subtitle": "sounds.roundabout.anubis_raging",
     "sounds": [

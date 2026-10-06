@@ -22,6 +22,7 @@ import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
@@ -244,7 +245,10 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 } else if (((sauce.is(ModDamageTypes.STAND)|| sauce.is(ModDamageTypes.STAND_BRAWL) ||
                         sauce.is(ModDamageTypes.VAMPIRE) || sauce.is(ModDamageTypes.HAMON) ||
                         sauce.is(ModDamageTypes.MARTIAL_ARTS)
-                        || sauce.is(ModDamageTypes.STAND_BRAWL)) && sauce.getDirectEntity() instanceof LivingEntity LE2)){
+                        || sauce.is(ModDamageTypes.STAND_BRAWL)) && sauce.getDirectEntity() instanceof LivingEntity LE2
+                && !(((StandUser)LE2).roundabout$getStandPowers() instanceof PowersMagiciansRed &&
+                        PowerTypes.hasStandActivelyEquipped(LE2)  &&
+                        PowerTypes.hasStandActive(LE2)))){
                     if (!HeatUtil.isLegsFrozen(LE)) {
                         HeatUtil.addHeat(LE, -5 + (-1*getFreezeLevel()));
                     }
