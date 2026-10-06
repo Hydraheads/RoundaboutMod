@@ -33,6 +33,7 @@ public class DiverKickEntityRenderer extends EntityRenderer<DiverKickEntity> {
         this.skinLegs.put((byte) 0, this.defaultLeg);
         this.skinLegs.put(DiverDownEntity.BETA_DIVER, bakeLeg(context, ModEntityRendererClient.DIVER_DOWN_BETA_LAYER));
         this.skinLegs.put(DiverDownEntity.WORLD_DIVER, bakeLeg(context, ModEntityRendererClient.DIVER_DOWN_WORLD_LAYER));
+        this.skinLegs.put(DiverDownEntity.DIVER_DROWNED, bakeLeg(context, ModEntityRendererClient.DIVER_DROWNED_LAYER));
         // for the future:
         // this.skinLegs.put(DiverDownEntity.MODEL_NAME, bakeLeg(context, ModEntityRendererClient.MODEL_NAME_LAYER));
     }
@@ -41,7 +42,7 @@ public class DiverKickEntityRenderer extends EntityRenderer<DiverKickEntity> {
         ModelPart root = context.bakeLayer(layer);
         ModelPart legs = root.getChild("stand").getChild("stand2").getChild("body").getChild("body2").getChild("legs");
         ModelPart rLeg = legs.getChild("right_leg");
-        rLeg.setPos(0.0F, -9.0F, 0.0F);
+        rLeg.setPos(0.0F, -7.0F, 0.0F);
         return rLeg;
     }
 
@@ -75,21 +76,23 @@ public class DiverKickEntityRenderer extends EntityRenderer<DiverKickEntity> {
 
         // Orient texture matching DiverLimbBlockEntityRenderer
         switch (facing) {
-            case NORTH -> poseStack.mulPose(Axis.XP.rotationDegrees(-90.0F));
-            case EAST -> {
-                poseStack.mulPose(Axis.YP.rotationDegrees(270.0F));
-                poseStack.mulPose(Axis.XP.rotationDegrees(-90.0F));
-            }
-            case SOUTH -> {
+            case NORTH -> {
                 poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
                 poseStack.mulPose(Axis.XP.rotationDegrees(-90.0F));
             }
-            case WEST -> {
+            case EAST -> {
                 poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
                 poseStack.mulPose(Axis.XP.rotationDegrees(-90.0F));
             }
-            case DOWN -> poseStack.mulPose(Axis.XP.rotationDegrees(180.0F));
-            default -> {}
+            case SOUTH -> {
+                poseStack.mulPose(Axis.XP.rotationDegrees(-90.0F));
+            }
+            case WEST -> {
+                poseStack.mulPose(Axis.YP.rotationDegrees(270.0F));
+                poseStack.mulPose(Axis.XP.rotationDegrees(-90.0F));
+            }
+            case UP -> poseStack.mulPose(Axis.XP.rotationDegrees(180.0F));
+            case DOWN -> {}
         }
 
         poseStack.scale(1.0F, -1.0F, -1.0F);
