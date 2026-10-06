@@ -56,6 +56,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
@@ -112,6 +113,16 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
 
+    public int getPullLevel(){
+        return 2;
+    }
+    public int getPushLevel(){
+        return 3;
+    }
+    public int getStompLevel(){
+        return 4;
+    }
+
     @Override
     public boolean interceptSuccessfulDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
         if ((hasStandActive(this.getSelf()) && $$0.is(DamageTypes.PLAYER_ATTACK)) && hasExtendedHeelsForWalking()){
@@ -146,10 +157,10 @@ public class PowersWalkingHeart extends NewDashPreset {
             IPlayerEntity ipe = ((IPlayerEntity) PE);
             byte level = ipe.roundabout$getStandLevel();
             if (level == 4){
-                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.max.skins").
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.max.both").
                         withStyle(ChatFormatting.AQUA), true);
             } else if (level == 2 || level == 3){
-                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.skins").
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.both").
                         withStyle(ChatFormatting.AQUA), true);
             }
         }
@@ -202,11 +213,15 @@ public class PowersWalkingHeart extends NewDashPreset {
                     return;
                 }
 
-                if (isHoldingSneak()) {
-                    clientPush();
+                if (isHoldingSneak() && !hasExtendedHeelsForWalking()) {
+                    if (canExecuteMoveWithLevel(getPushLevel())){
+                        clientPush();
+                    }
                 } else if (canUseAirAttack() && !onCooldown(PowerIndex.SKILL_2_SNEAK)){
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
-                    tryPowerPacket(PowerIndex.POWER_2_SNEAK);
+                    if (canExecuteMoveWithLevel(getStompLevel())) {
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
+                        tryPowerPacket(PowerIndex.POWER_2_SNEAK);
+                    }
                 } else {
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
                     tryPowerPacket(PowerIndex.POWER_2);
@@ -220,23 +235,40 @@ public class PowersWalkingHeart extends NewDashPreset {
             return;
         if (canLatchOntoWall() && canWallWalkConfig())
             doWallLatchClient();
-        else if (isHoldingSneak())
+        else if (isHoldingSneak() && !hasExtendedHeelsForWalking())
             clientPull();
         else if (!hasExtendedHeelsForWalking())
             dash();
     }
 
     public void clientPull(){
-        if (!onCooldown(PowerIndex.GLOBAL_DASH)) {
+        if (canExecuteMoveWithLevel(getPullLevel())){
+        if (!onCooldown(PowerIndex.GLOBAL_DASH) && hasWalkingSpot()) {
             clientBoth();
             //((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_EXTRA, true);
             tryPowerPacket(PowerIndex.POWER_2_EXTRA);
+            BlockHitResult result = getWalkingSpot();
+            Vec3 db = RotationUtil.distanceBetween(result.getLocation().subtract(0,0.001,0),self).normalize().scale(3);;
+            self.setDeltaMovement(
+                    db.x * -0.25,
+                    db.y * -0.25,
+                    db.z * -0.25
+            );
+        }
         }
     }
     public void clientPush(){
-        if (!onCooldown(PowerIndex.GLOBAL_DASH)) {
+        if (!onCooldown(PowerIndex.GLOBAL_DASH) && hasWalkingSpot()) {
             clientBoth();
             tryPowerPacket(PowerIndex.POWER_3_EXTRA);
+            BlockHitResult result = getWalkingSpot();
+
+            Vec3 db = RotationUtil.distanceBetween(result.getLocation().subtract(0,0.2,0),self).normalize().scale(3);
+            self.setDeltaMovement(
+                    db.x * 0.25,
+                    db.y * 0.25,
+                    db.z * 0.25
+            );
         }
     }
     public void clientBoth(){
@@ -249,14 +281,32 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
     public void serverPull(){
         serverBoth();
+        playSoundIfPossible(self.level(),null, self.getX(), self.getY(),
+                self.getZ(), ModSounds.WH_PULL_EVENT, self.getSoundSource(), 2F, 1.0F);
     }
     public void serverPush(){
         serverBoth();
+        playSoundIfPossible(self.level(),null, self.getX(), self.getY(),
+                self.getZ(), ModSounds.WH_PUSH_EVENT, self.getSoundSource(), 2F, 1.0F);
+    }
+
+
+    public BlockHitResult getWalkingSpot(){
+        return MainUtil.getAheadVecRender(self, 7, 1F);
+    }
+    public boolean hasWalkingSpot(){
+        BlockHitResult result = MainUtil.getAheadVecRender(self, 7, 1F);
+        BlockState state = self.level().getBlockState(result.getBlockPos());
+        if (state.isSolid()){
+            return true;
+        }
+        return false;
     }
 
     public void serverBoth(){
         setCooldown(PowerIndex.GLOBAL_DASH,ClientNetworking.getAppropriateConfig().walkingHeartSettings.spikePullCooldown);
         setActivePower(PowerIndex.POWER_3_SNEAK);
+        addEXP(1);
         attackTimeDuring = -10;
         getStandUserSelf().roundabout$setStandAnimation(HEEL_RAISE);
         sendHeelPacket(120);
@@ -508,16 +558,19 @@ public class PowersWalkingHeart extends NewDashPreset {
         if (hasExtendedHeelsForWalking())
             setSkillIcon(context, x, y, 2, StandIcons.GROUND_IMPLANT, PowerIndex.SKILL_2);
         else if (isHoldingSneak())
-            setSkillIcon(context, x, y, 2, StandIcons.PUSH_SPIKE, PowerIndex.GLOBAL_DASH);
+            LockedOrNot(context, x, y, 2, StandIcons.PUSH_SPIKE, PowerIndex.GLOBAL_DASH,
+                    getPushLevel());
         else if (canUseAirAttack())
-            setSkillIcon(context, x, y, 2, StandIcons.WALKING_STOMP, PowerIndex.SKILL_2_SNEAK);
+            LockedOrNot(context, x, y, 2, StandIcons.WALKING_STOMP, PowerIndex.SKILL_2_SNEAK,
+                    getStompLevel());
         else
             setSkillIcon(context, x, y, 2, StandIcons.GROUND_IMPLANT_OUT, PowerIndex.SKILL_2);
 
         if ((canLatchOntoWall() || hasExtendedHeelsForWalking()) && canWallWalkConfig())
             setSkillIcon(context, x, y, 3, StandIcons.WALL_WALK, PowerIndex.SKILL_3);
         else if (isHoldingSneak())
-            setSkillIcon(context, x, y, 3, StandIcons.PULL_SPIKE, PowerIndex.GLOBAL_DASH);
+            LockedOrNot(context, x, y, 3, StandIcons.PULL_SPIKE, PowerIndex.GLOBAL_DASH,
+                    getPullLevel());
         else
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
 
@@ -561,6 +614,11 @@ public class PowersWalkingHeart extends NewDashPreset {
         if (slot == 1 && (isBlockedByStone()  || (getShootTicks() > 0 && !inCombatMode())))
             return true;
         if ((slot == 2 || slot == 3) && inCombatMode())
+            return true;
+        if (((slot == 2 && !hasExtendedHeelsForWalking())
+                ||
+                (slot == 3 && !((canLatchOntoWall() || hasExtendedHeelsForWalking()) && canWallWalkConfig())))
+        && isHoldingSneak() && !hasWalkingSpot())
             return true;
         return super.isAttackIneptVisually(activeP, slot);
     }
@@ -640,13 +698,10 @@ public class PowersWalkingHeart extends NewDashPreset {
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
             if (Level > 3 || bypass) {
                 return 10000;
-            }
-            if (Level > 2) {
+            } if (Level > 1) {
                 return 10000-getUseTicks();
-            }if (Level > 1) {
-                return 10000-getUseTicks()-getUseTicks();
             }
-            return 10000-getUseTicks()-getUseTicks()-getUseTicks()-getUseTicks();
+            return 10000-getUseTicks()-getUseTicks();
         }
         return 10000;
     }
@@ -1590,13 +1645,13 @@ public class PowersWalkingHeart extends NewDashPreset {
                 "instruction.roundabout.press_skill", StandIcons.SPIKE_ATTACK_MODE, 1, level, bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.heel_plant",
                 "instruction.roundabout.press_skill", StandIcons.GROUND_IMPLANT,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.spike_stomp",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, getStompLevel(), "ability.roundabout.spike_stomp",
                 "instruction.roundabout.press_skill_air", StandIcons.WALKING_STOMP,2,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.spike_push",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, getPushLevel(), "ability.roundabout.spike_push",
                 "instruction.roundabout.press_skill_crouch", StandIcons.PUSH_SPIKE,3,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.spike_pull",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, getPullLevel(), "ability.roundabout.spike_pull",
                 "instruction.roundabout.press_skill_crouch", StandIcons.PULL_SPIKE,3,level,bypass));
         if (canWallWalkConfig()) {
             $$1.add(drawSingleGUIIcon(context, 18, leftPos + 57, topPos + 80, 0, "ability.roundabout.wall_walk_move",
@@ -1628,11 +1683,13 @@ public class PowersWalkingHeart extends NewDashPreset {
             if (Level > 1 || bypass) {
                 $$1.add(WalkingHeartEntity.MODEL_SKIN);
                 $$1.add(WalkingHeartEntity.PURPLE_SKIN);
+                $$1.add(WalkingHeartEntity.MELON_SKIN);
             }if (Level > 2 || bypass) {
                 $$1.add(WalkingHeartEntity.SCARECROW_SKIN);
                 $$1.add(WalkingHeartEntity.VALENTINE_SKIN);
                 $$1.add(WalkingHeartEntity.VERDANT_SKIN);
             }if (Level > 3 || bypass) {
+                $$1.add(WalkingHeartEntity.ABYSSAL_SKIN);
                 $$1.add(WalkingHeartEntity.PALE_SKIN);
                 $$1.add(WalkingHeartEntity.GOTHIC_SKIN);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
@@ -1666,6 +1723,10 @@ public class PowersWalkingHeart extends NewDashPreset {
             return Component.translatable(  "skins.roundabout.walking_heart.spider");
         } else if (skinId == WalkingHeartEntity.SCARECROW_SKIN){
             return Component.translatable(  "skins.roundabout.walking_heart.scarecrow");
+        } else if (skinId == WalkingHeartEntity.ABYSSAL_SKIN){
+            return Component.translatable(  "skins.roundabout.walking_heart.abyssal");
+        } else if (skinId == WalkingHeartEntity.MELON_SKIN){
+            return Component.translatable(  "skins.roundabout.walking_heart.melon");
         }
         return Component.translatable(  "skins.roundabout.walking_heart.base");
     }

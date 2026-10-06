@@ -31,6 +31,7 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 	private final ModelPart belt;
 	private final ModelPart hanger;
 	private final ModelPart Stray_Cat;
+	private final ModelPart backGround;
 	private final ModelPart swordHolder;
 	private final ModelPart sword2;
 	private final ModelPart bubble;
@@ -75,6 +76,7 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 		this.belt = this.lower_torso.getChild("belt");
 		this.hanger = this.belt.getChild("hanger");
 		this.Stray_Cat = this.lower_torso.getChild("Stray_Cat");
+		this.backGround = this.lower_torso.getChild("backGround");
 		this.swordHolder = this.lower_chest.getChild("swordHolder");
 		this.sword2 = this.swordHolder.getChild("sword2");
 		this.bubble = this.lower_chest.getChild("bubble");
@@ -186,6 +188,8 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 		PartDefinition Stray_Cat = lower_torso.addOrReplaceChild("Stray_Cat", CubeListBuilder.create().texOffs(113, 98).addBox(-1.5F, -1.75F, -1.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(0.0F))
 		.texOffs(113, 93).addBox(-1.5F, -3.5F, -1.5F, 3.0F, 2.0F, 3.0F, new CubeDeformation(0.1F))
 		.texOffs(112, 85).addBox(-2.0F, -0.55F, -2.0F, 4.0F, 2.0F, 4.0F, new CubeDeformation(-0.2F)), PartPose.offset(0.0F, -2.25F, 0.0F));
+
+		PartDefinition backGround = lower_torso.addOrReplaceChild("backGround", CubeListBuilder.create().texOffs(103, 10).addBox(-4.0F, -6.0F, 2.0F, 8.0F, 5.0F, 0.0F, new CubeDeformation(-0.05F)), PartPose.offset(0.0F, 0.0F, -0.1F));
 
 		PartDefinition swordHolder = lower_chest.addOrReplaceChild("swordHolder", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 

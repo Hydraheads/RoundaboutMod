@@ -687,7 +687,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		float range = explosionRadius;
 		float cap = 45;
 		if (warm > cap) {
-			range += Math.min(0.60f * ((warm - cap) / 40), 1.25f);
+			range += Math.min(0.90f * ((warm - cap) / 60), 1.05f);
 		}
 
 		return range;
@@ -708,7 +708,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		ExplosionUtil.explosionHurtWithMulti(pos, dmg, this.level(), damage, 0.3f, range,
 				KQ.multiplyPowerByStandConfigMobs(1.3f), KQ.multiplyPowerByStandConfigPlayers(1.0f));
 
-		ExplosionUtil.explodeEffects(pos, this.level(), KQ.getExplosionParticle(), new Vec3(range*0.8f, range*0.9f, range*0.8f), (int)(25*range));
+		ExplosionUtil.explodeEffects(pos, this.level(), KQ.getExplosionParticle(), new Vec3(range*0.7f, range*0.75f, range*0.7f), (int)(32*range));
 
 		this.level().playSound(null, this.blockPosition(), KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
 
@@ -751,7 +751,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			ExplosionUtil.explosionHurt(this.blockTarget.getCenter(), dmg, this.level(),
 					ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage, 0.3f, range);
 
-			ExplosionUtil.explodeEffects(this.blockTarget.getCenter(), this.level(), KQ.getExplosionParticle(), new Vec3(range*0.8f, range*0.9f, range*0.8f), (int)(22*range));
+			ExplosionUtil.explodeEffects(this.blockTarget.getCenter(), this.level(), KQ.getExplosionParticle(), new Vec3(range*0.7f, range*0.75f, range*0.7f), (int)(30*range));
 			level().playSound(null, this.blockTarget, KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
 
 			if (canDestroyBlocks()) {

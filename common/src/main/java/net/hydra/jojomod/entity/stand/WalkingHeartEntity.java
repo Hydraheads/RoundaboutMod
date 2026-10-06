@@ -19,7 +19,9 @@ public class WalkingHeartEntity extends FollowingStandEntity {
             VALENTINE_SKIN = 6,
             GOTHIC_SKIN = 7,
             SPIDER_SKIN = 8,
-            SCARECROW_SKIN = 9;
+            SCARECROW_SKIN = 9,
+            MELON_SKIN = 10,
+            ABYSSAL_SKIN = 11;
 
 
     @Override

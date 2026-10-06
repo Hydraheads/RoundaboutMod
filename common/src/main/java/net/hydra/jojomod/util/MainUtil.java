@@ -14,6 +14,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.gui.FogInventoryMenu;
 import net.hydra.jojomod.client.gui.PowerInventoryMenu;
+import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.KingCrimsonProjectionEntity;
 import net.hydra.jojomod.entity.ParallelChestEntity;
 import net.hydra.jojomod.entity.corpses.FallenMob;
@@ -2430,6 +2431,8 @@ public class MainUtil {
                                 &&
                                 !PowerTypes.isExistentiallyElsewhereTogether($$1, value))
                         && !(value instanceof FallenMob)
+                        && !(value instanceof D4CCloneEntity)
+                        && (HeatUtil.getHeat(value) == 0)
                         && (MainUtil.isActuallyALivingEntityNoCap(value))) {
                     double distance = value.position().distanceTo($$1.position());
                     if (distance <= maxDistance && ((StandUser) value).roundabout$getLocacacaCurse() < 0) {
