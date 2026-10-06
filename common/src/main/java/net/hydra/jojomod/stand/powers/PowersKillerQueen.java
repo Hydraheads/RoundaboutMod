@@ -4574,8 +4574,6 @@ public class PowersKillerQueen extends NewPunchingStand {
             return (float)(1.1+Math.random()*0.2);
         }else if (soundChoice == BLOCK_PLANT) {
             return (float) (0.95 + Math.random() * 0.1);
-        }else if(soundChoice == SUMMON_ARMS) {
-            return 1.6f;
         }
 
         return super.getSoundPitchFromByte(soundChoice);
