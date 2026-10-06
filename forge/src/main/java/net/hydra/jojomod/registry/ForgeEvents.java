@@ -61,6 +61,7 @@ public class ForgeEvents {
 
     @SubscribeEvent
     public static void entityAttributes(EntityAttributeCreationEvent event) {
+        event.put(ForgeEntities.CHOCOLATE_DISCO.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.TERRIER_DOG.get(), Wolf.createAttributes().build());
         event.put(ForgeEntities.ZOMBIEFISH.get(), Zombiefish.createAttributes().build());
         event.put(ForgeEntities.STRAY_CAT.get(), StrayCatEntity.createAttributes().build());
@@ -349,7 +350,6 @@ public class ForgeEvents {
         ModItems.LUCK_UPGRADE = ForgeItems.LUCK_UPGRADE.get();
         ModItems.EXECUTION_UPGRADE = ForgeItems.EXECUTION_UPGRADE.get();
         ModItems.OCCULT_CHARGE = ForgeItems.OCCULT_CHARGE.get();
-        ModItems.TOTEM_OF_DOOM = ForgeItems.TOTEM_OF_DOOM.get();
         ModItems.HAIRSPRAY = ForgeItems.HAIRSPRAY.get();
         ModItems.LUCK_SWORD = ForgeItems.LUCK_SWORD.get();
         ModItems.WOODEN_GLAIVE = ForgeItems.WOODEN_GLAIVE.get();
@@ -378,6 +378,8 @@ public class ForgeEvents {
         ModItems.GASOLINE_CAN = ForgeItems.GASOLINE_CAN.get();
         ModItems.GASOLINE_BUCKET = ForgeItems.GASOLINE_BUCKET.get();
         ModItems.ROAD_ROLLER = ForgeItems.ROAD_ROLLER.get();
+        ModItems.STAND_DISC_CHOCOLATE_DISCO = ForgeItems.STAND_DISC_CHOCOLATE_DISCO.get();
+        ModItems.DISCO_MASK = ForgeItems.DISCO_MASK.get();
         ModItems.STAND_DISC = ForgeItems.STAND_DISC.get();
 
         ModItems.STRAY_CAT_ANIME = ForgeItems.STRAY_CAT_ANIME.get();
@@ -696,9 +698,6 @@ public class ForgeEvents {
         ModParticles.PUNCH_IMPACT_A = ForgeParticles.PUNCH_IMPACT_A.get();
         ModParticles.PUNCH_IMPACT_B = ForgeParticles.PUNCH_IMPACT_B.get();
         ModParticles.PUNCH_IMPACT_C = ForgeParticles.PUNCH_IMPACT_C.get();
-        ModParticles.GOLD_PUNCH_IMPACT_A = ForgeParticles.GOLD_PUNCH_IMPACT_A.get();
-        ModParticles.GOLD_PUNCH_IMPACT_B = ForgeParticles.GOLD_PUNCH_IMPACT_B.get();
-        ModParticles.GOLD_PUNCH_IMPACT_C = ForgeParticles.GOLD_PUNCH_IMPACT_C.get();
         ModParticles.DISC_STEAL_HIT = ForgeParticles.DISC_STEAL_HIT.get();
         ModParticles.PUNCH_MISS = ForgeParticles.PUNCH_MISS.get();
         ModParticles.BUBBLE_TRAIL = ForgeParticles.BUBBLE_TRAIL.get();
@@ -777,7 +776,6 @@ public class ForgeEvents {
         ModEffects.BLEED = ForgeEffects.BLEED.get();
         ModEffects.HEX = ForgeEffects.HEX.get();
         ModEffects.BANISH = ForgeEffects.BANISH.get();
-        ModEffects.DOOMED = ForgeEffects.DOOMED.get();
         ModEffects.STAND_VIRUS = ForgeEffects.STAND_VIRUS.get();
         ModEffects.CAPTURING_LOVE = ForgeEffects.CAPTURING_LOVE.get();
         ModEffects.FACELESS = ForgeEffects.FACELESS.get();

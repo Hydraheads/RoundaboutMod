@@ -1,6 +1,8 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.chocolatedisco.PowersChocolateDisco;
+import net.hydra.jojomod.chocolatedisco.visage.DiscoVisage;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.event.powers.visagedata.*;
 import net.hydra.jojomod.event.powers.visagedata.aesthetician.*;
@@ -69,8 +71,6 @@ public class ForgeItems {
             () -> new GasolineBucketItem(new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> OCCULT_CHARGE = addToTab(ITEMS.register("occult_charge",
             () -> new OccultChargeItem(new Item.Properties().stacksTo(16))));
-    public static final RegistryObject<Item> TOTEM_OF_DOOM = addToWIPTab(ITEMS.register("totem_of_doom",
-            () -> new TotemOfDoomItem(new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> ROAD_ROLLER = addToTab(ITEMS.register("road_roller",
             () -> new RoadRollerItem(new Item.Properties().stacksTo(1))));
 
@@ -732,6 +732,11 @@ public class ForgeItems {
     public static final RegistryObject<Item> KIRA_PART_EIGHT_MASK = addToWIPTab(ITEMS.register(
             "kira_part_eight_mask", () -> new MaskItem(new Item.Properties().stacksTo(1), new KiraPartEightVisage(null))));
 
+
+    public static final RegistryObject<Item> STAND_DISC_CHOCOLATE_DISCO = addToWIPTab(ITEMS.register(
+            "chocolate_disco_disc", () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersChocolateDisco(null))));
+    public static final RegistryObject<Item> DISCO_MASK = addToWIPTab(ITEMS.register(
+            "disco_mask", () -> new MaskItem(new Item.Properties().stacksTo(1), new DiscoVisage(null))));
 
     public static final RegistryObject<Item> STAND_DISC_WHITE_ALBUM = addToDiscTab(ITEMS.register("white_album_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersWhiteAlbum(null))));

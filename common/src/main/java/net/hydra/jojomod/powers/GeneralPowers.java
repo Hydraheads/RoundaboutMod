@@ -42,7 +42,7 @@ public class GeneralPowers extends AbilityScapeBasis {
     }
 
     /**Runs this code while pressing R to activate powers*/
-    public void onStandSummon(boolean desummon){
+    public void     onStandSummon(boolean desummon){
     }
     /**The text name of the power*/
     public Component getPowerName(){

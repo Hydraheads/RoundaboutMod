@@ -430,10 +430,6 @@ public class FabricSounds {
         addSound(ModSounds.KQ_PLANT_WINDUP_ID, ModSounds.KQ_PLANT_WINDUP_EVENT);
         addSound(ModSounds.KQ_MOB_PLANT_ID, ModSounds.KQ_MOB_PLANT_EVENT);
         addSound(ModSounds.KQ_BLOCK_PLANT_ID, ModSounds.KQ_BLOCK_PLANT_EVENT);
-        addSound(ModSounds.KQ_BTD_WINDUP_ID, ModSounds.KQ_BTD_WINDUP_EVENT);
-        addSound(ModSounds.KQ_BTD_WINDUP_LINE_ID, ModSounds.KQ_BTD_WINDUP_LINE_EVENT);
-        addSound(ModSounds.KIRA4_BTD_ACTIVATION_ID, ModSounds.KIRA4_BTD_ACTIVATION_EVENT);
-        addSound(ModSounds.ADD_STRAY_CAT_ID, ModSounds.ADD_STRAY_CAT_EVENT);
 
         addSound(ModSounds.STRAY_CAT_BUBBLE_POP_ID, ModSounds.STRAY_CAT_BUBBLE_POP_EVENT);
         addSound(ModSounds.STRAY_CAT_BUBBLE_SOUND_1_ID, ModSounds.STRAY_CAT_BUBBLE_SOUND_1_EVENT);
@@ -491,8 +487,6 @@ public class FabricSounds {
 
         addSound(ModSounds.THE_WORLD_OVER_HEAVEN_ID, ModSounds.THE_WORLD_OVER_HEAVEN_EVENT);
         addSound(ModSounds.UNLOCK_SKIN_ID, ModSounds.UNLOCK_SKIN_EVENT);
-        addSound(ModSounds.WH_PULL_ID, ModSounds.WH_PULL_EVENT);
-        addSound(ModSounds.WH_PUSH_ID, ModSounds.WH_PUSH_EVENT);
 
         addSound(ModSounds.TIME_STOP_TICKING_ID, ModSounds.TIME_STOP_TICKING_EVENT);
         addSound(ModSounds.CAN_BOUNCE_ID, ModSounds.CAN_BOUNCE_EVENT);
@@ -813,5 +807,14 @@ public class FabricSounds {
         addSound(ModSounds.EMPEROR_METAL_ID,ModSounds.EMPEROR_METAL_EVENT);
         addSound(ModSounds.EMPEROR_NON_BLEED_ID,ModSounds.EMPEROR_NON_BLEED_EVENT);
         addSound(ModSounds.EMPEROR_SQUINT_ID,ModSounds.EMPEROR_SQUINT_EVENT);
+
+        addSound(ModSounds.DISCO_SUMMON_ID, ModSounds.DISCO_SUMMON_EVENT);
+        addSound(ModSounds.DISCO_MENU_ID, ModSounds.DISCO_MENU_EVENT);
+        addSound(ModSounds.DISCO_SELECT_ID, ModSounds.DISCO_SELECT_EVENT);
+        addSound(ModSounds.DISCO_TELEPORT_ID, ModSounds.DISCO_TELEPORT_EVENT);
+        addSound(ModSounds.BUILDING_MODE_ID, ModSounds.BUILDING_MODE_EVENT);
+        addSound(ModSounds.QUEUE_ITEM_ID, ModSounds.QUEUE_ITEM_EVENT);
+        addSound(ModSounds.QUEUE_EMPTY_ID, ModSounds.QUEUE_EMPTY_EVENT);
+        addSound(ModSounds.DISCO_LOCK_ID, ModSounds.DISCO_LOCK_EVENT);
     }
 }
