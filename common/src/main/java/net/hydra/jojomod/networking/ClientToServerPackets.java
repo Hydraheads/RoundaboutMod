@@ -19,6 +19,7 @@ import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.event.powers.DiverDownDisguiseService;
+import net.hydra.jojomod.chocolatedisco.network.ChocolateDiscoNetworking;
 import net.hydra.jojomod.event.powers.whitesnake.disc.MemoryDiscConversionService;
 import net.hydra.jojomod.event.powers.whitesnake.WhitesnakeControlInventory;
 import net.hydra.jojomod.event.powers.whitesnake.WhitesnakeDisguiseService;
@@ -98,7 +99,13 @@ public class ClientToServerPackets {
             DiverDownDisguise("diver_down_disguise"),
             GunRecoil("gun_recoil"),
             ZombieMinionTactic("zombie_minion_tactics"),
-            DimensionHopD4C("thread_hop_d4c_request_dimension_hop");
+            DimensionHopD4C("thread_hop_d4c_request_dimension_hop"),
+            ChocolateDiscoTeleportProjectiles("chocolate_disco_teleport_projectiles"),
+            ChocolateDiscoQueueItem("chocolate_disco_queue_item"),
+            ChocolateDiscoRedirectProjectiles("chocolate_disco_redirect_projectiles"),
+            ChocolateDiscoGridLockState("chocolate_disco_grid_lock_state"),
+            ChocolateDiscoBuildingModeState("chocolate_disco_building_mode_state"),
+            ChocolateDiscoBuildingSelection("chocolate_disco_building_selection");
 
             public final String value;
 
@@ -117,6 +124,16 @@ public class ClientToServerPackets {
         public void INVOKE(String message, @Nullable ServerPlayer sender, Object... vargs) {
             /**Try Power Packet*/
             if (sender != null) {
+                if (message.equals(MESSAGES.ChocolateDiscoTeleportProjectiles.value)
+                        || message.equals(MESSAGES.ChocolateDiscoQueueItem.value)
+                        || message.equals(MESSAGES.ChocolateDiscoRedirectProjectiles.value)
+                        || message.equals(MESSAGES.ChocolateDiscoGridLockState.value)
+                        || message.equals(MESSAGES.ChocolateDiscoBuildingModeState.value)
+                        || message.equals(MESSAGES.ChocolateDiscoBuildingSelection.value)) {
+                    ChocolateDiscoNetworking.handleC2SPacket(message, sender, vargs);
+                    return;
+                }
+
                 MinecraftServer server = sender.server;
 
                 if (message.equals(MESSAGES.TryPower.value)) {

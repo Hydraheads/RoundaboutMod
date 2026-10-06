@@ -405,14 +405,6 @@ public class ForgeSounds {
         register(ModSounds.KQ_BLOCK_PLANT, ModSounds.KQ_BLOCK_PLANT_ID);
     public static final RegistryObject<SoundEvent> KQ_PLANT_WINDUP_EVENT =
         register(ModSounds.KQ_PLANT_WINDUP, ModSounds.KQ_PLANT_WINDUP_ID);
-    public static final RegistryObject<SoundEvent> KQ_BTD_WINDUP_EVENT =
-        register(ModSounds.KQ_BTD_WINDUP, ModSounds.KQ_BTD_WINDUP_ID);
-    public static final RegistryObject<SoundEvent> KQ_BTD_WINDUP_LINE_EVENT =
-        register(ModSounds.KQ_BTD_WINDUP_LINE, ModSounds.KQ_BTD_WINDUP_LINE_ID);
-    public static final RegistryObject<SoundEvent> KIRA4_BTD_ACTIVATION_EVENT =
-        register(ModSounds.KIRA4_BTD_ACTIVATION, ModSounds.KIRA4_BTD_ACTIVATION_ID);
-    public static final RegistryObject<SoundEvent> ADD_STRAY_CAT_EVENT =
-        register(ModSounds.ADD_STRAY_CAT, ModSounds.ADD_STRAY_CAT_ID);
 
     public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_PUNCH_1_EVENT =
             register(ModSounds.KQ_MINESWEEPER_PUNCH_1, ModSounds.KQ_MINESWEEPER_PUNCH_1_ID);
@@ -1525,6 +1517,14 @@ public class ForgeSounds {
             register(ModSounds.PUCCI_RESPONSE_ANASUI_1, ModSounds.PUCCI_RESPONSE_ANASUI_1_ID);
     public static final RegistryObject<SoundEvent> PUCCI_RESPONSE_ANASUI_2 =
             register(ModSounds.PUCCI_RESPONSE_ANASUI_2, ModSounds.PUCCI_RESPONSE_ANASUI_2_ID);
+    public static final RegistryObject<SoundEvent> DISCO_SUMMON = register(ModSounds.DISCO_SUMMON, ModSounds.DISCO_SUMMON_ID);
+    public static final RegistryObject<SoundEvent> DISCO_MENU = register(ModSounds.DISCO_MENU, ModSounds.DISCO_MENU_ID);
+    public static final RegistryObject<SoundEvent> DISCO_SELECT = register(ModSounds.DISCO_SELECT, ModSounds.DISCO_SELECT_ID);
+    public static final RegistryObject<SoundEvent> DISCO_TELEPORT = register(ModSounds.DISCO_TELEPORT, ModSounds.DISCO_TELEPORT_ID);
+    public static final RegistryObject<SoundEvent> BUILDING_MODE = register(ModSounds.BUILDING_MODE, ModSounds.BUILDING_MODE_ID);
+    public static final RegistryObject<SoundEvent> QUEUE_ITEM = register(ModSounds.QUEUE_ITEM, ModSounds.QUEUE_ITEM_ID);
+    public static final RegistryObject<SoundEvent> QUEUE_EMPTY = register(ModSounds.QUEUE_EMPTY, ModSounds.QUEUE_EMPTY_ID);
+    public static final RegistryObject<SoundEvent> DISCO_LOCK = register(ModSounds.DISCO_LOCK, ModSounds.DISCO_LOCK_ID);
 
     public static RegistryObject<SoundEvent> register(String id, ResourceLocation id2){
         return SOUNDS.register(id, () -> SoundEvent.createVariableRangeEvent(id2));

@@ -283,11 +283,9 @@ public abstract class ZItemInHandRenderer {
 
 
         byte posByte2 = ((IPlayerEntity) abstractClientPlayer).roundabout$GetPoseEmote();
-        byte posByte3 = ((StandUser) abstractClientPlayer).roundabout$getStandAnimation();
-
         if (abstractClientPlayer != null && ((StandUser)abstractClientPlayer).roundabout$getEffectiveCombatMode() && !abstractClientPlayer.isUsingItem() ||
                 AnubisLayer.shouldRender(abstractClientPlayer) != null || abstractClientPlayer.getItemInHand(interactionHand).is(ModItems.ANUBIS_ITEM) ||
-                posByte2 == 35 || posByte3 == StandPowers.HEEL_RAISE) {
+                posByte2 == 35) {
             ((AccessLoweringRenderer)this).rdbt$assertSelf();
 
             if (PowerTypes.isBrawling(abstractClientPlayer) || posByte2 == 35){

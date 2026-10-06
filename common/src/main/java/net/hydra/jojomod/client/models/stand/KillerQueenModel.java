@@ -259,6 +259,8 @@ public class KillerQueenModel<T extends KillerQueenEntity> extends StandModel<T>
 				.texOffs(113, 93).addBox(-1.5F, -3.5F, -1.5F, 3.0F, 2.0F, 3.0F, new CubeDeformation(0.1F))
 				.texOffs(112, 85).addBox(-2.0F, -0.55F, -2.0F, 4.0F, 2.0F, 4.0F, new CubeDeformation(-0.2F)), PartPose.offset(0.0F, -2.25F, 0.0F));
 
+		PartDefinition backGround = lower_torso.addOrReplaceChild("backGround", CubeListBuilder.create().texOffs(103, 10).addBox(-4.0F, -6.0F, 2.0F, 8.0F, 5.0F, 0.0F, new CubeDeformation(-0.05F)), PartPose.offset(0.0F, 0.0F, -0.1F));
+
 		PartDefinition swordHolder = lower_chest.addOrReplaceChild("swordHolder", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
 		PartDefinition cube_r8 = swordHolder.addOrReplaceChild("cube_r8", CubeListBuilder.create().texOffs(23, 106).addBox(-1.5F, -2.0F, -3.5F, 2.0F, 3.0F, 7.0F, new CubeDeformation(-0.4F)), PartPose.offsetAndRotation(5.0F, 5.65F, 0.05F, 0.7854F, 0.0F, 0.0F));

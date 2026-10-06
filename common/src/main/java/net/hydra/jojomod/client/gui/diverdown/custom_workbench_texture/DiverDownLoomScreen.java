@@ -13,7 +13,5 @@ public class DiverDownLoomScreen extends LoomScreen {
 
     public DiverDownLoomScreen(LoomMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
-        this.inventoryLabelY = 10000;
-        this.titleLabelY = 10000;
     }
 }
