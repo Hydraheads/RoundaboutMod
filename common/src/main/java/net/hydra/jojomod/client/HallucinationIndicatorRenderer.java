@@ -29,6 +29,18 @@ public final class HallucinationIndicatorRenderer {
     private HallucinationIndicatorRenderer() {
     }
 
+    public static void tick(Minecraft minecraft) {
+        if (minecraft.level == null) {
+            clear();
+            return;
+        }
+        INDICATORS.values().removeIf(indicator -> indicator.expiresAt() < minecraft.level.getGameTime());
+    }
+
+    public static void clear() {
+        INDICATORS.clear();
+    }
+
     public static void update(int entityId, int level) {
         Minecraft minecraft = Minecraft.getInstance();
         if (level <= 0 || minecraft.level == null) {

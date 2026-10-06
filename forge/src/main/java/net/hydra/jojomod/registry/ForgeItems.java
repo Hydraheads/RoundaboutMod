@@ -69,6 +69,8 @@ public class ForgeItems {
             () -> new GasolineBucketItem(new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> OCCULT_CHARGE = addToTab(ITEMS.register("occult_charge",
             () -> new OccultChargeItem(new Item.Properties().stacksTo(16))));
+    public static final RegistryObject<Item> TOTEM_OF_DOOM = addToWIPTab(ITEMS.register("totem_of_doom",
+            () -> new TotemOfDoomItem(new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> ROAD_ROLLER = addToTab(ITEMS.register("road_roller",
             () -> new RoadRollerItem(new Item.Properties().stacksTo(1))));
 

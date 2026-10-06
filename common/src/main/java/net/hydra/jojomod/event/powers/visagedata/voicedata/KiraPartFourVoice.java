@@ -139,6 +139,7 @@ public class KiraPartFourVoice extends VoiceData{
         if (attackCooldown > -1 || inTheMiddleOfTalking()) return;
 
         playSoundAttack(ModSounds.KIRA4_BTD_1_EVENT, 25);
+
     }
 
     public void playBtdRange() {
@@ -151,7 +152,9 @@ public class KiraPartFourVoice extends VoiceData{
         if (inTheMiddleOfTalking()) return;
 
         double db = Math.random();
-        if (db <= 0.5) {
+        if (db <= 0.3) {
+            playSoundAttack(ModSounds.KIRA4_BTD_ACTIVATION_EVENT, 77);
+        }else if (db <= 0.6) {
             playSoundAttack(ModSounds.KIRA4_I_BEAT_THEM_EVENT, 80);
         }else {
             playSoundAttack(ModSounds.KIRA4_LIVE_HAPPY_EVENT, 51);

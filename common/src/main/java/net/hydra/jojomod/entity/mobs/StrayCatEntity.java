@@ -131,11 +131,20 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
             this.setBreed(tag.getByte(TAG_SKIN));
         }
     }
+
     @Override
     public boolean isInLove() {
         return false;
     }
 
+    @Override
+    public float getNameTagOffsetY() {
+        if (getPotted()) {
+            return super.getNameTagOffsetY() + 0.25f;
+        }
+
+        return super.getNameTagOffsetY();
+    }
 
     public final AnimationState idle = new AnimationState();
     public final AnimationState unpotted = new AnimationState();

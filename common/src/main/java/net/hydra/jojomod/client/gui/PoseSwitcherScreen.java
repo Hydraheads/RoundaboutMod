@@ -178,8 +178,6 @@ public class PoseSwitcherScreen extends Screen {
                 "textures/gui/pose_icons/jonathan.png"),Poses.JONATHAN.id,31,0),
         SITTING(Component.translatable("roundabout.pose.sitting"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/pose_icons/sit.png"),Poses.SITTING.id,-62,31),
-        ANASUI(Component.translatable("roundabout.pose.anasui"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/pose_icons/anasui.png"),Poses.ANASUI.id,62,31),
 
         NONE(Component.translatable("roundabout.pose.none"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/pose_icons/jonathan.png"),Poses.NONE.id,0,31);
@@ -198,7 +196,6 @@ public class PoseSwitcherScreen extends Screen {
                 case JOTARO -> JOTARO;
                 case JONATHAN -> JONATHAN;
                 case SITTING -> SITTING;
-                case ANASUI -> ANASUI;
             };
         }
         protected static final posIcon[] VALUES;
@@ -229,7 +226,7 @@ public class PoseSwitcherScreen extends Screen {
 
         static {
             VALUES = new PoseSwitcherScreen.posIcon[]{GIORNO,JOSEPH,KOICHI,WRY,OH_NO,TORTURE_DANCE,WAMUU,JOTARO,JONATHAN,
-                    SITTING,ANASUI,NONE};
+                    SITTING,NONE};
         }
     }
 
