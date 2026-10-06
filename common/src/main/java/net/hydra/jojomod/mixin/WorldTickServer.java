@@ -2,7 +2,6 @@ package net.hydra.jojomod.mixin;
 
 import com.google.common.collect.ImmutableList;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.chocolatedisco.network.ChocolateDiscoNetworking;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
@@ -90,10 +89,6 @@ public abstract class WorldTickServer extends Level {
     @Inject(method = "tick", at = @At(value = "HEAD")
             , require = 0)
     private void roundabout$tickTimeStopList(BooleanSupplier $$0, CallbackInfo ci) {
-        if (((ServerLevel)(Object) this).dimension() == Level.OVERWORLD) {
-            ChocolateDiscoNetworking.tick(((ServerLevel)(Object) this).getServer());
-        }
-
         ((ILevelAccess)this).roundabout$tickPlunderBubbleRemoval();
 
         ((TimeStop) this).tickAllTimeStops();

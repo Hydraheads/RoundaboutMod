@@ -23,14 +23,12 @@
             "net.hydra.jojomod.RoundaboutFabric"
         ],
         "client": [
-            "net.hydra.jojomod.client.RoundaboutFabricClient",
-            "net.hydra.jojomod.chocolatedisco.client.RoundaboutChocolateDiscoFabricClient"
+            "net.hydra.jojomod.client.RoundaboutFabricClient"
         ]
     },
     "mixins": [
         "${mod_id}.mixins.json",
-        "${mod_id}.fabric.mixins.json",
-        "roundabout.chocolatedisco.mixins.json"
+        "${mod_id}.fabric.mixins.json"
     ],
     "custom": {
         "fabric-loom:injected_interfaces": [],
@@ -39,9 +37,9 @@
                 "${mod_id}.sodium.mixins.json"
             ]
         },
-        "badoptimizations:cache_hooks": {
-            "common": "net.hydra.jojomod.util.BadOptimizationsFixer"
-        }
+      "badoptimizations:cache_hooks": {
+        "common": "net.hydra.jojomod.util.BadOptimizationsFixer"
+      }
     },
     "depends": {
         "fabricloader": ">=0.14",
@@ -49,5 +47,6 @@
         "minecraft": "${minecraft_version}",
         "java": ">=17"
     },
-    "accessWidener": "${mod_id}.accesswidener"
+    "accessWidener" : "${mod_id}.accesswidener"
 }
+  

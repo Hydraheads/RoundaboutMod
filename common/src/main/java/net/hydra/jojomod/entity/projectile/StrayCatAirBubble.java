@@ -168,8 +168,8 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
     @Override
     public boolean dealWithPenetration(Entity proj){
-        popBubble();
-        return true;
+        //popBubble();
+        return false;
     }
 
 
