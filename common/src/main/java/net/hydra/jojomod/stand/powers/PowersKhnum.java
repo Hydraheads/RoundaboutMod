@@ -26,6 +26,7 @@ public class PowersKhnum extends NewDashPreset {
     private static final byte TALL_LEGS = 1;
     private static final byte WIDE = 2;
     private static final byte SMALL = 3;
+    private int mobFormChangeTicks;
 
     public PowersKhnum(LivingEntity self) {
         super(self);
@@ -214,6 +215,7 @@ public class PowersKhnum extends NewDashPreset {
             Mob mob = (Mob) self;
             StandUser user = (StandUser) self;
             if (attackTarget == null) {
+                mobFormChangeTicks = 0;
                 if (user.roundabout$getKhnumForm() != NEUTRAL) user.roundabout$setKhnumForm(NEUTRAL);
                 if (user.roundabout$getKhnumMobDisguise() == KhnumMobDisguise.NONE) {
                     user.roundabout$setKhnumMobDisguise(KhnumMobDisguise.chooseFor(mob));
@@ -223,9 +225,14 @@ public class PowersKhnum extends NewDashPreset {
                     user.roundabout$setKhnumMobDisguise(KhnumMobDisguise.NONE);
                 }
                 byte currentForm = user.roundabout$getKhnumForm();
-                if (currentForm != WIDE && currentForm != SMALL || mob.getRandom().nextInt(10) == 0) {
-                    byte nextForm = mob.getRandom().nextBoolean() ? WIDE : SMALL;
-                    if (nextForm != currentForm) user.roundabout$setKhnumForm(nextForm);
+                if (currentForm != WIDE && currentForm != SMALL) {
+                    user.roundabout$setKhnumForm(mob.getRandom().nextBoolean() ? WIDE : SMALL);
+                    mobFormChangeTicks = 100 + mob.getRandom().nextInt(101);
+                } else if (mobFormChangeTicks > 0) {
+                    mobFormChangeTicks--;
+                } else {
+                    user.roundabout$setKhnumForm(currentForm == WIDE ? SMALL : WIDE);
+                    mobFormChangeTicks = 100 + mob.getRandom().nextInt(101);
                 }
             }
         }
