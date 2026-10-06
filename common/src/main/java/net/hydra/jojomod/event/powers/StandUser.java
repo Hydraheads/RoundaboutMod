@@ -412,6 +412,8 @@ public interface StandUser {
     int roundabout$getKhnumWidth();
     int roundabout$getKhnumHead();
     void roundabout$setKhnumVisage(int height, int width, int head);
+    byte roundabout$getKhnumMobDisguise();
+    void roundabout$setKhnumMobDisguise(byte disguise);
     boolean roundabout$hasDiverLegs();
     void roundabout$setDiverLegs(boolean legs);
     boolean roundabout$hasDiverArms();

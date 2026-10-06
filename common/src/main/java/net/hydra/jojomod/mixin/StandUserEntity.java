@@ -4001,6 +4001,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$KHNUM_HEIGHT, 237);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$KHNUM_WIDTH, 135);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$KHNUM_HEAD, 135);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$KHNUM_MOB_DISGUISE, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DIVER_LEGS, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DIVER_ARMS, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$RIBCAGE_TRAP, false);
@@ -7041,6 +7042,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private static final EntityDataAccessor<Integer> ROUNDABOUT$KHNUM_HEAD = SynchedEntityData.defineId(
             LivingEntity.class, EntityDataSerializers.INT);
     @Unique
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$KHNUM_MOB_DISGUISE = SynchedEntityData.defineId(
+            LivingEntity.class, EntityDataSerializers.BYTE);
+    @Unique
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$DIVER_LEGS = SynchedEntityData.defineId(
             LivingEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$DIVER_ARMS = SynchedEntityData.defineId(
@@ -7257,5 +7261,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.entityData.set(ROUNDABOUT$KHNUM_HEIGHT, Mth.clamp(height, 0, 270));
         this.entityData.set(ROUNDABOUT$KHNUM_WIDTH, Mth.clamp(width, 0, 270));
         this.entityData.set(ROUNDABOUT$KHNUM_HEAD, Mth.clamp(head, 0, 270));
+    }
+
+    @Override
+    public byte roundabout$getKhnumMobDisguise() {
+        return this.entityData.get(ROUNDABOUT$KHNUM_MOB_DISGUISE);
+    }
+
+    @Override
+    public void roundabout$setKhnumMobDisguise(byte disguise) {
+        this.entityData.set(ROUNDABOUT$KHNUM_MOB_DISGUISE, disguise);
     }
 }

@@ -13,6 +13,14 @@ public class ForgeSounds {
             DeferredRegister.create(Registries.SOUND_EVENT, Roundabout.MOD_ID);
     public static final RegistryObject<SoundEvent> SUMMON_SOUND_EVENT =
             register(ModSounds.SUMMON_SOUND, ModSounds.SUMMON_SOUND_ID);
+    public static final RegistryObject<SoundEvent> KHNUM_SUMMON_EVENT =
+            register(ModSounds.KHNUM_SUMMON, ModSounds.KHNUM_SUMMON_ID);
+    public static final RegistryObject<SoundEvent> KHNUM_DISGUISE_EVENT =
+            register(ModSounds.KHNUM_DISGUISE, ModSounds.KHNUM_DISGUISE_ID);
+    public static final RegistryObject<SoundEvent> KHNUM_STRETCH_EVENT =
+            register(ModSounds.KHNUM_STRETCH, ModSounds.KHNUM_STRETCH_ID);
+    public static final RegistryObject<SoundEvent> KHNUM_RESET_EVENT =
+            register(ModSounds.KHNUM_RESET, ModSounds.KHNUM_RESET_ID);
     public static final RegistryObject<SoundEvent> STAND_ARROW_CHARGE_EVENT =
             register(ModSounds.STAND_ARROW_CHARGE, ModSounds.STAND_ARROW_CHARGE_ID);
     public static final RegistryObject<SoundEvent> STAND_ARROW_USE_EVENT =
