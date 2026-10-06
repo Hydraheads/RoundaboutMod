@@ -1,6 +1,8 @@
 package net.hydra.jojomod.mixin.fates;
 
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.khnum.KhnumMobDisguise;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
@@ -15,6 +17,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Entity.class)
 public class FateEntityMixin {
+
+    @Inject(method = "isInWater()Z", at = @At("RETURN"), cancellable = true)
+    private void roundabout$keepKhnumFishStandInSwimming(CallbackInfoReturnable<Boolean> cir) {
+        if ((Object) this instanceof StandUser user
+                && user.roundabout$getKhnumMobDisguise() == KhnumMobDisguise.SWIMMING_FISH_RENDER) {
+            cir.setReturnValue(true);
+        }
+    }
 
     /**vampires cannot drown*/
     @Inject(method = "isInvulnerableTo(Lnet/minecraft/world/damagesource/DamageSource;)Z", at = @At(value = "HEAD"), cancellable = true)

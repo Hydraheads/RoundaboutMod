@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.animal.AbstractFish;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
@@ -39,6 +40,9 @@ public abstract class JusticeMobRenderer<T extends Mob, M extends EntityModel<T>
         if ($$0 instanceof StandUser user && user.roundabout$getKhnumMobDisguise() != KhnumMobDisguise.NONE) {
             roundabout$shapeShift = KhnumMobDisguise.create(user.roundabout$getKhnumMobDisguise(), $$0.level());
             if (roundabout$shapeShift != null) {
+                if (roundabout$shapeShift instanceof AbstractFish && roundabout$shapeShift instanceof StandUser fishStandIn) {
+                    fishStandIn.roundabout$setKhnumMobDisguise(KhnumMobDisguise.SWIMMING_FISH_RENDER);
+                }
                 roundabout$shapeShift.setAggressive($$0.getTarget() != null);
                 roundabout$doTheThing($$0,$$1,$$2,$$3,$$4,$$5);
                 ci.cancel();

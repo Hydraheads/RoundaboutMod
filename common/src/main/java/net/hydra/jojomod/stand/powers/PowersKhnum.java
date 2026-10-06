@@ -14,9 +14,9 @@ import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.sounds.SoundSource;
 
 import java.util.List;
 import com.google.common.collect.Lists;
@@ -49,6 +49,19 @@ public class PowersKhnum extends NewDashPreset {
     @Override
     public boolean canSummonStandAsEntity() {
         return false;
+    }
+
+    @Override
+    public boolean canSummonStand() {
+        return true;
+    }
+
+    @Override
+    public void playSummonSound() {
+        if (self != null && !self.isCrouching() && !self.level().isClientSide()) {
+            self.level().playSound(null, self.blockPosition(), ModSounds.KHNUM_SUMMON_EVENT,
+                    SoundSource.PLAYERS, 1.0F, 1.0F);
+        }
     }
 
     @Override
@@ -117,10 +130,6 @@ public class PowersKhnum extends NewDashPreset {
         switch (context) {
             case SKILL_1_NORMAL -> {
                 if (!onCooldown(PowerIndex.SKILL_1)) {
-                    if (self.level().isClientSide()) {
-                        self.level().playLocalSound(self.getX(), self.getY(), self.getZ(), ModSounds.KHNUM_SUMMON_EVENT,
-                                SoundSource.PLAYERS, 1.0F, 1.0F, false);
-                    }
                     ClientUtil.openKhnumDisguiseScreen();
                 }
             }
