@@ -2663,7 +2663,6 @@ public class PowersKillerQueen extends NewPunchingStand {
                     try {
                         stray.setCustomName(Component.Serializer.fromJson(string));
                     } catch (Exception exception) {
-                        //LOGGER.warn("Failed to parse entity custom name {}", (Object)string, (Object)exception);
                     }
                 }
                 stray.setPotted(true);
@@ -2671,12 +2670,10 @@ public class PowersKillerQueen extends NewPunchingStand {
                 hasStrayCat = false;
                 strayCatData = null;
 
-                Roundabout.LOGGER.info("Stray cat data: " + strayCatData + " has stray cat: " + hasStrayCat + " clientSide: " + isClient());
 
                 stray.moveTo(self.getPosition(1).x, self.getPosition(1).y, self.getPosition(1).z, self.getYRot(), 0.0F);
                 self.level().addFreshEntity(stray);
 
-                Roundabout.LOGGER.info("Stray cat data: " + strayCatData + " has stray cat: " + hasStrayCat + " clientSide: " + isClient());
             }
         }
         syncCanStrayCatStatus(false);
