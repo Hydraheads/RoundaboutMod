@@ -124,7 +124,7 @@ public class KillerQueenEntity extends FollowingStandEntity {
             BUBBLE_SEND = 125,
             BITES_THE_DUST_FOLLOW_LOOP = 126,
             BITES_THE_DUST_FOLLOW = 127,
-            BITES_THE_DUST_IDLE = -10,
+            BITES_THE_DUST_IDLE = 100,
             SHA_SEND = 88,
     	    HEAVY_STRIKE = 26,
             ARROW_CHARGE = 89,
@@ -286,9 +286,21 @@ public class KillerQueenEntity extends FollowingStandEntity {
         }
     }
 
+    @Override
+    public EntityDimensions getDimensions(Pose pose) {
+        if (getPlantedBitesTheDust()
+                || this.getAnimation() == BITES_THE_DUST_FOLLOW || this.getAnimation() == BITES_THE_DUST_FOLLOW_LOOP || this.getAnimation() == BITES_THE_DUST_IDLE) {
+
+            return EntityDimensions.scalable(0.4F,0.4F);
+
+        }
+
+        return super.getDimensions(pose);
+    }
+
 
     public Vec3 getBitesTheDustOffset(LivingEntity standUser) {
-        double r = 0.7;
+        double r = 0.65;
 
         double yawfix = standUser.getYRot();
         yawfix += this.getAnchorPlace() + 125;
