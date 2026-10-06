@@ -4573,7 +4573,9 @@ public class PowersKillerQueen extends NewPunchingStand {
         }else if (soundChoice == BUBBLE_TARGET) {
             return (float)(1.1+Math.random()*0.2);
         }else if (soundChoice == BLOCK_PLANT) {
-            return (float)(0.95+Math.random()*0.1);
+            return (float) (0.95 + Math.random() * 0.1);
+        }else if(soundChoice == SUMMON_ARMS) {
+            return 1.6f;
         }
 
         return super.getSoundPitchFromByte(soundChoice);
@@ -4639,6 +4641,8 @@ public class PowersKillerQueen extends NewPunchingStand {
             return ModSounds.KQ_BTD_WINDUP_EVENT;
         }else if (soundChoice == BTD_DAY_WINDUP_LINE) {
             return ModSounds.KQ_BTD_WINDUP_LINE_EVENT;
+        }else if (soundChoice == SUMMON_ARMS) {
+            return ModSounds.SUMMON_SOUND_EVENT;
         }
 
 
