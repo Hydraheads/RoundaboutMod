@@ -372,7 +372,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     public static int getMobPlantWindup() {
         return ClientNetworking.getAppropriateConfig().killerQueenSettings.mobPlantWindup;
     }
-    public int getNormalMaxGuardPoints() { return 15; }
+    public int getNormalMaxGuardPoints() { return ClientNetworking.getAppropriateConfig().killerQueenSettings.killerQueenGuardPoints; }
 
     @Override
     public int getMaxGuardPoints(){

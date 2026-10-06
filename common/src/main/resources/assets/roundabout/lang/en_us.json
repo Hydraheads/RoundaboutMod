@@ -4194,6 +4194,8 @@
   "config.roundabout.moldMaxSize.desc": "Controls the maximum range of green day's mold fields",
   "config.roundabout.sneakyKilling.name": "Silent Killer",
   "config.roundabout.sneakyKilling.desc": "When this config is enabled, the name of the user isn't showed in the kill message, only if hided from the victim. Mobs also don't get aggro if showed the same scenario.",
+  "config.roundabout.killerQueenGuardPoints.name": "Guard Points",
+  "config.roundabout.killerQueenGuardPoints.desc": "How much raw, unreduced damage can the stand take before its guard breaks?",
   "config.roundabout.canUseBitesTheDustDayMode.name": "Enable Bites the dust (Day Mode)",
   "config.roundabout.canUseBitesTheDustDayMode.desc": "Turn on/off the Bites the Dust Day mode, that restart the day of the game when detonating (enabled by default)",
   "config.roundabout.bitesTheDustDayModeAffectGlobalTime.name": "Bites the dust Day Mode rewinds global time",

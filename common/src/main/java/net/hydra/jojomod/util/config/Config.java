@@ -464,7 +464,7 @@ public class Config implements Cloneable {
     }
 
     public static class KillerQueenSettings {
-    	@BooleanOption(group = "inherit", value = true)
+        @BooleanOption(group = "inherit", value = true)
         public Boolean enableKillerQueen;
         @BooleanOption(group = "inherit", value = true)
         public Boolean sneakyKilling;
@@ -472,6 +472,8 @@ public class Config implements Cloneable {
         public Integer killerQueenAttackMultOnPlayers;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer killerQueenAttackMultOnMobs;
+        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        public Integer killerQueenGuardPoints;
     	@BooleanOption(group = "inherit", value = true)
         public Boolean canUseBitesTheDustDayMode;
         @BooleanOption(group = "inherit", value = false)
