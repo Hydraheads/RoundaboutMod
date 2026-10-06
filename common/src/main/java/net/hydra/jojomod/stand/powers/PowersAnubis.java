@@ -2415,10 +2415,6 @@ public class PowersAnubis extends NewDashPreset {
         Vec3 pos = e.getEyePosition().add(0,e.getLookAngle().y,0);
 
         List<Entity> list = MainUtil.genHitbox(this.getSelf().level(),pos.x,pos.y,pos.z,8,1.5,8);
-        Entity targetEntity = this.rayCastEntity((LivingEntity) e,(float)radius);
-        if (targetEntity != null) {
-            list.add(targetEntity);
-        }
         list = doAttackChecks(list);
         list.remove(e);
 

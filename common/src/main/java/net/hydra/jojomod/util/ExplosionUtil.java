@@ -170,9 +170,7 @@ public class ExplosionUtil {
 			BlockState info = level.getBlockState(pos);
 			if (isBlockBlackListed(info) || (MainUtil.confirmIsOre(info) && ignoreOres)
 					|| info.isAir() || info.is(Blocks.BARRIER) || info.is(Blocks.BEDROCK)
-					|| !MainUtil.isDestructible(level, location, info)
-					|| MainUtil.isBlockDestructionBlacklisted(info)
-			) {
+					|| !MainUtil.isDestructible(level, location, info)) {
 				continue;
 			}
 
@@ -192,10 +190,7 @@ public class ExplosionUtil {
 
 	public static void destroyBlockHandled(Level level, BlockPos $$0, boolean $$1, @Nullable Entity $$2) {
 		if ($$2 instanceof Player p) {
-			if (
-					!MainUtil.canPlaceOnClaim(p, new BlockHitResult(new Vec3($$0.relative(Direction.DOWN).getX(),$$0.relative(Direction.DOWN).getY(),$$0.relative(Direction.DOWN).getZ()), Direction.UP,$$0.relative(Direction.DOWN),false))
-					|| !level.mayInteract(p, $$0)
-			) {
+			if (!MainUtil.canPlaceOnClaim(p, new BlockHitResult(new Vec3($$0.relative(Direction.DOWN).getX(),$$0.relative(Direction.DOWN).getY(),$$0.relative(Direction.DOWN).getZ()), Direction.UP,$$0.relative(Direction.DOWN),false))) {
 				return;
 			}
 		}

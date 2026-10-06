@@ -112,7 +112,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
+import net.hydra.jojomod.chocolatedisco.network.ChocolateDiscoNetworking;
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -4512,11 +4512,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             return;
         }
 
-        if (this.hasEffect(ModEffects.DOOMED)) {
-            cir.setReturnValue(false);
-            return;
-        }
-
         if (rdbt$this() instanceof AbstractVillager || rdbt$this() instanceof AbstractIllager) {
             if (dsource.is(ModDamageTypes.BLOOD_DRAIN) || (dsource.getDirectEntity() instanceof BaseMinion)) {
                 Entity ent = dsource.getEntity();
@@ -5460,6 +5455,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
 
         MainUtil.onDeath(this, $$0);
+
+        if ((Object) this instanceof ServerPlayer serverPlayer) {
+            ChocolateDiscoNetworking.onPlayerDeath(serverPlayer);
+        }
     }
 
     @Inject(method = "die(Lnet/minecraft/world/damagesource/DamageSource;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;setPose(Lnet/minecraft/world/entity/Pose;)V", shift = At.Shift.BEFORE), cancellable = true, require = 0)

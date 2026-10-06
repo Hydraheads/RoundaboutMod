@@ -1,6 +1,7 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.chocolatedisco.ChocolateDiscoEntity;
 import net.hydra.jojomod.entity.*;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
@@ -36,6 +37,13 @@ public class ForgeEntities {
 
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
             DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, Roundabout.MOD_ID);
+    public static final RegistryObject<EntityType<ChocolateDiscoEntity>> CHOCOLATE_DISCO =
+            ENTITY_TYPES.register("chocolate_disco", () ->
+                    EntityType.Builder.of(ChocolateDiscoEntity::new, MobCategory.MISC)
+                            .sized(0.6F, 2.0F)
+                            .clientTrackingRange(10)
+                            .build(new ResourceLocation(Roundabout.MOD_ID, "chocolate_disco").toString())
+            );
     public static final RegistryObject<EntityType<TerrierEntity>> TERRIER_DOG =
             ENTITY_TYPES.register("terrier", () ->
                     EntityType.Builder.of(TerrierEntity::new, MobCategory.CREATURE).sized(0.6f, 0.55f).
@@ -637,6 +645,12 @@ public class ForgeEntities {
                     EntityType.Builder.of(DiverDownWorldEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "diver_down_world").toString())
+            );
+    public static final RegistryObject<EntityType<DiverDrownedEntity>> DIVER_DROWNED =
+            ENTITY_TYPES.register("diver_drowned", () ->
+                    EntityType.Builder.of(DiverDrownedEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "diver_drowned").toString())
             );
     public static final RegistryObject<EntityType<DiverKickEntity>> DIVER_KICK =
             ENTITY_TYPES.register("diver_kick", () ->

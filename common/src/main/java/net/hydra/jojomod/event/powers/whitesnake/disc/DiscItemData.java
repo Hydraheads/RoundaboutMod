@@ -1,8 +1,6 @@
 package net.hydra.jojomod.event.powers.whitesnake.disc;
 
 import net.hydra.jojomod.access.DiscBearer;
-import net.hydra.jojomod.event.ModEffects;
-import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.item.MemoryDiscItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -266,9 +264,8 @@ public final class DiscItemData {
     }
 
     public static boolean isLobotomized(LivingEntity entity) {
-        return (!((DiscBearer) entity).roundabout$hasMemoryDisc()
-                && !WhitesnakeDiscUtil.hasUsableStandDisc(entity))
-                || (entity instanceof Mob mob && mob.hasEffect(ModEffects.DOOMED) && !MainUtil.isBossMob(mob));
+        return !((DiscBearer) entity).roundabout$hasMemoryDisc()
+                && !WhitesnakeDiscUtil.hasUsableStandDisc(entity);
     }
 
     public static boolean isMemoryDevelopmentLimited(LivingEntity entity) {

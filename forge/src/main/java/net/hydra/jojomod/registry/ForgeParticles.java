@@ -137,18 +137,6 @@ public class ForgeParticles {
             "punch_impact_c",
             () -> new SimpleParticleType(true)
     );
-    public static final RegistryObject<SimpleParticleType> GOLD_PUNCH_IMPACT_A = PARTICLES.register(
-            "gold_punch_impact_a",
-            () -> new SimpleParticleType(true)
-    );
-    public static final RegistryObject<SimpleParticleType> GOLD_PUNCH_IMPACT_B = PARTICLES.register(
-            "gold_punch_impact_b",
-            () -> new SimpleParticleType(true)
-    );
-    public static final RegistryObject<SimpleParticleType> GOLD_PUNCH_IMPACT_C = PARTICLES.register(
-            "gold_punch_impact_c",
-            () -> new SimpleParticleType(true)
-    );
     public static final RegistryObject<SimpleParticleType> DISC_STEAL_HIT = PARTICLES.register(
             "disc_steal_hit",
             () -> new SimpleParticleType(true)
