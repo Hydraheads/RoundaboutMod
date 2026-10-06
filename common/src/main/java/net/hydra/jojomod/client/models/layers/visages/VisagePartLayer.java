@@ -115,7 +115,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 float b = isHurt ? 0.6F : 1.0F;
                 StandUser user = ((StandUser) entity);
 
-                if (user.roundabout$getStandPowers() instanceof PowersWalkingHeart PW && (PW.rendersInCombatMode() || PW.hasExtendedHeelsForWalking())){
+                if (user.roundabout$getStandPowers() instanceof PowersWalkingHeart PW && (PW.inCombatMode() || PW.hasExtendedHeelsForWalking())){
                     if (user instanceof AbstractClientPlayer PE) {
                         renderRightHeelPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, PE.getSkinTextureLocation(),
                                 r, g, b);

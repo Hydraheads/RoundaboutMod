@@ -65,7 +65,11 @@ public class ServerToClientPackets {
             ClearEpitaph("clear_epitaph"),
             SendSafeSound("send_safe_sound"),
             SendSafeSound2("send_safe_sound_2"),
-            SendSafeParticle("send_safe_particle");
+            SendSafeParticle("send_safe_particle"),
+            ChocolateDiscoQueueState("chocolate_disco_queue_state"),
+            ChocolateDiscoSummonSound("chocolate_disco_summon_sound"),
+            ChocolateDiscoBuildingSelectionClear("chocolate_disco_building_selection_clear"),
+            ChocolateDiscoBuildingModeReset("chocolate_disco_building_mode_reset");
 
             public final String value;
 

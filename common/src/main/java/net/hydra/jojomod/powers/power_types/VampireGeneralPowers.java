@@ -882,7 +882,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                     if (entity.isPassenger() && !(entity instanceof Player pl && pl.isCreative()))
                         entity.removeVehicle();
                     playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.LASSO_EVENT, SoundSource.PLAYERS, 1F, (float) (1.5f + Math.random() * 0.05f));
-                    addToCombo(entity);
+
                     entity.hurtMarked = true;
                     entity.hasImpulse = true;
                     entity.setDeltaMovement(self.getEyePosition().subtract(entity.position()).normalize().scale(1));

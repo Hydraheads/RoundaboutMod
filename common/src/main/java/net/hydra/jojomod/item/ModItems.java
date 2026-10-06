@@ -86,6 +86,8 @@ public class ModItems {
     public static Item STAND_DISC_CREAM;
     public static Item MAX_STAND_DISC_CREAM;
     public static Item STAND_DISC_EMPEROR;
+    public static Item STAND_DISC_CHOCOLATE_DISCO;
+    public static Item DISCO_MASK;
     public static Item MAX_STAND_DISC_EMPEROR;
     public static Item STAND_DISC;
     public static Item SIGHT_DISC;
@@ -159,7 +161,6 @@ public class ModItems {
     public static Item LUCK_UPGRADE;
     public static Item EXECUTION_UPGRADE;
     public static Item OCCULT_CHARGE;
-    public static Item TOTEM_OF_DOOM;
 
     public static Item HARPOON;
     public static Item SCISSORS;
@@ -419,35 +420,35 @@ public class ModItems {
         return registerStand(powers, itemLocation, true);
     }
 
-    /// Registers a stand disc (and a max stand disc when requested) by the powers and base disc item name.
-    /// @param powers The stand powers. Usually from new Powers(null);
-    /// @param itemLocation The stand disc location. An example being <code>new ResourceLocation(Roundabout.MOD_ID, "the_world_disc")</code>
-    /// @return Returns a list of the items created. First index is the regular stand disc, second being maximum.
-    public static <T extends StandPowers> List<Item> registerStand(T powers, ResourceLocation itemLocation, boolean maxDisc)
-    {
-        Item.Properties properties = new Item.Properties().stacksTo(1);
-        List<Item> discs = new ArrayList<>();
-
-        discs.add(
-                registerItem(itemLocation, new StandDiscItem(properties, powers))
-        );
-
-        if (maxDisc)
+        /// Registers a stand disc (and a max stand disc when requested) by the powers and base disc item name.
+        /// @param powers The stand powers. Usually from new Powers(null);
+        /// @param itemLocation The stand disc location. An example being <code>new ResourceLocation(Roundabout.MOD_ID, "the_world_disc")</code>
+        /// @return Returns a list of the items created. First index is the regular stand disc, second being maximum.
+        public static <T extends StandPowers> List<Item> registerStand(T powers, ResourceLocation itemLocation, boolean maxDisc)
         {
-            ResourceLocation maxLocation = new ResourceLocation(itemLocation.getNamespace(), "max_" + itemLocation.getPath());
+            Item.Properties properties = new Item.Properties().stacksTo(1);
+            List<Item> discs = new ArrayList<>();
+
             discs.add(
-                    registerItem(maxLocation, new MaxStandDiscItem(properties, powers, (StandDiscItem) discs.get(0)))
+                    registerItem(itemLocation, new StandDiscItem(properties, powers))
             );
+
+            if (maxDisc)
+            {
+                ResourceLocation maxLocation = new ResourceLocation(itemLocation.getNamespace(), "max_" + itemLocation.getPath());
+                discs.add(
+                        registerItem(maxLocation, new MaxStandDiscItem(properties, powers, (StandDiscItem) discs.get(0)))
+                );
+            }
+
+            return discs;
         }
 
-        return discs;
-    }
+        private static Item registerItem(String name, Item item){
+            return Registry.register(BuiltInRegistries.ITEM, Roundabout.location(name), item);
+        }
 
-    private static Item registerItem(String name, Item item){
-        return Registry.register(BuiltInRegistries.ITEM, Roundabout.location(name), item);
+        private static Item registerItem(ResourceLocation location, Item item){
+            return Registry.register(BuiltInRegistries.ITEM, location, item);
+        }
     }
-
-    private static Item registerItem(ResourceLocation location, Item item){
-        return Registry.register(BuiltInRegistries.ITEM, location, item);
-    }
-}

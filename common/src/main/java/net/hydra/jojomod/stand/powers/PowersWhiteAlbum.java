@@ -258,11 +258,6 @@ public class PowersWhiteAlbum extends NewDashPreset {
                         ((StandUser)self).roundabout$tryPower(PowerIndex.NONE,true);
                     }
                 }
-//            if (self.getUseItem() != null && self.getUseItem().is(ModItems.NEW_LOCACACA)){
-//                if ($$0.getEntity() != null){
-//                    self.stopUsingItem();
-//                }
-//            }
 
             if (self instanceof Player pl) {
                 if ($$0.is(DamageTypes.FALL) ||
