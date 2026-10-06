@@ -3793,9 +3793,9 @@ public class PowersKillerQueen extends NewPunchingStand {
                         if (!onCooldown(PowerIndex.SKILL_3) && this.currentShaStatus == SHA_NONE) {
                             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BLOCK, true);
                         }
-                    } else if ((this.getSelf() instanceof Spider || this.getSelf() instanceof Slime
-                            || this.getSelf() instanceof JojoNPC || upAiNow
-                            || this.getSelf() instanceof Rabbit || this.getSelf() instanceof AbstractVillager
+                    } else if ((this.getSelf() instanceof Spider
+                            || this.getSelf() instanceof JojoNPC /*|| upAiNow*/
+                             || this.getSelf() instanceof AbstractVillager
                             || this.getSelf() instanceof Piglin || this.getSelf() instanceof Vindicator) &&
                             dist <= 16 && dist >= 12 && this.currentBombStatus == BOMB_NONE && !wentForCharge
                             && this.bombBubble == null) {
@@ -3809,14 +3809,14 @@ public class PowersKillerQueen extends NewPunchingStand {
                             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
                         }
 
-                    } else if (dist > 1.4 && !wentForCharge && this.currentBombStatus != BOMB_NONE) {
+                    } else if (dist > 1.4 && !wentForCharge && currentBombStatus != BOMB_NONE) {
 
                         if (this.currentBombStatus != BOMB_BUBBLE ) {
                             ((StandUser) this.getSelf()).roundabout$tryPower(DETONATE, true);
-                        }else if (currentBombStatus == BOMB_BUBBLE) {
+                        }else  {
                             if (bombBubble == null) {
                                 defuseServer();
-                            }else if (bombBubble.distanceTo(targetEntity) < 1.3f) {
+                            }else if (targetEntity != null && bombBubble.distanceTo(targetEntity) < 1.3f) {
                                 ((StandUser) this.getSelf()).roundabout$tryPower(DETONATE, true);
                             }
                         }
