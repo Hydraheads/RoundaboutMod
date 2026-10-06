@@ -32,7 +32,7 @@ public class EnergyRippleSurfaceParticle extends SimpleAnimatedParticle {
         this.gravity = 0;
         this.quadSize = 0.95F;
         this.hasPhysics = false;
-        this.lifetime = 28;
+        this.lifetime = 14;
         this.setAlpha(0.35F);
 
         // for orientation
@@ -110,9 +110,9 @@ public class EnergyRippleSurfaceParticle extends SimpleAnimatedParticle {
             return;
         }
 
-        int ticksPerFrame = 2;
+        int ticksPerFrame = 1;
         int step = this.age / ticksPerFrame;
-        int holdSteps = 2;
+        int holdSteps = 1;
 
         int frameIndex;
         if (step <= 6) {

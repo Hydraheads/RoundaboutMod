@@ -270,6 +270,7 @@ public class FabricItems {
     public static Item HAIRSPRAY = registerItem("hairspray", new HairsprayItem(new Item.Properties().stacksTo(64)));
 
     public static Item OCCULT_CHARGE = registerItem("occult_charge", new OccultChargeItem(new Item.Properties().stacksTo(16)));
+    public static Item TOTEM_OF_DOOM = registerItem("totem_of_doom", new TotemOfDoomItem(new Item.Properties().stacksTo(1)));
 
     public static Item MATCH = registerItem("match", new MatchItem(new Item.Properties().stacksTo(64)));
     public static Item MATCH_BUNDLE = registerItem("match_bundle", new MatchItem(new Item.Properties().stacksTo(16)));
@@ -825,6 +826,7 @@ public class FabricItems {
                         entries.accept(HALLUCINATORY_ACID_HEIGHT_4);
                         entries.accept(HALLUCINATORY_ACID_WALL);
                         entries.accept(ModBlocks.GAMBLING_TABLE);
+                        entries.accept(TOTEM_OF_DOOM);
                     }).build());
     public static final CreativeModeTab FOG_BLOCK_ITEMS = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
             new ResourceLocation(Roundabout.MOD_ID, "justice_fog_items"),
@@ -948,6 +950,7 @@ public class FabricItems {
         ModItems.LUCK_UPGRADE = LUCK_UPGRADE;
         ModItems.EXECUTION_UPGRADE = EXECUTION_UPGRADE;
         ModItems.OCCULT_CHARGE = OCCULT_CHARGE;
+        ModItems.TOTEM_OF_DOOM = TOTEM_OF_DOOM;
         ModItems.LUCK_SWORD = LUCK_SWORD;
         ModItems.SCISSORS = SCISSORS;
         ModItems.SACRIFICIAL_DAGGER = SACRIFICIAL_DAGGER;

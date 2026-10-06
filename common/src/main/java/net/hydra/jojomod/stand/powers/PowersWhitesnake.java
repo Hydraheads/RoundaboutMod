@@ -514,7 +514,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         boolean entering = stand != null && selected != null && selected.is(stand);
         boolean leavingAutoMode = entering && autoMode;
         if (entering && getActivePower() == PowerIndex.POWER_2_BLOCK) {
-            stopPhaseGrabAtCurrentPosition(stand);
+            stopPowerAtCurrentPosition(stand);
         }
         if (entering) prepareStandForRemoteControl(stand);
         ((IPlayerEntity) player).roundabout$setIsControlling(entering ? id : 0);
@@ -597,10 +597,6 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     private static boolean isUsableStand(StandEntity stand) {
         return stand != null && stand.isAlive() && !stand.isRemoved();
-    }
-
-    private void stopPhaseGrabAtCurrentPosition(StandEntity stand) {
-        stopPowerAtCurrentPosition(stand);
     }
 
     private void stopPowerAtCurrentPosition(StandEntity stand) {
@@ -1301,10 +1297,12 @@ public class PowersWhitesnake extends BlockGrabPreset {
                 ? ClientNetworking.getAppropriateConfig().generalStandSettings.jumpingDashCooldown
                 : ClientNetworking.getAppropriateConfig().generalStandSettings.dashCooldown;
         setCooldown(PowerIndex.GLOBAL_DASH, cooldown);
-        MainUtil.takeUnresistableKnockbackWithY(stand, 0.91F,
-                Mth.sin(degrees * ((float) Math.PI / 180)),
-                Mth.sin(-20 * ((float) Math.PI / 180)),
-                -Mth.cos(degrees * ((float) Math.PI / 180)));
+        if (self.level().isClientSide()) {
+            MainUtil.takeUnresistableKnockbackWithY(stand, 0.91F,
+                    Mth.sin(degrees * ((float) Math.PI / 180)),
+                    Mth.sin(-20 * ((float) Math.PI / 180)),
+                    -Mth.cos(degrees * ((float) Math.PI / 180)));
+        }
         if (!self.level().isClientSide()) {
             playSoundIfPossible(self.level(),null, stand.blockPosition(), ModSounds.DODGE_EVENT,
                     SoundSource.PLAYERS, 1.5F, (float) (0.98 + Math.random() * 0.04));
@@ -1944,8 +1942,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         stand.setTarget(null);
         double distance = stand.distanceTo(self);
         boolean sprinting = distance > 3.0D;
-        stand.setSprinting(sprinting);
-        stand.setSpeed(sprinting ? 0.3F : 0.2F);
+        updateAutoModeSpeed(stand, sprinting);
 
         retreatTicks++;
 
@@ -2635,6 +2632,28 @@ public class PowersWhitesnake extends BlockGrabPreset {
         if (forwardBarrage) return 15.0F;
         if (!isPiloting() && !autoMode) return super.getRushDistance();
         return self.distanceTo(actionOrigin()) + CONTROL_PUNCH_RANGE;
+    }
+
+    @Override
+    public boolean StandDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker) {
+        boolean hit = super.StandDamageEntityAttack(target, pow, knockbackStrength, attacker);
+        if (hit) setControlModeAttackTarget(target);
+        return hit;
+    }
+
+    @Override
+    public boolean StandRushDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker) {
+        boolean hit = super.StandRushDamageEntityAttack(target, pow, knockbackStrength, attacker);
+        if (hit) setControlModeAttackTarget(target);
+        return hit;
+    }
+
+    private void setControlModeAttackTarget(Entity target) {
+        if (!self.level().isClientSide() && isPiloting() && target instanceof Mob mob
+                && getPilotingStand() instanceof WhitesnakeEntity stand) {
+            mob.setLastHurtByMob(stand);
+            if (mob.getTarget() == self) mob.setTarget(stand);
+        }
     }
 
     @Override

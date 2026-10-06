@@ -160,6 +160,7 @@ public class ModItems {
     public static Item LUCK_UPGRADE;
     public static Item EXECUTION_UPGRADE;
     public static Item OCCULT_CHARGE;
+    public static Item TOTEM_OF_DOOM;
 
     public static Item HARPOON;
     public static Item SCISSORS;

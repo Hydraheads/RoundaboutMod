@@ -188,7 +188,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	private int soundsDelay = 40;
 
-	static final float explosionRadius = 1.3f;
+	static final float explosionRadius = 1.2f;
 
 	static final byte
 		NONE = 0,
@@ -243,6 +243,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 			this.returnTicks = 0;
 		}
 	}
+
+	private Vec3 lastUserPositionCheck = null;
+	private float lastDistanceCheck = 0.0f;
 
 	public static AttributeSupplier.Builder createStandAttributes() {
 		return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED,
@@ -384,7 +387,14 @@ public class SheerHeartAttackEntity extends StandEntity {
 				}
 				this.moveToTarget();
 
-				if (this.getHaveToReturn()) { this.returnTicks++; }
+				if (this.getHaveToReturn()) {
+					this.returnTicks++;
+
+					if (returnTicks == 1) {
+						lastUserPositionCheck = getUser().getPosition(1);
+						lastDistanceCheck = (float) getPosition(1).distanceTo(lastUserPositionCheck);
+					}
+				}
 
 
 				if (flyngTicks > 2 && this.hasTarget() && throwStatus != THROWED) {
@@ -677,7 +687,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		float range = explosionRadius;
 		float cap = 45;
 		if (warm > cap) {
-			range += Math.min(2.55f * ((warm - cap) / 40), 3.05f);
+			range += Math.min(0.90f * ((warm - cap) / 60), 1.05f);
 		}
 
 		return range;
@@ -698,7 +708,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		ExplosionUtil.explosionHurtWithMulti(pos, dmg, this.level(), damage, 0.3f, range,
 				KQ.multiplyPowerByStandConfigMobs(1.3f), KQ.multiplyPowerByStandConfigPlayers(1.0f));
 
-		ExplosionUtil.explodeEffects(pos, this.level(), KQ.getExplosionParticle(), new Vec3(range*0.4f, range*0.5f, range*0.4f), (int)(14*range));
+		ExplosionUtil.explodeEffects(pos, this.level(), KQ.getExplosionParticle(), new Vec3(range*0.7f, range*0.75f, range*0.7f), (int)(32*range));
 
 		this.level().playSound(null, this.blockPosition(), KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
 
@@ -741,17 +751,16 @@ public class SheerHeartAttackEntity extends StandEntity {
 			ExplosionUtil.explosionHurt(this.blockTarget.getCenter(), dmg, this.level(),
 					ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage, 0.3f, range);
 
-			ExplosionUtil.explodeEffects(this.blockTarget.getCenter(), this.level(), KQ.getExplosionParticle(), new Vec3(range*0.4f, range*0.5f, range*0.4f), (int)(12*range));
+			ExplosionUtil.explodeEffects(this.blockTarget.getCenter(), this.level(), KQ.getExplosionParticle(), new Vec3(range*0.7f, range*0.75f, range*0.7f), (int)(30*range));
 			level().playSound(null, this.blockTarget, KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
 
-			if (ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction &&
-					this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) &&
-					this.getUser() instanceof Player) {
-
+			if (canDestroyBlocks()) {
 				BlockState info =this.level().getBlockState(this.blockTarget);
 				if (!(ExplosionUtil.isBlockBlackListed(info) || (MainUtil.confirmIsOre(info))
 						|| info.isAir() || info.is(Blocks.BARRIER) || info.is(Blocks.BEDROCK)
-						|| !MainUtil.isDestructible2(level(), this.blockTarget, info))) {
+						|| !MainUtil.isDestructible2(level(), this.blockTarget, info)
+						|| MainUtil.isBlockDestructionBlacklisted(info))
+				) {
 
 					boolean shouldDrop = !info.requiresCorrectToolForDrops();
 					this.level().destroyBlock(this.blockTarget, shouldDrop);
@@ -800,13 +809,30 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		boolean struck = this.getNavigation().isStuck() || this.struckTicks >= struckMaxTicks;
 
-		return (dist <= 1.3f) || struck || this.returnTicks > returnMaxTicks;
+		if (returnTicks > returnMaxTicks) {
+			Vec3 currentPosition = getPosition(1);
+			float currentDistance = (float) getPosition(1).distanceTo(getUser().getPosition(1));
+			float movementProgress = (float) currentPosition.distanceTo(lastUserPositionCheck);
+			boolean isStruck = !(currentDistance < lastDistanceCheck || movementProgress < lastDistanceCheck);
+			if (!isStruck) {
+				returnTicks = 0;
+			}
+			struck = struck || isStruck;
+		}
+
+		return (dist <= 1.3f) || struck;
 	}
 
 	public void shaStopMove() {
 		this.getMoveControl().setWantedPosition(this.getX(), this.getY(), this.getZ(), 0.0);
 		this.getNavigation().setSpeedModifier(0.0);
 		this.getNavigation().stop();
+	}
+
+	public boolean canDestroyBlocks() {
+		return ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction &&
+				level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) &&
+				this.getUser() instanceof Player PL && MainUtil.getIsGamemodeApproriateForGrief(PL);
 	}
 
 	public void shaMiningMove() {
@@ -837,7 +863,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 				ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
 		if (hitResult.getType() == HitResult.Type.BLOCK && explosionMiningTicks <= 0) {
 			ExplosionUtil.explodeEffects(hitResult.getBlockPos().getCenter(), this.level(), KQ.getExplosionParticle(), new Vec3(0.8f, 0.8f, 0.8f), 8);
-			ExplosionUtil.explodeBlocksBase(hitResult.getBlockPos().above(), level(), 1.2f, true, getUser());
+			if (canDestroyBlocks()) {
+				ExplosionUtil.explodeBlocksBase(hitResult.getBlockPos().above(), level(), 1.2f, true, getUser());
+			}
 			level().playSound(null, hitResult.getBlockPos(), KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
 			explosionMiningTicks = explosionMiningTicksMax;
 			explosions++;
@@ -846,7 +874,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 			explosionMiningIntervalTicks--;
 			if (explosionMiningIntervalTicks <= 0) {
 				ExplosionUtil.explodeEffects(hitResult.getBlockPos().getCenter(), this.level(), KQ.getExplosionParticle(), new Vec3(0.8f, 0.8f, 0.8f), 6);
-				ExplosionUtil.explodeBlocksBase(hitResult.getBlockPos().above(), level(), 1.2f, true, getUser());
+				if (canDestroyBlocks()) {
+					ExplosionUtil.explodeBlocksBase(hitResult.getBlockPos().above(), level(), 1.2f, true, getUser());
+				}
 				level().playSound(null, hitResult.getBlockPos(), KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
 				explosions++;
 				explosionMiningIntervalTicks = explosionMiningIntervalTicksMax;

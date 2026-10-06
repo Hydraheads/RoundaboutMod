@@ -4,6 +4,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 
 import net.hydra.jojomod.access.DiscBearer;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.whitesnake.disc.DiscItemData;
 import net.hydra.jojomod.event.powers.whitesnake.disc.DreamingMemoryController;
 import net.hydra.jojomod.event.powers.whitesnake.disc.MemoryPersonality;
@@ -200,7 +201,8 @@ public abstract class LivingEntityDiscData extends Entity implements DiscBearer 
             living.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 100, 0, false, false, false));
         }
         boolean lobotomized = DiscItemData.isLobotomized(living)
-                || living instanceof Mob mob && DreamingMemoryController.isDreamingWithoutMemory(mob);
+                || living instanceof Mob mob && DreamingMemoryController.isDreamingWithoutMemory(mob)
+                || (living instanceof Mob mobDoomed && (mobDoomed.hasEffect(ModEffects.DOOMED) && !MainUtil.isBossMob(mobDoomed)));
         if (lobotomized) {
             living.xxa = 0;
             living.zza = 0;

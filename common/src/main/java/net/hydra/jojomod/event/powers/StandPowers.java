@@ -2020,6 +2020,10 @@ public class StandPowers extends AbilityScapeBasis {
                     if (getActivePower() != PowerIndex.MINING) {
                         userSelf.roundabout$setStandAnimation(NONE);
                     }
+                } else if (animationType == HEEL_RAISE) {
+                    if (getActivePower() != PowerIndex.POWER_3_SNEAK) {
+                        userSelf.roundabout$setStandAnimation(NONE);
+                    }
                 } else if (animationType == PUNCH_LEFT || animationType == PUNCH_RIGHT) {
                     if ((activePower != PowerIndex.NONE || attackTimeDuring > attackTimeMax) || !PowerTypes.hasHandsActive(self)) {
                         userSelf.roundabout$setStandAnimation(NONE);

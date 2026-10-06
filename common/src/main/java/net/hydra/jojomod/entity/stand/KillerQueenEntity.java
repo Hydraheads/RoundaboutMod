@@ -99,7 +99,6 @@ public class KillerQueenEntity extends FollowingStandEntity {
     public final AnimationState itemGrab = new AnimationState();
     public final AnimationState itemThrow = new AnimationState();
     public final AnimationState detonate = new AnimationState();
-    public final AnimationState thirdBomb = new AnimationState();
     public final AnimationState mobBombPlant= new AnimationState();
     public final AnimationState mobBombPlant2 = new AnimationState();
     public final AnimationState bubbleLaunch = new AnimationState();
@@ -107,7 +106,9 @@ public class KillerQueenEntity extends FollowingStandEntity {
     public final AnimationState heavyStrike = new AnimationState();
     public final AnimationState shaSend = new AnimationState();
     public final AnimationState impale = new AnimationState();
-    public final AnimationState bitesTheDust = new AnimationState();
+    public final AnimationState bitesTheDustChase = new AnimationState();
+    public final AnimationState bitesTheDustChaseLoop = new AnimationState();
+    public final AnimationState bitesTheDustChaseIdle = new AnimationState();
     public final AnimationState itemThrowCharge = new AnimationState();
     public final AnimationState arrowThrow = new AnimationState();
     public final AnimationState itemGrabAnimation = new AnimationState();
@@ -121,7 +122,9 @@ public class KillerQueenEntity extends FollowingStandEntity {
             MOB_PLANT = 123,
             MOB_PLANT_2 = 124,
             BUBBLE_SEND = 125,
-            BITES_THE_DUST_FOLLOW = 126,
+            BITES_THE_DUST_FOLLOW_LOOP = 126,
+            BITES_THE_DUST_FOLLOW = 127,
+            BITES_THE_DUST_IDLE = 100,
             SHA_SEND = 88,
     	    HEAVY_STRIKE = 26,
             ARROW_CHARGE = 89,
@@ -266,17 +269,38 @@ public class KillerQueenEntity extends FollowingStandEntity {
             }
 
             if (animation == BITES_THE_DUST_FOLLOW) {
-                this.bitesTheDust.startIfStopped(this.tickCount);
+                this.bitesTheDustChase.startIfStopped(this.tickCount);
             } else {
-                this.bitesTheDust.stop();
+                this.bitesTheDustChase.stop();
             }
+            if (animation == BITES_THE_DUST_FOLLOW_LOOP) {
+                this.bitesTheDustChaseLoop.startIfStopped(this.tickCount);
+            } else {
+                this.bitesTheDustChaseLoop.stop();
+            }
+            if (animation == BITES_THE_DUST_IDLE) {
+                this.bitesTheDustChaseIdle.startIfStopped(this.tickCount);
+            } else {
+                this.bitesTheDustChaseIdle.stop();
+            }
+        }
+    }
+
+    @Override
+    public EntityDimensions getDimensions(Pose pose) {
+        if (getPlantedBitesTheDust()
+                || this.getAnimation() == BITES_THE_DUST_FOLLOW || this.getAnimation() == BITES_THE_DUST_FOLLOW_LOOP || this.getAnimation() == BITES_THE_DUST_IDLE) {
+
+            return EntityDimensions.scalable(0.4F,0.4F);
 
         }
+
+        return super.getDimensions(pose);
     }
 
 
     public Vec3 getBitesTheDustOffset(LivingEntity standUser) {
-        double r = 0.7;
+        double r = 0.65;
 
         double yawfix = standUser.getYRot();
         yawfix += this.getAnchorPlace() + 125;

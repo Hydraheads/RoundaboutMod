@@ -587,7 +587,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             return;
         }
 
-        if (acl != null && ((StandUser)acl).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.inCombatMode()
+        if (acl != null && ((StandUser)acl).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.rendersInCombatMode()
         ) {
 
             $$6.rightLeg.copyFrom($$6.rightArm);
@@ -610,7 +610,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                                                                                                     AbstractClientPlayer acl, ModelPart $$4, ModelPart $$5,
                                                                                                     CallbackInfo ci) {
         PlayerModel<AbstractClientPlayer> $$6 = this.getModel();
-        if (acl != null && ((StandUser)acl).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.inCombatMode()){
+        if (acl != null && ((StandUser)acl).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.rendersInCombatMode()){
             $$6.rightLeg.xRot = 0.2F;
             $$6.rightPants.copyFrom($$6.rightLeg);
             $$6.leftLeg.xRot = 0.2F;
@@ -623,7 +623,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                                                                                                               CallbackInfo ci) {
 
         PlayerModel<AbstractClientPlayer> $$6 = this.getModel();
-        if (acl != null && ((StandUser)acl).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.inCombatMode()) {
+        if (acl != null && ((StandUser)acl).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.rendersInCombatMode()) {
 
             boolean isHurt = acl.hurtTime > 0;
             float r = 1;
@@ -698,7 +698,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     @Inject(method = "renderRightHand", at = @At(value = "HEAD"), cancellable = true)
     private  <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderRightHandX(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, CallbackInfo ci) {
 
-        if ($$3 != null && ((StandUser)$$3).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.inCombatMode()){
+        if ($$3 != null && ((StandUser)$$3).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.rendersInCombatMode()){
             this.renderHand($$0, $$1, $$2, $$3, this.model.rightLeg, this.model.rightLeg);
             ci.cancel();
             return;
@@ -721,7 +721,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
 
     @Inject(method = "renderLeftHand", at = @At(value = "HEAD"), cancellable = true)
     private <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderLeftHandX(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, CallbackInfo ci) {
-        if ($$3 != null && ((StandUser)$$3).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.inCombatMode()){
+        if ($$3 != null && ((StandUser)$$3).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.rendersInCombatMode()){
             this.renderHand($$0, $$1, $$2, $$3, this.model.leftLeg, this.model.leftLeg);
             ci.cancel();
             return;
