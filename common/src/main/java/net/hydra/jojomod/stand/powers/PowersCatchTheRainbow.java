@@ -5,9 +5,11 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.substand.CTRplatformEntity;
 import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.SoundIndex;
@@ -18,6 +20,7 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
@@ -273,7 +276,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                 return true;
             }
         }
-        if (slot == 1 && !canUseRainMend())
+        if (slot == 1 && !canUseRainMend() && isHoldingSneak())
             return true;
 
         return super.isAttackIneptVisually(activeP, slot);
@@ -284,7 +287,8 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     RAINMEND = 53,
     DROPDOWN = 54,
     OFF_HAND_THROW_SLIM = 55,
-    RETURN = 56;
+    RETURN = 56,
+    DEATH_TIMER = 57;
 
     @Override
     public void powerActivate(PowerContext context){
@@ -354,6 +358,9 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                 LeftArmState = data;
                 armGoneTicks = data;
             }
+            case DEATH_TIMER -> {
+                deathTimer = data;
+            }
         }
         super.updatePowerInt(activePower,data);
     }
@@ -396,11 +403,12 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         if (self.onGround())
             dropTimer = 0;
 
-        if (isHoldingSneak()){
-            if (self.onGround()){
-                rainPlatform(false);
-            }else{
-                rainPlatform(true);
+        if (isInRain() && PowerTypes.hasStandActive(self)) {
+            if (isHoldingSneak()) {
+                if (dropTimer == 0)
+                    canCreatePlatform = true;
+            } else if (canCreatePlatform) {
+                rainPlatform();
             }
         }
 
@@ -449,8 +457,8 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                 this.updatePowerInt(PowerIndex.POWER_2, LeftArmState);
                 S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowerIndex.POWER_2, LeftArmState);
 
-                this.updatePowerInt(PowerIndex.POWER_4, deathTimer);
-                S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowerIndex.POWER_4, deathTimer);
+                this.updatePowerInt(DEATH_TIMER, deathTimer);
+                S2CPacketUtil.sendIntPowerDataPacket((Player) this.self, PowersCatchTheRainbow.DEATH_TIMER, deathTimer);
 
                 if(Off_hand_entity == null){
                     HasOffHand = true;
@@ -498,7 +506,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         if (!dsource.is(ModDamageTypes.SUNLIGHT) && !dsource.is(DamageTypes.GENERIC_KILL)
                 && self instanceof Player PE) {
             if (isInRain() && deathTimer == 0 && hasStandActive(self)) {
-                deathTimer = 1200;
+                if (!this.self.level().isClientSide)deathTimer = 1200;
                 PE.setHealth(1);
                 PE.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 1), PE);
                 PE.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 40, 10), PE);
@@ -573,8 +581,20 @@ public class PowersCatchTheRainbow extends NewDashPreset {
 
     //platform
 
-    public void rainPlatform(boolean active){
+    boolean canCreatePlatform = false;
 
+    public void rainPlatform(){
+        if (!this.self.level().isClientSide()) {
+            canCreatePlatform = false;
+            CTRplatformEntity plat = ModEntities.CTR_PLATFORM.create(this.self.level());
+
+            if (plat != null) {
+                plat.setUser(this.self);
+                PowerTypes.copyPlaneOfExisting(self, plat);
+                plat.setPos(getRayBlock(this.self, 0.0f).add(0, -2.35, 0));
+                this.self.level().addFreshEntity(plat);
+            }
+        }
     }
 
     //drop down

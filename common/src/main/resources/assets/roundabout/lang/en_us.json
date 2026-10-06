@@ -2235,7 +2235,7 @@
   "ability.roundabout.ctr_passives": "We Believed We'd C. T. R.",
   "ability.roundabout.ctr_passives.desc": "Catch The Rainbow's abilities can only be used in the rain. While in the rain, you gain a speed boost and you become immune to fall damage.",
   "ability.roundabout.ctr_rain_platform": "Stabilize Raindrops",
-  "ability.roundabout.ctr_rain_platform.desc": "Stabilize the raindrops below your feet, creating a platform which lets you hover mid-air. [Not implemented!]",
+  "ability.roundabout.ctr_rain_platform.desc": "Stabilize the raindrops below your feet, creating a platform which lets you hover mid-air. [WIP]",
   "ability.roundabout.ctr_life_clutch": "Life Clutch",
   "ability.roundabout.ctr_life_clutch.desc": "When receiving fatal damage, survive at half a heart and become invincible for two seconds. This ability takes a long time to recharge.",
   "ability.roundabout.ctr_barrier": "Barrier",

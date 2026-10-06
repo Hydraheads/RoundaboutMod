@@ -168,6 +168,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.MOLD_SPORE.get(), MoldSporesEntity.createStandAttributes().build());
         event.put(ForgeEntities.PURPLE_SMOKE.get(), PurpleSmokeEntity.createStandAttributes().build());
         event.put(ForgeEntities.SHEER_HEART_ATTACK.get(), SheerHeartAttackEntity.createStandAttributes().build());
+        event.put(ForgeEntities.CTR_PLATFORM.get(), CTRplatformEntity.createStandAttributes().build());
     }
 
     @SubscribeEvent
@@ -927,6 +928,7 @@ public class ForgeEvents {
         ModEntities.TUSK_NAIL = ForgeEntities.TUSK_NAIL.get();
         ModEntities.TUSK_HOLE = ForgeEntities.TUSK_HOLE.get();
         ModEntities.PH_CAPSULE = ForgeEntities.PH_CAPSULE.get();
+        ModEntities.CTR_PLATFORM = ForgeEntities.CTR_PLATFORM.get();
 
         ModEntities.FALLEN_ZOMBIE = ForgeEntities.FALLEN_ZOMBIE.get();
         ModEntities.FALLEN_SKELETON = ForgeEntities.FALLEN_SKELETON.get();
