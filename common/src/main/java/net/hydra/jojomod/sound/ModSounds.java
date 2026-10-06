@@ -8,6 +8,19 @@ import net.minecraft.sounds.SoundEvent;
 
 public class ModSounds {
 
+    public static final String KHNUM_SUMMON = "khnum_summon";
+    public static final ResourceLocation KHNUM_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID + ":" + KHNUM_SUMMON);
+    public static final SoundEvent KHNUM_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(KHNUM_SUMMON_ID);
+    public static final String KHNUM_DISGUISE = "khnum_disguise";
+    public static final ResourceLocation KHNUM_DISGUISE_ID = new ResourceLocation(Roundabout.MOD_ID + ":" + KHNUM_DISGUISE);
+    public static final SoundEvent KHNUM_DISGUISE_EVENT = SoundEvent.createVariableRangeEvent(KHNUM_DISGUISE_ID);
+    public static final String KHNUM_STRETCH = "khnum_stretch";
+    public static final ResourceLocation KHNUM_STRETCH_ID = new ResourceLocation(Roundabout.MOD_ID + ":" + KHNUM_STRETCH);
+    public static final SoundEvent KHNUM_STRETCH_EVENT = SoundEvent.createVariableRangeEvent(KHNUM_STRETCH_ID);
+    public static final String KHNUM_RESET = "khnum_reset";
+    public static final ResourceLocation KHNUM_RESET_ID = new ResourceLocation(Roundabout.MOD_ID + ":" + KHNUM_RESET);
+    public static final SoundEvent KHNUM_RESET_EVENT = SoundEvent.createVariableRangeEvent(KHNUM_RESET_ID);
+
     /** Defines sound files... but JSON files are still needed to complete registration!
      * Also, forge and Fabric must register the sounds.*/
     public static final String SUMMON_SOUND = "summon_sound";

@@ -4,11 +4,14 @@ import com.mojang.authlib.Agent;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.ProfileLookupCallback;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersKhnum;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 
 import java.util.Optional;
 import java.util.Set;
@@ -31,6 +34,8 @@ public final class KhnumDisguiseService {
             return;
         }
         if (!isKhnum(player)) return;
+        PowersKhnum powers = (PowersKhnum) ((StandUser) player).roundabout$getStandPowers();
+        if (powers.onCooldown(PowerIndex.SKILL_1)) return;
         MinecraftServer server = player.getServer();
         if (server == null || !PENDING.add(player.getUUID())) return;
         CompletableFuture.supplyAsync(() -> findProfile(server, name), Util.backgroundExecutor())
@@ -39,6 +44,9 @@ public final class KhnumDisguiseService {
                     if (server.getPlayerList().getPlayer(player.getUUID()) == player && isKhnum(player)) {
                         if (profile.isPresent()) {
                             ((StandUser) player).roundabout$setDisguise(profile.get());
+                            powers.setCooldown(PowerIndex.SKILL_1, 100);
+                            player.level().playSound(null, player.blockPosition(), ModSounds.KHNUM_DISGUISE_EVENT,
+                                    SoundSource.PLAYERS, 1.0F, 1.0F);
                         } else {
                             player.sendSystemMessage(Component.translatable("roundabout.khnum.disguise.not_found"));
                         }
