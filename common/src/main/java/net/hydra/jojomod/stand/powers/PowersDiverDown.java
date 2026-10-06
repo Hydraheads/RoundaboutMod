@@ -5071,6 +5071,18 @@ public class PowersDiverDown extends NewPunchingStand {
         return displayStand;
     }
 
+    // for the unique idles
+    @Override
+    public Component getPosName(byte posID){
+        if (posID == 2){
+            return Component.translatable(  "idle.roundabout.diver_down_1");
+        } else if (posID == 3) {
+            return Component.translatable(  "idle.roundabout.diver_down_2");
+        } else {
+            return super.getPosName(posID);
+        }
+    }
+
     // skins end
 
     // setter, getter, and updater functions below here

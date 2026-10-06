@@ -2757,6 +2757,8 @@
 
   "idle.roundabout.sc_part_3": "Part 3 Pose",
   "idle.roundabout.sc_part_5": "Part 5 Pose",
+  "idle.roundabout.diver_down_1": "Watchful",
+  "idle.roundabout.diver_down_2": "Protector",
 
   "skins.roundabout.king_crimson.base": "Part 5",
   "skins.roundabout.king_crimson.manga": "Manga",
@@ -3101,7 +3103,8 @@
   "skins.roundabout.diver_down.manga": "Manga",
   "skins.roundabout.diver_down.volume_4": "Volume 4",
   "skins.roundabout.diver_down.spine_art": "Spine Art",
-  "skins.roundabout.diver_down.world_diver": "The World",
+  "skins.roundabout.diver_down.world_diver": "Holy Diver",
+  "skins.roundabout.diver_down.diver_drowned": "Diver Drown",
 
   "skins.roundabout.20_centuryboy.manga": "Manga",
   "skins.roundabout.20_centuryboy.bedrock": "Bedrock",
