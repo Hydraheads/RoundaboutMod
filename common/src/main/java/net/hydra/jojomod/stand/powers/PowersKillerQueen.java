@@ -245,7 +245,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 KQE.setOffsetType(OffsetIndex.LOOSE);
                 KQE.setPlantedBitesTheDust(true);
             }
-            animateStand(KillerQueenEntity.BITES_THE_DUST_FOLLOW);
+            animateStand(KillerQueenEntity.BITES_THE_DUST_IDLE);
         }
     }
 
@@ -1680,7 +1680,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override
     public void animateStand(byte r){
-        if (!inBitesTheDustMode() || r == KillerQueenEntity.BITES_THE_DUST_FOLLOW) {
+        if (!inBitesTheDustMode() || r == KillerQueenEntity.BITES_THE_DUST_IDLE) {
             super.animateStand(r);
         }
     }
@@ -2950,6 +2950,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             btdTicksMax = 0;
 
             this.syncBombStatus(BITES_THE_DUST);
+            animateStand(KillerQueenEntity.BITES_THE_DUST_IDLE);
 
             int cooldown = ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatActivationCooldown;
 
@@ -3964,6 +3965,9 @@ public class PowersKillerQueen extends NewPunchingStand {
                     if (Objects.nonNull(stand)) { stand.setFadePercent(100); }
 
                 } else if (this.attackTimeDuring >= 0) {
+                    if (attackTimeDuring >= 10) {
+                        animateStand(KillerQueenEntity.BITES_THE_DUST_FOLLOW_LOOP);
+                    }
                     StandEntity stand = getStandEntity(this.self);
                     if (Objects.nonNull(stand)) {
                         AABB BB1 = stand.getBoundingBox();

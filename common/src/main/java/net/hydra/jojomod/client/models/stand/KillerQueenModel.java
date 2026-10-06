@@ -352,7 +352,9 @@ public class KillerQueenModel<T extends KillerQueenEntity> extends StandModel<T>
 		this.animate(pEntity.bubbleLaunch, KillerQueenAnimations.bubble_launch, pAgeInTicks, 0.9F);
 		this.animate(pEntity.bubbleRedirect, KillerQueenAnimations.bubble_redirection, pAgeInTicks, 1F);
 		this.animate(pEntity.shaSend, KillerQueenAnimations.sha_deploy, pAgeInTicks, 2F);
-		this.animate(pEntity.bitesTheDust, KillerQueenAnimations.TertiaryBomb, pAgeInTicks, 1.04F);
+		this.animate(pEntity.bitesTheDustChase, KillerQueenAnimations.TertiaryBomb, pAgeInTicks, 1F);
+		this.animate(pEntity.bitesTheDustChaseLoop, KillerQueenAnimations.btdChaseLoop, pAgeInTicks, 1F);
+		this.animate(pEntity.bitesTheDustChaseIdle, KillerQueenAnimations.btdPlantedIdle, pAgeInTicks, 1F);
 		this.animate(pEntity.itemThrowCharge, StarPlatinumAnimations.ItemGrab, pAgeInTicks, (1/((float) (Power.getArrowThrowChargeMax()) / 20.0f)) * 0.29f);
 		this.animate(pEntity.arrowThrow, StarPlatinumAnimations.ItemThrow, pAgeInTicks, 1F);
 		this.animate(pEntity.itemGrabAnimation, StandAnimations.GRAB_ITEM, pAgeInTicks, 1f);
