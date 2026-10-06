@@ -4754,7 +4754,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if (LE.getId() == bitesTheDustPlantedEntity.getId() || LE.distanceTo(bitesTheDustPlantedEntity) <= btdRange && LE.hasLineOfSight(bitesTheDustPlantedEntity)) {
                     matrixStack.pushPose();
 
-                    float height = (LE.getBbHeight() + 0.43F);
+                    float height = (LE.getNameTagOffsetY() + 0.275F);
 
                     // Orient the texture
                     matrixStack.scale(1, 1, 1);
