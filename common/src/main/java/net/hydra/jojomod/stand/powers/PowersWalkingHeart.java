@@ -56,7 +56,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
@@ -113,16 +112,6 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
 
-    public int getPullLevel(){
-        return 2;
-    }
-    public int getPushLevel(){
-        return 3;
-    }
-    public int getStompLevel(){
-        return 4;
-    }
-
     @Override
     public boolean interceptSuccessfulDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
         if ((hasStandActive(this.getSelf()) && $$0.is(DamageTypes.PLAYER_ATTACK)) && hasExtendedHeelsForWalking()){
@@ -157,10 +146,10 @@ public class PowersWalkingHeart extends NewDashPreset {
             IPlayerEntity ipe = ((IPlayerEntity) PE);
             byte level = ipe.roundabout$getStandLevel();
             if (level == 4){
-                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.max.both").
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.max.skins").
                         withStyle(ChatFormatting.AQUA), true);
             } else if (level == 2 || level == 3){
-                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.both").
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.skins").
                         withStyle(ChatFormatting.AQUA), true);
             }
         }
@@ -213,15 +202,9 @@ public class PowersWalkingHeart extends NewDashPreset {
                     return;
                 }
 
-                if (isHoldingSneak() && !hasExtendedHeelsForWalking()) {
-                    if (canExecuteMoveWithLevel(getPushLevel())){
-                        clientPush();
-                    }
-                } else if (canUseAirAttack() && !onCooldown(PowerIndex.SKILL_2_SNEAK)){
-                    if (canExecuteMoveWithLevel(getStompLevel())) {
-                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
-                        tryPowerPacket(PowerIndex.POWER_2_SNEAK);
-                    }
+                if (canUseAirAttack()){
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
+                    tryPowerPacket(PowerIndex.POWER_2_SNEAK);
                 } else {
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
                     tryPowerPacket(PowerIndex.POWER_2);
@@ -230,95 +213,20 @@ public class PowersWalkingHeart extends NewDashPreset {
         }
     }
 
-    public void dashOrWallLatch(){
-        if (inCombatMode())
-            return;
-        if (canLatchOntoWall() && canWallWalkConfig())
-            doWallLatchClient();
-        else if (isHoldingSneak() && !hasExtendedHeelsForWalking())
-            clientPull();
-        else if (!hasExtendedHeelsForWalking())
-            dash();
-    }
-
-    public void clientPull(){
-        if (canExecuteMoveWithLevel(getPullLevel())){
-        if (!onCooldown(PowerIndex.GLOBAL_DASH) && hasWalkingSpot()) {
-            clientBoth();
-            //((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_EXTRA, true);
-            tryPowerPacket(PowerIndex.POWER_2_EXTRA);
-            BlockHitResult result = getWalkingSpot();
-            Vec3 db = RotationUtil.distanceBetween(result.getLocation().subtract(0,0.001,0),self).normalize().scale(3);;
-            self.setDeltaMovement(
-                    db.x * -0.25,
-                    db.y * -0.25,
-                    db.z * -0.25
-            );
-        }
-        }
-    }
-    public void clientPush(){
-        if (!onCooldown(PowerIndex.GLOBAL_DASH) && hasWalkingSpot()) {
-            clientBoth();
-            tryPowerPacket(PowerIndex.POWER_3_EXTRA);
-            BlockHitResult result = getWalkingSpot();
-
-            Vec3 db = RotationUtil.distanceBetween(result.getLocation().subtract(0,0.2,0),self).normalize().scale(3);
-            self.setDeltaMovement(
-                    db.x * 0.25,
-                    db.y * 0.25,
-                    db.z * 0.25
-            );
-        }
-    }
-    public void clientBoth(){
-        getStandUserSelf().roundabout$getStandPowers().tryPower(PowerIndex.NONE, true);
-        tryPowerPacket(PowerIndex.NONE);
-        ClientUtil.stopDestroyingBlock();
-        getStandUserSelf().roundabout$setStandAnimation(HEEL_RAISE);
-        setHeelExtension(3);
-        setCooldown(PowerIndex.GLOBAL_DASH,ClientNetworking.getAppropriateConfig().walkingHeartSettings.spikePullCooldown);
-    }
-    public void serverPull(){
-        serverBoth();
-        playSoundIfPossible(self.level(),null, self.getX(), self.getY(),
-                self.getZ(), ModSounds.WH_PULL_EVENT, self.getSoundSource(), 2F, 1.0F);
-    }
-    public void serverPush(){
-        serverBoth();
-        playSoundIfPossible(self.level(),null, self.getX(), self.getY(),
-                self.getZ(), ModSounds.WH_PUSH_EVENT, self.getSoundSource(), 2F, 1.0F);
-    }
-
-
-    public BlockHitResult getWalkingSpot(){
-        return MainUtil.getAheadVecRender(self, 7, 1F);
-    }
-    public boolean hasWalkingSpot(){
-        BlockHitResult result = MainUtil.getAheadVecRender(self, 7, 1F);
-        BlockState state = self.level().getBlockState(result.getBlockPos());
-        if (state.isSolid()){
-            return true;
-        }
-        return false;
-    }
-
-    public void serverBoth(){
-        setCooldown(PowerIndex.GLOBAL_DASH,ClientNetworking.getAppropriateConfig().walkingHeartSettings.spikePullCooldown);
-        setActivePower(PowerIndex.POWER_3_SNEAK);
-        addEXP(1);
-        attackTimeDuring = -10;
-        getStandUserSelf().roundabout$setStandAnimation(HEEL_RAISE);
-        sendHeelPacket(120);
-        MainUtil.playPop(self);
-    }
-
     public boolean forceBlock(){
         if (!MainUtil.isBlockWalkableSimplified(self.level().getBlockState(self.getOnPos())))
             return true;
         return false;
     }
 
+    public void dashOrWallLatch(){
+        if (inCombatMode())
+            return;
+        if (canLatchOntoWall() && canWallWalkConfig())
+            doWallLatchClient();
+        else if (!hasExtendedHeelsForWalking())
+            dash();
+    }
 
     public void doWallLatchClient(){
         if (!this.onCooldown(PowerIndex.SKILL_3) && !onCooldown(PowerIndex.SKILL_2)) {
@@ -557,20 +465,12 @@ public class PowersWalkingHeart extends NewDashPreset {
 
         if (hasExtendedHeelsForWalking())
             setSkillIcon(context, x, y, 2, StandIcons.GROUND_IMPLANT, PowerIndex.SKILL_2);
-        else if (isHoldingSneak())
-            LockedOrNot(context, x, y, 2, StandIcons.PUSH_SPIKE, PowerIndex.GLOBAL_DASH,
-                    getPushLevel());
         else if (canUseAirAttack())
-            LockedOrNot(context, x, y, 2, StandIcons.WALKING_STOMP, PowerIndex.SKILL_2_SNEAK,
-                    getStompLevel());
+            setSkillIcon(context, x, y, 2, StandIcons.WALKING_STOMP, PowerIndex.SKILL_2_SNEAK);
         else
             setSkillIcon(context, x, y, 2, StandIcons.GROUND_IMPLANT_OUT, PowerIndex.SKILL_2);
-
         if ((canLatchOntoWall() || hasExtendedHeelsForWalking()) && canWallWalkConfig())
             setSkillIcon(context, x, y, 3, StandIcons.WALL_WALK, PowerIndex.SKILL_3);
-        else if (isHoldingSneak())
-            LockedOrNot(context, x, y, 3, StandIcons.PULL_SPIKE, PowerIndex.GLOBAL_DASH,
-                    getPullLevel());
         else
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
 
@@ -615,11 +515,6 @@ public class PowersWalkingHeart extends NewDashPreset {
             return true;
         if ((slot == 2 || slot == 3) && inCombatMode())
             return true;
-        if (((slot == 2 && !hasExtendedHeelsForWalking())
-                ||
-                (slot == 3 && !((canLatchOntoWall() || hasExtendedHeelsForWalking()) && canWallWalkConfig())))
-        && isHoldingSneak() && !hasWalkingSpot())
-            return true;
         return super.isAttackIneptVisually(activeP, slot);
     }
 
@@ -651,9 +546,6 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
     public boolean inCombatMode(){
         return getStandUserSelf().roundabout$getCombatMode() && PowerTypes.hasStandActivelyEquipped(self);
-    }
-    public boolean rendersInCombatMode(){
-        return inCombatMode() || ((StandUser)self).roundabout$getStandAnimation() == StandPowers.HEEL_RAISE;
     }
 
     public boolean canCornerCutConfig(){
@@ -698,10 +590,13 @@ public class PowersWalkingHeart extends NewDashPreset {
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
             if (Level > 3 || bypass) {
                 return 10000;
-            } if (Level > 1) {
-                return 10000-getUseTicks();
             }
-            return 10000-getUseTicks()-getUseTicks();
+            if (Level > 2) {
+                return 10000-getUseTicks();
+            }if (Level > 1) {
+                return 10000-getUseTicks()-getUseTicks();
+            }
+            return 10000-getUseTicks()-getUseTicks()-getUseTicks()-getUseTicks();
         }
         return 10000;
     }
@@ -726,27 +621,25 @@ public class PowersWalkingHeart extends NewDashPreset {
 //    }
 
     public void walkingStomp(){
-        if (!onCooldown(PowerIndex.SKILL_2_SNEAK)) {
-            this.attackTimeMax = 5;
-            this.attackTimeDuring = 0;
-            setActivePower(PowerIndex.POWER_2_SNEAK);
-            if (!self.level().isClientSide()) {
-                for (int i = 0; i < 3; i++) {
-                    Vec3 cvec = new Vec3(Math.random() * 0.2 - 0.1, 1, Math.random() * 0.2 - 0.1);
-                    Direction gravD = ((IGravityEntity) this.self).roundabout$getGravityDirection();
-                    if (gravD != Direction.DOWN) {
-                        cvec = RotationUtil.vecPlayerToWorld(cvec, gravD);
-                    }
-
-                    sendParticlesIfPossible(self.level(), ParticleTypes.CLOUD,
-                            this.getSelf().getX() + cvec.x, this.getSelf().getY() + cvec.y, this.getSelf().getZ() + cvec.z,
-                            0, cvec.x, cvec.y, cvec.z, 0.8);
+        this.attackTimeMax= 5;
+        this.attackTimeDuring = 0;
+        setActivePower(PowerIndex.POWER_2_SNEAK);
+        if (!self.level().isClientSide()) {
+            for (int i = 0; i < 3; i++){
+                Vec3 cvec = new Vec3(Math.random()*0.2 - 0.1,1,Math.random()*0.2 - 0.1);
+                Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+                if (gravD != Direction.DOWN){
+                    cvec = RotationUtil.vecPlayerToWorld(cvec,gravD);
                 }
-                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.VAMPIRE_DIVE_EVENT, SoundSource.PLAYERS, 1F, (float) (0.96f + Math.random() * 0.08f));
-            } else {
-                Vec3 lower = self.getDeltaMovement();
-                self.setDeltaMovement(lower.x(), -1.8, lower.z());
+
+                sendParticlesIfPossible(self.level(),ParticleTypes.CLOUD,
+                        this.getSelf().getX()+cvec.x, this.getSelf().getY()+cvec.y, this.getSelf().getZ()+cvec.z,
+                        0, cvec.x, cvec.y, cvec.z, 0.8);
             }
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(),ModSounds.VAMPIRE_DIVE_EVENT, SoundSource.PLAYERS, 1F, (float) (0.96f + Math.random() * 0.08f));
+        } else {
+            Vec3 lower = self.getDeltaMovement();
+            self.setDeltaMovement(lower.x(),-1.8,lower.z());
         }
     }
     @Override
@@ -767,12 +660,6 @@ public class PowersWalkingHeart extends NewDashPreset {
             }
             case PowerIndex.POWER_4_EXTRA -> {
                 useSpikeAttack();
-            }
-            case PowerIndex.POWER_3_EXTRA -> {
-                serverPull();
-            }
-            case PowerIndex.POWER_2_EXTRA -> {
-                serverPush();
             }
             case PowerIndex.POWER_4_SNEAK_EXTRA -> {
                 useSpikeAttack2();
@@ -836,14 +723,12 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
     public void diveImpact(Entity entity) {
-        if (!onCooldown(PowerIndex.SKILL_2_SNEAK)) {
+        if (!onCooldown(PowerIndex.GENERAL_1)) {
             if (!this.self.level().isClientSide()) {
                 if (entity != null) {
                     if (entity.distanceTo(self) > 3.5){
                         return;
                     }
-                    this.setCooldown(PowerIndex.SKILL_2_SNEAK, ClientNetworking.getAppropriateConfig().walkingHeartSettings.spikeDiveAttackCooldown);
-
                     self.fallDistance = 0;
                     attackTargetId = 0;
                     float pow;
@@ -853,12 +738,15 @@ public class PowersWalkingHeart extends NewDashPreset {
                         MainUtil.makeBleed(LE,0,300,this.self);
                     }
                     knockbackStrength = 0.10F;
+                    int diveCooldown = ClientNetworking.getAppropriateConfig().vampireSettings.diveAttackCooldown;
+                    setCooldown(PowerIndex.GENERAL_1, diveCooldown);
+                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
+                            PowerIndex.GENERAL_1, diveCooldown);
 
                     hitParticles(entity);
                     if (DamageHandler.StandDamageEntity(entity, pow, this.self)) {
                         if (entity instanceof LivingEntity livingEntity) {
                             setDazed(livingEntity,(byte) 12);
-                            addEXP(6,livingEntity);
                         }
                         sendParticlesIfPossible(self.level(),ParticleTypes.CRIT,
                                 entity.getEyePosition().x, entity.getEyePosition().y, entity.getEyePosition().z,
@@ -913,13 +801,7 @@ public class PowersWalkingHeart extends NewDashPreset {
             }
         }
     }
-    @Override
-    public boolean isServerControlledCooldown(byte num){
-        if (num == PowerIndex.SKILL_2_SNEAK) {
-            return true;
-        }
-        return super.isServerControlledCooldown(num);
-    }
+
     @Override
     public boolean tryIntPower(int move, boolean forced, int chargeTime){
         if (move == PowerIndex.POWER_1_BLOCK) {
@@ -962,6 +844,7 @@ public class PowersWalkingHeart extends NewDashPreset {
             return false;
 
         hitParticlesCenter(target);
+
         if (attacker instanceof TamableAnimal TA){
             if (target instanceof TamableAnimal TT && TT.getOwner() != null
                     && TA.getOwner() != null && TT.getOwner().is(TA.getOwner())){
@@ -1496,7 +1379,7 @@ public class PowersWalkingHeart extends NewDashPreset {
             return !this.getSelf().onGround()
                     && !self.isInWater()
                     && !hasExtendedHeelsForWalking()
-                    && (this.fallTime > 7)
+                    && (this.fallTime > 6)
                     && (this.airTime > 6);
         }
         return false;
@@ -1645,29 +1528,25 @@ public class PowersWalkingHeart extends NewDashPreset {
                 "instruction.roundabout.press_skill", StandIcons.SPIKE_ATTACK_MODE, 1, level, bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.heel_plant",
                 "instruction.roundabout.press_skill", StandIcons.GROUND_IMPLANT,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, getStompLevel(), "ability.roundabout.spike_stomp",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.spike_stomp",
                 "instruction.roundabout.press_skill_air", StandIcons.WALKING_STOMP,2,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, getPushLevel(), "ability.roundabout.spike_push",
-                "instruction.roundabout.press_skill_crouch", StandIcons.PUSH_SPIKE,3,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, getPullLevel(), "ability.roundabout.spike_pull",
-                "instruction.roundabout.press_skill_crouch", StandIcons.PULL_SPIKE,3,level,bypass));
         if (canWallWalkConfig()) {
-            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 57, topPos + 80, 0, "ability.roundabout.wall_walk_move",
+            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.wall_walk_move",
                     "instruction.roundabout.press_skill_air", StandIcons.WALL_WALK, 3, level, bypass));
-            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 57, topPos + 99, 0, "ability.roundabout.firm_swing",
+            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.firm_swing",
                     "instruction.roundabout.passive", StandIcons.FIRM_SWING, 0, level, bypass));
-            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 57, topPos + 118, 0, "ability.roundabout.fall_disperse",
+            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 57, topPos + 80, 0, "ability.roundabout.fall_disperse",
                     "instruction.roundabout.passive", StandIcons.FALL_ABSORB, 0, level, bypass));
             if (canCornerCutConfig()) {
-                $$1.add(drawSingleGUIIcon(context, 18, leftPos + 75, topPos + 80, 0, "ability.roundabout.corner_cut",
+                $$1.add(drawSingleGUIIcon(context, 18, leftPos + 57, topPos + 99, 0, "ability.roundabout.corner_cut",
                         "instruction.roundabout.press_skill", StandIcons.WALL_CUT, 4, level, bypass));
             }
         } else {
-            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 57, topPos + 80, 0, "ability.roundabout.firm_swing",
+            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.firm_swing",
                     "instruction.roundabout.passive", StandIcons.FIRM_SWING, 0, level, bypass));
-            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 57, topPos + 99, 0, "ability.roundabout.fall_disperse",
+            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.fall_disperse",
                     "instruction.roundabout.passive", StandIcons.FALL_ABSORB, 0, level, bypass));
         }
         return $$1;
@@ -1683,13 +1562,11 @@ public class PowersWalkingHeart extends NewDashPreset {
             if (Level > 1 || bypass) {
                 $$1.add(WalkingHeartEntity.MODEL_SKIN);
                 $$1.add(WalkingHeartEntity.PURPLE_SKIN);
-                $$1.add(WalkingHeartEntity.MELON_SKIN);
             }if (Level > 2 || bypass) {
                 $$1.add(WalkingHeartEntity.SCARECROW_SKIN);
                 $$1.add(WalkingHeartEntity.VALENTINE_SKIN);
                 $$1.add(WalkingHeartEntity.VERDANT_SKIN);
             }if (Level > 3 || bypass) {
-                $$1.add(WalkingHeartEntity.ABYSSAL_SKIN);
                 $$1.add(WalkingHeartEntity.PALE_SKIN);
                 $$1.add(WalkingHeartEntity.GOTHIC_SKIN);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
@@ -1723,10 +1600,6 @@ public class PowersWalkingHeart extends NewDashPreset {
             return Component.translatable(  "skins.roundabout.walking_heart.spider");
         } else if (skinId == WalkingHeartEntity.SCARECROW_SKIN){
             return Component.translatable(  "skins.roundabout.walking_heart.scarecrow");
-        } else if (skinId == WalkingHeartEntity.ABYSSAL_SKIN){
-            return Component.translatable(  "skins.roundabout.walking_heart.abyssal");
-        } else if (skinId == WalkingHeartEntity.MELON_SKIN){
-            return Component.translatable(  "skins.roundabout.walking_heart.melon");
         }
         return Component.translatable(  "skins.roundabout.walking_heart.base");
     }

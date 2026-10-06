@@ -84,6 +84,9 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.*;
 import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.chocolatedisco.client.ChocolateDiscoQueueState;
+import net.hydra.jojomod.chocolatedisco.client.ChocolateDiscoSelectionState;
+import net.hydra.jojomod.chocolatedisco.client.ChocolateDiscoSounds;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -1050,6 +1053,27 @@ public class ClientUtil {
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncPurpleHazePods.value)) {
                     byte pods = (byte) vargs[0];
                     ((IPlayerEntity) player).roundabout$setPurpleHazePods(pods);
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ChocolateDiscoQueueState.value)) {
+                    boolean queued = (boolean) vargs[0];
+                    ItemStack queuedItem = (ItemStack) vargs[1];
+                    boolean wasQueued = ChocolateDiscoQueueState.isQueued();
+                    ChocolateDiscoQueueState.setQueued(queued, queuedItem);
+                    if (player != null) {
+                        if (queued && !wasQueued) {
+                            player.playSound(ChocolateDiscoSounds.QUEUE_ITEM, 1.0F, 1.0F);
+                        } else if (!queued && wasQueued) {
+                            player.playSound(ChocolateDiscoSounds.QUEUE_EMPTY, 1.0F, 1.0F);
+                        }
+                    }
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ChocolateDiscoSummonSound.value)) {
+                    if (player != null && !ChocolateDiscoSounds.consumeSuppressedDiscoSummonSound()) {
+                        player.playSound(ChocolateDiscoSounds.DISCO_SUMMON, 1.0F, 1.0F);
+                    }
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ChocolateDiscoBuildingSelectionClear.value)) {
+                    ChocolateDiscoSelectionState.clearSelectedCells();
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ChocolateDiscoBuildingModeReset.value)) {
+                    ChocolateDiscoSelectionState.setBuildingMode(false);
+                    ChocolateDiscoSelectionState.clearSelectedCells();
                 }
 
                 // theoretical deregister dynamic worlds packet

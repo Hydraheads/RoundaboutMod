@@ -37,7 +37,7 @@ public class NewLocacacaItem extends Item {
     /**32 is the default eating duration of a food. New Locaca takes notably longer to eat.*/
     @Override
     public int getUseDuration(ItemStack $$0) {
-            return 70;
+            return 64;
     }
     public NewLocacacaItem(Properties $$0) {
         super($$0);

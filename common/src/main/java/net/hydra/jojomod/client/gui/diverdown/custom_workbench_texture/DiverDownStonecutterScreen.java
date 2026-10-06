@@ -13,7 +13,5 @@ public class DiverDownStonecutterScreen extends StonecutterScreen {
 
     public DiverDownStonecutterScreen(StonecutterMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
-        this.inventoryLabelY = 10000;
-        this.titleLabelY = 10000;
     }
 }
