@@ -63,8 +63,6 @@ public class DiverDownEntity extends FollowingStandEntity {
     public final AnimationState groundDive = new AnimationState();
     public final AnimationState diverZip = new AnimationState();
     public final AnimationState diverZipIdle = new AnimationState();
-    public final AnimationState ddIdlePose = new AnimationState();
-    public final AnimationState ddIdlePose2 = new AnimationState();
 
     private static final float DIVER_ZIP_BLEND_STEP = 0.25F;
     private float diverZipBlend = 0.0F;
@@ -91,8 +89,6 @@ public class DiverDownEntity extends FollowingStandEntity {
     public void setupAnimationStates() {
         super.setupAnimationStates();
         //fix for the idle bugging out thing
-        this.idleAnimationState3.stop();
-        this.idleAnimationState4.stop();
         byte animation = getAnimation();
         if (animation != BARRAGE && animation != GROUND_BARRAGE) {
             this.hideFists.startIfStopped(this.tickCount);
@@ -153,16 +149,6 @@ public class DiverDownEntity extends FollowingStandEntity {
         boolean isMoving = false;
         if (getUser() != null) {
             isMoving = Math.abs(getUser().xxa) > 0.01F || Math.abs(getUser().zza) > 0.01F;
-        }
-        if (getAnimation() == IDLE && getIdleAnimation() == 3) {
-            this.ddIdlePose2.startIfStopped(this.tickCount);
-        } else {
-            this.ddIdlePose2.stop();
-        }
-        if (getAnimation() == IDLE && getIdleAnimation() == 2) {
-            this.ddIdlePose.startIfStopped(this.tickCount);
-        } else {
-            this.ddIdlePose.stop();
         }
 
         diverZipBlendOld = diverZipBlend;
