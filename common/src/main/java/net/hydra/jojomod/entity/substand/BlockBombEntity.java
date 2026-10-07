@@ -134,7 +134,8 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 	
 	public boolean blockGotDestroyed() {
 		BlockState state = this.level().getBlockState(this.bombPos);
-		return state.isAir();
+
+		return state.isAir() || (originalState != null && originalState.is(state.getBlock()));
 	}
 
 
@@ -157,11 +158,6 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 					if (this != PKQ.bombBlock) {
 						this.discard();
 						return;
-					}
-					if (originalState != null) {
-						if (!(originalState.is(level().getBlockState(getBlockPos()).getBlock()))) {
-							PKQ.defuseServer();
-						}
 					}
 				}else {
 					discard();
