@@ -1,8 +1,6 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -18,7 +16,6 @@ import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
@@ -35,7 +32,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.PacketUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -51,14 +47,12 @@ import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -277,7 +271,7 @@ public class PowersWalkingHeart extends NewDashPreset {
         ClientUtil.stopDestroyingBlock();
         getStandUserSelf().roundabout$setStandAnimation(HEEL_RAISE);
         setHeelExtension(3);
-        setCooldown(PowerIndex.GLOBAL_DASH,ClientNetworking.getAppropriateConfig().walkingHeartSettings.spikePullCooldown);
+        setCooldown(PowerIndex.GLOBAL_DASH,ClientNetworking.getAppropriateConfig().walkingHeartSettings.spikePullCooldownv2);
     }
     public void serverPull(){
         serverBoth();
@@ -304,7 +298,7 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
     public void serverBoth(){
-        setCooldown(PowerIndex.GLOBAL_DASH,ClientNetworking.getAppropriateConfig().walkingHeartSettings.spikePullCooldown);
+        setCooldown(PowerIndex.GLOBAL_DASH,ClientNetworking.getAppropriateConfig().walkingHeartSettings.spikePullCooldownv2);
         setActivePower(PowerIndex.POWER_3_SNEAK);
         addEXP(1);
         attackTimeDuring = -10;

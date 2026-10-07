@@ -4524,8 +4524,8 @@
   "config.roundabout.getMiningTierVampire.name": "Mining Tier",
   "config.roundabout.getMiningTierVampire.desc": "Tier 0 is the default, it does not replace tools for harvesting blocks. Tier 1 is wood tier, tier 2 is stone tier, tier 3 is iron tier, and tier 4 is diamond tier.",
 
-  "config.roundabout.spikePullCooldown.name": "Push/Pull Cooldown",
-  "config.roundabout.spikePullCooldown.desc": "The cooldown of walking heart's movement ability with spikes.",
+  "config.roundabout.spikePullCooldownv2.name": "Push/Pull Cooldown",
+  "config.roundabout.spikePullCooldownv2.desc": "The cooldown of walking heart's movement ability with spikes.",
   "config.roundabout.diveAttackCooldown.name": "Dive Cooldown",
   "config.roundabout.diveAttackCooldown.desc": "The cooldown of vampire powers dive attack.",
   "config.roundabout.spikeDiveAttackCooldown.name": "Dive Cooldown",
