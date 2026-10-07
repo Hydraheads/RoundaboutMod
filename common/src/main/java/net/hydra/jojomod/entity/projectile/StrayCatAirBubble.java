@@ -196,6 +196,13 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                 return;
             }
 
+            if (getOwner() instanceof Mob M) {
+                target = M.getTarget();
+                if (target == null || !target.isAlive()) {
+                    popBubble();
+                }
+            }
+
             this.soundEffectCooldown--;
             if (this.soundEffectCooldown <= 0) {
 

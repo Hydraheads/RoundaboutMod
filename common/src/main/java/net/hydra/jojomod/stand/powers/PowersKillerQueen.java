@@ -2893,6 +2893,17 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
     }
 
+    public void blockContact(Entity ent) {
+        if (this.isContactModeEnabled() || this.detonateTimer > -1) {
+            bombEntity = ent;
+            bombBlock.discard();
+            syncBombStatus(BLOCK_CONTACT);
+            if (this.detonateTimer == -1) {
+                this.explode();
+            }
+        }
+    }
+
     public void bulletContacted(Entity ent) {
         this.bombEntity = ent;
         syncBombStatus(BULLET_CONTACT);

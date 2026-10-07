@@ -158,7 +158,16 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 						this.discard();
 						return;
 					}
+					if (originalState != null) {
+						if (!(originalState.is(level().getBlockState(getBlockPos()).getBlock()))) {
+							PKQ.defuseServer();
+						}
+					}
+				}else {
+					discard();
 				}
+
+
 				this.setYRot(0f);
 				this.setYBodyRot(0);
 				/*if (blockstate.hasProperty(BlockStateProperties.HORIZONTAL_AXIS)) {
