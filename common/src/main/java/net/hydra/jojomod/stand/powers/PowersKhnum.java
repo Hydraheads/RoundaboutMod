@@ -70,15 +70,15 @@ public class PowersKhnum extends NewDashPreset {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         setSkillIcon(context, x, y, 1,
-                isHoldingSneak() ? StandIcons.CINDERELLA_VISAGES : StandIcons.WHITESNAKE_HALLUCINATORY_DISGUISE,
+                isHoldingSneak() ? StandIcons.KHNUM_MODIFICATION : StandIcons.KHNUM_DISGUISE,
                 PowerIndex.SKILL_1);
         setSkillIcon(context, x, y, 2,
-                isHoldingSneak() ? StandIcons.CINDERELLA_MASK : StandIcons.CINDERELLA_SCALP,
+                isHoldingSneak() ? StandIcons.KHNUM_WIDE : StandIcons.KHNUM_TALL,
                 PowerIndex.SKILL_2);
         setSkillIcon(context, x, y, 3,
-                isHoldingSneak() ? StandIcons.CINDERELLA_MASK : StandIcons.DODGE,
+                isHoldingSneak() ? StandIcons.KHNUM_SHRINK : StandIcons.DODGE,
                 isHoldingSneak() ? PowerIndex.SKILL_3 : PowerIndex.GLOBAL_DASH);
-        setSkillIcon(context, x, y, 4, StandIcons.CINDERELLA_VISAGES, PowerIndex.SKILL_4);
+        setSkillIcon(context, x, y, 4, StandIcons.KHNUM_RESET, PowerIndex.SKILL_4);
         super.renderIcons(context, x, y);
     }
 
@@ -88,28 +88,28 @@ public class PowersKhnum extends NewDashPreset {
         List<AbilityIconInstance> icons = Lists.newArrayList();
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0,
                 "ability.roundabout.khnum_disguise", "instruction.roundabout.press_skill",
-                StandIcons.WHITESNAKE_HALLUCINATORY_DISGUISE, 1, level, bypass));
+                StandIcons.KHNUM_DISGUISE, 1, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0,
                 "ability.roundabout.khnum_visage", "instruction.roundabout.press_skill_crouch",
-                StandIcons.CINDERELLA_VISAGES, 1, level, bypass));
+                StandIcons.KHNUM_MODIFICATION, 1, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0,
                 "ability.roundabout.khnum_tall", "instruction.roundabout.press_skill",
-                StandIcons.CINDERELLA_SCALP, 2, level, bypass));
+                StandIcons.KHNUM_TALL, 2, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0,
                 "ability.roundabout.khnum_wide", "instruction.roundabout.press_skill_crouch",
-                StandIcons.CINDERELLA_MASK, 2, level, bypass));
+                StandIcons.KHNUM_WIDE, 2, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0,
                 "ability.roundabout.khnum_dash", "instruction.roundabout.press_skill",
                 StandIcons.DODGE, 3, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0,
                 "ability.roundabout.khnum_small", "instruction.roundabout.press_skill_crouch",
-                StandIcons.CINDERELLA_MASK, 3, level, bypass));
+                StandIcons.KHNUM_SHRINK, 3, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, 0,
                 "ability.roundabout.khnum_reset", "instruction.roundabout.press_skill",
-                StandIcons.CINDERELLA_VISAGES, 4, level, bypass));
+                StandIcons.KHNUM_RESET, 4, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 99, 0,
                 "ability.roundabout.khnum_passive", "instruction.roundabout.passive",
-                StandIcons.WHITESNAKE_HALLUCINATORY_DISGUISE, 0, level, bypass));
+                StandIcons.KHNUM_MODIFICATION, 0, level, bypass));
         return icons;
     }
 
