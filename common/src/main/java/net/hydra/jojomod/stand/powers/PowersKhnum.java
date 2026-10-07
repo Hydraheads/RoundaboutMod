@@ -27,6 +27,8 @@ public class PowersKhnum extends NewDashPreset {
     private static final byte WIDE = 2;
     private static final byte SMALL = 3;
     private int mobFormChangeTicks;
+    private byte pendingForm = -1;
+    private int formWindupTicks;
 
     public PowersKhnum(LivingEntity self) {
         super(self);
@@ -171,6 +173,8 @@ public class PowersKhnum extends NewDashPreset {
     }
 
     private void resetKhnum() {
+        pendingForm = -1;
+        formWindupTicks = 0;
         StandUser user = (StandUser) self;
         user.roundabout$setKhnumForm(NEUTRAL);
         user.roundabout$setKhnumVisage(237, 135, 135);
@@ -186,8 +190,8 @@ public class PowersKhnum extends NewDashPreset {
                 case PowerIndex.POWER_2_SNEAK -> WIDE;
                 default -> SMALL;
             };
-            ((StandUser) self).roundabout$setKhnumForm(form);
-            ((StandUser) self).roundabout$setKhnumMobDisguise(KhnumMobDisguise.NONE);
+            pendingForm = form;
+            formWindupTicks = 40;
             startFormCooldown();
             playKhnumSound(ModSounds.KHNUM_STRETCH_EVENT);
             return true;
@@ -206,6 +210,20 @@ public class PowersKhnum extends NewDashPreset {
     private void playKhnumSound(net.minecraft.sounds.SoundEvent sound) {
         if (self != null && !self.level().isClientSide()) {
             self.level().playSound(null, self.blockPosition(), sound, SoundSource.PLAYERS, 1.0F, 1.0F);
+        }
+    }
+
+    @Override
+    public void tickPower() {
+        super.tickPower();
+        if (self != null && !self.level().isClientSide() && pendingForm >= 0 && formWindupTicks > 0) {
+            formWindupTicks--;
+            if (formWindupTicks == 0) {
+                StandUser user = (StandUser) self;
+                user.roundabout$setKhnumForm(pendingForm);
+                user.roundabout$setKhnumMobDisguise(KhnumMobDisguise.NONE);
+                pendingForm = -1;
+            }
         }
     }
 

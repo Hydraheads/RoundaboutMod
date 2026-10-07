@@ -1,5 +1,7 @@
 package net.hydra.jojomod.event.powers;
 
+import net.hydra.jojomod.event.powers.khnum.KhnumFormScale;
+
 import com.mojang.authlib.GameProfile;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
@@ -408,6 +410,20 @@ public interface StandUser {
     void roundabout$clearDisguise();
     byte roundabout$getKhnumForm();
     void roundabout$setKhnumForm(byte form);
+    byte roundabout$getKhnumTransitionStartForm();
+    float roundabout$getKhnumTransitionProgress();
+    default float roundabout$getKhnumWidthScale() {
+        return KhnumFormScale.interpolate(roundabout$getKhnumTransitionStartForm(), roundabout$getKhnumForm(),
+                roundabout$getKhnumTransitionProgress(), true, false);
+    }
+    default float roundabout$getKhnumHeightScale() {
+        return KhnumFormScale.interpolate(roundabout$getKhnumTransitionStartForm(), roundabout$getKhnumForm(),
+                roundabout$getKhnumTransitionProgress(), false, false);
+    }
+    default float roundabout$getKhnumModelHeightScale() {
+        return KhnumFormScale.interpolate(roundabout$getKhnumTransitionStartForm(), roundabout$getKhnumForm(),
+                roundabout$getKhnumTransitionProgress(), false, true);
+    }
     int roundabout$getKhnumHeight();
     int roundabout$getKhnumWidth();
     int roundabout$getKhnumHead();
