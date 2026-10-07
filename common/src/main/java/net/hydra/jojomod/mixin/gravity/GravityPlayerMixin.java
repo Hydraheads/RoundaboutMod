@@ -66,11 +66,7 @@ public abstract class GravityPlayerMixin extends LivingEntity {
             at = @At("RETURN"), cancellable = true)
     private void roundabout$khnumPlayerEyeHeight(Pose pose, EntityDimensions dimensions,
                                                  CallbackInfoReturnable<Float> cir) {
-        float heightScale = switch (((StandUser) (Object) this).roundabout$getKhnumForm()) {
-            case 1 -> 1.3F;
-            case 3 -> 0.62F;
-            default -> 1.0F;
-        };
+        float heightScale = ((StandUser) (Object) this).roundabout$getKhnumHeightScale();
         if (heightScale != 1.0F) {
             cir.setReturnValue(cir.getReturnValue() * heightScale);
         }

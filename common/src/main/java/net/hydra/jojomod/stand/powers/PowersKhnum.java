@@ -14,9 +14,9 @@ import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.sounds.SoundSource;
 
 import java.util.List;
 import com.google.common.collect.Lists;
@@ -26,6 +26,9 @@ public class PowersKhnum extends NewDashPreset {
     private static final byte TALL_LEGS = 1;
     private static final byte WIDE = 2;
     private static final byte SMALL = 3;
+    private int mobFormChangeTicks;
+    private byte pendingForm = -1;
+    private int formWindupTicks;
 
     public PowersKhnum(LivingEntity self) {
         super(self);
@@ -52,17 +55,30 @@ public class PowersKhnum extends NewDashPreset {
     }
 
     @Override
+    public boolean canSummonStand() {
+        return true;
+    }
+
+    @Override
+    public void playSummonSound() {
+        if (self != null && !self.isCrouching() && !self.level().isClientSide()) {
+            self.level().playSound(null, self.blockPosition(), ModSounds.KHNUM_SUMMON_EVENT,
+                    SoundSource.PLAYERS, 1.0F, 1.0F);
+        }
+    }
+
+    @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         setSkillIcon(context, x, y, 1,
-                isHoldingSneak() ? StandIcons.CINDERELLA_VISAGES : StandIcons.WHITESNAKE_HALLUCINATORY_DISGUISE,
+                isHoldingSneak() ? StandIcons.KHNUM_MODIFICATION : StandIcons.KHNUM_DISGUISE,
                 PowerIndex.SKILL_1);
         setSkillIcon(context, x, y, 2,
-                isHoldingSneak() ? StandIcons.CINDERELLA_MASK : StandIcons.CINDERELLA_SCALP,
+                isHoldingSneak() ? StandIcons.KHNUM_WIDE : StandIcons.KHNUM_TALL,
                 PowerIndex.SKILL_2);
         setSkillIcon(context, x, y, 3,
-                isHoldingSneak() ? StandIcons.CINDERELLA_MASK : StandIcons.DODGE,
+                isHoldingSneak() ? StandIcons.KHNUM_SHRINK : StandIcons.DODGE,
                 isHoldingSneak() ? PowerIndex.SKILL_3 : PowerIndex.GLOBAL_DASH);
-        setSkillIcon(context, x, y, 4, StandIcons.CINDERELLA_VISAGES, PowerIndex.SKILL_4);
+        setSkillIcon(context, x, y, 4, StandIcons.KHNUM_RESET, PowerIndex.SKILL_4);
         super.renderIcons(context, x, y);
     }
 
@@ -72,28 +88,28 @@ public class PowersKhnum extends NewDashPreset {
         List<AbilityIconInstance> icons = Lists.newArrayList();
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0,
                 "ability.roundabout.khnum_disguise", "instruction.roundabout.press_skill",
-                StandIcons.WHITESNAKE_HALLUCINATORY_DISGUISE, 1, level, bypass));
+                StandIcons.KHNUM_DISGUISE, 1, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0,
                 "ability.roundabout.khnum_visage", "instruction.roundabout.press_skill_crouch",
-                StandIcons.CINDERELLA_VISAGES, 1, level, bypass));
+                StandIcons.KHNUM_MODIFICATION, 1, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0,
                 "ability.roundabout.khnum_tall", "instruction.roundabout.press_skill",
-                StandIcons.CINDERELLA_SCALP, 2, level, bypass));
+                StandIcons.KHNUM_TALL, 2, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0,
                 "ability.roundabout.khnum_wide", "instruction.roundabout.press_skill_crouch",
-                StandIcons.CINDERELLA_MASK, 2, level, bypass));
+                StandIcons.KHNUM_WIDE, 2, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0,
                 "ability.roundabout.khnum_dash", "instruction.roundabout.press_skill",
                 StandIcons.DODGE, 3, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0,
                 "ability.roundabout.khnum_small", "instruction.roundabout.press_skill_crouch",
-                StandIcons.CINDERELLA_MASK, 3, level, bypass));
+                StandIcons.KHNUM_SHRINK, 3, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, 0,
                 "ability.roundabout.khnum_reset", "instruction.roundabout.press_skill",
-                StandIcons.CINDERELLA_VISAGES, 4, level, bypass));
+                StandIcons.KHNUM_RESET, 4, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 99, 0,
                 "ability.roundabout.khnum_passive", "instruction.roundabout.passive",
-                StandIcons.WHITESNAKE_HALLUCINATORY_DISGUISE, 0, level, bypass));
+                StandIcons.KHNUM_MODIFICATION, 0, level, bypass));
         return icons;
     }
 
@@ -117,10 +133,6 @@ public class PowersKhnum extends NewDashPreset {
         switch (context) {
             case SKILL_1_NORMAL -> {
                 if (!onCooldown(PowerIndex.SKILL_1)) {
-                    if (self.level().isClientSide()) {
-                        self.level().playLocalSound(self.getX(), self.getY(), self.getZ(), ModSounds.KHNUM_SUMMON_EVENT,
-                                SoundSource.PLAYERS, 1.0F, 1.0F, false);
-                    }
                     ClientUtil.openKhnumDisguiseScreen();
                 }
             }
@@ -161,6 +173,8 @@ public class PowersKhnum extends NewDashPreset {
     }
 
     private void resetKhnum() {
+        pendingForm = -1;
+        formWindupTicks = 0;
         StandUser user = (StandUser) self;
         user.roundabout$setKhnumForm(NEUTRAL);
         user.roundabout$setKhnumVisage(237, 135, 135);
@@ -176,8 +190,8 @@ public class PowersKhnum extends NewDashPreset {
                 case PowerIndex.POWER_2_SNEAK -> WIDE;
                 default -> SMALL;
             };
-            ((StandUser) self).roundabout$setKhnumForm(form);
-            ((StandUser) self).roundabout$setKhnumMobDisguise(KhnumMobDisguise.NONE);
+            pendingForm = form;
+            formWindupTicks = 10;
             startFormCooldown();
             playKhnumSound(ModSounds.KHNUM_STRETCH_EVENT);
             return true;
@@ -200,11 +214,26 @@ public class PowersKhnum extends NewDashPreset {
     }
 
     @Override
+    public void tickPower() {
+        super.tickPower();
+        if (self != null && !self.level().isClientSide() && pendingForm >= 0 && formWindupTicks > 0) {
+            formWindupTicks--;
+            if (formWindupTicks == 0) {
+                StandUser user = (StandUser) self;
+                user.roundabout$setKhnumForm(pendingForm);
+                user.roundabout$setKhnumMobDisguise(KhnumMobDisguise.NONE);
+                pendingForm = -1;
+            }
+        }
+    }
+
+    @Override
     public void tickMobAI(LivingEntity attackTarget) {
         if (self instanceof Mob && !self.level().isClientSide) {
             Mob mob = (Mob) self;
             StandUser user = (StandUser) self;
             if (attackTarget == null) {
+                mobFormChangeTicks = 0;
                 if (user.roundabout$getKhnumForm() != NEUTRAL) user.roundabout$setKhnumForm(NEUTRAL);
                 if (user.roundabout$getKhnumMobDisguise() == KhnumMobDisguise.NONE) {
                     user.roundabout$setKhnumMobDisguise(KhnumMobDisguise.chooseFor(mob));
@@ -214,9 +243,14 @@ public class PowersKhnum extends NewDashPreset {
                     user.roundabout$setKhnumMobDisguise(KhnumMobDisguise.NONE);
                 }
                 byte currentForm = user.roundabout$getKhnumForm();
-                if (currentForm != WIDE && currentForm != SMALL || mob.getRandom().nextInt(10) == 0) {
-                    byte nextForm = mob.getRandom().nextBoolean() ? WIDE : SMALL;
-                    if (nextForm != currentForm) user.roundabout$setKhnumForm(nextForm);
+                if (currentForm != WIDE && currentForm != SMALL) {
+                    user.roundabout$setKhnumForm(mob.getRandom().nextBoolean() ? WIDE : SMALL);
+                    mobFormChangeTicks = 100 + mob.getRandom().nextInt(101);
+                } else if (mobFormChangeTicks > 0) {
+                    mobFormChangeTicks--;
+                } else {
+                    user.roundabout$setKhnumForm(currentForm == WIDE ? SMALL : WIDE);
+                    mobFormChangeTicks = 100 + mob.getRandom().nextInt(101);
                 }
             }
         }

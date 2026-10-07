@@ -22,6 +22,7 @@ public final class KhnumMobDisguise {
     public static final byte SALMON = 7;
     public static final byte TROPICAL_FISH = 8;
     public static final byte PUFFERFISH = 9;
+    public static final byte SWIMMING_FISH_RENDER = 10;
 
     private KhnumMobDisguise() { }
 

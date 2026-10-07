@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.justice;
 
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.index.ShapeShifts;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
@@ -39,6 +40,11 @@ public class JusticeTargetGoal {
 
             }
         } else if (mob instanceof IronGolem ZE && targetMob instanceof Player $$0){
+            // Khnum disguises the golem's appearance; it must not pacify it or
+            // erase retaliation against players as Justice morphs do.
+            if (((StandUser) mob).roundabout$getStandPowers() instanceof net.hydra.jojomod.stand.powers.PowersKhnum) {
+                return;
+            }
             IPlayerEntity ple = ((IPlayerEntity) $$0);
             byte shape = ple.roundabout$getShapeShift();
             ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);

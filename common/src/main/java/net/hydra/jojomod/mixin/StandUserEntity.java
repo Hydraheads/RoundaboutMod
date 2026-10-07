@@ -1663,6 +1663,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "tick", at = @At(value = "HEAD"))
     public void roundabout$tick(CallbackInfo ci) {
+        if (!this.level().isClientSide) {
+            float progress = roundabout$getKhnumTransitionProgress();
+            if (progress < 1.0F) {
+                this.entityData.set(ROUNDABOUT$KHNUM_TRANSITION_PROGRESS, Math.min(1.0F, progress + 0.05F));
+                ((LivingEntity) (Object) this).refreshDimensions();
+            }
+        } else if (roundabout$getKhnumTransitionProgress() < 1.0F) {
+            ((LivingEntity) (Object) this).refreshDimensions();
+        }
 
         // this is needed to ensure that your jump doesn't get a random boost the middle
         // of it if you're to activate your stand etc.
@@ -2725,6 +2734,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         roundabout$setHeat(compoundtag.getByte("heat"));
         if (compoundtag.contains("khnumForm")) {
             roundabout$setKhnumForm(compoundtag.getByte("khnumForm"));
+            this.entityData.set(ROUNDABOUT$KHNUM_TRANSITION_START_FORM, roundabout$getKhnumForm());
+            this.entityData.set(ROUNDABOUT$KHNUM_TRANSITION_PROGRESS, 1.0F);
         }
         if (compoundtag.contains("khnumHeight")) {
             roundabout$setKhnumVisage(compoundtag.getInt("khnumHeight"), compoundtag.getInt("khnumWidth"),
@@ -3998,6 +4009,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DISGUISE_ID, Optional.empty());
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DISGUISE_NAME, "");
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$KHNUM_FORM, (byte) 0);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$KHNUM_TRANSITION_START_FORM, (byte) 0);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$KHNUM_TRANSITION_PROGRESS, 1.0F);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$KHNUM_HEIGHT, 237);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$KHNUM_WIDTH, 135);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$KHNUM_HEAD, 135);
@@ -4013,13 +4026,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             at = @At("RETURN"), cancellable = true)
     private void roundabout$khnumDimensions(Pose pose, CallbackInfoReturnable<EntityDimensions> cir) {
         EntityDimensions dimensions = cir.getReturnValue();
-        float widthScale = 1.0F;
-        float heightScale = 1.0F;
-        switch (roundabout$getKhnumForm()) {
-            case 1 -> { widthScale = 0.85F; heightScale = 1.3F; }
-            case 2 -> widthScale = 1.65F;
-            case 3 -> { widthScale = 0.75F; heightScale = 0.62F; }
-        }
+        StandUser user = (StandUser) this;
+        float widthScale = user.roundabout$getKhnumWidthScale();
+        float heightScale = user.roundabout$getKhnumHeightScale();
         if (widthScale != 1.0F || heightScale != 1.0F) {
             cir.setReturnValue(EntityDimensions.scalable(dimensions.width * widthScale,
                     dimensions.height * heightScale));
@@ -7033,6 +7042,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private static final EntityDataAccessor<Byte> ROUNDABOUT$KHNUM_FORM = SynchedEntityData.defineId(
             LivingEntity.class, EntityDataSerializers.BYTE);
     @Unique
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$KHNUM_TRANSITION_START_FORM = SynchedEntityData.defineId(
+            LivingEntity.class, EntityDataSerializers.BYTE);
+    @Unique
+    private static final EntityDataAccessor<Float> ROUNDABOUT$KHNUM_TRANSITION_PROGRESS = SynchedEntityData.defineId(
+            LivingEntity.class, EntityDataSerializers.FLOAT);
+    @Unique
     private static final EntityDataAccessor<Integer> ROUNDABOUT$KHNUM_HEIGHT = SynchedEntityData.defineId(
             LivingEntity.class, EntityDataSerializers.INT);
     @Unique
@@ -7222,7 +7237,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public void roundabout$setKhnumForm(byte form) {
         byte clampedForm = (byte) Mth.clamp(form, 0, 3);
+        this.entityData.set(ROUNDABOUT$KHNUM_TRANSITION_START_FORM, this.entityData.get(ROUNDABOUT$KHNUM_FORM));
         this.entityData.set(ROUNDABOUT$KHNUM_FORM, clampedForm);
+        this.entityData.set(ROUNDABOUT$KHNUM_TRANSITION_PROGRESS, 0.0F);
         LivingEntity living = (LivingEntity) (Object) this;
         AttributeInstance movementSpeed = living.getAttribute(Attributes.MOVEMENT_SPEED);
         if (movementSpeed != null) {
@@ -7239,6 +7256,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
         living.refreshDimensions();
+    }
+
+    @Override
+    public byte roundabout$getKhnumTransitionStartForm() {
+        return this.entityData.get(ROUNDABOUT$KHNUM_TRANSITION_START_FORM);
+    }
+
+    @Override
+    public float roundabout$getKhnumTransitionProgress() {
+        return this.entityData.get(ROUNDABOUT$KHNUM_TRANSITION_PROGRESS);
     }
 
     @Override

@@ -10,6 +10,17 @@ public class StandIcons {
         return new ResourceLocation(Roundabout.MOD_ID, "textures/gui/icons/whitesnake/" + path + ".png");
     }
 
+    private static ResourceLocation khnumIcon(String path) {
+        return new ResourceLocation(Roundabout.MOD_ID, "textures/gui/icons/khnum/" + path + ".png");
+    }
+
+    public static final ResourceLocation KHNUM_MODIFICATION = khnumIcon("modification");
+    public static final ResourceLocation KHNUM_DISGUISE = khnumIcon("disguise");
+    public static final ResourceLocation KHNUM_TALL = khnumIcon("tall");
+    public static final ResourceLocation KHNUM_WIDE = khnumIcon("wide");
+    public static final ResourceLocation KHNUM_SHRINK = khnumIcon("shrink");
+    public static final ResourceLocation KHNUM_RESET = khnumIcon("reset");
+
     public static final ResourceLocation WHITESNAKE_PUNCH = whitesnakeIcon("punch");
     public static final ResourceLocation WHITESNAKE_GUARD = whitesnakeIcon("guard");
     public static final ResourceLocation WHITESNAKE_CHOP = whitesnakeIcon("chop");

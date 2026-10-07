@@ -1502,22 +1502,19 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                     Vector3f scale =vd.scale();
                     $$1.scale(scale.x, scale.y, scale.z);
                 }
-                byte form = khnumUser.roundabout$getKhnumForm();
-                if (form == 1) $$1.scale(0.85F, 1.3F, 0.85F);
-                else if (form == 2) $$1.scale(1.65F, 1.0F, 1.65F);
-                else if (form == 3) $$1.scale(0.75F, 0.75F, 0.75F);
+                float widthScale = khnumUser.roundabout$getKhnumWidthScale();
+                float heightScale = khnumUser.roundabout$getKhnumModelHeightScale();
+                $$1.scale(widthScale, heightScale, widthScale);
                 ci.cancel();
 
             }
         }
-        byte form = khnumUser.roundabout$getKhnumForm();
         int height = khnumUser.roundabout$getKhnumHeight();
         int width = khnumUser.roundabout$getKhnumWidth();
         float bodyWidth = 1.0F + (width - 135) * 0.001F;
         float bodyHeight = 1.0F + (height - 237) * 0.001F;
-        if (form == 1) { bodyWidth *= 0.85F; bodyHeight *= 1.3F; }
-        else if (form == 2) bodyWidth *= 1.65F;
-        else if (form == 3) { bodyWidth *= 0.75F; bodyHeight *= 0.62F; }
+        bodyWidth *= khnumUser.roundabout$getKhnumWidthScale();
+        bodyHeight *= khnumUser.roundabout$getKhnumModelHeightScale();
         if (bodyWidth != 1.0F || bodyHeight != 1.0F) {
             $$1.scale(bodyWidth, bodyHeight, bodyWidth);
         }

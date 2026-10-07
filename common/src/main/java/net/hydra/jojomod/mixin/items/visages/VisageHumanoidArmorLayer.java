@@ -9,6 +9,7 @@ import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.stand.powers.PowersOasis;
 import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
@@ -62,8 +63,10 @@ public abstract class VisageHumanoidArmorLayer<T extends LivingEntity, M extends
         if ($$3 instanceof Player PE) {
             if (!((IPlayerEntity)PE).roundabout$getMaskSlot().isEmpty()
                     && ((IPlayerEntity)PE).roundabout$getMaskSlot().getItem() instanceof MaskItem ME
-                    && !ME.visageData.generateVisageData(PE).rendersArmor()
-                    && !((StandUser) PE).roundabout$isDisguised() &&
+                    && ((!ME.visageData.generateVisageData(PE).rendersArmor()
+                    && !((StandUser) PE).roundabout$isDisguised())
+                    || (((StandUser) PE).roundabout$isDisguised()
+                    && ((IPlayerEntity) PE).roundabout$getMaskSlot().is(ModItems.BLANK_MASK))) &&
                     !($$3.isInvisible() && ((IEntityAndData) $$3).roundabout$getTrueInvisibility() <= -1)
             ){
                 ci.cancel();
