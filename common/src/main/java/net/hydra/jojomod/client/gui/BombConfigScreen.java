@@ -64,8 +64,10 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
 
         int offsetCenter = 32;
 
-        this.slots.add(new ToggableIcon((byte)BLOCK_DESTRUCTION, this.width / 2 - 13 - offsetCenter, this.height / 2 + 31 - 44, Component.translatable("roundabout.bomb_config.block_destruction")));
-        this.slots.add(new ToggableIcon((byte)ON_CONTACT, this.width / 2 - 13 + offsetCenter, this.height / 2 + 31 - 44, Component.translatable("roundabout.bomb_config.contact_explosion")));
+        this.slots.add(new ToggableIcon((byte)BLOCK_DESTRUCTION, this.width / 2 - 13 - offsetCenter, this.height / 2 + 31 - 44,
+                Component.translatable("roundabout.bomb_config.block_destruction")));
+        this.slots.add(new ToggableIcon((byte)ON_CONTACT, this.width / 2 - 13 + offsetCenter, this.height / 2 + 31 - 44,
+                Component.translatable("roundabout.bomb_config.contact_explosion")));
 
         this.sizes.add(new SwitchSelect(0, this.width / 2 - 33, this.height / 2 - 32 + 48, Component.translatable("roundabout.bomb_config.explosion_size_0")));
         this.sizes.add(new SwitchSelect(1, this.width / 2 - 33 + 20, this.height / 2 - 32 + 48, Component.translatable("roundabout.bomb_config.explosion_size_1")));

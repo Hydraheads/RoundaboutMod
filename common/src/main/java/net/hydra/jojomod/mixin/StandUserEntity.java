@@ -4578,6 +4578,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             return;
         }
 
+        if (this.hasEffect(ModEffects.DOOMED)) {
+            cir.setReturnValue(false);
+            return;
+        }
+
         if (rdbt$this() instanceof AbstractVillager || rdbt$this() instanceof AbstractIllager) {
             if (dsource.is(ModDamageTypes.BLOOD_DRAIN) || (dsource.getDirectEntity() instanceof BaseMinion)) {
                 Entity ent = dsource.getEntity();

@@ -2635,6 +2635,28 @@ public class PowersWhitesnake extends BlockGrabPreset {
     }
 
     @Override
+    public boolean StandDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker) {
+        boolean hit = super.StandDamageEntityAttack(target, pow, knockbackStrength, attacker);
+        if (hit) setControlModeAttackTarget(target);
+        return hit;
+    }
+
+    @Override
+    public boolean StandRushDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker) {
+        boolean hit = super.StandRushDamageEntityAttack(target, pow, knockbackStrength, attacker);
+        if (hit) setControlModeAttackTarget(target);
+        return hit;
+    }
+
+    private void setControlModeAttackTarget(Entity target) {
+        if (!self.level().isClientSide() && isPiloting() && target instanceof Mob mob
+                && getPilotingStand() instanceof WhitesnakeEntity stand) {
+            mob.setLastHurtByMob(stand);
+            if (mob.getTarget() == self) mob.setTarget(stand);
+        }
+    }
+
+    @Override
     public void barrageImpact2(Entity entity, boolean lastHit, float knockbackStrength) {
         if (!isPiloting() && !autoMode) {
             super.barrageImpact2(entity, lastHit, knockbackStrength);

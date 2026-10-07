@@ -114,6 +114,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.DIVER_DOWN.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.DIVER_DOWN_BETA.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.DIVER_DOWN_WORLD.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.DIVER_DROWNED.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SILVER_CHARIOT.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.OVA_ENYA.get(), OVAEnyaNPC.createAttributes().build());
         event.put(ForgeEntities.ENYA.get(), OVAEnyaNPC.createAttributes().build());
@@ -349,6 +350,7 @@ public class ForgeEvents {
         ModItems.LUCK_UPGRADE = ForgeItems.LUCK_UPGRADE.get();
         ModItems.EXECUTION_UPGRADE = ForgeItems.EXECUTION_UPGRADE.get();
         ModItems.OCCULT_CHARGE = ForgeItems.OCCULT_CHARGE.get();
+        ModItems.TOTEM_OF_DOOM = ForgeItems.TOTEM_OF_DOOM.get();
         ModItems.HAIRSPRAY = ForgeItems.HAIRSPRAY.get();
         ModItems.LUCK_SWORD = ForgeItems.LUCK_SWORD.get();
         ModItems.WOODEN_GLAIVE = ForgeItems.WOODEN_GLAIVE.get();
@@ -777,6 +779,7 @@ public class ForgeEvents {
         ModEffects.BLEED = ForgeEffects.BLEED.get();
         ModEffects.HEX = ForgeEffects.HEX.get();
         ModEffects.BANISH = ForgeEffects.BANISH.get();
+        ModEffects.DOOMED = ForgeEffects.DOOMED.get();
         ModEffects.STAND_VIRUS = ForgeEffects.STAND_VIRUS.get();
         ModEffects.CAPTURING_LOVE = ForgeEffects.CAPTURING_LOVE.get();
         ModEffects.FACELESS = ForgeEffects.FACELESS.get();
@@ -862,6 +865,7 @@ public class ForgeEvents {
         ModEntities.DIVER_DOWN = ForgeEntities.DIVER_DOWN.get();
         ModEntities.DIVER_DOWN_BETA = ForgeEntities.DIVER_DOWN_BETA.get();
         ModEntities.DIVER_DOWN_WORLD = ForgeEntities.DIVER_DOWN_WORLD.get();
+        ModEntities.DIVER_DROWNED = ForgeEntities.DIVER_DROWNED.get();
         ModEntities.DIVER_KICK = ForgeEntities.DIVER_KICK.get();
         ModEntities.BONE_PROJECTILE = ForgeEntities.BONE_PROJECTILE.get();
         ModEntities.SILVER_CHARIOT = ForgeEntities.SILVER_CHARIOT.get();
