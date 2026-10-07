@@ -2872,6 +2872,21 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     @Unique
+    public int roundabout$diverDownVanishTicks = 0;
+
+    @Unique
+    @Override
+    public int roundabout$getDiverDownVanishTicks() {
+        return roundabout$diverDownVanishTicks;
+    }
+
+    @Unique
+    @Override
+    public void roundabout$setDiverDownVanishTicks(int set) {
+        roundabout$diverDownVanishTicks = Mth.clamp(set, 0, 10);
+    }
+
+    @Unique
     public int roundabout$RattShoulderVanishTicks = 0;
 
     @Unique
@@ -6100,6 +6115,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             roundabout$setWhiteAlbumVanishTicks(roundabout$getWhiteAlbumVanishTicks() - 1);
         }
 
+        if (roundabout$hasDiverArms()) {
+            roundabout$setDiverDownVanishTicks(roundabout$getDiverDownVanishTicks() + 1);
+        } else {
+            roundabout$setDiverDownVanishTicks(roundabout$getDiverDownVanishTicks() - 1);
+        }
+
         if (roundabout$getStandPowers() instanceof PowersMandom && active) {
             roundabout$setMandomVanishTicks(roundabout$getMandomVanishTicks() + 1);
         } else {
@@ -6980,8 +7001,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$DIVER_LEGS = SynchedEntityData.defineId(
             LivingEntity.class, EntityDataSerializers.BOOLEAN);
+    @Unique
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$DIVER_ARMS = SynchedEntityData.defineId(
-            StandUserEntity.class, EntityDataSerializers.BOOLEAN);
+            LivingEntity.class, EntityDataSerializers.BOOLEAN);
 
     @Unique
     public PowersKillerQueen BtdPlantedUser = null;
@@ -7071,11 +7093,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.entityData.set(ROUNDABOUT$DIVER_LEGS, legs);
     }
 
-    @Unique
     @Override
     public boolean roundabout$hasDiverArms() {return this.entityData.get(ROUNDABOUT$DIVER_ARMS);}
 
-    @Unique
     @Override
     public void roundabout$setDiverArms(boolean arms) {this.entityData.set(ROUNDABOUT$DIVER_ARMS, arms);}
 

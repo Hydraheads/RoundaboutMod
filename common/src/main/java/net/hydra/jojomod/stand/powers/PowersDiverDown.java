@@ -922,7 +922,7 @@ public class PowersDiverDown extends NewPunchingStand {
     @Override
     public void tickPower() {
         super.tickPower();
-        if (isPiloting() && this.self.level().isClientSide()) {
+        if (isPiloting() && this.self.level().isClientSide() && isPacketPlayer()) {
             Minecraft mc = Minecraft.getInstance();
             boolean isMoving = mc.options.keyUp.isDown() || mc.options.keyDown.isDown()
                     || mc.options.keyLeft.isDown() || mc.options.keyRight.isDown();
@@ -4146,6 +4146,34 @@ public class PowersDiverDown extends NewPunchingStand {
         this.hasDiverArms = false;
     }
 
+    // for diver arms in first person, stolen from white album and oasis
+    public static float getDiverDownAmt(Entity entity,float partialTicks){
+        float heyFull = 0;
+        if (entity instanceof LivingEntity LE) {
+            StandUser user = ((StandUser) LE);
+            boolean hasDiverDownArmsOut = user.roundabout$hasDiverArms();
+            int diverDownTicks = user.roundabout$getDiverDownVanishTicks();
+            if (hasDiverDownArmsOut || diverDownTicks > 0) {
+                byte skin = user.roundabout$getStandSkin();
+                if (user.roundabout$getLastStandSkin() != skin) {
+                    user.roundabout$setLastStandSkin(skin);
+                    diverDownTicks = 0;
+                    user.roundabout$setDiverDownVanishTicks(0);
+                }
+
+                float partialTicks2 = partialTicks % 1;
+                if (hasDiverDownArmsOut) {
+                    heyFull = diverDownTicks + partialTicks2;
+                    heyFull = Math.min(heyFull / 10, 1f);
+                } else {
+                    heyFull = diverDownTicks - partialTicks2;
+                    heyFull = Math.max(heyFull / 10, 0);
+                }
+            }
+        }
+        return heyFull;
+    }
+
     // diver arms end
 
     /* need to ask hydra permission if we can make this a move instead
@@ -4204,6 +4232,7 @@ public class PowersDiverDown extends NewPunchingStand {
 
             //transfer process
             removeDiverLegsFromTarget();
+            removeDiverArmsFromTarget();
             if (this.submergedTarget != null) {
                 ((StandUser) this.submergedTarget).roundabout$SetDiverUser(null);
             }
@@ -4934,6 +4963,9 @@ public class PowersDiverDown extends NewPunchingStand {
             case DiverDownEntity.DIVER_DROWNED -> {
                 return Component.translatable("skins.roundabout.diver_down.diver_drowned");
             }
+            case DiverDownEntity.SECCO -> {
+                return Component.translatable("skins.roundabout.diver_down.secco");
+            }
             default -> {
                 return Component.translatable("skins.roundabout.diver_down.base");
             }
@@ -4972,10 +5004,11 @@ public class PowersDiverDown extends NewPunchingStand {
             if (Level > 5 || bypass) {
                 l.add(DiverDownEntity.INVERSION);
                 l.add(DiverDownEntity.FIGURE);
+                l.add(DiverDownEntity.EYECATCH);
             }
             if (Level > 6 || bypass) {
-                l.add(DiverDownEntity.EYECATCH);
                 l.add(DiverDownEntity.ARTWORK);
+                l.add(DiverDownEntity.SECCO);
             }
             if (Level > 7 || bypass) {
                 l.add(DiverDownEntity.WORLD_DIVER);
