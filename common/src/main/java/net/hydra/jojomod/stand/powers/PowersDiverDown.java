@@ -922,7 +922,7 @@ public class PowersDiverDown extends NewPunchingStand {
     @Override
     public void tickPower() {
         super.tickPower();
-        if (isPiloting() && this.self.level().isClientSide()) {
+        if (isPiloting() && this.self.level().isClientSide() && isPacketPlayer()) {
             Minecraft mc = Minecraft.getInstance();
             boolean isMoving = mc.options.keyUp.isDown() || mc.options.keyDown.isDown()
                     || mc.options.keyLeft.isDown() || mc.options.keyRight.isDown();
@@ -4934,6 +4934,9 @@ public class PowersDiverDown extends NewPunchingStand {
             case DiverDownEntity.DIVER_DROWNED -> {
                 return Component.translatable("skins.roundabout.diver_down.diver_drowned");
             }
+            case DiverDownEntity.SECCO -> {
+                return Component.translatable("skins.roundabout.diver_down.secco");
+            }
             default -> {
                 return Component.translatable("skins.roundabout.diver_down.base");
             }
@@ -4972,10 +4975,11 @@ public class PowersDiverDown extends NewPunchingStand {
             if (Level > 5 || bypass) {
                 l.add(DiverDownEntity.INVERSION);
                 l.add(DiverDownEntity.FIGURE);
+                l.add(DiverDownEntity.EYECATCH);
             }
             if (Level > 6 || bypass) {
-                l.add(DiverDownEntity.EYECATCH);
                 l.add(DiverDownEntity.ARTWORK);
+                l.add(DiverDownEntity.SECCO);
             }
             if (Level > 7 || bypass) {
                 l.add(DiverDownEntity.WORLD_DIVER);
