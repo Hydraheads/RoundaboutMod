@@ -697,16 +697,17 @@ public class SheerHeartAttackEntity extends StandEntity {
 		DamageSource dmg = ModDamageTypes.of(this.level(), ModDamageTypes.EXPLOSIVE_STAND, this.getUser());
 
 		StandPowers SP = ((StandUser)this.getUser()).roundabout$getStandPowers();
-		if (!(SP instanceof PowersKillerQueen)) { return; }
-		PowersKillerQueen KQ = (PowersKillerQueen)SP;
+		if (!(SP instanceof PowersKillerQueen KQ)) { return; }
 
 		Vec3 pos = this.position().add(this.getForward().scale(0.3));
 		float damage = ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage;
 
 		float range = getRangeByWarm(getEntityWarm(target));
 
-		ExplosionUtil.explosionHurtWithMulti(pos, dmg, this.level(), damage, 0.3f, range,
-				KQ.multiplyPowerByStandConfigMobs(1.3f), KQ.multiplyPowerByStandConfigPlayers(1.0f));
+		for (LivingEntity LE : ExplosionUtil.explosionHurtWithMulti(pos, dmg, this.level(), damage, 0.3f, range,
+				KQ.multiplyPowerByStandConfigMobs(1.3f), KQ.multiplyPowerByStandConfigPlayers(1.0f))) {
+			KQ.addEXP(1, LE);
+		}
 
 		ExplosionUtil.explodeEffects(pos, this.level(), KQ.getExplosionParticle(), new Vec3(range*0.7f, range*0.75f, range*0.7f), (int)(32*range));
 
@@ -727,8 +728,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		this.explosions++;
 
 		StandPowers SP = ((StandUser)this.getUser()).roundabout$getStandPowers();
-		if (!(SP instanceof PowersKillerQueen)) { return; }
-		PowersKillerQueen KQ = (PowersKillerQueen)SP;
+		if (!(SP instanceof PowersKillerQueen KQ)) { return; }
 
 		if (this.getTargetType() == ENTITY){
 			attackAt(getEntityTarget());
@@ -748,8 +748,13 @@ public class SheerHeartAttackEntity extends StandEntity {
 		}else if(this.getTargetType() == BLOCK){
 			float range = getRangeByWarm(getBlockWarm(blockTarget, level()));
 
-			ExplosionUtil.explosionHurt(this.blockTarget.getCenter(), dmg, this.level(),
-					ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage, 0.3f, range);
+			for (LivingEntity LE : ExplosionUtil.explosionHurtWithMulti(this.blockTarget.getCenter(), dmg, this.level(),
+					ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage, 0.3f, range,
+					KQ.multiplyPowerByStandConfigMobs(1.3f), KQ.multiplyPowerByStandConfigPlayers(1.0f)
+			)) {
+				KQ.addEXP(1, LE);
+			}
+
 
 			ExplosionUtil.explodeEffects(this.blockTarget.getCenter(), this.level(), KQ.getExplosionParticle(), new Vec3(range*0.7f, range*0.75f, range*0.7f), (int)(30*range));
 			level().playSound(null, this.blockTarget, KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
