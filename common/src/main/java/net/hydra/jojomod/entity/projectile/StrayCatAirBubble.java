@@ -137,7 +137,6 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
             return false;
         } else {
 
-            //this.popBubble();
         }
         return false;
 
@@ -168,7 +167,6 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
     @Override
     public boolean dealWithPenetration(Entity proj){
-        //popBubble();
         return false;
     }
 
@@ -231,7 +229,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                 Vec3 nextPos = currentPos.add(this.getDeltaMovement());
                 AABB sweptBox = this.getBoundingBox()
                         .expandTowards(this.getDeltaMovement())
-                        .inflate(this.getBbWidth() * 1.1 + 0.3); // Adjust as needed
+                        .inflate(this.getBbWidth() * 1.2 + 0.3); // Adjust as needed
 
                 EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(
                         this.level(), this, currentPos, nextPos, sweptBox,
