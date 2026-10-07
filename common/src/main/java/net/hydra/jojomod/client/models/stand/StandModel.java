@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
+import net.hydra.jojomod.client.models.stand.animations.StandIdles;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
@@ -68,12 +69,37 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
         return stand;
     }
 
-    /**Most humanoid stands share these animations.*/
-    public void defaultAnimations(T entity, float animationProgress, float windupLength){
+    public void animateIdles(T entity, float animationProgress) {
         this.animate(entity.idleAnimationState, StandAnimations.STAND_IDLE_FLOAT, animationProgress, 1f);
         this.animate(entity.idleAnimationState2, StandAnimations.IDLE_2, animationProgress, 1f);
         this.animate(entity.idleAnimationState3, StandAnimations.FLOATY_IDLE, animationProgress, 1f);
         this.animate(entity.idleAnimationState4, StandAnimations.STAR_PLATINUM_IDLE, animationProgress, 1f);
+        this.animate(entity.idleAnimationStarPlat1, StandIdles.StarPlatinumIDLE, animationProgress, 1f);
+        this.animate(entity.idleAnimationStarPlat2, StandIdles.StarPlatinumIDLE2, animationProgress, 1f);
+        this.animate(entity.idleAnimationMagRed1, StandIdles.MagiciansRedIDLE, animationProgress, 1f);
+        this.animate(entity.idleAnimationMagRed2, StandIdles.MagiciansRedIDLE2, animationProgress, 1f);
+        this.animate(entity.idleAnimationTheWorld1, StandIdles.TheWorldIDLE, animationProgress, 1f);
+        this.animate(entity.idleAnimationTheWorld2, StandIdles.TheWorldIDLE2, animationProgress, 1f);
+        this.animate(entity.idleAnimationKillerQueen1, StandIdles.KillerQueenIDLE, animationProgress, 1f);
+        this.animate(entity.idleAnimationKillerQueen2, StandIdles.KillerQueenIDLE2, animationProgress, 1f);
+        this.animate(entity.idleAnimationPurpleHaze1, StandIdles.PurpleHazeIDLE, animationProgress, 1f);
+        this.animate(entity.idleAnimationPurpleHaze2, StandIdles.PurpleHazeIDLE2, animationProgress, 1f);
+        this.animate(entity.idleAnimationKingCrimson1, StandIdles.KingCrimsonIDLE, animationProgress, 1f);
+        this.animate(entity.idleAnimationKingCrimson2, StandIdles.KingCrimsonIDLE2, animationProgress, 1f);
+        this.animate(entity.idleAnimationWhiteSnake1, StandIdles.WhiteSnakeIDLE, animationProgress, 1f);
+        this.animate(entity.idleAnimationWhiteSnake2, StandIdles.WhiteSnakeIDLE2, animationProgress, 1f);
+        this.animate(entity.idleAnimationDiverDown1, StandIdles.DiverDownIDLE, animationProgress, 1f);
+        this.animate(entity.idleAnimationDiverDown2, StandIdles.DiverDownIDLE2, animationProgress, 1f);
+        this.animate(entity.idleAnimationD4C1, StandIdles.D4CIDLE, animationProgress, 1f);
+        this.animate(entity.idleAnimationD4C2, StandIdles.D4CIDLE2, animationProgress, 1f);
+        this.animate(entity.idleAnimationSoftAndWet1, StandIdles.SoftAndWetIDLE, animationProgress, 1f);
+        this.animate(entity.idleAnimationSoftAndWet2, StandIdles.SoftAndWetIDLE2, animationProgress, 1f);
+    }
+
+    /**Most humanoid stands share these animations.*/
+    public void defaultAnimations(T entity, float animationProgress, float windupLength){
+        this.animateIdles(entity, animationProgress);
+
         Entity owner = entity.getUser();
         float partial = 1.4f;
         float full = 1.16666f;
