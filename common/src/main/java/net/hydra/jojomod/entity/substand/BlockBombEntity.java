@@ -135,7 +135,7 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 	public boolean blockGotDestroyed() {
 		BlockState state = this.level().getBlockState(this.bombPos);
 
-		return state.isAir() || (originalState != null && originalState.is(state.getBlock()));
+		return state.isAir() || (originalState != null && !originalState.is(state.getBlock()));
 	}
 
 
