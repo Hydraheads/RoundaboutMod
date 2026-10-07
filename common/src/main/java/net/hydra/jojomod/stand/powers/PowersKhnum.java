@@ -191,7 +191,7 @@ public class PowersKhnum extends NewDashPreset {
                 default -> SMALL;
             };
             pendingForm = form;
-            formWindupTicks = 40;
+            formWindupTicks = 10;
             startFormCooldown();
             playKhnumSound(ModSounds.KHNUM_STRETCH_EVENT);
             return true;
