@@ -560,6 +560,9 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
     }
     @Override
     public void tickMobAI(LivingEntity attackTarget){
+        //Disabled mob AI to avoid crashes, will be done later
+
+        /*
         if(attackTarget != null){
             if(!blackSabbathTargets.contains(attackTarget)) {
                 if (blackSabbathTargets.isEmpty()) {
@@ -589,7 +592,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                     }
                 }
             }
-        }
+        }*/
     }
     @Override
     public boolean tryPower(int move, boolean forced) {
