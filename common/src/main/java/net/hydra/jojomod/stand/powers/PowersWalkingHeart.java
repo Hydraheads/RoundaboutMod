@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -1475,8 +1476,10 @@ public class PowersWalkingHeart extends NewDashPreset {
             this.fallTime = 0;
             this.airTime = 0;
         } else {
-            if (self.getDeltaMovement().y < 0) {
+            if (self.getDeltaMovement().y < 0 && ((IEntityAndData)self).rdbt$getStuckSpeedMultiplier().equals(Vec3.ZERO)) {
                 this.fallTime += 1;
+            } else {
+                this.fallTime = 0;
             }
             airTime+=1;
         }
