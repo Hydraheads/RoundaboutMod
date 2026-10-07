@@ -754,6 +754,8 @@ public abstract class ZMob extends LivingEntity implements IMob {
             sg.stop();
         } else if (goal instanceof PanicGoal tg) {
             tg.stop();
+        } else if (goal instanceof MoveTowardsTargetGoal tg) {
+            tg.stop();
         }
     }
     @Unique
