@@ -4766,6 +4766,8 @@
   "config.roundabout.bitesTheDustDayPlayersDamage.desc": "Sets the amount of damage dealt to players by Bites the Dust explosions.",
   "config.roundabout.maximunBiteTheDustCombatActivations.name": "'Bites the Dust: Reveal' Use Limit",
   "config.roundabout.maximunBiteTheDustCombatActivations.desc": "Sets the number of times 'Bites the Dust: Reveal' can be used on a single host without resetting Bites the Dust. A value of 0 is limitless.",
+  "config.roundabout.killerQueenGuardPoints.name": "Guard Points",
+  "config.roundabout.killerQueenGuardPoints.desc": "How much raw, unreduced damage can the stand take before its guard breaks?",
 
   "config.roundabout.theWorldAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.theWorldAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
