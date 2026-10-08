@@ -51,7 +51,7 @@ public class DynamicItemRendering extends BlockEntityWithoutLevelRenderer {
                 return;
             }
 
-            Roundabout.LOGGER.info("is been called?");
+
 
             blockEntityRenderDispatcher.renderItem(blockEntity, poseStack, bufferSource, combinedLight, combinedOverlay);
         }

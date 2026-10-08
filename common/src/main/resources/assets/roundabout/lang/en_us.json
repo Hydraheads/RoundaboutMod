@@ -2753,6 +2753,11 @@
   "idle.roundabout.d4c2": "Cheap Price",
   "idle.roundabout.soft_and_wet1": "Walk Halves",
   "idle.roundabout.soft_and_wet2": "Go Beyond",
+  "idle.roundabout.kneel": "Kneel",
+  "idle.roundabout.brave": "Brave",
+  "idle.roundabout.reborn": "Reborn",
+  "idle.roundabout.patriot": "Patriot",
+  "idle.roundabout.relaxed": "Relaxed",
 
   "idle.roundabout.passive_justice": "Idle Pose",
   "idle.roundabout.battle_justice": "Menace",

@@ -633,6 +633,7 @@ public class ClientForgeEvents implements IClientItemExtensions {
     @Override
     public BlockEntityWithoutLevelRenderer getCustomRenderer(){
 
+        // TODO: someone pls find out how to make this registered on forge
         return new DynamicItemRendering(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
     }
 }

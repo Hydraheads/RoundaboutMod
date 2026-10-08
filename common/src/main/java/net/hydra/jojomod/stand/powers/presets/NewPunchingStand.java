@@ -454,6 +454,11 @@ public class NewPunchingStand extends NewDashPreset {
         $$1.add((byte) 21);
         $$1.add((byte) 22);
         $$1.add((byte) 23);
+        $$1.add((byte) 24);
+        $$1.add((byte) 25);
+        $$1.add((byte) 26);
+        $$1.add((byte) 27);
+        $$1.add((byte) 28);
         return $$1;
     }
 

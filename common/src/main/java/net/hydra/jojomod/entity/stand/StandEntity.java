@@ -212,6 +212,11 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
     public final AnimationState idleAnimationD4C2 = new AnimationState();
     public final AnimationState idleAnimationSoftAndWet1 = new AnimationState();
     public final AnimationState idleAnimationSoftAndWet2 = new AnimationState();
+    public final AnimationState idleAnimationKneel = new AnimationState();
+    public final AnimationState idleAnimationBrave = new AnimationState();
+    public final AnimationState idleAnimationReborn = new AnimationState();
+    public final AnimationState idleAnimationPatriot = new AnimationState();
+    public final AnimationState idleAnimationRelaxed = new AnimationState();
     public final AnimationState punchState1 = new AnimationState();
     public final AnimationState punchState2 = new AnimationState();
     public final AnimationState punchState3 = new AnimationState();
@@ -352,6 +357,31 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                 this.idleAnimationSoftAndWet2.startIfStopped(this.tickCount);
             } else {
                 this.idleAnimationSoftAndWet2.stop();
+            }
+            if (idle == 24 && animation == IDLE) {
+                this.idleAnimationKneel.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationKneel.stop();
+            }
+            if (idle == 25 && animation == IDLE) {
+                this.idleAnimationBrave.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationBrave.stop();
+            }
+            if (idle == 26 && animation == IDLE) {
+                this.idleAnimationReborn.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationReborn.stop();
+            }
+            if (idle == 27 && animation == IDLE) {
+                this.idleAnimationPatriot.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationPatriot.stop();
+            }
+            if (idle == 28 && animation == IDLE) {
+                this.idleAnimationRelaxed.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationRelaxed.stop();
             }
 
 
