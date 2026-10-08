@@ -417,14 +417,15 @@ public class AdvancedConfig implements Cloneable {
                     "mod_id:add_other_mod_item"
             )
     );
-    public Set<String> occultChargeEffectsToBanishv2 = new HashSet<>(
+    public Set<String> occultChargeEffectsToBanishv3 = new HashSet<>(
             Arrays.asList(
                     "minecraft:absorption",
                     "minecraft:saturation",
                     "minecraft:jump_boost",
                     "minecraft:strength",
                     "minecraft:speed",
-                    "minecraft:resistance"
+                    "minecraft:resistance",
+                    "minecraft:regeneration"
             )
     );
 
