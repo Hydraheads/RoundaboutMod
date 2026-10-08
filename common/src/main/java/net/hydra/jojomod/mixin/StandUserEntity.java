@@ -2629,9 +2629,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     public void rdbt$onSyncedDataUpdated2(EntityDataAccessor<?> $$0){
         if ($$0.equals(ROUNDABOUT$STAND_DISC)){
-            this.roundabout$setStandPowers(null);
-            roundabout$itemParityClient = ItemStack.EMPTY;
+
         }
+    }
+    public void rdbt$refreshStand(){
+        this.roundabout$setStandPowers(null);
+        roundabout$itemParityClient = ItemStack.EMPTY;
     }
     @Inject(method = "canFreeze()Z", at = @At(value = "HEAD"), require = 0, cancellable = true)
     public void roundabout$canFreeze(CallbackInfoReturnable<Boolean> cir) {
