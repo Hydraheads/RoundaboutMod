@@ -1227,6 +1227,16 @@ public class StandPowers extends AbilityScapeBasis {
             return Component.translatable(  "idle.roundabout.patriot");
         } else if (posID == 28){
             return Component.translatable(  "idle.roundabout.relaxed");
+        } else if (posID == 29){
+            return Component.translatable(  "idle.roundabout.crazy_diamond1");
+        } else if (posID == 30){
+            return Component.translatable(  "idle.roundabout.crazy_diamond2");
+        } else if (posID == 31){
+            return Component.translatable(  "idle.roundabout.golden_experience1");
+        } else if (posID == 32){
+            return Component.translatable(  "idle.roundabout.golden_experience2");
+        } else if (posID == 33){
+            return Component.translatable(  "idle.roundabout.sticky_fingers1");
         } else {
             return Component.translatable(  "idle.roundabout.passive");
         }
