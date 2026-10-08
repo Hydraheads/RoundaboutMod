@@ -94,7 +94,7 @@ public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer
             $$2.pushPose();
             $$2.translate(0.5F, 0.5F, 0.5F);
             $$2.mulPose(Axis.YP.rotationDegrees(-$$13));
-            $$2.mulPose(Axis.ZP.rotationDegrees(180));
+            //$$2.mulPose(Axis.ZP.rotationDegrees(180));
             $$2.translate(0F, -1F, 0F);
             VertexConsumer vertexConsumer;
 
@@ -120,7 +120,7 @@ public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer
             $$2.popPose();
         //}
     }
-    public void renderHand(GameProfile pfp, BlockState $$8, PoseStack $$2, MultiBufferSource $$3, int $$4, int $$5) {
+    public static void renderHand(GameProfile pfp, BlockState $$8, PoseStack $$2, MultiBufferSource $$3, int $$4, int $$5) {
         /*float $$13 = RotationSegment.convertToDegrees($$8.getValue(HandBlock.ROTATION));
         $$2.pushPose();
         $$2.translate(0.5F, 0.5F, 0.5F);

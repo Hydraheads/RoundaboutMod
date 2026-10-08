@@ -47,10 +47,13 @@ public class DynamicItemRendering implements BuiltinItemRendererRegistry.Dynamic
             /// If someone is willing to do, maybe we could turn this into a Map? so we don't end up with a giant if statement.
 
             if (block instanceof HandBlock) {
-                //blockEntity = HAND_BLOCK_ENTITY;
+                blockEntity = HAND_BLOCK_ENTITY;
+                ((HandBlockEntity)blockEntity).setStoredStack(stack);
                 /* in my situation is better to call a method in HandRender because of skins,
                  but in most cases using the block entity with the 'renderItem' is good enough
                  */
+
+                /*
                 GameProfile gameProfile2 = null;
                 if (stack.hasTag()) {
                     CompoundTag compoundTag = stack.getTag();
@@ -58,14 +61,15 @@ public class DynamicItemRendering implements BuiltinItemRendererRegistry.Dynamic
                         gameProfile2 = NbtUtils.readGameProfile(compoundTag.getCompound("HandProfile"));
                     }
                 }
-                //HandRenderer.renderHand(gameProfile2, FabricBlocks.HAND.defaultBlockState(), matrices, vertexConsumers, light, overlay);
-                return;
+                HandRenderer.renderHand(gameProfile2, FabricBlocks.HAND.defaultBlockState(), matrices, vertexConsumers, light, overlay);
+
+                return;*/
             }else {
                 return;
             }
             /// uncomment it for other cases of blocks.
 
-            //client.getBlockEntityRenderDispatcher().renderItem(blockEntity, matrices, vertexConsumers, light, overlay);
+            client.getBlockEntityRenderDispatcher().renderItem(blockEntity, matrices, vertexConsumers, light, overlay);
         }
 
     }
