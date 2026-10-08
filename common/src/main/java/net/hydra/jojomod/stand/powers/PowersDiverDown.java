@@ -1012,6 +1012,7 @@ public class PowersDiverDown extends NewPunchingStand {
                         exitGroundDive();
                     }
                 } else if (this.diveTicksLeft <= 0) {
+                    setCooldown(PowerIndex.SKILL_4, 100);
                     exitGroundDive();
                 }
                 if (this.oreDetectionEnabled) {
@@ -5063,6 +5064,15 @@ public class PowersDiverDown extends NewPunchingStand {
         }
     }
 
+    // too many bugs with switching skins while diving. i'm just gonna disable it.
+    @Override
+    public void getSkinInDirection(boolean right, boolean sealed) {
+        if (this.getActivePower() != PowerIndex.NONE || this.areStandMovesDisabled()) {
+            return;
+        }
+        super.getSkinInDirection(right, sealed);
+    }
+
     //stolen from black sabbath tee hee
     @Override
     public boolean returnFakeStandForHud(){
@@ -5102,18 +5112,6 @@ public class PowersDiverDown extends NewPunchingStand {
         }
 
         return displayStand;
-    }
-
-    // for the unique idles
-    @Override
-    public Component getPosName(byte posID){
-        if (posID == 2){
-            return Component.translatable(  "idle.roundabout.diver_down_1");
-        } else if (posID == 3) {
-            return Component.translatable(  "idle.roundabout.diver_down_2");
-        } else {
-            return super.getPosName(posID);
-        }
     }
 
     // skins end

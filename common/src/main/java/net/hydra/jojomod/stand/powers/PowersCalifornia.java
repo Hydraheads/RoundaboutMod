@@ -652,10 +652,12 @@ public class PowersCalifornia extends NewDashPreset {
 
     public void onEnderPearlThrow(){
         clearLeadAndPunish();
+        super.onEnderPearlThrow();
     }
 
     public void onEnderPearlLand(){
         clearLeadAndPunish();
+        super.onEnderPearlLand();
     }
     @Override
     public void onSpinAttackStart(){
