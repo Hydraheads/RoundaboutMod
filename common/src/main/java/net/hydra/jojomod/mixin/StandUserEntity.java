@@ -4661,6 +4661,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     PWA.hasSkatesActivated() && !pl.isCrouching()) {
                 stepAddon += 0.7F;
             }
+            if (roundabout$hasDiverLegs() && !pl.isCrouching()) {
+                stepAddon += 0.7F;
+            }
         }
         if (stepAddon > 0) {
             cir.setReturnValue(((IEntityAndData) this).roundabout$getStepHeight() + stepAddon);
@@ -5088,11 +5091,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (rdbt$this() instanceof Player pl) {
             basis = ((IFatePlayer) this).rdbt$getFatePowers().inputSpeedModifiers(basis);
             basis = ((IPowersPlayer) this).rdbt$getPowers().inputSpeedModifiers(basis);
-        }
-        //diver down legs speed boost
-        StandUser SU = (StandUser) this;
-        if (this.roundabout$hasDiverLegs()) {
-            basis *= 1.2F; //20%, same as a speed 1 pot
         }
         if(this.roundabout$getGrabbedSoul()){
             basis *= 0.025F;
