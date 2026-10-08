@@ -87,6 +87,8 @@ public class PowersMandom extends NewDashPreset {
         super.readAdditionalSaveData($$0);
         if ($$0.contains("watchStyle")) {
             watchStyle = $$0.getByte("watchStyle");
+        } else {
+            watchStyle = WATCHLESS;
         }
     }
     @Override

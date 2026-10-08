@@ -376,6 +376,11 @@ public class BombPlantedItemEntity extends Entity implements TraceableEntity {
     }
 
     @Override
+    public boolean canChangeDimensions() {
+        return false;
+    }
+
+    @Override
     public float getVisualRotationYInDegrees() {
         return 180.0F - this.getSpin(0.5F) / (float) (Math.PI * 2) * 360.0F;
     }

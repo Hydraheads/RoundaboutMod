@@ -265,15 +265,15 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     ClientUtil.bootTimeErase();
                 }
             }
+        } else {
+            timeEraseActive = false;
         }
-        if ($$0.contains("hasArmsOut")) {
-            hasArmsOut = $$0.getBoolean("hasArmsOut");
-        }
-        if ($$0.contains("isRenderingArms")) {
-            isRenderingArms = $$0.getBoolean("isRenderingArms");
-        }
+        hasArmsOut = $$0.getBoolean("hasArmsOut");
+        isRenderingArms = $$0.getBoolean("isRenderingArms");
         if ($$0.contains("ticksOfEraseLeft")) {
             ticksOfEraseLeft = $$0.getInt("ticksOfEraseLeft");
+        } else {
+            ticksOfEraseLeft = 0;
         }
         if ($$0.contains("timeEraseCooldown")) {
             if (!self.level().isClientSide()){
