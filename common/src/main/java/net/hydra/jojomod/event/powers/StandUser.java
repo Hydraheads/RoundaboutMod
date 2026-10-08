@@ -1,5 +1,7 @@
 package net.hydra.jojomod.event.powers;
 
+import net.hydra.jojomod.event.powers.khnum.KhnumFormScale;
+
 import com.mojang.authlib.GameProfile;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
@@ -410,6 +412,28 @@ public interface StandUser {
     @Nullable GameProfile roundabout$getDisguiseProfile();
     void roundabout$setDisguise(GameProfile profile);
     void roundabout$clearDisguise();
+    byte roundabout$getKhnumForm();
+    void roundabout$setKhnumForm(byte form);
+    byte roundabout$getKhnumTransitionStartForm();
+    float roundabout$getKhnumTransitionProgress();
+    default float roundabout$getKhnumWidthScale() {
+        return KhnumFormScale.interpolate(roundabout$getKhnumTransitionStartForm(), roundabout$getKhnumForm(),
+                roundabout$getKhnumTransitionProgress(), true, false);
+    }
+    default float roundabout$getKhnumHeightScale() {
+        return KhnumFormScale.interpolate(roundabout$getKhnumTransitionStartForm(), roundabout$getKhnumForm(),
+                roundabout$getKhnumTransitionProgress(), false, false);
+    }
+    default float roundabout$getKhnumModelHeightScale() {
+        return KhnumFormScale.interpolate(roundabout$getKhnumTransitionStartForm(), roundabout$getKhnumForm(),
+                roundabout$getKhnumTransitionProgress(), false, true);
+    }
+    int roundabout$getKhnumHeight();
+    int roundabout$getKhnumWidth();
+    int roundabout$getKhnumHead();
+    void roundabout$setKhnumVisage(int height, int width, int head);
+    byte roundabout$getKhnumMobDisguise();
+    void roundabout$setKhnumMobDisguise(byte disguise);
     boolean roundabout$hasDiverLegs();
     void roundabout$setDiverLegs(boolean legs);
     boolean roundabout$hasDiverArms();

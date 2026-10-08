@@ -725,6 +725,17 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
                 }
             }
+            if ((visage == null || visage.isEmpty())
+                    && (SU.roundabout$getKhnumHeight() != 237 || SU.roundabout$getKhnumWidth() != 135
+                    || SU.roundabout$getKhnumHead() != 135)) {
+                float headScale = 1.0F + (SU.roundabout$getKhnumHead() - 135) * 0.001F;
+                head.xScale *= headScale;
+                head.yScale *= headScale;
+                head.zScale *= headScale;
+                hat.xScale *= headScale;
+                hat.yScale *= headScale;
+                hat.zScale *= headScale;
+            }
 
             if ( SU.roundabout$isPossessed()  ) {
                 PathfinderMob poss = SU.roundabout$getPossessor();

@@ -94,6 +94,16 @@ import java.util.function.Predicate;
 @Mixin(Player.class)
 public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity{
 
+    @Inject(method = "getDisplayName", at = @At("RETURN"), cancellable = true)
+    private void roundabout$useDisguiseDisplayName(CallbackInfoReturnable<Component> cir) {
+        if ((Object) this instanceof StandUser standUser && standUser.roundabout$isDisguised()) {
+            com.mojang.authlib.GameProfile profile = standUser.roundabout$getDisguiseProfile();
+            if (profile != null && profile.getName() != null && !profile.getName().isEmpty()) {
+                cir.setReturnValue(Component.literal(profile.getName()));
+            }
+        }
+    }
+
     @Shadow public abstract boolean isSwimming();
 
     @Shadow public abstract float getDestroySpeed(BlockState $$0);

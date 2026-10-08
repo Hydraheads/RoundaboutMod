@@ -4,6 +4,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.khnum.KhnumMobDisguise;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -14,6 +16,7 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.animal.AbstractFish;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
@@ -34,6 +37,19 @@ public abstract class JusticeMobRenderer<T extends Mob, M extends EntityModel<T>
             at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$render(T $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
 
+        if ($$0 instanceof StandUser user && user.roundabout$getKhnumMobDisguise() != KhnumMobDisguise.NONE) {
+            roundabout$shapeShift = KhnumMobDisguise.create(user.roundabout$getKhnumMobDisguise(), $$0.level());
+            if (roundabout$shapeShift != null) {
+                if (roundabout$shapeShift instanceof AbstractFish && roundabout$shapeShift instanceof StandUser fishStandIn) {
+                    fishStandIn.roundabout$setKhnumMobDisguise(KhnumMobDisguise.SWIMMING_FISH_RENDER);
+                }
+                roundabout$shapeShift.setAggressive($$0.getTarget() != null);
+                roundabout$doTheThing($$0,$$1,$$2,$$3,$$4,$$5);
+                ci.cancel();
+                return;
+            }
+        }
+
         if ($$0 instanceof Creeper) {
             if (((IJusticeCreeper) $$0).roundabout$isTransformed()){
                 roundabout$shapeShift = EntityType.PIG.create(Minecraft.getInstance().level);
@@ -53,8 +69,13 @@ public abstract class JusticeMobRenderer<T extends Mob, M extends EntityModel<T>
     @Unique
     public void roundabout$doTheThing(T $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5){
         if (roundabout$shapeShift != null) {
-            ItemStack tem = $$0.getMainHandItem();
-            roundabout$shapeShift.setAggressive(!tem.isEmpty() && tem.getMaxDamage() > 0);
+            if ($$0 instanceof StandUser user
+                    && user.roundabout$getKhnumMobDisguise() != KhnumMobDisguise.NONE) {
+                roundabout$shapeShift.setAggressive($$0.getTarget() != null);
+            } else {
+                ItemStack tem = $$0.getMainHandItem();
+                roundabout$shapeShift.setAggressive(!tem.isEmpty() && tem.getMaxDamage() > 0);
+            }
             roundabout$renderEntityForce1($$1, $$2, $$3, $$4, roundabout$shapeShift, $$0, $$5);
         }
     }

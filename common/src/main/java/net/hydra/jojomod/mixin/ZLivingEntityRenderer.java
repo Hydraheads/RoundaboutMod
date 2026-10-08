@@ -62,6 +62,15 @@ import javax.annotation.Nullable;
 @Mixin(LivingEntityRenderer.class)
 public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends EntityModel<T>> extends EntityRenderer<T> implements RenderLayerParent<T, M>, ILivingEntityRenderer {
 
+    @Inject(method = "scale(Lnet/minecraft/world/entity/LivingEntity;Lcom/mojang/blaze3d/vertex/PoseStack;F)V",
+            at = @At("HEAD"))
+    private void roundabout$khnumScale(T entity, PoseStack poseStack, float partialTick, CallbackInfo ci) {
+        if (entity instanceof StandUser user && !(entity instanceof Player)) {
+            poseStack.scale(user.roundabout$getKhnumWidthScale(), user.roundabout$getKhnumHeightScale(),
+                    user.roundabout$getKhnumWidthScale());
+        }
+    }
+
     @Shadow protected abstract boolean addLayer(RenderLayer<T, M> $$0);
     @Shadow protected M model;
     @Shadow public abstract void render(T $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5);

@@ -172,6 +172,8 @@ public class FabricItems {
 
     public static Item STAND_DISC_CINDERELLA = registerItem("cinderella_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCinderella(null)));
+    public static Item STAND_DISC_KHNUM = registerItem("khnum_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersKhnum(null)));
     public static Item STAND_DISC_PLANET_WAVES = registerItem("planet_waves_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersPlanetWaves(null)));
     public static Item MAX_STAND_DISC_PLANET_WAVES= registerItem("max_planet_waves_disc",
@@ -776,6 +778,7 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_METALLICA);
                         entries.accept(STAND_DISC_PURPLE_HAZE);
                         entries.accept(MAX_STAND_DISC_PURPLE_HAZE);
+                        entries.accept(STAND_DISC_KHNUM);
                         entries.accept(STAND_DISC_KILLER_QUEEN);
                         entries.accept(MAX_STAND_DISC_KILLER_QUEEN);
                         entries.accept(KIRA_PART_FOUR_MASK);
@@ -914,6 +917,7 @@ public class FabricItems {
         ((MaxStandDiscItem)MAX_STAND_DISC_KILLER_QUEEN).baseDisc = ((StandDiscItem)STAND_DISC_KILLER_QUEEN);
         ModItems.MAX_STAND_DISC_KILLER_QUEEN = MAX_STAND_DISC_KILLER_QUEEN;
         ModItems.STAND_DISC_CINDERELLA = STAND_DISC_CINDERELLA;
+        ModItems.STAND_DISC_KHNUM = STAND_DISC_KHNUM;
         ModItems.STAND_DISC_MANHATTAN_TRANSFER = STAND_DISC_MANHATTAN_TRANSFER;
         ModItems.STAND_DISC_BLACK_SABBATH = STAND_DISC_BLACK_SABBATH;
         ModItems.STAND_DISC_PEARL_JAM = STAND_DISC_PEARL_JAM;

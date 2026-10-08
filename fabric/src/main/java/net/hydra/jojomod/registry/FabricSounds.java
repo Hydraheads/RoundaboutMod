@@ -15,6 +15,11 @@ public class FabricSounds {
 
     public static void register(){
 
+        addSound(ModSounds.KHNUM_SUMMON_ID, ModSounds.KHNUM_SUMMON_EVENT);
+        addSound(ModSounds.KHNUM_DISGUISE_ID, ModSounds.KHNUM_DISGUISE_EVENT);
+        addSound(ModSounds.KHNUM_STRETCH_ID, ModSounds.KHNUM_STRETCH_EVENT);
+        addSound(ModSounds.KHNUM_RESET_ID, ModSounds.KHNUM_RESET_EVENT);
+
         addSound(ModSounds.SUMMON_SOUND_ID, ModSounds.SUMMON_SOUND_EVENT);
         addSound(ModSounds.STAND_ARROW_CHARGE_ID, ModSounds.STAND_ARROW_CHARGE_EVENT);
         addSound(ModSounds.STAND_ARROW_USE_ID, ModSounds.STAND_ARROW_USE_EVENT);

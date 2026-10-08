@@ -3,6 +3,8 @@ package net.hydra.jojomod.mixin.justice;
 import net.hydra.jojomod.access.IIronGolem;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.index.ShapeShifts;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersKhnum;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -33,6 +35,11 @@ public abstract class JusticeIronGolem extends AbstractGolem implements NeutralM
     @Inject(method = "aiStep()V", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/animal/IronGolem;updatePersistentAnger(Lnet/minecraft/server/level/ServerLevel;Z)V",shift = At.Shift.BEFORE))
     protected void roundabout$aiStep(CallbackInfo ci) {
+        // Khnum's mob disguise is only a visual disguise. Do not let Justice's
+        // player-morph pacification clear a Khnum golem's real combat target.
+        if (((StandUser) this).roundabout$getStandPowers() instanceof PowersKhnum) {
+            return;
+        }
         if (this.getTarget() instanceof Player PE && !PE.isCreative() && !PE.isSpectator()){
             IPlayerEntity ple = ((IPlayerEntity) PE);
             byte shape = ple.roundabout$getShapeShift();

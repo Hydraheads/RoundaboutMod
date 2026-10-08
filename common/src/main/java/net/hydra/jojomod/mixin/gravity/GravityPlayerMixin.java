@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin.gravity;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
@@ -60,6 +61,34 @@ public abstract class GravityPlayerMixin extends LivingEntity {
     @Shadow public abstract void awardStat(Stat<?> stat, int i);
 
     @Shadow public abstract void awardStat(ResourceLocation resourceLocation, int i);
+
+    @Inject(method = "getStandingEyeHeight(Lnet/minecraft/world/entity/Pose;Lnet/minecraft/world/entity/EntityDimensions;)F",
+            at = @At("RETURN"), cancellable = true)
+    private void roundabout$khnumPlayerEyeHeight(Pose pose, EntityDimensions dimensions,
+                                                 CallbackInfoReturnable<Float> cir) {
+        float heightScale = ((StandUser) (Object) this).roundabout$getKhnumHeightScale();
+        if (heightScale != 1.0F) {
+            cir.setReturnValue(cir.getReturnValue() * heightScale);
+        }
+    }
+
+    @Inject(method = "getDimensions(Lnet/minecraft/world/entity/Pose;)Lnet/minecraft/world/entity/EntityDimensions;",
+            at = @At("RETURN"), cancellable = true)
+    private void roundabout$khnumPlayerDimensions(Pose pose, CallbackInfoReturnable<EntityDimensions> cir) {
+        byte form = ((StandUser) (Object) this).roundabout$getKhnumForm();
+        float widthScale = 1.0F;
+        float heightScale = 1.0F;
+        switch (form) {
+            case 1 -> { widthScale = 0.85F; heightScale = 1.3F; }
+            case 2 -> widthScale = 1.65F;
+            case 3 -> { widthScale = 0.75F; heightScale = 0.62F; }
+        }
+        if (widthScale != 1.0F || heightScale != 1.0F) {
+            EntityDimensions dimensions = cir.getReturnValue();
+            cir.setReturnValue(EntityDimensions.scalable(dimensions.width * widthScale,
+                    dimensions.height * heightScale));
+        }
+    }
 
     protected GravityPlayerMixin(EntityType<? extends LivingEntity> entityType, Level world) {
         super(entityType, world);

@@ -68,6 +68,7 @@ import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -118,6 +119,19 @@ import java.util.function.Predicate;
 
 @Mixin(value = LivingEntity.class, priority = 103)
 public abstract class StandUserEntity extends Entity implements StandUser {
+    @Unique
+    private static final UUID ROUNDABOUT$KHNUM_SMALL_SPEED_UUID = UUID.fromString("a1200000-0000-0000-0000-000000000003");
+    @Unique
+    private static final AttributeModifier ROUNDABOUT$KHNUM_SMALL_SPEED = new AttributeModifier(
+            ROUNDABOUT$KHNUM_SMALL_SPEED_UUID, "Khnum short form slowdown", -0.12D,
+            AttributeModifier.Operation.MULTIPLY_TOTAL);
+    @Unique
+    private static final UUID ROUNDABOUT$KHNUM_SMALL_DAMAGE_UUID = UUID.fromString("a1200000-0000-0000-0000-000000000004");
+    @Unique
+    private static final AttributeModifier ROUNDABOUT$KHNUM_SMALL_DAMAGE = new AttributeModifier(
+            ROUNDABOUT$KHNUM_SMALL_DAMAGE_UUID, "Khnum short form reduced damage", -0.2D,
+            AttributeModifier.Operation.MULTIPLY_TOTAL);
+
     @Shadow
     public abstract ItemStack getItemInHand(InteractionHand $$0);
 
@@ -1649,6 +1663,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "tick", at = @At(value = "HEAD"))
     public void roundabout$tick(CallbackInfo ci) {
+        if (!this.level().isClientSide) {
+            float progress = roundabout$getKhnumTransitionProgress();
+            if (progress < 1.0F) {
+                this.entityData.set(ROUNDABOUT$KHNUM_TRANSITION_PROGRESS, Math.min(1.0F, progress + 0.05F));
+                ((LivingEntity) (Object) this).refreshDimensions();
+            }
+        } else if (roundabout$getKhnumTransitionProgress() < 1.0F) {
+            ((LivingEntity) (Object) this).refreshDimensions();
+        }
 
         // this is needed to ensure that your jump doesn't get a random boost the middle
         // of it if you're to activate your stand etc.
@@ -2665,6 +2688,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         compoundtag.putByte("bubbleEncased", roundabout$getBubbleEncased());
         compoundtag.putInt("heat", roundabout$getHeat());
         compoundtag.putBoolean("expTaken", rdbt$getExperienceTaken());
+        compoundtag.putByte("khnumForm", roundabout$getKhnumForm());
+        compoundtag.putInt("khnumHeight", roundabout$getKhnumHeight());
+        compoundtag.putInt("khnumWidth", roundabout$getKhnumWidth());
+        compoundtag.putInt("khnumHead", roundabout$getKhnumHead());
 
         if (rdbt$fleshBudPlanted != null) {
             compoundtag.putUUID("fleshBud", rdbt$fleshBudPlanted);
@@ -2713,6 +2740,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         CompoundTag compoundtag = $$0.getCompound("roundabout");
         roundabout$setBubbleEncased(compoundtag.getByte("bubbleEncased"));
         roundabout$setHeat(compoundtag.getByte("heat"));
+        if (compoundtag.contains("khnumForm")) {
+            roundabout$setKhnumForm(compoundtag.getByte("khnumForm"));
+            this.entityData.set(ROUNDABOUT$KHNUM_TRANSITION_START_FORM, roundabout$getKhnumForm());
+            this.entityData.set(ROUNDABOUT$KHNUM_TRANSITION_PROGRESS, 1.0F);
+        }
+        if (compoundtag.contains("khnumHeight")) {
+            roundabout$setKhnumVisage(compoundtag.getInt("khnumHeight"), compoundtag.getInt("khnumWidth"),
+                    compoundtag.getInt("khnumHead"));
+        }
         if (compoundtag.contains("sealedTicks")) {
             roundabout$sealedTicks = compoundtag.getInt("sealedTicks");
         }
@@ -3995,11 +4031,40 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DISTORTION_HAZE_TICKS, 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DISGUISE_ID, Optional.empty());
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DISGUISE_NAME, "");
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$KHNUM_FORM, (byte) 0);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$KHNUM_TRANSITION_START_FORM, (byte) 0);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$KHNUM_TRANSITION_PROGRESS, 1.0F);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$KHNUM_HEIGHT, 237);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$KHNUM_WIDTH, 135);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$KHNUM_HEAD, 135);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$KHNUM_MOB_DISGUISE, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DIVER_LEGS, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DIVER_ARMS, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$RIBCAGE_TRAP, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$SPRING_LEGS, false);
         }
+    }
+
+    @Inject(method = "getDimensions(Lnet/minecraft/world/entity/Pose;)Lnet/minecraft/world/entity/EntityDimensions;",
+            at = @At("RETURN"), cancellable = true)
+    private void roundabout$khnumDimensions(Pose pose, CallbackInfoReturnable<EntityDimensions> cir) {
+        EntityDimensions dimensions = cir.getReturnValue();
+        StandUser user = (StandUser) this;
+        float widthScale = user.roundabout$getKhnumWidthScale();
+        float heightScale = user.roundabout$getKhnumHeightScale();
+        if (widthScale != 1.0F || heightScale != 1.0F) {
+            cir.setReturnValue(EntityDimensions.scalable(dimensions.width * widthScale,
+                    dimensions.height * heightScale));
+        }
+    }
+
+    @ModifyVariable(method = "hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z",
+            at = @At("HEAD"), argsOnly = true, ordinal = 0)
+    private float roundabout$khnumArrowResistance(float amount, DamageSource source) {
+        if (roundabout$getKhnumForm() == 2 && source.getDirectEntity() instanceof AbstractArrow) {
+            return amount * 0.9F;
+        }
+        return amount;
     }
 
     @Override
@@ -4152,8 +4217,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 this.rdbt$isRedirectingDamage = false;
             }
         }
-        // diver down damage breaking disguise
-        if (!entity.level().isClientSide() && $$1 > 0 && this.roundabout$isDisguised()) {
+        // Diver Down disguises break when hit; Khnum's self-disguise persists until reset or stand change.
+        if (!entity.level().isClientSide() && $$1 > 0 && this.roundabout$isDisguised()
+                && !(this.roundabout$getStandPowers() instanceof PowersKhnum)) {
             this.roundabout$clearDisguise();
         }
         if ($$0.getEntity() instanceof Player pe) {
@@ -7005,6 +7071,27 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private static final EntityDataAccessor<String> ROUNDABOUT$DISGUISE_NAME = SynchedEntityData.defineId(
             LivingEntity.class, EntityDataSerializers.STRING);
     @Unique
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$KHNUM_FORM = SynchedEntityData.defineId(
+            LivingEntity.class, EntityDataSerializers.BYTE);
+    @Unique
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$KHNUM_TRANSITION_START_FORM = SynchedEntityData.defineId(
+            LivingEntity.class, EntityDataSerializers.BYTE);
+    @Unique
+    private static final EntityDataAccessor<Float> ROUNDABOUT$KHNUM_TRANSITION_PROGRESS = SynchedEntityData.defineId(
+            LivingEntity.class, EntityDataSerializers.FLOAT);
+    @Unique
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$KHNUM_HEIGHT = SynchedEntityData.defineId(
+            LivingEntity.class, EntityDataSerializers.INT);
+    @Unique
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$KHNUM_WIDTH = SynchedEntityData.defineId(
+            LivingEntity.class, EntityDataSerializers.INT);
+    @Unique
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$KHNUM_HEAD = SynchedEntityData.defineId(
+            LivingEntity.class, EntityDataSerializers.INT);
+    @Unique
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$KHNUM_MOB_DISGUISE = SynchedEntityData.defineId(
+            LivingEntity.class, EntityDataSerializers.BYTE);
+    @Unique
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$DIVER_LEGS = SynchedEntityData.defineId(
             LivingEntity.class, EntityDataSerializers.BOOLEAN);
     @Unique
@@ -7171,5 +7258,76 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$clearDisguise() {
         this.entityData.set(ROUNDABOUT$DISGUISE_ID, Optional.empty());
         this.entityData.set(ROUNDABOUT$DISGUISE_NAME, "");
+    }
+
+    @Override
+    public byte roundabout$getKhnumForm() {
+        return this.entityData.get(ROUNDABOUT$KHNUM_FORM);
+    }
+
+    @Override
+    public void roundabout$setKhnumForm(byte form) {
+        byte clampedForm = (byte) Mth.clamp(form, 0, 3);
+        this.entityData.set(ROUNDABOUT$KHNUM_TRANSITION_START_FORM, this.entityData.get(ROUNDABOUT$KHNUM_FORM));
+        this.entityData.set(ROUNDABOUT$KHNUM_FORM, clampedForm);
+        this.entityData.set(ROUNDABOUT$KHNUM_TRANSITION_PROGRESS, 0.0F);
+        LivingEntity living = (LivingEntity) (Object) this;
+        AttributeInstance movementSpeed = living.getAttribute(Attributes.MOVEMENT_SPEED);
+        if (movementSpeed != null) {
+            movementSpeed.removeModifier(ROUNDABOUT$KHNUM_SMALL_SPEED_UUID);
+            if (clampedForm == 3) {
+                movementSpeed.addTransientModifier(ROUNDABOUT$KHNUM_SMALL_SPEED);
+            }
+        }
+        AttributeInstance attackDamage = living.getAttribute(Attributes.ATTACK_DAMAGE);
+        if (attackDamage != null) {
+            attackDamage.removeModifier(ROUNDABOUT$KHNUM_SMALL_DAMAGE_UUID);
+            if (clampedForm == 3) {
+                attackDamage.addTransientModifier(ROUNDABOUT$KHNUM_SMALL_DAMAGE);
+            }
+        }
+        living.refreshDimensions();
+    }
+
+    @Override
+    public byte roundabout$getKhnumTransitionStartForm() {
+        return this.entityData.get(ROUNDABOUT$KHNUM_TRANSITION_START_FORM);
+    }
+
+    @Override
+    public float roundabout$getKhnumTransitionProgress() {
+        return this.entityData.get(ROUNDABOUT$KHNUM_TRANSITION_PROGRESS);
+    }
+
+    @Override
+    public int roundabout$getKhnumHeight() {
+        return this.entityData.get(ROUNDABOUT$KHNUM_HEIGHT);
+    }
+
+    @Override
+    public int roundabout$getKhnumWidth() {
+        return this.entityData.get(ROUNDABOUT$KHNUM_WIDTH);
+    }
+
+    @Override
+    public int roundabout$getKhnumHead() {
+        return this.entityData.get(ROUNDABOUT$KHNUM_HEAD);
+    }
+
+    @Override
+    public void roundabout$setKhnumVisage(int height, int width, int head) {
+        this.entityData.set(ROUNDABOUT$KHNUM_HEIGHT, Mth.clamp(height, 0, 270));
+        this.entityData.set(ROUNDABOUT$KHNUM_WIDTH, Mth.clamp(width, 0, 270));
+        this.entityData.set(ROUNDABOUT$KHNUM_HEAD, Mth.clamp(head, 0, 270));
+    }
+
+    @Override
+    public byte roundabout$getKhnumMobDisguise() {
+        return this.entityData.get(ROUNDABOUT$KHNUM_MOB_DISGUISE);
+    }
+
+    @Override
+    public void roundabout$setKhnumMobDisguise(byte disguise) {
+        this.entityData.set(ROUNDABOUT$KHNUM_MOB_DISGUISE, disguise);
     }
 }

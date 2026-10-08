@@ -1504,6 +1504,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$scale(AbstractClientPlayer $$0, PoseStack $$1, float $$2, CallbackInfo ci) {
         IPlayerEntity ple = ((IPlayerEntity) $$0);
+        StandUser khnumUser = (StandUser) $$0;
         ItemStack visage = ple.roundabout$getMaskSlot();
         ShapeShifts shift = ShapeShifts.getShiftFromByte(ple.roundabout$getShapeShift());
         if (shift == ShapeShifts.OVA) {
@@ -1529,14 +1530,29 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                     Vector3f scale =vd.scale();
                     $$1.scale(scale.x, scale.y, scale.z);
                 }
+                float widthScale = khnumUser.roundabout$getKhnumWidthScale();
+                float heightScale = khnumUser.roundabout$getKhnumModelHeightScale();
+                $$1.scale(widthScale, heightScale, widthScale);
                 ci.cancel();
 
             }
+        }
+        int height = khnumUser.roundabout$getKhnumHeight();
+        int width = khnumUser.roundabout$getKhnumWidth();
+        float bodyWidth = 1.0F + (width - 135) * 0.001F;
+        float bodyHeight = 1.0F + (height - 237) * 0.001F;
+        bodyWidth *= khnumUser.roundabout$getKhnumWidthScale();
+        bodyHeight *= khnumUser.roundabout$getKhnumModelHeightScale();
+        if (bodyWidth != 1.0F || bodyHeight != 1.0F) {
+            $$1.scale(bodyWidth, bodyHeight, bodyWidth);
         }
     }
     @Inject(method = "getTextureLocation(Lnet/minecraft/client/player/AbstractClientPlayer;)Lnet/minecraft/resources/ResourceLocation;",
             at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$getTextureLocation(AbstractClientPlayer $$0, CallbackInfoReturnable<ResourceLocation> cir) {
+        if ($$0 instanceof StandUser user && user.roundabout$isDisguised()) {
+            cir.setReturnValue(SkinUtil.getSkin(user.roundabout$getDisguiseProfile()).texture());
+        }
     }
     @Shadow
     public ResourceLocation getTextureLocation(AbstractClientPlayer var1) {

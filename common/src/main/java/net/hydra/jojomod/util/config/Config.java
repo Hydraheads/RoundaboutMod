@@ -96,6 +96,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public AchtungSettings achtungSettings;
     @NestedOption(group = "modded")
+    public KhnumSettings khnumSettings;
+    @NestedOption(group = "modded")
     public CenturyBoySettings centuryBoySettings;
     @NestedOption(group = "modded")
     public CaliforniaKingBedSettings californiaKingBedSettings;
@@ -1135,6 +1137,11 @@ public class Config implements Cloneable {
         public Integer invisiBurstBlockRange;
         @BooleanOption(group = "inherit", value = true)
         public Boolean invisiBurstAlertsMobs;
+    }
+
+    public static class KhnumSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableKhnum;
     }
 
 

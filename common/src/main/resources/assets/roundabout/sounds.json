@@ -1,4 +1,20 @@
 {
+  "khnum_summon": {
+    "subtitle": "sounds.roundabout.khnum_summon",
+    "sounds": ["roundabout:khnum_summon"]
+  },
+  "khnum_disguise": {
+    "subtitle": "sounds.roundabout.khnum_disguise",
+    "sounds": ["roundabout:khnum_disguise"]
+  },
+  "khnum_stretch": {
+    "subtitle": "sounds.roundabout.khnum_stretch",
+    "sounds": ["roundabout:khnum_stretch"]
+  },
+  "khnum_reset": {
+    "subtitle": "sounds.roundabout.khnum_reset",
+    "sounds": ["roundabout:khnum_reset"]
+  },
   "summon_sound": {
     "subtitle": "sounds.roundabout.summon_stand",
     "sounds": [
