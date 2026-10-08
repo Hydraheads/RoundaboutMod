@@ -46,6 +46,8 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;;
 import net.minecraft.world.entity.animal.Fox;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.monster.AbstractIllager;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
@@ -233,6 +235,12 @@ public class SheerHeartAttackEntity extends StandEntity {
 	}
 
 	public boolean getHaveToReturn() {
+		if (getUser() instanceof Mob M) {
+			if (M.getTarget() == null || !M.getTarget().isAlive()) {
+				return true;
+			}
+		}
+
 		return this.haveToReturn || hasReachMaximunExplosions()
 				|| (this.inativeTicks >= inativeMaxTicks && !getTorchStatus());
 	}
@@ -997,6 +1005,10 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		if (this.getTargetType() == ENTITY) {
 
+			if (Owner instanceof Mob M && M.getTarget() == target) {
+				return false;
+			}
+
 			if (Owner instanceof AbstractVillager || Owner instanceof IronGolem) {
 				if (target instanceof AbstractVillager || target instanceof IronGolem) {
 					return true;
@@ -1021,6 +1033,10 @@ public class SheerHeartAttackEntity extends StandEntity {
 						return true;
 					}
 				}
+			}
+
+			if (Owner instanceof Enemy && target instanceof Enemy) {
+				return true;
 			}
 		}
 

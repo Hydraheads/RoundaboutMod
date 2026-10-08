@@ -109,6 +109,11 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                     visage = znpc.getBasis();
                 }
 
+                // specifically to fix visage parts like hat trims and stuff appearing when disguised
+                if (entity instanceof StandUser su && su.roundabout$isDisguised()) {
+                    visage = null;
+                }
+
                 boolean isHurt = entity.hurtTime > 0;
                 float r = isHurt ? 1.0F : 1.0F;
                 float g = isHurt ? 0.6F : 1.0F;

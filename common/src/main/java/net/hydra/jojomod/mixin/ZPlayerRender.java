@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin;
 
+import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
@@ -164,6 +165,9 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             }
             ClientUtil.popPoseAndCooperate(poseStack,8);
 
+        } else if (((StandUser) player).roundabout$hasDiverArms()) {
+            // had my own diver arms thing that i made before realizing it should also appear in first person, so all the code for that goes there.
+            DiverArmsLayer.renderFirstPersonArm(poseStack, bufferSource, packedLight, player, this.model.rightArm, true, 1.0F);
         } else if (curse == LocacacaCurseIndex.RIGHT_HAND) {
             this.model.rightSleeve.xScale += 0.04F;
             this.model.rightSleeve.zScale += 0.04F;
@@ -261,6 +265,9 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             }
             ClientUtil.popPoseAndCooperate(poseStack,8);
 
+        } else if (((StandUser) player).roundabout$hasDiverArms()) {
+            // had my own diver arms thing that i made before realizing it should also appear in first person, so all the code for that goes there.
+            DiverArmsLayer.renderFirstPersonArm(poseStack, bufferSource, packedLight, player, this.model.leftArm, false, 1.0F);
         } else if (curse == LocacacaCurseIndex.LEFT_HAND) {
             this.model.leftSleeve.xScale += 0.04F;
             this.model.leftSleeve.zScale += 0.04F;
@@ -746,6 +753,16 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     }
     @Inject(method = "renderNameTag(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$renderNameTag(AbstractClientPlayer $$0, Component $$1, PoseStack $$2, MultiBufferSource $$3, int $$4, CallbackInfo ci) {
+        if ($$0 instanceof StandUser su && su.roundabout$isDisguised()) {
+            GameProfile profile = su.roundabout$getDisguiseProfile();
+            if (profile != null && profile.getName() != null && !profile.getName().isEmpty()) {
+                if ($$0 != Minecraft.getInstance().player && !$$0.isInvisible() && !Minecraft.getInstance().options.hideGui) {
+                    this.roundabout$renderNameTagSpecial($$0, Component.literal(profile.getName()), $$2, $$3, $$4);
+                }
+                ci.cancel();
+                return;
+            }
+        }
         //deletes original nametag
         if ($$0 instanceof StandUser su && su.roundabout$isDisguised()) {
             com.mojang.authlib.GameProfile profile = su.roundabout$getDisguiseProfile();
@@ -1068,7 +1085,18 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     }
     boolean roundabout$switched = false;
     public void roundabout$changeTheModel(AbstractClientPlayer player, ItemStack visage, ShapeShifts shifts){
-
+        if (player instanceof StandUser su && su.roundabout$isDisguised()) {
+            GameProfile profile = su.roundabout$getDisguiseProfile();
+            if (profile != null) {
+                SkinUtil.SkinData skin = SkinUtil.getSkin(profile);
+                if (skin.slim() != originalArms) {
+                    model = roundabout$otherModel;
+                } else {
+                    model = roundabout$mainModel;
+                }
+                return;
+            }
+        }
         IPlayerEntity pl = ((IPlayerEntity) player);
         visage = pl.roundabout$getMaskSlot();
         if (shifts == ShapeShifts.OVA) {

@@ -359,7 +359,6 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public Vec3 moveVec = Vec3.ZERO;
 
-    public int tntSweeped = 0;
 
     public boolean canSummonStandAsEntity(){
         if (hasArmsOut || getActivePower() == BITES_THE_DUST_DAY){
@@ -980,7 +979,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     tryToSendOrReturnSHA(true);
                 }
         	}
-            case SKILL_4_CROUCH, SKILL_4_CROUCH_GUARD -> {
+            case SKILL_4_CROUCH -> {
                 if (inBitesTheDustMode()) {
                     btdDefuseClient();
                 }else {
@@ -988,7 +987,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
             }
 
-        	case SKILL_4_NORMAL, SKILL_4_GUARD -> {
+        	case SKILL_4_NORMAL, SKILL_4_GUARD, SKILL_4_CROUCH_GUARD -> {
                 if (inBitesTheDustMode()) {
                     btdDefuseClient();
                 }else {
@@ -2889,6 +2888,17 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (this.detonateTimer == -1) {
                 detonate();
                 //this.explode();
+            }
+        }
+    }
+
+    public void blockContact(Entity ent) {
+        if (this.isContactModeEnabled() || this.detonateTimer > -1) {
+            bombEntity = ent;
+            bombBlock.discard();
+            syncBombStatus(BLOCK_CONTACT);
+            if (this.detonateTimer == -1) {
+                this.explode();
             }
         }
     }
@@ -4849,7 +4859,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     "instruction.roundabout.press_skill_btd_mode", StandIcons.KILLER_QUEEN_BTD_COMBAT,2,level,bypas));
             $$1.add(drawSingleGUIIcon(context,18,leftPos+134 + startPos,topPos+118, getBitesTheDustDayLevel(), "ability.roundabout.kq_btd_day",
                     "instruction.roundabout.press_skill_btd_mode", StandIcons.KILLER_QUEEN_BTD_DAY,1,level,bypas));
-            $$1.add(drawSingleGUIIcon(context,18,leftPos+153 + startPos,topPos+118, getBitesTheDustDayLevel(), "ability.roundabout.kq_btd_defuse",
+            $$1.add(drawSingleGUIIcon(context,18,leftPos+153 + startPos,topPos+118, getBitesTheDustLevel(), "ability.roundabout.kq_btd_defuse",
                     "instruction.roundabout.press_skill_btd_mode", StandIcons.KILLER_QUEEN_BTD_DEACTIVATE,4,level,bypas));
         }else {
             $$1.add(drawSingleGUIIcon(context,18,leftPos+134 + startPos,topPos+80, getBitesTheDustLevel(), "ability.roundabout.obtain_btd",

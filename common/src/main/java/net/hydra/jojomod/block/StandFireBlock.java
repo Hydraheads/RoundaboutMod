@@ -343,7 +343,7 @@ public class StandFireBlock extends BaseEntityBlock {
                                 40, 0.0, 0.2, 0.0, 0.2);
                         ((ServerLevel) $$1).sendParticles(ParticleTypes.EXPLOSION, $$3.getX(), $$3.getY() + $$3.getEyeHeight(), $$3.getZ(),
                                 1, 0.5, 0.5, 0.5, 0.2);
-                        MainUtil.gasExplode(null, (ServerLevel) $$3.level(), $$3.getOnPos(), 0, 2, 4, MainUtil.gasDamageMultiplier() * 14);
+                        MainUtil.gasExplode(null, (ServerLevel) $$3.level(), $$3.getOnPos(), 0, 2, 4, MainUtil.gasDamageMultiplier() * 5);
                         $$3.discard();
                     }
                 }

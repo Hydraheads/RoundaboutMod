@@ -537,6 +537,7 @@ public class AbilityScapeBasis {
     public void onEnderPearlThrow(){
     }
     public void onEnderPearlLand(){
+        xTryPower(PowerIndex.NONE,true);
     }
     public void onSpinAttackStart(){
     }

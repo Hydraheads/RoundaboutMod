@@ -1073,8 +1073,8 @@ public class Config implements Cloneable {
         public Boolean fallProtectionOnRelease;
         @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
         public Integer spikeDiveAttackCooldown;
-        @IntOption(group = "inherit", value = 190, min = 0, max = 72000)
-        public Integer spikePullCooldown;
+        @IntOption(group = "inherit", value = 170, min = 0, max = 72000)
+        public Integer spikePullCooldownv2;
     }
 
     public static class RattSettings {

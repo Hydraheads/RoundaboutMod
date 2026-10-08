@@ -65,8 +65,8 @@ public interface IEntityAndData {
     void roundabout$setRoundaboutPrevY(double roundaboutPrevY);
     void roundabout$setRoundaboutPrevZ(double roundaboutPrevZ);
 
+    Vec3 rdbt$getStuckSpeedMultiplier();
     void roundabout$resetPreTSTick();
-
     @Nullable Vec3 roundabout$getRoundaboutDeltaBuildupTS();
 
     void roundabout$setRoundaboutDeltaBuildupTS(Vec3 vec3);
