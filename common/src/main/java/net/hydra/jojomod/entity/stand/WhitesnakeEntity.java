@@ -583,6 +583,13 @@ public class WhitesnakeEntity extends FollowingStandEntity {
     }
 
     @Override
+    public boolean canBeSeenAsEnemy() {
+        if (!isControlModeActive() || !isAlive() || isRemoved()) return false;
+        LivingEntity user = getUser();
+        return user != null && user.canBeSeenAsEnemy();
+    }
+
+    @Override
     public boolean isAttackable() {
         return isRemoteControlled() || super.isAttackable();
     }

@@ -39,6 +39,7 @@ public interface StandUser {
     boolean roundabout$getUniqueStandModeToggle();
     void roundabout$setUniqueStandModeToggle(boolean mode);
     boolean roundabout$skipFriction();
+    void rdbt$onSyncedDataUpdated2(EntityDataAccessor<?> $$0);
     void roundabout$setEyeSightTaken(SoftAndWetPlunderBubbleEntity bubble);
     SoftAndWetPlunderBubbleEntity roundabout$getEyeSightTaken();
     LivingEntity roundabout$getEmulator();
@@ -143,6 +144,8 @@ public interface StandUser {
     void roundabout$setWhiteAlbumVanishTicks(int set);
     int roundabout$getOasisVanishTicks();
     void roundabout$setOasisVanishTicks(int set);
+    int roundabout$getDiverDownVanishTicks();
+    void roundabout$setDiverDownVanishTicks(int set);
 
     int getJumpImmunityTicks();
 

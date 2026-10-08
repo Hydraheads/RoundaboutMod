@@ -2627,7 +2627,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             cir.setReturnValue(false);
         }
     }
-
+    public void rdbt$onSyncedDataUpdated2(EntityDataAccessor<?> $$0){
+        if ($$0.equals(ROUNDABOUT$STAND_DISC)){
+            this.roundabout$setStandPowers(null);
+            roundabout$itemParityClient = ItemStack.EMPTY;
+        }
+    }
     @Inject(method = "canFreeze()Z", at = @At(value = "HEAD"), require = 0, cancellable = true)
     public void roundabout$canFreeze(CallbackInfoReturnable<Boolean> cir) {
         if (roundabout$getStandPowers().freezeImmune() ||
@@ -2869,6 +2874,21 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public void roundabout$setWhiteAlbumVanishTicks(int set) {
         roundabout$whiteAlbumVanishTicks = Mth.clamp(set, 0, 10);
+    }
+
+    @Unique
+    public int roundabout$diverDownVanishTicks = 0;
+
+    @Unique
+    @Override
+    public int roundabout$getDiverDownVanishTicks() {
+        return roundabout$diverDownVanishTicks;
+    }
+
+    @Unique
+    @Override
+    public void roundabout$setDiverDownVanishTicks(int set) {
+        roundabout$diverDownVanishTicks = Mth.clamp(set, 0, 10);
     }
 
     @Unique
@@ -4512,6 +4532,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             return;
         }
 
+        if (this.hasEffect(ModEffects.DOOMED)) {
+            cir.setReturnValue(false);
+            return;
+        }
+
         if (rdbt$this() instanceof AbstractVillager || rdbt$this() instanceof AbstractIllager) {
             if (dsource.is(ModDamageTypes.BLOOD_DRAIN) || (dsource.getDirectEntity() instanceof BaseMinion)) {
                 Entity ent = dsource.getEntity();
@@ -6095,6 +6120,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             roundabout$setWhiteAlbumVanishTicks(roundabout$getWhiteAlbumVanishTicks() - 1);
         }
 
+        if (roundabout$hasDiverArms()) {
+            roundabout$setDiverDownVanishTicks(roundabout$getDiverDownVanishTicks() + 1);
+        } else {
+            roundabout$setDiverDownVanishTicks(roundabout$getDiverDownVanishTicks() - 1);
+        }
+
         if (roundabout$getStandPowers() instanceof PowersMandom && active) {
             roundabout$setMandomVanishTicks(roundabout$getMandomVanishTicks() + 1);
         } else {
@@ -6975,8 +7006,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$DIVER_LEGS = SynchedEntityData.defineId(
             LivingEntity.class, EntityDataSerializers.BOOLEAN);
+    @Unique
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$DIVER_ARMS = SynchedEntityData.defineId(
-            StandUserEntity.class, EntityDataSerializers.BOOLEAN);
+            LivingEntity.class, EntityDataSerializers.BOOLEAN);
 
     @Unique
     public PowersKillerQueen BtdPlantedUser = null;
@@ -7066,11 +7098,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.entityData.set(ROUNDABOUT$DIVER_LEGS, legs);
     }
 
-    @Unique
     @Override
     public boolean roundabout$hasDiverArms() {return this.entityData.get(ROUNDABOUT$DIVER_ARMS);}
 
-    @Unique
     @Override
     public void roundabout$setDiverArms(boolean arms) {this.entityData.set(ROUNDABOUT$DIVER_ARMS, arms);}
 

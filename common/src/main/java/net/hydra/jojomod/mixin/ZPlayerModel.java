@@ -475,7 +475,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
             StandUser user = ((StandUser)$$0);
             if (rdbt$isNotPosing($$0)) {
                 if (user.roundabout$getEffectiveCombatMode() && !$$0.isUsingItem()) {
-                    if (user.roundabout$rotateArmToShoot(HumanoidArm.LEFT) || user.roundabout$rotateArmToShoot(HumanoidArm.RIGHT))  {
+                    if (user.roundabout$rotateArmToShoot(HumanoidArm.LEFT) || user.roundabout$rotateArmToShoot(HumanoidArm.RIGHT)) {
                         if (user.roundabout$rotateArmToShoot(HumanoidArm.RIGHT)) {
                             this.rightArm.yRot = -0.1F + this.head.yRot;
                             this.rightArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
@@ -527,7 +527,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                             this.rightArm.xRot = -0.65F + curve;
                             this.leftArm.yRot = 0.45F;
                             this.leftArm.xRot = -0.55F + curve;
-                        } else if (((IPlayerEntity) $$0).roundabout$GetPos() == PlayerPosIndex.SKATE_GENERAL){
+                        } else if (((IPlayerEntity) $$0).roundabout$GetPos() == PlayerPosIndex.SKATE_GENERAL) {
                             float curve = -0.5F;
                             this.rightArm.yRot = -0.45F;
                             this.rightArm.xRot = -0.8F + curve;
@@ -580,6 +580,38 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         this.rightArm.xRot = -1.1F + curve;
                         this.leftArm.yRot = 0.2F;
                         this.leftArm.xRot = -1.4F + curve;
+                    }
+                } else if (user.roundabout$getStandPowers() instanceof PowersWalkingHeart pw && pw.rendersInCombatMode()){
+                    if (!$$0.isUsingItem()){
+                        boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
+                        if ($$9) {
+                            this.rightLeg.yRot = -0.1F + this.head.yRot;
+                            this.rightLeg.xRot = (float) (-Math.PI / 2) + this.head.xRot;
+
+                            this.rightLeg.xRot = Math.max(this.rightLeg.xRot, -2.5f);
+                            this.rightLeg.xRot -= 0.2f;
+
+
+                            this.leftLeg.yRot = 0;
+                            this.leftLeg.xRot = 0;
+                            this.leftLeg.zRot = 0;
+                        } else {
+                            this.leftLeg.yRot = 0.1F + this.head.yRot;
+                            this.leftLeg.xRot = (float) (-Math.PI / 2) + this.head.xRot;
+
+                            this.leftLeg.xRot = Math.max(this.leftLeg.xRot, -2.5f);
+                            this.leftLeg.xRot -= 0.2f;
+
+                            this.rightLeg.yRot = 0;
+                            this.rightLeg.xRot = 0;
+                            this.rightLeg.zRot = 0;
+                        }
+                        this.rightArm.zRot = 0.5F;
+                        this.leftArm.zRot = -0.5F;
+                        this.rightArm.xRot = 0F;
+                        this.leftArm.xRot = 0F;
+                        this.rightArm.yRot = 0F;
+                        this.leftArm.yRot = 0F;
                     }
                 } else if ((MainUtil.isHoldingRoadRoller($$0) && FateTypes.isVampireStrong($$0) ||
                         ClientUtil.isRenderingFlag($$0))) {

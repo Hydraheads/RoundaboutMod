@@ -192,6 +192,26 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
     public final AnimationState idleAnimationState2 = new AnimationState();
     public final AnimationState idleAnimationState3 = new AnimationState();
     public final AnimationState idleAnimationState4 = new AnimationState();
+    public final AnimationState idleAnimationStarPlat1 = new AnimationState();
+    public final AnimationState idleAnimationStarPlat2 = new AnimationState();
+    public final AnimationState idleAnimationMagRed1 = new AnimationState();
+    public final AnimationState idleAnimationMagRed2 = new AnimationState();
+    public final AnimationState idleAnimationTheWorld1 = new AnimationState();
+    public final AnimationState idleAnimationTheWorld2 = new AnimationState();
+    public final AnimationState idleAnimationKillerQueen1 = new AnimationState();
+    public final AnimationState idleAnimationKillerQueen2 = new AnimationState();
+    public final AnimationState idleAnimationPurpleHaze1 = new AnimationState();
+    public final AnimationState idleAnimationPurpleHaze2 = new AnimationState();
+    public final AnimationState idleAnimationKingCrimson1 = new AnimationState();
+    public final AnimationState idleAnimationKingCrimson2 = new AnimationState();
+    public final AnimationState idleAnimationWhiteSnake1 = new AnimationState();
+    public final AnimationState idleAnimationWhiteSnake2 = new AnimationState();
+    public final AnimationState idleAnimationDiverDown1 = new AnimationState();
+    public final AnimationState idleAnimationDiverDown2 = new AnimationState();
+    public final AnimationState idleAnimationD4C1 = new AnimationState();
+    public final AnimationState idleAnimationD4C2 = new AnimationState();
+    public final AnimationState idleAnimationSoftAndWet1 = new AnimationState();
+    public final AnimationState idleAnimationSoftAndWet2 = new AnimationState();
     public final AnimationState punchState1 = new AnimationState();
     public final AnimationState punchState2 = new AnimationState();
     public final AnimationState punchState3 = new AnimationState();
@@ -212,26 +232,128 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
         tryHardTimeEraseRendering();
             byte idle = getIdleAnimation();
             byte animation = getAnimation();
-            if (animation == IDLE && idle == 1) {
+
+            if (idle == 1 && animation == IDLE) {
                 this.idleAnimationState2.startIfStopped(this.tickCount);
             } else {
                 this.idleAnimationState2.stop();
             }
-            if (animation == IDLE && (idle == 0 || idle == 4)) {
+            if (idle == 0 && animation == IDLE) {
                 this.idleAnimationState.startIfStopped(this.tickCount);
             } else {
                 this.idleAnimationState.stop();
             }
-            if (animation == IDLE && idle == 2) {
+            if (idle == 2 && animation == IDLE) {
                 this.idleAnimationState3.startIfStopped(this.tickCount);
             } else {
                 this.idleAnimationState3.stop();
             }
-            if (animation == IDLE && idle == 3) {
+            if (idle == 3 && animation == IDLE) {
                 this.idleAnimationState4.startIfStopped(this.tickCount);
             } else {
                 this.idleAnimationState4.stop();
             }
+            if (idle == 4 && animation == IDLE) {
+                this.idleAnimationStarPlat1.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationStarPlat1.stop();
+            }
+            if (idle == 5 && animation == IDLE) {
+                this.idleAnimationStarPlat2.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationStarPlat2.stop();
+            }
+            if (idle == 6 && animation == IDLE) {
+                this.idleAnimationMagRed1.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationMagRed1.stop();
+            }
+            if (idle == 7 && animation == IDLE) {
+                this.idleAnimationMagRed2.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationMagRed2.stop();
+            }
+            if (idle == 8 && animation == IDLE) {
+                this.idleAnimationTheWorld1.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationTheWorld1.stop();
+            }
+            if (idle == 9 && animation == IDLE) {
+                this.idleAnimationTheWorld2.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationTheWorld2.stop();
+            }
+            if (idle == 10 && animation == IDLE) {
+                this.idleAnimationKillerQueen1.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationKillerQueen1.stop();
+            }
+            if (idle == 11 && animation == IDLE) {
+                this.idleAnimationKillerQueen2.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationKillerQueen2.stop();
+            }
+            if (idle == 12 && animation == IDLE) {
+                this.idleAnimationPurpleHaze1.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationPurpleHaze1.stop();
+            }
+            if (idle == 13 && animation == IDLE) {
+                this.idleAnimationPurpleHaze2.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationPurpleHaze2.stop();
+            }
+            if (idle == 14 && animation == IDLE) {
+                this.idleAnimationKingCrimson1.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationKingCrimson1.stop();
+            }
+            if (idle == 15 && animation == IDLE) {
+                this.idleAnimationKingCrimson2.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationKingCrimson2.stop();
+            }
+            if (idle == 16 && animation == IDLE) {
+                this.idleAnimationWhiteSnake1.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationWhiteSnake1.stop();
+            }
+            if (idle == 17 && animation == IDLE) {
+                this.idleAnimationWhiteSnake2.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationWhiteSnake2.stop();
+            }
+            if (idle == 18 && animation == IDLE) {
+                this.idleAnimationDiverDown1.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationDiverDown1.stop();
+            }
+            if (idle == 19 && animation == IDLE) {
+                this.idleAnimationDiverDown2.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationDiverDown2.stop();
+            }
+            if (idle == 20 && animation == IDLE) {
+                this.idleAnimationD4C1.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationD4C1.stop();
+            }
+            if (idle == 21 && animation == IDLE) {
+                this.idleAnimationD4C2.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationD4C2.stop();
+            }
+            if (idle == 22 && animation == IDLE) {
+                this.idleAnimationSoftAndWet1.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationSoftAndWet1.stop();
+            }
+            if (idle == 23 && animation == IDLE) {
+                this.idleAnimationSoftAndWet2.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationSoftAndWet2.stop();
+            }
+
 
             if (animation == FIRST_PUNCH)
                 this.punchState1.startIfStopped(this.tickCount);

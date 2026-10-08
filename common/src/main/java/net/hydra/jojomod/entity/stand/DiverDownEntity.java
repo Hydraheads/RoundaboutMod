@@ -45,7 +45,9 @@ public class DiverDownEntity extends FollowingStandEntity {
             MANGA = 15,
             VOLUME_4 = 16,
             SPINE_ART = 17,
-            WORLD_DIVER = 18;
+            WORLD_DIVER = 18,
+            DIVER_DROWNED = 19,
+            SECCO = 20;
 
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState mobDive = new AnimationState();
@@ -86,6 +88,7 @@ public class DiverDownEntity extends FollowingStandEntity {
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
+        //fix for the idle bugging out thing
         byte animation = getAnimation();
         if (animation != BARRAGE && animation != GROUND_BARRAGE) {
             this.hideFists.startIfStopped(this.tickCount);

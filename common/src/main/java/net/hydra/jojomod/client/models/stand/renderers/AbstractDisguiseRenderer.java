@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.hydra.jojomod.util.SkinUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidArmorModel;
 import net.minecraft.client.model.HumanoidModel;
@@ -39,9 +40,7 @@ public abstract class AbstractDisguiseRenderer extends LivingEntityRenderer<Livi
     protected final HumanoidArmorLayer<LivingEntity, PlayerModel<LivingEntity>, HumanoidArmorModel<LivingEntity>> regularArmorLayer;
     protected final HumanoidArmorLayer<LivingEntity, PlayerModel<LivingEntity>, HumanoidArmorModel<LivingEntity>> slimArmorLayer;
 
-    private final Map<UUID, SkinData> skins = new ConcurrentHashMap<>();
-    private final Set<UUID> requestedSkins = ConcurrentHashMap.newKeySet();
-    protected SkinData currentSkin = null;
+    protected SkinUtil.SkinData currentSkin = null;
 
     public AbstractDisguiseRenderer(EntityRendererProvider.Context context) {
         super(context, new PlayerModel<>(context.bakeLayer(ModelLayers.PLAYER), false), 0.5F);
@@ -56,7 +55,7 @@ public abstract class AbstractDisguiseRenderer extends LivingEntityRenderer<Livi
         ) {
             @Override
             public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, LivingEntity entity, float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
-                if (currentSkin != null && !currentSkin.slim && shouldShowArmor(entity)) {
+                if (currentSkin != null && !currentSkin.slim() && shouldShowArmor(entity)) {
                     super.render(poseStack, buffer, packedLight, entity, limbSwing, limbSwingAmount, partialTick, ageInTicks, netHeadYaw, headPitch);
                 }
             }
@@ -70,7 +69,7 @@ public abstract class AbstractDisguiseRenderer extends LivingEntityRenderer<Livi
         ) {
             @Override
             public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, LivingEntity entity, float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
-                if (currentSkin != null && currentSkin.slim && shouldShowArmor(entity)) {
+                if (currentSkin != null && currentSkin.slim() && shouldShowArmor(entity)) {
                     super.render(poseStack, buffer, packedLight, entity, limbSwing, limbSwingAmount, partialTick, ageInTicks, netHeadYaw, headPitch);
                 }
             }
@@ -101,8 +100,8 @@ public abstract class AbstractDisguiseRenderer extends LivingEntityRenderer<Livi
 
     public void renderDisguise(LivingEntity entity, GameProfile profile, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource buffers, int packedLight) {
         if (profile == null) return;
-        this.currentSkin = getSkin(profile);
-        this.model = this.currentSkin.slim ? this.slimModel : this.regularModel;
+        this.currentSkin = SkinUtil.getSkin(profile);
+        this.model = this.currentSkin.slim() ? this.slimModel : this.regularModel;
         this.model.setAllVisible(true);
         this.model.crouching = entity.isCrouching();
         setupModelArmPoses(entity, this.model);
@@ -112,22 +111,7 @@ public abstract class AbstractDisguiseRenderer extends LivingEntityRenderer<Livi
 
     @Override
     public ResourceLocation getTextureLocation(LivingEntity entity) {
-        return currentSkin != null ? currentSkin.texture : DefaultPlayerSkin.getDefaultSkin();
-    }
-
-    private SkinData getSkin(GameProfile profile) {
-        UUID id = profile.getId();
-        SkinData current = skins.computeIfAbsent(id, ignored -> new SkinData(
-                DefaultPlayerSkin.getDefaultSkin(id), "slim".equals(DefaultPlayerSkin.getSkinModelName(id))));
-
-        if (requestedSkins.add(id)) {
-            Minecraft.getInstance().getSkinManager().registerSkins(profile, (type, location, texture) -> {
-                if (type == MinecraftProfileTexture.Type.SKIN) {
-                    skins.put(id, new SkinData(location, "slim".equals(texture.getMetadata("model"))));
-                }
-            }, false);
-        }
-        return current;
+        return currentSkin != null ? currentSkin.texture() : DefaultPlayerSkin.getDefaultSkin();
     }
 
     private void setupModelArmPoses(LivingEntity entity, PlayerModel<LivingEntity> model) {
@@ -160,16 +144,6 @@ public abstract class AbstractDisguiseRenderer extends LivingEntityRenderer<Livi
             return HumanoidModel.ArmPose.CROSSBOW_HOLD;
         }
         return HumanoidModel.ArmPose.ITEM;
-    }
-
-    public static final class SkinData {
-        public final ResourceLocation texture;
-        public final boolean slim;
-
-        public SkinData(ResourceLocation texture, boolean slim) {
-            this.texture = texture;
-            this.slim = slim;
-        }
     }
 
     @Override

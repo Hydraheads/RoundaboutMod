@@ -922,7 +922,7 @@ public class PowersDiverDown extends NewPunchingStand {
     @Override
     public void tickPower() {
         super.tickPower();
-        if (isPiloting() && this.self.level().isClientSide()) {
+        if (isPiloting() && this.self.level().isClientSide() && isPacketPlayer()) {
             Minecraft mc = Minecraft.getInstance();
             boolean isMoving = mc.options.keyUp.isDown() || mc.options.keyDown.isDown()
                     || mc.options.keyLeft.isDown() || mc.options.keyRight.isDown();
@@ -1012,6 +1012,7 @@ public class PowersDiverDown extends NewPunchingStand {
                         exitGroundDive();
                     }
                 } else if (this.diveTicksLeft <= 0) {
+                    setCooldown(PowerIndex.SKILL_4, 100);
                     exitGroundDive();
                 }
                 if (this.oreDetectionEnabled) {
@@ -1431,8 +1432,8 @@ public class PowersDiverDown extends NewPunchingStand {
         BlockPos feetWall = BlockPos.containing(mpos).relative(rd);
         BlockPos eyeWall = BlockPos.containing(this.self.getEyePosition()).relative(rd);
 
-        return MainUtil.isBlockWalkableSimplified(this.self.level().getBlockState(feetWall))
-                || MainUtil.isBlockWalkableSimplified(this.self.level().getBlockState(eyeWall));
+        return MainUtil.isBlockWalkable(this.self.level().getBlockState(feetWall))
+                || MainUtil.isBlockWalkable(this.self.level().getBlockState(eyeWall));
     }
 
     /**
@@ -4146,6 +4147,34 @@ public class PowersDiverDown extends NewPunchingStand {
         this.hasDiverArms = false;
     }
 
+    // for diver arms in first person, stolen from white album and oasis
+    public static float getDiverDownAmt(Entity entity,float partialTicks){
+        float heyFull = 0;
+        if (entity instanceof LivingEntity LE) {
+            StandUser user = ((StandUser) LE);
+            boolean hasDiverDownArmsOut = user.roundabout$hasDiverArms();
+            int diverDownTicks = user.roundabout$getDiverDownVanishTicks();
+            if (hasDiverDownArmsOut || diverDownTicks > 0) {
+                byte skin = user.roundabout$getStandSkin();
+                if (user.roundabout$getLastStandSkin() != skin) {
+                    user.roundabout$setLastStandSkin(skin);
+                    diverDownTicks = 0;
+                    user.roundabout$setDiverDownVanishTicks(0);
+                }
+
+                float partialTicks2 = partialTicks % 1;
+                if (hasDiverDownArmsOut) {
+                    heyFull = diverDownTicks + partialTicks2;
+                    heyFull = Math.min(heyFull / 10, 1f);
+                } else {
+                    heyFull = diverDownTicks - partialTicks2;
+                    heyFull = Math.max(heyFull / 10, 0);
+                }
+            }
+        }
+        return heyFull;
+    }
+
     // diver arms end
 
     /* need to ask hydra permission if we can make this a move instead
@@ -4204,6 +4233,7 @@ public class PowersDiverDown extends NewPunchingStand {
 
             //transfer process
             removeDiverLegsFromTarget();
+            removeDiverArmsFromTarget();
             if (this.submergedTarget != null) {
                 ((StandUser) this.submergedTarget).roundabout$SetDiverUser(null);
             }
@@ -4931,6 +4961,12 @@ public class PowersDiverDown extends NewPunchingStand {
             case DiverDownEntity.SPINE_ART -> {
                 return Component.translatable("skins.roundabout.diver_down.spine_art");
             }
+            case DiverDownEntity.DIVER_DROWNED -> {
+                return Component.translatable("skins.roundabout.diver_down.diver_drowned");
+            }
+            case DiverDownEntity.SECCO -> {
+                return Component.translatable("skins.roundabout.diver_down.secco");
+            }
             default -> {
                 return Component.translatable("skins.roundabout.diver_down.base");
             }
@@ -4969,13 +5005,15 @@ public class PowersDiverDown extends NewPunchingStand {
             if (Level > 5 || bypass) {
                 l.add(DiverDownEntity.INVERSION);
                 l.add(DiverDownEntity.FIGURE);
+                l.add(DiverDownEntity.EYECATCH);
             }
             if (Level > 6 || bypass) {
-                l.add(DiverDownEntity.EYECATCH);
                 l.add(DiverDownEntity.ARTWORK);
+                l.add(DiverDownEntity.SECCO);
             }
             if (Level > 7 || bypass) {
                 l.add(DiverDownEntity.WORLD_DIVER);
+                l.add(DiverDownEntity.DIVER_DROWNED);
             }
             if (((IPlayerEntity) PE).roundabout$getUnlockedBonusSkin() || bypass) {
                 //add scuba diver skin here
@@ -4993,6 +5031,9 @@ public class PowersDiverDown extends NewPunchingStand {
         }
         if (skin == DiverDownEntity.WORLD_DIVER) {
             return ModEntities.DIVER_DOWN_WORLD.create(this.getSelf().level());
+        }
+        if (skin == DiverDownEntity.DIVER_DROWNED) {
+            return ModEntities.DIVER_DROWNED.create(this.getSelf().level());
         }
         return ModEntities.DIVER_DOWN.create(this.getSelf().level());
     }
@@ -5021,6 +5062,15 @@ public class PowersDiverDown extends NewPunchingStand {
                 }
             }
         }
+    }
+
+    // too many bugs with switching skins while diving. i'm just gonna disable it.
+    @Override
+    public void getSkinInDirection(boolean right, boolean sealed) {
+        if (this.getActivePower() != PowerIndex.NONE || this.areStandMovesDisabled()) {
+            return;
+        }
+        super.getSkinInDirection(right, sealed);
     }
 
     //stolen from black sabbath tee hee

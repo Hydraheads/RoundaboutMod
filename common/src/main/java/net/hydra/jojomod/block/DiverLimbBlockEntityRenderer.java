@@ -44,6 +44,7 @@ public class DiverLimbBlockEntityRenderer implements BlockEntityRenderer<DiverLi
         this.skinLimbs.put((byte) 0, this.defaultLimbs);
         this.skinLimbs.put(DiverDownEntity.BETA_DIVER, bakeLimbs(context, ModEntityRendererClient.DIVER_DOWN_BETA_LAYER));
         this.skinLimbs.put(DiverDownEntity.WORLD_DIVER, bakeLimbs(context, ModEntityRendererClient.DIVER_DOWN_WORLD_LAYER));
+        this.skinLimbs.put(DiverDownEntity.DIVER_DROWNED, bakeLimbs(context, ModEntityRendererClient.DIVER_DROWNED_LAYER));
         // for the future, when adding more models, follow this template:
         // this.skinLimbs.put(DiverDownEntity.MODEL_NAME, bakeLimbs(context, ModEntityRendererClient.MODEL_NAME_LAYER));
     }
