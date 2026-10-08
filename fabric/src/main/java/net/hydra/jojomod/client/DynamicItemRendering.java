@@ -58,7 +58,7 @@ public class DynamicItemRendering implements BuiltinItemRendererRegistry.Dynamic
                         gameProfile2 = NbtUtils.readGameProfile(compoundTag.getCompound("HandProfile"));
                     }
                 }
-                HandRenderer.renderHand(gameProfile2, FabricBlocks.HAND.defaultBlockState(), matrices, vertexConsumers, light, overlay);
+                //HandRenderer.renderHand(gameProfile2, FabricBlocks.HAND.defaultBlockState(), matrices, vertexConsumers, light, overlay);
                 return;
             }else {
                 return;
