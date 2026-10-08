@@ -3702,7 +3702,8 @@
   "config.roundabout.enableSurvivor.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableWhiteAlbum.name": "Enable Stand",
   "config.roundabout.enableWhiteAlbum.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
-
+  "config.roundabout.enableDiverDown.name":"Enable Stand",
+  "config.roundabout.enableDiverDown.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableKingCrimson.name": "Enable Stand",
   "config.roundabout.enableKingCrimson.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
 
