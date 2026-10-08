@@ -1596,8 +1596,14 @@ public class PowersGreenDay extends NewPunchingStand {
         super.readAdditionalSaveData($$0);
         if ($$0.contains("hasmainhand")) {
             HasMainArm = $$0.getBoolean("hasmainarm");
-        }if ($$0.contains("hasoffhand")) {
-            HasMainArm = $$0.getBoolean("hasoffhand");
+        } else {
+            HasMainArm = true;
+        }
+
+        if ($$0.contains("hasoffhand")) {
+            HasOffHand = $$0.getBoolean("hasoffhand");
+        } else {
+            HasOffHand = true;
         }
     }
 

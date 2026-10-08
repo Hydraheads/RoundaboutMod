@@ -3546,7 +3546,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     roundabout$itemParityClient = standDisc;
 
                     if (this.roundabout$Powers != null) {
-                        CompoundTag $$4 = standDisc.getTagElement("Memory");
+                        CompoundTag $$4 = standDisc.getOrCreateTagElement("Memory");
                         if ($$4 != null) {
                             this.roundabout$Powers.readAdditionalSaveData($$4);
                         }
@@ -3569,7 +3569,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
                 if (this.level().isClientSide()) {
                     if (this.roundabout$Powers != null) {
-                        CompoundTag $$4 = StandDisc.getTagElement("Memory");
+                        CompoundTag $$4 = StandDisc.getOrCreateTagElement("Memory");
                         if ($$4 != null) {
                             this.roundabout$Powers.readAdditionalSaveData($$4);
                         }
