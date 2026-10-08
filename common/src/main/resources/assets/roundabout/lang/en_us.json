@@ -2575,6 +2575,8 @@
   "ability.roundabout.diver_chest.desc": "Diver Down opens the closest chest and brings items to and from your inventory.",
   "ability.roundabout.diver_recall": "Recall Stand",
   "ability.roundabout.diver_recall.desc": "Recall Diver Down back to you.",
+  "text.roundabout.diver_down.release_mode": "Release Mode: Automatic",
+  "text.roundabout.diver_down.release_mode_manual": "Release Mode: Manual",
 
   "ability.roundabout.emperor_shoot": "Shoot",
   "ability.roundabout.emperor_shoot.desc": "Shoot a bullet from the emperor.",
