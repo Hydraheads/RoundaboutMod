@@ -36,9 +36,11 @@ import net.hydra.jojomod.client.models.npcs.ZombieAestheticianModel;
 import net.hydra.jojomod.client.models.npcs.renderers.ZombieAestheticianRenderer;
 import net.hydra.jojomod.particles.*;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.model.SilverfishModel;
 import net.minecraft.client.particle.ExplodeParticle;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
@@ -47,12 +49,13 @@ import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 @Mod.EventBusSubscriber(modid = Roundabout.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-public class ClientForgeEvents {
+public class ClientForgeEvents implements IClientItemExtensions {
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
@@ -625,5 +628,11 @@ public class ClientForgeEvents {
             return path.equals("hallucinatory_acid") || path.equals("hallucinatory_acid_wall")
                     ? new HallucinationAcidBakedModel(model) : model;
         });
+    }
+
+    @Override
+    public BlockEntityWithoutLevelRenderer getCustomRenderer(){
+
+        return new DynamicItemRendering(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
     }
 }
