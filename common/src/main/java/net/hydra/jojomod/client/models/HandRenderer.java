@@ -193,7 +193,7 @@ public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer
     //public static RenderType getRenderType(HandBlock.Type type, @Nullable GameProfile $$1) {
     public static RenderType getRenderType(@Nullable GameProfile $$1) {
 
-        //if (/*p_112524_ == SkullBlock.Types.PLAYER &&*/ p_112525_ != null) {
+        
         if ($$1 != null) {
             Minecraft $$3 = Minecraft.getInstance();
             Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> $$4 = $$3.getSkinManager().getInsecureSkinInformation($$1);
@@ -203,7 +203,7 @@ public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer
             return RenderType.entityCutoutNoCullZOffset(WIDE_BASE);
         }
 
-    }
+    }*/
 
     public static boolean getSlim(GameProfile pfp) {
         if (pfp != null) {
