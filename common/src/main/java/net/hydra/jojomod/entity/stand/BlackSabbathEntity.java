@@ -1229,7 +1229,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                             }
                         }
                     } else {
-                        if(level().getEntity(getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser)e).roundabout$setSealedTicks(0);}
+                        if(level().getEntity(getGrabbing()) != null && level().getEntity(getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser)e).roundabout$setSealedTicks(0);}
                         setGrabbing(0);
                         setMeleeInteractionTicks(0);
                         setUnrender(false);
@@ -1249,7 +1249,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                 }
                             }
                         } else {
-                            if(level().getEntity(getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser)e).roundabout$setSealedTicks(0);}
+                            if(level().getEntity(getGrabbing()) != null && level().getEntity(getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser)e).roundabout$setSealedTicks(0);}
                             setGrabbing(0);
                             setMeleeInteractionTicks(0);
                             if (isWalking) {

@@ -229,8 +229,10 @@ public class PowersBlackSabbath extends NewDashPreset {
                 }
             }
             if(this.getStandEntity(self) instanceof BlackSabbathEntity BE){
-                ((StandUser)BE.level().getEntity(BE.getGrabbing())).roundabout$setSealedTicks(0);
-                ((StandUser)BE.level().getEntity(BE.getGrabbing())).roundabout$setGrabbedSoul(false);
+                if(BE.level().getEntity(BE.getGrabbing()) != null) {
+                    ((StandUser) BE.level().getEntity(BE.getGrabbing())).roundabout$setSealedTicks(0);
+                    ((StandUser) BE.level().getEntity(BE.getGrabbing())).roundabout$setGrabbedSoul(false);
+                }
             }
 
             if (desummon && moveMode == 2) {
