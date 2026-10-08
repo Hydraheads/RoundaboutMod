@@ -213,6 +213,7 @@ public abstract class PlayerEntityClient extends AbstractClientPlayer implements
     @Inject(method = "onSyncedDataUpdated", at = @At(value = "TAIL"), require = 0)
     public void roundabout$onSyncedDataUpdated(EntityDataAccessor<?> $$0, CallbackInfo ci) {
         ((IPlayerEntity)this).rdbt$onSyncedDataUpdated($$0);
+        ((StandUser)this).rdbt$onSyncedDataUpdated2($$0);
     }
 
     /**If you are stopping time, make it so that you gain a block placement cooldown for blocks with
