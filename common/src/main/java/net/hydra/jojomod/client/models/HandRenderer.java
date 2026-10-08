@@ -87,9 +87,9 @@ public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer
 
             //AbstractHandBlock.Type HandBlock$type = ((AbstractHandBlock) $$8.getBlock()).getType();
             GameProfile pfp = ((HandBlockEntity) $$0).getProfile();
-            renderHand(pfp, $$8, $$2, $$3, $$4, $$5);
+            //renderHand(pfp, $$8, $$2, $$3, $$4, $$5);
 
-            /*
+
             float $$13 = RotationSegment.convertToDegrees($$8.getValue(HandBlock.ROTATION));
             $$2.pushPose();
             $$2.translate(0.5F, 0.5F, 0.5F);
@@ -117,7 +117,7 @@ public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer
 
             this.render($$2, vertexConsumer, part, $$4, $$5);
 
-            $$2.popPose();*/
+            $$2.popPose();
         //}
     }
     public void renderHand(GameProfile pfp, BlockState $$8, PoseStack $$2, MultiBufferSource $$3, int $$4, int $$5) {
@@ -154,7 +154,8 @@ public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer
         this.render($$2, vertexConsumer, part, $$4, $$5);
 
         $$2.popPose();*/
-    }/*
+    }
+    /*
     public static void renderHandSafe(GameProfile pfp, BlockState $$8, PoseStack $$2, MultiBufferSource $$3, int $$4, int $$5) {
         float $$13 = RotationSegment.convertToDegrees($$8.getValue(HandBlock.ROTATION));
         $$2.pushPose();
@@ -184,7 +185,7 @@ public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer
         this.render($$2, vertexConsumer, part, $$4, $$5);
 
         $$2.popPose();
-    }
+    }*/
 
     private void render(PoseStack $$0, VertexConsumer $$1, ModelPart $$2,  int $$6, int $$7) {
         $$2.render($$0, $$1, $$6, $$7);
@@ -193,7 +194,7 @@ public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer
     //public static RenderType getRenderType(HandBlock.Type type, @Nullable GameProfile $$1) {
     public static RenderType getRenderType(@Nullable GameProfile $$1) {
 
-        
+
         if ($$1 != null) {
             Minecraft $$3 = Minecraft.getInstance();
             Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> $$4 = $$3.getSkinManager().getInsecureSkinInformation($$1);
@@ -203,7 +204,7 @@ public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer
             return RenderType.entityCutoutNoCullZOffset(WIDE_BASE);
         }
 
-    }*/
+    }
 
     public static boolean getSlim(GameProfile pfp) {
         if (pfp != null) {
