@@ -665,14 +665,14 @@ public class PowersDiverDown extends NewPunchingStand {
 
         // Ability 1 (Z)
         else {
-            if (isHoldingSneak()) {
+            if (isGuarding()) {
+                setSkillIcon(context, x, y, 1, StandIcons.DIVER_DOWN_SELF_SUBMERGE, PowerIndex.SKILL_EXTRA);
+            } else if (isHoldingSneak()) {
                 if (canExecuteMoveWithLevel(getBlockDisassemblyLevel())) {
                     setSkillIcon(context, x, y, 1, StandIcons.DIVER_DOWN_DISASSEMBLE, PowerIndex.SKILL_1_SNEAK);
                 } else {
                     setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD, true);
                 }
-            } else if (isGuarding()) {
-                setSkillIcon(context, x, y, 1, StandIcons.DIVER_DOWN_SELF_SUBMERGE, PowerIndex.SKILL_EXTRA);
             } else {
                 setSkillIcon(context, x, y, 1, StandIcons.DIVER_DOWN_SUBMERGE, PowerIndex.SKILL_1);
             }
@@ -1759,7 +1759,7 @@ public class PowersDiverDown extends NewPunchingStand {
      * tryLimbClimb is the client side activation for the limb move.
      */
     private void tryLimbClimb() {
-        if (!areStandMovesDisabled() && !isDiverMoveActive() && canExecuteMoveWithLevel(getDiverLimbLevel())) {
+        if (!isDiverMoveActive() && canExecuteMoveWithLevel(getDiverLimbLevel())) {
             if (this.self.level().isClientSide()) {
                 if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK)) {
                     // literally just to prevent the move from being spammed
