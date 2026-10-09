@@ -2663,5 +2663,5 @@ public class StandIdles {
                         new Keyframe(1.5F, KeyframeAnimations.degreeVec(44.4808F, -19.8172F, 9.0445F), AnimationChannel.Interpolations.CATMULLROM),
                         new Keyframe(3.0F, KeyframeAnimations.degreeVec(35.65F, -21.3874F, -0.4312F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
-                .build();
+                .build();       
 }

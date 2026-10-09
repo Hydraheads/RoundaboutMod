@@ -492,7 +492,7 @@ public class Config implements Cloneable {
         public Integer bubbleShootCooldown;
         @IntOption(group = "inherit", value = 160, min = 0, max = 72000)
         public Integer itemPlantCooldown;
-        @IntOption(group = "inherit", value = 220, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 120, min = 0, max = 72000)
         public Integer mobPlantCooldown;
     	@IntOption(group = "inherit", value = 11, min = 0, max = 72000)
         public Integer explosionActivationCooldown;
