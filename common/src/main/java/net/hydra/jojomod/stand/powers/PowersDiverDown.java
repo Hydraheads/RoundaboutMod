@@ -198,7 +198,7 @@ public class PowersDiverDown extends NewPunchingStand {
     public final Map<BlockFace, KickTrap> storedKickTraps = new LinkedHashMap<>();
     private static final int MAX_TRAP_DURATION = 2400; // 2 minute lifetime
     private static final float TRAP_RANGE = 5.5f;
-    private static final int MAX_NUMBER_OF_TRAPS = 10;
+    private static final int MAX_NUMBER_OF_TRAPS = ClientNetworking.getAppropriateConfig().diverDownSettings.maxTrapsDiverDown;
     public static final int KICK_TRAP_WINDUP_MAX = 10;
     public final Map<BlockPos, Integer> releasingLimbs = new HashMap<>();
     // water bucket
@@ -356,9 +356,9 @@ public class PowersDiverDown extends NewPunchingStand {
 
     private float getKickTrapStrength(Entity entity) {
         if (this.getReducedDamage(entity)) {
-            return levelupDamageMod(3F * this.getAttackMultOnPlayers() * 0.01F);
+            return levelupDamageMod(4F * this.getAttackMultOnPlayers() * 0.01F);
         } else {
-            return levelupDamageMod(6F * this.getAttackMultOnMobs() * 0.01F);
+            return levelupDamageMod(7F * this.getAttackMultOnMobs() * 0.01F);
         }
     }
 
@@ -1141,9 +1141,9 @@ public class PowersDiverDown extends NewPunchingStand {
 
                 sendParticlesIfPossible(
                         this.self.level(), ModParticles.ICE_SPARKLE, px, py, pz,
-                            2, 0.05, 0.05, 0.05, 0.08);
+                            1, 0.05, 0.05, 0.05, 0.08);
             }
-            if (this.hasDiverArms && this.submergedTarget instanceof LivingEntity target && target.isAlive()) {
+            if (this.hasDiverArms && this.submergedTarget instanceof LivingEntity target && target.isAlive() && this.self.tickCount % 2 == 0) {
                 float yawRad = (float) Math.toRadians(submergedTarget.getYRot());
                 float armOffsetRad = yawRad + (float) (Math.PI / 2.0);
 
@@ -2541,7 +2541,7 @@ public class PowersDiverDown extends NewPunchingStand {
     @Override
     public int getMaxPilotRange() {
         // (this is in blocks)
-        return 13;
+        return ClientNetworking.getAppropriateConfig().diverDownSettings.maxPilotRange;
     }
 
     @Override
@@ -2840,7 +2840,7 @@ public class PowersDiverDown extends NewPunchingStand {
         StandEntity stand = getStandEntity(this.self);
         BlockPos centerPos = (stand != null) ? stand.blockPosition() : this.self.blockPosition();
         List<BlockPos> found = new ArrayList<>();
-        int hRange = 2;    // Horizontal radius (4 blocks each direction)
+        int hRange = ClientNetworking.getAppropriateConfig().diverDownSettings.oreDetectionRange;    // Horizontal radius (in blocks, each direction)
         int depth = 6;    // Depth beneath the stand (add 2 to start from the stand's feet)
         int maxOres = 32;   // Ore cap to prevent visual clutter
         //start y from -1 to start from feet
@@ -4120,9 +4120,11 @@ public class PowersDiverDown extends NewPunchingStand {
             playSoundIfPossible(self.level(), null, host.blockPosition(),
                     ModSounds.DIVER_DOWN_BOMB_EVENT,
                     SoundSource.PLAYERS, 0.8F, 1);
-            sendParticlesIfPossible(level, ModParticles.BLOOD_MIST,
-                    host.getX(), host.getY() + host.getBbHeight() * 0.8, host.getZ(),
-                    6, 0.04, 0.04, 0.04, 0.02);
+            if(MainUtil.getMobBleed(host) && !MainUtil.hasBlueBlood(host) && !MainUtil.hasEnderBlood(host)) {
+                sendParticlesIfPossible(level, ModParticles.BLOOD_MIST,
+                        host.getX(), host.getY() + host.getBbHeight() * 0.8, host.getZ(),
+                        6, 0.04, 0.04, 0.04, 0.02);
+            }
             LivingEntity hostStorage = host;
             emergeServer();
             //20F one shots normal mobs like villagers, zombies and stuff, but keeps bigger mobs alive.
@@ -4292,7 +4294,10 @@ public class PowersDiverDown extends NewPunchingStand {
         List<MobEffect> negativeEffects = new ArrayList<>();
         for (MobEffectInstance instance : targetLiving.getActiveEffects()) {
             MobEffect effect = instance.getEffect();
-            if (effect.getCategory() == MobEffectCategory.HARMFUL && !MainUtil.isSpecialEffect(effect)) {
+            if (effect.getCategory() == MobEffectCategory.HARMFUL) {
+                if (!ClientNetworking.getAppropriateConfig().diverDownSettings.advancedClearEffect && MainUtil.isSpecialEffect(effect)) {
+                    continue;
+                }
                 negativeEffects.add(effect);
                 if (effect == MobEffects.MOVEMENT_SLOWDOWN) {
                     hadSlowness = true;
