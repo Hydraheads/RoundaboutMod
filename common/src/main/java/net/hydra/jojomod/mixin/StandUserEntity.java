@@ -2627,7 +2627,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             cir.setReturnValue(false);
         }
     }
+    public void rdbt$onSyncedDataUpdated2(EntityDataAccessor<?> $$0){
+        if ($$0.equals(ROUNDABOUT$STAND_DISC)){
 
+        }
+    }
+    public void rdbt$refreshStand(){
+        this.roundabout$setStandPowers(null);
+        roundabout$itemParityClient = ItemStack.EMPTY;
+    }
     @Inject(method = "canFreeze()Z", at = @At(value = "HEAD"), require = 0, cancellable = true)
     public void roundabout$canFreeze(CallbackInfoReturnable<Boolean> cir) {
         if (roundabout$getStandPowers().freezeImmune() ||
@@ -3538,7 +3546,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     roundabout$itemParityClient = standDisc;
 
                     if (this.roundabout$Powers != null) {
-                        CompoundTag $$4 = standDisc.getTagElement("Memory");
+                        CompoundTag $$4 = standDisc.getOrCreateTagElement("Memory");
                         if ($$4 != null) {
                             this.roundabout$Powers.readAdditionalSaveData($$4);
                         }
@@ -3561,7 +3569,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
                 if (this.level().isClientSide()) {
                     if (this.roundabout$Powers != null) {
-                        CompoundTag $$4 = StandDisc.getTagElement("Memory");
+                        CompoundTag $$4 = StandDisc.getOrCreateTagElement("Memory");
                         if ($$4 != null) {
                             this.roundabout$Powers.readAdditionalSaveData($$4);
                         }
@@ -4653,6 +4661,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     PWA.hasSkatesActivated() && !pl.isCrouching()) {
                 stepAddon += 0.7F;
             }
+            if (roundabout$hasDiverLegs() && !pl.isCrouching()) {
+                stepAddon += 0.7F;
+            }
         }
         if (stepAddon > 0) {
             cir.setReturnValue(((IEntityAndData) this).roundabout$getStepHeight() + stepAddon);
@@ -5080,11 +5091,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (rdbt$this() instanceof Player pl) {
             basis = ((IFatePlayer) this).rdbt$getFatePowers().inputSpeedModifiers(basis);
             basis = ((IPowersPlayer) this).rdbt$getPowers().inputSpeedModifiers(basis);
-        }
-        //diver down legs speed boost
-        StandUser SU = (StandUser) this;
-        if (this.roundabout$hasDiverLegs()) {
-            basis *= 1.2F; //20%, same as a speed 1 pot
         }
         if(this.roundabout$getGrabbedSoul()){
             basis *= 0.025F;

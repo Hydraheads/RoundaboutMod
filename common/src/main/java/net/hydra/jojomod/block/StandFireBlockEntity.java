@@ -108,7 +108,7 @@ public class StandFireBlockEntity extends BlockEntity{
                             40, 0.0, 0.2, 0.0, 0.2);
                     ((ServerLevel) $$1).sendParticles(ParticleTypes.EXPLOSION, below.getX(), below.getY(), below.getZ(),
                             1, 0.5, 0.5, 0.5, 0.2);
-                    MainUtil.gasExplode(null, (ServerLevel) $$1, below, 0, 2, 4, MainUtil.gasDamageMultiplier()*10);
+                    MainUtil.gasExplode(null, (ServerLevel) $$1, below, 0, 2, 4, MainUtil.gasDamageMultiplier()*5);
                     return;
                 }
 

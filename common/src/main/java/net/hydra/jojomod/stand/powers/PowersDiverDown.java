@@ -1012,6 +1012,7 @@ public class PowersDiverDown extends NewPunchingStand {
                         exitGroundDive();
                     }
                 } else if (this.diveTicksLeft <= 0) {
+                    setCooldown(PowerIndex.SKILL_4, 100);
                     exitGroundDive();
                 }
                 if (this.oreDetectionEnabled) {
@@ -1087,20 +1088,15 @@ public class PowersDiverDown extends NewPunchingStand {
                         } else {
                             // If ANY block directly beneath your rotated feet is solid, you are still on a
                             // surface
-                            if (MainUtil.isBlockWalkableSimplified(self.level().getBlockState(pos))
-                                    || MainUtil.isBlockWalkableSimplified(self.level().getBlockState(pos2))
-                                    || MainUtil.isBlockWalkableSimplified(self.level().getBlockState(pos4))
-                                    || MainUtil.isBlockWalkableSimplified(self.level().getBlockState(pos5))) {
+                            if (MainUtil.isBlockWalkable(self.level().getBlockState(pos))
+                                    || MainUtil.isBlockWalkable(self.level().getBlockState(pos2))
+                                    || MainUtil.isBlockWalkable(self.level().getBlockState(pos4))
+                                    || MainUtil.isBlockWalkable(self.level().getBlockState(pos5))) {
                                 mercyTicks--;
                             } else {
-                                // Only attempt to cut the corner when all probe blocks are AIR (stepped off
-                                // edge)
-                                if (self.onGround() && MainUtil.isBlockWalkableSimplified(self.getBlockStateOn())) {
-                                    mercyTicks = 4;
-                                    lastGroundPosition = self.position();
-                                } else {
-                                    mercyTicks--;
-                                }
+                                // walking heart had some corner cutting code here, but diver down doesn't have that so...
+                                // i just removed it
+                                mercyTicks = 0;
                             }
                         }
                         // cancel power if something bad happens
@@ -1753,7 +1749,7 @@ public class PowersDiverDown extends NewPunchingStand {
      * tryLimbClimb is the client side activation for the limb move.
      */
     private void tryLimbClimb() {
-        if (canExecuteMoveWithLevel(getDiverLimbLevel())) {
+        if (!areStandMovesDisabled() && this.activePower == NONE && canExecuteMoveWithLevel(getDiverLimbLevel())) {
             if (this.self.level().isClientSide()) {
                 if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK)) {
                     // literally just to prevent the move from being spammed
@@ -2453,12 +2449,14 @@ public class PowersDiverDown extends NewPunchingStand {
     // Ground dive start
 
     private void tryGroundDive() {
-        if (canExecuteMoveWithLevel(getGroundDiveLevel()) && !this.onCooldown(PowerIndex.SKILL_4) && canChangePower(PowerIndex.SKILL_4, false)) {
+        if (this.canAttack() && canExecuteMoveWithLevel(getGroundDiveLevel())
+                && !this.onCooldown(PowerIndex.SKILL_4) && canChangePower(PowerIndex.SKILL_4, false)) {
             if (this.self.level().isClientSide() && isPacketPlayer() && GravityAPI.getGravityDirection(this.self) == Direction.DOWN) {
                 StandEntity stand = getStandEntity(this.self);
                 if (stand != null && stand.isAlive()) {
                     DiverDownControlsClient.enter(stand);
                     setPiloting(stand.getId());
+                    this.setActivePower(GROUND_DIVE_START);
                     tryPowerPacket(GROUND_DIVE_START);
                     // the 0.05 is there to fix the pilot enter bug, so it can enter pilot inside
                     // walls
@@ -2913,7 +2911,8 @@ public class PowersDiverDown extends NewPunchingStand {
     // heel plant 2.0 start
 
     public void tryDiverZip() {
-        if (canExecuteMoveWithLevel(getDiverZipLevel()) && !this.onCooldown(PowerIndex.SKILL_3)) {
+        if (!areStandMovesDisabled() && this.activePower == NONE && canExecuteMoveWithLevel(getDiverZipLevel())
+                && !this.onCooldown(PowerIndex.SKILL_3)) {
             if (!self.isInWater()) {
                 if (forceBlock())
                     return;
@@ -3290,10 +3289,12 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     public void tryPlantKickTrap() {
-        if (canExecuteMoveWithLevel(getKickStorageLevel()) && !this.onCooldown(PowerIndex.SKILL_2)) {
+        if (this.activePower == NONE && canExecuteMoveWithLevel(getKickStorageLevel())
+                && !this.onCooldown(PowerIndex.SKILL_2)) {
             if (this.canAttack() && !this.areStandMovesDisabled()) {
                 this.tryPower(STORE_KICK_TRAP, true);
                 tryPowerPacket(STORE_KICK_TRAP);
+                this.setActivePower(STORE_KICK_TRAP);
             }
         }
     }
@@ -3441,6 +3442,14 @@ public class PowersDiverDown extends NewPunchingStand {
     private boolean toggleTrapMode() {
         if (!this.self.level().isClientSide()) {
             this.isAutoRelease = !this.isAutoRelease;
+            //basically stolen from survivor :steamhappy:
+            if (!isClient() && this.self instanceof ServerPlayer PE) {
+                if (isAutoRelease) {
+                    PE.displayClientMessage(Component.translatable("text.roundabout.diver_down.release_mode").withStyle(ChatFormatting.DARK_AQUA), true);
+                } else {
+                    PE.displayClientMessage(Component.translatable("text.roundabout.diver_down.release_mode_manual").withStyle(ChatFormatting.DARK_AQUA), true);
+                }
+            }
         }
         return true;
     }
@@ -3495,9 +3504,11 @@ public class PowersDiverDown extends NewPunchingStand {
     // dive start
 
     private void tryStartDiveClient() {
-        if (!areStandMovesDisabled() && !isDiveActive() && !this.onCooldown(PowerIndex.SKILL_1) && this.getActivePower() != DIVER_SUBMERGE_START) {
+        if (this.activePower == NONE && !areStandMovesDisabled() && !isDiveActive() && !this.onCooldown(PowerIndex.SKILL_1)
+                && this.getActivePower() != DIVER_SUBMERGE_START && this.canAttack()) {
             this.tryPower(DIVER_SUBMERGE_START, true);
             tryPowerPacket(DIVER_SUBMERGE_START);
+            this.setActivePower(DIVER_SUBMERGE_START);
         }
     }
 
@@ -3662,9 +3673,11 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     private void tryStartSelfDiveClient() {
-        if (!areStandMovesDisabled() && !isDiveActive() && !this.onCooldown(PowerIndex.SKILL_EXTRA)) {
+        if (this.activePower == NONE && !areStandMovesDisabled() && !isDiveActive()
+                && !this.onCooldown(PowerIndex.SKILL_EXTRA)) {
             this.tryPower(DIVER_SELF_SUBMERGE, true);
             tryPowerPacket(DIVER_SELF_SUBMERGE);
+            this.setActivePower(DIVER_SELF_SUBMERGE);
         }
     }
 
@@ -4303,6 +4316,12 @@ public class PowersDiverDown extends NewPunchingStand {
                 SoundEvents.ZOMBIE_VILLAGER_CURE,
                 SoundSource.PLAYERS, 0.7F, 1.3F);
 
+        // if it's the diver down player that's using it on themselves, make them useless for a few seconds.
+        if (isSelfDive()) {
+            targetLiving.addEffect(new MobEffectInstance(ModEffects.IMPRINTING, 80, 0, false, false, false), this.self);
+            targetLiving.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 80, 4, false, false, false), this.self);
+        }
+
         setCooldown(PowerIndex.GENERAL_1, getAfflictionCooldown());
     }
 
@@ -4344,6 +4363,7 @@ public class PowersDiverDown extends NewPunchingStand {
         if (this.self.level().isClientSide()) return;
         if (!(this.submergedTarget instanceof LivingEntity targetLiving) || !targetLiving.isAlive()) return;
 
+        // for mob ai, that way it will just embed a random negative potion
         if (this.self instanceof Witch) {
             double rng = Math.random();
             MobEffectInstance witchEffect;
@@ -4391,7 +4411,7 @@ public class PowersDiverDown extends NewPunchingStand {
 
             // prevent players and bosses passive from attacking for 3 seconds
             if (targetLiving instanceof Player) {
-                targetLiving.addEffect(new MobEffectInstance(ModEffects.IMPRINTING, 60, 0, false, true, true), this.self);
+                targetLiving.addEffect(new MobEffectInstance(ModEffects.IMPRINTING, 60, 0, false, false, false), this.self);
                 targetLiving.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 60, 4, false, false, false), this.self);
             } else if (MainUtil.isBossMob(targetLiving)) {
                 targetLiving.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 60, 2, false, false, false), this.self);
@@ -4457,17 +4477,13 @@ public class PowersDiverDown extends NewPunchingStand {
             int newDuration = effect.getDuration();
             // make potions with durations longer
             if (!effect.getEffect().isInstantenous()) {
-                newDuration = (int) (effect.getDuration() + 300); // extra 15 seconds
-            }
-            int newAmplifier = effect.getAmplifier() + 1;
-            if (newAmplifier > 3) {
-                newAmplifier = 3;
+                newDuration = (int) (effect.getDuration() + 600); // extra 30 seconds
             }
 
             MobEffectInstance boostedEffect = new MobEffectInstance(
                     effect.getEffect(),
                     newDuration,
-                    newAmplifier,
+                    effect.getAmplifier(),
                     effect.isAmbient(),
                     effect.isVisible(),
                     effect.showIcon()
@@ -4640,7 +4656,7 @@ public class PowersDiverDown extends NewPunchingStand {
 
     //checks for a block to disassemble
     private void tryDisassembleBlockClient() {
-        if (canExecuteMoveWithLevel(getBlockDisassemblyLevel())) {
+        if (canExecuteMoveWithLevel(getBlockDisassemblyLevel()) && !areStandMovesDisabled() && this.activePower == NONE) {
             if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
                 Vec3 eyePos = this.self.getEyePosition(0);
                 Vec3 viewVec = this.self.getViewVector(0);
@@ -5063,6 +5079,15 @@ public class PowersDiverDown extends NewPunchingStand {
         }
     }
 
+    // too many bugs with switching skins while diving. i'm just gonna disable it.
+    @Override
+    public void getSkinInDirection(boolean right, boolean sealed) {
+        if (this.getActivePower() != PowerIndex.NONE || this.areStandMovesDisabled()) {
+            return;
+        }
+        super.getSkinInDirection(right, sealed);
+    }
+
     //stolen from black sabbath tee hee
     @Override
     public boolean returnFakeStandForHud(){
@@ -5102,18 +5127,6 @@ public class PowersDiverDown extends NewPunchingStand {
         }
 
         return displayStand;
-    }
-
-    // for the unique idles
-    @Override
-    public Component getPosName(byte posID){
-        if (posID == 2){
-            return Component.translatable(  "idle.roundabout.diver_down_1");
-        } else if (posID == 3) {
-            return Component.translatable(  "idle.roundabout.diver_down_2");
-        } else {
-            return super.getPosName(posID);
-        }
     }
 
     // skins end

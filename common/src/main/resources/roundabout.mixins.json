@@ -50,6 +50,7 @@
     "access.AccessTargetGoal",
     "access.AccessThrownEnderpearl",
     "access.AccessWalkAnimationState",
+    "access.AnvilMenuAccessor",
     "achtung.AchtungBambooSaplingBlock",
     "achtung.AchtungBambooStalkBlock",
     "achtung.AchtungBushBlock",

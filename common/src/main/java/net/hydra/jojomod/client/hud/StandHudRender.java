@@ -361,6 +361,19 @@ public class StandHudRender {
         l = scaledHeight - 31 - 5;
         context.blit(StandIcons.JOJO_ICONS, k, l, u, 60, 9, 9);
     }
+    public static void renderBlockedStandHud(GuiGraphics context, Minecraft client, Player playerEntity,
+                                           int scaledWidth, int scaledHeight, int ticks, int x,
+                                           float flashAlpha, float otherFlashAlpha) {
+        int l;
+        int k;
+        int v;
+        l = scaledHeight - 32 + 3;
+        context.blit(StandIcons.JOJO_ICONS_3, x, l, 3, 1, 182, 5);
+        int u = 187;
+        k = scaledWidth/2 - 5;
+        l = scaledHeight - 31 - 5;
+        context.blit(StandIcons.JOJO_ICONS_3, k, l, u, 1, 9, 9);
+    }
     public static void renderWalkingHeartHud(GuiGraphics context, Player playerEntity,
                                              int scaledWidth, int scaledHeight, int x) {
 

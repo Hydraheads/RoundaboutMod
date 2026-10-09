@@ -173,6 +173,26 @@ public class PowersBlackSabbath extends NewDashPreset {
         }
     }
 
+    @Override
+    public void onStandSwitch(){
+        skillSwitching();
+        super.onPowerSwitch();
+    }
+    @Override
+    public void onPowerSwitch(){
+        skillSwitching();
+        super.onPowerSwitch();
+    }
+    void skillSwitching(){
+        if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){
+            Entity e = be.level().getEntity(be.getGrabbing());
+            if(e != null && e instanceof LivingEntity l) {
+                ((StandUser)l).roundabout$setSealedTicks(0);
+                ((StandUser)l).roundabout$setGrabbedSoul(false);
+            }
+            killTargetListClient();
+        }
+    }
 
     @Override
     /**Override to add disable config*/
@@ -207,12 +227,19 @@ public class PowersBlackSabbath extends NewDashPreset {
                         blackSelect = null;
                     }
                 }
-            } else {
-                if (desummon && moveMode == 2) {
-                    this.setCooldown(PowerIndex.SKILL_1, 40);
-                    this.setCooldown(PowerIndex.SKILL_2, 40);
+            }
+            if(this.getStandEntity(self) instanceof BlackSabbathEntity BE){
+                if(BE.level().getEntity(BE.getGrabbing()) != null) {
+                    ((StandUser) BE.level().getEntity(BE.getGrabbing())).roundabout$setSealedTicks(0);
+                    ((StandUser) BE.level().getEntity(BE.getGrabbing())).roundabout$setGrabbedSoul(false);
                 }
             }
+
+            if (desummon && moveMode == 2) {
+                this.setCooldown(PowerIndex.SKILL_1, 40);
+                this.setCooldown(PowerIndex.SKILL_2, 40);
+            }
+
         } else {
             if(desummon){
                 setNull();
@@ -535,6 +562,9 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
     }
     @Override
     public void tickMobAI(LivingEntity attackTarget){
+        //Disabled mob AI to avoid crashes, will be done later
+
+        /*
         if(attackTarget != null){
             if(!blackSabbathTargets.contains(attackTarget)) {
                 if (blackSabbathTargets.isEmpty()) {
@@ -564,7 +594,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                     }
                 }
             }
-        }
+        }*/
     }
     @Override
     public boolean tryPower(int move, boolean forced) {
@@ -1152,6 +1182,9 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             }
             case PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET -> {
                 this.setActivePower(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET);
+                if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){
+                    if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser)e).roundabout$setSealedTicks(0);}
+                }
                 this.setAttackTime(0);
                 Entity target = this.getSelf().level().getEntity(value);
                 if(value != 0) {
@@ -1165,6 +1198,9 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             case PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET_LIST -> {
                 this.setActivePower(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET_LIST);
                 this.setAttackTime(0);
+                if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){
+                    if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser)e).roundabout$setSealedTicks(0);}
+                }
                 setTickDown2(40);
                 this.clearTargetEntities();
             }
@@ -1194,6 +1230,9 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         if (TE != null) {
             if (TE instanceof LivingEntity LE) {
                 if(blackSabbathTargets.contains(LE)) {
+                    if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){
+                        if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e && be.level().getEntity(be.getGrabbing()).is(LE)){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser)e).roundabout$setSealedTicks(0);}
+                    }
                     this.removeTargetEntities(LE);
                     tryIntPower(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET, true, LE.getId());
                     tryIntPowerPacket(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET, LE.getId());
@@ -1208,6 +1247,9 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         if(!blackSabbathTargets.isEmpty()) {
             this.clearTargetEntities();
             setTickDown2(40);
+            if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){
+                if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser)e).roundabout$setSealedTicks(0);}
+            }
             tryIntPower(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET_LIST, true, 0);
             tryIntPowerPacket(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET_LIST, 0);
             if(this.isClient()) {

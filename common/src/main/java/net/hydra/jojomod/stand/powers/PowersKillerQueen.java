@@ -359,7 +359,6 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public Vec3 moveVec = Vec3.ZERO;
 
-    public int tntSweeped = 0;
 
     public boolean canSummonStandAsEntity(){
         if (hasArmsOut || getActivePower() == BITES_THE_DUST_DAY){
