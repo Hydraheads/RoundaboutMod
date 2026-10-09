@@ -972,7 +972,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             modifier*= bpow;
         }
         if (((StandUser) this).roundabout$hasDiverArms()) {
-            modifier *= 1.30F;
+            modifier *= 1F + (ClientNetworking.getAppropriateConfig().diverDownSettings.armAttackBoost * 0.01F);
         }
         if (modifier != 1){
             cir.setReturnValue((float)(1.0D / (this.getAttributeValue(Attributes.ATTACK_SPEED)*modifier) * 20.0D));
@@ -1030,7 +1030,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 }
             }
             if (((StandUser) this).roundabout$hasDiverArms()) {
-                dSpeed *= 1.35F;
+                dSpeed *= 1F + (ClientNetworking.getAppropriateConfig().diverDownSettings.armMineBoost * 0.01F);
             }
             cir.setReturnValue(dSpeed);
         }

@@ -212,6 +212,16 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
     public final AnimationState idleAnimationD4C2 = new AnimationState();
     public final AnimationState idleAnimationSoftAndWet1 = new AnimationState();
     public final AnimationState idleAnimationSoftAndWet2 = new AnimationState();
+    public final AnimationState idleAnimationKneel = new AnimationState();
+    public final AnimationState idleAnimationBrave = new AnimationState();
+    public final AnimationState idleAnimationReborn = new AnimationState();
+    public final AnimationState idleAnimationPatriot = new AnimationState();
+    public final AnimationState idleAnimationRelaxed = new AnimationState();
+    public final AnimationState idleAnimationCrazyDiamond1 = new AnimationState();
+    public final AnimationState idleAnimationCrazyDiamond2 = new AnimationState();
+    public final AnimationState idleAnimationGoldenExperience1 = new AnimationState();
+    public final AnimationState idleAnimationGoldenExperience2 = new AnimationState();
+    public final AnimationState idleAnimationStickyFingers1 = new AnimationState();
     public final AnimationState punchState1 = new AnimationState();
     public final AnimationState punchState2 = new AnimationState();
     public final AnimationState punchState3 = new AnimationState();
@@ -352,6 +362,56 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                 this.idleAnimationSoftAndWet2.startIfStopped(this.tickCount);
             } else {
                 this.idleAnimationSoftAndWet2.stop();
+            }
+            if (idle == 24 && animation == IDLE) {
+                this.idleAnimationKneel.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationKneel.stop();
+            }
+            if (idle == 25 && animation == IDLE) {
+                this.idleAnimationBrave.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationBrave.stop();
+            }
+            if (idle == 26 && animation == IDLE) {
+                this.idleAnimationReborn.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationReborn.stop();
+            }
+            if (idle == 27 && animation == IDLE) {
+                this.idleAnimationPatriot.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationPatriot.stop();
+            }
+            if (idle == 28 && animation == IDLE) {
+                this.idleAnimationRelaxed.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationRelaxed.stop();
+            }
+            if (idle == 29 && animation == IDLE) {
+                this.idleAnimationCrazyDiamond1.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationCrazyDiamond1.stop();
+            }
+            if (idle == 30 && animation == IDLE) {
+                this.idleAnimationCrazyDiamond2.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationCrazyDiamond2.stop();
+            }
+            if (idle == 31 && animation == IDLE) {
+                this.idleAnimationGoldenExperience1.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationGoldenExperience1.stop();
+            }
+            if (idle == 32 && animation == IDLE) {
+                this.idleAnimationGoldenExperience2.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationGoldenExperience2.stop();
+            }
+            if (idle == 33 && animation == IDLE) {
+                this.idleAnimationStickyFingers1.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationStickyFingers1.stop();
             }
 
 

@@ -2629,9 +2629,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     public void rdbt$onSyncedDataUpdated2(EntityDataAccessor<?> $$0){
         if ($$0.equals(ROUNDABOUT$STAND_DISC)){
-            this.roundabout$setStandPowers(null);
-            roundabout$itemParityClient = ItemStack.EMPTY;
+
         }
+    }
+    public void rdbt$refreshStand(){
+        this.roundabout$setStandPowers(null);
+        roundabout$itemParityClient = ItemStack.EMPTY;
     }
     @Inject(method = "canFreeze()Z", at = @At(value = "HEAD"), require = 0, cancellable = true)
     public void roundabout$canFreeze(CallbackInfoReturnable<Boolean> cir) {
@@ -3543,7 +3546,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     roundabout$itemParityClient = standDisc;
 
                     if (this.roundabout$Powers != null) {
-                        CompoundTag $$4 = standDisc.getTagElement("Memory");
+                        CompoundTag $$4 = standDisc.getOrCreateTagElement("Memory");
                         if ($$4 != null) {
                             this.roundabout$Powers.readAdditionalSaveData($$4);
                         }
@@ -3566,7 +3569,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
                 if (this.level().isClientSide()) {
                     if (this.roundabout$Powers != null) {
-                        CompoundTag $$4 = StandDisc.getTagElement("Memory");
+                        CompoundTag $$4 = StandDisc.getOrCreateTagElement("Memory");
                         if ($$4 != null) {
                             this.roundabout$Powers.readAdditionalSaveData($$4);
                         }
@@ -4150,7 +4153,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
         // diver down damage breaking disguise
-        if (!entity.level().isClientSide() && $$1 > 0 && this.roundabout$isDisguised()) {
+        if (!entity.level().isClientSide() && $$1 > 0 && this.roundabout$isDisguised() && ClientNetworking.getAppropriateConfig().diverDownSettings.clearDisguiseOnHit) {
             this.roundabout$clearDisguise();
         }
         if ($$0.getEntity() instanceof Player pe) {
@@ -5088,6 +5091,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (rdbt$this() instanceof Player pl) {
             basis = ((IFatePlayer) this).rdbt$getFatePowers().inputSpeedModifiers(basis);
             basis = ((IPowersPlayer) this).rdbt$getPowers().inputSpeedModifiers(basis);
+        }
+        //diver down legs speed boost
+        StandUser SU = (StandUser) this;
+        if (this.roundabout$hasDiverLegs()) {
+            basis *= 1F + (ClientNetworking.getAppropriateConfig().diverDownSettings.legSpeedBoost * 0.01F); //0% speed boost default
         }
         if(this.roundabout$getGrabbedSoul()){
             basis *= 0.025F;
