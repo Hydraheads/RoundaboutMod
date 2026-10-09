@@ -1330,12 +1330,12 @@ public class Config implements Cloneable {
         public Integer maxPilotRange;
         @BooleanOption(group = "inherit", value = true)
         public Boolean clearDisguiseOnHit;
-        @FloatOption(group = "inherit", value = 0, min = 0, max = 72000F)
-        public Float legSpeedBoost;
-        @FloatOption(group = "inherit", value = 30, min = 0, max = 72000F)
-        public Float armAttackBoost;
-        @FloatOption(group = "inherit", value = 35, min = 0, max = 72000F)
-        public Float armMineBoost;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 72000)
+        public Integer legSpeedBoost;
+        @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
+        public Integer armAttackBoost;
+        @IntOption(group = "inherit", value = 35, min = 0, max = 72000)
+        public Integer armMineBoost;
         @BooleanOption(group = "inherit", value = false)
         public Boolean advancedClearEffect;
     }
