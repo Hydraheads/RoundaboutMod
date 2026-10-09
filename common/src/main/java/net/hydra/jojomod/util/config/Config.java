@@ -1322,6 +1322,22 @@ public class Config implements Cloneable {
         public Integer miningSpeedMultiplierDiverDown;
         @IntOption(group = "inherit", value = 0, min = 0, max = 4)
         public Integer getMiningTierDiverDown;
+        @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
+        public Integer maxTrapsDiverDown;
+        @IntOption(group = "inherit", value = 2, min = 0, max = 72000)
+        public Integer oreDetectionRange;
+        @IntOption(group = "inherit", value = 13, min = 0, max = 72000)
+        public Integer maxPilotRange;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean clearDisguiseOnHit;
+        @FloatOption(group = "inherit", value = 0, min = 0, max = 72000F)
+        public Integer legSpeedBoost;
+        @FloatOption(group = "inherit", value = 30, min = 0, max = 72000F)
+        public Integer armAttackBoost;
+        @FloatOption(group = "inherit", value = 35, min = 0, max = 72000F)
+        public Integer armMineBoost;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean advancedClearEffect;
     }
     public static class WhitesnakeSettings {
         @BooleanOption(group = "inherit", value = true)
