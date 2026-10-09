@@ -1237,6 +1237,8 @@ public class StandPowers extends AbilityScapeBasis {
             return Component.translatable(  "idle.roundabout.golden_experience2");
         } else if (posID == 33){
             return Component.translatable(  "idle.roundabout.sticky_fingers1");
+        } else if (posID == 34){
+            return Component.translatable(  "idle.roundabout.sticky_fingers2");
         } else {
             return Component.translatable(  "idle.roundabout.passive");
         }
