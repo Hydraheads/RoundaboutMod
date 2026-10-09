@@ -908,6 +908,16 @@ public class PowersDiverDown extends NewPunchingStand {
 
     // START OF ACTUAL MOVE METHODS
 
+    public boolean isDiverMoveActive() {
+        return this.activePower == STORE_KICK_TRAP
+                || this.activePower == DIVER_SUBMERGE_START
+                || this.activePower == DIVER_SELF_SUBMERGE
+                || this.activePower == GROUND_DIVE_START
+                || this.activePower == PowerIndex.SNEAK_ATTACK_CHARGE
+                || this.activePower == PowerIndex.SNEAK_ATTACK
+                || this.isBarraging();
+    }
+
     //for cooldowns, like D4C
     @Override
     public boolean isServerControlledCooldown(byte num) {
@@ -1749,7 +1759,7 @@ public class PowersDiverDown extends NewPunchingStand {
      * tryLimbClimb is the client side activation for the limb move.
      */
     private void tryLimbClimb() {
-        if (!areStandMovesDisabled() && this.activePower == NONE && canExecuteMoveWithLevel(getDiverLimbLevel())) {
+        if (!areStandMovesDisabled() && !isDiverMoveActive() && canExecuteMoveWithLevel(getDiverLimbLevel())) {
             if (this.self.level().isClientSide()) {
                 if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK)) {
                     // literally just to prevent the move from being spammed
@@ -2911,7 +2921,7 @@ public class PowersDiverDown extends NewPunchingStand {
     // heel plant 2.0 start
 
     public void tryDiverZip() {
-        if (!areStandMovesDisabled() && this.activePower == NONE && canExecuteMoveWithLevel(getDiverZipLevel())
+        if (!isDiverMoveActive() && canExecuteMoveWithLevel(getDiverZipLevel())
                 && !this.onCooldown(PowerIndex.SKILL_3)) {
             if (!self.isInWater()) {
                 if (forceBlock())
@@ -3211,26 +3221,15 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     public boolean startKickTrapWindup() {
-        if (this.self.level().isClientSide()) {
-            return true;
-        }
-        Vec3 eyePos = this.self.getEyePosition(0);
-        Vec3 lookVec = this.self.getViewVector(0);
-        Vec3 reachVec = eyePos.add(lookVec.scale(TRAP_RANGE));
-
-        BlockHitResult blockHit = this.self.level().clip(
-                new ClipContext(eyePos, reachVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.self));
-
-        // startup timer
         this.setActivePower(STORE_KICK_TRAP);
         this.setAttackTimeDuring(0);
-
-        // animations and sounds and stuff
-        playSoundIfPossible(self.level(), null, this.self.blockPosition(),
-                ModSounds.DIVER_DOWN_CHARGE_EVENT,
-                SoundSource.PLAYERS, 0.8F, 1.45F);
         this.poseStand(OffsetIndex.GUARD);
         animateStand(DiverDownEntity.ENERGY_STORAGE_WINDUP);
+        if (!this.self.level().isClientSide()) {
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                    ModSounds.DIVER_DOWN_CHARGE_EVENT,
+                    SoundSource.PLAYERS, 0.8F, 1.45F);
+        }
         return true;
     }
 
@@ -3289,7 +3288,7 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     public void tryPlantKickTrap() {
-        if (this.activePower == NONE && canExecuteMoveWithLevel(getKickStorageLevel())
+        if (!isDiverMoveActive() && canExecuteMoveWithLevel(getKickStorageLevel())
                 && !this.onCooldown(PowerIndex.SKILL_2)) {
             if (this.canAttack() && !this.areStandMovesDisabled()) {
                 this.tryPower(STORE_KICK_TRAP, true);
@@ -3504,7 +3503,7 @@ public class PowersDiverDown extends NewPunchingStand {
     // dive start
 
     private void tryStartDiveClient() {
-        if (this.activePower == NONE && !areStandMovesDisabled() && !isDiveActive() && !this.onCooldown(PowerIndex.SKILL_1)
+        if (!isDiverMoveActive() && !areStandMovesDisabled() && !isDiveActive() && !this.onCooldown(PowerIndex.SKILL_1)
                 && this.getActivePower() != DIVER_SUBMERGE_START && this.canAttack()) {
             this.tryPower(DIVER_SUBMERGE_START, true);
             tryPowerPacket(DIVER_SUBMERGE_START);
@@ -3519,17 +3518,20 @@ public class PowersDiverDown extends NewPunchingStand {
 
     //starts up the dive windup
     public boolean startDiveWindupServer() {
-        if (this.self.level().isClientSide() || isDiveActive()) {
+        if (isDiveActive()) {
             return false;
         }
-        // the windup
-        playSoundIfPossible(self.level(), null, this.self.blockPosition(),
-                ModSounds.DIVER_DOWN_CHARGE_EVENT,
-                SoundSource.PLAYERS, 0.8F, 0.9F);
+        // Run on both client and server
         this.setActivePower(DIVER_SUBMERGE_START);
         this.setAttackTimeDuring(0);
         this.poseStand(OffsetIndex.ATTACK);
         animateStand(DiverDownEntity.MOB_DIVE);
+        // Server-only logic
+        if (!this.self.level().isClientSide()) {
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                    ModSounds.DIVER_DOWN_CHARGE_EVENT,
+                    SoundSource.PLAYERS, 0.8F, 0.9F);
+        }
         return true;
     }
 
@@ -3543,7 +3545,6 @@ public class PowersDiverDown extends NewPunchingStand {
             }
             if (!(target instanceof LivingEntity) || target instanceof StandEntity || target == null) {
                 this.setAttackTimeDuring(-15);
-                this.setAttackTime(-15);
                 this.poseStand(OffsetIndex.ATTACK);
                 setCooldown(PowerIndex.SKILL_1, 200);
                 setCooldown(PowerIndex.SKILL_EXTRA, 200);
@@ -3673,7 +3674,7 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     private void tryStartSelfDiveClient() {
-        if (this.activePower == NONE && !areStandMovesDisabled() && !isDiveActive()
+        if (!isDiverMoveActive() && !areStandMovesDisabled() && !isDiveActive()
                 && !this.onCooldown(PowerIndex.SKILL_EXTRA)) {
             this.tryPower(DIVER_SELF_SUBMERGE, true);
             tryPowerPacket(DIVER_SELF_SUBMERGE);
@@ -4656,7 +4657,7 @@ public class PowersDiverDown extends NewPunchingStand {
 
     //checks for a block to disassemble
     private void tryDisassembleBlockClient() {
-        if (canExecuteMoveWithLevel(getBlockDisassemblyLevel()) && !areStandMovesDisabled() && this.activePower == NONE) {
+        if (canExecuteMoveWithLevel(getBlockDisassemblyLevel()) && !areStandMovesDisabled() && !isDiverMoveActive()) {
             if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
                 Vec3 eyePos = this.self.getEyePosition(0);
                 Vec3 viewVec = this.self.getViewVector(0);
