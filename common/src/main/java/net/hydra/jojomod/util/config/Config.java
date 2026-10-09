@@ -1331,11 +1331,11 @@ public class Config implements Cloneable {
         @BooleanOption(group = "inherit", value = true)
         public Boolean clearDisguiseOnHit;
         @FloatOption(group = "inherit", value = 0, min = 0, max = 72000F)
-        public Integer legSpeedBoost;
+        public Float legSpeedBoost;
         @FloatOption(group = "inherit", value = 30, min = 0, max = 72000F)
-        public Integer armAttackBoost;
+        public Float armAttackBoost;
         @FloatOption(group = "inherit", value = 35, min = 0, max = 72000F)
-        public Integer armMineBoost;
+        public Float armMineBoost;
         @BooleanOption(group = "inherit", value = false)
         public Boolean advancedClearEffect;
     }
