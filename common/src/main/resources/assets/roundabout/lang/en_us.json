@@ -2753,6 +2753,16 @@
   "idle.roundabout.d4c2": "Cheap Price",
   "idle.roundabout.soft_and_wet1": "Walk Halves",
   "idle.roundabout.soft_and_wet2": "Go Beyond",
+  "idle.roundabout.kneel": "Kneel",
+  "idle.roundabout.brave": "Brave",
+  "idle.roundabout.reborn": "Reborn",
+  "idle.roundabout.patriot": "Patriot",
+  "idle.roundabout.relaxed": "Relaxed",
+  "idle.roundabout.crazy_diamond1": "Crazy Noisy",
+  "idle.roundabout.crazy_diamond2": "Shine On",
+  "idle.roundabout.golden_experience1": "Gangster",
+  "idle.roundabout.golden_experience2": "Mozart",
+  "idle.roundabout.sticky_fingers1": "Brown Sugar",
 
   "idle.roundabout.passive_justice": "Idle Pose",
   "idle.roundabout.battle_justice": "Menace",
@@ -3702,7 +3712,8 @@
   "config.roundabout.enableSurvivor.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableWhiteAlbum.name": "Enable Stand",
   "config.roundabout.enableWhiteAlbum.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
-
+  "config.roundabout.enableDiverDown.name":"Enable Stand",
+  "config.roundabout.enableDiverDown.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableKingCrimson.name": "Enable Stand",
   "config.roundabout.enableKingCrimson.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
 

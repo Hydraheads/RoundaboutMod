@@ -94,6 +94,16 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
         this.animate(entity.idleAnimationD4C2, StandIdles.D4CIDLE2, animationProgress, 1f);
         this.animate(entity.idleAnimationSoftAndWet1, StandIdles.SoftAndWetIDLE, animationProgress, 1f);
         this.animate(entity.idleAnimationSoftAndWet2, StandIdles.SoftAndWetIDLE2, animationProgress, 1f);
+        this.animate(entity.idleAnimationKneel, StandIdles.kneel, animationProgress, 1f);
+        this.animate(entity.idleAnimationBrave, StandIdles.brave, animationProgress, 1f);
+        this.animate(entity.idleAnimationReborn, StandIdles.reborn, animationProgress, 1f);
+        this.animate(entity.idleAnimationPatriot, StandIdles.patriot, animationProgress, 1f);
+        this.animate(entity.idleAnimationRelaxed, StandIdles.relaxed, animationProgress, 1f);
+        this.animate(entity.idleAnimationCrazyDiamond1, StandIdles.Crazy_Noisy, animationProgress, 1f);
+        this.animate(entity.idleAnimationCrazyDiamond2, StandIdles.Shine_On, animationProgress, 1f);
+        this.animate(entity.idleAnimationGoldenExperience1, StandIdles.Gangstar, animationProgress, 1f);
+        this.animate(entity.idleAnimationGoldenExperience2, StandIdles.Mozart, animationProgress, 1f);
+        this.animate(entity.idleAnimationStickyFingers1, StandIdles.Brown_Sugar, animationProgress, 1f);
     }
 
     /**Most humanoid stands share these animations.*/

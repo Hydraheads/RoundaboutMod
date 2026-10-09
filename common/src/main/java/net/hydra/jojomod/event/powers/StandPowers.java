@@ -1217,6 +1217,26 @@ public class StandPowers extends AbilityScapeBasis {
             return Component.translatable(  "idle.roundabout.soft_and_wet1");
         } else if (posID == 23){
             return Component.translatable(  "idle.roundabout.soft_and_wet2");
+        } else if (posID == 24){
+            return Component.translatable(  "idle.roundabout.kneel");
+        } else if (posID == 25){
+            return Component.translatable(  "idle.roundabout.brave");
+        } else if (posID == 26){
+            return Component.translatable(  "idle.roundabout.reborn");
+        } else if (posID == 27){
+            return Component.translatable(  "idle.roundabout.patriot");
+        } else if (posID == 28){
+            return Component.translatable(  "idle.roundabout.relaxed");
+        } else if (posID == 29){
+            return Component.translatable(  "idle.roundabout.crazy_diamond1");
+        } else if (posID == 30){
+            return Component.translatable(  "idle.roundabout.crazy_diamond2");
+        } else if (posID == 31){
+            return Component.translatable(  "idle.roundabout.golden_experience1");
+        } else if (posID == 32){
+            return Component.translatable(  "idle.roundabout.golden_experience2");
+        } else if (posID == 33){
+            return Component.translatable(  "idle.roundabout.sticky_fingers1");
         } else {
             return Component.translatable(  "idle.roundabout.passive");
         }
@@ -2262,7 +2282,7 @@ public class StandPowers extends AbilityScapeBasis {
             } else {
                 skinind-=1;
                 if (skinind < 0){
-                    skinind =poses.size()-1;
+                    skinind = poses.size()-1;
                 }
                 SE.roundabout$setIdlePosX(poses.get(skinind));
             }
