@@ -19,6 +19,7 @@ import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import net.hydra.jojomod.client.DynamicItemRendering;
 
 import static net.hydra.jojomod.registry.ForgeCreativeTab.*;
 
@@ -408,11 +409,11 @@ public class ForgeItems {
                 @Override
                 public void initializeClient(java.util.function.Consumer<net.minecraftforge.client.extensions.common.IClientItemExtensions> consumer) {
                     consumer.accept(new net.minecraftforge.client.extensions.common.IClientItemExtensions() {
-                        private net.hydra.jojomod.client.DynamicItemRendering renderer;
+                        private DynamicItemRendering renderer;
                         @Override
                         public net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer getCustomRenderer() {
                             if (this.renderer == null) {
-                                this.renderer = new net.hydra.jojomod.client.DynamicItemRendering(
+                                this.renderer = new DynamicItemRendering(
                                         net.minecraft.client.Minecraft.getInstance().getBlockEntityRenderDispatcher(),
                                         net.minecraft.client.Minecraft.getInstance().getEntityModels()
                                 );
