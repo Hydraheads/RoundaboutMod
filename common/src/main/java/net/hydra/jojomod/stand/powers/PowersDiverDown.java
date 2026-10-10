@@ -4487,11 +4487,12 @@ public class PowersDiverDown extends NewPunchingStand {
             if (!effect.getEffect().isInstantenous()) {
                 newDuration = (int) (effect.getDuration() + 600); // extra 30 seconds
             }
+            int newAmplifier = effect.getAmplifier() + ClientNetworking.getAppropriateConfig().diverDownSettings.potionStrengthBoost;
 
             MobEffectInstance boostedEffect = new MobEffectInstance(
                     effect.getEffect(),
                     newDuration,
-                    effect.getAmplifier(),
+                    newAmplifier,
                     effect.isAmbient(),
                     effect.isVisible(),
                     effect.showIcon()
