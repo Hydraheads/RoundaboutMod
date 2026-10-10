@@ -707,7 +707,9 @@ public class PowersDiverDown extends NewPunchingStand {
             }
 
             // Ability 3 (C)
-            if (isHoldingSneak()) {
+            if (isGuarding()){
+                setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+            } else if (isHoldingSneak()) {
                 if (canExecuteMoveWithLevel(getDiverZipLevel())) {
                     setSkillIcon(context, x, y, 3, StandIcons.DIVER_DOWN_ZIP, PowerIndex.SKILL_3);
                 } else {
