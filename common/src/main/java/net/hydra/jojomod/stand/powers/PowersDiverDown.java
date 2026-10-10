@@ -3656,7 +3656,8 @@ public class PowersDiverDown extends NewPunchingStand {
      * handles the damage transfer ability
      */
     public void onSubmergedTargetHurt(DamageSource source, float amount) {
-        if (!this.damageRedirectionEnabled || this.isTransferringDamage || !isDiveActive() || isSelfDive())
+        if (!this.damageRedirectionEnabled || this.isTransferringDamage
+                || !isDiveActive() || isSelfDive() || !MainUtil.isSpecialDamage(source))
             return;
         this.isTransferringDamage = true;
         try {

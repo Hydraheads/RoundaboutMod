@@ -4142,7 +4142,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (!this.level().isClientSide() && !this.rdbt$isRedirectingDamage && this.diverSubmergedUser != null
                 && this.diverSubmergedUser.isDiveActive()
                 && !this.diverSubmergedUser.isSelfDive()
-                && this.diverSubmergedUser.damageRedirectionEnabled) {
+                && this.diverSubmergedUser.damageRedirectionEnabled
+                && !MainUtil.isSpecialDamage($$0)) {
             this.rdbt$isRedirectingDamage = true;
             try {
                 this.diverSubmergedUser.onSubmergedTargetHurt($$0, $$1);
