@@ -7,6 +7,7 @@ import net.hydra.jojomod.block.MiningAlertBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
@@ -294,7 +295,7 @@ public class PowersHeyYa extends NewDashPreset {
                 /**If a mob tries to set its attack target to you again, does not repeat yapping*/
                 if (!(mob.getTarget() != null && mob.getTarget().is(this.self)) && !(mob.getLastHurtByMob() != null && mob.getLastHurtByMob().is(this.self))) {
                     /**This function assures the aggro isn't passive mob aggro like animals running*/
-                    if (MainUtil.getIfMobIsAttacking(mob)) {
+                    if (MainUtil.getIfMobIsAttacking(mob) && !(mob instanceof KingCrimsonCloneEntity)) {
                         yapSounds();
                         if (isEvilYapper()) {
                             ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.hey_ya_messaging.danger.evil.no_" + (Mth.floor(Math.random() * ClientNetworking.getAppropriateConfig().heyYaSettings.numberOfEvilDangerYapLines) + 1), mob.getDisplayName()).withStyle(ChatFormatting.RED), true);
