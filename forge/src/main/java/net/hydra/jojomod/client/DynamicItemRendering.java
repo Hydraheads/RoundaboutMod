@@ -20,7 +20,17 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class DynamicItemRendering extends BlockEntityWithoutLevelRenderer {
 
-    //public static final DynamicItemRendering INSTANCE = new DynamicItemRendering();
+    public static DynamicItemRendering INSTANCE = null;
+
+    public static DynamicItemRendering getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new DynamicItemRendering(
+                    Minecraft.getInstance().getBlockEntityRenderDispatcher(),
+                    Minecraft.getInstance().getEntityModels()
+            );
+        }
+        return INSTANCE;
+    }
 
     private final Minecraft client = Minecraft.getInstance();
     private final BlockEntityRenderDispatcher blockEntityRenderDispatcher;

@@ -20,6 +20,9 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.hydra.jojomod.client.DynamicItemRendering;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import java.util.function.Consumer;
 
 import static net.hydra.jojomod.registry.ForgeCreativeTab.*;
 
@@ -404,21 +407,14 @@ public class ForgeItems {
     public static final RegistryObject<BlockItem> HAND_ITEM = ITEMS.register("hand_block",
             () -> new HandBlockItem(ForgeBlocks.HAND_BLOCK.get(),
                     new Item.Properties().stacksTo(1)
-            ) {
-                //HandBlockItem is a common class, putting BEWLR in there might break fabric, so i put BEWLR here in the forge item registry
+            ) { //HandBlockItem is a common class, putting BEWLR in there might break fabric, so i put BEWLR here in the forge item registry
+
                 @Override
-                public void initializeClient(java.util.function.Consumer<net.minecraftforge.client.extensions.common.IClientItemExtensions> consumer) {
-                    consumer.accept(new net.minecraftforge.client.extensions.common.IClientItemExtensions() {
-                        private DynamicItemRendering renderer;
+                public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+                    consumer.accept(new IClientItemExtensions() {
                         @Override
-                        public net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                            if (this.renderer == null) {
-                                this.renderer = new DynamicItemRendering(
-                                        net.minecraft.client.Minecraft.getInstance().getBlockEntityRenderDispatcher(),
-                                        net.minecraft.client.Minecraft.getInstance().getEntityModels()
-                                );
-                            }
-                            return this.renderer;
+                        public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                            return DynamicItemRendering.getInstance(); /// the mod should have only 1 instance of its own custom BEWLR
                         }
                     });
                 }
