@@ -258,6 +258,11 @@ public class PowersWhiteAlbum extends NewDashPreset {
                         ((StandUser)self).roundabout$tryPower(PowerIndex.NONE,true);
                     }
                 }
+//            if (self.getUseItem() != null && self.getUseItem().is(ModItems.NEW_LOCACACA)){
+//                if ($$0.getEntity() != null){
+//                    self.stopUsingItem();
+//                }
+//            }
 
             if (self instanceof Player pl) {
                 if ($$0.is(DamageTypes.FALL) ||
@@ -737,13 +742,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
         super.readAdditionalSaveData($$0);
-        if ($$0.contains("skatesActive")) {
-            skatesActive = $$0.getBoolean("skatesActive");
-        } if ($$0.contains("cracked")) {
-            cracked = $$0.getBoolean("cracked");
-        } if ($$0.contains("fistsOut")) {
-            fistsOut = $$0.getBoolean("fistsOut");
-        }
+        skatesActive = $$0.getBoolean("skatesActive");
+        cracked = $$0.getBoolean("cracked");
+        fistsOut = $$0.getBoolean("fistsOut");
     }
 
 

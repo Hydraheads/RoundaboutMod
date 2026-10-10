@@ -14,10 +14,12 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.gui.FogInventoryMenu;
 import net.hydra.jojomod.client.gui.PowerInventoryMenu;
+import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.KingCrimsonProjectionEntity;
 import net.hydra.jojomod.entity.ParallelChestEntity;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.corpses.FallenPhantom;
+import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
@@ -1242,7 +1244,7 @@ public class MainUtil {
 
     public static void extractDiscData(LivingEntity ent, StandDiscItem SD, ItemStack stack) {
         StandUser user = ((StandUser) ent);
-        CompoundTag $$4 = stack.getTagElement("Memory");
+        CompoundTag $$4 = stack.getOrCreateTagElement("Memory");
         if ($$4 != null) {
             ((StandUser) ent).roundabout$getStandPowers().readAdditionalSaveData($$4);
             if (SD instanceof MaxStandDiscItem) {
@@ -1529,6 +1531,38 @@ public class MainUtil {
                 && ((StandUser) ent).roundabout$getStandPowers() instanceof PowersMetallica PM) {
             if (PM.hasStandActive(LE)) {
                 return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean canMineWithAnyInventoryTool(LivingEntity LE, BlockState state) {
+        if (!ClientNetworking.getAppropriateConfig().generalStandSettings.standGrabRequiresTool){
+            return true;
+        }
+        if (LE instanceof Player player) {
+            // Blocks that don't require a correct tool can be mined without one.
+            if (!state.requiresCorrectToolForDrops()) {
+                return true;
+            }
+            ItemStack shears = new ItemStack(Items.SHEARS);
+            ItemStack pick = new ItemStack(Items.WOODEN_PICKAXE);
+            if (shears.isCorrectToolForDrops(state)) {
+                return true;
+            }
+            if (pick.isCorrectToolForDrops(state)) {
+                return true;
+            }
+            if (state.is(Blocks.DIRT_PATH)){
+                return true;
+            }
+
+
+            for (ItemStack stack : player.getInventory().items) {
+                if (!stack.isEmpty() && stack.isCorrectToolForDrops(state)) {
+                    return true;
+                }
             }
         }
 
@@ -2397,6 +2431,8 @@ public class MainUtil {
                                 &&
                                 !PowerTypes.isExistentiallyElsewhereTogether($$1, value))
                         && !(value instanceof FallenMob)
+                        && !(value instanceof D4CCloneEntity)
+                        && (HeatUtil.getHeat(value) == 0)
                         && (MainUtil.isActuallyALivingEntityNoCap(value))) {
                     double distance = value.position().distanceTo($$1.position());
                     if (distance <= maxDistance && ((StandUser) value).roundabout$getLocacacaCurse() < 0) {
@@ -2734,6 +2770,7 @@ public class MainUtil {
     public static boolean isSpecialEffect(MobEffect value) {
         return value.equals(ModEffects.BLEED) || value.equals(ModEffects.FACELESS)
                 || value.equals(ModEffects.BANISH) || value.equals(ModEffects.WARDING) || value.equals(ModEffects.HEX)
+                || value.equals(ModEffects.DOOMED)
                 || value.equals(ModEffects.SWITCH) || value.equals(ModEffects.STAND_VIRUS) ||
                 value.equals(ModEffects.IMPRINTING) || value.equals(ModEffects.SWAPPED) ||
                 value.equals(ModEffects.SINGE)
@@ -2746,6 +2783,7 @@ public class MainUtil {
         return value.equals(ModEffects.BLEED) || value.equals(ModEffects.CAPTURING_LOVE)
                 || value.equals(ModEffects.FACELESS)
                 || value.equals(ModEffects.BANISH) || value.equals(ModEffects.WARDING) || value.equals(ModEffects.HEX)
+                || value.equals(ModEffects.DOOMED)
                 || value.equals(ModEffects.SWITCH) || value.equals(ModEffects.MELTING) ||
                 value.equals(ModEffects.IMPRINTING) || value.equals(ModEffects.SWAPPED)
                 || value.equals(ModEffects.STAND_MELTING) ||
@@ -4577,6 +4615,7 @@ public class MainUtil {
                 && !user.hasEffect(MobEffects.DIG_SLOWDOWN)
                 && !(state.getBlock() instanceof SlabBlock)
                 && !(state.getBlock() instanceof FrostedIceBlock)
+                && MainUtil.canMineWithAnyInventoryTool(user,state)
                 && !(state.getBlock() instanceof BuddingAmethystBlock)
                 && state.getBlock().defaultDestroyTime() >= 0 && state.getBlock() != Blocks.NETHERITE_BLOCK;
 

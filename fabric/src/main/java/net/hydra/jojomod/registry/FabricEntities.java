@@ -704,6 +704,29 @@ public class FabricEntities {
                     EntityType.Builder.of(DiverDownBetaEntity::new, MobCategory.MISC).
                             sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":diver_down_beta")
             );
+    public static final EntityType<DiverDownWorldEntity> DIVER_DOWN_WORLD =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    Roundabout.location("diver_down_world"),
+                    EntityType.Builder.of(DiverDownWorldEntity::new, MobCategory.MISC).
+                            sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":diver_down_world")
+            );
+    public static final EntityType<DiverDrownedEntity> DIVER_DROWNED =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    Roundabout.location("diver_drowned"),
+                    EntityType.Builder.of(DiverDrownedEntity::new, MobCategory.MISC).
+                            sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":diver_drowned")
+            );
+    public static final EntityType<DiverKickEntity> DIVER_KICK =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "diver_kick"),
+                    EntityType.Builder.<DiverKickEntity>of(DiverKickEntity::new, MobCategory.MISC)
+                            .sized(0.1F, 0.1F)
+                            .clientTrackingRange(8)
+                            .build(Roundabout.MOD_ID + ":diver_kick")
+            );
         public static final EntityType<BoneProjectileEntity> BONE_PROJECTILE =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
@@ -1282,6 +1305,9 @@ public class FabricEntities {
                 ModEntities.ANUBIS = ANUBIS;
                 ModEntities.DIVER_DOWN = DIVER_DOWN;
                 ModEntities.DIVER_DOWN_BETA = DIVER_DOWN_BETA;
+        ModEntities.DIVER_DOWN_WORLD = DIVER_DOWN_WORLD;
+        ModEntities.DIVER_DROWNED = DIVER_DROWNED;
+                ModEntities.DIVER_KICK = DIVER_KICK;
                 ModEntities.SILVER_CHARIOT = SILVER_CHARIOT;
                 ModEntities.THROWN_HARPOON = THROWN_HARPOON;
                 ModEntities.BLADED_BOWLER_HAT = BLADED_BOWLER_HAT;
@@ -1496,6 +1522,8 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(WALKING_HEART, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(DIVER_DOWN, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(DIVER_DOWN_BETA, StandEntity.createStandAttributes());
+        FabricDefaultAttributeRegistry.register(DIVER_DOWN_WORLD, StandEntity.createStandAttributes());
+        FabricDefaultAttributeRegistry.register(DIVER_DROWNED, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SILVER_CHARIOT, StandEntity.createStandAttributes());
 
 
@@ -1514,7 +1542,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(PURPLE_SMOKE, PurpleSmokeEntity.createStandAttributes());
                 
                 FabricDefaultAttributeRegistry.register(SHEER_HEART_ATTACK, SheerHeartAttackEntity.createStandAttributes());
-                
+
                 /*Spawn Weights and Biomes*/
                 BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.DESERT), MobCategory.CREATURE,
                         ModEntities.TERRIER_DOG, 2, 1, 1);

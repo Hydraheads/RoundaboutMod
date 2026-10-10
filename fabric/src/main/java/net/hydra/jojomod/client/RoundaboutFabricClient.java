@@ -4,9 +4,11 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
+import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.client.gui.GamblingTableScreen;
 import net.hydra.jojomod.item.FancyLighterItem;
 import net.hydra.jojomod.item.StrayCatItem;
 import net.hydra.jojomod.particles.FabricParticlesClient;
@@ -16,6 +18,7 @@ import net.hydra.jojomod.registry.FabricKeyInputs;
 import net.hydra.jojomod.registry.FabricMenus;
 import net.hydra.jojomod.client.gui.diverdown.custom_workbench_texture.*;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
@@ -74,18 +77,23 @@ public class RoundaboutFabricClient implements ClientModInitializer {
         FabricParticlesClient.registerClientParticles();
         FabricEntityClient.register();
         //diver down custom workbench menus registry
-        net.minecraft.client.gui.screens.MenuScreens.register(FabricMenus.DIVER_DOWN_CRAFTING, DiverDownCraftingScreen::new);
-        net.minecraft.client.gui.screens.MenuScreens.register(FabricMenus.DIVER_DOWN_ANVIL, DiverDownAnvilScreen::new);
-        net.minecraft.client.gui.screens.MenuScreens.register(FabricMenus.DIVER_DOWN_SMITHING, DiverDownSmithingScreen::new);
-        net.minecraft.client.gui.screens.MenuScreens.register(FabricMenus.DIVER_DOWN_STONECUTTER, DiverDownStonecutterScreen::new);
-        net.minecraft.client.gui.screens.MenuScreens.register(FabricMenus.DIVER_DOWN_LOOM, DiverDownLoomScreen::new);
+        MenuScreens.register(FabricMenus.DIVER_DOWN_CRAFTING, DiverDownCraftingScreen::new);
+        MenuScreens.register(FabricMenus.DIVER_DOWN_ANVIL, DiverDownAnvilScreen::new);
+        MenuScreens.register(FabricMenus.DIVER_DOWN_SMITHING, DiverDownSmithingScreen::new);
+        MenuScreens.register(FabricMenus.DIVER_DOWN_STONECUTTER, DiverDownStonecutterScreen::new);
+        MenuScreens.register(FabricMenus.DIVER_DOWN_LOOM, DiverDownLoomScreen::new);
         //DD menus end
+        MenuScreens.register(FabricMenus.GAMBLING_TABLE, GamblingTableScreen::new);
         registerWhitesnakeClient();
         ClientPlayConnectionEvents.JOIN.register((clientPlayNetworkHandler, packetSender, minecraftClient) -> ClientNetworking.sendHandshake());
         ItemProperties.register(FabricItems.HARPOON, new ResourceLocation(Roundabout.MOD_ID,"throwing"), (itemStack, clientLevel, livingEntity, i) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == itemStack ? 1.0f : 0.0f);
         ItemProperties.register(FabricItems.STRAY_CAT_MANGA, new ResourceLocation(Roundabout.MOD_ID,"anim"), (itemStack, clientLevel, livingEntity, i) ->  !itemStack.isEmpty() ? ((StrayCatItem)(itemStack.getItem())).getCurrentPredicateValue(clientLevel, itemStack, livingEntity) : 0.0f);
         ItemProperties.register(FabricItems.STRAY_CAT_ANIME, new ResourceLocation(Roundabout.MOD_ID,"anim"), (itemStack, clientLevel, livingEntity, i) ->  !itemStack.isEmpty() ? ((StrayCatItem)(itemStack.getItem())).getCurrentPredicateValue(clientLevel, itemStack, livingEntity) : 0.0f);
         ItemProperties.register(FabricItems.FANCY_LIGHTER, new ResourceLocation(Roundabout.MOD_ID,"islit"), (itemStack, clientLevel, livingEntity, i) ->  !itemStack.isEmpty() ? ((FancyLighterItem)(itemStack.getItem())).getCurrentPredicateValue(clientLevel, itemStack) : 0.0f);
+
+        BuiltinItemRendererRegistry.INSTANCE.register(ModBlocks.HAND_BLOCK, DynamicItemRendering.INSTANCE);
+        BuiltinItemRendererRegistry.INSTANCE.register(ModBlocks.COFFIN_BLOCK, DynamicItemRendering.INSTANCE);
+
         ClientClass.init();
     }
 

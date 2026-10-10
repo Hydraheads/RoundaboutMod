@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.pathfinding;
 
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.whitesnake.disc.CommandDiscController;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -22,14 +23,13 @@ import javax.annotation.Nullable;
 public final class CommandDiscPossession extends GroundPathfindingStandAttackEntity {
     private static final EntityDataAccessor<Integer> TARGET_ID =
             SynchedEntityData.defineId(CommandDiscPossession.class, EntityDataSerializers.INT);
-    private static final int DURATION = 100;
     private static final double ATTACK_RANGE_SQR = 9.0D;
     public static final double MAX_TARGET_DISTANCE_SQR = 1600.0D;
     private boolean attacking;
 
     public CommandDiscPossession(EntityType<? extends CommandDiscPossession> type, Level level) {
         super(type, level);
-        setLifeSpan(DURATION);
+        setLifeSpan(CommandDiscController.ATTACK_COMMAND_DURATION);
         setMaxUpStep(1.5F);
     }
 

@@ -92,14 +92,14 @@ public class KiraPartFourVoice extends VoiceData{
             }
         }
 
-        if (self.getDeltaMovement().lengthSqr() > 0.2f) {
+        if (self.getDeltaMovement().lengthSqr() > 0.075f) {
             lastTarget = -1;
             staringTicks = 0;
-        }else if (staringTicks >= 295 && self.tickCount % 11 == 0) {
+        }else if (staringTicks >= 550 && self.tickCount % 11 == 0) {
             playSoundChallenge(ModSounds.KIRA4_MONOLOGUE_EVENT,1484);
         }else {
             Entity target = MainUtil.getTargetEntity(this.self, 9);
-            if (target instanceof LivingEntity) {
+            if (target instanceof LivingEntity && target.getDeltaMovement().lengthSqr() <= 0.075f) {
                 if (target.getId() != lastTarget) {
                     lastTarget = target.getId();
                     staringTicks = -1;
@@ -115,8 +115,13 @@ public class KiraPartFourVoice extends VoiceData{
 
     public void playPrimaryBomb() {
         if (attackCooldown > -1 || inTheMiddleOfTalking()) return;
+        double db = Math.random();
 
-        playSoundAttack(ModSounds.KIRA4_PRIMARY_BOMB_EVENT, 62);
+        if (db <= 0.5) {
+            playSoundAttack(ModSounds.KIRA4_PRIMARY_BOMB_2_EVENT, 51);
+        }else {
+            playSoundAttack(ModSounds.KIRA4_PRIMARY_BOMB_EVENT, 62);
+        }
     }
 
     public void playSecondaryBomb() {
@@ -132,12 +137,9 @@ public class KiraPartFourVoice extends VoiceData{
     }
     public void playTertiaryBomb() {
         if (attackCooldown > -1 || inTheMiddleOfTalking()) return;
-        double db = Math.random();
-        if (db <= 0.5) {
-            playSoundAttack(ModSounds.KIRA4_BTD_1_EVENT, 25);
-        }else {
-            playSoundAttack(ModSounds.KIRA4_BTD_2_EVENT, 51);
-        }
+
+        playSoundAttack(ModSounds.KIRA4_BTD_1_EVENT, 25);
+
     }
 
     public void playBtdRange() {
@@ -150,7 +152,9 @@ public class KiraPartFourVoice extends VoiceData{
         if (inTheMiddleOfTalking()) return;
 
         double db = Math.random();
-        if (db <= 0.5) {
+        if (db <= 0.3) {
+            playSoundAttack(ModSounds.KIRA4_BTD_ACTIVATION_EVENT, 77);
+        }else if (db <= 0.6) {
             playSoundAttack(ModSounds.KIRA4_I_BEAT_THEM_EVENT, 80);
         }else {
             playSoundAttack(ModSounds.KIRA4_LIVE_HAPPY_EVENT, 51);

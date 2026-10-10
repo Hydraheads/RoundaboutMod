@@ -2,6 +2,7 @@ package net.hydra.jojomod.registry;
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistry;
+import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.handBlock.AbstractHandBlock;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -91,13 +92,13 @@ public class FabricItems {
     public static final Item HEARING_DISC = registerItem("hearing_disc",
             new HearingDiscItem(new Item.Properties().stacksTo(1)));
     public static final Item JUMP_BACK_COMMAND_DISC = registerItem("jump_back_command_disc",
-            new CommandDiscItem(new Item.Properties().stacksTo(1), CommandDiscItem.Command.JUMP_BACK));
+            new CommandDiscItem(new Item.Properties().durability(3), CommandDiscItem.Command.JUMP_BACK));
     public static final Item ATTACK_COMMAND_DISC = registerItem("attack_command_disc",
-            new CommandDiscItem(new Item.Properties().stacksTo(1), CommandDiscItem.Command.ATTACK));
+            new CommandDiscItem(new Item.Properties().durability(3), CommandDiscItem.Command.ATTACK));
     public static final Item FORGET_COMMAND_DISC = registerItem("forget_command_disc",
-            new CommandDiscItem(new Item.Properties().stacksTo(1), CommandDiscItem.Command.FORGET));
+            new CommandDiscItem(new Item.Properties().durability(3), CommandDiscItem.Command.FORGET));
     public static final Item EXPLOSIVE_COMMAND_DISC = registerItem("explosive_command_disc",
-            new CommandDiscItem(new Item.Properties().stacksTo(1), CommandDiscItem.Command.EXPLOSIVE));
+            new CommandDiscItem(new Item.Properties().durability(3), CommandDiscItem.Command.EXPLOSIVE));
     public static final Item HALLUCINATORY_ACID_HEIGHT_1 = registerItem("hallucinatory_acid_height_1",
             new HallucinatoryAcidDebugItem(FabricBlocks.HALLUCINATORY_ACID, 1, new Item.Properties()));
     public static final Item HALLUCINATORY_ACID_HEIGHT_2 = registerItem("hallucinatory_acid_height_2",
@@ -262,6 +263,7 @@ public class FabricItems {
     public static Item HAIRSPRAY = registerItem("hairspray", new HairsprayItem(new Item.Properties().stacksTo(64)));
 
     public static Item OCCULT_CHARGE = registerItem("occult_charge", new OccultChargeItem(new Item.Properties().stacksTo(16)));
+    public static Item TOTEM_OF_DOOM = registerItem("totem_of_doom", new TotemOfDoomItem(new Item.Properties().stacksTo(1)));
 
     public static Item MATCH = registerItem("match", new MatchItem(new Item.Properties().stacksTo(64)));
     public static Item MATCH_BUNDLE = registerItem("match_bundle", new MatchItem(new Item.Properties().stacksTo(16)));
@@ -814,7 +816,8 @@ public class FabricItems {
                         entries.accept(HALLUCINATORY_ACID_HEIGHT_3);
                         entries.accept(HALLUCINATORY_ACID_HEIGHT_4);
                         entries.accept(HALLUCINATORY_ACID_WALL);
-
+                        entries.accept(ModBlocks.GAMBLING_TABLE);
+                        entries.accept(TOTEM_OF_DOOM);
                     }).build());
     public static final CreativeModeTab FOG_BLOCK_ITEMS = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
             new ResourceLocation(Roundabout.MOD_ID, "justice_fog_items"),
@@ -938,11 +941,14 @@ public class FabricItems {
         ModItems.LUCK_UPGRADE = LUCK_UPGRADE;
         ModItems.EXECUTION_UPGRADE = EXECUTION_UPGRADE;
         ModItems.OCCULT_CHARGE = OCCULT_CHARGE;
+        ModItems.TOTEM_OF_DOOM = TOTEM_OF_DOOM;
         ModItems.LUCK_SWORD = LUCK_SWORD;
         ModItems.SCISSORS = SCISSORS;
         ModItems.SACRIFICIAL_DAGGER = SACRIFICIAL_DAGGER;
         ModItems.WOODEN_GLAIVE = WOODEN_GLAIVE;
         ModItems.WOODEN_WAR_HAMMER = WOODEN_WAR_HAMMER;
+        FuelRegistry.INSTANCE.add(ModItems.WOODEN_WAR_HAMMER,200);
+        FuelRegistry.INSTANCE.add(ModItems.WOODEN_GLAIVE,200);
         ModItems.STONE_GLAIVE = STONE_GLAIVE;
         ModItems.STONE_WAR_HAMMER = STONE_WAR_HAMMER;
         ModItems.IRON_GLAIVE = IRON_GLAIVE;

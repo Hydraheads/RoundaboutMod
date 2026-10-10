@@ -7,6 +7,7 @@ import net.hydra.jojomod.event.index.AnubisMoment;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.JackalRifleItem;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
+import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.Minecraft;
@@ -106,6 +107,12 @@ public abstract class MouseHandlerMixin {
         if (player != null){
             //You cannot look around while totally frozen
             if (HeatUtil.isBodyFrozen(player)){
+                ci.cancel();
+                return;
+            }
+
+            //You cannot look around while you are opening your Black Sabbath inventory (unskippable cutscene)
+            if(((StandUser)player).roundabout$getStandPowers() instanceof PowersBlackSabbath pbs && pbs.active){
                 ci.cancel();
                 return;
             }

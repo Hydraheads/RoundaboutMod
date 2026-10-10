@@ -269,6 +269,216 @@
       "roundabout:diver_down_bomb"
     ]
   },
+  "anasui_visage_equip": {
+    "subtitle": "sounds.roundabout.anasui_visage_equip",
+    "sounds": [
+      "roundabout:anasui_visage_equip"
+    ]
+  },
+  "anasui_hurt_1": {
+    "subtitle": "sounds.roundabout.anasui_hurt_1",
+    "sounds": [
+      "roundabout:anasui_hurt_1"
+    ]
+  },
+  "anasui_hurt_2": {
+    "subtitle": "sounds.roundabout.anasui_hurt_2",
+    "sounds": [
+      "roundabout:anasui_hurt_2"
+    ]
+  },
+  "anasui_hurt_3": {
+    "subtitle": "sounds.roundabout.anasui_hurt_3",
+    "sounds": [
+      "roundabout:anasui_hurt_3"
+    ]
+  },
+  "anasui_stand_summon_1": {
+    "subtitle": "sounds.roundabout.anasui_stand_summon_1",
+    "sounds": [
+      "roundabout:anasui_stand_summon_1"
+    ]
+  },
+  "anasui_stand_summon_2": {
+    "subtitle": "sounds.roundabout.anasui_stand_summon_2",
+    "sounds": [
+      "roundabout:anasui_stand_summon_2"
+    ]
+  },
+  "anasui_kill_1": {
+    "subtitle": "sounds.roundabout.anasui_kill_1",
+    "sounds": [
+      "roundabout:anasui_kill_1"
+    ]
+  },
+  "anasui_kill_2": {
+    "subtitle": "sounds.roundabout.anasui_kill_2",
+    "sounds": [
+      "roundabout:anasui_kill_2"
+    ]
+  },
+  "anasui_kill_3": {
+    "subtitle": "sounds.roundabout.anasui_kill_3",
+    "sounds": [
+      "roundabout:anasui_kill_3"
+    ]
+  },
+  "anasui_kill_4": {
+    "subtitle": "sounds.roundabout.anasui_kill_4",
+    "sounds": [
+      "roundabout:anasui_kill_4"
+    ]
+  },
+  "anasui_kill_5": {
+    "subtitle": "sounds.roundabout.anasui_kill_5",
+    "sounds": [
+      "roundabout:anasui_kill_5"
+    ]
+  },
+  "anasui_kill_6": {
+    "subtitle": "sounds.roundabout.anasui_kill_6",
+    "sounds": [
+      "roundabout:anasui_kill_6"
+    ]
+  },
+  "anasui_idle_1": {
+    "subtitle": "sounds.roundabout.anasui_idle_1",
+    "sounds": [
+      "roundabout:anasui_idle_1"
+    ]
+  },
+  "anasui_idle_2": {
+    "subtitle": "sounds.roundabout.anasui_idle_2",
+    "sounds": [
+      "roundabout:anasui_idle_2"
+    ]
+  },
+  "anasui_idle_3": {
+    "subtitle": "sounds.roundabout.anasui_idle_3",
+    "sounds": [
+      "roundabout:anasui_idle_3"
+    ]
+  },
+  "anasui_idle_4": {
+    "subtitle": "sounds.roundabout.anasui_idle_4",
+    "sounds": [
+      "roundabout:anasui_idle_4"
+    ]
+  },
+  "anasui_idle_5": {
+    "subtitle": "sounds.roundabout.anasui_idle_5",
+    "sounds": [
+      "roundabout:anasui_idle_5"
+    ]
+  },
+  "anasui_idle_6": {
+    "subtitle": "sounds.roundabout.anasui_idle_6",
+    "sounds": [
+      "roundabout:anasui_idle_6"
+    ]
+  },
+  "anasui_idle_7": {
+    "subtitle": "sounds.roundabout.anasui_idle_7",
+    "sounds": [
+      "roundabout:anasui_idle_7"
+    ]
+  },
+  "anasui_death_1": {
+    "subtitle": "sounds.roundabout.anasui_death_1",
+    "sounds": [
+      "roundabout:anasui_death_1"
+    ]
+  },
+  "anasui_death_2": {
+    "subtitle": "sounds.roundabout.anasui_death_2",
+    "sounds": [
+      "roundabout:anasui_death_2"
+    ]
+  },
+  "anasui_phase_punch": {
+    "subtitle": "sounds.roundabout.anasui_phase_punch",
+    "sounds": [
+      "roundabout:anasui_phase_punch"
+    ]
+  },
+  "anasui_zip_1": {
+    "subtitle": "sounds.roundabout.anasui_zip_1",
+    "sounds": [
+      "roundabout:anasui_zip_1"
+    ]
+  },
+  "anasui_zip_2": {
+    "subtitle": "sounds.roundabout.anasui_zip_2",
+    "sounds": [
+      "roundabout:anasui_zip_2"
+    ]
+  },
+  "anasui_zip_3": {
+    "subtitle": "sounds.roundabout.anasui_zip_3",
+    "sounds": [
+      "roundabout:anasui_zip_3"
+    ]
+  },
+  "anasui_submerge": {
+    "subtitle": "sounds.roundabout.anasui_submerge",
+    "sounds": [
+      "roundabout:anasui_submerge"
+    ]
+  },
+  "anasui_trap_trigger_1": {
+    "subtitle": "sounds.roundabout.anasui_trap_trigger_1",
+    "sounds": [
+      "roundabout:anasui_trap_trigger_1"
+    ]
+  },
+  "anasui_trap_trigger_2": {
+    "subtitle": "sounds.roundabout.anasui_trap_trigger_2",
+    "sounds": [
+      "roundabout:anasui_trap_trigger_2"
+    ]
+  },
+  "anasui_trap": {
+    "subtitle": "sounds.roundabout.anasui_trap",
+    "sounds": [
+      "roundabout:anasui_trap"
+    ]
+  },
+  "anasui_ground_dive_1": {
+    "subtitle": "sounds.roundabout.anasui_ground_dive_1",
+    "sounds": [
+      "roundabout:anasui_ground_dive_1"
+    ]
+  },
+  "anasui_ground_dive_2": {
+    "subtitle": "sounds.roundabout.anasui_ground_dive_2",
+    "sounds": [
+      "roundabout:anasui_ground_dive_2"
+    ]
+  },
+  "anasui_jotaro_1": {
+    "subtitle": "sounds.roundabout.anasui_jotaro_1",
+    "sounds": [
+      "roundabout:anasui_jotaro_1"
+    ]
+  },
+  "anasui_jotaro_2": {
+    "subtitle": "sounds.roundabout.anasui_jotaro_2",
+    "sounds": [
+      "roundabout:anasui_jotaro_2"
+    ]
+  },
+  "anasui_pucci_1": {
+    "subtitle": "sounds.roundabout.anasui_pucci_1",
+    "sounds": [
+      "roundabout:anasui_pucci_1"
+    ]
+  },
+  "anasui_pucci_2": {
+    "subtitle": "sounds.roundabout.anasui_pucci_2",
+    "sounds": [
+      "roundabout:anasui_pucci_2"
+    ]
+  },
   "summon_king_crimson": {
     "subtitle": "sounds.roundabout.summon_king_crimson",
     "sounds": [
@@ -737,6 +947,18 @@
       "roundabout:killer_queen_explosion_3"
     ]
   },
+  "btd_windup" : {
+    "subtitle": "sounds.roundabout.btd_windup",
+    "sounds": [
+      "roundabout:btd_windup"
+    ]
+  },
+  "btd_windup_line" : {
+    "subtitle": "sounds.roundabout.btd_windup_line",
+    "sounds": [
+      "roundabout:btd_windup_line"
+    ]
+  },
   "btd_normal_reset": {
     "subtitle": "sounds.roundabout.btd_normal_reset",
     "sounds": [
@@ -783,6 +1005,85 @@
     "subtitle": "sounds.roundabout.killer_queen_select",
     "sounds": [
       "roundabout:killer_queen_select"
+    ]
+  },
+  "kq_block_plant" : {
+    "subtitle": "sounds.roundabout.kq_block_plant",
+    "sounds": [
+      "roundabout:kq_block_plant"
+    ]
+  },
+  "kq_mob_plant" : {
+    "subtitle": "sounds.roundabout.kq_mob_plant",
+    "sounds": [
+      "roundabout:kq_mob_plant"
+    ]
+  },
+  "kq_samurai_summon" : {
+    "subtitle": "sounds.roundabout.summon_samurai_queen",
+    "sounds": [
+      "roundabout:kq_samurai_summon"
+    ]
+  },
+  "kq_samurai_block" : {
+    "subtitle": "sounds.roundabout.kq_block_plant",
+    "sounds": [
+      "roundabout:kq_samurai_block"
+    ]
+  },
+  "kq_samurai_mob" : {
+    "subtitle": "sounds.roundabout.kq_mob_plant",
+    "sounds": [
+      "roundabout:kq_samurai_mob"
+    ]
+  },
+  "kq_samurai_btd_noise" : {
+    "subtitle": "sounds.roundabout.bites_the_dust_noise",
+    "sounds": [
+      "roundabout:kq_samurai_btd_noise"
+    ]
+  },
+  "kq_samurai_sheathe" : {
+    "subtitle": "sounds.roundabout.kq_samurai_sheathe",
+    "sounds": [
+      "roundabout:kq_samurai_sheathe"
+    ]
+  },
+  "kq_samurai_stab" : {
+    "subtitle": "sounds.roundabout.kq_samurai_stab",
+    "sounds": [
+      "roundabout:kq_samurai_stab"
+    ]
+  },
+  "kq_samurai_slash" : {
+    "subtitle": "sounds.roundabout.kq_samurai_slash",
+    "sounds": [
+      "roundabout:kq_samurai_slash"
+    ]
+  },
+  "kq_samurai_whoosh_1" : {
+    "subtitle": "sounds.roundabout.kq_samurai_whoosh",
+    "sounds": [
+      "roundabout:kq_samurai_whoosh_1"
+    ]
+  },
+  "kq_samurai_whoosh_2" : {
+    "subtitle": "sounds.roundabout.kq_samurai_whoosh",
+    "sounds": [
+      "roundabout:kq_samurai_whoosh_2"
+    ]
+  },
+  "kq_samurai_sha" : {
+    "subtitle": "sounds.roundabout.kq_samurai_sha",
+    "sounds": [
+      "roundabout:kq_samurai_sha"
+    ]
+  },
+
+  "kq_plant_windup" : {
+    "subtitle": "sounds.roundabout.kq_plant_windup",
+    "sounds": [
+      "roundabout:kq_plant_windup"
     ]
   },
   "kq_minesweeper_detonate": {
@@ -1127,6 +1428,36 @@
       "roundabout:black_sabbath_chest_open"
     ]
   },
+  "black_sabbath_emerge": {
+    "subtitle": "sounds.roundabout.black_sabbath_emerge",
+    "sounds": [
+      "roundabout:black_sabbath_emerge"
+    ]
+  },
+  "bs_select_add": {
+    "subtitle": "sounds.roundabout.bs_select_add",
+    "sounds": [
+      "roundabout:bs_select_add"
+    ]
+  },
+  "bs_select_remove": {
+    "subtitle": "sounds.roundabout.bs_select_remove",
+    "sounds": [
+      "roundabout:bs_select_remove"
+    ]
+  },
+  "bs_select_cancel": {
+    "subtitle": "sounds.roundabout.bs_select_cancel",
+    "sounds": [
+      "roundabout:bs_select_cancel"
+    ]
+  },
+  "bs_select_confirm": {
+    "subtitle": "sounds.roundabout.bs_select_confirm",
+    "sounds": [
+      "roundabout:bs_select_confirm"
+    ]
+  },
   "century_boy_summon": {
     "subtitle": "sounds.roundabout.century_boy_summon",
     "sounds": [
@@ -1413,6 +1744,18 @@
     "subtitle": "sounds.roundabout.extend_spikes",
     "sounds": [
       "roundabout:extend_spikes"
+    ]
+  },
+  "wh_pull": {
+    "subtitle": "sounds.roundabout.wh_pull",
+    "sounds": [
+      "roundabout:wh_pull"
+    ]
+  },
+  "wh_push": {
+    "subtitle": "sounds.roundabout.wh_push",
+    "sounds": [
+      "roundabout:wh_push"
     ]
   },
   "firestorm": {
@@ -2117,6 +2460,18 @@
       "roundabout:jotaro_getting_closer"
     ]
   },
+  "jotaro_response_anasui_1": {
+    "subtitle": "sounds.roundabout.jotaro_response_anasui_1",
+    "sounds": [
+      "roundabout:jotaro_response_anasui_1"
+    ]
+  },
+  "jotaro_response_anasui_2": {
+    "subtitle": "sounds.roundabout.jotaro_response_anasui_2",
+    "sounds": [
+      "roundabout:jotaro_response_anasui_2"
+    ]
+  },
   "fire_whoosh": {
     "subtitle": "sounds.roundabout.fire_whoosh",
     "sounds": [
@@ -2325,6 +2680,42 @@
     "subtitle": "sounds.roundabout.anubis_alluring",
     "sounds": [
       "roundabout:anubis_alluring"
+    ]
+  },
+  "j_anubis_hit_1": {
+    "subtitle": "sounds.roundabout.j_anubis_hit_1",
+    "sounds": [
+      "roundabout:j_anubis_hit_1"
+    ]
+  },
+  "j_anubis_hit_2": {
+    "subtitle": "sounds.roundabout.j_anubis_hit_2",
+    "sounds": [
+      "roundabout:j_anubis_hit_2"
+    ]
+  },
+  "j_anubis_hit_3": {
+    "subtitle": "sounds.roundabout.j_anubis_hit_3",
+    "sounds": [
+      "roundabout:j_anubis_hit_3"
+    ]
+  },
+  "j_anubis_miss_1": {
+    "subtitle": "sounds.roundabout.j_anubis_miss_1",
+    "sounds": [
+      "roundabout:j_anubis_miss_1"
+    ]
+  },
+  "j_anubis_miss_2": {
+    "subtitle": "sounds.roundabout.j_anubis_miss_2",
+    "sounds": [
+      "roundabout:j_anubis_miss_2"
+    ]
+  },
+  "j_anubis_miss_3": {
+    "subtitle": "sounds.roundabout.j_anubis_miss_3",
+    "sounds": [
+      "roundabout:j_anubis_miss_3"
     ]
   },
   "anubis_raging": {
@@ -3715,6 +4106,13 @@
       "roundabout:wsvoice_acid_toss"
     ]
   },
+  "kira4_btd_activation": {
+    "subtitle": "sounds.roundabout.kira4_btd_activation",
+    "sounds" : [
+      "roundabout:kira4_btd_activation"
+    ]
+  },
+
   "kira4_damage_1": {
     "subtitle": "sounds.roundabout.kira4_damage",
     "sounds" : [
@@ -3737,6 +4135,12 @@
     "subtitle": "sounds.roundabout.kira4_damage",
     "sounds" : [
       "roundabout:kira4_damage_4"
+    ]
+  },
+  "add_stray_cat_sfx": {
+    "subtitle": "sounds.roundabout.add_stray_cat_sfx",
+    "sounds" : [
+      "roundabout:add_stray_cat_sfx"
     ]
   },
   "kira4_damage_5": {
@@ -3937,10 +4341,10 @@
       "roundabout:kira4_kq_btd_1"
     ]
   },
-  "kira4_kq_btd_2": {
-    "subtitle": "sounds.roundabout.kira4_kq_btd",
+  "kira4_kq_bomb_2": {
+    "subtitle": "sounds.roundabout.kira4_kq_bomb",
     "sounds" : [
-      "roundabout:kira4_kq_btd_2"
+      "roundabout:kira4_kq_bomb_2"
     ]
   },
   "kira4_btd_range": {
@@ -4073,6 +4477,18 @@
     "subtitle": "sounds.roundabout.pucci_hurt_4",
     "sounds": [
       "roundabout:pucci_hurt_4"
+    ]
+  },
+  "pucci_response_anasui_1": {
+    "subtitle": "sounds.roundabout.pucci_response_anasui_1",
+    "sounds": [
+      "roundabout:pucci_response_anasui_1"
+    ]
+  },
+  "pucci_response_anasui_2": {
+    "subtitle": "sounds.roundabout.pucci_response_anasui_2",
+    "sounds": [
+      "roundabout:pucci_response_anasui_2"
     ]
   },
   "silver_chariot_summon": {

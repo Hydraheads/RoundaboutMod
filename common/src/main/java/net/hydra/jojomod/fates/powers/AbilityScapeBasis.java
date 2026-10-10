@@ -421,7 +421,8 @@ public class AbilityScapeBasis {
             VAULT = 33,
             MINING = 34,
             MELT_DODGE_ANIM = 35,
-            SWITCH_INTO_BODY = 36;
+            SWITCH_INTO_BODY = 36,
+            HEEL_RAISE = 37;
 
     public float guardMod(){
         return 0.2f;
@@ -536,6 +537,7 @@ public class AbilityScapeBasis {
     public void onEnderPearlThrow(){
     }
     public void onEnderPearlLand(){
+        xTryPower(PowerIndex.NONE,true);
     }
     public void onSpinAttackStart(){
     }
@@ -2497,6 +2499,21 @@ public class AbilityScapeBasis {
         return listE;
     }
 
+    public List<ItemEntity> getItemTargetEntityList(LivingEntity User, float distMax, float angle){
+        /*First, attempts to hit what you are looking at*/
+        if (!(distMax >= 0)) {
+            distMax = this.getDistanceOut(User, this.getReach(), false);
+        }
+
+        /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
+        float halfReach = (float) (distMax*0.5);
+        Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
+        List<ItemEntity> listE = ItemStandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
+                pointVec.z, halfReach, halfReach, halfReach), distMax);
+        storeEnt = null;
+
+        return listE;
+    }
     public Entity getTargetEntityThroughWalls(LivingEntity User, float distMax, float angle){
         /*First, attempts to hit what you are looking at*/
         if (!(distMax >= 0)) {
@@ -2946,6 +2963,40 @@ public class AbilityScapeBasis {
                         hitEntities.remove(value);
                     }
                 }
+            }
+        }
+        return hitEntities;
+    }
+
+    public List<ItemEntity> ItemStandGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance){
+        return ItemStandGrabHitbox(User,entities,maxDistance,25);
+    }
+    public List<ItemEntity> ItemStandGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance, float angle){
+        return ItemStandGrabHitbox(User,entities,maxDistance,angle,false);
+    }
+    public List<ItemEntity> ItemStandGrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance, float angle, boolean throughWalls){
+        List<ItemEntity> hitEntities = new ArrayList<>() {
+        };
+
+        for (Entity value : entities) {
+            if (value instanceof ItemEntity IE && !value.isRemoved()){
+                Direction gravD = ((IGravityEntity)User).roundabout$getGravityDirection();
+                Vec2 lookVec = new Vec2(getLookAtEntityYaw(User, value), getLookAtEntityPitch(User, value));
+                if (gravD != Direction.DOWN) {
+                    lookVec = RotationUtil.rotPlayerToWorld(lookVec.x, lookVec.y, gravD);
+                }
+                if (!(angleDistance(lookVec.x, (User.getYHeadRot()%360f)) <= angle && angleDistance(lookVec.y, User.getXRot()) <= angle)){
+                    continue;
+                } else if (!canActuallyHit(value)){
+                    if (throughWalls) {
+                        if (!MainUtil.allowThruWalls(value)){
+                            continue;
+                        }
+                    } else {
+                        continue;
+                    }
+                }
+                hitEntities.add(IE);
             }
         }
         return hitEntities;

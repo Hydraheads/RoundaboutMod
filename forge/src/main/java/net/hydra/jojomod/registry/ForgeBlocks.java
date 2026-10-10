@@ -414,6 +414,10 @@ public class ForgeBlocks {
             () -> ModBlocks.CREAM_FIRE_PROPERTIES);
     public static final RegistryObject<Block> FANCY_LIGHTER_BLOCK = BLOCKS.register("fancy_lighter_block",
             () -> ModBlocks.FANCY_LIGHTER_PROPRETIES);
+    public static final RegistryObject<Block> GAMBLING_TABLE = BLOCKS.register("gambling_table",
+            () -> ModBlocks.GAMBLING_TABLE_PROPERTIES);
+    public static final RegistryObject<BlockEntityType<GamblingTableBlockEntity>> GAMBLING_TABLE_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("gambling_table", () -> BlockEntityType.Builder.of(GamblingTableBlockEntity::new, GAMBLING_TABLE.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<OasisMudBlockEntity>> OASIS_MUD_BLOCK_ENTITY = BLOCK_ENTITIES.register("oasis_mud_block",
             () -> BlockEntityType.Builder.of(OasisMudBlockEntity::new, OASIS_MUD_BLOCK.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "oasis_mud_block")));

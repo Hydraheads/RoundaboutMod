@@ -1,23 +1,22 @@
 package net.hydra.jojomod.util;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.GameRules;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.phys.BlockHitResult;
 import org.joml.Vector3f;
-
-import com.google.common.collect.Lists;
 
 //import net.hydra.jojomod.client.ClientNetworking;
 //import net.hydra.jojomod.event.ModParticles;
@@ -33,6 +32,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+
+import javax.annotation.Nullable;
 
 public class ExplosionUtil {
 	
@@ -158,6 +159,7 @@ public class ExplosionUtil {
 	}
 
 	public static void explodeBlocksBase(BlockPos location, Level level, Float range, boolean ignoreOres, Entity causer) {
+
 		Vec3 center = new Vec3(location.getX(), location.getY(), location.getZ());
 
 		int intSize = Math.round(range) + 1;
@@ -168,7 +170,9 @@ public class ExplosionUtil {
 			BlockState info = level.getBlockState(pos);
 			if (isBlockBlackListed(info) || (MainUtil.confirmIsOre(info) && ignoreOres)
 					|| info.isAir() || info.is(Blocks.BARRIER) || info.is(Blocks.BEDROCK)
-					|| !MainUtil.isDestructible(level, location, info)) {
+					|| !MainUtil.isDestructible(level, location, info)
+					|| MainUtil.isBlockDestructionBlacklisted(info)
+			) {
 				continue;
 			}
 
@@ -177,9 +181,37 @@ public class ExplosionUtil {
 
 			Double dist2 = center.distanceToSqr(pos.getX(), pos.getY(), pos.getZ());
 
-			if (dist2 <= explosionDistance && !(causer instanceof Player PL && !MainUtil.canPlaceOnClaim(PL, pos))) {
+			if (dist2 <= explosionDistance) {
 				boolean shouldDrop = !info.requiresCorrectToolForDrops() && level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING_OBTAINMENT);
-				level.destroyBlock(pos, shouldDrop);
+
+				destroyBlockHandled(level, pos, shouldDrop, causer);
+
+			}
+		}
+	}
+
+	public static void destroyBlockHandled(Level level, BlockPos $$0, boolean $$1, @Nullable Entity $$2) {
+		if ($$2 instanceof Player p) {
+			if (
+					!MainUtil.canPlaceOnClaim(p, new BlockHitResult(new Vec3($$0.relative(Direction.DOWN).getX(),$$0.relative(Direction.DOWN).getY(),$$0.relative(Direction.DOWN).getZ()), Direction.UP,$$0.relative(Direction.DOWN),false))
+					|| !level.mayInteract(p, $$0)
+			) {
+				return;
+			}
+		}
+
+		BlockState $$4 = level.getBlockState($$0);
+		if (!$$4.isAir()) {
+			FluidState $$5 = level.getFluidState($$0);
+
+			if ($$1) {
+				BlockEntity $$6 = $$4.hasBlockEntity() ? level.getBlockEntity($$0) : null;
+				Block.dropResources($$4, level, $$0, $$6, $$2, ItemStack.EMPTY);
+			}
+
+			boolean $$7 = level.setBlock($$0, $$5.createLegacyBlock(), 3, 512);
+			if ($$7) {
+				level.gameEvent(GameEvent.BLOCK_DESTROY, $$0, GameEvent.Context.of($$2, $$4));
 			}
 		}
 	}

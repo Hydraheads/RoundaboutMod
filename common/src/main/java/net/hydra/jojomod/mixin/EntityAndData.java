@@ -117,6 +117,10 @@ public abstract class EntityAndData implements IEntityAndData {
     @Unique
     private float roundabout$lastDirectDamage = 0;
 
+    @Override
+    public Vec3 rdbt$getStuckSpeedMultiplier(){
+        return stuckSpeedMultiplier;
+    }
 
 
     @Override
@@ -239,7 +243,7 @@ public abstract class EntityAndData implements IEntityAndData {
     @Unique
     public void roundabout$tickTrueInvisibilityManhattan(){
         Vec3 position =  getPosition(1);
-        if (rdbt$lastPos != null && rdbt$lastPos.distanceToSqr(position) > 0.01F){
+        if (rdbt$lastPos != null && rdbt$lastPos.distanceToSqr(position) > 0.001F){
             roundabout$trueInvisibilityManhattan = 80;
         } else {
             roundabout$trueInvisibilityManhattan--;
@@ -939,6 +943,8 @@ public abstract class EntityAndData implements IEntityAndData {
 
     @Shadow
     protected int boardingCooldown;
+    @Shadow
+    protected Vec3 stuckSpeedMultiplier;
     @Unique
     private int rdbt$inForeignWorld = 0;
     @Unique

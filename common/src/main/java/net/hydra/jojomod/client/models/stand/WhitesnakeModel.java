@@ -213,10 +213,13 @@ public class WhitesnakeModel extends StandModel<WhitesnakeEntity> {
     @Override
     public void defaultAnimations(WhitesnakeEntity entity, float animationProgress, float windupLength) {
         if (!entity.isRemoteControlled()) {
+            /*
             this.animate(entity.idleAnimationState, StandAnimations.STAND_IDLE_FLOAT, animationProgress, 1.0F);
             this.animate(entity.idleAnimationState2, StandAnimations.IDLE_2, animationProgress, 1.0F);
             this.animate(entity.idleAnimationState3, StandAnimations.FLOATY_IDLE, animationProgress, 1.0F);
             this.animate(entity.idleAnimationState4, StandAnimations.STAR_PLATINUM_IDLE, animationProgress, 1.0F);
+            */
+            animateIdles(entity, animationProgress);
         }
         float partial = 1.4F;
         float full = 1.16666F;

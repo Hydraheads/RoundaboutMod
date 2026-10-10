@@ -8,6 +8,7 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.ILivingEntityRenderer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.DiverDownPointerRenderer;
 import net.hydra.jojomod.client.HallucinationIndicatorRenderer;
 import net.hydra.jojomod.client.models.layers.BigBubbleLayer;
 import net.hydra.jojomod.client.models.layers.FrozenLayer;
@@ -29,6 +30,7 @@ import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -158,6 +160,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
             PKQ.bitesTheDustRender(entity, matrixStack, buffer);
         }
         HallucinationIndicatorRenderer.render(entity, matrixStack, buffer);
+        DiverDownPointerRenderer.render(entity, matrixStack, buffer);
     }
 
     @Inject(method = "shouldShowName(Lnet/minecraft/world/entity/LivingEntity;)Z", at=@At("HEAD"), cancellable = true)
@@ -390,6 +393,10 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
             return;
         }
 
+        if (entity instanceof AbstractClientPlayer) {
+            return;
+        }
+
         StandUser su = (StandUser) entity;
         if (su.roundabout$isDisguised()) {
             GameProfile profile = su.roundabout$getDisguiseProfile();
@@ -399,7 +406,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
                     DiverDownDisguiseRenderer.INSTANCE.renderDisguise(entity, profile, entityYaw, partialTicks, poseStack, buffer, packedLight);
                 }
                 //adds the nametag
-                if (entity != Minecraft.getInstance().player && !entity.isInvisible()) {
+                if (entity != Minecraft.getInstance().player && !entity.isInvisible() && !Minecraft.getInstance().options.hideGui) {
                     String disguiseName = profile.getName();
                     if (disguiseName != null && !disguiseName.isEmpty()) {
                         float targetY = (entity.isCrouching() ? 2.0F : 2.3F);

@@ -19,6 +19,10 @@ import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import net.hydra.jojomod.client.DynamicItemRendering;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import java.util.function.Consumer;
 
 import static net.hydra.jojomod.registry.ForgeCreativeTab.*;
 
@@ -69,6 +73,8 @@ public class ForgeItems {
             () -> new GasolineBucketItem(new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> OCCULT_CHARGE = addToTab(ITEMS.register("occult_charge",
             () -> new OccultChargeItem(new Item.Properties().stacksTo(16))));
+    public static final RegistryObject<Item> TOTEM_OF_DOOM = addToWIPTab(ITEMS.register("totem_of_doom",
+            () -> new TotemOfDoomItem(new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> ROAD_ROLLER = addToTab(ITEMS.register("road_roller",
             () -> new RoadRollerItem(new Item.Properties().stacksTo(1))));
 
@@ -211,7 +217,18 @@ public class ForgeItems {
     public static final RegistryObject<BlockItem> COFFIN_BLOCK_ITEM = addToBuildingTab(ITEMS.register("coffin_block",
             () -> new CoffinBlockItem(DyeColor.BLACK, ForgeBlocks.COFFIN_BLOCK.get(),
                     new Item.Properties().stacksTo(1)
-            )));
+            ){ //CoffinBlockItem is a common class, putting BEWLR in there might break fabric, so i put BEWLR here in the forge item registry
+
+                @Override
+                public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+                    consumer.accept(new IClientItemExtensions() {
+                        @Override
+                        public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                            return DynamicItemRendering.getInstance(); /// the mod should have only 1 instance of its own custom BEWLR
+                        }
+                    });
+                }
+            }));
 
 
     /*public static final RegistryObject<BlockItem> CHESSBOARD_BLOCK_ITEM = addToWIPTab(ITEMS.register("chessboard_block",
@@ -399,9 +416,20 @@ public class ForgeItems {
                     new Item.Properties().stacksTo(64)
             )));
     public static final RegistryObject<BlockItem> HAND_ITEM = ITEMS.register("hand_block",
-            () -> new BlockItem(ForgeBlocks.HAND_BLOCK.get(),
+            () -> new HandBlockItem(ForgeBlocks.HAND_BLOCK.get(),
                     new Item.Properties().stacksTo(1)
-            ));
+            ) { //HandBlockItem is a common class, putting BEWLR in there might break fabric, so i put BEWLR here in the forge item registry
+
+                @Override
+                public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+                    consumer.accept(new IClientItemExtensions() {
+                        @Override
+                        public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                            return DynamicItemRendering.getInstance(); /// the mod should have only 1 instance of its own custom BEWLR
+                        }
+                    });
+                }
+            });
 
     public static final RegistryObject<BlockItem> MELON_PARFAIT_ITEM = addToBuildingTab(ITEMS.register("melon_parfait",
             () -> new BlockItem(ForgeBlocks.MELON_PARFAIT.get(),
@@ -753,16 +781,16 @@ public class ForgeItems {
     public static final RegistryObject<Item> HEARING_DISC = ITEMS.register(
             "hearing_disc", () -> new HearingDiscItem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> JUMP_BACK_COMMAND_DISC = addToWIPTab(ITEMS.register(
-            "jump_back_command_disc", () -> new CommandDiscItem(new Item.Properties().stacksTo(1),
+            "jump_back_command_disc", () -> new CommandDiscItem(new Item.Properties().durability(3),
                     CommandDiscItem.Command.JUMP_BACK)));
     public static final RegistryObject<Item> ATTACK_COMMAND_DISC = addToWIPTab(ITEMS.register(
-            "attack_command_disc", () -> new CommandDiscItem(new Item.Properties().stacksTo(1),
+            "attack_command_disc", () -> new CommandDiscItem(new Item.Properties().durability(3),
                     CommandDiscItem.Command.ATTACK)));
     public static final RegistryObject<Item> FORGET_COMMAND_DISC = addToWIPTab(ITEMS.register(
-            "forget_command_disc", () -> new CommandDiscItem(new Item.Properties().stacksTo(1),
+            "forget_command_disc", () -> new CommandDiscItem(new Item.Properties().durability(3),
                     CommandDiscItem.Command.FORGET)));
     public static final RegistryObject<Item> EXPLOSIVE_COMMAND_DISC = addToWIPTab(ITEMS.register(
-            "explosive_command_disc", () -> new CommandDiscItem(new Item.Properties().stacksTo(1),
+            "explosive_command_disc", () -> new CommandDiscItem(new Item.Properties().durability(3),
                     CommandDiscItem.Command.EXPLOSIVE)));
     public static final RegistryObject<Item> HALLUCINATORY_ACID_HEIGHT_1 = addToWIPTab(ITEMS.register(
             "hallucinatory_acid_height_1", () -> new HallucinatoryAcidDebugItem(
@@ -1028,6 +1056,9 @@ public class ForgeItems {
             () -> new MemoryChessPieceItem(ForgeBlocks.CHESS_PIECE.get(),new Item.Properties())));
     public static final RegistryObject<Item> EXP_BISHOP = addToTab(ITEMS.register("exp_bishop",
             () -> new ExperienceBishopItem(ForgeBlocks.CHESS_PIECE.get(),new Item.Properties())));
+
+    public static final RegistryObject<BlockItem> GAMBLING_TABLE_ITEM = addToWIPTab(ITEMS.register("gambling_table",
+            () -> new BlockItem(ForgeBlocks.GAMBLING_TABLE.get(), new Item.Properties())));
 
     public static void assignStupidForge(){
         DispenserBlock.registerBehavior(ForgeItems.KNIFE.get(), DispenserRegistry.KNIFE);

@@ -44,6 +44,7 @@ import net.minecraft.client.Options;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -1249,6 +1250,8 @@ public class PowersAnubis extends NewDashPreset {
                             C2SPacketUtil.standPunchPacket(entity.getId(),this.getActivePowerPhase());
                         }
                     }
+                } else {
+                    C2SPacketUtil.standPunchPacket(0,this.getActivePowerPhase());
                 }
             }
         } else {
@@ -1260,22 +1263,53 @@ public class PowersAnubis extends NewDashPreset {
                     }
                 }
             }
+            if (!isClient()) {
+                if (entities.isEmpty()){
+                    playMissSound(this.getSelf().level());
+                }
+            }
         }
+    }
 
-        if (entities.isEmpty() && !isClient()) {
-            playMissSound(this.getSelf().level());
+
+
+    public void playSlashSound(){
+        float pitch = 0.99F+(float)(Math.random()*0.02F);
+        SoundEvent event = ModSounds.J_ANUBIS_HIT_1_EVENT;
+        if (activePowerPhase == 2){
+            event = ModSounds.J_ANUBIS_HIT_2_EVENT;
+        } else if (activePowerPhase == 3){
+            event = ModSounds.J_ANUBIS_HIT_3_EVENT;
         }
+        playSoundIfPossible(self.level(),null,this.getSelf().blockPosition(), event,SoundSource.PLAYERS,1F,pitch);
+    }
 
+    public void playMissSound(Level l) {
+        float pitch = 0.99F+(float)(Math.random()*0.02F);
+        SoundEvent event = ModSounds.J_ANUBIS_MISS_1_EVENT;
+        if (activePowerPhase == 2){
+            event = ModSounds.J_ANUBIS_MISS_2_EVENT;
+        } else if (activePowerPhase == 3){
+            event = ModSounds.J_ANUBIS_MISS_3_EVENT;
+        }
+        playSoundIfPossible(l,null,this.getSelf().blockPosition(), event,SoundSource.PLAYERS,1F,pitch);
     }
 
 
     @Override
     public void punchImpact(Entity entity) {
-
+        boolean atd = attackTimeDuring != -10;
+        if (entity == null){
+            playMissSound(self.level());
+            return;
+        } if (attackTimeDuring != -10){
+            playSlashSound();
+        }
+        if (entity.distanceTo(self) > 5){
+            return;
+        }
         Vec3 pos = entity.getPosition(0F).add(0,entity.getEyeHeight()/2,0);
         sendParticlesIfPossible(self.level(),ParticleTypes.SWEEP_ATTACK, pos.x, pos.y, pos.z, 0, 0, 0.0, 0, 0.0);
-        float pitch = 0.9F+(float)(Math.random()*0.2F);
-        playSoundIfPossible(self.level(),null,this.getSelf().blockPosition(), ModSounds.ANUBIS_SWING_EVENT,SoundSource.PLAYERS,1F,pitch);
 
         this.setAttackTimeDuring(-10);
         float knockbackStrength = 0.2F;
@@ -2300,10 +2334,6 @@ public class PowersAnubis extends NewDashPreset {
         return SoundIndex.SUMMON_SOUND;
     }
 
-    public void playMissSound(Level l) {
-        playSoundIfPossible(l,null,this.getSelf().blockPosition(),ModSounds.ANUBIS_POGO_LAUNCH_EVENT,SoundSource.PLAYERS,1F,(float)(1.0F+Math.random()*0.2F));
-    }
-
     @Override
     public void onStandSummon(boolean desummon) {
         if (!desummon) {
@@ -2415,9 +2445,10 @@ public class PowersAnubis extends NewDashPreset {
             if (dist > radius-(dungle*factor*0.35)+(box.getXsize()+box.getZsize())/4) {return true;}
             return (dungle > angle );
         });
-
-
-
+        Entity targetEntity = this.rayCastEntityThroughWalls((LivingEntity) e,(float)radius);
+        if (targetEntity != null && !list.contains(targetEntity) ) {
+            list.add(targetEntity);
+        }
 
         return list;
     }

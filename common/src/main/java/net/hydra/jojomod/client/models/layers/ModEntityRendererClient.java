@@ -38,6 +38,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation STAR_PLATINUM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "star_platinum"), "main");
     public static final ModelLayerLocation COFFIN_LEFT_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "coffin_left"), "main");
     public static final ModelLayerLocation COFFIN_RIGHT_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "coffin_right"), "main");
+    public static final ModelLayerLocation COFFIN_FULL_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "coffin_full"), "main");
     public static final ModelLayerLocation SURVIVOR_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "survivor"), "main");
     public static final ModelLayerLocation JUSTICE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "justice"), "main");
     public static final ModelLayerLocation MAGICIANS_RED_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "magicians_red"), "main");
@@ -77,6 +78,8 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation STAR_PLATINUM_BASEBALL_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "star_platinum_baseball"), "main");
     public static final ModelLayerLocation DIVER_DOWN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "diver_down"), "main");
     public static final ModelLayerLocation DIVER_DOWN_BETA_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "diver_down_beta"), "main");
+    public static final ModelLayerLocation DIVER_DOWN_WORLD_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "diver_down_world"), "main");
+    public static final ModelLayerLocation DIVER_DROWNED_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "diver_drowned"), "main");
     public static final ModelLayerLocation SILVER_CHARIOT_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot"), "main");
     public static final ModelLayerLocation SILVER_CHARIOT_RAPIER_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_rapier"), "main");
     public static final ModelLayerLocation SILVER_CHARIOT_RAPIER_PLATFORM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_rapier_platform"), "main");

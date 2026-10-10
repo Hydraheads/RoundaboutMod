@@ -1178,7 +1178,67 @@ public class StandPowers extends AbilityScapeBasis {
         } else if (posID == 3){
             return Component.translatable(  "idle.roundabout.star_platinum");
         } else if (posID == 4){
-            return Component.translatable(  "idle.roundabout.arms_only");
+            return Component.translatable(  "idle.roundabout.star_platinum1");
+        } else if (posID == 5){
+            return Component.translatable(  "idle.roundabout.star_platinum2");
+        } else if (posID == 6){
+            return Component.translatable(  "idle.roundabout.magicians_red1");
+        } else if (posID == 7){
+            return Component.translatable(  "idle.roundabout.magicians_red2");
+        } else if (posID == 8){
+            return Component.translatable(  "idle.roundabout.the_world1");
+        } else if (posID == 9){
+            return Component.translatable(  "idle.roundabout.the_world2");
+        } else if (posID == 10){
+            return Component.translatable(  "idle.roundabout.killer_queen1");
+        } else if (posID == 11){
+            return Component.translatable(  "idle.roundabout.killer_queen2");
+        } else if (posID == 12){
+            return Component.translatable(  "idle.roundabout.purple_haze1");
+        } else if (posID == 13){
+            return Component.translatable(  "idle.roundabout.purple_haze2");
+        } else if (posID == 14){
+            return Component.translatable(  "idle.roundabout.king_crimson1");
+        } else if (posID == 15){
+            return Component.translatable(  "idle.roundabout.king_crimson2");
+        } else if (posID == 16){
+            return Component.translatable(  "idle.roundabout.white_snake1");
+        } else if (posID == 17){
+            return Component.translatable(  "idle.roundabout.white_snake2");
+        } else if (posID == 18){
+            return Component.translatable(  "idle.roundabout.diver_down1");
+        } else if (posID == 19){
+            return Component.translatable(  "idle.roundabout.diver_down2");
+        } else if (posID == 20){
+            return Component.translatable(  "idle.roundabout.d4c1");
+        } else if (posID == 21){
+            return Component.translatable(  "idle.roundabout.d4c2");
+        } else if (posID == 22){
+            return Component.translatable(  "idle.roundabout.soft_and_wet1");
+        } else if (posID == 23){
+            return Component.translatable(  "idle.roundabout.soft_and_wet2");
+        } else if (posID == 24){
+            return Component.translatable(  "idle.roundabout.kneel");
+        } else if (posID == 25){
+            return Component.translatable(  "idle.roundabout.brave");
+        } else if (posID == 26){
+            return Component.translatable(  "idle.roundabout.reborn");
+        } else if (posID == 27){
+            return Component.translatable(  "idle.roundabout.patriot");
+        } else if (posID == 28){
+            return Component.translatable(  "idle.roundabout.relaxed");
+        } else if (posID == 29){
+            return Component.translatable(  "idle.roundabout.crazy_diamond1");
+        } else if (posID == 30){
+            return Component.translatable(  "idle.roundabout.crazy_diamond2");
+        } else if (posID == 31){
+            return Component.translatable(  "idle.roundabout.golden_experience1");
+        } else if (posID == 32){
+            return Component.translatable(  "idle.roundabout.golden_experience2");
+        } else if (posID == 33){
+            return Component.translatable(  "idle.roundabout.sticky_fingers1");
+        } else if (posID == 34){
+            return Component.translatable(  "idle.roundabout.sticky_fingers2");
         } else {
             return Component.translatable(  "idle.roundabout.passive");
         }
@@ -2020,6 +2080,10 @@ public class StandPowers extends AbilityScapeBasis {
                     if (getActivePower() != PowerIndex.MINING) {
                         userSelf.roundabout$setStandAnimation(NONE);
                     }
+                } else if (animationType == HEEL_RAISE) {
+                    if (getActivePower() != PowerIndex.POWER_3_SNEAK) {
+                        userSelf.roundabout$setStandAnimation(NONE);
+                    }
                 } else if (animationType == PUNCH_LEFT || animationType == PUNCH_RIGHT) {
                     if ((activePower != PowerIndex.NONE || attackTimeDuring > attackTimeMax) || !PowerTypes.hasHandsActive(self)) {
                         userSelf.roundabout$setStandAnimation(NONE);
@@ -2220,7 +2284,7 @@ public class StandPowers extends AbilityScapeBasis {
             } else {
                 skinind-=1;
                 if (skinind < 0){
-                    skinind =poses.size()-1;
+                    skinind = poses.size()-1;
                 }
                 SE.roundabout$setIdlePosX(poses.get(skinind));
             }

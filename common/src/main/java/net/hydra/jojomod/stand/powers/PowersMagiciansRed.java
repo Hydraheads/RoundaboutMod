@@ -2756,7 +2756,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                                 40, 0.0, 0.2, 0.0, 0.2);
                         sendParticlesIfPossible(self.level(),ParticleTypes.EXPLOSION, value.getX(), value.getY()+value.getEyeHeight(), value.getZ(),
                                 1, 0.5, 0.5, 0.5, 0.2);
-                        MainUtil.gasExplode(null, (ServerLevel) value.level(), value.getOnPos(), 0, 2, 4, MainUtil.gasDamageMultiplier()*10);
+                        MainUtil.gasExplode(null, (ServerLevel) value.level(), value.getOnPos(), 0, 2, 4, MainUtil.gasDamageMultiplier()*5);
                     }
 
                     value.discard();

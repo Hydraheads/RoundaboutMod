@@ -3,7 +3,6 @@ package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.ICreeper;
 import net.hydra.jojomod.access.IGravityEntity;
-import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
@@ -12,23 +11,19 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.entity.visages.mobs.DIONPC;
 import net.hydra.jojomod.entity.visages.mobs.DiegoNPC;
-import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
-import net.hydra.jojomod.event.powers.visagedata.DiegoVisage;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.DiegoVoice;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.TWAndSPSharedPowers;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.DIOVoice;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
@@ -975,7 +970,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                     stand.setXRot(getLookAtEntityPitch(stand,$$5));
                     playSoundIfPossible(self.level(),null, this.self.blockPosition(),  ModSounds.PUNCH_4_SOUND_EVENT,
                             SoundSource.PLAYERS, 0.95F, 1.3F);
-                    int cdr = ClientNetworking.getAppropriateConfig().theWorldSettings.assaultCooldown;
+                    int cdr = ClientNetworking.getAppropriateConfig().theWorldSettings.assaultCooldownv2;
                     if (this.getSelf() instanceof ServerPlayer) {
                         S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
                                 PowerIndex.SKILL_1, cdr);

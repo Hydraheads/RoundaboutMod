@@ -104,6 +104,9 @@ public class ModEntities {
     public static EntityType<StarPlatinumBaseballEntity> STAR_PLATINUM_BASEBALL;
     public static EntityType<DiverDownEntity> DIVER_DOWN;
     public static EntityType<DiverDownBetaEntity> DIVER_DOWN_BETA;
+    public static EntityType<DiverDownWorldEntity> DIVER_DOWN_WORLD;
+    public static EntityType<DiverDrownedEntity> DIVER_DROWNED;
+    public static EntityType<DiverKickEntity> DIVER_KICK;
     public static EntityType<BoneProjectileEntity> BONE_PROJECTILE;
     public static EntityType<SilverChariotEntity> SILVER_CHARIOT;
     public static EntityType<SilverChariotRapierShotEntity> SILVER_CHARIOT_RAPIER;

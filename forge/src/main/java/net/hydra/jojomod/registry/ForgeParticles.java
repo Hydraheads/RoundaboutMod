@@ -137,6 +137,18 @@ public class ForgeParticles {
             "punch_impact_c",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> GOLD_PUNCH_IMPACT_A = PARTICLES.register(
+            "gold_punch_impact_a",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> GOLD_PUNCH_IMPACT_B = PARTICLES.register(
+            "gold_punch_impact_b",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> GOLD_PUNCH_IMPACT_C = PARTICLES.register(
+            "gold_punch_impact_c",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> DISC_STEAL_HIT = PARTICLES.register(
             "disc_steal_hit",
             () -> new SimpleParticleType(true)
@@ -263,6 +275,26 @@ public class ForgeParticles {
     );
     public static final RegistryObject<SimpleParticleType> AIRBUBBLE_BOMB = PARTICLES.register(
             "airbubble_bomb",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> ENERGY_RIPPLE_SURFACE = PARTICLES.register(
+            "energy_ripple_surface",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> ENERGY_RIPPLE = PARTICLES.register(
+            "energy_ripple",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> WAKE_RIPPLE = PARTICLES.register(
+            "wake_ripple",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> DIVER_DOWN_FINAL = PARTICLES.register(
+            "diver_down_final",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> RIBCAGE = PARTICLES.register(
+            "ribcage",
             () -> new SimpleParticleType(true)
     );
     public static final RegistryObject<SimpleParticleType> HYPNO_SWIRL = PARTICLES.register(

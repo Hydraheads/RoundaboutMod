@@ -1,5 +1,6 @@
 package net.hydra.jojomod.registry;
 
+import com.mojang.authlib.GameProfile;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.Utils.ForgeBrewingRecipes;
 import net.hydra.jojomod.access.IFireBlock;
@@ -29,12 +30,16 @@ import net.hydra.jojomod.entity.visages.mobs.*;
 import net.hydra.jojomod.entity.zombie_minion.*;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.block.Blocks;
@@ -43,9 +48,13 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
+import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mod.EventBusSubscriber(modid = Roundabout.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ForgeEvents {
@@ -104,6 +113,8 @@ public class ForgeEvents {
         event.put(ForgeEntities.ANUBIS.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.DIVER_DOWN.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.DIVER_DOWN_BETA.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.DIVER_DOWN_WORLD.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.DIVER_DROWNED.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SILVER_CHARIOT.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.OVA_ENYA.get(), OVAEnyaNPC.createAttributes().build());
         event.put(ForgeEntities.ENYA.get(), OVAEnyaNPC.createAttributes().build());
@@ -170,6 +181,7 @@ public class ForgeEvents {
                 SpawnPlacementRegisterEvent.Operation.OR
         );
     }
+
 
     @SubscribeEvent
     public static void registerRoundaboutBridge(FMLCommonSetupEvent event){
@@ -270,6 +282,9 @@ public class ForgeEvents {
         ModBlocks.CHESS_PIECE = ForgeBlocks.CHESS_PIECE.get();
         ModBlocks.CHESS_PIECE_BLOCK_ENTITY = ForgeBlocks.CHESS_PIECE_BLOCK_ENTITY.get();
 
+        ModBlocks.GAMBLING_TABLE = ForgeBlocks.GAMBLING_TABLE.get();
+        ModBlocks.GAMBLING_TABLE_BLOCK_ENTITY = ForgeBlocks.GAMBLING_TABLE_BLOCK_ENTITY.get();
+
         ModBlocks.WIRE_TRAP = ForgeBlocks.WIRE_TRAP.get();
         ModBlocks.BARBED_WIRE = ForgeBlocks.BARBED_WIRE.get();
         ModBlocks.BARBED_WIRE_BUNDLE = ForgeBlocks.BARBED_WIRE_BUNDLE.get();
@@ -335,6 +350,7 @@ public class ForgeEvents {
         ModItems.LUCK_UPGRADE = ForgeItems.LUCK_UPGRADE.get();
         ModItems.EXECUTION_UPGRADE = ForgeItems.EXECUTION_UPGRADE.get();
         ModItems.OCCULT_CHARGE = ForgeItems.OCCULT_CHARGE.get();
+        ModItems.TOTEM_OF_DOOM = ForgeItems.TOTEM_OF_DOOM.get();
         ModItems.HAIRSPRAY = ForgeItems.HAIRSPRAY.get();
         ModItems.LUCK_SWORD = ForgeItems.LUCK_SWORD.get();
         ModItems.WOODEN_GLAIVE = ForgeItems.WOODEN_GLAIVE.get();
@@ -681,6 +697,9 @@ public class ForgeEvents {
         ModParticles.PUNCH_IMPACT_A = ForgeParticles.PUNCH_IMPACT_A.get();
         ModParticles.PUNCH_IMPACT_B = ForgeParticles.PUNCH_IMPACT_B.get();
         ModParticles.PUNCH_IMPACT_C = ForgeParticles.PUNCH_IMPACT_C.get();
+        ModParticles.GOLD_PUNCH_IMPACT_A = ForgeParticles.GOLD_PUNCH_IMPACT_A.get();
+        ModParticles.GOLD_PUNCH_IMPACT_B = ForgeParticles.GOLD_PUNCH_IMPACT_B.get();
+        ModParticles.GOLD_PUNCH_IMPACT_C = ForgeParticles.GOLD_PUNCH_IMPACT_C.get();
         ModParticles.DISC_STEAL_HIT = ForgeParticles.DISC_STEAL_HIT.get();
         ModParticles.PUNCH_MISS = ForgeParticles.PUNCH_MISS.get();
         ModParticles.BUBBLE_TRAIL = ForgeParticles.BUBBLE_TRAIL.get();
@@ -714,6 +733,11 @@ public class ForgeEvents {
         ModParticles.AIRBUBBLE_CYAN = ForgeParticles.AIRBUBBLE_CYAN.get();
         ModParticles.AIRBUBBLE_BOMB = ForgeParticles.AIRBUBBLE_BOMB.get();
         ModParticles.AIRBUBBLE_YELLOW = ForgeParticles.AIRBUBBLE_YELLOW.get();
+        ModParticles.ENERGY_RIPPLE_SURFACE = ForgeParticles.ENERGY_RIPPLE_SURFACE.get();
+        ModParticles.ENERGY_RIPPLE = ForgeParticles.ENERGY_RIPPLE.get();
+        ModParticles.WAKE_RIPPLE = ForgeParticles.WAKE_RIPPLE.get();
+        ModParticles.DIVER_DOWN_FINAL = ForgeParticles.DIVER_DOWN_FINAL.get();
+        ModParticles.RIBCAGE = ForgeParticles.RIBCAGE.get();
         ModParticles.HYPNO_SWIRL = ForgeParticles.HYPNO_SWIRL.get();
         ModParticles.TUSK_VORTEX = ForgeParticles.TUSK_VORTEX.get();
         ModParticles.METALLICA_NAIL = ForgeParticles.METALLICA_NAIL.get();
@@ -754,6 +778,7 @@ public class ForgeEvents {
         ModEffects.BLEED = ForgeEffects.BLEED.get();
         ModEffects.HEX = ForgeEffects.HEX.get();
         ModEffects.BANISH = ForgeEffects.BANISH.get();
+        ModEffects.DOOMED = ForgeEffects.DOOMED.get();
         ModEffects.STAND_VIRUS = ForgeEffects.STAND_VIRUS.get();
         ModEffects.CAPTURING_LOVE = ForgeEffects.CAPTURING_LOVE.get();
         ModEffects.FACELESS = ForgeEffects.FACELESS.get();
@@ -838,6 +863,9 @@ public class ForgeEvents {
         ModEntities.STAR_PLATINUM_BASEBALL = ForgeEntities.STAR_PLATINUM_BASEBALL.get();
         ModEntities.DIVER_DOWN = ForgeEntities.DIVER_DOWN.get();
         ModEntities.DIVER_DOWN_BETA = ForgeEntities.DIVER_DOWN_BETA.get();
+        ModEntities.DIVER_DOWN_WORLD = ForgeEntities.DIVER_DOWN_WORLD.get();
+        ModEntities.DIVER_DROWNED = ForgeEntities.DIVER_DROWNED.get();
+        ModEntities.DIVER_KICK = ForgeEntities.DIVER_KICK.get();
         ModEntities.BONE_PROJECTILE = ForgeEntities.BONE_PROJECTILE.get();
         ModEntities.SILVER_CHARIOT = ForgeEntities.SILVER_CHARIOT.get();
         ModEntities.SILVER_CHARIOT_RAPIER = ForgeEntities.SILVER_CHARIOT_RAPIER.get();

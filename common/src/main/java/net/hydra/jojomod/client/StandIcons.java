@@ -52,6 +52,8 @@ public class StandIcons {
             "textures/gui/jojo_icons.png");
     public static final ResourceLocation JOJO_ICONS_2 = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/jojo_icons_2.png");
+    public static final ResourceLocation JOJO_ICONS_3 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/jojo_icons_3.png");
     public static final ResourceLocation TIME_ERASE_SKY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/environment/time_erase_sky.png");
     public static final ResourceLocation[] SKYBOX = new ResourceLocation[]{
@@ -671,6 +673,8 @@ public class StandIcons {
 
     public static final ResourceLocation LOCKED = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/locked_2.png");
+    public static final ResourceLocation UNUSABLE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/unusable.png");
     public static final ResourceLocation STAR_PLATINUM_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/star_platinum/punch.png");
     public static final ResourceLocation STAR_PLATINUM_FINAL_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
@@ -769,6 +773,12 @@ public class StandIcons {
             "textures/gui/icons/walking_heart/wall_walk_pass.png");
     public static final ResourceLocation WALL_CUT = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/walking_heart/wall_walk_cut.png");
+    public static final ResourceLocation WALKING_STOMP = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/walking_heart/walking_stomp.png");
+    public static final ResourceLocation PULL_SPIKE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/walking_heart/pull_spike.png");
+    public static final ResourceLocation PUSH_SPIKE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/walking_heart/push_spike.png");
 
     public static final ResourceLocation CINDERELLA_SCALP = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/cinderella/deface.png");
