@@ -1138,6 +1138,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 			return $$4 ? InteractionResult.CONSUME : InteractionResult.PASS;
 		} else if (this.getUser() == $$0) {
+			if (throwStatus == THROWED) { return InteractionResult.FAIL; }
+
 			if ($$2.is(Items.TORCH) && !getTorchStatus() && ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction &&
 					this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
 				if (!$$0.getAbilities().instabuild) { $$2.shrink(1); }

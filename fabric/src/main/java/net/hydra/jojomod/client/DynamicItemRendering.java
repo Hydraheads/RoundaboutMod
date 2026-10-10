@@ -29,7 +29,6 @@ public class DynamicItemRendering implements BuiltinItemRendererRegistry.Dynamic
         if (item instanceof BlockItem BItem) {
             Block block = BItem.getBlock();
             BlockEntity blockEntity;
-
             /// If someone is willing to do, maybe we could turn this into a Map? so we don't end up with a giant if statement.
 
             if (block instanceof HandBlock) {
