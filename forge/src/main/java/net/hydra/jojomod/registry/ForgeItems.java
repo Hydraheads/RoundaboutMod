@@ -217,7 +217,18 @@ public class ForgeItems {
     public static final RegistryObject<BlockItem> COFFIN_BLOCK_ITEM = addToBuildingTab(ITEMS.register("coffin_block",
             () -> new CoffinBlockItem(DyeColor.BLACK, ForgeBlocks.COFFIN_BLOCK.get(),
                     new Item.Properties().stacksTo(1)
-            )));
+            ){ //CoffinBlockItem is a common class, putting BEWLR in there might break fabric, so i put BEWLR here in the forge item registry
+
+                @Override
+                public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+                    consumer.accept(new IClientItemExtensions() {
+                        @Override
+                        public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                            return DynamicItemRendering.getInstance(); /// the mod should have only 1 instance of its own custom BEWLR
+                        }
+                    });
+                }
+            }));
 
 
     /*public static final RegistryObject<BlockItem> CHESSBOARD_BLOCK_ITEM = addToWIPTab(ITEMS.register("chessboard_block",

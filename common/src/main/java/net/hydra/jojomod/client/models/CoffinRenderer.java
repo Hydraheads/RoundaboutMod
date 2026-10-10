@@ -86,7 +86,7 @@ public class CoffinRenderer <T extends BlockEntity> implements BlockEntityRender
 
         return LayerDefinition.create(meshdefinition, 160, 160);
     }
-    private static final ResourceLocation COFFIN = new ResourceLocation(Roundabout.MOD_ID, "textures/block/coffin1.png");
+    public static final ResourceLocation COFFIN = new ResourceLocation(Roundabout.MOD_ID, "textures/block/coffin1.png");
 
     @Override
     public void render(T $$0, float $$1, PoseStack $$2, MultiBufferSource $$3, int $$4, int $$5) {
