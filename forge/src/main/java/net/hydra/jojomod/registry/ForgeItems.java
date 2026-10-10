@@ -401,9 +401,27 @@ public class ForgeItems {
                     new Item.Properties().stacksTo(64)
             )));
     public static final RegistryObject<BlockItem> HAND_ITEM = ITEMS.register("hand_block",
-            () -> new BlockItem(ForgeBlocks.HAND_BLOCK.get(),
+            () -> new HandBlockItem(ForgeBlocks.HAND_BLOCK.get(),
                     new Item.Properties().stacksTo(1)
-            ));
+            ) {
+                //HandBlockItem is a common class, putting BEWLR in there might break fabric, so i put BEWLR here in the forge item registry
+                @Override
+                public void initializeClient(java.util.function.Consumer<net.minecraftforge.client.extensions.common.IClientItemExtensions> consumer) {
+                    consumer.accept(new net.minecraftforge.client.extensions.common.IClientItemExtensions() {
+                        private net.hydra.jojomod.client.DynamicItemRendering renderer;
+                        @Override
+                        public net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                            if (this.renderer == null) {
+                                this.renderer = new net.hydra.jojomod.client.DynamicItemRendering(
+                                        net.minecraft.client.Minecraft.getInstance().getBlockEntityRenderDispatcher(),
+                                        net.minecraft.client.Minecraft.getInstance().getEntityModels()
+                                );
+                            }
+                            return this.renderer;
+                        }
+                    });
+                }
+            });
 
     public static final RegistryObject<BlockItem> MELON_PARFAIT_ITEM = addToBuildingTab(ITEMS.register("melon_parfait",
             () -> new BlockItem(ForgeBlocks.MELON_PARFAIT.get(),
