@@ -48,12 +48,13 @@ public final class WhitesnakeDiscUtil {
         if (!lowHealthSteal && hallucinationLevel(target) < config.hallucinationAllowsDiscSteal) {
             return DiscSealController.seal(target, type);
         }
-        return switch (type) {
-            case SIGHT -> ejectSight(target, user);
-            case MEMORY -> ejectMemory(target, user);
-            case HEARING -> ejectHearing(target, user);
-            default -> ejectStand(target, user);
+        ItemStack stack = switch (type) {
+            case SIGHT -> extractSight(target, true);
+            case MEMORY -> extractMemory(target, true);
+            case HEARING -> extractHearing(target, true);
+            default -> extractStand(target, true);
         };
+        return dropExtracted(target, user, stack);
     }
 
     public static boolean canCarrySightDisc(LivingEntity target) {
@@ -80,22 +81,6 @@ public final class WhitesnakeDiscUtil {
             case HEARING -> isHearingDiscEnabled();
             default -> true;
         };
-    }
-
-    private static boolean ejectSight(LivingEntity target, LivingEntity user) {
-        return dropExtracted(target, user, extractSight(target, true));
-    }
-
-    private static boolean ejectHearing(LivingEntity target, LivingEntity user) {
-        return dropExtracted(target, user, extractHearing(target, true));
-    }
-
-    private static boolean ejectMemory(LivingEntity target, LivingEntity user) {
-        return dropExtracted(target, user, extractMemory(target, true));
-    }
-
-    private static boolean ejectStand(LivingEntity target, LivingEntity user) {
-        return dropExtracted(target, user, extractStand(target, true));
     }
 
     public static ItemStack extractDiscStack(LivingEntity target, byte type) {

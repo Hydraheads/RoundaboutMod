@@ -779,6 +779,7 @@ public class ForgeEvents {
         ModEffects.HEX = ForgeEffects.HEX.get();
         ModEffects.BANISH = ForgeEffects.BANISH.get();
         ModEffects.DOOMED = ForgeEffects.DOOMED.get();
+        ModEffects.DOOM_IMMUNITY = ForgeEffects.DOOM_IMMUNITY.get();
         ModEffects.STAND_VIRUS = ForgeEffects.STAND_VIRUS.get();
         ModEffects.CAPTURING_LOVE = ForgeEffects.CAPTURING_LOVE.get();
         ModEffects.FACELESS = ForgeEffects.FACELESS.get();
@@ -901,6 +902,7 @@ public class ForgeEvents {
         ModEntities.GASOLINE_SPLATTER = ForgeEntities.GASOLINE_SPLATTER.get();
         ModEntities.BLOOD_SPLATTER = ForgeEntities.BLOOD_SPLATTER.get();
         ModEntities.STAND_ARROW = ForgeEntities.STAND_ARROW.get();
+        ModEntities.TOTEM_OF_DOOM = ForgeEntities.TOTEM_OF_DOOM.get();
         ModEntities.BOMB_PLANTED_ARROW = ForgeEntities.BOMB_PLANTED_ARROW.get();
         ModEntities.BOMB_PLANTED_SPECTRAL_ARROW = ForgeEntities.BOMB_PLANTED_SPECTRAL_ARROW.get();
         ModEntities.BOMB_PLANTED_ENDERPEARL = ForgeEntities.BOMB_PLANTED_ENDERPEARL.get();

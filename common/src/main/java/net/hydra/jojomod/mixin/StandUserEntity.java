@@ -3224,6 +3224,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    @Override
+    public void roundabout$stopAutoSpinAttack() {
+        this.autoSpinAttackTicks = 0;
+        if (!this.level().isClientSide) {
+            this.setLivingEntityFlag(4, false);
+        }
+    }
+
     @Unique
     public void roundabout$syncDaze() {
         if (((LivingEntity) (Object) this) instanceof Player && !((LivingEntity) (Object) this).level().isClientSide) {
@@ -4967,6 +4975,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /** Villager call to action */
     @Inject(method = "actuallyHurt", at = @At(value = "HEAD"), cancellable = true, require = 0)
     protected void rooundabout$actuallyHurt(DamageSource $$0, float $$1, CallbackInfo ci) {
+
+        // mob immunity to doomed, in seconds
+        int immunityTime = 20 * ClientNetworking.getAppropriateConfig().itemSettings.doomImmunityDuration;
+        if (!(((LivingEntity) (Object) this) instanceof Player)) {
+            if (this.hasEffect(ModEffects.DOOMED)) {
+                this.removeEffect(ModEffects.DOOMED);
+                this.addEffect(new MobEffectInstance(ModEffects.DOOM_IMMUNITY, immunityTime, 0, false, false));
+            }
+        }
 
         if (!this.isInvulnerableTo($$0)) {
             if (((LivingEntity) (Object) this) instanceof AbstractVillager AV

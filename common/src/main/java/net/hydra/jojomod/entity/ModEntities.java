@@ -143,6 +143,7 @@ public class ModEntities {
     public static EntityType<GentlyWeepsEntity> GENTLY_WEEPS;
     public static EntityType<GasolineCanEntity> GASOLINE_CAN;
     public static EntityType<RoadRollerEntity> ROAD_ROLLER_ENTITY;
+    public static EntityType<TotemOfDoomEntity> TOTEM_OF_DOOM;
 
     public static EntityType<GasolineSplatterEntity> GASOLINE_SPLATTER;
     public static EntityType<BloodSplatterEntity> BLOOD_SPLATTER;

@@ -23,6 +23,7 @@ public class FabricEffects extends MobEffect{
     public static final MobEffect HEX = register("hex", new FabricEffects(MobEffectCategory.HARMFUL, 11606258)); //old color 16762706
     public static final MobEffect BANISH = register("banish", new FabricEffects(MobEffectCategory.NEUTRAL, 15099838)); //old color 16762706
     public static final MobEffect DOOMED = register("doom", new FabricEffects(MobEffectCategory.HARMFUL, 0));
+    public static final MobEffect DOOM_IMMUNITY = register("doom_immunity", new FabricEffects(MobEffectCategory.BENEFICIAL, 0));
     public static final MobEffect STAND_VIRUS = register("stand_virus", new FabricEffects(MobEffectCategory.HARMFUL, 9979490));
     public static final MobEffect CAPTURING_LOVE = register("capturing_love", new FabricEffects(MobEffectCategory.BENEFICIAL, 16772988));
     public static final MobEffect FACELESS = register("faceless", new FabricEffects(MobEffectCategory.HARMFUL, 10329495));
@@ -89,6 +90,7 @@ public class FabricEffects extends MobEffect{
         ModEffects.HEX = HEX;
         ModEffects.BANISH = BANISH;
         ModEffects.DOOMED = DOOMED;
+        ModEffects.DOOM_IMMUNITY = DOOM_IMMUNITY;
         ModEffects.STAND_VIRUS = STAND_VIRUS;
         ModEffects.CAPTURING_LOVE = CAPTURING_LOVE;
         ModEffects.FACELESS = FACELESS;

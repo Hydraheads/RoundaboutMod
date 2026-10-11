@@ -789,6 +789,12 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "gasoline_can").toString())
             );
+    public static final RegistryObject<EntityType<TotemOfDoomEntity>> TOTEM_OF_DOOM =
+            ENTITY_TYPES.register("totem_of_doom", () ->
+                    EntityType.Builder.<TotemOfDoomEntity>of(TotemOfDoomEntity::new, MobCategory.MISC).sized(0.25f, 0.25f).
+                            clientTrackingRange(8).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "totem_of_doom").toString())
+            );
     public static final RegistryObject<EntityType<CrossfireHurricaneEntity>> CROSSFIRE_HURRICANE =
             ENTITY_TYPES.register("crossfire_hurricane", () ->
                     EntityType.Builder.<CrossfireHurricaneEntity>of(CrossfireHurricaneEntity::new, MobCategory.MISC).sized(1.5f, 1.5f).
