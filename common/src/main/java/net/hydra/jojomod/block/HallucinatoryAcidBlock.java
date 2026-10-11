@@ -34,7 +34,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -126,9 +125,8 @@ public final class HallucinatoryAcidBlock extends BaseEntityBlock implements Sim
         double strength = layers / 4.0D;
         double fullHeightMultiplier = 0.9D;
         double horizontalMultiplier = 1.0D - (1.0D - fullHeightMultiplier) * strength;
-        double verticalMultiplier = 1.0D - 0.1D * strength;
-        entity.makeStuckInBlock(state,
-                new Vec3(horizontalMultiplier, verticalMultiplier, horizontalMultiplier));
+        entity.setDeltaMovement(entity.getDeltaMovement().multiply(
+                horizontalMultiplier, 1.0D, horizontalMultiplier));
     }
 
     @Override
