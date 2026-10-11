@@ -4992,6 +4992,9 @@ public class PowersDiverDown extends NewPunchingStand {
             case DiverDownEntity.SECCO -> {
                 return Component.translatable("skins.roundabout.diver_down.secco");
             }
+            case DiverDownEntity.VAN_HALEN -> {
+                return Component.translatable("skins.roundabout.diver_down.van_halen");
+            }
             default -> {
                 return Component.translatable("skins.roundabout.diver_down.base");
             }
@@ -5034,6 +5037,7 @@ public class PowersDiverDown extends NewPunchingStand {
             }
             if (Level > 6 || bypass) {
                 l.add(DiverDownEntity.ARTWORK);
+                l.add(DiverDownEntity.VAN_HALEN);
                 l.add(DiverDownEntity.SECCO);
             }
             if (Level > 7 || bypass) {
