@@ -880,6 +880,13 @@ public class FabricEntities {
                         EntityType.Builder.<GasolineCanEntity>of(GasolineCanEntity::new, MobCategory.MISC).
                                 sized(0.8f, 0.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":gasoline_can")
                 );
+        public static final EntityType<TotemOfDoomEntity> TOTEM_OF_DOOM =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "totem_of_doom"),
+                    EntityType.Builder.<TotemOfDoomEntity>of(TotemOfDoomEntity::new, MobCategory.MISC).
+                            sized(0.25f, 0.25f).clientTrackingRange(8).build(Roundabout.MOD_ID+":totem_of_doom")
+            );
         public static final EntityType<CrossfireHurricaneEntity> CROSSFIRE_HURRICANE =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -1339,6 +1346,7 @@ public class FabricEntities {
                 ModEntities.ULTRAVIOLET_PROJECTILE = ULTRAVIOLET_PROJECTILE;
                 ModEntities.COLD_BLAST_PROJECTILE = COLD_BLAST_PROJECTILE;
                 ModEntities.GASOLINE_CAN = GASOLINE_CAN;
+                ModEntities.TOTEM_OF_DOOM = TOTEM_OF_DOOM;
                 ModEntities.GASOLINE_SPLATTER = GASOLINE_SPLATTER;
                 ModEntities.BLOOD_SPLATTER = BLOOD_SPLATTER;
                 ModEntities.STAND_ARROW = STAND_ARROW;
