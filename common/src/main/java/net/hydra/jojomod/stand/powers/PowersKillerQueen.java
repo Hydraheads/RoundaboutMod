@@ -249,6 +249,23 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
     }
 
+    @Override
+    public void onStandSwitch(){
+        super.onStandSwitch();
+        btdDefuseServer(true);
+        defuseServer();
+        entityTargetBuffer = null;
+        if (bombPlantedItem != null) {
+            bombPlantedItem.defuse();
+            bombPlantedItem = null;
+        }
+        if (bombEntity instanceof BombPlantedArrow BPA) {
+            BPA.defuse();
+        }else if (bombEntity instanceof BombPlantedSpectralArrow BPSA) {
+            BPSA.defuse();
+        }
+    }
+
     public void syncBombStatus(byte status) {
          this.currentBombStatus = status;
          this.updatePowerInt(PowersKillerQueen.PLANTED, status);
@@ -2698,8 +2715,11 @@ public class PowersKillerQueen extends NewPunchingStand {
         super.levelUp();
     }
 
-
     public boolean btdDefuseServer() {
+        return btdDefuseServer(false);
+    }
+
+    public boolean btdDefuseServer(boolean standSwitch) {
         if (!this.isClient()) {
 
             clearEntitiesSeconds();
@@ -2722,7 +2742,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (inBitesTheDustMode()) {
                 int cooldownBase = ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustPlantCooldown;
 
-                if (!onCooldown(PowerIndex.SKILL_4) && !isClient()) {
+                if (!onCooldown(PowerIndex.SKILL_4) && !isClient() && !standSwitch) {
                     this.setCooldown(PowerIndex.SKILL_4, (int) ((cooldownBase / 4.0f) * (combatActivations + 1)));
                 }
 

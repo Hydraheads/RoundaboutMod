@@ -1150,7 +1150,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 				setTorchStatus(true);
 				Vec3 dir = $$0.getLookAngle();
 				Vec3 unhandledDir = new Vec3(dir.x, 0, dir.z).normalize();
-				float snap = 4;
+				float snap = 2;
 				miningDir = new Vec3(
 						Math.round(unhandledDir.x*snap)/snap,
 						0,
