@@ -104,6 +104,7 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
         this.animate(entity.idleAnimationGoldenExperience1, StandIdles.Gangstar, animationProgress, 1f);
         this.animate(entity.idleAnimationGoldenExperience2, StandIdles.Mozart, animationProgress, 1f);
         this.animate(entity.idleAnimationStickyFingers1, StandIdles.Brown_Sugar, animationProgress, 1f);
+        this.animate(entity.idleAnimationStickyFingers2, StandIdles.Capo, animationProgress, 1f);
     }
 
     /**Most humanoid stands share these animations.*/

@@ -3224,6 +3224,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    @Override
+    public void roundabout$stopAutoSpinAttack() {
+        this.autoSpinAttackTicks = 0;
+        if (!this.level().isClientSide) {
+            this.setLivingEntityFlag(4, false);
+        }
+    }
+
     @Unique
     public void roundabout$syncDaze() {
         if (((LivingEntity) (Object) this) instanceof Player && !((LivingEntity) (Object) this).level().isClientSide) {
@@ -4142,7 +4150,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (!this.level().isClientSide() && !this.rdbt$isRedirectingDamage && this.diverSubmergedUser != null
                 && this.diverSubmergedUser.isDiveActive()
                 && !this.diverSubmergedUser.isSelfDive()
-                && this.diverSubmergedUser.damageRedirectionEnabled) {
+                && this.diverSubmergedUser.damageRedirectionEnabled
+                && !MainUtil.isSpecialDamage($$0)) {
             this.rdbt$isRedirectingDamage = true;
             try {
                 this.diverSubmergedUser.onSubmergedTargetHurt($$0, $$1);
@@ -4153,7 +4162,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
         // diver down damage breaking disguise
-        if (!entity.level().isClientSide() && $$1 > 0 && this.roundabout$isDisguised()) {
+        if (!entity.level().isClientSide() && $$1 > 0 && this.roundabout$isDisguised() && ClientNetworking.getAppropriateConfig().diverDownSettings.clearDisguiseOnHit) {
             this.roundabout$clearDisguise();
         }
         if ($$0.getEntity() instanceof Player pe) {
@@ -4967,6 +4976,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "actuallyHurt", at = @At(value = "HEAD"), cancellable = true, require = 0)
     protected void rooundabout$actuallyHurt(DamageSource $$0, float $$1, CallbackInfo ci) {
 
+        // mob immunity to doomed, in seconds
+        int immunityTime = 20 * ClientNetworking.getAppropriateConfig().itemSettings.doomImmunityDuration;
+        if (!(((LivingEntity) (Object) this) instanceof Player)) {
+            if (this.hasEffect(ModEffects.DOOMED)) {
+                this.removeEffect(ModEffects.DOOMED);
+                this.addEffect(new MobEffectInstance(ModEffects.DOOM_IMMUNITY, immunityTime, 0, false, false));
+            }
+        }
+
         if (!this.isInvulnerableTo($$0)) {
             if (((LivingEntity) (Object) this) instanceof AbstractVillager AV
                     && !($$0.getEntity() instanceof AbstractVillager) && $$0.getEntity() instanceof LivingEntity LE) {
@@ -5091,6 +5109,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (rdbt$this() instanceof Player pl) {
             basis = ((IFatePlayer) this).rdbt$getFatePowers().inputSpeedModifiers(basis);
             basis = ((IPowersPlayer) this).rdbt$getPowers().inputSpeedModifiers(basis);
+        }
+        //diver down legs speed boost
+        StandUser SU = (StandUser) this;
+        if (this.roundabout$hasDiverLegs()) {
+            basis *= 1F + (ClientNetworking.getAppropriateConfig().diverDownSettings.legSpeedBoost * 0.01F); //0% speed boost default
         }
         if(this.roundabout$getGrabbedSoul()){
             basis *= 0.025F;

@@ -124,6 +124,12 @@ public class PowersWalkingHeart extends NewDashPreset {
         $$1.add((byte) 26);
         $$1.add((byte) 27);
         $$1.add((byte) 28);
+        $$1.add((byte) 29);
+        $$1.add((byte) 30);
+        $$1.add((byte) 31);
+        $$1.add((byte) 32);
+        $$1.add((byte) 33);
+        $$1.add((byte) 34);
         return $$1;
     }
 

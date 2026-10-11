@@ -1,6 +1,6 @@
 {
-  "parent": "item/generated",
+  "parent": "minecraft:item/template_bed",
   "textures": {
-    "layer0": "roundabout:item/coffin"
+    "particle": "minecraft:block/black_wool"
   }
 }

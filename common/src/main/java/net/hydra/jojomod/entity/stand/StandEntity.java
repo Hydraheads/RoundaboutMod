@@ -222,6 +222,7 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
     public final AnimationState idleAnimationGoldenExperience1 = new AnimationState();
     public final AnimationState idleAnimationGoldenExperience2 = new AnimationState();
     public final AnimationState idleAnimationStickyFingers1 = new AnimationState();
+    public final AnimationState idleAnimationStickyFingers2 = new AnimationState();
     public final AnimationState punchState1 = new AnimationState();
     public final AnimationState punchState2 = new AnimationState();
     public final AnimationState punchState3 = new AnimationState();
@@ -412,6 +413,11 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                 this.idleAnimationStickyFingers1.startIfStopped(this.tickCount);
             } else {
                 this.idleAnimationStickyFingers1.stop();
+            }
+            if (idle == 34 && animation == IDLE) {
+                this.idleAnimationStickyFingers2.startIfStopped(this.tickCount);
+            } else {
+                this.idleAnimationStickyFingers2.stop();
             }
 
 

@@ -92,6 +92,7 @@ public class RoundaboutFabricClient implements ClientModInitializer {
         ItemProperties.register(FabricItems.FANCY_LIGHTER, new ResourceLocation(Roundabout.MOD_ID,"islit"), (itemStack, clientLevel, livingEntity, i) ->  !itemStack.isEmpty() ? ((FancyLighterItem)(itemStack.getItem())).getCurrentPredicateValue(clientLevel, itemStack) : 0.0f);
 
         BuiltinItemRendererRegistry.INSTANCE.register(ModBlocks.HAND_BLOCK, DynamicItemRendering.INSTANCE);
+        BuiltinItemRendererRegistry.INSTANCE.register(ModBlocks.COFFIN_BLOCK, DynamicItemRendering.INSTANCE);
 
         ClientClass.init();
     }
