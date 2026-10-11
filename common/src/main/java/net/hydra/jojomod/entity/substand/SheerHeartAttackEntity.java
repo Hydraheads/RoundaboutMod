@@ -991,11 +991,17 @@ public class SheerHeartAttackEntity extends StandEntity {
 				}
 			}
 
+			boolean undeadAndArthropodIgnore = ClientNetworking.getAppropriateConfig().killerQueenSettings.sheerHeartAttackSeenUndeadAndArthropod;
+
 			MobType mobType = LE.getMobType();
-			if (ClientNetworking.getAppropriateConfig().killerQueenSettings.sheerHeartAttackSeenUndeadAndArthropod
+			if (undeadAndArthropodIgnore
 					&& (mobType.equals(MobType.UNDEAD) || mobType.equals(MobType.ARTHROPOD)
-					|| (LE instanceof FallenMob) )
+					|| (LE instanceof FallenMob) ) || (LE instanceof FallenMob FM && !FM.getActivated())
 					|| FateTypes.isVampire(LE) || FateTypes.isZombie(LE)) { points -= 30;}
+			if (!undeadAndArthropodIgnore
+					&& (mobType.equals(MobType.UNDEAD) || mobType.equals(MobType.ARTHROPOD))) {
+				points -= 10;
+			}
 		}
 
 		return points;
