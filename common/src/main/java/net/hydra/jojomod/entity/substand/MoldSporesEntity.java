@@ -160,8 +160,8 @@ public class MoldSporesEntity extends StandEntity {
                             && !entity.equals(User)) {
                         if ((!((PowersGreenDay) ((StandUser) User).roundabout$getStandPowers()).allies.contains(entity.getStringUUID())) || !(User instanceof Player)) {
 
-                            float fallDistance = (((StandUser) entity).getStaringYPos() - (float)entity.getY());
-                            if (fallDistance < 1.2) { continue; }
+                            float fallDistance = (((StandUser) entity).getStaringYPos() - (float)entity.getPosition(1).y());
+                            if (fallDistance < 0.8) { continue; }
 
                             double width = entity.getBbWidth() / 2;
                             double height = entity.getBbHeight() / 2;

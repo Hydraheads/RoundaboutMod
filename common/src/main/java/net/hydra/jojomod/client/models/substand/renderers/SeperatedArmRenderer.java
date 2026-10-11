@@ -82,11 +82,11 @@ public class SeperatedArmRenderer extends StandRenderer<SeperatedArmEntity> {
                     if (MI instanceof ModificationMaskItem MD){
                         int height = visage.getOrCreateTagElement("modifications").getInt("height");
                         int width = visage.getOrCreateTagElement("modifications").getInt("width");
-                        matrixStack.scale(0.798F + (((float) width)*0.001F), 0.7F+(((float) height)*0.001F), 0.798F+(((float) width)*0.001F));
+                        matrixStack.scale(0.798F + (((float) height)*0.001F), 0.7F+(((float) width)*0.001F), 0.798F+(((float) height)*0.001F));
                     } else {
                         VisageData vd = MI.visageData.generateVisageData(P);
                         Vector3f scale = vd.scale();
-                        matrixStack.scale(scale.x, scale.y, scale.z);
+                        matrixStack.scale(scale.y, scale.z, scale.x);
                     }
                 }
             }
