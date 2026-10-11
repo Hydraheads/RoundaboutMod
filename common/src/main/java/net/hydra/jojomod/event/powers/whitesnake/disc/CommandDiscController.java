@@ -164,9 +164,11 @@ public final class CommandDiscController {
             return;
         }
         if (!(mob.level() instanceof ServerLevel level)) return;
-        if (level.getGameTime() >= command.expiresAt() || !((DiscBearer) mob).roundabout$hasMemoryDisc()) {
+        if (mob.isNoAi() || level.getGameTime() >= command.expiresAt()
+                || !((DiscBearer) mob).roundabout$hasMemoryDisc()) {
             clearAttackCommand(mob);
             mob.setTarget(null);
+            mob.getNavigation().stop();
             return;
         }
         Entity found = level.getEntity(command.targetId());
@@ -176,7 +178,6 @@ public final class CommandDiscController {
             return;
         }
 
-        if (mob.isNoAi()) mob.setNoAi(false);
         mob.setTarget(target);
         mob.getLookControl().setLookAt(target, 30.0F, 30.0F);
         mob.getNavigation().moveTo(target, 1.15D);
