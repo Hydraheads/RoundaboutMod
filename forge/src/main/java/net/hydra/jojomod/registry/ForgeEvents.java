@@ -902,6 +902,7 @@ public class ForgeEvents {
         ModEntities.GASOLINE_SPLATTER = ForgeEntities.GASOLINE_SPLATTER.get();
         ModEntities.BLOOD_SPLATTER = ForgeEntities.BLOOD_SPLATTER.get();
         ModEntities.STAND_ARROW = ForgeEntities.STAND_ARROW.get();
+        ModEntities.TOTEM_OF_DOOM = ForgeEntities.TOTEM_OF_DOOM.get();
         ModEntities.BOMB_PLANTED_ARROW = ForgeEntities.BOMB_PLANTED_ARROW.get();
         ModEntities.BOMB_PLANTED_SPECTRAL_ARROW = ForgeEntities.BOMB_PLANTED_SPECTRAL_ARROW.get();
         ModEntities.BOMB_PLANTED_ENDERPEARL = ForgeEntities.BOMB_PLANTED_ENDERPEARL.get();
