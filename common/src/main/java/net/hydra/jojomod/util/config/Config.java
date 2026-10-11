@@ -208,6 +208,12 @@ public class Config implements Cloneable {
         public Integer matchDamage;
         @BooleanOption(group = "inherit", value = true)
         public Boolean noGlaiveDuringPunchRecharge;
+        @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
+        public Integer totemRange;
+        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
+        public Integer totemDuration;
+        @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
+        public Integer doomImmunityDuration;
     }
     public static class WorldGenSettings {
         @IntOption(group = "inherit", value = 55, min = 0, max = 4096)

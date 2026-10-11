@@ -1,8 +1,11 @@
 package net.hydra.jojomod.entity;
 
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.platform.ClientServices;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
@@ -11,13 +14,19 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ItemSupplier;
+import net.minecraft.world.entity.projectile.ThrownEnderpearl;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TridentItem;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -31,8 +40,8 @@ public class TotemOfDoomEntity extends Entity implements ItemSupplier {
             SynchedEntityData.defineId(TotemOfDoomEntity.class, EntityDataSerializers.ITEM_STACK);
 
     private int life = 0;
-    private static final int RADIUS = 30; // radius of the depression square
-    private static final int MAX_LIFE = 200; // change this later, 10 seconds is only for testing
+    private static final int RADIUS = ClientNetworking.getAppropriateConfig().itemSettings.totemRange; // radius of the depression square
+    private static final int MAX_LIFE = 20 * ClientNetworking.getAppropriateConfig().itemSettings.totemDuration;
 
     public TotemOfDoomEntity(EntityType<?> type, Level level) {
         super(type, level);
@@ -94,8 +103,40 @@ public class TotemOfDoomEntity extends Entity implements ItemSupplier {
             List<Entity> entities = this.level().getEntities(null, box);
             for (Entity M : entities) {
                 if (M instanceof LivingEntity LV) {
-                    LV.addEffect(new MobEffectInstance(ModEffects.DOOMED, 10, 0, false, true));
-                    // will eventually add the code here that shoots down pearls and stuff
+                    if (!LV.hasEffect(ModEffects.DOOM_IMMUNITY)) {
+                        LV.addEffect(new MobEffectInstance(ModEffects.DOOMED, 10, 0, false, true));
+                    }
+
+                    if (LV.isFallFlying() || LV.isAutoSpinAttack()) {
+                        this.zapEntity(LV);
+
+                        // Stops tridents from riptiding
+                        if (LV.isAutoSpinAttack()) {
+                            ItemStack main = LV.getMainHandItem();
+                            ItemStack off = LV.getOffhandItem();
+
+                            // checks if the player is holding a trident, and if the trident has riptide. pretty simple
+                            boolean isRiptideTrident = (main.getItem() instanceof TridentItem && EnchantmentHelper.getRiptide(main) > 0)
+                                    || (off.getItem() instanceof TridentItem && EnchantmentHelper.getRiptide(off) > 0);
+
+                            if (isRiptideTrident) {
+                                ((StandUser) LV).roundabout$stopAutoSpinAttack();
+                                // completely kills momentum so you don't just fling anyways
+                                LV.setDeltaMovement(Vec3.ZERO);
+                                LV.hurtMarked = true;
+                            }
+                        }
+
+                        // Shoots down the plane (elytra)
+                        if (LV.isFallFlying()) {
+                            if (LV instanceof Player player) {
+                                player.stopFallFlying();
+                            }
+                        }
+                    }
+                } else if (M instanceof ThrownEnderpearl pearl) {
+                    zapEntity(pearl);
+                    pearl.discard();
                 }
             }
         }
@@ -164,5 +205,18 @@ public class TotemOfDoomEntity extends Entity implements ItemSupplier {
         Vec3 p4 = new Vec3(center.x - RADIUS, center.y, center.z + RADIUS);
 
         drawSquare(level, p1, p2, p3, p4, 70, particle);
+    }
+
+    // Valorant Veto beam :O
+    public void zapEntity(Entity target) {
+        if (!this.level().isClientSide) {
+            ParticleOptions particle = DOOM_PALETTE[this.level().random.nextInt(DOOM_PALETTE.length)];
+            Vec3 targetPos = target.position();
+            // I only need the distance so i know how many particles to spawn
+            // it gets multiplied by 2 so it's not too spacious, but also not too dense
+            int distance = 2 * ((int) Math.round(this.position().distanceTo(targetPos)));
+            drawLine((ServerLevel) this.level(), this.position(), targetPos, distance, particle);
+            this.level().playSound(null, target.blockPosition(), SoundEvents.ELDER_GUARDIAN_HURT, SoundSource.NEUTRAL, 1.0F, 1.2F);
+        }
     }
 }

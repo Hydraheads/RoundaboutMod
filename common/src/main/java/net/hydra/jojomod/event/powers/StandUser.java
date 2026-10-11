@@ -283,6 +283,7 @@ public interface StandUser {
 
     void roundabout$UniversalTick();
     void roundabout$startAutoSpinAttack(int p_204080_);
+    void roundabout$stopAutoSpinAttack();
 
     void roundabout$setThrower(LivingEntity thrower);
     void roundabout$setZappedToID(int bound);
