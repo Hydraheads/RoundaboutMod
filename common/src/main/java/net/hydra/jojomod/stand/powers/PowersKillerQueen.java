@@ -1188,7 +1188,8 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
         if (targetEntity instanceof Mob || targetEntity instanceof Player) {
             LivingEntity LE = (LivingEntity)targetEntity;
-            if (LE.isDeadOrDying() || LE.getMaxHealth() > getMaxBTDHostHealth()) {
+            if (LE.isDeadOrDying() || LE.getMaxHealth() > getMaxBTDHostHealth()
+                    || LE.getAttribute(Attributes.MAX_HEALTH).getBaseValue() > getMaxBTDHostHealth()) {
                 return false;
             }
 
@@ -3942,7 +3943,9 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             tickBtdGuard();
             if (inBitesTheDustMode() && bitesTheDustPlantedEntity != null) {
-                if ( self instanceof Player player
+                if (bitesTheDustPlantedEntity.getMaxHealth() > getMaxBTDHostHealth()) {
+                    btdDefuseServer();
+                } else if ( self instanceof Player player
                         && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof KiraPartFourVoice voice && !voice.inTheMiddleOfTalking()) {
                     Vec3 pos = bitesTheDustPlantedEntity.getPosition(1);
 

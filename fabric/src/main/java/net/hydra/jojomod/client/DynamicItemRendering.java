@@ -1,19 +1,15 @@
 package net.hydra.jojomod.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.hydra.jojomod.block.CoffinBlockEntity;
 import net.hydra.jojomod.block.handBlock.HandBlock;
 import net.hydra.jojomod.block.handBlock.HandBlockEntity;
-
 import net.hydra.jojomod.registry.FabricBlocks;
 import net.hydra.jojomod.registry.FabricItems;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
