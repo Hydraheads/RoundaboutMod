@@ -61,6 +61,16 @@ public class TotemOfDoomEntity extends Entity implements ItemSupplier {
         return item.isEmpty() ? new ItemStack(ModItems.TOTEM_OF_DOOM) : item;
     }
 
+    /*
+    Drew like a dark, messed up version of the totem of undying particles haha. Just a glimpse into my dark reality.
+    A full stare into my twisted perspective would make most simply go insane lmao
+     */
+    public static final ParticleOptions[] DOOM_PALETTE = new ParticleOptions[] {
+            new DustParticleOptions(Vec3.fromRGB24(0xE01613).toVector3f(), 1.0F), // red like eyes
+            new DustParticleOptions(Vec3.fromRGB24(0x7B1FA2).toVector3f(), 1.0F), // purple
+            new DustParticleOptions(Vec3.fromRGB24(0x2A1B19).toVector3f(), 1.0F)  // black-ish
+    };
+
     @Override
     public void tick() {
         super.tick();
@@ -69,7 +79,17 @@ public class TotemOfDoomEntity extends Entity implements ItemSupplier {
 
         // bounding box that gives people depression
         if (!this.level().isClientSide) {
+            //this is for the box particle
             drawMagicSymbol(this.level(), this.position());
+            //this is for the constant particles it emits
+            ParticleOptions particle = DOOM_PALETTE[level().random.nextInt(DOOM_PALETTE.length)];
+            if (this.tickCount % 1 == 0) {
+                ((ServerLevel) level()).sendParticles(
+                        particle,
+                        this.getX(), this.getY() + 0.1, this.getZ(),
+                        1, 0.1, 0.1, 0.1, 0.02
+                );
+            }
             AABB box = this.getBoundingBox().inflate(RADIUS, RADIUS, RADIUS);
             List<Entity> entities = this.level().getEntities(null, box);
             for (Entity M : entities) {
@@ -112,7 +132,7 @@ public class TotemOfDoomEntity extends Entity implements ItemSupplier {
     }
 
     // for making the square that tells where the box of the move is
-    public static final Vector3f OCCULT_PARTICLE_COLOR = Vec3.fromRGB24(0xE667BE).toVector3f();
+    public static final Vector3f OCCULT_PARTICLE_COLOR = Vec3.fromRGB24(0x2A1B19).toVector3f();
     public static void drawLine(Level level, Vec3 start, Vec3 end, int points, ParticleOptions particle) {
         for (int i = 0; i <= points; i++) {
             double t = (double) i / points;
