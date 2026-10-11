@@ -5238,6 +5238,14 @@ public class PowersDiverDown extends NewPunchingStand {
         }
     }
 
+    // Need to override this to clear spring legs and ribcage trap when swapping stands
+    @Override
+    public void onStandSwitch(){
+        clearRibcageTrap();
+        clearSpringLegs();
+        super.onStandSwitch();
+    }
+
     // WIP FEATURES BELOW HERE, DELETE WHEN DONE
     @Override
     public boolean isWip() {
