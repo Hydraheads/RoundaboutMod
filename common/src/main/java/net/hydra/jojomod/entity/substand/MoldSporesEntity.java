@@ -22,6 +22,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
@@ -141,14 +142,12 @@ public class MoldSporesEntity extends StandEntity {
         for (int j = 0; j < damages.size(); j++) {
             if (Objects.nonNull(this.getUser())) {
                 Entity entity = damages.get(j);
-
-
                 //boolean down = previousYpos > entity.getY() + 0.1;
 
                 boolean isStand = (entity instanceof StandEntity);
                 boolean isBoss = (MainUtil.isBossMob(entity));
 
-                if (entity instanceof LivingEntity) {
+                if (entity instanceof LivingEntity && User != null) {
 
                     if (!((StandUser) entity).roundabout$getStandPowers().isStoppingTime()
                             && !((StandUser) entity).roundabout$isBubbleEncased()
@@ -160,6 +159,9 @@ public class MoldSporesEntity extends StandEntity {
                             && ((StandUser) entity).getJumpImmunityTicks() < 1
                             && !entity.equals(User)) {
                         if ((!((PowersGreenDay) ((StandUser) User).roundabout$getStandPowers()).allies.contains(entity.getStringUUID())) || !(User instanceof Player)) {
+
+                            float fallDistance = (((StandUser) entity).getStaringYPos() - (float)entity.getY());
+                            if (fallDistance < 1.2) { continue; }
 
                             double width = entity.getBbWidth() / 2;
                             double height = entity.getBbHeight() / 2;
@@ -182,7 +184,7 @@ public class MoldSporesEntity extends StandEntity {
                             } else {
                                 damage = 8;
                             }
-                            damage = (int) (damage * ((((StandUser) entity).getStaringYPos() - entity.getY()) * 0.6F));
+                            damage = (int) (damage * (fallDistance * 0.6F));
                             if (((StandUser) entity).getStaringYPos() - entity.getY() < 1) {
                                 damage = damage * 0.25;
                             }

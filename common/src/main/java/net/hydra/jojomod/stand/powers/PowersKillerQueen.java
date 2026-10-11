@@ -264,7 +264,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         }else if (bombEntity instanceof BombPlantedSpectralArrow BPSA) {
             BPSA.defuse();
         }
-        SHA.discard();
+        if (SHA != null) { SHA.discard(); }
     }
 
     public void syncBombStatus(byte status) {

@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.SafePlaceContext;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.stand.renderers.StandRenderer;
@@ -15,6 +16,9 @@ import net.hydra.jojomod.entity.stand.CinderellaEntity;
 import net.hydra.jojomod.entity.stand.GreenDayEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.entity.substand.SeperatedLegsEntity;
+import net.hydra.jojomod.event.powers.visagedata.VisageData;
+import net.hydra.jojomod.item.MaskItem;
+import net.hydra.jojomod.item.ModificationMaskItem;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -26,9 +30,12 @@ import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.client.resources.SkinManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class SeperatedLegsRenderer extends StandRenderer<SeperatedLegsEntity> {
     private static final ResourceLocation PART_FIVE_GREEN_DAY = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/green_day/part_four_green_day.png");
@@ -70,6 +77,24 @@ public class SeperatedLegsRenderer extends StandRenderer<SeperatedLegsEntity> {
 
     @Override
     public void render(SeperatedLegsEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
+        if (mobEntity.getUser() instanceof Player P) {
+            IPlayerEntity pl = ((IPlayerEntity) P);
+            ItemStack visage = pl.roundabout$getMaskSlot();
+            if (Objects.nonNull(visage)) {
+                if (visage.getItem() instanceof MaskItem MI) {
+                    if (MI instanceof ModificationMaskItem MD){
+                        int height = visage.getOrCreateTagElement("modifications").getInt("height");
+                        int width = visage.getOrCreateTagElement("modifications").getInt("width");
+                        matrixStack.scale(0.798F + (((float) width)*0.001F), 0.7F+(((float) height)*0.001F), 0.798F+(((float) width)*0.001F));
+                    } else {
+                        VisageData vd = MI.visageData.generateVisageData(P);
+                        Vector3f scale = vd.scale();
+                        matrixStack.scale(scale.x, scale.y, scale.z);
+                    }
+                }
+            }
+        }
+
         super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
     }
 
