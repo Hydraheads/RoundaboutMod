@@ -264,6 +264,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         }else if (bombEntity instanceof BombPlantedSpectralArrow BPSA) {
             BPSA.defuse();
         }
+        SHA.discard();
     }
 
     public void syncBombStatus(byte status) {
@@ -3630,7 +3631,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     animateStand(StandEntity.ITEM_GRAB);
                 }else {
 
-                    checkForSkinUnlock(stack);
+                    //checkForSkinUnlock(stack);
 
                     bombPlantedItem = new BombPlantedItemEntity(
                             ModEntities.BOMB_PLANTED_ITEM,
@@ -5408,6 +5409,30 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
     }
 
+    public void samuraiUnlockTrigger() {
+        if (getSelf() instanceof Player PE) {
+            StandUser user = ((StandUser) PE);
+            IPlayerEntity ipe = ((IPlayerEntity) PE);
+
+            ipe.roundabout$setUnlockedBonusSkin(true);
+            playSoundIfPossible(self.level(),null, self.getX(), self.getY(),
+                    self.getZ(), ModSounds.UNLOCK_SKIN_EVENT, self.getSoundSource(), 2.0F, 1.0F);
+
+            sendParticlesIfPossible(self.level(), ParticleTypes.SOUL_FIRE_FLAME, self.getX(),
+                    self.getY() + self.getEyeHeight(), self.getZ(),
+                    19, 0.3, 0.5, 0.3, 0.01);
+            sendParticlesIfPossible(self.level(), ParticleTypes.CHERRY_LEAVES, self.getX(),
+                    self.getY() + self.getEyeHeight(), self.getZ(),
+                    15, 0.3, 0.5, 0.3, 0.02);
+
+            user.roundabout$setStandSkin(KillerQueenEntity.SAMURAI);
+
+            ((ServerPlayer) ipe).displayClientMessage(
+                    Component.translatable("unlock_skin.roundabout.killer_queen.samurai"), true);
+            user.roundabout$summonStand(self.level(), true, false);
+        }
+    }
+
     public void checkForSkinUnlock(ItemStack stack) {
         if (getSelf() instanceof Player PE) {
             StandUser user = ((StandUser) PE);
@@ -5420,19 +5445,13 @@ public class PowersKillerQueen extends NewPunchingStand {
                     ipe.roundabout$setUnlockedBonusSkin(true);
                     playSoundIfPossible(self.level(),null, self.getX(), self.getY(),
                             self.getZ(), ModSounds.UNLOCK_SKIN_EVENT, self.getSoundSource(), 2.0F, 1.0F);
-                    /*sendParticlesIfPossible(self.level(),ModParticles.SMALL_EXPLOSION, self.getX(),
-                            self.getY() + self.getEyeHeight(), self.getZ(),
-                            10, 0.5, 0.5, 0.5, 0.2);
-                    sendParticlesIfPossible(self.level(),ModParticles.AIRBUBBLE_BOMB, self.getX(),
-                            self.getY() + self.getEyeHeight(), self.getZ(),
-                            10, 0.5, 0.5, 0.5, 0.01);
-                    */
+
                     sendParticlesIfPossible(self.level(), ParticleTypes.SOUL_FIRE_FLAME, self.getX(),
                             self.getY() + self.getEyeHeight(), self.getZ(),
-                            19, 0.3, 0.3, 0.3, 0.01);
+                            19, 0.3, 0.5, 0.3, 0.01);
                     sendParticlesIfPossible(self.level(), ParticleTypes.CHERRY_LEAVES, self.getX(),
                             self.getY() + self.getEyeHeight(), self.getZ(),
-                            15, 0.3, 0.3, 0.3, 0.02);
+                            15, 0.3, 0.5, 0.3, 0.02);
 
                     user.roundabout$setStandSkin(KillerQueenEntity.SAMURAI);
 
