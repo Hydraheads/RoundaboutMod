@@ -443,15 +443,19 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 
 								if (MainUtil.getReducedDamage(LE)) {
+									float dmgAmound = (1.75f * (float)(ClientNetworking.getAppropriateConfig().
+											killerQueenSettings.killerQueenAttackMultOnPlayers*0.01));
 									if (user instanceof Player && ((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ) {
-										KQ.levelupDamageMod(KQ.multiplyPowerByStandConfigPlayers(0.25f));
+										KQ.levelupDamageMod(dmgAmound);
 									}
-									LE.hurt(dmg, 1.25f);
+									LE.hurt(dmg, dmgAmound);
 								}else {
+									float dmgAmound = (3.35f * (float)(ClientNetworking.getAppropriateConfig().
+											killerQueenSettings.killerQueenAttackMultOnMobs*0.01));
 									if (user instanceof Player && ((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ) {
-										KQ.levelupDamageMod(KQ.multiplyPowerByStandConfigMobs(0.35f));
+										KQ.levelupDamageMod(dmgAmound);
 									}
-									LE.hurt(dmg, 2.35f);
+									LE.hurt(dmg, dmgAmound);
 								}
 							}
 						}
@@ -987,11 +991,17 @@ public class SheerHeartAttackEntity extends StandEntity {
 				}
 			}
 
+			boolean undeadAndArthropodIgnore = ClientNetworking.getAppropriateConfig().killerQueenSettings.sheerHeartAttackSeenUndeadAndArthropod;
+
 			MobType mobType = LE.getMobType();
-			if (ClientNetworking.getAppropriateConfig().killerQueenSettings.sheerHeartAttackSeenUndeadAndArthropod
+			if (undeadAndArthropodIgnore
 					&& (mobType.equals(MobType.UNDEAD) || mobType.equals(MobType.ARTHROPOD)
-					|| (LE instanceof FallenMob) )
+					|| (LE instanceof FallenMob) ) || (LE instanceof FallenMob FM && !FM.getActivated())
 					|| FateTypes.isVampire(LE) || FateTypes.isZombie(LE)) { points -= 30;}
+			if (!undeadAndArthropodIgnore
+					&& (mobType.equals(MobType.UNDEAD) || mobType.equals(MobType.ARTHROPOD))) {
+				points -= 10;
+			}
 		}
 
 		return points;
@@ -1145,7 +1155,13 @@ public class SheerHeartAttackEntity extends StandEntity {
 				if (!$$0.getAbilities().instabuild) { $$2.shrink(1); }
 				setTorchStatus(true);
 				Vec3 dir = $$0.getLookAngle();
-				miningDir = new Vec3(dir.x, 0, dir.z).normalize();
+				Vec3 unhandledDir = new Vec3(dir.x, 0, dir.z).normalize();
+				float snap = 2;
+				miningDir = new Vec3(
+						Math.round(unhandledDir.x*snap)/snap,
+						0,
+						Math.round(unhandledDir.z*snap)/snap
+				);
 
 				return InteractionResult.SUCCESS;
 			} else if(getTorchStatus()) {

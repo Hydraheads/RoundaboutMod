@@ -822,7 +822,8 @@ public class PowersDiverDown extends NewPunchingStand {
             }
         }
         // block disassembly
-        if (slot == 1 && isHoldingSneak() && !isGuarding() && !areStandMovesDisabled()) {
+        if (slot == 1 && isHoldingSneak() && !isGuarding()
+                && !areStandMovesDisabled() && canExecuteMoveWithLevel(getBlockDisassemblyLevel())) {
             if (!canTargetDisassembleBlock()) {
                 return true;
             }
@@ -1175,7 +1176,11 @@ public class PowersDiverDown extends NewPunchingStand {
                 }
             } else if (this.getActivePower() != DIVER_SUBMERGE_START && hasStandActive(this.self)) {
                 // failsafe just in case the last second whiff happens
-                if (!hasStandEntity(this.self) || getStandEntity(this.self) == null || !getStandEntity(this.self).isAlive() || getStandEntity(this.self).isRemoved()) {
+                StandEntity stand = getStandEntity(this.self);
+                if (stand instanceof DiverDownEntity ddEntity && ddEntity.isSubmerged()) {
+                    ddEntity.setSubmerged(false);
+                }
+                if (!hasStandEntity(this.self) || stand == null || !stand.isAlive() || stand.isRemoved()) {
                     ((StandUser) this.self).roundabout$summonStand(this.self.level(), true, false);
                 }
             }
@@ -2924,7 +2929,8 @@ public class PowersDiverDown extends NewPunchingStand {
 
     public void tryDiverZip() {
         if (!isDiverMoveActive() && canExecuteMoveWithLevel(getDiverZipLevel())
-                && !this.onCooldown(PowerIndex.SKILL_3)) {
+                && !this.onCooldown(PowerIndex.SKILL_3)
+                && !((StandUser) this.self).roundabout$hasSpringLegs()) {
             if (!self.isInWater()) {
                 if (forceBlock())
                     return;
@@ -4992,6 +4998,9 @@ public class PowersDiverDown extends NewPunchingStand {
             case DiverDownEntity.SECCO -> {
                 return Component.translatable("skins.roundabout.diver_down.secco");
             }
+            case DiverDownEntity.VAN_HALEN -> {
+                return Component.translatable("skins.roundabout.diver_down.van_halen");
+            }
             default -> {
                 return Component.translatable("skins.roundabout.diver_down.base");
             }
@@ -5034,6 +5043,7 @@ public class PowersDiverDown extends NewPunchingStand {
             }
             if (Level > 6 || bypass) {
                 l.add(DiverDownEntity.ARTWORK);
+                l.add(DiverDownEntity.VAN_HALEN);
                 l.add(DiverDownEntity.SECCO);
             }
             if (Level > 7 || bypass) {
@@ -5243,6 +5253,14 @@ public class PowersDiverDown extends NewPunchingStand {
     public void onStandSwitch(){
         clearRibcageTrap();
         clearSpringLegs();
+        recallLimbs();
+        removeDiverLegsFromTarget();
+        removeDiverArmsFromTarget();
+        toggleZip(false);
+        if (isDiveActive()) {
+            emergeServer();
+        }
+        setPiloting(0);
         super.onStandSwitch();
     }
 
