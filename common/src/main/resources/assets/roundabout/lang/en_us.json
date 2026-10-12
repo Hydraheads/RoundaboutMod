@@ -1977,6 +1977,8 @@
   "ability.roundabout.fall_brace.desc": "Use the power of your stand to brace the impact of a fall. Long falls still deal damage, but it is reduced.",
   "ability.roundabout.vault": "Vault",
   "ability.roundabout.vault.desc": "Press while looking at a ledge, your stand will extend its arm to grab on and launch you up.",
+  "ability.roundabout.vault_kc": "Wall Climb Vault",
+  "ability.roundabout.vault_kc.desc": "Press while looking at a ledge, your stand will extend its arm to grab on and launch you up. If aimed at a standard wall, can do a shorter launch a couple of times, or chain a shorter launch into a full vault.",
   "ability.roundabout.time_stop": "Time Stop",
   "ability.roundabout.time_stop.desc": "Charge up to stop time itself, freezing everything! You can resume time early to recharge faster, and actions taken in stopped time influence recharge time as well.",
   "ability.roundabout.time_stop_impulse": "Time Stop (Impulse)",
