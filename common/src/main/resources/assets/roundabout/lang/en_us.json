@@ -1098,6 +1098,8 @@
   "death.attack.glaive.item": "%1$s was skewered by %2$s using %3$s",
   "death.attack.stand_virus": "%1$s was turned into tomato sauce",
   "death.attack.stand_virus.item": "%1$s was turned into tomato sauce",
+  "death.attack.stand_virus.player": "%$2s turned %1$s into tomato sauce",
+  "death.attack.stand_virus.player.item": "%$2s turned %1$s into tomato sauce",
   "death.attack.disintegration": "%1$s disintegrated",
   "death.attack.disintegration.player": "%1$s was disintegrated by %2$s",
   "death.attack.disintegration.item": "%1$s disintegrated",

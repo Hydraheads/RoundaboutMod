@@ -9,6 +9,7 @@ import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.GlaiveItem;
 import net.hydra.jojomod.item.KnifeItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
@@ -39,6 +40,7 @@ import net.minecraft.world.entity.ai.control.JumpControl;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.animal.goat.Goat;
+import net.minecraft.world.entity.boss.enderdragon.EndCrystal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -531,124 +533,152 @@ public class SeperatedArmEntity extends StandEntity {
             }
         }
 
+        boolean breakShield = item instanceof GlaiveItem || item instanceof AxeItem;
 
         for(int j = 0;j<damages.size();j++) {
-
-
-
             Entity entity = damages.get(j);
 
 
-
-                if ((entity instanceof LivingEntity) && !((entity.equals(this) || entity.equals(user)) || entity instanceof StandEntity || entity instanceof ItemEntity)) {
-                    if (!(SpinTicks > 0)) {
-                        if(user != null) {
-                            ((StandUser) user).roundabout$getStandPowers().addEXP(1);
-                        }
+            if ((entity instanceof LivingEntity) && !((entity.equals(this) || entity.equals(user)) || entity instanceof StandEntity || entity instanceof ItemEntity)) {
+                if (!(SpinTicks > 0)) {
+                    if(user != null) {
+                        ((StandUser) user).roundabout$getStandPowers().addEXP(1);
                     }
-                    if (flyingTicks > 2 && SpinTicks > 0) {
-                        if (Math.abs(this.getY()-((entity.getEyeHeight()) + entity.getY())) < 1 ) {
-                            entity.addDeltaMovement(new Vec3(0, 0.11, 0));
-                        }
-                    }
-
-                    if(SpinTicks == 0) {
-                        if (this.getMainHandItem().isDamageableItem()) {
-                            this.getMainHandItem().setDamageValue(this.getMainHandItem().getDamageValue() + 1);
-                        }
-                    }
-
-                    if (item instanceof KnifeItem) {
-                        Can_activate = false;
-                        this.setDeltaMovement(0, 0, 0);
-                        float $$2;
-                        Entity $$1 = entity;
-
-                        if (entity instanceof Player) {
-                            $$2 = (float) (2.29F * (ClientNetworking.getAppropriateConfig().itemSettings.knifeDamageOnPlayers * 0.01));
-                        } else {
-                            $$2 = (float) (4.0F * (ClientNetworking.getAppropriateConfig().itemSettings.knifeDamageOnMobs * 0.01));
-                            ;
-                        }
-                        if ($$1 instanceof LivingEntity $$3) {
-                            int f = EnchantmentHelper.getEnchantmentLevel(Enchantments.PROJECTILE_PROTECTION, $$3);
-                            $$2 = (float) ($$2 * (1 - (f * 0.03)));
-
-                        }
-                        if (SpinTicks > 1) {
-                            $$2 = $$2 / 6;
-                        }
-
-                        Entity $$4 = this.getUser();
-                        DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.KNIFE, $$4);
-                        SoundEvent $$6 = ModSounds.KNIFE_IMPACT_EVENT;
-                        Vec3 DM = $$1.getDeltaMovement();
-                        if ($$1.hurt($$5, $$2)) {
-
-                            if ($$4 instanceof LivingEntity LE) {
-                                LE.setLastHurtMob($$1);
-                            }
-                            if (MainUtil.getMobBleed($$1)) {
-                                MainUtil.makeBleed($$1, 0, 400, getUser());
-                            }
-                            if ($$1.getType() == EntityType.ENDERMAN) {
-                                return;
-                            }
-
-                            if ($$1 instanceof LivingEntity $$7) {
-                                $$1.setDeltaMovement($$1.getDeltaMovement().multiply(0.4, 0.4, 0.4));
-                                if ($$4 instanceof LivingEntity) {
-                                    EnchantmentHelper.doPostHurtEffects($$7, $$4);
-                                    EnchantmentHelper.doPostDamageEffects((LivingEntity) $$4, $$7);
-                                }
-
-                            }
-                            this.playSound($$6, 1.0F, (this.random.nextFloat() * 0.2F + 0.9F));
-                            this.getMainHandItem().setCount(this.getMainHandItem().getCount() - 1);
-                        }
-                        Vec3 location = new Vec3(this.getX(), this.getY(), this.getZ());
-                        ((ServerLevel) this.level()).sendParticles(ParticleTypes.CRIT, location.x,
-                                location.y, location.z,
-                                16,
-                                0.45, 0.45, 0.45,
-                                0.1);
-
-                    } else if (this.getMainHandItem().getItem() instanceof ShieldItem) {
-                        Can_activate = true;
-                        if (entity instanceof Projectile && !(entity instanceof GoBeyondEntity)) {
-                            entity.discard();
-
-                            Vec3 location = new Vec3(this.getX(), this.getY(), this.getZ());
-                            ((ServerLevel) this.level()).sendParticles(ModParticles.PUNCH_MISS, location.x,
-                                    location.y, location.z,
-                                    1,
-                                    0, 0, 0,
-                                    0.1);
-
-
-                        }
-                    } else {
-                        if(entity instanceof LivingEntity) {
-                            if (!((StandUser) entity).roundabout$isGuarding() || ((LivingEntity) entity).isBlocking()) {
-                                Can_activate = false;
-                                this.setDeltaMovement(0, 0, 0);
-                                Vec3 location = new Vec3(this.getX(), this.getY(), this.getZ());
-                                ((ServerLevel) this.level()).sendParticles(ParticleTypes.CRIT, location.x,
-                                        location.y, location.z,
-                                        16,
-                                        0.45, 0.45, 0.45,
-                                        0.1);
-                                if (entity instanceof Player) {
-                                    entity.hurt(ModDamageTypes.of(level(), DamageTypes.PLAYER_ATTACK, this.getUser(), user), (Double.valueOf(this.getAttributeValue(Attributes.ATTACK_DAMAGE)).floatValue()) * 1.75f);
-                                } else {
-                                    entity.hurt(ModDamageTypes.of(level(), DamageTypes.PLAYER_ATTACK, this.getUser(), user), (Double.valueOf(this.getAttributeValue(Attributes.ATTACK_DAMAGE)).floatValue()) * 1f);
-                                }
-                            }
-                        }
+                }
+                if (flyingTicks > 2 && SpinTicks > 0) {
+                    if (Math.abs(this.getY()-((entity.getEyeHeight()) + entity.getY())) < 1 ) {
+                        entity.addDeltaMovement(new Vec3(0, 0.11, 0));
                     }
                 }
 
+                if(SpinTicks == 0) {
+                    if (this.getMainHandItem().isDamageableItem()) {
+                        this.getMainHandItem().setDamageValue(this.getMainHandItem().getDamageValue() + 1);
+                    }
+                }
+
+                if (item instanceof KnifeItem) {
+                    Can_activate = false;
+                    this.setDeltaMovement(0, 0, 0);
+                    float $$2;
+                    Entity $$1 = entity;
+
+                    if (entity instanceof Player) {
+                        $$2 = (float) (2.29F * (ClientNetworking.getAppropriateConfig().itemSettings.knifeDamageOnPlayers * 0.01));
+                    } else {
+                        $$2 = (float) (4.0F * (ClientNetworking.getAppropriateConfig().itemSettings.knifeDamageOnMobs * 0.01));
+                        ;
+                    }
+                    if ($$1 instanceof LivingEntity $$3) {
+                        int f = EnchantmentHelper.getEnchantmentLevel(Enchantments.PROJECTILE_PROTECTION, $$3);
+                        $$2 = (float) ($$2 * (1 - (f * 0.03)));
+
+                    }
+                    if (SpinTicks > 1) {
+                        $$2 = $$2 / 6;
+                    }
+
+                    Entity $$4 = this.getUser();
+                    DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.KNIFE, $$4);
+                    SoundEvent $$6 = ModSounds.KNIFE_IMPACT_EVENT;
+                    Vec3 DM = $$1.getDeltaMovement();
+                    if ($$1.hurt($$5, $$2)) {
+
+                        if ($$4 instanceof LivingEntity LE) {
+                            LE.setLastHurtMob($$1);
+                        }
+                        if (MainUtil.getMobBleed($$1)) {
+                            MainUtil.makeBleed($$1, 0, 400, getUser());
+                        }
+                        if ($$1.getType() == EntityType.ENDERMAN) {
+                            return;
+                        }
+
+                        if ($$1 instanceof LivingEntity $$7) {
+                            $$1.setDeltaMovement($$1.getDeltaMovement().multiply(0.4, 0.4, 0.4));
+                            if ($$4 instanceof LivingEntity) {
+                                EnchantmentHelper.doPostHurtEffects($$7, $$4);
+                                EnchantmentHelper.doPostDamageEffects((LivingEntity) $$4, $$7);
+                            }
+
+                        }
+                        this.playSound($$6, 1.0F, (this.random.nextFloat() * 0.2F + 0.9F));
+                        this.getMainHandItem().setCount(this.getMainHandItem().getCount() - 1);
+                    }
+                    Vec3 location = new Vec3(this.getX(), this.getY(), this.getZ());
+                    ((ServerLevel) this.level()).sendParticles(ParticleTypes.CRIT, location.x,
+                            location.y, location.z,
+                            16,
+                            0.45, 0.45, 0.45,
+                            0.1);
+
+                } else if (this.getMainHandItem().getItem() instanceof ShieldItem) {
+                    Can_activate = true;
+                    if (entity instanceof Projectile && !(entity instanceof GoBeyondEntity)) {
+                        entity.discard();
+
+                        Vec3 location = new Vec3(this.getX(), this.getY(), this.getZ());
+                        ((ServerLevel) this.level()).sendParticles(ModParticles.PUNCH_MISS, location.x,
+                                location.y, location.z,
+                                1,
+                                0, 0, 0,
+                                0.1);
+
+
+                    }
+                } else {
+                    if(entity instanceof LivingEntity LE) {
+                        if (breakShield && ((StandUser) LE).roundabout$getStandPowers().interceptGuard()
+                                && LE.isBlocking() && !((StandUser) LE).roundabout$isGuarding()) {
+                            knockShield2(entity, 60);
+                        } else {
+                            knockShield2(entity, 40);
+                        }
+                        if (!((StandUser) LE).roundabout$isGuarding() || LE.isBlocking()) {
+                            Can_activate = false;
+                            this.setDeltaMovement(0, 0, 0);
+                            Vec3 location = new Vec3(this.getX(), this.getY(), this.getZ());
+                            ((ServerLevel) this.level()).sendParticles(ParticleTypes.CRIT, location.x,
+                                    location.y, location.z,
+                                    16,
+                                    0.45, 0.45, 0.45,
+                                    0.1);
+                            if (entity instanceof Player) {
+                                entity.hurt(ModDamageTypes.of(level(), DamageTypes.PLAYER_ATTACK, this.getUser(), user), (Double.valueOf(this.getAttributeValue(Attributes.ATTACK_DAMAGE)).floatValue()) * 1.75f);
+                            } else {
+                                entity.hurt(ModDamageTypes.of(level(), DamageTypes.PLAYER_ATTACK, this.getUser(), user), (Double.valueOf(this.getAttributeValue(Attributes.ATTACK_DAMAGE)).floatValue()) * 1f);
+                            }
+                        }
+                    } else {
+                        entity.hurt(ModDamageTypes.of(level(), DamageTypes.PLAYER_ATTACK, this.getUser(), user), (Double.valueOf(this.getAttributeValue(Attributes.ATTACK_DAMAGE)).floatValue()) * 1f);
+                    }
+                }
+            }
+
         }
+    }
+
+    public boolean knockShield2(Entity entity, int duration){
+
+        if (entity != null && entity.isAlive() && !entity.isRemoved()) {
+            if (entity instanceof LivingEntity) {
+                if (((LivingEntity) entity).isBlocking()) {
+
+                    if (entity instanceof Player){
+                        ItemStack itemStack = ((LivingEntity) entity).getUseItem();
+                        Item item = itemStack.getItem();
+                        if (item.getUseAnimation(itemStack) == UseAnim.BLOCK) {
+                            ((LivingEntity) entity).releaseUsingItem();
+                            ((Player) entity).stopUsingItem();
+                        }
+                        ((Player) entity).getCooldowns().addCooldown(Items.SHIELD, duration);
+                        entity.level().broadcastEntityEvent(entity, EntityEvent.SHIELD_DISABLED);
+                    }
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override

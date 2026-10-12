@@ -1,12 +1,14 @@
 package net.hydra.jojomod.item;
 
 
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersKillerQueen;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
@@ -52,6 +54,13 @@ public class AnubisItem extends Item {
             StandUser SU = (StandUser)P;
             if (!$$1.isClientSide) {
                 P.getCooldowns().addCooldown($$0.getItem(),1200);
+
+                if (SU.roundabout$getStandPowers() instanceof PowersKillerQueen PKQ && SU.roundabout$hasStandOut()
+                        && !((IPlayerEntity)P).roundabout$getUnlockedBonusSkin()) {
+                    PKQ.samuraiUnlockTrigger();
+                    return $$0;
+                }
+
                 P.level().playSound(null,P.blockPosition(), ModSounds.ANUBIS_POSSESSION_EVENT,SoundSource.PLAYERS,1.0F,1.3F);
 
 
