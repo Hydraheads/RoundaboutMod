@@ -18,33 +18,33 @@ public class GamblingTableScreen extends AbstractContainerScreen<GamblingTableMe
     // Change these if the texture also gets changed
     private static final int BTN_WIDTH = 14;
     private static final int BTN_HEIGHT = 14;
-    private static final int ACCEPT_X = 132;
-    private static final int ACCEPT_Y = 35;
-    private static final int DENY_X = 155;
-    private static final int DENY_Y = 35;
+    private static final int ACCEPT_X = 141;
+    private static final int ACCEPT_Y = 42;
+    private static final int DENY_X = 164;
+    private static final int DENY_Y = 42;
 
     // Reminder: x and y represent their positions on the player's screens
     // u and v refer to the texture's position in the sprite sheet.
-    private static final int ACCEPT_IDLE_U = 0;
-    private static final int ACCEPT_IDLE_V = 194;
-    private static final int ACCEPT_CLICKED_U = 14;
-    private static final int ACCEPT_CLICKED_V = 194;
+    private static final int ACCEPT_IDLE_U = 9;
+    private static final int ACCEPT_IDLE_V = 201;
+    private static final int ACCEPT_CLICKED_U = 22;
+    private static final int ACCEPT_CLICKED_V = 201;
 
-    private static final int DENY_IDLE_U = 0;
-    private static final int DENY_IDLE_V = 166;
-    private static final int DENY_CLICKED_U = 14;
-    private static final int DENY_CLICKED_V = 166;
+    private static final int DENY_IDLE_U = 9;
+    private static final int DENY_IDLE_V = 173;
+    private static final int DENY_CLICKED_U = 22;
+    private static final int DENY_CLICKED_V = 173;
 
     private boolean acceptPressed = false;
     private boolean denyPressed = false;
 
     public GamblingTableScreen(GamblingTableMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
-        this.imageWidth = 176;
-        this.imageHeight = 166;
+        this.imageWidth = 192;
+        this.imageHeight = 172;
         this.titleLabelX = 8;
-        this.titleLabelY = 6;
-        this.inventoryLabelY = this.imageHeight - 94;
+        this.titleLabelY = 3;
+        this.inventoryLabelY = this.imageHeight - 98;
     }
 
     @Override
@@ -64,8 +64,8 @@ public class GamblingTableScreen extends AbstractContainerScreen<GamblingTableMe
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        int x = (this.width - this.imageWidth) / 2;
-        int y = (this.height - this.imageHeight) / 2;
+        int x = (this.width - this.imageWidth) / 2 - 9;
+        int y = (this.height - this.imageHeight) / 2 - 7;
         graphics.blit(TEXTURE, x, y, 0, 0, this.imageWidth, this.imageHeight);
 
         // Accept Button
@@ -90,7 +90,8 @@ public class GamblingTableScreen extends AbstractContainerScreen<GamblingTableMe
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
         super.renderLabels(graphics, mouseX, mouseY);
         Component gameTitle = this.menu.getGameName();
-        graphics.drawString(this.font, gameTitle, 8, 38, 0x404040, false);
+        graphics.drawString(this.font, this.title, this.titleLabelX, this.titleLabelY, 0xbafbff, false);
+        graphics.drawString(this.font, gameTitle, 8, 38, 0xbafbff, false);
     }
 
     @Override
