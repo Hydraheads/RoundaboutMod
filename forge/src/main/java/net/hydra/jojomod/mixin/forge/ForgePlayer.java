@@ -122,6 +122,14 @@ public abstract class ForgePlayer extends LivingEntity {
             }
         }
 
+        if (((StandUser) this).roundabout$hasDiverArms()) {
+            float bpow = 1F + (ClientNetworking.getAppropriateConfig().diverDownSettings.armMineBoost * 0.01F);
+            if (bpow != 1) {
+                f *= bpow;
+                overwrite = true;
+            }
+        }
+
         if (overwrite){
             if (f > 1.0F) {
                 int i = EnchantmentHelper.getBlockEfficiency(this);
