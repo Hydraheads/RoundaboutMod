@@ -42,7 +42,7 @@ public class SeperatedArmSlimRenderer extends StandRenderer<SeperatedArmSlimEnti
         //Player user = (Player)seperatedLegsEntity.getUser();
         //GameProfile profile = user.getGameProfile();
         Player P =((Player)seperatedArmSlimEntity.getUser());
-        if( P != null || false) {
+        if( P != null) {
             if (P.getGameProfile() != null) {
                 return MainUtil.getPlayerSkinWithRespectToVisage((Player) seperatedArmSlimEntity.getUser());
             } else {
