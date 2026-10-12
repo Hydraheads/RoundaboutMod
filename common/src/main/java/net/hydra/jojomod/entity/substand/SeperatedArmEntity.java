@@ -80,8 +80,6 @@ public class SeperatedArmEntity extends StandEntity {
     public void setSpinTicks(int val){SpinTicks = val;};
     public void setNeuteredSpinTicks(int val){neuteredSpinTicks = val;}
 
-
-
     public static final byte
             IDLE=11;
 
@@ -102,6 +100,7 @@ public class SeperatedArmEntity extends StandEntity {
 
     public SeperatedArmEntity(EntityType<? extends StandEntity> $$0, Level $$1) {
         super($$0, $$1);
+        forceVisible = true;
     }
 
     public void jump(Vec3 jumpT0Pos){
