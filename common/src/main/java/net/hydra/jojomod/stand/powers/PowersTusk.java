@@ -404,7 +404,7 @@ public class PowersTusk extends NewDashPreset {
                         this.shootNail(this.getAttackTimeDuring());
                     }
                 }
-                nailFireDelay = this.getAct() == 1 ? 10 : 6;
+                nailFireDelay = this.getAct() == 1 ? 4 : 6;
                 this.setActivePower(PowersTusk.FIRE_NAIL);
                 this.setAttackTimeDuring(-5);
             }
@@ -772,41 +772,18 @@ public class PowersTusk extends NewDashPreset {
                             ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
                     Direction dir = result.getDirection().getOpposite();
 
-
-                    Pair<Direction,Direction> args = switch (dir) {
-                        case NORTH,SOUTH -> NORTHSOUTH;
-                        case EAST,WEST -> EASTWEST;
-                        case UP,DOWN -> UPDOWN;
-                    };
+                    BlockPos start = alignBlockPos(blockPos,0,-1,-1,dir);
+                    BlockPos end = alignBlockPos(blockPos,2,1,1,dir);
                     for(int i=0;i<3;i++) {
                         for (int x = -1; x < 2; x++) {
                             for (int y = -1; y < 2; y++) {
-                                BlockPos delta = blockPos.relative(dir, i);
-
-                                Direction dirX = switch (x) {
-                                    case -1 -> args.getA();
-                                    case 1 -> args.getA().getOpposite();
-                                    default -> null;
-                                };
-                                if (dirX != null) {
-                                    delta = delta.relative(dirX);
-                                }
-
-                                Direction dirY = switch (y) {
-                                    case -1 -> args.getB();
-                                    case 1 -> args.getB().getOpposite();
-                                    default -> null;
-                                };
-                                if (dirY != null) {
-                                    delta = delta.relative(dirY);
-                                }
+                                BlockPos delta = alignBlockPos(blockPos,i,x,y,dir);
                                 BlockState state = this.getSelf().level().getBlockState(delta);
                                 if (!state.isAir()) {
-                                    ReturningObjectEntity ret = new ReturningObjectEntity(ModEntities.RETURNING_OBJECT,this.getSelf().level());
+                                    ReturningObjectEntity ret = new ReturningObjectEntity(ModEntities.RETURNING_OBJECT,this.getSelf().level(),delta,start,end);
                                     ret.setPos(delta.getCenter());
-                                    MainUtil.takeKnockbackWithY(ret,1,0,-1,0);
+                                    MainUtil.takeKnockbackWithY(ret,0.5F,0,-1,0);
                                     ret.setLifetime(40);
-                                    ret.setReturnPos(delta);
                                     ret.setState(state);
                                     this.getSelf().level().addFreshEntity(ret);
                                     this.getSelf().level().destroyBlock(delta,false);
@@ -819,6 +796,35 @@ public class PowersTusk extends NewDashPreset {
             }
         }
         return super.tryBlockPosPower(move, forced, blockPos);
+    }
+
+    private BlockPos alignBlockPos(BlockPos blockPos,int i, int x, int y, Direction dir) {
+        Pair<Direction,Direction> args = switch (dir) {
+            case NORTH,SOUTH -> NORTHSOUTH;
+            case EAST,WEST -> EASTWEST;
+            case UP,DOWN -> UPDOWN;
+        };
+
+        BlockPos delta = blockPos.relative(dir, i);
+
+        Direction dirX = switch (x) {
+            case -1 -> args.getA();
+            case 1 -> args.getA().getOpposite();
+            default -> null;
+        };
+        if (dirX != null) {
+            delta = delta.relative(dirX);
+        }
+
+        Direction dirY = switch (y) {
+            case -1 -> args.getB();
+            case 1 -> args.getB().getOpposite();
+            default -> null;
+        };
+        if (dirY != null) {
+            delta = delta.relative(dirY);
+        }
+        return delta;
     }
 
     @Override
@@ -970,7 +976,7 @@ public class PowersTusk extends NewDashPreset {
                         }
                     }
                     case 3 -> clientGrabEntity();
-             //       case 4 -> clientWallBreaker();
+                    case 4 -> clientWallBreaker();
                 }
             }
             case SKILL_3_NORMAL -> {
@@ -1431,11 +1437,11 @@ public class PowersTusk extends NewDashPreset {
             float damage = lastHit ? 3.0F : 2.0F;
             if (!this.hasNail()) {damage = 0.1F;}
             if (this.getReducedDamage(target)) {damage *= 0.5F;}
-            float knockback = lastHit ? 0.3F : 0.05F;
+            float knockback = lastHit ? 0.6F : 0.1F;
 
             if (!StandDamageEntityAttack(target,damage,knockback,this.getSelf())) {
                 if (lastHit && this.hasNail()) {
-                    MainUtil.knockShieldPlusStand(target,60);
+                    MainUtil.knockShieldPlusStand(target,80);
                 }
             }
         }

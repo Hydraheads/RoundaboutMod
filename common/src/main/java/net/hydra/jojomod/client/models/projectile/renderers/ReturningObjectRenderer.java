@@ -44,7 +44,7 @@ public class ReturningObjectRenderer<T extends Entity>
 
     @Override
     protected int getBlockLightLevel(T entity, BlockPos blockPos) {
-        return this.fullBright ? 15 : super.getBlockLightLevel(entity, blockPos);
+        return 15;
     }
 
 
@@ -56,7 +56,7 @@ public class ReturningObjectRenderer<T extends Entity>
 
         poseStack.pushPose();
 
-        poseStack.scale((float) (this.scale*3), (float) (this.scale*3), (float) (this.scale*3));
+        poseStack.scale( this.scale*3, this.scale*3, this.scale*3);
         poseStack.mulPose(Axis.YP.rotationDegrees(180.0f));
 
         this.itemRenderer.renderStatic(
