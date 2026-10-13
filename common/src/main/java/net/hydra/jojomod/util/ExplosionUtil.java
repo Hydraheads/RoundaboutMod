@@ -3,6 +3,7 @@ package net.hydra.jojomod.util;
 import java.util.HashSet;
 import java.util.List;
 
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -159,6 +160,9 @@ public class ExplosionUtil {
 	}
 
 	public static void explodeBlocksBase(BlockPos location, Level level, Float range, boolean ignoreOres, Entity causer) {
+		explodeBlocksBase(location, level, range, ignoreOres, causer, false);
+	}
+	public static void explodeBlocksBase(BlockPos location, Level level, Float range, boolean ignoreOres, Entity causer, boolean useTool) {
 
 		Vec3 center = new Vec3(location.getX(), location.getY(), location.getZ());
 
@@ -168,9 +172,9 @@ public class ExplosionUtil {
 
 		for (BlockPos pos : BlockPos.betweenClosed(location.offset(intSize, intSize, intSize), location.offset(-intSize, -intSize, -intSize))) {
 			BlockState info = level.getBlockState(pos);
-			if (isBlockBlackListed(info) || (MainUtil.confirmIsOre(info) && ignoreOres)
-					|| info.isAir() || info.is(Blocks.BARRIER) || info.is(Blocks.BEDROCK)
-					|| !MainUtil.isDestructible(level, location, info)
+			if (isBlockBlackListed(info) || (MainUtil.confirmIsOre(info) && ignoreOres && !(useTool && causer instanceof Player PL && canMineWithAnyInventoryTool(PL, info)))
+					|| info.isAir() || info.is(Blocks.BARRIER) || info.is(Blocks.BEDROCK) || info.hasBlockEntity()
+					|| !MainUtil.isDestructible2(level, location, info)
 					|| MainUtil.isBlockDestructionBlacklisted(info)
 			) {
 				continue;
@@ -182,10 +186,9 @@ public class ExplosionUtil {
 			Double dist2 = center.distanceToSqr(pos.getX(), pos.getY(), pos.getZ());
 
 			if (dist2 <= explosionDistance) {
-				boolean shouldDrop = !info.requiresCorrectToolForDrops() && level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING_OBTAINMENT);
+				boolean shouldDrop = (useTool && causer instanceof Player PL && canMineWithAnyInventoryTool(PL, info)) && level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING_OBTAINMENT);
 
 				destroyBlockHandled(level, pos, shouldDrop, causer);
-
 			}
 		}
 	}
@@ -214,6 +217,26 @@ public class ExplosionUtil {
 				level.gameEvent(GameEvent.BLOCK_DESTROY, $$0, GameEvent.Context.of($$2, $$4));
 			}
 		}
+	}
+
+	public static boolean canMineWithAnyInventoryTool(LivingEntity LE, BlockState state) {
+		if (!ClientNetworking.getAppropriateConfig().generalStandSettings.standGrabRequiresTool){
+			return true;
+		}
+		if (LE instanceof Player player) {
+			// Blocks that don't require a correct tool can be mined without one.
+			if (!state.requiresCorrectToolForDrops()) {
+				return true;
+			}
+
+			for (ItemStack stack : player.getInventory().items) {
+				if (!stack.isEmpty() && stack.isCorrectToolForDrops(state)) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 }
