@@ -1674,6 +1674,9 @@ public class PowersDiverDown extends NewPunchingStand {
             StandEntity stand = this.getStandEntity(this.self);
             if (stand instanceof DiverDownEntity ddEntity) {
                 ddEntity.setSubmerged(false);
+                stand.setFadePercent(0);
+                // can't just use setFadePercent because of lerp :rage:
+                stand.fadePercent = 0F;
             }
         } else if (activePower == LIMB_RECALL) {
             this.activeLimbs.clear();
@@ -3521,6 +3524,11 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     private void tryEmergeClient() {
+        StandEntity stand = this.getStandEntity(this.self);
+        if (stand != null) {
+            stand.setFadePercent(0);
+            stand.fadePercent = 0F;
+        }
         this.tryPower(DIVER_EMERGE, true);
         tryPowerPacket(DIVER_EMERGE);
     }
@@ -3614,6 +3622,7 @@ public class PowersDiverDown extends NewPunchingStand {
         StandEntity stand = this.getStandEntity(this.self);
         if (stand instanceof DiverDownEntity ddEntity) {
             ddEntity.setSubmerged(false);
+            stand.setFadePercent(0);
         }
         // Resummon stand to user
         if (!this.self.level().isClientSide() && hasStandActive(this.self)) {
@@ -3640,6 +3649,7 @@ public class PowersDiverDown extends NewPunchingStand {
         StandEntity stand = this.getStandEntity(this.self);
         if (stand instanceof DiverDownEntity ddEntity) {
             ddEntity.setSubmerged(false);
+            stand.setFadePercent(0);
         }
         // fix for the diver down disappearing but nothing happening hopefully
         if (!this.self.level().isClientSide() && hasStandActive(this.self)) {
