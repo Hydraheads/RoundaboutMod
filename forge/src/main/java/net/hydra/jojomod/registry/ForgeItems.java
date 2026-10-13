@@ -73,8 +73,6 @@ public class ForgeItems {
             () -> new GasolineBucketItem(new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> OCCULT_CHARGE = addToTab(ITEMS.register("occult_charge",
             () -> new OccultChargeItem(new Item.Properties().stacksTo(16))));
-    public static final RegistryObject<Item> TOTEM_OF_DOOM = addToWIPTab(ITEMS.register("totem_of_doom",
-            () -> new TotemOfDoomItem(new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> ROAD_ROLLER = addToTab(ITEMS.register("road_roller",
             () -> new RoadRollerItem(new Item.Properties().stacksTo(1))));
 
@@ -82,6 +80,9 @@ public class ForgeItems {
             () -> new StrayCatItem(new Item.Properties().stacksTo(1), (byte)0)));
     public static final RegistryObject<Item> STRAY_CAT_MANGA= addToTab(ITEMS.register("stray_cat_manga",
             () -> new StrayCatItem(new Item.Properties().stacksTo(1), (byte)1)));
+
+    public static final RegistryObject<Item> TOTEM_OF_DOOM = addToTab(ITEMS.register("totem_of_doom",
+            () -> new TotemOfDoomItem(new Item.Properties().stacksTo(1))));
 
     public static final RegistryObject<BlockItem> WIRE_TRAP = addToBuildingTab(ITEMS.register("wire_trap",
             () -> new BlockItem(ForgeBlocks.WIRE_TRAP.get(),
