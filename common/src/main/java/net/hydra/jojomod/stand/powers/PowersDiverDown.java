@@ -5177,7 +5177,7 @@ public class PowersDiverDown extends NewPunchingStand {
     private float getPhasePunchStrength(Entity entity) {
         // lowering the heavy punch damage due to the ability's damage to phase through
         // everything at max charge.
-        float punchD = this.getPunchStrength(entity) * 2 + (this.getHeavyPunchStrength(entity) - 2);
+        float punchD = this.getPunchStrength(entity) * 2 + (this.getHeavyPunchStrength(entity) - 3);
         if (this.getReducedDamage(entity)) {
             float ret = (getChargedPercent() * punchD);
             if (this.chargedPhasePunch >= getMaxPhasePunchTime()) {
@@ -5196,7 +5196,7 @@ public class PowersDiverDown extends NewPunchingStand {
     private float getPhasePunchKnockback() {
         float charge = getChargedPercent();
         if (charge >= 1) {
-            return (((float) this.chargedPhasePunch / (float) getMaxPhasePunchTime()) * 3);
+            return (((float) this.chargedPhasePunch / (float) getMaxPhasePunchTime()) * 2.3F);
         } else if (charge >= 0.5F) {
             return 0.7F;
         }
