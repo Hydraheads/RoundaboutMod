@@ -49,6 +49,7 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
@@ -432,6 +433,11 @@ public class PowersKingCrimson extends BlockGrabPreset {
             //Cancel erase on relog
             if (isErasingTime() && activeClone == null){
                 timeErase();
+            }
+        }
+        if (midVault){
+            if (self.onGround() || self.isInWater() || self.onClimbable() || !((IEntityAndData)self).rdbt$getStuckSpeedMultiplier().equals(Vec3.ZERO)){
+                midVault = false;
             }
         }
 
@@ -1913,7 +1919,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 "instruction.roundabout.press_skill_crouch", StandIcons.KING_CRIMSON_ITEM_GRAB,2,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+99,0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+118,0, "ability.roundabout.vault",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+118,0, "ability.roundabout.vault_kc",
                 "instruction.roundabout.press_skill_air", StandIcons.KING_CRIMSON_LEDGE_GRAB,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+80,getBloodSplashLevel(), "ability.roundabout.blood_splash",
                 "instruction.roundabout.press_skill_crouch", StandIcons.KING_CRIMSON_BLOOD_SPLASH,3,level,bypas));
@@ -2955,6 +2961,118 @@ public class PowersKingCrimson extends BlockGrabPreset {
             }
         }
     }
+
+    public boolean midVault = false;
+
+    public BlockPos savePos = BlockPos.ZERO;
+
+    @Override
+    public boolean tryBlockPosPower(int move, boolean forced, BlockPos blockPos){
+        if (move == PowerIndex.BOUNCE) {
+            savePos = blockPos;
+            return tryPower(move, forced);
+        }
+        return super.tryBlockPosPower(move,forced,blockPos);
+    }
+
+    public boolean doVault(){
+        if (!this.self.onGround()) {
+            Vec3 vec3d = this.getSelf().getEyePosition(1);
+
+            Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+            Vec3 vec3d2 = this.getSelf().getViewVector(1);
+            Vec3 vec3d3 = vec3d.add(vec3d2.x * 2, vec3d2.y * 2, vec3d2.z * 2);
+            BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
+
+
+            boolean logicCheck = blockHit.getBlockPos().getY()+1 > this.getSelf().getY();
+            BlockPos aboveCheck = blockHit.getBlockPos().above();
+            if (gravD != Direction.DOWN){
+                BlockPos abv = blockHit.getBlockPos().relative(gravD.getOpposite());
+                BlockPos att = blockHit.getBlockPos();
+
+                Vec3 blockHitVec = RotationUtil.vecPlayerToWorld(new Vec3(abv.getX(),att.getY(),att.getZ()), gravD);
+                Vec3 playerVec = RotationUtil.vecPlayerToWorld(this.getSelf().position(), gravD);
+                aboveCheck = abv;
+                logicCheck = blockHitVec.y+1 > playerVec.y;
+            }
+
+            if (this.getSelf().level().getBlockState(blockHit.getBlockPos()).isSolid() && logicCheck
+                   ) {
+                if (!this.onCooldown(PowerIndex.GLOBAL_DASH) || midVault) {
+                    /*Stand vaulting*/
+                    this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.vaultingCooldown
+                            + getCooldown(PowerIndex.GLOBAL_DASH).time);
+                    double mag = this.getSelf().getPosition(0).distanceTo(
+                            new Vec3(blockHit.getLocation().x, blockHit.getLocation().y, blockHit.getLocation().z)) * 1.68 + 1;
+                    Vec3 vec3 = new Vec3(
+                            (blockHit.getLocation().x - this.getSelf().getX()) / mag,
+                            (blockHit.getLocation().y - this.getSelf().getY()) / mag,
+                            (blockHit.getLocation().z - this.getSelf().getZ()) / mag
+                    );
+                    if (gravD != Direction.DOWN){
+                        vec3 = RotationUtil.vecWorldToPlayer(vec3,gravD);
+                    }
+
+                    if (!this.getSelf().level().getBlockState(aboveCheck).isSolid()){
+                        midVault = false;
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.VAULT, true);
+                        tryPowerPacket(PowerIndex.VAULT);
+                    } else {
+                        vec3.scale(0.6);
+                        ((StandUser) this.getSelf()).roundabout$tryBlockPosPower(PowerIndex.BOUNCE, true,blockHit.getBlockPos());
+                        tryBlockPosPowerPacket(PowerIndex.BOUNCE,blockHit.getBlockPos());
+                        midVault = !midVault;
+                    }
+
+                    MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),
+                            vec3.x,
+                            0.35 + Math.max(vec3.y, 0),
+                            vec3.z
+                    );
+                    return true;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean vault2() {
+        cancelConsumableItem(this.getSelf());
+        this.setAttackTimeDuring(-7);
+        this.setActivePower(PowerIndex.VAULT);
+        this.getSelf().resetFallDistance();
+        if (!this.getSelf().level().isClientSide()) {
+            if (hasHandsOut()) {
+                getStandUserSelf().roundabout$setStandAnimation(VAULT);
+                refreshArms();
+            }
+
+
+            animateStand(StandEntity.BROKEN_GUARD);
+            this.poseStand(OffsetIndex.GUARD);
+            if (Math.random() > 0.85){
+                addEXP(1);
+            }
+            blockBreakParticles(self.level().getBlockState(savePos).getBlock(),self.getEyePosition());
+            if (!playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.VAMPIRE_WALL_GRIP_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.8 + (Math.random() * 0.04)))){
+                if (self instanceof ServerPlayer sp){
+                    S2CPacketUtil.sendPlaySoundPacket(sp, this.self.getId(), StandPowers.VAULT_NOISE);
+                }
+            }
+        }
+        return true;
+    }
+    public void blockBreakParticles(Block block, Vec3 pos){
+        if (!this.self.level().isClientSide()) {
+            sendParticlesIfPossible(self.level(),new BlockParticleOption(ParticleTypes.BLOCK,
+                            block.defaultBlockState()),
+                    pos.x, pos.y, pos.z,
+                    100, 0.2, 0.2, 0.2, 0.5);
+        }
+    }
+
+
     public boolean cancelSprintParticles(){
         return super.cancelSprintParticles() || isChargingBloodSplash();
     }
@@ -3494,6 +3612,37 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
     }
 
+    public boolean canVault2(){
+        return super.canVault();
+    }
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean canVault(){
+        if (this.self.onGround())
+            return false;
+        Vec3 vec3d = this.getSelf().getEyePosition(0);
+        Vec3 vec3d2 = this.getSelf().getViewVector(0);
+        Vec3 vec3d3 = vec3d.add(vec3d2.x * 2, vec3d2.y * 2, vec3d2.z * 2);
+        BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
+
+        Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+        boolean logicCheck = blockHit.getBlockPos().getY()+1 > this.getSelf().getY();
+        if (gravD != Direction.DOWN){
+            BlockPos abv = blockHit.getBlockPos().relative(gravD.getOpposite());
+            BlockPos att = blockHit.getBlockPos();
+
+            Vec3 blockHitVec = RotationUtil.vecPlayerToWorld(new Vec3(abv.getX(),att.getY(),att.getZ()), gravD);
+            Vec3 playerVec = RotationUtil.vecPlayerToWorld(this.getSelf().position(), gravD);
+            logicCheck = blockHitVec.y+1 > playerVec.y;
+        }
+
+        if (this.getSelf().level().getBlockState(blockHit.getBlockPos()).isSolid() && logicCheck){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         if (!isHoldingSneak() && !isUsingTimeErase()){
@@ -3522,9 +3671,24 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (isGuarding()) {
             LockedOrNot(context, x, y, 3, StandIcons.KING_CRIMSON_HANDS_ACTIVE,
                     PowerIndex.SKILL_EXTRA_2, getArmsLevel());
-        } else if (canVault()){
-            setSkillIcon(context, x, y, 3, StandIcons.KING_CRIMSON_LEDGE_GRAB,
-                    PowerIndex.GLOBAL_DASH);
+        } else if (canVault() ){
+            if (midVault){
+                if (canVault2()){
+                    setSkillIcon(context, x, y, 3, StandIcons.KING_CRIMSON_LEDGE_GRAB,
+                            PowerIndex.NONE);
+                } else {
+                    setSkillIcon(context, x, y, 3, StandIcons.KING_CRIMSON_LEDGE_GRAB_2,
+                            PowerIndex.NONE);
+                }
+            } else {
+                if (canVault2()){
+                    setSkillIcon(context, x, y, 3, StandIcons.KING_CRIMSON_LEDGE_GRAB,
+                            PowerIndex.GLOBAL_DASH);
+                } else {
+                    setSkillIcon(context, x, y, 3, StandIcons.KING_CRIMSON_LEDGE_GRAB_2,
+                            PowerIndex.GLOBAL_DASH);
+                }
+            }
         } else {
             if (!isHoldingSneak()){
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
@@ -3893,6 +4057,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public boolean setPowerOther(int move, int lastMove) {
         if (move == PowerIndex.VAULT){
             return this.vault();
+        } else if (move == PowerIndex.BOUNCE){
+            return this.vault2();
         } else if (move == PowerIndex.POWER_1_SNEAK){
             return this.impale();
         } else if (move == PowerIndex.POWER_1){
