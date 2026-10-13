@@ -4718,7 +4718,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
         }
 
-        if (ent == this.SHA) { return this.SHA.getReturnStatus(); }
+        if (ent == this.SHA) { return this.SHA.getHaveToReturn() || this.SHA.getReturnStatus(); }
 
         if (this.getSelf().hasLineOfSight(ent)) {
 
@@ -4925,7 +4925,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override
     public boolean replaceHudActively() {
-        return this.SHA != null && this.SHA.getReturnStatus() && this.isHoldingSneak() || inBitesTheDustMode();
+        return (this.SHA != null && (this.SHA.getReturnStatus() || this.SHA.getHaveToReturn()) && this.isHoldingSneak()) || inBitesTheDustMode();
     }
 
     @Override
