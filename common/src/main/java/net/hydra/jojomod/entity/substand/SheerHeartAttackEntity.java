@@ -478,18 +478,18 @@ public class SheerHeartAttackEntity extends StandEntity {
 				if (getTargetType() == ENTITY && getEntityTarget() != null) {
 					pos = getEntityTarget().getEyePosition();
 				}
-				if (getTargetType() == BLOCK && blockTarget != null) {
-					if (Math.abs(pos.x - getPosition(1).x) < 1.0 && Math.abs(pos.z - getPosition(1).z) < 1.0) {
-						if (pos.y > getPosition(1).y && !isClimbing()) {
-							explodedBlocks.add(new Vec3(blockTarget.getX(), blockTarget.getY(), blockTarget.getZ()));
-						}
-					}
-				}
 
 				this.jump(pos);
 				this.shaStopMove();
 			} else {
 				shaMove(pos);
+				if (getTargetType() == BLOCK && blockTarget != null) {
+					if (Math.abs(pos.x - getPosition(1).x) < 1.0 && Math.abs(pos.z - getPosition(1).z) < 1.0) {
+						if (pos.y > getPosition(1).y && !isClimbing() && !this.horizontalCollision) {
+							explodedBlocks.add(new Vec3(blockTarget.getX(), blockTarget.getY(), blockTarget.getZ()));
+						}
+					}
+				}
 			}
 
 
@@ -939,6 +939,10 @@ public class SheerHeartAttackEntity extends StandEntity {
 			return -1;
 		}
 
+		if (getUser() != null && MainUtil.cheapDistanceTo2(getUser().getPosition(1).x, getUser().getPosition(1).z, pos.getX(), pos.getZ()) > 100) {
+			return -1;
+		}
+
 		BlockState info = level.getBlockState(pos);
 
 		ResourceLocation key = BuiltInRegistries.BLOCK.getKey(info.getBlock());
@@ -962,6 +966,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	public int getEntityWarm(Entity entity) {
 		int points = 0;
+		if (getUser() != null && MainUtil.cheapDistanceTo2(getUser().getPosition(1).x, getUser().getPosition(1).z, entity.getPosition(1).x, entity.getPosition(1).z) > 100) {
+			return -1;
+		}
 
 		if (!entity.isAttackable() || (entity instanceof LivingEntity LE && !LE.canBeSeenAsEnemy())
 				|| (entity instanceof Player PL && PL.isCreative())

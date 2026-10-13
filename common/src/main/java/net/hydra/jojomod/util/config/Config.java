@@ -475,6 +475,10 @@ public class Config implements Cloneable {
         @BooleanOption(group = "inherit", value = true)
         public Boolean sneakyKilling;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer miningSpeedMultiplierKq;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
+        public Integer getMiningTierKq;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer killerQueenAttackMultOnPlayers;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer killerQueenAttackMultOnMobs;

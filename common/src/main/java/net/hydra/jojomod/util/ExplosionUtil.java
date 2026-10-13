@@ -3,11 +3,14 @@ package net.hydra.jojomod.util;
 import java.util.HashSet;
 import java.util.List;
 
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -92,6 +95,9 @@ public class ExplosionUtil {
     }
 
 	public static HashSet<LivingEntity> explosionHurtBaseWithMulti(Boolean sneaky, Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range, float mobMult, float playerMult) {
+		return explosionHurtBaseWithMulti(sneaky, pos, dmgSource, level, damage, knockBack, range, mobMult, playerMult, false);
+	}
+	public static HashSet<LivingEntity> explosionHurtBaseWithMulti(Boolean sneaky, Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range, float mobMult, float playerMult, boolean hurtItems) {
 		List<Entity> damages = MainUtil.genHitbox(level, pos.x(), pos.y(), pos.z(), range, range, range);
 
 		Entity causer = dmgSource.getEntity();
@@ -102,50 +108,49 @@ public class ExplosionUtil {
 
 		//int amountOfVictims = 0;
 
-		for(int j = 0;j<damages.size();j++) {
-			Entity entity = damages.get(j);
-			if (entity instanceof StandEntity || !entity.isAttackable()) {
-				continue;
-			}
-			if (entity instanceof Player PL && (PL.isCreative() || PL.isSpectator())) {
-				continue;
-			}
+        for (Entity entity : damages) {
+            if (entity instanceof StandEntity || !(entity.isAttackable() || (entity instanceof ItemEntity && hurtItems))) {
+                continue;
+            }
+            if (entity instanceof Player PL && (PL.isCreative() || PL.isSpectator())) {
+                continue;
+            }
 
-			if (entity instanceof LivingEntity LE) {
-				victims.add(LE);
-				//amountOfVictims++;
-			}
+            if (entity instanceof LivingEntity LE && !(LE instanceof ArmorStand)) {
+                victims.add(LE);
+                //amountOfVictims++;
+            }
 
-			double dist = entity.distanceToSqr(pos);
-			float percUnhand = ((float)dist/ (range * range * range));
-			float perc = 1.0f - (percUnhand*0.85f);
-			float percKnockback = 1.0f - (percUnhand*0.5f);
+            double dist = entity.distanceToSqr(pos);
+            float percUnhand = ((float) dist / (range * range * range));
+            float perc = 1.0f - (percUnhand * 0.85f);
+            float percKnockback = 1.0f - (percUnhand * 0.5f);
 
-			boolean hasSeen = true;
+            boolean hasSeen = true;
 
-			if (sneaky && entity instanceof LivingEntity LE && causer != null) {
-				hasSeen = (LE.hasLineOfSight(causer));
-			}
+            if (sneaky && entity instanceof LivingEntity LE && causer != null) {
+                hasSeen = (LE.hasLineOfSight(causer));
+            }
 
-			if (hasSeen || MainUtil.isBossMob(entity)) {
-				if (MainUtil.getReducedDamage(entity)) {
-					entity.hurt(dmgSource, perc * damage * playerMult);
-				}else {
-					entity.hurt(dmgSource, perc * damage * mobMult);
-				}
-			} else {
-				if (MainUtil.getReducedDamage(entity)) {
-					entity.hurt(notSeenDamage, perc * damage * playerMult);
-				}else {
-					entity.hurt(notSeenDamage, perc * damage * mobMult);
-				}
-			}
+            if (hasSeen || MainUtil.isBossMob(entity)) {
+                if (MainUtil.getReducedDamage(entity)) {
+                    entity.hurt(dmgSource, perc * damage * playerMult);
+                } else {
+                    entity.hurt(dmgSource, perc * damage * mobMult);
+                }
+            } else {
+                if (MainUtil.getReducedDamage(entity)) {
+                    entity.hurt(notSeenDamage, perc * damage * playerMult);
+                } else {
+                    entity.hurt(notSeenDamage, perc * damage * mobMult);
+                }
+            }
 
-			Vec3 knockbackUnhand = new Vec3(entity.getX() - pos.x(), entity.getY() - pos.y(), entity.getZ() - pos.z());
-			Vec3 knockback = knockbackUnhand.normalize().scale(Math.min(knockBack, percKnockback*knockBack));
+            Vec3 knockbackUnhand = new Vec3(entity.getX() - pos.x(), entity.getY() - pos.y(), entity.getZ() - pos.z());
+            Vec3 knockback = knockbackUnhand.normalize().scale(Math.min(knockBack, percKnockback * knockBack));
 
-			MainUtil.takeLiteralUnresistableKnockbackWithY(entity, knockback.x, knockback.y, knockback.z);
-		}
+            MainUtil.takeLiteralUnresistableKnockbackWithY(entity, knockback.x, knockback.y, knockback.z);
+        }
 
 		return victims;
 	}
@@ -159,6 +164,9 @@ public class ExplosionUtil {
 	}
 
 	public static void explodeBlocksBase(BlockPos location, Level level, Float range, boolean ignoreOres, Entity causer) {
+		explodeBlocksBase(location, level, range, ignoreOres, causer, false);
+	}
+	public static void explodeBlocksBase(BlockPos location, Level level, Float range, boolean ignoreOres, Entity causer, boolean useTool) {
 
 		Vec3 center = new Vec3(location.getX(), location.getY(), location.getZ());
 
@@ -168,9 +176,9 @@ public class ExplosionUtil {
 
 		for (BlockPos pos : BlockPos.betweenClosed(location.offset(intSize, intSize, intSize), location.offset(-intSize, -intSize, -intSize))) {
 			BlockState info = level.getBlockState(pos);
-			if (isBlockBlackListed(info) || (MainUtil.confirmIsOre(info) && ignoreOres)
-					|| info.isAir() || info.is(Blocks.BARRIER) || info.is(Blocks.BEDROCK)
-					|| !MainUtil.isDestructible(level, location, info)
+			if (isBlockBlackListed(info) || (MainUtil.confirmIsOre(info) && ignoreOres && !(useTool && causer instanceof Player PL && canMineWithAnyInventoryTool(PL, info, true)))
+					|| info.isAir() || info.is(Blocks.BARRIER) || info.is(Blocks.BEDROCK) || info.hasBlockEntity()
+					|| !MainUtil.isDestructible2(level, location, info)
 					|| MainUtil.isBlockDestructionBlacklisted(info)
 			) {
 				continue;
@@ -182,10 +190,9 @@ public class ExplosionUtil {
 			Double dist2 = center.distanceToSqr(pos.getX(), pos.getY(), pos.getZ());
 
 			if (dist2 <= explosionDistance) {
-				boolean shouldDrop = !info.requiresCorrectToolForDrops() && level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING_OBTAINMENT);
+				boolean shouldDrop = (useTool && causer instanceof Player PL && canMineWithAnyInventoryTool(PL, info, true)) && level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING_OBTAINMENT);
 
 				destroyBlockHandled(level, pos, shouldDrop, causer);
-
 			}
 		}
 	}
@@ -214,6 +221,26 @@ public class ExplosionUtil {
 				level.gameEvent(GameEvent.BLOCK_DESTROY, $$0, GameEvent.Context.of($$2, $$4));
 			}
 		}
+	}
+
+	public static boolean canMineWithAnyInventoryTool(LivingEntity LE, BlockState state, boolean onlyOre) {
+		if (!ClientNetworking.getAppropriateConfig().generalStandSettings.standGrabRequiresTool){
+			return true;
+		}
+		if (LE instanceof Player player) {
+			// Blocks that don't require a correct tool can be mined without one.
+			if (!state.requiresCorrectToolForDrops()) {
+				return true;
+			}
+
+			for (ItemStack stack : player.getInventory().items) {
+				if (!stack.isEmpty() && stack.isCorrectToolForDrops(state) && (MainUtil.confirmIsOre(state) || !onlyOre)) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 }

@@ -857,6 +857,8 @@ public class StandHudRender {
         int l;
         int k;
         int v;
+        value = Math.min(value, max);
+
         int blt = (int) Math.floor(((double) 182 / max)*(value));
         l = scaledHeight - 32 + 3;
         context.blit(file, x, l, bx, by, 182, 5);
