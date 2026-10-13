@@ -9,6 +9,8 @@ import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -93,6 +95,9 @@ public class ExplosionUtil {
     }
 
 	public static HashSet<LivingEntity> explosionHurtBaseWithMulti(Boolean sneaky, Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range, float mobMult, float playerMult) {
+		return explosionHurtBaseWithMulti(sneaky, pos, dmgSource, level, damage, knockBack, range, mobMult, playerMult, false);
+	}
+	public static HashSet<LivingEntity> explosionHurtBaseWithMulti(Boolean sneaky, Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range, float mobMult, float playerMult, boolean hurtItems) {
 		List<Entity> damages = MainUtil.genHitbox(level, pos.x(), pos.y(), pos.z(), range, range, range);
 
 		Entity causer = dmgSource.getEntity();
@@ -103,50 +108,49 @@ public class ExplosionUtil {
 
 		//int amountOfVictims = 0;
 
-		for(int j = 0;j<damages.size();j++) {
-			Entity entity = damages.get(j);
-			if (entity instanceof StandEntity || !entity.isAttackable()) {
-				continue;
-			}
-			if (entity instanceof Player PL && (PL.isCreative() || PL.isSpectator())) {
-				continue;
-			}
+        for (Entity entity : damages) {
+            if (entity instanceof StandEntity || !(entity.isAttackable() || (entity instanceof ItemEntity && hurtItems))) {
+                continue;
+            }
+            if (entity instanceof Player PL && (PL.isCreative() || PL.isSpectator())) {
+                continue;
+            }
 
-			if (entity instanceof LivingEntity LE) {
-				victims.add(LE);
-				//amountOfVictims++;
-			}
+            if (entity instanceof LivingEntity LE && !(LE instanceof ArmorStand)) {
+                victims.add(LE);
+                //amountOfVictims++;
+            }
 
-			double dist = entity.distanceToSqr(pos);
-			float percUnhand = ((float)dist/ (range * range * range));
-			float perc = 1.0f - (percUnhand*0.85f);
-			float percKnockback = 1.0f - (percUnhand*0.5f);
+            double dist = entity.distanceToSqr(pos);
+            float percUnhand = ((float) dist / (range * range * range));
+            float perc = 1.0f - (percUnhand * 0.85f);
+            float percKnockback = 1.0f - (percUnhand * 0.5f);
 
-			boolean hasSeen = true;
+            boolean hasSeen = true;
 
-			if (sneaky && entity instanceof LivingEntity LE && causer != null) {
-				hasSeen = (LE.hasLineOfSight(causer));
-			}
+            if (sneaky && entity instanceof LivingEntity LE && causer != null) {
+                hasSeen = (LE.hasLineOfSight(causer));
+            }
 
-			if (hasSeen || MainUtil.isBossMob(entity)) {
-				if (MainUtil.getReducedDamage(entity)) {
-					entity.hurt(dmgSource, perc * damage * playerMult);
-				}else {
-					entity.hurt(dmgSource, perc * damage * mobMult);
-				}
-			} else {
-				if (MainUtil.getReducedDamage(entity)) {
-					entity.hurt(notSeenDamage, perc * damage * playerMult);
-				}else {
-					entity.hurt(notSeenDamage, perc * damage * mobMult);
-				}
-			}
+            if (hasSeen || MainUtil.isBossMob(entity)) {
+                if (MainUtil.getReducedDamage(entity)) {
+                    entity.hurt(dmgSource, perc * damage * playerMult);
+                } else {
+                    entity.hurt(dmgSource, perc * damage * mobMult);
+                }
+            } else {
+                if (MainUtil.getReducedDamage(entity)) {
+                    entity.hurt(notSeenDamage, perc * damage * playerMult);
+                } else {
+                    entity.hurt(notSeenDamage, perc * damage * mobMult);
+                }
+            }
 
-			Vec3 knockbackUnhand = new Vec3(entity.getX() - pos.x(), entity.getY() - pos.y(), entity.getZ() - pos.z());
-			Vec3 knockback = knockbackUnhand.normalize().scale(Math.min(knockBack, percKnockback*knockBack));
+            Vec3 knockbackUnhand = new Vec3(entity.getX() - pos.x(), entity.getY() - pos.y(), entity.getZ() - pos.z());
+            Vec3 knockback = knockbackUnhand.normalize().scale(Math.min(knockBack, percKnockback * knockBack));
 
-			MainUtil.takeLiteralUnresistableKnockbackWithY(entity, knockback.x, knockback.y, knockback.z);
-		}
+            MainUtil.takeLiteralUnresistableKnockbackWithY(entity, knockback.x, knockback.y, knockback.z);
+        }
 
 		return victims;
 	}

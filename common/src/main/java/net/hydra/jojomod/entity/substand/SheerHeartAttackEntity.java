@@ -939,6 +939,10 @@ public class SheerHeartAttackEntity extends StandEntity {
 			return -1;
 		}
 
+		if (getUser() != null && MainUtil.cheapDistanceTo2(getUser().getPosition(1).x, getUser().getPosition(1).z, pos.getX(), pos.getZ()) > 100) {
+			return -1;
+		}
+
 		BlockState info = level.getBlockState(pos);
 
 		ResourceLocation key = BuiltInRegistries.BLOCK.getKey(info.getBlock());
@@ -962,6 +966,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	public int getEntityWarm(Entity entity) {
 		int points = 0;
+		if (getUser() != null && MainUtil.cheapDistanceTo2(getUser().getPosition(1).x, getUser().getPosition(1).z, entity.getPosition(1).x, entity.getPosition(1).z) > 100) {
+			return -1;
+		}
 
 		if (!entity.isAttackable() || (entity instanceof LivingEntity LE && !LE.canBeSeenAsEnemy())
 				|| (entity instanceof Player PL && PL.isCreative())

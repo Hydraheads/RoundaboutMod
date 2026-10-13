@@ -4936,7 +4936,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     btdTicks + disabledBTDTicks, Math.max(this.btdTicksMax, btdTicks), this);
         }else if (this.SHA != null && !this.SHA.isRemoved()) {
             double distance = SHA.distanceTo(getSelf());
-            StandHudRender.renderNumberHUD(context, Minecraft.getInstance(), screenWidth, screenHeight, x, distance, 100, StandIcons.JOJO_ICONS, 0, 161, 0xe2badf);
+            StandHudRender.renderNumberHUD(context, Minecraft.getInstance(), screenWidth, screenHeight, x, distance, 100, StandIcons.JOJO_ICONS_3, 0, 10, 0x718cc0);
         }
     }
     @Override
@@ -5355,7 +5355,6 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if (!MainUtil.isBossMob(target)) {
                     target.discard();
                 }
-
                 spawnLingeringCloud(target);
             }
 
