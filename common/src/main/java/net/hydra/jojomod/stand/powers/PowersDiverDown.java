@@ -211,7 +211,7 @@ public class PowersDiverDown extends NewPunchingStand {
     public Entity submergedTarget = null;
     public int submergedTargetId = -1; //for client/server desynchronization fix
     public static final int DIVE_WINDUP_MAX = 30; // 1.5 seconds uncancellable windup
-    public static final float DIVE_REACH = 4.0f; // how far it goes
+    public static final float DIVE_REACH = 3.0f; // how far it goes
     public boolean isTransferringDamage = false; // recursion guard, prevents things like 2 DDs repeatedly protecting each other
     public boolean damageRedirectionEnabled = true;
     public boolean hasDiverLegs = false;
@@ -1828,11 +1828,11 @@ public class PowersDiverDown extends NewPunchingStand {
                 // movement speed is the same for both crouching and standing up.
                 basis *= g;
             }
-            // slows you down by 70%
-            basis *= 0.3f;
+            // slows you down by 45%
+            basis *= 0.45f;
             // right now the dive move isn't implemented, so this is just a placeholder.
         } else if (this.getActivePower() == PowerIndex.POWER_1) {
-            // slows you down by 70%
+            // slows you down by 30%
             basis *= 0.3f;
         }
         if (inZipMode()) {
