@@ -230,7 +230,7 @@ public class PowersDiverDown extends NewPunchingStand {
 
     // for secret skin
     public int underwaterTicks = 0;
-    public static final int REQUIRED_UNDERWATER_TICKS = 1800; // 90 seconds
+    public static final int REQUIRED_UNDERWATER_TICKS = 2400; // 120 seconds (2 minutes
 
     // for cooldowns
     private final int getAfflictionCooldown() {
@@ -4763,6 +4763,17 @@ public class PowersDiverDown extends NewPunchingStand {
             return false;
         }
         return super.interceptAttack();
+    }
+
+    @Override
+    public boolean interceptGuard() {
+        if (inZipMode()) {
+            return true;
+        }
+        if (areStandMovesDisabled()) {
+            return false;
+        }
+        return super.interceptGuard();
     }
 
     // disables PLAYER MOVES for zip mode
