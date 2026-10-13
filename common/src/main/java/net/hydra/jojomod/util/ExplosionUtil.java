@@ -172,7 +172,7 @@ public class ExplosionUtil {
 
 		for (BlockPos pos : BlockPos.betweenClosed(location.offset(intSize, intSize, intSize), location.offset(-intSize, -intSize, -intSize))) {
 			BlockState info = level.getBlockState(pos);
-			if (isBlockBlackListed(info) || (MainUtil.confirmIsOre(info) && ignoreOres && !(useTool && causer instanceof Player PL && canMineWithAnyInventoryTool(PL, info)))
+			if (isBlockBlackListed(info) || (MainUtil.confirmIsOre(info) && ignoreOres && !(useTool && causer instanceof Player PL && canMineWithAnyInventoryTool(PL, info, true)))
 					|| info.isAir() || info.is(Blocks.BARRIER) || info.is(Blocks.BEDROCK) || info.hasBlockEntity()
 					|| !MainUtil.isDestructible2(level, location, info)
 					|| MainUtil.isBlockDestructionBlacklisted(info)
@@ -186,7 +186,7 @@ public class ExplosionUtil {
 			Double dist2 = center.distanceToSqr(pos.getX(), pos.getY(), pos.getZ());
 
 			if (dist2 <= explosionDistance) {
-				boolean shouldDrop = (useTool && causer instanceof Player PL && canMineWithAnyInventoryTool(PL, info)) && level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING_OBTAINMENT);
+				boolean shouldDrop = (useTool && causer instanceof Player PL && canMineWithAnyInventoryTool(PL, info, true)) && level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING_OBTAINMENT);
 
 				destroyBlockHandled(level, pos, shouldDrop, causer);
 			}
@@ -219,7 +219,7 @@ public class ExplosionUtil {
 		}
 	}
 
-	public static boolean canMineWithAnyInventoryTool(LivingEntity LE, BlockState state) {
+	public static boolean canMineWithAnyInventoryTool(LivingEntity LE, BlockState state, boolean onlyOre) {
 		if (!ClientNetworking.getAppropriateConfig().generalStandSettings.standGrabRequiresTool){
 			return true;
 		}
@@ -230,7 +230,7 @@ public class ExplosionUtil {
 			}
 
 			for (ItemStack stack : player.getInventory().items) {
-				if (!stack.isEmpty() && stack.isCorrectToolForDrops(state)) {
+				if (!stack.isEmpty() && stack.isCorrectToolForDrops(state) && (MainUtil.confirmIsOre(state) || !onlyOre)) {
 					return true;
 				}
 			}
