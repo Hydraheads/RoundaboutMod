@@ -1,7 +1,23 @@
 {
   "variants": {
-    "": {
-      "model": "roundabout:block/gambling_table"
-    }
+    "facing=south,part=front_left":  { "model": "roundabout:block/gambling_table", "y": 0 },
+    "facing=south,part=front_right": { "model": "roundabout:block/gambling_table", "y": 90 },
+    "facing=south,part=back_left":   { "model": "roundabout:block/gambling_table", "y": 270 },
+    "facing=south,part=back_right":  { "model": "roundabout:block/gambling_table", "y": 180 },
+
+    "facing=west,part=front_left":   { "model": "roundabout:block/gambling_table", "y": 90 },
+    "facing=west,part=front_right":  { "model": "roundabout:block/gambling_table", "y": 180 },
+    "facing=west,part=back_left":    { "model": "roundabout:block/gambling_table", "y": 0 },
+    "facing=west,part=back_right":   { "model": "roundabout:block/gambling_table", "y": 270 },
+
+    "facing=north,part=front_left":  { "model": "roundabout:block/gambling_table", "y": 180 },
+    "facing=north,part=front_right": { "model": "roundabout:block/gambling_table", "y": 270 },
+    "facing=north,part=back_left":   { "model": "roundabout:block/gambling_table", "y": 90 },
+    "facing=north,part=back_right":  { "model": "roundabout:block/gambling_table", "y": 0 },
+
+    "facing=east,part=front_left":   { "model": "roundabout:block/gambling_table", "y": 270 },
+    "facing=east,part=front_right":  { "model": "roundabout:block/gambling_table", "y": 0 },
+    "facing=east,part=back_left":    { "model": "roundabout:block/gambling_table", "y": 180 },
+    "facing=east,part=back_right":   { "model": "roundabout:block/gambling_table", "y": 90 }
   }
 }

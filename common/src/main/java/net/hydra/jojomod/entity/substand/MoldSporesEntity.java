@@ -127,12 +127,13 @@ public class MoldSporesEntity extends StandEntity {
             S2CPacketUtil.sync_mold_duration(lifetime, this.getId());
             S2CPacketUtil.sync_mold_range(range, this.getId());
         }
-
+        /*
         if(client){
             Roundabout.LOGGER.info("ClientRange= " + range);
         }else{
             Roundabout.LOGGER.info("ServerRange= " + range);
         }
+        */
         super.tick();
     }
 

@@ -477,6 +477,9 @@ public class ModSounds {
     public static final String CENTURY_BOY_HIT = "century_boy_hit";
     public static final ResourceLocation CENTURY_BOY_HIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CENTURY_BOY_HIT);
     public static SoundEvent CENTURY_BOY_HIT_EVENT = SoundEvent.createVariableRangeEvent(CENTURY_BOY_HIT_ID);
+    public static final String CENTURY_BOY_HIT_2 = "century_boy_hit_2";
+    public static final ResourceLocation CENTURY_BOY_HIT_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CENTURY_BOY_HIT_2);
+    public static SoundEvent CENTURY_BOY_HIT_2_EVENT = SoundEvent.createVariableRangeEvent(CENTURY_BOY_HIT_2_ID);
     public static final String CENTURY_BOY_NORMAL_STANCE = "century_boy_normal_stance";
     public static final ResourceLocation CENTURY_BOY_NORMAL_STANCE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CENTURY_BOY_NORMAL_STANCE);
     public static SoundEvent CENTURY_BOY_NORMAL_STANCE_EVENT = SoundEvent.createVariableRangeEvent(CENTURY_BOY_NORMAL_STANCE_ID);

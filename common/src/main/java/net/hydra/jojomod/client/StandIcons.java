@@ -563,6 +563,8 @@ public class StandIcons {
             "textures/gui/icons/king_crimson/epitaph.png");
     public static final ResourceLocation KING_CRIMSON_LEDGE_GRAB = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/king_crimson/stand_ledge_grab.png");
+    public static final ResourceLocation KING_CRIMSON_LEDGE_GRAB_2 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/king_crimson/vault_2.png");
     public static final ResourceLocation KING_CRIMSON_HANDS_ACTIVE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/king_crimson/hands_active.png");
     public static final ResourceLocation STAR_PLATINUM_HANDS_ACTIVE = new ResourceLocation(Roundabout.MOD_ID,

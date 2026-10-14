@@ -219,6 +219,8 @@ public class ForgeSounds {
             register(ModSounds.CENTURY_BOY_SUMMON, ModSounds.CENTURY_BOY_SUMMON_ID);
     public static final RegistryObject<SoundEvent> CENTURY_BOY_HIT_EVENT =
             register(ModSounds.CENTURY_BOY_HIT, ModSounds.CENTURY_BOY_HIT_ID);
+    public static final RegistryObject<SoundEvent> CENTURY_BOY_HIT_2_EVENT =
+            register(ModSounds.CENTURY_BOY_HIT_2, ModSounds.CENTURY_BOY_HIT_2_ID);
     public static final RegistryObject<SoundEvent> CENTURY_BOY_NORMAL_STANCE =
             register(ModSounds.CENTURY_BOY_NORMAL_STANCE, ModSounds.CENTURY_BOY_NORMAL_STANCE_ID);
     public static final RegistryObject<SoundEvent> CENTURY_BOY_PROPEL_STANCE =
