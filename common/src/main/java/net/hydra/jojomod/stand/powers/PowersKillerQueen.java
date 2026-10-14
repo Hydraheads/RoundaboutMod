@@ -986,7 +986,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
             case SKILL_2_CROUCH_GUARD, SKILL_2_GUARD -> {
                 if (!this.inBitesTheDustMode()) {
-                    if (this.currentBombStatus == BOMB_BUBBLE) {
+                    if (this.currentBombStatus == BOMB_BUBBLE || (activePower == PowerIndex.POWER_2_BLOCK && !isBubbleAutoPlantingEnabled())) {
                         airBubbleRedirectClient();
                     } else if (this.currentBombStatus == BOMB_NONE || !isBubbleAutoPlantingEnabled()) {
                         tryBubbleSend();
