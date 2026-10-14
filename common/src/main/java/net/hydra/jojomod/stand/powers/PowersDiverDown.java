@@ -5288,7 +5288,6 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     // WIP FEATURES BELOW HERE, DELETE WHEN DONE
-    /*
     @Override
     public boolean isWip() {
         return true;
@@ -5303,5 +5302,4 @@ public class PowersDiverDown extends NewPunchingStand {
     public Component ifWipListDev() {
         return Component.literal("88superguy").withStyle(ChatFormatting.GOLD);
     }
-     */
 }
