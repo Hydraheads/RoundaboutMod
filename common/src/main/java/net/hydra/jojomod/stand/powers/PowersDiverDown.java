@@ -226,11 +226,11 @@ public class PowersDiverDown extends NewPunchingStand {
     public static final double HOSTILE_DETECTION_RANGE = 16.0; // non-zombie hostile detection range
     public LivingEntity springTarget = null;
     public int springLegsTicks = 0;
-    public static final int SPRING_LEGS_MAX_DURATION = 300; // 15 seconds max duration
+    public static final int SPRING_LEGS_MAX_DURATION = 200; // 10 seconds max duration
 
     // for secret skin
     public int underwaterTicks = 0;
-    public static final int REQUIRED_UNDERWATER_TICKS = 2400; // 120 seconds (2 minutes
+    public static final int REQUIRED_UNDERWATER_TICKS = 2400; // 120 seconds (2 minutes)
 
     // for cooldowns
     private final int getAfflictionCooldown() {
