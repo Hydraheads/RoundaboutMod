@@ -794,7 +794,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         
     	if (inBitesTheDustMode()) {
     		setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_BTD_COMBAT, PowerIndex.SKILL_EXTRA_2);
-        } else if ((this.currentBombStatus == BOMB_BUBBLE && isGuarding() || (this.activePower == PowerIndex.POWER_2_BLOCK && !isBubbleAutoPlantingEnabled())) && !holdingItem) {
+        } else if (((this.currentBombStatus == BOMB_BUBBLE) && isGuarding() || (this.activePower == PowerIndex.POWER_2_BLOCK && !isBubbleAutoPlantingEnabled())) && !holdingItem) {
             setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_BUBBLE_REDIRECT, PowerIndex.NO_CD);
 
         } else if ((this.currentBombStatus != BOMB_NONE && !(!isBubbleAutoPlantingEnabled() && isGuarding())) || holdingItem) {
@@ -1925,7 +1925,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100, false);
             }
             if (this.getActivePower() == PowerIndex.POWER_2_BLOCK && move != PowerIndex.POWER_2_BLOCK && move != PowerIndex.POWER_2_EXTRA
-                    && currentBombStatus != BOMB_BUBBLE && currentBombStatus != BUBBLE_CONTACT) {
+                    && !(this.bombBubble != null && this.bombBubble.isAlive())) {
                 this.stopSoundsIfNearby(AIRBUBBLE, 100, false);
             }
 
@@ -3009,7 +3009,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public void bubbleSend() {
-        if (!canUseStrayCat() || (this.currentBombStatus != BOMB_NONE && !isBubbleAutoPlantingEnabled())) {
+        if (!canUseStrayCat() || (this.currentBombStatus != BOMB_NONE && isBubbleAutoPlantingEnabled())) {
             return;
         }
         if (!this.isClient()) {
@@ -3048,7 +3048,9 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if (this.self instanceof ServerPlayer) {
                     S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowersKillerQueen.BUBBLE_BOMB, entID);
                 }
-                syncBombStatus(BOMB_BUBBLE);
+                if (isBubbleAutoPlantingEnabled()) {
+                    syncBombStatus(BOMB_BUBBLE);
+                }
             }
         }
     }
