@@ -235,6 +235,13 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override
     public void onStandSummon(boolean desummon) {
         super.onStandSummon(desummon);
+        if (desummon && !isClient()) {
+            if (this.getActivePower() == PowerIndex.POWER_2_BLOCK
+                    && !(this.bombBubble != null && this.bombBubble.isAlive())) {
+                this.stopSoundsIfNearby(AIRBUBBLE, 100, false);
+            }
+        }
+
         if (!self.level().isClientSide()){
             flipArmRendering();
         }
@@ -1875,7 +1882,6 @@ public class PowersKillerQueen extends NewPunchingStand {
             return this.bitesTheDustCombatActivate();
         } else if (move == BITES_THE_DUST_DAY) {
             return setPowerBTDDayActivate();
-            //return this.bitesTheDustDayActivate();
         } else if (move == PowerIndex.POWER_4_SNEAK) {
             switchHands();
             return true;
@@ -1904,6 +1910,13 @@ public class PowersKillerQueen extends NewPunchingStand {
                 || move == PowerIndex.SNEAK_ATTACK_CHARGE || move == PowerIndex.SNEAK_ATTACK))
             return false;
 
+        /*
+        if (this.getActivePower() == PowerIndex.POWER_2_BLOCK && move != PowerIndex.POWER_2_BLOCK && move != PowerIndex.POWER_2_EXTRA
+                && !(this.bombBubble != null && this.bombBubble.isAlive())) {
+            this.stopSoundsIfNearby(AIRBUBBLE, 100, false);
+        }
+        */
+
         StandEntity stand = getStandEntity(this.self);
 
         if (!isClient()) {
@@ -1923,10 +1936,6 @@ public class PowersKillerQueen extends NewPunchingStand {
             if ((this.getActivePower() == PowerIndex.BARRAGE || this.getActivePower() == PowerIndex.BARRAGE_CHARGE)
                     && (move != PowerIndex.BARRAGE && move != PowerIndex.BARRAGE_CHARGE)){
                 this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100, false);
-            }
-            if (this.getActivePower() == PowerIndex.POWER_2_BLOCK && move != PowerIndex.POWER_2_BLOCK && move != PowerIndex.POWER_2_EXTRA
-                    && !(this.bombBubble != null && this.bombBubble.isAlive())) {
-                this.stopSoundsIfNearby(AIRBUBBLE, 100, false);
             }
 
             StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
@@ -3035,20 +3044,20 @@ public class PowersKillerQueen extends NewPunchingStand {
                 Vec3 pos = user.getPosition(1).add(addToPosition.x, addToPosition.y, addToPosition.z)/*.add(user.getForward().scale(user.getBbWidth() * 0.5f))*/;
                 bubble.setPos(pos.x(), pos.y(), pos.z());
                 bubble.shootFromRotationDeltaAgnostic(user, user.getXRot(), user.getYRot(), 1.0F, getStrayCatAirBubbleSpeed(), 0);
+                bubble.setTarget(this.entityTargetBuffer);
 
                 user.level().addFreshEntity(bubble);
 
-                this.bombBubble = bubble;
-
-                this.bombBubble.setTarget(this.entityTargetBuffer);
                 this.entityTargetBuffer = null;
 
-                int entID = this.bombBubble.getId();
-                this.bombBubbleID = entID;
-                if (this.self instanceof ServerPlayer) {
-                    S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowersKillerQueen.BUBBLE_BOMB, entID);
-                }
                 if (isBubbleAutoPlantingEnabled()) {
+                    this.bombBubble = bubble;
+                    int entID = this.bombBubble.getId();
+                    this.bombBubbleID = entID;
+                    if (this.self instanceof ServerPlayer) {
+                        S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowersKillerQueen.BUBBLE_BOMB, entID);
+                    }
+
                     syncBombStatus(BOMB_BUBBLE);
                 }
             }
