@@ -2440,7 +2440,7 @@
   "ability.roundabout.kq_fast_kick":"Low Kick / Strong Punch",
   "ability.roundabout.kq_fast_kick.desc":"Charge a fast kick, fully charge does a heavy punch with high knockback.",
   "ability.roundabout.kq_config":"Bomb Settings",
-  "ability.roundabout.kq_config.desc":"Opens a menu to customize the behavior of Primary Bomb skills. Adjusts whether bombs can break blocks, if they detonate manually or on entity contact, and their explosion size. Increasing explosion size increases the cooldown of Primary Bomb skills.",
+  "ability.roundabout.kq_config.desc":"Opens a menu to customize the behavior of Primary Bomb skills. Adjusts whether bombs can break blocks, if they destroy items, if they detonate manually or on entity contact, and their explosion size. Increasing explosion size increases the cooldown of Primary Bomb skills. Ores broken by bombs will only drop items if the necessary tool is in your inventory.",
   "ability.roundabout.kq_detonate":"Detonate",
   "ability.roundabout.kq_detonate.desc":"Detonates the current primary bomb.",
   "ability.roundabout.kq_defuse":"Defuse",
