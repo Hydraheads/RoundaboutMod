@@ -113,5 +113,15 @@ public class LootAdder {
             BuiltInLootTables.BASTION_BRIDGE,
             BuiltInLootTables.NETHER_BRIDGE
     );
-
+    public static LootAdder STRONGHOLD_TOTEM_OF_DOOM = new LootAdder(LootPool.lootPool()
+            .setRolls(ConstantValue.exactly(1.0F))
+            .when(LootItemRandomChanceCondition.randomChance(0.2F))
+            .add(LootItem.lootTableItem(ModItems.TOTEM_OF_DOOM))
+            .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))
+            .build(),
+            null,
+            BuiltInLootTables.STRONGHOLD_CORRIDOR,
+            BuiltInLootTables.STRONGHOLD_CROSSING,
+            BuiltInLootTables.STRONGHOLD_LIBRARY
+    );
 }

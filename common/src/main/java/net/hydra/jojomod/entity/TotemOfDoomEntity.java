@@ -204,7 +204,7 @@ public class TotemOfDoomEntity extends Entity implements ItemSupplier {
         Vec3 p3 = new Vec3(center.x - RADIUS, center.y, center.z - RADIUS);
         Vec3 p4 = new Vec3(center.x - RADIUS, center.y, center.z + RADIUS);
 
-        drawSquare(level, p1, p2, p3, p4, 70, particle);
+        drawSquare(level, p1, p2, p3, p4, RADIUS * 2, particle);
     }
 
     // Valorant Veto beam :O
