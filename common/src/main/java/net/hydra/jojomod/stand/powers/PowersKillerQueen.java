@@ -761,6 +761,10 @@ public class PowersKillerQueen extends NewPunchingStand {
         return (this.bombConfig & (1 << 2)) != 0;
     }
 
+    public boolean isBubbleAutoPlantingEnabled() {
+        return (this.bombConfig & (1 << 3)) != 0;
+    }
+
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
 
@@ -790,10 +794,10 @@ public class PowersKillerQueen extends NewPunchingStand {
         
     	if (inBitesTheDustMode()) {
     		setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_BTD_COMBAT, PowerIndex.SKILL_EXTRA_2);
-        } else if ((this.currentBombStatus == BOMB_BUBBLE && isGuarding() || this.activePower == PowerIndex.POWER_2_BLOCK) && !holdingItem) {
+        } else if ((this.currentBombStatus == BOMB_BUBBLE && isGuarding() || (this.activePower == PowerIndex.POWER_2_BLOCK && !isBubbleAutoPlantingEnabled())) && !holdingItem) {
             setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_BUBBLE_REDIRECT, PowerIndex.NO_CD);
 
-        } else if (this.currentBombStatus != BOMB_NONE || holdingItem) {
+        } else if ((this.currentBombStatus != BOMB_NONE && !(!isBubbleAutoPlantingEnabled() && isGuarding())) || holdingItem) {
             setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_BOMB_DETONATE, PowerIndex.NO_CD);
         } else if (isGuarding()) {
             if (!canExecuteMoveWithLevel(getStrayCatLevel()) || !this.canUseStrayCat()) {
@@ -984,7 +988,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if (!this.inBitesTheDustMode()) {
                     if (this.currentBombStatus == BOMB_BUBBLE) {
                         airBubbleRedirectClient();
-                    } else if (this.currentBombStatus == BOMB_NONE) {
+                    } else if (this.currentBombStatus == BOMB_NONE || !isBubbleAutoPlantingEnabled()) {
                         tryBubbleSend();
                     } else {
                         detonateClient();
@@ -3005,7 +3009,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public void bubbleSend() {
-        if (!canUseStrayCat() || this.currentBombStatus != BOMB_NONE) {
+        if (!canUseStrayCat() || (this.currentBombStatus != BOMB_NONE && !isBubbleAutoPlantingEnabled())) {
             return;
         }
         if (!this.isClient()) {
@@ -3019,7 +3023,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 bubble.setOwner(user);
                 bubble.setSkin(this.getBubbleSkin());
                 bubble.setIsKQAirBubble(true);
-                bubble.setIsPlanted(true);
+                bubble.setIsPlanted(isBubbleAutoPlantingEnabled());
                 bubble.setHasTimeLimit(true);
                 bubble.setFollowOwnerView(true);
 

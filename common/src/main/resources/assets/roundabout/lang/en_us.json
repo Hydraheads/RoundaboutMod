@@ -3293,6 +3293,7 @@
   "roundabout.bomb_config.contact_explosion": "Toggle Contact/Manual Bombs",
   "roundabout.bomb_config.block_destruction": "Toggle Block Destruction",
   "roundabout.bomb_config.item_destruction": "Toggle Item Destruction",
+  "roundabout.bomb_config.auto_bubble_plant": "Airbubbles are bomb planted",
   "roundabout.bomb_config.explosion_size_0": "Small Explosion",
   "roundabout.bomb_config.explosion_size_1": "Medium Explosion",
   "roundabout.bomb_config.explosion_size_2": "Large Explosion",
