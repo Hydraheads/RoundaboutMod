@@ -749,8 +749,16 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
     }
 
+    public boolean isBlockDestructionEnabled() {
+        return (this.bombConfig & (1 << 0)) != 0;
+    }
+
     public boolean isContactModeEnabled() {
-        return this.bombConfig >= 2;
+        return (this.bombConfig & (1 << 1)) != 0;
+    }
+
+    public boolean isItemDestructionEnabled() {
+        return (this.bombConfig & (1 << 2)) != 0;
     }
 
     @Override
@@ -2716,6 +2724,18 @@ public class PowersKillerQueen extends NewPunchingStand {
         syncCanStrayCatStatus(false);
 
         this.saveDiscAndSync();
+    }
+
+    @Override
+    public int getExpForLevelUp(int currentLevel){
+        int amt;
+        if (currentLevel == 1){
+            amt = 50;
+        } else {
+            amt = (100+((currentLevel-1)*70));
+        }
+        amt= (int) (amt*(getLevelMultiplier()));
+        return amt;
     }
 
     @Override
@@ -5156,7 +5176,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             Vec3 vPos = Vec3.ZERO;
             Level level = this.getSelf().level();
 
-            boolean canDestroyBlocks = ((this.bombConfig % 2) == 1) &&
+            boolean canDestroyBlocks = isBlockDestructionEnabled() &&
                     ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction &&
                     level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) &&
                     this.getSelf() instanceof Player && MainUtil.getIsGamemodeApproriateForGrief(self);
@@ -5262,7 +5282,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                     config.sneakyKilling,
                     vPos, dmg, level, damage,
                     0.1f + (0.3f * bombSize), (0.6f + (float)bombSize * 0.9f) * rangeModifier,
-                    multiplyPowerByStandConfigMobs(1.5f), multiplyPowerByStandConfigPlayers(1))) {
+                    multiplyPowerByStandConfigMobs(1.5f), multiplyPowerByStandConfigPlayers(1), isItemDestructionEnabled()
+            )) {
 
                 if (target != null) {
                     if (LE.getId() == target.getId()) {

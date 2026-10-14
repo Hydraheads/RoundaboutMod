@@ -104,21 +104,19 @@ public class ExplosionUtil {
 
 		DamageSource notSeenDamage =  ModDamageTypes.of(level, ModDamageTypes.EXPLOSIVE_STAND, null);
 
-		HashSet<LivingEntity> victims = new HashSet<LivingEntity>();
-
-		//int amountOfVictims = 0;
+		HashSet<LivingEntity> victims = new HashSet<>();
 
         for (Entity entity : damages) {
             if (entity instanceof StandEntity || !(entity.isAttackable() || (entity instanceof ItemEntity && hurtItems))) {
                 continue;
             }
+
             if (entity instanceof Player PL && (PL.isCreative() || PL.isSpectator())) {
                 continue;
             }
 
             if (entity instanceof LivingEntity LE && !(LE instanceof ArmorStand)) {
                 victims.add(LE);
-                //amountOfVictims++;
             }
 
             double dist = entity.distanceToSqr(pos);
