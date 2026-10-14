@@ -11,6 +11,7 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
+import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -49,6 +50,12 @@ public abstract class AchtungCapeLayer extends RenderLayer<AbstractClientPlayer,
                     ci.cancel();
                     return;
                 }
+            }
+        }
+        if (SU.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB) {
+            if (PCB.invincibleState) {
+                    ci.cancel();
+                    return;
             }
         }
         ItemStack visage;

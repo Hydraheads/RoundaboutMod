@@ -4,6 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
@@ -25,6 +27,11 @@ public abstract class AchtungElytraLayer<T extends LivingEntity, M extends Entit
                   && ClientNetworking.getAppropriateConfig() != null &&
                   ClientNetworking.getAppropriateConfig().achtungSettings != null &&
                   ClientNetworking.getAppropriateConfig().achtungSettings.hidesElytra && !ClientUtil.checkIfClientCanSeeMobsForWindVision() ) {
+              ci.cancel();
+          }
+
+          StandUser SU = (StandUser) $$3;
+          if (SU.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB && PCB.invincibleState){
               ci.cancel();
           }
       }
