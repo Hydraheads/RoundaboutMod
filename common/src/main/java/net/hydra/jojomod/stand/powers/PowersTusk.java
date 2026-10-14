@@ -345,7 +345,7 @@ public class PowersTusk extends NewDashPreset {
                 return !hasNail() || this.nailCharge > 5 || this.getActivePower() == PowersTusk.CHARGE_EXTRA || this.getActivePower() == PowersTusk.FLATTEN;
             }
         } else if (slot == 4) {
-            return this.getActivePower() == PowersTusk.FLATTEN && !isInHole();
+            return (this.getActivePower() == PowersTusk.FLATTEN && !isInHole()) || !this.canSummonStandAsEntity() ;
         }
         return super.isAttackIneptVisually(activeP, slot);
     }
@@ -683,13 +683,13 @@ public class PowersTusk extends NewDashPreset {
                 }
             }
             case PowersTusk.DEATH_PUNCH -> {
-                if (this.getAttackTimeDuring() > 36) {
-                    deathTarget = null;
-                    this.setPowerNone();
-                } else if (this.getAttackTimeDuring() > 33) {
+                if (this.getAttackTimeDuring() == 33) {
                     if (!isClient()) {
                         deathPunch();
                     }
+                } else if (this.getAttackTimeDuring() > 40) {
+                    deathTarget = null;
+                    this.setPowerNone();
                 } else {
                     StandEntity stand = this.getStandEntity(this.getSelf());
                     if (stand != null && !isClient()) {
@@ -1119,7 +1119,7 @@ public class PowersTusk extends NewDashPreset {
                     mid.z, half, half, half));
 
             for (Entity target :targets) {
-                if (!StandDamageEntityAttack(target,getReducedDamage(target)? 2.0F : 4.0F,0F,this.getSelf())) {
+                if (!StandDamageEntityAttack(target,getReducedDamage(target)? 2.0F : 4.0F,1.4F,this.getSelf())) {
                     if (target instanceof LivingEntity LE) {
                         if (LE.isBlocking()) {
                             MainUtil.knockShieldPlusStand(target,50);
@@ -1171,7 +1171,7 @@ public class PowersTusk extends NewDashPreset {
         this.setCooldown(PowerIndex.GLOBAL_DASH,200);
         if (this.isClient()) {
             Vec3 look = this.getSelf().getLookAngle().multiply(1, 0, 1).normalize().reverse();
-            MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 1, look.x, -3, look.z);
+            MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 1.3, look.x*2, -3, look.z*2);
         }
         return true;
     }
@@ -1437,12 +1437,21 @@ public class PowersTusk extends NewDashPreset {
             float damage = lastHit ? 3.0F : 2.0F;
             if (!this.hasNail()) {damage = 0.1F;}
             if (this.getReducedDamage(target)) {damage *= 0.5F;}
-            float knockback = lastHit ? 0.6F : 0.1F;
+            float knockback = lastHit ? 1F : 0.2F;
 
+            boolean kb = false;
             if (!StandDamageEntityAttack(target,damage,knockback,this.getSelf())) {
                 if (lastHit && this.hasNail()) {
                     MainUtil.knockShieldPlusStand(target,80);
+                    kb = true;
                 }
+            } else {
+                if (target instanceof LivingEntity LE && LE.isBlocking()) {
+                    kb = true;
+                }
+            }
+            if (kb) {
+                MainUtil.takeKnockbackWithY(target,1,this.getSelf().getViewVector(0).x,-0.2,this.getSelf().getViewVector(0).z);
             }
         }
         this.setPowerNone();
@@ -2070,7 +2079,7 @@ public class PowersTusk extends NewDashPreset {
                 if (stand instanceof FollowingStandEntity FSE) {
                     FSE.setOffsetType(OffsetIndex.LOOSE);
                 }
-                stand.setPos(nail.getPosition(0));
+                stand.setPos(nail.getPosition(0).add(nail.getDeltaMovement()));
                 stand.setAnimation(TuskEntity.DEATH_PUNCH);
             }
             this.setActivePower(PowersTusk.DEATH_PUNCH);
@@ -2088,10 +2097,10 @@ public class PowersTusk extends NewDashPreset {
         if (stand != null) {
             if (deathTarget != null) {
                 this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.COMBAT_PUNCH_2_EVENT,SoundSource.PLAYERS,1F,0.7F);
+                hitParticles(deathTarget);
 
                 if (deathTarget.getPosition(0).add(new Vec3(0,deathTarget.getEyeHeight()*0.5F,0)).distanceTo(stand.getPosition(0)) < 3) {
                     if (deathTarget.hurt(ModDamageTypes.of(this.getSelf().level(), ModDamageTypes.INFINITE_SPIN, this.getSelf()), 1)) {
-                        hitParticles(deathTarget);
                         Vec3 dir = deathTarget.getPosition(0).subtract(stand.getPosition(0)).normalize().reverse();
                         MainUtil.takeKnockbackWithY(deathTarget,0.2F,dir.x,dir.y-0.1F,dir.z);
                         if (deathTarget instanceof LivingEntity LE) {

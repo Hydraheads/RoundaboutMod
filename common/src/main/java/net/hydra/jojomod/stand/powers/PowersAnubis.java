@@ -2454,7 +2454,7 @@ public class PowersAnubis extends NewDashPreset {
     }
     public List<Entity> doAttackChecks(List<Entity> list) {
         list.remove(this.getSelf());
-        list.removeIf(Entity -> !Entity.isAttackable() );
+        list.removeIf(entity -> !entity.isAttackable() || !entity.isAlive() );
         list.removeIf(entity -> (entity instanceof TamableAnimal TA && Objects.equals(TA.getOwner(), this.getSelf())) );
         return  list;
     }
