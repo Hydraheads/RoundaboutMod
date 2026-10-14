@@ -204,6 +204,7 @@ public class ModBlocks {
     public static Block MELON_PARFAIT;
 
     public static Block GAMBLING_TABLE;
+    public static final EnumProperty<GamblingTablePart> GAMBLING_TABLE_PART = EnumProperty.create("part", GamblingTablePart.class);
     public static BlockEntityType<GamblingTableBlockEntity> GAMBLING_TABLE_BLOCK_ENTITY;
 
     public static BlockEntityType<OasisMudBlockEntity> OASIS_MUD_BLOCK_ENTITY;
@@ -1044,6 +1045,7 @@ public class ModBlocks {
                     .instrument(NoteBlockInstrument.BASS)
                     .strength(2.5F)
                     .sound(SoundType.WOOD)
+                    .noOcclusion()
                     .ignitedByLava()
     );
 

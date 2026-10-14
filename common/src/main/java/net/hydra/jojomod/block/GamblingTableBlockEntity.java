@@ -30,7 +30,7 @@ public class GamblingTableBlockEntity extends BlockEntity implements Container, 
     This one
     GamblingTableMenu
     GamblingGameSelectionScreen
-    en_us json
+    en_us.json
      */
     public static final byte
             WAITING = 0,
