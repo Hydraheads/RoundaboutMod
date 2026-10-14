@@ -3296,6 +3296,8 @@
   "roundabout.bomb_config.explosion_size_0": "Small Explosion",
   "roundabout.bomb_config.explosion_size_1": "Medium Explosion",
   "roundabout.bomb_config.explosion_size_2": "Large Explosion",
+  "roundabout.bomb_config.on": ": on",
+  "roundabout.bomb_config.off": ": off",
 
   "skins.roundabout.green_day.part_five_green_day": "Part 5",
   "skins.roundabout.green_day.red_day": "Red Day",

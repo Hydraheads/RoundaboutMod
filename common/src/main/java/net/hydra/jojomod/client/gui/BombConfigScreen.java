@@ -246,9 +246,8 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
         guiGraphics.pose().popPose();
         super.render(guiGraphics, i, j, f);
 
+        Component str = Component.translatable("roundabout.killer_queen.bomb_config");
 
-       Component str = Component.translatable("roundabout.killer_queen.bomb_config");
-       
         guiGraphics.drawCenteredString(this.font, str , this.width / 2, this.height / 2 - 31 - 32+8 - 5, -1);
 
         if (Minecraft.getInstance().player != null) {
@@ -295,8 +294,16 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
 
         if (this.currentlyHovered != -1) {
             Component text;
+            String name;
+
             if (currentlyHovered < 3) {
-                text = slots.get(currentlyHovered).getName();
+                name = slots.get(currentlyHovered).getName().getString();
+                if (slots.get(currentlyHovered).getMode(false) == ENABLED) {
+                    name += Component.translatable("roundabout.bomb_config.on").getString();
+                }else {
+                    name += Component.translatable("roundabout.bomb_config.off").getString();
+                }
+                text = Component.literal(name);
             }else {
                 text = sizes.get(currentlyHovered - 3).getName();
             }

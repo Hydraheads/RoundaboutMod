@@ -8,10 +8,13 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ChunkMap;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ThrownEnderpearl;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -182,10 +185,18 @@ public class ExplosionUtil {
 				continue;
 			}
 
-			// Simulate natural explosions
-			Double explosionDistance = explosionDistanceMax + ((double) level.getRandom().nextIntBetweenInclusive(-intSize*2, intSize*2) / 7.5);
+			if (causer instanceof ServerPlayer PL) {
+				if (PL.blockActionRestricted(level, pos, PL.gameMode.getGameModeForPlayer())
+					|| !MainUtil.canPlaceOnClaim(PL, pos)
+				) {
+					continue;
+				}
+			}
 
-			Double dist2 = center.distanceToSqr(pos.getX(), pos.getY(), pos.getZ());
+			// Simulate natural explosions
+			double explosionDistance = explosionDistanceMax + ((double) level.getRandom().nextIntBetweenInclusive(-intSize*2, intSize*2) / 7.5);
+
+			double dist2 = center.distanceToSqr(pos.getX(), pos.getY(), pos.getZ());
 
 			if (dist2 <= explosionDistance) {
 				boolean shouldDrop = (useTool && causer instanceof Player PL && canMineWithAnyInventoryTool(PL, info, true)) && level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING_OBTAINMENT);
@@ -198,8 +209,7 @@ public class ExplosionUtil {
 	public static void destroyBlockHandled(Level level, BlockPos $$0, boolean $$1, @Nullable Entity $$2) {
 		if ($$2 instanceof Player p) {
 			if (
-					!MainUtil.canPlaceOnClaim(p, new BlockHitResult(new Vec3($$0.relative(Direction.DOWN).getX(),$$0.relative(Direction.DOWN).getY(),$$0.relative(Direction.DOWN).getZ()), Direction.UP,$$0.relative(Direction.DOWN),false))
-					|| !level.mayInteract(p, $$0)
+					!level.mayInteract(p, $$0)
 			) {
 				return;
 			}
