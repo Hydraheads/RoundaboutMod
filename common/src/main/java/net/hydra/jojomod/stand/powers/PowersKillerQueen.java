@@ -801,7 +801,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         
     	if (inBitesTheDustMode()) {
     		setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_BTD_COMBAT, PowerIndex.SKILL_EXTRA_2);
-        } else if (((this.currentBombStatus == BOMB_BUBBLE) && isGuarding() || (this.activePower == PowerIndex.POWER_2_BLOCK && !isBubbleAutoPlantingEnabled())) && !holdingItem) {
+        } else if (((this.currentBombStatus == BOMB_BUBBLE) && isGuarding() || (this.activePower == PowerIndex.POWER_2_BLOCK && isBubbleAutoPlantingEnabled())) && !holdingItem) {
             setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_BUBBLE_REDIRECT, PowerIndex.NO_CD);
 
         } else if ((this.currentBombStatus != BOMB_NONE && !(!isBubbleAutoPlantingEnabled() && isGuarding())) || holdingItem) {
@@ -889,18 +889,18 @@ public class PowersKillerQueen extends NewPunchingStand {
             if(inBitesTheDustMode()) {
                 return !canBitesTheDustCombat();
             }
-            if (this.currentBombStatus == BOMB_NONE) {
-                if (isGuarding()) {
-                    return !canUseStrayCat() || hasArmsOut;
-                } else if (this.currentBombStatus == BOMB_BUBBLE) {
-                    Entity target = MainUtil.getTargetEntity(this.getSelf(), 40);
-                    return !canBubbleTarget(target);
-                }
-                if (isHoldingSneak()) { return  !canItemPlantBomb();}
 
-                return !canBlockPlantBomb();
-
+            if (isGuarding() && this.currentBombStatus == BOMB_NONE && !activeP != PowerIndex.POWER_2_BLOCK) {
+                return !canUseStrayCat() || hasArmsOut;
+            } else if (this.currentBombStatus == BOMB_BUBBLE) {
+                Entity target = MainUtil.getTargetEntity(this.getSelf(), 40);
+                return !canBubbleTarget(target);
             }
+            if (isHoldingSneak()) { return  !canItemPlantBomb();}
+
+            return !canBlockPlantBomb();
+
+
     	}
 
         if (slot == 4) {
