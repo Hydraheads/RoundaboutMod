@@ -432,7 +432,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             double randX = Roundabout.RANDOM.nextDouble(-0.3, 0.3);
             double randY = Roundabout.RANDOM.nextDouble(-0.2, 0.2);
             double randZ = Roundabout.RANDOM.nextDouble(-0.3, 0.3);
-            ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.SPLASH,
+            ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.DRIPPING_DRIPSTONE_WATER,
                     this.self.getX() + randX,
                     this.self.getY() + randY + 0.15,
                     this.self.getZ() + randZ,
