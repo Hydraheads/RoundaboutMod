@@ -68,6 +68,9 @@ public abstract class ConfigManager {
     public static Path getClientConfigPath() {
         return clientConfigPath;
     }
+    public static Path getAdvenceConfigPath() {
+        return advancedConfigPath;
+    }
 
     public static void loadBlacklists2()
     {
@@ -549,7 +552,7 @@ public abstract class ConfigManager {
         Config.updateServer(config);
         Roundabout.LOGGER.info("Loaded server config");
     }
-    private static void loadAdvancedConfig() {
+    public static void loadAdvancedConfig() {
         AdvancedConfig config = loadAdvanced();
         validateFields(config);
         AdvancedConfig.updateServer(config);

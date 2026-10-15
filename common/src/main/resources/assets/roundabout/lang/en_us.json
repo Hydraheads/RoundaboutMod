@@ -4230,6 +4230,8 @@
   "config.roundabout.enableRattBlockMelt.desc": "If Ratt can use its newer move to melt blocks.",
 
 
+  "config.roundabout.advencedConfigOpen.name": "Advanced Config",
+  "config.roundabout.advencedConfigOpen.desc": "Opens the Advanced Config file. Changes only apply after leaving settings or relaunching the game.",
   "config.roundabout.anubisMemoryOpen.name": "Anubis Memories",
   "config.roundabout.anubisMemories.name": "Anubis Client Settings",
   "config.roundabout.anubisPogoCounter.name": "Anubis Pogo Indicator",
