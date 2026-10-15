@@ -122,6 +122,7 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
         public AdvenceConfigEntry(Path p) {
             config_path = p;
             button = Button.builder(Component.translatable("config.roundabout.advencedConfigOpen.name"), (button) -> {
+                ConfigManager.markAdvancedConfigAsDirty();
                 Util.getPlatform().openUri(config_path.toUri());
             }).build();
         }

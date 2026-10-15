@@ -552,12 +552,24 @@ public abstract class ConfigManager {
         Config.updateServer(config);
         Roundabout.LOGGER.info("Loaded server config");
     }
-    public static void loadAdvancedConfig() {
+    private static void loadAdvancedConfig() {
         AdvancedConfig config = loadAdvanced();
         validateFields(config);
         AdvancedConfig.updateServer(config);
         saveAdvacedConfig();
         Roundabout.LOGGER.info("Loaded advanced config");
+    }
+    private static boolean advancedConfigDirty = false;
+
+    public static void markAdvancedConfigAsDirty(){
+        advancedConfigDirty = true;
+    }
+
+    public static void reloadAdvancedConfigCheck() {
+        if (advancedConfigDirty) {
+            loadAdvancedConfig();
+            advancedConfigDirty = false;
+        }
     }
 
     public static void validateFields(Object instance) {

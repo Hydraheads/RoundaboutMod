@@ -890,7 +890,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 return !canBitesTheDustCombat();
             }
 
-            if (isGuarding() && this.currentBombStatus == BOMB_NONE && !(activeP != PowerIndex.POWER_2_BLOCK)) {
+            if (isGuarding() && this.currentBombStatus == BOMB_NONE && activeP != PowerIndex.POWER_2_BLOCK) {
                 return !canUseStrayCat() || hasArmsOut;
             } else if (this.currentBombStatus == BOMB_BUBBLE) {
                 Entity target = MainUtil.getTargetEntity(this.getSelf(), 40);
