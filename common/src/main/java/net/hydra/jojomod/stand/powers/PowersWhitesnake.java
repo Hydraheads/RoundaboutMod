@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IClientEntity;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.block.FancyLighterBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyboardPilotInput;
@@ -73,18 +74,13 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.RecordItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.block.BedBlock;
-import net.minecraft.world.level.block.ButtonBlock;
-import net.minecraft.world.level.block.CropBlock;
-import net.minecraft.world.level.block.DoorBlock;
-import net.minecraft.world.level.block.FenceGateBlock;
-import net.minecraft.world.level.block.LeverBlock;
-import net.minecraft.world.level.block.TrapDoorBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -1870,20 +1866,22 @@ public class PowersWhitesnake extends BlockGrabPreset {
         AABB searchBounds = oldBounds.inflate(1.6D).minmax(newBounds.inflate(1.6D));
         for (Entity entity : stand.level().getEntities(stand, searchBounds)) {
             if (!(entity instanceof ItemEntity itemEntity) || !stand.getSensing().hasLineOfSight(entity)) continue;
-            ItemStack stack = itemEntity.getItem();
-            if (!isThrowableDisc(stack)) continue;
-            stand.canAcquireHeldItem = true;
-            stand.setHeldItem(stack.copyWithCount(1));
-            playSoundIfPossible(self.level(),null, self.blockPosition(), ModSounds.BLOCK_GRAB_EVENT,
-                    SoundSource.PLAYERS, 1.7F, 1.3F);
-            setActivePower(PowerIndex.POWER_2_SNEAK);
-            setAttackTimeDuring(0);
-            poseStand(OffsetIndex.FOLLOW_NOLEAN);
-            animateStand(MainUtil.isThrownBlockItem(stack.getItem())
-                    ? StandEntity.BLOCK_GRAB : StandEntity.ITEM_GRAB);
-            stack.shrink(1);
-            syncGrabbedItem(itemEntity.getId());
-            return;
+            if (!(itemEntity.getItem().getItem() instanceof BlockItem BI && (BI.getBlock() instanceof ShulkerBoxBlock || BI.getBlock() instanceof FancyLighterBlock))) {
+                ItemStack stack = itemEntity.getItem();
+                if (!isThrowableDisc(stack)) continue;
+                stand.canAcquireHeldItem = true;
+                stand.setHeldItem(stack.copyWithCount(1));
+                playSoundIfPossible(self.level(), null, self.blockPosition(), ModSounds.BLOCK_GRAB_EVENT,
+                        SoundSource.PLAYERS, 1.7F, 1.3F);
+                setActivePower(PowerIndex.POWER_2_SNEAK);
+                setAttackTimeDuring(0);
+                poseStand(OffsetIndex.FOLLOW_NOLEAN);
+                animateStand(MainUtil.isThrownBlockItem(stack.getItem())
+                        ? StandEntity.BLOCK_GRAB : StandEntity.ITEM_GRAB);
+                stack.shrink(1);
+                syncGrabbedItem(itemEntity.getId());
+                return;
+            }
         }
     }
 
@@ -1975,7 +1973,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
             return;
         }
 
-        LivingEntity target = getAutoAttackTarget();
+        LivingEntity target = getAutoAttackTarget(stand);
         if (target != null) autoMoveTarget = null;
 
         if (autoMoveTarget != null) {
@@ -2019,8 +2017,8 @@ public class PowersWhitesnake extends BlockGrabPreset {
         double distance = stand.distanceTo(target);
         boolean sprinting = distance > CONTROL_PUNCH_RANGE;
         updateAutoModeSpeed(stand, sprinting);
-        if (distance > CONTROL_PUNCH_RANGE) {
-            stand.getNavigation().moveTo(target, sprinting ? 1.5D : 1.0D);
+        if (sprinting) {
+            stand.getNavigation().moveTo(target, 1.5D);
             return;
         }
 
@@ -2041,7 +2039,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         stand.setSpeed(sprinting ? 0.3F : 0.2F);
     }
 
-    private LivingEntity getAutoAttackTarget() {
+    private LivingEntity getAutoAttackTarget(StandEntity stand) {
         LivingEntity target = null;
         if (manualAutoTargetId >= 0) {
             Entity manual = self.level().getEntity(manualAutoTargetId);
@@ -2052,7 +2050,6 @@ public class PowersWhitesnake extends BlockGrabPreset {
             }
         }
         if (target == null && manualAutoTargetId < 0 && autoAttack) target = self.getLastHurtMob();
-        StandEntity stand = getStandEntity(self);
         if (target == null || stand == null || !target.isAlive() || target.isRemoved()
                 || target.level() != stand.level() || target.is(self) || target.is(stand)
                 || MainUtil.cheapDistanceTo2(target.getX(), target.getZ(), self.getX(), self.getZ()) > getMaxPilotRange()
@@ -2392,7 +2389,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         }
         if (autoMode) {
             if (!self.level().isClientSide()) {
-                LivingEntity target = getAutoAttackTarget();
+                LivingEntity target = getAutoAttackTarget(getStandEntity(self));
                 if (target != null && target.isAlive() && !target.isRemoved()
                         && target.distanceTo(actionOrigin()) <= CONTROL_PUNCH_RANGE + 0.75F
                         && actionOrigin().hasLineOfSight(target)) {
@@ -2481,7 +2478,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     public void standImpale() {
         if (autoMode) {
-            if (!self.level().isClientSide()) impaleImpact(getAutoAttackTarget());
+            if (!self.level().isClientSide()) impaleImpact(getAutoAttackTarget(getStandEntity(self)));
             return;
         }
         if (self instanceof Player && isPacketPlayer()) {
@@ -2578,7 +2575,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         }
         if (autoMode) {
             if (!self.level().isClientSide()) {
-                LivingEntity target = getAutoAttackTarget();
+                LivingEntity target = getAutoAttackTarget(getStandEntity(self));
                 if (target != null && target.distanceTo(actionOrigin()) <= CONTROL_PUNCH_RANGE + 0.75F
                         && actionOrigin().hasLineOfSight(target)) {
                     barrageImpact(target, attackTimeDuring);

@@ -64,7 +64,9 @@ public class SheerHeartAttackModel<T extends SheerHeartAttackEntity> extends Sta
 
 		PartDefinition cube_r1 = torch.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(35, 0).addBox(-1.0F, -10.0F, -1.0F, 2.0F, 10.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -3.0F, 3.0F, 1.5708F, 0.0F, 0.0F));
 
-		PartDefinition details = head.addOrReplaceChild("details", CubeListBuilder.create().texOffs(37, 6).addBox(-1.0F, -7.0F, -3.0F, 2.0F, 4.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition details = head.addOrReplaceChild("details", CubeListBuilder.create().texOffs(43, 12).addBox(-1.0F, -7.0F, -3.0F, 2.0F, 3.0F, 0.0F, new CubeDeformation(0.0F))
+				.texOffs(47, 12).addBox(-1.0F, -7.0F, 3.0F, 2.0F, 3.0F, 0.0F, new CubeDeformation(0.0F))
+				.texOffs(37, 6).addBox(-1.0F, -7.0F, -3.0F, 2.0F, 0.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
 		PartDefinition spout = head.addOrReplaceChild("spout", CubeListBuilder.create(), PartPose.offsetAndRotation(0.0F, -2.75F, -3.75F, 0.2182F, 0.0F, 0.0F));
 

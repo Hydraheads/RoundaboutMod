@@ -142,7 +142,7 @@ public final class HallucinatoryAcidProjectile extends ThrowableItemProjectile {
                 if (old.getValue(HallucinatoryAcidWallBlock.FACING) != facing) continue;
             } else {
                 BlockPos supportPos = pos.relative(facing.getOpposite());
-                if (!canReplaceWithAcid(old) || !level().getBlockState(supportPos)
+                if (!HallucinatoryAcidBlock.canReplaceWithAcid(old) || !level().getBlockState(supportPos)
                         .isFaceSturdy(level(), supportPos, facing)) continue;
                 level().setBlockAndUpdate(pos, ModBlocks.HALLUCINATORY_ACID_WALL.defaultBlockState()
                         .setValue(HallucinatoryAcidWallBlock.FACING, facing)
@@ -158,21 +158,17 @@ public final class HallucinatoryAcidProjectile extends ThrowableItemProjectile {
     }
 
     private BlockPos findPlacement(BlockPos origin, int offsetX, int offsetZ, int addedLayers) {
-        BlockPos selected = null;
-        for (int y = -1; y < 3; y++) {
+        for (int y = 2; y >= -1; y--) {
             BlockPos pos = origin.offset(offsetX, y, offsetZ);
             BlockState state = level().getBlockState(pos);
             if (state.is(ModBlocks.HALLUCINATORY_ACID)
-                    && state.getValue(HallucinatoryAcidBlock.LAYERS) + addedLayers <= 4) selected = pos;
-            else if (canReplaceWithAcid(state)) {
-                BlockPos below = pos.below();
-                BlockState support = level().getBlockState(below);
-                if (support.isFaceSturdy(level(), below, Direction.UP)
-                        || support.is(ModBlocks.HALLUCINATORY_ACID)
-                        && support.getValue(HallucinatoryAcidBlock.LAYERS) == 4) selected = pos;
+                    && state.getValue(HallucinatoryAcidBlock.LAYERS) + addedLayers <= 4) return pos;
+            if (HallucinatoryAcidBlock.canReplaceWithAcid(state)
+                    && HallucinatoryAcidBlock.hasSpreadSupport(level(), pos)) {
+                return pos;
             }
         }
-        return selected;
+        return null;
     }
 
     private void setAcid(BlockPos origin, int offsetX, int offsetZ, int amount, UUID ownerId, long expiry,
@@ -202,15 +198,10 @@ public final class HallucinatoryAcidProjectile extends ThrowableItemProjectile {
                 selected = pos;
                 break;
             }
-            if (canReplaceWithAcid(state)) {
-                BlockPos below = pos.below();
-                BlockState support = level.getBlockState(below);
-                if (support.isFaceSturdy(level, below, Direction.UP)
-                        || support.is(ModBlocks.HALLUCINATORY_ACID)
-                        && support.getValue(HallucinatoryAcidBlock.LAYERS) == 4) {
-                    selected = pos;
-                    break;
-                }
+            if (HallucinatoryAcidBlock.canReplaceWithAcid(state)
+                    && HallucinatoryAcidBlock.hasSpreadSupport(level, pos)) {
+                selected = pos;
+                break;
             }
         }
         if (selected == null) return false;
@@ -239,7 +230,7 @@ public final class HallucinatoryAcidProjectile extends ThrowableItemProjectile {
         if (old.is(ModBlocks.HALLUCINATORY_ACID_WALL)) {
             if (old.getValue(HallucinatoryAcidWallBlock.FACING) != facing) return false;
         } else {
-            if (!old.canBeReplaced() || !canReplaceWithAcid(old)) return false;
+            if (!old.canBeReplaced() || !HallucinatoryAcidBlock.canReplaceWithAcid(old)) return false;
             BlockPos supportPos = origin.relative(gravity);
             if (!level.getBlockState(supportPos).isFaceSturdy(level, supportPos, facing)) return false;
             level.setBlockAndUpdate(origin, ModBlocks.HALLUCINATORY_ACID_WALL.defaultBlockState()
@@ -254,12 +245,6 @@ public final class HallucinatoryAcidProjectile extends ThrowableItemProjectile {
                     + ClientNetworking.getAppropriateConfig().whitesnakeSettings.hallucinatoryAcidDespawnTime, false);
         }
         return true;
-    }
-
-    private static boolean canReplaceWithAcid(BlockState state) {
-        if (state.isAir()) return true;
-        return state.getFluidState().is(Fluids.WATER)
-                && !ClientNetworking.getAppropriateConfig().whitesnakeSettings.waterWashesAwayAcid;
     }
 
     private static int ownerSkin(Entity owner) {

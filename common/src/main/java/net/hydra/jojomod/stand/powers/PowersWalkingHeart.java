@@ -1,8 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IFatePlayer;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -18,7 +17,6 @@ import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
@@ -35,7 +33,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.PacketUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -51,14 +48,12 @@ import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -104,6 +99,37 @@ public class PowersWalkingHeart extends NewDashPreset {
         $$1.add((byte) 1);
         $$1.add((byte) 2);
         $$1.add((byte) 3);
+        $$1.add((byte) 4);
+        $$1.add((byte) 5);
+        $$1.add((byte) 6);
+        $$1.add((byte) 7);
+        $$1.add((byte) 8);
+        $$1.add((byte) 9);
+        $$1.add((byte) 10);
+        $$1.add((byte) 11);
+        $$1.add((byte) 12);
+        $$1.add((byte) 13);
+        $$1.add((byte) 14);
+        $$1.add((byte) 15);
+        $$1.add((byte) 16);
+        $$1.add((byte) 17);
+        $$1.add((byte) 18);
+        $$1.add((byte) 19);
+        $$1.add((byte) 20);
+        $$1.add((byte) 21);
+        $$1.add((byte) 22);
+        $$1.add((byte) 23);
+        $$1.add((byte) 24);
+        $$1.add((byte) 25);
+        $$1.add((byte) 26);
+        $$1.add((byte) 27);
+        $$1.add((byte) 28);
+        $$1.add((byte) 29);
+        $$1.add((byte) 30);
+        $$1.add((byte) 31);
+        $$1.add((byte) 32);
+        $$1.add((byte) 33);
+        $$1.add((byte) 34);
         return $$1;
     }
 
@@ -277,7 +303,7 @@ public class PowersWalkingHeart extends NewDashPreset {
         ClientUtil.stopDestroyingBlock();
         getStandUserSelf().roundabout$setStandAnimation(HEEL_RAISE);
         setHeelExtension(3);
-        setCooldown(PowerIndex.GLOBAL_DASH,ClientNetworking.getAppropriateConfig().walkingHeartSettings.spikePullCooldown);
+        setCooldown(PowerIndex.GLOBAL_DASH,ClientNetworking.getAppropriateConfig().walkingHeartSettings.spikePullCooldownv2);
     }
     public void serverPull(){
         serverBoth();
@@ -304,7 +330,7 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
     public void serverBoth(){
-        setCooldown(PowerIndex.GLOBAL_DASH,ClientNetworking.getAppropriateConfig().walkingHeartSettings.spikePullCooldown);
+        setCooldown(PowerIndex.GLOBAL_DASH,ClientNetworking.getAppropriateConfig().walkingHeartSettings.spikePullCooldownv2);
         setActivePower(PowerIndex.POWER_3_SNEAK);
         addEXP(1);
         attackTimeDuring = -10;
@@ -1481,8 +1507,10 @@ public class PowersWalkingHeart extends NewDashPreset {
             this.fallTime = 0;
             this.airTime = 0;
         } else {
-            if (self.getDeltaMovement().y < 0) {
+            if (self.getDeltaMovement().y < 0 && ((IEntityAndData)self).rdbt$getStuckSpeedMultiplier().equals(Vec3.ZERO)) {
                 this.fallTime += 1;
+            } else {
+                this.fallTime = 0;
             }
             airTime+=1;
         }

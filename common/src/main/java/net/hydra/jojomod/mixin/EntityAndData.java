@@ -117,6 +117,10 @@ public abstract class EntityAndData implements IEntityAndData {
     @Unique
     private float roundabout$lastDirectDamage = 0;
 
+    @Override
+    public Vec3 rdbt$getStuckSpeedMultiplier(){
+        return stuckSpeedMultiplier;
+    }
 
 
     @Override
@@ -939,6 +943,8 @@ public abstract class EntityAndData implements IEntityAndData {
 
     @Shadow
     protected int boardingCooldown;
+    @Shadow
+    protected Vec3 stuckSpeedMultiplier;
     @Unique
     private int rdbt$inForeignWorld = 0;
     @Unique

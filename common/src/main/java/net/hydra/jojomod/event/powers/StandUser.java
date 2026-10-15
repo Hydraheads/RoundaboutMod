@@ -39,6 +39,8 @@ public interface StandUser {
     boolean roundabout$getUniqueStandModeToggle();
     void roundabout$setUniqueStandModeToggle(boolean mode);
     boolean roundabout$skipFriction();
+    void rdbt$onSyncedDataUpdated2(EntityDataAccessor<?> $$0);
+    void rdbt$refreshStand();
     void roundabout$setEyeSightTaken(SoftAndWetPlunderBubbleEntity bubble);
     SoftAndWetPlunderBubbleEntity roundabout$getEyeSightTaken();
     LivingEntity roundabout$getEmulator();
@@ -143,8 +145,8 @@ public interface StandUser {
     void roundabout$setWhiteAlbumVanishTicks(int set);
     int roundabout$getOasisVanishTicks();
     void roundabout$setOasisVanishTicks(int set);
-    int roundabout$getCatchTheRainbowVanishTicks();
-    void roundabout$setCatchTheRainbowVanishTicks(int set);
+    int roundabout$getDiverDownVanishTicks();
+    void roundabout$setDiverDownVanishTicks(int set);
 
     int getJumpImmunityTicks();
 
@@ -281,6 +283,7 @@ public interface StandUser {
 
     void roundabout$UniversalTick();
     void roundabout$startAutoSpinAttack(int p_204080_);
+    void roundabout$stopAutoSpinAttack();
 
     void roundabout$setThrower(LivingEntity thrower);
     void roundabout$setZappedToID(int bound);
@@ -396,6 +399,9 @@ public interface StandUser {
     @Nullable PowersKillerQueen rdbt$GetBtdPlantedUser();
     void rdbt$SetBtdPlantedUser(@Nullable PowersKillerQueen e);
     boolean rdbt$interceptIncomingHarmIfBTD(DamageSource source);
+
+    @Nullable PowersDiverDown rdbt$getRibcagePlacer();
+    void rdbt$setRibcagePlacer(@Nullable PowersDiverDown e);
 
     List<CooldownInstance> rdbt$initPowerCooldowns();
     List<CooldownInstance> rdbt$getPowerCooldowns();

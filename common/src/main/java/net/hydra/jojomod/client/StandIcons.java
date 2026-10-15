@@ -52,6 +52,8 @@ public class StandIcons {
             "textures/gui/jojo_icons.png");
     public static final ResourceLocation JOJO_ICONS_2 = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/jojo_icons_2.png");
+    public static final ResourceLocation JOJO_ICONS_3 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/jojo_icons_3.png");
     public static final ResourceLocation TIME_ERASE_SKY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/environment/time_erase_sky.png");
     public static final ResourceLocation[] SKYBOX = new ResourceLocation[]{
@@ -584,6 +586,8 @@ public class StandIcons {
             "textures/gui/icons/king_crimson/epitaph.png");
     public static final ResourceLocation KING_CRIMSON_LEDGE_GRAB = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/king_crimson/stand_ledge_grab.png");
+    public static final ResourceLocation KING_CRIMSON_LEDGE_GRAB_2 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/king_crimson/vault_2.png");
     public static final ResourceLocation KING_CRIMSON_HANDS_ACTIVE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/king_crimson/hands_active.png");
     public static final ResourceLocation STAR_PLATINUM_HANDS_ACTIVE = new ResourceLocation(Roundabout.MOD_ID,

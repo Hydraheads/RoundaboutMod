@@ -170,6 +170,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.GENTLY_WEEPS.get(), GentlyWeepsRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BLOOD_SPLATTER.get(), BloodSplatterRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GASOLINE_CAN.get(), GasolineCanRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.TOTEM_OF_DOOM.get(), TotemOfDoomRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_OBJECT.get(), ThrownObjectRenderer::new);
         event.registerEntityRenderer(ForgeEntities.RETURNING_OBJECT.get(), ReturningObjectRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_ANUBIS.get(), ThrownAnubisRenderer::new);

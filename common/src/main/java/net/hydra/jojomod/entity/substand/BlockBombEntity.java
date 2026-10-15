@@ -134,7 +134,8 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 	
 	public boolean blockGotDestroyed() {
 		BlockState state = this.level().getBlockState(this.bombPos);
-		return state.isAir();
+
+		return state.isAir() || (originalState != null && !originalState.is(state.getBlock()));
 	}
 
 
@@ -154,11 +155,15 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
             }
             else{
 				if ((((StandUser)user).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ)) {
-					if (this != PKQ.bombBlock) {
+					if (this != PKQ.bombBlock || PKQ.getCurrentBombStatus() != 1) {
 						this.discard();
 						return;
 					}
+				}else {
+					discard();
 				}
+
+
 				this.setYRot(0f);
 				this.setYBodyRot(0);
 				/*if (blockstate.hasProperty(BlockStateProperties.HORIZONTAL_AXIS)) {

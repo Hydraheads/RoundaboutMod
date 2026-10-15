@@ -19,6 +19,10 @@ import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import net.hydra.jojomod.client.DynamicItemRendering;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import java.util.function.Consumer;
 
 import static net.hydra.jojomod.registry.ForgeCreativeTab.*;
 
@@ -69,8 +73,6 @@ public class ForgeItems {
             () -> new GasolineBucketItem(new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> OCCULT_CHARGE = addToTab(ITEMS.register("occult_charge",
             () -> new OccultChargeItem(new Item.Properties().stacksTo(16))));
-    public static final RegistryObject<Item> TOTEM_OF_DOOM = addToWIPTab(ITEMS.register("totem_of_doom",
-            () -> new TotemOfDoomItem(new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> ROAD_ROLLER = addToTab(ITEMS.register("road_roller",
             () -> new RoadRollerItem(new Item.Properties().stacksTo(1))));
 
@@ -78,6 +80,9 @@ public class ForgeItems {
             () -> new StrayCatItem(new Item.Properties().stacksTo(1), (byte)0)));
     public static final RegistryObject<Item> STRAY_CAT_MANGA= addToTab(ITEMS.register("stray_cat_manga",
             () -> new StrayCatItem(new Item.Properties().stacksTo(1), (byte)1)));
+
+    public static final RegistryObject<Item> TOTEM_OF_DOOM = addToTab(ITEMS.register("totem_of_doom",
+            () -> new TotemOfDoomItem(new Item.Properties().stacksTo(1))));
 
     public static final RegistryObject<BlockItem> WIRE_TRAP = addToBuildingTab(ITEMS.register("wire_trap",
             () -> new BlockItem(ForgeBlocks.WIRE_TRAP.get(),
@@ -213,7 +218,18 @@ public class ForgeItems {
     public static final RegistryObject<BlockItem> COFFIN_BLOCK_ITEM = addToBuildingTab(ITEMS.register("coffin_block",
             () -> new CoffinBlockItem(DyeColor.BLACK, ForgeBlocks.COFFIN_BLOCK.get(),
                     new Item.Properties().stacksTo(1)
-            )));
+            ){ //CoffinBlockItem is a common class, putting BEWLR in there might break fabric, so i put BEWLR here in the forge item registry
+
+                @Override
+                public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+                    consumer.accept(new IClientItemExtensions() {
+                        @Override
+                        public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                            return DynamicItemRendering.getInstance(); /// the mod should have only 1 instance of its own custom BEWLR
+                        }
+                    });
+                }
+            }));
 
 
     /*public static final RegistryObject<BlockItem> CHESSBOARD_BLOCK_ITEM = addToWIPTab(ITEMS.register("chessboard_block",
@@ -401,9 +417,20 @@ public class ForgeItems {
                     new Item.Properties().stacksTo(64)
             )));
     public static final RegistryObject<BlockItem> HAND_ITEM = ITEMS.register("hand_block",
-            () -> new BlockItem(ForgeBlocks.HAND_BLOCK.get(),
+            () -> new HandBlockItem(ForgeBlocks.HAND_BLOCK.get(),
                     new Item.Properties().stacksTo(1)
-            ));
+            ) { //HandBlockItem is a common class, putting BEWLR in there might break fabric, so i put BEWLR here in the forge item registry
+
+                @Override
+                public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+                    consumer.accept(new IClientItemExtensions() {
+                        @Override
+                        public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                            return DynamicItemRendering.getInstance(); /// the mod should have only 1 instance of its own custom BEWLR
+                        }
+                    });
+                }
+            });
 
     public static final RegistryObject<BlockItem> MELON_PARFAIT_ITEM = addToBuildingTab(ITEMS.register("melon_parfait",
             () -> new BlockItem(ForgeBlocks.MELON_PARFAIT.get(),

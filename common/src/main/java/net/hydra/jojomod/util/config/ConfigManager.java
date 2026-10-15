@@ -68,6 +68,9 @@ public abstract class ConfigManager {
     public static Path getClientConfigPath() {
         return clientConfigPath;
     }
+    public static Path getAdvenceConfigPath() {
+        return advancedConfigPath;
+    }
 
     public static void loadBlacklists2()
     {
@@ -269,10 +272,10 @@ public abstract class ConfigManager {
                 }
             }
         }
-        if (getAdvancedConfig().occultChargeEffectsToBanishv2 != null)
+        if (getAdvancedConfig().occultChargeEffectsToBanishv3 != null)
         {
             MainUtil.occultChargeEffectsToBanish.clear();
-            MainUtil.occultChargeEffectsToBanish.addAll(getAdvancedConfig().occultChargeEffectsToBanishv2);
+            MainUtil.occultChargeEffectsToBanish.addAll(getAdvancedConfig().occultChargeEffectsToBanishv3);
         }
         if (getAdvancedConfig().naturalStandUserMobBlacklist != null)
         {
@@ -347,11 +350,11 @@ public abstract class ConfigManager {
 
     public static void loadStandArrowPool()
     {
-        if (getAdvancedConfig().standArrowPoolv6 != null)
+        if (getAdvancedConfig().standArrowPoolv7 != null)
         {
             ModItems.STAND_ARROW_POOL.clear();
 
-            for (String disc : getAdvancedConfig().standArrowPoolv6)
+            for (String disc : getAdvancedConfig().standArrowPoolv7)
             {
                 String[] split = disc.split(":");
 
@@ -372,11 +375,11 @@ public abstract class ConfigManager {
                 }
             }
         }
-        if (getAdvancedConfig().naturalStandUserMobPoolv9 != null)
+        if (getAdvancedConfig().naturalStandUserMobPoolv10 != null)
         {
             ModItems.STAND_ARROW_POOL_FOR_MOBS.clear();
 
-            for (String disc : getAdvancedConfig().naturalStandUserMobPoolv9)
+            for (String disc : getAdvancedConfig().naturalStandUserMobPoolv10)
             {
                 String[] split = disc.split(":");
 
@@ -555,6 +558,18 @@ public abstract class ConfigManager {
         AdvancedConfig.updateServer(config);
         saveAdvacedConfig();
         Roundabout.LOGGER.info("Loaded advanced config");
+    }
+    private static boolean advancedConfigDirty = false;
+
+    public static void markAdvancedConfigAsDirty(){
+        advancedConfigDirty = true;
+    }
+
+    public static void reloadAdvancedConfigCheck() {
+        if (advancedConfigDirty) {
+            loadAdvancedConfig();
+            advancedConfigDirty = false;
+        }
     }
 
     public static void validateFields(Object instance) {

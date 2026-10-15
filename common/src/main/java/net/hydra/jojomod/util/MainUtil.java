@@ -1244,7 +1244,7 @@ public class MainUtil {
 
     public static void extractDiscData(LivingEntity ent, StandDiscItem SD, ItemStack stack) {
         StandUser user = ((StandUser) ent);
-        CompoundTag $$4 = stack.getTagElement("Memory");
+        CompoundTag $$4 = stack.getOrCreateTagElement("Memory");
         if ($$4 != null) {
             ((StandUser) ent).roundabout$getStandPowers().readAdditionalSaveData($$4);
             if (SD instanceof MaxStandDiscItem) {
@@ -2770,7 +2770,7 @@ public class MainUtil {
     public static boolean isSpecialEffect(MobEffect value) {
         return value.equals(ModEffects.BLEED) || value.equals(ModEffects.FACELESS)
                 || value.equals(ModEffects.BANISH) || value.equals(ModEffects.WARDING) || value.equals(ModEffects.HEX)
-                || value.equals(ModEffects.DOOMED)
+                || value.equals(ModEffects.DOOMED) || value.equals(ModEffects.DOOM_IMMUNITY)
                 || value.equals(ModEffects.SWITCH) || value.equals(ModEffects.STAND_VIRUS) ||
                 value.equals(ModEffects.IMPRINTING) || value.equals(ModEffects.SWAPPED) ||
                 value.equals(ModEffects.SINGE)

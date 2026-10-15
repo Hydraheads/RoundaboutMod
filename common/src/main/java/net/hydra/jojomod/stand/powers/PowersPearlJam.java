@@ -192,7 +192,7 @@ public class PowersPearlJam extends NewDashPreset {
             Minecraft mc = Minecraft.getInstance();
             if (LE != this.getSelf() && this.getSelf() instanceof Player && this.getSelf().distanceToSqr(LE) <= 1024 && palmReadEffects.containsKey(LE) && this.palmReadEffects.get(LE) != null && !this.palmReadEffects.get(LE).isEmpty()){
                 matrixStack.pushPose();
-                float height = LE.getBbHeight() + 0.25F;
+                float height = LE.getNameTagOffsetY() + 0.275F;
                 matrixStack.translate(0, height, 0);
                 matrixStack.mulPose(mc.getEntityRenderDispatcher().cameraOrientation());
                 matrixStack.scale(-0.025F, -0.025F, 0.025F);

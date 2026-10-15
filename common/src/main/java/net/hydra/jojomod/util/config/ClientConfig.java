@@ -209,7 +209,7 @@ public class ClientConfig implements Cloneable {
         public Boolean vampireVisionMode;
         @IntOption(group = "inherit", value = 1, min = 1, max = 8)
         public Integer currentPowerInventoryTab;
-        @IntOption(group = "inherit", value = 2, min = 0, max = 3)
+        @IntOption(group = "inherit", value = 10, min = 0, max = 15)
         public Integer killerQueenCurrentBombConfig;
         @IntOption(group = "inherit", value = 1, min = 0, max = 2)
         public Integer killerQueenCurrentBombSize;

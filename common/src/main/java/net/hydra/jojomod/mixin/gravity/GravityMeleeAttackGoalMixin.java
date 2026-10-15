@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin.gravity;
 
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.minecraft.core.Direction;
@@ -32,6 +33,12 @@ public abstract class GravityMeleeAttackGoalMixin {
             ),
             cancellable = true)
     private void rdbt$checkAndPerformAttack(LivingEntity $$0, double $$1, CallbackInfo ci) {
+        if (PowerTypes.isInADifferentExistence($$0,mob)){
+            ci.cancel();
+            return;
+        }
+
+
         Direction gravityDirection = GravityAPI.getGravityDirection($$0);
         Direction gravityDirection2 = GravityAPI.getGravityDirection(this.mob);
         if (gravityDirection == gravityDirection2)

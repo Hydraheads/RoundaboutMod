@@ -9,9 +9,11 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.ShapeShifts;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.util.SkinUtil;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -119,6 +121,13 @@ public abstract class PlayerEntityAbstractClient extends Player implements IPlay
     @Inject(method = "getSkinTextureLocation",
             at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$getTextureLocation(CallbackInfoReturnable<ResourceLocation> cir) {
+        if (this instanceof StandUser su && su.roundabout$isDisguised()) {
+            GameProfile profile = su.roundabout$getDisguiseProfile();
+            if (profile != null) {
+                cir.setReturnValue(SkinUtil.getSkin(profile).texture());
+                return;
+            }
+        }
         IPlayerEntity ple = ((IPlayerEntity) this);
         byte shape = ple.roundabout$getShapeShift();
         ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
@@ -203,6 +212,12 @@ public abstract class PlayerEntityAbstractClient extends Player implements IPlay
 
 
     public ResourceLocation rdbt$getSkinTextureLocation3() {
+        if (this instanceof StandUser su && su.roundabout$isDisguised()) {
+            GameProfile profile = su.roundabout$getDisguiseProfile();
+            if (profile != null) {
+                return SkinUtil.getSkin(profile).texture();
+            }
+        }
         PlayerInfo $$0 = this.getPlayerInfo();
         return $$0 == null ? DefaultPlayerSkin.getDefaultSkin(this.getUUID()) : $$0.getSkinLocation();
     }

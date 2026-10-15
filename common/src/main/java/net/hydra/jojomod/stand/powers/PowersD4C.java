@@ -3326,9 +3326,7 @@ public class PowersD4C extends NewPunchingStand {
     public void readAdditionalSaveData(CompoundTag $$0) {
         super.readAdditionalSaveData($$0);
 
-        if ($$0.contains("canHoldBanner")) {
-            canHoldBanner = $$0.getBoolean("canHoldBanner");
-        }
+        canHoldBanner = $$0.getBoolean("canHoldBanner");
         if ($$0.contains("altBlockX") && $$0.contains("altBlockY") && $$0.contains("altBlockZ")) {
             altBlockPos = new BlockPos(
                     $$0.getInt("altBlockX"),

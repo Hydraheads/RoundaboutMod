@@ -208,6 +208,12 @@ public class Config implements Cloneable {
         public Integer matchDamage;
         @BooleanOption(group = "inherit", value = true)
         public Boolean noGlaiveDuringPunchRecharge;
+        @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
+        public Integer totemRange;
+        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
+        public Integer totemDuration;
+        @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
+        public Integer doomImmunityDuration;
     }
     public static class WorldGenSettings {
         @IntOption(group = "inherit", value = 55, min = 0, max = 4096)
@@ -464,14 +470,20 @@ public class Config implements Cloneable {
     }
 
     public static class KillerQueenSettings {
-    	@BooleanOption(group = "inherit", value = true)
+        @BooleanOption(group = "inherit", value = true)
         public Boolean enableKillerQueen;
         @BooleanOption(group = "inherit", value = true)
         public Boolean sneakyKilling;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer miningSpeedMultiplierKq;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
+        public Integer getMiningTierKq;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer killerQueenAttackMultOnPlayers;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer killerQueenAttackMultOnMobs;
+        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        public Integer killerQueenGuardPoints;
     	@BooleanOption(group = "inherit", value = true)
         public Boolean canUseBitesTheDustDayMode;
         @BooleanOption(group = "inherit", value = false)
@@ -490,7 +502,7 @@ public class Config implements Cloneable {
         public Integer bubbleShootCooldown;
         @IntOption(group = "inherit", value = 160, min = 0, max = 72000)
         public Integer itemPlantCooldown;
-        @IntOption(group = "inherit", value = 220, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 120, min = 0, max = 72000)
         public Integer mobPlantCooldown;
     	@IntOption(group = "inherit", value = 11, min = 0, max = 72000)
         public Integer explosionActivationCooldown;
@@ -1069,8 +1081,8 @@ public class Config implements Cloneable {
         public Boolean fallProtectionOnRelease;
         @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
         public Integer spikeDiveAttackCooldown;
-        @IntOption(group = "inherit", value = 190, min = 0, max = 72000)
-        public Integer spikePullCooldown;
+        @IntOption(group = "inherit", value = 170, min = 0, max = 72000)
+        public Integer spikePullCooldownv2;
     }
 
     public static class RattSettings {
@@ -1320,6 +1332,24 @@ public class Config implements Cloneable {
         public Integer miningSpeedMultiplierDiverDown;
         @IntOption(group = "inherit", value = 0, min = 0, max = 4)
         public Integer getMiningTierDiverDown;
+        @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
+        public Integer maxTrapsDiverDown;
+        @IntOption(group = "inherit", value = 2, min = 0, max = 72000)
+        public Integer oreDetectionRange;
+        @IntOption(group = "inherit", value = 13, min = 0, max = 72000)
+        public Integer maxPilotRange;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean clearDisguiseOnHit;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 72000)
+        public Integer legSpeedBoost;
+        @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
+        public Integer armAttackBoost;
+        @IntOption(group = "inherit", value = 35, min = 0, max = 72000)
+        public Integer armMineBoost;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean advancedClearEffect;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 5)
+        public Integer potionStrengthBoost;
     }
     public static class WhitesnakeSettings {
         @BooleanOption(group = "inherit", value = true)

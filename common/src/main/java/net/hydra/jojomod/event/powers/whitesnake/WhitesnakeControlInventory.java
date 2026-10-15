@@ -68,7 +68,7 @@ public final class WhitesnakeControlInventory {
                 || stack.getItem() instanceof CommandDiscItem
                 || stack.getItem() instanceof RecordItem) return true;
         String path = BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath();
-        return path.endsWith("disc") || path.endsWith("_disc") || path.contains("disc_");
+        return path.endsWith("disc") || path.contains("disc_");
     }
 
     public static boolean canPickUp(ItemStack stack) {
@@ -86,10 +86,7 @@ public final class WhitesnakeControlInventory {
         if (isWeapon(source)) {
             if (inventory.get(WEAPON_SLOT).isEmpty()) {
                 int moved = Math.min(source.getCount(), source.getMaxStackSize());
-                ItemStack placed = source.copy();
-                placed.setCount(moved);
-                inventory.set(WEAPON_SLOT, placed);
-                source.shrink(moved);
+                inventory.set(WEAPON_SLOT, source.split(moved));
             }
         } else if (isAmmo(source) || isDisc(source)) {
             for (int i = STORAGE_START; i < SIZE && !source.isEmpty(); i++) {
@@ -105,10 +102,7 @@ public final class WhitesnakeControlInventory {
             for (int i = STORAGE_START; i < SIZE && !source.isEmpty(); i++) {
                 if (inventory.get(i).isEmpty()) {
                     int moved = Math.min(source.getCount(), source.getMaxStackSize());
-                    ItemStack placed = source.copy();
-                    placed.setCount(moved);
-                    inventory.set(i, placed);
-                    source.shrink(moved);
+                    inventory.set(i, source.split(moved));
                 }
             }
         }
@@ -138,8 +132,9 @@ public final class WhitesnakeControlInventory {
 
     public static boolean hasAmmo(Player player) {
         if (player.isCreative()) return true;
+        NonNullList<ItemStack> inventory = get(player);
         for (int i = STORAGE_START; i < SIZE; i++) {
-            ItemStack stack = get(player).get(i);
+            ItemStack stack = inventory.get(i);
             if (isAmmo(stack) && !stack.isEmpty()) return true;
         }
         return false;
@@ -147,15 +142,16 @@ public final class WhitesnakeControlInventory {
 
     public static int consumeAmmo(Player player, int amount) {
         if (player.isCreative()) return amount;
+        NonNullList<ItemStack> inventory = get(player);
         int consumed = 0;
         for (int i = STORAGE_START; i < SIZE && amount > 0; i++) {
-            ItemStack stack = get(player).get(i);
+            ItemStack stack = inventory.get(i);
             if (!isAmmo(stack)) continue;
             int removed = Math.min(stack.getCount(), amount);
             stack.shrink(removed);
             consumed += removed;
             amount -= removed;
-            if (stack.isEmpty()) get(player).set(i, ItemStack.EMPTY);
+            if (stack.isEmpty()) inventory.set(i, ItemStack.EMPTY);
         }
         if (consumed > 0) ((WhitesnakeInventoryAccess) player).roundaboutWhitesnake$syncInventory();
         return consumed;
