@@ -68,6 +68,9 @@ public abstract class ConfigManager {
     public static Path getClientConfigPath() {
         return clientConfigPath;
     }
+    public static Path getAdvenceConfigPath() {
+        return advancedConfigPath;
+    }
 
     public static void loadBlacklists2()
     {
@@ -555,6 +558,18 @@ public abstract class ConfigManager {
         AdvancedConfig.updateServer(config);
         saveAdvacedConfig();
         Roundabout.LOGGER.info("Loaded advanced config");
+    }
+    private static boolean advancedConfigDirty = false;
+
+    public static void markAdvancedConfigAsDirty(){
+        advancedConfigDirty = true;
+    }
+
+    public static void reloadAdvancedConfigCheck() {
+        if (advancedConfigDirty) {
+            loadAdvancedConfig();
+            advancedConfigDirty = false;
+        }
     }
 
     public static void validateFields(Object instance) {

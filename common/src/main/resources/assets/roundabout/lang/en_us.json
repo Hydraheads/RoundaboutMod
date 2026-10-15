@@ -3293,9 +3293,12 @@
   "roundabout.bomb_config.contact_explosion": "Toggle Contact/Manual Bombs",
   "roundabout.bomb_config.block_destruction": "Toggle Block Destruction",
   "roundabout.bomb_config.item_destruction": "Toggle Item Destruction",
+  "roundabout.bomb_config.auto_bubble_plant": "Airbubbles are bomb planted",
   "roundabout.bomb_config.explosion_size_0": "Small Explosion",
   "roundabout.bomb_config.explosion_size_1": "Medium Explosion",
   "roundabout.bomb_config.explosion_size_2": "Large Explosion",
+  "roundabout.bomb_config.on": ": on",
+  "roundabout.bomb_config.off": ": off",
 
   "skins.roundabout.green_day.part_five_green_day": "Part 5",
   "skins.roundabout.green_day.red_day": "Red Day",
@@ -4227,6 +4230,8 @@
   "config.roundabout.enableRattBlockMelt.desc": "If Ratt can use its newer move to melt blocks.",
 
 
+  "config.roundabout.advencedConfigOpen.name": "Advanced Config",
+  "config.roundabout.advencedConfigOpen.desc": "Opens the Advanced Config file.",
   "config.roundabout.anubisMemoryOpen.name": "Anubis Memories",
   "config.roundabout.anubisMemories.name": "Anubis Client Settings",
   "config.roundabout.anubisPogoCounter.name": "Anubis Pogo Indicator",
