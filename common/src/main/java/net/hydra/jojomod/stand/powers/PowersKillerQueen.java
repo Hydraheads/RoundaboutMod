@@ -106,9 +106,9 @@ import java.util.*;
 public class PowersKillerQueen extends NewPunchingStand {
 	public PowersKillerQueen(LivingEntity self) {super(self);}
 
-    @Override public boolean isWip(){return true;}
-    @Override public Component ifWipListDevStatus(){ return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);}
-    @Override public Component ifWipListDev(){ return Component.literal("DOGael Arts").withStyle(ChatFormatting.AQUA);}
+    //@Override public boolean isWip(){return true;}
+    //@Override public Component ifWipListDevStatus(){ return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);}
+    //@Override public Component ifWipListDev(){ return Component.literal("DOGael Arts").withStyle(ChatFormatting.AQUA);}
 
     @Override public StandPowers generateStandPowers(LivingEntity entity){ return new PowersKillerQueen(entity);}
     @Override public boolean isStandEnabled(){ return ClientNetworking.getAppropriateConfig().killerQueenSettings.enableKillerQueen; }
@@ -750,9 +750,20 @@ public class PowersKillerQueen extends NewPunchingStand {
         } else if (this.self instanceof IronGolem) {
             user.roundabout$setStandSkin(KillerQueenEntity.LIMBUSMORTIS);
         } else if (this.self instanceof Warden) {
-            user.roundabout$setStandSkin(KillerQueenEntity.STRAY);
+            user.roundabout$setStandSkin(KillerQueenEntity.SPIRIT);
         } else if (this.self instanceof Cat) {
-            user.roundabout$setStandSkin(KillerQueenEntity.TAMA);
+            double RNG = Math.random();
+            if (RNG < 0.2) {
+                user.roundabout$setStandSkin(KillerQueenEntity.TAMA);
+            }else if (RNG < 0.4) {
+                user.roundabout$setStandSkin(KillerQueenEntity.MINUET);
+            }else if (RNG <= 0.7) {
+                user.roundabout$setStandSkin(KillerQueenEntity.BROWN);
+            }else {
+                user.roundabout$setStandSkin(KillerQueenEntity.GREY);
+            }
+        } else if (this.self instanceof Skeleton) {
+            user.roundabout$setStandSkin(KillerQueenEntity.NOTW);
         }
     }
 
@@ -878,7 +889,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (slot == 1) {
             if(inBitesTheDustMode()) {
     			return (!canBitesTheDustDay());
-    		}else if (this.currentBombStatus == BOMB_NONE && !isGuarding()) {
+    		}else if (!isGuarding()) {
     			if (isHoldingSneak()) {
 
                     return hasArmsOut && !canAddStrayCatto();
@@ -892,9 +903,12 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             if (isGuarding() && this.currentBombStatus == BOMB_NONE && activeP != PowerIndex.POWER_2_BLOCK) {
                 return !canUseStrayCat() || hasArmsOut;
-            } else if (this.currentBombStatus == BOMB_BUBBLE) {
+            } else if (this.currentBombStatus == BOMB_BUBBLE && (activeP == PowerIndex.POWER_2_BLOCK || isGuarding())) {
                 Entity target = MainUtil.getTargetEntity(this.getSelf(), 40);
                 return !canBubbleTarget(target);
+            }
+            if (currentBombStatus != BOMB_NONE) {
+                return true;
             }
             if (isHoldingSneak()) { return  !canItemPlantBomb();}
 
@@ -3059,6 +3073,12 @@ public class PowersKillerQueen extends NewPunchingStand {
                     }
 
                     syncBombStatus(BOMB_BUBBLE);
+                }else {
+                    int cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.bubbleShootCooldown/2;
+                    this.setCooldown(BUBBLE_SEND_COOLDOWN, cooldownAmount);
+                    if (this.getSelf() instanceof Player P) {
+                        S2CPacketUtil.sendCooldownSyncPacket(P, BUBBLE_SEND_COOLDOWN, cooldownAmount);
+                    }
                 }
             }
         }
@@ -3874,17 +3894,16 @@ public class PowersKillerQueen extends NewPunchingStand {
                             }
                         }
                     }
-                    else if ((this.getSelf() instanceof Piglin || upAiNow
+                    else if (upAiNow && (this.getSelf() instanceof Piglin || this.getSelf() instanceof Spider
                             || this.getSelf() instanceof AbstractIllager || this.getSelf() instanceof Raider) && dist <= 12 && dist >= 6) {
                         if (!onCooldown(PowerIndex.SKILL_3) && this.currentShaStatus == SHA_NONE) {
                             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BLOCK, true);
                         }
-                    } else if ((this.getSelf() instanceof Spider
-                            || this.getSelf() instanceof JojoNPC /*|| upAiNow*/
+                    } else if ((this.getSelf() instanceof JojoNPC
                              || this.getSelf() instanceof AbstractVillager
                             || this.getSelf() instanceof Piglin || this.getSelf() instanceof Vindicator) &&
                             dist <= 16 && dist >= 12 && this.currentBombStatus == BOMB_NONE && !wentForCharge
-                            && this.bombBubble == null) {
+                            && this.bombBubble == null && upAiNow) {
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BLOCK, true);
                         entityTargetBuffer = attackTarget;
 
