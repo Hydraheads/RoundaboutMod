@@ -750,9 +750,20 @@ public class PowersKillerQueen extends NewPunchingStand {
         } else if (this.self instanceof IronGolem) {
             user.roundabout$setStandSkin(KillerQueenEntity.LIMBUSMORTIS);
         } else if (this.self instanceof Warden) {
-            user.roundabout$setStandSkin(KillerQueenEntity.STRAY);
+            user.roundabout$setStandSkin(KillerQueenEntity.SPIRIT);
         } else if (this.self instanceof Cat) {
-            user.roundabout$setStandSkin(KillerQueenEntity.TAMA);
+            double RNG = Math.random();
+            if (RNG < 0.2) {
+                user.roundabout$setStandSkin(KillerQueenEntity.TAMA);
+            }else if (RNG < 0.4) {
+                user.roundabout$setStandSkin(KillerQueenEntity.MINUET);
+            }else if (RNG <= 0.7) {
+                user.roundabout$setStandSkin(KillerQueenEntity.BROWN);
+            }else {
+                user.roundabout$setStandSkin(KillerQueenEntity.GREY);
+            }
+        } else if (this.self instanceof Skeleton) {
+            user.roundabout$setStandSkin(KillerQueenEntity.NOTW);
         }
     }
 
@@ -3883,17 +3894,16 @@ public class PowersKillerQueen extends NewPunchingStand {
                             }
                         }
                     }
-                    else if ((this.getSelf() instanceof Piglin || upAiNow
+                    else if (upAiNow && (this.getSelf() instanceof Piglin || this.getSelf() instanceof Spider
                             || this.getSelf() instanceof AbstractIllager || this.getSelf() instanceof Raider) && dist <= 12 && dist >= 6) {
                         if (!onCooldown(PowerIndex.SKILL_3) && this.currentShaStatus == SHA_NONE) {
                             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BLOCK, true);
                         }
-                    } else if ((this.getSelf() instanceof Spider
-                            || this.getSelf() instanceof JojoNPC /*|| upAiNow*/
+                    } else if ((this.getSelf() instanceof JojoNPC
                              || this.getSelf() instanceof AbstractVillager
                             || this.getSelf() instanceof Piglin || this.getSelf() instanceof Vindicator) &&
                             dist <= 16 && dist >= 12 && this.currentBombStatus == BOMB_NONE && !wentForCharge
-                            && this.bombBubble == null) {
+                            && this.bombBubble == null && upAiNow) {
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BLOCK, true);
                         entityTargetBuffer = attackTarget;
 
