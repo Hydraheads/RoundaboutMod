@@ -3062,6 +3062,12 @@ public class PowersKillerQueen extends NewPunchingStand {
                     }
 
                     syncBombStatus(BOMB_BUBBLE);
+                }else {
+                    int cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.bubbleShootCooldown/2;
+                    this.setCooldown(BUBBLE_SEND_COOLDOWN, cooldownAmount);
+                    if (this.getSelf() instanceof Player P) {
+                        S2CPacketUtil.sendCooldownSyncPacket(P, BUBBLE_SEND_COOLDOWN, cooldownAmount);
+                    }
                 }
             }
         }
