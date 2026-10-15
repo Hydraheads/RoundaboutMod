@@ -1231,7 +1231,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public boolean canItemPlantBomb(ItemStack stack) {
         if (isClient() && ConfigManager.getClientConfig().killerQueenSettings.itemToolsProtection) {
-            if (stack.getItem().canBeDepleted()) {
+            if (stack.getItem().canBeDepleted() || (stack.getItem() instanceof BlockItem BI && BI.getBlock() instanceof ShulkerBoxBlock)) {
                 return false;
             }
         }
