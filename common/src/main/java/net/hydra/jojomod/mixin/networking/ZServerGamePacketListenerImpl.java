@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.networking;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersCatchTheRainbow;
 import net.hydra.jojomod.stand.powers.PowersCream;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.minecraft.network.protocol.PacketUtils;
@@ -43,6 +44,11 @@ public class ZServerGamePacketListenerImpl implements IClientNetworking {
                 }
                 if(((StandUser)this.player).roundabout$getStandPowers() instanceof PowersGreenDay PGD){
                     if(!(PGD.HasMainArm && PGD.HasOffHand)){
+                        ci.cancel();
+                    }
+                }
+                if(((StandUser)this.player).roundabout$getStandPowers() instanceof PowersCatchTheRainbow PCTR){
+                    if(!(PCTR.HasOffHand)){
                         ci.cancel();
                     }
                 }
