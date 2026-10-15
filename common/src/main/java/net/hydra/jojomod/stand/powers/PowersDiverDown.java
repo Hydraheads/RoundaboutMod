@@ -925,8 +925,7 @@ public class PowersDiverDown extends NewPunchingStand {
     @Override
     public boolean isServerControlledCooldown(byte num) {
         if (num == PowerIndex.SKILL_1 || num == PowerIndex.SKILL_EXTRA || num == PowerIndex.SKILL_1_SNEAK
-                || num == PowerIndex.SKILL_2 || num == PowerIndex.GENERAL_1
-                || num == PowerIndex.SKILL_3) {
+                || num == PowerIndex.SKILL_2 || num == PowerIndex.GENERAL_1) {
             return true;
         }
         return super.isServerControlledCooldown(num);
@@ -2047,9 +2046,7 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     public void wallLatch() {
-        if (!(self.level().isClientSide())) {
-            this.setCooldown(PowerIndex.SKILL_3, 10);
-        }
+        this.setCooldown(PowerIndex.SKILL_3, 10);
         toggleZip(true);
         Direction gd = RotationUtil.getRealFacingDirection2(this.self);
         setHeelDirection(gd);
@@ -2814,7 +2811,7 @@ public class PowersDiverDown extends NewPunchingStand {
             Vec3 pos = stand.position();
             tryPosPower(GROUND_DIVE_BARRAGE, true, pos);
             tryPosPowerPacket(GROUND_DIVE_BARRAGE, pos);
-            setCooldown(PowerIndex.SKILL_4, 360);
+            setCooldown(PowerIndex.SKILL_4, 500);
         }
     }
 
