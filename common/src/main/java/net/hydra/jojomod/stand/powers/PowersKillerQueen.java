@@ -908,7 +908,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 return !canBubbleTarget(target);
             }
             if (currentBombStatus != BOMB_NONE) {
-                return true;
+                return false;
             }
             if (isHoldingSneak()) { return  !canItemPlantBomb();}
 
