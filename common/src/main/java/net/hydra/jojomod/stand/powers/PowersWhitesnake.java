@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IClientEntity;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.block.FancyLighterBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyboardPilotInput;
@@ -74,13 +73,18 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.RecordItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.BedBlock;
+import net.minecraft.world.level.block.ButtonBlock;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.FenceGateBlock;
+import net.minecraft.world.level.block.LeverBlock;
+import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -1866,22 +1870,20 @@ public class PowersWhitesnake extends BlockGrabPreset {
         AABB searchBounds = oldBounds.inflate(1.6D).minmax(newBounds.inflate(1.6D));
         for (Entity entity : stand.level().getEntities(stand, searchBounds)) {
             if (!(entity instanceof ItemEntity itemEntity) || !stand.getSensing().hasLineOfSight(entity)) continue;
-            if (!(itemEntity.getItem().getItem() instanceof BlockItem BI && (BI.getBlock() instanceof ShulkerBoxBlock || BI.getBlock() instanceof FancyLighterBlock))) {
-                ItemStack stack = itemEntity.getItem();
-                if (!isThrowableDisc(stack)) continue;
-                stand.canAcquireHeldItem = true;
-                stand.setHeldItem(stack.copyWithCount(1));
-                playSoundIfPossible(self.level(), null, self.blockPosition(), ModSounds.BLOCK_GRAB_EVENT,
-                        SoundSource.PLAYERS, 1.7F, 1.3F);
-                setActivePower(PowerIndex.POWER_2_SNEAK);
-                setAttackTimeDuring(0);
-                poseStand(OffsetIndex.FOLLOW_NOLEAN);
-                animateStand(MainUtil.isThrownBlockItem(stack.getItem())
-                        ? StandEntity.BLOCK_GRAB : StandEntity.ITEM_GRAB);
-                stack.shrink(1);
-                syncGrabbedItem(itemEntity.getId());
-                return;
-            }
+            ItemStack stack = itemEntity.getItem();
+            if (!isThrowableDisc(stack)) continue;
+            stand.canAcquireHeldItem = true;
+            stand.setHeldItem(stack.copyWithCount(1));
+            playSoundIfPossible(self.level(),null, self.blockPosition(), ModSounds.BLOCK_GRAB_EVENT,
+                    SoundSource.PLAYERS, 1.7F, 1.3F);
+            setActivePower(PowerIndex.POWER_2_SNEAK);
+            setAttackTimeDuring(0);
+            poseStand(OffsetIndex.FOLLOW_NOLEAN);
+            animateStand(MainUtil.isThrownBlockItem(stack.getItem())
+                    ? StandEntity.BLOCK_GRAB : StandEntity.ITEM_GRAB);
+            stack.shrink(1);
+            syncGrabbedItem(itemEntity.getId());
+            return;
         }
     }
 
