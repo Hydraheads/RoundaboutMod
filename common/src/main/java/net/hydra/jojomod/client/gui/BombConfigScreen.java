@@ -159,6 +159,12 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
         	ClientConfig clientConfig = ConfigManager.getClientConfig();
 
             int conf = clientConfig.dynamicSettings.killerQueenCurrentBombConfig;
+            if (this.context == AUTO_BUBBLE_PLANT && Minecraft.getInstance().player != null) {
+                if (((StandUser)Minecraft.getInstance().player).roundabout$getStandPowers() instanceof PowersKillerQueen PK && !PK.canUseStrayCat()) {
+                    return ENABLED;
+                }
+            }
+
             if ((conf & (1 << this.context)) != 0) {
                 return (invert && isHoveredOrFocused() && (lastChangedConfig != context || !safeToggle)) ? DISABLED : ENABLED;
             }
@@ -176,6 +182,11 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
 
 			if (this.context == 0 && (!ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction
                     || !level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING))) {status = 3;}
+            if (this.context == AUTO_BUBBLE_PLANT) {
+                if (((StandUser)Minecraft.getInstance().player).roundabout$getStandPowers() instanceof PowersKillerQueen PK && !PK.canUseStrayCat()) {
+                    status = 3;
+                }
+            }
 			
 	        this.drawSlot(guiGraphics, status);
 	        this.drawIcon(guiGraphics);
@@ -202,6 +213,9 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
 		private void drawIcon(GuiGraphics guiGraphics) {
 			int status = getMode(false);
             if (this.context == BLOCK_DESTRUCTION && !ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction) {status = 2;}
+            if (Minecraft.getInstance().player != null && ((StandUser)Minecraft.getInstance().player).roundabout$getStandPowers() instanceof PowersKillerQueen PK && !PK.canUseStrayCat()) {
+                status = 3;
+            }
 
             int x = status*18;
             int y = this.context*18;
