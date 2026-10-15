@@ -4,20 +4,19 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersCatchTheRainbow;
-import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-
-import java.util.List;
+import net.minecraft.world.phys.Vec3;
 
 import static net.hydra.jojomod.util.MainUtil.sendParticlesIfPossible;
 
@@ -34,29 +33,32 @@ public class CTRplatformEntity extends StandEntity {
 
     @Override
     public void tick() {
-        double randX = Roundabout.RANDOM.nextDouble(-1, 1);
-        double randZ = Roundabout.RANDOM.nextDouble(-1, 1);
-        sendParticlesIfPossible(this, level(), ParticleTypes.SPLASH,
-                this.getX() + randX,
-                this.getY(),
-                this.getZ() + randZ,
-                1, 0, 0, 0, 0);
-
-        if(!this.level().isClientSide) {
-            if (User != null) {
-                this.setPos(User.getX(), this.getY(), User.getZ());
+        if (!this.level().isClientSide) {
+            if (User != null && ((StandUser) User).roundabout$getStandPowers() instanceof PowersCatchTheRainbow
+                    && (((PowersCatchTheRainbow) ((StandUser) User).roundabout$getStandPowers()).isInRain())) {
+                this.moveTo(User.getX(), this.getY(), User.getZ());
                 if (MainUtil.cheapDistanceTo(this.getX(), this.getY(), this.getZ(), User.getX(), User.getY(), User.getZ()) > 1 || User.isCrouching()) {
                     this.discard();
+                    this.setUser(null);
                 }
+            } else {
+                this.discard();
+                this.setUser(null);
             }
+        double randX = Roundabout.RANDOM.nextDouble(-0.5, 0.5);
+        double randZ = Roundabout.RANDOM.nextDouble(-0.5, 0.5);
+        sendParticlesIfPossible(this, level(), ParticleTypes.DRIPPING_DRIPSTONE_WATER,
+                this.getX() + randX,
+                this.getY() + 0.35f,
+                this.getZ() + randZ,
+                1, 0, 0, 0, 0);
         }
-
         super.tick();
     }
 
     public static AttributeSupplier.Builder createStandAttributes() {
         return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED,
-                0.0F).add(Attributes.MAX_HEALTH, 0.0).add(Attributes.ATTACK_DAMAGE, 0.0);
+                1F).add(Attributes.MAX_HEALTH, 0.0).add(Attributes.ATTACK_DAMAGE, 0.0);
     }
 
     @Override

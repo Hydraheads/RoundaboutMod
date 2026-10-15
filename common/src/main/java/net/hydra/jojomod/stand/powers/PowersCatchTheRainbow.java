@@ -407,7 +407,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             if (isHoldingSneak()) {
                 if (dropTimer == 0)
                     canCreatePlatform = true;
-            } else if (canCreatePlatform) {
+            } else if (canCreatePlatform && !self.onGround()) {
                 rainPlatform();
             }
         }
@@ -519,7 +519,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         return false;
     }
 
-    //the f###ing healing move that i hate
+    //rain mend :)
 
     public void rainMendClient(){
         if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {

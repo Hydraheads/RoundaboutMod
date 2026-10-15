@@ -81,7 +81,7 @@ public class CatchTheRainbowModel extends PsuedoHierarchicalModel {
 			"textures/stand/catch_the_rainbow/strider_sick.png");
 
 	public ResourceLocation getTextureLocation(Entity context, byte skin) {
-		if (!context.isInWaterOrRain()) {
+		if (!(((PowersCatchTheRainbow) ((StandUser) context).roundabout$getStandPowers()).isInRain())) {
 			switch (skin) {
 				case PowersCatchTheRainbow.GHAST -> {
 					return ghast_dry;

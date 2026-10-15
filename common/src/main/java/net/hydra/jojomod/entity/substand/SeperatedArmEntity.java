@@ -33,6 +33,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -251,8 +252,13 @@ public class SeperatedArmEntity extends StandEntity {
         if (((((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersCatchTheRainbow))) {
             if (!this.level().isClientSide) {
                 if (grabbedEntity != null){
-                    if (isInRain() && this.getBoundingBox().inflate(2).intersects(grabbedEntity.getBoundingBox())) {
+                    List<Entity> getNearEntity = MainUtil.getEntitiesInRange(this.level(), this.blockPosition(), 5F, this);
+                    if (!getNearEntity.contains(grabbedEntity)){
+                        grabbedEntity = null;
+                    }
+                    if (isInRain() && grabbedEntity != null && grabbedEntity instanceof LivingEntity) {
                         this.setPos(grabbedEntity.getX(), grabbedEntity.getEyeY() - 0.3, grabbedEntity.getZ());
+                        ((LivingEntity) grabbedEntity).addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, 2), grabbedEntity);
                     }else{
                         grabbedEntity = null;
                     }
@@ -389,7 +395,9 @@ public class SeperatedArmEntity extends StandEntity {
                     Can_activate_special = false;
                 }
                 attractMobs();
-                pickUpItems();
+                if (grabbedEntity == null) {
+                    pickUpItems();
+                }
                 doSpin();
 
                 if (FireworkLaunchTicks > 0) {

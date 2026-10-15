@@ -797,7 +797,7 @@ public class FabricEntities {
                     new ResourceLocation(Roundabout.MOD_ID, "ctr_platorm"),
                     EntityType.Builder.<CTRplatformEntity>of(CTRplatformEntity::new, MobCategory.MISC).
                             sized(1.25f, 0.5f).
-                            clientTrackingRange(10).build(Roundabout.MOD_ID+":ctrplatformmodel")
+                            clientTrackingRange(15).build(Roundabout.MOD_ID+":ctrplatformmodel")
             );
     public static final EntityType<BlockWallEntity> BLOCK_WALL =
             Registry.register(
