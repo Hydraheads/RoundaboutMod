@@ -4172,6 +4172,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 return;
             }
         }
+        // diver down trap clear
+        if (this.roundabout$hasRibcageTrap() && this.rdbt$getRibcagePlacer() != null) {
+            if ($$0.getEntity() == this.rdbt$getRibcagePlacer().getSelf()) {
+                this.roundabout$setRibcageTrap(false);
+            }
+        }
         // Stand Damage new IFrames vs melee
         if ((float) this.invulnerableTime > 10.0F && !$$0.is(DamageTypeTags.BYPASSES_COOLDOWN)) {
             if (!MainUtil.isStandDamage($$0) && roundabout$standHurtTicks > 0) {
@@ -5457,6 +5463,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "die", at = @At("HEAD"))
     protected void roundabout$die(DamageSource $$0, CallbackInfo ci) {
+
+        // for diver down affliction removal
+        if (this.roundabout$hasRibcageTrap()) {
+            this.roundabout$setRibcageTrap(false);
+        }
+        if (this.roundabout$hasSpringLegs()) {
+            this.roundabout$setSpringLegs(false);
+        }
+        if (this.roundabout$getStandPowers() instanceof PowersDiverDown dd) {
+            dd.clearRibcageTrap();
+            dd.clearSpringLegs();
+        }
 
         if (rdbt$GetBtdPlantedUser() != null) {
             if (rdbt$GetBtdPlantedUser().btdTicks > 8
@@ -7037,6 +7055,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     public PowersKillerQueen BtdPlantedUser = null;
 
+    @Unique
+    public PowersDiverDown ribcagePlacer = null;
+
     @Override
     public boolean rdbt$interceptIncomingHarmIfBTD(DamageSource source) {
         if (!this.level().isClientSide() && this.rdbt$GetBtdPlantedUser() != null && this.rdbt$GetBtdPlantedUser().catBtdShield()
@@ -7063,6 +7084,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (!this.level().isClientSide) {
             this.BtdPlantedUser = e;
         }
+    }
+
+    @Override
+    @Nullable
+    public PowersDiverDown rdbt$getRibcagePlacer() {
+        return this.ribcagePlacer;
+    }
+
+    @Override
+    public void rdbt$setRibcagePlacer(@Nullable PowersDiverDown dd) {
+        this.ribcagePlacer = dd;
     }
 
     @Inject(method = "attackable", at = @At("HEAD"), cancellable = true)

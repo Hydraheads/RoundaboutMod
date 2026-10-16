@@ -400,6 +400,9 @@ public interface StandUser {
     void rdbt$SetBtdPlantedUser(@Nullable PowersKillerQueen e);
     boolean rdbt$interceptIncomingHarmIfBTD(DamageSource source);
 
+    @Nullable PowersDiverDown rdbt$getRibcagePlacer();
+    void rdbt$setRibcagePlacer(@Nullable PowersDiverDown e);
+
     List<CooldownInstance> rdbt$initPowerCooldowns();
     List<CooldownInstance> rdbt$getPowerCooldowns();
     void rdbt$setPowerCooldowns(List<CooldownInstance> cdi);
