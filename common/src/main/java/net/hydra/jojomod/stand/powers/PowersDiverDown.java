@@ -3554,9 +3554,14 @@ public class PowersDiverDown extends NewPunchingStand {
         if (this.getAttackTimeDuring() > DIVE_WINDUP_MAX) {
             // run the get target method to find a target
             Entity target = getTargetEntity(self, DIVE_REACH);
+            if (target instanceof Player PE && PE.isCreative()) {
+                target = null;
+            }
+            // transfers stand hits into the user of the stand
             if (target instanceof StandEntity stand && stand.getUser() != null) {
                 target = stand.getUser();
             }
+            // cooldown if whiffed
             if (!(target instanceof LivingEntity) || target instanceof StandEntity || target == null) {
                 this.setAttackTimeDuring(-15);
                 this.poseStand(OffsetIndex.ATTACK);
