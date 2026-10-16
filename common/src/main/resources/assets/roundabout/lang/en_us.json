@@ -2473,7 +2473,7 @@
   "ability.roundabout.kq_btd_defuse":"Cancel Bites The Dust",
   "ability.roundabout.kq_btd_defuse.desc":"Removes Killer Queen from its host, returning it to the user. All targets that were marked to explode will be unmarked.",
   "ability.roundabout.add_stray_cat":"Add Stray Cat",
-  "ability.roundabout.add_stray_cat.desc":"While looking at or holding a tamed Stray Cat, combine it with Killer Queen to gain additional skills.",
+  "ability.roundabout.add_stray_cat.desc":"While looking at or holding a tamed Stray Cat, combine it with Killer Queen to gain additional skills. Stray Cats are created when an unworthy Cat is shot with a Stand Arrow to gain the Stand Virus effect and dies on a dirt-variant block. Stray Cat must be tamed with Raw Cod or Salmon to be used.",
   "ability.roundabout.kq_bomb_bubble":"Primary Bomb: Air Bubble",
   "ability.roundabout.kq_bomb_bubble.desc":"Fires an explosive air bubble that continuously travels in the direction faced by the user.",
   "ability.roundabout.kq_bomb_bubble_redirect":"Air Bubble Redirect",
