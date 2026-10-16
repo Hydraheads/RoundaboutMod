@@ -97,6 +97,9 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
         if (selectedType == ConfigType.CLIENT) {
             this.addEntry(new AnubisEntry(ConfigManager.getClientConfigPath()));
         }
+        if (selectedType == ConfigType.COMMON) {
+            this.addEntry(new AdvenceConfigEntry(ConfigManager.getAdvenceConfigPath()));
+        }
 
     }
 
@@ -111,6 +114,43 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
     }
 
     public abstract static class Entry extends ContainerObjectSelectionList.Entry<Entry> {
+    }
+
+    public class AdvenceConfigEntry extends Entry {
+        private Button button;
+        public Path config_path;
+        public AdvenceConfigEntry(Path p) {
+            config_path = p;
+            button = Button.builder(Component.translatable("config.roundabout.advencedConfigOpen.name"), (button) -> {
+                ConfigManager.markAdvancedConfigAsDirty();
+                Util.getPlatform().openUri(config_path.toUri());
+            }).build();
+        }
+        @Override
+        public void render(GuiGraphics drawContext, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float delta) {
+            button.setX(x+entryWidth/4);
+            button.setY(y);
+            button.render(drawContext, mouseX, mouseY, delta);
+            renderHover(drawContext,index,y,x,width,height,mouseX,mouseY,hovered,delta,button);
+        }
+
+
+        @Override
+        public List<? extends NarratableEntry> narratables() {return List.of(button);}
+        @Override
+        public List<? extends GuiEventListener> children() {return List.of(button);}
+
+        public void renderHover(GuiGraphics drawContext, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTic,
+                                Button editButton){
+            if (editButton.isHovered()){
+                List<Component> compList = Lists.newArrayList();
+                String[] strung2 = ClientUtil.splitIntoLine(Component.translatable("config.roundabout.advencedConfigOpen.desc").getString(), 35);
+                for (String s : strung2) {
+                    compList.add(Component.literal(s).withStyle(ChatFormatting.BLUE));
+                }
+                drawContext.renderTooltip(Minecraft.getInstance().font, compList, Optional.empty(), x, y+8-(10*strung2.length));
+            }
+        }
     }
 
     public class AnubisEntry extends Entry {

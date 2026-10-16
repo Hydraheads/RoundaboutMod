@@ -1030,8 +1030,14 @@ public class ForgeSounds {
             register(ModSounds.DIVER_DOWN_DIVE, ModSounds.DIVER_DOWN_DIVE_ID);
         public static final RegistryObject<SoundEvent> DIVER_DOWN_DIVE2 =
             register(ModSounds.DIVER_DOWN_DIVE2, ModSounds.DIVER_DOWN_DIVE2_ID);
-    public static final RegistryObject<SoundEvent> DIVER_DOWN_BARRAGE =
-            register(ModSounds.DIVER_DOWN_BARRAGE, ModSounds.DIVER_DOWN_BARRAGE_ID);
+    public static final RegistryObject<SoundEvent> DIVER_DOWN_BARRAGE_1 =
+            register(ModSounds.DIVER_DOWN_BARRAGE_1, ModSounds.DIVER_DOWN_BARRAGE_1_ID);
+    public static final RegistryObject<SoundEvent> DIVER_DOWN_BARRAGE_2 =
+            register(ModSounds.DIVER_DOWN_BARRAGE_2, ModSounds.DIVER_DOWN_BARRAGE_2_ID);
+    public static final RegistryObject<SoundEvent> DIVER_DOWN_BARRAGE_3 =
+            register(ModSounds.DIVER_DOWN_BARRAGE_3, ModSounds.DIVER_DOWN_BARRAGE_3_ID);
+    public static final RegistryObject<SoundEvent> DIVER_DOWN_BARRAGE_4 =
+            register(ModSounds.DIVER_DOWN_BARRAGE_4, ModSounds.DIVER_DOWN_BARRAGE_4_ID);
     public static final RegistryObject<SoundEvent> DIVER_DOWN_GROUND_BARRAGE =
             register(ModSounds.DIVER_DOWN_GROUND_BARRAGE, ModSounds.DIVER_DOWN_GROUND_BARRAGE_ID);
     public static final RegistryObject<SoundEvent> DIVER_DOWN_GROUND_DIVE =

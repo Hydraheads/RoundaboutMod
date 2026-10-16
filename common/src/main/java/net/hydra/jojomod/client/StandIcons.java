@@ -1094,6 +1094,13 @@ public class StandIcons {
             "textures/gui/icons/diver_down/mining.png");
         //Diver Down icons end
 
+    // lyin eyes icons start
+
+    public static final ResourceLocation LYIN_EYES_PLACEHOLDER = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/lyin_eyes/placeholder.png");
+
+    // lyin eyes icons end
+
     public static final ResourceLocation EMPEROR_SPEED_UP = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/emperor/emperor_speed_up.png");
     public static final ResourceLocation EMPEROR_SPEED_DOWN = new ResourceLocation(Roundabout.MOD_ID,

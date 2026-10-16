@@ -215,10 +215,28 @@
       "roundabout:diver_down_dive2"
     ]
   },
-  "diver_down_barrage": {
-    "subtitle": "sounds.roundabout.diver_down_barrage",
+  "diver_down_barrage_1": {
+    "subtitle": "sounds.roundabout.diver_down_barrage_1",
     "sounds": [
-      "roundabout:diver_down_barrage"
+      "roundabout:diver_down_barrage_1"
+    ]
+  },
+  "diver_down_barrage_2": {
+    "subtitle": "sounds.roundabout.diver_down_barrage_2",
+    "sounds": [
+      "roundabout:diver_down_barrage_2"
+    ]
+  },
+  "diver_down_barrage_3": {
+    "subtitle": "sounds.roundabout.diver_down_barrage_3",
+    "sounds": [
+      "roundabout:diver_down_barrage_3"
+    ]
+  },
+  "diver_down_barrage_4": {
+    "subtitle": "sounds.roundabout.diver_down_barrage_4",
+    "sounds": [
+      "roundabout:diver_down_barrage_4"
     ]
   },
   "diver_down_ground_barrage": {

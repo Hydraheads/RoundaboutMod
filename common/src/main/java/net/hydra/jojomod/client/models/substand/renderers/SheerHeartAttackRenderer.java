@@ -118,6 +118,12 @@ public class SheerHeartAttackRenderer extends StandRenderer<SheerHeartAttackEnti
 
     @Override
     public boolean skipLighting(SheerHeartAttackEntity mr){
-        return mr.getTorchStatus();
+        LivingEntity user = mr.getUser();
+        if (user != null && ((StandUser)user).roundabout$getStandPowers() instanceof PowersKillerQueen) {
+            if (((StandUser) user).roundabout$getStandSkin() == KillerQueenEntity.SPIRIT) {
+                return true;
+            }
+        }
+        return mr.getTorchStatus() ;
     }
 }

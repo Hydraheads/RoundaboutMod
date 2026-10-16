@@ -155,7 +155,7 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
             }
             else{
 				if ((((StandUser)user).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ)) {
-					if (this != PKQ.bombBlock) {
+					if (this != PKQ.bombBlock || PKQ.getCurrentBombStatus() != 1) {
 						this.discard();
 						return;
 					}

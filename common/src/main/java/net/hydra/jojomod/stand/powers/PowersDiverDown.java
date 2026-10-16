@@ -877,11 +877,26 @@ public class PowersDiverDown extends NewPunchingStand {
         }
     }
 
+    public SoundEvent getBarrageNoise(){
+        SoundEvent barrage;
+        float random = (float) (Math.random()*4);
+        if (random > 3){
+            barrage = ModSounds.DIVER_DOWN_BARRAGE_1_EVENT;
+        } else if (random > 2){
+            barrage = ModSounds.DIVER_DOWN_BARRAGE_2_EVENT;
+        } else if (random > 1){
+            barrage = ModSounds.DIVER_DOWN_BARRAGE_3_EVENT;
+        } else {
+            barrage = ModSounds.DIVER_DOWN_BARRAGE_4_EVENT;
+        }
+        return barrage;
+    }
+
     @Override
     public void playBarrageNoise(int hitNumber, Entity entity) {
         if (!this.self.level().isClientSide()) {
             if (hitNumber % 2 == 0)
-                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.DIVER_DOWN_BARRAGE_EVENT, SoundSource.PLAYERS, 0.7F, (float) (0.9 + (Math.random() * 0.25)));
+                playSoundIfPossible(self.level(), null, this.self.blockPosition(), getBarrageNoise(), SoundSource.PLAYERS, 0.7F, (float) (0.9 + (Math.random() * 0.25)));
         }
     }
 
@@ -925,8 +940,7 @@ public class PowersDiverDown extends NewPunchingStand {
     @Override
     public boolean isServerControlledCooldown(byte num) {
         if (num == PowerIndex.SKILL_1 || num == PowerIndex.SKILL_EXTRA || num == PowerIndex.SKILL_1_SNEAK
-                || num == PowerIndex.SKILL_2 || num == PowerIndex.GENERAL_1
-                || num == PowerIndex.SKILL_3) {
+                || num == PowerIndex.SKILL_2 || num == PowerIndex.GENERAL_1) {
             return true;
         }
         return super.isServerControlledCooldown(num);
@@ -2047,9 +2061,7 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     public void wallLatch() {
-        if (!(self.level().isClientSide())) {
-            this.setCooldown(PowerIndex.SKILL_3, 10);
-        }
+        this.setCooldown(PowerIndex.SKILL_3, 10);
         toggleZip(true);
         Direction gd = RotationUtil.getRealFacingDirection2(this.self);
         setHeelDirection(gd);
@@ -2814,7 +2826,7 @@ public class PowersDiverDown extends NewPunchingStand {
             Vec3 pos = stand.position();
             tryPosPower(GROUND_DIVE_BARRAGE, true, pos);
             tryPosPowerPacket(GROUND_DIVE_BARRAGE, pos);
-            setCooldown(PowerIndex.SKILL_4, 360);
+            setCooldown(PowerIndex.SKILL_4, 500);
         }
     }
 
@@ -3557,9 +3569,14 @@ public class PowersDiverDown extends NewPunchingStand {
         if (this.getAttackTimeDuring() > DIVE_WINDUP_MAX) {
             // run the get target method to find a target
             Entity target = getTargetEntity(self, DIVE_REACH);
+            if (target instanceof Player PE && PE.isCreative()) {
+                target = null;
+            }
+            // transfers stand hits into the user of the stand
             if (target instanceof StandEntity stand && stand.getUser() != null) {
                 target = stand.getUser();
             }
+            // cooldown if whiffed
             if (!(target instanceof LivingEntity) || target instanceof StandEntity || target == null) {
                 this.setAttackTimeDuring(-15);
                 this.poseStand(OffsetIndex.ATTACK);
@@ -3674,7 +3691,7 @@ public class PowersDiverDown extends NewPunchingStand {
      */
     public void onSubmergedTargetHurt(DamageSource source, float amount) {
         if (!this.damageRedirectionEnabled || this.isTransferringDamage
-                || !isDiveActive() || isSelfDive() || !MainUtil.isSpecialDamage(source))
+                || !isDiveActive() || isSelfDive())
             return;
         this.isTransferringDamage = true;
         try {
@@ -5288,7 +5305,6 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     // WIP FEATURES BELOW HERE, DELETE WHEN DONE
-    /*
     @Override
     public boolean isWip() {
         return true;
@@ -5303,5 +5319,4 @@ public class PowersDiverDown extends NewPunchingStand {
     public Component ifWipListDev() {
         return Component.literal("88superguy").withStyle(ChatFormatting.GOLD);
     }
-     */
 }
