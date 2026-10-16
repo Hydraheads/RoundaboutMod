@@ -334,6 +334,7 @@ public class ModItems {
         addToVisageStore(SHADOW_DIO_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(ENYA_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(CHAKA_MASK,page, characterCostExp, characterCostEmerald);
+
         page++;
         addToVisageStore(JOTARO_4_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(AYA_MASK,page, characterCostExp, characterCostEmerald);
@@ -348,6 +349,10 @@ public class ModItems {
         addToVisageStore(FEM_ANASUI_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(ANAKISS_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(GUCCIO_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(KIRA_PART_FOUR_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(KIRASAKU_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(KOSAKU_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(HAYATO_KAWAJIRI_MASK,page, characterCostExp, characterCostEmerald);
 
         page++;
         addToVisageStore(JOHNNY_MASK,page, characterCostExp, characterCostEmerald);
@@ -368,6 +373,7 @@ public class ModItems {
         addToVisageStore(DAIYA_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(DAIYA_2_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(HATO_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(KIRA_PART_EIGHT_MASK, page, characterCostExp, characterCostEmerald);
         if (ClientNetworking.getAppropriateConfig().cinderellaSettings.enableJojoveinVisagesInShop){
             page++;
             addToVisageStore(SHIZUKA_MASK,page, characterCostExp, characterCostEmerald);
