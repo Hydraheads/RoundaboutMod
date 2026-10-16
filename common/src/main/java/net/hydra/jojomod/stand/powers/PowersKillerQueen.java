@@ -4776,7 +4776,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         if (this.getSelf().hasLineOfSight(ent)) {
 
-            if (isEntityBomb(currentBombStatus) && this.getBombEntity() != null) {
+            if (currentBombStatus == BOMB_ENTITY && this.getBombEntity() != null) {
                 if ((PowerTypes.isErasingTime(this.getBombEntity()))) {
                     if (((StandUser)this.getBombEntity()).roundabout$getStandPowers() instanceof
                             PowersKingCrimson pkc){
