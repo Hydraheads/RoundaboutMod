@@ -209,6 +209,7 @@
   "item.roundabout.max_killer_queen_disc": "Stand Disc+",
   "item.roundabout.max_20th_century_boy_disc": "Stand Disc+",
   "item.roundabout.diver_down_disc": "Stand Disc",
+  "item.roundabout.lyin_eyes_disc": "Stand Disc",
   "item.roundabout.manhattan_transfer_disc": "Stand Disc",
   "item.roundabout.pearl_jam_disc": "Stand Disc",
   "item.roundabout.black_sabbath_disc": "Stand Disc",
@@ -254,6 +255,7 @@
   "item.roundabout.walking_heart_disc.desc": "Walking Heart",
   "item.roundabout.diver_down_disc.desc": "Diver Down",
   "item.roundabout.max_diver_down_disc.desc": "Diver Down",
+  "item.roundabout.lyin_eyes_disc.desc": "Lyin Eyes",
   "item.roundabout.manhattan_transfer_disc.desc": "Manhattan Transfer",
   "item.roundabout.black_sabbath_disc.desc": "Black Sabbath",
   "item.roundabout.manhattan_transfer_disc.desc.short": "Manhattan T.",
@@ -2584,6 +2586,9 @@
   "ability.roundabout.diver_recall.desc": "Recall Diver Down back to you.",
   "text.roundabout.diver_down.release_mode": "Release Mode: Automatic",
   "text.roundabout.diver_down.release_mode_manual": "Release Mode: Manual",
+
+  "ability.roundabout.lyin_eyes_placeholder": "Would you still love me",
+  "ability.roundabout.lyin_eyes_placeholder.desc": "if I were a worm? \uD83E\uDD7A",
 
   "ability.roundabout.emperor_shoot": "Shoot",
   "ability.roundabout.emperor_shoot.desc": "Shoot a bullet from the emperor.",
