@@ -877,11 +877,26 @@ public class PowersDiverDown extends NewPunchingStand {
         }
     }
 
+    public SoundEvent getBarrageNoise(){
+        SoundEvent barrage;
+        float random = (float) (Math.random()*4);
+        if (random > 3){
+            barrage = ModSounds.DIVER_DOWN_BARRAGE_1_EVENT;
+        } else if (random > 2){
+            barrage = ModSounds.DIVER_DOWN_BARRAGE_2_EVENT;
+        } else if (random > 1){
+            barrage = ModSounds.DIVER_DOWN_BARRAGE_3_EVENT;
+        } else {
+            barrage = ModSounds.DIVER_DOWN_BARRAGE_4_EVENT;
+        }
+        return barrage;
+    }
+
     @Override
     public void playBarrageNoise(int hitNumber, Entity entity) {
         if (!this.self.level().isClientSide()) {
             if (hitNumber % 2 == 0)
-                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.DIVER_DOWN_BARRAGE_EVENT, SoundSource.PLAYERS, 0.7F, (float) (0.9 + (Math.random() * 0.25)));
+                playSoundIfPossible(self.level(), null, this.self.blockPosition(), getBarrageNoise(), SoundSource.PLAYERS, 0.7F, (float) (0.9 + (Math.random() * 0.25)));
         }
     }
 
@@ -3554,9 +3569,14 @@ public class PowersDiverDown extends NewPunchingStand {
         if (this.getAttackTimeDuring() > DIVE_WINDUP_MAX) {
             // run the get target method to find a target
             Entity target = getTargetEntity(self, DIVE_REACH);
+            if (target instanceof Player PE && PE.isCreative()) {
+                target = null;
+            }
+            // transfers stand hits into the user of the stand
             if (target instanceof StandEntity stand && stand.getUser() != null) {
                 target = stand.getUser();
             }
+            // cooldown if whiffed
             if (!(target instanceof LivingEntity) || target instanceof StandEntity || target == null) {
                 this.setAttackTimeDuring(-15);
                 this.poseStand(OffsetIndex.ATTACK);
