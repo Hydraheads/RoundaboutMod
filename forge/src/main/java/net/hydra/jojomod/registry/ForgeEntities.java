@@ -8,9 +8,7 @@ import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
-import net.hydra.jojomod.entity.objects.FallingBannerEntity;
-import net.hydra.jojomod.entity.objects.GentlyWeepsEntity;
-import net.hydra.jojomod.entity.objects.IceTwisterEntity;
+import net.hydra.jojomod.entity.objects.*;
 import net.hydra.jojomod.entity.paintings.BirthOfVenusPainting;
 import net.hydra.jojomod.entity.paintings.MonaLisaPainting;
 import net.hydra.jojomod.entity.paintings.VanGoughPainting;
@@ -559,6 +557,24 @@ public class ForgeEntities {
                     EntityType.Builder.of(CowboySabbathEntity::new, MobCategory.MISC).sized(0.60F, 1.6f).
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "cowboy_sabbath").toString())
+            );
+    public static final RegistryObject<EntityType<GrabbedMobSoul>> GRABBED_MOB_SOUL =
+            ENTITY_TYPES.register("bs_mob_soul", () ->
+                    EntityType.Builder.of(GrabbedMobSoul::new, MobCategory.MISC).sized(0.5F, 0.5f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "bs_mob_soul").toString())
+            );
+    public static final RegistryObject<EntityType<GrabbedMobSoulPlayerLarge>> GRABBED_PLAYER_SOUL =
+            ENTITY_TYPES.register("bs_player_soul", () ->
+                    EntityType.Builder.of(GrabbedMobSoulPlayerLarge::new, MobCategory.MISC).sized(0.5F, 0.5f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "bs_player_soul").toString())
+            );
+    public static final RegistryObject<EntityType<GrabbedMobSoulPlayerSlim>> GRABBED_PLAYER_SOUL_SLIM =
+            ENTITY_TYPES.register("bs_player_soul_slim", () ->
+                    EntityType.Builder.of(GrabbedMobSoulPlayerSlim::new, MobCategory.MISC).sized(0.5F, 0.5f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "bs_player_soul_slim").toString())
             );
     public static final RegistryObject<EntityType<PearlJamEntity>> PEARL_JAM =
             ENTITY_TYPES.register("pearl_jam", () ->

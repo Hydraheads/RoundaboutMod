@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.NoVibrationEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
+import net.hydra.jojomod.entity.objects.GrabbedMobSoul;
 import net.hydra.jojomod.entity.projectile.IronBallEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.PowerTypes;
@@ -899,7 +900,9 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
 
                             if (!this.level().isClientSide() && (((StandUser)this.getUser()).roundabout$getStandDisc().isEmpty() ||
                             ((StandUser)this.getUser()).roundabout$getStandDisc().is(ModItems.STAND_DISC))){
-                                this.discard();
+                                if(!(this instanceof GrabbedMobSoul)) {
+                                    this.discard();
+                                }
                             }
                         } else {
                             handleTickDownIfDupe(thisStand);
