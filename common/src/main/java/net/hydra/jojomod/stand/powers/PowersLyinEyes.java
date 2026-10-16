@@ -27,7 +27,7 @@ public class PowersLyinEyes extends NewDashPreset {
         return new PowersLyinEyes(entity);
     }
 
-    // stand icons and info screen
+    // stand icons and info screen start
 
     /**
      * Renders the icons for the stand's abilities on the GUI. Comments will specify
@@ -54,6 +54,8 @@ public class PowersLyinEyes extends NewDashPreset {
                 "instruction.roundabout.barrage", StandIcons.LYIN_EYES_PLACEHOLDER, 0, level, bypas));
         return $$1;
     }
+
+    // stand icons and info screen end
 
     // WIP FEATURES BELOW HERE, DELETE WHEN DONE
     @Override
