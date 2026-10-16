@@ -3397,7 +3397,7 @@
 
   "roundabout.diver_affliction.none": "Effect Selection",
   "roundabout.diver_affliction.diver_legs": "Diver Legs",
-  "roundabout.diver_affliction.diver_legs.desc": "Diver Down replaces the legs of the target. While Diver Down is submerged inside the target, they will gain increased jump height and speed.",
+  "roundabout.diver_affliction.diver_legs.desc": "Diver Down replaces the legs of the target. While Diver Down is submerged inside the target, they will gain increased jump height and auto step.",
   "roundabout.diver_affliction.effect_cure": "Effect Cure",
   "roundabout.diver_affliction.effect_cure.desc": "Diver Down purges the body of all negative effects from the inside out. This only works on effects that can be cleared by milk.",
   "roundabout.diver_affliction.diver_arms": "Diver Arms",
