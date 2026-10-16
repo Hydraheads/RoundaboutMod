@@ -284,12 +284,6 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
                     }
 
                 }
-                if (PT.flattenTicks > 0) {
-                    if (SU.roundabout$getStandAnimation() != PowersTusk.FLATTEN) {$$4 *= -1;}
-
-                    float scale = Math.min(1, (PT.flattenTicks + $$4) / 7.0F);
-                    poseStack.scale(1.0F + scale, Math.max(0.1F, 1 - scale), 1.0F + scale);
-                }
             }
 
             byte playerP = ((IPlayerEntity)$$0).roundabout$GetPos();
