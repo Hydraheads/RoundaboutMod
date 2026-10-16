@@ -115,6 +115,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.*;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -1013,6 +1014,11 @@ public class MainUtil {
 
             }
         }
+    }
+
+    public static <T extends Comparable<T>> BlockState copyBlockStateProperty(BlockState from, BlockState to,
+                                                                              Property<T> prop) {
+        return to.setValue(prop, from.getValue(prop));
     }
 
     public static boolean canAddItem(ItemStack itemStack, Inventory inventory) {
