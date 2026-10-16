@@ -2041,6 +2041,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                    }
             	   this.setPowerNone();
                    this.bombEntity = null;
+                   this.bombEntityID = -1;
                }
                if (inBitesTheDustMode()) {
                    this.btdTicks = 0;
@@ -2942,7 +2943,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public void blockContacted(Entity ent) {
         if ((this.isContactModeEnabled() || this.detonateTimer > -1) && currentBombStatus == BOMB_BLOCK) {
-            this.bombEntity = ent;
+            setBombEntityAndSync(ent);
             syncBombStatus(BLOCK_CONTACT);
             this.bombBlock.discard();
             if (this.detonateTimer == -1) {
@@ -2953,7 +2954,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public void contactExplode(Entity ent) {
         if (this.isContactModeEnabled() || this.detonateTimer > -1) {
-            this.bombEntity = ent;
+            setBombEntityAndSync(ent);
             syncBombStatus(BUBBLE_CONTACT);
             if (this.detonateTimer == -1) {
                 this.explode();
@@ -2964,8 +2965,8 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public void contactDetonate(Entity ent) {
-        this.bombEntity = ent;
         syncBombStatus(ARROW_CONTACT);
+        setBombEntityAndSync(ent);
 
         if (this.self instanceof Player) {
             S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(),
@@ -2982,7 +2983,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public void blockContact(Entity ent) {
         if (this.isContactModeEnabled() || this.detonateTimer > -1) {
-            bombEntity = ent;
+            setBombEntityAndSync(ent);
             bombBlock.discard();
             syncBombStatus(BLOCK_CONTACT);
             if (this.detonateTimer == -1) {
@@ -2992,7 +2993,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public void bulletContacted(Entity ent) {
-        this.bombEntity = ent;
+        setBombEntityAndSync(ent);
         syncBombStatus(BULLET_CONTACT);
 
         if (this.self instanceof Player) {
@@ -4015,6 +4016,77 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
     }
 
+    public void setBombEntityAndSync(Entity target) {
+        this.bombEntity = target;
+
+        if (this.self instanceof Player) {
+            int id  = -1;
+            if (bombEntity != null) {
+                id = bombEntity.getId();
+            }
+            S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(),
+                    PowersKillerQueen.ENTITY_BOMB, id);
+        }
+    }
+
+    public void detectContactActiveBomb() {
+        if (this.isContactModeEnabled() && activePower != DETONATE) {
+            if (this.currentBombStatus == BOMB_BLOCK && getActivePower() != PowerIndex.POWER_1) {
+                if(Objects.nonNull(this.bombBlock) && activePower != PowerIndex.POWER_1) {
+                    Entity contact = detectContact(this.bombBlock, 0.2);
+                    if (contact != null) {
+                        this.syncBombStatus(BLOCK_CONTACT);
+                        this.bombBlock.discard();
+                        setBombEntityAndSync(contact);
+                        this.detonate();
+                    }
+                }
+            }else if (this.currentBombStatus == BOMB_ENTITY || this.currentBombStatus == ARROW_BOMB) {
+                if(Objects.nonNull(this.getBombEntity()) && activePower != PowerIndex.POWER_2 && !(bombEntity instanceof BombPlantedEnderpearl)) {
+                    if (!(
+                            this.getBombEntity() instanceof AbstractArrow A && !A.onGround()
+                    )) {
+                        Entity contact = detectContact(this.bombEntity, 0.1);
+                        if (contact != null) {
+                            if (this.currentBombStatus == ARROW_BOMB) {
+                                if (bombEntity instanceof RoundaboutBulletEntity) {
+                                    this.syncBombStatus(BULLET_CONTACT);
+                                }else {
+                                    this.syncBombStatus(ARROW_CONTACT);
+                                }
+                            }
+                            if (this.getBombEntity() instanceof AbstractArrow AR && AR.pickup == AbstractArrow.Pickup.DISALLOWED) {
+                                if (self instanceof Player PL && PL.getAbilities().instabuild) {
+                                    AR.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
+                                }else {
+                                    AR.pickup = AbstractArrow.Pickup.ALLOWED;
+                                }
+                            }
+
+                            if (currentBombStatus == BOMB_ENTITY) {
+                                syncBombStatus(ENTITY_CONTACT);
+                            }
+
+                            setBombEntityAndSync(contact);
+                            this.detonate();
+
+                        }
+                    }
+                }
+            }else if (this.currentBombStatus == BOMB_ITEM) {
+                if(Objects.nonNull(bombPlantedItem) && bombPlantedItem.safeContactTicks <= 0) {
+                    Entity contact = detectContact(bombPlantedItem, 0.2);
+                    if (contact != null) {
+                        syncBombStatus(ITEM_CONTACT);
+                        bombPlantedItem.defuse();
+                        setBombEntityAndSync(contact);
+                        this.detonate();
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     public void tickPower(){
 
@@ -4098,61 +4170,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             byte activePower = this.getActivePower();
 
-            if (this.isContactModeEnabled() && activePower != DETONATE) {
-                if (this.currentBombStatus == BOMB_BLOCK && getActivePower() != PowerIndex.POWER_1) {
-                    if(Objects.nonNull(this.bombBlock) && activePower != PowerIndex.POWER_1) {
-                        Entity contact = detectContact(this.bombBlock, 0.2);
-                        if (contact != null) {
-                            this.syncBombStatus(BLOCK_CONTACT);
-                            this.bombBlock.discard();
-                            this.bombEntity = contact;
-                            this.detonate();
-                        }
-                    }
-                }else if (this.currentBombStatus == BOMB_ENTITY || this.currentBombStatus == ARROW_BOMB) {
-                    if(Objects.nonNull(this.getBombEntity()) && activePower != PowerIndex.POWER_2 && !(bombEntity instanceof BombPlantedEnderpearl)) {
-                        if (!(
-                                this.getBombEntity() instanceof AbstractArrow A && !A.onGround()
-                        )) {
-                            Entity contact = detectContact(this.bombEntity, 0.1);
-                            if (contact != null) {
-                                if (this.currentBombStatus == ARROW_BOMB) {
-                                    if (bombEntity instanceof RoundaboutBulletEntity) {
-                                        this.syncBombStatus(BULLET_CONTACT);
-                                    }else {
-                                        this.syncBombStatus(ARROW_CONTACT);
-                                    }
-                                }
-                                if (this.getBombEntity() instanceof AbstractArrow AR && AR.pickup == AbstractArrow.Pickup.DISALLOWED) {
-                                    if (self instanceof Player PL && PL.getAbilities().instabuild) {
-                                        AR.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
-                                    }else {
-                                        AR.pickup = AbstractArrow.Pickup.ALLOWED;
-                                    }
-                                }
-
-                                if (currentBombStatus == BOMB_ENTITY) {
-                                    syncBombStatus(ENTITY_CONTACT);
-                                }
-
-                                this.bombEntity = contact;
-                                this.detonate();
-
-                            }
-                        }
-                    }
-                }else if (this.currentBombStatus == BOMB_ITEM) {
-                    if(Objects.nonNull(bombPlantedItem) && bombPlantedItem.safeContactTicks <= 0) {
-                        Entity contact = detectContact(bombPlantedItem, 0.2);
-                        if (contact != null) {
-                            syncBombStatus(ITEM_CONTACT);
-                            bombPlantedItem.defuse();
-                            this.bombEntity = contact;
-                            this.detonate();
-                        }
-                    }
-                }
-            }
+            this.detectContactActiveBomb();
         }
 
         super.tickPower();
@@ -4776,7 +4794,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         if (this.getSelf().hasLineOfSight(ent)) {
 
-            if (currentBombStatus == BOMB_ENTITY && this.getBombEntity() != null) {
+            if (isEntityBomb(currentBombStatus) && this.getBombEntity() != null) {
                 if ((PowerTypes.isErasingTime(this.getBombEntity()))) {
                     if (((StandUser)this.getBombEntity()).roundabout$getStandPowers() instanceof
                             PowersKingCrimson pkc){
