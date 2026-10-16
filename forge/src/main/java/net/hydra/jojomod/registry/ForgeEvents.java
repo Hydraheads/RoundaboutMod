@@ -100,6 +100,9 @@ public class ForgeEvents {
         event.put(ForgeEntities.BEACH_SABBATH.get(), BlackSabbathEntity.createStandAttributes().build());
         event.put(ForgeEntities.SANTA_SABBATH.get(), BlackSabbathEntity.createStandAttributes().build());
         event.put(ForgeEntities.COWBOY_SABBATH.get(), BlackSabbathEntity.createStandAttributes().build());
+        event.put(ForgeEntities.GRABBED_MOB_SOUL.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.GRABBED_PLAYER_SOUL.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.GRABBED_PLAYER_SOUL_SLIM.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.WALKING_HEART.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.CREAM.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.MAGICIANS_RED.get(), StandEntity.createStandAttributes().build());
@@ -854,6 +857,9 @@ public class ForgeEvents {
         ModEntities.BEACH_SABBATH = ForgeEntities.BEACH_SABBATH.get();
         ModEntities.SANTA_SABBATH = ForgeEntities.SANTA_SABBATH.get();
         ModEntities.COWBOY_SABBATH = ForgeEntities.COWBOY_SABBATH.get();
+        ModEntities.GRABBED_MOB_SOUL = ForgeEntities.GRABBED_MOB_SOUL.get();
+        ModEntities.GRABBED_PLAYER_SOUL = ForgeEntities.GRABBED_PLAYER_SOUL.get();
+        ModEntities.GRABBED_PLAYER_SOUL_SLIM = ForgeEntities.GRABBED_PLAYER_SOUL_SLIM.get();
         ModEntities.WALKING_HEART = ForgeEntities.WALKING_HEART.get();
         ModEntities.JUSTICE_PIRATE = ForgeEntities.JUSTICE_PIRATE.get();
         ModEntities.DARK_MIRAGE = ForgeEntities.DARK_MIRAGE.get();
