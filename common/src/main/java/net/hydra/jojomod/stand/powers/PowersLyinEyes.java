@@ -1,0 +1,283 @@
+package net.hydra.jojomod.stand.powers;
+
+import com.google.common.collect.Lists;
+import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.menu.LyinEyesInventoryMenu;
+import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.elements.PowerContext;
+import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+
+import java.util.List;
+
+public class PowersLyinEyes extends NewDashPreset {
+    // for move ids accessed here. update public bytes every time this is edited.
+    private static final byte
+        READ_INVENTORY = 53,
+        FINISH_READ_INVENTORY = 54;
+    // stand summoning variable
+    private int summonOverlayTicks = 0;
+    private int gatherOverlayTicks = 0;
+    private boolean isSummon = false;
+    private boolean isGather = false;
+    private boolean hadInventoryMenuOpen = false;
+    //inventory reading target;
+    private Entity inventoryTarget = null;
+
+    // basic stand registry stuff
+    public PowersLyinEyes(LivingEntity self) {super(self);}
+    @Override
+    public boolean canSummonStandAsEntity() {return false;}
+    @Override
+    public boolean isSecondaryStand(){return true;}
+    @Override
+    public boolean rendersPlayer(){return true;}
+    @Override
+    public StandPowers generateStandPowers(LivingEntity entity) {
+        return new PowersLyinEyes(entity);
+    }
+
+    // stand summoning start
+
+    @Override
+    public void onStandSummon(boolean desummon) {
+        if (!desummon && this.self.level().isClientSide()) {
+            summonOverlayTicks = 1;
+            isSummon = true;
+        }
+        if (desummon && this.self.level().isClientSide()) {
+            isSummon = false;
+        }
+        super.onStandSummon(desummon);
+    }
+
+    // stand summoning end
+
+    // tick power start
+
+    @Override
+    public void tickPower() {
+        if (this.self.level().isClientSide()) {
+            //inventory tracking for animation oooooh
+            boolean isMenuOpen = isInventoryMenuOpen();
+            if (isMenuOpen) {
+                hadInventoryMenuOpen = true;
+                isGather = true;
+            } else if (hadInventoryMenuOpen) {
+                hadInventoryMenuOpen = false;
+                isGather = false;
+                isSummon = true;
+            }
+        }
+        super.tickPower();
+        if (isSummon) {
+            summonOverlayTicks = Math.min(summonOverlayTicks + 1, 12);
+        } else {
+            summonOverlayTicks = Math.max(summonOverlayTicks - 1, 0);
+        }
+        if (isGather) {
+            gatherOverlayTicks = Math.min(gatherOverlayTicks + 1, 7);
+        } else {
+            gatherOverlayTicks = Math.max(gatherOverlayTicks - 1, 0);
+        }
+    }
+
+    // tick power end
+
+    // moves start
+
+    @Override
+    public boolean isAttackIneptVisually(byte activeP, int slot) {
+        // inventory reading
+        if (slot == 4) {
+            if (!isPlayerDetected()) {
+                return true;
+            }
+        }
+        return super.isAttackIneptVisually(activeP, slot);
+    }
+
+    /**
+     * Gets the input for the power based on the buttons pressed.
+     * Note, this is client side only. DO NOT FORGET!!!!
+     *
+     * @param context What button combination was pressed.
+     */
+    @Override
+    public void powerActivate(PowerContext context) {
+        switch (context) {
+            // entity highlighter
+            case SKILL_1_NORMAL -> {
+                //tryStartDiveClient();
+            }
+            // minimap
+            case SKILL_2_NORMAL -> {
+                //tryPlantKickTrap();
+            }
+            // dash
+            case SKILL_3_NORMAL -> {
+                dash();
+            }
+            // inventory reader
+            case SKILL_4_NORMAL -> {
+                tryReadInventory();
+            }
+        }
+    }
+
+    @Override
+    public boolean tryIntPower(int move, boolean forced, int value) {
+        // inventory open thingy
+        if (move == FINISH_READ_INVENTORY) {
+            return readInventory(value);
+        }
+        return super.tryIntPower(move, forced, value);
+    }
+
+    //used with attackTimeDuring to activate moves when it hits 0
+    @Override
+    public void updateUniqueMoves() {
+        if (this.getActivePower() == READ_INVENTORY) {
+            completeReadInventory();
+        }
+        super.updateUniqueMoves();
+    }
+
+    // inventory reading start
+
+    // used for visually inept
+    private boolean isPlayerDetected() {
+        Entity target = getTargetEntity(self, 20);
+        return target instanceof Player;
+    }
+
+    // client side power only, since inventories are client side, probably.
+    private void tryReadInventory() {
+        this.inventoryTarget = getTargetEntity(self, 20);
+        if (this.inventoryTarget instanceof Player p) {
+            this.setAttackTimeDuring(0);
+            this.setActivePower(READ_INVENTORY);
+            isSummon = false;
+            isGather = true;
+            gatherOverlayTicks = 1;
+        }
+    }
+
+    // complete read inventory
+    private void completeReadInventory() {
+        if (this.getAttackTimeDuring() > 5) {
+            if (this.inventoryTarget instanceof Player p) {
+                tryIntPowerPacket(FINISH_READ_INVENTORY, this.inventoryTarget.getId());
+            }
+        }
+    }
+
+    // gets the player id from the server and opens up the menu
+    private boolean readInventory(int playerID) {
+        if (!this.self.level().isClientSide() && self instanceof ServerPlayer serverPlayer) {
+            //if (this.getSelf() instanceof Player self) {
+            //    serverPlayer.displayClientMessage(Component.literal("AHHHH PLAYER DETECTED AHHHHH PANIC AHHH!!!!"), false);
+            //}
+            Entity target = serverPlayer.level().getEntity(playerID);
+            if (target instanceof ServerPlayer targetPlayer) {
+                LyinEyesInventoryMenu.open(serverPlayer, targetPlayer);
+            }
+        }
+        return true;
+    }
+
+    // inventory reading stop
+
+    // for tracking open menus
+
+    private boolean isInventoryMenuOpen() {
+        if (this.self instanceof Player player) {
+            return player.containerMenu instanceof LyinEyesInventoryMenu;
+        }
+        return false;
+    }
+
+    // moves end
+
+    // stand icons and info screen start
+
+    /**
+     * Renders the icons for the stand's abilities on the GUI. Comments will specify
+     * if icon is for courching, blocking, or normal.
+     */
+    @Override
+    public void renderIcons(GuiGraphics context, int x, int y) {
+        setSkillIcon(context, x, y, 1, StandIcons.LYIN_EYES_PLACEHOLDER, PowerIndex.SKILL_1);
+        setSkillIcon(context, x, y, 2, StandIcons.LYIN_EYES_PLACEHOLDER, PowerIndex.SKILL_2);
+        setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        setSkillIcon(context, x, y, 4, StandIcons.LYIN_EYES_INVENTORY, PowerIndex.SKILL_4);
+    }
+
+    public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos,
+                                                  int topPos, byte level, boolean bypas) {
+        List<AbilityIconInstance> $$1 = Lists.newArrayList();
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.lyin_eyes_placeholder",
+                "instruction.roundabout.press_skill", StandIcons.LYIN_EYES_PLACEHOLDER, 1, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.lyin_eyes_placeholder",
+                "instruction.roundabout.press_skill", StandIcons.LYIN_EYES_PLACEHOLDER, 2, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
+                "instruction.roundabout.press_skill", StandIcons.DODGE, 3, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.lyin_eyes_inventory",
+                "instruction.roundabout.press_skill", StandIcons.LYIN_EYES_INVENTORY, 4, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.lyin_eyes_placeholder",
+                "instruction.roundabout.passive", StandIcons.LYIN_EYES_PLACEHOLDER, 0, level, bypas));
+        return $$1;
+    }
+
+    // stand icons and info screen end
+
+    // sounds start
+
+    @Override
+    public SoundEvent getSoundFromByte(byte soundChoice) {
+        if (soundChoice == SoundIndex.SUMMON_SOUND) {
+            return ModSounds.LYIN_EYES_SUMMON_EVENT;
+        }
+        return super.getSoundFromByte(soundChoice);
+    }
+
+    @Override
+    protected Byte getSummonSound() {
+        return SoundIndex.SUMMON_SOUND;
+    }
+
+    // sounds end
+
+    // basic setters and getters here
+
+    public int getSummonOverlayTicks() {return summonOverlayTicks;}
+    public int getGatherOverlayTicks() {return gatherOverlayTicks;}
+
+    // WIP FEATURES BELOW HERE, DELETE WHEN DONE
+
+    @Override
+    public boolean isWip() {
+        return true;
+    }
+
+    @Override
+    public Component ifWipListDevStatus() {
+        return Component.translatable("roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
+    }
+
+    @Override
+    public Component ifWipListDev() {
+        return Component.literal("88superguy").withStyle(ChatFormatting.GOLD);
+    }
+}

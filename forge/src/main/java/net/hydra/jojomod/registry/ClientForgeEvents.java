@@ -3,6 +3,7 @@ package net.hydra.jojomod.registry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.*;
+import net.hydra.jojomod.client.gui.LyinEyesInventoryScreen;
 import net.hydra.jojomod.client.gui.diverdown.custom_workbench_texture.*;
 import net.hydra.jojomod.client.gui.GamblingTableScreen;
 import net.hydra.jojomod.client.models.*;
@@ -24,6 +25,10 @@ import net.hydra.jojomod.client.models.stand.*;
 import net.hydra.jojomod.client.models.stand.renderers.*;
 import net.hydra.jojomod.client.models.substand.*;
 import net.hydra.jojomod.client.models.substand.renderers.*;
+import net.hydra.jojomod.client.models.substand.zsabbathsouls.GrabbedMobSoulModel;
+import net.hydra.jojomod.client.models.substand.zsabbathsouls.renderers.GrabbedMobSoulRenderer;
+import net.hydra.jojomod.client.models.substand.zsabbathsouls.renderers.GrabbedMobSoulRendererPlayerLarge;
+import net.hydra.jojomod.client.models.substand.zsabbathsouls.renderers.GrabbedMobSoulRendererPlayerSlim;
 import net.hydra.jojomod.client.models.visages.*;
 import net.hydra.jojomod.client.models.visages.parts.*;
 import net.hydra.jojomod.client.models.visages.renderers.*;
@@ -67,6 +72,7 @@ public class ClientForgeEvents {
             MenuScreens.register(ForgeMenus.DIVER_DOWN_LOOM.get(), DiverDownLoomScreen::new);
             //DD workbench registry end
             MenuScreens.register(ForgeMenus.GAMBLING_TABLE.get(), GamblingTableScreen::new);
+            MenuScreens.register(ForgeMenus.LYIN_EYES_INVENTORY.get(), LyinEyesInventoryScreen::new);
             ItemBlockRenderTypes.setRenderLayer(ForgeBlocks.HALLUCINATORY_ACID.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(ForgeBlocks.HALLUCINATORY_ACID_WALL.get(), RenderType.translucent());
         });
@@ -117,6 +123,9 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.BEACH_SABBATH.get(), BeachSabbathRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SANTA_SABBATH.get(), BlackSantaSabbathRenderer::new);
         event.registerEntityRenderer(ForgeEntities.COWBOY_SABBATH.get(), CowboySabbathRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.GRABBED_MOB_SOUL.get(), GrabbedMobSoulRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.GRABBED_PLAYER_SOUL.get(), GrabbedMobSoulRendererPlayerLarge::new);
+        event.registerEntityRenderer(ForgeEntities.GRABBED_PLAYER_SOUL_SLIM.get(), GrabbedMobSoulRendererPlayerSlim::new);
         event.registerEntityRenderer(ForgeEntities.WALKING_HEART.get(), WalkingHeartRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ANUBIS.get(), AnubisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.JUSTICE_PIRATE.get(), JusticePirateRenderer::new);
@@ -323,6 +332,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.BEACH_SABBATH_LAYER,BeachSabbathModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.SANTA_SABBATH_LAYER,BlackSantaSabbathModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.COWBOY_SABBATH_LAYER,CowboySabbathModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.GRABBED_MOB_SOUL_LAYER, GrabbedMobSoulModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.DARK_MIRAGE_LAYER, DarkMirageModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.TUSK_A1_LAYER, TuskAct1Model::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.TUSK_A2_LAYER, TuskAct2Model::createBodyLayer);

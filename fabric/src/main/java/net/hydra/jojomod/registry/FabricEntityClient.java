@@ -25,6 +25,8 @@ import net.hydra.jojomod.client.models.stand.*;
 import net.hydra.jojomod.client.models.stand.renderers.*;
 import net.hydra.jojomod.client.models.substand.*;
 import net.hydra.jojomod.client.models.substand.renderers.*;
+import net.hydra.jojomod.client.models.substand.zsabbathsouls.renderers.*;
+import net.hydra.jojomod.client.models.substand.zsabbathsouls.*;
 import net.hydra.jojomod.client.models.visages.*;
 import net.hydra.jojomod.client.models.visages.parts.*;
 import net.hydra.jojomod.client.models.visages.renderers.*;
@@ -98,6 +100,9 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.BEACH_SABBATH, BeachSabbathRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SANTA_SABBATH, BlackSantaSabbathRenderer::new);
         EntityRendererRegistry.register(FabricEntities.COWBOY_SABBATH, CowboySabbathRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.GRABBED_MOB_SOUL, GrabbedMobSoulRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.GRABBED_PLAYER_SOUL, GrabbedMobSoulRendererPlayerLarge::new);
+        EntityRendererRegistry.register(FabricEntities.GRABBED_PLAYER_SOUL_SLIM, GrabbedMobSoulRendererPlayerSlim::new);
         EntityRendererRegistry.register(FabricEntities.PEARL_JAM, PearlJamRenderer::new);
         EntityRendererRegistry.register(FabricEntities.WALKING_HEART, WalkingHeartRenderer::new);
         EntityRendererRegistry.register(FabricEntities.DARK_MIRAGE, DarkMirageRenderer::new);
@@ -292,6 +297,9 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.BEACH_SABBATH_LAYER, BeachSabbathModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SANTA_SABBATH_LAYER, BlackSantaSabbathModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.COWBOY_SABBATH_LAYER, CowboySabbathModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GRABBED_MOB_SOUL_LAYER, GrabbedMobSoulModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GRABBED_MOB_SOUL_PLAYER_LAYER, GrabbedPlayerSoulSteveModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GRABBED_MOB_SOUL_PLAYER_SLIM_LAYER, GrabbedPlayerSoulAlexModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DARK_MIRAGE_LAYER, DarkMirageModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.TUSK_A1_LAYER, TuskAct1Model::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.TUSK_A2_LAYER, TuskAct2Model::createBodyLayer);

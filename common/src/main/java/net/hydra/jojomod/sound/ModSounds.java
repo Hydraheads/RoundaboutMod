@@ -1802,6 +1802,20 @@ public class ModSounds {
     public static SoundEvent SURVIVOR_REMOVE_EVENT = SoundEvent.createVariableRangeEvent(SURVIVOR_REMOVE_ID);
 
 
+    public static final String BC_TROOP_SUMMON = "bc_troop_summon";
+    public static final ResourceLocation BC_TROOP_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BC_TROOP_SUMMON);
+    public static SoundEvent BC_TROOP_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(BC_TROOP_SUMMON_ID);
+    public static final String BC_BUNDLE_SUMMON = "bc_bundle_summon";
+    public static final ResourceLocation BC_BUNDLE_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BC_BUNDLE_SUMMON);
+    public static SoundEvent BC_BUNDLE_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(BC_BUNDLE_SUMMON_ID);
+    public static final String BC_HELICOPTER_SUMMON = "bc_helicopter_summon";
+    public static final ResourceLocation BC_HELICOPTER_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BC_HELICOPTER_SUMMON);
+    public static SoundEvent BC_HELICOPTER_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(BC_HELICOPTER_SUMMON_ID);
+    public static final String BC_TANK_SUMMON = "bc_tank_summon";
+    public static final ResourceLocation BC_TANK_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BC_TANK_SUMMON);
+    public static SoundEvent BC_TANK_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(BC_TANK_SUMMON_ID);
+
+
     public static final String ZOMBIE_CHARGE = "zombie_charge";
     public static final ResourceLocation ZOMBIE_CHARGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ZOMBIE_CHARGE);
     public static SoundEvent ZOMBIE_CHARGE_EVENT = SoundEvent.createVariableRangeEvent(ZOMBIE_CHARGE_ID);
@@ -1851,9 +1865,18 @@ public class ModSounds {
     public static final String DIVER_DOWN_DIVE2 = "diver_down_dive2";
     public static final ResourceLocation DIVER_DOWN_DIVE2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIVER_DOWN_DIVE2);
     public static SoundEvent DIVER_DOWN_DIVE2_EVENT = SoundEvent.createVariableRangeEvent(DIVER_DOWN_DIVE2_ID);
-    public static final String DIVER_DOWN_BARRAGE = "diver_down_barrage";
-    public static final ResourceLocation DIVER_DOWN_BARRAGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIVER_DOWN_BARRAGE);
-    public static SoundEvent DIVER_DOWN_BARRAGE_EVENT = SoundEvent.createVariableRangeEvent(DIVER_DOWN_BARRAGE_ID);
+    public static final String DIVER_DOWN_BARRAGE_1 = "diver_down_barrage_1";
+    public static final ResourceLocation DIVER_DOWN_BARRAGE_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIVER_DOWN_BARRAGE_1);
+    public static SoundEvent DIVER_DOWN_BARRAGE_1_EVENT = SoundEvent.createVariableRangeEvent(DIVER_DOWN_BARRAGE_1_ID);
+    public static final String DIVER_DOWN_BARRAGE_2 = "diver_down_barrage_2";
+    public static final ResourceLocation DIVER_DOWN_BARRAGE_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIVER_DOWN_BARRAGE_2);
+    public static SoundEvent DIVER_DOWN_BARRAGE_2_EVENT = SoundEvent.createVariableRangeEvent(DIVER_DOWN_BARRAGE_2_ID);
+    public static final String DIVER_DOWN_BARRAGE_3 = "diver_down_barrage_3";
+    public static final ResourceLocation DIVER_DOWN_BARRAGE_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIVER_DOWN_BARRAGE_3);
+    public static SoundEvent DIVER_DOWN_BARRAGE_3_EVENT = SoundEvent.createVariableRangeEvent(DIVER_DOWN_BARRAGE_3_ID);
+    public static final String DIVER_DOWN_BARRAGE_4 = "diver_down_barrage_4";
+    public static final ResourceLocation DIVER_DOWN_BARRAGE_4_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIVER_DOWN_BARRAGE_4);
+    public static SoundEvent DIVER_DOWN_BARRAGE_4_EVENT = SoundEvent.createVariableRangeEvent(DIVER_DOWN_BARRAGE_4_ID);
     public static final String DIVER_DOWN_GROUND_BARRAGE = "diver_down_ground_barrage";
     public static final ResourceLocation DIVER_DOWN_GROUND_BARRAGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIVER_DOWN_GROUND_BARRAGE);
     public static SoundEvent DIVER_DOWN_GROUND_BARRAGE_EVENT = SoundEvent.createVariableRangeEvent(DIVER_DOWN_GROUND_BARRAGE_ID);
@@ -1983,6 +2006,10 @@ public class ModSounds {
     public static final String ANASUI_PUCCI_2 = "anasui_pucci_2";
     public static final ResourceLocation ANASUI_PUCCI_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ANASUI_PUCCI_2);
     public static SoundEvent ANASUI_PUCCI_2_EVENT = SoundEvent.createVariableRangeEvent(ANASUI_PUCCI_2_ID);
+
+    public static final String LYIN_EYES_SUMMON = "lyin_eyes_summon";
+    public static final ResourceLocation LYIN_EYES_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+LYIN_EYES_SUMMON);
+    public static SoundEvent LYIN_EYES_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(LYIN_EYES_SUMMON_ID);
 
     public static final String SUMMON_GREEN_DAY = "summon_green_day";
     public static final ResourceLocation SUMMON_GREEN_DAY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_GREEN_DAY);

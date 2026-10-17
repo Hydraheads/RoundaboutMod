@@ -510,6 +510,15 @@ public class StandIcons {
     public static final ResourceLocation BITES_THE_DUST_TARGET = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/killer_queen/bites_the_dust_target.png");
 
+    public static final ResourceLocation BAD_COMPANY_TROOP_DROP = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/bad_company/troop_summon.png");
+    public static final ResourceLocation BAD_COMPANY_TROOP_RECALL = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/bad_company/troop_recall.png");
+    public static final ResourceLocation BAD_COMPANY_PILOT_MODE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/bad_company/pilot_mode.png");
+    public static final ResourceLocation BAD_COMPANY_PILOT_MODE_EXIT = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/bad_company/pilot_mode_exit.png");
+
     public static final ResourceLocation PLANET_WAVES_METEOR_SHOWER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/planet_waves/meteor_shower.png");
     public static final ResourceLocation PLANET_WAVES_BIG_METEOR = new ResourceLocation(Roundabout.MOD_ID,
@@ -1116,6 +1125,17 @@ public class StandIcons {
     public static final ResourceLocation DIVER_DOWN_MINING = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/diver_down/mining.png");
         //Diver Down icons end
+
+    // lyin eyes icons start
+
+    public static final ResourceLocation LYIN_EYES_PLACEHOLDER = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/lyin_eyes/placeholder.png");
+    public static final ResourceLocation LYIN_EYES_INVENTORY = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/lyin_eyes/inventory_reading.png");
+    public static final ResourceLocation LYIN_EYES_LAYER = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/lyin_eyes_layer.png");
+
+    // lyin eyes icons end
 
     public static final ResourceLocation EMPEROR_SPEED_UP = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/emperor/emperor_speed_up.png");

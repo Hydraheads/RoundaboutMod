@@ -738,15 +738,20 @@ public class ForgeItems {
     public static final RegistryObject<Item> MAX_STAND_DISC_RATT = addToDiscTab(ITEMS.register("max_ratt_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersRatt(null))));
 
+    public static final RegistryObject<Item> STAND_DISC_KILLER_QUEEN = addToDiscTab(ITEMS.register("killer_queen_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersKillerQueen(null))));
+    public static final RegistryObject<Item> MAX_STAND_DISC_KILLER_QUEEN = addToDiscTab(ITEMS.register("max_killer_queen_disc",
+            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersKillerQueen(null))));
+
     public static final RegistryObject<Item> STAND_DISC_PURPLE_HAZE = addToWIPTab(ITEMS.register("purple_haze_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersPurpleHaze(null))));
     public static final RegistryObject<Item> MAX_STAND_DISC_PURPLE_HAZE = addToWIPTab(ITEMS.register("max_purple_haze_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersPurpleHaze(null))));
 
- 	public static final RegistryObject<Item> STAND_DISC_KILLER_QUEEN = addToWIPTab(ITEMS.register("killer_queen_disc",
-            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersKillerQueen(null))));
-    public static final RegistryObject<Item> MAX_STAND_DISC_KILLER_QUEEN = addToWIPTab(ITEMS.register("max_killer_queen_disc",
-            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersKillerQueen(null))));
+ 	public static final RegistryObject<Item> STAND_DISC_BAD_COMPANY = addToWIPTab(ITEMS.register("bad_company_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersBadCompany(null))));
+    public static final RegistryObject<Item> MAX_STAND_DISC_BAD_COMPANY = addToWIPTab(ITEMS.register("max_bad_company_disc",
+            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersBadCompany(null))));
 
     public static final RegistryObject<Item> KIRA_PART_FOUR_MASK = addToWIPTab(ITEMS.register(
             "kira_part_four_mask", () -> new MaskItem(new Item.Properties().stacksTo(1), new KiraPartFourVisage(null))));
@@ -853,6 +858,8 @@ public class ForgeItems {
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersMandom(null))));
     public static final RegistryObject<Item> STAND_DISC_CENTURY_BOY = addToWIPTab(ITEMS.register("20th_century_boy_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new Powers20thCenturyBoy(null))));
+    public static final RegistryObject<Item> STAND_DISC_LYIN_EYES = addToWIPTab(ITEMS.register("lyin_eyes_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersLyinEyes(null))));
 
     public static final RegistryObject<Item> STAND_DISC_CALIFORNIA_KING_BED = addToDiscTab(ITEMS.register("california_king_bed_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCalifornia(null))));

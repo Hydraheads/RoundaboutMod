@@ -11,9 +11,7 @@ import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
-import net.hydra.jojomod.entity.objects.FallingBannerEntity;
-import net.hydra.jojomod.entity.objects.GentlyWeepsEntity;
-import net.hydra.jojomod.entity.objects.IceTwisterEntity;
+import net.hydra.jojomod.entity.objects.*;
 import net.hydra.jojomod.entity.paintings.BirthOfVenusPainting;
 import net.hydra.jojomod.entity.paintings.MonaLisaPainting;
 import net.hydra.jojomod.entity.paintings.VanGoughPainting;
@@ -633,6 +631,27 @@ public class FabricEntities {
                     new ResourceLocation(Roundabout.MOD_ID, "cowboy_sabbath"),
                     EntityType.Builder.of(CowboySabbathEntity::new, MobCategory.MISC).
                             sized(0.60F, 1.6f).clientTrackingRange(14).build(Roundabout.MOD_ID+":cowboy_sabbath")
+            );
+    public static final EntityType<GrabbedMobSoul> GRABBED_MOB_SOUL =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "bs_mob_soul"),
+                    EntityType.Builder.of(GrabbedMobSoul::new, MobCategory.MISC).
+                            sized(0.35F, 0.35f).clientTrackingRange(14).build(Roundabout.MOD_ID+":bs_mob_soul")
+            );
+    public static final EntityType<GrabbedMobSoulPlayerLarge> GRABBED_PLAYER_SOUL =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "bs_player_soul"),
+                    EntityType.Builder.of(GrabbedMobSoulPlayerLarge::new, MobCategory.MISC).
+                            sized(0.4F, 1.8f).clientTrackingRange(14).build(Roundabout.MOD_ID+":bs_player_soul")
+            );
+    public static final EntityType<GrabbedMobSoulPlayerSlim> GRABBED_PLAYER_SOUL_SLIM =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "bs_player_soul_slim"),
+                    EntityType.Builder.of(GrabbedMobSoulPlayerSlim::new, MobCategory.MISC).
+                            sized(0.4F, 1.8f).clientTrackingRange(14).build(Roundabout.MOD_ID+":bs_player_soul_slim")
             );
         public static final EntityType<WalkingHeartEntity> WALKING_HEART =
                 Registry.register(
@@ -1309,6 +1328,9 @@ public class FabricEntities {
                 ModEntities.BEACH_SABBATH = BEACH_SABBATH;
                 ModEntities.SANTA_SABBATH = SANTA_SABBATH;
                 ModEntities.COWBOY_SABBATH = COWBOY_SABBATH;
+                ModEntities.GRABBED_MOB_SOUL = GRABBED_MOB_SOUL;
+                ModEntities.GRABBED_PLAYER_SOUL = GRABBED_PLAYER_SOUL;
+                ModEntities.GRABBED_PLAYER_SOUL_SLIM = GRABBED_PLAYER_SOUL_SLIM;
                 ModEntities.WALKING_HEART = WALKING_HEART;
                 ModEntities.PEARL_JAM = PEARL_JAM;
                 ModEntities.JUSTICE_PIRATE = JUSTICE_PIRATE;
@@ -1320,8 +1342,8 @@ public class FabricEntities {
                 ModEntities.ANUBIS = ANUBIS;
                 ModEntities.DIVER_DOWN = DIVER_DOWN;
                 ModEntities.DIVER_DOWN_BETA = DIVER_DOWN_BETA;
-        ModEntities.DIVER_DOWN_WORLD = DIVER_DOWN_WORLD;
-        ModEntities.DIVER_DROWNED = DIVER_DROWNED;
+                ModEntities.DIVER_DOWN_WORLD = DIVER_DOWN_WORLD;
+                ModEntities.DIVER_DROWNED = DIVER_DROWNED;
                 ModEntities.DIVER_KICK = DIVER_KICK;
                 ModEntities.SILVER_CHARIOT = SILVER_CHARIOT;
                 ModEntities.THROWN_HARPOON = THROWN_HARPOON;
@@ -1536,11 +1558,14 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(BEACH_SABBATH, BlackSabbathEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SANTA_SABBATH, BlackSabbathEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(COWBOY_SABBATH, BlackSabbathEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(GRABBED_MOB_SOUL, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(GRABBED_PLAYER_SOUL, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(GRABBED_PLAYER_SOUL_SLIM, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(WALKING_HEART, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(DIVER_DOWN, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(DIVER_DOWN_BETA, StandEntity.createStandAttributes());
-        FabricDefaultAttributeRegistry.register(DIVER_DOWN_WORLD, StandEntity.createStandAttributes());
-        FabricDefaultAttributeRegistry.register(DIVER_DROWNED, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(DIVER_DOWN_WORLD, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(DIVER_DROWNED, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SILVER_CHARIOT, StandEntity.createStandAttributes());
 
 
