@@ -2602,6 +2602,8 @@
 
   "ability.roundabout.lyin_eyes_placeholder": "Would you still love me",
   "ability.roundabout.lyin_eyes_placeholder.desc": "if I were a worm? \uD83E\uDD7A",
+  "ability.roundabout.lyin_eyes_inventory": "Inventory Reader",
+  "ability.roundabout.lyin_eyes_inventory.desc": "The nematodes gather around to show you what items a player has in their inventory.",
   "container.roundabout.lyin_eyes_inventory": " ",
 
   "ability.roundabout.emperor_shoot": "Shoot",

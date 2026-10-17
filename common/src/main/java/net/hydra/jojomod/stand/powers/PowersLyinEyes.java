@@ -221,7 +221,7 @@ public class PowersLyinEyes extends NewDashPreset {
         setSkillIcon(context, x, y, 1, StandIcons.LYIN_EYES_PLACEHOLDER, PowerIndex.SKILL_1);
         setSkillIcon(context, x, y, 2, StandIcons.LYIN_EYES_PLACEHOLDER, PowerIndex.SKILL_2);
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
-        setSkillIcon(context, x, y, 4, StandIcons.LYIN_EYES_PLACEHOLDER, PowerIndex.SKILL_4);
+        setSkillIcon(context, x, y, 4, StandIcons.LYIN_EYES_INVENTORY, PowerIndex.SKILL_4);
     }
 
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos,
@@ -233,8 +233,8 @@ public class PowersLyinEyes extends NewDashPreset {
                 "instruction.roundabout.press_skill", StandIcons.LYIN_EYES_PLACEHOLDER, 2, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE, 3, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.lyin_eyes_placeholder",
-                "instruction.roundabout.press_skill", StandIcons.LYIN_EYES_PLACEHOLDER, 4, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.lyin_eyes_inventory",
+                "instruction.roundabout.press_skill", StandIcons.LYIN_EYES_INVENTORY, 4, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.lyin_eyes_placeholder",
                 "instruction.roundabout.passive", StandIcons.LYIN_EYES_PLACEHOLDER, 0, level, bypas));
         return $$1;
