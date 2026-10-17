@@ -386,6 +386,15 @@ public class PowersDiverDown extends NewPunchingStand {
         }
     }
 
+    @Override
+    public float getPunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.26F));
+        } else {
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(4.0F));
+        }
+    }
+
     // mob AI here
 
     private int creeperDodgeTimer = 0;
@@ -1853,17 +1862,31 @@ public class PowersDiverDown extends NewPunchingStand {
             basis *= 0.3f;
         }
         if (inZipMode()) {
+            //enchantment thing copied and adjusted from above
+            float sneakSpeed = Mth.clamp(0.3F + EnchantmentHelper.getSneakingSpeedBonus(this.getSelf()), 0.0F, 1.0F);
+            float enchantmentMultiplier = sneakSpeed / 0.3F;
+
             if (isHoldingSneak()) {
-                basis *= 3.32F; // slow crawl when holding Shift (1.295 base crawl speed * 3.32 modifier = ~4.3
-                // m/s)
+                basis *= 3.32F;
             } else {
-                basis *= 5.503F; // 1.295 base crawl speed * 5.303 modifier = ~7.127 m/s
+                basis *= 5.503F;
             }
+
+            basis *= enchantmentMultiplier;
+
             if (this.self.level().isClientSide() && ClientUtil.isMovingDiagonally()) {
                 basis *= 0.7071F;
             }
         }
         return super.inputSpeedModifiers(basis);
+    }
+
+    @Override
+    public boolean cancelSprintJump() {
+        if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+            return true;
+        }
+        return super.cancelSprintJump();
     }
 
     //used with attackTimeDuring to activate moves when it hits 0
@@ -1914,7 +1937,7 @@ public class PowersDiverDown extends NewPunchingStand {
         this.setActivePowerPhase(this.getActivePowerPhaseMax());
 
         boolean isFullyCharged = this.chargedPhasePunch >= getMaxPhasePunchTime();
-        float reach = 5.5F;
+        float reach = 3.5F;
         float defaultAngle = 25F;
 
         if (this.self instanceof Player) {
@@ -3429,10 +3452,12 @@ public class PowersDiverDown extends NewPunchingStand {
 
             launchX = Math.min(2.9D, Math.max(-2.9D, launchX));
             launchZ = Math.min(2.9D, Math.max(-2.9D, launchZ));
-            if (DamageHandler.StandDamageEntity(victim, getKickTrapStrength(victim), this.self)) {
+
+            // checks to see if damage was blocked so it won't kb
+            DamageSource source = ModDamageTypes.of(victim.level(), ModDamageTypes.STAND, this.self);
+            boolean blocked = victim.isDamageSourceBlocked(source);
+            if (DamageHandler.StandDamageEntity(victim, getKickTrapStrength(victim), this.self) && !blocked) {
                 MainUtil.takeLiteralUnresistableKnockbackWithY(victim, launchX, launchY, launchZ);
-                victim.hurtMarked = true;
-                victim.hasImpulse = true;
             }
 
             // play effects sounds and stuff here
@@ -3977,10 +4002,11 @@ public class PowersDiverDown extends NewPunchingStand {
             if (player.isSprinting()) {
                 player.setSprinting(false);
             }
-            Vec3 forward = player.getForward();
-            double walkSpeed = 0.4317D;
-            player.setDeltaMovement(forward.x * walkSpeed, player.getDeltaMovement().y, forward.z * walkSpeed);
-            player.hurtMarked = true;
+            if (level.isClientSide()) {
+                Vec3 forward = player.getForward();
+                double walkSpeed = 0.4317D;
+                player.setDeltaMovement(forward.x * walkSpeed, player.getDeltaMovement().y, forward.z * walkSpeed);
+            }
             return;
         } else if (MainUtil.isBossMob(host)) {
             Vec3 forward = host.getForward();
@@ -4015,10 +4041,18 @@ public class PowersDiverDown extends NewPunchingStand {
                 }
             }
 
+            mob.setTarget(null);
+            mob.setAggressive(false);
+
+            // ughhh skeletons still draw an arrow ugh
+            if (mob.isUsingItem()) {
+                mob.stopUsingItem();
+            }
+
             if (nearestTarget != null) {
                 // need this desiredSpeed thing because villagers zoom away when yuo use ribcage trap on them
                 double desiredSpeed = 0.23D;
-                double baseSpeed = mob.getAttributeValue(Attributes.MOVEMENT_SPEED);
+                double baseSpeed = mob.getAttributeBaseValue(Attributes.MOVEMENT_SPEED);
                 double speedModifier = baseSpeed > 0 ? (desiredSpeed / baseSpeed) : 1.0D;
 
                 mob.getNavigation().moveTo(nearestTarget, speedModifier);
@@ -4033,7 +4067,7 @@ public class PowersDiverDown extends NewPunchingStand {
                 // keep walking forward in straight line
                 if (this.ribcageWalkDirection != null) {
                     double desiredSpeed = 0.23D;
-                    double baseSpeed = mob.getAttributeValue(Attributes.MOVEMENT_SPEED);
+                    double baseSpeed = mob.getAttributeBaseValue(Attributes.MOVEMENT_SPEED);
                     double speedModifier = baseSpeed > 0 ? (desiredSpeed / baseSpeed) : 1.0D;
 
                     Vec3 targetWalkPos = host.position().add(this.ribcageWalkDirection.scale(3.0D));
@@ -5222,9 +5256,9 @@ public class PowersDiverDown extends NewPunchingStand {
     private float getPhasePunchKnockback() {
         float charge = getChargedPercent();
         if (charge >= 1) {
-            return (((float) this.chargedPhasePunch / (float) getMaxPhasePunchTime()) * 2.3F);
+            return (((float) this.chargedPhasePunch / (float) getMaxPhasePunchTime()) * 2.1F);
         } else if (charge >= 0.5F) {
-            return 0.7F;
+            return 0.6F;
         }
         return 0.1F;
     }
@@ -5270,9 +5304,9 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     private void updatePhasePunchCharge() {
-        // 20 ticks = 1 second, rn it's at 80 ticks so you can hold the move for 4
-        // seconds after max charge.
-        if (this.attackTimeDuring >= 80) {
+        // 20 ticks = 1 second, rn it's at 10 ticks so you can hold the move for half a
+        // second after max charge.
+        if (this.attackTimeDuring >= 10) {
             this.stopSoundsIfNearby(IMPALE_NOISE, 100, true);
             if (this.getSelf() instanceof Player && this.getSelf().level().isClientSide() && isPacketPlayer()) {
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
