@@ -1226,6 +1226,7 @@
   "sounds.roundabout.diver_down_spring":  "SPROING!",
   "sounds.roundabout.diver_down_ribcage":  "Ribcage Snaps",
   "sounds.roundabout.diver_down_bomb":  "Head Explodes",
+
   "sounds.roundabout.anasui_visage_equip":  "Anasui speaks",
   "sounds.roundabout.anasui_hurt_1":  "Anasui hurt",
   "sounds.roundabout.anasui_hurt_2":  "Anasui hurt",
@@ -1261,6 +1262,9 @@
   "sounds.roundabout.anasui_jotaro_2":  "Asks for approval",
   "sounds.roundabout.anasui_pucci_1":  "Protecting Jolyne",
   "sounds.roundabout.anasui_pucci_2":  "Protecting Jolyne",
+
+  "sounds.roundabout.lyin_eyes_summon":  "Stand summoned",
+
   "sounds.roundabout.vampire_dive":  "Whoosh",
   "sounds.roundabout.punch_sfx1":  "Air Cracks",
   "sounds.roundabout.punch_sfx2":  "Air Cracks",

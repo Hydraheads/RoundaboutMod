@@ -1993,6 +1993,10 @@ public class ModSounds {
     public static final ResourceLocation ANASUI_PUCCI_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ANASUI_PUCCI_2);
     public static SoundEvent ANASUI_PUCCI_2_EVENT = SoundEvent.createVariableRangeEvent(ANASUI_PUCCI_2_ID);
 
+    public static final String LYIN_EYES_SUMMON = "lyin_eyes_summon";
+    public static final ResourceLocation LYIN_EYES_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+LYIN_EYES_SUMMON);
+    public static SoundEvent LYIN_EYES_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(LYIN_EYES_SUMMON_ID);
+
     public static final String SUMMON_GREEN_DAY = "summon_green_day";
     public static final ResourceLocation SUMMON_GREEN_DAY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_GREEN_DAY);
     public static SoundEvent SUMMON_GREEN_DAY_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_GREEN_DAY_ID);

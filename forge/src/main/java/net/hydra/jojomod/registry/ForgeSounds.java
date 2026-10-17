@@ -1125,6 +1125,9 @@ public class ForgeSounds {
     public static final RegistryObject<SoundEvent> ANASUI_PUCCI_2 =
             register(ModSounds.ANASUI_PUCCI_2, ModSounds.ANASUI_PUCCI_2_ID);
 
+    public static final RegistryObject<SoundEvent> LYIN_EYES_SUMMON =
+            register(ModSounds.LYIN_EYES_SUMMON, ModSounds.LYIN_EYES_SUMMON_ID);
+
     public static final RegistryObject<SoundEvent> SUMMON_GREEN_DAY =
             register(ModSounds.SUMMON_GREEN_DAY, ModSounds.SUMMON_GREEN_DAY_ID);
     public static final RegistryObject<SoundEvent> GREEN_DAY_SPIN =
