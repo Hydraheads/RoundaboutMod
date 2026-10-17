@@ -95,53 +95,6 @@ public class PowersLyinEyes extends NewDashPreset {
 
     // tick power end
 
-    // stand icons and info screen start
-
-    /**
-     * Renders the icons for the stand's abilities on the GUI. Comments will specify
-     * if icon is for courching, blocking, or normal.
-     */
-    @Override
-    public void renderIcons(GuiGraphics context, int x, int y) {
-        setSkillIcon(context, x, y, 1, StandIcons.LYIN_EYES_PLACEHOLDER, PowerIndex.SKILL_1);
-        setSkillIcon(context, x, y, 2, StandIcons.LYIN_EYES_PLACEHOLDER, PowerIndex.SKILL_2);
-        setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
-        setSkillIcon(context, x, y, 4, StandIcons.LYIN_EYES_PLACEHOLDER, PowerIndex.SKILL_4);
-    }
-
-    public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos,
-                                                  int topPos, byte level, boolean bypas) {
-        List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.lyin_eyes_placeholder",
-                "instruction.roundabout.press_attack", StandIcons.LYIN_EYES_PLACEHOLDER, 0, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.lyin_eyes_placeholder",
-                "instruction.roundabout.hold_block", StandIcons.LYIN_EYES_PLACEHOLDER, 0, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
-                "instruction.roundabout.hold_attack_crouch", StandIcons.DODGE, 0, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.lyin_eyes_placeholder",
-                "instruction.roundabout.barrage", StandIcons.LYIN_EYES_PLACEHOLDER, 0, level, bypas));
-        return $$1;
-    }
-
-    // stand icons and info screen end
-
-    // sounds start
-
-    @Override
-    public SoundEvent getSoundFromByte(byte soundChoice) {
-        if (soundChoice == SoundIndex.SUMMON_SOUND) {
-            return ModSounds.LYIN_EYES_SUMMON_EVENT;
-        }
-        return super.getSoundFromByte(soundChoice);
-    }
-
-    @Override
-    protected Byte getSummonSound() {
-        return SoundIndex.SUMMON_SOUND;
-    }
-
-    // sounds end
-
     // moves start
 
     @Override
@@ -171,6 +124,10 @@ public class PowersLyinEyes extends NewDashPreset {
             // minimap
             case SKILL_2_NORMAL -> {
                 //tryPlantKickTrap();
+            }
+            // dash
+            case SKILL_3_NORMAL -> {
+                dash();
             }
             // inventory reader
             case SKILL_4_NORMAL -> {
@@ -252,6 +209,55 @@ public class PowersLyinEyes extends NewDashPreset {
     }
 
     // moves end
+
+    // stand icons and info screen start
+
+    /**
+     * Renders the icons for the stand's abilities on the GUI. Comments will specify
+     * if icon is for courching, blocking, or normal.
+     */
+    @Override
+    public void renderIcons(GuiGraphics context, int x, int y) {
+        setSkillIcon(context, x, y, 1, StandIcons.LYIN_EYES_PLACEHOLDER, PowerIndex.SKILL_1);
+        setSkillIcon(context, x, y, 2, StandIcons.LYIN_EYES_PLACEHOLDER, PowerIndex.SKILL_2);
+        setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        setSkillIcon(context, x, y, 4, StandIcons.LYIN_EYES_PLACEHOLDER, PowerIndex.SKILL_4);
+    }
+
+    public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos,
+                                                  int topPos, byte level, boolean bypas) {
+        List<AbilityIconInstance> $$1 = Lists.newArrayList();
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.lyin_eyes_placeholder",
+                "instruction.roundabout.press_skill", StandIcons.LYIN_EYES_PLACEHOLDER, 1, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.lyin_eyes_placeholder",
+                "instruction.roundabout.press_skill", StandIcons.LYIN_EYES_PLACEHOLDER, 2, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
+                "instruction.roundabout.press_skill", StandIcons.DODGE, 3, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.lyin_eyes_placeholder",
+                "instruction.roundabout.press_skill", StandIcons.LYIN_EYES_PLACEHOLDER, 4, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.lyin_eyes_placeholder",
+                "instruction.roundabout.passive", StandIcons.LYIN_EYES_PLACEHOLDER, 0, level, bypas));
+        return $$1;
+    }
+
+    // stand icons and info screen end
+
+    // sounds start
+
+    @Override
+    public SoundEvent getSoundFromByte(byte soundChoice) {
+        if (soundChoice == SoundIndex.SUMMON_SOUND) {
+            return ModSounds.LYIN_EYES_SUMMON_EVENT;
+        }
+        return super.getSoundFromByte(soundChoice);
+    }
+
+    @Override
+    protected Byte getSummonSound() {
+        return SoundIndex.SUMMON_SOUND;
+    }
+
+    // sounds end
 
     // basic setters and getters here
 
