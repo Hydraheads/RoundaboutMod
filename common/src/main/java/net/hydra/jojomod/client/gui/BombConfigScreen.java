@@ -181,7 +181,7 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
             Level level = Minecraft.getInstance().player.level();
 
 			if (this.context == 0 && (!ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction
-                    || !level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING))) {status = 3;}
+                    || !level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) || ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims)) {status = 3;}
             if (this.context == AUTO_BUBBLE_PLANT) {
                 if (((StandUser)Minecraft.getInstance().player).roundabout$getStandPowers() instanceof PowersKillerQueen PK && !PK.canUseStrayCat()) {
                     status = 3;
@@ -212,7 +212,7 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
 		
 		private void drawIcon(GuiGraphics guiGraphics) {
 			int status = getMode(false);
-            if (this.context == BLOCK_DESTRUCTION && !ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction) {status = 2;}
+            if (this.context == BLOCK_DESTRUCTION && (!ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction || ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims)) {status = 2;}
             if (Minecraft.getInstance().player != null && ((StandUser)Minecraft.getInstance().player).roundabout$getStandPowers() instanceof PowersKillerQueen PK && !PK.canUseStrayCat()) {
                 status = 3;
             }
