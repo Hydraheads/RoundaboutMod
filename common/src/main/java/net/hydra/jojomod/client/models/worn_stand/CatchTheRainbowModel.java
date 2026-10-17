@@ -79,6 +79,10 @@ public class CatchTheRainbowModel extends PsuedoHierarchicalModel {
 			"textures/stand/catch_the_rainbow/strider_healthy.png");
 	public static ResourceLocation strider_sick = new ResourceLocation(Roundabout.MOD_ID,
 			"textures/stand/catch_the_rainbow/strider_sick.png");
+	public static ResourceLocation cmy = new ResourceLocation(Roundabout.MOD_ID,
+			"textures/stand/catch_the_rainbow/cmy.png");
+	public static ResourceLocation magma = new ResourceLocation(Roundabout.MOD_ID,
+			"textures/stand/catch_the_rainbow/magma.png");
 
 	public ResourceLocation getTextureLocation(Entity context, byte skin) {
 		if (!(((PowersCatchTheRainbow) ((StandUser) context).roundabout$getStandPowers()).isInRain())) {
@@ -100,6 +104,12 @@ public class CatchTheRainbowModel extends PsuedoHierarchicalModel {
 				}
 				case PowersCatchTheRainbow.STRIDER -> {
 					return strider_sick;
+				}
+				case PowersCatchTheRainbow.CMY -> {
+					return cmy;
+				}
+				case PowersCatchTheRainbow.MAGMA -> {
+					return magma;
 				}
 				default -> {
 					return base;
@@ -125,6 +135,12 @@ public class CatchTheRainbowModel extends PsuedoHierarchicalModel {
 				}
 				case PowersCatchTheRainbow.STRIDER -> {
 					return strider_healthy;
+				}
+				case PowersCatchTheRainbow.CMY -> {
+					return cmy;
+				}
+				case PowersCatchTheRainbow.MAGMA -> {
+					return magma;
 				}
 				default -> {
 					return base;

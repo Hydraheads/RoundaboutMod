@@ -411,7 +411,7 @@ public class SeperatedArmEntity extends StandEntity {
                                 this.getZ() + randZ,
                                 1, 0, 0, 0, 0);
                     }else if (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersCatchTheRainbow){
-                        ((ServerLevel) this.level()).sendParticles(ParticleTypes.DRIPPING_DRIPSTONE_WATER,
+                        ((ServerLevel) this.level()).sendParticles(ParticleTypes.SPLASH,
                                 this.getX(),
                                 this.getY() + 0.15,
                                 this.getZ(),

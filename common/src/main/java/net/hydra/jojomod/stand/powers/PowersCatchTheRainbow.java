@@ -9,18 +9,13 @@ import net.hydra.jojomod.entity.substand.CTRplatformEntity;
 import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
-import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.SoundIndex;
-import net.hydra.jojomod.event.powers.ModDamageTypes;
-import net.hydra.jojomod.event.powers.StandPowers;
-import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
-import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
@@ -33,7 +28,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -54,8 +48,10 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.apache.commons.compress.utils.Lists;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import static net.hydra.jojomod.event.index.PowerIndex.POWER_2;
 
@@ -119,7 +115,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         {
             case SoundIndex.SUMMON_SOUND -> {
                 //change
-                return ModSounds.GREEN_DAY_MOLD_SPREAD_EVENT;
+                return ModSounds.CTR_SUMMON_EVENT;
             }
         }
         return super.getSoundFromByte(soundChoice);
@@ -147,17 +143,21 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     //skins
     public static final byte
             BASE = 1,
-            NEON = 2,
-            SKELETONCTR = 3,
-            GHAST = 4,
-            STRIDER = 5,
-            LALI_HO = 6,
-            EYE = 7;
+            CMY = 2,
+            NEON = 3,
+            MAGMA = 4,
+            SKELETONCTR = 5,
+            GHAST = 6,
+            STRIDER = 7,
+            LALI_HO = 8,
+            EYE = 9;
 
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
                 BASE,
+                CMY,
+                MAGMA,
                 NEON,
                 SKELETONCTR,
                 GHAST,
@@ -177,6 +177,8 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                     case NEON -> Component.translatable("skins.roundabout.catch_the_rainbow.neon_off");
                     case SKELETONCTR -> Component.translatable("skins.roundabout.catch_the_rainbow.skeleton");
                     case STRIDER -> Component.translatable("skins.roundabout.catch_the_rainbow.strider_sick");
+                    case MAGMA -> Component.translatable("skins.roundabout.catch_the_rainbow.magma");
+                    case CMY -> Component.translatable("skins.roundabout.catch_the_rainbow.cmy");
                     default -> Component.translatable("skins.roundabout.catch_the_rainbow.base");
                 };
             } else {
@@ -187,6 +189,8 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                     case NEON -> Component.translatable("skins.roundabout.catch_the_rainbow.neon_on");
                     case SKELETONCTR -> Component.translatable("skins.roundabout.catch_the_rainbow.skeleton");
                     case STRIDER -> Component.translatable("skins.roundabout.catch_the_rainbow.strider_healthy");
+                    case MAGMA -> Component.translatable("skins.roundabout.catch_the_rainbow.magma");
+                    case CMY -> Component.translatable("skins.roundabout.catch_the_rainbow.cmy");
                     default -> Component.translatable("skins.roundabout.catch_the_rainbow.base");
                 };
             }
@@ -199,6 +203,8 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                 case NEON -> Component.translatable("skins.roundabout.catch_the_rainbow.neon_off");
                 case SKELETONCTR -> Component.translatable("skins.roundabout.catch_the_rainbow.skeleton");
                 case STRIDER -> Component.translatable("skins.roundabout.catch_the_rainbow.strider_sick");
+                case MAGMA -> Component.translatable("skins.roundabout.catch_the_rainbow.magma");
+                case CMY -> Component.translatable("skins.roundabout.catch_the_rainbow.cmy");
                 default -> Component.translatable("skins.roundabout.catch_the_rainbow.base");
             };
         }
@@ -400,8 +406,10 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         super.tickPower();
         if (deathTimer != 0) deathTimer --;
 
-        if (self.onGround())
+        if (self.onGround()) {
             dropTimer = 0;
+            canCreatePlatform = false;
+        }
 
         if (isInRain() && PowerTypes.hasStandActive(self)) {
             if (isHoldingSneak()) {
@@ -428,15 +436,6 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                     dropTimer = 0;
                 }
             }
-
-            double randX = Roundabout.RANDOM.nextDouble(-0.3, 0.3);
-            double randY = Roundabout.RANDOM.nextDouble(-0.2, 0.2);
-            double randZ = Roundabout.RANDOM.nextDouble(-0.3, 0.3);
-            ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.DRIPPING_DRIPSTONE_WATER,
-                    this.self.getX() + randX,
-                    this.self.getY() + randY + 0.15,
-                    this.self.getZ() + randZ,
-                    1, 0, 0, 0, 0);
         }
 
         if (isInRain() && hasStandActive(self)) {
@@ -513,6 +512,8 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                 getStandUserSelf().roundabout$setDazed((byte)0);
                 playSoundIfPossible(self.level(), null, self.blockPosition(), ModSounds.VAMPIRE_AWAKEN_EVENT,
                         SoundSource.PLAYERS, 1F, 1F);
+                playSoundIfPossible(self.level(), null, self.blockPosition(), ModSounds.CTR_LIFE_CLUTCH_EVENT,
+                        SoundSource.PLAYERS, 1F, 1F);
                 return true;
             }
         }
@@ -567,7 +568,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                 double Pitch = Math.toRadians(this.self.getLookAngle().y);
                 double Zangle = Math.toRadians(this.self.getLookAngle().z);
                 double diameter = 0.6d;
-                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GREEN_DAY_STITCH_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.CTR_HEAL_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
                 for (int i = 0; i < 11; i = i + 1) {
                     sendParticlesIfPossible(self.level(), ParticleTypes.SPLASH,
                             this.getSelf().getX() + (diameter * Math.sin(i * 6)) * Math.cos(Xangle),
@@ -594,8 +595,28 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                 plat.setPos(getRayBlock(this.self, 0.0f).add(0, -2.35, 0));
                 this.self.level().addFreshEntity(plat);
             }
+            soundVariations.removeAll(soundVariations);
+
+            soundVariations.add(ModSounds.CTR_RAIN_STEP_1_EVENT);
+            soundVariations.add(ModSounds.CTR_RAIN_STEP_2_EVENT);
+            soundVariations.add(ModSounds.CTR_RAIN_STEP_3_EVENT);
+            soundVariations.add(ModSounds.CTR_RAIN_STEP_4_EVENT);
+            soundVariations.add(ModSounds.CTR_RAIN_STEP_5_EVENT);
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(), getRandomSound(soundVariations), SoundSource.PLAYERS, 1.0F, 1.0F);
         }
     }
+
+    //sound variations
+    private static <T> T getRandomSound(List<T> list) {
+        if (list == null || list.isEmpty()) {
+            return null; // Return null for empty or null list
+        }
+        Random random = new Random();
+        int randomIndex = random.nextInt(list.size());
+        return list.get(randomIndex);
+    }
+
+    List<SoundEvent> soundVariations = new ArrayList<>();
 
     //drop down
 
@@ -674,7 +695,12 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                 this.self.level().addFreshEntity(SAE);
                 SAE.jump(rayCastFromSelf(20));
                 Off_hand_entity = SAE;
-                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GREEN_DAY_SPLIT_EVENT, SoundSource.PLAYERS, 1.0F, 2.0F);
+
+                soundVariations.removeAll(soundVariations);
+
+                soundVariations.add(ModSounds.CTR_DETACH_1_EVENT);
+                soundVariations.add(ModSounds.CTR_DETACH_2_EVENT);
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), getRandomSound(soundVariations), SoundSource.PLAYERS, 1.0F, 1.0F);
             }
             HasOffHand = false;
             this.self.getItemInHand(InteractionHand.OFF_HAND).setCount(0);
@@ -730,7 +756,8 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             double Pitch = Math.toRadians(this.self.getLookAngle().y);
             double Zangle = Math.toRadians(this.self.getLookAngle().z);
             double diameter = 0.6d;
-            playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GREEN_DAY_STITCH_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.CTR_HEAL_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
             for (int i = 0; i < 11; i = i + 1) {
                 sendParticlesIfPossible(self.level(), ParticleTypes.SPLASH,
                         this.getSelf().getX() + (diameter * Math.sin(i * 6)) * Math.cos(Xangle),
