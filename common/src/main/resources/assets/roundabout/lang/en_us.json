@@ -2565,7 +2565,7 @@
   "ability.roundabout.diver_submerge": "Diver Submerge",
   "ability.roundabout.diver_submerge.desc": "Submerge your stand into another person! Then, change their insides to suit you, whether that change is positive... or not.",
   "ability.roundabout.diver_disassemble": "Block Disassemble",
-  "ability.roundabout.diver_disassemble.desc": "Break down a block into it's basic crafting components. This move only works on blocks that only use 1 type of ingredient, don't create multiple blocks form crafting, and don't return items when being crafted.",
+  "ability.roundabout.diver_disassemble.desc": "Break down a block into it's basic crafting components. This move only works on blocks that use 1 type of ingredient, don't create multiple blocks from crafting, and don't return items when being crafted.",
   "ability.roundabout.diver_self_submerge": "Self Submerge",
   "ability.roundabout.diver_self_submerge.desc": "Submerge your stand into yourself. This lets you toggle redirection early, and lets you apply effects on yourself",
   "ability.roundabout.diver_selection": "Effect Selection",
