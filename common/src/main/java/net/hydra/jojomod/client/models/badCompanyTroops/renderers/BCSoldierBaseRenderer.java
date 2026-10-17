@@ -52,7 +52,6 @@ public class BCSoldierBaseRenderer extends StandRenderer<BCSoldier> {
             VertexConsumer vertexConsumerResult = vertexConsumer.getBuffer(RenderType.entityTranslucent(getTextureLocation(mobEntity)));
             this.model.renderToBuffer(matrixStack, vertexConsumerResult, i, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, i);
             matrixStack.popPose();
-            matrixStack.popPose();
         }
 
 
