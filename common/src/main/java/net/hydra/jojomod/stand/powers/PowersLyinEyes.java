@@ -34,6 +34,8 @@ public class PowersLyinEyes extends NewDashPreset {
     private boolean hadInventoryMenuOpen = false;
     //inventory reading target;
     private Entity inventoryTarget = null;
+    //highlight mode
+    private boolean visionModeClient = false;
 
     // basic stand registry stuff
     public PowersLyinEyes(LivingEntity self) {super(self);}
@@ -119,7 +121,7 @@ public class PowersLyinEyes extends NewDashPreset {
         switch (context) {
             // entity highlighter
             case SKILL_1_NORMAL -> {
-                //tryStartDiveClient();
+                switchVisionClient();
             }
             // minimap
             case SKILL_2_NORMAL -> {
@@ -143,6 +145,21 @@ public class PowersLyinEyes extends NewDashPreset {
             return readInventory(value);
         }
         return super.tryIntPower(move, forced, value);
+    }
+
+    @Override
+    public boolean setPowerOther(int move, int lastMove) {
+        switch (move) {
+            case PowerIndex.POWER_4 -> {
+                switchVision();
+            }
+        }
+        return super.setPowerOther(move, lastMove);
+    }
+
+    @Override
+    public void updateIntMove(int in) {
+        super.updateIntMove(in);
     }
 
     //used with attackTimeDuring to activate moves when it hits 0
@@ -198,6 +215,30 @@ public class PowersLyinEyes extends NewDashPreset {
     }
 
     // inventory reading stop
+
+    // entity highlighter start
+
+    public void switchVisionClient(){
+        this.tryPower(PowerIndex.POWER_4, true);
+        tryPowerPacket(PowerIndex.POWER_4);
+        if (isClient() && visionModeClient) {
+            // play sound here
+            // this.self.playSound(ModSounds.MANHATTAN_VISION_EVENT, 150F, 0.9F);
+        }
+    }
+
+    public void switchVision(){
+        if (isClient() && this.self instanceof Player PE) {
+            if (!visionModeClient) {
+                visionModeClient = true;
+                PE.displayClientMessage(Component.translatable("text.roundabout.lyin_eyes.tension_highlight").withStyle(ChatFormatting.GOLD), true);
+            }
+            else{
+                visionModeClient = false;
+                PE.displayClientMessage(Component.translatable("text.roundabout.lyin_eyes.tension_highlight_off").withStyle(ChatFormatting.GOLD), true);
+            }
+        }
+    }
 
     // for tracking open menus
 
@@ -263,6 +304,7 @@ public class PowersLyinEyes extends NewDashPreset {
 
     public int getSummonOverlayTicks() {return summonOverlayTicks;}
     public int getGatherOverlayTicks() {return gatherOverlayTicks;}
+    public boolean getVisionModeClient() {return visionModeClient;}
 
     // WIP FEATURES BELOW HERE, DELETE WHEN DONE
 
