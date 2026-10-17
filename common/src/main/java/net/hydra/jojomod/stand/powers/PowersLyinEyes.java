@@ -2,21 +2,29 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.menu.LyinEyesInventoryMenu;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.List;
 
 public class PowersLyinEyes extends NewDashPreset {
+    // for move ids accessed here. update public bytes every time this is edited.
+    private static final byte
+        READ_INVENTORY = 53;
     // stand summoning variable
     private int summonOverlayTicks = 0;
     private boolean isSummon = false;
@@ -111,11 +119,92 @@ public class PowersLyinEyes extends NewDashPreset {
 
     // sounds end
 
+    // moves start
+
+    @Override
+    public boolean isAttackIneptVisually(byte activeP, int slot) {
+        // inventory reading
+        if (slot == 4) {
+            if (!isPlayerDetected()) {
+                return true;
+            }
+        }
+        return super.isAttackIneptVisually(activeP, slot);
+    }
+
+    /**
+     * Gets the input for the power based on the buttons pressed.
+     * Note, this is client side only. DO NOT FORGET!!!!
+     *
+     * @param context What button combination was pressed.
+     */
+    @Override
+    public void powerActivate(PowerContext context) {
+        switch (context) {
+            // entity highlighter
+            case SKILL_1_NORMAL -> {
+                //tryStartDiveClient();
+            }
+            // minimap
+            case SKILL_2_NORMAL -> {
+                //tryPlantKickTrap();
+            }
+            // inventory reader
+            case SKILL_4_NORMAL -> {
+                tryReadInventory();
+            }
+        }
+    }
+
+    @Override
+    public boolean tryIntPower(int move, boolean forced, int value) {
+        // inventory open thingy
+        if (move == READ_INVENTORY) {
+            return readInventory(value);
+        }
+        return super.tryIntPower(move, forced, value);
+    }
+
+    // inventory reading start
+
+    // used for visually inept
+    private boolean isPlayerDetected() {
+        Entity target = getTargetEntity(self, 20);
+        return target instanceof Player;
+    }
+
+    // client side power only, since inventories are client side, probably.
+    private void tryReadInventory() {
+        Entity target = getTargetEntity(self, 20);
+        if(target instanceof Player p) {
+            tryIntPowerPacket(READ_INVENTORY, target.getId());
+        }
+    }
+
+    // gets the player id from the server and opens up the menu
+    private boolean readInventory(int playerID) {
+        if (!this.self.level().isClientSide() && self instanceof ServerPlayer serverPlayer) {
+            if (this.getSelf() instanceof Player self) {
+                serverPlayer.displayClientMessage(Component.literal("AHHHH PLAYER DETECTED AHHHHH PANIC AHHH!!!!"), false);
+            }
+            Entity target = serverPlayer.level().getEntity(playerID);
+            if (target instanceof ServerPlayer targetPlayer) {
+                LyinEyesInventoryMenu.open(serverPlayer, targetPlayer);
+            }
+        }
+        return true;
+    }
+
+    // inventory reading stop
+
+    // moves end
+
     // basic setters and getters here
 
     public int getSummonOverlayTicks() {return summonOverlayTicks;}
 
     // WIP FEATURES BELOW HERE, DELETE WHEN DONE
+
     @Override
     public boolean isWip() {
         return true;
