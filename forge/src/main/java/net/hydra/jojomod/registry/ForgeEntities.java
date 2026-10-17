@@ -566,13 +566,13 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<GrabbedMobSoulPlayerLarge>> GRABBED_PLAYER_SOUL =
             ENTITY_TYPES.register("bs_player_soul", () ->
-                    EntityType.Builder.of(GrabbedMobSoulPlayerLarge::new, MobCategory.MISC).sized(0.5F, 0.5f).
+                    EntityType.Builder.of(GrabbedMobSoulPlayerLarge::new, MobCategory.MISC).sized(0.4F, 1.8f).
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "bs_player_soul").toString())
             );
     public static final RegistryObject<EntityType<GrabbedMobSoulPlayerSlim>> GRABBED_PLAYER_SOUL_SLIM =
             ENTITY_TYPES.register("bs_player_soul_slim", () ->
-                    EntityType.Builder.of(GrabbedMobSoulPlayerSlim::new, MobCategory.MISC).sized(0.5F, 0.5f).
+                    EntityType.Builder.of(GrabbedMobSoulPlayerSlim::new, MobCategory.MISC).sized(0.4F, 1.8f).
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "bs_player_soul_slim").toString())
             );
