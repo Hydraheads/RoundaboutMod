@@ -300,7 +300,7 @@ public abstract class HudRendering implements IHudAccess {
                 }
                 // Lyin Eyes gathering renderer
                 if (((StandUser) this.minecraft.player).roundabout$getStandPowers() instanceof PowersLyinEyes lyinEyes
-                        && lyinEyes.getGatherOverlayTicks() != 0) {
+                        && lyinEyes.getGatherOverlayTicks() != 0 && lyinEyes.getGatherOverlayTicks() != 7) {
                     // need to stop the thing from reaching 0, so i put an extra math method to clamp it.
                     int frame = Math.max(1, Math.min(lyinEyes.getGatherOverlayTicks(), 5));
                     // this copies PH distortion gui formatting since this is also an animation

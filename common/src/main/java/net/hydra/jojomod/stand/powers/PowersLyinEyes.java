@@ -32,6 +32,8 @@ public class PowersLyinEyes extends NewDashPreset {
     private boolean isSummon = false;
     private boolean isGather = false;
     private boolean hadInventoryMenuOpen = false;
+    //inventory reading target;
+    private Entity inventoryTarget = null;
 
     // basic stand registry stuff
     public PowersLyinEyes(LivingEntity self) {super(self);}
@@ -85,7 +87,7 @@ public class PowersLyinEyes extends NewDashPreset {
             summonOverlayTicks = Math.max(summonOverlayTicks - 1, 0);
         }
         if (isGather) {
-            gatherOverlayTicks = Math.min(gatherOverlayTicks + 1, 6);
+            gatherOverlayTicks = Math.min(gatherOverlayTicks + 1, 7);
         } else {
             gatherOverlayTicks = Math.max(gatherOverlayTicks - 1, 0);
         }
@@ -205,19 +207,21 @@ public class PowersLyinEyes extends NewDashPreset {
 
     // client side power only, since inventories are client side, probably.
     private void tryReadInventory() {
-        this.setAttackTimeDuring(0);
-        this.setActivePower(READ_INVENTORY);
-        isSummon = false;
-        isGather = true;
-        gatherOverlayTicks = 1;
+        this.inventoryTarget = getTargetEntity(self, 20);
+        if (this.inventoryTarget instanceof Player p) {
+            this.setAttackTimeDuring(0);
+            this.setActivePower(READ_INVENTORY);
+            isSummon = false;
+            isGather = true;
+            gatherOverlayTicks = 1;
+        }
     }
 
     // complete read inventory
     private void completeReadInventory() {
         if (this.getAttackTimeDuring() > 5) {
-            Entity target = getTargetEntity(self, 20);
-            if (target instanceof Player p) {
-                tryIntPowerPacket(FINISH_READ_INVENTORY, target.getId());
+            if (this.inventoryTarget instanceof Player p) {
+                tryIntPowerPacket(FINISH_READ_INVENTORY, this.inventoryTarget.getId());
             }
         }
     }
