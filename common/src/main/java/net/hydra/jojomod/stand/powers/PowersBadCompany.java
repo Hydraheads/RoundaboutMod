@@ -5,8 +5,8 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
-import net.hydra.jojomod.entity.badCompanyTroops.BCTroop;
-import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
+import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.badCompanyTroops.*;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -39,6 +39,7 @@ public class PowersBadCompany extends NewDashPreset {
         List<Byte> $$1 = Lists.newArrayList();
         return $$1;
     }
+
     public static final byte
         ANIME_SKIN = 1;
 
@@ -76,7 +77,6 @@ public class PowersBadCompany extends NewDashPreset {
     public void powerActivate(PowerContext context) {
         switch (context)
         {
-
             case SKILL_1_NORMAL, SKILL_1_GUARD -> {
                 openTroopSelector();
             }
@@ -94,13 +94,17 @@ public class PowersBadCompany extends NewDashPreset {
     public SoundEvent getSoundFromByte(byte soundChoice) {
         if (soundChoice == SoundIndex.SUMMON_SOUND) {
             return ModSounds.BC_TROOP_SUMMON_EVENT;
+        }else if (soundChoice == SoundIndex.SUMMON_SOUND_2) {
+            return ModSounds.BC_BUNDLE_SUMMON_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
 
     public float getSoundVolumeFromByte(byte soundChoice){
         if (soundChoice == SoundIndex.SUMMON_SOUND) {
-            return 0.7f;
+            return 0.6f;
+        }else if (soundChoice == SoundIndex.SUMMON_SOUND_2) {
+            return 0.6f;
         }
 
         return super.getSoundVolumeFromByte(soundChoice);
@@ -114,23 +118,67 @@ public class PowersBadCompany extends NewDashPreset {
     }
 
     private void openTroopSelector() {
-        initActiveTroops();
         ClientUtil.openTroopSelectionScreen();
     }
 
     public void selectedTroop(int id) {
         Roundabout.LOGGER.info("Selected Troop ID: {}", id);
        if (id == TROOP) {
-            Roundabout.LOGGER.info("Selected Troop!");
-        }else if (id == BUNDLE) {
-            Roundabout.LOGGER.info("Selected Bundle Troop!");
-        }else if (id == HELICOPTER) {
-            Roundabout.LOGGER.info("Selected Helicopter!");
+           tryIntPowerPacket(PowerIndex.POWER_1, id);
+           Roundabout.LOGGER.info("Selected Troop!");
+       }else if (id == BUNDLE) {
+           tryIntPowerPacket(PowerIndex.POWER_1, id);
+           Roundabout.LOGGER.info("Selected Bundle Troop!");
+       }else if (id == HELICOPTER) {
+           Roundabout.LOGGER.info("Selected Helicopter!");
        }else if (id == TANK) {
-            Roundabout.LOGGER.info("Selected Tank!");
-        }else {
-            Roundabout.LOGGER.info("Unknow ID: {}", id);
+           Roundabout.LOGGER.info("Selected Tank!");
+       }else {
+           Roundabout.LOGGER.info("Unknow ID: {}", id);
+       }
+    }
+
+    public boolean tryIntPower(int move, boolean forced, int chargeTime){
+        if (move == PowerIndex.POWER_1) {
+            Roundabout.LOGGER.info("received package on " + isClient());
+            if (chargeTime == 0) {
+                spawnSoldier(false);
+            }else if (chargeTime == 1) {
+                spawnSoldier(true);
+            }
+        }
+
+        return super.tryIntPower(move, forced, chargeTime);
+    }
+
+    public void spawnSoldier(boolean bundle) {
+        if (isClient()) { return; }
+
+        initActiveTroops();
+        BCSoldier soldier = ModEntities.BAD_COMPANY_SOLDIER.create(self.level());
+        if (soldier != null) {
+            soldier.setUser(self);
+            soldier.absMoveTo(
+                    self.getPosition(1).x,
+                    self.getPosition(1).y,
+                    self.getPosition(1).z
+            );
+            soldier.setBundle(bundle);
+            self.level().addFreshEntity(soldier);
+            activeTroops.add(soldier);
+            if (bundle) {
+                playStandUserOnlySoundsIfNearby(SoundIndex.SUMMON_SOUND_2, 8, false, false);
+            }else {
+                playStandUserOnlySoundsIfNearby(this.getSummonSound(), 8, false, false);
+            }
         }
     }
 
+    public void troopRemoved(BCTroop soldier) {
+        activeTroops.remove(soldier);
+    }
+
+    public boolean troopOnList(BCTroop soldier) {
+        return activeTroops.contains(soldier);
+    }
 }

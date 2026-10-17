@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.*;
+import net.hydra.jojomod.entity.badCompanyTroops.*;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.mobs.TerrierEntity;
@@ -1267,6 +1268,13 @@ public class FabricEntities {
                     EntityType.Builder.of(PurpleSmokeEntity::new, MobCategory.CREATURE).
                             sized(0.01f, 0.01f).clientTrackingRange(50).build(Roundabout.MOD_ID+":purple_smoke")
             );
+    public static final EntityType<BCSoldier> BAD_COMPANY_SOLDIER =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "bad_company_soldier"),
+                    EntityType.Builder.of(BCSoldier::new, MobCategory.CREATURE).
+                            sized(BCSoldier.size, BCSoldier.size).clientTrackingRange(30).build(Roundabout.MOD_ID+":bad_company_soldier")
+            );
     public static final EntityType<SheerHeartAttackEntity> SHEER_HEART_ATTACK =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
@@ -1402,6 +1410,8 @@ public class FabricEntities {
                 ModEntities.SILVER_CHARIOT_RAPIER = SILVER_CHARIOT_RAPIER;
                 ModEntities.SILVER_CHARIOT_RAPIER_PLATFORM = SILVER_CHARIOT_RAPIER_PLATFORM;
                 ModEntities.VIRUS_SPIT = VIRUS_SPIT;
+
+                ModEntities.BAD_COMPANY_SOLDIER = BAD_COMPANY_SOLDIER;
 
 
                 ModEntities.FALLEN_ZOMBIE = FALLEN_ZOMBIE;
@@ -1573,7 +1583,8 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(LEFT_SEPERATED_ARM_SLIM, SeperatedArmEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(MOLD_SPORE, MoldSporesEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(PURPLE_SMOKE, PurpleSmokeEntity.createStandAttributes());
-                
+                FabricDefaultAttributeRegistry.register(BAD_COMPANY_SOLDIER, BCSoldier.createStandAttributes());
+
                 FabricDefaultAttributeRegistry.register(SHEER_HEART_ATTACK, SheerHeartAttackEntity.createStandAttributes());
 
                 /*Spawn Weights and Biomes*/
