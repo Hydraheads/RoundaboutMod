@@ -41,7 +41,7 @@ public class GrabbedMobSoulRendererPlayerSlim<T extends GrabbedMobSoulPlayerSlim
         Player P =((Player)entity.getUser());
         if( P != null) {
             if (P.getGameProfile() != null) {
-                return MainUtil.getPlayerSkinWithRespectToVisage((Player) entity.getUser());
+                return MainUtil.getPlayerSkin((Player) entity.getUser());
             } else {
                 return NULL;
             }

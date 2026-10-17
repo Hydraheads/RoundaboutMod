@@ -181,9 +181,9 @@ public class MoldSporesEntity extends StandEntity {
                             //}
                             double damage = 0;
                             if (MainUtil.getReducedDamage(entity)) {
-                                damage = 4;
+                                damage = 2;
                             } else {
-                                damage = 8;
+                                damage = 4;
                             }
                             damage = (int) (damage * (fallDistance * 0.6F));
                             if (((StandUser) entity).getStaringYPos() - entity.getY() < 1) {
