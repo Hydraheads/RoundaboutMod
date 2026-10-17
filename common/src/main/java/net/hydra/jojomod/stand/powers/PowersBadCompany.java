@@ -1,10 +1,12 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.badCompanyTroops.BCTroop;
+import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -37,6 +39,21 @@ public class PowersBadCompany extends NewDashPreset {
         List<Byte> $$1 = Lists.newArrayList();
         return $$1;
     }
+    public static final byte
+        ANIME_SKIN = 1;
+
+    @Override
+    public List<Byte> getSkinList() {
+        List<Byte> list = Lists.newArrayList();
+        list.add(ANIME_SKIN);
+        return list;
+    }
+
+    public static final int
+        TROOP = 0,
+        BUNDLE = 1,
+        HELICOPTER = 2,
+        TANK = 3;
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
@@ -81,6 +98,14 @@ public class PowersBadCompany extends NewDashPreset {
         return super.getSoundFromByte(soundChoice);
     }
 
+    public float getSoundVolumeFromByte(byte soundChoice){
+        if (soundChoice == SoundIndex.SUMMON_SOUND) {
+            return 0.7f;
+        }
+
+        return super.getSoundVolumeFromByte(soundChoice);
+    }
+
     HashSet<BCTroop> activeTroops = new HashSet<>();
     public void initActiveTroops() {
         if (activeTroops == null) {
@@ -91,6 +116,21 @@ public class PowersBadCompany extends NewDashPreset {
     private void openTroopSelector() {
         initActiveTroops();
         ClientUtil.openTroopSelectionScreen();
+    }
+
+    public void selectedTroop(int id) {
+        Roundabout.LOGGER.info("Selected Troop ID: {}", id);
+       if (id == TROOP) {
+            Roundabout.LOGGER.info("Selected Troop!");
+        }else if (id == BUNDLE) {
+            Roundabout.LOGGER.info("Selected Bundle Troop!");
+        }else if (id == HELICOPTER) {
+            Roundabout.LOGGER.info("Selected Helicopter!");
+       }else if (id == TANK) {
+            Roundabout.LOGGER.info("Selected Tank!");
+        }else {
+            Roundabout.LOGGER.info("Unknow ID: {}", id);
+        }
     }
 
 }
