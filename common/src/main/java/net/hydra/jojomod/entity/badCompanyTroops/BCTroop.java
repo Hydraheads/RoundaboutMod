@@ -20,6 +20,11 @@ public class BCTroop extends MultipleTypeStand {
     }
 
     @Override
+    public boolean hasNoPhysics(){
+        return false;
+    }
+
+    @Override
     public boolean needsActive(){
         return false;
     }

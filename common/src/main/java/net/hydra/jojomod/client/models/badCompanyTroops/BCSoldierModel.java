@@ -15,13 +15,10 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
 public class BCSoldierModel<T extends BCTroop> extends StandModel<T> {
-    private final ModelPart stand;
     private final ModelPart stand2;
     private final ModelPart bone;
     private final ModelPart parachute;
-    private final ModelPart head;
     private final ModelPart head2;
-    private final ModelPart body;
     private final ModelPart body2;
     private final ModelPart torso;
     private final ModelPart arms;
