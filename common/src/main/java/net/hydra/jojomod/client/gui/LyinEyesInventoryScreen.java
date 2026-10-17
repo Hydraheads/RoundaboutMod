@@ -21,7 +21,7 @@ public class LyinEyesInventoryScreen extends AbstractContainerScreen<LyinEyesInv
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         int x = (this.width - this.imageWidth) / 2;
-        int y = (this.height - this.imageHeight) / 2 + 9;
+        int y = (this.height - this.imageHeight) / 2 + 30;
         graphics.blit(TEXTURE, x, y, 0, 0, this.imageWidth, this.imageHeight);
     }
 

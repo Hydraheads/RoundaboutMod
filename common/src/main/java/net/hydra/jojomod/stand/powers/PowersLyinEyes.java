@@ -24,10 +24,14 @@ import java.util.List;
 public class PowersLyinEyes extends NewDashPreset {
     // for move ids accessed here. update public bytes every time this is edited.
     private static final byte
-        READ_INVENTORY = 53;
+        READ_INVENTORY = 53,
+        FINISH_READ_INVENTORY = 54;
     // stand summoning variable
     private int summonOverlayTicks = 0;
+    private int gatherOverlayTicks = 0;
     private boolean isSummon = false;
+    private boolean isGather = false;
+    private boolean hadInventoryMenuOpen = false;
 
     // basic stand registry stuff
     public PowersLyinEyes(LivingEntity self) {super(self);}
@@ -62,11 +66,28 @@ public class PowersLyinEyes extends NewDashPreset {
 
     @Override
     public void tickPower() {
+        if (this.self.level().isClientSide()) {
+            //inventory tracking for animation oooooh
+            boolean isMenuOpen = isInventoryMenuOpen();
+            if (isMenuOpen) {
+                hadInventoryMenuOpen = true;
+                isGather = true;
+            } else if (hadInventoryMenuOpen) {
+                hadInventoryMenuOpen = false;
+                isGather = false;
+                isSummon = true;
+            }
+        }
         super.tickPower();
         if (isSummon) {
             summonOverlayTicks = Math.min(summonOverlayTicks + 1, 12);
         } else {
             summonOverlayTicks = Math.max(summonOverlayTicks - 1, 0);
+        }
+        if (isGather) {
+            gatherOverlayTicks = Math.min(gatherOverlayTicks + 1, 6);
+        } else {
+            gatherOverlayTicks = Math.max(gatherOverlayTicks - 1, 0);
         }
     }
 
@@ -159,10 +180,19 @@ public class PowersLyinEyes extends NewDashPreset {
     @Override
     public boolean tryIntPower(int move, boolean forced, int value) {
         // inventory open thingy
-        if (move == READ_INVENTORY) {
+        if (move == FINISH_READ_INVENTORY) {
             return readInventory(value);
         }
         return super.tryIntPower(move, forced, value);
+    }
+
+    //used with attackTimeDuring to activate moves when it hits 0
+    @Override
+    public void updateUniqueMoves() {
+        if (this.getActivePower() == READ_INVENTORY) {
+            completeReadInventory();
+        }
+        super.updateUniqueMoves();
     }
 
     // inventory reading start
@@ -175,18 +205,29 @@ public class PowersLyinEyes extends NewDashPreset {
 
     // client side power only, since inventories are client side, probably.
     private void tryReadInventory() {
-        Entity target = getTargetEntity(self, 20);
-        if(target instanceof Player p) {
-            tryIntPowerPacket(READ_INVENTORY, target.getId());
+        this.setAttackTimeDuring(0);
+        this.setActivePower(READ_INVENTORY);
+        isSummon = false;
+        isGather = true;
+        gatherOverlayTicks = 1;
+    }
+
+    // complete read inventory
+    private void completeReadInventory() {
+        if (this.getAttackTimeDuring() > 5) {
+            Entity target = getTargetEntity(self, 20);
+            if (target instanceof Player p) {
+                tryIntPowerPacket(FINISH_READ_INVENTORY, target.getId());
+            }
         }
     }
 
     // gets the player id from the server and opens up the menu
     private boolean readInventory(int playerID) {
         if (!this.self.level().isClientSide() && self instanceof ServerPlayer serverPlayer) {
-            if (this.getSelf() instanceof Player self) {
-                serverPlayer.displayClientMessage(Component.literal("AHHHH PLAYER DETECTED AHHHHH PANIC AHHH!!!!"), false);
-            }
+            //if (this.getSelf() instanceof Player self) {
+            //    serverPlayer.displayClientMessage(Component.literal("AHHHH PLAYER DETECTED AHHHHH PANIC AHHH!!!!"), false);
+            //}
             Entity target = serverPlayer.level().getEntity(playerID);
             if (target instanceof ServerPlayer targetPlayer) {
                 LyinEyesInventoryMenu.open(serverPlayer, targetPlayer);
@@ -197,11 +238,21 @@ public class PowersLyinEyes extends NewDashPreset {
 
     // inventory reading stop
 
+    // for tracking open menus
+
+    private boolean isInventoryMenuOpen() {
+        if (this.self instanceof Player player) {
+            return player.containerMenu instanceof LyinEyesInventoryMenu;
+        }
+        return false;
+    }
+
     // moves end
 
     // basic setters and getters here
 
     public int getSummonOverlayTicks() {return summonOverlayTicks;}
+    public int getGatherOverlayTicks() {return gatherOverlayTicks;}
 
     // WIP FEATURES BELOW HERE, DELETE WHEN DONE
 

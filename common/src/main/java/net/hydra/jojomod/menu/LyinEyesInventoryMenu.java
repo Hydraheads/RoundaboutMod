@@ -35,7 +35,7 @@ public class LyinEyesInventoryMenu extends AbstractContainerMenu {
             for (int col = 0; col < 9; col++) {
                 int slotIndex = col + row * 9;
                 if (row != 3) {
-                    this.addSlot(new Slot(targetContainer, slotIndex, 8 + col * 18, 18 + row * 18) {
+                    this.addSlot(new Slot(targetContainer, slotIndex, 8 + col * 18, 39 + row * 18) {
                         @Override
                         public boolean mayPickup(Player player) {
                             return false; // read-only
@@ -48,7 +48,7 @@ public class LyinEyesInventoryMenu extends AbstractContainerMenu {
                     });
                 }
                 else {
-                    this.addSlot(new Slot(targetContainer, slotIndex, 8 + col * 18, 22 + row * 18) {
+                    this.addSlot(new Slot(targetContainer, slotIndex, 8 + col * 18, 43 + row * 18) {
                             @Override
                             public boolean mayPickup(Player player) {
                                 return false; // read-only
