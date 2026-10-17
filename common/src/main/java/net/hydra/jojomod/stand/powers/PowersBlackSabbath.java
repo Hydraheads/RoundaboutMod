@@ -464,12 +464,12 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                             PowerTypes.copyPlaneOfExisting(self,BE);
                             this.self.level().addFreshEntity(BE);
 
-                            GrabbedMobSoul gs = ModEntities.GRABBED_PLAYER_SOUL.create(this.getSelf().level());
+                            /*GrabbedMobSoul gs = ModEntities.GRABBED_PLAYER_SOUL.create(this.getSelf().level());
                             gs.absMoveTo(pn.x(), this.self.getY() + (this.self.getBbHeight() / 2.45F), pn.z());
                             gs.setMaster(this.self);
                             gs.setYRot((self.getYRot() % 360) - 180);
                             PowerTypes.copyPlaneOfExisting(self,gs);
-                            this.self.level().addFreshEntity(gs);
+                            this.self.level().addFreshEntity(gs);*/
                         }
                     }
                 }

@@ -2604,6 +2604,8 @@
   "ability.roundabout.lyin_eyes_inventory": "Inventory Reader",
   "ability.roundabout.lyin_eyes_inventory.desc": "The nematodes gather around to show you what items a player has in their inventory.",
   "container.roundabout.lyin_eyes_inventory": " ",
+  "text.roundabout.lyin_eyes.tension_highlight": "Tension Highlight On",
+  "text.roundabout.lyin_eyes.tension_highlight_off": "Tension Highlight Off",
 
   "ability.roundabout.emperor_shoot": "Shoot",
   "ability.roundabout.emperor_shoot.desc": "Shoot a bullet from the emperor.",
