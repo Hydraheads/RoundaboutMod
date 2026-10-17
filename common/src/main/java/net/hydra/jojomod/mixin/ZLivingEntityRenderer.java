@@ -10,6 +10,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.DiverDownPointerRenderer;
 import net.hydra.jojomod.client.HallucinationIndicatorRenderer;
+import net.hydra.jojomod.client.LyinEyesHighlighterRenderer;
 import net.hydra.jojomod.client.models.layers.BigBubbleLayer;
 import net.hydra.jojomod.client.models.layers.FrozenLayer;
 import net.hydra.jojomod.client.models.stand.renderers.*;
@@ -161,6 +162,11 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
         }
         HallucinationIndicatorRenderer.render(entity, matrixStack, buffer);
         DiverDownPointerRenderer.render(entity, matrixStack, buffer);
+        if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof PowersLyinEyes LE && LE.getVisionModeClient()) {
+            if (entity.isAlive() && player.distanceToSqr(entity) <= (24.0 * 24.0)) {
+                LyinEyesHighlighterRenderer.render(entity, matrixStack, buffer, 255, 215, 0, 200, 0.8F);
+            }
+        }
     }
 
     @Inject(method = "shouldShowName(Lnet/minecraft/world/entity/LivingEntity;)Z", at=@At("HEAD"), cancellable = true)

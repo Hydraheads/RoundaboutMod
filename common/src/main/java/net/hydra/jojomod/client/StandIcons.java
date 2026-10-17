@@ -1107,6 +1107,8 @@ public class StandIcons {
 
     public static final ResourceLocation LYIN_EYES_PLACEHOLDER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/lyin_eyes/placeholder.png");
+    public static final ResourceLocation LYIN_EYES_INVENTORY = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/lyin_eyes/inventory_reading.png");
     public static final ResourceLocation LYIN_EYES_LAYER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/lyin_eyes_layer.png");
 

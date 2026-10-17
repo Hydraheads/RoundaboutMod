@@ -3,6 +3,7 @@ package net.hydra.jojomod.registry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.*;
+import net.hydra.jojomod.client.gui.LyinEyesInventoryScreen;
 import net.hydra.jojomod.client.gui.diverdown.custom_workbench_texture.*;
 import net.hydra.jojomod.client.gui.GamblingTableScreen;
 import net.hydra.jojomod.client.models.*;
@@ -73,6 +74,7 @@ public class ClientForgeEvents {
             MenuScreens.register(ForgeMenus.DIVER_DOWN_LOOM.get(), DiverDownLoomScreen::new);
             //DD workbench registry end
             MenuScreens.register(ForgeMenus.GAMBLING_TABLE.get(), GamblingTableScreen::new);
+            MenuScreens.register(ForgeMenus.LYIN_EYES_INVENTORY.get(), LyinEyesInventoryScreen::new);
             ItemBlockRenderTypes.setRenderLayer(ForgeBlocks.HALLUCINATORY_ACID.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(ForgeBlocks.HALLUCINATORY_ACID_WALL.get(), RenderType.translucent());
         });

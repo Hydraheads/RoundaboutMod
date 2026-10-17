@@ -5229,6 +5229,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             boolean canDestroyBlocks = isBlockDestructionEnabled() &&
                     ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction &&
+                    !ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims &&
                     level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) &&
                     this.getSelf() instanceof Player && MainUtil.getIsGamemodeApproriateForGrief(self);
 

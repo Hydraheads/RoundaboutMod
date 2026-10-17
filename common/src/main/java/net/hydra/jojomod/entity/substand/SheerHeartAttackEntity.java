@@ -848,6 +848,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	public boolean canDestroyBlocks() {
 		return ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction &&
+				!ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims &&
 				level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) &&
 				this.getUser() instanceof Player PL && MainUtil.getIsGamemodeApproriateForGrief(PL);
 	}
@@ -1150,6 +1151,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		if (this.level().isClientSide) {
 			boolean $$4 = $$2.is(Items.TORCH) && this.getUser() == $$0
 					&& ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction
+					&& !ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims
 					&& this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)
 					|| getTorchStatus();
 
@@ -1157,8 +1159,10 @@ public class SheerHeartAttackEntity extends StandEntity {
 		} else if (this.getUser() == $$0) {
 			if (throwStatus == THROWED) { return InteractionResult.FAIL; }
 
-			if ($$2.is(Items.TORCH) && !getTorchStatus() && ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction &&
-					this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
+			if ($$2.is(Items.TORCH) && !getTorchStatus()
+					&& ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction
+					&& !ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims
+					&& this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
 				if (!$$0.getAbilities().instabuild) { $$2.shrink(1); }
 				setTorchStatus(true);
 				Vec3 dir = $$0.getLookAngle();

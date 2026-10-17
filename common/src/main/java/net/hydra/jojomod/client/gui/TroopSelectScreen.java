@@ -14,6 +14,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ClientToServerPackets;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersBadCompany;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -77,10 +78,10 @@ public class TroopSelectScreen extends Screen {
         currentlyHovered = -1;
         lastChangedConfig = -1;
 
-        int offsetCenter = 10;
-        int centerX = this.width / 2;
-        int centerY = this.height / 2;
-        int Yoffset = 20;
+        int offsetCenter = 20;
+        int centerX = this.width / 2-12;
+        int centerY = this.height / 2-12;
+        int Yoffset = 0;
 
         this.slots.add(new SwitchSelect(TROOP, centerX-offsetCenter, centerY-offsetCenter + Yoffset,
                 Component.translatable("roundabout.troop_select.troop")));
@@ -97,9 +98,18 @@ public class TroopSelectScreen extends Screen {
 
     @Override
     public boolean mouseReleased(double $$0, double $$1, int $$2) {
-        this.switchToHoveredGameMode();
+        if ($$2 == 0) {
+            selectCurrentHoveredTroop(false);
+        }else {
+            this.exitTroopSelect();
+        }
+
+        return super.mouseReleased($$0, $$1, $$2);
+    }
+
+    public void exitTroopSelect() {
+        selectCurrentHoveredTroop(true);
         this.minecraft.setScreen(null);
-        return true;
     }
 
     @Override
@@ -111,14 +121,14 @@ public class TroopSelectScreen extends Screen {
         guiGraphics.pose().pushPose();
         RenderSystem.enableBlend();
         int k = this.width / 2 - 52;
-        int l = this.height / 2 - 31 - 22 - 10;
+        int l = this.height / 2 - 31 - 22 - 10 - 20;
         guiGraphics.blit(TROOP_CHOOSER_LOCATION, k, l, 0.0f, 104.0f, 105, 24, 128, 128);
         guiGraphics.pose().popPose();
         super.render(guiGraphics, i, j, f);
 
         Component str = Component.translatable("roundabout.bad_company.troop_select");
 
-        guiGraphics.drawCenteredString(this.font, str , this.width / 2, this.height / 2 - 31-10-10, -1);
+        guiGraphics.drawCenteredString(this.font, str , this.width / 2, this.height / 2 - 31 -30 - 10, -1);
 
         int lastState = currentlyHovered;
 
@@ -139,17 +149,31 @@ public class TroopSelectScreen extends Screen {
     }
 
     private boolean checkToClose() {
-        if (minecraft != null) {
-            if (sameKeyOneX(KeyInputRegistry.abilityTwoKey, this.minecraft.options)) {
+        /*if (minecraft != null) {
+            if (sameKeyOneX(KeyInputRegistry.abilityOneKey, this.minecraft.options)) {
                 this.switchToHoveredGameMode();
                 this.minecraft.setScreen(null);
                 return true;
             }
-        }
+        }*/
         return false;
     }
 
-    private void switchToHoveredGameMode() {}
+    private void switchToHoveredGameMode() {
+        selectCurrentHoveredTroop(true);
+    }
+
+    private void selectCurrentHoveredTroop(boolean safeSelect) {
+        if (currentlyHovered != -1) {
+            if (safeSelect && lastChangedConfig == currentlyHovered) {
+                return;
+            }
+            if (Minecraft.getInstance().player != null && ((StandUser)Minecraft.getInstance().player).roundabout$getStandPowers() instanceof PowersBadCompany PBC) {
+                PBC.selectedTroop(currentlyHovered);
+                lastChangedConfig = currentlyHovered;
+            }
+        }
+    }
 
     public class SwitchSelect extends AbstractWidget {
         public int context;
@@ -159,7 +183,7 @@ public class TroopSelectScreen extends Screen {
         final Component name;
 
         public SwitchSelect(int context, int xoff, int yoff, Component name) {
-            super(xoff, yoff, 26, 26, name);
+            super(xoff, yoff, 24, 24, name);
             this.context = context;
             this.xoff = xoff;
             this.yoff = yoff;
@@ -180,11 +204,11 @@ public class TroopSelectScreen extends Screen {
 
 
         private void renderSlot(GuiGraphics guiGraphics) {
-            guiGraphics.blit(TROOP_CHOOSER_LOCATION, this.getX()-12, this.getY()-12, isHoveredOrFocused() ? 24 : 0, 0, 24, 24, 128, 128);
+            guiGraphics.blit(TROOP_CHOOSER_LOCATION, this.getX(), this.getY(), isHoveredOrFocused() ? 24 : 0, 0, 24, 24, 128, 128);
         }
 
         private void renderIcon(GuiGraphics guiGraphics) {
-            guiGraphics.blit(TROOP_CHOOSER_LOCATION, this.getX()+4-12, this.getY()+4-12, context*18, 31, 18, 18, 128, 128);
+            guiGraphics.blit(TROOP_CHOOSER_LOCATION, this.getX()+3, this.getY()+3, context*18, 31, 18, 18, 128, 128);
         }
 
         @Override
@@ -193,10 +217,28 @@ public class TroopSelectScreen extends Screen {
         }
     }
 
-    public boolean sameKeyOneX(KeyMapping key1, Options options){
+    /*public boolean sameKeyOneX(KeyMapping key1, Options options){
         return (InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)key1).roundabout$justTellMeTheKey().getValue())
                 || (key1.same(options.keyLoadHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keyLoadHotbarActivator).roundabout$justTellMeTheKey().getValue()))
                 || (key1.same(options.keySaveHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keySaveHotbarActivator).roundabout$justTellMeTheKey().getValue()))
         );
+    }*/
+
+    /*
+    public boolean roundabout$sameKeyOne(KeyMapping key1){
+        return (key1.isDown() || (key1.same(this.minecraft.options.keyLoadHotbarActivator) && this.minecraft.options.keyLoadHotbarActivator.isDown())
+                || (key1.same(this.minecraft.options.keySaveHotbarActivator) && this.minecraft.options.keySaveHotbarActivator.isDown())
+        );
     }
+
+    @Override
+    public boolean keyReleased(int $$0, int $$1, int $$2) {
+        if (this.minecraft != null && !roundabout$sameKeyOne(KeyInputRegistry.abilityOneKey)) {
+            this.exitTroopSelect();
+
+            this.minecraft.options.keyUse.setDown(false);
+
+        }
+        return false;
+    }*/
 }
