@@ -4632,13 +4632,13 @@
   "bc_helicopter_summon": {
     "subtitle" : "sounds.roundabout.bc_helicopter_summon",
     "sounds": [
-      "roundabout:bc_bundle_summon"
+      "roundabout:bc_helicopter_summon"
     ]
   },
   "bc_tank_summon": {
     "subtitle" : "sounds.roundabout.bc_tank_summon",
     "sounds": [
-      "roundabout:bc_bundle_summon"
+      "roundabout:bc_tank_summon"
     ]
   }
 }

@@ -119,7 +119,13 @@ public class BCSoldierModel<T extends BCTroop> extends StandModel<T> {
 
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        defaultModifiers(entity);
         super.setupAnim(entity, limbSwing,limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+    }
+
+    @Override
+    public ModelPart root() {
+        return stand;
     }
 
     @Override

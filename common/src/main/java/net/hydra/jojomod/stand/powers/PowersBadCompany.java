@@ -41,7 +41,9 @@ public class PowersBadCompany extends NewDashPreset {
     }
 
     public static final byte
-        ANIME_SKIN = 1;
+        ANIME_SKIN = 1,
+
+        TANK_SUMMON = 50;
 
     @Override
     public List<Byte> getSkinList() {
@@ -96,6 +98,10 @@ public class PowersBadCompany extends NewDashPreset {
             return ModSounds.BC_TROOP_SUMMON_EVENT;
         }else if (soundChoice == SoundIndex.SUMMON_SOUND_2) {
             return ModSounds.BC_BUNDLE_SUMMON_EVENT;
+        }else if (soundChoice == SoundIndex.SUMMON_SOUND_4) {
+            return ModSounds.BC_HELICOPTER_SUMMON_EVENT;
+        }else if (soundChoice == TANK_SUMMON) {
+            return ModSounds.BC_TANK_SUMMON_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
@@ -123,28 +129,32 @@ public class PowersBadCompany extends NewDashPreset {
 
     public void selectedTroop(int id) {
         Roundabout.LOGGER.info("Selected Troop ID: {}", id);
-       if (id == TROOP) {
-           tryIntPowerPacket(PowerIndex.POWER_1, id);
+        tryIntPowerPacket(PowerIndex.POWER_1, id);
+        /*if (id == TROOP) {
            Roundabout.LOGGER.info("Selected Troop!");
-       }else if (id == BUNDLE) {
+        }else if (id == BUNDLE) {
            tryIntPowerPacket(PowerIndex.POWER_1, id);
            Roundabout.LOGGER.info("Selected Bundle Troop!");
-       }else if (id == HELICOPTER) {
+        }else if (id == HELICOPTER) {
            Roundabout.LOGGER.info("Selected Helicopter!");
-       }else if (id == TANK) {
+        }else if (id == TANK) {
            Roundabout.LOGGER.info("Selected Tank!");
-       }else {
+        }else {
            Roundabout.LOGGER.info("Unknow ID: {}", id);
-       }
+        }*/
     }
 
     public boolean tryIntPower(int move, boolean forced, int chargeTime){
         if (move == PowerIndex.POWER_1) {
             Roundabout.LOGGER.info("received package on " + isClient());
-            if (chargeTime == 0) {
+            if (chargeTime == TROOP) {
                 spawnSoldier(false);
-            }else if (chargeTime == 1) {
+            }else if (chargeTime == BUNDLE) {
                 spawnSoldier(true);
+            }else if (chargeTime == HELICOPTER) {
+                playStandUserOnlySoundsIfNearby(SoundIndex.SUMMON_SOUND_4, 8, false, false);
+            }else if (chargeTime == TANK) {
+                playStandUserOnlySoundsIfNearby(TANK_SUMMON, 8, false, false);
             }
         }
 
