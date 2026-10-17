@@ -487,6 +487,15 @@ public class StandIcons {
     public static final ResourceLocation BITES_THE_DUST_TARGET = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/killer_queen/bites_the_dust_target.png");
 
+    public static final ResourceLocation BAD_COMPANY_TROOP_DROP = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/bad_company/troop_summon.png");
+    public static final ResourceLocation BAD_COMPANY_TROOP_RECALL = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/bad_company/troop_recall.png");
+    public static final ResourceLocation BAD_COMPANY_PILOT_MODE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/bad_company/pilot_mode.png");
+    public static final ResourceLocation BAD_COMPANY_PILOT_MODE_EXIT = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/bad_company/pilot_mode_exit.png");
+
     public static final ResourceLocation PLANET_WAVES_METEOR_SHOWER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/planet_waves/meteor_shower.png");
     public static final ResourceLocation PLANET_WAVES_BIG_METEOR = new ResourceLocation(Roundabout.MOD_ID,
