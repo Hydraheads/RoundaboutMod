@@ -1802,6 +1802,20 @@ public class ModSounds {
     public static SoundEvent SURVIVOR_REMOVE_EVENT = SoundEvent.createVariableRangeEvent(SURVIVOR_REMOVE_ID);
 
 
+    public static final String BC_TROOP_SUMMON = "bc_troop_summon";
+    public static final ResourceLocation BC_TROOP_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BC_TROOP_SUMMON);
+    public static SoundEvent BC_TROOP_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(BC_TROOP_SUMMON_ID);
+    public static final String BC_BUNDLE_SUMMON = "bc_bundle_summon";
+    public static final ResourceLocation BC_BUNDLE_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BC_BUNDLE_SUMMON);
+    public static SoundEvent BC_BUNDLE_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(BC_BUNDLE_SUMMON_ID);
+    public static final String BC_HELICOPTER_SUMMON = "bc_helicopter_summon";
+    public static final ResourceLocation BC_HELICOPTER_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BC_HELICOPTER_SUMMON);
+    public static SoundEvent BC_HELICOPTER_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(BC_HELICOPTER_SUMMON_ID);
+    public static final String BC_TANK_SUMMON = "bc_tank_summon";
+    public static final ResourceLocation BC_TANK_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BC_TANK_SUMMON);
+    public static SoundEvent BC_TANK_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(BC_TANK_SUMMON_ID);
+
+
     public static final String ZOMBIE_CHARGE = "zombie_charge";
     public static final ResourceLocation ZOMBIE_CHARGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ZOMBIE_CHARGE);
     public static SoundEvent ZOMBIE_CHARGE_EVENT = SoundEvent.createVariableRangeEvent(ZOMBIE_CHARGE_ID);

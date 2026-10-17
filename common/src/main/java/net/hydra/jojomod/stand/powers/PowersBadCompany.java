@@ -76,7 +76,7 @@ public class PowersBadCompany extends NewDashPreset {
     @Override
     public SoundEvent getSoundFromByte(byte soundChoice) {
         if (soundChoice == SoundIndex.SUMMON_SOUND) {
-            return ModSounds.SUMMON_SOUND_EVENT;
+            return ModSounds.BC_TROOP_SUMMON_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }

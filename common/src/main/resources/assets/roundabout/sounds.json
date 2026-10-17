@@ -4616,5 +4616,29 @@
     "sounds": [
       "roundabout:silver_chariot_rapier_shot_entity_impact"
     ]
+  },
+  "bc_troop_summon": {
+    "subtitle" : "sounds.roundabout.bc_troop_summon",
+    "sounds": [
+      "roundabout:bc_troop_summon"
+    ]
+  },
+  "bc_bundle_summon": {
+    "subtitle" : "sounds.roundabout.bc_bundle_summon",
+    "sounds": [
+      "roundabout:bc_bundle_summon"
+    ]
+  },
+  "bc_helicopter_summon": {
+    "subtitle" : "sounds.roundabout.bc_bundle_summon",
+    "sounds": [
+      "roundabout:bc_bundle_summon"
+    ]
+  },
+  "bc_tank_summon": {
+    "subtitle" : "sounds.roundabout.bc_bundle_summon",
+    "sounds": [
+      "roundabout:bc_bundle_summon"
+    ]
   }
 }

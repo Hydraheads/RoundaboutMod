@@ -1203,6 +1203,15 @@ public class ForgeSounds {
     public static final RegistryObject<SoundEvent> VSONG_DAMNABLE_CEREMONY =
             register(ModSounds.VSONG_DAMNABLE_CEREMONY, ModSounds.VSONG_DAMNABLE_CEREMONY_ID);
 
+    public static final RegistryObject<SoundEvent> BC_TROOP_SUMMON =
+            register(ModSounds.BC_TROOP_SUMMON, ModSounds.BC_TROOP_SUMMON_ID);
+    public static final RegistryObject<SoundEvent> BC_BUNDLE_SUMMON =
+            register(ModSounds.BC_BUNDLE_SUMMON, ModSounds.BC_BUNDLE_SUMMON_ID);
+    public static final RegistryObject<SoundEvent> BC_HELICOPTER_SUMMON =
+            register(ModSounds.BC_HELICOPTER_SUMMON, ModSounds.BC_HELICOPTER_SUMMON_ID);
+    public static final RegistryObject<SoundEvent> BC_TANK_SUMMON =
+            register(ModSounds.BC_TANK_SUMMON, ModSounds.BC_TANK_SUMMON_ID);
+
     public static final RegistryObject<SoundEvent> PLANET_WAVES_SUMMON =
             register(ModSounds.PLANET_WAVES_SUMMON, ModSounds.PLANET_WAVES_SUMMON_ID);
     public static final RegistryObject<SoundEvent> PLANET_WAVES_METEOR_SHOWER =
