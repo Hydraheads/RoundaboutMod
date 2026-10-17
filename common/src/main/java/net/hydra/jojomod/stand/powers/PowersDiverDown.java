@@ -1937,7 +1937,7 @@ public class PowersDiverDown extends NewPunchingStand {
         this.setActivePowerPhase(this.getActivePowerPhaseMax());
 
         boolean isFullyCharged = this.chargedPhasePunch >= getMaxPhasePunchTime();
-        float reach = 3.5F;
+        float reach = 4F;
         float defaultAngle = 25F;
 
         if (this.self instanceof Player) {
