@@ -497,6 +497,12 @@
       "roundabout:anasui_pucci_2"
     ]
   },
+  "lyin_eyes_summon": {
+    "subtitle": "sounds.roundabout.lyin_eyes_summon",
+    "sounds": [
+      "roundabout:lyin_eyes_summon"
+    ]
+  },
   "summon_king_crimson": {
     "subtitle": "sounds.roundabout.summon_king_crimson",
     "sounds": [

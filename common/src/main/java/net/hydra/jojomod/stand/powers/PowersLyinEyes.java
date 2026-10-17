@@ -4,16 +4,23 @@ import com.google.common.collect.Lists;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.LivingEntity;
 
 import java.util.List;
 
 public class PowersLyinEyes extends NewDashPreset {
+    // stand summoning variable
+    private int summonOverlayTicks = 0;
+    private boolean isSummon = false;
+
     // basic stand registry stuff
     public PowersLyinEyes(LivingEntity self) {super(self);}
     @Override
@@ -27,7 +34,37 @@ public class PowersLyinEyes extends NewDashPreset {
         return new PowersLyinEyes(entity);
     }
 
-    // stand icons and info screen
+    // stand summoning start
+
+    @Override
+    public void onStandSummon(boolean desummon) {
+        if (!desummon && this.self.level().isClientSide()) {
+            summonOverlayTicks = 1;
+            isSummon = true;
+        }
+        if (desummon && this.self.level().isClientSide()) {
+            isSummon = false;
+        }
+        super.onStandSummon(desummon);
+    }
+
+    // stand summoning end
+
+    // tick power start
+
+    @Override
+    public void tickPower() {
+        super.tickPower();
+        if (isSummon) {
+            summonOverlayTicks = Math.min(summonOverlayTicks + 1, 12);
+        } else {
+            summonOverlayTicks = Math.max(summonOverlayTicks - 1, 0);
+        }
+    }
+
+    // tick power end
+
+    // stand icons and info screen start
 
     /**
      * Renders the icons for the stand's abilities on the GUI. Comments will specify
@@ -54,6 +91,29 @@ public class PowersLyinEyes extends NewDashPreset {
                 "instruction.roundabout.barrage", StandIcons.LYIN_EYES_PLACEHOLDER, 0, level, bypas));
         return $$1;
     }
+
+    // stand icons and info screen end
+
+    // sounds start
+
+    @Override
+    public SoundEvent getSoundFromByte(byte soundChoice) {
+        if (soundChoice == SoundIndex.SUMMON_SOUND) {
+            return ModSounds.LYIN_EYES_SUMMON_EVENT;
+        }
+        return super.getSoundFromByte(soundChoice);
+    }
+
+    @Override
+    protected Byte getSummonSound() {
+        return SoundIndex.SUMMON_SOUND;
+    }
+
+    // sounds end
+
+    // basic setters and getters here
+
+    public int getSummonOverlayTicks() {return summonOverlayTicks;}
 
     // WIP FEATURES BELOW HERE, DELETE WHEN DONE
     @Override

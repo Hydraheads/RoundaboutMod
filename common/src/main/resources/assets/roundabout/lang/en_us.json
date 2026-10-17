@@ -1226,6 +1226,7 @@
   "sounds.roundabout.diver_down_spring":  "SPROING!",
   "sounds.roundabout.diver_down_ribcage":  "Ribcage Snaps",
   "sounds.roundabout.diver_down_bomb":  "Head Explodes",
+
   "sounds.roundabout.anasui_visage_equip":  "Anasui speaks",
   "sounds.roundabout.anasui_hurt_1":  "Anasui hurt",
   "sounds.roundabout.anasui_hurt_2":  "Anasui hurt",
@@ -1261,6 +1262,9 @@
   "sounds.roundabout.anasui_jotaro_2":  "Asks for approval",
   "sounds.roundabout.anasui_pucci_1":  "Protecting Jolyne",
   "sounds.roundabout.anasui_pucci_2":  "Protecting Jolyne",
+
+  "sounds.roundabout.lyin_eyes_summon":  "Stand summoned",
+
   "sounds.roundabout.vampire_dive":  "Whoosh",
   "sounds.roundabout.punch_sfx1":  "Air Cracks",
   "sounds.roundabout.punch_sfx2":  "Air Cracks",
@@ -3153,6 +3157,7 @@
   "skins.roundabout.diver_down.diver_drowned": "Diver Drown",
   "skins.roundabout.diver_down.secco": "Secco",
   "skins.roundabout.diver_down.van_halen": "Van Halen",
+  "skins.roundabout.diver_down.scuba_diver": "Scuba Diver",
 
   "skins.roundabout.20_centuryboy.manga": "Manga",
   "skins.roundabout.20_centuryboy.bedrock": "Bedrock",
@@ -3398,7 +3403,7 @@
 
   "roundabout.diver_affliction.none": "Effect Selection",
   "roundabout.diver_affliction.diver_legs": "Diver Legs",
-  "roundabout.diver_affliction.diver_legs.desc": "Diver Down replaces the legs of the target. While Diver Down is submerged inside the target, they will gain increased jump height and speed.",
+  "roundabout.diver_affliction.diver_legs.desc": "Diver Down replaces the legs of the target. While Diver Down is submerged inside the target, they will gain increased jump height and auto step.",
   "roundabout.diver_affliction.effect_cure": "Effect Cure",
   "roundabout.diver_affliction.effect_cure.desc": "Diver Down purges the body of all negative effects from the inside out. This only works on effects that can be cleared by milk.",
   "roundabout.diver_affliction.diver_arms": "Diver Arms",

@@ -604,6 +604,8 @@ public class FabricSounds {
         addSound(ModSounds.ANASUI_PUCCI_1_ID, ModSounds.ANASUI_PUCCI_1_EVENT);
         addSound(ModSounds.ANASUI_PUCCI_2_ID, ModSounds.ANASUI_PUCCI_2_EVENT);
 
+        addSound(ModSounds.LYIN_EYES_SUMMON_ID, ModSounds.LYIN_EYES_SUMMON_EVENT);
+
         addSound(ModSounds.SUMMON_GREEN_DAY_ID, ModSounds.SUMMON_GREEN_DAY_EVENT);
         addSound(ModSounds.SUMMON_WALKING_ID, ModSounds.SUMMON_WALKING_EVENT);
         addSound(ModSounds.HEEL_RAISE_ID, ModSounds.HEEL_RAISE_EVENT);

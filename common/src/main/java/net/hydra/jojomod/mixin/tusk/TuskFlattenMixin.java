@@ -23,12 +23,12 @@ public abstract class TuskFlattenMixin {
     private void roundabout$flattenCamera(BlockGetter $$0, Entity $$1, boolean $$2, boolean $$3, float partialTicks, CallbackInfo ci) {
         if ($$1 instanceof Player P) {
             StandUser SU = (StandUser) P;
-            if (SU.roundabout$getStandPowers() instanceof PowersTusk PT && PT.flattenTicks > 0) {
+            if (SU.roundabout$getStandPowers() instanceof PowersTusk PT && PT.getFlattenCameraTicks() > 0) {
                 if (PT.getActivePower() != PowersTusk.FLATTEN) {partialTicks *= -1;}
 
                 if (ClientUtil.checkIfFirstPerson()) {
                     Camera self = (Camera) (Object) this;
-                    Vec3 fixpos = self.getPosition().add(0.0,  -1 * Math.min(1,(PT.flattenTicks+partialTicks)/5 ), 0.0);
+                    Vec3 fixpos = self.getPosition().add(0.0,  -1 * Math.min(1,(PT.getFlattenCameraTicks()+partialTicks)/5 ), 0.0);
                     this.setPosition(fixpos);
                 }
             }

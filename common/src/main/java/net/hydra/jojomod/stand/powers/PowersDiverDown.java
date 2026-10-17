@@ -1352,7 +1352,7 @@ public class PowersDiverDown extends NewPunchingStand {
                             // BIG FINAL PUNCH!!! (does bleed)
                             if (DamageHandler.StandDamageEntity(living, getGroundFinisherStrength(living), this.self)) {
                                 MainUtil.makeBleed(target, 0, 300, stand);
-                                living.setDeltaMovement(living.getDeltaMovement().x * 0.3, 1.35D,
+                                living.setDeltaMovement(living.getDeltaMovement().x * 0.3, 1.25D,
                                         living.getDeltaMovement().z * 0.3);
                                 living.hurtMarked = true;
                                 MainUtil.knockShieldPlusStand(living, 80);
@@ -3358,7 +3358,7 @@ public class PowersDiverDown extends NewPunchingStand {
 
         // store the trap
         this.storedKickTraps.put(key, new KickTrap(MAX_TRAP_DURATION, face, reflection));
-        setCooldown(PowerIndex.SKILL_2, 100);
+        setCooldown(PowerIndex.SKILL_2, 60);
 
         // animation here
         // Sounds & ground impact particles here
@@ -3368,9 +3368,6 @@ public class PowersDiverDown extends NewPunchingStand {
         if (self instanceof Player player && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof AnasuiVoice voice) {
             voice.playTrap();
         }
-
-        // cooldown here
-
         return true;
     }
 
@@ -5041,6 +5038,9 @@ public class PowersDiverDown extends NewPunchingStand {
             case DiverDownEntity.VAN_HALEN -> {
                 return Component.translatable("skins.roundabout.diver_down.van_halen");
             }
+            case DiverDownEntity.SCUBA_DIVER -> {
+                return Component.translatable("skins.roundabout.diver_down.scuba_diver");
+            }
             default -> {
                 return Component.translatable("skins.roundabout.diver_down.base");
             }
@@ -5091,7 +5091,7 @@ public class PowersDiverDown extends NewPunchingStand {
                 l.add(DiverDownEntity.DIVER_DROWNED);
             }
             if (((IPlayerEntity) PE).roundabout$getUnlockedBonusSkin() || bypass) {
-                //add scuba diver skin here
+                l.add(DiverDownEntity.SCUBA_DIVER);
             }
         }
 
@@ -5128,8 +5128,7 @@ public class PowersDiverDown extends NewPunchingStand {
                         sendParticlesIfPossible(self.level(),ParticleTypes.END_ROD, self.getX(),
                                 self.getY() + self.getEyeHeight(), self.getZ(),
                                 10, 0.5, 0.5, 0.5, 0.2);
-                        //uncomment this once added
-                        //user.roundabout$setStandSkin(DiverDownEntity.SCUBA_DIVER);
+                        user.roundabout$setStandSkin(DiverDownEntity.SCUBA_DIVER);
                         user.roundabout$summonStand(this.getSelf().level(), true, false);
                         ((ServerPlayer) ipe).displayClientMessage(
                                 Component.translatable("unlock_skin.roundabout.diver_down.scuba_diver"), true);

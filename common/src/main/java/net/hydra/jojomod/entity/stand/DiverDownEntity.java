@@ -48,7 +48,8 @@ public class DiverDownEntity extends FollowingStandEntity {
             WORLD_DIVER = 18,
             DIVER_DROWNED = 19,
             SECCO = 20,
-            VAN_HALEN = 21;
+            VAN_HALEN = 21,
+            SCUBA_DIVER = 22;
 
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState mobDive = new AnimationState();
