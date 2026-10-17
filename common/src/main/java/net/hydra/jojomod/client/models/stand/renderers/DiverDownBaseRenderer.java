@@ -155,7 +155,7 @@ public class DiverDownBaseRenderer extends StandRenderer<DiverDownEntity> {
             }
         }
 
-        float factor = 1;
+        float factor = 0.5F + (mobEntity.getSizePercent()/2);
         if(mobEntity.isBaby()){
             matrixStack.scale(0.50f * factor, 0.50f * factor, 0.50f * factor);
         } else {
