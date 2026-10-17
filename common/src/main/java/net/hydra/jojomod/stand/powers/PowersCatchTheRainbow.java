@@ -568,7 +568,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                 double Pitch = Math.toRadians(this.self.getLookAngle().y);
                 double Zangle = Math.toRadians(this.self.getLookAngle().z);
                 double diameter = 0.6d;
-                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.CTR_HEAL_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.CTR_HEAL_EVENT, SoundSource.PLAYERS, 0.6F, (float)Roundabout.RANDOM.nextDouble(0.9, 1.1));
                 for (int i = 0; i < 11; i = i + 1) {
                     sendParticlesIfPossible(self.level(), ParticleTypes.SPLASH,
                             this.getSelf().getX() + (diameter * Math.sin(i * 6)) * Math.cos(Xangle),
@@ -602,7 +602,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             soundVariations.add(ModSounds.CTR_RAIN_STEP_3_EVENT);
             soundVariations.add(ModSounds.CTR_RAIN_STEP_4_EVENT);
             soundVariations.add(ModSounds.CTR_RAIN_STEP_5_EVENT);
-            playSoundIfPossible(self.level(), null, this.self.blockPosition(), getRandomSound(soundVariations), SoundSource.PLAYERS, 1.0F, 1.0F);
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(), getRandomSound(soundVariations), SoundSource.PLAYERS, 0.8F, 1.0F);
         }
     }
 
@@ -700,7 +700,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
 
                 soundVariations.add(ModSounds.CTR_DETACH_1_EVENT);
                 soundVariations.add(ModSounds.CTR_DETACH_2_EVENT);
-                playSoundIfPossible(self.level(),null, this.self.blockPosition(), getRandomSound(soundVariations), SoundSource.PLAYERS, 1.0F, 1.0F);
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), getRandomSound(soundVariations), SoundSource.PLAYERS, 0.7F, 1.2F);
             }
             HasOffHand = false;
             this.self.getItemInHand(InteractionHand.OFF_HAND).setCount(0);
@@ -757,7 +757,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             double Zangle = Math.toRadians(this.self.getLookAngle().z);
             double diameter = 0.6d;
 
-            playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.CTR_HEAL_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.CTR_HEAL_EVENT, SoundSource.PLAYERS, 0.35F, (float)Roundabout.RANDOM.nextDouble(0.65, 0.85));
             for (int i = 0; i < 11; i = i + 1) {
                 sendParticlesIfPossible(self.level(), ParticleTypes.SPLASH,
                         this.getSelf().getX() + (diameter * Math.sin(i * 6)) * Math.cos(Xangle),
