@@ -947,6 +947,11 @@
   "sounds.roundabout.hologram_end": "Blip",
   "sounds.roundabout.king_hologram": "Projection",
 
+  "sounds.roundabout.bc_troop_summon": "Bad Company troop summoning",
+  "sounds.roundabout.bc_bundle_summon": "Bad Company group summoning",
+  "sounds.roundabout.bc_tank_summon": "Bad Company tank summoning",
+  "sounds.roundabout.bc_helicopter_summon": "Bad Company helicopter summoning",
+
 
   "sounds.roundabout.j_anubis_hit_1": "Sword hit",
   "sounds.roundabout.j_anubis_hit_2": "Sword hit",
