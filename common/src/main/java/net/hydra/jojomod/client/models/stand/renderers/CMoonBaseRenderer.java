@@ -16,17 +16,17 @@ import org.jetbrains.annotations.Nullable;
 
 public class CMoonBaseRenderer<M extends StandEntity> extends StandRenderer<CMoonEntity> {
 
-    private static final ResourceLocation Anime = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/cmoon/CMoonTexture.png");
+    private static final ResourceLocation ANIME = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/cmoon/CMoonTexture.png");
 
     public CMoonBaseRenderer(EntityRendererProvider.Context context, StandModel root) {
         super(context, root,0f);
     }
 
     public static ResourceLocation getSkin(byte BT){
-        if (BT == CMoonEntity.Anime){
-            return Anime;
+        if (BT == CMoonEntity.ANIME){
+            return ANIME;
         }
-        return Anime;
+        return ANIME;
     }
 
     @Override

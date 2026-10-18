@@ -5,7 +5,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
 
 public class CMoonEntity extends FollowingStandEntity {
-    public static byte Anime;
+    public static byte ANIME = 0;
 
     public CMoonEntity(EntityType<? extends Mob> entityType, Level world) {super(entityType, world);
     }
