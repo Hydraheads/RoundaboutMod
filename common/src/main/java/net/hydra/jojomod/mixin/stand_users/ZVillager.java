@@ -64,6 +64,11 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
     @Unique
     private static final EntityDataAccessor<Byte> ROUNDABOUT$ANUBIS_TYPE = SynchedEntityData.defineId(Villager.class,
             EntityDataSerializers.BYTE);
+    @Unique
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$TENSION_STATE = SynchedEntityData.defineId(
+            Villager.class,
+            EntityDataSerializers.BYTE
+    );
 
     @Unique
     @Override
@@ -97,6 +102,9 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
         if (this.roundabout$getAnubisTicks() != -1) {
             $$0.putByte("roundabout.heldAnubis",this.roundabout$getAnubisType());
         }
+        if (this.roundabout$getTensionState() != TENSION_UNROLLED) {
+            $$0.putByte("roundabout.tensionState", this.roundabout$getTensionState());
+        }
     }
 
     @Inject(method = "readAdditionalSaveData",at = @At("HEAD"))
@@ -104,6 +112,9 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
         if ($$0.contains("roundabout.heldAnubis")) {
             this.roundabout$setAnubisTicks(30);
             this.roundabout$setAnubisType($$0.getByte("roundabout.heldAnubis"));
+        }
+        if ($$0.contains("roundabout.tensionState")) {
+            this.roundabout$setTensionState($$0.getByte("roundabout.tensionState"));
         }
     }
 
@@ -113,8 +124,51 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
             ((Villager)(Object)this).getEntityData().define(ROUNDABOUT$ANUBIS_TICKS, -1);
             ((Villager)(Object)this).getEntityData().define(ROUNDABOUT$ANUBIS_TYPE, (byte)-1);
         }
+        if (!((Villager)(Object)this).getEntityData().hasItem(ROUNDABOUT$TENSION_STATE)) {
+            ((Villager)(Object)this).getEntityData().define(ROUNDABOUT$TENSION_STATE, TENSION_UNROLLED);
+        }
     }
     /// currently broken, unsure why
+
+    @Unique
+    @Override
+    public byte roundabout$getTensionState() {
+        return this.getEntityData().get(ROUNDABOUT$TENSION_STATE);
+    }
+
+    @Unique
+    @Override
+    public void roundabout$setTensionState(byte state) {
+        this.getEntityData().set(ROUNDABOUT$TENSION_STATE, state);
+    }
+
+    @Unique
+    @Override
+    public boolean roundabout$isTense() {
+        return this.roundabout$getTensionState() == TENSION_TENSE;
+    }
+
+    @Unique
+    @Override
+    public void roundabout$setTense(boolean tense) {
+        this.roundabout$setTensionState(tense ? TENSION_TENSE : TENSION_RELAXED);
+    }
+
+    @Unique
+    @Override
+    public boolean roundabout$hasRolledTension() {
+        return this.roundabout$getTensionState() != TENSION_UNROLLED;
+    }
+
+    @Unique
+    @Override
+    public void roundabout$rollTensionIfUnrolled() {
+        if (!this.roundabout$hasRolledTension() && !this.isClientSide()) {
+            // note to self: replace this with the lyin eyes config in the future - 88superguy
+            boolean isTense = this.random.nextFloat() < 0.65F;
+            this.roundabout$setTense(isTense);
+        }
+    }
 
 
     @Inject(method = "tick", at = @At(value = "HEAD"))
@@ -143,7 +197,22 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
 
     }
 
+    //will eventually add another method that checks to see if the player interacting has lyin eyes active and is currently using tension highlighter.
+    @Inject(method = "mobInteract", at = @At("HEAD"))
+    private void roundabout$rollTensionOnInteract(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
+        if (!isClientSide()) {
+            this.roundabout$rollTensionIfUnrolled();
 
+            //test statement yippeee
+            /*if (hand == InteractionHand.MAIN_HAND) {
+                if (this.roundabout$isTense()) {
+                    player.sendSystemMessage(Component.literal("i'm lyin, i'm lyin so hard rn"));
+                } else {
+                    player.sendSystemMessage(Component.literal("i'm not lyin, i'm not lyin so hard rn"));
+                }
+            }*/
+        }
+    }
 
     @Inject(method = "mobInteract", at = @At(value = "HEAD"), cancellable = true)
     private void villagerAnubisInteraction(Player $$0, InteractionHand $$1, CallbackInfoReturnable<InteractionResult> cir) {
