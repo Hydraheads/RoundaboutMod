@@ -163,6 +163,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
         }
         HallucinationIndicatorRenderer.render(entity, matrixStack, buffer);
         DiverDownPointerRenderer.render(entity, matrixStack, buffer);
+        // lyin eyes highlighter
         if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof PowersLyinEyes LE
                 && LE.getVisionModeClient() && LE.isActive()) {
             if (entity.isAlive() && player.distanceToSqr(entity) <= (24.0 * 24.0) && !(entity instanceof StandEntity)) {
