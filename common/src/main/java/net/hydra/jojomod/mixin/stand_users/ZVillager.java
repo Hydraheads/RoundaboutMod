@@ -8,6 +8,7 @@ import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.IVillagerAccess;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.AnubisItem;
 import net.hydra.jojomod.item.ModItems;
@@ -68,10 +69,13 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
     private static final EntityDataAccessor<Byte> ROUNDABOUT$ANUBIS_TYPE = SynchedEntityData.defineId(Villager.class,
             EntityDataSerializers.BYTE);
     @Unique
-    private static final EntityDataAccessor<Byte> ROUNDABOUT$TENSION_STATE = SynchedEntityData.defineId(
-            Villager.class,
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$TENSION_STATE = SynchedEntityData.defineId(Villager.class,
             EntityDataSerializers.BYTE
     );
+    @Unique
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$CALLOUT_EFFECT_TICKS = SynchedEntityData.defineId(Villager.class,
+            EntityDataSerializers.INT);
+
     @Unique
     @Override
     public int roundabout$getAnubisTicks() {
@@ -129,6 +133,9 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
         if (!((Villager)(Object)this).getEntityData().hasItem(ROUNDABOUT$TENSION_STATE)) {
             ((Villager)(Object)this).getEntityData().define(ROUNDABOUT$TENSION_STATE, TENSION_UNROLLED);
         }
+        if (!this.getEntityData().hasItem(ROUNDABOUT$CALLOUT_EFFECT_TICKS)) {
+            this.getEntityData().define(ROUNDABOUT$CALLOUT_EFFECT_TICKS, 0);
+        }
     }
     /// currently broken, unsure why
 
@@ -166,6 +173,8 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
     @Override
     public void roundabout$setUnnerved() {
         this.roundabout$setTensionState(TENSION_UNNERVED);
+        this.getEntityData().set(ROUNDABOUT$CALLOUT_EFFECT_TICKS, 160);
+        this.level().playSound(null, this.blockPosition(), ModSounds.VILLAGER_CALLED_OUT_EVENT, SoundSource.NEUTRAL, 0.9F, 0.75F);
     }
 
     @Unique
@@ -184,10 +193,17 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
         }
     }
 
+    @Unique
+    @Override
+    public int roundabout$getCalloutTicks() {
+        return this.getEntityData().get(ROUNDABOUT$CALLOUT_EFFECT_TICKS);
+    }
+
 
     @Inject(method = "tick", at = @At(value = "HEAD"))
     public void roundabout$villagerTick(CallbackInfo ci) {
         int at = this.roundabout$getAnubisTicks();
+        int calloutTick = this.roundabout$getCalloutTicks();
         if (!isClientSide()) {
             if (at >= 0) {
                 at--;
@@ -205,6 +221,15 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
                 this.roundabout$setAnubisTicks(at);
                 if (at == 0) {
                     doAnubis();
+                }
+            }
+            if (calloutTick >= 0) {
+                calloutTick--;
+                this.getEntityData().set(ROUNDABOUT$CALLOUT_EFFECT_TICKS, calloutTick);
+                if (calloutTick % 2 == 0) {
+                    ((ServerLevel) this.level()).sendParticles(ModParticles.SWEAT, this.getRandomX(0.45),
+                            this.getY() + this.getEyeHeight() * 0.85, this.getRandomZ(0.45),
+                            1, 0.02, 0.02, 0.02, 0.01);
                 }
             }
         }
