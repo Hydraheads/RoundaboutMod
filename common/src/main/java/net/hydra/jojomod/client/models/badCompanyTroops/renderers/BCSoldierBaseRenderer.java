@@ -7,12 +7,15 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.client.models.stand.renderers.StandRenderer;
 import net.hydra.jojomod.entity.badCompanyTroops.BCSoldier;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersBadCompany;
+import net.hydra.jojomod.stand.powers.PowersKillerQueen;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 
 public class BCSoldierBaseRenderer extends StandRenderer<BCSoldier> {
@@ -27,13 +30,17 @@ public class BCSoldierBaseRenderer extends StandRenderer<BCSoldier> {
 
     @Override
     public ResourceLocation getTextureLocation(BCSoldier entity) {
-        byte skn = entity.getSkin();
-        if (skn == PowersBadCompany.ANIME_SKIN) {
-            return ANIME;
-        }else if (skn == PowersBadCompany.MANGA_SKIN) {
-            return MANGA;
-        }else if (skn == PowersBadCompany.BETA_SKIN) {
-            return BETA;
+        LivingEntity user = entity.getUser();
+        if (user != null && ((StandUser)user).roundabout$getStandPowers() instanceof PowersBadCompany) {
+            byte skn = ((StandUser)user).roundabout$getStandSkin();
+
+            if (skn == PowersBadCompany.ANIME_SKIN) {
+                return ANIME;
+            }else if (skn == PowersBadCompany.MANGA_SKIN) {
+                return MANGA;
+            }else if (skn == PowersBadCompany.BETA_SKIN) {
+                return BETA;
+            }
         }
 
         return ANIME;
@@ -50,14 +57,21 @@ public class BCSoldierBaseRenderer extends StandRenderer<BCSoldier> {
         } else {
             matrixStack.scale(0.80f * factor, 0.80f * factor, 0.80f * factor);
         }
-        super.render(mobEntity, f, g, matrixStack, vertexConsumer, i);
 
         if (mobEntity.getBundle()) {
-            renderExtraSoldier(1f, 0f, -1.8f, mobEntity, f, g, matrixStack, vertexConsumer, i);
-            renderExtraSoldier(1f, 0f, -0.5f, mobEntity, f, g, matrixStack, vertexConsumer, i);
-            renderExtraSoldier(0f, 0f, -1.3f, mobEntity, f, g, matrixStack, vertexConsumer, i);
-            renderExtraSoldier(-1f, 0f, -0.5f, mobEntity, f, g, matrixStack, vertexConsumer, i);
-            renderExtraSoldier(-1f, 0f, -1.8f, mobEntity, f, g, matrixStack, vertexConsumer, i);
+            float offCenter = 0.7f;
+
+            // Line 1
+            renderExtraSoldier(1.0f, 0.0f, -0.5f+offCenter, mobEntity, f, g, matrixStack, vertexConsumer, i);
+            renderExtraSoldier(0.0f, 0.0f, 0.0f+offCenter, mobEntity, f, g, matrixStack, vertexConsumer, i);
+            renderExtraSoldier(-1.0f, 0.0f, -0.5f+offCenter, mobEntity, f, g, matrixStack, vertexConsumer, i);
+
+            // Line 2
+            renderExtraSoldier(1.0f, 0.0f, -1.8f+offCenter, mobEntity, f, g, matrixStack, vertexConsumer, i);
+            renderExtraSoldier(0.0f, 0.0f, -1.3f+offCenter, mobEntity, f, g, matrixStack, vertexConsumer, i);
+            renderExtraSoldier(-1.0f, 0.0f, -1.8f+offCenter, mobEntity, f, g, matrixStack, vertexConsumer, i);
+        }else {
+            super.render(mobEntity, f, g, matrixStack, vertexConsumer, i);
         }
     }
 
