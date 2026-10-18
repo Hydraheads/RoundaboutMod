@@ -564,6 +564,11 @@ public class FabricItems {
                         entries.accept(DOPPIO_MASK);
                         entries.accept(GHIACCIO_MASK);
                         entries.accept(JOTARO_6_MASK);
+                        entries.accept(KIRA_PART_FOUR_MASK);
+                        entries.accept(KOSAKU_MASK);
+                        entries.accept(KIRASAKU_MASK);
+                        entries.accept(HAYATO_KAWAJIRI_MASK);
+                        entries.accept(KIRA_PART_EIGHT_MASK);
                         entries.accept(JOHNGALLIA_MASK);
                         entries.accept(ANASUI_MASK);
                         entries.accept(FEM_ANASUI_MASK);
@@ -791,11 +796,6 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_PURPLE_HAZE);
                         entries.accept(STAND_DISC_BAD_COMPANY);
                         entries.accept(MAX_STAND_DISC_BAD_COMPANY);
-                        entries.accept(KIRA_PART_FOUR_MASK);
-                        entries.accept(KOSAKU_MASK);
-                        entries.accept(KIRASAKU_MASK);
-                        entries.accept(HAYATO_KAWAJIRI_MASK);
-                        entries.accept(KIRA_PART_EIGHT_MASK);
                         entries.accept(STAND_DISC_EMPEROR);
                         entries.accept(MAX_STAND_DISC_EMPEROR);
                         entries.accept(STAND_DISC_PLANET_WAVES);

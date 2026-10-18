@@ -4652,5 +4652,11 @@
     "sounds": [
       "roundabout:bc_summon"
     ]
+  },
+  "bc_ui_select": {
+    "subtitle" : "sounds.roundabout.bc_ui_select",
+    "sounds": [
+      "roundabout:bc_ui_select"
+    ]
   }
 }
