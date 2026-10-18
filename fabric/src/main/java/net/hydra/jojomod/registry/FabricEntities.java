@@ -52,6 +52,13 @@ public class FabricEntities {
                     EntityType.Builder.of(Zombiefish::new, MobCategory.MISC).
                             sized(0.44F, 0.33F).clientTrackingRange(10).build(Roundabout.MOD_ID+":zombiefish")
             );
+    public static final EntityType<CMoonEntity> CMOON =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "cmoon"),
+                    EntityType.Builder.of(CMoonEntity::new, MobCategory.MISC).
+                            sized(0.6F, 1.8F).clientTrackingRange(10).build(Roundabout.MOD_ID+"cmoon")
+            );
     public static final EntityType<AnubisGuardian> ANUBIS_GUARDIAN =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
@@ -1288,6 +1295,7 @@ public class FabricEntities {
                 ModEntities.THE_WORLD = THE_WORLD;
                 ModEntities.KING_CRIMSON = KING_CRIMSON;
                 ModEntities.WHITESNAKE = WHITESNAKE;
+                ModEntities.CMOON = CMOON;
                 ModEntities.HALLUCINATORY_ACID_PROJECTILE = HALLUCINATORY_ACID_PROJECTILE;
                 ModEntities.D4C = D4C;
                 ModEntities.KING_CRIMSON_REAPER = KING_CRIMSON_REAPER;
@@ -1516,6 +1524,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(THE_WORLD, StandEntity.createStandAttributes());
         FabricDefaultAttributeRegistry.register(KING_CRIMSON, StandEntity.createStandAttributes());
         FabricDefaultAttributeRegistry.register(WHITESNAKE, StandEntity.createStandAttributes());
+        FabricDefaultAttributeRegistry.register(CMOON, StandEntity.createStandAttributes());
         FabricDefaultAttributeRegistry.register(D4C, StandEntity.createStandAttributes());
         FabricDefaultAttributeRegistry.register(KING_CRIMSON_REAPER, StandEntity.createStandAttributes());
 

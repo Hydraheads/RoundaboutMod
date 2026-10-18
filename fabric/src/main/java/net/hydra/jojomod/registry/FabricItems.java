@@ -790,6 +790,8 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_20_CENTURY_BOY);
                         entries.accept(STAND_DISC_LYIN_EYES);
+                        entries.accept(STAND_DISC_CMOON);
+                        entries.accept(MAX_STAND_DISC_CMOON);
                         entries.accept(STAND_DISC_TUSK);
                         entries.accept(MAX_STAND_DISC_TUSK);
                         entries.accept(STAND_DISC_METALLICA);
@@ -862,6 +864,8 @@ public class FabricItems {
         ModItems.STAND_DISC_D4C = STAND_DISC_D4C;
         ((MaxStandDiscItem)MAX_STAND_DISC_D4C).baseDisc = ((StandDiscItem)STAND_DISC_D4C);
         ModItems.MAX_STAND_DISC_D4C = MAX_STAND_DISC_D4C;
+        ModItems.STAND_DISC_CMOON = STAND_DISC_CMOON;
+        ((MaxStandDiscItem)MAX_STAND_DISC_CMOON).baseDisc = ((StandDiscItem)STAND_DISC_CMOON);
         ModItems.STAND_DISC_MAGICIANS_RED = STAND_DISC_MAGICIANS_RED;
         ((MaxStandDiscItem)MAX_STAND_DISC_MAGICIANS_RED).baseDisc = ((StandDiscItem)STAND_DISC_MAGICIANS_RED);
         ModItems.MAX_STAND_DISC_MAGICIANS_RED = MAX_STAND_DISC_MAGICIANS_RED;
