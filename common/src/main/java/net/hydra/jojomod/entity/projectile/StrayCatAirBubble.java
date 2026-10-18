@@ -236,7 +236,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                 Vec3 nextPos = currentPos.add(this.getDeltaMovement());
                 AABB sweptBox = this.getBoundingBox()
                         .expandTowards(this.getDeltaMovement())
-                        .inflate(this.getBbWidth() * 1.2 + 0.3); // Adjust as needed
+                        .inflate(this.getBbWidth() * 1.2 + 0.4); // Adjust as needed
 
                 EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(
                         this.level(), this, currentPos, nextPos, sweptBox,
@@ -245,6 +245,16 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
                 if (entityHitResult != null) {
                     this.onHitEntity(entityHitResult);
+                }else if(getTarget() != null && getTarget().isAlive()) {
+                    if (distanceTo(getTarget()) < this.getBbWidth()*1.2f) {
+                        EntityHitResult entityHitResult2 = ProjectileUtil.getEntityHitResult(
+                                this.level(), this, currentPos, getTarget().getPosition(1), sweptBox,
+                                this::canHitEntity
+                        );
+                        if (entityHitResult2 != null) {
+                            this.onHitEntity(entityHitResult2);
+                        }
+                    }
                 }
             }
 
@@ -255,7 +265,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                         this.bubbleRedirect();
                         this.redirectCooldown = redirectCooldownMax;
                         if (((StandUser)getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ && PKQ.getBombSize() == 0) {
-                            this.redirectCooldown = redirectCooldownMax/2;
+                            this.redirectCooldown = redirectCooldownMax-10;
                         }
                     }
                 } else {
