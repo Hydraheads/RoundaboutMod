@@ -18,6 +18,8 @@ public class BCSoldier extends BCTroop{
 
     private static final EntityDataAccessor<Boolean> BUNDLE = SynchedEntityData.defineId(BCSoldier.class, EntityDataSerializers.BOOLEAN);
 
+    public boolean isDisplay = false;
+
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();

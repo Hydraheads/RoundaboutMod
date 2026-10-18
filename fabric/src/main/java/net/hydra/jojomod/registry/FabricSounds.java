@@ -624,6 +624,7 @@ public class FabricSounds {
         addSound(ModSounds.WALL_LATCH_ID, ModSounds.WALL_LATCH_EVENT);
         addSound(ModSounds.STONE_MASK_ACTIVATE_ID, ModSounds.STONE_MASK_ACTIVATE_EVENT);
 
+        addSound(ModSounds.BC_SUMMON_ID, ModSounds.BC_SUMMON_EVENT);
         addSound(ModSounds.BC_TROOP_SUMMON_ID, ModSounds.BC_TROOP_SUMMON_EVENT);
         addSound(ModSounds.BC_BUNDLE_SUMMON_ID, ModSounds.BC_BUNDLE_SUMMON_EVENT);
         addSound(ModSounds.BC_HELICOPTER_SUMMON_ID, ModSounds.BC_HELICOPTER_SUMMON_EVENT);

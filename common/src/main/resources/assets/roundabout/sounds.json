@@ -4640,5 +4640,11 @@
     "sounds": [
       "roundabout:bc_tank_summon"
     ]
+  },
+  "bc_summon": {
+    "subtitle" : "sounds.roundabout.bc_summon",
+    "sounds": [
+      "roundabout:bc_summon"
+    ]
   }
 }

@@ -31,27 +31,17 @@ public class BCSoldierBaseRenderer extends StandRenderer<BCSoldier> {
 
     @Override
     public void render(BCSoldier mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumer, int i) {
-        float factor = 0.2f;
+        float factor = 0.3f;
+        if (mobEntity.isDisplay) {
+            factor = 0.9f;
+        }
         if(mobEntity.isBaby()){
             matrixStack.scale(0.60f * factor, 0.60f * factor, 0.60f * factor);
         } else {
             matrixStack.scale(0.80f * factor, 0.80f * factor, 0.80f * factor);
         }
         if (mobEntity.getBundle()) {
-            matrixStack.pushPose();
-            matrixStack.pushPose();
-            matrixStack.translate(
-                    1.0,
-                    0,
-                    1.0
-            );
-            this.setupRotations(mobEntity, matrixStack, mobEntity.tickCount + g, f, g);
-            matrixStack.mulPose((Axis.ZP.rotationDegrees(180.0F)));
-            this.scale(mobEntity, matrixStack, g);
-
-            VertexConsumer vertexConsumerResult = vertexConsumer.getBuffer(RenderType.entityTranslucent(getTextureLocation(mobEntity)));
-            this.model.renderToBuffer(matrixStack, vertexConsumerResult, i, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, i);
-            matrixStack.popPose();
+            renderExtraSoldier(1, 0, 0, mobEntity, f, g, matrixStack, vertexConsumer, i);
         }
 
 
@@ -63,5 +53,18 @@ public class BCSoldierBaseRenderer extends StandRenderer<BCSoldier> {
     protected RenderType getRenderType(BCSoldier entity, boolean showBody, boolean translucent, boolean showOutline) {
         ResourceLocation $$4 = this.getTextureLocation(entity);
         return RenderType.entityTranslucent($$4);
+    }
+
+    private void renderExtraSoldier(float x, float y, float z, BCSoldier mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumer, int i) {
+        matrixStack.pushPose();
+        matrixStack.translate( x, y, z );
+
+        this.setupRotations(mobEntity, matrixStack, mobEntity.tickCount + g, f, g);
+        //matrixStack.mulPose((Axis.ZP.rotationDegrees(180.0F)));
+        this.scale(mobEntity, matrixStack, g);
+
+        VertexConsumer vertexConsumerResult = vertexConsumer.getBuffer(RenderType.entityTranslucent(getTextureLocation(mobEntity)));
+        this.model.renderToBuffer(matrixStack, vertexConsumerResult, i, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, i);
+        matrixStack.popPose();
     }
 }

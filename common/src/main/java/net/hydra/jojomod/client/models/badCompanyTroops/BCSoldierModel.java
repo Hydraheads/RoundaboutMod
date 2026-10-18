@@ -56,23 +56,21 @@ public class BCSoldierModel<T extends BCTroop> extends StandModel<T> {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition stand = partdefinition.addOrReplaceChild("stand", CubeListBuilder.create(), PartPose.offset(1.5F, 17.0F, 2.0F));
+        PartDefinition stand = partdefinition.addOrReplaceChild("stand", CubeListBuilder.create(), PartPose.offset(0.5F, 17.0F, 0.0F));
 
         PartDefinition stand2 = stand.addOrReplaceChild("stand2", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition bone = stand2.addOrReplaceChild("bone", CubeListBuilder.create(), PartPose.offsetAndRotation(-7.5F, 7.0F, -2.0F, -1.5708F, 0.0F, 0.0F));
-
-        PartDefinition parachute = stand2.addOrReplaceChild("parachute", CubeListBuilder.create().texOffs(0, 26).addBox(-8.0F, -23.0F, 0.5F, 14.0F, 21.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition parachute = stand2.addOrReplaceChild("parachute", CubeListBuilder.create().texOffs(0, 26).addBox(-8.0F, -23.0F, 0.5F, 14.0F, 21.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 2.0F));
 
         PartDefinition cube_r1 = parachute.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-10.0F, -7.5F, 0.0F, 18.0F, 18.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.5F, -16.5F, -1.0F, 1.5708F, 0.0F, 0.0F));
 
-        PartDefinition head = stand2.addOrReplaceChild("head", CubeListBuilder.create(), PartPose.offset(-0.5F, -6.0F, -2.0F));
+        PartDefinition head = stand2.addOrReplaceChild("head", CubeListBuilder.create(), PartPose.offset(-0.5F, -6.0F, 0.0F));
 
         PartDefinition head2 = head.addOrReplaceChild("head2", CubeListBuilder.create().texOffs(28, 32).addBox(-2.0F, -4.0F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F))
                 .texOffs(44, 32).addBox(-2.0F, -5.0F, -2.0F, 4.0F, 2.0F, 4.0F, new CubeDeformation(0.1F))
                 .texOffs(28, 26).addBox(-2.5F, -4.0F, -2.5F, 5.0F, 1.0F, 5.0F, new CubeDeformation(-0.3F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition body = stand2.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, -2.0F));
+        PartDefinition body = stand2.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         PartDefinition body2 = body.addOrReplaceChild("body2", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 2.0F));
 
@@ -97,7 +95,7 @@ public class BCSoldierModel<T extends BCTroop> extends StandModel<T> {
 
         PartDefinition knife = leftArm.addOrReplaceChild("knife", CubeListBuilder.create(), PartPose.offset(1.0F, 5.5F, 0.0F));
 
-        PartDefinition cube_r3 = knife.addOrReplaceChild("cube_r3", CubeListBuilder.create().texOffs(42, 51).addBox(0.0F, -1.5F, -0.5F, 0.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, -2.75F, -1.5708F, 0.0F, 0.0F));
+        PartDefinition cube_r3 = knife.addOrReplaceChild("cube_r3", CubeListBuilder.create().texOffs(42, 51).addBox(0.0F, -1.5F, -0.5F, 0.0F, 3.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, -2.75F, -1.5708F, 0.0F, 0.0F));
 
         PartDefinition cube_r4 = knife.addOrReplaceChild("cube_r4", CubeListBuilder.create().texOffs(52, 4).addBox(0.0F, -0.5F, 0.5F, 1.0F, 2.0F, 1.0F, new CubeDeformation(-0.3F)), PartPose.offsetAndRotation(-0.5F, 1.0F, -1.25F, 1.5708F, 0.0F, 0.0F));
 
