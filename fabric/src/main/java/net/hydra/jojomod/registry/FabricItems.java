@@ -34,6 +34,10 @@ public class FabricItems {
     public static Item STAND_ARROW = registerItem("stand_arrow", new StandArrowItem(new Item.Properties().stacksTo(1).durability(5)));
     public static Item STAND_BEETLE_ARROW = registerItem("stand_beetle_arrow", new StandArrowItem(new Item.Properties().stacksTo(1).durability(5)));
     public static Item WORTHY_ARROW = registerItem("worthy_arrow", new WorthyArrowItem(new Item.Properties().stacksTo(1)));
+    public static Item STAND_DISC_CMOON = registerItem("cmoon_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCMoon(null)));
+    public static Item MAX_STAND_DISC_CMOON = registerItem("max_cmoon_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersCMoon(null)));
     public static Item STAND_DISC_STAR_PLATINUM = registerItem("star_platinum_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersStarPlatinum(null)));
     public static Item MAX_STAND_DISC_STAR_PLATINUM = registerItem("max_star_platinum_disc",
@@ -770,6 +774,8 @@ public class FabricItems {
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_20_CENTURY_BOY);
+                        entries.accept(STAND_DISC_CMOON);
+                        entries.accept(MAX_STAND_DISC_CMOON);
                         entries.accept(STAND_DISC_TUSK);
                         entries.accept(MAX_STAND_DISC_TUSK);
                         entries.accept(STAND_DISC_METALLICA);
@@ -850,6 +856,8 @@ public class FabricItems {
         ModItems.STAND_DISC_D4C = STAND_DISC_D4C;
         ((MaxStandDiscItem)MAX_STAND_DISC_D4C).baseDisc = ((StandDiscItem)STAND_DISC_D4C);
         ModItems.MAX_STAND_DISC_D4C = MAX_STAND_DISC_D4C;
+        ModItems.STAND_DISC_CMOON = STAND_DISC_CMOON;
+        ((MaxStandDiscItem)MAX_STAND_DISC_CMOON).baseDisc = ((StandDiscItem)STAND_DISC_CMOON);
         ModItems.STAND_DISC_MAGICIANS_RED = STAND_DISC_MAGICIANS_RED;
         ((MaxStandDiscItem)MAX_STAND_DISC_MAGICIANS_RED).baseDisc = ((StandDiscItem)STAND_DISC_MAGICIANS_RED);
         ModItems.MAX_STAND_DISC_MAGICIANS_RED = MAX_STAND_DISC_MAGICIANS_RED;

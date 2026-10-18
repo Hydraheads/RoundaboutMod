@@ -28,6 +28,8 @@ public class ModItems {
     public static Item STAND_ARROW;
     public static Item STAND_BEETLE_ARROW;
     public static Item WORTHY_ARROW;
+    public static Item STAND_DISC_CMOON;
+    public static Item MAX_STAND_DISC_CMOON;
     public static Item STAND_DISC_STAR_PLATINUM;
     public static Item MAX_STAND_DISC_STAR_PLATINUM;
     public static Item STAND_DISC_THE_WORLD;
