@@ -2969,7 +2969,8 @@ public class PowersDiverDown extends NewPunchingStand {
     public void tryDiverZip() {
         if (!isDiverMoveActive() && canExecuteMoveWithLevel(getDiverZipLevel())
                 && !this.onCooldown(PowerIndex.SKILL_3)
-                && !((StandUser) this.self).roundabout$hasSpringLegs()) {
+                && !((StandUser) this.self).roundabout$hasSpringLegs()
+                && !((StandUser) this.self).roundabout$hasRibcageTrap()){
             if (!self.isInWater()) {
                 if (forceBlock())
                     return;
