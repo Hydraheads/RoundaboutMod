@@ -29,6 +29,8 @@ import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.visagedata.VisageData;
+import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.mixin.PlayerEntity;
 import net.hydra.jojomod.sound.ModSounds;
@@ -861,8 +863,8 @@ public class PowersGreenDay extends NewPunchingStand {
                     HasOffHandCharge = true;
                 }
                 if (isClient()) {
-                    AbstractClientPlayer abstractClientPlayer = (AbstractClientPlayer) this.self;
-                    if ((abstractClientPlayer).getModelName().equals("default")) {
+
+                    if (isWideSkin()) {
                         tryPowerPacket(PowerIndex.POWER_2);
                     } else {
                         tryPowerPacket(OFF_HAND_THROW_SLIM);
@@ -925,8 +927,8 @@ public class PowersGreenDay extends NewPunchingStand {
                     if(HasOffHand){
                         setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinCooldown);
                     }
-                    AbstractClientPlayer abstractClientPlayer = (AbstractClientPlayer) this.self;
-                    if ((abstractClientPlayer).getModelName().equals("default")) {
+
+                    if (isWideSkin()) {
                         tryPowerPacket(PowerIndex.POWER_2_BLOCK);
                     } else {
                         tryPowerPacket(OFF_HAND_SPIN_THROW_SLIM);
@@ -1041,6 +1043,23 @@ public class PowersGreenDay extends NewPunchingStand {
         sendParticlesIfPossible(self.level(),ModParticles.MENACING,this.self.getX(),this.self.getY() + 1,this.self.getZ(),5,0.25,0.5,0.25,0);
     }
 
+    public boolean isWideSkin() {
+        boolean isWide = ((AbstractClientPlayer) this.self).getModelName().equals("default");
+
+        IPlayerEntity pl = ((IPlayerEntity) self);
+        ItemStack visage = pl.roundabout$getMaskSlot();
+        if (Objects.nonNull(visage)) {
+            if (visage.getItem() instanceof MaskItem MI) {
+                VisageData data = MI.visageData.generateVisageData(self);
+                if (data.isCharacterVisage()) {
+                    isWide = !data.isSlim();
+                }
+            }
+        }
+
+        return isWide;
+    }
+
     public SeperatedArmEntity Main_arm = null;
 
     public void MainArmSpin(){
@@ -1049,8 +1068,8 @@ public class PowersGreenDay extends NewPunchingStand {
                 if(HasMainArm){
                     setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinCooldown);
                 }
-                AbstractClientPlayer abstractClientPlayer = (AbstractClientPlayer) this.self;
-                if ((abstractClientPlayer).getModelName().equals("default")) {
+
+                if (isWideSkin()) {
                     tryPowerPacket(PowerIndex.POWER_1_BLOCK);
                 } else {
                     tryPowerPacket(MAIN_ARM_SPIN_THROW_SLIM);
@@ -1135,8 +1154,8 @@ public class PowersGreenDay extends NewPunchingStand {
                     HasMainArmCharge = true;
                 }
                 if (isClient()) {
-                    AbstractClientPlayer abstractClientPlayer = (AbstractClientPlayer) this.self;
-                    if ((abstractClientPlayer).getModelName().equals("default")) {
+
+                    if (isWideSkin()) {
                         tryPowerPacket(PowerIndex.POWER_1);
                     } else {
                         tryPowerPacket(MAIN_ARM_THROW_SLIM);

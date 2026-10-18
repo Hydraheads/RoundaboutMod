@@ -283,6 +283,7 @@ public interface StandUser {
 
     void roundabout$UniversalTick();
     void roundabout$startAutoSpinAttack(int p_204080_);
+    void roundabout$stopAutoSpinAttack();
 
     void roundabout$setThrower(LivingEntity thrower);
     void roundabout$setZappedToID(int bound);
@@ -398,6 +399,9 @@ public interface StandUser {
     @Nullable PowersKillerQueen rdbt$GetBtdPlantedUser();
     void rdbt$SetBtdPlantedUser(@Nullable PowersKillerQueen e);
     boolean rdbt$interceptIncomingHarmIfBTD(DamageSource source);
+
+    @Nullable PowersDiverDown rdbt$getRibcagePlacer();
+    void rdbt$setRibcagePlacer(@Nullable PowersDiverDown e);
 
     List<CooldownInstance> rdbt$initPowerCooldowns();
     List<CooldownInstance> rdbt$getPowerCooldowns();

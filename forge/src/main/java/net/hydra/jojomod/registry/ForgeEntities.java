@@ -2,15 +2,14 @@ package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.*;
+import net.hydra.jojomod.entity.badCompanyTroops.BCSoldier;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
-import net.hydra.jojomod.entity.objects.FallingBannerEntity;
-import net.hydra.jojomod.entity.objects.GentlyWeepsEntity;
-import net.hydra.jojomod.entity.objects.IceTwisterEntity;
+import net.hydra.jojomod.entity.objects.*;
 import net.hydra.jojomod.entity.paintings.BirthOfVenusPainting;
 import net.hydra.jojomod.entity.paintings.MonaLisaPainting;
 import net.hydra.jojomod.entity.paintings.VanGoughPainting;
@@ -560,6 +559,24 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "cowboy_sabbath").toString())
             );
+    public static final RegistryObject<EntityType<GrabbedMobSoul>> GRABBED_MOB_SOUL =
+            ENTITY_TYPES.register("bs_mob_soul", () ->
+                    EntityType.Builder.of(GrabbedMobSoul::new, MobCategory.MISC).sized(0.5F, 0.5f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "bs_mob_soul").toString())
+            );
+    public static final RegistryObject<EntityType<GrabbedMobSoulPlayerLarge>> GRABBED_PLAYER_SOUL =
+            ENTITY_TYPES.register("bs_player_soul", () ->
+                    EntityType.Builder.of(GrabbedMobSoulPlayerLarge::new, MobCategory.MISC).sized(0.4F, 1.8f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "bs_player_soul").toString())
+            );
+    public static final RegistryObject<EntityType<GrabbedMobSoulPlayerSlim>> GRABBED_PLAYER_SOUL_SLIM =
+            ENTITY_TYPES.register("bs_player_soul_slim", () ->
+                    EntityType.Builder.of(GrabbedMobSoulPlayerSlim::new, MobCategory.MISC).sized(0.4F, 1.8f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "bs_player_soul_slim").toString())
+            );
     public static final RegistryObject<EntityType<PearlJamEntity>> PEARL_JAM =
             ENTITY_TYPES.register("pearl_jam", () ->
                     EntityType.Builder.of(PearlJamEntity::new, MobCategory.MISC).sized(0.25F, 0.30f).
@@ -788,6 +805,12 @@ public class ForgeEntities {
                     EntityType.Builder.<GasolineCanEntity>of(GasolineCanEntity::new, MobCategory.MISC).sized(0.8f, 0.8f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "gasoline_can").toString())
+            );
+    public static final RegistryObject<EntityType<TotemOfDoomEntity>> TOTEM_OF_DOOM =
+            ENTITY_TYPES.register("totem_of_doom", () ->
+                    EntityType.Builder.<TotemOfDoomEntity>of(TotemOfDoomEntity::new, MobCategory.MISC).sized(0.25f, 0.25f).
+                            clientTrackingRange(8).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "totem_of_doom").toString())
             );
     public static final RegistryObject<EntityType<CrossfireHurricaneEntity>> CROSSFIRE_HURRICANE =
             ENTITY_TYPES.register("crossfire_hurricane", () ->
@@ -1047,6 +1070,12 @@ public class ForgeEntities {
                     EntityType.Builder.of(PurpleSmokeEntity::new, MobCategory.CREATURE).sized(0.01f, 0.01f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "purple_smoke").toString())
+            );
+    public static final RegistryObject<EntityType<BCSoldier>> BAD_COMPANY_SOLDIER =
+            ENTITY_TYPES.register("bad_company_soldier", () ->
+                    EntityType.Builder.of(BCSoldier::new, MobCategory.CREATURE).sized(BCSoldier.size, BCSoldier.size).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "bad_company_soldier").toString())
             );
     public static final RegistryObject<EntityType<PHCapsuleEntity>> PH_CAPSULE =
             ENTITY_TYPES.register("ph_capsule", () ->

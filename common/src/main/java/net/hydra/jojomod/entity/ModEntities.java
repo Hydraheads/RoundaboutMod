@@ -2,15 +2,14 @@ package net.hydra.jojomod.entity;
 
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.entity.badCompanyTroops.BCSoldier;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
-import net.hydra.jojomod.entity.objects.FallingBannerEntity;
-import net.hydra.jojomod.entity.objects.GentlyWeepsEntity;
-import net.hydra.jojomod.entity.objects.IceTwisterEntity;
+import net.hydra.jojomod.entity.objects.*;
 import net.hydra.jojomod.entity.paintings.BirthOfVenusPainting;
 import net.hydra.jojomod.entity.paintings.MonaLisaPainting;
 import net.hydra.jojomod.entity.paintings.VanGoughPainting;
@@ -87,6 +86,9 @@ public class ModEntities {
     public static EntityType<BeachSabbathEntity> BEACH_SABBATH;
     public static EntityType<BlackSantaSabbathEntity> SANTA_SABBATH;
     public static EntityType<CowboySabbathEntity> COWBOY_SABBATH;
+    public static EntityType<GrabbedMobSoul> GRABBED_MOB_SOUL;
+    public static EntityType<GrabbedMobSoulPlayerLarge> GRABBED_PLAYER_SOUL;
+    public static EntityType<GrabbedMobSoulPlayerSlim> GRABBED_PLAYER_SOUL_SLIM;
     public static EntityType<WalkingHeartEntity> WALKING_HEART;
     public static EntityType<JusticePirateEntity> JUSTICE_PIRATE;
     public static EntityType<DarkMirageEntity> DARK_MIRAGE;
@@ -144,6 +146,7 @@ public class ModEntities {
     public static EntityType<GentlyWeepsEntity> GENTLY_WEEPS;
     public static EntityType<GasolineCanEntity> GASOLINE_CAN;
     public static EntityType<RoadRollerEntity> ROAD_ROLLER_ENTITY;
+    public static EntityType<TotemOfDoomEntity> TOTEM_OF_DOOM;
 
     public static EntityType<GasolineSplatterEntity> GASOLINE_SPLATTER;
     public static EntityType<BloodSplatterEntity> BLOOD_SPLATTER;
@@ -210,6 +213,7 @@ public class ModEntities {
     public static EntityType<FallenVillager> FALLEN_VILLAGER;
     public static EntityType<FallenPhantom> FALLEN_PHANTOM;
     public static EntityType<FallenCreeper> FALLEN_CREEPER;
+    public static EntityType<BCSoldier> BAD_COMPANY_SOLDIER;
 
 
     public static EntityType<ParallelChestEntity> PARALLEL_CHEST;

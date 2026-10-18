@@ -102,8 +102,9 @@ public class AnubisGuardian extends AbstractIllager implements RangedAttackMob {
 
         if (this.getAction().equals(AnubisAttacks.NONE)) {
             this.setItemInHand(InteractionHand.MAIN_HAND,Items.AIR.getDefaultInstance());
+        } else if (this.getMainHandItem().is(Items.POTION)) {
+            this.startUsingItem(InteractionHand.MAIN_HAND);
         }
-
 
         super.tick();
     }
@@ -242,7 +243,11 @@ static class ChooseNormalAttack extends RangedBowAttackGoal<AnubisGuardian> {
         super.tick();
         time++;
         if (time > 20) {
-            this.mob.setAction(AnubisAttacks.getRandom(this.mob));
+            if (this.mob.isOnFire() && !this.mob.hasEffect(MobEffects.FIRE_RESISTANCE)) {
+                this.mob.setAction(AnubisAttacks.FIRE_POT);
+            } else {
+                this.mob.setAction(AnubisAttacks.getRandom(this.mob));
+            }
             stop();
         }
     }
@@ -438,6 +443,11 @@ static class FirePotGoal extends Goal {
     @Override
     public boolean canUse() {
         return this.mob.isOnFire() && !this.mob.hasEffect(MobEffects.FIRE_RESISTANCE);
+    }
+
+    @Override
+    public boolean isInterruptable() {
+        return false;
     }
 }
 

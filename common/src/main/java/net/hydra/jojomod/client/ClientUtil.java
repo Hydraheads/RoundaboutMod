@@ -1718,6 +1718,7 @@ public class ClientUtil {
     public static void openMemoryReadingScreen(ItemStack stack, InteractionHand hand){
         Minecraft.getInstance().setScreen(new MemoryReadingScreen(stack, hand));
     }
+    public static void openTroopSelectionScreen(){Minecraft.getInstance().setScreen(new TroopSelectScreen());}
 
     //Diver Down UI start
     public static void openWorkbenchSelect() {Minecraft.getInstance().setScreen(new DiverDownWorkbenchSelect());}

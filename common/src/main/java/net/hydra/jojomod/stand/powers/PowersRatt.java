@@ -1041,10 +1041,10 @@ public class PowersRatt extends NewDashPreset {
     @Override
     public void tickStandRejection(MobEffectInstance effect) {
         if (!isClient()) {
-            if (effect.getDuration()%15 == 0) {
+            if (effect.getDuration()%43 == 0) {
                 MobEffectInstance effec = this.getSelf().getEffect(ModEffects.MELTING);
                 int stack = effec != null ?  effec.getAmplifier() : 0;
-                this.getSelf().addEffect(new MobEffectInstance(ModEffects.MELTING,600,stack+2));
+                this.getSelf().addEffect(new MobEffectInstance(ModEffects.MELTING, 120,stack+1));
                 float degrees = (float) Math.random()*360;
                 MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 0.27F,
                         Mth.sin(degrees * ((float) Math.PI / 180)),

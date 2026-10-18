@@ -32,6 +32,10 @@ public class ForgeEffects{
             POTION_EFFECTS.register("doom", () ->
                     new Effect(MobEffectCategory.HARMFUL, 0)
             );
+    public static final RegistryObject<MobEffect> DOOM_IMMUNITY =
+            POTION_EFFECTS.register("doom_immunity", () ->
+                    new Effect(MobEffectCategory.BENEFICIAL, 0)
+            );
     public static final RegistryObject<MobEffect> SWITCH =
             POTION_EFFECTS.register("switch", () ->
                     new Effect(MobEffectCategory.HARMFUL, 9974431)

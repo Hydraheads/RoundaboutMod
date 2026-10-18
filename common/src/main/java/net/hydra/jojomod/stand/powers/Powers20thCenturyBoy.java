@@ -301,19 +301,19 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             switch (mode) {
                 case 1 -> {
                     staticMode = 1;
-                    playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_GROUND_STANCE_EVENT, SoundSource.PLAYERS, 3.0F, 1.0F);
+                    playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_GROUND_STANCE_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
                 }
                 case 2 -> {
                     staticMode = 2;
-                    playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_NORMAL_STANCE_EVENT, SoundSource.PLAYERS, 3.0F, 1.0F);
+                    playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_NORMAL_STANCE_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
                 }
                 case 3 -> {
                     staticMode = 3;
-                    playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_PROPEL_STANCE_EVENT, SoundSource.PLAYERS, 3.0F, 1.0F);
+                    playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_PROPEL_STANCE_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
                 }
                 case 4 -> {
                     staticMode = 4;
-                    playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_OUTPUT_STANCE_EVENT, SoundSource.PLAYERS, 3.0F, 1.0F);
+                    playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_OUTPUT_STANCE_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
                 }
             }
             this.self.stopUsingItem();
@@ -731,7 +731,12 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             if (!level.isClientSide() && level instanceof ServerLevel serverLevel) {
                 sendParticlesIfPossible(serverLevel,new BlockParticleOption(ParticleTypes.BLOCK, state), x, y, z,10,.2,.3, 0.3, .3);
             }
-            level.playSound(null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_HIT_EVENT, SoundSource.PLAYERS, 3F, 1.0F);
+            double rand = Math.random() *2 + 1;
+            if(rand > 2){
+                level.playSound(null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_HIT_2_EVENT, SoundSource.PLAYERS, 1F, 1.0F);
+            } else {
+                level.playSound(null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_HIT_EVENT, SoundSource.PLAYERS, 1F, 1.0F);
+            }
         }
     }
 

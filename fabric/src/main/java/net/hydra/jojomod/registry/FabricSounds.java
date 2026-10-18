@@ -310,6 +310,7 @@ public class FabricSounds {
 
         addSound(ModSounds.CENTURY_BOY_SUMMON_ID, ModSounds.CENTURY_BOY_SUMMON_EVENT);
         addSound(ModSounds.CENTURY_BOY_HIT_ID, ModSounds.CENTURY_BOY_HIT_EVENT);
+        addSound(ModSounds.CENTURY_BOY_HIT_2_ID, ModSounds.CENTURY_BOY_HIT_2_EVENT);
         addSound(ModSounds.CENTURY_BOY_NORMAL_STANCE_ID, ModSounds.CENTURY_BOY_NORMAL_STANCE_EVENT);
         addSound(ModSounds.CENTURY_BOY_PROPEL_STANCE_ID, ModSounds.CENTURY_BOY_PROPEL_STANCE_EVENT);
         addSound(ModSounds.CENTURY_BOY_OUTPUT_STANCE_ID, ModSounds.CENTURY_BOY_OUTPUT_STANCE_EVENT);
@@ -555,7 +556,10 @@ public class FabricSounds {
         addSound(ModSounds.DIVER_DOWN_CHARGE_ID, ModSounds.DIVER_DOWN_CHARGE_EVENT);
         addSound(ModSounds.DIVER_DOWN_DIVE_ID, ModSounds.DIVER_DOWN_DIVE_EVENT);
         addSound(ModSounds.DIVER_DOWN_DIVE2_ID, ModSounds.DIVER_DOWN_DIVE2_EVENT);
-        addSound(ModSounds.DIVER_DOWN_BARRAGE_ID, ModSounds.DIVER_DOWN_BARRAGE_EVENT);
+        addSound(ModSounds.DIVER_DOWN_BARRAGE_1_ID, ModSounds.DIVER_DOWN_BARRAGE_1_EVENT);
+        addSound(ModSounds.DIVER_DOWN_BARRAGE_2_ID, ModSounds.DIVER_DOWN_BARRAGE_2_EVENT);
+        addSound(ModSounds.DIVER_DOWN_BARRAGE_3_ID, ModSounds.DIVER_DOWN_BARRAGE_3_EVENT);
+        addSound(ModSounds.DIVER_DOWN_BARRAGE_4_ID, ModSounds.DIVER_DOWN_BARRAGE_4_EVENT);
         addSound(ModSounds.DIVER_DOWN_GROUND_BARRAGE_ID, ModSounds.DIVER_DOWN_GROUND_BARRAGE_EVENT);
         addSound(ModSounds.DIVER_DOWN_GROUND_DIVE_ID, ModSounds.DIVER_DOWN_GROUND_DIVE_EVENT);
         addSound(ModSounds.DIVER_DOWN_BUBBLING_ID, ModSounds.DIVER_DOWN_BUBBLING_EVENT);
@@ -600,6 +604,8 @@ public class FabricSounds {
         addSound(ModSounds.ANASUI_PUCCI_1_ID, ModSounds.ANASUI_PUCCI_1_EVENT);
         addSound(ModSounds.ANASUI_PUCCI_2_ID, ModSounds.ANASUI_PUCCI_2_EVENT);
 
+        addSound(ModSounds.LYIN_EYES_SUMMON_ID, ModSounds.LYIN_EYES_SUMMON_EVENT);
+
         addSound(ModSounds.SUMMON_GREEN_DAY_ID, ModSounds.SUMMON_GREEN_DAY_EVENT);
         addSound(ModSounds.SUMMON_WALKING_ID, ModSounds.SUMMON_WALKING_EVENT);
         addSound(ModSounds.HEEL_RAISE_ID, ModSounds.HEEL_RAISE_EVENT);
@@ -617,6 +623,11 @@ public class FabricSounds {
         addSound(ModSounds.EXTEND_SPIKES_ID, ModSounds.EXTEND_SPIKES_EVENT);
         addSound(ModSounds.WALL_LATCH_ID, ModSounds.WALL_LATCH_EVENT);
         addSound(ModSounds.STONE_MASK_ACTIVATE_ID, ModSounds.STONE_MASK_ACTIVATE_EVENT);
+
+        addSound(ModSounds.BC_TROOP_SUMMON_ID, ModSounds.BC_TROOP_SUMMON_EVENT);
+        addSound(ModSounds.BC_BUNDLE_SUMMON_ID, ModSounds.BC_BUNDLE_SUMMON_EVENT);
+        addSound(ModSounds.BC_HELICOPTER_SUMMON_ID, ModSounds.BC_HELICOPTER_SUMMON_EVENT);
+        addSound(ModSounds.BC_TANK_SUMMON_ID, ModSounds.BC_TANK_SUMMON_EVENT);
 
         addSound(ModSounds.DIO_HOHO_ID, ModSounds.DIO_HOHO_EVENT);
         addSound(ModSounds.DIO_HOHO_2_ID, ModSounds.DIO_HOHO_2_EVENT);
