@@ -7,6 +7,7 @@ import net.hydra.jojomod.access.IGossipContainerAccess;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.IVillagerAccess;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.AnubisItem;
 import net.hydra.jojomod.item.ModItems;
@@ -43,6 +44,7 @@ import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.entity.schedule.Schedule;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -70,7 +72,6 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
             Villager.class,
             EntityDataSerializers.BYTE
     );
-
     @Unique
     @Override
     public int roundabout$getAnubisTicks() {
@@ -237,6 +238,22 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
             /*if (hand == InteractionHand.MAIN_HAND) {
                 player.sendSystemMessage(Component.literal("i'm unnerved, i'm unnerved so hard rn"));
             }*/
+        }
+    }
+
+    //taken from CinderellaVillager
+    @Inject(method = "updateSpecialPrices(Lnet/minecraft/world/entity/player/Player;)V", at = @At(value = "TAIL"),cancellable = true)
+    private void roundabout$updateSpecialPrices(Player player, CallbackInfo ci) {
+        if (!player.hasEffect(MobEffects.HERO_OF_THE_VILLAGE)) {
+            //lyin eyes discount
+            if (((StandUser)player).roundabout$getStandPowers() instanceof PowersLyinEyes
+                    && this.roundabout$isUnnerved()) {
+                for (MerchantOffer offer : this.getOffers()) {
+                    // rn it's a 20% discount, turn this into a config later :thumbsup:
+                    int discount = (int) Math.floor(0.20 * (double) offer.getBaseCostA().getCount());
+                    offer.addToSpecialPriceDiff(-Math.max(discount, 1));
+                }
+            }
         }
     }
 
