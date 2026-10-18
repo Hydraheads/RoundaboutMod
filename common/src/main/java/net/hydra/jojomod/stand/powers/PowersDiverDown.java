@@ -4002,11 +4002,6 @@ public class PowersDiverDown extends NewPunchingStand {
             if (player.isSprinting()) {
                 player.setSprinting(false);
             }
-            if (level.isClientSide()) {
-                Vec3 forward = player.getForward();
-                double walkSpeed = 0.4317D;
-                player.setDeltaMovement(forward.x * walkSpeed, player.getDeltaMovement().y, forward.z * walkSpeed);
-            }
             return;
         } else if (MainUtil.isBossMob(host)) {
             Vec3 forward = host.getForward();
@@ -5306,7 +5301,7 @@ public class PowersDiverDown extends NewPunchingStand {
     private void updatePhasePunchCharge() {
         // 20 ticks = 1 second, rn it's at 10 ticks so you can hold the move for half a
         // second after max charge.
-        if (this.attackTimeDuring >= 10) {
+        if (this.attackTimeDuring >= 40) {
             this.stopSoundsIfNearby(IMPALE_NOISE, 100, true);
             if (this.getSelf() instanceof Player && this.getSelf().level().isClientSide() && isPacketPlayer()) {
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
