@@ -2,11 +2,14 @@ package net.hydra.jojomod.mixin.justice;
 
 import net.hydra.jojomod.access.IIronGolem;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.NeutralMob;
 import net.minecraft.world.entity.animal.AbstractGolem;
@@ -20,6 +23,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 
 @Mixin(IronGolem.class)
@@ -84,11 +88,23 @@ public abstract class JusticeIronGolem extends AbstractGolem implements NeutralM
     @Unique
     private static final EntityDataAccessor<Byte> roundabout$ALT_LOOK = SynchedEntityData.defineId(IronGolem.class, EntityDataSerializers.BYTE);
 
-
     @Inject(method = "defineSynchedData", at = @At(value = "HEAD"))
     protected void roundabout$pigDefineSyncedData(CallbackInfo ci) {
         if (!(this.getEntityData().hasItem(roundabout$ALT_LOOK))) {
             this.entityData.define(roundabout$ALT_LOOK, (byte)0);
+        }
+    }
+    @Inject(method = "canAttackType(Lnet/minecraft/world/entity/EntityType;)Z", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundabout$canAttackTypeG(EntityType<?> $$0, CallbackInfoReturnable<Boolean> cir) {
+        if ($$0.getClass() == ModEntities.ANUBIS_GUARDIAN.getClass()){
+            cir.setReturnValue(false);
+        }
+    }
+    @Inject(method = "doPush(Lnet/minecraft/world/entity/Entity;)V", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundabout$doPush(Entity $$0, CallbackInfo ci) {
+        if ($$0 instanceof AnubisGuardian){
+            super.push($$0);
+            ci.cancel();
         }
     }
     @Inject(method = "addAdditionalSaveData", at = @At(value = "HEAD"))
