@@ -80,8 +80,10 @@ public class PowersBadCompany extends NewDashPreset {
         if (isHoldingSneak()) {
             setSkillIcon(context, x, y, 1, StandIcons.BAD_COMPANY_TROOP_RECALL, PowerIndex.NO_CD);
         }else{
-            setSkillIcon(context, x, y, 1, StandIcons.BAD_COMPANY_TROOP_DROP, PowerIndex.SKILL_1);
+            setSkillIcon(context, x, y, 1, StandIcons.BAD_COMPANY_TROOP_DROP, PowerIndex.NO_CD);
         }
+        
+        setSkillIcon(context, x, y, 2, StandIcons.BAD_COMPANY_TACTICAL_OPTIONS, PowerIndex.NO_CD);
 
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
 

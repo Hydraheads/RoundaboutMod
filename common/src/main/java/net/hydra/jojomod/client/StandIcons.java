@@ -495,6 +495,8 @@ public class StandIcons {
             "textures/gui/icons/bad_company/pilot_mode.png");
     public static final ResourceLocation BAD_COMPANY_PILOT_MODE_EXIT = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/bad_company/pilot_mode_exit.png");
+    public static final ResourceLocation BAD_COMPANY_TACTICAL_OPTIONS = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/bad_company/tactical_options.png");
 
     public static final ResourceLocation PLANET_WAVES_METEOR_SHOWER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/planet_waves/meteor_shower.png");
