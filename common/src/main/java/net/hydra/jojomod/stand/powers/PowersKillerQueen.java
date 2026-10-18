@@ -264,7 +264,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         btdDefuseServer(true);
         defuseServer();
         entityTargetBuffer = null;
-        if (bombPlantedItem != null) {
+        if (bombPlantedItem != null && getCurrentBombStatus() != BOMB_NONE) {
             bombPlantedItem.defuse();
             bombPlantedItem = null;
         }
