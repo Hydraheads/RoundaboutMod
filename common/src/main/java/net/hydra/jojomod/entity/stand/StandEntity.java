@@ -91,6 +91,9 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
     protected static final EntityDataAccessor<Byte> SKIN = SynchedEntityData.defineId(StandEntity.class,
             EntityDataSerializers.BYTE);
 
+    protected static final EntityDataAccessor<Boolean> BS_GRABBED = SynchedEntityData.defineId(StandEntity.class,
+            EntityDataSerializers.BOOLEAN);
+
     public boolean canAcquireHeldItem = false;
 
     /**This rotation data is for the model rotating when you look certain directions,
@@ -529,7 +532,12 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
         return this.entityData.get(FADE_OUT);
     }
 
-
+    public final void setBsGrabbed(Boolean grabbed) {
+        this.entityData.set(BS_GRABBED, grabbed);
+    }
+    public boolean getBsGrabbed() {
+        return this.entityData.get(BS_GRABBED);
+    }
 
     public final void setMeltLevel(int FadeOut) {
         this.entityData.set(MELT_LEVEL, FadeOut);
@@ -694,6 +702,7 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
             this.entityData.define(HELD_ITEM, ItemStack.EMPTY);
             this.entityData.define(SKIN, (byte) 0);
             this.entityData.define(MELT_LEVEL, 0);
+            this.entityData.define(BS_GRABBED, false);
         }
     }
 
@@ -908,7 +917,9 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                             handleTickDownIfDupe(thisStand);
                         }
                     } else {
-                        TickDown();
+                        if(!getBsGrabbed()) {
+                            TickDown();
+                        }
                     }
                 } else {
                     if (!this.getNeedsUser()){
@@ -942,7 +953,7 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
         return true;
     }
     public boolean isValid(boolean userActive, LivingEntity thisStand, LivingEntity userEntity){
-        return userEntity.isAlive() && !userEntity.isRemoved() && (!needsActive() || userActive) && (thisStand != null && thisStand.is(this));
+        return (userEntity.isAlive() && !userEntity.isRemoved() && (!needsActive() || userActive) && (thisStand != null && thisStand.is(this))) || this.getBsGrabbed();
     }
     public void handleTickDownIfDupe(LivingEntity thisStand){
 
@@ -1085,6 +1096,11 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
             }
         }
         super.remove($$0);
+    }
+
+    @Override
+    public boolean isNoGravity() {
+        return getBsGrabbed();
     }
 
     public boolean canBeHitByStands(){

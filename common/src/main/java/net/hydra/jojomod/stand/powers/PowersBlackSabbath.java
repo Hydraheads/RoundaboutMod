@@ -64,7 +64,8 @@ public class PowersBlackSabbath extends NewDashPreset {
     CLIENT_SYNC_REMOVE_TARGET = 103,
     CLIENT_SYNC_REMOVE_TARGET_LIST = 104,
     C2S_SYNC_DESTROY_LIST = 105,
-    S2C_CLOSE_CHEST = 106;
+    S2C_CLOSE_CHEST = 106,
+    CREATE_TEST_SOUL_SERVER = 107;
 
     public int moveMode = 0;
     public int tickBeforeHunt = -1;
@@ -474,6 +475,9 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                     }
                 }
             }
+            if(isClient()){
+                //makeSoulTest();
+            }
         } else {
             if (!this.getSelf().level().isClientSide()) {
                 blackSelect.forceDespawnSet = true;
@@ -483,6 +487,34 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         }
         return true;
     }
+
+    /**Testing stuff: TO REMOVE LATER*/
+    private void makeSoulTest(){
+        if(isClient()) {
+           // if (((StandUser) this.getSelf()).roundabout$getStandPowers() == null) {
+                if (this.getSelf() instanceof Player P) {
+                    if (isWideSkin(P)) {
+                        tryIntPower(PowersBlackSabbath.CREATE_TEST_SOUL_SERVER, true, 1);
+                        tryIntPowerPacket(PowersBlackSabbath.CREATE_TEST_SOUL_SERVER, 1);
+                    } else {
+                        tryIntPower(PowersBlackSabbath.CREATE_TEST_SOUL_SERVER, true, 2);
+                        tryIntPowerPacket(PowersBlackSabbath.CREATE_TEST_SOUL_SERVER, 2);
+                    }
+                } else {
+                    tryIntPower(PowersBlackSabbath.CREATE_TEST_SOUL_SERVER, true, 3);
+                    tryIntPowerPacket(PowersBlackSabbath.CREATE_TEST_SOUL_SERVER, 3);
+                }
+          /*  } else {
+                tryIntPower(PowersBlackSabbath.CREATE_TEST_SOUL_SERVER, true, 4);
+                tryIntPowerPacket(PowersBlackSabbath.CREATE_TEST_SOUL_SERVER, 4);
+            }*/
+        }
+    }
+
+    public boolean isWideSkin(Player p) {
+        return ((AbstractClientPlayer) p).getModelName().equals("default");
+    }
+
     private boolean biteFingers(LivingEntity ojiroSasame){
         if(this.self.isAlive()) {
             if (!isClient()) {
@@ -564,38 +596,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
     @Override
     public void tickMobAI(LivingEntity attackTarget){
         //Disabled mob AI to avoid crashes, will be done later
-
-        /*
-        if(attackTarget != null){
-            if(!blackSabbathTargets.contains(attackTarget)) {
-                if (blackSabbathTargets.isEmpty()) {
-                    this.blackSabbathTargets.add(attackTarget);
-                } else {
-                    this.blackSabbathTargets.add(attackTarget);
-                }
-
-            }
-            if(this.getStandEntity(self) == null && !blackSabbathTargets.isEmpty() && tickBeforeHunt < 1){
-                this.setTickBeforeHunt(20);
-                moveMode = 3;
-            }
-          //  System.out.println(blackSabbathTargets.isEmpty() + " " + this.isClient());
-        }
-        if(this.getSelf() instanceof AbstractIllager || this.getSelf() instanceof Raider || this.getSelf() instanceof Witch){
-            List<Villager> lvent = this.self.level().getEntitiesOfClass(Villager.class, this.getSelf().getBoundingBox().inflate(40), (livingEntity) -> {
-                return true;
-            });
-            if (lvent != null && !lvent.isEmpty()) {
-                for (LivingEntity value : lvent) {
-                    if (value.hasLineOfSight(this.getSelf())) {
-                        if (!(value instanceof StandEntity || value instanceof RoadRollerEntity)) {
-                            this.blackSabbathTargets.add(attackTarget);
-                           // this.selectTargetSecond(value);
-                        }
-                    }
-                }
-            }
-        }*/
     }
     @Override
     public boolean tryPower(int move, boolean forced) {
@@ -1181,6 +1181,39 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                     }
                 }
             }
+
+            case PowersBlackSabbath.CREATE_TEST_SOUL_SERVER -> {
+                StandEntity t = null;
+                boolean illDeleteThisLater = false;
+                if(illDeleteThisLater) {
+                    switch (value) {
+                        case 1 -> {
+                            t = ModEntities.GRABBED_PLAYER_SOUL.create(this.getSelf().level());
+                        }
+                        case 2 -> {
+                            t = ModEntities.GRABBED_PLAYER_SOUL_SLIM.create(this.getSelf().level());
+                        }
+                        case 3 -> {
+                            t = ModEntities.GRABBED_MOB_SOUL.create(this.getSelf().level());
+                        }
+                        case 4 -> {
+
+                        }
+
+                    }
+                } else {
+                    t = ModEntities.BLACK_SABBATH.create(this.self.level());
+                }
+                t.setBsGrabbed(true);
+                t.setMaster(null);
+                t.setFadeOut((byte)8);
+                t.absMoveTo(self.position().x(), this.self.getY() + (this.self.getBbHeight() / 2.45F), self.position().z());
+                t.setYRot((self.getYRot() % 360) - 180);
+                PowerTypes.copyPlaneOfExisting(self,t);
+                this.self.level().addFreshEntity(t);
+                System.out.println(t);
+            }
+
             case PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET -> {
                 this.setActivePower(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET);
                 if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){

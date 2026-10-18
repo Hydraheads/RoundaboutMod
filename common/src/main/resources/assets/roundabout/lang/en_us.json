@@ -2824,6 +2824,10 @@
   "idle.roundabout.sc_part_3": "Part 3 Pose",
   "idle.roundabout.sc_part_5": "Part 5 Pose",
 
+  "skins.roundabout.bad_company.anime": "Part 4",
+  "skins.roundabout.bad_company.manga": "Manga",
+  "skins.roundabout.bad_company.beta": "Beta",
+
   "skins.roundabout.king_crimson.base": "Part 5",
   "skins.roundabout.king_crimson.manga": "Manga",
   "skins.roundabout.king_crimson.end": "King End",
