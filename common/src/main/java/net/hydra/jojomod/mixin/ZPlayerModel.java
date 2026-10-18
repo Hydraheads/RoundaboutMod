@@ -384,6 +384,24 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                 this.leftArm.resetPose();
             }
 
+
+            if (SU.roundabout$getStandPowers() instanceof PowersTusk PT){
+                AnimationDefinition anim = PowersTusk.getAnimation(SU);
+                if (anim != null){
+                    if (ipe.roundabout$GetPoseEmote() != Poses.NONE.id) {
+                        ipe.roundabout$SetPoseEmote(Poses.NONE.id);
+                    }
+                    this.leftArm.resetPose();
+                    this.rightArm.resetPose();
+                    this.leftLeg.resetPose();
+                    this.rightLeg.resetPose();
+                    SU.roundabout$getWornStandAnimation().startIfStopped($$0.tickCount);
+                    this.roundabout$animate(SU.roundabout$getWornStandAnimation(),anim,$$3,1F);
+                } else {
+                    SU.roundabout$getWornStandAnimation().stop();
+                }
+            }
+
             boolean firstPerson = net.minecraft.client.Minecraft.getInstance().options.getCameraType().isFirstPerson();
             Player mainP = ClientUtil.getPlayer();
             if (!firstPerson || !(mainP != null && $$0.is(mainP))){
@@ -681,6 +699,16 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                     this.roundabout$animate(SU.roundabout$getWornStandIdleAnimation(),anim,$$3,1F);
                 } else {
                     SU.roundabout$getWornStandAnimation().stop();
+                }
+                anim = PowersTusk.getAnimation(SU);
+                if (anim != null) {
+                    this.leftArm.xRot = 0;
+                    this.leftArm.yRot = 0;
+                    this.rightArm.xRot = 0;
+                    this.rightArm.yRot = 0;
+                    SU.roundabout$getWornStandAnimation().startIfStopped($$0.tickCount);
+                    this.roundabout$animate(SU.roundabout$getWornStandIdleAnimation(),anim,$$3,1F);
+
                 }
 
                 if ($$0.getItemBySlot(EquipmentSlot.CHEST).isEmpty()) {

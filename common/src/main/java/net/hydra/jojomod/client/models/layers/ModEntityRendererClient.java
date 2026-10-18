@@ -38,7 +38,6 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation STAR_PLATINUM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "star_platinum"), "main");
     public static final ModelLayerLocation COFFIN_LEFT_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "coffin_left"), "main");
     public static final ModelLayerLocation COFFIN_RIGHT_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "coffin_right"), "main");
-    public static final ModelLayerLocation COFFIN_FULL_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "coffin_full"), "main");
     public static final ModelLayerLocation SURVIVOR_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "survivor"), "main");
     public static final ModelLayerLocation JUSTICE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "justice"), "main");
     public static final ModelLayerLocation MAGICIANS_RED_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "magicians_red"), "main");
@@ -67,6 +66,9 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation BEACH_SABBATH_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "beach_sabbath"), "main");
     public static final ModelLayerLocation SANTA_SABBATH_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "santa_sabbath"), "main");
     public static final ModelLayerLocation COWBOY_SABBATH_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "cowboy_sabbath"), "main");
+    public static final ModelLayerLocation GRABBED_MOB_SOUL_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "bs_mob_soul"), "main");
+    public static final ModelLayerLocation GRABBED_MOB_SOUL_PLAYER_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "bs_player_soul"), "main");
+    public static final ModelLayerLocation GRABBED_MOB_SOUL_PLAYER_SLIM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "bs_player_soul_slim"), "main");
     public static final ModelLayerLocation PEARL_JAM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "pearl_jam"), "main");
     public static final ModelLayerLocation JUSTICE_PIRATE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "justice_pirate"), "main");
     public static final ModelLayerLocation DARK_MIRAGE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "dark_mirage"), "main");
@@ -135,4 +137,5 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation BIRTH_OF_VENUS_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "venus"), "main");
 
     public static final ModelLayerLocation SHEER_HEART_ATTACK_LAYER =  new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "sheer_heart_attack"), "main");
+    public static final ModelLayerLocation BAD_COMPANY_SOLDIER_LAYER =  new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "bad_company_soldier"), "main");
 }

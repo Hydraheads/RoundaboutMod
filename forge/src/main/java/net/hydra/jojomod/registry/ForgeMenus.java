@@ -1,6 +1,7 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.menu.LyinEyesInventoryMenu;
 import net.hydra.jojomod.menu.ModMenus;
 import net.hydra.jojomod.menu.GamblingTableMenu;
 import net.hydra.jojomod.menu.diverdown.*;
@@ -36,6 +37,8 @@ public final class ForgeMenus {
                     new MenuType<>(DiverDownLoomMenu::new, FeatureFlags.DEFAULT_FLAGS));
     public static final RegistryObject<MenuType<GamblingTableMenu>> GAMBLING_TABLE =
             MENUS.register("gambling_table", () -> new MenuType<>(GamblingTableMenu::new, FeatureFlags.DEFAULT_FLAGS));
+    public static final RegistryObject<MenuType<LyinEyesInventoryMenu>> LYIN_EYES_INVENTORY =
+            MENUS.register("lyin_eyes_inventory", () -> new MenuType<>(LyinEyesInventoryMenu::new, FeatureFlags.DEFAULT_FLAGS));
 
     private ForgeMenus() {
     }
@@ -47,5 +50,6 @@ public final class ForgeMenus {
         ModMenus.DIVER_DOWN_STONECUTTER = DIVER_DOWN_STONECUTTER.get();
         ModMenus.DIVER_DOWN_LOOM = DIVER_DOWN_LOOM.get();
         ModMenus.GAMBLING_TABLE = GAMBLING_TABLE.get();
+        ModMenus.LYIN_EYES_INVENTORY = LYIN_EYES_INVENTORY.get();
     }
 }

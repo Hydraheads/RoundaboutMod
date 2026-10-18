@@ -9,6 +9,7 @@ public final class ModMenus {
     public static MenuType<StonecutterMenu> DIVER_DOWN_STONECUTTER;
     public static MenuType<LoomMenu> DIVER_DOWN_LOOM;
     public static MenuType<GamblingTableMenu> GAMBLING_TABLE;
+    public static MenuType<LyinEyesInventoryMenu> LYIN_EYES_INVENTORY;
 
     private ModMenus() {
     }

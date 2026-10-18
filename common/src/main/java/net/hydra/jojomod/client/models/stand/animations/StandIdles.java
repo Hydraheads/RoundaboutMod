@@ -1580,9 +1580,9 @@ public class StandIdles {
                     new Keyframe(3.0F, KeyframeAnimations.degreeVec(9.4082F, 8.2325F, -3.6643F), AnimationChannel.Interpolations.CATMULLROM)
             ))
             .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.POSITION,
-                    new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, -0.5F, -3.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(1.5F, KeyframeAnimations.posVec(0.0F, -0.75F, -2.25F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(3.0F, KeyframeAnimations.posVec(0.0F, -0.5F, -3.0F), AnimationChannel.Interpolations.CATMULLROM)
+                    new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, -0.5F, -1.5F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.5F, KeyframeAnimations.posVec(0.0F, -0.75F, -0.75F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(3.0F, KeyframeAnimations.posVec(0.0F, -0.5F, -1.5F), AnimationChannel.Interpolations.CATMULLROM)
             ))
             .addAnimation("head2", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(5.0F, 2.5F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -1663,9 +1663,9 @@ public class StandIdles {
                     new Keyframe(3.0F, KeyframeAnimations.degreeVec(4.0351F, 17.4919F, -1.314F), AnimationChannel.Interpolations.CATMULLROM)
             ))
             .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.POSITION,
-                    new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, -0.5F, -1.5F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(1.5F, KeyframeAnimations.posVec(0.0F, -0.5F, -1.5F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(3.0F, KeyframeAnimations.posVec(0.0F, -0.5F, -1.5F), AnimationChannel.Interpolations.CATMULLROM)
+                    new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, -0.5F, -1.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(1.5F, KeyframeAnimations.posVec(0.0F, -0.5F, -0.25F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(3.0F, KeyframeAnimations.posVec(0.0F, -0.5F, -1.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
             .addAnimation("upper_chest", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(10.1511F, -9.8466F, -1.7538F), AnimationChannel.Interpolations.CATMULLROM),

@@ -50,6 +50,7 @@ public class ConfigScreen extends Screen {
 
         this.doneButton = Button.builder(Component.translatable("config.roundabout.major.done"), btn -> {
                     this.minecraft.setScreen(lastScreen);
+                    ConfigManager.reloadAdvancedConfigCheck();
                 }).size(buttonWidth, buttonHeight)
                 .pos(startX + buttonWidth + spacing, y)
                 .build();

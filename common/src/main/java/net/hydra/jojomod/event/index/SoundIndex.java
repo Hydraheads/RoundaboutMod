@@ -50,6 +50,5 @@ public class SoundIndex {
     public static final byte TIME_SOUND_GROUP = 102;
     public static final byte TIME_END_GROUP = 103;
     public static final byte ITEM_GROUP = 104;
-    public static final byte MANHATTAN_DODGING_RAIN = 105;
 
 }

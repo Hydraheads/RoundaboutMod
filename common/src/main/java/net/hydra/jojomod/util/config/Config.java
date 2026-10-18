@@ -208,6 +208,12 @@ public class Config implements Cloneable {
         public Integer matchDamage;
         @BooleanOption(group = "inherit", value = true)
         public Boolean noGlaiveDuringPunchRecharge;
+        @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
+        public Integer totemRange;
+        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
+        public Integer totemDuration;
+        @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
+        public Integer doomImmunityDuration;
     }
     public static class WorldGenSettings {
         @IntOption(group = "inherit", value = 55, min = 0, max = 4096)
@@ -468,6 +474,10 @@ public class Config implements Cloneable {
         public Boolean enableKillerQueen;
         @BooleanOption(group = "inherit", value = true)
         public Boolean sneakyKilling;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer miningSpeedMultiplierKq;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
+        public Integer getMiningTierKq;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer killerQueenAttackMultOnPlayers;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)

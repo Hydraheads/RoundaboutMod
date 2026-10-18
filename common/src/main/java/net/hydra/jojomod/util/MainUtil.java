@@ -2770,7 +2770,7 @@ public class MainUtil {
     public static boolean isSpecialEffect(MobEffect value) {
         return value.equals(ModEffects.BLEED) || value.equals(ModEffects.FACELESS)
                 || value.equals(ModEffects.BANISH) || value.equals(ModEffects.WARDING) || value.equals(ModEffects.HEX)
-                || value.equals(ModEffects.DOOMED)
+                || value.equals(ModEffects.DOOMED) || value.equals(ModEffects.DOOM_IMMUNITY)
                 || value.equals(ModEffects.SWITCH) || value.equals(ModEffects.STAND_VIRUS) ||
                 value.equals(ModEffects.IMPRINTING) || value.equals(ModEffects.SWAPPED) ||
                 value.equals(ModEffects.SINGE)
@@ -4590,6 +4590,30 @@ public class MainUtil {
             }
         }
 
+        return new ResourceLocation(Roundabout.MOD_ID, "textures/stand/green_day/part_four_green_day.png");
+    }
+
+    /**This one is for when you don't want visages/modifications to the skin*/
+    public static ResourceLocation getPlayerSkin(Player player) {
+        if (player instanceof AbstractClientPlayer lpe) {
+            IPlayerEntity pl = ((IPlayerEntity) player);
+            if (player.getGameProfile() != null) {
+                if (!player.getGameProfile().isComplete()) {
+                    return new ResourceLocation(Roundabout.MOD_ID, "textures/stand/green_day/part_four_green_day.png");
+                } else {
+                    final Minecraft minecraft = Minecraft.getInstance();
+                    SkinManager skinManager = minecraft.getSkinManager();
+                    final Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> loadSkinFromCache = skinManager
+                            .getInsecureSkinInformation(player.getGameProfile()); // returned map may or may not be typed
+                    if (loadSkinFromCache.containsKey(MinecraftProfileTexture.Type.SKIN)) {
+                        return skinManager.registerTexture(loadSkinFromCache.get(MinecraftProfileTexture.Type.SKIN),
+                                MinecraftProfileTexture.Type.SKIN);
+                    } else {
+                        return DefaultPlayerSkin.getDefaultSkin(player.getGameProfile().getId());
+                    }
+                }
+            }
+        }
         return new ResourceLocation(Roundabout.MOD_ID, "textures/stand/green_day/part_four_green_day.png");
     }
 

@@ -1975,7 +1975,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
             return;
         }
 
-        LivingEntity target = getAutoAttackTarget();
+        LivingEntity target = getAutoAttackTarget(stand);
         if (target != null) autoMoveTarget = null;
 
         if (autoMoveTarget != null) {
@@ -2019,8 +2019,8 @@ public class PowersWhitesnake extends BlockGrabPreset {
         double distance = stand.distanceTo(target);
         boolean sprinting = distance > CONTROL_PUNCH_RANGE;
         updateAutoModeSpeed(stand, sprinting);
-        if (distance > CONTROL_PUNCH_RANGE) {
-            stand.getNavigation().moveTo(target, sprinting ? 1.5D : 1.0D);
+        if (sprinting) {
+            stand.getNavigation().moveTo(target, 1.5D);
             return;
         }
 
@@ -2041,7 +2041,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         stand.setSpeed(sprinting ? 0.3F : 0.2F);
     }
 
-    private LivingEntity getAutoAttackTarget() {
+    private LivingEntity getAutoAttackTarget(StandEntity stand) {
         LivingEntity target = null;
         if (manualAutoTargetId >= 0) {
             Entity manual = self.level().getEntity(manualAutoTargetId);
@@ -2052,7 +2052,6 @@ public class PowersWhitesnake extends BlockGrabPreset {
             }
         }
         if (target == null && manualAutoTargetId < 0 && autoAttack) target = self.getLastHurtMob();
-        StandEntity stand = getStandEntity(self);
         if (target == null || stand == null || !target.isAlive() || target.isRemoved()
                 || target.level() != stand.level() || target.is(self) || target.is(stand)
                 || MainUtil.cheapDistanceTo2(target.getX(), target.getZ(), self.getX(), self.getZ()) > getMaxPilotRange()
@@ -2392,7 +2391,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         }
         if (autoMode) {
             if (!self.level().isClientSide()) {
-                LivingEntity target = getAutoAttackTarget();
+                LivingEntity target = getAutoAttackTarget(getStandEntity(self));
                 if (target != null && target.isAlive() && !target.isRemoved()
                         && target.distanceTo(actionOrigin()) <= CONTROL_PUNCH_RANGE + 0.75F
                         && actionOrigin().hasLineOfSight(target)) {
@@ -2481,7 +2480,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     public void standImpale() {
         if (autoMode) {
-            if (!self.level().isClientSide()) impaleImpact(getAutoAttackTarget());
+            if (!self.level().isClientSide()) impaleImpact(getAutoAttackTarget(getStandEntity(self)));
             return;
         }
         if (self instanceof Player && isPacketPlayer()) {
@@ -2578,7 +2577,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         }
         if (autoMode) {
             if (!self.level().isClientSide()) {
-                LivingEntity target = getAutoAttackTarget();
+                LivingEntity target = getAutoAttackTarget(getStandEntity(self));
                 if (target != null && target.distanceTo(actionOrigin()) <= CONTROL_PUNCH_RANGE + 0.75F
                         && actionOrigin().hasLineOfSight(target)) {
                     barrageImpact(target, attackTimeDuring);

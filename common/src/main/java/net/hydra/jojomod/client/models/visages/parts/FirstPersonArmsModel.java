@@ -133,10 +133,6 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
                     return;
                 }
 
-                if (standUser.roundabout$getStandPowers() instanceof Powers20thCenturyBoy CB && CB.invincibleState && PowerTypes.isUsingStand(LE)) {
-                    return;
-                }
-
                 mainHandRight = player.getMainArm() == HumanoidArm.RIGHT;
             }
             if (player.getUseItem().getItem() instanceof SnubnoseRevolverItem) {
@@ -194,10 +190,11 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
 
                     AnimationDefinition anim = PT.getFirstPersonAnimation();
                     if (standUser.roundabout$getStandAnimation() == PowerIndex.NONE) {
-                        standUser.roundabout$getWornStandAnimation().startIfStopped(player.tickCount);
+                        standUser.roundabout$getWornStandIdleAnimation().startIfStopped(player.tickCount);
                     }
-                    this.animate(standUser.roundabout$getWornStandAnimation(),anim,partialTicks,1F);
+                    this.animate(standUser.roundabout$getWornStandIdleAnimation(),anim,partialTicks,1F);
                 }
+
 
                 if (standUser.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB && PowerTypes.isUsingStand(player)){
                     if (PCB.invincibleState){

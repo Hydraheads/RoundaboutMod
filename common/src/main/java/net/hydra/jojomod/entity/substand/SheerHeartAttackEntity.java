@@ -327,16 +327,6 @@ public class SheerHeartAttackEntity extends StandEntity {
 		boolean client = this.level().isClientSide();
 		LivingEntity user = this.getUser();
 
-		/* No funny spinning when jumping XD
-		Vec3 $$1 = getDeltaMovement();
-		if ($$1.y * $$1.y < (double)0.03F && getXRot() != 0.0F) {
-			setXRot(Mth.rotLerp(0.2F, getXRot(), 0.0F));
-		} else {
-			double $$2 = $$1.horizontalDistance();
-			double $$3 = Math.signum(-$$1.y) * Math.acos($$2 / $$1.length()) * (double)(180F / (float)Math.PI);
-			setXRot((float)$$3);
-		}*/
-
 		if (!client) {
 			if(user == null){
 				unsummon();
@@ -443,15 +433,19 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 
 								if (MainUtil.getReducedDamage(LE)) {
+									float dmgAmound = (1.75f * (float)(ClientNetworking.getAppropriateConfig().
+											killerQueenSettings.killerQueenAttackMultOnPlayers*0.01));
 									if (user instanceof Player && ((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ) {
-										KQ.levelupDamageMod(KQ.multiplyPowerByStandConfigPlayers(0.25f));
+										KQ.levelupDamageMod(dmgAmound);
 									}
-									LE.hurt(dmg, 1.25f);
+									LE.hurt(dmg, dmgAmound);
 								}else {
+									float dmgAmound = (3.35f * (float)(ClientNetworking.getAppropriateConfig().
+											killerQueenSettings.killerQueenAttackMultOnMobs*0.01));
 									if (user instanceof Player && ((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ) {
-										KQ.levelupDamageMod(KQ.multiplyPowerByStandConfigMobs(0.35f));
+										KQ.levelupDamageMod(dmgAmound);
 									}
-									LE.hurt(dmg, 2.35f);
+									LE.hurt(dmg, dmgAmound);
 								}
 							}
 						}
@@ -489,7 +483,17 @@ public class SheerHeartAttackEntity extends StandEntity {
 				this.shaStopMove();
 			} else {
 				shaMove(pos);
+				if (getTargetType() == BLOCK && blockTarget != null) {
+					if (Math.abs(pos.x - getPosition(1).x) < 1.0 && Math.abs(pos.z - getPosition(1).z) < 1.0) {
+						if (pos.y > getPosition(1).y && !isClimbing() && !this.horizontalCollision) {
+							explodedBlocks.add(new Vec3(blockTarget.getX(), blockTarget.getY(), blockTarget.getZ()));
+						}
+					}
+				}
 			}
+
+
+
 		} else {
 			this.shaStopMove();
 		}
@@ -844,6 +848,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	public boolean canDestroyBlocks() {
 		return ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction &&
+				!ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims &&
 				level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) &&
 				this.getUser() instanceof Player PL && MainUtil.getIsGamemodeApproriateForGrief(PL);
 	}
@@ -935,6 +940,10 @@ public class SheerHeartAttackEntity extends StandEntity {
 			return -1;
 		}
 
+		if (getUser() != null && MainUtil.cheapDistanceTo2(getUser().getPosition(1).x, getUser().getPosition(1).z, pos.getX(), pos.getZ()) > 100) {
+			return -1;
+		}
+
 		BlockState info = level.getBlockState(pos);
 
 		ResourceLocation key = BuiltInRegistries.BLOCK.getKey(info.getBlock());
@@ -958,6 +967,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	public int getEntityWarm(Entity entity) {
 		int points = 0;
+		if (getUser() != null && MainUtil.cheapDistanceTo2(getUser().getPosition(1).x, getUser().getPosition(1).z, entity.getPosition(1).x, entity.getPosition(1).z) > 100) {
+			return -1;
+		}
 
 		if (!entity.isAttackable() || (entity instanceof LivingEntity LE && !LE.canBeSeenAsEnemy())
 				|| (entity instanceof Player PL && PL.isCreative())
@@ -987,11 +999,17 @@ public class SheerHeartAttackEntity extends StandEntity {
 				}
 			}
 
+			boolean undeadAndArthropodIgnore = ClientNetworking.getAppropriateConfig().killerQueenSettings.sheerHeartAttackSeenUndeadAndArthropod;
+
 			MobType mobType = LE.getMobType();
-			if (ClientNetworking.getAppropriateConfig().killerQueenSettings.sheerHeartAttackSeenUndeadAndArthropod
+			if (undeadAndArthropodIgnore
 					&& (mobType.equals(MobType.UNDEAD) || mobType.equals(MobType.ARTHROPOD)
-					|| (LE instanceof FallenMob) )
+					|| (LE instanceof FallenMob) ) || (LE instanceof FallenMob FM && !FM.getActivated())
 					|| FateTypes.isVampire(LE) || FateTypes.isZombie(LE)) { points -= 30;}
+			if (!undeadAndArthropodIgnore
+					&& (mobType.equals(MobType.UNDEAD) || mobType.equals(MobType.ARTHROPOD))) {
+				points -= 10;
+			}
 		}
 
 		return points;
@@ -1133,6 +1151,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		if (this.level().isClientSide) {
 			boolean $$4 = $$2.is(Items.TORCH) && this.getUser() == $$0
 					&& ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction
+					&& !ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims
 					&& this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)
 					|| getTorchStatus();
 
@@ -1140,12 +1159,20 @@ public class SheerHeartAttackEntity extends StandEntity {
 		} else if (this.getUser() == $$0) {
 			if (throwStatus == THROWED) { return InteractionResult.FAIL; }
 
-			if ($$2.is(Items.TORCH) && !getTorchStatus() && ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction &&
-					this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
+			if ($$2.is(Items.TORCH) && !getTorchStatus()
+					&& ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction
+					&& !ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims
+					&& this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
 				if (!$$0.getAbilities().instabuild) { $$2.shrink(1); }
 				setTorchStatus(true);
 				Vec3 dir = $$0.getLookAngle();
-				miningDir = new Vec3(dir.x, 0, dir.z).normalize();
+				Vec3 unhandledDir = new Vec3(dir.x, 0, dir.z).normalize();
+				float snap = 2;
+				miningDir = new Vec3(
+						Math.round(unhandledDir.x*snap)/snap,
+						0,
+						Math.round(unhandledDir.z*snap)/snap
+				);
 
 				return InteractionResult.SUCCESS;
 			} else if(getTorchStatus()) {
