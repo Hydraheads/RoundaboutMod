@@ -81,7 +81,9 @@ public class PowersLyinEyes extends NewDashPreset {
             } else if (hadInventoryMenuOpen) {
                 hadInventoryMenuOpen = false;
                 isGather = false;
-                isSummon = true;
+                if (!visionModeClient) {
+                    isSummon = true;
+                }
             }
         }
         super.tickPower();
