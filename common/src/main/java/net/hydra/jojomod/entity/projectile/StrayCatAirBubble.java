@@ -254,6 +254,9 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                             && !(MainUtil.getEntityIsTrulyInvisible(target) || (target instanceof LivingEntity LE && LE.getEffect(MobEffects.INVISIBILITY) != null))) {
                         this.bubbleRedirect();
                         this.redirectCooldown = redirectCooldownMax;
+                        if (((StandUser)getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ && PKQ.getBombSize() == 0) {
+                            this.redirectCooldown = redirectCooldownMax/2;
+                        }
                     }
                 } else {
                     this.redirectCooldown--;

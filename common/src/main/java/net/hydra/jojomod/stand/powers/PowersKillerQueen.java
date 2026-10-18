@@ -195,6 +195,9 @@ public class PowersKillerQueen extends NewPunchingStand {
     private byte currentShaStatus = SHA_NONE;
     private int bombConfig = 2;
     private int bombSize = 1;
+    public int getBombSize() {
+        return bombSize;
+    }
 
     public byte getCurrentBombStatus() { return currentBombStatus; }
 
