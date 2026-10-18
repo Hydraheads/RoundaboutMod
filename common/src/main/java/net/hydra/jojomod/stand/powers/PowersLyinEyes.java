@@ -153,7 +153,13 @@ public class PowersLyinEyes extends NewDashPreset {
     public boolean setPowerOther(int move, int lastMove) {
         switch (move) {
             case PowerIndex.POWER_4 -> {
-                switchVision();
+                if (this.self.level().isClientSide()) {
+                    switchVision();
+                } else {
+                    //need an extra toggle here so it gets updated on the server
+                    //used for the villager passive thingy
+                    visionModeClient = !visionModeClient;
+                }
             }
         }
         return super.setPowerOther(move, lastMove);

@@ -17,6 +17,8 @@ public interface IVillagerAccess {
     void roundabout$setTensionState(byte state);
     boolean roundabout$isTense();
     void roundabout$setTense(boolean tense);
+    boolean roundabout$isUnnerved();
+    void roundabout$setUnnerved();
     boolean roundabout$hasRolledTension();
     void roundabout$rollTensionIfUnrolled();
 }

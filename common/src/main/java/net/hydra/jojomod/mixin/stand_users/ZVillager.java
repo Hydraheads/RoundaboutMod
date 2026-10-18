@@ -11,6 +11,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.AnubisItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersLyinEyes;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
@@ -156,6 +157,18 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
 
     @Unique
     @Override
+    public boolean roundabout$isUnnerved() {
+        return this.roundabout$getTensionState() == TENSION_UNNERVED;
+    }
+
+    @Unique
+    @Override
+    public void roundabout$setUnnerved() {
+        this.roundabout$setTensionState(TENSION_UNNERVED);
+    }
+
+    @Unique
+    @Override
     public boolean roundabout$hasRolledTension() {
         return this.roundabout$getTensionState() != TENSION_UNROLLED;
     }
@@ -197,12 +210,11 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
 
     }
 
-    //will eventually add another method that checks to see if the player interacting has lyin eyes active and is currently using tension highlighter.
+    // rolls for tension when interacted with
     @Inject(method = "mobInteract", at = @At("HEAD"))
     private void roundabout$rollTensionOnInteract(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
         if (!isClientSide()) {
             this.roundabout$rollTensionIfUnrolled();
-
             //test statement yippeee
             /*if (hand == InteractionHand.MAIN_HAND) {
                 if (this.roundabout$isTense()) {
@@ -210,6 +222,20 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
                 } else {
                     player.sendSystemMessage(Component.literal("i'm not lyin, i'm not lyin so hard rn"));
                 }
+            }*/
+        }
+    }
+
+    // checks if the person interacting with the villager is a lyin eyes user that is using tension highlighter
+    @Inject(method = "mobInteract", at = @At("HEAD"))
+    private void roundabout$updateUnnervedOnInteract(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
+        if (!isClientSide()
+                && ((StandUser)player).roundabout$getStandPowers() instanceof PowersLyinEyes LE
+                && LE.getVisionModeClient()
+                && this.roundabout$isTense()) {
+            this.roundabout$setUnnerved();
+            /*if (hand == InteractionHand.MAIN_HAND) {
+                player.sendSystemMessage(Component.literal("i'm unnerved, i'm unnerved so hard rn"));
             }*/
         }
     }
