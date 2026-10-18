@@ -620,6 +620,31 @@ public class PowersDiverDown extends NewPunchingStand {
         }
     }
 
+    // rejection ai
+
+    @Override
+    public void tickStandRejection(MobEffectInstance effect){
+        if (!this.getSelf().level().isClientSide()) {
+            tickRibcageTrap();
+            tickSpringLegs();
+            if (effect.getDuration() == 200 && startSelfDiveServer()) {
+                startSelfDiveServer();
+                double rng = Math.random();
+                if (rng < 0.35) {
+                    openAfflictions(BONE_BOMB);
+                } else if (rng < 0.70) {
+                    openAfflictions(RIBCAGE_TRAP);
+                } else {
+                    openAfflictions(SPRING_LEGS);
+                }
+            }
+            if (effect.getDuration() <= 1) {
+                clearRibcageTrap();
+                clearSpringLegs();
+            }
+        }
+    }
+
     // icons and ability list here
 
     /**
@@ -5334,7 +5359,7 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     // WIP FEATURES BELOW HERE, DELETE WHEN DONE
-    @Override
+   /* @Override
     public boolean isWip() {
         return true;
     }
@@ -5347,5 +5372,5 @@ public class PowersDiverDown extends NewPunchingStand {
     @Override
     public Component ifWipListDev() {
         return Component.literal("88superguy").withStyle(ChatFormatting.GOLD);
-    }
+    }*/
 }

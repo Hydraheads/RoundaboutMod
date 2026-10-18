@@ -31,7 +31,7 @@ public class AdvancedConfig implements Cloneable {
         SERVER_OINLY_INSTANCE = config;
     }
 
-    public Set<String> standArrowPoolv7 = new HashSet<>(
+    public Set<String> standArrowPoolv8 = new HashSet<>(
             Arrays.asList(
                     "roundabout:star_platinum_disc",
                     "roundabout:the_world_disc",
@@ -42,7 +42,8 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:white_album_disc",
                     "roundabout:king_crimson_disc",
                     "roundabout:ratt_disc",
-                    "roundabout:killer_queen_disc"
+                    "roundabout:killer_queen_disc",
+                    "roundabout:diver_down_disc"
                     //"roundabout:green_day_disc"
             )
     );
@@ -58,7 +59,7 @@ public class AdvancedConfig implements Cloneable {
                     //"roundabout:20th_century_boy_disc"
             )
     );
-    public Set<String> naturalStandUserMobPoolv10 = new HashSet<>(
+    public Set<String> naturalStandUserMobPoolv11 = new HashSet<>(
             Arrays.asList(
                     "roundabout:star_platinum_disc",
                     "roundabout:the_world_disc",
@@ -73,7 +74,8 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:white_album_disc",
                     "roundabout:manhattan_transfer_disc",
                     "roundabout:california_king_bed_disc",
-                    "roundabout:killer_queen_disc"
+                    "roundabout:killer_queen_disc",
+                    "roundabout:diver_down_disc"
             )
     );
 
@@ -328,7 +330,7 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:ancient_debris"
             )
     );
-    public Set<String> standDisassemblyBlacklist = new HashSet<>(
+    public Set<String> standDisassemblyBlacklistv1 = new HashSet<>(
             Arrays.asList(
                     "roundabout:melon_parfait",
                     "minecraft:lodestone"
