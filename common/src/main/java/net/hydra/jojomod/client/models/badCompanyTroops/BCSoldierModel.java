@@ -16,7 +16,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 
 public class BCSoldierModel<T extends BCTroop> extends StandModel<T> {
     private final ModelPart stand2;
-    private final ModelPart bone;
     private final ModelPart parachute;
     private final ModelPart head2;
     private final ModelPart body2;
@@ -34,7 +33,6 @@ public class BCSoldierModel<T extends BCTroop> extends StandModel<T> {
     public BCSoldierModel(ModelPart root) {
         this.stand = root.getChild("stand");
         this.stand2 = this.stand.getChild("stand2");
-        this.bone = this.stand2.getChild("bone");
         this.parachute = this.stand2.getChild("parachute");
         this.head = this.stand2.getChild("head");
         this.head2 = this.head.getChild("head2");
