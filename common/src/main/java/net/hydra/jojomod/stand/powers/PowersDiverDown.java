@@ -4622,6 +4622,11 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     private void tryDisguiseClient() {
+        if (!(submergedTarget instanceof LivingEntity target)
+                || MainUtil.isBossMob(target) || target.getMaxHealth() > 40
+                || target.getAttribute(Attributes.MAX_HEALTH).getBaseValue() > 40) {
+            return;
+        }
         if (this.self.level().isClientSide())
             ClientUtil.openDisguiseScreen();
     }
