@@ -10,6 +10,7 @@ public class ModParticles {
     public static SimpleParticleType BLOOD;
     public static SimpleParticleType BLUE_BLOOD;
     public static SimpleParticleType ENDER_BLOOD;
+    public static SimpleParticleType SWEAT;
     public static SimpleParticleType SMALL_EXPLOSION;
 
     public static SimpleParticleType MELTING;

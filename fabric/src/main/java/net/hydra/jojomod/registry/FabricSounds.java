@@ -605,6 +605,7 @@ public class FabricSounds {
         addSound(ModSounds.ANASUI_PUCCI_2_ID, ModSounds.ANASUI_PUCCI_2_EVENT);
 
         addSound(ModSounds.LYIN_EYES_SUMMON_ID, ModSounds.LYIN_EYES_SUMMON_EVENT);
+        addSound(ModSounds.VILLAGER_CALLED_OUT_ID, ModSounds.VILLAGER_CALLED_OUT_EVENT);
 
         addSound(ModSounds.SUMMON_GREEN_DAY_ID, ModSounds.SUMMON_GREEN_DAY_EVENT);
         addSound(ModSounds.SUMMON_WALKING_ID, ModSounds.SUMMON_WALKING_EVENT);
@@ -624,6 +625,7 @@ public class FabricSounds {
         addSound(ModSounds.WALL_LATCH_ID, ModSounds.WALL_LATCH_EVENT);
         addSound(ModSounds.STONE_MASK_ACTIVATE_ID, ModSounds.STONE_MASK_ACTIVATE_EVENT);
 
+        addSound(ModSounds.BC_UI_SELECT_ID, ModSounds.BC_UI_SELECT_EVENT);
         addSound(ModSounds.BC_SUMMON_ID, ModSounds.BC_SUMMON_EVENT);
         addSound(ModSounds.BC_TROOP_SUMMON_ID, ModSounds.BC_TROOP_SUMMON_EVENT);
         addSound(ModSounds.BC_BUNDLE_SUMMON_ID, ModSounds.BC_BUNDLE_SUMMON_EVENT);

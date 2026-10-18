@@ -41,7 +41,8 @@ public class BCSoldierBaseRenderer extends StandRenderer<BCSoldier> {
             matrixStack.scale(0.80f * factor, 0.80f * factor, 0.80f * factor);
         }
         if (mobEntity.getBundle()) {
-            renderExtraSoldier(1, 0, 0, mobEntity, f, g, matrixStack, vertexConsumer, i);
+            renderExtraSoldier(1, 0, 0.5f, mobEntity, f, g, matrixStack, vertexConsumer, i);
+            renderExtraSoldier(-1, 0, 0.5f, mobEntity, f, g, matrixStack, vertexConsumer, i);
         }
 
 
@@ -57,10 +58,10 @@ public class BCSoldierBaseRenderer extends StandRenderer<BCSoldier> {
 
     private void renderExtraSoldier(float x, float y, float z, BCSoldier mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumer, int i) {
         matrixStack.pushPose();
+        matrixStack.mulPose((Axis.ZP.rotationDegrees(180.0F)));
         matrixStack.translate( x, y, z );
 
         this.setupRotations(mobEntity, matrixStack, mobEntity.tickCount + g, f, g);
-        //matrixStack.mulPose((Axis.ZP.rotationDegrees(180.0F)));
         this.scale(mobEntity, matrixStack, g);
 
         VertexConsumer vertexConsumerResult = vertexConsumer.getBuffer(RenderType.entityTranslucent(getTextureLocation(mobEntity)));

@@ -503,6 +503,12 @@
       "roundabout:lyin_eyes_summon"
     ]
   },
+  "villager_called_out": {
+    "subtitle": "sounds.roundabout.villager_called_out",
+    "sounds": [
+      "roundabout:villager_called_out"
+    ]
+  },
   "summon_king_crimson": {
     "subtitle": "sounds.roundabout.summon_king_crimson",
     "sounds": [
@@ -4645,6 +4651,12 @@
     "subtitle" : "sounds.roundabout.bc_summon",
     "sounds": [
       "roundabout:bc_summon"
+    ]
+  },
+  "bc_ui_select": {
+    "subtitle" : "sounds.roundabout.bc_ui_select",
+    "sounds": [
+      "roundabout:bc_ui_select"
     ]
   }
 }

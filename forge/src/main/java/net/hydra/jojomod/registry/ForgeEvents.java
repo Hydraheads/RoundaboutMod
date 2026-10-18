@@ -393,6 +393,10 @@ public class ForgeEvents {
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_THE_WORLD.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_THE_WORLD.get());
         ModItems.MAX_STAND_DISC_THE_WORLD = ForgeItems.MAX_STAND_DISC_THE_WORLD.get();
 
+        ModItems.STAND_DISC_BAD_COMPANY = ForgeItems.STAND_DISC_BAD_COMPANY.get();
+        ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_BAD_COMPANY.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_BAD_COMPANY.get());
+        ModItems.MAX_STAND_DISC_BAD_COMPANY = ForgeItems.MAX_STAND_DISC_BAD_COMPANY.get();
+
         ModItems.STAND_DISC_STAR_PLATINUM = ForgeItems.STAND_DISC_STAR_PLATINUM.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_STAR_PLATINUM.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_STAR_PLATINUM.get());
         ModItems.MAX_STAND_DISC_STAR_PLATINUM = ForgeItems.MAX_STAND_DISC_STAR_PLATINUM.get();
@@ -675,6 +679,7 @@ public class ForgeEvents {
         ModParticles.HIT_IMPACT = ForgeParticles.HIT_IMPACT.get();
         ModParticles.MELTING = ForgeParticles.MELTING.get();
         ModParticles.BLOOD = ForgeParticles.BLOOD.get();
+        ModParticles.SWEAT = ForgeParticles.SWEAT.get();
         ModParticles.BLUE_BLOOD = ForgeParticles.BLUE_BLOOD.get();
         ModParticles.SMALL_EXPLOSION = ForgeParticles.SMALL_EXPLOSION.get();
         ModParticles.ENDER_BLOOD = ForgeParticles.ENDER_BLOOD.get();

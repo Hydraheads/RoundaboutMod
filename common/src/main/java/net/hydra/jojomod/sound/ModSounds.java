@@ -1802,6 +1802,10 @@ public class ModSounds {
     public static SoundEvent SURVIVOR_REMOVE_EVENT = SoundEvent.createVariableRangeEvent(SURVIVOR_REMOVE_ID);
 
 
+    public static final String BC_UI_SELECT = "bc_ui_select";
+    public static final ResourceLocation BC_UI_SELECT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BC_UI_SELECT);
+    public static SoundEvent BC_UI_SELECT_EVENT = SoundEvent.createVariableRangeEvent(BC_UI_SELECT_ID);
+
     public static final String BC_SUMMON = "bc_summon";
     public static final ResourceLocation BC_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BC_SUMMON);
     public static SoundEvent BC_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(BC_SUMMON_ID);
@@ -2013,6 +2017,9 @@ public class ModSounds {
     public static final String LYIN_EYES_SUMMON = "lyin_eyes_summon";
     public static final ResourceLocation LYIN_EYES_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+LYIN_EYES_SUMMON);
     public static SoundEvent LYIN_EYES_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(LYIN_EYES_SUMMON_ID);
+    public static final String VILLAGER_CALLED_OUT = "villager_called_out";
+    public static final ResourceLocation VILLAGER_CALLED_OUT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VILLAGER_CALLED_OUT);
+    public static SoundEvent VILLAGER_CALLED_OUT_EVENT = SoundEvent.createVariableRangeEvent(VILLAGER_CALLED_OUT_ID);
 
     public static final String SUMMON_GREEN_DAY = "summon_green_day";
     public static final ResourceLocation SUMMON_GREEN_DAY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_GREEN_DAY);

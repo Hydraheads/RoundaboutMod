@@ -43,10 +43,14 @@ public class LyinEyesHighlighterRenderer {
         // Full brightness
         int light = 15728880;
 
-        consumer.vertex(matrix, -radius, -radius, 0.0F).color(r, g, b, a).uv(0.0F, 1.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(normal, 0, 0, -1).endVertex();
-        consumer.vertex(matrix,  radius, -radius, 0.0F).color(r, g, b, a).uv(1.0F, 1.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(normal, 0, 0, -1).endVertex();
-        consumer.vertex(matrix,  radius,  radius, 0.0F).color(r, g, b, a).uv(1.0F, 0.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(normal, 0, 0, -1).endVertex();
-        consumer.vertex(matrix, -radius,  radius, 0.0F).color(r, g, b, a).uv(0.0F, 0.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(normal, 0, 0, -1).endVertex();
+        boolean isLowHealth = entity.getHealth() / entity.getMaxHealth() <= 0.3F;
+        float pulse = (float) ((Math.sin(entity.tickCount * 0.15F) + 1.0) * 0.5);
+        float brightness = isLowHealth ? 0.5F + 0.5F * pulse : 1.0F;
+
+        consumer.vertex(matrix, -radius, -radius, 0.0F).color((int) (r * brightness), (int) (g * brightness), (int) (b * brightness), a).uv(0.0F, 1.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(normal, 0, 0, -1).endVertex();
+        consumer.vertex(matrix,  radius, -radius, 0.0F).color((int) (r * brightness), (int) (g * brightness), (int) (b * brightness), a).uv(1.0F, 1.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(normal, 0, 0, -1).endVertex();
+        consumer.vertex(matrix,  radius,  radius, 0.0F).color((int) (r * brightness), (int) (g * brightness), (int) (b * brightness), a).uv(1.0F, 0.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(normal, 0, 0, -1).endVertex();
+        consumer.vertex(matrix, -radius,  radius, 0.0F).color((int) (r * brightness), (int) (g * brightness), (int) (b * brightness), a).uv(0.0F, 0.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(normal, 0, 0, -1).endVertex();
 
         poseStack.popPose();
     }

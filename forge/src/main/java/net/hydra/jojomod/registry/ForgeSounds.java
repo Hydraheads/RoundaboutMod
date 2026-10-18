@@ -1127,6 +1127,8 @@ public class ForgeSounds {
 
     public static final RegistryObject<SoundEvent> LYIN_EYES_SUMMON =
             register(ModSounds.LYIN_EYES_SUMMON, ModSounds.LYIN_EYES_SUMMON_ID);
+    public static final RegistryObject<SoundEvent> VILLAGER_CALLED_OUT =
+            register(ModSounds.VILLAGER_CALLED_OUT, ModSounds.VILLAGER_CALLED_OUT_ID);
 
     public static final RegistryObject<SoundEvent> SUMMON_GREEN_DAY =
             register(ModSounds.SUMMON_GREEN_DAY, ModSounds.SUMMON_GREEN_DAY_ID);
@@ -1203,6 +1205,8 @@ public class ForgeSounds {
     public static final RegistryObject<SoundEvent> VSONG_DAMNABLE_CEREMONY =
             register(ModSounds.VSONG_DAMNABLE_CEREMONY, ModSounds.VSONG_DAMNABLE_CEREMONY_ID);
 
+    public static final RegistryObject<SoundEvent> BC_UI_SELECT =
+            register(ModSounds.BC_UI_SELECT, ModSounds.BC_UI_SELECT_ID);
     public static final RegistryObject<SoundEvent> BC_SUMMON =
             register(ModSounds.BC_SUMMON, ModSounds.BC_SUMMON_ID);
     public static final RegistryObject<SoundEvent> BC_TROOP_SUMMON =

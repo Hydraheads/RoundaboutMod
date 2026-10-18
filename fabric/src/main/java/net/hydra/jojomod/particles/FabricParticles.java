@@ -21,6 +21,7 @@ public class FabricParticles {
     public static final SimpleParticleType GOLD_PUNCH_IMPACT_C = FabricParticleTypes.simple();
     public static final SimpleParticleType MELTING = FabricParticleTypes.simple();
     public static final SimpleParticleType BLOOD = FabricParticleTypes.simple();
+    public static final SimpleParticleType SWEAT = FabricParticleTypes.simple();
     public static final SimpleParticleType POINTER = FabricParticleTypes.simple();
     public static final SimpleParticleType POINTER_SOFT = FabricParticleTypes.simple();
     public static final SimpleParticleType BLUE_BLOOD = FabricParticleTypes.simple();
@@ -147,6 +148,7 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("gold_punch_impact_c"), GOLD_PUNCH_IMPACT_C);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("melting"), MELTING);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("blood"), BLOOD);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("sweat"), SWEAT);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("pointer"), POINTER);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("pointer_soft"), POINTER_SOFT);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("star"), STAR);
@@ -251,6 +253,7 @@ public class FabricParticles {
         ModParticles.MELTING = MELTING;
         ModParticles.HALLUCINATORY_ACID_DRIP = HALLUCINATORY_ACID_DRIP;
         ModParticles.BLOOD = BLOOD;
+        ModParticles.SWEAT = SWEAT;
         ModParticles.BLUE_BLOOD = BLUE_BLOOD;
         ModParticles.ENDER_BLOOD = ENDER_BLOOD;
         ModParticles.SMALL_EXPLOSION = SMALL_EXPLOSION;
