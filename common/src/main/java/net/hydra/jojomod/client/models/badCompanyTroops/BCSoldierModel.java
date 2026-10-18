@@ -1,6 +1,9 @@
 package net.hydra.jojomod.client.models.badCompanyTroops;
 
+import net.hydra.jojomod.client.models.badCompanyTroops.animations.BCSoldierAnimations;
 import net.hydra.jojomod.client.models.stand.StandModel;
+import net.hydra.jojomod.client.models.stand.animations.StarPlatinumAnimations;
+import net.hydra.jojomod.entity.badCompanyTroops.BCSoldier;
 import net.hydra.jojomod.entity.badCompanyTroops.BCTroop;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Minecraft;
@@ -14,7 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
-public class BCSoldierModel<T extends BCTroop> extends StandModel<T> {
+public class BCSoldierModel<T extends BCSoldier> extends StandModel<T> {
     private final ModelPart stand2;
     private final ModelPart parachute;
     private final ModelPart head2;
@@ -112,8 +115,12 @@ public class BCSoldierModel<T extends BCTroop> extends StandModel<T> {
 
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        defaultModifiers(entity);
         super.setupAnim(entity, limbSwing,limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+        defaultModifiers(entity);
+        this.animate(entity.releaseParachute, BCSoldierAnimations.releaseParachute, ageInTicks, 1.0f);
+        this.animate(entity.closeParachute, BCSoldierAnimations.closeParachute, ageInTicks, 1.0f);
+        this.animate(entity.idleWithGun, BCSoldierAnimations.idle_with_gun, ageInTicks, 1.0f);
+
     }
 
     @Override

@@ -1073,7 +1073,7 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<BCSoldier>> BAD_COMPANY_SOLDIER =
             ENTITY_TYPES.register("bad_company_soldier", () ->
-                    EntityType.Builder.of(BCSoldier::new, MobCategory.CREATURE).sized(BCSoldier.size, BCSoldier.size).
+                    EntityType.Builder.of(BCSoldier::new, MobCategory.CREATURE).sized(BCSoldier.width, BCSoldier.height).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "bad_company_soldier").toString())
             );
