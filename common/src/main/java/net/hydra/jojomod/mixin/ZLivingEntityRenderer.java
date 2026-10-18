@@ -10,11 +10,13 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.DiverDownPointerRenderer;
 import net.hydra.jojomod.client.HallucinationIndicatorRenderer;
+import net.hydra.jojomod.client.LyinEyesHighlighterRenderer;
 import net.hydra.jojomod.client.models.layers.BigBubbleLayer;
 import net.hydra.jojomod.client.models.layers.FrozenLayer;
 import net.hydra.jojomod.client.models.stand.renderers.*;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.pathfinding.CommandDiscPossession;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.JojoNPCPlayer;
 import net.hydra.jojomod.entity.visages.mobs.JosukePartEightNPC;
 import net.hydra.jojomod.entity.visages.mobs.PlayerAlexNPC;
@@ -42,10 +44,8 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Quaternionf;
@@ -161,6 +161,23 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
         }
         HallucinationIndicatorRenderer.render(entity, matrixStack, buffer);
         DiverDownPointerRenderer.render(entity, matrixStack, buffer);
+        if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof PowersLyinEyes LE
+                && LE.getVisionModeClient() && LE.isActive()) {
+            if (entity.isAlive() && player.distanceToSqr(entity) <= (24.0 * 24.0) && !(entity instanceof StandEntity)) {
+                // hostile mobs
+                if (entity instanceof Enemy && !(entity instanceof NeutralMob)) {
+                    LyinEyesHighlighterRenderer.render(entity, matrixStack, buffer, 255, 0, 0, 200, 0.7F);
+                }
+                // neutral mobs
+                else if (entity instanceof NeutralMob || entity instanceof Player || ((StandUser) entity).roundabout$hasAStand()) {
+                    LyinEyesHighlighterRenderer.render(entity, matrixStack, buffer, 255, 255, 0, 200, 0.7F);
+                }
+                // passive mobs
+                else if (!(entity instanceof Enemy) && !(entity instanceof NeutralMob)) {
+                    LyinEyesHighlighterRenderer.render(entity, matrixStack, buffer, 0, 255, 0, 200, 0.7F);
+                }
+            }
+        }
     }
 
     @Inject(method = "shouldShowName(Lnet/minecraft/world/entity/LivingEntity;)Z", at=@At("HEAD"), cancellable = true)
@@ -283,12 +300,6 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
                         }
                     }
 
-                }
-                if (PT.flattenTicks > 0) {
-                    if (SU.roundabout$getStandAnimation() != PowersTusk.FLATTEN) {$$4 *= -1;}
-
-                    float scale = Math.min(1, (PT.flattenTicks + $$4) / 7.0F);
-                    poseStack.scale(1.0F + scale, Math.max(0.1F, 1 - scale), 1.0F + scale);
                 }
             }
 

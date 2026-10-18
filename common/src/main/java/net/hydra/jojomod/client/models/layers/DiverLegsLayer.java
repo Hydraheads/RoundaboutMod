@@ -7,6 +7,7 @@ import net.hydra.jojomod.client.models.stand.renderers.DiverDownBaseRenderer;
 import net.hydra.jojomod.entity.stand.DiverDownEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersDiverDown;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -52,7 +53,7 @@ public class DiverLegsLayer<T extends LivingEntity, A extends HumanoidModel<T>> 
                        T entity, float limbSwing, float limbSwingAmount, float partialTicks,
                        float ageInTicks, float netHeadYaw, float headPitch) {
 
-        if (entity == null || entity.isInvisible()) return;
+        if (entity == null || entity.isInvisible() || !MainUtil.isHumanoid2(entity)) return;
 
         if (entity instanceof StandUser su && su.roundabout$hasDiverLegs()) {
             if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) return;

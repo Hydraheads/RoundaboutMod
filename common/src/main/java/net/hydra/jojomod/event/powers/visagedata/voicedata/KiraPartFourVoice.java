@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers.visagedata.voicedata;
 
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.VoiceLine;
 import net.hydra.jojomod.event.powers.visagedata.HayatoVisage;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
@@ -10,6 +11,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 
@@ -99,7 +101,7 @@ public class KiraPartFourVoice extends VoiceData{
             playSoundChallenge(ModSounds.KIRA4_MONOLOGUE_EVENT,1484);
         }else {
             Entity target = MainUtil.getTargetEntity(this.self, 9);
-            if (target instanceof LivingEntity && target.getDeltaMovement().lengthSqr() <= 0.075f) {
+            if ((target instanceof Mob || target instanceof Player) && !(target instanceof StandEntity) && target.getDeltaMovement().lengthSqr() <= 0.075f) {
                 if (target.getId() != lastTarget) {
                     lastTarget = target.getId();
                     staringTicks = -1;

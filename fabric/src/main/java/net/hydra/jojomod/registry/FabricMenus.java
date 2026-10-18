@@ -1,6 +1,7 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.menu.LyinEyesInventoryMenu;
 import net.hydra.jojomod.menu.ModMenus;
 import net.hydra.jojomod.menu.GamblingTableMenu;
 import net.hydra.jojomod.menu.diverdown.*;
@@ -43,6 +44,11 @@ public final class FabricMenus {
             new ResourceLocation(Roundabout.MOD_ID, "gambling_table"),
             new MenuType<>(GamblingTableMenu::new, FeatureFlags.DEFAULT_FLAGS)
     );
+    public static final MenuType<LyinEyesInventoryMenu> LYIN_EYES_INVENTORY = Registry.register(
+            BuiltInRegistries.MENU,
+            new ResourceLocation(Roundabout.MOD_ID, "lyin_eyes_inventory"),
+            new MenuType<>(LyinEyesInventoryMenu::new, FeatureFlags.DEFAULT_FLAGS)
+    );
 
     private FabricMenus() {
     }
@@ -54,6 +60,7 @@ public final class FabricMenus {
         ModMenus.DIVER_DOWN_STONECUTTER = DIVER_DOWN_STONECUTTER;
         ModMenus.DIVER_DOWN_LOOM = DIVER_DOWN_LOOM;
         ModMenus.GAMBLING_TABLE = GAMBLING_TABLE;
+        ModMenus.LYIN_EYES_INVENTORY = LYIN_EYES_INVENTORY;
     }
 
 }

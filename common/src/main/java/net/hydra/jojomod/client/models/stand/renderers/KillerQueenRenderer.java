@@ -132,4 +132,9 @@ public class KillerQueenRenderer extends StandRenderer<KillerQueenEntity>{
     protected RenderType getRenderType(KillerQueenEntity entity, boolean showBody, boolean translucent, boolean showOutline) {
         return super.getRenderType(entity, showBody, true, showOutline);
     }
+
+    @Override
+    public boolean skipLighting(KillerQueenEntity entity){
+        return entity.getSkin() == KillerQueenEntity.SPIRIT;
+    }
 }

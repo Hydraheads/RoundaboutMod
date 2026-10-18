@@ -16,6 +16,8 @@ public class GamblingTableScreen extends AbstractContainerScreen<GamblingTableMe
             new ResourceLocation(Roundabout.MOD_ID, "textures/gui/gambling_table.png");
 
     // Change these if the texture also gets changed
+    private static final int GUI_OFFSET_X = -9;
+    private static final int GUI_OFFSET_Y = -7;
     private static final int BTN_WIDTH = 14;
     private static final int BTN_HEIGHT = 14;
     private static final int ACCEPT_X = 141;
@@ -55,21 +57,24 @@ public class GamblingTableScreen extends AbstractContainerScreen<GamblingTableMe
         }
     }
 
-    protected boolean isHovering(int btnRelX, int btnRelY, int width, int height, double mouseX, double mouseY) {
-        int screenBtnX = this.leftPos + btnRelX;
-        int screenBtnY = this.topPos + btnRelY;
+    // named slightly differently from minecraft's actual isHovered, just for the check and x buttons
+    protected boolean isButtonHovered(int btnRelX, int btnRelY, int width, int height, double mouseX, double mouseY) {
+        int x = (this.width - this.imageWidth) / 2 + GUI_OFFSET_X;
+        int y = (this.height - this.imageHeight) / 2 + GUI_OFFSET_Y;
+        int screenBtnX = x + btnRelX;
+        int screenBtnY = y + btnRelY;
         return mouseX >= screenBtnX && mouseX < screenBtnX + width &&
                 mouseY >= screenBtnY && mouseY < screenBtnY + height;
     }
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        int x = (this.width - this.imageWidth) / 2 - 9;
-        int y = (this.height - this.imageHeight) / 2 - 7;
+        int x = (this.width - this.imageWidth) / 2 + GUI_OFFSET_X;
+        int y = (this.height - this.imageHeight) / 2 + GUI_OFFSET_Y;
         graphics.blit(TEXTURE, x, y, 0, 0, this.imageWidth, this.imageHeight);
 
         // Accept Button
-        boolean acceptHovered = isHovering(ACCEPT_X, ACCEPT_Y, BTN_WIDTH, BTN_HEIGHT, mouseX, mouseY);
+        boolean acceptHovered = isButtonHovered(ACCEPT_X, ACCEPT_Y, BTN_WIDTH, BTN_HEIGHT, mouseX, mouseY);
         if (this.acceptPressed && acceptHovered) {
             graphics.blit(TEXTURE, x + ACCEPT_X, y + ACCEPT_Y, ACCEPT_CLICKED_U, ACCEPT_CLICKED_V, BTN_WIDTH, BTN_HEIGHT);
         } else if (!acceptHovered) {
@@ -77,7 +82,7 @@ public class GamblingTableScreen extends AbstractContainerScreen<GamblingTableMe
         }
 
         // Deny Button
-        boolean denyHovered = isHovering(DENY_X, DENY_Y, BTN_WIDTH, BTN_HEIGHT, mouseX, mouseY);
+        boolean denyHovered = isButtonHovered(DENY_X, DENY_Y, BTN_WIDTH, BTN_HEIGHT, mouseX, mouseY);
         if (this.denyPressed && denyHovered) {
             graphics.blit(TEXTURE, x + DENY_X, y + DENY_Y, DENY_CLICKED_U, DENY_CLICKED_V, BTN_WIDTH, BTN_HEIGHT);
         } else if (!denyHovered) {
@@ -98,12 +103,12 @@ public class GamblingTableScreen extends AbstractContainerScreen<GamblingTableMe
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         // button 0 means left click
         if (button == 0) {
-            if (isHovering(ACCEPT_X, ACCEPT_Y, BTN_WIDTH, BTN_HEIGHT, mouseX, mouseY)) {
+            if (isButtonHovered(ACCEPT_X, ACCEPT_Y, BTN_WIDTH, BTN_HEIGHT, mouseX, mouseY)) {
                 this.acceptPressed = true;
                 playClickSound();
                 return true;
             }
-            if (isHovering(DENY_X, DENY_Y, BTN_WIDTH, BTN_HEIGHT, mouseX, mouseY)) {
+            if (isButtonHovered(DENY_X, DENY_Y, BTN_WIDTH, BTN_HEIGHT, mouseX, mouseY)) {
                 this.denyPressed = true;
                 playClickSound();
                 return true;
@@ -117,14 +122,14 @@ public class GamblingTableScreen extends AbstractContainerScreen<GamblingTableMe
         if (button == 0) {
             if (this.acceptPressed) {
                 this.acceptPressed = false;
-                if (isHovering(ACCEPT_X, ACCEPT_Y, BTN_WIDTH, BTN_HEIGHT, mouseX, mouseY)) {
+                if (isButtonHovered(ACCEPT_X, ACCEPT_Y, BTN_WIDTH, BTN_HEIGHT, mouseX, mouseY)) {
                     onAcceptClicked();
                     return true;
                 }
             }
             if (this.denyPressed) {
                 this.denyPressed = false;
-                if (isHovering(DENY_X, DENY_Y, BTN_WIDTH, BTN_HEIGHT, mouseX, mouseY)) {
+                if (isButtonHovered(DENY_X, DENY_Y, BTN_WIDTH, BTN_HEIGHT, mouseX, mouseY)) {
                     onDenyClicked();
                     return true;
                 }

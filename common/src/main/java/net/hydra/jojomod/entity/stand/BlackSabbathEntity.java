@@ -6,13 +6,16 @@ import net.hydra.jojomod.access.IPlayerEntityServer;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.goals.BlackSabbathRangedAttackGoal;
 import net.hydra.jojomod.entity.navigation.BlackSabbathNavigation;
+import net.hydra.jojomod.entity.objects.GrabbedMobSoul;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.sound.ModSounds;
-import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
+import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -1044,7 +1047,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                                 setRiding(true);
                                                 setSecondsOnFire(0);
                                                 setUnrender(true);
-                                                System.out.println(1);
                                             }
                                         }
                                     }
@@ -1271,6 +1273,31 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             }
         }
     }
+
+    //TODO: make an int/boolean in StandPowers to define if a stand can be grabbed by BS or not (also used to display different animations basing on the size of said stand).
+
+    //TODO: make BS summon said soul when grabbing instead of being summoned with X
+
+    private LivingEntity getNewSoulGrabbed(){
+        Entity grab = this.level().getEntity(getGrabbing());
+        if(grab != null && grab instanceof LivingEntity l){
+            StandPowers sp = ((StandUser)l).roundabout$getStandPowers();
+            boolean regSoulStand = sp != null && (sp instanceof PowersAchtungBaby || sp instanceof PowersWhiteAlbum || sp instanceof PowersEmperor || sp instanceof PowersMetallica
+                                                    || sp instanceof PowersMetallica || sp instanceof PowersOasis);
+
+            if(!regSoulStand){
+               //RETURNS THE STAND
+            } else {
+                if(!(l instanceof Player p)){
+                    return ModEntities.GRABBED_MOB_SOUL.create(this.level());
+                } else {
+                    //RETURNS THE YELLOWED PLAYER SKIN
+                }
+            }
+        }
+        return null;
+    }
+
     public boolean isStuck = false;
     private Vec3 lastPos = Vec3.ZERO;
     public int shouldReattemptSpawn = 100;
