@@ -1269,6 +1269,7 @@
   "sounds.roundabout.anasui_pucci_2":  "Protecting Jolyne",
 
   "sounds.roundabout.lyin_eyes_summon":  "Stand summoned",
+  "sounds.roundabout.villager_called_out":  "Villager Called Out",
 
   "sounds.roundabout.vampire_dive":  "Whoosh",
   "sounds.roundabout.punch_sfx1":  "Air Cracks",
@@ -2602,6 +2603,8 @@
 
   "ability.roundabout.lyin_eyes_placeholder": "Would you still love me",
   "ability.roundabout.lyin_eyes_placeholder.desc": "if I were a worm? \uD83E\uDD7A",
+  "ability.roundabout.lyin_eyes_tension_sensor": "Tension Sensor",
+  "ability.roundabout.lyin_eyes_tension_sensor.desc": "The nematodes highlight enemies through walls. Hostile mobs are highlighted red, neutral mobs are yellow, and passive mobs are green. Enemies that are low are highlighted differently.",
   "ability.roundabout.lyin_eyes_inventory": "Inventory Reader",
   "ability.roundabout.lyin_eyes_inventory.desc": "The nematodes gather around to show you what items a player has in their inventory.",
   "container.roundabout.lyin_eyes_inventory": " ",

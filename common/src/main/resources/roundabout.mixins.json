@@ -301,6 +301,7 @@
     "whitesnake.memory.LivingEntityDiscData",
     "whitesnake.memory.MemoryServerPlayerGameMode",
     "whitesnake.memory.MobMemoryMixin",
+    "whitesnake.memory.MusicDiscTrackingMixin",
     "whitesnake.memory.PlayerMemoryControlMixin",
     "whitesnake.memory.ServerPlayerGameModeAccessor",
     "whitesnake.memory.WhitesnakeSightTargetGoalMixin",

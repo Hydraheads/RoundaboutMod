@@ -7,10 +7,13 @@ import net.hydra.jojomod.access.IGossipContainerAccess;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.IVillagerAccess;
+import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.AnubisItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersLyinEyes;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
@@ -42,6 +45,7 @@ import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.entity.schedule.Schedule;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -64,6 +68,13 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
     @Unique
     private static final EntityDataAccessor<Byte> ROUNDABOUT$ANUBIS_TYPE = SynchedEntityData.defineId(Villager.class,
             EntityDataSerializers.BYTE);
+    @Unique
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$TENSION_STATE = SynchedEntityData.defineId(Villager.class,
+            EntityDataSerializers.BYTE
+    );
+    @Unique
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$CALLOUT_EFFECT_TICKS = SynchedEntityData.defineId(Villager.class,
+            EntityDataSerializers.INT);
 
     @Unique
     @Override
@@ -97,6 +108,9 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
         if (this.roundabout$getAnubisTicks() != -1) {
             $$0.putByte("roundabout.heldAnubis",this.roundabout$getAnubisType());
         }
+        if (this.roundabout$getTensionState() != TENSION_UNROLLED) {
+            $$0.putByte("roundabout.tensionState", this.roundabout$getTensionState());
+        }
     }
 
     @Inject(method = "readAdditionalSaveData",at = @At("HEAD"))
@@ -104,6 +118,9 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
         if ($$0.contains("roundabout.heldAnubis")) {
             this.roundabout$setAnubisTicks(30);
             this.roundabout$setAnubisType($$0.getByte("roundabout.heldAnubis"));
+        }
+        if ($$0.contains("roundabout.tensionState")) {
+            this.roundabout$setTensionState($$0.getByte("roundabout.tensionState"));
         }
     }
 
@@ -113,13 +130,80 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
             ((Villager)(Object)this).getEntityData().define(ROUNDABOUT$ANUBIS_TICKS, -1);
             ((Villager)(Object)this).getEntityData().define(ROUNDABOUT$ANUBIS_TYPE, (byte)-1);
         }
+        if (!((Villager)(Object)this).getEntityData().hasItem(ROUNDABOUT$TENSION_STATE)) {
+            ((Villager)(Object)this).getEntityData().define(ROUNDABOUT$TENSION_STATE, TENSION_UNROLLED);
+        }
+        if (!this.getEntityData().hasItem(ROUNDABOUT$CALLOUT_EFFECT_TICKS)) {
+            this.getEntityData().define(ROUNDABOUT$CALLOUT_EFFECT_TICKS, 0);
+        }
     }
     /// currently broken, unsure why
+
+    @Unique
+    @Override
+    public byte roundabout$getTensionState() {
+        return this.getEntityData().get(ROUNDABOUT$TENSION_STATE);
+    }
+
+    @Unique
+    @Override
+    public void roundabout$setTensionState(byte state) {
+        this.getEntityData().set(ROUNDABOUT$TENSION_STATE, state);
+    }
+
+    @Unique
+    @Override
+    public boolean roundabout$isTense() {
+        return this.roundabout$getTensionState() == TENSION_TENSE;
+    }
+
+    @Unique
+    @Override
+    public void roundabout$setTense(boolean tense) {
+        this.roundabout$setTensionState(tense ? TENSION_TENSE : TENSION_RELAXED);
+    }
+
+    @Unique
+    @Override
+    public boolean roundabout$isUnnerved() {
+        return this.roundabout$getTensionState() == TENSION_UNNERVED;
+    }
+
+    @Unique
+    @Override
+    public void roundabout$setUnnerved() {
+        this.roundabout$setTensionState(TENSION_UNNERVED);
+        this.getEntityData().set(ROUNDABOUT$CALLOUT_EFFECT_TICKS, 160);
+        this.level().playSound(null, this.blockPosition(), ModSounds.VILLAGER_CALLED_OUT_EVENT, SoundSource.NEUTRAL, 0.9F, 0.75F);
+    }
+
+    @Unique
+    @Override
+    public boolean roundabout$hasRolledTension() {
+        return this.roundabout$getTensionState() != TENSION_UNROLLED;
+    }
+
+    @Unique
+    @Override
+    public void roundabout$rollTensionIfUnrolled() {
+        if (!this.roundabout$hasRolledTension() && !this.isClientSide()) {
+            // note to self: replace this with the lyin eyes config in the future - 88superguy
+            boolean isTense = this.random.nextFloat() < 0.65F;
+            this.roundabout$setTense(isTense);
+        }
+    }
+
+    @Unique
+    @Override
+    public int roundabout$getCalloutTicks() {
+        return this.getEntityData().get(ROUNDABOUT$CALLOUT_EFFECT_TICKS);
+    }
 
 
     @Inject(method = "tick", at = @At(value = "HEAD"))
     public void roundabout$villagerTick(CallbackInfo ci) {
         int at = this.roundabout$getAnubisTicks();
+        int calloutTick = this.roundabout$getCalloutTicks();
         if (!isClientSide()) {
             if (at >= 0) {
                 at--;
@@ -139,11 +223,64 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
                     doAnubis();
                 }
             }
+            if (calloutTick >= 0) {
+                calloutTick--;
+                this.getEntityData().set(ROUNDABOUT$CALLOUT_EFFECT_TICKS, calloutTick);
+                if (calloutTick % 2 == 0) {
+                    ((ServerLevel) this.level()).sendParticles(ModParticles.SWEAT, this.getRandomX(0.45),
+                            this.getY() + this.getEyeHeight() * 0.85, this.getRandomZ(0.45),
+                            1, 0.02, 0.02, 0.02, 0.01);
+                }
+            }
         }
 
     }
 
+    // rolls for tension when interacted with
+    @Inject(method = "mobInteract", at = @At("HEAD"))
+    private void roundabout$rollTensionOnInteract(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
+        if (!isClientSide()) {
+            this.roundabout$rollTensionIfUnrolled();
+            //test statement yippeee
+            /*if (hand == InteractionHand.MAIN_HAND) {
+                if (this.roundabout$isTense()) {
+                    player.sendSystemMessage(Component.literal("i'm lyin, i'm lyin so hard rn"));
+                } else {
+                    player.sendSystemMessage(Component.literal("i'm not lyin, i'm not lyin so hard rn"));
+                }
+            }*/
+        }
+    }
 
+    // checks if the person interacting with the villager is a lyin eyes user that is using tension highlighter
+    @Inject(method = "mobInteract", at = @At("HEAD"))
+    private void roundabout$updateUnnervedOnInteract(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
+        if (!isClientSide()
+                && ((StandUser)player).roundabout$getStandPowers() instanceof PowersLyinEyes LE
+                && LE.getVisionModeClient()
+                && this.roundabout$isTense()) {
+            this.roundabout$setUnnerved();
+            /*if (hand == InteractionHand.MAIN_HAND) {
+                player.sendSystemMessage(Component.literal("i'm unnerved, i'm unnerved so hard rn"));
+            }*/
+        }
+    }
+
+    //taken from CinderellaVillager
+    @Inject(method = "updateSpecialPrices(Lnet/minecraft/world/entity/player/Player;)V", at = @At(value = "TAIL"),cancellable = true)
+    private void roundabout$updateSpecialPrices(Player player, CallbackInfo ci) {
+        if (!player.hasEffect(MobEffects.HERO_OF_THE_VILLAGE)) {
+            //lyin eyes discount
+            if (((StandUser)player).roundabout$getStandPowers() instanceof PowersLyinEyes
+                    && this.roundabout$isUnnerved()) {
+                for (MerchantOffer offer : this.getOffers()) {
+                    // rn it's a 20% discount, turn this into a config later :thumbsup:
+                    int discount = (int) Math.floor(0.20 * (double) offer.getBaseCostA().getCount());
+                    offer.addToSpecialPriceDiff(-Math.max(discount, 1));
+                }
+            }
+        }
+    }
 
     @Inject(method = "mobInteract", at = @At(value = "HEAD"), cancellable = true)
     private void villagerAnubisInteraction(Player $$0, InteractionHand $$1, CallbackInfoReturnable<InteractionResult> cir) {

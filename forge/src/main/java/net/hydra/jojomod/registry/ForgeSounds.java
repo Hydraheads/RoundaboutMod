@@ -1127,6 +1127,8 @@ public class ForgeSounds {
 
     public static final RegistryObject<SoundEvent> LYIN_EYES_SUMMON =
             register(ModSounds.LYIN_EYES_SUMMON, ModSounds.LYIN_EYES_SUMMON_ID);
+    public static final RegistryObject<SoundEvent> VILLAGER_CALLED_OUT =
+            register(ModSounds.VILLAGER_CALLED_OUT, ModSounds.VILLAGER_CALLED_OUT_ID);
 
     public static final RegistryObject<SoundEvent> SUMMON_GREEN_DAY =
             register(ModSounds.SUMMON_GREEN_DAY, ModSounds.SUMMON_GREEN_DAY_ID);

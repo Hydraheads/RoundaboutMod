@@ -21,6 +21,7 @@ import net.hydra.jojomod.entity.visages.JojoNPCPlayer;
 import net.hydra.jojomod.entity.visages.mobs.JosukePartEightNPC;
 import net.hydra.jojomod.entity.visages.mobs.PlayerAlexNPC;
 import net.hydra.jojomod.entity.visages.mobs.PlayerSteveNPC;
+import net.hydra.jojomod.event.IVillagerAccess;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.DiverDownDisguiseService;
@@ -46,6 +47,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Quaternionf;
@@ -161,7 +163,9 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
         }
         HallucinationIndicatorRenderer.render(entity, matrixStack, buffer);
         DiverDownPointerRenderer.render(entity, matrixStack, buffer);
-        if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof PowersLyinEyes LE && LE.getVisionModeClient()) {
+        // lyin eyes highlighter
+        if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof PowersLyinEyes LE
+                && LE.getVisionModeClient() && LE.isActive()) {
             if (entity.isAlive() && player.distanceToSqr(entity) <= (24.0 * 24.0) && !(entity instanceof StandEntity)) {
                 // hostile mobs
                 if (entity instanceof Enemy && !(entity instanceof NeutralMob)) {
@@ -385,6 +389,14 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
             ci.setReturnValue(roundabout$PackRed(
                     15,
                     10));
+        }
+    }
+
+    // for shaking stuff
+    @Inject(method = "isShaking", at = @At("HEAD"), cancellable = true)
+    private void roundabout$shakeWhenCalledOut(T entity, CallbackInfoReturnable<Boolean> cir) {
+        if (entity instanceof Villager villager && ((IVillagerAccess) villager).roundabout$getCalloutTicks() > 0) {
+            cir.setReturnValue(true);
         }
     }
 

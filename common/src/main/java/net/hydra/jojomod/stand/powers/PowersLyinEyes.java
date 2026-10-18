@@ -56,7 +56,9 @@ public class PowersLyinEyes extends NewDashPreset {
     public void onStandSummon(boolean desummon) {
         if (!desummon && this.self.level().isClientSide()) {
             summonOverlayTicks = 1;
-            isSummon = true;
+            if(!visionModeClient) {
+                isSummon = true;
+            }
         }
         if (desummon && this.self.level().isClientSide()) {
             isSummon = false;
@@ -151,7 +153,13 @@ public class PowersLyinEyes extends NewDashPreset {
     public boolean setPowerOther(int move, int lastMove) {
         switch (move) {
             case PowerIndex.POWER_4 -> {
-                switchVision();
+                if (this.self.level().isClientSide()) {
+                    switchVision();
+                } else {
+                    //need an extra toggle here so it gets updated on the server
+                    //used for the villager passive thingy
+                    visionModeClient = !visionModeClient;
+                }
             }
         }
         return super.setPowerOther(move, lastMove);
@@ -216,9 +224,9 @@ public class PowersLyinEyes extends NewDashPreset {
 
     // inventory reading stop
 
-    // entity highlighter start
+    // tension highlighter start
 
-    public void switchVisionClient(){
+    private void switchVisionClient(){
         this.tryPower(PowerIndex.POWER_4, true);
         tryPowerPacket(PowerIndex.POWER_4);
         if (isClient() && visionModeClient) {
@@ -227,18 +235,22 @@ public class PowersLyinEyes extends NewDashPreset {
         }
     }
 
-    public void switchVision(){
+    private void switchVision(){
         if (isClient() && this.self instanceof Player PE) {
             if (!visionModeClient) {
                 visionModeClient = true;
+                isSummon = false;
                 PE.displayClientMessage(Component.translatable("text.roundabout.lyin_eyes.tension_highlight").withStyle(ChatFormatting.GOLD), true);
             }
             else{
                 visionModeClient = false;
+                isSummon = true;
                 PE.displayClientMessage(Component.translatable("text.roundabout.lyin_eyes.tension_highlight_off").withStyle(ChatFormatting.GOLD), true);
             }
         }
     }
+
+    // tension highlighter end
 
     // for tracking open menus
 
@@ -259,17 +271,18 @@ public class PowersLyinEyes extends NewDashPreset {
      */
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        setSkillIcon(context, x, y, 1, StandIcons.LYIN_EYES_PLACEHOLDER, PowerIndex.SKILL_1);
+        setSkillIcon(context, x, y, 1, StandIcons.LYIN_EYES_TENSION_SENSOR, PowerIndex.SKILL_1);
         setSkillIcon(context, x, y, 2, StandIcons.LYIN_EYES_PLACEHOLDER, PowerIndex.SKILL_2);
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         setSkillIcon(context, x, y, 4, StandIcons.LYIN_EYES_INVENTORY, PowerIndex.SKILL_4);
     }
 
+    @Override
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos,
                                                   int topPos, byte level, boolean bypas) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.lyin_eyes_placeholder",
-                "instruction.roundabout.press_skill", StandIcons.LYIN_EYES_PLACEHOLDER, 1, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.lyin_eyes_tension_sensor",
+                "instruction.roundabout.press_skill", StandIcons.LYIN_EYES_TENSION_SENSOR, 1, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.lyin_eyes_placeholder",
                 "instruction.roundabout.press_skill", StandIcons.LYIN_EYES_PLACEHOLDER, 2, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
@@ -305,6 +318,7 @@ public class PowersLyinEyes extends NewDashPreset {
     public int getSummonOverlayTicks() {return summonOverlayTicks;}
     public int getGatherOverlayTicks() {return gatherOverlayTicks;}
     public boolean getVisionModeClient() {return visionModeClient;}
+    public boolean isActive() {return hasStandActive(this.self);}
 
     // WIP FEATURES BELOW HERE, DELETE WHEN DONE
 

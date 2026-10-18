@@ -2013,6 +2013,9 @@ public class ModSounds {
     public static final String LYIN_EYES_SUMMON = "lyin_eyes_summon";
     public static final ResourceLocation LYIN_EYES_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+LYIN_EYES_SUMMON);
     public static SoundEvent LYIN_EYES_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(LYIN_EYES_SUMMON_ID);
+    public static final String VILLAGER_CALLED_OUT = "villager_called_out";
+    public static final ResourceLocation VILLAGER_CALLED_OUT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VILLAGER_CALLED_OUT);
+    public static SoundEvent VILLAGER_CALLED_OUT_EVENT = SoundEvent.createVariableRangeEvent(VILLAGER_CALLED_OUT_ID);
 
     public static final String SUMMON_GREEN_DAY = "summon_green_day";
     public static final ResourceLocation SUMMON_GREEN_DAY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_GREEN_DAY);
