@@ -82,7 +82,7 @@ public class PowersBadCompany extends NewDashPreset {
         }else{
             setSkillIcon(context, x, y, 1, StandIcons.BAD_COMPANY_TROOP_DROP, PowerIndex.NO_CD);
         }
-        
+
         setSkillIcon(context, x, y, 2, StandIcons.BAD_COMPANY_TACTICAL_OPTIONS, PowerIndex.NO_CD);
 
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
