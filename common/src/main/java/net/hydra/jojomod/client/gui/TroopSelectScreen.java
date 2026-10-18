@@ -142,7 +142,7 @@ public class TroopSelectScreen extends Screen {
 
         if (currentlyHovered != -1 && lastState != currentlyHovered) {
             SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
-            soundmanager.play(SimpleSoundInstance.forUI(ModSounds.KILLER_QUEEN_DETONATE_EVENT, (float) (0.95 + (Math.random() * 0.1F))));
+            soundmanager.play(SimpleSoundInstance.forUI(ModSounds.BC_UI_SELECT_EVENT, (float) (0.95 + (Math.random() * 0.1F))));
         }
 
 

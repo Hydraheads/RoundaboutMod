@@ -46,6 +46,8 @@ public class PowersBadCompany extends NewDashPreset {
 
     public static final byte
         ANIME_SKIN = 1,
+        MANGA_SKIN = 2,
+        BETA_SKIN = 3,
 
         SOLDIER_SUMMON = 50,
         BUNDLE_SUMMON = 51,
@@ -56,7 +58,21 @@ public class PowersBadCompany extends NewDashPreset {
     public List<Byte> getSkinList() {
         List<Byte> list = Lists.newArrayList();
         list.add(ANIME_SKIN);
+        list.add(MANGA_SKIN);
+        list.add(BETA_SKIN);
         return list;
+    }
+
+    @Override public Component getSkinName(byte skinId) {
+
+        switch (skinId)
+        {
+            case ANIME_SKIN -> { return Component.translatable("skins.roundabout.bad_company.anime"); }
+            case MANGA_SKIN -> { return Component.translatable("skins.roundabout.bad_company.manga"); }
+            case BETA_SKIN -> { return Component.translatable("skins.roundabout.bad_company.beta"); }
+        }
+
+        return Component.translatable("skins.roundabout.bad_company.anime");
     }
 
     public static final int
@@ -82,7 +98,7 @@ public class PowersBadCompany extends NewDashPreset {
         }else{
             setSkillIcon(context, x, y, 1, StandIcons.BAD_COMPANY_TROOP_DROP, PowerIndex.NO_CD);
         }
-        
+
         setSkillIcon(context, x, y, 2, StandIcons.BAD_COMPANY_TACTICAL_OPTIONS, PowerIndex.NO_CD);
 
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);

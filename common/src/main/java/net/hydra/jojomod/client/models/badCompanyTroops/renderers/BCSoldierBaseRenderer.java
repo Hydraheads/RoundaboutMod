@@ -7,17 +7,22 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.client.models.stand.renderers.StandRenderer;
 import net.hydra.jojomod.entity.badCompanyTroops.BCSoldier;
-import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersBadCompany;
+import net.hydra.jojomod.stand.powers.PowersKillerQueen;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 
 public class BCSoldierBaseRenderer extends StandRenderer<BCSoldier> {
 
+    private static final ResourceLocation BETA = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/bad_company/soldier/beta.png");
     private static final ResourceLocation ANIME = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/bad_company/soldier/anime.png");
+    private static final ResourceLocation MANGA = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/bad_company/soldier/manga.png");
 
     public BCSoldierBaseRenderer(EntityRendererProvider.Context context, StandModel<BCSoldier> entityModel, float f) {
         super(context, entityModel,f);
@@ -25,6 +30,18 @@ public class BCSoldierBaseRenderer extends StandRenderer<BCSoldier> {
 
     @Override
     public ResourceLocation getTextureLocation(BCSoldier entity) {
+        LivingEntity user = entity.getUser();
+        if (user != null && ((StandUser)user).roundabout$getStandPowers() instanceof PowersBadCompany) {
+            byte skn = ((StandUser)user).roundabout$getStandSkin();
+
+            if (skn == PowersBadCompany.ANIME_SKIN) {
+                return ANIME;
+            }else if (skn == PowersBadCompany.MANGA_SKIN) {
+                return MANGA;
+            }else if (skn == PowersBadCompany.BETA_SKIN) {
+                return BETA;
+            }
+        }
 
         return ANIME;
     }
@@ -40,12 +57,22 @@ public class BCSoldierBaseRenderer extends StandRenderer<BCSoldier> {
         } else {
             matrixStack.scale(0.80f * factor, 0.80f * factor, 0.80f * factor);
         }
+
         if (mobEntity.getBundle()) {
-            renderExtraSoldier(1, 0, 0, mobEntity, f, g, matrixStack, vertexConsumer, i);
+            float offCenter = 0.7f;
+
+            // Line 1
+            renderExtraSoldier(1.0f, 0.0f, -0.5f+offCenter, mobEntity, f, g, matrixStack, vertexConsumer, i);
+            renderExtraSoldier(0.0f, 0.0f, 0.0f+offCenter, mobEntity, f, g, matrixStack, vertexConsumer, i);
+            renderExtraSoldier(-1.0f, 0.0f, -0.5f+offCenter, mobEntity, f, g, matrixStack, vertexConsumer, i);
+
+            // Line 2
+            renderExtraSoldier(1.0f, 0.0f, -1.8f+offCenter, mobEntity, f, g, matrixStack, vertexConsumer, i);
+            renderExtraSoldier(0.0f, 0.0f, -1.3f+offCenter, mobEntity, f, g, matrixStack, vertexConsumer, i);
+            renderExtraSoldier(-1.0f, 0.0f, -1.8f+offCenter, mobEntity, f, g, matrixStack, vertexConsumer, i);
+        }else {
+            super.render(mobEntity, f, g, matrixStack, vertexConsumer, i);
         }
-
-
-        super.render(mobEntity, f, g, matrixStack, vertexConsumer, i);
     }
 
     @Nullable
@@ -59,12 +86,7 @@ public class BCSoldierBaseRenderer extends StandRenderer<BCSoldier> {
         matrixStack.pushPose();
         matrixStack.translate( x, y, z );
 
-        this.setupRotations(mobEntity, matrixStack, mobEntity.tickCount + g, f, g);
-        //matrixStack.mulPose((Axis.ZP.rotationDegrees(180.0F)));
-        this.scale(mobEntity, matrixStack, g);
-
-        VertexConsumer vertexConsumerResult = vertexConsumer.getBuffer(RenderType.entityTranslucent(getTextureLocation(mobEntity)));
-        this.model.renderToBuffer(matrixStack, vertexConsumerResult, i, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, i);
+        super.render(mobEntity, f, g, matrixStack, vertexConsumer, i);
         matrixStack.popPose();
     }
 }

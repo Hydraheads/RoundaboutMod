@@ -1802,6 +1802,10 @@ public class ModSounds {
     public static SoundEvent SURVIVOR_REMOVE_EVENT = SoundEvent.createVariableRangeEvent(SURVIVOR_REMOVE_ID);
 
 
+    public static final String BC_UI_SELECT = "bc_ui_select";
+    public static final ResourceLocation BC_UI_SELECT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BC_UI_SELECT);
+    public static SoundEvent BC_UI_SELECT_EVENT = SoundEvent.createVariableRangeEvent(BC_UI_SELECT_ID);
+
     public static final String BC_SUMMON = "bc_summon";
     public static final ResourceLocation BC_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BC_SUMMON);
     public static SoundEvent BC_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(BC_SUMMON_ID);

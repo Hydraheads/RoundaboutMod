@@ -195,6 +195,9 @@ public class PowersKillerQueen extends NewPunchingStand {
     private byte currentShaStatus = SHA_NONE;
     private int bombConfig = 2;
     private int bombSize = 1;
+    public int getBombSize() {
+        return bombSize;
+    }
 
     public byte getCurrentBombStatus() { return currentBombStatus; }
 
@@ -261,7 +264,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         btdDefuseServer(true);
         defuseServer();
         entityTargetBuffer = null;
-        if (bombPlantedItem != null) {
+        if (bombPlantedItem != null && getCurrentBombStatus() != BOMB_NONE) {
             bombPlantedItem.defuse();
             bombPlantedItem = null;
         }
@@ -4801,8 +4804,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                     }
                 } else { return ent == this.getBombEntity() && PowerTypes.isExistentiallyElsewhereTogether(ent, self); }
             }
-            boolean shouldRenderBubbleTarget = (currentBombStatus == BOMB_BUBBLE && this.isGuarding() || this.activePower == PowerIndex.POWER_2_BLOCK)
-                    && this.bombBubble != null && !bombBubble.isRemoved();
+            boolean shouldRenderBubbleTarget = (currentBombStatus == BOMB_BUBBLE && this.isGuarding() && this.bombBubble != null && !bombBubble.isRemoved())
+                    || this.activePower == PowerIndex.POWER_2_BLOCK;
 
             if (shouldRenderBubbleTarget) {
                 Entity target = MainUtil.getTargetEntity(this.self, 40);

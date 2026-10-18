@@ -1205,6 +1205,8 @@ public class ForgeSounds {
     public static final RegistryObject<SoundEvent> VSONG_DAMNABLE_CEREMONY =
             register(ModSounds.VSONG_DAMNABLE_CEREMONY, ModSounds.VSONG_DAMNABLE_CEREMONY_ID);
 
+    public static final RegistryObject<SoundEvent> BC_UI_SELECT =
+            register(ModSounds.BC_UI_SELECT, ModSounds.BC_UI_SELECT_ID);
     public static final RegistryObject<SoundEvent> BC_SUMMON =
             register(ModSounds.BC_SUMMON, ModSounds.BC_SUMMON_ID);
     public static final RegistryObject<SoundEvent> BC_TROOP_SUMMON =

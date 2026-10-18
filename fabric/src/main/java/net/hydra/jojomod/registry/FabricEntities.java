@@ -1273,7 +1273,7 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "bad_company_soldier"),
                     EntityType.Builder.of(BCSoldier::new, MobCategory.CREATURE).
-                            sized(BCSoldier.size, BCSoldier.size).clientTrackingRange(30).build(Roundabout.MOD_ID+":bad_company_soldier")
+                            sized(BCSoldier.width, BCSoldier.height).clientTrackingRange(30).build(Roundabout.MOD_ID+":bad_company_soldier")
             );
     public static final EntityType<SheerHeartAttackEntity> SHEER_HEART_ATTACK =
             Registry.register(

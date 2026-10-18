@@ -664,7 +664,11 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public boolean canUseMiningStand() {
-        return !isRegainingArmourFromDesummon() && !onCooldown(PowerIndex.SKILL_4) && super.canUseMiningStand();
+        // return !isRegainingArmourFromDesummon() && !onCooldown(PowerIndex.SKILL_4) && super.canUseMiningStand();
+        if (!isRegainingArmourFromDesummon() && !onCooldown(PowerIndex.SKILL_4)) {
+            return super.canUseMiningStand();
+        }
+        return isPiloting() ? isMiningStand() : super.canUseMiningStand();
     }
 
     @Override
@@ -722,7 +726,7 @@ public class PowersSilverChariot extends NewPunchingStand {
             super.standPunch();
             return;
         }
-        if (self instanceof Player) {
+        if (self instanceof Player && isPacketPlayer()) {
             attackTimeDuring = -10;
             Entity target = getTargetEntity(actionOrigin(), SILVER_CHARIOT_CONTROL_MODE_PUNCH_RANGE, getPunchAngle());
             C2SPacketUtil.standPunchPacket(target == null ? -1 : target.getId(), activePowerPhase);
@@ -869,6 +873,20 @@ public class PowersSilverChariot extends NewPunchingStand {
             armoured = true;
             this.animateStand(SilverChariotEntity.SC_TOGGLE_ARMOUR_ON);
         }
+    }
+
+    @Override
+    public void onStandSwitch() {
+        StandEntity stand = this.getStandEntity(this.self);
+        boolean hasControlId = self instanceof Player player
+                && ((IPlayerEntity) player).roundabout$getControlling() != 0;
+        if (hasControlId || stand instanceof SilverChariotEntity silverChariot && silverChariot.isControlModeActive()) {
+            setPiloting(0);
+            if (self.level().isClientSide()) {
+                SilverChariotClient.exit();
+            }
+        }
+        super.onStandSwitch();
     }
 
     @Override
@@ -1350,7 +1368,7 @@ public class PowersSilverChariot extends NewPunchingStand {
             case SKILL_3_CROUCH -> {
                 // TODO: Implement carry self ability
                 // toggleControlModeClient((short) 1);
-                selfGrabClient();
+                // selfGrabClient();
             }
             case SKILL_3_GUARD -> {
                 // TODO: Implement Silver Chariot arm render ability
@@ -1398,7 +1416,7 @@ public class PowersSilverChariot extends NewPunchingStand {
                 return true;
             }
             case PowerIndex.POWER_3_SNEAK -> {
-                selfGrabServer();
+                // selfGrabServer();
                 return true;
             }
             case PowerIndex.POWER_3_BLOCK -> {
@@ -1452,10 +1470,14 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public boolean tryPower(int move, boolean forced) {
+        /*
         if (!this.self.level().isClientSide && (this.isBarraging() || this.isClashing()) && (move != PowerIndex.BARRAGE && move != PowerIndex.BARRAGE_CLASH
                 && move != PowerIndex.BARRAGE_CHARGE)){
             this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
         }
+        */
+        if (moveStarted) moveStarted = false;
+        if (move == PowerIndex.BARRAGE_CHARGE_2 || move == PowerIndex.BARRAGE_2) return false;
         return super.tryPower(move, forced);
     }
 
@@ -1499,6 +1521,7 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public boolean setPowerNone() {
+        /*
         this.attackTimeDuring = -1;
         this.setActivePower(PowerIndex.NONE);
         poseStand(OffsetIndex.FOLLOW);
@@ -1508,6 +1531,13 @@ public class PowersSilverChariot extends NewPunchingStand {
         }
         animateStand(SilverChariotEntity.IDLE);
         return true;
+        */
+        boolean detached = hasDetachedStand();
+        boolean result = super.setPowerNone();
+        if (detached && getStandEntity(self) instanceof FollowingStandEntity following) {
+            following.setOffsetType(OffsetIndex.LOOSE);
+        }
+        return result;
     }
 
     @Override
@@ -1702,32 +1732,6 @@ public class PowersSilverChariot extends NewPunchingStand {
             this.setIsSilverChariotArmoured(true);
         }
 
-        if (this.self instanceof Player player) {
-            int controlledId = ((IPlayerEntity) player).roundabout$getControlling();
-            Entity controlled = self.level().getEntity(controlledId);
-            if (this.self.level().isClientSide() && isPacketPlayer()) {
-                if (controlled instanceof LivingEntity livingEntity && controlMode == CONTROL_MODE_STANDARD) {
-                    if (
-                            !livingEntity.isRemoved()
-                            && livingEntity.isAlive()
-                            && isWithinRemoteRange(livingEntity)
-                    ) {
-                        StandEntity se = this.getStandEntity(this.self);
-                        if (se != null && livingEntity.is(se)) {
-                            ClientUtil.setCameraEntity(livingEntity);
-                        }
-                    } else {
-                        IPlayerEntity ipe = ((IPlayerEntity) player);
-                        ipe.roundabout$setIsControlling(0);
-                        tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT,0);
-                        ClientUtil.setCameraEntity(null);
-                    }
-                } else {
-                    ClientUtil.setCameraEntity(null);
-                }
-            }
-        }
-
         /*
         if (self instanceof Player player && self.level().isClientSide() && isPacketPlayer()) {
             int controlledId = ((IPlayerEntity) player).roundabout$getControlling();
@@ -1749,11 +1753,7 @@ public class PowersSilverChariot extends NewPunchingStand {
         }
 
         if (!this.self.level().isClientSide()) {
-            tickControlModeServer();
-        }
-
-        if (this.self.isUsingItem() && isPiloting()){
-            this.self.stopUsingItem();
+            // tickControlModeServer();
         }
 
         // super.tickPower();
@@ -2079,78 +2079,58 @@ public class PowersSilverChariot extends NewPunchingStand {
             CONTROL_MODE_SELF_CARRY = 2;
 
     public void toggleControlModeClient() {
-        if (!(this.self instanceof Player)) {
+        if (!(self instanceof Player)) {
             return;
         }
         if (isPiloting()) {
-            this.exitControlModeClient();
-        } else {
-            controlMode = CONTROL_MODE_STANDARD;
-            StandEntity stand = getStandEntity(self);
-            if (isUsableStand(stand)) {
-                setPiloting(stand.getId());
-                // SilverChariotClient.enter();
-                tryIntPowerPacket(SILVER_CHARIOT_CONTROL_MODE, stand.getId());
-            }
+            exitControlModeClient();
+            return;
+        }
+        StandEntity stand = getStandEntity(self);
+        if (isUsableStand(stand)) {
+            setPiloting(stand.getId());
+            SilverChariotClient.enter();
+            tryIntPowerPacket(SILVER_CHARIOT_CONTROL_MODE, stand.getId());
         }
     }
 
     private void exitControlModeClient() {
-        controlMode = CONTROL_MODE_OFF;
-        // controlModeZero = false;
-        // controlModeOne = false;
-        if (this.self instanceof Player PE) {
-            IPlayerEntity ipe = ((IPlayerEntity) PE);
-            ipe.roundabout$setIsControlling(0);
-        }
-        // setPiloting(0);
-        // SilverChariotClient.exit();
+        setPiloting(0);
+        SilverChariotClient.exit();
         tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, 0);
     }
 
     @Override
-    public void setPiloting(int ID) {
+    public void setPiloting(int id) {
         if (!(this.self instanceof Player player)) {
             return;
         }
-        switch (controlMode) {
-            case CONTROL_MODE_OFF -> {
-
+        boolean wasPiloting = isPiloting();
+        StandEntity stand = getStandEntity(self);
+        Entity selected = self.level().getEntity(id);
+        boolean entering = stand != null && selected != null && selected.is(stand);
+        ((IPlayerEntity) player).roundabout$setIsControlling(entering ? id : 0);
+        if (stand instanceof SilverChariotEntity silverChariot) {
+            silverChariot.setControlMode(entering);
+            if (entering) {
+                silverChariot.setOffsetType(OffsetIndex.LOOSE_NOLEAN);
+            } else {
+                silverChariot.setOffsetType(OffsetIndex.FOLLOW);
             }
-            case CONTROL_MODE_STANDARD -> {
-                IPlayerEntity ipe = ((IPlayerEntity) player);
-                Entity ent = this.self.level().getEntity(ID);
-                if (ent != null && ent.is(this.getPilotingStand())){
-                    poseStand(OffsetIndex.LOOSE);
-                    ipe.roundabout$setIsControlling(ID);
-                } else {
-                    ipe.roundabout$setIsControlling(ID);
-                    poseStand(OffsetIndex.FOLLOW);
-                }
-            }
-            case CONTROL_MODE_SELF_CARRY -> {
-                IPlayerEntity ipe = ((IPlayerEntity) player);
-                Entity ent = this.self.level().getEntity(ID);
-                if (ent != null && ent.is(this.getPilotingStand())){
-                    poseStand(OffsetIndex.LOOSE);
-                    ipe.roundabout$setIsControlling(ID);
-                } else {
-                    ipe.roundabout$setIsControlling(ID);
-                    poseStand(OffsetIndex.FOLLOW);
-                }
-            }
+        }
+        if (!entering) {
+            player.stopUsingItem();
+        } else if (stand instanceof SilverChariotEntity silverChariot) {
+            silverChariot.getNavigation().stop();
+            // silverChariot.clearControlInput();
         }
     }
 
     @Override
     public boolean isPiloting() {
-        if (this.getSelf() instanceof Player PE){
-            IPlayerEntity ipe = ((IPlayerEntity) PE);
-            int zint = ipe.roundabout$getControlling();
-            StandEntity sde = ((StandUser)PE).roundabout$getStand();
-            if (sde != null && zint == sde.getId()){
-                return true;
-            }
+        if (self instanceof Player player) {
+            StandEntity stand = ((StandUser) player).roundabout$getStand();
+            return stand != null && ((IPlayerEntity) player).roundabout$getControlling() == stand.getId();
         }
         return false;
     }
@@ -2190,7 +2170,8 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public boolean pilotInputInteract() {
-        return false;
+        if (!self.level().isClientSide()) return true;
+        return preCheckButtonInputGuard(true, Minecraft.getInstance().options);
     }
 
     @Override
@@ -2198,21 +2179,11 @@ public class PowersSilverChariot extends NewPunchingStand {
         if (isRegainingArmourFromDesummon() || onCooldown(PowerIndex.SKILL_4)) {
             return;
         }
-        LivingEntity ent = getPilotingStand();
-        if (this.controlMode == CONTROL_MODE_SELF_CARRY && ent instanceof SilverChariotEntity silverChariot) {
-            return;
-        }
-        if (this.getActivePower() == PowerIndex.BARRAGE) {
-            return;
-        }
-        StandEntity stand = getStandEntity(this.self);
-        if (stand != null && isGuarding()) {
-            tryPower(PowerIndex.BARRAGE_CHARGE, true);
-            tryPowerPacket(PowerIndex.BARRAGE_CHARGE);
-            return;
-        }
-        tryPower(PowerIndex.ATTACK, true);
-        tryPowerPacket(PowerIndex.ATTACK);
+        if (!self.level().isClientSide()) return;
+        Minecraft minecraft = Minecraft.getInstance();
+        if (SilverChariotClient.tryMining(minecraft)) return;
+        if (!(self instanceof Player player)) return;
+        preCheckButtonInputGuard(true, minecraft.options);
     }
 
     @Override
@@ -2223,26 +2194,15 @@ public class PowersSilverChariot extends NewPunchingStand {
     @Override
     public void synchToCamera(){
         if (isPiloting()) {
-            switch (controlMode) {
-                case CONTROL_MODE_OFF -> {
-                    // SilverChariotClient.exit();
-                    exitControlModeClient();
-                }
-                case CONTROL_MODE_STANDARD -> {
-                    LivingEntity stand = this.getPilotingStand();
-                    if (stand != null) {
-                        // SilverChariotClient.applyLook(stand);
-                        ClientUtil.synchToCamera(stand);
-                    }
-                }
-                case CONTROL_MODE_SELF_CARRY -> {
-                    // Control Silver Chariot while looking from the player's view
-                }
-            }
+            LivingEntity stand = getPilotingStand();
+            if (stand != null) SilverChariotClient.applyLook(stand);
         }
     }
 
-
+    @Override
+    public void poseStand(byte r) {
+        if (!hasDetachedStand()) super.poseStand(r);
+    }
 
     // Offhand weapon render or final attack
     public void crouchAttack() {
