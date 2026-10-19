@@ -5108,14 +5108,13 @@ public class PowersDiverDown extends NewPunchingStand {
     public List<Byte> getSkinList() {
         List<Byte> l = Lists.newArrayList();
         l.add(DiverDownEntity.PART_6);
-        l.add(DiverDownEntity.BETA_DIVER);
+        l.add(DiverDownEntity.MANGA);
         if (this.getSelf() instanceof Player PE) {
             byte Level = ((IPlayerEntity) PE).roundabout$getStandLevel();
             ItemStack goldDisc = ((StandUser) PE).roundabout$getStandDisc();
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
             if (Level > 1 || bypass) {
                 l.add(DiverDownEntity.KELP);
-                l.add(DiverDownEntity.MANGA);
                 l.add(DiverDownEntity.GRAY);
             }
             if (Level > 2 || bypass) {
@@ -5145,6 +5144,7 @@ public class PowersDiverDown extends NewPunchingStand {
             if (Level > 7 || bypass) {
                 l.add(DiverDownEntity.WORLD_DIVER);
                 l.add(DiverDownEntity.DIVER_DROWNED);
+                l.add(DiverDownEntity.BETA_DIVER);
             }
             if (((IPlayerEntity) PE).roundabout$getUnlockedBonusSkin() || bypass) {
                 l.add(DiverDownEntity.SCUBA_DIVER);
