@@ -31,8 +31,13 @@ public class BCSoldier extends BCTroop{
 
     public void setBundle(boolean value) {
         this.entityData.set(BUNDLE, value);
+
+        /*if (value) {
+            setBoundingBox(EntityDimensions.scalable(height, width*2.8f).makeBoundingBox(position()));
+        }*/
     }
     public boolean getBundle() {
+
         return this.entityData.get(BUNDLE);
     }
 
@@ -42,8 +47,8 @@ public class BCSoldier extends BCTroop{
                 0.4F).add(Attributes.MAX_HEALTH, 4.0).add(Attributes.ATTACK_DAMAGE, 2.0);
     }
 
-    public static float width = 0.15f;
-    public static float height = 0.35f;
+    public static float width = 0.275f;
+    public static float height = 0.32f;
     public boolean isDisplay = false;
 
     public final AnimationState releaseParachute = new AnimationState();
@@ -82,11 +87,24 @@ public class BCSoldier extends BCTroop{
         goalSelector.addGoal(0, new FloatGoal(this));
     }
 
+    /*
         @Override
     public EntityDimensions getDimensions(Pose pose) {
         if (getBundle()) {
             return EntityDimensions.scalable(height, width*2.8f);
         }
         return super.getDimensions(pose);
+    }*/
+    @Override
+    public boolean isAttackable() {
+        return true;
     }
+
+    @Override
+    public boolean isPickable() {
+        return true;
+    }
+
+    public boolean canStandBeHurt() {return true;}
+
 }

@@ -62,6 +62,7 @@ import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.AbstractVillager;
@@ -401,6 +402,21 @@ public abstract class ZMob extends LivingEntity implements IMob {
             if (!stack.isEmpty() && stack.getItem() instanceof StandDiscItem SD){
                 ((StandUser)this).roundabout$setStandDisc(stack);
                 ((StandUser)this).roundabout$getStandPowers().rollSkin();
+            }
+            // diver down extra zombies spawn
+            if (stack.getItem() == ModItems.STAND_DISC_DIVER_DOWN && ((Object) this) instanceof Zombie
+                    && ($$2 == MobSpawnType.NATURAL || $$2 == MobSpawnType.CHUNK_GENERATION)) {
+                for (int i = 0; i < 2; i++) {
+                    Zombie backup = EntityType.ZOMBIE.create(this.level());
+                    if (backup == null) continue;
+
+                    double offsetX = i == 0 ? -1.5 : 1.5;
+                    backup.moveTo(this.getX() + offsetX, this.getY(), this.getZ(), this.getYRot(), 0);
+                    backup.finalizeSpawn($$0,
+                            $$0.getCurrentDifficultyAt(backup.blockPosition()),
+                            MobSpawnType.MOB_SUMMONED, null, null);
+                    $$0.addFreshEntity(backup);
+                }
             }
         } else if (this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_WORTHY_MOB_SPAWNS) && $$5.nextFloat() < MainUtil.getWorthyOdds(((Mob)(Object)this))) {
             this.roundabout$setWorthy(true);

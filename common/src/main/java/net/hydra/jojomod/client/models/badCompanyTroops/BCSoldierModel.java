@@ -7,6 +7,7 @@ import net.hydra.jojomod.entity.badCompanyTroops.BCSoldier;
 import net.hydra.jojomod.entity.badCompanyTroops.BCTroop;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.HeadedModel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -17,7 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
-public class BCSoldierModel<T extends BCSoldier> extends StandModel<T> {
+public class BCSoldierModel<T extends BCSoldier> extends StandModel<T> implements HeadedModel {
     private final ModelPart stand2;
     private final ModelPart parachute;
     private final ModelPart head2;
@@ -32,6 +33,8 @@ public class BCSoldierModel<T extends BCSoldier> extends StandModel<T> {
     private final ModelPart legs;
     private final ModelPart leftleg;
     private final ModelPart rightleg;
+
+    @Override public ModelPart getHead() { return this.head; }
 
     public BCSoldierModel(ModelPart root) {
         this.stand = root.getChild("stand");
@@ -116,6 +119,13 @@ public class BCSoldierModel<T extends BCSoldier> extends StandModel<T> {
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         super.setupAnim(entity, limbSwing,limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+        if (entity.isDisplay) {
+            parachute.visible = false;
+        }
+
+        this.getHead().yRot = netHeadYaw * ((float) Math.PI / 180F);
+        this.getHead().xRot = headPitch * ((float) Math.PI / 180F);
+
         defaultModifiers(entity);
         this.animate(entity.releaseParachute, BCSoldierAnimations.releaseParachute, ageInTicks, 1.0f);
         this.animate(entity.closeParachute, BCSoldierAnimations.closeParachute, ageInTicks, 1.0f);

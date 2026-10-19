@@ -1113,6 +1113,10 @@ public class StandIcons {
             "textures/gui/icons/lyin_eyes/inventory_reading.png");
     public static final ResourceLocation LYIN_EYES_TENSION_SENSOR = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/lyin_eyes/tension_sensor.png");
+    public static final ResourceLocation LYIN_EYES_TENSION_SENSOR_ON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/lyin_eyes/tension_sensor_on.png");
+    public static final ResourceLocation LYIN_EYES_PASSIVE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/lyin_eyes/callout_passive.png");
     public static final ResourceLocation LYIN_EYES_LAYER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/lyin_eyes_layer.png");
 

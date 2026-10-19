@@ -4767,8 +4767,6 @@ public class PowersKillerQueen extends NewPunchingStand {
             return ModSounds.KQ_BTD_WINDUP_EVENT;
         }else if (soundChoice == BTD_DAY_WINDUP_LINE) {
             return ModSounds.KQ_BTD_WINDUP_LINE_EVENT;
-        }else if (soundChoice == SUMMON_ARMS) {
-            return ModSounds.SUMMON_SOUND_EVENT;
         }
 
 

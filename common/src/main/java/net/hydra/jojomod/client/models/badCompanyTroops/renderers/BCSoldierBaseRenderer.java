@@ -50,7 +50,7 @@ public class BCSoldierBaseRenderer extends StandRenderer<BCSoldier> {
     public void render(BCSoldier mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumer, int i) {
         float factor = 0.3f;
         if (mobEntity.isDisplay) {
-            factor = 0.9f;
+            factor = 1.5f;
         }
         if(mobEntity.isBaby()){
             matrixStack.scale(0.60f * factor, 0.60f * factor, 0.60f * factor);
@@ -59,7 +59,7 @@ public class BCSoldierBaseRenderer extends StandRenderer<BCSoldier> {
         }
 
         if (mobEntity.getBundle()) {
-            float offCenter = 0.7f;
+            float offCenter = 0.75f;
 
             // Line 1
             renderExtraSoldier(1.0f, 0.0f, -0.5f+offCenter, mobEntity, f, g, matrixStack, vertexConsumer, i);
