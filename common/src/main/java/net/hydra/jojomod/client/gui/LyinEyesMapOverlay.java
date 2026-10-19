@@ -30,63 +30,70 @@ public class LyinEyesMapOverlay {
         Player player = mc.player;
         if (player == null || mc.level == null) return;
 
-        if (((StandUser) player).roundabout$getStandPowers() instanceof PowersLyinEyes LE && LE.getMapModeClient()) {
-            // it's scanning time
-            BlockCategory[][] mapData = LyinEyesScanner.scanFeetLevel(player, mc.level, RADIUS);
+        if (((StandUser) player).roundabout$getStandPowers() instanceof PowersLyinEyes lyinEyes) {
+            float opacity = lyinEyes.getMapOpacity();
+            if (opacity <= 0.0F) return;
 
-            // center the map on the screen.
-            int screenWidth = mc.getWindow().getGuiScaledWidth();
-            int screenHeight = mc.getWindow().getGuiScaledHeight();
-            int mapDisplaySize = mapData.length * RENDER_BLOCK_SIZE;
-            int startX = (screenWidth - mapDisplaySize) / 2;
-            int startY = (screenHeight - mapDisplaySize) / 2;
+            guiGraphics.setColor(1.0F, 1.0F, 1.0F, opacity);
+            try {
+                // it's scanning time
+                BlockCategory[][] mapData = LyinEyesScanner.scanFeetLevel(player, mc.level, RADIUS);
 
-            // place the player arrow in the center
-            int centerX = startX + (RADIUS * RENDER_BLOCK_SIZE);
-            int centerY = startY + (RADIUS * RENDER_BLOCK_SIZE);
-            float rotAngle = player.getYRot() - 180.0f;
+                // center the map on the screen.
+                int screenWidth = mc.getWindow().getGuiScaledWidth();
+                int screenHeight = mc.getWindow().getGuiScaledHeight();
+                int mapDisplaySize = mapData.length * RENDER_BLOCK_SIZE;
+                int startX = (screenWidth - mapDisplaySize) / 2;
+                int startY = (screenHeight - mapDisplaySize) / 2;
 
-            guiGraphics.pose().pushPose();
-            if (ConfigManager.getClientConfig().lyinEyesSettings.spinMapInsteadOfArrow) {
-                guiGraphics.pose().translate(centerX, centerY, 0);
-                guiGraphics.pose().mulPose(Axis.ZP.rotationDegrees(-rotAngle));
-                guiGraphics.pose().translate(-centerX, -centerY, 0);
-            }
+                // place the player arrow in the center
+                int centerX = startX + (RADIUS * RENDER_BLOCK_SIZE);
+                int centerY = startY + (RADIUS * RENDER_BLOCK_SIZE);
+                float rotAngle = player.getYRot() - 180.0f;
 
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+                guiGraphics.pose().pushPose();
+                if (ConfigManager.getClientConfig().lyinEyesSettings.spinMapInsteadOfArrow) {
+                    guiGraphics.pose().translate(centerX, centerY, 0);
+                    guiGraphics.pose().mulPose(Axis.ZP.rotationDegrees(-rotAngle));
+                    guiGraphics.pose().translate(-centerX, -centerY, 0);
+                }
 
-            // simple 2d arrow for loop, this is where the blocks get drawn
-            for (int x = 0; x < mapData.length; x++) {
-                for (int z = 0; z < mapData[x].length; z++) {
-                    BlockCategory category = mapData[x][z];
-                    // air gets skipped
-                    if (category == BlockCategory.AIR) continue;
+                // simple 2d arrow for loop, this is where the blocks get drawn
+                for (int x = 0; x < mapData.length; x++) {
+                    for (int z = 0; z < mapData[x].length; z++) {
+                        BlockCategory category = mapData[x][z];
+                        // air gets skipped
+                        if (category == BlockCategory.AIR) continue;
 
-                    int drawX = startX + (x * RENDER_BLOCK_SIZE);
-                    int drawY = startY + (z * RENDER_BLOCK_SIZE);
+                        int drawX = startX + (x * RENDER_BLOCK_SIZE);
+                        int drawY = startY + (z * RENDER_BLOCK_SIZE);
 
-                    if (category == BlockCategory.SOLID) {
-                        guiGraphics.blit(MAP_ICONS, drawX, drawY, RENDER_BLOCK_SIZE, RENDER_BLOCK_SIZE, SOLID_U, SOLID_V, TEX_ICON_SIZE, TEX_ICON_SIZE, 256, 256);
-                    } else if (category == BlockCategory.LIQUID) {
-                        guiGraphics.blit(MAP_ICONS, drawX, drawY, RENDER_BLOCK_SIZE, RENDER_BLOCK_SIZE, LIQUID_U, LIQUID_V, TEX_ICON_SIZE, TEX_ICON_SIZE, 256, 256);
+                        if (category == BlockCategory.SOLID) {
+                            guiGraphics.blit(MAP_ICONS, drawX, drawY, RENDER_BLOCK_SIZE, RENDER_BLOCK_SIZE, SOLID_U, SOLID_V, TEX_ICON_SIZE, TEX_ICON_SIZE, 256, 256);
+                        } else if (category == BlockCategory.LIQUID) {
+                            guiGraphics.blit(MAP_ICONS, drawX, drawY, RENDER_BLOCK_SIZE, RENDER_BLOCK_SIZE, LIQUID_U, LIQUID_V, TEX_ICON_SIZE, TEX_ICON_SIZE, 256, 256);
+                        }
                     }
                 }
+
+                guiGraphics.pose().popPose();
+
+                guiGraphics.pose().pushPose();
+                guiGraphics.pose().translate(centerX + (RENDER_BLOCK_SIZE / 2.0f), centerY + (RENDER_BLOCK_SIZE / 2.0f), 0);
+
+                // rotate the arrow based on where the player looks
+                if (!ConfigManager.getClientConfig().lyinEyesSettings.spinMapInsteadOfArrow) {
+                    guiGraphics.pose().mulPose(Axis.ZP.rotationDegrees(rotAngle));
+                }
+
+                // time to draw the arrow
+                guiGraphics.blit(MAP_ICONS, -4, -6, ARROW_U, ARROW_V, 8, 12, 256, 256);
+
+                guiGraphics.pose().popPose();
+            } finally {
+                guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+                RenderSystem.disableBlend();
             }
-
-            guiGraphics.pose().popPose();
-
-            guiGraphics.pose().pushPose();
-            guiGraphics.pose().translate(centerX + (RENDER_BLOCK_SIZE / 2.0f), centerY + (RENDER_BLOCK_SIZE / 2.0f), 0);
-
-            // rotate the arrow based on where the player looks
-            if (!ConfigManager.getClientConfig().lyinEyesSettings.spinMapInsteadOfArrow) {
-                guiGraphics.pose().mulPose(Axis.ZP.rotationDegrees(rotAngle));
-            }
-
-            // time to draw the arrow
-            guiGraphics.blit(MAP_ICONS, -4, -6, ARROW_U, ARROW_V, 8, 12, 256, 256);
-
-            guiGraphics.pose().popPose();
         }
     }
 }

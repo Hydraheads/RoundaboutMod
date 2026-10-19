@@ -16,6 +16,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -26,7 +27,8 @@ public class PowersLyinEyes extends NewDashPreset {
     // for move ids accessed here. update public bytes every time this is edited.
     private static final byte
         READ_INVENTORY = 53,
-        FINISH_READ_INVENTORY = 54;
+        FINISH_READ_INVENTORY = 54,
+        FINISH_OPEN_MAP = 55;
     // stand summoning variable
     private int summonOverlayTicks = 0;
     private int gatherOverlayTicks = 0;
@@ -75,6 +77,7 @@ public class PowersLyinEyes extends NewDashPreset {
 
     @Override
     public void tickPower() {
+        mapOpacity = Mth.approach(mapOpacity, mapModeClient ? 1.0F : 0.0F, 0.20F);
         if (this.self.level().isClientSide()) {
             //inventory tracking for animation oooooh
             boolean isMenuOpen = isInventoryMenuOpen();
@@ -83,8 +86,10 @@ public class PowersLyinEyes extends NewDashPreset {
                 isGather = true;
             } else if (hadInventoryMenuOpen) {
                 hadInventoryMenuOpen = false;
-                isGather = false;
-                if (!visionModeClient) {
+                if (!mapModeClient) {
+                    isGather = false;
+                }
+                if (!visionModeClient || !mapModeClient) {
                     isSummon = true;
                 }
             }
@@ -254,7 +259,9 @@ public class PowersLyinEyes extends NewDashPreset {
             }
             else{
                 visionModeClient = false;
-                isSummon = true;
+                if (!mapModeClient) {
+                    isSummon = true;
+                }
                 PE.displayClientMessage(Component.translatable("text.roundabout.lyin_eyes.tension_highlight_off").withStyle(ChatFormatting.GOLD), true);
             }
         }
@@ -263,6 +270,8 @@ public class PowersLyinEyes extends NewDashPreset {
     // tension highlighter end
 
     // map start
+
+    private float mapOpacity = 0.0F;
 
     private void tryOpenMap() {
         this.tryPower(PowerIndex.POWER_2, true);
@@ -273,16 +282,20 @@ public class PowersLyinEyes extends NewDashPreset {
         }
     }
 
-    private void switchMap(){
-        if (isClient() && this.self instanceof Player PE) {
-            if (!mapModeClient) {
-                mapModeClient = true;
-                isSummon = false;
-            }
-            else{
-                mapModeClient = false;
+    private void switchMap() {
+        if (!mapModeClient) {
+            mapModeClient = true;
+            isSummon = false;
+            mapModeClient = true;
+            gatherOverlayTicks = 1;
+            isGather = true;
+        }
+        else{
+            mapModeClient = false;
+            if (!visionModeClient) {
                 isSummon = true;
             }
+            isGather = false;
         }
     }
 
@@ -361,6 +374,7 @@ public class PowersLyinEyes extends NewDashPreset {
     public boolean getVisionModeClient() {return visionModeClient;}
     public boolean isActive() {return hasStandActive(this.self);}
     public boolean getMapModeClient() {return mapModeClient;}
+    public float getMapOpacity() {return mapOpacity;}
 
     // WIP FEATURES BELOW HERE, DELETE WHEN DONE
 
