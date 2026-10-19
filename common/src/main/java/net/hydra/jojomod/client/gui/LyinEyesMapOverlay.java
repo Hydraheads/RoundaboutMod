@@ -7,6 +7,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersLyinEyes;
 import net.hydra.jojomod.util.LyinEyesScanner;
 import net.hydra.jojomod.util.LyinEyesScanner.BlockCategory;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
@@ -40,6 +41,18 @@ public class LyinEyesMapOverlay {
             int startX = (screenWidth - mapDisplaySize) / 2;
             int startY = (screenHeight - mapDisplaySize) / 2;
 
+            // place the player arrow in the center
+            int centerX = startX + (RADIUS * RENDER_BLOCK_SIZE);
+            int centerY = startY + (RADIUS * RENDER_BLOCK_SIZE);
+            float rotAngle = player.getYRot() - 180.0f;
+
+            guiGraphics.pose().pushPose();
+            if (ConfigManager.getClientConfig().lyinEyesSettings.spinMapInsteadOfArrow) {
+                guiGraphics.pose().translate(centerX, centerY, 0);
+                guiGraphics.pose().mulPose(Axis.ZP.rotationDegrees(-rotAngle));
+                guiGraphics.pose().translate(-centerX, -centerY, 0);
+            }
+
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
             // simple 2d arrow for loop, this is where the blocks get drawn
@@ -60,16 +73,15 @@ public class LyinEyesMapOverlay {
                 }
             }
 
-            // place the player arrow in the center
-            int centerX = startX + (RADIUS * RENDER_BLOCK_SIZE);
-            int centerY = startY + (RADIUS * RENDER_BLOCK_SIZE);
+            guiGraphics.pose().popPose();
 
             guiGraphics.pose().pushPose();
             guiGraphics.pose().translate(centerX + (RENDER_BLOCK_SIZE / 2.0f), centerY + (RENDER_BLOCK_SIZE / 2.0f), 0);
-            float yaw = player.getYRot();
-            float rotAngle = yaw - 180.0f;
 
-            guiGraphics.pose().mulPose(Axis.ZP.rotationDegrees(rotAngle));
+            // rotate the arrow based on where the player looks
+            if (!ConfigManager.getClientConfig().lyinEyesSettings.spinMapInsteadOfArrow) {
+                guiGraphics.pose().mulPose(Axis.ZP.rotationDegrees(rotAngle));
+            }
 
             // time to draw the arrow
             guiGraphics.blit(MAP_ICONS, -4, -6, ARROW_U, ARROW_V, 8, 12, 256, 256);

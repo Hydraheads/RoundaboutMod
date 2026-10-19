@@ -4249,6 +4249,9 @@
   "config.roundabout.forceThirdPersonInGroundDive.name": "Force Third Person in Ground Dive",
   "config.roundabout.forceThirdPersonInGroundDive.desc": "Automatically switches to third person while in ground dive.",
 
+  "config.roundabout.spinMapInsteadOfArrow.name": "Spin Map Instead Of Arrow",
+  "config.roundabout.spinMapInsteadOfArrow.desc": "Spins the minimap of the second ability instead of the player arrow.",
+
   "config.roundabout.rattAttackBonusOnMobs.name": "Bonus Mob Damage",
   "config.roundabout.rattAttackBonusOnMobs.desc": "How much bonus damage Ratt darts deal to a mob.",
   "config.roundabout.rattSafetyTicks.name": "Ratt Safety Ticks",
@@ -5231,6 +5234,7 @@
   "config.roundabout.d4cSettings.name": "D4C",
   "config.roundabout.whitesnakeSettings.name": "Whitesnake",
   "config.roundabout.diverDownSettings.name": "Diver Down",
+  "config.roundabout.lyinEyesSettings.name": "Lyin Eyes",
   "config.roundabout.starPlatinumSettings.name": "Star Platinum",
   "config.roundabout.oasisSettings.name": "Oasis",
   "config.roundabout.timeStopSettings.name": "Time Stop",
