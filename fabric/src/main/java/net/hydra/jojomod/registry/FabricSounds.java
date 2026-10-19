@@ -605,6 +605,9 @@ public class FabricSounds {
         addSound(ModSounds.ANASUI_PUCCI_1_ID, ModSounds.ANASUI_PUCCI_1_EVENT);
         addSound(ModSounds.ANASUI_PUCCI_2_ID, ModSounds.ANASUI_PUCCI_2_EVENT);
 
+        addSound(ModSounds.LYIN_EYES_SUMMON_ID, ModSounds.LYIN_EYES_SUMMON_EVENT);
+        addSound(ModSounds.VILLAGER_CALLED_OUT_ID, ModSounds.VILLAGER_CALLED_OUT_EVENT);
+
         addSound(ModSounds.SUMMON_GREEN_DAY_ID, ModSounds.SUMMON_GREEN_DAY_EVENT);
         addSound(ModSounds.SUMMON_WALKING_ID, ModSounds.SUMMON_WALKING_EVENT);
         addSound(ModSounds.HEEL_RAISE_ID, ModSounds.HEEL_RAISE_EVENT);
@@ -622,6 +625,13 @@ public class FabricSounds {
         addSound(ModSounds.EXTEND_SPIKES_ID, ModSounds.EXTEND_SPIKES_EVENT);
         addSound(ModSounds.WALL_LATCH_ID, ModSounds.WALL_LATCH_EVENT);
         addSound(ModSounds.STONE_MASK_ACTIVATE_ID, ModSounds.STONE_MASK_ACTIVATE_EVENT);
+
+        addSound(ModSounds.BC_UI_SELECT_ID, ModSounds.BC_UI_SELECT_EVENT);
+        addSound(ModSounds.BC_SUMMON_ID, ModSounds.BC_SUMMON_EVENT);
+        addSound(ModSounds.BC_TROOP_SUMMON_ID, ModSounds.BC_TROOP_SUMMON_EVENT);
+        addSound(ModSounds.BC_BUNDLE_SUMMON_ID, ModSounds.BC_BUNDLE_SUMMON_EVENT);
+        addSound(ModSounds.BC_HELICOPTER_SUMMON_ID, ModSounds.BC_HELICOPTER_SUMMON_EVENT);
+        addSound(ModSounds.BC_TANK_SUMMON_ID, ModSounds.BC_TANK_SUMMON_EVENT);
 
         addSound(ModSounds.DIO_HOHO_ID, ModSounds.DIO_HOHO_EVENT);
         addSound(ModSounds.DIO_HOHO_2_ID, ModSounds.DIO_HOHO_2_EVENT);

@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.NoVibrationEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
+import net.hydra.jojomod.entity.objects.GrabbedMobSoul;
 import net.hydra.jojomod.entity.projectile.IronBallEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.PowerTypes;
@@ -89,6 +90,9 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
             EntityDataSerializers.ITEM_STACK);
     protected static final EntityDataAccessor<Byte> SKIN = SynchedEntityData.defineId(StandEntity.class,
             EntityDataSerializers.BYTE);
+
+    protected static final EntityDataAccessor<Boolean> BS_GRABBED = SynchedEntityData.defineId(StandEntity.class,
+            EntityDataSerializers.BOOLEAN);
 
     public boolean canAcquireHeldItem = false;
 
@@ -528,7 +532,12 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
         return this.entityData.get(FADE_OUT);
     }
 
-
+    public final void setBsGrabbed(Boolean grabbed) {
+        this.entityData.set(BS_GRABBED, grabbed);
+    }
+    public boolean getBsGrabbed() {
+        return this.entityData.get(BS_GRABBED);
+    }
 
     public final void setMeltLevel(int FadeOut) {
         this.entityData.set(MELT_LEVEL, FadeOut);
@@ -693,6 +702,7 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
             this.entityData.define(HELD_ITEM, ItemStack.EMPTY);
             this.entityData.define(SKIN, (byte) 0);
             this.entityData.define(MELT_LEVEL, 0);
+            this.entityData.define(BS_GRABBED, false);
         }
     }
 
@@ -899,13 +909,17 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
 
                             if (!this.level().isClientSide() && (((StandUser)this.getUser()).roundabout$getStandDisc().isEmpty() ||
                             ((StandUser)this.getUser()).roundabout$getStandDisc().is(ModItems.STAND_DISC))){
-                                this.discard();
+                                if(!(this instanceof GrabbedMobSoul)) {
+                                    this.discard();
+                                }
                             }
                         } else {
                             handleTickDownIfDupe(thisStand);
                         }
                     } else {
-                        TickDown();
+                        if(!getBsGrabbed()) {
+                            TickDown();
+                        }
                     }
                 } else {
                     if (!this.getNeedsUser()){
@@ -939,7 +953,7 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
         return true;
     }
     public boolean isValid(boolean userActive, LivingEntity thisStand, LivingEntity userEntity){
-        return userEntity.isAlive() && !userEntity.isRemoved() && (!needsActive() || userActive) && (thisStand != null && thisStand.is(this));
+        return (userEntity.isAlive() && !userEntity.isRemoved() && (!needsActive() || userActive) && (thisStand != null && thisStand.is(this))) || this.getBsGrabbed();
     }
     public void handleTickDownIfDupe(LivingEntity thisStand){
 
@@ -1082,6 +1096,11 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
             }
         }
         super.remove($$0);
+    }
+
+    @Override
+    public boolean isNoGravity() {
+        return getBsGrabbed();
     }
 
     public boolean canBeHitByStands(){

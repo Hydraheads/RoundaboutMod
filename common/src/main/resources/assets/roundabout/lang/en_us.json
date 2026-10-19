@@ -947,6 +947,12 @@
   "sounds.roundabout.hologram_end": "Blip",
   "sounds.roundabout.king_hologram": "Projection",
 
+  "sounds.roundabout.bc_summon": "Bad Company summon",
+  "sounds.roundabout.bc_troop_summon": "Bad Company troop summoning",
+  "sounds.roundabout.bc_bundle_summon": "Bad Company group summoning",
+  "sounds.roundabout.bc_tank_summon": "Bad Company tank summoning",
+  "sounds.roundabout.bc_helicopter_summon": "Bad Company helicopter summoning",
+  "sounds.roundabout.bc_ui_select": "Troop select",
 
   "sounds.roundabout.j_anubis_hit_1": "Sword hit",
   "sounds.roundabout.j_anubis_hit_2": "Sword hit",
@@ -1226,6 +1232,7 @@
   "sounds.roundabout.diver_down_spring":  "SPROING!",
   "sounds.roundabout.diver_down_ribcage":  "Ribcage Snaps",
   "sounds.roundabout.diver_down_bomb":  "Head Explodes",
+
   "sounds.roundabout.anasui_visage_equip":  "Anasui speaks",
   "sounds.roundabout.anasui_hurt_1":  "Anasui hurt",
   "sounds.roundabout.anasui_hurt_2":  "Anasui hurt",
@@ -1261,6 +1268,10 @@
   "sounds.roundabout.anasui_jotaro_2":  "Asks for approval",
   "sounds.roundabout.anasui_pucci_1":  "Protecting Jolyne",
   "sounds.roundabout.anasui_pucci_2":  "Protecting Jolyne",
+
+  "sounds.roundabout.lyin_eyes_summon":  "Stand summoned",
+  "sounds.roundabout.villager_called_out":  "Villager Called Out",
+
   "sounds.roundabout.vampire_dive":  "Whoosh",
   "sounds.roundabout.punch_sfx1":  "Air Cracks",
   "sounds.roundabout.punch_sfx2":  "Air Cracks",
@@ -2558,7 +2569,7 @@
   "ability.roundabout.diver_submerge": "Diver Submerge",
   "ability.roundabout.diver_submerge.desc": "Submerge your stand into another person! Then, change their insides to suit you, whether that change is positive... or not.",
   "ability.roundabout.diver_disassemble": "Block Disassemble",
-  "ability.roundabout.diver_disassemble.desc": "Break down a block into it's basic crafting components. This move only works on blocks that only use 1 type of ingredient, don't create multiple blocks form crafting, and don't return items when being crafted.",
+  "ability.roundabout.diver_disassemble.desc": "Break down a block into it's basic crafting components. This move only works on blocks that use 1 type of ingredient, don't create multiple blocks from crafting, and don't return items when being crafted.",
   "ability.roundabout.diver_self_submerge": "Self Submerge",
   "ability.roundabout.diver_self_submerge.desc": "Submerge your stand into yourself. This lets you toggle redirection early, and lets you apply effects on yourself",
   "ability.roundabout.diver_selection": "Effect Selection",
@@ -2594,6 +2605,15 @@
 
   "ability.roundabout.lyin_eyes_placeholder": "Would you still love me",
   "ability.roundabout.lyin_eyes_placeholder.desc": "if I were a worm? \uD83E\uDD7A",
+  "ability.roundabout.lyin_eyes_tension_sensor": "Tension Sensor",
+  "ability.roundabout.lyin_eyes_tension_sensor.desc": "The nematodes highlight enemies through walls. Hostile mobs are highlighted red, neutral mobs are yellow, and passive mobs are green. Enemies that are low are highlighted differently.",
+  "ability.roundabout.lyin_eyes_inventory": "Inventory Reader",
+  "ability.roundabout.lyin_eyes_inventory.desc": "The nematodes gather around to show you what items a player has in their inventory.",
+  "ability.roundabout.lyin_eyes_callout": "Callout Liar",
+  "ability.roundabout.lyin_eyes_callout.desc": "Interacting with a villager might cause them to be revealed as a liar. Using Tension Sensor, you can detect those that are lying to you. Interact with them again while in Tension Sensor to call them out, giving all Lyin Eyes users permanent trade discounts. Don't go lying.",
+  "container.roundabout.lyin_eyes_callout": " ",
+  "text.roundabout.lyin_eyes.tension_highlight": "Tension Highlight On",
+  "text.roundabout.lyin_eyes.tension_highlight_off": "Tension Highlight Off",
 
   "ability.roundabout.emperor_shoot": "Shoot",
   "ability.roundabout.emperor_shoot.desc": "Shoot a bullet from the emperor.",
@@ -2806,6 +2826,10 @@
 
   "idle.roundabout.sc_part_3": "Part 3 Pose",
   "idle.roundabout.sc_part_5": "Part 5 Pose",
+
+  "skins.roundabout.bad_company.anime": "Part 4",
+  "skins.roundabout.bad_company.manga": "Manga",
+  "skins.roundabout.bad_company.beta": "Beta",
 
   "skins.roundabout.king_crimson.base": "Part 5",
   "skins.roundabout.king_crimson.manga": "Manga",
@@ -3154,6 +3178,7 @@
   "skins.roundabout.diver_down.diver_drowned": "Diver Drown",
   "skins.roundabout.diver_down.secco": "Secco",
   "skins.roundabout.diver_down.van_halen": "Van Halen",
+  "skins.roundabout.diver_down.scuba_diver": "Scuba Diver",
 
   "skins.roundabout.20_centuryboy.manga": "Manga",
   "skins.roundabout.20_centuryboy.bedrock": "Bedrock",
@@ -3313,6 +3338,8 @@
   "roundabout.bomb_config.on": ": on",
   "roundabout.bomb_config.off": ": off",
 
+  "roundabout.bad_company.troop_select" : "Troop Selection",
+
   "skins.roundabout.green_day.part_five_green_day": "Part 5",
   "skins.roundabout.green_day.red_day": "Red Day",
   "skins.roundabout.green_day.teal_day": "Teal Day",
@@ -3397,7 +3424,7 @@
 
   "roundabout.diver_affliction.none": "Effect Selection",
   "roundabout.diver_affliction.diver_legs": "Diver Legs",
-  "roundabout.diver_affliction.diver_legs.desc": "Diver Down replaces the legs of the target. While Diver Down is submerged inside the target, they will gain increased jump height and speed.",
+  "roundabout.diver_affliction.diver_legs.desc": "Diver Down replaces the legs of the target. While Diver Down is submerged inside the target, they will gain increased jump height and auto step.",
   "roundabout.diver_affliction.effect_cure": "Effect Cure",
   "roundabout.diver_affliction.effect_cure.desc": "Diver Down purges the body of all negative effects from the inside out. This only works on effects that can be cleared by milk.",
   "roundabout.diver_affliction.diver_arms": "Diver Arms",

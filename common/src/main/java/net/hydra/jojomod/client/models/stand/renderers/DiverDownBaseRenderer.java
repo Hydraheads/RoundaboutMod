@@ -46,8 +46,8 @@ public class DiverDownBaseRenderer extends StandRenderer<DiverDownEntity> {
     public static final ResourceLocation VOLUME_4 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/volume_4.png");
     public static final ResourceLocation SPINE_ART = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/spine_art.png");
     public static final ResourceLocation DIVER_DROWNED = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/diver_drowned.png");
-    public static final ResourceLocation SECCO = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/secco.png");
     public static final ResourceLocation VAN_HALEN = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/van_halen.png");
+    public static final ResourceLocation SCUBA_DIVER = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/scuba_diver.png");
 
     /*UPDATE THE FOLLOWING FILES AS WELL WHENEVER ADDING NEW MODELS:
     DiverKickEntityRenderer
@@ -120,11 +120,11 @@ public class DiverDownBaseRenderer extends StandRenderer<DiverDownEntity> {
         if (bt == DiverDownEntity.DIVER_DROWNED) {
             return DIVER_DROWNED;
         }
-        if (bt == DiverDownEntity.SECCO) {
-            return SECCO;
-        }
         if (bt == DiverDownEntity.VAN_HALEN) {
             return VAN_HALEN;
+        }
+        if (bt == DiverDownEntity.SCUBA_DIVER) {
+            return SCUBA_DIVER;
         }
         return PART_6;
     }
@@ -151,7 +151,7 @@ public class DiverDownBaseRenderer extends StandRenderer<DiverDownEntity> {
             }
         }
 
-        float factor = 1;
+        float factor = 0.5F + (mobEntity.getSizePercent()/2);
         if(mobEntity.isBaby()){
             matrixStack.scale(0.50f * factor, 0.50f * factor, 0.50f * factor);
         } else {

@@ -1,13 +1,12 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.objects.GrabbedMobSoul;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -15,6 +14,7 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
@@ -24,6 +24,7 @@ import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
@@ -34,26 +35,19 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.monster.AbstractIllager;
-import net.minecraft.world.entity.monster.Witch;
-import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.dimension.DimensionType;
-import net.minecraft.world.level.material.LavaFluid;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.apache.logging.log4j.core.pattern.AbstractStyleNameConverter;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -70,7 +64,8 @@ public class PowersBlackSabbath extends NewDashPreset {
     CLIENT_SYNC_REMOVE_TARGET = 103,
     CLIENT_SYNC_REMOVE_TARGET_LIST = 104,
     C2S_SYNC_DESTROY_LIST = 105,
-    S2C_CLOSE_CHEST = 106;
+    S2C_CLOSE_CHEST = 106,
+    CREATE_TEST_SOUL_SERVER = 107;
 
     public int moveMode = 0;
     public int tickBeforeHunt = -1;
@@ -469,9 +464,19 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                             BE.incFadeOut((byte) 1);
                             PowerTypes.copyPlaneOfExisting(self,BE);
                             this.self.level().addFreshEntity(BE);
+
+                            /*GrabbedMobSoul gs = ModEntities.GRABBED_PLAYER_SOUL.create(this.getSelf().level());
+                            gs.absMoveTo(pn.x(), this.self.getY() + (this.self.getBbHeight() / 2.45F), pn.z());
+                            gs.setMaster(this.self);
+                            gs.setYRot((self.getYRot() % 360) - 180);
+                            PowerTypes.copyPlaneOfExisting(self,gs);
+                            this.self.level().addFreshEntity(gs);*/
                         }
                     }
                 }
+            }
+            if(isClient()){
+                //makeSoulTest();
             }
         } else {
             if (!this.getSelf().level().isClientSide()) {
@@ -482,6 +487,34 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         }
         return true;
     }
+
+    /**Testing stuff: TO REMOVE LATER*/
+    private void makeSoulTest(){
+        if(isClient()) {
+           // if (((StandUser) this.getSelf()).roundabout$getStandPowers() == null) {
+                if (this.getSelf() instanceof Player P) {
+                    if (isWideSkin(P)) {
+                        tryIntPower(PowersBlackSabbath.CREATE_TEST_SOUL_SERVER, true, 1);
+                        tryIntPowerPacket(PowersBlackSabbath.CREATE_TEST_SOUL_SERVER, 1);
+                    } else {
+                        tryIntPower(PowersBlackSabbath.CREATE_TEST_SOUL_SERVER, true, 2);
+                        tryIntPowerPacket(PowersBlackSabbath.CREATE_TEST_SOUL_SERVER, 2);
+                    }
+                } else {
+                    tryIntPower(PowersBlackSabbath.CREATE_TEST_SOUL_SERVER, true, 3);
+                    tryIntPowerPacket(PowersBlackSabbath.CREATE_TEST_SOUL_SERVER, 3);
+                }
+          /*  } else {
+                tryIntPower(PowersBlackSabbath.CREATE_TEST_SOUL_SERVER, true, 4);
+                tryIntPowerPacket(PowersBlackSabbath.CREATE_TEST_SOUL_SERVER, 4);
+            }*/
+        }
+    }
+
+    public boolean isWideSkin(Player p) {
+        return ((AbstractClientPlayer) p).getModelName().equals("default");
+    }
+
     private boolean biteFingers(LivingEntity ojiroSasame){
         if(this.self.isAlive()) {
             if (!isClient()) {
@@ -563,38 +596,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
     @Override
     public void tickMobAI(LivingEntity attackTarget){
         //Disabled mob AI to avoid crashes, will be done later
-
-        /*
-        if(attackTarget != null){
-            if(!blackSabbathTargets.contains(attackTarget)) {
-                if (blackSabbathTargets.isEmpty()) {
-                    this.blackSabbathTargets.add(attackTarget);
-                } else {
-                    this.blackSabbathTargets.add(attackTarget);
-                }
-
-            }
-            if(this.getStandEntity(self) == null && !blackSabbathTargets.isEmpty() && tickBeforeHunt < 1){
-                this.setTickBeforeHunt(20);
-                moveMode = 3;
-            }
-          //  System.out.println(blackSabbathTargets.isEmpty() + " " + this.isClient());
-        }
-        if(this.getSelf() instanceof AbstractIllager || this.getSelf() instanceof Raider || this.getSelf() instanceof Witch){
-            List<Villager> lvent = this.self.level().getEntitiesOfClass(Villager.class, this.getSelf().getBoundingBox().inflate(40), (livingEntity) -> {
-                return true;
-            });
-            if (lvent != null && !lvent.isEmpty()) {
-                for (LivingEntity value : lvent) {
-                    if (value.hasLineOfSight(this.getSelf())) {
-                        if (!(value instanceof StandEntity || value instanceof RoadRollerEntity)) {
-                            this.blackSabbathTargets.add(attackTarget);
-                           // this.selectTargetSecond(value);
-                        }
-                    }
-                }
-            }
-        }*/
     }
     @Override
     public boolean tryPower(int move, boolean forced) {
@@ -1180,6 +1181,39 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                     }
                 }
             }
+
+            case PowersBlackSabbath.CREATE_TEST_SOUL_SERVER -> {
+                StandEntity t = null;
+                boolean illDeleteThisLater = false;
+                if(illDeleteThisLater) {
+                    switch (value) {
+                        case 1 -> {
+                            t = ModEntities.GRABBED_PLAYER_SOUL.create(this.getSelf().level());
+                        }
+                        case 2 -> {
+                            t = ModEntities.GRABBED_PLAYER_SOUL_SLIM.create(this.getSelf().level());
+                        }
+                        case 3 -> {
+                            t = ModEntities.GRABBED_MOB_SOUL.create(this.getSelf().level());
+                        }
+                        case 4 -> {
+
+                        }
+
+                    }
+                } else {
+                    t = ModEntities.BLACK_SABBATH.create(this.self.level());
+                }
+                t.setBsGrabbed(true);
+                t.setMaster(null);
+                t.setFadeOut((byte)8);
+                t.absMoveTo(self.position().x(), this.self.getY() + (this.self.getBbHeight() / 2.45F), self.position().z());
+                t.setYRot((self.getYRot() % 360) - 180);
+                PowerTypes.copyPlaneOfExisting(self,t);
+                this.self.level().addFreshEntity(t);
+                System.out.println(t);
+            }
+
             case PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET -> {
                 this.setActivePower(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET);
                 if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){
@@ -1479,7 +1513,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
     @Override
     public boolean returnFakeStandForHud(){
         if(this.self != null) {
-           // return !(this.getStandEntity(this.self) != null);
             return true;
         }
         return false;

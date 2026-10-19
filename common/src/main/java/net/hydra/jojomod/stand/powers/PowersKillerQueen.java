@@ -195,6 +195,9 @@ public class PowersKillerQueen extends NewPunchingStand {
     private byte currentShaStatus = SHA_NONE;
     private int bombConfig = 2;
     private int bombSize = 1;
+    public int getBombSize() {
+        return bombSize;
+    }
 
     public byte getCurrentBombStatus() { return currentBombStatus; }
 
@@ -261,7 +264,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         btdDefuseServer(true);
         defuseServer();
         entityTargetBuffer = null;
-        if (bombPlantedItem != null) {
+        if (bombPlantedItem != null && getCurrentBombStatus() != BOMB_NONE) {
             bombPlantedItem.defuse();
             bombPlantedItem = null;
         }
@@ -4764,8 +4767,6 @@ public class PowersKillerQueen extends NewPunchingStand {
             return ModSounds.KQ_BTD_WINDUP_EVENT;
         }else if (soundChoice == BTD_DAY_WINDUP_LINE) {
             return ModSounds.KQ_BTD_WINDUP_LINE_EVENT;
-        }else if (soundChoice == SUMMON_ARMS) {
-            return ModSounds.SUMMON_SOUND_EVENT;
         }
 
 
@@ -4801,8 +4802,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                     }
                 } else { return ent == this.getBombEntity() && PowerTypes.isExistentiallyElsewhereTogether(ent, self); }
             }
-            boolean shouldRenderBubbleTarget = (currentBombStatus == BOMB_BUBBLE && this.isGuarding() || this.activePower == PowerIndex.POWER_2_BLOCK)
-                    && this.bombBubble != null && !bombBubble.isRemoved();
+            boolean shouldRenderBubbleTarget = (currentBombStatus == BOMB_BUBBLE && this.isGuarding() && this.bombBubble != null && !bombBubble.isRemoved())
+                    || this.activePower == PowerIndex.POWER_2_BLOCK;
 
             if (shouldRenderBubbleTarget) {
                 Entity target = MainUtil.getTargetEntity(this.self, 40);
@@ -5229,6 +5230,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             boolean canDestroyBlocks = isBlockDestructionEnabled() &&
                     ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction &&
+                    !ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims &&
                     level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) &&
                     this.getSelf() instanceof Player && MainUtil.getIsGamemodeApproriateForGrief(self);
 

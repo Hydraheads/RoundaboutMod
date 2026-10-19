@@ -497,6 +497,18 @@
       "roundabout:anasui_pucci_2"
     ]
   },
+  "lyin_eyes_summon": {
+    "subtitle": "sounds.roundabout.lyin_eyes_summon",
+    "sounds": [
+      "roundabout:lyin_eyes_summon"
+    ]
+  },
+  "villager_called_out": {
+    "subtitle": "sounds.roundabout.villager_called_out",
+    "sounds": [
+      "roundabout:villager_called_out"
+    ]
+  },
   "summon_king_crimson": {
     "subtitle": "sounds.roundabout.summon_king_crimson",
     "sounds": [
@@ -4615,6 +4627,42 @@
     "subtitle": "sounds.roundabout.silver_chariot_rapier_shot_entity_impact",
     "sounds": [
       "roundabout:silver_chariot_rapier_shot_entity_impact"
+    ]
+  },
+  "bc_troop_summon": {
+    "subtitle" : "sounds.roundabout.bc_troop_summon",
+    "sounds": [
+      "roundabout:bc_troop_summon"
+    ]
+  },
+  "bc_bundle_summon": {
+    "subtitle" : "sounds.roundabout.bc_bundle_summon",
+    "sounds": [
+      "roundabout:bc_bundle_summon"
+    ]
+  },
+  "bc_helicopter_summon": {
+    "subtitle" : "sounds.roundabout.bc_helicopter_summon",
+    "sounds": [
+      "roundabout:bc_helicopter_summon"
+    ]
+  },
+  "bc_tank_summon": {
+    "subtitle" : "sounds.roundabout.bc_tank_summon",
+    "sounds": [
+      "roundabout:bc_tank_summon"
+    ]
+  },
+  "bc_summon": {
+    "subtitle" : "sounds.roundabout.bc_summon",
+    "sounds": [
+      "roundabout:bc_summon"
+    ]
+  },
+  "bc_ui_select": {
+    "subtitle" : "sounds.roundabout.bc_ui_select",
+    "sounds": [
+      "roundabout:bc_ui_select"
     ]
   }
 }

@@ -9,6 +9,7 @@ import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StreetSignBlock;
 import net.hydra.jojomod.block.handBlock.AbstractHandBlock;
 import net.hydra.jojomod.entity.*;
+import net.hydra.jojomod.entity.badCompanyTroops.*;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.mobs.TerrierEntity;
@@ -100,6 +101,9 @@ public class ForgeEvents {
         event.put(ForgeEntities.BEACH_SABBATH.get(), BlackSabbathEntity.createStandAttributes().build());
         event.put(ForgeEntities.SANTA_SABBATH.get(), BlackSabbathEntity.createStandAttributes().build());
         event.put(ForgeEntities.COWBOY_SABBATH.get(), BlackSabbathEntity.createStandAttributes().build());
+        event.put(ForgeEntities.GRABBED_MOB_SOUL.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.GRABBED_PLAYER_SOUL.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.GRABBED_PLAYER_SOUL_SLIM.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.WALKING_HEART.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.CREAM.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.MAGICIANS_RED.get(), StandEntity.createStandAttributes().build());
@@ -169,6 +173,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.MOLD_SPORE.get(), MoldSporesEntity.createStandAttributes().build());
         event.put(ForgeEntities.PURPLE_SMOKE.get(), PurpleSmokeEntity.createStandAttributes().build());
         event.put(ForgeEntities.SHEER_HEART_ATTACK.get(), SheerHeartAttackEntity.createStandAttributes().build());
+        event.put(ForgeEntities.BAD_COMPANY_SOLDIER.get(), BCSoldier.createStandAttributes().build());
     }
 
     @SubscribeEvent
@@ -387,6 +392,10 @@ public class ForgeEvents {
         ModItems.STAND_DISC_THE_WORLD = ForgeItems.STAND_DISC_THE_WORLD.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_THE_WORLD.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_THE_WORLD.get());
         ModItems.MAX_STAND_DISC_THE_WORLD = ForgeItems.MAX_STAND_DISC_THE_WORLD.get();
+
+        ModItems.STAND_DISC_BAD_COMPANY = ForgeItems.STAND_DISC_BAD_COMPANY.get();
+        ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_BAD_COMPANY.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_BAD_COMPANY.get());
+        ModItems.MAX_STAND_DISC_BAD_COMPANY = ForgeItems.MAX_STAND_DISC_BAD_COMPANY.get();
 
         ModItems.STAND_DISC_STAR_PLATINUM = ForgeItems.STAND_DISC_STAR_PLATINUM.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_STAR_PLATINUM.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_STAR_PLATINUM.get());
@@ -670,6 +679,7 @@ public class ForgeEvents {
         ModParticles.HIT_IMPACT = ForgeParticles.HIT_IMPACT.get();
         ModParticles.MELTING = ForgeParticles.MELTING.get();
         ModParticles.BLOOD = ForgeParticles.BLOOD.get();
+        ModParticles.SWEAT = ForgeParticles.SWEAT.get();
         ModParticles.BLUE_BLOOD = ForgeParticles.BLUE_BLOOD.get();
         ModParticles.SMALL_EXPLOSION = ForgeParticles.SMALL_EXPLOSION.get();
         ModParticles.ENDER_BLOOD = ForgeParticles.ENDER_BLOOD.get();
@@ -854,6 +864,9 @@ public class ForgeEvents {
         ModEntities.BEACH_SABBATH = ForgeEntities.BEACH_SABBATH.get();
         ModEntities.SANTA_SABBATH = ForgeEntities.SANTA_SABBATH.get();
         ModEntities.COWBOY_SABBATH = ForgeEntities.COWBOY_SABBATH.get();
+        ModEntities.GRABBED_MOB_SOUL = ForgeEntities.GRABBED_MOB_SOUL.get();
+        ModEntities.GRABBED_PLAYER_SOUL = ForgeEntities.GRABBED_PLAYER_SOUL.get();
+        ModEntities.GRABBED_PLAYER_SOUL_SLIM = ForgeEntities.GRABBED_PLAYER_SOUL_SLIM.get();
         ModEntities.WALKING_HEART = ForgeEntities.WALKING_HEART.get();
         ModEntities.JUSTICE_PIRATE = ForgeEntities.JUSTICE_PIRATE.get();
         ModEntities.DARK_MIRAGE = ForgeEntities.DARK_MIRAGE.get();
@@ -935,6 +948,8 @@ public class ForgeEvents {
         ModEntities.TUSK_NAIL = ForgeEntities.TUSK_NAIL.get();
         ModEntities.TUSK_HOLE = ForgeEntities.TUSK_HOLE.get();
         ModEntities.PH_CAPSULE = ForgeEntities.PH_CAPSULE.get();
+
+        ModEntities.BAD_COMPANY_SOLDIER = ForgeEntities.BAD_COMPANY_SOLDIER.get();
 
         ModEntities.FALLEN_ZOMBIE = ForgeEntities.FALLEN_ZOMBIE.get();
         ModEntities.FALLEN_SKELETON = ForgeEntities.FALLEN_SKELETON.get();

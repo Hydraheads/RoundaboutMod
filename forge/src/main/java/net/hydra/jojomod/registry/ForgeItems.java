@@ -753,18 +753,6 @@ public class ForgeItems {
     public static final RegistryObject<Item> MAX_STAND_DISC_BAD_COMPANY = addToWIPTab(ITEMS.register("max_bad_company_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersBadCompany(null))));
 
-    public static final RegistryObject<Item> KIRA_PART_FOUR_MASK = addToWIPTab(ITEMS.register(
-            "kira_part_four_mask", () -> new MaskItem(new Item.Properties().stacksTo(1), new KiraPartFourVisage(null))));
-    public static final RegistryObject<Item> KOSAKU_MASK = addToWIPTab(ITEMS.register(
-            "kosaku_mask", () -> new MaskItem(new Item.Properties().stacksTo(1), new KosakuVisage(null))));
-    public static final RegistryObject<Item> KIRASAKU_MASK = addToWIPTab(ITEMS.register(
-            "kirasaku_mask", () -> new MaskItem(new Item.Properties().stacksTo(1), new KirasakuVisage(null))));
-    public static final RegistryObject<Item> HAYATO_KAWAJIRI_MASK = addToWIPTab(ITEMS.register(
-            "hayato_kawajiri_mask", () -> new MaskItem(new Item.Properties().stacksTo(1), new HayatoVisage(null))));
-    public static final RegistryObject<Item> KIRA_PART_EIGHT_MASK = addToWIPTab(ITEMS.register(
-            "kira_part_eight_mask", () -> new MaskItem(new Item.Properties().stacksTo(1), new KiraPartEightVisage(null))));
-
-
     public static final RegistryObject<Item> STAND_DISC_WHITE_ALBUM = addToDiscTab(ITEMS.register("white_album_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersWhiteAlbum(null))));
     public static final RegistryObject<Item> MAX_STAND_DISC_WHITE_ALBUM = addToDiscTab(ITEMS.register("max_white_album_disc",
@@ -877,9 +865,9 @@ public class ForgeItems {
     public static final RegistryObject<Item> MAX_STAND_DISC_GREEN_DAY = addToWIPTab(ITEMS.register("max_green_day_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersGreenDay(null))));
 
-    public static final RegistryObject<Item> STAND_DISC_DIVER_DOWN = addToWIPTab(ITEMS.register("diver_down_disc",
+    public static final RegistryObject<Item> STAND_DISC_DIVER_DOWN = addToDiscTab(ITEMS.register("diver_down_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null))));
-    public static final RegistryObject<Item> MAX_STAND_DISC_DIVER_DOWN = addToWIPTab(ITEMS.register("max_diver_down_disc",
+    public static final RegistryObject<Item> MAX_STAND_DISC_DIVER_DOWN = addToDiscTab(ITEMS.register("max_diver_down_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null))));
 
  /*   public static final RegistryObject<Item> STAND_DISC_CREAM = addToWIPTab(ITEMS.register("cream_disc",
@@ -944,6 +932,16 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new DiavoloVisage(null))));
     public static final RegistryObject<Item> DOPPIO_MASK = addToTab(ITEMS.register("doppio_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new DoppioVisage(null))));
+    public static final RegistryObject<Item> KIRA_PART_FOUR_MASK = addToTab(ITEMS.register(
+            "kira_part_four_mask", () -> new MaskItem(new Item.Properties().stacksTo(1), new KiraPartFourVisage(null))));
+    public static final RegistryObject<Item> KOSAKU_MASK = addToTab(ITEMS.register(
+            "kosaku_mask", () -> new MaskItem(new Item.Properties().stacksTo(1), new KosakuVisage(null))));
+    public static final RegistryObject<Item> KIRASAKU_MASK = addToTab(ITEMS.register(
+            "kirasaku_mask", () -> new MaskItem(new Item.Properties().stacksTo(1), new KirasakuVisage(null))));
+    public static final RegistryObject<Item> HAYATO_KAWAJIRI_MASK = addToTab(ITEMS.register(
+            "hayato_kawajiri_mask", () -> new MaskItem(new Item.Properties().stacksTo(1), new HayatoVisage(null))));
+    public static final RegistryObject<Item> KIRA_PART_EIGHT_MASK = addToTab(ITEMS.register(
+            "kira_part_eight_mask", () -> new MaskItem(new Item.Properties().stacksTo(1), new KiraPartEightVisage(null))));
     public static final RegistryObject<Item> JOHNGALLIA_MASK = addToTab(ITEMS.register("johngallia_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new JohngalliaVisage(null))));
     public static final RegistryObject<Item> JOHNNY_MASK = addToTab(ITEMS.register("johnny_mask",
