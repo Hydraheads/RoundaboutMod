@@ -142,13 +142,16 @@ public class AnubisItem extends Item {
     }
 
     public static int aggroOnto(LivingEntity LE) {
+        if(LE == null){
+            return 0;
+        }
         int radius = 13;
         AABB box = LE.getBoundingBox().inflate(radius,2,radius);
         List<Mob> entities = LE.level().getNearbyEntities(Mob.class, TargetingConditions.DEFAULT,LE,box);
         entities.removeIf(entity -> entity instanceof Villager);
         entities.removeIf(entity -> entity instanceof Piglin && entity.getTarget() == null);
         for (Mob M : entities) {
-            if (M instanceof Wolf W && W.getOwner().equals(LE) ) {
+            if (M instanceof Wolf W && W.getOwner() != null && W.getOwner().equals(LE) ) {
                 W.setTarget(null);
             }
         }

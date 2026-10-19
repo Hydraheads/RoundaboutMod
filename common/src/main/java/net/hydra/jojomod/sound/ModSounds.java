@@ -1520,6 +1520,10 @@ public class ModSounds {
     public static final String RATT_MODE_CHANGE = "ratt_mode_change";
     public static final ResourceLocation RATT_MODE_CHANGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+RATT_MODE_CHANGE);
     public static SoundEvent RATT_MODE_CHANGE_EVENT = SoundEvent.createVariableRangeEvent(RATT_MODE_CHANGE_ID);
+    public static final String RATT_BOUNCE = "ratt_bounce";
+    public static final ResourceLocation RATT_BOUNCE_ID = new ResourceLocation(Roundabout.MOD_ID,RATT_BOUNCE);
+    public static SoundEvent RATT_BOUNCE_EVENT = SoundEvent.createVariableRangeEvent(RATT_BOUNCE_ID);
+
 
     public static final String ANUBIS_POSSESSION = "anubis_possession";
     public static final ResourceLocation ANUBIS_POSSESSION_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_POSSESSION);
@@ -2020,6 +2024,12 @@ public class ModSounds {
     public static final String VILLAGER_CALLED_OUT = "villager_called_out";
     public static final ResourceLocation VILLAGER_CALLED_OUT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VILLAGER_CALLED_OUT);
     public static SoundEvent VILLAGER_CALLED_OUT_EVENT = SoundEvent.createVariableRangeEvent(VILLAGER_CALLED_OUT_ID);
+    public static final String LYIN_EYES_VISION = "lyin_eyes_vision";
+    public static final ResourceLocation LYIN_EYES_VISION_ID = new ResourceLocation(Roundabout.MOD_ID+":"+LYIN_EYES_VISION);
+    public static SoundEvent LYIN_EYES_VISION_EVENT = SoundEvent.createVariableRangeEvent(LYIN_EYES_VISION_ID);
+    public static final String LYIN_EYES_GATHER = "lyin_eyes_gather";
+    public static final ResourceLocation LYIN_EYES_GATHER_ID = new ResourceLocation(Roundabout.MOD_ID+":"+LYIN_EYES_GATHER);
+    public static SoundEvent LYIN_EYES_GATHER_EVENT = SoundEvent.createVariableRangeEvent(LYIN_EYES_GATHER_ID);
 
     public static final String SUMMON_GREEN_DAY = "summon_green_day";
     public static final ResourceLocation SUMMON_GREEN_DAY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_GREEN_DAY);

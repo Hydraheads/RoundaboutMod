@@ -1595,6 +1595,7 @@ public class MainUtil {
         playerNames.put("That_Brit_Trash", UUID.fromString("f861fb4c-6cfc-4f19-82ee-65cc8edd2c30"));
         playerNames.put("Talonios1", UUID.fromString("9b42b60e-731b-4942-8a09-24307173a1ac"));
         playerNames.put("GenericName", UUID.fromString("e16801d1-d6c4-495c-9cc9-024645cc13a5"));
+        playerNames.put("88superguy", UUID.fromString("3d19d796-6064-4ae9-8903-48908bfdfa63"));
         playerNames.put("ValidFish", UUID.fromString("d9db8b8b-c14e-4d22-bad7-c595140c151a"));
         playerNames.put("Blugnib", UUID.fromString("4eefa46e-eaf0-4170-8ef4-307e8745f2f7"));
         playerNames.put("DarkkJon", UUID.fromString("e3cf5756-2795-4256-92cd-a1c2284865dc"));

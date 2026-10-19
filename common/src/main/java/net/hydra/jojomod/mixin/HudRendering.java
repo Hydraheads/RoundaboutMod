@@ -6,6 +6,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.gui.LyinEyesMapOverlay;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
@@ -301,13 +302,17 @@ public abstract class HudRendering implements IHudAccess {
                 // Lyin Eyes gathering renderer
                 if (((StandUser) this.minecraft.player).roundabout$getStandPowers() instanceof PowersLyinEyes lyinEyes
                         && lyinEyes.getGatherOverlayTicks() != 0 && lyinEyes.getGatherOverlayTicks() != 7) {
-                    // need to stop the thing from reaching 0, so i put an extra math method to clamp it.
-                    int frame = Math.max(1, Math.min(lyinEyes.getGatherOverlayTicks(), 5));
-                    // this copies PH distortion gui formatting since this is also an animation
-                    ResourceLocation texture = new ResourceLocation(Roundabout.MOD_ID,
-                            "textures/misc/lyin_eyes/pileup_f" + frame + ".png");
-                    RenderSystem.enableBlend();
-                    this.renderTextureOverlay($$1, texture, 1F);
+                    // inverse opacity of the map, aka it fades in when the map fades out and vice versa
+                    float gatherOpacity = 1.0F - lyinEyes.getMapOpacity();
+                    if (gatherOpacity > 0.0F) {
+                        // need to stop the thing from reaching 0, so i put an extra math method to clamp it.
+                        int frame = Math.max(1, Math.min(lyinEyes.getGatherOverlayTicks(), 5));
+                        // this copies PH distortion gui formatting since this is also an animation
+                        ResourceLocation texture = new ResourceLocation(Roundabout.MOD_ID,
+                                "textures/misc/lyin_eyes/pileup_f" + frame + ".png");
+                        RenderSystem.enableBlend();
+                        this.renderTextureOverlay($$1, texture, gatherOpacity);
+                    }
                 }
 
                 float ticks = user.roundabout$getZappedTicks();
@@ -1010,6 +1015,10 @@ public abstract class HudRendering implements IHudAccess {
 
     @Inject(method = "renderCrosshair", at = @At(value = "TAIL"))
     private void rdbt$renderCrosshairMixinTail(GuiGraphics $$0, CallbackInfo info) {
+        // lyin eyes map
+        if(((StandUser)this.minecraft.player).roundabout$getStandPowers() instanceof PowersLyinEyes LE && LE.isActive()) {
+            LyinEyesMapOverlay.renderMap($$0, this.minecraft.getFrameTime());
+        }
         //See ForgeForgeGui
         if (rdbt$tempEnt !=null){
             this.minecraft.crosshairPickEntity = rdbt$tempEnt;

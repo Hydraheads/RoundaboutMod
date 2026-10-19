@@ -327,6 +327,7 @@ public class FabricSounds {
         addSound(ModSounds.RATT_FIRING_ID, ModSounds.RATT_FIRING_EVENT);
         addSound(ModSounds.RATT_LEAP_ID, ModSounds.RATT_LEAP_EVENT);
         addSound(ModSounds.RATT_MODE_CHANGE_ID, ModSounds.RATT_MODE_CHANGE_EVENT);
+        addSound(ModSounds.RATT_BOUNCE_ID, ModSounds.RATT_BOUNCE_EVENT);
 
         addSound(ModSounds.STRAY_CAT_SOUND_1_ID, ModSounds.STRAY_CAT_SOUND_1_EVENT);
         addSound(ModSounds.STRAY_CAT_SOUND_2_ID, ModSounds.STRAY_CAT_SOUND_2_EVENT);
@@ -606,6 +607,8 @@ public class FabricSounds {
 
         addSound(ModSounds.LYIN_EYES_SUMMON_ID, ModSounds.LYIN_EYES_SUMMON_EVENT);
         addSound(ModSounds.VILLAGER_CALLED_OUT_ID, ModSounds.VILLAGER_CALLED_OUT_EVENT);
+        addSound(ModSounds.LYIN_EYES_VISION_ID, ModSounds.LYIN_EYES_VISION_EVENT);
+        addSound(ModSounds.LYIN_EYES_GATHER_ID, ModSounds.LYIN_EYES_GATHER_EVENT);
 
         addSound(ModSounds.SUMMON_GREEN_DAY_ID, ModSounds.SUMMON_GREEN_DAY_EVENT);
         addSound(ModSounds.SUMMON_WALKING_ID, ModSounds.SUMMON_WALKING_EVENT);

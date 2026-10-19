@@ -1,6 +1,8 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.access.IMob;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.menu.LyinEyesInventoryMenu;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -15,6 +17,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -25,7 +28,16 @@ public class PowersLyinEyes extends NewDashPreset {
     // for move ids accessed here. update public bytes every time this is edited.
     private static final byte
         READ_INVENTORY = 53,
-        FINISH_READ_INVENTORY = 54;
+        FINISH_READ_INVENTORY = 54,
+        FINISH_OPEN_MAP = 55;
+    // for mob ai, a new attribute is needed to increase the detection range
+    private static final net.minecraft.world.entity.ai.attributes.AttributeModifier DETECTION_BOOST =
+            new net.minecraft.world.entity.ai.attributes.AttributeModifier(
+                    java.util.UUID.fromString("d8f3b2a0-4e2a-4b9d-8f2c-1a2b3c4d5e6f"),
+                    "Lyin Eyes Range Boost",
+                    20.0D,
+                    net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION
+            );
     // stand summoning variable
     private int summonOverlayTicks = 0;
     private int gatherOverlayTicks = 0;
@@ -36,6 +48,8 @@ public class PowersLyinEyes extends NewDashPreset {
     private Entity inventoryTarget = null;
     //highlight mode
     private boolean visionModeClient = false;
+    //map mode
+    private boolean mapModeClient = false;
 
     // basic stand registry stuff
     public PowersLyinEyes(LivingEntity self) {super(self);}
@@ -56,7 +70,7 @@ public class PowersLyinEyes extends NewDashPreset {
     public void onStandSummon(boolean desummon) {
         if (!desummon && this.self.level().isClientSide()) {
             summonOverlayTicks = 1;
-            if(!visionModeClient) {
+            if(!visionModeClient && !mapModeClient) {
                 isSummon = true;
             }
         }
@@ -72,6 +86,7 @@ public class PowersLyinEyes extends NewDashPreset {
 
     @Override
     public void tickPower() {
+        mapOpacity = Mth.approach(mapOpacity, mapModeClient ? 1.0F : 0.0F, 0.20F);
         if (this.self.level().isClientSide()) {
             //inventory tracking for animation oooooh
             boolean isMenuOpen = isInventoryMenuOpen();
@@ -80,8 +95,10 @@ public class PowersLyinEyes extends NewDashPreset {
                 isGather = true;
             } else if (hadInventoryMenuOpen) {
                 hadInventoryMenuOpen = false;
-                isGather = false;
-                if (!visionModeClient) {
+                if (!mapModeClient) {
+                    isGather = false;
+                }
+                if (!visionModeClient || !mapModeClient) {
                     isSummon = true;
                 }
             }
@@ -129,7 +146,7 @@ public class PowersLyinEyes extends NewDashPreset {
             }
             // minimap
             case SKILL_2_NORMAL -> {
-                //tryPlantKickTrap();
+                tryOpenMap();
             }
             // dash
             case SKILL_3_NORMAL -> {
@@ -154,13 +171,18 @@ public class PowersLyinEyes extends NewDashPreset {
     @Override
     public boolean setPowerOther(int move, int lastMove) {
         switch (move) {
-            case PowerIndex.POWER_4 -> {
+            case PowerIndex.POWER_1 -> {
                 if (this.self.level().isClientSide()) {
                     switchVision();
                 } else {
                     //need an extra toggle here so it gets updated on the server
                     //used for the villager passive thingy
                     visionModeClient = !visionModeClient;
+                }
+            }
+            case PowerIndex.POWER_2 -> {
+                if (this.self.level().isClientSide()) {
+                    switchMap();
                 }
             }
         }
@@ -198,6 +220,8 @@ public class PowersLyinEyes extends NewDashPreset {
             isSummon = false;
             isGather = true;
             gatherOverlayTicks = 1;
+            // play sound here
+            this.self.playSound(ModSounds.LYIN_EYES_GATHER_EVENT, 0.9F, 1.2F);
         }
     }
 
@@ -229,11 +253,11 @@ public class PowersLyinEyes extends NewDashPreset {
     // tension highlighter start
 
     private void switchVisionClient(){
-        this.tryPower(PowerIndex.POWER_4, true);
-        tryPowerPacket(PowerIndex.POWER_4);
+        this.tryPower(PowerIndex.POWER_1, true);
+        tryPowerPacket(PowerIndex.POWER_1);
         if (isClient() && visionModeClient) {
             // play sound here
-            // this.self.playSound(ModSounds.MANHATTAN_VISION_EVENT, 150F, 0.9F);
+            this.self.playSound(ModSounds.LYIN_EYES_VISION_EVENT, 0.85F, 1F);
         }
     }
 
@@ -246,13 +270,47 @@ public class PowersLyinEyes extends NewDashPreset {
             }
             else{
                 visionModeClient = false;
-                isSummon = true;
+                if (!mapModeClient) {
+                    isSummon = true;
+                }
                 PE.displayClientMessage(Component.translatable("text.roundabout.lyin_eyes.tension_highlight_off").withStyle(ChatFormatting.GOLD), true);
             }
         }
     }
 
     // tension highlighter end
+
+    // map start
+
+    private float mapOpacity = 0.0F;
+
+    private void tryOpenMap() {
+        this.tryPower(PowerIndex.POWER_2, true);
+        tryPowerPacket(PowerIndex.POWER_2);
+        if (isClient() && mapModeClient) {
+            // play sound here
+            this.self.playSound(ModSounds.LYIN_EYES_GATHER_EVENT, 0.9F, 1.2F);
+        }
+    }
+
+    private void switchMap() {
+        if (!mapModeClient) {
+            mapModeClient = true;
+            isSummon = false;
+            mapModeClient = true;
+            gatherOverlayTicks = 1;
+            isGather = true;
+        }
+        else{
+            mapModeClient = false;
+            if (!visionModeClient) {
+                isSummon = true;
+            }
+            isGather = false;
+        }
+    }
+
+    // map end
 
     // for tracking open menus
 
@@ -320,12 +378,30 @@ public class PowersLyinEyes extends NewDashPreset {
 
     // sounds end
 
+    // mob and other stuff AI
+
+    // wtf would lyin eyes even do for mobs lmao
+    // i just made it so that their detection range is increased by 20 blocks if they have it.
+    @Override
+    public void tickMobAI(LivingEntity attackTarget){
+        if (!this.self.level().isClientSide()) {
+            net.minecraft.world.entity.ai.attributes.AttributeInstance followRangeAttr =
+                    this.self.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.FOLLOW_RANGE);
+
+            if (followRangeAttr != null && !followRangeAttr.hasModifier(DETECTION_BOOST)) {
+                followRangeAttr.addTransientModifier(DETECTION_BOOST);
+            }
+        }
+    }
+
     // basic setters and getters here
 
     public int getSummonOverlayTicks() {return summonOverlayTicks;}
     public int getGatherOverlayTicks() {return gatherOverlayTicks;}
     public boolean getVisionModeClient() {return visionModeClient;}
     public boolean isActive() {return hasStandActive(this.self);}
+    public boolean getMapModeClient() {return mapModeClient;}
+    public float getMapOpacity() {return mapOpacity;}
 
     // WIP FEATURES BELOW HERE, DELETE WHEN DONE
 
