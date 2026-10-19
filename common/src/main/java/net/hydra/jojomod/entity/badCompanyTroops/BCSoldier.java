@@ -47,6 +47,14 @@ public class BCSoldier extends BCTroop{
                 0.4F).add(Attributes.MAX_HEALTH, 4.0).add(Attributes.ATTACK_DAMAGE, 2.0);
     }
 
+    @Override
+    public int getTroopValue(){
+        if (getBundle()) {
+            return 6;
+        }
+        return 1;
+    }
+
     public static float width = 0.275f;
     public static float height = 0.32f;
     public boolean isDisplay = false;

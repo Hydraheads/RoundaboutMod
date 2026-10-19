@@ -50,13 +50,13 @@ public class PowersBadCompany extends NewDashPreset {
         ANIME_SKIN = 1,
         MANGA_SKIN = 2,
         BETA_SKIN = 3,
+        MARINE_SKIN = 4,
+        SAND_SKIN = 5,
 
         SOLDIER_SUMMON = 50,
         BUNDLE_SUMMON = 51,
         HELICOPTER_SUMMON = 52,
         TANK_SUMMON = 53;
-
-    private int totalTroopsOut = 0;
 
     @Override
     public List<Byte> getSkinList() {
@@ -64,6 +64,8 @@ public class PowersBadCompany extends NewDashPreset {
         list.add(ANIME_SKIN);
         list.add(MANGA_SKIN);
         list.add(BETA_SKIN);
+        list.add(MARINE_SKIN);
+        list.add(SAND_SKIN);
         return list;
     }
 
@@ -74,6 +76,8 @@ public class PowersBadCompany extends NewDashPreset {
             case ANIME_SKIN -> { return Component.translatable("skins.roundabout.bad_company.anime"); }
             case MANGA_SKIN -> { return Component.translatable("skins.roundabout.bad_company.manga"); }
             case BETA_SKIN -> { return Component.translatable("skins.roundabout.bad_company.beta"); }
+            case MARINE_SKIN -> { return Component.translatable("skins.roundabout.bad_company.marine"); }
+            case SAND_SKIN -> { return Component.translatable("skins.roundabout.bad_company.sand"); }
         }
 
         return Component.translatable("skins.roundabout.bad_company.anime");
@@ -220,6 +224,24 @@ public class PowersBadCompany extends NewDashPreset {
         initActiveTroops();
         return activeTroops.contains(soldier);
     }
+
+    private int totalTroopsOut = 0;
+
+    public void syncTotalTroopsOut() {
+        if (!isClient()) {
+            initActiveTroops();
+            int amount = 0;
+            for (BCTroop T : activeTroops) {
+                if (T == null || T.isRemoved()) {
+                    activeTroops.remove(T);
+                    continue;
+                }
+                amount += T.getTroopValue();
+            }
+            totalTroopsOut = amount;
+        }
+    }
+
     @Override
     public boolean returnFakeStandForHud(){
         if(this.self != null) {

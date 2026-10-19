@@ -224,7 +224,7 @@ public class TroopSelectScreen extends Screen {
         );
     }*/
 
-    /*
+
     public boolean roundabout$sameKeyOne(KeyMapping key1){
         return (key1.isDown() || (key1.same(this.minecraft.options.keyLoadHotbarActivator) && this.minecraft.options.keyLoadHotbarActivator.isDown())
                 || (key1.same(this.minecraft.options.keySaveHotbarActivator) && this.minecraft.options.keySaveHotbarActivator.isDown())
@@ -240,5 +240,5 @@ public class TroopSelectScreen extends Screen {
 
         }
         return false;
-    }*/
+    }
 }

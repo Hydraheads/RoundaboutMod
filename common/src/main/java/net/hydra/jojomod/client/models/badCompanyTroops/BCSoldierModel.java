@@ -119,12 +119,15 @@ public class BCSoldierModel<T extends BCSoldier> extends StandModel<T> implement
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         super.setupAnim(entity, limbSwing,limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+
         if (entity.isDisplay) {
             parachute.visible = false;
-        }
+        }else {
+            parachute.visible = true;
 
-        this.getHead().yRot = netHeadYaw * ((float) Math.PI / 180F);
-        this.getHead().xRot = headPitch * ((float) Math.PI / 180F);
+            this.getHead().yRot = netHeadYaw * ((float) Math.PI / 180F);
+            this.getHead().xRot = headPitch * ((float) Math.PI / 180F);
+        }
 
         defaultModifiers(entity);
         this.animate(entity.releaseParachute, BCSoldierAnimations.releaseParachute, ageInTicks, 1.0f);

@@ -23,6 +23,8 @@ public class BCSoldierBaseRenderer extends StandRenderer<BCSoldier> {
     private static final ResourceLocation BETA = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/bad_company/soldier/beta.png");
     private static final ResourceLocation ANIME = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/bad_company/soldier/anime.png");
     private static final ResourceLocation MANGA = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/bad_company/soldier/manga.png");
+    private static final ResourceLocation MARINE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/bad_company/soldier/marine.png");
+    private static final ResourceLocation SAND = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/bad_company/soldier/sand.png");
 
     public BCSoldierBaseRenderer(EntityRendererProvider.Context context, StandModel<BCSoldier> entityModel, float f) {
         super(context, entityModel,f);
@@ -40,6 +42,10 @@ public class BCSoldierBaseRenderer extends StandRenderer<BCSoldier> {
                 return MANGA;
             }else if (skn == PowersBadCompany.BETA_SKIN) {
                 return BETA;
+            }else if (skn == PowersBadCompany.MARINE_SKIN) {
+                return MARINE;
+            }else if (skn == PowersBadCompany.SAND_SKIN) {
+                return SAND;
             }
         }
 
