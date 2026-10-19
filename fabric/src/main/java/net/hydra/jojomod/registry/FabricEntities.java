@@ -761,6 +761,13 @@ public class FabricEntities {
                         EntityType.Builder.of(SilverChariotEntity::new, MobCategory.MISC).
                                 sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":silver_chariot")
                 );
+    public static final EntityType<SilverChariotEntity> SILVER_CHARIOT_PHARAOH =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    Roundabout.location("silver_chariot_pharaoh"),
+                    EntityType.Builder.of(SilverChariotEntity::new, MobCategory.MISC).
+                            sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":silver_chariot_pharaoh")
+            );
         public static final EntityType<SilverChariotRapierShotEntity> SILVER_CHARIOT_RAPIER =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -1346,6 +1353,7 @@ public class FabricEntities {
                 ModEntities.DIVER_DROWNED = DIVER_DROWNED;
                 ModEntities.DIVER_KICK = DIVER_KICK;
                 ModEntities.SILVER_CHARIOT = SILVER_CHARIOT;
+                ModEntities.SILVER_CHARIOT_PHARAOH =  SILVER_CHARIOT_PHARAOH;
                 ModEntities.THROWN_HARPOON = THROWN_HARPOON;
                 ModEntities.BLADED_BOWLER_HAT = BLADED_BOWLER_HAT;
                 ModEntities.ROUNDABOUT_BULLET_ENTITY = ROUNDABOUT_BULLET_ENTITY;
@@ -1568,6 +1576,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(DIVER_DOWN_WORLD, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(DIVER_DROWNED, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SILVER_CHARIOT, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(SILVER_CHARIOT_PHARAOH, StandEntity.createStandAttributes());
 
 
                 FabricDefaultAttributeRegistry.register(GROUND_HURRICANE, GroundHurricaneEntity.createStandAttributes());

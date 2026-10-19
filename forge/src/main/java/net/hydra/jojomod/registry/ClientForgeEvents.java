@@ -145,6 +145,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.DIVER_KICK.get(), DiverKickEntityRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BONE_PROJECTILE.get(), BoneProjectileRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT.get(), SilverChariotRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT_PHARAOH.get(), SilverChariotPharaohRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT_RAPIER.get(), SilverChariotRapierRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT_RAPIER_PLATFORM.get(), SilverChariotRapierPlatformRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_HARPOON.get(), HarpoonRenderer::new);
@@ -351,6 +352,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.DIVER_DOWN_WORLD_LAYER, DiverDownWorldModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.DIVER_DROWNED_LAYER, DiverDrownedModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.SILVER_CHARIOT_LAYER, SilverChariotModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.SILVER_CHARIOT_PHARAOH_LAYER, SilverChariotPharaohModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.SILVER_CHARIOT_RAPIER_LAYER, SilverChariotRapierModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.SILVER_CHARIOT_RAPIER_PLATFORM_LAYER, SilverChariotRapierPlatformModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.KNIFE_LAYER, KnifeModel::createBodyLayer);

@@ -757,12 +757,12 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_RATT);
                         entries.accept(STAND_DISC_KILLER_QUEEN);
                         entries.accept(MAX_STAND_DISC_KILLER_QUEEN);
-                        entries.accept(STAND_DISC_DIVER_DOWN);
-                        entries.accept(MAX_STAND_DISC_DIVER_DOWN);
                         entries.accept(STAND_DISC_WHITE_ALBUM);
                         entries.accept(MAX_STAND_DISC_WHITE_ALBUM);
                         entries.accept(STAND_DISC_KING_CRIMSON);
                         entries.accept(MAX_STAND_DISC_KING_CRIMSON);
+                        entries.accept(STAND_DISC_DIVER_DOWN);
+                        entries.accept(MAX_STAND_DISC_DIVER_DOWN);
                         entries.accept(STAND_DISC_SOFT_AND_WET);
                         entries.accept(MAX_STAND_DISC_SOFT_AND_WET);
                         entries.accept(STAND_DISC_WALKING_HEART);

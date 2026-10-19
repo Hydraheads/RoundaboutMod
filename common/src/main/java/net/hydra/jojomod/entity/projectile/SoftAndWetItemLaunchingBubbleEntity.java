@@ -130,6 +130,7 @@ public class SoftAndWetItemLaunchingBubbleEntity extends SoftAndWetBubbleEntity{
     public void addItemLight(){
         if (canGiveYouItem) {
             if (!hasDitchedItem) {
+                hasDitchedItem = true;
                 if (standUser instanceof Player PE) {
                     ItemEntity $$4 = new ItemEntity(this.level(), this.getX(),
                             this.getY() + this.getEyeHeight(), this.getZ(),
