@@ -1016,7 +1016,9 @@ public abstract class HudRendering implements IHudAccess {
     @Inject(method = "renderCrosshair", at = @At(value = "TAIL"))
     private void rdbt$renderCrosshairMixinTail(GuiGraphics $$0, CallbackInfo info) {
         // lyin eyes map
-        LyinEyesMapOverlay.renderMap($$0, this.minecraft.getFrameTime());
+        if(((StandUser)this.minecraft.player).roundabout$getStandPowers() instanceof PowersLyinEyes LE && LE.isActive()) {
+            LyinEyesMapOverlay.renderMap($$0, this.minecraft.getFrameTime());
+        }
         //See ForgeForgeGui
         if (rdbt$tempEnt !=null){
             this.minecraft.crosshairPickEntity = rdbt$tempEnt;

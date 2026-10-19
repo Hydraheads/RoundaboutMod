@@ -61,16 +61,12 @@ public class PowersLyinEyes extends NewDashPreset {
     public void onStandSummon(boolean desummon) {
         if (!desummon && this.self.level().isClientSide()) {
             summonOverlayTicks = 1;
-            if(!visionModeClient) {
+            if(!visionModeClient && !mapModeClient) {
                 isSummon = true;
             }
         }
         if (desummon && this.self.level().isClientSide()) {
             isSummon = false;
-            if (mapModeClient) {
-                mapModeClient = false;
-                isGather = false;
-            }
         }
         super.onStandSummon(desummon);
     }
