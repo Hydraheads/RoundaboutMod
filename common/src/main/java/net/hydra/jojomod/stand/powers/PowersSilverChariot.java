@@ -171,7 +171,9 @@ public class PowersSilverChariot extends NewPunchingStand {
             case SilverChariotEntity.YELLOW -> {
                 return Component.translatable("skins.roundabout.silver_chariot.yellow");
             }
-
+            case SilverChariotEntity.PHARAOH -> {
+                return Component.translatable("skins.roundabout.silver_chariot.pharaoh");
+            }
             default -> {
                 return Component.translatable("skins.roundabout.silver_chariot.part_3");
             }
@@ -201,6 +203,7 @@ public class PowersSilverChariot extends NewPunchingStand {
         $$1.add(SilverChariotEntity.SANDY);
         $$1.add(SilverChariotEntity.TURQUOISE);
         $$1.add(SilverChariotEntity.YELLOW);
+        $$1.add(SilverChariotEntity.PHARAOH);
         return $$1;
     }
 
@@ -524,6 +527,10 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public StandEntity getNewStandEntity() {
+        byte sk = ((StandUser) this.getSelf()).roundabout$getStandSkin();
+        if (sk == SilverChariotEntity.PHARAOH) {
+            return ModEntities.SILVER_CHARIOT_PHARAOH.create(this.getSelf().level());
+        }
         return ModEntities.SILVER_CHARIOT.create(this.getSelf().level());
     }
 
