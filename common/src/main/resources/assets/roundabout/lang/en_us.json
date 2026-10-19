@@ -3348,6 +3348,11 @@
   "roundabout.bomb_config.off": ": off",
 
   "roundabout.bad_company.troop_select" : "Troop Selection",
+  "roundabout.troop_select.troop": "Troop",
+  "roundabout.troop_select.bundle": "Troop Bundle",
+  "roundabout.troop_select.tank": "Tank",
+  "roundabout.troop_select.helicopter": "Helicopter",
+  "roundabout.troop_select.mine": "Mine",
 
   "skins.roundabout.green_day.part_five_green_day": "Part 5",
   "skins.roundabout.green_day.red_day": "Red Day",

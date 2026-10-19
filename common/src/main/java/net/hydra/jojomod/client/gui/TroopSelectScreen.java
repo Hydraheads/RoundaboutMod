@@ -88,11 +88,11 @@ public class TroopSelectScreen extends Screen {
                 Component.translatable("roundabout.troop_select.troop")));
         this.slots.add(new SwitchSelect(BUNDLE, centerX+offsetCenter, centerY-offsetCenter + Yoffset,
                 Component.translatable("roundabout.troop_select.bundle")));
-        this.slots.add(new SwitchSelect(HELICOPTER, centerX-offsetCenter-18, centerY+offsetCenter + Yoffset-12,
+        this.slots.add(new SwitchSelect(HELICOPTER, centerX-offsetCenter-12, centerY+offsetCenter + Yoffset-6,
                 Component.translatable("roundabout.troop_select.helicopter")));
-        this.slots.add(new SwitchSelect(TANK, centerX+offsetCenter+18, centerY+offsetCenter + Yoffset-12,
+        this.slots.add(new SwitchSelect(TANK, centerX+offsetCenter+12, centerY+offsetCenter + Yoffset-6,
                 Component.translatable("roundabout.troop_select.tank")));
-        this.slots.add(new SwitchSelect(MINE, centerX, centerY+offsetCenter + Yoffset,
+        this.slots.add(new SwitchSelect(MINE, centerX, centerY+offsetCenter + Yoffset+12,
                 Component.translatable("roundabout.troop_select.mine")));
 
     }
@@ -124,7 +124,7 @@ public class TroopSelectScreen extends Screen {
         guiGraphics.pose().pushPose();
         RenderSystem.enableBlend();
         int k = this.width / 2 - 52;
-        int l = this.height / 2 - 70;
+        int l = this.height / 2 - 65;
         guiGraphics.blit(TROOP_CHOOSER_LOCATION, k, l-6, 0.0f, 108.0f, 105, 20, 192, 192);
         guiGraphics.pose().popPose();
         super.render(guiGraphics, i, j, f);
@@ -240,7 +240,6 @@ public class TroopSelectScreen extends Screen {
             this.exitTroopSelect();
 
             this.minecraft.options.keyUse.setDown(false);
-
         }
         return false;
     }
