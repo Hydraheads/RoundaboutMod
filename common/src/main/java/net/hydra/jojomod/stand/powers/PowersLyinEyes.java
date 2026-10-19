@@ -273,7 +273,12 @@ public class PowersLyinEyes extends NewDashPreset {
      */
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        setSkillIcon(context, x, y, 1, StandIcons.LYIN_EYES_TENSION_SENSOR, PowerIndex.SKILL_1);
+        if(visionModeClient) {
+            setSkillIcon(context, x, y, 1, StandIcons.LYIN_EYES_TENSION_SENSOR_ON, PowerIndex.SKILL_1);
+        }
+        else {
+            setSkillIcon(context, x, y, 1, StandIcons.LYIN_EYES_TENSION_SENSOR, PowerIndex.SKILL_1);
+        }
         setSkillIcon(context, x, y, 2, StandIcons.LYIN_EYES_PLACEHOLDER, PowerIndex.SKILL_2);
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         setSkillIcon(context, x, y, 4, StandIcons.LYIN_EYES_INVENTORY, PowerIndex.SKILL_4);
@@ -285,14 +290,14 @@ public class PowersLyinEyes extends NewDashPreset {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.lyin_eyes_tension_sensor",
                 "instruction.roundabout.press_skill", StandIcons.LYIN_EYES_TENSION_SENSOR, 1, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.lyin_eyes_placeholder",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.lyin_eyes_callout",
+                "instruction.roundabout.passive", StandIcons.LYIN_EYES_PASSIVE, 0, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.lyin_eyes_placeholder",
                 "instruction.roundabout.press_skill", StandIcons.LYIN_EYES_PLACEHOLDER, 2, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE, 3, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.lyin_eyes_inventory",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.lyin_eyes_inventory",
                 "instruction.roundabout.press_skill", StandIcons.LYIN_EYES_INVENTORY, 4, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.lyin_eyes_placeholder",
-                "instruction.roundabout.passive", StandIcons.LYIN_EYES_PLACEHOLDER, 0, level, bypas));
         return $$1;
     }
 
