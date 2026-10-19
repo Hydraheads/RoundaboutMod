@@ -6,6 +6,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.badCompanyTroops.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -17,6 +18,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
@@ -53,6 +55,8 @@ public class PowersBadCompany extends NewDashPreset {
         BUNDLE_SUMMON = 51,
         HELICOPTER_SUMMON = 52,
         TANK_SUMMON = 53;
+
+    private int totalTroopsOut = 0;
 
     @Override
     public List<Byte> getSkinList() {
@@ -195,6 +199,7 @@ public class PowersBadCompany extends NewDashPreset {
                     self.getPosition(1).y,
                     self.getPosition(1).z
             );
+            soldier.setYRot(self.getYRot());
             self.level().addFreshEntity(soldier);
             activeTroops.add(soldier);
 
@@ -255,5 +260,17 @@ public class PowersBadCompany extends NewDashPreset {
         }
 
         return displayStand;
+    }
+
+    @Override
+    public boolean replaceHudActively() {
+        return true;
+    }
+
+    @Override
+    public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x,
+                                  boolean removeNum) {
+        StandHudRender.renderNumberHUD(context, Minecraft.getInstance(), screenWidth, screenHeight, x, totalTroopsOut, 12, StandIcons.JOJO_ICONS_3, 0, 20, 0x7fd355);
+
     }
 }

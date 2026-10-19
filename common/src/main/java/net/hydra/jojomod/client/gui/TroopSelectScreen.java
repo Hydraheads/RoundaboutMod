@@ -121,14 +121,14 @@ public class TroopSelectScreen extends Screen {
         guiGraphics.pose().pushPose();
         RenderSystem.enableBlend();
         int k = this.width / 2 - 52;
-        int l = this.height / 2 - 31 - 22 - 10 - 20;
-        guiGraphics.blit(TROOP_CHOOSER_LOCATION, k, l, 0.0f, 104.0f, 105, 24, 128, 128);
+        int l = this.height / 2 - 70;
+        guiGraphics.blit(TROOP_CHOOSER_LOCATION, k, l-5, 0.0f, 108.0f, 105, 24, 128, 128);
         guiGraphics.pose().popPose();
         super.render(guiGraphics, i, j, f);
 
         Component str = Component.translatable("roundabout.bad_company.troop_select");
 
-        guiGraphics.drawCenteredString(this.font, str , this.width / 2, this.height / 2 - 31 -30 - 10, -1);
+        guiGraphics.drawCenteredString(this.font, str , this.width / 2, l, -1);
 
         int lastState = currentlyHovered;
 
@@ -208,7 +208,7 @@ public class TroopSelectScreen extends Screen {
         }
 
         private void renderIcon(GuiGraphics guiGraphics) {
-            guiGraphics.blit(TROOP_CHOOSER_LOCATION, this.getX()+3, this.getY()+3, context*18, 31, 18, 18, 128, 128);
+            guiGraphics.blit(TROOP_CHOOSER_LOCATION, this.getX()+3, this.getY()+3, context*18, 24, 18, 18, 128, 128);
         }
 
         @Override
