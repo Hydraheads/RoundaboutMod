@@ -5269,7 +5269,7 @@ public class PowersDiverDown extends NewPunchingStand {
         } else {
             float ret = (getChargedPercent() * punchD) + 3;
             if (this.chargedPhasePunch >= getMaxPhasePunchTime()) {
-                ret += 2;
+                ret += 4;
             }
             return ret;
         }
