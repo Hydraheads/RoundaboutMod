@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.menu.LyinEyesInventoryMenu;
@@ -29,6 +30,14 @@ public class PowersLyinEyes extends NewDashPreset {
         READ_INVENTORY = 53,
         FINISH_READ_INVENTORY = 54,
         FINISH_OPEN_MAP = 55;
+    // for mob ai, a new attribute is needed to increase the detection range
+    private static final net.minecraft.world.entity.ai.attributes.AttributeModifier DETECTION_BOOST =
+            new net.minecraft.world.entity.ai.attributes.AttributeModifier(
+                    java.util.UUID.fromString("d8f3b2a0-4e2a-4b9d-8f2c-1a2b3c4d5e6f"),
+                    "Lyin Eyes Range Boost",
+                    20.0D,
+                    net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION
+            );
     // stand summoning variable
     private int summonOverlayTicks = 0;
     private int gatherOverlayTicks = 0;
@@ -368,6 +377,22 @@ public class PowersLyinEyes extends NewDashPreset {
     }
 
     // sounds end
+
+    // mob and other stuff AI
+
+    // wtf would lyin eyes even do for mobs lmao
+    // i just made it so that their detection range is increased by 20 blocks if they have it.
+    @Override
+    public void tickMobAI(LivingEntity attackTarget){
+        if (!this.self.level().isClientSide()) {
+            net.minecraft.world.entity.ai.attributes.AttributeInstance followRangeAttr =
+                    this.self.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.FOLLOW_RANGE);
+
+            if (followRangeAttr != null && !followRangeAttr.hasModifier(DETECTION_BOOST)) {
+                followRangeAttr.addTransientModifier(DETECTION_BOOST);
+            }
+        }
+    }
 
     // basic setters and getters here
 
