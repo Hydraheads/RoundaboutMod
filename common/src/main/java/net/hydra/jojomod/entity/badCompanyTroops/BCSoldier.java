@@ -80,6 +80,19 @@ public class BCSoldier extends BCTroop{
         }
     }
 
+    public void tick() {
+        super.tick();
+
+        float pitch = this.getXRot();
+        float yaw = this.getYRot();
+
+        this.setXRot(pitch);
+        this.setYRot(yaw);
+        this.setYBodyRot(yaw);
+        this.xRotO = pitch;
+        this.yRotO = yaw;
+    }
+
 
     public void aiStep() {
         super.aiStep();
@@ -94,6 +107,9 @@ public class BCSoldier extends BCTroop{
         super.registerGoals();
         goalSelector.addGoal(0, new FloatGoal(this));
     }
+
+
+    public boolean forceVisualRotation(){ return true; }
 
     /*
         @Override

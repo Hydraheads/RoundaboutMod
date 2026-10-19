@@ -51,7 +51,8 @@ public class SilverChariotEntity extends FollowingStandEntity {
             PURPLE = 17,
             SANDY = 18,
             TURQUOISE = 19,
-            YELLOW = 20;
+            YELLOW = 20,
+            PHARAOH = 21;
 
     public static final byte
             IS_PART_3_SKIN = 1,

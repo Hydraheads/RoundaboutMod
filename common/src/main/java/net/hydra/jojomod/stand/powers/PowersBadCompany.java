@@ -56,7 +56,8 @@ public class PowersBadCompany extends NewDashPreset {
         SOLDIER_SUMMON = 50,
         BUNDLE_SUMMON = 51,
         HELICOPTER_SUMMON = 52,
-        TANK_SUMMON = 53;
+        TANK_SUMMON = 53,
+        MINE_PLANT = 54;
 
     @Override
     public List<Byte> getSkinList() {
@@ -87,7 +88,8 @@ public class PowersBadCompany extends NewDashPreset {
         TROOP = 0,
         BUNDLE = 1,
         HELICOPTER = 2,
-        TANK = 3;
+        TANK = 3,
+        MINE = 4;
 
     public BCSoldier getSoldierEntity(boolean bundle) {
         BCSoldier soldier = ModEntities.BAD_COMPANY_SOLDIER.create(self.level());

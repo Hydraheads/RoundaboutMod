@@ -65,7 +65,7 @@ public class BCSoldierBaseRenderer extends StandRenderer<BCSoldier> {
         }
 
         if (mobEntity.getBundle()) {
-            float offCenter = 0.75f;
+            float offCenter = 1.15f;
 
             // Line 1
             renderExtraSoldier(1.0f, 0.0f, -0.5f+offCenter, mobEntity, f, g, matrixStack, vertexConsumer, i);
@@ -74,7 +74,7 @@ public class BCSoldierBaseRenderer extends StandRenderer<BCSoldier> {
 
             // Line 2
             renderExtraSoldier(1.0f, 0.0f, -1.8f+offCenter, mobEntity, f, g, matrixStack, vertexConsumer, i);
-            renderExtraSoldier(0.0f, 0.0f, -1.3f+offCenter, mobEntity, f, g, matrixStack, vertexConsumer, i);
+            renderExtraSoldier(0.0f, 0.0f, -2.3f+offCenter, mobEntity, f, g, matrixStack, vertexConsumer, i);
             renderExtraSoldier(-1.0f, 0.0f, -1.8f+offCenter, mobEntity, f, g, matrixStack, vertexConsumer, i);
         }else {
             super.render(mobEntity, f, g, matrixStack, vertexConsumer, i);
