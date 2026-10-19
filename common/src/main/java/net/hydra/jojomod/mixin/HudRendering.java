@@ -6,6 +6,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.gui.LyinEyesMapOverlay;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
@@ -1010,6 +1011,8 @@ public abstract class HudRendering implements IHudAccess {
 
     @Inject(method = "renderCrosshair", at = @At(value = "TAIL"))
     private void rdbt$renderCrosshairMixinTail(GuiGraphics $$0, CallbackInfo info) {
+        // lyin eyes map
+        LyinEyesMapOverlay.renderMap($$0, this.minecraft.getFrameTime());
         //See ForgeForgeGui
         if (rdbt$tempEnt !=null){
             this.minecraft.crosshairPickEntity = rdbt$tempEnt;
