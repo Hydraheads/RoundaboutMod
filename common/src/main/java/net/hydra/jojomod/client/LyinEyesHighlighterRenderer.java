@@ -3,12 +3,14 @@ package net.hydra.jojomod.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import net.hydra.jojomod.event.IVillagerAccess;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.npc.Villager;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.Random;
@@ -19,6 +21,12 @@ public class LyinEyesHighlighterRenderer {
         new ResourceLocation("roundabout", "textures/particle/lyin_eyes_highlight_2.png"),
         new ResourceLocation("roundabout", "textures/particle/lyin_eyes_highlight_3.png"),
         new ResourceLocation("roundabout", "textures/particle/lyin_eyes_highlight_4.png")
+    };
+    private static final ResourceLocation[] ICONS_THICK = {
+            new ResourceLocation("roundabout", "textures/particle/lyin_eyes_thick_1.png"),
+            new ResourceLocation("roundabout", "textures/particle/lyin_eyes_thick_2.png"),
+            new ResourceLocation("roundabout", "textures/particle/lyin_eyes_thick_3.png"),
+            new ResourceLocation("roundabout", "textures/particle/lyin_eyes_thick_4.png")
     };
 
     /**
@@ -73,6 +81,11 @@ public class LyinEyesHighlighterRenderer {
             order[j] = tmp;
         }
 
-        return ICONS[order[stepInRound]];
+        // tense villager check
+        if(entity instanceof Villager V && (((IVillagerAccess) V).roundabout$isTense() || ((IVillagerAccess) V).roundabout$isUnnerved()))
+        {
+            return ICONS_THICK[order[stepInRound]];
+        }
+        else return ICONS[order[stepInRound]];
     }
 }

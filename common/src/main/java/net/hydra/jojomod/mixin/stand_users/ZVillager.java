@@ -236,33 +236,21 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
 
     }
 
-    // rolls for tension when interacted with
+    // handles tension for interaction
     @Inject(method = "mobInteract", at = @At("HEAD"))
-    private void roundabout$rollTensionOnInteract(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
-        if (!isClientSide()) {
-            this.roundabout$rollTensionIfUnrolled();
-            //test statement yippeee
-            /*if (hand == InteractionHand.MAIN_HAND) {
-                if (this.roundabout$isTense()) {
-                    player.sendSystemMessage(Component.literal("i'm lyin, i'm lyin so hard rn"));
-                } else {
-                    player.sendSystemMessage(Component.literal("i'm not lyin, i'm not lyin so hard rn"));
-                }
-            }*/
-        }
-    }
-
-    // checks if the person interacting with the villager is a lyin eyes user that is using tension highlighter
-    @Inject(method = "mobInteract", at = @At("HEAD"))
-    private void roundabout$updateUnnervedOnInteract(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
+    private void roundabout$handleTensionOnInteract(
+            Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
         if (!isClientSide()
-                && ((StandUser)player).roundabout$getStandPowers() instanceof PowersLyinEyes LE
-                && LE.getVisionModeClient()
-                && this.roundabout$isTense()) {
-            this.roundabout$setUnnerved();
-            /*if (hand == InteractionHand.MAIN_HAND) {
-                player.sendSystemMessage(Component.literal("i'm unnerved, i'm unnerved so hard rn"));
-            }*/
+                && (((StandUser) player).roundabout$getStandPowers() instanceof PowersLyinEyes lyinEyes)
+                && lyinEyes.getVisionModeClient()) {
+            boolean tensionWasAlreadyRolled = this.roundabout$hasRolledTension();
+            if (!tensionWasAlreadyRolled) {
+                this.roundabout$rollTensionIfUnrolled();
+                return;
+            }
+            if (this.roundabout$isTense()) {
+                this.roundabout$setUnnerved();
+            }
         }
     }
 
