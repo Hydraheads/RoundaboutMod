@@ -431,14 +431,19 @@
   "item.roundabout.pucci_manga_mask.tag": "Pucci",
   "item.roundabout.kira_part_four_mask": "Kira Visage",
   "item.roundabout.kira_part_four_mask.desc": "Yoshikage Kira (Part 4)",
+  "item.roundabout.kira_part_four_mask.tag": "Yoshikage Kira",
   "item.roundabout.kira_part_eight_mask": "Kira Visage",
   "item.roundabout.kira_part_eight_mask.desc": "Yoshikage Kira (Part 8)",
+  "item.roundabout.kira_part_eight_mask.tag": "Yoshikage Kira",
   "item.roundabout.hayato_kawajiri_mask": "Hayato Visage",
   "item.roundabout.hayato_kawajiri_mask.desc": "Hayato Kawajiri",
+  "item.roundabout.hayato_kawajiri_mask.tag": "Hayato",
   "item.roundabout.kosaku_mask": "Kosaku Visage",
   "item.roundabout.kosaku_mask.desc": "Kosaku Kawajiri",
+  "item.roundabout.kosaku_mask.tag": "Kosaku",
   "item.roundabout.kirasaku_mask": "'Kosaku' Visage",
   "item.roundabout.kirasaku_mask.desc": "Disguised Kira",
+  "item.roundabout.kirasaku_mask.tag": "Kosaku",
   "item.roundabout.johngallia_mask": "Johngalli A. Visage",
   "item.roundabout.johngallia_mask.desc": "Johngalli A.",
   "item.roundabout.johngallia_mask.tag": "Johngalli A.",
@@ -1275,6 +1280,8 @@
 
   "sounds.roundabout.lyin_eyes_summon":  "Stand summoned",
   "sounds.roundabout.villager_called_out":  "Villager Called Out",
+  "sounds.roundabout.lyin_eyes_vision":  "Nematodes gather",
+  "sounds.roundabout.lyin_eyes_gather":  "Nematodes gather",
 
   "sounds.roundabout.vampire_dive":  "Whoosh",
   "sounds.roundabout.punch_sfx1":  "Air Cracks",
@@ -1513,6 +1520,7 @@
   "sounds.roundabout.ratt_firing": "Ratt Firing",
   "sounds.roundabout.ratt_leap": "Mini Leap",
   "sounds.roundabout.ratt_mode_change": "Mode Change",
+  "sounds.roundabout.ratt_bounce": "Ratt Dart Bounces",
 
   "sounds.roundabout.anubis_possession": "Ominous Roar",
   "sounds.roundabout.anubis_summon" : "Be Calm",
@@ -2257,7 +2265,7 @@
   "ability.roundabout.place_invis.desc": "Place blocks, passing your invisibility duration down to them. Only works while you are invisible. To activate this skill, you must be holding a block and invisible.",
 
   "ability.roundabout.ratt_scope": "Scoped Mode",
-  "ability.roundabout.ratt_scope.desc": "Hold Ratt and scope in, allowing you to shoot while moving. Interacting builds charge, and punching releases it as a flurry of darts.",
+  "ability.roundabout.ratt_scope.desc": "Hold Ratt and scope in, allowing you to shoot while moving. Interacting builds charge, and attacking releases it as a flurry of darts. After 10 blocks of travel, the darts automatically bounce to the nearest target.",
   "ability.roundabout.ratt_fire": "Fire Darts",
   "ability.roundabout.ratt_fire.desc": "Shoots a volley of three darts, inflicting melt and disabling guard on the final hit.",
   "ability.roundabout.ratt_mode_change": "Mode Change",
@@ -2612,7 +2620,9 @@
   "ability.roundabout.lyin_eyes_tension_sensor.desc": "The nematodes highlight enemies through walls. Hostile mobs are highlighted red, neutral mobs are yellow, and passive mobs are green. Enemies that are low are highlighted differently.",
   "ability.roundabout.lyin_eyes_inventory": "Inventory Reader",
   "ability.roundabout.lyin_eyes_inventory.desc": "The nematodes gather around to show you what items a player has in their inventory.",
-  "container.roundabout.lyin_eyes_inventory": " ",
+  "ability.roundabout.lyin_eyes_callout": "Callout Liar",
+  "ability.roundabout.lyin_eyes_callout.desc": "Interacting with a villager might cause them to be revealed as a liar. Using Tension Sensor, you can detect those that are lying to you. Interact with them again while in Tension Sensor to call them out, giving all Lyin Eyes users permanent trade discounts. Don't go lying.",
+  "container.roundabout.lyin_eyes_callout": " ",
   "text.roundabout.lyin_eyes.tension_highlight": "Tension Highlight On",
   "text.roundabout.lyin_eyes.tension_highlight_off": "Tension Highlight Off",
 
@@ -2831,6 +2841,8 @@
   "skins.roundabout.bad_company.anime": "Part 4",
   "skins.roundabout.bad_company.manga": "Manga",
   "skins.roundabout.bad_company.beta": "Beta",
+  "skins.roundabout.bad_company.marine": "Marine",
+  "skins.roundabout.bad_company.sand": "Sand",
 
   "skins.roundabout.king_crimson.base": "Part 5",
   "skins.roundabout.king_crimson.manga": "Manga",
@@ -4251,6 +4263,9 @@
   "config.roundabout.forceThirdPersonInGroundDive.name": "Force Third Person in Ground Dive",
   "config.roundabout.forceThirdPersonInGroundDive.desc": "Automatically switches to third person while in ground dive.",
 
+  "config.roundabout.spinMapInsteadOfArrow.name": "Spin Map Instead Of Arrow",
+  "config.roundabout.spinMapInsteadOfArrow.desc": "Spins the minimap of the second ability instead of the player arrow.",
+
   "config.roundabout.rattAttackBonusOnMobs.name": "Bonus Mob Damage",
   "config.roundabout.rattAttackBonusOnMobs.desc": "How much bonus damage Ratt darts deal to a mob.",
   "config.roundabout.rattSafetyTicks.name": "Ratt Safety Ticks",
@@ -5233,6 +5248,7 @@
   "config.roundabout.d4cSettings.name": "D4C",
   "config.roundabout.whitesnakeSettings.name": "Whitesnake",
   "config.roundabout.diverDownSettings.name": "Diver Down",
+  "config.roundabout.lyinEyesSettings.name": "Lyin Eyes",
   "config.roundabout.starPlatinumSettings.name": "Star Platinum",
   "config.roundabout.oasisSettings.name": "Oasis",
   "config.roundabout.timeStopSettings.name": "Time Stop",

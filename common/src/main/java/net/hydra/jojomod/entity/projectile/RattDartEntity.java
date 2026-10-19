@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IEnderMan;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.event.ModEffects;
@@ -27,6 +28,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -40,13 +42,16 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.Vec2;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.*;
 import org.joml.Vector3f;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RattDartEntity extends AbstractArrow {
 
@@ -232,24 +237,12 @@ public class RattDartEntity extends AbstractArrow {
                 discard();
                 return;
             } else if (getBounces() > 0) {
-                this.setBounces(getBounces()-1);
 
-                // yoinked from BladedBowlerHatEntity
-                Vec3 velocity = this.getDeltaMovement();
-                Direction hitDir = $$0.getDirection();
-                Vec3 normal = Vec3.atLowerCornerOf(hitDir.getNormal());
-
-                // Makes it bounce
-                Vec3 reflected = velocity.subtract(normal.scale(2 * velocity.dot(normal)));
-
-                // Slowly stops it bouncing
-                reflected = reflected.scale(0.5); // less bounce / more bounce :)
-
-                this.setDeltaMovement(reflected);
-
-                Vec3 hitLoc = $$0.getLocation();
-                Vec3 pushOut = normal.scale(0.2);
-                this.setPos(hitLoc.x + pushOut.x, hitLoc.y + pushOut.y, hitLoc.z + pushOut.z);
+                if (this.getShotType() != BASIC && this.getOwner() != null && this.distanceTo(this.getOwner()) > 10) {
+                    targetBounce($$0);
+                } else {
+                    bounce($$0);
+                }
 
             } else {
                 onHitBlock2($$0);
@@ -257,6 +250,59 @@ public class RattDartEntity extends AbstractArrow {
             }
         }
         this.setSuperthrowTicks(0);
+    }
+
+    private void bounce(BlockHitResult $$0) {
+        this.setBounces(getBounces()-1);
+
+        // yoinked from BladedBowlerHatEntity
+        Vec3 velocity = this.getDeltaMovement();
+        Direction hitDir = $$0.getDirection();
+        Vec3 normal = Vec3.atLowerCornerOf(hitDir.getNormal());
+
+        // Makes it bounce
+        Vec3 reflected = velocity.subtract(normal.scale(2 * velocity.dot(normal)));
+
+        // Slowly stops it bouncing
+        reflected = reflected.scale(0.5); // less bounce / more bounce :)
+
+        this.setDeltaMovement(reflected);
+
+        Vec3 hitLoc = $$0.getLocation();
+        Vec3 pushOut = normal.scale(0.2);
+        this.setPos(hitLoc.x + pushOut.x, hitLoc.y + pushOut.y, hitLoc.z + pushOut.z);
+
+    }
+
+    private void targetBounce(BlockHitResult $$0) {
+        Vec3 pos = $$0.getLocation();
+        List<Entity> targets = MainUtil.genHitbox(this.level(),pos.x,pos.y,pos.z,10,10,10);
+        targets.remove(this.getOwner());
+        targets.removeIf(entity -> !entity.isAttackable());
+        targets.removeIf(entity -> entity.getPosition(0).distanceTo(pos) > 10);
+        targets.removeIf(entity -> this.level().clip(new ClipContext(entity.getPosition(0), pos, ClipContext.Block.COLLIDER, net.minecraft.world.level.ClipContext.Fluid.NONE, this)).getType() != HitResult.Type.MISS);
+        Entity target = null;
+        for (Entity e : targets) {
+            boolean priortized = isPrioritized(e) && !isPrioritized(target);
+            if (priortized || target == null || e.getPosition(0).distanceTo(pos) < target.getPosition(0).distanceTo(pos) ) {
+                target = e;
+            }
+        }
+        if (target == null) {
+            this.bounce($$0);
+        } else {
+            if (!this.level().isClientSide) {
+                ((ServerLevel)this.level()).sendParticles(ModParticles.AIR_CRACKLE,pos.x,pos.y,pos.z,1,0,0,0,0);
+                this.level().playSound(null,this.blockPosition(),ModSounds.RATT_BOUNCE_EVENT, SoundSource.PLAYERS,1F,1F);
+            }
+            this.setBounces(this.getBounces()-1);
+            Vec3 dir = target.getPosition(0).add(0,1,0).subtract(this.getPosition(0)).normalize().scale(1.1);
+            this.setDeltaMovement(dir.x,dir.y,dir.z);
+        }
+    }
+
+    private boolean isPrioritized(Entity e) {
+        return e instanceof Player || e instanceof KingCrimsonCloneEntity;
     }
 
     public void shootWithVariance(double $$0, double $$1, double $$2, float $$3, float $$4) {

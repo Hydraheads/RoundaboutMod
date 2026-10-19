@@ -6,6 +6,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.badCompanyTroops.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -17,6 +18,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
@@ -48,6 +50,8 @@ public class PowersBadCompany extends NewDashPreset {
         ANIME_SKIN = 1,
         MANGA_SKIN = 2,
         BETA_SKIN = 3,
+        MARINE_SKIN = 4,
+        SAND_SKIN = 5,
 
         SOLDIER_SUMMON = 50,
         BUNDLE_SUMMON = 51,
@@ -60,6 +64,8 @@ public class PowersBadCompany extends NewDashPreset {
         list.add(ANIME_SKIN);
         list.add(MANGA_SKIN);
         list.add(BETA_SKIN);
+        list.add(MARINE_SKIN);
+        list.add(SAND_SKIN);
         return list;
     }
 
@@ -70,6 +76,8 @@ public class PowersBadCompany extends NewDashPreset {
             case ANIME_SKIN -> { return Component.translatable("skins.roundabout.bad_company.anime"); }
             case MANGA_SKIN -> { return Component.translatable("skins.roundabout.bad_company.manga"); }
             case BETA_SKIN -> { return Component.translatable("skins.roundabout.bad_company.beta"); }
+            case MARINE_SKIN -> { return Component.translatable("skins.roundabout.bad_company.marine"); }
+            case SAND_SKIN -> { return Component.translatable("skins.roundabout.bad_company.sand"); }
         }
 
         return Component.translatable("skins.roundabout.bad_company.anime");
@@ -195,6 +203,7 @@ public class PowersBadCompany extends NewDashPreset {
                     self.getPosition(1).y,
                     self.getPosition(1).z
             );
+            soldier.setYRot(self.getYRot());
             self.level().addFreshEntity(soldier);
             activeTroops.add(soldier);
 
@@ -215,6 +224,24 @@ public class PowersBadCompany extends NewDashPreset {
         initActiveTroops();
         return activeTroops.contains(soldier);
     }
+
+    private int totalTroopsOut = 0;
+
+    public void syncTotalTroopsOut() {
+        if (!isClient()) {
+            initActiveTroops();
+            int amount = 0;
+            for (BCTroop T : activeTroops) {
+                if (T == null || T.isRemoved()) {
+                    activeTroops.remove(T);
+                    continue;
+                }
+                amount += T.getTroopValue();
+            }
+            totalTroopsOut = amount;
+        }
+    }
+
     @Override
     public boolean returnFakeStandForHud(){
         if(this.self != null) {
@@ -255,5 +282,17 @@ public class PowersBadCompany extends NewDashPreset {
         }
 
         return displayStand;
+    }
+
+    @Override
+    public boolean replaceHudActively() {
+        return true;
+    }
+
+    @Override
+    public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x,
+                                  boolean removeNum) {
+        StandHudRender.renderNumberHUD(context, Minecraft.getInstance(), screenWidth, screenHeight, x, totalTroopsOut, 12, StandIcons.JOJO_ICONS_3, 0, 20, 0x7fd355);
+
     }
 }

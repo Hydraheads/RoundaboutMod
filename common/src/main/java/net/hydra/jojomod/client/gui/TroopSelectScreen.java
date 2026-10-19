@@ -51,7 +51,8 @@ public class TroopSelectScreen extends Screen {
             TROOP = 0,
             BUNDLE = 1,
             HELICOPTER = 2,
-            TANK = 3;
+            TANK = 3,
+            MINE = 4;
 
 
 
@@ -87,10 +88,12 @@ public class TroopSelectScreen extends Screen {
                 Component.translatable("roundabout.troop_select.troop")));
         this.slots.add(new SwitchSelect(BUNDLE, centerX+offsetCenter, centerY-offsetCenter + Yoffset,
                 Component.translatable("roundabout.troop_select.bundle")));
-        this.slots.add(new SwitchSelect(HELICOPTER, centerX-offsetCenter, centerY+offsetCenter + Yoffset,
+        this.slots.add(new SwitchSelect(HELICOPTER, centerX-offsetCenter-18, centerY+offsetCenter + Yoffset-12,
                 Component.translatable("roundabout.troop_select.helicopter")));
-        this.slots.add(new SwitchSelect(TANK, centerX+offsetCenter, centerY+offsetCenter + Yoffset,
+        this.slots.add(new SwitchSelect(TANK, centerX+offsetCenter+18, centerY+offsetCenter + Yoffset-12,
                 Component.translatable("roundabout.troop_select.tank")));
+        this.slots.add(new SwitchSelect(MINE, centerX, centerY+offsetCenter + Yoffset,
+                Component.translatable("roundabout.troop_select.mine")));
 
     }
 
@@ -121,14 +124,14 @@ public class TroopSelectScreen extends Screen {
         guiGraphics.pose().pushPose();
         RenderSystem.enableBlend();
         int k = this.width / 2 - 52;
-        int l = this.height / 2 - 31 - 22 - 10 - 20;
-        guiGraphics.blit(TROOP_CHOOSER_LOCATION, k, l, 0.0f, 104.0f, 105, 24, 128, 128);
+        int l = this.height / 2 - 70;
+        guiGraphics.blit(TROOP_CHOOSER_LOCATION, k, l-6, 0.0f, 108.0f, 105, 20, 192, 192);
         guiGraphics.pose().popPose();
         super.render(guiGraphics, i, j, f);
 
         Component str = Component.translatable("roundabout.bad_company.troop_select");
 
-        guiGraphics.drawCenteredString(this.font, str , this.width / 2, this.height / 2 - 31 -30 - 10, -1);
+        guiGraphics.drawCenteredString(this.font, str , this.width / 2, l, -1);
 
         int lastState = currentlyHovered;
 
@@ -204,11 +207,11 @@ public class TroopSelectScreen extends Screen {
 
 
         private void renderSlot(GuiGraphics guiGraphics) {
-            guiGraphics.blit(TROOP_CHOOSER_LOCATION, this.getX(), this.getY(), isHoveredOrFocused() ? 24 : 0, 0, 24, 24, 128, 128);
+            guiGraphics.blit(TROOP_CHOOSER_LOCATION, this.getX(), this.getY(), isHoveredOrFocused() ? 24 : 0, 0, 24, 24, 192, 192);
         }
 
         private void renderIcon(GuiGraphics guiGraphics) {
-            guiGraphics.blit(TROOP_CHOOSER_LOCATION, this.getX()+3, this.getY()+3, context*18, 31, 18, 18, 128, 128);
+            guiGraphics.blit(TROOP_CHOOSER_LOCATION, this.getX()+3, this.getY()+3, context*18, 24, 18, 18, 192, 192);
         }
 
         @Override
@@ -224,7 +227,7 @@ public class TroopSelectScreen extends Screen {
         );
     }*/
 
-    /*
+
     public boolean roundabout$sameKeyOne(KeyMapping key1){
         return (key1.isDown() || (key1.same(this.minecraft.options.keyLoadHotbarActivator) && this.minecraft.options.keyLoadHotbarActivator.isDown())
                 || (key1.same(this.minecraft.options.keySaveHotbarActivator) && this.minecraft.options.keySaveHotbarActivator.isDown())
@@ -240,5 +243,5 @@ public class TroopSelectScreen extends Screen {
 
         }
         return false;
-    }*/
+    }
 }

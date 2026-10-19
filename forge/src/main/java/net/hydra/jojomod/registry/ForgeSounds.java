@@ -770,6 +770,8 @@ public class ForgeSounds {
             register(ModSounds.RATT_LEAP, ModSounds.RATT_LEAP_ID);
     public static final RegistryObject<SoundEvent> RATT_MODE_CHANGE =
             register(ModSounds.RATT_MODE_CHANGE, ModSounds.RATT_MODE_CHANGE_ID);
+    public static final RegistryObject<SoundEvent> RATT_BOUNCE =
+            register(ModSounds.RATT_BOUNCE, ModSounds.RATT_BOUNCE_ID);
 
     public static final RegistryObject<SoundEvent> STRAY_CAT_SOUND_1 =
             register(ModSounds.STRAY_CAT_SOUND_1, ModSounds.STRAY_CAT_SOUND_1_ID);
@@ -1129,6 +1131,10 @@ public class ForgeSounds {
             register(ModSounds.LYIN_EYES_SUMMON, ModSounds.LYIN_EYES_SUMMON_ID);
     public static final RegistryObject<SoundEvent> VILLAGER_CALLED_OUT =
             register(ModSounds.VILLAGER_CALLED_OUT, ModSounds.VILLAGER_CALLED_OUT_ID);
+    public static final RegistryObject<SoundEvent> LYIN_EYES_VISION =
+            register(ModSounds.LYIN_EYES_VISION, ModSounds.LYIN_EYES_VISION_ID);
+    public static final RegistryObject<SoundEvent> LYIN_EYES_GATHER =
+            register(ModSounds.LYIN_EYES_GATHER, ModSounds.LYIN_EYES_GATHER_ID);
 
     public static final RegistryObject<SoundEvent> SUMMON_GREEN_DAY =
             register(ModSounds.SUMMON_GREEN_DAY, ModSounds.SUMMON_GREEN_DAY_ID);

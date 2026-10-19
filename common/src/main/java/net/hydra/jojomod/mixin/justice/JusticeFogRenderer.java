@@ -1,16 +1,17 @@
 package net.hydra.jojomod.mixin.justice;
 
-
 import com.mojang.blaze3d.shaders.FogShape;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.access.IClientLevel;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.DiverDownControlsClient;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.FogRenderer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.util.Mth;
@@ -20,7 +21,13 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FogType;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -47,22 +54,39 @@ public class JusticeFogRenderer {
     private static void roundabout$setupFog(Camera $$0, FogRenderer.FogMode $$1, float $$2, boolean $$3, float $$4, CallbackInfo ci) {
         //i needed an anti-xray for diver down and justice fog was literally perfect for this because it uses fog rendering
         //thanks hydra!
-        if (net.hydra.jojomod.client.DiverDownControlsClient.isDiving()) {
-            net.minecraft.client.multiplayer.ClientLevel clientLevel = Minecraft.getInstance().level;
+        if (DiverDownControlsClient.isDiving()) {
+            ClientLevel clientLevel = Minecraft.getInstance().level;
             if (clientLevel != null) {
-                net.minecraft.world.phys.Vec3 pos = $$0.getPosition();
+                Vec3 pos = $$0.getPosition();
                 //make a bounding box around the camera, so that no clipping shenanigans occur
-                net.minecraft.world.phys.AABB camBox = new net.minecraft.world.phys.AABB(
+                AABB camBox = new AABB(
                         pos.x - 0.1, pos.y - 0.1, pos.z - 0.1,
                         pos.x + 0.1, pos.y + 0.1, pos.z + 0.1
                 );
                 boolean isSolid = false;
-                for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(
-                        net.minecraft.util.Mth.floor(camBox.minX), net.minecraft.util.Mth.floor(camBox.minY), net.minecraft.util.Mth.floor(camBox.minZ),
-                        net.minecraft.util.Mth.floor(camBox.maxX), net.minecraft.util.Mth.floor(camBox.maxY), net.minecraft.util.Mth.floor(camBox.maxZ))) {
-                    if (clientLevel.getBlockState(p).isSolidRender(clientLevel, p)) {
-                        isSolid = true;
-                        break;
+                for (BlockPos p : BlockPos.betweenClosed(
+                        Mth.floor(camBox.minX), Mth.floor(camBox.minY), Mth.floor(camBox.minZ),
+                        Mth.floor(camBox.maxX), Mth.floor(camBox.maxY), Mth.floor(camBox.maxZ))) {
+                    BlockState state = clientLevel.getBlockState(p);
+                    // have to check if the block is solid or not because things like stairs don't trigger the anti xray, and that messes up the thing
+                    if (!state.isAir()) {
+                        if (state.isSolidRender(clientLevel, p)) {
+                            isSolid = true;
+                            break;
+                        }
+
+                        VoxelShape shape = state.getShape(clientLevel, p);
+
+                        if (!shape.isEmpty()) {
+                            AABB localCamBox = camBox.move(-p.getX(), -p.getY(), -p.getZ());
+                            if (Shapes.joinIsNotEmpty(
+                                    shape,
+                                    Shapes.create(localCamBox),
+                                    BooleanOp.AND)) {
+                                isSolid = true;
+                                break;
+                            }
+                        }
                     }
                 }
 
@@ -252,23 +276,46 @@ public class JusticeFogRenderer {
         fogGreen = g;
         fogBlue =b;
     }
+
+    //basically the same checks as above, but this time for color
     @Inject(method = "setupColor", at = @At("HEAD"), cancellable = true)
     private static void roundabout$diverDownXrayColorBlock(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, CallbackInfo ci) {
-        if (net.hydra.jojomod.client.DiverDownControlsClient.isDiving() && level != null) {
-            net.minecraft.world.phys.Vec3 pos = camera.getPosition();
-            net.minecraft.world.phys.AABB camBox = new net.minecraft.world.phys.AABB(
+        if (DiverDownControlsClient.isDiving() && level != null) {
+            Vec3 pos = camera.getPosition();
+            AABB camBox = new AABB(
                     pos.x - 0.1, pos.y - 0.1, pos.z - 0.1,
                     pos.x + 0.1, pos.y + 0.1, pos.z + 0.1
             );
             boolean isSolid = false;
-            for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(
-                    net.minecraft.util.Mth.floor(camBox.minX), net.minecraft.util.Mth.floor(camBox.minY), net.minecraft.util.Mth.floor(camBox.minZ),
-                    net.minecraft.util.Mth.floor(camBox.maxX), net.minecraft.util.Mth.floor(camBox.maxY), net.minecraft.util.Mth.floor(camBox.maxZ))) {
-                if (level.getBlockState(p).isSolidRender(level, p)) {
-                    isSolid = true;
-                    break;
+
+            for (BlockPos p : BlockPos.betweenClosed(
+                    Mth.floor(camBox.minX), Mth.floor(camBox.minY), Mth.floor(camBox.minZ),
+                    Mth.floor(camBox.maxX), Mth.floor(camBox.maxY), Mth.floor(camBox.maxZ))) {
+
+                BlockState state = level.getBlockState(p);
+
+                if (!state.isAir()) {
+                    if (state.isSolidRender(level, p)) {
+                        isSolid = true;
+                        break;
+                    }
+
+                    VoxelShape shape = state.getShape(level, p);
+
+                    if (!shape.isEmpty()) {
+                        AABB localCamBox = camBox.move(-p.getX(), -p.getY(), -p.getZ());
+
+                        if (Shapes.joinIsNotEmpty(
+                                shape,
+                                Shapes.create(localCamBox),
+                                BooleanOp.AND)) {
+                            isSolid = true;
+                            break;
+                        }
+                    }
                 }
             }
+
             if (isSolid) {
                 // black fog, completely block everything
                 RenderSystem.clearColor(0.0F, 0.0F, 0.0F, 1.0F);
