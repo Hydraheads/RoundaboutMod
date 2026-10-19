@@ -607,6 +607,8 @@ public class FabricSounds {
 
         addSound(ModSounds.LYIN_EYES_SUMMON_ID, ModSounds.LYIN_EYES_SUMMON_EVENT);
         addSound(ModSounds.VILLAGER_CALLED_OUT_ID, ModSounds.VILLAGER_CALLED_OUT_EVENT);
+        addSound(ModSounds.LYIN_EYES_VISION_ID, ModSounds.LYIN_EYES_VISION_EVENT);
+        addSound(ModSounds.LYIN_EYES_GATHER_ID, ModSounds.LYIN_EYES_GATHER_EVENT);
 
         addSound(ModSounds.SUMMON_GREEN_DAY_ID, ModSounds.SUMMON_GREEN_DAY_EVENT);
         addSound(ModSounds.SUMMON_WALKING_ID, ModSounds.SUMMON_WALKING_EVENT);

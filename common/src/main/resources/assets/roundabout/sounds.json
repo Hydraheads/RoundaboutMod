@@ -509,6 +509,18 @@
       "roundabout:villager_called_out"
     ]
   },
+  "lyin_eyes_vision": {
+    "subtitle": "sounds.roundabout.lyin_eyes_vision",
+    "sounds": [
+      "roundabout:lyin_eyes_vision"
+    ]
+  },
+  "lyin_eyes_gather": {
+    "subtitle": "sounds.roundabout.lyin_eyes_gather",
+    "sounds": [
+      "roundabout:lyin_eyes_gather"
+    ]
+  },
   "summon_king_crimson": {
     "subtitle": "sounds.roundabout.summon_king_crimson",
     "sounds": [

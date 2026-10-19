@@ -67,6 +67,10 @@ public class PowersLyinEyes extends NewDashPreset {
         }
         if (desummon && this.self.level().isClientSide()) {
             isSummon = false;
+            if (mapModeClient) {
+                mapModeClient = false;
+                isGather = false;
+            }
         }
         super.onStandSummon(desummon);
     }
@@ -211,6 +215,8 @@ public class PowersLyinEyes extends NewDashPreset {
             isSummon = false;
             isGather = true;
             gatherOverlayTicks = 1;
+            // play sound here
+            this.self.playSound(ModSounds.LYIN_EYES_GATHER_EVENT, 0.9F, 1.2F);
         }
     }
 
@@ -246,7 +252,7 @@ public class PowersLyinEyes extends NewDashPreset {
         tryPowerPacket(PowerIndex.POWER_1);
         if (isClient() && visionModeClient) {
             // play sound here
-            // this.self.playSound(ModSounds.MANHATTAN_VISION_EVENT, 150F, 0.9F);
+            this.self.playSound(ModSounds.LYIN_EYES_VISION_EVENT, 0.85F, 1F);
         }
     }
 
@@ -278,7 +284,7 @@ public class PowersLyinEyes extends NewDashPreset {
         tryPowerPacket(PowerIndex.POWER_2);
         if (isClient() && mapModeClient) {
             // play sound here
-            // this.self.playSound(ModSounds.MANHATTAN_VISION_EVENT, 150F, 0.9F);
+            this.self.playSound(ModSounds.LYIN_EYES_GATHER_EVENT, 0.9F, 1.2F);
         }
     }
 
