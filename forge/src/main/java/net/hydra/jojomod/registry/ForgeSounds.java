@@ -770,6 +770,8 @@ public class ForgeSounds {
             register(ModSounds.RATT_LEAP, ModSounds.RATT_LEAP_ID);
     public static final RegistryObject<SoundEvent> RATT_MODE_CHANGE =
             register(ModSounds.RATT_MODE_CHANGE, ModSounds.RATT_MODE_CHANGE_ID);
+    public static final RegistryObject<SoundEvent> RATT_BOUNCE =
+            register(ModSounds.RATT_BOUNCE, ModSounds.RATT_BOUNCE_ID);
 
     public static final RegistryObject<SoundEvent> STRAY_CAT_SOUND_1 =
             register(ModSounds.STRAY_CAT_SOUND_1, ModSounds.STRAY_CAT_SOUND_1_ID);

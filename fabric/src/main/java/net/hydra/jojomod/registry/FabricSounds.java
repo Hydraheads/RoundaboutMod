@@ -327,6 +327,7 @@ public class FabricSounds {
         addSound(ModSounds.RATT_FIRING_ID, ModSounds.RATT_FIRING_EVENT);
         addSound(ModSounds.RATT_LEAP_ID, ModSounds.RATT_LEAP_EVENT);
         addSound(ModSounds.RATT_MODE_CHANGE_ID, ModSounds.RATT_MODE_CHANGE_EVENT);
+        addSound(ModSounds.RATT_BOUNCE_ID, ModSounds.RATT_BOUNCE_EVENT);
 
         addSound(ModSounds.STRAY_CAT_SOUND_1_ID, ModSounds.STRAY_CAT_SOUND_1_EVENT);
         addSound(ModSounds.STRAY_CAT_SOUND_2_ID, ModSounds.STRAY_CAT_SOUND_2_EVENT);

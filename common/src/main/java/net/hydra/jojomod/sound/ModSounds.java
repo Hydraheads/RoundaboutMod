@@ -1520,6 +1520,10 @@ public class ModSounds {
     public static final String RATT_MODE_CHANGE = "ratt_mode_change";
     public static final ResourceLocation RATT_MODE_CHANGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+RATT_MODE_CHANGE);
     public static SoundEvent RATT_MODE_CHANGE_EVENT = SoundEvent.createVariableRangeEvent(RATT_MODE_CHANGE_ID);
+    public static final String RATT_BOUNCE = "ratt_bounce";
+    public static final ResourceLocation RATT_BOUNCE_ID = new ResourceLocation(Roundabout.MOD_ID,RATT_BOUNCE);
+    public static SoundEvent RATT_BOUNCE_EVENT = SoundEvent.createVariableRangeEvent(RATT_BOUNCE_ID);
+
 
     public static final String ANUBIS_POSSESSION = "anubis_possession";
     public static final ResourceLocation ANUBIS_POSSESSION_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_POSSESSION);

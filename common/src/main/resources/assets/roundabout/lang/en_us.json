@@ -1498,6 +1498,7 @@
   "sounds.roundabout.ratt_firing": "Ratt Firing",
   "sounds.roundabout.ratt_leap": "Mini Leap",
   "sounds.roundabout.ratt_mode_change": "Mode Change",
+  "sounds.roundabout.ratt_bounce": "Ratt Dart Bounces",
 
   "sounds.roundabout.anubis_possession": "Ominous Roar",
   "sounds.roundabout.anubis_summon" : "Be Calm",
@@ -2242,7 +2243,7 @@
   "ability.roundabout.place_invis.desc": "Place blocks, passing your invisibility duration down to them. Only works while you are invisible. To activate this skill, you must be holding a block and invisible.",
 
   "ability.roundabout.ratt_scope": "Scoped Mode",
-  "ability.roundabout.ratt_scope.desc": "Hold Ratt and scope in, allowing you to shoot while moving. Interacting builds charge, and punching releases it as a flurry of darts.",
+  "ability.roundabout.ratt_scope.desc": "Hold Ratt and scope in, allowing you to shoot while moving. Interacting builds charge, and attacking releases it as a flurry of darts. After 10 blocks of travel, the darts automatically bounce to the nearest target.",
   "ability.roundabout.ratt_fire": "Fire Darts",
   "ability.roundabout.ratt_fire.desc": "Shoots a volley of three darts, inflicting melt and disabling guard on the final hit.",
   "ability.roundabout.ratt_mode_change": "Mode Change",

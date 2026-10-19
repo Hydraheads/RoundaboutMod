@@ -2694,6 +2694,12 @@
       "roundabout:ratt_mode_change"
     ]
   },
+  "ratt_bounce": {
+    "subtitle": "sounds.roundabout.ratt_bounce",
+    "sounds": [
+      "roundabout:ratt_bounce"
+    ]
+  },
   "anubis_possession": {
     "subtitle": "sounds.roundabout.anubis_possession",
     "sounds": [
