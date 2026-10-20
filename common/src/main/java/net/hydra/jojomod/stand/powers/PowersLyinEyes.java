@@ -422,14 +422,6 @@ public class PowersLyinEyes extends NewDashPreset {
         }
     }
 
-    // basically the stand rejection thing is gonna have the nematodes
-    // cover your entire screen for the duration of the virus. cool
-    @Override
-    public void tickStandRejection(MobEffectInstance effect){
-        if (this.getSelf().level().isClientSide()) {
-            //oops! nematodes all over your screen.
-        }
-    }
     // basic setters and getters here
 
     public int getSummonOverlayTicks() {return summonOverlayTicks;}
