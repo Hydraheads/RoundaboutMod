@@ -274,7 +274,7 @@ public class PowersBadCompany extends NewDashPreset {
                 if (T instanceof BCSoldier S) {
                     amount += BCSoldier.getTroopValue(S.getBundle());
                 }else {
-                    amount += T.getTroopValue();
+                    amount += BCTroop.getTroopValue();
                 }
             }
             if (totalTroopsOut != amount) {
