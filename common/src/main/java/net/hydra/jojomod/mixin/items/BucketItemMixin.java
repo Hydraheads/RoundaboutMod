@@ -122,11 +122,9 @@ public class BucketItemMixin extends Item implements IBucketItem {
 
 
                         if (!level.isClientSide) {
-                            Roundabout.LOGGER.info("1");
                             player.awardStat(Stats.ITEM_USED.get(this));
                             player.swing(hand);
                             itemStack.shrink(1);
-                            Roundabout.LOGGER.info("2");
                             SoundEvent $$6 = SoundEvents.BUCKET_FILL;
                             level.playSound(null, blockPos, $$6, SoundSource.BLOCKS, 1F, 1.5F);
                             if (itemStack.isEmpty()) {
