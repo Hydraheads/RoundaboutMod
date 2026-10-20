@@ -230,6 +230,7 @@ public class SilverChariotBaseRenderer<T extends StandEntity> extends StandRende
     @Nullable
     @Override
     protected RenderType getRenderType(SilverChariotEntity entity, boolean showBody, boolean translucent, boolean showOutline) {
-        return super.getRenderType(entity, showBody, true, showOutline);
+        // return super.getRenderType(entity, showBody, true, showOutline);
+        return RenderType.entityCutoutNoCull(getTextureLocation(entity));
     }
 }

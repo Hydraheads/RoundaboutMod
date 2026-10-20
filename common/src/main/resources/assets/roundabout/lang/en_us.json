@@ -3361,6 +3361,7 @@
   "roundabout.troop_select.tank": "Tank",
   "roundabout.troop_select.helicopter": "Helicopter",
   "roundabout.troop_select.mine": "Mine",
+  "stand.bad_company.troop_limit": "You have reached army maximum size!",
 
   "skins.roundabout.green_day.part_five_green_day": "Part 5",
   "skins.roundabout.green_day.red_day": "Red Day",
@@ -3711,6 +3712,10 @@
 
   "config.roundabout.chanceForAltMobs.name": "Alternate Mob Chance",
   "config.roundabout.chanceForAltMobs.desc": "Small chance of select mobs having rare variations like shiny pokemon, from 0-1 (1 being 100 percent chance). Also rabbits can be killer rabbits...",
+
+  "config.roundabout.standGrabRequiresTool.name": "Grab Requires Tool",
+  "config.roundabout.standGrabRequiresTool.desc": "If stand grab requires pickaxe tiers to use.",
+
 
 
   "config.roundabout.chanceToEncounterNewAnimal.name": "Encounter New Animals",
@@ -5230,6 +5235,7 @@
   "config.roundabout.PurpleHazeSettings.name": "Purple Haze",
   "config.roundabout.softAndWetSettings.name": "Soft And Wet",
   "config.roundabout.killerQueenSettings.name": "Killer Queen",
+  "config.roundabout.silverChariotSettings.name": "Silver Chariot",
   "config.roundabout.magiciansRedSettings.name": "Magician's Red",
   "config.roundabout.walkingHeartSettings.name": "Walking Heart",
   "config.roundabout.greenDaySettings.name": "Green Day",

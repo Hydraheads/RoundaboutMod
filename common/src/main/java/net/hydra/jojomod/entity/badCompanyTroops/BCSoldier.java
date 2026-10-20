@@ -83,6 +83,7 @@ public class BCSoldier extends BCTroop{
     public void tick() {
         super.tick();
 
+        /*
         float pitch = this.getXRot();
         float yaw = this.getYRot();
 
@@ -91,6 +92,7 @@ public class BCSoldier extends BCTroop{
         this.setYBodyRot(yaw);
         this.xRotO = pitch;
         this.yRotO = yaw;
+        */
     }
 
 
