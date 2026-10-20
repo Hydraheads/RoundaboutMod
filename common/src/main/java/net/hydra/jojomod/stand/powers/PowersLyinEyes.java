@@ -18,6 +18,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -394,6 +395,14 @@ public class PowersLyinEyes extends NewDashPreset {
         }
     }
 
+    // basically the stand rejection thing is gonna have the nematodes
+    // cover your entire screen for the duration of the virus. cool
+    @Override
+    public void tickStandRejection(MobEffectInstance effect){
+        if (this.getSelf().level().isClientSide()) {
+            //oops! nematodes all over your screen.
+        }
+    }
     // basic setters and getters here
 
     public int getSummonOverlayTicks() {return summonOverlayTicks;}
