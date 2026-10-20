@@ -578,7 +578,6 @@ public class PowersTusk extends NewDashPreset {
         super.tickPower();
         this.tickNails();
 
-        Roundabout.LOGGER.info(""+this.getStandUserSelf().roundabout$getStandAnimation());
 
         if (this.getAct() == 4 && !isInfiniteSpinning() && !(this.getSelf() instanceof Player P && P.isCreative()) ) {
             this.setAct(3,true);
@@ -1557,11 +1556,23 @@ public class PowersTusk extends NewDashPreset {
         this.nailFireDelay = 10;
         this.expendNails();
     }
+
     @Override
     public void pilotStandControls(KeyboardPilotInput kpi, LivingEntity entity) {
         if (entity instanceof TuskHoleEntity) {
-            entity.xxa = kpi.leftImpulse;
-            entity.zza = kpi.forwardImpulse;
+            float yawRad = entity.getYHeadRot() * Mth.DEG_TO_RAD;
+            double forward = kpi.forwardImpulse;
+            double strafe = kpi.leftImpulse;
+            if (forward != 0.0 && strafe != 0.0) {
+                double length = Math.hypot(forward, strafe);
+                forward /= length;
+                strafe /= length;
+            }
+            double speed = 0.2;
+            double motionX = (-Math.sin(yawRad) * forward + Math.cos(yawRad) * strafe) * speed;
+            double motionZ = (Math.cos(yawRad) * forward + Math.sin(yawRad) * strafe) * speed;
+
+            entity.setDeltaMovement(motionX, entity.getDeltaMovement().y, motionZ);
         }
     }
 

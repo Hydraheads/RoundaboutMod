@@ -218,9 +218,9 @@ public class TuskNailEntity extends AbstractArrow {
                             PowersTusk.takeDeterminedKnockbackWithY2(LE, ent, knockbackStrength);
 
 
-                            if (this.getAct() == 2) {
+                            if (this.getAct() == 2 || this.getAct() == 3) {
                                 TuskHoleEntity tuskHole = createHole(null,ent.getPosition(0));
-                                if (tuskHole != null && this.getAct() == 2) {
+                                if (tuskHole != null) {
                                     if ( (this.getOwner() instanceof Player P && (P.getLastHurtMob() == null || P.getLastHurtMob() == ent)) || !(this.getOwner() instanceof Player)  ) {
                                         tuskHole.doHurtTarget(ent);
                                     }
