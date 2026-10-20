@@ -1107,8 +1107,6 @@ public class StandIcons {
 
     // lyin eyes icons start
 
-    public static final ResourceLocation LYIN_EYES_PLACEHOLDER = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/lyin_eyes/placeholder.png");
     public static final ResourceLocation LYIN_EYES_INVENTORY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/lyin_eyes/inventory_reading.png");
     public static final ResourceLocation LYIN_EYES_TENSION_SENSOR = new ResourceLocation(Roundabout.MOD_ID,
@@ -1119,6 +1117,10 @@ public class StandIcons {
             "textures/gui/icons/lyin_eyes/callout_passive.png");
     public static final ResourceLocation LYIN_EYES_LAYER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/lyin_eyes_layer.png");
+    public static final ResourceLocation LYIN_EYES_MAP_ON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/lyin_eyes/nematode_map_on.png");
+    public static final ResourceLocation LYIN_EYES_MAP_OFF = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/lyin_eyes/nematode_map_off.png");
     public static final ResourceLocation LYIN_EYES_LAEM_LAYER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/lyin_eyes_laem_layer.png");
 

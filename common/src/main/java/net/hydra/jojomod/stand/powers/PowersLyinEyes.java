@@ -338,7 +338,12 @@ public class PowersLyinEyes extends NewDashPreset {
         else {
             setSkillIcon(context, x, y, 1, StandIcons.LYIN_EYES_TENSION_SENSOR, PowerIndex.SKILL_1);
         }
-        setSkillIcon(context, x, y, 2, StandIcons.LYIN_EYES_PLACEHOLDER, PowerIndex.SKILL_2);
+        if(mapModeClient) {
+            setSkillIcon(context, x, y, 2, StandIcons.LYIN_EYES_MAP_ON, PowerIndex.SKILL_2);
+        }
+        else {
+            setSkillIcon(context, x, y, 2, StandIcons.LYIN_EYES_MAP_OFF, PowerIndex.SKILL_2);
+        }
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         setSkillIcon(context, x, y, 4, StandIcons.LYIN_EYES_INVENTORY, PowerIndex.SKILL_4);
     }
@@ -351,8 +356,8 @@ public class PowersLyinEyes extends NewDashPreset {
                 "instruction.roundabout.press_skill", StandIcons.LYIN_EYES_TENSION_SENSOR, 1, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.lyin_eyes_callout",
                 "instruction.roundabout.passive", StandIcons.LYIN_EYES_PASSIVE, 0, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.lyin_eyes_placeholder",
-                "instruction.roundabout.press_skill", StandIcons.LYIN_EYES_PLACEHOLDER, 2, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.lyin_eyes_map",
+                "instruction.roundabout.press_skill", StandIcons.LYIN_EYES_MAP_OFF, 2, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE, 3, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.lyin_eyes_inventory",

@@ -2614,8 +2614,8 @@
   "text.roundabout.diver_down.release_mode": "Release Mode: Automatic",
   "text.roundabout.diver_down.release_mode_manual": "Release Mode: Manual",
 
-  "ability.roundabout.lyin_eyes_placeholder": "Would you still love me",
-  "ability.roundabout.lyin_eyes_placeholder.desc": "if I were a worm? \uD83E\uDD7A",
+  "ability.roundabout.lyin_eyes_map": "Nematode Map",
+  "ability.roundabout.lyin_eyes_map.desc": "The nematodes show you a layout of the blocks around you. The nematodes will also highlight enemies and containers, like chests, for you.",
   "ability.roundabout.lyin_eyes_tension_sensor": "Tension Sensor",
   "ability.roundabout.lyin_eyes_tension_sensor.desc": "The nematodes highlight enemies through walls. Hostile mobs are highlighted red, neutral mobs are yellow, and passive mobs are green. Enemies that are low are highlighted differently.",
   "ability.roundabout.lyin_eyes_inventory": "Inventory Reader",
