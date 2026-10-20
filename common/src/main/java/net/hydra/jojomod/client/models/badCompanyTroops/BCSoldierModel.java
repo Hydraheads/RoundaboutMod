@@ -133,6 +133,8 @@ public class BCSoldierModel<T extends BCSoldier> extends StandModel<T> implement
         this.animate(entity.releaseParachute, BCSoldierAnimations.releaseParachute, ageInTicks, 1.0f);
         this.animate(entity.closeParachute, BCSoldierAnimations.closeParachute, ageInTicks, 1.0f);
         this.animate(entity.idleWithGun, BCSoldierAnimations.idle_with_gun, ageInTicks, 1.0f);
+        this.animate(entity.walkWithGun, BCSoldierAnimations.walk_with_gun, ageInTicks, 1.0f);
+        this.animate(entity.runWithGun, BCSoldierAnimations.run_with_gun, ageInTicks, 1.0f);
 
     }
 

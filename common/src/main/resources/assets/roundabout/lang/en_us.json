@@ -3362,6 +3362,7 @@
   "roundabout.troop_select.tank": "Tank",
   "roundabout.troop_select.helicopter": "Helicopter",
   "roundabout.troop_select.mine": "Mine",
+  "stand.bad_company.not_enought_space": "You don't have enought space for that troop!",
   "stand.bad_company.troop_limit": "You have reached army maximum size!",
 
   "skins.roundabout.green_day.part_five_green_day": "Part 5",
@@ -3498,7 +3499,7 @@
 
   "roundabout.stand_switch.main": "Main Stand",
   "roundabout.stand_switch.main.desc": "A stand with combat potential that can level up in development. Costs %s experience levels to obtain.",
-  "roundabout.stand_switch.secondary": "Secondary Stand",
+  "roundabout.stand_switch.secondary": "Specialized Stand",
   "roundabout.stand_switch.secondary.desc": "A stand with fewer abilities that cannot level up in development. Costs no experience levels to obtain.",
   "roundabout.stand_switch.custom": "Custom Stand",
   "roundabout.stand_switch.custom.desc": "A stand that you can design to your liking, think of it as your own stand. Costs %s levels to obtain.",
@@ -4233,6 +4234,8 @@
   "config.roundabout.whitesnakeAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
   "config.roundabout.whitesnakeAttackMultOnMobs.name": "Mob Damage Multiplier",
   "config.roundabout.whitesnakeAttackMultOnMobs.desc": "How much damage the stand deals to every other mob, same math as above.",
+  "config.roundabout.whitesnakeNameChangingText.name": "Whitesnake changing name in messages",
+  "config.roundabout.whitesnakeNameChangingText.desc": "When this config is on, when sending messages during pilot the users name will change to whitesnake or the disguise the user is using.",
 
 
   "config.roundabout.creamAttackMultOnPlayers.name": "Player Damage Multiplier",

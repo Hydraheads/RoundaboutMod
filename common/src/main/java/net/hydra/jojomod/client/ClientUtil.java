@@ -24,6 +24,8 @@ import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.entity.substand.MoldSporesEntity;
+import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
+import net.hydra.jojomod.entity.substand.SeperatedLegsEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -1047,6 +1049,24 @@ public class ClientUtil {
                     if (entity instanceof MoldSporesEntity mse){
                         mse.lifetime = data;
                     }
+                }else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncGdArms.value)) {;
+                    int user = (int) vargs[0];
+                    int offhandent = (int) vargs[1];
+                    int mainhandent = (int) vargs[2];
+                    boolean hasoffhand = ((int) vargs[3]) == 1;
+                    boolean hasmainhand = ((int) vargs[4]) == 1;
+                    int legsent = (int) vargs[5];
+                    Entity userent = player.level().getEntity(user);
+                    if(((StandUser)userent).roundabout$getStandPowers() instanceof PowersGreenDay PGD){
+
+                        PGD.Main_arm = (SeperatedArmEntity) player.level().getEntity(mainhandent);
+                        PGD.Off_hand_entity = (SeperatedArmEntity) player.level().getEntity(offhandent);
+                        PGD.HasMainArm = hasmainhand;
+                        PGD.HasOffHand = hasoffhand;
+                        PGD.legGoneTicks = ((int) vargs[6]);
+                        PGD.currentlegs = (SeperatedLegsEntity) player.level().getEntity(legsent);
+                    }
+
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncPurpleHazePods.value)) {
                     byte pods = (byte) vargs[0];
                     ((IPlayerEntity) player).roundabout$setPurpleHazePods(pods);

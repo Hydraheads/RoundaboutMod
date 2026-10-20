@@ -1367,6 +1367,8 @@ public class Config implements Cloneable {
         @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
         public Integer whitesnakeGuardPoints;
         @BooleanOption(group = "inherit", value = false)
+        public Boolean whitesnakeNameChangingText;
+        @BooleanOption(group = "inherit", value = false)
         public Boolean discStealDealsDamage;
         @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
         public Integer timeSparkCooldown;
