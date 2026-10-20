@@ -220,12 +220,16 @@ public class SeperatedArmEntity extends StandEntity {
 
     @Override
     public void tick() {
+        Roundabout.LOGGER.info("i am being ticked as an entity");
         this.entityData.set(HELD_ITEM,this.getMainHandItem());
         tickeffects();
     }
 
     public void tickeffects() {
-        if (User != null) {
+        if(!this.level().isClientSide()){
+        if (User == null) {
+            removearm();
+        }} if (User != null) {
             if (getMainHandItem().getDamageValue() == getMainHandItem().getMaxDamage() - 1) {
                 Can_activate = false;
                 Can_activate_special = false;
@@ -235,9 +239,7 @@ public class SeperatedArmEntity extends StandEntity {
             LivingEntity user = this.getUser();
             if (!client) {
 
-                if (user == null) {
-                    removearm();
-                } else if ((!(((StandUser) user).roundabout$getStandPowers() instanceof PowersGreenDay)) || (!user.isAlive())) {
+                if ((!(((StandUser) user).roundabout$getStandPowers() instanceof PowersGreenDay)) || (!user.isAlive())) {
                     removearm();
                 } else if (user != null) {
 
@@ -255,6 +257,7 @@ public class SeperatedArmEntity extends StandEntity {
                         }
                     }
                 }
+                Roundabout.LOGGER.info(user.getStringUUID());
                 if (!onGround()) {
                     flyingTicks += 1;
                 } else {

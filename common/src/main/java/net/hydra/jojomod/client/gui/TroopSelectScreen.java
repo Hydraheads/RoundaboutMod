@@ -82,7 +82,7 @@ public class TroopSelectScreen extends Screen {
         int offsetCenter = 20;
         int centerX = this.width / 2-12;
         int centerY = this.height / 2-12;
-        int Yoffset = 0;
+        int Yoffset = -10;
 
         this.slots.add(new SwitchSelect(TROOP, centerX-offsetCenter, centerY-offsetCenter + Yoffset,
                 Component.translatable("roundabout.troop_select.troop")));
@@ -117,10 +117,6 @@ public class TroopSelectScreen extends Screen {
 
     @Override
     public void render(GuiGraphics guiGraphics, int i, int j, float f) {
-        if (this.checkToClose()) {
-            return;
-        }
-
         guiGraphics.pose().pushPose();
         RenderSystem.enableBlend();
         int k = this.width / 2 - 52;
@@ -147,19 +143,6 @@ public class TroopSelectScreen extends Screen {
             SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
             soundmanager.play(SimpleSoundInstance.forUI(ModSounds.BC_UI_SELECT_EVENT, (float) (0.95 + (Math.random() * 0.1F))));
         }
-
-
-    }
-
-    private boolean checkToClose() {
-        /*if (minecraft != null) {
-            if (sameKeyOneX(KeyInputRegistry.abilityOneKey, this.minecraft.options)) {
-                this.switchToHoveredGameMode();
-                this.minecraft.setScreen(null);
-                return true;
-            }
-        }*/
-        return false;
     }
 
     private void switchToHoveredGameMode() {

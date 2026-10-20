@@ -1,8 +1,7 @@
 package net.hydra.jojomod.entity.badCompanyTroops;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.entity.FakeItemEntity;
-import net.hydra.jojomod.entity.goals.badCompanyGoals.returnToLeaderGoal;
+import net.hydra.jojomod.entity.goals.badCompanyGoals.ReturnToLeaderGoal;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -11,7 +10,6 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
@@ -22,27 +20,33 @@ public class BCSoldier extends BCTroop{
 
     private static final EntityDataAccessor<Boolean> BUNDLE = SynchedEntityData.defineId(BCSoldier.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> PARACHUTE_STATUS = SynchedEntityData.defineId(BCSoldier.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Byte> CURRENT_ANIM = SynchedEntityData.defineId(BCSoldier.class, EntityDataSerializers.BYTE);
+
 
     public static final byte
-            WALK = 50;
+            IDLE_GUN = 0,
+            WALK_GUN = 1;
 
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(BUNDLE, false);
         this.entityData.define(PARACHUTE_STATUS, false);
+        this.entityData.define(CURRENT_ANIM, IDLE_GUN);
     }
 
     public void setBundle(boolean value) {
         this.entityData.set(BUNDLE, value);
-
-        /*if (value) {
-            setBoundingBox(EntityDimensions.scalable(height, width*2.8f).makeBoundingBox(position()));
-        }*/
     }
     public boolean getBundle() {
-
         return this.entityData.get(BUNDLE);
+    }
+
+    public void setAnim(byte value) {
+        this.entityData.set(CURRENT_ANIM, value);
+    }
+    public byte getAnim() {
+        return this.entityData.get(CURRENT_ANIM);
     }
 
 
@@ -73,15 +77,15 @@ public class BCSoldier extends BCTroop{
     public void setupAnimationStates() {
         //super.setupAnimationStates();
         if (this.getUser() != null) {
-            byte animation = this.getAnimation();
+            byte animation = this.getAnim();
 
-            if (animation == WALK) {
+            if (animation == WALK_GUN) {
                 walkWithGun.startIfStopped(tickCount);
             }else {
                 walkWithGun.stop();
             }
 
-            if (animation == IDLE) {
+            if (animation == IDLE_GUN) {
                 idleWithGun.startIfStopped(tickCount);
             }else {
                 idleWithGun.stop();
@@ -110,10 +114,11 @@ public class BCSoldier extends BCTroop{
         this.yRotO = yaw;
 
         if (!level().isClientSide) {
-            if (getDeltaMovement().length() > 0.1) {
-                setAnimation(WALK);
+            if (getNavigation().isInProgress()) {
+                Roundabout.LOGGER.info("test");
+                setAnim(WALK_GUN);
             } else {
-                setAnimation(IDLE);
+                setAnim(IDLE_GUN);
             }
         }
     }
@@ -131,7 +136,7 @@ public class BCSoldier extends BCTroop{
     protected void registerGoals() {
         super.registerGoals();
         goalSelector.addGoal(0, new FloatGoal(this));
-        goalSelector.addGoal(1, new returnToLeaderGoal(this, 1));
+        goalSelector.addGoal(1, new ReturnToLeaderGoal(this, 1));
     }
 
 
