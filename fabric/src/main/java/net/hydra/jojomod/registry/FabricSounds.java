@@ -557,10 +557,7 @@ public class FabricSounds {
         addSound(ModSounds.DIVER_DOWN_CHARGE_ID, ModSounds.DIVER_DOWN_CHARGE_EVENT);
         addSound(ModSounds.DIVER_DOWN_DIVE_ID, ModSounds.DIVER_DOWN_DIVE_EVENT);
         addSound(ModSounds.DIVER_DOWN_DIVE2_ID, ModSounds.DIVER_DOWN_DIVE2_EVENT);
-        addSound(ModSounds.DIVER_DOWN_BARRAGE_1_ID, ModSounds.DIVER_DOWN_BARRAGE_1_EVENT);
-        addSound(ModSounds.DIVER_DOWN_BARRAGE_2_ID, ModSounds.DIVER_DOWN_BARRAGE_2_EVENT);
-        addSound(ModSounds.DIVER_DOWN_BARRAGE_3_ID, ModSounds.DIVER_DOWN_BARRAGE_3_EVENT);
-        addSound(ModSounds.DIVER_DOWN_BARRAGE_4_ID, ModSounds.DIVER_DOWN_BARRAGE_4_EVENT);
+        addSound(ModSounds.DIVER_DOWN_BARRAGE_ID, ModSounds.DIVER_DOWN_BARRAGE_EVENT);
         addSound(ModSounds.DIVER_DOWN_GROUND_BARRAGE_ID, ModSounds.DIVER_DOWN_GROUND_BARRAGE_EVENT);
         addSound(ModSounds.DIVER_DOWN_GROUND_DIVE_ID, ModSounds.DIVER_DOWN_GROUND_DIVE_EVENT);
         addSound(ModSounds.DIVER_DOWN_BUBBLING_ID, ModSounds.DIVER_DOWN_BUBBLING_EVENT);

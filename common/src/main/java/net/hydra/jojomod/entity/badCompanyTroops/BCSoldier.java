@@ -47,9 +47,9 @@ public class BCSoldier extends BCTroop{
                 0.4F).add(Attributes.MAX_HEALTH, 4.0).add(Attributes.ATTACK_DAMAGE, 2.0);
     }
 
-    @Override
-    public int getTroopValue(){
-        if (getBundle()) {
+
+    public static int getTroopValue(boolean bundle){
+        if (bundle) {
             return 6;
         }
         return 1;
@@ -83,6 +83,7 @@ public class BCSoldier extends BCTroop{
     public void tick() {
         super.tick();
 
+
         float pitch = this.getXRot();
         float yaw = this.getYRot();
 
@@ -91,6 +92,7 @@ public class BCSoldier extends BCTroop{
         this.setYBodyRot(yaw);
         this.xRotO = pitch;
         this.yRotO = yaw;
+
     }
 
 
@@ -109,7 +111,7 @@ public class BCSoldier extends BCTroop{
     }
 
 
-    public boolean forceVisualRotation(){ return true; }
+    //public boolean forceVisualRotation(){ return true; }
 
     /*
         @Override

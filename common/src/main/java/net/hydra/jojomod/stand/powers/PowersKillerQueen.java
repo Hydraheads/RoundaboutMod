@@ -3067,7 +3067,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                 this.entityTargetBuffer = null;
 
-                if (isBubbleAutoPlantingEnabled()) {
+                if (isBubbleAutoPlantingEnabled() || !(self instanceof Player)) {
                     this.bombBubble = bubble;
                     int entID = this.bombBubble.getId();
                     this.bombBubbleID = entID;
@@ -5212,6 +5212,9 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if (bStatus == ARROW_BOMB) { cooldownAmount += 40; }
                 if (bStatus == ARROW_CONTACT) { cooldownAmount += 200; }
                 if (bStatus == BULLET_CONTACT) { cooldownAmount += 380; }
+                if (bombEntity instanceof BombPlantedArrow || bombEntity instanceof BombPlantedSpectralArrow) {
+                    cooldownAmount = Math.max(100, cooldownAmount - 240);
+                }
 
                 cooldownAmount = (int)(cooldownMultiplier *cooldownAmount);
 

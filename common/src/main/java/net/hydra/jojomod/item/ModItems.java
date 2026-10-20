@@ -261,6 +261,7 @@ public class ModItems {
     public static Item CHAKA_MASK;
     public static Item DAIYA_MASK;
     public static Item DAIYA_2_MASK;
+    public static Item LAEM_MASK;
     public static Item INTERDIMENSIONAL_KEY;
 
     public static Item ANUBIS_ITEM;
