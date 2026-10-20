@@ -8,6 +8,7 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersTusk;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -92,7 +93,7 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
             if (target.hurt(ModDamageTypes.of(this.level(),ModDamageTypes.PENETRATING_STAND,this,this.getUser()),PT.getHoleDamage(target) ) ){
                 this.level().playSound(null,this.blockPosition(),ModSounds.TUSK_HOLE_IMPACT_EVENT,SoundSource.PLAYERS,1F,0.9F+((float) Math.random()*0.2F));
                 if (MainUtil.getMobBleed(target)) {
-                    MainUtil.makeBleed(target,1,180,this.getUser());
+                    MainUtil.makeBleed(target,1,120,this.getUser());
                 }
                 
                 if (!target.isAlive()) {
@@ -146,7 +147,7 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
     @Override
     public void tick() {
         boolean client = this.level().isClientSide();
-        LivingEntity $$0 = this.getUser();
+        LivingEntity user = this.getUser();
         super.tick();
 
         if (this.level().isClientSide()) {
@@ -195,7 +196,7 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
                     }
                 }
 
-                if ($$0 != null && ((StandUser) $$0).roundabout$getStandPowers() instanceof PowersTusk) {
+                if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersTusk) {
                     Vec3 vec3 = this.getDeltaMovement();
                     double x = this.getX() + vec3.x;
                     double y = this.getY();
@@ -285,14 +286,35 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
 
     @Override
     protected void goDownInWater() {}
-
     @Override
     public boolean isPushedByFluid() {
         return false;
     }
+    @Override
+    protected boolean isAffectedByFluids() {return false;}
+    @Override
+    public boolean isNoGravity() {return this.isVortex();}
+    @Override
+    public boolean isControlledByLocalInstance() {
+        LivingEntity user = this.getUser();
+        if (user != null) {
+            Entity ent = ((StandUser)user).roundabout$getStandPowers().getPilotingStand();
+            if (ent != null && ent.is(this)) {
+                return (user instanceof Player $$0 && $$0.isLocalPlayer());
+            }
+        }
+        return super.isControlledByLocalInstance();
+    }
 
     @Override
-    public boolean isNoGravity() {return super.isNoGravity() || this.isVortex();}
+    public void travel(Vec3 vec3) {
+        super.travel(vec3);
+        if (this.isControlledByLocalInstance()) {
+            if (this.getUser() instanceof Player && this.level().isClientSide()) {
+                C2SPacketUtil.updatePilot(this);
+            }
+        }
+    }
 
     private boolean isPiloted() {
         if (this.getUser() instanceof Player P) {
@@ -322,6 +344,11 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
        if (isPiloted() && this.getUser() instanceof Player P) {
            P.getInventory().add($$0.getItem());
        }
+    }
+
+    @Override
+    public boolean onClimbable() {
+        return this.isPiloted() && this.horizontalCollision;
     }
 }
 
