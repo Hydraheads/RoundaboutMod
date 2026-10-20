@@ -213,7 +213,8 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
 		private void drawIcon(GuiGraphics guiGraphics) {
 			int status = getMode(false);
             if (this.context == BLOCK_DESTRUCTION && (!ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction || ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims)) {status = 2;}
-            if (Minecraft.getInstance().player != null && ((StandUser)Minecraft.getInstance().player).roundabout$getStandPowers() instanceof PowersKillerQueen PK && !PK.canUseStrayCat()) {
+            if (Minecraft.getInstance().player != null && ((StandUser)Minecraft.getInstance().player).roundabout$getStandPowers() instanceof PowersKillerQueen PK && !PK.canUseStrayCat()
+            && context == AUTO_BUBBLE_PLANT) {
                 status = 3;
             }
 

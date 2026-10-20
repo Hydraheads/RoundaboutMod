@@ -1032,14 +1032,8 @@ public class ForgeSounds {
             register(ModSounds.DIVER_DOWN_DIVE, ModSounds.DIVER_DOWN_DIVE_ID);
         public static final RegistryObject<SoundEvent> DIVER_DOWN_DIVE2 =
             register(ModSounds.DIVER_DOWN_DIVE2, ModSounds.DIVER_DOWN_DIVE2_ID);
-    public static final RegistryObject<SoundEvent> DIVER_DOWN_BARRAGE_1 =
-            register(ModSounds.DIVER_DOWN_BARRAGE_1, ModSounds.DIVER_DOWN_BARRAGE_1_ID);
-    public static final RegistryObject<SoundEvent> DIVER_DOWN_BARRAGE_2 =
-            register(ModSounds.DIVER_DOWN_BARRAGE_2, ModSounds.DIVER_DOWN_BARRAGE_2_ID);
-    public static final RegistryObject<SoundEvent> DIVER_DOWN_BARRAGE_3 =
-            register(ModSounds.DIVER_DOWN_BARRAGE_3, ModSounds.DIVER_DOWN_BARRAGE_3_ID);
-    public static final RegistryObject<SoundEvent> DIVER_DOWN_BARRAGE_4 =
-            register(ModSounds.DIVER_DOWN_BARRAGE_4, ModSounds.DIVER_DOWN_BARRAGE_4_ID);
+    public static final RegistryObject<SoundEvent> DIVER_DOWN_BARRAGE =
+            register(ModSounds.DIVER_DOWN_BARRAGE, ModSounds.DIVER_DOWN_BARRAGE_ID);
     public static final RegistryObject<SoundEvent> DIVER_DOWN_GROUND_BARRAGE =
             register(ModSounds.DIVER_DOWN_GROUND_BARRAGE, ModSounds.DIVER_DOWN_GROUND_BARRAGE_ID);
     public static final RegistryObject<SoundEvent> DIVER_DOWN_GROUND_DIVE =
@@ -1131,6 +1125,10 @@ public class ForgeSounds {
             register(ModSounds.LYIN_EYES_SUMMON, ModSounds.LYIN_EYES_SUMMON_ID);
     public static final RegistryObject<SoundEvent> VILLAGER_CALLED_OUT =
             register(ModSounds.VILLAGER_CALLED_OUT, ModSounds.VILLAGER_CALLED_OUT_ID);
+    public static final RegistryObject<SoundEvent> LYIN_EYES_VISION =
+            register(ModSounds.LYIN_EYES_VISION, ModSounds.LYIN_EYES_VISION_ID);
+    public static final RegistryObject<SoundEvent> LYIN_EYES_GATHER =
+            register(ModSounds.LYIN_EYES_GATHER, ModSounds.LYIN_EYES_GATHER_ID);
 
     public static final RegistryObject<SoundEvent> SUMMON_GREEN_DAY =
             register(ModSounds.SUMMON_GREEN_DAY, ModSounds.SUMMON_GREEN_DAY_ID);

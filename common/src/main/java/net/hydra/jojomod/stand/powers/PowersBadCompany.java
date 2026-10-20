@@ -11,12 +11,14 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.badCompanyTroops.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -50,13 +52,16 @@ public class PowersBadCompany extends NewDashPreset {
         ANIME_SKIN = 1,
         MANGA_SKIN = 2,
         BETA_SKIN = 3,
+        MARINE_SKIN = 4,
+        SAND_SKIN = 5,
+
+        TROOP_AMOUNT_SYNC = 60,
 
         SOLDIER_SUMMON = 50,
         BUNDLE_SUMMON = 51,
         HELICOPTER_SUMMON = 52,
-        TANK_SUMMON = 53;
-
-    private int totalTroopsOut = 0;
+        TANK_SUMMON = 53,
+        MINE_PLANT = 54;
 
     @Override
     public List<Byte> getSkinList() {
@@ -64,6 +69,8 @@ public class PowersBadCompany extends NewDashPreset {
         list.add(ANIME_SKIN);
         list.add(MANGA_SKIN);
         list.add(BETA_SKIN);
+        list.add(MARINE_SKIN);
+        list.add(SAND_SKIN);
         return list;
     }
 
@@ -74,6 +81,8 @@ public class PowersBadCompany extends NewDashPreset {
             case ANIME_SKIN -> { return Component.translatable("skins.roundabout.bad_company.anime"); }
             case MANGA_SKIN -> { return Component.translatable("skins.roundabout.bad_company.manga"); }
             case BETA_SKIN -> { return Component.translatable("skins.roundabout.bad_company.beta"); }
+            case MARINE_SKIN -> { return Component.translatable("skins.roundabout.bad_company.marine"); }
+            case SAND_SKIN -> { return Component.translatable("skins.roundabout.bad_company.sand"); }
         }
 
         return Component.translatable("skins.roundabout.bad_company.anime");
@@ -83,7 +92,8 @@ public class PowersBadCompany extends NewDashPreset {
         TROOP = 0,
         BUNDLE = 1,
         HELICOPTER = 2,
-        TANK = 3;
+        TANK = 3,
+        MINE = 4;
 
     public BCSoldier getSoldierEntity(boolean bundle) {
         BCSoldier soldier = ModEntities.BAD_COMPANY_SOLDIER.create(self.level());
@@ -171,8 +181,23 @@ public class PowersBadCompany extends NewDashPreset {
         tryIntPowerPacket(PowerIndex.POWER_1, id);
     }
 
+    private int getTroopLimit() { return 12; }
+
+    private boolean detectTroopLimit(int value) {
+        if ((totalTroopsOut + value) > getTroopLimit()){
+            if (self instanceof Player PL) {
+                PL.displayClientMessage(Component.translatable("stand.bad_company.troop_limit").withStyle(ChatFormatting.DARK_GREEN), true);
+            }
+
+            return true;
+        }
+        return false;
+    }
+
     public boolean tryIntPower(int move, boolean forced, int chargeTime){
         if (move == PowerIndex.POWER_1) {
+            syncTotalTroopsOut();
+
             if (chargeTime == TROOP) {
                 spawnSoldier(false);
             }else if (chargeTime == BUNDLE) {
@@ -182,15 +207,27 @@ public class PowersBadCompany extends NewDashPreset {
             }else if (chargeTime == TANK) {
                 playStandUserOnlySoundsIfNearby(TANK_SUMMON, 8, false, false);
             }
+
+            syncTotalTroopsOut();
         }
 
         return super.tryIntPower(move, forced, chargeTime);
     }
 
+    @Override
+    public void updatePowerInt(byte activePower, int data) {
+        switch (activePower) {
+            case TROOP_AMOUNT_SYNC -> {
+                totalTroopsOut = data;
+            }
+        }
+    }
+
     public void spawnSoldier(boolean bundle) {
-        if (isClient()) { return; }
+        if (isClient() || detectTroopLimit(BCSoldier.getTroopValue(bundle))) { return; }
 
         initActiveTroops();
+        syncTotalTroopsOut();
         BCSoldier soldier = getSoldierEntity(bundle);
         if (soldier != null) {
             soldier.setUser(self);
@@ -214,12 +251,41 @@ public class PowersBadCompany extends NewDashPreset {
     public void troopRemoved(BCTroop soldier) {
         initActiveTroops();
         activeTroops.remove(soldier);
+        syncTotalTroopsOut();
     }
 
     public boolean troopOnList(BCTroop soldier) {
         initActiveTroops();
         return activeTroops.contains(soldier);
     }
+
+    private int totalTroopsOut = 0;
+
+    public void syncTotalTroopsOut() {
+        if (!isClient()) {
+            initActiveTroops();
+            int amount = 0;
+            for (BCTroop T : activeTroops) {
+                if (T == null || T.isRemoved()) {
+                    activeTroops.remove(T);
+                    continue;
+                }
+
+                if (T instanceof BCSoldier S) {
+                    amount += BCSoldier.getTroopValue(S.getBundle());
+                }else {
+                    amount += T.getTroopValue();
+                }
+            }
+            if (totalTroopsOut != amount) {
+                totalTroopsOut = amount;
+                if (this.getSelf() instanceof Player) {
+                    S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), TROOP_AMOUNT_SYNC, totalTroopsOut);
+                }
+            }
+        }
+    }
+
     @Override
     public boolean returnFakeStandForHud(){
         if(this.self != null) {
@@ -264,13 +330,13 @@ public class PowersBadCompany extends NewDashPreset {
 
     @Override
     public boolean replaceHudActively() {
-        return true;
+        return ((StandUser)self).roundabout$getActive();
     }
 
     @Override
     public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x,
                                   boolean removeNum) {
-        StandHudRender.renderNumberHUD(context, Minecraft.getInstance(), screenWidth, screenHeight, x, totalTroopsOut, 12, StandIcons.JOJO_ICONS_3, 0, 20, 0x7fd355);
+        StandHudRender.renderNumberHUD(context, Minecraft.getInstance(), screenWidth, screenHeight, x, totalTroopsOut, getTroopLimit(), StandIcons.JOJO_ICONS_3, 0, 20, 0x7fd355);
 
     }
 }

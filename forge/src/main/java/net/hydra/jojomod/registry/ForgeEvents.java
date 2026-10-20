@@ -120,6 +120,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.DIVER_DOWN_WORLD.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.DIVER_DROWNED.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SILVER_CHARIOT.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.SILVER_CHARIOT_PHARAOH.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.OVA_ENYA.get(), OVAEnyaNPC.createAttributes().build());
         event.put(ForgeEntities.ENYA.get(), OVAEnyaNPC.createAttributes().build());
         event.put(ForgeEntities.JOTARO.get(), JotaroNPC.createAttributes().build());
@@ -624,6 +625,7 @@ public class ForgeEvents {
         ModItems.ENYA_MASK = ForgeItems.ENYA_MASK.get();
         ModItems.DAIYA_MASK = ForgeItems.DAIYA_MASK.get();
         ModItems.DAIYA_2_MASK = ForgeItems.DAIYA_2_MASK.get();
+        ModItems.ANASUI_MASK = ForgeItems.ANASUI_MASK.get();
         ModItems.ENYA_OVA_MASK = ForgeItems.ENYA_OVA_MASK.get();
         ModItems.VALENTINE_MASK = ForgeItems.VALENTINE_MASK.get();
         ModItems.JOSUKE_PART_EIGHT_MASK = ForgeItems.JOSUKE_PART_EIGHT_MASK.get();
@@ -883,6 +885,7 @@ public class ForgeEvents {
         ModEntities.DIVER_KICK = ForgeEntities.DIVER_KICK.get();
         ModEntities.BONE_PROJECTILE = ForgeEntities.BONE_PROJECTILE.get();
         ModEntities.SILVER_CHARIOT = ForgeEntities.SILVER_CHARIOT.get();
+        ModEntities.SILVER_CHARIOT_PHARAOH = ForgeEntities.SILVER_CHARIOT_PHARAOH.get();
         ModEntities.SILVER_CHARIOT_RAPIER = ForgeEntities.SILVER_CHARIOT_RAPIER.get();
         ModEntities.SILVER_CHARIOT_RAPIER_PLATFORM = ForgeEntities.SILVER_CHARIOT_RAPIER_PLATFORM.get();
         ModEntities.THROWN_HARPOON = ForgeEntities.THROWN_HARPOON.get();

@@ -4,7 +4,7 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.entity.goals.AvoidLearnedAnnihilatorGoal;
 import net.hydra.jojomod.entity.goals.D4CMeleeAttackGoal;
 import net.hydra.jojomod.entity.visages.CloneEntity;
-import net.hydra.jojomod.item.MaskItem;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -22,7 +22,6 @@ import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
@@ -41,6 +40,22 @@ public class D4CCloneEntity extends CloneEntity {
         ((GroundPathNavigation)this.getNavigation()).setCanPassDoors(true);
     }
 
+    public boolean letsNotAttackOurMasterOrPeers(Entity isMaster){
+        if (safeCopy && PowerTypes.isNativeToOurWorld(this)){
+            if (isMaster != null && getPlayerUUID().isPresent()){
+                if (isMaster.getUUID().equals(getPlayerUUID().get())) {
+                    return true;
+                }
+                if (isMaster instanceof CloneEntity CE && CE.getPlayerUUID().isPresent()){
+                    if (CE.getPlayerUUID().get().equals(getPlayerUUID().get())) {
+                        return true;
+                    }
+                }
+            }
+
+        }
+        return false;
+    }
     protected static final EntityDataAccessor<Integer> STRATEGY = SynchedEntityData.defineId(D4CCloneEntity.class,
             EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Boolean> SPAWNED = SynchedEntityData.defineId(D4CCloneEntity.class,
@@ -78,6 +93,37 @@ public class D4CCloneEntity extends CloneEntity {
     }
 
     @Override
+    public void setTarget(@Nullable LivingEntity $$0) {
+        if (letsNotAttackOurMasterOrPeers($$0)){
+            return;
+        } else {
+            super.setTarget($$0);
+        }
+    }
+    public void setLastHurtByPlayer(@Nullable Player $$0) {
+        if (letsNotAttackOurMasterOrPeers($$0)){
+            return;
+        } else {
+            super.setLastHurtByPlayer($$0);
+        }
+    }
+
+    public void setLastHurtByMob(@Nullable LivingEntity $$0) {
+        if (letsNotAttackOurMasterOrPeers($$0)){
+            return;
+        } else {
+            super.setLastHurtMob($$0);
+        }
+    }
+
+    public void setLastHurtMob(Entity $$0) {
+        if (letsNotAttackOurMasterOrPeers($$0)){
+            return;
+        } else {
+            super.setLastHurtMob($$0);
+        }
+    }
+    @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
 
@@ -93,6 +139,9 @@ public class D4CCloneEntity extends CloneEntity {
 
     private boolean isValidTarget(LivingEntity entity) {
         if (entity == null || entity == this) {
+            return false;
+        }
+        if (letsNotAttackOurMasterOrPeers(entity)){
             return false;
         }
 
@@ -127,6 +176,7 @@ public class D4CCloneEntity extends CloneEntity {
 
 
     public boolean canFocusOnFighting(@Nullable Entity entity) {
+
         if (entity == null) {
             return false;
         }
@@ -163,6 +213,20 @@ public class D4CCloneEntity extends CloneEntity {
         } else {
             if (getSpawned()){
                 ticksSinceSwitch++;
+            }
+            Player pl = getPlayer();
+            if (pl != null){
+                if (letsNotAttackOurMasterOrPeers(pl)){
+                    if (pl.distanceTo(this) < 30){
+                        LivingEntity hurt = pl.getLastHurtMob();
+                        LivingEntity hurtBy = pl.getLastHurtByMob();
+                        if (hurt != null && hurt.isAlive()){
+                            setTarget(hurt);
+                        } else if (hurtBy != null && hurtBy.isAlive()){
+                            setTarget(hurtBy);
+                        }
+                    }
+                }
             }
         }
 

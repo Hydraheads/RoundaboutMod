@@ -679,6 +679,12 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot").toString())
             );
+    public static final RegistryObject<EntityType<SilverChariotEntity>> SILVER_CHARIOT_PHARAOH =
+            ENTITY_TYPES.register("silver_chariot_pharaoh", () ->
+                    EntityType.Builder.of(SilverChariotEntity::new, MobCategory.MISC).sized(0.75f, 2.05f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_pharaoh").toString())
+            );
     public static final RegistryObject<EntityType<SilverChariotRapierShotEntity>> SILVER_CHARIOT_RAPIER =
             ENTITY_TYPES.register("silver_chariot_rapier", () ->
                     EntityType.Builder.<SilverChariotRapierShotEntity>of(SilverChariotRapierShotEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).

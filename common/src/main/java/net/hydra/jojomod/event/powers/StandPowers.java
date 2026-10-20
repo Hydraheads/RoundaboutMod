@@ -1468,7 +1468,7 @@ public class StandPowers extends AbilityScapeBasis {
         }
     }
     public void addEXP(int amt){
-        if (this.getSelf() instanceof Player PE){
+        if (this.getSelf() instanceof Player PE && !PE.level().isClientSide()){
             ItemStack stack = ((StandUser) PE).roundabout$getStandDisc();
             if (!stack.isEmpty() && !(hasGoldenDisc())){
                 IPlayerEntity ipe = ((IPlayerEntity) PE);

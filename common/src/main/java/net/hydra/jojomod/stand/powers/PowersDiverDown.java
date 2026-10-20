@@ -87,6 +87,7 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -856,9 +857,8 @@ public class PowersDiverDown extends NewPunchingStand {
             }
         }
         // block disassembly
-        if (slot == 1 && isHoldingSneak() && !isGuarding()
-                && !areStandMovesDisabled() && canExecuteMoveWithLevel(getBlockDisassemblyLevel())) {
-            if (!canTargetDisassembleBlock()) {
+        if (slot == 1 && isHoldingSneak() && !isGuarding()) {
+            if (!canTargetDisassembleBlock() || !ClientNetworking.getAppropriateConfig().diverDownSettings.disableBlockDisassembly) {
                 return true;
             }
         }
@@ -911,26 +911,11 @@ public class PowersDiverDown extends NewPunchingStand {
         }
     }
 
-    public SoundEvent getBarrageNoise(){
-        SoundEvent barrage;
-        float random = (float) (Math.random()*4);
-        if (random > 3){
-            barrage = ModSounds.DIVER_DOWN_BARRAGE_1_EVENT;
-        } else if (random > 2){
-            barrage = ModSounds.DIVER_DOWN_BARRAGE_2_EVENT;
-        } else if (random > 1){
-            barrage = ModSounds.DIVER_DOWN_BARRAGE_3_EVENT;
-        } else {
-            barrage = ModSounds.DIVER_DOWN_BARRAGE_4_EVENT;
-        }
-        return barrage;
-    }
-
     @Override
     public void playBarrageNoise(int hitNumber, Entity entity) {
         if (!this.self.level().isClientSide()) {
             if (hitNumber % 2 == 0)
-                playSoundIfPossible(self.level(), null, this.self.blockPosition(), getBarrageNoise(), SoundSource.PLAYERS, 0.7F, (float) (0.9 + (Math.random() * 0.25)));
+                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.DIVER_DOWN_BARRAGE_EVENT, SoundSource.PLAYERS, 0.7F, (float) (0.9 + (Math.random() * 0.25)));
         }
     }
 
@@ -4661,6 +4646,9 @@ public class PowersDiverDown extends NewPunchingStand {
         // Unbreakable blocks check (bedrock, end portal frame, etc.)
         if (state.getBlock().defaultDestroyTime() < 0) return false;
 
+        // shulker boxes were too buggy, had to disable them
+        if (state.getBlock() instanceof ShulkerBoxBlock) return false;
+
         // Server config block blacklist check
         if (MainUtil.isBlockDisassemblyBlacklisted(state)) return false;
 
@@ -4758,7 +4746,9 @@ public class PowersDiverDown extends NewPunchingStand {
 
     //checks for a block to disassemble
     private void tryDisassembleBlockClient() {
-        if (canExecuteMoveWithLevel(getBlockDisassemblyLevel()) && !areStandMovesDisabled() && !isDiverMoveActive()) {
+        if (canExecuteMoveWithLevel(getBlockDisassemblyLevel()) && !areStandMovesDisabled()
+                && !isDiverMoveActive()
+                && !ClientNetworking.getAppropriateConfig().diverDownSettings.disableBlockDisassembly) {
             if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
                 Vec3 eyePos = this.self.getEyePosition(0);
                 Vec3 viewVec = this.self.getViewVector(0);
@@ -5269,7 +5259,7 @@ public class PowersDiverDown extends NewPunchingStand {
         } else {
             float ret = (getChargedPercent() * punchD) + 3;
             if (this.chargedPhasePunch >= getMaxPhasePunchTime()) {
-                ret += 2;
+                ret += 4;
             }
             return ret;
         }
