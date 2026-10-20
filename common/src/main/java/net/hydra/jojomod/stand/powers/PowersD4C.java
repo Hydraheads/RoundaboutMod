@@ -8,6 +8,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.*;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.objects.FallingBannerEntity;
@@ -563,16 +564,27 @@ public class PowersD4C extends NewPunchingStand {
     }
     public int rech = 0;
     D4CCloneEntity cloneInReach = null;
+    D4CCloneEntity cloneInStore = null;
     @Override
     public boolean highlightsEntity(Entity ent,Player player){
-        if (cloneInReach != null && ent != null && cloneInReach.getUUID().equals(ent.getUUID())){
-            return true;
+        if (isInSelectionMode) {
+            if (cloneInStore != null && ent != null && cloneInStore.getUUID().equals(ent.getUUID())) {
+                return true;
+            }
+        } else {
+            if (cloneInReach != null && ent != null && cloneInReach.getUUID().equals(ent.getUUID())) {
+                return true;
+            }
         }
         return false;
     }
     @Override
     public int highlightsEntityColor(Entity ent, Player player){
-        return 15151775;
+        if (isInSelectionMode) {
+            return 54527;
+        } else {
+            return 15151775;
+        }
     }
     @Override
     public void tickPower() {
@@ -607,6 +619,26 @@ public class PowersD4C extends NewPunchingStand {
                 }
             } else {
                 cloneInReach = null;
+            }
+
+            if (isInSelectionMode){
+                Entity jentity = getTargetEntity(self,40);
+                if (jentity instanceof D4CCloneEntity d4cclone){
+                    Optional<UUID> uuid = d4cclone.getPlayerUUID();
+                    if (uuid != null && uuid.isPresent()){
+                        if (uuid.get().equals(self.getUUID()) && jentity.isAlive()){
+                            cloneInStore = d4cclone;
+                        } else {
+                            cloneInStore = null;
+                        }
+                    } else {
+                        cloneInStore = null;
+                    }
+                } else {
+                    cloneInStore = null;
+                }
+            } else {
+                cloneInStore = null;
             }
         }
         if (!this.self.level().isClientSide() && self instanceof ServerPlayer sp){
@@ -2045,6 +2077,7 @@ public class PowersD4C extends NewPunchingStand {
         }
         return super.isServerControlledCooldown(num);
     }
+
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
