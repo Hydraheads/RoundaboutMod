@@ -5213,7 +5213,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if (bStatus == ARROW_CONTACT) { cooldownAmount += 200; }
                 if (bStatus == BULLET_CONTACT) { cooldownAmount += 380; }
                 if (bombEntity instanceof BombPlantedArrow || bombEntity instanceof BombPlantedSpectralArrow) {
-                    cooldownAmount = Math.min(100, cooldownAmount - 240);
+                    cooldownAmount = Math.max(100, cooldownAmount - 240);
                 }
 
                 cooldownAmount = (int)(cooldownMultiplier *cooldownAmount);
