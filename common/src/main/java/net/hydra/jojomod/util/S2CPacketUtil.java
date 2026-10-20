@@ -485,6 +485,12 @@ public class S2CPacketUtil {
         );
     }
 
+    public static void sync_GD_arms(int User, int offhandentity, int mainhandentity, int hasoffhand, int hasmainhand, int seperatedLegsEntity, int haslegs) {
+        ModMessageEvents.sendToAll(
+                ServerToClientPackets.S2CPackets.MESSAGES.SyncGdArms.value, User, offhandentity,mainhandentity, hasoffhand, hasmainhand, seperatedLegsEntity
+        );
+    }
+
     public static void sync_mold_duration( int dur, int entity) {
             ModMessageEvents.sendToAll(
                     ServerToClientPackets.S2CPackets.MESSAGES.SyncMoldDuration.value,

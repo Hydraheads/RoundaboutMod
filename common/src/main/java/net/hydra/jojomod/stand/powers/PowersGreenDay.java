@@ -445,9 +445,11 @@ public class PowersGreenDay extends NewPunchingStand {
                 }
                 if(Main_arm == null){
                     HasMainArm = true;
+                    syncArmFromServer();
                 }
                 if(Off_hand_entity == null){
                     HasOffHand = true;
+                    syncArmFromServer();
                 }
             }
         }
@@ -483,44 +485,48 @@ public class PowersGreenDay extends NewPunchingStand {
         }
         if(this.self instanceof Player) {
             if (!this.self.level().isClientSide) {
-                if (HasOffHand) {
-                    LeftArmState = 0;
-                } else {
-                    LeftArmState = 1;
+                // start of sync shenaninaigans
 
-                }
 
-                if (HasMainArm) {
-                    RightArmState = 0;
-                } else {
-                    RightArmState = 1;
-                }
+                // end
+           //     if (HasOffHand) {
+           //         LeftArmState = 0;
+            //    } else {
+            //        LeftArmState = 1;
+
+           //     }
+
+             //   if (HasMainArm) {
+            //        RightArmState = 0;
+             //   } else {
+             //       RightArmState = 1;
+               // }
 
                 this.updatePowerInt(PowerIndex.POWER_1, RightArmState);
                 S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowerIndex.POWER_1, RightArmState);
                 this.updatePowerInt(PowerIndex.POWER_2, LeftArmState);
                 S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowerIndex.POWER_2, LeftArmState);
             }else{
-                if(LeftArmState == 0){
-                    HasOffHand = true;
-                }else{
-                    HasOffHand = false;
-                }
+               // if(LeftArmState == 0){
+               //     HasOffHand = true;
+               // }else{
+               //     HasOffHand = false;
+               // }
 
-                if(RightArmState == 0){
-                    HasMainArm = true;
-                }else{
-                    HasMainArm = false;
-                }
+                //if(RightArmState == 0){
+               //     HasMainArm = true;
+               // }else{
+              //      HasMainArm = false;
+               // }
 
 
             }
         }
         if(!(currentlegs == null)) {
-
             if(!(legGoneTicks>0)) {
                 if (!this.self.level().isClientSide()) {
                     currentlegs.discard();
+                    syncArmFromServer();
                 }
             }else{
                 if (!this.self.level().isClientSide()) {
@@ -545,10 +551,12 @@ public class PowersGreenDay extends NewPunchingStand {
                 }else{
                     if(MainUtil.cheapDistanceTo(this.self.getX(),this.self.getY(),this.self.getZ(),currentlegs.getX(),currentlegs.getY(),currentlegs.getZ())<1.5 && currentlegs.StartupTicks == 0 ) {
                         legGoneTicks = 0;
+                        syncArmFromServer();
                         ((StandUser) this.self).rdbt$SetCrawlTicks(0);
                     }
                 }
             }
+            syncArmFromServer();
         }else{
         }
         if(!hasCheckedAllies) {
@@ -598,6 +606,32 @@ public class PowersGreenDay extends NewPunchingStand {
         MoldGone = true;
         (self.level()).playSound(self,self.getOnPos(),ModSounds.SNAP_EVENT,SoundSource.PLAYERS,1,1);
         return true;
+    }
+
+    public void syncArmFromServer(){
+        int offhandid = 0;
+        if(Off_hand_entity != null){
+            offhandid = Off_hand_entity.getId();
+        }
+        int mainhandid = 0;
+        if(Main_arm != null){
+            mainhandid = Main_arm.getId();
+        }
+        int seplegsid = 0;
+        int leggoneticks = legGoneTicks;
+
+        if(currentlegs != null){
+            seplegsid = currentlegs.getId();
+        }
+        int hasoffhand = 0;
+        if(HasOffHand){
+            hasoffhand = 1;
+        }
+        int hasmainhand = 0;
+        if(HasMainArm){
+            hasmainhand = 1;
+        }
+        S2CPacketUtil.sync_GD_arms(this.self.getId(),offhandid,mainhandid,hasoffhand,hasmainhand,seplegsid,leggoneticks);
     }
 
 
@@ -847,6 +881,7 @@ public class PowersGreenDay extends NewPunchingStand {
 
             //}
         }
+        syncArmFromServer();
         return true;
     }
 
@@ -916,6 +951,7 @@ public class PowersGreenDay extends NewPunchingStand {
                         0, 0, 0, 0, 0);
             }
         }
+        syncArmFromServer();
         return true;
     }
 
@@ -1137,6 +1173,7 @@ public class PowersGreenDay extends NewPunchingStand {
                 Main_arm.jump2(((StandUser) this.self).roundabout$getTargetEntity(this.self, 20).getEyePosition());
             }
         }
+        syncArmFromServer();
         return true;
     }
 
@@ -1205,6 +1242,7 @@ public class PowersGreenDay extends NewPunchingStand {
                         this.getSelf().getZ() + (diameter * Math.cos(i * 4)) * Math.cos(Zangle),
                         0, 0, 0, 0, 0);
             }
+            syncArmFromServer();
         }
         return true;
     }
@@ -1613,17 +1651,17 @@ public class PowersGreenDay extends NewPunchingStand {
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
         super.readAdditionalSaveData($$0);
-        if ($$0.contains("hasmainhand")) {
-            HasMainArm = $$0.getBoolean("hasmainarm");
-        } else {
-            HasMainArm = true;
-        }
+       // if ($$0.contains("hasmainhand")) {
+       //     HasMainArm = $$0.getBoolean("hasmainarm");
+       // } else {
+       //     HasMainArm = true;
+       // }
 
-        if ($$0.contains("hasoffhand")) {
-            HasOffHand = $$0.getBoolean("hasoffhand");
-        } else {
-            HasOffHand = true;
-        }
+       // if ($$0.contains("hasoffhand")) {
+       //     HasOffHand = $$0.getBoolean("hasoffhand");
+       // } else {
+       //     HasOffHand = true;
+       // }
     }
 
     @Override
