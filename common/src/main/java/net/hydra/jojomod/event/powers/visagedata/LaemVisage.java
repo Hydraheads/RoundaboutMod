@@ -32,10 +32,12 @@ public class LaemVisage extends VisageData {
         return true;
     }
     @Override
-    public boolean rendersBreast() {return true;}
+    public boolean rendersLaemBreasts() {return true;}
+    @Override
+    public boolean rendersLaemHolsters() {return true;}
     @Override
     public Vector3f scale(){
-        return new Vector3f(0.9091F, 0.9091F, 0.9091F);
+        return new Vector3f(0.951F, 0.951F, 0.951F);
     }
 
     public String getSkinPath(){

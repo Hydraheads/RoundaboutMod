@@ -60,6 +60,8 @@ public class ModStrayModels {
     public static JohnnyHatPart JohnnyHatPart;
     public static DaiyaEarsPart DaiyaEarsPart;
     public static DaiyaFluffPart DaiyaFluffPart;
+    public static LaemBreastsPart laemBreastsPart;
+    public static LaemHolstersPart laemHolstersPart;
     public static RipperEyesPart ripperEyesPart;
     public static SpeedwagonFoundationHatPart SpeedwagonFoundationHatPart;
     public static BasicHatPart BasicHatPart;

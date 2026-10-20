@@ -312,6 +312,16 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             renderDaiyaEars(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
+                        if (vd.rendersLaemBreasts() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !isHoldingBowlerHat
+                                && !hideExtraPartsWithSuit) {
+                            renderLaemBreasts(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                    r, g, b);
+                        }
+                        if (vd.rendersLaemHolsters() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !isHoldingBowlerHat
+                                && !hideExtraPartsWithSuit) {
+                            renderLaemHolsters(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                    r, g, b);
+                        }
                         if (vd.rendersJohnnyHat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !isHoldingBowlerHat
                                 && !hideExtraPartsWithSuit) {
                             renderJohnnyHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
@@ -920,6 +930,24 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         ModStrayModels.DaiyaEarsPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
         ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderLaemBreasts(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().body.translateAndRotate(poseStack);
+        ModStrayModels.laemBreastsPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderLaemHolsters(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack, 36);
+        getParentModel().body.translateAndRotate(poseStack);
+        ModStrayModels.laemHolstersPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack, 36);
     }
     public void renderJohnnyHat(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
                                float r, float g, float b) {

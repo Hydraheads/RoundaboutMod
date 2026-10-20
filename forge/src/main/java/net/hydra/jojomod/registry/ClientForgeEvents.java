@@ -441,6 +441,8 @@ public class ClientForgeEvents {
         ModStrayModels.kosakuHairPart = new KosakuHairPart();
         ModStrayModels.DaiyaEarsPart = new DaiyaEarsPart();
         ModStrayModels.DaiyaFluffPart = new DaiyaFluffPart();
+        ModStrayModels.laemBreastsPart = new LaemBreastsPart();
+        ModStrayModels.laemHolstersPart = new LaemHolstersPart();
         ModStrayModels.JohngalliaHairPart = new JohngalliaHairPart();
         ModStrayModels.ripperEyesPart = new RipperEyesPart();
         ModStrayModels.SpeedwagonFoundationHatPart = new SpeedwagonFoundationHatPart();
