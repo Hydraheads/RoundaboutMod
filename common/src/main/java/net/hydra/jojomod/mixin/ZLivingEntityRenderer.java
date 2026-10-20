@@ -166,7 +166,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
         // lyin eyes highlighter
         if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof PowersLyinEyes LE
                 && LE.getVisionModeClient() && LE.isActive()) {
-            if (entity.isAlive() && player.distanceToSqr(entity) <= (24.0 * 24.0) && !(entity instanceof StandEntity)) {
+            if (entity != player && entity.isAlive() && player.distanceToSqr(entity) <= (24.0 * 24.0) && !(entity instanceof StandEntity)) {
                 // hostile mobs
                 if (entity instanceof Enemy && !(entity instanceof NeutralMob)) {
                     LyinEyesHighlighterRenderer.render(entity, matrixStack, buffer, 255, 0, 0, 200, 0.7F);
