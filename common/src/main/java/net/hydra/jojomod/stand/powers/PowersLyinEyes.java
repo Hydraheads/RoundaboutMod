@@ -386,9 +386,12 @@ public class PowersLyinEyes extends NewDashPreset {
 
     //skins and poses
 
-    @Override public Component getSkinName(byte skinId) {
+    @Override
+    public Component getSkinName(byte skinId) {
         return Component.translatable("skins.roundabout.lyin_eyes.base");
     }
+
+    @Override
     public Component getPosName(byte posID){
         return switch (posID) {
             case (byte) 1 -> Component.translatable("idle.roundabout.lyin_eyes_2");
@@ -397,6 +400,8 @@ public class PowersLyinEyes extends NewDashPreset {
             default -> Component.translatable("idle.roundabout.lyin_eyes_1");
         };
     }
+    
+    @Override
     public List<Byte> getPosList(){
         List<Byte> $$1 = Lists.newArrayList();
         $$1.add((byte)0);
@@ -422,14 +427,6 @@ public class PowersLyinEyes extends NewDashPreset {
         }
     }
 
-    // basically the stand rejection thing is gonna have the nematodes
-    // cover your entire screen for the duration of the virus. cool
-    @Override
-    public void tickStandRejection(MobEffectInstance effect){
-        if (this.getSelf().level().isClientSide()) {
-            //oops! nematodes all over your screen.
-        }
-    }
     // basic setters and getters here
 
     public int getSummonOverlayTicks() {return summonOverlayTicks;}

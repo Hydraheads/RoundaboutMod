@@ -5121,17 +5121,15 @@ public class PowersDiverDown extends NewPunchingStand {
                 l.add(DiverDownEntity.PINK);
                 l.add(DiverDownEntity.VOLUME_4);
                 l.add(DiverDownEntity.SPINE_ART);
+                l.add(DiverDownEntity.EYECATCH);
             }
             if (Level > 5 || bypass) {
                 l.add(DiverDownEntity.INVERSION);
                 l.add(DiverDownEntity.FIGURE);
-                l.add(DiverDownEntity.EYECATCH);
-            }
-            if (Level > 6 || bypass) {
                 l.add(DiverDownEntity.ARTWORK);
                 l.add(DiverDownEntity.VAN_HALEN);
             }
-            if (Level > 7 || bypass) {
+            if (Level > 6 || bypass) {
                 l.add(DiverDownEntity.WORLD_DIVER);
                 l.add(DiverDownEntity.DIVER_DROWNED);
                 l.add(DiverDownEntity.BETA_DIVER);
