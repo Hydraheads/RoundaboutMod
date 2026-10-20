@@ -4267,6 +4267,8 @@
   "config.roundabout.advancedClearEffect.desc": "Clears effects that normally can't be cleared with milk. False is the default.",
   "config.roundabout.potionStrengthBoost.name": "Potion Strength Increase",
   "config.roundabout.potionStrengthBoost.desc": "How much of an increase the strength of potions embeded using item embed will have. 0 is the default.",
+  "config.roundabout.disableBlockDisassembly.name": "Disable Block Disassembly",
+  "config.roundabout.disableBlockDisassembly.desc": "Should block disassembly be disabled?. false is the default.",
   "config.roundabout.customDiverDownWorkbench.name": "Custom Workbench Textures",
   "config.roundabout.customDiverDownWorkbench.desc": "Enables the custom wokrbench textures.",
   "config.roundabout.forceThirdPersonInGroundDive.name": "Force Third Person in Ground Dive",

@@ -1350,6 +1350,8 @@ public class Config implements Cloneable {
         public Boolean advancedClearEffect;
         @IntOption(group = "inherit", value = 0, min = 0, max = 5)
         public Integer potionStrengthBoost;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean disableBlockDisassembly;
     }
     public static class WhitesnakeSettings {
         @BooleanOption(group = "inherit", value = true)

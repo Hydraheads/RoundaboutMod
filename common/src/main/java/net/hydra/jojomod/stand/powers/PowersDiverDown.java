@@ -857,9 +857,8 @@ public class PowersDiverDown extends NewPunchingStand {
             }
         }
         // block disassembly
-        if (slot == 1 && isHoldingSneak() && !isGuarding()
-                && !areStandMovesDisabled() && canExecuteMoveWithLevel(getBlockDisassemblyLevel())) {
-            if (!canTargetDisassembleBlock()) {
+        if (slot == 1 && isHoldingSneak() && !isGuarding()) {
+            if (!canTargetDisassembleBlock() || !ClientNetworking.getAppropriateConfig().diverDownSettings.disableBlockDisassembly) {
                 return true;
             }
         }
@@ -4747,7 +4746,9 @@ public class PowersDiverDown extends NewPunchingStand {
 
     //checks for a block to disassemble
     private void tryDisassembleBlockClient() {
-        if (canExecuteMoveWithLevel(getBlockDisassemblyLevel()) && !areStandMovesDisabled() && !isDiverMoveActive()) {
+        if (canExecuteMoveWithLevel(getBlockDisassemblyLevel()) && !areStandMovesDisabled()
+                && !isDiverMoveActive()
+                && !ClientNetworking.getAppropriateConfig().diverDownSettings.disableBlockDisassembly) {
             if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
                 Vec3 eyePos = this.self.getEyePosition(0);
                 Vec3 viewVec = this.self.getViewVector(0);
