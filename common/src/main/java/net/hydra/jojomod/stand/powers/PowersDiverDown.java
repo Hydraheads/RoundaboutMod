@@ -5130,8 +5130,6 @@ public class PowersDiverDown extends NewPunchingStand {
                 l.add(DiverDownEntity.VAN_HALEN);
             }
             if (Level > 6 || bypass) {
-                l.add(DiverDownEntity.ARTWORK);
-                l.add(DiverDownEntity.VAN_HALEN);
                 l.add(DiverDownEntity.WORLD_DIVER);
                 l.add(DiverDownEntity.DIVER_DROWNED);
                 l.add(DiverDownEntity.BETA_DIVER);
