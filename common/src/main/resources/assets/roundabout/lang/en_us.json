@@ -4236,7 +4236,7 @@
   "config.roundabout.whitesnakeAttackMultOnMobs.name": "Mob Damage Multiplier",
   "config.roundabout.whitesnakeAttackMultOnMobs.desc": "How much damage the stand deals to every other mob, same math as above.",
   "config.roundabout.whitesnakeNameChangingText.name": "Whitesnake changing name in messages",
-  "config.roundabout.whitesnakeNameChangingText.desc": "When this config is on, sending messages when piloting will change the sender name to Whitesnake or to the disguise that he is currently using.",
+  "config.roundabout.whitesnakeNameChangingText.desc": "When this config is on, when sending messages during pilot the users name will change to whitesnake or the disguise the user is using.",
 
 
   "config.roundabout.creamAttackMultOnPlayers.name": "Player Damage Multiplier",

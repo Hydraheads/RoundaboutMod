@@ -49,10 +49,7 @@ public class returnToLeaderGoal extends Goal {
     }
 
     public void stop() {
-        // this may cause problems
-        if (this.mob.getNavigation().isDone() && mob.haveToReturn) {
-            mob.discard();
-        }
+
     }
 
     public void start() {

@@ -23,6 +23,9 @@ public class BCSoldier extends BCTroop{
     private static final EntityDataAccessor<Boolean> BUNDLE = SynchedEntityData.defineId(BCSoldier.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> PARACHUTE_STATUS = SynchedEntityData.defineId(BCSoldier.class, EntityDataSerializers.BOOLEAN);
 
+    public static final byte
+            WALK = 50;
+
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
@@ -63,14 +66,27 @@ public class BCSoldier extends BCTroop{
     public final AnimationState releaseParachute = new AnimationState();
     public final AnimationState closeParachute = new AnimationState();
     public final AnimationState idleWithGun = new AnimationState();
+    public final AnimationState walkWithGun = new AnimationState();
+    public final AnimationState runWithGun = new AnimationState();
 
     @Override
     public void setupAnimationStates() {
-        super.setupAnimationStates();
+        //super.setupAnimationStates();
         if (this.getUser() != null) {
             byte animation = this.getAnimation();
 
-            idleWithGun.startIfStopped(tickCount);
+            if (animation == WALK) {
+                walkWithGun.startIfStopped(tickCount);
+            }else {
+                walkWithGun.stop();
+            }
+
+            if (animation == IDLE) {
+                idleWithGun.startIfStopped(tickCount);
+            }else {
+                idleWithGun.stop();
+            }
+
             if (!onGround() && !(isInWater() || isInLava()) && !isDisplay) {
                 releaseParachute.startIfStopped(tickCount);
                 closeParachute.stop();
@@ -92,6 +108,14 @@ public class BCSoldier extends BCTroop{
         this.setYBodyRot(yaw);
         this.xRotO = pitch;
         this.yRotO = yaw;
+
+        if (!level().isClientSide) {
+            if (getDeltaMovement().length() > 0.1) {
+                setAnimation(WALK);
+            } else {
+                setAnimation(IDLE);
+            }
+        }
     }
 
 
