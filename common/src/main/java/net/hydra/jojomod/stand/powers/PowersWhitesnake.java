@@ -11,9 +11,11 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.WhitesnakeControlClient;
 import net.hydra.jojomod.client.gui.WhitesnakeInventoryMenu;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.badCompanyTroops.BCSoldier;
 import net.hydra.jojomod.entity.projectile.HallucinatoryAcidProjectile;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
+import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.WhitesnakeEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -206,6 +208,16 @@ public class PowersWhitesnake extends BlockGrabPreset {
     @Override
     public List<Byte> getSkinList() {
         List<Byte> skins = Lists.newArrayList();
+
+        if (isPiloting() || isAutoMode()) {
+            if (getStandEntity(this.getSelf()) instanceof WhitesnakeEntity WSE) {
+                skins.add(WSE.getSkin());
+                return skins;
+            }
+
+            return null;
+        }
+
         skins.add(WhitesnakeEntity.ANIME_SKIN);
         skins.add(WhitesnakeEntity.MANGA_SKIN);
         if (self instanceof Player player) {
@@ -3159,5 +3171,44 @@ public class PowersWhitesnake extends BlockGrabPreset {
                             : isHoldingSneak() ? StandIcons.WHITESNAKE_AUTO_MODE : StandIcons.WHITESNAKE_CONTROL_MODE,
                     isPiloting() && isGuarding() ? PowerIndex.SKILL_4 : PowerIndex.NO_CD);
         }
+    }
+
+    @Override
+    public boolean returnFakeStandForHud(){
+        if(isPiloting()) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public StandEntity getStandForHUDIfFake(){
+        if (displayStand == null){
+            displayStand = getNewStandEntity();
+        }
+        if (this.self instanceof Player PL && ((IPlayerEntity) PL).roundabout$getStandSkin() != displayStand.getSkin()) {
+            displayStand = getNewStandEntity();
+            displayStand.setSkin(((IPlayerEntity) PL).roundabout$getStandSkin());
+        }
+
+        // All of this is code to have the idle animation appear.
+        if (displayStand != null && this.self != null) {
+            StandUser su = (StandUser) this.self;
+            displayStand.setUser(this.self);
+            displayStand.tickCount = this.self.tickCount;
+
+            displayStand.setAnimation(su.roundabout$getStandAnimation());
+            displayStand.setIdleAnimation(su.roundabout$getIdlePos());
+
+            StandEntity realStand = this.getStandEntity(this.self);
+            if (realStand != null) {
+                displayStand.setPose(realStand.getPose());
+                displayStand.setIdleAnimation(realStand.getIdleAnimation());
+            }
+
+            displayStand.setupAnimationStates();
+        }
+
+        return displayStand;
     }
 }
