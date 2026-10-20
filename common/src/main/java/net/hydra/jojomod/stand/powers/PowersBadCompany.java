@@ -130,6 +130,9 @@ public class PowersBadCompany extends NewDashPreset {
             case SKILL_1_NORMAL, SKILL_1_GUARD -> {
                 openTroopSelector();
             }
+            case SKILL_1_CROUCH, SKILL_1_CROUCH_GUARD -> {
+                returnTroops();
+            }
             case SKILL_3_NORMAL, SKILL_3_GUARD, SKILL_3_CROUCH, SKILL_3_CROUCH_GUARD -> {
                 dash();
             }
@@ -177,6 +180,10 @@ public class PowersBadCompany extends NewDashPreset {
         ClientUtil.openTroopSelectionScreen();
     }
 
+    public void returnTroops() {
+        tryPowerPacket(PowerIndex.POWER_1_SNEAK);
+    }
+
     public void selectedTroop(int id) {
         tryIntPowerPacket(PowerIndex.POWER_1, id);
     }
@@ -184,9 +191,16 @@ public class PowersBadCompany extends NewDashPreset {
     private int getTroopLimit() { return 12; }
 
     private boolean detectTroopLimit(int value) {
-        if ((totalTroopsOut + value) > getTroopLimit()){
+        if (totalTroopsOut >= getTroopLimit()){
             if (self instanceof Player PL) {
                 PL.displayClientMessage(Component.translatable("stand.bad_company.troop_limit").withStyle(ChatFormatting.DARK_GREEN), true);
+            }
+
+            return true;
+        }
+        if ((totalTroopsOut + value) > getTroopLimit()){
+            if (self instanceof Player PL) {
+                PL.displayClientMessage(Component.translatable("stand.bad_company.not_enought_space").withStyle(ChatFormatting.DARK_GREEN), true);
             }
 
             return true;
@@ -212,6 +226,15 @@ public class PowersBadCompany extends NewDashPreset {
         }
 
         return super.tryIntPower(move, forced, chargeTime);
+    }
+
+    @Override
+    public boolean setPowerOther(int move, int lastMove) {
+        if (move == PowerIndex.POWER_1_SNEAK) {
+            sendTroopsReturnSignal();
+        }
+
+        return super.setPowerOther(move, lastMove);
     }
 
     @Override
@@ -283,6 +306,13 @@ public class PowersBadCompany extends NewDashPreset {
                     S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), TROOP_AMOUNT_SYNC, totalTroopsOut);
                 }
             }
+        }
+    }
+
+    private void sendTroopsReturnSignal(){
+        initActiveTroops();
+        for (BCTroop T : activeTroops) {
+            T.haveToReturn = true;
         }
     }
 

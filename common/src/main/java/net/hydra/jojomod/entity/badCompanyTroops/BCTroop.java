@@ -19,6 +19,8 @@ public class BCTroop extends MultipleTypeStand {
         return (((StandUser)user).roundabout$getStandPowers() instanceof PowersBadCompany);
     }
 
+    public boolean haveToReturn = false;
+
     @Override
     public boolean hasNoPhysics(){
         return false;
@@ -52,5 +54,12 @@ public class BCTroop extends MultipleTypeStand {
 
     public static int getTroopValue() {
         return 1;
+    }
+
+    public void tick() {
+        super.tick();
+        if (haveToReturn && distanceTo(getUser()) < 1.8) {
+            discard();
+        }
     }
 }
