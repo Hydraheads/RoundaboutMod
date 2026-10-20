@@ -11,6 +11,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.badCompanyTroops.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -182,8 +183,8 @@ public class PowersBadCompany extends NewDashPreset {
 
     private int getTroopLimit() { return 12; }
 
-    private boolean detectTroopLimit() {
-        if (totalTroopsOut >= getTroopLimit()){
+    private boolean detectTroopLimit(int value) {
+        if ((totalTroopsOut + value) > getTroopLimit()){
             if (self instanceof Player PL) {
                 PL.displayClientMessage(Component.translatable("stand.bad_company.troop_limit").withStyle(ChatFormatting.DARK_GREEN), true);
             }
@@ -223,7 +224,7 @@ public class PowersBadCompany extends NewDashPreset {
     }
 
     public void spawnSoldier(boolean bundle) {
-        if (isClient() || detectTroopLimit()) { return; }
+        if (isClient() || detectTroopLimit(BCSoldier.getTroopValue(bundle))) { return; }
 
         initActiveTroops();
         syncTotalTroopsOut();
@@ -269,7 +270,12 @@ public class PowersBadCompany extends NewDashPreset {
                     activeTroops.remove(T);
                     continue;
                 }
-                amount += T.getTroopValue();
+
+                if (T instanceof BCSoldier S) {
+                    amount += BCSoldier.getTroopValue(S.getBundle());
+                }else {
+                    amount += T.getTroopValue();
+                }
             }
             if (totalTroopsOut != amount) {
                 totalTroopsOut = amount;
@@ -324,13 +330,13 @@ public class PowersBadCompany extends NewDashPreset {
 
     @Override
     public boolean replaceHudActively() {
-        return true;
+        return ((StandUser)self).roundabout$getActive();
     }
 
     @Override
     public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x,
                                   boolean removeNum) {
-        StandHudRender.renderNumberHUD(context, Minecraft.getInstance(), screenWidth, screenHeight, x, totalTroopsOut, 12, StandIcons.JOJO_ICONS_3, 0, 20, 0x7fd355);
+        StandHudRender.renderNumberHUD(context, Minecraft.getInstance(), screenWidth, screenHeight, x, totalTroopsOut, getTroopLimit(), StandIcons.JOJO_ICONS_3, 0, 20, 0x7fd355);
 
     }
 }
