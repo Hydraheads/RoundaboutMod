@@ -1196,6 +1196,8 @@ public class Config implements Cloneable {
         public Integer dropMode;
         @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
         public Integer cloneLimit;
+        @FloatOption(group = "inherit", value = 0.05F, min = 0.0F, max = 1.0F)
+        public Float chanceForFatClone;
         @BooleanOption(group = "inherit", value = false)
         public Boolean whiteListModdedMobs;
         @BooleanOption(group = "inherit", value = true)

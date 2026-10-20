@@ -3718,6 +3718,10 @@
   "config.roundabout.cloneLimit.desc": "How many of your parallel selves can exist in a space before leaving home.",
 
 
+  "config.roundabout.chanceForFatClone.name": "Fat Chance",
+  "config.roundabout.chanceForFatClone.desc": "Chance that a clone has more or less weight.",
+
+
   "config.roundabout.chanceToEncounterNewAnimal.name": "Encounter New Animals",
   "config.roundabout.chanceToEncounterNewAnimal.desc": "Small chance of seeing a new animal in a parallel world, from 0-1 (1 being 100 percent chance).",
   "config.roundabout.chanceToEncounterPlayer.name": "Encounter New Players",

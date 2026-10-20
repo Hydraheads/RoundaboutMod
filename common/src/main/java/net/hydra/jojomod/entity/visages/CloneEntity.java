@@ -38,6 +38,10 @@ public class CloneEntity extends PathfinderMob {
             EntityDataSerializers.ITEM_STACK);
     private static final EntityDataAccessor<String> DISGUISE_NAME = SynchedEntityData.defineId(
             CloneEntity.class, EntityDataSerializers.STRING);
+    //This is essential for clone "girth" that you semi-permanently acquire from jumping bodies
+    @Unique
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$WIDTH_FACTOR = SynchedEntityData.defineId(CloneEntity.class,
+            EntityDataSerializers.BYTE);
 
     public boolean isBackingUp = false;
     public boolean isMovingForward = false;
@@ -127,7 +131,15 @@ public class CloneEntity extends PathfinderMob {
             this.entityData.define(PLAYER, Optional.empty());
             this.entityData.define(VISAGE, ItemStack.EMPTY);
             this.entityData.define(DISGUISE_NAME, "Player");
+            this.entityData.define(ROUNDABOUT$WIDTH_FACTOR, (byte)0);
         }
+    }
+
+    public void roundabout$setWidthFactor(byte level){
+        this.getEntityData().set(ROUNDABOUT$WIDTH_FACTOR, level);
+    }
+    public byte roundabout$getWidthFactor(){
+        return this.getEntityData().get(ROUNDABOUT$WIDTH_FACTOR);
     }
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
@@ -137,6 +149,7 @@ public class CloneEntity extends PathfinderMob {
             CompoundTag compoundtag = new CompoundTag();
             tag.put("roundabout.Mask",getVisage().save(compoundtag));
         }
+        tag.putByte("widthFactor",roundabout$getWidthFactor());
 
         getPlayerUUID().ifPresent(uuid -> tag.putUUID("PlayerUUID", uuid));
     }
@@ -151,6 +164,9 @@ public class CloneEntity extends PathfinderMob {
             }
         }
 
+        if (tag.contains("widthFactor")) {
+            roundabout$setWidthFactor(tag.getByte("widthFactor"));
+        }
         if (tag.hasUUID("PlayerUUID")) {
             UUID uuid = tag.getUUID("PlayerUUID");
             setPlayerUUID(uuid);

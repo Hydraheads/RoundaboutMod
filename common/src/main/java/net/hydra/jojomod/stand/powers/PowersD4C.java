@@ -1152,6 +1152,9 @@ public class PowersD4C extends NewPunchingStand {
         ItemStack visage = pl.roundabout$getMaskSlot();
         copy.setVisage(visage);
         copy.setPlayer(original);
+        if (Math.random() < ClientNetworking.getAppropriateConfig().d4cSettings.chanceForFatClone){
+           copy.roundabout$setWidthFactor((byte) (Math.random() * 10 + 1));
+        }
         ((IMob)copy).roundabout$setFate(((IPlayerEntity)original).roundabout$getFate());
         copy.setItemSlot(EquipmentSlot.HEAD, original.getItemBySlot(EquipmentSlot.HEAD).copy());
         copy.setItemSlot(EquipmentSlot.CHEST, original.getItemBySlot(EquipmentSlot.CHEST).copy());
@@ -2585,6 +2588,12 @@ public class PowersD4C extends NewPunchingStand {
                 self.setHealth(swapHealth);
                 self.stopUsingItem();
 
+                if (self instanceof Player pl){
+                    byte ogWidth = ((IPlayerEntity)pl).roundabout$getWidthFactor();
+                    byte swapWidth = cloneInReach.roundabout$getWidthFactor();
+                    ((IPlayerEntity)pl).roundabout$setWidthFactor(swapWidth);
+                    cloneInReach.roundabout$setWidthFactor(ogWidth);
+                }
                 cloneInReach.stopUsingItem();
 
                 Entity mount1 =cloneInReach.getVehicle();
