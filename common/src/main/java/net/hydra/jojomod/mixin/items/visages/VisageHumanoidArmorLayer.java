@@ -10,11 +10,9 @@ import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaskItem;
-import net.hydra.jojomod.stand.powers.PowersOasis;
-import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
-import net.hydra.jojomod.stand.powers.PowersGreenDay;
-import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
+import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.util.config.ConfigManager;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
@@ -59,13 +57,19 @@ public abstract class VisageHumanoidArmorLayer<T extends LivingEntity, M extends
             }
         }
 
+        boolean diverDownShowArmor =
+                // i am not putting all this in the if statement lmao
+                Minecraft.getInstance().player instanceof StandUser user
+                        && user.roundabout$getStandPowers() instanceof PowersDiverDown dd
+                        && dd.shouldShowDisguiseArmor();
+
         if ($$3 instanceof Player PE) {
             if (!((IPlayerEntity)PE).roundabout$getMaskSlot().isEmpty()
                     && ((IPlayerEntity)PE).roundabout$getMaskSlot().getItem() instanceof MaskItem ME
                     && !ME.visageData.generateVisageData(PE).rendersArmor()
-                    && !((StandUser) PE).roundabout$isDisguised() &&
-                    !($$3.isInvisible() && ((IEntityAndData) $$3).roundabout$getTrueInvisibility() <= -1)
-            ){
+                    && (!((StandUser) PE).roundabout$isDisguised() || !diverDownShowArmor)
+                    && !($$3.isInvisible() && ((IEntityAndData) $$3).roundabout$getTrueInvisibility() <= -1)
+            ) {
                 ci.cancel();
                 return;
             }
