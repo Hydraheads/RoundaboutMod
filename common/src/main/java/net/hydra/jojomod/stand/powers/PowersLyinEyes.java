@@ -142,19 +142,19 @@ public class PowersLyinEyes extends NewDashPreset {
     public void powerActivate(PowerContext context) {
         switch (context) {
             // entity highlighter
-            case SKILL_1_NORMAL -> {
+            case SKILL_1_NORMAL, SKILL_1_CROUCH -> {
                 switchVisionClient();
             }
             // minimap
-            case SKILL_2_NORMAL -> {
+            case SKILL_2_NORMAL, SKILL_2_CROUCH -> {
                 tryOpenMap();
             }
             // dash
-            case SKILL_3_NORMAL -> {
+            case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
                 dash();
             }
             // inventory reader
-            case SKILL_4_NORMAL -> {
+            case SKILL_4_NORMAL, SKILL_4_CROUCH -> {
                 tryReadInventory();
             }
         }
@@ -383,6 +383,21 @@ public class PowersLyinEyes extends NewDashPreset {
     }
 
     // sounds end
+
+    //skins and poses
+
+    @Override public Component getSkinName(byte skinId) {
+        return Component.translatable("skins.roundabout.achtung_baby.base");
+    }
+    @Override
+    public Component getPosName(byte posID){
+        return Component.empty();
+    }
+    @Override
+    public List<Byte> getPosList(){
+        List<Byte> $$1 = Lists.newArrayList();
+        return $$1;
+    }
 
     // mob and other stuff AI
 
