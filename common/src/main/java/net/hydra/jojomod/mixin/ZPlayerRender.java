@@ -1529,8 +1529,20 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                     Vector3f scale =vd.scale();
                     $$1.scale(scale.x, scale.y, scale.z);
                 }
-                ci.cancel();
 
+                ci.cancel();
+            }
+        }
+        byte widthMod = ((IPlayerEntity)$$0).roundabout$getWidthFactor();
+        if (widthMod > 0){
+            if (widthMod < 5){
+                float factor = 1f-(0.03F*widthMod);
+                Vector3f scale = new Vector3f(factor,1,factor);
+                $$1.scale(scale.x, scale.y, scale.z);
+            } else {
+                float factor = 1f+(0.07F*(widthMod-4));
+                Vector3f scale = new Vector3f(factor,1,factor);
+                $$1.scale(scale.x, scale.y, scale.z);
             }
         }
     }
