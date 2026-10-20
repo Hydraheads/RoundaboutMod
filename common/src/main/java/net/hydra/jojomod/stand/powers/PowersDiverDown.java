@@ -87,6 +87,7 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -4660,6 +4661,9 @@ public class PowersDiverDown extends NewPunchingStand {
 
         // Unbreakable blocks check (bedrock, end portal frame, etc.)
         if (state.getBlock().defaultDestroyTime() < 0) return false;
+
+        // shulker boxes were too buggy, had to disable them
+        if (state.getBlock() instanceof ShulkerBoxBlock) return false;
 
         // Server config block blacklist check
         if (MainUtil.isBlockDisassemblyBlacklisted(state)) return false;
