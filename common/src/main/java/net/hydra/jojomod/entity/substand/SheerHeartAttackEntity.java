@@ -699,7 +699,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		float range = explosionRadius;
 		float cap = 45;
 		if (warm > cap) {
-			range += Math.min(0.90f * ((warm - cap) / 60), 1.05f);
+			range += Math.min(0.90f * ((warm - cap) / 60), 1.2f);
 		}
 
 		return range;
@@ -711,7 +711,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		StandPowers SP = ((StandUser)this.getUser()).roundabout$getStandPowers();
 		if (!(SP instanceof PowersKillerQueen KQ)) { return; }
 
-		Vec3 pos = this.position().add(this.getForward().scale(0.3));
+		Vec3 pos = this.position().add(this.getForward().scale(0.15));
 		float damage = ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage;
 
 		float range = getRangeByWarm(getEntityWarm(target));
