@@ -1,25 +1,17 @@
 package net.hydra.jojomod.entity.goals.badCompanyGoals;
 
 import net.hydra.jojomod.entity.badCompanyTroops.BCTroop;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.util.DefaultRandomPos;
-import net.minecraft.world.phys.Vec3;
 
-import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-public class returnToLeaderGoal extends Goal {
+public class ReturnToLeaderGoal extends Goal {
 
     private final BCTroop mob;
-    private double wantedX;
-    private double wantedY;
-    private double wantedZ;
     private final double speedModifier;
     //private final float within;
 
-    public returnToLeaderGoal(BCTroop $$0, double $$1) {
+    public ReturnToLeaderGoal(BCTroop $$0, double $$1) {
         this.mob = $$0;
         this.speedModifier = $$1;
         //this.within = $$2;
@@ -36,9 +28,7 @@ public class returnToLeaderGoal extends Goal {
             if ($$0 == null) {
                 return false;
             } else {*/
-                this.wantedX = this.mob.getUser().position().x;
-                this.wantedY = this.mob.getUser().position().y;
-                this.wantedZ = this.mob.getUser().position().z;
+
                 return true;
             //}
         }
@@ -53,6 +43,17 @@ public class returnToLeaderGoal extends Goal {
     }
 
     public void start() {
-        this.mob.getNavigation().moveTo(this.wantedX, this.wantedY, this.wantedZ, this.speedModifier);
+        this.mob.getNavigation().moveTo(mob.getUser(), this.speedModifier);
+    }
+
+    int ticksToRecalculate = 8;
+
+    @Override
+    public void tick(){
+        ticksToRecalculate--;
+        if (ticksToRecalculate < 0) {
+            this.mob.getNavigation().moveTo(mob.getUser(), this.speedModifier);
+            ticksToRecalculate = 5;
+        }
     }
 }
