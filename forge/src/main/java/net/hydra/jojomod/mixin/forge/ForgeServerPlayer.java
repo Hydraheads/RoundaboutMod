@@ -61,9 +61,9 @@ public abstract class ForgeServerPlayer extends Player {
                         ME.setHeldItemManhattan(ItemStack.EMPTY);
                     }
                 }
-                if (((StandUser) this).roundabout$getStandPowers() instanceof PowersDiverDown dd && dd.isSelfDive()) {
-                    dd.emergeServer();
-                }
+            }
+            if (((StandUser) this).roundabout$getStandPowers() instanceof PowersDiverDown dd && dd.isSelfDive()) {
+                dd.emergeServer();
             }
         }
     }
