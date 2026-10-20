@@ -370,6 +370,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                         playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.7F, 1.3F);
                         this.setActivePower(PowerIndex.POWER_2_SNEAK);
                         this.setAttackTimeDuring(0);
+                        stand.setFadePercent(100);
                         poseStand(OffsetIndex.FOLLOW_NOLEAN);
                         if (MainUtil.isThrownBlockItem(IE.getItem().getItem())) {
                             animateStand(StandEntity.BLOCK_GRAB);
