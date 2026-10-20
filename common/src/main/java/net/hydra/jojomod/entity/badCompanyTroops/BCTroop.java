@@ -50,7 +50,7 @@ public class BCTroop extends MultipleTypeStand {
         return userEntity.isAlive() && validatePowers(userEntity);
     }
 
-    public int getTroopValue() {
+    public static int getTroopValue() {
         return 1;
     }
 }
