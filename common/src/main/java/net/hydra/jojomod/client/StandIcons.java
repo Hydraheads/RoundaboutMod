@@ -1119,6 +1119,8 @@ public class StandIcons {
             "textures/gui/icons/lyin_eyes/callout_passive.png");
     public static final ResourceLocation LYIN_EYES_LAYER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/lyin_eyes_layer.png");
+    public static final ResourceLocation LYIN_EYES_LAEM_LAYER = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/entity/lyin_eyes_laem_layer.png");
 
     // lyin eyes icons end
 

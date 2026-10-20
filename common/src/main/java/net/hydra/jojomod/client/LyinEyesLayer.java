@@ -4,9 +4,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IHumanoidModelAccess;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersLyinEyes;
+import net.hydra.jojomod.item.ModItems;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -46,7 +48,10 @@ public class LyinEyesLayer<T extends LivingEntity, M extends HumanoidModel<T>, A
             if (var4 instanceof Player player
                     && ((StandUser) player).roundabout$getStandPowers() instanceof PowersLyinEyes
                     && PowerTypes.hasStandActive(player)) {
-                ResourceLocation rl = StandIcons.LYIN_EYES_LAYER;
+                // checks if the play is using the laem chabang visage
+                ResourceLocation rl = ((IPlayerEntity) player).roundabout$getMaskSlot().is(ModItems.LAEM_MASK)
+                        ? StandIcons.LYIN_EYES_LAEM_LAYER
+                        : StandIcons.LYIN_EYES_LAYER;
                 renderPart(poseStack, multiBufferSource, integ, livingEntityRenderer.getModel(), 1, 1, 1, null,
                         rl);
             }
