@@ -2838,6 +2838,11 @@
   "idle.roundabout.sc_part_3": "Part 3 Pose",
   "idle.roundabout.sc_part_5": "Part 5 Pose",
 
+  "idle.roundabout.lyin_eyes_1": "Face",
+  "idle.roundabout.lyin_eyes_2": "Eyes Top",
+  "idle.roundabout.lyin_eyes_3": "Eyes Middle",
+  "idle.roundabout.lyin_eyes_4": "Eyes Bottom",
+
   "skins.roundabout.bad_company.anime": "Part 4",
   "skins.roundabout.bad_company.manga": "Manga",
   "skins.roundabout.bad_company.beta": "Beta",
@@ -3403,6 +3408,8 @@
   "skins.roundabout.whitesnake.sandsnake": "Sandsnake",
   "skins.roundabout.whitesnake.eoh": "EOH",
   "skins.roundabout.whitesnake.fleshsnake": "Fleshsnake",
+
+  "skins.roundabout.lyin_eyes.base": "Part 9",
 
   "unlock_skin.roundabout.the_world.over_heaven": "The World: Over Heaven Skin Unlocked!",
   "unlock_skin.roundabout.star_platinum.atomic": "Star Platinum: Atomic Skin Unlocked!",

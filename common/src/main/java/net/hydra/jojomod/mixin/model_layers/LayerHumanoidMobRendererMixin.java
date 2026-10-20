@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin.model_layers;
 
 import net.hydra.jojomod.client.FacelessLayer;
+import net.hydra.jojomod.client.LyinEyesLayer;
 import net.hydra.jojomod.client.models.layers.*;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.client.models.layers.visages.VisagePartLayer2;
@@ -28,6 +29,7 @@ public abstract class LayerHumanoidMobRendererMixin<T extends Mob, M extends Hum
         this.addLayer(new VisagePartLayer2<>($$0, this));
         this.addLayer(new DiverLegsLayer<>($$0, this));
         this.addLayer(new DiverArmsLayer<>($$0, this));
+        this.addLayer(new LyinEyesLayer<>($$0, this));
     }
 
     /**Shadows, ignore

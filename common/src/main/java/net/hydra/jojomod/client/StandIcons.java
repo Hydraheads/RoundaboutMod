@@ -1115,14 +1115,10 @@ public class StandIcons {
             "textures/gui/icons/lyin_eyes/tension_sensor_on.png");
     public static final ResourceLocation LYIN_EYES_PASSIVE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/lyin_eyes/callout_passive.png");
-    public static final ResourceLocation LYIN_EYES_LAYER = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/entity/lyin_eyes_layer.png");
     public static final ResourceLocation LYIN_EYES_MAP_ON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/lyin_eyes/nematode_map_on.png");
     public static final ResourceLocation LYIN_EYES_MAP_OFF = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/lyin_eyes/nematode_map_off.png");
-    public static final ResourceLocation LYIN_EYES_LAEM_LAYER = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/entity/lyin_eyes_laem_layer.png");
 
     // lyin eyes icons end
 

@@ -387,15 +387,22 @@ public class PowersLyinEyes extends NewDashPreset {
     //skins and poses
 
     @Override public Component getSkinName(byte skinId) {
-        return Component.translatable("skins.roundabout.achtung_baby.base");
+        return Component.translatable("skins.roundabout.lyin_eyes.base");
     }
-    @Override
     public Component getPosName(byte posID){
-        return Component.empty();
+        return switch (posID) {
+            case (byte) 1 -> Component.translatable("idle.roundabout.lyin_eyes_2");
+            case (byte) 2 -> Component.translatable("idle.roundabout.lyin_eyes_3");
+            case (byte) 3 -> Component.translatable("idle.roundabout.lyin_eyes_4");
+            default -> Component.translatable("idle.roundabout.lyin_eyes_1");
+        };
     }
-    @Override
     public List<Byte> getPosList(){
         List<Byte> $$1 = Lists.newArrayList();
+        $$1.add((byte)0);
+        $$1.add((byte)1);
+        $$1.add((byte)2);
+        $$1.add((byte)3);
         return $$1;
     }
 
