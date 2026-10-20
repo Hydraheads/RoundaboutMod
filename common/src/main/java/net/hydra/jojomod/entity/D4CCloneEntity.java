@@ -1,15 +1,23 @@
 package net.hydra.jojomod.entity;
 
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.goals.AvoidLearnedAnnihilatorGoal;
 import net.hydra.jojomod.entity.goals.D4CMeleeAttackGoal;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.index.PowerTypes;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -18,14 +26,18 @@ import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.UUID;
 
 public class D4CCloneEntity extends CloneEntity {
@@ -90,6 +102,24 @@ public class D4CCloneEntity extends CloneEntity {
                         && canFocusOnFighting(entity)
                 )
         ));
+    }
+
+    public void dropAllItems(){
+
+    }
+    public void peaceOut(){
+        MainUtil.playSoundIfPossible(this,this.level(),null, this.blockPosition(), ModSounds.D4C_CLONE_EVENT,
+                SoundSource.PLAYERS, 0.95F, 1F);
+        Vector3f color = new Vector3f(0.97F, 1F, 0.3F);
+        MainUtil.sendParticlesIfPossible(this,this.level(),
+                new DustParticleOptions(
+                        color,
+                        1.0F
+                ), this.getEyePosition().x,
+                this.getEyePosition().y, this.getEyePosition().z,
+                20, 0.3, 0.3, 0.3, 0.3);
+        dropAllItems();
+        this.discard();
     }
 
     @Override
@@ -204,6 +234,10 @@ public class D4CCloneEntity extends CloneEntity {
     private UUID learnedAnnihilator;
 
     public int ticksSinceSwitch = 0;
+
+    public static int getCloneLimit(){
+        return ClientNetworking.getAppropriateConfig().d4cSettings.cloneLimit;
+    }
     @Override
     public void tick() {
         if (this.level().isClientSide) {
@@ -211,6 +245,22 @@ public class D4CCloneEntity extends CloneEntity {
                 ticksSinceSwitch++;
             }
         } else {
+            if (tickCount % 15 == 0){
+                AABB $$0 = this.getBoundingBox().inflate(40, 40, 40);
+                List<? extends D4CCloneEntity> $$1 = this.level().getNearbyEntities(D4CCloneEntity.class, MainUtil.plsWorkTargetting2, this, $$0);
+                int iterator = 0;
+                for (D4CCloneEntity $$3 : $$1) {
+                    if (getPlayerUUID().isPresent() && $$3.getPlayerUUID().isPresent()) {
+                        if (getPlayerUUID().equals($$3.getPlayerUUID())){
+                            iterator++;
+                        }
+                    }
+                }
+                if (iterator > getCloneLimit() && tickCount > 100){
+                    peaceOut();
+                }
+            }
+
             if (getSpawned()){
                 ticksSinceSwitch++;
             }

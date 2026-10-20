@@ -841,6 +841,8 @@ public class MainUtil {
     public static final TargetingConditions followTargetting = TargetingConditions.forCombat().range(50.0);
     public static final TargetingConditions plsWorkTargetting = TargetingConditions.forCombat().range(20.0)
             .ignoreInvisibilityTesting();
+    public static final TargetingConditions plsWorkTargetting2 = TargetingConditions.forNonCombat().range(40.0)
+            .ignoreInvisibilityTesting().ignoreLineOfSight();
 
     public static double getWorthyOdds(Mob mob) {
         if ((isBossMob(mob)
