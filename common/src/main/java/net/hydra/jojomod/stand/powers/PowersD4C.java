@@ -1148,6 +1148,9 @@ public class PowersD4C extends NewPunchingStand {
         if (original.getUUID().equals(self.getUUID())){
             copy.safeCopy = true;
         }
+        IPlayerEntity pl = ((IPlayerEntity) original);
+        ItemStack visage = pl.roundabout$getMaskSlot();
+        copy.setVisage(visage);
         copy.setPlayer(original);
         ((IMob)copy).roundabout$setFate(((IPlayerEntity)original).roundabout$getFate());
         copy.setItemSlot(EquipmentSlot.HEAD, original.getItemBySlot(EquipmentSlot.HEAD).copy());
