@@ -291,11 +291,20 @@ public abstract class HudRendering implements IHudAccess {
                 // Lyin Eyes stand hud renderer
                 if (((StandUser) this.minecraft.player).roundabout$getStandPowers() instanceof PowersLyinEyes lyinEyes
                         && lyinEyes.getSummonOverlayTicks() != 0) {
-                    // need to stop the thing from reaching 0, so i put an extra math method to clamp it.
-                    int frame = Math.max(1, Math.min(lyinEyes.getSummonOverlayTicks() / 2, 6));
-                    // this copies PH distortion gui formatting since this is also an animation
-                    ResourceLocation texture = new ResourceLocation(Roundabout.MOD_ID,
-                            "textures/misc/lyin_eyes/lyin_eyes_" + frame + ".png");
+                    ResourceLocation texture;
+                    if (lyinEyes.getSummonOverlayTicks() >= 12) {
+                        // idle anim
+                        int idleFrameCount = 4;
+                        int idleFrame = 1 + ((lyinEyes.getIdleOverlayTicks() / 3) % idleFrameCount);
+                        texture = new ResourceLocation(Roundabout.MOD_ID,
+                                "textures/misc/lyin_eyes/idle_f" + idleFrame + ".png");
+                    } else {
+                        // need to stop the thing from reaching 0, so i put an extra math method to clamp it.
+                        int frame = Math.max(1, Math.min(lyinEyes.getSummonOverlayTicks() / 2, 6));
+                        // this copies PH distortion gui formatting since this is also an animation
+                        texture = new ResourceLocation(Roundabout.MOD_ID,
+                                "textures/misc/lyin_eyes/lyin_eyes_" + frame + ".png");
+                    }
                     RenderSystem.enableBlend();
                     this.renderTextureOverlay($$1, texture, 1F);
                 }
@@ -956,8 +965,17 @@ public abstract class HudRendering implements IHudAccess {
     }
 
     public Entity rdbt$tempEnt = null;
-    @Inject(method = "renderCrosshair", at = @At(value = "HEAD"))
+    @Inject(method = "renderCrosshair", at = @At(value = "HEAD"), cancellable = true)
     private void rdbt$renderCrosshairMixin(GuiGraphics $$0, CallbackInfo info) {
+        // updated the mixin to be cancellable so i can hide the crosshair in map mode while it's active
+        // lyin eyes map
+        if (this.minecraft.player != null
+                && ((StandUser) this.minecraft.player).roundabout$getStandPowers() instanceof PowersLyinEyes LE
+                && LE.getMapModeClient()) {
+            LyinEyesMapOverlay.renderMap($$0, this.minecraft.getFrameTime());
+            info.cancel();
+            return;
+        }
         //See ForgeForgeGui
         RenderSystem.defaultBlendFunc();
         StandHudRender.renderAttackHud($$0, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, this.getVehicleMaxHearts(this.getPlayerVehicleWithHealth()), roundabout$flashAlpha, roundabout$otherFlashAlpha);
@@ -1015,10 +1033,6 @@ public abstract class HudRendering implements IHudAccess {
 
     @Inject(method = "renderCrosshair", at = @At(value = "TAIL"))
     private void rdbt$renderCrosshairMixinTail(GuiGraphics $$0, CallbackInfo info) {
-        // lyin eyes map
-        if(((StandUser)this.minecraft.player).roundabout$getStandPowers() instanceof PowersLyinEyes LE && LE.isActive()) {
-            LyinEyesMapOverlay.renderMap($$0, this.minecraft.getFrameTime());
-        }
         //See ForgeForgeGui
         if (rdbt$tempEnt !=null){
             this.minecraft.crosshairPickEntity = rdbt$tempEnt;

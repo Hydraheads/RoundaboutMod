@@ -968,6 +968,11 @@ public class PowersDiverDown extends NewPunchingStand {
     @Override
     public void tickPower() {
         super.tickPower();
+        if (this.self.level().isClientSide()) {
+            if (this.self.tickCount % 2 == 0) {
+                scanAndPopulateClientLimbs();
+            }
+        }
         if (isPiloting() && this.self.level().isClientSide() && isPacketPlayer()) {
             Minecraft mc = Minecraft.getInstance();
             boolean isMoving = mc.options.keyUp.isDown() || mc.options.keyDown.isDown()
@@ -1714,6 +1719,10 @@ public class PowersDiverDown extends NewPunchingStand {
         } else if (activePower == LIMB_RECALL) {
             this.activeLimbs.clear();
             this.currentLimbIndex = 0;
+        } else if (activePower == LIMB_SCAFFOLD) {
+            if (this.self.level().isClientSide) {
+                scanAndPopulateClientLimbs();
+            }
         }
         super.updatePowerInt(activePower, data);
     }
@@ -2383,6 +2392,9 @@ public class PowersDiverDown extends NewPunchingStand {
                     activeLimbs.add(targetPos);
                     // place the block on the servers
                     if (!level.isClientSide) {
+                        if (this.self instanceof ServerPlayer sp) {
+                            S2CPacketUtil.sendIntPowerDataPacket(sp, LIMB_SCAFFOLD, 1);
+                        }
                         level.setBlockAndUpdate(targetPos, state);
                         if (level.getBlockEntity(targetPos) instanceof DiverLimbBlockEntity be) {
                             be.ownerUUID = this.self.getUUID();
@@ -2508,6 +2520,26 @@ public class PowersDiverDown extends NewPunchingStand {
     private void tryRecallLimbs() {
         ((StandUser) this.getSelf()).roundabout$tryPower(LIMB_RECALL, true);
         tryPowerPacket(LIMB_RECALL);
+    }
+
+    // hopefully this fixes server/client desyncs so that the game ALWAYS tracks if you have a limb placed
+    public void scanAndPopulateClientLimbs() {
+        if (this.self == null || this.self.level() == null || !this.self.level().isClientSide) return;
+        this.activeLimbs.clear();
+        BlockPos center = this.self.blockPosition();
+        int radius = 6;
+
+        for (BlockPos pos : BlockPos.betweenClosed(center.offset(-radius, -radius, -radius), center.offset(radius, radius, radius))) {
+            if (this.self.level().getBlockState(pos).is(ModBlocks.DIVER_LIMB)) {
+                if (this.self.level().getBlockEntity(pos) instanceof DiverLimbBlockEntity be) {
+                    if (be.ownerUUID == null || this.self.getUUID().equals(be.ownerUUID)) {
+                        this.activeLimbs.add(pos.immutable());
+                    }
+                } else {
+                    this.activeLimbs.add(pos.immutable());
+                }
+            }
+        }
     }
 
     // Limb scaffold climb move end
