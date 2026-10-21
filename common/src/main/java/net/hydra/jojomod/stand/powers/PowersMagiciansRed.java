@@ -2365,19 +2365,9 @@ public class PowersMagiciansRed extends NewPunchingStand {
         float barrageLength = this.getRangedBarrage2Length();
         float power;
         if (this.getReducedDamage(entity)){
-            power = 10/barrageLength;
+            power = 11/barrageLength;
         } else {
-            power = 16/barrageLength;
-        }
-        /*Barrage hits are incapable of killing their target until the last hit.*/
-        if (entity instanceof LivingEntity){
-            if (power >= ((LivingEntity) entity).getHealth()){
-                if (entity instanceof Player) {
-                    power = 0.00001F;
-                } else {
-                    power = 0F;
-                }
-            }
+            power = 20/barrageLength;
         }
 
 
@@ -2557,7 +2547,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     @Override
     public boolean canInterruptPower(DamageSource sauce, Entity interrupter) {
         if (this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE || this.getActivePower() == PowerIndex.RANGED_BARRAGE_CHARGE_2
-                || this.getActivePower() == PowerIndex.RANGED_BARRAGE || this.getActivePower() == PowerIndex.POWER_4_BONUS) {
+                 || this.getActivePower() == PowerIndex.POWER_4_BONUS) {
             return true;
         } else if (this.getActivePower() == PowerIndex.POWER_1) {
             int cdr = getRedBindMissCooldown();

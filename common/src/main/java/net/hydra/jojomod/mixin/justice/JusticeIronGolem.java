@@ -96,7 +96,7 @@ public abstract class JusticeIronGolem extends AbstractGolem implements NeutralM
     }
     @Inject(method = "canAttackType(Lnet/minecraft/world/entity/EntityType;)Z", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$canAttackTypeG(EntityType<?> $$0, CallbackInfoReturnable<Boolean> cir) {
-        if ($$0.getClass() == ModEntities.ANUBIS_GUARDIAN.getClass()){
+        if ($$0 == ModEntities.ANUBIS_GUARDIAN){
             cir.setReturnValue(false);
         }
     }

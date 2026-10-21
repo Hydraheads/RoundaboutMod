@@ -3362,8 +3362,11 @@
   "roundabout.troop_select.tank": "Tank",
   "roundabout.troop_select.helicopter": "Helicopter",
   "roundabout.troop_select.mine": "Mine",
+
   "stand.bad_company.not_enought_space": "You don't have enought space for that troop!",
   "stand.bad_company.troop_limit": "You have reached army maximum size!",
+
+  "roundabout.bad_company.troop_tactics": "Troop Tactics",
 
   "skins.roundabout.green_day.part_five_green_day": "Part 5",
   "skins.roundabout.green_day.red_day": "Red Day",

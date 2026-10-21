@@ -452,7 +452,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     /**Begin Charging Time Stop, also detects activation via release**/
     public void doTSClient(){
 
-        if (hasBlock() || hasEntity() || TSFORCE)
+        if ((hasBlock() || hasEntity() || TSFORCE) && !(self instanceof Player pl && pl.isCreative()))
             return;
         boolean exTS = canExecuteMoveWithLevel(getTSLevel());
         boolean exImpTS = canExecuteMoveWithLevel(getImpulseTSLevel());
@@ -465,7 +465,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 boolean sendPacket = false;
                 if (this.isStoppingTime()) {
                     KeyInputs.roundaboutClickCount = 2;
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SPECIAL_FINISH, true);
+                    tryPowerPacket(PowerIndex.SPECIAL_FINISH);
                 } else if (this.getActivePower() == PowerIndex.SPECIAL || (this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative() && ClientNetworking.getAppropriateConfig().timeStopSettings.creativeModeInfiniteTimeStop))) {
                     sendPacket = true;
                 } else {
@@ -493,7 +493,11 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
 
                 if (sendPacket) {
-                    TSFORCE = true;
+                    if (self instanceof Player pl && pl.isCreative()){
+                        TSFORCE = false;
+                    } else {
+                        TSFORCE = true;
+                    }
                     tryIntPowerPacket(PowerIndex.SPECIAL_CHARGED,this.getChargedTSTicks());
                 }
             }
