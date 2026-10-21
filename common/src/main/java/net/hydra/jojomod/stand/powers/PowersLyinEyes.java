@@ -42,6 +42,7 @@ public class PowersLyinEyes extends NewDashPreset {
     // stand summoning variable
     private int summonOverlayTicks = 0;
     private int gatherOverlayTicks = 0;
+    private int idleOverlayTicks = 0;
     private boolean isSummon = false;
     private boolean isGather = false;
     private boolean hadInventoryMenuOpen = false;
@@ -107,8 +108,15 @@ public class PowersLyinEyes extends NewDashPreset {
         super.tickPower();
         if (isSummon) {
             summonOverlayTicks = Math.min(summonOverlayTicks + 1, 12);
+            // once summoned, idle anim.
+            if (summonOverlayTicks >= 12) {
+                idleOverlayTicks++;
+            } else {
+                idleOverlayTicks = 0;
+            }
         } else {
             summonOverlayTicks = Math.max(summonOverlayTicks - 1, 0);
+            idleOverlayTicks = 0;
         }
         if (isGather) {
             gatherOverlayTicks = Math.min(gatherOverlayTicks + 1, 7);
@@ -431,6 +439,7 @@ public class PowersLyinEyes extends NewDashPreset {
 
     public int getSummonOverlayTicks() {return summonOverlayTicks;}
     public int getGatherOverlayTicks() {return gatherOverlayTicks;}
+    public int getIdleOverlayTicks() { return idleOverlayTicks; }
     public boolean getVisionModeClient() {return visionModeClient;}
     public boolean isActive() {return hasStandActive(this.self);}
     public boolean getMapModeClient() {return mapModeClient;}
