@@ -45,6 +45,7 @@ public class PowersLyinEyes extends NewDashPreset {
     private int idleOverlayTicks = 0;
     private boolean isSummon = false;
     private boolean isGather = false;
+    private boolean desummonFromMove = false;
     private boolean hadInventoryMenuOpen = false;
     //inventory reading target;
     private Entity inventoryTarget = null;
@@ -78,6 +79,7 @@ public class PowersLyinEyes extends NewDashPreset {
         }
         if (desummon && this.self.level().isClientSide()) {
             isSummon = false;
+            desummonFromMove = false;
         }
         super.onStandSummon(desummon);
     }
@@ -106,6 +108,7 @@ public class PowersLyinEyes extends NewDashPreset {
             }
         }
         super.tickPower();
+
         if (isSummon) {
             summonOverlayTicks = Math.min(summonOverlayTicks + 1, 12);
             // once summoned, idle anim.
@@ -115,7 +118,9 @@ public class PowersLyinEyes extends NewDashPreset {
                 idleOverlayTicks = 0;
             }
         } else {
-            summonOverlayTicks = Math.max(summonOverlayTicks - 1, 0);
+            // if desummoned through a move, update every tick instead of every other tick
+            int decrement = desummonFromMove ? 2 : 1;
+            summonOverlayTicks = Math.max(summonOverlayTicks - decrement, 0);
             idleOverlayTicks = 0;
         }
         if (isGather) {
@@ -227,6 +232,7 @@ public class PowersLyinEyes extends NewDashPreset {
             this.setAttackTimeDuring(0);
             this.setActivePower(READ_INVENTORY);
             isSummon = false;
+            desummonFromMove = true;
             isGather = true;
             gatherOverlayTicks = 1;
             // play sound here
@@ -275,6 +281,7 @@ public class PowersLyinEyes extends NewDashPreset {
             if (!visionModeClient) {
                 visionModeClient = true;
                 isSummon = false;
+                desummonFromMove = true;
                 PE.displayClientMessage(Component.translatable("text.roundabout.lyin_eyes.tension_highlight").withStyle(ChatFormatting.GOLD), true);
             }
             else{
@@ -307,6 +314,7 @@ public class PowersLyinEyes extends NewDashPreset {
             mapModeClient = true;
             isSummon = false;
             mapModeClient = true;
+            desummonFromMove = true;
             gatherOverlayTicks = 1;
             isGather = true;
         }
