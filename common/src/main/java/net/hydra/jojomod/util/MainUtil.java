@@ -1703,6 +1703,10 @@ public class MainUtil {
             Player player, int entityInt,
             double velocityX, double velocityY, double velocityZ) {
         Entity entity = player.level().getEntity(entityInt);
+        StandPowers powers = ((StandUser)player).roundabout$getStandPowers();
+        if (!powers.isPiloting() || entity == null || entity != powers.getPilotingStand()){
+            return;
+        }
         if (entity != null) {
             if (containsInvalidValues(getX, getY, getZ, getYRot, getXRot)
                     || !Double.isFinite(velocityX) || !Double.isFinite(velocityY) || !Double.isFinite(velocityZ)) {
