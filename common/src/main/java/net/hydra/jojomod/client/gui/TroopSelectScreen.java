@@ -82,7 +82,7 @@ public class TroopSelectScreen extends Screen {
         int offsetCenter = 20;
         int centerX = this.width / 2-12;
         int centerY = this.height / 2-12;
-        int Yoffset = -10;
+        int Yoffset = -6;
 
         this.slots.add(new SwitchSelect(TROOP, centerX-offsetCenter, centerY-offsetCenter + Yoffset,
                 Component.translatable("roundabout.troop_select.troop")));

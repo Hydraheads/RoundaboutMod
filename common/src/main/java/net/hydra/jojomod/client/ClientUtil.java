@@ -1740,6 +1740,7 @@ public class ClientUtil {
         Minecraft.getInstance().setScreen(new MemoryReadingScreen(stack, hand));
     }
     public static void openTroopSelectionScreen(){Minecraft.getInstance().setScreen(new TroopSelectScreen());}
+    public static void openTroopTacticsScreen(){Minecraft.getInstance().setScreen(new TroopTacticsScreen());}
 
     //Diver Down UI start
     public static void openWorkbenchSelect() {Minecraft.getInstance().setScreen(new DiverDownWorkbenchSelect());}

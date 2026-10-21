@@ -27,11 +27,15 @@ public class TroopTacticsScreen extends Screen {
             "textures/gui/troop_chooser.png");
 
     private static final int
-            TROOP = 0,
-            BUNDLE = 1,
-            HELICOPTER = 2,
-            TANK = 3,
-            MINE = 4;
+        STOP = 0,
+        ADVANCE = 1,
+        FIRE = 2,
+        HUNT = 3,
+        WARD = 4,
+        TANK = 5,
+        HELICOPTER = 6,
+        MISSILE = 7,
+        SOLDIER = 8;
 
 
 
@@ -58,10 +62,30 @@ public class TroopTacticsScreen extends Screen {
         currentlyHovered = -1;
         lastChangedConfig = -1;
 
-        int offsetCenter = 20;
+        int offsetCenter = 30;
         int centerX = this.width / 2-10;
         int centerY = this.height / 2-10;
 
+        this.slots.add(new SwitchSelect(STOP, centerX, centerY-25,
+                Component.translatable("roundabout.troop_tactics.stop")));
+
+        this.slots.add(new SwitchSelect(ADVANCE, centerX-(offsetCenter*2), centerY-12,
+                Component.translatable("roundabout.troop_tactics.stop")));
+        this.slots.add(new SwitchSelect(FIRE, centerX-offsetCenter, centerY-18,
+                Component.translatable("roundabout.troop_tactics.fire")));
+        this.slots.add(new SwitchSelect(HUNT, centerX-(offsetCenter*2)+15, centerY+18,
+                Component.translatable("roundabout.troop_tactics.hunt")));
+        this.slots.add(new SwitchSelect(WARD, centerX-offsetCenter+15, centerY+12,
+                Component.translatable("roundabout.troop_tactics.ward")));
+
+        this.slots.add(new SwitchSelect(TANK, centerX+(offsetCenter*2), centerY-12,
+                Component.translatable("roundabout.troop_tactics.tank")));
+        this.slots.add(new SwitchSelect(HELICOPTER, centerX+offsetCenter, centerY-18,
+                Component.translatable("roundabout.troop_tactics.helicopter")));
+        this.slots.add(new SwitchSelect(MISSILE, centerX+(offsetCenter*2)-15, centerY+18,
+                Component.translatable("roundabout.troop_tactics.missile")));
+        this.slots.add(new SwitchSelect(SOLDIER, centerX+offsetCenter-15, centerY+12,
+                Component.translatable("roundabout.troop_tactics.soldier")));
 
         /*this.slots.add(new SwitchSelect(TROOP, centerX-offsetCenter, centerY-offsetCenter + Yoffset,
                 Component.translatable("roundabout.troop_select.troop")));
@@ -138,7 +162,7 @@ public class TroopTacticsScreen extends Screen {
                 return;
             }
             if (Minecraft.getInstance().player != null && ((StandUser)Minecraft.getInstance().player).roundabout$getStandPowers() instanceof PowersBadCompany PBC) {
-                PBC.selectedTroop(currentlyHovered);
+                //PBC.selectedTroop(currentlyHovered);
                 lastChangedConfig = currentlyHovered;
             }
         }
@@ -165,6 +189,8 @@ public class TroopTacticsScreen extends Screen {
         protected void renderWidget(GuiGraphics guiGraphics, int i, int i1, float v) {
             renderSlot(guiGraphics);
             renderIcon(guiGraphics);
+            if (isSelected) { renderHover(guiGraphics); }
+            renderNumber(guiGraphics);
         }
 
         public void setSelected(boolean bl) {
@@ -173,11 +199,19 @@ public class TroopTacticsScreen extends Screen {
 
 
         private void renderSlot(GuiGraphics guiGraphics) {
-            guiGraphics.blit(TROOP_CHOOSER_LOCATION, this.getX(), this.getY(), isHoveredOrFocused() ? 96 : 72, 0, 20, 20, 192, 192);
+            guiGraphics.blit(TROOP_CHOOSER_LOCATION, this.getX(), this.getY(), isHoveredOrFocused() ? 92 : 72, 0, 20, 20, 192, 192);
         }
 
         private void renderIcon(GuiGraphics guiGraphics) {
-            guiGraphics.blit(TROOP_CHOOSER_LOCATION, this.getX()+2, this.getY()+2, context*18, 24, 18, 18, 192, 192);
+            guiGraphics.blit(TROOP_CHOOSER_LOCATION, this.getX()+2, this.getY()+2, context*16, 48, 16, 16, 192, 192);
+        }
+
+        private void renderHover(GuiGraphics guiGraphics) {
+            guiGraphics.blit(TROOP_CHOOSER_LOCATION, this.getX()-4, this.getY()-4, 132, 0, 24, 24, 192, 192);
+        }
+
+        private void renderNumber(GuiGraphics guiGraphics) {
+            guiGraphics.blit(TROOP_CHOOSER_LOCATION, this.getX()-2, this.getY()+15, 7*context, 80, 7, 7, 192, 192);
         }
 
         @Override
