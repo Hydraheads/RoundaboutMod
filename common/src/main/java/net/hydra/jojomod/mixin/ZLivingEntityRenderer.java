@@ -14,6 +14,7 @@ import net.hydra.jojomod.client.LyinEyesHighlighterRenderer;
 import net.hydra.jojomod.client.models.layers.BigBubbleLayer;
 import net.hydra.jojomod.client.models.layers.FrozenLayer;
 import net.hydra.jojomod.client.models.stand.renderers.*;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.pathfinding.CommandDiscPossession;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -166,7 +167,9 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
         // lyin eyes highlighter
         if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof PowersLyinEyes LE
                 && LE.getVisionModeClient() && LE.isActive()) {
-            if (entity != player && entity.isAlive() && player.distanceToSqr(entity) <= (24.0 * 24.0) && !(entity instanceof StandEntity)) {
+            if (entity != player && entity.isAlive() && player.distanceToSqr(entity) <= (24.0 * 24.0)
+                    && !(entity instanceof StandEntity)
+                    && !(entity instanceof FallenMob)) {
                 // hostile mobs
                 if (entity instanceof Enemy && !(entity instanceof NeutralMob)) {
                     LyinEyesHighlighterRenderer.render(entity, matrixStack, buffer, 255, 0, 0, 200, 0.7F);

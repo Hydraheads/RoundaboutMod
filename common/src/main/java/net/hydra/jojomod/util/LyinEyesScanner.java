@@ -1,6 +1,7 @@
 package net.hydra.jojomod.util;
 
 import net.hydra.jojomod.client.LyinEyesHighlighterRenderer;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.Entity;
@@ -104,7 +105,7 @@ public class LyinEyesScanner {
 
         List<Entity> entities = level.getEntities(player, scanBox);
         for (Entity entity : entities) {
-            if (!entity.isAlive() || entity instanceof StandEntity) continue;
+            if (!entity.isAlive() || entity instanceof StandEntity || entity instanceof FallenMob) continue;
 
             double yDiff = entity.getY() - player.getY();
             boolean isAbove = yDiff >= 1.0;
