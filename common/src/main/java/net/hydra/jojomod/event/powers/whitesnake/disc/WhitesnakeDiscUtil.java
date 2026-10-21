@@ -7,6 +7,7 @@ import net.hydra.jojomod.event.powers.whitesnake.HallucinationEffect;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersWhitesnake;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.config.Config;
@@ -18,6 +19,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ambient.Bat;
+import net.minecraft.world.entity.animal.Cow;
 import net.minecraft.world.entity.animal.Dolphin;
 import net.minecraft.world.entity.animal.sniffer.Sniffer;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -158,6 +160,10 @@ public final class WhitesnakeDiscUtil {
 
     private static ItemStack extractStand(LivingEntity target, boolean storeOwner) {
         StandUser standUser = (StandUser) target;
+        if (target instanceof Cow && standUser.roundabout$getStandPowers() instanceof PowersAnubis) {
+            return ItemStack.EMPTY;
+        }
+
         ItemStack current = standUser.roundabout$getStandDisc();
         if (current.isEmpty()) return ItemStack.EMPTY;
         ItemStack stack = MainUtil.saveToDiscData(target, current.copy());
