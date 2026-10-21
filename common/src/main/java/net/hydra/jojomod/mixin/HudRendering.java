@@ -965,8 +965,17 @@ public abstract class HudRendering implements IHudAccess {
     }
 
     public Entity rdbt$tempEnt = null;
-    @Inject(method = "renderCrosshair", at = @At(value = "HEAD"))
+    @Inject(method = "renderCrosshair", at = @At(value = "HEAD"), cancellable = true)
     private void rdbt$renderCrosshairMixin(GuiGraphics $$0, CallbackInfo info) {
+        // updated the mixin to be cancellable so i can hide the crosshair in map mode while it's active
+        // lyin eyes map
+        if (this.minecraft.player != null
+                && ((StandUser) this.minecraft.player).roundabout$getStandPowers() instanceof PowersLyinEyes LE
+                && LE.getMapModeClient()) {
+            LyinEyesMapOverlay.renderMap($$0, this.minecraft.getFrameTime());
+            info.cancel();
+            return;
+        }
         //See ForgeForgeGui
         RenderSystem.defaultBlendFunc();
         StandHudRender.renderAttackHud($$0, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, this.getVehicleMaxHearts(this.getPlayerVehicleWithHealth()), roundabout$flashAlpha, roundabout$otherFlashAlpha);
@@ -1024,10 +1033,6 @@ public abstract class HudRendering implements IHudAccess {
 
     @Inject(method = "renderCrosshair", at = @At(value = "TAIL"))
     private void rdbt$renderCrosshairMixinTail(GuiGraphics $$0, CallbackInfo info) {
-        // lyin eyes map
-        if(((StandUser)this.minecraft.player).roundabout$getStandPowers() instanceof PowersLyinEyes LE && LE.isActive()) {
-            LyinEyesMapOverlay.renderMap($$0, this.minecraft.getFrameTime());
-        }
         //See ForgeForgeGui
         if (rdbt$tempEnt !=null){
             this.minecraft.crosshairPickEntity = rdbt$tempEnt;
