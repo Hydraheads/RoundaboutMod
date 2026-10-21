@@ -152,7 +152,7 @@ public class TroopTacticsScreen extends Screen {
         final Component name;
 
         public SwitchSelect(int context, int xoff, int yoff, Component name) {
-            super(xoff, yoff, 24, 24, name);
+            super(xoff, yoff, 20, 20, name);
             this.context = context;
             this.xoff = xoff;
             this.yoff = yoff;
@@ -173,11 +173,11 @@ public class TroopTacticsScreen extends Screen {
 
 
         private void renderSlot(GuiGraphics guiGraphics) {
-            guiGraphics.blit(TROOP_CHOOSER_LOCATION, this.getX(), this.getY(), isHoveredOrFocused() ? 24 : 0, 0, 24, 24, 192, 192);
+            guiGraphics.blit(TROOP_CHOOSER_LOCATION, this.getX(), this.getY(), isHoveredOrFocused() ? 96 : 72, 0, 20, 20, 192, 192);
         }
 
         private void renderIcon(GuiGraphics guiGraphics) {
-            guiGraphics.blit(TROOP_CHOOSER_LOCATION, this.getX()+3, this.getY()+3, context*18, 24, 18, 18, 192, 192);
+            guiGraphics.blit(TROOP_CHOOSER_LOCATION, this.getX()+2, this.getY()+2, context*18, 24, 18, 18, 192, 192);
         }
 
         @Override

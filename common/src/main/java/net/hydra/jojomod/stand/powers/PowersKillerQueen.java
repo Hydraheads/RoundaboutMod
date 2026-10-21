@@ -2978,7 +2978,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (this.isContactModeEnabled() || this.detonateTimer > -1) {
             if (this.detonateTimer == -1) {
                 detonate();
-                //this.explode();
+
             }
         }
     }
@@ -4046,7 +4046,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             }else if (this.currentBombStatus == BOMB_ENTITY || this.currentBombStatus == ARROW_BOMB) {
                 if(Objects.nonNull(this.getBombEntity()) && activePower != PowerIndex.POWER_2 && !(bombEntity instanceof BombPlantedEnderpearl)) {
                     if (!(
-                            this.getBombEntity() instanceof AbstractArrow A && !A.onGround()
+                            this.getBombEntity() instanceof AbstractArrow A && !A.onGround() || getBombEntity() instanceof KnifeEntity KE && !KE.onGround()
                     )) {
                         Entity contact = detectContact(this.bombEntity, 0.1);
                         if (contact != null) {
