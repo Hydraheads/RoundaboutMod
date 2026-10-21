@@ -133,6 +133,9 @@ public class PowersBadCompany extends NewDashPreset {
             case SKILL_1_CROUCH, SKILL_1_CROUCH_GUARD -> {
                 returnTroops();
             }
+            case SKILL_2_NORMAL, SKILL_2_GUARD, SKILL_2_CROUCH, SKILL_2_CROUCH_GUARD -> {
+                openTroopTactics();
+            }
             case SKILL_3_NORMAL, SKILL_3_GUARD, SKILL_3_CROUCH, SKILL_3_CROUCH_GUARD -> {
                 dash();
             }
@@ -178,6 +181,9 @@ public class PowersBadCompany extends NewDashPreset {
 
     private void openTroopSelector() {
         ClientUtil.openTroopSelectionScreen();
+    }
+    private void openTroopTactics() {
+        ClientUtil.openTroopTacticsScreen();
     }
 
     public void returnTroops() {

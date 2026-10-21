@@ -251,9 +251,9 @@ public abstract class ConfigManager {
                 }
             }
         }
-        if (getAdvancedConfig().sheerHeartAttackCustomEntityHeatV2 != null)
+        if (getAdvancedConfig().sheerHeartAttackCustomEntityHeatV3 != null)
         {
-            for (String entry : getAdvancedConfig().sheerHeartAttackCustomEntityHeatV2) {
+            for (String entry : getAdvancedConfig().sheerHeartAttackCustomEntityHeatV3) {
                 try {
                     String[] split = entry.split(":");
 

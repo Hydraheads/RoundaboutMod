@@ -371,10 +371,10 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:colored_fire_cream:80"
             )
     );
-    public Set<String> sheerHeartAttackCustomEntityHeatV2 = new HashSet<>(
+    public Set<String> sheerHeartAttackCustomEntityHeatV3 = new HashSet<>(
             Arrays.asList(
                     "minecraft:blaze:90",
-                    "minecraft:magna_cube:70",
+                    "minecraft:magma_cube:100",
                     "minecraft:slime:0",
                     "minecraft:stray:-50",
                     "minecraft:wither_skeleton:20",
