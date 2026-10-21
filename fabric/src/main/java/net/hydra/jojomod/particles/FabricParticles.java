@@ -41,6 +41,7 @@ public class FabricParticles {
     public static final SimpleParticleType VAMPIRE_AURA = FabricParticleTypes.simple();
     public static final SimpleParticleType MENACING = FabricParticleTypes.simple();
     public static final SimpleParticleType VACUUM = FabricParticleTypes.simple();
+    public static final SimpleParticleType FLASH = FabricParticleTypes.simple();
     public static final SimpleParticleType ZAP = FabricParticleTypes.simple();
     public static final SimpleParticleType ORANGE_FLAME = FabricParticleTypes.simple();
     public static final SimpleParticleType BLUE_FLAME = FabricParticleTypes.simple();
@@ -168,6 +169,7 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("heartbeat"), HEARTBEAT);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("menacing"), MENACING);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("vacuum"), VACUUM);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("flash"), FLASH);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("zap"), ZAP);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("fog_chain"), FOG_CHAIN);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("bubble_trail"), BUBBLE_TRAIL);
@@ -270,6 +272,7 @@ public class FabricParticles {
         ModParticles.GOLD_PUNCH_IMPACT_C = GOLD_PUNCH_IMPACT_C;
         ModParticles.PUNCH_MISS = PUNCH_MISS;
         ModParticles.VACUUM = VACUUM;
+        ModParticles.FLASH = FLASH;
         ModParticles.STAR = STAR;
         ModParticles.HEART_ATTACK_MINI = HEART_ATTACK_MINI;
         ModParticles.ENERGY_DISTORTION = ENERGY_DISTORTION;

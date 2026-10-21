@@ -19,6 +19,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -130,5 +131,10 @@ public class FirearmItem extends Item {
                 Component.literal("Ammo: " + ammo + " / " + getMaxAmmo())
                         .withStyle(ChatFormatting.GRAY)
         );
+    }
+
+    // call this in the fireBullet method, look at existing firearms for how.
+    protected void spawnMuzzleFlash(ServerLevel level, Vec3 position) {
+        level.sendParticles(ModParticles.FLASH, position.x, position.y, position.z, 0, 255, 210, 17, 1.0);
     }
 }

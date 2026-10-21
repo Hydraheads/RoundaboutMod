@@ -60,6 +60,10 @@ public class ForgeParticles {
             "vacuum",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> FLASH = PARTICLES.register(
+            "flash",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> ORANGE_FLAME = PARTICLES.register(
             "orange_flame",
             () -> new SimpleParticleType(true)

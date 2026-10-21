@@ -398,7 +398,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
         // for getting the trail
         if (this.level().isClientSide()) {
             if (!this.inGround && !this.isRemoved()) {
-                this.trailPoints.add(this.position());
+                this.trailPoints.add(this.position().add(0, 0.1, 0));
                 if (this.trailPoints.size() > MAX_TRAIL_POINTS) {
                     this.trailPoints.remove(0);
                 }

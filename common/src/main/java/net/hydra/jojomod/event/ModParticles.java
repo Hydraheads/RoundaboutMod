@@ -19,6 +19,7 @@ public class ModParticles {
     public static SimpleParticleType HEARTBEAT;
     public static SimpleParticleType MENACING;
     public static SimpleParticleType VACUUM;
+    public static SimpleParticleType FLASH;
     public static SimpleParticleType STAR;
     public static SimpleParticleType HEART_ATTACK_MINI;
     public static SimpleParticleType ENERGY_DISTORTION;

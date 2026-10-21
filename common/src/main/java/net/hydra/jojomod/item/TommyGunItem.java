@@ -142,8 +142,8 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
                     sideOffset -= sideOffset * 2;
                 }
 
-                Vec3 pos = player.getEyePosition().add(look.scale(forwardOffset)).add(right.scale(sideOffset)).add(0, verticalOffset, 0);
-                serverLevel.sendParticles(ParticleTypes.SMOKE, pos.x, pos.y, pos.z, 1, 0.0D, 0.0D, 0.0D, 0.0D);
+                Vec3 pos = player.getEyePosition().add(look.scale(forwardOffset)).add(0, verticalOffset, 0);
+                spawnMuzzleFlash(serverLevel, pos);
             }
             if (livingEntity != null && ((StandUser) livingEntity).roundabout$isBubbleEncased()) {
                 StandUser SE = ((StandUser) livingEntity);
