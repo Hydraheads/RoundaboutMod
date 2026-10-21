@@ -63,6 +63,7 @@ public class TroopTacticsScreen extends Screen {
         lastChangedConfig = -1;
 
         int offsetCenter = 30;
+        int offsetY = 10;
         int centerX = this.width / 2-10;
         int centerY = this.height / 2-10;
 
@@ -73,31 +74,20 @@ public class TroopTacticsScreen extends Screen {
                 Component.translatable("roundabout.troop_tactics.stop")));
         this.slots.add(new SwitchSelect(FIRE, centerX-offsetCenter, centerY-18,
                 Component.translatable("roundabout.troop_tactics.fire")));
-        this.slots.add(new SwitchSelect(HUNT, centerX-(offsetCenter*2)+15, centerY+18,
+        this.slots.add(new SwitchSelect(HUNT, centerX-(offsetCenter*2)+offsetY, centerY+16,
                 Component.translatable("roundabout.troop_tactics.hunt")));
-        this.slots.add(new SwitchSelect(WARD, centerX-offsetCenter+15, centerY+12,
+        this.slots.add(new SwitchSelect(WARD, centerX-offsetCenter+offsetY, centerY+10,
                 Component.translatable("roundabout.troop_tactics.ward")));
 
         this.slots.add(new SwitchSelect(TANK, centerX+(offsetCenter*2), centerY-12,
                 Component.translatable("roundabout.troop_tactics.tank")));
         this.slots.add(new SwitchSelect(HELICOPTER, centerX+offsetCenter, centerY-18,
                 Component.translatable("roundabout.troop_tactics.helicopter")));
-        this.slots.add(new SwitchSelect(MISSILE, centerX+(offsetCenter*2)-15, centerY+18,
+        this.slots.add(new SwitchSelect(MISSILE, centerX+(offsetCenter*2)-offsetY, centerY+16,
                 Component.translatable("roundabout.troop_tactics.missile")));
-        this.slots.add(new SwitchSelect(SOLDIER, centerX+offsetCenter-15, centerY+12,
+        this.slots.add(new SwitchSelect(SOLDIER, centerX+offsetCenter-offsetY, centerY+10,
                 Component.translatable("roundabout.troop_tactics.soldier")));
 
-        /*this.slots.add(new SwitchSelect(TROOP, centerX-offsetCenter, centerY-offsetCenter + Yoffset,
-                Component.translatable("roundabout.troop_select.troop")));
-        this.slots.add(new SwitchSelect(BUNDLE, centerX+offsetCenter, centerY-offsetCenter + Yoffset,
-                Component.translatable("roundabout.troop_select.bundle")));
-        this.slots.add(new SwitchSelect(HELICOPTER, centerX-offsetCenter-12, centerY+offsetCenter + Yoffset-6,
-                Component.translatable("roundabout.troop_select.helicopter")));
-        this.slots.add(new SwitchSelect(TANK, centerX+offsetCenter+12, centerY+offsetCenter + Yoffset-6,
-                Component.translatable("roundabout.troop_select.tank")));
-        this.slots.add(new SwitchSelect(MINE, centerX, centerY+offsetCenter + Yoffset+12,
-                Component.translatable("roundabout.troop_select.mine")));
-        */
     }
 
 
@@ -128,7 +118,7 @@ public class TroopTacticsScreen extends Screen {
         guiGraphics.pose().popPose();
         super.render(guiGraphics, i, j, f);
 
-        Component str = Component.translatable("roundabout.bad_company.troop_select");
+        Component str = Component.translatable("roundabout.bad_company.troop_tactics");
 
         guiGraphics.drawCenteredString(this.font, str , this.width / 2, l, -1);
 
@@ -150,11 +140,6 @@ public class TroopTacticsScreen extends Screen {
 
     }
 
-
-
-    private void switchToHoveredGameMode() {
-        selectCurrentHoveredTroop(true);
-    }
 
     private void selectCurrentHoveredTroop(boolean safeSelect) {
         if (currentlyHovered != -1) {
@@ -236,7 +221,7 @@ public class TroopTacticsScreen extends Screen {
 
     @Override
     public boolean keyReleased(int $$0, int $$1, int $$2) {
-        if (this.minecraft != null && !roundabout$sameKeyOne(KeyInputRegistry.abilityOneKey)) {
+        if (this.minecraft != null && !roundabout$sameKeyOne(KeyInputRegistry.abilityTwoKey)) {
             this.exitTroopSelect();
 
             this.minecraft.options.keyUse.setDown(false);
