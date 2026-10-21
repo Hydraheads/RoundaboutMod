@@ -447,11 +447,12 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     }
 
 
+    public boolean TSFORCE = false;
 
     /**Begin Charging Time Stop, also detects activation via release**/
     public void doTSClient(){
 
-        if (hasBlock() || hasEntity())
+        if (hasBlock() || hasEntity() || TSFORCE)
             return;
         boolean exTS = canExecuteMoveWithLevel(getTSLevel());
         boolean exImpTS = canExecuteMoveWithLevel(getImpulseTSLevel());
@@ -472,6 +473,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                     if (isHoldingSneak() || (!exTS &&
                             exImpTS)) {
                         if (exImpTS) {
+
+
                             this.setChargedTSTicks(ClientNetworking.getAppropriateConfig().timeStopSettings.impulseTimeStopLength);
                             this.setMaxChargeTSTime(ClientNetworking.getAppropriateConfig().timeStopSettings.impulseTimeStopLength);
                             sendPacket = true;
@@ -490,6 +493,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
 
                 if (sendPacket) {
+                    TSFORCE = true;
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SPECIAL_CHARGED, true);
                     tryIntPowerPacket(PowerIndex.SPECIAL_CHARGED,this.getChargedTSTicks());
                 }
@@ -623,6 +627,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     public boolean resumeTime(){
         return resumeTime(this.self.level());
     }
+
+
     public boolean resumeTime(Level level) {
         /*Time Resume*/
         if (!level.isClientSide()) {
@@ -1296,6 +1302,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                     this.setChargedTSTicks(chargeTime);
                 }
                 super.tryIntPower(move, forced, chargeTime);
+                if (self instanceof ServerPlayer sp){
+                    S2CPacketUtil.sendSimpleByteToClientPacket(sp,PacketDataIndex.DONT_SPAM_TIME_STOP);
+                }
             } else if (move == PowerIndex.SPECIAL_FINISH) {
                 /*If the server is behind on the client TS time, update it to lower*/
             }else if (move == PowerIndex.SNEAK_ATTACK) {

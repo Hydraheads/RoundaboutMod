@@ -42,6 +42,7 @@ import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.presets.TWAndSPSharedPowers;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.minecraft.client.gui.Font;
@@ -2205,6 +2206,10 @@ public class ClientUtil {
             }
         } else if (context == PacketDataIndex.BITES_THE_DUST_COMBAT){
             bitesTheDustTicker = 0;
+        } else if (context == PacketDataIndex.DONT_SPAM_TIME_STOP){
+            if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof TWAndSPSharedPowers TW) {
+                TW.TSFORCE = false;
+            }
         } else if (context == PacketDataIndex.S2C_SOFT){
             if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
                 PW.setGoBeyondChargeTicks(PW.goBeyondChargeTicks+PW.getGoBeyondUseTicks2());
