@@ -447,11 +447,12 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     }
 
 
+    public boolean TSFORCE = false;
 
     /**Begin Charging Time Stop, also detects activation via release**/
     public void doTSClient(){
 
-        if (hasBlock() || hasEntity())
+        if (hasBlock() || hasEntity() || TSFORCE)
             return;
         boolean exTS = canExecuteMoveWithLevel(getTSLevel());
         boolean exImpTS = canExecuteMoveWithLevel(getImpulseTSLevel());
@@ -472,6 +473,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                     if (isHoldingSneak() || (!exTS &&
                             exImpTS)) {
                         if (exImpTS) {
+
+
                             this.setChargedTSTicks(ClientNetworking.getAppropriateConfig().timeStopSettings.impulseTimeStopLength);
                             this.setMaxChargeTSTime(ClientNetworking.getAppropriateConfig().timeStopSettings.impulseTimeStopLength);
                             sendPacket = true;
@@ -490,6 +493,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
 
                 if (sendPacket) {
+                    TSFORCE = true;
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SPECIAL_CHARGED, true);
                     tryIntPowerPacket(PowerIndex.SPECIAL_CHARGED,this.getChargedTSTicks());
                 }
@@ -623,6 +627,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     public boolean resumeTime(){
         return resumeTime(this.self.level());
     }
+
+
     public boolean resumeTime(Level level) {
         /*Time Resume*/
         if (!level.isClientSide()) {
@@ -652,9 +658,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
                 int sendTSCooldown = Math.round(tsTimeRemaining);
                 if (!(this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative() && ClientNetworking.getAppropriateConfig().timeStopSettings.creativeModeInfiniteTimeStop))) {
-                    if (this.getSelf() instanceof Player) {
-                        S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_4, sendTSCooldown);
-                    }
+
                     this.setCooldown(PowerIndex.SKILL_4, sendTSCooldown);
                 }
 
@@ -688,7 +692,12 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     }
     @Override
     public boolean setPowerSpecial(int lastMove) {
-
+        if (isStoppingTime()){
+            return false;
+        }
+        if (this.onCooldown(PowerIndex.SKILL_4)){
+            return false;
+        }
         this.setMaxChargeTSTime(this.getMaxTSTime());
         this.setAttackTimeDuring(0);
         this.setChargedTSTicks(20);
@@ -725,10 +734,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
         // leaping puts timestop on a cooldown
         applyLeapCooldowns();
-        int leapCd = ConfigManager.getConfig().timeStopSettings.timestopLeapCooldown;
-        if (leapCd != 0) {
-            this.setCooldown(PowerIndex.SKILL_4, leapCd);
-        }
 
         this.setAttackTimeDuring(-1);
         this.setActivePower(PowerIndex.NONE);
@@ -738,6 +743,10 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             cancelConsumableItem(this.getSelf());
         }
         if (!this.getSelf().level().isClientSide()) {
+            int leapCd = ConfigManager.getConfig().timeStopSettings.timestopLeapCooldown;
+            if (leapCd != 0) {
+                this.setCooldown(PowerIndex.SKILL_4, leapCd);
+            }
             if (Math.random() > 0.5){
                 addEXP(1);
             }
@@ -1223,9 +1232,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             } else {
                 cdr = ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopInterruptedCooldownMobs;
             }
-            if (this.getSelf() instanceof Player) {
-                S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_4, cdr);
-            }
             this.setCooldown(PowerIndex.SKILL_4, cdr);
             return true;
         } else if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
@@ -1293,9 +1299,16 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             if (move == PowerIndex.SPECIAL_CHARGED) {
                 if (this.getSelf().level().isClientSide() ||
                         !((TimeStop) this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
-                    this.setChargedTSTicks(chargeTime);
+                    if (!isStoppingTime()) {
+                        this.setChargedTSTicks(chargeTime);
+                    }
                 }
-                super.tryIntPower(move, forced, chargeTime);
+                if (!isStoppingTime()) {
+                    super.tryIntPower(move, forced, chargeTime);
+                }
+                if (self instanceof ServerPlayer sp){
+                    S2CPacketUtil.sendSimpleByteToClientPacket(sp,PacketDataIndex.DONT_SPAM_TIME_STOP);
+                }
             } else if (move == PowerIndex.SPECIAL_FINISH) {
                 /*If the server is behind on the client TS time, update it to lower*/
             }else if (move == PowerIndex.SNEAK_ATTACK) {
@@ -1480,11 +1493,12 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (!(this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative() && ClientNetworking.getAppropriateConfig().timeStopSettings.creativeModeInfiniteTimeStop))) {
             if (this.getSelf() instanceof Player) {
                 if (!isClient()) {
-                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_4, sendTSCooldown);
                     S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
                 }
             }
-            this.setCooldown(PowerIndex.SKILL_4, sendTSCooldown);
+            if (!self.level().isClientSide()) {
+                this.setCooldown(PowerIndex.SKILL_4, sendTSCooldown);
+            }
             this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
         }
     }
@@ -1599,6 +1613,14 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
     }
 
+    @Override
+    public boolean isServerControlledCooldown(byte num){
+        if (num == PowerIndex.SKILL_4) {
+            return true;
+        }
+        return super.isServerControlledCooldown(num);
+    }
+
     public void setMaxChargeTSTime(int chargedTSTicks){
         this.maxChargeTSTime = chargedTSTicks;
     }
@@ -1619,6 +1641,12 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     }
     public boolean stopTime() {
         /*Time Stop*/
+        if (this.onCooldown(PowerIndex.SKILL_4)){
+            return false;
+        }
+        if (isStoppingTime()){
+            return false;
+        }
         if (this.getActivePower() == PowerIndex.SPECIAL || (this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative() && ClientNetworking.getAppropriateConfig().timeStopSettings.creativeModeInfiniteTimeStop)) ||
                 this.getChargedTSTicks() <= ClientNetworking.getAppropriateConfig().timeStopSettings.impulseTimeStopLength) {
             if (!this.getSelf().level().isClientSide()) {
@@ -1649,6 +1677,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                         S2CPacketUtil.sendIntPowerDataPacket(((ServerPlayer) this.getSelf()), PowerIndex.SPECIAL, maxChargeTSTime);
                     }
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                    setCooldown(PowerIndex.POWER_4,5);
                     /**
                      if (animate){
                      animateStand((byte) 31);
@@ -2078,7 +2107,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     @Override
     public boolean setPowerGuard() {
         if (this.getIsTsCharging()) {
-            this.setCooldown(PowerIndex.SKILL_4,ConfigManager.getConfig().timeStopSettings.timeStopInterruptedCooldownMobs);
+            if (!self.level().isClientSide()){
+                this.setCooldown(PowerIndex.SKILL_4,ConfigManager.getConfig().timeStopSettings.timeStopInterruptedCooldownMobs);
+            }
         }
         return super.setPowerGuard();
     }
@@ -2086,7 +2117,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     @Override
     public void onStandSummon(boolean desummon) {
         if (desummon && this.getIsTsCharging() ) {
-            this.setCooldown(PowerIndex.SKILL_4,ConfigManager.getConfig().timeStopSettings.timeStopInterruptedCooldownMobs);
+            if (!self.level().isClientSide()) {
+                this.setCooldown(PowerIndex.SKILL_4, ConfigManager.getConfig().timeStopSettings.timeStopInterruptedCooldownMobs);
+            }
         }
         super.onStandSummon(desummon);
     }
