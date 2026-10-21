@@ -1872,9 +1872,9 @@ public class PowersDiverDown extends NewPunchingStand {
             basis *= 0.3f;
         }
         if (inZipMode()) {
-            //enchantment thing copied and adjusted from above
+            // I FREAKING HATE math
             float sneakSpeed = Mth.clamp(0.3F + EnchantmentHelper.getSneakingSpeedBonus(this.getSelf()), 0.0F, 1.0F);
-            float enchantmentMultiplier = sneakSpeed / 0.3F;
+            float enchantmentMultiplier = 0.3F / sneakSpeed;
 
             if (isHoldingSneak()) {
                 basis *= 3.32F;
