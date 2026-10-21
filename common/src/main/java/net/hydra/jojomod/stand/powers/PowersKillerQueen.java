@@ -238,8 +238,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     public void onStandSummon(boolean desummon) {
         super.onStandSummon(desummon);
         if (desummon && !isClient()) {
-            if (this.getActivePower() == PowerIndex.POWER_2_BLOCK
-                    && !(this.bombBubble != null && this.bombBubble.isAlive())) {
+            if (!(this.bombBubble != null && this.bombBubble.isAlive())) {
                 this.stopSoundsIfNearby(AIRBUBBLE, 100, false);
             }
         }
