@@ -100,11 +100,12 @@ public class LyinEyesMapOverlay {
                     int targetDrawX = (target.type == LyinEyesScanner.TargetType.CONTAINER) ? drawX + 3 : drawX;
                     int targetDrawY = (target.type == LyinEyesScanner.TargetType.CONTAINER) ? drawY + 3 : drawY;
 
+                    // first is the container drawing, next is the entity drawing
                     if (target.type == LyinEyesScanner.TargetType.CONTAINER) {
-                        guiGraphics.blit(MAP_ICONS, targetDrawX, targetDrawY, 7, 7, CHEST_U, CHEST_V, TEX_HIGHLIGHTER_ICON_SIZE, TEX_HIGHLIGHTER_ICON_SIZE, 256, 256);
+                        guiGraphics.blit(MAP_ICONS, targetDrawX, targetDrawY, 9, 9, CHEST_U, CHEST_V, TEX_HIGHLIGHTER_ICON_SIZE, TEX_HIGHLIGHTER_ICON_SIZE, 256, 256);
                     } else {
                         // neutral base drawing
-                        guiGraphics.blit(MAP_ICONS, targetDrawX, targetDrawY, 7, 7, BASE_MOB_U, BASE_MOB_V, TEX_HIGHLIGHTER_ICON_SIZE, TEX_HIGHLIGHTER_ICON_SIZE, 256, 256);
+                        guiGraphics.blit(MAP_ICONS, targetDrawX, targetDrawY, 9, 9, BASE_MOB_U, BASE_MOB_V, TEX_HIGHLIGHTER_ICON_SIZE, TEX_HIGHLIGHTER_ICON_SIZE, 256, 256);
 
                         // outline thing
                         int outlineU;
@@ -125,14 +126,14 @@ public class LyinEyesMapOverlay {
                         }
 
                         // put the outline over the normal thing
-                        guiGraphics.blit(MAP_ICONS, targetDrawX, targetDrawY, 7, 7, outlineU, outlineV, TEX_HIGHLIGHTER_ICON_SIZE, TEX_HIGHLIGHTER_ICON_SIZE, 256, 256);
+                        guiGraphics.blit(MAP_ICONS, targetDrawX, targetDrawY, 9, 9, outlineU, outlineV, TEX_HIGHLIGHTER_ICON_SIZE, TEX_HIGHLIGHTER_ICON_SIZE, 256, 256);
                     }
 
                     // draw the + or -
                     if (target.isAbove) {
-                        guiGraphics.blit(MAP_ICONS, targetDrawX + 1, targetDrawY + 1, 5, 5, PLUS_U, PLUS_V, 5, 5, 256, 256);
+                        guiGraphics.blit(MAP_ICONS, targetDrawX + 1, targetDrawY + 1, 7, 7, PLUS_U, PLUS_V, 5, 5, 256, 256);
                     } else if (target.isBelow) {
-                        guiGraphics.blit(MAP_ICONS, targetDrawX + 1, targetDrawY + 1, 5, 5, MINUS_U, MINUS_V, 5, 5, 256, 256);
+                        guiGraphics.blit(MAP_ICONS, targetDrawX + 1, targetDrawY + 1, 7, 7, MINUS_U, MINUS_V, 5, 5, 256, 256);
                     }
                 }
 
