@@ -105,7 +105,7 @@ public class LyinEyesScanner {
 
         List<Entity> entities = level.getEntities(player, scanBox);
         for (Entity entity : entities) {
-            if (!entity.isAlive() || entity instanceof StandEntity || entity instanceof FallenMob) continue;
+            if (!entity.isAlive() || entity instanceof StandEntity || entity instanceof FallenMob || !(entity instanceof LivingEntity)) continue;
 
             double yDiff = entity.getY() - player.getY();
             boolean isAbove = yDiff >= 1.0;
