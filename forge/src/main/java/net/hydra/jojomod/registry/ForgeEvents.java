@@ -691,6 +691,7 @@ public class ForgeEvents {
         ModParticles.HEARTBEAT = ForgeParticles.HEARTBEAT.get();
         ModParticles.MENACING = ForgeParticles.MENACING.get();
         ModParticles.VACUUM = ForgeParticles.VACUUM.get();
+        ModParticles.FLASH = ForgeParticles.FLASH.get();
         ModParticles.ORANGE_FLAME = ForgeParticles.ORANGE_FLAME.get();
         ModParticles.BLUE_FLAME = ForgeParticles.BLUE_FLAME.get();
         ModParticles.PURPLE_FLAME = ForgeParticles.PURPLE_FLAME.get();

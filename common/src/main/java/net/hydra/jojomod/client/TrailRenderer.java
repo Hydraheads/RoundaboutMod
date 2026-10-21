@@ -34,8 +34,8 @@ public class TrailRenderer {
         // yellow trail for bullets. to use the color selector, just put in your rgb values and divide by 255
         public static final Settings BULLETS = new Settings(
                 16.0f, 0.03f, 0.12f,
-                new Vector3f(243 / 255f, 226 / 255f, 0), new Vector3f(1, 1, 195 / 255f),
-                0.5f, 0.5f
+                new Vector3f(1, 173/255f, 13/255f), new Vector3f(255/255f, 210/255f, 17 / 255f),
+                0.4f, 0.7f
         );
     }
 
