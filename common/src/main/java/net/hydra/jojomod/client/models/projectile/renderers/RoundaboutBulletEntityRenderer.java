@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.TrailRenderer;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.projectile.RattDartModel;
 import net.hydra.jojomod.client.models.projectile.RoundaboutBulletModel;
@@ -19,6 +20,9 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
+
+import java.util.List;
 
 public class RoundaboutBulletEntityRenderer extends EntityRenderer<RoundaboutBulletEntity> {
     private final RoundaboutBulletModel model;
@@ -33,6 +37,7 @@ public class RoundaboutBulletEntityRenderer extends EntityRenderer<RoundaboutBul
         return ModEntities.ROUNDABOUT_BULLET_ENTITY_TEXTURE;
     }
 
+    @Override
     public void render(RoundaboutBulletEntity $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5) {
         if (!ClientUtil.getScreenFreeze()) {
             if (((Entity)$$0).tickCount < 2 && this.entityRenderDispatcher.camera.getEntity().distanceToSqr((Entity)$$0) < 12.25 && !((TimeStop) $$0.level()).inTimeStopRange($$0)) {
@@ -45,6 +50,25 @@ public class RoundaboutBulletEntityRenderer extends EntityRenderer<RoundaboutBul
             VertexConsumer $$6 = ItemRenderer.getFoilBufferDirect($$4, this.model.renderType(this.getTextureLocation($$0)), false, false);
             this.model.renderToBuffer($$3, $$6, $$5, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
             $$3.popPose();
+
+            // for rendering the bullet trail
+            Vec3 anchor = $$0.getPosition($$2);
+            List<Vec3> points = $$0.getTrailPoints();
+
+            if (points != null && points.size() >= 2) {
+                $$3.pushPose();
+                TrailRenderer.drawTrailRaw(
+                        anchor,
+                        points,
+                        $$3.last(),
+                        $$5,
+                        $$2,
+                        TrailRenderer.Settings.BULLETS,
+                        $$4
+                );
+                $$3.popPose();
+            }
+
             super.render($$0, $$1, $$2, $$3, $$4, $$5);
         }
     }

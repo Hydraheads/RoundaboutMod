@@ -39,7 +39,14 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RoundaboutBulletEntity extends AbstractArrow {
+
+    private final List<Vec3> trailPoints = new ArrayList<>();
+    // trail length
+    private static final int MAX_TRAIL_POINTS = 16;
 
     public RoundaboutBulletEntity(EntityType<? extends RoundaboutBulletEntity> type, Level level) {
         super(type, level);
@@ -50,6 +57,10 @@ public class RoundaboutBulletEntity extends AbstractArrow {
     }
     public RoundaboutBulletEntity(Level $$0, LivingEntity $$1, ItemStack $$2, double p_36862_, double p_36863_, double p_36864_) {
         super(ModEntities.ROUNDABOUT_BULLET_ENTITY, p_36862_, p_36863_, p_36864_, $$0);
+    }
+
+    public List<Vec3> getTrailPoints() {
+        return this.trailPoints;
     }
 
     @Override
@@ -384,11 +395,15 @@ public class RoundaboutBulletEntity extends AbstractArrow {
             this.setDeltaMovement(delta);
         }
 
-        if (!level().isClientSide && !this.inGround) {
-            boolean isFlying = getDeltaMovement().lengthSqr() > 1;
-
-            if (isFlying) {
-                ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(0.2F, 0.2F, 0.2F), 1f), this.getX(), this.getY(), this.getZ(), 0, 0, 0, 0, 0);
+        // for getting the trail
+        if (this.level().isClientSide()) {
+            if (!this.inGround && !this.isRemoved()) {
+                this.trailPoints.add(this.position());
+                if (this.trailPoints.size() > MAX_TRAIL_POINTS) {
+                    this.trailPoints.remove(0);
+                }
+            } else if (this.inGround) {
+                this.trailPoints.clear();
             }
         }
     }
