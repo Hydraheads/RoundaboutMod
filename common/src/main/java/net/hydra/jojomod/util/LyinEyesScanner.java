@@ -52,7 +52,8 @@ public class LyinEyesScanner {
     }
 
     public static BlockCategory[][] scanFeetLevel(Player player, Level level, int radius) {
-        BlockPos center = player.blockPosition();
+        //need to account for things like path blocks or whatever tf.
+        BlockPos center = BlockPos.containing(player.getX(), player.getY() + 0.2, player.getZ());
 
         // extra 1 because of the player position
         int size = (radius * 2) + 1;
