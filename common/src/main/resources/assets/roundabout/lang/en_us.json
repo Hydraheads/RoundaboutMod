@@ -53,6 +53,7 @@
   "text.roundabout.bullets.revolver": "Compatible with Snubnosed Revolvers and Colt Revolvers.",
   "text.roundabout.bullets.tommy": "Compatible with Tommy Guns.",
   "text.roundabout.bullets.sniper": "Compatible with Sniper Rifles.",
+  "text.roundabout.bullets.pistol": "Compatible with Beretta.",
 
   "text.roundabout.stray_cat.anime": "Anime Color",
   "text.roundabout.stray_cat.manga": "Manga Color",
@@ -347,6 +348,9 @@
 
   "item.roundabout.jackal_rifle": "Sniper Rifle",
   "item.roundabout.sniper_ammo": "Rifle Ammunition",
+
+  "item.roundabout.beretta_pistol": "Beretta Pistol",
+  "item.roundabout.pistol_ammo": "Pistol Cartridge",
 
   "item.roundabout.light_bulb": "Light Bulb",
 
@@ -5088,6 +5092,9 @@
 
   "config.roundabout.coltDamage.name": "Colt Damage",
   "config.roundabout.coltDamage.desc": "Before being multiplied by the above, the base colt damage.",
+
+  "config.roundabout.berettaDamage.name": "Beretta Damage",
+  "config.roundabout.berettaDamage.desc": "Before being multiplied by the above, the base beretta damage.",
 
   "config.roundabout.tommyGunDamage.name": "Tommy Gun Damage",
   "config.roundabout.tommyGunDamage.desc": "Before being multiplied by the above, the base tommy gun damage.",

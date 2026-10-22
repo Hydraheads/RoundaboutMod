@@ -161,6 +161,9 @@ public abstract class RegisterItemRenderer implements IItemRenderer {
         } if (stack.is(ModItems.JACKAL_RIFLE) && renderMode != ItemDisplayContext.GUI && renderMode != ItemDisplayContext.GROUND) {
             return this.itemModelShaper.getModelManager().
                     getModel(ModItemModels.JACKAL_RIFLE_IN_HAND);
+        } if (stack.is(ModItems.BERETTA_PISTOL) && renderMode != ItemDisplayContext.GUI && renderMode != ItemDisplayContext.GROUND) {
+            return this.itemModelShaper.getModelManager().
+                    getModel(ModItemModels.BERETTA_PISTOL_IN_HAND);
         } if (stack.is(ModItems.STREET_SIGN_DIO_BLOCK_ITEM) && renderMode != ItemDisplayContext.GUI) {
 
             CompoundTag ct = stack.getOrCreateTagElement("BlockStateTag");
