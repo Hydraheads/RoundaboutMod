@@ -97,7 +97,9 @@ public class PowersBadCompany extends NewDashPreset {
         BUNDLE = 1,
         HELICOPTER = 2,
         TANK = 3,
-        MINE = 4;
+        MINE = 4,
+
+        STOP = 0;
 
     public BCSoldier getSoldierEntity(boolean bundle) {
         BCSoldier soldier = ModEntities.BAD_COMPANY_SOLDIER.create(self.level());
@@ -198,6 +200,10 @@ public class PowersBadCompany extends NewDashPreset {
         tryIntPowerPacket(PowerIndex.POWER_1, id);
     }
 
+    public void selectedTactics(int id) {
+        tryIntPowerPacket(PowerIndex.POWER_2, id);
+    }
+
     private int getTroopLimit() { return 12; }
 
     private boolean detectTroopLimit(int value) {
@@ -241,6 +247,9 @@ public class PowersBadCompany extends NewDashPreset {
 
             return true;
         }
+        if (self instanceof Player PL) {
+            PL.displayClientMessage(Component.translatable("stand.bad_company.total_troops.soldier", (activeSoldiers + (bundle ? 6 : 1)), getMaxSoldier()).withStyle(ChatFormatting.GREEN), true);
+        }
         return false;
     }
 
@@ -259,6 +268,10 @@ public class PowersBadCompany extends NewDashPreset {
             }
 
             syncTotalTroopsOut();
+        }else if (move == PowerIndex.POWER_2) {
+            if (chargeTime == STOP) {
+                sendTroopsStopSignal();
+            }
         }
 
         return super.tryIntPower(move, forced, chargeTime);
@@ -348,6 +361,15 @@ public class PowersBadCompany extends NewDashPreset {
         initActiveTroops();
         for (BCTroop T : activeTroops) {
             T.haveToReturn = true;
+        }
+    }
+
+    private void sendTroopsStopSignal(){
+        initActiveTroops();
+        for (BCTroop T : activeTroops) {
+            T.haveToReturn = false;
+            T.setTarget(null);
+            T.getNavigation().stop();
         }
     }
 

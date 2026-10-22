@@ -5,6 +5,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersBadCompany;
 import net.hydra.jojomod.stand.powers.PowersSurvivor;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -58,8 +59,12 @@ public class BCTroop extends MultipleTypeStand {
 
     public void tick() {
         super.tick();
-        if (haveToReturn && distanceTo(getUser()) < 1.8) {
+        if (haveToReturn && distanceTo(getUser()) < 1.8
+                || (MainUtil.cheapDistanceTo2(this.getX(), this.getZ(), getUser().getX(), getUser().getZ())
+                > getMaximumRange())) {
             discard();
         }
     }
+
+    public int getMaximumRange() { return 25; }
 }

@@ -7,6 +7,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.*;
 
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -52,11 +53,11 @@ public class BCSoldier extends BCTroop{
 
     public static AttributeSupplier.Builder createStandAttributes() {
         return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED,
-                0.175F).add(Attributes.MAX_HEALTH, 4.0).add(Attributes.ATTACK_DAMAGE, 2.0);
+                0.17F).add(Attributes.MAX_HEALTH, 4.0).add(Attributes.ATTACK_DAMAGE, 2.0);
     }
 
 
-    public static float width = 0.275f;
+    public static float width = 0.35f;
     public static float height = 0.32f;
     public boolean isDisplay = false;
 
@@ -131,17 +132,17 @@ public class BCSoldier extends BCTroop{
         goalSelector.addGoal(1, new ReturnToLeaderGoal(this, 1));
     }
 
-
-    //public boolean forceVisualRotation(){ return true; }
-
-    /*
-        @Override
-    public EntityDimensions getDimensions(Pose pose) {
-        if (getBundle()) {
-            return EntityDimensions.scalable(height, width*2.8f);
+    public double getAttributeValue(Attribute $$0) {
+        if (getBundle()){
+            if ($$0.equals(Attributes.MAX_HEALTH)) {
+                return this.getAttributes().getValue($$0) * 6;
+            }else if ($$0.equals(Attributes.MOVEMENT_SPEED)) {
+                return this.getAttributes().getValue($$0) * 1.15f;
+            }
         }
-        return super.getDimensions(pose);
-    }*/
+        return this.getAttributes().getValue($$0);
+    }
+
     @Override
     public boolean isAttackable() {
         return true;

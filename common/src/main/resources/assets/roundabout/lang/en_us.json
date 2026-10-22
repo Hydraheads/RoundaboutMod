@@ -1137,9 +1137,9 @@
   "death.attack.bites_the_dust.item": "%1$s bit the dust",
   "death.attack.bites_the_dust.player.item": "%$2s made %1$s bite the dust",
   "death.attack.kq_explosion": "%1$s was reduced to dust",
-  "death.attack.kq_explosion.player": "%%$2s reduced %1$s to dust",
+  "death.attack.kq_explosion.player": "%$2s reduced %1$s to dust",
   "death.attack.kq_explosion.item": "%1$s was reduced to dust",
-  "death.attack.kq_explosion.player.item": "%%$2s reduced %1$s to dust",
+  "death.attack.kq_explosion.player.item": "%$2s reduced %1$s to dust",
   "death.attack.kick": "%1$s was ran over",
   "death.attack.kick.player": "%$2s trampled %1$s",
   "death.attack.kick.item": "%1$s was ran over",
@@ -3369,6 +3369,7 @@
 
   "stand.bad_company.not_enought_space": "You don't have enough space for that troop!",
   "stand.bad_company.not_enought_space.soldier": "You don't have enough soldiers left for that troop!",
+  "stand.bad_company.total_troops.soldier": "%$1s/%$2s active Soldiers.",
   "stand.bad_company.soldier_limit": "You already have released all your soldiers!",
   "stand.bad_company.troop_limit": "You have reached army maximum size!",
 
