@@ -85,7 +85,7 @@ public final class SilverChariotClient {
     }
 
     public static boolean hasCameraLook() {
-        return cameraActive && lookInitialized;
+        return cameraActive && lookInitialized && getControlPowers(Minecraft.getInstance()) != null;
     }
     public static float getCameraYaw() {
         return cameraYaw;
