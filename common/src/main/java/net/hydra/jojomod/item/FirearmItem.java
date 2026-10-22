@@ -35,16 +35,16 @@ import java.util.List;
 
 public abstract class FirearmItem extends Item {
 
-    protected static final String AMMO_COUNT_TAG = "AmmoCount";
-    protected static final String RELOADING_TAG = "IsReloading";
-    private static boolean cycleReload = false;
+    public static final String AMMO_COUNT_TAG = "AmmoCount";
+    public static final String RELOADING_TAG = "IsReloading";
+    public static boolean cycleReload = false;
 
     public FirearmItem(Properties properties) {
         super(properties);
     }
 
     // checks if there's ammo in inventory
-    private boolean hasAmmoInInventory(Player player) {
+    protected boolean hasAmmoInInventory(Player player) {
         if (canWhitesnakeUse() && WhitesnakeControlInventory.isActive(player)) {
             return WhitesnakeControlInventory.hasAmmo(player);
         }
@@ -59,7 +59,7 @@ public abstract class FirearmItem extends Item {
     }
 
     // ammo consumption
-    private int consumeAmmoFromInventory(Player player, int amount) {
+    protected int consumeAmmoFromInventory(Player player, int amount) {
         if (canWhitesnakeUse() && WhitesnakeControlInventory.isActive(player)) {
             return player.isCreative() ? getMaxAmmo() : WhitesnakeControlInventory.consumeAmmo(player, amount);
         }
@@ -201,7 +201,7 @@ public abstract class FirearmItem extends Item {
     }
 
     // cancels reloads
-    protected void cancelReload(ItemStack stack, Player player) {
+    public void cancelReload(ItemStack stack, Player player) {
         if (isReloading(stack)) {
             setReloading(stack, false);
             if (player != null) {
@@ -270,9 +270,9 @@ public abstract class FirearmItem extends Item {
 
     // getters and setters
     public int getAmmo(ItemStack stack) { return stack.getOrCreateTag().getInt(AMMO_COUNT_TAG); }
-    protected void setAmmo(ItemStack stack, int count) { stack.getOrCreateTag().putInt(AMMO_COUNT_TAG, count); }
+    public void setAmmo(ItemStack stack, int count) { stack.getOrCreateTag().putInt(AMMO_COUNT_TAG, count); }
     public boolean getReloading(ItemStack stack) { return stack.getOrCreateTag().getBoolean(RELOADING_TAG); }
-    protected void setReloading(ItemStack stack, boolean value) { stack.getOrCreateTag().putBoolean(RELOADING_TAG, value); }
+    public void setReloading(ItemStack stack, boolean value) { stack.getOrCreateTag().putBoolean(RELOADING_TAG, value); }
     public boolean isReloading(ItemStack stack) { return stack.getOrCreateTag().getBoolean(RELOADING_TAG); }
-    private boolean isCrouchingOrSomething(Player player, ItemStack stack){ return (player.isCrouching() && player.getUseItem() != stack) || cycleReload; }
+    public boolean isCrouchingOrSomething(Player player, ItemStack stack){ return (player.isCrouching() && player.getUseItem() != stack) || cycleReload; }
 }
