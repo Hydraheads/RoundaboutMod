@@ -30,10 +30,7 @@ import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
-import net.hydra.jojomod.entity.stand.PurpleHazeEntity;
-import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
-import net.hydra.jojomod.entity.stand.WhitesnakeEntity;
+import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
@@ -1705,8 +1702,10 @@ public class MainUtil {
             double velocityX, double velocityY, double velocityZ) {
         Entity entity = player.level().getEntity(entityInt);
         StandPowers powers = ((StandUser)player).roundabout$getStandPowers();
-        if (!powers.isPiloting() || entity == null || entity != powers.getPilotingStand()){
-            return;
+        if (!(powers instanceof PowersManhattanTransfer pmt && entity instanceof ManhattanTransferEntity)) {
+            if (!powers.isPiloting() || entity == null || entity != powers.getPilotingStand()) {
+                return;
+            }
         }
         if (entity != null) {
             if (containsInvalidValues(getX, getY, getZ, getYRot, getXRot)
