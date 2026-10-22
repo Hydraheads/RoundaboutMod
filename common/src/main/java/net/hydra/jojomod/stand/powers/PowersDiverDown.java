@@ -2088,7 +2088,7 @@ public class PowersDiverDown extends NewPunchingStand {
 
         if (!this.self.level().isClientSide()) {
             playSoundIfPossible(self.level(), null, this.self.blockPosition(), SE,
-                    SoundSource.PLAYERS, 0.9F, pitch);
+                    SoundSource.PLAYERS, 0.8F, pitch);
         }
     }
 
