@@ -2267,6 +2267,11 @@ public class MainUtil {
         return false;
     }
 
+    // Claim check that checks for interactions specifically
+    public static boolean canInteractWithBlock(Player player, BlockPos pos) {
+        return player.level().mayInteract(player, pos);
+    }
+
     // Couldn't find better wording but this tests if you're on claimed land that
     // isn't yours
     // It doesn't need the block hit to be on a claim

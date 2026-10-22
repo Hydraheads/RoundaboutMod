@@ -2788,7 +2788,7 @@ public class PowersDiverDown extends NewPunchingStand {
         if (chestPos == null) {
             return false;
         }
-        if (!MainUtil.canPlaceOnClaim(serverPlayer, chestPos)) {
+        if (!MainUtil.canInteractWithBlock(serverPlayer, chestPos)) {
             return false;
         }
         StandEntity stand = getStandEntity(this.self);
