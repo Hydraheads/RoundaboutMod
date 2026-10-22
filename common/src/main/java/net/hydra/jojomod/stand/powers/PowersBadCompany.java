@@ -74,6 +74,10 @@ public class PowersBadCompany extends NewDashPreset {
         return list;
     }
 
+    public int getMaxSoldier() { return 60; }
+    public int getMaxTanks() { return 7; }
+    public int getMaxHelicopter() { return 4; }
+
     @Override public Component getSkinName(byte skinId) {
 
         switch (skinId)
@@ -214,6 +218,32 @@ public class PowersBadCompany extends NewDashPreset {
         return false;
     }
 
+    private boolean detectSoldierLimit(boolean bundle) {
+        initActiveTroops();
+        int activeSoldiers = 0;
+        for (BCTroop troop : activeTroops) {
+            if (troop instanceof BCSoldier S) {
+                activeSoldiers += S.getBundle() ? 6 : 1;
+            }
+        }
+        if (activeSoldiers >= getMaxSoldier()) {
+            if (self instanceof Player PL) {
+                PL.displayClientMessage(Component.translatable("stand.bad_company.soldier_limit").withStyle(ChatFormatting.DARK_GREEN), true);
+            }
+
+            return true;
+
+        }
+        if ((activeSoldiers + (bundle ? 6 : 1)) > getMaxSoldier()) {
+            if (self instanceof Player PL) {
+                PL.displayClientMessage(Component.translatable("stand.bad_company.not_enought_space.soldier").withStyle(ChatFormatting.DARK_GREEN), true);
+            }
+
+            return true;
+        }
+        return false;
+    }
+
     public boolean tryIntPower(int move, boolean forced, int chargeTime){
         if (move == PowerIndex.POWER_1) {
             syncTotalTroopsOut();
@@ -252,8 +282,9 @@ public class PowersBadCompany extends NewDashPreset {
         }
     }
 
+
     public void spawnSoldier(boolean bundle) {
-        if (isClient() || detectTroopLimit(BCSoldier.getTroopValue(bundle))) { return; }
+        if (isClient() || detectTroopLimit(BCSoldier.getTroopValue()) || detectSoldierLimit(bundle)) { return; }
 
         initActiveTroops();
         syncTotalTroopsOut();
@@ -274,6 +305,8 @@ public class PowersBadCompany extends NewDashPreset {
             }else {
                 playStandUserOnlySoundsIfNearby(SOLDIER_SUMMON, 8, false, false);
             }
+
+            PowerTypes.copyPlaneOfExisting(self, soldier);
         }
     }
 
@@ -300,11 +333,7 @@ public class PowersBadCompany extends NewDashPreset {
                     continue;
                 }
 
-                if (T instanceof BCSoldier S) {
-                    amount += BCSoldier.getTroopValue(S.getBundle());
-                }else {
-                    amount += BCTroop.getTroopValue();
-                }
+                amount += BCTroop.getTroopValue();
             }
             if (totalTroopsOut != amount) {
                 totalTroopsOut = amount;

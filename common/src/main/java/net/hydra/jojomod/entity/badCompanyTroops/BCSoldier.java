@@ -56,13 +56,6 @@ public class BCSoldier extends BCTroop{
     }
 
 
-    public static int getTroopValue(boolean bundle){
-        if (bundle) {
-            return 6;
-        }
-        return 1;
-    }
-
     public static float width = 0.275f;
     public static float height = 0.32f;
     public boolean isDisplay = false;
@@ -115,7 +108,6 @@ public class BCSoldier extends BCTroop{
 
         if (!level().isClientSide) {
             if (getNavigation().isInProgress()) {
-                Roundabout.LOGGER.info("test");
                 setAnim(WALK_GUN);
             } else {
                 setAnim(IDLE_GUN);

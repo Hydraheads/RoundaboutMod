@@ -3367,7 +3367,9 @@
   "roundabout.troop_select.helicopter": "Helicopter",
   "roundabout.troop_select.mine": "Mine",
 
-  "stand.bad_company.not_enought_space": "You don't have enought space for that troop!",
+  "stand.bad_company.not_enought_space": "You don't have enough space for that troop!",
+  "stand.bad_company.not_enought_space.soldier": "You don't have enough soldiers left for that troop!",
+  "stand.bad_company.soldier_limit": "You already have released all your soldiers!",
   "stand.bad_company.troop_limit": "You have reached army maximum size!",
 
   "roundabout.bad_company.troop_tactics": "Troop Tactics",
