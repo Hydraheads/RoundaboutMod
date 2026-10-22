@@ -13,6 +13,7 @@ import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -33,6 +34,7 @@ public abstract class SilverChariotMouseHandlerMixin {
         }
     }
 
+    @Unique
     private void roundabout$turnControlledStand(Entity stand) {
         double time = Blaze3D.getTime();
         double elapsed = time - lastMouseEventTime;
@@ -70,6 +72,7 @@ public abstract class SilverChariotMouseHandlerMixin {
         SilverChariotClient.turnCamera(stand, yawDelta, pitchDelta);
     }
 
+    @Unique
     private Entity roundabout$getControlledStand() {
         LocalPlayer localPlayer = minecraft.player;
         if (localPlayer == null

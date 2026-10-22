@@ -71,7 +71,7 @@ public class TroopTacticsScreen extends Screen {
                 Component.translatable("roundabout.troop_tactics.stop")));
 
         this.slots.add(new SwitchSelect(ADVANCE, centerX-(offsetCenter*2), centerY-12,
-                Component.translatable("roundabout.troop_tactics.stop")));
+                Component.translatable("roundabout.troop_tactics.advance")));
         this.slots.add(new SwitchSelect(FIRE, centerX-offsetCenter, centerY-18,
                 Component.translatable("roundabout.troop_tactics.fire")));
         this.slots.add(new SwitchSelect(HUNT, centerX-(offsetCenter*2)+offsetY, centerY+16,
@@ -136,8 +136,11 @@ public class TroopTacticsScreen extends Screen {
             SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
             soundmanager.play(SimpleSoundInstance.forUI(ModSounds.BC_UI_SELECT_EVENT, (float) (0.95 + (Math.random() * 0.1F))));
         }
+        if (this.currentlyHovered != -1) {
+            Component text = slots.get(currentlyHovered).name;
 
-
+            guiGraphics.drawCenteredString(this.font, text, this.width / 2, this.height / 2 - 31 + 90, -1);
+        }
     }
 
 

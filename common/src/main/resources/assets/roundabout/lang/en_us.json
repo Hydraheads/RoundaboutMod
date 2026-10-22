@@ -3371,6 +3371,15 @@
   "stand.bad_company.troop_limit": "You have reached army maximum size!",
 
   "roundabout.bad_company.troop_tactics": "Troop Tactics",
+  "roundabout.troop_tactics.stop": "Stop!",
+  "roundabout.troop_tactics.advance": "Advance and shoot!",
+  "roundabout.troop_tactics.fire": "Fire!",
+  "roundabout.troop_tactics.ward": "Ward!",
+  "roundabout.troop_tactics.hunt": "Hunt!",
+  "roundabout.troop_tactics.tank": "Select tank.",
+  "roundabout.troop_tactics.helicopter": "Select helicopter.",
+  "roundabout.troop_tactics.missile": "Shoot missile!",
+  "roundabout.troop_tactics.troop": "Select troop.",
 
   "skins.roundabout.green_day.part_five_green_day": "Part 5",
   "skins.roundabout.green_day.red_day": "Red Day",

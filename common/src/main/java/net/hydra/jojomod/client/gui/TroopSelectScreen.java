@@ -143,6 +143,12 @@ public class TroopSelectScreen extends Screen {
             SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
             soundmanager.play(SimpleSoundInstance.forUI(ModSounds.BC_UI_SELECT_EVENT, (float) (0.95 + (Math.random() * 0.1F))));
         }
+        if (this.currentlyHovered != -1) {
+            Component text = slots.get(currentlyHovered).name;
+
+            guiGraphics.drawCenteredString(this.font, text, this.width / 2, this.height / 2 - 31 + 90, -1);
+        }
+
     }
 
     private void switchToHoveredGameMode() {
