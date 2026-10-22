@@ -82,6 +82,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
             case PurpleHazeEntity.MIRROR_BATTLE -> {return Component.translatable("skins.roundabout.purple_haze.mirror_battle");}
             case PurpleHazeEntity.ROTT -> {return Component.translatable("skins.roundabout.purple_haze.rott_haze");}
             case PurpleHazeEntity.PEPPERMINT -> {return Component.translatable("skins.roundabout.purple_haze.peppermint");}
+            case PurpleHazeEntity.GREENER -> {return Component.translatable("skins.roundabout.purple_haze.greener");}
+            case PurpleHazeEntity.DISTORTION -> {return Component.translatable("skins.roundabout.purple_haze.distortion");}
+            case PurpleHazeEntity.GREEN_DSITORTION -> {return Component.translatable("skins.roundabout.purple_haze.green_distortion");}
             default -> {
                 return Component.translatable("skins.roundabout.purple_haze.anime");
             }
@@ -121,9 +124,12 @@ public class PowersPurpleHaze extends NewPunchingStand {
             } if (Level > 2 || bypass) {
                 $$1.add(PurpleHazeEntity.BLAZING_HAZE);
                 $$1.add(PurpleHazeEntity.MIRROR_BATTLE);
-            } if (Level > 3 || bypass) {
                 $$1.add(PurpleHazeEntity.ROTT);
                 $$1.add(PurpleHazeEntity.PEPPERMINT);
+            } if (Level > 3 || bypass) {
+                $$1.add(PurpleHazeEntity.DISTORTION);
+                $$1.add(PurpleHazeEntity.GREEN_DSITORTION);
+                $$1.add(PurpleHazeEntity.GREENER);
             }/*if (((IPlayerEntity) PE).roundabout$getUnlockedBonusSkin() || bypass) {
                 $$1.add(PurpleHazeEntity.PLAGUE);}*/
         }

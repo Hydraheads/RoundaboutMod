@@ -23,6 +23,9 @@ public class PurpleHazeRenderer extends StandRenderer<PurpleHazeEntity> {
     public static final ResourceLocation MIRROR_BATTLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/mirror_battle.png");
     public static final ResourceLocation ROTT = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/rott_haze.png");
     public static final ResourceLocation PEPPERMINT = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/peppermint.png");
+    public static final ResourceLocation GREENER = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/greener.png");
+    public static final ResourceLocation DISTORTION = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/distortion.png");
+    public static final ResourceLocation GREEN_DSITORTION = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/distorted_green.png");
 
     public PurpleHazeRenderer(EntityRendererProvider.Context context) {
         super(context, new PurpleHazeModel<>(context.bakeLayer(ModEntityRendererClient.PURPLE_HAZE_LAYER)), 0f);
@@ -48,6 +51,12 @@ public class PurpleHazeRenderer extends StandRenderer<PurpleHazeEntity> {
                 return ROTT;
             case (PurpleHazeEntity.PEPPERMINT):
                 return PEPPERMINT;
+            case (PurpleHazeEntity.GREENER):
+                return GREENER;
+            case (PurpleHazeEntity.DISTORTION):
+                return DISTORTION;
+            case (PurpleHazeEntity.GREEN_DSITORTION):
+                return GREEN_DSITORTION;
             default:
                 return ANIME;
         }
