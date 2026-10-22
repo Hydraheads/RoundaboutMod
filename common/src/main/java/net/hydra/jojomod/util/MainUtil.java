@@ -26,6 +26,7 @@ import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.paintings.RoundaboutPainting;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundPathfindingStandAttackEntity;
+import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
@@ -4001,7 +4002,7 @@ public class MainUtil {
             StandEntity SE = ((StandUser) player).roundabout$getStand();
             Entity target = player.level().getEntity(data);
             if (target != null) {
-                if (!isCollidingWithAnyBlock(target)) {
+                if (!isCollidingWithAnyBlock(target) || (target instanceof TuskHoleEntity) ) {
                     ((StandUser) player).roundabout$getStandPowers().setPiloting(data);
                 }
             } else {

@@ -6,6 +6,7 @@ import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.TrailRenderer;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.projectile.RattDartModel;
 import net.hydra.jojomod.client.models.projectile.Tusk1NailModel;
@@ -23,6 +24,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
+
+import java.util.List;
 
 public class TuskNailRenderer extends EntityRenderer<TuskNailEntity> {
     private final Tusk1NailModel model;
@@ -68,6 +73,33 @@ public class TuskNailRenderer extends EntityRenderer<TuskNailEntity> {
             this.model.renderToBuffer(poseStack, $$6, $$5, OverlayTexture.NO_OVERLAY, r, g, b, 1.0F);
             poseStack.popPose();
             super.render($$0, $$1, partialTicks, poseStack, $$4, $$5);
+
+            // for rendering the bullet trail
+            Vec3 anchor = $$0.getPosition(partialTicks);
+            List<Vec3> points = $$0.getTrailPoints();
+
+
+            Vector3f color = PT.getNailColor();
+            if ($$0.getExtra() == TuskNailEntity.GOLDEN) {color = new Vector3f(1,1,0.3F);}
+            TrailRenderer.Settings settings = new TrailRenderer.Settings(
+                    10.0F, 0.03f, 0.12f,
+                    color, color,
+                    0.4F, 0.4F
+            );
+
+            if (points != null && points.size() >= 2) {
+                poseStack.pushPose();
+                TrailRenderer.drawTrailRaw(
+                        anchor,
+                        points,
+                        poseStack.last(),
+                        $$5,
+                        partialTicks,
+                        settings,
+                        $$4
+                );
+                poseStack.popPose();
+            }
         }
     }
 
