@@ -54,6 +54,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
 
     public RoundaboutBulletEntity(Level level, LivingEntity livingEntity) {
         super(ModEntities.ROUNDABOUT_BULLET_ENTITY, livingEntity, level);
+        setNoGravity(true);
     }
     public RoundaboutBulletEntity(Level $$0, LivingEntity $$1, ItemStack $$2, double p_36862_, double p_36863_, double p_36864_) {
         super(ModEntities.ROUNDABOUT_BULLET_ENTITY, p_36862_, p_36863_, p_36864_, $$0);
@@ -91,7 +92,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(ROUNDABOUT$SUPER_THROWN, true);
+        this.entityData.define(ROUNDABOUT$SUPER_THROWN, false);
         this.entityData.define(AMMO_TYPE, (byte) 0);
         this.entityData.define(DEFLECTED, false);
     }
@@ -102,6 +103,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
 
     public void setSuperThrown(boolean value) {
         this.entityData.set(ROUNDABOUT$SUPER_THROWN, value);
+        setNoGravity(value);
     }
 
     public boolean getDeflected() {
