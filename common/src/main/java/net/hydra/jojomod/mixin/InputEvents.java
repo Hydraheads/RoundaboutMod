@@ -1509,7 +1509,7 @@ public abstract class InputEvents implements IInputEvents {
                 isMining = (standComp.roundabout$getActivePower() == PowerIndex.MINING)
                         || this.gameMode.isDestroying();
                 if (this.options.keyAttack.isDown() && !player.isUsingItem() && (!standComp.roundabout$getCombatMode() || PowerTypes.isMiningStand(player)) ) {
-                    if (powers.isMiningStand()){
+                    if (powers.isMiningStand() && !(powers instanceof PowersWhitesnake && powers.isPiloting())){
                         Entity TE = standComp.roundabout$getTargetEntity(player, -1);
                         if (!isMining && TE == null && this.hitResult != null && !this.player.isHandsBusy()
                                 && (standComp.roundabout$getActivePower() == PowerIndex.NONE || standComp.roundabout$getAttackTimeDuring() == -1)
