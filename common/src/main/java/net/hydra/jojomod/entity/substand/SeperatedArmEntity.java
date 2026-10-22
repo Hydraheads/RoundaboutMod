@@ -308,11 +308,11 @@ public class SeperatedArmEntity extends StandEntity {
 
                             if (this.getMainHandItem().getItem() instanceof PickaxeItem) {
                                 if (pickaxeable) {
-                                    level.destroyBlock(targetpos,false);
+
                                     BlockState bstate = this.level().getBlockState(targetpos);
                                     BlockEntity blockEnt = bstate.hasBlockEntity() ? this.level().getBlockEntity(targetpos) : null;
                                     Block.dropResources(bstate, this.level(), targetpos, blockEnt, this, this.getMainHandItem());
-
+                                    level.destroyBlock(targetpos,false);
 
                                     this.setDeltaMovement(0, 0, 0);
 
@@ -328,12 +328,12 @@ public class SeperatedArmEntity extends StandEntity {
 
                             } else if (this.getMainHandItem().getItem() instanceof ShovelItem) {
                                 if (shovelable) {
-                                    level.destroyBlock(targetpos,false);
+
                                     BlockState bstate = this.level().getBlockState(targetpos);
                                     BlockEntity blockEnt = bstate.hasBlockEntity() ? this.level().getBlockEntity(targetpos) : null;
                                     Block.dropResources(bstate, this.level(), targetpos, blockEnt, this, this.getMainHandItem());
                                     this.setDeltaMovement(0, 0, 0);
-
+                                    level.destroyBlock(targetpos,false);
                                     if (Can_activate) {
                                         if (!((Player) user).isCreative()) {
                                             if (!(this.getMainHandItem().getItem() instanceof FleshBucketItem)) {
@@ -346,11 +346,11 @@ public class SeperatedArmEntity extends StandEntity {
 
                             } else if (this.getMainHandItem().getItem() instanceof AxeItem) {
                                 if (axeable) {
-                                    level.destroyBlock(targetpos,false);
+
                                     BlockState bstate = this.level().getBlockState(targetpos);
                                     BlockEntity blockEnt = bstate.hasBlockEntity() ? this.level().getBlockEntity(targetpos) : null;
                                     Block.dropResources(bstate, this.level(), targetpos, blockEnt, this, this.getMainHandItem());
-
+                                    level.destroyBlock(targetpos,false);
                                     this.setDeltaMovement(0, 0, 0);
                                     if (Can_activate) {
                                         if (!((Player) user).isCreative()) {
