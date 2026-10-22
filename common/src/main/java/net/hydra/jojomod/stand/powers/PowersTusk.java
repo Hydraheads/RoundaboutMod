@@ -578,7 +578,6 @@ public class PowersTusk extends NewDashPreset {
         super.tickPower();
         this.tickNails();
 
-
         if (this.getAct() == 4 && !isInfiniteSpinning() && !(this.getSelf() instanceof Player P && P.isCreative()) ) {
             this.setAct(3,true);
         }
@@ -2426,6 +2425,8 @@ public class PowersTusk extends NewDashPreset {
         if (reset) {
             this.getStandUserSelf().roundabout$getWornStandAnimation().stop();
             this.getStandUserSelf().roundabout$getWornStandAnimation().startIfStopped(this.getSelf().tickCount);
+            this.getStandUserSelf().roundabout$getWornStandIdleAnimation().stop();
+            this.getStandUserSelf().roundabout$getWornStandIdleAnimation().startIfStopped(this.getSelf().tickCount);
         }
     }
 
