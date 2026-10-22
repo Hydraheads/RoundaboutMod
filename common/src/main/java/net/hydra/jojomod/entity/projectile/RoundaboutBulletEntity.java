@@ -364,7 +364,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
             timeStopShot = true;
         }
 
-        if (this.getSuperThrown() && this.getAmmoType() != SNIPER) {
+        if ((this.getSuperThrown() || isNoGravity()) && this.getAmmoType() != SNIPER) {
             superThrownTimer++;
             if (superThrownTimer >= 20) {
                 this.setSuperThrown(false);
