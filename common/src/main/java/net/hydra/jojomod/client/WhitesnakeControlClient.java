@@ -144,6 +144,7 @@ public final class WhitesnakeControlClient {
     public static boolean handleMining(Minecraft minecraft, boolean attackHeld) {
         PowersWhitesnake powers = getControlPowers(minecraft);
         if (powers == null) return false;
+        if (attackHeld && !miningActive && powers.getActivePower() != PowerIndex.MINING) return true;
         updateMining(minecraft, powers, attackHeld ? getMiningHit(minecraft, powers) : null, true);
         return true;
     }
