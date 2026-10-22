@@ -204,20 +204,26 @@ public final class WhitesnakeControlClient {
             return;
         }
         BlockPos pos = hit.getBlockPos();
-        if (!miningActive || !pos.equals(miningPos)) {
-            if (miningActive) stopMining();
-            if (!powers.canUseMiningStand()
-                    || (powers.getActivePower() != PowerIndex.NONE
-                    && powers.getActivePower() != PowerIndex.MINING
-                    && powers.getAttackTimeDuring() != -1)) return;
-            if (powers.getActivePower() != PowerIndex.MINING) {
-                ((StandUser) minecraft.player).roundabout$tryPower(PowerIndex.MINING, true);
-                powers.tryPowerPacket(PowerIndex.MINING);
+        HitResult result = minecraft.hitResult;
+        minecraft.hitResult = hit;
+        try {
+            if (!miningActive || !pos.equals(miningPos)) {
+                if (miningActive) stopMining();
+                if (!powers.canUseMiningStand()
+                        || (powers.getActivePower() != PowerIndex.NONE
+                        && powers.getActivePower() != PowerIndex.MINING
+                        && powers.getAttackTimeDuring() != -1)) return;
+                if (powers.getActivePower() != PowerIndex.MINING) {
+                    ((StandUser) minecraft.player).roundabout$tryPower(PowerIndex.MINING, true);
+                    powers.tryPowerPacket(PowerIndex.MINING);
+                }
+                miningActive = minecraft.gameMode.startDestroyBlock(pos, hit.getDirection());
+                miningPos = miningActive ? pos.immutable() : null;
+            } else if (continueMining && minecraft.gameMode.continueDestroyBlock(pos, hit.getDirection())) {
+                minecraft.particleEngine.crack(pos, hit.getDirection());
             }
-            miningActive = minecraft.gameMode.startDestroyBlock(pos, hit.getDirection());
-            miningPos = miningActive ? pos.immutable() : null;
-        } else if (continueMining && minecraft.gameMode.continueDestroyBlock(pos, hit.getDirection())) {
-            minecraft.particleEngine.crack(pos, hit.getDirection());
+        } finally {
+            minecraft.hitResult = result;
         }
     }
 
