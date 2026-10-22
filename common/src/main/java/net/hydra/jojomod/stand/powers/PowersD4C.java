@@ -2556,8 +2556,6 @@ public class PowersD4C extends NewPunchingStand {
                 }
             } else {
                 if (isInSelectionMode){
-                    consumeClickInput = false;
-                    holdDownClick = false;
                     return;
                 }
                 if (keyIsDown) {
