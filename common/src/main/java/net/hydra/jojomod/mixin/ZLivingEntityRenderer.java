@@ -169,7 +169,8 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
                 && LE.getVisionModeClient() && LE.isActive()) {
             if (entity != player && entity.isAlive() && player.distanceToSqr(entity) <= (24.0 * 24.0)
                     && !(entity instanceof StandEntity)
-                    && !(entity instanceof FallenMob)) {
+                    && !(entity instanceof FallenMob)
+                    && ((entity instanceof Mob) || (entity instanceof Player))) {
                 // hostile mobs
                 if (entity instanceof Enemy && !(entity instanceof NeutralMob)) {
                     LyinEyesHighlighterRenderer.render(entity, matrixStack, buffer, 255, 0, 0, 200, 0.7F);
