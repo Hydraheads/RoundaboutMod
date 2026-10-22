@@ -25,6 +25,7 @@ public class ModStrayModels {
     public static FirstPersonTommyGunModel FirstPersonTommyGunModel;
     public static FirstPersonColtRevolverModel FirstPersonColtRevolverModel;
     public static FirstPersonJackalRifleModel FirstPersonJackalRifleModel;
+    public static FirstPersonBerettaPistolModel FirstPersonBerettaPistolModel;
     public static HeyYaModel HEY_YA;
     public static CenturyBoyModel CENTURY_BOY;
     public static BowlerHatModel BOWLER_HAT;
@@ -146,4 +147,5 @@ public class ModStrayModels {
     public static TommyGunModel TOMMY_GUN_MODEL;
     public static ColtRevolverModel COLT_REVOLVER_MODEL;
     public static JackalRifleModel JACKAL_RIFLE_MODEL;
+    public static BerettaPistolModel BERETTA_PISTOL_MODEL;
 }

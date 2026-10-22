@@ -36,8 +36,9 @@ public class FirearmLayer<T extends LivingEntity, A extends HumanoidModel<T>> ex
         boolean isTommy = stack.getItem() instanceof TommyGunItem;
         boolean isColt = stack.getItem() instanceof ColtRevolverItem;
         boolean isJackal = stack.getItem() instanceof JackalRifleItem;
+        boolean isBeretta = stack.getItem() instanceof BerettaPistolItem;
 
-        if (!isSnub && !isTommy && !isColt && !isJackal) return;
+        if (!isSnub && !isTommy && !isColt && !isJackal && !isBeretta) return;
 
         boolean actualRightArm = rightSide == mainArmRight;
 
@@ -96,6 +97,19 @@ public class FirearmLayer<T extends LivingEntity, A extends HumanoidModel<T>> ex
             poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
             poseStack.scale(0.9F, 0.9F, 0.9F);
             ModStrayModels.JACKAL_RIFLE_MODEL.render(
+                    entity, partialTicks, poseStack, bufferSource, packedLight,
+                    1.0F, entity.hurtTime > 0 ? 0.0F : 1.0F, entity.hurtTime > 0 ? 0.0F : 1.0F, 1.0F
+            );
+        }
+
+        if (isBeretta) {
+            poseStack.translate(
+                    actualRightArm ? -0.032F : 0.032F,
+                    0.52F,
+                    -1.50F
+            );
+            poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
+            ModStrayModels.BERETTA_PISTOL_MODEL.render(
                     entity, partialTicks, poseStack, bufferSource, packedLight,
                     1.0F, entity.hurtTime > 0 ? 0.0F : 1.0F, entity.hurtTime > 0 ? 0.0F : 1.0F, 1.0F
             );

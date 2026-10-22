@@ -13,6 +13,7 @@ public class ModItemModels {
     public static ModelResourceLocation TOMMY_GUN_IN_HAND = new ModelResourceLocation(Roundabout.MOD_ID, "tommy_gun_in_hand", "inventory");
     public static ModelResourceLocation COLT_REVOLVER_IN_HAND = new ModelResourceLocation(Roundabout.MOD_ID, "colt_revolver_in_hand", "inventory");
     public static ModelResourceLocation JACKAL_RIFLE_IN_HAND = new ModelResourceLocation(Roundabout.MOD_ID, "jackal_rifle_in_hand", "inventory");
+    public static ModelResourceLocation BERETTA_PISTOL_IN_HAND = new ModelResourceLocation(Roundabout.MOD_ID, "beretta_pistol_in_hand", "inventory");
     public static ModelResourceLocation ANUBIS_IN_HAND = new ModelResourceLocation(Roundabout.MOD_ID, "anubis_in_hand", "inventory");
     public static ModelResourceLocation STAND_BOW = new ModelResourceLocation(Roundabout.MOD_ID, "stand_bow_arrow", "inventory");
     public static ModelResourceLocation STAND_BEETLE_BOW = new ModelResourceLocation(Roundabout.MOD_ID, "stand_beetle_bow_arrow", "inventory");
