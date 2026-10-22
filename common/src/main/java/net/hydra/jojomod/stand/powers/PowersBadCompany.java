@@ -1,15 +1,14 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.badCompanyTroops.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.index.BadCompanyTactics;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.SoundIndex;
@@ -99,7 +98,15 @@ public class PowersBadCompany extends NewDashPreset {
         TANK = 3,
         MINE = 4,
 
-        STOP = 0;
+        TACTIC_STOP = 0,
+        TACTIC_ADVANCE = 1,
+        TACTIC_FIRE = 2,
+        TACTIC_HUNT = 3,
+        TACTIC_WARD = 4,
+        TACTIC_TANK = 5,
+        TACTIC_HELICOPTER = 6,
+        TACTIC_MISSILE = 7,
+        TACTIC_SOLDIER = 8;
 
     public BCSoldier getSoldierEntity(boolean bundle) {
         BCSoldier soldier = ModEntities.BAD_COMPANY_SOLDIER.create(self.level());
@@ -269,8 +276,10 @@ public class PowersBadCompany extends NewDashPreset {
 
             syncTotalTroopsOut();
         }else if (move == PowerIndex.POWER_2) {
-            if (chargeTime == STOP) {
-                sendTroopsStopSignal();
+            if (chargeTime == TACTIC_STOP) {
+                sendTroopsSignal(BadCompanyTactics.STOP);
+            }else if (chargeTime == TACTIC_WARD) {
+
             }
         }
 
@@ -280,7 +289,7 @@ public class PowersBadCompany extends NewDashPreset {
     @Override
     public boolean setPowerOther(int move, int lastMove) {
         if (move == PowerIndex.POWER_1_SNEAK) {
-            sendTroopsReturnSignal();
+            sendTroopsSignal(BadCompanyTactics.RETURN);
         }
 
         return super.setPowerOther(move, lastMove);
@@ -357,19 +366,10 @@ public class PowersBadCompany extends NewDashPreset {
         }
     }
 
-    private void sendTroopsReturnSignal(){
+    private void sendTroopsSignal(BadCompanyTactics tactic){
         initActiveTroops();
         for (BCTroop T : activeTroops) {
-            T.haveToReturn = true;
-        }
-    }
-
-    private void sendTroopsStopSignal(){
-        initActiveTroops();
-        for (BCTroop T : activeTroops) {
-            T.haveToReturn = false;
-            T.setTarget(null);
-            T.getNavigation().stop();
+            T.setCurrentTactic(tactic.id);
         }
     }
 

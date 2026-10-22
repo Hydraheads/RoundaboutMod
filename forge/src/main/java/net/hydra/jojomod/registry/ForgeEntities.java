@@ -788,6 +788,12 @@ public class ForgeEntities {
                             clientTrackingRange(16).
                             build(new ResourceLocation(Roundabout.MOD_ID, "roundabout_bullet_entity").toString())
             );
+    public static final RegistryObject<EntityType<BadCompanyBulletEntity>> BAD_COMPANY_BULLET_ENTITY =
+            ENTITY_TYPES.register("bad_company_bullet_entity", () ->
+                    EntityType.Builder.<BadCompanyBulletEntity>of(BadCompanyBulletEntity::new, MobCategory.MISC).sized(0.25f, 0.25f).
+                            clientTrackingRange(16).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "bad_company_bullet_entity").toString())
+            );
     public static final RegistryObject<EntityType<EmperorBulletEntity>> EMPEROR_BULLET_ENTITY =
             ENTITY_TYPES.register("emperor_bullet_entity", () ->
                     EntityType.Builder.<EmperorBulletEntity>of(EmperorBulletEntity::new, MobCategory.MISC).sized(0.25f, 0.25f).

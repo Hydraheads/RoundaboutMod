@@ -1,20 +1,30 @@
 package net.hydra.jojomod.entity.badCompanyTroops;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.entity.goals.badCompanyGoals.ReturnToLeaderGoal;
+import net.hydra.jojomod.entity.goals.badCompanyGoals.*;
+import net.hydra.jojomod.entity.projectile.BadCompanyBulletEntity;
+import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
+import net.hydra.jojomod.event.index.BadCompanyTactics;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.*;
 
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
+import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-public class BCSoldier extends BCTroop{
+import java.util.Random;
+
+public class BCSoldier extends BCTroop implements RangedAttackMob {
     public BCSoldier(EntityType<? extends BCTroop> entityType, Level world) {
         super(entityType, world);
     }
@@ -130,6 +140,13 @@ public class BCSoldier extends BCTroop{
         super.registerGoals();
         goalSelector.addGoal(0, new FloatGoal(this));
         goalSelector.addGoal(1, new ReturnToLeaderGoal(this, 1));
+        goalSelector.addGoal(2, new UserHurtTargetGoal(this));
+        goalSelector.addGoal(2, new RangedAttackGoal(this, 1.2, 5, 7.5f) {
+            @Override
+            public boolean canUse() {
+                return super.canUse() && getCurrentTactic() != BadCompanyTactics.RETURN.id;
+            }
+        });
     }
 
     public double getAttributeValue(Attribute $$0) {
@@ -155,4 +172,24 @@ public class BCSoldier extends BCTroop{
 
     public boolean canStandBeHurt() {return true;}
 
+    @Override
+    public void performRangedAttack(LivingEntity target, float v) {
+        BadCompanyBulletEntity bullet = new BadCompanyBulletEntity(level(), getUser());
+        Vec3 positionShoot = getEyePosition(1);
+        Vec3 targetPosition = target.getEyePosition(1);
+        level().addFreshEntity(bullet);
+        bullet.absMoveTo(positionShoot.x, positionShoot.y, positionShoot.z);
+        bullet.shoot(targetPosition.x - positionShoot.x, targetPosition.y - positionShoot.y, targetPosition.z - positionShoot.z, 5.0F, 1.0F);
+        level().playSound(null, this.blockPosition(), getFireSound(), SoundSource.PLAYERS, getFireSoundVolume(), getFireSoundPitch());
+    }
+
+
+    public SoundEvent getFireSound() { return ModSounds.TOMMY_FIRE_EVENT; }
+
+    public float getFireSoundVolume() { return 7.0F; }
+
+    public float getFireSoundPitch() {
+        Random random = new Random();
+        return random.nextFloat(1.7F - 1.5F) + 1.5F;
+    }
 }
