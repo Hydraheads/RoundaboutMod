@@ -2269,6 +2269,11 @@ public class MainUtil {
 
     // Claim check that checks for interactions specifically
     public static boolean canInteractWithBlock(Player player, BlockPos pos) {
+        if (!ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims
+                || !MainUtil.getIsGamemodeApproriateForGrief(player)) {
+            return true;
+        }
+
         return player.level().mayInteract(player, pos);
     }
 
