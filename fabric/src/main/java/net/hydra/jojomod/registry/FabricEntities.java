@@ -803,6 +803,13 @@ public class FabricEntities {
                         EntityType.Builder.<RoundaboutBulletEntity>of(RoundaboutBulletEntity::new, MobCategory.MISC).
                                 sized(0.25f, 0.25f).clientTrackingRange(16).build(Roundabout.MOD_ID+":roundabout_bullet_entity")
                 );
+        public static final EntityType<BadCompanyBulletEntity> BAD_COMPANY_BULLET_ENTITY =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "bad_company_bullet_entity"),
+                        EntityType.Builder.<BadCompanyBulletEntity>of(BadCompanyBulletEntity::new, MobCategory.MISC).
+                                sized(0.25f, 0.25f).clientTrackingRange(16).build(Roundabout.MOD_ID+":bad_company_bullet_entity")
+                );
         public static final EntityType<KnifeEntity> THROWN_KNIFE =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -1357,6 +1364,7 @@ public class FabricEntities {
                 ModEntities.THROWN_HARPOON = THROWN_HARPOON;
                 ModEntities.BLADED_BOWLER_HAT = BLADED_BOWLER_HAT;
                 ModEntities.ROUNDABOUT_BULLET_ENTITY = ROUNDABOUT_BULLET_ENTITY;
+                ModEntities.BAD_COMPANY_BULLET_ENTITY = BAD_COMPANY_BULLET_ENTITY;
                 ModEntities.THROWN_KNIFE = THROWN_KNIFE;
                 ModEntities.PH_CAPSULE = PH_CAPSULE;
                 ModEntities.BONE_PROJECTILE = BONE_PROJECTILE;

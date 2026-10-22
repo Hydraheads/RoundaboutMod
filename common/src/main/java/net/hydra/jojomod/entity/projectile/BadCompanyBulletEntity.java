@@ -1,0 +1,275 @@
+package net.hydra.jojomod.entity.projectile;
+
+import net.hydra.jojomod.access.IAbstractArrowAccess;
+import net.hydra.jojomod.access.IEnderMan;
+import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.objects.GentlyWeepsEntity;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.AbstractGlassBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.StainedGlassPaneBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class BadCompanyBulletEntity extends AbstractArrow {
+
+    private final List<Vec3> trailPoints = new ArrayList<>();
+    // trail length
+    private static final int MAX_TRAIL_POINTS = 12;
+
+    public BadCompanyBulletEntity(EntityType<? extends BadCompanyBulletEntity> type, Level level) {
+        super(type, level);
+    }
+
+    public BadCompanyBulletEntity(Level level, LivingEntity livingEntity) {
+        super(ModEntities.BAD_COMPANY_BULLET_ENTITY, livingEntity, level);
+        setNoGravity(true);
+    }
+    public BadCompanyBulletEntity(Level $$0, LivingEntity $$1, ItemStack $$2, double p_36862_, double p_36863_, double p_36864_) {
+        super(ModEntities.BAD_COMPANY_BULLET_ENTITY, p_36862_, p_36863_, p_36864_, $$0);
+    }
+
+    public List<Vec3> getTrailPoints() {
+        return this.trailPoints;
+    }
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+
+    }
+
+
+    public void applyEffect(LivingEntity target) {
+        if (!MainUtil.isBossMob(target) && !(target instanceof RoadRollerEntity)) {
+            if (MainUtil.getMobBleed(target)) {
+
+                //MainUtil.makeBleed(target,0,60,getOwner());
+
+            }
+        }
+    }
+
+    private float getBulletDamage() {
+        return 1.5f;
+    }
+
+    @Override
+    public void onHitEntity(EntityHitResult result) {
+        Entity entity = result.getEntity();
+
+        if (!level().isClientSide && entity instanceof EnderMan em) {
+
+            if (((IEnderMan) em).roundabout$teleport()) return;
+
+            for (int i = 0; i < 64; i++) {
+                if (((IEnderMan) em).roundabout$teleport()) {
+                    return;
+                }
+            }
+        }
+
+        if (entity instanceof LivingEntity $$3) {
+            StandPowers entityPowers = ((StandUser) $$3).roundabout$getStandPowers();
+            if (entityPowers != null ) {
+                if (entityPowers.dealWithProjectile(this, result)) {
+                    discard();
+                    return;
+                } else if (entityPowers.dealWithProjectileNoDiscard(this, result)) {
+                    return;
+                }
+            }
+        }
+
+        if (entity instanceof LivingEntity livingEntity) {
+
+            boolean hadIFrames = livingEntity.invulnerableTime > 0 || livingEntity.hurtTime > 0;
+
+            if (livingEntity.isInvulnerable()) {
+                return;
+            }
+
+
+            if (hadIFrames) {
+                livingEntity.invulnerableTime = 0;
+                livingEntity.hurtTime = 0;
+            }
+
+            float damage = getBulletDamage();
+
+
+            if (livingEntity instanceof Player) {
+                damage = (float) (damage * (ClientNetworking.getAppropriateConfig().itemSettings.gunDamageOnPlayers * 0.01));
+                damage *= 0.85F;
+            } else {
+                damage = (float) (damage * (ClientNetworking.getAppropriateConfig().itemSettings.gunDamageOnMobs * 0.01));
+
+            }
+
+
+
+            boolean didDamage = livingEntity.hurt(ModDamageTypes.of(level(), getDamageType(), this, this.getOwner()), damage);
+
+            if (didDamage) {
+                applyEffect(livingEntity);
+            }
+
+            if (didDamage) {
+                livingEntity.invulnerableTime = 10;
+                livingEntity.hurtTime = 10;
+            }
+
+        }else if (entity instanceof GentlyWeepsEntity gwe){
+                GentlyWeepsEntity.dealWithProjectile(this,gwe);
+                return;
+        } else {
+            entity.hurt(ModDamageTypes.of(level(), getDamageType(), this, this.getOwner()), 1);
+        }
+
+        Entity $$2 = this.getOwner();
+        if ($$2 instanceof LivingEntity livingOwner) {
+            livingOwner.setLastHurtMob(entity);
+        }
+
+        this.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), ModSounds.BULLET_PENTRATION_EVENT, this.getSoundSource(), 1.0F, 1.0F);
+        this.discard();
+    }
+
+    ResourceKey<DamageType> getDamageType(){
+
+        return ModDamageTypes.BULLET;
+    }
+
+    protected void onHitBlock2(BlockHitResult $$0) {
+        ((IAbstractArrowAccess)this).roundabout$setLastState(this.level().getBlockState($$0.getBlockPos()));
+        BlockState BSS = this.level().getBlockState($$0.getBlockPos());
+        BSS.onProjectileHit(this.level(), BSS, $$0, this);
+        Vec3 $$1 = $$0.getLocation().subtract(this.getX(), this.getY(), this.getZ());
+        this.setDeltaMovement($$1);
+        Vec3 $$2 = $$1.normalize().scale(0.05F);
+        this.setPosRaw(this.getX() - $$2.x, this.getY() - $$2.y, this.getZ() - $$2.z);
+        this.playSound(ModSounds.BULLET_PENTRATION_EVENT, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
+        this.inGround = true;
+        this.shakeTime = 7;
+        this.setCritArrow(false);
+        this.setPierceLevel((byte)0);
+        this.setSoundEvent(SoundEvents.ARROW_HIT);
+        this.setShotFromCrossbow(false);
+        ((IAbstractArrowAccess)this).roundabout$resetPiercedEntities();
+    }
+
+    @Override
+    protected void doPostHurtEffects(LivingEntity target) {
+    }
+
+    int ticksSinceCreation = 0;
+
+    @Override
+    public void tick() {
+
+        super.tick();
+        ticksSinceCreation++;
+
+        // for getting the trail
+        if (this.level().isClientSide() && ticksSinceCreation > 3) {
+            if (!this.inGround && !this.isRemoved()) {
+                this.trailPoints.add(this.position().add(0, 0.1, 0));
+                if (this.trailPoints.size() > MAX_TRAIL_POINTS) {
+                    this.trailPoints.remove(0);
+                }
+            } else if (this.inGround) {
+                this.trailPoints.clear();
+            }
+        }
+    }
+
+    @Override
+    protected ItemStack getPickupItem() {
+        return ItemStack.EMPTY;
+    }
+
+    public void blockBreakParticles(Block block, Vec3 pos){
+        if (!this.level().isClientSide()) {
+            ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
+                            block.defaultBlockState()),
+                    pos.x, pos.y, pos.z,
+                    100, 0, 0, 0, 0.5);
+        }
+    }
+
+    @Override
+    protected void onHitBlock(BlockHitResult $$0) {
+
+        this.setDeltaMovement(Vec3.ZERO);
+        if (!level().isClientSide) {
+            Block blkk = this.level().getBlockState($$0.getBlockPos()).getBlock();
+            if (blkk instanceof AbstractGlassBlock || blkk instanceof StainedGlassPaneBlock
+                    || blkk.defaultBlockState().is(Blocks.GLASS_PANE)){
+                if (this.level().removeBlock($$0.getBlockPos(),false)){
+                    blockBreakParticles(blkk,
+                            new Vec3($$0.getBlockPos().getX()+0.5,
+                                    $$0.getBlockPos().getY()+0.5,
+                                    $$0.getBlockPos().getZ()+0.5));
+                    this.playSound(blkk.defaultBlockState().getSoundType().getBreakSound(), 1.0F, 0.9F);
+                    return;
+                }
+            }
+        }
+
+        onHitBlock2($$0);
+    }
+
+
+    @Override
+    protected boolean tryPickup(Player $$0) {
+        return false;
+    }
+
+    @Override
+    public void tickDespawn() {
+        int $$0 = 1;
+        if (this.pickup != Pickup.ALLOWED || $$0 <= 0) {
+            super.tickDespawn();
+        }
+    }
+
+    @Override
+    protected float getWaterInertia() {
+        return 0.99F;
+    }
+
+    @Override
+    public boolean shouldRender(double $$0, double $$1, double $$2) {
+        if (ClientUtil.getPlayer() != null) {
+            return ((StandUser) ClientUtil.getPlayer()).roundabout$hasAStand();
+        }
+
+        return true;
+    }
+}
