@@ -221,7 +221,6 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
         }
 
 
-        Roundabout.LOGGER.info(""+this.getDirection());
 
         if (!client) {
             if (!isVortex()) {

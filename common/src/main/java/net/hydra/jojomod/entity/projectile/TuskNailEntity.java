@@ -205,9 +205,7 @@ public class TuskNailEntity extends AbstractArrow {
             Direction dir = bhr.getDirection();
             if (dir != Direction.DOWN && dir != Direction.UP) {
                 tuskHoleEntity.setClinging(dir);
-                Roundabout.LOGGER.info(""+pos);
                 pos = tuskHoleEntity.alignToDirection(pos,dir);
-                Roundabout.LOGGER.info(""+pos);
             }
             tuskHoleEntity.setPos(pos);
             this.level().addFreshEntity(tuskHoleEntity);
