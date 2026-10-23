@@ -2438,7 +2438,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                 syncBombStatus(ARROW_BOMB);
             }
-            if (this.self instanceof Player) {
+            if (this.self instanceof Player && bombEntity != null) {
                 S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(),
                         PowersKillerQueen.ENTITY_BOMB, bombEntity.getId());
             }
@@ -2496,7 +2496,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public void tryBitesTheDustDay() {
-        if (canBitesTheDustDay() && !onCooldown(PowerIndex.SKILL_EXTRA)) {
+        if (canExecuteMoveWithLevel(getBitesTheDustDayLevel()) && canBitesTheDustDay() && !onCooldown(PowerIndex.SKILL_EXTRA)) {
             if (this.activePower == BITES_THE_DUST_DAY) {
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                 tryPowerPacket(PowerIndex.NONE);
@@ -3355,7 +3355,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public boolean bitesTheDustDayActivate() {
-        if (!canBitesTheDustDay()) { return false; }
+        if (!canExecuteMoveWithLevel(getBitesTheDustDayLevel()) || !canBitesTheDustDay()) { return false; }
 
         if (this.isClient()) {
             btdTicks = 0;
@@ -4589,6 +4589,22 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
 
         return BASE_EXPLOSION_4;
+    }
+
+
+    @Override
+    public void playBarrageEndNoise(float mod, Entity entity) {
+        if (!this.self.level().isClientSide()) {
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.KILLER_QUEEN_HEAVY_PUNCH_EVENT, SoundSource.PLAYERS, 0.85F + mod, 1F);
+        }
+    }
+
+    @Override
+    public void playBarrageNoise(int hitNumber, Entity entity) {
+        if (!this.self.level().isClientSide()) {
+            if (hitNumber % 2 == 0)
+                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.KILLER_QUEEN_BARRAGE_HIT_EVENT, SoundSource.PLAYERS, 0.7F, (float) (0.9 + (Math.random() * 0.25)));
+        }
     }
 
     public SoundEvent getExplosionSoundFromByte(byte value) {
