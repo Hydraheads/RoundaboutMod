@@ -320,7 +320,7 @@ public abstract class HudRendering implements IHudAccess {
                         ResourceLocation texture = new ResourceLocation(Roundabout.MOD_ID,
                                 "textures/misc/lyin_eyes/pileup_f" + frame + ".png");
                         RenderSystem.enableBlend();
-                        gatherOpacity = gatherOpacity * ConfigManager.getClientConfig().lyinEyesSettings.nematodeOpacity;
+                        gatherOpacity *= ConfigManager.getClientConfig().lyinEyesSettings.nematodeOpacity;
                         this.renderTextureOverlay($$1, texture, gatherOpacity);
                     }
                 }

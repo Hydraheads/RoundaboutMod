@@ -4328,6 +4328,8 @@
   "config.roundabout.maxDetectionRange.desc": "How many blocks away can the nematodes detect someone in tension sensor? Default is 25.",
   "config.roundabout.nematodeOpacity.name": "Nematode Overlay Opacity",
   "config.roundabout.nematodeOpacity.desc": "What is the opacity of the nematode overlay in first person? 1.0 is the default. (Change this as a decimal point, i.e. 0.5 for 50%)",
+  "config.roundabout.mapOpacity.name": "Map Overlay Opacity",
+  "config.roundabout.mapOpacity.desc": "What is the opacity of the map overlay in first person? 1.0 is the default. (Change this as a decimal point, i.e. 0.5 for 50%)",
   "config.roundabout.spinMapInsteadOfArrow.name": "Spin Map Instead Of Arrow",
   "config.roundabout.spinMapInsteadOfArrow.desc": "Spins the minimap of the second ability instead of the player arrow.",
 

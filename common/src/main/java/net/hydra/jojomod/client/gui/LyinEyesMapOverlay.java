@@ -43,6 +43,7 @@ public class LyinEyesMapOverlay {
         if (((StandUser) player).roundabout$getStandPowers() instanceof PowersLyinEyes lyinEyes) {
             float opacity = lyinEyes.getMapOpacity();
             if (opacity <= 0.0F) return;
+            opacity *= ConfigManager.getClientConfig().lyinEyesSettings.mapOpacity;
 
             guiGraphics.setColor(1.0F, 1.0F, 1.0F, opacity);
             try {
