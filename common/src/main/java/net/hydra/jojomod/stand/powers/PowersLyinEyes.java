@@ -53,6 +53,8 @@ public class PowersLyinEyes extends NewDashPreset {
     private boolean visionModeClient = false;
     //map mode
     private boolean mapModeClient = false;
+    // fading in/out when summoning/unsummoning
+    private float trueSummon = 0.0F;
 
     // basic stand registry stuff
     public PowersLyinEyes(LivingEntity self) {super(self);}
@@ -90,6 +92,11 @@ public class PowersLyinEyes extends NewDashPreset {
 
     @Override
     public void tickPower() {
+        if (isActive()) {
+            trueSummon = Math.min(1.0F, trueSummon + (1.0F / 12.0F));
+        } else {
+            trueSummon = Math.max(0.0F, trueSummon - (1.0F / 12.0F));
+        }
         mapOpacity = Mth.approach(mapOpacity, mapModeClient ? 1.0F : 0.0F, 0.20F);
         if (this.self.level().isClientSide()) {
             //inventory tracking for animation oooooh
@@ -452,6 +459,7 @@ public class PowersLyinEyes extends NewDashPreset {
     public boolean isActive() {return hasStandActive(this.self);}
     public boolean getMapModeClient() {return mapModeClient;}
     public float getMapOpacity() {return mapOpacity;}
+    public float getTrueSummon() { return trueSummon; }
 
     // WIP FEATURES BELOW HERE, DELETE WHEN DONE
 
