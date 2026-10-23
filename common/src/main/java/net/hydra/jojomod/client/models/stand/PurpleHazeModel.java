@@ -166,7 +166,12 @@ public class PurpleHazeModel<T extends PurpleHazeEntity> extends StandModel<T> {
         this.animate(pEntity.strangle_windup, PurpleHazeAnimations.STRANGLE_WINDUP, pAgeInTicks, 1f);
         this.animate(pEntity.flyloop, PurpleHazeAnimations.FLYLOOP, pAgeInTicks, 1f);
         this.animate(pEntity.strangle_hold, PurpleHazeAnimations.STRANGLE_HOLD, pAgeInTicks, 1f);
-        this.animate(pEntity.strangle_grab, PurpleHazeAnimations.STRANGLE_GRAB, pAgeInTicks, 1f);}
+        this.animate(pEntity.strangle_grab, PurpleHazeAnimations.STRANGLE_GRAB, pAgeInTicks, 1f);
+        this.animate(pEntity.phfullcombo, PurpleHazeAnimations.PHFULLCOMBO, pAgeInTicks, 1f);
+        this.animate(pEntity.phcombo1, PurpleHazeAnimations.PHCOMBO1, pAgeInTicks, 1f);
+        this.animate(pEntity.phcombo2, PurpleHazeAnimations.PHCOMBO2, pAgeInTicks, 1f);
+        this.animate(pEntity.phcombo3, PurpleHazeAnimations.PHCOMBO3, pAgeInTicks, 1f);
+    }
     @Override
     public ModelPart root() {
         return stand;
