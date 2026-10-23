@@ -465,7 +465,7 @@ public class PowersLyinEyes extends NewDashPreset {
 
     // WIP FEATURES BELOW HERE, DELETE WHEN DONE
 
-    @Override
+    /*@Override
     public boolean isWip() {
         return true;
     }
@@ -478,5 +478,5 @@ public class PowersLyinEyes extends NewDashPreset {
     @Override
     public Component ifWipListDev() {
         return Component.literal("88superguy").withStyle(ChatFormatting.GOLD);
-    }
+    }*/
 }
