@@ -175,6 +175,9 @@ public class FabricSounds {
         addSound(ModSounds.JACKAL_FIRE_ID, ModSounds.JACKAL_FIRE_EVENT);
         addSound(ModSounds.JACKAL_RELOAD_ID, ModSounds.JACKAL_RELOAD_EVENT);
 
+        addSound(ModSounds.BERETTA_FIRE_ID, ModSounds.BERETTA_FIRE_EVENT);
+        addSound(ModSounds.BERETTA_RELOAD_ID, ModSounds.BERETTA_RELOAD_EVENT);
+
         addSound(ModSounds.BULLET_PENTRATION_ID, ModSounds.BULLET_PENTRATION_EVENT);
         addSound(ModSounds.BULLET_RICOCHET_ID, ModSounds.BULLET_RICOCHET_EVENT);
         addSound(ModSounds.MAGIC_DING_ID, ModSounds.MAGIC_DING_EVENT);
@@ -393,6 +396,7 @@ public class FabricSounds {
         addSound(ModSounds.KQ_MINESWEEPER_SHIBABA_ID, ModSounds.KQ_MINESWEEPER_SHIBABA_EVENT);
         addSound(ModSounds.KILLER_QUEEN_PUNCH_ID, ModSounds.KILLER_QUEEN_PUNCH_EVENT);
         addSound(ModSounds.KILLER_QUEEN_IMPALE_ID, ModSounds.KILLER_QUEEN_IMPALE_EVENT);
+        addSound(ModSounds.KILLER_QUEEN_BARRAGE_HIT_ID, ModSounds.KILLER_QUEEN_BARRAGE_HIT_EVENT);
         addSound(ModSounds.KILLER_QUEEN_PUNCH_1_ID, ModSounds.KILLER_QUEEN_PUNCH_1_EVENT);
         addSound(ModSounds.KILLER_QUEEN_PUNCH_2_ID, ModSounds.KILLER_QUEEN_PUNCH_2_EVENT);
         addSound(ModSounds.KILLER_QUEEN_HEAVY_PUNCH_ID, ModSounds.KILLER_QUEEN_HEAVY_PUNCH_EVENT);

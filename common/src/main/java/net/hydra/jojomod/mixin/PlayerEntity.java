@@ -12,6 +12,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
+import net.hydra.jojomod.entity.stand.SilverChariotEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -1206,6 +1207,10 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             if (rticks < 50){
                 cir.setReturnValue(false);
             }
+        } else if (this.getVehicle() != null && this.getVehicle() instanceof SilverChariotEntity silverChariot) {
+            if (silverChariot.isSelfCarryModeActive()) {
+                cir.setReturnValue(false);
+            }
         }
     }
     @Inject(method = "rideTick", at = @At(value = "HEAD"), cancellable = true)
@@ -1235,6 +1240,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                     ci.cancel();
                 }
             }
+        } else if (this.getVehicle() != null && this.getVehicle() instanceof SilverChariotEntity sc && sc.isSelfCarryModeActive()) {
+            this.setShiftKeyDown(false);
         }
     }
     @Inject(method = "getProjectile(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/item/ItemStack;",

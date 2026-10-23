@@ -146,6 +146,14 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                     this.animate(ipe.roundabout$getItemAnimation(), Poses.TOMMY_AIM_LEFT.ad, partialTicks, 1f);
                     this.animate(ipe.roundabout$getItemAnimationActive(), Poses.TOMMY_RECOIL_LEFT.ad, partialTicks, 1f);
                 }
+            } else if (player.getUseItem().getItem() instanceof ColtRevolverItem) {
+                if (mainHandRight) {
+                    this.animate(ipe.roundabout$getItemAnimation(), Poses.SNUBNOSE_AIM.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.SNUBNOSE_RECOIL.ad, partialTicks, 1f);
+                } else {
+                    this.animate(ipe.roundabout$getItemAnimation(), Poses.SNUBNOSE_AIM_LEFT.ad, partialTicks, 1f);
+                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.SNUBNOSE_RECOIL_LEFT.ad, partialTicks, 1f);
+                }
             } else if (player.getUseItem().getItem() instanceof BerettaPistolItem) {
                 if (mainHandRight) {
                     this.animate(ipe.roundabout$getItemAnimation(), Poses.SNUBNOSE_AIM.ad, partialTicks, 1f);

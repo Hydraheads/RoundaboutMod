@@ -524,6 +524,13 @@ public class ModSounds {
     public static final ResourceLocation JACKAL_RELOAD_ID = new ResourceLocation(Roundabout.MOD_ID+":"+JACKAL_RELOAD);
     public static SoundEvent JACKAL_RELOAD_EVENT = SoundEvent.createVariableRangeEvent(JACKAL_RELOAD_ID);
 
+    public static final String BERETTA_FIRE = "beretta_fire";
+    public static final ResourceLocation BERETTA_FIRE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BERETTA_FIRE);
+    public static SoundEvent BERETTA_FIRE_EVENT = SoundEvent.createVariableRangeEvent(BERETTA_FIRE_ID);
+    public static final String BERETTA_RELOAD = "beretta_reload";
+    public static final ResourceLocation BERETTA_RELOAD_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BERETTA_RELOAD);
+    public static SoundEvent BERETTA_RELOAD_EVENT = SoundEvent.createVariableRangeEvent(BERETTA_RELOAD_ID);
+
     public static final String BULLET_PENTRATION = "bullet_penetration";
     public static final ResourceLocation BULLET_PENTRATION_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BULLET_PENTRATION);
     public static SoundEvent BULLET_PENTRATION_EVENT = SoundEvent.createVariableRangeEvent(BULLET_PENTRATION_ID);
@@ -799,6 +806,9 @@ public class ModSounds {
     public static final ResourceLocation STRAY_CAT_SOUND_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+STRAY_CAT_SOUND_3);
     public static SoundEvent STRAY_CAT_SOUND_3_EVENT = SoundEvent.createVariableRangeEvent(STRAY_CAT_SOUND_3_ID);
 
+    public static final String KILLER_QUEEN_BARRAGE_HIT = "killer_queen_barrage_hit";
+    public static final ResourceLocation KILLER_QUEEN_BARRAGE_HIT_ID = new ResourceLocation(Roundabout.MOD_ID + ":" + KILLER_QUEEN_BARRAGE_HIT);
+    public static SoundEvent KILLER_QUEEN_BARRAGE_HIT_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_BARRAGE_HIT_ID);
     public static final String KILLER_QUEEN_IMPALE = "killer_queen_impale";
     public static final ResourceLocation KILLER_QUEEN_IMPALE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_IMPALE);
     public static SoundEvent KILLER_QUEEN_IMPALE_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_IMPALE_ID);

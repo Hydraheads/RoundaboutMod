@@ -36,7 +36,8 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
 
     public static final byte
             IDLE_GUN = 0,
-            WALK_GUN = 1;
+            WALK_GUN = 1,
+            SHOOT_GUN = 2;
 
     @Override
     protected void defineSynchedData() {
@@ -70,11 +71,13 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
     public static float width = 0.35f;
     public static float height = 0.32f;
     public boolean isDisplay = false;
+    public boolean isShooting = false;
 
     public final AnimationState releaseParachute = new AnimationState();
     public final AnimationState closeParachute = new AnimationState();
     public final AnimationState idleWithGun = new AnimationState();
     public final AnimationState walkWithGun = new AnimationState();
+    public final AnimationState shootGun = new AnimationState();
     public final AnimationState runWithGun = new AnimationState();
 
     @Override
@@ -105,6 +108,8 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
         }
     }
 
+    private float attackRange = 7.5f;
+
     public void tick() {
         super.tick();
 
@@ -121,7 +126,19 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
             if (getNavigation().isInProgress()) {
                 setAnim(WALK_GUN);
             } else {
-                setAnim(IDLE_GUN);
+                if (getTarget() != null && !(distanceToSqr(getTarget().getX(), getTarget().getY(), getTarget().getZ()) > attackRange)) {
+                    setAnim(IDLE_GUN);
+                }else {
+                    setAnim(SHOOT_GUN);
+                }
+            }
+        }
+
+        if (chargeTicks != -1 || bulletsLeft <= 0) {
+            chargeTicks--;
+            if (chargeTicks <= 0) {
+                bulletsLeft = getBulletsAmount();
+                chargeTicks = -1;
             }
         }
     }
@@ -141,10 +158,15 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
         goalSelector.addGoal(0, new FloatGoal(this));
         goalSelector.addGoal(1, new ReturnToLeaderGoal(this, 1));
         goalSelector.addGoal(2, new UserHurtTargetGoal(this));
-        goalSelector.addGoal(2, new RangedAttackGoal(this, 1.2, 5, 7.5f) {
+        goalSelector.addGoal(2, new RangedAttackGoal(this, 1.2, 5, attackRange) {
             @Override
             public boolean canUse() {
-                return super.canUse() && getCurrentTactic() != BadCompanyTactics.RETURN.id;
+                return super.canUse() && getCurrentTactic() != BadCompanyTactics.RETURN.id && getRemainingBullets() > 0;
+            }
+
+            @Override
+            public boolean canContinueToUse() {
+                return super.canContinueToUse() && getRemainingBullets() > 0;
             }
         });
     }
@@ -174,15 +196,32 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
 
     @Override
     public void performRangedAttack(LivingEntity target, float v) {
+        if (getBundle()) {
+            shootSingleBulletAt(getEyePosition(1).add(1.0f, 0.0f, 0.65f), target);
+            shootSingleBulletAt(getEyePosition(1).add(0f, 0.0f, 1.15f), target);
+            shootSingleBulletAt(getEyePosition(1).add(-1.0f, 0.0f, 0.65f), target);
+
+            shootSingleBulletAt(getEyePosition(1).add(1.0f, 0.0f, -0.65), target);
+            shootSingleBulletAt(getEyePosition(1).add(0f, 0.0f, -1.15f), target);
+            shootSingleBulletAt(getEyePosition(1).add(-1.0f, 0.0f, -0.65), target);
+
+        }else {
+            shootSingleBulletAt(getEyePosition(1), target);
+        }
+        bulletsLeft--;
+        if (bulletsLeft <= 0) {
+            chargeTicks = getRechargeTime();
+        }
+    }
+
+    public void shootSingleBulletAt(Vec3 positionShoot, LivingEntity target) {
         BadCompanyBulletEntity bullet = new BadCompanyBulletEntity(level(), getUser());
-        Vec3 positionShoot = getEyePosition(1);
         Vec3 targetPosition = target.getEyePosition(1);
         level().addFreshEntity(bullet);
         bullet.absMoveTo(positionShoot.x, positionShoot.y, positionShoot.z);
-        bullet.shoot(targetPosition.x - positionShoot.x, targetPosition.y - positionShoot.y, targetPosition.z - positionShoot.z, 5.0F, 1.0F);
+        bullet.shoot(targetPosition.x - positionShoot.x, targetPosition.y - positionShoot.y, targetPosition.z - positionShoot.z, 4.5F, 1.5F);
         level().playSound(null, this.blockPosition(), getFireSound(), SoundSource.PLAYERS, getFireSoundVolume(), getFireSoundPitch());
     }
-
 
     public SoundEvent getFireSound() { return ModSounds.TOMMY_FIRE_EVENT; }
 
@@ -191,5 +230,13 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
     public float getFireSoundPitch() {
         Random random = new Random();
         return random.nextFloat(1.7F - 1.5F) + 1.5F;
+    }
+
+    public int getRechargeTime() { return 50; }
+    public int getBulletsAmount() { return 12; }
+    private int chargeTicks = -1;
+    public int bulletsLeft = getBulletsAmount();
+    public int getRemainingBullets() {
+        return bulletsLeft;
     }
 }

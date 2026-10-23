@@ -253,6 +253,11 @@ public class ForgeSounds {
     public static final RegistryObject<SoundEvent> JACKAL_RELOAD_EVENT =
             register(ModSounds.JACKAL_RELOAD, ModSounds.JACKAL_RELOAD_ID);
 
+    public static final RegistryObject<SoundEvent> BERETTA_FIRE_EVENT =
+            register(ModSounds.BERETTA_FIRE, ModSounds.BERETTA_FIRE_ID);
+    public static final RegistryObject<SoundEvent> BERETTA_RELOAD_EVENT =
+            register(ModSounds.BERETTA_RELOAD, ModSounds.BERETTA_RELOAD_ID);
+
     public static final RegistryObject<SoundEvent> BULLET_PENTRATION_EVENT =
             register(ModSounds.BULLET_PENTRATION, ModSounds.BULLET_PENTRATION_ID);
     public static final RegistryObject<SoundEvent> BULLET_RICOCHET_EVENT =
@@ -349,6 +354,8 @@ public class ForgeSounds {
             register(ModSounds.STAND_BARRAGE_END_BLOCK, ModSounds.STAND_BARRAGE_END_BLOCK_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_IMPALE_EVENT =
             register(ModSounds.KILLER_QUEEN_IMPALE, ModSounds.KILLER_QUEEN_IMPALE_ID);
+    public static final RegistryObject<SoundEvent> KILLER_QUEEN_BARRAGE_HIT_EVENT =
+            register(ModSounds.KILLER_QUEEN_BARRAGE_HIT, ModSounds.KILLER_QUEEN_BARRAGE_HIT_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_PUNCH_EVENT =
             register(ModSounds.KILLER_QUEEN_PUNCH, ModSounds.KILLER_QUEEN_PUNCH_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_HEAVY_PUNCH_EVENT =

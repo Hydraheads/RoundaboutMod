@@ -1034,6 +1034,15 @@
       "roundabout:killer_queen_select"
     ]
   },
+  "killer_queen_barrage_hit" : {
+    "subtitle": "sounds.roundabout.stand_barrage_hit_soft",
+    "sounds": [
+      "roundabout:kq_barrage_hit_1",
+      "roundabout:kq_barrage_hit_2",
+      "roundabout:kq_barrage_hit_3",
+      "roundabout:kq_barrage_hit_4"
+    ]
+  },
   "kq_block_plant" : {
     "subtitle": "sounds.roundabout.kq_block_plant",
     "sounds": [
@@ -1585,6 +1594,21 @@
     "subtitle": "sounds.roundabout.colt_reload",
     "sounds": [
       "roundabout:colt_reload"
+    ]
+  },
+  "beretta_fire": {
+    "subtitle": "sounds.roundabout.snubnose_fire",
+    "sounds": [
+      "roundabout:beretta_shot_1",
+      "roundabout:beretta_shot_2",
+      "roundabout:beretta_shot_3",
+      "roundabout:beretta_shot_4"
+    ]
+  },
+  "beretta_reload": {
+    "subtitle": "sounds.roundabout.snubnose_reload",
+    "sounds": [
+      "roundabout:beretta_reload"
     ]
   },
   "bullet_penetration": {

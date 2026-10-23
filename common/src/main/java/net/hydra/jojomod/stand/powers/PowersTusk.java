@@ -1105,7 +1105,7 @@ public class PowersTusk extends NewDashPreset {
         this.setPowerNone();
         this.setActivePowerPhase((byte)2);
         this.setAttackTime(0);
-        this.setAttackTimeMax(50);
+        this.setAttackTimeMax(40);
         if (!isClient()) {
 
             float reach = 5F;
@@ -1310,7 +1310,7 @@ public class PowersTusk extends NewDashPreset {
     public float getNailDamage(TuskNailEntity nail, Entity target, int act) {
         boolean bl = MainUtil.getReducedDamage(target);
         float damage = switch (act) {
-            case 1 -> bl ? 1.35F : 3.0F;
+            case 1 -> bl ? 0.7F : 3.0F;
             case 2,3 -> bl ? 3 : 5;
             case 4 -> bl ? 4 : 2;
             default -> 1.0F;
@@ -1395,9 +1395,9 @@ public class PowersTusk extends NewDashPreset {
         } else {
             this.activePowerPhase++;
             if (this.activePowerPhase == 2) {
-                this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.finalStandPunchInStringCooldown;
+                this.attackTimeMax= 30;
             } else {
-                this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.standPunchCooldown;
+                this.attackTimeMax= 20;
             }
         }
         this.attackTimeDuring = 0;
