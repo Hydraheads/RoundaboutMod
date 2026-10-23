@@ -12,6 +12,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
+import net.hydra.jojomod.entity.stand.SilverChariotEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -147,6 +148,10 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             EntityDataSerializers.BYTE);
     @Unique
     private static final EntityDataAccessor<Byte> ROUNDABOUT$SHAPE_SHIFT_EXTRA = SynchedEntityData.defineId(Player.class,
+            EntityDataSerializers.BYTE);
+    //This is essential for clone "girth" that you semi-permanently acquire from jumping bodies
+    @Unique
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$WIDTH_FACTOR = SynchedEntityData.defineId(Player.class,
             EntityDataSerializers.BYTE);
     @Unique
     private static final EntityDataAccessor<Integer> ROUNDABOUT$STAND_EXP = SynchedEntityData.defineId(Player.class,
@@ -859,18 +864,28 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
     @Override
     @Unique
-    public void roundabout$setShapeShiftExtraData(byte level){
-        ((Player) (Object) this).getEntityData().set(ROUNDABOUT$SHAPE_SHIFT_EXTRA, level);
-    }
-    @Override
-    @Unique
     public byte roundabout$getShapeShift(){
         return ((Player) (Object) this).getEntityData().get(ROUNDABOUT$SHAPE_SHIFT);
     }
     @Override
     @Unique
+    public void roundabout$setShapeShiftExtraData(byte level){
+        ((Player) (Object) this).getEntityData().set(ROUNDABOUT$SHAPE_SHIFT_EXTRA, level);
+    }
+    @Override
+    @Unique
     public byte roundabout$getShapeShiftExtraData(){
         return ((Player) (Object) this).getEntityData().get(ROUNDABOUT$SHAPE_SHIFT_EXTRA);
+    }
+    @Override
+    @Unique
+    public void roundabout$setWidthFactor(byte level){
+        ((Player) (Object) this).getEntityData().set(ROUNDABOUT$WIDTH_FACTOR, level);
+    }
+    @Override
+    @Unique
+    public byte roundabout$getWidthFactor(){
+        return ((Player) (Object) this).getEntityData().get(ROUNDABOUT$WIDTH_FACTOR);
     }
     @Override
     @Unique
@@ -1192,6 +1207,10 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             if (rticks < 50){
                 cir.setReturnValue(false);
             }
+        } else if (this.getVehicle() != null && this.getVehicle() instanceof SilverChariotEntity silverChariot) {
+            if (silverChariot.isSelfCarryModeActive()) {
+                cir.setReturnValue(false);
+            }
         }
     }
     @Inject(method = "rideTick", at = @At(value = "HEAD"), cancellable = true)
@@ -1221,6 +1240,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                     ci.cancel();
                 }
             }
+        } else if (this.getVehicle() != null && this.getVehicle() instanceof SilverChariotEntity sc && sc.isSelfCarryModeActive()) {
+            this.setShiftKeyDown(false);
         }
     }
     @Inject(method = "getProjectile(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/item/ItemStack;",
@@ -1332,6 +1353,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         compoundtag.putFloat("idleYOffset",roundabout$idleYOffset);
         compoundtag.putFloat("sizePercent",roundabout$sizePercent);
         compoundtag.putByte("teamColor",roundabout$getTeamColor());
+        compoundtag.putByte("widthFactor",roundabout$getWidthFactor());
         compoundtag.putByte("fate",roundabout$getFate());
         compoundtag.putByte("power",roundabout$getPower());
         compoundtag.putFloat("hairColorX",rdbt$getHairColorX());
@@ -1432,6 +1454,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
         if (compoundtag2.contains("teamColor")) {
             roundabout$setTeamColor(compoundtag2.getByte("teamColor"));
+        }
+        if (compoundtag2.contains("widthFactor")) {
+            roundabout$setWidthFactor(compoundtag2.getByte("widthFactor"));
         }
         if (compoundtag2.contains("fate")) {
             roundabout$setFate(compoundtag2.getByte("fate"));
@@ -2080,6 +2105,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_LEVEL, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$SHAPE_SHIFT, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$SHAPE_SHIFT_EXTRA, (byte) 0);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$WIDTH_FACTOR, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_EXP, 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_CONTROLLING, 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$TEAM_COLOR, (byte) 0);

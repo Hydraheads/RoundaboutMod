@@ -87,6 +87,7 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -620,6 +621,31 @@ public class PowersDiverDown extends NewPunchingStand {
         }
     }
 
+    // rejection ai
+
+    @Override
+    public void tickStandRejection(MobEffectInstance effect){
+        if (!this.getSelf().level().isClientSide()) {
+            tickRibcageTrap();
+            tickSpringLegs();
+            if (effect.getDuration() == 200 && startSelfDiveServer()) {
+                startSelfDiveServer();
+                double rng = Math.random();
+                if (rng < 0.35) {
+                    openAfflictions(BONE_BOMB);
+                } else if (rng < 0.70) {
+                    openAfflictions(RIBCAGE_TRAP);
+                } else {
+                    openAfflictions(SPRING_LEGS);
+                }
+            }
+            if (effect.getDuration() <= 1) {
+                clearRibcageTrap();
+                clearSpringLegs();
+            }
+        }
+    }
+
     // icons and ability list here
 
     /**
@@ -831,9 +857,8 @@ public class PowersDiverDown extends NewPunchingStand {
             }
         }
         // block disassembly
-        if (slot == 1 && isHoldingSneak() && !isGuarding()
-                && !areStandMovesDisabled() && canExecuteMoveWithLevel(getBlockDisassemblyLevel())) {
-            if (!canTargetDisassembleBlock()) {
+        if (slot == 1 && isHoldingSneak() && !isGuarding()) {
+            if (!canTargetDisassembleBlock() || !ClientNetworking.getAppropriateConfig().diverDownSettings.disableBlockDisassembly) {
                 return true;
             }
         }
@@ -886,26 +911,11 @@ public class PowersDiverDown extends NewPunchingStand {
         }
     }
 
-    public SoundEvent getBarrageNoise(){
-        SoundEvent barrage;
-        float random = (float) (Math.random()*4);
-        if (random > 3){
-            barrage = ModSounds.DIVER_DOWN_BARRAGE_1_EVENT;
-        } else if (random > 2){
-            barrage = ModSounds.DIVER_DOWN_BARRAGE_2_EVENT;
-        } else if (random > 1){
-            barrage = ModSounds.DIVER_DOWN_BARRAGE_3_EVENT;
-        } else {
-            barrage = ModSounds.DIVER_DOWN_BARRAGE_4_EVENT;
-        }
-        return barrage;
-    }
-
     @Override
     public void playBarrageNoise(int hitNumber, Entity entity) {
         if (!this.self.level().isClientSide()) {
             if (hitNumber % 2 == 0)
-                playSoundIfPossible(self.level(), null, this.self.blockPosition(), getBarrageNoise(), SoundSource.PLAYERS, 0.7F, (float) (0.9 + (Math.random() * 0.25)));
+                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.DIVER_DOWN_BARRAGE_EVENT, SoundSource.PLAYERS, 0.7F, (float) (0.9 + (Math.random() * 0.25)));
         }
     }
 
@@ -958,6 +968,11 @@ public class PowersDiverDown extends NewPunchingStand {
     @Override
     public void tickPower() {
         super.tickPower();
+        if (this.self.level().isClientSide()) {
+            if (this.self.tickCount % 2 == 0) {
+                scanAndPopulateClientLimbs();
+            }
+        }
         if (isPiloting() && this.self.level().isClientSide() && isPacketPlayer()) {
             Minecraft mc = Minecraft.getInstance();
             boolean isMoving = mc.options.keyUp.isDown() || mc.options.keyDown.isDown()
@@ -1704,6 +1719,10 @@ public class PowersDiverDown extends NewPunchingStand {
         } else if (activePower == LIMB_RECALL) {
             this.activeLimbs.clear();
             this.currentLimbIndex = 0;
+        } else if (activePower == LIMB_SCAFFOLD) {
+            if (this.self.level().isClientSide) {
+                scanAndPopulateClientLimbs();
+            }
         }
         super.updatePowerInt(activePower, data);
     }
@@ -1862,9 +1881,9 @@ public class PowersDiverDown extends NewPunchingStand {
             basis *= 0.3f;
         }
         if (inZipMode()) {
-            //enchantment thing copied and adjusted from above
+            // I FREAKING HATE math
             float sneakSpeed = Mth.clamp(0.3F + EnchantmentHelper.getSneakingSpeedBonus(this.getSelf()), 0.0F, 1.0F);
-            float enchantmentMultiplier = sneakSpeed / 0.3F;
+            float enchantmentMultiplier = 0.3F / sneakSpeed;
 
             if (isHoldingSneak()) {
                 basis *= 3.32F;
@@ -2069,7 +2088,7 @@ public class PowersDiverDown extends NewPunchingStand {
 
         if (!this.self.level().isClientSide()) {
             playSoundIfPossible(self.level(), null, this.self.blockPosition(), SE,
-                    SoundSource.PLAYERS, 0.9F, pitch);
+                    SoundSource.PLAYERS, 0.8F, pitch);
         }
     }
 
@@ -2373,6 +2392,9 @@ public class PowersDiverDown extends NewPunchingStand {
                     activeLimbs.add(targetPos);
                     // place the block on the servers
                     if (!level.isClientSide) {
+                        if (this.self instanceof ServerPlayer sp) {
+                            S2CPacketUtil.sendIntPowerDataPacket(sp, LIMB_SCAFFOLD, 1);
+                        }
                         level.setBlockAndUpdate(targetPos, state);
                         if (level.getBlockEntity(targetPos) instanceof DiverLimbBlockEntity be) {
                             be.ownerUUID = this.self.getUUID();
@@ -2498,6 +2520,26 @@ public class PowersDiverDown extends NewPunchingStand {
     private void tryRecallLimbs() {
         ((StandUser) this.getSelf()).roundabout$tryPower(LIMB_RECALL, true);
         tryPowerPacket(LIMB_RECALL);
+    }
+
+    // hopefully this fixes server/client desyncs so that the game ALWAYS tracks if you have a limb placed
+    public void scanAndPopulateClientLimbs() {
+        if (this.self == null || this.self.level() == null || !this.self.level().isClientSide) return;
+        this.activeLimbs.clear();
+        BlockPos center = this.self.blockPosition();
+        int radius = 6;
+
+        for (BlockPos pos : BlockPos.betweenClosed(center.offset(-radius, -radius, -radius), center.offset(radius, radius, radius))) {
+            if (this.self.level().getBlockState(pos).is(ModBlocks.DIVER_LIMB)) {
+                if (this.self.level().getBlockEntity(pos) instanceof DiverLimbBlockEntity be) {
+                    if (be.ownerUUID == null || this.self.getUUID().equals(be.ownerUUID)) {
+                        this.activeLimbs.add(pos.immutable());
+                    }
+                } else {
+                    this.activeLimbs.add(pos.immutable());
+                }
+            }
+        }
     }
 
     // Limb scaffold climb move end
@@ -2746,7 +2788,7 @@ public class PowersDiverDown extends NewPunchingStand {
         if (chestPos == null) {
             return false;
         }
-        if (!MainUtil.canPlaceOnClaim(serverPlayer, chestPos)) {
+        if (!MainUtil.canInteractWithBlock(serverPlayer, chestPos)) {
             return false;
         }
         StandEntity stand = getStandEntity(this.self);
@@ -2969,7 +3011,8 @@ public class PowersDiverDown extends NewPunchingStand {
     public void tryDiverZip() {
         if (!isDiverMoveActive() && canExecuteMoveWithLevel(getDiverZipLevel())
                 && !this.onCooldown(PowerIndex.SKILL_3)
-                && !((StandUser) this.self).roundabout$hasSpringLegs()) {
+                && !((StandUser) this.self).roundabout$hasSpringLegs()
+                && !((StandUser) this.self).roundabout$hasRibcageTrap()){
             if (!self.isInWater()) {
                 if (forceBlock())
                     return;
@@ -4002,11 +4045,6 @@ public class PowersDiverDown extends NewPunchingStand {
             if (player.isSprinting()) {
                 player.setSprinting(false);
             }
-            if (level.isClientSide()) {
-                Vec3 forward = player.getForward();
-                double walkSpeed = 0.4317D;
-                player.setDeltaMovement(forward.x * walkSpeed, player.getDeltaMovement().y, forward.z * walkSpeed);
-            }
             return;
         } else if (MainUtil.isBossMob(host)) {
             Vec3 forward = host.getForward();
@@ -4601,6 +4639,11 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     private void tryDisguiseClient() {
+        if (!(submergedTarget instanceof LivingEntity target)
+                || MainUtil.isBossMob(target) || target.getMaxHealth() > 40
+                || target.getAttribute(Attributes.MAX_HEALTH).getBaseValue() > 40) {
+            return;
+        }
         if (this.self.level().isClientSide())
             ClientUtil.openDisguiseScreen();
     }
@@ -4634,6 +4677,9 @@ public class PowersDiverDown extends NewPunchingStand {
 
         // Unbreakable blocks check (bedrock, end portal frame, etc.)
         if (state.getBlock().defaultDestroyTime() < 0) return false;
+
+        // shulker boxes were too buggy, had to disable them
+        if (state.getBlock() instanceof ShulkerBoxBlock) return false;
 
         // Server config block blacklist check
         if (MainUtil.isBlockDisassemblyBlacklisted(state)) return false;
@@ -4732,7 +4778,9 @@ public class PowersDiverDown extends NewPunchingStand {
 
     //checks for a block to disassemble
     private void tryDisassembleBlockClient() {
-        if (canExecuteMoveWithLevel(getBlockDisassemblyLevel()) && !areStandMovesDisabled() && !isDiverMoveActive()) {
+        if (canExecuteMoveWithLevel(getBlockDisassemblyLevel()) && !areStandMovesDisabled()
+                && !isDiverMoveActive()
+                && !ClientNetworking.getAppropriateConfig().diverDownSettings.disableBlockDisassembly) {
             if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
                 Vec3 eyePos = this.self.getEyePosition(0);
                 Vec3 viewVec = this.self.getViewVector(0);
@@ -5066,9 +5114,6 @@ public class PowersDiverDown extends NewPunchingStand {
             case DiverDownEntity.DIVER_DROWNED -> {
                 return Component.translatable("skins.roundabout.diver_down.diver_drowned");
             }
-            case DiverDownEntity.SECCO -> {
-                return Component.translatable("skins.roundabout.diver_down.secco");
-            }
             case DiverDownEntity.VAN_HALEN -> {
                 return Component.translatable("skins.roundabout.diver_down.van_halen");
             }
@@ -5085,14 +5130,13 @@ public class PowersDiverDown extends NewPunchingStand {
     public List<Byte> getSkinList() {
         List<Byte> l = Lists.newArrayList();
         l.add(DiverDownEntity.PART_6);
-        l.add(DiverDownEntity.BETA_DIVER);
+        l.add(DiverDownEntity.MANGA);
         if (this.getSelf() instanceof Player PE) {
             byte Level = ((IPlayerEntity) PE).roundabout$getStandLevel();
             ItemStack goldDisc = ((StandUser) PE).roundabout$getStandDisc();
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
             if (Level > 1 || bypass) {
                 l.add(DiverDownEntity.KELP);
-                l.add(DiverDownEntity.MANGA);
                 l.add(DiverDownEntity.GRAY);
             }
             if (Level > 2 || bypass) {
@@ -5109,20 +5153,18 @@ public class PowersDiverDown extends NewPunchingStand {
                 l.add(DiverDownEntity.PINK);
                 l.add(DiverDownEntity.VOLUME_4);
                 l.add(DiverDownEntity.SPINE_ART);
+                l.add(DiverDownEntity.EYECATCH);
             }
             if (Level > 5 || bypass) {
                 l.add(DiverDownEntity.INVERSION);
                 l.add(DiverDownEntity.FIGURE);
-                l.add(DiverDownEntity.EYECATCH);
-            }
-            if (Level > 6 || bypass) {
                 l.add(DiverDownEntity.ARTWORK);
                 l.add(DiverDownEntity.VAN_HALEN);
-                l.add(DiverDownEntity.SECCO);
             }
-            if (Level > 7 || bypass) {
+            if (Level > 6 || bypass) {
                 l.add(DiverDownEntity.WORLD_DIVER);
                 l.add(DiverDownEntity.DIVER_DROWNED);
+                l.add(DiverDownEntity.BETA_DIVER);
             }
             if (((IPlayerEntity) PE).roundabout$getUnlockedBonusSkin() || bypass) {
                 l.add(DiverDownEntity.SCUBA_DIVER);
@@ -5247,7 +5289,7 @@ public class PowersDiverDown extends NewPunchingStand {
         } else {
             float ret = (getChargedPercent() * punchD) + 3;
             if (this.chargedPhasePunch >= getMaxPhasePunchTime()) {
-                ret += 2;
+                ret += 4;
             }
             return ret;
         }
@@ -5306,7 +5348,7 @@ public class PowersDiverDown extends NewPunchingStand {
     private void updatePhasePunchCharge() {
         // 20 ticks = 1 second, rn it's at 10 ticks so you can hold the move for half a
         // second after max charge.
-        if (this.attackTimeDuring >= 10) {
+        if (this.attackTimeDuring >= 40) {
             this.stopSoundsIfNearby(IMPALE_NOISE, 100, true);
             if (this.getSelf() instanceof Player && this.getSelf().level().isClientSide() && isPacketPlayer()) {
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
@@ -5338,7 +5380,7 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     // WIP FEATURES BELOW HERE, DELETE WHEN DONE
-    @Override
+   /* @Override
     public boolean isWip() {
         return true;
     }
@@ -5351,5 +5393,5 @@ public class PowersDiverDown extends NewPunchingStand {
     @Override
     public Component ifWipListDev() {
         return Component.literal("88superguy").withStyle(ChatFormatting.GOLD);
-    }
+    }*/
 }

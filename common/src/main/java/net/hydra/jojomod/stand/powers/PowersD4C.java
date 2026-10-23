@@ -8,6 +8,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.*;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.objects.FallingBannerEntity;
@@ -108,6 +109,8 @@ public class PowersD4C extends NewPunchingStand {
     protected Byte getSummonSound() {
         return SoundIndex.SUMMON_SOUND;
     }
+
+    public boolean isInSelectionMode = false;
 
     public static final byte WORLD_MERGE = 106;
     public static final byte PORTAL = 107;
@@ -561,16 +564,27 @@ public class PowersD4C extends NewPunchingStand {
     }
     public int rech = 0;
     D4CCloneEntity cloneInReach = null;
+    D4CCloneEntity cloneInStore = null;
     @Override
     public boolean highlightsEntity(Entity ent,Player player){
-        if (cloneInReach != null && ent != null && cloneInReach.getUUID().equals(ent.getUUID())){
-            return true;
+        if (isInSelectionMode) {
+            if (cloneInStore != null && ent != null && cloneInStore.getUUID().equals(ent.getUUID())) {
+                return true;
+            }
+        } else {
+            if (cloneInReach != null && ent != null && cloneInReach.getUUID().equals(ent.getUUID())) {
+                return true;
+            }
         }
         return false;
     }
     @Override
     public int highlightsEntityColor(Entity ent, Player player){
-        return 15151775;
+        if (isInSelectionMode) {
+            return 54527;
+        } else {
+            return 15151775;
+        }
     }
     @Override
     public void tickPower() {
@@ -605,6 +619,26 @@ public class PowersD4C extends NewPunchingStand {
                 }
             } else {
                 cloneInReach = null;
+            }
+
+            if (isInSelectionMode){
+                Entity jentity = getTargetEntity(self,40);
+                if (jentity instanceof D4CCloneEntity d4cclone){
+                    Optional<UUID> uuid = d4cclone.getPlayerUUID();
+                    if (uuid != null && uuid.isPresent()){
+                        if (uuid.get().equals(self.getUUID()) && jentity.isAlive()){
+                            cloneInStore = d4cclone;
+                        } else {
+                            cloneInStore = null;
+                        }
+                    } else {
+                        cloneInStore = null;
+                    }
+                } else {
+                    cloneInStore = null;
+                }
+            } else {
+                cloneInStore = null;
             }
         }
         if (!this.self.level().isClientSide() && self instanceof ServerPlayer sp){
@@ -1148,7 +1182,13 @@ public class PowersD4C extends NewPunchingStand {
         if (original.getUUID().equals(self.getUUID())){
             copy.safeCopy = true;
         }
+        IPlayerEntity pl = ((IPlayerEntity) original);
+        ItemStack visage = pl.roundabout$getMaskSlot();
+        copy.setVisage(visage);
         copy.setPlayer(original);
+        if (Math.random() < ClientNetworking.getAppropriateConfig().d4cSettings.chanceForFatClone){
+           copy.roundabout$setWidthFactor((byte) (Math.random() * 10 + 1));
+        }
         ((IMob)copy).roundabout$setFate(((IPlayerEntity)original).roundabout$getFate());
         copy.setItemSlot(EquipmentSlot.HEAD, original.getItemBySlot(EquipmentSlot.HEAD).copy());
         copy.setItemSlot(EquipmentSlot.CHEST, original.getItemBySlot(EquipmentSlot.CHEST).copy());
@@ -1667,6 +1707,10 @@ public class PowersD4C extends NewPunchingStand {
         return ClientNetworking.getAppropriateConfig().d4cSettings.d4cGuardPoints;
     }
     public void worldHopClient(){
+        if (isInSelectionMode){
+            flipSelectionMode();
+            return;
+        }
         if (PowerTypes.isInD4CWorld(self)){
             altBlockGrabClient();
             return;
@@ -1678,17 +1722,25 @@ public class PowersD4C extends NewPunchingStand {
             return;
         }
     }
+
+    public void flipSelectionMode(){
+        isInSelectionMode = !isInSelectionMode;
+    }
+
     public void worldHop2Client(){
         if (PowerTypes.isInD4CWorld(self)){
             altBlockGrabClient();
             return;
         }
+
         if (altBlockPos != null){
             if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK)) {
                 tryPowerPacket(PowerIndex.POWER_4_SNEAK_EXTRA);
             }
             return;
         }
+
+        flipSelectionMode();
     }
     public void removeAltBlock() {
         if (altBlockPos != null && !onCooldown(PowerIndex.SKILL_4_SNEAK)) {
@@ -1786,6 +1838,10 @@ public class PowersD4C extends NewPunchingStand {
     }
 
     public void meltDodgeClient(){
+        if (isInSelectionMode){
+            return;
+        }
+
         if (!this.onCooldown(PowerIndex.SKILL_EXTRA) && isEligable()) {
             tryPowerPacket(PowerIndex.POWER_3_BLOCK);
         }
@@ -1805,6 +1861,10 @@ public class PowersD4C extends NewPunchingStand {
         }
     }
     public void worldTakingClient(){
+
+        if (isInSelectionMode){
+            return;
+        }
         if (PowerTypes.isInD4CWorld(self)){
             exitD4CClient();
         } else if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK) && isEligable()) {
@@ -1818,6 +1878,10 @@ public class PowersD4C extends NewPunchingStand {
         }
     }
     public void worldMergingClient(){
+
+        if (isInSelectionMode){
+            return;
+        }
         if (PowerTypes.isInD4CWorld(self)){
             exitD4CClient();
         } else if (!this.onCooldown(PowerIndex.SKILL_1) && isEligable()) {
@@ -1827,6 +1891,9 @@ public class PowersD4C extends NewPunchingStand {
     public boolean seesBetween = false;
     public int seesBetweenTicks = 0;
     public void switchCloneClient(){
+        if (isInSelectionMode){
+            return;
+        }
         if (PowerTypes.isInD4CWorld(self)){
             return;
         }
@@ -1836,6 +1903,10 @@ public class PowersD4C extends NewPunchingStand {
         }
     }
     public void replaceBodyClient(){
+
+        if (isInSelectionMode){
+            return;
+        }
         if (PowerTypes.isInD4CWorld(self)){
             pullIntoRealityClient();
             return;
@@ -1847,6 +1918,10 @@ public class PowersD4C extends NewPunchingStand {
         }
     }
     public void makeCloneClient(){
+
+        if (isInSelectionMode){
+            return;
+        }
         if (PowerTypes.isInD4CWorld(self)){
             pullIntoRealityClient();
             return;
@@ -1947,6 +2022,9 @@ public class PowersD4C extends NewPunchingStand {
         }
     }
     public void betweenVisionClient(){
+        if (isInSelectionMode){
+            return;
+        }
         seesBetween = !seesBetween;
         seesBetweenTicks = 10;
         if (seesBetween){
@@ -1955,11 +2033,19 @@ public class PowersD4C extends NewPunchingStand {
         tickBetween();
     }
     public void dashOrBlockSwitchClient(){
+
+        if (isInSelectionMode){
+            return;
+        }
         if (!doVault()) {
             dash();
         }
     }
     public void chopClient(){
+
+        if (isInSelectionMode){
+            return;
+        }
         if (!doVault()) {
             if (!canImpale()) {
                 return;
@@ -1992,9 +2078,12 @@ public class PowersD4C extends NewPunchingStand {
         return super.isServerControlledCooldown(num);
     }
 
+
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        if (isGuarding()) {
+        if (isInSelectionMode){
+            setSkillIcon(context, x, y, 1, StandIcons.NONE, PowerIndex.NO_CD);
+        } else if (isGuarding()) {
             setSkillIcon(context, x, y, 1, StandIcons.D4C_BETWEEN_VISION, PowerIndex.NO_CD);
         } else if (PowerTypes.isInD4CWorld(self)){
             LockedOrNot(context, x, y, 1, StandIcons.MERGING_RETURN, PowerIndex.NO_CD,0);
@@ -2004,7 +2093,9 @@ public class PowersD4C extends NewPunchingStand {
             setSkillIcon(context, x, y, 1, StandIcons.D4C_PARALLEL_GRAB, PowerIndex.SKILL_1_SNEAK);
         }
 
-        if (PowerTypes.isInD4CWorld(self)) {
+        if (isInSelectionMode){
+            setSkillIcon(context, x, y, 2, StandIcons.NONE, PowerIndex.NO_CD);
+        } else if (PowerTypes.isInD4CWorld(self)) {
             LockedOrNot(context, x, y, 2, StandIcons.D4C_PARALLEL_GRAB_2, PowerIndex.SKILL_EXTRA_2, 0);
         } else if (isGuarding()){
             LockedOrNot(context, x, y, 2, StandIcons.D4C_CLONE_SWAP, PowerIndex.SKILL_EXTRA_2, 0);
@@ -2014,7 +2105,9 @@ public class PowersD4C extends NewPunchingStand {
             LockedOrNot(context, x, y, 2, StandIcons.D4C_CLONE_SWAP_2, PowerIndex.SKILL_2_SNEAK,0);
         }
 
-        if (isGuarding()){
+        if (isInSelectionMode){
+            setSkillIcon(context, x, y, 3, StandIcons.NONE, PowerIndex.NO_CD);
+        } else if (isGuarding()){
             setSkillIcon(context, x, y, 3, StandIcons.D4C_MELT_DODGE, PowerIndex.SKILL_EXTRA);
         } else if (canVault()) {
             setSkillIcon(context, x, y, 3, StandIcons.D4C_LEDGE_GRAB,
@@ -2025,7 +2118,9 @@ public class PowersD4C extends NewPunchingStand {
             LockedOrNot(context, x, y, 3, StandIcons.D4C_CHOP, PowerIndex.SKILL_3,0);
         }
 
-        if (PowerTypes.isInD4CWorld(self)) {
+        if (isInSelectionMode){
+            setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.NO_CD);
+        } else if (PowerTypes.isInD4CWorld(self)) {
             setSkillIcon(context, x, y, 4, StandIcons.D4C_BLOCK_COPY, PowerIndex.SKILL_4_SNEAK);
         } else if (altBlockPos != null){
             if (!isHoldingSneak()) {
@@ -2036,7 +2131,7 @@ public class PowersD4C extends NewPunchingStand {
         } else if (!isHoldingSneak()) {
             setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP_2, PowerIndex.SKILL_4);
         } else {
-            setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP, PowerIndex.SKILL_4);
+            setSkillIcon(context, x, y, 4, StandIcons.NONE, PowerIndex.NO_CD);
         }
     }
     @Override
@@ -2460,6 +2555,9 @@ public class PowersD4C extends NewPunchingStand {
                     holdDownClick = false;
                 }
             } else {
+                if (isInSelectionMode){
+                    return;
+                }
                 if (keyIsDown) {
                     if (!isHoldingSneak()) {
                         super.buttonInputAttack(keyIsDown, options);
@@ -2582,6 +2680,12 @@ public class PowersD4C extends NewPunchingStand {
                 self.setHealth(swapHealth);
                 self.stopUsingItem();
 
+                if (self instanceof Player pl){
+                    byte ogWidth = ((IPlayerEntity)pl).roundabout$getWidthFactor();
+                    byte swapWidth = cloneInReach.roundabout$getWidthFactor();
+                    ((IPlayerEntity)pl).roundabout$setWidthFactor(swapWidth);
+                    cloneInReach.roundabout$setWidthFactor(ogWidth);
+                }
                 cloneInReach.stopUsingItem();
 
                 Entity mount1 =cloneInReach.getVehicle();
@@ -3159,6 +3263,9 @@ public class PowersD4C extends NewPunchingStand {
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
+        if (isInSelectionMode){
+            return;
+        }
         boolean standOn = PowerTypes.hasStandActive(playerEntity);
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;

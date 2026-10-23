@@ -22,6 +22,9 @@ public class ForgeParticles {
     public static final RegistryObject<SimpleParticleType> BLOOD = PARTICLES.register("blood",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> SWEAT = PARTICLES.register("sweat",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> BLUE_BLOOD = PARTICLES.register("blue_blood",
             () -> new SimpleParticleType(true)
     );
@@ -55,6 +58,10 @@ public class ForgeParticles {
     );
     public static final RegistryObject<SimpleParticleType> VACUUM = PARTICLES.register(
             "vacuum",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> FLASH = PARTICLES.register(
+            "flash",
             () -> new SimpleParticleType(true)
     );
     public static final RegistryObject<SimpleParticleType> ORANGE_FLAME = PARTICLES.register(

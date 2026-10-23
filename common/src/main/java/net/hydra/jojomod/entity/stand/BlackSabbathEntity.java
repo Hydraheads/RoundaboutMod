@@ -416,7 +416,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         if(this.getUser() != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb){
             return pb.moveMode == 2 || this.is(pb.blackSelect) || getRiding();
         }
-        return false;
+        return super.isNoGravity();
     }
     @Override
     public boolean standHasGravity() {
@@ -1369,8 +1369,10 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                 newPath = null;
             }
             if (newPath == null) { return; }
-            if(!getThrowable() && targetSabbath() != null && hasLineOfSight(targetSabbath())) {
-                this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(this.moveControl.getWantedX(), this.moveControl.getWantedY(), this.moveControl.getWantedZ()));
+            if(getGrabbing() != 0) {
+                if (!getThrowable() && targetSabbath() != null && hasLineOfSight(targetSabbath())) {
+                    this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(this.moveControl.getWantedX(), this.moveControl.getWantedY(), this.moveControl.getWantedZ()));
+                }
             }
             if (!this.getNavigation().moveTo(newPath, 1.6f))
                 ticksUntilNextPathRecalculation += 5;

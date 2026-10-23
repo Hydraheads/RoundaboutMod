@@ -1,14 +1,195 @@
 package net.hydra.jojomod.entity.badCompanyTroops;
 
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.entity.goals.badCompanyGoals.*;
+import net.hydra.jojomod.entity.projectile.BadCompanyBulletEntity;
+import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
+import net.hydra.jojomod.event.index.BadCompanyTactics;
+import net.hydra.jojomod.sound.ModSounds;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.*;
 
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
+import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
-public class BCSoldier extends BCTroop{
-    protected BCSoldier(EntityType<? extends BCTroop> entityType, Level world) {
+import java.util.Random;
+
+public class BCSoldier extends BCTroop implements RangedAttackMob {
+    public BCSoldier(EntityType<? extends BCTroop> entityType, Level world) {
         super(entityType, world);
     }
 
+    private static final EntityDataAccessor<Boolean> BUNDLE = SynchedEntityData.defineId(BCSoldier.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> PARACHUTE_STATUS = SynchedEntityData.defineId(BCSoldier.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Byte> CURRENT_ANIM = SynchedEntityData.defineId(BCSoldier.class, EntityDataSerializers.BYTE);
 
+
+    public static final byte
+            IDLE_GUN = 0,
+            WALK_GUN = 1;
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(BUNDLE, false);
+        this.entityData.define(PARACHUTE_STATUS, false);
+        this.entityData.define(CURRENT_ANIM, IDLE_GUN);
+    }
+
+    public void setBundle(boolean value) {
+        this.entityData.set(BUNDLE, value);
+    }
+    public boolean getBundle() {
+        return this.entityData.get(BUNDLE);
+    }
+
+    public void setAnim(byte value) {
+        this.entityData.set(CURRENT_ANIM, value);
+    }
+    public byte getAnim() {
+        return this.entityData.get(CURRENT_ANIM);
+    }
+
+
+    public static AttributeSupplier.Builder createStandAttributes() {
+        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED,
+                0.17F).add(Attributes.MAX_HEALTH, 4.0).add(Attributes.ATTACK_DAMAGE, 2.0);
+    }
+
+
+    public static float width = 0.35f;
+    public static float height = 0.32f;
+    public boolean isDisplay = false;
+
+    public final AnimationState releaseParachute = new AnimationState();
+    public final AnimationState closeParachute = new AnimationState();
+    public final AnimationState idleWithGun = new AnimationState();
+    public final AnimationState walkWithGun = new AnimationState();
+    public final AnimationState runWithGun = new AnimationState();
+
+    @Override
+    public void setupAnimationStates() {
+        //super.setupAnimationStates();
+        if (this.getUser() != null) {
+            byte animation = this.getAnim();
+
+            if (animation == WALK_GUN) {
+                walkWithGun.startIfStopped(tickCount);
+            }else {
+                walkWithGun.stop();
+            }
+
+            if (animation == IDLE_GUN) {
+                idleWithGun.startIfStopped(tickCount);
+            }else {
+                idleWithGun.stop();
+            }
+
+            if (!onGround() && !(isInWater() || isInLava()) && !isDisplay) {
+                releaseParachute.startIfStopped(tickCount);
+                closeParachute.stop();
+            }else {
+                releaseParachute.stop();
+                closeParachute.startIfStopped(tickCount);
+            }
+        }
+    }
+
+    public void tick() {
+        super.tick();
+
+        float pitch = this.getXRot();
+        float yaw = this.getYRot();
+
+        this.setXRot(pitch);
+        this.setYRot(yaw);
+        this.setYBodyRot(yaw);
+        this.xRotO = pitch;
+        this.yRotO = yaw;
+
+        if (!level().isClientSide) {
+            if (getNavigation().isInProgress()) {
+                setAnim(WALK_GUN);
+            } else {
+                setAnim(IDLE_GUN);
+            }
+        }
+    }
+
+
+    public void aiStep() {
+        super.aiStep();
+        Vec3 $$0 = this.getDeltaMovement();
+        if (!this.onGround() && $$0.y < 0.0F) {
+            this.setDeltaMovement($$0.multiply(1.0F, 0.3, 1.0F));
+        }
+    }
+
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        goalSelector.addGoal(0, new FloatGoal(this));
+        goalSelector.addGoal(1, new ReturnToLeaderGoal(this, 1));
+        goalSelector.addGoal(2, new UserHurtTargetGoal(this));
+        goalSelector.addGoal(2, new RangedAttackGoal(this, 1.2, 5, 7.5f) {
+            @Override
+            public boolean canUse() {
+                return super.canUse() && getCurrentTactic() != BadCompanyTactics.RETURN.id;
+            }
+        });
+    }
+
+    public double getAttributeValue(Attribute $$0) {
+        if (getBundle()){
+            if ($$0.equals(Attributes.MAX_HEALTH)) {
+                return this.getAttributes().getValue($$0) * 6;
+            }else if ($$0.equals(Attributes.MOVEMENT_SPEED)) {
+                return this.getAttributes().getValue($$0) * 1.15f;
+            }
+        }
+        return this.getAttributes().getValue($$0);
+    }
+
+    @Override
+    public boolean isAttackable() {
+        return true;
+    }
+
+    @Override
+    public boolean isPickable() {
+        return true;
+    }
+
+    public boolean canStandBeHurt() {return true;}
+
+    @Override
+    public void performRangedAttack(LivingEntity target, float v) {
+        BadCompanyBulletEntity bullet = new BadCompanyBulletEntity(level(), getUser());
+        Vec3 positionShoot = getEyePosition(1);
+        Vec3 targetPosition = target.getEyePosition(1);
+        level().addFreshEntity(bullet);
+        bullet.absMoveTo(positionShoot.x, positionShoot.y, positionShoot.z);
+        bullet.shoot(targetPosition.x - positionShoot.x, targetPosition.y - positionShoot.y, targetPosition.z - positionShoot.z, 5.0F, 1.0F);
+        level().playSound(null, this.blockPosition(), getFireSound(), SoundSource.PLAYERS, getFireSoundVolume(), getFireSoundPitch());
+    }
+
+
+    public SoundEvent getFireSound() { return ModSounds.TOMMY_FIRE_EVENT; }
+
+    public float getFireSoundVolume() { return 7.0F; }
+
+    public float getFireSoundPitch() {
+        Random random = new Random();
+        return random.nextFloat(1.7F - 1.5F) + 1.5F;
+    }
 }

@@ -7,18 +7,19 @@ import com.mojang.math.Axis;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.ILivingEntityRenderer;
 import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.client.ClientUtil;
-import net.hydra.jojomod.client.DiverDownPointerRenderer;
-import net.hydra.jojomod.client.HallucinationIndicatorRenderer;
+import net.hydra.jojomod.client.*;
 import net.hydra.jojomod.client.models.layers.BigBubbleLayer;
 import net.hydra.jojomod.client.models.layers.FrozenLayer;
 import net.hydra.jojomod.client.models.stand.renderers.*;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.pathfinding.CommandDiscPossession;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.JojoNPCPlayer;
 import net.hydra.jojomod.entity.visages.mobs.JosukePartEightNPC;
 import net.hydra.jojomod.entity.visages.mobs.PlayerAlexNPC;
 import net.hydra.jojomod.entity.visages.mobs.PlayerSteveNPC;
+import net.hydra.jojomod.event.IVillagerAccess;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.DiverDownDisguiseService;
@@ -42,10 +43,9 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Quaternionf;
@@ -161,6 +161,28 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
         }
         HallucinationIndicatorRenderer.render(entity, matrixStack, buffer);
         DiverDownPointerRenderer.render(entity, matrixStack, buffer);
+        // lyin eyes highlighter
+        if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof PowersLyinEyes LE
+                && LE.getVisionModeClient() && LE.isActive()) {
+            float maxDetectionRange = ClientNetworking.getAppropriateConfig().lyinEyesSettings.maxDetectionRange;
+            if (entity != player && entity.isAlive() && player.distanceToSqr(entity) <= (maxDetectionRange * maxDetectionRange)
+                    && !(entity instanceof StandEntity)
+                    && !(entity instanceof FallenMob)
+                    && ((entity instanceof Mob) || (entity instanceof Player))) {
+                // hostile mobs
+                if (entity instanceof Enemy && !(entity instanceof NeutralMob)) {
+                    LyinEyesHighlighterRenderer.render(entity, matrixStack, buffer, 255, 0, 0, 200, 0.7F);
+                }
+                // neutral mobs
+                else if (entity instanceof NeutralMob || entity instanceof Player || ((StandUser) entity).roundabout$hasAStand()) {
+                    LyinEyesHighlighterRenderer.render(entity, matrixStack, buffer, 255, 255, 0, 200, 0.7F);
+                }
+                // passive mobs
+                else if (!(entity instanceof Enemy) && !(entity instanceof NeutralMob)) {
+                    LyinEyesHighlighterRenderer.render(entity, matrixStack, buffer, 0, 255, 0, 200, 0.7F);
+                }
+            }
+        }
     }
 
     @Inject(method = "shouldShowName(Lnet/minecraft/world/entity/LivingEntity;)Z", at=@At("HEAD"), cancellable = true)
@@ -369,6 +391,14 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
             ci.setReturnValue(roundabout$PackRed(
                     15,
                     10));
+        }
+    }
+
+    // for shaking stuff
+    @Inject(method = "isShaking", at = @At("HEAD"), cancellable = true)
+    private void roundabout$shakeWhenCalledOut(T entity, CallbackInfoReturnable<Boolean> cir) {
+        if (entity instanceof Villager villager && ((IVillagerAccess) villager).roundabout$getCalloutTicks() > 0) {
+            cir.setReturnValue(true);
         }
     }
 

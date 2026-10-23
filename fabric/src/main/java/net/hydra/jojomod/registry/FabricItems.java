@@ -251,6 +251,9 @@ public class FabricItems {
     public static Item JACKAL_RIFLE = registerItem("jackal_rifle", new JackalRifleItem(new Item.Properties().stacksTo(1)));
     public static Item SNIPER_AMMO = registerItem("sniper_ammo", new SniperAmmoItem(new Item.Properties().stacksTo(64)));
 
+    public static Item BERETTA_PISTOL = registerItem("beretta_pistol", new BerettaPistolItem(new Item.Properties().stacksTo(1)));
+    public static Item PISTOL_AMMO = registerItem("pistol_ammo", new PistolAmmoItem(new Item.Properties().stacksTo(64)));
+
     public static Item IRON_BALL_CROSSBOW = registerItem("iron_ball_crossbow", new IronBallCrossbowItem(new Item.Properties().stacksTo(1).durability(565)));
 
     public static Item ULTRAVIOLET_BLASTER = registerItem("ultraviolet_blaster", new UltravioletBlasterItem(new Item.Properties().stacksTo(1).durability(UltravioletBlasterItem.durability)));
@@ -393,6 +396,7 @@ public class FabricItems {
     public static Item ENYA_OVA_MASK = registerItem("enya_ova_mask", new MaskItem(new Item.Properties().stacksTo(1), new EnyaOVAVisage(null)));
     public static Item DAIYA_MASK = registerItem("daiya_mask", new MaskItem(new Item.Properties().stacksTo(1), new DaiyaVisage(null)));
     public static Item DAIYA_2_MASK = registerItem("daiya_2_mask", new MaskItem(new Item.Properties().stacksTo(1), new Daiya2Visage(null)));
+    public static Item LAEM_MASK = registerItem("laem_mask", new MaskItem(new Item.Properties().stacksTo(1), new LaemVisage(null)));
     public static Item AYA_MASK = registerItem("aya_mask", new MaskItem(new Item.Properties().stacksTo(1), new AyaVisage(null)));
     public static Item RINGO_MASK = registerItem("ringo_mask", new MaskItem(new Item.Properties().stacksTo(1), new RingoVisage(null)));
     public static Item POCOLOCO_MASK = registerItem("pocoloco_mask", new MaskItem(new Item.Properties().stacksTo(1), new PocolocoVisage(null)));
@@ -520,10 +524,12 @@ public class FabricItems {
                         entries.accept(GASOLINE_BUCKET);
                         entries.accept(OCCULT_CHARGE);
                         entries.accept(SNUBNOSE_REVOLVER);
-                        entries.accept(TOMMY_GUN);
                         entries.accept(COLT_REVOLVER);
+                        entries.accept(BERETTA_PISTOL);
+                        entries.accept(TOMMY_GUN);
                         entries.accept(JACKAL_RIFLE);
                         entries.accept(SNUBNOSE_AMMO);
+                        entries.accept(PISTOL_AMMO);
                         entries.accept(TOMMY_AMMO);
                         entries.accept(SNIPER_AMMO);
                         entries.accept(ROAD_ROLLER);
@@ -571,6 +577,11 @@ public class FabricItems {
                         entries.accept(DOPPIO_MASK);
                         entries.accept(GHIACCIO_MASK);
                         entries.accept(JOTARO_6_MASK);
+                        entries.accept(KIRA_PART_FOUR_MASK);
+                        entries.accept(KOSAKU_MASK);
+                        entries.accept(KIRASAKU_MASK);
+                        entries.accept(HAYATO_KAWAJIRI_MASK);
+                        entries.accept(KIRA_PART_EIGHT_MASK);
                         entries.accept(JOHNGALLIA_MASK);
                         entries.accept(ANASUI_MASK);
                         entries.accept(FEM_ANASUI_MASK);
@@ -594,6 +605,7 @@ public class FabricItems {
                         entries.accept(DAIYA_MASK);
                         entries.accept(DAIYA_2_MASK);
                         entries.accept(HATO_MASK);
+                        entries.accept(LAEM_MASK);
                         entries.accept(SHIZUKA_MASK);
                         entries.accept(RAT_MASK);
 
@@ -753,6 +765,8 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_MAGICIANS_RED);
                         entries.accept(STAND_DISC_JUSTICE);
                         entries.accept(MAX_STAND_DISC_JUSTICE);
+                        entries.accept(STAND_DISC_GREEN_DAY);
+                        entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_ANUBIS);
                         entries.accept(MAX_STAND_DISC_ANUBIS);
                         entries.accept(STAND_DISC_RATT);
@@ -763,6 +777,8 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_WHITE_ALBUM);
                         entries.accept(STAND_DISC_KING_CRIMSON);
                         entries.accept(MAX_STAND_DISC_KING_CRIMSON);
+                        entries.accept(STAND_DISC_DIVER_DOWN);
+                        entries.accept(MAX_STAND_DISC_DIVER_DOWN);
                         entries.accept(STAND_DISC_SOFT_AND_WET);
                         entries.accept(MAX_STAND_DISC_SOFT_AND_WET);
                         entries.accept(STAND_DISC_WALKING_HEART);
@@ -774,6 +790,7 @@ public class FabricItems {
                         entries.accept(STAND_DISC_HEY_YA);
                         entries.accept(STAND_DISC_MANDOM);
                         entries.accept(STAND_DISC_CALIFORNIA_KING_BED);
+                        entries.accept(STAND_DISC_LYIN_EYES);
 
                     }).build());
 
@@ -786,10 +803,7 @@ public class FabricItems {
                         //entries.accept(ModBlocks.HAND_BLOCK);
                         entries.accept(STAND_DISC_D4C);
                         entries.accept(MAX_STAND_DISC_D4C);
-                        entries.accept(STAND_DISC_GREEN_DAY);
-                        entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_20_CENTURY_BOY);
-                        entries.accept(STAND_DISC_LYIN_EYES);
                         entries.accept(STAND_DISC_TUSK);
                         entries.accept(MAX_STAND_DISC_TUSK);
                         entries.accept(STAND_DISC_METALLICA);
@@ -798,11 +812,6 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_PURPLE_HAZE);
                         entries.accept(STAND_DISC_BAD_COMPANY);
                         entries.accept(MAX_STAND_DISC_BAD_COMPANY);
-                        entries.accept(KIRA_PART_FOUR_MASK);
-                        entries.accept(KOSAKU_MASK);
-                        entries.accept(KIRASAKU_MASK);
-                        entries.accept(HAYATO_KAWAJIRI_MASK);
-                        entries.accept(KIRA_PART_EIGHT_MASK);
                         entries.accept(STAND_DISC_EMPEROR);
                         entries.accept(MAX_STAND_DISC_EMPEROR);
                         entries.accept(STAND_DISC_PLANET_WAVES);
@@ -1000,10 +1009,12 @@ public class FabricItems {
         ModItems.SNUBNOSE_REVOLVER = SNUBNOSE_REVOLVER;
         ModItems.TOMMY_GUN = TOMMY_GUN;
         ModItems.COLT_REVOLVER = COLT_REVOLVER;
+        ModItems.BERETTA_PISTOL = BERETTA_PISTOL;
         ModItems.SNUBNOSE_AMMO = SNUBNOSE_AMMO;
         ModItems.TOMMY_AMMO = TOMMY_AMMO;
         ModItems.JACKAL_RIFLE = JACKAL_RIFLE;
         ModItems.SNIPER_AMMO = SNIPER_AMMO;
+        ModItems.PISTOL_AMMO = PISTOL_AMMO;
         ModItems.STAND_DISC = STAND_DISC;
         ModItems.COFFEE_GUM = COFFEE_GUM;
         ModItems.CHAMOMILE_SEEDS = CHAMOMILE_SEEDS;
@@ -1105,6 +1116,7 @@ public class FabricItems {
         ModItems.CHAKA_MASK = CHAKA_MASK;
         ModItems.DAIYA_MASK = DAIYA_MASK;
         ModItems.DAIYA_2_MASK = DAIYA_2_MASK;
+        ModItems.LAEM_MASK = LAEM_MASK;
         ModItems.ENYA_MASK = ENYA_MASK;
         ModItems.ENYA_OVA_MASK = ENYA_OVA_MASK;
         ModItems.AYA_MASK = AYA_MASK;

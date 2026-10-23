@@ -142,7 +142,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	}
 
 	public static float width = 0.5f;
-	public static float height = 0.3f;
+	public static float height = 0.505f;
 
 	private HashSet<Vec3> explodedBlocks = new HashSet<Vec3>();
 
@@ -699,7 +699,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		float range = explosionRadius;
 		float cap = 45;
 		if (warm > cap) {
-			range += Math.min(0.90f * ((warm - cap) / 60), 1.05f);
+			range += Math.min(0.90f * ((warm - cap) / 60), 1.2f);
 		}
 
 		return range;
@@ -711,7 +711,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		StandPowers SP = ((StandUser)this.getUser()).roundabout$getStandPowers();
 		if (!(SP instanceof PowersKillerQueen KQ)) { return; }
 
-		Vec3 pos = this.position().add(this.getForward().scale(0.3));
+		Vec3 pos = this.position().add(this.getForward().scale(0.15));
 		float damage = ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage;
 
 		float range = getRangeByWarm(getEntityWarm(target));
@@ -848,6 +848,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	public boolean canDestroyBlocks() {
 		return ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction &&
+				!ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims &&
 				level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) &&
 				this.getUser() instanceof Player PL && MainUtil.getIsGamemodeApproriateForGrief(PL);
 	}
@@ -1150,6 +1151,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		if (this.level().isClientSide) {
 			boolean $$4 = $$2.is(Items.TORCH) && this.getUser() == $$0
 					&& ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction
+					&& !ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims
 					&& this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)
 					|| getTorchStatus();
 
@@ -1157,8 +1159,10 @@ public class SheerHeartAttackEntity extends StandEntity {
 		} else if (this.getUser() == $$0) {
 			if (throwStatus == THROWED) { return InteractionResult.FAIL; }
 
-			if ($$2.is(Items.TORCH) && !getTorchStatus() && ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction &&
-					this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
+			if ($$2.is(Items.TORCH) && !getTorchStatus()
+					&& ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction
+					&& !ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims
+					&& this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
 				if (!$$0.getAbilities().instabuild) { $$2.shrink(1); }
 				setTorchStatus(true);
 				Vec3 dir = $$0.getLookAngle();

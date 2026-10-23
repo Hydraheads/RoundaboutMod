@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin.keyboard;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.KeyboardPilotInput;
 import net.hydra.jojomod.entity.corpses.FallenPhantom;
+import net.hydra.jojomod.entity.stand.SilverChariotEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
 import net.hydra.jojomod.stand.powers.PowersCream;
@@ -38,8 +39,10 @@ public abstract class KeysKeyboardInput extends Input {
                     || (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy CB && CB.invincibleState)
                     || (user.roundabout$getStandPowers() instanceof PowersCream PC && PC.getTransformTimer() > 0)
                     || (user.roundabout$getStandPowers() instanceof PowersTusk PT && PT.getActivePower() == PowersTusk.FLATTEN)
-                    || user.roundabout$hasRibcageTrap()
-                    || user.roundabout$hasSpringLegs();
+                    || user.roundabout$hasSpringLegs()
+                    || (user.roundabout$getStand() instanceof SilverChariotEntity sc && sc.isSelfCarryModeActive());
+
+            boolean forwardKeys = user.roundabout$hasRibcageTrap();
 
 
             if (user.roundabout$getStandPowers().isPiloting()){
@@ -69,6 +72,21 @@ public abstract class KeysKeyboardInput extends Input {
                 this.leftImpulse = 0;
                 this.jumping = false;
                 this.shiftKeyDown = false;
+                ci.cancel();
+            }
+
+            if (forwardKeys) {
+                this.up = true;
+                this.down = false;
+                this.left = false;
+                this.right = false;
+                this.forwardImpulse = 1.0F;
+                this.leftImpulse = 0;
+                this.jumping = false;
+                this.shiftKeyDown = false;
+                if (player.isSprinting()) {
+                    player.setSprinting(false);
+                }
                 ci.cancel();
             }
 

@@ -169,6 +169,10 @@ public class ExplosionUtil {
 	}
 	public static void explodeBlocksBase(BlockPos location, Level level, Float range, boolean ignoreOres, Entity causer, boolean useTool) {
 
+		if (ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims) {
+			return;
+		}
+
 		Vec3 center = new Vec3(location.getX(), location.getY(), location.getZ());
 
 		int intSize = Math.round(range) + 1;

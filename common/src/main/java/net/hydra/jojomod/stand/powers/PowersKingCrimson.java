@@ -583,6 +583,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
             if (mount != null && mount.getId() != self.getId()){
                 PE.stopRiding();
             }
+            if (fclone != null){
+                fclone.roundabout$setWidthFactor(((IPlayerEntity)PE).roundabout$getWidthFactor());
+            }
+
             fclone.setVisage(((IPlayerEntity)PE).roundabout$getMaskSlot());
             fclone.setPlayer(PE);
             fclone.copyPosition(PE);

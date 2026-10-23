@@ -51,6 +51,7 @@ public class SilverChariotRapierRenderer extends EntityRenderer<SilverChariotRap
     private static final ResourceLocation SANDY = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/silver_chariot/sandy_silver_chariot.png");
     private static final ResourceLocation TURQUOISE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/silver_chariot/turquoise_silver_chariot.png");
     private static final ResourceLocation YELLOW = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/silver_chariot/yellow_silver_chariot.png");
+    private static final ResourceLocation PHARAOH = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/silver_chariot/pharaoh_silver_chariot.png");
 
     @Override
     public void render(SilverChariotRapierShotEntity $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5) {
@@ -135,6 +136,9 @@ public class SilverChariotRapierRenderer extends EntityRenderer<SilverChariotRap
             }
             case SilverChariotEntity.YELLOW -> {
                 return YELLOW;
+            }
+            case SilverChariotEntity.PHARAOH -> {
+                return PHARAOH;
             }
         }
         return PART_3;

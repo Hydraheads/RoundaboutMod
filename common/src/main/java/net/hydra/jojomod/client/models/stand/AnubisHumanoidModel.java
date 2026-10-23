@@ -7,6 +7,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
+import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
 import net.hydra.jojomod.entity.stand.AnubisEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -129,6 +130,7 @@ public class AnubisHumanoidModel<T extends AnubisEntity> extends StandModel<T> {
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
         super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
         this.defaultModifiers(pEntity);
+        this.animate(pEntity.idlePoseAnubis, StandAnimations.STAND_IDLE_FLOAT, pAgeInTicks, 1f);
     }
 
     @Override

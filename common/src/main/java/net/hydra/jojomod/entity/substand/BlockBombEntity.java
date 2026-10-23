@@ -1,24 +1,13 @@
 package net.hydra.jojomod.entity.substand;
 
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.NoHitboxRendering;
-import net.hydra.jojomod.access.PenetratableWithProjectile;
-import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.StepRuleEntity;
-import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.powers.StandUser;
 
-import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.access.NoHitboxRendering;
+import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
-import net.hydra.jojomod.util.MainUtil;
-import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -27,23 +16,14 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.EndGatewayBlock;
-import net.minecraft.world.level.block.NetherPortalBlock;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-
-import java.util.List;
-import java.util.UUID;
-
 import org.joml.Vector3f;
 
 public class BlockBombEntity extends StandEntity implements NoHitboxRendering {

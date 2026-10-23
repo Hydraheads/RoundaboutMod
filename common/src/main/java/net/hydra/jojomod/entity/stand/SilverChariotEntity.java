@@ -51,7 +51,8 @@ public class SilverChariotEntity extends FollowingStandEntity {
             PURPLE = 17,
             SANDY = 18,
             TURQUOISE = 19,
-            YELLOW = 20;
+            YELLOW = 20,
+            PHARAOH = 21;
 
     public static final byte
             IS_PART_3_SKIN = 1,
@@ -94,8 +95,10 @@ public class SilverChariotEntity extends FollowingStandEntity {
     }
 
     public void setSelfCarryMode(boolean active) {
-        if (active) setRemoteMode(REMOTE_MODE_SELF_CARRY);
-        else if (entityData.get(REMOTE_MODE) == REMOTE_MODE_SELF_CARRY) setRemoteMode(REMOTE_MODE_NONE);
+        if (active) {
+            setRemoteMode(REMOTE_MODE_SELF_CARRY);
+            this.noGravityCarryTicks = 0;
+        } else if (entityData.get(REMOTE_MODE) == REMOTE_MODE_SELF_CARRY) setRemoteMode(REMOTE_MODE_NONE);
     }
 
     private void setRemoteMode(byte remoteMode) {
@@ -261,6 +264,10 @@ public class SilverChariotEntity extends FollowingStandEntity {
     public final AnimationState scArmIdle = new AnimationState();
     public final AnimationState scHideRightArm = new AnimationState();
     public final AnimationState scHideLeftArm = new AnimationState();
+    public final AnimationState scMiningBarrageRight = new AnimationState();
+    public final AnimationState scMiningBarrageLeft = new AnimationState();
+    public final AnimationState scBarrageFinisherRight = new AnimationState();
+    public final AnimationState scBarrageFinisherLeft = new AnimationState();
 
     public static final byte
             SC_ = 40,
@@ -315,6 +322,32 @@ public class SilverChariotEntity extends FollowingStandEntity {
                 }
                 this.scHideRapiers.startIfStopped(this.tickCount);
             }
+            if (animationState == MINING_BARRAGE) {
+                if (isPart3Skin) {
+                    this.scMiningBarrageRight.startIfStopped(this.tickCount);
+                } else {
+                    this.scMiningBarrageLeft.startIfStopped(this.tickCount);
+                }
+            } else {
+                if (isPart3Skin) {
+                    this.scMiningBarrageRight.stop();
+                } else {
+                    this.scMiningBarrageLeft.stop();
+                }
+            }
+            if (animationState == BARRAGE_FINISHER) {
+                if (isPart3Skin) {
+                    this.scBarrageFinisherRight.startIfStopped(this.tickCount);
+                } else {
+                    this.scBarrageFinisherLeft.startIfStopped(this.tickCount);
+                }
+            } else {
+                if (isPart3Skin) {
+                    this.scBarrageFinisherRight.stop();
+                } else {
+                    this.scBarrageFinisherLeft.stop();
+                }
+            }
 
             if (animationState == IDLE && idle == 0 && this.getArmoured()) {
                 this.scIdleArmoured.startIfStopped(this.tickCount);
@@ -367,14 +400,16 @@ public class SilverChariotEntity extends FollowingStandEntity {
                 if (isPart3Skin) {
                     this.scRightOffhandSwipe.startIfStopped(this.tickCount);
                 } else {
-                    this.scToggleLeftSword.stop();
+                    // this.scToggleLeftSword.stop();
                     this.scRightOffhandSwipe.startIfStopped(this.tickCount);
                 }
             } else {
                 this.scRightOffhandSwipe.stop();
+                /*
                 if (!isPart3Skin) {
                     this.scToggleLeftSword.start(this.tickCount);
                 }
+                */
             }
             if (animationState == SC_ARM_SUMMON) {
                 this.scArmIdle.startIfStopped(this.tickCount);
@@ -636,18 +671,42 @@ public class SilverChariotEntity extends FollowingStandEntity {
     @Override
     public boolean isRemoteControlled() {
         // return entityData.get(CONTROL_MODE) != CONTROL_MODE_NONE;
-        return super.isRemoteControlled();
+        // return super.isRemoteControlled();
+        return entityData.get(REMOTE_MODE) != REMOTE_MODE_NONE;
     }
+
+
 
     @Override
     public void travel(Vec3 vec3) {
         // TODO: Remove the teleporting camera for control mode when moving out of max range, as suggested by DOGael.
+        /*
         super.travel(vec3);
         if (this.isControlledByLocalInstance()) {
             if (this.getUser() instanceof Player PE && this.level().isClientSide()) {
                 C2SPacketUtil.updatePilot(this);
             }
         }
+        */
+        if (isRemoteControlled()) {
+            if (level().isClientSide() && isControlledByLocalInstance()) {
+                super.travel(vec3);
+                C2SPacketUtil.updatePilot(this);
+            } else {
+                super.travel(Vec3.ZERO);
+            }
+        }
+        super.travel(vec3);
+    }
+
+    @Override
+    public void move(MoverType $$0, Vec3 $$1) {
+        super.move($$0, $$1);
+    }
+
+    @Override
+    public void moveRelative(float $$0, Vec3 $$1) {
+        super.moveRelative($$0, $$1);
     }
 
     // Custom mounting system for Silver Chariot to carry the user
@@ -748,7 +807,11 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     @Override
     protected void positionRider(Entity $$0, MoveFunction $$1) {
-        super.positionRider($$0, $$1);
+        if ($$0 instanceof Player) {
+            $$1.accept($$0,this.getX(),this.getY()+1.85d,this.getZ());
+        } else {
+            super.positionRider($$0,$$1);
+        }
     }
 
     @Override

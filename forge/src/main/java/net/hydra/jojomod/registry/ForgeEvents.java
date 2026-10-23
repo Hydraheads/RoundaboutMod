@@ -9,6 +9,7 @@ import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StreetSignBlock;
 import net.hydra.jojomod.block.handBlock.AbstractHandBlock;
 import net.hydra.jojomod.entity.*;
+import net.hydra.jojomod.entity.badCompanyTroops.*;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.mobs.TerrierEntity;
@@ -119,6 +120,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.DIVER_DOWN_WORLD.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.DIVER_DROWNED.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SILVER_CHARIOT.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.SILVER_CHARIOT_PHARAOH.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.OVA_ENYA.get(), OVAEnyaNPC.createAttributes().build());
         event.put(ForgeEntities.ENYA.get(), OVAEnyaNPC.createAttributes().build());
         event.put(ForgeEntities.JOTARO.get(), JotaroNPC.createAttributes().build());
@@ -172,6 +174,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.MOLD_SPORE.get(), MoldSporesEntity.createStandAttributes().build());
         event.put(ForgeEntities.PURPLE_SMOKE.get(), PurpleSmokeEntity.createStandAttributes().build());
         event.put(ForgeEntities.SHEER_HEART_ATTACK.get(), SheerHeartAttackEntity.createStandAttributes().build());
+        event.put(ForgeEntities.BAD_COMPANY_SOLDIER.get(), BCSoldier.createStandAttributes().build());
         event.put(ForgeEntities.CTR_PLATFORM.get(), CTRplatformEntity.createStandAttributes().build());
         event.put(ForgeEntities.CTR_BARRIER.get(), CTRbarrierEntity.createStandAttributes().build());
     }
@@ -393,6 +396,10 @@ public class ForgeEvents {
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_THE_WORLD.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_THE_WORLD.get());
         ModItems.MAX_STAND_DISC_THE_WORLD = ForgeItems.MAX_STAND_DISC_THE_WORLD.get();
 
+        ModItems.STAND_DISC_BAD_COMPANY = ForgeItems.STAND_DISC_BAD_COMPANY.get();
+        ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_BAD_COMPANY.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_BAD_COMPANY.get());
+        ModItems.MAX_STAND_DISC_BAD_COMPANY = ForgeItems.MAX_STAND_DISC_BAD_COMPANY.get();
+
         ModItems.STAND_DISC_STAR_PLATINUM = ForgeItems.STAND_DISC_STAR_PLATINUM.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_STAR_PLATINUM.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_STAR_PLATINUM.get());
         ModItems.MAX_STAND_DISC_STAR_PLATINUM = ForgeItems.MAX_STAND_DISC_STAR_PLATINUM.get();
@@ -538,6 +545,8 @@ public class ForgeEvents {
         ModItems.JACKAL_RIFLE = ForgeItems.JACKAL_RIFLE.get();
         ModItems.SNIPER_AMMO = ForgeItems.SNIPER_AMMO.get();
 
+        ModItems.BERETTA_PISTOL = ForgeItems.BERETTA_PISTOL.get();
+        ModItems.PISTOL_AMMO = ForgeItems.PISTOL_AMMO.get();
 
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_DIO.get()).referenceItem = ForgeItems.STREET_SIGN_DIO_BLOCK_ITEM.get().getDefaultInstance();
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_RIGHT.get()).referenceItem = ForgeItems.STREET_SIGN_RIGHT_BLOCK_ITEM.get().getDefaultInstance();
@@ -622,6 +631,7 @@ public class ForgeEvents {
         ModItems.ENYA_MASK = ForgeItems.ENYA_MASK.get();
         ModItems.DAIYA_MASK = ForgeItems.DAIYA_MASK.get();
         ModItems.DAIYA_2_MASK = ForgeItems.DAIYA_2_MASK.get();
+        ModItems.ANASUI_MASK = ForgeItems.ANASUI_MASK.get();
         ModItems.ENYA_OVA_MASK = ForgeItems.ENYA_OVA_MASK.get();
         ModItems.VALENTINE_MASK = ForgeItems.VALENTINE_MASK.get();
         ModItems.JOSUKE_PART_EIGHT_MASK = ForgeItems.JOSUKE_PART_EIGHT_MASK.get();
@@ -677,6 +687,7 @@ public class ForgeEvents {
         ModParticles.HIT_IMPACT = ForgeParticles.HIT_IMPACT.get();
         ModParticles.MELTING = ForgeParticles.MELTING.get();
         ModParticles.BLOOD = ForgeParticles.BLOOD.get();
+        ModParticles.SWEAT = ForgeParticles.SWEAT.get();
         ModParticles.BLUE_BLOOD = ForgeParticles.BLUE_BLOOD.get();
         ModParticles.SMALL_EXPLOSION = ForgeParticles.SMALL_EXPLOSION.get();
         ModParticles.ENDER_BLOOD = ForgeParticles.ENDER_BLOOD.get();
@@ -686,6 +697,7 @@ public class ForgeEvents {
         ModParticles.HEARTBEAT = ForgeParticles.HEARTBEAT.get();
         ModParticles.MENACING = ForgeParticles.MENACING.get();
         ModParticles.VACUUM = ForgeParticles.VACUUM.get();
+        ModParticles.FLASH = ForgeParticles.FLASH.get();
         ModParticles.ORANGE_FLAME = ForgeParticles.ORANGE_FLAME.get();
         ModParticles.BLUE_FLAME = ForgeParticles.BLUE_FLAME.get();
         ModParticles.PURPLE_FLAME = ForgeParticles.PURPLE_FLAME.get();
@@ -880,11 +892,13 @@ public class ForgeEvents {
         ModEntities.DIVER_KICK = ForgeEntities.DIVER_KICK.get();
         ModEntities.BONE_PROJECTILE = ForgeEntities.BONE_PROJECTILE.get();
         ModEntities.SILVER_CHARIOT = ForgeEntities.SILVER_CHARIOT.get();
+        ModEntities.SILVER_CHARIOT_PHARAOH = ForgeEntities.SILVER_CHARIOT_PHARAOH.get();
         ModEntities.SILVER_CHARIOT_RAPIER = ForgeEntities.SILVER_CHARIOT_RAPIER.get();
         ModEntities.SILVER_CHARIOT_RAPIER_PLATFORM = ForgeEntities.SILVER_CHARIOT_RAPIER_PLATFORM.get();
         ModEntities.THROWN_HARPOON = ForgeEntities.THROWN_HARPOON.get();
         ModEntities.BLADED_BOWLER_HAT = ForgeEntities.BLADED_BOWLER_HAT.get();
         ModEntities.ROUNDABOUT_BULLET_ENTITY = ForgeEntities.ROUNDABOUT_BULLET_ENTITY.get();
+        ModEntities.BAD_COMPANY_BULLET_ENTITY = ForgeEntities.BAD_COMPANY_BULLET_ENTITY.get();
         ModEntities.THROWN_KNIFE = ForgeEntities.THROWN_KNIFE.get();
         ModEntities.BLOCK_WALL = ForgeEntities.BLOCK_WALL.get();
         ModEntities.PARALLEL_CHEST = ForgeEntities.PARALLEL_CHEST.get();
@@ -947,6 +961,8 @@ public class ForgeEvents {
         ModEntities.PH_CAPSULE = ForgeEntities.PH_CAPSULE.get();
         ModEntities.CTR_PLATFORM = ForgeEntities.CTR_PLATFORM.get();
         ModEntities.CTR_BARRIER = ForgeEntities.CTR_BARRIER.get();
+
+        ModEntities.BAD_COMPANY_SOLDIER = ForgeEntities.BAD_COMPANY_SOLDIER.get();
 
         ModEntities.FALLEN_ZOMBIE = ForgeEntities.FALLEN_ZOMBIE.get();
         ModEntities.FALLEN_SKELETON = ForgeEntities.FALLEN_SKELETON.get();

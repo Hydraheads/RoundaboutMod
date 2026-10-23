@@ -262,6 +262,7 @@ public class ModItems {
     public static Item CHAKA_MASK;
     public static Item DAIYA_MASK;
     public static Item DAIYA_2_MASK;
+    public static Item LAEM_MASK;
     public static Item INTERDIMENSIONAL_KEY;
 
     public static Item ANUBIS_ITEM;
@@ -279,6 +280,9 @@ public class ModItems {
 
     public static Item JACKAL_RIFLE;
     public static Item SNIPER_AMMO;
+
+    public static Item BERETTA_PISTOL;
+    public static Item PISTOL_AMMO;
 
     public static Item PAINTING_VAN_GOUGH;
     public static Item PAINTING_MONA_LISA;

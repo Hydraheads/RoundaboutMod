@@ -110,6 +110,10 @@ public class ClientConfig implements Cloneable {
     public ClientConfig.WhitesnakeSettings whitesnakeSettings;
     @NestedOption(group = "modded")
     public ClientConfig.DiverDownSettings diverDownSettings;
+    @NestedOption(group = "modded")
+    public ClientConfig.SilverChariotSettings silverChariotSettings;
+    @NestedOption(group = "modded")
+    public ClientConfig.LyinEyesSettings lyinEyesSettings;
   /*  @NestedOption(group = "modded")
     public ClientConfig.StandTweakSettings standTweakSettings; */
 
@@ -251,6 +255,18 @@ public class ClientConfig implements Cloneable {
         public Boolean customDiverDownWorkbench;
         @BooleanOption(group = "inherit", value = false)
         public Boolean forceThirdPersonInGroundDive;
+    }
+    public static class SilverChariotSettings {
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean silverChariotForceThirdPersonInControlMode;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean silverChariotUniqueControlModeEntityRendering;
+    }
+    public static class LyinEyesSettings {
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean spinMapInsteadOfArrow;
+        @FloatOption(group = "inherit", value = 1F, min = 0, max = 1)
+        public Float nematodeOpacity;
     }
     public static class AnubisSettings {
         @BooleanOption(group = "inherit", value = false)

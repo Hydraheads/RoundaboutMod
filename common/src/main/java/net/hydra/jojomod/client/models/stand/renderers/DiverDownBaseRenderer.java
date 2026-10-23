@@ -46,7 +46,6 @@ public class DiverDownBaseRenderer extends StandRenderer<DiverDownEntity> {
     public static final ResourceLocation VOLUME_4 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/volume_4.png");
     public static final ResourceLocation SPINE_ART = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/spine_art.png");
     public static final ResourceLocation DIVER_DROWNED = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/diver_drowned.png");
-    public static final ResourceLocation SECCO = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/secco.png");
     public static final ResourceLocation VAN_HALEN = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/van_halen.png");
     public static final ResourceLocation SCUBA_DIVER = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/diver_down/scuba_diver.png");
 
@@ -120,9 +119,6 @@ public class DiverDownBaseRenderer extends StandRenderer<DiverDownEntity> {
         }
         if (bt == DiverDownEntity.DIVER_DROWNED) {
             return DIVER_DROWNED;
-        }
-        if (bt == DiverDownEntity.SECCO) {
-            return SECCO;
         }
         if (bt == DiverDownEntity.VAN_HALEN) {
             return VAN_HALEN;

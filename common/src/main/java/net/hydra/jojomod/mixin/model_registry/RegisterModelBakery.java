@@ -30,6 +30,7 @@ public abstract class RegisterModelBakery {
         this.loadTopLevel(ModItemModels.TOMMY_GUN_IN_HAND);
         this.loadTopLevel(ModItemModels.COLT_REVOLVER_IN_HAND);
         this.loadTopLevel(ModItemModels.JACKAL_RIFLE_IN_HAND);
+        this.loadTopLevel(ModItemModels.BERETTA_PISTOL_IN_HAND);
         this.loadTopLevel(ModItemModels.ANUBIS_IN_HAND);
         this.loadTopLevel(ModItemModels.STAND_BOW);
         this.loadTopLevel(ModItemModels.STAND_BEETLE_BOW);

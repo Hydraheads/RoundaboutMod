@@ -24,6 +24,8 @@ import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.entity.substand.MoldSporesEntity;
+import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
+import net.hydra.jojomod.entity.substand.SeperatedLegsEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -40,6 +42,7 @@ import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.presets.TWAndSPSharedPowers;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.minecraft.client.gui.Font;
@@ -1047,6 +1050,24 @@ public class ClientUtil {
                     if (entity instanceof MoldSporesEntity mse){
                         mse.lifetime = data;
                     }
+                }else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncGdArms.value)) {;
+                    int user = (int) vargs[0];
+                    int offhandent = (int) vargs[1];
+                    int mainhandent = (int) vargs[2];
+                    boolean hasoffhand = ((int) vargs[3]) == 1;
+                    boolean hasmainhand = ((int) vargs[4]) == 1;
+                    int legsent = (int) vargs[5];
+                    Entity userent = player.level().getEntity(user);
+                    if(((StandUser)userent).roundabout$getStandPowers() instanceof PowersGreenDay PGD){
+
+                        PGD.Main_arm = (SeperatedArmEntity) player.level().getEntity(mainhandent);
+                        PGD.Off_hand_entity = (SeperatedArmEntity) player.level().getEntity(offhandent);
+                        PGD.HasMainArm = hasmainhand;
+                        PGD.HasOffHand = hasoffhand;
+                        PGD.legGoneTicks = ((int) vargs[6]);
+                        PGD.currentlegs = (SeperatedLegsEntity) player.level().getEntity(legsent);
+                    }
+
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncPurpleHazePods.value)) {
                     byte pods = (byte) vargs[0];
                     ((IPlayerEntity) player).roundabout$setPurpleHazePods(pods);
@@ -1719,6 +1740,7 @@ public class ClientUtil {
         Minecraft.getInstance().setScreen(new MemoryReadingScreen(stack, hand));
     }
     public static void openTroopSelectionScreen(){Minecraft.getInstance().setScreen(new TroopSelectScreen());}
+    public static void openTroopTacticsScreen(){Minecraft.getInstance().setScreen(new TroopTacticsScreen());}
 
     //Diver Down UI start
     public static void openWorkbenchSelect() {Minecraft.getInstance().setScreen(new DiverDownWorkbenchSelect());}
@@ -2185,6 +2207,10 @@ public class ClientUtil {
             }
         } else if (context == PacketDataIndex.BITES_THE_DUST_COMBAT){
             bitesTheDustTicker = 0;
+        } else if (context == PacketDataIndex.DONT_SPAM_TIME_STOP){
+            if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof TWAndSPSharedPowers TW) {
+                TW.TSFORCE = false;
+            }
         } else if (context == PacketDataIndex.S2C_SOFT){
             if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
                 PW.setGoBeyondChargeTicks(PW.goBeyondChargeTicks+PW.getGoBeyondUseTicks2());
@@ -2541,6 +2567,8 @@ public class ClientUtil {
                     ModStrayModels.FirstPersonColtRevolverModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
                 } else if (item instanceof TommyGunItem) {
                     ModStrayModels.FirstPersonTommyGunModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
+                } else if (item instanceof BerettaPistolItem) {
+                    ModStrayModels.FirstPersonBerettaPistolModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
                 }
 
                 stack.popPose();

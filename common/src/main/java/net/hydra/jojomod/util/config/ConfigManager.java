@@ -210,10 +210,10 @@ public abstract class ConfigManager {
             MainUtil.standBlockGrabBlacklist.clear();
             MainUtil.standBlockGrabBlacklist.addAll(getAdvancedConfig().standBlockGrabBlacklist);
         }
-        if (getAdvancedConfig().standDisassemblyBlacklist != null)
+        if (getAdvancedConfig().standDisassemblyBlacklistv1 != null)
         {
             MainUtil.standDisassemblyBlacklist.clear();
-            MainUtil.standDisassemblyBlacklist.addAll(getAdvancedConfig().standDisassemblyBlacklist);
+            MainUtil.standDisassemblyBlacklist.addAll(getAdvancedConfig().standDisassemblyBlacklistv1);
         }
         if (getAdvancedConfig().lootPoolForD4CChests != null)
         {
@@ -251,9 +251,9 @@ public abstract class ConfigManager {
                 }
             }
         }
-        if (getAdvancedConfig().sheerHeartAttackCustomEntityHeatV2 != null)
+        if (getAdvancedConfig().sheerHeartAttackCustomEntityHeatV3 != null)
         {
-            for (String entry : getAdvancedConfig().sheerHeartAttackCustomEntityHeatV2) {
+            for (String entry : getAdvancedConfig().sheerHeartAttackCustomEntityHeatV3) {
                 try {
                     String[] split = entry.split(":");
 
@@ -350,11 +350,11 @@ public abstract class ConfigManager {
 
     public static void loadStandArrowPool()
     {
-        if (getAdvancedConfig().standArrowPoolv7 != null)
+        if (getAdvancedConfig().standArrowPoolv8 != null)
         {
             ModItems.STAND_ARROW_POOL.clear();
 
-            for (String disc : getAdvancedConfig().standArrowPoolv7)
+            for (String disc : getAdvancedConfig().standArrowPoolv8)
             {
                 String[] split = disc.split(":");
 
@@ -375,11 +375,11 @@ public abstract class ConfigManager {
                 }
             }
         }
-        if (getAdvancedConfig().naturalStandUserMobPoolv10 != null)
+        if (getAdvancedConfig().naturalStandUserMobPoolv11 != null)
         {
             ModItems.STAND_ARROW_POOL_FOR_MOBS.clear();
 
-            for (String disc : getAdvancedConfig().naturalStandUserMobPoolv10)
+            for (String disc : getAdvancedConfig().naturalStandUserMobPoolv11)
             {
                 String[] split = disc.split(":");
 

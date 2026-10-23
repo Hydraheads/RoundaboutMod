@@ -52,6 +52,7 @@ public class SilverChariotRapierPlatformRenderer extends EntityRenderer<SilverCh
     private static final ResourceLocation SANDY = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/silver_chariot/sandy_silver_chariot.png");
     private static final ResourceLocation TURQUOISE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/silver_chariot/turquoise_silver_chariot.png");
     private static final ResourceLocation YELLOW = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/silver_chariot/yellow_silver_chariot.png");
+    private static final ResourceLocation PHARAOH = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/silver_chariot/pharaoh_silver_chariot.png");
 
     public static ResourceLocation getSkin(byte bt) {
         switch (bt) {
@@ -114,6 +115,9 @@ public class SilverChariotRapierPlatformRenderer extends EntityRenderer<SilverCh
             }
             case SilverChariotEntity.YELLOW -> {
                 return YELLOW;
+            }
+            case SilverChariotEntity.PHARAOH -> {
+                return PHARAOH;
             }
         }
         return PART_3;

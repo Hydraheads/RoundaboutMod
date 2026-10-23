@@ -518,6 +518,8 @@ public class StandIcons {
             "textures/gui/icons/bad_company/pilot_mode.png");
     public static final ResourceLocation BAD_COMPANY_PILOT_MODE_EXIT = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/bad_company/pilot_mode_exit.png");
+    public static final ResourceLocation BAD_COMPANY_TACTICAL_OPTIONS = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/bad_company/tactical_options.png");
 
     public static final ResourceLocation PLANET_WAVES_METEOR_SHOWER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/planet_waves/meteor_shower.png");
@@ -1128,12 +1130,18 @@ public class StandIcons {
 
     // lyin eyes icons start
 
-    public static final ResourceLocation LYIN_EYES_PLACEHOLDER = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/lyin_eyes/placeholder.png");
     public static final ResourceLocation LYIN_EYES_INVENTORY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/lyin_eyes/inventory_reading.png");
-    public static final ResourceLocation LYIN_EYES_LAYER = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/entity/lyin_eyes_layer.png");
+    public static final ResourceLocation LYIN_EYES_TENSION_SENSOR = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/lyin_eyes/tension_sensor.png");
+    public static final ResourceLocation LYIN_EYES_TENSION_SENSOR_ON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/lyin_eyes/tension_sensor_on.png");
+    public static final ResourceLocation LYIN_EYES_PASSIVE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/lyin_eyes/callout_passive.png");
+    public static final ResourceLocation LYIN_EYES_MAP_ON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/lyin_eyes/nematode_map_on.png");
+    public static final ResourceLocation LYIN_EYES_MAP_OFF = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/lyin_eyes/nematode_map_off.png");
 
     // lyin eyes icons end
 

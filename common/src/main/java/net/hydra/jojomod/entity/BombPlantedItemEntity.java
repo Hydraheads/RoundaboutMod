@@ -161,7 +161,11 @@ public class BombPlantedItemEntity extends Entity implements TraceableEntity {
         if (!level().isClientSide()) {
             if (host == null || !(host.isAlive() && ((StandUser)host).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ
                     /*&& PKQ.getCurrentBombStatus() == (byte)2*/ && PKQ.bombPlantedItem == this)) {
-                defuse();
+                    defuse();
+                    if(host != null && ((StandUser)host).roundabout$getStandPowers() != null
+                       && ((StandUser)host).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ){
+                        PKQ.bombPlantedItem = null;
+                    }
             }
         }
         if (this.getItem().isEmpty()) {

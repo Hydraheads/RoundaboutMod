@@ -89,7 +89,7 @@ public class ManhattanTransferEntity extends StandEntity {
                 }
             }
         }
-        return true;
+        return !getBsGrabbed();
     }
 
     @Override
@@ -99,7 +99,7 @@ public class ManhattanTransferEntity extends StandEntity {
 
     @Override
     public boolean isAttackable() {
-        return true;
+        return !getBsGrabbed();
     }
 
     @Override

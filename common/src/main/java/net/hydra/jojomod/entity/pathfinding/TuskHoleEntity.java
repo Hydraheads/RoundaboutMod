@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.pathfinding;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
@@ -8,6 +9,7 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersTusk;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -64,12 +66,14 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
     public boolean isVortex() {return entityData.get(VORTEX);}
 
     public boolean isClinging() {return entityData.get(CLINGING) != Direction.DOWN;}
+    public Direction getClingDirection() {return entityData.get(CLINGING);}
     public void setClinging(Direction d) {entityData.set(CLINGING,d);}
 
     private LivingEntity nearest;
     public TuskHoleEntity(Level $$1, LivingEntity user) {
         super(ModEntities.TUSK_HOLE, $$1);
         this.setUser(user);
+        this.setMaxUpStep(1);
     }
 
 
@@ -92,7 +96,7 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
             if (target.hurt(ModDamageTypes.of(this.level(),ModDamageTypes.PENETRATING_STAND,this,this.getUser()),PT.getHoleDamage(target) ) ){
                 this.level().playSound(null,this.blockPosition(),ModSounds.TUSK_HOLE_IMPACT_EVENT,SoundSource.PLAYERS,1F,0.9F+((float) Math.random()*0.2F));
                 if (MainUtil.getMobBleed(target)) {
-                    MainUtil.makeBleed(target,1,180,this.getUser());
+                    MainUtil.makeBleed(target,1,120,this.getUser());
                 }
                 
                 if (!target.isAlive()) {
@@ -139,6 +143,11 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
             soundDelay = 0;
         }
         super.setTarget($$0);
+        if ($$0 != null && this.getUser() != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersTusk PT && PT.getAct() == 2) {
+            if (isClinging()) {
+                this.setClinging(Direction.DOWN);
+            }
+        }
     }
 
     private int soundDelay = 0;
@@ -146,7 +155,7 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
     @Override
     public void tick() {
         boolean client = this.level().isClientSide();
-        LivingEntity $$0 = this.getUser();
+        LivingEntity user = this.getUser();
         super.tick();
 
         if (this.level().isClientSide()) {
@@ -157,11 +166,41 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
             }
         }
 
-        if (this.isClinging()) {
-            if (!this.horizontalCollision) {
-                this.setClinging(Direction.DOWN);
+        if (!level().isClientSide()) {
+            if (this.isClinging()) {
+                BlockPos wall = this.blockPosition().relative(this.getClingDirection().getOpposite());
+                if (this.level().getBlockState(wall).isAir()) {
+                    this.setClinging(Direction.DOWN);
+                }
+                if (!this.isPiloted()) {
+                    this.setDeltaMovement(Vec3.ZERO);
+                    ((IGravityEntity) this).roundabout$setGravityDirection(getClingDirection().getOpposite());
+                } else {
+                    ((IGravityEntity) this).roundabout$setGravityDirection(Direction.DOWN);
+                }
+            } else {
+                ((IGravityEntity) this).roundabout$setGravityDirection(Direction.DOWN);
             }
-            this.setDeltaMovement(Vec3.ZERO);
+
+            if (isPiloted()) {
+                boolean changed = false;
+                for (Direction direction : Direction.values()) {
+
+                    if (direction != Direction.DOWN && direction != Direction.UP) {
+                        BlockPos delta = this.blockPosition().relative(direction);
+                        if (!this.level().getBlockState(delta).isAir()) {
+                            if (alignToDirection(direction.getOpposite()).distanceTo(this.getPosition(0)) < 0.2) {
+                                this.setClinging(direction.getOpposite());
+                                changed = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (!changed) {
+                    this.setClinging(Direction.DOWN);
+                }
+            }
         }
 
         if (this.getUser() != null) { // doubles lifespan during act 3
@@ -182,6 +221,7 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
         }
 
 
+
         if (!client) {
             if (!isVortex()) {
                 if (isInWater()) {
@@ -193,30 +233,6 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
                         this.doHurtTarget(nearest);
                         nearest = null;
                     }
-                }
-
-                if ($$0 != null && ((StandUser) $$0).roundabout$getStandPowers() instanceof PowersTusk) {
-                    Vec3 vec3 = this.getDeltaMovement();
-                    double x = this.getX() + vec3.x;
-                    double y = this.getY();
-                    double z = this.getZ() + vec3.z;
-
-                    BlockPos check = this.blockPosition();
-                    for (int i=0;i<3;i++) {
-                        check.below();
-                        if (this.level().getBlockState(check).isSolid()) {
-                            break;
-                        }
-                    }
-
-                    BlockState bs = this.level().getBlockState(this.blockPosition());
-                    y = y%1;
-                    if (!bs.isAir()) {
-                        double height = bs.getBlock().getVisualShape(bs,this.level(),this.blockPosition(), CollisionContext.of(this)).max(Direction.Axis.Y);
-                        y += height-y;
-                    }
-
-                    ((ServerLevel) this.level()).sendParticles(ModParticles.TUSK_HOLE, x, check.getY() + y  + 0.04, z, 0, 0, 0, 0, 0.1);
                 }
             } else {
                 Vec3 pos = this.getPosition(0);
@@ -275,6 +291,44 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
                     }
                 }
             }
+        } else {
+            if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersTusk) {
+                Vec3 vec3 = this.getDeltaMovement();
+                double x = this.getX() + vec3.x;
+                double y = this.getY();
+                double z = this.getZ() + vec3.z;
+
+                BlockPos check = this.blockPosition();
+                for (int i=0;i<3;i++) {
+                    check.below();
+                    if (this.level().getBlockState(check).isSolid()) {
+                        break;
+                    }
+                }
+
+                BlockState bs = this.level().getBlockState(this.blockPosition());
+                y = y%1;
+                if (!bs.isAir()) {
+                    double height = bs.getBlock().getVisualShape(bs,this.level(),this.blockPosition(), CollisionContext.of(this)).max(Direction.Axis.Y);
+                    y += height-y;
+                }
+
+                            /*    if (!this.onGround() && !isClinging()) {
+                    d = Direction.UP;
+                } */
+                Direction d = this.getClingDirection();
+             //   Roundabout.LOGGER.info("d: "+ d);
+                int dir = switch (d) {
+                    case DOWN -> 0;
+                    case UP -> 1;
+                    case WEST -> 2;
+                    case EAST -> 3;
+                    case SOUTH -> 4;
+                    case NORTH -> 5;
+                };
+                MainUtil.sendParticlesIfPossible(this, this.level(), ModParticles.TUSK_HOLE, x, check.getY() + y + 0.04, z, dir, 0, 0);
+
+            }
         }
     }
 
@@ -285,14 +339,35 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
 
     @Override
     protected void goDownInWater() {}
-
     @Override
     public boolean isPushedByFluid() {
         return false;
     }
+    @Override
+    protected boolean isAffectedByFluids() {return false;}
+    @Override
+    public boolean isNoGravity() {return this.isVortex();}
+    @Override
+    public boolean isControlledByLocalInstance() {
+        LivingEntity user = this.getUser();
+        if (user != null) {
+            Entity ent = ((StandUser)user).roundabout$getStandPowers().getPilotingStand();
+            if (ent != null && ent.is(this)) {
+                return (user instanceof Player $$0 && $$0.isLocalPlayer());
+            }
+        }
+        return super.isControlledByLocalInstance();
+    }
 
     @Override
-    public boolean isNoGravity() {return super.isNoGravity() || this.isVortex();}
+    public void travel(Vec3 vec3) {
+        super.travel(vec3);
+        if (this.isControlledByLocalInstance()) {
+            if (this.getUser() instanceof Player && this.level().isClientSide()) {
+                C2SPacketUtil.updatePilot(this);
+            }
+        }
+    }
 
     private boolean isPiloted() {
         if (this.getUser() instanceof Player P) {
@@ -322,6 +397,23 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
        if (isPiloted() && this.getUser() instanceof Player P) {
            P.getInventory().add($$0.getItem());
        }
+    }
+
+    @Override
+    public boolean onClimbable() {
+        return this.isPiloted() && this.horizontalCollision;
+    }
+
+    public Vec3 alignToDirection(Direction dir) {return alignToDirection(this.getPosition(0),dir);}
+    public Vec3 alignToDirection(Vec3 pos, Direction dir) {
+        boolean negative = !dir.getAxisDirection().equals(Direction.AxisDirection.POSITIVE);
+        double offset = 0.1;
+        pos = switch (dir.getAxis()) {
+            case X -> new Vec3(negative ? Math.ceil(pos.x)-offset : Math.floor(pos.x)+offset,  pos.y,pos.z);
+            case Y -> new Vec3(pos.x,negative ? Math.ceil(pos.y)-offset : Math.floor(pos.y)+offset,pos.z);
+            case Z -> new Vec3(pos.x,pos.y,negative ? Math.ceil(pos.z)-offset : Math.floor(pos.z)+offset);
+        };
+        return pos;
     }
 }
 

@@ -330,14 +330,27 @@ public class SilverChariotModel<T extends SilverChariotEntity> extends StandMode
 		this.head.visible = !(pEntity.isRemoteControlled()
 				&& pEntity.getUser() == minecraft.player
 				&& minecraft.options.getCameraType().isFirstPerson());
+		if (!pEntity.isPart5Skin()) {
+			this.right_sword.visible = true;
+			this.left_sword.visible = false;
+		} else {
+			this.right_sword.visible = false;
+			// this.left_sword.visible = true;
+			if (pEntity.getAnimation() == SilverChariotEntity.SC_OFFHAND_WEAPON_SWIPE) {
+				this.left_sword.visible = false;
+			} else {
+				this.left_sword.visible = true;
+			}
+		}
+
 		this.animate(pEntity.scFallBrace, SilverChariotAnimations.FallBrace(), pAgeInTicks, 1f);
-		this.animate(pEntity.scGuardLeftBreak, SilverChariotAnimations.LeftGuardBreak(), pAgeInTicks, 1f);
+		this.animate(pEntity.scGuardLeftBreak, SilverChariotAnimations.LeftGuardBreak(), pAgeInTicks, 1.8f);
 		this.animate(pEntity.scGuardLeftStart, SilverChariotAnimations.LeftGuardStart(), pAgeInTicks, 1f);
 		this.animate(pEntity.scGuardLeftHit, SilverChariotAnimations.LeftGuardHit(), pAgeInTicks, 1f);
-		this.animate(pEntity.scGuardRightBreak, SilverChariotAnimations.RightGuardBreak(), pAgeInTicks, 1f);
+		this.animate(pEntity.scGuardRightBreak, SilverChariotAnimations.RightGuardBreak(), pAgeInTicks, 1.8f);
 		this.animate(pEntity.scGuardRightStart, SilverChariotAnimations.RightGuardStart(), pAgeInTicks, 1f);
 		this.animate(pEntity.scGuardRightHit, SilverChariotAnimations.RightGuardHit(), pAgeInTicks, 1f);
-		this.animate(pEntity.scBarrageDamage, StandAnimations.BARRAGEDAMAGE, pAgeInTicks, 1f);
+		this.animate(pEntity.scBarrageDamage, StandAnimations.BARRAGEDAMAGE, pAgeInTicks, 2.5f);
 		this.animate(pEntity.scLeftHit1, SilverChariotAnimations.LeftHit1(), pAgeInTicks, partial);
 		this.animate(pEntity.scLeftHit2, SilverChariotAnimations.LeftHit2(), pAgeInTicks, full);
 		this.animate(pEntity.scLeftHit3, SilverChariotAnimations.LeftHit3(), pAgeInTicks, full);
@@ -376,6 +389,10 @@ public class SilverChariotModel<T extends SilverChariotEntity> extends StandMode
 		this.animate(pEntity.scLeftStatueCutting, SilverChariotAnimations.LeftStatueCutting(), pAgeInTicks, 1f);
 		this.animate(pEntity.scHideRightArm, SilverChariotAnimations.HideRightArm(), pAgeInTicks, 1f);
 		this.animate(pEntity.scHideLeftArm, SilverChariotAnimations.HideLeftArm(), pAgeInTicks, 1f);
+		this.animate(pEntity.scMiningBarrageRight, SilverChariotAnimations.RightBarrage(), pAgeInTicks, 1.65f);
+		this.animate(pEntity.scMiningBarrageLeft, SilverChariotAnimations.LeftBarrage(), pAgeInTicks, 1.65f);
+		this.animate(pEntity.scBarrageFinisherRight, SilverChariotAnimations.RightHit3(), pAgeInTicks, 2.2f);
+		this.animate(pEntity.scBarrageFinisherLeft, SilverChariotAnimations.LeftHit3(), pAgeInTicks, 2.2f);
 	}
 
 	@Override

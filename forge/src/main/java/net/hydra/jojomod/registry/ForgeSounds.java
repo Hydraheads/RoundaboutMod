@@ -253,6 +253,11 @@ public class ForgeSounds {
     public static final RegistryObject<SoundEvent> JACKAL_RELOAD_EVENT =
             register(ModSounds.JACKAL_RELOAD, ModSounds.JACKAL_RELOAD_ID);
 
+    public static final RegistryObject<SoundEvent> BERETTA_FIRE_EVENT =
+            register(ModSounds.BERETTA_FIRE, ModSounds.BERETTA_FIRE_ID);
+    public static final RegistryObject<SoundEvent> BERETTA_RELOAD_EVENT =
+            register(ModSounds.BERETTA_RELOAD, ModSounds.BERETTA_RELOAD_ID);
+
     public static final RegistryObject<SoundEvent> BULLET_PENTRATION_EVENT =
             register(ModSounds.BULLET_PENTRATION, ModSounds.BULLET_PENTRATION_ID);
     public static final RegistryObject<SoundEvent> BULLET_RICOCHET_EVENT =
@@ -770,6 +775,8 @@ public class ForgeSounds {
             register(ModSounds.RATT_LEAP, ModSounds.RATT_LEAP_ID);
     public static final RegistryObject<SoundEvent> RATT_MODE_CHANGE =
             register(ModSounds.RATT_MODE_CHANGE, ModSounds.RATT_MODE_CHANGE_ID);
+    public static final RegistryObject<SoundEvent> RATT_BOUNCE =
+            register(ModSounds.RATT_BOUNCE, ModSounds.RATT_BOUNCE_ID);
 
     public static final RegistryObject<SoundEvent> STRAY_CAT_SOUND_1 =
             register(ModSounds.STRAY_CAT_SOUND_1, ModSounds.STRAY_CAT_SOUND_1_ID);
@@ -1030,14 +1037,8 @@ public class ForgeSounds {
             register(ModSounds.DIVER_DOWN_DIVE, ModSounds.DIVER_DOWN_DIVE_ID);
         public static final RegistryObject<SoundEvent> DIVER_DOWN_DIVE2 =
             register(ModSounds.DIVER_DOWN_DIVE2, ModSounds.DIVER_DOWN_DIVE2_ID);
-    public static final RegistryObject<SoundEvent> DIVER_DOWN_BARRAGE_1 =
-            register(ModSounds.DIVER_DOWN_BARRAGE_1, ModSounds.DIVER_DOWN_BARRAGE_1_ID);
-    public static final RegistryObject<SoundEvent> DIVER_DOWN_BARRAGE_2 =
-            register(ModSounds.DIVER_DOWN_BARRAGE_2, ModSounds.DIVER_DOWN_BARRAGE_2_ID);
-    public static final RegistryObject<SoundEvent> DIVER_DOWN_BARRAGE_3 =
-            register(ModSounds.DIVER_DOWN_BARRAGE_3, ModSounds.DIVER_DOWN_BARRAGE_3_ID);
-    public static final RegistryObject<SoundEvent> DIVER_DOWN_BARRAGE_4 =
-            register(ModSounds.DIVER_DOWN_BARRAGE_4, ModSounds.DIVER_DOWN_BARRAGE_4_ID);
+    public static final RegistryObject<SoundEvent> DIVER_DOWN_BARRAGE =
+            register(ModSounds.DIVER_DOWN_BARRAGE, ModSounds.DIVER_DOWN_BARRAGE_ID);
     public static final RegistryObject<SoundEvent> DIVER_DOWN_GROUND_BARRAGE =
             register(ModSounds.DIVER_DOWN_GROUND_BARRAGE, ModSounds.DIVER_DOWN_GROUND_BARRAGE_ID);
     public static final RegistryObject<SoundEvent> DIVER_DOWN_GROUND_DIVE =
@@ -1127,6 +1128,12 @@ public class ForgeSounds {
 
     public static final RegistryObject<SoundEvent> LYIN_EYES_SUMMON =
             register(ModSounds.LYIN_EYES_SUMMON, ModSounds.LYIN_EYES_SUMMON_ID);
+    public static final RegistryObject<SoundEvent> VILLAGER_CALLED_OUT =
+            register(ModSounds.VILLAGER_CALLED_OUT, ModSounds.VILLAGER_CALLED_OUT_ID);
+    public static final RegistryObject<SoundEvent> LYIN_EYES_VISION =
+            register(ModSounds.LYIN_EYES_VISION, ModSounds.LYIN_EYES_VISION_ID);
+    public static final RegistryObject<SoundEvent> LYIN_EYES_GATHER =
+            register(ModSounds.LYIN_EYES_GATHER, ModSounds.LYIN_EYES_GATHER_ID);
 
     public static final RegistryObject<SoundEvent> SUMMON_GREEN_DAY =
             register(ModSounds.SUMMON_GREEN_DAY, ModSounds.SUMMON_GREEN_DAY_ID);
@@ -1203,6 +1210,10 @@ public class ForgeSounds {
     public static final RegistryObject<SoundEvent> VSONG_DAMNABLE_CEREMONY =
             register(ModSounds.VSONG_DAMNABLE_CEREMONY, ModSounds.VSONG_DAMNABLE_CEREMONY_ID);
 
+    public static final RegistryObject<SoundEvent> BC_UI_SELECT =
+            register(ModSounds.BC_UI_SELECT, ModSounds.BC_UI_SELECT_ID);
+    public static final RegistryObject<SoundEvent> BC_SUMMON =
+            register(ModSounds.BC_SUMMON, ModSounds.BC_SUMMON_ID);
     public static final RegistryObject<SoundEvent> BC_TROOP_SUMMON =
             register(ModSounds.BC_TROOP_SUMMON, ModSounds.BC_TROOP_SUMMON_ID);
     public static final RegistryObject<SoundEvent> BC_BUNDLE_SUMMON =

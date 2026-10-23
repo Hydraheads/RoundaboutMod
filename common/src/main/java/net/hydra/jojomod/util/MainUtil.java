@@ -26,13 +26,11 @@ import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.paintings.RoundaboutPainting;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundPathfindingStandAttackEntity;
+import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
-import net.hydra.jojomod.entity.stand.PurpleHazeEntity;
-import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
-import net.hydra.jojomod.entity.stand.WhitesnakeEntity;
+import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
@@ -841,6 +839,8 @@ public class MainUtil {
     public static final TargetingConditions followTargetting = TargetingConditions.forCombat().range(50.0);
     public static final TargetingConditions plsWorkTargetting = TargetingConditions.forCombat().range(20.0)
             .ignoreInvisibilityTesting();
+    public static final TargetingConditions plsWorkTargetting2 = TargetingConditions.forNonCombat().range(40.0)
+            .ignoreInvisibilityTesting().ignoreLineOfSight();
 
     public static double getWorthyOdds(Mob mob) {
         if ((isBossMob(mob)
@@ -1595,6 +1595,7 @@ public class MainUtil {
         playerNames.put("That_Brit_Trash", UUID.fromString("f861fb4c-6cfc-4f19-82ee-65cc8edd2c30"));
         playerNames.put("Talonios1", UUID.fromString("9b42b60e-731b-4942-8a09-24307173a1ac"));
         playerNames.put("GenericName", UUID.fromString("e16801d1-d6c4-495c-9cc9-024645cc13a5"));
+        playerNames.put("88superguy", UUID.fromString("3d19d796-6064-4ae9-8903-48908bfdfa63"));
         playerNames.put("ValidFish", UUID.fromString("d9db8b8b-c14e-4d22-bad7-c595140c151a"));
         playerNames.put("Blugnib", UUID.fromString("4eefa46e-eaf0-4170-8ef4-307e8745f2f7"));
         playerNames.put("DarkkJon", UUID.fromString("e3cf5756-2795-4256-92cd-a1c2284865dc"));
@@ -1700,6 +1701,12 @@ public class MainUtil {
             Player player, int entityInt,
             double velocityX, double velocityY, double velocityZ) {
         Entity entity = player.level().getEntity(entityInt);
+        StandPowers powers = ((StandUser)player).roundabout$getStandPowers();
+        if (!(powers instanceof PowersManhattanTransfer pmt && entity instanceof ManhattanTransferEntity)) {
+            if (!powers.isPiloting() || entity == null || entity != powers.getPilotingStand()) {
+                return;
+            }
+        }
         if (entity != null) {
             if (containsInvalidValues(getX, getY, getZ, getYRot, getXRot)
                     || !Double.isFinite(velocityX) || !Double.isFinite(velocityY) || !Double.isFinite(velocityZ)) {
@@ -2257,6 +2264,16 @@ public class MainUtil {
             }
         }
         return false;
+    }
+
+    // Claim check that checks for interactions specifically
+    public static boolean canInteractWithBlock(Player player, BlockPos pos) {
+        if (!ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims
+                || !MainUtil.getIsGamemodeApproriateForGrief(player)) {
+            return true;
+        }
+
+        return player.level().mayInteract(player, pos);
     }
 
     // Couldn't find better wording but this tests if you're on claimed land that
@@ -3994,7 +4011,7 @@ public class MainUtil {
             StandEntity SE = ((StandUser) player).roundabout$getStand();
             Entity target = player.level().getEntity(data);
             if (target != null) {
-                if (!isCollidingWithAnyBlock(target)) {
+                if (!isCollidingWithAnyBlock(target) || (target instanceof TuskHoleEntity) ) {
                     ((StandUser) player).roundabout$getStandPowers().setPiloting(data);
                 }
             } else {

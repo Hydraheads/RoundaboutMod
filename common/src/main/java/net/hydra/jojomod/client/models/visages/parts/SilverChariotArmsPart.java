@@ -10,7 +10,7 @@ import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.stand.animations.KingCrimsonAnimations;
 import net.hydra.jojomod.client.models.stand.animations.SilverChariotAnimations;
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
-import net.hydra.jojomod.client.models.stand.renderers.SilverChariotRenderer;
+import net.hydra.jojomod.client.models.stand.renderers.SilverChariotBaseRenderer;
 import net.hydra.jojomod.entity.stand.SilverChariotEntity;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -181,7 +181,7 @@ public class SilverChariotArmsPart extends PsuedoHierarchicalModel {
 		if (context instanceof LivingEntity LE) {
 			bt = ((StandUser) LE).roundabout$getStandSkin();
 		}
-		return SilverChariotRenderer.getSkin(bt);
+		return SilverChariotBaseRenderer.getSkin(bt);
 	}
 
 	public void render(Entity context, PoseStack poseStack, MultiBufferSource bufferSource, int light) {

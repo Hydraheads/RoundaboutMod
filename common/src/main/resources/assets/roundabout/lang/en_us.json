@@ -53,6 +53,7 @@
   "text.roundabout.bullets.revolver": "Compatible with Snubnosed Revolvers and Colt Revolvers.",
   "text.roundabout.bullets.tommy": "Compatible with Tommy Guns.",
   "text.roundabout.bullets.sniper": "Compatible with Sniper Rifles.",
+  "text.roundabout.bullets.pistol": "Compatible with Beretta.",
 
   "text.roundabout.stray_cat.anime": "Anime Color",
   "text.roundabout.stray_cat.manga": "Manga Color",
@@ -350,6 +351,9 @@
   "item.roundabout.jackal_rifle": "Sniper Rifle",
   "item.roundabout.sniper_ammo": "Rifle Ammunition",
 
+  "item.roundabout.beretta_pistol": "Beretta Pistol",
+  "item.roundabout.pistol_ammo": "Pistol Ammunition",
+
   "item.roundabout.light_bulb": "Light Bulb",
 
   "item.roundabout.blank_mask": "Glass Visage",
@@ -433,14 +437,19 @@
   "item.roundabout.pucci_manga_mask.tag": "Pucci",
   "item.roundabout.kira_part_four_mask": "Kira Visage",
   "item.roundabout.kira_part_four_mask.desc": "Yoshikage Kira (Part 4)",
+  "item.roundabout.kira_part_four_mask.tag": "Yoshikage Kira",
   "item.roundabout.kira_part_eight_mask": "Kira Visage",
   "item.roundabout.kira_part_eight_mask.desc": "Yoshikage Kira (Part 8)",
+  "item.roundabout.kira_part_eight_mask.tag": "Yoshikage Kira",
   "item.roundabout.hayato_kawajiri_mask": "Hayato Visage",
   "item.roundabout.hayato_kawajiri_mask.desc": "Hayato Kawajiri",
+  "item.roundabout.hayato_kawajiri_mask.tag": "Hayato",
   "item.roundabout.kosaku_mask": "Kosaku Visage",
   "item.roundabout.kosaku_mask.desc": "Kosaku Kawajiri",
+  "item.roundabout.kosaku_mask.tag": "Kosaku",
   "item.roundabout.kirasaku_mask": "'Kosaku' Visage",
   "item.roundabout.kirasaku_mask.desc": "Disguised Kira",
+  "item.roundabout.kirasaku_mask.tag": "Kosaku",
   "item.roundabout.johngallia_mask": "Johngalli A. Visage",
   "item.roundabout.johngallia_mask.desc": "Johngalli A.",
   "item.roundabout.johngallia_mask.tag": "Johngalli A.",
@@ -527,6 +536,9 @@
   "item.roundabout.daiya_2_mask": "Daiya Visage",
   "item.roundabout.daiya_2_mask.desc": "Daiya Higashikata (New Outfit)",
   "item.roundabout.daiya_2_mask.tag": "Daiya",
+  "item.roundabout.laem_mask": "Laem Visage",
+  "item.roundabout.laem_mask.desc": "Laem Chabang",
+  "item.roundabout.laem_mask.tag": "Laem",
 
   "item.roundabout.stand_arrow.fail": "Need more experience!",
 
@@ -641,6 +653,8 @@
   "entity.roundabout.killer_queen": "Killer Queen",
   "entity.roundabout.walking_heart": "Walking Heart",
   "entity.roundabout.diver_down": "Diver Down",
+  "entity.roundabout.silver_chariot": "Silver Chariot",
+  "entity.roundabout.silver_chariot_pharaoh": "Pharaoh Chariot",
   "entity.roundabout.green_day": "Green Day",
   "entity.roundabout.planet_waves": "Planet Waves",
   "entity.roundabout.purple_haze": "Purple Haze",
@@ -728,6 +742,8 @@
   "entity.roundabout.road_roller_entity": "Road Roller",
   "entity.roundabout.anubis_possessor": "Anubis Possessor",
   "entity.roundabout.anubis_slipstream": "Anubis Slipstream",
+  "entity.roundabout.silver_chariot_rapier": "Rapier",
+  "entity.roundabout.silver_chariot_rapier_platform": "Rapier Platform",
 
   "entity.roundabout.villager_minion": "Zombie Minion",
   "entity.roundabout.axolotl_minion": "Zombie Minion",
@@ -949,11 +965,12 @@
   "sounds.roundabout.hologram_end": "Blip",
   "sounds.roundabout.king_hologram": "Projection",
 
+  "sounds.roundabout.bc_summon": "Bad Company summon",
   "sounds.roundabout.bc_troop_summon": "Bad Company troop summoning",
   "sounds.roundabout.bc_bundle_summon": "Bad Company group summoning",
   "sounds.roundabout.bc_tank_summon": "Bad Company tank summoning",
   "sounds.roundabout.bc_helicopter_summon": "Bad Company helicopter summoning",
-
+  "sounds.roundabout.bc_ui_select": "Troop select",
 
   "sounds.roundabout.j_anubis_hit_1": "Sword hit",
   "sounds.roundabout.j_anubis_hit_2": "Sword hit",
@@ -1089,12 +1106,18 @@
   "death.attack.time.item": "Time caught up with %1$s whilst fighting %2$s",
   "death.attack.knife": "%1$s was knifed to death by %2$s",
   "death.attack.knife.item": "%1$s was knifed to death by %2$s",
+  "death.attack.knife.player": "%1$s was knifed to death by %2$s",
+  "death.attack.knife.player.item": "%1$s was knifed to death by %2$s",
   "death.attack.bowler_hat": "%1$s sought after %2$s's forgiveness",
   "death.attack.bowler_hat.item": "%1$s sought after %2$s's forgiveness",
+  "death.attack.bowler_hat.player": "%1$s sought after %2$s's forgiveness",
+  "death.attack.bowler_hat.player.item": "%1$s sought after %2$s's forgiveness",
   "death.attack.bladed_bowler_hat": "%1$s was cut down to the bone!",
   "death.attack.bladed_bowler_hat.item": "%1$s was cut down to the bone!",
   "death.attack.match": "%1$s met their match in battle with %2$s",
   "death.attack.match.item": "%1$s met their match in battle with %2$s",
+  "death.attack.match.player": "%1$s met their match in battle with %2$s",
+  "death.attack.match.player.item": "%1$s met their match in battle with %2$s",
   "death.attack.power_throw": "%1$s struck out whilst fighting %2$s",
   "death.attack.power_throw.item": "%1$s was beaten by %2$s throwing %3$s",
   "death.attack.barbed_wire": "%1$s ran into a wire",
@@ -1113,6 +1136,8 @@
   "death.attack.fusion.item": "%1$s was fused into %2$s",
   "death.attack.harpoon": "%1$s was speared by %2$s",
   "death.attack.harpoon.item": "%1$s was speared by %2$s with %3$s",
+  "death.attack.harpoon.player": "%1$s was speared by %2$s",
+  "death.attack.harpoon.player.item": "%1$s was speared by %2$s",
   "death.attack.statue": "%1$s was impaled by a statue of the Goddess of Love",
   "death.attack.statue.item": "%1$s was impaled by a statue of the Goddess of Love",
   "death.attack.gas_explosion": "%1$s was cooked",
@@ -1134,9 +1159,9 @@
   "death.attack.bites_the_dust.item": "%1$s bit the dust",
   "death.attack.bites_the_dust.player.item": "%$2s made %1$s bite the dust",
   "death.attack.kq_explosion": "%1$s was reduced to dust",
-  "death.attack.kq_explosion.player": "%%$2s reduced %1$s to dust",
+  "death.attack.kq_explosion.player": "%$2s reduced %1$s to dust",
   "death.attack.kq_explosion.item": "%1$s was reduced to dust",
-  "death.attack.kq_explosion.player.item": "%%$2s reduced %1$s to dust",
+  "death.attack.kq_explosion.player.item": "%$2s reduced %1$s to dust",
   "death.attack.kick": "%1$s was ran over",
   "death.attack.kick.player": "%$2s trampled %1$s",
   "death.attack.kick.item": "%1$s was ran over",
@@ -1184,6 +1209,8 @@
   "death.attack.diver_redirection": "%1$s died for the sake of others",
   "death.attack.diver_redirection.player": "%1$s died for the sake of %2$s",
   "death.attack.brain_dead": "%1$s stopped thinking",
+  "death.attack.arn_throw": "%1$s died",
+  "death.attack.arm_throw_player": "%1$s was slain by %2$s",
   "death.attack.sharp_raindrop": "%1$s was sliced by the rain",
 
   "item.glaive.charge_power": "Charge Attack",
@@ -1234,10 +1261,7 @@
   "sounds.roundabout.diver_down_charge":  "Charging Attack",
   "sounds.roundabout.diver_down_dive":  "Diver Submerges",
   "sounds.roundabout.diver_down_dive2":  "Diver Submerges",
-  "sounds.roundabout.diver_down_barrage_1":  "Barrage",
-  "sounds.roundabout.diver_down_barrage_2":  "Barrage",
-  "sounds.roundabout.diver_down_barrage_3":  "Barrage",
-  "sounds.roundabout.diver_down_barrage_4":  "Barrage",
+  "sounds.roundabout.diver_down_barrage":  "Barrage",
   "sounds.roundabout.diver_down_ground_barrage":  "Barrage",
   "sounds.roundabout.diver_down_ground_dive":  "Diver Submerges",
   "sounds.roundabout.diver_down_bubbling":  "Diver Swimming",
@@ -1284,6 +1308,9 @@
   "sounds.roundabout.anasui_pucci_2":  "Protecting Jolyne",
 
   "sounds.roundabout.lyin_eyes_summon":  "Stand summoned",
+  "sounds.roundabout.villager_called_out":  "Villager Called Out",
+  "sounds.roundabout.lyin_eyes_vision":  "Nematodes gather",
+  "sounds.roundabout.lyin_eyes_gather":  "Nematodes gather",
 
   "sounds.roundabout.vampire_dive":  "Whoosh",
   "sounds.roundabout.punch_sfx1":  "Air Cracks",
@@ -1522,6 +1549,7 @@
   "sounds.roundabout.ratt_firing": "Ratt Firing",
   "sounds.roundabout.ratt_leap": "Mini Leap",
   "sounds.roundabout.ratt_mode_change": "Mode Change",
+  "sounds.roundabout.ratt_bounce": "Ratt Dart Bounces",
 
   "sounds.roundabout.anubis_possession": "Ominous Roar",
   "sounds.roundabout.anubis_summon" : "Be Calm",
@@ -2267,7 +2295,7 @@
   "ability.roundabout.place_invis.desc": "Place blocks, passing your invisibility duration down to them. Only works while you are invisible. To activate this skill, you must be holding a block and invisible.",
 
   "ability.roundabout.ratt_scope": "Scoped Mode",
-  "ability.roundabout.ratt_scope.desc": "Hold Ratt and scope in, allowing you to shoot while moving. Interacting builds charge, and punching releases it as a flurry of darts.",
+  "ability.roundabout.ratt_scope.desc": "Hold Ratt and scope in, allowing you to shoot while moving. Interacting builds charge, and attacking releases it as a flurry of darts. After 10 blocks of travel, the darts automatically bounce to the nearest target.",
   "ability.roundabout.ratt_fire": "Fire Darts",
   "ability.roundabout.ratt_fire.desc": "Shoots a volley of three darts, inflicting melt and disabling guard on the final hit.",
   "ability.roundabout.ratt_mode_change": "Mode Change",
@@ -2600,7 +2628,7 @@
   "ability.roundabout.diver_submerge": "Diver Submerge",
   "ability.roundabout.diver_submerge.desc": "Submerge your stand into another person! Then, change their insides to suit you, whether that change is positive... or not.",
   "ability.roundabout.diver_disassemble": "Block Disassemble",
-  "ability.roundabout.diver_disassemble.desc": "Break down a block into it's basic crafting components. This move only works on blocks that only use 1 type of ingredient, don't create multiple blocks form crafting, and don't return items when being crafted.",
+  "ability.roundabout.diver_disassemble.desc": "Break down a block into it's basic crafting components. This move only works on blocks that use 1 type of ingredient, don't create multiple blocks from crafting, and don't return items when being crafted.",
   "ability.roundabout.diver_self_submerge": "Self Submerge",
   "ability.roundabout.diver_self_submerge.desc": "Submerge your stand into yourself. This lets you toggle redirection early, and lets you apply effects on yourself",
   "ability.roundabout.diver_selection": "Effect Selection",
@@ -2634,11 +2662,17 @@
   "text.roundabout.diver_down.release_mode": "Release Mode: Automatic",
   "text.roundabout.diver_down.release_mode_manual": "Release Mode: Manual",
 
-  "ability.roundabout.lyin_eyes_placeholder": "Would you still love me",
-  "ability.roundabout.lyin_eyes_placeholder.desc": "if I were a worm? \uD83E\uDD7A",
+  "ability.roundabout.lyin_eyes_map": "Nematode Map",
+  "ability.roundabout.lyin_eyes_map.desc": "The nematodes show you a layout of the blocks around you. The nematodes will also highlight enemies and containers, like chests, for you.",
+  "ability.roundabout.lyin_eyes_tension_sensor": "Tension Sensor",
+  "ability.roundabout.lyin_eyes_tension_sensor.desc": "The nematodes highlight enemies through walls. Hostile mobs are highlighted red, neutral mobs are yellow, and passive mobs are green. Enemies that are low are highlighted differently.",
   "ability.roundabout.lyin_eyes_inventory": "Inventory Reader",
   "ability.roundabout.lyin_eyes_inventory.desc": "The nematodes gather around to show you what items a player has in their inventory.",
-  "container.roundabout.lyin_eyes_inventory": " ",
+  "ability.roundabout.lyin_eyes_callout": "Callout Liar",
+  "ability.roundabout.lyin_eyes_callout.desc": "Interacting with a villager might cause them to be revealed as a liar. Using Tension Sensor, you can detect those that are lying to you. Interact with them again while in Tension Sensor to call them out, giving all Lyin Eyes users permanent trade discounts. Don't go lying.",
+  "container.roundabout.lyin_eyes_callout": " ",
+  "text.roundabout.lyin_eyes.tension_highlight": "Tension Highlight On",
+  "text.roundabout.lyin_eyes.tension_highlight_off": "Tension Highlight Off",
 
   "ability.roundabout.emperor_shoot": "Shoot",
   "ability.roundabout.emperor_shoot.desc": "Shoot a bullet from the emperor.",
@@ -2855,6 +2889,17 @@
 
   "idle.roundabout.sc_part_3": "Part 3 Pose",
   "idle.roundabout.sc_part_5": "Part 5 Pose",
+
+  "idle.roundabout.lyin_eyes_1": "Face",
+  "idle.roundabout.lyin_eyes_2": "Eyes Top",
+  "idle.roundabout.lyin_eyes_3": "Eyes Middle",
+  "idle.roundabout.lyin_eyes_4": "Eyes Bottom",
+
+  "skins.roundabout.bad_company.anime": "Part 4",
+  "skins.roundabout.bad_company.manga": "Manga",
+  "skins.roundabout.bad_company.beta": "Beta",
+  "skins.roundabout.bad_company.marine": "Marine",
+  "skins.roundabout.bad_company.sand": "Sand",
 
   "skins.roundabout.king_crimson.base": "Part 5",
   "skins.roundabout.king_crimson.manga": "Manga",
@@ -3201,7 +3246,6 @@
   "skins.roundabout.diver_down.spine_art": "Spine Art",
   "skins.roundabout.diver_down.world_diver": "Holy Diver",
   "skins.roundabout.diver_down.diver_drowned": "Diver Drown",
-  "skins.roundabout.diver_down.secco": "Secco",
   "skins.roundabout.diver_down.van_halen": "Van Halen",
   "skins.roundabout.diver_down.scuba_diver": "Scuba Diver",
 
@@ -3290,6 +3334,9 @@
   "skins.roundabout.purple_haze.mirror_battle": "Mirror Battle",
   "skins.roundabout.purple_haze.rott_haze": "Rott Haze",
   "skins.roundabout.purple_haze.peppermint": "Peppermint",
+  "skins.roundabout.purple_haze.distortion": "Distortion",
+  "skins.roundabout.purple_haze.green_distortion": "Greenstortion",
+  "skins.roundabout.purple_haze.greener": "Greener",
 
   "skins.roundabout.silver_chariot.part_3": "Part 3",
   "skins.roundabout.silver_chariot.part_3_grey": "Part 3 Grey",
@@ -3299,8 +3346,8 @@
   "skins.roundabout.silver_chariot.azure": "Azure",
   "skins.roundabout.silver_chariot.blue": "Blue",
   "skins.roundabout.silver_chariot.crystal": "Crystal",
-  "skins.roundabout.silver_chariot.end_of_the_world": "End of THE WORLD",
-  "skins.roundabout.silver_chariot.genesis_of_the_universe": "Genesis of the Universe",
+  "skins.roundabout.silver_chariot.end_of_the_world": "EoTD",
+  "skins.roundabout.silver_chariot.genesis_of_the_universe": "GotU",
   "skins.roundabout.silver_chariot.jojonium_a": "Jojonium A",
   "skins.roundabout.silver_chariot.jojonium_b": "Jojonium B",
   "skins.roundabout.silver_chariot.jojonium_c": "Jojonium C",
@@ -3311,6 +3358,7 @@
   "skins.roundabout.silver_chariot.sandy": "Sandy",
   "skins.roundabout.silver_chariot.turquoise": "Turquoise",
   "skins.roundabout.silver_chariot.yellow": "Yellow",
+  "skins.roundabout.silver_chariot.pharaoh": "Pharaoh",
 
   "death.attack.anubis_possess": "%1$s couldn't challenge %2$s",
   "death.attack.anubis_spin": "%1$s was shredded by %2$s",
@@ -3380,6 +3428,28 @@
   "roundabout.bomb_config.off": ": off",
 
   "roundabout.bad_company.troop_select" : "Troop Selection",
+  "roundabout.troop_select.troop": "Troop",
+  "roundabout.troop_select.bundle": "Troop Bundle",
+  "roundabout.troop_select.tank": "Tank",
+  "roundabout.troop_select.helicopter": "Helicopter",
+  "roundabout.troop_select.mine": "Mine",
+
+  "stand.bad_company.not_enought_space": "You don't have enough space for that troop!",
+  "stand.bad_company.not_enought_space.soldier": "You don't have enough soldiers left for that troop!",
+  "stand.bad_company.total_troops.soldier": "%$1s/%$2s active Soldiers.",
+  "stand.bad_company.soldier_limit": "You already have released all your soldiers!",
+  "stand.bad_company.troop_limit": "You have reached army maximum size!",
+
+  "roundabout.bad_company.troop_tactics": "Troop Tactics",
+  "roundabout.troop_tactics.stop": "Stop!",
+  "roundabout.troop_tactics.advance": "Advance and shoot!",
+  "roundabout.troop_tactics.fire": "Fire!",
+  "roundabout.troop_tactics.ward": "Ward!",
+  "roundabout.troop_tactics.hunt": "Hunt!",
+  "roundabout.troop_tactics.tank": "Select tank.",
+  "roundabout.troop_tactics.helicopter": "Select helicopter.",
+  "roundabout.troop_tactics.missile": "Shoot missile!",
+  "roundabout.troop_tactics.troop": "Select troop.",
 
   "skins.roundabout.green_day.part_five_green_day": "Part 5",
   "skins.roundabout.green_day.red_day": "Red Day",
@@ -3424,6 +3494,8 @@
   "skins.roundabout.whitesnake.sandsnake": "Sandsnake",
   "skins.roundabout.whitesnake.eoh": "EOH",
   "skins.roundabout.whitesnake.fleshsnake": "Fleshsnake",
+
+  "skins.roundabout.lyin_eyes.base": "Part 9",
 
   "unlock_skin.roundabout.the_world.over_heaven": "The World: Over Heaven Skin Unlocked!",
   "unlock_skin.roundabout.star_platinum.atomic": "Star Platinum: Atomic Skin Unlocked!",
@@ -3473,7 +3545,7 @@
   "roundabout.diver_affliction.disguise": "Disguise",
   "roundabout.diver_affliction.disguise.desc": "Change the bone structure of the current target, disguising them into whatever user you want. You can toggle showing armor on or off, and the move also works on corpses. Using this move again clears the disguise.",
   "roundabout.diver_affliction.embed_potion": "Embed Item",
-  "roundabout.diver_affliction.embed_potion.desc": "Use a currently held potion or bucketed mob and embed it directly inside the target. Potions last longer and have their strength increased, while bucketed mobs pacify enemies.",
+  "roundabout.diver_affliction.embed_potion.desc": "Use a currently held potion or bucketed mob and embed it directly inside the target. Potions last longer when embeded this way, while bucketed mobs pacify enemies.",
   "roundabout.diver_affliction.ribcage_trap": "Ribcage Trap",
   "roundabout.diver_affliction.ribcage_trap.desc": "Force the enemy to walk in a straight line, then when they see an enemy, release the trap! Against players and bosses, this move will only force them to walk.",
   "roundabout.diver_affliction.bone_bomb": "Bone Bomb",
@@ -3491,7 +3563,6 @@
   "roundabout.pose.jotaro": "Stand Proud",
   "roundabout.pose.jonathan": "The Hero",
   "roundabout.pose.sitting": "Sitting",
-  "roundabout.pose.anasui": "The Diver",
   "roundabout.pose.none": "Strike Pose!",
 
   "roundabout.soft_and_wet_plunder.none": "Plunder",
@@ -3514,7 +3585,7 @@
 
   "roundabout.stand_switch.main": "Main Stand",
   "roundabout.stand_switch.main.desc": "A stand with combat potential that can level up in development. Costs %s experience levels to obtain.",
-  "roundabout.stand_switch.secondary": "Secondary Stand",
+  "roundabout.stand_switch.secondary": "Specialized Stand",
   "roundabout.stand_switch.secondary.desc": "A stand with fewer abilities that cannot level up in development. Costs no experience levels to obtain.",
   "roundabout.stand_switch.custom": "Custom Stand",
   "roundabout.stand_switch.custom.desc": "A stand that you can design to your liking, think of it as your own stand. Costs %s levels to obtain.",
@@ -3732,6 +3803,17 @@
   "config.roundabout.chanceForAltMobs.name": "Alternate Mob Chance",
   "config.roundabout.chanceForAltMobs.desc": "Small chance of select mobs having rare variations like shiny pokemon, from 0-1 (1 being 100 percent chance). Also rabbits can be killer rabbits...",
 
+  "config.roundabout.standGrabRequiresTool.name": "Grab Requires Tool",
+  "config.roundabout.standGrabRequiresTool.desc": "If stand grab requires pickaxe tiers to use.",
+
+
+  "config.roundabout.cloneLimit.name": "Clone Limit",
+  "config.roundabout.cloneLimit.desc": "How many of your parallel selves can exist in a space before leaving home.",
+
+
+  "config.roundabout.chanceForFatClone.name": "Fat Chance",
+  "config.roundabout.chanceForFatClone.desc": "Chance that a clone has more or less weight.",
+
 
   "config.roundabout.chanceToEncounterNewAnimal.name": "Encounter New Animals",
   "config.roundabout.chanceToEncounterNewAnimal.desc": "Small chance of seeing a new animal in a parallel world, from 0-1 (1 being 100 percent chance).",
@@ -3789,6 +3871,8 @@
   "config.roundabout.enableAchtungBaby.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableGreenDay.name": "Enable Stand",
   "config.roundabout.enableGreenDay.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
+  "config.roundabout.enableLyinEyes.name": "Enable Stand",
+  "config.roundabout.enableLyinEyes.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableHeyYa.name": "Enable Stand",
   "config.roundabout.enableHeyYa.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableCinderella.name": "Enable Stand",
@@ -4238,6 +4322,8 @@
   "config.roundabout.whitesnakeAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
   "config.roundabout.whitesnakeAttackMultOnMobs.name": "Mob Damage Multiplier",
   "config.roundabout.whitesnakeAttackMultOnMobs.desc": "How much damage the stand deals to every other mob, same math as above.",
+  "config.roundabout.whitesnakeNameChangingText.name": "Whitesnake changing name in messages",
+  "config.roundabout.whitesnakeNameChangingText.desc": "When this config is on, when sending messages during pilot the users name will change to whitesnake or the disguise the user is using.",
 
 
   "config.roundabout.creamAttackMultOnPlayers.name": "Player Damage Multiplier",
@@ -4285,10 +4371,19 @@
   "config.roundabout.advancedClearEffect.desc": "Clears effects that normally can't be cleared with milk. False is the default.",
   "config.roundabout.potionStrengthBoost.name": "Potion Strength Increase",
   "config.roundabout.potionStrengthBoost.desc": "How much of an increase the strength of potions embeded using item embed will have. 0 is the default.",
+  "config.roundabout.disableBlockDisassembly.name": "Disable Block Disassembly",
+  "config.roundabout.disableBlockDisassembly.desc": "Should block disassembly be disabled?. false is the default.",
   "config.roundabout.customDiverDownWorkbench.name": "Custom Workbench Textures",
   "config.roundabout.customDiverDownWorkbench.desc": "Enables the custom wokrbench textures.",
   "config.roundabout.forceThirdPersonInGroundDive.name": "Force Third Person in Ground Dive",
   "config.roundabout.forceThirdPersonInGroundDive.desc": "Automatically switches to third person while in ground dive.",
+
+  "config.roundabout.maxDetectionRange.name": "Max Detection Range",
+  "config.roundabout.maxDetectionRange.desc": "How many blocks away can the nematodes detect someone in tension sensor? Default is 25.",
+  "config.roundabout.nematodeOpacity.name": "Nematode Overlay Opacity",
+  "config.roundabout.nematodeOpacity.desc": "What is the opacity of the nematode overlay in first person? 1.0 is the default. (Change this as a decimal point, i.e. 0.5 for 50%)",
+  "config.roundabout.spinMapInsteadOfArrow.name": "Spin Map Instead Of Arrow",
+  "config.roundabout.spinMapInsteadOfArrow.desc": "Spins the minimap of the second ability instead of the player arrow.",
 
   "config.roundabout.rattAttackBonusOnMobs.name": "Bonus Mob Damage",
   "config.roundabout.rattAttackBonusOnMobs.desc": "How much bonus damage Ratt darts deal to a mob.",
@@ -5083,6 +5178,9 @@
   "config.roundabout.coltDamage.name": "Colt Damage",
   "config.roundabout.coltDamage.desc": "Before being multiplied by the above, the base colt damage.",
 
+  "config.roundabout.berettaDamage.name": "Beretta Damage",
+  "config.roundabout.berettaDamage.desc": "Before being multiplied by the above, the base beretta damage.",
+
   "config.roundabout.tommyGunDamage.name": "Tommy Gun Damage",
   "config.roundabout.tommyGunDamage.desc": "Before being multiplied by the above, the base tommy gun damage.",
 
@@ -5247,6 +5345,7 @@
   "config.roundabout.PurpleHazeSettings.name": "Purple Haze",
   "config.roundabout.softAndWetSettings.name": "Soft And Wet",
   "config.roundabout.killerQueenSettings.name": "Killer Queen",
+  "config.roundabout.silverChariotSettings.name": "Silver Chariot",
   "config.roundabout.magiciansRedSettings.name": "Magician's Red",
   "config.roundabout.walkingHeartSettings.name": "Walking Heart",
   "config.roundabout.greenDaySettings.name": "Green Day",
@@ -5272,6 +5371,7 @@
   "config.roundabout.d4cSettings.name": "D4C",
   "config.roundabout.whitesnakeSettings.name": "Whitesnake",
   "config.roundabout.diverDownSettings.name": "Diver Down",
+  "config.roundabout.lyinEyesSettings.name": "Lyin Eyes",
   "config.roundabout.starPlatinumSettings.name": "Star Platinum",
   "config.roundabout.oasisSettings.name": "Oasis",
   "config.roundabout.timeStopSettings.name": "Time Stop",

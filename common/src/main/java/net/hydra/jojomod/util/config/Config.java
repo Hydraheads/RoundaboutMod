@@ -84,6 +84,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public PurpleHazeSettings PurpleHazeSettings;
     @NestedOption(group = "modded")
+    public LyinEyesSettings lyinEyesSettings;
+    @NestedOption(group = "modded")
     public ManhattanTransferSettings manhattanTransferSettings;
     @NestedOption(group = "modded")
     public BlackSabbathSettings blackSabbathSettings;
@@ -199,6 +201,8 @@ public class Config implements Cloneable {
         @FloatOption(group = "inherit", value = 4.5F, min = 0, max = 72000)
         public Float snubnoseDamage;
         @FloatOption(group = "inherit", value = 2.0F, min = 0, max = 72000)
+        public Float berettaDamage;
+        @FloatOption(group = "inherit", value = 3.0F, min = 0, max = 72000)
         public Float tommyGunDamage;
         @IntOption(group = "inherit", value = 12, min = 0, max = 72000)
         public Integer maxKnivesInOneHit;
@@ -858,6 +862,12 @@ public class Config implements Cloneable {
         @BooleanOption(group = "inherit", value = false)
         public Boolean HazeMelts;
     }
+    public static class LyinEyesSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableLyinEyes;
+        @FloatOption(group = "inherit", value = 25.0F, min = 0, max = 72000)
+        public Float maxDetectionRange;
+    }
     public static class HeyYaSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableHeyYa;
@@ -1194,6 +1204,10 @@ public class Config implements Cloneable {
         public Boolean enableD4c;
         @IntOption(group = "inherit", value = 1, min = 0, max = 3)
         public Integer dropMode;
+        @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
+        public Integer cloneLimit;
+        @FloatOption(group = "inherit", value = 0.05F, min = 0.0F, max = 1.0F)
+        public Float chanceForFatClone;
         @BooleanOption(group = "inherit", value = false)
         public Boolean whiteListModdedMobs;
         @BooleanOption(group = "inherit", value = true)
@@ -1350,6 +1364,8 @@ public class Config implements Cloneable {
         public Boolean advancedClearEffect;
         @IntOption(group = "inherit", value = 0, min = 0, max = 5)
         public Integer potionStrengthBoost;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean disableBlockDisassembly;
     }
     public static class WhitesnakeSettings {
         @BooleanOption(group = "inherit", value = true)
@@ -1360,6 +1376,8 @@ public class Config implements Cloneable {
         public Integer whitesnakeAttackMultOnMobs;
         @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
         public Integer whitesnakeGuardPoints;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean whitesnakeNameChangingText;
         @BooleanOption(group = "inherit", value = false)
         public Boolean discStealDealsDamage;
         @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
@@ -1447,6 +1465,10 @@ public class Config implements Cloneable {
         public Integer silverChariotCooldownSlabCutting;
         @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
         public Integer silverChariotCooldownSelfGrab;
+        @IntOption(group = "inherit", value = 280, min = 0, max = 72000)
+        public Integer silverChariotCooldownSelfThrow;
+        @IntOption(group = "inherit", value = 280, min = 0, max = 72000)
+        public Integer silverChariotCooldownSelfThrowRebound;
         @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
         public Integer silverChariotCooldownControlModeToggle;
         @IntOption(group = "inherit", value = 600, min = 0, max = 72000)

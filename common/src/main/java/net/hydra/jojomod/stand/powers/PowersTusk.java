@@ -578,8 +578,6 @@ public class PowersTusk extends NewDashPreset {
         super.tickPower();
         this.tickNails();
 
-        Roundabout.LOGGER.info(""+this.getStandUserSelf().roundabout$getStandAnimation());
-
         if (this.getAct() == 4 && !isInfiniteSpinning() && !(this.getSelf() instanceof Player P && P.isCreative()) ) {
             this.setAct(3,true);
         }
@@ -1107,7 +1105,7 @@ public class PowersTusk extends NewDashPreset {
         this.setPowerNone();
         this.setActivePowerPhase((byte)2);
         this.setAttackTime(0);
-        this.setAttackTimeMax(50);
+        this.setAttackTimeMax(40);
         if (!isClient()) {
 
             float reach = 5F;
@@ -1312,7 +1310,7 @@ public class PowersTusk extends NewDashPreset {
     public float getNailDamage(TuskNailEntity nail, Entity target, int act) {
         boolean bl = MainUtil.getReducedDamage(target);
         float damage = switch (act) {
-            case 1 -> bl ? 1.35F : 3.0F;
+            case 1 -> bl ? 0.7F : 3.0F;
             case 2,3 -> bl ? 3 : 5;
             case 4 -> bl ? 4 : 2;
             default -> 1.0F;
@@ -1397,9 +1395,9 @@ public class PowersTusk extends NewDashPreset {
         } else {
             this.activePowerPhase++;
             if (this.activePowerPhase == 2) {
-                this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.finalStandPunchInStringCooldown;
+                this.attackTimeMax= 30;
             } else {
-                this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.standPunchCooldown;
+                this.attackTimeMax= 20;
             }
         }
         this.attackTimeDuring = 0;
@@ -1557,11 +1555,23 @@ public class PowersTusk extends NewDashPreset {
         this.nailFireDelay = 10;
         this.expendNails();
     }
+
     @Override
     public void pilotStandControls(KeyboardPilotInput kpi, LivingEntity entity) {
         if (entity instanceof TuskHoleEntity) {
-            entity.xxa = kpi.leftImpulse;
-            entity.zza = kpi.forwardImpulse;
+            float yawRad = entity.getYHeadRot() * Mth.DEG_TO_RAD;
+            double forward = kpi.forwardImpulse;
+            double strafe = kpi.leftImpulse;
+            if (forward != 0.0 && strafe != 0.0) {
+                double length = Math.hypot(forward, strafe);
+                forward /= length;
+                strafe /= length;
+            }
+            double speed = 0.2;
+            double motionX = (-Math.sin(yawRad) * forward + Math.cos(yawRad) * strafe) * speed;
+            double motionZ = (Math.cos(yawRad) * forward + Math.sin(yawRad) * strafe) * speed;
+
+            entity.setDeltaMovement(motionX, entity.getDeltaMovement().y, motionZ);
         }
     }
 
@@ -2415,6 +2425,8 @@ public class PowersTusk extends NewDashPreset {
         if (reset) {
             this.getStandUserSelf().roundabout$getWornStandAnimation().stop();
             this.getStandUserSelf().roundabout$getWornStandAnimation().startIfStopped(this.getSelf().tickCount);
+            this.getStandUserSelf().roundabout$getWornStandIdleAnimation().stop();
+            this.getStandUserSelf().roundabout$getWornStandIdleAnimation().startIfStopped(this.getSelf().tickCount);
         }
     }
 

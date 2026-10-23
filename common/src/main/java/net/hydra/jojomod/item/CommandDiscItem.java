@@ -53,6 +53,7 @@ public final class CommandDiscItem extends Item {
     public boolean applyCommand(Entity target, LivingEntity whitesnakeUser, ItemStack stack) {
         if (target.level().isClientSide() || stack.isEmpty()
                 || !(target instanceof LivingEntity living) || WhitesnakeDiscUtil.isDiscBlacklisted(living)) return false;
+        if (living instanceof Mob mob && mob.isNoAi()) return false;
         boolean applied = switch (command) {
             case JUMP_BACK -> applyJumpBack(living, whitesnakeUser);
             case ATTACK -> applyAttack(living, whitesnakeUser);
@@ -113,7 +114,6 @@ public final class CommandDiscItem extends Item {
         LivingEntity commandedTarget = user.getLastHurtMob();
         if (commandedTarget == null || !commandedTarget.isAlive() || commandedTarget == target) return false;
         if (target instanceof Mob mob) {
-            if (mob.isNoAi()) mob.setNoAi(false);
             mob.setTarget(commandedTarget);
             mob.getLookControl().setLookAt(commandedTarget, 30.0F, 30.0F);
             mob.getNavigation().moveTo(commandedTarget, 1.15D);

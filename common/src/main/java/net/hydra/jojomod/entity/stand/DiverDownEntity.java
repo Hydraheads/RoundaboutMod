@@ -53,7 +53,6 @@ public class DiverDownEntity extends FollowingStandEntity {
 
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState mobDive = new AnimationState();
-    public final AnimationState mobDiveWindup = new AnimationState();
     public final AnimationState energyStorage = new AnimationState();
     public final AnimationState energyStorageWindup = new AnimationState();
     public final AnimationState phasePunchWindup = new AnimationState();

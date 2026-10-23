@@ -7,6 +7,7 @@ import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersDiverDown;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
@@ -59,6 +60,9 @@ public abstract class FabricServerPlayer extends Player {
                         ME.setHeldItemManhattan(ItemStack.EMPTY);
                     }
                 }
+            }
+            if (((StandUser) this).roundabout$getStandPowers() instanceof PowersDiverDown dd && dd.isSelfDive()) {
+                dd.emergeServer();
             }
         }
     }

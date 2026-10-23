@@ -15,10 +15,13 @@ import net.minecraft.world.item.RecordItem;
 import net.hydra.jojomod.sound.ModSounds;
 
 import java.util.Map;
+import java.util.Set;
+import java.util.Collections;
 import java.util.WeakHashMap;
 
 public final class MusicDiscController {
     private static final Map<LivingEntity, Item> PLAYING = new WeakHashMap<>();
+    private static final Map<LivingEntity, Set<ServerPlayer>> LISTENERS = new WeakHashMap<>();
 
     private MusicDiscController() {
     }
@@ -42,10 +45,18 @@ public final class MusicDiscController {
         if (bearerEntity.level().isClientSide()) return;
         ItemStack stack = ((DiscBearer) bearerEntity).roundabout$getMusicDisc();
         if (stack.isEmpty() || !(stack.getItem() instanceof RecordItem)) {
-            PLAYING.remove(bearerEntity);
+            if (PLAYING.containsKey(bearerEntity)) stop(bearerEntity);
             return;
         }
-        if (PLAYING.get(bearerEntity) != stack.getItem()) start(bearerEntity, stack);
+        if (PLAYING.get(bearerEntity) != stack.getItem() || bearerEntity.tickCount % 20 == 0) {
+            start(bearerEntity, stack);
+        }
+    }
+
+    public static void startTracking(LivingEntity entity, ServerPlayer player) {
+        Set<ServerPlayer> listeners = LISTENERS.get(entity);
+        if (listeners != null) listeners.remove(player);
+        start(entity, ((DiscBearer) entity).roundabout$getMusicDisc());
     }
 
     public static void ejectOnDamage(LivingEntity bearerEntity) {
@@ -53,9 +64,8 @@ public final class MusicDiscController {
         DiscBearer bearer = (DiscBearer) bearerEntity;
         ItemStack stack = bearer.roundabout$getMusicDisc();
         if (stack.isEmpty()) return;
-        stop(bearerEntity, stack);
+        stop(bearerEntity);
         bearer.roundabout$setMusicDisc(ItemStack.EMPTY);
-        PLAYING.remove(bearerEntity);
         bearerEntity.spawnAtLocation(stack.copy());
         bearerEntity.level().playSound(null, bearerEntity.blockPosition(), ModSounds.WHITESNAKE_DISC_EJECT_EVENT,
                 SoundSource.PLAYERS, 1.0F, 1.0F);
@@ -63,9 +73,16 @@ public final class MusicDiscController {
 
     private static void start(LivingEntity entity, ItemStack stack) {
         if (!(entity.level() instanceof ServerLevel server) || !(stack.getItem() instanceof RecordItem record)) return;
+        if (PLAYING.get(entity) != stack.getItem()) {
+            if (PLAYING.containsKey(entity)) stop(entity);
+            PLAYING.put(entity, stack.getItem());
+        }
+        Set<ServerPlayer> listeners = LISTENERS.computeIfAbsent(entity,
+                target -> Collections.newSetFromMap(new WeakHashMap<>()));
         SoundEvent sound = record.getSound();
         double range = sound.getRange(4.0F);
         for (ServerPlayer player : server.players()) {
+            if (listeners.contains(player)) continue;
             if (player.distanceToSqr(entity) > range * range) {
                 if (!(((StandUser) player).roundabout$getStandPowers() instanceof PowersWhitesnake powers)
                         || !powers.isPiloting()) continue;
@@ -74,12 +91,14 @@ public final class MusicDiscController {
                         || stand.distanceToSqr(entity) > range * range) continue;
             }
             S2CPacketUtil.sendMusicDiscPacket(player, entity.getId(), sound.getLocation().toString());
+            listeners.add(player);
         }
-        PLAYING.put(entity, stack.getItem());
     }
 
-    private static void stop(LivingEntity entity, ItemStack stack) {
-        if (!(entity.level() instanceof ServerLevel server) || !(stack.getItem() instanceof RecordItem)) return;
+    private static void stop(LivingEntity entity) {
+        if (!(entity.level() instanceof ServerLevel server)) return;
+        PLAYING.remove(entity);
+        LISTENERS.remove(entity);
         server.players().forEach(player -> S2CPacketUtil.sendMusicDiscPacket(player, entity.getId(), ""));
     }
 }
