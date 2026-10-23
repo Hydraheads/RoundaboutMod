@@ -55,7 +55,7 @@ public class BerettaPistolItem extends FirearmItem implements Vanishable {
 
     @Override
     public void configureBulletTrajectory(RoundaboutBulletEntity bullet, LivingEntity shooter) {
-        bullet.shootFromRotation(shooter, shooter.getXRot(), shooter.getYRot(), 0.0F, 3.7F, 1.8F);
+        bullet.shootFromRotation(shooter, shooter.getXRot(), shooter.getYRot(), 0.0F, 3.9F, 2F);
     }
 
     @Override
