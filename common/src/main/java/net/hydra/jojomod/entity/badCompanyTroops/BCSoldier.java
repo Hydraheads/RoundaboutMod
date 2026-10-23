@@ -108,7 +108,7 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
         }
     }
 
-    private float attackRange = 12.5f;
+    private float attackRange = 5.5f;
 
     public void tick() {
         super.tick();
@@ -140,7 +140,6 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
                 bulletsLeft = getBulletsAmount();
                 chargeTicks = -1;
             }
-            Roundabout.LOGGER.info("charge ticks: " + chargeTicks);
         }
     }
 
@@ -227,7 +226,7 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
         Vec3 targetPosition = target.getEyePosition(1);
         level().addFreshEntity(bullet);
         bullet.absMoveTo(positionShoot.x, positionShoot.y, positionShoot.z);
-        bullet.shoot(targetPosition.x - positionShoot.x, targetPosition.y - positionShoot.y, targetPosition.z - positionShoot.z, 4.5F, 1.5F);
+        bullet.shoot(targetPosition.x - positionShoot.x, targetPosition.y - positionShoot.y, targetPosition.z - positionShoot.z, 3.5F, 1.25F);
         level().playSound(null, this.blockPosition(), getFireSound(), SoundSource.PLAYERS, getFireSoundVolume(), getFireSoundPitch());
     }
 
@@ -240,11 +239,12 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
         return random.nextFloat(1.7F - 1.5F) + 1.5F;
     }
 
-    public int getRechargeTime() { return 50; }
+    public int getRechargeTime() {
+        return 50 + (getBundle() ? 20 : 0);
+    }
+    
     public int getBulletsAmount() { return 12; }
     private int chargeTicks = -1;
     public int bulletsLeft = getBulletsAmount();
-    public int getRemainingBullets() {
-        return bulletsLeft;
-    }
+
 }
