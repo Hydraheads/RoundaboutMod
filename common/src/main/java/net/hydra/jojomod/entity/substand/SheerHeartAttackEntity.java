@@ -318,6 +318,35 @@ public class SheerHeartAttackEntity extends StandEntity {
 		);
 	}
 
+	public boolean isWorthyToClimb() {
+		if (getUser() == null) { return true; }
+
+		Vec3 dir = null;
+
+		if (getHaveToReturn() || getReturnStatus()) {
+			Vec3 handDir = getUser().getPosition(1).subtract(this.getPosition(1));
+			dir = new Vec3(handDir.x, 0, handDir.z);
+		}else if (getTargetType() != NONE) {
+			Vec3 handDir = getTargetPosition().subtract(this.getPosition(1));
+			dir = new Vec3(handDir.x, 0, handDir.z);
+		}
+
+		if (dir != null) {
+			if (dir.length() < 1.3f) {
+				return true;
+			}else {
+				dir = dir.normalize().scale(1.3);
+			}
+
+			BlockHitResult hitResult = this.level().clip(new ClipContext(this.getPosition(1), this.getPosition(1).add(dir),
+					ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+
+			return hitResult.getType() == HitResult.Type.BLOCK;
+		}
+
+		return true;
+	}
+
 	@Override
 	public void tick() {
 		validateUUID();
@@ -354,7 +383,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 				this.setReturnStatus(this.getHaveToReturn());
 
-				this.setClimbing(this.horizontalCollision && !getTorchStatus());
+				this.setClimbing(this.horizontalCollision && !getTorchStatus() && isWorthyToClimb());
 
 				if (this.tickTargetFindCount <= 0) {
 					this.findTarget();
