@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IEnderMan;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.badCompanyTroops.BCTroop;
 import net.hydra.jojomod.entity.objects.GentlyWeepsEntity;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -41,7 +42,7 @@ public class BadCompanyBulletEntity extends AbstractArrow {
 
     private final List<Vec3> trailPoints = new ArrayList<>();
     // trail length
-    private static final int MAX_TRAIL_POINTS = 12;
+    private static final int MAX_TRAIL_POINTS = 16;
 
     public BadCompanyBulletEntity(EntityType<? extends BadCompanyBulletEntity> type, Level level) {
         super(type, level);
@@ -269,5 +270,15 @@ public class BadCompanyBulletEntity extends AbstractArrow {
         }
 
         return true;
+    }
+
+    protected boolean canHitEntity(Entity ent) {
+        if (ent == getOwner()) { return false; }
+        if (ent instanceof BCTroop BCT) {
+            if (BCT.getUser() == getOwner()) {
+                return false;
+            }
+        }
+        return super.canHitEntity(ent);
     }
 }

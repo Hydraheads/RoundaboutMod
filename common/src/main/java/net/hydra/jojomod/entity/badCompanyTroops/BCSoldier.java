@@ -108,7 +108,7 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
         }
     }
 
-    private float attackRange = 7.5f;
+    private float attackRange = 12.5f;
 
     public void tick() {
         super.tick();
@@ -134,12 +134,13 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
             }
         }
 
-        if (chargeTicks != -1 || bulletsLeft <= 0) {
+        if (chargeTicks > -1) {
             chargeTicks--;
             if (chargeTicks <= 0) {
                 bulletsLeft = getBulletsAmount();
                 chargeTicks = -1;
             }
+            Roundabout.LOGGER.info("charge ticks: " + chargeTicks);
         }
     }
 
@@ -158,15 +159,16 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
         goalSelector.addGoal(0, new FloatGoal(this));
         goalSelector.addGoal(1, new ReturnToLeaderGoal(this, 1));
         goalSelector.addGoal(2, new UserHurtTargetGoal(this));
-        goalSelector.addGoal(2, new RangedAttackGoal(this, 1.2, 5, attackRange) {
+        goalSelector.addGoal(2, new RangedAttackGoal(this, 0.8, 5, 8f) {
             @Override
             public boolean canUse() {
-                return super.canUse() && getCurrentTactic() != BadCompanyTactics.RETURN.id && getRemainingBullets() > 0;
+                return super.canUse() && getCurrentTactic() != BadCompanyTactics.RETURN.id;
             }
 
             @Override
-            public boolean canContinueToUse() {
-                return super.canContinueToUse() && getRemainingBullets() > 0;
+            public void stop() {
+                super.stop();
+                Roundabout.LOGGER.info("why is it stopping");
             }
         });
     }
@@ -196,14 +198,20 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
 
     @Override
     public void performRangedAttack(LivingEntity target, float v) {
-        if (getBundle()) {
-            shootSingleBulletAt(getEyePosition(1).add(1.0f, 0.0f, 0.65f), target);
-            shootSingleBulletAt(getEyePosition(1).add(0f, 0.0f, 1.15f), target);
-            shootSingleBulletAt(getEyePosition(1).add(-1.0f, 0.0f, 0.65f), target);
+        if (bulletsLeft <= 0) {
+            Roundabout.LOGGER.info("test");
 
-            shootSingleBulletAt(getEyePosition(1).add(1.0f, 0.0f, -0.65), target);
-            shootSingleBulletAt(getEyePosition(1).add(0f, 0.0f, -1.15f), target);
-            shootSingleBulletAt(getEyePosition(1).add(-1.0f, 0.0f, -0.65), target);
+            return;
+        }
+
+        if (getBundle()) {
+            shootSingleBulletAt(getEyePosition(1).add(0.3f, 0.0f, 0.65f * 0.3f), target);
+            shootSingleBulletAt(getEyePosition(1).add(0f, 0.0f, 1.15f * 0.3f), target);
+            shootSingleBulletAt(getEyePosition(1).add(-0.3f, 0.0f, 0.65f * 0.3f), target);
+
+            shootSingleBulletAt(getEyePosition(1).add(0.3f, 0.0f, -0.65f * 0.3f), target);
+            shootSingleBulletAt(getEyePosition(1).add(0f, 0.0f, -1.15f * 0.3f), target);
+            shootSingleBulletAt(getEyePosition(1).add(-0.3f, 0.0f, -0.65 * 0.3f), target);
 
         }else {
             shootSingleBulletAt(getEyePosition(1), target);
