@@ -2438,7 +2438,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                 syncBombStatus(ARROW_BOMB);
             }
-            if (this.self instanceof Player) {
+            if (this.self instanceof Player && bombEntity != null) {
                 S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(),
                         PowersKillerQueen.ENTITY_BOMB, bombEntity.getId());
             }
