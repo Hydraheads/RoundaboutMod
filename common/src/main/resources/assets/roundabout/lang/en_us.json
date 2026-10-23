@@ -3809,6 +3809,8 @@
   "config.roundabout.enableAchtungBaby.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableGreenDay.name": "Enable Stand",
   "config.roundabout.enableGreenDay.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
+  "config.roundabout.enableLyinEyes.name": "Enable Stand",
+  "config.roundabout.enableLyinEyes.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableHeyYa.name": "Enable Stand",
   "config.roundabout.enableHeyYa.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableCinderella.name": "Enable Stand",
@@ -4314,6 +4316,10 @@
   "config.roundabout.forceThirdPersonInGroundDive.name": "Force Third Person in Ground Dive",
   "config.roundabout.forceThirdPersonInGroundDive.desc": "Automatically switches to third person while in ground dive.",
 
+  "config.roundabout.maxDetectionRange.name": "Max Detection Range",
+  "config.roundabout.maxDetectionRange.desc": "How many blocks away can the nematodes detect someone in tension sensor? Default is 25.",
+  "config.roundabout.nematodeOpacity.name": "Nematode Overlay Opacity",
+  "config.roundabout.nematodeOpacity.desc": "What is the opacity of the nematode overlay in first person? 1.0 is the default. (Change this as a decimal point, i.e. 0.5 for 50%)",
   "config.roundabout.spinMapInsteadOfArrow.name": "Spin Map Instead Of Arrow",
   "config.roundabout.spinMapInsteadOfArrow.desc": "Spins the minimap of the second ability instead of the player arrow.",
 
