@@ -26,7 +26,7 @@ public class BerettaPistolItem extends FirearmItem implements Vanishable {
     public int getReloadCooldown() { return 70; }
 
     @Override
-    public byte getReloadSound() { return SoundIndex.REVOLVER_RELOAD; }
+    public byte getReloadSound() { return SoundIndex.PISTOL_RELOAD; }
 
     @Override
     public int getFireCooldown() { return 3; }
@@ -35,10 +35,10 @@ public class BerettaPistolItem extends FirearmItem implements Vanishable {
     public byte getBulletType() { return RoundaboutBulletEntity.BERETTA; }
 
     @Override
-    public SoundEvent getFireSound() { return ModSounds.SNUBNOSE_FIRE_EVENT; }
+    public SoundEvent getFireSound() { return ModSounds.BERETTA_FIRE_EVENT; }
 
     @Override
-    public float getFireSoundVolume() { return 7.0F; }
+    public float getFireSoundVolume() { return 3.5F; }
 
     @Override
     public float getFireSoundPitch() { return 1.0F; }
@@ -55,7 +55,7 @@ public class BerettaPistolItem extends FirearmItem implements Vanishable {
 
     @Override
     public void configureBulletTrajectory(RoundaboutBulletEntity bullet, LivingEntity shooter) {
-        bullet.shootFromRotation(shooter, shooter.getXRot(), shooter.getYRot(), 0.0F, 3.7F, 1.8F);
+        bullet.shootFromRotation(shooter, shooter.getXRot(), shooter.getYRot(), 0.0F, 3.9F, 2F);
     }
 
     @Override

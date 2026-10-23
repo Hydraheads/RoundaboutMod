@@ -1793,17 +1793,8 @@ public class PowersGreenDay extends NewPunchingStand {
 
     @Override
     public boolean isWip(){
-        return true;
+        return false;
     }
-    @Override
-    public Component ifWipListDevStatus(){
-        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.GOLD);
-    }
-    @Override
-    public Component ifWipListDev(){
-        return Component.literal(  "Fish").withStyle(ChatFormatting.GREEN);
-    }
-
 
     public static final byte
             PART_FIVE_GREEN_DAY = 1,

@@ -688,7 +688,8 @@ public class SeperatedArmEntity extends StandEntity {
                                     0.45, 0.45, 0.45,
                                     0.1);
                             if (entity instanceof Player) {
-                                entity.hurt(ModDamageTypes.of(level(), DamageTypes.PLAYER_ATTACK, this.getUser(), user), (Double.valueOf(this.getAttributeValue(Attributes.ATTACK_DAMAGE)).floatValue()) * 1.75f);
+                                entity.hurt(ModDamageTypes.of(level(), DamageTypes.PLAYER_ATTACK, this.getUser(), user), (Double.valueOf(this.getAttributeValue(Attributes.ATTACK_DAMAGE)).floatValue()) * 0.5f);
+                                entity.hurt(ModDamageTypes.of(level(), ModDamageTypes.ARMTHROW, this.getUser(), user), 1.5f);
                             } else {
                                 entity.hurt(ModDamageTypes.of(level(), DamageTypes.PLAYER_ATTACK, this.getUser(), user), (Double.valueOf(this.getAttributeValue(Attributes.ATTACK_DAMAGE)).floatValue()) * 1f);
                             }

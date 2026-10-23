@@ -2,6 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IMob;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.menu.LyinEyesInventoryMenu;
@@ -53,6 +54,8 @@ public class PowersLyinEyes extends NewDashPreset {
     private boolean visionModeClient = false;
     //map mode
     private boolean mapModeClient = false;
+    // fading in/out when summoning/unsummoning
+    private float trueSummon = 0.0F;
 
     // basic stand registry stuff
     public PowersLyinEyes(LivingEntity self) {super(self);}
@@ -63,11 +66,12 @@ public class PowersLyinEyes extends NewDashPreset {
     @Override
     public boolean rendersPlayer(){return true;}
     @Override
-    public StandPowers generateStandPowers(LivingEntity entity) {
-        return new PowersLyinEyes(entity);
-    }
+    public StandPowers generateStandPowers(LivingEntity entity) {return new PowersLyinEyes(entity);}
+    @Override
+    public boolean isStandEnabled(){return ClientNetworking.getAppropriateConfig().lyinEyesSettings.enableLyinEyes;}
 
     // stand summoning start
+
 
     @Override
     public void onStandSummon(boolean desummon) {
@@ -90,6 +94,11 @@ public class PowersLyinEyes extends NewDashPreset {
 
     @Override
     public void tickPower() {
+        if (isActive()) {
+            trueSummon = Math.min(1.0F, trueSummon + (1.0F / 12.0F));
+        } else {
+            trueSummon = Math.max(0.0F, trueSummon - (1.0F / 12.0F));
+        }
         mapOpacity = Mth.approach(mapOpacity, mapModeClient ? 1.0F : 0.0F, 0.20F);
         if (this.self.level().isClientSide()) {
             //inventory tracking for animation oooooh
@@ -452,10 +461,11 @@ public class PowersLyinEyes extends NewDashPreset {
     public boolean isActive() {return hasStandActive(this.self);}
     public boolean getMapModeClient() {return mapModeClient;}
     public float getMapOpacity() {return mapOpacity;}
+    public float getTrueSummon() { return trueSummon; }
 
     // WIP FEATURES BELOW HERE, DELETE WHEN DONE
 
-    @Override
+    /*@Override
     public boolean isWip() {
         return true;
     }
@@ -468,5 +478,5 @@ public class PowersLyinEyes extends NewDashPreset {
     @Override
     public Component ifWipListDev() {
         return Component.literal("88superguy").withStyle(ChatFormatting.GOLD);
-    }
+    }*/
 }

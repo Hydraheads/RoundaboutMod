@@ -524,6 +524,13 @@ public class ModSounds {
     public static final ResourceLocation JACKAL_RELOAD_ID = new ResourceLocation(Roundabout.MOD_ID+":"+JACKAL_RELOAD);
     public static SoundEvent JACKAL_RELOAD_EVENT = SoundEvent.createVariableRangeEvent(JACKAL_RELOAD_ID);
 
+    public static final String BERETTA_FIRE = "beretta_fire";
+    public static final ResourceLocation BERETTA_FIRE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BERETTA_FIRE);
+    public static SoundEvent BERETTA_FIRE_EVENT = SoundEvent.createVariableRangeEvent(BERETTA_FIRE_ID);
+    public static final String BERETTA_RELOAD = "beretta_reload";
+    public static final ResourceLocation BERETTA_RELOAD_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BERETTA_RELOAD);
+    public static SoundEvent BERETTA_RELOAD_EVENT = SoundEvent.createVariableRangeEvent(BERETTA_RELOAD_ID);
+
     public static final String BULLET_PENTRATION = "bullet_penetration";
     public static final ResourceLocation BULLET_PENTRATION_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BULLET_PENTRATION);
     public static SoundEvent BULLET_PENTRATION_EVENT = SoundEvent.createVariableRangeEvent(BULLET_PENTRATION_ID);

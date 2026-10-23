@@ -175,6 +175,9 @@ public class FabricSounds {
         addSound(ModSounds.JACKAL_FIRE_ID, ModSounds.JACKAL_FIRE_EVENT);
         addSound(ModSounds.JACKAL_RELOAD_ID, ModSounds.JACKAL_RELOAD_EVENT);
 
+        addSound(ModSounds.BERETTA_FIRE_ID, ModSounds.BERETTA_FIRE_EVENT);
+        addSound(ModSounds.BERETTA_RELOAD_ID, ModSounds.BERETTA_RELOAD_EVENT);
+
         addSound(ModSounds.BULLET_PENTRATION_ID, ModSounds.BULLET_PENTRATION_EVENT);
         addSound(ModSounds.BULLET_RICOCHET_ID, ModSounds.BULLET_RICOCHET_EVENT);
         addSound(ModSounds.MAGIC_DING_ID, ModSounds.MAGIC_DING_EVENT);

@@ -46,6 +46,11 @@ public enum Poses {
     COLT_MODEL_AIM_LEFT((byte) 33, FirearmFirstPersonAnimations.colt_model_aim_left),
     COLT_MODEL_RECOIL_LEFT((byte) 34, FirearmFirstPersonAnimations.colt_model_recoil_left),
 
+    BERETTA_MODEL_AIM((byte) 39, FirearmFirstPersonAnimations.beretta_model_aim),
+    BERETTA_MODEL_RECOIL((byte) 40, FirearmFirstPersonAnimations.beretta_model_recoil),
+    BERETTA_MODEL_AIM_LEFT((byte) 41, FirearmFirstPersonAnimations.beretta_model_aim_left),
+    BERETTA_MODEL_RECOIL_LEFT((byte) 42, FirearmFirstPersonAnimations.beretta_model_recoil_left),
+
     COWER((byte) 35, PoseAnimations.Cower),
 
     UNCOWER((byte) 36, PoseAnimations.Uncower),
@@ -128,6 +133,14 @@ public enum Poses {
             return COLT_MODEL_AIM_LEFT;
         } if (bt== COLT_MODEL_RECOIL_LEFT.id) {
             return COLT_MODEL_RECOIL_LEFT;
+        } if (bt== BERETTA_MODEL_AIM.id) {
+            return BERETTA_MODEL_AIM;
+        } if (bt== BERETTA_MODEL_RECOIL.id) {
+            return BERETTA_MODEL_RECOIL;
+        } if (bt== BERETTA_MODEL_AIM_LEFT.id) {
+            return BERETTA_MODEL_AIM_LEFT;
+        } if (bt== BERETTA_MODEL_RECOIL_LEFT.id) {
+            return BERETTA_MODEL_RECOIL_LEFT;
         } if (bt== COWER.id) {
             return COWER;
         } if (bt== UNCOWER.id) {
