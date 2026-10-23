@@ -2496,7 +2496,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public void tryBitesTheDustDay() {
-        if (canBitesTheDustDay() && !onCooldown(PowerIndex.SKILL_EXTRA)) {
+        if (canExecuteMoveWithLevel(getBitesTheDustDayLevel()) && canBitesTheDustDay() && !onCooldown(PowerIndex.SKILL_EXTRA)) {
             if (this.activePower == BITES_THE_DUST_DAY) {
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                 tryPowerPacket(PowerIndex.NONE);
@@ -3355,7 +3355,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public boolean bitesTheDustDayActivate() {
-        if (!canBitesTheDustDay()) { return false; }
+        if (!canExecuteMoveWithLevel(getBitesTheDustDayLevel()) || !canBitesTheDustDay()) { return false; }
 
         if (this.isClient()) {
             btdTicks = 0;
