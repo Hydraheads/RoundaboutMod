@@ -31,7 +31,7 @@ import java.util.List;
 
 public class PowersBadCompany extends NewDashPreset {
     @Override public boolean isWip(){return true;}
-    @Override public Component ifWipListDevStatus(){ return Component.translatable(  "roundabout.dev_status.paused").withStyle(ChatFormatting.AQUA);}
+    @Override public Component ifWipListDevStatus(){ return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.GREEN);}
     @Override public Component ifWipListDev(){ return Component.literal("DOGael Arts").withStyle(ChatFormatting.AQUA);}
 
     public PowersBadCompany(LivingEntity self) { super(self); }
@@ -426,4 +426,7 @@ public class PowersBadCompany extends NewDashPreset {
         StandHudRender.renderNumberHUD(context, Minecraft.getInstance(), screenWidth, screenHeight, x, totalTroopsOut, getTroopLimit(), StandIcons.JOJO_ICONS_3, 0, 20, 0x7fd355);
 
     }
+
+    @Override
+    public boolean isMiningStand() { return true; }
 }
