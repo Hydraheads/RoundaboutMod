@@ -2,6 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IMob;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.menu.LyinEyesInventoryMenu;
@@ -65,11 +66,12 @@ public class PowersLyinEyes extends NewDashPreset {
     @Override
     public boolean rendersPlayer(){return true;}
     @Override
-    public StandPowers generateStandPowers(LivingEntity entity) {
-        return new PowersLyinEyes(entity);
-    }
+    public StandPowers generateStandPowers(LivingEntity entity) {return new PowersLyinEyes(entity);}
+    @Override
+    public boolean isStandEnabled(){return ClientNetworking.getAppropriateConfig().lyinEyesSettings.enableLyinEyes;}
 
     // stand summoning start
+
 
     @Override
     public void onStandSummon(boolean desummon) {

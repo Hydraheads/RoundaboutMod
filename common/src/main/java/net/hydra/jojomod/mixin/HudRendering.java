@@ -306,13 +306,16 @@ public abstract class HudRendering implements IHudAccess {
                                 "textures/misc/lyin_eyes/lyin_eyes_" + frame + ".png");
                     }
                     RenderSystem.enableBlend();
-                    this.renderTextureOverlay($$1, texture, 1F);
+                    this.renderTextureOverlay($$1, texture, ConfigManager.getClientConfig().lyinEyesSettings.nematodeOpacity);
                 }
                 // Lyin Eyes gathering renderer
                 if (((StandUser) this.minecraft.player).roundabout$getStandPowers() instanceof PowersLyinEyes lyinEyes
                         && lyinEyes.getGatherOverlayTicks() != 0 && lyinEyes.getGatherOverlayTicks() != 7) {
                     // inverse opacity of the map, aka it fades in when the map fades out and vice versa
                     float gatherOpacity = 1.0F - lyinEyes.getMapOpacity();
+                    if (ConfigManager.getClientConfig().lyinEyesSettings.nematodeOpacity < 1) {
+                        gatherOpacity = ConfigManager.getClientConfig().lyinEyesSettings.nematodeOpacity;
+                    }
                     if (gatherOpacity > 0.0F) {
                         // need to stop the thing from reaching 0, so i put an extra math method to clamp it.
                         int frame = Math.max(1, Math.min(lyinEyes.getGatherOverlayTicks(), 5));
