@@ -306,4 +306,48 @@ public class FirearmFirstPersonAnimations {
                     new Keyframe(0.25F, KeyframeAnimations.posVec(-4.0F, 30.0F, -14.0F), AnimationChannel.Interpolations.LINEAR)
             ))
             .build();
+
+    public static final AnimationDefinition beretta_model_aim = AnimationDefinition.Builder.withLength(0.0F).looping()
+            .addAnimation("Beretta", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(-0.2476F, -2.5F, -180.0278F), AnimationChannel.Interpolations.LINEAR)
+            ))
+            .addAnimation("Beretta", new AnimationChannel(AnimationChannel.Targets.POSITION,
+                    new Keyframe(0.0F, KeyframeAnimations.posVec(4.0F, 30.0F, -14.0F), AnimationChannel.Interpolations.LINEAR)
+            ))
+            .build();
+
+    public static final AnimationDefinition beretta_model_recoil = AnimationDefinition.Builder.withLength(0.25F)
+            .addAnimation("Beretta", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(-0.2476F, -2.5F, 180.0278F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(0.0417F, KeyframeAnimations.degreeVec(-10.7524F, -2.5F, 180.0278F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(0.25F, KeyframeAnimations.degreeVec(-0.2476F, -2.5F, 180.0278F), AnimationChannel.Interpolations.LINEAR)
+            ))
+            .addAnimation("Beretta", new AnimationChannel(AnimationChannel.Targets.POSITION,
+                    new Keyframe(0.0F, KeyframeAnimations.posVec(4.0F, 30.0F, -14.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(0.0417F, KeyframeAnimations.posVec(4.0F, 28.5F, -14.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(0.25F, KeyframeAnimations.posVec(4.0F, 30.0F, -14.0F), AnimationChannel.Interpolations.LINEAR)
+            ))
+            .build();
+
+    public static final AnimationDefinition beretta_model_aim_left = AnimationDefinition.Builder.withLength(0.0F)
+            .addAnimation("Beretta", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(-0.2476F, 2.5F, 180.0278F), AnimationChannel.Interpolations.LINEAR)
+            ))
+            .addAnimation("Beretta", new AnimationChannel(AnimationChannel.Targets.POSITION,
+                    new Keyframe(0.0F, KeyframeAnimations.posVec(-4.0F, 30.0F, -14.0F), AnimationChannel.Interpolations.LINEAR)
+            ))
+            .build();
+
+    public static final AnimationDefinition beretta_model_recoil_left = AnimationDefinition.Builder.withLength(0.25F)
+            .addAnimation("Beretta", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(-0.2476F, 2.5F, -180.0278F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(0.0417F, KeyframeAnimations.degreeVec(-10.7524F, 2.5F, -180.0278F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(0.25F, KeyframeAnimations.degreeVec(-0.2476F, 2.5F, -180.0278F), AnimationChannel.Interpolations.LINEAR)
+            ))
+            .addAnimation("Beretta", new AnimationChannel(AnimationChannel.Targets.POSITION,
+                    new Keyframe(0.0F, KeyframeAnimations.posVec(-4.0F, 30.0F, -14.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(0.0417F, KeyframeAnimations.posVec(-4.0F, 28.5F, -14.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(0.25F, KeyframeAnimations.posVec(-4.0F, 30.0F, -14.0F), AnimationChannel.Interpolations.LINEAR)
+            ))
+            .build();
 }
