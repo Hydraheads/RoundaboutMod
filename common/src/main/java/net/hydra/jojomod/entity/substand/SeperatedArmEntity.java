@@ -6,6 +6,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.projectile.GoBeyondEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -26,6 +27,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -54,6 +56,7 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.AABB;
@@ -266,80 +269,100 @@ public class SeperatedArmEntity extends StandEntity {
                 if (Can_activate_special || (Can_activate)) {
                     ItemStack item = (this.getMainHandItem());
                     if ((MainUtil.cheapDistanceTo(this.getX(), this.getY(), this.getZ(), MiningPos.getX(), MiningPos.getY(), MiningPos.getZ()) < 2)) {
-
-                        BlockState block = (this.level().getBlockState(MiningPos));
-
-
-                        boolean RightTier = false;
-
-                        if (item.getItem() instanceof DiggerItem DI) {
-                            RightTier = (
-                                    (block.is(BlockTags.NEEDS_STONE_TOOL) && !(DI.getTier().equals(Tiers.WOOD)))
-                                            ||
-                                            (block.is(BlockTags.NEEDS_IRON_TOOL) && (DI.getTier().equals(Tiers.IRON) || DI.getTier().equals(Tiers.DIAMOND) || DI.getTier().equals(Tiers.NETHERITE)))
-                                            ||
-                                            (block.is(BlockTags.NEEDS_DIAMOND_TOOL) && DI.getTier().equals(Tiers.NETHERITE) || DI.getTier().equals(Tiers.DIAMOND))
-                                            ||
-                                            !(block.is(BlockTags.NEEDS_DIAMOND_TOOL) || block.is(BlockTags.NEEDS_STONE_TOOL) || block.is(BlockTags.NEEDS_IRON_TOOL))
-                            );
+                        boolean mine = true;
+                        if (user instanceof ServerPlayer PE) {
+                            mine = !((!this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) ||
+                             (PE.blockActionRestricted(PE.serverLevel(), MiningPos, PE.gameMode.getGameModeForPlayer())) ||
+                             (!this.level().mayInteract(PE, MiningPos)) ||
+                             (!MainUtil.canPlaceOnClaim(PE, MiningPos)));
                         }
+                        if(mine) {
 
-                        RightTier = true;
+                            BlockState block = (this.level().getBlockState(MiningPos));
 
-                        boolean pickaxeable = block.is(BlockTags.MINEABLE_WITH_PICKAXE) && RightTier;
-                        boolean axeable = block.is(BlockTags.MINEABLE_WITH_AXE) && RightTier;
-                        boolean shovelable = block.is(BlockTags.MINEABLE_WITH_SHOVEL) && RightTier;
 
-                        BlockState state = this.level().getBlockState(MiningPos);
-                        ServerLevel level = (ServerLevel) this.level();
+                            boolean RightTier = false;
 
-                        BlockPos targetpos = MiningPos;
-
-                        if (this.getMainHandItem().getItem() instanceof PickaxeItem) {
-                            if (pickaxeable) {
-                                level.destroyBlock(targetpos, true, this);
-                                this.setDeltaMovement(0, 0, 0);
-
-                                if (Can_activate) {
-                                    if(!((Player)user).isCreative()) {
-                                        if(!(this.getMainHandItem().getItem() instanceof FleshBucketItem)) {
-                                            this.getMainHandItem().hurt(1, this.level().getRandom(), null);
-                                        }
-                                    }
-                                }
-                                Can_activate = false;
+                            if (item.getItem() instanceof DiggerItem DI) {
+                                RightTier = (
+                                        (block.is(BlockTags.NEEDS_STONE_TOOL) && !(DI.getTier().equals(Tiers.WOOD)))
+                                                ||
+                                                (block.is(BlockTags.NEEDS_IRON_TOOL) && (DI.getTier().equals(Tiers.IRON) || DI.getTier().equals(Tiers.DIAMOND) || DI.getTier().equals(Tiers.NETHERITE)))
+                                                ||
+                                                (block.is(BlockTags.NEEDS_DIAMOND_TOOL) && DI.getTier().equals(Tiers.NETHERITE) || DI.getTier().equals(Tiers.DIAMOND))
+                                                ||
+                                                !(block.is(BlockTags.NEEDS_DIAMOND_TOOL) || block.is(BlockTags.NEEDS_STONE_TOOL) || block.is(BlockTags.NEEDS_IRON_TOOL))
+                                );
                             }
 
-                        } else if (this.getMainHandItem().getItem() instanceof ShovelItem) {
-                            if (shovelable) {
-                                level.destroyBlock(targetpos, true, this);
-                                this.setDeltaMovement(0, 0, 0);
+                            RightTier = true;
 
-                                if (Can_activate) {
-                                    if(!((Player)user).isCreative()) {
-                                        if(!(this.getMainHandItem().getItem() instanceof FleshBucketItem)) {
-                                            this.getMainHandItem().hurt(1, this.level().getRandom(), null);
+                            boolean pickaxeable = block.is(BlockTags.MINEABLE_WITH_PICKAXE) && RightTier;
+                            boolean axeable = block.is(BlockTags.MINEABLE_WITH_AXE) && RightTier;
+                            boolean shovelable = block.is(BlockTags.MINEABLE_WITH_SHOVEL) && RightTier;
+
+                            BlockState state = this.level().getBlockState(MiningPos);
+                            ServerLevel level = (ServerLevel) this.level();
+
+                            BlockPos targetpos = MiningPos;
+
+                            if (this.getMainHandItem().getItem() instanceof PickaxeItem) {
+                                if (pickaxeable) {
+
+                                    BlockState bstate = this.level().getBlockState(targetpos);
+                                    BlockEntity blockEnt = bstate.hasBlockEntity() ? this.level().getBlockEntity(targetpos) : null;
+                                    Block.dropResources(bstate, this.level(), targetpos, blockEnt, this, this.getMainHandItem());
+                                    level.destroyBlock(targetpos,false);
+
+                                    this.setDeltaMovement(0, 0, 0);
+
+                                    if (Can_activate) {
+                                        if (!((Player) user).isCreative()) {
+                                            if (!(this.getMainHandItem().getItem() instanceof FleshBucketItem)) {
+                                                this.getMainHandItem().hurt(1, this.level().getRandom(), null);
+                                            }
                                         }
                                     }
+                                    Can_activate = false;
                                 }
-                                Can_activate = false;
-                            }
 
-                        } else if (this.getMainHandItem().getItem() instanceof AxeItem) {
-                            if (axeable) {
-                                level.destroyBlock(targetpos, true, this);
+                            } else if (this.getMainHandItem().getItem() instanceof ShovelItem) {
+                                if (shovelable) {
 
-                                this.setDeltaMovement(0, 0, 0);
-                                if (Can_activate) {
-                                    if(!((Player)user).isCreative()) {
-                                        if(!(this.getMainHandItem().getItem() instanceof FleshBucketItem)) {
-                                            this.getMainHandItem().hurt(1, this.level().getRandom(), null);
+                                    BlockState bstate = this.level().getBlockState(targetpos);
+                                    BlockEntity blockEnt = bstate.hasBlockEntity() ? this.level().getBlockEntity(targetpos) : null;
+                                    Block.dropResources(bstate, this.level(), targetpos, blockEnt, this, this.getMainHandItem());
+                                    this.setDeltaMovement(0, 0, 0);
+                                    level.destroyBlock(targetpos,false);
+                                    if (Can_activate) {
+                                        if (!((Player) user).isCreative()) {
+                                            if (!(this.getMainHandItem().getItem() instanceof FleshBucketItem)) {
+                                                this.getMainHandItem().hurt(1, this.level().getRandom(), null);
+                                            }
                                         }
                                     }
+                                    Can_activate = false;
                                 }
-                                Can_activate = false;
-                            }
 
+                            } else if (this.getMainHandItem().getItem() instanceof AxeItem) {
+                                if (axeable) {
+
+                                    BlockState bstate = this.level().getBlockState(targetpos);
+                                    BlockEntity blockEnt = bstate.hasBlockEntity() ? this.level().getBlockEntity(targetpos) : null;
+                                    Block.dropResources(bstate, this.level(), targetpos, blockEnt, this, this.getMainHandItem());
+                                    level.destroyBlock(targetpos,false);
+                                    this.setDeltaMovement(0, 0, 0);
+                                    if (Can_activate) {
+                                        if (!((Player) user).isCreative()) {
+                                            if (!(this.getMainHandItem().getItem() instanceof FleshBucketItem)) {
+                                                this.getMainHandItem().hurt(1, this.level().getRandom(), null);
+                                            }
+                                        }
+                                    }
+                                    Can_activate = false;
+                                }
+
+                            }
                         }
                     }
                     doAttack();

@@ -146,7 +146,7 @@ public class DiverDownBaseRenderer extends StandRenderer<DiverDownEntity> {
             }
 
             // Hide while submerged inside a mob
-            if (mobEntity.isSubmerged()) {
+            if (mobEntity.isSubmerged() && dd.isDiveActive()) {
                 return;
             }
         }
