@@ -1187,6 +1187,8 @@
   "death.attack.diver_redirection": "%1$s died for the sake of others",
   "death.attack.diver_redirection.player": "%1$s died for the sake of %2$s",
   "death.attack.brain_dead": "%1$s stopped thinking",
+  "death.attack.arn_throw": "%1$s died",
+  "death.attack.arm_throw_player": "%1$s was slain by %2$s",
 
   "item.glaive.charge_power": "Charge Attack",
 
