@@ -77,7 +77,7 @@ public class BadCompanyBulletEntity extends AbstractArrow {
     }
 
     private float getBulletDamage() {
-        return 1.5f;
+        return 0.1f;
     }
 
     @Override
