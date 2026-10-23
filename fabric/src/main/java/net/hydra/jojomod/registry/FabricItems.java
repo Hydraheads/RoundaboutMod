@@ -758,6 +758,8 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_MAGICIANS_RED);
                         entries.accept(STAND_DISC_JUSTICE);
                         entries.accept(MAX_STAND_DISC_JUSTICE);
+                        entries.accept(STAND_DISC_GREEN_DAY);
+                        entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_ANUBIS);
                         entries.accept(MAX_STAND_DISC_ANUBIS);
                         entries.accept(STAND_DISC_RATT);
@@ -794,8 +796,6 @@ public class FabricItems {
                         //entries.accept(ModBlocks.HAND_BLOCK);
                         entries.accept(STAND_DISC_D4C);
                         entries.accept(MAX_STAND_DISC_D4C);
-                        entries.accept(STAND_DISC_GREEN_DAY);
-                        entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_20_CENTURY_BOY);
                         entries.accept(STAND_DISC_TUSK);
                         entries.accept(MAX_STAND_DISC_TUSK);

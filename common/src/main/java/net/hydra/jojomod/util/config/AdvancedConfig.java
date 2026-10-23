@@ -43,8 +43,8 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:king_crimson_disc",
                     "roundabout:ratt_disc",
                     "roundabout:killer_queen_disc",
-                    "roundabout:diver_down_disc"
-                    //"roundabout:green_day_disc"
+                    "roundabout:diver_down_disc",
+                    "roundabout:green_day_disc"
             )
     );
     public Set<String> standArrowSecondaryPoolv7 = new HashSet<>(
