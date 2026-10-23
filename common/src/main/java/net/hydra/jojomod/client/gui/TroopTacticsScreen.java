@@ -150,7 +150,7 @@ public class TroopTacticsScreen extends Screen {
                 return;
             }
             if (Minecraft.getInstance().player != null && ((StandUser)Minecraft.getInstance().player).roundabout$getStandPowers() instanceof PowersBadCompany PBC) {
-                //PBC.selectedTroop(currentlyHovered);
+                PBC.selectedTactics(currentlyHovered);
                 lastChangedConfig = currentlyHovered;
             }
         }

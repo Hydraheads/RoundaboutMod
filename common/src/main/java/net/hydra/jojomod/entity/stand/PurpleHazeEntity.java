@@ -19,7 +19,11 @@ public class PurpleHazeEntity extends FollowingStandEntity{
             MANGA = 6,
             MIRROR_BATTLE = 7,
             ROTT = 8,
-            PEPPERMINT = 9;
+            PEPPERMINT = 9,
+            GREENER = 10,
+            DISTORTION = 11,
+            GREEN_DSITORTION = 12;
+
 
 
     public final AnimationState hideFists = new AnimationState();
@@ -30,11 +34,14 @@ public class PurpleHazeEntity extends FollowingStandEntity{
     public final AnimationState strangle_windup = new AnimationState();
     public final AnimationState flyloop = new AnimationState();
     public final AnimationState strangle_hold= new AnimationState();
+    public final AnimationState strangle_grab= new AnimationState();
 
     public static byte
             STRANGLE_WINDUP = 86,
             FLYLOOP = 87,
-            STRANGLE_HOLD = 88;
+            STRANGLE_GRAB = 88,
+            STRANGLE_HOLD = 89;
+
 
 
     @Override
@@ -75,6 +82,11 @@ public class PurpleHazeEntity extends FollowingStandEntity{
                 this.flyloop.startIfStopped(this.tickCount);
             } else {
                 this.flyloop.stop();
+            }
+            if (this.getAnimation() == STRANGLE_GRAB) {
+                this.strangle_grab.startIfStopped(this.tickCount);
+            } else {
+                this.strangle_grab.stop();
             }
             if (this.getAnimation() == STRANGLE_HOLD) {
                 this.strangle_hold.startIfStopped(this.tickCount);

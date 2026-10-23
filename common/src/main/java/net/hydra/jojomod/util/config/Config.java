@@ -84,6 +84,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public PurpleHazeSettings PurpleHazeSettings;
     @NestedOption(group = "modded")
+    public LyinEyesSettings lyinEyesSettings;
+    @NestedOption(group = "modded")
     public ManhattanTransferSettings manhattanTransferSettings;
     @NestedOption(group = "modded")
     public BlackSabbathSettings blackSabbathSettings;
@@ -860,6 +862,12 @@ public class Config implements Cloneable {
         @BooleanOption(group = "inherit", value = false)
         public Boolean HazeMelts;
     }
+    public static class LyinEyesSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableLyinEyes;
+        @FloatOption(group = "inherit", value = 25, min = 0, max = 72000)
+        public Integer maxDetectionRange;
+    }
     public static class HeyYaSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableHeyYa;
@@ -1457,6 +1465,10 @@ public class Config implements Cloneable {
         public Integer silverChariotCooldownSlabCutting;
         @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
         public Integer silverChariotCooldownSelfGrab;
+        @IntOption(group = "inherit", value = 280, min = 0, max = 72000)
+        public Integer silverChariotCooldownSelfThrow;
+        @IntOption(group = "inherit", value = 280, min = 0, max = 72000)
+        public Integer silverChariotCooldownSelfThrowRebound;
         @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
         public Integer silverChariotCooldownControlModeToggle;
         @IntOption(group = "inherit", value = 600, min = 0, max = 72000)

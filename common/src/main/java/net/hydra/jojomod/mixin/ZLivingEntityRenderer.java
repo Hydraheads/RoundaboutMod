@@ -7,10 +7,7 @@ import com.mojang.math.Axis;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.ILivingEntityRenderer;
 import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.client.ClientUtil;
-import net.hydra.jojomod.client.DiverDownPointerRenderer;
-import net.hydra.jojomod.client.HallucinationIndicatorRenderer;
-import net.hydra.jojomod.client.LyinEyesHighlighterRenderer;
+import net.hydra.jojomod.client.*;
 import net.hydra.jojomod.client.models.layers.BigBubbleLayer;
 import net.hydra.jojomod.client.models.layers.FrozenLayer;
 import net.hydra.jojomod.client.models.stand.renderers.*;
@@ -167,7 +164,8 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
         // lyin eyes highlighter
         if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof PowersLyinEyes LE
                 && LE.getVisionModeClient() && LE.isActive()) {
-            if (entity != player && entity.isAlive() && player.distanceToSqr(entity) <= (24.0 * 24.0)
+            float maxDetectionRange = ClientNetworking.getAppropriateConfig().lyinEyesSettings.maxDetectionRange;
+            if (entity != player && entity.isAlive() && player.distanceToSqr(entity) <= (maxDetectionRange * maxDetectionRange)
                     && !(entity instanceof StandEntity)
                     && !(entity instanceof FallenMob)
                     && ((entity instanceof Mob) || (entity instanceof Player))) {

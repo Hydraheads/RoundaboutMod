@@ -76,6 +76,7 @@ public class ModItemModels {
     public static TommyGunModel TOMMY_GUN_MODEL;
     public static ColtRevolverModel COLT_REVOLVER_MODEL;
     public static JackalRifleModel JACKAL_RIFLE_MODEL;
+    public static BerettaPistolModel BERETTA_PISTOL_MODEL;
     public static AnubisModel ANUBIS_MODEL;
 
     public static BowlerHatModel BOWLER_HAT_MODEL;

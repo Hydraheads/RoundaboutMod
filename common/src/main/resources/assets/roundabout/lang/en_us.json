@@ -350,7 +350,7 @@
   "item.roundabout.sniper_ammo": "Rifle Ammunition",
 
   "item.roundabout.beretta_pistol": "Beretta Pistol",
-  "item.roundabout.pistol_ammo": "Pistol Cartridge",
+  "item.roundabout.pistol_ammo": "Pistol Ammunition",
 
   "item.roundabout.light_bulb": "Light Bulb",
 
@@ -1145,9 +1145,9 @@
   "death.attack.bites_the_dust.item": "%1$s bit the dust",
   "death.attack.bites_the_dust.player.item": "%$2s made %1$s bite the dust",
   "death.attack.kq_explosion": "%1$s was reduced to dust",
-  "death.attack.kq_explosion.player": "%%$2s reduced %1$s to dust",
+  "death.attack.kq_explosion.player": "%$2s reduced %1$s to dust",
   "death.attack.kq_explosion.item": "%1$s was reduced to dust",
-  "death.attack.kq_explosion.player.item": "%%$2s reduced %1$s to dust",
+  "death.attack.kq_explosion.player.item": "%$2s reduced %1$s to dust",
   "death.attack.kick": "%1$s was ran over",
   "death.attack.kick.player": "%$2s trampled %1$s",
   "death.attack.kick.item": "%1$s was ran over",
@@ -1195,6 +1195,8 @@
   "death.attack.diver_redirection": "%1$s died for the sake of others",
   "death.attack.diver_redirection.player": "%1$s died for the sake of %2$s",
   "death.attack.brain_dead": "%1$s stopped thinking",
+  "death.attack.arn_throw": "%1$s died",
+  "death.attack.arm_throw_player": "%1$s was slain by %2$s",
 
   "item.glaive.charge_power": "Charge Attack",
 
@@ -3278,6 +3280,9 @@
   "skins.roundabout.purple_haze.mirror_battle": "Mirror Battle",
   "skins.roundabout.purple_haze.rott_haze": "Rott Haze",
   "skins.roundabout.purple_haze.peppermint": "Peppermint",
+  "skins.roundabout.purple_haze.distortion": "Distortion",
+  "skins.roundabout.purple_haze.green_distortion": "Greenstortion",
+  "skins.roundabout.purple_haze.greener": "Greener",
 
   "skins.roundabout.silver_chariot.part_3": "Part 3",
   "skins.roundabout.silver_chariot.part_3_grey": "Part 3 Grey",
@@ -3375,7 +3380,10 @@
   "roundabout.troop_select.helicopter": "Helicopter",
   "roundabout.troop_select.mine": "Mine",
 
-  "stand.bad_company.not_enought_space": "You don't have enought space for that troop!",
+  "stand.bad_company.not_enought_space": "You don't have enough space for that troop!",
+  "stand.bad_company.not_enought_space.soldier": "You don't have enough soldiers left for that troop!",
+  "stand.bad_company.total_troops.soldier": "%$1s/%$2s active Soldiers.",
+  "stand.bad_company.soldier_limit": "You already have released all your soldiers!",
   "stand.bad_company.troop_limit": "You have reached army maximum size!",
 
   "roundabout.bad_company.troop_tactics": "Troop Tactics",
@@ -3809,6 +3817,8 @@
   "config.roundabout.enableAchtungBaby.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableGreenDay.name": "Enable Stand",
   "config.roundabout.enableGreenDay.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
+  "config.roundabout.enableLyinEyes.name": "Enable Stand",
+  "config.roundabout.enableLyinEyes.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableHeyYa.name": "Enable Stand",
   "config.roundabout.enableHeyYa.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableCinderella.name": "Enable Stand",
@@ -4314,6 +4324,10 @@
   "config.roundabout.forceThirdPersonInGroundDive.name": "Force Third Person in Ground Dive",
   "config.roundabout.forceThirdPersonInGroundDive.desc": "Automatically switches to third person while in ground dive.",
 
+  "config.roundabout.maxDetectionRange.name": "Max Detection Range",
+  "config.roundabout.maxDetectionRange.desc": "How many blocks away can the nematodes detect someone in tension sensor? Default is 25.",
+  "config.roundabout.nematodeOpacity.name": "Nematode Overlay Opacity",
+  "config.roundabout.nematodeOpacity.desc": "What is the opacity of the nematode overlay in first person? 1.0 is the default. (Change this as a decimal point, i.e. 0.5 for 50%)",
   "config.roundabout.spinMapInsteadOfArrow.name": "Spin Map Instead Of Arrow",
   "config.roundabout.spinMapInsteadOfArrow.desc": "Spins the minimap of the second ability instead of the player arrow.",
 

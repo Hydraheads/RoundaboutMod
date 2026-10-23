@@ -133,6 +133,7 @@ public class FabricEntityClient {
 
         EntityRendererRegistry.register(FabricEntities.BLADED_BOWLER_HAT, BladedBowlerHatRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ROUNDABOUT_BULLET_ENTITY, RoundaboutBulletEntityRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.BAD_COMPANY_BULLET_ENTITY, BadCompanyBulletEntityRenderer::new);
         EntityRendererRegistry.register(FabricEntities.RATT_DART, RattDartRenderer::new);
         EntityRendererRegistry.register(FabricEntities.POISON_LLAMA_SPIT, PoisonLlamaSpitRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_MATCH, ThrownItemRenderer::new);
@@ -494,8 +495,10 @@ public class FabricEntityClient {
         ModStrayModels.TOMMY_GUN_MODEL = new TommyGunModel();
         ModStrayModels.COLT_REVOLVER_MODEL = new ColtRevolverModel();
         ModStrayModels.JACKAL_RIFLE_MODEL = new JackalRifleModel();
+        ModStrayModels.BERETTA_PISTOL_MODEL = new BerettaPistolModel();
         ModStrayModels.FirstPersonSnubnoseModel = new FirstPersonSnubnoseModel();
         ModStrayModels.FirstPersonTommyGunModel = new FirstPersonTommyGunModel();
         ModStrayModels.FirstPersonColtRevolverModel = new FirstPersonColtRevolverModel();
+        ModStrayModels.FirstPersonBerettaPistolModel = new FirstPersonBerettaPistolModel();
     }
 }

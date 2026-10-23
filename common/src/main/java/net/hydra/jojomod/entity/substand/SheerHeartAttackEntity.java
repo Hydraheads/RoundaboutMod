@@ -142,7 +142,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	}
 
 	public static float width = 0.5f;
-	public static float height = 0.3f;
+	public static float height = 0.505f;
 
 	private HashSet<Vec3> explodedBlocks = new HashSet<Vec3>();
 

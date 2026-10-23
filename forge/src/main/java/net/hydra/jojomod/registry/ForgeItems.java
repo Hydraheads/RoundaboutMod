@@ -559,7 +559,7 @@ public class ForgeItems {
     ));
 
     public static final RegistryObject<Item> PISTOL_AMMO = addToWIPTab(ITEMS.register("pistol_ammo",
-            () -> new PistolAmmoItem(new Item.Properties().stacksTo(16))
+            () -> new PistolAmmoItem(new Item.Properties().stacksTo(64))
     ));
 
 

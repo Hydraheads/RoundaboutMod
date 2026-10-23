@@ -894,6 +894,7 @@ public class ForgeEvents {
         ModEntities.THROWN_HARPOON = ForgeEntities.THROWN_HARPOON.get();
         ModEntities.BLADED_BOWLER_HAT = ForgeEntities.BLADED_BOWLER_HAT.get();
         ModEntities.ROUNDABOUT_BULLET_ENTITY = ForgeEntities.ROUNDABOUT_BULLET_ENTITY.get();
+        ModEntities.BAD_COMPANY_BULLET_ENTITY = ForgeEntities.BAD_COMPANY_BULLET_ENTITY.get();
         ModEntities.THROWN_KNIFE = ForgeEntities.THROWN_KNIFE.get();
         ModEntities.BLOCK_WALL = ForgeEntities.BLOCK_WALL.get();
         ModEntities.PARALLEL_CHEST = ForgeEntities.PARALLEL_CHEST.get();
