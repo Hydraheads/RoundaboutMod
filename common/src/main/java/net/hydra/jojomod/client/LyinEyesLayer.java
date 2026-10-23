@@ -59,8 +59,8 @@ public class LyinEyesLayer<T extends LivingEntity, M extends HumanoidModel<T>, A
             if (((IEntityAndData) var4).roundabout$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()) return;
 
             // it's lyin time
-            if (((StandUser) var4).roundabout$getStandPowers() instanceof PowersLyinEyes
-                    && PowerTypes.hasStandActive(var4)) {
+            if (((StandUser) var4).roundabout$getStandPowers() instanceof PowersLyinEyes LE) {
+                float alpha = LE.getTrueSummon();
                 // checks if the play is using the laem chabang visage
                 ResourceLocation rl = LYIN_EYES_LAYER;
                 byte idlePose = ((StandUser) var4).roundabout$getIdlePos();
@@ -76,7 +76,7 @@ public class LyinEyesLayer<T extends LivingEntity, M extends HumanoidModel<T>, A
                     rl = LYIN_EYES_LAYER4;
                 }
                 renderPart(poseStack, multiBufferSource, integ, livingEntityRenderer.getModel(), 1, 1, 1, null,
-                        rl);
+                        rl, alpha);
             }
 
         }
@@ -84,14 +84,14 @@ public class LyinEyesLayer<T extends LivingEntity, M extends HumanoidModel<T>, A
 
     private void renderPart(
             PoseStack poseStack, MultiBufferSource multiBufferSource, int integ, HumanoidModel<T> $$4,float $$6, float $$7, float $$8, @Nullable String $$9,
-            ResourceLocation RL
+            ResourceLocation RL, float alpha
     ) {
         if (RL != null) {
             VertexConsumer $$10 = multiBufferSource.getBuffer(RenderType.entityTranslucent(RL));
 
             ((IHumanoidModelAccess) $$4).roundabout$getBodyParts().forEach($$8x -> $$8x.xScale += 0.04F);
             ((IHumanoidModelAccess) $$4).roundabout$getBodyParts().forEach($$8x -> $$8x.zScale += 0.04F);
-            $$4.renderToBuffer(poseStack, $$10, integ, OverlayTexture.NO_OVERLAY, $$6, $$7, $$8, 1.0F);
+            $$4.renderToBuffer(poseStack, $$10, integ, OverlayTexture.NO_OVERLAY, $$6, $$7, $$8, alpha);
             ((IHumanoidModelAccess) $$4).roundabout$getBodyParts().forEach($$8x -> $$8x.xScale -= 0.04F);
             ((IHumanoidModelAccess) $$4).roundabout$getBodyParts().forEach($$8x -> $$8x.zScale -= 0.04F);
         }
