@@ -1374,7 +1374,7 @@ public class PowersSilverChariot extends NewPunchingStand {
             case SKILL_3_CROUCH -> {
                 // TODO: Implement carry self ability
                 // toggleControlModeClient((short) 1);
-                // selfGrabClient();
+                selfGrabClient();
             }
             case SKILL_3_GUARD -> {
                 // TODO: Implement Silver Chariot arm render ability
@@ -1422,7 +1422,7 @@ public class PowersSilverChariot extends NewPunchingStand {
                 return true;
             }
             case PowerIndex.POWER_3_SNEAK -> {
-                // selfGrabServer();
+                selfGrabServer();
                 return true;
             }
             case PowerIndex.POWER_3_BLOCK -> {
@@ -1735,9 +1735,16 @@ public class PowersSilverChariot extends NewPunchingStand {
             }
         }
 
-        if (this.hasFullGuard() && isRegainingArmourFromDesummon()) {
+        if (!self.level().isClientSide() && this.hasFullGuard() && isRegainingArmourFromDesummon()) {
             regainingArmourFromDesummon = false;
             this.setIsSilverChariotArmoured(true);
+        }
+        if (!self.level().isClientSide() && this.getStandEntity(self) instanceof SilverChariotEntity sc && sc.isSelfCarryModeActive()) {
+            if (sc.isAlive() && !sc.isRemoved()) {
+                if (this.self.getVehicle() == null || !this.self.getVehicle().is(sc)) {
+                    this.self.startRiding(sc, true);
+                }
+            }
         }
 
         if (self instanceof Player player && self.level().isClientSide() && isPacketPlayer()) {
@@ -3019,7 +3026,7 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     public void selfGrabClient() {
         if (this.self.level().isClientSide() && !isRegainingArmourFromDesummon() && !this.onCooldown(PowerIndex.SKILL_3) && canExecuteMoveWithLevel(getSelfGrabLevel())) {
-            this.controlMode = CONTROL_MODE_SELF_CARRY;
+            // this.controlMode = CONTROL_MODE_SELF_CARRY;
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_SNEAK, true);
             tryPowerPacket(PowerIndex.POWER_3_SNEAK);
         }
