@@ -865,8 +865,8 @@ public class Config implements Cloneable {
     public static class LyinEyesSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableLyinEyes;
-        @FloatOption(group = "inherit", value = 25, min = 0, max = 72000)
-        public Integer maxDetectionRange;
+        @FloatOption(group = "inherit", value = 25.0F, min = 0, max = 72000)
+        public Float maxDetectionRange;
     }
     public static class HeyYaSettings {
         @BooleanOption(group = "inherit", value = true)
