@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.substand.CTRbarrierEntity;
 import net.hydra.jojomod.entity.substand.CTRplatformEntity;
 import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -150,7 +151,8 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             GHAST = 6,
             STRIDER = 7,
             LALI_HO = 8,
-            EYE = 9;
+            EYE = 9,
+            UMVUTHI = 10;
 
     @Override
     public List<Byte> getSkinList() {
@@ -163,7 +165,8 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                 GHAST,
                 LALI_HO,
                 EYE,
-                STRIDER
+                STRIDER,
+                UMVUTHI
         );
     }
 
@@ -179,6 +182,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                     case STRIDER -> Component.translatable("skins.roundabout.catch_the_rainbow.strider_sick");
                     case MAGMA -> Component.translatable("skins.roundabout.catch_the_rainbow.magma");
                     case CMY -> Component.translatable("skins.roundabout.catch_the_rainbow.cmy");
+                    case UMVUTHI -> Component.translatable("skins.roundabout.catch_the_rainbow.umvuthi_off");
                     default -> Component.translatable("skins.roundabout.catch_the_rainbow.base");
                 };
             } else {
@@ -191,6 +195,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                     case STRIDER -> Component.translatable("skins.roundabout.catch_the_rainbow.strider_healthy");
                     case MAGMA -> Component.translatable("skins.roundabout.catch_the_rainbow.magma");
                     case CMY -> Component.translatable("skins.roundabout.catch_the_rainbow.cmy");
+                    case UMVUTHI -> Component.translatable("skins.roundabout.catch_the_rainbow.umvuthi_on");
                     default -> Component.translatable("skins.roundabout.catch_the_rainbow.base");
                 };
             }
@@ -205,6 +210,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                 case STRIDER -> Component.translatable("skins.roundabout.catch_the_rainbow.strider_sick");
                 case MAGMA -> Component.translatable("skins.roundabout.catch_the_rainbow.magma");
                 case CMY -> Component.translatable("skins.roundabout.catch_the_rainbow.cmy");
+                case UMVUTHI -> Component.translatable("skins.roundabout.catch_the_rainbow.umvuthi_off");
                 default -> Component.translatable("skins.roundabout.catch_the_rainbow.base");
             };
         }
@@ -294,12 +300,15 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     DROPDOWN = 54,
     OFF_HAND_THROW_SLIM = 55,
     RETURN = 56,
-    DEATH_TIMER = 57;
+    DEATH_TIMER = 57,
+    BARRIER = 58;
 
     @Override
     public void powerActivate(PowerContext context){
         switch (context){
             case SKILL_1_CROUCH -> rainMendClient();
+
+            case SKILL_1_NORMAL -> barrierClient();
 
             case SKILL_3_NORMAL -> {
                 if (!isInRain())
@@ -342,6 +351,9 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     public boolean setPowerOther(int move, int lastMove) {
         if (move == RAINMEND) {
             useRainMend();
+        }
+        if (move== BARRIER) {
+            barrier();
         }
         else if (move == DROPDOWN) {
             dropDown();
@@ -432,7 +444,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                             0,
                             -1,
                             0);
-                    ent.hurt(ModDamageTypes.of(this.self.level(), DamageTypes.PLAYER_ATTACK, self, self), 5);
+                    ent.hurt(ModDamageTypes.of(this.self.level(), ModDamageTypes.SHARP_RAINDROP, self, self), 5);
                     dropTimer = 0;
                 }
             }
@@ -502,7 +514,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
 
     @Override
     public boolean cheatDeath(DamageSource dsource){
-        if (!dsource.is(ModDamageTypes.SUNLIGHT) && !dsource.is(DamageTypes.GENERIC_KILL)
+        if (!dsource.is(ModDamageTypes.SUNLIGHT) && !dsource.is(DamageTypes.GENERIC_KILL) && !dsource.is(ModDamageTypes.INFINITE_SPIN)
                 && self instanceof Player PE) {
             if (isInRain() && deathTimer == 0 && hasStandActive(self)) {
                 if (!this.self.level().isClientSide)deathTimer = 1200;
@@ -603,6 +615,29 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             soundVariations.add(ModSounds.CTR_RAIN_STEP_4_EVENT);
             soundVariations.add(ModSounds.CTR_RAIN_STEP_5_EVENT);
             playSoundIfPossible(self.level(), null, this.self.blockPosition(), getRandomSound(soundVariations), SoundSource.PLAYERS, 0.8F, 1.0F);
+        }
+    }
+
+    //barrier
+
+    public void barrierClient(){
+        if (!this.onCooldown(BARRIER) && isInRain()) {
+            this.setCooldown(BARRIER, 600);
+            this.tryPower(BARRIER, true);
+            tryPowerPacket(BARRIER);
+        }
+    }
+
+    public void barrier(){
+        if (!this.self.level().isClientSide()) {
+            CTRbarrierEntity barrier = ModEntities.CTR_BARRIER.create(this.self.level());
+
+            if (barrier != null) {
+                barrier.setUser(this.self);
+                PowerTypes.copyPlaneOfExisting(self, barrier);
+                barrier.setPos(getRayBlock(this.self, 0.0f).add(0, -1.6, 0));
+                this.self.level().addFreshEntity(barrier);
+            }
         }
     }
 

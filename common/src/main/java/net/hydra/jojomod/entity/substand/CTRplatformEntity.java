@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersCatchTheRainbow;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -35,8 +36,9 @@ public class CTRplatformEntity extends StandEntity {
     public void tick() {
         if (!this.level().isClientSide) {
             if (User != null && ((StandUser) User).roundabout$getStandPowers() instanceof PowersCatchTheRainbow
-                    && (((PowersCatchTheRainbow) ((StandUser) User).roundabout$getStandPowers()).isInRain())) {
-                this.moveTo(User.getX(), this.getY(), User.getZ());
+                    && (((PowersCatchTheRainbow) ((StandUser) User).roundabout$getStandPowers()).isInRain())
+                    && User.isAlive()) {
+                setPos(User.getX(), this.getY(), User.getZ());
                 if (MainUtil.cheapDistanceTo(this.getX(), this.getY(), this.getZ(), User.getX(), User.getY(), User.getZ()) > 1 || User.isCrouching()) {
                     this.discard();
                     this.setUser(null);

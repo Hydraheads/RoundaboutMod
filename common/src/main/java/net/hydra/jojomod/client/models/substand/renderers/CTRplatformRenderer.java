@@ -11,16 +11,12 @@ import net.minecraft.resources.ResourceLocation;
 
 public class CTRplatformRenderer extends StandRenderer<CTRplatformEntity> {
 
-    private static final ResourceLocation CTR_RAIN_PLATFORM_MODEL =
-            //lol
-            new ResourceLocation(Roundabout.MOD_ID,"textures/stand/achtung_baby/very_badass_texture.png");
-
     public CTRplatformRenderer(EntityRendererProvider.Context context) {
         super(context, new CTRplatformModel<>(context.bakeLayer(ModEntityRendererClient.CTR_PLATFORM_LAYER)), 0f);
     }
 
     @Override
     public ResourceLocation getTextureLocation(CTRplatformEntity ctrplatformEntity) {
-        return CTR_RAIN_PLATFORM_MODEL;
+        return new ResourceLocation(Roundabout.MOD_ID,"textures/stand/achtung_baby/very_badass_texture.png");
     }
 }

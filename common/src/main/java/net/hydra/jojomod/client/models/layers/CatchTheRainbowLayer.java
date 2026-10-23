@@ -82,8 +82,13 @@ public class CatchTheRainbowLayer<T extends LivingEntity, A extends HumanoidMode
                         float r = isHurt ? 1.0F : 1.0F;
                         float g = isHurt ? 0.0F : 1.0F;
                         float b = isHurt ? 0.0F : 1.0F;
-                        ModStrayModels.CATCH_THE_RAINBOW.render(livent, partialTicks, poseStack, bufferSource, packedLight,
-                                r, g, b, heyFull, skin);
+                        if (((StandUser) entity).roundabout$getStandSkin() != 10) {
+                            ModStrayModels.CATCH_THE_RAINBOW.render(livent, partialTicks, poseStack, bufferSource, packedLight,
+                                    r, g, b, heyFull, skin);
+                        }else {
+                            ModStrayModels.CATCH_THE_RAINBOW_UMVUTHI.render(livent, partialTicks, poseStack, bufferSource, packedLight,
+                                    r, g, b, heyFull, skin);
+                        }
                         ClientUtil.popPoseAndCooperate(poseStack,24);
                     }
                 }

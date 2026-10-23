@@ -1078,10 +1078,17 @@ public class ForgeEntities {
                             build(new ResourceLocation(Roundabout.MOD_ID, "ph_capsule").toString())
             );
     public static final RegistryObject<EntityType<CTRplatformEntity>> CTR_PLATFORM =
-            ENTITY_TYPES.register("ctrplatformmodel", () ->
+            ENTITY_TYPES.register("ctrplatform", () ->
                     EntityType.Builder.<CTRplatformEntity>of(CTRplatformEntity::new, MobCategory.MISC).
                             sized(1.25f, 0.5f).
                             clientTrackingRange(15).
-                            build(new ResourceLocation(Roundabout.MOD_ID, "ctrplatformmodel").toString())
+                            build(new ResourceLocation(Roundabout.MOD_ID, "ctrplatform").toString())
+            );
+    public static final RegistryObject<EntityType<CTRbarrierEntity>> CTR_BARRIER =
+            ENTITY_TYPES.register("ctrbarrier", () ->
+                    EntityType.Builder.<CTRbarrierEntity>of(CTRbarrierEntity::new, MobCategory.MISC).
+                            sized(4f, 4f).
+                            clientTrackingRange(15).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "ctrbarrier").toString())
             );
 }

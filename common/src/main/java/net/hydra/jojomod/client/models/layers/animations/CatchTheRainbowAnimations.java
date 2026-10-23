@@ -23,4 +23,23 @@ public class CatchTheRainbowAnimations {
                     new Keyframe(0.0F, KeyframeAnimations.posVec(4.25F, 1F, -3.0F), AnimationChannel.Interpolations.LINEAR)
             ))
             .build();
+
+
+    public static final AnimationDefinition umvuthiright = AnimationDefinition.Builder.withLength(0.0F)
+            .addAnimation("mask", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(-15.0F, 45.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+            ))
+            .addAnimation("mask", new AnimationChannel(AnimationChannel.Targets.POSITION,
+                    new Keyframe(0.0F, KeyframeAnimations.posVec(-4.25F, 1F, -3.0F), AnimationChannel.Interpolations.LINEAR)
+            ))
+            .build();
+
+    public static final AnimationDefinition umvuthileft = AnimationDefinition.Builder.withLength(0.0F)
+            .addAnimation("mask", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(-15.0F, -45.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+            ))
+            .addAnimation("mask", new AnimationChannel(AnimationChannel.Targets.POSITION,
+                    new Keyframe(0.0F, KeyframeAnimations.posVec(4.25F, 1F, -3.0F), AnimationChannel.Interpolations.LINEAR)
+            ))
+            .build();
 }

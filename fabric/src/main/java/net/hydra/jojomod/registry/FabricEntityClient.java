@@ -227,6 +227,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.LEFT_SEPERATED_ARM_SLIM, LeftSeperatedArmSlimRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SHEER_HEART_ATTACK, SheerHeartAttackRenderer::new);
         EntityRendererRegistry.register(FabricEntities.CTR_PLATFORM, CTRplatformRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.CTR_BARRIER, CTRbarrierRenderer::new);
 
         EntityRendererRegistry.register(FabricEntities.METALLICA_KNIFE, KnifeRenderer::new);
 
@@ -375,6 +376,7 @@ public class FabricEntityClient {
         ModStrayModels.TUSK_DRILL_NAIL = new TuskDrillNailModel();
         ModStrayModels.HEY_YA = new HeyYaModel();
         ModStrayModels.CATCH_THE_RAINBOW = new CatchTheRainbowModel();
+        ModStrayModels.CATCH_THE_RAINBOW_UMVUTHI = new CatchTheRainbowUmvuthiModel();
         ModStrayModels.CENTURY_BOY = new CenturyBoyModel();
         ModStrayModels.BOWLER_HAT = new BowlerHatModel();
         ModStrayModels.UV_BLASTER = new UVBlasterModel();

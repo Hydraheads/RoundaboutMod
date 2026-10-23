@@ -816,7 +816,15 @@ public class FabricEntities {
                     new ResourceLocation(Roundabout.MOD_ID, "ctr_platorm"),
                     EntityType.Builder.<CTRplatformEntity>of(CTRplatformEntity::new, MobCategory.MISC).
                             sized(1.25f, 0.5f).
-                            clientTrackingRange(15).build(Roundabout.MOD_ID+":ctrplatformmodel")
+                            clientTrackingRange(15).build(Roundabout.MOD_ID+":ctrplatform")
+            );
+    public static final EntityType<CTRbarrierEntity> CTR_BARRIER =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "ctr_barrier"),
+                    EntityType.Builder.<CTRbarrierEntity>of(CTRbarrierEntity::new, MobCategory.MISC).
+                            sized(4f, 4f).
+                            clientTrackingRange(15).build(Roundabout.MOD_ID+":ctrbarrier")
             );
     public static final EntityType<BlockWallEntity> BLOCK_WALL =
             Registry.register(
@@ -1352,6 +1360,7 @@ public class FabricEntities {
                 ModEntities.THROWN_KNIFE = THROWN_KNIFE;
                 ModEntities.PH_CAPSULE = PH_CAPSULE;
                 ModEntities.CTR_PLATFORM = CTR_PLATFORM;
+                ModEntities.CTR_BARRIER = CTR_BARRIER;
                 ModEntities.BONE_PROJECTILE = BONE_PROJECTILE;
                 ModEntities.BLOCK_WALL = BLOCK_WALL;
                 ModEntities.PARALLEL_CHEST = PARALLEL_CHEST;
@@ -1583,6 +1592,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(MOLD_SPORE, MoldSporesEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(PURPLE_SMOKE, PurpleSmokeEntity.createStandAttributes());
         FabricDefaultAttributeRegistry.register(CTR_PLATFORM, CTRplatformEntity.createStandAttributes());
+        FabricDefaultAttributeRegistry.register(CTR_BARRIER, CTRbarrierEntity.createStandAttributes());
                 
                 FabricDefaultAttributeRegistry.register(SHEER_HEART_ATTACK, SheerHeartAttackEntity.createStandAttributes());
 

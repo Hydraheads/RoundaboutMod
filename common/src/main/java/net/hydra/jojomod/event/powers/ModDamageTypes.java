@@ -68,6 +68,7 @@ public class ModDamageTypes {
         public static final ResourceKey<DamageType> INFINITE_SPIN = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "infinite_spin"));
         public static final ResourceKey<DamageType> BRAIN_DEAD = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "brain_dead"));
         public static final ResourceKey<DamageType> DIVER_REDIRECTION = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "diver_redirection"));
+        public static final ResourceKey<DamageType> SHARP_RAINDROP = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "sharp_raindrop"));
 
         public static DamageSource of(Level world, ResourceKey<DamageType> key, Entity attacker) {
             return new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(key), attacker, attacker);
