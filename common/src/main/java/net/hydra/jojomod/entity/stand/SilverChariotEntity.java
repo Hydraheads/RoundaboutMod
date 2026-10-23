@@ -95,8 +95,10 @@ public class SilverChariotEntity extends FollowingStandEntity {
     }
 
     public void setSelfCarryMode(boolean active) {
-        if (active) setRemoteMode(REMOTE_MODE_SELF_CARRY);
-        else if (entityData.get(REMOTE_MODE) == REMOTE_MODE_SELF_CARRY) setRemoteMode(REMOTE_MODE_NONE);
+        if (active) {
+            setRemoteMode(REMOTE_MODE_SELF_CARRY);
+            this.noGravityCarryTicks = 0;
+        } else if (entityData.get(REMOTE_MODE) == REMOTE_MODE_SELF_CARRY) setRemoteMode(REMOTE_MODE_NONE);
     }
 
     private void setRemoteMode(byte remoteMode) {
@@ -805,7 +807,11 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     @Override
     protected void positionRider(Entity $$0, MoveFunction $$1) {
-        super.positionRider($$0, $$1);
+        if ($$0 instanceof Player) {
+            $$1.accept($$0,this.getX(),this.getY()+1.85d,this.getZ());
+        } else {
+            super.positionRider($$0,$$1);
+        }
     }
 
     @Override
