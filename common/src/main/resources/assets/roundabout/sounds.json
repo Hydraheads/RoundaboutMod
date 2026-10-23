@@ -1587,6 +1587,21 @@
       "roundabout:colt_reload"
     ]
   },
+  "beretta_fire": {
+    "subtitle": "sounds.roundabout.snubnose_fire",
+    "sounds": [
+      "roundabout:beretta_shot_1",
+      "roundabout:beretta_shot_2",
+      "roundabout:beretta_shot_3",
+      "roundabout:beretta_shot_4"
+    ]
+  },
+  "beretta_reload": {
+    "subtitle": "sounds.roundabout.snubnose_reload",
+    "sounds": [
+      "roundabout:beretta_reload"
+    ]
+  },
   "bullet_penetration": {
     "subtitle": "sounds.roundabout.bullet_penetration",
     "sounds": [
