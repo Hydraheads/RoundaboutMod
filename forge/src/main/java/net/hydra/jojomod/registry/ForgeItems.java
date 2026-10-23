@@ -554,6 +554,14 @@ public class ForgeItems {
             () -> new SniperAmmoItem(new Item.Properties().stacksTo(64))
     ));
 
+    public static final RegistryObject<Item> BERETTA_PISTOL = addToWIPTab(ITEMS.register("beretta_pistol",
+            () -> new BerettaPistolItem(new Item.Properties().stacksTo(1))
+    ));
+
+    public static final RegistryObject<Item> PISTOL_AMMO = addToWIPTab(ITEMS.register("pistol_ammo",
+            () -> new PistolAmmoItem(new Item.Properties().stacksTo(64))
+    ));
+
 
 
 

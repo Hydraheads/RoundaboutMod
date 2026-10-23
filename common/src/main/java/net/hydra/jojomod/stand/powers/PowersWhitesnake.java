@@ -719,8 +719,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
     public void preCheckButtonInputAttack(boolean keyIsDown, Options options) {
         if (autoMode || isRetreating) return;
         if (keyIsDown && isControlHovering()) return;
-        if (isPiloting() && keyIsDown
-                && WhitesnakeControlClient.tryMining(Minecraft.getInstance())) return;
+        if (isPiloting() && keyIsDown && getActivePower() == PowerIndex.MINING) return;
         super.preCheckButtonInputAttack(keyIsDown, options);
     }
 

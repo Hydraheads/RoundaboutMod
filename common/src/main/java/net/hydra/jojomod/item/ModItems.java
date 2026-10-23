@@ -280,6 +280,9 @@ public class ModItems {
     public static Item JACKAL_RIFLE;
     public static Item SNIPER_AMMO;
 
+    public static Item BERETTA_PISTOL;
+    public static Item PISTOL_AMMO;
+
     public static Item PAINTING_VAN_GOUGH;
     public static Item PAINTING_MONA_LISA;
     public static Item PAINTING_BIRTH_OF_VENUS;

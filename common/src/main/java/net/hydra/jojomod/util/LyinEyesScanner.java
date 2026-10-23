@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.NeutralMob;
@@ -52,7 +53,8 @@ public class LyinEyesScanner {
     }
 
     public static BlockCategory[][] scanFeetLevel(Player player, Level level, int radius) {
-        BlockPos center = player.blockPosition();
+        //need to account for things like path blocks or whatever tf.
+        BlockPos center = BlockPos.containing(player.getX(), player.getY() + 0.2, player.getZ());
 
         // extra 1 because of the player position
         int size = (radius * 2) + 1;
@@ -105,7 +107,8 @@ public class LyinEyesScanner {
 
         List<Entity> entities = level.getEntities(player, scanBox);
         for (Entity entity : entities) {
-            if (!entity.isAlive() || entity instanceof StandEntity || entity instanceof FallenMob || !(entity instanceof LivingEntity)) continue;
+            if (!entity.isAlive() || entity instanceof StandEntity || entity instanceof FallenMob
+                    || !((entity instanceof Mob) || (entity instanceof Player))) continue;
 
             double yDiff = entity.getY() - player.getY();
             boolean isAbove = yDiff >= 1.0;

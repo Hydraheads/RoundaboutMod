@@ -244,6 +244,9 @@ public class FabricItems {
     public static Item JACKAL_RIFLE = registerItem("jackal_rifle", new JackalRifleItem(new Item.Properties().stacksTo(1)));
     public static Item SNIPER_AMMO = registerItem("sniper_ammo", new SniperAmmoItem(new Item.Properties().stacksTo(64)));
 
+    public static Item BERETTA_PISTOL = registerItem("beretta_pistol", new BerettaPistolItem(new Item.Properties().stacksTo(1)));
+    public static Item PISTOL_AMMO = registerItem("pistol_ammo", new PistolAmmoItem(new Item.Properties().stacksTo(64)));
+
     public static Item IRON_BALL_CROSSBOW = registerItem("iron_ball_crossbow", new IronBallCrossbowItem(new Item.Properties().stacksTo(1).durability(565)));
 
     public static Item ULTRAVIOLET_BLASTER = registerItem("ultraviolet_blaster", new UltravioletBlasterItem(new Item.Properties().stacksTo(1).durability(UltravioletBlasterItem.durability)));
@@ -832,6 +835,8 @@ public class FabricItems {
                         entries.accept(HALLUCINATORY_ACID_HEIGHT_4);
                         entries.accept(HALLUCINATORY_ACID_WALL);
                         entries.accept(ModBlocks.GAMBLING_TABLE);
+                        entries.accept(BERETTA_PISTOL);
+                        entries.accept(PISTOL_AMMO);
                     }).build());
     public static final CreativeModeTab FOG_BLOCK_ITEMS = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
             new ResourceLocation(Roundabout.MOD_ID, "justice_fog_items"),
@@ -993,10 +998,12 @@ public class FabricItems {
         ModItems.SNUBNOSE_REVOLVER = SNUBNOSE_REVOLVER;
         ModItems.TOMMY_GUN = TOMMY_GUN;
         ModItems.COLT_REVOLVER = COLT_REVOLVER;
+        ModItems.BERETTA_PISTOL = BERETTA_PISTOL;
         ModItems.SNUBNOSE_AMMO = SNUBNOSE_AMMO;
         ModItems.TOMMY_AMMO = TOMMY_AMMO;
         ModItems.JACKAL_RIFLE = JACKAL_RIFLE;
         ModItems.SNIPER_AMMO = SNIPER_AMMO;
+        ModItems.PISTOL_AMMO = PISTOL_AMMO;
         ModItems.STAND_DISC = STAND_DISC;
         ModItems.COFFEE_GUM = COFFEE_GUM;
         ModItems.CHAMOMILE_SEEDS = CHAMOMILE_SEEDS;

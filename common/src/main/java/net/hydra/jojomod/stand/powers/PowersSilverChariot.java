@@ -855,7 +855,6 @@ public class PowersSilverChariot extends NewPunchingStand {
         if (desummon) {
             if (isPiloting()) {
                 setPiloting(0);
-                // SilverChariotClient.exit();
             }
             // TODO: Implement armor shed support
             this.desummon = true;
@@ -1375,7 +1374,7 @@ public class PowersSilverChariot extends NewPunchingStand {
             case SKILL_3_CROUCH -> {
                 // TODO: Implement carry self ability
                 // toggleControlModeClient((short) 1);
-                // selfGrabClient();
+                selfGrabClient();
             }
             case SKILL_3_GUARD -> {
                 // TODO: Implement Silver Chariot arm render ability
@@ -1423,7 +1422,7 @@ public class PowersSilverChariot extends NewPunchingStand {
                 return true;
             }
             case PowerIndex.POWER_3_SNEAK -> {
-                // selfGrabServer();
+                selfGrabServer();
                 return true;
             }
             case PowerIndex.POWER_3_BLOCK -> {
@@ -1510,6 +1509,18 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public boolean tryIntPower(int move, boolean forced, int chargeTime) {
+        if (move == SILVER_CHARIOT_CONTROL_MODE) {
+            StandEntity stand = getStandEntity(self);
+            if (chargeTime != 0 && (!isUsableStand(stand) || stand.getId() != chargeTime
+                    || !getStandUserSelf().roundabout$getActive() || !isWithinRemoteRange(stand))) {
+                if (self instanceof ServerPlayer player) {
+                    S2CPacketUtil.sendIntPowerDataPacket(player, SILVER_CHARIOT_CONTROL_MODE, 0);
+                }
+                return false;
+            }
+            setPiloting(chargeTime);
+            return true;
+        }
         if (move == PowerIndex.SNEAK_ATTACK) {
             this.chargedFinal = chargeTime;
         }
@@ -1518,6 +1529,10 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public void updatePowerInt(byte activePower, int data) {
+        if (activePower == SILVER_CHARIOT_CONTROL_MODE) {
+            setPiloting(data);
+            return;
+        }
         super.updatePowerInt(activePower, data);
     }
 
@@ -1720,30 +1735,22 @@ public class PowersSilverChariot extends NewPunchingStand {
             }
         }
 
-        if (!this.self.level().isClientSide() && this.self instanceof Player player && isPacketPlayer()) {
-            /*
-            int getPilotInt = ((IPlayerEntity) player).roundabout$getControlling();
-            Entity entity = self.level().getEntity(getPilotInt);
-            if (entity instanceof LivingEntity livingEntity && livingEntity.isAlive() && !livingEntity.isRemoved()) {
-                Minecraft minecraft = Minecraft.getInstance();
-                if (minecraft.player != null && minecraft.getCameraEntity() != minecraft.player) {
-                    minecraft.setCameraEntity(minecraft.player);
-                }
-                ClientUtil.setCameraEntity(entity);
-            }
-            */
-        }
-
-        if (this.hasFullGuard() && isRegainingArmourFromDesummon()) {
+        if (!self.level().isClientSide() && this.hasFullGuard() && isRegainingArmourFromDesummon()) {
             regainingArmourFromDesummon = false;
             this.setIsSilverChariotArmoured(true);
         }
+        if (!self.level().isClientSide() && this.getStandEntity(self) instanceof SilverChariotEntity sc && sc.isSelfCarryModeActive()) {
+            if (sc.isAlive() && !sc.isRemoved()) {
+                if (this.self.getVehicle() == null || !this.self.getVehicle().is(sc)) {
+                    this.self.startRiding(sc, true);
+                }
+            }
+        }
 
-        /*
         if (self instanceof Player player && self.level().isClientSide() && isPacketPlayer()) {
             int controlledId = ((IPlayerEntity) player).roundabout$getControlling();
             Entity controlled = self.level().getEntity(controlledId);
-            if (controlled instanceof LivingEntity living && living.isAlive() && !living.isRemoved()) {
+            if (isPiloting() && controlled instanceof LivingEntity living && living.isAlive() && !living.isRemoved()) {
                 if (isWithinRemoteRange(living)) {
                     SilverChariotClient.enforceCamera(living);
                 } else {
@@ -1751,19 +1758,14 @@ public class PowersSilverChariot extends NewPunchingStand {
                 }
             } else if (controlledId != 0) {
                 exitControlModeClient();
+            } else {
+                SilverChariotClient.exitIfInactive();
             }
         }
-        */
 
         if (!this.self.level().isClientSide()) {
-
+            tickControlModeServer();
         }
-
-        if (!this.self.level().isClientSide()) {
-            // tickControlModeServer();
-        }
-
-        // super.tickPower();
     }
 
     private void tickControlModeServer() {
@@ -2127,6 +2129,7 @@ public class PowersSilverChariot extends NewPunchingStand {
         }
         if (!entering) {
             player.stopUsingItem();
+            if (isPacketPlayer()) SilverChariotClient.exit();
         } else if (stand instanceof SilverChariotEntity silverChariot) {
             silverChariot.getNavigation().stop();
             // silverChariot.clearControlInput();
@@ -2190,7 +2193,7 @@ public class PowersSilverChariot extends NewPunchingStand {
         Minecraft minecraft = Minecraft.getInstance();
         if (SilverChariotClient.tryMining(minecraft)) return;
         if (!(self instanceof Player player)) return;
-        preCheckButtonInputGuard(true, minecraft.options);
+        preCheckButtonInputAttack(true, minecraft.options);
     }
 
     @Override
@@ -3023,7 +3026,7 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     public void selfGrabClient() {
         if (this.self.level().isClientSide() && !isRegainingArmourFromDesummon() && !this.onCooldown(PowerIndex.SKILL_3) && canExecuteMoveWithLevel(getSelfGrabLevel())) {
-            this.controlMode = CONTROL_MODE_SELF_CARRY;
+            // this.controlMode = CONTROL_MODE_SELF_CARRY;
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_SNEAK, true);
             tryPowerPacket(PowerIndex.POWER_3_SNEAK);
         }

@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.goals.badCompanyGoals;
 
 import net.hydra.jojomod.entity.badCompanyTroops.BCTroop;
+import net.hydra.jojomod.event.index.BadCompanyTactics;
 import net.minecraft.world.entity.ai.goal.Goal;
 
 import java.util.EnumSet;
@@ -19,7 +20,7 @@ public class ReturnToLeaderGoal extends Goal {
     }
 
     public boolean canUse() {
-        if (this.mob.getUser() == null || !mob.haveToReturn) {
+        if (this.mob.getUser() == null || !(mob.getCurrentTactic() == BadCompanyTactics.RETURN.id)) {
             return false;
         //} else if (this.target.distanceToSqr(this.mob) > (double)(this.within * this.within)) {
         //    return false;

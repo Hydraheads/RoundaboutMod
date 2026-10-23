@@ -2567,6 +2567,8 @@ public class ClientUtil {
                     ModStrayModels.FirstPersonColtRevolverModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
                 } else if (item instanceof TommyGunItem) {
                     ModStrayModels.FirstPersonTommyGunModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
+                } else if (item instanceof BerettaPistolItem) {
+                    ModStrayModels.FirstPersonBerettaPistolModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
                 }
 
                 stack.popPose();

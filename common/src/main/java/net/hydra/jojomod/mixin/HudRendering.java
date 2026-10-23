@@ -306,13 +306,16 @@ public abstract class HudRendering implements IHudAccess {
                                 "textures/misc/lyin_eyes/lyin_eyes_" + frame + ".png");
                     }
                     RenderSystem.enableBlend();
-                    this.renderTextureOverlay($$1, texture, 1F);
+                    this.renderTextureOverlay($$1, texture, ConfigManager.getClientConfig().lyinEyesSettings.nematodeOpacity);
                 }
                 // Lyin Eyes gathering renderer
                 if (((StandUser) this.minecraft.player).roundabout$getStandPowers() instanceof PowersLyinEyes lyinEyes
                         && lyinEyes.getGatherOverlayTicks() != 0 && lyinEyes.getGatherOverlayTicks() != 7) {
                     // inverse opacity of the map, aka it fades in when the map fades out and vice versa
                     float gatherOpacity = 1.0F - lyinEyes.getMapOpacity();
+                    if (ConfigManager.getClientConfig().lyinEyesSettings.nematodeOpacity < 1) {
+                        gatherOpacity = ConfigManager.getClientConfig().lyinEyesSettings.nematodeOpacity;
+                    }
                     if (gatherOpacity > 0.0F) {
                         // need to stop the thing from reaching 0, so i put an extra math method to clamp it.
                         int frame = Math.max(1, Math.min(lyinEyes.getGatherOverlayTicks(), 5));
@@ -971,7 +974,8 @@ public abstract class HudRendering implements IHudAccess {
         // lyin eyes map
         if (this.minecraft.player != null
                 && ((StandUser) this.minecraft.player).roundabout$getStandPowers() instanceof PowersLyinEyes LE
-                && LE.getMapModeClient()) {
+                && LE.getMapModeClient()
+                && LE.isActive()) {
             LyinEyesMapOverlay.renderMap($$0, this.minecraft.getFrameTime());
             info.cancel();
             return;
@@ -1037,6 +1041,41 @@ public abstract class HudRendering implements IHudAccess {
         if (rdbt$tempEnt !=null){
             this.minecraft.crosshairPickEntity = rdbt$tempEnt;
             rdbt$tempEnt = null;
+        }
+
+        // ammo counter for guns
+
+        if (this.minecraft.player != null) {
+            ItemStack heldItem = this.minecraft.player.getMainHandItem();
+
+            // check if the main hand item is a firearm, don't render with jackal rifle cuz like... it's 1 ammo...
+            if (heldItem.getItem() instanceof net.hydra.jojomod.item.FirearmItem gun && !(gun instanceof JackalRifleItem)) {
+                String ammoText;
+                int color = 0xFFFFFF; // white
+
+                // if gun is reloading, print dots to indicate  an action
+                if (gun.isReloading(heldItem)) {
+                    ammoText = "...";
+                    color = 0xFFFF55; // yellow
+                } else {
+                    // self explanatory, just print the current and max ammo
+                    int currentAmmo = gun.getAmmo(heldItem);
+                    int maxAmmo = gun.getMaxAmmo();
+                    ammoText = currentAmmo + " / " + maxAmmo;
+
+                    // if low, make it red
+                    if (currentAmmo < maxAmmo * 0.25) {
+                        color = 0xFF5555; // red
+                    }
+                }
+
+                // put the thing slightly below the crosshair
+                int textWidth = this.getFont().width(ammoText);
+                int x = (this.screenWidth - textWidth) / 2;
+                int y = (this.screenHeight / 2) + 15;
+                // prints :O
+                $$0.drawString(this.getFont(), ammoText, x, y, color, true);
+            }
         }
     }
 

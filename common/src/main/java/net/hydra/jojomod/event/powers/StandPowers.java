@@ -887,6 +887,8 @@ public class StandPowers extends AbilityScapeBasis {
             return ModSounds.COLT_RELOAD_EVENT;
         } else if (soundChoice == SoundIndex.TOMMY_RELOAD) {
             return ModSounds.TOMMY_RELOAD_EVENT;
+        } else if (soundChoice == SoundIndex.PISTOL_RELOAD) {
+            return ModSounds.BERETTA_RELOAD_EVENT;
         } else if (soundChoice == TIME_ERASE_END) {
             return ModSounds.TIME_ERASE_END_EVENT;
         } else if (soundChoice == TIME_SKIP_1) {

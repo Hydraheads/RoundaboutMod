@@ -151,6 +151,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.THROWN_HARPOON.get(), HarpoonRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BLADED_BOWLER_HAT.get(), BladedBowlerHatRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ROUNDABOUT_BULLET_ENTITY.get(), RoundaboutBulletEntityRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.BAD_COMPANY_BULLET_ENTITY.get(), BadCompanyBulletEntityRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_KNIFE.get(), KnifeRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BLOCK_WALL.get(), BlockWallEntityRenderer::new);
         event.registerEntityRenderer(ForgeEntities.PARALLEL_CHEST.get(), ParallelChestRenderer::new);
@@ -518,9 +519,11 @@ public class ClientForgeEvents {
         ModStrayModels.TOMMY_GUN_MODEL = new TommyGunModel();
         ModStrayModels.COLT_REVOLVER_MODEL = new ColtRevolverModel();
         ModStrayModels.JACKAL_RIFLE_MODEL = new JackalRifleModel();
+        ModStrayModels.BERETTA_PISTOL_MODEL = new BerettaPistolModel();
         ModStrayModels.FirstPersonSnubnoseModel = new FirstPersonSnubnoseModel();
         ModStrayModels.FirstPersonTommyGunModel = new FirstPersonTommyGunModel();
         ModStrayModels.FirstPersonColtRevolverModel = new FirstPersonColtRevolverModel();
+        ModStrayModels.FirstPersonBerettaPistolModel = new FirstPersonBerettaPistolModel();
         //BlockEntityRenderers.register(ModBlocks.STAND_FIRE_BLOCK_ENTITY, StandFireRenderer::new);
     }
     @SubscribeEvent

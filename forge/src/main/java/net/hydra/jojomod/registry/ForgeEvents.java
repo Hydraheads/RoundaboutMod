@@ -541,6 +541,8 @@ public class ForgeEvents {
         ModItems.JACKAL_RIFLE = ForgeItems.JACKAL_RIFLE.get();
         ModItems.SNIPER_AMMO = ForgeItems.SNIPER_AMMO.get();
 
+        ModItems.BERETTA_PISTOL = ForgeItems.BERETTA_PISTOL.get();
+        ModItems.PISTOL_AMMO = ForgeItems.PISTOL_AMMO.get();
 
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_DIO.get()).referenceItem = ForgeItems.STREET_SIGN_DIO_BLOCK_ITEM.get().getDefaultInstance();
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_RIGHT.get()).referenceItem = ForgeItems.STREET_SIGN_RIGHT_BLOCK_ITEM.get().getDefaultInstance();
@@ -892,6 +894,7 @@ public class ForgeEvents {
         ModEntities.THROWN_HARPOON = ForgeEntities.THROWN_HARPOON.get();
         ModEntities.BLADED_BOWLER_HAT = ForgeEntities.BLADED_BOWLER_HAT.get();
         ModEntities.ROUNDABOUT_BULLET_ENTITY = ForgeEntities.ROUNDABOUT_BULLET_ENTITY.get();
+        ModEntities.BAD_COMPANY_BULLET_ENTITY = ForgeEntities.BAD_COMPANY_BULLET_ENTITY.get();
         ModEntities.THROWN_KNIFE = ForgeEntities.THROWN_KNIFE.get();
         ModEntities.BLOCK_WALL = ForgeEntities.BLOCK_WALL.get();
         ModEntities.PARALLEL_CHEST = ForgeEntities.PARALLEL_CHEST.get();

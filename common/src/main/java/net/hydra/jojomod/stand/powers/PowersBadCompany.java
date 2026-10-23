@@ -1,15 +1,14 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.badCompanyTroops.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.index.BadCompanyTactics;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.SoundIndex;
@@ -74,6 +73,10 @@ public class PowersBadCompany extends NewDashPreset {
         return list;
     }
 
+    public int getMaxSoldier() { return 60; }
+    public int getMaxTanks() { return 7; }
+    public int getMaxHelicopter() { return 4; }
+
     @Override public Component getSkinName(byte skinId) {
 
         switch (skinId)
@@ -93,7 +96,17 @@ public class PowersBadCompany extends NewDashPreset {
         BUNDLE = 1,
         HELICOPTER = 2,
         TANK = 3,
-        MINE = 4;
+        MINE = 4,
+
+        TACTIC_STOP = 0,
+        TACTIC_ADVANCE = 1,
+        TACTIC_FIRE = 2,
+        TACTIC_HUNT = 3,
+        TACTIC_WARD = 4,
+        TACTIC_TANK = 5,
+        TACTIC_HELICOPTER = 6,
+        TACTIC_MISSILE = 7,
+        TACTIC_SOLDIER = 8;
 
     public BCSoldier getSoldierEntity(boolean bundle) {
         BCSoldier soldier = ModEntities.BAD_COMPANY_SOLDIER.create(self.level());
@@ -194,6 +207,10 @@ public class PowersBadCompany extends NewDashPreset {
         tryIntPowerPacket(PowerIndex.POWER_1, id);
     }
 
+    public void selectedTactics(int id) {
+        tryIntPowerPacket(PowerIndex.POWER_2, id);
+    }
+
     private int getTroopLimit() { return 12; }
 
     private boolean detectTroopLimit(int value) {
@@ -214,6 +231,35 @@ public class PowersBadCompany extends NewDashPreset {
         return false;
     }
 
+    private boolean detectSoldierLimit(boolean bundle) {
+        initActiveTroops();
+        int activeSoldiers = 0;
+        for (BCTroop troop : activeTroops) {
+            if (troop instanceof BCSoldier S) {
+                activeSoldiers += S.getBundle() ? 6 : 1;
+            }
+        }
+        if (activeSoldiers >= getMaxSoldier()) {
+            if (self instanceof Player PL) {
+                PL.displayClientMessage(Component.translatable("stand.bad_company.soldier_limit").withStyle(ChatFormatting.DARK_GREEN), true);
+            }
+
+            return true;
+
+        }
+        if ((activeSoldiers + (bundle ? 6 : 1)) > getMaxSoldier()) {
+            if (self instanceof Player PL) {
+                PL.displayClientMessage(Component.translatable("stand.bad_company.not_enought_space.soldier").withStyle(ChatFormatting.DARK_GREEN), true);
+            }
+
+            return true;
+        }
+        if (self instanceof Player PL) {
+            PL.displayClientMessage(Component.translatable("stand.bad_company.total_troops.soldier", (activeSoldiers + (bundle ? 6 : 1)), getMaxSoldier()).withStyle(ChatFormatting.GREEN), true);
+        }
+        return false;
+    }
+
     public boolean tryIntPower(int move, boolean forced, int chargeTime){
         if (move == PowerIndex.POWER_1) {
             syncTotalTroopsOut();
@@ -229,6 +275,12 @@ public class PowersBadCompany extends NewDashPreset {
             }
 
             syncTotalTroopsOut();
+        }else if (move == PowerIndex.POWER_2) {
+            if (chargeTime == TACTIC_STOP) {
+                sendTroopsSignal(BadCompanyTactics.STOP);
+            }else if (chargeTime == TACTIC_WARD) {
+
+            }
         }
 
         return super.tryIntPower(move, forced, chargeTime);
@@ -237,7 +289,7 @@ public class PowersBadCompany extends NewDashPreset {
     @Override
     public boolean setPowerOther(int move, int lastMove) {
         if (move == PowerIndex.POWER_1_SNEAK) {
-            sendTroopsReturnSignal();
+            sendTroopsSignal(BadCompanyTactics.RETURN);
         }
 
         return super.setPowerOther(move, lastMove);
@@ -252,8 +304,9 @@ public class PowersBadCompany extends NewDashPreset {
         }
     }
 
+
     public void spawnSoldier(boolean bundle) {
-        if (isClient() || detectTroopLimit(BCSoldier.getTroopValue(bundle))) { return; }
+        if (isClient() || detectTroopLimit(BCSoldier.getTroopValue()) || detectSoldierLimit(bundle)) { return; }
 
         initActiveTroops();
         syncTotalTroopsOut();
@@ -274,6 +327,8 @@ public class PowersBadCompany extends NewDashPreset {
             }else {
                 playStandUserOnlySoundsIfNearby(SOLDIER_SUMMON, 8, false, false);
             }
+
+            PowerTypes.copyPlaneOfExisting(self, soldier);
         }
     }
 
@@ -300,11 +355,7 @@ public class PowersBadCompany extends NewDashPreset {
                     continue;
                 }
 
-                if (T instanceof BCSoldier S) {
-                    amount += BCSoldier.getTroopValue(S.getBundle());
-                }else {
-                    amount += BCTroop.getTroopValue();
-                }
+                amount += BCTroop.getTroopValue();
             }
             if (totalTroopsOut != amount) {
                 totalTroopsOut = amount;
@@ -315,10 +366,10 @@ public class PowersBadCompany extends NewDashPreset {
         }
     }
 
-    private void sendTroopsReturnSignal(){
+    private void sendTroopsSignal(BadCompanyTactics tactic){
         initActiveTroops();
         for (BCTroop T : activeTroops) {
-            T.haveToReturn = true;
+            T.setCurrentTactic(tactic.id);
         }
     }
 

@@ -1,244 +1,70 @@
 package net.hydra.jojomod.item;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
-import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.SoundIndex;
-import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.S2CPacketUtil;
-import net.minecraft.ChatFormatting;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Vanishable;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-
-import javax.annotation.Nullable;
-import java.util.List;
 import java.util.Random;
 
 public class TommyGunItem extends FirearmItem implements Vanishable {
 
-    public TommyGunItem(Properties $$0) {
-        super($$0.durability(1500));
+    public TommyGunItem(Properties properties) {
+        super(properties.durability(1500));
     }
 
-
-    int maxAmmo = 30;
     @Override
-    public int getMaxAmmo(){
-        return maxAmmo;
+    public int getMaxAmmo() { return 30; }
+
+    @Override
+    public Item getAmmoItem() { return ModItems.TOMMY_AMMO; }
+
+    @Override
+    public int getReloadCooldown() { return 70; }
+
+    @Override
+    public byte getReloadSound() { return SoundIndex.TOMMY_RELOAD; }
+
+    @Override
+    public int getFireCooldown() { return 2; }
+
+    @Override
+    public byte getBulletType() { return RoundaboutBulletEntity.TOMMY_GUN; }
+
+    @Override
+    public SoundEvent getFireSound() { return ModSounds.TOMMY_FIRE_EVENT; }
+
+    @Override
+    public float getFireSoundVolume() { return 7.0F; }
+
+    @Override
+    public float getFireSoundPitch() {
+        Random random = new Random();
+        return random.nextFloat(1.7F - 1.5F) + 1.5F;
     }
 
-    private boolean hasTommyAmmo(Player player) {
-        Inventory inv = player.getInventory();
+    @Override
+    public void applyRecoil(Player player) {
+        S2CPacketUtil.gunRecoil(player, "tommy");
+    }
 
-        for (ItemStack stack : inv.items) {
-            if (stack.getItem() instanceof TommyAmmoItem && stack.getCount() > 0) {
-                return true;
-            }
-        }
-        for (ItemStack stack : inv.offhand) {
-            if (stack.getItem() instanceof TommyAmmoItem && stack.getCount() > 0) {
-                return true;
-            }
-        }
-
-        if (player.isCreative()) {
-            return true;
-        }
-
+    @Override
+    public boolean canWhitesnakeUse() {
         return false;
     }
 
-    private int consumeTommyAmmo(Player player, int amount) {
-        Inventory inv = player.getInventory();
-        int consumed = 0;
-
-        for (int i = 0; i < inv.items.size() && amount > 0; i++) {
-            ItemStack stack = inv.items.get(i);
-            if (stack.getItem() instanceof TommyAmmoItem && !player.isCreative()) {
-                int remove = Math.min(stack.getCount(), amount);
-                stack.shrink(remove);
-                consumed += remove;
-                amount -= remove;
-
-                if (amount <= 0) break;
-            }
-        }
-
-        for (int i = 0; i < inv.offhand.size() && amount > 0; i++) {
-            ItemStack stack = inv.offhand.get(i);
-            if (stack.getItem() instanceof TommyAmmoItem && !player.isCreative()) {
-                int remove = Math.min(stack.getCount(), amount);
-                stack.shrink(remove);
-                consumed += remove;
-                amount -= remove;
-
-                if (amount <= 0) break;
-            }
-        }
-
-        if (player.isCreative()) {
-            return maxAmmo;
-        }
-
-        return consumed;
-    }
-
-
     @Override
-    public void fireBullet(Level level, Player player, InteractionHand hand) {
-
-        if (player.getCooldowns().isOnCooldown(this)) {
-            return;
-        }
-        ItemStack itemStack = player.getItemInHand(hand);
-        if (getAmmo(itemStack) > 0) {
-            player.getCooldowns().addCooldown(this, 2);
-            itemStack.hurtAndBreak(1, player, player1 -> {
-
-            });
-            Random random = new Random();
-            if (player.isCreative()) {
-            } else {
-                setAmmo(itemStack, getAmmo(itemStack) - 1);
-            }
-            LivingEntity livingEntity = player;
-            RoundaboutBulletEntity $$7 = new RoundaboutBulletEntity(level, livingEntity);
-            $$7.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 3.0F, 5.0F);
-            $$7.setAmmoType(RoundaboutBulletEntity.TOMMY_GUN);
-            level.addFreshEntity($$7);
-            S2CPacketUtil.gunRecoil(player, "tommy");
-            float randomPitch = random.nextFloat(1.7F - 1.5F) + 1.5F;
-            level.playSound(null, player, ModSounds.TOMMY_FIRE_EVENT, SoundSource.PLAYERS, 7.0F, randomPitch);
-            if (level instanceof ServerLevel serverLevel) {
-                Vec3 look = player.getLookAngle().normalize();
-                Vec3 up = new Vec3(0, 1, 0);
-                Vec3 right = look.cross(up).normalize();
-
-                double forwardOffset = 1.5;
-                double sideOffset = 0.10;
-                double verticalOffset = -0.15;
-
-                if ((player.getMainArm() == HumanoidArm.LEFT && player.getMainHandItem().getItem() instanceof SnubnoseRevolverItem) || (player.getMainArm() == HumanoidArm.RIGHT && player.getOffhandItem().getItem() instanceof SnubnoseRevolverItem)) {
-                    sideOffset -= sideOffset * 2;
-                }
-
-                Vec3 pos = player.getEyePosition().add(look.scale(forwardOffset)).add(0, verticalOffset, 0);
-                spawnMuzzleFlash(serverLevel, pos);
-            }
-            if (livingEntity != null && ((StandUser) livingEntity).roundabout$isBubbleEncased()) {
-                StandUser SE = ((StandUser) livingEntity);
-                if (!level.isClientSide()) {
-                    SE.roundabout$setBubbleEncased((byte) 0);
-                    level.playSound(null, livingEntity.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
-                            SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
-                    ((ServerLevel) level).sendParticles(ModParticles.BUBBLE_POP,
-                            livingEntity.getX(), livingEntity.getY() + livingEntity.getBbHeight() * 0.5, livingEntity.getZ(),
-                            5, 0.25, 0.25, 0.25, 0.025);
-                }
-            }
-        } else {
-            level.playSound(null, player, ModSounds.SNUBNOSE_DRY_FIRE_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
-            if (player instanceof ServerPlayer SP) {
-                SP.displayClientMessage(Component.translatable("text.roundabout.out_of_bullets").withStyle(ChatFormatting.LIGHT_PURPLE), true);
-            }
-        }
+    public void configureBulletTrajectory(RoundaboutBulletEntity bullet, LivingEntity shooter) {
+        bullet.shootFromRotation(shooter, shooter.getXRot(), shooter.getYRot(), 0.0F, 3.0F, 5.0F);
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        super.use(level, player, hand);
-        ItemStack itemStack = player.getItemInHand(hand);
-        if (!(itemStack.getItem() instanceof TommyGunItem)) {
-            return InteractionResultHolder.fail(itemStack);
-        }
-            if ((isCrouchingOrSomething(player,itemStack) && hasTommyAmmo(player) && getAmmo(itemStack) != maxAmmo) || (isCrouchingOrSomething(player,itemStack) && player.isCreative())) {
-                if (!isReloading(itemStack)) {
-                    setReloading(itemStack, true);
-                    player.stopUsingItem();
-                    player.getCooldowns().addCooldown(this, 70);
-                    ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.TOMMY_RELOAD, 10, false);
-                }
-
-                return InteractionResultHolder.consume(itemStack);
-            } else {
-                if (isCrouchingOrSomething(player,itemStack) && getAmmo(itemStack) == maxAmmo) {
-                    if (player instanceof ServerPlayer SP) {
-                        SP.displayClientMessage(Component.translatable("text.roundabout.already_reloaded").withStyle(ChatFormatting.GRAY), true);
-                    }
-                } else if (isCrouchingOrSomething(player,itemStack) && getAmmo(itemStack) != maxAmmo && !hasTommyAmmo(player)) {
-                    if (player instanceof ServerPlayer SP) {
-                        SP.displayClientMessage(Component.translatable("text.roundabout.no_more_usable_ammo").withStyle(ChatFormatting.GRAY), true);
-                    }
-                } else {
-                    player.startUsingItem(hand);
-                }
-            }
-        return InteractionResultHolder.consume(itemStack);
+    public Vec3 getMuzzleOffset() {
+        return new Vec3(1.5, 0.10, -0.15);
     }
-
-    @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
-        super.inventoryTick(stack, level, entity, slot, selected);
-
-        if (!(entity instanceof Player player)) return;
-        if (level.isClientSide) return;
-
-        if (isReloading(stack)) {
-            boolean justTookDamage = player.hurtTime == player.hurtDuration - 1;
-
-            if (justTookDamage) {
-                DamageSource last = player.getLastDamageSource();
-                if (last != null && last.getEntity() instanceof Entity
-                && !(last.getDirectEntity() instanceof Projectile)) {
-                    cancelReload(stack, player);
-                    return;
-                }
-            }
-        }
-
-        if ((isReloading(stack) && player.getMainHandItem() != stack) && (isReloading(stack) && player.getOffhandItem() != stack)) {
-            cancelReload(stack, player);
-            return;
-        }
-
-        if (isReloading(stack) && !player.getCooldowns().isOnCooldown(stack.getItem()) && player.getMainHandItem() == stack
-                || isReloading(stack) && !player.getCooldowns().isOnCooldown(stack.getItem()) && (player.getOffhandItem() == stack)) {
-            int currentAmmo = getAmmo(stack);
-            int ammoNeeded = getMaxAmmo() - currentAmmo;
-
-            int ammoLoaded = consumeTommyAmmo(player, ammoNeeded);
-
-            if (ammoLoaded > 0) {
-                if (player.isCreative()) {
-                    setAmmo(stack, getMaxAmmo());
-                } else {
-                    setAmmo(stack, currentAmmo + ammoLoaded);
-                }
-            }
-
-            setReloading(stack, false);
-        }
-    }
-
-
 }

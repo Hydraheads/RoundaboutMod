@@ -54,6 +54,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
 
     public RoundaboutBulletEntity(Level level, LivingEntity livingEntity) {
         super(ModEntities.ROUNDABOUT_BULLET_ENTITY, livingEntity, level);
+        setNoGravity(true);
     }
     public RoundaboutBulletEntity(Level $$0, LivingEntity $$1, ItemStack $$2, double p_36862_, double p_36863_, double p_36864_) {
         super(ModEntities.ROUNDABOUT_BULLET_ENTITY, p_36862_, p_36863_, p_36864_, $$0);
@@ -91,7 +92,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(ROUNDABOUT$SUPER_THROWN, true);
+        this.entityData.define(ROUNDABOUT$SUPER_THROWN, false);
         this.entityData.define(AMMO_TYPE, (byte) 0);
         this.entityData.define(DEFLECTED, false);
     }
@@ -102,6 +103,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
 
     public void setSuperThrown(boolean value) {
         this.entityData.set(ROUNDABOUT$SUPER_THROWN, value);
+        setNoGravity(value);
     }
 
     public boolean getDeflected() {
@@ -124,6 +126,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
     public static final byte TOMMY_GUN = 2;
     public static final byte SNIPER = 3;
     public static final byte COLT = 4;
+    public static final byte BERETTA = 5;
 
     public ItemStack getBulletItemStack() {
         ItemStack itemStack;
@@ -141,12 +144,17 @@ public class RoundaboutBulletEntity extends AbstractArrow {
         } else if (getAmmoType() == SNIPER) {
             itemStack = ModItems.SNIPER_AMMO.getDefaultInstance();
             return itemStack;
+        } else if (getAmmoType() == BERETTA) {
+            itemStack = ModItems.PISTOL_AMMO.getDefaultInstance();
+            return itemStack;
         }
         return ItemStack.EMPTY;
     }
 
     public void applyEffect(LivingEntity target) {
-        if (!MainUtil.isBossMob(target) && !(target instanceof RoadRollerEntity)) {
+        // pistols won't do bleed, but will do more damage compared to revolvers
+        if (!MainUtil.isBossMob(target) && !(target instanceof RoadRollerEntity)
+                && getAmmoType() != BERETTA) {
             if (MainUtil.getMobBleed(target)) {
                 if (getAmmoType() == TOMMY_GUN){
                     MainUtil.makeBleed(target,0,180,getOwner());
@@ -172,6 +180,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
             case TOMMY_GUN -> timeStopShot ? 0.74F : ClientNetworking.getAppropriateConfig().itemSettings.tommyGunDamage;
             case SNIPER -> timeStopShot ? 3.7F : ClientNetworking.getAppropriateConfig().itemSettings.rifleDamage;
             case COLT -> timeStopShot ? 3.8F : ClientNetworking.getAppropriateConfig().itemSettings.coltDamage;
+            case BERETTA -> timeStopShot ? 3.74F : ClientNetworking.getAppropriateConfig().itemSettings.berettaDamage;
             default -> 0.0F;
         };
     }
@@ -220,7 +229,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
                 livingEntity.invulnerableTime = 0;
             }
 
-            if (getAmmoType() == SNUBNOSE && hadIFrames) {
+            if (getAmmoType() == SNUBNOSE || getAmmoType() == BERETTA && hadIFrames) {
                 livingEntity.invulnerableTime = 0;
                 livingEntity.hurtTime = 0;
             }
@@ -261,7 +270,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
                     applyEffect(livingEntity);
                 }
 
-                if (didDamage && getAmmoType() == SNUBNOSE && outsideOfTimeStop == 0) {
+                if (didDamage && getAmmoType() == SNUBNOSE || getAmmoType() == BERETTA && outsideOfTimeStop == 0) {
                     livingEntity.invulnerableTime = 10;
                     livingEntity.hurtTime = 10;
                 }
@@ -272,7 +281,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
                     applyEffect(livingEntity);
                 }
 
-                if (didDamage && getAmmoType() == SNUBNOSE && outsideOfTimeStop == 0) {
+                if (didDamage && getAmmoType() == SNUBNOSE || getAmmoType() == BERETTA && outsideOfTimeStop == 0) {
                     livingEntity.invulnerableTime = 10;
                     livingEntity.hurtTime = 10;
                 }
@@ -355,7 +364,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
             timeStopShot = true;
         }
 
-        if (this.getSuperThrown() && this.getAmmoType() != SNIPER) {
+        if ((this.getSuperThrown() || isNoGravity()) && this.getAmmoType() != SNIPER) {
             superThrownTimer++;
             if (superThrownTimer >= 20) {
                 this.setSuperThrown(false);

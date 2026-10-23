@@ -82,6 +82,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
             case PurpleHazeEntity.MIRROR_BATTLE -> {return Component.translatable("skins.roundabout.purple_haze.mirror_battle");}
             case PurpleHazeEntity.ROTT -> {return Component.translatable("skins.roundabout.purple_haze.rott_haze");}
             case PurpleHazeEntity.PEPPERMINT -> {return Component.translatable("skins.roundabout.purple_haze.peppermint");}
+            case PurpleHazeEntity.GREENER -> {return Component.translatable("skins.roundabout.purple_haze.greener");}
+            case PurpleHazeEntity.DISTORTION -> {return Component.translatable("skins.roundabout.purple_haze.distortion");}
+            case PurpleHazeEntity.GREEN_DSITORTION -> {return Component.translatable("skins.roundabout.purple_haze.green_distortion");}
             default -> {
                 return Component.translatable("skins.roundabout.purple_haze.anime");
             }
@@ -121,9 +124,12 @@ public class PowersPurpleHaze extends NewPunchingStand {
             } if (Level > 2 || bypass) {
                 $$1.add(PurpleHazeEntity.BLAZING_HAZE);
                 $$1.add(PurpleHazeEntity.MIRROR_BATTLE);
-            } if (Level > 3 || bypass) {
                 $$1.add(PurpleHazeEntity.ROTT);
                 $$1.add(PurpleHazeEntity.PEPPERMINT);
+            } if (Level > 3 || bypass) {
+                $$1.add(PurpleHazeEntity.DISTORTION);
+                $$1.add(PurpleHazeEntity.GREEN_DSITORTION);
+                $$1.add(PurpleHazeEntity.GREENER);
             }/*if (((IPlayerEntity) PE).roundabout$getUnlockedBonusSkin() || bypass) {
                 $$1.add(PurpleHazeEntity.PLAGUE);}*/
         }
@@ -949,10 +955,16 @@ public class PowersPurpleHaze extends NewPunchingStand {
             }
         }
     }
-    private static final int STRANGLE_WINDUP_TICKS=30;
+    private static final int STRANGLE_WINDUP_TICKS=65;
     private static final double STRANGLE_SPEED=1.4;
-    private static final double STRANGLE_MAX_DISTANCE=8.0;
-    private static final int STRANGLE_HOLD_DURATION=80;
+    private static final double STRANGLE_MAX_DISTANCE=16.0;
+    private static final int STRANGLE_HOLD_DURATION= 80;
+    private static final int STRANGLE_GRAB_TICKS = 5;
+    private static final double STRANGLE_LIFT_HEIGHT = 0.25;
+
+    private double strangleBaseY = 0;
+    private int strangleGrabTicks = 0;
+    private boolean strangleVictimHadNoGravity = false;
 
     private int strangleTicks = -1;
     private int strangleTravelTicks = 0;
@@ -1099,17 +1111,39 @@ public class PowersPurpleHaze extends NewPunchingStand {
             endStrangle();
         }
     }
+    private static final double STRANGLE_STAND_GAP = 0.5;      // distancia entre mob y ph
+    private static final double STRANGLE_STAND_Y_OFFSET = 0.1; // numero mas alto, sube un poco mas
 
+    private Vec3 getStrangleStandPos(LivingEntity victim) {
+        Vec3 horiz = new Vec3(strangleDirection.x, 0, strangleDirection.z);
+        if (horiz.lengthSqr() < 1.0E-4) {
+
+            horiz = new Vec3(victim.getX() - self.getX(), 0, victim.getZ() - self.getZ());
+        }
+        horiz = horiz.normalize();
+
+        double dist = victim.getBbWidth() * 0.5 + STRANGLE_STAND_GAP;
+        return new Vec3(
+                victim.getX() - horiz.x * dist,
+                strangleBaseY + STRANGLE_STAND_Y_OFFSET,
+                victim.getZ() - horiz.z * dist
+        );
+    }
     private void beginStranglePin(StandEntity stand, LivingEntity victim) {
         this.strangleVictim = victim;
         this.strangleHoldTicks = STRANGLE_HOLD_DURATION;
+        this.strangleBaseY = victim.getY();
+        this.strangleGrabTicks = 0;
+        this.strangleVictimHadNoGravity = victim.isNoGravity();
+        victim.setNoGravity(true);
 
         if (victim instanceof StandUser SU) {
             SU.roundabout$setRestrainedTicks(STRANGLE_HOLD_DURATION);
         }
 
-        stand.setPos(victim.position().add(0, victim.getBbHeight() * 0.5, 0));
-        animateStand(PurpleHazeEntity.STRANGLE_HOLD);
+
+        stand.setPos(getStrangleStandPos(victim));
+        animateStand(PurpleHazeEntity.STRANGLE_GRAB);
 
         playSoundIfPossible(self.level(), null, this.self.blockPosition(),
                 ModSounds.SOFT_AND_WET_BARRAGE_EVENT /*placeholder*/, SoundSource.PLAYERS, 1.0F, 1.0F);
@@ -1125,8 +1159,20 @@ public class PowersPurpleHaze extends NewPunchingStand {
             SU.roundabout$setRestrainedTicks(20);
         }
 
-        stand.setPos(strangleVictim.position().add(0, strangleVictim.getBbHeight() * 0.5, 0));
+        if (strangleGrabTicks < STRANGLE_GRAB_TICKS) {
+            strangleGrabTicks++;
+            if (strangleGrabTicks == STRANGLE_GRAB_TICKS) {
+                animateStand(PurpleHazeEntity.STRANGLE_HOLD);
+            }
+        }
+        double lift = STRANGLE_LIFT_HEIGHT * ((double) strangleGrabTicks / STRANGLE_GRAB_TICKS);
+
+        strangleVictim.setPos(strangleVictim.getX(), strangleBaseY + lift, strangleVictim.getZ());
         strangleVictim.setDeltaMovement(Vec3.ZERO);
+        strangleVictim.fallDistance = 0;
+        strangleVictim.hurtMarked = true;
+
+        stand.setPos(getStrangleStandPos(strangleVictim));
 
         if (strangleVictim instanceof Mob mob) {
             mob.getNavigation().stop();
@@ -1153,6 +1199,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
     private void endStrangle() {
         if (strangleVictim != null) {
+            strangleVictim.setNoGravity(strangleVictimHadNoGravity);
             if (strangleVictim instanceof Mob mob) {
                 mob.setNoAi(false);
             }
@@ -1160,6 +1207,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 SU.roundabout$setRestrainedTicks(0);
             }
         }
+        this.strangleGrabTicks = 0;
         this.strangleVictim = null;
         this.strangleTicks = -1;
         this.strangleTravelTicks = 0;

@@ -2555,6 +2555,9 @@ public class PowersD4C extends NewPunchingStand {
                     holdDownClick = false;
                 }
             } else {
+                if (isInSelectionMode){
+                    return;
+                }
                 if (keyIsDown) {
                     if (!isHoldingSneak()) {
                         super.buttonInputAttack(keyIsDown, options);
@@ -3260,6 +3263,9 @@ public class PowersD4C extends NewPunchingStand {
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
+        if (isInSelectionMode){
+            return;
+        }
         boolean standOn = PowerTypes.hasStandActive(playerEntity);
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;

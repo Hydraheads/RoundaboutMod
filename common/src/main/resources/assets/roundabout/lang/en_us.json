@@ -53,6 +53,7 @@
   "text.roundabout.bullets.revolver": "Compatible with Snubnosed Revolvers and Colt Revolvers.",
   "text.roundabout.bullets.tommy": "Compatible with Tommy Guns.",
   "text.roundabout.bullets.sniper": "Compatible with Sniper Rifles.",
+  "text.roundabout.bullets.pistol": "Compatible with Beretta.",
 
   "text.roundabout.stray_cat.anime": "Anime Color",
   "text.roundabout.stray_cat.manga": "Manga Color",
@@ -347,6 +348,9 @@
 
   "item.roundabout.jackal_rifle": "Sniper Rifle",
   "item.roundabout.sniper_ammo": "Rifle Ammunition",
+
+  "item.roundabout.beretta_pistol": "Beretta Pistol",
+  "item.roundabout.pistol_ammo": "Pistol Ammunition",
 
   "item.roundabout.light_bulb": "Light Bulb",
 
@@ -1088,12 +1092,18 @@
   "death.attack.time.item": "Time caught up with %1$s whilst fighting %2$s",
   "death.attack.knife": "%1$s was knifed to death by %2$s",
   "death.attack.knife.item": "%1$s was knifed to death by %2$s",
+  "death.attack.knife.player": "%1$s was knifed to death by %2$s",
+  "death.attack.knife.player.item": "%1$s was knifed to death by %2$s",
   "death.attack.bowler_hat": "%1$s sought after %2$s's forgiveness",
   "death.attack.bowler_hat.item": "%1$s sought after %2$s's forgiveness",
+  "death.attack.bowler_hat.player": "%1$s sought after %2$s's forgiveness",
+  "death.attack.bowler_hat.player.item": "%1$s sought after %2$s's forgiveness",
   "death.attack.bladed_bowler_hat": "%1$s was cut down to the bone!",
   "death.attack.bladed_bowler_hat.item": "%1$s was cut down to the bone!",
   "death.attack.match": "%1$s met their match in battle with %2$s",
   "death.attack.match.item": "%1$s met their match in battle with %2$s",
+  "death.attack.match.player": "%1$s met their match in battle with %2$s",
+  "death.attack.match.player.item": "%1$s met their match in battle with %2$s",
   "death.attack.power_throw": "%1$s struck out whilst fighting %2$s",
   "death.attack.power_throw.item": "%1$s was beaten by %2$s throwing %3$s",
   "death.attack.barbed_wire": "%1$s ran into a wire",
@@ -1112,6 +1122,8 @@
   "death.attack.fusion.item": "%1$s was fused into %2$s",
   "death.attack.harpoon": "%1$s was speared by %2$s",
   "death.attack.harpoon.item": "%1$s was speared by %2$s with %3$s",
+  "death.attack.harpoon.player": "%1$s was speared by %2$s",
+  "death.attack.harpoon.player.item": "%1$s was speared by %2$s",
   "death.attack.statue": "%1$s was impaled by a statue of the Goddess of Love",
   "death.attack.statue.item": "%1$s was impaled by a statue of the Goddess of Love",
   "death.attack.gas_explosion": "%1$s was cooked",
@@ -1133,9 +1145,9 @@
   "death.attack.bites_the_dust.item": "%1$s bit the dust",
   "death.attack.bites_the_dust.player.item": "%$2s made %1$s bite the dust",
   "death.attack.kq_explosion": "%1$s was reduced to dust",
-  "death.attack.kq_explosion.player": "%%$2s reduced %1$s to dust",
+  "death.attack.kq_explosion.player": "%$2s reduced %1$s to dust",
   "death.attack.kq_explosion.item": "%1$s was reduced to dust",
-  "death.attack.kq_explosion.player.item": "%%$2s reduced %1$s to dust",
+  "death.attack.kq_explosion.player.item": "%$2s reduced %1$s to dust",
   "death.attack.kick": "%1$s was ran over",
   "death.attack.kick.player": "%$2s trampled %1$s",
   "death.attack.kick.item": "%1$s was ran over",
@@ -1183,6 +1195,8 @@
   "death.attack.diver_redirection": "%1$s died for the sake of others",
   "death.attack.diver_redirection.player": "%1$s died for the sake of %2$s",
   "death.attack.brain_dead": "%1$s stopped thinking",
+  "death.attack.arn_throw": "%1$s died",
+  "death.attack.arm_throw_player": "%1$s was slain by %2$s",
 
   "item.glaive.charge_power": "Charge Attack",
 
@@ -3266,6 +3280,9 @@
   "skins.roundabout.purple_haze.mirror_battle": "Mirror Battle",
   "skins.roundabout.purple_haze.rott_haze": "Rott Haze",
   "skins.roundabout.purple_haze.peppermint": "Peppermint",
+  "skins.roundabout.purple_haze.distortion": "Distortion",
+  "skins.roundabout.purple_haze.green_distortion": "Greenstortion",
+  "skins.roundabout.purple_haze.greener": "Greener",
 
   "skins.roundabout.silver_chariot.part_3": "Part 3",
   "skins.roundabout.silver_chariot.part_3_grey": "Part 3 Grey",
@@ -3363,10 +3380,22 @@
   "roundabout.troop_select.helicopter": "Helicopter",
   "roundabout.troop_select.mine": "Mine",
 
-  "stand.bad_company.not_enought_space": "You don't have enought space for that troop!",
+  "stand.bad_company.not_enought_space": "You don't have enough space for that troop!",
+  "stand.bad_company.not_enought_space.soldier": "You don't have enough soldiers left for that troop!",
+  "stand.bad_company.total_troops.soldier": "%$1s/%$2s active Soldiers.",
+  "stand.bad_company.soldier_limit": "You already have released all your soldiers!",
   "stand.bad_company.troop_limit": "You have reached army maximum size!",
 
   "roundabout.bad_company.troop_tactics": "Troop Tactics",
+  "roundabout.troop_tactics.stop": "Stop!",
+  "roundabout.troop_tactics.advance": "Advance and shoot!",
+  "roundabout.troop_tactics.fire": "Fire!",
+  "roundabout.troop_tactics.ward": "Ward!",
+  "roundabout.troop_tactics.hunt": "Hunt!",
+  "roundabout.troop_tactics.tank": "Select tank.",
+  "roundabout.troop_tactics.helicopter": "Select helicopter.",
+  "roundabout.troop_tactics.missile": "Shoot missile!",
+  "roundabout.troop_tactics.troop": "Select troop.",
 
   "skins.roundabout.green_day.part_five_green_day": "Part 5",
   "skins.roundabout.green_day.red_day": "Red Day",
@@ -3788,6 +3817,8 @@
   "config.roundabout.enableAchtungBaby.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableGreenDay.name": "Enable Stand",
   "config.roundabout.enableGreenDay.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
+  "config.roundabout.enableLyinEyes.name": "Enable Stand",
+  "config.roundabout.enableLyinEyes.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableHeyYa.name": "Enable Stand",
   "config.roundabout.enableHeyYa.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableCinderella.name": "Enable Stand",
@@ -4293,6 +4324,10 @@
   "config.roundabout.forceThirdPersonInGroundDive.name": "Force Third Person in Ground Dive",
   "config.roundabout.forceThirdPersonInGroundDive.desc": "Automatically switches to third person while in ground dive.",
 
+  "config.roundabout.maxDetectionRange.name": "Max Detection Range",
+  "config.roundabout.maxDetectionRange.desc": "How many blocks away can the nematodes detect someone in tension sensor? Default is 25.",
+  "config.roundabout.nematodeOpacity.name": "Nematode Overlay Opacity",
+  "config.roundabout.nematodeOpacity.desc": "What is the opacity of the nematode overlay in first person? 1.0 is the default. (Change this as a decimal point, i.e. 0.5 for 50%)",
   "config.roundabout.spinMapInsteadOfArrow.name": "Spin Map Instead Of Arrow",
   "config.roundabout.spinMapInsteadOfArrow.desc": "Spins the minimap of the second ability instead of the player arrow.",
 
@@ -5088,6 +5123,9 @@
 
   "config.roundabout.coltDamage.name": "Colt Damage",
   "config.roundabout.coltDamage.desc": "Before being multiplied by the above, the base colt damage.",
+
+  "config.roundabout.berettaDamage.name": "Beretta Damage",
+  "config.roundabout.berettaDamage.desc": "Before being multiplied by the above, the base beretta damage.",
 
   "config.roundabout.tommyGunDamage.name": "Tommy Gun Damage",
   "config.roundabout.tommyGunDamage.desc": "Before being multiplied by the above, the base tommy gun damage.",
