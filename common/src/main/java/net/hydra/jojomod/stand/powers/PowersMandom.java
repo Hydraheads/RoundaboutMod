@@ -362,11 +362,6 @@ public class PowersMandom extends NewDashPreset {
                     if (lastSecond != null) {
                         lastSecond.loadTime(ent);
                     }
-                    if(ent instanceof LivingEntity) {
-                        if (((StandUser) ent).getJumpImmunityTicks() == 0) {
-                            ((StandUser) ent).roundabout$setJumpImunityTicks(3);
-                        }
-                    }
                     if (ent instanceof LivingEntity LE && LE.isUsingItem()){
                         LE.stopUsingItem();
                     }
