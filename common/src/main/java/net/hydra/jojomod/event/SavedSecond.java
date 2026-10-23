@@ -173,6 +173,9 @@ public class SavedSecond {
                     VP.setWallWalkDirection(gravityDirection);
                 }
             }
+            if (((StandUser) ent).getJumpImmunityTicks() == 0) {
+                ((StandUser) ent).roundabout$setJumpImunityTicks(3);
+            }
         }
         ((IGravityEntity)ent).roundabout$setGravityDirection(gravityDirection);
 

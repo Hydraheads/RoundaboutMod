@@ -38,7 +38,7 @@ public class BerettaPistolItem extends FirearmItem implements Vanishable {
     public SoundEvent getFireSound() { return ModSounds.BERETTA_FIRE_EVENT; }
 
     @Override
-    public float getFireSoundVolume() { return 2.0F; }
+    public float getFireSoundVolume() { return 3.5F; }
 
     @Override
     public float getFireSoundPitch() { return 1.0F; }

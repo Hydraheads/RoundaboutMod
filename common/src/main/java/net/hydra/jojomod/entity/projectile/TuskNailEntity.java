@@ -1,6 +1,5 @@
 package net.hydra.jojomod.entity.projectile;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEnderMan;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
@@ -10,10 +9,8 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersTusk;
 import net.hydra.jojomod.util.MainUtil;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -35,16 +32,14 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TuskNailEntity extends AbstractArrow {
 
-
+    /// trails
     private final List<Vec3> trailPoints = new ArrayList<>();
-    // trail length
     private static final int MAX_TRAIL_POINTS = 10;
     public List<Vec3> getTrailPoints() {
         return this.trailPoints;

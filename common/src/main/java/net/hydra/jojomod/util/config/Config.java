@@ -202,7 +202,7 @@ public class Config implements Cloneable {
         public Float snubnoseDamage;
         @FloatOption(group = "inherit", value = 2.0F, min = 0, max = 72000)
         public Float berettaDamage;
-        @FloatOption(group = "inherit", value = 3.0F, min = 0, max = 72000)
+        @FloatOption(group = "inherit", value = 5.5F, min = 0, max = 72000)
         public Float tommyGunDamage;
         @IntOption(group = "inherit", value = 12, min = 0, max = 72000)
         public Integer maxKnivesInOneHit;
@@ -865,8 +865,8 @@ public class Config implements Cloneable {
     public static class LyinEyesSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableLyinEyes;
-        @FloatOption(group = "inherit", value = 25, min = 0, max = 72000)
-        public Integer maxDetectionRange;
+        @FloatOption(group = "inherit", value = 25.0F, min = 0, max = 72000)
+        public Float maxDetectionRange;
     }
     public static class HeyYaSettings {
         @BooleanOption(group = "inherit", value = true)
