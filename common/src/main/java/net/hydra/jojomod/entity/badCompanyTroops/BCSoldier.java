@@ -108,7 +108,7 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
         }
     }
 
-    private float attackRange = 5.5f;
+    private float attackRange = 7.5f;
 
     public void tick() {
         super.tick();
@@ -161,12 +161,12 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
         goalSelector.addGoal(2, new RangedAttackGoal(this, 1.2, 5, attackRange) {
             @Override
             public boolean canUse() {
-                return super.canUse() && getCurrentTactic() != BadCompanyTactics.RETURN.id && bulletsLeft > 0;
+                return super.canUse() && getCurrentTactic() != BadCompanyTactics.RETURN.id && getRemainingBullets() > 0;
             }
 
             @Override
             public boolean canContinueToUse() {
-                return super.canContinueToUse() && bulletsLeft > 0;
+                return super.canContinueToUse() && getRemainingBullets() > 0;
             }
         });
     }
@@ -236,4 +236,7 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
     public int getBulletsAmount() { return 12; }
     private int chargeTicks = -1;
     public int bulletsLeft = getBulletsAmount();
+    public int getRemainingBullets() {
+        return bulletsLeft;
+    }
 }
