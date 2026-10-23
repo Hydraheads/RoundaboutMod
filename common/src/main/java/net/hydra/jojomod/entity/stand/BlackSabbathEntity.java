@@ -6,10 +6,8 @@ import net.hydra.jojomod.access.IPlayerEntityServer;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.goals.BlackSabbathRangedAttackGoal;
 import net.hydra.jojomod.entity.navigation.BlackSabbathNavigation;
-import net.hydra.jojomod.entity.objects.GrabbedMobSoul;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -21,8 +19,6 @@ import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Position;
 import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -59,6 +55,9 @@ import java.util.List;
 import java.util.Random;
 
 public class BlackSabbathEntity extends StandEntity implements HasCustomInventoryScreen, RangedAttackMob {
+
+    private static final EntityDataAccessor<Boolean> HAS_TARGETS = SynchedEntityData.defineId(BlackSabbathEntity.class,
+            EntityDataSerializers.BOOLEAN);
 
 
     public BlackSabbathEntity(EntityType<? extends Mob> entityType, Level world) {
@@ -131,7 +130,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                         this.coat_open.startIfStopped(this.tickCount);
                     }
                     case 3 -> {
-                        if(!pb.blackSabbathTargets.isEmpty() || !(this.getUser() instanceof Player)){
+                        if(getHasTargets() || !(this.getUser() instanceof Player)){
                             if (!isBlackSabbathUnderLight()) {
                                 if (!isOnFire()) {
                                     animationTick = 20;
@@ -480,6 +479,11 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         validateUUID();
         float pitch = this.getXRot();
         float yaw = this.getYRot();
+        if (!level().isClientSide) {
+            if (((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb) {
+                setHasTargets(!pb.blackSabbathTargets.isEmpty());
+            }
+        }
         if(!getHunting()) {
             if (shouldFloat && this.getUser() != null) {
                 if (!this.level().isClientSide()) {
@@ -675,6 +679,14 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     public final void setTridentLoyalty(Boolean bool) {
         this.entityData.set(IS_TRIDENT, bool);
     }
+    public final Boolean getHasTargets() {
+        return this.entityData.get(IS_TRIDENT);
+    }
+    public final void setHasTargets(Boolean bool) {
+        this.entityData.set(HAS_TARGETS, bool);
+    }
+
+
     private static final EntityDataAccessor<Boolean> IS_TRIDENT =
             SynchedEntityData.defineId(BlackSabbathEntity.class, EntityDataSerializers.BOOLEAN);
     public final Boolean getThrowable() {
@@ -698,6 +710,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             this.entityData.define(IS_TRIDENT, false);
             this.entityData.define(MOVEMENT_MODE, 0);
             this.entityData.define(HELD_ITEM_BLACK_SABBATH, ItemStack.EMPTY);
+            this.entityData.define(HAS_TARGETS, false);
         }
     }
     @Override
