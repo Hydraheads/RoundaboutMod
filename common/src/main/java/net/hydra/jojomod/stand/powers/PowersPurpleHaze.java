@@ -955,10 +955,16 @@ public class PowersPurpleHaze extends NewPunchingStand {
             }
         }
     }
-    private static final int STRANGLE_WINDUP_TICKS=30;
+    private static final int STRANGLE_WINDUP_TICKS=65;
     private static final double STRANGLE_SPEED=1.4;
-    private static final double STRANGLE_MAX_DISTANCE=8.0;
-    private static final int STRANGLE_HOLD_DURATION=80;
+    private static final double STRANGLE_MAX_DISTANCE=16.0;
+    private static final int STRANGLE_HOLD_DURATION= 80;
+    private static final int STRANGLE_GRAB_TICKS = 5;
+    private static final double STRANGLE_LIFT_HEIGHT = 0.25;
+
+    private double strangleBaseY = 0;
+    private int strangleGrabTicks = 0;
+    private boolean strangleVictimHadNoGravity = false;
 
     private int strangleTicks = -1;
     private int strangleTravelTicks = 0;
@@ -1105,17 +1111,39 @@ public class PowersPurpleHaze extends NewPunchingStand {
             endStrangle();
         }
     }
+    private static final double STRANGLE_STAND_GAP = 0.5;      // distancia entre mob y ph
+    private static final double STRANGLE_STAND_Y_OFFSET = 0.1; // numero mas alto, sube un poco mas
 
+    private Vec3 getStrangleStandPos(LivingEntity victim) {
+        Vec3 horiz = new Vec3(strangleDirection.x, 0, strangleDirection.z);
+        if (horiz.lengthSqr() < 1.0E-4) {
+
+            horiz = new Vec3(victim.getX() - self.getX(), 0, victim.getZ() - self.getZ());
+        }
+        horiz = horiz.normalize();
+
+        double dist = victim.getBbWidth() * 0.5 + STRANGLE_STAND_GAP;
+        return new Vec3(
+                victim.getX() - horiz.x * dist,
+                strangleBaseY + STRANGLE_STAND_Y_OFFSET,
+                victim.getZ() - horiz.z * dist
+        );
+    }
     private void beginStranglePin(StandEntity stand, LivingEntity victim) {
         this.strangleVictim = victim;
         this.strangleHoldTicks = STRANGLE_HOLD_DURATION;
+        this.strangleBaseY = victim.getY();
+        this.strangleGrabTicks = 0;
+        this.strangleVictimHadNoGravity = victim.isNoGravity();
+        victim.setNoGravity(true);
 
         if (victim instanceof StandUser SU) {
             SU.roundabout$setRestrainedTicks(STRANGLE_HOLD_DURATION);
         }
 
-        stand.setPos(victim.position().add(0, victim.getBbHeight() * 0.5, 0));
-        animateStand(PurpleHazeEntity.STRANGLE_HOLD);
+
+        stand.setPos(getStrangleStandPos(victim));
+        animateStand(PurpleHazeEntity.STRANGLE_GRAB);
 
         playSoundIfPossible(self.level(), null, this.self.blockPosition(),
                 ModSounds.SOFT_AND_WET_BARRAGE_EVENT /*placeholder*/, SoundSource.PLAYERS, 1.0F, 1.0F);
@@ -1131,8 +1159,20 @@ public class PowersPurpleHaze extends NewPunchingStand {
             SU.roundabout$setRestrainedTicks(20);
         }
 
-        stand.setPos(strangleVictim.position().add(0, strangleVictim.getBbHeight() * 0.5, 0));
+        if (strangleGrabTicks < STRANGLE_GRAB_TICKS) {
+            strangleGrabTicks++;
+            if (strangleGrabTicks == STRANGLE_GRAB_TICKS) {
+                animateStand(PurpleHazeEntity.STRANGLE_HOLD);
+            }
+        }
+        double lift = STRANGLE_LIFT_HEIGHT * ((double) strangleGrabTicks / STRANGLE_GRAB_TICKS);
+
+        strangleVictim.setPos(strangleVictim.getX(), strangleBaseY + lift, strangleVictim.getZ());
         strangleVictim.setDeltaMovement(Vec3.ZERO);
+        strangleVictim.fallDistance = 0;
+        strangleVictim.hurtMarked = true;
+
+        stand.setPos(getStrangleStandPos(strangleVictim));
 
         if (strangleVictim instanceof Mob mob) {
             mob.getNavigation().stop();
@@ -1159,6 +1199,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
     private void endStrangle() {
         if (strangleVictim != null) {
+            strangleVictim.setNoGravity(strangleVictimHadNoGravity);
             if (strangleVictim instanceof Mob mob) {
                 mob.setNoAi(false);
             }
@@ -1166,6 +1207,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 SU.roundabout$setRestrainedTicks(0);
             }
         }
+        this.strangleGrabTicks = 0;
         this.strangleVictim = null;
         this.strangleTicks = -1;
         this.strangleTravelTicks = 0;

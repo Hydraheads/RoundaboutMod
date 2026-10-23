@@ -131,9 +131,7 @@ public class BadCompanyBulletEntity extends AbstractArrow {
                 damage = (float) (damage * (ClientNetworking.getAppropriateConfig().itemSettings.gunDamageOnMobs * 0.01));
 
             }
-
-
-
+            
             boolean didDamage = livingEntity.hurt(ModDamageTypes.of(level(), getDamageType(), this, this.getOwner()), damage);
 
             if (didDamage) {
@@ -163,7 +161,7 @@ public class BadCompanyBulletEntity extends AbstractArrow {
 
     ResourceKey<DamageType> getDamageType(){
 
-        return ModDamageTypes.BULLET;
+        return ModDamageTypes.STAND;
     }
 
     protected void onHitBlock2(BlockHitResult $$0) {

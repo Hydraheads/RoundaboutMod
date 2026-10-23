@@ -245,7 +245,7 @@ public class FabricItems {
     public static Item SNIPER_AMMO = registerItem("sniper_ammo", new SniperAmmoItem(new Item.Properties().stacksTo(64)));
 
     public static Item BERETTA_PISTOL = registerItem("beretta_pistol", new BerettaPistolItem(new Item.Properties().stacksTo(1)));
-    public static Item PISTOL_AMMO = registerItem("pistol_ammo", new PistolAmmoItem(new Item.Properties().stacksTo(16)));
+    public static Item PISTOL_AMMO = registerItem("pistol_ammo", new PistolAmmoItem(new Item.Properties().stacksTo(64)));
 
     public static Item IRON_BALL_CROSSBOW = registerItem("iron_ball_crossbow", new IronBallCrossbowItem(new Item.Properties().stacksTo(1).durability(565)));
 

@@ -253,6 +253,11 @@ public class ForgeSounds {
     public static final RegistryObject<SoundEvent> JACKAL_RELOAD_EVENT =
             register(ModSounds.JACKAL_RELOAD, ModSounds.JACKAL_RELOAD_ID);
 
+    public static final RegistryObject<SoundEvent> BERETTA_FIRE_EVENT =
+            register(ModSounds.BERETTA_FIRE, ModSounds.BERETTA_FIRE_ID);
+    public static final RegistryObject<SoundEvent> BERETTA_RELOAD_EVENT =
+            register(ModSounds.BERETTA_RELOAD, ModSounds.BERETTA_RELOAD_ID);
+
     public static final RegistryObject<SoundEvent> BULLET_PENTRATION_EVENT =
             register(ModSounds.BULLET_PENTRATION, ModSounds.BULLET_PENTRATION_ID);
     public static final RegistryObject<SoundEvent> BULLET_RICOCHET_EVENT =
