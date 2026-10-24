@@ -79,7 +79,7 @@ public class PowersBlackSabbath extends NewDashPreset {
         List<LivingEntity> fogControlledEntities2 = new ArrayList<>(blackSabbathTargets) {};
         if (!fogControlledEntities2.isEmpty()){
             for (LivingEntity value : fogControlledEntities2) {
-                if (value.isRemoved() || !value.isAlive() || value.isDeadOrDying()) {
+                if (value.isRemoved() || !value.isAlive() || value.isDeadOrDying() || value instanceof Player P && (P.isSpectator() || P.isCreative())) {
                     removeTargetEntities(value);
                 }
             }
@@ -182,8 +182,8 @@ public class PowersBlackSabbath extends NewDashPreset {
         if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){
             Entity e = be.level().getEntity(be.getGrabbing());
             if(e != null && e instanceof LivingEntity l) {
-                ((StandUser)l).roundabout$setSealedTicks(0);
                 ((StandUser)l).roundabout$setGrabbedSoul(false);
+                ((StandUser)l).roundabout$updateSealedTicks(-1);
             }
             killTargetListClient();
         }
@@ -225,8 +225,8 @@ public class PowersBlackSabbath extends NewDashPreset {
             }
             if(this.getStandEntity(self) instanceof BlackSabbathEntity BE){
                 if(BE.level().getEntity(BE.getGrabbing()) != null) {
-                    ((StandUser) BE.level().getEntity(BE.getGrabbing())).roundabout$setSealedTicks(0);
                     ((StandUser) BE.level().getEntity(BE.getGrabbing())).roundabout$setGrabbedSoul(false);
+                    ((StandUser) BE.level().getEntity(BE.getGrabbing())).roundabout$updateSealedTicks(-1);;
                 }
             }
 
@@ -1079,12 +1079,9 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
           if(self != null) {
               if(moveMode == 2 || moveMode == 3 && this.blackSabbathTargets.contains(entity)) {
                   Entity TE = MainUtil.getTargetEntity(self, 100, 10);
-                  if (TE != null && TE.is(entity) && !(TE instanceof StandEntity && !TE.isAttackable()) && !TE.isInvisible() && TE instanceof LivingEntity && !(TE instanceof RoadRollerEntity)) {
+                  if (TE != null && TE.is(entity) && !(TE instanceof StandEntity) && !TE.isInvisible() && TE instanceof LivingEntity && !(TE instanceof RoadRollerEntity)) {
                       return true;
                   }
-              }
-              if(this.getStandEntity(self) != null && entity.is(this.getStandEntity(self))){
-                 // return true;
               }
           }
         return false;
@@ -1209,7 +1206,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             case PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET -> {
                 this.setActivePower(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET);
                 if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){
-                    if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser)e).roundabout$setSealedTicks(0);}
+                    if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser) e).roundabout$updateSealedTicks(-1);}
                 }
                 this.setAttackTime(0);
                 Entity target = this.getSelf().level().getEntity(value);
@@ -1225,7 +1222,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                 this.setActivePower(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET_LIST);
                 this.setAttackTime(0);
                 if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){
-                    if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser)e).roundabout$setSealedTicks(0);}
+                    if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser) e).roundabout$updateSealedTicks(-1);}
                 }
                 setTickDown2(40);
                 this.clearTargetEntities();
@@ -1241,7 +1238,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
     private Entity getTarget() {
         Entity target = MainUtil.getTargetEntity(this.getSelf(),100,10);
         if (target instanceof LivingEntity LE) {
-            if (LE.isInvisible() || LE instanceof RoadRollerEntity || LE.isDeadOrDying() || LE.isRemoved() || !LE.isAlive()) {
+            if (LE.isInvisible() || LE instanceof RoadRollerEntity || LE.isDeadOrDying() || LE.isRemoved() || !LE.isAlive() || LE instanceof StandEntity) {
                 return null;
             }
         }
@@ -1257,7 +1254,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             if (TE instanceof LivingEntity LE) {
                 if(blackSabbathTargets.contains(LE)) {
                     if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){
-                        if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e && be.level().getEntity(be.getGrabbing()).is(LE)){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser)e).roundabout$setSealedTicks(0);}
+                        if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e && be.level().getEntity(be.getGrabbing()).is(LE)){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser) e).roundabout$updateSealedTicks(-1);}
                     }
                     this.removeTargetEntities(LE);
                     tryIntPower(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET, true, LE.getId());
@@ -1274,7 +1271,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             this.clearTargetEntities();
             setTickDown2(40);
             if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){
-                if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser)e).roundabout$setSealedTicks(0);}
+                if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser) e).roundabout$updateSealedTicks(-1);}
             }
             tryIntPower(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET_LIST, true, 0);
             tryIntPowerPacket(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET_LIST, 0);

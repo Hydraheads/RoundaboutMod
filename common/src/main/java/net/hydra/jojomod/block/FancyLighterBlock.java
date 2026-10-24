@@ -119,7 +119,7 @@ public class FancyLighterBlock extends BaseEntityBlock implements CancelDataDriv
             if(ownerEntity instanceof ServerPlayer spl){
                        if(stepper.getUUID() != fbe.getOwner()){
                            if(!bs.blackSabbathTargets.contains(stepper)) {
-                               if(bs.tickDown2 <= -9) {
+                               if(bs.tickDown2 <= -9) {;
                                    bs.selectTargetSecond(stepper);
                                    bs.setThree();
                                    bs.setTickBeforeHunt(20);
@@ -127,7 +127,7 @@ public class FancyLighterBlock extends BaseEntityBlock implements CancelDataDriv
                                    if (bs.blackSelect != null) {
                                        bs.blackSelect.forceDespawnSet = true;
                                    }
-                                   if (bs.getStandEntity(bs.self) != null && bs.moveMode == 1) {
+                                   if (bs.getStandEntity(bs.self) != null) {
                                        bs.getStandEntity(bs.self).forceDespawnSet = true;
                                    }
 
