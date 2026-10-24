@@ -35,6 +35,11 @@ public class UserHurtTargetGoal extends TargetGoal {
         }
     }
 
+    @Override
+    public boolean canContinueToUse() {
+        return super.canContinueToUse() && this.troop.wantsToAttack(this.ownerLastHurt, this.troop.getUser());
+    }
+
     public void start() {
         this.mob.setTarget(this.ownerLastHurt);
         LivingEntity $$0 = this.troop.getUser();

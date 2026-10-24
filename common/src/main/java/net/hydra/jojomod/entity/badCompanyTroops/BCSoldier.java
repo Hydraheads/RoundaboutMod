@@ -127,17 +127,14 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
 
         hasParachuteOff = !onGround() && !(isInWater() || isInLava()) && !isDisplay;
 
-        //if (level().isClientSide) {
-            //if (((StandUser) ClientUtil.getPlayer()).roundabout$hasAStand()) {
-                if (hasParachuteOff && !wasParachuteOff) {
-                    level().playSound(null, blockPosition(), ModSounds.BC_PARACHUTE_OPEN_EVENT, SoundSource.AMBIENT, 1.5f, 1.0f);
-                }else if (hasParachuteOff) {
-                    if (parachuteTicks % 80 == 10) {
-                        level().playSound(null, blockPosition(), ModSounds.BC_PARACHUTE_LOOP_EVENT, SoundSource.AMBIENT, 1.5f, 1.0f);
-                    }
-                }
-            //}
-        //}
+        if (hasParachuteOff && !wasParachuteOff) {
+            level().playSound(null, blockPosition(), ModSounds.BC_PARACHUTE_OPEN_EVENT, SoundSource.AMBIENT, 0.5f, 1.0f);
+        }/*else if (hasParachuteOff) {
+            if (parachuteTicks % 80 == 10) {
+                level().playSound(null, blockPosition(), ModSounds.BC_PARACHUTE_LOOP_EVENT, SoundSource.AMBIENT, 0.5f, 1.0f);
+            }
+        }*/
+
 
         wasParachuteOff = hasParachuteOff;
 
@@ -195,7 +192,6 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
             @Override
             public void stop() {
                 super.stop();
-                Roundabout.LOGGER.info("why is it stopping");
             }
         });
     }
@@ -225,7 +221,7 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
 
     @Override
     public void performRangedAttack(LivingEntity target, float v) {
-        if (bulletsLeft <= 0) { return; }
+        if (bulletsLeft <= 0 || distanceTo(target) > (attackRange+0.75f)) { return; }
 
         if (getBundle()) {
             shootSingleBulletAt(getEyePosition(1).add(0.3f, 0.0f, 0.65f * 0.3f), target);

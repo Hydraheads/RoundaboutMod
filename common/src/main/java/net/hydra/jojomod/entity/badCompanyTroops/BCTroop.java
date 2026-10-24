@@ -15,6 +15,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.raid.Raider;
@@ -93,9 +94,15 @@ public class BCTroop extends MultipleTypeStand {
         }
     }
 
-    public int getMaximumRange() { return 25; }
+    public static int getMaximumRange() { return 25; }
+    public static int getMaximumRangeBullets() { return 31; }
 
     public boolean wantsToAttack(LivingEntity target, LivingEntity user) {
+        if (user == null) return false;
+        if (user.distanceToSqr(target) > (getMaximumRangeBullets() * getMaximumRangeBullets())) {
+            return false;
+        }
+
         if (user.isAlliedTo(target)) {
             return false;
         }
@@ -110,6 +117,10 @@ public class BCTroop extends MultipleTypeStand {
         }
 
         if ((user instanceof AbstractVillager || user instanceof IronGolem) && (target instanceof AbstractVillager || target instanceof IronGolem)) {
+            return false;
+        }
+
+        if ((target instanceof TamableAnimal TA && TA.isOwnedBy(user)) || (user instanceof TamableAnimal TA1 && TA1.isOwnedBy(target))) {
             return false;
         }
 

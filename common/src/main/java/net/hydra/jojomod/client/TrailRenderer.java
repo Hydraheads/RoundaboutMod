@@ -37,6 +37,11 @@ public class TrailRenderer {
                 new Vector3f(1, 173/255f, 13/255f), new Vector3f(255/255f, 210/255f, 17 / 255f),
                 0.4f, 0.7f
         );
+        public static final Settings BC_BULLETS = new Settings(
+                16.0f, 0.01f, 0.04f,
+                new Vector3f(1, 173/255f, 13/255f), new Vector3f(255/255f, 210/255f, 17 / 255f),
+                0.4f, 0.7f
+        );
         public static final Settings RATT = new Settings(
                 16.0F, 0.03f, 0.12f,
                 new Vector3f(0.86F, 0.28F, 0.48F), new Vector3f(0.88F, 0.3F, 0.5F),
