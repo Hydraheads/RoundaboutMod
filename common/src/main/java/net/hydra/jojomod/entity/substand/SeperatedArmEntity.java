@@ -237,6 +237,28 @@ public class SeperatedArmEntity extends StandEntity {
                 || this.level().isRainingAt(BlockPos.containing((double)$$0.getX(), this.getBoundingBox().maxY, (double)$$0.getZ()));
     }
 
+    //get the grabbed entity's "neck" position
+    public Vec3 rayCastFromGrabbedEntity(double dist){
+        int steps = (int) (Math.round(dist * 6) + 1);
+        Vec3 CurrentCheckPos = grabbedEntity.getEyePosition();
+        double xstep = (grabbedEntity.getLookAngle().x)/6 ;
+        double zstep = (grabbedEntity.getLookAngle().z)/6 ;
+
+        for(int i = 0; i < steps ;i ++){
+            CurrentCheckPos = CurrentCheckPos.add(xstep,0,zstep);
+
+            BlockPos bp = (BlockPos.containing(CurrentCheckPos));
+            if(grabbedEntity.level().getBlockState(bp).getBlock() != Blocks.AIR
+                    && grabbedEntity.level().getBlockState(bp).getBlock()!=Blocks.WATER
+                    && grabbedEntity.level().getBlockState(bp).getBlock()!=Blocks.LAVA
+                    && !grabbedEntity.level().getBlockState(bp).canBeReplaced()
+            ) {
+                return CurrentCheckPos;
+            }
+        }
+        return CurrentCheckPos;
+    }
+
     @Override
     public void tick() {
         Roundabout.LOGGER.info("i am being ticked as an entity");
@@ -251,14 +273,16 @@ public class SeperatedArmEntity extends StandEntity {
                         grabbedEntity = null;
                     }
                     if (isInRain() && grabbedEntity != null && grabbedEntity instanceof LivingEntity) {
-                        this.setPos(grabbedEntity.getX(), grabbedEntity.getEyeY() - 0.3, grabbedEntity.getZ());
+                        this.setPos(rayCastFromGrabbedEntity(0.5).subtract(0, 0.35, 0));
+                        this.lookAt(EntityAnchorArgument.Anchor.EYES, grabbedEntity.getEyePosition());
+
                         ((LivingEntity) grabbedEntity).addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, 2), grabbedEntity);
                     }else{
                         grabbedEntity = null;
                     }
                 } else {
                     if (StartupTicks == 0) {
-                        if (User != null) {
+                        if (User != null && ((((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersCatchTheRainbow))) {
                             this.lookAt(EntityAnchorArgument.Anchor.EYES, User.getEyePosition());
                             this.setDeltaMovement(this.getLookAngle().multiply(0.4, 0.4, 0.4));
                         } else {
@@ -271,6 +295,11 @@ public class SeperatedArmEntity extends StandEntity {
                             StartupTicks = 0;
                     }
                 }
+            }
+        }else{
+            if (!this.level().isClientSide) {
+                this.setUser(null);
+                removearm();
             }
         }
     }
@@ -766,7 +795,9 @@ public class SeperatedArmEntity extends StandEntity {
                             }
 
                             if (((((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersCatchTheRainbow))){
-                                grabbedEntity = entity;
+                                if (grabbedEntity == null) {
+                                    grabbedEntity = entity;
+                                }
                             }
                         }
                     } else {

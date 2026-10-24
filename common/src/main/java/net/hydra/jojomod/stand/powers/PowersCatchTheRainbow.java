@@ -54,7 +54,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import static net.hydra.jojomod.event.index.PowerIndex.POWER_2;
+import static net.hydra.jojomod.event.index.PowerIndex.*;
 
 public class PowersCatchTheRainbow extends NewDashPreset {
     public PowersCatchTheRainbow(LivingEntity self) {
@@ -95,9 +95,9 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     public void playSummonEffects(boolean forced) {
         if (!this.getSelf().level().isClientSide()) {
             for(int i = 0; i < 23; i = i + 1) {
-                double randX = Roundabout.RANDOM.nextDouble(-1, 1);
+                double randX = Roundabout.RANDOM.nextDouble(-1.5, 1.5);
                 double randY = Roundabout.RANDOM.nextDouble(-1, 2);
-                double randZ = Roundabout.RANDOM.nextDouble(-1, 1);
+                double randZ = Roundabout.RANDOM.nextDouble(-1.5, 1.5);
                 sendParticlesIfPossible(self.level(),ParticleTypes.SPLASH,
                         this.getSelf().getX() + randX,
                         this.getSelf().getY() + randY,
@@ -300,8 +300,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     DROPDOWN = 54,
     OFF_HAND_THROW_SLIM = 55,
     RETURN = 56,
-    DEATH_TIMER = 57,
-    BARRIER = 58;
+    DEATH_TIMER = 57;
 
     @Override
     public void powerActivate(PowerContext context){
@@ -352,7 +351,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         if (move == RAINMEND) {
             useRainMend();
         }
-        if (move== BARRIER) {
+        if (move== POWER_1) {
             barrier();
         }
         else if (move == DROPDOWN) {
@@ -385,7 +384,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
 
     @Override
     public boolean isServerControlledCooldown(byte num){
-        if (num == PowerIndex.SKILL_2){
+        if (num == PowerIndex.SKILL_2 || num == SKILL_1){
             return true;
         }
         return super.isServerControlledCooldown(num);
@@ -621,15 +620,15 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     //barrier
 
     public void barrierClient(){
-        if (!this.onCooldown(BARRIER) && isInRain()) {
-            this.setCooldown(BARRIER, 600);
-            this.tryPower(BARRIER, true);
-            tryPowerPacket(BARRIER);
+        if (!this.onCooldown(PowerIndex.SKILL_1) && isInRain()) {
+            this.tryPower(POWER_1, true);
+            tryPowerPacket(POWER_1);
         }
     }
 
     public void barrier(){
         if (!this.self.level().isClientSide()) {
+            this.setCooldown(PowerIndex.SKILL_1, 600);
             CTRbarrierEntity barrier = ModEntities.CTR_BARRIER.create(this.self.level());
 
             if (barrier != null) {
@@ -685,19 +684,12 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         for(int i = 0; i < steps ;i ++){
             CurrentCheckPos = CurrentCheckPos.add(xstep,ystep,zstep);
 
-            // if(!this.self.level().isClientSide) {
-            //     sendParticlesIfPossible(self.level(),ParticleTypes.END_ROD, CurrentCheckPos.x, CurrentCheckPos.y, CurrentCheckPos.z, 1, 0, 0, 0, 0);
-            // }
             BlockPos bp = (BlockPos.containing(CurrentCheckPos));
             if(this.self.level().getBlockState(bp).getBlock() != Blocks.AIR
                     && this.self.level().getBlockState(bp).getBlock()!=Blocks.WATER
                     && this.self.level().getBlockState(bp).getBlock()!=Blocks.LAVA
                     && !this.self.level().getBlockState(bp).canBeReplaced()
             ) {
-                // if(!this.self.level().isClientSide) {
-
-                //     sendParticlesIfPossible(self.level(),ParticleTypes.END_ROD, bp.getCenter().x, bp.getCenter().y, bp.getCenter().z, 1, 0, 0, 0, 0);
-                // }
                 return CurrentCheckPos;
             }
         }
