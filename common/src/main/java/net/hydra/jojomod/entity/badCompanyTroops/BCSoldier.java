@@ -150,7 +150,9 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
             } else {
                 if (getTarget() != null && !(distanceToSqr(getTarget().getX(), getTarget().getY(), getTarget().getZ()) > attackRange)) {
                     setAnim(IDLE_GUN);
-                }else { setAnim(SHOOT_GUN); }
+                }else {
+                    setAnim(SHOOT_GUN);
+                }
             }
         }
 
@@ -211,23 +213,32 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
 
     @Override
     public void performRangedAttack(LivingEntity target, float v) {
-        if (bulletsLeft <= 0 || distanceTo(target) > (attackRange+0.75f)) { return; }
+        //shootAt(target);
+    }
+
+    public boolean shootAt(LivingEntity target) {
+        return shootAtPosition(target.getEyePosition(1));
+    }
+    public boolean shootAtPosition(Vec3 target) {
+        if (bulletsLeft <= 0 || distanceToSqr(target) > ((attackRange+0.75f)*(attackRange+0.75f))) { return false; }
 
         if (getBundle()) {
-            shootSingleBulletAt(getEyePosition(1).add(0.3f, 0.0f, 0.65f * 0.3f), target);
-            shootSingleBulletAt(getEyePosition(1).add(0f, 0.0f, 1.15f * 0.3f), target);
-            shootSingleBulletAt(getEyePosition(1).add(-0.3f, 0.0f, 0.65f * 0.3f), target);
+            shootSingleBulletAtPosition(getEyePosition(1).add(0.3f, 0.0f, 0.65f * 0.3f), target);
+            shootSingleBulletAtPosition(getEyePosition(1).add(0f, 0.0f, 1.15f * 0.3f), target);
+            shootSingleBulletAtPosition(getEyePosition(1).add(-0.3f, 0.0f, 0.65f * 0.3f), target);
 
-            shootSingleBulletAt(getEyePosition(1).add(0.3f, 0.0f, -0.65f * 0.3f), target);
-            shootSingleBulletAt(getEyePosition(1).add(0f, 0.0f, -1.15f * 0.3f), target);
-            shootSingleBulletAt(getEyePosition(1).add(-0.3f, 0.0f, -0.65 * 0.3f), target);
+            shootSingleBulletAtPosition(getEyePosition(1).add(0.3f, 0.0f, -0.65f * 0.3f), target);
+            shootSingleBulletAtPosition(getEyePosition(1).add(0f, 0.0f, -1.15f * 0.3f), target);
+            shootSingleBulletAtPosition(getEyePosition(1).add(-0.3f, 0.0f, -0.65 * 0.3f), target);
 
         }else {
-            shootSingleBulletAt(getEyePosition(1), target);
+            shootSingleBulletAtPosition(getEyePosition(1), target);
         }
 
         bulletsLeft--;
         if (bulletsLeft <= 0) { chargeTicks = getRechargeTime(); }
+
+        return true;
     }
 
     public void shootSingleBulletAt(Vec3 positionShoot, LivingEntity target) {
@@ -262,10 +273,7 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
     @Override
     public boolean performAttack() {
         if (getTarget() != null) {
-            if (bulletsLeft <= 0 || distanceTo(getTarget()) > (attackRange+0.75f)) { return false; }
-
-            performRangedAttack(getTarget(), 1);
-            return true;
+            return shootAt(getTarget());
         }
 
         return false;
