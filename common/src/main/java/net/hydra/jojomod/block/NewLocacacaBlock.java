@@ -22,6 +22,9 @@ public class NewLocacacaBlock extends LocacacaBlock{
 
     @Override
     public boolean canSurvive(BlockState $$0, LevelReader $$1, BlockPos $$2) {
+        if ($$0.is(ModBlocks.INVISIBLOCK)){
+            return true;
+        }
         BlockPos $$3 = $$2.below();
         return this.mayPlaceOn($$1.getBlockState($$3), $$1, $$3);
     }

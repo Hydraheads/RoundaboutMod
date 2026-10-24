@@ -1,9 +1,9 @@
 package net.hydra.jojomod.entity.badCompanyTroops;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.goals.badCompanyGoals.*;
 import net.hydra.jojomod.entity.projectile.BadCompanyBulletEntity;
-import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
 import net.hydra.jojomod.event.index.BadCompanyTactics;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -12,7 +12,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.*;
-
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -36,7 +36,8 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
 
     public static final byte
             IDLE_GUN = 0,
-            WALK_GUN = 1;
+            WALK_GUN = 1,
+            SHOOT_GUN = 2;
 
     @Override
     protected void defineSynchedData() {
@@ -70,12 +71,18 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
     public static float width = 0.35f;
     public static float height = 0.32f;
     public boolean isDisplay = false;
+    public boolean isShooting = false;
 
     public final AnimationState releaseParachute = new AnimationState();
     public final AnimationState closeParachute = new AnimationState();
     public final AnimationState idleWithGun = new AnimationState();
     public final AnimationState walkWithGun = new AnimationState();
+    public final AnimationState shootGun = new AnimationState();
     public final AnimationState runWithGun = new AnimationState();
+
+    private boolean hasParachuteOff = false;
+    private boolean wasParachuteOff = false;
+    private int parachuteTicks = -1;
 
     @Override
     public void setupAnimationStates() {
@@ -98,15 +105,41 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
             if (!onGround() && !(isInWater() || isInLava()) && !isDisplay) {
                 releaseParachute.startIfStopped(tickCount);
                 closeParachute.stop();
+                hasParachuteOff = true;
             }else {
                 releaseParachute.stop();
                 closeParachute.startIfStopped(tickCount);
+                hasParachuteOff = false;
             }
         }
     }
 
+    private float attackRange = 5.5f;
+
     public void tick() {
         super.tick();
+
+        if (hasParachuteOff) {
+            parachuteTicks++;
+        }else {
+            parachuteTicks = -1;
+        }
+
+        hasParachuteOff = !onGround() && !(isInWater() || isInLava()) && !isDisplay;
+
+        //if (level().isClientSide) {
+            //if (((StandUser) ClientUtil.getPlayer()).roundabout$hasAStand()) {
+                if (hasParachuteOff && !wasParachuteOff) {
+                    level().playSound(null, blockPosition(), ModSounds.BC_PARACHUTE_OPEN_EVENT, SoundSource.AMBIENT, 1.5f, 1.0f);
+                }else if (hasParachuteOff) {
+                    if (parachuteTicks % 80 == 10) {
+                        level().playSound(null, blockPosition(), ModSounds.BC_PARACHUTE_LOOP_EVENT, SoundSource.AMBIENT, 1.5f, 1.0f);
+                    }
+                }
+            //}
+        //}
+
+        wasParachuteOff = hasParachuteOff;
 
         float pitch = this.getXRot();
         float yaw = this.getYRot();
@@ -121,7 +154,19 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
             if (getNavigation().isInProgress()) {
                 setAnim(WALK_GUN);
             } else {
-                setAnim(IDLE_GUN);
+                if (getTarget() != null && !(distanceToSqr(getTarget().getX(), getTarget().getY(), getTarget().getZ()) > attackRange)) {
+                    setAnim(IDLE_GUN);
+                }else {
+                    setAnim(SHOOT_GUN);
+                }
+            }
+        }
+
+        if (chargeTicks > -1) {
+            chargeTicks--;
+            if (chargeTicks <= 0) {
+                bulletsLeft = getBulletsAmount();
+                chargeTicks = -1;
             }
         }
     }
@@ -141,10 +186,16 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
         goalSelector.addGoal(0, new FloatGoal(this));
         goalSelector.addGoal(1, new ReturnToLeaderGoal(this, 1));
         goalSelector.addGoal(2, new UserHurtTargetGoal(this));
-        goalSelector.addGoal(2, new RangedAttackGoal(this, 1.2, 5, 7.5f) {
+        goalSelector.addGoal(2, new RangedAttackGoal(this, 0.8, 5, 8f) {
             @Override
             public boolean canUse() {
                 return super.canUse() && getCurrentTactic() != BadCompanyTactics.RETURN.id;
+            }
+
+            @Override
+            public void stop() {
+                super.stop();
+                Roundabout.LOGGER.info("why is it stopping");
             }
         });
     }
@@ -174,15 +225,33 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
 
     @Override
     public void performRangedAttack(LivingEntity target, float v) {
+        if (bulletsLeft <= 0) { return; }
+
+        if (getBundle()) {
+            shootSingleBulletAt(getEyePosition(1).add(0.3f, 0.0f, 0.65f * 0.3f), target);
+            shootSingleBulletAt(getEyePosition(1).add(0f, 0.0f, 1.15f * 0.3f), target);
+            shootSingleBulletAt(getEyePosition(1).add(-0.3f, 0.0f, 0.65f * 0.3f), target);
+
+            shootSingleBulletAt(getEyePosition(1).add(0.3f, 0.0f, -0.65f * 0.3f), target);
+            shootSingleBulletAt(getEyePosition(1).add(0f, 0.0f, -1.15f * 0.3f), target);
+            shootSingleBulletAt(getEyePosition(1).add(-0.3f, 0.0f, -0.65 * 0.3f), target);
+
+        }else {
+            shootSingleBulletAt(getEyePosition(1), target);
+        }
+
+        bulletsLeft--;
+        if (bulletsLeft <= 0) { chargeTicks = getRechargeTime(); }
+    }
+
+    public void shootSingleBulletAt(Vec3 positionShoot, LivingEntity target) {
         BadCompanyBulletEntity bullet = new BadCompanyBulletEntity(level(), getUser());
-        Vec3 positionShoot = getEyePosition(1);
         Vec3 targetPosition = target.getEyePosition(1);
         level().addFreshEntity(bullet);
         bullet.absMoveTo(positionShoot.x, positionShoot.y, positionShoot.z);
-        bullet.shoot(targetPosition.x - positionShoot.x, targetPosition.y - positionShoot.y, targetPosition.z - positionShoot.z, 5.0F, 1.0F);
+        bullet.shoot(targetPosition.x - positionShoot.x, targetPosition.y - positionShoot.y, targetPosition.z - positionShoot.z, 3.5F, 1.25F);
         level().playSound(null, this.blockPosition(), getFireSound(), SoundSource.PLAYERS, getFireSoundVolume(), getFireSoundPitch());
     }
-
 
     public SoundEvent getFireSound() { return ModSounds.TOMMY_FIRE_EVENT; }
 
@@ -192,4 +261,13 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
         Random random = new Random();
         return random.nextFloat(1.7F - 1.5F) + 1.5F;
     }
+
+    public int getRechargeTime() {
+        return 50 + (getBundle() ? 20 : 0);
+    }
+
+    public int getBulletsAmount() { return 12; }
+    private int chargeTicks = -1;
+    public int bulletsLeft = getBulletsAmount();
+
 }

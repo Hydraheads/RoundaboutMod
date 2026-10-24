@@ -354,6 +354,8 @@ public class ForgeSounds {
             register(ModSounds.STAND_BARRAGE_END_BLOCK, ModSounds.STAND_BARRAGE_END_BLOCK_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_IMPALE_EVENT =
             register(ModSounds.KILLER_QUEEN_IMPALE, ModSounds.KILLER_QUEEN_IMPALE_ID);
+    public static final RegistryObject<SoundEvent> KILLER_QUEEN_BARRAGE_HIT_EVENT =
+            register(ModSounds.KILLER_QUEEN_BARRAGE_HIT, ModSounds.KILLER_QUEEN_BARRAGE_HIT_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_PUNCH_EVENT =
             register(ModSounds.KILLER_QUEEN_PUNCH, ModSounds.KILLER_QUEEN_PUNCH_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_HEAVY_PUNCH_EVENT =
@@ -1222,6 +1224,10 @@ public class ForgeSounds {
             register(ModSounds.BC_HELICOPTER_SUMMON, ModSounds.BC_HELICOPTER_SUMMON_ID);
     public static final RegistryObject<SoundEvent> BC_TANK_SUMMON =
             register(ModSounds.BC_TANK_SUMMON, ModSounds.BC_TANK_SUMMON_ID);
+    public static final RegistryObject<SoundEvent> BC_PARACHUTE_OPEN =
+            register(ModSounds.BC_PARACHUTE_OPEN, ModSounds.BC_PARACHUTE_OPEN_ID);
+    public static final RegistryObject<SoundEvent> BC_PARACHUTE_LOOP =
+            register(ModSounds.BC_PARACHUTE_LOOP, ModSounds.BC_PARACHUTE_LOOP_ID);
 
     public static final RegistryObject<SoundEvent> PLANET_WAVES_SUMMON =
             register(ModSounds.PLANET_WAVES_SUMMON, ModSounds.PLANET_WAVES_SUMMON_ID);

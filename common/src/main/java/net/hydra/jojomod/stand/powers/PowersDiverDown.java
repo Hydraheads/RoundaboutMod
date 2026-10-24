@@ -228,6 +228,7 @@ public class PowersDiverDown extends NewPunchingStand {
     public LivingEntity springTarget = null;
     public int springLegsTicks = 0;
     public static final int SPRING_LEGS_MAX_DURATION = 200; // 10 seconds max duration
+    private int lastSpringTick = 0;
 
     // for secret skin
     public int underwaterTicks = 0;
@@ -3919,7 +3920,7 @@ public class PowersDiverDown extends NewPunchingStand {
 
         this.springTarget = host;
         if (this.getReducedDamage(host)) {
-            this.springLegsTicks = SPRING_LEGS_MAX_DURATION-5;
+            this.springLegsTicks = SPRING_LEGS_MAX_DURATION-80;
         } else {
             this.springLegsTicks = SPRING_LEGS_MAX_DURATION;
         }
@@ -3960,8 +3961,11 @@ public class PowersDiverDown extends NewPunchingStand {
                 return;
             }
         }
+        if (this.lastSpringTick > 0) {
+            this.lastSpringTick--;
+        }
 
-        if (!host.onGround()) return;
+        if (!host.onGround() || this.lastSpringTick > 0) return;
         Level level = host.level();
         if (host.isSprinting()) {
             host.setSprinting(false);
@@ -3969,8 +3973,18 @@ public class PowersDiverDown extends NewPunchingStand {
         double randomY = 0.5D + host.getRandom().nextDouble() * 0.3D;
         double randomX = (host.getRandom().nextDouble() - 0.5) * 2.7;
         double randomZ = (host.getRandom().nextDouble() - 0.5) * 2.7;
+        // stops people from riding a mob with spring legs
+        // also the rider gets launched too because they were sitting on a spring.
+        if (host.isVehicle()) {
+            for (Entity passenger : host.getPassengers()) {
+                passenger.stopRiding();
+                passenger.setDeltaMovement(randomX, randomY, randomZ);
+                passenger.hurtMarked = true;
+            }
+        }
         host.setDeltaMovement(randomX, randomY, randomZ);
         host.hurtMarked = true;
+        this.lastSpringTick = 10;
         //sound here
         playSoundIfPossible(self.level(), null, host.blockPosition(),
                 ModSounds.DIVER_DOWN_SPRING_EVENT,
@@ -3984,6 +3998,7 @@ public class PowersDiverDown extends NewPunchingStand {
         }
         this.springTarget = null;
         this.springLegsTicks = 0;
+        this.lastSpringTick = 0;
     }
 
     // spring legs end
