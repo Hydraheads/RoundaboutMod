@@ -147,6 +147,8 @@ public interface StandUser {
     void roundabout$setOasisVanishTicks(int set);
     int roundabout$getDiverDownVanishTicks();
     void roundabout$setDiverDownVanishTicks(int set);
+    int roundabout$getCatchTheRainbowVanishTicks();
+    void roundabout$setCatchTheRainbowVanishTicks(int set);
 
     int getJumpImmunityTicks();
 
