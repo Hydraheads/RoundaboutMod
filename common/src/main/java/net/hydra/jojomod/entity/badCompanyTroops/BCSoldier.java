@@ -119,11 +119,8 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
     public void tick() {
         super.tick();
 
-        if (hasParachuteOff) {
-            parachuteTicks++;
-        }else {
-            parachuteTicks = -1;
-        }
+        if (hasParachuteOff) { parachuteTicks++; }
+        else { parachuteTicks = -1; }
 
         hasParachuteOff = !onGround() && !(isInWater() || isInLava()) && !isDisplay;
 
@@ -153,9 +150,7 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
             } else {
                 if (getTarget() != null && !(distanceToSqr(getTarget().getX(), getTarget().getY(), getTarget().getZ()) > attackRange)) {
                     setAnim(IDLE_GUN);
-                }else {
-                    setAnim(SHOOT_GUN);
-                }
+                }else { setAnim(SHOOT_GUN); }
             }
         }
 
@@ -201,21 +196,16 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
             if ($$0.equals(Attributes.MAX_HEALTH)) {
                 return this.getAttributes().getValue($$0) * 6;
             }else if ($$0.equals(Attributes.MOVEMENT_SPEED)) {
-                return this.getAttributes().getValue($$0) * 1.15f;
+                return this.getAttributes().getValue($$0) * 0.8f;
             }
         }
         return this.getAttributes().getValue($$0);
     }
 
     @Override
-    public boolean isAttackable() {
-        return true;
-    }
+    public boolean isAttackable() { return true; }
 
-    @Override
-    public boolean isPickable() {
-        return true;
-    }
+    @Override  public boolean isPickable() { return true; }
 
     public boolean canStandBeHurt() {return true;}
 
@@ -241,8 +231,11 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
     }
 
     public void shootSingleBulletAt(Vec3 positionShoot, LivingEntity target) {
+        shootSingleBulletAtPosition(positionShoot, target.getEyePosition(1));
+    }
+
+    public void shootSingleBulletAtPosition(Vec3 positionShoot, Vec3 targetPosition) {
         BadCompanyBulletEntity bullet = new BadCompanyBulletEntity(level(), getUser());
-        Vec3 targetPosition = target.getEyePosition(1);
         level().addFreshEntity(bullet);
         bullet.absMoveTo(positionShoot.x, positionShoot.y, positionShoot.z);
         bullet.shoot(targetPosition.x - positionShoot.x, targetPosition.y - positionShoot.y, targetPosition.z - positionShoot.z, 3.5F, 1.25F);
@@ -266,4 +259,15 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
     private int chargeTicks = -1;
     public int bulletsLeft = getBulletsAmount();
 
+    @Override
+    public boolean performAttack() {
+        if (getTarget() != null) {
+            if (bulletsLeft <= 0 || distanceTo(getTarget()) > (attackRange+0.75f)) { return false; }
+
+            performRangedAttack(getTarget(), 1);
+            return true;
+        }
+
+        return false;
+    }
 }

@@ -92,6 +92,13 @@ public class BCTroop extends MultipleTypeStand {
                 > getMaximumRange())) {
             discard();
         }
+        if (fireCooldown > 0) {
+            fireCooldown--;
+        }else {
+            if (performAttack()) {
+                fireCooldown = getFireCooldownMax();
+            }
+        }
     }
 
     public static int getMaximumRange() { return 25; }
@@ -125,5 +132,14 @@ public class BCTroop extends MultipleTypeStand {
         }
 
         return true;
+    }
+
+    public int fireCooldown = 0;
+    public int getFireCooldownMax() {
+        return 5;
+    }
+
+    public boolean performAttack() {
+        return false;
     }
 }

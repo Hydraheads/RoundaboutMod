@@ -21,7 +21,8 @@ public class UserHurtTargetGoal extends TargetGoal {
     }
 
     public boolean canUse() {
-        if (troop.getCurrentTactic() == BadCompanyTactics.RETURN.id || troop.getCurrentTactic() == BadCompanyTactics.STOP.id) {
+        if (troop.getCurrentTactic() != BadCompanyTactics.WARD.id) {
+        //if (troop.getCurrentTactic() == BadCompanyTactics.RETURN.id || troop.getCurrentTactic() == BadCompanyTactics.STOP.id) {
             return false;
         }
 
