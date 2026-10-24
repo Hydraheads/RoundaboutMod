@@ -3966,7 +3966,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
 
                 float radius = this.self.getBbWidth() * 0.5f + 0.05f;
-                ExplosionUtil.explodeEffects(this.self.getPosition(0), this.self.level(), ModParticles.KILLER_QUEEN_EXPLOSION, radius, 12);
+                ExplosionUtil.explodeEffects(this.self.getPosition(0), this.self, ModParticles.KILLER_QUEEN_EXPLOSION, radius, 12);
                 playSoundIfPossible(self.level(),null, this.self.getOnPos(), ModSounds.KILLER_QUEEN_EXPLOSION_EVENT, SoundSource.PLAYERS, 0.3F, 1.0f);
             }
         }
@@ -4307,7 +4307,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                         if(!target.isAlive() && !MainUtil.isBossMob(target)){ target.discard(); }
 
-                        ExplosionUtil.explodeEffects(target.getPosition(1), target.level(), getExplosionParticle(), 0.35f);
+                        ExplosionUtil.explodeEffects(target.getPosition(1), target, getExplosionParticle(), 0.35f);
                         if (this.self instanceof ServerPlayer pl) {
                             S2CPacketUtil.sendPlaySoundPacket(pl, this.self.getId(), getExplosionByteSound());
                         }
@@ -4363,7 +4363,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                                         multiplier * ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustDayMobsDamage);
                             }
 
-                            ExplosionUtil.explodeEffects(target.getPosition(1), target.level(), getExplosionParticle(), 0.35f);
+                            ExplosionUtil.explodeEffects(target.getPosition(1), target, getExplosionParticle(), 0.35f);
                             if(!target.isAlive() && !MainUtil.isBossMob(target)){ target.discard(); }
 
                             if (this.self instanceof ServerPlayer pl) {
@@ -5453,7 +5453,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             float hRange = 0.15f + (0.4f*bombSize);
             float vRange = 0.35f + (0.5f*bombSize);
 
-            ExplosionUtil.explodeEffects(vPos, level, getExplosionParticle(), new Vec3(hRange * rangeModifier, vRange * rangeModifier, hRange * rangeModifier),
+            ExplosionUtil.explodeEffects(vPos, target != null ? target : self, getExplosionParticle(), new Vec3(hRange * rangeModifier, vRange * rangeModifier, hRange * rangeModifier),
                     4 + 13*bombSize);
             //ExplosionUtil.explodeEffects(vPos, level, getExplosionParticle(), 0.55f);
             if (this.self instanceof ServerPlayer pl) {
