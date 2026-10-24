@@ -91,7 +91,8 @@ public class PowersSilverChariot extends NewPunchingStand {
             SILVER_CHARIOT_RAPIER_SPIN_UPDATE = 93,
             SILVER_CHARIOT_ARMOURED = 94,
             SILVER_CHARIOT_HAS_RAPIER = 95,
-            SILVER_CHARIOT_REGAINING_ARMOUR_FROM_DESUMMON = 96;
+            SILVER_CHARIOT_REGAINING_ARMOUR_FROM_DESUMMON = 96,
+            SILVER_CHARIOT_OFFHAND_ITEM = 97;
 
     public static final byte
             BASE = (byte) 1,
@@ -1589,6 +1590,11 @@ public class PowersSilverChariot extends NewPunchingStand {
             this.updateRapierShotPlatformCharge();
         }
         super.updateUniqueMoves();
+    }
+
+    @Override
+    public boolean tryTripleIntPower(int move, boolean forced, int chargeTime, int move2, int move3) {
+        return super.tryTripleIntPower(move, forced, chargeTime, move2, move3);
     }
 
     @Override
