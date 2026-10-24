@@ -82,6 +82,7 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
 
     private boolean hasParachuteOff = false;
     private boolean wasParachuteOff = false;
+    private int parachuteTicks = -1;
 
     @Override
     public void setupAnimationStates() {
@@ -118,13 +119,24 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
     public void tick() {
         super.tick();
 
+        if (hasParachuteOff) {
+            parachuteTicks++;
+        }else {
+            parachuteTicks = -1;
+        }
+
         if (level().isClientSide) {
             if (((StandUser) ClientUtil.getPlayer()).roundabout$hasAStand()) {
                 if (hasParachuteOff && !wasParachuteOff) {
-                    level().playSound(this, blockPosition(), ModSounds.BC_PARACHUTE_OPEN_EVENT, SoundSource.AMBIENT, 1.0f, 1.0f);
+                    level().playSound(this, blockPosition(), ModSounds.BC_PARACHUTE_OPEN_EVENT, SoundSource.AMBIENT, 0.4f, 1.0f);
+                }else if (hasParachuteOff) {
+                    if (parachuteTicks % 80 == 10) {
+                        level().playSound(this, blockPosition(), ModSounds.BC_PARACHUTE_LOOP_EVENT, SoundSource.AMBIENT, 0.4f, 1.0f);
+                    }
                 }
             }
         }
+
         wasParachuteOff = hasParachuteOff;
 
         float pitch = this.getXRot();
