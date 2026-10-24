@@ -3973,6 +3973,15 @@ public class PowersDiverDown extends NewPunchingStand {
         double randomY = 0.5D + host.getRandom().nextDouble() * 0.3D;
         double randomX = (host.getRandom().nextDouble() - 0.5) * 2.7;
         double randomZ = (host.getRandom().nextDouble() - 0.5) * 2.7;
+        // stops people from riding a mob with spring legs
+        // also the rider gets launched too because they were sitting on a spring.
+        if (host.isVehicle()) {
+            for (Entity passenger : host.getPassengers()) {
+                passenger.stopRiding();
+                passenger.setDeltaMovement(randomX, randomY, randomZ);
+                passenger.hurtMarked = true;
+            }
+        }
         host.setDeltaMovement(randomX, randomY, randomZ);
         host.hurtMarked = true;
         this.lastSpringTick = 10;
