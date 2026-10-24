@@ -10,18 +10,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
 
 public class GrabbedMobSoulPlayerSlim extends GrabbedMobSoul{
-
     public GrabbedMobSoulPlayerSlim(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
     }
-
-    int tick = 0;
-
-    @Override
-    public void tick(){
-        super.tick();
-        tick++;
-        System.out.println(tick);
-    }
-
 }
