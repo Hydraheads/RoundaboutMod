@@ -316,6 +316,7 @@ public interface StandUser {
     void roundabout$setLocacacaCurse(byte locacacaCurse);
     byte roundabout$getLocacacaCurse();
 
+    /**Slack Babbath*/
     void roundabout$setGrabbedSoul(boolean grabbedSoul);
     boolean roundabout$getGrabbedSoul();
 

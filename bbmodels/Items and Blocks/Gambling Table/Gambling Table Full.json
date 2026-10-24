@@ -130,6 +130,10 @@
 			"rotation": [0, -135, 0],
 			"scale": [0.3, 0.3, 0.3]
 		},
+		"ground": {
+			"translation": [1.75, 0, 1.75],
+			"scale": [0.25, 0.25, 0.25]
+		},
 		"gui": {
 			"rotation": [33, 35, 1],
 			"translation": [3.9, -0.75, 0],

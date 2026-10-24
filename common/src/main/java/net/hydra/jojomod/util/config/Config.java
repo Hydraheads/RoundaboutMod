@@ -200,9 +200,9 @@ public class Config implements Cloneable {
         public Float coltDamage;
         @FloatOption(group = "inherit", value = 4.5F, min = 0, max = 72000)
         public Float snubnoseDamage;
-        @FloatOption(group = "inherit", value = 2.0F, min = 0, max = 72000)
-        public Float berettaDamage;
         @FloatOption(group = "inherit", value = 5.5F, min = 0, max = 72000)
+        public Float berettaDamage;
+        @FloatOption(group = "inherit", value = 2.0F, min = 0, max = 72000)
         public Float tommyGunDamage;
         @IntOption(group = "inherit", value = 12, min = 0, max = 72000)
         public Integer maxKnivesInOneHit;
@@ -1463,11 +1463,11 @@ public class Config implements Cloneable {
         public Integer silverChariotCooldownStatueCutting;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer silverChariotCooldownSlabCutting;
-        @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer silverChariotCooldownSelfGrab;
         @IntOption(group = "inherit", value = 280, min = 0, max = 72000)
         public Integer silverChariotCooldownSelfThrow;
-        @IntOption(group = "inherit", value = 280, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer silverChariotCooldownSelfThrowRebound;
         @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
         public Integer silverChariotCooldownControlModeToggle;
@@ -1479,12 +1479,12 @@ public class Config implements Cloneable {
         public Integer silverChariotCooldownRapierShotInterrupt;
         @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
         public Integer silverChariotCooldownRapierShotPlatform;
-        @IntOption(group = "inherit", value = 250, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
         public Integer silverChariotCooldownRapierSpin;
         @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
         public Integer silverChariotCooldownRapierSlash;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
-        public Integer silverChariotMinimumCooldownCrouchAttack;
+        public Integer silverChariotMinimumCooldownOffhandAttack;
         @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
         public Integer silverChariotRapierSlashRadius;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)

@@ -751,14 +751,25 @@ public class SilverChariotEntity extends FollowingStandEntity {
         previousCarryPosition = carryPos;
     }
 
+    private static final int AFTERIMAGE_TICK_INTERVAL = 2;
+    private static final int AFTERIMAGE_MAX_AMOUNT = 5;
+    private int afterImageTicks = 0;
+    private Deque<SilverChariotAfterimageState> silverChariotAfterimageStates = new ArrayDeque<>();
+
     @Override
     public void tick() {
-        super.tick();
         Vec3 oldPosition = this.position();
 
         if (this.level().isClientSide()) {
-            this.addCurrentPositionAndRoationToQueue();
+            afterImageTicks++;
+
+            if (afterImageTicks >= AFTERIMAGE_TICK_INTERVAL) {
+                this.addCurrentPositionAndRoationToQueue();
+            }
+            // afterImageTicks++;
+            afterImageTicks = afterImageTicks % AFTERIMAGE_TICK_INTERVAL;
         }
+        super.tick();
 
         if (!this.level().isClientSide()) {
             if (this.isSelfCarryModeActive()) {
@@ -980,8 +991,6 @@ public class SilverChariotEntity extends FollowingStandEntity {
         return isRemoteControlled();
     }
 
-    private Deque<SilverChariotAfterimageState> silverChariotAfterimageStates = new ArrayDeque<>();
-
     private Random rand = new Random();
 
     private void addCurrentPositionAndRoationToQueue() {
@@ -993,7 +1002,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
                 )
         );
 
-        while (silverChariotAfterimageStates.size() > 4) {
+        while (silverChariotAfterimageStates.size() > AFTERIMAGE_MAX_AMOUNT) {
             this.silverChariotAfterimageStates.removeLast();
         }
     }
