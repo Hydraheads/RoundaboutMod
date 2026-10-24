@@ -969,6 +969,8 @@
   "sounds.roundabout.bc_tank_summon": "Bad Company tank summoning",
   "sounds.roundabout.bc_helicopter_summon": "Bad Company helicopter summoning",
   "sounds.roundabout.bc_ui_select": "Bad Company select",
+  "sounds.roundabout.bc_parachute_open": "Parachute Open",
+  "sounds.roundabout.bc_parachute_loop": "Parachute",
 
   "sounds.roundabout.j_anubis_hit_1": "Sword hit",
   "sounds.roundabout.j_anubis_hit_2": "Sword hit",
