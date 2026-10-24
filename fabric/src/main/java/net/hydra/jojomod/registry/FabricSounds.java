@@ -635,6 +635,8 @@ public class FabricSounds {
         addSound(ModSounds.BC_BUNDLE_SUMMON_ID, ModSounds.BC_BUNDLE_SUMMON_EVENT);
         addSound(ModSounds.BC_HELICOPTER_SUMMON_ID, ModSounds.BC_HELICOPTER_SUMMON_EVENT);
         addSound(ModSounds.BC_TANK_SUMMON_ID, ModSounds.BC_TANK_SUMMON_EVENT);
+        addSound(ModSounds.BC_PARACHUTE_OPEN_ID, ModSounds.BC_PARACHUTE_OPEN_EVENT);
+        addSound(ModSounds.BC_PARACHUTE_LOOP_ID, ModSounds.BC_PARACHUTE_LOOP_EVENT);
 
         addSound(ModSounds.DIO_HOHO_ID, ModSounds.DIO_HOHO_EVENT);
         addSound(ModSounds.DIO_HOHO_2_ID, ModSounds.DIO_HOHO_2_EVENT);
