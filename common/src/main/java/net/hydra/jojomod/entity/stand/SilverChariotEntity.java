@@ -7,6 +7,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
 import net.hydra.jojomod.stand.powers.PowersSilverChariot;
 import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -751,8 +752,8 @@ public class SilverChariotEntity extends FollowingStandEntity {
         previousCarryPosition = carryPos;
     }
 
-    private static final int AFTERIMAGE_TICK_INTERVAL = 2;
-    private static final int AFTERIMAGE_MAX_AMOUNT = 5;
+    private static final int AFTERIMAGE_TICK_INTERVAL = ConfigManager.getClientConfig().silverChariotSettings.silverChariotTickIntervalBetweenAfterimage;
+    private static final int AFTERIMAGE_MAX_AMOUNT = ConfigManager.getClientConfig().silverChariotSettings.silverChariotAfterimagesMaxAmount;
     private int afterImageTicks = 0;
     private Deque<SilverChariotAfterimageState> silverChariotAfterimageStates = new ArrayDeque<>();
 
@@ -850,7 +851,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     @Override
     public boolean canBeHitByStands() {
-        return super.canBeHitByStands();
+        return this.isControlModeActive();
     }
 
     @Override
@@ -917,7 +918,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     @Override
     public HumanoidArm getMainArm() {
-        return super.getMainArm();
+        return !this.isPart5Skin() ? HumanoidArm.RIGHT : HumanoidArm.LEFT;
     }
 
     @Override
@@ -954,7 +955,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
         // }
         // }
         // }
-        return isRemoteControlled() && super.canBeHitByProjectile();
+        return isRemoteControlled() || super.canBeHitByProjectile();
     }
 
     @Override
