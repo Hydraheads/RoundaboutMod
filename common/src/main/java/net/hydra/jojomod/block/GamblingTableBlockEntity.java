@@ -2,6 +2,7 @@ package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.menu.GamblingGame;
 import net.hydra.jojomod.menu.GamblingTableMenu;
+import net.hydra.jojomod.menu.gambling_games.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
@@ -279,7 +280,11 @@ public class GamblingTableBlockEntity extends BlockEntity implements Container, 
     private void startGamble() {
         this.gameInProgress = true;
         // IT'S GAMBLING TIME!!!!
-        this.level.getServer().getPlayerList().broadcastSystemMessage(Component.literal("IT'S GAMBLING TIME!!!!! game: " + this.selectedGame), false);
+        switch (this.selectedGame) {
+            case COIN_DROP -> this.activeGame = new CoinDropGame(this);
+            default -> this.activeGame = null;
+        }
+        this.setChanged();
     }
 
     public GamblingGame getActiveGame() {
@@ -315,6 +320,8 @@ public class GamblingTableBlockEntity extends BlockEntity implements Container, 
     public int getSelectedGame() {
         return this.selectedGame;
     }
+    public UUID getHostUUID() { return this.hostUUID; }
+    public UUID getChallengerUUID() { return this.challengerUUID; }
 
     public void setSelectedGame(int game) {
         this.selectedGame = game;
