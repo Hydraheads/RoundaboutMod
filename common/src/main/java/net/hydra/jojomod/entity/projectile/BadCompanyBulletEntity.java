@@ -11,6 +11,7 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersBadCompany;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -193,10 +194,17 @@ public class BadCompanyBulletEntity extends AbstractArrow {
     public void tick() {
 
         super.tick();
+
+        if (getOwner() == null) {
+            discard();
+        }else if (!(((StandUser)getOwner()).roundabout$getStandPowers() instanceof PowersBadCompany) || MainUtil.cheapDistanceTo2(this.getX(), this.getZ(), getOwner().getX(), getOwner().getZ()) > 30.5) {
+            discard();
+        }
+
         ticksSinceCreation++;
 
         // for getting the trail
-        if (this.level().isClientSide() && ticksSinceCreation > 3) {
+        if (this.level().isClientSide() && ticksSinceCreation > 1) {
             if (!this.inGround && !this.isRemoved()) {
                 this.trailPoints.add(this.position().add(0, 0.1, 0));
                 if (this.trailPoints.size() > MAX_TRAIL_POINTS) {
@@ -206,6 +214,7 @@ public class BadCompanyBulletEntity extends AbstractArrow {
                 this.trailPoints.clear();
             }
         }
+
     }
 
     @Override

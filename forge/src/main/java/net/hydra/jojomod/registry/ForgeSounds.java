@@ -1224,6 +1224,10 @@ public class ForgeSounds {
             register(ModSounds.BC_HELICOPTER_SUMMON, ModSounds.BC_HELICOPTER_SUMMON_ID);
     public static final RegistryObject<SoundEvent> BC_TANK_SUMMON =
             register(ModSounds.BC_TANK_SUMMON, ModSounds.BC_TANK_SUMMON_ID);
+    public static final RegistryObject<SoundEvent> BC_PARACHUTE_OPEN =
+            register(ModSounds.BC_PARACHUTE_OPEN, ModSounds.BC_PARACHUTE_OPEN_ID);
+    public static final RegistryObject<SoundEvent> BC_PARACHUTE_LOOP =
+            register(ModSounds.BC_PARACHUTE_LOOP, ModSounds.BC_PARACHUTE_LOOP_ID);
 
     public static final RegistryObject<SoundEvent> PLANET_WAVES_SUMMON =
             register(ModSounds.PLANET_WAVES_SUMMON, ModSounds.PLANET_WAVES_SUMMON_ID);

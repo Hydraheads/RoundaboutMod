@@ -4650,6 +4650,18 @@
       "roundabout:silver_chariot_rapier_shot_entity_impact"
     ]
   },
+  "bc_parachute_open": {
+    "subtitle" : "sounds.roundabout.bc_parachute_open",
+    "sounds": [
+      "roundabout:bc_parachute_open"
+    ]
+  },
+  "bc_parachute_loop": {
+    "subtitle" : "sounds.roundabout.bc_parachute_loop",
+    "sounds": [
+      "roundabout:bc_parachute_loop"
+    ]
+  },
   "bc_troop_summon": {
     "subtitle" : "sounds.roundabout.bc_troop_summon",
     "sounds": [

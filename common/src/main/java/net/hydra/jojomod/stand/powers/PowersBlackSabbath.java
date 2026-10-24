@@ -464,13 +464,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                             BE.incFadeOut((byte) 1);
                             PowerTypes.copyPlaneOfExisting(self,BE);
                             this.self.level().addFreshEntity(BE);
-
-                            /*GrabbedMobSoul gs = ModEntities.GRABBED_PLAYER_SOUL.create(this.getSelf().level());
-                            gs.absMoveTo(pn.x(), this.self.getY() + (this.self.getBbHeight() / 2.45F), pn.z());
-                            gs.setMaster(this.self);
-                            gs.setYRot((self.getYRot() % 360) - 180);
-                            PowerTypes.copyPlaneOfExisting(self,gs);
-                            this.self.level().addFreshEntity(gs);*/
                         }
                     }
                 }
@@ -1038,7 +1031,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                             BE.setShouldFloat(false);
                             BE.setShouldSelect(false);
                             PowerTypes.copyPlaneOfExisting(self,BE);
-                            BE.setUnrender(true);
                             if(BE.getUser() != null && BE.getUser() instanceof Player pl) {
                                 IPlayerEntity play = ((IPlayerEntity) pl);
                                 ItemStack blackFS = play.roundabout$getBlckSabbathPlayerInventory().getItem(0);
@@ -1051,6 +1043,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                                     BE.setMoveMode(2);
                                 }
                             }
+                          //  BE.setUnrender(true);
                             this.self.level().addFreshEntity(BE);
                         }
                     }

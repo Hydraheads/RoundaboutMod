@@ -1836,6 +1836,13 @@ public class ModSounds {
     public static final ResourceLocation BC_TANK_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BC_TANK_SUMMON);
     public static SoundEvent BC_TANK_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(BC_TANK_SUMMON_ID);
 
+    public static final String BC_PARACHUTE_LOOP = "bc_parachute_loop";
+    public static final ResourceLocation BC_PARACHUTE_LOOP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BC_PARACHUTE_LOOP);
+    public static SoundEvent BC_PARACHUTE_LOOP_EVENT = SoundEvent.createVariableRangeEvent(BC_PARACHUTE_LOOP_ID);
+    public static final String BC_PARACHUTE_OPEN = "bc_parachute_open";
+    public static final ResourceLocation BC_PARACHUTE_OPEN_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BC_PARACHUTE_OPEN);
+    public static SoundEvent BC_PARACHUTE_OPEN_EVENT = SoundEvent.createVariableRangeEvent(BC_PARACHUTE_OPEN_ID);
+
 
     public static final String ZOMBIE_CHARGE = "zombie_charge";
     public static final ResourceLocation ZOMBIE_CHARGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ZOMBIE_CHARGE);

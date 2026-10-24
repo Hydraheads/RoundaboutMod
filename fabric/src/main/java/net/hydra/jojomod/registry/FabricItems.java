@@ -758,8 +758,6 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_MAGICIANS_RED);
                         entries.accept(STAND_DISC_JUSTICE);
                         entries.accept(MAX_STAND_DISC_JUSTICE);
-                        entries.accept(STAND_DISC_GREEN_DAY);
-                        entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_ANUBIS);
                         entries.accept(MAX_STAND_DISC_ANUBIS);
                         entries.accept(STAND_DISC_RATT);
@@ -770,6 +768,8 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_WHITE_ALBUM);
                         entries.accept(STAND_DISC_KING_CRIMSON);
                         entries.accept(MAX_STAND_DISC_KING_CRIMSON);
+                        entries.accept(STAND_DISC_GREEN_DAY);
+                        entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_DIVER_DOWN);
                         entries.accept(MAX_STAND_DISC_DIVER_DOWN);
                         entries.accept(STAND_DISC_SOFT_AND_WET);
