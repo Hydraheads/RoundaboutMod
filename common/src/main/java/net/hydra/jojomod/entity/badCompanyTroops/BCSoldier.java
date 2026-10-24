@@ -125,17 +125,19 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
             parachuteTicks = -1;
         }
 
-        if (level().isClientSide) {
-            if (((StandUser) ClientUtil.getPlayer()).roundabout$hasAStand()) {
+        hasParachuteOff = !onGround() && !(isInWater() || isInLava()) && !isDisplay;
+
+        //if (level().isClientSide) {
+            //if (((StandUser) ClientUtil.getPlayer()).roundabout$hasAStand()) {
                 if (hasParachuteOff && !wasParachuteOff) {
-                    level().playSound(this, blockPosition(), ModSounds.BC_PARACHUTE_OPEN_EVENT, SoundSource.AMBIENT, 0.4f, 1.0f);
+                    level().playSound(null, blockPosition(), ModSounds.BC_PARACHUTE_OPEN_EVENT, SoundSource.AMBIENT, 1.5f, 1.0f);
                 }else if (hasParachuteOff) {
                     if (parachuteTicks % 80 == 10) {
-                        level().playSound(this, blockPosition(), ModSounds.BC_PARACHUTE_LOOP_EVENT, SoundSource.AMBIENT, 0.4f, 1.0f);
+                        level().playSound(null, blockPosition(), ModSounds.BC_PARACHUTE_LOOP_EVENT, SoundSource.AMBIENT, 1.5f, 1.0f);
                     }
                 }
-            }
-        }
+            //}
+        //}
 
         wasParachuteOff = hasParachuteOff;
 
