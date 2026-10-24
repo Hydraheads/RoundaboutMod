@@ -1031,7 +1031,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                             BE.setShouldFloat(false);
                             BE.setShouldSelect(false);
                             PowerTypes.copyPlaneOfExisting(self,BE);
-                            BE.setUnrender(true);
                             if(BE.getUser() != null && BE.getUser() instanceof Player pl) {
                                 IPlayerEntity play = ((IPlayerEntity) pl);
                                 ItemStack blackFS = play.roundabout$getBlckSabbathPlayerInventory().getItem(0);
@@ -1044,6 +1043,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                                     BE.setMoveMode(2);
                                 }
                             }
+                          //  BE.setUnrender(true);
                             this.self.level().addFreshEntity(BE);
                         }
                     }
