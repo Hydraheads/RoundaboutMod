@@ -52,6 +52,7 @@ public class GrabbedMobSoulRendererPlayerSlim<T extends GrabbedMobSoulPlayerSlim
 
     @Override
     public void render(GrabbedMobSoulPlayerSlim mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
+        matrixStack.scale(0.96f, 0.96f, 0.96f);
         super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
     }
 

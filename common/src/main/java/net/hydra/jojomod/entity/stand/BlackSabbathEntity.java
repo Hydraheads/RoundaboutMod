@@ -6,8 +6,11 @@ import net.hydra.jojomod.access.IPlayerEntityServer;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.goals.BlackSabbathRangedAttackGoal;
 import net.hydra.jojomod.entity.navigation.BlackSabbathNavigation;
+import net.hydra.jojomod.entity.objects.GrabbedMobSoul;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -15,6 +18,7 @@ import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Position;
@@ -112,9 +116,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
  public void setupAnimationStates() {
      super.setupAnimationStates();
      Byte bt = this.getBsAnimation();
-
      System.out.println(bt + ".  " + this.level());
-
      switch (bt) {
          case 0 -> {
              coat_open.startIfStopped(this.tickCount);
@@ -252,9 +254,11 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
              diving.stop();
              catching.stop();
              emerge.stop();
-          //   grabOne.stop();
          }
          case 13 -> {
+             this.emerge.stop();
+             diving.stop();
+             burningDive.stop();
              burningCripple.stop();
              burningStart.stop();
              this.coat_open.stop();
@@ -269,6 +273,9 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
              }
          }
          case 14 -> {
+             diving.stop();
+             burningDive.stop();
+             this.emerge.stop();
              burningCripple.stop();
              burningStart.stop();
              this.coat_open.stop();
@@ -340,6 +347,8 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
 
  /**Changes animation states dynamically server sided*/
     public void animationStateTick(){
+        System.out.println(getThrowable());
+        System.out.println(getTridentLoyalty());
      if(!this.level().isClientSide()){
          if(this.getUser() != null){
              if (((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb){
@@ -367,7 +376,9 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                          this.coat_open.stop();
                                          if ((targetSabbath() != null && !isUnderSunlight(targetSabbath()))) {
                                              if (lungeTicks < 10) {
-                                                 setBsAnimations((byte)4);
+                                                 if(!getTridentLoyalty()) {
+                                                     setBsAnimations((byte) 4);
+                                                 }
                                              }
                                              if (lungeTicks < 220 && lungeTicks > 210) {
                                                  setBsAnimations((byte)5);
@@ -383,9 +394,11 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                                          setBsAnimations((byte)7);
                                                      }
                                                  } else {
-                                                     if (!burningDive.isStarted()) {
-                                                         setBsAnimations((byte)8);
-                                                     }
+                                                         if (!burningDive.isStarted()) {
+                                                             if(!getTridentLoyalty()) {
+                                                                 setBsAnimations((byte) 8);
+                                                             }
+                                                         }
                                                  }
                                              }
                                          } else {
@@ -395,9 +408,11 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                                          setBsAnimations((byte)7);
                                                      }
                                                  } else {
-                                                     if (!burningDive.isStarted()) {
-                                                         setBsAnimations((byte)8);
-                                                     }
+                                                         if (!burningDive.isStarted()) {
+                                                             if(!getTridentLoyalty()) {
+                                                                 setBsAnimations((byte) 8);
+                                                             }
+                                                         }
                                                  }
                                              }
                                              if (isWalking && lungeTicks > 50) {
@@ -428,9 +443,11 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                                  setBsAnimations((byte) 7);
                                              }
                                          } else {
-                                             if (!burningDive.isStarted()) {
-                                                 setBsAnimations((byte) 8);
-                                             }
+                                                 if (!burningDive.isStarted()) {
+                                                     if(!getTridentLoyalty()) {
+                                                         setBsAnimations((byte) 8);
+                                                     }
+                                                 }
                                          }
                                      }
                                      if (getStrafing()) {
@@ -1306,6 +1323,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                             setMeleeInteractionTicks(220);
                                             if(!this.level().isClientSide) {
                                                 ((StandUser) targetSabbath()).roundabout$setSealedTicks(220);
+                                                //createSoul();
                                             }
                                         }
                                     }
@@ -1357,7 +1375,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                             }
                         }
                     } else {
-                        if(level().getEntity(getGrabbing()) != null && level().getEntity(getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser) e).roundabout$updateSealedTicks(-1);}
+                        if(level().getEntity(getGrabbing()) != null && level().getEntity(getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser) e).roundabout$updateSealedTicks(-1);killSoul();}
                         setGrabbing(0);
                         setMeleeInteractionTicks(0);
                         setUnrender(false);
@@ -1381,7 +1399,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                 }
                             }
                         } else {
-                            if(level().getEntity(getGrabbing()) != null && level().getEntity(getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser) e).roundabout$updateSealedTicks(-1);}
+                            if(level().getEntity(getGrabbing()) != null && level().getEntity(getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser) e).roundabout$updateSealedTicks(-1);killSoul();}
                             setGrabbing(0);
                             setMeleeInteractionTicks(0);
                             if (isWalking) {
@@ -1404,25 +1422,63 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         }
     }
 
-   /* private LivingEntity getNewSoulGrabbed(){
+    private StandEntity grabbedSoul = null;
+
+    private void createSoul(){
+        StandEntity s = this.getNewSoulGrabbed();
+        Entity grab = this.level().getEntity(getGrabbing());
+
+        if(!this.level().isClientSide()) {
+            if (s != null && grab != null) {
+                s.setBsGrabbed(true);
+                s.setBsGrabbed(true);
+                if(s instanceof GrabbedMobSoul) {
+                    if(grab instanceof LivingEntity le) {
+                        s.setMaster(le);
+                    }
+                } else {
+                    s.setMaster(null);
+                }
+                s.setFadeOut((byte) 8);
+                s.absMoveTo(grab.position().x, grab.position().y, grab.position().z);
+                s.setYRot((getYRot() % 360) - 180);
+                PowerTypes.copyPlaneOfExisting(this, s);
+                grabbedSoul = s;
+                this.level().addFreshEntity(s);
+                if (this.getUser() != null && ((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pbs) {
+                    pbs.setGrabbedSoul(s);
+                }
+            }
+        }
+    }
+
+    private StandEntity getNewSoulGrabbed(){
         Entity grab = this.level().getEntity(getGrabbing());
         if(grab != null && grab instanceof LivingEntity l){
             StandPowers sp = ((StandUser)l).roundabout$getStandPowers();
             boolean regSoulStand = sp != null && (sp instanceof PowersAchtungBaby || sp instanceof PowersWhiteAlbum || sp instanceof PowersEmperor || sp instanceof PowersMetallica
                                                     || sp instanceof PowersMetallica || sp instanceof PowersOasis);
 
-            if(!regSoulStand){
+          /*  if(!regSoulStand){
                //RETURNS THE STAND
-            } else {
+            } else {*/
                 if(!(l instanceof Player p)){
                     return ModEntities.GRABBED_MOB_SOUL.create(this.level());
                 } else {
-                    //RETURNS THE YELLOWED PLAYER SKIN
+                   // if(isWideSkin(p)) {
+                   //     return ModEntities.GRABBED_PLAYER_SOUL.create(this.level());
+                  //  } else {
+                        return ModEntities.GRABBED_PLAYER_SOUL_SLIM.create(this.level());
+                   // }
                 }
-            }
+           // }
         }
         return null;
-    }*/
+    }
+
+    public boolean isWideSkin(Player p) {
+        return ((AbstractClientPlayer) p).getModelName().equals("default");
+    }
 
     public boolean isStuck = false;
     private Vec3 lastPos = Vec3.ZERO;
@@ -1716,9 +1772,16 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                             ((StandUser) e).roundabout$updateSealedTicks(-1);
                         }
                         ((StandUser) e).roundabout$setGrabbedSoul(false);
+                        killSoul();
                     }
             }
         }
+        }
+    }
+
+    public void killSoul(){
+        if(this.grabbedSoul != null){
+            grabbedSoul.forceDespawn(true);
         }
     }
 
