@@ -145,9 +145,9 @@ public class SilverChariotBaseRenderer<T extends StandEntity> extends StandRende
             matrixStack.scale(0.87f * factor, 0.87f * factor, 0.87f * factor);
         }
 
+        super.render(mobEntity, entityYaw, partialTicks, matrixStack, vertexConsumerProvider, packedLight);
 
-
-        float alpha = 0.15F;
+        float alpha = 0.50F;
         if (!mobEntity.getArmoured() && mobEntity.getAfterimageStates().size() >= 2) {
             // renderAfterimage1(mobEntity, entityYaw, partialTicks, matrixStack, vertexConsumerProvider, packedLight, alpha, 2.5D, -2.0D, -1.5D);
             // renderAfterimage1(mobEntity, entityYaw, partialTicks, matrixStack, vertexConsumerProvider, packedLight, alpha, 1.5D, -2.0D, 3.5D);
@@ -162,7 +162,7 @@ public class SilverChariotBaseRenderer<T extends StandEntity> extends StandRende
                     && minecraft.options.getCameraType().isFirstPerson());
         }
         // this.model.getHead().visible = true;
-        super.render(mobEntity, entityYaw, partialTicks, matrixStack, vertexConsumerProvider, packedLight);
+        // super.render(mobEntity, entityYaw, partialTicks, matrixStack, vertexConsumerProvider, packedLight);
     }
 
     public void renderAfterimage1(SilverChariotEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i, float alpha, double x, double y, double z) {
@@ -263,7 +263,7 @@ public class SilverChariotBaseRenderer<T extends StandEntity> extends StandRende
             this.scale(mobEntity, matrixStack, g);
 
             // VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderType.entityTranslucent(getTextureLocation(mobEntity)));
-            VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderType.entityTranslucent(getTextureLocation(mobEntity)));
+            VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderType.entityTranslucentCull(getTextureLocation(mobEntity)));
             // this.model.head.visible = true;
             this.model.renderToBuffer(matrixStack, vertexConsumer, i, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, alpha);
             matrixStack.popPose();
