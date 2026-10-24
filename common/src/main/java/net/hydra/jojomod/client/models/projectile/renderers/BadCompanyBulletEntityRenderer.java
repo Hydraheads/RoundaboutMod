@@ -62,7 +62,7 @@ public class BadCompanyBulletEntityRenderer extends EntityRenderer<BadCompanyBul
                         $$3.last(),
                         $$5,
                         $$2,
-                        TrailRenderer.Settings.BULLETS,
+                        TrailRenderer.Settings.BC_BULLETS,
                         $$4
                 );
                 $$3.popPose();

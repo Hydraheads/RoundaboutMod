@@ -463,6 +463,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                             self.setDeltaMovement(Vec3.ZERO);
                             BE.incFadeOut((byte) 1);
                             PowerTypes.copyPlaneOfExisting(self,BE);
+                            BE.setBsAnimations((byte)3);
                             this.self.level().addFreshEntity(BE);
                         }
                     }
@@ -1510,7 +1511,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         if (displayStand == null){
             displayStand = this.getNewStandEntity();
         } else if(displayStand instanceof BlackSabbathEntity BSE){
-            BSE.coat_open.start(BSE.tickCount);
+            BSE.emerge.stop();
         }
         if (this.self instanceof Player PL && ((IPlayerEntity) PL).roundabout$getStandSkin() != displayStand.getSkin()) {
             displayStand = this.getNewStandEntity();

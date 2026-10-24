@@ -118,24 +118,27 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
      switch (bt) {
          case 0 -> {
              coat_open.startIfStopped(this.tickCount);
+             this.emerge.start(this.tickCount);
          }
          /* 1 and 2: Black Sabbath chest */
          case 1 -> {
+             this.emerge.stop();
              this.coat_open.stop();
              chest_close.stop();
              this.chest_open.startIfStopped(this.tickCount);
          }
          case 2 -> {
+             this.emerge.stop();
              this.chest_open.stop();
              this.coat_open.stop();
              this.chest_close.startIfStopped(this.tickCount);
          }
          /*3: floating behind user*/
          case 3 -> {
+             this.emerge.stop();
              this.chest_open.stop();
              this.chest_close.stop();
              this.floating.startIfStopped(this.tickCount);
-             this.coat_open.startIfStopped(this.tickCount);
          }
          /*Hunting Mode*/
          case 4 -> {

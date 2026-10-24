@@ -197,7 +197,7 @@ public class BadCompanyBulletEntity extends AbstractArrow {
 
         if (getOwner() == null) {
             discard();
-        }else if (!(((StandUser)getOwner()).roundabout$getStandPowers() instanceof PowersBadCompany) || MainUtil.cheapDistanceTo2(this.getX(), this.getZ(), getOwner().getX(), getOwner().getZ()) > 30.5) {
+        }else if (!(((StandUser)getOwner()).roundabout$getStandPowers() instanceof PowersBadCompany) || MainUtil.cheapDistanceTo2(this.getX(), this.getZ(), getOwner().getX(), getOwner().getZ()) > BCTroop.getMaximumRangeBullets()) {
             discard();
         }
 
