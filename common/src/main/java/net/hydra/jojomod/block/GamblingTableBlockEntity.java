@@ -1,5 +1,6 @@
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.menu.GamblingGame;
 import net.hydra.jojomod.menu.GamblingTableMenu;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -46,6 +47,7 @@ public class GamblingTableBlockEntity extends BlockEntity implements Container, 
     private boolean gameInProgress = false;
     private boolean hostAccepted = false;
     private boolean challengerAccepted = false;
+    private GamblingGame activeGame = null;
 
     public enum Role { HOST, CHALLENGER, SPECTATOR }
 
@@ -111,6 +113,24 @@ public class GamblingTableBlockEntity extends BlockEntity implements Container, 
                 this.items.set(i, ItemStack.EMPTY);
             }
         }
+    }
+
+    /**
+     * Awards all bet slots (0-17) to the winner and resets acceptance states.
+     */
+    public void awardBetsToWinner(boolean hostWon) {
+        if (this.level == null || this.level.isClientSide()) return;
+
+        UUID winnerUUID = hostWon ? this.hostUUID : this.challengerUUID;
+
+        // give both host and challenger bet slots (0 to 18) to the winner
+        returnSlotRange(0, 18, winnerUUID);
+
+        // reset the game
+        this.hostAccepted = false;
+        this.challengerAccepted = false;
+        this.gameInProgress = false;
+        resetGame();
     }
 
     /* Getter method for checking the role of the player based on their UUID
@@ -262,18 +282,32 @@ public class GamblingTableBlockEntity extends BlockEntity implements Container, 
         this.level.getServer().getPlayerList().broadcastSystemMessage(Component.literal("IT'S GAMBLING TIME!!!!! game: " + this.selectedGame), false);
     }
 
-    // saves and loads whatever is in storage
-    @Override
-    public void load(CompoundTag tag) {
-        super.load(tag);
-        this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-        ContainerHelper.loadAllItems(tag, this.items);
+    public GamblingGame getActiveGame() {
+        return this.activeGame;
     }
 
+    // saves and loads whatever is in storage
     @Override
     protected void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
-        ContainerHelper.saveAllItems(tag, this.items);
+        tag.putInt("SelectedGame", this.selectedGame);
+        if (this.activeGame != null) {
+            CompoundTag gameTag = new CompoundTag();
+            this.activeGame.saveAdditional(gameTag);
+            tag.put("ActiveGameData", gameTag);
+        }
+    }
+
+    @Override
+    public void load(CompoundTag tag) {
+        super.load(tag);
+        this.selectedGame = tag.getInt("SelectedGame");
+        if (tag.contains("ActiveGameData")) {
+            startGamble();
+            if (this.activeGame != null) {
+                this.activeGame.loadAdditional(tag.getCompound("ActiveGameData"));
+            }
+        }
     }
 
     // simple getters and setters

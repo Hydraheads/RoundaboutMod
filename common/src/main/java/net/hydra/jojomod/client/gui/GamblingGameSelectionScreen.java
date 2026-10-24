@@ -15,7 +15,7 @@ public class GamblingGameSelectionScreen extends Screen {
     private int currentPage = 0;
     private static final int GAMES_PER_PAGE = 4;
 
-    // Registry of available games (gameId, translationKey)
+    // Registry of available games (gameId, translationKey (like in en_us))
     public record GameEntry(int id, Component name) {}
     private final List<GameEntry> games = List.of(
             new GameEntry(1, Component.translatable("gui.roundabout.gambling_table.game.coin_drop"))
