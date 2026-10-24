@@ -43,7 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RoundaboutBulletEntity extends AbstractArrow {
-
+    private Vec3 spawnPos = null;
     private final List<Vec3> trailPoints = new ArrayList<>();
     // trail length
     private static final int MAX_TRAIL_POINTS = 16;
@@ -72,6 +72,11 @@ public class RoundaboutBulletEntity extends AbstractArrow {
         tag.putBoolean("TimeStopShot", this.timeStopShot);
         tag.putInt("OutsideTimeStop", this.outsideOfTimeStop);
         tag.putInt("SuperThrownTimer", this.superThrownTimer);
+        if (this.spawnPos != null) {
+            tag.putDouble("SpawnX", this.spawnPos.x);
+            tag.putDouble("SpawnY", this.spawnPos.y);
+            tag.putDouble("SpawnZ", this.spawnPos.z);
+        }
     }
 
     @Override
@@ -82,6 +87,9 @@ public class RoundaboutBulletEntity extends AbstractArrow {
         this.timeStopShot = tag.getBoolean("TimeStopShot");
         this.outsideOfTimeStop = tag.getInt("OutsideTimeStop");
         this.superThrownTimer = tag.getInt("SuperThrownTimer");
+        if (tag.contains("SpawnX")) {
+            this.spawnPos = new Vec3(tag.getDouble("SpawnX"), tag.getDouble("SpawnY"), tag.getDouble("SpawnZ"));
+        }
     }
 
 
@@ -246,6 +254,13 @@ public class RoundaboutBulletEntity extends AbstractArrow {
                 }
             }
 
+            if (getAmmoType() == BERETTA && this.spawnPos != null) {
+                double distanceTravelled = this.position().distanceTo(this.spawnPos);
+                if (distanceTravelled > 10.0D) {
+                    damage -= 3;
+                }
+            }
+
             if (getAmmoType() == SNUBNOSE && !hadIFrames) {
                 damage += 1.0F;
             }
@@ -358,6 +373,10 @@ public class RoundaboutBulletEntity extends AbstractArrow {
 
     @Override
     public void tick() {
+        if (this.spawnPos == null) {
+            this.spawnPos = this.position();
+        }
+
         Vec3 delta = this.getDeltaMovement();
 
         if (((IProjectileAccess) this).roundabout$getRoundaboutIsTimeStopCreated()) {
