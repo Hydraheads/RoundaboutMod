@@ -968,7 +968,7 @@
   "sounds.roundabout.bc_bundle_summon": "Bad Company group summoning",
   "sounds.roundabout.bc_tank_summon": "Bad Company tank summoning",
   "sounds.roundabout.bc_helicopter_summon": "Bad Company helicopter summoning",
-  "sounds.roundabout.bc_ui_select": "Troop select",
+  "sounds.roundabout.bc_ui_select": "Bad Company select",
 
   "sounds.roundabout.j_anubis_hit_1": "Sword hit",
   "sounds.roundabout.j_anubis_hit_2": "Sword hit",
@@ -3395,7 +3395,7 @@
   "roundabout.troop_tactics.tank": "Select tank.",
   "roundabout.troop_tactics.helicopter": "Select helicopter.",
   "roundabout.troop_tactics.missile": "Shoot missile!",
-  "roundabout.troop_tactics.troop": "Select troop.",
+  "roundabout.troop_tactics.soldier": "Select soldier.",
 
   "skins.roundabout.green_day.part_five_green_day": "Part 5",
   "skins.roundabout.green_day.red_day": "Red Day",
