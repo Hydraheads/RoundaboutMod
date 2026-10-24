@@ -396,6 +396,7 @@ public class FabricSounds {
         addSound(ModSounds.KQ_MINESWEEPER_SHIBABA_ID, ModSounds.KQ_MINESWEEPER_SHIBABA_EVENT);
         addSound(ModSounds.KILLER_QUEEN_PUNCH_ID, ModSounds.KILLER_QUEEN_PUNCH_EVENT);
         addSound(ModSounds.KILLER_QUEEN_IMPALE_ID, ModSounds.KILLER_QUEEN_IMPALE_EVENT);
+        addSound(ModSounds.KILLER_QUEEN_BARRAGE_HIT_ID, ModSounds.KILLER_QUEEN_BARRAGE_HIT_EVENT);
         addSound(ModSounds.KILLER_QUEEN_PUNCH_1_ID, ModSounds.KILLER_QUEEN_PUNCH_1_EVENT);
         addSound(ModSounds.KILLER_QUEEN_PUNCH_2_ID, ModSounds.KILLER_QUEEN_PUNCH_2_EVENT);
         addSound(ModSounds.KILLER_QUEEN_HEAVY_PUNCH_ID, ModSounds.KILLER_QUEEN_HEAVY_PUNCH_EVENT);
@@ -634,6 +635,8 @@ public class FabricSounds {
         addSound(ModSounds.BC_BUNDLE_SUMMON_ID, ModSounds.BC_BUNDLE_SUMMON_EVENT);
         addSound(ModSounds.BC_HELICOPTER_SUMMON_ID, ModSounds.BC_HELICOPTER_SUMMON_EVENT);
         addSound(ModSounds.BC_TANK_SUMMON_ID, ModSounds.BC_TANK_SUMMON_EVENT);
+        addSound(ModSounds.BC_PARACHUTE_OPEN_ID, ModSounds.BC_PARACHUTE_OPEN_EVENT);
+        addSound(ModSounds.BC_PARACHUTE_LOOP_ID, ModSounds.BC_PARACHUTE_LOOP_EVENT);
 
         addSound(ModSounds.DIO_HOHO_ID, ModSounds.DIO_HOHO_EVENT);
         addSound(ModSounds.DIO_HOHO_2_ID, ModSounds.DIO_HOHO_2_EVENT);

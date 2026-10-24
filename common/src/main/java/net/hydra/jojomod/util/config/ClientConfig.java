@@ -267,6 +267,8 @@ public class ClientConfig implements Cloneable {
         public Boolean spinMapInsteadOfArrow;
         @FloatOption(group = "inherit", value = 1F, min = 0, max = 1)
         public Float nematodeOpacity;
+        @FloatOption(group = "inherit", value = 1F, min = 0, max = 1)
+        public Float mapOpacity;
     }
     public static class AnubisSettings {
         @BooleanOption(group = "inherit", value = false)

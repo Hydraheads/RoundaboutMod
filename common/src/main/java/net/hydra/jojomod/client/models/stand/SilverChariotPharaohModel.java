@@ -322,9 +322,11 @@ public class SilverChariotPharaohModel<T extends SilverChariotEntity> extends St
         // this.animate(pEntity.scBarrageDamage, SilverChariotAnimations.BarrageDamage, pAgeInTicks, 1f);
         // this.animate(pEntity.scBarrageCharge, SilverChariotAnimations.BarrageCharge, pAgeInTicks, 1f);
         // this.animate(pEntity, SilverChariotAnimations, pAgeInTicks, 1f);
+        /*
         this.head.visible = !(pEntity.isRemoteControlled()
                 && pEntity.getUser() == minecraft.player
                 && minecraft.options.getCameraType().isFirstPerson());
+        */
         if (!pEntity.isPart5Skin()) {
             this.right_sword.visible = true;
             this.left_sword.visible = false;

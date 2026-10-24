@@ -665,9 +665,9 @@ public class SeperatedArmEntity extends StandEntity {
         Item item = (this.getMainHandItem().getItem());
         List<Entity> damages = List.of();
         if(Can_activate_special || Can_activate) {
-             damages = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), 1, 1, 1.5);
+             damages = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), 1.5, 1.5, 1.5);
             if (SpinTicks > 0) {
-                damages = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), 2, 2, 2.5);
+                damages = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), 2.5, 2.5, 2.5);
             }
         }
 

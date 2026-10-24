@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "item": "minecraft:gunpowder"
+    },
+    "P":
+    {
+      "item": "minecraft:heavy_weighted_pressure_plate"
+    },
+    "F":
+    {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "pattern": [
+    "F",
+    "B",
+    "P"
+  ],
+  "result": {
+    "count": 32,
+    "item": "roundabout:pistol_ammo"
+  },
+  "show_notification": true
+}

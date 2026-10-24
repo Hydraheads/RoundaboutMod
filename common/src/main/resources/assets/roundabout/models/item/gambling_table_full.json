@@ -149,6 +149,10 @@
       "rotation": [0, -180, 0],
       "translation": [0, 0, -4],
       "scale": [0.3, 0.3, 0.3]
+    },
+    "ground": {
+      "translation": [1.75, 0, 1.75],
+      "scale": [0.25, 0.25, 0.25]
     }
   },
   "groups": [

@@ -197,14 +197,16 @@ public class TuskNailEntity extends AbstractArrow {
         if (this.getOwner() instanceof LivingEntity LE) {
             TuskHoleEntity tuskHoleEntity = new TuskHoleEntity(this.level(), LE);
             if (this.getExtra() == GOLDEN) {tuskHoleEntity.setLifeSpan(150);}
-            Direction dir = bhr.getDirection();
-            if (dir != Direction.DOWN && dir != Direction.UP) {
-                tuskHoleEntity.setClinging(dir);
-                pos = tuskHoleEntity.alignToDirection(pos,dir);
+            if(bhr != null) {
+                Direction dir = bhr.getDirection();
+                if (dir != Direction.DOWN && dir != Direction.UP) {
+                    tuskHoleEntity.setClinging(dir);
+                    pos = tuskHoleEntity.alignToDirection(pos, dir);
+                }
+                tuskHoleEntity.setPos(pos);
+                this.level().addFreshEntity(tuskHoleEntity);
+                return tuskHoleEntity;
             }
-            tuskHoleEntity.setPos(pos);
-            this.level().addFreshEntity(tuskHoleEntity);
-            return tuskHoleEntity;
         }
         return null;
     }

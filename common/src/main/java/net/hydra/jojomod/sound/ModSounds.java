@@ -806,6 +806,9 @@ public class ModSounds {
     public static final ResourceLocation STRAY_CAT_SOUND_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+STRAY_CAT_SOUND_3);
     public static SoundEvent STRAY_CAT_SOUND_3_EVENT = SoundEvent.createVariableRangeEvent(STRAY_CAT_SOUND_3_ID);
 
+    public static final String KILLER_QUEEN_BARRAGE_HIT = "killer_queen_barrage_hit";
+    public static final ResourceLocation KILLER_QUEEN_BARRAGE_HIT_ID = new ResourceLocation(Roundabout.MOD_ID + ":" + KILLER_QUEEN_BARRAGE_HIT);
+    public static SoundEvent KILLER_QUEEN_BARRAGE_HIT_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_BARRAGE_HIT_ID);
     public static final String KILLER_QUEEN_IMPALE = "killer_queen_impale";
     public static final ResourceLocation KILLER_QUEEN_IMPALE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_IMPALE);
     public static SoundEvent KILLER_QUEEN_IMPALE_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_IMPALE_ID);
@@ -1832,6 +1835,13 @@ public class ModSounds {
     public static final String BC_TANK_SUMMON = "bc_tank_summon";
     public static final ResourceLocation BC_TANK_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BC_TANK_SUMMON);
     public static SoundEvent BC_TANK_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(BC_TANK_SUMMON_ID);
+
+    public static final String BC_PARACHUTE_LOOP = "bc_parachute_loop";
+    public static final ResourceLocation BC_PARACHUTE_LOOP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BC_PARACHUTE_LOOP);
+    public static SoundEvent BC_PARACHUTE_LOOP_EVENT = SoundEvent.createVariableRangeEvent(BC_PARACHUTE_LOOP_ID);
+    public static final String BC_PARACHUTE_OPEN = "bc_parachute_open";
+    public static final ResourceLocation BC_PARACHUTE_OPEN_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BC_PARACHUTE_OPEN);
+    public static SoundEvent BC_PARACHUTE_OPEN_EVENT = SoundEvent.createVariableRangeEvent(BC_PARACHUTE_OPEN_ID);
 
 
     public static final String ZOMBIE_CHARGE = "zombie_charge";
