@@ -4534,7 +4534,7 @@
   "ability.roundabout.melting_mode": "Melting Mode",
   "ability.roundabout.melting_mode.desc": "While in Control Mode, hold Guard and press X to toggle Melting Mode.",
   "effect.roundabout.hallucination": "Hallucination",
-  "effect.roundabout.dreaming": "Dreaming",
+  "effect.roundabout.sleeping": "Сон",
   "effect.roundabout.old": "Old",
   "entity.roundabout.hallucinatory_acid_projectile": "Hallucinatory Acid",
   "item.roundabout.hallucinatory_acid_height_1": "Acid Block",

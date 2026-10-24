@@ -83,10 +83,10 @@ public final class HallucinationEffect extends MobEffect {
             }
         }
         if (amplifier >= 2) {
-            MobEffectInstance dreaming = living.getEffect(
-                    ModEffects.DREAMING);
-            if (dreaming == null || dreaming.getDuration() < duration - 1) {
-                living.addEffect(DreamingEffect.createInstance(duration));
+            MobEffectInstance sleeping = living.getEffect(
+                    ModEffects.SLEEPING);
+            if (sleeping == null || sleeping.getDuration() < duration - 1) {
+                living.addEffect(SleepingEffect.createInstance(duration));
             }
         }
         if (ClientNetworking.getAppropriateConfig().whitesnakeSettings.hallucinationAppliesMelting) {
