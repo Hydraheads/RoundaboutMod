@@ -174,6 +174,7 @@ public interface StandUser {
 
     void roundabout$sealStand(int ticks);
 
+    void roundabout$setSealedTicksAgnostic(int ticks);
     void roundabout$setSealedTicks(int ticks);
     void roundabout$setSealedTicks(int ticks, int maxticks);
     int roundabout$getSealedTicks();

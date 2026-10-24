@@ -306,28 +306,12 @@ public abstract class ZMob extends LivingEntity implements IMob {
     }
     @ModifyVariable(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"), ordinal = 0, argsOnly = true)
     public CompoundTag roundabout$addAdditionalSaveData(CompoundTag $$0){
-        $$0.putBoolean("roundabout.isWorthy", this.roundabout$isWorthy());
-        $$0.putBoolean("roundabout.isNaturalStandUser", this.roundabout$isNaturalStandUser);
-        $$0.putBoolean("roundabout.isBred", roundabout$getIsBred());
-        CompoundTag compoundtag = $$0.getCompound("roundabout");
-        compoundtag.putBoolean("vampire",roundabout$isVampire());
-        compoundtag.putBoolean("stolenMemory", rdbt$getStolen());
-
-        $$0.put("roundabout",compoundtag);
-
-        return $$0;
+        return MainUtil.saveMobData($$0,this);
     }
 
     @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"))
     public void roundabout$readAdditionalSaveData(CompoundTag $$0, CallbackInfo ci){
-        this.roundabout$setWorthy($$0.getBoolean("roundabout.isWorthy"));
-        this.roundabout$setIsNaturalStandUser($$0.getBoolean("roundabout.isNaturalStandUser"));
-        this.roundabout$setIsBred($$0.getBoolean("roundabout.isBred"));
-        CompoundTag compoundtag = $$0.getCompound("roundabout");
-            roundabout$setVampire(compoundtag.getBoolean("vampire"));
-        if (compoundtag.contains("stolenMemory")) {
-            rdbt$stolen = compoundtag.getBoolean("stolenMemory");
-        }
+        MainUtil.loadMobData($$0,this);
     }
 
     @Shadow
