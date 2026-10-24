@@ -751,8 +751,8 @@ public class SilverChariotEntity extends FollowingStandEntity {
         previousCarryPosition = carryPos;
     }
 
-    private static final int AFTERIMAGE_TICK_INTERVAL = 5;
-    private static final int AFTERIMAGE_MAX_AMOUNT = 4;
+    private static final int AFTERIMAGE_TICK_INTERVAL = 2;
+    private static final int AFTERIMAGE_MAX_AMOUNT = 5;
     private int afterImageTicks = 0;
     private Deque<SilverChariotAfterimageState> silverChariotAfterimageStates = new ArrayDeque<>();
 
