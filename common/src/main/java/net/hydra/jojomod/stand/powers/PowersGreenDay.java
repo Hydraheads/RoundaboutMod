@@ -26,6 +26,7 @@ import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 
 import net.hydra.jojomod.event.powers.StandUser;
@@ -1790,6 +1791,44 @@ public class PowersGreenDay extends NewPunchingStand {
         }
     }
 
+    @Override
+    public void tickStandRejection(MobEffectInstance effect) {
+        if (!this.self.level().isClientSide) {
+            ((ServerLevel)this.self.level()).sendParticles(ModParticles.MOLD_DUST,
+                    this.self.getX(),
+                    this.self.getY(),
+                    this.self.getZ(),
+                    4, 2, 2, 2, 0.005);
+            ((ServerLevel)this.self.level()).sendParticles(new DustParticleOptions(new Vector3f(0.76F, 1.0F, 0.9F), 2f),
+                    this.self.getX(),
+                    this.self.getY(),
+                    this.self.getZ(),
+                    1, 2, 2, 2, 0.005);
+            Entity entity = this.self;
+            float fallDistance = (((StandUser) entity).getStaringYPos() - (float) entity.getPosition(1).y());
+
+            double width = entity.getBbWidth() / 2;
+            double height = entity.getBbHeight() / 2;
+            ((ServerLevel) this.self.level()).sendParticles(ModParticles.MOLD
+                    , entity.getX(),
+                    (entity.getY() + height / 2),
+                    entity.getZ(),
+                    13, width, height, width, 0)
+            ;
+
+            double damage = 0;
+            if (MainUtil.getReducedDamage(entity)) {
+                damage = 2;
+            } else {
+                damage = 4;
+            }
+            damage = (int) (damage * (fallDistance * 0.6F));
+            if (((StandUser) entity).getStaringYPos() - entity.getY() < 1) {
+                damage = damage * 0.25;
+            }
+            entity.hurt(ModDamageTypes.of(this.self.level(), ModDamageTypes.DISINTEGRATION), (float) (damage * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldDMGPlayersMultiplier / 100F)));
+        }
+    }
 
     @Override
     public boolean isWip(){
