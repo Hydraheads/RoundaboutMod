@@ -12,20 +12,12 @@
     "P":
     {
       "item": "minecraft:heavy_weighted_pressure_plate"
-    },
-    "F":
-    {
-      "item": "minecraft:gold_nugget"
-    },
-    "G":
-    {
-      "item": "minecraft:gold_ingot"
     }
   },
   "pattern": [
-    " I ",
-    "FBF",
-    "GPG"
+    "I",
+    "B",
+    "P"
   ],
   "result": {
     "count": 16,
