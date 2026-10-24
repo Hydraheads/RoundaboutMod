@@ -10,6 +10,7 @@ import net.hydra.jojomod.client.models.stand.SilverChariotModel;
 import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.entity.stand.SilverChariotEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -148,12 +149,15 @@ public class SilverChariotBaseRenderer<T extends StandEntity> extends StandRende
         super.render(mobEntity, entityYaw, partialTicks, matrixStack, vertexConsumerProvider, packedLight);
 
         float alpha = 0.50F;
-        if (!mobEntity.getArmoured() && mobEntity.getAfterimageStates().size() >= 2) {
+        boolean renderAfterimages = ConfigManager.getClientConfig().silverChariotSettings.silverChariotRenderAfterimages;
+        boolean renderAfterimagesInFirstPerson = ConfigManager.getClientConfig().silverChariotSettings.silverChariotShouldRenderAfterimagesWhileUserInFirstPerson;
+        if (renderAfterimages && !mobEntity.getArmoured() && mobEntity.getAfterimageStates().size() >= 2) {
             // renderAfterimage1(mobEntity, entityYaw, partialTicks, matrixStack, vertexConsumerProvider, packedLight, alpha, 2.5D, -2.0D, -1.5D);
             // renderAfterimage1(mobEntity, entityYaw, partialTicks, matrixStack, vertexConsumerProvider, packedLight, alpha, 1.5D, -2.0D, 3.5D);
             // renderAfterimage1(mobEntity, entityYaw, partialTicks, matrixStack, vertexConsumerProvider, packedLight, alpha, -1.5D, -2.0D, 3.5D);
             // renderAfterimage1(mobEntity, entityYaw, partialTicks, matrixStack, vertexConsumerProvider, packedLight, alpha, -2.5D, -2.0D, -1.5D);
-            this.model.stand.visible = !(mobEntity.getUser() == minecraft.player
+            this.model.stand.visible = !(renderAfterimagesInFirstPerson
+                    && mobEntity.getUser() == minecraft.player
                     && minecraft.options.getCameraType().isFirstPerson());
             this.renderAfterimages(mobEntity, entityYaw, partialTicks, matrixStack, vertexConsumerProvider, packedLight, alpha);
             this.model.stand.visible = true;
@@ -263,7 +267,7 @@ public class SilverChariotBaseRenderer<T extends StandEntity> extends StandRende
             this.scale(mobEntity, matrixStack, g);
 
             // VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderType.entityTranslucent(getTextureLocation(mobEntity)));
-            VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderType.entityTranslucentCull(getTextureLocation(mobEntity)));
+            VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(mobEntity)));
             // this.model.head.visible = true;
             this.model.renderToBuffer(matrixStack, vertexConsumer, i, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, alpha);
             matrixStack.popPose();
@@ -314,7 +318,7 @@ public class SilverChariotBaseRenderer<T extends StandEntity> extends StandRende
             this.scale(mobEntity, matrixStack, g);
 
             // VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderType.entityTranslucent(getTextureLocation(mobEntity)));
-            VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderType.entityTranslucent(getTextureLocation(mobEntity)));
+            VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(mobEntity)));
             // this.model.head.visible = true;
             this.model.renderToBuffer(matrixStack, vertexConsumer, i, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, alpha);
             matrixStack.popPose();
