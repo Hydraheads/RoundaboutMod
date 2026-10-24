@@ -378,6 +378,7 @@ public class ModItems {
         addToVisageStore(DAIYA_2_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(HATO_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(KIRA_PART_EIGHT_MASK, page, characterCostExp, characterCostEmerald);
+        addToVisageStore(LAEM_MASK,page, characterCostExp, characterCostEmerald);
         if (ClientNetworking.getAppropriateConfig().cinderellaSettings.enableJojoveinVisagesInShop){
             page++;
             addToVisageStore(SHIZUKA_MASK,page, characterCostExp, characterCostEmerald);
