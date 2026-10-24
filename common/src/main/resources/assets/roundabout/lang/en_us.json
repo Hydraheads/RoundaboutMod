@@ -1239,6 +1239,7 @@
   "sounds.roundabout.survivor_summon":  "Stand summoned",
   "sounds.roundabout.ova_summon":  "Stand summoned",
   "sounds.roundabout.ova_summon_the_world":  "Stand summoned",
+  "sounds.roundabout.summon_black_sabbath":  "Stand summoned",
   "sounds.roundabout.summon_diver_down":  "Stand summoned",
   "sounds.roundabout.diver_down_hit":  "Impact",
   "sounds.roundabout.diver_down_hit_heavy":  "Heavy Impact",
@@ -1387,6 +1388,11 @@
 
   "sounds.roundabout.lighter_click":  "Lighter Click",
   "sounds.roundabout.black_sabbath_chest_open":  "Open Black Sabbath Chest",
+  "sounds.roundabout.bs_select_add":  "Added target!",
+  "sounds.roundabout.bs_select_remove":  "Removed target!",
+  "sounds.roundabout.bs_select_confirm":  "Confirmed targets!",
+  "sounds.roundabout.bs_select_cancel":  "Removed all targets!",
+  "sounds.roundabout.black_sabbath_emerge":  "Black Sabbath emerges",
 
   "sounds.roundabout.planet_waves_summon":  "Stand summoned",
   "sounds.roundabout.planet_waves_meteor_shower":  "Meteors Approaching",
