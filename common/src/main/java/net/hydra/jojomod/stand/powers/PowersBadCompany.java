@@ -279,7 +279,7 @@ public class PowersBadCompany extends NewDashPreset {
             if (chargeTime == TACTIC_STOP) {
                 sendTroopsSignal(BadCompanyTactics.STOP);
             }else if (chargeTime == TACTIC_WARD) {
-
+                sendTroopsSignal(BadCompanyTactics.WARD);
             }
         }
 
