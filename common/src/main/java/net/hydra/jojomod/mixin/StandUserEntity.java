@@ -3932,6 +3932,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DIVER_ARMS, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$RIBCAGE_TRAP, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$SPRING_LEGS, false);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$GRABBED_SOUL, false);
         }
     }
 
@@ -7033,17 +7034,20 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     //black sabbath soul methods
     private boolean roundabout$grabbedSoul = false;
+    @Unique
+    private static final EntityDataAccessor<Boolean> ROUNDABOUT$GRABBED_SOUL = SynchedEntityData.defineId(
+            LivingEntity.class, EntityDataSerializers.BOOLEAN);
 
     @Unique
     @Override
     public void roundabout$setGrabbedSoul(boolean boleean) {
-        roundabout$grabbedSoul = boleean;
+        this.entityData.set(ROUNDABOUT$GRABBED_SOUL, boleean);
     }
 
     @Unique
     @Override
     public boolean roundabout$getGrabbedSoul() {
-        return roundabout$grabbedSoul;
+        return this.entityData.get(ROUNDABOUT$GRABBED_SOUL);
     }
 
     // for diver down

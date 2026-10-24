@@ -15,6 +15,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.raid.Raider;
@@ -91,11 +92,24 @@ public class BCTroop extends MultipleTypeStand {
                 > getMaximumRange())) {
             discard();
         }
+        if (fireCooldown > 0) {
+            fireCooldown--;
+        }else {
+            if (performAttack()) {
+                fireCooldown = getFireCooldownMax();
+            }
+        }
     }
 
-    public int getMaximumRange() { return 25; }
+    public static int getMaximumRange() { return 25; }
+    public static int getMaximumRangeBullets() { return 31; }
 
     public boolean wantsToAttack(LivingEntity target, LivingEntity user) {
+        if (user == null) return false;
+        if (user.distanceToSqr(target) > (getMaximumRangeBullets() * getMaximumRangeBullets())) {
+            return false;
+        }
+
         if (user.isAlliedTo(target)) {
             return false;
         }
@@ -113,6 +127,19 @@ public class BCTroop extends MultipleTypeStand {
             return false;
         }
 
+        if ((target instanceof TamableAnimal TA && TA.isOwnedBy(user)) || (user instanceof TamableAnimal TA1 && TA1.isOwnedBy(target))) {
+            return false;
+        }
+
         return true;
+    }
+
+    public int fireCooldown = 0;
+    public int getFireCooldownMax() {
+        return 5;
+    }
+
+    public boolean performAttack() {
+        return false;
     }
 }
