@@ -116,7 +116,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
  public void setupAnimationStates() {
      super.setupAnimationStates();
      Byte bt = this.getBsAnimation();
-     System.out.println(bt + ".  " + this.level());
      switch (bt) {
          case 0 -> {
              coat_open.startIfStopped(this.tickCount);
@@ -245,7 +244,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
              grabOne.startIfStopped(this.tickCount);
          }
          case 12 -> {
-
              burningDive.stop();
              burningCripple.stop();
              burningStart.stop();
@@ -347,8 +345,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
 
  /**Changes animation states dynamically server sided*/
     public void animationStateTick(){
-        System.out.println(getThrowable());
-        System.out.println(getTridentLoyalty());
      if(!this.level().isClientSide()){
          if(this.getUser() != null){
              if (((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb){
