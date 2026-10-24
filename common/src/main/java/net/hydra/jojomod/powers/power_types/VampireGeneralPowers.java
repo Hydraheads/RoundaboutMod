@@ -233,6 +233,10 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     @Override
     public void onHitGuard(float amt, DamageSource sauce){
         if (getFreezeLevel() > 0) {
+            boolean hasMR = sauce.getDirectEntity() instanceof LivingEntity LE2
+                    && (((StandUser)LE2).roundabout$getStandPowers() instanceof PowersMagiciansRed &&
+                    PowerTypes.hasStandActivelyEquipped(LE2)  &&
+                    PowerTypes.hasStandActive(LE2));
             if (sauce != null && isGuarding() && sauce.getEntity() instanceof LivingEntity LE) {
                 if (((sauce.is(DamageTypes.MOB_ATTACK) || sauce.is(DamageTypes.PLAYER_ATTACK)))){
                     if (!HeatUtil.isLegsFrozen(LE)) {
@@ -246,13 +250,12 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         sauce.is(ModDamageTypes.VAMPIRE) || sauce.is(ModDamageTypes.HAMON) ||
                         sauce.is(ModDamageTypes.MARTIAL_ARTS)
                         || sauce.is(ModDamageTypes.STAND_BRAWL)) && sauce.getDirectEntity() instanceof LivingEntity LE2
-                && !(((StandUser)LE2).roundabout$getStandPowers() instanceof PowersMagiciansRed &&
-                        PowerTypes.hasStandActivelyEquipped(LE2)  &&
-                        PowerTypes.hasStandActive(LE2)))){
+                        && !hasMR)){
                     if (!HeatUtil.isLegsFrozen(LE)) {
                         HeatUtil.addHeat(LE, -5 + (-1*getFreezeLevel()));
                     }
-                } else if (sauce.is(ModDamageTypes.STAND_RUSH) && sauce.getDirectEntity() instanceof LivingEntity LE2){
+                } else if (sauce.is(ModDamageTypes.STAND_RUSH) && sauce.getDirectEntity() instanceof LivingEntity LE2
+                && !hasMR){
                     if (!HeatUtil.isLegsFrozen(LE)) {
                         HeatUtil.addHeat(LE, -2);
                     }

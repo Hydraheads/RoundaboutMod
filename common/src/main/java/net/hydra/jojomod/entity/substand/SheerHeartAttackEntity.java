@@ -750,7 +750,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			KQ.addEXP(1, LE);
 		}
 
-		ExplosionUtil.explodeEffects(pos, this.level(), KQ.getExplosionParticle(), new Vec3(range*0.7f, range*0.75f, range*0.7f), (int)(32*range));
+		ExplosionUtil.explodeEffects(pos, this, KQ.getExplosionParticle(), new Vec3(range*0.7f, range*0.75f, range*0.7f), (int)(32*range));
 
 		this.level().playSound(null, this.blockPosition(), KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
 
@@ -797,7 +797,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			}
 
 
-			ExplosionUtil.explodeEffects(this.blockTarget.getCenter(), this.level(), KQ.getExplosionParticle(), new Vec3(range*0.7f, range*0.75f, range*0.7f), (int)(30*range));
+			ExplosionUtil.explodeEffects(this.blockTarget.getCenter(), this, KQ.getExplosionParticle(), new Vec3(range*0.7f, range*0.75f, range*0.7f), (int)(30*range));
 			level().playSound(null, this.blockTarget, KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
 
 			if (canDestroyBlocks()) {
@@ -909,7 +909,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		BlockHitResult hitResult = this.level().clip(new ClipContext(viewPos, viewEnd,
 				ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
 		if (hitResult.getType() == HitResult.Type.BLOCK && explosionMiningTicks <= 0) {
-			ExplosionUtil.explodeEffects(hitResult.getBlockPos().getCenter(), this.level(), KQ.getExplosionParticle(), new Vec3(0.8f, 0.8f, 0.8f), 8);
+			ExplosionUtil.explodeEffects(hitResult.getBlockPos().getCenter(), this, KQ.getExplosionParticle(), new Vec3(0.8f, 0.8f, 0.8f), 8);
 			if (canDestroyBlocks()) {
 				ExplosionUtil.explodeBlocksBase(hitResult.getBlockPos().above(), level(), 1.2f, true, getUser());
 			}
@@ -920,7 +920,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		}else{
 			explosionMiningIntervalTicks--;
 			if (explosionMiningIntervalTicks <= 0) {
-				ExplosionUtil.explodeEffects(hitResult.getBlockPos().getCenter(), this.level(), KQ.getExplosionParticle(), new Vec3(0.8f, 0.8f, 0.8f), 6);
+				ExplosionUtil.explodeEffects(hitResult.getBlockPos().getCenter(), this, KQ.getExplosionParticle(), new Vec3(0.8f, 0.8f, 0.8f), 6);
 				if (canDestroyBlocks()) {
 					ExplosionUtil.explodeBlocksBase(hitResult.getBlockPos().above(), level(), 1.2f, true, getUser());
 				}

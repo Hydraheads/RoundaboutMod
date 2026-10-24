@@ -1,9 +1,9 @@
 package net.hydra.jojomod.entity.badCompanyTroops;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.goals.badCompanyGoals.*;
 import net.hydra.jojomod.entity.projectile.BadCompanyBulletEntity;
-import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
 import net.hydra.jojomod.event.index.BadCompanyTactics;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -12,7 +12,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.*;
-
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -80,6 +80,10 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
     public final AnimationState shootGun = new AnimationState();
     public final AnimationState runWithGun = new AnimationState();
 
+    private boolean hasParachuteOff = false;
+    private boolean wasParachuteOff = false;
+    private int parachuteTicks = -1;
+
     @Override
     public void setupAnimationStates() {
         //super.setupAnimationStates();
@@ -101,9 +105,11 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
             if (!onGround() && !(isInWater() || isInLava()) && !isDisplay) {
                 releaseParachute.startIfStopped(tickCount);
                 closeParachute.stop();
+                hasParachuteOff = true;
             }else {
                 releaseParachute.stop();
                 closeParachute.startIfStopped(tickCount);
+                hasParachuteOff = false;
             }
         }
     }
@@ -112,6 +118,26 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
 
     public void tick() {
         super.tick();
+
+        if (hasParachuteOff) {
+            parachuteTicks++;
+        }else {
+            parachuteTicks = -1;
+        }
+
+        if (level().isClientSide) {
+            if (((StandUser) ClientUtil.getPlayer()).roundabout$hasAStand()) {
+                if (hasParachuteOff && !wasParachuteOff) {
+                    level().playSound(this, blockPosition(), ModSounds.BC_PARACHUTE_OPEN_EVENT, SoundSource.AMBIENT, 0.4f, 1.0f);
+                }else if (hasParachuteOff) {
+                    if (parachuteTicks % 80 == 10) {
+                        level().playSound(this, blockPosition(), ModSounds.BC_PARACHUTE_LOOP_EVENT, SoundSource.AMBIENT, 0.4f, 1.0f);
+                    }
+                }
+            }
+        }
+
+        wasParachuteOff = hasParachuteOff;
 
         float pitch = this.getXRot();
         float yaw = this.getYRot();
@@ -197,11 +223,7 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
 
     @Override
     public void performRangedAttack(LivingEntity target, float v) {
-        if (bulletsLeft <= 0) {
-            Roundabout.LOGGER.info("test");
-
-            return;
-        }
+        if (bulletsLeft <= 0) { return; }
 
         if (getBundle()) {
             shootSingleBulletAt(getEyePosition(1).add(0.3f, 0.0f, 0.65f * 0.3f), target);
@@ -215,10 +237,9 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
         }else {
             shootSingleBulletAt(getEyePosition(1), target);
         }
+
         bulletsLeft--;
-        if (bulletsLeft <= 0) {
-            chargeTicks = getRechargeTime();
-        }
+        if (bulletsLeft <= 0) { chargeTicks = getRechargeTime(); }
     }
 
     public void shootSingleBulletAt(Vec3 positionShoot, LivingEntity target) {
@@ -242,7 +263,7 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
     public int getRechargeTime() {
         return 50 + (getBundle() ? 20 : 0);
     }
-    
+
     public int getBulletsAmount() { return 12; }
     private int chargeTicks = -1;
     public int bulletsLeft = getBulletsAmount();

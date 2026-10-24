@@ -539,7 +539,7 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
                             this.getX(), this.getY(), this.getZ(),
                             1, 0.005, 0.01, 0.005, 0.02
                     );
-                    ExplosionUtil.explodeEffects(this.position(), this.level(),  PPW.getMushroomEXPLOSIONParticle(), 1.75f);
+                    ExplosionUtil.explodeEffects(this.position(), this,  PPW.getMushroomEXPLOSIONParticle(), 1.75f);
                 }
 
 

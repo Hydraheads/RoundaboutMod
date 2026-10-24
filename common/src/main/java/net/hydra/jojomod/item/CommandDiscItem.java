@@ -93,7 +93,7 @@ public final class CommandDiscItem extends Item {
                 ModDamageTypes.of(level, ModDamageTypes.EXPLOSIVE_STAND, user), level,
                 ClientNetworking.getAppropriateConfig().whitesnakeSettings.explosiveDiscDamage,
                 0.4F, 1.5F, 1.0F, 1.0F);
-        ExplosionUtil.explodeEffects(position, level, ModParticles.KILLER_QUEEN_EXPLOSION, 0.55F);
+        ExplosionUtil.explodeEffects(position, target, ModParticles.KILLER_QUEEN_EXPLOSION, 0.55F);
         level.playSound(null, target.blockPosition(), ModSounds.KILLER_QUEEN_EXPLOSION_EVENT,
                 SoundSource.PLAYERS, 0.3F, 1.0F);
     }
