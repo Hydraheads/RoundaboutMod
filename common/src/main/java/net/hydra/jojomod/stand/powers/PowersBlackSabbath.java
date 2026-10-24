@@ -1043,7 +1043,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                                     BE.setMoveMode(2);
                                 }
                             }
-                          //  BE.setUnrender(true);
                             this.self.level().addFreshEntity(BE);
                         }
                     }
