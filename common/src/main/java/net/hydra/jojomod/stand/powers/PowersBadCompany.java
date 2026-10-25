@@ -20,6 +20,7 @@ import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
@@ -212,15 +213,19 @@ public class PowersBadCompany extends NewDashPreset {
 
     public void selectedTactics(int id) {
         if (id == TACTIC_FIRE) {
-            float range = BCTroop.getMaximumRangeBullets()+1;
-            Vec3 vec3d = self.getEyePosition(0);
-            Vec3 vec3d2 = self.getViewVector(0);
-            Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
-            HitResult blockHit = self.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, self));
-            tryPosPowerPacket(PowerIndex.POWER_2, blockHit.getLocation());
+            fireTactic();
         }else {
             tryIntPowerPacket(PowerIndex.POWER_2, id);
         }
+    }
+
+    public void fireTactic() {
+        float range = BCTroop.getMaximumRangeBullets()+1;
+        Vec3 vec3d = self.getEyePosition(0);
+        Vec3 vec3d2 = self.getViewVector(0);
+        Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
+        HitResult blockHit = self.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, self));
+        tryPosPowerPacket(PowerIndex.POWER_2, blockHit.getLocation());
     }
 
     private int getTroopLimit() { return 12; }
@@ -324,6 +329,13 @@ public class PowersBadCompany extends NewDashPreset {
                 totalTroopsOut = data;
             }
         }
+    }
+
+    public boolean holdDownClick = false;
+
+    @Override
+    public void buttonInputAttack(boolean keyIsDown, Options options) {
+        holdDownClick = keyIsDown;
     }
 
 
@@ -459,5 +471,11 @@ public class PowersBadCompany extends NewDashPreset {
     }
 
     @Override
-    public boolean isMiningStand() { return true; }
+    public boolean isMiningStand() { return false; }
+    @Override
+    public boolean interceptAttack(){ return true; }
+
+    public void tickPower() {
+        if (holdDownClick) fireTactic();
+    }
 }

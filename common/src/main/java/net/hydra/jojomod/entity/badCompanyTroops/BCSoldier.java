@@ -148,7 +148,7 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
             if (getNavigation().isInProgress()) {
                 setAnim(WALK_GUN);
             } else {
-                if (getTarget() != null && !(distanceTo(getTarget()) > attackRange)) {
+                if (shootingTicks > 0 && !getNavigation().isInProgress()) {
                     setAnim(SHOOT_GUN);
                 }else {
                     setAnim(IDLE_GUN);
@@ -217,9 +217,16 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
     }
 
     public boolean shootAt(LivingEntity target) {
-        return shootAtPosition(target.getEyePosition(1));
+        getLookControl().setLookAt(target, 30.0F, 30.0F);
+        return shootAtPosition(target.getEyePosition(1), false);
     }
     public boolean shootAtPosition(Vec3 target) {
+        return shootAtPosition(target, true);
+    }
+    public boolean shootAtPosition(Vec3 target, boolean look) {
+        if (look) getLookControl().setLookAt(target);
+
+        shootingTicks = getFireCooldownMax()+5;
         if (bulletsLeft <= 0 || fireCooldown > 0) { return false; }
 
         if (getBundle()) {
@@ -269,10 +276,12 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
     public int getBulletsAmount() { return 12; }
     private int chargeTicks = -1;
     public int bulletsLeft = getBulletsAmount();
+    public int shootingTicks = 0;
 
     @Override
     public boolean performAttack() {
         if (getTarget() != null) {
+
             return shootAt(getTarget());
         }
         return false;

@@ -99,8 +99,8 @@ public class BCTroop extends MultipleTypeStand {
         }
     }
 
-    public static int getMaximumRange() { return 25; }
-    public static int getMaximumRangeBullets() { return 31; }
+    public static int getMaximumRange() { return 15; }
+    public static int getMaximumRangeBullets() { return 18; }
 
     public boolean wantsToAttack(LivingEntity target, LivingEntity user) {
         if (user == null) return false;
