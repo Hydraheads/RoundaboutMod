@@ -2,7 +2,7 @@ package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.*;
-import net.hydra.jojomod.entity.badCompanyTroops.BCSoldier;
+import net.hydra.jojomod.entity.badCompanyTroops.*;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.mobs.TerrierEntity;
@@ -1088,6 +1088,12 @@ public class ForgeEntities {
                     EntityType.Builder.of(BCSoldier::new, MobCategory.CREATURE).sized(BCSoldier.width, BCSoldier.height).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "bad_company_soldier").toString())
+            );
+    public static final RegistryObject<EntityType<BCTank>> BAD_COMPANY_TANK =
+            ENTITY_TYPES.register("bad_company_tank", () ->
+                    EntityType.Builder.of(BCTank::new, MobCategory.CREATURE).sized(BCTank.width, BCTank.height).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "bad_company_tank").toString())
             );
     public static final RegistryObject<EntityType<PHCapsuleEntity>> PH_CAPSULE =
             ENTITY_TYPES.register("ph_capsule", () ->

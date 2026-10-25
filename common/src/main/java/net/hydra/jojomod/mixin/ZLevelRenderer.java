@@ -12,6 +12,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.KingCrimsonProjectionEntity;
 import net.hydra.jojomod.entity.TimeSkipSnapshot;
+import net.hydra.jojomod.entity.objects.GrabbedMobSoul;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
@@ -326,6 +327,13 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                         ClientUtil.preRenderLifeTracker(pre, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
                     } else if(entity instanceof BlackSabbathEntity bs){
                         ClientUtil.preRenderFloatSabbath(bs, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
+                    } else if (entity instanceof StandEntity se) {
+                        if(se.getBsGrabbed() != 0 || se instanceof GrabbedMobSoul) {
+                            Entity e = level.getEntity(se.getBsGrabbed());
+                            if(e instanceof BlackSabbathEntity bs) {
+                                ClientUtil.preRenderGrabbedSoul(bs, se, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
+                            }
+                        }
                     }
                 }
                 //ci.cancel();

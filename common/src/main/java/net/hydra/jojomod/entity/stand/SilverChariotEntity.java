@@ -25,6 +25,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class SilverChariotEntity extends FollowingStandEntity {
@@ -350,7 +351,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
                 }
             }
 
-            if (animationState == IDLE && idle == 0 && this.getArmoured()) {
+            if (animationState == IDLE && idle == 0) {
                 this.scIdleArmoured.startIfStopped(this.tickCount);
             } else {
                 this.scIdleArmoured.stop();
@@ -800,6 +801,18 @@ public class SilverChariotEntity extends FollowingStandEntity {
             controlBodyYaw += headDifference - Math.copySign(50.0F, headDifference);
         }
         setYBodyRot(controlBodyYaw);
+    }
+
+    @Nullable
+    public LivingEntity getControllingPassenger() {
+        if (!this.getPassengers().isEmpty()) {
+            Entity entity = this.getPassengers().get(0);
+            if (entity instanceof LivingEntity) {
+                return (LivingEntity) entity;
+            }
+        }
+
+        return null;
     }
 
     @Override

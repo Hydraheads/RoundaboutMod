@@ -148,7 +148,8 @@ public class SilverChariotBaseRenderer<T extends StandEntity> extends StandRende
 
         super.render(mobEntity, entityYaw, partialTicks, matrixStack, vertexConsumerProvider, packedLight);
 
-        float alpha = 0.50F;
+        // float alpha = 0.50F;
+        float alpha = ConfigManager.getClientConfig().silverChariotSettings.silverChariotAfterimageOpacity;
         boolean renderAfterimages = ConfigManager.getClientConfig().silverChariotSettings.silverChariotRenderAfterimages;
         boolean renderAfterimagesInFirstPerson = ConfigManager.getClientConfig().silverChariotSettings.silverChariotShouldRenderAfterimagesWhileUserInFirstPerson;
         if (renderAfterimages && !mobEntity.getArmoured() && mobEntity.getAfterimageStates().size() >= 2) {
@@ -156,6 +157,7 @@ public class SilverChariotBaseRenderer<T extends StandEntity> extends StandRende
             // renderAfterimage1(mobEntity, entityYaw, partialTicks, matrixStack, vertexConsumerProvider, packedLight, alpha, 1.5D, -2.0D, 3.5D);
             // renderAfterimage1(mobEntity, entityYaw, partialTicks, matrixStack, vertexConsumerProvider, packedLight, alpha, -1.5D, -2.0D, 3.5D);
             // renderAfterimage1(mobEntity, entityYaw, partialTicks, matrixStack, vertexConsumerProvider, packedLight, alpha, -2.5D, -2.0D, -1.5D);
+            this.model.setAlpha(alpha);
             this.model.stand.visible = !(renderAfterimagesInFirstPerson
                     && mobEntity.getUser() == minecraft.player
                     && minecraft.options.getCameraType().isFirstPerson());
@@ -165,6 +167,7 @@ public class SilverChariotBaseRenderer<T extends StandEntity> extends StandRende
                     && mobEntity.getUser() == minecraft.player
                     && minecraft.options.getCameraType().isFirstPerson());
         }
+        this.model.setAlpha(1f);
         // this.model.getHead().visible = true;
         // super.render(mobEntity, entityYaw, partialTicks, matrixStack, vertexConsumerProvider, packedLight);
     }
