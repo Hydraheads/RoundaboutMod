@@ -139,4 +139,5 @@ public class ModEntityRendererClient {
 
     public static final ModelLayerLocation SHEER_HEART_ATTACK_LAYER =  new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "sheer_heart_attack"), "main");
     public static final ModelLayerLocation BAD_COMPANY_SOLDIER_LAYER =  new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "bad_company_soldier"), "main");
+    public static final ModelLayerLocation BAD_COMPANY_TANK_LAYER =  new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "bad_company_tank"), "main");
 }

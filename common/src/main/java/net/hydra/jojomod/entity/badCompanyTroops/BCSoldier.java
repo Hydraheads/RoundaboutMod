@@ -68,8 +68,8 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
     }
 
 
-    public static float width = 0.35f;
-    public static float height = 0.32f;
+    public final static float width = 0.35f;
+    public final static float height = 0.32f;
     public boolean isDisplay = false;
     public boolean isShooting = false;
 
@@ -100,6 +100,11 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
                 idleWithGun.startIfStopped(tickCount);
             }else {
                 idleWithGun.stop();
+            }
+            if (animation == SHOOT_GUN) {
+                shootGun.startIfStopped(tickCount);
+            }else {
+                shootGun.stop();
             }
 
             if (!onGround() && !(isInWater() || isInLava()) && !isDisplay) {
@@ -148,13 +153,14 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
             if (getNavigation().isInProgress()) {
                 setAnim(WALK_GUN);
             } else {
-                if (shootingTicks > 0 && !getNavigation().isInProgress()) {
+                if (shootingTicks > 0) {
                     setAnim(SHOOT_GUN);
                 }else {
                     setAnim(IDLE_GUN);
                 }
             }
         }
+        shootingTicks--;
 
         if (chargeTicks > -1) {
             chargeTicks--;
@@ -172,6 +178,10 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
         if (!this.onGround() && $$0.y < 0.0F) {
             this.setDeltaMovement($$0.multiply(1.0F, 0.3, 1.0F));
         }
+        $$0 = this.getDeltaMovement();
+        if (shootingTicks > 0) {
+            this.setDeltaMovement($$0.multiply(0.01F, 1.0F, 0.01F));
+        }
     }
 
     @Override
@@ -180,15 +190,10 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
         goalSelector.addGoal(0, new FloatGoal(this));
         goalSelector.addGoal(1, new ReturnToLeaderGoal(this, 1));
         goalSelector.addGoal(2, new UserHurtTargetGoal(this));
-        goalSelector.addGoal(2, new RangedAttackGoal(this, 0.8, 5, 8f) {
+        goalSelector.addGoal(2, new RangedAttackGoal(this, 0.8, 5, attackRange) {
             @Override
             public boolean canUse() {
                 return super.canUse() && getCurrentTactic() != BadCompanyTactics.RETURN.id;
-            }
-
-            @Override
-            public void stop() {
-                super.stop();
             }
         });
     }
@@ -226,6 +231,7 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
     public boolean shootAtPosition(Vec3 target, boolean look) {
         if (look) getLookControl().setLookAt(target);
 
+        getNavigation().stop();
         shootingTicks = getFireCooldownMax()+5;
         if (bulletsLeft <= 0 || fireCooldown > 0) { return false; }
 
@@ -270,7 +276,7 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
     }
 
     public int getRechargeTime() {
-        return 50 + (getBundle() ? 20 : 0);
+        return 50 + (getBundle() ? 50 : 0);
     }
 
     public int getBulletsAmount() { return 12; }

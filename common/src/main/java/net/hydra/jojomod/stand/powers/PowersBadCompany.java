@@ -277,6 +277,29 @@ public class PowersBadCompany extends NewDashPreset {
         return false;
     }
 
+    private boolean detectTankLimit() {
+        initActiveTroops();
+        int activeSoldiers = 0;
+        for (BCTroop troop : activeTroops) {
+            if (troop instanceof BCTank) {
+                activeSoldiers += 1;
+            }
+        }
+        if (activeSoldiers >= getMaxTanks()) {
+            if (self instanceof Player PL) {
+                PL.displayClientMessage(Component.translatable("stand.bad_company.tank_limit").withStyle(ChatFormatting.DARK_GREEN), true);
+            }
+
+            return true;
+
+        }
+
+        if (self instanceof Player PL) {
+            PL.displayClientMessage(Component.translatable("stand.bad_company.total_troops.tank", (activeSoldiers + 1), getMaxTanks()).withStyle(ChatFormatting.GREEN), true);
+        }
+        return false;
+    }
+
     public boolean tryIntPower(int move, boolean forced, int chargeTime){
         if (move == PowerIndex.POWER_1) {
             syncTotalTroopsOut();
@@ -288,7 +311,8 @@ public class PowersBadCompany extends NewDashPreset {
             }else if (chargeTime == HELICOPTER) {
                 playStandUserOnlySoundsIfNearby(HELICOPTER_SUMMON, 8, false, false);
             }else if (chargeTime == TANK) {
-                playStandUserOnlySoundsIfNearby(TANK_SUMMON, 8, false, false);
+                spawnTank();
+
             }
 
             syncTotalTroopsOut();
@@ -338,31 +362,45 @@ public class PowersBadCompany extends NewDashPreset {
         holdDownClick = keyIsDown;
     }
 
+    private void addTroop(BCTroop troop) {
+        troop.setUser(self);
+        troop.absMoveTo(
+                self.getPosition(1).x,
+                self.getPosition(1).y,
+                self.getPosition(1).z
+        );
+        troop.setYRot(self.getYRot());
+        self.level().addFreshEntity(troop);
+        PowerTypes.copyPlaneOfExisting(self, troop);
 
+        activeTroops.add(troop);
+    }
+
+    public void spawnTank() {
+        if (isClient() || detectTroopLimit(BCTank.getTroopValue()) || detectTankLimit()) {
+            return;
+        }
+
+        initActiveTroops();
+        BCTank tank = ModEntities.BAD_COMPANY_TANK.create(self.level());
+        if (tank != null) {
+            addTroop(tank);
+            playStandUserOnlySoundsIfNearby(TANK_SUMMON, 8, false, false);
+        }
+    }
     public void spawnSoldier(boolean bundle) {
         if (isClient() || detectTroopLimit(BCSoldier.getTroopValue()) || detectSoldierLimit(bundle)) { return; }
 
         initActiveTroops();
-        syncTotalTroopsOut();
         BCSoldier soldier = getSoldierEntity(bundle);
         if (soldier != null) {
-            soldier.setUser(self);
-            soldier.absMoveTo(
-                    self.getPosition(1).x,
-                    self.getPosition(1).y,
-                    self.getPosition(1).z
-            );
-            soldier.setYRot(self.getYRot());
-            self.level().addFreshEntity(soldier);
-            activeTroops.add(soldier);
+            addTroop(soldier);
 
             if (bundle) {
                 playStandUserOnlySoundsIfNearby(BUNDLE_SUMMON, 8, false, false);
             }else {
                 playStandUserOnlySoundsIfNearby(SOLDIER_SUMMON, 8, false, false);
             }
-
-            PowerTypes.copyPlaneOfExisting(self, soldier);
         }
     }
 

@@ -204,6 +204,9 @@ public class GamblingTableBlockEntity extends BlockEntity implements Container, 
                 if (index == 0) return selectedGame;
                 if (index == 1) return role == Role.HOST ? 1 : 0;
                 if (index == 2) return gameInProgress ? 1 : 0;
+                if (index == 3 && activeGame != null) {
+                    return activeGame.isHostTurn() ? 1 : 0;
+                }
                 return 0;
             }
 
@@ -215,7 +218,7 @@ public class GamblingTableBlockEntity extends BlockEntity implements Container, 
 
             @Override
             public int getCount() {
-                return 3;
+                return 4;
             }
         };
         return new GamblingTableMenu(containerId, playerInventory, this, ContainerLevelAccess.create(this.level, this.worldPosition), menuData);
