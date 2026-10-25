@@ -585,7 +585,9 @@ public class PowersSurvivor extends NewDashPreset {
             CAKE=10,
             SPONGE=11,
             SCULK=12,
-            REDSTONE=13;
+            REDSTONE=13,
+            CENTURIAN=14,
+            BLOB=15;
 
     @Override
     public List<Byte> getSkinList() {
@@ -596,6 +598,8 @@ public class PowersSurvivor extends NewDashPreset {
                 PURPLE,
                 BLUE,
                 SILVER,
+                CENTURIAN,
+                BLOB,
                 GHAST,
                 ENDER,
                 CONDUIT,
@@ -629,6 +633,8 @@ public class PowersSurvivor extends NewDashPreset {
             case SPONGE -> Component.translatable("skins.roundabout.survivor.sponge");
             case SCULK -> Component.translatable("skins.roundabout.survivor.sculk");
             case REDSTONE -> Component.translatable("skins.roundabout.survivor.redstone");
+            case CENTURIAN -> Component.translatable("skins.roundabout.survivor.centurian");
+            case BLOB -> Component.translatable("skins.roundabout.survivor.blob");
             default -> Component.translatable("skins.roundabout.survivor.base");
         };
     }

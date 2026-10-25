@@ -36,7 +36,8 @@ public class DiverLimbBlockEntity extends BlockEntity {
 
     @Override
     public CompoundTag getUpdateTag() {
-        CompoundTag tag = new CompoundTag();
+        // Inherits required x, y, z, and id tags
+        CompoundTag tag = super.getUpdateTag();
         saveAdditional(tag);
         return tag;
     }
@@ -47,6 +48,9 @@ public class DiverLimbBlockEntity extends BlockEntity {
         tag.putInt("Facing", facing.get3DDataValue());
         tag.putInt("LimbIndex", limbIndex);
         tag.putByte("StandSkin", standSkin);
+        if (this.ownerUUID != null) {
+            tag.putUUID("OwnerUUID", this.ownerUUID);
+        }
     }
 
     @Override
@@ -60,6 +64,9 @@ public class DiverLimbBlockEntity extends BlockEntity {
         }
         if (tag.contains("StandSkin")) {
             this.standSkin = tag.getByte("StandSkin");
+        }
+        if (tag.hasUUID("OwnerUUID")) {
+            this.ownerUUID = tag.getUUID("OwnerUUID");
         }
     }
 

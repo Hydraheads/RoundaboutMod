@@ -21,7 +21,8 @@ public class UserHurtTargetGoal extends TargetGoal {
     }
 
     public boolean canUse() {
-        if (troop.getCurrentTactic() == BadCompanyTactics.RETURN.id || troop.getCurrentTactic() == BadCompanyTactics.STOP.id) {
+        if (troop.getCurrentTactic() != BadCompanyTactics.WARD.id) {
+        //if (troop.getCurrentTactic() == BadCompanyTactics.RETURN.id || troop.getCurrentTactic() == BadCompanyTactics.STOP.id) {
             return false;
         }
 
@@ -37,7 +38,7 @@ public class UserHurtTargetGoal extends TargetGoal {
 
     @Override
     public boolean canContinueToUse() {
-        return super.canContinueToUse() && this.troop.wantsToAttack(this.ownerLastHurt, this.troop.getUser());
+        return super.canContinueToUse() && this.troop.wantsToAttack(this.ownerLastHurt, this.troop.getUser()) && troop.getCurrentTactic() == BadCompanyTactics.WARD.id;
     }
 
     public void start() {

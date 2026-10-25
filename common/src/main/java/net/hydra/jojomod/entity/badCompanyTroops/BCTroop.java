@@ -92,10 +92,15 @@ public class BCTroop extends MultipleTypeStand {
                 > getMaximumRange())) {
             discard();
         }
+        if (fireCooldown > 0) {
+            fireCooldown--;
+        }else {
+            performAttack();
+        }
     }
 
-    public static int getMaximumRange() { return 25; }
-    public static int getMaximumRangeBullets() { return 31; }
+    public static int getMaximumRange() { return 15; }
+    public static int getMaximumRangeBullets() { return 18; }
 
     public boolean wantsToAttack(LivingEntity target, LivingEntity user) {
         if (user == null) return false;
@@ -107,9 +112,7 @@ public class BCTroop extends MultipleTypeStand {
             return false;
         }
         if (user instanceof Mob M) {
-            if (M.getTarget() == target) {
-                return true;
-            }
+            if (M.getTarget() == target) { return true; }
         }
 
         if (user instanceof Raider && target instanceof Raider) {
@@ -125,5 +128,14 @@ public class BCTroop extends MultipleTypeStand {
         }
 
         return true;
+    }
+
+    public int fireCooldown = 0;
+    public int getFireCooldownMax() {
+        return 5;
+    }
+
+    public boolean performAttack() {
+        return false;
     }
 }

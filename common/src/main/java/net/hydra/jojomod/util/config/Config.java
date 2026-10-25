@@ -1366,6 +1366,12 @@ public class Config implements Cloneable {
         public Integer potionStrengthBoost;
         @BooleanOption(group = "inherit", value = false)
         public Boolean disableBlockDisassembly;
+        @IntOption(group = "inherit", value = 180, min = 0, max = 72000)
+        public Integer diverZipCooldown;
+        @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
+        public Integer kickTrapCooldown;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer diveCooldown;
     }
     public static class WhitesnakeSettings {
         @BooleanOption(group = "inherit", value = true)

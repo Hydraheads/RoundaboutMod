@@ -164,33 +164,21 @@ public abstract class EntityAndData implements IEntityAndData {
     public boolean rdbt$returnPickup(){
         return rdbt$canBePickedUp;
     }
+    @Unique
+    @Override
+    public void rdbt$setReturnPickup(boolean ye){
+        rdbt$canBePickedUp = ye;
+    }
 
     @Inject(method = "saveWithoutId(Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/nbt/CompoundTag;", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V",shift = At.Shift.AFTER))
     public void roundabout$addAdditionalSaveDataX(CompoundTag $$0, CallbackInfoReturnable<CompoundTag> cir){
-        $$0.putBoolean("canMobGrab",rdbt$canBePickedUp);
-        $$0.putInt("inForeignWorld",rdbt$inForeignWorld);
-        $$0.putByte("nativeToWorld",rdbt$nativeTo);
-        $$0.putByte("originWorld",rdbt$originWorld);
-        if (rdbt$nativeCopy != null){
-            $$0.putUUID("nativeToWorldCopy",rdbt$nativeCopy);
-        }
+        MainUtil.saveEntityData($$0,this);
     }
 
     @Inject(method = "load(Lnet/minecraft/nbt/CompoundTag;)V",
             at = @At(value = "INVOKE",target = "Lnet/minecraft/world/entity/Entity;readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V",shift = At.Shift.AFTER))
     public void roundabout$readAdditionalSaveDataX(CompoundTag $$0, CallbackInfo ci){
-        if ($$0.contains("canMobGrab")) {
-            rdbt$canBePickedUp = $$0.getBoolean("canMobGrab");
-        } if ($$0.contains("inForeignWorld")) {
-            rdbt$inForeignWorld = $$0.getInt("inForeignWorld");
-        } if ($$0.contains("nativeToWorld")) {
-            rdbt$nativeTo = $$0.getByte("nativeToWorld");
-        } if ($$0.hasUUID("nativeToWorldCopy")) {
-            rdbt$nativeCopy = $$0.getUUID("nativeToWorldCopy");
-        } if ($$0.hasUUID("originWorld")) {
-            rdbt$nativeCopy = $$0.getUUID("originWorld");
-        }
-
+       MainUtil.loadEntityData($$0,this);
     }
 
 

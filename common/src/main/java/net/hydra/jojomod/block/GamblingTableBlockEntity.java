@@ -8,6 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.Containers;
@@ -159,6 +160,10 @@ public class GamblingTableBlockEntity extends BlockEntity implements Container, 
     public void resetGame() {
         this.hostUUID = null;
         this.challengerUUID = null;
+        this.hostAccepted = false;
+        this.challengerAccepted = false;
+        this.gameInProgress = false;
+        this.activeGame = null;
         this.selectedGame = WAITING;
         setChanged();
     }
@@ -198,17 +203,22 @@ public class GamblingTableBlockEntity extends BlockEntity implements Container, 
             public int get(int index) {
                 if (index == 0) return selectedGame;
                 if (index == 1) return role == Role.HOST ? 1 : 0;
+                if (index == 2) return gameInProgress ? 1 : 0;
+                if (index == 3 && activeGame != null) {
+                    return activeGame.isHostTurn() ? 1 : 0;
+                }
                 return 0;
             }
 
             @Override
             public void set(int index, int value) {
                 if (index == 0) selectedGame = value;
+                if (index == 2) gameInProgress = value == 1;
             }
 
             @Override
             public int getCount() {
-                return 2;
+                return 4;
             }
         };
         return new GamblingTableMenu(containerId, playerInventory, this, ContainerLevelAccess.create(this.level, this.worldPosition), menuData);
@@ -285,6 +295,9 @@ public class GamblingTableBlockEntity extends BlockEntity implements Container, 
             default -> this.activeGame = null;
         }
         this.setChanged();
+        if (this.level != null && !this.level.isClientSide()) {
+            this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
+        }
     }
 
     public GamblingGame getActiveGame() {
@@ -314,6 +327,47 @@ public class GamblingTableBlockEntity extends BlockEntity implements Container, 
             }
         }
     }
+
+    // packet syncs
+
+    @Override
+    public CompoundTag getUpdateTag() {
+        return saveWithoutMetadata();
+    }
+
+    @Override
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    // server tick
+    /*
+    public void serverTick() {
+        if (this.level == null || this.level.isClientSide()) return;
+
+        // reset the game if someone becomes null (i.e., by leaving the server, etc.)
+        if (this.hostUUID != null) {
+            Player host = this.level.getPlayerByUUID(this.hostUUID);
+            if (host == null) {
+                handlePlayerLeft();
+            }
+        }
+
+        if (this.challengerUUID != null) {
+            Player challenger = this.level.getPlayerByUUID(this.challengerUUID);
+            if (challenger == null) {
+                handlePlayerLeft();
+            }
+        }
+    }
+
+    private void handlePlayerLeft() {
+        returnAllItems();
+        resetGame();
+        if (this.level != null && !this.level.isClientSide()) {
+            this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
+        }
+    } */
 
     // simple getters and setters
 

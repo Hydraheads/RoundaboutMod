@@ -51,6 +51,12 @@ public class SurvivorRenderer<M extends StandEntity> extends StandRenderer<Survi
     private static final ResourceLocation SCULK = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/survivor/sculk.png");
     private static final ResourceLocation SCULK_ACTIVATED = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/survivor/activated/sculk.png");
 
+    private static final ResourceLocation CENTURIAN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/survivor/centurian.png");
+    private static final ResourceLocation CENTURIAN_ACTIVATED = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/survivor/activated/centurian.png");
+
+    private static final ResourceLocation BLOB = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/survivor/blob.png");
+    private static final ResourceLocation BLOB_ACTIVATED = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/survivor/activated/blob.png");
+
     private static final ResourceLocation SPONGE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/survivor/sponge.png");
     private static final ResourceLocation SPONGE_ACTIVATED = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/survivor/activated/sponge.png");
 
@@ -87,6 +93,10 @@ public class SurvivorRenderer<M extends StandEntity> extends StandRenderer<Survi
                 return SPONGE_ACTIVATED;
             if (BT == PowersSurvivor.SCULK)
                 return SCULK_ACTIVATED;
+            if (BT == PowersSurvivor.CENTURIAN)
+                return CENTURIAN_ACTIVATED;
+            if (BT == PowersSurvivor.BLOB)
+                return BLOB_ACTIVATED;
             if (BT == PowersSurvivor.REDSTONE)
                 return REDSTONE_ACTIVATED;
             return BASE_ACTIVATED;
@@ -113,6 +123,10 @@ public class SurvivorRenderer<M extends StandEntity> extends StandRenderer<Survi
             return SPONGE;
         if (BT == PowersSurvivor.SCULK)
             return SCULK;
+        if (BT == PowersSurvivor.CENTURIAN)
+            return CENTURIAN;
+        if (BT == PowersSurvivor.BLOB)
+            return BLOB;
         if (BT == PowersSurvivor.REDSTONE)
             return REDSTONE;
         return BASE;

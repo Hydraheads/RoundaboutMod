@@ -1684,6 +1684,147 @@ public class MainUtil {
         }
     }
 
+    //this needs to exist because minecraft code decided to write separate data storage functions
+    //for bucketable fish instead of hooking to the same one.
+    public static CompoundTag saveMobData(CompoundTag tag, IMob mob){
+        tag.putBoolean("roundabout.isWorthy", mob.roundabout$isWorthy());
+        tag.putBoolean("roundabout.isNaturalStandUser", mob.roundabout$getIsNaturalStandUser());
+        tag.putBoolean("roundabout.isBred", mob.roundabout$getIsBred());
+        CompoundTag compoundtag = tag.getCompound("roundabout");
+        compoundtag.putBoolean("vampire",mob.roundabout$isVampire());
+        compoundtag.putBoolean("stolenMemory", mob.rdbt$getStolen());
+
+        tag.put("roundabout",compoundtag);
+        return tag;
+    }
+
+
+    public static void loadMobData(CompoundTag tag, IMob mob){
+        mob.roundabout$setWorthy(tag.getBoolean("roundabout.isWorthy"));
+        mob.roundabout$setIsNaturalStandUser(tag.getBoolean("roundabout.isNaturalStandUser"));
+        mob.roundabout$setIsBred(tag.getBoolean("roundabout.isBred"));
+        CompoundTag compoundtag = tag.getCompound("roundabout");
+        mob.roundabout$setVampire(compoundtag.getBoolean("vampire"));
+        if (compoundtag.contains("stolenMemory")) {
+            mob.rdbt$setStolen(compoundtag.getBoolean("stolenMemory"));
+        }
+    }
+
+    public static CompoundTag saveEntityData(CompoundTag tag, IEntityAndData mob){
+        tag.putBoolean("canMobGrab",mob.rdbt$returnPickup());
+        tag.putInt("inForeignWorld",mob.rdbt$getForeignWorldTicks());
+        tag.putByte("nativeToWorld",mob.rdbt$getNativeTo());
+        tag.putByte("originWorld",mob.rdbt$getOriginWorld());
+        if (mob.rdbt$getNativeCopy() != null){
+            tag.putUUID("nativeToWorldCopy",mob.rdbt$getNativeCopy());
+        }
+        return tag;
+    }
+
+
+    public static void loadEntityData(CompoundTag tag, IEntityAndData mob){
+        if (tag.contains("canMobGrab")) {
+            mob.rdbt$setReturnPickup(tag.getBoolean("canMobGrab"));
+        } if (tag.contains("inForeignWorld")) {
+            mob.rdbt$setForeignWorldTicks(tag.getInt("inForeignWorld"));
+        } if (tag.contains("nativeToWorld")) {
+            mob.rdbt$setNativeTo(tag.getByte("nativeToWorld"));
+        } if (tag.hasUUID("nativeToWorldCopy")) {
+            mob.rdbt$setNativeCopy(tag.getUUID("nativeToWorldCopy"));
+        } if (tag.hasUUID("originWorld")) {
+            mob.rdbt$setOriginWorld(tag.getByte("originWorld"));
+        }
+    }
+
+    public static void loadLivingData(CompoundTag tag, StandUser mob, LivingEntity living){
+        if (tag.contains("roundabout.StandDisc", 10)) {
+            CompoundTag compoundtag = tag.getCompound("roundabout.StandDisc");
+            ItemStack itemstack = ItemStack.of(compoundtag);
+            if (!itemstack.isEmpty() && itemstack.getItem() instanceof StandDiscItem SD) {
+                mob.roundabout$setStandDisc(itemstack);
+                MainUtil.extractDiscData((living), SD, itemstack);
+            }
+        }
+        if (tag.contains("roundabout.StandRejectionDisc", 10)) {
+            CompoundTag compoundtag = tag.getCompound("roundabout.StandRejectionDisc");
+            ItemStack itemstack = ItemStack.of(compoundtag);
+            if (!itemstack.isEmpty() && itemstack.getItem() instanceof StandDiscItem SD) {
+                mob.roundabout$setRejectionStandDisc(itemstack);
+                SD.generateStandPowerRejection(living);
+            }
+        }
+
+        CompoundTag compoundtag = tag.getCompound("roundabout");
+        mob.roundabout$setBubbleEncased(compoundtag.getByte("bubbleEncased"));
+        mob.roundabout$setHeat(compoundtag.getByte("heat"));
+        if (compoundtag.contains("sealedTicks")) {
+            mob.roundabout$setSealedTicksAgnostic(compoundtag.getInt("sealedTicks"));
+        }
+        if (compoundtag.contains("fleshBud")) {
+            mob.rdbt$setFleshBud(compoundtag.getUUID("fleshBud"));
+        }
+
+        mob.rdbt$setExperienceTaken(compoundtag.getBoolean("expTaken"));
+        StandPowers powers = mob.roundabout$getStandPowers();
+        List<CooldownInstance> CDCopy = new ArrayList<>(mob.rdbt$getPowerCooldowns()) {
+        };
+        if (!CDCopy.isEmpty()) {
+            for (byte i = 0; i < CDCopy.size(); i++) {
+                CooldownInstance instance = CDCopy.get(i);
+                if (compoundtag.contains("cooldown_" + i)) {
+                    instance.time = compoundtag.getInt("cooldown_" + i);
+                    instance.maxTime = compoundtag.getInt("cooldown_" + i + "_max");
+                }
+            }
+        }
+    }
+    public static CompoundTag saveLivingData(CompoundTag tag, StandUser mob, LivingEntity liv){
+        if (!mob.roundabout$getStandDisc().isEmpty() || tag.contains("roundabout.StandDisc", 10)) {
+            ItemStack discy = mob.roundabout$getStandDisc();
+            CompoundTag compoundtag = new CompoundTag();
+            tag.put("roundabout.StandDisc",
+                    MainUtil.saveToDiscData(liv, discy).save(compoundtag));
+        }
+        if ((mob.roundabout$getRejectionStandDisc() != null && !mob.roundabout$getRejectionStandDisc().isEmpty())
+                || tag.contains("roundabout.StandRejectionDisc", 10)) {
+            CompoundTag compoundtag = new CompoundTag();
+            if (mob.roundabout$getRejectionStandDisc() == null) {
+                mob.roundabout$setRejectionStandDisc(ItemStack.EMPTY);
+            }
+            tag.put("roundabout.StandRejectionDisc", mob.roundabout$getRejectionStandDisc().save(compoundtag));
+        }
+
+        CompoundTag compoundtag = tag.getCompound("roundabout");
+        compoundtag.putByte("bubbleEncased", mob.roundabout$getBubbleEncased());
+        compoundtag.putInt("heat", mob.roundabout$getHeat());
+        compoundtag.putBoolean("expTaken", mob.rdbt$getExperienceTaken());
+
+        if (mob.rdbt$getFleshBud() != null) {
+            compoundtag.putUUID("fleshBud", mob.rdbt$getFleshBud());
+        } else {
+            if (compoundtag.contains("fleshBud")) {
+                compoundtag.remove("fleshBud");
+            }
+        }
+
+        StandPowers powers = mob.roundabout$getStandPowers();
+        List<CooldownInstance> CDCopy = new ArrayList<>(mob.rdbt$getPowerCooldowns()) {
+        };
+        if (!CDCopy.isEmpty()) {
+            for (byte i = 0; i < CDCopy.size(); i++) {
+                CooldownInstance ci = CDCopy.get(i);
+                compoundtag.putInt("cooldown_" + i, ci.time);
+                compoundtag.putInt("cooldown_" + i + "_max", ci.maxTime);
+            }
+        }
+        compoundtag.putInt("sealedTicks", mob.roundabout$getSealedTicks());
+
+        tag.put("roundabout", compoundtag);
+
+        return tag;
+    }
+
+
     public static void updateNailColor(Player player, float red, float green, float blue) {
         if (player != null) {
             if (((StandUser) player).roundabout$getStandPowers() instanceof PowersTusk PT) {

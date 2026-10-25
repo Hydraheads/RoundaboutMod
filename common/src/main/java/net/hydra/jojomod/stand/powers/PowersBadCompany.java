@@ -20,11 +20,15 @@ import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.HashSet;
 import java.util.List;
@@ -208,7 +212,20 @@ public class PowersBadCompany extends NewDashPreset {
     }
 
     public void selectedTactics(int id) {
-        tryIntPowerPacket(PowerIndex.POWER_2, id);
+        if (id == TACTIC_FIRE) {
+            fireTactic();
+        }else {
+            tryIntPowerPacket(PowerIndex.POWER_2, id);
+        }
+    }
+
+    public void fireTactic() {
+        float range = BCTroop.getMaximumRangeBullets()+1;
+        Vec3 vec3d = self.getEyePosition(0);
+        Vec3 vec3d2 = self.getViewVector(0);
+        Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
+        HitResult blockHit = self.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, self));
+        tryPosPowerPacket(PowerIndex.POWER_2, blockHit.getLocation());
     }
 
     private int getTroopLimit() { return 12; }
@@ -260,6 +277,29 @@ public class PowersBadCompany extends NewDashPreset {
         return false;
     }
 
+    private boolean detectTankLimit() {
+        initActiveTroops();
+        int activeSoldiers = 0;
+        for (BCTroop troop : activeTroops) {
+            if (troop instanceof BCTank) {
+                activeSoldiers += 1;
+            }
+        }
+        if (activeSoldiers >= getMaxTanks()) {
+            if (self instanceof Player PL) {
+                PL.displayClientMessage(Component.translatable("stand.bad_company.tank_limit").withStyle(ChatFormatting.DARK_GREEN), true);
+            }
+
+            return true;
+
+        }
+
+        if (self instanceof Player PL) {
+            PL.displayClientMessage(Component.translatable("stand.bad_company.total_troops.tank", (activeSoldiers + 1), getMaxTanks()).withStyle(ChatFormatting.GREEN), true);
+        }
+        return false;
+    }
+
     public boolean tryIntPower(int move, boolean forced, int chargeTime){
         if (move == PowerIndex.POWER_1) {
             syncTotalTroopsOut();
@@ -271,7 +311,8 @@ public class PowersBadCompany extends NewDashPreset {
             }else if (chargeTime == HELICOPTER) {
                 playStandUserOnlySoundsIfNearby(HELICOPTER_SUMMON, 8, false, false);
             }else if (chargeTime == TANK) {
-                playStandUserOnlySoundsIfNearby(TANK_SUMMON, 8, false, false);
+                spawnTank();
+
             }
 
             syncTotalTroopsOut();
@@ -279,11 +320,21 @@ public class PowersBadCompany extends NewDashPreset {
             if (chargeTime == TACTIC_STOP) {
                 sendTroopsSignal(BadCompanyTactics.STOP);
             }else if (chargeTime == TACTIC_WARD) {
-
+                sendTroopsSignal(BadCompanyTactics.WARD);
             }
         }
 
         return super.tryIntPower(move, forced, chargeTime);
+    }
+
+    @Override
+    public boolean tryPosPower(int move, boolean forced, Vec3 pos) {
+        if (move == PowerIndex.POWER_2) {
+            sendTroopsShootSignal(pos);
+            return true;
+        }
+
+        return super.tryPosPower(move, forced, pos);
     }
 
     @Override
@@ -304,31 +355,52 @@ public class PowersBadCompany extends NewDashPreset {
         }
     }
 
+    public boolean holdDownClick = false;
 
+    @Override
+    public void buttonInputAttack(boolean keyIsDown, Options options) {
+        holdDownClick = keyIsDown;
+    }
+
+    private void addTroop(BCTroop troop) {
+        troop.setUser(self);
+        troop.absMoveTo(
+                self.getPosition(1).x,
+                self.getPosition(1).y,
+                self.getPosition(1).z
+        );
+        troop.setYRot(self.getYRot());
+        self.level().addFreshEntity(troop);
+        PowerTypes.copyPlaneOfExisting(self, troop);
+
+        activeTroops.add(troop);
+    }
+
+    public void spawnTank() {
+        if (isClient() || detectTroopLimit(BCTank.getTroopValue()) || detectTankLimit()) {
+            return;
+        }
+
+        initActiveTroops();
+        BCTank tank = ModEntities.BAD_COMPANY_TANK.create(self.level());
+        if (tank != null) {
+            addTroop(tank);
+            playStandUserOnlySoundsIfNearby(TANK_SUMMON, 8, false, false);
+        }
+    }
     public void spawnSoldier(boolean bundle) {
         if (isClient() || detectTroopLimit(BCSoldier.getTroopValue()) || detectSoldierLimit(bundle)) { return; }
 
         initActiveTroops();
-        syncTotalTroopsOut();
         BCSoldier soldier = getSoldierEntity(bundle);
         if (soldier != null) {
-            soldier.setUser(self);
-            soldier.absMoveTo(
-                    self.getPosition(1).x,
-                    self.getPosition(1).y,
-                    self.getPosition(1).z
-            );
-            soldier.setYRot(self.getYRot());
-            self.level().addFreshEntity(soldier);
-            activeTroops.add(soldier);
+            addTroop(soldier);
 
             if (bundle) {
                 playStandUserOnlySoundsIfNearby(BUNDLE_SUMMON, 8, false, false);
             }else {
                 playStandUserOnlySoundsIfNearby(SOLDIER_SUMMON, 8, false, false);
             }
-
-            PowerTypes.copyPlaneOfExisting(self, soldier);
         }
     }
 
@@ -370,6 +442,15 @@ public class PowersBadCompany extends NewDashPreset {
         initActiveTroops();
         for (BCTroop T : activeTroops) {
             T.setCurrentTactic(tactic.id);
+        }
+    }
+    private void sendTroopsShootSignal(Vec3 pos){
+        initActiveTroops();
+        for (BCTroop T : activeTroops) {
+            if (T instanceof BCSoldier Soldier) {
+                Soldier.shootAtPosition(pos);
+            }
+            //T.setCurrentTactic(tactic.id);
         }
     }
 
@@ -428,5 +509,11 @@ public class PowersBadCompany extends NewDashPreset {
     }
 
     @Override
-    public boolean isMiningStand() { return true; }
+    public boolean isMiningStand() { return false; }
+    @Override
+    public boolean interceptAttack(){ return true; }
+
+    public void tickPower() {
+        if (holdDownClick) fireTactic();
+    }
 }

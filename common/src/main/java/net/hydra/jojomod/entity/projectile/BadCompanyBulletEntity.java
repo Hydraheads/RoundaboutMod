@@ -133,12 +133,8 @@ public class BadCompanyBulletEntity extends AbstractArrow {
                 damage = (float) (damage * (ClientNetworking.getAppropriateConfig().itemSettings.gunDamageOnMobs * 0.01));
 
             }
-            
-            boolean didDamage = livingEntity.hurt(ModDamageTypes.of(level(), getDamageType(), this, this.getOwner()), damage);
 
-            if (didDamage) {
-                applyEffect(livingEntity);
-            }
+            boolean didDamage = livingEntity.hurt(ModDamageTypes.of(level(), getDamageType(), null, this.getOwner()), damage);
 
             if (didDamage) {
                 livingEntity.invulnerableTime = 10;
@@ -182,6 +178,7 @@ public class BadCompanyBulletEntity extends AbstractArrow {
         this.setSoundEvent(SoundEvents.ARROW_HIT);
         this.setShotFromCrossbow(false);
         ((IAbstractArrowAccess)this).roundabout$resetPiercedEntities();
+        discard();
     }
 
     @Override
