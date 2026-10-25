@@ -264,7 +264,7 @@ public class PurpleSmokeEntity extends StandEntity {
         for (Entity entity : damages) {
             if (!(entity instanceof LivingEntity living)) continue;
 
-            int effectDuration = living instanceof Player ? 200 : 300;
+            int effectDuration = living instanceof Player ? 100 : 150;
             boolean isSelf = living == user;
 
             if (isDistortionMode()) {
@@ -276,19 +276,19 @@ public class PurpleSmokeEntity extends StandEntity {
                     ((StandUser) user).roundabout$getStandPowers().addEXP(2);
                 }
                 if (ClientNetworking.getAppropriateConfig().PurpleHazeSettings.HazeMelts) {
-                    living.addEffect(new MobEffectInstance(ModEffects.MELTING, 300, 2));
+                    living.addEffect(new MobEffectInstance(ModEffects.MELTING, 150, 2));
                 }
             } else {
                 boolean alreadyHasVirus = living.hasEffect(ModEffects.HAZE_VIRUS);
                 ((StandUser) living).SetInPurpleHazeTicks(5);
                 ((StandUser) living).SetPurpleHazeSkin(this.getStandSkin());
-                living.addEffect(new MobEffectInstance(ModEffects.HAZE_VIRUS, 300));
+                living.addEffect(new MobEffectInstance(ModEffects.HAZE_VIRUS, 150));
 
                 if (!isSelf && !alreadyHasVirus && expGrantedTo.add(living.getId())) {
                     ((StandUser) user).roundabout$getStandPowers().addEXP(3);
                 }
                 if (ClientNetworking.getAppropriateConfig().PurpleHazeSettings.HazeMelts) {
-                    living.addEffect(new MobEffectInstance(ModEffects.MELTING, 300, 1));
+                    living.addEffect(new MobEffectInstance(ModEffects.MELTING, 150, 1));
                 }
             }
         }
