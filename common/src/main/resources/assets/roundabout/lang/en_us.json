@@ -3133,6 +3133,7 @@
   "skins.roundabout.mandom.command": "Commander",
   "skins.roundabout.mandom.sculk": "Sculk",
   "skins.roundabout.mandom.tv": "TV",
+  "skins.roundabout.mandom.caps": "Caps",
 
   "skins.roundabout.survivor.base": "Part 6",
   "skins.roundabout.survivor.green": "Green",
@@ -3147,6 +3148,8 @@
   "skins.roundabout.survivor.sponge": "Sponge",
   "skins.roundabout.survivor.sculk": "Sculk",
   "skins.roundabout.survivor.redstone": "Redstone",
+  "skins.roundabout.survivor.centurian": "Centurion",
+  "skins.roundabout.survivor.blob": "Blob",
 
   "skins.roundabout.oasis.base": "Part 5",
   "skins.roundabout.oasis.open": "Open",
@@ -3171,6 +3174,8 @@
   "skins.roundabout.white_album.manga": "Manga",
   "skins.roundabout.white_album.yuki": "Yuki-onna",
   "skins.roundabout.white_album.ice": "Ice",
+  "skins.roundabout.white_album.shulker": "Shulker",
+  "skins.roundabout.white_album.boxer": "Boxer",
 
   "skins.roundabout.killer_queen.anime": "Part 4",
   "skins.roundabout.killer_queen.manga": "Manga",

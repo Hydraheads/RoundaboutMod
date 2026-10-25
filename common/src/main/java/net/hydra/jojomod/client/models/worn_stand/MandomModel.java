@@ -111,6 +111,8 @@ public class MandomModel extends PsuedoHierarchicalModel {
             "textures/stand/mandom/eye.png");
     public static ResourceLocation esidisi = new ResourceLocation(Roundabout.MOD_ID,
             "textures/stand/mandom/esidisi.png");
+    public static ResourceLocation caps = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/stand/mandom/caps.png");
     public static ResourceLocation command = new ResourceLocation(Roundabout.MOD_ID,
             "textures/stand/mandom/command.png");
     public static ResourceLocation command2 = new ResourceLocation(Roundabout.MOD_ID,
@@ -142,6 +144,7 @@ public class MandomModel extends PsuedoHierarchicalModel {
             case PowersMandom.COMMAND -> {return command;}
             case PowersMandom.SCULK -> {return sculk;}
             case PowersMandom.TV -> {return tv;}
+            case PowersMandom.CAPS -> {return caps;}
             default -> {return base;}
         }
     }
