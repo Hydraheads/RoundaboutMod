@@ -14,6 +14,9 @@ public class CoinDropScreen extends Screen {
     private static final ResourceLocation TEXTURE_2 =
             new ResourceLocation(Roundabout.MOD_ID, "textures/gui/gambling_table/coin_drop/coin_drop_2.png");
 
+    private static final int MAIN_SCREEN_U = 4, MAIN_SCREEN_V = 2;
+    private static final int MAIN_SCREEN_WIDTH = 194, MAIN_SCREEN_HEIGHT = 181;
+
     private final CoinDropGame game;
     private boolean isHoldingSpace = false;
     private int chargeTicks = 0;
@@ -52,12 +55,10 @@ public class CoinDropScreen extends Screen {
         int centerX = this.width / 2;
         int centerY = this.height / 2;
 
-        int texWidth = 256;
-        int texHeight = 256;
-        int x = centerX - (texWidth / 2);
-        int y = centerY - (texHeight / 2);
+        int x = centerX - (MAIN_SCREEN_WIDTH / 2);
+        int y = centerY - (MAIN_SCREEN_HEIGHT / 2);
 
-        graphics.blit(TEXTURE_1, x, y, 0, 0, texWidth, texHeight);
+        graphics.blit(TEXTURE_1, x, y, MAIN_SCREEN_U, MAIN_SCREEN_V, MAIN_SCREEN_WIDTH, MAIN_SCREEN_HEIGHT);
 
         super.render(graphics, mouseX, mouseY, partialTick);
     }
