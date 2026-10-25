@@ -101,6 +101,11 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
             }else {
                 idleWithGun.stop();
             }
+            if (animation == SHOOT_GUN) {
+                shootGun.startIfStopped(tickCount);
+            }else {
+                shootGun.stop();
+            }
 
             if (!onGround() && !(isInWater() || isInLava()) && !isDisplay) {
                 releaseParachute.startIfStopped(tickCount);
@@ -226,6 +231,7 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
     public boolean shootAtPosition(Vec3 target, boolean look) {
         if (look) getLookControl().setLookAt(target);
 
+        getNavigation().stop();
         shootingTicks = getFireCooldownMax()+5;
         if (bulletsLeft <= 0 || fireCooldown > 0) { return false; }
 
