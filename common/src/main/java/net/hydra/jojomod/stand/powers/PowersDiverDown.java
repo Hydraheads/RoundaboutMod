@@ -5037,7 +5037,9 @@ public class PowersDiverDown extends NewPunchingStand {
             removeDiverLegsFromTarget();
             removeDiverArmsFromTarget();
             recallLimbs();
-            toggleZip(false);
+            if(inZipMode()) {
+                toggleZip(false);
+            }
             if (isDiveActive()) {
                 emergeServer();
             }
