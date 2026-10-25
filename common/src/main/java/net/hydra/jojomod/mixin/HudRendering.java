@@ -375,6 +375,10 @@ public abstract class HudRendering implements IHudAccess {
         StandHudRender.renderStandHud($$1, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, this.getVehicleMaxHearts(this.getPlayerVehicleWithHealth()), roundabout$flashAlpha, roundabout$otherFlashAlpha);
 
         RenderSystem.enableBlend();
+    }
+
+    @Inject(method = "renderHotbar", at = @At(value = "TAIL"))
+    private void roundabout$renderHotbarTailMixin(float partialTick, GuiGraphics graphics, CallbackInfo info) {
 
         // for counting gun ammo
 
@@ -405,16 +409,15 @@ public abstract class HudRendering implements IHudAccess {
                 // put the thing slightly below the crosshair
                 int textWidth = this.getFont().width(ammoText);
                 int x = (this.screenWidth - textWidth) / 2;
-                int y = this.screenHeight - 56;
+                // fix for survival/creative rendering
+                int y = this.screenHeight - 70;
+                if (this.minecraft.gameMode != null && !this.minecraft.gameMode.canHurtPlayer()) {
+                    y += 14;
+                }
                 // prints :0
-                $$1.drawString(this.getFont(), ammoText, x, y, color, true);
+                graphics.drawString(this.getFont(), ammoText, x, y, color, true);
             }
         }
-    }
-
-    @Inject(method = "renderHotbar", at = @At(value = "TAIL"))
-    private void roundabout$renderHotbarTailMixin(float partialTick, GuiGraphics graphics, CallbackInfo info) {
-
     }
 
     private void rdbt$renderTex(TextureAtlasSprite $$0, PoseStack $$1) {
