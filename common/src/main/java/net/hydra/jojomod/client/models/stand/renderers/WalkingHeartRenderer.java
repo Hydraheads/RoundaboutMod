@@ -24,6 +24,7 @@ public class WalkingHeartRenderer extends StandRenderer<WalkingHeartEntity> {
     private static final ResourceLocation SCARECROW_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/walking_heart/scarecrow.png");
     private static final ResourceLocation ABYSSAL_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/walking_heart/abyssal.png");
     private static final ResourceLocation MELON_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/walking_heart/melon.png");
+    private static final ResourceLocation CREAKING_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/walking_heart/creaking.png");
     public WalkingHeartRenderer(EntityRendererProvider.Context context) {
         super(context, new WalkingHeartModel<>(context.bakeLayer(ModEntityRendererClient.WALKING_HEART_LAYER)), 0f);
         this.addLayer(new WalkingHeartEyeLayer<>(this));
@@ -42,6 +43,7 @@ public class WalkingHeartRenderer extends StandRenderer<WalkingHeartEntity> {
             case (WalkingHeartEntity.SCARECROW_SKIN) -> SCARECROW_SKIN;
             case (WalkingHeartEntity.ABYSSAL_SKIN) -> ABYSSAL_SKIN;
             case (WalkingHeartEntity.MELON_SKIN) -> MELON_SKIN;
+            case (WalkingHeartEntity.CREAKING_SKIN) -> CREAKING_SKIN;
             default -> MANGA;
         };
     }

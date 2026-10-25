@@ -1710,10 +1710,11 @@ public class PowersWalkingHeart extends NewDashPreset {
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
             if (Level > 1 || bypass) {
                 $$1.add(WalkingHeartEntity.MODEL_SKIN);
-                $$1.add(WalkingHeartEntity.PURPLE_SKIN);
                 $$1.add(WalkingHeartEntity.MELON_SKIN);
-            }if (Level > 2 || bypass) {
                 $$1.add(WalkingHeartEntity.SCARECROW_SKIN);
+            }if (Level > 2 || bypass) {
+                $$1.add(WalkingHeartEntity.CREAKING_SKIN);
+                $$1.add(WalkingHeartEntity.PURPLE_SKIN);
                 $$1.add(WalkingHeartEntity.VALENTINE_SKIN);
                 $$1.add(WalkingHeartEntity.VERDANT_SKIN);
             }if (Level > 3 || bypass) {
@@ -1755,6 +1756,8 @@ public class PowersWalkingHeart extends NewDashPreset {
             return Component.translatable(  "skins.roundabout.walking_heart.abyssal");
         } else if (skinId == WalkingHeartEntity.MELON_SKIN){
             return Component.translatable(  "skins.roundabout.walking_heart.melon");
+        } else if (skinId == WalkingHeartEntity.CREAKING_SKIN){
+            return Component.translatable(  "skins.roundabout.walking_heart.creaking");
         }
         return Component.translatable(  "skins.roundabout.walking_heart.base");
     }
