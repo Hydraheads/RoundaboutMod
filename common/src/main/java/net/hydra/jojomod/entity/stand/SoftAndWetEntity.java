@@ -28,7 +28,8 @@ public class SoftAndWetEntity extends FollowingStandEntity {
             NATURE = 16,
             MELON = 17,
             WHEEL = 18,
-            ACTION = 19;
+            ACTION = 19,
+            GREEN_2 = 20;
 
 
     public final AnimationState hideFists = new AnimationState();
