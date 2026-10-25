@@ -3057,7 +3057,7 @@ public class PowersDiverDown extends NewPunchingStand {
             this.self.setPose(Pose.STANDING);
             this.setPowerNone();
             if (inZipMode())
-                setCooldown(PowerIndex.SKILL_3, 180);
+                setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().diverDownSettings.diverZipCooldown);
         } else {
             this.self.setSprinting(false);
         }
@@ -3433,7 +3433,7 @@ public class PowersDiverDown extends NewPunchingStand {
 
         // store the trap
         this.storedKickTraps.put(key, new KickTrap(MAX_TRAP_DURATION, face, reflection));
-        setCooldown(PowerIndex.SKILL_2, 60);
+        setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().diverDownSettings.kickTrapCooldown);
 
         // animation here
         // Sounds & ground impact particles here
@@ -3654,8 +3654,8 @@ public class PowersDiverDown extends NewPunchingStand {
             if (!(target instanceof LivingEntity) || target instanceof StandEntity || target == null) {
                 this.setAttackTimeDuring(-15);
                 this.poseStand(OffsetIndex.ATTACK);
-                setCooldown(PowerIndex.SKILL_1, 200);
-                setCooldown(PowerIndex.SKILL_EXTRA, 200);
+                setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().diverDownSettings.diveCooldown);
+                setCooldown(PowerIndex.SKILL_EXTRA, ClientNetworking.getAppropriateConfig().diverDownSettings.diveCooldown);
                 return;
             }
             this.submergedTarget = target;
@@ -3722,8 +3722,8 @@ public class PowersDiverDown extends NewPunchingStand {
                     ModSounds.SUMMON_DIVER_DOWN_EVENT,
                     SoundSource.PLAYERS, 0.85F, 1);
         }
-        setCooldown(PowerIndex.SKILL_1, 200);
-        setCooldown(PowerIndex.SKILL_EXTRA, 200);
+        setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().diverDownSettings.diveCooldown);
+        setCooldown(PowerIndex.SKILL_EXTRA, ClientNetworking.getAppropriateConfig().diverDownSettings.diveCooldown);
         return true;
     }
 

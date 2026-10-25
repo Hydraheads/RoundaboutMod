@@ -4350,6 +4350,12 @@
   "config.roundabout.customDiverDownWorkbench.desc": "Enables the custom wokrbench textures.",
   "config.roundabout.forceThirdPersonInGroundDive.name": "Force Third Person in Ground Dive",
   "config.roundabout.forceThirdPersonInGroundDive.desc": "Automatically switches to third person while in ground dive.",
+  "config.roundabout.diverZipCooldown.name": "Diver Zip CD",
+  "config.roundabout.diverZipCooldown.desc": "This cooldown in ticks.",
+  "config.roundabout.kickTrapCooldown.name": "Kick Trap CD",
+  "config.roundabout.kickTrapCooldown.desc": "This cooldown in ticks.",
+  "config.roundabout.diveCooldown.name": "Submerge/Self-Submerge CD",
+  "config.roundabout.diveCooldown.desc": "This cooldown in ticks.",
 
   "config.roundabout.maxDetectionRange.name": "Max Detection Range",
   "config.roundabout.maxDetectionRange.desc": "How many blocks away can the nematodes detect someone in tension sensor? Default is 25.",
