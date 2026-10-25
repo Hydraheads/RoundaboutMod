@@ -1,6 +1,7 @@
 package net.hydra.jojomod.client.gui.gambling_table;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.menu.GamblingTableMenu;
 import net.hydra.jojomod.menu.gambling_games.CoinDropGame;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -139,7 +140,15 @@ public class CoinDropScreen extends Screen {
     }
 
     private boolean isMyTurn() {
-        return this.minecraft != null && this.game.isPlayerTurn(this.minecraft.player);
+        if (this.minecraft == null || this.minecraft.player == null) return false;
+
+        if (this.minecraft.player.containerMenu instanceof GamblingTableMenu menu) {
+            boolean iAmHost = menu.isHost(this.minecraft.player);
+            boolean isHostsTurn = menu.isHostsTurn();
+            return (iAmHost && isHostsTurn) || (!iAmHost && !isHostsTurn);
+        }
+
+        return this.game.isPlayerTurn(this.minecraft.player);
     }
 
     @Override
