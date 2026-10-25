@@ -114,7 +114,7 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
         }
     }
 
-    private float attackRange = 5.5f;
+    private float attackRange = 4.5f;
 
     public void tick() {
         super.tick();
@@ -148,10 +148,10 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
             if (getNavigation().isInProgress()) {
                 setAnim(WALK_GUN);
             } else {
-                if (getTarget() != null && !(distanceToSqr(getTarget().getX(), getTarget().getY(), getTarget().getZ()) > attackRange)) {
-                    setAnim(IDLE_GUN);
-                }else {
+                if (getTarget() != null && !(distanceTo(getTarget()) > attackRange)) {
                     setAnim(SHOOT_GUN);
+                }else {
+                    setAnim(IDLE_GUN);
                 }
             }
         }
@@ -220,7 +220,7 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
         return shootAtPosition(target.getEyePosition(1));
     }
     public boolean shootAtPosition(Vec3 target) {
-        if (bulletsLeft <= 0 || distanceToSqr(target) > ((attackRange+0.75f)*(attackRange+0.75f))) { return false; }
+        if (bulletsLeft <= 0 || fireCooldown > 0) { return false; }
 
         if (getBundle()) {
             shootSingleBulletAtPosition(getEyePosition(1).add(0.3f, 0.0f, 0.65f * 0.3f), target);
@@ -237,7 +237,7 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
 
         bulletsLeft--;
         if (bulletsLeft <= 0) { chargeTicks = getRechargeTime(); }
-
+        fireCooldown = getFireCooldownMax();
         return true;
     }
 
@@ -275,7 +275,6 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
         if (getTarget() != null) {
             return shootAt(getTarget());
         }
-
         return false;
     }
 }
