@@ -25,6 +25,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.HashSet;
 import java.util.List;
@@ -208,7 +211,16 @@ public class PowersBadCompany extends NewDashPreset {
     }
 
     public void selectedTactics(int id) {
-        tryIntPowerPacket(PowerIndex.POWER_2, id);
+        if (id == TACTIC_FIRE) {
+            float range = BCTroop.getMaximumRangeBullets()+1;
+            Vec3 vec3d = self.getEyePosition(0);
+            Vec3 vec3d2 = self.getViewVector(0);
+            Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
+            HitResult blockHit = self.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, self));
+            tryPosPowerPacket(PowerIndex.POWER_2, blockHit.getLocation());
+        }else {
+            tryIntPowerPacket(PowerIndex.POWER_2, id);
+        }
     }
 
     private int getTroopLimit() { return 12; }
@@ -284,6 +296,16 @@ public class PowersBadCompany extends NewDashPreset {
         }
 
         return super.tryIntPower(move, forced, chargeTime);
+    }
+
+    @Override
+    public boolean tryPosPower(int move, boolean forced, Vec3 pos) {
+        if (move == PowerIndex.POWER_2) {
+            sendTroopsShootSignal(pos);
+            return true;
+        }
+
+        return super.tryPosPower(move, forced, pos);
     }
 
     @Override
@@ -370,6 +392,15 @@ public class PowersBadCompany extends NewDashPreset {
         initActiveTroops();
         for (BCTroop T : activeTroops) {
             T.setCurrentTactic(tactic.id);
+        }
+    }
+    private void sendTroopsShootSignal(Vec3 pos){
+        initActiveTroops();
+        for (BCTroop T : activeTroops) {
+            if (T instanceof BCSoldier Soldier) {
+                Soldier.shootAtPosition(pos);
+            }
+            //T.setCurrentTactic(tactic.id);
         }
     }
 

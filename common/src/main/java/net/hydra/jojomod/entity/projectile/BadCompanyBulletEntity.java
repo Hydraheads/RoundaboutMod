@@ -182,6 +182,7 @@ public class BadCompanyBulletEntity extends AbstractArrow {
         this.setSoundEvent(SoundEvents.ARROW_HIT);
         this.setShotFromCrossbow(false);
         ((IAbstractArrowAccess)this).roundabout$resetPiercedEntities();
+        discard();
     }
 
     @Override

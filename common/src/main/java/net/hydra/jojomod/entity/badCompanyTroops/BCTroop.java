@@ -95,9 +95,7 @@ public class BCTroop extends MultipleTypeStand {
         if (fireCooldown > 0) {
             fireCooldown--;
         }else {
-            if (performAttack()) {
-                fireCooldown = getFireCooldownMax();
-            }
+            performAttack();
         }
     }
 
