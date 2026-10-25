@@ -1,6 +1,7 @@
 package net.hydra.jojomod.menu;
 
 import net.hydra.jojomod.block.GamblingTableBlockEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -28,7 +29,7 @@ public class GamblingTableMenu extends AbstractContainerMenu {
 
     // Client-side constructor called by MenuType
     public GamblingTableMenu(int containerId, Inventory playerInventory) {
-        this(containerId, playerInventory, new SimpleContainer(BET_SLOT_COUNT), ContainerLevelAccess.NULL, new SimpleContainerData(2));
+        this(containerId, playerInventory, new SimpleContainer(BET_SLOT_COUNT), ContainerLevelAccess.NULL, new SimpleContainerData(3));
     }
 
     // Server-side constructor called by GamblingTableBlockEntity
@@ -166,10 +167,42 @@ public class GamblingTableMenu extends AbstractContainerMenu {
         return true;
     }
 
+    // gets the block entity using block pos
+
+    public GamblingTableBlockEntity getTable() {
+        if (this.betContainer instanceof GamblingTableBlockEntity table) {
+            return table;
+        }
+        if (this.player != null && this.player.level() != null) {
+            BlockPos playerPos = this.player.blockPosition();
+            GamblingTableBlockEntity closest = null;
+            double closestDistSq = Double.MAX_VALUE;
+            for (BlockPos p : BlockPos.betweenClosed(playerPos.offset(-5, -3, -5), playerPos.offset(5, 3, 5))) {
+                if (this.player.level().getBlockEntity(p) instanceof GamblingTableBlockEntity table) {
+                    double distSq = p.distSqr(playerPos);
+                    if (distSq < closestDistSq) {
+                        closestDistSq = distSq;
+                        closest = table;
+                    }
+                }
+            }
+            return closest;
+        }
+        return null;
+    }
+
     //literally all this is used for is to track if the host has selected a game that way the host gets auto sent to the selection menu
     public boolean hasGameStarted() {return this.data.get(0) > 0;}
 
     public void setSelectedGameClient(int gameId) {
         this.data.set(0, gameId);
+    }
+
+    public boolean isGameInProgress() {
+        return this.data.get(2) == 1;
+    }
+
+    public int getSelectedGame() {
+        return this.data.get(0);
     }
 }
