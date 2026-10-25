@@ -972,9 +972,7 @@ public class PowersDiverDown extends NewPunchingStand {
         super.tickPower();
         if (this.self.level().isClientSide()) {
             if (this.self.tickCount % 2 == 0) {
-                LogUtils.getLogger().info("DEBUG: Scanning and populating client limbs");
                 scanAndPopulateClientLimbs();
-                LogUtils.getLogger().info("DEBUG: Client has {} active limbs", this.activeLimbs.size());
             }
         }
         if (isPiloting() && this.self.level().isClientSide() && isPacketPlayer()) {
