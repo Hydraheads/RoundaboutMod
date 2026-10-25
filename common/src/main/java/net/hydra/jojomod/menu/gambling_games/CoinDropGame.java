@@ -45,33 +45,31 @@ public class CoinDropGame extends GamblingGame {
     public void handleAction(Player player, int actionId, int extraData) {
         if (gameOver || table.getLevel() == null || table.getLevel().isClientSide()) return;
 
-        // Verify it is this player's turn
+        // verify it is this player's turn
         boolean isHost = table.getPlayerRole(player) == GamblingTableBlockEntity.Role.HOST;
         if (isHost != isHostTurn) return;
 
         if (actionId == ACTION_DROP_COIN) {
-            // extraData is encoded charge: 0 to 100 (0.00 to 1.00)
             float chargeProgress = Math.max(0.0f, Math.min(1.0f, extraData / 100.0f));
 
-            // Calculate spillage: 1.0 = 5% rise, 0.0 = 30% rise
+            // Calculate spillage
             float penaltyFactor = 1.0f - chargeProgress;
             this.lastSpillageAdded = 5.0f + (penaltyFactor * 25.0f);
             this.currentTension += this.lastSpillageAdded;
 
-            // Determine drop quality for feedback
-            if (chargeProgress <= 0.33f) {
+            // determine drop quality
+            if (chargeProgress <= 0.389f) {
                 this.lastDropQuality = 1;
-            } else if (chargeProgress <= 0.611f) {
+            } else if (chargeProgress <= 0.667f) {
                 this.lastDropQuality = 2;
-            } else if (chargeProgress <= 0.833f) {
+            } else if (chargeProgress <= 0.944f) {
                 this.lastDropQuality = 3;
             } else {
                 this.lastDropQuality = 4;
             }
 
-            // Check for game over (spill over 100%)
+            // check for spill
             if (this.currentTension >= 100.0f) {
-                // The current player caused the spill, so the OTHER player wins!
                 broadcastMessage(player.getScoreboardName() + " spilled the glass!");
                 endGame(!isHostTurn);
             } else {
