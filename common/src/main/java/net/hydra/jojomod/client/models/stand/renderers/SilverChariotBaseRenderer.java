@@ -48,7 +48,7 @@ public class SilverChariotBaseRenderer<T extends StandEntity> extends StandRende
     private static final ResourceLocation YELLOW = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/silver_chariot/yellow_silver_chariot.png");
     private static final ResourceLocation PHARAOH = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/silver_chariot/pharaoh_silver_chariot.png");
 
-    public SilverChariotBaseRenderer(EntityRendererProvider.Context context, StandModel root) {
+    public SilverChariotBaseRenderer(EntityRendererProvider.Context context, StandModel<SilverChariotEntity> root) {
         // super(context, new SilverChariotModel<>(context.bakeLayer(ModEntityRendererClient.SILVER_CHARIOT_LAYER)), 0.0F);
         super(context, root, 0f);
     }
@@ -157,7 +157,7 @@ public class SilverChariotBaseRenderer<T extends StandEntity> extends StandRende
             // renderAfterimage1(mobEntity, entityYaw, partialTicks, matrixStack, vertexConsumerProvider, packedLight, alpha, 1.5D, -2.0D, 3.5D);
             // renderAfterimage1(mobEntity, entityYaw, partialTicks, matrixStack, vertexConsumerProvider, packedLight, alpha, -1.5D, -2.0D, 3.5D);
             // renderAfterimage1(mobEntity, entityYaw, partialTicks, matrixStack, vertexConsumerProvider, packedLight, alpha, -2.5D, -2.0D, -1.5D);
-            this.model.setAlpha(alpha);
+            // this.model.setAlpha(alpha);
             this.model.stand.visible = !(renderAfterimagesInFirstPerson
                     && mobEntity.getUser() == minecraft.player
                     && minecraft.options.getCameraType().isFirstPerson());
@@ -167,7 +167,7 @@ public class SilverChariotBaseRenderer<T extends StandEntity> extends StandRende
                     && mobEntity.getUser() == minecraft.player
                     && minecraft.options.getCameraType().isFirstPerson());
         }
-        this.model.setAlpha(1f);
+        // this.model.setAlpha(1f);
         // this.model.getHead().visible = true;
         // super.render(mobEntity, entityYaw, partialTicks, matrixStack, vertexConsumerProvider, packedLight);
     }
@@ -337,6 +337,6 @@ public class SilverChariotBaseRenderer<T extends StandEntity> extends StandRende
     @Override
     protected RenderType getRenderType(SilverChariotEntity entity, boolean showBody, boolean translucent, boolean showOutline) {
         // return super.getRenderType(entity, showBody, true, showOutline);
-        return RenderType.entityCutoutNoCull(getTextureLocation(entity));
+        return RenderType.entityTranslucent(getTextureLocation(entity));
     }
 }
