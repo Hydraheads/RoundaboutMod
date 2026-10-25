@@ -8,6 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.Containers;
@@ -332,9 +333,38 @@ public class GamblingTableBlockEntity extends BlockEntity implements Container, 
     }
 
     @Override
-    public net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket.create(this);
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
+
+    // server tick
+    /*
+    public void serverTick() {
+        if (this.level == null || this.level.isClientSide()) return;
+
+        // reset the game if someone becomes null (i.e., by leaving the server, etc.)
+        if (this.hostUUID != null) {
+            Player host = this.level.getPlayerByUUID(this.hostUUID);
+            if (host == null) {
+                handlePlayerLeft();
+            }
+        }
+
+        if (this.challengerUUID != null) {
+            Player challenger = this.level.getPlayerByUUID(this.challengerUUID);
+            if (challenger == null) {
+                handlePlayerLeft();
+            }
+        }
+    }
+
+    private void handlePlayerLeft() {
+        returnAllItems();
+        resetGame();
+        if (this.level != null && !this.level.isClientSide()) {
+            this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
+        }
+    } */
 
     // simple getters and setters
 
