@@ -3,6 +3,7 @@ package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 
+import com.mojang.logging.LogUtils;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.DiverLimbBlockEntity;
@@ -971,7 +972,9 @@ public class PowersDiverDown extends NewPunchingStand {
         super.tickPower();
         if (this.self.level().isClientSide()) {
             if (this.self.tickCount % 2 == 0) {
+                LogUtils.getLogger().info("DEBUG: Scanning and populating client limbs");
                 scanAndPopulateClientLimbs();
+                LogUtils.getLogger().info("DEBUG: Client has {} active limbs", this.activeLimbs.size());
             }
         }
         if (isPiloting() && this.self.level().isClientSide() && isPacketPlayer()) {
@@ -2377,22 +2380,23 @@ public class PowersDiverDown extends NewPunchingStand {
                 Level level = this.self.level();
                 if (level.getBlockState(targetPos).canBeReplaced()
                         && !level.getBlockState(targetPos).is(ModBlocks.DIVER_LIMB)) {
-                    // cycle limb code here
-                    while (activeLimbs.size() >= 4) {
-                        BlockPos oldest = activeLimbs.remove(0);
-                        if (level.getBlockState(oldest).is(ModBlocks.DIVER_LIMB)) {
-                            level.removeBlock(oldest, false);
-                        }
-                    }
-                    // increases limb index so the next limb will be the next in queue (read
-                    // DiverLimbBlockEntity to see the cycle order)
-                    int nextLimb = getNextAvailableLimbIndex(level);
-                    Direction facing = blockHit.getDirection().getOpposite();
-                    // variable for ModBlocks.DIVER_LIMB.defaultBlockState() since it's used 3 times
-                    BlockState state = ModBlocks.DIVER_LIMB.defaultBlockState();
-                    activeLimbs.add(targetPos);
-                    // place the block on the servers
                     if (!level.isClientSide) {
+                        // cycle limb code here
+                        while (activeLimbs.size() >= 4) {
+                            BlockPos oldest = activeLimbs.remove(0);
+                            if (level.getBlockState(oldest).is(ModBlocks.DIVER_LIMB)) {
+                                level.removeBlock(oldest, false);
+                            }
+                        }
+                        // increases limb index so the next limb will be the next in queue (read
+                        // DiverLimbBlockEntity to see the cycle order)
+                        int nextLimb = getNextAvailableLimbIndex(level);
+                        Direction facing = blockHit.getDirection().getOpposite();
+                        // variable for ModBlocks.DIVER_LIMB.defaultBlockState() since it's used 3 times
+                        BlockState state = ModBlocks.DIVER_LIMB.defaultBlockState();
+                        // place the block on the servers
+                        activeLimbs.add(targetPos);
+
                         if (this.self instanceof ServerPlayer sp) {
                             S2CPacketUtil.sendIntPowerDataPacket(sp, LIMB_SCAFFOLD, 1);
                         }
@@ -2403,7 +2407,8 @@ public class PowersDiverDown extends NewPunchingStand {
                             be.facing = facing;
                             be.standSkin = ((StandUser) this.self).roundabout$getStandSkin();
                             be.setChanged();
-                            level.sendBlockUpdated(targetPos, state, state, 3);
+                            BlockState currentState = level.getBlockState(targetPos);
+                            level.sendBlockUpdated(targetPos, currentState, currentState, 3);
                         }
                         // desummons stand
                         if (hasStandEntity(this.self)) {
@@ -2526,20 +2531,25 @@ public class PowersDiverDown extends NewPunchingStand {
     // hopefully this fixes server/client desyncs so that the game ALWAYS tracks if you have a limb placed
     public void scanAndPopulateClientLimbs() {
         if (this.self == null || this.self.level() == null || !this.self.level().isClientSide) return;
-        this.activeLimbs.clear();
+
+        List<BlockPos> foundLimbs = new ArrayList<>();
         BlockPos center = this.self.blockPosition();
-        int radius = 6;
+        int radius = 8;
 
         for (BlockPos pos : BlockPos.betweenClosed(center.offset(-radius, -radius, -radius), center.offset(radius, radius, radius))) {
             if (this.self.level().getBlockState(pos).is(ModBlocks.DIVER_LIMB)) {
                 if (this.self.level().getBlockEntity(pos) instanceof DiverLimbBlockEntity be) {
                     if (be.ownerUUID == null || this.self.getUUID().equals(be.ownerUUID)) {
-                        this.activeLimbs.add(pos.immutable());
+                        foundLimbs.add(pos.immutable());
                     }
                 } else {
-                    this.activeLimbs.add(pos.immutable());
+                    foundLimbs.add(pos.immutable());
                 }
             }
+        }
+        if (!this.activeLimbs.equals(foundLimbs)) {
+            this.activeLimbs.clear();
+            this.activeLimbs.addAll(foundLimbs);
         }
     }
 
