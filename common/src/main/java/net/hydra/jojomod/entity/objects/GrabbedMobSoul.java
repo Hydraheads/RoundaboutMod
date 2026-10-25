@@ -16,13 +16,9 @@ public class GrabbedMobSoul extends StandEntity{
         super(entityType, world);
     }
 
-    int tick = 0;
-
     @Override
     public void tick(){
         super.tick();
-        tick++;
-        System.out.println(tick);
     }
 
     @Override

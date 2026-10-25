@@ -116,8 +116,8 @@ public class FancyLighterItem extends BlockItem {
                                 Entity user = $$8.getEntity(compoundtag.getUUID("StuffOther"));
                                 if (user != null && $$0 != null) {
                                     if(user != $$0){
-                                        if(((StandUser)$$0).roundabout$getStandPowers() instanceof PowersBlackSabbath pbs){
-                                            if(pbs.tickDown2 < -9) {
+                                        if(((StandUser)user).roundabout$getStandPowers() instanceof PowersBlackSabbath pbs){
+                                            if(pbs.tickDown2 <= -9) {
                                                 if (!pbs.blackSabbathTargets.contains($$0)) {
                                                     pbs.selectTargetSecond($$0);
                                                     pbs.setThree();

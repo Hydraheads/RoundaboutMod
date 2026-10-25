@@ -2646,93 +2646,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @ModifyVariable(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"), ordinal = 0, argsOnly = true)
     public CompoundTag roundabout$addAdditionalSaveData(CompoundTag $$0) {
-        if (!this.roundabout$getStandDisc().isEmpty() || $$0.contains("roundabout.StandDisc", 10)) {
-            ItemStack discy = this.roundabout$getStandDisc();
-            CompoundTag compoundtag = new CompoundTag();
-            $$0.put("roundabout.StandDisc",
-                    MainUtil.saveToDiscData(((LivingEntity) (Object) this), discy).save(compoundtag));
-        }
-        if ((this.roundabout$getRejectionStandDisc() != null && !this.roundabout$getRejectionStandDisc().isEmpty())
-                || $$0.contains("roundabout.StandRejectionDisc", 10)) {
-            CompoundTag compoundtag = new CompoundTag();
-            if (roundabout$getRejectionStandDisc() == null) {
-                roundabout$setRejectionStandDisc(ItemStack.EMPTY);
-            }
-            $$0.put("roundabout.StandRejectionDisc", this.roundabout$getRejectionStandDisc().save(compoundtag));
-        }
-
-        CompoundTag compoundtag = $$0.getCompound("roundabout");
-        compoundtag.putByte("bubbleEncased", roundabout$getBubbleEncased());
-        compoundtag.putInt("heat", roundabout$getHeat());
-        compoundtag.putBoolean("expTaken", rdbt$getExperienceTaken());
-
-        if (rdbt$fleshBudPlanted != null) {
-            compoundtag.putUUID("fleshBud", rdbt$fleshBudPlanted);
-        } else {
-            if (compoundtag.contains("fleshBud")) {
-                compoundtag.remove("fleshBud");
-            }
-        }
-
-        StandPowers powers = roundabout$getStandPowers();
-        List<CooldownInstance> CDCopy = new ArrayList<>(rdbt$PowerCooldowns) {
-        };
-        if (!CDCopy.isEmpty()) {
-            for (byte i = 0; i < CDCopy.size(); i++) {
-                CooldownInstance ci = CDCopy.get(i);
-                compoundtag.putInt("cooldown_" + i, ci.time);
-                compoundtag.putInt("cooldown_" + i + "_max", ci.maxTime);
-            }
-        }
-        compoundtag.putInt("sealedTicks", roundabout$getSealedTicks());
-
-        $$0.put("roundabout", compoundtag);
-
-        return $$0;
+        return MainUtil.saveLivingData($$0,this,(LivingEntity)(Object) this);
     }
 
     @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"))
     public void roundabout$readAdditionalSaveData(CompoundTag $$0, CallbackInfo ci) {
-        if ($$0.contains("roundabout.StandDisc", 10)) {
-            CompoundTag compoundtag = $$0.getCompound("roundabout.StandDisc");
-            ItemStack itemstack = ItemStack.of(compoundtag);
-            if (!itemstack.isEmpty() && itemstack.getItem() instanceof StandDiscItem SD) {
-                this.roundabout$setStandDisc(itemstack);
-                MainUtil.extractDiscData(((LivingEntity) (Object) this), SD, itemstack);
-            }
-        }
-        if ($$0.contains("roundabout.StandRejectionDisc", 10)) {
-            CompoundTag compoundtag = $$0.getCompound("roundabout.StandRejectionDisc");
-            ItemStack itemstack = ItemStack.of(compoundtag);
-            if (!itemstack.isEmpty() && itemstack.getItem() instanceof StandDiscItem SD) {
-                this.roundabout$setRejectionStandDisc(itemstack);
-                SD.generateStandPowerRejection((LivingEntity) (Object) this);
-            }
-        }
-
-        CompoundTag compoundtag = $$0.getCompound("roundabout");
-        roundabout$setBubbleEncased(compoundtag.getByte("bubbleEncased"));
-        roundabout$setHeat(compoundtag.getByte("heat"));
-        if (compoundtag.contains("sealedTicks")) {
-            roundabout$sealedTicks = compoundtag.getInt("sealedTicks");
-        }
-        if (compoundtag.contains("fleshBud")) {
-            rdbt$fleshBudPlanted = compoundtag.getUUID("fleshBud");
-        }
-
-        rdbt$experienceTaken = rdbt$getExperienceTaken();
-        StandPowers powers = roundabout$getStandPowers();
-        List<CooldownInstance> CDCopy = new ArrayList<>(rdbt$PowerCooldowns) {
-        };
-        if (!CDCopy.isEmpty()) {
-            for (byte i = 0; i < CDCopy.size(); i++) {
-                CooldownInstance instance = CDCopy.get(i);
-                if (compoundtag.contains("cooldown_" + i)) {
-                    instance.time = compoundtag.getInt("cooldown_" + i);
-                    instance.maxTime = compoundtag.getInt("cooldown_" + i + "_max");
-                }
-            }
-        }
+        MainUtil.loadLivingData($$0,this,(LivingEntity)(Object) this);
     }
 
     @ModifyVariable(method = "checkAutoSpinAttack(Lnet/minecraft/world/phys/AABB;Lnet/minecraft/world/phys/AABB;)V", at = @At("STORE"), ordinal = 0)
@@ -3667,6 +3586,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Override
     @Unique
+    public void roundabout$setSealedTicksAgnostic(int ticks) {
+        roundabout$sealedTicks = ticks;
+    }
+
+    @Override
+    @Unique
     public void roundabout$setSealedTicks(int ticks, int max) {
         if (PowerTypes.hasStandActive(rdbt$this())) {
             roundabout$setSummonCD(8);
@@ -4007,6 +3932,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DIVER_ARMS, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$RIBCAGE_TRAP, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$SPRING_LEGS, false);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$GRABBED_SOUL, false);
         }
     }
 
@@ -7108,17 +7034,20 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     //black sabbath soul methods
     private boolean roundabout$grabbedSoul = false;
+    @Unique
+    private static final EntityDataAccessor<Boolean> ROUNDABOUT$GRABBED_SOUL = SynchedEntityData.defineId(
+            LivingEntity.class, EntityDataSerializers.BOOLEAN);
 
     @Unique
     @Override
     public void roundabout$setGrabbedSoul(boolean boleean) {
-        roundabout$grabbedSoul = boleean;
+        this.entityData.set(ROUNDABOUT$GRABBED_SOUL, boleean);
     }
 
     @Unique
     @Override
     public boolean roundabout$getGrabbedSoul() {
-        return roundabout$grabbedSoul;
+        return this.entityData.get(ROUNDABOUT$GRABBED_SOUL);
     }
 
     // for diver down

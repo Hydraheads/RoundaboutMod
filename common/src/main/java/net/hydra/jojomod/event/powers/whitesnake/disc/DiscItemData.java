@@ -1,6 +1,9 @@
 package net.hydra.jojomod.event.powers.whitesnake.disc;
 
 import net.hydra.jojomod.access.DiscBearer;
+import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.item.MemoryDiscItem;
@@ -268,7 +271,8 @@ public final class DiscItemData {
     public static boolean isLobotomized(LivingEntity entity) {
         return (!((DiscBearer) entity).roundabout$hasMemoryDisc()
                 && !WhitesnakeDiscUtil.hasUsableStandDisc(entity))
-                || (entity instanceof Mob mob && mob.hasEffect(ModEffects.DOOMED) && !MainUtil.isBossMob(mob));
+                || (entity instanceof Mob mob && mob.hasEffect(ModEffects.DOOMED) && !MainUtil.isBossMob(mob)
+        && !(mob instanceof StandEntity) && !(mob instanceof FallenMob) && !(mob instanceof BaseMinion));
     }
 
     public static boolean isMemoryDevelopmentLimited(LivingEntity entity) {
