@@ -16,6 +16,8 @@ public class CoinDropScreen extends Screen {
 
     private static final int MAIN_SCREEN_U = 4, MAIN_SCREEN_V = 2;
     private static final int MAIN_SCREEN_WIDTH = 194, MAIN_SCREEN_HEIGHT = 181;
+    private static final int FULL_CUP_U = 45, FULL_CUP_V = 192;
+    private static final int FULL_CUP_WIDTH = 111, FULL_CUP_HEIGHT = 61;
 
     private final CoinDropGame game;
     private boolean isHoldingSpace = false;
@@ -52,6 +54,7 @@ public class CoinDropScreen extends Screen {
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         this.renderBackground(graphics);
 
+        //normal cup
         int centerX = this.width / 2;
         int centerY = this.height / 2;
 
@@ -59,6 +62,26 @@ public class CoinDropScreen extends Screen {
         int y = centerY - (MAIN_SCREEN_HEIGHT / 2);
 
         graphics.blit(TEXTURE_1, x, y, MAIN_SCREEN_U, MAIN_SCREEN_V, MAIN_SCREEN_WIDTH, MAIN_SCREEN_HEIGHT);
+
+        // filled cup
+        float tensionRatio = 0.0f;
+        if (this.game != null) {
+            tensionRatio = Math.max(0.0f, Math.min(1.0f, this.game.getTension() / 100.0f));
+        }
+
+        int fillHeight = (int) (tensionRatio * FULL_CUP_HEIGHT);
+
+        if (fillHeight > 0) {
+            int xOffset = x + 41;
+            int yOffset = y + 95;
+            // scissors is pretty self explanatory, you just "cut" the image where you want to.
+            int scissorTop = yOffset + (FULL_CUP_HEIGHT - fillHeight);
+            graphics.enableScissor(xOffset, scissorTop, xOffset + FULL_CUP_WIDTH, yOffset + FULL_CUP_HEIGHT);
+
+            graphics.blit(TEXTURE_1, xOffset, yOffset, FULL_CUP_U, FULL_CUP_V, FULL_CUP_WIDTH, FULL_CUP_HEIGHT);
+
+            graphics.disableScissor();
+        }
 
         super.render(graphics, mouseX, mouseY, partialTick);
     }
