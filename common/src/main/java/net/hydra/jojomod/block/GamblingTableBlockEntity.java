@@ -159,6 +159,10 @@ public class GamblingTableBlockEntity extends BlockEntity implements Container, 
     public void resetGame() {
         this.hostUUID = null;
         this.challengerUUID = null;
+        this.hostAccepted = false;
+        this.challengerAccepted = false;
+        this.gameInProgress = false;
+        this.activeGame = null;
         this.selectedGame = WAITING;
         setChanged();
     }
@@ -198,17 +202,19 @@ public class GamblingTableBlockEntity extends BlockEntity implements Container, 
             public int get(int index) {
                 if (index == 0) return selectedGame;
                 if (index == 1) return role == Role.HOST ? 1 : 0;
+                if (index == 2) return gameInProgress ? 1 : 0;
                 return 0;
             }
 
             @Override
             public void set(int index, int value) {
                 if (index == 0) selectedGame = value;
+                if (index == 2) gameInProgress = value == 1;
             }
 
             @Override
             public int getCount() {
-                return 2;
+                return 3;
             }
         };
         return new GamblingTableMenu(containerId, playerInventory, this, ContainerLevelAccess.create(this.level, this.worldPosition), menuData);
@@ -285,6 +291,9 @@ public class GamblingTableBlockEntity extends BlockEntity implements Container, 
             default -> this.activeGame = null;
         }
         this.setChanged();
+        if (this.level != null && !this.level.isClientSide()) {
+            this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
+        }
     }
 
     public GamblingGame getActiveGame() {
@@ -313,6 +322,18 @@ public class GamblingTableBlockEntity extends BlockEntity implements Container, 
                 this.activeGame.loadAdditional(tag.getCompound("ActiveGameData"));
             }
         }
+    }
+
+    // packet syncs
+
+    @Override
+    public CompoundTag getUpdateTag() {
+        return saveWithoutMetadata();
+    }
+
+    @Override
+    public net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket.create(this);
     }
 
     // simple getters and setters

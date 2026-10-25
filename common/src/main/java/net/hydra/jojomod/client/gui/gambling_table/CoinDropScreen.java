@@ -1,0 +1,99 @@
+package net.hydra.jojomod.client.gui.gambling_table;
+
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.menu.gambling_games.CoinDropGame;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+
+public class CoinDropScreen extends Screen {
+    private static final ResourceLocation TEXTURE_1 =
+            new ResourceLocation(Roundabout.MOD_ID, "textures/gui/gambling_table/coin_drop/coin_drop_1.png");
+    private static final ResourceLocation TEXTURE_2 =
+            new ResourceLocation(Roundabout.MOD_ID, "textures/gui/gambling_table/coin_drop/coin_drop_2.png");
+
+    private final CoinDropGame game;
+    private boolean isHoldingSpace = false;
+    private int chargeTicks = 0;
+    private float chargeProgress = 0.0f;
+
+    public CoinDropScreen(CoinDropGame game) {
+        super(CommonComponents.EMPTY);
+        this.game = game;
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        // If the game ends, close the minigame screen
+        if (this.game.isGameOver()) {
+            this.onClose();
+            return;
+        }
+
+        // charge bar logic
+        if (this.isHoldingSpace && isMyTurn()) {
+            this.chargeTicks++;
+            if (this.chargeTicks < 10) {
+                this.chargeProgress = this.chargeTicks * 0.1f;
+            } else {
+                this.chargeProgress = 0.8f + (2.0f / (float) (this.chargeTicks - 9)) * 0.1f;
+            }
+        }
+    }
+
+    @Override
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        this.renderBackground(graphics);
+
+        int centerX = this.width / 2;
+        int centerY = this.height / 2;
+
+        int texWidth = 256;
+        int texHeight = 256;
+        int x = centerX - (texWidth / 2);
+        int y = centerY - (texHeight / 2);
+
+        graphics.blit(TEXTURE_1, x, y, 0, 0, texWidth, texHeight);
+
+        super.render(graphics, mouseX, mouseY, partialTick);
+    }
+
+    // both methods below are used to track the user input for holding space.
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        boolean isJumpKey = this.minecraft != null && this.minecraft.options.keyJump.matches(keyCode, scanCode);
+        if (isJumpKey && isMyTurn() && !this.isHoldingSpace) {
+            this.isHoldingSpace = true;
+            this.chargeTicks = 0;
+            this.chargeProgress = 0.0f;
+            return true;
+        }
+        return super.keyPressed(keyCode, scanCode, modifiers);
+    }
+
+    @Override
+    public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
+        boolean isJumpKey = this.minecraft != null && this.minecraft.options.keyJump.matches(keyCode, scanCode);
+        if (isJumpKey && this.isHoldingSpace) {
+            this.isHoldingSpace = false;
+            this.game.dropCoin(this.chargeProgress);
+            this.chargeTicks = 0;
+            this.chargeProgress = 0.0f;
+            return true;
+        }
+        return super.keyReleased(keyCode, scanCode, modifiers);
+    }
+
+    private boolean isMyTurn() {
+        return this.minecraft != null && this.game.isPlayerTurn(this.minecraft.player);
+    }
+
+    @Override
+    public boolean isPauseScreen() {
+        return false;
+    }
+}
