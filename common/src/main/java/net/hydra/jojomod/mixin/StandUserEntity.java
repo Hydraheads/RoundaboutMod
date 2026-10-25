@@ -6162,12 +6162,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         if (this.hasEffect(ModEffects.HAZE_VIRUS) && !this.hasEffect(ModEffects.VIRUS_IMMUNITY)) {
             if (this.tickCount % 10 == 0 && !this.level().isClientSide() && this.isAlive()) {
-                this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.HAZE_VIRUS),
-                        this.getEffect(ModEffects.HAZE_VIRUS).getAmplifier() + 1);
+                MobEffectInstance inst = this.getEffect(ModEffects.HAZE_VIRUS);
+                if (inst != null) {
+                    this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.HAZE_VIRUS),
+                            inst.getAmplifier() + 1);
+                }
             }
 
-            if (this.tickCount % 30 == 0 && !this.level().isClientSide() && this.isAlive()) {
-                int amplifier = this.getEffect(ModEffects.HAZE_VIRUS).getAmplifier();
+            MobEffectInstance spreadInst = this.getEffect(ModEffects.HAZE_VIRUS);
+            if (spreadInst != null && this.tickCount % 5 == 0
+                    && !this.level().isClientSide() && this.isAlive()) {
+                int amplifier = spreadInst.getAmplifier();
                 List<LivingEntity> nearby = ((ServerLevel) this.level()).getNearbyEntities(
                         LivingEntity.class,
                         TargetingConditions.forNonCombat().range(2.0).ignoreLineOfSight(),
@@ -6176,22 +6181,28 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 for (LivingEntity target : nearby) {
                     if (target == rdbt$this() || target.hasEffect(ModEffects.HAZE_VIRUS))
                         continue;
-                    if (this.random.nextFloat() < 1.5F) {
+                    if (this.random.nextFloat() < 1.0F) {
                         target.addEffect(new MobEffectInstance(ModEffects.HAZE_VIRUS, 200, amplifier, false, true),
                                 rdbt$this());
                     }
                 }
             }
         }
+
         if (this.hasEffect(ModEffects.DISTORTION_VIRUS) && !this.hasEffect(ModEffects.VIRUS_IMMUNITY)) {
             if (this.tickCount % 15 == 0 && !this.level().isClientSide() && this.isAlive()) {
-                this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISTORTION_VIRUS),
-                        this.getEffect(ModEffects.DISTORTION_VIRUS).getAmplifier() + 1);
-                rdbt$reduceOtherEffectDurations(20, ModEffects.DISTORTION_VIRUS, ModEffects.VIRUS_IMMUNITY);
+                MobEffectInstance inst = this.getEffect(ModEffects.DISTORTION_VIRUS);
+                if (inst != null) {
+                    this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISTORTION_VIRUS),
+                            inst.getAmplifier() + 1);
+                    rdbt$reduceOtherEffectDurations(20, ModEffects.DISTORTION_VIRUS, ModEffects.VIRUS_IMMUNITY);
+                }
             }
 
-            if (this.tickCount % 30 == 0 && !this.level().isClientSide() && this.isAlive()) {
-                int amplifier = this.getEffect(ModEffects.DISTORTION_VIRUS).getAmplifier();
+            MobEffectInstance spreadInst = this.getEffect(ModEffects.DISTORTION_VIRUS);
+            if (spreadInst != null && this.tickCount % 5 == 0
+                    && !this.level().isClientSide() && this.isAlive()) {
+                int amplifier = spreadInst.getAmplifier();
                 List<LivingEntity> nearby = ((ServerLevel) this.level()).getNearbyEntities(
                         LivingEntity.class,
                         TargetingConditions.forNonCombat().range(2.0).ignoreLineOfSight(),
@@ -6200,7 +6211,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 for (LivingEntity target : nearby) {
                     if (target == rdbt$this() || target.hasEffect(ModEffects.DISTORTION_VIRUS))
                         continue;
-                    if (this.random.nextFloat() < 0.15F) {
+                    if (this.random.nextFloat() < 1.0F) {
                         target.addEffect(
                                 new MobEffectInstance(ModEffects.DISTORTION_VIRUS, 200, amplifier, false, true),
                                 rdbt$this());

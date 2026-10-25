@@ -514,7 +514,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         if(getGrabbing() == 0) {
             super.knockback($$0 * 1.65D, $$1, $$2 * 1.65D);
         } else {
-            super.knockback($$0 * 0.25D, $$1 / 1.5, $$2 * 0.25D);
+            super.knockback($$0 * 1.25D, $$1, $$2 * 1.25D);
         }
     }
     public boolean shouldFloat = false;
@@ -1792,6 +1792,17 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         }
     }
 
+    //TODO:
+//TODO:
+    //TODO:
+    //TODO:
+    //TODO:
+    //TODO:REMEMBER TO FIX ALL UNRENDERING PISSUES
+    //TODO:
+    //TODO:
+    //TODO:
+    //TODO:
+    //TODO:
 
     public final Vec3 getLookAngle(float $$0, Entity selfie) {
         return ((StandUser)selfie).roundabout$calculateViewVectorButICanUseIt(0, selfie.getYRot());
