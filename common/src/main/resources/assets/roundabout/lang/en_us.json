@@ -2995,6 +2995,7 @@
   "skins.roundabout.soft_and_wet.kira": "Kira",
   "skins.roundabout.soft_and_wet.colors": "Colors",
   "skins.roundabout.soft_and_wet.green": "Green",
+  "skins.roundabout.soft_and_wet.green_2": "Volume 5",
   "skins.roundabout.soft_and_wet.knight": "Knight",
   "skins.roundabout.soft_and_wet.morioh": "Morioh",
   "skins.roundabout.soft_and_wet.melon": "Melon",
@@ -3038,6 +3039,7 @@
   "skins.roundabout.walking_heart.scarecrow": "Scarecrow",
   "skins.roundabout.walking_heart.abyssal": "Abyssal",
   "skins.roundabout.walking_heart.melon": "Melon",
+  "skins.roundabout.walking_heart.creaking": "Creaking",
 
   "skins.roundabout.green_day.base": "Part 5",
 
@@ -3131,6 +3133,7 @@
   "skins.roundabout.mandom.command": "Commander",
   "skins.roundabout.mandom.sculk": "Sculk",
   "skins.roundabout.mandom.tv": "TV",
+  "skins.roundabout.mandom.caps": "Caps",
 
   "skins.roundabout.survivor.base": "Part 6",
   "skins.roundabout.survivor.green": "Green",
@@ -3145,6 +3148,8 @@
   "skins.roundabout.survivor.sponge": "Sponge",
   "skins.roundabout.survivor.sculk": "Sculk",
   "skins.roundabout.survivor.redstone": "Redstone",
+  "skins.roundabout.survivor.centurian": "Centurion",
+  "skins.roundabout.survivor.blob": "Blob",
 
   "skins.roundabout.oasis.base": "Part 5",
   "skins.roundabout.oasis.open": "Open",
@@ -3169,6 +3174,8 @@
   "skins.roundabout.white_album.manga": "Manga",
   "skins.roundabout.white_album.yuki": "Yuki-onna",
   "skins.roundabout.white_album.ice": "Ice",
+  "skins.roundabout.white_album.shulker": "Shulker",
+  "skins.roundabout.white_album.boxer": "Boxer",
 
   "skins.roundabout.killer_queen.anime": "Part 4",
   "skins.roundabout.killer_queen.manga": "Manga",
@@ -4343,6 +4350,12 @@
   "config.roundabout.customDiverDownWorkbench.desc": "Enables the custom wokrbench textures.",
   "config.roundabout.forceThirdPersonInGroundDive.name": "Force Third Person in Ground Dive",
   "config.roundabout.forceThirdPersonInGroundDive.desc": "Automatically switches to third person while in ground dive.",
+  "config.roundabout.diverZipCooldown.name": "Diver Zip CD",
+  "config.roundabout.diverZipCooldown.desc": "This cooldown in ticks.",
+  "config.roundabout.kickTrapCooldown.name": "Kick Trap CD",
+  "config.roundabout.kickTrapCooldown.desc": "This cooldown in ticks.",
+  "config.roundabout.diveCooldown.name": "Submerge/Self-Submerge CD",
+  "config.roundabout.diveCooldown.desc": "This cooldown in ticks.",
 
   "config.roundabout.maxDetectionRange.name": "Max Detection Range",
   "config.roundabout.maxDetectionRange.desc": "How many blocks away can the nematodes detect someone in tension sensor? Default is 25.",

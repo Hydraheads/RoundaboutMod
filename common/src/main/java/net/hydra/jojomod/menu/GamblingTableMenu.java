@@ -29,7 +29,7 @@ public class GamblingTableMenu extends AbstractContainerMenu {
 
     // Client-side constructor called by MenuType
     public GamblingTableMenu(int containerId, Inventory playerInventory) {
-        this(containerId, playerInventory, new SimpleContainer(BET_SLOT_COUNT), ContainerLevelAccess.NULL, new SimpleContainerData(3));
+        this(containerId, playerInventory, new SimpleContainer(BET_SLOT_COUNT), ContainerLevelAccess.NULL, new SimpleContainerData(4));
     }
 
     // Server-side constructor called by GamblingTableBlockEntity
@@ -193,16 +193,14 @@ public class GamblingTableMenu extends AbstractContainerMenu {
 
     //literally all this is used for is to track if the host has selected a game that way the host gets auto sent to the selection menu
     public boolean hasGameStarted() {return this.data.get(0) > 0;}
-
     public void setSelectedGameClient(int gameId) {
         this.data.set(0, gameId);
     }
-
     public boolean isGameInProgress() {
         return this.data.get(2) == 1;
     }
-
     public int getSelectedGame() {
         return this.data.get(0);
     }
+    public boolean isHostsTurn() {return this.data.get(3) == 1;}
 }

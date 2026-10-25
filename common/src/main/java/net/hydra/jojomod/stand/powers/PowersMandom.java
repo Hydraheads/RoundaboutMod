@@ -492,14 +492,14 @@ public class PowersMandom extends NewDashPreset {
             ESIDISI = 14,
             COMMAND = 15,
             SCULK = 16,
-            TV = 17;
+            TV = 17,
+            CAPS = 18;
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
                 MANGA,
                 PURPLE,
                 SKY,
-                ALIEN,
                 DARK,
                 SQUID,
                 GLOW_SQUID,
@@ -508,6 +508,8 @@ public class PowersMandom extends NewDashPreset {
                 JELLYFISH,
                 HAPPY,
                 EYE,
+                ALIEN,
+                CAPS,
                 MELON,
                 SCULK,
                 ESIDISI,
@@ -534,6 +536,7 @@ public class PowersMandom extends NewDashPreset {
             case PowersMandom.COMMAND -> Component.translatable("skins.roundabout.mandom.command");
             case PowersMandom.SCULK -> Component.translatable("skins.roundabout.mandom.sculk");
             case PowersMandom.TV -> Component.translatable("skins.roundabout.mandom.tv");
+            case PowersMandom.CAPS -> Component.translatable("skins.roundabout.mandom.caps");
             default -> Component.translatable("skins.roundabout.mandom.manga");
         };
     }
