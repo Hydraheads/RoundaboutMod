@@ -387,6 +387,16 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
 
     @Override
+    public boolean tryPower(int move, boolean forced) {
+        if (!this.getSelf().level().isClientSide && move == PowerIndex.SNEAK_MOVEMENT && this.isClashing()){
+            ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
+            ((StandUser) this.getSelf()).roundabout$setLeapIntentionally(true);
+        }
+
+        return super.tryPower(move, forced);
+    }
+
+    @Override
     public void powerActivate(PowerContext context) {
         switch (context) {
             case SKILL_1_NORMAL, SKILL_1_GUARD -> {
@@ -634,7 +644,12 @@ public class PowersPurpleHaze extends NewPunchingStand {
         } else setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.SKILL_2);
 
         if (isHoldingSneak()) {
-            setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_PURPLE_HAZE, PowerIndex.SKILL_3);
+            boolean jojoveinLikeKeys = !ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpAndDashShareCooldown;
+            if (jojoveinLikeKeys){
+                setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_PURPLE_HAZE, PowerIndex.SKILL_3);
+            } else {
+                setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_PURPLE_HAZE, PowerIndex.GLOBAL_DASH);
+            }
         } else {
             if (canVault()) {
                 setSkillIcon(context, x, y, 3, StandIcons.PURPLE_HAZE_LEDGE_GRAB, PowerIndex.GLOBAL_DASH);
@@ -1133,7 +1148,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     && !e.is(this.getSelf())
                     && le.isAlive()
                     && !le.isInvulnerable()
-                    && stand.getSensing().hasLineOfSight(le)) {
+                    && stand.getSensing().hasLineOfSight(le)
+                    && le.isAttackable() && le.isPickable() && !(le instanceof StandEntity)
+            ) {
                 beginStranglePin(stand, le);
                 return;
             }
@@ -1439,6 +1456,12 @@ public class PowersPurpleHaze extends NewPunchingStand {
             * Just Override the breakClash(LivingEntity winner, LivingEntity loser)
             * or TieClash(LivingEntity user1, LivingEntity user2)
             * */
+            if (getPods() > 0) {
+                if (!(self instanceof Player pl && pl.isCreative())) {
+                    setPods(getPods() - 1);
+                }
+                activatePurpleHazeField(self.position(), indistortionmode);
+            }
         }
     }
 
@@ -1477,6 +1500,14 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 }
             }
         }
+
+        if (this.getSelf().onGround()){
+            if (((StandUser)this.getSelf()).roundabout$getLeapTicks() <= -1) {
+                if (this.getAnimation() == StandEntity.LEAP) {
+                    animateStand(StandEntity.LEAP_END);
+                }
+            }
+        }
     }
     public boolean purpleHazeFieldGone = false;
 
@@ -1509,6 +1540,23 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
         return ModSounds.PURPLE_HAZE_BARRAGE_CRY_EVENT;
     }
+
+
+    @Override
+    public void playBarrageEndNoise(float mod, Entity entity) {
+        if (!this.self.level().isClientSide()) {
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.PURPLE_HAZE_BARRAGE_FINISHER_EVENT, SoundSource.PLAYERS, 0.85F + mod, 1F);
+        }
+    }
+
+    @Override
+    public void playBarrageNoise(int hitNumber, Entity entity) {
+        if (!this.self.level().isClientSide()) {
+            if (hitNumber % 2 == 0)
+                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.PURPLE_HAZE_BARRAGE_HIT_EVENT, SoundSource.PLAYERS, 0.7F, 1/*(float) (0.9 + (Math.random() * 0.25))*/);
+        }
+    }
+
     @Override
     public SoundEvent getSoundFromByte(byte soundChoice) {
         if (soundChoice == SoundIndex.SUMMON_SOUND) {

@@ -1244,6 +1244,10 @@ public class ForgeSounds {
             register(ModSounds.PURPLE_HAZE_SUMMON, ModSounds.PURPLE_HAZE_SUMMON_ID);
     public static final RegistryObject<SoundEvent> PURPLE_HAZE_BARRAGE_CRY =
             register(ModSounds.PURPLE_HAZE_BARRAGE_CRY, ModSounds.PURPLE_HAZE_BARRAGE_CRY_ID);
+    public static final RegistryObject<SoundEvent> PURPLE_HAZE_BARRAGE_HIT =
+            register(ModSounds.PURPLE_HAZE_BARRAGE_HIT, ModSounds.PURPLE_HAZE_BARRAGE_HIT_ID);
+    public static final RegistryObject<SoundEvent> PURPLE_HAZE_BARRAGE_FINISHER =
+            register(ModSounds.PURPLE_HAZE_BARRAGE_FINISHER, ModSounds.PURPLE_HAZE_BARRAGE_FINISHER_ID);
     public static final RegistryObject<SoundEvent> PURPLE_HAZE_SMOKE=
             register(ModSounds.PURPLE_HAZE_SMOKE, ModSounds.PURPLE_HAZE_SMOKE_ID);
     public static final RegistryObject<SoundEvent> PURPLE_HAZE_DISTORTION_SMOKE =
