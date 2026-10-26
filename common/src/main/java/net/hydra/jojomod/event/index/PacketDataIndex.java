@@ -106,6 +106,7 @@ public class PacketDataIndex {
     public static final byte BITES_THE_DUST = 10;
     public static final byte STAND_HIT = 11;
     public static final byte BITES_THE_DUST_COMBAT = 12;
+    public static final byte DONT_SPAM_TIME_STOP = 13;
 
 
     /**S2C Int packets*/

@@ -23,8 +23,11 @@ public final class DiverDownControlsClient {
         if (stand == null) return;
         Minecraft mc = Minecraft.getInstance();
 
-        if (previousCameraType == null) {
+        if (net.hydra.jojomod.util.config.ConfigManager.getClientConfig().diverDownSettings.forceThirdPersonInGroundDive) {
             previousCameraType = mc.options.getCameraType();
+            mc.options.setCameraType(CameraType.THIRD_PERSON_BACK);
+        } else {
+            previousCameraType = null;
         }
 
         if (mc.player != null && mc.getCameraEntity() != mc.player) {
@@ -61,6 +64,11 @@ public final class DiverDownControlsClient {
         if (diveSoundInstance != null) {
             Minecraft.getInstance().getSoundManager().stop(diveSoundInstance);
             diveSoundInstance = null;
+        }
+
+        if (previousCameraType != null) {
+            mc.options.setCameraType(previousCameraType);
+            previousCameraType = null;
         }
     }
 

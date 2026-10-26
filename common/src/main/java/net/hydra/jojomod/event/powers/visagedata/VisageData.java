@@ -140,9 +140,7 @@ public class VisageData {
     public boolean rendersGyroHat(){
         return false;
     }
-    public boolean rendersAnakissHat(){
-        return false;
-    }
+    public boolean rendersAnakissHat(){return false;}
     public boolean rendersSchoolHat(){
         return false;
     }
@@ -152,6 +150,8 @@ public class VisageData {
     public boolean rendersDaiyaFluff(){
         return false;
     }
+    public boolean rendersLaemBreasts(){return false;}
+    public boolean rendersLaemHolsters(){return false;}
     public boolean rendersJohnnyHat(){
         return false;
     }

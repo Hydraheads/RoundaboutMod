@@ -19,7 +19,11 @@ public class PurpleHazeEntity extends FollowingStandEntity{
             MANGA = 6,
             MIRROR_BATTLE = 7,
             ROTT = 8,
-            PEPPERMINT = 9;
+            PEPPERMINT = 9,
+            GREENER = 10,
+            DISTORTION = 11,
+            GREEN_DSITORTION = 12;
+
 
 
     public final AnimationState hideFists = new AnimationState();
@@ -30,16 +34,36 @@ public class PurpleHazeEntity extends FollowingStandEntity{
     public final AnimationState strangle_windup = new AnimationState();
     public final AnimationState flyloop = new AnimationState();
     public final AnimationState strangle_hold= new AnimationState();
-
+    public final AnimationState strangle_grab= new AnimationState();
+    public final AnimationState phfullcombo= new AnimationState();
+    public final AnimationState phcombo1= new AnimationState();
+    public final AnimationState phcombo2= new AnimationState();
+    public final AnimationState phcombo3= new AnimationState();
+    public final AnimationState fallinghitstart= new AnimationState();
+    public final AnimationState fallinghit= new AnimationState();
+    public final AnimationState fallinghitlong= new AnimationState();
+    public final AnimationState fallinghitimpact= new AnimationState();
     public static byte
             STRANGLE_WINDUP = 86,
             FLYLOOP = 87,
-            STRANGLE_HOLD = 88;
+            STRANGLE_GRAB = 88,
+            STRANGLE_HOLD = 89,
+            PHFULLCOMBO = 90,
+            PHCOMBO1 = 91,
+            PHCOMBO2 = 92,
+            PHCOMBO3 = 93,
+            FALLINGHITSTART = 94,
+            FALLINGHIT = 95,
+            FALLINGHITLONG = 96,
+            FALLINGHITIMPACT = 97;
+
+
 
 
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
+        boolean isNotDistortionSkin = getSkin() != DISTORTION && getSkin() != GREEN_DSITORTION;
         if (this.getUser() != null) {
             if (this.getAnimation() != 12) {
                 this.hideFists.startIfStopped(this.tickCount);
@@ -76,10 +100,79 @@ public class PurpleHazeEntity extends FollowingStandEntity{
             } else {
                 this.flyloop.stop();
             }
+            if (this.getAnimation() == STRANGLE_GRAB) {
+                this.strangle_grab.startIfStopped(this.tickCount);
+            } else {
+                this.strangle_grab.stop();
+            }
             if (this.getAnimation() == STRANGLE_HOLD) {
                 this.strangle_hold.startIfStopped(this.tickCount);
             } else {
                 this.strangle_hold.stop();
+            }
+            if (this.getAnimation() == PHFULLCOMBO) {
+                this.phfullcombo.startIfStopped(this.tickCount);
+            } else {
+                this.phfullcombo.stop();
+            }
+            if (this.getAnimation() == FIRST_PUNCH) {
+                if (isNotDistortionSkin) {
+                    this.phcombo1.startIfStopped(this.tickCount);
+                } else {
+                    this.punchState1.startIfStopped(this.tickCount);
+                }
+            } else {
+                if (isNotDistortionSkin) {
+                    this.phcombo1.stop();
+                } else {
+                    this.punchState1.stop();
+                }
+            }
+            if (this.getAnimation() == SECOND_PUNCH) {
+                if (isNotDistortionSkin) {
+                    this.phcombo2.startIfStopped(this.tickCount);
+                } else {
+                    this.punchState2.startIfStopped(this.tickCount);
+                }
+            } else {
+                if (isNotDistortionSkin) {
+                    this.phcombo2.stop();
+                } else {
+                    this.punchState2.stop();
+                }
+            }
+            if (this.getAnimation() == THIRD_PUNCH) {
+                if (isNotDistortionSkin) {
+                    this.phcombo3.startIfStopped(this.tickCount);
+                } else {
+                    this.punchState3.startIfStopped(this.tickCount);
+                }
+            } else {
+                if (isNotDistortionSkin) {
+                    this.phcombo3.stop();
+                } else {
+                    this.punchState3.stop();
+                }
+            }
+            if (this.getAnimation() == FALLINGHITSTART) {
+                this.fallinghitstart.startIfStopped(this.tickCount);
+            } else {
+                this.fallinghitstart.stop();
+            }
+            if (this.getAnimation() == FALLINGHIT) {
+                this.fallinghit.startIfStopped(this.tickCount);
+            } else {
+                this.fallinghit.stop();
+            }
+            if (this.getAnimation() == FALLINGHITLONG) {
+                this.fallinghitlong.startIfStopped(this.tickCount);
+            } else {
+                this.fallinghitlong.stop();
+            }
+            if (this.getAnimation() == FALLINGHITIMPACT) {
+                this.fallinghitimpact.startIfStopped(this.tickCount);
+            } else {
+                this.fallinghitimpact.stop();
             }
         }
     }

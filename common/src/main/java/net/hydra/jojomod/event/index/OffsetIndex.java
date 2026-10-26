@@ -15,6 +15,8 @@ public class OffsetIndex {
     public static final byte GUARD_FURTHER_RIGHT = 9;
     public static final byte BENEATH_2 = 10;
     public static final byte BEHIND = 11;
+    //made this for diver down since the stand's pilot mode's animations weren't made to rotate with the camera
+    public static final byte LOOSE_NOLEAN = 12;
 
 
 
@@ -29,7 +31,7 @@ public class OffsetIndex {
         } else if (offsetType == ATTACK || offsetType == GUARD || offsetType == BENEATH|| offsetType == BENEATH_2 || offsetType == GUARD_AND_TRACE
                 || offsetType == GUARD_FURTHER_RIGHT){
             return FIXED_STYLE;
-        } else if (offsetType == LOOSE){
+        } else if (offsetType == LOOSE || offsetType == LOOSE_NOLEAN){
             return LOOSE_STYLE;
         }
         return 0;

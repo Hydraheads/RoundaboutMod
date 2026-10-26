@@ -1,10 +1,14 @@
 package net.hydra.jojomod.block;
 
-import net.hydra.jojomod.client.gui.gamblingtable.GamblingTableMenu;
+import net.hydra.jojomod.menu.GamblingGame;
+import net.hydra.jojomod.menu.GamblingTableMenu;
+import net.hydra.jojomod.menu.gambling_games.*;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.Containers;
@@ -12,6 +16,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -23,12 +28,28 @@ import java.util.Set;
 import java.util.UUID;
 
 public class GamblingTableBlockEntity extends BlockEntity implements Container, MenuProvider {
+    // byte list for all the games, when adding a game, be sure to update the bytes here.
+    /* list of all classes you need to change whenever adding a game:
+    This one
+    GamblingTableMenu
+    GamblingGameSelectionScreen
+    en_us.json
+     */
+    public static final byte
+            WAITING = 0,
+            COIN_DROP = 1;
+
+    private int selectedGame = WAITING;
+
     private NonNullList<ItemStack> items = NonNullList.withSize(GamblingTableMenu.BET_SLOT_COUNT, ItemStack.EMPTY);
     // UUIDs are used for tracking the players
     private UUID hostUUID;
     private UUID challengerUUID;
     private final Set<UUID> activeViewers = new HashSet<>();
     private boolean gameInProgress = false;
+    private boolean hostAccepted = false;
+    private boolean challengerAccepted = false;
+    private GamblingGame activeGame = null;
 
     public enum Role { HOST, CHALLENGER, SPECTATOR }
 
@@ -51,7 +72,7 @@ public class GamblingTableBlockEntity extends BlockEntity implements Container, 
         if (!this.remove && !player.isSpectator()) {
             this.activeViewers.remove(player.getUUID());
 
-            // If nobody is interacting with the table at the time of betting:
+            // If nobody is interacting with the table at the time of betting
             if (this.activeViewers.isEmpty() && !this.gameInProgress && this.level != null && !this.level.isClientSide()) {
                 returnAllItems();
                 resetGame();
@@ -96,6 +117,24 @@ public class GamblingTableBlockEntity extends BlockEntity implements Container, 
         }
     }
 
+    /**
+     * Awards all bet slots (0-17) to the winner and resets acceptance states.
+     */
+    public void awardBetsToWinner(boolean hostWon) {
+        if (this.level == null || this.level.isClientSide()) return;
+
+        UUID winnerUUID = hostWon ? this.hostUUID : this.challengerUUID;
+
+        // give both host and challenger bet slots (0 to 18) to the winner
+        returnSlotRange(0, 18, winnerUUID);
+
+        // reset the game
+        this.hostAccepted = false;
+        this.challengerAccepted = false;
+        this.gameInProgress = false;
+        resetGame();
+    }
+
     /* Getter method for checking the role of the player based on their UUID
      * Right now, the gambling table only supports players, so when villager gambling AI is added,
      * you can easily make it so that the villager's UUID is tracked as well.
@@ -121,6 +160,11 @@ public class GamblingTableBlockEntity extends BlockEntity implements Container, 
     public void resetGame() {
         this.hostUUID = null;
         this.challengerUUID = null;
+        this.hostAccepted = false;
+        this.challengerAccepted = false;
+        this.gameInProgress = false;
+        this.activeGame = null;
+        this.selectedGame = WAITING;
         setChanged();
     }
 
@@ -128,14 +172,56 @@ public class GamblingTableBlockEntity extends BlockEntity implements Container, 
         this.gameInProgress = inProgress;
         this.setChanged();
     }
-    @Override
-    public @NotNull Component getDisplayName() {
-        return Component.translatable("container.roundabout.gambling_table");
-    }
 
+    // For game selection
+
+    public final ContainerData dataAccess = new ContainerData() {
+        @Override
+        public int get(int index) {
+            return index == 0 ? selectedGame : 0;
+        }
+
+        @Override
+        public void set(int index, int value) {
+            if (index == 0) {
+                selectedGame = value;
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return 1;
+        }
+    };
+
+    // creates the gambling menu
     @Override
     public AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player) {
-        return new GamblingTableMenu(containerId, playerInventory, this, ContainerLevelAccess.create(this.level, this.worldPosition));
+        Role role = getPlayerRole(player);
+        ContainerData menuData = new ContainerData() {
+            @Override
+            public int get(int index) {
+                if (index == 0) return selectedGame;
+                if (index == 1) return role == Role.HOST ? 1 : 0;
+                if (index == 2) return gameInProgress ? 1 : 0;
+                if (index == 3 && activeGame != null) {
+                    return activeGame.isHostTurn() ? 1 : 0;
+                }
+                return 0;
+            }
+
+            @Override
+            public void set(int index, int value) {
+                if (index == 0) selectedGame = value;
+                if (index == 2) gameInProgress = value == 1;
+            }
+
+            @Override
+            public int getCount() {
+                return 4;
+            }
+        };
+        return new GamblingTableMenu(containerId, playerInventory, this, ContainerLevelAccess.create(this.level, this.worldPosition), menuData);
     }
 
     @Override
@@ -149,11 +235,6 @@ public class GamblingTableBlockEntity extends BlockEntity implements Container, 
             if (!stack.isEmpty()) return false;
         }
         return true;
-    }
-
-    @Override
-    public @NotNull ItemStack getItem(int slot) {
-        return this.items.get(slot);
     }
 
     @Override
@@ -190,17 +271,124 @@ public class GamblingTableBlockEntity extends BlockEntity implements Container, 
         this.setChanged();
     }
 
-    // saves and loads whatever is in storage
-    @Override
-    public void load(CompoundTag tag) {
-        super.load(tag);
-        this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-        ContainerHelper.loadAllItems(tag, this.items);
+    // accepting and starting the game
+
+    public void setPlayerAccepted(Player player, boolean accepted) {
+        Role role = getPlayerRole(player);
+        if (role == Role.HOST) {
+            this.hostAccepted = accepted;
+        } else if (role == Role.CHALLENGER) {
+            this.challengerAccepted = accepted;
+        }
+        this.setChanged();
+
+        if (this.hostAccepted && this.challengerAccepted) {
+            startGamble();
+        }
     }
 
+    private void startGamble() {
+        this.gameInProgress = true;
+        // IT'S GAMBLING TIME!!!!
+        switch (this.selectedGame) {
+            case COIN_DROP -> this.activeGame = new CoinDropGame(this);
+            default -> this.activeGame = null;
+        }
+        this.setChanged();
+        if (this.level != null && !this.level.isClientSide()) {
+            this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
+        }
+    }
+
+    public GamblingGame getActiveGame() {
+        return this.activeGame;
+    }
+
+    // saves and loads whatever is in storage
     @Override
     protected void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
-        ContainerHelper.saveAllItems(tag, this.items);
+        tag.putInt("SelectedGame", this.selectedGame);
+        if (this.activeGame != null) {
+            CompoundTag gameTag = new CompoundTag();
+            this.activeGame.saveAdditional(gameTag);
+            tag.put("ActiveGameData", gameTag);
+        }
+    }
+
+    @Override
+    public void load(CompoundTag tag) {
+        super.load(tag);
+        this.selectedGame = tag.getInt("SelectedGame");
+        if (tag.contains("ActiveGameData")) {
+            startGamble();
+            if (this.activeGame != null) {
+                this.activeGame.loadAdditional(tag.getCompound("ActiveGameData"));
+            }
+        }
+    }
+
+    // packet syncs
+
+    @Override
+    public CompoundTag getUpdateTag() {
+        return saveWithoutMetadata();
+    }
+
+    @Override
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    // server tick
+    /*
+    public void serverTick() {
+        if (this.level == null || this.level.isClientSide()) return;
+
+        // reset the game if someone becomes null (i.e., by leaving the server, etc.)
+        if (this.hostUUID != null) {
+            Player host = this.level.getPlayerByUUID(this.hostUUID);
+            if (host == null) {
+                handlePlayerLeft();
+            }
+        }
+
+        if (this.challengerUUID != null) {
+            Player challenger = this.level.getPlayerByUUID(this.challengerUUID);
+            if (challenger == null) {
+                handlePlayerLeft();
+            }
+        }
+    }
+
+    private void handlePlayerLeft() {
+        returnAllItems();
+        resetGame();
+        if (this.level != null && !this.level.isClientSide()) {
+            this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
+        }
+    } */
+
+    // simple getters and setters
+
+    public int getSelectedGame() {
+        return this.selectedGame;
+    }
+    public UUID getHostUUID() { return this.hostUUID; }
+    public UUID getChallengerUUID() { return this.challengerUUID; }
+    public java.util.Set<java.util.UUID> getActiveViewers() {return this.activeViewers;}
+
+    public void setSelectedGame(int game) {
+        this.selectedGame = game;
+        this.setChanged();
+    }
+
+    @Override
+    public @NotNull ItemStack getItem(int slot) {
+        return this.items.get(slot);
+    }
+    @Override
+    public @NotNull Component getDisplayName() {
+        return Component.translatable("container.roundabout.gambling_table");
     }
 }

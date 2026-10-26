@@ -1,6 +1,7 @@
 package net.hydra.jojomod.item;
 
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.pathfinding.CommandDiscPossession;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -27,6 +28,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.List;
 
 public final class CommandDiscItem extends Item {
@@ -51,6 +53,7 @@ public final class CommandDiscItem extends Item {
     public boolean applyCommand(Entity target, LivingEntity whitesnakeUser, ItemStack stack) {
         if (target.level().isClientSide() || stack.isEmpty()
                 || !(target instanceof LivingEntity living) || WhitesnakeDiscUtil.isDiscBlacklisted(living)) return false;
+        if (living instanceof Mob mob && mob.isNoAi()) return false;
         boolean applied = switch (command) {
             case JUMP_BACK -> applyJumpBack(living, whitesnakeUser);
             case ATTACK -> applyAttack(living, whitesnakeUser);
@@ -90,7 +93,7 @@ public final class CommandDiscItem extends Item {
                 ModDamageTypes.of(level, ModDamageTypes.EXPLOSIVE_STAND, user), level,
                 ClientNetworking.getAppropriateConfig().whitesnakeSettings.explosiveDiscDamage,
                 0.4F, 1.5F, 1.0F, 1.0F);
-        ExplosionUtil.explodeEffects(position, level, ModParticles.KILLER_QUEEN_EXPLOSION, 0.55F);
+        ExplosionUtil.explodeEffects(position, target, ModParticles.KILLER_QUEEN_EXPLOSION, 0.55F);
         level.playSound(null, target.blockPosition(), ModSounds.KILLER_QUEEN_EXPLOSION_EVENT,
                 SoundSource.PLAYERS, 0.3F, 1.0F);
     }
@@ -111,7 +114,6 @@ public final class CommandDiscItem extends Item {
         LivingEntity commandedTarget = user.getLastHurtMob();
         if (commandedTarget == null || !commandedTarget.isAlive() || commandedTarget == target) return false;
         if (target instanceof Mob mob) {
-            if (mob.isNoAi()) mob.setNoAi(false);
             mob.setTarget(commandedTarget);
             mob.getLookControl().setLookAt(commandedTarget, 30.0F, 30.0F);
             mob.getNavigation().moveTo(commandedTarget, 1.15D);
@@ -156,6 +158,9 @@ public final class CommandDiscItem extends Item {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> lines, TooltipFlag flag) {
         DiscItemData.addOwnerTooltip(stack, lines, false);
-        lines.add(Component.translatable(getDescriptionId() + ".desc"));
+
+        for (String str : ClientUtil.splitIntoLine(Component.translatable(getDescriptionId() + ".desc").getString(), 40)) {
+            lines.add(Component.literal(str));
+        }
     }
 }

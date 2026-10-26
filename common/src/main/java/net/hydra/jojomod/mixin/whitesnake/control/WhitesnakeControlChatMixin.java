@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin.whitesnake.control;
 
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.WhitesnakeEntity;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -25,7 +26,7 @@ public abstract class WhitesnakeControlChatMixin {
                     + "Lnet/minecraft/network/chat/ChatType$Bound;)V"), index = 2)
     private ChatType.Bound roundaboutWhitesnake$useControlModeName(ChatType.Bound original) {
         if (!(((StandUser) player).roundabout$getStandPowers() instanceof PowersWhitesnake powers)
-                || !powers.isPiloting()) {
+                || !powers.isPiloting() || !ClientNetworking.getAppropriateConfig().whitesnakeSettings.whitesnakeNameChangingText) {
             return original;
         }
         StandEntity stand = ((StandUser) player).roundabout$getStand();

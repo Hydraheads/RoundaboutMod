@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin.whitesnake.hallucination;
 
 import net.hydra.jojomod.block.HallucinatoryAcidBlockEntity;
+import net.hydra.jojomod.client.HallucinationIndicatorRenderer;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.whitesnake.HallucinationEffect;
 import net.minecraft.client.Minecraft;
@@ -18,9 +19,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class HallucinationClientTickMixin {
     @Unique private boolean roundaboutWhitesnake$acidHidden;
 
+    @Inject(method = "updateLevelInEngines", at = @At("HEAD"))
+    private void roundaboutWhitesnake$clearIndicators(CallbackInfo ci) {
+        HallucinationIndicatorRenderer.clear();
+    }
+
     @Inject(method = "tick", at = @At("TAIL"))
     private void roundaboutWhitesnake$refreshAcidVisibility(CallbackInfo ci) {
         Minecraft minecraft = (Minecraft) (Object) this;
+        HallucinationIndicatorRenderer.tick(minecraft);
         MobEffectInstance effect = minecraft.player == null ? null
                 : minecraft.player.getEffect(ModEffects.HALLUCINATION);
         boolean hidden = HallucinationEffect.hasDistortion(effect);

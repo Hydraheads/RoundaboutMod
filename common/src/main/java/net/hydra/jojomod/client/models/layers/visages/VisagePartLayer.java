@@ -109,13 +109,18 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                     visage = znpc.getBasis();
                 }
 
+                // specifically to fix visage parts like hat trims and stuff appearing when disguised
+                if (entity instanceof StandUser su && su.roundabout$isDisguised()) {
+                    visage = null;
+                }
+
                 boolean isHurt = entity.hurtTime > 0;
                 float r = isHurt ? 1.0F : 1.0F;
                 float g = isHurt ? 0.6F : 1.0F;
                 float b = isHurt ? 0.6F : 1.0F;
                 StandUser user = ((StandUser) entity);
 
-                if (user.roundabout$getStandPowers() instanceof PowersWalkingHeart PW && (PW.inCombatMode() || PW.hasExtendedHeelsForWalking())){
+                if (user.roundabout$getStandPowers() instanceof PowersWalkingHeart PW && (PW.rendersInCombatMode() || PW.hasExtendedHeelsForWalking())){
                     if (user instanceof AbstractClientPlayer PE) {
                         renderRightHeelPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, PE.getSkinTextureLocation(),
                                 r, g, b);
@@ -305,6 +310,16 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                         if (vd.rendersDaiyaEars() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !isHoldingBowlerHat
                                 && !hideExtraPartsWithSuit) {
                             renderDaiyaEars(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                    r, g, b);
+                        }
+                        if (vd.rendersLaemBreasts() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !isHoldingBowlerHat
+                                && !hideExtraPartsWithSuit) {
+                            renderLaemBreasts(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                    r, g, b);
+                        }
+                        if (vd.rendersLaemHolsters() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !isHoldingBowlerHat
+                                && !hideExtraPartsWithSuit) {
+                            renderLaemHolsters(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
                         if (vd.rendersJohnnyHat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !isHoldingBowlerHat
@@ -915,6 +930,24 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         ModStrayModels.DaiyaEarsPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
         ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderLaemBreasts(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().body.translateAndRotate(poseStack);
+        ModStrayModels.laemBreastsPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderLaemHolsters(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack, 36);
+        getParentModel().body.translateAndRotate(poseStack);
+        ModStrayModels.laemHolstersPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack, 36);
     }
     public void renderJohnnyHat(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
                                float r, float g, float b) {

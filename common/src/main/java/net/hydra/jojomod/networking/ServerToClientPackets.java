@@ -60,12 +60,14 @@ public class ServerToClientPackets {
             SyncAllies("sync_allies"),
             SyncMoldRange("sync_mold_range"),
             SyncMoldDuration("sync_mold_duration"),
+            SyncGdArms("SyncGdArms"),
             SyncPurpleHazePods("sync_purple_haze_pods"),
             AddEpitaph("add_epitaph"),
             ClearEpitaph("clear_epitaph"),
             SendSafeSound("send_safe_sound"),
             SendSafeSound2("send_safe_sound_2"),
-            SendSafeParticle("send_safe_particle");
+            SendSafeParticle("send_safe_particle"),
+            SyncGamblingState( "sync_gambling_state ");
 
             public final String value;
 

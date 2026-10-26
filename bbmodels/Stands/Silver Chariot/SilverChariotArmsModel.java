@@ -22,6 +22,7 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 	private final ModelPart right_blade;
 	private final ModelPart right_tip;
 	private final ModelPart right_wrist_ARMOR;
+	private final ModelPart right_offhand_item;
 	private final ModelPart left_arm;
 	private final ModelPart upper_left_arm;
 	private final ModelPart left_elbow;
@@ -32,6 +33,7 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 	private final ModelPart left_blade;
 	private final ModelPart left_tip;
 	private final ModelPart left_wrist_ARMOR;
+	private final ModelPart left_offhand_item;
 
 	public unknown(ModelPart root) {
 		this.stand = root.getChild("stand");
@@ -50,6 +52,7 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 		this.right_blade = this.right_sword.getChild("right_blade");
 		this.right_tip = this.right_blade.getChild("right_tip");
 		this.right_wrist_ARMOR = this.lower_right_arm.getChild("right_wrist_ARMOR");
+		this.right_offhand_item = this.lower_right_arm.getChild("right_offhand_item");
 		this.left_arm = this.upper_chest.getChild("left_arm");
 		this.upper_left_arm = this.left_arm.getChild("upper_left_arm");
 		this.left_elbow = this.upper_left_arm.getChild("left_elbow");
@@ -60,6 +63,7 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 		this.left_blade = this.left_sword.getChild("left_blade");
 		this.left_tip = this.left_blade.getChild("left_tip");
 		this.left_wrist_ARMOR = this.lower_left_arm.getChild("left_wrist_ARMOR");
+		this.left_offhand_item = this.lower_left_arm.getChild("left_offhand_item");
 	}
 
 	public static LayerDefinition createBodyLayer() {
@@ -105,6 +109,8 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 
 		PartDefinition right_wrist_ARMOR = lower_right_arm.addOrReplaceChild("right_wrist_ARMOR", CubeListBuilder.create().texOffs(0, 44).addBox(-1.5F, -1.0F, -2.0F, 3.0F, 2.0F, 4.0F, new CubeDeformation(0.26F)), PartPose.offset(0.5F, 3.25F, 0.0F));
 
+		PartDefinition right_offhand_item = lower_right_arm.addOrReplaceChild("right_offhand_item", CubeListBuilder.create(), PartPose.offset(0.5F, 5.25F, 0.0F));
+
 		PartDefinition left_arm = upper_chest.addOrReplaceChild("left_arm", CubeListBuilder.create(), PartPose.offset(4.0F, -5.25F, 0.0F));
 
 		PartDefinition upper_left_arm = left_arm.addOrReplaceChild("upper_left_arm", CubeListBuilder.create().texOffs(49, 29).addBox(0.0F, -0.75F, -2.0F, 3.0F, 6.0F, 4.0F, new CubeDeformation(0.01F))
@@ -129,6 +135,8 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 		PartDefinition left_tip = left_blade.addOrReplaceChild("left_tip", CubeListBuilder.create().texOffs(97, 110).mirror().addBox(0.0F, -2.5F, -7.0F, 0.0F, 5.0F, 7.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(0.0F, 0.0F, -5.0F));
 
 		PartDefinition left_wrist_ARMOR = lower_left_arm.addOrReplaceChild("left_wrist_ARMOR", CubeListBuilder.create().texOffs(14, 44).addBox(-1.5F, -1.0F, -2.0F, 3.0F, 2.0F, 4.0F, new CubeDeformation(0.26F)), PartPose.offset(-0.5F, 3.25F, 0.0F));
+
+		PartDefinition left_offhand_item = lower_left_arm.addOrReplaceChild("left_offhand_item", CubeListBuilder.create(), PartPose.offset(-0.5F, 5.25F, 0.0F));
 
 		return LayerDefinition.create(meshdefinition, 128, 128);
 	}

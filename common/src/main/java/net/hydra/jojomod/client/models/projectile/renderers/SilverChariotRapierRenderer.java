@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.projectile.SilverChariotRapierModel;
 import net.hydra.jojomod.entity.projectile.SilverChariotRapierShotEntity;
 import net.hydra.jojomod.entity.stand.SilverChariotEntity;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -51,6 +52,7 @@ public class SilverChariotRapierRenderer extends EntityRenderer<SilverChariotRap
     private static final ResourceLocation SANDY = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/silver_chariot/sandy_silver_chariot.png");
     private static final ResourceLocation TURQUOISE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/silver_chariot/turquoise_silver_chariot.png");
     private static final ResourceLocation YELLOW = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/silver_chariot/yellow_silver_chariot.png");
+    private static final ResourceLocation PHARAOH = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/silver_chariot/pharaoh_silver_chariot.png");
 
     @Override
     public void render(SilverChariotRapierShotEntity $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5) {
@@ -136,16 +138,17 @@ public class SilverChariotRapierRenderer extends EntityRenderer<SilverChariotRap
             case SilverChariotEntity.YELLOW -> {
                 return YELLOW;
             }
+            case SilverChariotEntity.PHARAOH -> {
+                return PHARAOH;
+            }
         }
         return PART_3;
     }
 
     @Override
     public ResourceLocation getTextureLocation(SilverChariotRapierShotEntity entity) {
-        if (entity.silverChariot != null) {
-            byte skin = entity.silverChariot.getSkin();
-            return getSkin(skin);
-        }
-        return PART_3;
+        // byte bt = ((StandUser) entity.getUser()).roundabout$getStandSkin();
+        byte bt = entity.getUser() != null ? ((StandUser) entity.getUser()).roundabout$getStandSkin() : 0;
+        return getSkin(bt);
     }
 }

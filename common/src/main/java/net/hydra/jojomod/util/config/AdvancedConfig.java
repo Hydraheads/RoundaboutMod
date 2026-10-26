@@ -31,7 +31,7 @@ public class AdvancedConfig implements Cloneable {
         SERVER_OINLY_INSTANCE = config;
     }
 
-    public Set<String> standArrowPoolv6 = new HashSet<>(
+    public Set<String> standArrowPoolv9 = new HashSet<>(
             Arrays.asList(
                     "roundabout:star_platinum_disc",
                     "roundabout:the_world_disc",
@@ -41,11 +41,13 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:walking_heart_disc",
                     "roundabout:white_album_disc",
                     "roundabout:king_crimson_disc",
-                    "roundabout:ratt_disc"
-                    //"roundabout:green_day_disc"
+                    "roundabout:ratt_disc",
+                    "roundabout:killer_queen_disc",
+                    "roundabout:diver_down_disc",
+                    "roundabout:green_day_disc"
             )
     );
-    public Set<String> standArrowSecondaryPoolv7 = new HashSet<>(
+    public Set<String> standArrowSecondaryPoolv9 = new HashSet<>(
             Arrays.asList(
                     "roundabout:cinderella_disc",
                     "roundabout:hey_ya_disc",
@@ -53,11 +55,12 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:survivor_disc",
                     "roundabout:achtung_baby_disc",
                     "roundabout:manhattan_transfer_disc",
-                    "roundabout:california_king_bed_disc"
+                    "roundabout:california_king_bed_disc",
+                    "roundabout:lyin_eyes_disc"
                     //"roundabout:20th_century_boy_disc"
             )
     );
-    public Set<String> naturalStandUserMobPoolv9 = new HashSet<>(
+    public Set<String> naturalStandUserMobPoolv12 = new HashSet<>(
             Arrays.asList(
                     "roundabout:star_platinum_disc",
                     "roundabout:the_world_disc",
@@ -71,7 +74,10 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:king_crimson_disc",
                     "roundabout:white_album_disc",
                     "roundabout:manhattan_transfer_disc",
-                    "roundabout:california_king_bed_disc"
+                    "roundabout:california_king_bed_disc",
+                    "roundabout:killer_queen_disc",
+                    "roundabout:diver_down_disc",
+                    "roundabout:lyin_eyes_disc"
             )
     );
 
@@ -106,10 +112,11 @@ public class AdvancedConfig implements Cloneable {
 
 
 
-    public Set<String> humanoidOnlyStandUserMobPoolv2 = new HashSet<>(
+    public Set<String> humanoidOnlyStandUserMobPoolv3 = new HashSet<>(
             Arrays.asList(
                     "roundabout:hey_ya_disc",
-                    "roundabout:mandom_disc"
+                    "roundabout:mandom_disc",
+                    "roundabout:lyin_eyes_disc"
                     //"roundabout:20th_century_boy_disc"
             )
     );
@@ -326,8 +333,11 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:ancient_debris"
             )
     );
-    public Set<String> standDisassemblyBlacklist = new HashSet<>(
+    public Set<String> standDisassemblyBlacklistv2 = new HashSet<>(
             Arrays.asList(
+                    "roundabout:melon_parfait",
+                    "minecraft:lodestone",
+                    "minecraft:grass_block"
             )
     );
     public Set<String> standBlockExplosionBlacklist = new HashSet<>(
@@ -365,10 +375,10 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:colored_fire_cream:80"
             )
     );
-    public Set<String> sheerHeartAttackCustomEntityHeatV2 = new HashSet<>(
+    public Set<String> sheerHeartAttackCustomEntityHeatV3 = new HashSet<>(
             Arrays.asList(
                     "minecraft:blaze:90",
-                    "minecraft:magna_cube:70",
+                    "minecraft:magma_cube:100",
                     "minecraft:slime:0",
                     "minecraft:stray:-50",
                     "minecraft:wither_skeleton:20",
@@ -415,14 +425,15 @@ public class AdvancedConfig implements Cloneable {
                     "mod_id:add_other_mod_item"
             )
     );
-    public Set<String> occultChargeEffectsToBanishv2 = new HashSet<>(
+    public Set<String> occultChargeEffectsToBanishv3 = new HashSet<>(
             Arrays.asList(
                     "minecraft:absorption",
                     "minecraft:saturation",
                     "minecraft:jump_boost",
                     "minecraft:strength",
                     "minecraft:speed",
-                    "minecraft:resistance"
+                    "minecraft:resistance",
+                    "minecraft:regeneration"
             )
     );
 

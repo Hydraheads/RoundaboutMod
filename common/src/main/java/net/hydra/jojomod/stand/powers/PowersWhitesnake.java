@@ -11,9 +11,11 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.WhitesnakeControlClient;
 import net.hydra.jojomod.client.gui.WhitesnakeInventoryMenu;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.badCompanyTroops.BCSoldier;
 import net.hydra.jojomod.entity.projectile.HallucinatoryAcidProjectile;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
+import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.WhitesnakeEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -206,6 +208,16 @@ public class PowersWhitesnake extends BlockGrabPreset {
     @Override
     public List<Byte> getSkinList() {
         List<Byte> skins = Lists.newArrayList();
+
+        if (isPiloting() || isAutoMode()) {
+            if (getStandEntity(this.getSelf()) instanceof WhitesnakeEntity WSE) {
+                skins.add(WSE.getSkin());
+                return skins;
+            }
+
+            return null;
+        }
+
         skins.add(WhitesnakeEntity.ANIME_SKIN);
         skins.add(WhitesnakeEntity.MANGA_SKIN);
         if (self instanceof Player player) {
@@ -514,7 +526,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         boolean entering = stand != null && selected != null && selected.is(stand);
         boolean leavingAutoMode = entering && autoMode;
         if (entering && getActivePower() == PowerIndex.POWER_2_BLOCK) {
-            stopPhaseGrabAtCurrentPosition(stand);
+            stopPowerAtCurrentPosition(stand);
         }
         if (entering) prepareStandForRemoteControl(stand);
         ((IPlayerEntity) player).roundabout$setIsControlling(entering ? id : 0);
@@ -597,10 +609,6 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     private static boolean isUsableStand(StandEntity stand) {
         return stand != null && stand.isAlive() && !stand.isRemoved();
-    }
-
-    private void stopPhaseGrabAtCurrentPosition(StandEntity stand) {
-        stopPowerAtCurrentPosition(stand);
     }
 
     private void stopPowerAtCurrentPosition(StandEntity stand) {
@@ -711,8 +719,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
     public void preCheckButtonInputAttack(boolean keyIsDown, Options options) {
         if (autoMode || isRetreating) return;
         if (keyIsDown && isControlHovering()) return;
-        if (isPiloting() && keyIsDown
-                && WhitesnakeControlClient.tryMining(Minecraft.getInstance())) return;
+        if (isPiloting() && keyIsDown && getActivePower() == PowerIndex.MINING) return;
         super.preCheckButtonInputAttack(keyIsDown, options);
     }
 
@@ -1301,10 +1308,12 @@ public class PowersWhitesnake extends BlockGrabPreset {
                 ? ClientNetworking.getAppropriateConfig().generalStandSettings.jumpingDashCooldown
                 : ClientNetworking.getAppropriateConfig().generalStandSettings.dashCooldown;
         setCooldown(PowerIndex.GLOBAL_DASH, cooldown);
-        MainUtil.takeUnresistableKnockbackWithY(stand, 0.91F,
-                Mth.sin(degrees * ((float) Math.PI / 180)),
-                Mth.sin(-20 * ((float) Math.PI / 180)),
-                -Mth.cos(degrees * ((float) Math.PI / 180)));
+        if (self.level().isClientSide()) {
+            MainUtil.takeUnresistableKnockbackWithY(stand, 0.91F,
+                    Mth.sin(degrees * ((float) Math.PI / 180)),
+                    Mth.sin(-20 * ((float) Math.PI / 180)),
+                    -Mth.cos(degrees * ((float) Math.PI / 180)));
+        }
         if (!self.level().isClientSide()) {
             playSoundIfPossible(self.level(),null, stand.blockPosition(), ModSounds.DODGE_EVENT,
                     SoundSource.PLAYERS, 1.5F, (float) (0.98 + Math.random() * 0.04));
@@ -1944,8 +1953,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         stand.setTarget(null);
         double distance = stand.distanceTo(self);
         boolean sprinting = distance > 3.0D;
-        stand.setSprinting(sprinting);
-        stand.setSpeed(sprinting ? 0.3F : 0.2F);
+        updateAutoModeSpeed(stand, sprinting);
 
         retreatTicks++;
 
@@ -1978,7 +1986,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
             return;
         }
 
-        LivingEntity target = getAutoAttackTarget();
+        LivingEntity target = getAutoAttackTarget(stand);
         if (target != null) autoMoveTarget = null;
 
         if (autoMoveTarget != null) {
@@ -2022,8 +2030,8 @@ public class PowersWhitesnake extends BlockGrabPreset {
         double distance = stand.distanceTo(target);
         boolean sprinting = distance > CONTROL_PUNCH_RANGE;
         updateAutoModeSpeed(stand, sprinting);
-        if (distance > CONTROL_PUNCH_RANGE) {
-            stand.getNavigation().moveTo(target, sprinting ? 1.5D : 1.0D);
+        if (sprinting) {
+            stand.getNavigation().moveTo(target, 1.5D);
             return;
         }
 
@@ -2044,7 +2052,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         stand.setSpeed(sprinting ? 0.3F : 0.2F);
     }
 
-    private LivingEntity getAutoAttackTarget() {
+    private LivingEntity getAutoAttackTarget(StandEntity stand) {
         LivingEntity target = null;
         if (manualAutoTargetId >= 0) {
             Entity manual = self.level().getEntity(manualAutoTargetId);
@@ -2055,7 +2063,6 @@ public class PowersWhitesnake extends BlockGrabPreset {
             }
         }
         if (target == null && manualAutoTargetId < 0 && autoAttack) target = self.getLastHurtMob();
-        StandEntity stand = getStandEntity(self);
         if (target == null || stand == null || !target.isAlive() || target.isRemoved()
                 || target.level() != stand.level() || target.is(self) || target.is(stand)
                 || MainUtil.cheapDistanceTo2(target.getX(), target.getZ(), self.getX(), self.getZ()) > getMaxPilotRange()
@@ -2269,7 +2276,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
                 && ((IPlayerEntity) player).roundabout$getControlling() != 0;
         if (hasControlId || stand instanceof WhitesnakeEntity whitesnake && whitesnake.isControlModeActive()) {
             setPiloting(0);
-            if (self.level().isClientSide()) WhitesnakeControlClient.exit();
+            if (self.level().isClientSide() && isPacketPlayer()) WhitesnakeControlClient.exit();
         }
         if (autoMode) setAutoMode(false);
         super.onStandSwitch();
@@ -2395,7 +2402,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         }
         if (autoMode) {
             if (!self.level().isClientSide()) {
-                LivingEntity target = getAutoAttackTarget();
+                LivingEntity target = getAutoAttackTarget(getStandEntity(self));
                 if (target != null && target.isAlive() && !target.isRemoved()
                         && target.distanceTo(actionOrigin()) <= CONTROL_PUNCH_RANGE + 0.75F
                         && actionOrigin().hasLineOfSight(target)) {
@@ -2484,7 +2491,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     public void standImpale() {
         if (autoMode) {
-            if (!self.level().isClientSide()) impaleImpact(getAutoAttackTarget());
+            if (!self.level().isClientSide()) impaleImpact(getAutoAttackTarget(getStandEntity(self)));
             return;
         }
         if (self instanceof Player && isPacketPlayer()) {
@@ -2581,7 +2588,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         }
         if (autoMode) {
             if (!self.level().isClientSide()) {
-                LivingEntity target = getAutoAttackTarget();
+                LivingEntity target = getAutoAttackTarget(getStandEntity(self));
                 if (target != null && target.distanceTo(actionOrigin()) <= CONTROL_PUNCH_RANGE + 0.75F
                         && actionOrigin().hasLineOfSight(target)) {
                     barrageImpact(target, attackTimeDuring);
@@ -2635,6 +2642,28 @@ public class PowersWhitesnake extends BlockGrabPreset {
         if (forwardBarrage) return 15.0F;
         if (!isPiloting() && !autoMode) return super.getRushDistance();
         return self.distanceTo(actionOrigin()) + CONTROL_PUNCH_RANGE;
+    }
+
+    @Override
+    public boolean StandDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker) {
+        boolean hit = super.StandDamageEntityAttack(target, pow, knockbackStrength, attacker);
+        if (hit) setControlModeAttackTarget(target);
+        return hit;
+    }
+
+    @Override
+    public boolean StandRushDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker) {
+        boolean hit = super.StandRushDamageEntityAttack(target, pow, knockbackStrength, attacker);
+        if (hit) setControlModeAttackTarget(target);
+        return hit;
+    }
+
+    private void setControlModeAttackTarget(Entity target) {
+        if (!self.level().isClientSide() && isPiloting() && target instanceof Mob mob
+                && getPilotingStand() instanceof WhitesnakeEntity stand) {
+            mob.setLastHurtByMob(stand);
+            if (mob.getTarget() == self) mob.setTarget(stand);
+        }
     }
 
     @Override
@@ -3141,5 +3170,44 @@ public class PowersWhitesnake extends BlockGrabPreset {
                             : isHoldingSneak() ? StandIcons.WHITESNAKE_AUTO_MODE : StandIcons.WHITESNAKE_CONTROL_MODE,
                     isPiloting() && isGuarding() ? PowerIndex.SKILL_4 : PowerIndex.NO_CD);
         }
+    }
+
+    @Override
+    public boolean returnFakeStandForHud(){
+        if(isPiloting()) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public StandEntity getStandForHUDIfFake(){
+        if (displayStand == null){
+            displayStand = getNewStandEntity();
+        }
+        if (this.self instanceof Player PL && ((IPlayerEntity) PL).roundabout$getStandSkin() != displayStand.getSkin()) {
+            displayStand = getNewStandEntity();
+            displayStand.setSkin(((IPlayerEntity) PL).roundabout$getStandSkin());
+        }
+
+        // All of this is code to have the idle animation appear.
+        if (displayStand != null && this.self != null) {
+            StandUser su = (StandUser) this.self;
+            displayStand.setUser(this.self);
+            displayStand.tickCount = this.self.tickCount;
+
+            displayStand.setAnimation(su.roundabout$getStandAnimation());
+            displayStand.setIdleAnimation(su.roundabout$getIdlePos());
+
+            StandEntity realStand = this.getStandEntity(this.self);
+            if (realStand != null) {
+                displayStand.setPose(realStand.getPose());
+                displayStand.setIdleAnimation(realStand.getIdleAnimation());
+            }
+
+            displayStand.setupAnimationStates();
+        }
+
+        return displayStand;
     }
 }

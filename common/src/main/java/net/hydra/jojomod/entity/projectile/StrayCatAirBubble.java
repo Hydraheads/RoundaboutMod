@@ -137,7 +137,6 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
             return false;
         } else {
 
-            //this.popBubble();
         }
         return false;
 
@@ -168,8 +167,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
     @Override
     public boolean dealWithPenetration(Entity proj){
-        popBubble();
-        return true;
+        return false;
     }
 
 
@@ -196,6 +194,13 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
             if (this.getOwner() == null || !this.getOwner().isAlive() || this.getOwner().isRemoved()) {
                 popBubble();
                 return;
+            }
+
+            if (getOwner() instanceof Mob M) {
+                target = M.getTarget();
+                if (target == null || !target.isAlive()) {
+                    popBubble();
+                }
             }
 
             this.soundEffectCooldown--;
@@ -231,7 +236,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                 Vec3 nextPos = currentPos.add(this.getDeltaMovement());
                 AABB sweptBox = this.getBoundingBox()
                         .expandTowards(this.getDeltaMovement())
-                        .inflate(this.getBbWidth() * 1.1 + 0.3); // Adjust as needed
+                        .inflate(this.getBbWidth() * 1.2 + 0.6); // Adjust as needed
 
                 EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(
                         this.level(), this, currentPos, nextPos, sweptBox,
@@ -240,6 +245,16 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
                 if (entityHitResult != null) {
                     this.onHitEntity(entityHitResult);
+                }else if(getTarget() != null && getTarget().isAlive()) {
+                    if (distanceTo(getTarget()) < this.getBbWidth()*1.2f) {
+                        EntityHitResult entityHitResult2 = ProjectileUtil.getEntityHitResult(
+                                this.level(), this, currentPos, getTarget().getPosition(1), sweptBox,
+                                this::canHitEntity
+                        );
+                        if (entityHitResult2 != null) {
+                            this.onHitEntity(entityHitResult2);
+                        }
+                    }
                 }
             }
 
@@ -249,6 +264,9 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                             && !(MainUtil.getEntityIsTrulyInvisible(target) || (target instanceof LivingEntity LE && LE.getEffect(MobEffects.INVISIBILITY) != null))) {
                         this.bubbleRedirect();
                         this.redirectCooldown = redirectCooldownMax;
+                        if (((StandUser)getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ && PKQ.getBombSize() == 0) {
+                            this.redirectCooldown = redirectCooldownMax-10;
+                        }
                     }
                 } else {
                     this.redirectCooldown--;

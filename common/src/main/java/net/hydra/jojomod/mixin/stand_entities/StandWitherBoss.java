@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin.stand_entities;
 
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.WhitesnakeEntity;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -28,6 +29,7 @@ public abstract class StandWitherBoss extends Monster implements PowerableMob, R
     protected void roundabout$setAlternativeTarget(int $$0, int $$1, CallbackInfo ci) {
         if (!roundabout$antiRecurse) {
             Entity ent = this.level().getEntity($$1);
+            if (ent instanceof WhitesnakeEntity stand && stand.isControlModeActive()) return;
             if (ent instanceof StandEntity SE) {
                 if (SE.getUser() != null && !(SE.getUser() instanceof StandEntity)) {
                     if (SE.getUser() instanceof ServerPlayer PE && !PE.gameMode.isCreative() && !PE.isSpectator()){

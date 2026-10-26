@@ -6,10 +6,12 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.gui.LyinEyesMapOverlay;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
+import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.substand.PurpleSmokeEntity;
 import net.hydra.jojomod.event.ModEffects;
@@ -286,6 +288,42 @@ public abstract class HudRendering implements IHudAccess {
                         this.renderTextureOverlay($$1, StandIcons.STONE_HEAD_OVERLAY, 1F);
                     }
                 }
+                // Lyin Eyes stand hud renderer
+                if (((StandUser) this.minecraft.player).roundabout$getStandPowers() instanceof PowersLyinEyes lyinEyes
+                        && lyinEyes.getSummonOverlayTicks() != 0) {
+                    ResourceLocation texture;
+                    if (lyinEyes.getSummonOverlayTicks() >= 12) {
+                        // idle anim
+                        int idleFrameCount = 4;
+                        int idleFrame = 1 + ((lyinEyes.getIdleOverlayTicks() / 3) % idleFrameCount);
+                        texture = new ResourceLocation(Roundabout.MOD_ID,
+                                "textures/misc/lyin_eyes/idle_f" + idleFrame + ".png");
+                    } else {
+                        // need to stop the thing from reaching 0, so i put an extra math method to clamp it.
+                        int frame = Math.max(1, Math.min(lyinEyes.getSummonOverlayTicks() / 2, 6));
+                        // this copies PH distortion gui formatting since this is also an animation
+                        texture = new ResourceLocation(Roundabout.MOD_ID,
+                                "textures/misc/lyin_eyes/lyin_eyes_" + frame + ".png");
+                    }
+                    RenderSystem.enableBlend();
+                    this.renderTextureOverlay($$1, texture, ConfigManager.getClientConfig().lyinEyesSettings.nematodeOpacity);
+                }
+                // Lyin Eyes gathering renderer
+                if (((StandUser) this.minecraft.player).roundabout$getStandPowers() instanceof PowersLyinEyes lyinEyes
+                        && lyinEyes.getGatherOverlayTicks() != 0 && lyinEyes.getGatherOverlayTicks() != 7) {
+                    // inverse opacity of the map, aka it fades in when the map fades out and vice versa
+                    float gatherOpacity = 1.0F - lyinEyes.getMapOpacity();
+                    if (gatherOpacity > 0.0F) {
+                        // need to stop the thing from reaching 0, so i put an extra math method to clamp it.
+                        int frame = Math.max(1, Math.min(lyinEyes.getGatherOverlayTicks(), 5));
+                        // this copies PH distortion gui formatting since this is also an animation
+                        ResourceLocation texture = new ResourceLocation(Roundabout.MOD_ID,
+                                "textures/misc/lyin_eyes/pileup_f" + frame + ".png");
+                        RenderSystem.enableBlend();
+                        gatherOpacity *= ConfigManager.getClientConfig().lyinEyesSettings.nematodeOpacity;
+                        this.renderTextureOverlay($$1, texture, gatherOpacity);
+                    }
+                }
 
                 float ticks = user.roundabout$getZappedTicks();
                 if (ticks > -1){
@@ -339,6 +377,48 @@ public abstract class HudRendering implements IHudAccess {
         RenderSystem.enableBlend();
     }
 
+    @Inject(method = "renderHotbar", at = @At(value = "TAIL"))
+    private void roundabout$renderHotbarTailMixin(float partialTick, GuiGraphics graphics, CallbackInfo info) {
+
+        // for counting gun ammo
+
+        if (this.minecraft.player != null) {
+            ItemStack heldItem = this.minecraft.player.getMainHandItem();
+
+            // check if the main hand item is a firearm, don't render with jackal rifle cuz like... it's 1 ammo...
+            if (heldItem.getItem() instanceof net.hydra.jojomod.item.FirearmItem gun && !(gun instanceof JackalRifleItem)) {
+                String ammoText;
+                int color = 0xFFFFFF; // white
+
+                // if gun is reloading, print dots to indicate  an action
+                if (gun.isReloading(heldItem)) {
+                    ammoText = "...";
+                    color = 0xFFFF55; // yellow
+                } else {
+                    // self explanatory, just print the current and max ammo
+                    int currentAmmo = gun.getAmmo(heldItem);
+                    int maxAmmo = gun.getMaxAmmo();
+                    ammoText = currentAmmo + " / " + maxAmmo;
+
+                    // if low, make it red
+                    if (currentAmmo < maxAmmo * 0.25) {
+                        color = 0xFF5555; // red
+                    }
+                }
+
+                // put the thing bottom right
+                int textWidth = this.getFont().width(ammoText);
+                int paddingRight = 15;
+                int paddingBottom = 20;
+                int x = this.screenWidth - textWidth - paddingRight;
+                int y = this.screenHeight - paddingBottom;
+
+                // prints :0
+                graphics.drawString(this.getFont(), ammoText, x, y, color, true);
+            }
+        }
+    }
+
     private void rdbt$renderTex(TextureAtlasSprite $$0, PoseStack $$1) {
         RenderSystem.setShaderTexture(0, $$0.atlasLocation());
         RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
@@ -388,9 +468,12 @@ public abstract class HudRendering implements IHudAccess {
         float b = (color & 0xFF) / 255.0F;
         return new float[]{r, g, b};
     }
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderEffects(Lnet/minecraft/client/gui/GuiGraphics;)V"))
-    private void roundabout$renderOverlay(GuiGraphics $$0, float $$1, CallbackInfo ci) {
-        /*This does not work on forge becasue the forcefully overwrite this function*/
+    @Inject(method = "renderEffects", at = @At("HEAD"), cancellable = true)
+    private void roundabout$renderOverlay(GuiGraphics $$0, CallbackInfo ci) {
+        if (ClientNetworking.getAppropriateConfig().whitesnakeSettings.hallucinationHidesEffects
+                && minecraft.player != null && minecraft.player.hasEffect(ModEffects.HALLUCINATION)) {
+            ci.cancel();
+        }
     }
 
     @Inject(method = "renderHearts", at = @At(value = "TAIL"))
@@ -758,11 +841,14 @@ public abstract class HudRendering implements IHudAccess {
 
                 StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha, true, this.getFont());
                 return true;
+            }else if (user.roundabout$getGrabbedSoul()){
+                StandHudRender.renderBlockedStandHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha);
+                return true;
             } else if (minecraft.player.getVehicle() != null && minecraft.player.getVehicle() instanceof StandEntity SE && SE.canRestrainWhileMounted()){
 
                 StandHudRender.renderGrabbedHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha);
                 return true;
-            } else if (user.roundabout$isSealed()){
+            } else if (user.roundabout$isSealed() && !user.roundabout$getGrabbedSoul()){
 
                 StandHudRender.renderSealedDiscHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha);
                 return true;
@@ -925,8 +1011,18 @@ public abstract class HudRendering implements IHudAccess {
     }
 
     public Entity rdbt$tempEnt = null;
-    @Inject(method = "renderCrosshair", at = @At(value = "HEAD"))
+    @Inject(method = "renderCrosshair", at = @At(value = "HEAD"), cancellable = true)
     private void rdbt$renderCrosshairMixin(GuiGraphics $$0, CallbackInfo info) {
+        // updated the mixin to be cancellable so i can hide the crosshair in map mode while it's active
+        // lyin eyes map
+        if (this.minecraft.player != null
+                && ((StandUser) this.minecraft.player).roundabout$getStandPowers() instanceof PowersLyinEyes LE
+                && LE.getMapModeClient()
+                && LE.isActive()) {
+            LyinEyesMapOverlay.renderMap($$0, this.minecraft.getFrameTime());
+            info.cancel();
+            return;
+        }
         //See ForgeForgeGui
         RenderSystem.defaultBlendFunc();
         StandHudRender.renderAttackHud($$0, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, this.getVehicleMaxHearts(this.getPlayerVehicleWithHealth()), roundabout$flashAlpha, roundabout$otherFlashAlpha);

@@ -62,6 +62,7 @@ import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.AbstractVillager;
@@ -305,28 +306,12 @@ public abstract class ZMob extends LivingEntity implements IMob {
     }
     @ModifyVariable(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"), ordinal = 0, argsOnly = true)
     public CompoundTag roundabout$addAdditionalSaveData(CompoundTag $$0){
-        $$0.putBoolean("roundabout.isWorthy", this.roundabout$isWorthy());
-        $$0.putBoolean("roundabout.isNaturalStandUser", this.roundabout$isNaturalStandUser);
-        $$0.putBoolean("roundabout.isBred", roundabout$getIsBred());
-        CompoundTag compoundtag = $$0.getCompound("roundabout");
-        compoundtag.putBoolean("vampire",roundabout$isVampire());
-        compoundtag.putBoolean("stolenMemory", rdbt$getStolen());
-
-        $$0.put("roundabout",compoundtag);
-
-        return $$0;
+        return MainUtil.saveMobData($$0,this);
     }
 
     @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"))
     public void roundabout$readAdditionalSaveData(CompoundTag $$0, CallbackInfo ci){
-        this.roundabout$setWorthy($$0.getBoolean("roundabout.isWorthy"));
-        this.roundabout$setIsNaturalStandUser($$0.getBoolean("roundabout.isNaturalStandUser"));
-        this.roundabout$setIsBred($$0.getBoolean("roundabout.isBred"));
-        CompoundTag compoundtag = $$0.getCompound("roundabout");
-            roundabout$setVampire(compoundtag.getBoolean("vampire"));
-        if (compoundtag.contains("stolenMemory")) {
-            rdbt$stolen = compoundtag.getBoolean("stolenMemory");
-        }
+        MainUtil.loadMobData($$0,this);
     }
 
     @Shadow
@@ -401,6 +386,21 @@ public abstract class ZMob extends LivingEntity implements IMob {
             if (!stack.isEmpty() && stack.getItem() instanceof StandDiscItem SD){
                 ((StandUser)this).roundabout$setStandDisc(stack);
                 ((StandUser)this).roundabout$getStandPowers().rollSkin();
+            }
+            // diver down extra zombies spawn
+            if (stack.getItem() == ModItems.STAND_DISC_DIVER_DOWN && ((Object) this) instanceof Zombie
+                    && ($$2 == MobSpawnType.NATURAL || $$2 == MobSpawnType.CHUNK_GENERATION)) {
+                for (int i = 0; i < 2; i++) {
+                    Zombie backup = EntityType.ZOMBIE.create(this.level());
+                    if (backup == null) continue;
+
+                    double offsetX = i == 0 ? -1.5 : 1.5;
+                    backup.moveTo(this.getX() + offsetX, this.getY(), this.getZ(), this.getYRot(), 0);
+                    backup.finalizeSpawn($$0,
+                            $$0.getCurrentDifficultyAt(backup.blockPosition()),
+                            MobSpawnType.MOB_SUMMONED, null, null);
+                    $$0.addFreshEntity(backup);
+                }
             }
         } else if (this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_WORTHY_MOB_SPAWNS) && $$5.nextFloat() < MainUtil.getWorthyOdds(((Mob)(Object)this))) {
             this.roundabout$setWorthy(true);
@@ -754,6 +754,8 @@ public abstract class ZMob extends LivingEntity implements IMob {
             sg.stop();
         } else if (goal instanceof PanicGoal tg) {
             tg.stop();
+        } else if (goal instanceof MoveTowardsTargetGoal tg) {
+            tg.stop();
         }
     }
     @Unique
@@ -1073,15 +1075,17 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
             if (!((StandUser) this).roundabout$getStandDisc().isEmpty()) {
                 if (!this.roundabout$getFightOrFlight()) {
-                    if (this.getTarget() != null){
-                        if (this.getVehicle() != null && (this.getVehicle() instanceof Boat ||
-                                this.getVehicle() instanceof Minecart)){
-                            Vec3 vec = this.getVehicle().getDismountLocationForPassenger(this);
-                            this.stopRiding();
-                            this.dismountTo(vec.x,vec.y,vec.z);
+                    if (!((StandUser) this).roundabout$getGrabbedSoul() && !(((StandUser) this).roundabout$getSealedTicks() > -1)) {
+                        if (this.getTarget() != null) {
+                            if (this.getVehicle() != null && (this.getVehicle() instanceof Boat ||
+                                    this.getVehicle() instanceof Minecart)) {
+                                Vec3 vec = this.getVehicle().getDismountLocationForPassenger(this);
+                                this.stopRiding();
+                                this.dismountTo(vec.x, vec.y, vec.z);
+                            }
                         }
+                        ((StandUser) this).roundabout$getStandPowers().tickMobAI(this.getTarget());
                     }
-                    ((StandUser) this).roundabout$getStandPowers().tickMobAI(this.getTarget());
                 }
             }
         }

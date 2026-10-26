@@ -4,7 +4,6 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.event.ModEffects;
-import net.hydra.jojomod.event.powers.whitesnake.DreamingEffect;
 import net.hydra.jojomod.event.powers.whitesnake.HallucinationEffect;
 import net.hydra.jojomod.event.powers.whitesnake.OldEffect;
 import net.minecraft.core.Registry;
@@ -22,6 +21,8 @@ public class FabricEffects extends MobEffect{
     public static final MobEffect BLEED = register("bleed", new FabricEffects(MobEffectCategory.HARMFUL, 11994666));
     public static final MobEffect HEX = register("hex", new FabricEffects(MobEffectCategory.HARMFUL, 11606258)); //old color 16762706
     public static final MobEffect BANISH = register("banish", new FabricEffects(MobEffectCategory.NEUTRAL, 15099838)); //old color 16762706
+    public static final MobEffect DOOMED = register("doom", new FabricEffects(MobEffectCategory.HARMFUL, 0));
+    public static final MobEffect DOOM_IMMUNITY = register("doom_immunity", new FabricEffects(MobEffectCategory.BENEFICIAL, 0));
     public static final MobEffect STAND_VIRUS = register("stand_virus", new FabricEffects(MobEffectCategory.HARMFUL, 9979490));
     public static final MobEffect CAPTURING_LOVE = register("capturing_love", new FabricEffects(MobEffectCategory.BENEFICIAL, 16772988));
     public static final MobEffect FACELESS = register("faceless", new FabricEffects(MobEffectCategory.HARMFUL, 10329495));
@@ -62,7 +63,7 @@ public class FabricEffects extends MobEffect{
 
     public static final MobEffect HALLUCINATION = register("hallucination", new HallucinationEffect());
     public static final MobEffect OLD = register("old", new OldEffect());
-    public static final MobEffect DREAMING = register("dreaming", new DreamingEffect());
+    public static final MobEffect SLEEPING = register("sleeping", new FabricEffects(MobEffectCategory.HARMFUL, 0x9BA9E8));
     public static final MobEffect REFRESHED =
             register("refreshed", new FabricEffects(MobEffectCategory.BENEFICIAL, 13302495));
     public static final MobEffect INFINITE_SPIN =
@@ -87,6 +88,8 @@ public class FabricEffects extends MobEffect{
         ModEffects.BLEED = BLEED;
         ModEffects.HEX = HEX;
         ModEffects.BANISH = BANISH;
+        ModEffects.DOOMED = DOOMED;
+        ModEffects.DOOM_IMMUNITY = DOOM_IMMUNITY;
         ModEffects.STAND_VIRUS = STAND_VIRUS;
         ModEffects.CAPTURING_LOVE = CAPTURING_LOVE;
         ModEffects.FACELESS = FACELESS;
@@ -102,7 +105,7 @@ public class FabricEffects extends MobEffect{
         ModEffects.CRIPPLED = CRIPPLED;
         ModEffects.HALLUCINATION = HALLUCINATION;
         ModEffects.OLD = OLD;
-        ModEffects.DREAMING = DREAMING;
+        ModEffects.SLEEPING = SLEEPING;
         ModEffects.REFRESHED = REFRESHED;
         ModEffects.INFINITE_SPIN = INFINITE_SPIN;
         ModEffects.HAZE_VIRUS = HAZE_VIRUS;

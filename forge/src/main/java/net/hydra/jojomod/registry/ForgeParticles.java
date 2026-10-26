@@ -22,6 +22,9 @@ public class ForgeParticles {
     public static final RegistryObject<SimpleParticleType> BLOOD = PARTICLES.register("blood",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> SWEAT = PARTICLES.register("sweat",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> BLUE_BLOOD = PARTICLES.register("blue_blood",
             () -> new SimpleParticleType(true)
     );
@@ -55,6 +58,10 @@ public class ForgeParticles {
     );
     public static final RegistryObject<SimpleParticleType> VACUUM = PARTICLES.register(
             "vacuum",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> FLASH = PARTICLES.register(
+            "flash",
             () -> new SimpleParticleType(true)
     );
     public static final RegistryObject<SimpleParticleType> ORANGE_FLAME = PARTICLES.register(
@@ -135,6 +142,18 @@ public class ForgeParticles {
     );
     public static final RegistryObject<SimpleParticleType> PUNCH_IMPACT_C = PARTICLES.register(
             "punch_impact_c",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> GOLD_PUNCH_IMPACT_A = PARTICLES.register(
+            "gold_punch_impact_a",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> GOLD_PUNCH_IMPACT_B = PARTICLES.register(
+            "gold_punch_impact_b",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> GOLD_PUNCH_IMPACT_C = PARTICLES.register(
+            "gold_punch_impact_c",
             () -> new SimpleParticleType(true)
     );
     public static final RegistryObject<SimpleParticleType> DISC_STEAL_HIT = PARTICLES.register(

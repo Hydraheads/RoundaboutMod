@@ -2,15 +2,14 @@ package net.hydra.jojomod.entity;
 
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.entity.badCompanyTroops.*;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
-import net.hydra.jojomod.entity.objects.FallingBannerEntity;
-import net.hydra.jojomod.entity.objects.GentlyWeepsEntity;
-import net.hydra.jojomod.entity.objects.IceTwisterEntity;
+import net.hydra.jojomod.entity.objects.*;
 import net.hydra.jojomod.entity.paintings.BirthOfVenusPainting;
 import net.hydra.jojomod.entity.paintings.MonaLisaPainting;
 import net.hydra.jojomod.entity.paintings.VanGoughPainting;
@@ -86,6 +85,9 @@ public class ModEntities {
     public static EntityType<BeachSabbathEntity> BEACH_SABBATH;
     public static EntityType<BlackSantaSabbathEntity> SANTA_SABBATH;
     public static EntityType<CowboySabbathEntity> COWBOY_SABBATH;
+    public static EntityType<GrabbedMobSoul> GRABBED_MOB_SOUL;
+    public static EntityType<GrabbedMobSoulPlayerLarge> GRABBED_PLAYER_SOUL;
+    public static EntityType<GrabbedMobSoulPlayerSlim> GRABBED_PLAYER_SOUL_SLIM;
     public static EntityType<WalkingHeartEntity> WALKING_HEART;
     public static EntityType<JusticePirateEntity> JUSTICE_PIRATE;
     public static EntityType<DarkMirageEntity> DARK_MIRAGE;
@@ -104,13 +106,19 @@ public class ModEntities {
     public static EntityType<StarPlatinumBaseballEntity> STAR_PLATINUM_BASEBALL;
     public static EntityType<DiverDownEntity> DIVER_DOWN;
     public static EntityType<DiverDownBetaEntity> DIVER_DOWN_BETA;
+    public static EntityType<DiverDownWorldEntity> DIVER_DOWN_WORLD;
+    public static EntityType<DiverDrownedEntity> DIVER_DROWNED;
+    public static EntityType<DiverKickEntity> DIVER_KICK;
     public static EntityType<BoneProjectileEntity> BONE_PROJECTILE;
+    public static EntityType<GoldExperienceEntity> GOLD_EXPERIENCE;
     public static EntityType<SilverChariotEntity> SILVER_CHARIOT;
+    public static EntityType<SilverChariotEntity> SILVER_CHARIOT_PHARAOH;
     public static EntityType<SilverChariotRapierShotEntity> SILVER_CHARIOT_RAPIER;
     public static EntityType<SilverChariotRapierPlatformEntity> SILVER_CHARIOT_RAPIER_PLATFORM;
     public static EntityType<HarpoonEntity> THROWN_HARPOON;
     public static EntityType<BladedBowlerHatEntity> BLADED_BOWLER_HAT;
     public static EntityType<RoundaboutBulletEntity> ROUNDABOUT_BULLET_ENTITY;
+    public static EntityType<BadCompanyBulletEntity> BAD_COMPANY_BULLET_ENTITY;
     public static EntityType<EmperorBulletEntity> EMPEROR_BULLET;
     public static EntityType<PoisonLlamaSpit> POISON_LLAMA_SPIT;
     public static EntityType<RattDartEntity> RATT_DART;
@@ -141,6 +149,7 @@ public class ModEntities {
     public static EntityType<GentlyWeepsEntity> GENTLY_WEEPS;
     public static EntityType<GasolineCanEntity> GASOLINE_CAN;
     public static EntityType<RoadRollerEntity> ROAD_ROLLER_ENTITY;
+    public static EntityType<TotemOfDoomEntity> TOTEM_OF_DOOM;
 
     public static EntityType<GasolineSplatterEntity> GASOLINE_SPLATTER;
     public static EntityType<BloodSplatterEntity> BLOOD_SPLATTER;
@@ -207,6 +216,8 @@ public class ModEntities {
     public static EntityType<FallenVillager> FALLEN_VILLAGER;
     public static EntityType<FallenPhantom> FALLEN_PHANTOM;
     public static EntityType<FallenCreeper> FALLEN_CREEPER;
+    public static EntityType<BCSoldier> BAD_COMPANY_SOLDIER;
+    public static EntityType<BCTank> BAD_COMPANY_TANK;
 
 
     public static EntityType<ParallelChestEntity> PARALLEL_CHEST;
@@ -222,6 +233,7 @@ public class ModEntities {
     public static final ResourceLocation TOMMY_GUN_IN_HAND_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/item/tommy_gun.png");
     public static final ResourceLocation COLT_REVOLVER_IN_HAND_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/item/colt_revolver.png");
     public static final ResourceLocation JACKAL_RIFLE_IN_HAND_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/item/jackal_rifle.png");
+    public static final ResourceLocation BERETTA_PISTOL_IN_HAND_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/item/beretta_pistol.png");
     public static final ResourceLocation BLADED_BOWLER_HAT_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/bladed_bowler_hat.png");
     public static final ResourceLocation ROUNDABOUT_BULLET_ENTITY_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/roundabout_bullet.png");
     public static final ResourceLocation KNIFE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/thrown_knife.png");

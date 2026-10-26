@@ -16,6 +16,7 @@ public class DiverDownAnvilScreen extends AnvilScreen {
         super(menu, inventory, title);
         // the entire "costs too much" etc. etc. text relies on renderlabels so the easiest solution is to literally just shove this entire text offscreen.
         this.inventoryLabelY = 10000;
+        this.titleLabelY = 10000;
     }
 
     @Override

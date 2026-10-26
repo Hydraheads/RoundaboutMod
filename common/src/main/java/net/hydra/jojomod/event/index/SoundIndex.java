@@ -13,6 +13,7 @@ public class SoundIndex {
     public static final byte TOMMY_RELOAD = -26;
     public static final byte SWORD_UNSHEATHE = -27;
     public static final byte MANHATTAN_RAIN = -28;
+    public static final byte PISTOL_RELOAD = -29;
     public static final byte BOWLER_HAT_AIM_SOUND = -22;
     public static final byte CACKLE = -4;
     public static final byte BLOOD_REGEN = -6;
@@ -50,6 +51,5 @@ public class SoundIndex {
     public static final byte TIME_SOUND_GROUP = 102;
     public static final byte TIME_END_GROUP = 103;
     public static final byte ITEM_GROUP = 104;
-    public static final byte MANHATTAN_DODGING_RAIN = 105;
 
 }

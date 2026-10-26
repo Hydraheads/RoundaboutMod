@@ -409,6 +409,22 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
         }
     }
 
+    public void applyScale(T entity, PoseStack $$1, float $$2){
+
+        byte widthMod = entity.roundabout$getWidthFactor();
+        if (widthMod > 0){
+            if (widthMod < 5){
+                float factor = 1f-(0.03F*widthMod);
+                Vector3f scale = new Vector3f(factor,1,factor);
+                $$1.scale(scale.x, scale.y, scale.z);
+            } else {
+                float factor = 1f+(0.07F*(widthMod-4));
+                Vector3f scale = new Vector3f(factor,1,factor);
+                $$1.scale(scale.x, scale.y, scale.z);
+            }
+        }
+    }
+
     @Override
     protected void scale(T entity, PoseStack $$1, float $$2) {
         if (entity instanceof FogCloneEntity) {
@@ -439,11 +455,14 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
                     Vector3f scale = vd.scale();
                     $$1.scale(scale.x, scale.y, scale.z);
                 }
+
+                applyScale(entity,$$1,$$2);
                 return;
             }
         }
         float scale = 0.9375F;
         $$1.scale(scale, scale, scale);
+        applyScale(entity,$$1,$$2);
     }
 
     @Override

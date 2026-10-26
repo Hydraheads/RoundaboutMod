@@ -1,10 +1,8 @@
 package net.hydra.jojomod.entity.mobs;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.goals.StrayCatBegGoal;
-import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.StrayCatAirBubble;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.item.ModItems;
@@ -19,7 +17,6 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.players.OldUsersConverter;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -40,18 +37,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.function.Predicate;
 
 public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
     public StrayCatEntity(EntityType<? extends TamableAnimal> $$0, Level $$1) {
@@ -131,11 +124,20 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
             this.setBreed(tag.getByte(TAG_SKIN));
         }
     }
+
     @Override
     public boolean isInLove() {
         return false;
     }
 
+    @Override
+    public float getNameTagOffsetY() {
+        if (getPotted()) {
+            return super.getNameTagOffsetY() + 0.25f;
+        }
+
+        return super.getNameTagOffsetY();
+    }
 
     public final AnimationState idle = new AnimationState();
     public final AnimationState unpotted = new AnimationState();
@@ -283,6 +285,9 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
     }
 
     public static void tryToSpawnStrayCat(Cat entity) {
+        if (entity == null){
+            return;
+        }
         Level level = entity.level();
         BlockPos bPos = entity.getOnPos();
 
@@ -557,7 +562,7 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
 
     @Override
     public void performRangedAttack(LivingEntity livingEntity, float v) {
-        if (this.getSleeping() || this.getInterested()) {
+        if (this.getSleeping() || this.getInterested() || livingEntity == null) {
             return;
         }
 
@@ -565,7 +570,9 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
                 && (this.isOwnedBy(livingEntity) || this.getOwner().isAlliedTo(livingEntity)
                 || livingEntity instanceof OwnableEntity OE && OE.getOwner() != null && this.getOwner().is(OE.getOwner()))) {
             this.setTarget(null);
-            if (this.getLastAttacker().is(livingEntity)) {
+
+            LivingEntity lastAt = this.getLastAttacker();
+            if (lastAt !=null && lastAt.is(livingEntity)) {
                 this.setLastHurtByMob(null);
             }
 

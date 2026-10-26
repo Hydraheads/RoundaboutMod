@@ -7,8 +7,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
+import net.hydra.jojomod.client.models.stand.animations.KingCrimsonAnimations;
 import net.hydra.jojomod.client.models.stand.animations.SilverChariotAnimations;
-import net.hydra.jojomod.client.models.stand.renderers.SilverChariotRenderer;
+import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
+import net.hydra.jojomod.client.models.stand.renderers.SilverChariotBaseRenderer;
+import net.hydra.jojomod.entity.stand.SilverChariotEntity;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -178,7 +181,7 @@ public class SilverChariotArmsPart extends PsuedoHierarchicalModel {
 		if (context instanceof LivingEntity LE) {
 			bt = ((StandUser) LE).roundabout$getStandSkin();
 		}
-		return SilverChariotRenderer.getSkin(bt);
+		return SilverChariotBaseRenderer.getSkin(bt);
 	}
 
 	public void render(Entity context, PoseStack poseStack, MultiBufferSource bufferSource, int light) {
@@ -228,43 +231,70 @@ public class SilverChariotArmsPart extends PsuedoHierarchicalModel {
 				}
 				byte animation = user.roundabout$getStandAnimation();
 
+				boolean isRightHanded = user.roundabout$getStandSkin() != SilverChariotEntity.PART_5;
 
 				VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(LE)));
 				//The number at the end is inversely proportional so 2 is half speed
-				if (!psc.isRightHanded()) {
-					this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.HideRightArm(), context.tickCount+fixedPartial, 1f);
+				this.animate(user.roundabout$getWornStandIdleAnimation(), SilverChariotAnimations.Idle(), partialTicks, 1f);
+				// this.animate(user.roundabout$getWornStandIdleAnimation(), SilverChariotAnimations.Idle(), partialTicks, 1f);
+				// user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
+				if (isRightHanded) {
+					this.right_arm.visible = true;
+					this.left_arm.visible = false;
+					// this.animate(user.roundabout$getWornStandIdleAnimation(), SilverChariotAnimations.HideLeftArm(), partialTicks, 1f);
 				} else {
-					this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.HideLeftArm(), context.tickCount+fixedPartial, 1f);
+					this.right_arm.visible = false;
+					this.left_arm.visible = true;
+					// this.animate(user.roundabout$getWornStandIdleAnimation(), SilverChariotAnimations.HideRightArm(), partialTicks, 1f);
 				}
-				user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
+				// user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
+				// this.animate(user.roundabout$getWornStandIdleAnimation(), SilverChariotAnimations.Idle(), partialTicks, 1f);
 				if (animation == StandPowers.GUARD) {
-					if (psc.isRightHanded()) {
+					// user.roundabout$getWornStandIdleAnimation().stop();
+					if (isRightHanded) {
 						this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.RightGuardStart(), context.tickCount+fixedPartial, 1f);
 					} else {
 						this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.LeftGuardStart(), context.tickCount+fixedPartial, 1f);
 					}
 				} else {
-					this.animate(user.roundabout$getWornStandIdleAnimation(), SilverChariotAnimations.Idle(), context.tickCount+fixedPartial, 1f);
+					user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
+					// this.animate(user.roundabout$getWornStandIdleAnimation(), SilverChariotAnimations.Idle(), partialTicks, 1f);
+					// user.roundabout$getWornStandIdleAnimation().stop();
 					if (animation == StandPowers.PUNCH_RIGHT) {
-						this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.RightHit1(), context.tickCount+fixedPartial, speed);
-					} else if (animation == StandPowers.PUNCH_LEFT) {
-						this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.LeftHit1(), context.tickCount+fixedPartial, speed);
-					} else if (animation == StandPowers.VAULT) {
-						if (psc.isRightHanded()) {
-							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.RightVault(), context.tickCount+fixedPartial, 1f);
+						if (isRightHanded) {
+							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.RightHit1(), partialTicks, speed*1.5f);
 						} else {
-							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.LeftVault(), context.tickCount+fixedPartial, 1f);
+							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.LeftHit1(), partialTicks, speed*1.5f);
+						}
+					} else if (animation == StandPowers.PUNCH_LEFT) {
+						if (isRightHanded) {
+							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.RightHit2(), partialTicks, speed*1.75f);
+						} else {
+							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.LeftHit2(), partialTicks, speed*1.75f);
+						}
+					} else if (animation == StandPowers.VAULT) {
+						if (isRightHanded) {
+							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.RightVault(), partialTicks, 1f);
+						} else {
+							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.LeftVault(), partialTicks, 1f);
 						}
 					} else if (animation == StandPowers.MINING) {
-						if (psc.isRightHanded()) {
-							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.LeftBarrage(), context.tickCount+fixedPartial, 1f);
+						if (isRightHanded) {
+							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.RightBarrage(), partialTicks, 1f);
 						} else {
-							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.RightBarrage(), context.tickCount+fixedPartial, 1f);
+							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.LeftBarrage(), partialTicks, 1f);
+						}
+					} else if (animation == SilverChariotEntity.SC_GUARD_HIT) {
+						if (isRightHanded) {
+							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.RightGuardHit(), partialTicks, 1f);
+						} else {
+							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.LeftGuardHit(), partialTicks, 1f);
 						}
 					}
 
-					root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, heyFull);
+					// root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, heyFull);
 				}
+				root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, heyFull);
 			}
 		}
 	}

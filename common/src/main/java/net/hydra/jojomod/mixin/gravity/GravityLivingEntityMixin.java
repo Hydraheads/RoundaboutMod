@@ -6,6 +6,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.mixin.StandUserEntity;
+import net.hydra.jojomod.stand.powers.PowersDiverDown;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.MainUtil;
@@ -198,7 +199,8 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
     private void roundabout$travelWithGravity(Vec3 $$0, CallbackInfo ci) {
         Direction gravityDirection = GravityAPI.getGravityDirection(rdbt$this());
         int changeContext = 0;
-        if (((StandUser)this).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.hasExtendedHeelsForWalking()){
+        if (((StandUser)this).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.hasExtendedHeelsForWalking()
+                || ((StandUser)this).roundabout$getStandPowers() instanceof PowersDiverDown DD && DD.inZipMode()){
             changeContext = 1;
         } else if (((StandUser)this).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW && PW.hasSkatesActivated()){
             changeContext = 2;

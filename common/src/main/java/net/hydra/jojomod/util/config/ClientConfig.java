@@ -110,6 +110,10 @@ public class ClientConfig implements Cloneable {
     public ClientConfig.WhitesnakeSettings whitesnakeSettings;
     @NestedOption(group = "modded")
     public ClientConfig.DiverDownSettings diverDownSettings;
+    @NestedOption(group = "modded")
+    public ClientConfig.SilverChariotSettings silverChariotSettings;
+    @NestedOption(group = "modded")
+    public ClientConfig.LyinEyesSettings lyinEyesSettings;
   /*  @NestedOption(group = "modded")
     public ClientConfig.StandTweakSettings standTweakSettings; */
 
@@ -209,7 +213,7 @@ public class ClientConfig implements Cloneable {
         public Boolean vampireVisionMode;
         @IntOption(group = "inherit", value = 1, min = 1, max = 8)
         public Integer currentPowerInventoryTab;
-        @IntOption(group = "inherit", value = 2, min = 0, max = 3)
+        @IntOption(group = "inherit", value = 10, min = 0, max = 15)
         public Integer killerQueenCurrentBombConfig;
         @IntOption(group = "inherit", value = 1, min = 0, max = 2)
         public Integer killerQueenCurrentBombSize;
@@ -236,7 +240,9 @@ public class ClientConfig implements Cloneable {
     	@BooleanOption(group = "inherit", value = true)
         public Boolean bombOverlayHideOnF1;
         @BooleanOption(group = "inherit", value = true)
-        public Boolean bombConfigTogglesOnLeave;
+        public Boolean bombConfigFastToggle;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean itemToolsProtection;
     }
     public static class WhitesnakeSettings {
         @BooleanOption(group = "inherit", value = false)
@@ -247,6 +253,34 @@ public class ClientConfig implements Cloneable {
     public static class DiverDownSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean customDiverDownWorkbench;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean forceThirdPersonInGroundDive;
+    }
+    public static class SilverChariotSettings {
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean silverChariotForceThirdPersonInControlMode;
+        // @BooleanOption(group = "inherit", value = true)
+        // public Boolean silverChariotUniqueControlModeEntityRendering;
+        // @BooleanOption(group = "inherit", value = true)
+        // public Boolean silverChariotControlModeVisualEffectLostSight;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean silverChariotRenderAfterimages;
+        @IntOption(group = "inherit", value = 5, min = 1, max = 10)
+        public Integer silverChariotAfterimagesMaxAmount;
+        @IntOption(group = "inherit", value = 5, min = 1, max = 20)
+        public Integer silverChariotTickIntervalBetweenAfterimage;
+        @FloatOption(group = "inherit", value = 1F, min = 0, max = 1)
+        public Float silverChariotAfterimageOpacity;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean silverChariotShouldRenderAfterimagesWhileUserInFirstPerson;
+    }
+    public static class LyinEyesSettings {
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean spinMapInsteadOfArrow;
+        @FloatOption(group = "inherit", value = 1F, min = 0, max = 1)
+        public Float nematodeOpacity;
+        @FloatOption(group = "inherit", value = 1F, min = 0, max = 1)
+        public Float mapOpacity;
     }
     public static class AnubisSettings {
         @BooleanOption(group = "inherit", value = false)

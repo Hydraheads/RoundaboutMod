@@ -653,11 +653,13 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
         if (!this.level().isClientSide()) {
 
             if ($$0.getEntity() instanceof Sheep S && !S.isSheared() && this.getPlunderType() == PlunderTypes.ITEM.id) {
-                this.level().playSound(null, this, SoundEvents.SHEEP_SHEAR, SoundSource.PLAYERS, 1.0F, 1.0F);
-                S.setSheared(true);
-                this.setHeldItem(new ItemStack(MainUtil.SHEEP_DYE.get(S.getColor()), 1 + this.random.nextInt(3)));
-                this.startReturning();
-                return;
+                if (!ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims){
+                    this.level().playSound(null, this, SoundEvents.SHEEP_SHEAR, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    S.setSheared(true);
+                    this.setHeldItem(new ItemStack(MainUtil.SHEEP_DYE.get(S.getColor()), 1 + this.random.nextInt(3)));
+                    this.startReturning();
+                    return;
+                }
             } else if ($$0.getEntity() instanceof GentlyWeepsEntity gwe && this.getPlunderType() == PlunderTypes.MOISTURE.id && this.getLiquidStolen() == 4) {
                 gwe.setBled(true);
                 super.onHitEntity($$0);
@@ -667,10 +669,12 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                 this.level().playSound(null, this, SoundEvents.COW_MILK, SoundSource.NEUTRAL, 1.0F, 1.0F);
                 return;
             } else if ($$0.getEntity() instanceof AbstractArrow ac && this.getPlunderType() == PlunderTypes.ITEM.id) {
-                this.setHeldItem(((IAbstractArrowAccess)ac).roundabout$GetPickupItem().copyAndClear());
-                startReturning();
-                ac.discard();
-                return;
+                if (!ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims) {
+                    this.setHeldItem(((IAbstractArrowAccess) ac).roundabout$GetPickupItem().copyAndClear());
+                    startReturning();
+                    ac.discard();
+                    return;
+                }
             } else if ($$0.getEntity() instanceof AreaEffectCloud ac) {
                 Collection<MobEffectInstance> effects = new ArrayList<>(((IAreaOfEffectCloud)ac).roundabout$getEffects());
                 if (!effects.isEmpty()) {
@@ -1171,11 +1175,19 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                     Entity $$5 = $$3.get($$4);
                     if ($$5 instanceof ItemEntity IE) {
                         if (!(IE.getItem().getItem() instanceof BlockItem BI && BI.getBlock() instanceof ShulkerBoxBlock && BI.getBlock() instanceof FancyLighterBlock)) {
-                            this.setHeldItem(IE.getItem().copyWithCount(1));
-                            startReturning();
 
-                            IE.getItem().shrink(1);
-                            itemNearby(IE.getId());
+                            if (ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims){
+                                if (getOwner() != null){
+                                    IE.setPos(getOwner().position());
+                                    popBubble();
+                                }
+                            } else {
+                                this.setHeldItem(IE.getItem().copyWithCount(1));
+                                startReturning();
+
+                                IE.getItem().shrink(1);
+                                itemNearby(IE.getId());
+                            }
                             return;
                         }
                     }
@@ -1289,6 +1301,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
     protected static final EntityDataAccessor<ItemStack> HELD_ITEM = SynchedEntityData.defineId(SoftAndWetPlunderBubbleEntity.class,
             EntityDataSerializers.ITEM_STACK);
     public final void setHeldItem(ItemStack stack) {
+
         this.entityData.set(HELD_ITEM, stack);
     }
     public final void itemNearby(int id) {

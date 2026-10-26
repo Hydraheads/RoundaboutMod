@@ -34,7 +34,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -124,11 +123,10 @@ public final class HallucinatoryAcidBlock extends BaseEntityBlock implements Sim
         int layers = state.getValue(LAYERS);
         if (entity.getY() - pos.getY() > SHAPES[layers].bounds().getYsize()) return;
         double strength = layers / 4.0D;
-        double fullHeightMultiplier = entity instanceof Player ? 0.9D : 0.9D;
+        double fullHeightMultiplier = 0.9D;
         double horizontalMultiplier = 1.0D - (1.0D - fullHeightMultiplier) * strength;
-        double verticalMultiplier = 1.0D - 0.1D * strength;
-        entity.makeStuckInBlock(state,
-                new Vec3(horizontalMultiplier, verticalMultiplier, horizontalMultiplier));
+        entity.setDeltaMovement(entity.getDeltaMovement().multiply(
+                horizontalMultiplier, 1.0D, horizontalMultiplier));
     }
 
     @Override
@@ -285,7 +283,7 @@ public final class HallucinatoryAcidBlock extends BaseEntityBlock implements Sim
         return null;
     }
 
-    private static boolean hasSpreadSupport(Level level, BlockPos pos) {
+    public static boolean hasSpreadSupport(Level level, BlockPos pos) {
         BlockPos below = pos.below();
         BlockState support = level.getBlockState(below);
         return support.isFaceSturdy(level, below, Direction.UP)
@@ -293,7 +291,7 @@ public final class HallucinatoryAcidBlock extends BaseEntityBlock implements Sim
                 && support.getValue(LAYERS) == 4;
     }
 
-    private static boolean canReplaceWithAcid(BlockState state) {
+    public static boolean canReplaceWithAcid(BlockState state) {
         if (state.isAir()) return true;
         return state.getFluidState().is(Fluids.WATER)
                 && !ClientNetworking.getAppropriateConfig().whitesnakeSettings.waterWashesAwayAcid;

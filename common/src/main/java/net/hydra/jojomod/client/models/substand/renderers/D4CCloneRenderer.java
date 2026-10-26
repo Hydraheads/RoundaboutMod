@@ -28,6 +28,7 @@ public class D4CCloneRenderer<T extends D4CCloneEntity> extends CloneRenderer<T>
                     ticksSince
             );
         }
+        super.scale(entity,$$1,$$2);
     }
 }
 

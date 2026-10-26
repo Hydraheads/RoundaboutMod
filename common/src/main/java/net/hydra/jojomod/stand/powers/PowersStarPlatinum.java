@@ -12,6 +12,7 @@ import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
@@ -602,8 +603,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         if (!this.onCooldown(PowerIndex.SKILL_1)) {
             if (canExecuteMoveWithLevel(getFingerLevel())) {
                 if (this.activePower != POWER_STAR_FINGER) {
-                    ticksForFinger = 0;
-                    ((StandUser) this.getSelf()).roundabout$tryPower(POWER_STAR_FINGER, true);
+                    ticksForFinger = 100;
                     tryPowerPacket(POWER_STAR_FINGER);
                 }
             }
@@ -1020,7 +1020,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                     if (entity instanceof LivingEntity LE) {
                         addEXP(2, LE);
                         if (canFingerBleed) {
-                            MainUtil.makeBleed(LE, 1, 160, this.self);
+                            MainUtil.makeBleed(LE, 0, 300, this.self);
+                            LE.addEffect(new MobEffectInstance(ModEffects.CRIPPLED,60,0,false,false));
                         }
                     }
                 } else {

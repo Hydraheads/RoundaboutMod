@@ -22,9 +22,12 @@ import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+
+import javax.annotation.Nullable;
 
 public class WarhammerItem extends DiggerItem  {
     /**The hammer joseph uses against wamuu in the chariot fight
@@ -43,7 +46,9 @@ public class WarhammerItem extends DiggerItem  {
         }
         return spd;
     }
-
+    public int getBurnTime(ItemStack stack, @Nullable RecipeType<?> recipeType) {
+        return 200;
+    }
     @Override
     public boolean canAttackBlock(BlockState $$0, Level $$1, BlockPos $$2, Player $$3) {
         return !$$3.isCreative();

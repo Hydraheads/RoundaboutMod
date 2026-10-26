@@ -26,9 +26,12 @@ import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.visagedata.VisageData;
+import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.mixin.PlayerEntity;
 import net.hydra.jojomod.sound.ModSounds;
@@ -443,9 +446,11 @@ public class PowersGreenDay extends NewPunchingStand {
                 }
                 if(Main_arm == null){
                     HasMainArm = true;
+                    syncArmFromServer();
                 }
                 if(Off_hand_entity == null){
                     HasOffHand = true;
+                    syncArmFromServer();
                 }
             }
         }
@@ -481,44 +486,48 @@ public class PowersGreenDay extends NewPunchingStand {
         }
         if(this.self instanceof Player) {
             if (!this.self.level().isClientSide) {
-                if (HasOffHand) {
-                    LeftArmState = 0;
-                } else {
-                    LeftArmState = 1;
+                // start of sync shenaninaigans
 
-                }
 
-                if (HasMainArm) {
-                    RightArmState = 0;
-                } else {
-                    RightArmState = 1;
-                }
+                // end
+           //     if (HasOffHand) {
+           //         LeftArmState = 0;
+            //    } else {
+            //        LeftArmState = 1;
+
+           //     }
+
+             //   if (HasMainArm) {
+            //        RightArmState = 0;
+             //   } else {
+             //       RightArmState = 1;
+               // }
 
                 this.updatePowerInt(PowerIndex.POWER_1, RightArmState);
                 S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowerIndex.POWER_1, RightArmState);
                 this.updatePowerInt(PowerIndex.POWER_2, LeftArmState);
                 S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowerIndex.POWER_2, LeftArmState);
             }else{
-                if(LeftArmState == 0){
-                    HasOffHand = true;
-                }else{
-                    HasOffHand = false;
-                }
+               // if(LeftArmState == 0){
+               //     HasOffHand = true;
+               // }else{
+               //     HasOffHand = false;
+               // }
 
-                if(RightArmState == 0){
-                    HasMainArm = true;
-                }else{
-                    HasMainArm = false;
-                }
+                //if(RightArmState == 0){
+               //     HasMainArm = true;
+               // }else{
+              //      HasMainArm = false;
+               // }
 
 
             }
         }
         if(!(currentlegs == null)) {
-
             if(!(legGoneTicks>0)) {
                 if (!this.self.level().isClientSide()) {
                     currentlegs.discard();
+                    syncArmFromServer();
                 }
             }else{
                 if (!this.self.level().isClientSide()) {
@@ -543,10 +552,12 @@ public class PowersGreenDay extends NewPunchingStand {
                 }else{
                     if(MainUtil.cheapDistanceTo(this.self.getX(),this.self.getY(),this.self.getZ(),currentlegs.getX(),currentlegs.getY(),currentlegs.getZ())<1.5 && currentlegs.StartupTicks == 0 ) {
                         legGoneTicks = 0;
+                        syncArmFromServer();
                         ((StandUser) this.self).rdbt$SetCrawlTicks(0);
                     }
                 }
             }
+            syncArmFromServer();
         }else{
         }
         if(!hasCheckedAllies) {
@@ -596,6 +607,32 @@ public class PowersGreenDay extends NewPunchingStand {
         MoldGone = true;
         (self.level()).playSound(self,self.getOnPos(),ModSounds.SNAP_EVENT,SoundSource.PLAYERS,1,1);
         return true;
+    }
+
+    public void syncArmFromServer(){
+        int offhandid = 0;
+        if(Off_hand_entity != null){
+            offhandid = Off_hand_entity.getId();
+        }
+        int mainhandid = 0;
+        if(Main_arm != null){
+            mainhandid = Main_arm.getId();
+        }
+        int seplegsid = 0;
+        int leggoneticks = legGoneTicks;
+
+        if(currentlegs != null){
+            seplegsid = currentlegs.getId();
+        }
+        int hasoffhand = 0;
+        if(HasOffHand){
+            hasoffhand = 1;
+        }
+        int hasmainhand = 0;
+        if(HasMainArm){
+            hasmainhand = 1;
+        }
+        S2CPacketUtil.sync_GD_arms(this.self.getId(),offhandid,mainhandid,hasoffhand,hasmainhand,seplegsid,leggoneticks);
     }
 
 
@@ -845,6 +882,7 @@ public class PowersGreenDay extends NewPunchingStand {
 
             //}
         }
+        syncArmFromServer();
         return true;
     }
 
@@ -861,8 +899,8 @@ public class PowersGreenDay extends NewPunchingStand {
                     HasOffHandCharge = true;
                 }
                 if (isClient()) {
-                    AbstractClientPlayer abstractClientPlayer = (AbstractClientPlayer) this.self;
-                    if ((abstractClientPlayer).getModelName().equals("default")) {
+
+                    if (isWideSkin()) {
                         tryPowerPacket(PowerIndex.POWER_2);
                     } else {
                         tryPowerPacket(OFF_HAND_THROW_SLIM);
@@ -914,6 +952,7 @@ public class PowersGreenDay extends NewPunchingStand {
                         0, 0, 0, 0, 0);
             }
         }
+        syncArmFromServer();
         return true;
     }
 
@@ -925,8 +964,8 @@ public class PowersGreenDay extends NewPunchingStand {
                     if(HasOffHand){
                         setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinCooldown);
                     }
-                    AbstractClientPlayer abstractClientPlayer = (AbstractClientPlayer) this.self;
-                    if ((abstractClientPlayer).getModelName().equals("default")) {
+
+                    if (isWideSkin()) {
                         tryPowerPacket(PowerIndex.POWER_2_BLOCK);
                     } else {
                         tryPowerPacket(OFF_HAND_SPIN_THROW_SLIM);
@@ -1041,6 +1080,23 @@ public class PowersGreenDay extends NewPunchingStand {
         sendParticlesIfPossible(self.level(),ModParticles.MENACING,this.self.getX(),this.self.getY() + 1,this.self.getZ(),5,0.25,0.5,0.25,0);
     }
 
+    public boolean isWideSkin() {
+        boolean isWide = ((AbstractClientPlayer) this.self).getModelName().equals("default");
+
+        IPlayerEntity pl = ((IPlayerEntity) self);
+        ItemStack visage = pl.roundabout$getMaskSlot();
+        if (Objects.nonNull(visage)) {
+            if (visage.getItem() instanceof MaskItem MI) {
+                VisageData data = MI.visageData.generateVisageData(self);
+                if (data.isCharacterVisage()) {
+                    isWide = !data.isSlim();
+                }
+            }
+        }
+
+        return isWide;
+    }
+
     public SeperatedArmEntity Main_arm = null;
 
     public void MainArmSpin(){
@@ -1049,8 +1105,8 @@ public class PowersGreenDay extends NewPunchingStand {
                 if(HasMainArm){
                     setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinCooldown);
                 }
-                AbstractClientPlayer abstractClientPlayer = (AbstractClientPlayer) this.self;
-                if ((abstractClientPlayer).getModelName().equals("default")) {
+
+                if (isWideSkin()) {
                     tryPowerPacket(PowerIndex.POWER_1_BLOCK);
                 } else {
                     tryPowerPacket(MAIN_ARM_SPIN_THROW_SLIM);
@@ -1118,6 +1174,7 @@ public class PowersGreenDay extends NewPunchingStand {
                 Main_arm.jump2(((StandUser) this.self).roundabout$getTargetEntity(this.self, 20).getEyePosition());
             }
         }
+        syncArmFromServer();
         return true;
     }
 
@@ -1135,8 +1192,8 @@ public class PowersGreenDay extends NewPunchingStand {
                     HasMainArmCharge = true;
                 }
                 if (isClient()) {
-                    AbstractClientPlayer abstractClientPlayer = (AbstractClientPlayer) this.self;
-                    if ((abstractClientPlayer).getModelName().equals("default")) {
+
+                    if (isWideSkin()) {
                         tryPowerPacket(PowerIndex.POWER_1);
                     } else {
                         tryPowerPacket(MAIN_ARM_THROW_SLIM);
@@ -1186,6 +1243,7 @@ public class PowersGreenDay extends NewPunchingStand {
                         this.getSelf().getZ() + (diameter * Math.cos(i * 4)) * Math.cos(Zangle),
                         0, 0, 0, 0, 0);
             }
+            syncArmFromServer();
         }
         return true;
     }
@@ -1594,11 +1652,17 @@ public class PowersGreenDay extends NewPunchingStand {
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
         super.readAdditionalSaveData($$0);
-        if ($$0.contains("hasmainhand")) {
-            HasMainArm = $$0.getBoolean("hasmainarm");
-        }if ($$0.contains("hasoffhand")) {
-            HasMainArm = $$0.getBoolean("hasoffhand");
-        }
+       // if ($$0.contains("hasmainhand")) {
+       //     HasMainArm = $$0.getBoolean("hasmainarm");
+       // } else {
+       //     HasMainArm = true;
+       // }
+
+       // if ($$0.contains("hasoffhand")) {
+       //     HasOffHand = $$0.getBoolean("hasoffhand");
+       // } else {
+       //     HasOffHand = true;
+       // }
     }
 
     @Override
@@ -1727,20 +1791,49 @@ public class PowersGreenDay extends NewPunchingStand {
         }
     }
 
+    @Override
+    public void tickStandRejection(MobEffectInstance effect) {
+        if (!this.self.level().isClientSide) {
+            ((ServerLevel)this.self.level()).sendParticles(ModParticles.MOLD_DUST,
+                    this.self.getX(),
+                    this.self.getY(),
+                    this.self.getZ(),
+                    4, 2, 2, 2, 0.005);
+            ((ServerLevel)this.self.level()).sendParticles(new DustParticleOptions(new Vector3f(0.76F, 1.0F, 0.9F), 2f),
+                    this.self.getX(),
+                    this.self.getY(),
+                    this.self.getZ(),
+                    1, 2, 2, 2, 0.005);
+            Entity entity = this.self;
+            float fallDistance = (((StandUser) entity).getStaringYPos() - (float) entity.getPosition(1).y());
+
+            double width = entity.getBbWidth() / 2;
+            double height = entity.getBbHeight() / 2;
+            ((ServerLevel) this.self.level()).sendParticles(ModParticles.MOLD
+                    , entity.getX(),
+                    (entity.getY() + height / 2),
+                    entity.getZ(),
+                    13, width, height, width, 0)
+            ;
+
+            double damage = 0;
+            if (MainUtil.getReducedDamage(entity)) {
+                damage = 2;
+            } else {
+                damage = 4;
+            }
+            damage = (int) (damage * (fallDistance * 0.6F));
+            if (((StandUser) entity).getStaringYPos() - entity.getY() < 1) {
+                damage = damage * 0.25;
+            }
+            entity.hurt(ModDamageTypes.of(this.self.level(), ModDamageTypes.DISINTEGRATION), (float) (damage * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldDMGPlayersMultiplier / 100F)));
+        }
+    }
 
     @Override
     public boolean isWip(){
-        return true;
+        return false;
     }
-    @Override
-    public Component ifWipListDevStatus(){
-        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.GOLD);
-    }
-    @Override
-    public Component ifWipListDev(){
-        return Component.literal(  "Fish").withStyle(ChatFormatting.GREEN);
-    }
-
 
     public static final byte
             PART_FIVE_GREEN_DAY = 1,

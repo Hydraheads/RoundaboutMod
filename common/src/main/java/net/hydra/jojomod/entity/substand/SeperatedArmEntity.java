@@ -6,9 +6,12 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.projectile.GoBeyondEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.FleshBucketItem;
+import net.hydra.jojomod.item.GlaiveItem;
 import net.hydra.jojomod.item.KnifeItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
@@ -24,6 +27,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -39,6 +43,7 @@ import net.minecraft.world.entity.ai.control.JumpControl;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.animal.goat.Goat;
+import net.minecraft.world.entity.boss.enderdragon.EndCrystal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -51,6 +56,7 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.AABB;
@@ -78,8 +84,6 @@ public class SeperatedArmEntity extends StandEntity {
     public void setSpinTicks(int val){SpinTicks = val;};
     public void setNeuteredSpinTicks(int val){neuteredSpinTicks = val;}
 
-
-
     public static final byte
             IDLE=11;
 
@@ -100,6 +104,7 @@ public class SeperatedArmEntity extends StandEntity {
 
     public SeperatedArmEntity(EntityType<? extends StandEntity> $$0, Level $$1) {
         super($$0, $$1);
+        forceVisible = true;
     }
 
     public void jump(Vec3 jumpT0Pos){
@@ -223,7 +228,10 @@ public class SeperatedArmEntity extends StandEntity {
     }
 
     public void tickeffects() {
-        if (User != null) {
+        if(!this.level().isClientSide()){
+        if (User == null) {
+            removearm();
+        }} if (User != null) {
             if (getMainHandItem().getDamageValue() == getMainHandItem().getMaxDamage() - 1) {
                 Can_activate = false;
                 Can_activate_special = false;
@@ -233,9 +241,7 @@ public class SeperatedArmEntity extends StandEntity {
             LivingEntity user = this.getUser();
             if (!client) {
 
-                if (user == null) {
-                    removearm();
-                } else if ((!(((StandUser) user).roundabout$getStandPowers() instanceof PowersGreenDay)) || (!user.isAlive())) {
+                if ((!(((StandUser) user).roundabout$getStandPowers() instanceof PowersGreenDay)) || (!user.isAlive())) {
                     removearm();
                 } else if (user != null) {
 
@@ -253,6 +259,7 @@ public class SeperatedArmEntity extends StandEntity {
                         }
                     }
                 }
+                
                 if (!onGround()) {
                     flyingTicks += 1;
                 } else {
@@ -261,68 +268,100 @@ public class SeperatedArmEntity extends StandEntity {
                 if (Can_activate_special || (Can_activate)) {
                     ItemStack item = (this.getMainHandItem());
                     if ((MainUtil.cheapDistanceTo(this.getX(), this.getY(), this.getZ(), MiningPos.getX(), MiningPos.getY(), MiningPos.getZ()) < 2)) {
-
-                        BlockState block = (this.level().getBlockState(MiningPos));
-
-
-                        boolean RightTier = false;
-
-                        if (item.getItem() instanceof DiggerItem DI) {
-                            RightTier = (
-                                    (block.is(BlockTags.NEEDS_STONE_TOOL) && !(DI.getTier().equals(Tiers.WOOD)))
-                                            ||
-                                            (block.is(BlockTags.NEEDS_IRON_TOOL) && (DI.getTier().equals(Tiers.IRON) || DI.getTier().equals(Tiers.DIAMOND) || DI.getTier().equals(Tiers.NETHERITE)))
-                                            ||
-                                            (block.is(BlockTags.NEEDS_DIAMOND_TOOL) && DI.getTier().equals(Tiers.NETHERITE) || DI.getTier().equals(Tiers.DIAMOND))
-                                            ||
-                                            !(block.is(BlockTags.NEEDS_DIAMOND_TOOL) || block.is(BlockTags.NEEDS_STONE_TOOL) || block.is(BlockTags.NEEDS_IRON_TOOL))
-                            );
+                        boolean mine = true;
+                        if (user instanceof ServerPlayer PE) {
+                            mine = !((!this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) ||
+                             (PE.blockActionRestricted(PE.serverLevel(), MiningPos, PE.gameMode.getGameModeForPlayer())) ||
+                             (!this.level().mayInteract(PE, MiningPos)) ||
+                             (!MainUtil.canPlaceOnClaim(PE, MiningPos)));
                         }
+                        if(mine) {
 
-                        RightTier = true;
+                            BlockState block = (this.level().getBlockState(MiningPos));
 
-                        boolean pickaxeable = block.is(BlockTags.MINEABLE_WITH_PICKAXE) && RightTier;
-                        boolean axeable = block.is(BlockTags.MINEABLE_WITH_AXE) && RightTier;
-                        boolean shovelable = block.is(BlockTags.MINEABLE_WITH_SHOVEL) && RightTier;
 
-                        BlockState state = this.level().getBlockState(MiningPos);
-                        ServerLevel level = (ServerLevel) this.level();
+                            boolean RightTier = false;
 
-                        BlockPos targetpos = MiningPos;
-
-                        if (this.getMainHandItem().getItem() instanceof PickaxeItem) {
-                            if (pickaxeable) {
-                                level.destroyBlock(targetpos, true, this);
-                                this.setDeltaMovement(0, 0, 0);
-
-                                if (Can_activate) {
-                                    this.getMainHandItem().setDamageValue(this.getMainHandItem().getDamageValue() + 1);
-                                }
-                                Can_activate = false;
+                            if (item.getItem() instanceof DiggerItem DI) {
+                                RightTier = (
+                                        (block.is(BlockTags.NEEDS_STONE_TOOL) && !(DI.getTier().equals(Tiers.WOOD)))
+                                                ||
+                                                (block.is(BlockTags.NEEDS_IRON_TOOL) && (DI.getTier().equals(Tiers.IRON) || DI.getTier().equals(Tiers.DIAMOND) || DI.getTier().equals(Tiers.NETHERITE)))
+                                                ||
+                                                (block.is(BlockTags.NEEDS_DIAMOND_TOOL) && DI.getTier().equals(Tiers.NETHERITE) || DI.getTier().equals(Tiers.DIAMOND))
+                                                ||
+                                                !(block.is(BlockTags.NEEDS_DIAMOND_TOOL) || block.is(BlockTags.NEEDS_STONE_TOOL) || block.is(BlockTags.NEEDS_IRON_TOOL))
+                                );
                             }
 
-                        } else if (this.getMainHandItem().getItem() instanceof ShovelItem) {
-                            if (shovelable) {
-                                level.destroyBlock(targetpos, true, this);
-                                this.setDeltaMovement(0, 0, 0);
+                            RightTier = true;
 
-                                if (Can_activate) {
-                                    this.getMainHandItem().setDamageValue(this.getMainHandItem().getDamageValue() + 1);
+                            boolean pickaxeable = block.is(BlockTags.MINEABLE_WITH_PICKAXE) && RightTier;
+                            boolean axeable = block.is(BlockTags.MINEABLE_WITH_AXE) && RightTier;
+                            boolean shovelable = block.is(BlockTags.MINEABLE_WITH_SHOVEL) && RightTier;
+
+                            BlockState state = this.level().getBlockState(MiningPos);
+                            ServerLevel level = (ServerLevel) this.level();
+
+                            BlockPos targetpos = MiningPos;
+
+                            if (this.getMainHandItem().getItem() instanceof PickaxeItem) {
+                                if (pickaxeable) {
+
+                                    BlockState bstate = this.level().getBlockState(targetpos);
+                                    BlockEntity blockEnt = bstate.hasBlockEntity() ? this.level().getBlockEntity(targetpos) : null;
+                                    Block.dropResources(bstate, this.level(), targetpos, blockEnt, this, this.getMainHandItem());
+                                    level.destroyBlock(targetpos,false);
+
+                                    this.setDeltaMovement(0, 0, 0);
+
+                                    if (Can_activate) {
+                                        if (!((Player) user).isCreative()) {
+                                            if (!(this.getMainHandItem().getItem() instanceof FleshBucketItem)) {
+                                                this.getMainHandItem().hurt(1, this.level().getRandom(), null);
+                                            }
+                                        }
+                                    }
+                                    Can_activate = false;
                                 }
-                                Can_activate = false;
-                            }
 
-                        } else if (this.getMainHandItem().getItem() instanceof AxeItem) {
-                            if (axeable) {
-                                level.destroyBlock(targetpos, true, this);
+                            } else if (this.getMainHandItem().getItem() instanceof ShovelItem) {
+                                if (shovelable) {
 
-                                this.setDeltaMovement(0, 0, 0);
-                                if (Can_activate) {
-                                    this.getMainHandItem().setDamageValue(this.getMainHandItem().getDamageValue() + 1);
+                                    BlockState bstate = this.level().getBlockState(targetpos);
+                                    BlockEntity blockEnt = bstate.hasBlockEntity() ? this.level().getBlockEntity(targetpos) : null;
+                                    Block.dropResources(bstate, this.level(), targetpos, blockEnt, this, this.getMainHandItem());
+                                    this.setDeltaMovement(0, 0, 0);
+                                    level.destroyBlock(targetpos,false);
+                                    if (Can_activate) {
+                                        if (!((Player) user).isCreative()) {
+                                            if (!(this.getMainHandItem().getItem() instanceof FleshBucketItem)) {
+                                                this.getMainHandItem().hurt(1, this.level().getRandom(), null);
+                                            }
+                                        }
+                                    }
+                                    Can_activate = false;
                                 }
-                                Can_activate = false;
-                            }
 
+                            } else if (this.getMainHandItem().getItem() instanceof AxeItem) {
+                                if (axeable) {
+
+                                    BlockState bstate = this.level().getBlockState(targetpos);
+                                    BlockEntity blockEnt = bstate.hasBlockEntity() ? this.level().getBlockEntity(targetpos) : null;
+                                    Block.dropResources(bstate, this.level(), targetpos, blockEnt, this, this.getMainHandItem());
+                                    level.destroyBlock(targetpos,false);
+                                    this.setDeltaMovement(0, 0, 0);
+                                    if (Can_activate) {
+                                        if (!((Player) user).isCreative()) {
+                                            if (!(this.getMainHandItem().getItem() instanceof FleshBucketItem)) {
+                                                this.getMainHandItem().hurt(1, this.level().getRandom(), null);
+                                            }
+                                        }
+                                    }
+                                    Can_activate = false;
+                                }
+
+                            }
                         }
                     }
                     doAttack();
@@ -525,130 +564,165 @@ public class SeperatedArmEntity extends StandEntity {
         Item item = (this.getMainHandItem().getItem());
         List<Entity> damages = List.of();
         if(Can_activate_special || Can_activate) {
-             damages = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), 1, 1, 1.5);
+             damages = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), 1.5, 1.5, 1.5);
             if (SpinTicks > 0) {
-                damages = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), 2, 2, 2.5);
+                damages = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), 2.5, 2.5, 2.5);
             }
         }
 
+        boolean breakShield = item instanceof GlaiveItem || item instanceof AxeItem;
 
         for(int j = 0;j<damages.size();j++) {
-
-
-
             Entity entity = damages.get(j);
+            if(entity instanceof EndCrystal){
+                ((EndCrystal)entity).hurt(ModDamageTypes.of(level(), DamageTypes.PLAYER_ATTACK, this.getUser(), user), 1);
+            }
 
-
-
-                if ((entity instanceof LivingEntity) && !((entity.equals(this) || entity.equals(user)) || entity instanceof StandEntity || entity instanceof ItemEntity)) {
-                    if (!(SpinTicks > 0)) {
-                        if(user != null) {
-                            ((StandUser) user).roundabout$getStandPowers().addEXP(1);
-                        }
+            if ((entity instanceof LivingEntity) && !((entity.equals(this) || entity.equals(user)) || entity instanceof StandEntity || entity instanceof ItemEntity)) {
+                if (!(SpinTicks > 0)) {
+                    if(user != null) {
+                        ((StandUser) user).roundabout$getStandPowers().addEXP(1);
                     }
-                    if (flyingTicks > 2 && SpinTicks > 0) {
-                        if (Math.abs(this.getY()-((entity.getEyeHeight()) + entity.getY())) < 1 ) {
-                            entity.addDeltaMovement(new Vec3(0, 0.11, 0));
-                        }
+                }
+                if (flyingTicks > 2 && SpinTicks > 0) {
+                    if (Math.abs(this.getY()-((entity.getEyeHeight()) + entity.getY())) < 1 ) {
+                        entity.addDeltaMovement(new Vec3(0, 0.11, 0));
                     }
+                }
 
-                    if(SpinTicks == 0) {
-                        if (this.getMainHandItem().isDamageableItem()) {
-                            this.getMainHandItem().setDamageValue(this.getMainHandItem().getDamageValue() + 1);
-                        }
-                    }
-
-                    if (item instanceof KnifeItem) {
-                        Can_activate = false;
-                        this.setDeltaMovement(0, 0, 0);
-                        float $$2;
-                        Entity $$1 = entity;
-
-                        if (entity instanceof Player) {
-                            $$2 = (float) (2.29F * (ClientNetworking.getAppropriateConfig().itemSettings.knifeDamageOnPlayers * 0.01));
-                        } else {
-                            $$2 = (float) (4.0F * (ClientNetworking.getAppropriateConfig().itemSettings.knifeDamageOnMobs * 0.01));
-                            ;
-                        }
-                        if ($$1 instanceof LivingEntity $$3) {
-                            int f = EnchantmentHelper.getEnchantmentLevel(Enchantments.PROJECTILE_PROTECTION, $$3);
-                            $$2 = (float) ($$2 * (1 - (f * 0.03)));
-
-                        }
-                        if (SpinTicks > 1) {
-                            $$2 = $$2 / 6;
-                        }
-
-                        Entity $$4 = this.getUser();
-                        DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.KNIFE, $$4);
-                        SoundEvent $$6 = ModSounds.KNIFE_IMPACT_EVENT;
-                        Vec3 DM = $$1.getDeltaMovement();
-                        if ($$1.hurt($$5, $$2)) {
-
-                            if ($$4 instanceof LivingEntity LE) {
-                                LE.setLastHurtMob($$1);
-                            }
-                            if (MainUtil.getMobBleed($$1)) {
-                                MainUtil.makeBleed($$1, 0, 400, getUser());
-                            }
-                            if ($$1.getType() == EntityType.ENDERMAN) {
-                                return;
-                            }
-
-                            if ($$1 instanceof LivingEntity $$7) {
-                                $$1.setDeltaMovement($$1.getDeltaMovement().multiply(0.4, 0.4, 0.4));
-                                if ($$4 instanceof LivingEntity) {
-                                    EnchantmentHelper.doPostHurtEffects($$7, $$4);
-                                    EnchantmentHelper.doPostDamageEffects((LivingEntity) $$4, $$7);
-                                }
-
-                            }
-                            this.playSound($$6, 1.0F, (this.random.nextFloat() * 0.2F + 0.9F));
-                            this.getMainHandItem().setCount(this.getMainHandItem().getCount() - 1);
-                        }
-                        Vec3 location = new Vec3(this.getX(), this.getY(), this.getZ());
-                        ((ServerLevel) this.level()).sendParticles(ParticleTypes.CRIT, location.x,
-                                location.y, location.z,
-                                16,
-                                0.45, 0.45, 0.45,
-                                0.1);
-
-                    } else if (this.getMainHandItem().getItem() instanceof ShieldItem) {
-                        Can_activate = true;
-                        if (entity instanceof Projectile && !(entity instanceof GoBeyondEntity)) {
-                            entity.discard();
-
-                            Vec3 location = new Vec3(this.getX(), this.getY(), this.getZ());
-                            ((ServerLevel) this.level()).sendParticles(ModParticles.PUNCH_MISS, location.x,
-                                    location.y, location.z,
-                                    1,
-                                    0, 0, 0,
-                                    0.1);
-
-
-                        }
-                    } else {
-                        if(entity instanceof LivingEntity) {
-                            if (!((StandUser) entity).roundabout$isGuarding() || ((LivingEntity) entity).isBlocking()) {
-                                Can_activate = false;
-                                this.setDeltaMovement(0, 0, 0);
-                                Vec3 location = new Vec3(this.getX(), this.getY(), this.getZ());
-                                ((ServerLevel) this.level()).sendParticles(ParticleTypes.CRIT, location.x,
-                                        location.y, location.z,
-                                        16,
-                                        0.45, 0.45, 0.45,
-                                        0.1);
-                                if (entity instanceof Player) {
-                                    entity.hurt(ModDamageTypes.of(level(), DamageTypes.PLAYER_ATTACK, this.getUser(), user), (Double.valueOf(this.getAttributeValue(Attributes.ATTACK_DAMAGE)).floatValue()) * 1.75f);
-                                } else {
-                                    entity.hurt(ModDamageTypes.of(level(), DamageTypes.PLAYER_ATTACK, this.getUser(), user), (Double.valueOf(this.getAttributeValue(Attributes.ATTACK_DAMAGE)).floatValue()) * 1f);
-                                }
+                if(SpinTicks == 0) {
+                    if (this.getMainHandItem().isDamageableItem()) {
+                        if(!((Player)user).isCreative()) {
+                            if(!(this.getMainHandItem().getItem() instanceof FleshBucketItem)) {
+                                this.getMainHandItem().hurt(1, this.level().getRandom(), null);
                             }
                         }
                     }
                 }
 
+                if (item instanceof KnifeItem) {
+                    Can_activate = false;
+                    this.setDeltaMovement(0, 0, 0);
+                    float $$2;
+                    Entity $$1 = entity;
+
+                    if (entity instanceof Player) {
+                        $$2 = (float) (2.29F * (ClientNetworking.getAppropriateConfig().itemSettings.knifeDamageOnPlayers * 0.01));
+                    } else {
+                        $$2 = (float) (4.0F * (ClientNetworking.getAppropriateConfig().itemSettings.knifeDamageOnMobs * 0.01));
+                        ;
+                    }
+                    if ($$1 instanceof LivingEntity $$3) {
+                        int f = EnchantmentHelper.getEnchantmentLevel(Enchantments.PROJECTILE_PROTECTION, $$3);
+                        $$2 = (float) ($$2 * (1 - (f * 0.03)));
+
+                    }
+                    if (SpinTicks > 1) {
+                        $$2 = $$2 / 6;
+                    }
+
+                    Entity $$4 = this.getUser();
+                    DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.KNIFE, $$4);
+                    SoundEvent $$6 = ModSounds.KNIFE_IMPACT_EVENT;
+                    Vec3 DM = $$1.getDeltaMovement();
+                    if ($$1.hurt($$5, $$2)) {
+
+                        if ($$4 instanceof LivingEntity LE) {
+                            LE.setLastHurtMob($$1);
+                        }
+                        if (MainUtil.getMobBleed($$1)) {
+                            MainUtil.makeBleed($$1, 0, 400, getUser());
+                        }
+                        if ($$1.getType() == EntityType.ENDERMAN) {
+                            return;
+                        }
+
+                        if ($$1 instanceof LivingEntity $$7) {
+                            $$1.setDeltaMovement($$1.getDeltaMovement().multiply(0.4, 0.4, 0.4));
+                            if ($$4 instanceof LivingEntity) {
+                                EnchantmentHelper.doPostHurtEffects($$7, $$4);
+                                EnchantmentHelper.doPostDamageEffects((LivingEntity) $$4, $$7);
+                            }
+
+                        }
+                        this.playSound($$6, 1.0F, (this.random.nextFloat() * 0.2F + 0.9F));
+                        this.getMainHandItem().setCount(this.getMainHandItem().getCount() - 1);
+                    }
+                    Vec3 location = new Vec3(this.getX(), this.getY(), this.getZ());
+                    ((ServerLevel) this.level()).sendParticles(ParticleTypes.CRIT, location.x,
+                            location.y, location.z,
+                            16,
+                            0.45, 0.45, 0.45,
+                            0.1);
+
+                } else if (this.getMainHandItem().getItem() instanceof ShieldItem) {
+                    Can_activate = true;
+                    if (entity instanceof Projectile && !(entity instanceof GoBeyondEntity)) {
+                        entity.discard();
+
+                        Vec3 location = new Vec3(this.getX(), this.getY(), this.getZ());
+                        ((ServerLevel) this.level()).sendParticles(ModParticles.PUNCH_MISS, location.x,
+                                location.y, location.z,
+                                1,
+                                0, 0, 0,
+                                0.1);
+
+
+                    }
+                } else {
+                    if(entity instanceof LivingEntity LE) {
+                        if (breakShield && ((StandUser) LE).roundabout$getStandPowers().interceptGuard()
+                                && LE.isBlocking() && !((StandUser) LE).roundabout$isGuarding()) {
+                            knockShield2(entity, 60);
+                        } else {
+                            knockShield2(entity, 40);
+                        }
+                        if (!((StandUser) LE).roundabout$isGuarding() || LE.isBlocking()) {
+                            Can_activate = false;
+                            this.setDeltaMovement(0, 0, 0);
+                            Vec3 location = new Vec3(this.getX(), this.getY(), this.getZ());
+                            ((ServerLevel) this.level()).sendParticles(ParticleTypes.CRIT, location.x,
+                                    location.y, location.z,
+                                    16,
+                                    0.45, 0.45, 0.45,
+                                    0.1);
+                            if (entity instanceof Player) {
+                                entity.hurt(ModDamageTypes.of(level(), DamageTypes.PLAYER_ATTACK, this.getUser(), user), (Double.valueOf(this.getAttributeValue(Attributes.ATTACK_DAMAGE)).floatValue()) * 0.5f);
+                                entity.hurt(ModDamageTypes.of(level(), ModDamageTypes.ARMTHROW, this.getUser(), user), 1.5f);
+                            } else {
+                                entity.hurt(ModDamageTypes.of(level(), DamageTypes.PLAYER_ATTACK, this.getUser(), user), (Double.valueOf(this.getAttributeValue(Attributes.ATTACK_DAMAGE)).floatValue()) * 1f);
+                            }
+                        }
+                    } else {
+                        entity.hurt(ModDamageTypes.of(level(), DamageTypes.PLAYER_ATTACK, this.getUser(), user), (Double.valueOf(this.getAttributeValue(Attributes.ATTACK_DAMAGE)).floatValue()) * 1f);
+                    }
+                }
+            }
+
         }
+    }
+
+    public boolean knockShield2(Entity entity, int duration){
+
+        if (entity != null && entity.isAlive() && !entity.isRemoved()) {
+            if (entity instanceof LivingEntity) {
+                if (((LivingEntity) entity).isBlocking()) {
+
+                    if (entity instanceof Player){
+                        ItemStack itemStack = ((LivingEntity) entity).getUseItem();
+                        Item item = itemStack.getItem();
+                        if (item.getUseAnimation(itemStack) == UseAnim.BLOCK) {
+                            ((LivingEntity) entity).releaseUsingItem();
+                            ((Player) entity).stopUsingItem();
+                        }
+                        ((Player) entity).getCooldowns().addCooldown(Items.SHIELD, duration);
+                        entity.level().broadcastEntityEvent(entity, EntityEvent.SHIELD_DISABLED);
+                    }
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override

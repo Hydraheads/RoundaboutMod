@@ -7,6 +7,7 @@ import net.hydra.jojomod.event.powers.whitesnake.HallucinationEffect;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersWhitesnake;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.config.Config;
@@ -18,6 +19,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ambient.Bat;
+import net.minecraft.world.entity.animal.Cow;
 import net.minecraft.world.entity.animal.Dolphin;
 import net.minecraft.world.entity.animal.sniffer.Sniffer;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -48,12 +50,13 @@ public final class WhitesnakeDiscUtil {
         if (!lowHealthSteal && hallucinationLevel(target) < config.hallucinationAllowsDiscSteal) {
             return DiscSealController.seal(target, type);
         }
-        return switch (type) {
-            case SIGHT -> ejectSight(target, user);
-            case MEMORY -> ejectMemory(target, user);
-            case HEARING -> ejectHearing(target, user);
-            default -> ejectStand(target, user);
+        ItemStack stack = switch (type) {
+            case SIGHT -> extractSight(target, true);
+            case MEMORY -> extractMemory(target, true);
+            case HEARING -> extractHearing(target, true);
+            default -> extractStand(target, true);
         };
+        return dropExtracted(target, user, stack);
     }
 
     public static boolean canCarrySightDisc(LivingEntity target) {
@@ -80,22 +83,6 @@ public final class WhitesnakeDiscUtil {
             case HEARING -> isHearingDiscEnabled();
             default -> true;
         };
-    }
-
-    private static boolean ejectSight(LivingEntity target, LivingEntity user) {
-        return dropExtracted(target, user, extractSight(target, true));
-    }
-
-    private static boolean ejectHearing(LivingEntity target, LivingEntity user) {
-        return dropExtracted(target, user, extractHearing(target, true));
-    }
-
-    private static boolean ejectMemory(LivingEntity target, LivingEntity user) {
-        return dropExtracted(target, user, extractMemory(target, true));
-    }
-
-    private static boolean ejectStand(LivingEntity target, LivingEntity user) {
-        return dropExtracted(target, user, extractStand(target, true));
     }
 
     public static ItemStack extractDiscStack(LivingEntity target, byte type) {
@@ -173,6 +160,10 @@ public final class WhitesnakeDiscUtil {
 
     private static ItemStack extractStand(LivingEntity target, boolean storeOwner) {
         StandUser standUser = (StandUser) target;
+        if (target instanceof Cow && standUser.roundabout$getStandPowers() instanceof PowersAnubis) {
+            return ItemStack.EMPTY;
+        }
+
         ItemStack current = standUser.roundabout$getStandDisc();
         if (current.isEmpty()) return ItemStack.EMPTY;
         ItemStack stack = MainUtil.saveToDiscData(target, current.copy());

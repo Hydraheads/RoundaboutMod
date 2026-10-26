@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "item": "minecraft:black_concrete"
+    },
+    "N":
+    {
+      "item": "minecraft:iron_nugget"
+    },
+    "I":
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    "F":
+    {
+      "item": "minecraft:blaze_powder"
+    },
+    "G":
+    {
+      "item": "minecraft:blackstone"
+    }
+  },
+  "pattern": [
+    "GIG",
+    "GFN",
+    "BB "
+  ],
+  "result": {
+    "count": 1,
+    "item": "roundabout:beretta_pistol"
+  },
+  "show_notification": true
+}

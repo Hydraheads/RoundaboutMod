@@ -14,8 +14,12 @@ public class FabricParticlesClient {
         ParticleFactoryRegistry.getInstance().register(FabricParticles.PUNCH_IMPACT_C, PunchImpactParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.DISC_STEAL_HIT,
                 DiscStealHitParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.GOLD_PUNCH_IMPACT_A, GoldPunchImpactParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.GOLD_PUNCH_IMPACT_B, GoldPunchImpactParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.GOLD_PUNCH_IMPACT_C, GoldPunchImpactParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.MELTING, BloodParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.BLOOD, BloodParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.SWEAT, BloodParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.BLUE_BLOOD, BloodParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.ENDER_BLOOD, BloodParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.SMALL_EXPLOSION, SmallExplosionParticle.Provider::new);
@@ -35,6 +39,7 @@ public class FabricParticlesClient {
         ParticleFactoryRegistry.getInstance().register(FabricParticles.VAMPIRE_AURA, VampireAuraParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.MENACING, MenacingParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.VACUUM, VacuumParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.FLASH, FlashParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.ZAP, ZapParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.ORANGE_FLAME, StandFlameParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.BLUE_FLAME, StandFlameParticle.Provider::new);

@@ -68,6 +68,9 @@ public abstract class ConfigManager {
     public static Path getClientConfigPath() {
         return clientConfigPath;
     }
+    public static Path getAdvenceConfigPath() {
+        return advancedConfigPath;
+    }
 
     public static void loadBlacklists2()
     {
@@ -207,10 +210,10 @@ public abstract class ConfigManager {
             MainUtil.standBlockGrabBlacklist.clear();
             MainUtil.standBlockGrabBlacklist.addAll(getAdvancedConfig().standBlockGrabBlacklist);
         }
-        if (getAdvancedConfig().standDisassemblyBlacklist != null)
+        if (getAdvancedConfig().standDisassemblyBlacklistv2 != null)
         {
             MainUtil.standDisassemblyBlacklist.clear();
-            MainUtil.standDisassemblyBlacklist.addAll(getAdvancedConfig().standDisassemblyBlacklist);
+            MainUtil.standDisassemblyBlacklist.addAll(getAdvancedConfig().standDisassemblyBlacklistv2);
         }
         if (getAdvancedConfig().lootPoolForD4CChests != null)
         {
@@ -248,9 +251,9 @@ public abstract class ConfigManager {
                 }
             }
         }
-        if (getAdvancedConfig().sheerHeartAttackCustomEntityHeatV2 != null)
+        if (getAdvancedConfig().sheerHeartAttackCustomEntityHeatV3 != null)
         {
-            for (String entry : getAdvancedConfig().sheerHeartAttackCustomEntityHeatV2) {
+            for (String entry : getAdvancedConfig().sheerHeartAttackCustomEntityHeatV3) {
                 try {
                     String[] split = entry.split(":");
 
@@ -269,10 +272,10 @@ public abstract class ConfigManager {
                 }
             }
         }
-        if (getAdvancedConfig().occultChargeEffectsToBanishv2 != null)
+        if (getAdvancedConfig().occultChargeEffectsToBanishv3 != null)
         {
             MainUtil.occultChargeEffectsToBanish.clear();
-            MainUtil.occultChargeEffectsToBanish.addAll(getAdvancedConfig().occultChargeEffectsToBanishv2);
+            MainUtil.occultChargeEffectsToBanish.addAll(getAdvancedConfig().occultChargeEffectsToBanishv3);
         }
         if (getAdvancedConfig().naturalStandUserMobBlacklist != null)
         {
@@ -347,11 +350,11 @@ public abstract class ConfigManager {
 
     public static void loadStandArrowPool()
     {
-        if (getAdvancedConfig().standArrowPoolv6 != null)
+        if (getAdvancedConfig().standArrowPoolv9 != null)
         {
             ModItems.STAND_ARROW_POOL.clear();
 
-            for (String disc : getAdvancedConfig().standArrowPoolv6)
+            for (String disc : getAdvancedConfig().standArrowPoolv9)
             {
                 String[] split = disc.split(":");
 
@@ -372,11 +375,11 @@ public abstract class ConfigManager {
                 }
             }
         }
-        if (getAdvancedConfig().naturalStandUserMobPoolv9 != null)
+        if (getAdvancedConfig().naturalStandUserMobPoolv12 != null)
         {
             ModItems.STAND_ARROW_POOL_FOR_MOBS.clear();
 
-            for (String disc : getAdvancedConfig().naturalStandUserMobPoolv9)
+            for (String disc : getAdvancedConfig().naturalStandUserMobPoolv12)
             {
                 String[] split = disc.split(":");
 
@@ -397,7 +400,7 @@ public abstract class ConfigManager {
                 }
             }
         }
-        if (getAdvancedConfig().humanoidOnlyStandUserMobPoolv2 != null)
+        if (getAdvancedConfig().humanoidOnlyStandUserMobPoolv3 != null)
         {
             ModItems.STAND_ARROW_POOL_FOR_HUMANOID_MOBS.clear();
 
@@ -405,7 +408,7 @@ public abstract class ConfigManager {
                 ModItems.STAND_ARROW_POOL_FOR_HUMANOID_MOBS.addAll(ModItems.STAND_ARROW_POOL_FOR_MOBS);
             }
 
-            for (String disc : getAdvancedConfig().humanoidOnlyStandUserMobPoolv2)
+            for (String disc : getAdvancedConfig().humanoidOnlyStandUserMobPoolv3)
             {
                 String[] split = disc.split(":");
 
@@ -428,11 +431,11 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getAdvancedConfig().standArrowSecondaryPoolv7 != null)
+        if (getAdvancedConfig().standArrowSecondaryPoolv9 != null)
         {
             ModItems.STAND_ARROW_SECONDARY_STAND_POOL.clear();
 
-            for (String disc : getAdvancedConfig().standArrowSecondaryPoolv7)
+            for (String disc : getAdvancedConfig().standArrowSecondaryPoolv9)
             {
                 String[] split = disc.split(":");
 
@@ -555,6 +558,18 @@ public abstract class ConfigManager {
         AdvancedConfig.updateServer(config);
         saveAdvacedConfig();
         Roundabout.LOGGER.info("Loaded advanced config");
+    }
+    private static boolean advancedConfigDirty = false;
+
+    public static void markAdvancedConfigAsDirty(){
+        advancedConfigDirty = true;
+    }
+
+    public static void reloadAdvancedConfigCheck() {
+        if (advancedConfigDirty) {
+            loadAdvancedConfig();
+            advancedConfigDirty = false;
+        }
     }
 
     public static void validateFields(Object instance) {

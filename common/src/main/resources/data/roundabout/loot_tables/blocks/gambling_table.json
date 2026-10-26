@@ -3,6 +3,15 @@
   "pools": [
     {
       "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:block_state_property",
+          "block": "roundabout:gambling_table",
+          "properties": {
+            "part": "front_left"
+          }
+        }
+      ],
       "entries": [
         {
           "type": "minecraft:item",

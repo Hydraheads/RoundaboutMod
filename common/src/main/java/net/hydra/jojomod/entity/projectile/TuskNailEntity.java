@@ -1,6 +1,5 @@
 package net.hydra.jojomod.entity.projectile;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEnderMan;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
@@ -10,10 +9,8 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersTusk;
 import net.hydra.jojomod.util.MainUtil;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -35,12 +32,18 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Vector3f;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TuskNailEntity extends AbstractArrow {
 
+    /// trails
+    private final List<Vec3> trailPoints = new ArrayList<>();
+    private static final int MAX_TRAIL_POINTS = 10;
+    public List<Vec3> getTrailPoints() {
+        return this.trailPoints;
+    }
 
     @Override
     public void shootFromRotation(Entity $$0, float $$1, float $$2, float $$3, float $$4, float $$5) {
@@ -105,19 +108,33 @@ public class TuskNailEntity extends AbstractArrow {
 
     public void tick() {
         super.tick();
+
+
+        // for getting the trail
+        if (this.level().isClientSide()) {
+            if (!this.inGround && !this.isRemoved()) {
+                this.trailPoints.add(this.position().add(0, 0.3, 0));
+                if (this.trailPoints.size() > MAX_TRAIL_POINTS) {
+                    this.trailPoints.remove(0);
+                }
+            } else if (this.inGround) {
+                this.trailPoints.clear();
+            }
+        }
+
         this.life += 1;
-        if (this.life > 200) {
+        if (this.life > 100 || (this.getAct() == 1 && life > 7) ) {
             this.discard();
         }
         if (!this.level().isClientSide() && this.getOwner() != null && this.getOwner() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersTusk PT) {
 
-            float r = PT.getNailColor().x;
+     /*       float r = PT.getNailColor().x;
             float g = PT.getNailColor().y;
             float b = PT.getNailColor().z;
             if (this.getExtra() == GOLDEN && tickCount % 2 == 0) {r = 1; g = 1; b = 0.33F;}
             ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(r,g,b),1F),
                     this.getX(), this.getY() + this.getBbHeight() / 2, this.getZ(),
-                    0, 0, 0, 0, 0.015);
+                    0, 0, 0, 0, 0.015);*/
 
 
 
@@ -179,12 +196,17 @@ public class TuskNailEntity extends AbstractArrow {
     private TuskHoleEntity createHole(BlockHitResult bhr, Vec3 pos) {
         if (this.getOwner() instanceof LivingEntity LE) {
             TuskHoleEntity tuskHoleEntity = new TuskHoleEntity(this.level(), LE);
-            tuskHoleEntity.setPos(pos);
-            if (this.getExtra() == GOLDEN) {
-                tuskHoleEntity.setLifeSpan(150);
+            if (this.getExtra() == GOLDEN) {tuskHoleEntity.setLifeSpan(150);}
+            if(bhr != null) {
+                Direction dir = bhr.getDirection();
+                if (dir != Direction.DOWN && dir != Direction.UP) {
+                    tuskHoleEntity.setClinging(dir);
+                    pos = tuskHoleEntity.alignToDirection(pos, dir);
+                }
+                tuskHoleEntity.setPos(pos);
+                this.level().addFreshEntity(tuskHoleEntity);
+                return tuskHoleEntity;
             }
-            this.level().addFreshEntity(tuskHoleEntity);
-            return tuskHoleEntity;
         }
         return null;
     }
@@ -218,9 +240,9 @@ public class TuskNailEntity extends AbstractArrow {
                             PowersTusk.takeDeterminedKnockbackWithY2(LE, ent, knockbackStrength);
 
 
-                            if (this.getAct() == 2) {
+                            if (this.getAct() == 2 || this.getAct() == 3) {
                                 TuskHoleEntity tuskHole = createHole(null,ent.getPosition(0));
-                                if (tuskHole != null && this.getAct() == 2) {
+                                if (tuskHole != null) {
                                     if ( (this.getOwner() instanceof Player P && (P.getLastHurtMob() == null || P.getLastHurtMob() == ent)) || !(this.getOwner() instanceof Player)  ) {
                                         tuskHole.doHurtTarget(ent);
                                     }

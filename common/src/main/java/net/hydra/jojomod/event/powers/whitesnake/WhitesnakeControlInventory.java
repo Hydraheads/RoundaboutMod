@@ -16,6 +16,8 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -27,6 +29,7 @@ public final class WhitesnakeControlInventory {
     public static final int SIZE = 9;
     public static final int WEAPON_SLOT = 1;
     public static final int STORAGE_START = 2;
+    private static final ThreadLocal<ItemEntity> PICKUP_ITEM = new ThreadLocal<>();
 
     private WhitesnakeControlInventory() {
     }
@@ -68,7 +71,7 @@ public final class WhitesnakeControlInventory {
                 || stack.getItem() instanceof CommandDiscItem
                 || stack.getItem() instanceof RecordItem) return true;
         String path = BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath();
-        return path.endsWith("disc") || path.endsWith("_disc") || path.contains("disc_");
+        return path.endsWith("disc") || path.contains("disc_");
     }
 
     public static boolean canPickUp(ItemStack stack) {
@@ -86,10 +89,7 @@ public final class WhitesnakeControlInventory {
         if (isWeapon(source)) {
             if (inventory.get(WEAPON_SLOT).isEmpty()) {
                 int moved = Math.min(source.getCount(), source.getMaxStackSize());
-                ItemStack placed = source.copy();
-                placed.setCount(moved);
-                inventory.set(WEAPON_SLOT, placed);
-                source.shrink(moved);
+                inventory.set(WEAPON_SLOT, source.split(moved));
             }
         } else if (isAmmo(source) || isDisc(source)) {
             for (int i = STORAGE_START; i < SIZE && !source.isEmpty(); i++) {
@@ -105,10 +105,7 @@ public final class WhitesnakeControlInventory {
             for (int i = STORAGE_START; i < SIZE && !source.isEmpty(); i++) {
                 if (inventory.get(i).isEmpty()) {
                     int moved = Math.min(source.getCount(), source.getMaxStackSize());
-                    ItemStack placed = source.copy();
-                    placed.setCount(moved);
-                    inventory.set(i, placed);
-                    source.shrink(moved);
+                    inventory.set(i, source.split(moved));
                 }
             }
         }
@@ -118,28 +115,52 @@ public final class WhitesnakeControlInventory {
     }
 
     public static void pickupNearby(Player player) {
-        if (player.level().isClientSide()) return;
+        if (player.level().isClientSide() || getPickupItem() != null) return;
         WhitesnakeEntity stand = controlledStand(player);
         if (stand == null) return;
         for (ItemEntity item : player.level().getEntitiesOfClass(ItemEntity.class,
                 stand.getBoundingBox().inflate(1.5D, 1.0D, 1.5D),
                 entity -> entity.isAlive() && !entity.hasPickUpDelay()
                         && canPickUp(entity.getItem()))) {
-            ItemStack remaining = item.getItem().copy();
-            int inserted = insert(player, remaining);
-            if (inserted <= 0) continue;
-            stand.take(item, inserted);
-            player.level().playSound(null, stand.blockPosition(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS,
-                    0.2F, ((player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F);
-            if (remaining.isEmpty()) item.discard();
-            else item.setItem(remaining);
+            pickupItem(player, item);
         }
+    }
+
+    public static void pickupItem(Player player, ItemEntity item) {
+        if (player.level().isClientSide() || getPickupItem() != null || !item.isAlive()
+                || item.hasPickUpDelay() || !canPickUp(item.getItem())) return;
+        WhitesnakeEntity stand = controlledStand(player);
+        if (stand == null || !stand.getBoundingBox().inflate(1.5D, 1.0D, 1.5D)
+                .intersects(item.getBoundingBox())) return;
+        int before = item.getItem().getCount();
+        PICKUP_ITEM.set(item);
+        try {
+            item.playerTouch(player);
+        } finally {
+            PICKUP_ITEM.remove();
+        }
+        if (!item.isRemoved() && item.getItem().getCount() >= before) return;
+        player.level().playSound(null, stand.blockPosition(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS,
+                0.2F, ((player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F);
+    }
+
+    public static ItemEntity getPickupItem() {
+        return PICKUP_ITEM.get();
+    }
+
+    public static boolean playPickupAnimation(LivingEntity entity, Entity item, int amount) {
+        if (!(entity instanceof Player player) || getPickupItem() != item) return false;
+        WhitesnakeEntity stand = controlledStand(player);
+        if (stand == null) return false;
+        stand.take(item, amount);
+        return true;
     }
 
     public static boolean hasAmmo(Player player) {
         if (player.isCreative()) return true;
+        NonNullList<ItemStack> inventory = get(player);
         for (int i = STORAGE_START; i < SIZE; i++) {
-            ItemStack stack = get(player).get(i);
+            ItemStack stack = inventory.get(i);
             if (isAmmo(stack) && !stack.isEmpty()) return true;
         }
         return false;
@@ -147,15 +168,16 @@ public final class WhitesnakeControlInventory {
 
     public static int consumeAmmo(Player player, int amount) {
         if (player.isCreative()) return amount;
+        NonNullList<ItemStack> inventory = get(player);
         int consumed = 0;
         for (int i = STORAGE_START; i < SIZE && amount > 0; i++) {
-            ItemStack stack = get(player).get(i);
+            ItemStack stack = inventory.get(i);
             if (!isAmmo(stack)) continue;
             int removed = Math.min(stack.getCount(), amount);
             stack.shrink(removed);
             consumed += removed;
             amount -= removed;
-            if (stack.isEmpty()) get(player).set(i, ItemStack.EMPTY);
+            if (stack.isEmpty()) inventory.set(i, ItemStack.EMPTY);
         }
         if (consumed > 0) ((WhitesnakeInventoryAccess) player).roundaboutWhitesnake$syncInventory();
         return consumed;

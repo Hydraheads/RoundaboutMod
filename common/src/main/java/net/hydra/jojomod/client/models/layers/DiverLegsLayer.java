@@ -7,6 +7,7 @@ import net.hydra.jojomod.client.models.stand.renderers.DiverDownBaseRenderer;
 import net.hydra.jojomod.entity.stand.DiverDownEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersDiverDown;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -35,8 +36,10 @@ public class DiverLegsLayer<T extends LivingEntity, A extends HumanoidModel<T>> 
         this.defaultLegs = bakeDiverLegs(context, ModEntityRendererClient.DIVER_DOWN_LAYER);
         this.skinLegModels.put((byte) 0, this.defaultLegs);
         this.skinLegModels.put(DiverDownEntity.BETA_DIVER, bakeDiverLegs(context, ModEntityRendererClient.DIVER_DOWN_BETA_LAYER));
+        this.skinLegModels.put(DiverDownEntity.WORLD_DIVER, bakeDiverLegs(context, ModEntityRendererClient.DIVER_DOWN_WORLD_LAYER));
+        this.skinLegModels.put(DiverDownEntity.DIVER_DROWNED, bakeDiverLegs(context, ModEntityRendererClient.DIVER_DROWNED_LAYER));
         // In the future, follow this template to add more
-        // this.skinLegModels.put(DiverDownEntity.[MODEL_NAME], bakeDiverLegs(context, ModEntityRendererClient.[MODEL_NAME]_LAYER));
+        // this.skinLegModels.put(DiverDownEntity.MODEL_NAME, bakeDiverLegs(context, ModEntityRendererClient.MODEL_NAME_LAYER));
     }
 
     private static LegPair bakeDiverLegs(EntityRendererProvider.Context context, ModelLayerLocation layer) {
@@ -50,7 +53,7 @@ public class DiverLegsLayer<T extends LivingEntity, A extends HumanoidModel<T>> 
                        T entity, float limbSwing, float limbSwingAmount, float partialTicks,
                        float ageInTicks, float netHeadYaw, float headPitch) {
 
-        if (entity == null || entity.isInvisible()) return;
+        if (entity == null || entity.isInvisible() || !MainUtil.isHumanoid2(entity)) return;
 
         if (entity instanceof StandUser su && su.roundabout$hasDiverLegs()) {
             if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) return;

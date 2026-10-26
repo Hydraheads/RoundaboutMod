@@ -1,15 +1,12 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.client.gui.ModMenus;
-import net.hydra.jojomod.client.gui.diverdown.custom_workbench_code.*;
-import net.hydra.jojomod.client.gui.gamblingtable.GamblingTableMenu;
+import net.hydra.jojomod.menu.LyinEyesInventoryMenu;
+import net.hydra.jojomod.menu.ModMenus;
+import net.hydra.jojomod.menu.GamblingTableMenu;
+import net.hydra.jojomod.menu.diverdown.*;
 import net.minecraft.world.flag.FeatureFlags;
-import net.minecraft.world.inventory.AnvilMenu;
-import net.minecraft.world.inventory.LoomMenu;
-import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.inventory.SmithingMenu;
-import net.minecraft.world.inventory.StonecutterMenu;
+import net.minecraft.world.inventory.*;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -21,7 +18,7 @@ public final class ForgeMenus {
                 DeferredRegister.create(ForgeRegistries.MENU_TYPES, Roundabout.MOD_ID);
 
         //Diver Down Crafting Table registry
-        public static final RegistryObject<MenuType<DiverDownCraftingMenu>> DIVER_DOWN_CRAFTING =
+        public static final RegistryObject<MenuType<CraftingMenu>> DIVER_DOWN_CRAFTING =
                 MENUS.register("diver_down_crafting", () ->
                         new MenuType<>(DiverDownCraftingMenu::new, FeatureFlags.DEFAULT_FLAGS));
         //Diver Down Anvil register
@@ -40,6 +37,8 @@ public final class ForgeMenus {
                     new MenuType<>(DiverDownLoomMenu::new, FeatureFlags.DEFAULT_FLAGS));
     public static final RegistryObject<MenuType<GamblingTableMenu>> GAMBLING_TABLE =
             MENUS.register("gambling_table", () -> new MenuType<>(GamblingTableMenu::new, FeatureFlags.DEFAULT_FLAGS));
+    public static final RegistryObject<MenuType<LyinEyesInventoryMenu>> LYIN_EYES_INVENTORY =
+            MENUS.register("lyin_eyes_inventory", () -> new MenuType<>(LyinEyesInventoryMenu::new, FeatureFlags.DEFAULT_FLAGS));
 
     private ForgeMenus() {
     }
@@ -51,5 +50,6 @@ public final class ForgeMenus {
         ModMenus.DIVER_DOWN_STONECUTTER = DIVER_DOWN_STONECUTTER.get();
         ModMenus.DIVER_DOWN_LOOM = DIVER_DOWN_LOOM.get();
         ModMenus.GAMBLING_TABLE = GAMBLING_TABLE.get();
+        ModMenus.LYIN_EYES_INVENTORY = LYIN_EYES_INVENTORY.get();
     }
 }

@@ -22,11 +22,11 @@ public final class MemoryAiController {
     }
 
     public static void tick(LivingEntity entity) {
-        if (entity.level().isClientSide() || !entity.isAlive()) return;
+        if (!(entity instanceof Mob mob) || entity.level().isClientSide() || !entity.isAlive()) return;
         DiscBearer bearer = (DiscBearer) entity;
         if (!bearer.roundabout$hasMemoryDisc()) return;
         byte personality = bearer.roundabout$getMemoryPersonality();
-        if (entity instanceof Mob mob && WhitesnakeDiscUtil.hasForeignMemory(entity)) tickMob(mob, personality);
+        if (WhitesnakeDiscUtil.hasForeignMemory(entity)) tickMob(mob, personality);
     }
 
     public static void tickBlankMob(Mob mob) {

@@ -16,6 +16,7 @@ public enum Poses {
     WAMUU((byte) 7,PoseAnimations.Wamuu),
     JOTARO((byte) 8, PoseAnimations.JOTARO),
     JONATHAN((byte) 9, PoseAnimations.Jonathan),
+    ANASUI((byte) 38, PoseAnimations.Anasui),
 
     WATCH((byte) 10, PoseAnimations.watch),
     SITTING((byte) 11, PoseAnimations.SITTING),
@@ -44,6 +45,11 @@ public enum Poses {
     COLT_MODEL_RECOIL((byte) 32, FirearmFirstPersonAnimations.colt_model_recoil),
     COLT_MODEL_AIM_LEFT((byte) 33, FirearmFirstPersonAnimations.colt_model_aim_left),
     COLT_MODEL_RECOIL_LEFT((byte) 34, FirearmFirstPersonAnimations.colt_model_recoil_left),
+
+    BERETTA_MODEL_AIM((byte) 39, FirearmFirstPersonAnimations.beretta_model_aim),
+    BERETTA_MODEL_RECOIL((byte) 40, FirearmFirstPersonAnimations.beretta_model_recoil),
+    BERETTA_MODEL_AIM_LEFT((byte) 41, FirearmFirstPersonAnimations.beretta_model_aim_left),
+    BERETTA_MODEL_RECOIL_LEFT((byte) 42, FirearmFirstPersonAnimations.beretta_model_recoil_left),
 
     COWER((byte) 35, PoseAnimations.Cower),
 
@@ -79,6 +85,8 @@ public enum Poses {
             return JOTARO;
         } if (bt== JONATHAN.id){
             return JONATHAN;
+        } if (bt== ANASUI.id){
+            return ANASUI;
         } if (bt== WATCH.id){
             return WATCH;
         } if (bt== SITTING.id) {
@@ -125,6 +133,14 @@ public enum Poses {
             return COLT_MODEL_AIM_LEFT;
         } if (bt== COLT_MODEL_RECOIL_LEFT.id) {
             return COLT_MODEL_RECOIL_LEFT;
+        } if (bt== BERETTA_MODEL_AIM.id) {
+            return BERETTA_MODEL_AIM;
+        } if (bt== BERETTA_MODEL_RECOIL.id) {
+            return BERETTA_MODEL_RECOIL;
+        } if (bt== BERETTA_MODEL_AIM_LEFT.id) {
+            return BERETTA_MODEL_AIM_LEFT;
+        } if (bt== BERETTA_MODEL_RECOIL_LEFT.id) {
+            return BERETTA_MODEL_RECOIL_LEFT;
         } if (bt== COWER.id) {
             return COWER;
         } if (bt== UNCOWER.id) {
@@ -159,6 +175,8 @@ public enum Poses {
             emote = Poses.JOTARO.ad;
         } else if (Poses.JONATHAN.id == poseEmote) {
             emote = Poses.JONATHAN.ad;
+        } else if (Poses.ANASUI.id == poseEmote) {
+            emote = Poses.ANASUI.ad;
         } else if (Poses.WATCH.id == poseEmote) {
             emote = Poses.WATCH.ad;
         } else if (Poses.SITTING.id == poseEmote) {

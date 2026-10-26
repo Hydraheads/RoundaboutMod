@@ -25,7 +25,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.DoubleBlockCombiner;
+import net.minecraft.world.level.block.entity.BedBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BedPart;
@@ -86,11 +88,51 @@ public class CoffinRenderer <T extends BlockEntity> implements BlockEntityRender
 
         return LayerDefinition.create(meshdefinition, 160, 160);
     }
-    private static final ResourceLocation COFFIN = new ResourceLocation(Roundabout.MOD_ID, "textures/block/coffin1.png");
+    public static final ResourceLocation COFFIN = new ResourceLocation(Roundabout.MOD_ID, "textures/block/coffin1.png");
 
     @Override
     public void render(T $$0, float $$1, PoseStack $$2, MultiBufferSource $$3, int $$4, int $$5) {
         Level $$6 = $$0.getLevel();
+
+        if ($$6 != null) {
+            BlockState $$8 = $$0.getBlockState();
+            float $$13 = $$8.getValue(CoffinBlock.FACING).toYRot();
+
+            BedPart $$9 = $$8.hasProperty(CoffinBlock.PART) ? $$8.getValue(CoffinBlock.PART) : BedPart.HEAD;
+            DoubleBlockCombiner.NeighborCombineResult<? extends CoffinBlockEntity> neighborcombineresult = DoubleBlockCombiner.combineWithNeigbour(ModBlocks.COFFIN_BLOCK_ENTITY,
+                    CoffinBlock::getBlockType, CoffinBlock::getConnectedDirection, ChestBlock.FACING, $$8, $$6, $$0.getBlockPos(), (p_112202_, p_112203_) -> {
+                return false;
+            });
+            int i = neighborcombineresult.apply(new BrightnessCombiner<>()).get($$4);
+
+            VertexConsumer vertexConsumer = $$3.getBuffer(RenderType.entityCutout(COFFIN));
+
+            boolean isHead = $$9 == BedPart.HEAD;
+
+            float openness = 1;
+            if ($$0 instanceof CoffinBlockEntity cbe) {
+                openness = cbe.closed;
+                if (cbe.closing) {
+                    openness = Math.max(0, openness - ($$1 * 0.1F));
+                } else {
+                    openness = Math.min(1f, openness + ($$1 * 0.1F));
+                }
+                openness = 1.0f - openness;
+                openness = 1.0f - openness * openness * openness;
+
+                openness *= 0.4F;
+            }
+
+            this.renderPiece($$2, vertexConsumer, $$3, isHead ? this.right_lid : this.left_lid, isHead ? this.right_bottom : this.left_bottom, $$13, openness, i, $$5, false);
+
+        }else {
+            VertexConsumer vertexConsumer = $$3.getBuffer(RenderType.entityCutout(COFFIN));
+            float $$13 = Direction.SOUTH.toYRot();
+
+            this.renderPiece($$2, vertexConsumer, $$3, this.right_lid, this.right_bottom, $$13, 0.38f, $$4, $$5, false);
+            this.renderPiece($$2, vertexConsumer, $$3, this.left_lid, this.left_bottom, $$13, 0.38f, $$4, $$5, true);
+        }
+        /*
         boolean $$7 = $$6 != null;
         BlockState $$8 = $$7 ? $$0.getBlockState() : ModBlocks.COFFIN_BLOCK.defaultBlockState().setValue(ChestBlock.FACING, Direction.SOUTH);
         if ($$8.getBlock() instanceof CoffinBlock $$11 && $$0 instanceof CoffinBlockEntity cbe) {
@@ -123,12 +165,28 @@ public class CoffinRenderer <T extends BlockEntity> implements BlockEntityRender
                 this.render($$2, vertexConsumer, this.left_lid, this.left_bottom, openness, $$4, $$5);
             }
             $$2.popPose();
-        }
+        }*/
+        // DEFAULT OPENNESS IS 1.
     }
 
     private void render(PoseStack $$0, VertexConsumer $$1, ModelPart $$2, ModelPart $$4, float $$5, int $$6, int $$7) {
         $$2.zRot = -($$5 * (float) (Math.PI / 2));
         $$2.render($$0, $$1, $$6, $$7);
         $$4.render($$0, $$1, $$6, $$7);
+    }
+
+    private void renderPiece(PoseStack $$0, VertexConsumer $$1, MultiBufferSource $$3, ModelPart $$2, ModelPart $$4, float $$13, float $$5, int $$6, int $$7, boolean p_173549_) {
+        $$0.pushPose();
+        $$0.translate(0.5F, 0.5F, p_173549_ ? -0.5F : 0.5F);
+        $$0.mulPose(Axis.YP.rotationDegrees(-$$13));
+        $$0.translate(-0.5F, -0.5F, -0.5F);
+        $$0.mulPose(Axis.ZP.rotationDegrees(180));
+        $$0.translate(-0.5F, 0F, 0.5F);
+
+        //$$2.render($$0, $$1, p_173547_, p_173548_);
+        $$2.zRot = -($$5 * (float) (Math.PI / 2));
+        $$2.render($$0, $$1, $$6, $$7);
+        $$4.render($$0, $$1, $$6, $$7);
+        $$0.popPose();
     }
 }

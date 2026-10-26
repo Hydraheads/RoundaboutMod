@@ -132,8 +132,7 @@ public final class HallucinatoryAcidWallBlock extends BaseEntityBlock implements
         if (random.nextInt(4) != 0) return;
         BlockPos below = pos.below();
         BlockState replaced = level.getBlockState(below);
-        if (!replaced.isAir() && (!replaced.getFluidState().is(Fluids.WATER)
-                || ClientNetworking.getAppropriateConfig().whitesnakeSettings.waterWashesAwayAcid)) return;
+        if (!HallucinatoryAcidBlock.canReplaceWithAcid(replaced)) return;
         BlockState growth = defaultBlockState().setValue(FACING, state.getValue(FACING))
                 .setValue(SKIN, state.getValue(SKIN))
                 .setValue(WATERLOGGED, replaced.getFluidState().is(Fluids.WATER));

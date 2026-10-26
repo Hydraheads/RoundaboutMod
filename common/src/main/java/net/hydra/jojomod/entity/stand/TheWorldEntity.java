@@ -75,7 +75,7 @@ public class TheWorldEntity extends FollowingStandEntity {
             }
             if (((this.getSkin() == TheWorldEntity.HERITAGE_SKIN) || (this.getSkin() == TheWorldEntity.ARCADE_SKIN))
                     && animation != KICK_BARRAGE && animation != KICK_BARRAGE_WINDUP && animation != KICK_BARRAGE_END
-            &&  animation != FINAL_ATTACK &&  animation != FINAL_ATTACK_WINDUP && idle != 4) {
+            &&  animation != FINAL_ATTACK &&  animation != FINAL_ATTACK_WINDUP /*&& idle != 4*/) {
                 this.hideLegEntirely.startIfStopped(this.tickCount);
             } else {
                 this.hideLegEntirely.stop();

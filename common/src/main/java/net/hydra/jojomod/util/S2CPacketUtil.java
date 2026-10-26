@@ -485,6 +485,12 @@ public class S2CPacketUtil {
         );
     }
 
+    public static void sync_GD_arms(int User, int offhandentity, int mainhandentity, int hasoffhand, int hasmainhand, int seperatedLegsEntity, int legTicks) {
+        ModMessageEvents.sendToAll(
+                ServerToClientPackets.S2CPackets.MESSAGES.SyncGdArms.value, User, offhandentity,mainhandentity, hasoffhand, hasmainhand, seperatedLegsEntity, legTicks
+        );
+    }
+
     public static void sync_mold_duration( int dur, int entity) {
             ModMessageEvents.sendToAll(
                     ServerToClientPackets.S2CPackets.MESSAGES.SyncMoldDuration.value,
@@ -498,6 +504,15 @@ public class S2CPacketUtil {
                     SP,
                     ServerToClientPackets.S2CPackets.MESSAGES.SyncPurpleHazePods.value,
                     pods
+            );
+        }
+    }
+
+    public static void syncGamblingState(Player player, int tension, int lastSpillage, int lastQuality, boolean isHostTurn, boolean gameOver) {
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.SyncGamblingState.value,
+                    tension, lastSpillage, lastQuality, isHostTurn, gameOver
             );
         }
     }

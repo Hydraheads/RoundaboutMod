@@ -10,6 +10,7 @@ public class ModParticles {
     public static SimpleParticleType BLOOD;
     public static SimpleParticleType BLUE_BLOOD;
     public static SimpleParticleType ENDER_BLOOD;
+    public static SimpleParticleType SWEAT;
     public static SimpleParticleType SMALL_EXPLOSION;
 
     public static SimpleParticleType MELTING;
@@ -18,6 +19,7 @@ public class ModParticles {
     public static SimpleParticleType HEARTBEAT;
     public static SimpleParticleType MENACING;
     public static SimpleParticleType VACUUM;
+    public static SimpleParticleType FLASH;
     public static SimpleParticleType STAR;
     public static SimpleParticleType HEART_ATTACK_MINI;
     public static SimpleParticleType ENERGY_DISTORTION;
@@ -31,6 +33,11 @@ public class ModParticles {
     public static SimpleParticleType PUNCH_IMPACT_A;
     public static SimpleParticleType PUNCH_IMPACT_B;
     public static SimpleParticleType PUNCH_IMPACT_C;
+    public static SimpleParticleType GOLD_PUNCH_IMPACT_A;
+    public static SimpleParticleType GOLD_PUNCH_IMPACT_B;
+    public static SimpleParticleType GOLD_PUNCH_IMPACT_C;
+
+
     public static SimpleParticleType DISC_STEAL_HIT;
 
     public static SimpleParticleType PUNCH_MISS;

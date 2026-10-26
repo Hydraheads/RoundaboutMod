@@ -65,6 +65,8 @@ public class ModItems {
     public static Item MAX_STAND_DISC_TUSK;
     public static Item STAND_DISC_KILLER_QUEEN;
     public static Item MAX_STAND_DISC_KILLER_QUEEN;
+    public static Item STAND_DISC_BAD_COMPANY;
+    public static Item MAX_STAND_DISC_BAD_COMPANY;
     public static Item STAND_DISC_PLANET_WAVES;
     public static Item MAX_STAND_DISC_PLANET_WAVES;
     public static Item STAND_DISC_CINDERELLA;
@@ -78,8 +80,11 @@ public class ModItems {
     public static Item STAND_DISC_ACHTUNG;
     public static Item STAND_DISC_CENTURY_BOY;
     public static Item STAND_DISC_OH_LONESOME_ME;
+    public static Item STAND_DISC_LYIN_EYES;
     public static Item STAND_DISC_DIVER_DOWN;
     public static Item MAX_STAND_DISC_DIVER_DOWN;
+    public static Item STAND_DISC_GOLD_EXPERIENCE;
+    public static Item MAX_STAND_DISC_GOLD_EXPERIENCE;
     public static Item STAND_DISC_SILVER_CHARIOT;
     public static Item MAX_STAND_DISC_SILVER_CHARIOT;
     public static Item STAND_DISC_METALLICA;
@@ -160,6 +165,7 @@ public class ModItems {
     public static Item LUCK_UPGRADE;
     public static Item EXECUTION_UPGRADE;
     public static Item OCCULT_CHARGE;
+    public static Item TOTEM_OF_DOOM;
 
     public static Item HARPOON;
     public static Item SCISSORS;
@@ -184,6 +190,7 @@ public class ModItems {
 
     public static Item MUSIC_DISC_TORTURE_DANCE;
     public static Item MUSIC_DISC_HALLELUJAH;
+    public static Item MUSIC_DISC_CHAKA_HFTF;
     public static Item LUCKY_LIPSTICK;
 
     public static Item MEMORY_PAWN;
@@ -258,6 +265,7 @@ public class ModItems {
     public static Item CHAKA_MASK;
     public static Item DAIYA_MASK;
     public static Item DAIYA_2_MASK;
+    public static Item LAEM_MASK;
     public static Item INTERDIMENSIONAL_KEY;
 
     public static Item ANUBIS_ITEM;
@@ -275,6 +283,9 @@ public class ModItems {
 
     public static Item JACKAL_RIFLE;
     public static Item SNIPER_AMMO;
+
+    public static Item BERETTA_PISTOL;
+    public static Item PISTOL_AMMO;
 
     public static Item PAINTING_VAN_GOUGH;
     public static Item PAINTING_MONA_LISA;
@@ -331,6 +342,7 @@ public class ModItems {
         addToVisageStore(SHADOW_DIO_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(ENYA_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(CHAKA_MASK,page, characterCostExp, characterCostEmerald);
+
         page++;
         addToVisageStore(JOTARO_4_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(AYA_MASK,page, characterCostExp, characterCostEmerald);
@@ -345,6 +357,10 @@ public class ModItems {
         addToVisageStore(FEM_ANASUI_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(ANAKISS_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(GUCCIO_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(KIRA_PART_FOUR_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(KIRASAKU_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(KOSAKU_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(HAYATO_KAWAJIRI_MASK,page, characterCostExp, characterCostEmerald);
 
         page++;
         addToVisageStore(JOHNNY_MASK,page, characterCostExp, characterCostEmerald);
@@ -361,10 +377,14 @@ public class ModItems {
         addToVisageStore(VALENTINE_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(DOT_HAN_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(AVDUL_MASK,page, characterCostExp, characterCostEmerald);
+
+        page++;
         addToVisageStore(JOSUKE_PART_EIGHT_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(DAIYA_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(DAIYA_2_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(HATO_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(KIRA_PART_EIGHT_MASK, page, characterCostExp, characterCostEmerald);
+        addToVisageStore(LAEM_MASK,page, characterCostExp, characterCostEmerald);
         if (ClientNetworking.getAppropriateConfig().cinderellaSettings.enableJojoveinVisagesInShop){
             page++;
             addToVisageStore(SHIZUKA_MASK,page, characterCostExp, characterCostEmerald);

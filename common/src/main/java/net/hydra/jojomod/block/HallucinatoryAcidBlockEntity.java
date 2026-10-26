@@ -78,16 +78,16 @@ public final class HallucinatoryAcidBlockEntity extends BlockEntity {
     public static void serverTick(net.minecraft.world.level.Level level, BlockPos pos,
                                   BlockState state, HallucinatoryAcidBlockEntity acid) {
         if (!(level instanceof ServerLevel server)) return;
+        Config.WhitesnakeSettings config = ClientNetworking.getAppropriateConfig().whitesnakeSettings;
         long time = server.getGameTime();
-        if (ClientNetworking.getAppropriateConfig().whitesnakeSettings.waterWashesAwayAcid
-                && state.getFluidState().is(Fluids.WATER)) {
+        if (config.waterWashesAwayAcid && state.getFluidState().is(Fluids.WATER)) {
             server.setBlockAndUpdate(pos, Blocks.WATER.defaultBlockState());
             return;
         }
         if (acid.expiresAt == 0L) {
-            acid.expiresAt = time + ClientNetworking.getAppropriateConfig().whitesnakeSettings.hallucinatoryAcidDespawnTime;
+            acid.expiresAt = time + config.hallucinatoryAcidDespawnTime;
         }
-        if (acid.ownerWithinPauseRange(server, pos)) {
+        if (acid.ownerWithinPauseRange(server, pos, config)) {
             acid.expiresAt++;
         } else if (time >= acid.expiresAt) {
             server.removeBlock(pos, false);
@@ -95,22 +95,21 @@ public final class HallucinatoryAcidBlockEntity extends BlockEntity {
         }
 
         if (state.getBlock() instanceof HallucinatoryAcidBlock) {
-            acid.tickDissolve(server, pos);
+            acid.tickDissolve(server, pos, config);
         } else {
             acid.clearDissolveProgress(server);
         }
 
         Vec3 center = Vec3.atCenterOf(pos);
-        double range = ClientNetworking.getAppropriateConfig().whitesnakeSettings.hallucinatoryAcidEffectRange;
+        double range = config.hallucinatoryAcidEffectRange;
         for (LivingEntity living : server.getEntitiesOfClass(LivingEntity.class,
                 new AABB(pos).inflate(range), entity -> entity.isAlive()
-                        && (acid.owner == null || !acid.owner.equals(entity.getUUID())))) {
-            if (living.distanceToSqr(center) <= range * range) AcidExposureTracker.touch(living, time);
+                        && !acid.isOwner(entity) && entity.distanceToSqr(center) <= range * range)) {
+            AcidExposureTracker.touch(living, time);
         }
     }
 
-    private void tickDissolve(ServerLevel level, BlockPos acidPos) {
-        Config.WhitesnakeSettings config = ClientNetworking.getAppropriateConfig().whitesnakeSettings;
+    private void tickDissolve(ServerLevel level, BlockPos acidPos, Config.WhitesnakeSettings config) {
         if (!config.acidGriefing || config.acidDissolveSpeed <= 0.0D) {
             clearDissolveProgress(level);
             return;
@@ -130,20 +129,15 @@ public final class HallucinatoryAcidBlockEntity extends BlockEntity {
         int stages = (int) dissolveAccumulator;
         if (stages <= 0) return;
         dissolveAccumulator -= stages;
-        for (int stage = 0; stage < stages; stage++) {
-            dissolveProgress++;
-            if (dissolveProgress >= 10) {
-                level.destroyBlockProgress(dissolveCrackId(target), target, -1);
-                dissolveProgress = 0;
-                dissolveAccumulator = 0.0D;
-                dissolveTarget = Long.MIN_VALUE;
-                level.destroyBlock(target, true);
-                if (level.getBlockState(acidPos).getBlock() instanceof HallucinatoryAcidBlock acidBlock) {
-                    level.scheduleTick(acidPos, acidBlock, 2);
-                }
-                return;
+        if (stages >= 10 - dissolveProgress) {
+            clearDissolveProgress(level);
+            level.destroyBlock(target, true);
+            if (level.getBlockState(acidPos).getBlock() instanceof HallucinatoryAcidBlock acidBlock) {
+                level.scheduleTick(acidPos, acidBlock, 2);
             }
+            return;
         }
+        dissolveProgress += stages;
         level.destroyBlockProgress(dissolveCrackId(target), target, dissolveProgress - 1);
     }
 
@@ -151,10 +145,9 @@ public final class HallucinatoryAcidBlockEntity extends BlockEntity {
         return pos.hashCode() ^ 0x57534E4B;
     }
 
-    private boolean ownerWithinPauseRange(ServerLevel server, BlockPos pos) {
-        if (acidTossAlwaysExpires
-                && ClientNetworking.getAppropriateConfig().whitesnakeSettings.acidTossAlwaysExpires) return false;
-        double range = ClientNetworking.getAppropriateConfig().whitesnakeSettings.hallucinatoryAcidDespawnPauseRange;
+    private boolean ownerWithinPauseRange(ServerLevel server, BlockPos pos, Config.WhitesnakeSettings config) {
+        if (acidTossAlwaysExpires && config.acidTossAlwaysExpires) return false;
+        double range = config.hallucinatoryAcidDespawnPauseRange;
         if (owner == null || range <= 0.0D) return false;
         Entity entity = server.getEntity(owner);
         return entity != null && entity.isAlive()

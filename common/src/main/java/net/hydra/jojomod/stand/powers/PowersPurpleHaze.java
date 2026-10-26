@@ -23,9 +23,11 @@ import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.particles.HazeColorParticleOptions;
 import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.sound.ModSounds;
@@ -81,6 +83,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
             case PurpleHazeEntity.MIRROR_BATTLE -> {return Component.translatable("skins.roundabout.purple_haze.mirror_battle");}
             case PurpleHazeEntity.ROTT -> {return Component.translatable("skins.roundabout.purple_haze.rott_haze");}
             case PurpleHazeEntity.PEPPERMINT -> {return Component.translatable("skins.roundabout.purple_haze.peppermint");}
+            case PurpleHazeEntity.GREENER -> {return Component.translatable("skins.roundabout.purple_haze.greener");}
+            case PurpleHazeEntity.DISTORTION -> {return Component.translatable("skins.roundabout.purple_haze.distortion");}
+            case PurpleHazeEntity.GREEN_DSITORTION -> {return Component.translatable("skins.roundabout.purple_haze.green_distortion");}
             default -> {
                 return Component.translatable("skins.roundabout.purple_haze.anime");
             }
@@ -120,13 +125,69 @@ public class PowersPurpleHaze extends NewPunchingStand {
             } if (Level > 2 || bypass) {
                 $$1.add(PurpleHazeEntity.BLAZING_HAZE);
                 $$1.add(PurpleHazeEntity.MIRROR_BATTLE);
-            } if (Level > 3 || bypass) {
                 $$1.add(PurpleHazeEntity.ROTT);
                 $$1.add(PurpleHazeEntity.PEPPERMINT);
-            }
+            } if (Level > 3 || bypass) {
+                $$1.add(PurpleHazeEntity.DISTORTION);
+                $$1.add(PurpleHazeEntity.GREEN_DSITORTION);
+                $$1.add(PurpleHazeEntity.GREENER);
+            }/*if (((IPlayerEntity) PE).roundabout$getUnlockedBonusSkin() || bypass) {
+                $$1.add(PurpleHazeEntity.PLAGUE);}*/
         }
         return $$1;
     }
+    private static final int SECRET_SKIN_TICKS = 40;
+    private int secretSkinTicks = 0;
+    private boolean secretSkinObtained = false;
+
+    private boolean hasSecretSkinCondition() {
+        return self.hasEffect(ModEffects.DISTORTION_VIRUS)
+                && self.hasEffect(MobEffects.POISON)
+                && self.hasEffect(MobEffects.WITHER);
+    }
+    private void tickSecretSkinObtaining() {
+        if (self == null || self.level().isClientSide()) {
+            return;
+        }
+
+        if (!(self instanceof Player player)) {
+            return;
+        }
+
+
+        if (hasSecretSkinCondition()) {
+            secretSkinTicks++;
+
+            if (secretSkinTicks >= SECRET_SKIN_TICKS) {
+                obtainSecretSkin();
+            }
+        } else {
+            secretSkinTicks = 0;
+        }
+    }
+    private void obtainSecretSkin() {
+        if (this.getSelf() instanceof Player PE) {
+            Level lv = this.getSelf().level();
+            ItemStack goldDisc = ((StandUser) PE).roundabout$getStandDisc();
+            StandUser user = (StandUser) PE;
+            IPlayerEntity ipe = (IPlayerEntity) PE;
+            boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
+
+            if (!ipe.roundabout$getUnlockedBonusSkin() && !bypass) {
+                ipe.roundabout$setUnlockedBonusSkin(true);
+                playSoundIfPossible(self.level(),null, PE.getX(), PE.getY(),
+                        PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
+                sendParticlesIfPossible(self.level(),ParticleTypes.END_ROD, PE.getX(),
+                        PE.getY() + PE.getEyeHeight(), PE.getZ(),
+                        10, 0.5, 0.5, 0.5, 0.2);
+                user.roundabout$setStandSkin(PurpleHazeEntity.GREEN);
+                ((ServerPlayer) PE).displayClientMessage(
+                        Component.translatable("unlock_skin.roundabout.purple_haze_plague"), true);
+                user.roundabout$summonStand(lv, true, false);
+            }
+        }
+    }
+
     @Override
     public boolean canSummonStand() {
         return true;
@@ -227,7 +288,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                             this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
                         } else {
                             this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
-                            this.setCooldown(PowerIndex.SKILL_1_SNEAK, 10);
+                           // this.setCooldown(PowerIndex.SKILL_1_SNEAK, 10);
                         }
                         bonusLeapCount = 3;
                         bigLeap(this.getSelf(), 20, 1);
@@ -239,6 +300,30 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 }
             }
         }
+    }
+
+    @Override
+    public boolean setPowerSneakMovement(int lastMove) {
+
+        // leaping puts timestop on a cooldown
+        applyLeapCooldowns(); // borrowed from TWAndSPSharedPowers, dunno if you gonna need to put something on cooldown
+
+        this.setAttackTimeDuring(-1);
+        this.setActivePower(PowerIndex.NONE);
+        poseStand(OffsetIndex.FOLLOW);
+        animateStand(StandEntity.LEAP);
+        if (this.getSelf() instanceof Player) {
+            cancelConsumableItem(this.getSelf());
+        }
+        if (!this.getSelf().level().isClientSide()) {
+            if (Math.random() > 0.5){
+                addEXP(1);
+            }
+            ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
+            ((StandUser) this.getSelf()).roundabout$setLeapIntentionally(true);
+            playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.STAND_LEAP_EVENT, SoundSource.PLAYERS, 2.3F, (float) (0.98 + (Math.random() * 0.04)));
+        }
+        return true;
     }
 
     public void applyLeapCooldowns() {
@@ -302,6 +387,16 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
 
     @Override
+    public boolean tryPower(int move, boolean forced) {
+        if (!this.getSelf().level().isClientSide && move == PowerIndex.SNEAK_MOVEMENT && this.isClashing()){
+            ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
+            ((StandUser) this.getSelf()).roundabout$setLeapIntentionally(true);
+        }
+
+        return super.tryPower(move, forced);
+    }
+
+    @Override
     public void powerActivate(PowerContext context) {
         switch (context) {
             case SKILL_1_NORMAL, SKILL_1_GUARD -> {
@@ -316,7 +411,11 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     }else this.tryPowerPacket(PowerIndex.POWER_1);
             }
             case SKILL_1_CROUCH,SKILL_1_CROUCH_GUARD -> {
-                this.tryPowerPacket(PowerIndex.POWER_1_SNEAK);
+                if(isBarraging() && !isBarrageCharging()){
+                    clientForwardBarrage();
+                }else {
+                    this.tryPowerPacket(PowerIndex.POWER_1_SNEAK);
+                }
             }
             case SKILL_2_NORMAL,SKILL_2_CROUCH,SKILL_2_CROUCH_GUARD, SKILL_2_GUARD -> {
                 this.tryPowerPacket(PowerIndex.POWER_2);
@@ -545,7 +644,12 @@ public class PowersPurpleHaze extends NewPunchingStand {
         } else setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.SKILL_2);
 
         if (isHoldingSneak()) {
-            setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_PURPLE_HAZE, PowerIndex.SKILL_3);
+            boolean jojoveinLikeKeys = !ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpAndDashShareCooldown;
+            if (jojoveinLikeKeys){
+                setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_PURPLE_HAZE, PowerIndex.SKILL_3);
+            } else {
+                setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_PURPLE_HAZE, PowerIndex.GLOBAL_DASH);
+            }
         } else {
             if (canVault()) {
                 setSkillIcon(context, x, y, 3, StandIcons.PURPLE_HAZE_LEDGE_GRAB, PowerIndex.GLOBAL_DASH);
@@ -895,10 +999,16 @@ public class PowersPurpleHaze extends NewPunchingStand {
             }
         }
     }
-    private static final int STRANGLE_WINDUP_TICKS=30;
+    private static final int STRANGLE_WINDUP_TICKS=65;
     private static final double STRANGLE_SPEED=1.4;
-    private static final double STRANGLE_MAX_DISTANCE=8.0;
-    private static final int STRANGLE_HOLD_DURATION=80;
+    private static final double STRANGLE_MAX_DISTANCE=16.0;
+    private static final int STRANGLE_HOLD_DURATION= 80;
+    private static final int STRANGLE_GRAB_TICKS = 5;
+    private static final double STRANGLE_LIFT_HEIGHT = 0.25;
+
+    private double strangleBaseY = 0;
+    private int strangleGrabTicks = 0;
+    private boolean strangleVictimHadNoGravity = false;
 
     private int strangleTicks = -1;
     private int strangleTravelTicks = 0;
@@ -989,13 +1099,14 @@ public class PowersPurpleHaze extends NewPunchingStand {
             }
         }
     }
+    Vec2 rotation;
     private void launchStrangle(StandEntity stand) {
-        Vec2 twoVec = new Vec2((this.getSelf().getYHeadRot() % 360), this.getSelf().getXRot());
+        rotation = new Vec2((this.getSelf().getYHeadRot() % 360), this.getSelf().getXRot());
         Direction gdir = ((IGravityEntity) this.self).roundabout$getGravityDirection();
-        Vec2 twoVecGrav = RotationUtil.rotPlayerToWorld(twoVec, gdir);
+        Vec2 twoVecGrav = RotationUtil.rotPlayerToWorld(rotation, gdir);
 
-        stand.setYRot(twoVec.x);
-        stand.setXRot(twoVec.y);
+        stand.setYRot(rotation.x);
+        stand.setXRot(rotation.y);
 
         this.strangleOrigin = stand.position();
         this.strangleDirection = DamageHandler.getRotationVector(twoVecGrav.y, (float) twoVecGrav.x).normalize();
@@ -1025,6 +1136,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }*/
 
         stand.setPos(nextPos);
+        stand.setYRot(rotation.x);
+        stand.setXRot(rotation.y);
         strangleTravelTicks++;
 
         AABB sweep = stand.getBoundingBox().inflate(0.6).minmax(
@@ -1035,7 +1148,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     && !e.is(this.getSelf())
                     && le.isAlive()
                     && !le.isInvulnerable()
-                    && stand.getSensing().hasLineOfSight(le)) {
+                    && stand.getSensing().hasLineOfSight(le)
+                    && le.isAttackable() && le.isPickable() && !(le instanceof StandEntity)
+            ) {
                 beginStranglePin(stand, le);
                 return;
             }
@@ -1045,17 +1160,39 @@ public class PowersPurpleHaze extends NewPunchingStand {
             endStrangle();
         }
     }
+    private static final double STRANGLE_STAND_GAP = 0.5;      // distancia entre mob y ph
+    private static final double STRANGLE_STAND_Y_OFFSET = 0.1; // numero mas alto, sube un poco mas
 
+    private Vec3 getStrangleStandPos(LivingEntity victim) {
+        Vec3 horiz = new Vec3(strangleDirection.x, 0, strangleDirection.z);
+        if (horiz.lengthSqr() < 1.0E-4) {
+
+            horiz = new Vec3(victim.getX() - self.getX(), 0, victim.getZ() - self.getZ());
+        }
+        horiz = horiz.normalize();
+
+        double dist = victim.getBbWidth() * 0.5 + STRANGLE_STAND_GAP;
+        return new Vec3(
+                victim.getX() - horiz.x * dist,
+                strangleBaseY + STRANGLE_STAND_Y_OFFSET,
+                victim.getZ() - horiz.z * dist
+        );
+    }
     private void beginStranglePin(StandEntity stand, LivingEntity victim) {
         this.strangleVictim = victim;
         this.strangleHoldTicks = STRANGLE_HOLD_DURATION;
+        this.strangleBaseY = victim.getY();
+        this.strangleGrabTicks = 0;
+        this.strangleVictimHadNoGravity = victim.isNoGravity();
+        victim.setNoGravity(true);
 
         if (victim instanceof StandUser SU) {
             SU.roundabout$setRestrainedTicks(STRANGLE_HOLD_DURATION);
         }
 
-        stand.setPos(victim.position().add(0, victim.getBbHeight() * 0.5, 0));
-        animateStand(PurpleHazeEntity.STRANGLE_HOLD);
+
+        stand.setPos(getStrangleStandPos(victim));
+        animateStand(PurpleHazeEntity.STRANGLE_GRAB);
 
         playSoundIfPossible(self.level(), null, this.self.blockPosition(),
                 ModSounds.SOFT_AND_WET_BARRAGE_EVENT /*placeholder*/, SoundSource.PLAYERS, 1.0F, 1.0F);
@@ -1071,8 +1208,20 @@ public class PowersPurpleHaze extends NewPunchingStand {
             SU.roundabout$setRestrainedTicks(20);
         }
 
-        stand.setPos(strangleVictim.position().add(0, strangleVictim.getBbHeight() * 0.5, 0));
+        if (strangleGrabTicks < STRANGLE_GRAB_TICKS) {
+            strangleGrabTicks++;
+            if (strangleGrabTicks == STRANGLE_GRAB_TICKS) {
+                animateStand(PurpleHazeEntity.STRANGLE_HOLD);
+            }
+        }
+        double lift = STRANGLE_LIFT_HEIGHT * ((double) strangleGrabTicks / STRANGLE_GRAB_TICKS);
+
+        strangleVictim.setPos(strangleVictim.getX(), strangleBaseY + lift, strangleVictim.getZ());
         strangleVictim.setDeltaMovement(Vec3.ZERO);
+        strangleVictim.fallDistance = 0;
+        strangleVictim.hurtMarked = true;
+
+        stand.setPos(getStrangleStandPos(strangleVictim));
 
         if (strangleVictim instanceof Mob mob) {
             mob.getNavigation().stop();
@@ -1099,6 +1248,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
     private void endStrangle() {
         if (strangleVictim != null) {
+            strangleVictim.setNoGravity(strangleVictimHadNoGravity);
             if (strangleVictim instanceof Mob mob) {
                 mob.setNoAi(false);
             }
@@ -1106,6 +1256,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 SU.roundabout$setRestrainedTicks(0);
             }
         }
+        this.strangleGrabTicks = 0;
         this.strangleVictim = null;
         this.strangleTicks = -1;
         this.strangleTravelTicks = 0;
@@ -1217,6 +1368,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 field.setStandSkin(getStandSkin());
                 field.totalDuration = distortionMode ? DISTORTION_FIELD_DURATION : PURPLE_HAZE_FIELD_DURATION;
                 field.lifetime = field.totalDuration;
+                PowerTypes.copyPlaneOfExisting(self, field);
                 this.self.level().addFreshEntity(field);
             }
         }
@@ -1281,6 +1433,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
             }
 
 
+            PowerTypes.copyPlaneOfExisting(self, capsule);
+
             this.setCooldown(PowerIndex.SNEAK_ATTACK, 200);
         }
     }
@@ -1290,6 +1444,25 @@ public class PowersPurpleHaze extends NewPunchingStand {
         boolean mode = purpleHazePodDistortionMode;
         purpleHazePod = null;
         activatePurpleHazeField(landingPosition, mode);
+    }
+
+    @Override
+    public void endClash(){
+        super.endClash();
+        if (self != null && self.isAlive()) {
+            /* I dunno how the crash pod should be, this method is called in either on tie or win
+            * So if you want the pod to release in only of those (which maybe be more safe since "endClash" is
+            * called in different context, like PowerType.forcePlaneOfExisting(...) and MainUtil.onDeath(...) )
+            * Just Override the breakClash(LivingEntity winner, LivingEntity loser)
+            * or TieClash(LivingEntity user1, LivingEntity user2)
+            * */
+            if (getPods() > 0) {
+                if (!(self instanceof Player pl && pl.isCreative())) {
+                    setPods(getPods() - 1);
+                }
+                activatePurpleHazeField(self.position(), indistortionmode);
+            }
+        }
     }
 
     @Override
@@ -1309,6 +1482,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         if (!self.level().isClientSide) {
             tickPodReset();
             tickPodRecharge();
+            tickSecretSkinObtaining();
 
             if (!podsSyncedOnJoin && self instanceof ServerPlayer sp) {
                 podsSyncedOnJoin = true;
@@ -1323,6 +1497,14 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 if (self instanceof ServerPlayer pl) {
                     this.setAttackTimeDuring(0);
                     ((IPlayerEntity) pl).roundabout$SetPoseEmote((byte) 0);
+                }
+            }
+        }
+
+        if (this.getSelf().onGround()){
+            if (((StandUser)this.getSelf()).roundabout$getLeapTicks() <= -1) {
+                if (this.getAnimation() == StandEntity.LEAP) {
+                    animateStand(StandEntity.LEAP_END);
                 }
             }
         }
@@ -1358,6 +1540,23 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
         return ModSounds.PURPLE_HAZE_BARRAGE_CRY_EVENT;
     }
+
+
+    @Override
+    public void playBarrageEndNoise(float mod, Entity entity) {
+        if (!this.self.level().isClientSide()) {
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.PURPLE_HAZE_BARRAGE_FINISHER_EVENT, SoundSource.PLAYERS, 0.85F + mod, 1F);
+        }
+    }
+
+    @Override
+    public void playBarrageNoise(int hitNumber, Entity entity) {
+        if (!this.self.level().isClientSide()) {
+            if (hitNumber % 2 == 0)
+                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.PURPLE_HAZE_BARRAGE_HIT_EVENT, SoundSource.PLAYERS, 0.7F, 1/*(float) (0.9 + (Math.random() * 0.25))*/);
+        }
+    }
+
     @Override
     public SoundEvent getSoundFromByte(byte soundChoice) {
         if (soundChoice == SoundIndex.SUMMON_SOUND) {

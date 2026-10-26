@@ -4,10 +4,12 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
+import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
-import net.hydra.jojomod.client.gui.gamblingtable.GamblingTableScreen;
+import net.hydra.jojomod.client.gui.GamblingTableScreen;
+import net.hydra.jojomod.client.gui.LyinEyesInventoryScreen;
 import net.hydra.jojomod.item.FancyLighterItem;
 import net.hydra.jojomod.item.StrayCatItem;
 import net.hydra.jojomod.particles.FabricParticlesClient;
@@ -83,12 +85,17 @@ public class RoundaboutFabricClient implements ClientModInitializer {
         MenuScreens.register(FabricMenus.DIVER_DOWN_LOOM, DiverDownLoomScreen::new);
         //DD menus end
         MenuScreens.register(FabricMenus.GAMBLING_TABLE, GamblingTableScreen::new);
+        MenuScreens.register(FabricMenus.LYIN_EYES_INVENTORY, LyinEyesInventoryScreen::new);
         registerWhitesnakeClient();
         ClientPlayConnectionEvents.JOIN.register((clientPlayNetworkHandler, packetSender, minecraftClient) -> ClientNetworking.sendHandshake());
         ItemProperties.register(FabricItems.HARPOON, new ResourceLocation(Roundabout.MOD_ID,"throwing"), (itemStack, clientLevel, livingEntity, i) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == itemStack ? 1.0f : 0.0f);
         ItemProperties.register(FabricItems.STRAY_CAT_MANGA, new ResourceLocation(Roundabout.MOD_ID,"anim"), (itemStack, clientLevel, livingEntity, i) ->  !itemStack.isEmpty() ? ((StrayCatItem)(itemStack.getItem())).getCurrentPredicateValue(clientLevel, itemStack, livingEntity) : 0.0f);
         ItemProperties.register(FabricItems.STRAY_CAT_ANIME, new ResourceLocation(Roundabout.MOD_ID,"anim"), (itemStack, clientLevel, livingEntity, i) ->  !itemStack.isEmpty() ? ((StrayCatItem)(itemStack.getItem())).getCurrentPredicateValue(clientLevel, itemStack, livingEntity) : 0.0f);
         ItemProperties.register(FabricItems.FANCY_LIGHTER, new ResourceLocation(Roundabout.MOD_ID,"islit"), (itemStack, clientLevel, livingEntity, i) ->  !itemStack.isEmpty() ? ((FancyLighterItem)(itemStack.getItem())).getCurrentPredicateValue(clientLevel, itemStack) : 0.0f);
+
+        BuiltinItemRendererRegistry.INSTANCE.register(ModBlocks.HAND_BLOCK, DynamicItemRendering.INSTANCE);
+        BuiltinItemRendererRegistry.INSTANCE.register(ModBlocks.COFFIN_BLOCK, DynamicItemRendering.INSTANCE);
+
         ClientClass.init();
     }
 

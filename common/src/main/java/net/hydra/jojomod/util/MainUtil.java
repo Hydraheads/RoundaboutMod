@@ -14,23 +14,23 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.gui.FogInventoryMenu;
 import net.hydra.jojomod.client.gui.PowerInventoryMenu;
+import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.KingCrimsonProjectionEntity;
 import net.hydra.jojomod.entity.ParallelChestEntity;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.corpses.FallenPhantom;
+import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.paintings.RoundaboutPainting;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundPathfindingStandAttackEntity;
+import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
-import net.hydra.jojomod.entity.stand.PurpleHazeEntity;
-import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
-import net.hydra.jojomod.entity.stand.WhitesnakeEntity;
+import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
@@ -839,6 +839,8 @@ public class MainUtil {
     public static final TargetingConditions followTargetting = TargetingConditions.forCombat().range(50.0);
     public static final TargetingConditions plsWorkTargetting = TargetingConditions.forCombat().range(20.0)
             .ignoreInvisibilityTesting();
+    public static final TargetingConditions plsWorkTargetting2 = TargetingConditions.forNonCombat().range(40.0)
+            .ignoreInvisibilityTesting().ignoreLineOfSight();
 
     public static double getWorthyOdds(Mob mob) {
         if ((isBossMob(mob)
@@ -1242,7 +1244,7 @@ public class MainUtil {
 
     public static void extractDiscData(LivingEntity ent, StandDiscItem SD, ItemStack stack) {
         StandUser user = ((StandUser) ent);
-        CompoundTag $$4 = stack.getTagElement("Memory");
+        CompoundTag $$4 = stack.getOrCreateTagElement("Memory");
         if ($$4 != null) {
             ((StandUser) ent).roundabout$getStandPowers().readAdditionalSaveData($$4);
             if (SD instanceof MaxStandDiscItem) {
@@ -1593,6 +1595,7 @@ public class MainUtil {
         playerNames.put("That_Brit_Trash", UUID.fromString("f861fb4c-6cfc-4f19-82ee-65cc8edd2c30"));
         playerNames.put("Talonios1", UUID.fromString("9b42b60e-731b-4942-8a09-24307173a1ac"));
         playerNames.put("GenericName", UUID.fromString("e16801d1-d6c4-495c-9cc9-024645cc13a5"));
+        playerNames.put("88superguy", UUID.fromString("3d19d796-6064-4ae9-8903-48908bfdfa63"));
         playerNames.put("ValidFish", UUID.fromString("d9db8b8b-c14e-4d22-bad7-c595140c151a"));
         playerNames.put("Blugnib", UUID.fromString("4eefa46e-eaf0-4170-8ef4-307e8745f2f7"));
         playerNames.put("DarkkJon", UUID.fromString("e3cf5756-2795-4256-92cd-a1c2284865dc"));
@@ -1681,6 +1684,147 @@ public class MainUtil {
         }
     }
 
+    //this needs to exist because minecraft code decided to write separate data storage functions
+    //for bucketable fish instead of hooking to the same one.
+    public static CompoundTag saveMobData(CompoundTag tag, IMob mob){
+        tag.putBoolean("roundabout.isWorthy", mob.roundabout$isWorthy());
+        tag.putBoolean("roundabout.isNaturalStandUser", mob.roundabout$getIsNaturalStandUser());
+        tag.putBoolean("roundabout.isBred", mob.roundabout$getIsBred());
+        CompoundTag compoundtag = tag.getCompound("roundabout");
+        compoundtag.putBoolean("vampire",mob.roundabout$isVampire());
+        compoundtag.putBoolean("stolenMemory", mob.rdbt$getStolen());
+
+        tag.put("roundabout",compoundtag);
+        return tag;
+    }
+
+
+    public static void loadMobData(CompoundTag tag, IMob mob){
+        mob.roundabout$setWorthy(tag.getBoolean("roundabout.isWorthy"));
+        mob.roundabout$setIsNaturalStandUser(tag.getBoolean("roundabout.isNaturalStandUser"));
+        mob.roundabout$setIsBred(tag.getBoolean("roundabout.isBred"));
+        CompoundTag compoundtag = tag.getCompound("roundabout");
+        mob.roundabout$setVampire(compoundtag.getBoolean("vampire"));
+        if (compoundtag.contains("stolenMemory")) {
+            mob.rdbt$setStolen(compoundtag.getBoolean("stolenMemory"));
+        }
+    }
+
+    public static CompoundTag saveEntityData(CompoundTag tag, IEntityAndData mob){
+        tag.putBoolean("canMobGrab",mob.rdbt$returnPickup());
+        tag.putInt("inForeignWorld",mob.rdbt$getForeignWorldTicks());
+        tag.putByte("nativeToWorld",mob.rdbt$getNativeTo());
+        tag.putByte("originWorld",mob.rdbt$getOriginWorld());
+        if (mob.rdbt$getNativeCopy() != null){
+            tag.putUUID("nativeToWorldCopy",mob.rdbt$getNativeCopy());
+        }
+        return tag;
+    }
+
+
+    public static void loadEntityData(CompoundTag tag, IEntityAndData mob){
+        if (tag.contains("canMobGrab")) {
+            mob.rdbt$setReturnPickup(tag.getBoolean("canMobGrab"));
+        } if (tag.contains("inForeignWorld")) {
+            mob.rdbt$setForeignWorldTicks(tag.getInt("inForeignWorld"));
+        } if (tag.contains("nativeToWorld")) {
+            mob.rdbt$setNativeTo(tag.getByte("nativeToWorld"));
+        } if (tag.hasUUID("nativeToWorldCopy")) {
+            mob.rdbt$setNativeCopy(tag.getUUID("nativeToWorldCopy"));
+        } if (tag.hasUUID("originWorld")) {
+            mob.rdbt$setOriginWorld(tag.getByte("originWorld"));
+        }
+    }
+
+    public static void loadLivingData(CompoundTag tag, StandUser mob, LivingEntity living){
+        if (tag.contains("roundabout.StandDisc", 10)) {
+            CompoundTag compoundtag = tag.getCompound("roundabout.StandDisc");
+            ItemStack itemstack = ItemStack.of(compoundtag);
+            if (!itemstack.isEmpty() && itemstack.getItem() instanceof StandDiscItem SD) {
+                mob.roundabout$setStandDisc(itemstack);
+                MainUtil.extractDiscData((living), SD, itemstack);
+            }
+        }
+        if (tag.contains("roundabout.StandRejectionDisc", 10)) {
+            CompoundTag compoundtag = tag.getCompound("roundabout.StandRejectionDisc");
+            ItemStack itemstack = ItemStack.of(compoundtag);
+            if (!itemstack.isEmpty() && itemstack.getItem() instanceof StandDiscItem SD) {
+                mob.roundabout$setRejectionStandDisc(itemstack);
+                SD.generateStandPowerRejection(living);
+            }
+        }
+
+        CompoundTag compoundtag = tag.getCompound("roundabout");
+        mob.roundabout$setBubbleEncased(compoundtag.getByte("bubbleEncased"));
+        mob.roundabout$setHeat(compoundtag.getByte("heat"));
+        if (compoundtag.contains("sealedTicks")) {
+            mob.roundabout$setSealedTicksAgnostic(compoundtag.getInt("sealedTicks"));
+        }
+        if (compoundtag.contains("fleshBud")) {
+            mob.rdbt$setFleshBud(compoundtag.getUUID("fleshBud"));
+        }
+
+        mob.rdbt$setExperienceTaken(compoundtag.getBoolean("expTaken"));
+        StandPowers powers = mob.roundabout$getStandPowers();
+        List<CooldownInstance> CDCopy = new ArrayList<>(mob.rdbt$getPowerCooldowns()) {
+        };
+        if (!CDCopy.isEmpty()) {
+            for (byte i = 0; i < CDCopy.size(); i++) {
+                CooldownInstance instance = CDCopy.get(i);
+                if (compoundtag.contains("cooldown_" + i)) {
+                    instance.time = compoundtag.getInt("cooldown_" + i);
+                    instance.maxTime = compoundtag.getInt("cooldown_" + i + "_max");
+                }
+            }
+        }
+    }
+    public static CompoundTag saveLivingData(CompoundTag tag, StandUser mob, LivingEntity liv){
+        if (!mob.roundabout$getStandDisc().isEmpty() || tag.contains("roundabout.StandDisc", 10)) {
+            ItemStack discy = mob.roundabout$getStandDisc();
+            CompoundTag compoundtag = new CompoundTag();
+            tag.put("roundabout.StandDisc",
+                    MainUtil.saveToDiscData(liv, discy).save(compoundtag));
+        }
+        if ((mob.roundabout$getRejectionStandDisc() != null && !mob.roundabout$getRejectionStandDisc().isEmpty())
+                || tag.contains("roundabout.StandRejectionDisc", 10)) {
+            CompoundTag compoundtag = new CompoundTag();
+            if (mob.roundabout$getRejectionStandDisc() == null) {
+                mob.roundabout$setRejectionStandDisc(ItemStack.EMPTY);
+            }
+            tag.put("roundabout.StandRejectionDisc", mob.roundabout$getRejectionStandDisc().save(compoundtag));
+        }
+
+        CompoundTag compoundtag = tag.getCompound("roundabout");
+        compoundtag.putByte("bubbleEncased", mob.roundabout$getBubbleEncased());
+        compoundtag.putInt("heat", mob.roundabout$getHeat());
+        compoundtag.putBoolean("expTaken", mob.rdbt$getExperienceTaken());
+
+        if (mob.rdbt$getFleshBud() != null) {
+            compoundtag.putUUID("fleshBud", mob.rdbt$getFleshBud());
+        } else {
+            if (compoundtag.contains("fleshBud")) {
+                compoundtag.remove("fleshBud");
+            }
+        }
+
+        StandPowers powers = mob.roundabout$getStandPowers();
+        List<CooldownInstance> CDCopy = new ArrayList<>(mob.rdbt$getPowerCooldowns()) {
+        };
+        if (!CDCopy.isEmpty()) {
+            for (byte i = 0; i < CDCopy.size(); i++) {
+                CooldownInstance ci = CDCopy.get(i);
+                compoundtag.putInt("cooldown_" + i, ci.time);
+                compoundtag.putInt("cooldown_" + i + "_max", ci.maxTime);
+            }
+        }
+        compoundtag.putInt("sealedTicks", mob.roundabout$getSealedTicks());
+
+        tag.put("roundabout", compoundtag);
+
+        return tag;
+    }
+
+
     public static void updateNailColor(Player player, float red, float green, float blue) {
         if (player != null) {
             if (((StandUser) player).roundabout$getStandPowers() instanceof PowersTusk PT) {
@@ -1698,6 +1842,12 @@ public class MainUtil {
             Player player, int entityInt,
             double velocityX, double velocityY, double velocityZ) {
         Entity entity = player.level().getEntity(entityInt);
+        StandPowers powers = ((StandUser)player).roundabout$getStandPowers();
+        if (!(powers instanceof PowersManhattanTransfer pmt && entity instanceof ManhattanTransferEntity)) {
+            if (!powers.isPiloting() || entity == null || entity != powers.getPilotingStand()) {
+                return;
+            }
+        }
         if (entity != null) {
             if (containsInvalidValues(getX, getY, getZ, getYRot, getXRot)
                     || !Double.isFinite(velocityX) || !Double.isFinite(velocityY) || !Double.isFinite(velocityZ)) {
@@ -2257,6 +2407,16 @@ public class MainUtil {
         return false;
     }
 
+    // Claim check that checks for interactions specifically
+    public static boolean canInteractWithBlock(Player player, BlockPos pos) {
+        if (!ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims
+                || !MainUtil.getIsGamemodeApproriateForGrief(player)) {
+            return true;
+        }
+
+        return player.level().mayInteract(player, pos);
+    }
+
     // Couldn't find better wording but this tests if you're on claimed land that
     // isn't yours
     // It doesn't need the block hit to be on a claim
@@ -2429,6 +2589,8 @@ public class MainUtil {
                                 &&
                                 !PowerTypes.isExistentiallyElsewhereTogether($$1, value))
                         && !(value instanceof FallenMob)
+                        && !(value instanceof D4CCloneEntity)
+                        && (HeatUtil.getHeat(value) == 0)
                         && (MainUtil.isActuallyALivingEntityNoCap(value))) {
                     double distance = value.position().distanceTo($$1.position());
                     if (distance <= maxDistance && ((StandUser) value).roundabout$getLocacacaCurse() < 0) {
@@ -2611,6 +2773,8 @@ public class MainUtil {
                 || sauce.is(ModDamageTypes.DISINTEGRATION)
                 || sauce.is(ModDamageTypes.KQ_EXPLOSION)
                 || sauce.is(ModDamageTypes.INFINITE_SPIN)
+                || sauce.is(ModDamageTypes.HAZE_VIRUS)
+                || sauce.is(ModDamageTypes.DISTORTION_VIRUS)
                 || sauce.is(ModDamageTypes.BITES_THE_DUST)){
             return true;
         }
@@ -2766,6 +2930,7 @@ public class MainUtil {
     public static boolean isSpecialEffect(MobEffect value) {
         return value.equals(ModEffects.BLEED) || value.equals(ModEffects.FACELESS)
                 || value.equals(ModEffects.BANISH) || value.equals(ModEffects.WARDING) || value.equals(ModEffects.HEX)
+                || value.equals(ModEffects.DOOMED) || value.equals(ModEffects.DOOM_IMMUNITY)
                 || value.equals(ModEffects.SWITCH) || value.equals(ModEffects.STAND_VIRUS) ||
                 value.equals(ModEffects.IMPRINTING) || value.equals(ModEffects.SWAPPED) ||
                 value.equals(ModEffects.SINGE)
@@ -2778,6 +2943,7 @@ public class MainUtil {
         return value.equals(ModEffects.BLEED) || value.equals(ModEffects.CAPTURING_LOVE)
                 || value.equals(ModEffects.FACELESS)
                 || value.equals(ModEffects.BANISH) || value.equals(ModEffects.WARDING) || value.equals(ModEffects.HEX)
+                || value.equals(ModEffects.DOOMED)
                 || value.equals(ModEffects.SWITCH) || value.equals(ModEffects.MELTING) ||
                 value.equals(ModEffects.IMPRINTING) || value.equals(ModEffects.SWAPPED)
                 || value.equals(ModEffects.STAND_MELTING) ||
@@ -3988,7 +4154,7 @@ public class MainUtil {
             StandEntity SE = ((StandUser) player).roundabout$getStand();
             Entity target = player.level().getEntity(data);
             if (target != null) {
-                if (!isCollidingWithAnyBlock(target)) {
+                if (!isCollidingWithAnyBlock(target) || (target instanceof TuskHoleEntity) ) {
                     ((StandUser) player).roundabout$getStandPowers().setPiloting(data);
                 }
             } else {
@@ -4584,6 +4750,30 @@ public class MainUtil {
             }
         }
 
+        return new ResourceLocation(Roundabout.MOD_ID, "textures/stand/green_day/part_four_green_day.png");
+    }
+
+    /**This one is for when you don't want visages/modifications to the skin*/
+    public static ResourceLocation getPlayerSkin(Player player) {
+        if (player instanceof AbstractClientPlayer lpe) {
+            IPlayerEntity pl = ((IPlayerEntity) player);
+            if (player.getGameProfile() != null) {
+                if (!player.getGameProfile().isComplete()) {
+                    return new ResourceLocation(Roundabout.MOD_ID, "textures/stand/green_day/part_four_green_day.png");
+                } else {
+                    final Minecraft minecraft = Minecraft.getInstance();
+                    SkinManager skinManager = minecraft.getSkinManager();
+                    final Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> loadSkinFromCache = skinManager
+                            .getInsecureSkinInformation(player.getGameProfile()); // returned map may or may not be typed
+                    if (loadSkinFromCache.containsKey(MinecraftProfileTexture.Type.SKIN)) {
+                        return skinManager.registerTexture(loadSkinFromCache.get(MinecraftProfileTexture.Type.SKIN),
+                                MinecraftProfileTexture.Type.SKIN);
+                    } else {
+                        return DefaultPlayerSkin.getDefaultSkin(player.getGameProfile().getId());
+                    }
+                }
+            }
+        }
         return new ResourceLocation(Roundabout.MOD_ID, "textures/stand/green_day/part_four_green_day.png");
     }
 

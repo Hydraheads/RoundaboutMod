@@ -26,9 +26,12 @@ import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+
+import javax.annotation.Nullable;
 
 public class GlaiveItem extends SwordItem {
     /**Glaives inspired by the Harken Scythe mod, with sound design from the Hexxit modpack.
@@ -45,7 +48,9 @@ public class GlaiveItem extends SwordItem {
         super($$0, $$1, $$2, $$3);
         this.chargeDamage =chargeDamage;
     }
-
+    public int getBurnTime(ItemStack stack, @Nullable RecipeType<?> recipeType) {
+        return 200;
+    }
 
 
     @Override

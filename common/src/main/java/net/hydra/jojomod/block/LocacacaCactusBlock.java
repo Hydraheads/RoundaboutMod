@@ -24,6 +24,9 @@ public class LocacacaCactusBlock extends CactusBlock {
     @SuppressWarnings("deprecation")
     @Override
     public boolean canSurvive(BlockState $$0, LevelReader $$1, BlockPos $$2) {
+        if ($$0.is(ModBlocks.INVISIBLOCK)){
+            return true;
+        }
         for (Direction $$3 : Direction.Plane.HORIZONTAL) {
             BlockState $$4 = $$1.getBlockState($$2.relative($$3));
             if ($$4.isSolid() || $$1.getFluidState($$2.relative($$3)).is(FluidTags.LAVA)) {

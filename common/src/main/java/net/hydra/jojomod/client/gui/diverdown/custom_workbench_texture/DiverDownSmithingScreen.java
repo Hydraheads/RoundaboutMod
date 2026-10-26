@@ -14,6 +14,9 @@ public class DiverDownSmithingScreen extends SmithingScreen {
 
     public DiverDownSmithingScreen(SmithingMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
+        // the entire "costs too much" etc. etc. text relies on renderlabels so the easiest solution is to literally just shove this entire text offscreen.
+        this.inventoryLabelY = 10000;
+        this.titleLabelY = 10000;
     }
 
     @Override
@@ -26,7 +29,7 @@ public class DiverDownSmithingScreen extends SmithingScreen {
 
         graphics.blit(TEXTURE, x + 59, y + 20, 0, this.imageHeight + (this.menu.getSlot(0).hasItem() ? 0 : 16), 110, 16);
         if ((this.menu.getSlot(0).hasItem() || this.menu.getSlot(1).hasItem()) && !this.menu.getSlot(2).hasItem()) {
-            graphics.blit(TEXTURE, x + 99, y + 45, this.imageWidth, 0, 28, 21);
+            graphics.blit(TEXTURE, x + 66, y + 46, this.imageWidth, 0, 28, 21);
         }
     }
 }

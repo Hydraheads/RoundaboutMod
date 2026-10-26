@@ -220,10 +220,13 @@ public class MagiciansRedModel<T extends MagiciansRedEntity> extends StandModel<
 
         this.animate(pEntity.barrageHurtAnimationState, StandAnimations.BARRAGEDAMAGE, pAgeInTicks, 2.5f);
         this.animate(pEntity.brokenBlockAnimationState, StandAnimations.BLOCKBREAK, pAgeInTicks, 1.8f);
+        animateIdles(pEntity, pAgeInTicks);
+        /*
         this.animate(pEntity.idleAnimationState, StandAnimations.STAND_IDLE_FLOAT, pAgeInTicks, 1f);
         this.animate(pEntity.idleAnimationState2, StandAnimations.IDLE_2, pAgeInTicks, 1f);
         this.animate(pEntity.idleAnimationState3, StandAnimations.FLOATY_IDLE, pAgeInTicks, 1f);
         this.animate(pEntity.idleAnimationState4, StandAnimations.STAR_PLATINUM_IDLE, pAgeInTicks, 1f);
+        */
         this.animate(pEntity.blockAnimationState, StandAnimations.BLOCK, pAgeInTicks, 1f);
     }
 

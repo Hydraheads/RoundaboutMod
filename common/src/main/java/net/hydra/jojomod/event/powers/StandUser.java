@@ -39,6 +39,8 @@ public interface StandUser {
     boolean roundabout$getUniqueStandModeToggle();
     void roundabout$setUniqueStandModeToggle(boolean mode);
     boolean roundabout$skipFriction();
+    void rdbt$onSyncedDataUpdated2(EntityDataAccessor<?> $$0);
+    void rdbt$refreshStand();
     void roundabout$setEyeSightTaken(SoftAndWetPlunderBubbleEntity bubble);
     SoftAndWetPlunderBubbleEntity roundabout$getEyeSightTaken();
     LivingEntity roundabout$getEmulator();
@@ -143,6 +145,8 @@ public interface StandUser {
     void roundabout$setWhiteAlbumVanishTicks(int set);
     int roundabout$getOasisVanishTicks();
     void roundabout$setOasisVanishTicks(int set);
+    int roundabout$getDiverDownVanishTicks();
+    void roundabout$setDiverDownVanishTicks(int set);
 
     int getJumpImmunityTicks();
 
@@ -170,6 +174,7 @@ public interface StandUser {
 
     void roundabout$sealStand(int ticks);
 
+    void roundabout$setSealedTicksAgnostic(int ticks);
     void roundabout$setSealedTicks(int ticks);
     void roundabout$setSealedTicks(int ticks, int maxticks);
     int roundabout$getSealedTicks();
@@ -279,6 +284,7 @@ public interface StandUser {
 
     void roundabout$UniversalTick();
     void roundabout$startAutoSpinAttack(int p_204080_);
+    void roundabout$stopAutoSpinAttack();
 
     void roundabout$setThrower(LivingEntity thrower);
     void roundabout$setZappedToID(int bound);
@@ -310,6 +316,10 @@ public interface StandUser {
     void roundabout$setIdleTime(int roundaboutIdleTime);
     void roundabout$setLocacacaCurse(byte locacacaCurse);
     byte roundabout$getLocacacaCurse();
+
+    /**Slack Babbath*/
+    void roundabout$setGrabbedSoul(boolean grabbedSoul);
+    boolean roundabout$getGrabbedSoul();
 
     byte roundabout$getStandSkin();
     byte roundabout$getLastStandSkin();
@@ -393,9 +403,12 @@ public interface StandUser {
     boolean rdbt$isForceCrawl();
     int rdbt$getCrawlTicks();
 
-    PowersKillerQueen rdbt$GetBtdPlantedUser();
-    void rdbt$SetBtdPlantedUser(PowersKillerQueen e);
+    @Nullable PowersKillerQueen rdbt$GetBtdPlantedUser();
+    void rdbt$SetBtdPlantedUser(@Nullable PowersKillerQueen e);
     boolean rdbt$interceptIncomingHarmIfBTD(DamageSource source);
+
+    @Nullable PowersDiverDown rdbt$getRibcagePlacer();
+    void rdbt$setRibcagePlacer(@Nullable PowersDiverDown e);
 
     List<CooldownInstance> rdbt$initPowerCooldowns();
     List<CooldownInstance> rdbt$getPowerCooldowns();
@@ -410,6 +423,8 @@ public interface StandUser {
     void roundabout$clearDisguise();
     boolean roundabout$hasDiverLegs();
     void roundabout$setDiverLegs(boolean legs);
+    boolean roundabout$hasDiverArms();
+    void roundabout$setDiverArms(boolean arms);
     boolean roundabout$hasRibcageTrap();
     void roundabout$setRibcageTrap(boolean trap);
     boolean roundabout$hasSpringLegs();

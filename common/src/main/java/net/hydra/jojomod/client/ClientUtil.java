@@ -7,6 +7,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
+import net.hydra.jojomod.block.GamblingTableBlockEntity;
 import net.hydra.jojomod.client.gui.*;
 import net.hydra.jojomod.client.gui.diverdown.*;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
@@ -24,6 +25,8 @@ import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.entity.substand.MoldSporesEntity;
+import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
+import net.hydra.jojomod.entity.substand.SeperatedLegsEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -35,11 +38,14 @@ import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.entity.TickableSoundInstances.BowlerHatFlyingSound;
+import net.hydra.jojomod.menu.GamblingTableMenu;
+import net.hydra.jojomod.menu.gambling_games.CoinDropGame;
 import net.hydra.jojomod.platform.ClientServices;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.presets.TWAndSPSharedPowers;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.minecraft.client.gui.Font;
@@ -454,12 +460,25 @@ public class ClientUtil {
         ent.setYRot(lerpYRot);
         ent.setYBodyRot(lerpYRot);
         ent.setYHeadRot(lerpYRot);
-
         LivingEntity user = ent.getUser();
         if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersBlackSabbath PBS) {
                 PBS.transformSabbath(ent);
         }
     }
+
+    public static void preRenderGrabbedSoul(BlackSabbathEntity ent, StandEntity se, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6) {
+        float lerpYRot = (float) ((ILivingEntityAccess)ent).roundabout$getLerpYRot();
+        ent.yRotO = lerpYRot;
+        ent.setYRot(lerpYRot);
+        ent.setYBodyRot(lerpYRot);
+        ent.setYHeadRot(lerpYRot);
+        LivingEntity user = ent.getUser();
+        LivingEntity user2 = ent.getUser();
+        if (user != null){
+            ent.travelAheadSoulRender($$4, se);
+        }
+    }
+
     public static void preRenderCrossfire(CrossfireHurricaneEntity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6){
             if (((TimeStop)ent.level()).inTimeStopRange(ent)){
                 $$4 = 0;
@@ -1047,9 +1066,42 @@ public class ClientUtil {
                     if (entity instanceof MoldSporesEntity mse){
                         mse.lifetime = data;
                     }
+                }else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncGdArms.value)) {;
+                    int user = (int) vargs[0];
+                    int offhandent = (int) vargs[1];
+                    int mainhandent = (int) vargs[2];
+                    boolean hasoffhand = ((int) vargs[3]) == 1;
+                    boolean hasmainhand = ((int) vargs[4]) == 1;
+                    int legsent = (int) vargs[5];
+                    Entity userent = player.level().getEntity(user);
+                    if(((StandUser)userent).roundabout$getStandPowers() instanceof PowersGreenDay PGD){
+
+                        PGD.Main_arm = (SeperatedArmEntity) player.level().getEntity(mainhandent);
+                        PGD.Off_hand_entity = (SeperatedArmEntity) player.level().getEntity(offhandent);
+                        PGD.HasMainArm = hasmainhand;
+                        PGD.HasOffHand = hasoffhand;
+                        PGD.legGoneTicks = ((int) vargs[6]);
+                        PGD.currentlegs = (SeperatedLegsEntity) player.level().getEntity(legsent);
+                    }
+
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncPurpleHazePods.value)) {
                     byte pods = (byte) vargs[0];
                     ((IPlayerEntity) player).roundabout$setPurpleHazePods(pods);
+                }
+
+                else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncGamblingState.value)) {
+                    int tension = (int) vargs[0];
+                    int lastSpillage = (int) vargs[1];
+                    int lastQuality = (int) vargs[2];
+                    boolean isHostTurn = (boolean) vargs[3];
+                    boolean gameOver = (boolean) vargs[4];
+                    if (Minecraft.getInstance().player != null &&
+                            Minecraft.getInstance().player.containerMenu instanceof GamblingTableMenu menu) {
+                        GamblingTableBlockEntity table = menu.getTable();
+                        if (table != null && table.getActiveGame() instanceof CoinDropGame coinGame) {
+                            coinGame.setClientState(tension, lastSpillage, lastQuality, isHostTurn, gameOver);
+                        }
+                    }
                 }
 
                 // theoretical deregister dynamic worlds packet
@@ -1718,6 +1770,8 @@ public class ClientUtil {
     public static void openMemoryReadingScreen(ItemStack stack, InteractionHand hand){
         Minecraft.getInstance().setScreen(new MemoryReadingScreen(stack, hand));
     }
+    public static void openTroopSelectionScreen(){Minecraft.getInstance().setScreen(new TroopSelectScreen());}
+    public static void openTroopTacticsScreen(){Minecraft.getInstance().setScreen(new TroopTacticsScreen());}
 
     //Diver Down UI start
     public static void openWorkbenchSelect() {Minecraft.getInstance().setScreen(new DiverDownWorkbenchSelect());}
@@ -2184,6 +2238,10 @@ public class ClientUtil {
             }
         } else if (context == PacketDataIndex.BITES_THE_DUST_COMBAT){
             bitesTheDustTicker = 0;
+        } else if (context == PacketDataIndex.DONT_SPAM_TIME_STOP){
+            if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof TWAndSPSharedPowers TW) {
+                TW.TSFORCE = false;
+            }
         } else if (context == PacketDataIndex.S2C_SOFT){
             if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
                 PW.setGoBeyondChargeTicks(PW.goBeyondChargeTicks+PW.getGoBeyondUseTicks2());
@@ -2540,6 +2598,8 @@ public class ClientUtil {
                     ModStrayModels.FirstPersonColtRevolverModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
                 } else if (item instanceof TommyGunItem) {
                     ModStrayModels.FirstPersonTommyGunModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
+                } else if (item instanceof BerettaPistolItem) {
+                    ModStrayModels.FirstPersonBerettaPistolModel.render(cameraEnt, cameraEnt.tickCount+$$4, stack, source, light);
                 }
 
                 stack.popPose();

@@ -216,6 +216,9 @@ public class BeachSabbathModel<T extends BeachSabbathEntity> extends StandModel<
         this.animate(pEntity.burningDive, BlackSabbathAnimations.burningDive, pAgeInTicks, 1f);
         this.animate(pEntity.walk, BlackSabbathAnimations.ArmedWalk, pAgeInTicks, 1f);
         this.animate(pEntity.stando, BlackSabbathAnimations.ArmedStand, pAgeInTicks, 1f);
+        this.animate(pEntity.strafeWalk, BlackSabbathAnimations.StrafeWalk, pAgeInTicks, 1f);
+        this.animate(pEntity.strafeEmerge, BlackSabbathAnimations.StrafeEmerge, pAgeInTicks, 1f);
+        this.animate(pEntity.grabOne, BlackSabbathAnimations.SoulGrabOne, pAgeInTicks, 1f);
 	}
 
 	@Override

@@ -12,6 +12,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.*;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.spongepowered.asm.mixin.Mixin;
@@ -71,13 +72,16 @@ public abstract class AccessFireworkRocket implements IFireworkRocketAccess {
                 }
             } else {
                 FireworkRocketEntity $$4 = new FireworkRocketEntity(ME.level(), ii, ME, ME.getX(), ME.getEyeY(), ME.getZ(), true);
-                $$4.setRemainingFireTicks(ME.fireTicksPrj);
+                if(!ME.getHeldItemManhattan().is(Items.FIREWORK_ROCKET)) {
+                    $$4.setRemainingFireTicks(ME.fireTicksPrj);
+                }
                 $$4.setOwner(ME.getUser());
                 $$4.shootFromRotation(ME, ME.shootRotationXHattan, ME.shootRotationYHattan, 0.0F, 1.4F, 0.0F);
                 ((IFireworkRocketAccess) $$4).roundabout$SetFireworkRemainingLifeTicks(this.roundabout$GetFireworkRemainingLifeTicks());
                 ((IFireworkRocketAccess) $$4).setIsHattanProj(true);
                 ME.level().addFreshEntity($$4);
             }
+            fwork.discard();
         }else {
                 ci.cancel();
                 return;

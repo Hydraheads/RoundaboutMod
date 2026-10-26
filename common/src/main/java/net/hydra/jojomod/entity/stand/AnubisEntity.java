@@ -17,4 +17,12 @@ public class AnubisEntity extends FollowingStandEntity {
     public void setPose(Pose $$0) {
         super.setPose($$0);
     }
+
+    public final AnimationState idlePoseAnubis = new AnimationState();
+
+    @Override
+    public void setupAnimationStates() {
+        super.setupAnimationStates();
+        this.idlePoseAnubis.startIfStopped(this.tickCount);
+    }
 }

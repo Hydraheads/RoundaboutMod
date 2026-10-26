@@ -34,14 +34,8 @@ public final class HallucinatoryAcidBlockEntityRenderer
                        MultiBufferSource buffers, int packedLight, int packedOverlay) {
         BlockState state = acid.getBlockState();
         if (!(state.getBlock() instanceof HallucinatoryAcidBlock) || acidIsHidden()) return;
-        int layers = state.getValue(HallucinatoryAcidBlock.LAYERS);
         int skin = state.getValue(HallucinatoryAcidBlock.SKIN);
-        float height = switch (layers) {
-            case 1 -> 3.0F;
-            case 2 -> 7.0F;
-            case 3 -> 11.0F;
-            default -> 15.0F;
-        } / 16.0F;
+        float height = coreHeight(state);
         ResourceLocation innerTexture = skin == WhitesnakeEntity.SANDSNAKE_SKIN
                 ? SAND_TEXTURE : ACID_TEXTURE;
         VertexConsumer vertices = buffers.getBuffer(RenderType.entityCutoutNoCull(innerTexture));
@@ -98,10 +92,11 @@ public final class HallucinatoryAcidBlockEntityRenderer
                                      VertexConsumer vertices, PoseStack.Pose pose, float height,
                                      int light, int overlay, int color) {
         BlockState firstNeighbor = level.getBlockState(pos.relative(first));
+        if (!isMatchingAcid(firstNeighbor, state)) return;
         BlockState secondNeighbor = level.getBlockState(pos.relative(second));
+        if (!isMatchingAcid(secondNeighbor, state)) return;
         BlockState diagonalNeighbor = level.getBlockState(pos.relative(first).relative(second));
-        if (!isMatchingAcid(firstNeighbor, state) || !isMatchingAcid(secondNeighbor, state)
-                || !isMatchingAcid(diagonalNeighbor, state)) return;
+        if (!isMatchingAcid(diagonalNeighbor, state)) return;
 
         float connectionHeight = Math.min(height, Math.min(coreHeight(firstNeighbor),
                 Math.min(coreHeight(secondNeighbor), coreHeight(diagonalNeighbor))));
@@ -120,12 +115,7 @@ public final class HallucinatoryAcidBlockEntityRenderer
     }
 
     private static float coreHeight(BlockState state) {
-        return switch (state.getValue(HallucinatoryAcidBlock.LAYERS)) {
-            case 1 -> 3.0F;
-            case 2 -> 7.0F;
-            case 3 -> 11.0F;
-            default -> 15.0F;
-        } / 16.0F;
+        return (state.getValue(HallucinatoryAcidBlock.LAYERS) * 4.0F - 1.0F) / 16.0F;
     }
 
     private static boolean acidIsHidden() {

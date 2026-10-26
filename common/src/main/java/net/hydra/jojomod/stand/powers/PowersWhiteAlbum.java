@@ -258,6 +258,11 @@ public class PowersWhiteAlbum extends NewDashPreset {
                         ((StandUser)self).roundabout$tryPower(PowerIndex.NONE,true);
                     }
                 }
+//            if (self.getUseItem() != null && self.getUseItem().is(ModItems.NEW_LOCACACA)){
+//                if ($$0.getEntity() != null){
+//                    self.stopUsingItem();
+//                }
+//            }
 
             if (self instanceof Player pl) {
                 if ($$0.is(DamageTypes.FALL) ||
@@ -737,13 +742,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
         super.readAdditionalSaveData($$0);
-        if ($$0.contains("skatesActive")) {
-            skatesActive = $$0.getBoolean("skatesActive");
-        } if ($$0.contains("cracked")) {
-            cracked = $$0.getBoolean("cracked");
-        } if ($$0.contains("fistsOut")) {
-            fistsOut = $$0.getBoolean("fistsOut");
-        }
+        skatesActive = $$0.getBoolean("skatesActive");
+        cracked = $$0.getBoolean("cracked");
+        fistsOut = $$0.getBoolean("fistsOut");
     }
 
 
@@ -1586,7 +1587,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
             FRIGID =9,
             MANGA =10,
             YUKI =11,
-            ICE =12;
+            ICE =12,
+            SHULKER =13,
+            BOXER =14;
 
 
     public static final int coldFromBlockLaunch = -8;
@@ -1609,7 +1612,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
             } if (Level > 3 || bypass){
                 $$1.add(ICEOLOGER);
                 $$1.add(STRAY);
+                $$1.add(SHULKER);
             } if (Level > 4 || bypass){
+                $$1.add(BOXER);
                 $$1.add(FRIGID);
                 $$1.add(BETA);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
@@ -1640,6 +1645,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
             case MANGA -> "manga";
             case YUKI -> "yuki";
             case ICE -> "ice";
+            case SHULKER -> "shulker";
+            case BOXER -> "boxer";
             default -> "base";
         };
     }

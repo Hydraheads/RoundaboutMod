@@ -141,6 +141,8 @@ public class PowersCalifornia extends NewDashPreset {
         super.readAdditionalSaveData($$0);
         if ($$0.contains("currentRule")) {
             currentRule = $$0.getByte("currentRule");
+        } else {
+            currentRule = DO_NOT_STEP_HERE;
         }
     }
 
@@ -652,10 +654,12 @@ public class PowersCalifornia extends NewDashPreset {
 
     public void onEnderPearlThrow(){
         clearLeadAndPunish();
+        super.onEnderPearlThrow();
     }
 
     public void onEnderPearlLand(){
         clearLeadAndPunish();
+        super.onEnderPearlLand();
     }
     @Override
     public void onSpinAttackStart(){
