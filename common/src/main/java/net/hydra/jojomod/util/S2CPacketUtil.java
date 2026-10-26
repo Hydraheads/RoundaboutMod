@@ -507,4 +507,13 @@ public class S2CPacketUtil {
             );
         }
     }
+
+    public static void syncGamblingState(Player player, int tension, int lastSpillage, int lastQuality, boolean isHostTurn, boolean gameOver) {
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.SyncGamblingState.value,
+                    tension, lastSpillage, lastQuality, isHostTurn, gameOver
+            );
+        }
+    }
 }

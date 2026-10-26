@@ -3,6 +3,7 @@ package net.hydra.jojomod.networking;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
+import net.hydra.jojomod.block.GamblingTableBlockEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
@@ -13,6 +14,8 @@ import net.hydra.jojomod.event.index.Tactics;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.item.*;
+import net.hydra.jojomod.menu.GamblingGame;
+import net.hydra.jojomod.menu.GamblingTableMenu;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersKingCrimson;
@@ -98,7 +101,8 @@ public class ClientToServerPackets {
             DiverDownDisguise("diver_down_disguise"),
             GunRecoil("gun_recoil"),
             ZombieMinionTactic("zombie_minion_tactics"),
-            DimensionHopD4C("thread_hop_d4c_request_dimension_hop");
+            DimensionHopD4C("thread_hop_d4c_request_dimension_hop"),
+            GamblingAction( "gambling_action ");
 
             public final String value;
 
@@ -687,6 +691,23 @@ public class ClientToServerPackets {
                     InteractionHand hand = (boolean) vargs[0]
                             ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
                     MemoryDiscConversionService.convert(sender, hand);
+                }
+                /**Gambling Table Action Packet*/
+                if (message.equals(MESSAGES.GamblingAction.value)) {
+                    server.execute(() -> {
+                        int actionId = (int) vargs[0];
+                        int extraData = (int) vargs[1];
+                        // find the gambling table the user is interacting with, and run handleAction
+                        if (sender.containerMenu instanceof GamblingTableMenu menu) {
+                            GamblingTableBlockEntity table = menu.getTable();
+                            if (table != null) {
+                                GamblingGame game = table.getActiveGame();
+                                if (game != null) {
+                                    game.handleAction(sender, actionId, extraData);
+                                }
+                            }
+                        }
+                    });
                 }
             }
         }
