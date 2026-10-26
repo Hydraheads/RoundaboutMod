@@ -2655,6 +2655,9 @@
   "text.roundabout.lyin_eyes.tension_highlight": "Tension Highlight On",
   "text.roundabout.lyin_eyes.tension_highlight_off": "Tension Highlight Off",
 
+  "ability.roundabout.gold_experience_placeholder": "I can't believe 88 is making popularslop.",
+  "ability.roundabout.gold_experience_placeholder.desc": "He should make less standslop.",
+
   "ability.roundabout.emperor_shoot": "Shoot",
   "ability.roundabout.emperor_shoot.desc": "Shoot a bullet from the emperor.",
   "ability.roundabout.emperor_heat": "Heat",

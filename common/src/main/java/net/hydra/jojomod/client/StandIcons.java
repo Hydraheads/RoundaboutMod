@@ -1122,6 +1122,13 @@ public class StandIcons {
 
     // lyin eyes icons end
 
+    // gold experience icons start
+
+    public static final ResourceLocation GOLD_EXPERIENCE_PLACEHOLDER = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/gold_experience/placeholder.png");
+
+    // gold experience icons end
+
     public static final ResourceLocation EMPEROR_SPEED_UP = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/emperor/emperor_speed_up.png");
     public static final ResourceLocation EMPEROR_SPEED_DOWN = new ResourceLocation(Roundabout.MOD_ID,

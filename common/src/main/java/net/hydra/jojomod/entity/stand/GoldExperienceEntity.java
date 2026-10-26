@@ -13,10 +13,12 @@ public class GoldExperienceEntity extends FollowingStandEntity {
 
     public static final byte PART_5 = 0;
 
+    public final AnimationState lifePunch = new AnimationState();
     public final AnimationState hideFists = new AnimationState();
 
     //used for animations later
-    //public static final byte
+    public static final byte
+        LIFE_PUNCH = 82;
 
     @Override
     public void setupAnimationStates() {
@@ -26,6 +28,11 @@ public class GoldExperienceEntity extends FollowingStandEntity {
             this.hideFists.startIfStopped(this.tickCount);
         } else {
             this.hideFists.stop();
+        }
+        if (animation == LIFE_PUNCH) {
+            this.lifePunch.startIfStopped(this.tickCount);
+        } else {
+            this.lifePunch.stop();
         }
     }
 }

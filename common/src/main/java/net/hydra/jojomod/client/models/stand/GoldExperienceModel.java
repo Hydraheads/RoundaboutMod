@@ -1,6 +1,7 @@
 package net.hydra.jojomod.client.models.stand;
 
 import net.hydra.jojomod.client.models.stand.animations.DiverDownAnimations;
+import net.hydra.jojomod.client.models.stand.animations.GoldExperienceAnimations;
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
 import net.hydra.jojomod.entity.stand.DiverDownEntity;
 import net.hydra.jojomod.entity.stand.GoldExperienceEntity;
@@ -227,6 +228,7 @@ public class GoldExperienceModel <T extends GoldExperienceEntity> extends StandM
         super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
         defaultModifiers(pEntity);
         defaultAnimations(pEntity, pAgeInTicks, 1/((float) Power.getBarrageWindup() /20));
+        this.animate(pEntity.lifePunch, GoldExperienceAnimations.LIFE_PUNCH, pAgeInTicks, 1f);
         this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1f);
     }
 
