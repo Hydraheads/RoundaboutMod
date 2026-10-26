@@ -3956,6 +3956,15 @@
       }
     ]
   },
+  "chaka_hftf": {
+    "subtitle": "sounds.roundabout.chaka_hftf",
+    "sounds": [
+      {
+        "name": "roundabout:chaka_hftf",
+        "stream": true
+      }
+    ]
+  },
   "vsong_silent_reveries": {
     "subtitle": "sounds.roundabout.vsong_silent_reveries",
     "sounds": [
