@@ -4058,6 +4058,15 @@
       "roundabout:purple_haze_barrage_cry"
     ]
   },
+  "purple_haze_barrage_hit": {
+    "subtitle": "sounds.roundabout.stand_barrage_hit_soft",
+    "sounds": [
+      "roundabout:ph_hit_1",
+      "roundabout:ph_hit_2",
+      "roundabout:ph_hit_3",
+      "roundabout:ph_hit_4"
+    ]
+  },
   "purple_haze_smoke": {
     "subtitle": "sounds.roundabout.purple_haze_smoke",
     "sounds": [
