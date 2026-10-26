@@ -4602,8 +4602,8 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override
     public void playBarrageNoise(int hitNumber, Entity entity) {
         if (!this.self.level().isClientSide()) {
-            if (hitNumber % 2 == 0)
-                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.KILLER_QUEEN_BARRAGE_HIT_EVENT, SoundSource.PLAYERS, 0.7F, (float) (0.9 + (Math.random() * 0.25)));
+            if (hitNumber % 4 == 0)
+                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.KILLER_QUEEN_BARRAGE_HIT_EVENT, SoundSource.PLAYERS, 0.5F, (float) (0.9 + (Math.random() * 0.25)));
         }
     }
 
