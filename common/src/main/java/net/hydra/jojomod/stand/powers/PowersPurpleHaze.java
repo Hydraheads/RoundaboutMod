@@ -1268,7 +1268,24 @@ public class PowersPurpleHaze extends NewPunchingStand {
         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
     }
 
+    private void tickFallingHitAnimation() {
+        if (fallingHitAnimTicks < 0 || self.level().isClientSide()) {
+            return;
+        }
 
+        if (this.getActivePower() != PowerIndex.EXTRA) {
+            fallingHitAnimTicks = -1;
+            return;
+        }
+
+        fallingHitAnimTicks++;
+
+        if (fallingHitAnimTicks == FALLING_HIT_START_TICKS) {
+            animateStand(PurpleHazeEntity.FALLINGHIT);
+        } else if (fallingHitAnimTicks == FALLING_HIT_START_TICKS + FALLING_HIT_TRANSITION_TICKS) {
+            animateStand(PurpleHazeEntity.FALLINGHITLONG);
+        }
+    }
     @Override
     public boolean canFallBrace() {
         return super.canFallBrace();
@@ -1296,7 +1313,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 }
                 activatePurpleHazeField(self.position(), indistortionmode);
             }
-
+            fallingHitAnimTicks = -1;
+            animateStand(PurpleHazeEntity.FALLINGHITIMPACT);
             playFallBraceShockwave();
 
             fallBraceOriginalDistance = 0;
@@ -1328,11 +1346,22 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
     }
     private double fallBraceOriginalDistance = 0;
+    private static final int FALLING_HIT_START_TICKS = 5;  //
+    private static final int FALLING_HIT_TRANSITION_TICKS = 40; //
+    private int fallingHitAnimTicks = -1;
 
     @Override
     public boolean fallBraceInit() {
         fallBraceOriginalDistance = this.getSelf().fallDistance;
-        return super.fallBraceInit();
+        boolean result = super.fallBraceInit();
+        if (result) {
+            poseStand(OffsetIndex.FOLLOW);
+            animateStand(PurpleHazeEntity.FALLINGHITSTART);
+            if (!this.getSelf().level().isClientSide()) {
+                fallingHitAnimTicks = 0;
+            }
+        }
+        return result;
     }
 
 
@@ -1483,6 +1512,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             tickPodReset();
             tickPodRecharge();
             tickSecretSkinObtaining();
+            tickFallingHitAnimation();
 
             if (!podsSyncedOnJoin && self instanceof ServerPlayer sp) {
                 podsSyncedOnJoin = true;
