@@ -2,12 +2,15 @@ package net.hydra.jojomod.client.models.substand.zsabbathsouls.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.client.models.stand.renderers.StandRenderer;
 import net.hydra.jojomod.entity.objects.GrabbedMobSoul;
+import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
@@ -29,13 +32,17 @@ public class GrabbedMobSoulBaseRenderer<T extends GrabbedMobSoul, P extends Huma
     }
 
     @Override
-    public void render(GrabbedMobSoul mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
-        float factor = 1;
-        if(mobEntity.isBaby()){
-            matrixStack.scale(0.75f * factor, 0.75f * factor, 0.75f * factor);
-        } else {
-            matrixStack.scale(1f, 1f, 1f);
+    public boolean shouldRender(GrabbedMobSoul $$0, Frustum $$1, double $$2, double $$3, double $$4) {
+        if ($$0.getUser() != null && ClientUtil.getPlayer() != null &&
+                $$0.getUser().getId() == ClientUtil.getPlayer().getId()){
+            return true;
         }
+
+        return super.shouldRender($$0,$$1,$$2,$$3,$$4);
+    }
+
+    @Override
+    public void render(GrabbedMobSoul mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
     }
 

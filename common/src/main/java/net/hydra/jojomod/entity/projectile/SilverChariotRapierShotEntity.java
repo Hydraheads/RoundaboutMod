@@ -54,17 +54,71 @@ public class SilverChariotRapierShotEntity extends AbstractArrow implements Unbu
         this.setPos($$1, $$2, $$3);
     }
 
-    public SilverChariotEntity silverChariot = null;
+    // public SilverChariotEntity silverChariot = null;
+    private byte skin = 0;
 
-    public SilverChariotRapierShotEntity(LivingEntity $$0, double $$1, double $$2, double $$3, Level $$4, byte type, SilverChariotEntity silverChariot) {
+    public byte getSkin() {
+        return this.skin;
+    }
+
+    public SilverChariotRapierShotEntity(LivingEntity $$0, double $$1, double $$2, double $$3, Level $$4, byte type, byte skin) {
         this(ModEntities.SILVER_CHARIOT_RAPIER, $$1, $$2, $$3, $$4);
         this.setRapierShotType(type);
-        if (type == BASE) {
+        if (type == BASE_SHOT) {
             this.setBounces(1);
         } else  {
             this.setBounces(0);
         }
-        this.silverChariot = silverChariot;
+        // this.silverChariot = silverChariot;
+        this.skin = skin;
+    }
+
+    private static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(SilverChariotRapierShotEntity.class, EntityDataSerializers.INT);
+
+    public LivingEntity standUser;
+    public UUID standUserUUID;
+
+    public int getUserID() {
+        return this.getEntityData().get(USER_ID);
+    }
+    public void setUserID(int idd) {
+        this.getEntityData().set(USER_ID, idd);
+        if (this.level().getEntity(this.getUserID()) instanceof LivingEntity LE){
+            this.standUser = LE;
+            if (!this.level().isClientSide()){
+                standUserUUID = LE.getUUID();
+            }
+        }
+    }
+
+    public LivingEntity getUser(){
+        if (this.level().getEntity(this.getUserID()) instanceof LivingEntity LE){
+            return LE;
+        }
+        return null;
+    }
+
+    public void setUser(LivingEntity User) {
+        standUser = User;
+        this.getEntityData().set(USER_ID, User.getId());
+        if (!this.level().isClientSide()){
+            standUserUUID = User.getUUID();
+        }
+    }
+
+    public LivingEntity getStandUser(){
+        if (standUser != null){
+            return standUser;
+        } else if (standUserUUID != null && !this.level().isClientSide()){
+            Entity ett = ((ServerLevel)this.level()).getEntity(standUserUUID);
+            if (ett instanceof LivingEntity lett){
+                standUser = lett;
+                this.setUserID(lett.getId());
+            }
+        } else if (this.level().getEntity(this.getUserID()) instanceof LivingEntity LE){
+            standUser = LE;
+        }
+        return standUser;
     }
 
     public final float speed = 3.0F;
@@ -185,11 +239,11 @@ public class SilverChariotRapierShotEntity extends AbstractArrow implements Unbu
     protected void onHitBlock(BlockHitResult $$0) {
         // super.onHitBlock($$0);
         if (!this.level().isClientSide()) {
-            if (this.getRapierShotType() == PLATFORM) {
+            if (this.getRapierShotType() == PLATFORM_SHOT) {
                 this.createPlatform($$0);
                 this.playSound(ModSounds.SILVER_CHARIOT_RAPIER_SHOT_BLOCK_IMPACT_EVENT, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
                 this.discard();
-            } else if (this.getRapierShotType() == BASE && this.getBounces() > 0) {
+            } else if (this.getRapierShotType() == BASE_SHOT && this.getBounces() > 0) {
                 // this.setBounces(this.getBounces() - 1);
 
                 Vec3 velocity = this.getDeltaMovement();
@@ -227,15 +281,18 @@ public class SilverChariotRapierShotEntity extends AbstractArrow implements Unbu
     }
 
     private void createPlatform(BlockHitResult $$0) {
+        // byte skin = ((StandUser) this.getUser()).roundabout$getStandSkin();
+        byte bt = this.getUser() != null ? ((StandUser) this.getUser()).roundabout$getStandSkin() : 0;
         SilverChariotRapierPlatformEntity platform = new SilverChariotRapierPlatformEntity(
                 this.level(),
-                silverChariot
+                bt
         );
+        platform.setUser(this.getUser());
 
         Direction hitDir = $$0.getDirection();
         Vec3 normal = Vec3.atLowerCornerOf(hitDir.getNormal());
         Vec3 hitLoc = $$0.getLocation();
-        Vec3 pushOut = normal.scale(0.5);
+        Vec3 pushOut = normal.scale(0.9);
         platform.setPos(hitLoc.x + pushOut.x, hitLoc.y + pushOut.y, hitLoc.z + pushOut.z);
 
         platform.setYRot(this.getYRot());
@@ -400,8 +457,8 @@ public class SilverChariotRapierShotEntity extends AbstractArrow implements Unbu
      */
 
     public static final byte
-                BASE = (byte) 1,
-                PLATFORM = (byte) 2;
+                BASE_SHOT = (byte) 1,
+                PLATFORM_SHOT = (byte) 2;
 
     @Override
     protected void defineSynchedData() {
@@ -414,6 +471,9 @@ public class SilverChariotRapierShotEntity extends AbstractArrow implements Unbu
         }
 
          */
+        if (!this.entityData.hasItem(USER_ID)) {
+            this.entityData.define(USER_ID, -1);
+        }
     }
 
     @Override
@@ -530,7 +590,7 @@ public class SilverChariotRapierShotEntity extends AbstractArrow implements Unbu
         // this.setDeltaMovement(this.getDeltaMovement());
 
         this.life += 1;
-        if (this.getRapierShotType() == BASE) {
+        if (this.getRapierShotType() == BASE_SHOT) {
             if (this.life > 300) {
                 this.discard();
             }

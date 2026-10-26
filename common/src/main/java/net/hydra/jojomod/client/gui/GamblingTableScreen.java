@@ -1,7 +1,10 @@
 package net.hydra.jojomod.client.gui;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.block.GamblingTableBlockEntity;
+import net.hydra.jojomod.client.gui.gambling_table.CoinDropScreen;
 import net.hydra.jojomod.menu.GamblingTableMenu;
+import net.hydra.jojomod.menu.gambling_games.CoinDropGame;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -13,7 +16,7 @@ import net.minecraft.world.entity.player.Inventory;
 
 public class GamblingTableScreen extends AbstractContainerScreen<GamblingTableMenu> {
     private static final ResourceLocation TEXTURE =
-            new ResourceLocation(Roundabout.MOD_ID, "textures/gui/gambling_table.png");
+            new ResourceLocation(Roundabout.MOD_ID, "textures/gui/gambling_table/gambling_table.png");
 
     // Change these if the texture also gets changed
     private static final int GUI_OFFSET_X = -9;
@@ -54,6 +57,11 @@ public class GamblingTableScreen extends AbstractContainerScreen<GamblingTableMe
         super.containerTick();
         if (this.menu.isHost(this.minecraft.player) && !this.menu.hasGameStarted()) {
             this.minecraft.setScreen(new GamblingGameSelectionScreen(this.menu));
+        } else if (this.menu.isGameInProgress() && this.menu.getSelectedGame() == GamblingTableBlockEntity.COIN_DROP) {
+            // Find table entity at player's location or through menu
+            if (this.menu.getTable() != null && this.menu.getTable().getActiveGame() instanceof CoinDropGame coinGame) {
+                this.minecraft.setScreen(new CoinDropScreen(coinGame));
+            }
         }
     }
 

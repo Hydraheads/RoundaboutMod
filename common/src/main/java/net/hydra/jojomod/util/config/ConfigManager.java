@@ -375,11 +375,11 @@ public abstract class ConfigManager {
                 }
             }
         }
-        if (getAdvancedConfig().naturalStandUserMobPoolv11 != null)
+        if (getAdvancedConfig().naturalStandUserMobPoolv12 != null)
         {
             ModItems.STAND_ARROW_POOL_FOR_MOBS.clear();
 
-            for (String disc : getAdvancedConfig().naturalStandUserMobPoolv11)
+            for (String disc : getAdvancedConfig().naturalStandUserMobPoolv12)
             {
                 String[] split = disc.split(":");
 

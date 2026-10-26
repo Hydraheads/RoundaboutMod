@@ -442,6 +442,9 @@ public class FabricItems {
     public static Item MUSIC_DISC_HALLELUJAH = registerItem("music_disc_hallelujah",
             new RecordItem(1, ModSounds.HALLELUJAH_EVENT,
                     (new Item.Properties()).stacksTo(1).rarity(Rarity.RARE), 4380));
+    public static Item MUSIC_DISC_CHAKA_HFTF = registerItem("music_disc_chaka_hftf",
+            new RecordItem(1, ModSounds.CHAKA_HFTF_EVENT,
+                    (new Item.Properties()).stacksTo(1).rarity(Rarity.RARE), 3720));
 
     public static final Item TERRIER_SPAWN_EGG = registerItem("terrier_spawn_egg", new SpawnEggItem(FabricEntities.TERRIER_DOG,
             0xc9c071, 0xfffded, new Item.Properties()));
@@ -545,6 +548,7 @@ public class FabricItems {
 
                         entries.accept(MUSIC_DISC_TORTURE_DANCE);
                         entries.accept(MUSIC_DISC_HALLELUJAH);
+                        entries.accept(MUSIC_DISC_CHAKA_HFTF);
 
                         entries.accept(ModBlocks.STEREO);
                         entries.accept(WORTHY_ARROW);
@@ -1127,6 +1131,7 @@ public class FabricItems {
         ModItems.ANUBIS_GUARDIAN_SPAWN_EGG = ANUBIS_GUARDIAN_SPAWN_EGG;
         ModItems.MUSIC_DISC_TORTURE_DANCE = MUSIC_DISC_TORTURE_DANCE;
         ModItems.MUSIC_DISC_HALLELUJAH = MUSIC_DISC_HALLELUJAH;
+        ModItems.MUSIC_DISC_CHAKA_HFTF = MUSIC_DISC_CHAKA_HFTF;
         ModItems.FOG_BLOCK_ITEMS = FOG_BLOCK_ITEMS;
      //   ModItems.INTERDIMENSIONAL_KEY = INTERDIMENSIONAL_KEY;
         ModItems.FLESH_BUCKET = FLESH_BUCKET;

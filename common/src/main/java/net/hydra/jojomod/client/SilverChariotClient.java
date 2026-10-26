@@ -4,6 +4,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersSilverChariot;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
@@ -35,7 +36,13 @@ public final class SilverChariotClient {
         cameraActive = true;
         pendingTicks = 20;
         lookInitialized = false;
-        previousCameraType = null;
+        if (ConfigManager.getClientConfig().silverChariotSettings.silverChariotForceThirdPersonInControlMode) {
+            Minecraft minecraft = Minecraft.getInstance();
+            previousCameraType = minecraft.options.getCameraType();
+            minecraft.options.setCameraType(CameraType.THIRD_PERSON_BACK);
+        } else {
+            previousCameraType = null;
+        }
     }
 
     public static void enforceCamera(Entity stand) {
@@ -47,6 +54,10 @@ public final class SilverChariotClient {
         }
         ClientUtil.setCameraEntity(stand);
         applyLook(stand);
+        if (ConfigManager.getClientConfig().silverChariotSettings.silverChariotForceThirdPersonInControlMode
+                && minecraft.options.getCameraType() != CameraType.THIRD_PERSON_BACK) {
+            minecraft.options.setCameraType(CameraType.THIRD_PERSON_BACK);
+        }
     }
 
     public static void turnCamera(Entity stand, double yawDelta, double pitchDelta) {

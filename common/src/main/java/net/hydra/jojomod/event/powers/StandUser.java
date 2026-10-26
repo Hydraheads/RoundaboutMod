@@ -174,6 +174,7 @@ public interface StandUser {
 
     void roundabout$sealStand(int ticks);
 
+    void roundabout$setSealedTicksAgnostic(int ticks);
     void roundabout$setSealedTicks(int ticks);
     void roundabout$setSealedTicks(int ticks, int maxticks);
     int roundabout$getSealedTicks();
@@ -316,6 +317,7 @@ public interface StandUser {
     void roundabout$setLocacacaCurse(byte locacacaCurse);
     byte roundabout$getLocacacaCurse();
 
+    /**Slack Babbath*/
     void roundabout$setGrabbedSoul(boolean grabbedSoul);
     boolean roundabout$getGrabbedSoul();
 

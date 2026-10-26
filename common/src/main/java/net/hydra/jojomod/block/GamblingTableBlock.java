@@ -18,6 +18,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -201,4 +203,19 @@ public class GamblingTableBlock extends HorizontalDirectionalBlock implements En
     }
 
     // block interaction end
+
+    // block tick
+    // i need to eventually make it so that leaving a server/making the player null resets the game, but for now
+    // it's very useful to not have it reset so that i can check on graphics and stuff in 1 instance.
+    // for now i'll just leave it commented out
+    /*@Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        // Only tick on the server side
+        return level.isClientSide() ? null : (lvl, pos, st, be) -> {
+            if (be instanceof GamblingTableBlockEntity table) {
+                table.serverTick();
+            }
+        };
+    }*/
 }

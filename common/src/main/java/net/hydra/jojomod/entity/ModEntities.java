@@ -2,7 +2,7 @@ package net.hydra.jojomod.entity;
 
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.entity.badCompanyTroops.BCSoldier;
+import net.hydra.jojomod.entity.badCompanyTroops.*;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.mobs.TerrierEntity;
@@ -215,6 +215,7 @@ public class ModEntities {
     public static EntityType<FallenPhantom> FALLEN_PHANTOM;
     public static EntityType<FallenCreeper> FALLEN_CREEPER;
     public static EntityType<BCSoldier> BAD_COMPANY_SOLDIER;
+    public static EntityType<BCTank> BAD_COMPANY_TANK;
 
 
     public static EntityType<ParallelChestEntity> PARALLEL_CHEST;

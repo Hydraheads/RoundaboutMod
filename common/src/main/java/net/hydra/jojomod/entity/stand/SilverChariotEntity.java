@@ -7,6 +7,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
 import net.hydra.jojomod.stand.powers.PowersSilverChariot;
 import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -24,6 +25,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class SilverChariotEntity extends FollowingStandEntity {
@@ -349,7 +351,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
                 }
             }
 
-            if (animationState == IDLE && idle == 0 && this.getArmoured()) {
+            if (animationState == IDLE && idle == 0) {
                 this.scIdleArmoured.startIfStopped(this.tickCount);
             } else {
                 this.scIdleArmoured.stop();
@@ -751,14 +753,25 @@ public class SilverChariotEntity extends FollowingStandEntity {
         previousCarryPosition = carryPos;
     }
 
+    private static final int AFTERIMAGE_TICK_INTERVAL = ConfigManager.getClientConfig().silverChariotSettings.silverChariotTickIntervalBetweenAfterimage;
+    private static final int AFTERIMAGE_MAX_AMOUNT = ConfigManager.getClientConfig().silverChariotSettings.silverChariotAfterimagesMaxAmount;
+    private int afterImageTicks = 0;
+    private Deque<SilverChariotAfterimageState> silverChariotAfterimageStates = new ArrayDeque<>();
+
     @Override
     public void tick() {
-        super.tick();
         Vec3 oldPosition = this.position();
 
         if (this.level().isClientSide()) {
-            this.addCurrentPositionAndRoationToQueue();
+            afterImageTicks++;
+
+            if (afterImageTicks >= AFTERIMAGE_TICK_INTERVAL) {
+                this.addCurrentPositionAndRoationToQueue();
+            }
+            // afterImageTicks++;
+            afterImageTicks = afterImageTicks % AFTERIMAGE_TICK_INTERVAL;
         }
+        super.tick();
 
         if (!this.level().isClientSide()) {
             if (this.isSelfCarryModeActive()) {
@@ -788,6 +801,18 @@ public class SilverChariotEntity extends FollowingStandEntity {
             controlBodyYaw += headDifference - Math.copySign(50.0F, headDifference);
         }
         setYBodyRot(controlBodyYaw);
+    }
+
+    @Nullable
+    public LivingEntity getControllingPassenger() {
+        if (!this.getPassengers().isEmpty()) {
+            Entity entity = this.getPassengers().get(0);
+            if (entity instanceof LivingEntity) {
+                return (LivingEntity) entity;
+            }
+        }
+
+        return null;
     }
 
     @Override
@@ -839,7 +864,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     @Override
     public boolean canBeHitByStands() {
-        return super.canBeHitByStands();
+        return this.isControlModeActive();
     }
 
     @Override
@@ -906,7 +931,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     @Override
     public HumanoidArm getMainArm() {
-        return super.getMainArm();
+        return !this.isPart5Skin() ? HumanoidArm.RIGHT : HumanoidArm.LEFT;
     }
 
     @Override
@@ -943,7 +968,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
         // }
         // }
         // }
-        return isRemoteControlled() && super.canBeHitByProjectile();
+        return isRemoteControlled() || super.canBeHitByProjectile();
     }
 
     @Override
@@ -980,8 +1005,6 @@ public class SilverChariotEntity extends FollowingStandEntity {
         return isRemoteControlled();
     }
 
-    private Deque<SilverChariotAfterimageState> silverChariotAfterimageStates = new ArrayDeque<>();
-
     private Random rand = new Random();
 
     private void addCurrentPositionAndRoationToQueue() {
@@ -993,7 +1016,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
                 )
         );
 
-        while (silverChariotAfterimageStates.size() > 4) {
+        while (silverChariotAfterimageStates.size() > AFTERIMAGE_MAX_AMOUNT) {
             this.silverChariotAfterimageStates.removeLast();
         }
     }

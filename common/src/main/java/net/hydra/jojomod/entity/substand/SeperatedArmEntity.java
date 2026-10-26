@@ -223,7 +223,6 @@ public class SeperatedArmEntity extends StandEntity {
 
     @Override
     public void tick() {
-        Roundabout.LOGGER.info("i am being ticked as an entity");
         this.entityData.set(HELD_ITEM,this.getMainHandItem());
         tickeffects();
     }
@@ -260,7 +259,7 @@ public class SeperatedArmEntity extends StandEntity {
                         }
                     }
                 }
-                Roundabout.LOGGER.info(user.getStringUUID());
+                
                 if (!onGround()) {
                     flyingTicks += 1;
                 } else {

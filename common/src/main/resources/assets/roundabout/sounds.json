@@ -1037,10 +1037,7 @@
   "killer_queen_barrage_hit" : {
     "subtitle": "sounds.roundabout.stand_barrage_hit_soft",
     "sounds": [
-      "roundabout:kq_barrage_hit_1",
-      "roundabout:kq_barrage_hit_2",
-      "roundabout:kq_barrage_hit_3",
-      "roundabout:kq_barrage_hit_4"
+      "roundabout:kq_barrage_hit"
     ]
   },
   "kq_block_plant" : {
@@ -3955,6 +3952,15 @@
     "sounds": [
       {
         "name": "roundabout:torture_dance",
+        "stream": true
+      }
+    ]
+  },
+  "chaka_hftf": {
+    "subtitle": "sounds.roundabout.chaka_hftf",
+    "sounds": [
+      {
+        "name": "roundabout:chaka_hftf",
         "stream": true
       }
     ]

@@ -2478,6 +2478,9 @@ public class ModSounds {
     public static final String HALLELUJAH = "hallelujah";
     public static final ResourceLocation HALLELUJAH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HALLELUJAH);
     public static SoundEvent HALLELUJAH_EVENT = SoundEvent.createVariableRangeEvent(HALLELUJAH_ID);
+    public static final String CHAKA_HFTF = "chaka_hftf";
+    public static final ResourceLocation CHAKA_HFTF_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CHAKA_HFTF);
+    public static SoundEvent CHAKA_HFTF_EVENT = SoundEvent.createVariableRangeEvent(CHAKA_HFTF_ID);
 
     public static final String FLESH_BUD = "flesh_bud_goes";
     public static final ResourceLocation FLESH_BUD_ID = new ResourceLocation(Roundabout.MOD_ID+":"+FLESH_BUD);
