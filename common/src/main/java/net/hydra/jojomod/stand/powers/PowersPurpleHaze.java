@@ -23,6 +23,7 @@ import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.particles.HazeColorParticleOptions;
 import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -299,6 +300,30 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 }
             }
         }
+    }
+
+    @Override
+    public boolean setPowerSneakMovement(int lastMove) {
+
+        // leaping puts timestop on a cooldown
+        applyLeapCooldowns(); // borrowed from TWAndSPSharedPowers, dunno if you gonna need to put something on cooldown
+
+        this.setAttackTimeDuring(-1);
+        this.setActivePower(PowerIndex.NONE);
+        poseStand(OffsetIndex.FOLLOW);
+        animateStand(StandEntity.LEAP);
+        if (this.getSelf() instanceof Player) {
+            cancelConsumableItem(this.getSelf());
+        }
+        if (!this.getSelf().level().isClientSide()) {
+            if (Math.random() > 0.5){
+                addEXP(1);
+            }
+            ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
+            ((StandUser) this.getSelf()).roundabout$setLeapIntentionally(true);
+            playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.STAND_LEAP_EVENT, SoundSource.PLAYERS, 2.3F, (float) (0.98 + (Math.random() * 0.04)));
+        }
+        return true;
     }
 
     public void applyLeapCooldowns() {
