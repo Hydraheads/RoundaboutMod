@@ -32,6 +32,11 @@ public abstract class WhitesnakeControlMinecraftMixin {
     @Inject(method = "tick", at = @At("TAIL"))
     private void roundaboutWhitesnake$tickMining(CallbackInfo ci) {
         Minecraft minecraft = (Minecraft) (Object) this;
+        if (minecraft.player == null
+                || !(((StandUser) minecraft.player).roundabout$getStandPowers() instanceof PowersWhitesnake powers)
+                || (!powers.isPiloting() && WhitesnakeControlClient.hasCameraLook())) {
+            WhitesnakeControlClient.exit();
+        }
         boolean attackHeld = minecraft.screen == null && minecraft.options.keyAttack.isDown()
                 && minecraft.mouseHandler.isMouseGrabbed();
         WhitesnakeControlClient.handleMining(minecraft, attackHeld);

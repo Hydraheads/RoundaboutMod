@@ -2276,7 +2276,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
                 && ((IPlayerEntity) player).roundabout$getControlling() != 0;
         if (hasControlId || stand instanceof WhitesnakeEntity whitesnake && whitesnake.isControlModeActive()) {
             setPiloting(0);
-            if (self.level().isClientSide()) WhitesnakeControlClient.exit();
+            if (self.level().isClientSide() && isPacketPlayer()) WhitesnakeControlClient.exit();
         }
         if (autoMode) setAutoMode(false);
         super.onStandSwitch();
