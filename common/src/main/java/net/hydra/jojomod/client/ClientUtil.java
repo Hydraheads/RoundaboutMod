@@ -474,7 +474,7 @@ public class ClientUtil {
         ent.setYHeadRot(lerpYRot);
         LivingEntity user = ent.getUser();
         LivingEntity user2 = ent.getUser();
-        if (user != null && user2 != null){
+        if (user != null){
             ent.travelAheadSoulRender($$4, se);
         }
     }
