@@ -82,6 +82,8 @@ public class ModItems {
     public static Item STAND_DISC_LYIN_EYES;
     public static Item STAND_DISC_DIVER_DOWN;
     public static Item MAX_STAND_DISC_DIVER_DOWN;
+    public static Item STAND_DISC_GOLD_EXPERIENCE;
+    public static Item MAX_STAND_DISC_GOLD_EXPERIENCE;
     public static Item STAND_DISC_SILVER_CHARIOT;
     public static Item MAX_STAND_DISC_SILVER_CHARIOT;
     public static Item STAND_DISC_METALLICA;

@@ -773,12 +773,13 @@ public class SilverChariotEntity extends FollowingStandEntity {
         }
         super.tick();
 
-        if (!this.level().isClientSide()) {
-            if (this.isSelfCarryModeActive()) {
-
-                this.noGravityCarryTicks += 1;
-                // updateSelfCarry();
+        if (this.isSelfCarryModeActive()) {
+            if (this.onGround()) {
+                this.noGravityCarryTicks = 0;
+            } else {
+                this.noGravityCarryTicks = 0;
             }
+            // updateSelfCarry();
         }
     }
 
@@ -1028,5 +1029,10 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     public Deque<SilverChariotAfterimageState> getAfterimageStates() {
         return this.silverChariotAfterimageStates;
+    }
+
+    @Override
+    public boolean isNoGravity() {
+        return !isSelfCarryModeActive();
     }
 }

@@ -673,6 +673,12 @@ public class ForgeEntities {
                     .clientTrackingRange(4)
                     .updateInterval(20)
                     .build(new ResourceLocation(Roundabout.MOD_ID, "bone_projectile").toString()));
+    public static final RegistryObject<EntityType<GoldExperienceEntity>> GOLD_EXPERIENCE =
+            ENTITY_TYPES.register("gold_experience", () ->
+                    EntityType.Builder.of(GoldExperienceEntity::new, MobCategory.MISC).sized(0.75f, 2.05f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "gold_experience").toString())
+            );
     public static final RegistryObject<EntityType<SilverChariotEntity>> SILVER_CHARIOT =
             ENTITY_TYPES.register("silver_chariot", () ->
                     EntityType.Builder.of(SilverChariotEntity::new, MobCategory.MISC).sized(0.75f, 2.05f).

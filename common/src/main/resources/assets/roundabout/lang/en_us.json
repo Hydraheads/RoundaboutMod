@@ -219,6 +219,8 @@
   "item.roundabout.pearl_jam_disc": "Stand Disc",
   "item.roundabout.black_sabbath_disc": "Stand Disc",
   "item.roundabout.max_diver_down_disc": "Stand Disc+",
+  "item.roundabout.gold_experience_disc": "Stand Disc",
+  "item.roundabout.max_gold_experience_disc": "Stand Disc+",
   "item.roundabout.whitesnake_disc": "Stand Disc",
   "item.roundabout.max_whitesnake_disc": "Stand Disc+",
   "item.roundabout.d4c_disc.desc": "D4C",
@@ -262,6 +264,8 @@
   "item.roundabout.walking_heart_disc.desc": "Walking Heart",
   "item.roundabout.diver_down_disc.desc": "Diver Down",
   "item.roundabout.max_diver_down_disc.desc": "Diver Down",
+  "item.roundabout.gold_experience_disc.desc": "Gold Experience",
+  "item.roundabout.max_gold_experience_disc.desc": "Gold Experience",
   "item.roundabout.lyin_eyes_disc.desc": "Lyin' Eyes",
   "item.roundabout.manhattan_transfer_disc.desc": "Manhattan Transfer",
   "item.roundabout.black_sabbath_disc.desc": "Black Sabbath",
@@ -2651,6 +2655,9 @@
   "text.roundabout.lyin_eyes.tension_highlight": "Tension Highlight On",
   "text.roundabout.lyin_eyes.tension_highlight_off": "Tension Highlight Off",
 
+  "ability.roundabout.gold_experience_placeholder": "I can't believe 88 is making popularslop.",
+  "ability.roundabout.gold_experience_placeholder.desc": "He should make less standslop.",
+
   "ability.roundabout.emperor_shoot": "Shoot",
   "ability.roundabout.emperor_shoot.desc": "Shoot a bullet from the emperor.",
   "ability.roundabout.emperor_heat": "Heat",
@@ -3228,6 +3235,8 @@
   "skins.roundabout.diver_down.diver_drowned": "Diver Drown",
   "skins.roundabout.diver_down.van_halen": "Van Halen",
   "skins.roundabout.diver_down.scuba_diver": "Scuba Diver",
+
+  "skins.roundabout.gold_experience.base": "Part 5",
 
   "skins.roundabout.20_centuryboy.manga": "Manga",
   "skins.roundabout.20_centuryboy.bedrock": "Bedrock",

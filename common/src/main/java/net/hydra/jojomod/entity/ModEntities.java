@@ -110,6 +110,7 @@ public class ModEntities {
     public static EntityType<DiverDrownedEntity> DIVER_DROWNED;
     public static EntityType<DiverKickEntity> DIVER_KICK;
     public static EntityType<BoneProjectileEntity> BONE_PROJECTILE;
+    public static EntityType<GoldExperienceEntity> GOLD_EXPERIENCE;
     public static EntityType<SilverChariotEntity> SILVER_CHARIOT;
     public static EntityType<SilverChariotEntity> SILVER_CHARIOT_PHARAOH;
     public static EntityType<SilverChariotRapierShotEntity> SILVER_CHARIOT_RAPIER;

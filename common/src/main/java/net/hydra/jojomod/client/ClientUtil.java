@@ -7,6 +7,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
+import net.hydra.jojomod.block.GamblingTableBlockEntity;
 import net.hydra.jojomod.client.gui.*;
 import net.hydra.jojomod.client.gui.diverdown.*;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
@@ -37,6 +38,8 @@ import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.entity.TickableSoundInstances.BowlerHatFlyingSound;
+import net.hydra.jojomod.menu.GamblingTableMenu;
+import net.hydra.jojomod.menu.gambling_games.CoinDropGame;
 import net.hydra.jojomod.platform.ClientServices;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
@@ -1084,6 +1087,21 @@ public class ClientUtil {
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncPurpleHazePods.value)) {
                     byte pods = (byte) vargs[0];
                     ((IPlayerEntity) player).roundabout$setPurpleHazePods(pods);
+                }
+
+                else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncGamblingState.value)) {
+                    int tension = (int) vargs[0];
+                    int lastSpillage = (int) vargs[1];
+                    int lastQuality = (int) vargs[2];
+                    boolean isHostTurn = (boolean) vargs[3];
+                    boolean gameOver = (boolean) vargs[4];
+                    if (Minecraft.getInstance().player != null &&
+                            Minecraft.getInstance().player.containerMenu instanceof GamblingTableMenu menu) {
+                        GamblingTableBlockEntity table = menu.getTable();
+                        if (table != null && table.getActiveGame() instanceof CoinDropGame coinGame) {
+                            coinGame.setClientState(tension, lastSpillage, lastQuality, isHostTurn, gameOver);
+                        }
+                    }
                 }
 
                 // theoretical deregister dynamic worlds packet

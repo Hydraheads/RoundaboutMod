@@ -2,6 +2,7 @@ package net.hydra.jojomod.menu.gambling_games;
 
 import net.hydra.jojomod.block.GamblingTableBlockEntity;
 import net.hydra.jojomod.menu.GamblingGame;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -28,12 +29,9 @@ public class CoinDropGame extends GamblingGame {
 
     // Client-side call to perform the drop
     public void dropCoin(float charge) {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc.gameMode != null && mc.player != null) {
-            int chargeEncoded = (int) (Math.max(0.0f, Math.min(1.0f, charge)) * 100);
-            // Uses the player's active open container ID without coupling to GamblingTableMenu
-            mc.gameMode.handleInventoryButtonClick(mc.player.containerMenu.containerId, 1000 + chargeEncoded);
-        }
+        //charge in percent
+        int chargeEncoded = (int) (Math.max(0.0f, Math.min(1.0f, charge)) * 100);
+        C2SPacketUtil.sendGamblingActionPacket(ACTION_DROP_COIN, chargeEncoded);
     }
 
     @Override
@@ -76,12 +74,35 @@ public class CoinDropGame extends GamblingGame {
                 switchTurn();
             }
             this.table.setChanged();
+
+            for (java.util.UUID viewerUUID : this.table.getActiveViewers()) {
+                Player viewer = this.table.getLevel().getPlayerByUUID(viewerUUID);
+                if (viewer instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
+                    net.hydra.jojomod.util.S2CPacketUtil.syncGamblingState(
+                            serverPlayer,
+                            (int) this.currentTension,
+                            (int) this.lastSpillageAdded,
+                            this.lastDropQuality,
+                            this.isHostTurn,
+                            this.gameOver
+                    );
+                }
+            }
         }
     }
 
     public float getTension() { return currentTension; }
     public float getLastSpillageAdded() { return lastSpillageAdded; }
     public int getLastDropQuality() { return lastDropQuality; }
+    public void setClientState(float tension, float spillage, int quality, boolean isHostTurn, boolean gameOver) {
+        if (this.table.getLevel() != null && this.table.getLevel().isClientSide()) {
+            this.currentTension = tension;
+            this.lastSpillageAdded = spillage;
+            this.lastDropQuality = quality;
+            this.isHostTurn = isHostTurn;
+            this.gameOver = gameOver;
+        }
+    }
 
     private void broadcastMessage(String message) {
         if (table.getLevel() != null && table.getLevel().getServer() != null) {

@@ -376,6 +376,7 @@ public class GamblingTableBlockEntity extends BlockEntity implements Container, 
     }
     public UUID getHostUUID() { return this.hostUUID; }
     public UUID getChallengerUUID() { return this.challengerUUID; }
+    public java.util.Set<java.util.UUID> getActiveViewers() {return this.activeViewers;}
 
     public void setSelectedGame(int game) {
         this.selectedGame = game;
