@@ -171,6 +171,10 @@ public class PurpleHazeModel<T extends PurpleHazeEntity> extends StandModel<T> {
         this.animate(pEntity.phcombo1, PurpleHazeAnimations.PHCOMBO1, pAgeInTicks, 1f);
         this.animate(pEntity.phcombo2, PurpleHazeAnimations.PHCOMBO2, pAgeInTicks, 1f);
         this.animate(pEntity.phcombo3, PurpleHazeAnimations.PHCOMBO3, pAgeInTicks, 1f);
+        this.animate(pEntity.fallinghitstart, PurpleHazeAnimations.FALLINGHITSTART, pAgeInTicks, 1f);
+        this.animate(pEntity.fallinghit, PurpleHazeAnimations.FALLINGHIT, pAgeInTicks, 1f);
+        this.animate(pEntity.fallinghitlong, PurpleHazeAnimations.FALLINGHITLONG, pAgeInTicks, 1f);
+        this.animate(pEntity.fallinghitimpact, PurpleHazeAnimations.FALLINGHITIMPACT, pAgeInTicks, 1f);
     }
     @Override
     public ModelPart root() {
