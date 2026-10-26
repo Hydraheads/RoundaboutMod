@@ -1338,7 +1338,7 @@ public class PowersSilverChariot extends NewPunchingStand {
         } else {
             if (isGuarding()) {
                 if (canExecuteMoveWithLevel(getArmorShedLevel())) {
-                    setSkillIcon(context, x, y, 2, StandIcons.SILVER_CHARIOT_STATUE_CUTTING, PowerIndex.SKILL_2_GUARD);
+                    setSkillIcon(context, x, y, 2, StandIcons.SILVER_CHARIOT_ARMOUR_OFF, PowerIndex.SKILL_2_GUARD);
                 } else {
                     setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD, true);
                 }
@@ -1370,8 +1370,10 @@ public class PowersSilverChariot extends NewPunchingStand {
                     setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD,true);
                 }
 
-                if (canExecuteMoveWithLevel(getControlModeLevel())) {
+                if (canExecuteMoveWithLevel(getControlModeLevel()) && !isPiloting()) {
                     setSkillIcon(context, x, y, 2, StandIcons.SILVER_CHARIOT_CONTROL_MODE_ON, PowerIndex.SKILL_2);
+                } else if (canExecuteMoveWithLevel(getControlModeLevel()) && isPiloting()) {
+                    setSkillIcon(context, x, y, 2, StandIcons.SILVER_CHARIOT_CONTROL_MODE_OFF, PowerIndex.SKILL_2);
                 } else {
                     setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD,true);
                 }
