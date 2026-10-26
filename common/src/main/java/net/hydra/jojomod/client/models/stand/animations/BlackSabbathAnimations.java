@@ -875,7 +875,7 @@ public class BlackSabbathAnimations {
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, -0.1F), AnimationChannel.Interpolations.LINEAR)
             ))
             .addAnimation("lower_right_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(-5.0F, 0.0F, -22.5F), AnimationChannel.Interpolations.LINEAR)
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(-5.0F, 0.0F, -25.5F), AnimationChannel.Interpolations.LINEAR)
             ))
             .addAnimation("left_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(-72.4715F, -2.1107F, -1.3405F), AnimationChannel.Interpolations.CATMULLROM),
@@ -886,7 +886,7 @@ public class BlackSabbathAnimations {
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.1F), AnimationChannel.Interpolations.LINEAR)
             ))
             .addAnimation("lower_left_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(-5.0F, 0.0F, 22.5F), AnimationChannel.Interpolations.LINEAR)
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(-5.0F, 0.0F, 25.5F), AnimationChannel.Interpolations.LINEAR)
             ))
             .addAnimation("right_leg", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)

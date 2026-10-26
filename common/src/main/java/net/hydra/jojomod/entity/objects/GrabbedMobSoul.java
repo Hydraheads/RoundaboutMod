@@ -46,6 +46,11 @@ public class GrabbedMobSoul extends StandEntity{
     }
 
     @Override
+    public boolean lockPos(){
+        return false;
+    }
+
+    @Override
     public boolean canBeHitByProjectile() { return false;}
 
     @Override

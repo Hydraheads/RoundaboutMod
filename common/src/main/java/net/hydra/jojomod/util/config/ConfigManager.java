@@ -350,11 +350,11 @@ public abstract class ConfigManager {
 
     public static void loadStandArrowPool()
     {
-        if (getAdvancedConfig().standArrowPoolv8 != null)
+        if (getAdvancedConfig().standArrowPoolv9 != null)
         {
             ModItems.STAND_ARROW_POOL.clear();
 
-            for (String disc : getAdvancedConfig().standArrowPoolv8)
+            for (String disc : getAdvancedConfig().standArrowPoolv9)
             {
                 String[] split = disc.split(":");
 
@@ -431,11 +431,11 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getAdvancedConfig().standArrowSecondaryPoolv8 != null)
+        if (getAdvancedConfig().standArrowSecondaryPoolv9 != null)
         {
             ModItems.STAND_ARROW_SECONDARY_STAND_POOL.clear();
 
-            for (String disc : getAdvancedConfig().standArrowSecondaryPoolv8)
+            for (String disc : getAdvancedConfig().standArrowSecondaryPoolv9)
             {
                 String[] split = disc.split(":");
 
