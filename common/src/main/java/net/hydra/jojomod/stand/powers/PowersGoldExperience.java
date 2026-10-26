@@ -20,6 +20,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -153,6 +154,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
         return false;
     }
 
+    @Override
+    public SoundEvent getImpaleSound() {
+        return ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_EVENT;
+    }
+
     // life punch end
 
     // end of move methods
@@ -165,11 +171,46 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public SoundEvent getSoundFromByte(byte soundChoice) {
         if (soundChoice == SoundIndex.SUMMON_SOUND) {
-            return ModSounds.SUMMON_KING_CRIMSON_EVENT;
+            return ModSounds.SUMMON_GOLD_EXPERIENCE_EVENT;
         } else if (soundChoice == IMPALE_NOISE) {
-            return ModSounds.IMPALE_CHARGE_EVENT;
+            return ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_WINDUP_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
+    }
+
+    @Override
+    public void playBarrageEndNoise(float mod, Entity entity) {
+        if (!this.self.level().isClientSide()) {
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_EVENT, SoundSource.PLAYERS, 0.85F + mod, 1F);
+        }
+    }
+
+    @Override
+    public void playBarrageNoise(int hitNumber, Entity entity) {
+        if (!this.self.level().isClientSide()) {
+            if (hitNumber % 2 == 0)
+                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GOLD_EXPERIENCE_HIT_EVENT, SoundSource.PLAYERS, 0.8F, 1F);
+        }
+    }
+
+    @Override
+    public float getPunchLandPitch() {
+        return 1F + 0.05F * activePowerPhase;
+    }
+
+    @Override
+    public float getPunchLandLastPitch() {
+        return 1F;
+    }
+
+    @Override
+    public SoundEvent getPunchLandSound() {
+        return ModSounds.GOLD_EXPERIENCE_HIT_EVENT;
+    }
+
+    @Override
+    public SoundEvent getPunchLandLastSound() {
+        return ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_EVENT;
     }
 
     // sounds end
@@ -180,7 +221,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public Component getSkinName(byte skinId) {
         switch (skinId) {
             default -> {
-                return Component.translatable("skins.roundabout.diver_down.base");
+                return Component.translatable("skins.roundabout.gold_experience.base");
             }
         }
     }

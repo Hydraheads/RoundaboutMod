@@ -1137,6 +1137,17 @@ public class ForgeSounds {
     public static final RegistryObject<SoundEvent> LYIN_EYES_GATHER =
             register(ModSounds.LYIN_EYES_GATHER, ModSounds.LYIN_EYES_GATHER_ID);
 
+    public static final RegistryObject<SoundEvent> SUMMON_GOLD_EXPERIENCE =
+            register(ModSounds.SUMMON_GOLD_EXPERIENCE, ModSounds.SUMMON_GOLD_EXPERIENCE_ID);
+    public static final RegistryObject<SoundEvent> GOLD_EXPERIENCE_HIT =
+            register(ModSounds.GOLD_EXPERIENCE_HIT, ModSounds.GOLD_EXPERIENCE_HIT_ID);
+    public static final RegistryObject<SoundEvent> GOLD_EXPERIENCE_LIFE_CREATION =
+            register(ModSounds.GOLD_EXPERIENCE_LIFE_CREATION, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_ID);
+    public static final RegistryObject<SoundEvent> GOLD_EXPERIENCE_LIFE_PUNCH_WINDUP =
+            register(ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_WINDUP, ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_WINDUP_ID);
+    public static final RegistryObject<SoundEvent> GOLD_EXPERIENCE_LIFE_PUNCH =
+            register(ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH, ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_ID);
+
     public static final RegistryObject<SoundEvent> SUMMON_GREEN_DAY =
             register(ModSounds.SUMMON_GREEN_DAY, ModSounds.SUMMON_GREEN_DAY_ID);
     public static final RegistryObject<SoundEvent> GREEN_DAY_SPIN =

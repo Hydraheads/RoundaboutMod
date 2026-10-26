@@ -506,6 +506,40 @@
       "roundabout:lyin_eyes_gather"
     ]
   },
+  "ge_summon": {
+    "subtitle": "sounds.roundabout.lyin_eyes_summon",
+    "sounds": [
+      "roundabout:ge_summon"
+    ]
+  },
+  "ge_life": {
+    "subtitle": "sounds.roundabout.ge_life",
+    "sounds": [
+      "roundabout:ge_life_1",
+      "roundabout:ge_life_2"
+    ]
+  },
+  "ge_hit": {
+    "subtitle": "sounds.roundabout.ge_hit",
+    "sounds": [
+      "roundabout:ge_hit_1",
+      "roundabout:ge_hit_2",
+      "roundabout:ge_hit_3",
+      "roundabout:ge_hit_4"
+    ]
+  },
+  "ge_life_punch": {
+    "subtitle": "sounds.roundabout.ge_life_punch",
+    "sounds": [
+      "roundabout:ge_life_punch"
+    ]
+  },
+  "ge_life_punch_windup": {
+    "subtitle": "sounds.roundabout.ge_life_punch_windup",
+    "sounds": [
+      "roundabout:ge_life_punch_windup"
+    ]
+  },
   "summon_king_crimson": {
     "subtitle": "sounds.roundabout.summon_king_crimson",
     "sounds": [
