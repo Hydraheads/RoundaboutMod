@@ -917,7 +917,7 @@ public class PowersDiverDown extends NewPunchingStand {
     public void playBarrageNoise(int hitNumber, Entity entity) {
         if (!this.self.level().isClientSide()) {
             if (hitNumber % 2 == 0)
-                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.DIVER_DOWN_BARRAGE_EVENT, SoundSource.PLAYERS, 0.7F, (float) (0.9 + (Math.random() * 0.25)));
+                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.DIVER_DOWN_BARRAGE_EVENT, SoundSource.PLAYERS, 0.7F, 1F);
         }
     }
 
