@@ -953,24 +953,8 @@
   "killer_queen_explosion": {
     "subtitle": "sounds.roundabout.killer_queen_explosion",
     "sounds": [
-      "roundabout:killer_queen_explosion"
-    ]
-  },
-  "killer_queen_explosion_1": {
-    "subtitle": "sounds.roundabout.killer_queen_explosion",
-    "sounds": [
-      "roundabout:killer_queen_explosion_1"
-    ]
-  },
-  "killer_queen_explosion_2": {
-    "subtitle": "sounds.roundabout.killer_queen_explosion",
-    "sounds": [
-      "roundabout:killer_queen_explosion_2"
-    ]
-  },
-  "killer_queen_explosion_3": {
-    "subtitle": "sounds.roundabout.killer_queen_explosion",
-    "sounds": [
+      "roundabout:killer_queen_explosion_1",
+      "roundabout:killer_queen_explosion_2",
       "roundabout:killer_queen_explosion_3"
     ]
   },
