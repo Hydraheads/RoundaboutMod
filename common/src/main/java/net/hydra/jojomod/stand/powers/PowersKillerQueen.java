@@ -22,6 +22,7 @@ import net.hydra.jojomod.entity.projectile.StrayCatAirBubble;
 import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
+import net.hydra.jojomod.entity.substand.PurpleSmokeEntity;
 import net.hydra.jojomod.entity.substand.SheerHeartAttackEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
@@ -3284,6 +3285,8 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
         }
 
+        int rewind = btdTicks;
+
         btdTicks = 0;
 
         if (!combatSavedBTD.isEmpty()) {
@@ -3292,6 +3295,10 @@ public class PowersKillerQueen extends NewPunchingStand {
             for (int id : this.combatSavedBTD.keySet()) {
                 Entity ent = this.self.level().getEntity(id);
                 if (ent != null && MainUtil.canRewindInTime(ent, this.self)) {
+                    if (ent instanceof PurpleSmokeEntity PSE) {
+                        PSE.timeRewindInteraction(rewind);
+                    }
+
                     SavedSecond second = combatSavedBTD.get(id);
 
                     if (second != null) {

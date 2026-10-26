@@ -53,7 +53,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class PurpleSmokeEntity extends StandEntity {
-    public float range = ClientNetworking.getAppropriateConfig().greenDaySettings.moldDefaultRange;
+    public float range = 1;
     public int lifetime = 600;
     public int lifetime_add = 150;
     public int totalDuration = 0;
@@ -313,6 +313,15 @@ public class PurpleSmokeEntity extends StandEntity {
         return true;
     }
 
+    public void timeSkipInteraction() {
+        lifetime -= 100;
+        ticksAlive += 100;
+    }
+
+    public void timeRewindInteraction(int time) {
+        lifetime = Math.min(600, lifetime + time);
+        ticksAlive = Math.max(0, ticksAlive - time);
+    }
 
     /**
      * USER_ID is the mob id of the stand's user. Needs to be stored as an int,
