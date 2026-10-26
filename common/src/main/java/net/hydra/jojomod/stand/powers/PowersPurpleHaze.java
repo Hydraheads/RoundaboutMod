@@ -1500,6 +1500,14 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 }
             }
         }
+
+        if (this.getSelf().onGround()){
+            if (((StandUser)this.getSelf()).roundabout$getLeapTicks() <= -1) {
+                if (this.getAnimation() == StandEntity.LEAP) {
+                    animateStand(StandEntity.LEAP_END);
+                }
+            }
+        }
     }
     public boolean purpleHazeFieldGone = false;
 
