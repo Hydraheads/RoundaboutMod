@@ -1669,33 +1669,38 @@ public class PowersWalkingHeart extends NewDashPreset {
 
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.spike_attack_mode",
+        int placement = 20;
+
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + placement, topPos + 80, 0, "ability.roundabout.spike_attack_mode",
                 "instruction.roundabout.press_skill", StandIcons.SPIKE_ATTACK_MODE, 1, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.heel_plant",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + placement, topPos + 99, 0, "ability.roundabout.heel_plant",
                 "instruction.roundabout.press_skill", StandIcons.GROUND_IMPLANT,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, getStompLevel(), "ability.roundabout.spike_stomp",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + placement, topPos + 118, getStompLevel(), "ability.roundabout.spike_stomp",
                 "instruction.roundabout.press_skill_air", StandIcons.WALKING_STOMP,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.dodge",
+        placement+=19;
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + placement, topPos + 80, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, getPushLevel(), "ability.roundabout.spike_push",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + placement, topPos + 99, getPushLevel(), "ability.roundabout.spike_push",
                 "instruction.roundabout.press_skill_crouch", StandIcons.PUSH_SPIKE,3,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, getPullLevel(), "ability.roundabout.spike_pull",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + placement, topPos + 118, getPullLevel(), "ability.roundabout.spike_pull",
                 "instruction.roundabout.press_skill_crouch", StandIcons.PULL_SPIKE,3,level,bypass));
+        placement+=19;
         if (canWallWalkConfig()) {
-            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 57, topPos + 80, 0, "ability.roundabout.wall_walk_move",
+            $$1.add(drawSingleGUIIcon(context, 18, leftPos + placement, topPos + 80, 0, "ability.roundabout.wall_walk_move",
                     "instruction.roundabout.press_skill_air", StandIcons.WALL_WALK, 3, level, bypass));
-            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 57, topPos + 99, 0, "ability.roundabout.firm_swing",
+            $$1.add(drawSingleGUIIcon(context, 18, leftPos + placement, topPos + 99, 0, "ability.roundabout.firm_swing",
                     "instruction.roundabout.passive", StandIcons.FIRM_SWING, 0, level, bypass));
-            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 57, topPos + 118, 0, "ability.roundabout.fall_disperse",
+            $$1.add(drawSingleGUIIcon(context, 18, leftPos + placement, topPos + 118, 0, "ability.roundabout.fall_disperse",
                     "instruction.roundabout.passive", StandIcons.FALL_ABSORB, 0, level, bypass));
             if (canCornerCutConfig()) {
-                $$1.add(drawSingleGUIIcon(context, 18, leftPos + 75, topPos + 80, 0, "ability.roundabout.corner_cut",
+                placement+=19;
+                $$1.add(drawSingleGUIIcon(context, 18, leftPos + placement, topPos + 80, 0, "ability.roundabout.corner_cut",
                         "instruction.roundabout.press_skill", StandIcons.WALL_CUT, 4, level, bypass));
             }
         } else {
-            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 57, topPos + 80, 0, "ability.roundabout.firm_swing",
+            $$1.add(drawSingleGUIIcon(context, 18, leftPos + placement, topPos + 80, 0, "ability.roundabout.firm_swing",
                     "instruction.roundabout.passive", StandIcons.FIRM_SWING, 0, level, bypass));
-            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 57, topPos + 99, 0, "ability.roundabout.fall_disperse",
+            $$1.add(drawSingleGUIIcon(context, 18, leftPos + placement, topPos + 99, 0, "ability.roundabout.fall_disperse",
                     "instruction.roundabout.passive", StandIcons.FALL_ABSORB, 0, level, bypass));
         }
         return $$1;
