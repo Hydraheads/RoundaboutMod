@@ -28,6 +28,7 @@ public interface IAbstractArrowAccess {
     /**Manhattan Transfer Values*/
     boolean roundabout$GetIsManhattan();
     void roundabout$SetIsManhattan(boolean isManhattanProjectile);
+    void roundabout$isArrowTooSlow(boolean mobAIForManhattan);
     float roundabout$getHattanDamage();
     void roundabout$setHattanDamage(float manhattanDmg);
     void roundabout$isMobAiArrow(boolean mobAIForManhattan);

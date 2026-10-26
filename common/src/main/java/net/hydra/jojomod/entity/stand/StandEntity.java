@@ -796,7 +796,9 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
            return super.hurt(source, amount);
         } else {
             if (this.getUser() != null && MainUtil.isStandDamage(source)) {
-                return this.getUser().hurt(source, amount);
+                if(!(this instanceof ManhattanTransferEntity ME)) {
+                    return this.getUser().hurt(source, amount);
+                }
             }
 
             if (source.is(DamageTypes.GENERIC_KILL) || source.is(DamageTypes.FELL_OUT_OF_WORLD)) {
