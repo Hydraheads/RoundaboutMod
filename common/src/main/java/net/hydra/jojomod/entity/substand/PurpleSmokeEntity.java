@@ -128,7 +128,7 @@ public class PurpleSmokeEntity extends StandEntity {
             range = 1.0F + (8.0F - 1.0F) * expansionProgress;
             range = Math.max(range, 1.0F);
         }
-        if (!((TimeStop) level()).inTimeStopRange(this)) {
+        //if (!((TimeStop) level()).inTimeStopRange(this)) {
             List<Entity> damages = MainUtil.genHitbox(
                     this.level(),
                     this.getX(),
@@ -151,7 +151,7 @@ public class PurpleSmokeEntity extends StandEntity {
                 if (Objects.nonNull(this.getUser())) {
                     Entity entity = damages.get(j);
                     if (entity instanceof LivingEntity LE) {
-                        if (!((StandUser) LE).roundabout$isBubbleEncased() && !(LE instanceof StrayCatEntity c && c.getBubbleShield()) && PowerTypes.isExistentiallyElsewhereTogether(this, LE)) {
+                        if (/*!((StandUser) LE).roundabout$isBubbleEncased() && !(LE instanceof StrayCatEntity c && c.getBubbleShield()) && */PowerTypes.isExistentiallyElsewhereTogether(this, LE)) {
                             if (isDistortionMode()) {
                                 ((StandUser) LE).SetInDistortionHazeTicks(5);
                             } else {
@@ -162,7 +162,7 @@ public class PurpleSmokeEntity extends StandEntity {
                     }
                 }
             }
-        }
+        //}
         if (!client) {
             tickeffect();
             tickBlockDecay();
