@@ -2773,6 +2773,8 @@ public class MainUtil {
                 || sauce.is(ModDamageTypes.DISINTEGRATION)
                 || sauce.is(ModDamageTypes.KQ_EXPLOSION)
                 || sauce.is(ModDamageTypes.INFINITE_SPIN)
+                || sauce.is(ModDamageTypes.HAZE_VIRUS)
+                || sauce.is(ModDamageTypes.DISTORTION_VIRUS)
                 || sauce.is(ModDamageTypes.BITES_THE_DUST)){
             return true;
         }

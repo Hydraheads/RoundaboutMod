@@ -392,7 +392,8 @@ public class SilverChariotPharaohModel<T extends SilverChariotEntity> extends St
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        stand.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+        // stand.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+        super.renderToBuffer(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
     }
 
     @Override

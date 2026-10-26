@@ -376,7 +376,11 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     }else this.tryPowerPacket(PowerIndex.POWER_1);
             }
             case SKILL_1_CROUCH,SKILL_1_CROUCH_GUARD -> {
-                this.tryPowerPacket(PowerIndex.POWER_1_SNEAK);
+                if(isBarraging() && !isBarrageCharging()){
+                    clientForwardBarrage();
+                }else {
+                    this.tryPowerPacket(PowerIndex.POWER_1_SNEAK);
+                }
             }
             case SKILL_2_NORMAL,SKILL_2_CROUCH,SKILL_2_CROUCH_GUARD, SKILL_2_GUARD -> {
                 this.tryPowerPacket(PowerIndex.POWER_2);
@@ -1055,13 +1059,14 @@ public class PowersPurpleHaze extends NewPunchingStand {
             }
         }
     }
+    Vec2 rotation;
     private void launchStrangle(StandEntity stand) {
-        Vec2 twoVec = new Vec2((this.getSelf().getYHeadRot() % 360), this.getSelf().getXRot());
+        rotation = new Vec2((this.getSelf().getYHeadRot() % 360), this.getSelf().getXRot());
         Direction gdir = ((IGravityEntity) this.self).roundabout$getGravityDirection();
-        Vec2 twoVecGrav = RotationUtil.rotPlayerToWorld(twoVec, gdir);
+        Vec2 twoVecGrav = RotationUtil.rotPlayerToWorld(rotation, gdir);
 
-        stand.setYRot(twoVec.x);
-        stand.setXRot(twoVec.y);
+        stand.setYRot(rotation.x);
+        stand.setXRot(rotation.y);
 
         this.strangleOrigin = stand.position();
         this.strangleDirection = DamageHandler.getRotationVector(twoVecGrav.y, (float) twoVecGrav.x).normalize();
@@ -1091,6 +1096,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }*/
 
         stand.setPos(nextPos);
+        stand.setYRot(rotation.x);
+        stand.setXRot(rotation.y);
         strangleTravelTicks++;
 
         AABB sweep = stand.getBoundingBox().inflate(0.6).minmax(
