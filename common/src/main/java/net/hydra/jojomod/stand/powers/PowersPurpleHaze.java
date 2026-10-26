@@ -288,7 +288,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                             this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
                         } else {
                             this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
-                            this.setCooldown(PowerIndex.SKILL_1_SNEAK, 10);
+                           // this.setCooldown(PowerIndex.SKILL_1_SNEAK, 10);
                         }
                         bonusLeapCount = 3;
                         bigLeap(this.getSelf(), 20, 1);
@@ -1427,6 +1427,19 @@ public class PowersPurpleHaze extends NewPunchingStand {
         boolean mode = purpleHazePodDistortionMode;
         purpleHazePod = null;
         activatePurpleHazeField(landingPosition, mode);
+    }
+
+    @Override
+    public void endClash(){
+        super.endClash();
+        if (self != null && self.isAlive()) {
+            /* I dunno how the crash pod should be, this method is called in either on tie or win
+            * So if you want the pod to release in only of those (which maybe be more safe since "endClash" is
+            * called in different context, like PowerType.forcePlaneOfExisting(...) and MainUtil.onDeath(...) )
+            * Just Override the breakClash(LivingEntity winner, LivingEntity loser)
+            * or TieClash(LivingEntity user1, LivingEntity user2)
+            * */
+        }
     }
 
     @Override
