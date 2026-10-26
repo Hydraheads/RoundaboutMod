@@ -574,6 +574,7 @@
 
   "effect.roundabout.fortification": "Fortification",
   "effect.roundabout.bleed": "Bleed",
+  "effect.roundabout.doom_immunity": "Doom Immunity",
   "effect.roundabout.banish": "Banish",
   "effect.roundabout.doom": "Doomed",
   "effect.roundabout.hex": "Hex",
@@ -723,6 +724,10 @@
   "entity.roundabout.left_seperated_arm": "Left Seperated Arm",
   "entity.roundabout.left_seperated_arm_slim": "Left Aeperated Arm Slim",
   "entity.roundabout.zombiefish": "Zombiefish",
+
+  "entity.roundabout.sheer_heart_attack": "Sheer Heart Attack",
+  "entity.roundabout.totem_of_doom": "Totem Of Doom",
+
 
   "entity.roundabout.step_rule": "Step Rule",
 
