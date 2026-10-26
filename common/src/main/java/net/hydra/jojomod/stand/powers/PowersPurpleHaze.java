@@ -1326,6 +1326,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 field.setStandSkin(getStandSkin());
                 field.totalDuration = distortionMode ? DISTORTION_FIELD_DURATION : PURPLE_HAZE_FIELD_DURATION;
                 field.lifetime = field.totalDuration;
+                PowerTypes.copyPlaneOfExisting(self, field);
                 this.self.level().addFreshEntity(field);
             }
         }
@@ -1389,6 +1390,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 setPods(getPods() - 1);
             }
 
+
+            PowerTypes.copyPlaneOfExisting(self, capsule);
 
             this.setCooldown(PowerIndex.SNEAK_ATTACK, 200);
         }

@@ -4,12 +4,14 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.RoundaboutLoadServer;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.stand.PurpleHazeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.mixin.PlayerEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.particles.HazeColorParticleOptions;
@@ -51,7 +53,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class PurpleSmokeEntity extends StandEntity {
-    public float range = ClientNetworking.getAppropriateConfig().greenDaySettings.moldDefaultRange;
+    public float range = 1;
     public int lifetime = 600;
     public int lifetime_add = 150;
     public int totalDuration = 0;
@@ -92,13 +94,15 @@ public class PurpleSmokeEntity extends StandEntity {
                 this.discard();
             }
         }
-        lifetime--;
-        ticksAlive++;
-        if (!client && !isDistortionMode()) {
-            lifetime -= getLightDecayAmount();
-        }
-        if (lifetime < 1) {
-            this.discard();
+        if (!((TimeStop) level()).inTimeStopRange(this)) {
+            lifetime--;
+            ticksAlive++;
+            if (!client && !isDistortionMode()) {
+                lifetime -= getLightDecayAmount();
+            }
+            if (lifetime < 1) {
+                this.discard();
+            }
         }
 
         if (user == null) {
@@ -124,15 +128,16 @@ public class PurpleSmokeEntity extends StandEntity {
             range = 1.0F + (8.0F - 1.0F) * expansionProgress;
             range = Math.max(range, 1.0F);
         }
-        List<Entity> damages = MainUtil.genHitbox(
-                this.level(),
-                this.getX(),
-                this.getY(),
-                this.getZ(),
-                range,
-                range,
-                range
-        );
+        //if (!((TimeStop) level()).inTimeStopRange(this)) {
+            List<Entity> damages = MainUtil.genHitbox(
+                    this.level(),
+                    this.getX(),
+                    this.getY(),
+                    this.getZ(),
+                    range,
+                    range,
+                    range
+            );
 
         /*if (client) {
             Roundabout.LOGGER.info(
@@ -142,19 +147,22 @@ public class PurpleSmokeEntity extends StandEntity {
             );
         }*/
 
-        for (int j = 0; j < damages.size(); j++) {
-            if (Objects.nonNull(this.getUser())) {
-                Entity entity = damages.get(j);
-                if (entity instanceof LivingEntity) {
-                    if (isDistortionMode()) {
-                        ((StandUser) entity).SetInDistortionHazeTicks(5);
-                    } else {
-                        ((StandUser) entity).SetInPurpleHazeTicks(5);
-                        ((StandUser) entity).SetPurpleHazeSkin(this.getStandSkin());
+            for (int j = 0; j < damages.size(); j++) {
+                if (Objects.nonNull(this.getUser())) {
+                    Entity entity = damages.get(j);
+                    if (entity instanceof LivingEntity LE) {
+                        if (/*!((StandUser) LE).roundabout$isBubbleEncased() && !(LE instanceof StrayCatEntity c && c.getBubbleShield()) && */PowerTypes.isExistentiallyElsewhereTogether(this, LE)) {
+                            if (isDistortionMode()) {
+                                ((StandUser) LE).SetInDistortionHazeTicks(5);
+                            } else {
+                                ((StandUser) LE).SetInPurpleHazeTicks(5);
+                                ((StandUser) LE).SetPurpleHazeSkin(this.getStandSkin());
+                            }
+                        }
                     }
                 }
             }
-        }
+        //}
         if (!client) {
             tickeffect();
             tickBlockDecay();
@@ -254,6 +262,8 @@ public class PurpleSmokeEntity extends StandEntity {
     }
     private final java.util.Set<Integer> expGrantedTo = new java.util.HashSet<>();
     public void tickeffect() {
+        if (((TimeStop) level()).inTimeStopRange(this)) { return; }
+
         List<Entity> damages = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), range, range, range);
         LivingEntity user = this.getUser();
         if (user == null) return;
@@ -264,31 +274,34 @@ public class PurpleSmokeEntity extends StandEntity {
         for (Entity entity : damages) {
             if (!(entity instanceof LivingEntity living)) continue;
 
-            int effectDuration = living instanceof Player ? 100 : 150;
-            boolean isSelf = living == user;
+            if (!((StandUser) living).roundabout$isBubbleEncased() && !(living instanceof StrayCatEntity c && c.getBubbleShield()) && PowerTypes.isExistentiallyElsewhereTogether(this, living)) {
 
-            if (isDistortionMode()) {
-                boolean alreadyHasVirus = living.hasEffect(ModEffects.DISTORTION_VIRUS);
-                living.addEffect(new MobEffectInstance(ModEffects.DISTORTION_VIRUS, effectDuration));
-                ((StandUser) living).SetInDistortionHazeTicks(5);
+                int effectDuration = living instanceof Player ? 100 : 150;
+                boolean isSelf = living == user;
 
-                if (!isSelf && !alreadyHasVirus && expGrantedTo.add(living.getId())) {
-                    ((StandUser) user).roundabout$getStandPowers().addEXP(2);
-                }
-                if (ClientNetworking.getAppropriateConfig().PurpleHazeSettings.HazeMelts) {
-                    living.addEffect(new MobEffectInstance(ModEffects.MELTING, 150, 2));
-                }
-            } else {
-                boolean alreadyHasVirus = living.hasEffect(ModEffects.HAZE_VIRUS);
-                ((StandUser) living).SetInPurpleHazeTicks(5);
-                ((StandUser) living).SetPurpleHazeSkin(this.getStandSkin());
-                living.addEffect(new MobEffectInstance(ModEffects.HAZE_VIRUS, 150));
+                if (isDistortionMode()) {
+                    boolean alreadyHasVirus = living.hasEffect(ModEffects.DISTORTION_VIRUS);
+                    living.addEffect(new MobEffectInstance(ModEffects.DISTORTION_VIRUS, effectDuration));
+                    ((StandUser) living).SetInDistortionHazeTicks(5);
 
-                if (!isSelf && !alreadyHasVirus && expGrantedTo.add(living.getId())) {
-                    ((StandUser) user).roundabout$getStandPowers().addEXP(3);
-                }
-                if (ClientNetworking.getAppropriateConfig().PurpleHazeSettings.HazeMelts) {
-                    living.addEffect(new MobEffectInstance(ModEffects.MELTING, 150, 1));
+                    if (!isSelf && !alreadyHasVirus && expGrantedTo.add(living.getId())) {
+                        ((StandUser) user).roundabout$getStandPowers().addEXP(2);
+                    }
+                    if (ClientNetworking.getAppropriateConfig().PurpleHazeSettings.HazeMelts) {
+                        living.addEffect(new MobEffectInstance(ModEffects.MELTING, 150, 2));
+                    }
+                } else {
+                    boolean alreadyHasVirus = living.hasEffect(ModEffects.HAZE_VIRUS);
+                    ((StandUser) living).SetInPurpleHazeTicks(5);
+                    ((StandUser) living).SetPurpleHazeSkin(this.getStandSkin());
+                    living.addEffect(new MobEffectInstance(ModEffects.HAZE_VIRUS, 150));
+
+                    if (!isSelf && !alreadyHasVirus && expGrantedTo.add(living.getId())) {
+                        ((StandUser) user).roundabout$getStandPowers().addEXP(3);
+                    }
+                    if (ClientNetworking.getAppropriateConfig().PurpleHazeSettings.HazeMelts) {
+                        living.addEffect(new MobEffectInstance(ModEffects.MELTING, 150, 1));
+                    }
                 }
             }
         }
@@ -305,6 +318,15 @@ public class PurpleSmokeEntity extends StandEntity {
         return true;
     }
 
+    public void timeSkipInteraction() {
+        lifetime -= 100;
+        ticksAlive += 100;
+    }
+
+    public void timeRewindInteraction(int time) {
+        lifetime = Math.min(600, lifetime + time);
+        ticksAlive = Math.max(0, ticksAlive - time);
+    }
 
     /**
      * USER_ID is the mob id of the stand's user. Needs to be stored as an int,

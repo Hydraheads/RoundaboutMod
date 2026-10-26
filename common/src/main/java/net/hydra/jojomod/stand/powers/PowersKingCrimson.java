@@ -22,6 +22,7 @@ import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
+import net.hydra.jojomod.entity.substand.PurpleSmokeEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
@@ -1768,7 +1769,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
             if (!canSkip(entity))
                 continue;
             hitWall2 = false;
-            if (entity instanceof Projectile proj) {
+            if (entity instanceof PurpleSmokeEntity PSE) {
+                PSE.timeSkipInteraction();
+            }else if (entity instanceof Projectile proj) {
                 if (proj instanceof FireworkRocketEntity){
                     proj.discard();
                 } else {
