@@ -1133,7 +1133,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     && !e.is(this.getSelf())
                     && le.isAlive()
                     && !le.isInvulnerable()
-                    && stand.getSensing().hasLineOfSight(le)) {
+                    && stand.getSensing().hasLineOfSight(le)
+                    && le.isAttackable() && le.isPickable() && !(le instanceof StandEntity)
+            ) {
                 beginStranglePin(stand, le);
                 return;
             }
