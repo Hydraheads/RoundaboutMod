@@ -1306,6 +1306,11 @@
   "sounds.roundabout.lyin_eyes_vision":  "Nematodes gather",
   "sounds.roundabout.lyin_eyes_gather":  "Nematodes gather",
 
+  "sounds.roundabout.ge_hit":  "Impact",
+  "sounds.roundabout.ge_life_punch":  "Heavy Impact",
+  "sounds.roundabout.ge_life_punch_windup":  "Windup",
+  "sounds.roundabout.ge_life":  "Life Creation",
+
   "sounds.roundabout.vampire_dive":  "Whoosh",
   "sounds.roundabout.punch_sfx1":  "Air Cracks",
   "sounds.roundabout.punch_sfx2":  "Air Cracks",

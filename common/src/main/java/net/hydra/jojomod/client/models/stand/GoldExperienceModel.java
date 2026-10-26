@@ -1,8 +1,11 @@
 package net.hydra.jojomod.client.models.stand;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.client.models.stand.animations.DiverDownAnimations;
 import net.hydra.jojomod.client.models.stand.animations.GoldExperienceAnimations;
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
+import net.hydra.jojomod.client.models.stand.renderers.GoldExperienceBaseRenderer;
 import net.hydra.jojomod.entity.stand.DiverDownEntity;
 import net.hydra.jojomod.entity.stand.GoldExperienceEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -14,6 +17,7 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.AnimationState;
@@ -21,6 +25,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
 public class GoldExperienceModel <T extends GoldExperienceEntity> extends StandModel<T>{
+    private GoldExperienceEntity currentEntity;
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "unknown"), "main");
     private final ModelPart stand2;
     private final ModelPart head2;
@@ -225,6 +230,7 @@ public class GoldExperienceModel <T extends GoldExperienceEntity> extends StandM
 
     @Override
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+        this.currentEntity = pEntity;
         super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
         defaultModifiers(pEntity);
         defaultAnimations(pEntity, pAgeInTicks, 1/((float) Power.getBarrageWindup() /20));
@@ -244,5 +250,33 @@ public class GoldExperienceModel <T extends GoldExperienceEntity> extends StandM
         state.updateTime(animationProgress, 1.0F);
         state.ifStarted(animationState -> KeyframeAnimations.animate(this, animation,
                 animationState.getAccumulatedTime(), weight, animationVectorCache));
+    }
+
+    // need to override this for the super cool glowy life punch arm
+    @Override
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+        super.renderToBuffer(poseStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+
+        if (this.currentEntity != null && this.currentEntity.getAnimation() == GoldExperienceEntity.LIFE_PUNCH) {
+            int fullBright = 15728880;
+            net.minecraft.client.renderer.MultiBufferSource.BufferSource globalBufferSource = net.minecraft.client.Minecraft.getInstance().renderBuffers().bufferSource();
+            ResourceLocation texture = GoldExperienceBaseRenderer.getSkin(this.currentEntity.getSkin());
+            RenderType additiveGlow = RenderType.beaconBeam(texture, true);
+            VertexConsumer glowBuffer = globalBufferSource.getBuffer(additiveGlow);
+
+            poseStack.pushPose();
+
+            this.stand.translateAndRotate(poseStack);
+            this.stand2.translateAndRotate(poseStack);
+            this.body.translateAndRotate(poseStack);
+            this.body2.translateAndRotate(poseStack);
+            this.torso.translateAndRotate(poseStack);
+            this.upper_chest.translateAndRotate(poseStack);
+            this.right_arm.translateAndRotate(poseStack);
+
+            this.lower_right_arm.render(poseStack, glowBuffer, fullBright, packedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
+
+            poseStack.popPose();
+        }
     }
 }
