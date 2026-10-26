@@ -1502,6 +1502,8 @@ public class ForgeSounds {
             register(ModSounds.HALLELUJAH, ModSounds.HALLELUJAH_ID);
     public static final RegistryObject<SoundEvent> TORTURE_DANCE =
             register(ModSounds.TORTURE_DANCE, ModSounds.TORTURE_DANCE_ID);
+    public static final RegistryObject<SoundEvent> CHAKA_HFTF =
+            register(ModSounds.CHAKA_HFTF, ModSounds.CHAKA_HFTF_ID);
     public static final RegistryObject<SoundEvent> WHITESNAKE_SUMMON =
             register(ModSounds.WHITESNAKE_SUMMON, ModSounds.WHITESNAKE_SUMMON_ID);
     public static final RegistryObject<SoundEvent> WHITESNAKE_PUNCH_HIT =

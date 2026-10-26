@@ -187,6 +187,7 @@ public class ModItems {
 
     public static Item MUSIC_DISC_TORTURE_DANCE;
     public static Item MUSIC_DISC_HALLELUJAH;
+    public static Item MUSIC_DISC_CHAKA_HFTF;
     public static Item LUCKY_LIPSTICK;
 
     public static Item MEMORY_PAWN;
