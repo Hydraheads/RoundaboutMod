@@ -1510,6 +1510,14 @@ public class PowersPurpleHaze extends NewPunchingStand {
         return ModSounds.PURPLE_HAZE_BARRAGE_CRY_EVENT;
     }
 
+
+    @Override
+    public void playBarrageEndNoise(float mod, Entity entity) {
+        if (!this.self.level().isClientSide()) {
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.PURPLE_HAZE_BARRAGE_FINISHER_EVENT, SoundSource.PLAYERS, 0.85F + mod, 1F);
+        }
+    }
+
     @Override
     public void playBarrageNoise(int hitNumber, Entity entity) {
         if (!this.self.level().isClientSide()) {
