@@ -814,7 +814,7 @@ public class ForgeEvents {
         ModEffects.CRIPPLED = ForgeEffects.CRIPPLED.get();
         ModEffects.HALLUCINATION = ForgeEffects.HALLUCINATION.get();
         ModEffects.OLD = ForgeEffects.OLD.get();
-        ModEffects.DREAMING = ForgeEffects.DREAMING.get();
+        ModEffects.SLEEPING = ForgeEffects.SLEEPING.get();
         ModEffects.REFRESHED = ForgeEffects.REFRESHED.get();
         ModEffects.INFINITE_SPIN = ForgeEffects.INFINITE_SPIN.get();
         ModEffects.IMPRINTING = ForgeEffects.IMPRINTING.get();

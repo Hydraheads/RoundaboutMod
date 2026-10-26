@@ -410,6 +410,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     private StandPowers roundabout$Powers;
     @Unique
+    private boolean roundabout$changingStandPowers;
+    @Unique
+    private boolean roundabout$loadingStandData;
+    @Unique
+    private int roundabout$springLegsTicks;
+    @Unique
     private StandPowers roundabout$RejectionStandPowers = null;
     @Unique
     private ItemStack roundabout$RejectionStandDisc = null;
@@ -1717,6 +1723,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         // if (StandID > -1) {
         if (!this.level().isClientSide()) {
+            if (roundabout$hasSpringLegs() && --roundabout$springLegsTicks <= 0) {
+                roundabout$setSpringLegs(false);
+            }
             if (roundabout$getBoundTo() != null && (!roundabout$getBoundTo().isAlive()
                     || roundabout$getBoundToID() != roundabout$getBoundTo().getId())) {
                 roundabout$setBoundTo(null);
@@ -2485,6 +2494,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (stack.getItem() instanceof StandDiscItem SD) {
                 SD.generateStandPowers(rdbt$this());
                 MainUtil.extractDiscData(((LivingEntity) (Object) this), SD, stack);
+            } else if (roundabout$Powers instanceof PowersWhitesnake || roundabout$Powers instanceof PowersDiverDown) {
+                this.roundabout$setStandPowers(null);
             }
         }
     }
@@ -2651,7 +2662,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"))
     public void roundabout$readAdditionalSaveData(CompoundTag $$0, CallbackInfo ci) {
-        MainUtil.loadLivingData($$0,this,(LivingEntity)(Object) this);
+        roundabout$loadingStandData = true;
+        try {
+            MainUtil.loadLivingData($$0,this,(LivingEntity)(Object) this);
+        } finally {
+            roundabout$loadingStandData = false;
+        }
     }
 
     @ModifyVariable(method = "checkAutoSpinAttack(Lnet/minecraft/world/phys/AABB;Lnet/minecraft/world/phys/AABB;)V", at = @At("STORE"), ordinal = 0)
@@ -3459,6 +3475,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public ItemStack roundabout$itemParityClient = ItemStack.EMPTY;
 
     public StandPowers roundabout$getStandPowers() {
+        if (roundabout$changingStandPowers) return roundabout$Powers;
         if (this.level().isClientSide) {
             ItemStack standDisc = this.roundabout$getStandDisc();
             if (!ItemStack.matches(roundabout$itemParityClient, standDisc)) {
@@ -3512,6 +3529,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     public void roundabout$setStandPowers(StandPowers standPowers) {
+        if (roundabout$Powers != standPowers && !roundabout$changingStandPowers
+                && !roundabout$loadingStandData
+                && !(rdbt$this() instanceof ServerPlayer player && player.connection == null)
+                && (roundabout$Powers instanceof PowersWhitesnake || roundabout$Powers instanceof PowersDiverDown)
+                && (!level().isClientSide() || roundabout$Powers.isPacketPlayer())) {
+            roundabout$changingStandPowers = true;
+            try {
+                roundabout$Powers.onStandSwitch();
+            } finally {
+                roundabout$changingStandPowers = false;
+            }
+        }
         this.roundabout$Powers = standPowers;
     }
 
@@ -7117,6 +7146,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Override
     public void roundabout$setSpringLegs(boolean spring) {
+        if (!level().isClientSide()) {
+            roundabout$springLegsTicks = spring ? PowersDiverDown.SPRING_LEGS_MAX_DURATION + 100 : 0;
+        }
         this.entityData.set(ROUNDABOUT$SPRING_LEGS, spring);
     }
     // for diver down end

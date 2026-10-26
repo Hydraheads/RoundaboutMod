@@ -1,7 +1,6 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.event.powers.whitesnake.DreamingEffect;
 import net.hydra.jojomod.event.powers.whitesnake.HallucinationEffect;
 import net.hydra.jojomod.event.powers.whitesnake.OldEffect;
 import net.minecraft.world.effect.MobEffect;
@@ -86,7 +85,8 @@ public class ForgeEffects{
     public static final RegistryObject<MobEffect> HALLUCINATION =
             POTION_EFFECTS.register("hallucination", HallucinationEffect::new);
     public static final RegistryObject<MobEffect> OLD = POTION_EFFECTS.register("old", OldEffect::new);
-    public static final RegistryObject<MobEffect> DREAMING = POTION_EFFECTS.register("dreaming", DreamingEffect::new);
+    public static final RegistryObject<MobEffect> SLEEPING = POTION_EFFECTS.register("sleeping", () ->
+            new Effect(MobEffectCategory.HARMFUL, 0x9BA9E8));
     public static final RegistryObject<MobEffect> REFRESHED =
             POTION_EFFECTS.register("refreshed", () ->
                     new Effect(MobEffectCategory.BENEFICIAL, 13302495)

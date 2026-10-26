@@ -32,7 +32,7 @@ public final class DreamingMemoryController {
     }
 
     public static boolean isDreamingWithoutMemory(Mob mob) {
-        return mob.hasEffect(ModEffects.DREAMING)
+        return mob.hasEffect(ModEffects.SLEEPING)
                 && !((DiscBearer) mob).roundabout$hasTemporaryMemoryDisc();
     }
 
