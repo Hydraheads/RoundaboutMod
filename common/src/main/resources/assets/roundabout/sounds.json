@@ -4067,6 +4067,12 @@
       "roundabout:ph_hit_4"
     ]
   },
+  "purple_haze_barrage_finisher": {
+    "subtitle": "sounds.roundabout.purple_haze_barrage_finisher",
+    "sounds": [
+      "roundabout:ph_finisher"
+    ]
+  },
   "purple_haze_smoke": {
     "subtitle": "sounds.roundabout.purple_haze_smoke",
     "sounds": [
