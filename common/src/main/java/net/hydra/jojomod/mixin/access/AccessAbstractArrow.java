@@ -102,7 +102,13 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
             this.isManhattanProjectile = isManhattanProjectile;
     }
 
+    @Override
+    public void roundabout$isArrowTooSlow(boolean isTooSlow){
+        this.isArrowTooSlow = isTooSlow;
+    }
+
     public boolean isManhattanProjectile;
+    public boolean isArrowTooSlow;
     public boolean isManhattanProjectileMobAI = false;
 
     @Override
@@ -168,9 +174,11 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
             if(!isManhattanProjectileMobAI) {
                 entity.hurt(damageSources().arrow(ABA, ABA.getOwner()), roundabout$lastHattanDamage);
             }
+            if(!isArrowTooSlow) {
                 entity.invulnerableTime = 0;
-            if (entity.isAlive()) {
-                doBonusDamageHattan(entity);
+                if (entity.isAlive()) {
+                    doBonusDamageHattan(entity);
+                }
             }
         }
     }

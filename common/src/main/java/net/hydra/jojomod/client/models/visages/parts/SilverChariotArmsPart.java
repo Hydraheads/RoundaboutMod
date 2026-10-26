@@ -279,10 +279,16 @@ public class SilverChariotArmsPart extends PsuedoHierarchicalModel {
 							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.LeftVault(), partialTicks, 1f);
 						}
 					} else if (animation == StandPowers.MINING) {
-						if (!isRightHanded) {
-							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.LeftBarrage(), partialTicks, 1f);
-						} else {
+						if (isRightHanded) {
 							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.RightBarrage(), partialTicks, 1f);
+						} else {
+							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.LeftBarrage(), partialTicks, 1f);
+						}
+					} else if (animation == SilverChariotEntity.SC_GUARD_HIT) {
+						if (isRightHanded) {
+							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.RightGuardHit(), partialTicks, 1f);
+						} else {
+							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.LeftGuardHit(), partialTicks, 1f);
 						}
 					}
 

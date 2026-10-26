@@ -574,6 +574,7 @@
 
   "effect.roundabout.fortification": "Fortification",
   "effect.roundabout.bleed": "Bleed",
+  "effect.roundabout.doom_immunity": "Doom Immunity",
   "effect.roundabout.banish": "Banish",
   "effect.roundabout.doom": "Doomed",
   "effect.roundabout.hex": "Hex",
@@ -723,6 +724,10 @@
   "entity.roundabout.left_seperated_arm": "Left Seperated Arm",
   "entity.roundabout.left_seperated_arm_slim": "Left Aeperated Arm Slim",
   "entity.roundabout.zombiefish": "Zombiefish",
+
+  "entity.roundabout.sheer_heart_attack": "Sheer Heart Attack",
+  "entity.roundabout.totem_of_doom": "Totem Of Doom",
+
 
   "entity.roundabout.step_rule": "Step Rule",
 
@@ -1305,6 +1310,11 @@
   "sounds.roundabout.villager_called_out":  "Villager Called Out",
   "sounds.roundabout.lyin_eyes_vision":  "Nematodes gather",
   "sounds.roundabout.lyin_eyes_gather":  "Nematodes gather",
+
+  "sounds.roundabout.ge_hit":  "Impact",
+  "sounds.roundabout.ge_life_punch":  "Heavy Impact",
+  "sounds.roundabout.ge_life_punch_windup":  "Windup",
+  "sounds.roundabout.ge_life":  "Life Creation",
 
   "sounds.roundabout.vampire_dive":  "Whoosh",
   "sounds.roundabout.punch_sfx1":  "Air Cracks",
@@ -2650,7 +2660,7 @@
   "ability.roundabout.lyin_eyes_tension_sensor.desc": "The nematodes highlight enemies through walls. Hostile mobs are highlighted red, neutral mobs are yellow, and passive mobs are green. Enemies that are low are highlighted differently.",
   "ability.roundabout.lyin_eyes_inventory": "Inventory Reader",
   "ability.roundabout.lyin_eyes_inventory.desc": "The nematodes gather around to show you what items a player has in their inventory.",
-  "ability.roundabout.lyin_eyes_callout": "Callout Liar",
+  "ability.roundabout.lyin_eyes_callout": "Call Out Liar",
   "ability.roundabout.lyin_eyes_callout.desc": "Interacting with a villager might cause them to be revealed as a liar. Using Tension Sensor, you can detect those that are lying to you. Interact with them again while in Tension Sensor to call them out, giving all Lyin' Eyes users permanent trade discounts. Don't go lying.",
   "container.roundabout.lyin_eyes_callout": " ",
   "text.roundabout.lyin_eyes.tension_highlight": "Tension Highlight On",

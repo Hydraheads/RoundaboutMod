@@ -406,14 +406,13 @@ public abstract class HudRendering implements IHudAccess {
                     }
                 }
 
-                // put the thing slightly below the crosshair
+                // put the thing bottom right
                 int textWidth = this.getFont().width(ammoText);
-                int x = (this.screenWidth - textWidth) / 2;
-                // fix for survival/creative rendering
-                int y = this.screenHeight - 70;
-                if (this.minecraft.gameMode != null && !this.minecraft.gameMode.canHurtPlayer()) {
-                    y += 14;
-                }
+                int paddingRight = 15;
+                int paddingBottom = 20;
+                int x = this.screenWidth - textWidth - paddingRight;
+                int y = this.screenHeight - paddingBottom;
+
                 // prints :0
                 graphics.drawString(this.getFont(), ammoText, x, y, color, true);
             }

@@ -2035,6 +2035,22 @@ public class ModSounds {
     public static final ResourceLocation LYIN_EYES_GATHER_ID = new ResourceLocation(Roundabout.MOD_ID+":"+LYIN_EYES_GATHER);
     public static SoundEvent LYIN_EYES_GATHER_EVENT = SoundEvent.createVariableRangeEvent(LYIN_EYES_GATHER_ID);
 
+    public static final String SUMMON_GOLD_EXPERIENCE = "ge_summon";
+    public static final ResourceLocation SUMMON_GOLD_EXPERIENCE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_GOLD_EXPERIENCE);
+    public static SoundEvent SUMMON_GOLD_EXPERIENCE_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_GOLD_EXPERIENCE_ID);
+    public static final String GOLD_EXPERIENCE_HIT = "ge_hit";
+    public static final ResourceLocation GOLD_EXPERIENCE_HIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+GOLD_EXPERIENCE_HIT);
+    public static SoundEvent GOLD_EXPERIENCE_HIT_EVENT = SoundEvent.createVariableRangeEvent(GOLD_EXPERIENCE_HIT_ID);
+    public static final String GOLD_EXPERIENCE_LIFE_CREATION = "ge_life";
+    public static final ResourceLocation GOLD_EXPERIENCE_LIFE_CREATION_ID = new ResourceLocation(Roundabout.MOD_ID+":"+GOLD_EXPERIENCE_LIFE_CREATION);
+    public static SoundEvent GOLD_EXPERIENCE_LIFE_CREATION_EVENT = SoundEvent.createVariableRangeEvent(GOLD_EXPERIENCE_LIFE_CREATION_ID);
+    public static final String GOLD_EXPERIENCE_LIFE_PUNCH_WINDUP = "ge_life_punch_windup";
+    public static final ResourceLocation GOLD_EXPERIENCE_LIFE_PUNCH_WINDUP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+GOLD_EXPERIENCE_LIFE_PUNCH_WINDUP);
+    public static SoundEvent GOLD_EXPERIENCE_LIFE_PUNCH_WINDUP_EVENT = SoundEvent.createVariableRangeEvent(GOLD_EXPERIENCE_LIFE_PUNCH_WINDUP_ID);
+    public static final String GOLD_EXPERIENCE_LIFE_PUNCH = "ge_life_punch";
+    public static final ResourceLocation GOLD_EXPERIENCE_LIFE_PUNCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+GOLD_EXPERIENCE_LIFE_PUNCH);
+    public static SoundEvent GOLD_EXPERIENCE_LIFE_PUNCH_EVENT = SoundEvent.createVariableRangeEvent(GOLD_EXPERIENCE_LIFE_PUNCH_ID);
+
     public static final String SUMMON_GREEN_DAY = "summon_green_day";
     public static final ResourceLocation SUMMON_GREEN_DAY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_GREEN_DAY);
     public static SoundEvent SUMMON_GREEN_DAY_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_GREEN_DAY_ID);

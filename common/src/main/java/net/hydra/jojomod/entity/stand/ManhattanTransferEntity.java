@@ -98,11 +98,6 @@ public class ManhattanTransferEntity extends StandEntity {
     }
 
     @Override
-    public boolean isAttackable() {
-        return getBsGrabbed() == 0;
-    }
-
-    @Override
     public boolean skipAttackInteraction(Entity $$0) {
         return false;
     }
@@ -225,6 +220,7 @@ public class ManhattanTransferEntity extends StandEntity {
     int knockbackArrow = 0;
     void setKnockbackArrow(int necessary){knockbackArrow = necessary;}
     int piercingArrow = 0;
+    boolean isArrowTooSlow = false;
     public StandUser getUserData(LivingEntity User) {
         return ((StandUser) User);
     }
@@ -275,6 +271,11 @@ public class ManhattanTransferEntity extends StandEntity {
                                         this.setHeldItemManhattan(ii.copyAndClear());
                                         setKnockbackArrow(AA.getKnockback());
                                         piercingArrow = AA.getPierceLevel();
+                                        if(AA.getDeltaMovement().length() > 0.7){
+                                            isArrowTooSlow = false;
+                                        } else {
+                                            isArrowTooSlow = true;
+                                        }
                                         AA.discard();
                                     } else if (AA instanceof RoundaboutBulletEntity BE) {
                                         hasItem = true;
@@ -440,6 +441,9 @@ public class ManhattanTransferEntity extends StandEntity {
                     $$11.pickup =AbstractArrow.Pickup.CREATIVE_ONLY;
                 }
                 thrower.level().addFreshEntity($$11);
+                if(thrower.isArrowTooSlow) {
+                    ((IAbstractArrowAccess) $$11).roundabout$isArrowTooSlow(true);
+                }
                 ((IAbstractArrowAccess) $$11).roundabout$SetIsManhattan(true);
                 ((IAbstractArrowAccess) $$11).roundabout$setHattanDamage(thrower.manhattanDamageIncipit);
                 $$11.setRemainingFireTicks(thrower.fireTicksPrj);
