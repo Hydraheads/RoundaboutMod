@@ -195,7 +195,7 @@ public class PowersSilverChariot extends NewPunchingStand {
 
         // Unable to switch skin if the stand is in control mode
         // or is not armoured
-        if (isPiloting() || !getArmoured()) {
+        if (isPiloting() || !getArmoured() || getSelfCarryMode()) {
             if (this.getStandEntity(self) instanceof SilverChariotEntity SCE) {
                 $$1.add(SCE.getSkin());
                 return $$1;
@@ -1747,6 +1747,7 @@ public class PowersSilverChariot extends NewPunchingStand {
         if (detached && getStandEntity(self) instanceof FollowingStandEntity following) {
             following.setOffsetType(OffsetIndex.LOOSE);
         }
+        // this.getStandUserSelf().roundabout$setStandAnimation(StandEntity.IDLE);
         return result;
     }
 
@@ -1913,8 +1914,6 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public void tickPower() {
-        super.tickPower();
-
         if (!isClient()) {
             if (PowerTypes.hasHandsActive(self)) {
                 StandUser userSelf = getStandUserSelf();
@@ -1957,6 +1956,7 @@ public class PowersSilverChariot extends NewPunchingStand {
         if (!this.self.level().isClientSide()) {
             tickControlModeServer();
         }
+        super.tickPower();
     }
 
     private void tickControlModeServer() {
@@ -2280,6 +2280,9 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     public void toggleControlModeClient() {
         if (!(self instanceof Player)) {
+            return;
+        }
+        if (this.getActivePower() == PowerIndex.POWER_3_SNEAK) {
             return;
         }
         if (isPiloting()) {
@@ -3037,6 +3040,11 @@ public class PowersSilverChariot extends NewPunchingStand {
     }
 
     @Override
+    public boolean setPowerGuard() {
+        return super.setPowerGuard();
+    }
+
+    @Override
     public void updateBarrage() {
         if (this.attackTimeDuring == -2 && this.getSelf() instanceof Player) {
             ((StandUser) this.self).roundabout$tryPower(PowerIndex.GUARD, true);
@@ -3388,12 +3396,12 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public boolean interceptAttack() {
-        return !isRegainingArmourFromDesummon() && !onCooldown(PowerIndex.SKILL_4);
+        return !isRegainingArmourFromDesummon() && !onCooldown(PowerIndex.SKILL_4) && super.interceptAttack();
     }
 
     @Override
     public boolean interceptGuard() {
-        return !isRegainingArmourFromDesummon() && !onCooldown(PowerIndex.SKILL_4);
+        return !isRegainingArmourFromDesummon() && !onCooldown(PowerIndex.SKILL_4) && super.interceptGuard();
     }
 
     @Override
