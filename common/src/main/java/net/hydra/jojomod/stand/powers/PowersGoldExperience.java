@@ -30,7 +30,8 @@ import java.util.Objects;
 
 public class PowersGoldExperience extends BlockGrabPreset {
     // move bytes
-    //private static final byte
+    private static final byte
+        LIFE_PUNCH = 53;
 
     // basic stand registry stuff
     public PowersGoldExperience(LivingEntity self) {super(self);}
@@ -52,7 +53,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public void powerActivate(PowerContext context) {
         switch (context) {
             // life punch
-            case SKILL_1_CROUCH -> {
+            case SKILL_3_CROUCH -> {
                 tryLifePunch();
             }
         }
@@ -60,15 +61,15 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     @Override
     public boolean setPowerOther(int move, int lastMove) {
-        if (move == PowerIndex.POWER_1_SNEAK) {
-            return this.impale(); // this is basically just a reskinned impale that does less damage and does fancy stuff
+        if (move == LIFE_PUNCH) {
+            return this.startLifePunch();
         }
         return super.setPowerOther(move, lastMove);
     }
 
     @Override
     public void updateUniqueMoves() {
-        if (this.getActivePower() == PowerIndex.POWER_1_SNEAK) {
+        if (this.getActivePower() == LIFE_PUNCH) {
             updateLifePunch();
         }
         super.updateUniqueMoves();
@@ -76,26 +77,36 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     @Override
     public void handleStandAttack(Player player, Entity target) {
-        if (this.getActivePower() == PowerIndex.POWER_1_SNEAK) {
-            // this is basically a reskinned impale so...
-            impaleImpact(target);
+        if (this.getActivePower() == LIFE_PUNCH) {
+            lifePunchImpact(target);
         }
     }
 
     // life punch start
 
     private void tryLifePunch() {
-        if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
-            //if (canExecuteMoveWithLevel(getImpaleLevel())) {
-                if (this.activePower == PowerIndex.POWER_1_SNEAK) {
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                    tryPowerPacket(PowerIndex.NONE);
-                } else {
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
-                    tryPowerPacket(PowerIndex.POWER_1_SNEAK);
-                }
-            //}
+        if (!this.onCooldown(LIFE_PUNCH)) {
+            if (this.activePower == LIFE_PUNCH) {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                tryPowerPacket(PowerIndex.NONE);
+            } else {
+                ((StandUser) this.getSelf()).roundabout$tryPower(LIFE_PUNCH, true);
+                tryPowerPacket(LIFE_PUNCH);
+            }
         }
+    }
+
+    public boolean startLifePunch() {
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand)) {
+            this.setAttackTimeDuring(0);
+            this.setActivePower(LIFE_PUNCH);
+            playSoundsIfNearby(IMPALE_NOISE, 27, false);
+            this.animateStand(GoldExperienceEntity.LIFE_PUNCH);
+            this.poseStand(OffsetIndex.GUARD);
+            return true;
+        }
+        return false;
     }
 
     private void updateLifePunch() {
@@ -126,32 +137,46 @@ public class PowersGoldExperience extends BlockGrabPreset {
             // mob ai stuff i guess? it makes sense because this is outside the play check.
             Entity targetEntity = getTargetEntity(this.self, impaleRange);
             //this is basically a reskinned impale
-            impaleImpact(targetEntity);
+            lifePunchImpact(targetEntity);
         }
     }
 
-    @Override
-    public void impaleImpact(Entity entity) {
-        super.impaleImpact(entity);
-        //eventually, i'll have to do the life punch stuff here, but for now this works fine.
-    }
+    public void lifePunchImpact(Entity entity) {
+        if (this.activePower == LIFE_PUNCH) {
+            this.setAttackTimeDuring(-20);
+            float range = 3.5F + 0.75F;
 
-    //overriding this to change the animation
-    @Override
-    public boolean impale(){
-        StandEntity stand = getStandEntity(this.self);
-        if (Objects.nonNull(stand)){
+            if (entity != null && entity.distanceTo(self) > range) {
+                entity = null;
+            }
 
-            airTriggered = (((StandUser) this.getSelf()).roundabout$getLeapTicks() > 0);
-            this.setAttackTimeDuring(0);
-            this.setActivePower(PowerIndex.POWER_1_SNEAK);
-            playSoundsIfNearby(IMPALE_NOISE, 27, false);
-            this.animateStand(GoldExperienceEntity.LIFE_PUNCH);
-            this.poseStand(OffsetIndex.GUARD);
+            if (entity != null) {
+                hitParticlesCenter(entity);
+                float pow = getHeavyPunchStrength(entity);
+                float knockbackStrength = 0.5F;
 
-            return true;
+                if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
+                    if (entity instanceof LivingEntity LE) {
+                        addEXP(5, LE);
+                        // TODO: punch the SOUL outta them
+                    }
+                    takeDeterminedKnockback(this.self, entity, knockbackStrength);
+                } else {
+                    knockShield2(entity, 100);
+                }
+            }
+
+            int cooldownTicks = 100;
+            if (this.getSelf() instanceof Player serverPlayer && !this.getSelf().level().isClientSide()) {
+                net.hydra.jojomod.util.S2CPacketUtil.sendCooldownSyncPacket((net.minecraft.server.level.ServerPlayer) serverPlayer, LIFE_PUNCH, cooldownTicks);
+            }
+            this.setCooldown(LIFE_PUNCH, cooldownTicks);
+
+            SoundEvent sound = entity != null ? ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_EVENT : ModSounds.PUNCH_2_SOUND_EVENT;
+            if (!this.self.level().isClientSide()) {
+                playSoundIfPossible(self.level(), null, this.self.blockPosition(), sound, SoundSource.PLAYERS, 0.95F, 1.2F);
+            }
         }
-        return false;
     }
 
     @Override
@@ -188,7 +213,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public void playBarrageNoise(int hitNumber, Entity entity) {
         if (!this.self.level().isClientSide()) {
-            if (hitNumber % 2 == 0)
+            if (hitNumber % 3 == 0)
                 playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GOLD_EXPERIENCE_HIT_EVENT, SoundSource.PLAYERS, 0.8F, 1F);
         }
     }
