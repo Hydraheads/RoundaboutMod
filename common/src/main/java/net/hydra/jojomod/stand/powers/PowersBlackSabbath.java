@@ -6,7 +6,6 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.objects.GrabbedMobSoul;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -14,7 +13,6 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
@@ -766,6 +764,12 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                         setGrabbed(l);
                 }
                 }
+            }
+        }
+
+        if(this.getStandEntity(self) == null && this.getGrabbedSoul() != null){
+            if(this.getGrabbedSoul() instanceof StandEntity se){
+                se.forceDespawn(true);
             }
         }
 

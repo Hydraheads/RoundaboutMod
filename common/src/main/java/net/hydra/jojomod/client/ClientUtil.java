@@ -457,12 +457,25 @@ public class ClientUtil {
         ent.setYRot(lerpYRot);
         ent.setYBodyRot(lerpYRot);
         ent.setYHeadRot(lerpYRot);
-
         LivingEntity user = ent.getUser();
         if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersBlackSabbath PBS) {
                 PBS.transformSabbath(ent);
         }
     }
+
+    public static void preRenderGrabbedSoul(BlackSabbathEntity ent, StandEntity se, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6) {
+        float lerpYRot = (float) ((ILivingEntityAccess)ent).roundabout$getLerpYRot();
+        ent.yRotO = lerpYRot;
+        ent.setYRot(lerpYRot);
+        ent.setYBodyRot(lerpYRot);
+        ent.setYHeadRot(lerpYRot);
+        LivingEntity user = ent.getUser();
+        LivingEntity user2 = ent.getUser();
+        if (user != null && user2 != null){
+            ent.travelAheadSoulRender($$4, se);
+        }
+    }
+
     public static void preRenderCrossfire(CrossfireHurricaneEntity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6){
             if (((TimeStop)ent.level()).inTimeStopRange(ent)){
                 $$4 = 0;

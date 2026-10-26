@@ -1481,11 +1481,11 @@ public class Config implements Cloneable {
         public Integer silverChariotCooldownArmorShed;
         @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
         public Integer silverChariotCooldownRapierShot;
-        @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
         public Integer silverChariotCooldownRapierShotInterrupt;
-        @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
-        public Integer silverChariotCooldownRapierShotPlatform;
-        @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
+        // @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
+        // public Integer silverChariotCooldownRapierShotPlatform;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer silverChariotCooldownRapierSpin;
         @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
         public Integer silverChariotCooldownRapierSlash;
