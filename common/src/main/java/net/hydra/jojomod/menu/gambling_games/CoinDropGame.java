@@ -2,6 +2,7 @@ package net.hydra.jojomod.menu.gambling_games;
 
 import net.hydra.jojomod.block.GamblingTableBlockEntity;
 import net.hydra.jojomod.menu.GamblingGame;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -28,12 +29,9 @@ public class CoinDropGame extends GamblingGame {
 
     // Client-side call to perform the drop
     public void dropCoin(float charge) {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc.gameMode != null && mc.player != null) {
-            int chargeEncoded = (int) (Math.max(0.0f, Math.min(1.0f, charge)) * 100);
-            // Uses the player's active open container ID without coupling to GamblingTableMenu
-            mc.gameMode.handleInventoryButtonClick(mc.player.containerMenu.containerId, 1000 + chargeEncoded);
-        }
+        //charge in percent
+        int chargeEncoded = (int) (Math.max(0.0f, Math.min(1.0f, charge)) * 100);
+        C2SPacketUtil.sendGamblingActionPacket(ACTION_DROP_COIN, chargeEncoded);
     }
 
     @Override
@@ -45,45 +43,66 @@ public class CoinDropGame extends GamblingGame {
     public void handleAction(Player player, int actionId, int extraData) {
         if (gameOver || table.getLevel() == null || table.getLevel().isClientSide()) return;
 
-        // Verify it is this player's turn
+        // verify it is this player's turn
         boolean isHost = table.getPlayerRole(player) == GamblingTableBlockEntity.Role.HOST;
         if (isHost != isHostTurn) return;
 
         if (actionId == ACTION_DROP_COIN) {
-            // extraData is encoded charge: 0 to 100 (0.00 to 1.00)
             float chargeProgress = Math.max(0.0f, Math.min(1.0f, extraData / 100.0f));
 
-            // Calculate spillage: 1.0 = 5% rise, 0.0 = 30% rise
+            // Calculate spillage
             float penaltyFactor = 1.0f - chargeProgress;
             this.lastSpillageAdded = 5.0f + (penaltyFactor * 25.0f);
             this.currentTension += this.lastSpillageAdded;
 
-            // Determine drop quality for feedback
-            if (chargeProgress <= 0.33f) {
+            // determine drop quality
+            if (chargeProgress <= 0.389f) {
                 this.lastDropQuality = 1;
-            } else if (chargeProgress <= 0.611f) {
+            } else if (chargeProgress <= 0.667f) {
                 this.lastDropQuality = 2;
-            } else if (chargeProgress <= 0.833f) {
+            } else if (chargeProgress <= 0.944f) {
                 this.lastDropQuality = 3;
             } else {
                 this.lastDropQuality = 4;
             }
 
-            // Check for game over (spill over 100%)
+            // check for spill
             if (this.currentTension >= 100.0f) {
-                // The current player caused the spill, so the OTHER player wins!
                 broadcastMessage(player.getScoreboardName() + " spilled the glass!");
                 endGame(!isHostTurn);
             } else {
                 switchTurn();
             }
             this.table.setChanged();
+
+            for (java.util.UUID viewerUUID : this.table.getActiveViewers()) {
+                Player viewer = this.table.getLevel().getPlayerByUUID(viewerUUID);
+                if (viewer instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
+                    net.hydra.jojomod.util.S2CPacketUtil.syncGamblingState(
+                            serverPlayer,
+                            (int) this.currentTension,
+                            (int) this.lastSpillageAdded,
+                            this.lastDropQuality,
+                            this.isHostTurn,
+                            this.gameOver
+                    );
+                }
+            }
         }
     }
 
     public float getTension() { return currentTension; }
     public float getLastSpillageAdded() { return lastSpillageAdded; }
     public int getLastDropQuality() { return lastDropQuality; }
+    public void setClientState(float tension, float spillage, int quality, boolean isHostTurn, boolean gameOver) {
+        if (this.table.getLevel() != null && this.table.getLevel().isClientSide()) {
+            this.currentTension = tension;
+            this.lastSpillageAdded = spillage;
+            this.lastDropQuality = quality;
+            this.isHostTurn = isHostTurn;
+            this.gameOver = gameOver;
+        }
+    }
 
     private void broadcastMessage(String message) {
         if (table.getLevel() != null && table.getLevel().getServer() != null) {

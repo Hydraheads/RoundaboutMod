@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.whitesnake.inventory;
 
 import net.hydra.jojomod.event.powers.whitesnake.WhitesnakeControlInventory;
 import net.hydra.jojomod.entity.stand.WhitesnakeEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -15,6 +16,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Inventory.class)
 public abstract class InventorySelectedItemMixin {
     @Shadow @Final public Player player;
+
+    @Inject(method = "add(ILnet/minecraft/world/item/ItemStack;)Z", at = @At("HEAD"), cancellable = true)
+    private void roundaboutWhitesnake$pickupItem(int slot, ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
+        ItemEntity item = WhitesnakeControlInventory.getPickupItem();
+        if (item != null && item.getItem() == stack && WhitesnakeControlInventory.isActive(player)) {
+            cir.setReturnValue(WhitesnakeControlInventory.insert(player, stack) > 0);
+        }
+    }
 
     @Inject(method = "getSelected", at = @At("HEAD"), cancellable = true)
     private void roundaboutWhitesnake$getSelected(CallbackInfoReturnable<ItemStack> cir) {

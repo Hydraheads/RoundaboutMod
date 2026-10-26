@@ -1419,6 +1419,12 @@ public class ModSounds {
     public static final String PURPLE_HAZE_BARRAGE_CRY = "purple_haze_barrage_cry";
     public static final ResourceLocation PURPLE_HAZE_BARRAGE_CRY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PURPLE_HAZE_BARRAGE_CRY);
     public static SoundEvent PURPLE_HAZE_BARRAGE_CRY_EVENT = SoundEvent.createVariableRangeEvent(PURPLE_HAZE_BARRAGE_CRY_ID);
+    public static final String PURPLE_HAZE_BARRAGE_HIT = "purple_haze_barrage_hit";
+    public static final ResourceLocation PURPLE_HAZE_BARRAGE_HIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PURPLE_HAZE_BARRAGE_HIT);
+    public static SoundEvent PURPLE_HAZE_BARRAGE_HIT_EVENT = SoundEvent.createVariableRangeEvent(PURPLE_HAZE_BARRAGE_HIT_ID);
+    public static final String PURPLE_HAZE_BARRAGE_FINISHER = "purple_haze_barrage_finisher";
+    public static final ResourceLocation PURPLE_HAZE_BARRAGE_FINISHER_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PURPLE_HAZE_BARRAGE_FINISHER);
+    public static SoundEvent PURPLE_HAZE_BARRAGE_FINISHER_EVENT = SoundEvent.createVariableRangeEvent(PURPLE_HAZE_BARRAGE_FINISHER_ID);
 
     public static final String PURPLE_HAZE_SMOKE = "purple_haze_smoke";
     public static final ResourceLocation PURPLE_HAZE_SMOKE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PURPLE_HAZE_SMOKE);
@@ -2478,6 +2484,9 @@ public class ModSounds {
     public static final String HALLELUJAH = "hallelujah";
     public static final ResourceLocation HALLELUJAH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HALLELUJAH);
     public static SoundEvent HALLELUJAH_EVENT = SoundEvent.createVariableRangeEvent(HALLELUJAH_ID);
+    public static final String CHAKA_HFTF = "chaka_hftf";
+    public static final ResourceLocation CHAKA_HFTF_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CHAKA_HFTF);
+    public static SoundEvent CHAKA_HFTF_EVENT = SoundEvent.createVariableRangeEvent(CHAKA_HFTF_ID);
 
     public static final String FLESH_BUD = "flesh_bud_goes";
     public static final ResourceLocation FLESH_BUD_ID = new ResourceLocation(Roundabout.MOD_ID+":"+FLESH_BUD);

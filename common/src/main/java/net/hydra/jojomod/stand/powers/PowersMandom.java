@@ -7,6 +7,7 @@ import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.substand.PurpleSmokeEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
@@ -357,6 +358,10 @@ public class PowersMandom extends NewDashPreset {
         if (!mobsInRange.isEmpty()) {
             for (Entity ent : mobsInRange) {
                 if (MainUtil.canRewindInTime(ent, this.self)) {
+                    if (ent instanceof PurpleSmokeEntity PSE) {
+                        PSE.timeRewindInteraction(120);
+                    }
+
                     IEntityAndData iData = (IEntityAndData) ent;
                     SavedSecond lastSecond = iData.roundabout$getLastSavedSecond();
                     if (lastSecond != null) {

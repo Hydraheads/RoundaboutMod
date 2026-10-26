@@ -114,6 +114,8 @@
   "item.roundabout.music_disc_hallelujah.desc": "Oratorio Chorus",
   "item.roundabout.music_disc_torture_dance": "Music Disc",
   "item.roundabout.music_disc_torture_dance.desc": "Yugo Kanno - Torture Dance Song",
+  "item.roundabout.music_disc_chaka_hftf": "Music Disc",
+  "item.roundabout.music_disc_chaka_hftf.desc": "Cricket - Chaka HFTF Theme",
   "item.roundabout.street_sign_dio_item": "Street Sign: Left",
   "item.roundabout.street_sign_right_item": "Street Sign: Right",
   "item.roundabout.street_sign_stop_item": "Street Sign: Stop",
@@ -217,6 +219,8 @@
   "item.roundabout.pearl_jam_disc": "Stand Disc",
   "item.roundabout.black_sabbath_disc": "Stand Disc",
   "item.roundabout.max_diver_down_disc": "Stand Disc+",
+  "item.roundabout.gold_experience_disc": "Stand Disc",
+  "item.roundabout.max_gold_experience_disc": "Stand Disc+",
   "item.roundabout.whitesnake_disc": "Stand Disc",
   "item.roundabout.max_whitesnake_disc": "Stand Disc+",
   "item.roundabout.d4c_disc.desc": "D4C",
@@ -260,6 +264,8 @@
   "item.roundabout.walking_heart_disc.desc": "Walking Heart",
   "item.roundabout.diver_down_disc.desc": "Diver Down",
   "item.roundabout.max_diver_down_disc.desc": "Diver Down",
+  "item.roundabout.gold_experience_disc.desc": "Gold Experience",
+  "item.roundabout.max_gold_experience_disc.desc": "Gold Experience",
   "item.roundabout.lyin_eyes_disc.desc": "Lyin' Eyes",
   "item.roundabout.manhattan_transfer_disc.desc": "Manhattan Transfer",
   "item.roundabout.black_sabbath_disc.desc": "Black Sabbath",
@@ -592,7 +598,7 @@
   "effect.roundabout.distortion_virus": "Distortion Virus",
   "effect.roundabout.virus_immunity": "Virus Immunity",
   "effect.roundabout.hallucination": "Hallucination",
-  "effect.roundabout.dreaming": "Dreaming",
+  "effect.roundabout.sleeping": "Sleeping",
   "effect.roundabout.old": "Old",
 
 
@@ -1407,6 +1413,7 @@
   "sounds.roundabout.purple_haze_smoke":  "Purple Haze Spreads",
   "sounds.roundabout.purple_haze_distortion_smoke":  "Distortion Haze Spreads",
   "sounds.roundabout.purple_haze_pod_bite":  "Pod Cracks",
+  "sounds.roundabout.purple_haze_barrage_finisher": "Heavy Punch",
 
   "sounds.roundabout.bullet_ricochet":  "Bullet ricochetted",
 
@@ -1613,6 +1620,7 @@
 
   "sounds.roundabout.hallelujah":  "Hallelujah",
   "sounds.roundabout.torture_dance":  "Torture Dance",
+  "sounds.roundabout.chaka_hftf":  "Chaka Theme",
 
   "sounds.roundabout.can_bounce": "Thunk",
   "sounds.roundabout.can_bounce_end": "Gasoline can thunk",
@@ -2648,6 +2656,9 @@
   "text.roundabout.lyin_eyes.tension_highlight": "Tension Highlight On",
   "text.roundabout.lyin_eyes.tension_highlight_off": "Tension Highlight Off",
 
+  "ability.roundabout.gold_experience_placeholder": "I can't believe 88 is making popularslop.",
+  "ability.roundabout.gold_experience_placeholder.desc": "He should make less standslop.",
+
   "ability.roundabout.emperor_shoot": "Shoot",
   "ability.roundabout.emperor_shoot.desc": "Shoot a bullet from the emperor.",
   "ability.roundabout.emperor_heat": "Heat",
@@ -3226,6 +3237,8 @@
   "skins.roundabout.diver_down.van_halen": "Van Halen",
   "skins.roundabout.diver_down.scuba_diver": "Scuba Diver",
 
+  "skins.roundabout.gold_experience.base": "Part 5",
+
   "skins.roundabout.20_centuryboy.manga": "Manga",
   "skins.roundabout.20_centuryboy.bedrock": "Bedrock",
   "skins.roundabout.20_centuryboy.bee": "Bee",
@@ -3398,7 +3411,9 @@
   "stand.bad_company.not_enought_space": "You don't have enough space for that troop!",
   "stand.bad_company.not_enought_space.soldier": "You don't have enough soldiers left for that troop!",
   "stand.bad_company.total_troops.soldier": "%1$s/%2$s active Soldiers.",
-  "stand.bad_company.soldier_limit": "You already have released all your soldiers!",
+  "stand.bad_company.total_troops.tank": "%1$s/%2$s active Tanks.",
+  "stand.bad_company.soldier_limit": "You already have released all your Soldiers!",
+  "stand.bad_company.tank_limit": "You already have released all your Tanks!",
   "stand.bad_company.troop_limit": "You have reached army maximum size!",
 
   "roundabout.bad_company.troop_tactics": "Troop Tactics",
@@ -4225,6 +4240,10 @@
   "config.roundabout.silverChariotCooldownStatueCutting.desc": "The cooldown of Statue Cutting.",
   "config.roundabout.silverChariotCooldownSelfGrab.name": "Self Grab Cooldown",
   "config.roundabout.silverChariotCooldownSelfGrab.desc": "The cooldown of Self Grab.",
+  "config.roundabout.silverChariotCooldownSelfThrow.name": "Self Throw Cooldown",
+  "config.roundabout.silverChariotCooldownSelfThrow.desc": "The cooldown of Self Throw.",
+  "config.roundabout.silverChariotCooldownSelfThrowRebound.name": "Self Throw Rebound Cooldown",
+  "config.roundabout.silverChariotCooldownSelfThrowRebound.desc": "The cooldown of Self Throw Rebound.",
   "config.roundabout.silverChariotCooldownArmorShed.name": "Armor Shed Cooldown",
   "config.roundabout.silverChariotCooldownArmorShed.desc": "The cooldown of Armor Shed.",
   "config.roundabout.silverChariotForceThirdPersonInControlMode.name": "Force Third Person in Control Mode",
@@ -4350,6 +4369,12 @@
   "config.roundabout.customDiverDownWorkbench.desc": "Enables the custom wokrbench textures.",
   "config.roundabout.forceThirdPersonInGroundDive.name": "Force Third Person in Ground Dive",
   "config.roundabout.forceThirdPersonInGroundDive.desc": "Automatically switches to third person while in ground dive.",
+  "config.roundabout.diverZipCooldown.name": "Diver Zip CD",
+  "config.roundabout.diverZipCooldown.desc": "This cooldown in ticks.",
+  "config.roundabout.kickTrapCooldown.name": "Kick Trap CD",
+  "config.roundabout.kickTrapCooldown.desc": "This cooldown in ticks.",
+  "config.roundabout.diveCooldown.name": "Submerge/Self-Submerge CD",
+  "config.roundabout.diveCooldown.desc": "This cooldown in ticks.",
 
   "config.roundabout.maxDetectionRange.name": "Max Detection Range",
   "config.roundabout.maxDetectionRange.desc": "How many blocks away can the nematodes detect someone in tension sensor? Default is 25.",

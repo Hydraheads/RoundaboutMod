@@ -116,6 +116,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.DIVER_DOWN, DiverDownRenderer::new);
         EntityRendererRegistry.register(FabricEntities.DIVER_DOWN_BETA, DiverDownBetaRenderer::new);
         EntityRendererRegistry.register(FabricEntities.DIVER_DOWN_WORLD, DiverDownWorldRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.GOLD_EXPERIENCE, GoldExperienceRenderer::new);
         EntityRendererRegistry.register(FabricEntities.DIVER_DROWNED, DiverDrownedRenderer::new);
         EntityRendererRegistry.register(FabricEntities.DIVER_KICK, DiverKickEntityRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SILVER_CHARIOT, SilverChariotRenderer::new);
@@ -172,6 +173,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.MOLD_SPORE, NoRenderer::new);
         EntityRendererRegistry.register(FabricEntities.PURPLE_SMOKE, NoRenderer::new);
         EntityRendererRegistry.register(FabricEntities.BAD_COMPANY_SOLDIER, BCSoldierRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.BAD_COMPANY_TANK, BCTankRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ANUBIS_SLIPSTREAM, NoRenderer::new);
         EntityRendererRegistry.register(FabricEntities.TUSK_NAIL, TuskNailRenderer::new);
         EntityRendererRegistry.register(FabricEntities.TUSK_HOLE, TuskHoleRenderer::new);
@@ -289,6 +291,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.STEP_RULE, StepRuleModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SHEER_HEART_ATTACK_LAYER, SheerHeartAttackModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.BAD_COMPANY_SOLDIER_LAYER, BCSoldierModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.BAD_COMPANY_TANK_LAYER, BCTankModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SOFT_AND_WET_KILLER_QUEEN_LAYER, SoftAndWetKillerQueenModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.CINDERELLA_LAYER, CinderellaModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.CALIFORNIA_LAYER, CaliforniaKingBedModel::getTexturedModelData);
@@ -315,6 +318,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DIVER_DOWN_BETA_LAYER, DiverDownBetaModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DIVER_DROWNED_LAYER, DiverDrownedModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DIVER_DOWN_WORLD_LAYER, DiverDownWorldModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GOLD_EXPERIENCE_LAYER, GoldExperienceModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SILVER_CHARIOT_LAYER, SilverChariotModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SILVER_CHARIOT_PHARAOH_LAYER, SilverChariotPharaohModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SILVER_CHARIOT_RAPIER_LAYER, SilverChariotRapierModel::createBodyLayer);

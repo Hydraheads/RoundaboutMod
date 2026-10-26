@@ -553,6 +553,8 @@ public class StandIcons {
             "textures/gui/icons/silver_chariot/grab_self.png");
     public static final ResourceLocation SILVER_CHARIOT_STAND_LEAP_REBOUND = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/silver_chariot/stand_leap_rebound.png");
+    public static final ResourceLocation SILVER_CHARIOT_ARMOUR_OFF = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/silver_chariot/armour_off.png");
 
 
     public static final ResourceLocation D4C_LEDGE_GRAB = new ResourceLocation(Roundabout.MOD_ID,
@@ -1121,6 +1123,13 @@ public class StandIcons {
             "textures/gui/icons/lyin_eyes/nematode_map_off.png");
 
     // lyin eyes icons end
+
+    // gold experience icons start
+
+    public static final ResourceLocation GOLD_EXPERIENCE_PLACEHOLDER = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/gold_experience/placeholder.png");
+
+    // gold experience icons end
 
     public static final ResourceLocation EMPEROR_SPEED_UP = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/emperor/emperor_speed_up.png");

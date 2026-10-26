@@ -1,6 +1,9 @@
 package net.hydra.jojomod.entity;
 
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -21,6 +24,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.entity.projectile.ThrownEnderpearl;
@@ -105,6 +109,11 @@ public class TotemOfDoomEntity extends Entity implements ItemSupplier {
                 if (M instanceof LivingEntity LV) {
                     if (!LV.hasEffect(ModEffects.DOOM_IMMUNITY)) {
                         LV.addEffect(new MobEffectInstance(ModEffects.DOOMED, 10, 0, false, true));
+                        if (LV instanceof Mob && !MainUtil.isBossMob(LV)
+                                && !(LV instanceof StandEntity) && !(LV instanceof FallenMob)
+                                && !(LV instanceof BaseMinion)) {
+                            LV.addEffect(new MobEffectInstance(ModEffects.SLEEPING, 10, 0, false, false, true));
+                        }
                     }
 
                     if (LV.isFallFlying() || LV.isAutoSpinAttack()) {

@@ -119,6 +119,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.DIVER_DOWN_BETA.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.DIVER_DOWN_WORLD.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.DIVER_DROWNED.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.GOLD_EXPERIENCE.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SILVER_CHARIOT.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SILVER_CHARIOT_PHARAOH.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.OVA_ENYA.get(), OVAEnyaNPC.createAttributes().build());
@@ -175,6 +176,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.PURPLE_SMOKE.get(), PurpleSmokeEntity.createStandAttributes().build());
         event.put(ForgeEntities.SHEER_HEART_ATTACK.get(), SheerHeartAttackEntity.createStandAttributes().build());
         event.put(ForgeEntities.BAD_COMPANY_SOLDIER.get(), BCSoldier.createStandAttributes().build());
+        event.put(ForgeEntities.BAD_COMPANY_TANK.get(), BCTank.createStandAttributes().build());
     }
 
     @SubscribeEvent
@@ -487,6 +489,10 @@ public class ForgeEvents {
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_DIVER_DOWN.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_DIVER_DOWN.get());
         ModItems.MAX_STAND_DISC_DIVER_DOWN = ForgeItems.MAX_STAND_DISC_DIVER_DOWN.get();
 
+        ModItems.STAND_DISC_GOLD_EXPERIENCE = ForgeItems.STAND_DISC_GOLD_EXPERIENCE.get();
+        ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_GOLD_EXPERIENCE.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_GOLD_EXPERIENCE.get());
+        ModItems.MAX_STAND_DISC_GOLD_EXPERIENCE = ForgeItems.MAX_STAND_DISC_GOLD_EXPERIENCE.get();
+
         /*ModItems.STAND_DISC_CREAM = ForgeItems.STAND_DISC_CREAM.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_CREAM.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_CREAM.get());
         ModItems.MAX_STAND_DISC_CREAM = ForgeItems.MAX_STAND_DISC_CREAM.get(); */
@@ -668,6 +674,7 @@ public class ForgeEvents {
         ModItems.ANUBIS_GUARDIAN_SPAWN_EGG = ForgeItems.ANUBIS_GUARDIAN_SPAWN_EGG.get();
         ModItems.MUSIC_DISC_TORTURE_DANCE = ForgeItems.MUSIC_DISC_TORTURE_DANCE.get();
         ModItems.MUSIC_DISC_HALLELUJAH = ForgeItems.MUSIC_DISC_HALLELUJAH.get();
+        ModItems.MUSIC_DISC_CHAKA_HFTF = ForgeItems.MUSIC_DISC_CHAKA_HFTF.get();
         ModItems.FOG_BLOCK_ITEMS = ForgeCreativeTab.FOG_GROUP.get();
 
      //   ModItems.INTERDIMENSIONAL_KEY = ForgeItems.INTERDIMENSIONAL_KEY.get();
@@ -812,7 +819,7 @@ public class ForgeEvents {
         ModEffects.CRIPPLED = ForgeEffects.CRIPPLED.get();
         ModEffects.HALLUCINATION = ForgeEffects.HALLUCINATION.get();
         ModEffects.OLD = ForgeEffects.OLD.get();
-        ModEffects.DREAMING = ForgeEffects.DREAMING.get();
+        ModEffects.SLEEPING = ForgeEffects.SLEEPING.get();
         ModEffects.REFRESHED = ForgeEffects.REFRESHED.get();
         ModEffects.INFINITE_SPIN = ForgeEffects.INFINITE_SPIN.get();
         ModEffects.IMPRINTING = ForgeEffects.IMPRINTING.get();
@@ -888,6 +895,7 @@ public class ForgeEvents {
         ModEntities.DIVER_DROWNED = ForgeEntities.DIVER_DROWNED.get();
         ModEntities.DIVER_KICK = ForgeEntities.DIVER_KICK.get();
         ModEntities.BONE_PROJECTILE = ForgeEntities.BONE_PROJECTILE.get();
+        ModEntities.GOLD_EXPERIENCE = ForgeEntities.GOLD_EXPERIENCE.get();
         ModEntities.SILVER_CHARIOT = ForgeEntities.SILVER_CHARIOT.get();
         ModEntities.SILVER_CHARIOT_PHARAOH = ForgeEntities.SILVER_CHARIOT_PHARAOH.get();
         ModEntities.SILVER_CHARIOT_RAPIER = ForgeEntities.SILVER_CHARIOT_RAPIER.get();
@@ -958,6 +966,7 @@ public class ForgeEvents {
         ModEntities.PH_CAPSULE = ForgeEntities.PH_CAPSULE.get();
 
         ModEntities.BAD_COMPANY_SOLDIER = ForgeEntities.BAD_COMPANY_SOLDIER.get();
+        ModEntities.BAD_COMPANY_TANK = ForgeEntities.BAD_COMPANY_TANK.get();
 
         ModEntities.FALLEN_ZOMBIE = ForgeEntities.FALLEN_ZOMBIE.get();
         ModEntities.FALLEN_SKELETON = ForgeEntities.FALLEN_SKELETON.get();

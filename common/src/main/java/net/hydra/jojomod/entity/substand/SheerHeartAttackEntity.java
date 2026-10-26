@@ -894,8 +894,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 		Vec3 speed = new Vec3(dir.x, 0, dir.z).normalize().scale(0.2f);
 
 		this.lookAt(EntityAnchorArgument.Anchor.EYES, getPosition(1).add(miningDir.scale(3)));
-		setYRot(yRotO);
 		this.lookAt(EntityAnchorArgument.Anchor.FEET, getPosition(1).add(miningDir.scale(3)));
+		setYRot(yRotO);
 
 		if (this.horizontalCollision) {
 			shaStopMove();

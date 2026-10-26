@@ -26,6 +26,9 @@ public abstract class PlayerWhitesnakeInventoryMixin implements WhitesnakeInvent
     private NonNullList<ItemStack> roundaboutWhitesnake$inventory =
             NonNullList.withSize(WhitesnakeControlInventory.SIZE, ItemStack.EMPTY);
     @Unique
+    private final NonNullList<ItemStack> roundaboutWhitesnake$lastItems =
+            NonNullList.withSize(WhitesnakeControlInventory.SIZE, ItemStack.EMPTY);
+    @Unique
     private CompoundTag roundaboutWhitesnake$lastSync = new CompoundTag();
 
     @Inject(method = "defineSynchedData", at = @At("TAIL"))
@@ -57,8 +60,7 @@ public abstract class PlayerWhitesnakeInventoryMixin implements WhitesnakeInvent
             if (!player.level().isClientSide()) WhitesnakeControlInventory.pickupNearby(player);
         }
         if (!player.level().isClientSide()) {
-            CompoundTag current = roundaboutWhitesnake$serialize();
-            if (!current.equals(roundaboutWhitesnake$lastSync)) roundaboutWhitesnake$syncInventory();
+            roundaboutWhitesnake$syncInventory();
         }
     }
 
@@ -86,9 +88,20 @@ public abstract class PlayerWhitesnakeInventoryMixin implements WhitesnakeInvent
     public void roundaboutWhitesnake$syncInventory() {
         Player player = (Player) (Object) this;
         if (player.level().isClientSide()) return;
+        boolean changed = false;
+        for (int i = 0; i < roundaboutWhitesnake$inventory.size(); i++) {
+            if (!ItemStack.matches(roundaboutWhitesnake$inventory.get(i), roundaboutWhitesnake$lastItems.get(i))) {
+                changed = true;
+                break;
+            }
+        }
+        if (!changed) return;
         CompoundTag tag = roundaboutWhitesnake$serialize();
         roundaboutWhitesnake$lastSync = tag.copy();
-        player.getEntityData().set(WHITESNAKE_INVENTORY, tag, true);
+        for (int i = 0; i < roundaboutWhitesnake$inventory.size(); i++) {
+            roundaboutWhitesnake$lastItems.set(i, roundaboutWhitesnake$inventory.get(i).copy());
+        }
+        player.getEntityData().set(WHITESNAKE_INVENTORY, tag);
     }
 
     @Unique

@@ -414,6 +414,15 @@ public class C2SPacketUtil {
         );
     }
 
+    /**Sends a gambling action to the server*/
+    public static void sendGamblingActionPacket(int actionId, int extraData) {
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.GamblingAction.value,
+                actionId,
+                extraData
+        );
+    }
+
     /**reading packets from the server*/
 
 }

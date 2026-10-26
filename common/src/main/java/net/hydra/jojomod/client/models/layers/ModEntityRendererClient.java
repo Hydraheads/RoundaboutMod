@@ -82,6 +82,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation DIVER_DOWN_BETA_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "diver_down_beta"), "main");
     public static final ModelLayerLocation DIVER_DOWN_WORLD_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "diver_down_world"), "main");
     public static final ModelLayerLocation DIVER_DROWNED_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "diver_drowned"), "main");
+    public static final ModelLayerLocation GOLD_EXPERIENCE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "gold_experience"), "main");
     public static final ModelLayerLocation SILVER_CHARIOT_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot"), "main");
     public static final ModelLayerLocation SILVER_CHARIOT_PHARAOH_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_pharaoh"), "main");
     public static final ModelLayerLocation SILVER_CHARIOT_RAPIER_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_rapier"), "main");
@@ -139,4 +140,5 @@ public class ModEntityRendererClient {
 
     public static final ModelLayerLocation SHEER_HEART_ATTACK_LAYER =  new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "sheer_heart_attack"), "main");
     public static final ModelLayerLocation BAD_COMPANY_SOLDIER_LAYER =  new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "bad_company_soldier"), "main");
+    public static final ModelLayerLocation BAD_COMPANY_TANK_LAYER =  new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "bad_company_tank"), "main");
 }

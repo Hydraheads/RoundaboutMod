@@ -112,9 +112,7 @@ public class BCTroop extends MultipleTypeStand {
             return false;
         }
         if (user instanceof Mob M) {
-            if (M.getTarget() == target) {
-                return true;
-            }
+            if (M.getTarget() == target) { return true; }
         }
 
         if (user instanceof Raider && target instanceof Raider) {

@@ -410,6 +410,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     private StandPowers roundabout$Powers;
     @Unique
+    private boolean roundabout$changingStandPowers;
+    @Unique
+    private boolean roundabout$loadingStandData;
+    @Unique
+    private int roundabout$springLegsTicks;
+    @Unique
     private StandPowers roundabout$RejectionStandPowers = null;
     @Unique
     private ItemStack roundabout$RejectionStandDisc = null;
@@ -1717,6 +1723,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         // if (StandID > -1) {
         if (!this.level().isClientSide()) {
+            if (roundabout$hasSpringLegs() && --roundabout$springLegsTicks <= 0) {
+                roundabout$setSpringLegs(false);
+            }
             if (roundabout$getBoundTo() != null && (!roundabout$getBoundTo().isAlive()
                     || roundabout$getBoundToID() != roundabout$getBoundTo().getId())) {
                 roundabout$setBoundTo(null);
@@ -2485,6 +2494,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (stack.getItem() instanceof StandDiscItem SD) {
                 SD.generateStandPowers(rdbt$this());
                 MainUtil.extractDiscData(((LivingEntity) (Object) this), SD, stack);
+            } else if (roundabout$Powers instanceof PowersWhitesnake || roundabout$Powers instanceof PowersDiverDown) {
+                this.roundabout$setStandPowers(null);
             }
         }
     }
@@ -2651,7 +2662,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"))
     public void roundabout$readAdditionalSaveData(CompoundTag $$0, CallbackInfo ci) {
-        MainUtil.loadLivingData($$0,this,(LivingEntity)(Object) this);
+        roundabout$loadingStandData = true;
+        try {
+            MainUtil.loadLivingData($$0,this,(LivingEntity)(Object) this);
+        } finally {
+            roundabout$loadingStandData = false;
+        }
     }
 
     @ModifyVariable(method = "checkAutoSpinAttack(Lnet/minecraft/world/phys/AABB;Lnet/minecraft/world/phys/AABB;)V", at = @At("STORE"), ordinal = 0)
@@ -3459,6 +3475,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public ItemStack roundabout$itemParityClient = ItemStack.EMPTY;
 
     public StandPowers roundabout$getStandPowers() {
+        if (roundabout$changingStandPowers) return roundabout$Powers;
         if (this.level().isClientSide) {
             ItemStack standDisc = this.roundabout$getStandDisc();
             if (!ItemStack.matches(roundabout$itemParityClient, standDisc)) {
@@ -3512,6 +3529,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     public void roundabout$setStandPowers(StandPowers standPowers) {
+        if (roundabout$Powers != standPowers && !roundabout$changingStandPowers
+                && !roundabout$loadingStandData
+                && !(rdbt$this() instanceof ServerPlayer player && player.connection == null)
+                && (roundabout$Powers instanceof PowersWhitesnake || roundabout$Powers instanceof PowersDiverDown)
+                && (!level().isClientSide() || roundabout$Powers.isPacketPlayer())) {
+            roundabout$changingStandPowers = true;
+            try {
+                roundabout$Powers.onStandSwitch();
+            } finally {
+                roundabout$changingStandPowers = false;
+            }
+        }
         this.roundabout$Powers = standPowers;
     }
 
@@ -6162,12 +6191,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         if (this.hasEffect(ModEffects.HAZE_VIRUS) && !this.hasEffect(ModEffects.VIRUS_IMMUNITY)) {
             if (this.tickCount % 10 == 0 && !this.level().isClientSide() && this.isAlive()) {
-                this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.HAZE_VIRUS),
-                        this.getEffect(ModEffects.HAZE_VIRUS).getAmplifier() + 1);
+                MobEffectInstance inst = this.getEffect(ModEffects.HAZE_VIRUS);
+                if (inst != null) {
+                    this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.HAZE_VIRUS),
+                            inst.getAmplifier() + 1);
+                }
             }
 
-            if (this.tickCount % 30 == 0 && !this.level().isClientSide() && this.isAlive()) {
-                int amplifier = this.getEffect(ModEffects.HAZE_VIRUS).getAmplifier();
+            MobEffectInstance spreadInst = this.getEffect(ModEffects.HAZE_VIRUS);
+            if (spreadInst != null && this.tickCount % 5 == 0
+                    && !this.level().isClientSide() && this.isAlive()) {
+                int amplifier = spreadInst.getAmplifier();
                 List<LivingEntity> nearby = ((ServerLevel) this.level()).getNearbyEntities(
                         LivingEntity.class,
                         TargetingConditions.forNonCombat().range(2.0).ignoreLineOfSight(),
@@ -6176,22 +6210,28 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 for (LivingEntity target : nearby) {
                     if (target == rdbt$this() || target.hasEffect(ModEffects.HAZE_VIRUS))
                         continue;
-                    if (this.random.nextFloat() < 1.5F) {
+                    if (this.random.nextFloat() < 1.0F) {
                         target.addEffect(new MobEffectInstance(ModEffects.HAZE_VIRUS, 200, amplifier, false, true),
                                 rdbt$this());
                     }
                 }
             }
         }
+
         if (this.hasEffect(ModEffects.DISTORTION_VIRUS) && !this.hasEffect(ModEffects.VIRUS_IMMUNITY)) {
             if (this.tickCount % 15 == 0 && !this.level().isClientSide() && this.isAlive()) {
-                this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISTORTION_VIRUS),
-                        this.getEffect(ModEffects.DISTORTION_VIRUS).getAmplifier() + 1);
-                rdbt$reduceOtherEffectDurations(20, ModEffects.DISTORTION_VIRUS, ModEffects.VIRUS_IMMUNITY);
+                MobEffectInstance inst = this.getEffect(ModEffects.DISTORTION_VIRUS);
+                if (inst != null) {
+                    this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISTORTION_VIRUS),
+                            inst.getAmplifier() + 1);
+                    rdbt$reduceOtherEffectDurations(20, ModEffects.DISTORTION_VIRUS, ModEffects.VIRUS_IMMUNITY);
+                }
             }
 
-            if (this.tickCount % 30 == 0 && !this.level().isClientSide() && this.isAlive()) {
-                int amplifier = this.getEffect(ModEffects.DISTORTION_VIRUS).getAmplifier();
+            MobEffectInstance spreadInst = this.getEffect(ModEffects.DISTORTION_VIRUS);
+            if (spreadInst != null && this.tickCount % 5 == 0
+                    && !this.level().isClientSide() && this.isAlive()) {
+                int amplifier = spreadInst.getAmplifier();
                 List<LivingEntity> nearby = ((ServerLevel) this.level()).getNearbyEntities(
                         LivingEntity.class,
                         TargetingConditions.forNonCombat().range(2.0).ignoreLineOfSight(),
@@ -6200,7 +6240,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 for (LivingEntity target : nearby) {
                     if (target == rdbt$this() || target.hasEffect(ModEffects.DISTORTION_VIRUS))
                         continue;
-                    if (this.random.nextFloat() < 0.15F) {
+                    if (this.random.nextFloat() < 1.0F) {
                         target.addEffect(
                                 new MobEffectInstance(ModEffects.DISTORTION_VIRUS, 200, amplifier, false, true),
                                 rdbt$this());
@@ -7106,6 +7146,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Override
     public void roundabout$setSpringLegs(boolean spring) {
+        if (!level().isClientSide()) {
+            roundabout$springLegsTicks = spring ? PowersDiverDown.SPRING_LEGS_MAX_DURATION + 100 : 0;
+        }
         this.entityData.set(ROUNDABOUT$SPRING_LEGS, spring);
     }
     // for diver down end

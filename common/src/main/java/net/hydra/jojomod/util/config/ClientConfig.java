@@ -261,6 +261,8 @@ public class ClientConfig implements Cloneable {
         public Boolean silverChariotForceThirdPersonInControlMode;
         // @BooleanOption(group = "inherit", value = true)
         // public Boolean silverChariotUniqueControlModeEntityRendering;
+        // @BooleanOption(group = "inherit", value = true)
+        // public Boolean silverChariotControlModeVisualEffectLostSight;
         @BooleanOption(group = "inherit", value = true)
         public Boolean silverChariotRenderAfterimages;
         @IntOption(group = "inherit", value = 5, min = 1, max = 10)

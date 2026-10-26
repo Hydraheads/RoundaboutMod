@@ -687,6 +687,10 @@ public class ForgeItems {
     public static final RegistryObject<Item> MUSIC_DISC_HALLELUJAH = addToTab(ITEMS.register("music_disc_hallelujah",
             () -> new RecordItem(1, ForgeSounds.HALLELUJAH,
                     (new Item.Properties()).stacksTo(1).rarity(Rarity.RARE), 4380)));
+    public static final RegistryObject<Item> MUSIC_DISC_CHAKA_HFTF = addToTab(ITEMS.register("music_disc_chaka_hftf",
+            () -> new RecordItem(1, ForgeSounds.CHAKA_HFTF,
+                    (new Item.Properties()).stacksTo(1).rarity(Rarity.RARE), 3720)));
+
     public static final RegistryObject<BlockItem> FLESH_BLOCK = addToBuildingTab(ITEMS.register("flesh_block",
             () -> new FleshChunkItem(ForgeBlocks.FLESH_BLOCK.get(),
                     new Item.Properties().food(ModFoodComponents.FLESH_CHUNK)
@@ -825,6 +829,10 @@ public class ForgeItems {
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null))));
     public static final RegistryObject<Item> MAX_STAND_DISC_DIVER_DOWN = addToDiscTab(ITEMS.register("max_diver_down_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null))));
+    public static final RegistryObject<Item> STAND_DISC_GOLD_EXPERIENCE = addToWIPTab(ITEMS.register("gold_experience_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersGoldExperience(null))));
+    public static final RegistryObject<Item> MAX_STAND_DISC_GOLD_EXPERIENCE = addToWIPTab(ITEMS.register("max_gold_experience_disc",
+            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersGoldExperience(null))));
 
     public static final RegistryObject<Item> STAND_DISC_OASIS = addToWIPTab(ITEMS.register("oasis_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersOasis(null))));

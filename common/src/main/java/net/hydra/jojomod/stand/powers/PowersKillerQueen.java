@@ -22,6 +22,7 @@ import net.hydra.jojomod.entity.projectile.StrayCatAirBubble;
 import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
+import net.hydra.jojomod.entity.substand.PurpleSmokeEntity;
 import net.hydra.jojomod.entity.substand.SheerHeartAttackEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
@@ -3284,6 +3285,8 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
         }
 
+        int rewind = btdTicks;
+
         btdTicks = 0;
 
         if (!combatSavedBTD.isEmpty()) {
@@ -3292,6 +3295,10 @@ public class PowersKillerQueen extends NewPunchingStand {
             for (int id : this.combatSavedBTD.keySet()) {
                 Entity ent = this.self.level().getEntity(id);
                 if (ent != null && MainUtil.canRewindInTime(ent, this.self)) {
+                    if (ent instanceof PurpleSmokeEntity PSE) {
+                        PSE.timeRewindInteraction(rewind);
+                    }
+
                     SavedSecond second = combatSavedBTD.get(id);
 
                     if (second != null) {
@@ -4595,15 +4602,15 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override
     public void playBarrageEndNoise(float mod, Entity entity) {
         if (!this.self.level().isClientSide()) {
-            playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.KILLER_QUEEN_HEAVY_PUNCH_EVENT, SoundSource.PLAYERS, 0.85F + mod, 1F);
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.KILLER_QUEEN_HEAVY_PUNCH_EVENT, SoundSource.PLAYERS, 0.90F + mod, 1F);
         }
     }
 
     @Override
     public void playBarrageNoise(int hitNumber, Entity entity) {
         if (!this.self.level().isClientSide()) {
-            if (hitNumber % 2 == 0)
-                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.KILLER_QUEEN_BARRAGE_HIT_EVENT, SoundSource.PLAYERS, 0.7F, (float) (0.9 + (Math.random() * 0.25)));
+            if (hitNumber % 4 == 0)
+                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.KILLER_QUEEN_BARRAGE_HIT_EVENT, SoundSource.PLAYERS, 0.5F, 1/*(float) (0.9 + (Math.random() * 0.25))*/);
         }
     }
 

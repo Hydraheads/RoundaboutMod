@@ -754,6 +754,13 @@ public class FabricEntities {
                     EntityType.Builder.<BoneProjectileEntity>of(BoneProjectileEntity::new, MobCategory.MISC).
                             sized(0.5f, 0.5f).clientTrackingRange(16).build(Roundabout.MOD_ID + ":bone_projectile")
             );
+    public static final EntityType<GoldExperienceEntity> GOLD_EXPERIENCE =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    Roundabout.location("gold_experience"),
+                    EntityType.Builder.of(GoldExperienceEntity::new, MobCategory.MISC).
+                            sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":gold_experience")
+            );
         public static final EntityType<SilverChariotEntity> SILVER_CHARIOT =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -1289,6 +1296,13 @@ public class FabricEntities {
                     EntityType.Builder.of(BCSoldier::new, MobCategory.CREATURE).
                             sized(BCSoldier.width, BCSoldier.height).clientTrackingRange(30).build(Roundabout.MOD_ID+":bad_company_soldier")
             );
+    public static final EntityType<BCTank> BAD_COMPANY_TANK =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "bad_company_tank"),
+                    EntityType.Builder.of(BCTank::new, MobCategory.CREATURE).
+                            sized(BCTank.width, BCTank.height).clientTrackingRange(30).build(Roundabout.MOD_ID+":bad_company_tank")
+            );
     public static final EntityType<SheerHeartAttackEntity> SHEER_HEART_ATTACK =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
@@ -1359,6 +1373,7 @@ public class FabricEntities {
                 ModEntities.DIVER_DOWN_WORLD = DIVER_DOWN_WORLD;
                 ModEntities.DIVER_DROWNED = DIVER_DROWNED;
                 ModEntities.DIVER_KICK = DIVER_KICK;
+        ModEntities.GOLD_EXPERIENCE = GOLD_EXPERIENCE;
                 ModEntities.SILVER_CHARIOT = SILVER_CHARIOT;
                 ModEntities.SILVER_CHARIOT_PHARAOH =  SILVER_CHARIOT_PHARAOH;
                 ModEntities.THROWN_HARPOON = THROWN_HARPOON;
@@ -1428,6 +1443,7 @@ public class FabricEntities {
                 ModEntities.VIRUS_SPIT = VIRUS_SPIT;
 
                 ModEntities.BAD_COMPANY_SOLDIER = BAD_COMPANY_SOLDIER;
+                ModEntities.BAD_COMPANY_TANK = BAD_COMPANY_TANK;
 
 
                 ModEntities.FALLEN_ZOMBIE = FALLEN_ZOMBIE;
@@ -1583,6 +1599,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(DIVER_DOWN_BETA, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(DIVER_DOWN_WORLD, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(DIVER_DROWNED, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(GOLD_EXPERIENCE, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SILVER_CHARIOT, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SILVER_CHARIOT_PHARAOH, StandEntity.createStandAttributes());
 
@@ -1601,6 +1618,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(MOLD_SPORE, MoldSporesEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(PURPLE_SMOKE, PurpleSmokeEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(BAD_COMPANY_SOLDIER, BCSoldier.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(BAD_COMPANY_TANK, BCTank.createStandAttributes());
 
                 FabricDefaultAttributeRegistry.register(SHEER_HEART_ATTACK, SheerHeartAttackEntity.createStandAttributes());
 

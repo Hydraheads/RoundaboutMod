@@ -1037,10 +1037,7 @@
   "killer_queen_barrage_hit" : {
     "subtitle": "sounds.roundabout.stand_barrage_hit_soft",
     "sounds": [
-      "roundabout:kq_barrage_hit_1",
-      "roundabout:kq_barrage_hit_2",
-      "roundabout:kq_barrage_hit_3",
-      "roundabout:kq_barrage_hit_4"
+      "roundabout:kq_barrage_hit"
     ]
   },
   "kq_block_plant" : {
@@ -3959,6 +3956,15 @@
       }
     ]
   },
+  "chaka_hftf": {
+    "subtitle": "sounds.roundabout.chaka_hftf",
+    "sounds": [
+      {
+        "name": "roundabout:chaka_hftf",
+        "stream": true
+      }
+    ]
+  },
   "vsong_silent_reveries": {
     "subtitle": "sounds.roundabout.vsong_silent_reveries",
     "sounds": [
@@ -4050,6 +4056,21 @@
     "subtitle": "sounds.roundabout.purple_haze_barrage_cry",
     "sounds": [
       "roundabout:purple_haze_barrage_cry"
+    ]
+  },
+  "purple_haze_barrage_hit": {
+    "subtitle": "sounds.roundabout.stand_barrage_hit_soft",
+    "sounds": [
+      "roundabout:ph_hit_1",
+      "roundabout:ph_hit_2",
+      "roundabout:ph_hit_3",
+      "roundabout:ph_hit_4"
+    ]
+  },
+  "purple_haze_barrage_finisher": {
+    "subtitle": "sounds.roundabout.purple_haze_barrage_finisher",
+    "sounds": [
+      "roundabout:ph_finisher"
     ]
   },
   "purple_haze_smoke": {

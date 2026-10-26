@@ -3,6 +3,8 @@ package net.hydra.jojomod.client.models.substand.zsabbathsouls;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.client.models.stand.StandModel;
+import net.hydra.jojomod.client.models.stand.animations.BlackSabbathAnimations;
+import net.hydra.jojomod.client.models.substand.zsabbathsouls.animations.MobSoulAnimation;
 import net.hydra.jojomod.entity.objects.GrabbedMobSoul;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Minecraft;
@@ -47,9 +49,9 @@ public class GrabbedMobSoulModel<T extends GrabbedMobSoul> extends StandModel<T>
 
         PartDefinition stand = partdefinition.addOrReplaceChild("stand", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
 
-        PartDefinition stand2 = stand.addOrReplaceChild("stand2", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition stand2 = stand.addOrReplaceChild("stand2", CubeListBuilder.create(), PartPose.offset(0.0F, -2.0F, 0.0F));
 
-        PartDefinition body = stand2.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 0).addBox(-2.5F, -3.0F, -2.5F, 5.0F, 5.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -6.0F, 0.0F));
+        PartDefinition body = stand2.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 0).addBox(-2.5F, -3.0F, -2.5F, 5.0F, 5.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         PartDefinition left_arm = body.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(0, 10).addBox(0.0F, 0.0F, -1.0F, 0.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(2.5F, 2.0F, 0.0F));
 
@@ -61,6 +63,7 @@ public class GrabbedMobSoulModel<T extends GrabbedMobSoul> extends StandModel<T>
     @Override
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
         super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
+        this.animate(pEntity.animationHeld, MobSoulAnimation.scared_held, pAgeInTicks, 1f);
     }
 
     @Override

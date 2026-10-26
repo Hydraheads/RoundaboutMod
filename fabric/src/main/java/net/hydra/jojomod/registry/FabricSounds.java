@@ -730,6 +730,7 @@ public class FabricSounds {
 
         addSound(ModSounds.TORTURE_DANCE_ID, ModSounds.TORTURE_DANCE_EVENT);
         addSound(ModSounds.HALLELUJAH_ID, ModSounds.HALLELUJAH_EVENT);
+        addSound(ModSounds.CHAKA_HFTF_ID, ModSounds.CHAKA_HFTF_EVENT);
         addSound(ModSounds.VSONG_SILENT_REVERIES_ID, ModSounds.VSONG_SILENT_REVERIES_EVENT);
         addSound(ModSounds.VSONG_TWISTED_ID, ModSounds.VSONG_TWISTED_EVENT);
         addSound(ModSounds.VSONG_GOTHIC_ORGAN_ID, ModSounds.VSONG_GOTHIC_ORGAN_EVENT);
@@ -806,6 +807,8 @@ public class FabricSounds {
 
         addSound(ModSounds.PURPLE_HAZE_SUMMON_ID,ModSounds.PURPLE_HAZE_SUMMON_EVENT);
         addSound(ModSounds.PURPLE_HAZE_BARRAGE_CRY_ID,ModSounds.PURPLE_HAZE_BARRAGE_CRY_EVENT);
+        addSound(ModSounds.PURPLE_HAZE_BARRAGE_HIT_ID,ModSounds.PURPLE_HAZE_BARRAGE_HIT_EVENT);
+        addSound(ModSounds.PURPLE_HAZE_BARRAGE_FINISHER_ID,ModSounds.PURPLE_HAZE_BARRAGE_FINISHER_EVENT);
         addSound(ModSounds.PURPLE_HAZE_SMOKE_ID,ModSounds.PURPLE_HAZE_SMOKE_EVENT);
         addSound(ModSounds.PURPLE_HAZE_DISTORTION_SMOKE_ID,ModSounds.PURPLE_HAZE_DISTORTION_SMOKE_EVENT);
 

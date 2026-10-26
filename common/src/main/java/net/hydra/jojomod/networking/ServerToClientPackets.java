@@ -66,7 +66,8 @@ public class ServerToClientPackets {
             ClearEpitaph("clear_epitaph"),
             SendSafeSound("send_safe_sound"),
             SendSafeSound2("send_safe_sound_2"),
-            SendSafeParticle("send_safe_particle");
+            SendSafeParticle("send_safe_particle"),
+            SyncGamblingState( "sync_gambling_state ");
 
             public final String value;
 

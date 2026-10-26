@@ -239,18 +239,22 @@ public class SilverChariotArmsPart extends PsuedoHierarchicalModel {
 				// this.animate(user.roundabout$getWornStandIdleAnimation(), SilverChariotAnimations.Idle(), partialTicks, 1f);
 				// user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
 				if (isRightHanded) {
-					this.animate(user.roundabout$getWornStandIdleAnimation(), SilverChariotAnimations.HideLeftArm(), partialTicks, 1f);
+					this.right_arm.visible = true;
+					this.left_arm.visible = false;
+					// this.animate(user.roundabout$getWornStandIdleAnimation(), SilverChariotAnimations.HideLeftArm(), partialTicks, 1f);
 				} else {
-					this.animate(user.roundabout$getWornStandIdleAnimation(), SilverChariotAnimations.HideRightArm(), partialTicks, 1f);
+					this.right_arm.visible = false;
+					this.left_arm.visible = true;
+					// this.animate(user.roundabout$getWornStandIdleAnimation(), SilverChariotAnimations.HideRightArm(), partialTicks, 1f);
 				}
 				// user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
 				// this.animate(user.roundabout$getWornStandIdleAnimation(), SilverChariotAnimations.Idle(), partialTicks, 1f);
 				if (animation == StandPowers.GUARD) {
 					// user.roundabout$getWornStandIdleAnimation().stop();
 					if (isRightHanded) {
-						this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.RightHit1(), partialTicks, 1f);
+						this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.RightGuardStart(), context.tickCount+fixedPartial, 1f);
 					} else {
-						this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.LeftHit1(), partialTicks, 1f);
+						this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.LeftGuardStart(), context.tickCount+fixedPartial, 1f);
 					}
 				} else {
 					user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
@@ -264,9 +268,9 @@ public class SilverChariotArmsPart extends PsuedoHierarchicalModel {
 						}
 					} else if (animation == StandPowers.PUNCH_LEFT) {
 						if (isRightHanded) {
-							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.RightHit1(), partialTicks, speed*1.75f);
+							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.RightHit2(), partialTicks, speed*1.75f);
 						} else {
-							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.LeftHit1(), partialTicks, speed*1.75f);
+							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.LeftHit2(), partialTicks, speed*1.75f);
 						}
 					} else if (animation == StandPowers.VAULT) {
 						if (isRightHanded) {
@@ -282,8 +286,9 @@ public class SilverChariotArmsPart extends PsuedoHierarchicalModel {
 						}
 					}
 
-					root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, heyFull);
+					// root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, heyFull);
 				}
+				root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, heyFull);
 			}
 		}
 	}
