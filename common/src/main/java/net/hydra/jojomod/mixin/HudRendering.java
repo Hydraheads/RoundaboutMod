@@ -469,9 +469,12 @@ public abstract class HudRendering implements IHudAccess {
         float b = (color & 0xFF) / 255.0F;
         return new float[]{r, g, b};
     }
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderEffects(Lnet/minecraft/client/gui/GuiGraphics;)V"))
-    private void roundabout$renderOverlay(GuiGraphics $$0, float $$1, CallbackInfo ci) {
-        /*This does not work on forge becasue the forcefully overwrite this function*/
+    @Inject(method = "renderEffects", at = @At("HEAD"), cancellable = true)
+    private void roundabout$renderOverlay(GuiGraphics $$0, CallbackInfo ci) {
+        if (ClientNetworking.getAppropriateConfig().whitesnakeSettings.hallucinationHidesEffects
+                && minecraft.player != null && minecraft.player.hasEffect(ModEffects.HALLUCINATION)) {
+            ci.cancel();
+        }
     }
 
     @Inject(method = "renderHearts", at = @At(value = "TAIL"))

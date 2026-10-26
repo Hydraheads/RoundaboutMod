@@ -298,6 +298,7 @@
     "whitesnake.inventory.PlayerWhitesnakeInventoryMixin",
     "whitesnake.inventory.ServerPlayerWhitesnakeInventoryMixin",
     "whitesnake.inventory.WhitesnakeDropItemMixin",
+    "whitesnake.inventory.WhitesnakePickupAnimationMixin",
     "whitesnake.memory.DiscMeleeImplantMixin",
     "whitesnake.memory.LivingEntityDiscData",
     "whitesnake.memory.MemoryServerPlayerGameMode",

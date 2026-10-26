@@ -200,9 +200,7 @@ public abstract class LivingEntityDiscData extends Entity implements DiscBearer 
                 || living.getEffect(MobEffects.BLINDNESS).getDuration() < 80)) {
             living.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 100, 0, false, false, false));
         }
-        boolean lobotomized = DiscItemData.isLobotomized(living)
-                || living instanceof Mob mob && DreamingMemoryController.isDreamingWithoutMemory(mob)
-                || (living instanceof Mob mobDoomed && (mobDoomed.hasEffect(ModEffects.DOOMED) && !MainUtil.isBossMob(mobDoomed)));
+        boolean lobotomized = DiscItemData.isLobotomized(living);
         if (lobotomized) {
             living.xxa = 0;
             living.zza = 0;

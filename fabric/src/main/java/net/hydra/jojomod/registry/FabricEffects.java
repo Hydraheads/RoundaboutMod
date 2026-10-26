@@ -4,7 +4,6 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.event.ModEffects;
-import net.hydra.jojomod.event.powers.whitesnake.DreamingEffect;
 import net.hydra.jojomod.event.powers.whitesnake.HallucinationEffect;
 import net.hydra.jojomod.event.powers.whitesnake.OldEffect;
 import net.minecraft.core.Registry;
@@ -64,7 +63,7 @@ public class FabricEffects extends MobEffect{
 
     public static final MobEffect HALLUCINATION = register("hallucination", new HallucinationEffect());
     public static final MobEffect OLD = register("old", new OldEffect());
-    public static final MobEffect DREAMING = register("dreaming", new DreamingEffect());
+    public static final MobEffect SLEEPING = register("sleeping", new FabricEffects(MobEffectCategory.HARMFUL, 0x9BA9E8));
     public static final MobEffect REFRESHED =
             register("refreshed", new FabricEffects(MobEffectCategory.BENEFICIAL, 13302495));
     public static final MobEffect INFINITE_SPIN =
@@ -106,7 +105,7 @@ public class FabricEffects extends MobEffect{
         ModEffects.CRIPPLED = CRIPPLED;
         ModEffects.HALLUCINATION = HALLUCINATION;
         ModEffects.OLD = OLD;
-        ModEffects.DREAMING = DREAMING;
+        ModEffects.SLEEPING = SLEEPING;
         ModEffects.REFRESHED = REFRESHED;
         ModEffects.INFINITE_SPIN = INFINITE_SPIN;
         ModEffects.HAZE_VIRUS = HAZE_VIRUS;

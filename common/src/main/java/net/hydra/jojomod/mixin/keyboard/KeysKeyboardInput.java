@@ -42,7 +42,7 @@ public abstract class KeysKeyboardInput extends Input {
             boolean forwardKeys = user.roundabout$hasRibcageTrap();
 
 
-            if (user.roundabout$getStandPowers().isPiloting() && user.roundabout$getStandPowers() instanceof PowersSilverChariot){
+            if (user.roundabout$getStandPowers().isPiloting()){
                 if (roundabout$keyPilot == null){
                     roundabout$keyPilot = new KeyboardPilotInput(this.options);
                 }

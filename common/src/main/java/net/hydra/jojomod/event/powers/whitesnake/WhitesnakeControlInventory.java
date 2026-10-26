@@ -16,6 +16,8 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -27,6 +29,7 @@ public final class WhitesnakeControlInventory {
     public static final int SIZE = 9;
     public static final int WEAPON_SLOT = 1;
     public static final int STORAGE_START = 2;
+    private static final ThreadLocal<ItemEntity> PICKUP_ITEM = new ThreadLocal<>();
 
     private WhitesnakeControlInventory() {
     }
@@ -112,22 +115,45 @@ public final class WhitesnakeControlInventory {
     }
 
     public static void pickupNearby(Player player) {
-        if (player.level().isClientSide()) return;
+        if (player.level().isClientSide() || getPickupItem() != null) return;
         WhitesnakeEntity stand = controlledStand(player);
         if (stand == null) return;
         for (ItemEntity item : player.level().getEntitiesOfClass(ItemEntity.class,
                 stand.getBoundingBox().inflate(1.5D, 1.0D, 1.5D),
                 entity -> entity.isAlive() && !entity.hasPickUpDelay()
                         && canPickUp(entity.getItem()))) {
-            ItemStack remaining = item.getItem().copy();
-            int inserted = insert(player, remaining);
-            if (inserted <= 0) continue;
-            stand.take(item, inserted);
-            player.level().playSound(null, stand.blockPosition(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS,
-                    0.2F, ((player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F);
-            if (remaining.isEmpty()) item.discard();
-            else item.setItem(remaining);
+            pickupItem(player, item);
         }
+    }
+
+    public static void pickupItem(Player player, ItemEntity item) {
+        if (player.level().isClientSide() || getPickupItem() != null || !item.isAlive()
+                || item.hasPickUpDelay() || !canPickUp(item.getItem())) return;
+        WhitesnakeEntity stand = controlledStand(player);
+        if (stand == null || !stand.getBoundingBox().inflate(1.5D, 1.0D, 1.5D)
+                .intersects(item.getBoundingBox())) return;
+        int before = item.getItem().getCount();
+        PICKUP_ITEM.set(item);
+        try {
+            item.playerTouch(player);
+        } finally {
+            PICKUP_ITEM.remove();
+        }
+        if (!item.isRemoved() && item.getItem().getCount() >= before) return;
+        player.level().playSound(null, stand.blockPosition(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS,
+                0.2F, ((player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F);
+    }
+
+    public static ItemEntity getPickupItem() {
+        return PICKUP_ITEM.get();
+    }
+
+    public static boolean playPickupAnimation(LivingEntity entity, Entity item, int amount) {
+        if (!(entity instanceof Player player) || getPickupItem() != item) return false;
+        WhitesnakeEntity stand = controlledStand(player);
+        if (stand == null) return false;
+        stand.take(item, amount);
+        return true;
     }
 
     public static boolean hasAmmo(Player player) {
