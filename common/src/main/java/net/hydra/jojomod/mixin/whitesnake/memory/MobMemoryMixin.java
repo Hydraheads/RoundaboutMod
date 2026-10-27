@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Mob.class)
 public abstract class MobMemoryMixin {
     @Inject(method = "serverAiStep", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$runBlankMemoryAi(CallbackInfo ci) {
+    private void roundabout$runBlankMemoryAi(CallbackInfo ci) {
         Mob mob = (Mob) (Object) this;
         if (DiscItemData.isLobotomized(mob)) {
             mob.setTarget(null);
