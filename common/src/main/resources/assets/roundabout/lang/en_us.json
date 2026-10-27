@@ -539,6 +539,9 @@
   "item.roundabout.laem_mask": "Laem Visage",
   "item.roundabout.laem_mask.desc": "Laem Chabang",
   "item.roundabout.laem_mask.tag": "Laem",
+  "item.roundabout.blackmore_mask": "Blackmore Visage",
+  "item.roundabout.blackmore_mask.desc": "Blackmore",
+  "item.roundabout.blackmore_mask.tag": "Blackmore",
 
   "item.roundabout.stand_arrow.fail": "Need more experience!",
 

@@ -55,6 +55,7 @@ public class ModStrayModels {
     public static KakyoinHairPart KakyoinHairPart;
     public static GyroHatPart gyroHatPart;
     public static AnakissHatPart anakissHatPart;
+    public static BlackmorePonytailPart blackmorePonytailPart;
     public static SteelBallsPart steelBallsPart;
     public static DiegoHatPart DiegoHatPart;
     public static KosakuHairPart kosakuHairPart;

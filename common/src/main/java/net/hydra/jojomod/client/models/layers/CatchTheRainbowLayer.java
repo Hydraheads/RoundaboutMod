@@ -68,7 +68,7 @@ public class CatchTheRainbowLayer<T extends LivingEntity, A extends HumanoidMode
                         // Translate to the body
                             getParentModel().head.translateAndRotate(poseStack);
                             // Apply additional transformations
-                            poseStack.translate(-0.035F, -1.245, -0.5F); //1 1
+                            poseStack.translate(-0.0325F, -1.245, -0.5F); //1 1
                             // The first value goes to the right (negative) and left (positive)
                             // The second value is correlated with up (negative) and down (positive)
                         // the third is further and closer, positive to head towards the mob's facing direction negative for away

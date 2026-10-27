@@ -37,9 +37,9 @@ public class CatchTheRainbowModel extends PsuedoHierarchicalModel {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
-		PartDefinition stand = partdefinition.addOrReplaceChild("stand", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -9.0F, -2.5F, 8.0F, 8.0F, 5.0F, new CubeDeformation(0.1F)), PartPose.offset(0.5F, 20.5F, 5.75F));
+		PartDefinition stand = partdefinition.addOrReplaceChild("stand", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -9.0F, -2.5F, 8.0F, 8.0F, 5.0F, new CubeDeformation(0.45F)), PartPose.offset(0.5F, 20.5F, 5.75F));
 
-		PartDefinition forehead_r1 = stand.addOrReplaceChild("forehead_r1", CubeListBuilder.create().texOffs(0, 13).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 3.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -0.1745F, 0.0F, 0.0F));
+		PartDefinition forehead_r1 = stand.addOrReplaceChild("forehead_r1", CubeListBuilder.create().texOffs(0, 13).addBox(-4.0F, -8.0F, -4F, 8.0F, 3.0F, 1.0F, new CubeDeformation(0.35F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -0.1745F, 0.0F, 0.0F));
 
 		return LayerDefinition.create(meshdefinition, 32, 32);
 	}

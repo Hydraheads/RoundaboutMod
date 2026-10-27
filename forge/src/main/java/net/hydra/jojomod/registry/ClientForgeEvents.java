@@ -436,6 +436,7 @@ public class ClientForgeEvents {
         ModStrayModels.KakyoinHairPart = new KakyoinHairPart();
         ModStrayModels.gyroHatPart = new GyroHatPart();
         ModStrayModels.anakissHatPart = new AnakissHatPart();
+        ModStrayModels.blackmorePonytailPart = new BlackmorePonytailPart();
         ModStrayModels.steelBallsPart = new SteelBallsPart();
         ModStrayModels.DiegoHatPart = new DiegoHatPart();
         ModStrayModels.Diego2HatPart = new Diego2HatPart();
