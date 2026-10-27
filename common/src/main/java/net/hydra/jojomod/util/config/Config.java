@@ -1497,6 +1497,8 @@ public class Config implements Cloneable {
         public Integer silverChariotRapierSpinDuration;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer silverChariotRapierSpinWindup;
+        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
+        public Integer silverChariotArmourShedStandSealTime;
     }
 
     public static class TimeStopSettings {

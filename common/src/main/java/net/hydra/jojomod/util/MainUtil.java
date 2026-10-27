@@ -2388,6 +2388,17 @@ public class MainUtil {
         return mdist;
     }
 
+    public static double cheapDistanceTo3d(double x, double y, double z, double x2, double y2, double z2){
+        double mdist = 0;
+        double cdist = Math.abs(x-x2);
+        if (cdist > mdist){mdist=cdist;}
+        cdist = Math.abs(y-y2);
+        if (cdist > mdist){mdist=cdist;}
+        cdist = Math.abs(z-z2);
+        if (cdist > mdist){mdist=cdist;}
+        return mdist;
+    }
+
     public static boolean isPlayerNearby(Vec3 pos, Level level, double range, int exemptID) {
         if (level instanceof ServerLevel) {
             ServerLevel serverWorld = ((ServerLevel) level);

@@ -4263,6 +4263,8 @@
   "config.roundabout.silverChariotAfterimageOpacity.desc": "Opacity of the rendered afterimages.",
   "config.roundabout.silverChariotShouldRenderAfterimagesWhileUserInFirstPerson.name": "Toggle first person afterimages",
   "config.roundabout.silverChariotShouldRenderAfterimagesWhileUserInFirstPerson.desc": "Toggles if Silver Chariot's user should see afterimages in first person.",
+  "config.roundabout.silverChariotArmourShedStandSealTime.name": "Armour Recover Stand Seal Time",
+  "config.roundabout.silverChariotArmourShedStandSealTime.desc": "How long Silver Chariot is sealed after desummoning your stand while the stand's armour is off.",
 
   "config.roundabout.manhattanTransferMaxRange.name": "Manhattan Transfer Max Range",
   "config.roundabout.manhattanTransferMaxRange.desc": "How far you and Manhattan Transfer can distance until it despawns.",
