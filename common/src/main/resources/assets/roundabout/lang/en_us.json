@@ -4917,6 +4917,12 @@
   "config.roundabout.moldDMGPlayersMultiplier.desc": "Controls the damage players take when they fall in green days mold fields",
   "config.roundabout.moldMaxSize.name": "Green Day Maximum Mold Range",
   "config.roundabout.moldMaxSize.desc": "Controls the maximum range of green day's mold fields",
+  "config.roundabout.playerMinFalldistance.name": "Minimum Fall Distance",
+  "config.roundabout.playerMinFalldistance.desc": "Controls how far players have to fall in the mold to begin taking damage",
+  "config.roundabout.eatingCancelsMold.name": "Eating Cancels Mold",
+  "config.roundabout.eatingCancelsMold.desc": "Controls Wether or not eating removes existing mold fields (balance)",
+  "config.roundabout.moldSpreadForceCooldown.name": "Mold Spread Force Cooldown",
+  "config.roundabout.moldSpreadForceCooldown.desc": "Cooldown when Mold Spread is put on cooldown by eating or using Mold Cancel, default is 360 ticks",
 
   "config.roundabout.sneakyKilling.name": "Silent Killer",
   "config.roundabout.sneakyKilling.desc": "When true, targets killed by a Killer Queen's explosions exclude the killer's name from their death messages. Also prevents mobs that lack a sightline with the user from becoming hostile when damaged by explosions.",

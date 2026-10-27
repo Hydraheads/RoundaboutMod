@@ -611,7 +611,7 @@ public class PowersGreenDay extends NewPunchingStand {
 
     private boolean serverToggleMold(){
         MoldGone = true;
-        setCooldown(PowerIndex.SKILL_4,360);
+        setCooldown(PowerIndex.SKILL_4,ClientNetworking.getAppropriateConfig().greenDaySettings.moldSpreadForceCooldown);
         (self.level()).playSound(self,self.getOnPos(),ModSounds.SNAP_EVENT,SoundSource.PLAYERS,1,1);
         return true;
     }

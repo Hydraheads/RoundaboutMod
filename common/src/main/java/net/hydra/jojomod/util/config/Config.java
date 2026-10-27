@@ -743,6 +743,12 @@ public class Config implements Cloneable {
         public Integer moldMaxSize;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer moldSpreadCooldown;
+        @IntOption(group = "inherit", value = 360, min = 0, max = 72000)
+        public Integer moldSpreadForceCooldown;
+        @IntOption(group = "inherit", value = 2, min = 0, max = 72000)
+        public Integer playerMinFalldistance;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean eatingCancelsMold;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer moldDMGPlayersMultiplier;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)

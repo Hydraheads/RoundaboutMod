@@ -75,8 +75,10 @@ public class MoldSporesEntity extends StandEntity {
         } else {
             if (user.isUsingItem() && user.getMainHandItem().getItem().getFoodProperties() != null) {
                 if (user.isUsingItem() && user.getMainHandItem().getItem().getFoodProperties().getNutrition() > 0) {
-                    this.discard();
-                    ((PowersGreenDay)((StandUser)user).roundabout$getStandPowers()).setCooldown(PowerIndex.SKILL_4,360);
+                    if (ClientNetworking.getAppropriateConfig().greenDaySettings.eatingCancelsMold) {
+                        this.discard();
+                        ((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).setCooldown(PowerIndex.SKILL_4, ClientNetworking.getAppropriateConfig().greenDaySettings.moldSpreadForceCooldown);
+                    }
                 }
             }if((StandUU.roundabout$getStandPowers() instanceof PowersGreenDay)){
                 if(((PowersGreenDay)StandUU.roundabout$getStandPowers()).MoldGone){
@@ -167,7 +169,7 @@ public class MoldSporesEntity extends StandEntity {
 
                             float fallDistance = (((StandUser) entity).getStaringYPos() - (float) entity.getPosition(1).y());
 
-                            if (fallDistance > 2 || !(entity instanceof Player)){
+                            if (fallDistance > ClientNetworking.getAppropriateConfig().greenDaySettings.playerMinFalldistance || !(entity instanceof Player)){
                                 double width = entity.getBbWidth() / 2;
                                 double height = entity.getBbHeight() / 2;
                                 ((ServerLevel) level()).sendParticles(ModParticles.MOLD
