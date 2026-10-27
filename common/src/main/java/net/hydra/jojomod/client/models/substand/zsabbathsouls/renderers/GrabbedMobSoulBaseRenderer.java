@@ -43,6 +43,11 @@ public class GrabbedMobSoulBaseRenderer<T extends GrabbedMobSoul, P extends Huma
 
     @Override
     public void render(GrabbedMobSoul mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
+        if (mobEntity.isBaby()) {
+            matrixStack.scale(1.1f, 1.1f, 1.1f);
+        } else {
+            matrixStack.scale(1, 1, 1);
+        }
         super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
     }
 

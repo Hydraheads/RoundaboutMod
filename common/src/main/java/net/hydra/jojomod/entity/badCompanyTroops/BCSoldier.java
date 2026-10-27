@@ -140,15 +140,6 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
 
         wasParachuteOff = hasParachuteOff;
 
-        float pitch = this.getXRot();
-        float yaw = this.getYRot();
-
-        this.setXRot(pitch);
-        this.setYRot(yaw);
-        this.setYBodyRot(yaw);
-        this.xRotO = pitch;
-        this.yRotO = yaw;
-
         if (!level().isClientSide) {
             if (getNavigation().isInProgress()) {
                 setAnim(WALK_GUN);

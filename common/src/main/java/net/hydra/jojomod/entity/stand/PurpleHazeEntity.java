@@ -39,6 +39,10 @@ public class PurpleHazeEntity extends FollowingStandEntity{
     public final AnimationState phcombo1= new AnimationState();
     public final AnimationState phcombo2= new AnimationState();
     public final AnimationState phcombo3= new AnimationState();
+    public final AnimationState fallinghitstart= new AnimationState();
+    public final AnimationState fallinghit= new AnimationState();
+    public final AnimationState fallinghitlong= new AnimationState();
+    public final AnimationState fallinghitimpact= new AnimationState();
     public static byte
             STRANGLE_WINDUP = 86,
             FLYLOOP = 87,
@@ -47,7 +51,12 @@ public class PurpleHazeEntity extends FollowingStandEntity{
             PHFULLCOMBO = 90,
             PHCOMBO1 = 91,
             PHCOMBO2 = 92,
-            PHCOMBO3 = 93;
+            PHCOMBO3 = 93,
+            FALLINGHITSTART = 94,
+            FALLINGHIT = 95,
+            FALLINGHITLONG = 96,
+            FALLINGHITIMPACT = 97;
+
 
 
 
@@ -144,6 +153,28 @@ public class PurpleHazeEntity extends FollowingStandEntity{
                 } else {
                     this.punchState3.stop();
                 }
+            }
+            if (this.getAnimation() == FALLINGHITSTART) {
+                this.fallinghitstart.startIfStopped(this.tickCount);
+            } else {
+                this.fallinghitstart.stop();
+            }
+            if (this.getAnimation() == FALLINGHIT) {
+                this.fallinghit.startIfStopped(this.tickCount);
+            } else {
+                this.fallinghit.stop();
+            }
+            if (this.getAnimation() == FALLINGHITLONG) {
+                this.fallinghitlong.startIfStopped(this.tickCount);
+            } else {
+                this.fallinghitlong.stop();
+            }
+            if (this.getAnimation() == FALLINGHITIMPACT) {
+                if (!this.fallinghitimpact.isStarted()) {
+                    this.fallinghitimpact.start(this.tickCount - 5);
+                }
+            } else {
+                this.fallinghitimpact.stop();
             }
         }
     }

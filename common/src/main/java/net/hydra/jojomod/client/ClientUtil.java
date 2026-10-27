@@ -474,7 +474,7 @@ public class ClientUtil {
         ent.setYHeadRot(lerpYRot);
         LivingEntity user = ent.getUser();
         LivingEntity user2 = ent.getUser();
-        if (user != null && user2 != null){
+        if (user != null){
             ent.travelAheadSoulRender($$4, se);
         }
     }
@@ -1074,7 +1074,7 @@ public class ClientUtil {
                     boolean hasmainhand = ((int) vargs[4]) == 1;
                     int legsent = (int) vargs[5];
                     Entity userent = player.level().getEntity(user);
-                    if(((StandUser)userent).roundabout$getStandPowers() instanceof PowersGreenDay PGD){
+                    if(userent instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersGreenDay PGD){
 
                         PGD.Main_arm = (SeperatedArmEntity) player.level().getEntity(mainhandent);
                         PGD.Off_hand_entity = (SeperatedArmEntity) player.level().getEntity(offhandent);

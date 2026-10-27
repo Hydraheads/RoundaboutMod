@@ -4,6 +4,7 @@ package net.hydra.jojomod.entity.substand;
 import net.hydra.jojomod.access.NoHitboxRendering;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersBadCompany;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;

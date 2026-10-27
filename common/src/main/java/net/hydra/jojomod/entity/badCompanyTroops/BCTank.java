@@ -54,13 +54,13 @@ public class BCTank extends BCTroop{
     public void tick() {
         super.tick();
 
-        float pitch = this.getXRot();
+        /*float pitch = this.getXRot();
         float yaw = this.getYRot();
 
         this.setXRot(pitch);
         this.setYRot(yaw);
         this.setYBodyRot(yaw);
         this.xRotO = pitch;
-        this.yRotO = yaw;
+        this.yRotO = yaw;*/
     }
 }
