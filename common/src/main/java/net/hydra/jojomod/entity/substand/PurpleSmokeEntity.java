@@ -276,7 +276,7 @@ public class PurpleSmokeEntity extends StandEntity {
 
             if (!((StandUser) living).roundabout$isBubbleEncased() && !(living instanceof StrayCatEntity c && c.getBubbleShield()) && PowerTypes.isExistentiallyElsewhereTogether(this, living)) {
 
-                int effectDuration = living instanceof Player ? 100 : 150;
+                int effectDuration = living instanceof Player ? 150 : 150; //for when it was less duration to you. It was 100 : 150
                 boolean isSelf = living == user;
 
                 if (isDistortionMode()) {
