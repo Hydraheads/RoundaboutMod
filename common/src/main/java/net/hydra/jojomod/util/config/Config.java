@@ -1366,6 +1366,12 @@ public class Config implements Cloneable {
         public Integer potionStrengthBoost;
         @BooleanOption(group = "inherit", value = false)
         public Boolean disableBlockDisassembly;
+        @IntOption(group = "inherit", value = 180, min = 0, max = 72000)
+        public Integer diverZipCooldown;
+        @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
+        public Integer kickTrapCooldown;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer diveCooldown;
     }
     public static class WhitesnakeSettings {
         @BooleanOption(group = "inherit", value = true)
@@ -1394,7 +1400,7 @@ public class Config implements Cloneable {
         public Integer hallucinationAllowsDiscSteal;
         @BooleanOption(group = "inherit", value = true)
         public Boolean stealDiscWhenLowHealth;
-        @BooleanOption(group = "inherit", value = true)
+        @BooleanOption(group = "inherit", value = false)
         public Boolean stealPlayerDiscs;
         @IntOption(group = "inherit", value = 1, min = 1, max = 2)
         public Integer ejectType;
@@ -1475,11 +1481,11 @@ public class Config implements Cloneable {
         public Integer silverChariotCooldownArmorShed;
         @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
         public Integer silverChariotCooldownRapierShot;
-        @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
         public Integer silverChariotCooldownRapierShotInterrupt;
-        @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
-        public Integer silverChariotCooldownRapierShotPlatform;
-        @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
+        // @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
+        // public Integer silverChariotCooldownRapierShotPlatform;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer silverChariotCooldownRapierSpin;
         @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
         public Integer silverChariotCooldownRapierSlash;

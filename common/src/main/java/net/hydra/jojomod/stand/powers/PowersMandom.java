@@ -7,6 +7,7 @@ import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.substand.PurpleSmokeEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
@@ -357,6 +358,10 @@ public class PowersMandom extends NewDashPreset {
         if (!mobsInRange.isEmpty()) {
             for (Entity ent : mobsInRange) {
                 if (MainUtil.canRewindInTime(ent, this.self)) {
+                    if (ent instanceof PurpleSmokeEntity PSE) {
+                        PSE.timeRewindInteraction(120);
+                    }
+
                     IEntityAndData iData = (IEntityAndData) ent;
                     SavedSecond lastSecond = iData.roundabout$getLastSavedSecond();
                     if (lastSecond != null) {
@@ -492,14 +497,14 @@ public class PowersMandom extends NewDashPreset {
             ESIDISI = 14,
             COMMAND = 15,
             SCULK = 16,
-            TV = 17;
+            TV = 17,
+            CAPS = 18;
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
                 MANGA,
                 PURPLE,
                 SKY,
-                ALIEN,
                 DARK,
                 SQUID,
                 GLOW_SQUID,
@@ -508,6 +513,8 @@ public class PowersMandom extends NewDashPreset {
                 JELLYFISH,
                 HAPPY,
                 EYE,
+                ALIEN,
+                CAPS,
                 MELON,
                 SCULK,
                 ESIDISI,
@@ -534,6 +541,7 @@ public class PowersMandom extends NewDashPreset {
             case PowersMandom.COMMAND -> Component.translatable("skins.roundabout.mandom.command");
             case PowersMandom.SCULK -> Component.translatable("skins.roundabout.mandom.sculk");
             case PowersMandom.TV -> Component.translatable("skins.roundabout.mandom.tv");
+            case PowersMandom.CAPS -> Component.translatable("skins.roundabout.mandom.caps");
             default -> Component.translatable("skins.roundabout.mandom.manga");
         };
     }

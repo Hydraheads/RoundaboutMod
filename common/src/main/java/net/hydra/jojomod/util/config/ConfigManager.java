@@ -17,6 +17,7 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -189,6 +190,33 @@ public abstract class ConfigManager {
                 }
             }
         }
+
+        if (getAdvancedConfig().goldExperienceDropsAndRatesv2 != null) {
+            MainUtil.GOLD_EXPERIENCE_DNA_DROPS.clear();
+            MainUtil.GOLD_EXPERIENCE_TRANSFORM_RATE.clear();
+            MainUtil.GOLD_EXPERIENCE_IS_BABY.clear();
+            for (String entry : getAdvancedConfig().goldExperienceDropsAndRatesv2) {
+                try {
+                    String[] split = entry.split(":");
+                    if (split.length != 6) {
+                        Roundabout.LOGGER.warn("Invalid Gold Experience DNA entry: {}", entry);
+                        continue;
+                    }
+                    ResourceLocation sourceId = new ResourceLocation(split[0],split[1]);
+                    ResourceLocation targetId = new ResourceLocation(split[2],split[3]);
+                    Float transformRate = Float.parseFloat(split[4]);
+                    boolean isBaby = split[5].equalsIgnoreCase("baby");
+                    Item sourceItem = BuiltInRegistries.ITEM.get(sourceId);
+                    EntityType targetMob = BuiltInRegistries.ENTITY_TYPE.get(targetId);
+                    MainUtil.GOLD_EXPERIENCE_DNA_DROPS.put(sourceItem, targetMob);
+                    MainUtil.GOLD_EXPERIENCE_TRANSFORM_RATE.put(sourceItem, transformRate);
+                    MainUtil.GOLD_EXPERIENCE_IS_BABY.put(sourceItem, isBaby);
+                }
+                catch (Exception e) {
+                    Roundabout.LOGGER.error("Failed to parse Gold Experience DNA entry '{}'", entry, e);
+                }
+            }
+        }
     }
     public static void loadThrownItemDestructionBlacklist()
     {
@@ -350,11 +378,11 @@ public abstract class ConfigManager {
 
     public static void loadStandArrowPool()
     {
-        if (getAdvancedConfig().standArrowPoolv8 != null)
+        if (getAdvancedConfig().standArrowPoolv9 != null)
         {
             ModItems.STAND_ARROW_POOL.clear();
 
-            for (String disc : getAdvancedConfig().standArrowPoolv8)
+            for (String disc : getAdvancedConfig().standArrowPoolv9)
             {
                 String[] split = disc.split(":");
 
@@ -375,11 +403,11 @@ public abstract class ConfigManager {
                 }
             }
         }
-        if (getAdvancedConfig().naturalStandUserMobPoolv11 != null)
+        if (getAdvancedConfig().naturalStandUserMobPoolv12 != null)
         {
             ModItems.STAND_ARROW_POOL_FOR_MOBS.clear();
 
-            for (String disc : getAdvancedConfig().naturalStandUserMobPoolv11)
+            for (String disc : getAdvancedConfig().naturalStandUserMobPoolv12)
             {
                 String[] split = disc.split(":");
 
@@ -431,11 +459,11 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getAdvancedConfig().standArrowSecondaryPoolv8 != null)
+        if (getAdvancedConfig().standArrowSecondaryPoolv9 != null)
         {
             ModItems.STAND_ARROW_SECONDARY_STAND_POOL.clear();
 
-            for (String disc : getAdvancedConfig().standArrowSecondaryPoolv8)
+            for (String disc : getAdvancedConfig().standArrowSecondaryPoolv9)
             {
                 String[] split = disc.split(":");
 

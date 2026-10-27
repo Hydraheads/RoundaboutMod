@@ -506,6 +506,40 @@
       "roundabout:lyin_eyes_gather"
     ]
   },
+  "ge_summon": {
+    "subtitle": "sounds.roundabout.lyin_eyes_summon",
+    "sounds": [
+      "roundabout:ge_summon"
+    ]
+  },
+  "ge_life": {
+    "subtitle": "sounds.roundabout.ge_life",
+    "sounds": [
+      "roundabout:ge_life_1",
+      "roundabout:ge_life_2"
+    ]
+  },
+  "ge_hit": {
+    "subtitle": "sounds.roundabout.ge_hit",
+    "sounds": [
+      "roundabout:ge_hit_1",
+      "roundabout:ge_hit_2",
+      "roundabout:ge_hit_3",
+      "roundabout:ge_hit_4"
+    ]
+  },
+  "ge_life_punch": {
+    "subtitle": "sounds.roundabout.ge_life_punch",
+    "sounds": [
+      "roundabout:ge_life_punch"
+    ]
+  },
+  "ge_life_punch_windup": {
+    "subtitle": "sounds.roundabout.ge_life_punch_windup",
+    "sounds": [
+      "roundabout:ge_life_punch_windup"
+    ]
+  },
   "summon_king_crimson": {
     "subtitle": "sounds.roundabout.summon_king_crimson",
     "sounds": [
@@ -953,24 +987,8 @@
   "killer_queen_explosion": {
     "subtitle": "sounds.roundabout.killer_queen_explosion",
     "sounds": [
-      "roundabout:killer_queen_explosion"
-    ]
-  },
-  "killer_queen_explosion_1": {
-    "subtitle": "sounds.roundabout.killer_queen_explosion",
-    "sounds": [
-      "roundabout:killer_queen_explosion_1"
-    ]
-  },
-  "killer_queen_explosion_2": {
-    "subtitle": "sounds.roundabout.killer_queen_explosion",
-    "sounds": [
-      "roundabout:killer_queen_explosion_2"
-    ]
-  },
-  "killer_queen_explosion_3": {
-    "subtitle": "sounds.roundabout.killer_queen_explosion",
-    "sounds": [
+      "roundabout:killer_queen_explosion_1",
+      "roundabout:killer_queen_explosion_2",
       "roundabout:killer_queen_explosion_3"
     ]
   },
@@ -1037,10 +1055,7 @@
   "killer_queen_barrage_hit" : {
     "subtitle": "sounds.roundabout.stand_barrage_hit_soft",
     "sounds": [
-      "roundabout:kq_barrage_hit_1",
-      "roundabout:kq_barrage_hit_2",
-      "roundabout:kq_barrage_hit_3",
-      "roundabout:kq_barrage_hit_4"
+      "roundabout:kq_barrage_hit"
     ]
   },
   "kq_block_plant" : {
@@ -3959,6 +3974,15 @@
       }
     ]
   },
+  "chaka_hftf": {
+    "subtitle": "sounds.roundabout.chaka_hftf",
+    "sounds": [
+      {
+        "name": "roundabout:chaka_hftf",
+        "stream": true
+      }
+    ]
+  },
   "vsong_silent_reveries": {
     "subtitle": "sounds.roundabout.vsong_silent_reveries",
     "sounds": [
@@ -4050,6 +4074,21 @@
     "subtitle": "sounds.roundabout.purple_haze_barrage_cry",
     "sounds": [
       "roundabout:purple_haze_barrage_cry"
+    ]
+  },
+  "purple_haze_barrage_hit": {
+    "subtitle": "sounds.roundabout.stand_barrage_hit_soft",
+    "sounds": [
+      "roundabout:ph_hit_1",
+      "roundabout:ph_hit_2",
+      "roundabout:ph_hit_3",
+      "roundabout:ph_hit_4"
+    ]
+  },
+  "purple_haze_barrage_finisher": {
+    "subtitle": "sounds.roundabout.purple_haze_barrage_finisher",
+    "sounds": [
+      "roundabout:ph_finisher"
     ]
   },
   "purple_haze_smoke": {

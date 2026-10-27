@@ -1982,6 +1982,9 @@ public class StandPowers extends AbilityScapeBasis {
         return Math.max(0.0f, Math.min(1.0f, normalized)) * maxOverlay;
     }
 
+    public int getKickBarrageLength(){
+        return 50;
+    }
 
     /**This happens every time a stand barrage hits, generally you dont want to override this unless
      * your stand's barrage operates very differently*/
@@ -2004,7 +2007,9 @@ public class StandPowers extends AbilityScapeBasis {
                     }
                 }
 
-                if (this.attackTimeDuring == this.getBarrageLength()){
+                if (this.activePower == PowerIndex.BARRAGE_2 && this.attackTimeDuring == this.getKickBarrageLength()){
+                    this.attackTimeDuring = -10;
+                } else if (this.attackTimeDuring == this.getBarrageLength()){
                     this.attackTimeDuring = -10;
                 }
             }

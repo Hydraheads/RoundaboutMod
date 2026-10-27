@@ -322,11 +322,9 @@ public class SilverChariotPharaohModel<T extends SilverChariotEntity> extends St
         // this.animate(pEntity.scBarrageDamage, SilverChariotAnimations.BarrageDamage, pAgeInTicks, 1f);
         // this.animate(pEntity.scBarrageCharge, SilverChariotAnimations.BarrageCharge, pAgeInTicks, 1f);
         // this.animate(pEntity, SilverChariotAnimations, pAgeInTicks, 1f);
-        /*
         this.head.visible = !(pEntity.isRemoteControlled()
                 && pEntity.getUser() == minecraft.player
                 && minecraft.options.getCameraType().isFirstPerson());
-        */
         if (!pEntity.isPart5Skin()) {
             this.right_sword.visible = true;
             this.left_sword.visible = false;
@@ -394,7 +392,8 @@ public class SilverChariotPharaohModel<T extends SilverChariotEntity> extends St
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        stand.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+        // stand.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+        super.renderToBuffer(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
     }
 
     @Override

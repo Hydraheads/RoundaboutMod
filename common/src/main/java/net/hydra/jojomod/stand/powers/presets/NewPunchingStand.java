@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers.presets;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -9,6 +10,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
+import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -95,10 +97,41 @@ public class NewPunchingStand extends NewDashPreset {
         return true;
     }
 
+    public void playKickBarrageChargeSound(){
+            if (!this.self.level().isClientSide()) {
+                SoundEvent barrageChargeSound = this.getBarrageChargeSound();
+                if (barrageChargeSound != null) {
+                    playSoundsIfNearby(SoundIndex.ALT_CHARGE_SOUND_1, 27, false);
+                }
+            }
+    }
+    public boolean setPowerKickBarrageCharge() {
+        if (hasHandsOut())
+            return true;
+        animateStand(StandEntity.KICK_BARRAGE_WINDUP);
+        this.attackTimeDuring = 0;
+        playKickBarrageChargeSound();
+        this.setActivePower(PowerIndex.BARRAGE_CHARGE_2);
+        this.poseStand(OffsetIndex.ATTACK);
+        return true;
+    }
+    public void kickBarrageImpact2(Entity entity, boolean lastHit, float knockbackStrength){
+        if (entity instanceof LivingEntity){
+            if (lastHit) {
+                takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
+            } else {
+
+                takeKnockbackWithY(entity, knockbackStrength,
+                        Mth.sin(this.getSelf().getYRot() * ((float) Math.PI / 180)),
+                        Mth.sin(-15 * ((float) Math.PI / 180)),
+                        -Mth.cos(this.getSelf().getYRot() * ((float) Math.PI / 180)));
+            }
+        }
+    }
     /**If you override this for any reason, you should probably call the super(). Although SP and TW override
      * this, you can probably do better*/
     public void barrageImpact(Entity entity, int hitNumber){
-        if (this.isBarrageAttacking()) {
+        if (this.activePower == PowerIndex.BARRAGE_2) {
             if (bonusBarrageConditions()) {
                 boolean sideHit = false;
                 if (hitNumber > 1000){
@@ -108,10 +141,10 @@ public class NewPunchingStand extends NewDashPreset {
                     hitNumber-=1000;
                     sideHit = true;
                 }
-                boolean lastHit = (hitNumber >= this.getBarrageLength());
+                boolean lastHit = (hitNumber >= this.getKickBarrageLength());
                 if (entity != null) {
                     if (entity instanceof LivingEntity && ((StandUser) entity).roundabout$isBarraging() && ((StandUser) entity).roundabout$getStandPowers().canClash()
-                            && ((StandUser) entity).roundabout$getAttackTimeDuring() > -1 && !(((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))  && !this.getStandUserSelf().roundabout$isPossessed()   ) {
+                            && ((StandUser) entity).roundabout$getAttackTimeDuring() > -1 && !(((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
                         initiateClash(entity);
                     } else {
                         hitParticles(entity);
@@ -122,11 +155,11 @@ public class NewPunchingStand extends NewDashPreset {
                          * through shields.*/
                         Vec3 prevVelocity = entity.getDeltaMovement();
                         if (lastHit) {
-                            pow = this.getBarrageFinisherStrength(entity);
-                            knockbackStrength = this.getBarrageFinisherKnockback();
+                            pow = this.getKickBarrageFinisherStrength(entity);
+                            knockbackStrength = this.getKickBarrageFinisherKnockback();
                         } else {
-                            pow = this.getBarrageHitStrength(entity);
-                            float mn = this.getBarrageLength() - hitNumber;
+                            pow = this.getKickBarrageHitStrength(entity);
+                            float mn = this.getKickBarrageLength() - hitNumber;
                             if (mn == 0) {
                                 mn = 0.015F;
                             } else {
@@ -136,59 +169,190 @@ public class NewPunchingStand extends NewDashPreset {
                         }
 
                         if (sideHit){
-                            pow/=4;
-                            knockbackStrength/=6;
+                            pow/=3;
+                            knockbackStrength/=3;
                         }
 
                         if (StandRushDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
                             if (entity instanceof LivingEntity LE) {
                                 if (lastHit) {
-                                    setDazed((LivingEntity) entity, (byte) 0);
-
+                                    if (entity instanceof Player PE){
+                                        ((IPlayerEntity) PE).roundabout$setCameraHits(-1);
+                                    }
                                     if (!sideHit) {
                                         ((StandUser)LE).roundabout$setDestructionTrailTicks(80);
-                                        addEXP(8,LE);
                                         playBarrageEndNoise(0, entity);
                                     }
                                 } else {
-                                    setDazed((LivingEntity) entity, (byte) 3);
+                                    if (entity instanceof Player PE){
+                                        ((IPlayerEntity) PE).roundabout$setCameraHits(2);
+                                    }
                                     if (!sideHit) {
-                                        playBarrageNoise(hitNumber, entity);
+                                        playKickBarrageNoise(hitNumber, entity);
                                     }
                                 }
                             }
-                            barrageImpact2(entity, lastHit, knockbackStrength);
+                            kickBarrageImpact2(entity, lastHit, knockbackStrength);
                         } else {
                             if (lastHit) {
-                                knockShield2(entity, 200);
+
                                 if (!sideHit) {
                                     playBarrageBlockEndNoise(0, entity);
                                 }
                             } else {
-                                entity.setDeltaMovement(prevVelocity);
                                 playBarrageBlockNoise();
+                                entity.setDeltaMovement(prevVelocity);
                             }
                         }
                     }
                 } else {
+
                     if (!sideHit) {
                         playBarrageMissNoise(hitNumber);
                     }
                 }
 
                 if (lastHit) {
-                    animateStand(StandEntity.BARRAGE_FINISHER);
+                    animateStand(StandEntity.KICK_BARRAGE_END);
                     this.attackTimeDuring = -10;
                 }
             } else {
                 ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
             }
         } else {
-            ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
+            if (this.isBarrageAttacking()) {
+                if (bonusBarrageConditions()) {
+                    boolean sideHit = false;
+                    if (hitNumber > 1000) {
+                        if (!(ClientNetworking.getAppropriateConfig().generalStandSettings.barrageHasAreaOfEffect)) {
+                            return;
+                        }
+                        hitNumber -= 1000;
+                        sideHit = true;
+                    }
+                    boolean lastHit = (hitNumber >= this.getBarrageLength());
+                    if (entity != null) {
+                        if (entity instanceof LivingEntity && ((StandUser) entity).roundabout$isBarraging() && ((StandUser) entity).roundabout$getStandPowers().canClash()
+                                && ((StandUser) entity).roundabout$getAttackTimeDuring() > -1 && !(((TimeStop) this.getSelf().level()).CanTimeStopEntity(entity)) && !this.getStandUserSelf().roundabout$isPossessed()) {
+                            initiateClash(entity);
+                        } else {
+                            hitParticles(entity);
+
+                            float pow;
+                            float knockbackStrength = 0;
+                            /**By saving the velocity before hitting, we can let people approach barraging foes
+                             * through shields.*/
+                            Vec3 prevVelocity = entity.getDeltaMovement();
+                            if (lastHit) {
+                                pow = this.getBarrageFinisherStrength(entity);
+                                knockbackStrength = this.getBarrageFinisherKnockback();
+                            } else {
+                                pow = this.getBarrageHitStrength(entity);
+                                float mn = this.getBarrageLength() - hitNumber;
+                                if (mn == 0) {
+                                    mn = 0.015F;
+                                } else {
+                                    mn = ((0.015F / (mn)));
+                                }
+                                knockbackStrength = 0.014F - mn;
+                            }
+
+                            if (sideHit) {
+                                pow /= 4;
+                                knockbackStrength /= 6;
+                            }
+
+                            if (StandRushDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
+                                if (entity instanceof LivingEntity LE) {
+                                    if (lastHit) {
+                                        setDazed((LivingEntity) entity, (byte) 0);
+
+                                        if (!sideHit) {
+                                            ((StandUser) LE).roundabout$setDestructionTrailTicks(80);
+                                            addEXP(8, LE);
+                                            playBarrageEndNoise(0, entity);
+                                        }
+                                    } else {
+                                        setDazed((LivingEntity) entity, (byte) 3);
+                                        if (!sideHit) {
+                                            playBarrageNoise(hitNumber, entity);
+                                        }
+                                    }
+                                }
+                                barrageImpact2(entity, lastHit, knockbackStrength);
+                            } else {
+                                if (lastHit) {
+                                    knockShield2(entity, 200);
+                                    if (!sideHit) {
+                                        playBarrageBlockEndNoise(0, entity);
+                                    }
+                                } else {
+                                    entity.setDeltaMovement(prevVelocity);
+                                    playBarrageBlockNoise();
+                                }
+                            }
+                        }
+                    } else {
+                        if (!sideHit) {
+                            playBarrageMissNoise(hitNumber);
+                        }
+                    }
+
+                    if (lastHit) {
+                        animateStand(StandEntity.BARRAGE_FINISHER);
+                        this.attackTimeDuring = -10;
+                    }
+                } else {
+                    ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
+                }
+            } else {
+                ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
+            }
+        }
+    }
+    public void playKickBarrageNoise(int hitNumber, Entity entity){
+        if (!this.getSelf().level().isClientSide()) {
+            if (!this.getSelf().level().isClientSide() && (((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
+                playBarrageBlockNoise();
+            } else {
+                if (hitNumber % 3 == 0) {
+                    playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.STAND_BARRAGE_HIT2_EVENT, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
+                }
+            }
         }
     }
 
 
+    public float getKickBarrageFinisherStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return 2F;
+        } else {
+            return 7;
+        }
+    }
+    public float getKickBarrageHitStrength(Entity entity){
+        float barrageLength = this.getKickBarrageLength();
+        float power;
+        if (this.getReducedDamage(entity)){
+            power = 7/barrageLength;
+        } else {
+            power = 15/barrageLength;
+        }
+        /*Barrage hits are incapable of killing their target until the last hit.*/
+        if (entity instanceof LivingEntity){
+            if (power >= ((LivingEntity) entity).getHealth() && ClientNetworking.getAppropriateConfig().generalStandSettings.barragesOnlyKillOnLastHit){
+                if (entity instanceof Player) {
+                    power = 0.00001F;
+                } else {
+                    power = 0F;
+                }
+            }
+        }
+        return power;
+    }
+    public float getKickBarrageFinisherKnockback(){
+        return 1.4F;
+    }
     public void updateBarrage(){
         if (this.attackTimeDuring == -2 && this.getSelf() instanceof Player) {
             ((StandUser) this.self).roundabout$tryPower(PowerIndex.GUARD, true);
@@ -760,5 +924,59 @@ public class NewPunchingStand extends NewDashPreset {
             }
         }
     }
+
+
+    /**This is called first by the server, it chooses the sfx and sends packets to nearby players*/
+    public void playKickBarrageCrySound(){
+
+    }
+    public boolean setPowerKickBarrage() {
+
+        if (hasHandsOut())
+            return true;
+        this.attackTimeDuring = 0;
+        this.setActivePower(PowerIndex.BARRAGE_2);
+        this.poseStand(OffsetIndex.ATTACK);
+        playKickBarrageCrySound();
+        this.setAttackTimeMax(this.getKickBarrageRecoilTime());
+        this.setActivePowerPhase(this.getActivePowerPhaseMax());
+        animateStand(StandEntity.KICK_BARRAGE);
+        return true;
+    }
+    public void updateKickBarrageCharge(){
+        if (this.attackTimeDuring >= this.getKickBarrageWindup()) {
+            ((StandUser) this.self).roundabout$tryPower(PowerIndex.BARRAGE_2, true);
+        }
+    }
+    @Override
+    public int getKickBarrageWindup(){
+        return ClientNetworking.getAppropriateConfig().generalStandSettings.kickBarrageWindup;
+    }
+    public int getKickBarrageRecoilTime(){
+        return ClientNetworking.getAppropriateConfig().
+                generalStandSettings.kickBarrageRecoilCooldown;
+    }
+    public void updateKickBarrage(){
+        if (this.attackTimeDuring == -2 && this.getSelf() instanceof Player) {
+            ((StandUser) this.self).roundabout$tryPower(PowerIndex.GUARD, true);
+        } else {
+            if (this.attackTimeDuring > this.getKickBarrageLength()) {
+                this.attackTimeDuring = -20;
+            } else {
+                if (this.attackTimeDuring > 0) {
+                    this.setAttackTime((getKickBarrageRecoilTime() - 1) -
+                            Math.round(((float) this.attackTimeDuring / this.getKickBarrageLength())
+                                    * (getKickBarrageRecoilTime() - 1)));
+
+                    standBarrageHit();
+                }
+            }
+        }
+    }
+
+    public float getKickBarrageChargePitch(){
+        return 1/((float) this.getKickBarrageWindup() /20);
+    }
+
 
 }

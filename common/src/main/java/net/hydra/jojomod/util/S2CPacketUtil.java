@@ -485,9 +485,9 @@ public class S2CPacketUtil {
         );
     }
 
-    public static void sync_GD_arms(int User, int offhandentity, int mainhandentity, int hasoffhand, int hasmainhand, int seperatedLegsEntity, int haslegs) {
+    public static void sync_GD_arms(int User, int offhandentity, int mainhandentity, int hasoffhand, int hasmainhand, int seperatedLegsEntity, int legTicks) {
         ModMessageEvents.sendToAll(
-                ServerToClientPackets.S2CPackets.MESSAGES.SyncGdArms.value, User, offhandentity,mainhandentity, hasoffhand, hasmainhand, seperatedLegsEntity
+                ServerToClientPackets.S2CPackets.MESSAGES.SyncGdArms.value, User, offhandentity,mainhandentity, hasoffhand, hasmainhand, seperatedLegsEntity, legTicks
         );
     }
 
@@ -504,6 +504,15 @@ public class S2CPacketUtil {
                     SP,
                     ServerToClientPackets.S2CPackets.MESSAGES.SyncPurpleHazePods.value,
                     pods
+            );
+        }
+    }
+
+    public static void syncGamblingState(Player player, int tension, int lastSpillage, int lastQuality, boolean isHostTurn, boolean gameOver) {
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.SyncGamblingState.value,
+                    tension, lastSpillage, lastQuality, isHostTurn, gameOver
             );
         }
     }

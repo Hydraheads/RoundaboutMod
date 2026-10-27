@@ -6,8 +6,10 @@ import net.hydra.jojomod.access.IPlayerEntityServer;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.goals.BlackSabbathRangedAttackGoal;
 import net.hydra.jojomod.entity.navigation.BlackSabbathNavigation;
+import net.hydra.jojomod.entity.objects.GrabbedMobSoul;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -15,6 +17,7 @@ import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Position;
@@ -58,6 +61,8 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
 
     private static final EntityDataAccessor<Boolean> HAS_TARGETS = SynchedEntityData.defineId(BlackSabbathEntity.class,
             EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Byte> ANIMATION = SynchedEntityData.defineId(BlackSabbathEntity.class,
+            EntityDataSerializers.BYTE);
 
 
     public BlackSabbathEntity(EntityType<? extends Mob> entityType, Level world) {
@@ -109,245 +114,368 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
  @Override
  public void setupAnimationStates() {
      super.setupAnimationStates();
-     if(this.getUser() != null){
-         if (((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb){
-             switch (pb.moveMode) {
-                 case 1 -> {
-                     if (pb.active) {
-                         this.coat_open.stop();
-                         chest_close.stop();
-                         this.chest_open.startIfStopped(this.tickCount);
-                     } else {
-                         this.chest_open.stop();
-                         this.coat_open.stop();
-                         this.chest_close.startIfStopped(this.tickCount);
-                     }
-                 }
-                 case 2 -> {
-                     this.chest_open.stop();
-                     this.chest_close.stop();
-                     this.floating.startIfStopped(this.tickCount);
-                     this.coat_open.startIfStopped(this.tickCount);
-                 }
-                 case 3 -> {
-                     System.out.println(!pb.blackSabbathTargets.isEmpty());
-                     if(getHasTargets()){
-                         if (!isBlackSabbathUnderLight()) {
-                             if (!isOnFire()) {
-                                 animationTick = 20;
-                             }
-                             if (!getThrowable()) {
-                                 if(meleeInteractionTicks < 1) {
-                                     this.chest_close.stop();
-                                     this.grabOne.stop();
-                                     this.coat_open.stop();
-                                     if ((targetSabbath() != null && !isUnderSunlight(targetSabbath()))) {
-                                         if (lungeTicks < 10) {
-                                             burningDive.stop();
-                                             diving.startIfStopped(this.tickCount);
-                                         }
-                                         if (lungeTicks < 220 && lungeTicks > 210) {
-                                             emerge.startIfStopped(this.tickCount);
-                                             diving.stop();
-                                             burningDive.stop();
-                                         } else {
-                                             emerge.stop();
-                                         }
-                                         if (lungeTicks <= 210 && lungeTicks > 180) {
-                                             catching.startIfStopped(this.tickCount);
-                                             emerge.stop();
-                                         }
-                                         if (lungeTicks <= 50 && lungeTicks > 35) {
-                                             if (burningCripple.isStarted() || burningStart.isStarted() || isOnFire()) {
-                                                 if (!diving.isStarted()) {
-                                                     diving.stop();
-                                                     walk.stop();
-                                                     stando.stop();
-                                                     burningCripple.stop();
-                                                     burningStart.stop();
-                                                     burningDive.startIfStopped(this.tickCount);
-                                                 }
-                                             } else {
-                                                 diving.animateWhen(catching.isStarted(), this.tickCount);
-                                                 if (!burningDive.isStarted()) {
-                                                     burningDive.stop();
-                                                     walk.stop();
-                                                     stando.stop();
-                                                     diving.startIfStopped(this.tickCount);
-                                                 }
-                                             }
-                                             emerge.stop();
-                                             catching.stop();
-                                         }
-                                     } else {
-                                         catching.stop();
-                                         this.emerge.stop();
-                                         coat_open.stop();
-                                         emerge.stop();
-                                         catching.stop();
-                                         if (lungeTicks <= 50 && lungeTicks > 35) {
-                                             if (burningCripple.isStarted() || burningStart.isStarted() || isOnFire()) {
-                                                 if (!diving.isStarted()) {
-                                                     burningCripple.stop();
-                                                     burningStart.stop();
-                                                     diving.stop();
-                                                     walk.stop();
-                                                     stando.stop();
-                                                     burningDive.startIfStopped(this.tickCount);
-                                                 }
-                                             } else {
-                                                 if (!burningDive.isStarted()) {
-                                                     walk.stop();
-                                                     stando.stop();
-                                                     diving.startIfStopped(this.tickCount);
-                                                 }
-                                             }
-                                         }
-                                         if (isWalking && lungeTicks > 50) {
-                                             if (this.getDeltaMovement().x() != 0 || this.getDeltaMovement().z() != 0) {
-                                                 stando.stop();
-                                                 walk.startIfStopped(this.tickCount);
-                                             } else {
-                                                 walk.stop();
-                                                 stando.stop();
-                                             }
-                                         } else {
-                                             walk.stop();
-                                             stando.stop();
-                                         }
-                                     }
-                                     strafeEmerge.stop();
-                                     strafeWalk.stop();
-                                 } else {
-                                     if (this.level().getEntity(this.getGrabbing()) != null) {
-                                         this.chest_close.stop();
-                                         if(meleeInteractionTicks > 20) {
-                                             burningDive.stop();
-                                             burningCripple.stop();
-                                             burningStart.stop();
-                                             walk.stop();
-                                             stando.stop();
-                                             diving.stop();
-                                             catching.stop();
-                                             emerge.stop();
-                                             grabOne.startIfStopped(this.tickCount);
-                                         } else {
-                                             burningDive.stop();
-                                             burningCripple.stop();
-                                             burningStart.stop();
-                                             walk.stop();
-                                             stando.stop();
-                                             diving.stop();
-                                             catching.stop();
-                                             emerge.stop();
-                                             grabOne.stop();
-                                         }
-                                     }
-                                 }
-                             }else {
-                                 if (lungeTicks <= 50 && lungeTicks > 35) {
-                                     this.chest_close.stop();
-                                     strafeEmerge.stop();
-                                     strafeWalk.stop();
-                                     if (burningCripple.isStarted() || burningStart.isStarted() || isOnFire()) {
-                                         if (!diving.isStarted()) {
-                                             diving.stop();
-                                             walk.stop();
-                                             stando.stop();
-                                             burningCripple.stop();
-                                             burningStart.stop();
-                                             burningDive.startIfStopped(this.tickCount);
-                                         }
-                                     } else {
-                                         if (!burningDive.isStarted()) {
-                                             burningDive.stop();
-                                             walk.stop();
-                                             stando.stop();
-                                             diving.startIfStopped(this.tickCount);
-                                         }
-                                     }
-                                     emerge.stop();
-                                     catching.stop();
-                                 } else {
-                                     this.chest_close.stop();
-                                     burningDive.stop();
-                                     diving.stop();
-                                     emerge.stop();
-                                 }
-                                 if (getStrafing()) {
-                                     chest_close.stop();
-                                     if (animationTick2 > 0) {
-                                         animationTick2--;
-                                         strafeWalk.stop();
-                                         strafeEmerge.startIfStopped(this.tickCount);
-                                     } else {
-                                         strafeEmerge.stop();
-                                         strafeWalk.startIfStopped(this.tickCount);
-                                     }
-                                 } else {
-                                     if (!getTridentLoyalty()) {
-                                         if (animationTick2 < 14) {
-                                             animationTick2++;
-                                         }
-                                         strafeEmerge.stop();
-                                         strafeWalk.stop();
-                                         chest_close.startIfStopped(this.tickCount);
-                                     }
-                                 }
-                                 burningCripple.stop();
-                                 burningStart.stop();
-                                 emerge.stop();
-                                 catching.stop();
-                                 walk.stop();
-                                 stando.stop();
-                             }
-                         } else {
-                             this.chest_close.stop();
-                             grabOne.stop();
-                             strafeEmerge.stop();
-                             strafeWalk.stop();
-                             catching.stop();
-                             this.emerge.stop();
-                             burningDive.stop();
-                             this.diving.stop();
-                             walk.stop();
-                             stando.stop();
-                             this.chest_open.stop();
-                             if(animationTick >= 1){
-                                 animationTick--;
-                             }
-                             if(animationTick > 1){
-                                 burningStart.startIfStopped(this.tickCount);
-                                 burningCripple.stop();
-                             } else {
-                                 burningStart.stop();
-                                 burningCripple.startIfStopped(this.tickCount);
-                             }
-                         }
-                     } else {
-                         System.out.println("why?");
-                         strafeEmerge.stop();
-                         strafeWalk.stop();
-                         catching.stop();
-                         this.emerge.stop();
-                         this.diving.stop();
-                         this.chest_open.stop();
-                         this.coat_open.stop();
-                         walk.stop();
-                         stando.stop();
-                         grabOne.stop();
-                         this.chest_close.startIfStopped(this.tickCount);
-                     }
-                     this.chest_open.stop();
-                 }
+     Byte bt = this.getBsAnimation();
+     switch (bt) {
+         case 0 -> {
+             coat_open.startIfStopped(this.tickCount);
+             this.emerge.start(this.tickCount);
+         }
+         /* 1 and 2: Black Sabbath chest */
+         case 1 -> {
+             this.emerge.stop();
+             this.coat_open.stop();
+             chest_close.stop();
+             this.chest_open.startIfStopped(this.tickCount);
+         }
+         case 2 -> {
+             this.emerge.stop();
+             this.chest_open.stop();
+             this.coat_open.stop();
+             this.chest_close.startIfStopped(this.tickCount);
+         }
+         /*3: floating behind user*/
+         case 3 -> {
+             this.emerge.stop();
+             this.chest_open.stop();
+             this.chest_close.stop();
+             this.floating.startIfStopped(this.tickCount);
+             this.coat_open.startIfStopped(this.tickCount);
+         }
+         /*Hunting Mode*/
+         case 4 -> {
+             burningCripple.stop();
+             burningStart.stop();
+             catching.stop();
+             walk.stop();
+             stando.stop();
+             this.coat_open.stop();
+             strafeEmerge.stop();
+             strafeWalk.stop();
+             burningDive.stop();
+             diving.startIfStopped(this.tickCount);
+             emerge.stop();
+         }
+         case 5 -> {
+             burningCripple.stop();
+             burningStart.stop();
+             catching.stop();
+             walk.stop();
+             stando.stop();
+             this.coat_open.stop();
+             strafeEmerge.stop();
+             strafeWalk.stop();
+             emerge.startIfStopped(this.tickCount);
+             diving.stop();
+             burningDive.stop();
+         }
+         case 6 -> {
+             burningCripple.stop();
+             burningStart.stop();
+             walk.stop();
+             stando.stop();
+             this.coat_open.stop();
+             strafeEmerge.stop();
+             strafeWalk.stop();
+             catching.startIfStopped(this.tickCount);
+             emerge.stop();
+         }
+         case 7 -> {
+             this.chest_close.stop();
+             strafeEmerge.stop();
+             strafeWalk.stop();
+             coat_open.stop();
+             emerge.stop();
+             catching.stop();
+             diving.stop();
+             walk.stop();
+             stando.stop();
+             burningCripple.stop();
+             burningStart.stop();
+             grabOne.stop();
+             burningDive.startIfStopped(this.tickCount);
+         }
+         case 8 -> {
+             grabOne.stop();
+             burningCripple.stop();
+             burningStart.stop();
+             this.chest_close.stop();
+             strafeEmerge.stop();
+             strafeWalk.stop();
+             coat_open.stop();
+             emerge.stop();
+             catching.stop();
+             burningDive.stop();
+             walk.stop();
+             stando.stop();
+             diving.startIfStopped(this.tickCount);
+         }
+         case 9 -> {
+             burningCripple.stop();
+             burningStart.stop();
+             strafeEmerge.stop();
+             strafeWalk.stop();
+             coat_open.stop();
+             emerge.stop();
+             catching.stop();
+             stando.stop();
+             walk.startIfStopped(this.tickCount);
+         }
+         case 10 -> {
+             burningCripple.stop();
+             burningStart.stop();
+             strafeEmerge.stop();
+             strafeWalk.stop();
+             coat_open.stop();
+             emerge.stop();
+             catching.stop();
+             walk.stop();
+             stando.stop();
+         }
+         case 11 -> {
+             this.coat_open.stop();
+             burningDive.stop();
+             burningCripple.stop();
+             burningStart.stop();
+             walk.stop();
+             stando.stop();
+             diving.stop();
+             catching.stop();
+             emerge.stop();
+             grabOne.startIfStopped(this.tickCount);
+         }
+         case 12 -> {
+             burningDive.stop();
+             burningCripple.stop();
+             burningStart.stop();
+             walk.stop();
+             stando.stop();
+             diving.stop();
+             catching.stop();
+             emerge.stop();
+         }
+         case 13 -> {
+             this.emerge.stop();
+             diving.stop();
+             burningDive.stop();
+             burningCripple.stop();
+             burningStart.stop();
+             this.coat_open.stop();
+             chest_close.stop();
+             if (animationTick2 > 0) {
+                 animationTick2--;
+                 strafeWalk.stop();
+                 strafeEmerge.startIfStopped(this.tickCount);
+             } else {
+                 strafeEmerge.stop();
+                 strafeWalk.startIfStopped(this.tickCount);
              }
          }
-     } else {
-         this.chest_open.stop();
-         this.chest_close.stop();
-         this.coat_open.startIfStopped(this.tickCount);
+         case 14 -> {
+             diving.stop();
+             burningDive.stop();
+             this.emerge.stop();
+             burningCripple.stop();
+             burningStart.stop();
+             this.coat_open.stop();
+             if (animationTick2 < 14) {
+                 animationTick2++;
+             }
+             strafeEmerge.stop();
+             strafeWalk.stop();
+             chest_close.startIfStopped(this.tickCount);
+         }
+         case 15 -> {
+             this.coat_open.stop();
+             this.chest_close.stop();
+             grabOne.stop();
+             strafeEmerge.stop();
+             strafeWalk.stop();
+             catching.stop();
+             this.emerge.stop();
+             burningDive.stop();
+             this.diving.stop();
+             walk.stop();
+             stando.stop();
+             this.chest_open.stop();
+             grabOne.stop();
+             burningStart.startIfStopped(this.tickCount);
+             burningCripple.stop();
+         }
+         case 16 -> {
+             this.coat_open.stop();
+             this.chest_close.stop();
+             grabOne.stop();
+             strafeEmerge.stop();
+             strafeWalk.stop();
+             catching.stop();
+             this.emerge.stop();
+             burningDive.stop();
+             this.diving.stop();
+             walk.stop();
+             stando.stop();
+             this.chest_open.stop();
+             burningStart.stop();
+             grabOne.stop();
+             burningCripple.startIfStopped(this.tickCount);
+         }
+         case 17 -> {
+             burningCripple.stop();
+             burningStart.stop();
+             strafeEmerge.stop();
+             strafeWalk.stop();
+             catching.stop();
+             this.emerge.stop();
+             this.diving.stop();
+             this.chest_open.stop();
+             this.coat_open.stop();
+             walk.stop();
+             stando.stop();
+             grabOne.stop();
+             this.chest_close.startIfStopped(this.tickCount);
+         }
      }
  }
+
+    public final Byte getBsAnimation() {
+        return this.entityData.get(ANIMATION);
+    }
+    public final void setBsAnimations(Byte bt) {
+        this.entityData.set(ANIMATION, bt);
+    }
+
+ /**Changes animation states dynamically server sided*/
+    public void animationStateTick(){
+     if(!this.level().isClientSide()){
+         if(this.getUser() != null){
+             if (((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb){
+                 switch (pb.moveMode) {
+                     case 1 -> {
+                         if (pb.active) {
+                             setBsAnimations((byte)1);
+                         } else {
+                             setBsAnimations((byte)2);
+                         }
+                     }
+                     case 2 -> {
+                         setBsAnimations((byte)3);
+                     }
+                     case 3 -> {
+                         if(getHasTargets()){
+                             if (!isBlackSabbathUnderLight()) {
+                                 if (!isOnFire()) {
+                                     animationTick = 20;
+                                 }
+                                 if (!getThrowable()) {
+                                     if(meleeInteractionTicks < 1) {
+                                         this.chest_close.stop();
+                                         this.grabOne.stop();
+                                         this.coat_open.stop();
+                                         if ((targetSabbath() != null && !isUnderSunlight(targetSabbath()))) {
+                                             if (lungeTicks < 10) {
+                                                 if(!getTridentLoyalty()) {
+                                                     setBsAnimations((byte) 4);
+                                                 }
+                                             }
+                                             if (lungeTicks < 220 && lungeTicks > 210) {
+                                                 setBsAnimations((byte)5);
+                                             } else {
+                                                 emerge.stop();
+                                             }
+                                             if (lungeTicks <= 210 && lungeTicks > 180) {
+                                                 setBsAnimations((byte)6);
+                                             }
+                                             if (lungeTicks <= 50 && lungeTicks > 35) {
+                                                 if (burningCripple.isStarted() || burningStart.isStarted() || isOnFire()) {
+                                                     if (!diving.isStarted()) {
+                                                         setBsAnimations((byte)7);
+                                                     }
+                                                 } else {
+                                                         if (!burningDive.isStarted()) {
+                                                             if(!getTridentLoyalty()) {
+                                                                 setBsAnimations((byte) 8);
+                                                             }
+                                                         }
+                                                 }
+                                             }
+                                         } else {
+                                             if (lungeTicks <= 50 && lungeTicks > 35) {
+                                                 if (burningCripple.isStarted() || burningStart.isStarted() || isOnFire()) {
+                                                     if (!diving.isStarted()) {
+                                                         setBsAnimations((byte)7);
+                                                     }
+                                                 } else {
+                                                         if (!burningDive.isStarted()) {
+                                                             if(!getTridentLoyalty()) {
+                                                                 setBsAnimations((byte) 8);
+                                                             }
+                                                         }
+                                                 }
+                                             }
+                                             if (isWalking && lungeTicks > 50) {
+                                                 if (this.getDeltaMovement().x() != 0 || this.getDeltaMovement().z() != 0) {
+                                                     setBsAnimations((byte)9);
+                                                 } else {
+                                                     setBsAnimations((byte)10);
+                                                 }
+                                             } else {
+                                                 setBsAnimations((byte)10);
+                                             }
+                                         }
+                                     } else {
+                                         if (this.level().getEntity(this.getGrabbing()) != null) {
+                                             if(meleeInteractionTicks > 20) {
+                                                 setBsAnimations((byte)11);
+                                             } else {
+                                                 setBsAnimations((byte)12);
+                                             }
+                                         }
+                                     }
+                                 }else {
+                                     if (lungeTicks <= 50 && lungeTicks > 35) {
+                                         strafeEmerge.stop();
+                                         strafeWalk.stop();
+                                         if (burningCripple.isStarted() || burningStart.isStarted() || isOnFire()) {
+                                             if (!diving.isStarted()) {
+                                                 setBsAnimations((byte) 7);
+                                             }
+                                         } else {
+                                                 if (!burningDive.isStarted()) {
+                                                     if(!getTridentLoyalty()) {
+                                                         setBsAnimations((byte) 8);
+                                                     }
+                                                 }
+                                         }
+                                     }
+                                     if (getStrafing()) {
+                                         setBsAnimations((byte)13);
+                                     } else {
+                                         if (!getTridentLoyalty()) {
+                                             setBsAnimations((byte)14);
+                                         }
+                                     }
+                                 }
+                             } else {
+                                 if(animationTick >= 1){
+                                     animationTick--;
+                                 }
+                                 if(animationTick > 1){
+                                     setBsAnimations((byte)15);
+                                 } else {
+                                     setBsAnimations((byte)16);
+                                 }
+                             }
+                         } else {
+                             setBsAnimations((byte)17);
+                         }
+                     }
+                 }
+             }
+         } else {
+             setBsAnimations((byte)0);
+         }
+     }
+    }
+
     int animationTick2 = 20;
     @Override
     public boolean canStandBeHurt(){
@@ -383,7 +511,11 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     }
     @Override
     public void knockback(double $$0, double $$1, double $$2){
-        super.knockback($$0 * 1.65D, $$1, $$2 * 1.65D);
+        if(getGrabbing() == 0) {
+            super.knockback($$0 * 1.65D, $$1, $$2 * 1.65D);
+        } else {
+            super.knockback($$0 * 1.25D, $$1, $$2 * 1.25D);
+        }
     }
     public boolean shouldFloat = false;
     public void setShouldFloat(boolean bool){shouldFloat = bool;}
@@ -537,7 +669,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                 if(blackSabbathFirstSlot != getHeldItemSabbath()){
                     if(!this.level().isClientSide()) {
                         setHeldItemSabbath(blackSabbathFirstSlot);
-                        /*Yo, see this as an example to put a message into chat*/
                         /*MutableComponent message = Component.literal("Your held item is " + getHeldItemSabbath().getCount() + " ");
                         MutableComponent message2 = Component.translatable(getHeldItemSabbath().getItem().getDescription().getString());
                         if(getHunting()) {
@@ -551,8 +682,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                         setTridentLoyalty(true);
                     }
                 }
-           // System.out.println(getHeldItemSabbath() + " " + this.level());
-            //System.out.println(blackSabbathFirstSlot + " " + this.level());
         }
 
         if(getHunting()){
@@ -563,8 +692,10 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                 soulGrabbingTick();
             }
         }
+        animationStateTick();
         super.tick();
         travelAhead(Entity::setPos);
+        travelAheadSoul(Entity::setPos);
     }
     public void hurtBlackSabbath(){
         if(getHunting()) {
@@ -677,7 +808,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     public final Integer getMoveMode() {
         return this.entityData.get(MOVEMENT_MODE);
     }
-    /**0 = no items; 1 = ranged mode; 2 = other items*/
+    /**0 = no items; 1 = ranged mode; 2 = other items; 3 = open chest (animations only!!!)*/
     public final void setMoveMode(Integer i) {
         this.entityData.set(MOVEMENT_MODE, i);
         this.entityData.set(MUST_UNRENDER, true);
@@ -710,6 +841,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     protected void defineSynchedData() {
         if (!this.entityData.hasItem(IS_RIDING)) {
             super.defineSynchedData();
+            this.entityData.define(ANIMATION, (byte) 0);
             this.entityData.define(CRIPPLED, false);
             this.entityData.define(IS_RIDING, false);
             this.entityData.define(IS_HUNTING, false);
@@ -1037,8 +1169,8 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                     if (pause < 1) {
                                         pause = 100;
                                     }
-                                    moveRandom();
-                                    this.getNavigation().setSpeedModifier(0.65);
+                                        moveRandom();
+                                        this.getNavigation().setSpeedModifier(0.65);
                                 }
                             } else {
                                 this.moveToTarget();
@@ -1047,8 +1179,10 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                     }
                 } else {}
             } else {
-                moveRandom();
-                this.getNavigation().setSpeedModifier(0.65);
+                if(meleeInteractionTicks < 1) {
+                    moveRandom();
+                    this.getNavigation().setSpeedModifier(0.65);
+                }
             }
         } else {
             moveToSafe();
@@ -1057,6 +1191,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             if(pbs.blackSabbathTargets != null){
                 if(securityTicks < 1 && lungeTicks < 1 && meleeInteractionTicks < 1) {
                     if(!getStrafing()){
+                        if(getGrabbing() == 0){
                         if (this.getNavigation().getPath() != null && this.getNavigation().getPath().isDone() && targetSabbath() != null && !isNearTarget(targetSabbath()) || isUnderSunlight(targetSabbath()) && this.getNavigation().getPath() != null && this.getNavigation().getPath().isDone()) {
                             if (shadowHidTarget() != null) {
                                 if (ridingEntity == null) {
@@ -1073,6 +1208,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                 }
                             }
                         }
+                        }
                     }
                     if (ridingEntity != null && (!isUnderSunlight(ridingEntity) || ridingEntity.isDeadOrDying() || ridingEntity.isRemoved())) {
                         absMoveTo(ridingEntity.getX(), ridingEntity.getY(), ridingEntity.getZ());
@@ -1085,8 +1221,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                 } else {
                     securityTicks--;
                 }
-                // System.out.println(meleeInteractionTicks + " Melee interaction ticks. Level is: " + this.level());
-                //  System.out.println(lungeTicks + " Lunge ticks. Level is:" + this.level());
                 if(!getThrowable() && meleeInteractionTicks < 1) {
                     if (lungeTicks >= 1) {
                         lungeTicks--;
@@ -1098,9 +1232,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                 } else {
                     test = "Level is Serverside";
                 }
-                // System.out.println(getThrowable() + ". " + test);
-                // System.out.println(this.level().getEntity(getGrabbing()));
-
                 if(getStrafing()){
                     tickShootCooldown--;
                     if(tickShootCooldown < 1){
@@ -1128,15 +1259,10 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                         }
                     }
                 }
-                // System.out.println(lungeTicks + " " + this.level().isClientSide());
                 if(getUnrender() || (lungeTicks < 20 && lungeTicks > 1)){
                     if(!getCrippled() && !getRiding()) {
                         createShadowParticles();
                     }
-                }
-                if(targetSabbath() != null) {
-                    // System.out.println(((StandUser) targetSabbath()).roundabout$getSealedTicks());
-                    //System.out.println(((StandUser) targetSabbath()).roundabout$isSealed());
                 }
                 if(getUnrender() && shouldReattemptSpawn < 0){
                     isStuck = true;
@@ -1144,6 +1270,9 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                     isStuck = false;
                 }
                 if(targetSabbath() != null) {
+                    if(getUnrender()){
+                        setGrabbing(0);
+                    }
                     if (!isBlackSabbathUnderLight()) {
                         if (isWalking) {
                             isWalking = false;
@@ -1152,21 +1281,22 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                         if(!getThrowable() && !getTridentLoyalty() && getMoveMode() != 1) {
                             if(meleeInteractionTicks < 1) {
                                 if (lungeTicks < 1) {
-                                    if (MainUtil.cheapDistanceTo2(this.getX(), this.getZ(), targetSabbath().getX(), targetSabbath().getZ()) > 2.5 || !hasLineOfSight(targetSabbath())) {
-                                        setUnrender(true);
-                                        setSecondsOnFire(0);
-                                    } else {
-                                        if (((this.getY() > targetSabbath().getY() && !hasLineOfSight(targetSabbath())) || targetSabbath().getY() - this.getY() > 9) && MainUtil.cheapDistanceTo2(this.getX(), this.getZ(), targetSabbath().getX(), targetSabbath().getZ()) > 1.5) {
+                                    if(getGrabbing() == 0) {
+                                        if (MainUtil.cheapDistanceTo2(this.getX(), this.getZ(), targetSabbath().getX(), targetSabbath().getZ()) > 2.5 || !hasLineOfSight(targetSabbath())) {
                                             setUnrender(true);
                                             setSecondsOnFire(0);
                                         } else {
-                                            if (lungeTicks < 1) {
-                                                if (getUnrender()) {
-                                                    setUnrender(false);
-                                                    System.out.println(2);
-                                                    this.level().playSound(null, this, ModSounds.BLACK_SABBATH_EMERGE_EVENT, SoundSource.HOSTILE, 0.95F, 1.0F);
+                                            if (((this.getY() > targetSabbath().getY() && !hasLineOfSight(targetSabbath())) || targetSabbath().getY() - this.getY() > 9) && MainUtil.cheapDistanceTo2(this.getX(), this.getZ(), targetSabbath().getX(), targetSabbath().getZ()) > 1.5) {
+                                                setUnrender(true);
+                                                setSecondsOnFire(0);
+                                            } else {
+                                                if (lungeTicks < 1) {
+                                                    if (getUnrender()) {
+                                                        setUnrender(false);
+                                                        this.level().playSound(null, this, ModSounds.BLACK_SABBATH_EMERGE_EVENT, SoundSource.HOSTILE, 0.95F, 1.0F);
+                                                    }
+                                                    attemptGrab();
                                                 }
-                                                attemptGrab();
                                             }
                                         }
                                     }
@@ -1176,29 +1306,26 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                         this.level().playSound(null, this, ModSounds.BLACK_SABBATH_EMERGE_EVENT, SoundSource.HOSTILE, 0.95F, 1.0F);
                                     }
                                     setUnrender(false);
-                                    System.out.println(3);
                                 }
                                 if (lungeTicks > 200) {
-                                    this.getNavigation().setSpeedModifier(0.60);
-                                } else if (lungeTicks > 190 && lungeTicks < 195) {
+                                    this.getNavigation().setSpeedModifier(0.70);
+                                } else if (lungeTicks > 185 && lungeTicks < 195) {
+                                    setUnrender(false);
                                     this.getNavigation().setSpeedModifier(2.25);
                                     if (targetSabbath() != null && isTouchingTarget(targetSabbath())) {
                                         if (!isBlackSabbathUnderLight()) {
                                             if (!this.level().isClientSide()) {
                                                 setGrabbing(targetSabbath().getId());
-                                                if(((StandUser)targetSabbath()).roundabout$getStandPowers() != null){
-                                                    if(level().getEntity(getGrabbing()) instanceof LivingEntity e){
-                                                        if(((StandUser)e).roundabout$getStandPowers() != null){
-                                                        }
-                                                    }
-                                                }
                                                 if(level().getEntity(getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(true);}
-                                                this.level().playSound(null, this, ModSounds.ARCADE_TIMESTOP_2_EVENT, SoundSource.HOSTILE, 0.95F, 1.0F);
+                                                this.level().playSound(null, this, ModSounds.BLOCK_GRAB_EVENT, SoundSource.HOSTILE, 0.95F, 1.0F);
                                             }
                                             lungeTicks = 51;
                                             setMeleeInteractionTicks(220);
                                             if(!this.level().isClientSide) {
                                                 ((StandUser) targetSabbath()).roundabout$setSealedTicks(220);
+                                                targetSabbath().knockback(0.3f, this.getX() - targetSabbath().getX(), this.getZ() - targetSabbath().getZ());
+                                                this.knockback(0.05f, this.getX() - targetSabbath().getX(), this.getZ() - targetSabbath().getZ());
+                                                createSoul();
                                             }
                                         }
                                     }
@@ -1207,7 +1334,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                         this.getNavigation().setSpeedModifier((float) 0);
                                     }
                                 }
-                                if (lungeTicks < 40 && lungeTicks > 1) {
+                                if (lungeTicks < 30 && lungeTicks >= 1) {
                                     if (!getUnrender()) {
                                         setUnrender(true);
                                     }
@@ -1215,7 +1342,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                             } else {
                                 this.getNavigation().setSpeedModifier((float) 0);
                                 setUnrender(false);
-                                System.out.println(4);
                             }
                         } else {
                             if(targetSabbath() != null) {
@@ -1223,7 +1349,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                     if (((!this.level().isClientSide() && seeTime > 0) && (MainUtil.cheapDistanceTo2(this.getX(), this.getZ(), targetSabbath().getX(), targetSabbath().getZ()) < 8.5 && this.getY() - targetSabbath().getY() < 12))) {
                                         if(getUnrender()) {
                                             setUnrender(false);
-                                            System.out.println(5);
                                             this.level().playSound(null, this, ModSounds.BLACK_SABBATH_EMERGE_EVENT, SoundSource.HOSTILE, 0.95F, 1.0F);
                                         }
                                         if(animationTick2 > 0) {
@@ -1244,7 +1369,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                     }
                                 } else {
                                     setUnrender(false);
-                                    System.out.println(6);
                                     this.setDeltaMovement(0, this.getDeltaMovement().y, 0);
                                     if (this.getNavigation() != null) {
                                         getNavigation().setSpeedModifier(1);
@@ -1253,11 +1377,10 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                             }
                         }
                     } else {
-                        if(level().getEntity(getGrabbing()) != null && level().getEntity(getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser)e).roundabout$setSealedTicks(0);}
+                        if(level().getEntity(getGrabbing()) != null && level().getEntity(getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser) e).roundabout$updateSealedTicks(-1);killSoul();}
                         setGrabbing(0);
                         setMeleeInteractionTicks(0);
                         setUnrender(false);
-                        System.out.println(6);
                         setStrafing(false);
                         lungeTicks = 51;
                     }
@@ -1272,26 +1395,23 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                             if(!this.level().isClientSide()) {
                                 if (lungeTicks < 15) {
                                     setUnrender(true);
-                                    System.out.println(6);
                                     if (isWalking) {
                                         isWalking = false;
                                     }
                                 }
                             }
                         } else {
-                            if(level().getEntity(getGrabbing()) != null && level().getEntity(getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser)e).roundabout$setSealedTicks(0);}
+                            if(level().getEntity(getGrabbing()) != null && level().getEntity(getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser) e).roundabout$updateSealedTicks(-1);killSoul();}
                             setGrabbing(0);
                             setMeleeInteractionTicks(0);
                             if (isWalking) {
                                 isWalking = false;
                             }
                             setUnrender(false);
-                            System.out.println(7);
                             lungeTicks = 51;
                         }
                     } else {
-                        setUnrender(false);
-                        System.out.println(8);
+                        //setUnrender(false);
                         if(this.getNavigation() != null) {
                             this.getNavigation().setSpeedModifier(0);
                         }
@@ -1304,25 +1424,65 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         }
     }
 
-   /* private LivingEntity getNewSoulGrabbed(){
+    private StandEntity grabbedSoul = null;
+
+    private void createSoul(){
+        StandEntity s = this.getNewSoulGrabbed();
+        Entity grab = this.level().getEntity(getGrabbing());
+
+        if(!this.level().isClientSide()) {
+            if (s != null && grab != null) {
+                s.setBsGrabbed(this.getId());
+                if(s instanceof GrabbedMobSoul) {
+                    if(grab instanceof LivingEntity le) {
+                        s.setMaster(le);
+                    }
+                } else {
+                    s.setMaster(null);
+                }
+                s.setFadeOut((byte) 8);
+                s.absMoveTo(grab.position().x, grab.position().y, grab.position().z);
+                s.setYRot((getYRot() % 360) - 180);
+                PowerTypes.copyPlaneOfExisting(this, s);
+                grabbedSoul = s;
+                this.level().addFreshEntity(s);
+                if (this.getUser() != null && ((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pbs) {
+                    pbs.setGrabbedSoul(s);
+                }
+            }
+        }
+    }
+
+    private StandEntity getNewSoulGrabbed(){
         Entity grab = this.level().getEntity(getGrabbing());
         if(grab != null && grab instanceof LivingEntity l){
             StandPowers sp = ((StandUser)l).roundabout$getStandPowers();
             boolean regSoulStand = sp != null && (sp instanceof PowersAchtungBaby || sp instanceof PowersWhiteAlbum || sp instanceof PowersEmperor || sp instanceof PowersMetallica
                                                     || sp instanceof PowersMetallica || sp instanceof PowersOasis);
 
-            if(!regSoulStand){
+          /*  if(!regSoulStand){
                //RETURNS THE STAND
             } else {
                 if(!(l instanceof Player p)){
                     return ModEntities.GRABBED_MOB_SOUL.create(this.level());
                 } else {
-                    //RETURNS THE YELLOWED PLAYER SKIN
+                   // if(isWideSkin(p)) {
+                   //     return ModEntities.GRABBED_PLAYER_SOUL.create(this.level());
+                  //  } else {
+                        return ModEntities.GRABBED_PLAYER_SOUL_SLIM.create(this.level());
+                   // }
                 }
-            }
+           // }
+
+           */
+            return ModEntities.GRABBED_MOB_SOUL.create(this.level());
         }
         return null;
-    }*/
+    }
+
+    public boolean isWideSkin(Player p) {
+        return ((AbstractClientPlayer) p).getModelName().equals("default");
+    }
 
     public boolean isStuck = false;
     private Vec3 lastPos = Vec3.ZERO;
@@ -1602,28 +1762,103 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     private void soulGrabbingTick(){
         ItemStack i = this.getHeldItemSabbath();
         Entity le = this.level().getEntity(getGrabbing());
-        System.out.println(meleeInteractionTicks);
 
         if(this.getUser() != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pbs){
         if(meleeInteractionTicks > 0) {
+            if(!this.level().isClientSide()){
+                setUnrender(false);
+            }
             if (le instanceof LivingEntity e) {
-                if (targetSabbath() != null && pbs.blackSabbathTargets.contains(e)) {
                     if (meleeInteractionTicks > 1) {
+                        if(!this.level().isClientSide) {
+                            ((StandUser) e).roundabout$sealStand(1);
+                        }
+                        lungeTicks = 51;
                         ((StandUser) e).roundabout$setGrabbedSoul(true);
+                        if(this.grabbedSoul == null){
+                            createSoul();
+                        }
+                       // this.moveGrabbedSoul(Entity::setPos);
                     } else {
+                        if(!this.level().isClientSide) {
+                            ((StandUser) e).roundabout$updateSealedTicks(-1);
+                        }
+                        lungeTicks = 51;
                         ((StandUser) e).roundabout$setGrabbedSoul(false);
+                        killSoul();
                     }
-                } else {
-                    meleeInteractionTicks = 0;
-                    setGrabbing(0);
-                }
             }
         }
         }
     }
 
+    //TODO:
+    //TODO:
+    //TODO:
+    //TODO:
+    //TODO:
+    //TODO:REMEMBER TO FIX ALL UNRENDERING PISSUES
+    //TODO:
+    //TODO:
+    //TODO:
+    //TODO:
+    //TODO:
+
+    public final Vec3 getLookAngle(float $$0, Entity selfie) {
+        return ((StandUser)selfie).roundabout$calculateViewVectorButICanUseIt(0, selfie.getYRot());
+    }
+
+    public void travelAheadSoul(Entity.MoveFunction positionUpdater) {
+        if (this.getUser() != null) {
+            StandEntity s = grabbedSoul;
+            if(grabbedSoul != null){
+                if(((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb) {
+                    Vec3 lvec = pb.getLookAngleChest(this.getYRot(), this);
+                    Position pn = this.position().add(lvec.scale(0.55F));
+                    positionUpdater.accept(s, pn.x(), this.getY() + 0.9, pn.z());
+                }
+            }
+        }
+    }
+
+    public void travelAheadSoulRender(float render, StandEntity se){
+        if (this.getUser() != null) {
+            System.out.println(render);
+            Vec3 junkPos = MainUtil.getAheadVecRender(this, 0.55f, render).getLocation();
+            Vec3 junkPosY = MainUtil.getAheadVecRender(this, 0f, render).getLocation();
+            if (!this.level().isClientSide()) {
+                se.setOldPosAndRot();
+            }
+            se.xOld = junkPos.x;
+            se.yOld = junkPosY.y - 0.40;
+            se.zOld = junkPos.z;
+            if (this.level().isClientSide()) {
+                se.absMoveTo(junkPos.x, junkPosY.y - 0.40, junkPos.z);
+            } else {
+                se.setPos(junkPos.x, junkPosY.y - 0.40, junkPos.z);
+            }
+
+            if (this.level().isClientSide()) {
+                se.setYRot((getYHeadRot() % 360) - 180);
+                se.setXRot(getXRot() - 180);
+                se.setYBodyRot((getYHeadRot() % 360) - 180);
+                se.setYHeadRot(getYHeadRot() % 360);
+            } else {
+                se.setYRot((getYHeadRot() % 360) - 180);
+                se.setXRot(getXRot() - 180 );
+                se.setYBodyRot((getYHeadRot() % 360) - 180);
+                se.setYHeadRot((getYHeadRot() % 360) - 180);
+            }
+        }
+    }
+
+    public void killSoul(){
+        if(this.grabbedSoul != null){
+            grabbedSoul.forceDespawn(true);
+        }
+    }
+
     @Override
     public void performRangedAttack(LivingEntity var1, float var2) {
-
     }
 }

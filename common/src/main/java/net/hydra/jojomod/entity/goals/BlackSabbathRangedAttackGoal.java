@@ -36,7 +36,7 @@ public class BlackSabbathRangedAttackGoal<T extends BlackSabbathEntity & RangedA
 
     @Override
     public boolean canContinueToUse() {
-        return mob.targetSabbath() == null  ? false : !mob.isBlackSabbathUnderLight() && (this.canUse() || mob.getThrowable() && (MainUtil.cheapDistanceTo2(mob.getX(), mob.getZ(), mob.targetSabbath().getX(), mob.targetSabbath().getZ()) < 12.5 && mob.seeTime > 0) && !mob.getHeldItemSabbath().is(ItemStack.EMPTY.getItem()));
+        return mob.targetSabbath() == null  ? false : !mob.isBlackSabbathUnderLight() && (this.canUse() || mob.getThrowable() && (MainUtil.cheapDistanceTo2(mob.getX(), mob.getZ(), mob.targetSabbath().getX(), mob.targetSabbath().getZ()) < 12.5 && mob.seeTime > 0) && !mob.getHeldItemSabbath().is(ItemStack.EMPTY.getItem()) && mob.getTridentLoyalty());
     }
 
     @Override

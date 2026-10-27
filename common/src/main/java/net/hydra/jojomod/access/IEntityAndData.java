@@ -22,6 +22,7 @@ public interface IEntityAndData {
     void roundabout$setExclusiveLayers(boolean exclusive);
     boolean roundabout$getExclusiveLayers();
     boolean rdbt$returnPickup();
+    void rdbt$setReturnPickup(boolean ye);
     void roundabout$setNoGravTicks(int ticks);
     int roundabout$getNoGravTicks();
     int rdbt$getAltCheckCooldown();

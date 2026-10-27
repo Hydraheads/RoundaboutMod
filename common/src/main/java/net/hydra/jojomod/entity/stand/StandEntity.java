@@ -91,8 +91,9 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
     protected static final EntityDataAccessor<Byte> SKIN = SynchedEntityData.defineId(StandEntity.class,
             EntityDataSerializers.BYTE);
 
-    protected static final EntityDataAccessor<Boolean> BS_GRABBED = SynchedEntityData.defineId(StandEntity.class,
-            EntityDataSerializers.BOOLEAN);
+    //For Black Sabbath soul grab. Don't use it anywhere else.
+    protected static final EntityDataAccessor<Integer> BS_GRABBED = SynchedEntityData.defineId(StandEntity.class,
+            EntityDataSerializers.INT);
 
     public boolean canAcquireHeldItem = false;
 
@@ -532,10 +533,11 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
         return this.entityData.get(FADE_OUT);
     }
 
-    public final void setBsGrabbed(Boolean grabbed) {
+    //For Black Sabbath soul grab. Don't use it anywhere else.
+    public final void setBsGrabbed(Integer grabbed) {
         this.entityData.set(BS_GRABBED, grabbed);
     }
-    public boolean getBsGrabbed() {
+    public int getBsGrabbed() {
         return this.entityData.get(BS_GRABBED);
     }
 
@@ -702,7 +704,7 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
             this.entityData.define(HELD_ITEM, ItemStack.EMPTY);
             this.entityData.define(SKIN, (byte) 0);
             this.entityData.define(MELT_LEVEL, 0);
-            this.entityData.define(BS_GRABBED, false);
+            this.entityData.define(BS_GRABBED, 0);
         }
     }
 
@@ -794,7 +796,9 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
            return super.hurt(source, amount);
         } else {
             if (this.getUser() != null && MainUtil.isStandDamage(source)) {
-                return this.getUser().hurt(source, amount);
+                if(!(this instanceof ManhattanTransferEntity ME)) {
+                    return this.getUser().hurt(source, amount);
+                }
             }
 
             if (source.is(DamageTypes.GENERIC_KILL) || source.is(DamageTypes.FELL_OUT_OF_WORLD)) {
@@ -917,7 +921,7 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                             handleTickDownIfDupe(thisStand);
                         }
                     } else {
-                        if(!getBsGrabbed()) {
+                        if(getBsGrabbed() == 0) {
                             TickDown();
                         }
                     }
@@ -953,7 +957,7 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
         return true;
     }
     public boolean isValid(boolean userActive, LivingEntity thisStand, LivingEntity userEntity){
-        return (userEntity.isAlive() && !userEntity.isRemoved() && (!needsActive() || userActive) && (thisStand != null && thisStand.is(this))) || this.getBsGrabbed();
+        return (userEntity.isAlive() && !userEntity.isRemoved() && (!needsActive() || userActive) && (thisStand != null && thisStand.is(this))) || this.getBsGrabbed() != 0;
     }
     public void handleTickDownIfDupe(LivingEntity thisStand){
 
@@ -1000,6 +1004,8 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                     ME.shootHattan();
                     ME.hasItem = false;
                     ME.setHeldItemManhattan(ItemStack.EMPTY);
+                }else if (this instanceof BlackSabbathEntity BE){
+                    BE.killSoul();
                 }
             }
             if (currFade < 0) {
@@ -1056,6 +1062,8 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                         ME.level().addFreshEntity($$7);
                     }
                 }
+            } else if (this instanceof BlackSabbathEntity BE){
+                BE.killSoul();
             }
             discard();
         }
@@ -1100,7 +1108,7 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
 
     @Override
     public boolean isNoGravity() {
-        return getBsGrabbed();
+        return getBsGrabbed() != 0;
     }
 
     public boolean canBeHitByStands(){

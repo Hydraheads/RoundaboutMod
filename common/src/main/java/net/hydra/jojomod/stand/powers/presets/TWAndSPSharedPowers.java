@@ -1053,157 +1053,12 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             }
         }
 
-        if (this.activePower == PowerIndex.BARRAGE_2) {
-            if (bonusBarrageConditions()) {
-                boolean sideHit = false;
-                if (hitNumber > 1000){
-                    if (!(ClientNetworking.getAppropriateConfig().generalStandSettings.barrageHasAreaOfEffect)){
-                        return;
-                    }
-                    hitNumber-=1000;
-                    sideHit = true;
-                }
-                boolean lastHit = (hitNumber >= this.getKickBarrageLength());
-                if (entity != null) {
-                    if (entity instanceof LivingEntity && ((StandUser) entity).roundabout$isBarraging() && ((StandUser) entity).roundabout$getStandPowers().canClash()
-                            && ((StandUser) entity).roundabout$getAttackTimeDuring() > -1 && !(((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
-                        initiateClash(entity);
-                    } else {
-                        hitParticles(entity);
-
-                        float pow;
-                        float knockbackStrength = 0;
-                        /**By saving the velocity before hitting, we can let people approach barraging foes
-                         * through shields.*/
-                        Vec3 prevVelocity = entity.getDeltaMovement();
-                        if (lastHit) {
-                            pow = this.getKickBarrageFinisherStrength(entity);
-                            knockbackStrength = this.getKickBarrageFinisherKnockback();
-                        } else {
-                            pow = this.getKickBarrageHitStrength(entity);
-                            float mn = this.getKickBarrageLength() - hitNumber;
-                            if (mn == 0) {
-                                mn = 0.015F;
-                            } else {
-                                mn = ((0.015F / (mn)));
-                            }
-                            knockbackStrength = 0.014F - mn;
-                        }
-
-                        if (sideHit){
-                            pow/=3;
-                            knockbackStrength/=3;
-                        }
-
-                        if (StandRushDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
-                            if (entity instanceof LivingEntity LE) {
-                                if (lastHit) {
-                                    if (entity instanceof Player PE){
-                                        ((IPlayerEntity) PE).roundabout$setCameraHits(-1);
-                                    }
-                                    if (!sideHit) {
-                                        ((StandUser)LE).roundabout$setDestructionTrailTicks(80);
-                                        playBarrageEndNoise(0, entity);
-                                    }
-                                } else {
-                                    if (entity instanceof Player PE){
-                                        ((IPlayerEntity) PE).roundabout$setCameraHits(2);
-                                    }
-                                    if (!sideHit) {
-                                        playKickBarrageNoise(hitNumber, entity);
-                                    }
-                                }
-                            }
-                            kickBarrageImpact2(entity, lastHit, knockbackStrength);
-                        } else {
-                            if (lastHit) {
-
-                                if (!sideHit) {
-                                    playBarrageBlockEndNoise(0, entity);
-                                }
-                            } else {
-                                playBarrageBlockNoise();
-                                entity.setDeltaMovement(prevVelocity);
-                            }
-                        }
-                    }
-                } else {
-
-                    if (!sideHit) {
-                        playBarrageMissNoise(hitNumber);
-                    }
-                }
-
-                if (lastHit) {
-                    animateStand(StandEntity.KICK_BARRAGE_END);
-                    this.attackTimeDuring = -10;
-                }
-            } else {
-                ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
-            }
-        } else {
-            super.barrageImpact(entity,hitNumber);
-        }
+        super.barrageImpact(entity,hitNumber);
     }
 
 
-    public void kickBarrageImpact2(Entity entity, boolean lastHit, float knockbackStrength){
-        if (entity instanceof LivingEntity){
-            if (lastHit) {
-                takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
-            } else {
-
-                takeKnockbackWithY(entity, knockbackStrength,
-                        Mth.sin(this.getSelf().getYRot() * ((float) Math.PI / 180)),
-                        Mth.sin(-15 * ((float) Math.PI / 180)),
-                        -Mth.cos(this.getSelf().getYRot() * ((float) Math.PI / 180)));
-            }
-        }
-    }
 
 
-    public float getKickBarrageFinisherStrength(Entity entity){
-        if (this.getReducedDamage(entity)){
-            return 2F;
-        } else {
-            return 7;
-        }
-    }
-    public float getKickBarrageHitStrength(Entity entity){
-        float barrageLength = this.getKickBarrageLength();
-        float power;
-        if (this.getReducedDamage(entity)){
-            power = 7/barrageLength;
-        } else {
-            power = 15/barrageLength;
-        }
-        /*Barrage hits are incapable of killing their target until the last hit.*/
-        if (entity instanceof LivingEntity){
-            if (power >= ((LivingEntity) entity).getHealth() && ClientNetworking.getAppropriateConfig().generalStandSettings.barragesOnlyKillOnLastHit){
-                if (entity instanceof Player) {
-                    power = 0.00001F;
-                } else {
-                    power = 0F;
-                }
-            }
-        }
-        return power;
-    }
-    public float getKickBarrageFinisherKnockback(){
-        return 1.4F;
-    }
-
-    public void playKickBarrageNoise(int hitNumber, Entity entity){
-        if (!this.getSelf().level().isClientSide()) {
-            if (!this.getSelf().level().isClientSide() && (((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
-                playBarrageBlockNoise();
-            } else {
-                if (hitNumber % 3 == 0) {
-                    playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.STAND_BARRAGE_HIT2_EVENT, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
-                }
-            }
-        }
-    }
     @Override
     public void buttonInputBarrage(boolean keyIsDown, Options options){
         if (hasHandsOut())
@@ -1387,16 +1242,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
         return false;
     }
-    public boolean setPowerKickBarrageCharge() {
-        if (hasHandsOut())
-            return true;
-        animateStand(StandEntity.KICK_BARRAGE_WINDUP);
-        this.attackTimeDuring = 0;
-        playKickBarrageChargeSound();
-        this.setActivePower(PowerIndex.BARRAGE_CHARGE_2);
-        this.poseStand(OffsetIndex.ATTACK);
-        return true;
-    }
+
 
     @Override
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
@@ -1460,27 +1306,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
     }
 
-    public int getKickBarrageRecoilTime(){
-        return ClientNetworking.getAppropriateConfig().
-                generalStandSettings.kickBarrageRecoilCooldown;
-    }
-    public void updateKickBarrage(){
-        if (this.attackTimeDuring == -2 && this.getSelf() instanceof Player) {
-            ((StandUser) this.self).roundabout$tryPower(PowerIndex.GUARD, true);
-        } else {
-            if (this.attackTimeDuring > this.getKickBarrageLength()) {
-                this.attackTimeDuring = -20;
-            } else {
-                if (this.attackTimeDuring > 0) {
-                    this.setAttackTime((getKickBarrageRecoilTime() - 1) -
-                            Math.round(((float) this.attackTimeDuring / this.getKickBarrageLength())
-                                    * (getKickBarrageRecoilTime() - 1)));
 
-                    standBarrageHit();
-                }
-            }
-        }
-    }
 
 
     @Override
@@ -1520,35 +1346,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             }
             playStandUserOnlySoundsIfNearby(barrageCrySound, 32, false,true);
         }
-    }
-    public boolean setPowerKickBarrage() {
-
-        if (hasHandsOut())
-            return true;
-        this.attackTimeDuring = 0;
-        this.setActivePower(PowerIndex.BARRAGE_2);
-        this.poseStand(OffsetIndex.ATTACK);
-        playKickBarrageCrySound();
-        this.setAttackTimeMax(this.getKickBarrageRecoilTime());
-        this.setActivePowerPhase(this.getActivePowerPhaseMax());
-        animateStand(StandEntity.KICK_BARRAGE);
-        return true;
-    }
-    public int getKickBarrageLength(){
-        return 50;
-    }
-    public void updateKickBarrageCharge(){
-        if (this.attackTimeDuring >= this.getKickBarrageWindup()) {
-            ((StandUser) this.self).roundabout$tryPower(PowerIndex.BARRAGE_2, true);
-        }
-    }
-    @Override
-    public int getKickBarrageWindup(){
-        return ClientNetworking.getAppropriateConfig().generalStandSettings.kickBarrageWindup;
-    }
-
-    private float getKickBarrageChargePitch(){
-        return 1/((float) this.getKickBarrageWindup() /20);
     }
 
 

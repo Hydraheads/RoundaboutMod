@@ -83,6 +83,8 @@ public class ModItems {
     public static Item STAND_DISC_LYIN_EYES;
     public static Item STAND_DISC_DIVER_DOWN;
     public static Item MAX_STAND_DISC_DIVER_DOWN;
+    public static Item STAND_DISC_GOLD_EXPERIENCE;
+    public static Item MAX_STAND_DISC_GOLD_EXPERIENCE;
     public static Item STAND_DISC_SILVER_CHARIOT;
     public static Item MAX_STAND_DISC_SILVER_CHARIOT;
     public static Item STAND_DISC_METALLICA;
@@ -188,6 +190,7 @@ public class ModItems {
 
     public static Item MUSIC_DISC_TORTURE_DANCE;
     public static Item MUSIC_DISC_HALLELUJAH;
+    public static Item MUSIC_DISC_CHAKA_HFTF;
     public static Item LUCKY_LIPSTICK;
 
     public static Item MEMORY_PAWN;

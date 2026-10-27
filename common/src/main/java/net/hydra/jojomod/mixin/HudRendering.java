@@ -377,6 +377,48 @@ public abstract class HudRendering implements IHudAccess {
         RenderSystem.enableBlend();
     }
 
+    @Inject(method = "renderHotbar", at = @At(value = "TAIL"))
+    private void roundabout$renderHotbarTailMixin(float partialTick, GuiGraphics graphics, CallbackInfo info) {
+
+        // for counting gun ammo
+
+        if (this.minecraft.player != null) {
+            ItemStack heldItem = this.minecraft.player.getMainHandItem();
+
+            // check if the main hand item is a firearm, don't render with jackal rifle cuz like... it's 1 ammo...
+            if (heldItem.getItem() instanceof net.hydra.jojomod.item.FirearmItem gun) {
+                String ammoText;
+                int color = 0xFFFFFF; // white
+
+                // if gun is reloading, print dots to indicate  an action
+                if (gun.isReloading(heldItem)) {
+                    ammoText = "...";
+                    color = 0xFFFF55; // yellow
+                } else {
+                    // self explanatory, just print the current and max ammo
+                    int currentAmmo = gun.getAmmo(heldItem);
+                    int maxAmmo = gun.getMaxAmmo();
+                    ammoText = currentAmmo + " / " + maxAmmo;
+
+                    // if low, make it red
+                    if (currentAmmo < maxAmmo * 0.25) {
+                        color = 0xFF5555; // red
+                    }
+                }
+
+                // put the thing bottom right
+                int textWidth = this.getFont().width(ammoText);
+                int paddingRight = 15;
+                int paddingBottom = 20;
+                int x = this.screenWidth - textWidth - paddingRight;
+                int y = this.screenHeight - paddingBottom;
+
+                // prints :0
+                graphics.drawString(this.getFont(), ammoText, x, y, color, true);
+            }
+        }
+    }
+
     private void rdbt$renderTex(TextureAtlasSprite $$0, PoseStack $$1) {
         RenderSystem.setShaderTexture(0, $$0.atlasLocation());
         RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
@@ -426,9 +468,12 @@ public abstract class HudRendering implements IHudAccess {
         float b = (color & 0xFF) / 255.0F;
         return new float[]{r, g, b};
     }
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderEffects(Lnet/minecraft/client/gui/GuiGraphics;)V"))
-    private void roundabout$renderOverlay(GuiGraphics $$0, float $$1, CallbackInfo ci) {
-        /*This does not work on forge becasue the forcefully overwrite this function*/
+    @Inject(method = "renderEffects", at = @At("HEAD"), cancellable = true)
+    private void roundabout$renderOverlay(GuiGraphics $$0, CallbackInfo ci) {
+        if (ClientNetworking.getAppropriateConfig().whitesnakeSettings.hallucinationHidesEffects
+                && minecraft.player != null && minecraft.player.hasEffect(ModEffects.HALLUCINATION)) {
+            ci.cancel();
+        }
     }
 
     @Inject(method = "renderHearts", at = @At(value = "TAIL"))
@@ -1039,41 +1084,6 @@ public abstract class HudRendering implements IHudAccess {
         if (rdbt$tempEnt !=null){
             this.minecraft.crosshairPickEntity = rdbt$tempEnt;
             rdbt$tempEnt = null;
-        }
-
-        // ammo counter for guns
-
-        if (this.minecraft.player != null) {
-            ItemStack heldItem = this.minecraft.player.getMainHandItem();
-
-            // check if the main hand item is a firearm, don't render with jackal rifle cuz like... it's 1 ammo...
-            if (heldItem.getItem() instanceof net.hydra.jojomod.item.FirearmItem gun && !(gun instanceof JackalRifleItem)) {
-                String ammoText;
-                int color = 0xFFFFFF; // white
-
-                // if gun is reloading, print dots to indicate  an action
-                if (gun.isReloading(heldItem)) {
-                    ammoText = "...";
-                    color = 0xFFFF55; // yellow
-                } else {
-                    // self explanatory, just print the current and max ammo
-                    int currentAmmo = gun.getAmmo(heldItem);
-                    int maxAmmo = gun.getMaxAmmo();
-                    ammoText = currentAmmo + " / " + maxAmmo;
-
-                    // if low, make it red
-                    if (currentAmmo < maxAmmo * 0.25) {
-                        color = 0xFF5555; // red
-                    }
-                }
-
-                // put the thing slightly below the crosshair
-                int textWidth = this.getFont().width(ammoText);
-                int x = (this.screenWidth - textWidth) / 2;
-                int y = (this.screenHeight / 2) + 15;
-                // prints :O
-                $$0.drawString(this.getFont(), ammoText, x, y, color, true);
-            }
         }
     }
 

@@ -2,7 +2,7 @@ package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.*;
-import net.hydra.jojomod.entity.badCompanyTroops.BCSoldier;
+import net.hydra.jojomod.entity.badCompanyTroops.*;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.mobs.TerrierEntity;
@@ -225,11 +225,23 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "d4c_clone").toString())
             );
+    public static final RegistryObject<EntityType<LifePunchCloneEntity>> LIFE_PUNCH_CLONE =
+            ENTITY_TYPES.register("life_punch_clone", () ->
+                    EntityType.Builder.of(LifePunchCloneEntity::new, MobCategory.MISC).sized(0.6f, 1.8f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "life_punch_clone").toString())
+            );
     public static final RegistryObject<EntityType<KingCrimsonProjectionEntity>> KING_CRIMSON_PROJECTION =
             ENTITY_TYPES.register("king_crimson_projection", () ->
                     EntityType.Builder.of(KingCrimsonProjectionEntity::new, MobCategory.MISC).sized(0.6f, 1.8f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "king_crimson_projection").toString())
+            );
+    public static final RegistryObject<EntityType<DNACreationEntity>> DNA_CREATION_SPAWNER =
+            ENTITY_TYPES.register("dna_creation_spawner", () ->
+                    EntityType.Builder.of(DNACreationEntity::new, MobCategory.MISC).sized(0.7f, 0.7f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "dna_creation_spawner").toString())
             );
     public static final RegistryObject<EntityType<FallenZombie>> FALLEN_ZOMBIE =
             ENTITY_TYPES.register("fallen_zombie", () ->
@@ -673,6 +685,12 @@ public class ForgeEntities {
                     .clientTrackingRange(4)
                     .updateInterval(20)
                     .build(new ResourceLocation(Roundabout.MOD_ID, "bone_projectile").toString()));
+    public static final RegistryObject<EntityType<GoldExperienceEntity>> GOLD_EXPERIENCE =
+            ENTITY_TYPES.register("gold_experience", () ->
+                    EntityType.Builder.of(GoldExperienceEntity::new, MobCategory.MISC).sized(0.75f, 2.05f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "gold_experience").toString())
+            );
     public static final RegistryObject<EntityType<SilverChariotEntity>> SILVER_CHARIOT =
             ENTITY_TYPES.register("silver_chariot", () ->
                     EntityType.Builder.of(SilverChariotEntity::new, MobCategory.MISC).sized(0.75f, 2.05f).
@@ -1088,6 +1106,12 @@ public class ForgeEntities {
                     EntityType.Builder.of(BCSoldier::new, MobCategory.CREATURE).sized(BCSoldier.width, BCSoldier.height).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "bad_company_soldier").toString())
+            );
+    public static final RegistryObject<EntityType<BCTank>> BAD_COMPANY_TANK =
+            ENTITY_TYPES.register("bad_company_tank", () ->
+                    EntityType.Builder.of(BCTank::new, MobCategory.CREATURE).sized(BCTank.width, BCTank.height).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "bad_company_tank").toString())
             );
     public static final RegistryObject<EntityType<PHCapsuleEntity>> PH_CAPSULE =
             ENTITY_TYPES.register("ph_capsule", () ->

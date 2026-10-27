@@ -2,7 +2,7 @@ package net.hydra.jojomod.entity;
 
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.entity.badCompanyTroops.BCSoldier;
+import net.hydra.jojomod.entity.badCompanyTroops.*;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.mobs.TerrierEntity;
@@ -110,6 +110,7 @@ public class ModEntities {
     public static EntityType<DiverDrownedEntity> DIVER_DROWNED;
     public static EntityType<DiverKickEntity> DIVER_KICK;
     public static EntityType<BoneProjectileEntity> BONE_PROJECTILE;
+    public static EntityType<GoldExperienceEntity> GOLD_EXPERIENCE;
     public static EntityType<SilverChariotEntity> SILVER_CHARIOT;
     public static EntityType<SilverChariotEntity> SILVER_CHARIOT_PHARAOH;
     public static EntityType<SilverChariotRapierShotEntity> SILVER_CHARIOT_RAPIER;
@@ -209,6 +210,7 @@ public class ModEntities {
     public static EntityType<FogCloneEntity> FOG_CLONE;
     public static EntityType<KingCrimsonCloneEntity> KING_CRIMSON_CLONE;
     public static EntityType<D4CCloneEntity> D4C_CLONE;
+    public static EntityType<LifePunchCloneEntity> LIFE_PUNCH_CLONE;
     public static EntityType<KingCrimsonProjectionEntity> KING_CRIMSON_PROJECTION;
     public static EntityType<FallenZombie> FALLEN_ZOMBIE;
     public static EntityType<FallenSkeleton> FALLEN_SKELETON;
@@ -217,6 +219,8 @@ public class ModEntities {
     public static EntityType<FallenPhantom> FALLEN_PHANTOM;
     public static EntityType<FallenCreeper> FALLEN_CREEPER;
     public static EntityType<BCSoldier> BAD_COMPANY_SOLDIER;
+    public static EntityType<BCTank> BAD_COMPANY_TANK;
+    public static EntityType<DNACreationEntity> DNA_CREATION_SPAWNER;
 
 
     public static EntityType<ParallelChestEntity> PARALLEL_CHEST;

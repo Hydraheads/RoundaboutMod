@@ -23,9 +23,11 @@ import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.particles.HazeColorParticleOptions;
 import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
@@ -208,7 +210,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
     @Override
     public boolean canGuard(){
-        if (isStrangling()||isStranglePinning()){
+        if (isStrangling()||isStranglePinning()||activePower == PowerIndex.POWER_2){
             return false;
         }
         return super.canGuard();
@@ -276,6 +278,21 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
     }
 
+    @Override
+    public void buttonInputBarrage(boolean keyIsDown, Options options){
+        if (hasHandsOut())
+            return;
+        if (keyIsDown) {
+            if (isHoldingSneak() && (this.getAttackTime() >= this.getAttackTimeMax() ||
+                    (this.getActivePowerPhase() != this.getActivePowerPhaseMax()))) {
+                this.tryPower(PowerIndex.BARRAGE_CHARGE_2, true);
+                tryPowerPacket(PowerIndex.BARRAGE_CHARGE_2);
+            } else {
+                super.buttonInputBarrage(keyIsDown, options);
+            }
+        }
+    }
+
     public void tryToStandLeapClient() {
         if (vaultOrFallBraceFails()) {
             if (this.getSelf().onGround()) {
@@ -287,7 +304,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                             this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
                         } else {
                             this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
-                            this.setCooldown(PowerIndex.SKILL_1_SNEAK, 10);
+                           // this.setCooldown(PowerIndex.SKILL_1_SNEAK, 10);
                         }
                         bonusLeapCount = 3;
                         bigLeap(this.getSelf(), 20, 1);
@@ -299,6 +316,40 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 }
             }
         }
+    }
+
+    @Override
+    public boolean setPowerSneakMovement(int lastMove) {
+
+        // leaping puts timestop on a cooldown
+        applyLeapCooldowns(); // borrowed from TWAndSPSharedPowers, dunno if you gonna need to put something on cooldown
+
+        this.setAttackTimeDuring(-1);
+        this.setActivePower(PowerIndex.NONE);
+        poseStand(OffsetIndex.FOLLOW);
+        animateStand(StandEntity.LEAP);
+        if (this.getSelf() instanceof Player) {
+            cancelConsumableItem(this.getSelf());
+        }
+        if (!this.getSelf().level().isClientSide()) {
+            if (Math.random() > 0.5){
+                addEXP(1);
+            }
+            ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
+            ((StandUser) this.getSelf()).roundabout$setLeapIntentionally(true);
+            playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.STAND_LEAP_EVENT, SoundSource.PLAYERS, 2.3F, (float) (0.98 + (Math.random() * 0.04)));
+        }
+        return true;
+    }
+
+    @Override
+    public boolean canInterruptPower(DamageSource sauce, Entity interrupter){
+
+        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
+            return true;
+        }
+
+        return super.canInterruptPower(sauce, interrupter);
     }
 
     public void applyLeapCooldowns() {
@@ -337,6 +388,31 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
 
     @Override
+    public boolean cancelItemUse() {
+        return (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2);
+    }
+
+    @Override
+    public boolean clickRelease(){
+        return (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2);
+    }
+
+    @Override
+    public boolean cancelSprintJump(){
+        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2) {
+            return true;
+        }
+        return super.cancelSprintJump();
+    }
+    @Override
+    public void updateUniqueMoves() {
+         if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
+             updateKickBarrageCharge();
+         }
+         super.updateUniqueMoves();
+    }
+
+    @Override
     public boolean setPowerOther(int move, int lastMove) {
         switch (move) {
             case PowerIndex.POWER_1 -> { // Distortion
@@ -357,15 +433,34 @@ public class PowersPurpleHaze extends NewPunchingStand {
             case PowerIndex.FALL_BRACE_FINISH -> {
                 return this.fallBrace();
             }
+            case PowerIndex.BARRAGE_CHARGE_2 -> {
+                return this.setPowerKickBarrageCharge();
+            }
         }
         return super.setPowerOther(move, lastMove);
+    }
+
+    @Override
+    public boolean tryPower(int move, boolean forced) {
+        if (!this.getSelf().level().isClientSide && move == PowerIndex.SNEAK_MOVEMENT && this.isClashing()){
+            ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
+            ((StandUser) this.getSelf()).roundabout$setLeapIntentionally(true);
+        }
+
+        if (!this.self.level().isClientSide &&
+                (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2)
+                && (move != PowerIndex.BARRAGE_2 && move != PowerIndex.BARRAGE_CHARGE_2)){
+            this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
+        }
+
+        return super.tryPower(move, forced);
     }
 
     @Override
     public void powerActivate(PowerContext context) {
         switch (context) {
             case SKILL_1_NORMAL, SKILL_1_GUARD -> {
-                if(isBarraging() && !isBarrageCharging()){
+                if(activePower == PowerIndex.BARRAGE || activePower == PowerIndex.BARRAGE_2){
                     clientForwardBarrage();
                 }
                 else if(isBarrageCharging()){
@@ -376,7 +471,11 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     }else this.tryPowerPacket(PowerIndex.POWER_1);
             }
             case SKILL_1_CROUCH,SKILL_1_CROUCH_GUARD -> {
-                this.tryPowerPacket(PowerIndex.POWER_1_SNEAK);
+                if(activePower == PowerIndex.BARRAGE || activePower == PowerIndex.BARRAGE_2){
+                    clientForwardBarrage();
+                }else {
+                    this.tryPowerPacket(PowerIndex.POWER_1_SNEAK);
+                }
             }
             case SKILL_2_NORMAL,SKILL_2_CROUCH,SKILL_2_CROUCH_GUARD, SKILL_2_GUARD -> {
                 this.tryPowerPacket(PowerIndex.POWER_2);
@@ -460,7 +559,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             }
         }
 
-        if (!lastHit || entity == null) {
+        if (!lastHit || entity == null || activePower == PowerIndex.BARRAGE_2) {
             return;
         }
 
@@ -477,7 +576,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
     private Vec2 forwardBarrageLockedRot = null;
     public boolean clientForwardBarrage(){
-        if (this.isBarraging()){
+        if (activePower == PowerIndex.BARRAGE || activePower == PowerIndex.BARRAGE_2){
             if (attackTimeDuring < 0){
                 return true;
             }
@@ -578,8 +677,32 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
 
     @Override
+    public void renderAttackHud(GuiGraphics context, Player playerEntity,
+                                int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
+                                float flashAlpha, float otherFlashAlpha) {
+        StandUser standUser = ((StandUser) playerEntity);
+        boolean standOn = PowerTypes.hasStandActive(playerEntity);
+        int j = scaledHeight / 2 - 7 - 4;
+        int k = scaledWidth / 2 - 8;
+
+        if (standOn && this.getActivePower() == PowerIndex.BARRAGE_2 && attackTimeDuring > -1) {
+            int ClashTime = 15 - Math.round(((float) attackTimeDuring / this.getKickBarrageLength()) * 15);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+        } else if (standOn && this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
+            int ClashTime = Math.round(((float) attackTimeDuring / this.getKickBarrageWindup()) * 15);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+        } else {
+            super.renderAttackHud(context,playerEntity,
+                    scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
+        }
+    }
+
+    @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        if (isBarraging()||isBarrageAttacking()) {
+        if ((activePower == PowerIndex.BARRAGE || activePower == PowerIndex.BARRAGE_2
+                || activePower == PowerIndex.BARRAGE_CHARGE || activePower == PowerIndex.BARRAGE_CHARGE_2)) {
             setSkillIcon(context, x, y, 1, StandIcons.PH_FORWARD_BARRAGE, PowerIndex.SKILL_3);
         } else if (isHoldingSneak()) {
             if (canExecuteMoveWithLevel(4)) {
@@ -605,7 +728,12 @@ public class PowersPurpleHaze extends NewPunchingStand {
         } else setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.SKILL_2);
 
         if (isHoldingSneak()) {
-            setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_PURPLE_HAZE, PowerIndex.SKILL_3);
+            boolean jojoveinLikeKeys = !ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpAndDashShareCooldown;
+            if (jojoveinLikeKeys){
+                setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_PURPLE_HAZE, PowerIndex.SKILL_3);
+            } else {
+                setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_PURPLE_HAZE, PowerIndex.GLOBAL_DASH);
+            }
         } else {
             if (canVault()) {
                 setSkillIcon(context, x, y, 3, StandIcons.PURPLE_HAZE_LEDGE_GRAB, PowerIndex.GLOBAL_DASH);
@@ -840,7 +968,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
     }
     public void attemptDistortion() {
-        if (canExecuteMoveWithLevel(4) && !this.isBarraging() && getPods()>0 ) {
+        if (canExecuteMoveWithLevel(4) && !(activePower == PowerIndex.BARRAGE || activePower == PowerIndex.BARRAGE_2
+                || activePower == PowerIndex.BARRAGE_CHARGE || activePower == PowerIndex.BARRAGE_CHARGE_2) && getPods()>0 ) {
             Distortion();
         }
     }
@@ -894,7 +1023,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
 
     public void attemptVirusSpit() {
-        if (canExecuteMoveWithLevel(4) && !this.isBarraging()) {
+        if (canExecuteMoveWithLevel(4) && !(activePower == PowerIndex.BARRAGE || activePower == PowerIndex.BARRAGE_2
+                || activePower == PowerIndex.BARRAGE_CHARGE || activePower == PowerIndex.BARRAGE_CHARGE_2)) {
             VirusSpit();
         }
     }
@@ -955,7 +1085,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             }
         }
     }
-    private static final int STRANGLE_WINDUP_TICKS=65;
+    private static final int STRANGLE_WINDUP_TICKS=22;
     private static final double STRANGLE_SPEED=1.4;
     private static final double STRANGLE_MAX_DISTANCE=16.0;
     private static final int STRANGLE_HOLD_DURATION= 80;
@@ -974,9 +1104,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
     private int strangleHoldTicks = 0;
 
     public void attemptStrangle() {
-        if (canExecuteMoveWithLevel(2)) {
+        if (canExecuteMoveWithLevel(2) && activePower == NONE) {
             Strangle();
-
         }
     }
     public void Strangle() {
@@ -991,6 +1120,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         this.setActivePower(PowerIndex.POWER_2);
         this.setAttackTimeDuring(0);
         this.strangleTicks = 0;
+        rotation = new Vec2((this.getSelf().getYHeadRot() % 360), this.getSelf().getXRot());
 
         animateStand(PurpleHazeEntity.STRANGLE_WINDUP);
         poseStand(OffsetIndex.LOOSE);
@@ -998,6 +1128,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 ModSounds.THE_WORLD_MUDA_EVENT /*placeholder*/, SoundSource.PLAYERS, 1.0F, 1.0F);
 
     }
+
     @Override
     public void tickPowerEnd() {
         super.tickPowerEnd();
@@ -1029,11 +1160,11 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
             tickStrangleTravel(stand);
         }
-        if (this.forwardBarrage && !this.isBarraging()){
+        if (this.forwardBarrage && !(this.isBarraging() || activePower == PowerIndex.BARRAGE_CHARGE_2 || activePower == PowerIndex.BARRAGE_2)){
             this.forwardBarrage = false;
             forwardBarrageLockedRot = null;
         }
-        if (this.forwardBarrage && this.attackTimeDuring >= 0 && this.isBarraging()) {
+        if (this.forwardBarrage && this.attackTimeDuring >= 0 && (this.isBarraging() || activePower == PowerIndex.BARRAGE_CHARGE_2 || activePower == PowerIndex.BARRAGE_2)) {
             if (!this.getSelf().level().isClientSide()) {
                 StandEntity stand = getStandEntity(this.self);
                 if (Objects.nonNull(stand)) {
@@ -1055,13 +1186,14 @@ public class PowersPurpleHaze extends NewPunchingStand {
             }
         }
     }
+    Vec2 rotation;
     private void launchStrangle(StandEntity stand) {
-        Vec2 twoVec = new Vec2((this.getSelf().getYHeadRot() % 360), this.getSelf().getXRot());
-        Direction gdir = ((IGravityEntity) this.self).roundabout$getGravityDirection();
-        Vec2 twoVecGrav = RotationUtil.rotPlayerToWorld(twoVec, gdir);
 
-        stand.setYRot(twoVec.x);
-        stand.setXRot(twoVec.y);
+        Direction gdir = ((IGravityEntity) this.self).roundabout$getGravityDirection();
+        Vec2 twoVecGrav = RotationUtil.rotPlayerToWorld(rotation, gdir);
+
+        stand.setYRot(rotation.x);
+        stand.setXRot(rotation.y);
 
         this.strangleOrigin = stand.position();
         this.strangleDirection = DamageHandler.getRotationVector(twoVecGrav.y, (float) twoVecGrav.x).normalize();
@@ -1091,6 +1223,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }*/
 
         stand.setPos(nextPos);
+        stand.setYRot(rotation.x);
+        stand.setXRot(rotation.y);
         strangleTravelTicks++;
 
         AABB sweep = stand.getBoundingBox().inflate(0.6).minmax(
@@ -1101,7 +1235,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     && !e.is(this.getSelf())
                     && le.isAlive()
                     && !le.isInvulnerable()
-                    && stand.getSensing().hasLineOfSight(le)) {
+                    && stand.getSensing().hasLineOfSight(le)
+                    && le.isAttackable() && le.isPickable() && !(le instanceof StandEntity)
+            ) {
                 beginStranglePin(stand, le);
                 return;
             }
@@ -1219,7 +1355,24 @@ public class PowersPurpleHaze extends NewPunchingStand {
         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
     }
 
+    private void tickFallingHitAnimation() {
+        if (fallingHitAnimTicks < 0 || self.level().isClientSide()) {
+            return;
+        }
 
+        if (this.getActivePower() != PowerIndex.EXTRA) {
+            fallingHitAnimTicks = -1;
+            return;
+        }
+
+        fallingHitAnimTicks++;
+
+        if (fallingHitAnimTicks == FALLING_HIT_START_TICKS) {
+            animateStand(PurpleHazeEntity.FALLINGHIT);
+        } else if (fallingHitAnimTicks == FALLING_HIT_START_TICKS + FALLING_HIT_TRANSITION_TICKS) {
+            animateStand(PurpleHazeEntity.FALLINGHITLONG);
+        }
+    }
     @Override
     public boolean canFallBrace() {
         return super.canFallBrace();
@@ -1247,7 +1400,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 }
                 activatePurpleHazeField(self.position(), indistortionmode);
             }
-
+            fallingHitAnimTicks = -1;
+            animateStand(PurpleHazeEntity.FALLINGHITIMPACT);
             playFallBraceShockwave();
 
             fallBraceOriginalDistance = 0;
@@ -1279,11 +1433,22 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
     }
     private double fallBraceOriginalDistance = 0;
+    private static final int FALLING_HIT_START_TICKS = 5;  //
+    private static final int FALLING_HIT_TRANSITION_TICKS = 40; //
+    private int fallingHitAnimTicks = -1;
 
     @Override
     public boolean fallBraceInit() {
         fallBraceOriginalDistance = this.getSelf().fallDistance;
-        return super.fallBraceInit();
+        boolean result = super.fallBraceInit();
+        if (result) {
+            poseStand(OffsetIndex.FOLLOW);
+            animateStand(PurpleHazeEntity.FALLINGHITSTART);
+            if (!this.getSelf().level().isClientSide()) {
+                fallingHitAnimTicks = 0;
+            }
+        }
+        return result;
     }
 
 
@@ -1319,6 +1484,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 field.setStandSkin(getStandSkin());
                 field.totalDuration = distortionMode ? DISTORTION_FIELD_DURATION : PURPLE_HAZE_FIELD_DURATION;
                 field.lifetime = field.totalDuration;
+                PowerTypes.copyPlaneOfExisting(self, field);
                 this.self.level().addFreshEntity(field);
             }
         }
@@ -1383,6 +1549,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
             }
 
 
+            PowerTypes.copyPlaneOfExisting(self, capsule);
+
             this.setCooldown(PowerIndex.SNEAK_ATTACK, 200);
         }
     }
@@ -1392,6 +1560,29 @@ public class PowersPurpleHaze extends NewPunchingStand {
         boolean mode = purpleHazePodDistortionMode;
         purpleHazePod = null;
         activatePurpleHazeField(landingPosition, mode);
+    }
+
+
+    @Override
+    public void TieClash(LivingEntity user1, LivingEntity user2) {
+        super.TieClash(user1, user2);
+        if (getPods() > 0) {
+            if (!(self instanceof Player pl && pl.isCreative())) {
+                setPods(getPods() - 1);
+            }
+            activatePurpleHazeField(user2.position(), indistortionmode);
+        }
+    }
+
+    @Override
+    public void breakClash(LivingEntity winner, LivingEntity loser){
+        super.breakClash(winner, loser);
+        if (getPods() > 0) {
+            if (!(self instanceof Player pl && pl.isCreative())) {
+                setPods(getPods() - 1);
+            }
+            activatePurpleHazeField(loser.position(), indistortionmode);
+        }
     }
 
     @Override
@@ -1404,7 +1595,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
 
         super.tickPower();
-        if (this.forwardBarrage && !this.isBarraging()){
+        if (this.forwardBarrage && !(this.isBarraging() || activePower == PowerIndex.BARRAGE_CHARGE_2 || activePower == PowerIndex.BARRAGE_2)){
             this.forwardBarrage = false;
             forwardBarrageLockedRot = null;
         }
@@ -1412,6 +1603,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             tickPodReset();
             tickPodRecharge();
             tickSecretSkinObtaining();
+            tickFallingHitAnimation();
 
             if (!podsSyncedOnJoin && self instanceof ServerPlayer sp) {
                 podsSyncedOnJoin = true;
@@ -1426,6 +1618,14 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 if (self instanceof ServerPlayer pl) {
                     this.setAttackTimeDuring(0);
                     ((IPlayerEntity) pl).roundabout$SetPoseEmote((byte) 0);
+                }
+            }
+        }
+
+        if (this.getSelf().onGround()){
+            if (((StandUser)this.getSelf()).roundabout$getLeapTicks() <= -1) {
+                if (this.getAnimation() == StandEntity.LEAP) {
+                    animateStand(StandEntity.LEAP_END);
                 }
             }
         }
@@ -1461,6 +1661,23 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
         return ModSounds.PURPLE_HAZE_BARRAGE_CRY_EVENT;
     }
+
+
+    @Override
+    public void playBarrageEndNoise(float mod, Entity entity) {
+        if (!this.self.level().isClientSide()) {
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.PURPLE_HAZE_BARRAGE_FINISHER_EVENT, SoundSource.PLAYERS, 0.85F + mod, 1F);
+        }
+    }
+
+    @Override
+    public void playBarrageNoise(int hitNumber, Entity entity) {
+        if (!this.self.level().isClientSide()) {
+            if (hitNumber % 2 == 0)
+                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.PURPLE_HAZE_BARRAGE_HIT_EVENT, SoundSource.PLAYERS, 0.7F, 1/*(float) (0.9 + (Math.random() * 0.25))*/);
+        }
+    }
+
     @Override
     public SoundEvent getSoundFromByte(byte soundChoice) {
         if (soundChoice == SoundIndex.SUMMON_SOUND) {
