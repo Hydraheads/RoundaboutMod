@@ -3,6 +3,7 @@ package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.GoldExperienceEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -21,7 +22,9 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -30,11 +33,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class PowersGoldExperience extends BlockGrabPreset {
     // move bytes
@@ -176,18 +180,120 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 if (!this.self.level().isClientSide()) {
                     playSoundIfPossible(self.level(), null, this.self.blockPosition(), sound, SoundSource.PLAYERS, 0.95F, 1.1F);
                 }
-            } else {
-                BlockHitResult blockHit = this.getRayBlockHit(this.self, range);
+            }
+            // all of this is for the block version of life punch
+            else {
+                BlockHitResult blockHit = this.getRayBlockOutline(this.self, range);
 
                 if (blockHit.getType() == HitResult.Type.BLOCK) {
                     BlockPos centerPos = blockHit.getBlockPos();
+                    BlockState centerState = this.self.level().getBlockState(centerPos);
+                    ItemStack boneMeal = new ItemStack(Items.BONE_MEAL);
 
                     if (!this.self.level().isClientSide) {
-                        BlockState centerState = this.self.level().getBlockState(centerPos);
-                        ItemStack boneMeal = new ItemStack(Items.BONE_MEAL);
+                        if (centerState.is(BlockTags.LOGS)) {
+                            Set<BlockPos> logsFound = new HashSet<>();
+                            Set<BlockPos> leavesFound = new HashSet<>();
+                            Queue<BlockPos> queue = new LinkedList<>();
+                            boolean foundNaturalLeaves = false;
 
+                            queue.add(centerPos);
+                            logsFound.add(centerPos);
+
+                            // need to limit these, otherwise some guy's pc might genuinely explode
+                            int logLimit = 50;
+                            int leafLimit = 100;
+
+                            // algorithm (breadth first search) for looking for logs and leaves
+                            while (!queue.isEmpty() && logsFound.size() < logLimit) {
+                                BlockPos currentPos = queue.poll();
+                                for (int x = -1; x <= 1; x++) {
+                                    for (int y = -1; y <= 1; y++) {
+                                        for (int z = -1; z <= 1; z++) {
+                                            if (x == 0 && y == 0 && z == 0) continue;
+
+                                            BlockPos checkPos = currentPos.offset(x, y, z);
+                                            BlockState checkState = this.self.level().getBlockState(checkPos);
+
+                                            if (checkState.is(BlockTags.LEAVES) && !leavesFound.contains(checkPos)) {
+                                                if (leavesFound.size() < leafLimit) {
+                                                    leavesFound.add(checkPos);
+                                                }
+                                                // check to make sure that the leaves haven't been sheared
+                                                if (checkState.hasProperty(BlockStateProperties.PERSISTENT)) {
+                                                    if (!checkState.getValue(BlockStateProperties.PERSISTENT)) {
+                                                        foundNaturalLeaves = true;
+                                                    }
+                                                } else {
+                                                    foundNaturalLeaves = true;
+                                                }
+                                            } else if (checkState.is(BlockTags.LOGS) && !logsFound.contains(checkPos)) {
+                                                logsFound.add(checkPos);
+                                                queue.add(checkPos);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (foundNaturalLeaves) {
+                                double totalX = 0, totalY = 0, totalZ = 0;
+                                for (BlockPos pos : logsFound) {
+                                    totalX += pos.getX();
+                                    totalY += pos.getY();
+                                    totalZ += pos.getZ();
+                                }
+                                double treeCenterX = totalX / logsFound.size();
+                                double treeCenterY = totalY / logsFound.size();
+                                double treeCenterZ = totalZ / logsFound.size();
+                                // leaves needs to be cleared, otherwise they will block logs
+                                for (BlockPos leafPos : leavesFound) {
+                                    this.self.level().destroyBlock(leafPos, false);
+                                }
+
+                                for (BlockPos pos : logsFound) {
+                                    BlockState logState = this.self.level().getBlockState(pos);
+                                    ItemStack logItem = new ItemStack(logState.getBlock().asItem());
+
+                                    ThrownObjectEntity projectile = new ThrownObjectEntity(this.self, this.self.level(), logItem, false);
+                                    projectile.setPos(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+                                    double dirX = pos.getX() - treeCenterX;
+                                    double dirY = pos.getY() - treeCenterY;
+                                    double dirZ = pos.getZ() - treeCenterZ;
+
+                                    Vec3 dir = new Vec3(dirX, dirY, dirZ).normalize();
+                                    if (dir.lengthSqr() == 0) {
+                                        dir = new Vec3(0, 1, 0);
+                                    }
+
+                                    projectile.setDeltaMovement(
+                                            dir.x * 1.3 + (Math.random() * 0.4 - 0.2),
+                                            Math.max(dir.y * 0.8, 0.4) + (Math.random() * 0.3),
+                                            dir.z * 1.3 + (Math.random() * 0.4 - 0.2)
+                                    );
+
+                                    projectile.setStyle(ThrownObjectEntity.SPTHROW);
+                                    this.self.level().addFreshEntity(projectile);
+                                    this.self.level().destroyBlock(pos, false);
+                                }
+
+                                this.self.level().playSound(null, centerPos, SoundEvents.ZOMBIE_BREAK_WOODEN_DOOR, SoundSource.PLAYERS, 1.2F, 0.8F);
+
+                            }
+                        }
+                        // special logic for saplings that way they insta grow
+                        else if (centerState.is(BlockTags.SAPLINGS)) {
+                            // bonemeal spalings up to 5 times, breaking the loop early if the block is no longer a sapling
+                            for (int i = 0; i < 5; i++) {
+                                BoneMealItem.growCrop(boneMeal, this.self.level(), centerPos);
+                                if (!this.self.level().getBlockState(centerPos).is(BlockTags.SAPLINGS)) {
+                                    break;
+                                }
+                            }
+                            this.self.level().levelEvent(1505, centerPos, 0);
+                        }
                         // if the punch was on grass, it should only apply once because vanilla bonemeal is already super big
-                        if (centerState.is(Blocks.GRASS_BLOCK)) {
+                        else if (centerState.is(Blocks.GRASS_BLOCK)) {
                             if (BoneMealItem.growCrop(boneMeal, this.self.level(), centerPos)) {
                                 this.self.level().levelEvent(1505, centerPos, 0);
                             }
