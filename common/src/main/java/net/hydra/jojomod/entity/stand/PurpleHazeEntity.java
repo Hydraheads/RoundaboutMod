@@ -43,6 +43,8 @@ public class PurpleHazeEntity extends FollowingStandEntity{
     public final AnimationState fallinghit= new AnimationState();
     public final AnimationState fallinghitlong= new AnimationState();
     public final AnimationState fallinghitimpact= new AnimationState();
+
+
     public static byte
             STRANGLE_WINDUP = 86,
             FLYLOOP = 87,
