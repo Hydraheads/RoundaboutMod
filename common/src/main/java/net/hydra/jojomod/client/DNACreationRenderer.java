@@ -56,6 +56,8 @@ public class DNACreationRenderer extends EntityRenderer<DNACreationEntity> {
         float itemScale = 1.0f - percentComplete;
         if (itemScale > 0.02f) {
             poseStack.pushPose();
+            float itemYOffset = 0.02f + (percentComplete * 0.12f);
+            poseStack.translate(0, itemYOffset, 0);
             poseStack.scale(itemScale, itemScale, itemScale);
             this.itemRenderer.renderStatic(itemStack, ItemDisplayContext.GROUND, packedLight, OverlayTexture.NO_OVERLAY, poseStack, buffer, entity.level(), 0);
             poseStack.popPose();

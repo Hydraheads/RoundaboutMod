@@ -71,7 +71,7 @@ public class DNACreationEntity extends LivingEntity {
                 return;
             }
 
-            if (this.tickCount % 3 == 0) {
+            if (this.tickCount % 7 == 0) {
                 MainUtil.sendParticlesIfPossible(
                         this,
                         this.level(),
