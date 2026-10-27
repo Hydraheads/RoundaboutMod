@@ -62,9 +62,7 @@ public class GratefulDeadEntity extends FollowingStandEntity{
             }
             if(animation!=BARRAGE && animation!=BARRAGE_CHARGE && animation!=BARRAGE_FINISHER && animation!=MINING_BARRAGE && animation!=FIRST_PUNCH && animation!=SECOND_PUNCH && animation!=THIRD_PUNCH && animation!=BLOCK){
                 this.closeHands.stop();
-                this.openHands.startIfStopped(this.tickCount);
             }else{
-                this.openHands.stop();
                 this.closeHands.startIfStopped(this.tickCount);
             }
             super.setupAnimationStates();
