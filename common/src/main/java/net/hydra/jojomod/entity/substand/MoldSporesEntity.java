@@ -6,6 +6,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -25,6 +26,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -73,7 +75,10 @@ public class MoldSporesEntity extends StandEntity {
         } else {
             if (user.isUsingItem() && user.getMainHandItem().getItem().getFoodProperties() != null) {
                 if (user.isUsingItem() && user.getMainHandItem().getItem().getFoodProperties().getNutrition() > 0) {
-                    this.discard();
+                    if (ClientNetworking.getAppropriateConfig().greenDaySettings.eatingCancelsMold) {
+                        this.discard();
+                        ((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).setCooldown(PowerIndex.SKILL_4, ClientNetworking.getAppropriateConfig().greenDaySettings.moldSpreadForceCooldown);
+                    }
                 }
             }if((StandUU.roundabout$getStandPowers() instanceof PowersGreenDay)){
                 if(((PowersGreenDay)StandUU.roundabout$getStandPowers()).MoldGone){
@@ -158,20 +163,21 @@ public class MoldSporesEntity extends StandEntity {
                             && ((StandUser) entity).GoingDown()
                             && !(entity instanceof FallenMob)
                             && ((StandUser) entity).getJumpImmunityTicks() < 1
+                            && !((LivingEntity) entity).hasEffect(MobEffects.SLOW_FALLING)
                             && !entity.equals(User)) {
                         if ((!((PowersGreenDay) ((StandUser) User).roundabout$getStandPowers()).allies.contains(entity.getStringUUID())) || !(User instanceof Player)) {
 
-                            float fallDistance = (((StandUser) entity).getStaringYPos() - (float)entity.getPosition(1).y());
-                            if (fallDistance < 0.8) { continue; }
+                            float fallDistance = (((StandUser) entity).getStaringYPos() - (float) entity.getPosition(1).y());
 
-                            double width = entity.getBbWidth() / 2;
-                            double height = entity.getBbHeight() / 2;
-                            ((ServerLevel) level()).sendParticles(ModParticles.MOLD
+                            if (fallDistance > ClientNetworking.getAppropriateConfig().greenDaySettings.playerMinFalldistance || !(entity instanceof Player)){
+                                double width = entity.getBbWidth() / 2;
+                                double height = entity.getBbHeight() / 2;
+                                ((ServerLevel) level()).sendParticles(ModParticles.MOLD
                                     , entity.getX(),
                                     (entity.getY() + height / 2),
                                     entity.getZ(),
                                     13, width, height, width, 0)
-                            ;
+                                ;
 
 
                             //((StandUser) entity).DoMoldTick();
@@ -179,27 +185,29 @@ public class MoldSporesEntity extends StandEntity {
                             //     lifetime += 200;
                             //     range += 4;
                             //}
-                            double damage = 0;
-                            if (MainUtil.getReducedDamage(entity)) {
-                                damage = 2;
-                            } else {
-                                damage = 4;
-                            }
-                            damage = (int) (damage * (fallDistance * 0.6F));
-                            if (((StandUser) entity).getStaringYPos() - entity.getY() < 1) {
-                                damage = damage * 0.25;
-                            }
-                            entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), (float) (damage * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldDMGPlayersMultiplier / 100F)));
-                            if (!entity.isAlive()) {
-                                range += 2;
-                                if (lifetime_add > 0) {
-                                    lifetime += lifetime_add;
-                                    lifetime_add -= 10;
+                                double damage = 0;
+                                if (MainUtil.getReducedDamage(entity)) {
+                                    damage = 2;
+                                } else {
+                                    damage = 4;
                                 }
-                                entity.discard();
-                            }
-                            if (Math.random() < 0.2) {
-                                ((StandUser) User).roundabout$getStandPowers().addEXP(1);
+                                damage = (int) (damage * (fallDistance * 0.6F));
+                                if (((StandUser) entity).getStaringYPos() - entity.getY() < 1) {
+                                    damage = damage * 0.25;
+                                }
+                                entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), (float) (damage * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldDMGPlayersMultiplier / 100F)));
+                                ((StandUser)entity).roundabout$setJumpImunityTicks(10);
+                                if (!entity.isAlive()) {
+                                    range += 2;
+                                    if (lifetime_add > 0) {
+                                        lifetime += lifetime_add;
+                                        lifetime_add -= 10;
+                                    }
+                                    entity.discard();
+                                }
+                                if (Math.random() < 0.2) {
+                                    ((StandUser) User).roundabout$getStandPowers().addEXP(1);
+                                }
                             }
                         }
                     }

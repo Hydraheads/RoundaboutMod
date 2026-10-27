@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
-@Mixin(AbstractArrow.class)
+@Mixin(value = AbstractArrow.class, priority = 103)
 public abstract class GravityAbstractArrowMixin extends Entity implements TraceableEntity {
     public GravityAbstractArrowMixin(EntityType<?> type, Level world) {
         super(type, world);
@@ -30,7 +30,8 @@ public abstract class GravityAbstractArrowMixin extends Entity implements Tracea
             at = @At(
                     value = "STORE"
             )
-            , ordinal = 0
+            , ordinal = 0,
+            require = 0
     )
     public Vec3 tick(Vec3 modify) {
         modify = new Vec3(modify.x, modify.y + 0.05, modify.z);

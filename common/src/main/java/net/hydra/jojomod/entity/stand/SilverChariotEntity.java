@@ -711,6 +711,46 @@ public class SilverChariotEntity extends FollowingStandEntity {
         super.moveRelative($$0, $$1);
     }
 
+    public Vec3 threatMovement(Vec3 vec3) {
+        if ((getUser() != null) && (((StandUser) getUser()).roundabout$getStandPowers() instanceof PowersSilverChariot PSC)) {
+            double nextX = getX() + vec3.x;
+            double nextY = getY() + vec3.y;
+            double nextZ = getZ() + vec3.z;
+            int maxRange = PSC.getMaxPilotRange();
+            double moveX = vec3.x;
+            double moveY = vec3.y;
+            double moveZ = vec3.z;
+
+            if (moveX != 0 && Math.abs(nextX - getUser().getX()) > maxRange) {
+                double stopX = Mth.clamp(nextX, getUser().getX() - maxRange, getUser().getX() + maxRange);
+                moveX = Mth.clamp(stopX - getX(), Math.min(0.0D, moveX), Math.max(0.0D, moveX));
+            }
+
+            if (moveY != 0 && Math.abs(nextY - getUser().getY()) > maxRange) {
+                double stopY = Mth.clamp(nextY, getUser().getY() - maxRange, getUser().getY() + maxRange);
+                moveY = Mth.clamp(stopY - getY(), Math.min(0.0D, moveY), Math.max(0.0D, moveY));
+            }
+
+            if (moveZ != 0 && Math.abs(nextZ - getUser().getZ()) > maxRange) {
+                double stopZ = Mth.clamp(nextZ, getUser().getZ() - maxRange, getUser().getZ() + maxRange);
+                moveZ = Mth.clamp(stopZ - getZ(), Math.min(0.0D, moveZ), Math.max(0.0D, moveZ));
+            }
+        }
+        return vec3;
+    }
+
+    private static Vec3 getInputVector(Vec3 p_20016_, float p_20017_, float p_20018_) {
+        double d0 = p_20016_.lengthSqr();
+        if (d0 < 1.0E-7D) {
+            return Vec3.ZERO;
+        } else {
+            Vec3 vec3 = (d0 > 1.0D ? p_20016_.normalize() : p_20016_).scale((double)p_20017_);
+            float f = Mth.sin(p_20018_ * ((float)Math.PI / 180F));
+            float f1 = Mth.cos(p_20018_ * ((float)Math.PI / 180F));
+            return new Vec3(vec3.x * (double)f1 - vec3.z * (double)f, vec3.y, vec3.z * (double)f1 + vec3.x * (double)f);
+        }
+    }
+
     // Custom mounting system for Silver Chariot to carry the user
     private Vec3 userOffsetFromStand;
     private Vec3 previousCarryPosition;
