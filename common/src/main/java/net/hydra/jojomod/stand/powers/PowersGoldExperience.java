@@ -2,44 +2,67 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.D4CCloneEntity;
+import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
+import net.hydra.jojomod.entity.LifePunchCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.GoldExperienceEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.index.OffsetIndex;
-import net.hydra.jojomod.event.index.PacketDataIndex;
-import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.BlockGrabPreset;
+import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BoneMealItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.zetalasis.networking.message.api.ModMessageEvents;
+import org.joml.Vector3f;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class PowersGoldExperience extends BlockGrabPreset {
     // move bytes
     private static final byte
-        LIFE_PUNCH = 53;
+        LIFE_PUNCH = 53,
+        DNA_CREATE = 54;
+
+    // for life punch
+    private LifePunchCloneEntity lifePunchClone = null;
+    private LivingEntity lifePunchVictim = null;
+    private int lifePunchTimer = 0;
+    private float lastKnownHealth = 0;
+    public final Map<Integer, Integer> disabledMobTimers = new HashMap<>();
 
     // basic stand registry stuff
     public PowersGoldExperience(LivingEntity self) {super(self);}
@@ -51,6 +74,81 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     // start of move methods
 
+    // tick power start
+
+    @Override
+    public void tickPower() {
+        if (!this.self.level().isClientSide()) {
+            // tick down Life Punch timer
+            if (lifePunchTimer > 0 && lifePunchVictim != null && lifePunchClone != null) {
+                if (!this.self.isAlive()) {
+                    restoreLifePunchVictim();
+                }
+                // check if either entity is gone
+                if (!lifePunchVictim.isAlive() || !lifePunchClone.isAlive()) {
+                    if (lifePunchVictim.isAlive()) {
+                        // clone died, victim takes fatal damage
+                        lifePunchVictim.hurt(lifePunchVictim.damageSources().generic(), 9999);
+                    }
+                    restoreLifePunchVictim();
+                } else {
+                    // transfer damage from clone to victim
+                    float currentHealth = lifePunchClone.getHealth();
+                    if (currentHealth < lastKnownHealth) {
+                        float damage = lastKnownHealth - currentHealth;
+                        lifePunchVictim.hurt(lifePunchVictim.damageSources().generic(), damage);
+                        lifePunchClone.setHealth(lastKnownHealth); // reset clone health
+                    }
+                    lastKnownHealth = lifePunchClone.getHealth();
+
+                    // transfer effects from clone to victim
+                    for (MobEffectInstance effect : lifePunchClone.getActiveEffects()) {
+                        if (!lifePunchVictim.hasEffect(effect.getEffect())) {
+                            lifePunchVictim.addEffect(new MobEffectInstance(effect));
+                        }
+                    }
+
+                    // tick down timer
+                    lifePunchTimer--;
+                    if (lifePunchTimer <= 0) {
+                        // restore the victim
+                        Vector3f blipVec = new Vector3f(
+                                (float) lifePunchClone.getX(),
+                                (float) lifePunchClone.getY(),
+                                (float) lifePunchClone.getZ()
+                        );
+                        packetNearby(blipVec, lifePunchVictim.getId());
+                        lifePunchVictim.teleportTo(lifePunchClone.getX(), lifePunchClone.getY(), lifePunchClone.getZ());
+                        lifePunchVictim.setYRot(lifePunchClone.getYRot());
+                        lifePunchVictim.setXRot(lifePunchClone.getXRot());
+                        lifePunchVictim.setDeltaMovement(Vec3.ZERO);
+                        restoreLifePunchVictim();
+                    }
+                }
+            }
+            // for mob life punch stuff
+            Iterator<Map.Entry<Integer, Integer>> it = disabledMobTimers.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry<Integer, Integer> entry = it.next();
+                int mobId = entry.getKey();
+                int ticksLeft = entry.getValue();
+                Entity mobEntity = this.self.level().getEntity(mobId);
+
+                if (mobEntity == null || !mobEntity.isAlive() || ticksLeft <= 0) {
+                    if (mobEntity instanceof Mob mob) {
+                        mob.getNavigation().recomputePath();
+                    }
+                    it.remove();
+                } else {
+                    entry.setValue(ticksLeft - 1);
+                }
+            }
+        }
+        super.tickPower();
+    }
+
+    // tick power end
+
     /**
      * Gets the input for the power based on the buttons pressed.
      * Note, this is client side only. DO NOT FORGET!!!!
@@ -60,6 +158,13 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public void powerActivate(PowerContext context) {
         switch (context) {
+            case SKILL_1_NORMAL -> {
+                if(canDNACreate()) {
+                    tryDNACreate();
+                } else {
+                    //insert life wheel here
+                }
+            }
             // life punch
             case SKILL_3_CROUCH -> {
                 tryLifePunch();
@@ -70,7 +175,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public boolean setPowerOther(int move, int lastMove) {
         if (move == LIFE_PUNCH) {
-            return this.startLifePunch();
+            return startLifePunch();
+        } else if (move == DNA_CREATE) {
+            return executeDNACreate();
         }
         return super.setPowerOther(move, lastMove);
     }
@@ -90,6 +197,58 @@ public class PowersGoldExperience extends BlockGrabPreset {
         }
     }
 
+    // DNA creation start
+
+    private boolean executeDNACreate() {
+        if (this.self.level().isClientSide()) return false;
+        ItemStack heldItem = this.self.getMainHandItem();
+        if (heldItem.isEmpty()) return false;
+        Item dnaItem = heldItem.getItem();
+        if (!MainUtil.GOLD_EXPERIENCE_DNA_DROPS.containsKey(dnaItem)) return false;
+
+        // Spawn the mob
+        EntityType<?> entityType = MainUtil.GOLD_EXPERIENCE_DNA_DROPS.get(dnaItem);
+        Entity entity = entityType.create((ServerLevel) this.self.level());
+
+        if (entity instanceof Mob mob) {
+            Vec3 spawnPos = this.self.position().add(this.self.getForward().scale(1.5));
+            mob.moveTo(spawnPos.x, spawnPos.y, spawnPos.z, this.self.level().random.nextFloat() * 360.0F, 0.0F);
+            boolean shouldBeBaby = MainUtil.GOLD_EXPERIENCE_IS_BABY.getOrDefault(dnaItem, false);
+            if (mob instanceof Animal animal && shouldBeBaby) {
+                animal.setBaby(true);
+            }
+
+            //this.self.level().addFreshEntity(mob);
+            //heldItem.shrink(1);
+            if (this.self instanceof net.minecraft.world.entity.player.Player player) {
+                player.sendSystemMessage(Component.literal("HOly MOLY!! you're holding a: " + dnaItem.toString()));
+                player.sendSystemMessage(Component.literal("great googly moogly!!! yo're making a: " + entityType.getDescription().getString()));
+            }
+
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                    ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.85F, 1F);
+            return true;
+        }
+
+        return false;
+    }
+
+    private void tryDNACreate() {
+        ((StandUser) this.getSelf()).roundabout$tryPower(DNA_CREATE, true);
+        tryPowerPacket(DNA_CREATE);
+    }
+
+    //checks to see if the player is holding a valid item
+    private boolean canDNACreate() {
+        ItemStack heldItem = this.self.getMainHandItem();
+        if (!heldItem.isEmpty() && MainUtil.GOLD_EXPERIENCE_DNA_DROPS.containsKey(heldItem.getItem())) {
+            return true;
+        }
+        return false;
+    }
+
+    // DNA creation end
+
     // life punch start
 
     private void tryLifePunch() {
@@ -104,7 +263,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
         }
     }
 
-    public boolean startLifePunch() {
+    private boolean startLifePunch() {
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)) {
             this.setAttackTimeDuring(0);
@@ -149,7 +308,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
         }
     }
 
-    public void lifePunchImpact(Entity entity) {
+    private void lifePunchImpact(Entity entity) {
         if (this.activePower == LIFE_PUNCH) {
             this.setAttackTimeDuring(-20);
             float range = 3.5F + 0.75F;
@@ -166,7 +325,39 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
                     if (entity instanceof LivingEntity LE) {
                         addEXP(5, LE);
-                        // TODO: punch the SOUL outta them
+                        if (!this.self.level().isClientSide()) {
+                            if(LE instanceof Player) {
+                                // IMPORTANT FAILSAFE: If someone else gets Life Punched, restore previous victim first
+                                if (lifePunchVictim != null && lifePunchVictim != LE) {
+                                    restoreLifePunchVictim();
+                                }
+                                // punch the SOUL outta them
+                                PowerTypes.setPlaneOfExisting(LE, (byte) 12);
+                                // spawn a Life Punch Clone in their place
+                                LifePunchCloneEntity clone = ModEntities.LIFE_PUNCH_CLONE.create(this.self.level());
+                                if (clone != null) {
+                                    clone.setPlayer((Player) LE);
+                                    clone.copyPosition(LE);
+                                    clone.setHealth(LE.getHealth());
+                                    clone.getAttribute(Attributes.MAX_HEALTH).setBaseValue(LE.getMaxHealth());
+                                    // copy inventory
+                                    for (EquipmentSlot slot : EquipmentSlot.values()) {
+                                        clone.setItemSlot(slot, LE.getItemBySlot(slot).copy());
+                                    }
+                                    clone.setTarget((LivingEntity) this.self);
+                                    this.self.level().addFreshEntity(clone);
+                                    // track the victim
+                                    lifePunchVictim = LE;
+                                    lifePunchClone = clone;
+                                    lifePunchTimer = 40; // 2 seconds
+                                    lastKnownHealth = clone.getHealth();
+                                }
+                            } else if (LE instanceof Mob mob) {
+                                ((StandUser) mob).roundabout$deeplyRemoveAttackTarget();
+                                mob.getNavigation().stop();
+                                disabledMobTimers.put(LE.getId(), 50);
+                            }
+                        }
                     }
                     takeDeterminedKnockback(this.self, entity, knockbackStrength);
                 } else {
@@ -176,18 +367,115 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 if (!this.self.level().isClientSide()) {
                     playSoundIfPossible(self.level(), null, this.self.blockPosition(), sound, SoundSource.PLAYERS, 0.95F, 1.1F);
                 }
-            } else {
-                BlockHitResult blockHit = this.getRayBlockHit(this.self, range);
+            }
+            // all of this is for the block version of life punch
+            else {
+                BlockHitResult blockHit = this.getRayBlockOutline(this.self, range);
 
                 if (blockHit.getType() == HitResult.Type.BLOCK) {
                     BlockPos centerPos = blockHit.getBlockPos();
+                    BlockState centerState = this.self.level().getBlockState(centerPos);
+                    ItemStack boneMeal = new ItemStack(Items.BONE_MEAL);
 
                     if (!this.self.level().isClientSide) {
-                        BlockState centerState = this.self.level().getBlockState(centerPos);
-                        ItemStack boneMeal = new ItemStack(Items.BONE_MEAL);
+                        if (centerState.is(BlockTags.LOGS)) {
+                            Set<BlockPos> logsFound = new HashSet<>();
+                            Set<BlockPos> leavesFound = new HashSet<>();
+                            Queue<BlockPos> queue = new LinkedList<>();
+                            boolean foundNaturalLeaves = false;
 
+                            queue.add(centerPos);
+                            logsFound.add(centerPos);
+
+                            // need to limit these, otherwise some guy's pc might genuinely explode
+                            int logLimit = 50;
+                            int leafLimit = 100;
+
+                            // algorithm (breadth first search) for looking for logs and leaves
+                            while (!queue.isEmpty() && logsFound.size() < logLimit) {
+                                BlockPos currentPos = queue.poll();
+                                for (int x = -1; x <= 1; x++) {
+                                    for (int y = -1; y <= 1; y++) {
+                                        for (int z = -1; z <= 1; z++) {
+                                            if (x == 0 && y == 0 && z == 0) continue;
+
+                                            BlockPos checkPos = currentPos.offset(x, y, z);
+                                            BlockState checkState = this.self.level().getBlockState(checkPos);
+
+                                            if (checkState.is(BlockTags.LEAVES) && !leavesFound.contains(checkPos)) {
+                                                if (leavesFound.size() < leafLimit) {
+                                                    leavesFound.add(checkPos);
+                                                }
+                                                // check to make sure that the leaves haven't been sheared
+                                                if (checkState.hasProperty(BlockStateProperties.PERSISTENT)) {
+                                                    if (!checkState.getValue(BlockStateProperties.PERSISTENT)) {
+                                                        foundNaturalLeaves = true;
+                                                    }
+                                                } else {
+                                                    foundNaturalLeaves = true;
+                                                }
+                                            } else if (checkState.is(BlockTags.LOGS) && !logsFound.contains(checkPos)) {
+                                                logsFound.add(checkPos);
+                                                queue.add(checkPos);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (foundNaturalLeaves) {
+                                // need to throw the logs like anubis block slice, so they go where the player is looking.
+                                Vec3 viewVector = this.getSelf().getViewVector(0);
+
+                                // leaves needs to be cleared, otherwise they will block logs
+                                Set<BlockPos> clearedLeaves = new HashSet<>();
+                                for (BlockPos logPos : logsFound) {
+                                    for (int x = -2; x <= 2; x++) {
+                                        for (int y = -2; y <= 2; y++) {
+                                            for (int z = -2; z <= 2; z++) {
+                                                BlockPos checkPos = logPos.offset(x, y, z);
+                                                BlockState checkState = this.self.level().getBlockState(checkPos);
+                                                if (checkState.is(BlockTags.LEAVES) && !clearedLeaves.contains(checkPos)) {
+                                                    this.self.level().destroyBlock(checkPos, false);
+                                                    clearedLeaves.add(checkPos);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                // launch the logs with respect to where the player is looking
+                                for (BlockPos pos : logsFound) {
+                                    BlockState logState = this.self.level().getBlockState(pos);
+                                    ItemStack logItem = new ItemStack(logState.getBlock().asItem());
+                                    ThrownObjectEntity projectile = new ThrownObjectEntity(this.self, this.self.level(), logItem, false);
+                                    projectile.setPos(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+                                    projectile.setDeltaMovement(
+                                            // note: randomness is always * x - (0.5x)
+                                            viewVector.x * 1.2 + (Math.random() * 1.0 - 0.5),
+                                            viewVector.y * 1.2 + (Math.random() * 0.5 - 0.25),
+                                            viewVector.z * 1.2 + (Math.random() * 1.0 - 0.5)
+                                    );
+                                    projectile.setStyle(ThrownObjectEntity.SPTHROW);
+                                    this.self.level().addFreshEntity(projectile);
+                                    this.self.level().destroyBlock(pos, false);
+                                }
+                                this.self.level().playSound(null, centerPos, SoundEvents.ZOMBIE_BREAK_WOODEN_DOOR, SoundSource.PLAYERS, 1.2F, 0.8F);
+                            }
+                        }
+                        // special logic for saplings that way they insta grow
+                        else if (centerState.is(BlockTags.SAPLINGS)) {
+                            // bonemeal spalings up to 5 times, breaking the loop early if the block is no longer a sapling
+                            for (int i = 0; i < 5; i++) {
+                                BoneMealItem.growCrop(boneMeal, this.self.level(), centerPos);
+                                if (!this.self.level().getBlockState(centerPos).is(BlockTags.SAPLINGS)) {
+                                    break;
+                                }
+                            }
+                            this.self.level().levelEvent(1505, centerPos, 0);
+                        }
                         // if the punch was on grass, it should only apply once because vanilla bonemeal is already super big
-                        if (centerState.is(Blocks.GRASS_BLOCK)) {
+                        else if (centerState.is(Blocks.GRASS_BLOCK)) {
                             if (BoneMealItem.growCrop(boneMeal, this.self.level(), centerPos)) {
                                 this.self.level().levelEvent(1505, centerPos, 0);
                             }
@@ -215,9 +503,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
                             }
                         }
                     }
-                }
-                if (!this.self.level().isClientSide()) {
-                    playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.95F, 1F);
+                    if (!this.self.level().isClientSide()) {
+                        playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.95F, 1F);
+                    }
                 }
             }
 
@@ -229,9 +517,37 @@ public class PowersGoldExperience extends BlockGrabPreset {
         }
     }
 
-    @Override
-    public SoundEvent getImpaleSound() {
-        return ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_EVENT;
+    private void restoreLifePunchVictim() {
+        if (lifePunchVictim != null) {
+            PowerTypes.setPlaneOfExisting(lifePunchVictim, (byte)0);
+        }
+        if (lifePunchClone != null) {
+            lifePunchClone.discard();
+        }
+        lifePunchVictim = null;
+        lifePunchClone = null;
+        lifePunchTimer = 0;
+        lastKnownHealth = 0;
+    }
+
+    // no lerp when teleporting
+    public final void packetNearby(Vector3f blip, int entId) {
+        if (!this.self.level().isClientSide) {
+            ServerLevel serverWorld = ((ServerLevel) this.self.level());
+            Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
+
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.blockPosition();
+                if (blockPos.closerToCenterThan(userLocation, 100)) {
+                    S2CPacketUtil.sendBlipPacket(serverPlayerEntity, (byte) 2, entId,blip);
+                }
+            }
+        }
     }
 
     // life punch end
@@ -256,7 +572,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public void playBarrageEndNoise(float mod, Entity entity) {
         if (!this.self.level().isClientSide()) {
-            playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_EVENT, SoundSource.PLAYERS, 0.85F + mod, 1F);
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_EVENT, SoundSource.PLAYERS, 0.75F + mod, 1F);
         }
     }
 
@@ -264,7 +580,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public void playBarrageNoise(int hitNumber, Entity entity) {
         if (!this.self.level().isClientSide()) {
             if (hitNumber % 3 == 0)
-                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GOLD_EXPERIENCE_HIT_EVENT, SoundSource.PLAYERS, 0.8F, 1F);
+                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GOLD_EXPERIENCE_HIT_EVENT, SoundSource.PLAYERS, 0.7F, 1F);
         }
     }
 
@@ -285,6 +601,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     @Override
     public SoundEvent getPunchLandLastSound() {
+        return ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_EVENT;
+    }
+
+    @Override
+    public SoundEvent getImpaleSound() {
         return ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_EVENT;
     }
 
@@ -336,8 +657,6 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     // skins and entity end
 
-    // icons and abilities start
-
     // stand icons and info screen start
 
     /**
@@ -346,9 +665,21 @@ public class PowersGoldExperience extends BlockGrabPreset {
      */
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        setSkillIcon(context, x, y, 1, StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, PowerIndex.SKILL_1);
+        // Ability 1 (Z)
+        if (canDNACreate()) {
+            setSkillIcon(context, x, y, 1, StandIcons.GOLD_EXPERIENCE_DNA_CREATION, PowerIndex.SKILL_1);
+        } else {
+            setSkillIcon(context, x, y, 1, StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, PowerIndex.SKILL_1);
+        }
         setSkillIcon(context, x, y, 2, StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, PowerIndex.SKILL_2);
-        setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        // Ability 3 (C)
+        if (isGuarding()){
+            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        } else if (isHoldingSneak()) {
+            setSkillIcon(context, x, y, 3, StandIcons.GOLD_EXPERIENCE_LIFE_PUNCH, PowerIndex.SKILL_3_CROUCH_GUARD);
+        } else {
+            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        }
         setSkillIcon(context, x, y, 4, StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, PowerIndex.SKILL_4);
     }
 
@@ -359,19 +690,33 @@ public class PowersGoldExperience extends BlockGrabPreset {
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.gold_experience_placeholder",
                 "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 1, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.gold_experience_placeholder",
-                "instruction.roundabout.passive", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 0, level, bypas));
+                "instruction.roundabout.passive", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 1, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.gold_experience_placeholder",
+                "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 1, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.gold_experience_placeholder",
                 "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 2, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.dodge",
-                "instruction.roundabout.press_skill", StandIcons.DODGE, 3, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.gold_experience_placeholder",
+                "instruction.roundabout.passive", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 2, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.gold_experience_placeholder",
+                "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 2, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, 0, "ability.roundabout.dodge",
+                "instruction.roundabout.press_skill", StandIcons.DODGE, 3, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 99, 0, "ability.roundabout.gold_experience_life_punch",
+                "instruction.roundabout.press_skill_crouch", StandIcons.GOLD_EXPERIENCE_LIFE_PUNCH, 3, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 118, 0, "ability.roundabout.gold_experience_placeholder",
+                "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 3, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 80, 0, "ability.roundabout.gold_experience_placeholder",
+                "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 4, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 99, 0, "ability.roundabout.gold_experience_placeholder",
+                "instruction.roundabout.passive", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 4, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 118, 0, "ability.roundabout.gold_experience_placeholder",
                 "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 4, level, bypas));
         return $$1;
     }
 
-    // icons and abilities end
+    // stand icons and info screen end
 
-    //WIP tags, comment out when done
+    // WIP tags, comment out when done
 
     @Override
     public boolean isWip() {

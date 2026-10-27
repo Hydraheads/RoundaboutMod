@@ -263,6 +263,21 @@ public class AdvancedConfig implements Cloneable {
             )
     );
 
+    public Set<String> goldExperienceDropsAndRates = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:rabbit:minecraft:rabbit:120:adult",
+                    "minecraft:beef:minecraft:cow:2400:baby",
+                    "minecraft:egg:minecraft:chicken:1000:adult",
+                    "minecraft:feather:minecraft:parrot:800:adult",
+                    "minecraft:ink_sac:minecraft:squid:800:adult",
+                    "minecraft:glow_ink_sac:minecraft:glow_squid:800:adult",
+                    "minecraft:porkchop:minecraft:pig:2000:baby",
+                    "minecraft:mutton:minecraft:sheep:2400:baby",
+                    "minecraft:goat_horn:minecraft:goat:1800:baby",
+                    "minecraft:scute:minecraft:turtle:1800:baby"
+            )
+    );
+
     public Set<String> silverChariotBlocksToSlabs = new HashSet<>(
             Arrays.asList(
                     "minecraft:stone:minecraft:stone_slab",

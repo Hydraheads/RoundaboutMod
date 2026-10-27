@@ -27,7 +27,7 @@ public abstract class TuskRefreshedMixin {
 
     @Inject(method = "tick",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/effect/MobEffectInstance;tickDownDuration()I"))
     private void roundabout$tickRefreshed(LivingEntity $$0, Runnable $$1, CallbackInfoReturnable<Boolean> cir) {
-        if (this.effect.equals(ModEffects.SWITCH)) {
+        if (this.effect.equals(ModEffects.REFRESHED)) {
             StandUser SU = (StandUser) $$0;
             if (SU.roundabout$getStandPowers() instanceof PowersTusk PT && PT.getUsedNails() > 0) {
                 final int bonus = 14;

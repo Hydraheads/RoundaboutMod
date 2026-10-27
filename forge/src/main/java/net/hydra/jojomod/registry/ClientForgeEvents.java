@@ -241,6 +241,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.BOMB_PLANTED_ITEM.get(), BombPlantedItemEntityRenderer::new);
         event.registerEntityRenderer(ForgeEntities.KING_CRIMSON_CLONE.get(), KingCrimsonCloneRenderer::new);
         event.registerEntityRenderer(ForgeEntities.D4C_CLONE.get(), D4CCloneRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.LIFE_PUNCH_CLONE.get(), LifePunchCloneRenderer::new);
         event.registerEntityRenderer(ForgeEntities.KING_CRIMSON_PROJECTION.get(), HologramCloneRenderer::new);
         event.registerEntityRenderer(ForgeEntities.MODIFIED_NPC.get(), PlayerModifiedRenderer::new);
         event.registerEntityRenderer(ForgeEntities.FALLEN_ZOMBIE.get(), FallenZombieRenderer::new);

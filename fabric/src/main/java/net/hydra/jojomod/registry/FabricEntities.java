@@ -260,6 +260,13 @@ public class FabricEntities {
                     EntityType.Builder.of(D4CCloneEntity::new, MobCategory.MISC).
                             sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":d4c_clone")
             );
+    public static final EntityType<LifePunchCloneEntity> LIFE_PUNCH_CLONE =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "life_punch_clone"),
+                    EntityType.Builder.of(LifePunchCloneEntity::new, MobCategory.MISC).
+                            sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":life_punch_clone")
+            );
     public static final EntityType<KingCrimsonProjectionEntity> KING_CRIMSON_PROJECTION =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
@@ -1488,6 +1495,7 @@ public class FabricEntities {
         ModEntities.FALLING_BANNER = FALLING_BANNER;
                 ModEntities.KING_CRIMSON_CLONE = KING_CRIMSON_CLONE;
                 ModEntities.D4C_CLONE = D4C_CLONE;
+        ModEntities.LIFE_PUNCH_CLONE = LIFE_PUNCH_CLONE;
                 ModEntities.KING_CRIMSON_PROJECTION = KING_CRIMSON_PROJECTION;
 
                 ModEntities.VAN_GOUGH_PAINTING = VAN_GOUGH_PAINTING;
@@ -1527,6 +1535,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(FOG_CLONE, PlayerAlexNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(KING_CRIMSON_CLONE, KingCrimsonCloneEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(D4C_CLONE, D4CCloneEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(LIFE_PUNCH_CLONE, LifePunchCloneEntity.createAttributes());
                 FabricDefaultAttributeRegistry.register(KING_CRIMSON_PROJECTION, KingCrimsonProjectionEntity.createAttributes());
 
                 FabricDefaultAttributeRegistry.register(FALLEN_ZOMBIE, FallenZombie.createAttributes());

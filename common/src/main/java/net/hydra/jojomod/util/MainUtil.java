@@ -245,6 +245,10 @@ public class MainUtil {
     public static final Map<Block, Block> PURPLE_HAZE_DECAY_BLOCKS = new HashMap<>();
     public static final Map<Block, Float> PURPLE_HAZE_DECAY_RATE = new HashMap<>();
 
+    public static final Map<Item, EntityType> GOLD_EXPERIENCE_DNA_DROPS = new HashMap<>();
+    public static final Map<Item, Float> GOLD_EXPERIENCE_TRANSFORM_RATE = new HashMap<>();
+    public static final Map<Item, Boolean> GOLD_EXPERIENCE_IS_BABY = new HashMap<>();
+
     public static final Map<Item, List<MobEffect>> foodCuresThat = new HashMap<>();
     public static final Map<Item, List<MobEffect>> foodAddsThat = new HashMap<>();
     public static final Map<Item, List<String>> specialFoodRemoves = new HashMap<>();
