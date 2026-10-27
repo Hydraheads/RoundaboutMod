@@ -88,6 +88,7 @@
   "item.roundabout.sacrificial_dagger": "Sacrificial Dagger",
   "item.roundabout.cherries": "Cherries",
   "item.roundabout.hairspray": "Hairspritz",
+  "item.roundabout.totem_of_doom": "Jewel o' Death",
   "item.roundabout.occult_charge": "Davy Jones eye",
   "item.roundabout.iron_ball_crossbow": "Steel Ball Crossbow",
 
@@ -150,11 +151,12 @@
   "item.roundabout.hey_ya_disc.desc": "Yo Ho Ho!",
   "item.roundabout.manhattan_transfer_disc": "Stand Disc",
   "item.roundabout.manhattan_transfer_disc.desc": "Downtown Transfer",
+  "item.roundabout.king_crimson_disc.desc": "Emperor Crimson",
   "item.roundabout.mandom_disc.desc": "Mando",
   "item.roundabout.walking_heart_disc.desc": "Walkin' corazon",
   "item.roundabout.white_album_disc.desc": "White Ice",
-  "item.roundabout.diver_down_disc.desc": "Diver Down",
-  "item.roundabout.max_diver_down_disc.desc": "Diver Down",
+  "item.roundabout.diver_down_disc.desc": "Diver Drive",
+  "item.roundabout.max_diver_down_disc.desc": "Diver Drive",
   "item.roundabout.none_disc.desc": "None",
 
   "item.roundabout.ocelot_remains": "Lynx Remains",
@@ -336,8 +338,10 @@
   "entity.roundabout.soft_and_wet_drowned": "Soft And Wet",
   "entity.roundabout.soft_and_wet_killer_queen": "Deadly Queen",
   "entity.roundabout.killer_queen": "Deadly Queen",
+  "entity.roundabout.king_crimson": "Emperor Crimson",
   "entity.roundabout.walking_heart": "Walkin' corazon",
-  "entity.roundabout.diver_down": "Diver Down",
+  "entity.roundabout.manhattan_transfer": "Downtown Transfer",
+  "entity.roundabout.diver_down": "Diver Drive",
   "entity.roundabout.green_day": "Green Day",
   "entity.roundabout.harpoon": "Harpoon",
   "entity.roundabout.match": "piece o' flames",
@@ -1200,6 +1204,9 @@
   "ability.roundabout.fog_pilot": "Justice Control",
   "ability.roundabout.fog_pilot.desc": "Switch to the perspective of Justice, and fly around the foggy sky. On top of surveying the area, you can command corpses from above to move around (use key) and attack (attack key) your targets, after highlighting the target you are mousing over (attack key). Interact with creeper corpses you control to blow them up. If you give a zombie corpse an item by sneaking and interacting, they can use tools to mine and place blocks they are holding with the attack key in this mode. Press again to return to your body.",
 
+  "ability.roundabout.blood_splash": "Tomato sauce special",
+  "ability.roundabout.blood_splash.desc": "You cause yourself to bleed and launch the blood at great force. This skill damages opponents and temporarily blinds players. If used during time erase, it will be stored on the target. When time erase is resumed, the target will not take damage, but be confused/blinded for longer. Builds up bleed on yourself you're already bleeding, but time skip counteracts this. If you have bleed II or higher, your bleed time will not increase.",
+
   "ability.roundabout.red_lash": "Fire Strike",
   "ability.roundabout.red_lash.desc": "Uses Red Bind's flame rope offensively to lash opponents, has increased reach! Hold it down for a 3 hit-combo!",
   "ability.roundabout.flame_kick": "Flame Kick / Flame Punch",
@@ -1354,7 +1361,7 @@
   "ability.roundabout.ratt_leap.desc": "Launches Rats in a direction, allowing you to quickly reposition them",
 
   "ability.roundabout.anubis_attack": "Slash",
-  "ability.roundabout.anubis_attack.desc": "Swing ghosty dog, dealing a sweeping attack. Goes through walls",
+  "ability.roundabout.anubis_attack.desc": "Swing ghosty doggy, dealing a sweeping attack. Goes through walls",
   "ability.roundabout.anubis_sneak_attack": "Crouching Slash",
   "ability.roundabout.anubis_sneak_attack.desc": "Swipe lower, dealing more knockback and sending further. Different combinations of your first and second attack will result in a different third attack ",
   "ability.roundabout.anubis_pogo": "Diving Slash",
@@ -1382,9 +1389,9 @@
   "ability.roundabout.anubis_mouse": "Mouse Mode",
   "ability.roundabout.anubis_mouse.desc": "Using this while hovering on a memory slot will allow it to remember your mouse motions.",
   "ability.roundabout.anubis_exp": "Knowledge Accumulation",
-  "ability.roundabout.anubis_exp.desc": "Due to ghosty dog' learning ability, you passively gain up to 50% more exp, even while ghosty dog is inactive",
+  "ability.roundabout.anubis_exp.desc": "Due to ghosty doggy' learning ability, you passively gain up to 50% more exp, even while ghosty doggy is inactive",
   "ability.roundabout.anubis_speed": "Extreme Speed",
-  "ability.roundabout.anubis_speed.desc": "ghosty dog grants incredible athletic ability, allowing you to move much faster and jump higher than before",
+  "ability.roundabout.anubis_speed.desc": "ghosty doggy grants incredible athletic ability, allowing you to move much faster and jump higher than before",
 
 
   "ability.roundabout.blood_drink": "Blood Suck",
