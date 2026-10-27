@@ -3625,6 +3625,22 @@ public class PowersKillerQueen extends NewPunchingStand {
     	return true;
     }
 
+    public void transferItem2BlockBom(BlockPos pos) {
+        this.currentBombStatus = BOMB_BLOCK;
+
+        this.syncBombStatus(BOMB_BLOCK);
+        this.bombBlock = ModEntities.getBlockBomb().create(this.getSelf().level());
+        this.bombBlock.setUser(this.self);
+        this.bombBlock.setOnContact(isContactModeEnabled());
+        PowerTypes.copyPlaneOfExisting(self, bombBlock);
+
+        this.bombBlock.setBlockPos(pos);
+        this.self.level().addFreshEntity(this.bombBlock);
+
+
+        this.bombPlantedItem = null;
+    }
+
     public boolean mobPlantBomb() {
         if (currentBombStatus != BOMB_NONE) { return false; }
 
@@ -4388,9 +4404,10 @@ public class PowersKillerQueen extends NewPunchingStand {
                 LivingEntity.class, wallBox)) {
 
             if (entity.equals(this.self) || entity.equals(bomb)
-                    || entity instanceof StandEntity || !entity.isAlive() || entity.isDeadOrDying()
+                    || (entity instanceof StandEntity) || !entity.isAlive() || entity.isDeadOrDying()
                     || PowerTypes.isInADifferentExistence(entity, bomb)
-                    || entity.isAlliedTo(self) || (entity instanceof TamableAnimal TA && TA.getOwner() == self)
+                    || entity.isAlliedTo(self) || (((entity instanceof TamableAnimal TA) && (TA.getOwner() == self))
+            )
             ) {
                 continue;
             }

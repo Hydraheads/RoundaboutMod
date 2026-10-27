@@ -170,7 +170,9 @@ public class PurpleHazeEntity extends FollowingStandEntity{
                 this.fallinghitlong.stop();
             }
             if (this.getAnimation() == FALLINGHITIMPACT) {
-                this.fallinghitimpact.startIfStopped(this.tickCount);
+                if (!this.fallinghitimpact.isStarted()) {
+                    this.fallinghitimpact.start(this.tickCount - 5);
+                }
             } else {
                 this.fallinghitimpact.stop();
             }
