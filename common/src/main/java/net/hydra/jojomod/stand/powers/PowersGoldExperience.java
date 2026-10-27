@@ -18,12 +18,20 @@ import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.BlockGrabPreset;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BoneMealItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 
 import java.util.List;
 import java.util.Objects;
@@ -164,6 +172,53 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 } else {
                     knockShield2(entity, 100);
                 }
+                SoundEvent sound = entity != null ? ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_EVENT : ModSounds.PUNCH_2_SOUND_EVENT;
+                if (!this.self.level().isClientSide()) {
+                    playSoundIfPossible(self.level(), null, this.self.blockPosition(), sound, SoundSource.PLAYERS, 0.95F, 1.1F);
+                }
+            } else {
+                BlockHitResult blockHit = this.getRayBlockHit(this.self, range);
+
+                if (blockHit.getType() == HitResult.Type.BLOCK) {
+                    BlockPos centerPos = blockHit.getBlockPos();
+
+                    if (!this.self.level().isClientSide) {
+                        BlockState centerState = this.self.level().getBlockState(centerPos);
+                        ItemStack boneMeal = new ItemStack(Items.BONE_MEAL);
+
+                        // if the punch was on grass, it should only apply once because vanilla bonemeal is already super big
+                        if (centerState.is(Blocks.GRASS_BLOCK)) {
+                            if (BoneMealItem.growCrop(boneMeal, this.self.level(), centerPos)) {
+                                this.self.level().levelEvent(1505, centerPos, 0);
+                            }
+                        } else {
+                            // anything else gets the radius, outside of grass blocks
+                            int radius = 3;
+                            for (int x = -radius; x <= radius; x++) {
+                                for (int y = -2; y <= 2; y++) {
+                                    for (int z = -radius; z <= radius; z++) {
+                                        BlockPos targetPos = centerPos.offset(x, y, z);
+                                        BlockState targetState = this.self.level().getBlockState(targetPos);
+
+                                        //ignore grass because it spawns a LOT of grass if it goes on them lol
+                                        if (targetState.is(Blocks.GRASS_BLOCK)) {
+                                            continue;
+                                        }
+
+                                        if (BoneMealItem.growCrop(boneMeal, this.self.level(), targetPos) ||
+                                                BoneMealItem.growWaterPlant(boneMeal, this.self.level(), targetPos, null)) {
+
+                                            this.self.level().levelEvent(1505, targetPos, 0);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if (!this.self.level().isClientSide()) {
+                    playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.95F, 1F);
+                }
             }
 
             int cooldownTicks = 100;
@@ -171,11 +226,6 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 net.hydra.jojomod.util.S2CPacketUtil.sendCooldownSyncPacket((net.minecraft.server.level.ServerPlayer) serverPlayer, LIFE_PUNCH, cooldownTicks);
             }
             this.setCooldown(LIFE_PUNCH, cooldownTicks);
-
-            SoundEvent sound = entity != null ? ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_EVENT : ModSounds.PUNCH_2_SOUND_EVENT;
-            if (!this.self.level().isClientSide()) {
-                playSoundIfPossible(self.level(), null, this.self.blockPosition(), sound, SoundSource.PLAYERS, 0.95F, 1.2F);
-            }
         }
     }
 
