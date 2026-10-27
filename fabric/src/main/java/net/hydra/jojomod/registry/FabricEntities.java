@@ -274,6 +274,13 @@ public class FabricEntities {
                     EntityType.Builder.of(KingCrimsonProjectionEntity::new, MobCategory.MISC).
                             sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":king_crimson_projection")
             );
+    public static final EntityType<DNACreationEntity> DNA_CREATION_SPAWNER =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "dna_creation_spawner"),
+                    EntityType.Builder.of(DNACreationEntity::new, MobCategory.MISC).
+                            sized(0.7f, 0.7f).clientTrackingRange(10).build(Roundabout.MOD_ID+":dna_creation_spawner")
+            );
         public static final EntityType<FallenZombie> FALLEN_ZOMBIE =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -1505,6 +1512,8 @@ public class FabricEntities {
                 ModEntities.METALLICA_KNIFE = METALLICA_KNIFE;
                 ModEntities.SHEER_HEART_ATTACK = SHEER_HEART_ATTACK;
 
+        ModEntities.DNA_CREATION_SPAWNER = DNA_CREATION_SPAWNER;
+
                 /*Attributes*/
                 FabricDefaultAttributeRegistry.register(TERRIER_DOG, Wolf.createAttributes());
                 FabricDefaultAttributeRegistry.register(STRAY_CAT, StrayCatEntity.createAttributes());
@@ -1537,6 +1546,7 @@ public class FabricEntities {
         FabricDefaultAttributeRegistry.register(D4C_CLONE, D4CCloneEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(LIFE_PUNCH_CLONE, LifePunchCloneEntity.createAttributes());
                 FabricDefaultAttributeRegistry.register(KING_CRIMSON_PROJECTION, KingCrimsonProjectionEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(DNA_CREATION_SPAWNER, DNACreationEntity.createAttributes());
 
                 FabricDefaultAttributeRegistry.register(FALLEN_ZOMBIE, FallenZombie.createAttributes());
                 FabricDefaultAttributeRegistry.register(FALLEN_SKELETON, FallenSkeleton.createAttributes());

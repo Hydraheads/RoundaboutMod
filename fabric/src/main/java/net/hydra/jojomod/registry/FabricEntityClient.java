@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.BombPlantedItemEntityRenderer;
+import net.hydra.jojomod.client.DNACreationRenderer;
 import net.hydra.jojomod.client.FakeItemEntityRenderer;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.models.*;
@@ -212,6 +213,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.D4C_CLONE, D4CCloneRenderer::new);
         EntityRendererRegistry.register(FabricEntities.LIFE_PUNCH_CLONE, LifePunchCloneRenderer::new);
         EntityRendererRegistry.register(FabricEntities.KING_CRIMSON_PROJECTION, HologramCloneRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.DNA_CREATION_SPAWNER, DNACreationRenderer::new);
         EntityRendererRegistry.register(FabricEntities.FALLEN_ZOMBIE, FallenZombieRenderer::new);
         EntityRendererRegistry.register(FabricEntities.FALLEN_SKELETON, FallenSkeletonRenderer::new);
         EntityRendererRegistry.register(FabricEntities.FALLEN_SPIDER, FallenSpiderRenderer::new);

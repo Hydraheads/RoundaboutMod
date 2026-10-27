@@ -149,6 +149,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.D4C_CLONE.get(), D4CCloneEntity.createAttributes().build());
         event.put(ForgeEntities.LIFE_PUNCH_CLONE.get(), LifePunchCloneEntity.createAttributes().build());
         event.put(ForgeEntities.KING_CRIMSON_PROJECTION.get(), KingCrimsonProjectionEntity.createAttributes().build());
+        event.put(ForgeEntities.DNA_CREATION_SPAWNER.get(), DNACreationEntity.createAttributes().build());
         event.put(ForgeEntities.FALLEN_ZOMBIE.get(), FallenZombie.createAttributes().build());
         event.put(ForgeEntities.FALLEN_SKELETON.get(), FallenSkeleton.createAttributes().build());
         event.put(ForgeEntities.FALLEN_SPIDER.get(), FallenSpider.createAttributes().build());
@@ -1014,6 +1015,7 @@ public class ForgeEvents {
         ModEntities.D4C_CLONE = ForgeEntities.D4C_CLONE.get();
         ModEntities.LIFE_PUNCH_CLONE = ForgeEntities.LIFE_PUNCH_CLONE.get();
         ModEntities.KING_CRIMSON_PROJECTION = ForgeEntities.KING_CRIMSON_PROJECTION.get();
+        ModEntities.DNA_CREATION_SPAWNER = ForgeEntities.DNA_CREATION_SPAWNER.get();
 
         ForgeItems.assignStupidForge();
         ConfigManager.loadBlacklists2();
