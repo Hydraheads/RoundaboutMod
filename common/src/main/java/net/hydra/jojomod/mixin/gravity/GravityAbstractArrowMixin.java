@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
-@Mixin(AbstractArrow.class)
+@Mixin(value = AbstractArrow.class, priority = 103)
 public abstract class GravityAbstractArrowMixin extends Entity implements TraceableEntity {
     public GravityAbstractArrowMixin(EntityType<?> type, Level world) {
         super(type, world);
