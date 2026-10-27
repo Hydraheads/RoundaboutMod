@@ -1130,6 +1130,8 @@ public class StandIcons {
             "textures/gui/icons/gold_experience/placeholder.png");
     public static final ResourceLocation GOLD_EXPERIENCE_LIFE_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/gold_experience/life_punch.png");
+    public static final ResourceLocation GOLD_EXPERIENCE_DNA_CREATION = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/gold_experience/dna_creation.png");
 
     // gold experience icons end
 

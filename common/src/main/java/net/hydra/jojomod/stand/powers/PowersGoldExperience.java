@@ -18,6 +18,7 @@ import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.BlockGrabPreset;
+import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
@@ -31,13 +32,12 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BoneMealItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
@@ -54,7 +54,8 @@ import java.util.*;
 public class PowersGoldExperience extends BlockGrabPreset {
     // move bytes
     private static final byte
-        LIFE_PUNCH = 53;
+        LIFE_PUNCH = 53,
+        DNA_CREATE = 54;
 
     // for life punch
     private LifePunchCloneEntity lifePunchClone = null;
@@ -157,6 +158,13 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public void powerActivate(PowerContext context) {
         switch (context) {
+            case SKILL_1_NORMAL -> {
+                if(canDNACreate()) {
+                    tryDNACreate();
+                } else {
+                    //insert life wheel here
+                }
+            }
             // life punch
             case SKILL_3_CROUCH -> {
                 tryLifePunch();
@@ -167,7 +175,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public boolean setPowerOther(int move, int lastMove) {
         if (move == LIFE_PUNCH) {
-            return this.startLifePunch();
+            return startLifePunch();
+        } else if (move == DNA_CREATE) {
+            return executeDNACreate();
         }
         return super.setPowerOther(move, lastMove);
     }
@@ -186,6 +196,58 @@ public class PowersGoldExperience extends BlockGrabPreset {
             lifePunchImpact(target);
         }
     }
+
+    // DNA creation start
+
+    private boolean executeDNACreate() {
+        if (this.self.level().isClientSide()) return false;
+        ItemStack heldItem = this.self.getMainHandItem();
+        if (heldItem.isEmpty()) return false;
+        Item dnaItem = heldItem.getItem();
+        if (!MainUtil.GOLD_EXPERIENCE_DNA_DROPS.containsKey(dnaItem)) return false;
+
+        // Spawn the mob
+        EntityType<?> entityType = MainUtil.GOLD_EXPERIENCE_DNA_DROPS.get(dnaItem);
+        Entity entity = entityType.create((ServerLevel) this.self.level());
+
+        if (entity instanceof Mob mob) {
+            Vec3 spawnPos = this.self.position().add(this.self.getForward().scale(1.5));
+            mob.moveTo(spawnPos.x, spawnPos.y, spawnPos.z, this.self.level().random.nextFloat() * 360.0F, 0.0F);
+            boolean shouldBeBaby = MainUtil.GOLD_EXPERIENCE_IS_BABY.getOrDefault(dnaItem, false);
+            if (mob instanceof Animal animal && shouldBeBaby) {
+                animal.setBaby(true);
+            }
+
+            //this.self.level().addFreshEntity(mob);
+            //heldItem.shrink(1);
+            if (this.self instanceof net.minecraft.world.entity.player.Player player) {
+                player.sendSystemMessage(Component.literal("HOly MOLY!! you're holding a: " + dnaItem.toString()));
+                player.sendSystemMessage(Component.literal("great googly moogly!!! yo're making a: " + entityType.getDescription().getString()));
+            }
+
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                    ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.85F, 1F);
+            return true;
+        }
+
+        return false;
+    }
+
+    private void tryDNACreate() {
+        ((StandUser) this.getSelf()).roundabout$tryPower(DNA_CREATE, true);
+        tryPowerPacket(DNA_CREATE);
+    }
+
+    //checks to see if the player is holding a valid item
+    private boolean canDNACreate() {
+        ItemStack heldItem = this.self.getMainHandItem();
+        if (!heldItem.isEmpty() && MainUtil.GOLD_EXPERIENCE_DNA_DROPS.containsKey(heldItem.getItem())) {
+            return true;
+        }
+        return false;
+    }
+
+    // DNA creation end
 
     // life punch start
 
@@ -603,8 +665,14 @@ public class PowersGoldExperience extends BlockGrabPreset {
      */
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        setSkillIcon(context, x, y, 1, StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, PowerIndex.SKILL_1);
+        // Ability 1 (Z)
+        if (canDNACreate()) {
+            setSkillIcon(context, x, y, 1, StandIcons.GOLD_EXPERIENCE_DNA_CREATION, PowerIndex.SKILL_1);
+        } else {
+            setSkillIcon(context, x, y, 1, StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, PowerIndex.SKILL_1);
+        }
         setSkillIcon(context, x, y, 2, StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, PowerIndex.SKILL_2);
+        // Ability 3 (C)
         if (isGuarding()){
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         } else if (isHoldingSneak()) {
