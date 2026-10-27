@@ -49,6 +49,7 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Snowball;
 import net.minecraft.world.item.ItemStack;
@@ -912,7 +913,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             S2CPacketUtil.syncPurpleHazePods(player, (byte) pods);
         }
     }
-    //summon minecraft:zombie ~ ~ ~ {roundabout.StandDisc:{id:"roundabout:max_purple_haze_disc",tag:{Memory:{Pose:0b,Skin:1b}},Count:1b}}
+    //summon minecraft:husk ~ ~ ~ {roundabout.StandDisc:{id:"roundabout:max_purple_haze_disc",tag:{Memory:{Pose:0b,Skin:1b}},Count:1b}}
     private void tickPodReset() {
         if (self == null || self.level().isClientSide() || !(self instanceof Player)) {
             return;
@@ -1104,7 +1105,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     private int strangleHoldTicks = 0;
 
     public void attemptStrangle() {
-        if (canExecuteMoveWithLevel(2) && activePower == NONE) {
+        if ((!(self instanceof Player) || canExecuteMoveWithLevel(2)) && activePower == NONE) {
             Strangle();
         }
     }
@@ -1270,13 +1271,10 @@ public class PowersPurpleHaze extends NewPunchingStand {
         this.strangleHoldTicks = STRANGLE_HOLD_DURATION;
         this.strangleBaseY = victim.getY();
         this.strangleGrabTicks = 0;
-        this.strangleVictimHadNoGravity = victim.isNoGravity();
-        victim.setNoGravity(true);
 
         if (victim instanceof StandUser SU) {
-            SU.roundabout$setRestrainedTicks(STRANGLE_HOLD_DURATION);
+            SU.roundabout$setRestrainedTicks(20);
         }
-
 
         stand.setPos(getStrangleStandPos(victim));
         animateStand(PurpleHazeEntity.STRANGLE_GRAB);
@@ -1335,7 +1333,6 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
     private void endStrangle() {
         if (strangleVictim != null) {
-            strangleVictim.setNoGravity(strangleVictimHadNoGravity);
             if (strangleVictim instanceof Mob mob) {
                 mob.setNoAi(false);
             }
@@ -1584,7 +1581,31 @@ public class PowersPurpleHaze extends NewPunchingStand {
             activatePurpleHazeField(loser.position(), indistortionmode);
         }
     }
-
+    @Override
+    public void tickMobAI(LivingEntity attackTarget) {
+        if (tickGenericFallBraceAI()) {
+            return;
+        }
+        if (attackTarget != null && attackTarget.isAlive() && !this.isDazed(this.getSelf())) {
+            boolean isCreeper = this.getSelf() instanceof Creeper;
+            if (isCreeper) {
+                double dist = attackTarget.distanceTo(this.getSelf());
+                if (!isStrangling()
+                        && this.getActivePower() == PowerIndex.NONE
+                        && !onCooldown(PowerIndex.SKILL_2)
+                        && dist <= 10
+                        && this.getSelf().hasLineOfSight(attackTarget)) {
+                    float yrot = getLookAtEntityYaw(this.getSelf(), attackTarget);
+                    this.getSelf().setXRot(getLookAtEntityPitch(this.getSelf(), attackTarget));
+                    this.getSelf().setYRot(yrot);
+                    this.getSelf().setYHeadRot(yrot);
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
+                }
+            } else {
+                super.tickMobAI(attackTarget);
+            }
+        }
+    }
     @Override
     public void tickPower() {
         if (purpleHazeFieldGone) {
@@ -1593,7 +1614,11 @@ public class PowersPurpleHaze extends NewPunchingStand {
         if (self == null) {
             return;
         }
-
+        if (!self.level().isClientSide()
+                && isStrangling()
+                && this.getActivePower() != PowerIndex.POWER_2) {
+            endStrangle();
+        }
         super.tickPower();
         if (this.forwardBarrage && !(this.isBarraging() || activePower == PowerIndex.BARRAGE_CHARGE_2 || activePower == PowerIndex.BARRAGE_2)){
             this.forwardBarrage = false;
