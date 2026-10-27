@@ -2246,6 +2246,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (this.roundabout$hasDiverLegs()) {
             TOT += 2; // same jump boost that vamp has
         }
+        // life punch jump height
+        if (PowerTypes.getPlaneOfExisting(rdbt$this()) == 12) {
+            TOT += 2;
+        }
         return TOT;
     }
 
@@ -4176,6 +4180,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             return;
         }
 
+        // soul punch soul damage immunity
+        if (PowerTypes.getPlaneOfExisting(rdbt$this()) == 12 && !$$0.is(DamageTypes.GENERIC_KILL)) {
+            ci.setReturnValue(false);
+            return;
+        }
+
         // Coprse damage is converted and multiplied for Justice Army
         if ($$0.is(DamageTypes.ARROW) && $$0.getEntity() instanceof FallenMob FM) {
             if (!(((LivingEntity) (Object) this) instanceof Player) && FM.getController() == this.getId()) {
@@ -4840,7 +4850,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "isPushable", at = @At(value = "HEAD"), cancellable = true, require = 0)
     protected void roundabout$isPushable(CallbackInfoReturnable<Boolean> cir) {
-        if (PowerTypes.isErasingTime(this)) {
+        if (PowerTypes.isErasingTime(this) || PowerTypes.getPlaneOfExisting(this) == 12) {
             cir.setReturnValue(false);
             return;
         }
@@ -4848,7 +4858,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "canBeSeenAsEnemy", at = @At(value = "HEAD"), cancellable = true, require = 0)
     protected void roundabout$canBeSeenAsEnemy(CallbackInfoReturnable<Boolean> cir) {
-        if (PowerTypes.isErasingTime(this)) {
+        if (PowerTypes.isErasingTime(this) || PowerTypes.getPlaneOfExisting(this) == 12) {
             cir.setReturnValue(false);
             return;
         }
@@ -4856,7 +4866,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "canBeSeenByAnyone", at = @At(value = "HEAD"), cancellable = true, require = 0)
     protected void roundabout$canBeSeenByAnyone(CallbackInfoReturnable<Boolean> cir) {
-        if (PowerTypes.isErasingTime(this)) {
+        if (PowerTypes.isErasingTime(this) || PowerTypes.getPlaneOfExisting(this) == 12) {
             cir.setReturnValue(false);
             return;
         }
@@ -4864,7 +4874,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "pushEntities", at = @At(value = "HEAD"), cancellable = true, require = 0)
     protected void roundabout$pushEntities(CallbackInfo ci) {
-        if (PowerTypes.isErasingTime(this)) {
+        if (PowerTypes.isErasingTime(this) || PowerTypes.getPlaneOfExisting(this) == 12) {
             ci.cancel();
             return;
         }
@@ -5078,6 +5088,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         if(this.roundabout$getGrabbedSoul()){
             basis *= 0.025F;
+        }
+        if(PowerTypes.getPlaneOfExisting(rdbt$this()) == 12) {
+            basis *= 1.6;
         }
         return basis;
     }

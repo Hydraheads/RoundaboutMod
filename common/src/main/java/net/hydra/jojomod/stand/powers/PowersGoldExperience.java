@@ -14,6 +14,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.BlockGrabPreset;
@@ -22,6 +23,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -44,6 +46,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.zetalasis.networking.message.api.ModMessageEvents;
+import org.joml.Vector3f;
 
 import java.util.*;
 
@@ -107,6 +111,12 @@ public class PowersGoldExperience extends BlockGrabPreset {
                     lifePunchTimer--;
                     if (lifePunchTimer <= 0) {
                         // restore the victim
+                        Vector3f blipVec = new Vector3f(
+                                (float) lifePunchClone.getX(),
+                                (float) lifePunchClone.getY(),
+                                (float) lifePunchClone.getZ()
+                        );
+                        packetNearby(blipVec, lifePunchVictim.getId());
                         lifePunchVictim.teleportTo(lifePunchClone.getX(), lifePunchClone.getY(), lifePunchClone.getZ());
                         lifePunchVictim.setYRot(lifePunchClone.getYRot());
                         lifePunchVictim.setXRot(lifePunchClone.getXRot());
@@ -456,6 +466,26 @@ public class PowersGoldExperience extends BlockGrabPreset {
         lifePunchClone = null;
         lifePunchTimer = 0;
         lastKnownHealth = 0;
+    }
+
+    // no lerp when teleporting
+    public final void packetNearby(Vector3f blip, int entId) {
+        if (!this.self.level().isClientSide) {
+            ServerLevel serverWorld = ((ServerLevel) this.self.level());
+            Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
+
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.blockPosition();
+                if (blockPos.closerToCenterThan(userLocation, 100)) {
+                    S2CPacketUtil.sendBlipPacket(serverPlayerEntity, (byte) 2, entId,blip);
+                }
+            }
+        }
     }
 
     // life punch end

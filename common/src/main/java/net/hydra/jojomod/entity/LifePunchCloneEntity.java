@@ -19,9 +19,9 @@ public class LifePunchCloneEntity extends CloneEntity {
     @Override
     protected void registerGoals() {
         // just look around and walk randomly
-        this.goalSelector.addGoal(1, new WaterAvoidingRandomStrollGoal(this, 0.15D));
-        this.goalSelector.addGoal(1, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(2, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(1, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.0F));
+        this.goalSelector.addGoal(2, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class, 8.0F));
     }
 
     public static AttributeSupplier.Builder createAttributes() {
