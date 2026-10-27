@@ -163,7 +163,7 @@ public class PurpleHazeModel<T extends PurpleHazeEntity> extends StandModel<T> {
         this.animate(pEntity.kick_barrage, StandAnimations.KICK_BARRAGE, pAgeInTicks, 1.25f);
         this.animate(pEntity.kick_barrage_windup, StandAnimations.KICK_BARRAGE_CHARGE, pAgeInTicks, 1f);
         this.animate(pEntity.kick_barrage_end, StandAnimations.KICK_BARRAGE_END, pAgeInTicks, 1f);
-        this.animate(pEntity.strangle_windup, PurpleHazeAnimations.STRANGLE_WINDUP, pAgeInTicks, 1f);
+        this.animate(pEntity.strangle_windup, PurpleHazeAnimations.STRANGLE_WINDUP, pAgeInTicks, 3f);
         this.animate(pEntity.flyloop, PurpleHazeAnimations.FLYLOOP, pAgeInTicks, 1f);
         this.animate(pEntity.strangle_hold, PurpleHazeAnimations.STRANGLE_HOLD, pAgeInTicks, 1f);
         this.animate(pEntity.strangle_grab, PurpleHazeAnimations.STRANGLE_GRAB, pAgeInTicks, 1f);
@@ -171,6 +171,10 @@ public class PurpleHazeModel<T extends PurpleHazeEntity> extends StandModel<T> {
         this.animate(pEntity.phcombo1, PurpleHazeAnimations.PHCOMBO1, pAgeInTicks, 1f);
         this.animate(pEntity.phcombo2, PurpleHazeAnimations.PHCOMBO2, pAgeInTicks, 1f);
         this.animate(pEntity.phcombo3, PurpleHazeAnimations.PHCOMBO3, pAgeInTicks, 1f);
+        this.animate(pEntity.fallinghitstart, PurpleHazeAnimations.FALLINGHITSTART, pAgeInTicks, 1f);
+        this.animate(pEntity.fallinghit, PurpleHazeAnimations.FALLINGHIT, pAgeInTicks, 1f);
+        this.animate(pEntity.fallinghitlong, PurpleHazeAnimations.FALLINGHITLONG, pAgeInTicks, 1f);
+        this.animate(pEntity.fallinghitimpact, PurpleHazeAnimations.FALLINGHITIMPACT, pAgeInTicks, 1f);
     }
     @Override
     public ModelPart root() {

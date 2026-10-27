@@ -6,7 +6,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.FancyLighterBlock;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -19,7 +18,6 @@ import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
 import net.hydra.jojomod.entity.projectile.StrayCatAirBubble;
-import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.substand.PurpleSmokeEntity;
@@ -74,7 +72,6 @@ import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.hoglin.Hoglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
@@ -92,9 +89,6 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
-import net.minecraft.world.level.block.TntBlock;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.*;
 import net.minecraft.nbt.CompoundTag;
 import org.joml.Matrix3f;
@@ -161,10 +155,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         BUBBLE_TARGET = 116,
         MINESWEEPER_EXPLOSION = 117,
         CREEPER_EXPLOSION = 118,
-        BASE_EXPLOSION_1 = 119,
-        BASE_EXPLOSION_2 = 120,
-        BASE_EXPLOSION_3 = 121,
-        BASE_EXPLOSION_4 = 122,
+        BASE_EXPLOSION = 119,
         BLOCK_PLANT = 123,
         MOB_PLANT = 124,
         MOB_PLANT_WINDUP = 125,
@@ -3634,6 +3625,22 @@ public class PowersKillerQueen extends NewPunchingStand {
     	return true;
     }
 
+    public void transferItem2BlockBom(BlockPos pos) {
+        this.currentBombStatus = BOMB_BLOCK;
+
+        this.syncBombStatus(BOMB_BLOCK);
+        this.bombBlock = ModEntities.getBlockBomb().create(this.getSelf().level());
+        this.bombBlock.setUser(this.self);
+        this.bombBlock.setOnContact(isContactModeEnabled());
+        PowerTypes.copyPlaneOfExisting(self, bombBlock);
+
+        this.bombBlock.setBlockPos(pos);
+        this.self.level().addFreshEntity(this.bombBlock);
+
+
+        this.bombPlantedItem = null;
+    }
+
     public boolean mobPlantBomb() {
         if (currentBombStatus != BOMB_NONE) { return false; }
 
@@ -4397,9 +4404,10 @@ public class PowersKillerQueen extends NewPunchingStand {
                 LivingEntity.class, wallBox)) {
 
             if (entity.equals(this.self) || entity.equals(bomb)
-                    || entity instanceof StandEntity || !entity.isAlive() || entity.isDeadOrDying()
+                    || (entity instanceof StandEntity) || !entity.isAlive() || entity.isDeadOrDying()
                     || PowerTypes.isInADifferentExistence(entity, bomb)
-                    || entity.isAlliedTo(self) || (entity instanceof TamableAnimal TA && TA.getOwner() == self)
+                    || entity.isAlliedTo(self) || (((entity instanceof TamableAnimal TA) && (TA.getOwner() == self))
+            )
             ) {
                 continue;
             }
@@ -4587,15 +4595,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         float rnd = (float) Math.random();
 
-        if (rnd <= 0.25)  {
-            return BASE_EXPLOSION_1;
-        }else if (rnd <= 0.5)  {
-            return BASE_EXPLOSION_2;
-        }else if (rnd <= 0.75)  {
-            return BASE_EXPLOSION_3;
-        }
-
-        return BASE_EXPLOSION_4;
+        return BASE_EXPLOSION;
     }
 
 
@@ -4622,14 +4622,8 @@ public class PowersKillerQueen extends NewPunchingStand {
             case CREEPER_EXPLOSION -> {
                 return SoundEvents.GENERIC_EXPLODE;
             }
-            case BASE_EXPLOSION_1 -> {
-                return ModSounds.KILLER_QUEEN_EXPLOSION_1_EVENT;
-            }
-            case BASE_EXPLOSION_2 -> {
-                return ModSounds.KILLER_QUEEN_EXPLOSION_2_EVENT;
-            }
-            case BASE_EXPLOSION_3 -> {
-                return ModSounds.KILLER_QUEEN_EXPLOSION_3_EVENT;
+            case BASE_EXPLOSION -> {
+                return ModSounds.KILLER_QUEEN_EXPLOSION_EVENT;
             }
         }
 
@@ -4642,16 +4636,6 @@ public class PowersKillerQueen extends NewPunchingStand {
             return ModSounds.KQ_MINESWEEPER_EXPLOSION_EVENT;
         }else if (skn == KillerQueenEntity.CREEPER) {
             return SoundEvents.GENERIC_EXPLODE;
-        }
-
-        float rnd = (float) Math.random();
-
-        if (rnd <= 0.25)  {
-            return ModSounds.KILLER_QUEEN_EXPLOSION_1_EVENT;
-        }else if (rnd <= 0.5)  {
-            return ModSounds.KILLER_QUEEN_EXPLOSION_2_EVENT;
-        }else if (rnd <= 0.75)  {
-            return ModSounds.KILLER_QUEEN_EXPLOSION_3_EVENT;
         }
 
         return ModSounds.KILLER_QUEEN_EXPLOSION_EVENT;
@@ -4691,7 +4675,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
         if (soundChoice == BUBBLE_TARGET) { return 0.3f; }
 
-        if (soundChoice >= MINESWEEPER_EXPLOSION && soundChoice <= BASE_EXPLOSION_4) {
+        if (soundChoice >= MINESWEEPER_EXPLOSION && soundChoice <= BASE_EXPLOSION) {
             return 0.2f + 0.3f * bombSize;
         }
 
@@ -4769,7 +4753,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             return ModSounds.JUSTICE_SELECT_EVENT;
         }else if (soundChoice == SUMMON_ARMS) {
             return ModSounds.SUMMON_SOUND_EVENT;
-        }else if (soundChoice >= MINESWEEPER_EXPLOSION && soundChoice <= BASE_EXPLOSION_4) {
+        }else if (soundChoice >= MINESWEEPER_EXPLOSION && soundChoice <= BASE_EXPLOSION) {
             return getExplosionSoundFromByte(soundChoice);
         }else if (soundChoice == MOB_PLANT) {
             if (samurai) {

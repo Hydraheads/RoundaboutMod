@@ -266,6 +266,8 @@ public class GoldExperienceModel <T extends GoldExperienceEntity> extends StandM
 
             poseStack.pushPose();
 
+            // we is currently making a glowy fist thing for this move specifically.
+            // eventually, i'll have to update the tree to account for that.
             this.stand.translateAndRotate(poseStack);
             this.stand2.translateAndRotate(poseStack);
             this.body.translateAndRotate(poseStack);

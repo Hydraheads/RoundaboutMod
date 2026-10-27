@@ -209,7 +209,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
     @Override
     public boolean canGuard(){
-        if (isStrangling()||isStranglePinning()){
+        if (isStrangling()||isStranglePinning()||activePower == PowerIndex.POWER_2){
             return false;
         }
         return super.canGuard();
@@ -999,7 +999,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             }
         }
     }
-    private static final int STRANGLE_WINDUP_TICKS=65;
+    private static final int STRANGLE_WINDUP_TICKS=22;
     private static final double STRANGLE_SPEED=1.4;
     private static final double STRANGLE_MAX_DISTANCE=16.0;
     private static final int STRANGLE_HOLD_DURATION= 80;
@@ -1035,6 +1035,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         this.setActivePower(PowerIndex.POWER_2);
         this.setAttackTimeDuring(0);
         this.strangleTicks = 0;
+        rotation = new Vec2((this.getSelf().getYHeadRot() % 360), this.getSelf().getXRot());
 
         animateStand(PurpleHazeEntity.STRANGLE_WINDUP);
         poseStand(OffsetIndex.LOOSE);
@@ -1101,7 +1102,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
     Vec2 rotation;
     private void launchStrangle(StandEntity stand) {
-        rotation = new Vec2((this.getSelf().getYHeadRot() % 360), this.getSelf().getXRot());
+
         Direction gdir = ((IGravityEntity) this.self).roundabout$getGravityDirection();
         Vec2 twoVecGrav = RotationUtil.rotPlayerToWorld(rotation, gdir);
 
@@ -1268,7 +1269,24 @@ public class PowersPurpleHaze extends NewPunchingStand {
         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
     }
 
+    private void tickFallingHitAnimation() {
+        if (fallingHitAnimTicks < 0 || self.level().isClientSide()) {
+            return;
+        }
 
+        if (this.getActivePower() != PowerIndex.EXTRA) {
+            fallingHitAnimTicks = -1;
+            return;
+        }
+
+        fallingHitAnimTicks++;
+
+        if (fallingHitAnimTicks == FALLING_HIT_START_TICKS) {
+            animateStand(PurpleHazeEntity.FALLINGHIT);
+        } else if (fallingHitAnimTicks == FALLING_HIT_START_TICKS + FALLING_HIT_TRANSITION_TICKS) {
+            animateStand(PurpleHazeEntity.FALLINGHITLONG);
+        }
+    }
     @Override
     public boolean canFallBrace() {
         return super.canFallBrace();
@@ -1296,7 +1314,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 }
                 activatePurpleHazeField(self.position(), indistortionmode);
             }
-
+            fallingHitAnimTicks = -1;
+            animateStand(PurpleHazeEntity.FALLINGHITIMPACT);
             playFallBraceShockwave();
 
             fallBraceOriginalDistance = 0;
@@ -1328,11 +1347,22 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
     }
     private double fallBraceOriginalDistance = 0;
+    private static final int FALLING_HIT_START_TICKS = 5;  //
+    private static final int FALLING_HIT_TRANSITION_TICKS = 40; //
+    private int fallingHitAnimTicks = -1;
 
     @Override
     public boolean fallBraceInit() {
         fallBraceOriginalDistance = this.getSelf().fallDistance;
-        return super.fallBraceInit();
+        boolean result = super.fallBraceInit();
+        if (result) {
+            poseStand(OffsetIndex.FOLLOW);
+            animateStand(PurpleHazeEntity.FALLINGHITSTART);
+            if (!this.getSelf().level().isClientSide()) {
+                fallingHitAnimTicks = 0;
+            }
+        }
+        return result;
     }
 
 
@@ -1446,22 +1476,26 @@ public class PowersPurpleHaze extends NewPunchingStand {
         activatePurpleHazeField(landingPosition, mode);
     }
 
+
     @Override
-    public void endClash(){
-        super.endClash();
-        if (self != null && self.isAlive()) {
-            /* I dunno how the crash pod should be, this method is called in either on tie or win
-            * So if you want the pod to release in only of those (which maybe be more safe since "endClash" is
-            * called in different context, like PowerType.forcePlaneOfExisting(...) and MainUtil.onDeath(...) )
-            * Just Override the breakClash(LivingEntity winner, LivingEntity loser)
-            * or TieClash(LivingEntity user1, LivingEntity user2)
-            * */
-            if (getPods() > 0) {
-                if (!(self instanceof Player pl && pl.isCreative())) {
-                    setPods(getPods() - 1);
-                }
-                activatePurpleHazeField(self.position(), indistortionmode);
+    public void TieClash(LivingEntity user1, LivingEntity user2) {
+        super.TieClash(user1, user2);
+        if (getPods() > 0) {
+            if (!(self instanceof Player pl && pl.isCreative())) {
+                setPods(getPods() - 1);
             }
+            activatePurpleHazeField(user2.position(), indistortionmode);
+        }
+    }
+
+    @Override
+    public void breakClash(LivingEntity winner, LivingEntity loser){
+        super.breakClash(winner, loser);
+        if (getPods() > 0) {
+            if (!(self instanceof Player pl && pl.isCreative())) {
+                setPods(getPods() - 1);
+            }
+            activatePurpleHazeField(loser.position(), indistortionmode);
         }
     }
 
@@ -1483,6 +1517,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             tickPodReset();
             tickPodRecharge();
             tickSecretSkinObtaining();
+            tickFallingHitAnimation();
 
             if (!podsSyncedOnJoin && self instanceof ServerPlayer sp) {
                 podsSyncedOnJoin = true;

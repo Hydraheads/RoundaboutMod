@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity;
 
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.block.StereoBlockEntity;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
@@ -25,7 +26,11 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.RecordItem;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.JukeboxBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 
@@ -122,13 +127,16 @@ public class BombPlantedItemEntity extends Entity implements TraceableEntity {
     }
 
     public void defuse() {
-        ItemEntity $$2 = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), getItem(), 0, 0, 0);
-        $$2.setDefaultPickUpDelay();
-        CompoundTag tag = new CompoundTag();
-        addAdditionalSaveData(tag);
-        $$2.readAdditionalSaveData(tag);
-        this.level().addFreshEntity($$2);
+        if (!getItem().isEmpty()) {
+            ItemEntity $$2 = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), getItem(), 0, 0, 0);
+            $$2.setDefaultPickUpDelay();
+            CompoundTag tag = new CompoundTag();
+            addAdditionalSaveData(tag);
+            $$2.readAdditionalSaveData(tag);
+            this.level().addFreshEntity($$2);
+        }
         discard();
+        setItem(ItemStack.EMPTY);
     }
 
     @Override
@@ -220,7 +228,36 @@ public class BombPlantedItemEntity extends Entity implements TraceableEntity {
                 this.move(MoverType.SELF, this.getDeltaMovement());
                 float $$2 = 0.98F;
                 if (this.onGround()) {
-                    $$2 = this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).getBlock().getFriction() * 0.98F;
+                    BlockPos pos = this.getBlockPosBelowThatAffectsMyMovement();
+                    BlockState state = this.level().getBlockState(pos);
+                    $$2 = state.getBlock().getFriction() * 0.98F;
+                    if (this.getItem().getItem() instanceof RecordItem && state.hasBlockEntity()) {
+                        BlockEntity BE = level().getBlockEntity(pos);
+
+                        if (BE instanceof JukeboxBlockEntity je && je.getFirstItem().isEmpty()) {
+                            je.setItem(0,this.getItem());
+                            if (host != null && ((StandUser)host).roundabout$getStandPowers() instanceof PowersKillerQueen KQ) {
+                                KQ.transferItem2BlockBom(pos);
+                            }
+                            discard();
+                            setItem(ItemStack.EMPTY);
+                        }else {
+                            pos = blockPosition();
+                            state = this.level().getBlockState(pos);
+                            if (state.hasBlockEntity()) {
+                                BE = level().getBlockEntity(pos);
+                                if (BE instanceof StereoBlockEntity je && je.getFirstItem().isEmpty()) {
+                                    je.setItem(0, this.getItem());
+                                    if (host != null && ((StandUser) host).roundabout$getStandPowers() instanceof PowersKillerQueen KQ) {
+                                        KQ.transferItem2BlockBom(pos);
+                                    }
+                                    discard();
+                                    setItem(ItemStack.EMPTY);
+                                }
+                            }
+                        }
+                    }
+
                 }
 
                 this.setDeltaMovement(this.getDeltaMovement().multiply((double)$$2, 0.98, (double)$$2));

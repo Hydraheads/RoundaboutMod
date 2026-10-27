@@ -1309,7 +1309,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                 }
                                 if (lungeTicks > 200) {
                                     this.getNavigation().setSpeedModifier(0.70);
-                                } else if (lungeTicks > 190 && lungeTicks < 195) {
+                                } else if (lungeTicks > 185 && lungeTicks < 195) {
                                     setUnrender(false);
                                     this.getNavigation().setSpeedModifier(2.25);
                                     if (targetSabbath() != null && isTouchingTarget(targetSabbath())) {
@@ -1411,7 +1411,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                             lungeTicks = 51;
                         }
                     } else {
-                        setUnrender(false);
+                        //setUnrender(false);
                         if(this.getNavigation() != null) {
                             this.getNavigation().setSpeedModifier(0);
                         }
@@ -1793,7 +1793,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     }
 
     //TODO:
-//TODO:
+    //TODO:
     //TODO:
     //TODO:
     //TODO:
