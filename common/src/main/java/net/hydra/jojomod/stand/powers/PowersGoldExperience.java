@@ -237,48 +237,43 @@ public class PowersGoldExperience extends BlockGrabPreset {
                             }
 
                             if (foundNaturalLeaves) {
-                                double totalX = 0, totalY = 0, totalZ = 0;
-                                for (BlockPos pos : logsFound) {
-                                    totalX += pos.getX();
-                                    totalY += pos.getY();
-                                    totalZ += pos.getZ();
-                                }
-                                double treeCenterX = totalX / logsFound.size();
-                                double treeCenterY = totalY / logsFound.size();
-                                double treeCenterZ = totalZ / logsFound.size();
+                                // need to throw the logs like anubis block slice, so they go where the player is looking.
+                                Vec3 viewVector = this.getSelf().getViewVector(0);
+
                                 // leaves needs to be cleared, otherwise they will block logs
-                                for (BlockPos leafPos : leavesFound) {
-                                    this.self.level().destroyBlock(leafPos, false);
+                                Set<BlockPos> clearedLeaves = new HashSet<>();
+                                for (BlockPos logPos : logsFound) {
+                                    for (int x = -2; x <= 2; x++) {
+                                        for (int y = -2; y <= 2; y++) {
+                                            for (int z = -2; z <= 2; z++) {
+                                                BlockPos checkPos = logPos.offset(x, y, z);
+                                                BlockState checkState = this.self.level().getBlockState(checkPos);
+                                                if (checkState.is(BlockTags.LEAVES) && !clearedLeaves.contains(checkPos)) {
+                                                    this.self.level().destroyBlock(checkPos, false);
+                                                    clearedLeaves.add(checkPos);
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
 
+                                // launch the logs with respect to where the player is looking
                                 for (BlockPos pos : logsFound) {
                                     BlockState logState = this.self.level().getBlockState(pos);
                                     ItemStack logItem = new ItemStack(logState.getBlock().asItem());
-
                                     ThrownObjectEntity projectile = new ThrownObjectEntity(this.self, this.self.level(), logItem, false);
                                     projectile.setPos(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
-                                    double dirX = pos.getX() - treeCenterX;
-                                    double dirY = pos.getY() - treeCenterY;
-                                    double dirZ = pos.getZ() - treeCenterZ;
-
-                                    Vec3 dir = new Vec3(dirX, dirY, dirZ).normalize();
-                                    if (dir.lengthSqr() == 0) {
-                                        dir = new Vec3(0, 1, 0);
-                                    }
-
                                     projectile.setDeltaMovement(
-                                            dir.x * 1.3 + (Math.random() * 0.4 - 0.2),
-                                            Math.max(dir.y * 0.8, 0.4) + (Math.random() * 0.3),
-                                            dir.z * 1.3 + (Math.random() * 0.4 - 0.2)
+                                            // note: randomness is always * x - (0.5x)
+                                            viewVector.x * 1.2 + (Math.random() * 1.0 - 0.5),
+                                            viewVector.y * 1.2 + (Math.random() * 0.5 - 0.25),
+                                            viewVector.z * 1.2 + (Math.random() * 1.0 - 0.5)
                                     );
-
                                     projectile.setStyle(ThrownObjectEntity.SPTHROW);
                                     this.self.level().addFreshEntity(projectile);
                                     this.self.level().destroyBlock(pos, false);
                                 }
-
                                 this.self.level().playSound(null, centerPos, SoundEvents.ZOMBIE_BREAK_WOODEN_DOOR, SoundSource.PLAYERS, 1.2F, 0.8F);
-
                             }
                         }
                         // special logic for saplings that way they insta grow
