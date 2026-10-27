@@ -191,11 +191,11 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getAdvancedConfig().goldExperienceDropsAndRates != null) {
+        if (getAdvancedConfig().goldExperienceDropsAndRatesv2 != null) {
             MainUtil.GOLD_EXPERIENCE_DNA_DROPS.clear();
             MainUtil.GOLD_EXPERIENCE_TRANSFORM_RATE.clear();
             MainUtil.GOLD_EXPERIENCE_IS_BABY.clear();
-            for (String entry : getAdvancedConfig().goldExperienceDropsAndRates) {
+            for (String entry : getAdvancedConfig().goldExperienceDropsAndRatesv2) {
                 try {
                     String[] split = entry.split(":");
                     if (split.length != 6) {

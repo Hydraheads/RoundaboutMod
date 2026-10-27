@@ -218,6 +218,7 @@ public class ModEntities {
     public static EntityType<FallenCreeper> FALLEN_CREEPER;
     public static EntityType<BCSoldier> BAD_COMPANY_SOLDIER;
     public static EntityType<BCTank> BAD_COMPANY_TANK;
+    public static EntityType<DNACreationEntity> DNA_CREATION_SPAWNER;
 
 
     public static EntityType<ParallelChestEntity> PARALLEL_CHEST;

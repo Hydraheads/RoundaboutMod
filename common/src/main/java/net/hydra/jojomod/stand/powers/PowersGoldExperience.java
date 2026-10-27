@@ -2,10 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.client.StandIcons;
-import net.hydra.jojomod.entity.D4CCloneEntity;
-import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
-import net.hydra.jojomod.entity.LifePunchCloneEntity;
-import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.*;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.GoldExperienceEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -50,6 +47,8 @@ import net.zetalasis.networking.message.api.ModMessageEvents;
 import org.joml.Vector3f;
 
 import java.util.*;
+
+import static com.mojang.text2speech.Narrator.LOGGER;
 
 public class PowersGoldExperience extends BlockGrabPreset {
     // move bytes
@@ -207,26 +206,22 @@ public class PowersGoldExperience extends BlockGrabPreset {
         if (!MainUtil.GOLD_EXPERIENCE_DNA_DROPS.containsKey(dnaItem)) return false;
 
         // Spawn the mob
-        EntityType<?> entityType = MainUtil.GOLD_EXPERIENCE_DNA_DROPS.get(dnaItem);
-        Entity entity = entityType.create((ServerLevel) this.self.level());
+        DNACreationEntity spawner = ModEntities.DNA_CREATION_SPAWNER.create(this.self.level());
+        if (spawner != null) {
+            Vec3 chestPos = new Vec3(this.self.getX(), this.self.getY() + 1.2D, this.self.getZ());
+            Vec3 spawnPos = chestPos.add(this.self.getLookAngle().scale(1.3D));
+            spawner.moveTo(spawnPos.x, spawnPos.y, spawnPos.z, this.self.level().random.nextFloat() * 360.0F, 0.0F);
 
-        if (entity instanceof Mob mob) {
-            Vec3 spawnPos = this.self.position().add(this.self.getForward().scale(1.5));
-            mob.moveTo(spawnPos.x, spawnPos.y, spawnPos.z, this.self.level().random.nextFloat() * 360.0F, 0.0F);
-            boolean shouldBeBaby = MainUtil.GOLD_EXPERIENCE_IS_BABY.getOrDefault(dnaItem, false);
-            if (mob instanceof Animal animal && shouldBeBaby) {
-                animal.setBaby(true);
-            }
+            // need to pass the item for the spinny thingy
+            spawner.setDNAItem(heldItem);
 
-            //this.self.level().addFreshEntity(mob);
-            //heldItem.shrink(1);
-            if (this.self instanceof net.minecraft.world.entity.player.Player player) {
-                player.sendSystemMessage(Component.literal("HOly MOLY!! you're holding a: " + dnaItem.toString()));
-                player.sendSystemMessage(Component.literal("great googly moogly!!! yo're making a: " + entityType.getDescription().getString()));
-            }
+            this.self.level().addFreshEntity(spawner);
+            heldItem.shrink(1);
 
             playSoundIfPossible(self.level(), null, this.self.blockPosition(),
                     ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.85F, 1F);
+
+            // eventually, add the cd here
             return true;
         }
 
