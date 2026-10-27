@@ -209,7 +209,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
     @Override
     public boolean canGuard(){
-        if (isStrangling()||isStranglePinning()){
+        if (isStrangling()||isStranglePinning()||activePower == PowerIndex.POWER_2){
             return false;
         }
         return super.canGuard();
