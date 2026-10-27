@@ -1018,9 +1018,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
     private int strangleHoldTicks = 0;
 
     public void attemptStrangle() {
-        if (canExecuteMoveWithLevel(2)) {
+        if (canExecuteMoveWithLevel(2) && activePower == NONE) {
             Strangle();
-
         }
     }
     public void Strangle() {
