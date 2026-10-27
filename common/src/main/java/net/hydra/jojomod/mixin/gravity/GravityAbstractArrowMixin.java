@@ -30,7 +30,8 @@ public abstract class GravityAbstractArrowMixin extends Entity implements Tracea
             at = @At(
                     value = "STORE"
             )
-            , ordinal = 0
+            , ordinal = 0,
+            require = 0
     )
     public Vec3 tick(Vec3 modify) {
         modify = new Vec3(modify.x, modify.y + 0.05, modify.z);
