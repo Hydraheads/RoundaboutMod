@@ -149,6 +149,37 @@ public class PurpleHazeModel<T extends PurpleHazeEntity> extends StandModel<T> {
 
         PartDefinition capsule_r6 = LeftArmBAM.addOrReplaceChild("capsule_r6", CubeListBuilder.create().texOffs(16, 62).mirror().addBox(1.5F, -1.25F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.3F)).mirror(false), PartPose.offsetAndRotation(-0.25F, 3.0F, -1.0F, -1.5708F, 0.0F, -1.5708F));
 
+        PartDefinition kick_barrage = stand2.addOrReplaceChild("kick_barrage", CubeListBuilder.create(), PartPose.offset(-11.0F, -12.0F, -2.0F));
+
+        PartDefinition One = kick_barrage.addOrReplaceChild("One", CubeListBuilder.create().texOffs(45, 117).mirror().addBox(-2.0F, 3.0F, -2.0F, 4.0F, 7.0F, 4.0F, new CubeDeformation(0.01F)).mirror(false)
+                .texOffs(61, 119).mirror().addBox(-2.0F, 5.0F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.201F)).mirror(false), PartPose.offset(0.0F, 2.0F, 0.0F));
+
+        PartDefinition upper_left_leg_r1 = One.addOrReplaceChild("upper_left_leg_r1", CubeListBuilder.create().texOffs(66, 116).addBox(9.5F, -1.5F, 0.0F, 2.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-10.5F, 4.5F, -2.25F, -0.0873F, 0.0F, 0.0F));
+
+        PartDefinition base_r1 = One.addOrReplaceChild("base_r1", CubeListBuilder.create().texOffs(45, 109).mirror().addBox(-2.0F, -2.0F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(0.0F, 1.1819F, 0.1667F, -0.0873F, 0.0F, 0.0F));
+
+        PartDefinition Two = kick_barrage.addOrReplaceChild("Two", CubeListBuilder.create().texOffs(45, 117).mirror().addBox(-2.0F, 3.0F, -2.0F, 4.0F, 7.0F, 4.0F, new CubeDeformation(0.01F)).mirror(false)
+                .texOffs(61, 119).mirror().addBox(-2.0F, 5.0F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.201F)).mirror(false), PartPose.offset(0.0F, 2.0F, 0.0F));
+
+        PartDefinition upper_left_leg_r2 = Two.addOrReplaceChild("upper_left_leg_r2", CubeListBuilder.create().texOffs(66, 116).addBox(9.5F, -1.5F, 0.0F, 2.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-10.5F, 4.5F, -2.25F, -0.0873F, 0.0F, 0.0F));
+
+        PartDefinition base_r2 = Two.addOrReplaceChild("base_r2", CubeListBuilder.create().texOffs(45, 109).mirror().addBox(-2.0F, -2.0F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(0.0F, 1.1819F, 0.1667F, -0.0873F, 0.0F, 0.0F));
+
+        PartDefinition Three = kick_barrage.addOrReplaceChild("Three", CubeListBuilder.create().texOffs(45, 117).mirror().addBox(-2.0F, 3.0F, -2.0F, 4.0F, 7.0F, 4.0F, new CubeDeformation(0.01F)).mirror(false)
+                .texOffs(61, 119).mirror().addBox(-2.0F, 5.0F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.201F)).mirror(false), PartPose.offset(0.0F, 2.0F, 0.0F));
+
+        PartDefinition upper_left_leg_r3 = Three.addOrReplaceChild("upper_left_leg_r3", CubeListBuilder.create().texOffs(66, 116).addBox(9.5F, -1.5F, 0.0F, 2.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-10.5F, 4.5F, -2.25F, -0.0873F, 0.0F, 0.0F));
+
+        PartDefinition base_r3 = Three.addOrReplaceChild("base_r3", CubeListBuilder.create().texOffs(45, 109).mirror().addBox(-2.0F, -2.0F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(0.0F, 1.1819F, 0.1667F, -0.0873F, 0.0F, 0.0F));
+
+        PartDefinition Four = kick_barrage.addOrReplaceChild("Four", CubeListBuilder.create().texOffs(45, 117).mirror().addBox(-2.0F, 3.0F, -2.0F, 4.0F, 7.0F, 4.0F, new CubeDeformation(0.01F)).mirror(false)
+                .texOffs(61, 119).mirror().addBox(-2.0F, 5.0F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.201F)).mirror(false), PartPose.offset(0.0F, 2.0F, 0.0F));
+
+        PartDefinition upper_left_leg_r4 = Four.addOrReplaceChild("upper_left_leg_r4", CubeListBuilder.create().texOffs(66, 116).addBox(9.5F, -1.5F, 0.0F, 2.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-10.5F, 4.5F, -2.25F, -0.0873F, 0.0F, 0.0F));
+
+        PartDefinition base_r4 = Four.addOrReplaceChild("base_r4", CubeListBuilder.create().texOffs(45, 109).mirror().addBox(-2.0F, -2.0F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(0.0F, 1.1819F, 0.1667F, -0.0873F, 0.0F, 0.0F));
+
+
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
 
@@ -163,7 +194,7 @@ public class PurpleHazeModel<T extends PurpleHazeEntity> extends StandModel<T> {
         this.animate(pEntity.kick_barrage, StandAnimations.KICK_BARRAGE, pAgeInTicks, 1.25f);
         this.animate(pEntity.kick_barrage_windup, StandAnimations.KICK_BARRAGE_CHARGE, pAgeInTicks, 1f);
         this.animate(pEntity.kick_barrage_end, StandAnimations.KICK_BARRAGE_END, pAgeInTicks, 1f);
-        this.animate(pEntity.strangle_windup, PurpleHazeAnimations.STRANGLE_WINDUP, pAgeInTicks, 1f);
+        this.animate(pEntity.strangle_windup, PurpleHazeAnimations.STRANGLE_WINDUP, pAgeInTicks, 3f);
         this.animate(pEntity.flyloop, PurpleHazeAnimations.FLYLOOP, pAgeInTicks, 1f);
         this.animate(pEntity.strangle_hold, PurpleHazeAnimations.STRANGLE_HOLD, pAgeInTicks, 1f);
         this.animate(pEntity.strangle_grab, PurpleHazeAnimations.STRANGLE_GRAB, pAgeInTicks, 1f);
@@ -171,6 +202,10 @@ public class PurpleHazeModel<T extends PurpleHazeEntity> extends StandModel<T> {
         this.animate(pEntity.phcombo1, PurpleHazeAnimations.PHCOMBO1, pAgeInTicks, 1f);
         this.animate(pEntity.phcombo2, PurpleHazeAnimations.PHCOMBO2, pAgeInTicks, 1f);
         this.animate(pEntity.phcombo3, PurpleHazeAnimations.PHCOMBO3, pAgeInTicks, 1f);
+        this.animate(pEntity.fallinghitstart, PurpleHazeAnimations.FALLINGHITSTART, pAgeInTicks, 1f);
+        this.animate(pEntity.fallinghit, PurpleHazeAnimations.FALLINGHIT, pAgeInTicks, 1f);
+        this.animate(pEntity.fallinghitlong, PurpleHazeAnimations.FALLINGHITLONG, pAgeInTicks, 1f);
+        this.animate(pEntity.fallinghitimpact, PurpleHazeAnimations.FALLINGHITIMPACT, pAgeInTicks, 1f);
     }
     @Override
     public ModelPart root() {

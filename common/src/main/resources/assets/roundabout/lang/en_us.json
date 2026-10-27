@@ -574,6 +574,7 @@
 
   "effect.roundabout.fortification": "Fortification",
   "effect.roundabout.bleed": "Bleed",
+  "effect.roundabout.doom_immunity": "Doom Immunity",
   "effect.roundabout.banish": "Banish",
   "effect.roundabout.doom": "Doomed",
   "effect.roundabout.hex": "Hex",
@@ -633,6 +634,7 @@
   "entity.roundabout.king_crimson_reaper": "King Crimson",
   "entity.roundabout.d4c_clone": "Player",
   "entity.roundabout.king_crimson_clone": "Player",
+  "entity.roundabout.life_punch_clone": "Player",
   "entity.roundabout.king_crimson_projection": "Projection",
   "entity.roundabout.whitesnake": "Whitesnake",
   "entity.roundabout.the_world_ultimate": "The World",
@@ -723,6 +725,10 @@
   "entity.roundabout.left_seperated_arm": "Left Seperated Arm",
   "entity.roundabout.left_seperated_arm_slim": "Left Aeperated Arm Slim",
   "entity.roundabout.zombiefish": "Zombiefish",
+
+  "entity.roundabout.sheer_heart_attack": "Sheer Heart Attack",
+  "entity.roundabout.totem_of_doom": "Totem Of Doom",
+
 
   "entity.roundabout.step_rule": "Step Rule",
 
@@ -2655,7 +2661,7 @@
   "ability.roundabout.lyin_eyes_tension_sensor.desc": "The nematodes highlight enemies through walls. Hostile mobs are highlighted red, neutral mobs are yellow, and passive mobs are green. Enemies that are low are highlighted differently.",
   "ability.roundabout.lyin_eyes_inventory": "Inventory Reader",
   "ability.roundabout.lyin_eyes_inventory.desc": "The nematodes gather around to show you what items a player has in their inventory.",
-  "ability.roundabout.lyin_eyes_callout": "Callout Liar",
+  "ability.roundabout.lyin_eyes_callout": "Call Out Liar",
   "ability.roundabout.lyin_eyes_callout.desc": "Interacting with a villager might cause them to be revealed as a liar. Using Tension Sensor, you can detect those that are lying to you. Interact with them again while in Tension Sensor to call them out, giving all Lyin' Eyes users permanent trade discounts. Don't go lying.",
   "container.roundabout.lyin_eyes_callout": " ",
   "text.roundabout.lyin_eyes.tension_highlight": "Tension Highlight On",
@@ -2663,6 +2669,8 @@
 
   "ability.roundabout.gold_experience_placeholder": "I can't believe 88 is making popularslop.",
   "ability.roundabout.gold_experience_placeholder.desc": "He should make less standslop.",
+  "ability.roundabout.gold_experience_life_punch": "Life Infusion Punch",
+  "ability.roundabout.gold_experience_life_punch.desc": "Your stand infused whatever you hit with life. This punch can act as bonemeal, make trees wilt and explode, or knock the soul out of your enemies.",
 
   "ability.roundabout.emperor_shoot": "Shoot",
   "ability.roundabout.emperor_shoot.desc": "Shoot a bullet from the emperor.",

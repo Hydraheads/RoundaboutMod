@@ -1316,7 +1316,7 @@ public class PowersTusk extends NewDashPreset {
             default -> 1.0F;
         };
         if (nail.getExtra() == TuskNailEntity.REDUCED) {
-            damage *= 0.2F;
+            damage *= 0.3F;
         } else if (nail.getExtra() == TuskNailEntity.GOLDEN) {
             damage *= 2F;
         }
@@ -1329,10 +1329,10 @@ public class PowersTusk extends NewDashPreset {
 
     @Override
     public boolean canCombatModeUse(Item item) {
-        if (this.getActivePower() != PowerIndex.NONE) {
+        if (this.getActivePower() != PowerIndex.NONE && this.getActivePower() != PowersTusk.SHOOT_MODE) {
             return false;
         }
-        return (this.isHoldingSneak() && item instanceof ShieldItem);
+        return this.isHoldingSneak() && (item instanceof ShieldItem || item.isEdible());
     }
 
     public boolean isGunMode() {
@@ -1458,7 +1458,8 @@ public class PowersTusk extends NewDashPreset {
                 }
             }
             if (kb) {
-                MainUtil.takeKnockbackWithY(target,1,this.getSelf().getViewVector(0).x,-0.2,this.getSelf().getViewVector(0).z);
+                Vec3 vec3 = this.getSelf().getViewVector(0).reverse();
+                MainUtil.takeKnockbackWithY(target,1,vec3.x,-0.2,vec3.z);
             }
         }
         this.setPowerNone();
@@ -1497,7 +1498,7 @@ public class PowersTusk extends NewDashPreset {
             Entity target = this.getTargetEntity(this.getSelf(),3,5);
             if (target != null && this.hasNail()) {
                 Vec3 kb = target.getDeltaMovement();
-                StandDamageEntityAttack(target,0.3F,0,this.getSelf());
+                StandDamageEntityAttack(target,0.4F,0,this.getSelf());
                 target.setDeltaMovement(kb);
             }
         }

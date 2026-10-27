@@ -97,6 +97,17 @@ public class BCTroop extends MultipleTypeStand {
         }else {
             performAttack();
         }
+
+        float pitch = this.getXRot();
+        float yaw = this.getYRot();
+
+        this.setXRot(pitch);
+        this.setYRot(yaw);
+        this.setYBodyRot(yaw);
+        this.xRotO = pitch;
+        this.yRotO = yaw;
+        setBodyRotationY(yaw);
+
     }
 
     public static int getMaximumRange() { return 15; }
@@ -138,4 +149,5 @@ public class BCTroop extends MultipleTypeStand {
     public boolean performAttack() {
         return false;
     }
+
 }

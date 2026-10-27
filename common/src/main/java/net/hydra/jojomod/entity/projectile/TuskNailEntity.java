@@ -233,9 +233,9 @@ public class TuskNailEntity extends AbstractArrow {
 
 
                         if (ent.hurt(ModDamageTypes.of(ent.level(), ModDamageTypes.EXPLOSIVE_STAND, this.getOwner()), str)) {;
-                            float knockbackStrength = this.getAct() == 1 ? 0.3F : 0.5F;
+                            float knockbackStrength = this.getAct() == 1 ? 0.4F : 0.6F;
                             if (this.getExtra() == GOLDEN) {
-                                knockbackStrength *= 1.5F;
+                                knockbackStrength *= 1.6F;
                             }
                             PowersTusk.takeDeterminedKnockbackWithY2(LE, ent, knockbackStrength);
 

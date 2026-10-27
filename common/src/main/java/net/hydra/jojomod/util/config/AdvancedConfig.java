@@ -31,7 +31,7 @@ public class AdvancedConfig implements Cloneable {
         SERVER_OINLY_INSTANCE = config;
     }
 
-    public Set<String> standArrowPoolv8 = new HashSet<>(
+    public Set<String> standArrowPoolv9 = new HashSet<>(
             Arrays.asList(
                     "roundabout:star_platinum_disc",
                     "roundabout:the_world_disc",
@@ -47,7 +47,7 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:green_day_disc"
             )
     );
-    public Set<String> standArrowSecondaryPoolv8 = new HashSet<>(
+    public Set<String> standArrowSecondaryPoolv9 = new HashSet<>(
             Arrays.asList(
                     "roundabout:cinderella_disc",
                     "roundabout:hey_ya_disc",
@@ -260,6 +260,21 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:mangrove_sapling:minecraft:dead_bush:0.3",
                     "minecraft:oak_sapling:minecraft:dead_bush:0.3",
                     "minecraft:spruce_sapling:minecraft:dead_bush:0.3"
+            )
+    );
+
+    public Set<String> goldExperienceDropsAndRatesv2 = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:rabbit:minecraft:rabbit:120:adult",
+                    "minecraft:beef:minecraft:cow:2400:baby",
+                    "minecraft:egg:minecraft:chicken:160:adult",
+                    "minecraft:feather:minecraft:parrot:800:adult",
+                    "minecraft:ink_sac:minecraft:squid:800:adult",
+                    "minecraft:glow_ink_sac:minecraft:glow_squid:800:adult",
+                    "minecraft:porkchop:minecraft:pig:2000:baby",
+                    "minecraft:mutton:minecraft:sheep:2400:baby",
+                    "minecraft:goat_horn:minecraft:goat:1500:baby",
+                    "minecraft:scute:minecraft:turtle:1800:baby"
             )
     );
 
