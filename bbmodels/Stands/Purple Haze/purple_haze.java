@@ -1,4 +1,4 @@
-// Made with Blockbench 5.1.6
+// Made with Blockbench 5.2.2
 // Exported for Minecraft version 1.17 or later with Mojang mappings
 // Paste this class into your mod and generate all required imports
 
@@ -40,6 +40,11 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 	private final ModelPart LeftArmBAM4;
 	private final ModelPart LeftArmBAM3;
 	private final ModelPart LeftArmBAM;
+	private final ModelPart kick_barrage;
+	private final ModelPart One;
+	private final ModelPart Two;
+	private final ModelPart Three;
+	private final ModelPart Four;
 
 	public unknown(ModelPart root) {
 		this.stand = root.getChild("stand");
@@ -69,13 +74,18 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 		this.left_leg = this.legs.getChild("left_leg");
 		this.upper_left_leg = this.left_leg.getChild("upper_left_leg");
 		this.lower_left_leg = this.left_leg.getChild("lower_left_leg");
-		this.BAM = root.getChild("BAM");
+		this.BAM = this.stand2.getChild("BAM");
 		this.RightArmBAM = this.BAM.getChild("RightArmBAM");
 		this.RightArmBAM2 = this.BAM.getChild("RightArmBAM2");
 		this.RightArmBAM3 = this.BAM.getChild("RightArmBAM3");
 		this.LeftArmBAM4 = this.BAM.getChild("LeftArmBAM4");
 		this.LeftArmBAM3 = this.BAM.getChild("LeftArmBAM3");
 		this.LeftArmBAM = this.BAM.getChild("LeftArmBAM");
+		this.kick_barrage = this.stand2.getChild("kick_barrage");
+		this.One = this.kick_barrage.getChild("One");
+		this.Two = this.kick_barrage.getChild("Two");
+		this.Three = this.kick_barrage.getChild("Three");
+		this.Four = this.kick_barrage.getChild("Four");
 	}
 
 	public static LayerDefinition createBodyLayer() {
@@ -161,7 +171,7 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 		.texOffs(48, 70).mirror().addBox(-1.0F, -1.0F, -2.25F, 2.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false)
 		.texOffs(66, 50).mirror().addBox(-2.0F, 0.9999F, -1.9998F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.202F)).mirror(false), PartPose.offset(0.0F, 7.0F, 0.0F));
 
-		PartDefinition BAM = partdefinition.addOrReplaceChild("BAM", CubeListBuilder.create(), PartPose.offset(0.0F, 7.0F, -12.0F));
+		PartDefinition BAM = stand2.addOrReplaceChild("BAM", CubeListBuilder.create(), PartPose.offset(0.0F, -17.0F, -12.0F));
 
 		PartDefinition RightArmBAM = BAM.addOrReplaceChild("RightArmBAM", CubeListBuilder.create(), PartPose.offset(-11.5F, -9.0F, 0.0F));
 
@@ -205,6 +215,36 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 
 		PartDefinition capsule_r6 = LeftArmBAM.addOrReplaceChild("capsule_r6", CubeListBuilder.create().texOffs(16, 62).mirror().addBox(1.5F, -1.25F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.3F)).mirror(false), PartPose.offsetAndRotation(-0.25F, 3.0F, -1.0F, -1.5708F, 0.0F, -1.5708F));
 
+		PartDefinition kick_barrage = stand2.addOrReplaceChild("kick_barrage", CubeListBuilder.create(), PartPose.offset(-11.0F, -12.0F, -2.0F));
+
+		PartDefinition One = kick_barrage.addOrReplaceChild("One", CubeListBuilder.create().texOffs(45, 117).mirror().addBox(-2.0F, 3.0F, -2.0F, 4.0F, 7.0F, 4.0F, new CubeDeformation(0.01F)).mirror(false)
+		.texOffs(61, 119).mirror().addBox(-2.0F, 5.0F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.201F)).mirror(false), PartPose.offset(0.0F, 2.0F, 0.0F));
+
+		PartDefinition upper_left_leg_r1 = One.addOrReplaceChild("upper_left_leg_r1", CubeListBuilder.create().texOffs(66, 116).addBox(9.5F, -1.5F, 0.0F, 2.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-10.5F, 4.5F, -2.25F, -0.0873F, 0.0F, 0.0F));
+
+		PartDefinition base_r1 = One.addOrReplaceChild("base_r1", CubeListBuilder.create().texOffs(45, 109).mirror().addBox(-2.0F, -2.0F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(0.0F, 1.1819F, 0.1667F, -0.0873F, 0.0F, 0.0F));
+
+		PartDefinition Two = kick_barrage.addOrReplaceChild("Two", CubeListBuilder.create().texOffs(45, 117).mirror().addBox(-2.0F, 3.0F, -2.0F, 4.0F, 7.0F, 4.0F, new CubeDeformation(0.01F)).mirror(false)
+		.texOffs(61, 119).mirror().addBox(-2.0F, 5.0F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.201F)).mirror(false), PartPose.offset(0.0F, 2.0F, 0.0F));
+
+		PartDefinition upper_left_leg_r2 = Two.addOrReplaceChild("upper_left_leg_r2", CubeListBuilder.create().texOffs(66, 116).addBox(9.5F, -1.5F, 0.0F, 2.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-10.5F, 4.5F, -2.25F, -0.0873F, 0.0F, 0.0F));
+
+		PartDefinition base_r2 = Two.addOrReplaceChild("base_r2", CubeListBuilder.create().texOffs(45, 109).mirror().addBox(-2.0F, -2.0F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(0.0F, 1.1819F, 0.1667F, -0.0873F, 0.0F, 0.0F));
+
+		PartDefinition Three = kick_barrage.addOrReplaceChild("Three", CubeListBuilder.create().texOffs(45, 117).mirror().addBox(-2.0F, 3.0F, -2.0F, 4.0F, 7.0F, 4.0F, new CubeDeformation(0.01F)).mirror(false)
+		.texOffs(61, 119).mirror().addBox(-2.0F, 5.0F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.201F)).mirror(false), PartPose.offset(0.0F, 2.0F, 0.0F));
+
+		PartDefinition upper_left_leg_r3 = Three.addOrReplaceChild("upper_left_leg_r3", CubeListBuilder.create().texOffs(66, 116).addBox(9.5F, -1.5F, 0.0F, 2.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-10.5F, 4.5F, -2.25F, -0.0873F, 0.0F, 0.0F));
+
+		PartDefinition base_r3 = Three.addOrReplaceChild("base_r3", CubeListBuilder.create().texOffs(45, 109).mirror().addBox(-2.0F, -2.0F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(0.0F, 1.1819F, 0.1667F, -0.0873F, 0.0F, 0.0F));
+
+		PartDefinition Four = kick_barrage.addOrReplaceChild("Four", CubeListBuilder.create().texOffs(45, 117).mirror().addBox(-2.0F, 3.0F, -2.0F, 4.0F, 7.0F, 4.0F, new CubeDeformation(0.01F)).mirror(false)
+		.texOffs(61, 119).mirror().addBox(-2.0F, 5.0F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.201F)).mirror(false), PartPose.offset(0.0F, 2.0F, 0.0F));
+
+		PartDefinition upper_left_leg_r4 = Four.addOrReplaceChild("upper_left_leg_r4", CubeListBuilder.create().texOffs(66, 116).addBox(9.5F, -1.5F, 0.0F, 2.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-10.5F, 4.5F, -2.25F, -0.0873F, 0.0F, 0.0F));
+
+		PartDefinition base_r4 = Four.addOrReplaceChild("base_r4", CubeListBuilder.create().texOffs(45, 109).mirror().addBox(-2.0F, -2.0F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(0.0F, 1.1819F, 0.1667F, -0.0873F, 0.0F, 0.0F));
+
 		return LayerDefinition.create(meshdefinition, 128, 128);
 	}
 
@@ -216,6 +256,5 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
 		stand.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-		BAM.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
 	}
 }

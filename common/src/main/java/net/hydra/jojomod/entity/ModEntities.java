@@ -208,6 +208,7 @@ public class ModEntities {
     public static EntityType<FogCloneEntity> FOG_CLONE;
     public static EntityType<KingCrimsonCloneEntity> KING_CRIMSON_CLONE;
     public static EntityType<D4CCloneEntity> D4C_CLONE;
+    public static EntityType<LifePunchCloneEntity> LIFE_PUNCH_CLONE;
     public static EntityType<KingCrimsonProjectionEntity> KING_CRIMSON_PROJECTION;
     public static EntityType<FallenZombie> FALLEN_ZOMBIE;
     public static EntityType<FallenSkeleton> FALLEN_SKELETON;
@@ -217,6 +218,7 @@ public class ModEntities {
     public static EntityType<FallenCreeper> FALLEN_CREEPER;
     public static EntityType<BCSoldier> BAD_COMPANY_SOLDIER;
     public static EntityType<BCTank> BAD_COMPANY_TANK;
+    public static EntityType<DNACreationEntity> DNA_CREATION_SPAWNER;
 
 
     public static EntityType<ParallelChestEntity> PARALLEL_CHEST;

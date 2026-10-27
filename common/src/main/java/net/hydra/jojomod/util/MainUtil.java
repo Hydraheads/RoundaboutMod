@@ -245,6 +245,10 @@ public class MainUtil {
     public static final Map<Block, Block> PURPLE_HAZE_DECAY_BLOCKS = new HashMap<>();
     public static final Map<Block, Float> PURPLE_HAZE_DECAY_RATE = new HashMap<>();
 
+    public static final Map<Item, EntityType> GOLD_EXPERIENCE_DNA_DROPS = new HashMap<>();
+    public static final Map<Item, Float> GOLD_EXPERIENCE_TRANSFORM_RATE = new HashMap<>();
+    public static final Map<Item, Boolean> GOLD_EXPERIENCE_IS_BABY = new HashMap<>();
+
     public static final Map<Item, List<MobEffect>> foodCuresThat = new HashMap<>();
     public static final Map<Item, List<MobEffect>> foodAddsThat = new HashMap<>();
     public static final Map<Item, List<String>> specialFoodRemoves = new HashMap<>();
@@ -2385,6 +2389,17 @@ public class MainUtil {
         if (cdist > mdist) {
             mdist = cdist;
         }
+        return mdist;
+    }
+
+    public static double cheapDistanceTo3d(double x, double y, double z, double x2, double y2, double z2){
+        double mdist = 0;
+        double cdist = Math.abs(x-x2);
+        if (cdist > mdist){mdist=cdist;}
+        cdist = Math.abs(y-y2);
+        if (cdist > mdist){mdist=cdist;}
+        cdist = Math.abs(z-z2);
+        if (cdist > mdist){mdist=cdist;}
         return mdist;
     }
 
