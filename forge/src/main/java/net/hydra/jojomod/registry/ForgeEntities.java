@@ -237,6 +237,12 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "king_crimson_projection").toString())
             );
+    public static final RegistryObject<EntityType<DNACreationEntity>> DNA_CREATION_SPAWNER =
+            ENTITY_TYPES.register("dna_creation_spawner", () ->
+                    EntityType.Builder.of(DNACreationEntity::new, MobCategory.MISC).sized(0.7f, 0.7f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "dna_creation_spawner").toString())
+            );
     public static final RegistryObject<EntityType<FallenZombie>> FALLEN_ZOMBIE =
             ENTITY_TYPES.register("fallen_zombie", () ->
                     EntityType.Builder.of(FallenZombie::new, MobCategory.MISC).sized(0.6F, 1.95F).clientTrackingRange(8).
