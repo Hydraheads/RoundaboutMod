@@ -2452,8 +2452,8 @@ public class PowersSilverChariot extends NewPunchingStand {
         int $$13 = 0;
         if (entity instanceof SilverChariotEntity SCE) {
             if (applySpeedMultInControlMode()) {
-                SCE.setDeltaMovement(SCE.getDeltaMovement().scale(inputSpeedModifiers(1f)));
-                return;
+                // SCE.setDeltaMovement(SCE.getDeltaMovement().scale(inputSpeedModifiers(1f)));
+                // return;
             }
 
             Vec3 deltaPrev = entity.getDeltaMovement();
@@ -2505,19 +2505,22 @@ public class PowersSilverChariot extends NewPunchingStand {
             double nextZ = SCE.getZ() + motionZ;
 
             if (Math.abs(nextX - this.self.getX()) >= maxRange) {
-                double stopX = this.self.getX() + maxRange;
+                // double stopX = this.self.getX() + maxRange;
+                double stopX = Mth.clamp(nextX, this.self.getX() - maxRange, this.self.getX() + maxRange);
                 motionX = stopX - SCE.getX();
                 // double stopX = Mth.clamp(nextX, this.self.getX() - maxRange, this.self.getX() + maxRange);
                 // motionX = Mth.clamp(stopX - this.self.getX(), Math.min(0.0D, motionX), Math.max(0.0D, motionX));
             }
             if (Math.abs(nextY - this.self.getY()) >= maxRange) {
-                double stopY = this.self.getY() + maxRange;
+                // double stopY = this.self.getY() + maxRange;
+                double stopY = Mth.clamp(nextY, this.self.getY() - maxRange, this.self.getY() + maxRange);
                 scY = stopY - SCE.getY();
                 // double stopY = Mth.clamp(nextY, this.self.getY() - maxRange, this.self.getY() + maxRange);
                 // scY = Mth.clamp(stopY - this.self.getY(), Math.min(0.0D, scY), Math.max(0.0D, scY));
             }
             if (Math.abs(nextZ - this.self.getZ()) >= maxRange) {
-                double stopZ = this.self.getZ() + maxRange;
+                // double stopZ = this.self.getZ() + maxRange;
+                double stopZ = Mth.clamp(nextZ, this.self.getZ() - maxRange, this.self.getZ() + maxRange);
                 motionZ = stopZ - SCE.getZ();
                 // double stopZ = Mth.clamp(nextZ, this.self.getZ() - maxRange, this.self.getZ() + maxRange);
                 // motionZ = Mth.clamp(stopZ - this.self.getZ(), Math.min(0.0D, motionZ), Math.max(0.0D, motionZ));
