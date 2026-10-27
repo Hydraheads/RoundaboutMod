@@ -2,31 +2,38 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.D4CCloneEntity;
+import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
+import net.hydra.jojomod.entity.LifePunchCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.GoldExperienceEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.index.OffsetIndex;
-import net.hydra.jojomod.event.index.PacketDataIndex;
-import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.BlockGrabPreset;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BoneMealItem;
 import net.minecraft.world.item.ItemStack;
@@ -45,6 +52,13 @@ public class PowersGoldExperience extends BlockGrabPreset {
     private static final byte
         LIFE_PUNCH = 53;
 
+    // for life punch
+    private LifePunchCloneEntity lifePunchClone = null;
+    private LivingEntity lifePunchVictim = null;
+    private int lifePunchTimer = 0;
+    private float lastKnownHealth = 0;
+    public final Map<Integer, Integer> disabledMobTimers = new HashMap<>();
+
     // basic stand registry stuff
     public PowersGoldExperience(LivingEntity self) {super(self);}
     @Override
@@ -54,6 +68,75 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public boolean isStandEnabled(){return true;}
 
     // start of move methods
+
+    // tick power start
+
+    @Override
+    public void tickPower() {
+        if (!this.self.level().isClientSide()) {
+            // tick down Life Punch timer
+            if (lifePunchTimer > 0 && lifePunchVictim != null && lifePunchClone != null) {
+                if (!this.self.isAlive()) {
+                    restoreLifePunchVictim();
+                }
+                // check if either entity is gone
+                if (!lifePunchVictim.isAlive() || !lifePunchClone.isAlive()) {
+                    if (lifePunchVictim.isAlive()) {
+                        // clone died, victim takes fatal damage
+                        lifePunchVictim.hurt(lifePunchVictim.damageSources().generic(), 9999);
+                    }
+                    restoreLifePunchVictim();
+                } else {
+                    // transfer damage from clone to victim
+                    float currentHealth = lifePunchClone.getHealth();
+                    if (currentHealth < lastKnownHealth) {
+                        float damage = lastKnownHealth - currentHealth;
+                        lifePunchVictim.hurt(lifePunchVictim.damageSources().generic(), damage);
+                        lifePunchClone.setHealth(lastKnownHealth); // reset clone health
+                    }
+                    lastKnownHealth = lifePunchClone.getHealth();
+
+                    // transfer effects from clone to victim
+                    for (MobEffectInstance effect : lifePunchClone.getActiveEffects()) {
+                        if (!lifePunchVictim.hasEffect(effect.getEffect())) {
+                            lifePunchVictim.addEffect(new MobEffectInstance(effect));
+                        }
+                    }
+
+                    // tick down timer
+                    lifePunchTimer--;
+                    if (lifePunchTimer <= 0) {
+                        // restore the victim
+                        lifePunchVictim.teleportTo(lifePunchClone.getX(), lifePunchClone.getY(), lifePunchClone.getZ());
+                        lifePunchVictim.setYRot(lifePunchClone.getYRot());
+                        lifePunchVictim.setXRot(lifePunchClone.getXRot());
+                        lifePunchVictim.setDeltaMovement(Vec3.ZERO);
+                        restoreLifePunchVictim();
+                    }
+                }
+            }
+            // for mob life punch stuff
+            Iterator<Map.Entry<Integer, Integer>> it = disabledMobTimers.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry<Integer, Integer> entry = it.next();
+                int mobId = entry.getKey();
+                int ticksLeft = entry.getValue();
+                Entity mobEntity = this.self.level().getEntity(mobId);
+
+                if (mobEntity == null || !mobEntity.isAlive() || ticksLeft <= 0) {
+                    if (mobEntity instanceof Mob mob) {
+                        mob.getNavigation().recomputePath();
+                    }
+                    it.remove();
+                } else {
+                    entry.setValue(ticksLeft - 1);
+                }
+            }
+        }
+        super.tickPower();
+    }
+
+    // tick power end
 
     /**
      * Gets the input for the power based on the buttons pressed.
@@ -108,7 +191,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
         }
     }
 
-    public boolean startLifePunch() {
+    private boolean startLifePunch() {
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)) {
             this.setAttackTimeDuring(0);
@@ -153,7 +236,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
         }
     }
 
-    public void lifePunchImpact(Entity entity) {
+    private void lifePunchImpact(Entity entity) {
         if (this.activePower == LIFE_PUNCH) {
             this.setAttackTimeDuring(-20);
             float range = 3.5F + 0.75F;
@@ -170,7 +253,39 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
                     if (entity instanceof LivingEntity LE) {
                         addEXP(5, LE);
-                        // TODO: punch the SOUL outta them
+                        if (!this.self.level().isClientSide()) {
+                            if(LE instanceof Player) {
+                                // IMPORTANT FAILSAFE: If someone else gets Life Punched, restore previous victim first
+                                if (lifePunchVictim != null && lifePunchVictim != LE) {
+                                    restoreLifePunchVictim();
+                                }
+                                // punch the SOUL outta them
+                                PowerTypes.setPlaneOfExisting(LE, (byte) 12);
+                                // spawn a Life Punch Clone in their place
+                                LifePunchCloneEntity clone = ModEntities.LIFE_PUNCH_CLONE.create(this.self.level());
+                                if (clone != null) {
+                                    clone.setPlayer((Player) LE);
+                                    clone.copyPosition(LE);
+                                    clone.setHealth(LE.getHealth());
+                                    clone.getAttribute(Attributes.MAX_HEALTH).setBaseValue(LE.getMaxHealth());
+                                    // copy inventory
+                                    for (EquipmentSlot slot : EquipmentSlot.values()) {
+                                        clone.setItemSlot(slot, LE.getItemBySlot(slot).copy());
+                                    }
+                                    clone.setTarget((LivingEntity) this.self);
+                                    this.self.level().addFreshEntity(clone);
+                                    // track the victim
+                                    lifePunchVictim = LE;
+                                    lifePunchClone = clone;
+                                    lifePunchTimer = 40; // 2 seconds
+                                    lastKnownHealth = clone.getHealth();
+                                }
+                            } else if (LE instanceof Mob mob) {
+                                ((StandUser) mob).roundabout$deeplyRemoveAttackTarget();
+                                mob.getNavigation().stop();
+                                disabledMobTimers.put(LE.getId(), 50);
+                            }
+                        }
                     }
                     takeDeterminedKnockback(this.self, entity, knockbackStrength);
                 } else {
@@ -330,9 +445,17 @@ public class PowersGoldExperience extends BlockGrabPreset {
         }
     }
 
-    @Override
-    public SoundEvent getImpaleSound() {
-        return ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_EVENT;
+    private void restoreLifePunchVictim() {
+        if (lifePunchVictim != null) {
+            PowerTypes.setPlaneOfExisting(lifePunchVictim, (byte)0);
+        }
+        if (lifePunchClone != null) {
+            lifePunchClone.discard();
+        }
+        lifePunchVictim = null;
+        lifePunchClone = null;
+        lifePunchTimer = 0;
+        lastKnownHealth = 0;
     }
 
     // life punch end
@@ -357,7 +480,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public void playBarrageEndNoise(float mod, Entity entity) {
         if (!this.self.level().isClientSide()) {
-            playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_EVENT, SoundSource.PLAYERS, 0.85F + mod, 1F);
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_EVENT, SoundSource.PLAYERS, 0.75F + mod, 1F);
         }
     }
 
@@ -365,7 +488,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public void playBarrageNoise(int hitNumber, Entity entity) {
         if (!this.self.level().isClientSide()) {
             if (hitNumber % 3 == 0)
-                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GOLD_EXPERIENCE_HIT_EVENT, SoundSource.PLAYERS, 0.8F, 1F);
+                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GOLD_EXPERIENCE_HIT_EVENT, SoundSource.PLAYERS, 0.7F, 1F);
         }
     }
 
@@ -386,6 +509,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     @Override
     public SoundEvent getPunchLandLastSound() {
+        return ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_EVENT;
+    }
+
+    @Override
+    public SoundEvent getImpaleSound() {
         return ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_EVENT;
     }
 

@@ -283,6 +283,7 @@ public enum PowerTypes {
     //1-5 = D4C merging
     //10 = time erase
     //11 = man in the mirror
+    //12 = gold experience life punch
     public static byte getPlaneOfExisting(Entity entity){
         if (entity != null){
             if (PowerTypes.isErasingTime(entity)){
