@@ -4247,6 +4247,8 @@
   "config.roundabout.forwardBarrageCanSteer.desc": "Decide if Purple Haze´s Forward Barrage can be slightly steered while travelling forward.",
   "config.roundabout.HazeMelts.name": "Haze Melting",
   "config.roundabout.HazeMelts.desc": "If the Purple Haze adds an effect of Melting and the Distortion Haze add an effect of Melting 2.",
+  "config.roundabout.CanonDistortion.name": "Canon Distortion",
+  "config.roundabout.CanonDistortion.desc": "If the distortion becomes a far stronger virus.",
 
   "config.roundabout.enableSilverChariot.name": "Enable Silver Chariot",
   "config.roundabout.enableSilverChariot.desc": "Enable Silver Chariot",
