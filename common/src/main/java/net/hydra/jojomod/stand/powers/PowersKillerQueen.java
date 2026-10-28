@@ -5479,7 +5479,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     	
     	return true;
     }
-
+    
     public void samuraiUnlockTrigger() {
         if (getSelf() instanceof Player PE) {
             StandUser user = ((StandUser) PE);
