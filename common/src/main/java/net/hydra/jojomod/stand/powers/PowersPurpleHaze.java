@@ -1427,7 +1427,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         animateStand(PurpleHazeEntity.STRANGLE_GRAB);
 
         playSoundIfPossible(self.level(), null, this.self.blockPosition(),
-                ModSounds.SOFT_AND_WET_BARRAGE_EVENT /*placeholder*/, SoundSource.PLAYERS, 1.0F, 1.0F);
+                ModSounds.PURPLE_HAZE_KICK_BARRAGE_CRY_EVENT /*placeholder*/, SoundSource.PLAYERS, 1.0F, 1.0F);
     }
 
     private void tickStranglePin(StandEntity stand) {
