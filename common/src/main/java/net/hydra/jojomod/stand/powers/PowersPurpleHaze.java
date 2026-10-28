@@ -414,7 +414,14 @@ public class PowersPurpleHaze extends NewPunchingStand {
         );
 
     }
-
+    @Override
+    public Vector3f getLeapColor() {
+        int color = PurpleSmokeEntity.SKIN_COLORS.getOrDefault(getStandSkin(), PurpleSmokeEntity.DEFAULT_HAZE_COLOR);
+        return new Vector3f(
+                ((color >> 16) & 0xFF) / 255f,
+                ((color >> 8) & 0xFF) / 255f,
+                (color & 0xFF) / 255f);
+    }
     @Override
     public boolean cancelItemUse() {
         return (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2);
