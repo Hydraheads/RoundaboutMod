@@ -1293,6 +1293,8 @@ public class Config implements Cloneable {
         public Boolean postTESoften;
         @BooleanOption(group = "inherit", value = true)
         public Boolean nerfedTEDamage;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean nerfedPVPRunning;
     }
     public static class TheWorldSettings {
         @BooleanOption(group = "inherit", value = true)
