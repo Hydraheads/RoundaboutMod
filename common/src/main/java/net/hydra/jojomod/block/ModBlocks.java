@@ -31,6 +31,7 @@ public class ModBlocks {
      **/
     public static final EnumProperty<GoddessStatuePart> GODDESS_STATUE_PART = EnumProperty.create("part", GoddessStatuePart.class);
     public static final EnumProperty<StreetSignPart> STREET_SIGN_PART = EnumProperty.create("part", StreetSignPart.class);
+    public static final EnumProperty<MagiciansStatuePart> MAGICIANS_STATUE_PART = EnumProperty.create("part", MagiciansStatuePart.class);
     public static final IntegerProperty DAMAGED = IntegerProperty.create("damaged", 0, 2);
     public static final IntegerProperty GAS_CAN_LEVEL = IntegerProperty.create("level", 0, 2);
     public static final IntegerProperty BLOOD_LEVEL = IntegerProperty.create("level", 0, 3);
@@ -120,6 +121,7 @@ public class ModBlocks {
     public static Block BARBED_WIRE;
     public static Block BARBED_WIRE_BUNDLE;
     public static Block GODDESS_STATUE_BLOCK;
+    public static Block MAGICIANS_STATUE_BLOCK;
     public static Block STREET_SIGN_DIO;
     public static Block STREET_SIGN_RIGHT;
     public static Block STREET_SIGN_STOP;
@@ -680,6 +682,16 @@ public class ModBlocks {
                     .forceSolidOn().noCollission().requiresCorrectToolForDrops()
     );
     public static GoddessStatueBlock GODDESS_STATUE_BLOCK_PROPERTIES = new GoddessStatueBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.STONE)
+                    .noOcclusion()
+                    .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
+                    .pushReaction(PushReaction.DESTROY)
+                    .strength(1.5F, 1.0F)
+                    .sound(SoundType.STONE)
+                    .requiresCorrectToolForDrops()
+    );
+    public static MagiciansStatueBlock MAGICIANS_STATUE_BLOCK_PROPERTIES = new MagiciansStatueBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.STONE)
                     .noOcclusion()

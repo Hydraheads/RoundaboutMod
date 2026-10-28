@@ -35,7 +35,7 @@ public class AchtungEntityRenderDispatcher {
     @Inject(method = "render(Lnet/minecraft/world/entity/Entity;DDDFFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "HEAD"), cancellable = true)
     protected <E extends Entity>  void roundabout$render(E entity, double $$1, double $$2, double $$3, float $$4, float $$5, PoseStack $$6, MultiBufferSource $$7, int light, CallbackInfo ci) {
 
-        if (PowerTypes.isErasingTime(ClientUtil.getPlayer())){
+        if (PowerTypes.isErasingTime(ClientUtil.getPlayer()) || PowerTypes.getPlaneOfExisting(ClientUtil.getPlayer()) == 12){
             if (PowerTypes.isExistentiallyElsewhere(entity)){
                 if (!ClientUtil.isPlayer(entity)) {
                     if (entity instanceof StandEntity SE) {

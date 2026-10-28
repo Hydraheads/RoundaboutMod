@@ -830,6 +830,7 @@ public class FabricItems {
                         entries.accept(HALLUCINATORY_ACID_HEIGHT_4);
                         entries.accept(HALLUCINATORY_ACID_WALL);
                         entries.accept(ModBlocks.GAMBLING_TABLE);
+                        entries.accept(ModBlocks.MAGICIANS_STATUE_BLOCK);
                     }).build());
     public static final CreativeModeTab FOG_BLOCK_ITEMS = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
             new ResourceLocation(Roundabout.MOD_ID, "justice_fog_items"),

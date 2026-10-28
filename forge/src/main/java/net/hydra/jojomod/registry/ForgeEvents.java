@@ -147,7 +147,9 @@ public class ForgeEvents {
         event.put(ForgeEntities.FOG_CLONE.get(), PlayerAlexNPC.createAttributes().build());
         event.put(ForgeEntities.KING_CRIMSON_CLONE.get(), KingCrimsonCloneEntity.createAttributes().build());
         event.put(ForgeEntities.D4C_CLONE.get(), D4CCloneEntity.createAttributes().build());
+        event.put(ForgeEntities.LIFE_PUNCH_CLONE.get(), LifePunchCloneEntity.createAttributes().build());
         event.put(ForgeEntities.KING_CRIMSON_PROJECTION.get(), KingCrimsonProjectionEntity.createAttributes().build());
+        event.put(ForgeEntities.DNA_CREATION_SPAWNER.get(), DNACreationEntity.createAttributes().build());
         event.put(ForgeEntities.FALLEN_ZOMBIE.get(), FallenZombie.createAttributes().build());
         event.put(ForgeEntities.FALLEN_SKELETON.get(), FallenSkeleton.createAttributes().build());
         event.put(ForgeEntities.FALLEN_SPIDER.get(), FallenSpider.createAttributes().build());
@@ -297,6 +299,7 @@ public class ForgeEvents {
         ModBlocks.BARBED_WIRE = ForgeBlocks.BARBED_WIRE.get();
         ModBlocks.BARBED_WIRE_BUNDLE = ForgeBlocks.BARBED_WIRE_BUNDLE.get();
         ModBlocks.GODDESS_STATUE_BLOCK = ForgeBlocks.GODDESS_STATUE_BLOCK.get();
+        ModBlocks.MAGICIANS_STATUE_BLOCK = ForgeBlocks.MAGICIANS_STATUE_BLOCK.get();
         ModBlocks.STREET_SIGN_DIO = ForgeBlocks.STREET_SIGN_DIO.get();
         ModBlocks.STREET_SIGN_RIGHT = ForgeBlocks.STREET_SIGN_RIGHT.get();
         ModBlocks.STREET_SIGN_STOP = ForgeBlocks.STREET_SIGN_STOP.get();
@@ -1011,7 +1014,9 @@ public class ForgeEvents {
         ModEntities.BOMB_PLANTED_ITEM = ForgeEntities.BOMB_PLANTED_ITEM.get();
         ModEntities.KING_CRIMSON_CLONE = ForgeEntities.KING_CRIMSON_CLONE.get();
         ModEntities.D4C_CLONE = ForgeEntities.D4C_CLONE.get();
+        ModEntities.LIFE_PUNCH_CLONE = ForgeEntities.LIFE_PUNCH_CLONE.get();
         ModEntities.KING_CRIMSON_PROJECTION = ForgeEntities.KING_CRIMSON_PROJECTION.get();
+        ModEntities.DNA_CREATION_SPAWNER = ForgeEntities.DNA_CREATION_SPAWNER.get();
 
         ForgeItems.assignStupidForge();
         ConfigManager.loadBlacklists2();

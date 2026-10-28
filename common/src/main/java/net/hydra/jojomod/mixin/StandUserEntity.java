@@ -2246,6 +2246,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (this.roundabout$hasDiverLegs()) {
             TOT += 2; // same jump boost that vamp has
         }
+        // life punch jump height
+        if (PowerTypes.getPlaneOfExisting(rdbt$this()) == 12) {
+            TOT += 2;
+        }
         return TOT;
     }
 
@@ -4176,6 +4180,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             return;
         }
 
+        // soul punch soul damage immunity
+        if (PowerTypes.getPlaneOfExisting(rdbt$this()) == 12 && !$$0.is(DamageTypes.GENERIC_KILL)) {
+            ci.setReturnValue(false);
+            return;
+        }
+
         // Coprse damage is converted and multiplied for Justice Army
         if ($$0.is(DamageTypes.ARROW) && $$0.getEntity() instanceof FallenMob FM) {
             if (!(((LivingEntity) (Object) this) instanceof Player) && FM.getController() == this.getId()) {
@@ -4840,7 +4850,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "isPushable", at = @At(value = "HEAD"), cancellable = true, require = 0)
     protected void roundabout$isPushable(CallbackInfoReturnable<Boolean> cir) {
-        if (PowerTypes.isErasingTime(this)) {
+        if (PowerTypes.isErasingTime(this) || PowerTypes.getPlaneOfExisting(this) == 12) {
             cir.setReturnValue(false);
             return;
         }
@@ -4848,7 +4858,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "canBeSeenAsEnemy", at = @At(value = "HEAD"), cancellable = true, require = 0)
     protected void roundabout$canBeSeenAsEnemy(CallbackInfoReturnable<Boolean> cir) {
-        if (PowerTypes.isErasingTime(this)) {
+        if (PowerTypes.isErasingTime(this) || PowerTypes.getPlaneOfExisting(this) == 12) {
             cir.setReturnValue(false);
             return;
         }
@@ -4856,7 +4866,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "canBeSeenByAnyone", at = @At(value = "HEAD"), cancellable = true, require = 0)
     protected void roundabout$canBeSeenByAnyone(CallbackInfoReturnable<Boolean> cir) {
-        if (PowerTypes.isErasingTime(this)) {
+        if (PowerTypes.isErasingTime(this) || PowerTypes.getPlaneOfExisting(this) == 12) {
             cir.setReturnValue(false);
             return;
         }
@@ -4864,7 +4874,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "pushEntities", at = @At(value = "HEAD"), cancellable = true, require = 0)
     protected void roundabout$pushEntities(CallbackInfo ci) {
-        if (PowerTypes.isErasingTime(this)) {
+        if (PowerTypes.isErasingTime(this) || PowerTypes.getPlaneOfExisting(this) == 12) {
             ci.cancel();
             return;
         }
@@ -5078,6 +5088,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         if(this.roundabout$getGrabbedSoul()){
             basis *= 0.025F;
+        }
+        if(PowerTypes.getPlaneOfExisting(rdbt$this()) == 12) {
+            basis *= 1.6;
         }
         return basis;
     }
@@ -6190,7 +6203,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
         if (this.hasEffect(ModEffects.HAZE_VIRUS) && !this.hasEffect(ModEffects.VIRUS_IMMUNITY)) {
-            if (this.tickCount % 10 == 0 && !this.level().isClientSide() && this.isAlive()) {
+            if (this.tickCount % 15 == 0 && !this.level().isClientSide() && this.isAlive()) {
                 MobEffectInstance inst = this.getEffect(ModEffects.HAZE_VIRUS);
                 if (inst != null) {
                     this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.HAZE_VIRUS),
@@ -6219,14 +6232,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
 
         if (this.hasEffect(ModEffects.DISTORTION_VIRUS) && !this.hasEffect(ModEffects.VIRUS_IMMUNITY)) {
-            if (this.tickCount % 15 == 0 && !this.level().isClientSide() && this.isAlive()) {
+            if (this.tickCount % 20 == 0 && !this.level().isClientSide() && this.isAlive()) {
                 MobEffectInstance inst = this.getEffect(ModEffects.DISTORTION_VIRUS);
                 if (inst != null) {
-                    this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISTORTION_VIRUS),
-                            inst.getAmplifier() + 1);
+                    float damage = inst.getAmplifier() + 1;
+                    if (((StandUser) this).roundabout$getStandPowers() instanceof PowersPurpleHaze) {
+                        damage *= 0.66F;
+                    }
+                    this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISTORTION_VIRUS), damage);
                     rdbt$reduceOtherEffectDurations(20, ModEffects.DISTORTION_VIRUS, ModEffects.VIRUS_IMMUNITY);
                 }
             }
+
 
             MobEffectInstance spreadInst = this.getEffect(ModEffects.DISTORTION_VIRUS);
             if (spreadInst != null && this.tickCount % 5 == 0

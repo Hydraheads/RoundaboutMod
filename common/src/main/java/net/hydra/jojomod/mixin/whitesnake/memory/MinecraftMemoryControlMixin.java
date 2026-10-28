@@ -17,17 +17,17 @@ public abstract class MinecraftMemoryControlMixin {
     @Shadow public LocalPlayer player;
 
     @Inject(method = "startAttack", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$blockAttack(CallbackInfoReturnable<Boolean> cir) {
+    private void roundabout$cantAttack(CallbackInfoReturnable<Boolean> cir) {
         if (player != null && !DiscItemData.hasPlayerControl(player)) cir.setReturnValue(false);
     }
 
     @Inject(method = "continueAttack", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$blockBreaking(boolean attacking, CallbackInfo ci) {
+    private void roundabout$cantMine(boolean attacking, CallbackInfo ci) {
         if (player != null && !DiscItemData.hasPlayerControl(player)) ci.cancel();
     }
 
     @Inject(method = "startUseItem", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$blockUse(CallbackInfo ci) {
+    private void roundabout$cantUse(CallbackInfo ci) {
         if (player != null
                 && ((StandUser) player).roundabout$getStandPowers() instanceof PowersWhitesnake powers
                 && powers.isAutoMode()
@@ -40,7 +40,7 @@ public abstract class MinecraftMemoryControlMixin {
     }
 
     @Inject(method = "pickBlock", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$blockPick(CallbackInfo ci) {
+    private void roundabout$cantPickBlock(CallbackInfo ci) {
         if (player != null && !DiscItemData.hasPlayerControl(player)) ci.cancel();
     }
 }

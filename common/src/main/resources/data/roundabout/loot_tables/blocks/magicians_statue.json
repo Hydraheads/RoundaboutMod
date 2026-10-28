@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "block": "roundabout:magicians_statue",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "part": "bottom"
+              }
+            }
+          ],
+          "name": "roundabout:magicians_statue"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "roundabout:blocks/magicians_statue"
+}

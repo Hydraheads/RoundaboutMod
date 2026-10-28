@@ -247,6 +247,17 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:nether_wart_block:minecraft:air:0.3",
                     "minecraft:warped_wart_block:minecraft:air:0.3",
                     "minecraft:shroomlight:minecraft:air:0.3",
+                    "minecraft:pumpkin:minecraft:air:0.3",
+                    "minecraft:carved_pumpkin:minecraft:air:0.3",
+                    "minecraft:melon:minecraft:air:0.3",
+                    "minecraft:hay_block:minecraft:air:0.3",
+                    "minecraft:infested_stone:minecraft:stone:0.3",
+                    "minecraft:infested_cobblestone:minecraft:cobblestone:0.3",
+                    "minecraft:infested_stone_bricks:minecraft:stone_bricks:0.3",
+                    "minecraft:infested_mossy_stone_bricks:minecraft:mossy_stone_bricks:0.3",
+                    "minecraft:infested_cracked_stone_bricks:minecraft:cracked_stone_bricks:0.3",
+                    "minecraft:infested_chiseled_stone_bricks:minecraft:chiseled_stone_bricks:0.3",
+                    "minecraft:infested_deepslate:minecraft:deepslate:0.3",
                     "minecraft:dirt_path:minecraft:farmland:0.3",
                     "minecraft:crying_obsidian:minecraft:obsidian:0.3",
                     "minecraft:warped_nylium:minecraft:netherrack:0.3",
@@ -260,6 +271,22 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:mangrove_sapling:minecraft:dead_bush:0.3",
                     "minecraft:oak_sapling:minecraft:dead_bush:0.3",
                     "minecraft:spruce_sapling:minecraft:dead_bush:0.3"
+
+            )
+    );
+
+    public Set<String> goldExperienceDropsAndRatesv2 = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:rabbit:minecraft:rabbit:120:adult",
+                    "minecraft:beef:minecraft:cow:2400:baby",
+                    "minecraft:egg:minecraft:chicken:160:adult",
+                    "minecraft:feather:minecraft:parrot:800:adult",
+                    "minecraft:ink_sac:minecraft:squid:800:adult",
+                    "minecraft:glow_ink_sac:minecraft:glow_squid:800:adult",
+                    "minecraft:porkchop:minecraft:pig:2000:baby",
+                    "minecraft:mutton:minecraft:sheep:2400:baby",
+                    "minecraft:goat_horn:minecraft:goat:1500:baby",
+                    "minecraft:scute:minecraft:turtle:1800:baby"
             )
     );
 

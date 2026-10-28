@@ -1810,7 +1810,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
 
     public void travelAheadSoul(Entity.MoveFunction positionUpdater) {
         if (this.getUser() != null) {
-            LivingEntity s = grabbedSoul;
+            StandEntity s = grabbedSoul;
             if(grabbedSoul != null){
                 if(((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb) {
                     Vec3 lvec = pb.getLookAngleChest(this.getYRot(), this);
@@ -1823,17 +1823,19 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
 
     public void travelAheadSoulRender(float render, StandEntity se){
         if (this.getUser() != null) {
+            System.out.println(render);
             Vec3 junkPos = MainUtil.getAheadVecRender(this, 0.55f, render).getLocation();
+            Vec3 junkPosY = MainUtil.getAheadVecRender(this, 0f, render).getLocation();
             if (!this.level().isClientSide()) {
                 se.setOldPosAndRot();
             }
             se.xOld = junkPos.x;
-            se.yOld = this.getY() + 0.9;
+            se.yOld = junkPosY.y - 0.40;
             se.zOld = junkPos.z;
             if (this.level().isClientSide()) {
-                se.absMoveTo(junkPos.x, this.getY() + 0.9, junkPos.z);
+                se.absMoveTo(junkPos.x, junkPosY.y - 0.40, junkPos.z);
             } else {
-                se.setPos(junkPos.x, this.getY() + 0.9, junkPos.z);
+                se.setPos(junkPos.x, junkPosY.y - 0.40, junkPos.z);
             }
 
             if (this.level().isClientSide()) {
