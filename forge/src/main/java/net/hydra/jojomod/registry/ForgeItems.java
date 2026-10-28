@@ -412,6 +412,10 @@ public class ForgeItems {
             () -> new BlockItem(ForgeBlocks.GODDESS_STATUE_BLOCK.get(),
                     new Item.Properties().stacksTo(1)
             )));
+    public static final RegistryObject<BlockItem> MAGICIANS_STATUE_ITEM = addToWIPTab(ITEMS.register("magicians_statue",
+            () -> new BlockItem(ForgeBlocks.MAGICIANS_STATUE_BLOCK.get(),
+                    new Item.Properties().stacksTo(1)
+            )));
     public static final RegistryObject<BlockItem> STEREO_ITEM = addToTab(ITEMS.register("stereo",
             () -> new BlockItem(ForgeBlocks.STEREO.get(),
                     new Item.Properties().stacksTo(64)
