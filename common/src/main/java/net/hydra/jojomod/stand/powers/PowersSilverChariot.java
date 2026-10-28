@@ -3342,7 +3342,9 @@ public class PowersSilverChariot extends NewPunchingStand {
             BlockState bs2 = this.self.level().getBlockState(bp2);
             BlockState bs3 = this.self.level().getBlockState(bp3);
 
-            if (bs.is(Blocks.STONE) && bs2.is(Blocks.STONE) && bs3.is(Blocks.STONE)) {
+            boolean materialValid = MainUtil.SILVER_CHARIOT_STATUE_MATERIAL_BLOCKS.contains(bs.getBlock());
+
+            if (materialValid && bs.is(bs.getBlock()) && bs2.is(bs.getBlock()) && bs3.is(bs.getBlock())) {
                 BlockState bs4 = ModBlocks.GODDESS_STATUE_BLOCK.defaultBlockState()
                         .setValue(GoddessStatueBlock.FACING, this.self.getDirection())
                         .setValue(GoddessStatueBlock.PART, GoddessStatuePart.BOTTOM);
@@ -3362,14 +3364,15 @@ public class PowersSilverChariot extends NewPunchingStand {
                         bp,
                         bs5,
                         GoddessStatueBlock.UPDATE_ALL
-                );this.self.level().setBlock(
+                );
+                this.self.level().setBlock(
                         bp3,
                         bs6,
                         GoddessStatueBlock.UPDATE_ALL
                 );
 
                 addEXP(5);
-                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.SILVER_CHARIOT_OFFHAND_WEAPON_HIT_EVENT,
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.SILVER_CHARIOT_STATUE_CUTTING_EVENT,
                         SoundSource.PLAYERS, 1F, 1F);
 
                 return true;
@@ -3391,14 +3394,22 @@ public class PowersSilverChariot extends NewPunchingStand {
             BlockState bs2 = this.self.level().getBlockState(bp2);
             BlockState bs3 = this.self.level().getBlockState(bp3);
 
-            if (bs.is(Blocks.STONE) && bs2.is(Blocks.STONE) && bs3.is(Blocks.STONE)) {
+            boolean materialValid = MainUtil.SILVER_CHARIOT_STATUE_MATERIAL_BLOCKS.contains(bs.getBlock());
+
+            if (materialValid && bs.is(bs.getBlock()) && bs2.is(bs.getBlock()) && bs3.is(bs.getBlock())) {
                 return true;
             }
         }
         return false;
     }
 
-
+    @Override
+    public boolean clickRelease() {
+        if (this.getActivePower() == PowerIndex.POWER_4_BLOCK || this.getActivePower() == PowerIndex.POWER_1_BLOCK) {
+            return true;
+        }
+        return super.clickRelease();
+    }
 
     // Slab cutting
     public void slabCuttingClient() {
@@ -3443,7 +3454,7 @@ public class PowersSilverChariot extends NewPunchingStand {
                 }
 
                 addEXP(1);
-                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.SILVER_CHARIOT_OFFHAND_WEAPON_HIT_EVENT,
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.SILVER_CHARIOT_SLAB_CUTTING_EVENT,
                         SoundSource.PLAYERS, 1F, 1F);
 
                 return true;
@@ -3511,6 +3522,10 @@ public class PowersSilverChariot extends NewPunchingStand {
         }
     }
 
+    public void selfGrabUpdate() {
+
+    }
+
     public void selfThrowServer() {
 
     }
@@ -3558,7 +3573,7 @@ public class PowersSilverChariot extends NewPunchingStand {
     // Arm render mode
     public void armRenderClient() {
         if (!isRegainingArmourFromDesummon() && !this.onCooldown(PowerIndex.SKILL_4) && !this.onCooldown(PowerIndex.SKILL_EXTRA) && canExecuteMoveWithLevel(getArmRenderLevel())) {
-            // ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BLOCK, true);
+            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BLOCK, true);
             tryPowerPacket(PowerIndex.POWER_3_BLOCK);
             setCooldown(PowerIndex.SKILL_EXTRA, 7);
         }
@@ -3762,9 +3777,10 @@ public class PowersSilverChariot extends NewPunchingStand {
                         SoundSource.PLAYERS, 1.0F, 1.0F);
             }
         }
+        this.setPowerNone();
         // this.setActivePower(PowerIndex.NONE);
-        this.tryPower(NONE, true);
-        tryPowerPacket(NONE);
+        // this.tryPower(NONE, true);
+        // tryPowerPacket(NONE);
     }
 
     public float getRapierShotDamage(Entity entity) {
@@ -3855,9 +3871,10 @@ public class PowersSilverChariot extends NewPunchingStand {
                         SoundSource.PLAYERS, 1.0F, 1.0F);
             }
         }
+        this.setPowerNone();
         // this.setActivePower(PowerIndex.NONE);
-        this.tryPower(NONE, true);
-        tryPowerPacket(NONE);
+        // this.tryPower(NONE, true);
+        // tryPowerPacket(NONE);
     }
 
 

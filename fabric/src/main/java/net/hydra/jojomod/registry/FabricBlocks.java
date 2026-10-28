@@ -44,6 +44,8 @@ public class FabricBlocks {
     );
     public static final Block CLIMBING_WIRE = registerBlockItemless("climbing_wire", CLIMBING_WIRE_PROPERTIES
     );
+    public static final Block SC_RAPIER_PLATFORM_BLOCK = registerBlock("sc_rapier_platform_block", SC_RAPIER_PLATFORM_BLOCK_PROPERTIES
+    );
     public static final Block FROZEN_DIRT = registerBlock("frozen_dirt", FROZEN_DIRT_PROPERTIES
     );
     public static final Block FROZEN_COBBLESTONE = registerBlock("frozen_cobblestone", FROZEN_COBBLESTONE_PROPERTIES
@@ -390,6 +392,7 @@ public class FabricBlocks {
         ModBlocks.AJA_BLOCK = AJA_BLOCK;
         ModBlocks.FROZEN_DIRT = FROZEN_DIRT;
         ModBlocks.CLIMBING_WIRE = CLIMBING_WIRE;
+        ModBlocks.SC_RAPIER_PLATFORM_BLOCK = SC_RAPIER_PLATFORM_BLOCK;
         ModBlocks.FROZEN_COBBLESTONE = FROZEN_COBBLESTONE;
         ModBlocks.FROZEN_STONE = FROZEN_STONE;
         ModBlocks.FROZEN_DEEPSLATE = FROZEN_DEEPSLATE;

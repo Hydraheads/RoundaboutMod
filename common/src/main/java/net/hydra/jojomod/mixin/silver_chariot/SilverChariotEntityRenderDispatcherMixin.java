@@ -57,6 +57,10 @@ public class SilverChariotEntityRenderDispatcherMixin {
             return;
         }
 
+        if (!SCE.getUser().hasLineOfSight(entity)) {
+            ci.cancel();
+        }
+
         if (!SilverChariotClient.shouldBeVisibleToUser(player, entity, partialTick)) {
             ci.cancel();
         }

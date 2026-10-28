@@ -186,6 +186,8 @@ public class ModBlocks {
     public static Block FROZEN_RED_SAND;
     public static Block FROZEN_RED_SANDSTONE;
 
+    public static Block SC_RAPIER_PLATFORM_BLOCK;
+
     public static Block SHINY_QUARTZ;
     public static Block SHINY_QUARTZ_TILES;
 
@@ -948,6 +950,9 @@ public class ModBlocks {
 
     public static Block CLIMBING_WIRE_PROPERTIES = new ClimbingWireBlock(BlockBehaviour.Properties.of().mapColor(MapColor.DEEPSLATE).
             strength(1F).sound(SoundType.METAL).noOcclusion());
+    public static Block SC_RAPIER_PLATFORM_BLOCK_PROPERTIES = new SilverChariotRapierPlatformBlock(
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_GRAY).noLootTable().sound(SoundType.EMPTY).isValidSpawn(ModBlocks::never).strength(-1.0F, 3600000.0F)
+    );
     public static Block FROZEN_DIRT_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.DIRT).
             strength(0.2F).sound(SoundType.GLASS).friction(0.98F)
             ,() -> Blocks.DIRT);

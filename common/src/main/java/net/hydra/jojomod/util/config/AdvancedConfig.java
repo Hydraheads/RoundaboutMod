@@ -45,6 +45,7 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:killer_queen_disc",
                     "roundabout:diver_down_disc",
                     "roundabout:green_day_disc"
+                    // "roundabout:silver_chariot_disc"
             )
     );
     public Set<String> standArrowSecondaryPoolv9 = new HashSet<>(
@@ -78,6 +79,7 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:killer_queen_disc",
                     "roundabout:diver_down_disc",
                     "roundabout:lyin_eyes_disc"
+                    // "roundabout:silver_chariot_disc"
             )
     );
 
@@ -351,6 +353,18 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:pink_wool:roundabout:wool_slab_pink",
                     "minecraft:red_wool:roundabout:wool_slab_red",
                     "minecraft:yellow_wool:roundabout:wool_slab_yellow"
+            )
+    );
+    public Set<String> silverChariotStatueMaterialBlocks = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:stone",
+                    "minecraft:andesite",
+                    "minecraft:diorite",
+                    "minecraft:granite",
+                    "minecraft:netherrack",
+                    "minecraft:end_stone",
+                    "minecraft:sandstone",
+                    "minecraft:red_sandstone"
             )
     );
 
