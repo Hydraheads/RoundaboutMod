@@ -86,8 +86,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
 
     @Override
     public boolean isStandEnabled() {
-        // turn this into a config
-        return true;
+        return ClientNetworking.getAppropriateConfig().catchTheRainbowSettings.enableCatchTheRainbow;
     }
 
     //cool summon vfx sfx
@@ -390,12 +389,16 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         return super.isServerControlledCooldown(num);
     }
 
-    public int LeftArmState = 0;
+    private int LeftArmState = 0;
 
     public boolean isInRain() {
-        BlockPos $$0 = this.self.blockPosition();
-        return this.self.level().isRainingAt($$0)
-                || this.self.level().isRainingAt(BlockPos.containing((double)$$0.getX(), this.self.getBoundingBox().maxY, (double)$$0.getZ()));
+        if (ClientNetworking.getAppropriateConfig().catchTheRainbowSettings.catchTheRainbowCanAlwaysUse) {
+            return true;
+        }else{
+            BlockPos $$0 = this.self.blockPosition();
+            return this.self.level().isRainingAt($$0)
+                    || this.self.level().isRainingAt(BlockPos.containing((double) $$0.getX(), this.self.getBoundingBox().maxY, (double) $$0.getZ()));
+        }
     }
 
     //rain speed
@@ -409,8 +412,8 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         return super.inputSpeedModifiers(basis);
     }
 
-    public int deathTimer = 0;
-    public int dropTimer = 0;
+    private int deathTimer = 0;
+    private int dropTimer = 0;
 
     @Override
     public void tickPower() {
@@ -509,14 +512,14 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         }
     }
 
-    public int armGoneTicks = 0;
+    private int armGoneTicks = 0;
 
     @Override
     public boolean cheatDeath(DamageSource dsource){
         if (!dsource.is(ModDamageTypes.SUNLIGHT) && !dsource.is(DamageTypes.GENERIC_KILL) && !dsource.is(ModDamageTypes.INFINITE_SPIN)
                 && self instanceof Player PE) {
             if (isInRain() && deathTimer == 0 && hasStandActive(self)) {
-                if (!this.self.level().isClientSide)deathTimer = 1200;
+                if (!this.self.level().isClientSide)deathTimer = (ClientNetworking.getAppropriateConfig().catchTheRainbowSettings.catchTheRainbowLifeClutchCooldown);
                 PE.setHealth(1);
                 PE.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 1), PE);
                 PE.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 40, 10), PE);
@@ -533,14 +536,14 @@ public class PowersCatchTheRainbow extends NewDashPreset {
 
     //rain mend :)
 
-    public void rainMendClient(){
+    private void rainMendClient(){
         if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
             this.tryPower(RAINMEND, true);
             tryPowerPacket(RAINMEND);
         }
     }
 
-    public LivingEntity getMendTarget(){
+    private LivingEntity getMendTarget(){
         Entity TE =getTargetEntity(this.self, 2);
         if (TE instanceof LivingEntity LV){
             return LV;
@@ -548,7 +551,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         return null;
     }
 
-    public boolean canUseRainMend(){
+    private boolean canUseRainMend(){
         if (isInRain()) {
             return (self.getHealth() < self.getMaxHealth() || self.hasEffect(ModEffects.BLEED)) ||
                     (self instanceof Player PE && PE.isCreative() || getMendTarget() != null);
@@ -556,12 +559,12 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         else return false;
     }
 
-    public void useRainMend() {
-        if (/*!this.self.level().isClientSide() &&*/ !onCooldown(PowerIndex.SKILL_1_SNEAK) && canUseRainMend()){
+    private void useRainMend() {
+        if (!onCooldown(PowerIndex.SKILL_1_SNEAK) && canUseRainMend()){
             Entity ent = self;
 
             if (ent instanceof LivingEntity LV && ent.isAlive()) {
-                this.setCooldown(PowerIndex.SKILL_1_SNEAK, 400);
+                this.setCooldown(PowerIndex.SKILL_1_SNEAK, (ClientNetworking.getAppropriateConfig().catchTheRainbowSettings.catchTheRainbowRainMendCooldown));
                 LV.heal(2f);
 
                 MobEffectInstance bleed = LV.getEffect(ModEffects.BLEED);
@@ -593,12 +596,12 @@ public class PowersCatchTheRainbow extends NewDashPreset {
 
     //platform
 
-    boolean canCreatePlatform = false;
+    private boolean canCreatePlatform = false;
+    private final CTRplatformEntity plat = ModEntities.CTR_PLATFORM.create(this.self.level());
 
-    public void rainPlatform(){
+    private void rainPlatform(){
         if (!this.self.level().isClientSide()) {
             canCreatePlatform = false;
-            CTRplatformEntity plat = ModEntities.CTR_PLATFORM.create(this.self.level());
 
             if (plat != null) {
                 plat.setUser(this.self);
@@ -619,16 +622,16 @@ public class PowersCatchTheRainbow extends NewDashPreset {
 
     //barrier
 
-    public void barrierClient(){
+    private void barrierClient(){
         if (!this.onCooldown(PowerIndex.SKILL_1) && isInRain()) {
             this.tryPower(POWER_1, true);
             tryPowerPacket(POWER_1);
         }
     }
 
-    public void barrier(){
+    private void barrier(){
         if (!this.self.level().isClientSide()) {
-            this.setCooldown(PowerIndex.SKILL_1, 600);
+            this.setCooldown(PowerIndex.SKILL_1, (ClientNetworking.getAppropriateConfig().catchTheRainbowSettings.catchTheRainbowBarrierCooldown));
             CTRbarrierEntity barrier = ModEntities.CTR_BARRIER.create(this.self.level());
 
             if (barrier != null) {
@@ -654,7 +657,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
 
     //drop down
 
-    public void dropDownClient(){
+    private void dropDownClient(){
         if (!this.onCooldown(PowerIndex.GLOBAL_DASH)) {
             this.setCooldown(PowerIndex.GLOBAL_DASH, 20);
             this.tryPower(DROPDOWN, true);
@@ -662,7 +665,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         }
     }
 
-    public void dropDown(){
+    private void dropDown(){
         if (!this.self.level().isClientSide()) {
             MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 2F,
                     0,
@@ -674,7 +677,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
 
     //choke
 
-    public Vec3 rayCastFromSelf(double dist){
+    private Vec3 rayCastFromSelf(double dist){
         int steps = (int) (Math.round(dist * 6) + 1);
         Vec3 CurrentCheckPos = this.self.getEyePosition();
         double xstep = (this.self.getLookAngle().x)/6 ;
@@ -697,17 +700,17 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     }
 
     public SeperatedArmEntity Off_hand_entity = null;
-    public boolean HasOffHandCharge = true;
+    private boolean HasOffHandCharge = true;
     public boolean HasOffHand = true;
 
-    public ItemStack OffhandItemToReturn;
+    private ItemStack OffhandItemToReturn;
 
-    public boolean OffHandThrowServer(SeperatedArmEntity SAE){
+    private boolean OffHandThrowServer(SeperatedArmEntity SAE){
 
         if (Off_hand_entity == null) {
             if (SAE != null) {
                 armGoneTicks = 240;
-                this.setCooldown(PowerIndex.SKILL_2, 60);
+                this.setCooldown(PowerIndex.SKILL_2, (ClientNetworking.getAppropriateConfig().catchTheRainbowSettings.catchTheRainbowArmReturnCooldown));
 
                 if(!(Off_hand_entity == null)){
                     Off_hand_entity.discard();
@@ -737,7 +740,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         return true;
     }
 
-    public void OffHandThrow(){
+    private void OffHandThrow(){
         if (!this.onCooldown(PowerIndex.SKILL_2) && isInRain() && !this.self.isUsingItem()) {
 
                 if (HasOffHandCharge && !HasOffHand) {
@@ -762,11 +765,11 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         }
     }
 
-    public boolean OffHandReturnServer() {
+    private boolean OffHandReturnServer() {
         if(!HasOffHand) {
             ItemEntity $$2 = new ItemEntity(this.self.level(), this.self.getX(), this.self.getY() + 1, this.self.getZ(), Off_hand_entity.getMainHandItem());
 
-            this.setCooldown(PowerIndex.SKILL_2, 180);
+            this.setCooldown(PowerIndex.SKILL_2, (ClientNetworking.getAppropriateConfig().catchTheRainbowSettings.catchTheRainbowArmThrowCooldown));
 
             Player player = (Player) this.self;
             if (this.self.getMainHandItem().getItem() instanceof AirItem) {
@@ -809,7 +812,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     }
 
     //rain dodge
-    public void rainDash(){
+    private void rainDash(){
         Options options = Minecraft.getInstance().options;
 
         inputDash = true;

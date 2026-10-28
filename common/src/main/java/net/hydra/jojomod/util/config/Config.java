@@ -126,6 +126,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public KingCrimsonSettings kingCrimsonSettings;
     @NestedOption(group = "modded")
+    public CatchTheRainbowSettings catchTheRainbowSettings;
+    @NestedOption(group = "modded")
     public TheWorldSettings theWorldSettings;
     @NestedOption(group = "modded")
     public StarPlatinumSettings starPlatinumSettings;
@@ -1497,6 +1499,25 @@ public class Config implements Cloneable {
         public Integer silverChariotRapierSpinDuration;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer silverChariotRapierSpinWindup;
+    }
+
+    public static class CatchTheRainbowSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableCatchTheRainbow;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean catchTheRainbowCanAlwaysUse;
+        @IntOption(group = "inherit", value = 1200, min = 0, max = 72000)
+        public Integer catchTheRainbowLifeClutchCooldown;
+        @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
+        public Integer catchTheRainbowRainMendCooldown;
+        @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
+        public Integer catchTheRainbowBarrierCooldown;
+        @IntOption(group = "inherit", value = 180, min = 0, max = 72000)
+        public Integer catchTheRainbowArmThrowCooldown;
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        public Integer catchTheRainbowArmReturnCooldown;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer catchTheRainbowFullDodgeCooldown;
     }
 
     public static class TimeStopSettings {

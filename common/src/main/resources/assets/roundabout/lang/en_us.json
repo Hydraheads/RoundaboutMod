@@ -4329,6 +4329,30 @@
   "config.roundabout.silverChariotShouldRenderAfterimagesWhileUserInFirstPerson.name": "Toggle first person afterimages",
   "config.roundabout.silverChariotShouldRenderAfterimagesWhileUserInFirstPerson.desc": "Toggles if Silver Chariot's user should see afterimages in first person.",
 
+  "config.roundabout.enableCatchTheRainbow.name": "Enable Catch The Rainbow",
+  "config.roundabout.enableCatchTheRainbow.desc": "Enable Catch The Rainbow",
+
+  "config.roundabout.catchTheRainbowCanAlwaysUse.name": "Can Always Use",
+  "config.roundabout.catchTheRainbowCanAlwaysUse.desc": "Toggles if CTR's abilities can always be used, regardless of the rain.",
+
+  "config.roundabout.catchTheRainbowLifeClutchCooldown.name": "Life Clutch Cooldown",
+  "config.roundabout.catchTheRainbowLifeClutchCooldown.desc": "The Cooldown of the Life Clutch passive ability, by default it is 1200 ticks (1 minute)",
+
+  "config.roundabout.catchTheRainbowRainMendCooldown.name": "Rain Mend Cooldown",
+  "config.roundabout.catchTheRainbowRainMendCooldown.desc": "The cooldown of the Rain Mend ability, by default it is 400 ticks (20 seconds)",
+
+  "config.roundabout.catchTheRainbowBarrierCooldown.name": "Barrier Cooldown",
+  "config.roundabout.catchTheRainbowBarrierCooldown.desc": "The cooldown of the Barrier ability, by default it is 600 ticks (30 seconds)",
+
+  "config.roundabout.catchTheRainbowArmThrowCooldown.name": "Arm Throw Cooldown",
+  "config.roundabout.catchTheRainbowArmThrowCooldown.desc": "The cooldown of the Arm Throw ability after it returns to you, by default it is 180 ticks (9 seconds)",
+
+  "config.roundabout.catchTheRainbowArmReturnCooldown.name": "Arm Return Cooldown",
+  "config.roundabout.catchTheRainbowArmReturnCooldown.desc": "The cooldown of the Arm Return ability after throwing your arm, by default it is 600 ticks (3 seconds)",
+
+  "config.roundabout.catchTheRainbowFullDodgeCooldown.name": "Full Dodge Cooldown",
+  "config.roundabout.catchTheRainbowFullDodgeCooldown.desc": "The cooldown of the \"Come The Dawn\" ability, by default it is 200 ticks (10 seconds)",
+
   "config.roundabout.manhattanTransferMaxRange.name": "Manhattan Transfer Max Range",
   "config.roundabout.manhattanTransferMaxRange.desc": "How far you and Manhattan Transfer can distance until it despawns.",
   "config.roundabout.getAutoSpeed.name":"Automatic Speed Modifier",

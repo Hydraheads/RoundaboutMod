@@ -229,16 +229,16 @@ public class SeperatedArmEntity extends StandEntity {
 
     public int StartupTicks = 80;
 
-    Entity grabbedEntity = null;
+    private Entity grabbedEntity = null;
 
-    public boolean isInRain() {
+    private boolean isInRain() {
         BlockPos $$0 = this.blockPosition();
         return this.level().isRainingAt($$0)
                 || this.level().isRainingAt(BlockPos.containing((double)$$0.getX(), this.getBoundingBox().maxY, (double)$$0.getZ()));
     }
 
     //get the grabbed entity's "neck" position
-    public Vec3 rayCastFromGrabbedEntity(double dist){
+    private Vec3 rayCastFromGrabbedEntity(double dist){
         int steps = (int) (Math.round(dist * 6) + 1);
         Vec3 CurrentCheckPos = grabbedEntity.getEyePosition();
         double xstep = (grabbedEntity.getLookAngle().x)/6 ;

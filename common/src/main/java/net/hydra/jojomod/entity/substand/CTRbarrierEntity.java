@@ -49,7 +49,7 @@ public class CTRbarrierEntity extends StandEntity {
 
     public final AnimationState spin = new AnimationState();
 
-    int lifespan = 160;
+    private int lifespan = 160;
 
     public int followTimer = 1;
 
@@ -103,7 +103,7 @@ public class CTRbarrierEntity extends StandEntity {
         super.tick();
     }
 
-    public static void dealWithProjectile(Projectile pj, CTRbarrierEntity this2){
+    private static void dealWithProjectile(Projectile pj, CTRbarrierEntity this2){
         if (pj.level() instanceof ServerLevel sl) {
             if (!(pj.getOwner() instanceof LivingEntity LE &&
                     ((StandUser) LE).roundabout$getStandPowers() instanceof PowersCatchTheRainbow)) {
