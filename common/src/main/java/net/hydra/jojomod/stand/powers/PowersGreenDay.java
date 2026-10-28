@@ -412,7 +412,13 @@ public class PowersGreenDay extends NewPunchingStand {
                     if(this.self.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof AirItem){
                         this.self.setItemInHand(InteractionHand.OFF_HAND,OffhandItemToReturn);
                     }else {
-                        this.self.spawnAtLocation(OffhandItemToReturn);
+                        ItemEntity $$4 = new ItemEntity(this.getSelf().level(), this.getSelf().getX(),
+                                this.getSelf().getY() + this.getSelf().getEyeHeight(), this.getSelf().getZ(),
+                                OffhandItemToReturn);
+                        $$4.setPickUpDelay(1);
+                        $$4.setThrower(this.getSelf().getUUID());
+                        PowerTypes.copyPlaneOfExisting(self,$$4);
+                        this.getSelf().level().addFreshEntity($$4);
                     }
                     OffhandItemToReturn = null;
                 }
@@ -605,6 +611,7 @@ public class PowersGreenDay extends NewPunchingStand {
 
     private boolean serverToggleMold(){
         MoldGone = true;
+        setCooldown(PowerIndex.SKILL_4,ClientNetworking.getAppropriateConfig().greenDaySettings.moldSpreadForceCooldown);
         (self.level()).playSound(self,self.getOnPos(),ModSounds.SNAP_EVENT,SoundSource.PLAYERS,1,1);
         return true;
     }
@@ -1225,7 +1232,13 @@ public class PowersGreenDay extends NewPunchingStand {
             if (this.self.getMainHandItem().getItem() instanceof AirItem) {
                 this.self.setItemInHand(InteractionHand.MAIN_HAND, Main_arm.getMainHandItem());
             } else {
-                this.self.spawnAtLocation(Main_arm.getMainHandItem());
+                ItemEntity $$4 = new ItemEntity(this.getSelf().level(), this.getSelf().getX(),
+                        this.getSelf().getY() + this.getSelf().getEyeHeight(), this.getSelf().getZ(),
+                        Main_arm.getHeldItem());
+                $$4.setPickUpDelay(1);
+                $$4.setThrower(this.getSelf().getUUID());
+                PowerTypes.copyPlaneOfExisting(self,$$4);
+                this.getSelf().level().addFreshEntity($$4);
             }
             //this.self.spawnAtLocation(Main_arm.getMainHandItem());
             Main_arm.setUser(null);

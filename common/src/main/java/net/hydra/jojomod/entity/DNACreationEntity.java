@@ -1,9 +1,13 @@
 package net.hydra.jojomod.entity;
 
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -67,6 +71,20 @@ public class DNACreationEntity extends LivingEntity {
                 return;
             }
 
+            if (this.tickCount % 7 == 0) {
+                MainUtil.sendParticlesIfPossible(
+                        this,
+                        this.level(),
+                        ParticleTypes.HAPPY_VILLAGER,
+                        this.getX(),
+                        this.getY() + 0.5,
+                        this.getZ(),
+                        1,
+                        0.2, 0.2, 0.2,
+                        0.05
+                );
+            }
+
             Item dnaItem = dnaStack.getItem();
 
             if (MainUtil.GOLD_EXPERIENCE_TRANSFORM_RATE.containsKey(dnaItem)) {
@@ -103,6 +121,31 @@ public class DNACreationEntity extends LivingEntity {
                 }
 
                 this.level().addFreshEntity(mob);
+
+                if (this.level() instanceof ServerLevel serverLevel) {
+                    serverLevel.sendParticles(
+                            ParticleTypes.TOTEM_OF_UNDYING,
+                            this.getX(), this.getY() + 0.5, this.getZ(),
+                            35,
+                            0.3, 0.3, 0.3,
+                            0.25
+                    );
+                    serverLevel.sendParticles(
+                            ParticleTypes.HAPPY_VILLAGER,
+                            this.getX(), this.getY() + 0.5, this.getZ(),
+                            20,
+                            0.4, 0.4, 0.4,
+                            0.05
+                    );
+                    this.level().playSound(
+                            null,
+                            this.blockPosition(),
+                            ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT,
+                            SoundSource.PLAYERS,
+                            1.0F,
+                            1.1F
+                    );
+                }
             }
         }
     }
