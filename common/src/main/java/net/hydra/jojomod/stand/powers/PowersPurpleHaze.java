@@ -24,9 +24,11 @@ import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.particles.HazeColorParticleOptions;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -981,6 +983,15 @@ public class PowersPurpleHaze extends NewPunchingStand {
         RenderSystem.enableBlend();
         context.setColor(1f, 1f, 1f, 1f);
 
+        CooldownInstance cd = null;
+        if (!getPowerCooldowns().isEmpty() && getPowerCooldowns().size() >= PowerIndex.SNEAK_ATTACK){
+            cd = getPowerCooldowns().get(PowerIndex.SNEAK_ATTACK);
+        }
+
+        if ((cd != null && (cd.time >= 0)) || getPods() <= 0) {
+            context.setColor(0.62f, 0.62f, 0.62f, 0.8f);
+        }
+
         x += slot * 25;
         y -= 1;
 
@@ -1008,13 +1019,36 @@ public class PowersPurpleHaze extends NewPunchingStand {
             context.blit(StandIcons.PODS_0, x - 3, y - 3,
                     0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
         }
-    }
-    private static final float PURPLE_HAZE_RANGE = 8.0F;
 
-    private boolean purpleHazeFieldActive = false;
+        if ((cd != null && (cd.time >= 0))) {
+            float blit = (20*(1-((float) (1+cd.time) /(1+cd.maxTime))));
+            int b = (int) Math.round(blit);
+            RenderSystem.enableBlend();
+            context.setColor(1f, 1f, 1f, 1f);
+
+            ResourceLocation COOLDOWN_TEX = StandIcons.COOLDOWN_ICON;
+
+            if (cd.isFrozen())
+                COOLDOWN_TEX = StandIcons.FROZEN_COOLDOWN_ICON;
+
+            context.blit(COOLDOWN_TEX, x - 1, y - 1 + b, 0, b, 20, 20-b, 20, 20);
+            int num = ((int)(Math.floor((double) cd.time /20)+1));
+            int offset = x+3;
+            if (num <=9){
+                offset = x+7;
+            }
+            //If 100 or more seconds long shift to the left
+            if (num >= 100){
+                offset = offset-3;
+            }
+
+            if (!cd.isFrozen())
+                context.drawString(Minecraft.getInstance().font, ""+num,offset,y,0xffffff,true);
+        }
+    }
+
     private boolean indistortionmode = false;
 
-    private int purpleHazeFieldTicks = 0;
 
     private static final int PURPLE_HAZE_FIELD_DURATION = 400;
     private static final int DISTORTION_FIELD_DURATION = 300;
@@ -1022,10 +1056,6 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     private PHCapsuleEntity purpleHazePod = null;
     private boolean purpleHazePodDistortionMode = false;
-    private Vec3 purpleHazeFieldPosition = null;
-
-    private static final int VIRUS_INFECTION_DELAY = 40;
-    private boolean purpleHazeFieldDistortionMode = false;
 
     //Pod count
     private static final int MAX_PODS = 6;
