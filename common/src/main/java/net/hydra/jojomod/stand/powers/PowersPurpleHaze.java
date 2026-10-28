@@ -93,6 +93,100 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
     }
 
+
+    public float getHeavyPunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod((float) multiplyPowerByStandConfigPlayers(1.75F));
+        } else {
+            return levelupDamageMod((float) (multiplyPowerByStandConfigMobs(6)));
+        }
+    }
+
+    @Override
+    public float getBarrageHitStrength(Entity entity){
+        float str = super.getBarrageHitStrength(entity);
+        if (str > 0.005F) {
+            if (getReducedDamage(entity)) {
+                str *= levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
+                        PurpleHazeSettings.PurpleHazeAttackMultOnPlayers * 0.01)));
+            } else {
+                str *= levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
+                        PurpleHazeSettings.PurpleHazeAttackMultOnMobs * 0.01)));
+            }
+            if (forwardBarrage) {
+                str *= 0.6F;
+            }
+        }
+        if (entity instanceof LivingEntity){
+            if (str >= ((LivingEntity) entity).getHealth() && ClientNetworking.getAppropriateConfig().generalStandSettings.barragesOnlyKillOnLastHit){
+                if (entity instanceof Player) {
+                    str = 0.00001F;
+                } else {
+                    str = 0F;
+                }
+            }
+        }
+        return str;
+    }
+    @Override
+    public float getBarrageFinisherStrength(Entity entity){
+        float str = super.getBarrageFinisherStrength(entity);
+        if (this.getReducedDamage(entity)){
+            str *=levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
+                    PurpleHazeSettings.PurpleHazeAttackMultOnPlayers*0.01)));
+        } else {
+            str *=levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
+                    PurpleHazeSettings.PurpleHazeAttackMultOnMobs*0.01)));
+        }
+        if (forwardBarrage && !(entity instanceof Player)){
+            str*=0.6F;
+        } else if (forwardBarrage){
+            str*=0.8F;
+        }
+        return str;
+    }
+    @Override
+    public float getKickBarrageHitStrength(Entity entity){
+        float str = super.getKickBarrageHitStrength(entity);
+        if (str > 0.005F) {
+            if (getReducedDamage(entity)) {
+                str *= levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
+                        PurpleHazeSettings.PurpleHazeAttackMultOnPlayers * 0.01)));
+            } else {
+                str *= levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
+                        PurpleHazeSettings.PurpleHazeAttackMultOnMobs * 0.01)));
+            }
+            if (forwardBarrage) {
+                str *= 0.6F;
+            }
+        }
+        return str;
+    }
+    @Override
+    public float getKickBarrageFinisherStrength(Entity entity){
+        float str = super.getKickBarrageFinisherStrength(entity);
+        if (this.getReducedDamage(entity)){
+            str *=levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
+                    PurpleHazeSettings.PurpleHazeAttackMultOnPlayers*0.01)));
+        } else {
+            str *=levelupDamageMod((float) ((ClientNetworking.getAppropriateConfig().
+                    PurpleHazeSettings.PurpleHazeAttackMultOnMobs*0.01)));
+        }
+        if (forwardBarrage && !(entity instanceof Player)){
+            str*=0.6F;
+        } else if (forwardBarrage){
+            str*=0.8F;
+        }
+        return str;
+    }
+
+    @Override
+    public void playKickBarrageCrySound(){
+        if (!this.self.level().isClientSide()) {
+            playStandUserOnlySoundsIfNearby(SoundIndex.BARRAGE_CRY_SOUND_2, 32, false, true);
+        }
+    }
+
     public int getLeapLevel() {
         return 3;
     }
@@ -436,6 +530,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
     public void updateUniqueMoves() {
          if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
              updateKickBarrageCharge();
+         } else if (this.getActivePower() == PowerIndex.BARRAGE_2) {
+             updateKickBarrage();
          }
          super.updateUniqueMoves();
     }
@@ -463,6 +559,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
             }
             case PowerIndex.BARRAGE_CHARGE_2 -> {
                 return this.setPowerKickBarrageCharge();
+            }
+            case PowerIndex.BARRAGE_2 ->{
+                return this.setPowerKickBarrage();
             }
         }
         return super.setPowerOther(move, lastMove);
@@ -1718,6 +1817,11 @@ public class PowersPurpleHaze extends NewPunchingStand {
         return ModSounds.PURPLE_HAZE_BARRAGE_CRY_EVENT;
     }
 
+    protected SoundEvent getKickBarrageSound() {
+
+        return ModSounds.PURPLE_HAZE_KICK_BARRAGE_CRY_EVENT;
+    }
+
 
     @Override
     public void playBarrageEndNoise(float mod, Entity entity) {
@@ -1740,14 +1844,19 @@ public class PowersPurpleHaze extends NewPunchingStand {
             return ModSounds.PURPLE_HAZE_SUMMON_EVENT;
         } else if (soundChoice == SoundIndex.BARRAGE_CRY_SOUND) {
             return getBarrageSound();
-    }
+        } else if (soundChoice == SoundIndex.BARRAGE_CRY_SOUND_2) {
+            return getKickBarrageSound();
+        }
         return super.getSoundFromByte(soundChoice);
     }
     @Override
     public byte getSoundCancelingGroupByte(byte soundChoice) {
-        if (soundChoice == SoundIndex.BARRAGE_CRY_SOUND) { return SoundIndex.BARRAGE_SOUND_GROUP; }
+        if (soundChoice == SoundIndex.BARRAGE_CRY_SOUND || soundChoice == SoundIndex.BARRAGE_CRY_SOUND_2) { return SoundIndex.BARRAGE_SOUND_GROUP; }
         return super.getSoundCancelingGroupByte(soundChoice);
     }
+
+
+    //@Override public SoundEvent getBarrageChargeSound() { return ModSounds.PURPLE_HAZE_BARRAGE_WINDUP_EVENT; }
 
     @Override
     public boolean isWip(){

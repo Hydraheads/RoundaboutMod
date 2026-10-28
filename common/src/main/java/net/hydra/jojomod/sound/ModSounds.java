@@ -1409,6 +1409,12 @@ public class ModSounds {
     public static final String PURPLE_HAZE_BARRAGE_CRY = "purple_haze_barrage_cry";
     public static final ResourceLocation PURPLE_HAZE_BARRAGE_CRY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PURPLE_HAZE_BARRAGE_CRY);
     public static SoundEvent PURPLE_HAZE_BARRAGE_CRY_EVENT = SoundEvent.createVariableRangeEvent(PURPLE_HAZE_BARRAGE_CRY_ID);
+    public static final String PURPLE_HAZE_BARRAGE_WINDUP = "purple_haze_barrage_windup";
+    public static final ResourceLocation PURPLE_HAZE_BARRAGE_WINDUP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PURPLE_HAZE_BARRAGE_WINDUP);
+    public static SoundEvent PURPLE_HAZE_BARRAGE_WINDUP_EVENT = SoundEvent.createVariableRangeEvent(PURPLE_HAZE_BARRAGE_WINDUP_ID);
+    public static final String PURPLE_HAZE_KICK_BARRAGE_CRY = "purple_haze_kick_barrage_cry";
+    public static final ResourceLocation PURPLE_HAZE_KICK_BARRAGE_CRY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PURPLE_HAZE_KICK_BARRAGE_CRY);
+    public static SoundEvent PURPLE_HAZE_KICK_BARRAGE_CRY_EVENT = SoundEvent.createVariableRangeEvent(PURPLE_HAZE_KICK_BARRAGE_CRY_ID);
     public static final String PURPLE_HAZE_BARRAGE_HIT = "purple_haze_barrage_hit";
     public static final ResourceLocation PURPLE_HAZE_BARRAGE_HIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PURPLE_HAZE_BARRAGE_HIT);
     public static SoundEvent PURPLE_HAZE_BARRAGE_HIT_EVENT = SoundEvent.createVariableRangeEvent(PURPLE_HAZE_BARRAGE_HIT_ID);
