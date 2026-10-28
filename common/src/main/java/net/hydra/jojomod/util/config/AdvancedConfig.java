@@ -247,6 +247,17 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:nether_wart_block:minecraft:air:0.3",
                     "minecraft:warped_wart_block:minecraft:air:0.3",
                     "minecraft:shroomlight:minecraft:air:0.3",
+                    "minecraft:pumpkin:minecraft:air:0.3",
+                    "minecraft:carved_pumpkin:minecraft:air:0.3",
+                    "minecraft:melon:minecraft:air:0.3",
+                    "minecraft:hay_block:minecraft:air:0.3",
+                    "minecraft:infested_stone:minecraft:stone:0.3",
+                    "minecraft:infested_cobblestone:minecraft:cobblestone:0.3",
+                    "minecraft:infested_stone_bricks:minecraft:stone_bricks:0.3",
+                    "minecraft:infested_mossy_stone_bricks:minecraft:mossy_stone_bricks:0.3",
+                    "minecraft:infested_cracked_stone_bricks:minecraft:cracked_stone_bricks:0.3",
+                    "minecraft:infested_chiseled_stone_bricks:minecraft:chiseled_stone_bricks:0.3",
+                    "minecraft:infested_deepslate:minecraft:deepslate:0.3",
                     "minecraft:dirt_path:minecraft:farmland:0.3",
                     "minecraft:crying_obsidian:minecraft:obsidian:0.3",
                     "minecraft:warped_nylium:minecraft:netherrack:0.3",
@@ -260,6 +271,7 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:mangrove_sapling:minecraft:dead_bush:0.3",
                     "minecraft:oak_sapling:minecraft:dead_bush:0.3",
                     "minecraft:spruce_sapling:minecraft:dead_bush:0.3"
+
             )
     );
 
