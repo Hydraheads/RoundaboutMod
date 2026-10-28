@@ -7,6 +7,7 @@ import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.stand.PurpleHazeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -213,11 +214,20 @@ public class PurpleSmokeEntity extends StandEntity {
         if (!(this.level() instanceof ServerLevel sl)) return;
         if (range < 1.0F) return;
 
+        LivingEntity user = this.getUser();
+
+        boolean canGrief =
+                !ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims
+                        && sl.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)
+                        && user instanceof Player
+                        && MainUtil.getIsGamemodeApproriateForGrief(user);
+
+        if (!canGrief) return;
+
         int r = Mth.ceil(range);
         if (r <= 0) return;
 
         BlockPos center = this.blockPosition();
-
         int attempts = Mth.clamp((int) (range * 8F), 15, 120);
 
         for (int i = 0; i < attempts; i++) {
