@@ -1851,6 +1851,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
             return ModSounds.PURPLE_HAZE_SUMMON_EVENT;
         } else if (soundChoice == SoundIndex.BARRAGE_CRY_SOUND) {
             return getBarrageSound();
+        } else if (soundChoice == SoundIndex.ALT_CHARGE_SOUND_1) {
+            return ModSounds.STAND_BARRAGE_WINDUP_EVENT;
         } else if (soundChoice == SoundIndex.BARRAGE_CRY_SOUND_2) {
             return getKickBarrageSound();
         }
