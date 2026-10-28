@@ -139,6 +139,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
                     }
                     it.remove();
                 } else {
+                    if (mobEntity instanceof Mob mob) {
+                        ((StandUser) mob).roundabout$deeplyRemoveAttackTarget();
+                        mob.getNavigation().stop();
+                    }
                     entry.setValue(ticksLeft - 1);
                 }
             }
@@ -163,6 +167,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 } else {
                     //insert life wheel here
                 }
+            }
+            // dash
+            case SKILL_3_NORMAL -> {
+                dash();
             }
             // life punch
             case SKILL_3_CROUCH -> {
@@ -350,7 +358,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                             } else if (LE instanceof Mob mob) {
                                 ((StandUser) mob).roundabout$deeplyRemoveAttackTarget();
                                 mob.getNavigation().stop();
-                                disabledMobTimers.put(LE.getId(), 50);
+                                disabledMobTimers.put(LE.getId(), 40);
                             }
                         }
                     }
@@ -498,6 +506,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                             }
                         }
                     }
+                    addEXP(5);
                     if (!this.self.level().isClientSide()) {
                         playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.95F, 1F);
                     }

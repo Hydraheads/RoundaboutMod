@@ -398,6 +398,15 @@ public class PowersDiverDown extends NewPunchingStand {
         }
     }
 
+    @Override
+    public float getHeavyPunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(1.75F));
+        } else {
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(5.0F));
+        }
+    }
+
     // mob AI here
 
     private int creeperDodgeTimer = 0;
@@ -529,7 +538,10 @@ public class PowersDiverDown extends NewPunchingStand {
                 // submerged in a friendly mob, apply buffs/cures
                 if (this.submergedTarget instanceof Zombie friendly && friendly.isAlive()) {
                     if (!this.onCooldown(PowerIndex.GENERAL_1)) {
-                        cureNegativeEffects();
+                        if (!this.onCooldown(PowerIndex.GENERAL_1) && hasHarmfulEffects(friendly)) {
+                            cureNegativeEffects();
+                            setCooldown(PowerIndex.GENERAL_1, 200);
+                        }
                         if (!this.hasDiverLegs && !((StandUser) friendly).roundabout$hasDiverLegs()) {
                             diverLegs();
                         }
@@ -621,6 +633,16 @@ public class PowersDiverDown extends NewPunchingStand {
                 toggleZip(false);
             }
         }
+    }
+
+    // used for zombie ai
+    private boolean hasHarmfulEffects(LivingEntity entity) {
+        for (MobEffectInstance instance : entity.getActiveEffects()) {
+            if (instance.getEffect().getCategory() == MobEffectCategory.HARMFUL) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // rejection ai
@@ -2490,7 +2512,7 @@ public class PowersDiverDown extends NewPunchingStand {
         return false;
     }
 
-    private boolean recallLimbs() {
+    public boolean recallLimbs() {
         if (this.activeLimbs.isEmpty()) {
             return false;
         }
@@ -2505,15 +2527,18 @@ public class PowersDiverDown extends NewPunchingStand {
         // reset current limbs
         this.activeLimbs.clear();
         this.currentLimbIndex = 0;
+
+        if (this.self instanceof ServerPlayer sp) {
+            S2CPacketUtil.sendIntPowerDataPacket(sp, LIMB_RECALL, -1);
+            S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.SKILL_4_SNEAK, 50);
+        }
+
         // resummons stand
         if (!level.isClientSide() && hasStandActive(this.self)) {
             ((StandUser) this.self).roundabout$summonStand(level, true, false);
             playSoundIfPossible(self.level(), null, this.self.blockPosition(),
                     ModSounds.SUMMON_DIVER_DOWN_EVENT,
                     SoundSource.PLAYERS, 0.85F, 1);
-        }
-        if (this.self instanceof ServerPlayer sp) {
-            S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.SKILL_4_SNEAK, 50);
         }
         return true;
     }
@@ -2762,6 +2787,9 @@ public class PowersDiverDown extends NewPunchingStand {
             if (isInDiveHitbox(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5)) {
                 BlockState state = stand.level().getBlockState(pos);
                 if (state.getBlock() instanceof ChestBlock || state.getBlock() instanceof BarrelBlock) {
+                    if (this.self instanceof Player player && !MainUtil.canInteractWithBlock(player, pos)) {
+                        continue;
+                    }
                     // distanceToSqr calculates 3D distance squared to stand's position
                     double distSq = stand.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
                     if (distSq < closestDistSq) {
@@ -2797,10 +2825,14 @@ public class PowersDiverDown extends NewPunchingStand {
         if (chestPos == null) {
             return false;
         }
-        if (!MainUtil.canInteractWithBlock(serverPlayer, chestPos)) {
+
+        // this is like my third attempt to fix claims with chests. bruh
+        StandEntity stand = getStandEntity(this.self);
+        BlockPos standPos = stand != null ? stand.blockPosition() : serverPlayer.blockPosition();
+        if (!MainUtil.canInteractWithBlock(serverPlayer, chestPos) || !MainUtil.canPlaceOnClaim(serverPlayer, standPos)) {
             return false;
         }
-        StandEntity stand = getStandEntity(this.self);
+
         if (stand != null) {
             if (!isPiloting()) {
                 setPiloting(stand.getId());
@@ -3511,6 +3543,8 @@ public class PowersDiverDown extends NewPunchingStand {
             if (DamageHandler.StandDamageEntity(victim, getKickTrapStrength(victim), this.self) && !blocked) {
                 MainUtil.takeLiteralUnresistableKnockbackWithY(victim, launchX, launchY, launchZ);
             }
+
+            addEXP(5, victim);
 
             // play effects sounds and stuff here
             playSoundIfPossible(self.level(), null, this.self.blockPosition(),

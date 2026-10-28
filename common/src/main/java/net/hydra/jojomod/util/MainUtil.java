@@ -2429,8 +2429,7 @@ public class MainUtil {
                 || !MainUtil.getIsGamemodeApproriateForGrief(player)) {
             return true;
         }
-
-        return player.level().mayInteract(player, pos);
+        return player.level().mayInteract(player, pos) && canPlaceOnClaim(player, pos);
     }
 
     // Couldn't find better wording but this tests if you're on claimed land that

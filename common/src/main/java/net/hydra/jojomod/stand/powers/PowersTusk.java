@@ -400,8 +400,12 @@ public class PowersTusk extends NewDashPreset {
                 }
 
                 if (!isClient()) {
+                    Vec3 vec3 = this.getSelf().getViewVector(0);
                     if (this.getAct() > 1) {
                         this.shootNail(this.getAttackTimeDuring());
+                        if (!this.getSelf().onGround()) {
+                            MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), Math.max(getChargeScale(this.getAttackTimeDuring()), 0.4) * 0.6F, vec3.x, vec3.y, vec3.z);
+                        }
                     } else {
                         shootNailBurst();
                     }
