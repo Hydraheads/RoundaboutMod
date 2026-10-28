@@ -398,6 +398,15 @@ public class PowersDiverDown extends NewPunchingStand {
         }
     }
 
+    @Override
+    public float getHeavyPunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(1.75F));
+        } else {
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(5.0F));
+        }
+    }
+
     // mob AI here
 
     private int creeperDodgeTimer = 0;
