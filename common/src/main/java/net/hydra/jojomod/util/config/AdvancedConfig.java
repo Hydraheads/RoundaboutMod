@@ -253,6 +253,7 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:carved_pumpkin:minecraft:air:0.3",
                     "minecraft:melon_block:minecraft:air:0.3",
                     "minecraft:hay_block:minecraft:air:0.3",
+                    "minecraft:minecraft:cobweb:minecraft:air:0.3",
                     "minecraft:infested_stone:minecraft:stone:0.3",
                     "minecraft:infested_cobblestone:minecraft:cobblestone:0.3",
                     "minecraft:infested_stone_bricks:minecraft:stone_bricks:0.3",
