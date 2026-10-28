@@ -2787,6 +2787,9 @@ public class PowersDiverDown extends NewPunchingStand {
             if (isInDiveHitbox(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5)) {
                 BlockState state = stand.level().getBlockState(pos);
                 if (state.getBlock() instanceof ChestBlock || state.getBlock() instanceof BarrelBlock) {
+                    if (this.self instanceof Player player && !MainUtil.canInteractWithBlock(player, pos)) {
+                        continue;
+                    }
                     // distanceToSqr calculates 3D distance squared to stand's position
                     double distSq = stand.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
                     if (distSq < closestDistSq) {
@@ -2822,10 +2825,14 @@ public class PowersDiverDown extends NewPunchingStand {
         if (chestPos == null) {
             return false;
         }
-        if (!MainUtil.canInteractWithBlock(serverPlayer, chestPos)) {
+
+        // this is like my third attempt to fix claims with chests. bruh
+        StandEntity stand = getStandEntity(this.self);
+        BlockPos standPos = stand != null ? stand.blockPosition() : serverPlayer.blockPosition();
+        if (!MainUtil.canInteractWithBlock(serverPlayer, chestPos) || !MainUtil.canPlaceOnClaim(serverPlayer, standPos)) {
             return false;
         }
-        StandEntity stand = getStandEntity(this.self);
+
         if (stand != null) {
             if (!isPiloting()) {
                 setPiloting(stand.getId());
