@@ -2505,15 +2505,18 @@ public class PowersDiverDown extends NewPunchingStand {
         // reset current limbs
         this.activeLimbs.clear();
         this.currentLimbIndex = 0;
+
+        if (this.self instanceof ServerPlayer sp) {
+            S2CPacketUtil.sendIntPowerDataPacket(sp, LIMB_RECALL, -1);
+            S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.SKILL_4_SNEAK, 50);
+        }
+
         // resummons stand
         if (!level.isClientSide() && hasStandActive(this.self)) {
             ((StandUser) this.self).roundabout$summonStand(level, true, false);
             playSoundIfPossible(self.level(), null, this.self.blockPosition(),
                     ModSounds.SUMMON_DIVER_DOWN_EVENT,
                     SoundSource.PLAYERS, 0.85F, 1);
-        }
-        if (this.self instanceof ServerPlayer sp) {
-            S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.SKILL_4_SNEAK, 50);
         }
         return true;
     }
