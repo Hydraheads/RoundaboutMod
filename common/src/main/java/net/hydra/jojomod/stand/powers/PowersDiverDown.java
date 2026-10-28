@@ -538,7 +538,10 @@ public class PowersDiverDown extends NewPunchingStand {
                 // submerged in a friendly mob, apply buffs/cures
                 if (this.submergedTarget instanceof Zombie friendly && friendly.isAlive()) {
                     if (!this.onCooldown(PowerIndex.GENERAL_1)) {
-                        cureNegativeEffects();
+                        if (!this.onCooldown(PowerIndex.GENERAL_1) && hasHarmfulEffects(friendly)) {
+                            cureNegativeEffects();
+                            setCooldown(PowerIndex.GENERAL_1, 200);
+                        }
                         if (!this.hasDiverLegs && !((StandUser) friendly).roundabout$hasDiverLegs()) {
                             diverLegs();
                         }
@@ -630,6 +633,16 @@ public class PowersDiverDown extends NewPunchingStand {
                 toggleZip(false);
             }
         }
+    }
+
+    // used for zombie ai
+    private boolean hasHarmfulEffects(LivingEntity entity) {
+        for (MobEffectInstance instance : entity.getActiveEffects()) {
+            if (instance.getEffect().getCategory() == MobEffectCategory.HARMFUL) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // rejection ai
