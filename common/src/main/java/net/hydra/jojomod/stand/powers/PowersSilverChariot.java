@@ -2,9 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.*;
-import net.hydra.jojomod.block.GoddessStatueBlock;
-import net.hydra.jojomod.block.GoddessStatuePart;
-import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.*;
 import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.ModEntities;
@@ -3343,33 +3341,63 @@ public class PowersSilverChariot extends NewPunchingStand {
             BlockState bs3 = this.self.level().getBlockState(bp3);
 
             boolean materialValid = MainUtil.SILVER_CHARIOT_STATUE_MATERIAL_BLOCKS.contains(bs.getBlock());
+            BlockState bs4;
+            BlockState bs5;
+            BlockState bs6;
 
             if (materialValid && bs.is(bs.getBlock()) && bs2.is(bs.getBlock()) && bs3.is(bs.getBlock())) {
-                BlockState bs4 = ModBlocks.GODDESS_STATUE_BLOCK.defaultBlockState()
-                        .setValue(GoddessStatueBlock.FACING, this.self.getDirection())
-                        .setValue(GoddessStatueBlock.PART, GoddessStatuePart.BOTTOM);
-                BlockState bs5 = ModBlocks.GODDESS_STATUE_BLOCK.defaultBlockState()
-                        .setValue(GoddessStatueBlock.FACING, this.self.getDirection())
-                        .setValue(GoddessStatueBlock.PART, GoddessStatuePart.MIDDLE);
-                BlockState bs6 = ModBlocks.GODDESS_STATUE_BLOCK.defaultBlockState()
-                        .setValue(GoddessStatueBlock.FACING, this.self.getDirection())
-                        .setValue(GoddessStatueBlock.PART, GoddessStatuePart.TOP);
+                double random = Math.random();
+                if (random > 0.5) {
+                    bs4 = ModBlocks.GODDESS_STATUE_BLOCK.defaultBlockState()
+                            .setValue(GoddessStatueBlock.FACING, this.self.getDirection())
+                            .setValue(GoddessStatueBlock.PART, GoddessStatuePart.BOTTOM);
+                    bs5 = ModBlocks.GODDESS_STATUE_BLOCK.defaultBlockState()
+                            .setValue(GoddessStatueBlock.FACING, this.self.getDirection())
+                            .setValue(GoddessStatueBlock.PART, GoddessStatuePart.MIDDLE);
+                    bs6 = ModBlocks.GODDESS_STATUE_BLOCK.defaultBlockState()
+                            .setValue(GoddessStatueBlock.FACING, this.self.getDirection())
+                            .setValue(GoddessStatueBlock.PART, GoddessStatuePart.TOP);
 
-                this.self.level().setBlock(
-                        bp2,
-                        bs4,
-                        GoddessStatueBlock.UPDATE_ALL
-                );
-                this.self.level().setBlock(
-                        bp,
-                        bs5,
-                        GoddessStatueBlock.UPDATE_ALL
-                );
-                this.self.level().setBlock(
-                        bp3,
-                        bs6,
-                        GoddessStatueBlock.UPDATE_ALL
-                );
+                    this.self.level().setBlock(
+                            bp2,
+                            bs4,
+                            GoddessStatueBlock.UPDATE_ALL
+                    );
+                    this.self.level().setBlock(
+                            bp,
+                            bs5,
+                            GoddessStatueBlock.UPDATE_ALL
+                    );
+                    this.self.level().setBlock(
+                            bp3,
+                            bs6,
+                            GoddessStatueBlock.UPDATE_ALL
+                    );
+                } else {
+                    bs4 = ModBlocks.MAGICIANS_STATUE_BLOCK.defaultBlockState()
+                            .setValue(MagiciansStatueBlock.FACING, this.self.getDirection())
+                            .setValue(MagiciansStatueBlock.PART, MagiciansStatuePart.BOTTOM);
+                    bs5 = ModBlocks.MAGICIANS_STATUE_BLOCK.defaultBlockState()
+                            .setValue(MagiciansStatueBlock.FACING, this.self.getDirection())
+                            .setValue(MagiciansStatueBlock.PART, MagiciansStatuePart.TOP);
+                    bs6 = Blocks.AIR.defaultBlockState();
+
+                    this.self.level().setBlock(
+                            bp2,
+                            bs4,
+                            MagiciansStatueBlock.UPDATE_ALL
+                    );
+                    this.self.level().setBlock(
+                            bp,
+                            bs5,
+                            MagiciansStatueBlock.UPDATE_ALL
+                    );
+                    this.self.level().setBlock(
+                            bp3,
+                            bs6,
+                            Block.UPDATE_ALL
+                    );
+                }
 
                 addEXP(5);
                 playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.SILVER_CHARIOT_STATUE_CUTTING_EVENT,

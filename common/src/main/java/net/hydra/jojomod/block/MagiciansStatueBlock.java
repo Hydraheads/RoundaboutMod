@@ -1,8 +1,10 @@
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -31,6 +33,19 @@ public class MagiciansStatueBlock extends HorizontalDirectionalBlock {
     public MagiciansStatueBlock(BlockBehaviour.Properties properties){
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(PART, MagiciansStatuePart.BOTTOM));
+    }
+
+    @Override
+    public void fallOn(Level $$0, BlockState $$1, BlockPos $$2, Entity $$3, float $$4) {
+        super.fallOn($$0, $$1, $$2, $$3, $$4 * 2F);
+    }
+
+    @Override
+    public void stepOn(Level $$0, BlockPos $$1, BlockState $$2, Entity $$3) {
+        if ($$2.getValue(PART) == MagiciansStatuePart.TOP) {
+            $$3.hurt(ModDamageTypes.of($$0, ModDamageTypes.STATUE), 2.0F);
+        }
+        super.stepOn($$0, $$1, $$2, $$3);
     }
 
     @Override
