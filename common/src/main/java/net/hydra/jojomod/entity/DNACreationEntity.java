@@ -92,20 +92,6 @@ public class DNACreationEntity extends LivingEntity {
                 return;
             }
 
-            if (this.tickCount % 7 == 0) {
-                MainUtil.sendParticlesIfPossible(
-                        this,
-                        this.level(),
-                        ParticleTypes.HAPPY_VILLAGER,
-                        this.getX(),
-                        this.getY() + 0.5,
-                        this.getZ(),
-                        1,
-                        0.2, 0.2, 0.2,
-                        0.05
-                );
-            }
-
             Item dnaItem = dnaStack.getItem();
 
             if (MainUtil.GOLD_EXPERIENCE_TRANSFORM_RATE.containsKey(dnaItem)) {

@@ -1,0 +1,36 @@
+{
+  "variants": {
+    "facing=east,part=bottom": {
+      "model": "roundabout:block/mr_statue_bottom",
+      "y": 270
+    },
+    "facing=east,part=top": {
+      "model": "roundabout:block/mr_statue_top",
+      "y": 270
+    },
+    "facing=north,part=bottom": {
+      "model": "roundabout:block/mr_statue_bottom",
+      "y": 180
+    },
+    "facing=north,part=top": {
+      "model": "roundabout:block/mr_statue_top",
+      "y": 180
+    },
+    "facing=south,part=bottom": {
+      "model": "roundabout:block/mr_statue_bottom",
+      "y": 0
+    },
+    "facing=south,part=top": {
+      "model": "roundabout:block/mr_statue_top",
+      "y": 0
+    },
+    "facing=west,part=bottom": {
+      "model": "roundabout:block/mr_statue_bottom",
+      "y": 90
+    },
+    "facing=west,part=top": {
+      "model": "roundabout:block/mr_statue_top",
+      "y": 90
+    }
+  }
+}

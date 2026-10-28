@@ -18,6 +18,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
@@ -270,6 +271,8 @@ public class SilverChariotEntity extends FollowingStandEntity {
     public final AnimationState scMiningBarrageLeft = new AnimationState();
     public final AnimationState scBarrageFinisherRight = new AnimationState();
     public final AnimationState scBarrageFinisherLeft = new AnimationState();
+    public final AnimationState scRightSlabCutting = new AnimationState();
+    public final AnimationState scLeftSlabCutting = new AnimationState();
 
     public static final byte
             SC_ = 40,
@@ -385,8 +388,11 @@ public class SilverChariotEntity extends FollowingStandEntity {
                     this.scLeftRapierSpin.startIfStopped(this.tickCount);
                 }
             } else {
-                this.scRightRapierSpin.stop();
-                this.scLeftRapierSpin.stop();
+                if (isPart3Skin) {
+                    this.scRightRapierSpin.stop();
+                } else {
+                    this.scLeftRapierSpin.stop();
+                }
             }
             if (animationState == SC_RAPIER_SLASH) {
                 if (isPart3Skin) {
@@ -395,8 +401,11 @@ public class SilverChariotEntity extends FollowingStandEntity {
                     this.scLeftRapierSlash.startIfStopped(this.tickCount);
                 }
             } else {
-                this.scRightRapierSlash.stop();
-                this.scLeftRapierSlash.stop();
+                if (isPart3Skin) {
+                    this.scRightRapierSlash.stop();
+                } else {
+                    this.scLeftRapierSlash.stop();
+                }
             }
             if (animationState == SC_OFFHAND_WEAPON_SWIPE) {
                 if (isPart3Skin) {
@@ -433,15 +442,15 @@ public class SilverChariotEntity extends FollowingStandEntity {
             }
             if (animationState == SC_SLAB_CUTTING) {
                 if (isPart3Skin) {
-                    this.scRightRapierSlash.startIfStopped(this.tickCount);
+                    this.scRightSlabCutting.startIfStopped(this.tickCount);
                 } else {
-                    this.scLeftRapierSlash.startIfStopped(this.tickCount);
+                    this.scLeftSlabCutting.startIfStopped(this.tickCount);
                 }
             } else {
                 if (isPart3Skin) {
-                    this.scRightRapierSlash.stop();
+                    this.scRightSlabCutting.stop();
                 } else {
-                    this.scLeftRapierSlash.stop();
+                    this.scLeftSlabCutting.stop();
                 }
             }
             if (animationState == SC_TOGGLE_ARMOUR_ON) {
@@ -1028,12 +1037,51 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     @Override
     protected float getFlyingSpeed() {
-        return 0.20F;
+        // return 0.20F;
+        return super.getFlyingSpeed();
+    }
+
+    @Override
+    public boolean canBeSeenAsEnemy() {
+        if (!isControlModeActive() || !isAlive() || isRemoved()) return false;
+        LivingEntity user = getUser();
+        return user != null && user.canBeSeenAsEnemy();
     }
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
+        // TODO: Silver Chariot should receive more damage while not armoured
+        if (source.is(DamageTypes.GENERIC_KILL) || source.is(DamageTypes.FELL_OUT_OF_WORLD)){
+            discard();
+            return false;
+        }
+        LivingEntity user = getUser();
+        if (isRemoteControlled() && user != null) {
+            Vec3 userVelocity = user.getDeltaMovement();
+            boolean damaged = user.hurt(withoutShieldBlocking(source), amount);
+            user.setDeltaMovement(userVelocity);
+            if (damaged) {
+                hurtTime = 10;
+                hurtDuration = 10;
+                level().broadcastEntityEvent(this, (byte) 2);
+                if (source.getEntity() instanceof Mob attacker && !source.isIndirect()) {
+                    knockback(0.4F, attacker.getX() - getX(), attacker.getZ() - getZ());
+                }
+                hurtMarked = true;
+            }
+            return damaged;
+        }
         return super.hurt(source, amount);
+    }
+
+    private DamageSource withoutShieldBlocking(DamageSource source) {
+        return new DamageSource(source.typeHolder(), source.getDirectEntity(), source.getEntity()) {
+            @Override
+            @Nullable
+            public Vec3 getSourcePosition() {
+                return null;
+            }
+        };
     }
 
     @Override

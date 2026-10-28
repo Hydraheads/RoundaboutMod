@@ -850,6 +850,7 @@
   "block.roundabout.barbed_wire": "Barbed Wire Trap",
   "block.roundabout.barbed_wire_bundle": "Barbed Wire Bunch",
   "block.roundabout.goddess_statue": "Love Goddess Statue",
+  "block.roundabout.magicians_statue": "Magician's Red Statue",
   "block.roundabout.ceiling_light": "Ceiling Light",
   "block.roundabout.mirror": "Mirror",
   "block.roundabout.stereo": "Stereo",
@@ -1868,6 +1869,10 @@
   "sounds.roundabout.silver_chariot_rapier_shot_redirect": "Rapier shot bounce",
   "sounds.roundabout.silver_chariot_rapier_shot_block_impact": "Rapier shot block hit",
   "sounds.roundabout.silver_chariot_rapier_shot_entity_impact": "Rapier shot entity hit",
+  "sounds.roundabout.silver_chariot_statue_cutting": "Statue cutting",
+  "sounds.roundabout.silver_chariot_slab_cutting": "Slab cutting",
+  "sounds.roundabout.silver_chariot_self_grab": "Self grab",
+  "sounds.roundabout.silver_chariot_self_throw": "Self throw",
 
   "sounds.roundabout.blood_suck":  "Blood",
   "sounds.roundabout.blood_suck_crit":  "Blood",

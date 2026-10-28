@@ -18,6 +18,7 @@ import net.hydra.jojomod.stand.powers.presets.BlockGrabPreset;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -28,6 +29,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -186,6 +188,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
         } else if (move == DNA_CREATE) {
             return executeDNACreate();
         }
+        else if (move == PowerIndex.BARRAGE_CHARGE_2) {
+            return this.setPowerKickBarrageCharge();
+        } else if (move == PowerIndex.BARRAGE_2) {
+            return this.setPowerKickBarrage();
+        }
         return super.setPowerOther(move, lastMove);
     }
 
@@ -193,6 +200,12 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public void updateUniqueMoves() {
         if (this.getActivePower() == LIFE_PUNCH) {
             updateLifePunch();
+        }
+        //kick barrage
+        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
+            updateKickBarrageCharge();
+        } else if (this.getActivePower() == PowerIndex.BARRAGE_2) {
+            updateKickBarrage();
         }
         super.updateUniqueMoves();
     }
@@ -203,6 +216,36 @@ public class PowersGoldExperience extends BlockGrabPreset {
             lifePunchImpact(target);
         }
     }
+
+    // kick barrage start
+
+    @Override
+    public void buttonInputBarrage(boolean keyIsDown, Options options) {
+        if (hasHandsOut())
+            return;
+        if (keyIsDown) {
+            if (isHoldingSneak() && (this.getAttackTime() >= this.getAttackTimeMax() ||
+                    (this.getActivePowerPhase() != this.getActivePowerPhaseMax()))) {
+                this.tryPower(PowerIndex.BARRAGE_CHARGE_2, true);
+                tryPowerPacket(PowerIndex.BARRAGE_CHARGE_2);
+            } else {
+                super.buttonInputBarrage(keyIsDown, options);
+            }
+        }
+    }
+
+    //all of ge's moves are uncancellable, so this can go here
+    @Override
+    public boolean canInterruptPower(DamageSource sauce, Entity interrupter){
+
+        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
+            return true;
+        }
+
+        return super.canInterruptPower(sauce, interrupter);
+    }
+
+    // kick barrage end
 
     // DNA creation start
 
@@ -556,6 +599,26 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     // life punch end
 
+    // move speed modifiers and the sort
+
+    @Override
+    public boolean cancelItemUse() {
+        return (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2);
+    }
+
+    @Override
+    public boolean clickRelease(){
+        return (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2);
+    }
+
+    @Override
+    public boolean cancelSprintJump(){
+        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2) {
+            return true;
+        }
+        return super.cancelSprintJump();
+    }
+
     // end of move methods
 
     // sounds start
@@ -569,8 +632,15 @@ public class PowersGoldExperience extends BlockGrabPreset {
             return ModSounds.SUMMON_GOLD_EXPERIENCE_EVENT;
         } else if (soundChoice == IMPALE_NOISE) {
             return ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_WINDUP_EVENT;
+        } else if (soundChoice == SoundIndex.ALT_CHARGE_SOUND_1) {
+            return ModSounds.STAND_BARRAGE_WINDUP_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
+    }
+
+    @Override
+    public SoundEvent getBarrageChargeSound() {
+        return ModSounds.STAND_BARRAGE_WINDUP_EVENT;
     }
 
     @Override
@@ -611,6 +681,17 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public SoundEvent getImpaleSound() {
         return ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_EVENT;
+    }
+
+    @Override
+    public boolean tryPower(int move, boolean forced) {
+        if (!this.self.level().isClientSide &&
+                (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2)
+                && (move != PowerIndex.BARRAGE_2 && move != PowerIndex.BARRAGE_CHARGE_2)){
+            this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
+        }
+
+        return super.tryPower(move, forced);
     }
 
     // sounds end
@@ -716,6 +797,28 @@ public class PowersGoldExperience extends BlockGrabPreset {
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 118, 0, "ability.roundabout.gold_experience_placeholder",
                 "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 4, level, bypas));
         return $$1;
+    }
+
+    // used for kick barrage
+    @Override
+    public void renderAttackHud(GuiGraphics context, Player playerEntity,
+                                int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
+                                float flashAlpha, float otherFlashAlpha) {
+        boolean standOn = PowerTypes.hasStandActive(playerEntity);
+        int j = scaledHeight / 2 - 7 - 4;
+        int k = scaledWidth / 2 - 8;
+        if (standOn && this.getActivePower() == PowerIndex.BARRAGE_2 && attackTimeDuring > -1) {
+            int ClashTime = 15 - Math.round(((float) attackTimeDuring / this.getKickBarrageLength()) * 15);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+        } else if (standOn && this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
+            int ClashTime = Math.round(((float) attackTimeDuring / this.getKickBarrageWindup()) * 15);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+        } else {
+            super.renderAttackHud(context,playerEntity,
+                    scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
+        }
     }
 
     // stand icons and info screen end

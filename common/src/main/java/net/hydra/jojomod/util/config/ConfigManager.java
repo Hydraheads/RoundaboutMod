@@ -168,6 +168,33 @@ public abstract class ConfigManager {
             }
         }
 
+        if (getAdvancedConfig().silverChariotStatueMaterialBlocks != null) {
+            MainUtil.SILVER_CHARIOT_STATUE_MATERIAL_BLOCKS.clear();
+            for (String entry : getAdvancedConfig().silverChariotStatueMaterialBlocks) {
+                try
+                {
+                    String[] split = entry.split(":");
+                    if (split.length != 2)
+                    {
+                        Roundabout.LOGGER.warn("Invalid statue material block: {}", entry);
+                        continue;
+                    }
+                    ResourceLocation sourceId = new ResourceLocation(split[0], split[1]);
+                    Block sourceBlock = BuiltInRegistries.BLOCK.get(sourceId);
+
+                    if (
+                                    sourceBlock.equals(Blocks.AIR)
+                    ) {
+                        Roundabout.LOGGER.warn("Invalid statue material block entry: {}", entry);
+                    }
+
+                    MainUtil.SILVER_CHARIOT_STATUE_MATERIAL_BLOCKS.add(sourceBlock);
+                } catch (Exception e) {
+                    Roundabout.LOGGER.error("Failed to parse statue material block '{}'", entry, e);
+                }
+            }
+        }
+
         if (getAdvancedConfig().purpleHazeDecayBlocksAndRates != null) {
             MainUtil.PURPLE_HAZE_DECAY_BLOCKS.clear();
             for (String entry : getAdvancedConfig().purpleHazeDecayBlocksAndRates) {
