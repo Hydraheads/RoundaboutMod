@@ -861,6 +861,28 @@ public class Config implements Cloneable {
         public Boolean PWtrackingmessage;
     }
     public static class PurpleHazeSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enablePurpleHaze;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer miningSpeedMultiplierPH;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
+        public Integer getMiningTierPH;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer PurpleHazeAttackMultOnPlayers;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer PurpleHazeAttackMultOnMobs;
+        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        public Integer PurpleHazeGuardPoints;
+        @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
+        public Integer DistortionCooldown;
+        @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
+        public Integer VirusSpitCooldown;
+        @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
+        public Integer DistortionModeChangeCooldown;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer StrangleCooldown;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer PodThrowCooldown;
         @BooleanOption(group = "inherit", value = false)
         public Boolean ThirdPunchCapsuleBreak;
         @BooleanOption(group = "inherit", value = false)

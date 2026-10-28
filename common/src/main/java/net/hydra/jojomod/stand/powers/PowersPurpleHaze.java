@@ -72,7 +72,6 @@ public class PowersPurpleHaze extends NewPunchingStand {
     public PowersPurpleHaze(LivingEntity self) {
         super(self);
     }
-
     @Override
     public Component getSkinName(byte skinId) {
         switch (skinId) {
@@ -199,22 +198,50 @@ public class PowersPurpleHaze extends NewPunchingStand {
     public boolean isMiningStand() {
         return true;
     }
+    @Override
+    public float getMiningMultiplier() {
+        return (float) (1F*(ClientNetworking.getAppropriateConfig().
+                PurpleHazeSettings.miningSpeedMultiplierPH *0.01));
+    }
+    @Override
+    public int getMiningLevel() {
+        return ClientNetworking.getAppropriateConfig().PurpleHazeSettings.getMiningTierPH;
+    }
 
     @Override
     public StandPowers generateStandPowers(LivingEntity entity) {
         return new PowersPurpleHaze(entity);
     }
+    @Override public boolean isStandEnabled(){ return ClientNetworking.getAppropriateConfig().PurpleHazeSettings.enablePurpleHaze; }
 
-    @Override
-    public int getMaxGuardPoints() {
-        return 15;
-    }
     @Override
     public boolean canGuard(){
         if (isStrangling()||isStranglePinning()||activePower == PowerIndex.POWER_2){
             return false;
         }
         return super.canGuard();
+    }
+    public int getMaxGuardPoints(){
+
+        return ClientNetworking.getAppropriateConfig().PurpleHazeSettings.PurpleHazeGuardPoints;
+    }
+
+    @Override public float getPunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.31F));
+        } else {
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(4.5f));
+        }
+    }
+    @Override
+    public float multiplyPowerByStandConfigMobs(float power){
+        return (float) (power*(ClientNetworking.getAppropriateConfig().
+                PurpleHazeSettings.PurpleHazeAttackMultOnMobs*0.01));
+    }
+    @Override
+    public float multiplyPowerByStandConfigPlayers(float power){
+        return (float) (power*(ClientNetworking.getAppropriateConfig().
+                PurpleHazeSettings.PurpleHazeAttackMultOnPlayers*0.01));
     }
     @Override
     public StandEntity getNewStandEntity() {
@@ -987,10 +1014,11 @@ public class PowersPurpleHaze extends NewPunchingStand {
             if (!(self instanceof Player pl && pl.isCreative())) {
                 setPods(getPods() - 1);
             }
-            this.setCooldown(PowerIndex.SKILL_1, 400);
+            int cdr = ClientNetworking.getAppropriateConfig().PurpleHazeSettings.DistortionCooldown;
+            this.setCooldown(PowerIndex.SKILL_1, cdr);
             if (this.getSelf() instanceof ServerPlayer sp) {
                 S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.SKILL_1,
-                        400);
+                        cdr);
             }
         }
     }
@@ -1061,10 +1089,11 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
             self.level().addFreshEntity(spit);
 
-            this.setCooldown(PowerIndex.POWER_1_BONUS, 400);
+            int cdr = ClientNetworking.getAppropriateConfig().PurpleHazeSettings.VirusSpitCooldown;
+            this.setCooldown(PowerIndex.POWER_1_BONUS, cdr);
             if (this.getSelf() instanceof ServerPlayer sp) {
                 S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.POWER_1_BONUS,
-                        400);
+                        cdr);
             }
         }
     }
@@ -1080,9 +1109,10 @@ public class PowersPurpleHaze extends NewPunchingStand {
             indistortionmode = !indistortionmode;
             saveDiscAndSync();
 
-            this.setCooldown(PowerIndex.SKILL_1_SNEAK, 400);
+            int cdr = ClientNetworking.getAppropriateConfig().PurpleHazeSettings.DistortionModeChangeCooldown;
+            this.setCooldown(PowerIndex.SKILL_1_SNEAK, cdr);
             if (this.getSelf() instanceof ServerPlayer sp) {
-                S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.SKILL_1_SNEAK, 400);
+                S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.SKILL_1_SNEAK, cdr);
             }
         }
     }
@@ -1344,7 +1374,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         this.strangleVictim = null;
         this.strangleTicks = -1;
         this.strangleTravelTicks = 0;
-        int cdr = 200;
+        int cdr = ClientNetworking.getAppropriateConfig().PurpleHazeSettings.StrangleCooldown;
         this.setCooldown(PowerIndex.SKILL_2, cdr);
         if (this.getSelf() instanceof ServerPlayer sp) {
             S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.SKILL_2, cdr);
@@ -1548,7 +1578,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
             PowerTypes.copyPlaneOfExisting(self, capsule);
 
-            this.setCooldown(PowerIndex.SNEAK_ATTACK, 200);
+            int cdr = ClientNetworking.getAppropriateConfig().PurpleHazeSettings.PodThrowCooldown;
+            this.setCooldown(PowerIndex.SNEAK_ATTACK, cdr);
         }
     }
 

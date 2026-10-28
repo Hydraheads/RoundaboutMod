@@ -350,6 +350,8 @@ public class ForgeBlocks {
             () -> ModBlocks.BARBED_WIRE_BUNDLE_PROPERTIES);
     public static final RegistryObject<Block> GODDESS_STATUE_BLOCK = BLOCKS.register("goddess_statue",
             () -> ModBlocks.GODDESS_STATUE_BLOCK_PROPERTIES);
+    public static final RegistryObject<Block> MAGICIANS_STATUE_BLOCK = BLOCKS.register("magicians_statue",
+            () -> MAGICIANS_STATUE_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> STREET_SIGN_DIO = BLOCKS.register("street_sign_dio",
             ModBlocks::getStreetSignBlockProperties);
     public static final RegistryObject<Block> STREET_SIGN_RIGHT = BLOCKS.register("street_sign_right",
