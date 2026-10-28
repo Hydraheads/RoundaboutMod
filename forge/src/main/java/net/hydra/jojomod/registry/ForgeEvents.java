@@ -251,6 +251,7 @@ public class ForgeEvents {
         ModBlocks.DEEPSLATE_AJA_ORE = ForgeBlocks.DEEPSLATE_AJA_ORE.get();
         ModBlocks.AJA_BLOCK = ForgeBlocks.AJA_BLOCK.get();
         ModBlocks.CLIMBING_WIRE = ForgeBlocks.CLIMBING_WIRE.get();
+        ModBlocks.SC_RAPIER_PLATFORM_BLOCK = ForgeBlocks.SC_RAPIER_PLATFORM_BLOCK.get();
         ModBlocks.FROZEN_DIRT = ForgeBlocks.FROZEN_DIRT.get();
         ModBlocks.FROZEN_STONE = ForgeBlocks.FROZEN_STONE.get();
         ModBlocks.FROZEN_COBBLESTONE = ForgeBlocks.FROZEN_COBBLESTONE.get();

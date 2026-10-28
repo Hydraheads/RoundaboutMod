@@ -368,8 +368,12 @@ public class SilverChariotPharaohModel<T extends SilverChariotEntity> extends St
         this.animate(pEntity.scLeftVault, SilverChariotAnimations.LeftVault(), pAgeInTicks, 1f);
         this.animate(pEntity.scRightRapierSpin, SilverChariotAnimations.RightRapierSpin(), pAgeInTicks, 1f);
         this.animate(pEntity.scLeftRapierSpin, SilverChariotAnimations.LeftRapierSpin(), pAgeInTicks, 1f);
-        this.animate(pEntity.scRightRapierSlash, SilverChariotAnimations.RightRapierSlash(), pAgeInTicks, 1f);
-        this.animate(pEntity.scLeftRapierSlash, SilverChariotAnimations.LeftRapierSlash(), pAgeInTicks, 1f);
+        // this.animate(pEntity.scRightRapierSlash, SilverChariotAnimations.RightRapierSlash(), pAgeInTicks, 1f);
+        // this.animate(pEntity.scLeftRapierSlash, SilverChariotAnimations.LeftRapierSlash(), pAgeInTicks, 1f);
+        this.animate(pEntity.scRightRapierSlash, SilverChariotAnimations.RightHit2(), pAgeInTicks, 1f);
+        this.animate(pEntity.scLeftRapierSlash, SilverChariotAnimations.LeftHit2(), pAgeInTicks, 1f);
+        this.animate(pEntity.scRightSlabCutting, SilverChariotAnimations.RightHit2(), pAgeInTicks, 1f);
+        this.animate(pEntity.scLeftSlabCutting, SilverChariotAnimations.LeftHit2(), pAgeInTicks, 1f);
         this.animate(pEntity.scRightOffhandSwipe, SilverChariotAnimations.RightOffhandSwipe(), pAgeInTicks, 1f);
         this.animate(pEntity.scLeftOffhandSwipe, SilverChariotAnimations.LeftOffhandSwipe(), pAgeInTicks, 1f);
         this.animate(pEntity.scUserCarry, SilverChariotAnimations.UserCarry(), pAgeInTicks, 1f);
@@ -380,8 +384,8 @@ public class SilverChariotPharaohModel<T extends SilverChariotEntity> extends St
         this.animate(pEntity.scRightRapierShotRelease, SilverChariotAnimations.RightSwordShotRELEASE_TAP(), pAgeInTicks, 1f);
         this.animate(pEntity.scLeftRapierShotHold, SilverChariotAnimations.LeftSwordShotHOLD_AIM(), pAgeInTicks, 1f);
         this.animate(pEntity.scLeftRapierShotRelease, SilverChariotAnimations.LeftSwordShotRELEASE_TAP(), pAgeInTicks, 1f);
-        this.animate(pEntity.scRightStatueCutting, SilverChariotAnimations.RightStatueCutting(), pAgeInTicks, 1f);
-        this.animate(pEntity.scLeftStatueCutting, SilverChariotAnimations.LeftStatueCutting(), pAgeInTicks, 1f);
+        this.animate(pEntity.scRightStatueCutting, SilverChariotAnimations.RightStatueCutting(), pAgeInTicks, 2.0f);
+        this.animate(pEntity.scLeftStatueCutting, SilverChariotAnimations.LeftStatueCutting(), pAgeInTicks, 2.0f);
         this.animate(pEntity.scHideRightArm, SilverChariotAnimations.HideRightArm(), pAgeInTicks, 1f);
         this.animate(pEntity.scHideLeftArm, SilverChariotAnimations.HideLeftArm(), pAgeInTicks, 1f);
         this.animate(pEntity.scMiningBarrageRight, SilverChariotAnimations.RightBarrage(), pAgeInTicks, 1.65f);

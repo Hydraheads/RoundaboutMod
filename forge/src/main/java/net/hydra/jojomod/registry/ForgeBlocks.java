@@ -68,6 +68,9 @@ public class ForgeBlocks {
     public static final RegistryObject<Block> CLIMBING_WIRE = BLOCKS.register("climbing_wire",
             () -> CLIMBING_WIRE_PROPERTIES
     );
+    public static final RegistryObject<Block> SC_RAPIER_PLATFORM_BLOCK = BLOCKS.register("sc_rapier_platform_block",
+            () -> SC_RAPIER_PLATFORM_BLOCK_PROPERTIES
+    );
     public static final RegistryObject<Block> FROZEN_DIRT = BLOCKS.register("frozen_dirt",
             () -> FROZEN_DIRT_PROPERTIES
     );

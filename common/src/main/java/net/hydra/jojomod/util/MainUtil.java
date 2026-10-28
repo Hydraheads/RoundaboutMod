@@ -241,6 +241,7 @@ public class MainUtil {
     public static final Map<String, Integer> SHA_CUSTOM_ENTITY_HEAT = new HashMap<>();
 
     public static final Map<Block, Block> SILVER_CHARIOT_BLOCK_TO_SLAB = new HashMap<>();
+    public static final Set<Block> SILVER_CHARIOT_STATUE_MATERIAL_BLOCKS = new HashSet<>();
 
     public static final Map<Block, Block> PURPLE_HAZE_DECAY_BLOCKS = new HashMap<>();
     public static final Map<Block, Float> PURPLE_HAZE_DECAY_RATE = new HashMap<>();
