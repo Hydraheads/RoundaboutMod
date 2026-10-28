@@ -1211,7 +1211,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
     public void DistortionModeChange() {
         if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
-            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.THE_WORLD_ASSAULT_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.PURPLE_HAZE_SWITCH_POD_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
             indistortionmode = !indistortionmode;
             saveDiscAndSync();
 
@@ -1262,7 +1262,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         animateStand(PurpleHazeEntity.STRANGLE_WINDUP);
         poseStand(OffsetIndex.LOOSE);
         playSoundIfPossible(self.level(), null, this.self.blockPosition(),
-                ModSounds.THE_WORLD_MUDA_EVENT /*placeholder*/, SoundSource.PLAYERS, 1.0F, 1.0F);
+                ModSounds.PURPLE_HAZE_STRANGLE_START_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
 
     }
 

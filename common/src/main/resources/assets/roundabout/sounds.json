@@ -4127,6 +4127,18 @@
       "roundabout:ph_pod_launch"
     ]
   },
+  "ph_strangle": {
+    "subtitle": "sounds.roundabout.ph_strangle",
+    "sounds": [
+      "roundabout:ph_strangle"
+    ]
+  },
+  "ph_type_switch": {
+    "subtitle": "sounds.roundabout.ph_type_switch",
+    "sounds": [
+      "roundabout:ph_type_switch"
+    ]
+  },
   "planet_waves_summon": {
     "subtitle": "sounds.roundabout.planet_waves_summon",
     "sounds": [
