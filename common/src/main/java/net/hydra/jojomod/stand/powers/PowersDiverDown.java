@@ -2512,7 +2512,7 @@ public class PowersDiverDown extends NewPunchingStand {
         return false;
     }
 
-    private boolean recallLimbs() {
+    public boolean recallLimbs() {
         if (this.activeLimbs.isEmpty()) {
             return false;
         }

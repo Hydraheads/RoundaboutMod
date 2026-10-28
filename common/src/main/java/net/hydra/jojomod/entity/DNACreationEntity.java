@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -36,6 +37,26 @@ public class DNACreationEntity extends LivingEntity {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_ITEM, ItemStack.EMPTY);
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        if (!this.getDNAItem().isEmpty()) {
+            tag.put("DNAItem", this.getDNAItem().save(new CompoundTag()));
+        }
+        tag.putInt("TransformTicks", this.tickCount);
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        if (tag.contains("DNAItem")) {
+            this.setDNAItem(ItemStack.of(tag.getCompound("DNAItem")));
+        }
+        if (tag.contains("TransformTicks")) {
+            this.tickCount = tag.getInt("TransformTicks");
+        }
     }
 
     @Override
