@@ -5438,7 +5438,6 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if (!MainUtil.isBossMob(target)) {
                     target.discard();
                 }
-                spawnLingeringCloud(target);
             }
 
             float hRange = 0.15f + (0.4f*bombSize);
@@ -5479,35 +5478,6 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
     	
     	return true;
-    }
-
-    private void spawnLingeringCloud(Entity entity) {
-        Collection<MobEffectInstance> $$0 = null;
-        if (entity instanceof LivingEntity LE) {
-            $$0 = LE.getActiveEffects();
-        }else if (entity instanceof BombPlantedArrow AR){
-            $$0 = AR.getEffects();
-        }
-
-        if ($$0 == null) { return; }
-
-        if (!$$0.isEmpty()) {
-
-            AreaEffectCloud $$1 = new AreaEffectCloud(entity.level(), entity.getX(), entity.getY(), entity.getZ());
-            $$1.setRadius(2.5F);
-            $$1.setRadiusOnUse(-0.5F);
-            $$1.setWaitTime(10);
-            $$1.setDuration($$1.getDuration() / 2);
-            $$1.setRadiusPerTick(-$$1.getRadius() / (float) $$1.getDuration());
-
-            for (MobEffectInstance $$2 : $$0) {
-                if (!MainUtil.isSpecialEffect($$2)) {
-                    $$1.addEffect(new MobEffectInstance($$2));
-                }
-            }
-
-            entity.level().addFreshEntity($$1);
-        }
     }
 
     public void samuraiUnlockTrigger() {
