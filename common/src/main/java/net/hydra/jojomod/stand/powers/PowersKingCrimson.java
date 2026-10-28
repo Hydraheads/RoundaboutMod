@@ -3008,7 +3008,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                    ) {
                 if (!this.onCooldown(PowerIndex.GLOBAL_DASH) || midVault) {
                     /*Stand vaulting*/
-                    this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.vaultingCooldown
+                    this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().kingCrimsonSettings.vaultingCooldown
                             + getCooldown(PowerIndex.GLOBAL_DASH).time);
                     double mag = this.getSelf().getPosition(0).distanceTo(
                             new Vec3(blockHit.getLocation().x, blockHit.getLocation().y, blockHit.getLocation().z)) * 1.68 + 1;
