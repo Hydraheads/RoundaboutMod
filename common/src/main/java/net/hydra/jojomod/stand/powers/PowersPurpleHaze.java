@@ -834,6 +834,15 @@ public class PowersPurpleHaze extends NewPunchingStand {
             super.renderAttackHud(context,playerEntity,
                     scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
         }
+
+        if (onCooldown(PowerIndex.SNEAK_ATTACK)) {
+            CooldownInstance cd = getCooldown(PowerIndex.SNEAK_ATTACK);
+            if (cd != null) {
+                int ClashTime = Math.round(((float) cd.time / cd.maxTime) * 15);
+                context.blit(StandIcons.JOJO_ICONS, k, j+17, 213, 97, 15, 4);
+                context.blit(StandIcons.JOJO_ICONS, k, j+17, 213, 102, ClashTime, 4);
+            }
+        }
     }
 
     @Override
@@ -983,12 +992,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         RenderSystem.enableBlend();
         context.setColor(1f, 1f, 1f, 1f);
 
-        CooldownInstance cd = null;
-        if (!getPowerCooldowns().isEmpty() && getPowerCooldowns().size() >= PowerIndex.SNEAK_ATTACK){
-            cd = getPowerCooldowns().get(PowerIndex.SNEAK_ATTACK);
-        }
-
-        if ((cd != null && (cd.time >= 0)) || getPods() <= 0) {
+        if (getPods() <= 0) {
             context.setColor(0.62f, 0.62f, 0.62f, 0.8f);
         }
 
@@ -1020,31 +1024,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
         }
 
-        if ((cd != null && (cd.time >= 0))) {
-            float blit = (20*(1-((float) (1+cd.time) /(1+cd.maxTime))));
-            int b = (int) Math.round(blit);
-            RenderSystem.enableBlend();
-            context.setColor(1f, 1f, 1f, 1f);
 
-            ResourceLocation COOLDOWN_TEX = StandIcons.COOLDOWN_ICON;
-
-            if (cd.isFrozen())
-                COOLDOWN_TEX = StandIcons.FROZEN_COOLDOWN_ICON;
-
-            context.blit(COOLDOWN_TEX, x - 1, y - 1 + b, 0, b, 20, 20-b, 20, 20);
-            int num = ((int)(Math.floor((double) cd.time /20)+1));
-            int offset = x+3;
-            if (num <=9){
-                offset = x+7;
-            }
-            //If 100 or more seconds long shift to the left
-            if (num >= 100){
-                offset = offset-3;
-            }
-
-            if (!cd.isFrozen())
-                context.drawString(Minecraft.getInstance().font, ""+num,offset,y,0xffffff,true);
-        }
     }
 
     private boolean indistortionmode = false;

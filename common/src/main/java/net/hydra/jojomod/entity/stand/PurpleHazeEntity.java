@@ -117,45 +117,7 @@ public class PurpleHazeEntity extends FollowingStandEntity{
             } else {
                 this.phfullcombo.stop();
             }
-            if (this.getAnimation() == FIRST_PUNCH) {
-                if (isNotDistortionSkin) {
-                    this.phcombo1.startIfStopped(this.tickCount);
-                } else {
-                    this.punchState1.startIfStopped(this.tickCount);
-                }
-            } else {
-                if (isNotDistortionSkin) {
-                    this.phcombo1.stop();
-                } else {
-                    this.punchState1.stop();
-                }
-            }
-            if (this.getAnimation() == SECOND_PUNCH) {
-                if (isNotDistortionSkin) {
-                    this.phcombo2.startIfStopped(this.tickCount);
-                } else {
-                    this.punchState2.startIfStopped(this.tickCount);
-                }
-            } else {
-                if (isNotDistortionSkin) {
-                    this.phcombo2.stop();
-                } else {
-                    this.punchState2.stop();
-                }
-            }
-            if (this.getAnimation() == THIRD_PUNCH) {
-                if (isNotDistortionSkin) {
-                    this.phcombo3.startIfStopped(this.tickCount);
-                } else {
-                    this.punchState3.startIfStopped(this.tickCount);
-                }
-            } else {
-                if (isNotDistortionSkin) {
-                    this.phcombo3.stop();
-                } else {
-                    this.punchState3.stop();
-                }
-            }
+           
             if (this.getAnimation() == FALLINGHITSTART) {
                 this.fallinghitstart.startIfStopped(this.tickCount);
             } else {
