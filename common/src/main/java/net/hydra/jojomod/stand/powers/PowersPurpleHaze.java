@@ -1686,6 +1686,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
             int cdr = ClientNetworking.getAppropriateConfig().PurpleHazeSettings.PodThrowCooldown;
             this.setCooldown(PowerIndex.SNEAK_ATTACK, cdr);
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                    ModSounds.PURPLE_HAZE_POD_LAUNCH_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
         }
     }
 

@@ -1260,6 +1260,10 @@ public class ForgeSounds {
             register(ModSounds.PURPLE_HAZE_SMOKE, ModSounds.PURPLE_HAZE_SMOKE_ID);
     public static final RegistryObject<SoundEvent> PURPLE_HAZE_DISTORTION_SMOKE =
             register(ModSounds.PURPLE_HAZE_DISTORTION_SMOKE, ModSounds.PURPLE_HAZE_DISTORTION_SMOKE_ID);
+    public static final RegistryObject<SoundEvent> PURPLE_HAZE_POD_BITE =
+            register(ModSounds.PURPLE_HAZE_POD_BITE, ModSounds.PURPLE_HAZE_POD_BITE_ID);
+public static final RegistryObject<SoundEvent> PURPLE_HAZE_POD_LAUNCH =
+            register(ModSounds.PURPLE_HAZE_POD_LAUNCH, ModSounds.PURPLE_HAZE_POD_LAUNCH_ID);
 
     public static final RegistryObject<SoundEvent> SILVER_CHARIOT_SUMMON =
             register(ModSounds.SILVER_CHARIOT_SUMMON, ModSounds.SILVER_CHARIOT_SUMMON_ID);

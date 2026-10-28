@@ -4121,6 +4121,12 @@
       "roundabout:purple_haze_pod_bite"
     ]
   },
+  "ph_pod_launch": {
+    "subtitle": "sounds.roundabout.ph_pod_launch",
+    "sounds": [
+      "roundabout:ph_pod_launch"
+    ]
+  },
   "planet_waves_summon": {
     "subtitle": "sounds.roundabout.planet_waves_summon",
     "sounds": [

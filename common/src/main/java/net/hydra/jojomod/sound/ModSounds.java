@@ -1434,6 +1434,10 @@ public class ModSounds {
     public static final ResourceLocation PURPLE_HAZE_POD_BITE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PURPLE_HAZE_POD_BITE);
     public static SoundEvent PURPLE_HAZE_POD_BITE_EVENT = SoundEvent.createVariableRangeEvent(PURPLE_HAZE_POD_BITE_ID);
 
+    public static final String PURPLE_HAZE_POD_LAUNCH = "ph_pod_launch";
+    public static final ResourceLocation PURPLE_HAZE_POD_LAUNCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PURPLE_HAZE_POD_LAUNCH);
+    public static SoundEvent PURPLE_HAZE_POD_LAUNCH_EVENT = SoundEvent.createVariableRangeEvent(PURPLE_HAZE_POD_LAUNCH_ID);
+
 
     public static final String SILVER_CHARIOT_SUMMON = "silver_chariot_summon";
     public static final ResourceLocation SILVER_CHARIOT_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_SUMMON);
