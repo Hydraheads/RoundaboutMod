@@ -1,12 +1,12 @@
 package net.hydra.jojomod.mixin.whitesnake.hallucination;
 
 import net.hydra.jojomod.event.ModEffects;
-import net.hydra.jojomod.event.powers.whitesnake.HallucinationEffect;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -16,24 +16,20 @@ public abstract class HallucinationDamageMixin {
 
     @Inject(method = "actuallyHurt", at = @At("HEAD"))
     private void roundaboutWhitesnake$reduceEffectDurations(DamageSource source, float amount,
-                                                                  CallbackInfo cir) {
-        if (amount < 2.0F || ((LivingEntity) (Object) this).level().isClientSide()) return;
-        MobEffectInstance hallucination = ((LivingEntity) (Object) this).getEffect(ModEffects.HALLUCINATION);
-        if (hallucination != null) {
-            ((LivingEntity) (Object) this).removeEffect(ModEffects.HALLUCINATION);
-            if (hallucination.getDuration() > 20) {
-                ((LivingEntity) (Object) this).addEffect(HallucinationEffect.createInstance(
-                        hallucination.getDuration() - 20, hallucination.getAmplifier()));
-            }
-        }
-        MobEffectInstance sleeping = ((LivingEntity) (Object) this).getEffect(ModEffects.SLEEPING);
-        if (sleeping != null) {
-            ((LivingEntity) (Object) this).removeEffect(ModEffects.SLEEPING);
-            if (sleeping.getDuration() > 20) {
-                ((LivingEntity) (Object) this).addEffect(new MobEffectInstance(ModEffects.SLEEPING,
-                        sleeping.getDuration() - 20, sleeping.getAmplifier(), sleeping.isAmbient(),
-                        sleeping.isVisible(), sleeping.showIcon()));
-            }
+                                                            CallbackInfo cir) {
+        LivingEntity living = (LivingEntity) (Object) this;
+        if (amount < 2.0F || living.level().isClientSide()) return;
+        roundabout$reduceEffectDuration(living, living.getEffect(ModEffects.HALLUCINATION));
+        roundabout$reduceEffectDuration(living, living.getEffect(ModEffects.SLEEPING));
+    }
+
+    @Unique
+    private static void roundabout$reduceEffectDuration(LivingEntity living, MobEffectInstance effect) {
+        if (effect == null || effect.isInfiniteDuration()) return;
+        living.removeEffect(effect.getEffect());
+        if (effect.getDuration() > 20) {
+            living.addEffect(new MobEffectInstance(effect.getEffect(), effect.getDuration() - 20,
+                    effect.getAmplifier(), effect.isAmbient(), effect.isVisible(), effect.showIcon()));
         }
     }
 }

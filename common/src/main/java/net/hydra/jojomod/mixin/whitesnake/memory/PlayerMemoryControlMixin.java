@@ -17,13 +17,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class PlayerMemoryControlMixin {
     @Inject(method = "interactOn(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResult;",
             at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$blockInteraction(Entity target, InteractionHand hand,
+    private void roundabout$cantInteract(Entity target, InteractionHand hand,
                                                        CallbackInfoReturnable<InteractionResult> cir) {
         if (!DiscItemData.hasPlayerControl((Player) (Object) this)) cir.setReturnValue(InteractionResult.FAIL);
     }
 
     @Inject(method = "attack", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$blockAttack(Entity target, CallbackInfo ci) {
+    private void roundabout$cantAttack(Entity target, CallbackInfo ci) {
         Player player = (Player) (Object) this;
         if (((StandUser) player).roundabout$getPossessor() instanceof CommandDiscPossession possession) {
             if (!possession.isAttacking() || target != possession.getCommandTarget()) ci.cancel();

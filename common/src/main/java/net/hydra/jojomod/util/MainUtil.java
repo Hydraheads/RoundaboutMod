@@ -241,6 +241,7 @@ public class MainUtil {
     public static final Map<String, Integer> SHA_CUSTOM_ENTITY_HEAT = new HashMap<>();
 
     public static final Map<Block, Block> SILVER_CHARIOT_BLOCK_TO_SLAB = new HashMap<>();
+    public static final Set<Block> SILVER_CHARIOT_STATUE_MATERIAL_BLOCKS = new HashSet<>();
 
     public static final Map<Block, Block> PURPLE_HAZE_DECAY_BLOCKS = new HashMap<>();
     public static final Map<Block, Float> PURPLE_HAZE_DECAY_RATE = new HashMap<>();
@@ -2392,6 +2393,17 @@ public class MainUtil {
         return mdist;
     }
 
+    public static double cheapDistanceTo3d(double x, double y, double z, double x2, double y2, double z2){
+        double mdist = 0;
+        double cdist = Math.abs(x-x2);
+        if (cdist > mdist){mdist=cdist;}
+        cdist = Math.abs(y-y2);
+        if (cdist > mdist){mdist=cdist;}
+        cdist = Math.abs(z-z2);
+        if (cdist > mdist){mdist=cdist;}
+        return mdist;
+    }
+
     public static boolean isPlayerNearby(Vec3 pos, Level level, double range, int exemptID) {
         if (level instanceof ServerLevel) {
             ServerLevel serverWorld = ((ServerLevel) level);
@@ -2417,8 +2429,7 @@ public class MainUtil {
                 || !MainUtil.getIsGamemodeApproriateForGrief(player)) {
             return true;
         }
-
-        return player.level().mayInteract(player, pos);
+        return player.level().mayInteract(player, pos) && canPlaceOnClaim(player, pos);
     }
 
     // Couldn't find better wording but this tests if you're on claimed land that

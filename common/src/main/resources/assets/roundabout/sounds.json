@@ -4689,6 +4689,30 @@
       "roundabout:silver_chariot_rapier_shot_entity_impact"
     ]
   },
+  "silver_chariot_slab_cutting": {
+    "subtitle": "sounds.roundabout.silver_chariot_slab_cutting",
+    "sounds": [
+      "roundabout:silver_chariot_slab_cutting"
+    ]
+  },
+  "silver_chariot_statue_cutting": {
+    "subtitle": "sounds.roundabout.silver_chariot_statue_cutting",
+    "sounds": [
+      "roundabout:silver_chariot_statue_cutting"
+    ]
+  },
+  "silver_chariot_self_grab": {
+    "subtitle": "sounds.roundabout.silver_chariot_self_grab",
+    "sounds": [
+      "roundabout:silver_chariot_self_grab"
+    ]
+  },
+  "silver_chariot_self_throw": {
+    "subtitle": "sounds.roundabout.silver_chariot_self_throw",
+    "sounds": [
+      "roundabout:silver_chariot_self_throw"
+    ]
+  },
   "bc_parachute_open": {
     "subtitle" : "sounds.roundabout.bc_parachute_open",
     "sounds": [

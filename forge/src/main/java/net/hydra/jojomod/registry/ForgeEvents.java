@@ -253,6 +253,7 @@ public class ForgeEvents {
         ModBlocks.DEEPSLATE_AJA_ORE = ForgeBlocks.DEEPSLATE_AJA_ORE.get();
         ModBlocks.AJA_BLOCK = ForgeBlocks.AJA_BLOCK.get();
         ModBlocks.CLIMBING_WIRE = ForgeBlocks.CLIMBING_WIRE.get();
+        ModBlocks.SC_RAPIER_PLATFORM_BLOCK = ForgeBlocks.SC_RAPIER_PLATFORM_BLOCK.get();
         ModBlocks.FROZEN_DIRT = ForgeBlocks.FROZEN_DIRT.get();
         ModBlocks.FROZEN_STONE = ForgeBlocks.FROZEN_STONE.get();
         ModBlocks.FROZEN_COBBLESTONE = ForgeBlocks.FROZEN_COBBLESTONE.get();
@@ -301,6 +302,7 @@ public class ForgeEvents {
         ModBlocks.BARBED_WIRE = ForgeBlocks.BARBED_WIRE.get();
         ModBlocks.BARBED_WIRE_BUNDLE = ForgeBlocks.BARBED_WIRE_BUNDLE.get();
         ModBlocks.GODDESS_STATUE_BLOCK = ForgeBlocks.GODDESS_STATUE_BLOCK.get();
+        ModBlocks.MAGICIANS_STATUE_BLOCK = ForgeBlocks.MAGICIANS_STATUE_BLOCK.get();
         ModBlocks.STREET_SIGN_DIO = ForgeBlocks.STREET_SIGN_DIO.get();
         ModBlocks.STREET_SIGN_RIGHT = ForgeBlocks.STREET_SIGN_RIGHT.get();
         ModBlocks.STREET_SIGN_STOP = ForgeBlocks.STREET_SIGN_STOP.get();

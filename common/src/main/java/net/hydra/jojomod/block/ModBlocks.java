@@ -31,6 +31,7 @@ public class ModBlocks {
      **/
     public static final EnumProperty<GoddessStatuePart> GODDESS_STATUE_PART = EnumProperty.create("part", GoddessStatuePart.class);
     public static final EnumProperty<StreetSignPart> STREET_SIGN_PART = EnumProperty.create("part", StreetSignPart.class);
+    public static final EnumProperty<MagiciansStatuePart> MAGICIANS_STATUE_PART = EnumProperty.create("part", MagiciansStatuePart.class);
     public static final IntegerProperty DAMAGED = IntegerProperty.create("damaged", 0, 2);
     public static final IntegerProperty GAS_CAN_LEVEL = IntegerProperty.create("level", 0, 2);
     public static final IntegerProperty BLOOD_LEVEL = IntegerProperty.create("level", 0, 3);
@@ -120,6 +121,7 @@ public class ModBlocks {
     public static Block BARBED_WIRE;
     public static Block BARBED_WIRE_BUNDLE;
     public static Block GODDESS_STATUE_BLOCK;
+    public static Block MAGICIANS_STATUE_BLOCK;
     public static Block STREET_SIGN_DIO;
     public static Block STREET_SIGN_RIGHT;
     public static Block STREET_SIGN_STOP;
@@ -183,6 +185,8 @@ public class ModBlocks {
     public static Block FROZEN_GRANITE;
     public static Block FROZEN_RED_SAND;
     public static Block FROZEN_RED_SANDSTONE;
+
+    public static Block SC_RAPIER_PLATFORM_BLOCK;
 
     public static Block SHINY_QUARTZ;
     public static Block SHINY_QUARTZ_TILES;
@@ -689,6 +693,16 @@ public class ModBlocks {
                     .sound(SoundType.STONE)
                     .requiresCorrectToolForDrops()
     );
+    public static MagiciansStatueBlock MAGICIANS_STATUE_BLOCK_PROPERTIES = new MagiciansStatueBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.STONE)
+                    .noOcclusion()
+                    .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
+                    .pushReaction(PushReaction.DESTROY)
+                    .strength(1.5F, 1.0F)
+                    .sound(SoundType.STONE)
+                    .requiresCorrectToolForDrops()
+    );
 
     public static StreetSignBlock getStreetSignBlockProperties() {
         return new StreetSignBlock(
@@ -936,6 +950,9 @@ public class ModBlocks {
 
     public static Block CLIMBING_WIRE_PROPERTIES = new ClimbingWireBlock(BlockBehaviour.Properties.of().mapColor(MapColor.DEEPSLATE).
             strength(1F).sound(SoundType.METAL).noOcclusion());
+    public static Block SC_RAPIER_PLATFORM_BLOCK_PROPERTIES = new SilverChariotRapierPlatformBlock(
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_GRAY).noLootTable().sound(SoundType.EMPTY).isValidSpawn(ModBlocks::never).strength(-1.0F, 3600000.0F)
+    );
     public static Block FROZEN_DIRT_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.DIRT).
             strength(0.2F).sound(SoundType.GLASS).friction(0.98F)
             ,() -> Blocks.DIRT);

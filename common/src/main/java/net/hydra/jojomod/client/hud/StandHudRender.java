@@ -919,6 +919,46 @@ public class StandHudRender {
         context.drawString(renderer, $$6, $$7, $$8 - 1, 0, false);
         context.drawString(renderer, $$6, $$7, $$8, y, false);
     }
+    public static void renderDistanceHUDPilotingSphere(GuiGraphics context, Player playerEntity,
+                                                 int scaledWidth, int scaledHeight, int x, LivingEntity stand) {
+        // Silver Chariot uses a cubical range instead of a rectangular range
+        Minecraft client = Minecraft.getInstance();
+        int l;
+        int k;
+        int v;
+        StandUser standUser = ((StandUser)playerEntity);
+        StandPowers powers = standUser.roundabout$getStandPowers();
+        int mode = powers.getPilotMode();
+        int maxDistance = powers.getMaxPilotRange();
+        int distance = 1;
+        if (mode == 1){
+            distance = (int) stand.position().distanceTo(playerEntity.position());
+        } else if (mode == 2){
+            // distance = (int) MainUtil.cheapDistanceTo2(stand.getX(),stand.getZ(),playerEntity.getX(),playerEntity.getZ());
+            distance = (int) MainUtil.cheapDistanceTo3d(stand.getX(),stand.getY(),stand.getZ(),playerEntity.getX(),playerEntity.getY(),playerEntity.getZ());
+        }
+        int blt = (int) Math.floor(((double) 182 /maxDistance)*(distance));
+        l = scaledHeight - 32 + 3;
+        context.blit(StandIcons.JOJO_ICONS, x, l, 0, 131, 182, 5);
+        if (blt > 0) {
+            context.blit(StandIcons.JOJO_ICONS, x, l, 0, 136, blt, 5);
+        }
+
+        int u = 183;
+        k = scaledWidth/2 - 5;
+        l = scaledHeight - 31 - 5;
+
+        int y = 16173823;
+        Font renderer = client.font;
+        String $$6 = distance + "";
+        int $$7 = (scaledWidth - renderer.width($$6)) / 2;
+        int $$8 = scaledHeight - 31 - 4;
+        context.drawString(renderer, $$6, $$7 + 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7 - 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 + 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 - 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8, y, false);
+    }
     //like pilot hud, except for the dive/submerge move for diver down.
     public static void renderDistanceHUDDive(GuiGraphics context, Minecraft client, Player playerEntity,
                                              int scaledWidth, int scaledHeight, int x, PowersDiverDown pdd) {
