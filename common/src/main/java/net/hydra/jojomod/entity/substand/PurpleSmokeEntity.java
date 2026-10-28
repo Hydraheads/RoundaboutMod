@@ -130,15 +130,7 @@ public class PurpleSmokeEntity extends StandEntity {
             range = Math.max(range, 1.0F);
         }
         //if (!((TimeStop) level()).inTimeStopRange(this)) {
-            List<Entity> damages = MainUtil.genHitbox(
-                    this.level(),
-                    this.getX(),
-                    this.getY(),
-                    this.getZ(),
-                    range,
-                    range,
-                    range
-            );
+        List<Entity> damages = getEntitiesInField();
 
         /*if (client) {
             Roundabout.LOGGER.info(
@@ -238,7 +230,7 @@ public class PurpleSmokeEntity extends StandEntity {
             BlockPos pos = center.offset(dx, dy, dz);
 
             double dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-            if (dist > range) continue;
+            if (dist > range * 0.95) continue;
 
             BlockState state = sl.getBlockState(pos);
             BlockState decayed = getDecayedState(state);
@@ -278,7 +270,6 @@ public class PurpleSmokeEntity extends StandEntity {
             double dy = (this.random.nextDouble() * 2 - 1) * radius;
             double dz = (this.random.nextDouble() * 2 - 1) * radius;
             if (dx * dx + dy * dy + dz * dz > radius * radius) continue;
-            dy = Math.abs(dy);
             sl.sendParticles(options, cx + dx, cy + dy, cz + dz, 1, 0, 0, 0, 0.01);
             spawned++;
         }
@@ -293,17 +284,35 @@ public class PurpleSmokeEntity extends StandEntity {
             double r = radius * (0.9 + this.random.nextDouble() * 0.1);
 
             double dx = Math.cos(theta) * ring * r;
-            double dy = Math.abs(y) * r;
+            double dy = y * r;
             double dz = Math.sin(theta) * ring * r;
 
             sl.sendParticles(options, cx + dx, cy + dy, cz + dz, 1, 0, 0, 0, 0);
         }
     }
+    private List<Entity> getEntitiesInField() {
+        List<Entity> cube = MainUtil.genHitbox(this.level(),
+                this.getX(), this.getY(), this.getZ(), range, range, range);
+
+        double r = range * 0.95;
+        double r2 = r * r;
+        List<Entity> inside = new java.util.ArrayList<>();
+        for (Entity e : cube) {
+            double dx = e.getX() - this.getX();
+            double dy = (e.getY() + e.getBbHeight() * 0.5) - this.getY();
+            double dz = e.getZ() - this.getZ();
+
+            if (dx * dx + dy * dy + dz * dz > r2) continue;
+
+            inside.add(e);
+        }
+        return inside;
+    }
     private final java.util.Set<Integer> expGrantedTo = new java.util.HashSet<>();
     public void tickeffect() {
         if (((TimeStop) level()).inTimeStopRange(this)) { return; }
 
-        List<Entity> damages = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), range, range, range);
+        List<Entity> damages = getEntitiesInField();
         LivingEntity user = this.getUser();
         if (user == null) return;
 

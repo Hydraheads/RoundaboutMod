@@ -180,7 +180,7 @@ public class AdvancedConfig implements Cloneable {
             )
     );
 
-    public Set<String> purpleHazeDecayBlocksAndRatesV1 = new HashSet<>(
+    public Set<String> purpleHazeDecayBlocksAndRatesV2 = new HashSet<>(
             Arrays.asList(
                     "minecraft:grass_block:minecraft:dirt:0.45",
                     "minecraft:mycelium:minecraft:dirt:0.45",
@@ -251,9 +251,9 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:shroomlight:minecraft:air:0.3",
                     "minecraft:pumpkin:minecraft:air:0.3",
                     "minecraft:carved_pumpkin:minecraft:air:0.3",
-                    "minecraft:melon_block:minecraft:air:0.3",
+                    "minecraft:melon:minecraft:air:0.3",
                     "minecraft:hay_block:minecraft:air:0.3",
-                    "minecraft:minecraft:cobweb:minecraft:air:0.3",
+                    "minecraft:cobweb:minecraft:air:0.3",
                     "minecraft:infested_stone:minecraft:stone:0.3",
                     "minecraft:infested_cobblestone:minecraft:cobblestone:0.3",
                     "minecraft:infested_stone_bricks:minecraft:stone_bricks:0.3",
