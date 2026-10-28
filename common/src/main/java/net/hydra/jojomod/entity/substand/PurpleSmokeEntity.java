@@ -254,20 +254,49 @@ public class PurpleSmokeEntity extends StandEntity {
     }
     private void spawnFieldParticles(byte skin) {
         if (!(this.level() instanceof ServerLevel sl)) return;
-        double x = this.getX();
-        double y = this.getY() + 1.0;
-        double z = this.getZ();
 
-        switch (skin) {
-            default -> {
-                if (isDistortionMode()) {
-                    sl.sendParticles(ModParticles.DISTORTION_SMOKE, x, y, z, 30, range / 2, 1.5, range / 2, 0.01);
-                } else {
-                    int color = SKIN_COLORS.getOrDefault(skin, DEFAULT_HAZE_COLOR);
-                    sl.sendParticles(HazeColorParticleOptions.fromPackedColor(ModParticles.PURPLE_HAZE_SMOKE, color),
-                            x, y, z, 30, range / 2, 1.5, range / 2, 0.01);
-                }
-            }
+        double cx = this.getX();
+        double cy = this.getY();
+        double cz = this.getZ();
+
+        double radius = Math.max(range * 0.95, 0.5);
+
+        net.minecraft.core.particles.ParticleOptions options;
+        if (isDistortionMode()) {
+            options = ModParticles.DISTORTION_SMOKE;
+        } else {
+            int color = SKIN_COLORS.getOrDefault(skin, DEFAULT_HAZE_COLOR);
+            options = HazeColorParticleOptions.fromPackedColor(ModParticles.PURPLE_HAZE_SMOKE, color);
+        }
+
+//interior
+        int spawned = 0;
+        int attempts = 0;
+        while (spawned < 20 && attempts < 60) {
+            attempts++;
+            double dx = (this.random.nextDouble() * 2 - 1) * radius;
+            double dy = (this.random.nextDouble() * 2 - 1) * radius;
+            double dz = (this.random.nextDouble() * 2 - 1) * radius;
+            if (dx * dx + dy * dy + dz * dz > radius * radius) continue;
+            dy = Math.abs(dy);
+            sl.sendParticles(options, cx + dx, cy + dy, cz + dz, 1, 0, 0, 0, 0.01);
+            spawned++;
+        }
+
+    //exterior
+        int borderCount = (int) (12 + range * 4);
+        for (int i = 0; i < borderCount; i++) {
+            double y = this.random.nextDouble() * 2 - 1;
+            double theta = this.random.nextDouble() * Math.PI * 2;
+            double ring = Math.sqrt(1 - y * y);
+
+            double r = radius * (0.9 + this.random.nextDouble() * 0.1);
+
+            double dx = Math.cos(theta) * ring * r;
+            double dy = Math.abs(y) * r;
+            double dz = Math.sin(theta) * ring * r;
+
+            sl.sendParticles(options, cx + dx, cy + dy, cz + dz, 1, 0, 0, 0, 0);
         }
     }
     private final java.util.Set<Integer> expGrantedTo = new java.util.HashSet<>();
