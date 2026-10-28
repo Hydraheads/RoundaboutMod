@@ -2664,6 +2664,7 @@
   "ability.roundabout.lyin_eyes_callout": "Call Out Liar",
   "ability.roundabout.lyin_eyes_callout.desc": "Interacting with a villager might cause them to be revealed as a liar. Using Tension Sensor, you can detect those that are lying to you. Interact with them again while in Tension Sensor to call them out, giving all Lyin' Eyes users permanent trade discounts. Don't go lying.",
   "container.roundabout.lyin_eyes_callout": " ",
+  "container.roundabout.lyin_eyes_inventory": " ",
   "text.roundabout.lyin_eyes.tension_highlight": "Tension Highlight On",
   "text.roundabout.lyin_eyes.tension_highlight_off": "Tension Highlight Off",
 
@@ -5113,6 +5114,9 @@
 
   "config.roundabout.nerfedTEDamage.name": "Nerfed TE PVP",
   "config.roundabout.nerfedTEDamage.desc": "Makes the fated self less physically strong with its punches by a small amount for balancing.",
+
+  "config.roundabout.nerfedPVPRunning.name": "Nerfed PVP Running",
+  "config.roundabout.nerfedPVPRunning.desc": "If in pvp, player skips are shorter distance.",
 
   "config.roundabout.vampireAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.vampireAttackMultOnPlayers.desc": "How much damage vampires deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",

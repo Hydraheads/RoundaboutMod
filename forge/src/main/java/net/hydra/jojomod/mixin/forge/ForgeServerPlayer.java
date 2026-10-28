@@ -62,8 +62,9 @@ public abstract class ForgeServerPlayer extends Player {
                     }
                 }
             }
-            if (((StandUser) this).roundabout$getStandPowers() instanceof PowersDiverDown dd && dd.isSelfDive()) {
+            if (((StandUser) this).roundabout$getStandPowers() instanceof PowersDiverDown dd) {
                 dd.emergeServer();
+                dd.recallLimbs();
             }
         }
     }

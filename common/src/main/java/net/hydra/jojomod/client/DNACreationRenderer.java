@@ -48,8 +48,8 @@ public class DNACreationRenderer extends EntityRenderer<DNACreationEntity> {
         poseStack.translate(0, verticalOffset, 0);
 
         // SPEEENS
-        // the float is in degrees, so 12 degrees per tick
-        float spin = (entity.tickCount + partialTicks) * 12.0f;
+        // the float is in degrees, so 8 degrees per tick
+        float spin = (entity.tickCount + partialTicks) * 8.0f;
         poseStack.mulPose(Axis.YP.rotationDegrees(spin));
 
         // shrinking item effect
