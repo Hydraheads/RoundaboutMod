@@ -3515,6 +3515,8 @@ public class PowersDiverDown extends NewPunchingStand {
                 MainUtil.takeLiteralUnresistableKnockbackWithY(victim, launchX, launchY, launchZ);
             }
 
+            addEXP(5, victim);
+
             // play effects sounds and stuff here
             playSoundIfPossible(self.level(), null, this.self.blockPosition(),
                     ModSounds.DIVER_DOWN_HIT_EVENT,
