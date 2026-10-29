@@ -15,6 +15,11 @@ public class GoldExperienceEntity extends FollowingStandEntity {
 
     public final AnimationState lifePunch = new AnimationState();
     public final AnimationState hideFists = new AnimationState();
+    public final AnimationState hideLeg = new AnimationState();
+    public final AnimationState hideLifePunch = new AnimationState();
+    public final AnimationState kick_barrage = new AnimationState();
+    public final AnimationState kick_barrage_end = new AnimationState();
+    public final AnimationState kick_barrage_windup = new AnimationState();
 
     //used for animations later
     public static final byte
@@ -29,10 +34,35 @@ public class GoldExperienceEntity extends FollowingStandEntity {
         } else {
             this.hideFists.stop();
         }
+
+        if (this.getAnimation() != LIFE_PUNCH) {
+            this.hideLifePunch.startIfStopped(this.tickCount);
+        } else {
+            this.hideLifePunch.stop();
+        }
         if (animation == LIFE_PUNCH) {
             this.lifePunch.startIfStopped(this.tickCount);
         } else {
             this.lifePunch.stop();
         }
+
+        if (this.getAnimation() != KICK_BARRAGE) {
+            this.hideLeg.startIfStopped(this.tickCount);
+            this.kick_barrage.stop();
+        } else {
+            this.hideLeg.stop();
+            this.kick_barrage.startIfStopped(this.tickCount);
+        }
+        if (this.getAnimation() == KICK_BARRAGE_WINDUP) {
+            this.kick_barrage_windup.startIfStopped(this.tickCount);
+        } else {
+            this.kick_barrage_windup.stop();
+        }
+        if (this.getAnimation() == KICK_BARRAGE_END) {
+            this.kick_barrage_end.startIfStopped(this.tickCount);
+        } else {
+            this.kick_barrage_end.stop();
+        }
+
     }
 }

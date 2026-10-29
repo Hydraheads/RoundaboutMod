@@ -36,9 +36,6 @@ public class PurpleHazeEntity extends FollowingStandEntity{
     public final AnimationState strangle_hold= new AnimationState();
     public final AnimationState strangle_grab= new AnimationState();
     public final AnimationState phfullcombo= new AnimationState();
-    public final AnimationState phcombo1= new AnimationState();
-    public final AnimationState phcombo2= new AnimationState();
-    public final AnimationState phcombo3= new AnimationState();
     public final AnimationState fallinghitstart= new AnimationState();
     public final AnimationState fallinghit= new AnimationState();
     public final AnimationState fallinghitlong= new AnimationState();
@@ -51,9 +48,6 @@ public class PurpleHazeEntity extends FollowingStandEntity{
             STRANGLE_GRAB = 88,
             STRANGLE_HOLD = 89,
             PHFULLCOMBO = 90,
-            PHCOMBO1 = 91,
-            PHCOMBO2 = 92,
-            PHCOMBO3 = 93,
             FALLINGHITSTART = 94,
             FALLINGHIT = 95,
             FALLINGHITLONG = 96,
@@ -117,45 +111,7 @@ public class PurpleHazeEntity extends FollowingStandEntity{
             } else {
                 this.phfullcombo.stop();
             }
-            if (this.getAnimation() == FIRST_PUNCH) {
-                if (isNotDistortionSkin) {
-                    this.phcombo1.startIfStopped(this.tickCount);
-                } else {
-                    this.punchState1.startIfStopped(this.tickCount);
-                }
-            } else {
-                if (isNotDistortionSkin) {
-                    this.phcombo1.stop();
-                } else {
-                    this.punchState1.stop();
-                }
-            }
-            if (this.getAnimation() == SECOND_PUNCH) {
-                if (isNotDistortionSkin) {
-                    this.phcombo2.startIfStopped(this.tickCount);
-                } else {
-                    this.punchState2.startIfStopped(this.tickCount);
-                }
-            } else {
-                if (isNotDistortionSkin) {
-                    this.phcombo2.stop();
-                } else {
-                    this.punchState2.stop();
-                }
-            }
-            if (this.getAnimation() == THIRD_PUNCH) {
-                if (isNotDistortionSkin) {
-                    this.phcombo3.startIfStopped(this.tickCount);
-                } else {
-                    this.punchState3.startIfStopped(this.tickCount);
-                }
-            } else {
-                if (isNotDistortionSkin) {
-                    this.phcombo3.stop();
-                } else {
-                    this.punchState3.stop();
-                }
-            }
+
             if (this.getAnimation() == FALLINGHITSTART) {
                 this.fallinghitstart.startIfStopped(this.tickCount);
             } else {

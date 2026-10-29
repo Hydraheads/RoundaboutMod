@@ -19,6 +19,7 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 	private final ModelPart right_arm;
 	private final ModelPart upper_right_arm;
 	private final ModelPart lower_right_arm;
+	private final ModelPart vitalpunchvfx;
 	private final ModelPart left_arm;
 	private final ModelPart upper_left_arm;
 	private final ModelPart lower_left_arm;
@@ -32,6 +33,11 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 	private final ModelPart left_leg;
 	private final ModelPart upper_left_leg;
 	private final ModelPart lower_left_leg;
+	private final ModelPart kick_barrage;
+	private final ModelPart One;
+	private final ModelPart Two;
+	private final ModelPart Three;
+	private final ModelPart Four;
 	private final ModelPart BAM;
 	private final ModelPart RightArmBAM;
 	private final ModelPart RightArmBAM2;
@@ -54,6 +60,7 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 		this.right_arm = this.upper_chest.getChild("right_arm");
 		this.upper_right_arm = this.right_arm.getChild("upper_right_arm");
 		this.lower_right_arm = this.right_arm.getChild("lower_right_arm");
+		this.vitalpunchvfx = this.lower_right_arm.getChild("vitalpunchvfx");
 		this.left_arm = this.upper_chest.getChild("left_arm");
 		this.upper_left_arm = this.left_arm.getChild("upper_left_arm");
 		this.lower_left_arm = this.left_arm.getChild("lower_left_arm");
@@ -67,6 +74,11 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 		this.left_leg = this.legs.getChild("left_leg");
 		this.upper_left_leg = this.left_leg.getChild("upper_left_leg");
 		this.lower_left_leg = this.left_leg.getChild("lower_left_leg");
+		this.kick_barrage = this.stand2.getChild("kick_barrage");
+		this.One = this.kick_barrage.getChild("One");
+		this.Two = this.kick_barrage.getChild("Two");
+		this.Three = this.kick_barrage.getChild("Three");
+		this.Four = this.kick_barrage.getChild("Four");
 		this.BAM = this.stand2.getChild("BAM");
 		this.RightArmBAM = this.BAM.getChild("RightArmBAM");
 		this.RightArmBAM2 = this.BAM.getChild("RightArmBAM2");
@@ -120,6 +132,9 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 		.texOffs(56, 40).addBox(-2.0F, -0.25F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F))
 		.texOffs(68, 9).addBox(-2.0F, 0.75F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.21F)), PartPose.offset(-2.0F, 5.5F, 0.0F));
 
+		PartDefinition vitalpunchvfx = lower_right_arm.addOrReplaceChild("vitalpunchvfx", CubeListBuilder.create().texOffs(100, 8).addBox(-8.0F, -17.0F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.32F))
+		.texOffs(88, 39).addBox(-8.1F, -17.9F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.1F)), PartPose.offset(6.1F, 17.65F, 0.0F));
+
 		PartDefinition left_arm = upper_chest.addOrReplaceChild("left_arm", CubeListBuilder.create(), PartPose.offset(4.0F, -5.25F, 0.0F));
 
 		PartDefinition upper_left_arm = left_arm.addOrReplaceChild("upper_left_arm", CubeListBuilder.create().texOffs(16, 60).addBox(0.0F, -0.75F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.01F))
@@ -160,6 +175,28 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 		PartDefinition lower_left_leg = left_leg.addOrReplaceChild("lower_left_leg", CubeListBuilder.create().texOffs(0, 52).mirror().addBox(-2.0F, -1.0F, -2.0F, 4.0F, 7.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false)
 		.texOffs(60, 20).mirror().addBox(-1.0F, -1.0F, -2.25F, 2.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false)
 		.texOffs(32, 70).mirror().addBox(-2.0F, 0.9999F, -1.9998F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.201F)).mirror(false), PartPose.offset(0.0F, 7.0F, 0.0F));
+
+		PartDefinition kick_barrage = stand2.addOrReplaceChild("kick_barrage", CubeListBuilder.create(), PartPose.offset(-11.0F, -12.0F, -2.0F));
+
+		PartDefinition One = kick_barrage.addOrReplaceChild("One", CubeListBuilder.create().texOffs(80, 63).mirror().addBox(-2.0F, 4.0F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(-0.01F)).mirror(false)
+		.texOffs(96, 64).addBox(-2.0F, 5.0F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.201F)), PartPose.offset(0.0F, 2.0F, 0.0F));
+
+		PartDefinition base_r1 = One.addOrReplaceChild("base_r1", CubeListBuilder.create().texOffs(80, 55).mirror().addBox(-2.0F, -1.0F, -2.0F, 4.0F, 3.0F, 4.0F, new CubeDeformation(0.1F)).mirror(false), PartPose.offsetAndRotation(0.0F, 2.1819F, 0.1667F, -0.0873F, 0.0F, 0.0F));
+
+		PartDefinition Two = kick_barrage.addOrReplaceChild("Two", CubeListBuilder.create().texOffs(80, 63).mirror().addBox(-2.0F, 4.0F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(-0.01F)).mirror(false)
+		.texOffs(96, 64).addBox(-2.0F, 5.0F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.201F)), PartPose.offset(0.0F, 2.0F, 0.0F));
+
+		PartDefinition base_r2 = Two.addOrReplaceChild("base_r2", CubeListBuilder.create().texOffs(80, 55).mirror().addBox(-2.0F, -1.0F, -2.0F, 4.0F, 3.0F, 4.0F, new CubeDeformation(0.1F)).mirror(false), PartPose.offsetAndRotation(0.0F, 2.1819F, 0.1667F, -0.0873F, 0.0F, 0.0F));
+
+		PartDefinition Three = kick_barrage.addOrReplaceChild("Three", CubeListBuilder.create().texOffs(80, 63).mirror().addBox(-2.0F, 4.0F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(-0.01F)).mirror(false)
+		.texOffs(96, 64).addBox(-2.0F, 5.0F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.201F)), PartPose.offset(0.0F, 2.0F, 0.0F));
+
+		PartDefinition base_r3 = Three.addOrReplaceChild("base_r3", CubeListBuilder.create().texOffs(80, 55).mirror().addBox(-2.0F, -1.0F, -2.0F, 4.0F, 3.0F, 4.0F, new CubeDeformation(0.1F)).mirror(false), PartPose.offsetAndRotation(0.0F, 2.1819F, 0.1667F, -0.0873F, 0.0F, 0.0F));
+
+		PartDefinition Four = kick_barrage.addOrReplaceChild("Four", CubeListBuilder.create().texOffs(80, 63).mirror().addBox(-2.0F, 4.0F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(-0.01F)).mirror(false)
+		.texOffs(96, 64).addBox(-2.0F, 5.0F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.201F)), PartPose.offset(0.0F, 2.0F, 0.0F));
+
+		PartDefinition base_r4 = Four.addOrReplaceChild("base_r4", CubeListBuilder.create().texOffs(80, 55).mirror().addBox(-2.0F, -1.0F, -2.0F, 4.0F, 3.0F, 4.0F, new CubeDeformation(0.1F)).mirror(false), PartPose.offsetAndRotation(0.0F, 2.1819F, 0.1667F, -0.0873F, 0.0F, 0.0F));
 
 		PartDefinition BAM = stand2.addOrReplaceChild("BAM", CubeListBuilder.create(), PartPose.offset(0.0F, -17.0F, -4.0F));
 

@@ -185,6 +185,26 @@ public class PurpleHazeModel<T extends PurpleHazeEntity> extends StandModel<T> {
 
     StandPowers Power = new PowersPurpleHaze(null);
     @Override
+    public void animatePunches(T pEntity, float pAgeInTicks) {
+        float partial = 1.4f;
+        float full = 1.16666f;
+        if (pEntity.getMeltLevel() > 0){
+            partial = 1.4f - Math.min(0.5f,0.9f*((float) pEntity.getMeltLevel()));
+            full = 1.16666f - Math.min(0.5f,0.07f*((float) pEntity.getMeltLevel()));
+        }
+
+        if (pEntity.getSkin() != PurpleHazeEntity.DISTORTION && pEntity.getSkin() != PurpleHazeEntity.GREEN_DSITORTION) {
+            this.animate(pEntity.punchState1, PurpleHazeAnimations.PHCOMBO1, pAgeInTicks, partial);
+            this.animate(pEntity.punchState2, PurpleHazeAnimations.PHCOMBO2, pAgeInTicks, full);
+            this.animate(pEntity.punchState3, PurpleHazeAnimations.PHCOMBO3, pAgeInTicks, full);
+        }else {
+            this.animate(pEntity.punchState1, StandAnimations.COMBO1, pAgeInTicks, partial);
+            this.animate(pEntity.punchState2, StandAnimations.COMBO2, pAgeInTicks, full); /*1.1666 for 6 ticks, 1.4 for 5*/
+            this.animate(pEntity.punchState3, StandAnimations.COMBO3, pAgeInTicks, full);
+        }
+    }
+
+    @Override
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
         super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
         defaultModifiers(pEntity);
@@ -199,9 +219,6 @@ public class PurpleHazeModel<T extends PurpleHazeEntity> extends StandModel<T> {
         this.animate(pEntity.strangle_hold, PurpleHazeAnimations.STRANGLE_HOLD, pAgeInTicks, 1f);
         this.animate(pEntity.strangle_grab, PurpleHazeAnimations.STRANGLE_GRAB, pAgeInTicks, 1f);
         this.animate(pEntity.phfullcombo, PurpleHazeAnimations.PHFULLCOMBO, pAgeInTicks, 1f);
-        this.animate(pEntity.phcombo1, PurpleHazeAnimations.PHCOMBO1, pAgeInTicks, 1f);
-        this.animate(pEntity.phcombo2, PurpleHazeAnimations.PHCOMBO2, pAgeInTicks, 1f);
-        this.animate(pEntity.phcombo3, PurpleHazeAnimations.PHCOMBO3, pAgeInTicks, 1f);
         this.animate(pEntity.fallinghitstart, PurpleHazeAnimations.FALLINGHITSTART, pAgeInTicks, 1f);
         this.animate(pEntity.fallinghit, PurpleHazeAnimations.FALLINGHIT, pAgeInTicks, 1f);
         this.animate(pEntity.fallinghitlong, PurpleHazeAnimations.FALLINGHITLONG, pAgeInTicks, 1f);

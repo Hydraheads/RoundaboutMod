@@ -4070,10 +4070,22 @@
       "roundabout:purple_haze_summon"
     ]
   },
+  "purple_haze_barrage_windup": {
+    "subtitle": "sounds.roundabout.stand_barrage_windup",
+    "sounds": [
+      "roundabout:ph_barrage_windup"
+    ]
+  },
   "purple_haze_barrage_cry": {
     "subtitle": "sounds.roundabout.purple_haze_barrage_cry",
     "sounds": [
-      "roundabout:purple_haze_barrage_cry"
+      "roundabout:ph_barrage"
+    ]
+  },
+  "purple_haze_kick_barrage_cry": {
+    "subtitle": "sounds.roundabout.purple_haze_barrage_cry",
+    "sounds": [
+      "roundabout:ph_kick_barrage"
     ]
   },
   "purple_haze_barrage_hit": {
@@ -4107,6 +4119,36 @@
     "subtitle": "sounds.roundabout.purple_haze_pod_bite",
     "sounds": [
       "roundabout:purple_haze_pod_bite"
+    ]
+  },
+  "ph_pod_launch": {
+    "subtitle": "sounds.roundabout.ph_pod_launch",
+    "sounds": [
+      "roundabout:ph_pod_launch"
+    ]
+  },
+  "ph_strangle": {
+    "subtitle": "sounds.roundabout.ph_strangle",
+    "sounds": [
+      "roundabout:ph_strangle"
+    ]
+  },
+  "ph_strangle_run": {
+    "subtitle": "sounds.roundabout.ph_strangle_run",
+    "sounds": [
+      "roundabout:ph_strangle_run"
+    ]
+  },
+  "ph_strangle_grab": {
+    "subtitle": "sounds.roundabout.ph_strangle_grab",
+    "sounds": [
+      "roundabout:ph_strangle_grab"
+    ]
+  },
+  "ph_type_switch": {
+    "subtitle": "sounds.roundabout.ph_type_switch",
+    "sounds": [
+      "roundabout:ph_type_switch"
     ]
   },
   "planet_waves_summon": {
@@ -4687,6 +4729,30 @@
     "subtitle": "sounds.roundabout.silver_chariot_rapier_shot_entity_impact",
     "sounds": [
       "roundabout:silver_chariot_rapier_shot_entity_impact"
+    ]
+  },
+  "silver_chariot_slab_cutting": {
+    "subtitle": "sounds.roundabout.silver_chariot_slab_cutting",
+    "sounds": [
+      "roundabout:silver_chariot_slab_cutting"
+    ]
+  },
+  "silver_chariot_statue_cutting": {
+    "subtitle": "sounds.roundabout.silver_chariot_statue_cutting",
+    "sounds": [
+      "roundabout:silver_chariot_statue_cutting"
+    ]
+  },
+  "silver_chariot_self_grab": {
+    "subtitle": "sounds.roundabout.silver_chariot_self_grab",
+    "sounds": [
+      "roundabout:silver_chariot_self_grab"
+    ]
+  },
+  "silver_chariot_self_throw": {
+    "subtitle": "sounds.roundabout.silver_chariot_self_throw",
+    "sounds": [
+      "roundabout:silver_chariot_self_throw"
     ]
   },
   "bc_parachute_open": {
