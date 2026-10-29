@@ -381,7 +381,8 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public int getExpForLevelUp(int currentLevel) {
-        return super.getExpForLevelUp(currentLevel);
+        int amount = currentLevel == 1 ? 100 : 100 + ((currentLevel - 1) * 100);
+        return (int) (amount * getLevelMultiplier());
     }
 
     public int getRapierSlashLevel() {
@@ -752,8 +753,61 @@ public class PowersSilverChariot extends NewPunchingStand {
     }
 
     @Override
+    public void playBarrageNoise(int hitNumber, Entity entity) {
+        if (!this.self.level().isClientSide()) {
+            if (hitNumber % 3 == 0) {
+                double rand = Math.random();
+                // playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.SILVER_CHARIOT_HIT_3_EVENT, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
+                SoundEvent se;
+                if (rand < 0.25){
+                    se = ModSounds.SILVER_CHARIOT_HIT_1_EVENT;
+                } else if (rand < 0.5){
+                    se = ModSounds.SILVER_CHARIOT_HIT_2_EVENT;
+                } else if (rand < 0.75){
+                    se = ModSounds.SILVER_CHARIOT_HIT_3_EVENT;
+                } else {
+                    se = ModSounds.SILVER_CHARIOT_HIT_4_EVENT;
+                }
+                playSoundIfPossible(self.level(),null, actionOrigin().blockPosition(), se, SoundSource.PLAYERS, 0.8F, (float) (0.8 + (Math.random() * 0.25)));
+            }
+        }
+    }
+
+    @Override
+    public void playBarrageCrySound() {
+        super.playBarrageCrySound();
+    }
+
+    @Override
+    public void playBarrageMissNoise(int hitNumber) {
+        if (!self.level().isClientSide() && hitNumber % 2 == 0) {
+            playSoundIfPossible(self.level(),null, actionOrigin().blockPosition(), ModSounds.STAND_BARRAGE_MISS_EVENT,
+                    SoundSource.PLAYERS, 0.95F, (float) (0.8 + Math.random() * 0.4));
+        }
+    }
+
+    @Override
     public void playBarrageEndNoise(float mod, Entity entity) {
-        super.playBarrageEndNoise(mod, entity);
+        if (!self.level().isClientSide()) {
+            playSoundIfPossible(self.level(),null, actionOrigin().blockPosition(), ModSounds.STAND_BARRAGE_END_EVENT,
+                    SoundSource.PLAYERS, 0.95F + mod, 1.0F);
+        }
+    }
+
+    @Override
+    public void playBarrageBlockNoise() {
+        if (!self.level().isClientSide()) {
+            playSoundIfPossible(self.level(),null, actionOrigin().blockPosition(), ModSounds.STAND_BARRAGE_BLOCK_EVENT,
+                    SoundSource.PLAYERS, 0.95F, (float) (0.8 + Math.random() * 0.4));
+        }
+    }
+
+    @Override
+    public void playBarrageBlockEndNoise(float mod, Entity entity) {
+        if (!self.level().isClientSide()) {
+            playSoundIfPossible(self.level(),null, actionOrigin().blockPosition(), ModSounds.STAND_BARRAGE_END_BLOCK_EVENT,
+                    SoundSource.PLAYERS, 0.88F + mod, 1.7F);
+        }
     }
 
     @Override
@@ -829,7 +883,13 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public boolean canActuallyHit(Entity entity) {
-        return !isRegainingArmourFromDesummon() && !onCooldown(PowerIndex.SKILL_4) && super.canActuallyHit(entity);
+        // return !isRegainingArmourFromDesummon() && !onCooldown(PowerIndex.SKILL_4) && super.canActuallyHit(entity);
+        if (entity == null) return false;
+        if (!isPiloting()) return super.canActuallyHit(entity);
+        if (ClientNetworking.getAppropriateConfig().generalStandSettings.standPunchesGoThroughDoorsAndCorners) {
+            return true;
+        }
+        return actionOrigin().hasLineOfSight(entity);
     }
 
     public boolean armoured = true;
@@ -862,7 +922,30 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public float getRushDistance(){
-        return super.getRushDistance();
+        // return super.getRushDistance();
+        if (!isPiloting()) {
+            return super.getRushDistance();
+        }
+        return self.distanceTo(actionOrigin()) + SILVER_CHARIOT_CONTROL_MODE_PUNCH_RANGE;
+    }
+
+    @Override
+    public boolean StandDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker) {
+        return super.StandDamageEntityAttack(target, pow, knockbackStrength, attacker);
+    }
+
+    @Override
+    public boolean StandRushDamageEntityAttack(Entity target, float pow, float knockbackStrength, Entity attacker) {
+        return super.StandRushDamageEntityAttack(target, pow, knockbackStrength, attacker);
+    }
+
+    private void setControlModeAttackTarget(Entity target) {
+        if (!self.level().isClientSide() && isPiloting()
+                && target instanceof Mob mob && getPilotingStand() instanceof SilverChariotEntity stand
+        ) {
+            mob.setLastHurtByMob(stand);
+            if (mob.getTarget() == self) mob.setTarget(stand);
+        }
     }
 
     @Override
@@ -1211,32 +1294,6 @@ public class PowersSilverChariot extends NewPunchingStand {
     }
 
     @Override
-    public void playBarrageNoise(int hitNumber, Entity entity) {
-        if (!this.self.level().isClientSide()) {
-            if (hitNumber % 3 == 0) {
-                double rand = Math.random();
-                // playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.SILVER_CHARIOT_HIT_3_EVENT, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
-                SoundEvent se;
-                if (rand < 0.25){
-                    se = ModSounds.SILVER_CHARIOT_HIT_1_EVENT;
-                } else if (rand < 0.5){
-                    se = ModSounds.SILVER_CHARIOT_HIT_2_EVENT;
-                } else if (rand < 0.75){
-                    se = ModSounds.SILVER_CHARIOT_HIT_3_EVENT;
-                } else {
-                    se = ModSounds.SILVER_CHARIOT_HIT_4_EVENT;
-                }
-                playSoundIfPossible(self.level(),null, this.self.blockPosition(), se, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
-            }
-        }
-    }
-
-    @Override
-    public void playBarrageCrySound() {
-        super.playBarrageCrySound();
-    }
-
-    @Override
     public byte chooseBarrageSound() {
         return BARRAGE_CRY_SOUND;
     }
@@ -1333,13 +1390,42 @@ public class PowersSilverChariot extends NewPunchingStand {
         */
         if (isHoldingSneak()) {
             if (isGuarding()) {
-                setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD, true);
-                setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD, true);
-                setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD, true);
-                setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+                // setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+                if (canExecuteMoveWithLevel(getSlabCuttingLevel())) {
+                    setSkillIcon(context, x, y, 1, StandIcons.SILVER_CHARIOT_SLAB_CUTTING, PowerIndex.SKILL_1_GUARD);
+                } else {
+                    setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+                }
+                // setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+                if (canExecuteMoveWithLevel(getArmorShedLevel())) {
+                    setSkillIcon(context, x, y, 2, StandIcons.SILVER_CHARIOT_ARMOUR_OFF, PowerIndex.SKILL_2_GUARD);
+                } else {
+                    setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+                }
+                // setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+                if (!this.getSelf().onGround() && canVault()) {
+                    setSkillIcon(context, x, y, 3, StandIcons.SILVER_CHARIOT_VAULT, PowerIndex.GLOBAL_DASH);
+                } else if (canFallBrace()) {
+                    setSkillIcon(context, x, y, 3, StandIcons.SILVER_CHARIOT_FALL_BRACE, PowerIndex.NO_CD);
+                } else {
+                    setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+                }
+                // setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+                if (canExecuteMoveWithLevel(getStatueCuttingLevel())) {
+                    setSkillIcon(context, x, y, 4, StandIcons.SILVER_CHARIOT_STATUE_CUTTING, PowerIndex.SKILL_4_GUARD);
+                } else {
+                    setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+                }
 
             } else {
-                setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+                // setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+                if (canExecuteMoveWithLevel(getControlModeLevel()) && !isPiloting()) {
+                    setSkillIcon(context, x, y, 2, StandIcons.SILVER_CHARIOT_CONTROL_MODE_ON, PowerIndex.SKILL_2);
+                } else if (canExecuteMoveWithLevel(getControlModeLevel()) && isPiloting()) {
+                    setSkillIcon(context, x, y, 2, StandIcons.SILVER_CHARIOT_CONTROL_MODE_OFF, PowerIndex.SKILL_2);
+                } else {
+                    setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+                }
 
                 if (canExecuteMoveWithLevel(getSelfGrabLevel())) {
                     setSkillIcon(context, x, y, 3, StandIcons.SILVER_CHARIOT_SELF_GRAB, PowerIndex.SKILL_3_GUARD);
@@ -1418,6 +1504,9 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot) {
+        boolean holdSneak = isHoldingSneak();
+        boolean isGuard = isGuarding();
+        boolean hasRapier = onCooldown(PowerIndex.SKILL_4);
         if (isRegainingArmourFromDesummon()) {
             return true;
         }
@@ -1426,10 +1515,10 @@ public class PowersSilverChariot extends NewPunchingStand {
                 return true;
             }
         }
-        if ((onCooldown(PowerIndex.SKILL_4) || !canCreateSlab()) && slot == 1 && isGuarding() && !isHoldingSneak()) {
+        if ((hasRapier || !canCreateSlab()) && slot == 1 && isGuard) {
             return true;
         }
-        if ((onCooldown(PowerIndex.SKILL_4) || !canCreateStatue()) && slot == 4 && isGuarding() && !isHoldingSneak()) {
+        if ((hasRapier || !canCreateStatue()) && slot == 4 && isGuard) {
             return true;
         }
         return super.isAttackIneptVisually(activeP, slot);
@@ -3108,6 +3197,32 @@ public class PowersSilverChariot extends NewPunchingStand {
         if (displayStand == null){
             displayStand = getNewStandEntity();
         }
+        if (this.self instanceof Player PL && ((IPlayerEntity) PL).roundabout$getStandSkin() != displayStand.getSkin()) {
+            displayStand = getNewStandEntity();
+            displayStand.setSkin(((IPlayerEntity) PL).roundabout$getStandSkin());
+        }
+
+        // All of this is code to have the idle animation appear.
+        if (displayStand != null && this.self != null) {
+            StandUser su = (StandUser) this.self;
+            displayStand.setUser(this.self);
+            displayStand.tickCount = this.self.tickCount;
+
+            displayStand.setAnimation(su.roundabout$getStandAnimation());
+            displayStand.setIdleAnimation(su.roundabout$getIdlePos());
+
+            StandEntity realStand = this.getStandEntity(this.self);
+            if (realStand != null) {
+                displayStand.setPose(realStand.getPose());
+                displayStand.setIdleAnimation(realStand.getIdleAnimation());
+            }
+
+            displayStand.setupAnimationStates();
+        }
+        /*
+        if (displayStand == null){
+            displayStand = getNewStandEntity();
+        }
         if (displayStand != null) {
             if (this.self instanceof Player PL && ((IPlayerEntity) PL).roundabout$getStandSkin() != displayStand.getSkin()) {
                 displayStand = getNewStandEntity();
@@ -3122,12 +3237,13 @@ public class PowersSilverChariot extends NewPunchingStand {
             displayStand.setAnimation(SilverChariotEntity.SC_TOGGLE_ARMOUR_OFF);
             displayStand.setIdleAnimation(((StandUser) self).roundabout$getIdlePos());
         }
+        */
         return displayStand;
     }
 
     @Override
     public boolean returnFakeStandForHud() {
-        return !this.getArmoured();
+        return this.isPiloting() || !this.getArmoured();
     }
 
     @Override
@@ -3275,12 +3391,22 @@ public class PowersSilverChariot extends NewPunchingStand {
                 refreshArms();
             }
         } else {
+            if (((StandUser)this.self).roundabout$getGuardBroken() && this.getArmoured()) {
+                animateStand(StandEntity.BROKEN_GUARD);
+            } else if (((StandUser)this.self).roundabout$getGuardBroken() && !this.getArmoured()) {
+                animateStand(StandEntity.IDLE);
+            } else {
+                animateStand(StandEntity.BLOCK);
+            }
+            this.poseStand(OffsetIndex.GUARD);
+            /*
             if (((StandUser)this.self).roundabout$getGuardBroken()) {
                 animateStand(StandEntity.BROKEN_GUARD);
             } else {
                 animateStand(StandEntity.BLOCK);
             }
             this.poseStand(OffsetIndex.GUARD);
+            */
         }
         this.setActivePower(PowerIndex.GUARD);
         this.attackTimeDuring = 0;
@@ -3328,7 +3454,9 @@ public class PowersSilverChariot extends NewPunchingStand {
     }
 
     public boolean createStatue() {
-        HitResult res = this.self.pick(5.0d, 0.0f, false);
+        // HitResult res = this.self.pick(5.0d, 0.0f, false);
+        LivingEntity origin = actionOrigin();
+        HitResult res = origin.pick(this.getReach(), 0.0f, false);
 
         if (res.getType() == HitResult.Type.BLOCK) {
             BlockHitResult bhr = (BlockHitResult) res;
@@ -3404,13 +3532,68 @@ public class PowersSilverChariot extends NewPunchingStand {
                         SoundSource.PLAYERS, 1F, 1F);
 
                 return true;
+            } else {
+                if (bs.is(ModBlocks.GODDESS_STATUE_BLOCK) && bs2.is(ModBlocks.GODDESS_STATUE_BLOCK) && bs3.is(ModBlocks.GODDESS_STATUE_BLOCK)) {
+                    bs4 = ModBlocks.MAGICIANS_STATUE_BLOCK.defaultBlockState()
+                            .setValue(MagiciansStatueBlock.FACING, this.self.getDirection())
+                            .setValue(MagiciansStatueBlock.PART, MagiciansStatuePart.BOTTOM);
+                    bs5 = ModBlocks.MAGICIANS_STATUE_BLOCK.defaultBlockState()
+                            .setValue(MagiciansStatueBlock.FACING, this.self.getDirection())
+                            .setValue(MagiciansStatueBlock.PART, MagiciansStatuePart.TOP);
+                    bs6 = Blocks.AIR.defaultBlockState();
+
+                    this.self.level().setBlock(
+                            bp2,
+                            bs4,
+                            MagiciansStatueBlock.UPDATE_ALL
+                    );
+                    this.self.level().setBlock(
+                            bp,
+                            bs5,
+                            MagiciansStatueBlock.UPDATE_ALL
+                    );
+                    this.self.level().setBlock(
+                            bp3,
+                            bs6,
+                            Block.UPDATE_ALL
+                    );
+                } else if (bs.is(ModBlocks.MAGICIANS_STATUE_BLOCK) && bs2.is(ModBlocks.MAGICIANS_STATUE_BLOCK) && bs3.is(Blocks.AIR)) {
+                    bs4 = ModBlocks.GODDESS_STATUE_BLOCK.defaultBlockState()
+                            .setValue(GoddessStatueBlock.FACING, this.self.getDirection())
+                            .setValue(GoddessStatueBlock.PART, GoddessStatuePart.BOTTOM);
+                    bs5 = ModBlocks.GODDESS_STATUE_BLOCK.defaultBlockState()
+                            .setValue(GoddessStatueBlock.FACING, this.self.getDirection())
+                            .setValue(GoddessStatueBlock.PART, GoddessStatuePart.MIDDLE);
+                    bs6 = ModBlocks.GODDESS_STATUE_BLOCK.defaultBlockState()
+                            .setValue(GoddessStatueBlock.FACING, this.self.getDirection())
+                            .setValue(GoddessStatueBlock.PART, GoddessStatuePart.TOP);
+
+                    this.self.level().setBlock(
+                            bp2,
+                            bs4,
+                            GoddessStatueBlock.UPDATE_ALL
+                    );
+                    this.self.level().setBlock(
+                            bp,
+                            bs5,
+                            GoddessStatueBlock.UPDATE_ALL
+                    );
+                    this.self.level().setBlock(
+                            bp3,
+                            bs6,
+                            GoddessStatueBlock.UPDATE_ALL
+                    );
+                }
+
             }
         }
         return false;
     }
 
     public boolean canCreateStatue() {
-        HitResult res = this.self.pick(5.0d, 0.0f, false);
+        // HitResult res = this.self.pick(5.0d, 0.0f, false);
+        LivingEntity origin = actionOrigin();
+        HitResult res = origin.pick(this.getReach(), 0.0f, false);
 
         if (res.getType() == HitResult.Type.BLOCK) {
             BlockHitResult bhr = (BlockHitResult) res;
@@ -3459,7 +3642,9 @@ public class PowersSilverChariot extends NewPunchingStand {
     }
 
     public boolean createSlab() {
-        HitResult res = this.self.pick(5.0d, 0.0f, false);
+        // HitResult res = this.self.pick(5.0d, 0.0f, false);
+        LivingEntity origin = actionOrigin();
+        HitResult res = origin.pick(this.getReach(), 0.0f, false);
 
         if (res.getType() == HitResult.Type.BLOCK) {
             BlockHitResult bhr = (BlockHitResult) res;
@@ -3492,7 +3677,9 @@ public class PowersSilverChariot extends NewPunchingStand {
     }
 
     public boolean canCreateSlab() {
-        HitResult res = this.self.pick(5.0d, 0.0f, false);
+        // HitResult res = this.self.pick(5.0d, 0.0f, false);
+        LivingEntity origin = actionOrigin();
+        HitResult res = origin.pick(this.getReach(), 0.0f, false);
 
         if (res.getType() == HitResult.Type.BLOCK) {
             BlockHitResult bhr = (BlockHitResult) res;
