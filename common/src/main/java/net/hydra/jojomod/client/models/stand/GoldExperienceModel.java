@@ -2,6 +2,7 @@ package net.hydra.jojomod.client.models.stand;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.hydra.jojomod.client.ModRenderTypes;
 import net.hydra.jojomod.client.models.stand.animations.DiverDownAnimations;
 import net.hydra.jojomod.client.models.stand.animations.GoldExperienceAnimations;
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
@@ -277,6 +278,7 @@ public class GoldExperienceModel <T extends GoldExperienceEntity> extends StandM
         this.animate(pEntity.kick_barrage_windup, StandAnimations.KICK_BARRAGE_CHARGE, pAgeInTicks, 1f);
         this.animate(pEntity.kick_barrage_end, StandAnimations.KICK_BARRAGE_END, pAgeInTicks, 1f);
         this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1f);
+        this.animate(pEntity.hideLifePunch, GoldExperienceAnimations.HIDE_LIFE_PUNCH, pAgeInTicks, 1f);
     }
 
     @Override
@@ -302,13 +304,12 @@ public class GoldExperienceModel <T extends GoldExperienceEntity> extends StandM
             int fullBright = 15728880;
             net.minecraft.client.renderer.MultiBufferSource.BufferSource globalBufferSource = net.minecraft.client.Minecraft.getInstance().renderBuffers().bufferSource();
             ResourceLocation texture = GoldExperienceBaseRenderer.getSkin(this.currentEntity.getSkin());
-            RenderType additiveGlow = RenderType.beaconBeam(texture, true);
+
+            RenderType additiveGlow = RenderType.energySwirl(texture, 0.0F, 0.0F);
             VertexConsumer glowBuffer = globalBufferSource.getBuffer(additiveGlow);
 
             poseStack.pushPose();
 
-            // we is currently making a glowy fist thing for this move specifically.
-            // eventually, i'll have to update the tree to account for that.
             this.stand.translateAndRotate(poseStack);
             this.stand2.translateAndRotate(poseStack);
             this.body.translateAndRotate(poseStack);
@@ -316,10 +317,12 @@ public class GoldExperienceModel <T extends GoldExperienceEntity> extends StandM
             this.torso.translateAndRotate(poseStack);
             this.upper_chest.translateAndRotate(poseStack);
             this.right_arm.translateAndRotate(poseStack);
+            this.lower_right_arm.translateAndRotate(poseStack);
 
-            this.lower_right_arm.render(poseStack, glowBuffer, fullBright, packedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
+            this.vitalpunchvfx.render(poseStack, glowBuffer, fullBright, packedOverlay, 0.6F, 0.6F, 0.6F, 0.3F);
 
             poseStack.popPose();
+            globalBufferSource.endBatch(additiveGlow);
         }
     }
 }
