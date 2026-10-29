@@ -1269,7 +1269,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 Mth.sin(rotation.x * ((float) Math.PI / 180)),
                 0,
                 -Mth.cos(rotation.x * ((float) Math.PI / 180)))
-                .scale(1.25f));
+                .scale(-1.25f));
 
         stand.absMoveTo(pos.x, pos.y, pos.z, rotation.x, rotation.y);
 
