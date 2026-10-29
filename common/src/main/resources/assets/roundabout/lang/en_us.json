@@ -4592,6 +4592,9 @@
 
   "config.roundabout.woundPlugCooldown.name": "Wound Plug Cooldown",
   "config.roundabout.woundPlugCooldown.desc": "The cooldown of wound plug.",
+  "config.roundabout.woundPlugHealAmount.name": "Wound Plug healing",
+  "config.roundabout.woundPlugHealAmount.desc": "Amount of Health recovered from wound plug",
+
 
   "config.roundabout.emperorShootingModePower.name": "Bullet power",
   "config.roundabout.emperorShootingModePower.desc": "[PLACEHOLDER]",
@@ -5039,6 +5042,7 @@
   "config.roundabout.bubbleShootCooldown.desc": "Sets the cooldown of 'Primary Bomb: Air Bubble'",
   "config.roundabout.itemPlantCooldown.name": "'Primary Bomb: Item' Cooldown",
   "config.roundabout.itemPlantCooldown.desc": "Sets the cooldown of 'Primary Bomb: Item'",
+
 
   "config.roundabout.bitesTheDustCombatMinimunForFullBlow.name": "Time For Full BTD Damage",
   "config.roundabout.bitesTheDustCombatMinimunForFullBlow.desc": "Sets the earliest time in the Bites the Dust timeline that marked entities will take the maximum damage when detonated. Explosions before this time will deal between 20-100% of the full damage, depending on how much earlier the explosion takes place.",
