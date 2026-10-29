@@ -6239,10 +6239,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     if (((StandUser) this).roundabout$getStandPowers() instanceof PowersPurpleHaze) {
                         damage *= 0.66F;
                     }
+                    if (ClientNetworking.getAppropriateConfig().PurpleHazeSettings.CanonDistortion) {
+                        damage *= 4;
+                    }
                     this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISTORTION_VIRUS), damage);
                     rdbt$reduceOtherEffectDurations(20, ModEffects.DISTORTION_VIRUS, ModEffects.VIRUS_IMMUNITY);
                 }
             }
+
 
 
             MobEffectInstance spreadInst = this.getEffect(ModEffects.DISTORTION_VIRUS);

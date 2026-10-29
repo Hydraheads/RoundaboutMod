@@ -195,9 +195,9 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getAdvancedConfig().purpleHazeDecayBlocksAndRates != null) {
+        if (getAdvancedConfig().purpleHazeDecayBlocksAndRatesV2 != null) {
             MainUtil.PURPLE_HAZE_DECAY_BLOCKS.clear();
-            for (String entry : getAdvancedConfig().purpleHazeDecayBlocksAndRates) {
+            for (String entry : getAdvancedConfig().purpleHazeDecayBlocksAndRatesV2) {
                 try {
                     String[] split = entry.split(":");
                     if (split.length != 5) {

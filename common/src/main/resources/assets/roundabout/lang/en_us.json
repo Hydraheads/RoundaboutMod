@@ -1426,8 +1426,11 @@
   "sounds.roundabout.purple_haze_distortion_smoke":  "Distortion Haze Spreads",
   "sounds.roundabout.purple_haze_pod_bite":  "Pod Cracks",
   "sounds.roundabout.purple_haze_barrage_finisher": "Heavy Punch",
+  "sounds.roundabout.ph_strangle": "Purple haze growls",
+  "sounds.roundabout.ph_type_switch": "Distorcion switch",
+  "sounds.roundabout.ph_pod_launch": "Pod launch",
 
-  "sounds.roundabout.bullet_ricochet":  "Bullet ricochetted",
+  "sounds.roundabout.bullet_ricochet":  "Bullet ricocheted",
 
   "sounds.roundabout.snubnose_fire":  "Gun fired!",
   "sounds.roundabout.snubnose_dry_fire":  "Gun click",
@@ -4252,6 +4255,8 @@
   "config.roundabout.forwardBarrageCanSteer.desc": "Decide if Purple Haze´s Forward Barrage can be slightly steered while travelling forward.",
   "config.roundabout.HazeMelts.name": "Haze Melting",
   "config.roundabout.HazeMelts.desc": "If the Purple Haze adds an effect of Melting and the Distortion Haze add an effect of Melting 2.",
+  "config.roundabout.CanonDistortion.name": "Canon Distortion",
+  "config.roundabout.CanonDistortion.desc": "If the distortion becomes a far stronger virus.",
 
   "config.roundabout.enableSilverChariot.name": "Enable Silver Chariot",
   "config.roundabout.enableSilverChariot.desc": "Enable Silver Chariot",
