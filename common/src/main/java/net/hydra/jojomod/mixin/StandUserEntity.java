@@ -7045,6 +7045,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     public PowersDiverDown ribcagePlacer = null;
 
+    @Unique
+    public PowersDiverDown springPlacer = null;
+
     @Override
     public boolean rdbt$interceptIncomingHarmIfBTD(DamageSource source) {
         if (!this.level().isClientSide() && this.rdbt$GetBtdPlantedUser() != null && this.rdbt$GetBtdPlantedUser().catBtdShield()
@@ -7083,6 +7086,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void rdbt$setRibcagePlacer(@Nullable PowersDiverDown dd) {
         this.ribcagePlacer = dd;
     }
+
+    @Override
+    @Nullable
+    public PowersDiverDown rdbt$getSpringPlacer() {return this.springPlacer;}
+
+    @Override
+    public void rdbt$setSpringPlacer(@Nullable PowersDiverDown e) {this.springPlacer = e;}
 
     @Inject(method = "attackable", at = @At("HEAD"), cancellable = true)
     private void roundabout$attackable(CallbackInfoReturnable<Boolean> cir) {
