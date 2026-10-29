@@ -47,21 +47,25 @@ public class DNACreationRenderer extends EntityRenderer<DNACreationEntity> {
         double verticalOffset = 0.5 + (Math.sin((entity.tickCount + partialTicks) * 0.1) * 0.1);
         poseStack.translate(0, verticalOffset, 0);
 
-        // scale is based on the completion percent
-        float scale = 0.2f + (0.8f * percentComplete);
-        poseStack.scale(scale, scale, scale);
-
         // SPEEENS
-        // the float is in degrees, so 12 degrees per tick
-        float spin = (entity.tickCount + partialTicks) * 12.0f;
+        // the float is in degrees, so 8 degrees per tick
+        float spin = (entity.tickCount + partialTicks) * 8.0f;
         poseStack.mulPose(Axis.YP.rotationDegrees(spin));
 
-        // if less than 50, render the item normally
-        if (percentComplete < 0.5f) {
+        // shrinking item effect
+        float itemScale = 1.0f - percentComplete;
+        if (itemScale > 0.02f) {
+            poseStack.pushPose();
+            float itemYOffset = 0.02f + (percentComplete * 0.12f);
+            poseStack.translate(0, itemYOffset, 0);
+            poseStack.scale(itemScale, itemScale, itemScale);
             this.itemRenderer.renderStatic(itemStack, ItemDisplayContext.GROUND, packedLight, OverlayTexture.NO_OVERLAY, poseStack, buffer, entity.level(), 0);
+            poseStack.popPose();
         }
-        // else, render the normal mob
-        else {
+
+        // growing mob effect
+        float mobScale = percentComplete;
+        if (mobScale > 0.02f) {
             EntityType<?> targetType = MainUtil.GOLD_EXPERIENCE_DNA_DROPS.get(dnaItem);
             if (targetType != null) {
                 if (renderEntityCache == null || cachedItem != dnaItem) {
@@ -75,9 +79,17 @@ public class DNACreationRenderer extends EntityRenderer<DNACreationEntity> {
 
                 if (renderEntityCache != null) {
                     renderEntityCache.tickCount = entity.tickCount;
-                    // minecraft has it's own entity renderer, so i might as well use that.
+
+                    poseStack.pushPose();
+                    // Scale the mob independently
+                    poseStack.scale(mobScale, mobScale, mobScale);
+
+                    // Center origin slightly so the mob grows outward from the middle
+                    poseStack.translate(0, -renderEntityCache.getBbHeight() * 0.3f, 0);
+
                     EntityRenderDispatcher dispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
                     dispatcher.render(renderEntityCache, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks, poseStack, buffer, packedLight);
+                    poseStack.popPose();
                 }
             }
         }

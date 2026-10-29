@@ -20,9 +20,11 @@ import net.hydra.jojomod.registry.FabricMenus;
 import net.hydra.jojomod.client.gui.diverdown.custom_workbench_texture.*;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.FoliageColor;
 
 public class RoundaboutFabricClient implements ClientModInitializer {
     @Override
@@ -33,6 +35,7 @@ public class RoundaboutFabricClient implements ClientModInitializer {
                 ModBlocks.BARBED_WIRE, ModBlocks.WIRE_TRAP, ModBlocks.BARBED_WIRE_BUNDLE,
                 ModBlocks.LOCACACA_BLOCK, ModBlocks.NEW_LOCACACA_BLOCK, ModBlocks.LOCACACA_CACTUS,
                 ModBlocks.GODDESS_STATUE_BLOCK,
+                ModBlocks.MAGICIANS_STATUE_BLOCK,
                 ModBlocks.ORANGE_FIRE,
                 ModBlocks.BLUE_FIRE,
                 ModBlocks.PURPLE_FIRE,
@@ -69,7 +72,9 @@ public class RoundaboutFabricClient implements ClientModInitializer {
                 ModBlocks.CLIMBING_WIRE,
                 ModBlocks.CHAMOMILE,
                 ModBlocks.MINT,
-                ModBlocks.MELON_PARFAIT);
+                ModBlocks.MELON_PARFAIT,
+                ModBlocks.GE_BUSH,
+                ModBlocks.GE_VINE);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.translucent(), ModBlocks.WHITE_ALBUM_ICE_BLOCK,
                 ModBlocks.COLD_AIR,ModBlocks.D4C_PORTAL, ModBlocks.FREEZING_AIR, ModBlocks.STICKY_ICE,
                 ModBlocks.WHITE_ALBUM_ICE_SLAB, ModBlocks.HALLUCINATORY_ACID,
@@ -111,5 +116,11 @@ public class RoundaboutFabricClient implements ClientModInitializer {
         ColorProviderRegistry.BLOCK.register(
                 (state, level, pos, tintIndex) -> HallucinatoryAcidColors.blockColor(state, tintIndex),
                 ModBlocks.HALLUCINATORY_ACID, ModBlocks.HALLUCINATORY_ACID_WALL);
+        ColorProviderRegistry.BLOCK.register((state, level, pos, tintIndex) -> {
+            if (level != null && pos != null) {
+                return BiomeColors.getAverageFoliageColor(level, pos);
+            }
+            return FoliageColor.getDefaultColor();
+        }, ModBlocks.GE_VINE);
     }
 }

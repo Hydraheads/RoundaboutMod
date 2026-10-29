@@ -412,6 +412,10 @@ public class ForgeItems {
             () -> new BlockItem(ForgeBlocks.GODDESS_STATUE_BLOCK.get(),
                     new Item.Properties().stacksTo(1)
             )));
+    public static final RegistryObject<BlockItem> MAGICIANS_STATUE_ITEM = addToWIPTab(ITEMS.register("magicians_statue",
+            () -> new BlockItem(ForgeBlocks.MAGICIANS_STATUE_BLOCK.get(),
+                    new Item.Properties().stacksTo(1)
+            )));
     public static final RegistryObject<BlockItem> STEREO_ITEM = addToTab(ITEMS.register("stereo",
             () -> new BlockItem(ForgeBlocks.STEREO.get(),
                     new Item.Properties().stacksTo(64)
@@ -680,7 +684,6 @@ public class ForgeItems {
                             .effect(() -> new MobEffectInstance(ForgeEffects.REFRESHED.get(),ModItems.TEA_DURATION),1.0F)
                             .build())
             )));
-
     public static final RegistryObject<Item> MUSIC_DISC_TORTURE_DANCE = addToTab(ITEMS.register("music_disc_torture_dance",
             () -> new RecordItem(1, ForgeSounds.TORTURE_DANCE,
                     (new Item.Properties()).stacksTo(1).rarity(Rarity.RARE), 2840)));
@@ -932,6 +935,8 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new DioVampireVisage(null))));
     public static final RegistryObject<Item> DIO_MASK = addToTab(ITEMS.register("dio_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new DIOVisage(null))));
+    public static final RegistryObject<Item> KHAN_MASK = addToWIPTab(ITEMS.register("khan_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new KhanVisage(null))));
     public static final RegistryObject<Item> SHADOW_DIO_MASK = addToTab(ITEMS.register("shadow_dio_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new ShadowDIOVisage(null))));
     public static final RegistryObject<Item> ENYA_MASK = addToTab(ITEMS.register("enya_mask",

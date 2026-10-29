@@ -21,9 +21,9 @@ import java.util.List;
 public class ModItems {
 
     // 'refreshed' effect durations for foods.
-    public static final int CHAMOMILE_DURATION = 100;
-    public static final int MINT_DURATION = 75;
-    public static final int TEA_DURATION = 800;
+    public static final int CHAMOMILE_DURATION = 150;
+    public static final int MINT_DURATION = 125;
+    public static final int TEA_DURATION = 1000;
 
     public static Item STAND_ARROW;
     public static Item STAND_BEETLE_ARROW;
@@ -211,6 +211,7 @@ public class ModItems {
     public static Item MODIFICATION_MASK;
     public static Item DIAVOLO_MASK;
     public static Item DOPPIO_MASK;
+    public static Item KHAN_MASK;
     public static Item BOSS_MASK;
     public static Item TIM_MASK;
     public static Item SANDMAN_MASK;

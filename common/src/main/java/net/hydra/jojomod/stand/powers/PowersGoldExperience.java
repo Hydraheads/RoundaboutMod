@@ -1,6 +1,9 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.block.GEBushBlockEntity;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.*;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
@@ -11,15 +14,19 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.BlockGrabPreset;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -28,6 +35,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -37,7 +45,9 @@ import net.minecraft.world.item.BoneMealItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.VineBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
@@ -54,7 +64,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // move bytes
     private static final byte
         LIFE_PUNCH = 53,
-        DNA_CREATE = 54;
+        DNA_CREATE = 54,
+        BUSH_CREATION = 55,
+        WALL_VINES = 56;
 
     // for life punch
     private LifePunchCloneEntity lifePunchClone = null;
@@ -139,6 +151,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
                     }
                     it.remove();
                 } else {
+                    if (mobEntity instanceof Mob mob) {
+                        ((StandUser) mob).roundabout$deeplyRemoveAttackTarget();
+                        mob.getNavigation().stop();
+                    }
                     entry.setValue(ticksLeft - 1);
                 }
             }
@@ -164,9 +180,17 @@ public class PowersGoldExperience extends BlockGrabPreset {
                     //insert life wheel here
                 }
             }
+            // dash or vine climb
+            case SKILL_3_NORMAL -> {
+                tryToDashClient();
+            }
             // life punch
             case SKILL_3_CROUCH -> {
                 tryLifePunch();
+            }
+            // bush growth move
+            case SKILL_4_GUARD -> {
+                tryGrowBush();
             }
         }
     }
@@ -175,8 +199,20 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public boolean setPowerOther(int move, int lastMove) {
         if (move == LIFE_PUNCH) {
             return startLifePunch();
-        } else if (move == DNA_CREATE) {
+        }
+        else if (move == DNA_CREATE) {
             return executeDNACreate();
+        }
+        else if (move == PowerIndex.BARRAGE_CHARGE_2) {
+            return this.setPowerKickBarrageCharge();
+        } else if (move == PowerIndex.BARRAGE_2) {
+            return this.setPowerKickBarrage();
+        }
+        else if (move == BUSH_CREATION) {
+            return executeBushCreation();
+        }
+        else if (move == WALL_VINES) {
+            return executeWallVines();
         }
         return super.setPowerOther(move, lastMove);
     }
@@ -185,6 +221,12 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public void updateUniqueMoves() {
         if (this.getActivePower() == LIFE_PUNCH) {
             updateLifePunch();
+        }
+        //kick barrage
+        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
+            updateKickBarrageCharge();
+        } else if (this.getActivePower() == PowerIndex.BARRAGE_2) {
+            updateKickBarrage();
         }
         super.updateUniqueMoves();
     }
@@ -195,6 +237,190 @@ public class PowersGoldExperience extends BlockGrabPreset {
             lifePunchImpact(target);
         }
     }
+
+    private void tryToDashClient() {
+        if (canLatchOntoWall()) {
+                tryWallVines();
+        } else {
+            dash();
+        }
+    }
+
+    // wall vines start
+
+    private void tryWallVines() {
+        ((StandUser) this.getSelf()).roundabout$tryPower(WALL_VINES, true);
+        tryPowerPacket(WALL_VINES);
+    }
+
+    // this move was actually stupidly easy to make. it's like if diver zip didn't have any of the convuluted gravity nonsense.
+    private boolean executeWallVines() {
+        if (this.self.level().isClientSide()) return false;
+        Level level = this.self.level();
+        Direction facing = RotationUtil.getRealFacingDirection2(this.self);
+        Direction wallFace = facing.getOpposite();
+
+        BlockPos startPos = this.self.blockPosition().below();
+        boolean createdAny = false;
+
+        // loop for 30 blocks, or until you hit a non-valid block. whichever happens first.
+        for (int i = 0; i < 30; i++) {
+            BlockPos currentAirPos = startPos.above(i);
+            BlockPos wallPos = currentAirPos.relative(facing);
+
+            BlockState airState = level.getBlockState(currentAirPos);
+            BlockState wallState = level.getBlockState(wallPos);
+
+            if (airState.canBeReplaced() && wallState.isFaceSturdy(level, wallPos, wallFace)) {
+                BlockState vineState = ModBlocks.GE_VINE.defaultBlockState()
+                        .setValue(VineBlock.getPropertyForFace(facing), true);
+
+                if (level.setBlock(currentAirPos, vineState, 3)) {
+                    // Schedule despawn tick on the custom GE_VINE block
+                    level.scheduleTick(currentAirPos, ModBlocks.GE_VINE, 600);
+                    createdAny = true;
+                }
+            } else if (i > 2) {
+                break;
+            }
+        }
+
+        if (createdAny) {
+            playSoundIfPossible(level, null, this.self.blockPosition(),
+                    ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.85F, 1.0F);
+            addEXP(5);
+        }
+
+        return createdAny;
+    }
+
+    /*
+    taken from DD and WH. checks to see if you can wall latch for vines
+     */
+    private boolean canLatchOntoWall() {
+        if (self.isInWater())
+            return false;
+        if (MainUtil.isStandingInBlock(self))
+            return false;
+        if (this.self.onGround())
+            return false;
+
+        Vec3 mpos = this.self.getPosition(1F);
+        Direction gravdir = ((IGravityEntity) this.self).roundabout$getGravityDirection();
+        switch (gravdir) {
+            case DOWN -> mpos = mpos.add(0, 0.1F, 0);
+            case UP -> mpos = mpos.add(0, -0.1F, 0);
+            case NORTH -> mpos = mpos.add(0, 0, 0.1F);
+            case SOUTH -> mpos = mpos.add(0, 0, -0.1F);
+            case WEST -> mpos = mpos.add(0.1F, 0, 0);
+            case EAST -> mpos = mpos.add(-0.1F, 0, 0);
+        }
+        Direction rd = RotationUtil.getRealFacingDirection2(this.self);
+        if (rd == gravdir || rd == gravdir.getOpposite())
+            return false;
+
+        BlockPos feetWall = BlockPos.containing(mpos).relative(rd);
+        BlockPos eyeWall = BlockPos.containing(this.self.getEyePosition()).relative(rd);
+
+        return MainUtil.isBlockWalkable(this.self.level().getBlockState(feetWall))
+                || MainUtil.isBlockWalkable(this.self.level().getBlockState(eyeWall));
+    }
+
+    // wall vines end
+
+    // bramble bush start
+
+    private void tryGrowBush() {
+        ((StandUser) this.getSelf()).roundabout$tryPower(BUSH_CREATION, true);
+        tryPowerPacket(BUSH_CREATION);
+    }
+
+    private boolean executeBushCreation() {
+        if (this.self.level().isClientSide()) return false;
+        Level level = this.self.level();
+        BlockPos origin = this.self.blockPosition();
+        BlockState bushState = ModBlocks.GE_BUSH.defaultBlockState();
+
+        boolean createdAny = false;
+        int radius = 7;
+        double radiusSq = radius * radius;
+        for (BlockPos columnPos : BlockPos.betweenClosed(
+                origin.offset(-radius, 0, -radius),
+                origin.offset(radius, 0, radius))) {
+
+            // limit to the radius
+            if (columnPos.distSqr(origin) > radiusSq) continue;
+
+            // 70% chance of creation
+            if (level.random.nextFloat() > 0.70F) continue;
+
+            // using the move on ONLY flat surfaces would feel bad
+            // so i fix this by letting bushes be placed 1 up or down
+            BlockPos targetPos = null;
+            for (int yOffset : new int[]{0, 1, -1}) {
+                BlockPos checkPos = columnPos.above(yOffset);
+                BlockState checkState = level.getBlockState(checkPos);
+
+                if (checkState.canBeReplaced()
+                        && !checkState.is(ModBlocks.GE_BUSH)
+                        && bushState.canSurvive(level, checkPos)) {
+                    targetPos = checkPos;
+                    break;
+                }
+            }
+
+            // places the bush
+            if (targetPos != null) {
+                level.setBlock(targetPos, bushState, 3);
+
+                if (level.getBlockEntity(targetPos) instanceof GEBushBlockEntity bushBE) {
+                    bushBE.setOwner(this.getSelf().getUUID());
+                }
+
+                createdAny = true;
+            }
+        }
+
+        if (createdAny) {
+            playSoundIfPossible(level, null, this.self.blockPosition(),
+                    ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.85F, 1.0F);
+            addEXP(5);
+        }
+
+        return createdAny;
+    }
+
+    // bramble bush end
+
+    // kick barrage start
+
+    @Override
+    public void buttonInputBarrage(boolean keyIsDown, Options options) {
+        if (hasHandsOut())
+            return;
+        if (keyIsDown) {
+            if (isHoldingSneak() && (this.getAttackTime() >= this.getAttackTimeMax() ||
+                    (this.getActivePowerPhase() != this.getActivePowerPhaseMax()))) {
+                this.tryPower(PowerIndex.BARRAGE_CHARGE_2, true);
+                tryPowerPacket(PowerIndex.BARRAGE_CHARGE_2);
+            } else {
+                super.buttonInputBarrage(keyIsDown, options);
+            }
+        }
+    }
+
+    //all of ge's moves are uncancellable, so this can go here
+    @Override
+    public boolean canInterruptPower(DamageSource sauce, Entity interrupter){
+
+        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
+            return true;
+        }
+
+        return super.canInterruptPower(sauce, interrupter);
+    }
+
+    // kick barrage end
 
     // DNA creation start
 
@@ -350,7 +576,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                             } else if (LE instanceof Mob mob) {
                                 ((StandUser) mob).roundabout$deeplyRemoveAttackTarget();
                                 mob.getNavigation().stop();
-                                disabledMobTimers.put(LE.getId(), 50);
+                                disabledMobTimers.put(LE.getId(), 40);
                             }
                         }
                     }
@@ -498,6 +724,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                             }
                         }
                     }
+                    addEXP(5);
                     if (!this.self.level().isClientSide()) {
                         playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.95F, 1F);
                     }
@@ -526,7 +753,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     }
 
     // no lerp when teleporting
-    public final void packetNearby(Vector3f blip, int entId) {
+    private final void packetNearby(Vector3f blip, int entId) {
         if (!this.self.level().isClientSide) {
             ServerLevel serverWorld = ((ServerLevel) this.self.level());
             Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
@@ -547,6 +774,26 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     // life punch end
 
+    // move speed modifiers and the sort
+
+    @Override
+    public boolean cancelItemUse() {
+        return (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2);
+    }
+
+    @Override
+    public boolean clickRelease(){
+        return (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2);
+    }
+
+    @Override
+    public boolean cancelSprintJump(){
+        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2) {
+            return true;
+        }
+        return super.cancelSprintJump();
+    }
+
     // end of move methods
 
     // sounds start
@@ -558,10 +805,15 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public SoundEvent getSoundFromByte(byte soundChoice) {
         if (soundChoice == SoundIndex.SUMMON_SOUND) {
             return ModSounds.SUMMON_GOLD_EXPERIENCE_EVENT;
-        } else if (soundChoice == IMPALE_NOISE) {
+        } else if (soundChoice == IMPALE_NOISE || soundChoice == SoundIndex.ALT_CHARGE_SOUND_1) {
             return ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_WINDUP_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
+    }
+
+    @Override
+    public SoundEvent getBarrageChargeSound() {
+        return ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_WINDUP_EVENT;
     }
 
     @Override
@@ -576,6 +828,19 @@ public class PowersGoldExperience extends BlockGrabPreset {
         if (!this.self.level().isClientSide()) {
             if (hitNumber % 3 == 0)
                 playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GOLD_EXPERIENCE_HIT_EVENT, SoundSource.PLAYERS, 0.7F, 1F);
+        }
+    }
+
+    @Override
+    public void playKickBarrageNoise(int hitNumber, Entity entity){
+        if (!this.getSelf().level().isClientSide()) {
+            if (!this.getSelf().level().isClientSide() && (((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
+                playBarrageBlockNoise();
+            } else {
+                if (hitNumber % 3 == 0) {
+                    playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.GOLD_EXPERIENCE_HIT_EVENT, SoundSource.PLAYERS, 0.7F, 1F);
+                }
+            }
         }
     }
 
@@ -602,6 +867,17 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public SoundEvent getImpaleSound() {
         return ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_EVENT;
+    }
+
+    @Override
+    public boolean tryPower(int move, boolean forced) {
+        if (!this.self.level().isClientSide &&
+                (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2)
+                && (move != PowerIndex.BARRAGE_2 && move != PowerIndex.BARRAGE_CHARGE_2)){
+            this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
+        }
+
+        return super.tryPower(move, forced);
     }
 
     // sounds end
@@ -666,16 +942,24 @@ public class PowersGoldExperience extends BlockGrabPreset {
         } else {
             setSkillIcon(context, x, y, 1, StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, PowerIndex.SKILL_1);
         }
+        // Ability 2 (X)
         setSkillIcon(context, x, y, 2, StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, PowerIndex.SKILL_2);
         // Ability 3 (C)
         if (isGuarding()){
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         } else if (isHoldingSneak()) {
             setSkillIcon(context, x, y, 3, StandIcons.GOLD_EXPERIENCE_LIFE_PUNCH, PowerIndex.SKILL_3_CROUCH_GUARD);
+        } else if (canLatchOntoWall()) {
+            setSkillIcon(context, x, y, 3, StandIcons.GOLD_EXPERIENCE_VINE_CLIMB, PowerIndex.SKILL_3);
         } else {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         }
-        setSkillIcon(context, x, y, 4, StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, PowerIndex.SKILL_4);
+        // Ability 4 (V)
+        if (isGuarding()){
+            setSkillIcon(context, x, y, 4, StandIcons.GOLD_EXPERIENCE_BRAMBLE_TRAP, PowerIndex.SKILL_4_GUARD);
+        } else {
+            setSkillIcon(context, x, y, 4, StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, PowerIndex.SKILL_1);
+        }
     }
 
     @Override
@@ -688,8 +972,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 "instruction.roundabout.passive", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 1, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.gold_experience_placeholder",
                 "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 1, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.gold_experience_placeholder",
-                "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 2, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.gold_experience_dna_creation",
+                "instruction.roundabout.press_skill_item", StandIcons.GOLD_EXPERIENCE_DNA_CREATION, 1, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.gold_experience_placeholder",
                 "instruction.roundabout.passive", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 2, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.gold_experience_placeholder",
@@ -698,15 +982,49 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 "instruction.roundabout.press_skill", StandIcons.DODGE, 3, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 99, 0, "ability.roundabout.gold_experience_life_punch",
                 "instruction.roundabout.press_skill_crouch", StandIcons.GOLD_EXPERIENCE_LIFE_PUNCH, 3, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 118, 0, "ability.roundabout.gold_experience_placeholder",
-                "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 3, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 80, 0, "ability.roundabout.gold_experience_placeholder",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 118, 0, "ability.roundabout.gold_experience_vine_climb",
+                "instruction.roundabout.press_skill_air", StandIcons.GOLD_EXPERIENCE_VINE_CLIMB, 3, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 80, 0, "ability.roundabout.gold_experience_vine_climb",
                 "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 4, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 99, 0, "ability.roundabout.gold_experience_placeholder",
                 "instruction.roundabout.passive", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 4, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 118, 0, "ability.roundabout.gold_experience_placeholder",
                 "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 4, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 96, topPos + 80, 0, "ability.roundabout.gold_experience_placeholder",
+                "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 4, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 96, topPos + 99, 0, "ability.roundabout.gold_experience_placeholder",
+                "instruction.roundabout.passive", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 4, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 96, topPos + 118, 0, "ability.roundabout.gold_experience_placeholder",
+                "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 4, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 80, 0, "ability.roundabout.gold_experience_placeholder",
+                "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 4, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 99, 0, "ability.roundabout.gold_experience_placeholder",
+                "instruction.roundabout.passive", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 4, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 118, 0, "ability.roundabout.gold_experience_bramble_trap",
+                "instruction.roundabout.press_skill_block", StandIcons.GOLD_EXPERIENCE_BRAMBLE_TRAP, 4, level, bypas));
         return $$1;
+    }
+
+    // used for kick barrage
+    @Override
+    public void renderAttackHud(GuiGraphics context, Player playerEntity,
+                                int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
+                                float flashAlpha, float otherFlashAlpha) {
+        boolean standOn = PowerTypes.hasStandActive(playerEntity);
+        int j = scaledHeight / 2 - 7 - 4;
+        int k = scaledWidth / 2 - 8;
+        if (standOn && this.getActivePower() == PowerIndex.BARRAGE_2 && attackTimeDuring > -1) {
+            int ClashTime = 15 - Math.round(((float) attackTimeDuring / this.getKickBarrageLength()) * 15);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+        } else if (standOn && this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
+            int ClashTime = Math.round(((float) attackTimeDuring / this.getKickBarrageWindup()) * 15);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+        } else {
+            super.renderAttackHud(context,playerEntity,
+                    scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
+        }
     }
 
     // stand icons and info screen end

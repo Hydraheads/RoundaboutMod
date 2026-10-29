@@ -589,6 +589,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
             }
 
             fclone.setVisage(((IPlayerEntity)PE).roundabout$getMaskSlot());
+            boolean hadSpringLegs = ((StandUser) PE).roundabout$hasSpringLegs();
+            boolean hadRibcageTrap = ((StandUser) PE).roundabout$hasRibcageTrap();
             fclone.setPlayer(PE);
             fclone.copyPosition(PE);
             // Position
@@ -676,6 +678,22 @@ public class PowersKingCrimson extends BlockGrabPreset {
             }
             StandUser thisUser = getStandUserSelf();
             activeCloneUser.roundabout$setStandSkin(thisUser.roundabout$getStandSkin());
+            if (hadSpringLegs) {
+                activeCloneUser.roundabout$setSpringLegs(true);
+                thisUser.roundabout$setSpringLegs(false);
+                PowersDiverDown springPlacer = ((StandUser) PE).rdbt$getSpringPlacer();
+                if (springPlacer != null) {
+                    springPlacer.springTarget = fclone;
+                }
+            }
+            if (hadRibcageTrap) {
+                activeCloneUser.roundabout$setRibcageTrap(true);
+                thisUser.roundabout$setRibcageTrap(false);
+                PowersDiverDown ribcagePlacer = ((StandUser) PE).rdbt$getRibcagePlacer();
+                if (ribcagePlacer != null) {
+                    ribcagePlacer.ribcageTarget = fclone;
+                }
+            }
             activeCloneUser.roundabout$setDazeTime(thisUser.roundabout$getDazeTime());
             activeCloneUser.roundabout$setOnStandFire(thisUser.roundabout$getOnStandFire());
             activeCloneUser.roundabout$setRemainingStandFireTicks(
@@ -958,6 +976,19 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 }
             }
         }
+    }
+
+    public int getPlayerSkipInt(){
+        if (inPVP() && ClientNetworking.getAppropriateConfig().kingCrimsonSettings.nerfedPVPRunning){
+            return 30;
+        }
+        return 40;
+    }
+    public boolean inPVP(){
+        if (disengageTarget != null){
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -1683,7 +1714,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 Vec3 pred = predictStrider(str,40);
                 return pred;
             } else {
-                Vec3 pred = predictPlayer(mob,40);
+                Vec3 pred = predictPlayer(mob,getPlayerSkipInt());
                 return pred;
             }
         }
@@ -1726,28 +1757,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
 
         return current;
-    }
-
-    public void debugPlayer(){
-        if (self instanceof Player pl) {
-            int id = self.getId();
-            float xRot = self.getXRot();
-            float yRot = self.getYRot();
-            Vec3 predicted = self.position();
-
-            hitWall2 = false;
-            predicted = predictPlayer(pl, 40);
-            if (hitWall2){
-                yRot = Mth.wrapDegrees(yRot + 180.0F);
-            }
-            epitaph.put(self.getId(), new TimeSkipSnapshot(
-                    id,
-                    predicted,
-                    xRot,
-                    yRot
-            ));
-            S2CPacketUtil.addEpitaph(pl, id, predicted, xRot, yRot);
-        }
     }
 
     //This variable makes a player turn around when they hit a wall to sell a believable reaction
@@ -1845,7 +1854,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                                 }
                             } else if (living instanceof Player player) {
                                 // Fallback for players, armor stands, etc.
-                                predicted = predictPlayer(player, 40);
+                                predicted = predictPlayer(player, getPlayerSkipInt());
                                 if (player.getId() == self.getId()) {
                                     if (predicted.distanceTo(self.getPosition(1)) < 0.1) {
                                         continue;
@@ -2580,7 +2589,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                                     } else if (entity instanceof Player player) {
                                         // Fallback for players, armor stands, etc.
                                         hitWall2 = false;
-                                        predicted = predictPlayer(player, 40);
+                                        predicted = predictPlayer(player, getPlayerSkipInt());
                                         if (hitWall2) {
                                             yRot = Mth.wrapDegrees(yRot + 180.0F);
                                         }
@@ -3008,7 +3017,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                    ) {
                 if (!this.onCooldown(PowerIndex.GLOBAL_DASH) || midVault) {
                     /*Stand vaulting*/
-                    this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.vaultingCooldown
+                    this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().kingCrimsonSettings.vaultingCooldown
                             + getCooldown(PowerIndex.GLOBAL_DASH).time);
                     double mag = this.getSelf().getPosition(0).distanceTo(
                             new Vec3(blockHit.getLocation().x, blockHit.getLocation().y, blockHit.getLocation().z)) * 1.68 + 1;

@@ -17,7 +17,7 @@ public class PurpleHazeSmokeParticle extends SimpleAnimatedParticle {
         this.yd = h * 0.03f;
         this.zd = 0;
         this.gravity = 0;
-        this.quadSize *= 2f + ((float) this.random.nextInt(5) / 10.0f);
+        this.quadSize *= 0.5F + this.random.nextFloat() * 2.0F;
         this.lifetime = 8 + this.random.nextInt(12);
         this.setSpriteFromAge(spriteSet);
     }

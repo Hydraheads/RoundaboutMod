@@ -372,7 +372,7 @@ public class SilverChariotRapierShotEntity extends AbstractArrow implements Unbu
             Entity user = this.getOwner();
             if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersSilverChariot PSC) {
                 PSC.addEXP(2);
-                this.level().playSound(null, this.blockPosition(), ModSounds.RATT_DART_IMPACT_EVENT,
+                this.level().playSound(null, this.blockPosition(), ModSounds.SILVER_CHARIOT_RAPIER_SHOT_ENTITY_IMPACT_EVENT,
                         SoundSource.PLAYERS, 2F, 1F);
                 if (livingEntity != null) {
                     this.getEntity(livingEntity, PSC);

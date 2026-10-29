@@ -25,7 +25,7 @@ public abstract class CenturyBoyPotionDuration{
     private void pauseDuration(LivingEntity entity, Runnable run, CallbackInfoReturnable<Boolean> cir){
         if (entity instanceof StandUser user && user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy pCB){
             if (pCB.invincibleState){
-                if (this.getEffect() != MobEffects.WITHER){
+                if (this.getEffect() != null && this.getEffect() != MobEffects.WITHER){
                     cir.setReturnValue(true);
                 }
             }

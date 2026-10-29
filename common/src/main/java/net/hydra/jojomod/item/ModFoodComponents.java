@@ -12,5 +12,4 @@ public class ModFoodComponents {
             .build();
     public static final FoodProperties LOCACACA = new FoodProperties.Builder().nutrition(4).saturationMod(0.1f)
             .alwaysEat().build();
-
 }

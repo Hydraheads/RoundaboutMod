@@ -141,4 +141,10 @@ public class GoldExperienceAnimations {
                         new Keyframe(1.5136F, KeyframeAnimations.degreeVec(0.0F, -15.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
                 ))
                 .build();
+
+        public static final AnimationDefinition HIDE_LIFE_PUNCH = AnimationDefinition.Builder.withLength(1.0F)
+                .addAnimation("vitalpunchvfx", new AnimationChannel(AnimationChannel.Targets.SCALE,
+                        new Keyframe(0.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+                ))
+                .build();
 }

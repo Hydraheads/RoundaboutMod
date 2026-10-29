@@ -6203,7 +6203,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
         if (this.hasEffect(ModEffects.HAZE_VIRUS) && !this.hasEffect(ModEffects.VIRUS_IMMUNITY)) {
-            if (this.tickCount % 10 == 0 && !this.level().isClientSide() && this.isAlive()) {
+            if (this.tickCount % 15 == 0 && !this.level().isClientSide() && this.isAlive()) {
                 MobEffectInstance inst = this.getEffect(ModEffects.HAZE_VIRUS);
                 if (inst != null) {
                     this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.HAZE_VIRUS),
@@ -6232,14 +6232,22 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
 
         if (this.hasEffect(ModEffects.DISTORTION_VIRUS) && !this.hasEffect(ModEffects.VIRUS_IMMUNITY)) {
-            if (this.tickCount % 15 == 0 && !this.level().isClientSide() && this.isAlive()) {
+            if (this.tickCount % 20 == 0 && !this.level().isClientSide() && this.isAlive()) {
                 MobEffectInstance inst = this.getEffect(ModEffects.DISTORTION_VIRUS);
                 if (inst != null) {
-                    this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISTORTION_VIRUS),
-                            inst.getAmplifier() + 1);
+                    float damage = inst.getAmplifier() + 1;
+                    if (((StandUser) this).roundabout$getStandPowers() instanceof PowersPurpleHaze) {
+                        damage *= 0.66F;
+                    }
+                    if (ClientNetworking.getAppropriateConfig().PurpleHazeSettings.CanonDistortion) {
+                        damage *= 4;
+                    }
+                    this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISTORTION_VIRUS), damage);
                     rdbt$reduceOtherEffectDurations(20, ModEffects.DISTORTION_VIRUS, ModEffects.VIRUS_IMMUNITY);
                 }
             }
+
+
 
             MobEffectInstance spreadInst = this.getEffect(ModEffects.DISTORTION_VIRUS);
             if (spreadInst != null && this.tickCount % 5 == 0
@@ -7037,6 +7045,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     public PowersDiverDown ribcagePlacer = null;
 
+    @Unique
+    public PowersDiverDown springPlacer = null;
+
     @Override
     public boolean rdbt$interceptIncomingHarmIfBTD(DamageSource source) {
         if (!this.level().isClientSide() && this.rdbt$GetBtdPlantedUser() != null && this.rdbt$GetBtdPlantedUser().catBtdShield()
@@ -7075,6 +7086,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void rdbt$setRibcagePlacer(@Nullable PowersDiverDown dd) {
         this.ribcagePlacer = dd;
     }
+
+    @Override
+    @Nullable
+    public PowersDiverDown rdbt$getSpringPlacer() {return this.springPlacer;}
+
+    @Override
+    public void rdbt$setSpringPlacer(@Nullable PowersDiverDown e) {this.springPlacer = e;}
 
     @Inject(method = "attackable", at = @At("HEAD"), cancellable = true)
     private void roundabout$attackable(CallbackInfoReturnable<Boolean> cir) {

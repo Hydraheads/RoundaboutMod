@@ -404,6 +404,8 @@ public interface StandUser {
 
     @Nullable PowersDiverDown rdbt$getRibcagePlacer();
     void rdbt$setRibcagePlacer(@Nullable PowersDiverDown e);
+    @Nullable PowersDiverDown rdbt$getSpringPlacer();
+    void rdbt$setSpringPlacer(@Nullable PowersDiverDown e);
 
     List<CooldownInstance> rdbt$initPowerCooldowns();
     List<CooldownInstance> rdbt$getPowerCooldowns();
