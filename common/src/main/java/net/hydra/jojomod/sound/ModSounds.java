@@ -1441,6 +1441,12 @@ public class ModSounds {
     public static final String PURPLE_HAZE_STRANGLE_START = "ph_strangle";
     public static final ResourceLocation PURPLE_HAZE_STRANGLE_START_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PURPLE_HAZE_STRANGLE_START);
     public static SoundEvent PURPLE_HAZE_STRANGLE_START_EVENT = SoundEvent.createVariableRangeEvent(PURPLE_HAZE_STRANGLE_START_ID);
+    public static final String PURPLE_HAZE_STRANGLE_RUN = "ph_strangle_run";
+    public static final ResourceLocation PURPLE_HAZE_STRANGLE_RUN_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PURPLE_HAZE_STRANGLE_RUN);
+    public static SoundEvent PURPLE_HAZE_STRANGLE_RUN_EVENT = SoundEvent.createVariableRangeEvent(PURPLE_HAZE_STRANGLE_RUN_ID);
+    public static final String PURPLE_HAZE_STRANGLE_GRAB = "ph_strangle_grab";
+    public static final ResourceLocation PURPLE_HAZE_STRANGLE_GRAB_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PURPLE_HAZE_STRANGLE_GRAB);
+    public static SoundEvent PURPLE_HAZE_STRANGLE_GRAB_EVENT = SoundEvent.createVariableRangeEvent(PURPLE_HAZE_STRANGLE_GRAB_ID);
     public static final String PURPLE_HAZE_SWITCH_POD = "ph_type_switch";
     public static final ResourceLocation PURPLE_HAZE_SWITCH_POD_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PURPLE_HAZE_SWITCH_POD);
     public static SoundEvent PURPLE_HAZE_SWITCH_POD_EVENT = SoundEvent.createVariableRangeEvent(PURPLE_HAZE_SWITCH_POD_ID);

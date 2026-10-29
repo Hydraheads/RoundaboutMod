@@ -4133,6 +4133,18 @@
       "roundabout:ph_strangle"
     ]
   },
+  "ph_strangle_run": {
+    "subtitle": "sounds.roundabout.ph_strangle_run",
+    "sounds": [
+      "roundabout:ph_strangle_run"
+    ]
+  },
+  "ph_strangle_grab": {
+    "subtitle": "sounds.roundabout.ph_strangle_grab",
+    "sounds": [
+      "roundabout:ph_strangle_grab"
+    ]
+  },
   "ph_type_switch": {
     "subtitle": "sounds.roundabout.ph_type_switch",
     "sounds": [
