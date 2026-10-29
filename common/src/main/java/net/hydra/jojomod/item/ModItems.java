@@ -211,6 +211,7 @@ public class ModItems {
     public static Item MODIFICATION_MASK;
     public static Item DIAVOLO_MASK;
     public static Item DOPPIO_MASK;
+    public static Item KHAN_MASK;
     public static Item BOSS_MASK;
     public static Item TIM_MASK;
     public static Item SANDMAN_MASK;
