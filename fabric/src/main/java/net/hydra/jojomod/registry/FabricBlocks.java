@@ -226,6 +226,7 @@ public class FabricBlocks {
     public static final Block BUBBLE_SCAFFOLD = registerBlockItemless("bubble_scaffold",ModBlocks.BUBBLE_SCAFFOLD_BLOCK_PROPERTIES);
     public static final Block DIVER_LIMB = registerBlockItemless("diver_limb", ModBlocks.DIVER_LIMB_BLOCK_PROPERTIES);
     public static final Block GE_BUSH = registerBlockItemless("ge_bush", ModBlocks.GE_BUSH_BLOCK_PROPERTIES);
+    public static final Block GE_VINE = registerBlockItemless("ge_vine", ModBlocks.GE_VINE_PROPERTIES);
     public static final Block INVISIBLOCK = registerBlockItemless("invisible_block",ModBlocks.INVISIBLE_BLOCK_PROPERTIES);
     public static final Block D4C_PORTAL = registerBlockItemless("d4c_portal", D4C_PORTAL_PROPERTIES);
 
@@ -493,6 +494,7 @@ public class FabricBlocks {
         ModBlocks.BUBBLE_SCAFFOLD = BUBBLE_SCAFFOLD;
         ModBlocks.DIVER_LIMB = DIVER_LIMB;
         ModBlocks.GE_BUSH = GE_BUSH;
+        ModBlocks.GE_VINE = GE_VINE;
         ModBlocks.FLESH_BLOCK = FLESH_BLOCK;
         ModBlocks.CULTIVATION_POT = CULTIVATION_POT;
         ModBlocks.CULTIVATED_CHERRY_SAPLING = CULTIVATED_CHERRY_SAPLING;

@@ -324,6 +324,7 @@ public class ForgeEvents {
         ModBlocks.BUBBLE_SCAFFOLD = ForgeBlocks.BUBBLE_SCAFFOLD.get();
         ModBlocks.DIVER_LIMB = ForgeBlocks.DIVER_LIMB.get();
         ModBlocks.GE_BUSH = ForgeBlocks.GE_BUSH.get();
+        ModBlocks.GE_VINE = ForgeBlocks.GE_VINE.get();
         ModBlocks.OASIS_MUD_BLOCK = ForgeBlocks.OASIS_MUD_BLOCK.get();
         ModBlocks.HALLUCINATORY_ACID = ForgeBlocks.HALLUCINATORY_ACID.get();
         ModBlocks.HALLUCINATORY_ACID_WALL = ForgeBlocks.HALLUCINATORY_ACID_WALL.get();
