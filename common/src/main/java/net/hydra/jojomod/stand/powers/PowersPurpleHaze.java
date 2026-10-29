@@ -985,7 +985,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         RenderSystem.enableBlend();
         context.setColor(1f, 1f, 1f, 1f);
 
-        if (getPods() <= 0 || (getPods() < MAX_PODS && canExecuteMoveWithLevel(getPodRegenLevel()))) {
+        if (getPods() <= 0/* || (getPods() < MAX_PODS && canExecuteMoveWithLevel(getPodRegenLevel()))*/) {
             context.setColor(0.62f, 0.62f, 0.62f, 0.8f);
         }
 
@@ -1016,7 +1016,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             context.blit(StandIcons.PODS_0, x - 3, y - 3,
                     0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
         }
-
+        /*
         if(canExecuteMoveWithLevel(getPodRegenLevel()) && getPods() < MAX_PODS && podRechargeTicks > 0) {
             float blit = (20*(1-((float) (1+podRechargeTicks) /(1+POD_RECHARGE_TIME))));
             int b = (int) Math.round(blit);
@@ -1038,6 +1038,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
             context.drawString(Minecraft.getInstance().font, ""+num,offset,y,0xffffff,true);
         }
+        */
 
     }
 
@@ -1799,6 +1800,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
             this.forwardBarrage = false;
             forwardBarrageLockedRot = null;
         }
+
+
         if (!self.level().isClientSide) {
             tickPodReset();
             tickPodRecharge();
