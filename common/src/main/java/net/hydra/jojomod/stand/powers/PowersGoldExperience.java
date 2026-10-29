@@ -630,17 +630,15 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public SoundEvent getSoundFromByte(byte soundChoice) {
         if (soundChoice == SoundIndex.SUMMON_SOUND) {
             return ModSounds.SUMMON_GOLD_EXPERIENCE_EVENT;
-        } else if (soundChoice == IMPALE_NOISE) {
+        } else if (soundChoice == IMPALE_NOISE || soundChoice == SoundIndex.ALT_CHARGE_SOUND_1) {
             return ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_WINDUP_EVENT;
-        } else if (soundChoice == SoundIndex.ALT_CHARGE_SOUND_1) {
-            return ModSounds.STAND_BARRAGE_WINDUP_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
 
     @Override
     public SoundEvent getBarrageChargeSound() {
-        return ModSounds.STAND_BARRAGE_WINDUP_EVENT;
+        return ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_WINDUP_EVENT;
     }
 
     @Override
