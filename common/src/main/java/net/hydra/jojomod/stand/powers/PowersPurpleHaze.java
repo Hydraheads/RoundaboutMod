@@ -1086,7 +1086,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
         //IPlayerEntity playerData = (IPlayerEntity) player;
 
-        if (canExecuteMoveWithLevel(getPodRegenLevel())) {
+        if (!canExecuteMoveWithLevel(getPodRegenLevel())) {
             podRechargeTicks = 0;
             return;
         }
