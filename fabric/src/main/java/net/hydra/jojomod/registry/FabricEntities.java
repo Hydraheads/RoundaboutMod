@@ -1324,7 +1324,13 @@ public class FabricEntities {
                     EntityType.Builder.of(SheerHeartAttackEntity::new, MobCategory.CREATURE).
                             sized(SheerHeartAttackEntity.width, SheerHeartAttackEntity.height).clientTrackingRange(15).build(Roundabout.MOD_ID+":sheer_heart_attack")
             );
-
+    public static final EntityType<LonesomeRopeEntity> LONESOME_ROPE =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "lonesome_rope"),
+                    EntityType.Builder.<LonesomeRopeEntity>of(LonesomeRopeEntity::new, MobCategory.MISC).
+                            sized(0.5f, 0.5f).clientTrackingRange(10).build(Roundabout.MOD_ID+":lonesome_rope")
+            );
     public static void register() {
                 /*Common Code Bridge*/
                 ModEntities.THE_WORLD = THE_WORLD;

@@ -198,10 +198,12 @@ public class FabricItems {
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersSurvivor(null)));
     public static Item STAND_DISC_CALIFORNIA_KING_BED = registerItem("california_king_bed_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCalifornia(null)));
+    public static Item STAND_DISC_OH_LONESOME_ME = registerItem("oh_lonesome_me_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersLonesome(null)));
     public static Item STAND_DISC_ACHTUNG = registerItem("achtung_baby_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAchtungBaby(null)));
 
-    public static Item STAND_DISC_DIVER_DOWN = registerItem("diver_down_disc",
+        public static Item STAND_DISC_DIVER_DOWN = registerItem("diver_down_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null)));
     public static Item MAX_STAND_DISC_DIVER_DOWN = registerItem("max_diver_down_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null)));
@@ -811,6 +813,7 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_SILVER_CHARIOT);
                         entries.accept(STAND_DISC_WHITESNAKE);
                         entries.accept(MAX_STAND_DISC_WHITESNAKE);
+                        entries.accept(STAND_DISC_OH_LONESOME_ME);
                         if (ClientNetworking.getAppropriateConfig().whitesnakeSettings.sightDiscStealEnabled) {
                             entries.accept(SIGHT_DISC);
                         }
@@ -936,6 +939,7 @@ public class FabricItems {
         ModItems.STAND_DISC_HEY_YA = STAND_DISC_HEY_YA;
         ModItems.STAND_DISC_MANDOM = STAND_DISC_MANDOM;
         ModItems.STAND_DISC_SURVIVOR = STAND_DISC_SURVIVOR;
+        ModItems.STAND_DISC_OH_LONESOME_ME = STAND_DISC_OH_LONESOME_ME;
         ModItems.STAND_DISC_CALIFORNIA_KING_BED = STAND_DISC_CALIFORNIA_KING_BED;
         ModItems.STAND_DISC_ACHTUNG = STAND_DISC_ACHTUNG;
         ModItems.STAND_DISC_CENTURY_BOY = STAND_DISC_20_CENTURY_BOY;

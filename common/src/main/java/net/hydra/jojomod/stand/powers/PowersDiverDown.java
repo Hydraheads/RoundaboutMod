@@ -2673,6 +2673,7 @@ public class PowersDiverDown extends NewPunchingStand {
         }
     }
 
+
     @Override
     public void pilotStandControls(KeyboardPilotInput kpi, LivingEntity entity) {
         if (entity instanceof DiverDownEntity diver) {
@@ -2801,6 +2802,7 @@ public class PowersDiverDown extends NewPunchingStand {
         }
         return closestPos;
     }
+
 
     // sends the open chest move to the server to process it
     private void tryOpenChest() {
