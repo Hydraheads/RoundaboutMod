@@ -33,6 +33,7 @@ public class RoundaboutFabricClient implements ClientModInitializer {
                 ModBlocks.BARBED_WIRE, ModBlocks.WIRE_TRAP, ModBlocks.BARBED_WIRE_BUNDLE,
                 ModBlocks.LOCACACA_BLOCK, ModBlocks.NEW_LOCACACA_BLOCK, ModBlocks.LOCACACA_CACTUS,
                 ModBlocks.GODDESS_STATUE_BLOCK,
+                ModBlocks.MAGICIANS_STATUE_BLOCK,
                 ModBlocks.ORANGE_FIRE,
                 ModBlocks.BLUE_FIRE,
                 ModBlocks.PURPLE_FIRE,
@@ -69,7 +70,8 @@ public class RoundaboutFabricClient implements ClientModInitializer {
                 ModBlocks.CLIMBING_WIRE,
                 ModBlocks.CHAMOMILE,
                 ModBlocks.MINT,
-                ModBlocks.MELON_PARFAIT);
+                ModBlocks.MELON_PARFAIT,
+                ModBlocks.GE_BUSH);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.translucent(), ModBlocks.WHITE_ALBUM_ICE_BLOCK,
                 ModBlocks.COLD_AIR,ModBlocks.D4C_PORTAL, ModBlocks.FREEZING_AIR, ModBlocks.STICKY_ICE,
                 ModBlocks.WHITE_ALBUM_ICE_SLAB, ModBlocks.HALLUCINATORY_ACID,

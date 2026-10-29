@@ -44,6 +44,8 @@ public class FabricBlocks {
     );
     public static final Block CLIMBING_WIRE = registerBlockItemless("climbing_wire", CLIMBING_WIRE_PROPERTIES
     );
+    public static final Block SC_RAPIER_PLATFORM_BLOCK = registerBlock("sc_rapier_platform_block", SC_RAPIER_PLATFORM_BLOCK_PROPERTIES
+    );
     public static final Block FROZEN_DIRT = registerBlock("frozen_dirt", FROZEN_DIRT_PROPERTIES
     );
     public static final Block FROZEN_COBBLESTONE = registerBlock("frozen_cobblestone", FROZEN_COBBLESTONE_PROPERTIES
@@ -202,6 +204,8 @@ public class FabricBlocks {
     );
     public static final Block GODDESS_STATUE_BLOCK = registerBlockUnstackable("goddess_statue",ModBlocks.GODDESS_STATUE_BLOCK_PROPERTIES
     , 1);
+    public static final Block MAGICIANS_STATUE_BLOCK = registerBlockUnstackable("magicians_statue",ModBlocks.MAGICIANS_STATUE_BLOCK_PROPERTIES
+    , 1);
     public static final Block STREET_SIGN_DIO = registerBlockUnstackableItemless("street_sign_dio",ModBlocks.getStreetSignBlockProperties()
             , 1);
     public static final Block STREET_SIGN_RIGHT = registerBlockUnstackableItemless("street_sign_right",ModBlocks.getStreetSignBlockProperties()
@@ -221,6 +225,7 @@ public class FabricBlocks {
     public static final Block MIRROR = registerBlock("mirror",ModBlocks.getMirrorBlockProperties());
     public static final Block BUBBLE_SCAFFOLD = registerBlockItemless("bubble_scaffold",ModBlocks.BUBBLE_SCAFFOLD_BLOCK_PROPERTIES);
     public static final Block DIVER_LIMB = registerBlockItemless("diver_limb", ModBlocks.DIVER_LIMB_BLOCK_PROPERTIES);
+    public static final Block GE_BUSH = registerBlockItemless("ge_bush", ModBlocks.GE_BUSH_BLOCK_PROPERTIES);
     public static final Block INVISIBLOCK = registerBlockItemless("invisible_block",ModBlocks.INVISIBLE_BLOCK_PROPERTIES);
     public static final Block D4C_PORTAL = registerBlockItemless("d4c_portal", D4C_PORTAL_PROPERTIES);
 
@@ -284,6 +289,8 @@ public class FabricBlocks {
             registerBE("bubble_scaffold",BlockEntityType.Builder.of(BubbleScaffoldBlockEntity::new, BUBBLE_SCAFFOLD));
     public static final BlockEntityType<DiverLimbBlockEntity> DIVER_LIMB_BLOCK_ENTITY =
         registerBE("diver_limb", BlockEntityType.Builder.of(DiverLimbBlockEntity::new, DIVER_LIMB));
+    public static final BlockEntityType<GEBushBlockEntity> GE_BUSH_BLOCK_ENTITY =
+            registerBE("ge_bush", BlockEntityType.Builder.of(GEBushBlockEntity::new, GE_BUSH));
     public static final BlockEntityType<InvisiBlockEntity> INVISI_BLOCK_ENTITY =
             registerBE("invisible_block",BlockEntityType.Builder.of(InvisiBlockEntity::new, INVISIBLOCK));
     public static final BlockEntityType<D4CPortalBlockEntity> D4C_PORTAL_BLOCK_ENTITY =
@@ -388,6 +395,7 @@ public class FabricBlocks {
         ModBlocks.AJA_BLOCK = AJA_BLOCK;
         ModBlocks.FROZEN_DIRT = FROZEN_DIRT;
         ModBlocks.CLIMBING_WIRE = CLIMBING_WIRE;
+        ModBlocks.SC_RAPIER_PLATFORM_BLOCK = SC_RAPIER_PLATFORM_BLOCK;
         ModBlocks.FROZEN_COBBLESTONE = FROZEN_COBBLESTONE;
         ModBlocks.FROZEN_STONE = FROZEN_STONE;
         ModBlocks.FROZEN_DEEPSLATE = FROZEN_DEEPSLATE;
@@ -466,6 +474,7 @@ public class FabricBlocks {
         ModBlocks.BARBED_WIRE_BUNDLE = BARBED_WIRE_BUNDLE;
         ModBlocks.WIRE_TRAP = WIRE_TRAP;
         ModBlocks.GODDESS_STATUE_BLOCK = GODDESS_STATUE_BLOCK;
+        ModBlocks.MAGICIANS_STATUE_BLOCK = MAGICIANS_STATUE_BLOCK;
         ModBlocks.STREET_SIGN_DIO = STREET_SIGN_DIO;
         ModBlocks.STREET_SIGN_RIGHT = STREET_SIGN_RIGHT;
         ModBlocks.STREET_SIGN_STOP = STREET_SIGN_STOP;
@@ -483,6 +492,7 @@ public class FabricBlocks {
         ModBlocks.MINING_ALERT_BLOCK = MINING_ALERT_BLOCK;
         ModBlocks.BUBBLE_SCAFFOLD = BUBBLE_SCAFFOLD;
         ModBlocks.DIVER_LIMB = DIVER_LIMB;
+        ModBlocks.GE_BUSH = GE_BUSH;
         ModBlocks.FLESH_BLOCK = FLESH_BLOCK;
         ModBlocks.CULTIVATION_POT = CULTIVATION_POT;
         ModBlocks.CULTIVATED_CHERRY_SAPLING = CULTIVATED_CHERRY_SAPLING;
@@ -507,6 +517,7 @@ public class FabricBlocks {
         ModBlocks.MIRROR_BLOCK_ENTITY = MIRROR_BLOCK_ENTITY;
         ModBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY = BUBBLE_SCAFFOLD_BLOCK_ENTITY;
         ModBlocks.DIVER_LIMB_BLOCK_ENTITY = DIVER_LIMB_BLOCK_ENTITY;
+        ModBlocks.GE_BUSH_BLOCK_ENTITY = GE_BUSH_BLOCK_ENTITY;
         ModBlocks.INVISIBLE_BLOCK_ENTITY = INVISI_BLOCK_ENTITY;
         ModBlocks.D4C_PORTAL_BLOCK_ENTITY = D4C_PORTAL_BLOCK_ENTITY;
 

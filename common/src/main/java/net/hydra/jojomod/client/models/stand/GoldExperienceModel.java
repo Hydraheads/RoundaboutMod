@@ -2,6 +2,7 @@ package net.hydra.jojomod.client.models.stand;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.hydra.jojomod.client.ModRenderTypes;
 import net.hydra.jojomod.client.models.stand.animations.DiverDownAnimations;
 import net.hydra.jojomod.client.models.stand.animations.GoldExperienceAnimations;
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
@@ -37,6 +38,7 @@ public class GoldExperienceModel <T extends GoldExperienceEntity> extends StandM
     private final ModelPart right_arm;
     private final ModelPart upper_right_arm;
     private final ModelPart lower_right_arm;
+    private final ModelPart vitalpunchvfx;
     private final ModelPart left_arm;
     private final ModelPart upper_left_arm;
     private final ModelPart lower_left_arm;
@@ -50,6 +52,11 @@ public class GoldExperienceModel <T extends GoldExperienceEntity> extends StandM
     private final ModelPart left_leg;
     private final ModelPart upper_left_leg;
     private final ModelPart lower_left_leg;
+    private final ModelPart kick_barrage;
+    private final ModelPart One;
+    private final ModelPart Two;
+    private final ModelPart Three;
+    private final ModelPart Four;
     private final ModelPart BAM;
     private final ModelPart RightArmBAM;
     private final ModelPart RightArmBAM2;
@@ -72,6 +79,7 @@ public class GoldExperienceModel <T extends GoldExperienceEntity> extends StandM
         this.right_arm = this.upper_chest.getChild("right_arm");
         this.upper_right_arm = this.right_arm.getChild("upper_right_arm");
         this.lower_right_arm = this.right_arm.getChild("lower_right_arm");
+        this.vitalpunchvfx = this.lower_right_arm.getChild("vitalpunchvfx");
         this.left_arm = this.upper_chest.getChild("left_arm");
         this.upper_left_arm = this.left_arm.getChild("upper_left_arm");
         this.lower_left_arm = this.left_arm.getChild("lower_left_arm");
@@ -85,6 +93,11 @@ public class GoldExperienceModel <T extends GoldExperienceEntity> extends StandM
         this.left_leg = this.legs.getChild("left_leg");
         this.upper_left_leg = this.left_leg.getChild("upper_left_leg");
         this.lower_left_leg = this.left_leg.getChild("lower_left_leg");
+        this.kick_barrage = this.stand2.getChild("kick_barrage");
+        this.One = this.kick_barrage.getChild("One");
+        this.Two = this.kick_barrage.getChild("Two");
+        this.Three = this.kick_barrage.getChild("Three");
+        this.Four = this.kick_barrage.getChild("Four");
         this.BAM = this.stand2.getChild("BAM");
         this.RightArmBAM = this.BAM.getChild("RightArmBAM");
         this.RightArmBAM2 = this.BAM.getChild("RightArmBAM2");
@@ -138,6 +151,9 @@ public class GoldExperienceModel <T extends GoldExperienceEntity> extends StandM
                 .texOffs(56, 40).addBox(-2.0F, -0.25F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F))
                 .texOffs(68, 9).addBox(-2.0F, 0.75F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.21F)), PartPose.offset(-2.0F, 5.5F, 0.0F));
 
+        PartDefinition vitalpunchvfx = lower_right_arm.addOrReplaceChild("vitalpunchvfx", CubeListBuilder.create().texOffs(100, 8).addBox(-8.0F, -17.0F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.32F))
+                .texOffs(88, 39).addBox(-8.1F, -17.9F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.1F)), PartPose.offset(6.1F, 17.65F, 0.0F));
+
         PartDefinition left_arm = upper_chest.addOrReplaceChild("left_arm", CubeListBuilder.create(), PartPose.offset(4.0F, -5.25F, 0.0F));
 
         PartDefinition upper_left_arm = left_arm.addOrReplaceChild("upper_left_arm", CubeListBuilder.create().texOffs(16, 60).addBox(0.0F, -0.75F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.01F))
@@ -178,6 +194,28 @@ public class GoldExperienceModel <T extends GoldExperienceEntity> extends StandM
         PartDefinition lower_left_leg = left_leg.addOrReplaceChild("lower_left_leg", CubeListBuilder.create().texOffs(0, 52).mirror().addBox(-2.0F, -1.0F, -2.0F, 4.0F, 7.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false)
                 .texOffs(60, 20).mirror().addBox(-1.0F, -1.0F, -2.25F, 2.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false)
                 .texOffs(32, 70).mirror().addBox(-2.0F, 0.9999F, -1.9998F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.201F)).mirror(false), PartPose.offset(0.0F, 7.0F, 0.0F));
+
+        PartDefinition kick_barrage = stand2.addOrReplaceChild("kick_barrage", CubeListBuilder.create(), PartPose.offset(-11.0F, -12.0F, -2.0F));
+
+        PartDefinition One = kick_barrage.addOrReplaceChild("One", CubeListBuilder.create().texOffs(80, 63).mirror().addBox(-2.0F, 4.0F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(-0.01F)).mirror(false)
+                .texOffs(96, 64).addBox(-2.0F, 5.0F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.201F)), PartPose.offset(0.0F, 2.0F, 0.0F));
+
+        PartDefinition base_r1 = One.addOrReplaceChild("base_r1", CubeListBuilder.create().texOffs(80, 55).mirror().addBox(-2.0F, -1.0F, -2.0F, 4.0F, 3.0F, 4.0F, new CubeDeformation(0.1F)).mirror(false), PartPose.offsetAndRotation(0.0F, 2.1819F, 0.1667F, -0.0873F, 0.0F, 0.0F));
+
+        PartDefinition Two = kick_barrage.addOrReplaceChild("Two", CubeListBuilder.create().texOffs(80, 63).mirror().addBox(-2.0F, 4.0F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(-0.01F)).mirror(false)
+                .texOffs(96, 64).addBox(-2.0F, 5.0F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.201F)), PartPose.offset(0.0F, 2.0F, 0.0F));
+
+        PartDefinition base_r2 = Two.addOrReplaceChild("base_r2", CubeListBuilder.create().texOffs(80, 55).mirror().addBox(-2.0F, -1.0F, -2.0F, 4.0F, 3.0F, 4.0F, new CubeDeformation(0.1F)).mirror(false), PartPose.offsetAndRotation(0.0F, 2.1819F, 0.1667F, -0.0873F, 0.0F, 0.0F));
+
+        PartDefinition Three = kick_barrage.addOrReplaceChild("Three", CubeListBuilder.create().texOffs(80, 63).mirror().addBox(-2.0F, 4.0F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(-0.01F)).mirror(false)
+                .texOffs(96, 64).addBox(-2.0F, 5.0F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.201F)), PartPose.offset(0.0F, 2.0F, 0.0F));
+
+        PartDefinition base_r3 = Three.addOrReplaceChild("base_r3", CubeListBuilder.create().texOffs(80, 55).mirror().addBox(-2.0F, -1.0F, -2.0F, 4.0F, 3.0F, 4.0F, new CubeDeformation(0.1F)).mirror(false), PartPose.offsetAndRotation(0.0F, 2.1819F, 0.1667F, -0.0873F, 0.0F, 0.0F));
+
+        PartDefinition Four = kick_barrage.addOrReplaceChild("Four", CubeListBuilder.create().texOffs(80, 63).mirror().addBox(-2.0F, 4.0F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(-0.01F)).mirror(false)
+                .texOffs(96, 64).addBox(-2.0F, 5.0F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.201F)), PartPose.offset(0.0F, 2.0F, 0.0F));
+
+        PartDefinition base_r4 = Four.addOrReplaceChild("base_r4", CubeListBuilder.create().texOffs(80, 55).mirror().addBox(-2.0F, -1.0F, -2.0F, 4.0F, 3.0F, 4.0F, new CubeDeformation(0.1F)).mirror(false), PartPose.offsetAndRotation(0.0F, 2.1819F, 0.1667F, -0.0873F, 0.0F, 0.0F));
 
         PartDefinition BAM = stand2.addOrReplaceChild("BAM", CubeListBuilder.create(), PartPose.offset(0.0F, -17.0F, -4.0F));
 
@@ -235,7 +273,12 @@ public class GoldExperienceModel <T extends GoldExperienceEntity> extends StandM
         defaultModifiers(pEntity);
         defaultAnimations(pEntity, pAgeInTicks, 1/((float) Power.getBarrageWindup() /20));
         this.animate(pEntity.lifePunch, GoldExperienceAnimations.LIFE_PUNCH, pAgeInTicks, 1f);
+        this.animate(pEntity.hideLeg, StandAnimations.HIDE_LEG, pAgeInTicks, 1f);
+        this.animate(pEntity.kick_barrage, StandAnimations.KICK_BARRAGE, pAgeInTicks, 1.25f);
+        this.animate(pEntity.kick_barrage_windup, StandAnimations.KICK_BARRAGE_CHARGE, pAgeInTicks, 1f);
+        this.animate(pEntity.kick_barrage_end, StandAnimations.KICK_BARRAGE_END, pAgeInTicks, 1f);
         this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1f);
+        this.animate(pEntity.hideLifePunch, GoldExperienceAnimations.HIDE_LIFE_PUNCH, pAgeInTicks, 1f);
     }
 
     @Override
@@ -261,13 +304,12 @@ public class GoldExperienceModel <T extends GoldExperienceEntity> extends StandM
             int fullBright = 15728880;
             net.minecraft.client.renderer.MultiBufferSource.BufferSource globalBufferSource = net.minecraft.client.Minecraft.getInstance().renderBuffers().bufferSource();
             ResourceLocation texture = GoldExperienceBaseRenderer.getSkin(this.currentEntity.getSkin());
-            RenderType additiveGlow = RenderType.beaconBeam(texture, true);
+
+            RenderType additiveGlow = RenderType.energySwirl(texture, 0.0F, 0.0F);
             VertexConsumer glowBuffer = globalBufferSource.getBuffer(additiveGlow);
 
             poseStack.pushPose();
 
-            // we is currently making a glowy fist thing for this move specifically.
-            // eventually, i'll have to update the tree to account for that.
             this.stand.translateAndRotate(poseStack);
             this.stand2.translateAndRotate(poseStack);
             this.body.translateAndRotate(poseStack);
@@ -275,10 +317,12 @@ public class GoldExperienceModel <T extends GoldExperienceEntity> extends StandM
             this.torso.translateAndRotate(poseStack);
             this.upper_chest.translateAndRotate(poseStack);
             this.right_arm.translateAndRotate(poseStack);
+            this.lower_right_arm.translateAndRotate(poseStack);
 
-            this.lower_right_arm.render(poseStack, glowBuffer, fullBright, packedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
+            this.vitalpunchvfx.render(poseStack, glowBuffer, fullBright, packedOverlay, 0.6F, 0.6F, 0.6F, 0.3F);
 
             poseStack.popPose();
+            globalBufferSource.endBatch(additiveGlow);
         }
     }
 }

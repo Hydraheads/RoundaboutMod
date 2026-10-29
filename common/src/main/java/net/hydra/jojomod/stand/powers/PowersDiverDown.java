@@ -2787,6 +2787,9 @@ public class PowersDiverDown extends NewPunchingStand {
             if (isInDiveHitbox(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5)) {
                 BlockState state = stand.level().getBlockState(pos);
                 if (state.getBlock() instanceof ChestBlock || state.getBlock() instanceof BarrelBlock) {
+                    if (this.self instanceof Player player && !MainUtil.canInteractWithBlock(player, pos)) {
+                        continue;
+                    }
                     // distanceToSqr calculates 3D distance squared to stand's position
                     double distSq = stand.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
                     if (distSq < closestDistSq) {
@@ -2822,10 +2825,14 @@ public class PowersDiverDown extends NewPunchingStand {
         if (chestPos == null) {
             return false;
         }
-        if (!MainUtil.canInteractWithBlock(serverPlayer, chestPos)) {
+
+        // this is like my third attempt to fix claims with chests. bruh
+        StandEntity stand = getStandEntity(this.self);
+        BlockPos standPos = stand != null ? stand.blockPosition() : serverPlayer.blockPosition();
+        if (!MainUtil.canInteractWithBlock(serverPlayer, chestPos) || !MainUtil.canPlaceOnClaim(serverPlayer, standPos)) {
             return false;
         }
-        StandEntity stand = getStandEntity(this.self);
+
         if (stand != null) {
             if (!isPiloting()) {
                 setPiloting(stand.getId());
@@ -3964,6 +3971,7 @@ public class PowersDiverDown extends NewPunchingStand {
         if (host instanceof StandUser su) {
             // just need this for the key disabling, nothing else
             su.roundabout$setSpringLegs(true);
+            su.rdbt$setSpringPlacer(this);
         }
         emergeServer();
     }
@@ -4030,6 +4038,7 @@ public class PowersDiverDown extends NewPunchingStand {
     public void clearSpringLegs() {
         if (this.springTarget instanceof StandUser su) {
             su.roundabout$setSpringLegs(false);
+            su.rdbt$setSpringPlacer(null);
         }
         this.springTarget = null;
         this.springLegsTicks = 0;
@@ -4211,6 +4220,7 @@ public class PowersDiverDown extends NewPunchingStand {
     public void clearRibcageTrap() {
         if (this.ribcageTarget instanceof StandUser su) {
             su.roundabout$setRibcageTrap(false);
+            su.rdbt$setRibcagePlacer(null);
         }
         if (this.ribcageTarget instanceof Mob mob) {
             mob.getNavigation().stop();

@@ -7,6 +7,7 @@ import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.stand.PurpleHazeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -65,7 +66,7 @@ public class PurpleSmokeEntity extends StandEntity {
         SKIN_COLORS.put(PurpleHazeEntity.BLACK, 0xA62AAD);
         SKIN_COLORS.put(PurpleHazeEntity.GREEN, 0x60ed24);//
         SKIN_COLORS.put(PurpleHazeEntity.NETHERITE, 0xffcc00);//
-        SKIN_COLORS.put(PurpleHazeEntity.BLAZING_HAZE, 0xA62AAD);
+        SKIN_COLORS.put(PurpleHazeEntity.BLAZING_HAZE, 0xc83d2a);
         SKIN_COLORS.put(PurpleHazeEntity.MIRROR_BATTLE, 0xA62AAD);
         SKIN_COLORS.put(PurpleHazeEntity.ROTT, 0x4e1c1c);//
         SKIN_COLORS.put(PurpleHazeEntity.PEPPERMINT, 0xc7fcff);//
@@ -129,15 +130,7 @@ public class PurpleSmokeEntity extends StandEntity {
             range = Math.max(range, 1.0F);
         }
         //if (!((TimeStop) level()).inTimeStopRange(this)) {
-            List<Entity> damages = MainUtil.genHitbox(
-                    this.level(),
-                    this.getX(),
-                    this.getY(),
-                    this.getZ(),
-                    range,
-                    range,
-                    range
-            );
+        List<Entity> damages = getEntitiesInField();
 
         /*if (client) {
             Roundabout.LOGGER.info(
@@ -213,11 +206,20 @@ public class PurpleSmokeEntity extends StandEntity {
         if (!(this.level() instanceof ServerLevel sl)) return;
         if (range < 1.0F) return;
 
+        LivingEntity user = this.getUser();
+
+        boolean canGrief =
+                !ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims
+                        && sl.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)
+                        && user instanceof Player
+                        && MainUtil.getIsGamemodeApproriateForGrief(user);
+
+        if (!canGrief) return;
+
         int r = Mth.ceil(range);
         if (r <= 0) return;
 
         BlockPos center = this.blockPosition();
-
         int attempts = Mth.clamp((int) (range * 8F), 15, 120);
 
         for (int i = 0; i < attempts; i++) {
@@ -228,7 +230,7 @@ public class PurpleSmokeEntity extends StandEntity {
             BlockPos pos = center.offset(dx, dy, dz);
 
             double dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-            if (dist > range) continue;
+            if (dist > range * 0.95) continue;
 
             BlockState state = sl.getBlockState(pos);
             BlockState decayed = getDecayedState(state);
@@ -244,27 +246,73 @@ public class PurpleSmokeEntity extends StandEntity {
     }
     private void spawnFieldParticles(byte skin) {
         if (!(this.level() instanceof ServerLevel sl)) return;
-        double x = this.getX();
-        double y = this.getY() + 1.0;
-        double z = this.getZ();
 
-        switch (skin) {
-            default -> {
-                if (isDistortionMode()) {
-                    sl.sendParticles(ModParticles.DISTORTION_SMOKE, x, y, z, 30, range / 2, 1.5, range / 2, 0.01);
-                } else {
-                    int color = SKIN_COLORS.getOrDefault(skin, DEFAULT_HAZE_COLOR);
-                    sl.sendParticles(HazeColorParticleOptions.fromPackedColor(ModParticles.PURPLE_HAZE_SMOKE, color),
-                            x, y, z, 30, range / 2, 1.5, range / 2, 0.01);
-                }
-            }
+        double cx = this.getX();
+        double cy = this.getY();
+        double cz = this.getZ();
+
+        double radius = Math.max(range * 0.95, 0.5);
+
+        net.minecraft.core.particles.ParticleOptions options;
+        if (isDistortionMode()) {
+            options = ModParticles.DISTORTION_SMOKE;
+        } else {
+            int color = SKIN_COLORS.getOrDefault(skin, DEFAULT_HAZE_COLOR);
+            options = HazeColorParticleOptions.fromPackedColor(ModParticles.PURPLE_HAZE_SMOKE, color);
         }
+
+//interior
+        int spawned = 0;
+        int attempts = 0;
+        while (spawned < 20 && attempts < 60) {
+            attempts++;
+            double dx = (this.random.nextDouble() * 2 - 1) * radius;
+            double dy = (this.random.nextDouble() * 2 - 1) * radius;
+            double dz = (this.random.nextDouble() * 2 - 1) * radius;
+            if (dx * dx + dy * dy + dz * dz > radius * radius) continue;
+            sl.sendParticles(options, cx + dx, cy + dy, cz + dz, 1, 0, 0, 0, 0.01);
+            spawned++;
+        }
+
+    //exterior
+        int borderCount = (int) (12 + range * 4);
+        for (int i = 0; i < borderCount; i++) {
+            double y = this.random.nextDouble() * 2 - 1;
+            double theta = this.random.nextDouble() * Math.PI * 2;
+            double ring = Math.sqrt(1 - y * y);
+
+            double r = radius * (0.9 + this.random.nextDouble() * 0.1);
+
+            double dx = Math.cos(theta) * ring * r;
+            double dy = y * r;
+            double dz = Math.sin(theta) * ring * r;
+
+            sl.sendParticles(options, cx + dx, cy + dy, cz + dz, 1, 0, 0, 0, 0);
+        }
+    }
+    private List<Entity> getEntitiesInField() {
+        List<Entity> cube = MainUtil.genHitbox(this.level(),
+                this.getX(), this.getY(), this.getZ(), range, range, range);
+
+        double r = range * 0.95;
+        double r2 = r * r;
+        List<Entity> inside = new java.util.ArrayList<>();
+        for (Entity e : cube) {
+            double dx = e.getX() - this.getX();
+            double dy = (e.getY() + e.getBbHeight() * 0.5) - this.getY();
+            double dz = e.getZ() - this.getZ();
+
+            if (dx * dx + dy * dy + dz * dz > r2) continue;
+
+            inside.add(e);
+        }
+        return inside;
     }
     private final java.util.Set<Integer> expGrantedTo = new java.util.HashSet<>();
     public void tickeffect() {
         if (((TimeStop) level()).inTimeStopRange(this)) { return; }
 
-        List<Entity> damages = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), range, range, range);
+        List<Entity> damages = getEntitiesInField();
         LivingEntity user = this.getUser();
         if (user == null) return;
 

@@ -316,8 +316,7 @@ public class FabricItems {
                     .nutrition(8)
                     .saturationMod(0.25F)
                     .effect(new MobEffectInstance(ModEffects.REFRESHED,ModItems.TEA_DURATION),1.0F)
-                    .build())));
-    public static Item METEORITE = registerItem("meteorite", new Item(new Item.Properties()));
+                    .build())));    public static Item METEORITE = registerItem("meteorite", new Item(new Item.Properties()));
     public static Item ANUBIS_2D = registerItem("anubis_sword_2d", new Item(new Item.Properties()));
     public static Item AJA = registerItem("aja", new Item(new Item.Properties()));
     public static Item METEORITE_INGOT = registerItem("meteorite_ingot", new Item(new Item.Properties()));
@@ -847,6 +846,7 @@ public class FabricItems {
                         entries.accept(HALLUCINATORY_ACID_HEIGHT_4);
                         entries.accept(HALLUCINATORY_ACID_WALL);
                         entries.accept(ModBlocks.GAMBLING_TABLE);
+                        entries.accept(ModBlocks.MAGICIANS_STATUE_BLOCK);
                     }).build());
     public static final CreativeModeTab FOG_BLOCK_ITEMS = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
             new ResourceLocation(Roundabout.MOD_ID, "justice_fog_items"),

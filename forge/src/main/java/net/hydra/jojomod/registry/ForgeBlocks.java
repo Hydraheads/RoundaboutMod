@@ -68,6 +68,9 @@ public class ForgeBlocks {
     public static final RegistryObject<Block> CLIMBING_WIRE = BLOCKS.register("climbing_wire",
             () -> CLIMBING_WIRE_PROPERTIES
     );
+    public static final RegistryObject<Block> SC_RAPIER_PLATFORM_BLOCK = BLOCKS.register("sc_rapier_platform_block",
+            () -> SC_RAPIER_PLATFORM_BLOCK_PROPERTIES
+    );
     public static final RegistryObject<Block> FROZEN_DIRT = BLOCKS.register("frozen_dirt",
             () -> FROZEN_DIRT_PROPERTIES
     );
@@ -350,6 +353,8 @@ public class ForgeBlocks {
             () -> ModBlocks.BARBED_WIRE_BUNDLE_PROPERTIES);
     public static final RegistryObject<Block> GODDESS_STATUE_BLOCK = BLOCKS.register("goddess_statue",
             () -> ModBlocks.GODDESS_STATUE_BLOCK_PROPERTIES);
+    public static final RegistryObject<Block> MAGICIANS_STATUE_BLOCK = BLOCKS.register("magicians_statue",
+            () -> MAGICIANS_STATUE_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> STREET_SIGN_DIO = BLOCKS.register("street_sign_dio",
             ModBlocks::getStreetSignBlockProperties);
     public static final RegistryObject<Block> STREET_SIGN_RIGHT = BLOCKS.register("street_sign_right",
@@ -392,8 +397,10 @@ public class ForgeBlocks {
             () -> ModBlocks.STAND_FIRE_PROPERTIES);
     public static final RegistryObject<Block> BUBBLE_SCAFFOLD = BLOCKS.register("bubble_scaffold",
             () -> ModBlocks.BUBBLE_SCAFFOLD_BLOCK_PROPERTIES);
-            public static final RegistryObject<Block> DIVER_LIMB = BLOCKS.register("diver_limb",
-                () -> ModBlocks.DIVER_LIMB_BLOCK_PROPERTIES);
+    public static final RegistryObject<Block> DIVER_LIMB = BLOCKS.register("diver_limb",
+            () -> ModBlocks.DIVER_LIMB_BLOCK_PROPERTIES);
+    public static final RegistryObject<Block> GE_BUSH = BLOCKS.register("ge_bush",
+            () -> ModBlocks.GE_BUSH_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> INVISIBLOCK = BLOCKS.register("invisible_block",
             () -> ModBlocks.INVISIBLE_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> D4C_PORTAL = BLOCKS.register("d4c_portal",
@@ -431,8 +438,10 @@ public class ForgeBlocks {
             () -> BlockEntityType.Builder.of(StandFireBlockEntity::new, STAND_FIRE.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "stand_fire")));
     public static final RegistryObject<BlockEntityType<BubbleScaffoldBlockEntity>> BUBBLE_SCAFFOLD_BLOCK_ENTITY = BLOCK_ENTITIES.register("block_scaffold",
             () -> BlockEntityType.Builder.of(BubbleScaffoldBlockEntity::new, BUBBLE_SCAFFOLD.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "block_scaffold")));
-        public static final RegistryObject<BlockEntityType<DiverLimbBlockEntity>> DIVER_LIMB_BLOCK_ENTITY = BLOCK_ENTITIES.register("diver_limb",
+    public static final RegistryObject<BlockEntityType<DiverLimbBlockEntity>> DIVER_LIMB_BLOCK_ENTITY = BLOCK_ENTITIES.register("diver_limb",
             () -> BlockEntityType.Builder.of(DiverLimbBlockEntity::new, DIVER_LIMB.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "diver_limb")));
+    public static final RegistryObject<BlockEntityType<GEBushBlockEntity>> GE_BUSH_BLOCK_ENTITY = BLOCK_ENTITIES.register("ge_bush",
+            () -> BlockEntityType.Builder.of(GEBushBlockEntity::new, GE_BUSH.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "ge_bush")));
     public static final RegistryObject<BlockEntityType<InvisiBlockEntity>> INVISIBLE_BLOCK_ENTITY = BLOCK_ENTITIES.register("invisible_block",
             () -> BlockEntityType.Builder.of(InvisiBlockEntity::new, INVISIBLOCK.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "invisible_block")));
     public static final RegistryObject<BlockEntityType<D4CPortalBlockEntity>> D4C_PORTAL_BLOCK_ENTITY = BLOCK_ENTITIES.register("d4c_portal",

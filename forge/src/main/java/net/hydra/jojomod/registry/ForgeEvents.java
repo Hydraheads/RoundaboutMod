@@ -251,6 +251,7 @@ public class ForgeEvents {
         ModBlocks.DEEPSLATE_AJA_ORE = ForgeBlocks.DEEPSLATE_AJA_ORE.get();
         ModBlocks.AJA_BLOCK = ForgeBlocks.AJA_BLOCK.get();
         ModBlocks.CLIMBING_WIRE = ForgeBlocks.CLIMBING_WIRE.get();
+        ModBlocks.SC_RAPIER_PLATFORM_BLOCK = ForgeBlocks.SC_RAPIER_PLATFORM_BLOCK.get();
         ModBlocks.FROZEN_DIRT = ForgeBlocks.FROZEN_DIRT.get();
         ModBlocks.FROZEN_STONE = ForgeBlocks.FROZEN_STONE.get();
         ModBlocks.FROZEN_COBBLESTONE = ForgeBlocks.FROZEN_COBBLESTONE.get();
@@ -299,6 +300,7 @@ public class ForgeEvents {
         ModBlocks.BARBED_WIRE = ForgeBlocks.BARBED_WIRE.get();
         ModBlocks.BARBED_WIRE_BUNDLE = ForgeBlocks.BARBED_WIRE_BUNDLE.get();
         ModBlocks.GODDESS_STATUE_BLOCK = ForgeBlocks.GODDESS_STATUE_BLOCK.get();
+        ModBlocks.MAGICIANS_STATUE_BLOCK = ForgeBlocks.MAGICIANS_STATUE_BLOCK.get();
         ModBlocks.STREET_SIGN_DIO = ForgeBlocks.STREET_SIGN_DIO.get();
         ModBlocks.STREET_SIGN_RIGHT = ForgeBlocks.STREET_SIGN_RIGHT.get();
         ModBlocks.STREET_SIGN_STOP = ForgeBlocks.STREET_SIGN_STOP.get();
@@ -321,6 +323,7 @@ public class ForgeEvents {
         ModBlocks.STAND_FIRE = ForgeBlocks.STAND_FIRE.get();
         ModBlocks.BUBBLE_SCAFFOLD = ForgeBlocks.BUBBLE_SCAFFOLD.get();
         ModBlocks.DIVER_LIMB = ForgeBlocks.DIVER_LIMB.get();
+        ModBlocks.GE_BUSH = ForgeBlocks.GE_BUSH.get();
         ModBlocks.OASIS_MUD_BLOCK = ForgeBlocks.OASIS_MUD_BLOCK.get();
         ModBlocks.HALLUCINATORY_ACID = ForgeBlocks.HALLUCINATORY_ACID.get();
         ModBlocks.HALLUCINATORY_ACID_WALL = ForgeBlocks.HALLUCINATORY_ACID_WALL.get();
@@ -343,6 +346,7 @@ public class ForgeEvents {
         ModBlocks.STAND_FIRE_BLOCK_ENTITY = ForgeBlocks.STAND_FIRE_BLOCK_ENTITY.get();
         ModBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY = ForgeBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY.get();
         ModBlocks.DIVER_LIMB_BLOCK_ENTITY = ForgeBlocks.DIVER_LIMB_BLOCK_ENTITY.get();
+        ModBlocks.GE_BUSH_BLOCK_ENTITY = ForgeBlocks.GE_BUSH_BLOCK_ENTITY.get();
         ModBlocks.OASIS_MUD_BLOCK_ENTITY = ForgeBlocks.OASIS_MUD_BLOCK_ENTITY.get();
         ModBlocks.HALLUCINATORY_ACID_BLOCK_ENTITY = ForgeBlocks.HALLUCINATORY_ACID_BLOCK_ENTITY.get();
         ModBlocks.INVISIBLE_BLOCK_ENTITY = ForgeBlocks.INVISIBLE_BLOCK_ENTITY.get();
