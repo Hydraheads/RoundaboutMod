@@ -13,6 +13,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
@@ -729,6 +730,19 @@ public class PowersGoldExperience extends BlockGrabPreset {
         if (!this.self.level().isClientSide()) {
             if (hitNumber % 3 == 0)
                 playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GOLD_EXPERIENCE_HIT_EVENT, SoundSource.PLAYERS, 0.7F, 1F);
+        }
+    }
+
+    @Override
+    public void playKickBarrageNoise(int hitNumber, Entity entity){
+        if (!this.getSelf().level().isClientSide()) {
+            if (!this.getSelf().level().isClientSide() && (((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
+                playBarrageBlockNoise();
+            } else {
+                if (hitNumber % 3 == 0) {
+                    playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.GOLD_EXPERIENCE_HIT_EVENT, SoundSource.PLAYERS, 0.7F, 1F);
+                }
+            }
         }
     }
 
