@@ -578,7 +578,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     }
 
     // no lerp when teleporting
-    public final void packetNearby(Vector3f blip, int entId) {
+    private final void packetNearby(Vector3f blip, int entId) {
         if (!this.self.level().isClientSide) {
             ServerLevel serverWorld = ((ServerLevel) this.self.level());
             Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "roundabout:block/ge_bush"
+  },
+  "render_type": "cutout"
+}
