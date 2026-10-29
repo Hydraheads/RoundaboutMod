@@ -870,7 +870,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 }
             } else setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD);
         } else {
-            if (canVault()) {
+            if (!(((StandUser) this.getSelf()).roundabout$getLeapTicks() > -1) && !this.getSelf().onGround() && canVault()) {
                 setSkillIcon(context, x, y, 3, StandIcons.PURPLE_HAZE_LEDGE_GRAB, PowerIndex.GLOBAL_DASH);
             } else if (canFallBrace()) {
                 setSkillIcon(context, x, y, 3, StandIcons.PURPLE_HAZE_FALL_CATCH, PowerIndex.GLOBAL_DASH);
@@ -1758,6 +1758,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             }
         }
     }
+    private int leapEndTicks = -1;
     @Override
     public void tickPower() {
         if (purpleHazeFieldGone) {
@@ -1797,6 +1798,17 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     ((IPlayerEntity) pl).roundabout$SetPoseEmote((byte) 0);
                 }
             }
+        }
+
+
+        if (this.getAnimation() == StandEntity.LEAP_END) {
+            leapEndTicks++;
+            if (leapEndTicks > 4) {
+                animateStand(StandEntity.IDLE);
+                leapEndTicks = -1;
+            }
+        } else {
+            leapEndTicks = -1;
         }
 
         if (this.getSelf().onGround()){
