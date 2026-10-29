@@ -296,11 +296,27 @@ public class FabricItems {
 
 
     public static Item CHAMOMILE_SEEDS = registerItem("chamomile_seeds", new ItemNameBlockItem(ModBlocks.CHAMOMILE, new Item.Properties()));
-    public static Item CHAMOMILE = registerItem("chamomile", new Item(new Item.Properties().food(ModFoodComponents.CHAMOMILE)));
+    public static Item CHAMOMILE = registerItem("chamomile", new Item(new Item.Properties()
+            .food(new FoodProperties.Builder()
+                    .nutrition(2)
+                    .saturationMod(0.1F)
+                    .effect(new MobEffectInstance(ModEffects.REFRESHED,ModItems.CHAMOMILE_DURATION),1.0F)
+                    .alwaysEat()
+                    .build())));
     public static Item MINT_SEEDS = registerItem("mint_seeds", new ItemNameBlockItem(ModBlocks.MINT, new Item.Properties())  );
-    public static Item MINT = registerItem("mint", new Item(new Item.Properties().food(ModFoodComponents.MINT)));
-    public static Item HERB_TEA = registerItem("herb_tea", new Item(new Item.Properties().food(ModFoodComponents.TEA)));
-    public static Item METEORITE = registerItem("meteorite", new Item(new Item.Properties()));
+    public static Item MINT = registerItem("mint", new Item(new Item.Properties().food(
+            new FoodProperties.Builder()
+                    .nutrition(2)
+                    .saturationMod(0.1F)
+                    .effect(new MobEffectInstance(ModEffects.REFRESHED,ModItems.MINT_DURATION),1.0F)
+                    .alwaysEat()
+                    .build())));
+    public static Item HERB_TEA = registerItem("herb_tea", new Item(new Item.Properties().food(
+            new FoodProperties.Builder()
+                    .nutrition(8)
+                    .saturationMod(0.25F)
+                    .effect(new MobEffectInstance(ModEffects.REFRESHED,ModItems.TEA_DURATION),1.0F)
+                    .build())));    public static Item METEORITE = registerItem("meteorite", new Item(new Item.Properties()));
     public static Item ANUBIS_2D = registerItem("anubis_sword_2d", new Item(new Item.Properties()));
     public static Item AJA = registerItem("aja", new Item(new Item.Properties()));
     public static Item METEORITE_INGOT = registerItem("meteorite_ingot", new Item(new Item.Properties()));
