@@ -629,6 +629,7 @@ public class ForgeEvents {
         ModItems.BOSS_MASK = ForgeItems.BOSS_MASK.get();
         ModItems.DOPPIO_MASK = ForgeItems.DOPPIO_MASK.get();
         ModItems.DIO_MASK = ForgeItems.DIO_MASK.get();
+        ModItems.KHAN_MASK = ForgeItems.KHAN_MASK.get();
         ModItems.GYRO_MASK = ForgeItems.GYRO_MASK.get();
         ModItems.SANDMAN_MASK = ForgeItems.SANDMAN_MASK.get();
         ModItems.SHADOW_DIO_MASK = ForgeItems.SHADOW_DIO_MASK.get();
