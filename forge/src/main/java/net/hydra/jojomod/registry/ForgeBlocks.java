@@ -401,6 +401,8 @@ public class ForgeBlocks {
             () -> ModBlocks.DIVER_LIMB_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> GE_BUSH = BLOCKS.register("ge_bush",
             () -> ModBlocks.GE_BUSH_BLOCK_PROPERTIES);
+    public static final RegistryObject<Block> GE_VINE = BLOCKS.register("ge_vine",
+            () -> ModBlocks.GE_VINE_PROPERTIES);
     public static final RegistryObject<Block> INVISIBLOCK = BLOCKS.register("invisible_block",
             () -> ModBlocks.INVISIBLE_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> D4C_PORTAL = BLOCKS.register("d4c_portal",

@@ -2685,6 +2685,10 @@
   "ability.roundabout.gold_experience_life_punch.desc": "Your stand infused whatever you hit with life. This punch can act as bonemeal, make trees wilt and explode, or make your enemy's senses go berserk.",
   "ability.roundabout.gold_experience_dna_creation": "DNA Creation",
   "ability.roundabout.gold_experience_dna_creation.desc": "Use the DNA from an item to create a new lifeform from the cells. This mob takes time to grow, but is permanent",
+  "ability.roundabout.gold_experience_bramble_trap": "Bramble Traps",
+  "ability.roundabout.gold_experience_bramble_trap.desc": "Grow a bunch of brambles from the ground. These brambles won't damage enemies, but they will slow them. Walking through the brambles destroys them.",
+  "ability.roundabout.gold_experience_vine_climb": "Vine Climb",
+  "ability.roundabout.gold_experience_vine_climb.desc": "Grow vines on a wall and climb on them. These vines stay for a while, allowing others to climb on them as well.",
 
   "ability.roundabout.emperor_shoot": "Shoot",
   "ability.roundabout.emperor_shoot.desc": "Shoot a bullet from the emperor.",
