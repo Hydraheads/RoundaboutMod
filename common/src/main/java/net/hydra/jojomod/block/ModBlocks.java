@@ -220,6 +220,7 @@ public class ModBlocks {
     public static BlockEntityType<MirrorBlockEntity> MIRROR_BLOCK_ENTITY;
     public static BlockEntityType<BubbleScaffoldBlockEntity> BUBBLE_SCAFFOLD_BLOCK_ENTITY;
     public static BlockEntityType<DiverLimbBlockEntity> DIVER_LIMB_BLOCK_ENTITY;
+    public static BlockEntityType<SilverChariotRapierPlatformBlockEntity> SC_RAPIER_PLATFORM_BLOCK_ENTITY;
     public static BlockEntityType<GEBushBlockEntity> GE_BUSH_BLOCK_ENTITY;
     public static BlockEntityType<InvisiBlockEntity> INVISIBLE_BLOCK_ENTITY;
     public static BlockEntityType<D4CPortalBlockEntity> D4C_PORTAL_BLOCK_ENTITY;
@@ -861,6 +862,10 @@ public class ModBlocks {
             BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).noCollission().dynamicShape().instabreak().lightLevel((p_152607_) -> {
                 return 1;
             }).noParticlesOnBreak().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY));
+    public static SilverChariotRapierPlatformBlock SC_RAPIER_PLATFORM_BLOCK_PROPERTIES = new SilverChariotRapierPlatformBlock(
+            BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).noCollission().dynamicShape().instabreak().lightLevel((p_152607_) -> {
+                return 1;
+            }).noParticlesOnBreak().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY));
     public static GEBushBlock GE_BUSH_BLOCK_PROPERTIES = new GEBushBlock(
             BlockBehaviour.Properties.of().mapColor(MapColor.PLANT)
                     .noCollission()
@@ -961,9 +966,6 @@ public class ModBlocks {
 
     public static Block CLIMBING_WIRE_PROPERTIES = new ClimbingWireBlock(BlockBehaviour.Properties.of().mapColor(MapColor.DEEPSLATE).
             strength(1F).sound(SoundType.METAL).noOcclusion());
-    public static Block SC_RAPIER_PLATFORM_BLOCK_PROPERTIES = new SilverChariotRapierPlatformBlock(
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_GRAY).noLootTable().sound(SoundType.EMPTY).isValidSpawn(ModBlocks::never).strength(-1.0F, 3600000.0F)
-    );
     public static Block FROZEN_DIRT_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.DIRT).
             strength(0.2F).sound(SoundType.GLASS).friction(0.98F)
             ,() -> Blocks.DIRT);

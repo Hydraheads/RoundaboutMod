@@ -44,8 +44,6 @@ public class FabricBlocks {
     );
     public static final Block CLIMBING_WIRE = registerBlockItemless("climbing_wire", CLIMBING_WIRE_PROPERTIES
     );
-    public static final Block SC_RAPIER_PLATFORM_BLOCK = registerBlock("sc_rapier_platform_block", SC_RAPIER_PLATFORM_BLOCK_PROPERTIES
-    );
     public static final Block FROZEN_DIRT = registerBlock("frozen_dirt", FROZEN_DIRT_PROPERTIES
     );
     public static final Block FROZEN_COBBLESTONE = registerBlock("frozen_cobblestone", FROZEN_COBBLESTONE_PROPERTIES
@@ -225,6 +223,7 @@ public class FabricBlocks {
     public static final Block MIRROR = registerBlock("mirror",ModBlocks.getMirrorBlockProperties());
     public static final Block BUBBLE_SCAFFOLD = registerBlockItemless("bubble_scaffold",ModBlocks.BUBBLE_SCAFFOLD_BLOCK_PROPERTIES);
     public static final Block DIVER_LIMB = registerBlockItemless("diver_limb", ModBlocks.DIVER_LIMB_BLOCK_PROPERTIES);
+    public static final Block SC_RAPIER_PLATFORM = registerBlockItemless("sc_rapier_platform", ModBlocks.SC_RAPIER_PLATFORM_BLOCK_PROPERTIES);
     public static final Block GE_BUSH = registerBlockItemless("ge_bush", ModBlocks.GE_BUSH_BLOCK_PROPERTIES);
     public static final Block GE_VINE = registerBlockItemless("ge_vine", ModBlocks.GE_VINE_PROPERTIES);
     public static final Block INVISIBLOCK = registerBlockItemless("invisible_block",ModBlocks.INVISIBLE_BLOCK_PROPERTIES);
@@ -290,6 +289,8 @@ public class FabricBlocks {
             registerBE("bubble_scaffold",BlockEntityType.Builder.of(BubbleScaffoldBlockEntity::new, BUBBLE_SCAFFOLD));
     public static final BlockEntityType<DiverLimbBlockEntity> DIVER_LIMB_BLOCK_ENTITY =
         registerBE("diver_limb", BlockEntityType.Builder.of(DiverLimbBlockEntity::new, DIVER_LIMB));
+    public static final BlockEntityType<SilverChariotRapierPlatformBlockEntity> SC_RAPIER_PLATFORM_BLOCK_ENTITY =
+            registerBE("sc_rapier_platform", BlockEntityType.Builder.of(SilverChariotRapierPlatformBlockEntity::new, SC_RAPIER_PLATFORM));
     public static final BlockEntityType<GEBushBlockEntity> GE_BUSH_BLOCK_ENTITY =
             registerBE("ge_bush", BlockEntityType.Builder.of(GEBushBlockEntity::new, GE_BUSH));
     public static final BlockEntityType<InvisiBlockEntity> INVISI_BLOCK_ENTITY =
@@ -519,6 +520,7 @@ public class FabricBlocks {
         ModBlocks.MIRROR_BLOCK_ENTITY = MIRROR_BLOCK_ENTITY;
         ModBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY = BUBBLE_SCAFFOLD_BLOCK_ENTITY;
         ModBlocks.DIVER_LIMB_BLOCK_ENTITY = DIVER_LIMB_BLOCK_ENTITY;
+        ModBlocks.SC_RAPIER_PLATFORM_BLOCK_ENTITY = SC_RAPIER_PLATFORM_BLOCK_ENTITY;
         ModBlocks.GE_BUSH_BLOCK_ENTITY = GE_BUSH_BLOCK_ENTITY;
         ModBlocks.INVISIBLE_BLOCK_ENTITY = INVISI_BLOCK_ENTITY;
         ModBlocks.D4C_PORTAL_BLOCK_ENTITY = D4C_PORTAL_BLOCK_ENTITY;
