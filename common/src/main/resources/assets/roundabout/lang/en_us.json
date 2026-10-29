@@ -1925,7 +1925,7 @@
   "instruction.roundabout.press_skill_memory":"Press Skill %1$s While Selecting A Memory",
   "instruction.roundabout.whitesnake_auto_mode_move": "While in Auto Mode, Press Skill %1$s",
   "instruction.roundabout.whitesnake_auto_mode_attack": "While in Auto Mode, Press Skill %1$s",
-  "instruction.roundabout.distortion_spit": "While having Haze immunity, Press Skill %1$s",
+  "instruction.roundabout.distortion_spit": "While having Haze immunity, Press Skill %1$s while crouching",
   "instruction.roundabout.press_skill_submerged": "Press Skill %1$s While Submerged",
   "instruction.roundabout.press_skill_item": "Press Skill %1$s With A Compatible Item",
 
