@@ -2297,7 +2297,7 @@
 
 
   "ability.roundabout.invisivision": "Invisi-Vision",
-  "ability.roundabout.invisivision.desc": "Turn on and off the able to see see-through versions of blocks and entities that you turn invisible with your power. Turning it off is useful to get the perspective of someone without the stand, and to see through invisible blocks better.",
+  "ability.roundabout.invisivision.desc": "Turn on and off the ability to see see-through versions of blocks and entities that you turn invisible with your power. Turning it off is useful to get the perspective of someone without the stand, and to see through invisible blocks better.",
   "ability.roundabout.invisiburst": "Invisiburst",
   "ability.roundabout.invisiburst.desc": "Release your emotions in a burst of invisibility, making you and all nearby entities invisible. It decreases your range of being seen, and wears off overtime, or when you do certain actions. Activating this ability briefly lets mobs see you. If the stand griefing gamerule is off, temporarily makes blocks that are not ores around you invisible too, which can assist in mining. Invisible blocks are without properties, and cannot be blown up.",
   "ability.roundabout.controlled_burst": "Controlled Burst",
