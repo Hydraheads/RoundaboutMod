@@ -1,6 +1,8 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.block.GEBushBlockEntity;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.*;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
@@ -39,6 +41,7 @@ import net.minecraft.world.item.BoneMealItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -56,7 +59,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // move bytes
     private static final byte
         LIFE_PUNCH = 53,
-        DNA_CREATE = 54;
+        DNA_CREATE = 54,
+        BUSH_CREATION = 55;
 
     // for life punch
     private LifePunchCloneEntity lifePunchClone = null;
@@ -178,6 +182,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
             case SKILL_3_CROUCH -> {
                 tryLifePunch();
             }
+            // bush growth move
+            case SKILL_4_GUARD -> {
+                tryGrowBush();
+            }
         }
     }
 
@@ -185,13 +193,17 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public boolean setPowerOther(int move, int lastMove) {
         if (move == LIFE_PUNCH) {
             return startLifePunch();
-        } else if (move == DNA_CREATE) {
+        }
+        else if (move == DNA_CREATE) {
             return executeDNACreate();
         }
         else if (move == PowerIndex.BARRAGE_CHARGE_2) {
             return this.setPowerKickBarrageCharge();
         } else if (move == PowerIndex.BARRAGE_2) {
             return this.setPowerKickBarrage();
+        }
+        else if (move == BUSH_CREATION) {
+            return executeBushCreation();
         }
         return super.setPowerOther(move, lastMove);
     }
@@ -216,6 +228,70 @@ public class PowersGoldExperience extends BlockGrabPreset {
             lifePunchImpact(target);
         }
     }
+
+    // bramble bush start
+
+    private void tryGrowBush() {
+        ((StandUser) this.getSelf()).roundabout$tryPower(BUSH_CREATION, true);
+        tryPowerPacket(BUSH_CREATION);
+    }
+
+    private boolean executeBushCreation() {
+        if (this.self.level().isClientSide()) return false;
+        Level level = this.self.level();
+        BlockPos origin = this.self.blockPosition();
+        BlockState bushState = ModBlocks.GE_BUSH.defaultBlockState();
+
+        boolean createdAny = false;
+        int radius = 7;
+        double radiusSq = radius * radius;
+        for (BlockPos columnPos : BlockPos.betweenClosed(
+                origin.offset(-radius, 0, -radius),
+                origin.offset(radius, 0, radius))) {
+
+            // limit to the radius
+            if (columnPos.distSqr(origin) > radiusSq) continue;
+
+            // 70% chance of creation
+            if (level.random.nextFloat() > 0.70F) continue;
+
+            // using the move on ONLY flat surfaces would feel bad
+            // so i fix this by letting bushes be placed 1 up or down
+            BlockPos targetPos = null;
+            for (int yOffset : new int[]{0, 1, -1}) {
+                BlockPos checkPos = columnPos.above(yOffset);
+                BlockState checkState = level.getBlockState(checkPos);
+
+                if (checkState.canBeReplaced()
+                        && !checkState.is(ModBlocks.GE_BUSH)
+                        && bushState.canSurvive(level, checkPos)) {
+                    targetPos = checkPos;
+                    break;
+                }
+            }
+
+            // places the bush
+            if (targetPos != null) {
+                level.setBlock(targetPos, bushState, 3);
+
+                if (level.getBlockEntity(targetPos) instanceof GEBushBlockEntity bushBE) {
+                    bushBE.setOwner(this.getSelf().getUUID());
+                }
+
+                createdAny = true;
+            }
+        }
+
+        if (createdAny) {
+            playSoundIfPossible(level, null, this.self.blockPosition(),
+                    ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.85F, 1.0F);
+            addEXP(5);
+        }
+
+        return createdAny;
+    }
+
+    // bramble bush end
 
     // kick barrage start
 
