@@ -20,9 +20,11 @@ import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.particles.HazeColorParticleOptions;
 import net.hydra.jojomod.util.C2SPacketUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
@@ -983,7 +985,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         RenderSystem.enableBlend();
         context.setColor(1f, 1f, 1f, 1f);
 
-        if (getPods() <= 0) {
+        if (getPods() <= 0 || (getPods() < MAX_PODS && canExecuteMoveWithLevel(getPodRegenLevel()))) {
             context.setColor(0.62f, 0.62f, 0.62f, 0.8f);
         }
 
@@ -1015,6 +1017,27 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
         }
 
+        if(canExecuteMoveWithLevel(getPodRegenLevel()) && getPods() < MAX_PODS && podRechargeTicks > 0) {
+            float blit = (20*(1-((float) (1+podRechargeTicks) /(1+POD_RECHARGE_TIME))));
+            int b = (int) Math.round(blit);
+            RenderSystem.enableBlend();
+            context.setColor(1f, 1f, 1f, 1f);
+
+            ResourceLocation COOLDOWN_TEX = StandIcons.COOLDOWN_ICON;
+
+            context.blit(COOLDOWN_TEX, x - 1, y - 1 + b, 0, b, 20, 20-b, 20, 20);
+            int num = ((int)(Math.floor((double) podRechargeTicks /20)+1));
+            int offset = x+3;
+            if (num <=9){
+                offset = x+7;
+            }
+            //If 100 or more seconds long shift to the left
+            if (num >= 100){
+                offset = offset-3;
+            }
+
+            context.drawString(Minecraft.getInstance().font, ""+num,offset,y,0xffffff,true);
+        }
 
     }
 
@@ -1080,11 +1103,10 @@ public class PowersPurpleHaze extends NewPunchingStand {
             return;
         }
 
-        if (!(self instanceof Player player)) {
+        if (!(self instanceof Player PL)) {
             return;
         }
 
-        //IPlayerEntity playerData = (IPlayerEntity) player;
 
         if (!canExecuteMoveWithLevel(getPodRegenLevel())) {
             podRechargeTicks = 0;
@@ -1098,7 +1120,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
         podRechargeTicks++;
 
-        if (podRechargeTicks >= POD_RECHARGE_TIME) {
+        if (podRechargeTicks >= POD_RECHARGE_TIME || PL.isCreative()) {
             setPods(Math.min(MAX_PODS, getPods() + 1));
             podRechargeTicks = 0;
         }
