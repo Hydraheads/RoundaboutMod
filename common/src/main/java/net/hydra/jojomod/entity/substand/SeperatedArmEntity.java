@@ -232,9 +232,13 @@ public class SeperatedArmEntity extends StandEntity {
     private Entity grabbedEntity = null;
 
     private boolean isInRain() {
-        BlockPos $$0 = this.blockPosition();
-        return this.level().isRainingAt($$0)
-                || this.level().isRainingAt(BlockPos.containing((double)$$0.getX(), this.getBoundingBox().maxY, (double)$$0.getZ()));
+        if (ClientNetworking.getAppropriateConfig().catchTheRainbowSettings.catchTheRainbowCanAlwaysUse) {
+            return true;
+        }else {
+            BlockPos $$0 = this.blockPosition();
+            return this.level().isRainingAt($$0)
+                    || this.level().isRainingAt(BlockPos.containing((double) $$0.getX(), this.getBoundingBox().maxY, (double) $$0.getZ()));
+        }
     }
 
     //get the grabbed entity's "neck" position

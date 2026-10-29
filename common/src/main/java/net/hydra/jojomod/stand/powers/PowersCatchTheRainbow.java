@@ -597,11 +597,11 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     //platform
 
     private boolean canCreatePlatform = false;
-    private final CTRplatformEntity plat = ModEntities.CTR_PLATFORM.create(this.self.level());
 
     private void rainPlatform(){
         if (!this.self.level().isClientSide()) {
             canCreatePlatform = false;
+            CTRplatformEntity plat = ModEntities.CTR_PLATFORM.create(this.self.level());
 
             if (plat != null) {
                 plat.setUser(this.self);
