@@ -1268,7 +1268,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         Vec3 pos = self.getPosition(1).add(new Vec3(
                 Mth.sin(rotation.x * ((float) Math.PI / 180)),
                 0,
-                Mth.sin(rotation.x * ((float) Math.PI / 180)))
+                -Mth.cos(rotation.x * ((float) Math.PI / 180)))
                 .scale(1.25f));
 
         stand.absMoveTo(pos.x, pos.y, pos.z, rotation.x, rotation.y);
