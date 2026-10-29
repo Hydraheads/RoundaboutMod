@@ -185,21 +185,7 @@ public class PurpleHazeModel<T extends PurpleHazeEntity> extends StandModel<T> {
 
     StandPowers Power = new PowersPurpleHaze(null);
     @Override
-    public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
-        super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
-        defaultModifiers(pEntity);
-        defaultAnimations(pEntity, pAgeInTicks, 1/((float) Power.getBarrageWindup() /20));
-        this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1f);
-        this.animate(pEntity.hideLeg, StandAnimations.HIDE_LEG, pAgeInTicks, 1f);
-        this.animate(pEntity.kick_barrage, StandAnimations.KICK_BARRAGE, pAgeInTicks, 1.25f);
-        this.animate(pEntity.kick_barrage_windup, StandAnimations.KICK_BARRAGE_CHARGE, pAgeInTicks, 1f);
-        this.animate(pEntity.kick_barrage_end, StandAnimations.KICK_BARRAGE_END, pAgeInTicks, 1f);
-        this.animate(pEntity.strangle_windup, PurpleHazeAnimations.STRANGLE_WINDUP, pAgeInTicks, 3f);
-        this.animate(pEntity.flyloop, PurpleHazeAnimations.FLYLOOP, pAgeInTicks, 1f);
-        this.animate(pEntity.strangle_hold, PurpleHazeAnimations.STRANGLE_HOLD, pAgeInTicks, 1f);
-        this.animate(pEntity.strangle_grab, PurpleHazeAnimations.STRANGLE_GRAB, pAgeInTicks, 1f);
-        this.animate(pEntity.phfullcombo, PurpleHazeAnimations.PHFULLCOMBO, pAgeInTicks, 1f);
-
+    public void animatePunches(T pEntity, float pAgeInTicks) {
         float partial = 1.4f;
         float full = 1.16666f;
         if (pEntity.getMeltLevel() > 0){
@@ -216,7 +202,23 @@ public class PurpleHazeModel<T extends PurpleHazeEntity> extends StandModel<T> {
             this.animate(pEntity.punchState2, StandAnimations.COMBO2, pAgeInTicks, full); /*1.1666 for 6 ticks, 1.4 for 5*/
             this.animate(pEntity.punchState3, StandAnimations.COMBO3, pAgeInTicks, full);
         }
+    }
 
+    @Override
+    public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+        super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
+        defaultModifiers(pEntity);
+        defaultAnimations(pEntity, pAgeInTicks, 1/((float) Power.getBarrageWindup() /20));
+        this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1f);
+        this.animate(pEntity.hideLeg, StandAnimations.HIDE_LEG, pAgeInTicks, 1f);
+        this.animate(pEntity.kick_barrage, StandAnimations.KICK_BARRAGE, pAgeInTicks, 1.25f);
+        this.animate(pEntity.kick_barrage_windup, StandAnimations.KICK_BARRAGE_CHARGE, pAgeInTicks, 1f);
+        this.animate(pEntity.kick_barrage_end, StandAnimations.KICK_BARRAGE_END, pAgeInTicks, 1f);
+        this.animate(pEntity.strangle_windup, PurpleHazeAnimations.STRANGLE_WINDUP, pAgeInTicks, 3f);
+        this.animate(pEntity.flyloop, PurpleHazeAnimations.FLYLOOP, pAgeInTicks, 1f);
+        this.animate(pEntity.strangle_hold, PurpleHazeAnimations.STRANGLE_HOLD, pAgeInTicks, 1f);
+        this.animate(pEntity.strangle_grab, PurpleHazeAnimations.STRANGLE_GRAB, pAgeInTicks, 1f);
+        this.animate(pEntity.phfullcombo, PurpleHazeAnimations.PHFULLCOMBO, pAgeInTicks, 1f);
         this.animate(pEntity.fallinghitstart, PurpleHazeAnimations.FALLINGHITSTART, pAgeInTicks, 1f);
         this.animate(pEntity.fallinghit, PurpleHazeAnimations.FALLINGHIT, pAgeInTicks, 1f);
         this.animate(pEntity.fallinghitlong, PurpleHazeAnimations.FALLINGHITLONG, pAgeInTicks, 1f);
