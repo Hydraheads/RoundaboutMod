@@ -85,7 +85,7 @@ public class RoundaboutCommands {
                 if (user.roundabout$getStandPowers() != null) {
                     user.roundabout$getStandPowers().onStandSwitch();
                 }
-                
+
                 for (Item i : BuiltInRegistries.ITEM)
                 {
                     // in the future: this code should be changed to support addons

@@ -1409,9 +1409,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         this.strangleBaseY = victim.getY();
         this.strangleGrabTicks = 0;
 
-        if (victim instanceof StandUser SU) {
-            SU.roundabout$setRestrainedTicks(20);
-        }
+        ((StandUser) victim).roundabout$setRestrainedTicks(20);
 
         stand.setPos(getStrangleStandPos(victim));
         animateStand(PurpleHazeEntity.STRANGLE_GRAB);
@@ -1426,9 +1424,12 @@ public class PowersPurpleHaze extends NewPunchingStand {
             return;
         }
 
-        if (strangleVictim instanceof StandUser SU) {
-            SU.roundabout$setRestrainedTicks(20);
+        if (strangleVictim != null) {
+            ((StandUser)strangleVictim).roundabout$setRestrainedTicks(20);
         }
+
+        setDazed(strangleVictim, (byte)10);
+
 
         if (strangleGrabTicks < STRANGLE_GRAB_TICKS) {
             strangleGrabTicks++;
@@ -1471,11 +1472,11 @@ public class PowersPurpleHaze extends NewPunchingStand {
     private void endStrangle() {
         if (strangleVictim != null) {
             if (strangleVictim instanceof Mob mob) {
-                mob.setNoAi(false);
+                //mob.setNoAi(false);
             }
-            if (strangleVictim instanceof StandUser SU) {
-                SU.roundabout$setRestrainedTicks(0);
-            }
+
+            ((StandUser)strangleVictim).roundabout$setRestrainedTicks(0);
+
         }
         this.strangleGrabTicks = 0;
         this.strangleVictim = null;
