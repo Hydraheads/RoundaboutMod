@@ -270,9 +270,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 sendParticlesIfPossible(self.level(),ParticleTypes.END_ROD, PE.getX(),
                         PE.getY() + PE.getEyeHeight(), PE.getZ(),
                         10, 0.5, 0.5, 0.5, 0.2);
-                user.roundabout$setStandSkin(PurpleHazeEntity.GREEN);
+                user.roundabout$setStandSkin(PurpleHazeEntity.PLAGUE_BLUE);
                 ((ServerPlayer) PE).displayClientMessage(
-                        Component.translatable("unlock_skin.roundabout.purple_haze_plague"), true);
+                        Component.translatable("unlock_skin.roundabout.purple_haze.plague"), true);
                 user.roundabout$summonStand(lv, true, false);
             }
         }
