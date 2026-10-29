@@ -23,6 +23,7 @@ import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -1255,6 +1256,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
         if (Objects.isNull(stand)) {
             return;
         }
+
+
         this.setActivePower(PowerIndex.POWER_2);
         this.setAttackTimeDuring(0);
         this.strangleTicks = 0;
@@ -1262,6 +1265,14 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
         animateStand(PurpleHazeEntity.STRANGLE_WINDUP);
         poseStand(OffsetIndex.LOOSE);
+        Vec3 pos = self.getPosition(1).add(new Vec3(
+                Mth.sin(rotation.x * ((float) Math.PI / 180)),
+                0,
+                Mth.sin(rotation.x * ((float) Math.PI / 180)))
+                .scale(1.25f));
+
+        stand.absMoveTo(pos.x, pos.y, pos.z, rotation.x, rotation.y);
+
         playSoundIfPossible(self.level(), null, this.self.blockPosition(),
                 ModSounds.PURPLE_HAZE_STRANGLE_START_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
 

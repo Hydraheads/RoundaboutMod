@@ -107,20 +107,27 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
         this.animate(entity.idleAnimationStickyFingers2, StandIdles.Capo, animationProgress, 1f);
     }
 
-    /**Most humanoid stands share these animations.*/
-    public void defaultAnimations(T entity, float animationProgress, float windupLength){
-        this.animateIdles(entity, animationProgress);
-
-        Entity owner = entity.getUser();
+    public void animatePunches(T entity, float animationProgress) {
         float partial = 1.4f;
         float full = 1.16666f;
         if (entity.getMeltLevel() > 0){
             partial = 1.4f - Math.min(0.5f,0.9f*((float) entity.getMeltLevel()));
             full = 1.16666f - Math.min(0.5f,0.07f*((float) entity.getMeltLevel()));
         }
+
         this.animate(entity.punchState1, StandAnimations.COMBO1, animationProgress, partial);
         this.animate(entity.punchState2, StandAnimations.COMBO2, animationProgress, full); /*1.1666 for 6 ticks, 1.4 for 5*/
         this.animate(entity.punchState3, StandAnimations.COMBO3, animationProgress, full);
+    }
+
+    /**Most humanoid stands share these animations.*/
+    public void defaultAnimations(T entity, float animationProgress, float windupLength){
+        this.animateIdles(entity, animationProgress);
+
+        Entity owner = entity.getUser();
+
+        animatePunches(entity, animationProgress);
+
         this.animate(entity.blockAnimationState, StandAnimations.BLOCK, animationProgress, 1f);
         this.animate(entity.barrageChargeAnimationState, StandAnimations.BARRAGECHARGE, animationProgress, windupLength);
         this.animate(entity.barrageAnimationState, StandAnimations.BARRAGE, animationProgress, 1f);
