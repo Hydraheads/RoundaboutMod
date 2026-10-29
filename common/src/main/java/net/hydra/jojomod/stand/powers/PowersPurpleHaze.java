@@ -1350,7 +1350,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
 
         playSoundIfPossible(self.level(), null, this.self.blockPosition(),
-                ModSounds.PURPLE_HAZE_POD_BITE_EVENT /*placeholder*/, SoundSource.PLAYERS, 1.0F, 1.0F);
+                ModSounds.PURPLE_HAZE_STRANGLE_RUN_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
     }
     private void tickStrangleTravel(StandEntity stand) {
         double traveled = strangleTravelTicks * STRANGLE_SPEED;
@@ -1426,7 +1426,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         animateStand(PurpleHazeEntity.STRANGLE_GRAB);
 
         playSoundIfPossible(self.level(), null, this.self.blockPosition(),
-                ModSounds.PURPLE_HAZE_KICK_BARRAGE_CRY_EVENT /*placeholder*/, SoundSource.PLAYERS, 1.0F, 1.0F);
+                ModSounds.PURPLE_HAZE_STRANGLE_GRAB_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
     }
 
     private void tickStranglePin(StandEntity stand) {
