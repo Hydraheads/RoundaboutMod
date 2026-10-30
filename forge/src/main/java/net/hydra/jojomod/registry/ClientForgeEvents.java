@@ -214,6 +214,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.SEPERATED_ARM_SLIM.get(), SeperatedArmSlimRenderer::new);
         event.registerEntityRenderer(ForgeEntities.LEFT_SEPERATED_ARM.get(), LeftSeperatedArmRenderer::new);
         event.registerEntityRenderer(ForgeEntities.LEFT_SEPERATED_ARM_SLIM.get(), LeftSeperatedArmSlimRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.CTR_PLATFORM.get(), CTRplatformRenderer::new);
         event.registerEntityRenderer(ForgeEntities.MOLD_SPORE.get(), NoRenderer::new);
         event.registerEntityRenderer(ForgeEntities.PURPLE_SMOKE.get(), NoRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BAD_COMPANY_SOLDIER.get(), BCSoldierRenderer::new);
@@ -384,6 +385,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.SEPERATED_ARM_SLIM_LAYER, SeperatedArmSlimModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.LEFT_SEPERATED_ARM_LAYER, LeftSeperatedArmModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.LEFT_SEPERATED_ARM_SLIM_LAYER, LeftSeperatedArmSlimModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.CTR_PLATFORM_LAYER, CTRplatformModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.STAND_FIREBALL_LAYER, StandFireballModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.PW_METEOR_LAYER, PWMeteorModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.PW_BIG_METEOR_LAYER, PWBigMeteorModel::createBodyLayer);
@@ -413,6 +415,8 @@ public class ClientForgeEvents {
         ModStrayModels.TUSK_NAIL = new TuskNailModel();
         ModStrayModels.TUSK_DRILL_NAIL = new TuskDrillNailModel();
         ModStrayModels.HEY_YA = new HeyYaModel();
+        ModStrayModels.CATCH_THE_RAINBOW = new CatchTheRainbowModel();
+        ModStrayModels.CATCH_THE_RAINBOW_UMVUTHI = new CatchTheRainbowUmvuthiModel();
         ModStrayModels.CENTURY_BOY = new CenturyBoyModel();
         ModStrayModels.BOWLER_HAT = new BowlerHatModel();
         ModStrayModels.UV_BLASTER = new UVBlasterModel();
@@ -442,6 +446,7 @@ public class ClientForgeEvents {
         ModStrayModels.KakyoinHairPart = new KakyoinHairPart();
         ModStrayModels.gyroHatPart = new GyroHatPart();
         ModStrayModels.anakissHatPart = new AnakissHatPart();
+        ModStrayModels.blackmorePonytailPart = new BlackmorePonytailPart();
         ModStrayModels.steelBallsPart = new SteelBallsPart();
         ModStrayModels.DiegoHatPart = new DiegoHatPart();
         ModStrayModels.Diego2HatPart = new Diego2HatPart();

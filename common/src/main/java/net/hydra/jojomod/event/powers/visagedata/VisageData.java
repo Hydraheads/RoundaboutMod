@@ -141,6 +141,9 @@ public class VisageData {
         return false;
     }
     public boolean rendersAnakissHat(){return false;}
+    public boolean rendersBlackmorePonytail(){
+        return false;
+    }
     public boolean rendersSchoolHat(){
         return false;
     }

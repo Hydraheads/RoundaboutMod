@@ -174,6 +174,7 @@
   "item.roundabout.green_day_disc": "Stand Disc",
   "item.roundabout.soft_and_wet_disc": "Stand Disc",
   "item.roundabout.cinderella_disc": "Stand Disc",
+  "item.roundabout.catch_the_rainbow_disc": "Stand Disc",
   "item.roundabout.california_king_bed_disc": "Stand Disc",
   "item.roundabout.survivor_disc": "Stand Disc",
   "item.roundabout.emperor_disc": "Stand Disc",
@@ -240,6 +241,7 @@
   "item.roundabout.max_oasis_disc.desc": "Oasis",
   "item.roundabout.justice_disc.desc": "Justice",
   "item.roundabout.cinderella_disc.desc": "Cinderella",
+  "item.roundabout.catch_the_rainbow_disc.desc": "Catch The Rainbow",
   "item.roundabout.max_ratt_disc.desc": "Ratt",
   "item.roundabout.ratt_disc.desc": "Ratt",
   "item.roundabout.purple_haze_disc.desc": "Purple Haze",
@@ -546,6 +548,9 @@
   "item.roundabout.laem_mask": "Laem Visage",
   "item.roundabout.laem_mask.desc": "Laem Chabang",
   "item.roundabout.laem_mask.tag": "Laem",
+  "item.roundabout.blackmore_mask": "Blackmore Visage",
+  "item.roundabout.blackmore_mask.desc": "Blackmore",
+  "item.roundabout.blackmore_mask.tag": "Blackmore",
 
   "item.roundabout.stand_arrow.fail": "Need more experience!",
 
@@ -1071,6 +1076,18 @@
   "sounds.roundabout.ripper_eyes_charge": "Fluid Buildup",
   "sounds.roundabout.ripper_eyes_beam": "Ripper Eyes",
   "sounds.roundabout.ripper_eyes_short": "Ripper Eyes",
+  "sounds.roundabout.ctr_heal": "Wounds cured",
+  "sounds.roundabout.ctr_summon": "Stand summoned",
+  "sounds.roundabout.ctr_detach_1": "Arm thrown",
+  "sounds.roundabout.ctr_detach_2": "Arm thrown",
+  "sounds.roundabout.ctr_life_clutch": "Saved by the rain...",
+  "sounds.roundabout.ctr_rain_step_1": "Rain stabilized",
+  "sounds.roundabout.ctr_rain_step_2": "Rain stabilized",
+  "sounds.roundabout.ctr_rain_step_3": "Rain stabilized",
+  "sounds.roundabout.ctr_rain_step_4": "Rain stabilized",
+  "sounds.roundabout.ctr_rain_step_5": "Rain stabilized",
+  "sounds.roundabout.ctr_stabilizing_rain": "Rain stabilizing",
+  "sounds.roundabout.ctr_dodge": "Dodge",
 
   "death.attack.stand": "%1$s died to a mysterious power whilst fighting %2$s",
   "death.attack.stand.item": "%1$s died to a mysterious power whilst fighting %2$s",
@@ -1215,6 +1232,7 @@
   "death.attack.brain_dead": "%1$s stopped thinking",
   "death.attack.arn_throw": "%1$s died",
   "death.attack.arm_throw_player": "%1$s was slain by %2$s",
+  "death.attack.sharp_raindrop": "%1$s was sliced by the rain",
 
   "item.glaive.charge_power": "Charge Attack",
 
@@ -1919,6 +1937,7 @@
   "instruction.roundabout.press_skill_air_crouch": "Press Skill %1$s In The Air While Crouching",
   "instruction.roundabout.press_2_skill": "Press Skill %1$s While Using Skill %2$s",
   "instruction.roundabout.passive": "Passive",
+  "instruction.roundabout.crouch_air": "Crouch While In The Air",
   "instruction.roundabout.stand_arrow": "Hold Interact With A Stand Arrow",
   "instruction.roundabout.shop_item": "Shop Item",
   "instruction.roundabout.use_item": "Item Interaction",
@@ -2344,6 +2363,24 @@
   "ability.roundabout.ratt_mining": "Melt Lock",
   "ability.roundabout.ratt_mining.desc": "Locks Ratt to the block you are facing, causing it to automatically shoot in that direction indefinitely. In this mode, if griefing is enabled, it can melt blocks, making it gradually drill a hole.",
 
+  "ability.roundabout.ctr_passives": "We Believed We'd C. T. R.",
+  "ability.roundabout.ctr_passives.desc": "Catch The Rainbow's abilities can only be used in the rain. While in the rain, you gain a speed boost and you become immune to fall damage.",
+  "ability.roundabout.ctr_rain_platform": "Stabilize Raindrops",
+  "ability.roundabout.ctr_rain_platform.desc": "Stabilize the raindrops below your feet, creating a platform which lets you hover mid-air. [WIP]",
+  "ability.roundabout.ctr_life_clutch": "Life Clutch",
+  "ability.roundabout.ctr_life_clutch.desc": "When receiving fatal damage, survive at half a heart and become invincible for two seconds. This ability takes a long time to recharge.",
+  "ability.roundabout.ctr_barrier": "Barrier",
+  "ability.roundabout.ctr_barrier.desc": "Stabilize the raindrops around you, creating a sharp barrier that blocks projectiles and inflicts bleed. [WIP]",
+  "ability.roundabout.ctr_rain_mend": "Rain Mend",
+  "ability.roundabout.ctr_rain_mend.desc": "Use raindrops to plug your wounds, restoring one heart and healing a level of bleed.",
+  "ability.roundabout.ctr_choke": "Arm Throw",
+  "ability.roundabout.ctr_choke.desc": "Detach your offhand and throw it forwards, chokes and slowly suffocates mobs hit. Your thrown arm can also pick up items from the ground. [WIP]",
+  "ability.roundabout.ctr_rain_dash": "Rain Dodge",
+  "ability.roundabout.ctr_rain_dash.desc": "A quick burst of speed, useful for dodging. While in the rain, it has a greatly reduced cooldown and can also be used mid-air.",
+  "ability.roundabout.ctr_drop_down": "Down To Earth",
+  "ability.roundabout.ctr_drop_down.desc": "Quickly drop down towards the ground. Can hit mobs, dealing good damage and making you bounce upwards.",
+  "ability.roundabout.ctr_full_dodge": "Come The Dawn",
+  "ability.roundabout.ctr_full_dodge.desc": "Disassemble your body. For a second, you dodge any incoming danger but you can't attack. [Not implemented!]",
 
   "ability.roundabout.anubis_attack": "Slash / Cleave",
   "ability.roundabout.anubis_attack.desc": "Swing Anubis, dealing a sweeping attack. Goes through walls. When empowered, do a sweeping cut.",
@@ -2902,6 +2939,10 @@
   "idle.roundabout.century_boy2": "Unlatched",
   "idle.roundabout.century_boy3": "Hat",
 
+  "idle.roundabout.catch_the_rainbow1": "Masked",
+  "idle.roundabout.catch_the_rainbow2": "HangingRight",
+  "idle.roundabout.catch_the_rainbow3": "HangingLeft",
+
   "idle.roundabout.ckb_1": "Fun",
   "idle.roundabout.ckb_2": "Dangle",
 
@@ -3299,6 +3340,22 @@
   "skins.roundabout.20_centuryboy.ghost": "Ghost",
   "skins.roundabout.20_centuryboy.wandering": "Wandering",
 
+  "skins.roundabout.catch_the_rainbow.base": "Part 7",
+  "skins.roundabout.catch_the_rainbow.warm": "Warm",
+  "skins.roundabout.catch_the_rainbow.ghast_dry": "Ghast",
+  "skins.roundabout.catch_the_rainbow.ghast_happy": "Ghast",
+  "skins.roundabout.catch_the_rainbow.lali_ho": "Lali-Ho!",
+  "skins.roundabout.catch_the_rainbow.eye_white": "Eye",
+  "skins.roundabout.catch_the_rainbow.eye_red": "Eye",
+  "skins.roundabout.catch_the_rainbow.skeleton": "Cranium",
+  "skins.roundabout.catch_the_rainbow.neon_on": "Neon",
+  "skins.roundabout.catch_the_rainbow.neon_off": "Neon",
+  "skins.roundabout.catch_the_rainbow.strider_healthy": "Strider",
+  "skins.roundabout.catch_the_rainbow.strider_sick": "Strider",
+  "skins.roundabout.catch_the_rainbow.cmy": "CMY",
+  "skins.roundabout.catch_the_rainbow.magma": "Magmatic",
+  "skins.roundabout.catch_the_rainbow.umvuthi_on": "Sun Bird",
+  "skins.roundabout.catch_the_rainbow.umvuthi_off": "Sun Bird",
 
   "skins.roundabout.manhattan_transfer.manhattan_part_6": "Part 6",
   "skins.roundabout.manhattan_transfer.manhattan_manga_part_6": "Manga",
@@ -4325,6 +4382,30 @@
   "config.roundabout.silverChariotShouldRenderAfterimagesWhileUserInFirstPerson.desc": "Toggles if Silver Chariot's user should see afterimages in first person.",
   "config.roundabout.silverChariotArmourShedStandSealTime.name": "Armour Recover Stand Seal Time",
   "config.roundabout.silverChariotArmourShedStandSealTime.desc": "How long Silver Chariot is sealed after desummoning your stand while the stand's armour is off.",
+
+  "config.roundabout.enableCatchTheRainbow.name": "Enable Catch The Rainbow",
+  "config.roundabout.enableCatchTheRainbow.desc": "Enable Catch The Rainbow",
+
+  "config.roundabout.catchTheRainbowCanAlwaysUse.name": "Can Always Use",
+  "config.roundabout.catchTheRainbowCanAlwaysUse.desc": "Toggles if CTR's abilities can always be used, regardless of the rain.",
+
+  "config.roundabout.catchTheRainbowLifeClutchCooldown.name": "Life Clutch Cooldown",
+  "config.roundabout.catchTheRainbowLifeClutchCooldown.desc": "The Cooldown of the Life Clutch passive ability, by default it is 1200 ticks (1 minute)",
+
+  "config.roundabout.catchTheRainbowRainMendCooldown.name": "Rain Mend Cooldown",
+  "config.roundabout.catchTheRainbowRainMendCooldown.desc": "The cooldown of the Rain Mend ability, by default it is 400 ticks (20 seconds)",
+
+  "config.roundabout.catchTheRainbowBarrierCooldown.name": "Barrier Cooldown",
+  "config.roundabout.catchTheRainbowBarrierCooldown.desc": "The cooldown of the Barrier ability, by default it is 600 ticks (30 seconds)",
+
+  "config.roundabout.catchTheRainbowArmThrowCooldown.name": "Arm Throw Cooldown",
+  "config.roundabout.catchTheRainbowArmThrowCooldown.desc": "The cooldown of the Arm Throw ability after it returns to you, by default it is 180 ticks (9 seconds)",
+
+  "config.roundabout.catchTheRainbowArmReturnCooldown.name": "Arm Return Cooldown",
+  "config.roundabout.catchTheRainbowArmReturnCooldown.desc": "The cooldown of the Arm Return ability after throwing your arm, by default it is 600 ticks (3 seconds)",
+
+  "config.roundabout.catchTheRainbowFullDodgeCooldown.name": "Full Dodge Cooldown",
+  "config.roundabout.catchTheRainbowFullDodgeCooldown.desc": "The cooldown of the \"Come The Dawn\" ability, by default it is 200 ticks (10 seconds)",
 
   "config.roundabout.manhattanTransferMaxRange.name": "Manhattan Transfer Max Range",
   "config.roundabout.manhattanTransferMaxRange.desc": "How far you and Manhattan Transfer can distance until it despawns.",

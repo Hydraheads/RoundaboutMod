@@ -18,6 +18,10 @@ import net.hydra.jojomod.item.paintings.MonaLisaPaintingItem;
 import net.hydra.jojomod.item.paintings.VanGoughPaintingItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.*;
+import net.hydra.jojomod.item.CommandDiscItem;
+import net.hydra.jojomod.item.HearingDiscItem;
+import net.hydra.jojomod.item.MemoryDiscItem;
+import net.hydra.jojomod.item.SightDiscItem;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -176,6 +180,9 @@ public class FabricItems {
     public static Item STAND_DISC_PEARL_JAM = registerItem("pearl_jam_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersPearlJam(null)));
 
+    public static Item STAND_DISC_CATCH_THE_RAINBOW = registerItem("catch_the_rainbow_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCatchTheRainbow(null)));
+
     public static Item STAND_DISC_CINDERELLA = registerItem("cinderella_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCinderella(null)));
     public static Item STAND_DISC_PLANET_WAVES = registerItem("planet_waves_disc",
@@ -201,7 +208,7 @@ public class FabricItems {
     public static Item STAND_DISC_ACHTUNG = registerItem("achtung_baby_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAchtungBaby(null)));
 
-    public static Item STAND_DISC_DIVER_DOWN = registerItem("diver_down_disc",
+   public static Item STAND_DISC_DIVER_DOWN = registerItem("diver_down_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null)));
     public static Item MAX_STAND_DISC_DIVER_DOWN = registerItem("max_diver_down_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null)));
@@ -386,6 +393,7 @@ public class FabricItems {
     public static Item ANASUI_MASK = registerItem("anasui_mask", new MaskItem(new Item.Properties().stacksTo(1), new AnasuiVisage(null)));
     public static Item FEM_ANASUI_MASK = registerItem("fem_anasui_mask", new MaskItem(new Item.Properties().stacksTo(1), new FemAnasuiVisage(null)));
     public static Item ANAKISS_MASK = registerItem("anakiss_mask", new MaskItem(new Item.Properties().stacksTo(1), new AnakissVisage(null)));
+    public static Item BLACKMORE_MASK = registerItem("blackmore_mask", new MaskItem(new Item.Properties().stacksTo(1), new BlackmoreVisage(null)));
     public static Item HATO_MASK = registerItem("hato_mask", new MaskItem(new Item.Properties().stacksTo(1), new HatoVisage(null)));
     public static Item SHIZUKA_MASK = registerItem("shizuka_mask", new MaskItem(new Item.Properties().stacksTo(1), new ShizukaVisage(null)));
     public static Item CHAKA_MASK = registerItem("chaka_mask", new MaskItem(new Item.Properties().stacksTo(1), new ChakaVisage(null)));
@@ -824,6 +832,11 @@ public class FabricItems {
                         entries.accept(STAND_DISC_OASIS);
                         entries.accept(MAX_STAND_DISC_OASIS);
                         entries.accept(STAND_DISC_PEARL_JAM);
+                        entries.accept(STAND_DISC_DIVER_DOWN);
+                        entries.accept(MAX_STAND_DISC_DIVER_DOWN);
+                        entries.accept(STAND_DISC_CATCH_THE_RAINBOW);
+                        entries.accept(BLACKMORE_MASK);
+
                         entries.accept(STAND_DISC_SILVER_CHARIOT);
                         entries.accept(MAX_STAND_DISC_SILVER_CHARIOT);
                         entries.accept(STAND_DISC_WHITESNAKE);
@@ -1114,6 +1127,7 @@ public class FabricItems {
         ModItems.ANASUI_MASK = ANASUI_MASK;
         ModItems.FEM_ANASUI_MASK = FEM_ANASUI_MASK;
         ModItems.ANAKISS_MASK = ANAKISS_MASK;
+        ModItems.BLACKMORE_MASK = BLACKMORE_MASK;
         ModItems.GUCCIO_MASK = GUCCIO_MASK;
         ModItems.HATO_MASK = HATO_MASK;
         ModItems.SHIZUKA_MASK = SHIZUKA_MASK;

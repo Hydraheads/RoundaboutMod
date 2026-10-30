@@ -74,6 +74,7 @@ public class ModItems {
     public static Item STAND_DISC_MANHATTAN_TRANSFER;
     public static Item STAND_DISC_BLACK_SABBATH;
     public static Item STAND_DISC_PEARL_JAM;
+    public static Item STAND_DISC_CATCH_THE_RAINBOW;
     public static Item STAND_DISC_HEY_YA;
     public static Item STAND_DISC_MANDOM;
     public static Item STAND_DISC_SURVIVOR;
@@ -259,6 +260,7 @@ public class ModItems {
     public static Item ANASUI_MASK;
     public static Item FEM_ANASUI_MASK;
     public static Item ANAKISS_MASK;
+    public static Item BLACKMORE_MASK;
     public static Item GUCCIO_MASK;
     public static Item HATO_MASK;
     public static Item SHIZUKA_MASK;
@@ -377,6 +379,7 @@ public class ModItems {
         addToVisageStore(VALENTINE_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(DOT_HAN_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(AVDUL_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(BLACKMORE_MASK,page, characterCostExp, characterCostEmerald);
 
         page++;
         addToVisageStore(JOSUKE_PART_EIGHT_MASK,page, characterCostExp, characterCostEmerald);
