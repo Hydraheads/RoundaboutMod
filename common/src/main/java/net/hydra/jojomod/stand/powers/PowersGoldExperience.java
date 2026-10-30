@@ -10,11 +10,13 @@ import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.GoldExperienceEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.mixin.StandUserEntity;
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
@@ -66,7 +68,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
         LIFE_PUNCH = 53,
         DNA_CREATE = 54,
         BUSH_CREATION = 55,
-        WALL_VINES = 56;
+        WALL_VINES = 56,
+        HEAL = 57;
 
     // for life punch
     private LifePunchCloneEntity lifePunchClone = null;
@@ -180,6 +183,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
                     //insert life wheel here
                 }
             }
+            // heal
+            case SKILL_1_CROUCH -> {
+                tryHeal();
+            }
             // dash or vine climb
             case SKILL_3_NORMAL -> {
                 tryToDashClient();
@@ -214,6 +221,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
         else if (move == WALL_VINES) {
             return executeWallVines();
         }
+        else if (move == HEAL) {
+            return startHealWindup();
+        }
         return super.setPowerOther(move, lastMove);
     }
 
@@ -227,6 +237,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
             updateKickBarrageCharge();
         } else if (this.getActivePower() == PowerIndex.BARRAGE_2) {
             updateKickBarrage();
+        }
+        // heal
+        if (this.getActivePower() == HEAL) {
+            updateHeal();
         }
         super.updateUniqueMoves();
     }
@@ -245,6 +259,53 @@ public class PowersGoldExperience extends BlockGrabPreset {
             dash();
         }
     }
+
+    // heal start
+
+    private void tryHeal() {
+        ((StandUser) this.getSelf()).roundabout$tryPower(HEAL, true);
+        tryPowerPacket(HEAL);
+    }
+
+    private boolean startHealWindup() {
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand)) {
+            this.setAttackTimeDuring(0);
+            this.setActivePower(HEAL);
+            //animate stand here
+            this.poseStand(OffsetIndex.GUARD);
+            return true;
+        }
+        return false;
+    }
+
+    private void updateHeal() {
+        if (this.attackTimeDuring > -1) {
+            if (this.attackTimeDuring > 9) {
+                finishHeal();
+            }
+        }
+    }
+
+    private void finishHeal(){
+        if (!this.self.level().isClientSide()) {
+            Entity target = MainUtil.getTargetEntity(this.getSelf(), 5f);
+            if (target instanceof LivingEntity livingHeal && livingHeal != null) {
+                // for healing others
+                livingHeal.heal(1f);
+                livingHeal.addEffect(new MobEffectInstance(ModEffects.RECONSTRUCTION, 400, 0, false, true, true));
+                playSoundIfPossible(this.self.level(), livingHeal, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            } else {
+                // for healing yourself
+                this.self.heal(1f);
+                this.self.addEffect(new MobEffectInstance(ModEffects.RECONSTRUCTION, 400, 0, false, true, true));
+                playSoundIfPossible(this.self.level(), this.self, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            }
+            this.setAttackTimeDuring(-5);
+        }
+    }
+
+    // heal end
 
     // wall vines start
 
@@ -733,7 +794,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
             int cooldownTicks = 100;
             if (this.getSelf() instanceof Player serverPlayer && !this.getSelf().level().isClientSide()) {
-                net.hydra.jojomod.util.S2CPacketUtil.sendCooldownSyncPacket((net.minecraft.server.level.ServerPlayer) serverPlayer, LIFE_PUNCH, cooldownTicks);
+                S2CPacketUtil.sendCooldownSyncPacket((net.minecraft.server.level.ServerPlayer) serverPlayer, LIFE_PUNCH, cooldownTicks);
             }
             this.setCooldown(LIFE_PUNCH, cooldownTicks);
         }
@@ -777,6 +838,15 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // move speed modifiers and the sort
 
     @Override
+    public float inputSpeedModifiers(float basis) {
+        if (this.getActivePower() == HEAL){
+            // slows you down by 70% while healing
+            basis *= 0.7f;
+        }
+        return super.inputSpeedModifiers(basis);
+    }
+
+    @Override
     public boolean cancelItemUse() {
         return (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2);
     }
@@ -788,7 +858,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     @Override
     public boolean cancelSprintJump(){
-        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2) {
+        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2
+            || this.getActivePower() == HEAL) {
             return true;
         }
         return super.cancelSprintJump();
@@ -937,7 +1008,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         // Ability 1 (Z)
-        if (canDNACreate()) {
+        if (isHoldingSneak()) {
+            setSkillIcon(context, x, y, 3, StandIcons.GOLD_EXPERIENCE_HEAL, PowerIndex.SKILL_1_SNEAK);
+        } else if (canDNACreate()) {
             setSkillIcon(context, x, y, 1, StandIcons.GOLD_EXPERIENCE_DNA_CREATION, PowerIndex.SKILL_1);
         } else {
             setSkillIcon(context, x, y, 1, StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, PowerIndex.SKILL_1);
@@ -970,8 +1043,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 1, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.gold_experience_placeholder",
                 "instruction.roundabout.passive", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 1, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.gold_experience_placeholder",
-                "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 1, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.gold_experience_heal",
+                "instruction.roundabout.press_skill_crouch", StandIcons.GOLD_EXPERIENCE_HEAL, 1, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.gold_experience_dna_creation",
                 "instruction.roundabout.press_skill_item", StandIcons.GOLD_EXPERIENCE_DNA_CREATION, 1, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.gold_experience_placeholder",

@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.powers.ReconstructionEffect;
 import net.hydra.jojomod.event.powers.whitesnake.HallucinationEffect;
 import net.hydra.jojomod.event.powers.whitesnake.OldEffect;
 import net.minecraft.core.Registry;
@@ -74,6 +75,7 @@ public class FabricEffects extends MobEffect{
             register("distortion_virus", new FabricEffects(MobEffectCategory.HARMFUL, 10824365));
     public static final MobEffect VIRUS_IMMUNITY =
             register("virus_immunity", new FabricEffects(MobEffectCategory.BENEFICIAL, 10824365));
+    public static final MobEffect RECONSTRUCTION = register("reconstruction", new ReconstructionEffect());
 
     protected FabricEffects(MobEffectCategory mobEffectCategory, int i) {
         super(mobEffectCategory, i);
@@ -114,5 +116,6 @@ public class FabricEffects extends MobEffect{
         ModEffects.IMPRINTING = IMPRINTING;
         ModEffects.SWAPPED = SWAPPED;
         ModEffects.FORTIFICATION = FORTIFICATION;
+        ModEffects.RECONSTRUCTION = RECONSTRUCTION;
     }
 }
