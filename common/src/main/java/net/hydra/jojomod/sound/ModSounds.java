@@ -1409,9 +1409,12 @@ public class ModSounds {
     public static final String PURPLE_HAZE_BARRAGE_CRY = "purple_haze_barrage_cry";
     public static final ResourceLocation PURPLE_HAZE_BARRAGE_CRY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PURPLE_HAZE_BARRAGE_CRY);
     public static SoundEvent PURPLE_HAZE_BARRAGE_CRY_EVENT = SoundEvent.createVariableRangeEvent(PURPLE_HAZE_BARRAGE_CRY_ID);
-    public static final String PURPLE_HAZE_BARRAGE_WINDUP = "purple_haze_barrage_windup";
-    public static final ResourceLocation PURPLE_HAZE_BARRAGE_WINDUP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PURPLE_HAZE_BARRAGE_WINDUP);
-    public static SoundEvent PURPLE_HAZE_BARRAGE_WINDUP_EVENT = SoundEvent.createVariableRangeEvent(PURPLE_HAZE_BARRAGE_WINDUP_ID);
+    public static final String PURPLE_HAZE_PUNCH = "purple_haze_punch";
+    public static final ResourceLocation PURPLE_HAZE_PUNCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PURPLE_HAZE_PUNCH);
+    public static SoundEvent PURPLE_HAZE_PUNCH_EVENT = SoundEvent.createVariableRangeEvent(PURPLE_HAZE_PUNCH_ID);
+    public static final String PURPLE_HAZE_HEAVY_PUNCH = "purple_haze_heavy_punch";
+    public static final ResourceLocation PURPLE_HAZE_HEAVY_PUNCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PURPLE_HAZE_HEAVY_PUNCH);
+    public static SoundEvent PURPLE_HAZE_HEAVY_PUNCH_EVENT = SoundEvent.createVariableRangeEvent(PURPLE_HAZE_HEAVY_PUNCH_ID);
     public static final String PURPLE_HAZE_KICK_BARRAGE_CRY = "purple_haze_kick_barrage_cry";
     public static final ResourceLocation PURPLE_HAZE_KICK_BARRAGE_CRY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PURPLE_HAZE_KICK_BARRAGE_CRY);
     public static SoundEvent PURPLE_HAZE_KICK_BARRAGE_CRY_EVENT = SoundEvent.createVariableRangeEvent(PURPLE_HAZE_KICK_BARRAGE_CRY_ID);
@@ -2097,6 +2100,18 @@ public class ModSounds {
     public static final String GREEN_DAY_ARM_SPIN = "green_day_arm_spin";
     public static final ResourceLocation GREEN_DAY_ARM_SPIN_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ GREEN_DAY_ARM_SPIN);
     public static SoundEvent GREEN_DAY_ARM_SPIN_EVENT = SoundEvent.createVariableRangeEvent(GREEN_DAY_ARM_SPIN_ID);
+
+    public static final String GREEN_DAY_PUNCH = "green_day_punch";
+    public static final ResourceLocation GREEN_DAY_PUNCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ GREEN_DAY_PUNCH);
+    public static SoundEvent GREEN_DAY_PUNCH_EVENT = SoundEvent.createVariableRangeEvent(GREEN_DAY_PUNCH_ID);
+
+    public static final String GREEN_DAY_HEAVY_PUNCH = "green_day_heavy_punch";
+    public static final ResourceLocation GREEN_DAY_HEAVY_PUNCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ GREEN_DAY_HEAVY_PUNCH);
+    public static SoundEvent GREEN_DAY_HEAVY_PUNCH_EVENT = SoundEvent.createVariableRangeEvent(GREEN_DAY_HEAVY_PUNCH_ID);
+
+    public static final String GREEN_DAY_BARRAGE_HIT = "green_day_barrage_hit";
+    public static final ResourceLocation GREEN_DAY_BARRAGE_HIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ GREEN_DAY_BARRAGE_HIT);
+    public static SoundEvent GREEN_DAY_BARRAGE_HIT_EVENT = SoundEvent.createVariableRangeEvent(GREEN_DAY_BARRAGE_HIT_ID);
 
     public static final String GREEN_DAY_SPLIT = "green_day_split";
     public static final ResourceLocation GREEN_DAY_SPLIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ GREEN_DAY_SPLIT);

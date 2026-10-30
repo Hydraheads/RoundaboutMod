@@ -586,14 +586,7 @@ public class ForgeItems {
             () -> new Item(new Item.Properties())));
     public static final RegistryObject<Item> AJA = addToTab(ITEMS.register("aja",
             () -> new Item(new Item.Properties())));
-    /*public static final RegistryObject<Item> HAND = addToWIPTab(ITEMS.register("player_hand",
-            () -> new Item(new Item.Properties())));
-    public static final RegistryObject<Item> VILLAGER_HAND = addToWIPTab(ITEMS.register("villager_hand",
-            () -> new Item(new Item.Properties())));
-    public static final RegistryObject<Item> ILLAGER_HAND = addToWIPTab(ITEMS.register("illager_hand",
-            () -> new Item(new Item.Properties())));
-    public static final RegistryObject<Item> ROTTEN_HAND = addToWIPTab(ITEMS.register("rotten_hand",
-            () -> new Item(new Item.Properties())));*/
+
     public static final RegistryObject<Item> FANCY_LIGHTER = addToWIPTab(ITEMS.register("fancy_lighter_block",
             () -> new FancyLighterItem(ForgeBlocks.FANCY_LIGHTER_BLOCK.get(), new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> ULTRAVIOLET_BLASTER = addToTab(ITEMS.register("ultraviolet_blaster",
@@ -935,6 +928,8 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new DioVampireVisage(null))));
     public static final RegistryObject<Item> DIO_MASK = addToTab(ITEMS.register("dio_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new DIOVisage(null))));
+    public static final RegistryObject<Item> KHAN_MASK = addToWIPTab(ITEMS.register("khan_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new KhanVisage(null))));
     public static final RegistryObject<Item> SHADOW_DIO_MASK = addToTab(ITEMS.register("shadow_dio_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new ShadowDIOVisage(null))));
     public static final RegistryObject<Item> ENYA_MASK = addToTab(ITEMS.register("enya_mask",

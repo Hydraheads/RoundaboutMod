@@ -398,6 +398,24 @@ public class PowersGreenDay extends NewPunchingStand {
         return super.setPowerOther(move, lastMove);
     }
 
+
+
+    public SoundEvent getPunchLandSound(){
+        return ModSounds.GREEN_DAY_PUNCH_EVENT;
+    }
+    public SoundEvent getPunchLandLastSound(){
+        return ModSounds.GREEN_DAY_HEAVY_PUNCH_EVENT;
+    }
+
+
+    @Override
+    public void playBarrageNoise(int hitNumber, Entity entity) {
+        if (!this.self.level().isClientSide()) {
+            if (hitNumber % 2 == 0)
+                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GREEN_DAY_BARRAGE_HIT_EVENT, SoundSource.PLAYERS, 0.7F, 1/*(float) (0.9 + (Math.random() * 0.25))*/);
+        }
+    }
+
     public boolean hasCheckedAllies = false;
 
 

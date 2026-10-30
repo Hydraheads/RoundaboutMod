@@ -68,9 +68,6 @@ public class ForgeBlocks {
     public static final RegistryObject<Block> CLIMBING_WIRE = BLOCKS.register("climbing_wire",
             () -> CLIMBING_WIRE_PROPERTIES
     );
-    public static final RegistryObject<Block> SC_RAPIER_PLATFORM_BLOCK = BLOCKS.register("sc_rapier_platform_block",
-            () -> SC_RAPIER_PLATFORM_BLOCK_PROPERTIES
-    );
     public static final RegistryObject<Block> FROZEN_DIRT = BLOCKS.register("frozen_dirt",
             () -> FROZEN_DIRT_PROPERTIES
     );
@@ -399,6 +396,8 @@ public class ForgeBlocks {
             () -> ModBlocks.BUBBLE_SCAFFOLD_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> DIVER_LIMB = BLOCKS.register("diver_limb",
             () -> ModBlocks.DIVER_LIMB_BLOCK_PROPERTIES);
+    public static final RegistryObject<Block> SC_RAPIER_PLATFORM = BLOCKS.register("sc_rapier_platform",
+            () -> ModBlocks.SC_RAPIER_PLATFORM_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> GE_BUSH = BLOCKS.register("ge_bush",
             () -> ModBlocks.GE_BUSH_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> GE_VINE = BLOCKS.register("ge_vine",
@@ -442,6 +441,8 @@ public class ForgeBlocks {
             () -> BlockEntityType.Builder.of(BubbleScaffoldBlockEntity::new, BUBBLE_SCAFFOLD.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "block_scaffold")));
     public static final RegistryObject<BlockEntityType<DiverLimbBlockEntity>> DIVER_LIMB_BLOCK_ENTITY = BLOCK_ENTITIES.register("diver_limb",
             () -> BlockEntityType.Builder.of(DiverLimbBlockEntity::new, DIVER_LIMB.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "diver_limb")));
+    public static final RegistryObject<BlockEntityType<SilverChariotRapierPlatformBlockEntity>> SC_RAPIER_PLATFORM_BLOCK_ENTITY = BLOCK_ENTITIES.register("sc_rapier_platform",
+            () -> BlockEntityType.Builder.of(SilverChariotRapierPlatformBlockEntity::new, SC_RAPIER_PLATFORM.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "sc_rapier_platform")));
     public static final RegistryObject<BlockEntityType<GEBushBlockEntity>> GE_BUSH_BLOCK_ENTITY = BLOCK_ENTITIES.register("ge_bush",
             () -> BlockEntityType.Builder.of(GEBushBlockEntity::new, GE_BUSH.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "ge_bush")));
     public static final RegistryObject<BlockEntityType<InvisiBlockEntity>> INVISIBLE_BLOCK_ENTITY = BLOCK_ENTITIES.register("invisible_block",

@@ -267,6 +267,22 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (SHA != null) { SHA.discard(); }
     }
 
+
+    @Override
+    public void onStandSwitchInto(){
+        super.onStandSwitchInto();
+
+        if (!(this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative()))
+                && canExecuteMoveWithLevel(getBitesTheDustDayLevel()) &&  canBitesTheDustDay()) {
+            if (!self.level().isClientSide()) {
+                int btdDayCooldown = ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatActivationCooldown +
+                        ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustDayCooldownBonus;
+                this.setCooldown(PowerIndex.SKILL_EXTRA, btdDayCooldown);
+            }
+        }
+    }
+
+
     public void syncBombStatus(byte status) {
          this.currentBombStatus = status;
          this.updatePowerInt(PowersKillerQueen.PLANTED, status);
@@ -1648,6 +1664,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
     }
 
+    /*
     @Override
     public void punchImpact(Entity entity){
         this.setAttackTimeDuring(-10);
@@ -1660,7 +1677,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             float knockbackStrength;
             boolean lasthit = false;
             if (this.getActivePowerPhase() >= this.getActivePowerPhaseMax()) {
-                /*The last hit in a string has more power and knockback if you commit to it*/
+                /*The last hit in a string has more power and knockback if you commit to it *
                 pow = getHeavyPunchStrength(entity);
                 knockbackStrength = 1F;
                 lasthit = true;
@@ -1729,8 +1746,13 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
             playSoundIfPossible(self.level(),null, this.self.blockPosition(), SE, SoundSource.PLAYERS, volume, pitch);
         }
-    }
+    }*/
 
+
+
+    // realized that somebody had made the punchImpact more costumazable so now I just added the volume costumization to it
+    public float getPunchLandVolume(){ return 1.15F; }
+    public float getPunchLandLastVolume(){ return 1.15F; }
 
     public void kickAttackImpact(Entity entity){
     	 this.setAttackTimeDuring(-20);
@@ -3765,7 +3787,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                         getStandUserSelf().roundabout$setStandAnimation(KillerQueenEntity.SHA_SHOOT);
                     }
 
-                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), getPunchHitSound(), SoundSource.PLAYERS, 0.9F, 1.0f);
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), getPunchLandSound(), SoundSource.PLAYERS, 0.9F, 1.0f);
                     this.poseStand(OffsetIndex.ATTACK);
                 } else {
                     this.animateStand(KillerQueenEntity.SHA_SEND);
@@ -4507,7 +4529,8 @@ public class PowersKillerQueen extends NewPunchingStand {
         return ModSounds.KILLER_QUEEN_BTD_PLANTED_EVENT;
     }
 
-    protected SoundEvent getPunchHitSound() {
+    @Override
+    public SoundEvent getPunchLandSound() {
         byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
         if (skn == KillerQueenEntity.MINESWEEPER) {
             return ModSounds.KQ_MINESWEEPER_PUNCH_1_EVENT;
@@ -4515,7 +4538,8 @@ public class PowersKillerQueen extends NewPunchingStand {
         return ModSounds.KILLER_QUEEN_PUNCH_1_EVENT;
     }
 
-    protected SoundEvent getLastPunchHitSounds() {
+    @Override
+    public SoundEvent getPunchLandLastSound() {
         byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
         if (skn == KillerQueenEntity.MINESWEEPER) {
             return ModSounds.KQ_MINESWEEPER_BTD_PLANT_EVENT;

@@ -139,6 +139,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
         return true;
     }
 
+    /*
     private static final EntityDataAccessor<Boolean> IS_FAKE = SynchedEntityData.defineId(
             SilverChariotEntity.class, EntityDataSerializers.BOOLEAN
     );
@@ -155,6 +156,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
         }
         return false;
     }
+    */
 
     private static final EntityDataAccessor<Boolean> IS_DUAL_WIELDING = SynchedEntityData.defineId(
             SilverChariotEntity.class, EntityDataSerializers.BOOLEAN
@@ -359,11 +361,13 @@ public class SilverChariotEntity extends FollowingStandEntity {
             } else {
                 this.scIdleArmoured.stop();
             }
+            /*
             if (animationState == IDLE && idle == 0 && !this.getArmoured()) {
                 this.scIdleNotArmoured.startIfStopped(this.tickCount);
             } else {
                 this.scIdleNotArmoured.stop();
             }
+            */
             if (animationState == IDLE && idle == 1) {
                 this.scPart3Pose.startIfStopped(this.tickCount);
             } else {
@@ -643,7 +647,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
         entityData.define(IS_ARMOURED, true);
         entityData.define(HAS_RAPIER, true);
         entityData.define(ACTIVE_HAND, RIGHT_HAND);
-        entityData.define(IS_FAKE, false);
+        // entityData.define(IS_FAKE, false);
         entityData.define(IS_DUAL_WIELDING, false);
         entityData.define(IS_CARRYING_USER, false);
         entityData.define(HELD_ITEM_SILVER_CHARIOT, ItemStack.EMPTY);
@@ -683,7 +687,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
     public boolean isRemoteControlled() {
         // return entityData.get(CONTROL_MODE) != CONTROL_MODE_NONE;
         // return super.isRemoteControlled();
-        return entityData.get(REMOTE_MODE) != REMOTE_MODE_NONE;
+        return entityData.get(REMOTE_MODE) == REMOTE_MODE_CONTROL;
     }
 
 
@@ -944,7 +948,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     @Override
     public boolean skipAttackInteraction(Entity attacker) {
-        return super.skipAttackInteraction(attacker);
+        return !isRemoteControlled() && super.skipAttackInteraction(attacker);
     }
 
     @Override
@@ -1051,6 +1055,12 @@ public class SilverChariotEntity extends FollowingStandEntity {
     @Override
     public boolean hurt(DamageSource source, float amount) {
         // TODO: Silver Chariot should receive more damage while not armoured
+        float amountNew = amount;
+        if (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersSilverChariot PSC) {
+            if (PSC.getArmoured()) {
+                amountNew = amount * 1.20F;
+            }
+        }
         if (source.is(DamageTypes.GENERIC_KILL) || source.is(DamageTypes.FELL_OUT_OF_WORLD)){
             discard();
             return false;
@@ -1058,7 +1068,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
         LivingEntity user = getUser();
         if (isRemoteControlled() && user != null) {
             Vec3 userVelocity = user.getDeltaMovement();
-            boolean damaged = user.hurt(withoutShieldBlocking(source), amount);
+            boolean damaged = user.hurt(withoutShieldBlocking(source), amountNew);
             user.setDeltaMovement(userVelocity);
             if (damaged) {
                 hurtTime = 10;
@@ -1071,7 +1081,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
             }
             return damaged;
         }
-        return super.hurt(source, amount);
+        return super.hurt(source, amountNew);
     }
 
     private DamageSource withoutShieldBlocking(DamageSource source) {
@@ -1101,7 +1111,8 @@ public class SilverChariotEntity extends FollowingStandEntity {
                 new SilverChariotAfterimageState(
                         this.position(),
                         this.getXRot(),
-                        this.getYRot()
+                        this.getYRot(),
+                        this.getDeltaMovement()
                 )
         );
 

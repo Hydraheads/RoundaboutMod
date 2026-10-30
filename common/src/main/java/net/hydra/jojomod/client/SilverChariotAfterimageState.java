@@ -7,11 +7,13 @@ public class SilverChariotAfterimageState {
     private Vec3 pos;
     private float xRot;
     private float yRot;
+    private Vec3 currVel;
 
-    public SilverChariotAfterimageState(Vec3 pos, float xRot, float yRot) {
+    public SilverChariotAfterimageState(Vec3 pos, float xRot, float yRot, Vec3 currVel) {
         this.pos = pos;
         this.xRot = xRot;
         this.yRot = yRot;
+        this.currVel = currVel;
     }
 
     public Vec3 getPos() {
@@ -24,5 +26,9 @@ public class SilverChariotAfterimageState {
 
     public float getYRot() {
         return yRot;
+    }
+
+    public Vec3 getCurrVel() {
+        return currVel;
     }
 }

@@ -271,6 +271,7 @@ public class ClientForgeEvents {
         //event.registerBlockEntityRenderer(ForgeBlocks.CHESSBOARD_BLOCK_ENTITY.get(), ChessBoardRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY.get(), BubbleScaffoldBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.DIVER_LIMB_BLOCK_ENTITY.get(), DiverLimbBlockEntityRenderer::new);
+        event.registerBlockEntityRenderer(ForgeBlocks.SC_RAPIER_PLATFORM_BLOCK_ENTITY.get(), SilverChariotRapierPlatformBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.D4C_PORTAL_BLOCK_ENTITY.get(), D4CPortalBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.INVISIBLE_BLOCK_ENTITY.get(), InvisiBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.OASIS_MUD_BLOCK_ENTITY.get(), OasisMudBlockEntityRenderer::new);
