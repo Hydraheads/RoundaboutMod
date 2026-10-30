@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.PHCapsuleEntity;
 import net.hydra.jojomod.entity.projectile.VirusSpitEntity;
+import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.stand.PurpleHazeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.substand.PurpleSmokeEntity;
@@ -1927,6 +1928,16 @@ public class PowersPurpleHaze extends NewPunchingStand {
         return ModSounds.PURPLE_HAZE_KICK_BARRAGE_CRY_EVENT;
     }
 
+
+    @Override
+    public SoundEvent getPunchLandSound() {
+        return ModSounds.PURPLE_HAZE_PUNCH_EVENT;
+    }
+
+    @Override
+    public SoundEvent getPunchLandLastSound() {
+        return ModSounds.PURPLE_HAZE_HEAVY_PUNCH_EVENT;
+    }
 
     @Override
     public void playBarrageEndNoise(float mod, Entity entity) {
