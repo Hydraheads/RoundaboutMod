@@ -50,6 +50,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -90,7 +91,12 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
     }
 
-
+    public float getSalimoPunchStrength(Entity entity) {
+        if (this.getReducedDamage(entity)) {
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(0.5F));  // KQ impale: 2F
+        }
+        return levelupDamageMod(multiplyPowerByStandConfigMobs(1.5F));         // KQ impale: 12
+    }
     public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
             return levelupDamageMod((float) multiplyPowerByStandConfigPlayers(1.75F));
@@ -354,7 +360,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
     @Override
     public boolean isServerControlledCooldown(byte num){
-        if (num == PowerIndex.SKILL_1 || num == PowerIndex.SKILL_1_SNEAK || num == PowerIndex.SKILL_2 ){
+        if (num == PowerIndex.SKILL_1 || num == PowerIndex.SKILL_1_SNEAK || num == PowerIndex.SKILL_2 || num == PowerIndex.SKILL_2_SNEAK){
             return true;
         }
         return super.isServerControlledCooldown(num);
@@ -363,7 +369,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (!consumeClickInput) {
-
+            if (this.salimoTicks > 0) { return; }
             if (holdDownClick) {
                 if (!keyIsDown) {
                     if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
@@ -465,7 +471,14 @@ public class PowersPurpleHaze extends NewPunchingStand {
         if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
             return true;
         }
-
+        if (this.getActivePower() == PowerIndex.POWER_2_SNEAK) {
+            int cdr = ClientNetworking.getAppropriateConfig().PurpleHazeSettings.SalimoCooldown;
+            if (this.getSelf() instanceof ServerPlayer sp) {
+                S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.SKILL_2_SNEAK, cdr);
+            }
+            this.setCooldown(PowerIndex.SKILL_2_SNEAK, cdr);
+            return true;
+        }
         return super.canInterruptPower(sauce, interrupter);
     }
 
@@ -523,9 +536,10 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     @Override
     public boolean cancelSprintJump(){
-        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2) {
+        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2|| this.getActivePower() == PowerIndex.POWER_2_SNEAK) {
             return true;
         }
+
         return super.cancelSprintJump();
     }
     @Override
@@ -534,10 +548,18 @@ public class PowersPurpleHaze extends NewPunchingStand {
              updateKickBarrageCharge();
          } else if (this.getActivePower() == PowerIndex.BARRAGE_2) {
              updateKickBarrage();
-         }
+         } else if (this.getActivePower() == PowerIndex.POWER_2_SNEAK) {
+             updateSalimo();
+    }
          super.updateUniqueMoves();
     }
-
+    @Override
+    public void handleStandAttack(Player player, Entity target) {
+        if (this.getActivePower() == PowerIndex.POWER_2_SNEAK) {
+            salimoImpact(target);
+        }
+        super.handleStandAttack(player, target);
+    }
     @Override
     public boolean setPowerOther(int move, int lastMove) {
         switch (move) {
@@ -556,7 +578,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 attemptStrangle();
             }
             case PowerIndex.POWER_2_SNEAK -> { // Strangle
-                attemptSalimo();
+                setPowerSalimo();
             }
             case PowerIndex.SNEAK_ATTACK_CHARGE -> {
                 attemptDistortionModeChange();
@@ -590,6 +612,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
             this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
         }
 
+        if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.POWER_2_SNEAK) {
+            this.stopSoundsIfNearby(IMPALE_CHARGE_NOISE, 100, true);
+        }
         return super.tryPower(move, forced);
     }
 
@@ -843,7 +868,12 @@ public class PowersPurpleHaze extends NewPunchingStand {
             int ClashTime = Math.round(((float) attackTimeDuring / this.getKickBarrageWindup()) * 15);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
-        } else {
+        } else if (this.getActivePower() == PowerIndex.POWER_2_SNEAK) {
+        Entity TE = this.getTargetEntity(playerEntity, SALIMO_RANGE);
+        if (TE != null) {
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
+        }
+        }else {
             super.renderAttackHud(context,playerEntity,
                     scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
         }
@@ -1202,6 +1232,10 @@ public class PowersPurpleHaze extends NewPunchingStand {
         if (isEatingCapsule()) {
             basis *= 0.0f;
         }
+        if (this.getActivePower() == PowerIndex.POWER_2_SNEAK && this.getSelf().isCrouching()) {
+            float f = Mth.clamp(0.3F + EnchantmentHelper.getSneakingSpeedBonus(this.getSelf()), 0.0F, 1.0F);
+            basis *= 1 / f;
+        }
         return super.inputSpeedModifiers(basis);
     }
 
@@ -1554,19 +1588,82 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
     }
-    public void attemptSalimo() {
-        if ((!(self instanceof Player) || canExecuteMoveWithLevel(getStrangleLevel())) && (activePower == NONE || activePower == GUARD)) {
-            Salimo();
+    private static final float SALIMO_RANGE = 3.5F;
+    private static final float SALIMO_KNOCKBACK = 3.2F;      // KQ impale is 1.3 so maybe this is ok idk
+    private static final byte IMPALE_CHARGE_NOISE = 105;
+    public int salimoTicks = 0;
+
+    public boolean setPowerSalimo() {
+        if (this.onCooldown(PowerIndex.SKILL_2_SNEAK)) return false;
+        if (self instanceof Player && !canExecuteMoveWithLevel(getStrangleLevel())) return false;
+        if (!(activePower == NONE || activePower == GUARD)) return false;
+
+        this.setAttackTimeDuring(0);
+        this.setActivePower(PowerIndex.POWER_2_SNEAK);
+        this.poseStand(OffsetIndex.GUARD);
+        //this.animateStand(); //PLACEHOLDER
+        playSoundsIfNearby(IMPALE_CHARGE_NOISE, 27, false);
+        return true;
+    }
+
+    public void updateSalimo() {
+        if (this.attackTimeDuring > -1) {
+            if (this.attackTimeDuring > 24) {
+                this.standSalimo();
+            } else if (!this.getSelf().level().isClientSide() && this.attackTimeDuring % 4 == 0) {
+                sendParticlesIfPossible(self.level(), ModParticles.MENACING,
+                        self.getX(), self.getY() + 0.3, self.getZ(), 1, 0.2, 0.2, 0.2, 0.05);
+            }
         }
     }
-    public void Salimo() {
-        if (this.onCooldown(PowerIndex.SKILL_2_SNEAK)) {
-            return;
+
+    public void standSalimo() {
+        if (this.self instanceof Player) {
+            if (isPacketPlayer()) {
+                this.setAttackTimeDuring(-20);
+                this.salimoTicks = 15;
+                tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK, getTargetEntityId2(SALIMO_RANGE));
+            }
+        } else {
+            this.salimoImpact(getTargetEntity(this.self, SALIMO_RANGE));
         }
+    }
+
+    public void salimoImpact(Entity entity) {
+        if (activePower != PowerIndex.POWER_2_SNEAK) return;
+        this.setAttackTimeDuring(-20);
+        if (entity != null && entity.distanceTo(self) > SALIMO_RANGE + 0.75F) {
+            entity = null;
+        }
+        if (entity != null) {
+            hitParticlesCenter(entity);
+            if (StandDamageEntityAttack(entity, getSalimoPunchStrength(entity), 0, this.self)) {
+                if (entity instanceof LivingEntity LE) {
+                    addEXP(5, LE);
+                }
+                takeDeterminedKnockback(this.self, entity, SALIMO_KNOCKBACK);
+            } else {
+                knockShield2(entity, 100);
+            }
+        }
+
         int cdr = ClientNetworking.getAppropriateConfig().PurpleHazeSettings.SalimoCooldown;
-        this.setCooldown(PowerIndex.SKILL_2_SNEAK, cdr);
         if (this.getSelf() instanceof ServerPlayer sp) {
             S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.SKILL_2_SNEAK, cdr);
+        }
+        this.setCooldown(PowerIndex.SKILL_2_SNEAK, cdr);
+
+        SoundEvent se;
+        float pitch = 1F;
+        if (entity != null) {
+            playImpaleConnectSoundExtra();
+            se = airTriggered ? ModSounds.PUNCH_4_SOUND_EVENT : ModSounds.KILLER_QUEEN_IMPALE_EVENT;
+            pitch = 1.2F;
+        } else {
+            se = getImpaleMissSound();
+        }
+        if (!this.self.level().isClientSide()) {
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(), se, SoundSource.PLAYERS, 0.95F, pitch);
         }
     }
     private void tickFallingHitAnimation() {
@@ -1859,6 +1956,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 S2CPacketUtil.syncPurpleHazePods(sp, (byte) getPods());
             }
         }
+
+        if (salimoTicks > 0) { salimoTicks--; }
 
         if (capsuleEatingTick > 0) {
             capsuleEatingTick--;
