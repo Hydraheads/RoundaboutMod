@@ -395,7 +395,7 @@ public class PowersTusk extends NewDashPreset {
 
                 if (this.getAct() == 1 && this.nailCharge > 5) {
                     this.setAnimation(PowersTusk.FIRE_BOTH_NAILS);
-                } else {
+                } else if (!isInHole()) {
                     this.setAnimation(PowersTusk.FIRE_NAIL);
                 }
 
@@ -431,7 +431,9 @@ public class PowersTusk extends NewDashPreset {
             }
 
             case PowersTusk.CHARGE_NAIL -> {
-                this.setAnimation(PowersTusk.CHARGE_NAIL);
+                if (!isInHole()) {
+                    this.setAnimation(PowersTusk.CHARGE_NAIL);
+                }
                 if (this.getActivePower() != PowersTusk.CHARGE_NAIL) {
                     this.playStandUserOnlySoundsIfNearby(PowersTusk.CHARGE_SOUND_2, 30, false, false);
                     this.setAttackTimeDuring(1);
@@ -503,12 +505,14 @@ public class PowersTusk extends NewDashPreset {
             }
 
             case PowersTusk.PILOT -> {
-                if (!isClient()) {
+           /*     if (!isClient()) {
                     TuskHoleEntity tuskHoleEntity = new TuskHoleEntity(this.getSelf().level(), this.getSelf());
                     tuskHoleEntity.setPos(this.getSelf().getPosition(0));
                     this.getSelf().level().addFreshEntity(tuskHoleEntity);
-                }
+                } */
+                this.setAnimation(PowersTusk.PILOT);
             }
+            case PowersTusk.PILOT_EXIT -> exitPilot();
 
             case PowersTusk.ADVANCE -> {
                 StandEntity stand = getStandEntity(this.getSelf());
@@ -586,11 +590,12 @@ public class PowersTusk extends NewDashPreset {
             this.setAct(3,true);
         }
 
-        this.flattenCameraTicks = this.getActivePower() == PowersTusk.FLATTEN ? Math.min(flattenCameraTicks+1,20) : Math.max(flattenCameraTicks-3,0);
 
 
         if (this.getSelf() instanceof Player P) {
-            if (P.isCreative()) {
+            this.flattenCameraTicks = this.getActivePower() == PowersTusk.FLATTEN ? Math.min(flattenCameraTicks+1,20) : Math.max(flattenCameraTicks-3,0);
+
+            if (P.isCreative() || !P.isAlive()) {
                 this.nailCooldowns = new ArrayList<>();
             }
 
@@ -609,7 +614,7 @@ public class PowersTusk extends NewDashPreset {
                         tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, 0);
                         ClientUtil.setCameraEntity(null);
                         if (this.getStandUserSelf().roundabout$getStandAnimation() == PowersTusk.PILOT) {
-                            this.setAnimation(PowersTusk.PILOT_EXIT);
+                            exitPilot();
                         }
                     } else {
                         ClientUtil.setCameraEntity(getPilotingStand());
@@ -617,7 +622,7 @@ public class PowersTusk extends NewDashPreset {
                 } else {
                     ClientUtil.setCameraEntity(null);
                     if (this.getStandUserSelf().roundabout$getStandAnimation() == PowersTusk.PILOT) {
-                    this.setAnimation(PowersTusk.PILOT_EXIT);
+                        exitPilot();
                     }
                 }
 
@@ -655,6 +660,24 @@ public class PowersTusk extends NewDashPreset {
             }
         }
 
+        if (this.isInHole()) {
+            Vec3 pos = this.getSelf().getPosition(0);
+            if (!isClient()) {
+                this.sendParticlesIfPossible(this.getSelf().level(),ModParticles.TUSK_HOLE,pos.x,pos.y+0.05F,pos.z,0,0,0);
+            } else {
+                this.getSelf().level().addParticle(ModParticles.TUSK_HOLE,pos.x,pos.y+0.05F,pos.z,0,0,0);
+            }
+        }
+
+    }
+
+    public void exitPilot() {
+        if (isClient()) {
+            this.setAnimation(PowersTusk.PILOT_EXIT);
+            this.tryPowerPacket(PowersTusk.PILOT_EXIT);
+        } else {
+            this.setAnimation(PowersTusk.PILOT_EXIT);
+        }
     }
 
     @Override
@@ -1631,7 +1654,7 @@ public class PowersTusk extends NewDashPreset {
                 this.setAttackTime(0);
                 this.setPiloting(targetHole.getId());
                 tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, targetHole.getId());
-                this.setAnimation(PowersTusk.PILOT);
+                exitPilot();
             }
 
         }
@@ -1651,7 +1674,7 @@ public class PowersTusk extends NewDashPreset {
                 this.setAttackTime(0);
                 this.setPiloting(0);
                 tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, 0);
-                this.setAnimation(PowersTusk.PILOT_EXIT);
+                exitPilot();
             }
         }
     }
