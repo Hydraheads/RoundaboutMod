@@ -1145,6 +1145,12 @@ public class ForgeSounds {
             register(ModSounds.SUMMON_GREEN_DAY, ModSounds.SUMMON_GREEN_DAY_ID);
     public static final RegistryObject<SoundEvent> GREEN_DAY_SPIN =
             register(ModSounds.GREEN_DAY_ARM_SPIN, ModSounds.GREEN_DAY_ARM_SPIN_ID);
+    public static final RegistryObject<SoundEvent> GREEN_DAY_PUNCH =
+            register(ModSounds.GREEN_DAY_PUNCH, ModSounds.GREEN_DAY_PUNCH_ID);
+    public static final RegistryObject<SoundEvent> GREEN_DAY_HEAVY_PUNCH =
+            register(ModSounds.GREEN_DAY_HEAVY_PUNCH, ModSounds.GREEN_DAY_HEAVY_PUNCH_ID);
+    public static final RegistryObject<SoundEvent> GREEN_DAY_BARRAGE_HIT =
+            register(ModSounds.GREEN_DAY_BARRAGE_HIT, ModSounds.GREEN_DAY_BARRAGE_HIT_ID);
     public static final RegistryObject<SoundEvent> GREEN_DAY_SPLIT =
             register(ModSounds.GREEN_DAY_SPLIT, ModSounds.GREEN_DAY_SPLIT_ID);
     public static final RegistryObject<SoundEvent> GREEN_DAY_MOLD_SPREAD =

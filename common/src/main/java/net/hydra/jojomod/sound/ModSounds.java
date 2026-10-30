@@ -2098,6 +2098,18 @@ public class ModSounds {
     public static final ResourceLocation GREEN_DAY_ARM_SPIN_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ GREEN_DAY_ARM_SPIN);
     public static SoundEvent GREEN_DAY_ARM_SPIN_EVENT = SoundEvent.createVariableRangeEvent(GREEN_DAY_ARM_SPIN_ID);
 
+    public static final String GREEN_DAY_PUNCH = "green_day_punch";
+    public static final ResourceLocation GREEN_DAY_PUNCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ GREEN_DAY_PUNCH);
+    public static SoundEvent GREEN_DAY_PUNCH_EVENT = SoundEvent.createVariableRangeEvent(GREEN_DAY_PUNCH_ID);
+
+    public static final String GREEN_DAY_HEAVY_PUNCH = "green_day_heavy_punch";
+    public static final ResourceLocation GREEN_DAY_HEAVY_PUNCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ GREEN_DAY_HEAVY_PUNCH);
+    public static SoundEvent GREEN_DAY_HEAVY_PUNCH_EVENT = SoundEvent.createVariableRangeEvent(GREEN_DAY_HEAVY_PUNCH_ID);
+
+    public static final String GREEN_DAY_BARRAGE_HIT = "green_day_barrage_hit";
+    public static final ResourceLocation GREEN_DAY_BARRAGE_HIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ GREEN_DAY_BARRAGE_HIT);
+    public static SoundEvent GREEN_DAY_BARRAGE_HIT_EVENT = SoundEvent.createVariableRangeEvent(GREEN_DAY_BARRAGE_HIT_ID);
+
     public static final String GREEN_DAY_SPLIT = "green_day_split";
     public static final ResourceLocation GREEN_DAY_SPLIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ GREEN_DAY_SPLIT);
     public static SoundEvent GREEN_DAY_SPLIT_EVENT = SoundEvent.createVariableRangeEvent(GREEN_DAY_SPLIT_ID);
