@@ -371,6 +371,7 @@ public class FabricEntityClient {
         //BlockEntityRenderers.register(ModBlocks.CHESSBOARD_BLOCK_ENTITY, ChessBoardRenderer::new);
         BlockEntityRenderers.register(ModBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY, BubbleScaffoldBlockEntityRenderer::new);
         BlockEntityRenderers.register(ModBlocks.DIVER_LIMB_BLOCK_ENTITY, DiverLimbBlockEntityRenderer::new);
+        BlockEntityRenderers.register(ModBlocks.SC_RAPIER_PLATFORM_BLOCK_ENTITY, SilverChariotRapierPlatformBlockEntityRenderer::new);
         BlockEntityRenderers.register(ModBlocks.D4C_PORTAL_BLOCK_ENTITY, D4CPortalBlockEntityRenderer::new);
         BlockEntityRenderers.register(ModBlocks.INVISIBLE_BLOCK_ENTITY, InvisiBlockEntityRenderer::new);
         BlockEntityRenderers.register(ModBlocks.OASIS_MUD_BLOCK_ENTITY, OasisMudBlockEntityRenderer::new);
