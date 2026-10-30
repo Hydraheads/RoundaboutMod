@@ -883,7 +883,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
         else setSkillIcon(context, x, y, 1, StandIcons.POD_THROW, PowerIndex.SKILL_1);
 
-        if (canExecuteMoveWithLevel(getStrangleLevel())) {
+        if (isHoldingSneak()){
+            setSkillIcon(context, x, y, 2, StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, PowerIndex.SKILL_2_SNEAK);
+        }else if (canExecuteMoveWithLevel(getStrangleLevel())) {
             setSkillIcon(context, x, y, 2, StandIcons.PURPLE_HAZE_STRANGLE, PowerIndex.SKILL_2);
         } else setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD);
 
@@ -917,7 +919,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos, topPos+99,0, "ability.roundabout.guard",
                 "instruction.roundabout.hold_block", StandIcons.STAR_PLATINUM_GUARD,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos, topPos+118,0, "ability.roundabout.guard",
-                "instruction.roundabout.hold_attack_crouch", StandIcons.PLANET_WAVES_FORCED_DISINTEGRATION,0,level,bypas));
+                "instruction.roundabout.hold_attack_crouch", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+80,0, "ability.purple_haze.punch_barrage",
                 "instruction.roundabout.barrage", StandIcons.PH_BARRAGE,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+99,0, "ability.purple_haze.kick_barrage",
@@ -941,7 +943,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+99,2, "ability.purple_haze.strangle",
                 "instruction.roundabout.press_skill", StandIcons.PURPLE_HAZE_STRANGLE,2,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+118,2, "ability.purple_haze.strangle",
-                "instruction.roundabout.press_skill_crouch", StandIcons.PLANET_WAVES_DESINTEGRATION,2,level,bypas));
+                "instruction.roundabout.press_skill_crouch", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER,2,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+80,0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+99,0, "ability.purple_haze.falling_hit",
@@ -1561,7 +1563,11 @@ public class PowersPurpleHaze extends NewPunchingStand {
         if (this.onCooldown(PowerIndex.SKILL_2_SNEAK)) {
             return;
         }
-
+        int cdr = ClientNetworking.getAppropriateConfig().PurpleHazeSettings.SalimoCooldown;
+        this.setCooldown(PowerIndex.SKILL_2_SNEAK, cdr);
+        if (this.getSelf() instanceof ServerPlayer sp) {
+            S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.SKILL_2_SNEAK, cdr);
+        }
     }
     private void tickFallingHitAnimation() {
         if (fallingHitAnimTicks < 0 || self.level().isClientSide()) {
