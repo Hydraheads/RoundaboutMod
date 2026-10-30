@@ -555,6 +555,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
             case PowerIndex.POWER_2 -> { // Strangle
                 attemptStrangle();
             }
+            case PowerIndex.POWER_2_SNEAK -> { // Strangle
+                attemptSalimo();
+            }
             case PowerIndex.SNEAK_ATTACK_CHARGE -> {
                 attemptDistortionModeChange();
             }
@@ -620,8 +623,11 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     this.tryPowerPacket(PowerIndex.POWER_1_BONUS);
                 }else this.tryPowerPacket(PowerIndex.POWER_1_SNEAK);
             }
-            case SKILL_2_NORMAL,SKILL_2_CROUCH,SKILL_2_CROUCH_GUARD, SKILL_2_GUARD -> {
+            case SKILL_2_NORMAL, SKILL_2_GUARD -> {
                 this.tryPowerPacket(PowerIndex.POWER_2);
+            }
+            case SKILL_2_CROUCH,SKILL_2_CROUCH_GUARD -> {
+                this.tryPowerPacket(PowerIndex.POWER_2_SNEAK);
             }
             case SKILL_3_NORMAL -> {
                 if (!(activePower == PowerIndex.BARRAGE || activePower == PowerIndex.BARRAGE_2
@@ -956,7 +962,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     private int getStrangleLevel() { return 2; }
     private int getLeapLevel() { return 3; }
     private int getDistortionAndPodBiteLevel() { return 4; }
-    private int getPodRegenLevel() { return 4; }
+    private int getPodRegenLevel() { return 5; }
 
     @Override  public byte getMaxLevel() { return 5; }
 
@@ -1546,7 +1552,17 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
     }
+    public void attemptSalimo() {
+        if ((!(self instanceof Player) || canExecuteMoveWithLevel(getStrangleLevel())) && (activePower == NONE || activePower == GUARD)) {
+            Salimo();
+        }
+    }
+    public void Salimo() {
+        if (this.onCooldown(PowerIndex.SKILL_2_SNEAK)) {
+            return;
+        }
 
+    }
     private void tickFallingHitAnimation() {
         if (fallingHitAnimTicks < 0 || self.level().isClientSide()) {
             return;
