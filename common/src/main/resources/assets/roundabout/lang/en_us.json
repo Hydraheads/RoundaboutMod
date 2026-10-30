@@ -1432,7 +1432,7 @@
   "sounds.roundabout.ph_strangle": "Purple haze growls",
   "sounds.roundabout.ph_strangle_run": "Strangle run",
   "sounds.roundabout.ph_strangle_grab": "Strangle grab",
-  "sounds.roundabout.ph_type_switch": "Distorcion switch",
+  "sounds.roundabout.ph_type_switch": "Distortion switch",
   "sounds.roundabout.ph_pod_launch": "Pod launch",
 
   "sounds.roundabout.bullet_ricochet":  "Bullet ricocheted",
@@ -4265,6 +4265,8 @@
   "config.roundabout.StrangleCooldown.desc": "The cooldown of Strangle.",
   "config.roundabout.PodThrowCooldown.name": "Pod Throw Cooldown",
   "config.roundabout.PodThrowCooldown.desc": "The cooldown of Pod Throw.",
+  "config.roundabout.SalimoCooldown.name": "Purple Kick Cooldown",
+  "config.roundabout.SalimoCooldown.desc": "The cooldown of Purple Kick.",
   "config.roundabout.ThirdPunchCapsuleBreak.name": "Third Punch Capsule Break",
   "config.roundabout.ThirdPunchCapsuleBreak.desc": "If your third punch in a combo breaks a pod on impact",
   "config.roundabout.forwardBarrageCanSteer.name": "Forward Barrage can steer",
