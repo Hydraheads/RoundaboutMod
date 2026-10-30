@@ -267,6 +267,22 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (SHA != null) { SHA.discard(); }
     }
 
+
+    @Override
+    public void onStandSwitchInto(){
+        super.onStandSwitchInto();
+
+        if (!(this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative()))
+                && canExecuteMoveWithLevel(getBitesTheDustDayLevel()) &&  canBitesTheDustDay()) {
+            if (!self.level().isClientSide()) {
+                int btdDayCooldown = ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatActivationCooldown +
+                        ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustDayCooldownBonus;
+                this.setCooldown(PowerIndex.SKILL_EXTRA, btdDayCooldown);
+            }
+        }
+    }
+
+
     public void syncBombStatus(byte status) {
          this.currentBombStatus = status;
          this.updatePowerInt(PowersKillerQueen.PLANTED, status);
