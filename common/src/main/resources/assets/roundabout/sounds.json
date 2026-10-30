@@ -4125,7 +4125,7 @@
     ]
   },
   "purple_haze_barrage_finisher": {
-    "subtitle": "sounds.roundabout.purple_haze_barrage_finisher",
+    "subtitle": "sounds.roundabout.purple_haze_heavy_punch",
     "sounds": [
       "roundabout:ph_finisher"
     ]
