@@ -363,6 +363,7 @@ public class FabricItems {
     public static Item DOT_HAN_MASK = registerItem("dot_han_mask", new MaskItem(new Item.Properties().stacksTo(1), new DotHanVisage(null)));
     public static Item AVDUL_MASK = registerItem("avdul_mask", new MaskItem(new Item.Properties().stacksTo(1), new AvdulVisage(null)));
     public static Item DIO_MASK = registerItem("dio_mask", new MaskItem(new Item.Properties().stacksTo(1), new DIOVisage(null)));
+    public static Item KHAN_MASK = registerItem("khan_mask", new MaskItem(new Item.Properties().stacksTo(1), new KhanVisage(null)));
     public static Item GYRO_MASK = registerItem("gyro_mask", new MaskItem(new Item.Properties().stacksTo(1), new GyroVisage(null)));
     public static Item SANDMAN_MASK = registerItem("sandman_mask", new MaskItem(new Item.Properties().stacksTo(1), new SandmanVisage(null)));
     public static Item TIM_MASK = registerItem("tim_mask", new MaskItem(new Item.Properties().stacksTo(1), new TimVisage(null)));
@@ -800,7 +801,7 @@ public class FabricItems {
                     .icon(() -> new ItemStack(AJA)).displayItems((displayContext, entries) -> {
                         //Add all items from the Jojo mod tab here
                     	//entries.accept(ModBlocks.CHESSBOARD_BLOCK);
-                        //entries.accept(ModBlocks.HAND_BLOCK);
+                        entries.accept(KHAN_MASK);
                         entries.accept(STAND_DISC_D4C);
                         entries.accept(MAX_STAND_DISC_D4C);
                         entries.accept(STAND_DISC_GOLD_EXPERIENCE);
@@ -1087,6 +1088,7 @@ public class FabricItems {
         ModItems.JOTARO_4_MASK = JOTARO_4_MASK;
         ModItems.JOTARO_6_MASK = JOTARO_6_MASK;
         ModItems.DIO_MASK = DIO_MASK;
+        ModItems.KHAN_MASK = KHAN_MASK;
         ModItems.GYRO_MASK = GYRO_MASK;
         ModItems.SANDMAN_MASK = SANDMAN_MASK;
         ModItems.TIM_MASK = TIM_MASK;

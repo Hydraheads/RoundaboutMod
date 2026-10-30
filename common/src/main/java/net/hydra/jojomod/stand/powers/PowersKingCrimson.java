@@ -589,6 +589,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
             }
 
             fclone.setVisage(((IPlayerEntity)PE).roundabout$getMaskSlot());
+            boolean hadSpringLegs = ((StandUser) PE).roundabout$hasSpringLegs();
+            boolean hadRibcageTrap = ((StandUser) PE).roundabout$hasRibcageTrap();
             fclone.setPlayer(PE);
             fclone.copyPosition(PE);
             // Position
@@ -676,6 +678,22 @@ public class PowersKingCrimson extends BlockGrabPreset {
             }
             StandUser thisUser = getStandUserSelf();
             activeCloneUser.roundabout$setStandSkin(thisUser.roundabout$getStandSkin());
+            if (hadSpringLegs) {
+                activeCloneUser.roundabout$setSpringLegs(true);
+                thisUser.roundabout$setSpringLegs(false);
+                PowersDiverDown springPlacer = ((StandUser) PE).rdbt$getSpringPlacer();
+                if (springPlacer != null) {
+                    springPlacer.springTarget = fclone;
+                }
+            }
+            if (hadRibcageTrap) {
+                activeCloneUser.roundabout$setRibcageTrap(true);
+                thisUser.roundabout$setRibcageTrap(false);
+                PowersDiverDown ribcagePlacer = ((StandUser) PE).rdbt$getRibcagePlacer();
+                if (ribcagePlacer != null) {
+                    ribcagePlacer.ribcageTarget = fclone;
+                }
+            }
             activeCloneUser.roundabout$setDazeTime(thisUser.roundabout$getDazeTime());
             activeCloneUser.roundabout$setOnStandFire(thisUser.roundabout$getOnStandFire());
             activeCloneUser.roundabout$setRemainingStandFireTicks(

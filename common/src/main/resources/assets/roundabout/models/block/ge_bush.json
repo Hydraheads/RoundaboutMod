@@ -3,5 +3,5 @@
   "textures": {
     "cross": "roundabout:block/ge_bush"
   },
-  "render_type": "cutout"
+  "render_type": "minecraft:cutout"
 }

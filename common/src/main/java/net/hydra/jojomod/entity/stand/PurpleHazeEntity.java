@@ -22,7 +22,9 @@ public class PurpleHazeEntity extends FollowingStandEntity{
             PEPPERMINT = 9,
             GREENER = 10,
             DISTORTION = 11,
-            GREEN_DSITORTION = 12;
+            GREEN_DSITORTION = 12,
+            PLAGUE_RED = 13,
+            PLAGUE_BLUE = 14;
 
 
 

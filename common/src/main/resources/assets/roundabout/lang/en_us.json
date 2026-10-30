@@ -406,6 +406,9 @@
   "item.roundabout.shadow_dio_mask": "DIO Visage",
   "item.roundabout.shadow_dio_mask.desc": "DIO (Mysterious Shadow)",
   "item.roundabout.shadow_dio_mask.tag": "DIO",
+  "item.roundabout.khan_mask": "Khan Visage",
+  "item.roundabout.khan_mask.desc": "Khan",
+  "item.roundabout.khan_mask.tag": "Khan",
   "item.roundabout.enya_mask": "Enya Visage",
   "item.roundabout.enya_mask.desc": "Enya Geil",
   "item.roundabout.enya_mask.tag": "Enya",
@@ -1657,6 +1660,8 @@
   "sounds.roundabout.green_day_split":  "Body Part Detatches",
   "sounds.roundabout.green_day_stitch":  "Stitch",
   "sounds.roundabout.green_day_mold_spread":  "Mold Spreads",
+  "sounds.roundabout.green_day_punch":  "Punch",
+  "sounds.roundabout.green_day_heavy_punch":  "Heavy Punch",
 
   "sounds.roundabout.summon_killer_queen": "Stand summoned",
   "sounds.roundabout.summon_creeper_queen": "Creeper Queen Summon",
@@ -1922,7 +1927,7 @@
   "instruction.roundabout.press_skill_memory":"Press Skill %1$s While Selecting A Memory",
   "instruction.roundabout.whitesnake_auto_mode_move": "While in Auto Mode, Press Skill %1$s",
   "instruction.roundabout.whitesnake_auto_mode_attack": "While in Auto Mode, Press Skill %1$s",
-  "instruction.roundabout.distortion_spit": "While having Haze immunity, Press Skill %1$s",
+  "instruction.roundabout.distortion_spit": "While having Haze immunity, Press Skill %1$s while crouching",
   "instruction.roundabout.press_skill_submerged": "Press Skill %1$s While Submerged",
   "instruction.roundabout.press_skill_item": "Press Skill %1$s With A Compatible Item",
 
@@ -2308,7 +2313,7 @@
 
 
   "ability.roundabout.invisivision": "Invisi-Vision",
-  "ability.roundabout.invisivision.desc": "Turn on and off the able to see see-through versions of blocks and entities that you turn invisible with your power. Turning it off is useful to get the perspective of someone without the stand, and to see through invisible blocks better.",
+  "ability.roundabout.invisivision.desc": "Turn on and off the ability to see see-through versions of blocks and entities that you turn invisible with your power. Turning it off is useful to get the perspective of someone without the stand, and to see through invisible blocks better.",
   "ability.roundabout.invisiburst": "Invisiburst",
   "ability.roundabout.invisiburst.desc": "Release your emotions in a burst of invisibility, making you and all nearby entities invisible. It decreases your range of being seen, and wears off overtime, or when you do certain actions. Activating this ability briefly lets mobs see you. If the stand griefing gamerule is off, temporarily makes blocks that are not ores around you invisible too, which can assist in mining. Invisible blocks are without properties, and cannot be blown up.",
   "ability.roundabout.controlled_burst": "Controlled Burst",
@@ -2685,6 +2690,10 @@
   "ability.roundabout.gold_experience_life_punch.desc": "Your stand infused whatever you hit with life. This punch can act as bonemeal, make trees wilt and explode, or make your enemy's senses go berserk.",
   "ability.roundabout.gold_experience_dna_creation": "DNA Creation",
   "ability.roundabout.gold_experience_dna_creation.desc": "Use the DNA from an item to create a new lifeform from the cells. This mob takes time to grow, but is permanent",
+  "ability.roundabout.gold_experience_bramble_trap": "Bramble Traps",
+  "ability.roundabout.gold_experience_bramble_trap.desc": "Grow a bunch of brambles from the ground. These brambles won't damage enemies, but they will slow them. Walking through the brambles destroys them.",
+  "ability.roundabout.gold_experience_vine_climb": "Vine Climb",
+  "ability.roundabout.gold_experience_vine_climb.desc": "Grow vines on a wall and climb on them. These vines stay for a while, allowing others to climb on them as well.",
 
   "ability.roundabout.emperor_shoot": "Shoot",
   "ability.roundabout.emperor_shoot.desc": "Shoot a bullet from the emperor.",
@@ -3338,6 +3347,8 @@
   "skins.roundabout.purple_haze.distortion": "Distortion",
   "skins.roundabout.purple_haze.green_distortion": "Greenstortion",
   "skins.roundabout.purple_haze.greener": "Greener",
+  "skins.roundabout.purple_haze.plague_blue": "Purple Plague",
+  "skins.roundabout.purple_haze.plague_red": "Bloody Doctor",
 
   "skins.roundabout.silver_chariot.part_3": "Part 3",
   "skins.roundabout.silver_chariot.part_3_grey": "Part 3 Grey",
@@ -3514,7 +3525,7 @@
   "unlock_skin.roundabout.planet_waves_cosmic": "Cosmic Skin Unlocked",
   "unlock_skin.roundabout.killer_queen.samurai": "Samurai Skins Unlocked!",
   "unlock_skin.roundabout.diver_down.scuba_diver": "Diver Down: Scuba Diver Skin Unlocked",
-  "unlock_skin.roundabout.purple_haze.plague": "Purple Haze: Plague Skin Unlocked",
+  "unlock_skin.roundabout.purple_haze.plague": "Purple Haze: Plague Skins Unlocked",
 
   "justice.morph.player": "Player",
   "justice.morph.villager": "Villager",
@@ -4583,6 +4594,9 @@
 
   "config.roundabout.woundPlugCooldown.name": "Wound Plug Cooldown",
   "config.roundabout.woundPlugCooldown.desc": "The cooldown of wound plug.",
+  "config.roundabout.woundPlugHealAmount.name": "Wound Plug healing",
+  "config.roundabout.woundPlugHealAmount.desc": "Amount of Health recovered from wound plug",
+
 
   "config.roundabout.emperorShootingModePower.name": "Bullet power",
   "config.roundabout.emperorShootingModePower.desc": "[PLACEHOLDER]",
@@ -5030,6 +5044,7 @@
   "config.roundabout.bubbleShootCooldown.desc": "Sets the cooldown of 'Primary Bomb: Air Bubble'",
   "config.roundabout.itemPlantCooldown.name": "'Primary Bomb: Item' Cooldown",
   "config.roundabout.itemPlantCooldown.desc": "Sets the cooldown of 'Primary Bomb: Item'",
+
 
   "config.roundabout.bitesTheDustCombatMinimunForFullBlow.name": "Time For Full BTD Damage",
   "config.roundabout.bitesTheDustCombatMinimunForFullBlow.desc": "Sets the earliest time in the Bites the Dust timeline that marked entities will take the maximum damage when detonated. Explosions before this time will deal between 20-100% of the full damage, depending on how much earlier the explosion takes place.",

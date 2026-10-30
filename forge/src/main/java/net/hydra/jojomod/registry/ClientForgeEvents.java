@@ -48,9 +48,11 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.model.SilverfishModel;
 import net.minecraft.client.particle.ExplodeParticle;
+import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.world.level.FoliageColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelEvent;
@@ -79,6 +81,7 @@ public class ClientForgeEvents {
             MenuScreens.register(ForgeMenus.LYIN_EYES_INVENTORY.get(), LyinEyesInventoryScreen::new);
             ItemBlockRenderTypes.setRenderLayer(ForgeBlocks.HALLUCINATORY_ACID.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(ForgeBlocks.HALLUCINATORY_ACID_WALL.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(ForgeBlocks.GE_VINE.get(), RenderType.cutout());
         });
     }
     @SubscribeEvent
@@ -268,6 +271,7 @@ public class ClientForgeEvents {
         //event.registerBlockEntityRenderer(ForgeBlocks.CHESSBOARD_BLOCK_ENTITY.get(), ChessBoardRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY.get(), BubbleScaffoldBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.DIVER_LIMB_BLOCK_ENTITY.get(), DiverLimbBlockEntityRenderer::new);
+        event.registerBlockEntityRenderer(ForgeBlocks.SC_RAPIER_PLATFORM_BLOCK_ENTITY.get(), SilverChariotRapierPlatformBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.D4C_PORTAL_BLOCK_ENTITY.get(), D4CPortalBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.INVISIBLE_BLOCK_ENTITY.get(), InvisiBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.OASIS_MUD_BLOCK_ENTITY.get(), OasisMudBlockEntityRenderer::new);
@@ -649,6 +653,12 @@ public class ClientForgeEvents {
     public static void registerWhitesnakeBlockColors(RegisterColorHandlersEvent.Block event) {
         event.register((state, level, pos, tintIndex) -> HallucinatoryAcidColors.blockColor(state, tintIndex),
                 ForgeBlocks.HALLUCINATORY_ACID.get(), ForgeBlocks.HALLUCINATORY_ACID_WALL.get());
+        event.register((state, level, pos, tintIndex) -> {
+                if (level != null && pos != null) {
+                    return BiomeColors.getAverageFoliageColor(level, pos);
+                }
+                return FoliageColor.getDefaultColor();
+            }, ForgeBlocks.GE_VINE.get());
     }
 
     @SubscribeEvent

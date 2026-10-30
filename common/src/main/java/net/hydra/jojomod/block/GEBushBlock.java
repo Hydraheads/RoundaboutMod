@@ -1,6 +1,7 @@
 package net.hydra.jojomod.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -88,5 +89,11 @@ public class GEBushBlock extends BushBlock implements EntityBlock {
                 GEBushBlockEntity.serverTick(lvl, pos, st, bushBE);
             }
         };
+    }
+
+    // without this, the bush would only be placeable on grass and stuff
+    @Override
+    protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
+        return state.isFaceSturdy(level, pos, Direction.UP) || super.mayPlaceOn(state, level, pos);
     }
 }
