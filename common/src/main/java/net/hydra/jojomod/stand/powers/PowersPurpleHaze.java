@@ -1833,8 +1833,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     1.0F,
                     1.0F
             );
-            
-            this.animateStand(PurpleHazeEntity.KICK_WINDUP); //PLACEHOLDER
+
+            this.animateStand(PurpleHazeEntity.POD_LAUNCH);
 
             PHCapsuleEntity capsule = new PHCapsuleEntity(
                     ModEntities.PH_CAPSULE,
