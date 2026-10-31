@@ -7,7 +7,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputRegistry;
-import net.hydra.jojomod.event.index.PlunderTypes;
+import net.hydra.jojomod.event.index.AnimalTypes;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
@@ -35,40 +35,18 @@ import java.util.StringTokenizer;
 public class AnimalSelectScreen extends Screen implements NoCancelInputScreen {
     //Check out GamemodeSwitcherScreen
     static final ResourceLocation MOB_SWITCHER_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/pose_switcher.png");
-    private static final int SPRITE_SHEET_WIDTH = 256;
-    private static final int SPRITE_SHEET_HEIGHT = 256;
-    private static final int SLOT_AREA = 26;
-    private static final int SLOT_PADDING = 5;
-    private static final int SLOT_AREA_PADDED = 31;
-    private static final int HELP_TIPS_OFFSET_Y = 5;
-    private static final int ALL_SLOTS_WIDTH = standRerollIcon.VALUES.length * 31 - 5;
+            "textures/gui/ge_menu.png");
     private standRerollIcon currentlyHovered;
     private int firstMouseX;
     private int firstMouseY;
     private boolean setFirstMousePos;
     public boolean zHeld;
 
-    public ItemStack arrow = ItemStack.EMPTY;
-
-    private final List<PlunderSlot> slots = Lists.newArrayList();
+    private final List<AnimalSlot> slots = Lists.newArrayList();
 
     public AnimalSelectScreen() {
         super(GameNarrator.NO_TITLE);
         this.currentlyHovered = null;
-    }
-
-    public AnimalSelectScreen(ItemStack arrow) {
-        super(GameNarrator.NO_TITLE);
-        this.currentlyHovered = null;
-        this.arrow = arrow;
-    }
-    private ShapeShifts getDefaultSelected() {
-        Player pl = Minecraft.getInstance().player;
-        if (pl != null){
-            return ShapeShifts.getShiftFromByte(((IPlayerEntity)pl).roundabout$getShapeShift());
-        }
-        return ShapeShifts.PLAYER;
     }
 
     @Override
@@ -81,7 +59,7 @@ public class AnimalSelectScreen extends Screen implements NoCancelInputScreen {
         this.currentlyHovered = standRerollIcon.NONE;
         for (int i = 0; i < standRerollIcon.VALUES.length; ++i) {
             standRerollIcon pIcon = standRerollIcon.VALUES[i];
-            this.slots.add(new PlunderSlot(pIcon, this.width / 2 + pIcon.xoff - 13, this.height / 2 + pIcon.yoff - 44));
+            this.slots.add(new AnimalSlot(pIcon, this.width / 2 + pIcon.xoff - 13, this.height / 2 + pIcon.yoff - 44));
         }
     }
     @Override
@@ -123,9 +101,9 @@ public class AnimalSelectScreen extends Screen implements NoCancelInputScreen {
         }
         guiGraphics.pose().pushPose();
         RenderSystem.enableBlend();
-        int k = this.width / 2 - 62;
+        int k = this.width / 2 - 74;
         int l = this.height / 2 - 90;
-        guiGraphics.blit(MOB_SWITCHER_LOCATION, k, l, 0.0f, 63.0f, 125, 22, 256, 256);
+        guiGraphics.blit(MOB_SWITCHER_LOCATION, k, l, 0.0f, 0.0f, 149, 24, 256, 256);
         guiGraphics.pose().popPose();
         super.render(guiGraphics, i, j, f);
         if (this.currentlyHovered != null) {
@@ -146,7 +124,7 @@ public class AnimalSelectScreen extends Screen implements NoCancelInputScreen {
         }
         caughtSomething = false;
         boolean bl = this.firstMouseX == i && this.firstMouseY == j;
-        for (PlunderSlot MobSlot : this.slots) {
+        for (AnimalSlot MobSlot : this.slots) {
             MobSlot.render(guiGraphics, i, j, f);
             MobSlot.setSelected(this.currentlyHovered == MobSlot.icon);
             if (bl || !MobSlot.isHoveredOrFocused()) continue;
@@ -266,43 +244,27 @@ public class AnimalSelectScreen extends Screen implements NoCancelInputScreen {
     }
 
     public enum standRerollIcon {
-        ITEM_PLUNDER(Component.translatable("roundabout.soft_and_wet_plunder.items"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/plunder_icons/item.png"),PlunderTypes.ITEM.id,-43,31, Component.translatable("roundabout.soft_and_wet_plunder.items.desc")),
-        SOUND_PLUNDER(Component.translatable("roundabout.soft_and_wet_plunder.sound"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/plunder_icons/sound.png"),PlunderTypes.SOUND.id,-28,1, Component.translatable("roundabout.soft_and_wet_plunder.sound.desc")),
-        FRICTION_PLUNDER(Component.translatable("roundabout.soft_and_wet_plunder.friction"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/plunder_icons/friction.png"),PlunderTypes.FRICTION.id,42,31, Component.translatable("roundabout.soft_and_wet_plunder.friction.desc")),
-        SIGHT_PLUNDER(Component.translatable("roundabout.soft_and_wet_plunder.sight"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/plunder_icons/sight.png"),PlunderTypes.SIGHT.id,0,-16, Component.translatable("roundabout.soft_and_wet_plunder.sight.desc")),
-        OXYGEN_PLUNDER(Component.translatable("roundabout.soft_and_wet_plunder.oxygen"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/plunder_icons/oxygen.png"),PlunderTypes.OXYGEN.id,28,1, Component.translatable("roundabout.soft_and_wet_plunder.oxygen.desc")),
-        MOB_PLUNDER(Component.translatable("roundabout.soft_and_wet_plunder.mobs"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/plunder_icons/mobs.png"),PlunderTypes.MOBS.id,28,61, Component.translatable("roundabout.soft_and_wet_plunder.mobs.desc")),
-        POTION_EFFECT_PLUNDER(Component.translatable("roundabout.soft_and_wet_plunder.potion_effects"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/plunder_icons/effects.png"),PlunderTypes.POTION_EFFECTS.id,-28,61, Component.translatable("roundabout.soft_and_wet_plunder.potion_effects.desc")),
-        MOISTURE_PLUNDER(Component.translatable("roundabout.soft_and_wet_plunder.moisture"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/plunder_icons/moisture.png"),PlunderTypes.MOISTURE.id,0,78, Component.translatable("roundabout.soft_and_wet_plunder.moisture.desc")),
+        BUTTERFLY(Component.translatable("roundabout.gold_experience_animal.butterfly"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/ge_animal_icons/butterfly.png"),AnimalTypes.BUTTERFLY.id,-43,31, Component.translatable("roundabout.gold_experience_animal.butterfly.desc")),
+        BAT(Component.translatable("roundabout.gold_experience_animal.bat"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/ge_animal_icons/bat.png"),AnimalTypes.BAT.id,-28,1, Component.translatable("roundabout.gold_experience_animal.bat.desc")),
+        BEE(Component.translatable("roundabout.gold_experience_animal.bee"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/ge_animal_icons/bee.png"),AnimalTypes.BEE.id,42,31, Component.translatable("roundabout.gold_experience_animal.bee.desc")),
+        FISH(Component.translatable("roundabout.gold_experience_animal.fish"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/ge_animal_icons/fish.png"),AnimalTypes.FISH.id,0,-16, Component.translatable("roundabout.gold_experience_animal.fish.desc")),
+        PIRAHNA(Component.translatable("roundabout.gold_experience_animal.pirahna"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/ge_animal_icons/pirahna.png"),AnimalTypes.PIRAHNA.id,28,1, Component.translatable("roundabout.gold_experience_animal.pirahna.desc")),
+        SNAKE(Component.translatable("roundabout.gold_experience_animal.snake"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/ge_animal_icons/snake.png"),AnimalTypes.SNAKE.id,28,61, Component.translatable("roundabout.gold_experience_animal.snake.desc")),
+        FROG(Component.translatable("roundabout.gold_experience_animal.frog"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/ge_animal_icons/frog.png"),AnimalTypes.FROG.id,-28,61, Component.translatable("roundabout.gold_experience_animal.frog.desc")),
+        RABBIT(Component.translatable("roundabout.gold_experience_animal.rabbit"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/ge_animal_icons/rabbit.png"),AnimalTypes.RABBIT.id,0,78, Component.translatable("roundabout.gold_experience_animal.rabbit.desc")),
 
-        NONE(Component.translatable("roundabout.soft_and_wet_plunder.none"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/plunder_icons/main_stand.png"),(byte)0,0,31, Component.translatable("roundabout.stand_switch.main.desc"));
+        NONE(Component.translatable("roundabout.gold_experience_animal.none"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/ge_animal_icons/main_stand.png"),(byte)0,0,31, Component.translatable("roundabout.stand_switch.main.desc"));
 
-        static standRerollIcon getByte(PlunderTypes pose) {
-            return switch (pose) {
-                default -> throw new IncompatibleClassChangeError();
-                case NONE -> NONE;
-                case ITEM -> ITEM_PLUNDER;
-                case SOUND -> SOUND_PLUNDER;
-                case FRICTION -> FRICTION_PLUNDER;
-                case OXYGEN -> OXYGEN_PLUNDER;
-                case SIGHT -> SIGHT_PLUNDER;
-                case MOISTURE -> MOISTURE_PLUNDER;
-                case POTION_EFFECTS -> POTION_EFFECT_PLUNDER;
-                case MOBS -> MOB_PLUNDER;
-            };
-        }
         protected static final standRerollIcon[] VALUES;
-        private static final int ICON_AREA = 16;
-        protected static final int ICON_TOP_LEFT = 5;
         final Component name;
         final Component desc;
         final ResourceLocation rl;
@@ -330,14 +292,14 @@ public class AnimalSelectScreen extends Screen implements NoCancelInputScreen {
 
         static {
             VALUES = new standRerollIcon[]{
-                    ITEM_PLUNDER,
-                    SOUND_PLUNDER,
-                    FRICTION_PLUNDER,
-                    OXYGEN_PLUNDER,
-                    SIGHT_PLUNDER,
-                    MOB_PLUNDER,
-                    POTION_EFFECT_PLUNDER,
-                    MOISTURE_PLUNDER,
+                    BUTTERFLY,
+                    BEE,
+                    BAT,
+                    FISH,
+                    PIRAHNA,
+                    SNAKE,
+                    FROG,
+                    RABBIT,
                     NONE
             };
         }
@@ -346,8 +308,8 @@ public class AnimalSelectScreen extends Screen implements NoCancelInputScreen {
     public void setWidgetNumber(byte swap){
         ClientConfig clientConfig = ConfigManager.getClientConfig();
         if (clientConfig != null && clientConfig.dynamicSettings != null){
-            if (clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble != (int) swap) {
-                clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble = (int) swap;
+            if (clientConfig.dynamicSettings.goldExperienceCurrentAnimal != (int) swap) {
+                clientConfig.dynamicSettings.goldExperienceCurrentAnimal = (int) swap;
                 ConfigManager.saveClientConfig();
             }
         }
@@ -355,16 +317,16 @@ public class AnimalSelectScreen extends Screen implements NoCancelInputScreen {
     public byte getWidgetNumber(){
         ClientConfig clientConfig = ConfigManager.getClientConfig();
         if (clientConfig != null && clientConfig.dynamicSettings != null){
-            return clientConfig.dynamicSettings.SoftAndWetCurrentlySelectedBubble.byteValue();
+            return clientConfig.dynamicSettings.goldExperienceCurrentAnimal.byteValue();
         }
         return 0;
     }
-    public class PlunderSlot
+    public class AnimalSlot
             extends AbstractWidget {
         final standRerollIcon icon;
         private boolean isSelected;
 
-        public PlunderSlot(standRerollIcon pIcon, int i, int j) {
+        public AnimalSlot(standRerollIcon pIcon, int i, int j) {
             super(i, j, 26, 26, pIcon.getName());
             this.icon = pIcon;
         }
@@ -402,21 +364,17 @@ public class AnimalSelectScreen extends Screen implements NoCancelInputScreen {
         }
 
         private void drawSlot(GuiGraphics guiGraphics) {
-            guiGraphics.blit(MOB_SWITCHER_LOCATION, this.getX(), this.getY(), 133.0f, 63.0f, 26, 26, 256, 256);
+            guiGraphics.blit(MOB_SWITCHER_LOCATION, this.getX(), this.getY(), 3.0f, 27.0f, 26, 26, 256, 256);
         }
         private void drawSlot2(GuiGraphics guiGraphics) {
-            guiGraphics.blit(MOB_SWITCHER_LOCATION, this.getX()-3, this.getY()-3, 160.0f, 60.0f, 32, 32, 256, 256);
+            guiGraphics.blit(MOB_SWITCHER_LOCATION, this.getX()-3, this.getY()-3, 0.0f, 56.0f, 32, 32, 256, 256);
         }
 
         private void drawSlot3(GuiGraphics guiGraphics) {
-            guiGraphics.blit(MOB_SWITCHER_LOCATION, this.getX(), this.getY(), 196.0f, 63.0f, 26, 26, 256, 256);
+            guiGraphics.blit(MOB_SWITCHER_LOCATION, this.getX(), this.getY(), 35.0f, 27.0f, 26, 26, 256, 256);
         }
         private void drawSlot4(GuiGraphics guiGraphics) {
-            guiGraphics.blit(MOB_SWITCHER_LOCATION, this.getX()-3, this.getY()-3, 223.0f, 60.0f, 32, 32, 256, 256);
-        }
-
-        private void drawSelection(GuiGraphics guiGraphics) {
-            guiGraphics.blit(MOB_SWITCHER_LOCATION, this.getX(), this.getY(), 170.0f, 0.0f, 26, 26, 256, 256);
+            guiGraphics.blit(MOB_SWITCHER_LOCATION, this.getX()-3, this.getY()-3, 32.0f, 56.0f, 32, 32, 256, 256);
         }
     }
 

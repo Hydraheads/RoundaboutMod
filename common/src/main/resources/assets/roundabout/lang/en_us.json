@@ -2703,6 +2703,8 @@
   "ability.roundabout.gold_experience_heal.desc": "Grow parts of something to heal it. Getting healed by this move makes your regenerate health over time, but getting hit ends it early. You can use the move on either yourself, or others.",
   "ability.roundabout.gold_experience_violent_brambles": "Violent Brambles",
   "ability.roundabout.gold_experience_violent_brambles.desc": "Grow brambles out of the ground in a line. If these brambles hit an enemy, they will take damage and bleed.",
+  "ability.roundabout.gold_experience_lifeform_select": "Lifeform Selection",
+  "ability.roundabout.gold_experience_lifeform_select.desc": "Opens a selection screen to choose an animal to create. The screen gives detailed descriptions of every animal.",
 
   "ability.roundabout.emperor_shoot": "Shoot",
   "ability.roundabout.emperor_shoot.desc": "Shoot a bullet from the emperor.",
@@ -3575,6 +3577,24 @@
   "roundabout.diver_affliction.bone_bomb.desc": "Explode the head of the target, causing bones to launch from them towards the nearest enemy. Against players and bosses this move will blind them.",
   "roundabout.diver_affliction.spring_legs": "Spring Legs",
   "roundabout.diver_affliction.spring_legs.desc": "Quickly break down the enemies flesh and bones and reassemble them, causing them to bounce around uncontrollably.",
+
+  "roundabout.gold_experience_animal.none": "Lifeform Selection",
+  "roundabout.gold_experience_animal.butterfly": "Butterfly",
+  "roundabout.gold_experience_animal.butterfly.desc": "placeholder, rework these after finishing the mobs cuz the doc is kinda vague.",
+  "roundabout.gold_experience_animal.bee": "Bee",
+  "roundabout.gold_experience_animal.bee.desc": "placeholder, rework these after finishing the mobs cuz the doc is kinda vague.",
+  "roundabout.gold_experience_animal.bat": "Bat",
+  "roundabout.gold_experience_animal.bat.desc": "placeholder, rework these after finishing the mobs cuz the doc is kinda vague.",
+  "roundabout.gold_experience_animal.fish": "Fish",
+  "roundabout.gold_experience_animal.fish.desc": "placeholder, rework these after finishing the mobs cuz the doc is kinda vague.",
+  "roundabout.gold_experience_animal.pirahna": "Pirahna",
+  "roundabout.gold_experience_animal.pirahna.desc": "placeholder, rework these after finishing the mobs cuz the doc is kinda vague.",
+  "roundabout.gold_experience_animal.snake": "Snake",
+  "roundabout.gold_experience_animal.snake.desc": "placeholder, rework these after finishing the mobs cuz the doc is kinda vague.",
+  "roundabout.gold_experience_animal.frog": "Frog",
+  "roundabout.gold_experience_animal.frog.desc": "placeholder, rework these after finishing the mobs cuz the doc is kinda vague.",
+  "roundabout.gold_experience_animal.rabbit": "Rabbit",
+  "roundabout.gold_experience_animal.rabbit.desc": "placeholder, rework these after finishing the mobs cuz the doc is kinda vague.",
 
   "roundabout.pose.giorno": "Requiem",
   "roundabout.pose.joseph": "Bloody Stream",
@@ -4459,6 +4479,9 @@
   "config.roundabout.mapOpacity.desc": "What is the opacity of the map overlay in first person? 1.0 is the default. (Change this as a decimal point, i.e. 0.5 for 50%)",
   "config.roundabout.spinMapInsteadOfArrow.name": "Spin Map Instead Of Arrow",
   "config.roundabout.spinMapInsteadOfArrow.desc": "Spins the minimap of the second ability instead of the player arrow.",
+
+  "config.roundabout.goldExperienceCurrentAnimal.name": "Selected Animal Type",
+  "config.roundabout.goldExperienceCurrentAnimal.desc": "For Gold Experience, your client remembers what animal is presently selected.",
 
   "config.roundabout.rattAttackBonusOnMobs.name": "Bonus Mob Damage",
   "config.roundabout.rattAttackBonusOnMobs.desc": "How much bonus damage Ratt darts deal to a mob.",
