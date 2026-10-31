@@ -19,7 +19,7 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
-public class FalconModel<T extends FalconEntity> extends EntityModel<T> {
+public class FalconModel<T extends FalconEntity> extends HierarchicalModel<T> implements HeadedModel {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
 	private final ModelPart falcon;
 	private final ModelPart head;
@@ -89,7 +89,20 @@ public class FalconModel<T extends FalconEntity> extends EntityModel<T> {
 	}
 
 	@Override
-	public void setupAnim(T t, float v, float v1, float v2, float v3, float v4) {
-
+	public ModelPart root() {
+		return falcon;
 	}
+
+	@Override
+	public ModelPart getHead() {
+		return head;
+	}
+
+	@Override
+	public void setupAnim(T falcon, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+		this.root().getAllParts().forEach(ModelPart::resetPose);
+		this.getHead().yRot = pNetHeadYaw * ((float) Math.PI / 180F);
+		this.getHead().xRot = pHeadPitch * ((float) Math.PI / 180F);
+	}
+
 }
