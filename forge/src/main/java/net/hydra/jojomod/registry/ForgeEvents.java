@@ -322,6 +322,7 @@ public class ForgeEvents {
         ModBlocks.STAND_FIRE = ForgeBlocks.STAND_FIRE.get();
         ModBlocks.BUBBLE_SCAFFOLD = ForgeBlocks.BUBBLE_SCAFFOLD.get();
         ModBlocks.DIVER_LIMB = ForgeBlocks.DIVER_LIMB.get();
+        ModBlocks.SC_RAPIER_PLATFORM = ForgeBlocks.SC_RAPIER_PLATFORM.get();
         ModBlocks.GE_BUSH = ForgeBlocks.GE_BUSH.get();
         ModBlocks.GE_VINE = ForgeBlocks.GE_VINE.get();
         ModBlocks.OASIS_MUD_BLOCK = ForgeBlocks.OASIS_MUD_BLOCK.get();

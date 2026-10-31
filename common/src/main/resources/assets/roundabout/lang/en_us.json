@@ -858,6 +858,7 @@
   "block.roundabout.mirror": "Mirror",
   "block.roundabout.stereo": "Stereo",
   "block.roundabout.bubble_scaffold": "Bubble Path",
+  "block.roundabout.sc_rapier_platform": "Rapier Platform",
   "block.roundabout.fog_block": "Foggy Block",
   "block.roundabout.fog_trap": "Fog Trap",
   "block.roundabout.fog_block.title": "Foggy",
