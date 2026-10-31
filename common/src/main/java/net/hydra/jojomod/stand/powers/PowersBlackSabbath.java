@@ -62,7 +62,8 @@ public class PowersBlackSabbath extends NewDashPreset {
     CLIENT_SYNC_REMOVE_TARGET = 103,
     CLIENT_SYNC_REMOVE_TARGET_LIST = 104,
     C2S_SYNC_DESTROY_LIST = 105,
-    S2C_CLOSE_CHEST = 106;
+    S2C_CLOSE_CHEST = 106,
+    C2S_SYNC_PLAYER_SOUL_TYPE = 107;
 
     public int moveMode = 0;
     public int tickBeforeHunt = -1;
@@ -843,6 +844,22 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             }
         }
 
+        if(isClient()){
+            StandEntity s = this.getStandEntity(this.getSelf());
+            if(s != null && s instanceof BlackSabbathEntity BE){
+                if(BE.targetSabbath() instanceof Player p){
+                    System.out.println(BE.isWideSkin(p));
+                    int slim = BE.isWideSkin(p) ? 1 : 0;
+
+                    if(BE.isWideSkin(p) != BE.getSlimSoul()) {
+                        tryIntPower(PowersBlackSabbath.C2S_SYNC_PLAYER_SOUL_TYPE, true, slim);
+                        tryIntPowerPacket(PowersBlackSabbath.C2S_SYNC_PLAYER_SOUL_TYPE, slim);
+                    }
+
+                }
+            }
+        }
+
         if(this.getStandEntity(this.getSelf()) != null) {
             DimensionType t = this.getStandEntity(this.getSelf()).level().dimensionType();
             DimensionType T = this.getSelf().level().dimensionType();
@@ -1189,6 +1206,15 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                 }
                 setTickDown2(40);
                 this.clearTargetEntities();
+            }
+
+            case PowersBlackSabbath.C2S_SYNC_PLAYER_SOUL_TYPE -> {
+                this.setActivePower(PowersBlackSabbath.C2S_SYNC_PLAYER_SOUL_TYPE);
+                this.setAttackTime(0);
+                if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be) {
+                    boolean bol = value == 1 ? true : false;
+                    be.setSlimSoul(bol);
+                }
             }
         }
         return super.tryIntPower(move, forced, value);

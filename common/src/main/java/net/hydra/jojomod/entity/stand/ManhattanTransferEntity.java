@@ -370,6 +370,10 @@ public class ManhattanTransferEntity extends StandEntity {
         return super.hurt(source, amount);
     }
 
+    @Override
+    public float blackSabbathGrabOffset(){
+        return 0.4f;
+    }
 
     public void itemEject() {
         if (hasItem && this.canAcquireHeldItem) {

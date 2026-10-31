@@ -1761,6 +1761,9 @@ public class ClientUtil {
     public static void openHairspryUI(){
         Minecraft.getInstance().setScreen(new HairColorChangeScreen());
     }
+    public static void openMandomClockUI(){
+        Minecraft.getInstance().setScreen(new MandomClockChangeScreen());
+    }
     public static void openBombConfigScreen() {Minecraft.getInstance().setScreen(new BombConfigScreen());}
     public static void openMemoryRecordScreen(boolean recording){Minecraft.getInstance().setScreen(new MemoryRecordScreen(recording));}
     public static void openTuskActScreen(){Minecraft.getInstance().setScreen(new TuskActScreen());}

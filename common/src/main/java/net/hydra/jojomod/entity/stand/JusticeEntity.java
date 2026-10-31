@@ -310,5 +310,9 @@ public class JusticeEntity extends FollowingStandEntity {
         }
     }
 
+    @Override
+    public float blackSabbathGrabOffset(){
+        return 1.45f;
+    }
 }
 

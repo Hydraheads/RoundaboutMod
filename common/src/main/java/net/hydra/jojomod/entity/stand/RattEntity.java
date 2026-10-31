@@ -237,6 +237,10 @@ public class RattEntity extends StandEntity {
         return super.changeDimension($$0);
     }
 
+    @Override
+    public float blackSabbathGrabOffset(){
+        return 0.65f;
+    }
 
     @Override
     public void knockback(double $$0, double $$1, double $$2) {}

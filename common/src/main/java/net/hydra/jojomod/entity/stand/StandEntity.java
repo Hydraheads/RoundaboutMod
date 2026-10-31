@@ -810,6 +810,10 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
         return false;
     }
 
+    public float blackSabbathGrabOffset(){
+       return 1.35f;
+    }
+
     @Override
     public boolean isInvulnerable() {
         return false;

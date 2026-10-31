@@ -4,9 +4,12 @@ import net.hydra.jojomod.access.AccessThrownTrident;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerEntityServer;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.badCompanyTroops.BCTroop;
 import net.hydra.jojomod.entity.goals.BlackSabbathRangedAttackGoal;
 import net.hydra.jojomod.entity.navigation.BlackSabbathNavigation;
 import net.hydra.jojomod.entity.objects.GrabbedMobSoul;
+import net.hydra.jojomod.entity.objects.GrabbedMobSoulPlayerLarge;
+import net.hydra.jojomod.entity.objects.GrabbedMobSoulPlayerSlim;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerTypes;
@@ -16,6 +19,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.*;
+import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -63,7 +67,8 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Byte> ANIMATION = SynchedEntityData.defineId(BlackSabbathEntity.class,
             EntityDataSerializers.BYTE);
-
+    private static final EntityDataAccessor<Boolean> SLIM_SOUL = SynchedEntityData.defineId(BlackSabbathEntity.class,
+            EntityDataSerializers.BOOLEAN);
 
     public BlackSabbathEntity(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
@@ -624,6 +629,13 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                 setHasTargets(!pb.blackSabbathTargets.isEmpty());
             }
         }
+        if (this.getUser() != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb) {
+            if(level().isClientSide()) {
+                if (targetSabbath() instanceof Player P) {
+                    setSlimSoul(isWideSkin(P));
+                }
+            }
+        }
         if(!getHunting()) {
             if (shouldFloat && this.getUser() != null) {
                 if (!this.level().isClientSide()) {
@@ -825,7 +837,12 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     public final void setHasTargets(Boolean bool) {
         this.entityData.set(HAS_TARGETS, bool);
     }
-
+    public final Boolean getSlimSoul() {
+        return this.entityData.get(SLIM_SOUL);
+    }
+    public final void setSlimSoul(Boolean bool) {
+        this.entityData.set(SLIM_SOUL, bool);
+    }
 
     private static final EntityDataAccessor<Boolean> IS_TRIDENT =
             SynchedEntityData.defineId(BlackSabbathEntity.class, EntityDataSerializers.BOOLEAN);
@@ -852,6 +869,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             this.entityData.define(HELD_ITEM_BLACK_SABBATH, ItemStack.EMPTY);
             this.entityData.define(HAS_TARGETS, true);
             this.entityData.define(MUST_UNRENDER, false);
+            this.entityData.define(SLIM_SOUL, false);
         }
     }
     @Override
@@ -1457,25 +1475,26 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         Entity grab = this.level().getEntity(getGrabbing());
         if(grab != null && grab instanceof LivingEntity l){
             StandPowers sp = ((StandUser)l).roundabout$getStandPowers();
-            boolean regSoulStand = sp != null && (sp instanceof PowersAchtungBaby || sp instanceof PowersWhiteAlbum || sp instanceof PowersEmperor || sp instanceof PowersMetallica
-                                                    || sp instanceof PowersMetallica || sp instanceof PowersOasis);
+            StandEntity s = sp.getNewStandEntity();
+            boolean regSoul = s == null && (!(sp instanceof PowersBadCompany));
 
-          /*  if(!regSoulStand){
+
                //RETURNS THE STAND
-            } else {
-                if(!(l instanceof Player p)){
-                    return ModEntities.GRABBED_MOB_SOUL.create(this.level());
-                } else {
-                   // if(isWideSkin(p)) {
-                   //     return ModEntities.GRABBED_PLAYER_SOUL.create(this.level());
-                  //  } else {
-                        return ModEntities.GRABBED_PLAYER_SOUL_SLIM.create(this.level());
-                   // }
+            if(!regSoul) {
+                if (s != null) {
+                    return s;
                 }
-           // }
-
-           */
-            return ModEntities.GRABBED_MOB_SOUL.create(this.level());
+            }else {
+                if(l instanceof Player p){
+                    if(getSlimSoul()) {
+                        return ModEntities.GRABBED_PLAYER_SOUL.create(this.level());
+                    } else {
+                        return ModEntities.GRABBED_PLAYER_SOUL_SLIM.create(this.level());
+                    }
+                } else {
+                    return ModEntities.GRABBED_MOB_SOUL.create(this.level());
+                }
+            }
         }
         return null;
     }
@@ -1808,34 +1827,56 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         return ((StandUser)selfie).roundabout$calculateViewVectorButICanUseIt(0, selfie.getYRot());
     }
 
+    private float yVerticalOffset(StandEntity s){
+        return s.blackSabbathGrabOffset();
+    }
+    private float horizontalOffset(){
+        if (this.getUser() != null) {
+            StandEntity s = grabbedSoul;
+            if(s instanceof GrabbedMobSoulPlayerLarge || s instanceof GrabbedMobSoulPlayerSlim) {
+                return 0.60f;
+            } else {
+                Entity grab = this.level().getEntity(getGrabbing());
+                if (grab != null && grab instanceof LivingEntity l) {
+                    StandPowers sp = ((StandUser) l).roundabout$getStandPowers();
+                    StandEntity se = sp.getNewStandEntity();
+
+                    if (!(sp instanceof PowersBadCompany) && se != null) {
+                        return 0.60f;
+                    }
+                }
+            }
+        }
+        return 0.55f;
+    }
+
     public void travelAheadSoul(Entity.MoveFunction positionUpdater) {
         if (this.getUser() != null) {
             StandEntity s = grabbedSoul;
-            if(grabbedSoul != null){
+            if(s != null){
                 if(((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb) {
                     Vec3 lvec = pb.getLookAngleChest(this.getYRot(), this);
-                    Position pn = this.position().add(lvec.scale(0.55F));
-                    positionUpdater.accept(s, pn.x(), this.getY() + 0.9, pn.z());
+                    Position pn = this.position().add(lvec.scale(horizontalOffset()));
+                    positionUpdater.accept(s, pn.x(), this.getY() - yVerticalOffset(s), pn.z());
                 }
             }
         }
     }
 
     public void travelAheadSoulRender(float render, StandEntity se){
-        if (this.getUser() != null) {
-            System.out.println(render);
-            Vec3 junkPos = MainUtil.getAheadVecRender(this, 0.55f, render).getLocation();
+        if (this.getUser() != null && se != null) {
+            Vec3 junkPos = MainUtil.getAheadVecRender(this, (float) horizontalOffset(), render).getLocation();
             Vec3 junkPosY = MainUtil.getAheadVecRender(this, 0f, render).getLocation();
             if (!this.level().isClientSide()) {
                 se.setOldPosAndRot();
             }
             se.xOld = junkPos.x;
-            se.yOld = junkPosY.y - 0.40;
+            se.yOld = junkPosY.y - yVerticalOffset(se);
             se.zOld = junkPos.z;
             if (this.level().isClientSide()) {
-                se.absMoveTo(junkPos.x, junkPosY.y - 0.40, junkPos.z);
+                se.absMoveTo(junkPos.x, junkPosY.y - yVerticalOffset(se), junkPos.z);
             } else {
-                se.setPos(junkPos.x, junkPosY.y - 0.40, junkPos.z);
+                se.setPos(junkPos.x, junkPosY.y - yVerticalOffset(se), junkPos.z);
             }
 
             if (this.level().isClientSide()) {
