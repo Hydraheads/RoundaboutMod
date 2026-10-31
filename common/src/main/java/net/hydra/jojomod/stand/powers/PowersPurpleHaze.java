@@ -915,7 +915,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
         else setSkillIcon(context, x, y, 1, StandIcons.POD_THROW, PowerIndex.SKILL_1);
 
         if (isHoldingSneak()){
+            if (canExecuteMoveWithLevel(getStrangleLevel())) {
             setSkillIcon(context, x, y, 2, StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, PowerIndex.SKILL_2_SNEAK);
+            } else setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD);
         }else if (canExecuteMoveWithLevel(getStrangleLevel())) {
             setSkillIcon(context, x, y, 2, StandIcons.PURPLE_HAZE_STRANGLE, PowerIndex.SKILL_2);
         } else setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD);
@@ -966,7 +968,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+80,4, "ability.purple_haze.virus_spit",
                 "instruction.roundabout.distortion_spit", StandIcons.VIRUS_SPIT,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+99,4, "ability.purple_haze.haze_switch",
-                "instruction.roundabout.press_skill_guard", StandIcons.PH_SWITCH,1,level,bypas));
+                "instruction.roundabout.press_skill_block", StandIcons.PH_SWITCH,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+118,0, "ability.purple_haze.purple_smoke",
                 "instruction.roundabout.passive", StandIcons.PURPLE_HAZE_MODE,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+80,4, "ability.purple_haze.distortion_smoke",
@@ -1810,7 +1812,10 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
 
     public void attemptThrowPod() {
-        ThrowPod();
+        if (!(activePower == PowerIndex.BARRAGE || activePower == PowerIndex.BARRAGE_2
+                || activePower == PowerIndex.BARRAGE_CHARGE || activePower == PowerIndex.BARRAGE_CHARGE_2 || this.isStrangling()|| this.isStranglePinning())) {
+            ThrowPod();
+        }
     }
 
     public void ThrowPod() {
