@@ -10,6 +10,8 @@ import net.hydra.jojomod.client.models.*;
 import net.hydra.jojomod.client.models.badCompanyTroops.*;
 import net.hydra.jojomod.client.models.badCompanyTroops.renderers.*;
 import net.hydra.jojomod.client.models.corpses.renderers.*;
+import net.hydra.jojomod.client.models.gold_experience.GEBrambleModel;
+import net.hydra.jojomod.client.models.gold_experience.GEBrambleRenderer;
 import net.hydra.jojomod.client.models.minions.*;
 import net.hydra.jojomod.client.models.minions.head_parts.*;
 import net.hydra.jojomod.client.models.minions.renderers.*;
@@ -148,6 +150,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.DIVER_KICK.get(), DiverKickEntityRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BONE_PROJECTILE.get(), BoneProjectileRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GOLD_EXPERIENCE.get(), GoldExperienceRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.GE_BRAMBLE.get(), GEBrambleRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT.get(), SilverChariotRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT_PHARAOH.get(), SilverChariotPharaohRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT_RAPIER.get(), SilverChariotRapierRenderer::new);
@@ -362,6 +365,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.DIVER_DOWN_WORLD_LAYER, DiverDownWorldModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.DIVER_DROWNED_LAYER, DiverDrownedModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.GOLD_EXPERIENCE_LAYER, GoldExperienceModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.GE_BRAMBLE_LAYER, GEBrambleModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.SILVER_CHARIOT_LAYER, SilverChariotModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.SILVER_CHARIOT_PHARAOH_LAYER, SilverChariotPharaohModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.SILVER_CHARIOT_RAPIER_LAYER, SilverChariotRapierModel::createBodyLayer);

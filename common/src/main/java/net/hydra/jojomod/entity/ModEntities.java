@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.badCompanyTroops.*;
+import net.hydra.jojomod.entity.gold_experience.GEBrambleEntity;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.mobs.TerrierEntity;
@@ -111,6 +112,7 @@ public class ModEntities {
     public static EntityType<DiverKickEntity> DIVER_KICK;
     public static EntityType<BoneProjectileEntity> BONE_PROJECTILE;
     public static EntityType<GoldExperienceEntity> GOLD_EXPERIENCE;
+    public static EntityType<GEBrambleEntity> GE_BRAMBLE;
     public static EntityType<SilverChariotEntity> SILVER_CHARIOT;
     public static EntityType<SilverChariotEntity> SILVER_CHARIOT_PHARAOH;
     public static EntityType<SilverChariotRapierShotEntity> SILVER_CHARIOT_RAPIER;

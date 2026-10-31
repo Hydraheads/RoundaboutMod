@@ -3,6 +3,7 @@ package net.hydra.jojomod.registry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.*;
 import net.hydra.jojomod.entity.badCompanyTroops.*;
+import net.hydra.jojomod.entity.gold_experience.GEBrambleEntity;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.mobs.TerrierEntity;
@@ -691,6 +692,12 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "gold_experience").toString())
             );
+    public static final RegistryObject<EntityType<GEBrambleEntity>> GE_BRAMBLE = ENTITY_TYPES.register("ge_bramble",
+            () -> EntityType.Builder.<GEBrambleEntity>of(GEBrambleEntity::new, MobCategory.MISC)
+                    .sized(0.8f, 1.8f)
+                    .clientTrackingRange(16)
+                    .updateInterval(20)
+                    .build(new ResourceLocation(Roundabout.MOD_ID, "ge_bramble").toString()));
     public static final RegistryObject<EntityType<SilverChariotEntity>> SILVER_CHARIOT =
             ENTITY_TYPES.register("silver_chariot", () ->
                     EntityType.Builder.of(SilverChariotEntity::new, MobCategory.MISC).sized(0.75f, 2.05f).
