@@ -615,6 +615,7 @@
   "item.roundabout.aesthetician_spawn_egg": "Aesthetician Spawn Egg",
   "item.roundabout.zombie_aesthetician_spawn_egg": "Zombie Aesthetician Spawn Egg",
   "item.roundabout.anubis_guardian_spawn_egg": "Anubis Guardian Spawn Egg",
+  "item.roundabout.falcon_spawn_egg": "Falcon Spawn Egg",
   "item.roundabout.zombie_minion_spawn_egg": "Zombie Minion Spawn Egg",
 
   "item.roundabout.painting_van_gough": "Van Gogh's Self-Portrait",
@@ -625,6 +626,7 @@
   "entity.roundabout.stray_cat_entity": "Stray Cat",
   "entity.roundabout.terrier": "Boston Terrier",
   "entity.roundabout.anubis_guardian": "Anubis Guardian",
+  "entity.roundabout.falcon": "Falcon",
   "entity.roundabout.anubis": "Anubis",
   "entity.roundabout.parallel_chest": "Parallel Chest",
   "entity.roundabout.block_d4c_entity": "Parallel Block",
