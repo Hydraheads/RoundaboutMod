@@ -1834,6 +1834,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     1.0F
             );
 
+            this.setAttackTimeDuring(-10);
             this.animateStand(PurpleHazeEntity.POD_LAUNCH);
 
             PHCapsuleEntity capsule = new PHCapsuleEntity(
