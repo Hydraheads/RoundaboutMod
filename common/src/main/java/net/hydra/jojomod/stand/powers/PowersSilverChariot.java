@@ -495,11 +495,19 @@ public class PowersSilverChariot extends NewPunchingStand {
         return 10;
     }
 
+    public int statueCuttingWindup() {
+        return 50;
+    }
+
 
 
     // Helper methods
     public boolean hasFullGuard() {
         return this.getStandUserSelf().roundabout$getGuardPoints() >= this.getStandUserSelf().roundabout$getMaxGuardPoints();
+    }
+
+    public void setFullGuard() {
+
     }
 
     private LivingEntity actionOrigin() {
@@ -878,18 +886,22 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public boolean canAttackHeavy() {
-        return !isRegainingArmourFromDesummon() && !onCooldown(PowerIndex.SKILL_4) && super.canAttackHeavy();
+        // return !isRegainingArmourFromDesummon() && !onCooldown(PowerIndex.SKILL_4) && super.canAttackHeavy();
+        return super.canAttackHeavy();
     }
 
     @Override
     public boolean canActuallyHit(Entity entity) {
         // return !isRegainingArmourFromDesummon() && !onCooldown(PowerIndex.SKILL_4) && super.canActuallyHit(entity);
+        /*
         if (entity == null) return false;
         if (!isPiloting()) return super.canActuallyHit(entity);
         if (ClientNetworking.getAppropriateConfig().generalStandSettings.standPunchesGoThroughDoorsAndCorners) {
             return true;
         }
         return actionOrigin().hasLineOfSight(entity);
+        */
+        return super.canActuallyHit(entity);
     }
 
     public boolean armoured = true;
@@ -1143,6 +1155,17 @@ public class PowersSilverChariot extends NewPunchingStand {
     }
 
     @Override
+    public void onStandSwitchInto() {
+        super.onStandSwitchInto();
+        if (!self.level().isClientSide()) {
+            int co = this.getCooldownRapierShot();
+            if (!onCooldown(PowerIndex.SKILL_4) || getCooldown(PowerIndex.SKILL_4).time < co) {
+                setCooldown(PowerIndex.SKILL_4, co);
+            }
+        }
+    }
+
+    @Override
     public boolean canSummonStandAsEntity() {
         if (hasArmsOut || isRegainingArmourFromDesummon()) {
             return false;
@@ -1155,7 +1178,7 @@ public class PowersSilverChariot extends NewPunchingStand {
         if (!getArmoured() && !isRegainingArmourFromDesummon()) {
             return 0.0F;
         } else if (isRegainingArmourFromDesummon()) {
-            return this.getStandUserSelf().roundabout$getMaxGuardPoints() / 440;
+            return this.getStandUserSelf().roundabout$getMaxGuardPoints() / 220;
         }
         return super.regenGuard();
     }
@@ -1165,7 +1188,7 @@ public class PowersSilverChariot extends NewPunchingStand {
         if (!getArmoured() && !isRegainingArmourFromDesummon()) {
             return 0.0f;
         } else if (isRegainingArmourFromDesummon()) {
-            return this.getStandUserSelf().roundabout$getMaxGuardPoints() / 440;
+            return this.getStandUserSelf().roundabout$getMaxGuardPoints() / 220;
         }
         return super.regenBrokenGuard();
     }
@@ -1175,6 +1198,7 @@ public class PowersSilverChariot extends NewPunchingStand {
         return !isRegainingArmourFromDesummon() && !onCooldown(PowerIndex.SKILL_4) && super.canAttack();
     }
 
+    /*
     @Override
     public boolean canAttack2() {
         return !isRegainingArmourFromDesummon() && !onCooldown(PowerIndex.SKILL_4) && super.canAttack2();
@@ -1184,6 +1208,7 @@ public class PowersSilverChariot extends NewPunchingStand {
     public boolean canAttackLight() {
         return !isRegainingArmourFromDesummon() && !onCooldown(PowerIndex.SKILL_4) && super.canAttackLight();
     }
+    */
 
     @Override
     public boolean canGuard() {
@@ -1527,7 +1552,7 @@ public class PowersSilverChariot extends NewPunchingStand {
     @Override
     public void renderAttackHud(GuiGraphics context, Player playerEntity, int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount, float flashAlpha, float otherFlashAlpha) {
         if (isRegainingArmourFromDesummon() || onCooldown(PowerIndex.SKILL_4)) {
-            return;
+            // return;
         }
 
         StandUser standUser = ((StandUser) playerEntity);
@@ -1816,7 +1841,6 @@ public class PowersSilverChariot extends NewPunchingStand {
     public boolean tryIntPower(int move, boolean forced, int chargeTime) {
         if (move == PowerIndex.SNEAK_ATTACK) {
             this.chargedFinal = chargeTime;
-            return true;
         }
         if (move == SILVER_CHARIOT_CONTROL_MODE) {
             StandEntity stand = getStandEntity(self);
@@ -1935,6 +1959,9 @@ public class PowersSilverChariot extends NewPunchingStand {
             return;
         }
         */
+        if (this.self instanceof Player player && this.getSelfCarryMode()) {
+
+        }
         if (hasArmsOut) {
             if (keyIsDown) {
                 if (activePowerPhase == 0) {
@@ -1944,6 +1971,28 @@ public class PowersSilverChariot extends NewPunchingStand {
             holdDownClick = false;
             return;
         }
+        if (holdDownClick) {
+            if (!keyIsDown) {
+                if (activePower == PowerIndex.SNEAK_ATTACK_CHARGE) {
+                    int chargeTime = attackTimeDuring;
+                    tryIntPower(PowerIndex.SNEAK_ATTACK, true, chargeTime);
+                    tryIntPowerPacket(PowerIndex.SNEAK_ATTACK, chargeTime);
+                }
+                holdDownClick = false;
+            }
+            return;
+        }
+        if (!keyIsDown) return;
+        if (!isHoldingSneak()) {
+            super.buttonInputAttack(true, options);
+        } else if (canAttack()) {
+            tryPower(PowerIndex.SNEAK_ATTACK_CHARGE, true);
+            tryPowerPacket(PowerIndex.SNEAK_ATTACK_CHARGE);
+            holdDownClick = true;
+        } else {
+            super.buttonInputAttack(true, options);
+        }
+        /*
         if (!consumeClickInput) {
             if (holdDownClick) {
                 if (keyIsDown) {
@@ -1976,7 +2025,8 @@ public class PowersSilverChariot extends NewPunchingStand {
                 consumeClickInput = false;
             }
         }
-        // super.buttonInputAttack(keyIsDown, options);
+        */
+        super.buttonInputAttack(keyIsDown, options);
     }
 
     @Override
@@ -2356,10 +2406,12 @@ public class PowersSilverChariot extends NewPunchingStand {
         if (getSelfCarryMode()) {
             return;
         }
+        /*
         if (isPiloting()) {
             silverChariotPilotDodgeClient();
             return;
         }
+        */
         if (vaultOrFallBraceFails()) {
             dash();
         }
@@ -3440,6 +3492,10 @@ public class PowersSilverChariot extends NewPunchingStand {
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4_BLOCK, true);
             tryPowerPacket(PowerIndex.POWER_4_BLOCK);
         }
+    }
+
+    public void statueCuttingUpdate() {
+
     }
 
     public void statueCuttingServer() {
