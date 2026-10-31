@@ -3670,7 +3670,11 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (Objects.nonNull(stand) || hasHandsOut()){
             this.setAttackTimeDuring(0);
             this.setActivePower(PowerIndex.POWER_2);
-            playSoundsIfNearby(MOB_PLANT_WINDUP, 27, false);
+            //playSoundsIfNearby(MOB_PLANT_WINDUP, 27, false);
+            if (this.self instanceof ServerPlayer pl) {
+                S2CPacketUtil.sendPlaySoundPacket(pl, this.self.getId(), MOB_PLANT_WINDUP);
+            }
+
             if (hasHandsOut()) {
                 getStandUserSelf().roundabout$setStandAnimation(KillerQueenEntity.MOB_PLANT);
             }else {

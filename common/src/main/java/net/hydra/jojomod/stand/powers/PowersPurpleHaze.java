@@ -442,6 +442,16 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
     }
 
+
+    @Override
+    public boolean tryIntPower(int move, boolean forced, int chargeTime) {
+        if (move == PowerIndex.SNEAK_ATTACK) {
+            this.chargedFinal = chargeTime;
+        }
+
+        return super.tryIntPower(move, forced, chargeTime);
+    }
+
     @Override
     public boolean setPowerSneakMovement(int lastMove) {
 
@@ -545,14 +555,16 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
     @Override
     public void updateUniqueMoves() {
-         if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
-             updateKickBarrageCharge();
-         } else if (this.getActivePower() == PowerIndex.BARRAGE_2) {
-             updateKickBarrage();
-         } else if (this.getActivePower() == PowerIndex.POWER_2_SNEAK) {
-             updateSalimo();
-    }
-         super.updateUniqueMoves();
+        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
+            updateKickBarrageCharge();
+        } else if (this.getActivePower() == PowerIndex.BARRAGE_2) {
+            updateKickBarrage();
+        } else if (this.getActivePower() == PowerIndex.POWER_2_SNEAK) {
+            updateSalimo();
+        } else if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+            updateSneakAttackCharge();
+        }
+        super.updateUniqueMoves();
     }
     @Override
     public void handleStandAttack(Player player, Entity target) {
@@ -582,7 +594,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 setPowerSalimo();
             }
             case PowerIndex.SNEAK_ATTACK_CHARGE -> {
-                attemptDistortionModeChange();
+                setSneakAttackCharge();
             }
             case PowerIndex.EXTRA -> {
                 return this.fallBraceInit();
@@ -869,11 +881,15 @@ public class PowersPurpleHaze extends NewPunchingStand {
             int ClashTime = Math.round(((float) attackTimeDuring / this.getKickBarrageWindup()) * 15);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+        }else if (standOn && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+            int ClashTime = Math.min(15, Math.round(((float) attackTimeDuring / getMaxSneakAttackCharge()) * 15));
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
         } else if (this.getActivePower() == PowerIndex.POWER_2_SNEAK) {
-        Entity TE = this.getTargetEntity(playerEntity, SALIMO_RANGE);
-        if (TE != null) {
-            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
-        }
+            Entity TE = this.getTargetEntity(playerEntity, SALIMO_RANGE);
+            if (TE != null) {
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
+            }
         }else {
             super.renderAttackHud(context,playerEntity,
                     scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
@@ -1238,6 +1254,13 @@ public class PowersPurpleHaze extends NewPunchingStand {
         if (this.getActivePower() == PowerIndex.POWER_2_SNEAK && this.getSelf().isCrouching()) {
             float f = Mth.clamp(0.3F + EnchantmentHelper.getSneakingSpeedBonus(this.getSelf()), 0.0F, 1.0F);
             basis *= 1 / f;
+        } else if (this.activePower == PowerIndex.SNEAK_ATTACK_CHARGE){
+            if (this.getSelf().isCrouching()) {
+                float f = Mth.clamp(0.3F + EnchantmentHelper.getSneakingSpeedBonus(this.getSelf()), 0.0F, 1.0F);
+                float g = 1 / f;
+                basis *= g;
+            }
+            basis *= 0.6f;
         }
         return super.inputSpeedModifiers(basis);
     }
@@ -1817,6 +1840,46 @@ public class PowersPurpleHaze extends NewPunchingStand {
             ThrowPod();
         }
     }
+
+    private void setSneakAttackCharge() {
+        this.attackTimeDuring = 0;
+        this.setActivePower(PowerIndex.SNEAK_ATTACK_CHARGE);
+        this.animateStand(PurpleHazeEntity.SNEAK_CHARGE);
+        this.poseStand(OffsetIndex.GUARD);
+    }
+
+    private int getMaxSneakAttackCharge() { return 25+(getMeltLevel()*2);}
+
+    public void updateSneakAttackCharge(){
+        if (this.attackTimeDuring > -1) {
+            if (this.attackTimeDuring >= getMaxSneakAttackCharge() &&
+                    (!(this.getSelf() instanceof Player) || (this.self.level().isClientSide() && isPacketPlayer()))){
+                int atd = this.getAttackTimeDuring();
+                ((StandUser) this.getSelf()).roundabout$tryIntPower(PowerIndex.SNEAK_ATTACK, true, getMaxSneakAttackCharge());
+                if (this.self.level().isClientSide()){
+                    tryIntPowerPacket(PowerIndex.SNEAK_ATTACK,atd);
+                }
+            }
+        }
+    }
+
+    public int chargedFinal;
+
+    public float getSneakAttackKnockback(){
+        return (1.2f + ((float)this.chargedFinal/(float)getMaxSneakAttackCharge())*1.6F);
+    }
+    public int getSneakAttackKnockShieldTime(){ return 40; }
+
+    public float getSneakAttackStrength(Entity entity){
+        float punchD = this.getPunchStrength(entity)*1.9F+this.getHeavyPunchStrength(entity);
+
+        if (this.getReducedDamage(entity)){
+            return (((float)this.chargedFinal/(float)getMaxSneakAttackCharge())*punchD);
+        } else {
+            return (((float)this.chargedFinal/(float)getMaxSneakAttackCharge())*punchD)+1;
+        }
+    }
+
 
     public void ThrowPod() {
         if (getPods() <= 0) {

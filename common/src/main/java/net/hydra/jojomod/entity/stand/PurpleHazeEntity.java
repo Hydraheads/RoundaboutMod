@@ -59,7 +59,8 @@ public class PurpleHazeEntity extends FollowingStandEntity{
             FALLINGHITIMPACT = 97,
             KICK_WINDUP = 98,
             KICK_ATTACK = 99,
-            POD_LAUNCH = 100;
+            POD_LAUNCH = 100,
+            SNEAK_CHARGE = 101;
 
 
 
