@@ -612,6 +612,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
             case PowerIndex.BARRAGE_2 ->{
                 return this.setPowerKickBarrage();
             }
+            case PowerIndex.VAULT ->{
+                return this.vault();
+            }
         }
         return super.setPowerOther(move, lastMove);
     }
