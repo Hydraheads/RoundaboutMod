@@ -1,5 +1,6 @@
 package net.hydra.jojomod.client.models.stand;
 
+import net.hydra.jojomod.client.models.stand.animations.KillerQueenAnimations;
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
 import net.hydra.jojomod.client.models.stand.animations.PurpleHazeAnimations;
 import net.hydra.jojomod.entity.stand.PurpleHazeEntity;
@@ -223,6 +224,8 @@ public class PurpleHazeModel<T extends PurpleHazeEntity> extends StandModel<T> {
         this.animate(pEntity.fallinghit, PurpleHazeAnimations.FALLINGHIT, pAgeInTicks, 1f);
         this.animate(pEntity.fallinghitlong, PurpleHazeAnimations.FALLINGHITLONG, pAgeInTicks, 1f);
         this.animate(pEntity.fallinghitimpact, PurpleHazeAnimations.FALLINGHITIMPACT, pAgeInTicks, 1f);
+        this.animate(pEntity.kickWindup, KillerQueenAnimations.HeavyKickWindup, pAgeInTicks, 1f);
+        this.animate(pEntity.kickAttack, KillerQueenAnimations.HeavyKick, pAgeInTicks, 0.8f);
     }
     @Override
     public ModelPart root() {

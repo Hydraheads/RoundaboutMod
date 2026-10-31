@@ -11,14 +11,15 @@ import net.hydra.jojomod.client.models.*;
 import net.hydra.jojomod.client.models.badCompanyTroops.*;
 import net.hydra.jojomod.client.models.badCompanyTroops.renderers.*;
 import net.hydra.jojomod.client.models.corpses.renderers.*;
+import net.hydra.jojomod.client.models.gold_experience.GEBrambleModel;
+import net.hydra.jojomod.client.models.gold_experience.GEBrambleRenderer;
 import net.hydra.jojomod.client.models.minions.*;
 import net.hydra.jojomod.client.models.minions.head_parts.*;
 import net.hydra.jojomod.client.models.minions.renderers.*;
 import net.hydra.jojomod.client.models.mobs.AnubisGuardianModel;
+import net.hydra.jojomod.client.models.mobs.FalconModel;
 import net.hydra.jojomod.client.models.mobs.StrayCatEntityModel;
-import net.hydra.jojomod.client.models.mobs.renderers.AnubisGuardianRenderer;
-import net.hydra.jojomod.client.models.mobs.renderers.StrayCatEntityRenderer;
-import net.hydra.jojomod.client.models.mobs.renderers.ZombiefishRenderer;
+import net.hydra.jojomod.client.models.mobs.renderers.*;
 import net.hydra.jojomod.client.models.paintings.MonaLisaPaintingRenderer;
 import net.hydra.jojomod.client.models.paintings.VanGoghPaintingRenderer;
 import net.hydra.jojomod.client.models.paintings.VenusPaintingRenderer;
@@ -35,7 +36,6 @@ import net.hydra.jojomod.client.models.visages.parts.*;
 import net.hydra.jojomod.client.models.visages.renderers.*;
 import net.hydra.jojomod.client.models.worn_stand.*;
 import net.hydra.jojomod.client.models.mobs.TerrierEntityModel;
-import net.hydra.jojomod.client.models.mobs.renderers.TerrierEntityRenderer;
 import net.hydra.jojomod.client.models.layers.MagiciansRedSpinEffectLayer;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.npcs.ZombieAestheticianModel;
@@ -62,6 +62,7 @@ public class FabricEntityClient {
         /*Renderers*/
         EntityRendererRegistry.register(FabricEntities.STRAY_CAT, StrayCatEntityRenderer::new);
         EntityRendererRegistry.register(FabricEntities.TERRIER_DOG, TerrierEntityRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.FALCON, FalconRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ZOMBIEFISH, ZombiefishRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ANUBIS_GUARDIAN, AnubisGuardianRenderer::new);
         EntityRendererRegistry.register(FabricEntities.STAR_PLATINUM, StarPlatinumRenderer::new);
@@ -118,6 +119,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.DIVER_DOWN_BETA, DiverDownBetaRenderer::new);
         EntityRendererRegistry.register(FabricEntities.DIVER_DOWN_WORLD, DiverDownWorldRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GOLD_EXPERIENCE, GoldExperienceRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.GE_BRAMBLE, GEBrambleRenderer::new);
         EntityRendererRegistry.register(FabricEntities.DIVER_DROWNED, DiverDrownedRenderer::new);
         EntityRendererRegistry.register(FabricEntities.DIVER_KICK, DiverKickEntityRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SILVER_CHARIOT, SilverChariotRenderer::new);
@@ -261,6 +263,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.EXP_BISHOP_LAYER, ChessPieceRenderer::createExpBishopLayer);
 
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.STRAY_CAT_ENTITY_LAYER, StrayCatEntityModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.FALCON_LAYER, FalconModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ANUBIS_GUARDIAN_LAYER, AnubisGuardianModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.KING_CRIMSON_LAYER, KingCrimsonModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.WHITESNAKE_LAYER, WhitesnakeModel::getTexturedModelData);
@@ -322,6 +325,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DIVER_DROWNED_LAYER, DiverDrownedModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DIVER_DOWN_WORLD_LAYER, DiverDownWorldModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GOLD_EXPERIENCE_LAYER, GoldExperienceModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GE_BRAMBLE_LAYER, GEBrambleModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SILVER_CHARIOT_LAYER, SilverChariotModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SILVER_CHARIOT_PHARAOH_LAYER, SilverChariotPharaohModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SILVER_CHARIOT_RAPIER_LAYER, SilverChariotRapierModel::createBodyLayer);

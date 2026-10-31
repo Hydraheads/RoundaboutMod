@@ -452,6 +452,8 @@ public class FabricItems {
 
     public static final Item TERRIER_SPAWN_EGG = registerItem("terrier_spawn_egg", new SpawnEggItem(FabricEntities.TERRIER_DOG,
             0xc9c071, 0xfffded, new Item.Properties()));
+    public static final Item FALCON_SPAWN_EGG = registerItem("falcon_spawn_egg", new SpawnEggItem(FabricEntities.FALCON,
+            0x93503c, 0xbba17e, new Item.Properties()));
     public static final Item ZOMBIE_MINION_SPAWN_EGG = registerItem("zombie_minion_spawn_egg", new SpawnEggItem(FabricEntities.VILLAGER_MINION,
             0xC1FF4F, 0x53A667, new Item.Properties()));
 
@@ -802,6 +804,7 @@ public class FabricItems {
                         //Add all items from the Jojo mod tab here
                     	//entries.accept(ModBlocks.CHESSBOARD_BLOCK);
                         entries.accept(KHAN_MASK);
+                        entries.accept(FALCON_SPAWN_EGG);
                         entries.accept(STAND_DISC_D4C);
                         entries.accept(MAX_STAND_DISC_D4C);
                         entries.accept(STAND_DISC_GOLD_EXPERIENCE);
@@ -1136,6 +1139,7 @@ public class FabricItems {
         ModItems.KIRASAKU_MASK = KIRASAKU_MASK;
         ModItems.HAYATO_KAWAJIRI_MASK = HAYATO_KAWAJIRI_MASK;
         ModItems.TERRIER_SPAWN_EGG = TERRIER_SPAWN_EGG;
+        ModItems.FALCON_SPAWN_EGG = FALCON_SPAWN_EGG;
         ModItems.ZOMBIE_MINION_SPAWN_EGG = ZOMBIE_MINION_SPAWN_EGG;
         ModItems.AESTHETICIAN_SPAWN_EGG = AESTHETICIAN_SPAWN_EGG;
         ModItems.ZOMBIE_AESTHETICIAN_SPAWN_EGG = ZOMBIE_AESTHETICIAN_SPAWN_EGG;

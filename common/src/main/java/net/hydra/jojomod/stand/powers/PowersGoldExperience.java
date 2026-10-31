@@ -4,17 +4,21 @@ import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.block.GEBushBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.*;
+import net.hydra.jojomod.entity.gold_experience.GEBrambleEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.GoldExperienceEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.mixin.StandUserEntity;
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
@@ -66,14 +70,21 @@ public class PowersGoldExperience extends BlockGrabPreset {
         LIFE_PUNCH = 53,
         DNA_CREATE = 54,
         BUSH_CREATION = 55,
-        WALL_VINES = 56;
+        WALL_VINES = 56,
+        HEAL = 57,
+        BRAMBLES = 58;
 
     // for life punch
     private LifePunchCloneEntity lifePunchClone = null;
     private LivingEntity lifePunchVictim = null;
     private int lifePunchTimer = 0;
     private float lastKnownHealth = 0;
-    public final Map<Integer, Integer> disabledMobTimers = new HashMap<>();
+    private final Map<Integer, Integer> disabledMobTimers = new HashMap<>();
+
+    // for brambles
+    private final List<BrambleSpawnData> pendingBrambles = new ArrayList<>();
+    private int brambleSpawnTimer = 0;
+    private record BrambleSpawnData(Vec3 pos, float yRot) {}
 
     // basic stand registry stuff
     public PowersGoldExperience(LivingEntity self) {super(self);}
@@ -90,6 +101,21 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public void tickPower() {
         if (!this.self.level().isClientSide()) {
+            // bramble staggered deploy time
+            if (!pendingBrambles.isEmpty()) {
+                brambleSpawnTimer++;
+                if (brambleSpawnTimer >= 2) { // 2 ticks = 0.1 seconds
+                    brambleSpawnTimer = 0;
+                    BrambleSpawnData data = pendingBrambles.remove(0);
+
+                    GEBrambleEntity bramble = new GEBrambleEntity(ModEntities.GE_BRAMBLE, this.self.level());
+                    bramble.setOwner(this.getSelf());
+                    bramble.setPos(data.pos().x, data.pos().y, data.pos().z);
+                    bramble.setYRot(data.yRot());
+
+                    this.self.level().addFreshEntity(bramble);
+                }
+            }
             // tick down Life Punch timer
             if (lifePunchTimer > 0 && lifePunchVictim != null && lifePunchClone != null) {
                 if (!this.self.isAlive()) {
@@ -177,8 +203,12 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 if(canDNACreate()) {
                     tryDNACreate();
                 } else {
-                    //insert life wheel here
+                    tryOpenAnimalSelect();
                 }
+            }
+            // heal
+            case SKILL_1_CROUCH -> {
+                tryHeal();
             }
             // dash or vine climb
             case SKILL_3_NORMAL -> {
@@ -191,6 +221,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
             // bush growth move
             case SKILL_4_GUARD -> {
                 tryGrowBush();
+            }
+            // bramble spike thing
+            case SKILL_4_CROUCH -> {
+                tryGrowBramble();
             }
         }
     }
@@ -214,6 +248,12 @@ public class PowersGoldExperience extends BlockGrabPreset {
         else if (move == WALL_VINES) {
             return executeWallVines();
         }
+        else if (move == HEAL) {
+            return startHealWindup();
+        }
+        else if (move == BRAMBLES) {
+            return startBrambleWindup();
+        }
         return super.setPowerOther(move, lastMove);
     }
 
@@ -227,6 +267,14 @@ public class PowersGoldExperience extends BlockGrabPreset {
             updateKickBarrageCharge();
         } else if (this.getActivePower() == PowerIndex.BARRAGE_2) {
             updateKickBarrage();
+        }
+        // heal
+        if (this.getActivePower() == HEAL) {
+            updateHeal();
+        }
+        // bramble
+        if (this.getActivePower() == BRAMBLES) {
+            updateBramble();
         }
         super.updateUniqueMoves();
     }
@@ -245,6 +293,138 @@ public class PowersGoldExperience extends BlockGrabPreset {
             dash();
         }
     }
+
+    // animal selection start
+
+    private void tryOpenAnimalSelect() {
+        ClientUtil.openAnimalSelect();
+    }
+
+    // animal selection end
+
+    // bramble spikes start
+
+    private void tryGrowBramble() {
+        ((StandUser) this.getSelf()).roundabout$tryPower(BRAMBLES, true);
+        tryPowerPacket(BRAMBLES);
+    }
+
+    private boolean startBrambleWindup() {
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand)) {
+            this.setAttackTimeDuring(0);
+            this.setActivePower(BRAMBLES);
+            //animate stand here
+            this.poseStand(OffsetIndex.ATTACK);
+            return true;
+        }
+        return false;
+    }
+
+    private void updateBramble() {
+        if (this.attackTimeDuring > 9) {
+            finishBramble();
+        }
+    }
+
+    private void finishBramble() {
+        if (!this.self.level().isClientSide()) {
+            Level level = this.self.level();
+            Vec3 lookVec = this.self.getLookAngle();
+            Vec3 dir = new Vec3(lookVec.x, 0, lookVec.z).normalize();
+
+            double startX = this.self.getX();
+            double startY = this.self.getY();
+            double startZ = this.self.getZ();
+
+            int spikeCount = 8;
+            double spacing = 1.3D;
+
+            // Clear any old queued spikes before adding new ones
+            pendingBrambles.clear();
+            brambleSpawnTimer = 0;
+
+            for (int i = 1; i <= spikeCount; i++) {
+                double targetX = startX + dir.x * (i * spacing);
+                double targetZ = startZ + dir.z * (i * spacing);
+
+                BlockPos groundPos = findGroundPosition(level, BlockPos.containing(targetX, startY, targetZ));
+                if (groundPos != null) {
+                    Vec3 spawnPos = new Vec3(targetX, groundPos.getY() + 1.0, targetZ);
+                    pendingBrambles.add(new BrambleSpawnData(spawnPos, this.self.getYRot()));
+                }
+            }
+
+            playSoundIfPossible(level, null, this.self.blockPosition(),
+                    ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 1.0F, 1F);
+            addEXP(7);
+
+            this.setAttackTimeDuring(-5);
+        }
+    }
+
+    private BlockPos findGroundPosition(Level level, BlockPos start) {
+        // Search up to 2 blocks up or 3 blocks down for solid ground
+        for (int yOffset = 2; yOffset >= -3; yOffset--) {
+            BlockPos checkPos = start.above(yOffset);
+            BlockState state = level.getBlockState(checkPos);
+            BlockPos abovePos = checkPos.above();
+
+            if (state.isSolid() && level.getBlockState(abovePos).canBeReplaced()) {
+                return checkPos;
+            }
+        }
+        return null;
+    }
+
+    // bramble spikes end
+
+    // heal start
+
+    private void tryHeal() {
+        ((StandUser) this.getSelf()).roundabout$tryPower(HEAL, true);
+        tryPowerPacket(HEAL);
+    }
+
+    private boolean startHealWindup() {
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand)) {
+            this.setAttackTimeDuring(0);
+            this.setActivePower(HEAL);
+            //animate stand here
+            this.poseStand(OffsetIndex.GUARD);
+            return true;
+        }
+        return false;
+    }
+
+    private void updateHeal() {
+        if (this.attackTimeDuring > -1) {
+            if (this.attackTimeDuring > 9) {
+                finishHeal();
+            }
+        }
+    }
+
+    private void finishHeal(){
+        if (!this.self.level().isClientSide()) {
+            Entity target = MainUtil.getTargetEntity(this.getSelf(), 5f);
+            if (target instanceof LivingEntity livingHeal && livingHeal != null) {
+                // for healing others
+                livingHeal.heal(1f);
+                livingHeal.addEffect(new MobEffectInstance(ModEffects.RECONSTRUCTION, 400, 0, false, true, true));
+                playSoundIfPossible(this.self.level(), livingHeal, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            } else {
+                // for healing yourself
+                this.self.heal(1f);
+                this.self.addEffect(new MobEffectInstance(ModEffects.RECONSTRUCTION, 400, 0, false, true, true));
+                playSoundIfPossible(this.self.level(), this.self, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            }
+            this.setAttackTimeDuring(-5);
+        }
+    }
+
+    // heal end
 
     // wall vines start
 
@@ -733,7 +913,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
             int cooldownTicks = 100;
             if (this.getSelf() instanceof Player serverPlayer && !this.getSelf().level().isClientSide()) {
-                net.hydra.jojomod.util.S2CPacketUtil.sendCooldownSyncPacket((net.minecraft.server.level.ServerPlayer) serverPlayer, LIFE_PUNCH, cooldownTicks);
+                S2CPacketUtil.sendCooldownSyncPacket((net.minecraft.server.level.ServerPlayer) serverPlayer, LIFE_PUNCH, cooldownTicks);
             }
             this.setCooldown(LIFE_PUNCH, cooldownTicks);
         }
@@ -777,6 +957,15 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // move speed modifiers and the sort
 
     @Override
+    public float inputSpeedModifiers(float basis) {
+        if (this.getActivePower() == HEAL){
+            // slows you down by 70% while healing
+            basis *= 0.7f;
+        }
+        return super.inputSpeedModifiers(basis);
+    }
+
+    @Override
     public boolean cancelItemUse() {
         return (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2);
     }
@@ -788,7 +977,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     @Override
     public boolean cancelSprintJump(){
-        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2) {
+        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2
+            || this.getActivePower() == HEAL) {
             return true;
         }
         return super.cancelSprintJump();
@@ -937,7 +1127,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         // Ability 1 (Z)
-        if (canDNACreate()) {
+        if (isHoldingSneak()) {
+            setSkillIcon(context, x, y, 1, StandIcons.GOLD_EXPERIENCE_HEAL, PowerIndex.SKILL_1_SNEAK);
+        } else if (canDNACreate()) {
             setSkillIcon(context, x, y, 1, StandIcons.GOLD_EXPERIENCE_DNA_CREATION, PowerIndex.SKILL_1);
         } else {
             setSkillIcon(context, x, y, 1, StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, PowerIndex.SKILL_1);
@@ -955,7 +1147,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         }
         // Ability 4 (V)
-        if (isGuarding()){
+        if (isHoldingSneak()) {
+            setSkillIcon(context, x, y, 4, StandIcons.GOLD_EXPERIENCE_BRAMBLES, PowerIndex.SKILL_4_SNEAK);
+        } else if (isGuarding()){
             setSkillIcon(context, x, y, 4, StandIcons.GOLD_EXPERIENCE_BRAMBLE_TRAP, PowerIndex.SKILL_4_GUARD);
         } else {
             setSkillIcon(context, x, y, 4, StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, PowerIndex.SKILL_1);
@@ -970,8 +1164,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 1, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.gold_experience_placeholder",
                 "instruction.roundabout.passive", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 1, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.gold_experience_placeholder",
-                "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 1, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.gold_experience_heal",
+                "instruction.roundabout.press_skill_crouch", StandIcons.GOLD_EXPERIENCE_HEAL, 1, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.gold_experience_dna_creation",
                 "instruction.roundabout.press_skill_item", StandIcons.GOLD_EXPERIENCE_DNA_CREATION, 1, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.gold_experience_placeholder",
@@ -998,8 +1192,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 4, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 80, 0, "ability.roundabout.gold_experience_placeholder",
                 "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 4, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 99, 0, "ability.roundabout.gold_experience_placeholder",
-                "instruction.roundabout.passive", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 4, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 99, 0, "ability.roundabout.gold_experience_violent_brambles",
+                "instruction.roundabout.press_skill_crouch", StandIcons.GOLD_EXPERIENCE_BRAMBLES, 4, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 118, 0, "ability.roundabout.gold_experience_bramble_trap",
                 "instruction.roundabout.press_skill_block", StandIcons.GOLD_EXPERIENCE_BRAMBLE_TRAP, 4, level, bypas));
         return $$1;

@@ -696,6 +696,9 @@ public class ForgeItems {
     public static final RegistryObject<ForgeSpawnEggItem> TERRIER_SPAWN_EGG = addToTab(ITEMS.register("terrier_spawn_egg",
             () -> new ForgeSpawnEggItem(ForgeEntities.TERRIER_DOG,
                     0xc9c071, 0xfffded, new Item.Properties())));
+    public static final RegistryObject<ForgeSpawnEggItem> FALCON_SPAWN_EGG = addToWIPTab(ITEMS.register("falcon_spawn_egg",
+            () -> new ForgeSpawnEggItem(ForgeEntities.FALCON,
+                    0x93503c, 0xbba17e, new Item.Properties())));
     public static final RegistryObject<ForgeSpawnEggItem> AESTHETICIAN_SPAWN_EGG = addToTab(ITEMS.register("aesthetician_spawn_egg",
             () -> new ForgeSpawnEggItem(ForgeEntities.AESTHETICIAN,
                     0xfffef2, 0xffa8e8, new Item.Properties())));
