@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.block.GEBushBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.*;
 import net.hydra.jojomod.entity.gold_experience.GEBrambleEntity;
@@ -202,7 +203,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 if(canDNACreate()) {
                     tryDNACreate();
                 } else {
-                    //insert life wheel here
+                    tryOpenAnimalSelect();
                 }
             }
             // heal
@@ -292,6 +293,14 @@ public class PowersGoldExperience extends BlockGrabPreset {
             dash();
         }
     }
+
+    // animal selection start
+
+    private void tryOpenAnimalSelect() {
+        ClientUtil.openAnimalSelect();
+    }
+
+    // animal selection end
 
     // bramble spikes start
 
