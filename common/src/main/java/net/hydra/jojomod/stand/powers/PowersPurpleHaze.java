@@ -1824,14 +1824,17 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
 
         if (!this.onCooldown(PowerIndex.SKILL_1)) {
-            /*playSoundIfPossible(self.level(),
+
+            playSoundIfPossible(self.level(),
                     null,
                     this.self.blockPosition(),
-                    ModSounds.STAR_FINGER_EVENT,
+                    ModSounds.PURPLE_HAZE_POD_LAUNCH_EVENT,
                     SoundSource.PLAYERS,
                     1.0F,
                     1.0F
-            );*/
+            );
+            
+            this.animateStand(PurpleHazeEntity.KICK_WINDUP); //PLACEHOLDER
 
             PHCapsuleEntity capsule = new PHCapsuleEntity(
                     ModEntities.PH_CAPSULE,
