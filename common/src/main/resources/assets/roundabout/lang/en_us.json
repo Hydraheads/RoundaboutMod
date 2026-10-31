@@ -604,6 +604,7 @@
   "effect.roundabout.hallucination": "Hallucination",
   "effect.roundabout.sleeping": "Sleeping",
   "effect.roundabout.old": "Old",
+  "effect.roundabout.reconstruction": "Reconstruction",
 
 
   "item.roundabout.creative_only.info": "Creative Only",
@@ -2695,6 +2696,8 @@
   "ability.roundabout.gold_experience_bramble_trap.desc": "Grow a bunch of brambles from the ground. These brambles won't damage enemies, but they will slow them. Walking through the brambles destroys them.",
   "ability.roundabout.gold_experience_vine_climb": "Vine Climb",
   "ability.roundabout.gold_experience_vine_climb.desc": "Grow vines on a wall and climb on them. These vines stay for a while, allowing others to climb on them as well.",
+  "ability.roundabout.gold_experience_heal": "Parts Maker",
+  "ability.roundabout.gold_experience_heal.desc": "Grow parts of something to heal it. Getting healed by this move makes your regenerate health over time, but getting hit ends it early. You can use the move on either yourself, or others.",
 
   "ability.roundabout.emperor_shoot": "Shoot",
   "ability.roundabout.emperor_shoot.desc": "Shoot a bullet from the emperor.",

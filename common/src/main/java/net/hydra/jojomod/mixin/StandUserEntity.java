@@ -4185,6 +4185,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ci.setReturnValue(false);
             return;
         }
+        // GE heal effect clear when hit
+        if (entity.hasEffect(ModEffects.RECONSTRUCTION)) {
+            entity.removeEffect(ModEffects.RECONSTRUCTION);
+        }
 
         // Coprse damage is converted and multiplied for Justice Army
         if ($$0.is(DamageTypes.ARROW) && $$0.getEntity() instanceof FallenMob FM) {

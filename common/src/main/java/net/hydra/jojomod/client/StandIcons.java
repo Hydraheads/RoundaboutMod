@@ -1136,6 +1136,8 @@ public class StandIcons {
             "textures/gui/icons/gold_experience/bramble_trap.png");
     public static final ResourceLocation GOLD_EXPERIENCE_VINE_CLIMB = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/gold_experience/vine_climb.png");
+    public static final ResourceLocation GOLD_EXPERIENCE_HEAL = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/gold_experience/heal.png");
 
     // gold experience icons end
 

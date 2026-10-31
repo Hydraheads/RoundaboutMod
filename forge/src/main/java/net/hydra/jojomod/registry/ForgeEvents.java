@@ -832,6 +832,8 @@ public class ForgeEvents {
         ModEffects.DISTORTION_VIRUS = ForgeEffects.DISTORTION_VIRUS.get();
         ModEffects.VIRUS_IMMUNITY = ForgeEffects.VIRUS_IMMUNITY.get();
 
+        ModEffects.RECONSTRUCTION = ForgeEffects.RECONSTRUCTION.get();
+
 
         ModEntities.VAN_GOUGH_PAINTING = ForgeEntities.VAN_GOUGH_PAINTING.get();
         ModEntities.MONA_LISA_PAINTING = ForgeEntities.MONA_LISA_PAINTING.get();
