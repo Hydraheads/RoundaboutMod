@@ -52,13 +52,11 @@ public class SilverChariotBaseRenderer<T extends StandEntity> extends StandRende
     public SilverChariotBaseRenderer(EntityRendererProvider.Context context, StandModel<SilverChariotEntity> root) {
         // super(context, new SilverChariotModel<>(context.bakeLayer(ModEntityRendererClient.SILVER_CHARIOT_LAYER)), 0.0F);
         super(context, root, 0f);
-        /*
         addLayer(
-                new SilverChariotItemLayer(
-
+                new SilverChariotItemLayer<>(
+                        this
                 )
         );
-        */
     }
 
     public static ResourceLocation getSkin(byte bt) {
