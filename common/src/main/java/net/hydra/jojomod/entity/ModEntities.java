@@ -91,6 +91,8 @@ public class ModEntities {
     public static EntityType<GrabbedMobSoul> GRABBED_MOB_SOUL;
     public static EntityType<GrabbedMobSoulPlayerLarge> GRABBED_PLAYER_SOUL;
     public static EntityType<GrabbedMobSoulPlayerSlim> GRABBED_PLAYER_SOUL_SLIM;
+    public static EntityType<MandomEntity> GRABBED_MANDOM;
+    public static EntityType<HeyYaEntity> GRABBED_HEY_YA;
     public static EntityType<WalkingHeartEntity> WALKING_HEART;
     public static EntityType<JusticePirateEntity> JUSTICE_PIRATE;
     public static EntityType<DarkMirageEntity> DARK_MIRAGE;

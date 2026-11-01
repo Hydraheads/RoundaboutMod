@@ -6,11 +6,13 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRe
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.*;
 import net.hydra.jojomod.entity.badCompanyTroops.*;
-import net.hydra.jojomod.entity.gold_experience.*;
+import net.hydra.jojomod.entity.gold_experience.GEBatEntity;
+import net.hydra.jojomod.entity.gold_experience.GEBeeEntity;
+import net.hydra.jojomod.entity.gold_experience.GEBrambleEntity;
+import net.hydra.jojomod.entity.gold_experience.GEFrogEntity;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.mobs.TerrierEntity;
-import net.hydra.jojomod.entity.mobs.FalconEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
@@ -34,10 +36,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacements;
-import net.minecraft.world.entity.ambient.Bat;
-import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.animal.Wolf;
-import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.levelgen.Heightmap;
 
@@ -49,13 +48,6 @@ public class FabricEntities {
                         new ResourceLocation(Roundabout.MOD_ID, "terrier"),
                         EntityType.Builder.of(TerrierEntity::new, MobCategory.CREATURE).
                                 sized(0.6f, 0.55f).clientTrackingRange(10).build(Roundabout.MOD_ID+":terrier")
-                );
-        public static final EntityType<FalconEntity> FALCON =
-                Registry.register(
-                        BuiltInRegistries.ENTITY_TYPE,
-                        new ResourceLocation(Roundabout.MOD_ID, "falcon"),
-                        EntityType.Builder.of(FalconEntity::new, MobCategory.CREATURE).
-                                sized(0.3f, 0.65f).clientTrackingRange(10).build(Roundabout.MOD_ID+":falcon")
                 );
     public static final EntityType<Zombiefish> ZOMBIEFISH =
             Registry.register(
@@ -1378,7 +1370,6 @@ public class FabricEntities {
                 ModEntities.KING_CRIMSON_REAPER = KING_CRIMSON_REAPER;
                 ModEntities.THE_WORLD_ULTIMATE = THE_WORLD_ULTIMATE;
                 ModEntities.TERRIER_DOG = TERRIER_DOG;
-                ModEntities.FALCON = FALCON;
                 ModEntities.ZOMBIEFISH = ZOMBIEFISH;
                 ModEntities.ANUBIS_GUARDIAN = ANUBIS_GUARDIAN;
                 ModEntities.STAR_PLATINUM = STAR_PLATINUM;
@@ -1431,6 +1422,7 @@ public class FabricEntities {
                 ModEntities.DIVER_DOWN_WORLD = DIVER_DOWN_WORLD;
                 ModEntities.DIVER_DROWNED = DIVER_DROWNED;
                 ModEntities.DIVER_KICK = DIVER_KICK;
+        ModEntities.GOLD_EXPERIENCE = GOLD_EXPERIENCE;
         ModEntities.GOLD_EXPERIENCE = GOLD_EXPERIENCE;
         ModEntities.GE_BRAMBLE = GE_BRAMBLE;
         ModEntities.GE_BAT = GE_BAT;
@@ -1564,7 +1556,6 @@ public class FabricEntities {
 
                 /*Attributes*/
                 FabricDefaultAttributeRegistry.register(TERRIER_DOG, Wolf.createAttributes());
-                FabricDefaultAttributeRegistry.register(FALCON, FalconEntity.createAttributes());
                 FabricDefaultAttributeRegistry.register(STRAY_CAT, StrayCatEntity.createAttributes());
                 FabricDefaultAttributeRegistry.register(ZOMBIEFISH, Zombiefish.createAttributes());
                 FabricDefaultAttributeRegistry.register(ANUBIS_GUARDIAN, AnubisGuardian.createAttributes());
@@ -1610,10 +1601,6 @@ public class FabricEntities {
             FabricDefaultAttributeRegistry.register(DOG_MINION, DogMinion.createAttributes());
             FabricDefaultAttributeRegistry.register(OCELOT_MINION, OcelotMinion.createAttributes());
             FabricDefaultAttributeRegistry.register(PARROT_MINION, ParrotMinion.createAttributes());
-
-            FabricDefaultAttributeRegistry.register(GE_BAT, Bat.createAttributes());
-        FabricDefaultAttributeRegistry.register(GE_FROG, Frog.createAttributes());
-        FabricDefaultAttributeRegistry.register(GE_BEE, Bee.createAttributes());
 
                 FabricDefaultAttributeRegistry.register(ROAD_ROLLER_ENTITY, RoadRollerEntity.createAttributes().build());
 

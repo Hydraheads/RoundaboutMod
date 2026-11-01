@@ -597,6 +597,18 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "bs_player_soul_slim").toString())
             );
+    public static final RegistryObject<EntityType<MandomEntity>> GRABBED_MANDOM =
+            ENTITY_TYPES.register("mandom_bs", () ->
+                    EntityType.Builder.of(MandomEntity::new, MobCategory.MISC).sized(0.5F, 0.6f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "mandom_bs").toString())
+            );
+    public static final RegistryObject<EntityType<HeyYaEntity>> GRABBED_HEY_YA =
+            ENTITY_TYPES.register("hey_ya_bs", () ->
+                    EntityType.Builder.of(HeyYaEntity::new, MobCategory.MISC).sized(0.3F, 0.5f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "hey_ya_bs").toString())
+            );
     public static final RegistryObject<EntityType<PearlJamEntity>> PEARL_JAM =
             ENTITY_TYPES.register("pearl_jam", () ->
                     EntityType.Builder.of(PearlJamEntity::new, MobCategory.MISC).sized(0.25F, 0.30f).

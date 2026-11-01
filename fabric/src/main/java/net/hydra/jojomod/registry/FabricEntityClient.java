@@ -39,6 +39,7 @@ import net.hydra.jojomod.client.models.layers.MagiciansRedSpinEffectLayer;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.npcs.ZombieAestheticianModel;
 import net.hydra.jojomod.client.models.npcs.renderers.ZombieAestheticianRenderer;
+import net.hydra.jojomod.entity.stand.MandomEntity;
 import net.minecraft.client.model.SilverfishModel;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
@@ -106,6 +107,8 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.GRABBED_MOB_SOUL, GrabbedMobSoulRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GRABBED_PLAYER_SOUL, GrabbedMobSoulRendererPlayerLarge::new);
         EntityRendererRegistry.register(FabricEntities.GRABBED_PLAYER_SOUL_SLIM, GrabbedMobSoulRendererPlayerSlim::new);
+        EntityRendererRegistry.register(FabricEntities.GRABBED_MANDOM, MandomBlackSabbathRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.GRABBED_HEY_YA, HeyYaBlackSabbathRenderer::new);
         EntityRendererRegistry.register(FabricEntities.PEARL_JAM, PearlJamRenderer::new);
         EntityRendererRegistry.register(FabricEntities.WALKING_HEART, WalkingHeartRenderer::new);
         EntityRendererRegistry.register(FabricEntities.DARK_MIRAGE, DarkMirageRenderer::new);
@@ -316,6 +319,8 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GRABBED_MOB_SOUL_LAYER, GrabbedMobSoulModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GRABBED_MOB_SOUL_PLAYER_LAYER, GrabbedPlayerSoulSteveModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GRABBED_MOB_SOUL_PLAYER_SLIM_LAYER, GrabbedPlayerSoulAlexModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GRABBED_MANDOM_LAYER, MandomBlackSabbathModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GRABBED_HEY_YA_LAYER, HeyYaBlackSabbathModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DARK_MIRAGE_LAYER, DarkMirageModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.TUSK_A1_LAYER, TuskAct1Model::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.TUSK_A2_LAYER, TuskAct2Model::createBodyLayer);

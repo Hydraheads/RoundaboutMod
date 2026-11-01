@@ -18,7 +18,11 @@ public class PlanetWavesCosmicEntity extends PlanetWavesEntity {
         if (this.getUser() != null) {
             this.idle_cosmic.startIfStopped(this.tickCount);
         } else {
-            this.idle_cosmic.stop();
+            if(this.getBsGrabbed() != 0){
+                this.idle_cosmic.startIfStopped(this.tickCount);
+            } else {
+                this.idle_cosmic.stop();
+            }
         }
     }
 }
