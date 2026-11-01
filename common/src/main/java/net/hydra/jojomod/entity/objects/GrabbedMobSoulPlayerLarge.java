@@ -16,6 +16,6 @@ public class GrabbedMobSoulPlayerLarge extends GrabbedMobSoul{
 
     @Override
     public float blackSabbathGrabOffset(){
-        return 1.35f;
+        return 1.65f;
     }
 }

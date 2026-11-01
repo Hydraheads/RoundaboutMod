@@ -1876,6 +1876,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
             }
         }
+        if(!this.roundabout$getGrabbedSoul()){
+            if(this.roundabout$getGrabberSabbath() != 0){
+                roundabout$setGrabberSabbath(0);
+            }
+        }
         if (roundabout$isSealed() && !level().isClientSide()) {
             roundabout$updateSealedTicks(roundabout$sealedTicks - 1);
             if (((LivingEntity) (Object) this) instanceof Player PE && PE.isCreative()) {
@@ -3966,6 +3971,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$RIBCAGE_TRAP, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$SPRING_LEGS, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$GRABBED_SOUL, false);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$GRABBER_ID, 0);
         }
     }
 
@@ -7104,7 +7110,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     //black sabbath soul methods
-    private boolean roundabout$grabbedSoul = false;
+
     @Unique
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$GRABBED_SOUL = SynchedEntityData.defineId(
             LivingEntity.class, EntityDataSerializers.BOOLEAN);
@@ -7119,6 +7125,22 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public boolean roundabout$getGrabbedSoul() {
         return this.entityData.get(ROUNDABOUT$GRABBED_SOUL);
+    }
+
+    @Unique
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$GRABBER_ID = SynchedEntityData.defineId(
+            LivingEntity.class, EntityDataSerializers.INT);
+
+    @Unique
+    @Override
+    public void roundabout$setGrabberSabbath(int boleean) {
+        this.entityData.set(ROUNDABOUT$GRABBER_ID, boleean);
+    }
+
+    @Unique
+    @Override
+    public int roundabout$getGrabberSabbath() {
+        return this.entityData.get(ROUNDABOUT$GRABBER_ID);
     }
 
     // for diver down

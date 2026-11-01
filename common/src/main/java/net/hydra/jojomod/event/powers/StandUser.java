@@ -321,6 +321,9 @@ public interface StandUser {
     void roundabout$setGrabbedSoul(boolean grabbedSoul);
     boolean roundabout$getGrabbedSoul();
 
+    void roundabout$setGrabberSabbath(int grabbedSoul);
+    int roundabout$getGrabberSabbath();
+
     byte roundabout$getStandSkin();
     byte roundabout$getLastStandSkin();
     void roundabout$setLastStandSkin(byte lastStandSkin);

@@ -1,6 +1,7 @@
 package net.hydra.jojomod.client.models.stand;
 
 
+import net.hydra.jojomod.client.models.substand.zsabbathsouls.animations.MobSoulAnimation;
 import net.hydra.jojomod.entity.stand.PearlJamEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.stand.powers.PowersPearlJam;
@@ -209,6 +210,12 @@ public class PearlJamModel<T extends PearlJamEntity> extends StandModel<T>{
     }
 
     StandPowers Power = new PowersPearlJam(null);
+
+    @Override
+    public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+        super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
+        this.animate(pEntity.grabbedStandByBlackSabbath, MobSoulAnimation.grabbed_pearljam, pAgeInTicks, 1f);
+    }
 
     @Override
     public ModelPart root() {return stand;}

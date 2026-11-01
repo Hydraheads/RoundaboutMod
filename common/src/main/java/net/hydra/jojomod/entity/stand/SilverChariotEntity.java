@@ -637,6 +637,10 @@ public class SilverChariotEntity extends FollowingStandEntity {
             } else {
                 this.scToggleNotArmouredState.stop();
             }
+        } else {
+            if(this.getBsGrabbed() != 0){
+                this.grabbedStandByBlackSabbath.startIfStopped(this.tickCount);
+            }
         }
     }
 

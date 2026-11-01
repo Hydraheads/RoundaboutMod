@@ -1,6 +1,7 @@
 package net.hydra.jojomod.client.models.stand;
 
 import net.hydra.jojomod.client.models.stand.animations.JusticeAnimations;
+import net.hydra.jojomod.client.models.substand.zsabbathsouls.animations.MobSoulAnimation;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -121,6 +122,7 @@ public class JusticeModel<T extends JusticeEntity> extends StandModel<T> {
         this.animate(pEntity.idleAnimation, JusticeAnimations.IDLE_JUSTICE, pAgeInTicks, 0.47f);
         this.animate(pEntity.idleAnimation2, JusticeAnimations.IDLE_JUSTICE_2, pAgeInTicks, 0.3f);
         this.animate(pEntity.cackleAnimation, JusticeAnimations.CACKLE, pAgeInTicks, 1f);
+        this.animate(pEntity.grabbedStandByBlackSabbath, MobSoulAnimation.grabbed_justice, pAgeInTicks, 1f);
     }
 
     @Override

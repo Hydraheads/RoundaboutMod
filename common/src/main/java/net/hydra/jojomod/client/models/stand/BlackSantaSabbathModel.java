@@ -202,6 +202,7 @@ public class BlackSantaSabbathModel <T extends BlackSantaSabbathEntity> extends 
         this.animate(pEntity.strafeWalk, BlackSabbathAnimations.StrafeWalk, pAgeInTicks, 1f);
         this.animate(pEntity.strafeEmerge, BlackSabbathAnimations.StrafeEmerge, pAgeInTicks, 1f);
         this.animate(pEntity.grabOne, BlackSabbathAnimations.SoulGrabOne, pAgeInTicks, 1f);
+        this.animate(pEntity.grabJustice, BlackSabbathAnimations.SoulGrabJustice, pAgeInTicks, 1f);
     }
 
     @Override

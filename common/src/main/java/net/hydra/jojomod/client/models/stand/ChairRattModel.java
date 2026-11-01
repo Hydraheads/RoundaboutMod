@@ -7,6 +7,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.models.stand.animations.RattAnimations;
+import net.hydra.jojomod.client.models.substand.zsabbathsouls.animations.MobSoulAnimation;
 import net.hydra.jojomod.entity.stand.ChairRattEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.stand.ReddEntity;
@@ -196,5 +197,6 @@ public class ChairRattModel<T extends ChairRattEntity> extends StandModel<T> {
         if (pEntity.isSafe()) {
             this.setAlpha(0.5F);
         }
+        this.animate(pEntity.grabbedStandByBlackSabbath, MobSoulAnimation.grabbed_ratt, pAgeInTicks, 1f);
     }
 }

@@ -8,6 +8,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.client.models.stand.animations.SilverChariotAnimations;
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
+import net.hydra.jojomod.client.models.substand.zsabbathsouls.animations.MobSoulAnimation;
 import net.hydra.jojomod.entity.stand.SilverChariotEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.stand.powers.PowersSilverChariot;
@@ -397,6 +398,7 @@ public class SilverChariotModel<T extends SilverChariotEntity> extends StandMode
 		this.animate(pEntity.scMiningBarrageLeft, SilverChariotAnimations.LeftBarrage(), pAgeInTicks, 1.65f);
 		this.animate(pEntity.scBarrageFinisherRight, SilverChariotAnimations.RightHit3(), pAgeInTicks, 2.2f);
 		this.animate(pEntity.scBarrageFinisherLeft, SilverChariotAnimations.LeftHit3(), pAgeInTicks, 2.2f);
+        this.animate(pEntity.grabbedStandByBlackSabbath, MobSoulAnimation.grabbed_humanoid_stand,  pAgeInTicks, 1f);
 	}
 
 	@Override
