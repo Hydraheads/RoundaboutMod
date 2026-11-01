@@ -1243,10 +1243,16 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         Entity TE = getTarget();
         if (TE != null) {
             if (TE instanceof LivingEntity LE) {
-                if(blackSabbathTargets.contains(LE)) {
-                    if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){
-                        if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e && be.level().getEntity(be.getGrabbing()).is(LE)){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser) e).roundabout$updateSealedTicks(-1);be.killSoul();((StandUser)e).roundabout$setGrabberSabbath(0);}
+                if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){
+                    if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e && be.level().getEntity(be.getGrabbing()).is(LE)){
+                        be.setMeleeInteractionTicks(0);
+                        ((StandUser)e).roundabout$setGrabbedSoul(false);
+                        ((StandUser) e).roundabout$updateSealedTicks(-1);
+                        be.killSoul();
+                        ((StandUser)e).roundabout$setGrabberSabbath(0);
                     }
+                }
+                if(blackSabbathTargets.contains(LE)) {
                     this.removeTargetEntities(LE);
                     tryIntPower(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET, true, LE.getId());
                     tryIntPowerPacket(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET, LE.getId());

@@ -32,6 +32,6 @@ public class PearlJamEntity extends FollowingStandEntity{
 
     @Override
     public float blackSabbathGrabOffset(){
-        return 1.2f;
+        return 0.45f;
     }
 }

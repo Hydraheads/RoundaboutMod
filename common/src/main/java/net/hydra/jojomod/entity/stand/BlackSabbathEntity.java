@@ -1101,7 +1101,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     int securityTicks2 = 0;
 
     int meleeInteractionTicks = 0;
-    void setMeleeInteractionTicks(int i){
+    public void setMeleeInteractionTicks(int i){
         meleeInteractionTicks = i;
     }
 
@@ -1848,7 +1848,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                         if(this.grabbedSoul == null){
                             createSoul();
                         }
-                       // this.moveGrabbedSoul(Entity::setPos);
                     } else {
                         if(!this.level().isClientSide) {
                             ((StandUser) e).roundabout$updateSealedTicks(-1);
@@ -1890,19 +1889,14 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             } else {
                 Entity grab = this.level().getEntity(getGrabbing());
                 if (grab != null && grab instanceof LivingEntity l) {
-                    StandPowers sp = ((StandUser) l).roundabout$getStandPowers();
-                    StandEntity se = sp.getNewStandEntity();
-
-                    if (!(sp instanceof PowersBadCompany) && se != null) {
-                        if(se instanceof CaliforniaKingBedEntity){
+                        if(s instanceof CaliforniaKingBedEntity){
                             return 0.55f;
-                        } else if (se instanceof RattEntity){
+                        } else if (s instanceof RattEntity){
                             return 0.63f;
-                        } else if (se instanceof PearlJamEntity pj) {
+                        } else if (s instanceof PearlJamEntity) {
                             return 0.50f;
                         }
                         return 0.65f;
-                    }
                 }
             }
         }
