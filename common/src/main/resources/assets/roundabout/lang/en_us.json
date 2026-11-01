@@ -2705,6 +2705,8 @@
   "ability.roundabout.gold_experience_violent_brambles.desc": "Grow brambles out of the ground in a line. If these brambles hit an enemy, they will take damage and bleed.",
   "ability.roundabout.gold_experience_lifeform_select": "Lifeform Selection",
   "ability.roundabout.gold_experience_lifeform_select.desc": "Opens a selection screen to choose an animal to create. The screen gives detailed descriptions of every animal.",
+  "ability.roundabout.gold_experience_lifeform_creation": "Lifeform Creation",
+  "ability.roundabout.gold_experience_lifeform_creation.desc": "Create a mob that you chose with Lifeform Selection. This mob will reflect all damage done to it, except from you.",
 
   "ability.roundabout.emperor_shoot": "Shoot",
   "ability.roundabout.emperor_shoot.desc": "Shoot a bullet from the emperor.",
@@ -3584,7 +3586,7 @@
   "roundabout.gold_experience_animal.bee": "Bee",
   "roundabout.gold_experience_animal.bee.desc": "placeholder, rework these after finishing the mobs cuz the doc is kinda vague.",
   "roundabout.gold_experience_animal.bat": "Bat",
-  "roundabout.gold_experience_animal.bat.desc": "placeholder, rework these after finishing the mobs cuz the doc is kinda vague.",
+  "roundabout.gold_experience_animal.bat.desc": "Bats will find the closest entity and fly erraticaly in their face to bait reflection hits.",
   "roundabout.gold_experience_animal.fish": "Fish",
   "roundabout.gold_experience_animal.fish.desc": "placeholder, rework these after finishing the mobs cuz the doc is kinda vague.",
   "roundabout.gold_experience_animal.pirahna": "Pirahna",

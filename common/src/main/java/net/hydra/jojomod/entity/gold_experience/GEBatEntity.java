@@ -1,18 +1,23 @@
 package net.hydra.jojomod.entity.gold_experience;
 
-import net.minecraft.commands.arguments.EntityAnchorArgument;
+import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.sound.ModSounds;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ambient.Bat;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
 import java.util.List;
 
 public class GEBatEntity extends Bat implements GELifeform {
@@ -32,19 +37,71 @@ public class GEBatEntity extends Bat implements GELifeform {
         if (!this.level().isClientSide()) {
             if (this.lifespan > 0) {
                 this.lifespan--;
-
+                baitTarget();
             } else {
-                dropSourceItem();
-                this.discard();
+                this.die(this.damageSources().generic());
             }
         }
     }
 
+    private void baitTarget() {
+        List<LivingEntity> nearby = this.level().getEntitiesOfClass(
+                LivingEntity.class,
+                this.getBoundingBox().inflate(16.0D),
+                e -> e != this && e != this.creator && e.isAlive()
+        );
+
+        LivingEntity target = null;
+        double closestDist = Double.MAX_VALUE;
+
+        for (LivingEntity entity : nearby) {
+            if (!(entity instanceof Mob || entity instanceof Player) ||
+                    entity instanceof GELifeform ||
+                    entity instanceof StandEntity){
+                continue;
+            }
+            double dist = this.distanceToSqr(entity);
+            if (dist < closestDist) {
+                closestDist = dist;
+                target = entity;
+            }
+        }
+
+        if (target != null) {
+            this.setResting(false);
+
+            Vec3 targetLook = target.getLookAngle();
+            Vec3 basePos = target.position()
+                    .add(0, target.getEyeHeight(), 0)
+                    .add(targetLook.scale(2.5));
+
+            // make these bigger to make bats fly much further away
+            double time = this.tickCount * 0.4;
+            double offsetX = Math.sin(time) * 3.0;
+            double offsetY = Math.cos(time * 0.7) * 3.0;
+            double offsetZ = Math.cos(time * 1.3) * 3.0;
+
+            Vec3 erraticPos = basePos.add(offsetX, offsetY, offsetZ);
+            Vec3 flightPath = erraticPos.subtract(this.position());
+            this.setDeltaMovement(flightPath.normalize().scale(0.45));
+
+            this.lookAt(net.minecraft.commands.arguments.EntityAnchorArgument.Anchor.EYES, target.getEyePosition());
+        }
+    }
+
     @Override
-    protected void dropAllDeathLoot(DamageSource damageSource) {
+    public void die(DamageSource cause) {
         if (!this.level().isClientSide()) {
             dropSourceItem();
+            if (this.level() instanceof ServerLevel serverLevel) {
+                serverLevel.sendParticles(ParticleTypes.TOTEM_OF_UNDYING,
+                        this.getX(), this.getY(0.5), this.getZ(),
+                        15, 0.2, 0.2, 0.2, 0.05);
+            }
+            this.level().playSound(null, this.blockPosition(),
+                    ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.NEUTRAL, 1.0F, 1.0F);
         }
+        this.discard();
     }
 
     private void dropSourceItem() {
