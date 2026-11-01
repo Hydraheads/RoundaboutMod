@@ -109,5 +109,5 @@ public class FalconModel<T extends FalconEntity> extends HierarchicalModel<T> im
 		this.getHead().yRot = pNetHeadYaw * ((float) Math.PI / 180F);
 		this.getHead().xRot = pHeadPitch * ((float) Math.PI / 180F);
 		this.root().render($$0, $$1, $$2, $$3);
-	}
+	}	
 }
