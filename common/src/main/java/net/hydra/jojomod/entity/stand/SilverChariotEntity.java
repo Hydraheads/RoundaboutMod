@@ -848,7 +848,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
             if (this.onGround()) {
                 this.noGravityCarryTicks = 0;
             } else {
-                this.noGravityCarryTicks = 0;
+                this.noGravityCarryTicks++;
             }
             // updateSelfCarry();
         }
@@ -903,11 +903,20 @@ public class SilverChariotEntity extends FollowingStandEntity {
     }
 
     @Override
-    protected void positionRider(Entity $$0, MoveFunction $$1) {
-        if ($$0 instanceof Player) {
-            $$1.accept($$0,this.getX(),this.getY()+1.85d,this.getZ());
+    protected void positionRider(Entity passenger, MoveFunction moveFunction) {
+        if (passenger instanceof Player && this.level().isClientSide) {
+            moveFunction.accept(
+                    passenger,
+                    this.getX(),
+                    this.getY() + 1.85D,
+                    this.getZ()
+            );
+
+            passenger.xo = passenger.getX();
+            passenger.yo = passenger.getY();
+            passenger.zo = passenger.getZ();
         } else {
-            super.positionRider($$0,$$1);
+            super.positionRider(passenger, moveFunction);
         }
     }
 

@@ -1084,14 +1084,14 @@ public class PowersSilverChariot extends NewPunchingStand {
     @Override
     public void onHitGuard(float amt, DamageSource sauce) {
         // super.onHitGuard(amt, sauce);
-        this.setAttackTimeDuring(-10);
+        this.setAttackTimeDuring(-5);
         if (hasHandsOut()) {
             getStandUserSelf().roundabout$setStandAnimation(SilverChariotEntity.SC_GUARD_HIT);
         } else {
             this.animateStand(SilverChariotEntity.SC_GUARD_HIT);
         }
         // this.poseStand(OffsetIndex.GUARD);
-        this.setPowerNone();
+        // this.setPowerNone();
     }
 
     @Override
@@ -2163,7 +2163,7 @@ public class PowersSilverChariot extends NewPunchingStand {
         if (self instanceof Player player && self.level().isClientSide() && isPacketPlayer()) {
             int controlledId = ((IPlayerEntity) player).roundabout$getControlling();
             Entity controlled = self.level().getEntity(controlledId);
-            if (isPiloting() && controlled instanceof LivingEntity living && living.isAlive() && !living.isRemoved()) {
+            if (isPiloting() && controlled instanceof LivingEntity living && living.isAlive() && !living.isRemoved() && this.getSelfCarryMode()) {
                 if (isWithinRemoteRange(living)) {
                     SilverChariotClient.enforceCamera(living);
                 } else {
@@ -2985,13 +2985,14 @@ public class PowersSilverChariot extends NewPunchingStand {
     }
 
     public void rapierSpinServer() {
-        this.setAttackTimeDuring(-10);
+        // this.setAttackTimeDuring(-10);
+        this.setAttackTimeDuring(0);
         this.setActivePower(SILVER_CHARIOT_RAPIER_SPIN_UPDATE);
         LivingEntity origin = actionOrigin();
         if (!this.self.level().isClientSide()) {
             this.animateStand(SilverChariotEntity.SC_RAPIER_SPIN);
             // playStandUserOnlySoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false,true);
-            playSoundIfPossible(self.level(),null, origin.blockPosition(), ModSounds.GREEN_DAY_ARM_SPIN_EVENT, SoundSource.PLAYERS, 1F, (float) (1.2f + Math.random() * 0.03f));
+            // playSoundIfPossible(self.level(),null, origin.blockPosition(), ModSounds.GREEN_DAY_ARM_SPIN_EVENT, SoundSource.PLAYERS, 1F, (float) (1.2f + Math.random() * 0.03f));
             sendParticlesIfPossible(
                     self.level(), ModParticles.VACUUM,
                     origin.getX(), origin.getY(), origin.getZ(),
@@ -3549,7 +3550,7 @@ public class PowersSilverChariot extends NewPunchingStand {
     }
 
     public void statueCuttingServer() {
-        this.setAttackTimeDuring(-40);
+        this.setAttackTimeDuring(-60);
         if (!this.self.level().isClientSide() && this.self instanceof Player player) {
             if (MainUtil.getIsGamemodeApproriateForGrief(player)) {
                 if (canCreateStatue()) {
@@ -3557,7 +3558,6 @@ public class PowersSilverChariot extends NewPunchingStand {
                     createStatue();
                 }
             }
-            this.setPowerNone();
         }
     }
 
