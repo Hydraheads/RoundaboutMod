@@ -2,6 +2,7 @@ package net.hydra.jojomod.particles;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.core.particles.SimpleParticleType;
 
 public class VitalEssenceParticle extends TextureSheetParticle {
@@ -62,6 +63,11 @@ public class VitalEssenceParticle extends TextureSheetParticle {
 
             this.setSprite(this.sprites.get(frameIndex, 4));
         }
+    }
+
+    @Override
+    public int getLightColor(float partialTick) {
+        return LightTexture.FULL_BRIGHT;
     }
 
     @Override

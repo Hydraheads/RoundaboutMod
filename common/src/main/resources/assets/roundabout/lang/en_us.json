@@ -3584,7 +3584,7 @@
   "roundabout.gold_experience_animal.butterfly": "Butterfly",
   "roundabout.gold_experience_animal.butterfly.desc": "placeholder, rework these after finishing the mobs cuz the doc is kinda vague.",
   "roundabout.gold_experience_animal.bee": "Bee",
-  "roundabout.gold_experience_animal.bee.desc": "placeholder, rework these after finishing the mobs cuz the doc is kinda vague.",
+  "roundabout.gold_experience_animal.bee.desc": "Flies to the last target that you hit, or who hit you. Reverts back into an item upon contact.",
   "roundabout.gold_experience_animal.bat": "Bat",
   "roundabout.gold_experience_animal.bat.desc": "Bats will find the closest entity and fly erraticaly in their face to bait reflection hits.",
   "roundabout.gold_experience_animal.fish": "Fish",

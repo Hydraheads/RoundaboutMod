@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity.gold_experience;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.sound.ModSounds;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -49,18 +50,13 @@ public class GEBatEntity extends Bat implements GELifeform {
         List<LivingEntity> nearby = this.level().getEntitiesOfClass(
                 LivingEntity.class,
                 this.getBoundingBox().inflate(16.0D),
-                e -> e != this && e != this.creator && e.isAlive()
+                this::isValidTarget
         );
 
         LivingEntity target = null;
         double closestDist = Double.MAX_VALUE;
 
         for (LivingEntity entity : nearby) {
-            if (!(entity instanceof Mob || entity instanceof Player) ||
-                    entity instanceof GELifeform ||
-                    entity instanceof StandEntity){
-                continue;
-            }
             double dist = this.distanceToSqr(entity);
             if (dist < closestDist) {
                 closestDist = dist;
@@ -86,8 +82,17 @@ public class GEBatEntity extends Bat implements GELifeform {
             Vec3 flightPath = erraticPos.subtract(this.position());
             this.setDeltaMovement(flightPath.normalize().scale(0.45));
 
-            this.lookAt(net.minecraft.commands.arguments.EntityAnchorArgument.Anchor.EYES, target.getEyePosition());
+            this.lookAt(EntityAnchorArgument.Anchor.EYES, target.getEyePosition());
         }
+    }
+
+    private boolean isValidTarget(LivingEntity entity) {
+        return entity != this
+                && entity != this.creator
+                && entity.isAlive()
+                && (entity instanceof Mob || entity instanceof Player)
+                && !(entity instanceof GELifeform)
+                && !(entity instanceof StandEntity);
     }
 
     @Override
