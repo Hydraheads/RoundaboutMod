@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.gold_experience;
 
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -94,9 +95,9 @@ public class GEBatEntity extends Bat implements GELifeform {
         if (!this.level().isClientSide()) {
             dropSourceItem();
             if (this.level() instanceof ServerLevel serverLevel) {
-                serverLevel.sendParticles(ParticleTypes.TOTEM_OF_UNDYING,
+                serverLevel.sendParticles(ModParticles.VITAL_ESSENCE,
                         this.getX(), this.getY(0.5), this.getZ(),
-                        15, 0.2, 0.2, 0.2, 0.05);
+                        20, 0.2, 0.2, 0.2, 0.05);
             }
             this.level().playSound(null, this.blockPosition(),
                     ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.NEUTRAL, 1.0F, 1.0F);

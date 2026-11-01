@@ -12,6 +12,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ambient.Bat;
 import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.entity.player.Player;
@@ -48,10 +49,12 @@ public class GEFrogEntity extends Frog implements GELifeform {
 
     private void bounceAround() {
         if (this.onGround()) {
-            if (this.getPose() == net.minecraft.world.entity.Pose.LONG_JUMPING) {
-                this.setPose(net.minecraft.world.entity.Pose.STANDING);
+            if (this.getPose() == Pose.LONG_JUMPING) {
+                this.setPose(Pose.STANDING);
             }
             if (this.getRandom().nextInt(15) == 0) {
+                // this is actually a lot like diver down's spring legs code, except this time i also need to tell minecraft
+                // "animate the frog jumping!!!!"
                 double dx = (this.getRandom().nextDouble() - 0.5) * 1.5;
                 double dz = (this.getRandom().nextDouble() - 0.5) * 1.5;
 
@@ -59,8 +62,8 @@ public class GEFrogEntity extends Frog implements GELifeform {
                 this.setYRot((float) (Math.atan2(dz, dx) * (180F / Math.PI)) - 90.0F);
                 this.yBodyRot = this.getYRot();
 
-                this.setPose(net.minecraft.world.entity.Pose.LONG_JUMPING);
-                this.playSound(net.minecraft.sounds.SoundEvents.FROG_LONG_JUMP, 1.0F, 1.0F);
+                this.setPose(Pose.LONG_JUMPING);
+                this.playSound(SoundEvents.FROG_LONG_JUMP, 1.0F, 1.0F);
             }
         }
     }
@@ -70,9 +73,9 @@ public class GEFrogEntity extends Frog implements GELifeform {
         if (!this.level().isClientSide()) {
             dropSourceItem();
             if (this.level() instanceof ServerLevel serverLevel) {
-                serverLevel.sendParticles(ParticleTypes.TOTEM_OF_UNDYING,
+                serverLevel.sendParticles(ModParticles.VITAL_ESSENCE,
                         this.getX(), this.getY(0.5), this.getZ(),
-                        15, 0.2, 0.2, 0.2, 0.05);
+                        20, 0.2, 0.2, 0.2, 0.05);
             }
             this.level().playSound(null, this.blockPosition(),
                     ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.NEUTRAL, 1.0F, 1.0F);
