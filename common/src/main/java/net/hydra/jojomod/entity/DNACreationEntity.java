@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity;
 
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.particles.ParticleTypes;
@@ -96,13 +97,13 @@ public class DNACreationEntity extends LivingEntity {
                 MainUtil.sendParticlesIfPossible(
                         this,
                         this.level(),
-                        ParticleTypes.HAPPY_VILLAGER,
+                        ModParticles.VITAL_ESSENCE,
                         this.getX(),
-                        this.getY() + 0.5,
+                        this.getY() + 0.3,
                         this.getZ(),
-                        1,
-                        0.2, 0.2, 0.2,
-                        0.05
+                        2,
+                        0.1, 0.1, 0.1,
+                        0.04
                 );
             }
 
@@ -147,12 +148,12 @@ public class DNACreationEntity extends LivingEntity {
                     serverLevel.sendParticles(
                             ParticleTypes.TOTEM_OF_UNDYING,
                             this.getX(), this.getY() + 0.5, this.getZ(),
-                            35,
+                            25,
                             0.3, 0.3, 0.3,
                             0.25
                     );
                     serverLevel.sendParticles(
-                            ParticleTypes.HAPPY_VILLAGER,
+                            ModParticles.VITAL_ESSENCE,
                             this.getX(), this.getY() + 0.5, this.getZ(),
                             20,
                             0.4, 0.4, 0.4,
@@ -164,7 +165,7 @@ public class DNACreationEntity extends LivingEntity {
                             ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT,
                             SoundSource.PLAYERS,
                             1.0F,
-                            1.1F
+                            1.05F
                     );
                 }
             }

@@ -119,5 +119,7 @@ public class FabricParticlesClient {
         ParticleFactoryRegistry.getInstance().register(FabricParticles.METALLICA_SCISSORS, CritParticle.Provider::new);
 
         ParticleFactoryRegistry.getInstance().register(FabricParticles.TOOTH, ToothParticle.Provider::new);
+
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.VITAL_ESSENCE, VitalEssenceParticle.Provider::new);
     }
 }
