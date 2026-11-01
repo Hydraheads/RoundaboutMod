@@ -126,6 +126,10 @@ public class FalconEntity extends ShoulderRidingEntity implements VariantHolder<
         return !this.onGround();
     }
 
+    protected void checkFallDamage(double p_29370_, boolean p_29371_, BlockState p_29372_, BlockPos p_29373_) {
+    }
+
+
     @Override
     protected void registerGoals() {
 
