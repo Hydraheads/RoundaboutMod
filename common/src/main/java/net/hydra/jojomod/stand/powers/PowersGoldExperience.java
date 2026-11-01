@@ -346,6 +346,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
             if (this.animalType == AnimalTypes.BAT.id) {
                 typeToSpawn = ModEntities.GE_BAT;
             }
+            else if (this.animalType == AnimalTypes.FROG.id) {
+                typeToSpawn = ModEntities.GE_FROG;
+            }
 
             if (typeToSpawn != null) {
                 return spawnLifeform(typeToSpawn);

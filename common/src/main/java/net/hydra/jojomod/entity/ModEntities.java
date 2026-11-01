@@ -116,6 +116,7 @@ public class ModEntities {
     public static EntityType<GoldExperienceEntity> GOLD_EXPERIENCE;
     public static EntityType<GEBrambleEntity> GE_BRAMBLE;
     public static EntityType<GEBatEntity> GE_BAT;
+    public static EntityType<GEFrogEntity> GE_FROG;
     public static EntityType<SilverChariotEntity> SILVER_CHARIOT;
     public static EntityType<SilverChariotEntity> SILVER_CHARIOT_PHARAOH;
     public static EntityType<SilverChariotRapierShotEntity> SILVER_CHARIOT_RAPIER;
