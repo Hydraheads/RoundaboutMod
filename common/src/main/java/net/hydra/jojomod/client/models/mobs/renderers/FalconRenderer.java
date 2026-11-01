@@ -1,27 +1,14 @@
 package net.hydra.jojomod.client.models.mobs.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.mobs.FalconModel;
-import net.hydra.jojomod.client.models.mobs.StrayCatEntityModel;
 import net.hydra.jojomod.entity.mobs.FalconEntity;
-import net.hydra.jojomod.entity.mobs.StrayCatEntity;
-import net.hydra.jojomod.util.gravity.GravityAPI;
-import net.hydra.jojomod.util.gravity.RotationUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
 
 public class FalconRenderer<T extends FalconEntity>
         extends MobRenderer<T, FalconModel<T>> {
@@ -40,8 +27,12 @@ public class FalconRenderer<T extends FalconEntity>
     }
 
     @Override
-    public ResourceLocation getTextureLocation(T falcon) {
-        switch (falcon.getVariant()) {
+    public  ResourceLocation getTextureLocation(T falcon) {
+        return getVariantTexture(falcon.getVariant());
+    }
+
+    public static ResourceLocation getVariantTexture(FalconEntity.Variant variant) {
+        switch (variant) {
             case APLOMADO -> {return APLOMADO;}
             case GERIFALTE -> {return GERIFALTE;}
             case CARACARA -> {return CARACARA;}

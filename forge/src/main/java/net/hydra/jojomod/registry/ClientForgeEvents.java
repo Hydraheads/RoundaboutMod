@@ -467,6 +467,7 @@ public class ClientForgeEvents {
         ModStrayModels.SpikeyHairPart = new SpikeyHairPart();
         ModStrayModels.bannerFlag = new BannerFlagModel();
         ModStrayModels.dotHanHair = new DotHanHairPart();
+        ModStrayModels.polnareffDecalsPart = new PolnareffDecalsPart();
         ModStrayModels.sheriffHatPart = new SheriffHatPart();
         ModStrayModels.SandmanHairPart = new SandmanHairPart();
         ModStrayModels.LucyHairPart = new LucyHairPart();
@@ -494,6 +495,8 @@ public class ClientForgeEvents {
         ModStrayModels.LeftHeel = new LeftHeelPart();
         ModStrayModels.RightHeel = new RightHeelPart();
         ModStrayModels.JohngalliaTiePart = new JohngalliaTiePart();
+        ModStrayModels.extraHairPart = new ExtraHairPart();
+        ModStrayModels.extraHairDecorationPart = new ExtraHairDecorationPart();
 
         ModStrayModels.GoatHeadPart = new GoatHeadPart();
         ModStrayModels.CatHeadPart = new CatHeadPart();

@@ -259,6 +259,16 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             renderBigHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
+                        if (vd.rendersExtraHair() && !isHoldingBowlerHat && !isBodyFrozen
+                                && !hideExtraPartsWithSuit) {
+                            renderExtraHairPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                    r, g, b);
+                        }
+                        if (vd.rendersExtraHairDetails() && !isHoldingBowlerHat && !isBodyFrozen
+                                && !hideExtraPartsWithSuit) {
+                            renderExtraHairDecorationPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                    r, g, b);
+                        }
                         if (vd.rendersLucyHair() && !isBodyFrozen && !hideExtraPartsWithSuit) {
                             renderLucyHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
@@ -359,6 +369,10 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                         }
                         if (vd.rendersJosukeDecals() && !isBodyFrozen) {
                             renderJosukeDecals(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                    r, g, b);
+                        }
+                        if (vd.rendersPolnareffDecals() && !isBodyFrozen) {
+                            renderPolnareffDecals(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
                         if (vd.rendersDaiyaFluff() && !isBodyFrozen) {
@@ -1272,6 +1286,15 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 r, g, b, 1, path);
         ClientUtil.popPoseAndCooperate(poseStack,40);
     }
+    public void renderPolnareffDecals(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                 float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,40);
+        getParentModel().body.translateAndRotate(poseStack);
+        ModStrayModels.polnareffDecalsPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,40);
+    }
     public void renderRatTail(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
                                    float r, float g, float b) {
 
@@ -1439,5 +1462,24 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         ModStrayModels.JohngalliaTiePart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, "johngallia");
         ClientUtil.popPoseAndCooperate(poseStack,47);
+    }
+
+    public void  renderExtraHairPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity,
+                                     float xx, float yy, float zz, float partialTicks, String path,
+                                         float r, float g, float b) {
+        ClientUtil.pushPoseAndCooperate(poseStack,48);
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.extraHairPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,48);
+    }
+    public void  renderExtraHairDecorationPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity,
+                                     float xx, float yy, float zz, float partialTicks, String path,
+                                         float r, float g, float b) {
+        ClientUtil.pushPoseAndCooperate(poseStack,49);
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.extraHairDecorationPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,49);
     }
 }
