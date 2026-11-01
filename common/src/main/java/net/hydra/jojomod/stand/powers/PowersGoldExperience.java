@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.block.GEBushBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.*;
@@ -27,6 +28,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
+import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
@@ -333,21 +335,54 @@ public class PowersGoldExperience extends BlockGrabPreset {
     }
 
     private boolean executeLifeformCreation() {
-        if (this.self instanceof Player player && !this.self.level().isClientSide()) {
+        if (!this.self.level().isClientSide()) {
+
+            if(!isHoldingItem()){
+                return false;
+            }
+
+            EntityType<?> typeToSpawn = null;
+
             if (this.animalType == AnimalTypes.BAT.id) {
-                GEBatEntity bat = ModEntities.GE_BAT.create(this.self.level());
-                if (bat != null) {
-                    Vec3 spawnPos = this.self.position().add(this.self.getLookAngle().scale(1.2));
-                    bat.moveTo(spawnPos.x, spawnPos.y + 1.0, spawnPos.z, this.self.getYRot(), 0.0F);
-                    bat.setCreator(this.getSelf());
-                    this.self.level().addFreshEntity(bat);
-                    playSoundIfPossible(this.self.level(), null, this.self.blockPosition(),
-                            ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
-                    return true;
-                }
+                typeToSpawn = ModEntities.GE_BAT;
+            }
+
+            if (typeToSpawn != null) {
+                return spawnLifeform(typeToSpawn);
             }
         }
         return false;
+    }
+
+    private boolean spawnLifeform(EntityType<?> entityType) {
+        Entity entity = entityType.create(this.self.level());
+
+        if (entity instanceof LivingEntity livingEntity) {
+            Vec3 spawnPos = this.self.position().add(this.self.getLookAngle().scale(1.2));
+            livingEntity.moveTo(spawnPos.x, spawnPos.y + 1.0, spawnPos.z, this.self.getYRot(), 0.0F);
+
+            if (livingEntity instanceof GELifeform lifeform) {
+                lifeform.setCreator(this.getSelf());
+                ItemStack consumedItem = this.self.getMainHandItem().copy();
+                consumedItem.setCount(1);
+                lifeform.setSourceItem(consumedItem);
+                this.self.getMainHandItem().shrink(1);
+            }
+
+            this.self.level().addFreshEntity(livingEntity);
+            playSoundIfPossible(this.self.level(), null, this.self.blockPosition(),
+                    ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isHoldingItem() {
+        ItemStack heldItem = this.self.getMainHandItem();
+        if (heldItem.isEmpty()) {
+            return false;
+        }
+        return true;
     }
 
     // animal creation (X) end
@@ -1210,6 +1245,15 @@ public class PowersGoldExperience extends BlockGrabPreset {
         } else {
             setSkillIcon(context, x, y, 4, StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, PowerIndex.SKILL_1);
         }
+    }
+
+    @Override
+    public boolean isAttackIneptVisually(byte activeP, int slot) {
+        // lifeform creation
+        if (slot == 4 && !isHoldingSneak() && !isGuarding() && !isHoldingItem()) {
+            return true;
+        }
+        return super.isAttackIneptVisually(activeP, slot);
     }
 
     @Override
