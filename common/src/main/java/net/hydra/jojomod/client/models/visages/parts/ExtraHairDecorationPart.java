@@ -25,7 +25,7 @@ public class ExtraHairDecorationPart extends PsuedoHierarchicalModel {
         super(RenderType::entityTranslucent);
 
         this.Root = createBodyLayer().bakeRoot();
-        this.hair = Root.getChild("hair");
+        this.hair = Root.getChild("hairDecol");
     }
 
     public static LayerDefinition createBodyLayer() {
