@@ -943,6 +943,10 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new AvdolVisage(null))));
     public static final RegistryObject<Item> KAKYOIN_MASK = addToTab(ITEMS.register("kakyoin_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new KakyoinVisage(null))));
+    public static final RegistryObject<Item> POLNAREFF_MASK = addToTab(ITEMS.register("polnareff_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new PolnareffVisage(null))));
+    public static final RegistryObject<Item> BLACK_POLNAREFF_MASK = addToTab(ITEMS.register("black_polnareff_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new BlackPolnareffVisage(null))));
     public static final RegistryObject<Item> SPEEDWAGON_FOUNDATION_MASK = addToTab(ITEMS.register("speedwagon_foundation_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new SpeedwagonFoundationVisage(null))));
     public static final RegistryObject<Item> GHIACCIO_MASK = addToTab(ITEMS.register("ghiaccio_mask",
@@ -981,8 +985,6 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new SandmanVisage(null))));
     public static final RegistryObject<Item> POCOLOCO_MASK = addToTab(ITEMS.register("pocoloco_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new PocolocoVisage(null))));
-    public static final RegistryObject<Item> POLNAREFF_MASK = addToWIPTab(ITEMS.register("polnareff_mask",
-            () -> new MaskItem(new Item.Properties().stacksTo(1), new PolnareffVisage(null))));
     public static final RegistryObject<Item> TIM_MASK = addToTab(ITEMS.register("tim_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new TimVisage(null))));
     public static final RegistryObject<Item> SHERIFF_MASK = addToTab(ITEMS.register("sheriff_mask",

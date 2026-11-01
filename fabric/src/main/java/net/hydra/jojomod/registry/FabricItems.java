@@ -398,6 +398,7 @@ public class FabricItems {
     public static Item RINGO_MASK = registerItem("ringo_mask", new MaskItem(new Item.Properties().stacksTo(1), new RingoVisage(null)));
     public static Item POCOLOCO_MASK = registerItem("pocoloco_mask", new MaskItem(new Item.Properties().stacksTo(1), new PocolocoVisage(null)));
     public static Item POLNAREFF_MASK = registerItem("polnareff_mask", new MaskItem(new Item.Properties().stacksTo(1), new PolnareffVisage(null)));
+    public static Item BLACK_POLNAREFF_MASK = registerItem("black_polnareff_mask", new MaskItem(new Item.Properties().stacksTo(1), new BlackPolnareffVisage(null)));
 
     public static Item COFFIN_BLOCK_ITEM = registerItem("coffin_block",
             new CoffinBlockItem(DyeColor.BLACK, FabricBlocks.COFFIN_BLOCK, new Item.Properties().stacksTo(1)));
@@ -568,6 +569,8 @@ public class FabricItems {
                         entries.accept(JOTARO_MASK);
                         entries.accept(AVDOL_MASK);
                         entries.accept(KAKYOIN_MASK);
+                        entries.accept(POLNAREFF_MASK);
+                        entries.accept(BLACK_POLNAREFF_MASK);
                         entries.accept(SPEEDWAGON_FOUNDATION_MASK);
                         entries.accept(SHADOW_DIO_MASK);
                         entries.accept(DIO_MASK);
@@ -805,7 +808,6 @@ public class FabricItems {
                     .icon(() -> new ItemStack(AJA)).displayItems((displayContext, entries) -> {
                         //Add all items from the Jojo mod tab here
                     	//entries.accept(ModBlocks.CHESSBOARD_BLOCK);
-                        entries.accept(POLNAREFF_MASK);
                         entries.accept(FALCON_SPAWN_EGG);
                         entries.accept(STAND_DISC_D4C);
                         entries.accept(MAX_STAND_DISC_D4C);
@@ -1105,6 +1107,7 @@ public class FabricItems {
         ModItems.DIEGO_2_MASK = DIEGO_2_MASK;
         ModItems.POCOLOCO_MASK = POCOLOCO_MASK;
         ModItems.POLNAREFF_MASK = POLNAREFF_MASK;
+        ModItems.BLACK_POLNAREFF_MASK = BLACK_POLNAREFF_MASK;
         ModItems.RINGO_MASK = RINGO_MASK;
         ModItems.VALENTINE_MASK = VALENTINE_MASK;
         ModItems.LUCY_MASK = LUCY_MASK;

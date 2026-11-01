@@ -676,6 +676,7 @@ public class ForgeEvents {
         ModItems.PAINTING_BIRTH_OF_VENUS = ForgeItems.PAINTING_BIRTH_OF_VENUS.get();
         ModItems.POCOLOCO_MASK = ForgeItems.POCOLOCO_MASK.get();
         ModItems.POLNAREFF_MASK = ForgeItems.POLNAREFF_MASK.get();
+        ModItems.BLACK_POLNAREFF_MASK = ForgeItems.BLACK_POLNAREFF_MASK.get();
         ModItems.TERRIER_SPAWN_EGG = ForgeItems.TERRIER_SPAWN_EGG.get();
         ModItems.FALCON_SPAWN_EGG = ForgeItems.FALCON_SPAWN_EGG.get();
         ModItems.ZOMBIE_MINION_SPAWN_EGG = ForgeItems.ZOMBIE_MINION_SPAWN_EGG.get();

@@ -16,10 +16,7 @@ public class PolnareffVisage extends VisageData {
     public VisageData generateVisageData(LivingEntity entity){
         return new PolnareffVisage(entity);
     }
-    @Override
-    public JojoNPC getModelNPC(LivingEntity pl){
-        return ModEntities.DIO.create(pl.level());
-    }
+
     @Override
     public Vec3 sizeModifier(){
         return new Vec3(1.09F,1.09F,1.09F);
