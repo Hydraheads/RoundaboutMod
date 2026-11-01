@@ -570,6 +570,7 @@ public class FabricItems {
                         entries.accept(AVDOL_MASK);
                         entries.accept(KAKYOIN_MASK);
                         entries.accept(POLNAREFF_MASK);
+                        entries.accept(KHAN_MASK);
                         entries.accept(BLACK_POLNAREFF_MASK);
                         entries.accept(SPEEDWAGON_FOUNDATION_MASK);
                         entries.accept(SHADOW_DIO_MASK);
@@ -602,7 +603,6 @@ public class FabricItems {
                         entries.accept(DIEGO_2_MASK);
                         entries.accept(SANDMAN_MASK);
                         entries.accept(POCOLOCO_MASK);
-                        entries.accept(KHAN_MASK);
                         entries.accept(TIM_MASK);
                         entries.accept(SHERIFF_MASK);
                         entries.accept(RINGO_MASK);

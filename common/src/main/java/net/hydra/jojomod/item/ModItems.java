@@ -347,6 +347,7 @@ public class ModItems {
         addToVisageStore(CHAKA_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(KHAN_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(POLNAREFF_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(BLACK_POLNAREFF_MASK,page, characterCostExp, characterCostEmerald);
 
         page++;
         addToVisageStore(JOTARO_4_MASK,page, characterCostExp, characterCostEmerald);
