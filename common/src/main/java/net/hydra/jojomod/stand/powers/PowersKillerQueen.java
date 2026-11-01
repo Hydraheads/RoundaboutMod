@@ -1939,12 +1939,12 @@ public class PowersKillerQueen extends NewPunchingStand {
                 || move == PowerIndex.SNEAK_ATTACK_CHARGE || move == PowerIndex.SNEAK_ATTACK))
             return false;
 
-        /*
+
         if (this.getActivePower() == PowerIndex.POWER_2_BLOCK && move != PowerIndex.POWER_2_BLOCK && move != PowerIndex.POWER_2_EXTRA
-                && !(this.bombBubble != null && this.bombBubble.isAlive())) {
+                && !(this.bombBubble != null && this.bombBubble.isAlive() || !isBubbleAutoPlantingEnabled())) {
             this.stopSoundsIfNearby(AIRBUBBLE, 100, false);
         }
-        */
+
 
         StandEntity stand = getStandEntity(this.self);
 
@@ -1957,9 +1957,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             if (move == PowerIndex.GUARD && this.getActivePower() == BITES_THE_DUST_CHASE
                     || move != BITES_THE_DUST_CHASE && (this.getActivePower() == BITES_THE_DUST_CHASE && this.currentBombStatus == BOMB_NONE)) {
-                if (this.self instanceof ServerPlayer pl) {
-                    S2CPacketUtil.sendCancelSoundPacket(pl, this.self.getId(), BTD_NOISE);
-                }
+                this.stopSoundsIfNearby(BTD_NOISE, 100, true);
             }
 
             if ((this.getActivePower() == PowerIndex.BARRAGE || this.getActivePower() == PowerIndex.BARRAGE_CHARGE)
@@ -3361,9 +3359,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             packetNearby2();
         }
 
-        if (this.self instanceof ServerPlayer pl) {
-            S2CPacketUtil.sendCancelSoundPacket(pl, this.self.getId(), BTD_PLANT);
-        }
+        this.stopSoundsIfNearby(BTD_PLANT, 100, true);
 
         if (!target.isAlive()) {
             btdDefuseServer();
@@ -3473,10 +3469,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             ((ServerLevel) this.self.level()).setDayTime(targetDayTime);
         }
 
-
-        if (this.self instanceof ServerPlayer pl) {
-            S2CPacketUtil.sendCancelSoundPacket(pl, this.self.getId(), BTD_PLANT);
-        }
+        this.stopSoundsIfNearby(BTD_PLANT, 100, true);
 
         syncBombStatus(BITES_THE_DUST_BIGGER);
 
@@ -4263,8 +4256,8 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                         if ((stand.isTechnicallyInWall()) ||
                                 stand.position().distanceTo(this.getSelf().position()) > 4.5){ // Maybe configurable distance?
-                            if (this.self instanceof ServerPlayer pl && this.attackTimeDuring < 35) {
-                                S2CPacketUtil.sendCancelSoundPacket(pl, this.self.getId(), BTD_NOISE);
+                            if ( this.attackTimeDuring < 35) {
+                                this.stopSoundsIfNearby(BTD_NOISE, 100, true);
                             }
                             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                             stand.setFadePercent(100);
