@@ -103,17 +103,11 @@ public class FalconModel<T extends FalconEntity> extends HierarchicalModel<T> im
 		this.root().getAllParts().forEach(ModelPart::resetPose);
 		this.getHead().yRot = pNetHeadYaw * ((float) Math.PI / 180F);
 		this.getHead().xRot = pHeadPitch * ((float) Math.PI / 180F);
-		if (falcon.isInSittingPose()) {
-
-		}
-
 	}
 
-	public void renderOnShoulder(PoseStack $$0, VertexConsumer $$1, int $$2, int $$3, float $$4, float $$5, float $$6, int pNetHeadYaw, float pHeadPitch) {
-		this.root().render($$0, $$1, $$2, $$3);
+	public void renderOnShoulder(PoseStack $$0, VertexConsumer $$1, int $$2, int $$3, float $$4, float $$5, float pNetHeadYaw, float pHeadPitch, int ticks) {
 		this.getHead().yRot = pNetHeadYaw * ((float) Math.PI / 180F);
 		this.getHead().xRot = pHeadPitch * ((float) Math.PI / 180F);
-	}
-
-
+		this.root().render($$0, $$1, $$2, $$3);
+	}	
 }
