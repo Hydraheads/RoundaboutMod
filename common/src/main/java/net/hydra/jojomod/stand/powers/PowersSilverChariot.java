@@ -1186,7 +1186,8 @@ public class PowersSilverChariot extends NewPunchingStand {
         if (!getArmoured() && !isRegainingArmourFromDesummon()) {
             return 0.0F;
         } else if (isRegainingArmourFromDesummon()) {
-            return this.getStandUserSelf().roundabout$getMaxGuardPoints() / 220;
+            // return this.getStandUserSelf().roundabout$getMaxGuardPoints() / 220;
+            return this.getStandUserSelf().roundabout$getMaxGuardPoints();
         }
         return super.regenGuard();
     }
@@ -1196,7 +1197,8 @@ public class PowersSilverChariot extends NewPunchingStand {
         if (!getArmoured() && !isRegainingArmourFromDesummon()) {
             return 0.0f;
         } else if (isRegainingArmourFromDesummon()) {
-            return this.getStandUserSelf().roundabout$getMaxGuardPoints() / 220;
+            // return this.getStandUserSelf().roundabout$getMaxGuardPoints() / 220;
+            return this.getStandUserSelf().roundabout$getMaxGuardPoints();
         }
         return super.regenBrokenGuard();
     }
@@ -2992,11 +2994,11 @@ public class PowersSilverChariot extends NewPunchingStand {
         if (!this.self.level().isClientSide()) {
             this.animateStand(SilverChariotEntity.SC_RAPIER_SPIN);
             // playStandUserOnlySoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false,true);
-            // playSoundIfPossible(self.level(),null, origin.blockPosition(), ModSounds.GREEN_DAY_ARM_SPIN_EVENT, SoundSource.PLAYERS, 1F, (float) (1.2f + Math.random() * 0.03f));
+            playSoundIfPossible(self.level(),null, origin.blockPosition(), ModSounds.GREEN_DAY_ARM_SPIN_EVENT, SoundSource.PLAYERS, 1F, (float) (1.2f + Math.random() * 0.03f));
             sendParticlesIfPossible(
                     self.level(), ModParticles.VACUUM,
                     origin.getX(), origin.getY(), origin.getZ(),
-                    3, 1, 1, 1, 0.5
+                    3, 0, 0, 0, 0.5
             );
         }
     }
@@ -3085,7 +3087,7 @@ public class PowersSilverChariot extends NewPunchingStand {
             LivingEntity origin = actionOrigin();
             if (this.attackTimeDuring <= this.getRapierSpinDuration()) {
                 if (this.attackTimeDuring % 25 == 0) {
-                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.GREEN_DAY_ARM_SPIN_EVENT, SoundSource.PLAYERS, 1F, (float) (1.2f + Math.random() * 0.03f));
+                    // playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.GREEN_DAY_ARM_SPIN_EVENT, SoundSource.PLAYERS, 1F, (float) (1.2f + Math.random() * 0.03f));
                 }
                 if (this.self instanceof Player) {
                     this.destroyProjectilesAndDamageEntities(
@@ -3094,6 +3096,7 @@ public class PowersSilverChariot extends NewPunchingStand {
                 }
             } else {
                 // this.setCooldown(PowerIndex.SKILL_1, this.getCooldownRapierSpin());
+                this.setPowerNone();
             }
         }
     }
