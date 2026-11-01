@@ -25,7 +25,7 @@ public class PolnareffDecalsPart extends PsuedoHierarchicalModel {
         super(RenderType::entityTranslucent);
 
         this.Root = createBodyLayer().bakeRoot();
-        this.body = Root.getChild("body");
+        this.body = Root.getChild("decal");
     }
 
     public static LayerDefinition createBodyLayer() {
