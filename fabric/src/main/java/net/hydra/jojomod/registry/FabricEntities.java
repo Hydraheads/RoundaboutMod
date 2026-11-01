@@ -6,7 +6,7 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRe
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.*;
 import net.hydra.jojomod.entity.badCompanyTroops.*;
-import net.hydra.jojomod.entity.gold_experience.GEBrambleEntity;
+import net.hydra.jojomod.entity.gold_experience.*;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.mobs.TerrierEntity;
@@ -34,7 +34,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.ambient.Bat;
+import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.levelgen.Heightmap;
 
@@ -791,6 +794,30 @@ public class FabricEntities {
                     EntityType.Builder.<GEBrambleEntity>of(GEBrambleEntity::new, MobCategory.MISC).
                             sized(0.8f, 1.8f).clientTrackingRange(16).build(Roundabout.MOD_ID + ":ge_bramble")
             );
+    public static final EntityType<GEBatEntity> GE_BAT = Registry.register(
+            BuiltInRegistries.ENTITY_TYPE,
+            new ResourceLocation(Roundabout.MOD_ID, "ge_bat"),
+            EntityType.Builder.of(GEBatEntity::new, MobCategory.AMBIENT)
+                    .sized(0.5f, 0.9f)
+                    .clientTrackingRange(5)
+                    .build(Roundabout.MOD_ID + ":ge_bat")
+    );
+    public static final EntityType<GEFrogEntity> GE_FROG = Registry.register(
+            BuiltInRegistries.ENTITY_TYPE,
+            new ResourceLocation(Roundabout.MOD_ID, "ge_frog"),
+            EntityType.Builder.of(GEFrogEntity::new, MobCategory.CREATURE)
+                    .sized(0.5f, 0.9f)
+                    .clientTrackingRange(5)
+                    .build(Roundabout.MOD_ID + ":ge_frog")
+    );
+    public static final EntityType<GEBeeEntity> GE_BEE = Registry.register(
+            BuiltInRegistries.ENTITY_TYPE,
+            new ResourceLocation(Roundabout.MOD_ID, "ge_bee"),
+            EntityType.Builder.of(GEBeeEntity::new, MobCategory.CREATURE)
+                    .sized(0.5f, 0.9f)
+                    .clientTrackingRange(5)
+                    .build(Roundabout.MOD_ID + ":ge_bee")
+    );
         public static final EntityType<SilverChariotEntity> SILVER_CHARIOT =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -1406,6 +1433,9 @@ public class FabricEntities {
                 ModEntities.DIVER_KICK = DIVER_KICK;
         ModEntities.GOLD_EXPERIENCE = GOLD_EXPERIENCE;
         ModEntities.GE_BRAMBLE = GE_BRAMBLE;
+        ModEntities.GE_BAT = GE_BAT;
+        ModEntities.GE_FROG = GE_FROG;
+        ModEntities.GE_BEE = GE_BEE;
                 ModEntities.SILVER_CHARIOT = SILVER_CHARIOT;
                 ModEntities.SILVER_CHARIOT_PHARAOH =  SILVER_CHARIOT_PHARAOH;
                 ModEntities.THROWN_HARPOON = THROWN_HARPOON;
@@ -1580,6 +1610,10 @@ public class FabricEntities {
             FabricDefaultAttributeRegistry.register(DOG_MINION, DogMinion.createAttributes());
             FabricDefaultAttributeRegistry.register(OCELOT_MINION, OcelotMinion.createAttributes());
             FabricDefaultAttributeRegistry.register(PARROT_MINION, ParrotMinion.createAttributes());
+
+            FabricDefaultAttributeRegistry.register(GE_BAT, Bat.createAttributes());
+        FabricDefaultAttributeRegistry.register(GE_FROG, Frog.createAttributes());
+        FabricDefaultAttributeRegistry.register(GE_BEE, Bee.createAttributes());
 
                 FabricDefaultAttributeRegistry.register(ROAD_ROLLER_ENTITY, RoadRollerEntity.createAttributes().build());
 

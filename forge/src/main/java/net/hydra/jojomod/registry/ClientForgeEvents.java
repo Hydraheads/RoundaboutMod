@@ -10,8 +10,7 @@ import net.hydra.jojomod.client.models.*;
 import net.hydra.jojomod.client.models.badCompanyTroops.*;
 import net.hydra.jojomod.client.models.badCompanyTroops.renderers.*;
 import net.hydra.jojomod.client.models.corpses.renderers.*;
-import net.hydra.jojomod.client.models.gold_experience.GEBrambleModel;
-import net.hydra.jojomod.client.models.gold_experience.GEBrambleRenderer;
+import net.hydra.jojomod.client.models.gold_experience.*;
 import net.hydra.jojomod.client.models.minions.*;
 import net.hydra.jojomod.client.models.minions.head_parts.*;
 import net.hydra.jojomod.client.models.minions.renderers.*;
@@ -150,6 +149,9 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.BONE_PROJECTILE.get(), BoneProjectileRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GOLD_EXPERIENCE.get(), GoldExperienceRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GE_BRAMBLE.get(), GEBrambleRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.GE_BAT.get(), GEBatRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.GE_FROG.get(), GEFrogRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.GE_BEE.get(), GEBeeRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT.get(), SilverChariotRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT_PHARAOH.get(), SilverChariotPharaohRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT_RAPIER.get(), SilverChariotRapierRenderer::new);
@@ -653,6 +655,7 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.PURPLE_HAZE_SMOKE.get(), PurpleHazeSmokeParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.PURPLE_HAZE_BLASTWAVE.get(), PurpleHazeSmokeParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.DISTORTION_SMOKE.get(), DistortionSmokeParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.VITAL_ESSENCE.get(), VitalEssenceParticle.Provider::new);
     }
 
     @SubscribeEvent
