@@ -1136,6 +1136,14 @@ public class StandIcons {
             "textures/gui/icons/gold_experience/bramble_trap.png");
     public static final ResourceLocation GOLD_EXPERIENCE_VINE_CLIMB = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/gold_experience/vine_climb.png");
+    public static final ResourceLocation GOLD_EXPERIENCE_HEAL = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/gold_experience/heal.png");
+    public static final ResourceLocation GOLD_EXPERIENCE_BRAMBLES = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/gold_experience/violent_brambles.png");
+    public static final ResourceLocation GOLD_EXPERIENCE_LIFEFORM_SELECT = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/gold_experience/lifeform_select.png");
+    public static final ResourceLocation GOLD_EXPERIENCE_LIFEFORM_CREATION = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/gold_experience/lifeform_creation.png");
 
     // gold experience icons end
 

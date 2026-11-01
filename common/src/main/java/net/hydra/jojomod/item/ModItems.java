@@ -125,6 +125,7 @@ public class ModItems {
     public static Item METEORITE;
     public static Item METEORITE_INGOT;
     public static Item TERRIER_SPAWN_EGG;
+    public static Item FALCON_SPAWN_EGG;
     public static Item ZOMBIE_MINION_SPAWN_EGG;
     public static Item AESTHETICIAN_SPAWN_EGG;
     public static Item ZOMBIE_AESTHETICIAN_SPAWN_EGG;
@@ -255,6 +256,8 @@ public class ModItems {
     public static Item AESTHETICIAN_MASK_5;
     public static Item AESTHETICIAN_MASK_ZOMBIE;
     public static Item POCOLOCO_MASK;
+    public static Item POLNAREFF_MASK;
+    public static Item BLACK_POLNAREFF_MASK;
     public static Item RINGO_MASK;
     public static Item ANASUI_MASK;
     public static Item FEM_ANASUI_MASK;
@@ -329,7 +332,7 @@ public class ModItems {
                 ClientNetworking.getAppropriateConfig().cinderellaSettings.emeraldCostModificationVisage);
         int characterCostExp = ClientNetworking.getAppropriateConfig().cinderellaSettings.levelCostCharacterVisage;
         int characterCostEmerald = ClientNetworking.getAppropriateConfig().cinderellaSettings.emeraldCostCharacterVisage;
-        //37 67 -34
+        //37 67 -34 + Each page can contain 5x5 masks.
         page++;
         addToVisageStore(SPEEDWAGON_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(DIO_VAMPIRE_MASK,page, characterCostExp, characterCostEmerald);
@@ -342,6 +345,9 @@ public class ModItems {
         addToVisageStore(SHADOW_DIO_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(ENYA_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(CHAKA_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(KHAN_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(POLNAREFF_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(BLACK_POLNAREFF_MASK,page, characterCostExp, characterCostEmerald);
 
         page++;
         addToVisageStore(JOTARO_4_MASK,page, characterCostExp, characterCostEmerald);

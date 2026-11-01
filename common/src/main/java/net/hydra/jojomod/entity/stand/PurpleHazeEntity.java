@@ -42,6 +42,9 @@ public class PurpleHazeEntity extends FollowingStandEntity{
     public final AnimationState fallinghit= new AnimationState();
     public final AnimationState fallinghitlong= new AnimationState();
     public final AnimationState fallinghitimpact= new AnimationState();
+    public final AnimationState kickWindup = new AnimationState();
+    public final AnimationState kickAttack = new AnimationState();
+    public final AnimationState podLaunch = new AnimationState();
 
 
     public static byte
@@ -53,7 +56,12 @@ public class PurpleHazeEntity extends FollowingStandEntity{
             FALLINGHITSTART = 94,
             FALLINGHIT = 95,
             FALLINGHITLONG = 96,
-            FALLINGHITIMPACT = 97;
+            FALLINGHITIMPACT = 97,
+            KICK_WINDUP = 98,
+            KICK_ATTACK = 99,
+            POD_LAUNCH = 100,
+            SNEAK_CHARGE = 101,
+            SNEAK_ATTACK = 102;
 
 
 
@@ -81,6 +89,24 @@ public class PurpleHazeEntity extends FollowingStandEntity{
                 this.kick_barrage_windup.startIfStopped(this.tickCount);
             } else {
                 this.kick_barrage_windup.stop();
+            }
+
+            if (this.getAnimation() == KICK_WINDUP) {
+                this.kickWindup.startIfStopped(this.tickCount);
+            } else {
+                this.kickWindup.stop();
+            }
+
+            if (this.getAnimation() == KICK_ATTACK) {
+                this.kickAttack.startIfStopped(this.tickCount);
+            } else {
+                this.kickAttack.stop();
+            }
+
+            if (this.getAnimation() == POD_LAUNCH) {
+                this.podLaunch.startIfStopped(this.tickCount);
+            } else {
+                this.podLaunch.stop();
             }
 
             if (this.getAnimation() == 43) {

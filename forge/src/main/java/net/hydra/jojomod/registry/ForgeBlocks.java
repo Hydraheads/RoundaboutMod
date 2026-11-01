@@ -397,7 +397,7 @@ public class ForgeBlocks {
     public static final RegistryObject<Block> DIVER_LIMB = BLOCKS.register("diver_limb",
             () -> ModBlocks.DIVER_LIMB_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> SC_RAPIER_PLATFORM = BLOCKS.register("sc_rapier_platform",
-            () -> ModBlocks.DIVER_LIMB_BLOCK_PROPERTIES);
+            () -> ModBlocks.SC_RAPIER_PLATFORM_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> GE_BUSH = BLOCKS.register("ge_bush",
             () -> ModBlocks.GE_BUSH_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> GE_VINE = BLOCKS.register("ge_vine",

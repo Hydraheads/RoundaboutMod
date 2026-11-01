@@ -397,7 +397,6 @@ public class FabricBlocks {
         ModBlocks.AJA_BLOCK = AJA_BLOCK;
         ModBlocks.FROZEN_DIRT = FROZEN_DIRT;
         ModBlocks.CLIMBING_WIRE = CLIMBING_WIRE;
-        ModBlocks.SC_RAPIER_PLATFORM_BLOCK = SC_RAPIER_PLATFORM_BLOCK;
         ModBlocks.FROZEN_COBBLESTONE = FROZEN_COBBLESTONE;
         ModBlocks.FROZEN_STONE = FROZEN_STONE;
         ModBlocks.FROZEN_DEEPSLATE = FROZEN_DEEPSLATE;
@@ -494,6 +493,7 @@ public class FabricBlocks {
         ModBlocks.MINING_ALERT_BLOCK = MINING_ALERT_BLOCK;
         ModBlocks.BUBBLE_SCAFFOLD = BUBBLE_SCAFFOLD;
         ModBlocks.DIVER_LIMB = DIVER_LIMB;
+        ModBlocks.SC_RAPIER_PLATFORM = SC_RAPIER_PLATFORM;
         ModBlocks.GE_BUSH = GE_BUSH;
         ModBlocks.GE_VINE = GE_VINE;
         ModBlocks.FLESH_BLOCK = FLESH_BLOCK;
