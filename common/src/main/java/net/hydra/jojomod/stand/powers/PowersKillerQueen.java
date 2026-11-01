@@ -1941,7 +1941,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
 
         if (this.getActivePower() == PowerIndex.POWER_2_BLOCK && move != PowerIndex.POWER_2_BLOCK && move != PowerIndex.POWER_2_EXTRA
-                && !(this.bombBubble != null && this.bombBubble.isAlive() || !isBubbleAutoPlantingEnabled())) {
+                /*&& !(this.bombBubble != null && this.bombBubble.isAlive() || !isBubbleAutoPlantingEnabled())*/) {
             this.stopSoundsIfNearby(AIRBUBBLE, 100, false);
         }
 
