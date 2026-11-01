@@ -650,7 +650,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
             }
             */
 
-            if (!this.getArmoured()) {
+            if (!armoured) {
                 this.scToggleNotArmouredState.startIfStopped(this.tickCount);
             } else {
                 this.scToggleNotArmouredState.stop();
