@@ -1921,6 +1921,8 @@ public class PowersKillerQueen extends NewPunchingStand {
     
     // Client2Server Receiver Methods
 
+    private boolean bubbleSendedSuccesfully = false;
+
     @Override
     public boolean tryPower(int move, boolean forced) {
         if (move == BITES_THE_DUST_DEFUSE) { btdTicksMax = 0; }
@@ -1941,7 +1943,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
 
         if (this.getActivePower() == PowerIndex.POWER_2_BLOCK && move != PowerIndex.POWER_2_BLOCK && move != PowerIndex.POWER_2_EXTRA
-                /*&& !(this.bombBubble != null && this.bombBubble.isAlive() || !isBubbleAutoPlantingEnabled())*/) {
+                && !(bubbleSendedSuccesfully)) {
             this.stopSoundsIfNearby(AIRBUBBLE, 100, false);
         }
 
@@ -3028,6 +3030,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
         if (!this.isClient()) {
             this.setAttackTimeDuring(0);
+            bubbleSendedSuccesfully = false;
             this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
             playSoundsIfNearby(AIRBUBBLE, 27, false);
             this.animateStand(KillerQueenEntity.BUBBLE_SEND);
@@ -3054,7 +3057,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             LivingEntity user = this.getSelf();
             StrayCatAirBubble bubble = ModEntities.STRAY_CAT_AIRBUBBLE.create(user.level());
             if (bubble != null) {
-
+                bubbleSendedSuccesfully = true;
                 bubble.setSped(getStrayCatAirBubbleSpeed());
 
                 bubble.setOwner(user);
