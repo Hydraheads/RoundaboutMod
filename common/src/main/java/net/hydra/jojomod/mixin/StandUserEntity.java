@@ -12,6 +12,7 @@ import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.TridentsIgnoreThis;
 import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.entity.gold_experience.GELifeform;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
@@ -4188,6 +4189,37 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         // GE heal effect clear when hit
         if (entity.hasEffect(ModEffects.RECONSTRUCTION)) {
             entity.removeEffect(ModEffects.RECONSTRUCTION);
+        }
+        // GE mobs damage reflection
+        if (this instanceof GELifeform lifeform) {
+            Entity attacker = $$0.getEntity() != null ? $$0.getEntity() : $$0.getDirectEntity();
+            // normal generic kill stuff should go through
+            if ($$0.is(DamageTypes.FELL_OUT_OF_WORLD) || $$0.is(DamageTypes.GENERIC_KILL) || attacker == lifeform.getCreator()) {
+                return;
+            }
+
+            if (!this.level().isClientSide() && !lifeform.isReflectingDamage() && $$1 > 0) {
+                if (attacker != null && attacker.isAlive() && attacker != lifeform.getCreator()) {
+                    lifeform.setReflectingDamage(true);
+                    try {
+                        // reflect the damage
+                        attacker.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.STAND, (LivingEntity) (Object) this), $$1);
+
+                        if (this.level() instanceof ServerLevel serverLevel) {
+                            serverLevel.sendParticles(
+                                    ParticleTypes.CRIT,
+                                    attacker.getX(), attacker.getY() + 1.0, attacker.getZ(),
+                                    12, 0.2, 0.2, 0.2, 0.1
+                            );
+                        }
+                    } finally {
+                        lifeform.setReflectingDamage(false);
+                    }
+                    //animal shouldn't be taking damage, like that time the forg tanked a shovel to the dome
+                    ci.setReturnValue(false);
+                    return;
+                }
+            }
         }
 
         // Coprse damage is converted and multiplied for Justice Army

@@ -7,7 +7,7 @@ import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.*;
-import net.hydra.jojomod.entity.gold_experience.GEBrambleEntity;
+import net.hydra.jojomod.entity.gold_experience.*;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.GoldExperienceEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -25,12 +25,15 @@ import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.BlockGrabPreset;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.config.ClientConfig;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -72,7 +75,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
         BUSH_CREATION = 55,
         WALL_VINES = 56,
         HEAL = 57,
-        BRAMBLES = 58;
+        BRAMBLES = 58,
+        LIFEFORM_CREATION = 59;
 
     // for life punch
     private LifePunchCloneEntity lifePunchClone = null;
@@ -85,6 +89,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
     private final List<BrambleSpawnData> pendingBrambles = new ArrayList<>();
     private int brambleSpawnTimer = 0;
     private record BrambleSpawnData(Vec3 pos, float yRot) {}
+
+    //for lifeforms
+    /**For mob ai, change the animalType before trypower to set what kind of plunder it has*/
+    private byte animalType = AnimalTypes.FROG.id;
 
     // basic stand registry stuff
     public PowersGoldExperience(LivingEntity self) {super(self);}
@@ -210,6 +218,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
             case SKILL_1_CROUCH -> {
                 tryHeal();
             }
+            // lifeform creation
+            case SKILL_2_NORMAL -> {
+                tryMakeAnimalClient();
+            }
             // dash or vine climb
             case SKILL_3_NORMAL -> {
                 tryToDashClient();
@@ -254,7 +266,21 @@ public class PowersGoldExperience extends BlockGrabPreset {
         else if (move == BRAMBLES) {
             return startBrambleWindup();
         }
+        else if (move == LIFEFORM_CREATION) {
+            return executeLifeformCreation();
+        }
         return super.setPowerOther(move, lastMove);
+    }
+
+    /* note: passedInt could be anything, it could be charge time, etc. for the purposes of life punch, for example
+    passedInt could be what animal you're making
+    */
+    public boolean tryIntPower(int move, boolean forced, int passedInt){
+        //note, put item throw here later too
+        if (move == LIFEFORM_CREATION) {
+            animalType = (byte)passedInt;
+        }
+        return super.tryIntPower(move, forced, passedInt);
     }
 
     @Override
@@ -293,6 +319,38 @@ public class PowersGoldExperience extends BlockGrabPreset {
             dash();
         }
     }
+
+    // animal creation (X) start
+
+    private void tryMakeAnimalClient() {
+        int animalClientConfig = 1;
+        ClientConfig clientConfig = ConfigManager.getClientConfig();
+        if (clientConfig != null && clientConfig.dynamicSettings != null) {
+            animalClientConfig = clientConfig.dynamicSettings.goldExperienceCurrentAnimal;
+        }
+        this.tryIntPower(LIFEFORM_CREATION, true, animalClientConfig);
+        tryIntPowerPacket(LIFEFORM_CREATION, animalClientConfig);
+    }
+
+    private boolean executeLifeformCreation() {
+        if (this.self instanceof Player player && !this.self.level().isClientSide()) {
+            if (this.animalType == AnimalTypes.BAT.id) {
+                GEBatEntity bat = ModEntities.GE_BAT.create(this.self.level());
+                if (bat != null) {
+                    Vec3 spawnPos = this.self.position().add(this.self.getLookAngle().scale(1.2));
+                    bat.moveTo(spawnPos.x, spawnPos.y + 1.0, spawnPos.z, this.self.getYRot(), 0.0F);
+                    bat.setCreator(this.getSelf());
+                    this.self.level().addFreshEntity(bat);
+                    playSoundIfPossible(this.self.level(), null, this.self.blockPosition(),
+                            ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    // animal creation (X) end
 
     // animal selection start
 
@@ -592,11 +650,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
     //all of ge's moves are uncancellable, so this can go here
     @Override
     public boolean canInterruptPower(DamageSource sauce, Entity interrupter){
-
         if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
             return true;
         }
-
         return super.canInterruptPower(sauce, interrupter);
     }
 
