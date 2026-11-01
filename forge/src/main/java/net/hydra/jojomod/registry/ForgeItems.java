@@ -931,7 +931,7 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new DioVampireVisage(null))));
     public static final RegistryObject<Item> DIO_MASK = addToTab(ITEMS.register("dio_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new DIOVisage(null))));
-    public static final RegistryObject<Item> KHAN_MASK = addToWIPTab(ITEMS.register("khan_mask",
+    public static final RegistryObject<Item> KHAN_MASK = addToTab(ITEMS.register("khan_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new KhanVisage(null))));
     public static final RegistryObject<Item> SHADOW_DIO_MASK = addToTab(ITEMS.register("shadow_dio_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new ShadowDIOVisage(null))));
@@ -981,6 +981,8 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new SandmanVisage(null))));
     public static final RegistryObject<Item> POCOLOCO_MASK = addToTab(ITEMS.register("pocoloco_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new PocolocoVisage(null))));
+    public static final RegistryObject<Item> POLNAREFF_MASK = addToWIPTab(ITEMS.register("polnareff_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new PolnareffVisage(null))));
     public static final RegistryObject<Item> TIM_MASK = addToTab(ITEMS.register("tim_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new TimVisage(null))));
     public static final RegistryObject<Item> SHERIFF_MASK = addToTab(ITEMS.register("sheriff_mask",
