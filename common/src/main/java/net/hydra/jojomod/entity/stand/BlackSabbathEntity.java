@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity.stand;
 import net.hydra.jojomod.access.AccessThrownTrident;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerEntityServer;
+import net.hydra.jojomod.client.models.stand.MandomBlackSabbathModel;
 import net.hydra.jojomod.client.models.stand.RattModel;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.badCompanyTroops.BCTroop;
@@ -118,10 +119,31 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     public final AnimationState strafeEmerge = new AnimationState();
     public final AnimationState grabOne = new AnimationState();
     public final AnimationState grabJustice = new AnimationState();
+    public final AnimationState grabHeyYa = new AnimationState();
  @Override
  public void setupAnimationStates() {
      super.setupAnimationStates();
      Byte bt = this.getBsAnimation();
+     if(this.getUser() == null){
+         if(this.getBsGrabbed() != 0){
+             grabbedStandByBlackSabbath.startIfStopped(this.tickCount);
+             burningCripple.stop();
+             burningStart.stop();
+             strafeEmerge.stop();
+             strafeWalk.stop();
+             catching.stop();
+             this.emerge.stop();
+             this.diving.stop();
+             this.chest_open.stop();
+             this.coat_open.stop();
+             walk.stop();
+             stando.stop();
+             grabOne.stop();
+             grabJustice.stop();
+             grabHeyYa.stop();
+             return;
+         }
+     }
      switch (bt) {
          case 0 -> {
              coat_open.startIfStopped(this.tickCount);
@@ -200,11 +222,13 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
              burningStart.stop();
              grabOne.stop();
              grabJustice.stop();
+             grabHeyYa.stop();
              burningDive.startIfStopped(this.tickCount);
          }
          case 8 -> {
              grabOne.stop();
              grabJustice.stop();
+             grabHeyYa.stop();
              burningCripple.stop();
              burningStart.stop();
              this.chest_close.stop();
@@ -251,6 +275,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
              catching.stop();
              emerge.stop();
              grabJustice.stop();
+             grabHeyYa.stop();
              grabOne.startIfStopped(this.tickCount);
          }
          case 12 -> {
@@ -308,6 +333,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
              stando.stop();
              this.chest_open.stop();
              grabJustice.stop();
+             grabHeyYa.stop();
              burningStart.startIfStopped(this.tickCount);
              burningCripple.stop();
          }
@@ -316,6 +342,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
              this.chest_close.stop();
              grabOne.stop();
              grabJustice.stop();
+             grabHeyYa.stop();
              strafeEmerge.stop();
              strafeWalk.stop();
              catching.stop();
@@ -342,6 +369,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
              stando.stop();
              grabOne.stop();
              grabJustice.stop();
+             grabHeyYa.stop();
              this.chest_close.startIfStopped(this.tickCount);
          }
          case 18 -> {
@@ -355,6 +383,21 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
              catching.stop();
              emerge.stop();
              grabJustice.startIfStopped(this.tickCount);
+             grabHeyYa.stop();
+             grabOne.stop();
+         }
+         case 19 -> {
+             this.coat_open.stop();
+             burningDive.stop();
+             burningCripple.stop();
+             burningStart.stop();
+             walk.stop();
+             stando.stop();
+             diving.stop();
+             catching.stop();
+             emerge.stop();
+             grabHeyYa.startIfStopped(this.tickCount);
+             grabJustice.stop();
              grabOne.stop();
          }
      }
@@ -448,9 +491,15 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                      } else {
                                          if (this.level().getEntity(this.getGrabbing()) != null) {
                                              if(meleeInteractionTicks > 20) {
-                                                 if(this.grabbedSoul instanceof JusticeEntity je) {
-                                                     setBsAnimations((byte) 18);
-                                                 } else {
+                                                 if(this.grabbedSoul instanceof JusticeEntity) {
+                                                     if(this.grabbedSoul instanceof DarkMirageEntity){
+                                                         setBsAnimations((byte) 11);
+                                                     } else {
+                                                         setBsAnimations((byte) 18);
+                                                     }
+                                                 } else if (this.grabbedSoul instanceof HeyYaEntity){
+                                                     setBsAnimations((byte) 19);
+                                                 }else {
                                                      setBsAnimations((byte) 11);
                                                  }
                                              } else {
@@ -1509,6 +1558,9 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                         if(s instanceof RattEntity r){
                             r.setSavedSkin(pw.standSkin);
                         }
+                        if(pw instanceof PowersSurvivor ps){
+                            ps.removeAllSurvivors();
+                        }
                     }
                 }
                 s.setFadeOut((byte) 8);
@@ -1529,12 +1581,17 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         if(grab != null && grab instanceof LivingEntity l){
             StandPowers sp = ((StandUser)l).roundabout$getStandPowers();
             StandEntity s = sp.getNewStandEntity();
-            boolean regSoul = s == null && (!(sp instanceof PowersBadCompany));
+            boolean regSoul = s == null && (!(sp instanceof PowersBadCompany) && !(sp instanceof PowersBlackSabbath));
             if(!regSoul) {
                 if (s != null) {
                     return s;
                 }
-            }else {
+            } else if (sp instanceof PowersHeyYa){
+                return ModEntities.GRABBED_HEY_YA.create(this.level());
+            } else if (sp instanceof PowersMandom){
+                return ModEntities.GRABBED_MANDOM.create(this.level());
+            }
+            else {
                 if(l instanceof Player){
                     if(getSlimSoul()) {
                         return ModEntities.GRABBED_PLAYER_SOUL.create(this.level());
@@ -1848,6 +1905,9 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                         if(this.grabbedSoul == null){
                             createSoul();
                         }
+                        if(!e.isAlive() || e.isDeadOrDying() || e.isRemoved()){
+                            setMeleeInteractionTicks(5);
+                        }
                     } else {
                         if(!this.level().isClientSide) {
                             ((StandUser) e).roundabout$updateSealedTicks(-1);
@@ -1895,8 +1955,13 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                             return 0.63f;
                         } else if (s instanceof PearlJamEntity) {
                             return 0.50f;
+                        } else if (s instanceof MandomEntity){
+                            return 0.45f;
+                        } else if (s instanceof HeyYaEntity){
+                            return 0.0f;
+                        } else {
+                            return 0.65f;
                         }
-                        return 0.65f;
                 }
             }
         }

@@ -7,6 +7,7 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.stand.StandModel;
+import net.hydra.jojomod.entity.objects.GrabbedMobSoul;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.entity.stand.SoftAndWetEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -110,9 +111,13 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
             }
         }
 
-        if (User != null && User.isBaby()){
-            matrixStack.scale(0.6F, 0.6F, 0.6F);
-            this.model.young = true;
+        if(!(mobEntity instanceof GrabbedMobSoul)) {
+            if (User != null && User.isBaby()) {
+                matrixStack.scale(0.6F, 0.6F, 0.6F);
+                this.model.young = true;
+            } else {
+                this.model.young = false;
+            }
         } else {
             this.model.young = false;
         }

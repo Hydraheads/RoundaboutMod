@@ -668,6 +668,20 @@ public class FabricEntities {
                     EntityType.Builder.of(GrabbedMobSoulPlayerSlim::new, MobCategory.MISC).
                             sized(0.4F, 1.8f).clientTrackingRange(14).build(Roundabout.MOD_ID+":bs_player_soul_slim")
             );
+    public static final EntityType<MandomEntity> GRABBED_MANDOM =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "mandom_bs"),
+                    EntityType.Builder.of(MandomEntity::new, MobCategory.MISC).
+                            sized(0.5F, 0.6f).clientTrackingRange(14).build(Roundabout.MOD_ID+":mandom_bs")
+            );
+    public static final EntityType<HeyYaEntity> GRABBED_HEY_YA =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "hey_ya_bs"),
+                    EntityType.Builder.of(HeyYaEntity::new, MobCategory.MISC).
+                            sized(0.3F, 0.5f).clientTrackingRange(14).build(Roundabout.MOD_ID+":hey_ya_bs")
+            );
         public static final EntityType<WalkingHeartEntity> WALKING_HEART =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -1373,6 +1387,8 @@ public class FabricEntities {
                 ModEntities.GRABBED_MOB_SOUL = GRABBED_MOB_SOUL;
                 ModEntities.GRABBED_PLAYER_SOUL = GRABBED_PLAYER_SOUL;
                 ModEntities.GRABBED_PLAYER_SOUL_SLIM = GRABBED_PLAYER_SOUL_SLIM;
+                ModEntities.GRABBED_MANDOM = GRABBED_MANDOM;
+                ModEntities.GRABBED_HEY_YA = GRABBED_HEY_YA;
                 ModEntities.WALKING_HEART = WALKING_HEART;
                 ModEntities.PEARL_JAM = PEARL_JAM;
                 ModEntities.JUSTICE_PIRATE = JUSTICE_PIRATE;
@@ -1387,7 +1403,7 @@ public class FabricEntities {
                 ModEntities.DIVER_DOWN_WORLD = DIVER_DOWN_WORLD;
                 ModEntities.DIVER_DROWNED = DIVER_DROWNED;
                 ModEntities.DIVER_KICK = DIVER_KICK;
-        ModEntities.GOLD_EXPERIENCE = GOLD_EXPERIENCE;
+                ModEntities.GOLD_EXPERIENCE = GOLD_EXPERIENCE;
                 ModEntities.SILVER_CHARIOT = SILVER_CHARIOT;
                 ModEntities.SILVER_CHARIOT_PHARAOH =  SILVER_CHARIOT_PHARAOH;
                 ModEntities.THROWN_HARPOON = THROWN_HARPOON;
@@ -1613,6 +1629,8 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(GRABBED_MOB_SOUL, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(GRABBED_PLAYER_SOUL, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(GRABBED_PLAYER_SOUL_SLIM, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(GRABBED_MANDOM, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(GRABBED_HEY_YA, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(WALKING_HEART, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(DIVER_DOWN, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(DIVER_DOWN_BETA, StandEntity.createStandAttributes());

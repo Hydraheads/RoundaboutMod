@@ -254,6 +254,7 @@ public class BlackSabbathModel<T extends BlackSabbathEntity> extends StandModel<
         this.animate(pEntity.strafeEmerge, BlackSabbathAnimations.StrafeEmerge, pAgeInTicks, 1f);
         this.animate(pEntity.grabOne, BlackSabbathAnimations.SoulGrabOne, pAgeInTicks, 1f);
         this.animate(pEntity.grabJustice, BlackSabbathAnimations.SoulGrabJustice, pAgeInTicks, 1f);
+        this.animate(pEntity.grabHeyYa, BlackSabbathAnimations.SoulGrabHeyYa, pAgeInTicks, 1f);
 	} private float swimRotCorrect = 0.0F;
 
 	@Override
