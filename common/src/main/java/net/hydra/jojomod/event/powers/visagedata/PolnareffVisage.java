@@ -48,4 +48,5 @@ public class PolnareffVisage extends VisageData {
 
     public boolean rendersExtraHair() {return true;}
     public boolean rendersExtraHairDetails() {return true;}
+    public boolean rendersPolnareffDecals() { return true; }
 }

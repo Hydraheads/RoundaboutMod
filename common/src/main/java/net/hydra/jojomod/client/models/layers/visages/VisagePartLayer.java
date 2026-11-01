@@ -371,6 +371,10 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             renderJosukeDecals(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
+                        if (vd.rendersPolnareffDecals() && !isBodyFrozen) {
+                            renderPolnareffDecals(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                    r, g, b);
+                        }
                         if (vd.rendersDaiyaFluff() && !isBodyFrozen) {
                             if (!hideExtraPartsWithSuit) {
                                 renderDaiyaFluff(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
@@ -1279,6 +1283,15 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         ClientUtil.pushPoseAndCooperate(poseStack,40);
         getParentModel().body.translateAndRotate(poseStack);
         ModStrayModels.JosukeDecalsPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,40);
+    }
+    public void renderPolnareffDecals(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                 float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,40);
+        getParentModel().body.translateAndRotate(poseStack);
+        ModStrayModels.polnareffDecalsPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
         ClientUtil.popPoseAndCooperate(poseStack,40);
     }

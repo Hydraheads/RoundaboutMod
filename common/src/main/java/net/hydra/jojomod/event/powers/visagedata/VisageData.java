@@ -101,6 +101,9 @@ public class VisageData {
     public boolean rendersJosukeDecals(){
         return false;
     }
+    public boolean rendersPolnareffDecals(){
+        return false;
+    }
     public boolean rendersTasselHat(){
         return false;
     }
