@@ -28,27 +28,25 @@ public class GoldExperienceLifePunchLayer extends RenderLayer<GoldExperienceEnti
 
             GoldExperienceModel<GoldExperienceEntity> model = (GoldExperienceModel<GoldExperienceEntity>) this.getParentModel();
 
-            // Hide left arm so it only renders on the right hand
+            // hide left arm so it only renders on the right hand
             model.left_arm.visible = false;
 
-            // 1. WHITE-HOT CORE PASS: Placed at 1.0F scale so it perfectly matches the hand geometry
             VertexConsumer coreConsumer = bufferSource.getBuffer(RenderType.entityTranslucentEmissive(CORE_TEXTURE));
             model.renderToBuffer(
                     poseStack,
                     coreConsumer,
-                    15728880, // Fullbright
+                    15728880,
                     OverlayTexture.NO_OVERLAY,
-                    1.0F, 1.0F, 1.0F, 0.55F // White core intensity
+                    1.0F, 1.0F, 1.0F, 0.55F
             );
 
-            // 2. GOLDEN BLOOM AURA PASS: Placed at 1.0F scale (texture transparency creates the outer halo)
             VertexConsumer auraConsumer = bufferSource.getBuffer(RenderType.energySwirl(SOFT_AURA_TEXTURE, 0.0F, 0.0F));
             model.renderToBuffer(
                     poseStack,
                     auraConsumer,
-                    15728880, // Fullbright
+                    15728880,
                     OverlayTexture.NO_OVERLAY,
-                    0.4F, 0.4F, 0.2F, 0.3F // Deep golden bloom
+                    0.4F, 0.4F, 0.2F, 0.3F
             );
 
             model.left_arm.visible = true;

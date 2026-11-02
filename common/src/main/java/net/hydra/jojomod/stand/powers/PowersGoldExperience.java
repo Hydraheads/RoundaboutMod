@@ -274,6 +274,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
         else if (move == LIFEFORM_CREATION) {
             return executeLifeformCreation();
         }
+        else if (move == PowerIndex.SNEAK_ATTACK) {
+            return executeDualPunch();
+        }
         return super.setPowerOther(move, lastMove);
     }
 
@@ -324,6 +327,32 @@ public class PowersGoldExperience extends BlockGrabPreset {
             dash();
         }
     }
+
+    // 1-2 sneak attack punch start
+
+    @Override
+    public void buttonInputAttack(boolean keyIsDown, Options options) {
+        if (!consumeClickInput) {
+                if (keyIsDown) {
+                    if (!isHoldingSneak()) {
+                        super.buttonInputAttack(keyIsDown, options);
+                    } else {
+                        if (this.canAttack()) {
+                            this.tryPower(PowerIndex.SNEAK_ATTACK, true);
+                            tryPowerPacket(PowerIndex.SNEAK_ATTACK);
+                        } else {
+                            super.buttonInputAttack(keyIsDown, options);
+                        }
+                    }
+                }
+        }
+    }
+
+    private boolean executeDualPunch() {
+        return false;
+    }
+
+    //1 -2 sneak attack punch end
 
     // animal creation (X) start
 
