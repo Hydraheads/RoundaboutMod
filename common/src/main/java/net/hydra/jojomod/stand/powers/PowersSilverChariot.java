@@ -86,9 +86,9 @@ public class PowersSilverChariot extends NewPunchingStand {
             SILVER_CHARIOT_SELF_GRAB_UPDATE = 86,
             SILVER_CHARIOT_THROW_USER = 87,
             SILVER_CHARIOT_RAPIER_SHOT = 88,
-            SILVER_CHARIOT_RAPIER_SHOT_CHARGE = 89,
+            SILVER_CHARIOT_RAPIER_SHOT_HOLD = 89,
             SILVER_CHARIOT_RAPIER_SHOT_PLATFORM = 90,
-            SILVER_CHARIOT_RAPIER_SHOT_PLATFORM_CHARGE = 91,
+            SILVER_CHARIOT_RAPIER_SHOT_PLATFORM_HOLD = 91,
             SILVER_CHARIOT_RAPIER_SPIN = 92,
             SILVER_CHARIOT_RAPIER_SPIN_UPDATE = 93,
             SILVER_CHARIOT_ARMOURED = 94,
@@ -1775,7 +1775,7 @@ public class PowersSilverChariot extends NewPunchingStand {
                 this.rapierShotServer();
                 return true;
             }
-            case SILVER_CHARIOT_RAPIER_SHOT_CHARGE -> {
+            case SILVER_CHARIOT_RAPIER_SHOT_HOLD -> {
                 this.rapierShotCharge();
                 return true;
             }
@@ -1783,7 +1783,7 @@ public class PowersSilverChariot extends NewPunchingStand {
                 this.rapierShotPlatformServer();
                 return true;
             }
-            case SILVER_CHARIOT_RAPIER_SHOT_PLATFORM_CHARGE ->  {
+            case SILVER_CHARIOT_RAPIER_SHOT_PLATFORM_HOLD ->  {
                 this.rapierShotPlatformCharge();
                 return true;
             }
@@ -1834,10 +1834,10 @@ public class PowersSilverChariot extends NewPunchingStand {
             this.updateOffhandWeaponAttack();
         } else if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
             this.updateOffhandWeaponAttackCharge();
-        } else if (this.getActivePower() == SILVER_CHARIOT_RAPIER_SHOT_CHARGE) {
-            this.updateRapierShotCharge();
-        } else if (this.getActivePower() == SILVER_CHARIOT_RAPIER_SHOT_PLATFORM_CHARGE) {
-            this.updateRapierShotPlatformCharge();
+        } else if (this.getActivePower() == SILVER_CHARIOT_RAPIER_SHOT_HOLD) {
+            // this.updateRapierShotCharge();
+        } else if (this.getActivePower() == SILVER_CHARIOT_RAPIER_SHOT_PLATFORM_HOLD) {
+            // this.updateRapierShotPlatformCharge();
         }
         super.updateUniqueMoves();
     }
@@ -1969,6 +1969,21 @@ public class PowersSilverChariot extends NewPunchingStand {
             return;
         }
         */
+        if (!consumeClickInput) {
+            if (!holdDownClick) {
+                if (keyIsDown) {
+                    if (!this.onCooldown(PowerIndex.SKILL_4)) {
+                        if (this.getActivePower() == SILVER_CHARIOT_RAPIER_SHOT_HOLD) {
+                            tryPower(SILVER_CHARIOT_RAPIER_SHOT, true);
+                            tryPowerPacket(SILVER_CHARIOT_RAPIER_SHOT);
+                        } else if (this.getActivePower() == SILVER_CHARIOT_RAPIER_SHOT_PLATFORM_HOLD) {
+                            tryPower(SILVER_CHARIOT_RAPIER_SHOT_PLATFORM, true);
+                            tryPowerPacket(SILVER_CHARIOT_RAPIER_SHOT_PLATFORM);
+                        }
+                    }
+                }
+            }
+        }
         if (this.self instanceof Player player && this.getSelfCarryMode()) {
 
         }
@@ -4049,9 +4064,9 @@ public class PowersSilverChariot extends NewPunchingStand {
     public SilverChariotRapierShotEntity rapierProjectile = null;
 
     public boolean isBusyFromRapierShot() {
-        return activePower == SILVER_CHARIOT_RAPIER_SHOT_CHARGE
+        return activePower == SILVER_CHARIOT_RAPIER_SHOT_HOLD
                 || activePower == SILVER_CHARIOT_RAPIER_SHOT
-                || activePower == SILVER_CHARIOT_RAPIER_SHOT_PLATFORM_CHARGE
+                || activePower == SILVER_CHARIOT_RAPIER_SHOT_PLATFORM_HOLD
                 || activePower == SILVER_CHARIOT_RAPIER_SHOT_PLATFORM;
     }
 
@@ -4063,8 +4078,13 @@ public class PowersSilverChariot extends NewPunchingStand {
             return;
         }
         if (!this.onCooldown(PowerIndex.SKILL_4) && canExecuteMoveWithLevel(getRapierShotLevel())) {
-            ((StandUser) this.getSelf()).roundabout$tryPower(SILVER_CHARIOT_RAPIER_SHOT_CHARGE, true);
-            tryPowerPacket(SILVER_CHARIOT_RAPIER_SHOT_CHARGE);
+            if (this.getActivePower() == SILVER_CHARIOT_RAPIER_SHOT_HOLD) {
+                tryPower(NONE, true);
+                tryPowerPacket(NONE);
+            } else {
+                tryPower(SILVER_CHARIOT_RAPIER_SHOT_HOLD, true);
+                tryPowerPacket(SILVER_CHARIOT_RAPIER_SHOT_HOLD);
+            }
         }
     }
 
@@ -4072,8 +4092,8 @@ public class PowersSilverChariot extends NewPunchingStand {
         this.setCooldown(PowerIndex.SKILL_4, this.getCooldownRapierShot());
         this.animateStand(SilverChariotEntity.SC_RAPIER_SHOT_HOLD);
         this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
-        this.setAttackTimeDuring(0);
-        this.setActivePower(SILVER_CHARIOT_RAPIER_SHOT_CHARGE);
+        // this.setAttackTimeDuring(0);
+        this.setActivePower(SILVER_CHARIOT_RAPIER_SHOT_HOLD);
 
         if (!this.self.level().isClientSide()) {
 
@@ -4098,6 +4118,7 @@ public class PowersSilverChariot extends NewPunchingStand {
     }
 
     public void rapierShotServer() {
+        this.setCooldown(PowerIndex.SKILL_4, this.getCooldownRapierShot());
         this.animateStand(SilverChariotEntity.SC_RAPIER_SHOT_RELASE);
         this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
         this.setAttackTimeDuring(-10);
@@ -4161,8 +4182,13 @@ public class PowersSilverChariot extends NewPunchingStand {
             return;
         }
         if (!this.onCooldown(PowerIndex.SKILL_4) && canExecuteMoveWithLevel(getRapierShotPlatformLevel())) {
-            ((StandUser) this.getSelf()).roundabout$tryPower(SILVER_CHARIOT_RAPIER_SHOT_PLATFORM_CHARGE, true);
-            tryPowerPacket(SILVER_CHARIOT_RAPIER_SHOT_PLATFORM_CHARGE);
+            if (this.getActivePower() == SILVER_CHARIOT_RAPIER_SHOT_HOLD) {
+                tryPower(NONE, true);
+                tryPowerPacket(NONE);
+            } else {
+                tryPower(SILVER_CHARIOT_RAPIER_SHOT_HOLD, true);
+                tryPowerPacket(SILVER_CHARIOT_RAPIER_SHOT_HOLD);
+            }
         }
     }
 
@@ -4170,8 +4196,8 @@ public class PowersSilverChariot extends NewPunchingStand {
         this.setCooldown(PowerIndex.SKILL_4, this.getCooldownRapierShot());
         this.animateStand(SilverChariotEntity.SC_RAPIER_SHOT_HOLD);
         this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
-        this.setAttackTimeDuring(0);
-        this.setActivePower(SILVER_CHARIOT_RAPIER_SHOT_PLATFORM_CHARGE);
+        // this.setAttackTimeDuring(0);
+        this.setActivePower(SILVER_CHARIOT_RAPIER_SHOT_PLATFORM_HOLD);
 
         if (!this.self.level().isClientSide()) {
 
@@ -4192,6 +4218,7 @@ public class PowersSilverChariot extends NewPunchingStand {
     }
 
     public void rapierShotPlatformServer() {
+        this.setCooldown(PowerIndex.SKILL_4, this.getCooldownRapierShot());
         this.animateStand(SilverChariotEntity.SC_RAPIER_SHOT_RELASE);
         this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
         this.setAttackTimeDuring(-10);
