@@ -2002,15 +2002,15 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             }
 
             if (this.level().isClientSide()) {
-                se.setYRot((getYHeadRot() % 360) - 180);
-                se.setXRot(getXRot() - 180);
-                se.setYBodyRot((getYHeadRot() % 360) - 180);
+                se.setYRot(getYHeadRot() % 360 - 180);
+                se.setXRot(getXRot());
+                se.setYBodyRot(getYHeadRot() % 360 - 180);
                 se.setYHeadRot(getYHeadRot() % 360);
             } else {
-                se.setYRot((getYHeadRot() % 360) - 180);
-                se.setXRot(getXRot() - 180 );
-                se.setYBodyRot((getYHeadRot() % 360) - 180);
-                se.setYHeadRot((getYHeadRot() % 360) - 180);
+                se.setYRot(getYHeadRot() % 360 - 180);
+                se.setXRot(getXRot());
+                se.setYBodyRot(getYHeadRot() % 360 - 180);
+                se.setYHeadRot(getYHeadRot() % 360 - 180);
             }
         }
     }
