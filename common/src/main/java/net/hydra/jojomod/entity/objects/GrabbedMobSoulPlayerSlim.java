@@ -13,4 +13,9 @@ public class GrabbedMobSoulPlayerSlim extends GrabbedMobSoul{
     public GrabbedMobSoulPlayerSlim(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
     }
+
+    @Override
+    public float blackSabbathGrabOffset(){
+        return 1.65f;
+    }
 }

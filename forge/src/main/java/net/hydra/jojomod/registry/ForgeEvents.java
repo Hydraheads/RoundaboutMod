@@ -100,6 +100,8 @@ public class ForgeEvents {
         event.put(ForgeEntities.GRABBED_MOB_SOUL.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.GRABBED_PLAYER_SOUL.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.GRABBED_PLAYER_SOUL_SLIM.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.GRABBED_MANDOM.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.GRABBED_HEY_YA.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.WALKING_HEART.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.CREAM.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.MAGICIANS_RED.get(), StandEntity.createStandAttributes().build());
@@ -675,6 +677,8 @@ public class ForgeEvents {
         ModItems.PAINTING_MONA_LISA = ForgeItems.PAINTING_MONA_LISA.get();
         ModItems.PAINTING_BIRTH_OF_VENUS = ForgeItems.PAINTING_BIRTH_OF_VENUS.get();
         ModItems.POCOLOCO_MASK = ForgeItems.POCOLOCO_MASK.get();
+        ModItems.POLNAREFF_MASK = ForgeItems.POLNAREFF_MASK.get();
+        ModItems.BLACK_POLNAREFF_MASK = ForgeItems.BLACK_POLNAREFF_MASK.get();
         ModItems.TERRIER_SPAWN_EGG = ForgeItems.TERRIER_SPAWN_EGG.get();
         ModItems.FALCON_SPAWN_EGG = ForgeItems.FALCON_SPAWN_EGG.get();
         ModItems.ZOMBIE_MINION_SPAWN_EGG = ForgeItems.ZOMBIE_MINION_SPAWN_EGG.get();
@@ -893,6 +897,8 @@ public class ForgeEvents {
         ModEntities.GRABBED_MOB_SOUL = ForgeEntities.GRABBED_MOB_SOUL.get();
         ModEntities.GRABBED_PLAYER_SOUL = ForgeEntities.GRABBED_PLAYER_SOUL.get();
         ModEntities.GRABBED_PLAYER_SOUL_SLIM = ForgeEntities.GRABBED_PLAYER_SOUL_SLIM.get();
+        ModEntities.GRABBED_MANDOM = ForgeEntities.GRABBED_MANDOM.get();
+        ModEntities.GRABBED_HEY_YA = ForgeEntities.GRABBED_HEY_YA.get();
         ModEntities.WALKING_HEART = ForgeEntities.WALKING_HEART.get();
         ModEntities.JUSTICE_PIRATE = ForgeEntities.JUSTICE_PIRATE.get();
         ModEntities.DARK_MIRAGE = ForgeEntities.DARK_MIRAGE.get();

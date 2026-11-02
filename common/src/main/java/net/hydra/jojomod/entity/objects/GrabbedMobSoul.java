@@ -100,4 +100,9 @@ public class GrabbedMobSoul extends StandEntity{
     public boolean hasNoPhysics(){
         return true;
     }
+
+    @Override
+    public float blackSabbathGrabOffset(){
+        return 0.4f;
+    }
 }

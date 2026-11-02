@@ -14,8 +14,11 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.ItemStack;
 
 public final class SilverChariotItemLayer<T extends SilverChariotEntity, M extends StandModel<T>> extends RenderLayer<T, M> {
+    private ItemStack itemStack;
+
     public SilverChariotItemLayer(RenderLayerParent<T, M> $$0) {
         super($$0);
     }
@@ -35,7 +38,8 @@ public final class SilverChariotItemLayer<T extends SilverChariotEntity, M exten
     ) {
         LivingEntity user = silverChariot.getUser();
         if (user == null
-                || user.getMainHandItem().isEmpty()
+                || silverChariot.getSilverChariotOffhandItem().isEmpty()
+                || silverChariot.getSilverChariotOffhandItem() == null
                 || !(((StandUser) user).roundabout$getStandPowers() instanceof PowersSilverChariot PSC
                 && (PSC.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE || PSC.getActivePower() == PowerIndex.SNEAK_ATTACK))
         ) {

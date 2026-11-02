@@ -235,7 +235,7 @@ public class ManhattanTransferModel<T extends ManhattanTransferEntity> extends S
 
         PartDefinition back_wing_r1 = back_flap.addOrReplaceChild("back_wing_r1", CubeListBuilder.create().texOffs(36, 46).addBox(-3.0F, -1.0F, -8.0F, 6.0F, 1.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.1309F, 0.0F, 0.0F));
 
-        PartDefinition back_teeth = back_flap.addOrReplaceChild("back_teeth", CubeListBuilder.create(), PartPose.offset(0.0F, 1.2503F, -7.7865F));
+        PartDefinition back_teeth = back_flap.addOrReplaceChild("back_teeth", CubeListBuilder.create(), PartPose.offset(0.0F, 1.2503F, -6.7865F));
 
         PartDefinition bak_teth_r1 = back_teeth.addOrReplaceChild("bak_teth_r1", CubeListBuilder.create().texOffs(43, 8).addBox(-3.5F, -2.5005F, -0.0218F, 7.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -2.8798F, 0.0F, 0.0F));
 

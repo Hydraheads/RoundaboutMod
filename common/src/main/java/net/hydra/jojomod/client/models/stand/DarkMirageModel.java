@@ -1,5 +1,6 @@
 package net.hydra.jojomod.client.models.stand;
 
+import net.hydra.jojomod.client.models.substand.zsabbathsouls.animations.MobSoulAnimation;
 import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -134,6 +135,7 @@ public class DarkMirageModel<T extends JusticeEntity> extends StandModel<T> {
         this.animate(pEntity.idleAnimationState3, StandAnimations.FLOATY_IDLE, pAgeInTicks, 1f);
         this.animate(pEntity.idleAnimationState4, StandAnimations.STAR_PLATINUM_IDLE, pAgeInTicks, 1f);
         this.animate(pEntity.cackleAnimation, StandAnimations.STAND_IDLE_FLOAT, pAgeInTicks, 1f);
+        this.animate(pEntity.grabbedStandByBlackSabbath, MobSoulAnimation.grabbed_humanoid_stand, pAgeInTicks, 1f);
     }
 
     @Override

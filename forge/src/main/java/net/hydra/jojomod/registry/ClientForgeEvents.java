@@ -133,6 +133,8 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.GRABBED_MOB_SOUL.get(), GrabbedMobSoulRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GRABBED_PLAYER_SOUL.get(), GrabbedMobSoulRendererPlayerLarge::new);
         event.registerEntityRenderer(ForgeEntities.GRABBED_PLAYER_SOUL_SLIM.get(), GrabbedMobSoulRendererPlayerSlim::new);
+        event.registerEntityRenderer(ForgeEntities.GRABBED_MANDOM.get(), MandomBlackSabbathRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.GRABBED_HEY_YA.get(), HeyYaBlackSabbathRenderer::new);
         event.registerEntityRenderer(ForgeEntities.WALKING_HEART.get(), WalkingHeartRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ANUBIS.get(), AnubisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.JUSTICE_PIRATE.get(), JusticePirateRenderer::new);
@@ -356,6 +358,8 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.GRABBED_MOB_SOUL_LAYER, GrabbedMobSoulModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.GRABBED_MOB_SOUL_PLAYER_LAYER, GrabbedPlayerSoulSteveModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.GRABBED_MOB_SOUL_PLAYER_SLIM_LAYER, GrabbedPlayerSoulAlexModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.GRABBED_MANDOM_LAYER, MandomBlackSabbathModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.GRABBED_HEY_YA_LAYER, HeyYaBlackSabbathModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.DARK_MIRAGE_LAYER, DarkMirageModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.TUSK_A1_LAYER, TuskAct1Model::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.TUSK_A2_LAYER, TuskAct2Model::createBodyLayer);
@@ -467,6 +471,7 @@ public class ClientForgeEvents {
         ModStrayModels.SpikeyHairPart = new SpikeyHairPart();
         ModStrayModels.bannerFlag = new BannerFlagModel();
         ModStrayModels.dotHanHair = new DotHanHairPart();
+        ModStrayModels.polnareffDecalsPart = new PolnareffDecalsPart();
         ModStrayModels.sheriffHatPart = new SheriffHatPart();
         ModStrayModels.SandmanHairPart = new SandmanHairPart();
         ModStrayModels.LucyHairPart = new LucyHairPart();
@@ -494,6 +499,8 @@ public class ClientForgeEvents {
         ModStrayModels.LeftHeel = new LeftHeelPart();
         ModStrayModels.RightHeel = new RightHeelPart();
         ModStrayModels.JohngalliaTiePart = new JohngalliaTiePart();
+        ModStrayModels.extraHairPart = new ExtraHairPart();
+        ModStrayModels.extraHairDecorationPart = new ExtraHairDecorationPart();
 
         ModStrayModels.GoatHeadPart = new GoatHeadPart();
         ModStrayModels.CatHeadPart = new CatHeadPart();
