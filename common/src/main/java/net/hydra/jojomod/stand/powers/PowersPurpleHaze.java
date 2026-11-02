@@ -230,7 +230,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
         return $$1;
     }
-    private static final int SECRET_SKIN_TICKS = 40;
+    private static final int SECRET_SKIN_TICKS = 25;
     private int secretSkinTicks = 0;
     private boolean secretSkinObtained = false;
 
