@@ -3603,7 +3603,7 @@
   "roundabout.gold_experience_animal.bat": "Bat",
   "roundabout.gold_experience_animal.bat.desc": "Bats will find the closest entity and fly erraticaly in their face to bait reflection hits.",
   "roundabout.gold_experience_animal.fish": "Fish",
-  "roundabout.gold_experience_animal.fish.desc": "placeholder, rework these after finishing the mobs cuz the doc is kinda vague.",
+  "roundabout.gold_experience_animal.fish.desc": "Swims in a straight line from where it spawned. You can interact with the fish to have it carry you.",
   "roundabout.gold_experience_animal.pirahna": "Pirahna",
   "roundabout.gold_experience_animal.pirahna.desc": "placeholder, rework these after finishing the mobs cuz the doc is kinda vague.",
   "roundabout.gold_experience_animal.snake": "Snake",
