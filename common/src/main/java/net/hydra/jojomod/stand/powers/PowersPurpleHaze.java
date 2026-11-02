@@ -421,18 +421,20 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 if ((jojoveinLikeKeys && !this.onCooldown(PowerIndex.SKILL_3)) ||
                         (!jojoveinLikeKeys && !this.onCooldown(PowerIndex.GLOBAL_DASH))) {
                     if (canExecuteMoveWithLevel(getLeapLevel())) {
-                        if (jojoveinLikeKeys) {
-                            this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
-                        } else {
-                            this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
-                           // this.setCooldown(PowerIndex.SKILL_1_SNEAK, 10);
+                        if(this.getActivePower() == PowerIndex.NONE){
+                            if (jojoveinLikeKeys) {
+                                this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
+                            } else {
+                                this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
+                            // this.setCooldown(PowerIndex.SKILL_1_SNEAK, 10);
+                            }
+                            bonusLeapCount = 3;
+                            bigLeap(this.getSelf(), 20, 1);
+                            ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
+                            ((StandUser) this.getSelf()).roundabout$setLeapIntentionally(true);
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SNEAK_MOVEMENT, true);
+                            tryPowerPacket(PowerIndex.SNEAK_MOVEMENT);
                         }
-                        bonusLeapCount = 3;
-                        bigLeap(this.getSelf(), 20, 1);
-                        ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
-                        ((StandUser) this.getSelf()).roundabout$setLeapIntentionally(true);
-                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SNEAK_MOVEMENT, true);
-                        tryPowerPacket(PowerIndex.SNEAK_MOVEMENT);
                     }
                 }
             }
