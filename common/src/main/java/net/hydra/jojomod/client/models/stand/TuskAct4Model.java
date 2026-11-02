@@ -179,7 +179,7 @@ public class TuskAct4Model<T extends TuskEntity> extends StandModel<T> {
         this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1f);
         this.animate(pEntity.barrageChargeAnimationState, StandAnimations.BARRAGECHARGE, pAgeInTicks, 1f);
         this.animate(pEntity.barrageAnimationState, TuskAnimations.Barrage, pAgeInTicks, 1f);
-        this.animate(pEntity.deathPunch, TuskAnimations.DeathPunch, pAgeInTicks, 1f);
+        this.animate(pEntity.deathPunch, TuskAnimations.DeathPunch, pAgeInTicks, 1.75F);
     }
 
 }
