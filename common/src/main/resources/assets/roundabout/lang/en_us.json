@@ -1081,10 +1081,7 @@
   "sounds.roundabout.ctr_rain_step_1": "Rain stabilized",
   "sounds.roundabout.ctr_rain_step_2": "Rain stabilized",
   "sounds.roundabout.ctr_rain_step_3": "Rain stabilized",
-  "sounds.roundabout.ctr_rain_step_4": "Rain stabilized",
-  "sounds.roundabout.ctr_rain_step_5": "Rain stabilized",
   "sounds.roundabout.ctr_stabilizing_rain": "Rain stabilizing",
-  "sounds.roundabout.ctr_dodge": "Dodge",
 
   "death.attack.stand": "%1$s died to a mysterious power whilst fighting %2$s",
   "death.attack.stand.item": "%1$s died to a mysterious power whilst fighting %2$s",
@@ -5509,6 +5506,7 @@
   "config.roundabout.lyinEyesSettings.name": "Lyin' Eyes",
   "config.roundabout.starPlatinumSettings.name": "Star Platinum",
   "config.roundabout.oasisSettings.name": "Oasis",
+  "config.roundabout.catchTheRainbowSettings.name": "Catch The Rainbow",
   "config.roundabout.timeStopSettings.name": "Time Stop",
 
 

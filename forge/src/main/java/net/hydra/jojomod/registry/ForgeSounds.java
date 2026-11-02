@@ -1589,8 +1589,6 @@ public class ForgeSounds {
             register(ModSounds.CTR_SUMMON, ModSounds.CTR_SUMMON_ID);
     public static final RegistryObject<SoundEvent> CTR_HEAL_EVENT =
             register(ModSounds.CTR_HEAL, ModSounds.CTR_HEAL_ID);
-    public static final RegistryObject<SoundEvent> CTR_DODGE_EVENT =
-            register(ModSounds.CTR_DODGE, ModSounds.CTR_DODGE_ID);
     public static final RegistryObject<SoundEvent> CTR_LIFE_CLUTCH_EVENT =
             register(ModSounds.CTR_LIFE_CLUTCH, ModSounds.CTR_LIFE_CLUTCH_ID);
     public static final RegistryObject<SoundEvent> CTR_RAIN_STABILIZING_EVENT =
@@ -1605,10 +1603,6 @@ public class ForgeSounds {
             register(ModSounds.CTR_RAIN_STEP_2, ModSounds.CTR_RAIN_STEP_2_ID);
     public static final RegistryObject<SoundEvent> CTR_RAIN_STEP_3_EVENT =
             register(ModSounds.CTR_RAIN_STEP_3, ModSounds.CTR_RAIN_STEP_3_ID);
-    public static final RegistryObject<SoundEvent> CTR_RAIN_STEP_4_EVENT =
-            register(ModSounds.CTR_RAIN_STEP_4, ModSounds.CTR_RAIN_STEP_4_ID);
-    public static final RegistryObject<SoundEvent> CTR_RAIN_STEP_5_EVENT =
-            register(ModSounds.CTR_RAIN_STEP_5, ModSounds.CTR_RAIN_STEP_5_ID);
 
     public static RegistryObject<SoundEvent> register(String id, ResourceLocation id2){
         return SOUNDS.register(id, () -> SoundEvent.createVariableRangeEvent(id2));

@@ -846,7 +846,6 @@ public class FabricSounds {
 
         addSound(ModSounds.CTR_SUMMON_ID,ModSounds.CTR_SUMMON_EVENT);
         addSound(ModSounds.CTR_HEAL_ID,ModSounds.CTR_HEAL_EVENT);
-        addSound(ModSounds.CTR_DODGE_ID,ModSounds.CTR_DODGE_EVENT);
         addSound(ModSounds.CTR_LIFE_CLUTCH_ID,ModSounds.CTR_LIFE_CLUTCH_EVENT);
         addSound(ModSounds.CTR_DETACH_1_ID,ModSounds.CTR_DETACH_1_EVENT);
         addSound(ModSounds.CTR_DETACH_2_ID,ModSounds.CTR_DETACH_2_EVENT);
@@ -854,7 +853,5 @@ public class FabricSounds {
         addSound(ModSounds.CTR_RAIN_STEP_1_ID,ModSounds.CTR_RAIN_STEP_1_EVENT);
         addSound(ModSounds.CTR_RAIN_STEP_2_ID,ModSounds.CTR_RAIN_STEP_2_EVENT);
         addSound(ModSounds.CTR_RAIN_STEP_3_ID,ModSounds.CTR_RAIN_STEP_3_EVENT);
-        addSound(ModSounds.CTR_RAIN_STEP_4_ID,ModSounds.CTR_RAIN_STEP_4_EVENT);
-        addSound(ModSounds.CTR_RAIN_STEP_5_ID,ModSounds.CTR_RAIN_STEP_5_EVENT);
     }
 }

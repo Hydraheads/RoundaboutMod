@@ -2686,9 +2686,6 @@ public class ModSounds {
     public static final String CTR_HEAL = "ctr_heal";
     public static final ResourceLocation CTR_HEAL_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CTR_HEAL);
     public static SoundEvent CTR_HEAL_EVENT = SoundEvent.createVariableRangeEvent(CTR_HEAL_ID);
-    public static final String CTR_DODGE = "ctr_dodge";
-    public static final ResourceLocation CTR_DODGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CTR_DODGE);
-    public static SoundEvent CTR_DODGE_EVENT = SoundEvent.createVariableRangeEvent(CTR_DODGE_ID);
     public static final String CTR_LIFE_CLUTCH = "ctr_life_clutch";
     public static final ResourceLocation CTR_LIFE_CLUTCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CTR_LIFE_CLUTCH);
     public static SoundEvent CTR_LIFE_CLUTCH_EVENT = SoundEvent.createVariableRangeEvent(CTR_LIFE_CLUTCH_ID);
@@ -2710,13 +2707,6 @@ public class ModSounds {
     public static final String CTR_RAIN_STEP_3 = "ctr_rain_step_3";
     public static final ResourceLocation CTR_RAIN_STEP_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CTR_RAIN_STEP_3);
     public static SoundEvent CTR_RAIN_STEP_3_EVENT = SoundEvent.createVariableRangeEvent(CTR_RAIN_STEP_3_ID);
-    public static final String CTR_RAIN_STEP_4 = "ctr_rain_step_4";
-    public static final ResourceLocation CTR_RAIN_STEP_4_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CTR_RAIN_STEP_4);
-    public static SoundEvent CTR_RAIN_STEP_4_EVENT = SoundEvent.createVariableRangeEvent(CTR_RAIN_STEP_4_ID);
-    public static final String CTR_RAIN_STEP_5 = "ctr_rain_step_5";
-    public static final ResourceLocation CTR_RAIN_STEP_5_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CTR_RAIN_STEP_5);
-    public static SoundEvent CTR_RAIN_STEP_5_EVENT = SoundEvent.createVariableRangeEvent(CTR_RAIN_STEP_5_ID);
-
 
 
     public static void registerSoundEvents(){

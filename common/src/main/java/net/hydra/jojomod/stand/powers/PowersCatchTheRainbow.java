@@ -162,9 +162,9 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                 NEON,
                 SKELETONCTR,
                 GHAST,
+                STRIDER,
                 LALI_HO,
                 EYE,
-                STRIDER,
                 UMVUTHI
         );
     }
@@ -519,16 +519,19 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         if (!dsource.is(ModDamageTypes.SUNLIGHT) && !dsource.is(DamageTypes.GENERIC_KILL) && !dsource.is(ModDamageTypes.INFINITE_SPIN)
                 && self instanceof Player PE) {
             if (isInRain() && deathTimer == 0 && hasStandActive(self)) {
-                if (!this.self.level().isClientSide)deathTimer = (ClientNetworking.getAppropriateConfig().catchTheRainbowSettings.catchTheRainbowLifeClutchCooldown);
-                PE.setHealth(1);
-                PE.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 1), PE);
-                PE.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 40, 10), PE);
-                getStandUserSelf().roundabout$setDazed((byte)0);
-                playSoundIfPossible(self.level(), null, self.blockPosition(), ModSounds.VAMPIRE_AWAKEN_EVENT,
-                        SoundSource.PLAYERS, 1F, 1F);
-                playSoundIfPossible(self.level(), null, self.blockPosition(), ModSounds.CTR_LIFE_CLUTCH_EVENT,
-                        SoundSource.PLAYERS, 1F, 1F);
-                return true;
+                if (!this.self.level().isClientSide) {
+                    deathTimer = (ClientNetworking.getAppropriateConfig().catchTheRainbowSettings.catchTheRainbowLifeClutchCooldown);
+                    PE.setHealth(1);
+                    PE.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 1), PE);
+                    PE.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 40, 10), PE);
+                    getStandUserSelf().roundabout$setDazed((byte) 0);
+                    OffHandReturnServer();
+                    playSoundIfPossible(self.level(), null, self.blockPosition(), ModSounds.VAMPIRE_AWAKEN_EVENT,
+                            SoundSource.PLAYERS, 1F, 1F);
+                    playSoundIfPossible(self.level(), null, self.blockPosition(), ModSounds.CTR_LIFE_CLUTCH_EVENT,
+                            SoundSource.PLAYERS, 1F, 1F);
+                    return true;
+                }
             }
         }
         return false;
@@ -614,9 +617,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             soundVariations.add(ModSounds.CTR_RAIN_STEP_1_EVENT);
             soundVariations.add(ModSounds.CTR_RAIN_STEP_2_EVENT);
             soundVariations.add(ModSounds.CTR_RAIN_STEP_3_EVENT);
-            soundVariations.add(ModSounds.CTR_RAIN_STEP_4_EVENT);
-            soundVariations.add(ModSounds.CTR_RAIN_STEP_5_EVENT);
-            playSoundIfPossible(self.level(), null, this.self.blockPosition(), getRandomSound(soundVariations), SoundSource.PLAYERS, 0.8F, 1.0F);
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(), getRandomSound(soundVariations), SoundSource.PLAYERS, 0.8F, (float)Roundabout.RANDOM.nextDouble(0.9, 1.1));
         }
     }
 

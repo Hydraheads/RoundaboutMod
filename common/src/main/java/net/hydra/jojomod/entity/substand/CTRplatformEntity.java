@@ -49,11 +49,13 @@ public class CTRplatformEntity extends StandEntity {
             }
         double randX = Roundabout.RANDOM.nextDouble(-0.5, 0.5);
         double randZ = Roundabout.RANDOM.nextDouble(-0.5, 0.5);
-        sendParticlesIfPossible(this, level(), ParticleTypes.DRIPPING_DRIPSTONE_WATER,
-                this.getX() + randX,
-                this.getY() + 0.35f,
-                this.getZ() + randZ,
-                1, 0, 0, 0, 0);
+        if (Math.random() > 0.4) {
+            sendParticlesIfPossible(this, level(), ParticleTypes.DRIPPING_DRIPSTONE_WATER,
+                    this.getX() + randX,
+                    this.getY() + 0.35f,
+                    this.getZ() + randZ,
+                    1, 0, 0, 0, 0);
+        }
         }
         super.tick();
     }

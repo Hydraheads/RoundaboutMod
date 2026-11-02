@@ -70,6 +70,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import static net.hydra.jojomod.util.MainUtil.sendParticlesIfPossible;
+
 public class SeperatedArmEntity extends StandEntity {
 
     String context = "left_hand";

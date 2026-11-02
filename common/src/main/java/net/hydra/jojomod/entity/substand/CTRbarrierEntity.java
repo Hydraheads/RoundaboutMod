@@ -94,11 +94,13 @@ public class CTRbarrierEntity extends StandEntity {
             double randX = Roundabout.RANDOM.nextDouble(-2, 2);
             double randZ = Roundabout.RANDOM.nextDouble(-2, 2);
             double randY = Roundabout.RANDOM.nextDouble(0, 4);
-            sendParticlesIfPossible(this, level(), ParticleTypes.DRIPPING_DRIPSTONE_WATER,
-                    this.getX() + randX,
-                    this.getY() + randY,
-                    this.getZ() + randZ,
-                    1, 0, 0, 0, 0);
+            if (Math.random() > 0.3) {
+                sendParticlesIfPossible(this, level(), ParticleTypes.DRIPPING_DRIPSTONE_WATER,
+                        this.getX() + randX,
+                        this.getY() + randY,
+                        this.getZ() + randZ,
+                        1, 0, 0, 0, 0);
+            }
         }
         super.tick();
     }
