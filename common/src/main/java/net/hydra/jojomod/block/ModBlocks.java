@@ -141,6 +141,7 @@ public class ModBlocks {
     public static Block MINING_ALERT_BLOCK;
     public static Block BUBBLE_SCAFFOLD;
     public static Block DIVER_LIMB;
+    public static Block SC_RAPIER_PLATFORM;
     public static Block GE_BUSH;
     public static Block GE_VINE;
     public static Block INVISIBLOCK;
@@ -187,8 +188,6 @@ public class ModBlocks {
     public static Block FROZEN_GRANITE;
     public static Block FROZEN_RED_SAND;
     public static Block FROZEN_RED_SANDSTONE;
-
-    public static Block SC_RAPIER_PLATFORM_BLOCK;
 
     public static Block SHINY_QUARTZ;
     public static Block SHINY_QUARTZ_TILES;

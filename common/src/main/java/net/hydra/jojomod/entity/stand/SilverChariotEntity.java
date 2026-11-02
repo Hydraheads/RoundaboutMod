@@ -311,7 +311,9 @@ public class SilverChariotEntity extends FollowingStandEntity {
         byte animationState = getAnimation();
         byte idle = getIdleAnimation();
         boolean isPart3Skin = getSkin() != PART_5;
+        boolean isRightHanded = true;
         byte activeHand = getActiveHand();
+        boolean armoured = this.getArmoured();
 
         if (this.getUser() != null) {
             if (animationState == BARRAGE) {
@@ -356,18 +358,16 @@ public class SilverChariotEntity extends FollowingStandEntity {
                 }
             }
 
-            if (animationState == IDLE && idle == 0) {
+            if (animationState == IDLE && idle == 0 && armoured) {
                 this.scIdleArmoured.startIfStopped(this.tickCount);
             } else {
                 this.scIdleArmoured.stop();
             }
-            /*
-            if (animationState == IDLE && idle == 0 && !this.getArmoured()) {
+            if (animationState == IDLE && idle == 0 && !armoured) {
                 this.scIdleNotArmoured.startIfStopped(this.tickCount);
             } else {
                 this.scIdleNotArmoured.stop();
             }
-            */
             if (animationState == IDLE && idle == 1) {
                 this.scPart3Pose.startIfStopped(this.tickCount);
             } else {
@@ -545,27 +545,43 @@ public class SilverChariotEntity extends FollowingStandEntity {
                 this.scBarrageDamage.stop();
             }
             if (animationState == BROKEN_GUARD) {
-                if (!this.getArmoured()) {
+                /*
+                if (!armoured) {
                     this.scIdleNotArmoured.startIfStopped(this.tickCount);
                 } else {
                     this.scIdleNotArmoured.stop();
                 }
-                if (isPart3Skin && this.getArmoured()) {
+                */
+                if (!armoured) {
+                    this.scIdleNotArmoured.startIfStopped(this.tickCount);
+                } else if (isPart3Skin) {
                     this.scGuardRightBreak.startIfStopped(this.tickCount);
-                } else if (!isPart3Skin && this.getArmoured()) {
+                } else {
                     this.scGuardLeftBreak.startIfStopped(this.tickCount);
                 }
             } else {
-                if (isPart3Skin) {
+                if (!armoured) {
+                    this.scIdleNotArmoured.stop();
+                } else if (isPart3Skin) {
                     this.scGuardRightBreak.stop();
                 } else {
                     this.scGuardLeftBreak.stop();
                 }
             }
             if (animationState == SC_FALL_BRACE) {
-                this.scFallBrace.startIfStopped(this.tickCount);
+                // this.scFallBrace.startIfStopped(this.tickCount);
+                if (isPart3Skin) {
+                    this.scGuardRightBreak.startIfStopped(this.tickCount);
+                } else {
+                    this.scGuardLeftBreak.startIfStopped(this.tickCount);
+                }
             } else {
-                this.scFallBrace.stop();
+                // this.scFallBrace.stop();
+                if (isPart3Skin) {
+                    this.scGuardRightBreak.stop();
+                } else {
+                    this.scGuardLeftBreak.stop();
+                }
             }
 
             if (animationState == SC_VAULT) {
@@ -624,6 +640,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
                 this.scLeftRapierShotRelease.stop();
             }
 
+            /*
             if (isPart3Skin) {
                 this.scToggleRightSword.start(this.tickCount);
                 this.scToggleLeftSword.stop();
@@ -631,11 +648,16 @@ public class SilverChariotEntity extends FollowingStandEntity {
                 this.scToggleLeftSword.start(this.tickCount);
                 this.scToggleRightSword.stop();
             }
+            */
 
-            if (!this.getArmoured()) {
+            if (!armoured) {
                 this.scToggleNotArmouredState.startIfStopped(this.tickCount);
             } else {
                 this.scToggleNotArmouredState.stop();
+            }
+        } else {
+            if(this.getBsGrabbed() != 0){
+                this.grabbedStandByBlackSabbath.startIfStopped(this.tickCount);
             }
         }
     }
@@ -830,7 +852,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
             if (this.onGround()) {
                 this.noGravityCarryTicks = 0;
             } else {
-                this.noGravityCarryTicks = 0;
+                this.noGravityCarryTicks++;
             }
             // updateSelfCarry();
         }
@@ -885,11 +907,20 @@ public class SilverChariotEntity extends FollowingStandEntity {
     }
 
     @Override
-    protected void positionRider(Entity $$0, MoveFunction $$1) {
-        if ($$0 instanceof Player) {
-            $$1.accept($$0,this.getX(),this.getY()+1.85d,this.getZ());
+    protected void positionRider(Entity passenger, MoveFunction moveFunction) {
+        if (passenger instanceof Player && this.level().isClientSide) {
+            moveFunction.accept(
+                    passenger,
+                    this.getX(),
+                    this.getY() + 1.85D,
+                    this.getZ()
+            );
+
+            passenger.xo = passenger.getX();
+            passenger.yo = passenger.getY();
+            passenger.zo = passenger.getZ();
         } else {
-            super.positionRider($$0,$$1);
+            super.positionRider(passenger, moveFunction);
         }
     }
 

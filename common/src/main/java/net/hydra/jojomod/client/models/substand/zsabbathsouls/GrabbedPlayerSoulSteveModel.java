@@ -3,6 +3,7 @@ package net.hydra.jojomod.client.models.substand.zsabbathsouls;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.client.models.stand.StandModel;
+import net.hydra.jojomod.client.models.substand.zsabbathsouls.animations.MobSoulAnimation;
 import net.hydra.jojomod.entity.objects.GrabbedMobSoul;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
@@ -85,6 +86,7 @@ public class GrabbedPlayerSoulSteveModel<T extends GrabbedMobSoul> extends Stand
 	@Override
 	public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
         super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
+        this.animate(pEntity.animationHeld, MobSoulAnimation.grabbed_player, pAgeInTicks, 1f);
 	}
 
     @Override

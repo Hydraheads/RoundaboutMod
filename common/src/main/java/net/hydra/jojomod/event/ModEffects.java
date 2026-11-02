@@ -37,4 +37,6 @@ public class ModEffects {
     public static MobEffect HAZE_VIRUS;
     public static MobEffect DISTORTION_VIRUS;
     public static MobEffect VIRUS_IMMUNITY;
+
+    public static MobEffect RECONSTRUCTION;
 }

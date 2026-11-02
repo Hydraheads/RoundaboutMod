@@ -370,6 +370,10 @@ public class ManhattanTransferEntity extends StandEntity {
         return super.hurt(source, amount);
     }
 
+    @Override
+    public float blackSabbathGrabOffset(){
+        return 0.4f;
+    }
 
     public void itemEject() {
         if (hasItem && this.canAcquireHeldItem) {
@@ -1070,6 +1074,10 @@ public class ManhattanTransferEntity extends StandEntity {
         AnimationState leftSlow = this.slow_manhattan_left;
         AnimationState rightSlow = this.slow_manhattan_right;
 
+        if(getBsGrabbed() != 0){
+            loaded.startIfStopped(this.tickCount);
+            return;
+        }
 
         if (this.level().isClientSide) {
             if (!this.isInRain()) {

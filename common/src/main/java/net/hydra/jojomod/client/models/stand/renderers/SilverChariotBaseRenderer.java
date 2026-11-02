@@ -19,6 +19,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -51,13 +52,11 @@ public class SilverChariotBaseRenderer<T extends StandEntity> extends StandRende
     public SilverChariotBaseRenderer(EntityRendererProvider.Context context, StandModel<SilverChariotEntity> root) {
         // super(context, new SilverChariotModel<>(context.bakeLayer(ModEntityRendererClient.SILVER_CHARIOT_LAYER)), 0.0F);
         super(context, root, 0f);
-        /*
         addLayer(
-                new SilverChariotItemLayer(
-
+                new SilverChariotItemLayer<>(
+                        this
                 )
         );
-        */
     }
 
     public static ResourceLocation getSkin(byte bt) {
@@ -154,6 +153,9 @@ public class SilverChariotBaseRenderer<T extends StandEntity> extends StandRende
         }
 
         super.render(mobEntity, entityYaw, partialTicks, matrixStack, vertexConsumerProvider, packedLight);
+        ItemStack offhandItem = mobEntity.getSilverChariotOffhandItem();
+
+        // TODO: Render item in Silver Chariot hand
 
         // float alpha = 0.50F;
         // float alpha = ConfigManager.getClientConfig().silverChariotSettings.silverChariotAfterimageOpacity;

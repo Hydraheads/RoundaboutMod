@@ -26,6 +26,7 @@ public abstract class LayerPlayerRendererMixin<T extends LivingEntity, M extends
     @Inject(method="<init>(Lnet/minecraft/client/renderer/entity/EntityRendererProvider$Context;Z)V", at = @At(value = "RETURN"))
     private void roundaboutRenderKnives(EntityRendererProvider.Context $$0, boolean $$1, CallbackInfo ci) {
         this.addLayer(new KnifeLayer<>($$0, this));
+        this.addLayer(new FalconShoulderLayer<>($$0, this));
         //this.addLayer(new LocacacaBeamLayer<>($$0, this));
         this.addLayer(new StoneLayer<>($$0, this));
         this.addLayer(new FacelessLayer<>($$0, this));

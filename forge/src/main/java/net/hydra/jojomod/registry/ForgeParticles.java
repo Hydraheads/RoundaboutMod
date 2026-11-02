@@ -427,4 +427,8 @@ public class ForgeParticles {
 
     public static final RegistryObject<SimpleParticleType> TOOTH = PARTICLES.register("tooth",
             () -> new SimpleParticleType(true));
+
+    public static final RegistryObject<SimpleParticleType> VITAL_ESSENCE = PARTICLES.register("vital_essence",
+            () -> new SimpleParticleType(true)
+    );
 }

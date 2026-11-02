@@ -1,35 +1,27 @@
 package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.models.stand.StandModel;
-import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.GoldExperienceEntity;
-import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
-import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.stand.powers.PowersGoldExperience;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
 
 public class GoldExperienceBaseRenderer extends StandRenderer<GoldExperienceEntity> {
     public static final ResourceLocation PART_5 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience/base.png");
+    public static final ResourceLocation BETA = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience/beta.png");
 
     public GoldExperienceBaseRenderer(EntityRendererProvider.Context context, StandModel<GoldExperienceEntity> entityModel, float f) {
         super(context, entityModel, f);
     }
 
     public static ResourceLocation getSkin(byte bt) {
+        if (bt == GoldExperienceEntity.BETA) {
+            return BETA;
+        }
         return PART_5;
     }
 

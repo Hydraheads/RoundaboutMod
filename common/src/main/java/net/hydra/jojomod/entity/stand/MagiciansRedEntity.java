@@ -109,8 +109,18 @@ public class MagiciansRedEntity extends FollowingStandEntity {
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
+        if(this.getUser() == null && this.getBsGrabbed() != 0){
+            if (emitsFlameCycle() && !isPutOutByWater()){
+                this.hideLash.startIfStopped(this.tickCount);
+                this.cycleFlames.startIfStopped(this.tickCount);
+                this.hideFlames.stop();
+            } else {
+                this.hideLash.startIfStopped(this.tickCount);
+                this.cycleFlames.stop();
+                this.hideFlames.startIfStopped(this.tickCount);
+            }
+        }
         if (this.getUser() != null) {
-
             if (emitsFlameCycle() && !isPutOutByWater()){
                 this.cycleFlames.startIfStopped(this.tickCount);
                 this.hideFlames.stop();

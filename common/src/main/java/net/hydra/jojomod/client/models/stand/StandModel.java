@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
 import net.hydra.jojomod.client.models.stand.animations.StandIdles;
+import net.hydra.jojomod.client.models.substand.zsabbathsouls.animations.MobSoulAnimation;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
@@ -105,6 +106,7 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
         this.animate(entity.idleAnimationGoldenExperience2, StandIdles.Mozart, animationProgress, 1f);
         this.animate(entity.idleAnimationStickyFingers1, StandIdles.Brown_Sugar, animationProgress, 1f);
         this.animate(entity.idleAnimationStickyFingers2, StandIdles.Capo, animationProgress, 1f);
+        this.animate(entity.grabbedStandByBlackSabbath, MobSoulAnimation.grabbed_humanoid_stand, animationProgress, 1f);
     }
 
     public void animatePunches(T entity, float animationProgress) {

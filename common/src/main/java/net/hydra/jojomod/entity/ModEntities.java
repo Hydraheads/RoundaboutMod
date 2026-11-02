@@ -3,7 +3,9 @@ package net.hydra.jojomod.entity;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.badCompanyTroops.*;
+import net.hydra.jojomod.entity.gold_experience.*;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
+import net.hydra.jojomod.entity.mobs.FalconEntity;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
@@ -39,6 +41,7 @@ public class ModEntities {
     public static float justiceHeight = 0.65f;
     public static float justiceWidth = 0.65F;
     public static EntityType<TerrierEntity> TERRIER_DOG;
+    public static EntityType<FalconEntity> FALCON;
     public static EntityType<Zombiefish> ZOMBIEFISH;
     public static EntityType<AnubisGuardian> ANUBIS_GUARDIAN;
     public static EntityType<TheWorldEntity> THE_WORLD;
@@ -88,6 +91,8 @@ public class ModEntities {
     public static EntityType<GrabbedMobSoul> GRABBED_MOB_SOUL;
     public static EntityType<GrabbedMobSoulPlayerLarge> GRABBED_PLAYER_SOUL;
     public static EntityType<GrabbedMobSoulPlayerSlim> GRABBED_PLAYER_SOUL_SLIM;
+    public static EntityType<MandomEntity> GRABBED_MANDOM;
+    public static EntityType<HeyYaEntity> GRABBED_HEY_YA;
     public static EntityType<WalkingHeartEntity> WALKING_HEART;
     public static EntityType<JusticePirateEntity> JUSTICE_PIRATE;
     public static EntityType<DarkMirageEntity> DARK_MIRAGE;
@@ -111,6 +116,12 @@ public class ModEntities {
     public static EntityType<DiverKickEntity> DIVER_KICK;
     public static EntityType<BoneProjectileEntity> BONE_PROJECTILE;
     public static EntityType<GoldExperienceEntity> GOLD_EXPERIENCE;
+    public static EntityType<GoldExperienceBetaEntity> GOLD_EXPERIENCE_BETA;
+    public static EntityType<GEBrambleEntity> GE_BRAMBLE;
+    public static EntityType<GEBatEntity> GE_BAT;
+    public static EntityType<GEFrogEntity> GE_FROG;
+    public static EntityType<GEBeeEntity> GE_BEE;
+    public static EntityType<GEFishEntity> GE_FISH;
     public static EntityType<SilverChariotEntity> SILVER_CHARIOT;
     public static EntityType<SilverChariotEntity> SILVER_CHARIOT_PHARAOH;
     public static EntityType<SilverChariotRapierShotEntity> SILVER_CHARIOT_RAPIER;

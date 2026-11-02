@@ -1,6 +1,7 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.event.powers.ReconstructionEffect;
 import net.hydra.jojomod.event.powers.whitesnake.HallucinationEffect;
 import net.hydra.jojomod.event.powers.whitesnake.OldEffect;
 import net.minecraft.world.effect.MobEffect;
@@ -120,6 +121,7 @@ public class ForgeEffects{
             POTION_EFFECTS.register("fortification", () ->
                     new Effect(MobEffectCategory.BENEFICIAL, 3137792)
             );
+    public static final RegistryObject<MobEffect> RECONSTRUCTION = POTION_EFFECTS.register("reconstruction", ReconstructionEffect::new);
 
     public static class Effect extends MobEffect{
         public Effect(MobEffectCategory typeIn, int liquidColorIn) {

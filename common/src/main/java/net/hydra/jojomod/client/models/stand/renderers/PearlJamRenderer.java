@@ -50,11 +50,15 @@ public class PearlJamRenderer extends StandRenderer<PearlJamEntity> {
     @Override
     public void render(PearlJamEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         float factor = 1;
-        matrixStack.scale(0.5f, 0.5f, 0.5f);
-        if (mobEntity.isBaby()) {
-            matrixStack.scale(0.5f*factor, 0.5f*factor, 0.5f*factor);
+        if(mobEntity.getBsGrabbed() == 0) {
+            matrixStack.scale(0.5f, 0.5f, 0.5f);
+            if (mobEntity.isBaby()) {
+                matrixStack.scale(0.5f * factor, 0.5f * factor, 0.5f * factor);
+            } else {
+                matrixStack.scale(0.68f * factor, 0.68f * factor, 0.68f * factor);
+            }
         } else {
-            matrixStack.scale(0.68f * factor, 0.68f * factor, 0.68f * factor);
+            matrixStack.scale(0.6f * factor, 0.6f * factor, 0.6f * factor);
         }
         super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
     }
