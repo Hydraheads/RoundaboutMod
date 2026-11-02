@@ -2005,7 +2005,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                 se.setYRot(getYHeadRot() % 360 - 180);
                 se.setXRot(getXRot());
                 se.setYBodyRot(getYHeadRot() % 360 - 180);
-                se.setYHeadRot(getYHeadRot() % 360);
+                se.setYHeadRot(getYHeadRot() % 360 - 180);
             } else {
                 se.setYRot(getYHeadRot() % 360 - 180);
                 se.setXRot(getXRot());
