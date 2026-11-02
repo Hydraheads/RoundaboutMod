@@ -671,6 +671,8 @@
   "entity.roundabout.killer_queen": "Killer Queen",
   "entity.roundabout.walking_heart": "Walking Heart",
   "entity.roundabout.diver_down": "Diver Down",
+  "entity.roundabout.gold_experience": "Gold Experience",
+  "entity.roundabout.gold_experience_beta": "Gold Experience",
   "entity.roundabout.silver_chariot": "Silver Chariot",
   "entity.roundabout.silver_chariot_pharaoh": "Pharaoh Chariot",
   "entity.roundabout.green_day": "Green Day",
@@ -3293,6 +3295,7 @@
   "skins.roundabout.diver_down.scuba_diver": "Scuba Diver",
 
   "skins.roundabout.gold_experience.base": "Part 5",
+  "skins.roundabout.gold_experience.beta": "Beta",
 
   "skins.roundabout.20_centuryboy.manga": "Manga",
   "skins.roundabout.20_centuryboy.bedrock": "Bedrock",

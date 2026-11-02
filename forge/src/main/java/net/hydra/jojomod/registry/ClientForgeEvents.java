@@ -150,6 +150,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.DIVER_KICK.get(), DiverKickEntityRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BONE_PROJECTILE.get(), BoneProjectileRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GOLD_EXPERIENCE.get(), GoldExperienceRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.GOLD_EXPERIENCE_BETA.get(), GoldExperienceBetaRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GE_BRAMBLE.get(), GEBrambleRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GE_BAT.get(), GEBatRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GE_FROG.get(), GEFrogRenderer::new);
@@ -371,6 +372,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.DIVER_DOWN_WORLD_LAYER, DiverDownWorldModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.DIVER_DROWNED_LAYER, DiverDrownedModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.GOLD_EXPERIENCE_LAYER, GoldExperienceModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.GOLD_EXPERIENCE_BETA_LAYER, GoldExperienceBetaModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.GE_BRAMBLE_LAYER, GEBrambleModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.SILVER_CHARIOT_LAYER, SilverChariotModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.SILVER_CHARIOT_PHARAOH_LAYER, SilverChariotPharaohModel::getTexturedModelData);

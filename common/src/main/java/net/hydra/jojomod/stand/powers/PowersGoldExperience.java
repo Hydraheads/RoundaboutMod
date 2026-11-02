@@ -2,6 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.GEBushBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -10,6 +11,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.*;
 import net.hydra.jojomod.entity.gold_experience.*;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
+import net.hydra.jojomod.entity.stand.DiverDownEntity;
 import net.hydra.jojomod.entity.stand.GoldExperienceEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -19,6 +21,7 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.mixin.StandUserEntity;
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.sound.ModSounds;
@@ -1174,6 +1177,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public Component getSkinName(byte skinId) {
         switch (skinId) {
+            case GoldExperienceEntity.BETA -> {
+                return Component.translatable("skins.roundabout.gold_experience.beta");
+            }
             default -> {
                 return Component.translatable("skins.roundabout.gold_experience.base");
             }
@@ -1184,7 +1190,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public List<Byte> getSkinList() {
         List<Byte> l = Lists.newArrayList();
         l.add(GoldExperienceEntity.PART_5);
-        /*if (this.getSelf() instanceof Player PE) {
+        if (this.getSelf() instanceof Player PE) {
             byte Level = ((IPlayerEntity) PE).roundabout$getStandLevel();
             ItemStack goldDisc = ((StandUser) PE).roundabout$getStandDisc();
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
@@ -1199,10 +1205,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
             if (Level > 5 || bypass) {
             }
             if (Level > 6 || bypass) {
+                l.add(GoldExperienceEntity.BETA);
             }
             if (((IPlayerEntity) PE).roundabout$getUnlockedBonusSkin() || bypass) {
             }
-        }*/
+        }
 
         return l;
     }
@@ -1210,6 +1217,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public StandEntity getNewStandEntity() {
         byte skin = ((StandUser) this.getSelf()).roundabout$getStandSkin();
+        if (skin == GoldExperienceEntity.BETA) {
+            return ModEntities.GOLD_EXPERIENCE_BETA.create(this.getSelf().level());
+        }
         return ModEntities.GOLD_EXPERIENCE.create(this.getSelf().level());
     }
 

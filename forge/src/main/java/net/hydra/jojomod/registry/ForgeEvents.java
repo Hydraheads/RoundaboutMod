@@ -118,6 +118,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.DIVER_DOWN_WORLD.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.DIVER_DROWNED.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.GOLD_EXPERIENCE.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.GOLD_EXPERIENCE_BETA.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SILVER_CHARIOT.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SILVER_CHARIOT_PHARAOH.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.OVA_ENYA.get(), OVAEnyaNPC.createAttributes().build());
@@ -915,6 +916,7 @@ public class ForgeEvents {
         ModEntities.DIVER_KICK = ForgeEntities.DIVER_KICK.get();
         ModEntities.BONE_PROJECTILE = ForgeEntities.BONE_PROJECTILE.get();
         ModEntities.GOLD_EXPERIENCE = ForgeEntities.GOLD_EXPERIENCE.get();
+        ModEntities.GOLD_EXPERIENCE_BETA = ForgeEntities.GOLD_EXPERIENCE_BETA.get();
         ModEntities.GE_BRAMBLE = ForgeEntities.GE_BRAMBLE.get();
         ModEntities.GE_BAT = ForgeEntities.GE_BAT.get();
         ModEntities.GE_FROG = ForgeEntities.GE_FROG.get();
