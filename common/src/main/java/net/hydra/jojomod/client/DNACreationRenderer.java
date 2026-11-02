@@ -1,7 +1,6 @@
 package net.hydra.jojomod.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
 import net.hydra.jojomod.entity.DNACreationEntity;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
@@ -38,8 +37,9 @@ public class DNACreationRenderer extends EntityRenderer<DNACreationEntity> {
         float requiredSeconds = MainUtil.GOLD_EXPERIENCE_TRANSFORM_RATE.getOrDefault(dnaItem, 5.0f);
         float requiredTicks = requiredSeconds * 20.0f;
 
-        // this one is pretty easy, it just gets completion in percent.
-        float percentComplete = Math.min(1.0F, ((float) entity.tickCount + partialTicks) / requiredTicks);
+        // this one is pretty easy, it just gets completion in percent. updated to only trigger when there's a pulse.
+        float steppedTickCount = (entity.tickCount / 20) * 20;
+        float percentComplete = Math.min(1.0F, steppedTickCount / requiredTicks);
 
         poseStack.pushPose();
 
@@ -47,16 +47,19 @@ public class DNACreationRenderer extends EntityRenderer<DNACreationEntity> {
         double verticalOffset = 0.5 + (Math.sin((entity.tickCount + partialTicks) * 0.1) * 0.1);
         poseStack.translate(0, verticalOffset, 0);
 
-        // SPEEENS
-        // the float is in degrees, so 8 degrees per tick
-        float spin = (entity.tickCount + partialTicks) * 8.0f;
-        poseStack.mulPose(Axis.YP.rotationDegrees(spin));
+        // pulsing heart effect thing
+        float pulseTime = (entity.tickCount % 20) + partialTicks;
+        float pulseMultiplier = 1.0f;
+        if (pulseTime < 4.0f) {
+            pulseMultiplier = 1.0f + (0.15f * (float)Math.sin((pulseTime / 4.0f) * Math.PI));
+        }
+        poseStack.scale(pulseMultiplier, pulseMultiplier, pulseMultiplier);
 
         // shrinking item effect
         float itemScale = 1.0f - percentComplete;
         if (itemScale > 0.02f) {
             poseStack.pushPose();
-            float itemYOffset = 0.02f + (percentComplete * 0.12f);
+            float itemYOffset = -0.05f + (percentComplete * 0.24f);
             poseStack.translate(0, itemYOffset, 0);
             poseStack.scale(itemScale, itemScale, itemScale);
             this.itemRenderer.renderStatic(itemStack, ItemDisplayContext.GROUND, packedLight, OverlayTexture.NO_OVERLAY, poseStack, buffer, entity.level(), 0);
