@@ -117,6 +117,10 @@ public class FabricItems {
             new MaskItem(new Item.Properties().stacksTo(1), new KiraPartFourVisage(null)));
     public static final Item KOSAKU_MASK = registerItem("kosaku_mask",
         new MaskItem(new Item.Properties().stacksTo(1), new KosakuVisage(null)));
+    public static final Item FUGO_MASK = registerItem("pannacotta_fugo_mask",
+        new MaskItem(new Item.Properties().stacksTo(1), new FugoVisage(null)));
+    public static final Item FUGO_FEEDBACK_MASK = registerItem("pannacotta_fugo_feedback_mask",
+        new MaskItem(new Item.Properties().stacksTo(1), new FugoFeedbackVisage(null)));
     public static final Item KIRASAKU_MASK = registerItem("kirasaku_mask",
         new MaskItem(new Item.Properties().stacksTo(1), new KirasakuVisage(null)));
     public static final Item HAYATO_KAWAJIRI_MASK = registerItem("hayato_kawajiri_mask",
@@ -580,6 +584,8 @@ public class FabricItems {
                         entries.accept(JOTARO_4_MASK);
                         entries.accept(AYA_MASK);
                         entries.accept(MISTA_MASK);
+                        entries.accept(FUGO_MASK);
+                        entries.accept(FUGO_FEEDBACK_MASK);
                         entries.accept(BOSS_MASK);
                         entries.accept(DIAVOLO_MASK);
                         entries.accept(DOPPIO_MASK);
@@ -1142,6 +1148,8 @@ public class FabricItems {
         ModItems.KIRA_PART_FOUR_MASK = KIRA_PART_FOUR_MASK;
         ModItems.KIRA_PART_EIGHT_MASK = KIRA_PART_EIGHT_MASK;
         ModItems.KOSAKU_MASK = KOSAKU_MASK;
+        ModItems.FUGO_MASK = FUGO_MASK;
+        ModItems.FUGO_FEEDBACK_MASK = FUGO_FEEDBACK_MASK;
         ModItems.KIRASAKU_MASK = KIRASAKU_MASK;
         ModItems.HAYATO_KAWAJIRI_MASK = HAYATO_KAWAJIRI_MASK;
         ModItems.TERRIER_SPAWN_EGG = TERRIER_SPAWN_EGG;

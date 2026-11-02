@@ -238,6 +238,8 @@ public class ModItems {
     public static Item KIRA_PART_FOUR_MASK;
     public static Item KIRA_PART_EIGHT_MASK;
     public static Item KOSAKU_MASK;
+    public static Item FUGO_MASK;
+    public static Item FUGO_FEEDBACK_MASK;
     public static Item KIRASAKU_MASK;
     public static Item HAYATO_KAWAJIRI_MASK;
     public static Item AYA_MASK;
@@ -353,6 +355,8 @@ public class ModItems {
         addToVisageStore(JOTARO_4_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(AYA_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(MISTA_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(FUGO_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(FUGO_FEEDBACK_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(GHIACCIO_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(BOSS_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(DIAVOLO_MASK,page, characterCostExp, characterCostEmerald);
