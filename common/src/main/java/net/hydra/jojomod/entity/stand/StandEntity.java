@@ -241,6 +241,7 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
     public final AnimationState brokenBlockAnimationState = new AnimationState();
     public final AnimationState standLeapAnimationState = new AnimationState();
     public final AnimationState standLeapEndAnimationState = new AnimationState();
+    public final AnimationState grabbedStandByBlackSabbath = new AnimationState();
 
     public boolean turned = false;
     /**Override this to define animations. Above are animation states defined.*/
@@ -249,6 +250,21 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
             byte idle = getIdleAnimation();
             byte animation = getAnimation();
 
+            if(this.getBsGrabbed() != 0 && !(this instanceof GrabbedMobSoul)){
+                this.grabbedStandByBlackSabbath.startIfStopped(this.tickCount);
+                if(this instanceof MagiciansRedEntity mr){
+                    if (mr.emitsFlameCycle() && !isInWaterOrRain()){
+                        mr.cycleFlames.startIfStopped(this.tickCount);
+                        mr.hideFlames.stop();
+                        System.out.println("aaa");
+                    } else {
+                        mr.cycleFlames.stop();
+                        mr.hideFlames.startIfStopped(this.tickCount);
+                        System.out.println("bbb");
+                    }
+                }
+                return;
+            }
             if (idle == 1 && animation == IDLE) {
                 this.idleAnimationState2.startIfStopped(this.tickCount);
             } else {
@@ -808,6 +824,10 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
         }
 
         return false;
+    }
+
+    public float blackSabbathGrabOffset(){
+       return 1.5f;
     }
 
     @Override

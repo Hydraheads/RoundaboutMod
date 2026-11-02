@@ -98,10 +98,18 @@ public class JusticeBaseRenderer extends StandRenderer<JusticeEntity> {
     @Override
     public void render(JusticeEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         float factor = 0.5F + (mobEntity.getSizePercent()/2);
-        if (mobEntity.getSkin() == JusticeEntity.DARK_MIRAGE){
-            matrixStack.scale(0.87f*factor, 0.87f*factor, 0.87f*factor);
+        if(mobEntity.getBsGrabbed() == 0) {
+            if (mobEntity.getSkin() == JusticeEntity.DARK_MIRAGE) {
+                matrixStack.scale(0.87f * factor, 0.87f * factor, 0.87f * factor);
+            } else {
+                matrixStack.scale(2.0f * factor, 2.0f * factor, 2.0f * factor);
+            }
         } else {
-            matrixStack.scale(2.0f*factor,2.0f*factor,2.0f*factor);
+            if (mobEntity.getSkin() == JusticeEntity.DARK_MIRAGE) {
+                matrixStack.scale(0.87f * factor, 0.87f * factor, 0.87f * factor);
+            } else {
+                matrixStack.scale(1.5f * factor, 1.5f * factor, 1.5f * factor);
+            }
         }
         float percentage = ((float) mobEntity.getJusticeSize()/100);
         matrixStack.scale(percentage,percentage,percentage);

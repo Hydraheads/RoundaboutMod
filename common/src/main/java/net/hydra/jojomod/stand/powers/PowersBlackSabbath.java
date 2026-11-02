@@ -62,7 +62,8 @@ public class PowersBlackSabbath extends NewDashPreset {
     CLIENT_SYNC_REMOVE_TARGET = 103,
     CLIENT_SYNC_REMOVE_TARGET_LIST = 104,
     C2S_SYNC_DESTROY_LIST = 105,
-    S2C_CLOSE_CHEST = 106;
+    S2C_CLOSE_CHEST = 106,
+    C2S_SYNC_PLAYER_SOUL_TYPE = 107;
 
     public int moveMode = 0;
     public int tickBeforeHunt = -1;
@@ -181,6 +182,7 @@ public class PowersBlackSabbath extends NewDashPreset {
             if(e != null && e instanceof LivingEntity l) {
                 ((StandUser)l).roundabout$setGrabbedSoul(false);
                 ((StandUser)l).roundabout$updateSealedTicks(-1);
+                ((StandUser)l).roundabout$setGrabberSabbath(0);
                 be.killSoul();
             }
             killTargetListClient();
@@ -225,6 +227,7 @@ public class PowersBlackSabbath extends NewDashPreset {
                 if(BE.level().getEntity(BE.getGrabbing()) != null) {
                     ((StandUser) BE.level().getEntity(BE.getGrabbing())).roundabout$setGrabbedSoul(false);
                     ((StandUser) BE.level().getEntity(BE.getGrabbing())).roundabout$updateSealedTicks(-1);
+                    ((StandUser)BE.level().getEntity(BE.getGrabbing())).roundabout$setGrabberSabbath(0);
                     BE.killSoul();
                 }
             }
@@ -843,6 +846,22 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             }
         }
 
+        if(isClient()){
+            StandEntity s = this.getStandEntity(this.getSelf());
+            if(s != null && s instanceof BlackSabbathEntity BE){
+                if(BE.targetSabbath() instanceof Player p){
+                    System.out.println(BE.isWideSkin(p));
+                    int slim = BE.isWideSkin(p) ? 1 : 0;
+
+                    if(BE.isWideSkin(p) != BE.getSlimSoul()) {
+                        tryIntPower(PowersBlackSabbath.C2S_SYNC_PLAYER_SOUL_TYPE, true, slim);
+                        tryIntPowerPacket(PowersBlackSabbath.C2S_SYNC_PLAYER_SOUL_TYPE, slim);
+                    }
+
+                }
+            }
+        }
+
         if(this.getStandEntity(this.getSelf()) != null) {
             DimensionType t = this.getStandEntity(this.getSelf()).level().dimensionType();
             DimensionType T = this.getSelf().level().dimensionType();
@@ -1185,10 +1204,19 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                 this.setActivePower(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET_LIST);
                 this.setAttackTime(0);
                 if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){
-                    if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser) e).roundabout$updateSealedTicks(-1);be.killSoul();}
+                    if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser) e).roundabout$updateSealedTicks(-1);be.killSoul();((StandUser)e).roundabout$setGrabberSabbath(0);}
                 }
                 setTickDown2(40);
                 this.clearTargetEntities();
+            }
+
+            case PowersBlackSabbath.C2S_SYNC_PLAYER_SOUL_TYPE -> {
+                this.setActivePower(PowersBlackSabbath.C2S_SYNC_PLAYER_SOUL_TYPE);
+                this.setAttackTime(0);
+                if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be) {
+                    boolean bol = value == 1 ? true : false;
+                    be.setSlimSoul(bol);
+                }
             }
         }
         return super.tryIntPower(move, forced, value);
@@ -1215,10 +1243,16 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         Entity TE = getTarget();
         if (TE != null) {
             if (TE instanceof LivingEntity LE) {
-                if(blackSabbathTargets.contains(LE)) {
-                    if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){
-                        if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e && be.level().getEntity(be.getGrabbing()).is(LE)){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser) e).roundabout$updateSealedTicks(-1);be.killSoul();}
+                if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){
+                    if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e && be.level().getEntity(be.getGrabbing()).is(LE)){
+                        be.setMeleeInteractionTicks(0);
+                        ((StandUser)e).roundabout$setGrabbedSoul(false);
+                        ((StandUser) e).roundabout$updateSealedTicks(-1);
+                        be.killSoul();
+                        ((StandUser)e).roundabout$setGrabberSabbath(0);
                     }
+                }
+                if(blackSabbathTargets.contains(LE)) {
                     this.removeTargetEntities(LE);
                     tryIntPower(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET, true, LE.getId());
                     tryIntPowerPacket(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET, LE.getId());
@@ -1234,7 +1268,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             this.clearTargetEntities();
             setTickDown2(40);
             if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){
-                if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser) e).roundabout$updateSealedTicks(-1);be.killSoul();}
+                if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser) e).roundabout$updateSealedTicks(-1);be.killSoul();((StandUser)e).roundabout$setGrabberSabbath(0);}
             }
             tryIntPower(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET_LIST, true, 0);
             tryIntPowerPacket(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET_LIST, 0);

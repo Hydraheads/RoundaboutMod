@@ -17,10 +17,7 @@ import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.projectile.*;
-import net.hydra.jojomod.entity.stand.FollowingStandEntity;
-import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
-import net.hydra.jojomod.entity.stand.RattEntity;
-import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.entity.zombie_minion.VillagerMinion;
@@ -77,7 +74,6 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.animal.CatVariant;
 import net.minecraft.world.entity.animal.Turtle;
-import net.hydra.jojomod.entity.stand.PurpleHazeEntity;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.piglin.Piglin;
@@ -1875,6 +1871,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                                 1, 0, 0, 0, 0.1);
                     }
                 }
+            }
+        }
+        if(!this.roundabout$getGrabbedSoul()){
+            if(this.roundabout$getGrabberSabbath() != 0){
+                roundabout$setGrabberSabbath(0);
             }
         }
         if (roundabout$isSealed() && !level().isClientSide()) {
@@ -3967,6 +3968,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$RIBCAGE_TRAP, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$SPRING_LEGS, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$GRABBED_SOUL, false);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$GRABBER_ID, 0);
         }
     }
 
@@ -5478,6 +5480,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (this.roundabout$getStandPowers() instanceof PowersDiverDown dd) {
             dd.clearRibcageTrap();
             dd.clearSpringLegs();
+        }
+
+        if(this.roundabout$getGrabberSabbath() != 0){
+            Entity z = this.level().getEntity(roundabout$getGrabberSabbath());
+            if(z != null && z instanceof BlackSabbathEntity be){
+                if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser) e).roundabout$updateSealedTicks(-1);be.killSoul();((StandUser)e).roundabout$setGrabberSabbath(0);}
+            }
         }
 
         if (rdbt$GetBtdPlantedUser() != null) {
@@ -7140,7 +7149,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     //black sabbath soul methods
-    private boolean roundabout$grabbedSoul = false;
+
     @Unique
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$GRABBED_SOUL = SynchedEntityData.defineId(
             LivingEntity.class, EntityDataSerializers.BOOLEAN);
@@ -7155,6 +7164,22 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public boolean roundabout$getGrabbedSoul() {
         return this.entityData.get(ROUNDABOUT$GRABBED_SOUL);
+    }
+
+    @Unique
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$GRABBER_ID = SynchedEntityData.defineId(
+            LivingEntity.class, EntityDataSerializers.INT);
+
+    @Unique
+    @Override
+    public void roundabout$setGrabberSabbath(int boleean) {
+        this.entityData.set(ROUNDABOUT$GRABBER_ID, boleean);
+    }
+
+    @Unique
+    @Override
+    public int roundabout$getGrabberSabbath() {
+        return this.entityData.get(ROUNDABOUT$GRABBER_ID);
     }
 
     // for diver down

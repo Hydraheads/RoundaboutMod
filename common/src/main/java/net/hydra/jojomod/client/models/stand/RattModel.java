@@ -8,6 +8,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.models.stand.animations.RattAnimations;
+import net.hydra.jojomod.client.models.substand.zsabbathsouls.animations.MobSoulAnimation;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -184,5 +185,6 @@ public class RattModel<T extends RattEntity> extends StandModel<T> {
         if (pEntity.isSafe()) {
             this.setAlpha(0.5F);
         }
+      this.animate(pEntity.grabbedStandByBlackSabbath, MobSoulAnimation.grabbed_ratt, pAgeInTicks, 1f);
     }
 }
