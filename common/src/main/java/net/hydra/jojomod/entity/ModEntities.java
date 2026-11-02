@@ -174,7 +174,6 @@ public class ModEntities {
     public static EntityType<PurpleSmokeEntity> PURPLE_SMOKE;
     public static EntityType<StrayCatAirBubble> STRAY_CAT_AIRBUBBLE;
     public static EntityType<PHCapsuleEntity> PH_CAPSULE;
-    public static EntityType<CTRplatformEntity> CTR_PLATFORM;
     public static EntityType<CTRbarrierEntity> CTR_BARRIER;
 
     public static EntityType<GoBeyondEntity> GO_BEYOND;

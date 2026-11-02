@@ -6,7 +6,6 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.substand.CTRbarrierEntity;
-import net.hydra.jojomod.entity.substand.CTRplatformEntity;
 import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
@@ -14,6 +13,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.*;
+import net.hydra.jojomod.mixin.StandUserEntity;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
@@ -48,6 +48,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.apache.commons.compress.utils.Lists;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -423,14 +424,21 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         if (self.onGround()) {
             dropTimer = 0;
             canCreatePlatform = false;
+            if (this.self instanceof StandUser su){
+                su.roundabout$setIsRainWalking(false);
+            }
         }
 
         if (isInRain() && PowerTypes.hasStandActive(self)) {
             if (isHoldingSneak()) {
-                if (dropTimer == 0)
+                if (dropTimer == 0){
                     canCreatePlatform = true;
+                    if (this.self instanceof StandUser su){
+                        su.roundabout$setIsRainWalking(true);
+                    }
+                }
             } else if (canCreatePlatform && !self.onGround()) {
-                rainPlatform();
+                rainWalk();
             }
         }
 
@@ -597,21 +605,17 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         }
     }
 
-    //platform
+    //rain walking
 
     private boolean canCreatePlatform = false;
 
-    private void rainPlatform(){
+    private void rainWalk(){
         if (!this.self.level().isClientSide()) {
             canCreatePlatform = false;
-            CTRplatformEntity plat = ModEntities.CTR_PLATFORM.create(this.self.level());
-
-            if (plat != null) {
-                plat.setUser(this.self);
-                PowerTypes.copyPlaneOfExisting(self, plat);
-                plat.setPos(getRayBlock(this.self, 0.0f).add(0, -2.35, 0));
-                this.self.level().addFreshEntity(plat);
+            if (this.self instanceof StandUser su){
+                su.roundabout$setIsRainWalking(true);
             }
+
             soundVariations.removeAll(soundVariations);
 
             soundVariations.add(ModSounds.CTR_RAIN_STEP_1_EVENT);

@@ -7,17 +7,11 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.projectile.GentlyWeepsModel;
-import net.hydra.jojomod.client.models.stand.renderers.StandRenderer;
-import net.hydra.jojomod.client.models.substand.CTRplatformModel;
 import net.hydra.jojomod.client.models.visages.parts.RipperEyesAnimation;
-import net.hydra.jojomod.entity.objects.GentlyWeepsEntity;
 import net.hydra.jojomod.entity.substand.CTRbarrierEntity;
-import net.hydra.jojomod.entity.substand.CTRplatformEntity;
-import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersCatchTheRainbow;
-import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -25,7 +19,6 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.phys.Vec3;
 
 public class CTRbarrierRenderer extends EntityRenderer<CTRbarrierEntity> {

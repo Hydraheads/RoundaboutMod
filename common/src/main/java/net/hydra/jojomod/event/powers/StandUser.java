@@ -428,4 +428,7 @@ public interface StandUser {
     void roundabout$setSpringLegs(boolean legs);
     boolean roundabout$hasInfiniteSpin();
     void roundabout$clearInfiniteSpin();
+
+    boolean roundabout$getIsRainWalking();
+    void roundabout$setIsRainWalking(boolean bool);
 }

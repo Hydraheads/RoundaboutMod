@@ -211,7 +211,6 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.SEPERATED_ARM_SLIM.get(), SeperatedArmSlimRenderer::new);
         event.registerEntityRenderer(ForgeEntities.LEFT_SEPERATED_ARM.get(), LeftSeperatedArmRenderer::new);
         event.registerEntityRenderer(ForgeEntities.LEFT_SEPERATED_ARM_SLIM.get(), LeftSeperatedArmSlimRenderer::new);
-        event.registerEntityRenderer(ForgeEntities.CTR_PLATFORM.get(), CTRplatformRenderer::new);
         event.registerEntityRenderer(ForgeEntities.MOLD_SPORE.get(), NoRenderer::new);
         event.registerEntityRenderer(ForgeEntities.PURPLE_SMOKE.get(), NoRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BAD_COMPANY_SOLDIER.get(), BCSoldierRenderer::new);
@@ -382,7 +381,6 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.SEPERATED_ARM_SLIM_LAYER, SeperatedArmSlimModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.LEFT_SEPERATED_ARM_LAYER, LeftSeperatedArmModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.LEFT_SEPERATED_ARM_SLIM_LAYER, LeftSeperatedArmSlimModel::createBodyLayer);
-        event.registerLayerDefinition(ModEntityRendererClient.CTR_PLATFORM_LAYER, CTRplatformModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.STAND_FIREBALL_LAYER, StandFireballModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.PW_METEOR_LAYER, PWMeteorModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.PW_BIG_METEOR_LAYER, PWBigMeteorModel::createBodyLayer);

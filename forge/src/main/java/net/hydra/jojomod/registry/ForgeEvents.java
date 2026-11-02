@@ -179,7 +179,6 @@ public class ForgeEvents {
         event.put(ForgeEntities.SHEER_HEART_ATTACK.get(), SheerHeartAttackEntity.createStandAttributes().build());
         event.put(ForgeEntities.BAD_COMPANY_SOLDIER.get(), BCSoldier.createStandAttributes().build());
         event.put(ForgeEntities.BAD_COMPANY_TANK.get(), BCTank.createStandAttributes().build());
-        event.put(ForgeEntities.CTR_PLATFORM.get(), CTRplatformEntity.createStandAttributes().build());
         event.put(ForgeEntities.CTR_BARRIER.get(), CTRbarrierEntity.createStandAttributes().build());
     }
 
@@ -973,7 +972,6 @@ public class ForgeEvents {
         ModEntities.TUSK_NAIL = ForgeEntities.TUSK_NAIL.get();
         ModEntities.TUSK_HOLE = ForgeEntities.TUSK_HOLE.get();
         ModEntities.PH_CAPSULE = ForgeEntities.PH_CAPSULE.get();
-        ModEntities.CTR_PLATFORM = ForgeEntities.CTR_PLATFORM.get();
         ModEntities.CTR_BARRIER = ForgeEntities.CTR_BARRIER.get();
 
         ModEntities.BAD_COMPANY_SOLDIER = ForgeEntities.BAD_COMPANY_SOLDIER.get();
