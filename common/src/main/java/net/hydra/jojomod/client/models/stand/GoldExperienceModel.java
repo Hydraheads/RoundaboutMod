@@ -27,7 +27,7 @@ public class GoldExperienceModel<T extends GoldExperienceEntity> extends StandMo
     private final ModelPart upper_right_arm;
     private final ModelPart right_shoulder;
     private final ModelPart lower_right_arm;
-    private final ModelPart left_arm;
+    public final ModelPart left_arm;
     private final ModelPart upper_left_arm;
     private final ModelPart left_shoulder;
     private final ModelPart lower_left_arm;
@@ -87,7 +87,7 @@ public class GoldExperienceModel<T extends GoldExperienceEntity> extends StandMo
         this.LeftArmBAM = this.BAM.getChild("LeftArmBAM");
         this.LeftArmBAM4 = this.BAM.getChild("LeftArmBAM4");
         this.LeftArmBAM3 = this.BAM.getChild("LeftArmBAM3");
-        this.kick_barrage = root.getChild("kick_barrage");
+        this.kick_barrage = this.stand2.getChild("kick_barrage");
         this.One = this.kick_barrage.getChild("One");
         this.Two = this.kick_barrage.getChild("Two");
         this.Three = this.kick_barrage.getChild("Three");
@@ -223,7 +223,7 @@ public class GoldExperienceModel<T extends GoldExperienceEntity> extends StandMo
 
         PartDefinition Left_Arm_r3 = LeftArmBAM3.addOrReplaceChild("Left_Arm_r3", CubeListBuilder.create().texOffs(0, 112).mirror().addBox(-4.25F, -1.25F, -4.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.3F)).mirror(false), PartPose.offsetAndRotation(0.625F, -0.5F, -1.0F, -1.5708F, 0.0F, -1.5708F));
 
-        PartDefinition kick_barrage = partdefinition.addOrReplaceChild("kick_barrage", CubeListBuilder.create(), PartPose.offset(-11.0F, 12.0F, -2.0F));
+        PartDefinition kick_barrage = stand2.addOrReplaceChild("kick_barrage", CubeListBuilder.create(), PartPose.offset(-11.0F, -12.0F, -2.0F));
 
         PartDefinition One = kick_barrage.addOrReplaceChild("One", CubeListBuilder.create().texOffs(45, 118).mirror().addBox(-2.0F, 4.0F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.01F)).mirror(false)
                 .texOffs(61, 119).mirror().addBox(-2.0F, 5.0F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.201F)).mirror(false), PartPose.offset(0.0F, 2.0F, 0.0F));
@@ -268,14 +268,5 @@ public class GoldExperienceModel<T extends GoldExperienceEntity> extends StandMo
     @Override
     public ModelPart root() {
         return stand;
-    }
-    private final org.joml.Vector3f animationVectorCache = new org.joml.Vector3f();
-
-    private void animateWeighted(AnimationState state, AnimationDefinition animation,
-                                 float animationProgress, float weight) {
-        if (weight <= 0.0F) return;
-        state.updateTime(animationProgress, 1.0F);
-        state.ifStarted(animationState -> KeyframeAnimations.animate(this, animation,
-                animationState.getAccumulatedTime(), weight, animationVectorCache));
     }
 }

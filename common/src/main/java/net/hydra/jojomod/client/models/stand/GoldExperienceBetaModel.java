@@ -26,7 +26,7 @@ public class GoldExperienceBetaModel<T extends GoldExperienceEntity> extends Sta
     private final ModelPart right_arm;
     private final ModelPart upper_right_arm;
     private final ModelPart lower_right_arm;
-    private final ModelPart left_arm;
+    public final ModelPart left_arm;
     private final ModelPart upper_left_arm;
     private final ModelPart lower_left_arm;
     private final ModelPart lower_chest;
@@ -265,14 +265,5 @@ public class GoldExperienceBetaModel<T extends GoldExperienceEntity> extends Sta
     @Override
     public ModelPart root() {
         return stand;
-    }
-    private final org.joml.Vector3f animationVectorCache = new org.joml.Vector3f();
-
-    private void animateWeighted(AnimationState state, AnimationDefinition animation,
-                                 float animationProgress, float weight) {
-        if (weight <= 0.0F) return;
-        state.updateTime(animationProgress, 1.0F);
-        state.ifStarted(animationState -> KeyframeAnimations.animate(this, animation,
-                animationState.getAccumulatedTime(), weight, animationVectorCache));
     }
 }
