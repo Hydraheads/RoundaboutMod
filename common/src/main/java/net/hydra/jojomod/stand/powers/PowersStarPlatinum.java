@@ -513,6 +513,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
     @Override
     public void powerActivate(PowerContext context) {
+        if (self.hasEffect(ModEffects.SWITCH)){
+            return;
+        }
         switch (context) {
 
             case SKILL_1_NORMAL -> {

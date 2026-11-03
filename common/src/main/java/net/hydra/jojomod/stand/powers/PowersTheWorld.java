@@ -15,6 +15,7 @@ import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.entity.visages.mobs.DIONPC;
 import net.hydra.jojomod.entity.visages.mobs.DiegoNPC;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
@@ -1029,6 +1030,9 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
     @Override
     public void powerActivate(PowerContext context) {
+        if (self.hasEffect(ModEffects.SWITCH)){
+            return;
+        }
         switch (context) {
 
             case SKILL_1_NORMAL -> {
