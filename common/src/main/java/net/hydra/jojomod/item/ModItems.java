@@ -244,6 +244,8 @@ public class ModItems {
     public static Item HAYATO_KAWAJIRI_MASK;
     public static Item AYA_MASK;
     public static Item MISTA_MASK;
+    public static Item OYECOMOVA_MASK;
+    public static Item ABBACCHIO_MASK;
     public static Item GHIACCIO_MASK;
     public static Item JOHNNY_MASK;
     public static Item JOHNGALLIA_MASK;
