@@ -28,7 +28,6 @@ public class PHCapsuleRenderer extends EntityRenderer<PHCapsuleEntity> {
     private static final ResourceLocation CYAN_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/killer_queen/projectiles/cyan.png");
     private static final ResourceLocation YELLOW_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/killer_queen/projectiles/yellow.png");
     private static final ResourceLocation BOMB_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/killer_queen/projectiles/bomb.png");
-    private static final ResourceLocation POD2 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/pod2.png");
 
     private final float scale;
 

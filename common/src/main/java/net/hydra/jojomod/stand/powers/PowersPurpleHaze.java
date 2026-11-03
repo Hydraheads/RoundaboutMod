@@ -1725,7 +1725,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
         return super.canFallBrace();
     }
     private static final float FALL_BRACE_SHOCKWAVE_RADIUS = 4.0F;
-    private static final float FALL_BRACE_SHOCKWAVE_DAMAGE = 3.0F;
+    private static final float FALL_BRACE_SHOCKWAVE_MIN_DAMAGE = 1.5F;
+    private static final float FALL_BRACE_SHOCKWAVE_MAX_DAMAGE = 10.0F;
+    private static final float FALL_BRACE_DAMAGE_SCALE = 0.2F;
 
     @Override
     public boolean fallBrace() {
@@ -1773,11 +1775,27 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
         AABB sweep = new AABB(pos, pos).inflate(FALL_BRACE_SHOCKWAVE_RADIUS, 1.5, FALL_BRACE_SHOCKWAVE_RADIUS);
         List<Entity> nearby = self.level().getEntities(self, sweep);
+        float shockwaveDamage = getFallBraceShockwaveDamage();
         for (Entity e : nearby) {
             if (e instanceof LivingEntity le && le.isAlive() && !le.isInvulnerable()) {
-                StandDamageEntityAttack(le, FALL_BRACE_SHOCKWAVE_DAMAGE, 0.6F, self);
+                StandDamageEntityAttack(le, shockwaveDamage, 0.6F, self);
             }
         }
+    }
+    private float getFallBraceShockwaveDamage() {
+        float dist = (float) Math.max(fallBraceOriginalDistance, 0.0);
+
+        float bonus;
+        if (dist <= 3.0F) {
+            bonus = dist * 4.0F;
+        } else if (dist <= 8.0F) {
+            bonus = 12.0F + (dist - 3.0F) * 2.0F;
+        } else {
+            bonus = 22.0F + (dist - 8.0F);
+        }
+
+        float dmg = FALL_BRACE_SHOCKWAVE_MIN_DAMAGE + bonus * FALL_BRACE_DAMAGE_SCALE;
+        return Mth.clamp(dmg, FALL_BRACE_SHOCKWAVE_MIN_DAMAGE, FALL_BRACE_SHOCKWAVE_MAX_DAMAGE);
     }
     private double fallBraceOriginalDistance = 0;
     private static final int FALLING_HIT_START_TICKS = 5;  //
