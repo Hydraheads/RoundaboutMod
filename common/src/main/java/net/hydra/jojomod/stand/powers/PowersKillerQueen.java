@@ -1957,8 +1957,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
             }
 
-            if (move == PowerIndex.GUARD && this.getActivePower() == BITES_THE_DUST_CHASE
-                    || move != BITES_THE_DUST_CHASE && (this.getActivePower() == BITES_THE_DUST_CHASE && this.currentBombStatus == BOMB_NONE)) {
+            if (move != BITES_THE_DUST_CHASE && (this.getActivePower() == BITES_THE_DUST_CHASE && !inBitesTheDustMode())) {
                 this.stopSoundsIfNearby(BTD_NOISE, 100, true);
             }
 

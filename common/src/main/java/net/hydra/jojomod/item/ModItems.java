@@ -335,7 +335,7 @@ public class ModItems {
         int characterCostExp = ClientNetworking.getAppropriateConfig().cinderellaSettings.levelCostCharacterVisage;
         int characterCostEmerald = ClientNetworking.getAppropriateConfig().cinderellaSettings.emeraldCostCharacterVisage;
         //37 67 -34 + Each page can contain 5x5 masks.
-        page++;
+        page++; // 14 / 25
         addToVisageStore(SPEEDWAGON_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(DIO_VAMPIRE_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(STRAIZO_VAMPIRE_MASK,page, characterCostExp, characterCostEmerald);
@@ -351,7 +351,7 @@ public class ModItems {
         addToVisageStore(POLNAREFF_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(BLACK_POLNAREFF_MASK,page, characterCostExp, characterCostEmerald);
 
-        page++;
+        page++; // 19 / 25
         addToVisageStore(JOTARO_4_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(AYA_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(MISTA_MASK,page, characterCostExp, characterCostEmerald);
@@ -372,7 +372,7 @@ public class ModItems {
         addToVisageStore(KOSAKU_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(HAYATO_KAWAJIRI_MASK,page, characterCostExp, characterCostEmerald);
 
-        page++;
+        page++; // 14 / 25
         addToVisageStore(JOHNNY_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(GYRO_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(LUCY_MASK,page, characterCostExp, characterCostEmerald);
