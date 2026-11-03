@@ -4,6 +4,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.DIOVoice;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
+import net.hydra.jojomod.item.ModItems;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
@@ -15,6 +16,15 @@ public class PolnareffVisage extends VisageData {
     }
     public VisageData generateVisageData(LivingEntity entity){
         return new PolnareffVisage(entity);
+    }
+
+    @Override
+    public JojoNPC getModelNPC(LivingEntity pl){
+        JojoNPC jojoNPC = ModEntities.JOTARO.create(pl.level());
+        if (jojoNPC !=null){
+            jojoNPC.setTrueBasis(ModItems.POLNAREFF_MASK.getDefaultInstance());
+        }
+        return jojoNPC;
     }
 
     @Override

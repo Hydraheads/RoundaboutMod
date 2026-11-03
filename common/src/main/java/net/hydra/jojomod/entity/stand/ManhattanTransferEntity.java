@@ -271,7 +271,8 @@ public class ManhattanTransferEntity extends StandEntity {
                                         this.setHeldItemManhattan(ii.copyAndClear());
                                         setKnockbackArrow(AA.getKnockback());
                                         piercingArrow = AA.getPierceLevel();
-                                        if(AA.getDeltaMovement().length() > 0.7){
+                                       // System.out.println(AA.getDeltaMovement().length());
+                                        if(AA.getDeltaMovement().length() > 1.5){
                                             isArrowTooSlow = false;
                                         } else {
                                             isArrowTooSlow = true;

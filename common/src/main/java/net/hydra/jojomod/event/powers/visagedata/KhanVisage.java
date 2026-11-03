@@ -16,6 +16,7 @@ public class KhanVisage extends VisageData {
         super(self);
     }
 
+
     @Override
     public Vec3i getHairColor(){
         return new Vec3i(92,70,49);

@@ -666,6 +666,8 @@ public class ForgeEvents {
         ModItems.DIEGO_MASK = ForgeItems.DIEGO_MASK.get();
         ModItems.DIEGO_2_MASK = ForgeItems.DIEGO_2_MASK.get();
         ModItems.TIM_MASK = ForgeItems.TIM_MASK.get();
+        ModItems.OYECOMOVA_MASK = ForgeItems.OYECOMOVA_MASK.get();
+        ModItems.ABBACCHIO_MASK = ForgeItems.ABBACCHIO_MASK.get();
         ModItems.SHERIFF_MASK = ForgeItems.SHERIFF_MASK.get();
         ModItems.RINGO_MASK = ForgeItems.RINGO_MASK.get();
         ModItems.HATO_MASK = ForgeItems.HATO_MASK.get();

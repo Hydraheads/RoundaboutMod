@@ -244,6 +244,8 @@ public class ModItems {
     public static Item HAYATO_KAWAJIRI_MASK;
     public static Item AYA_MASK;
     public static Item MISTA_MASK;
+    public static Item OYECOMOVA_MASK;
+    public static Item ABBACCHIO_MASK;
     public static Item GHIACCIO_MASK;
     public static Item JOHNNY_MASK;
     public static Item JOHNGALLIA_MASK;
@@ -335,7 +337,7 @@ public class ModItems {
         int characterCostExp = ClientNetworking.getAppropriateConfig().cinderellaSettings.levelCostCharacterVisage;
         int characterCostEmerald = ClientNetworking.getAppropriateConfig().cinderellaSettings.emeraldCostCharacterVisage;
         //37 67 -34 + Each page can contain 5x5 masks.
-        page++;
+        page++; // 14 / 25
         addToVisageStore(SPEEDWAGON_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(DIO_VAMPIRE_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(STRAIZO_VAMPIRE_MASK,page, characterCostExp, characterCostEmerald);
@@ -351,7 +353,7 @@ public class ModItems {
         addToVisageStore(POLNAREFF_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(BLACK_POLNAREFF_MASK,page, characterCostExp, characterCostEmerald);
 
-        page++;
+        page++; // 20 / 25
         addToVisageStore(JOTARO_4_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(AYA_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(MISTA_MASK,page, characterCostExp, characterCostEmerald);
@@ -361,6 +363,7 @@ public class ModItems {
         addToVisageStore(BOSS_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(DIAVOLO_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(DOPPIO_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(ABBACCHIO_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(JOTARO_6_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(JOHNGALLIA_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(ANASUI_MASK,page, characterCostExp, characterCostEmerald);
@@ -372,7 +375,7 @@ public class ModItems {
         addToVisageStore(KOSAKU_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(HAYATO_KAWAJIRI_MASK,page, characterCostExp, characterCostEmerald);
 
-        page++;
+        page++; // 15 / 25
         addToVisageStore(JOHNNY_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(GYRO_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(LUCY_MASK,page, characterCostExp, characterCostEmerald);
@@ -381,6 +384,7 @@ public class ModItems {
         addToVisageStore(DIEGO_2_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(SANDMAN_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(POCOLOCO_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(OYECOMOVA_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(TIM_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(SHERIFF_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(RINGO_MASK,page, characterCostExp, characterCostEmerald);

@@ -1,5 +1,8 @@
 package net.hydra.jojomod.event.powers.visagedata;
 
+import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.visages.JojoNPC;
+import net.hydra.jojomod.item.ModItems;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
@@ -16,6 +19,15 @@ public class FugoFeedbackVisage extends VisageData {
     }
     public VisageData generateVisageData(LivingEntity entity){
         return new FugoFeedbackVisage(entity);
+    }
+
+    @Override
+    public JojoNPC getModelNPC(LivingEntity pl){
+        JojoNPC jojoNPC = ModEntities.JOTARO.create(pl.level());
+        if (jojoNPC !=null){
+            jojoNPC.setTrueBasis(ModItems.FUGO_FEEDBACK_MASK.getDefaultInstance());
+        }
+        return jojoNPC;
     }
 
     @Override
