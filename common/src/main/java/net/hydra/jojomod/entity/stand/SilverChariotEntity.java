@@ -458,7 +458,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
                 }
             }
             if (animationState == SC_TOGGLE_ARMOUR_ON) {
-                this.scToggleNotArmouredState.stop();
+                // this.scToggleNotArmouredState.stop();
             }
 
             if (animationState == SC_GUARD_HIT) {
@@ -545,38 +545,12 @@ public class SilverChariotEntity extends FollowingStandEntity {
                 this.scBarrageDamage.stop();
             }
             if (animationState == BROKEN_GUARD) {
-                /*
-                if (!armoured) {
-                    this.scIdleNotArmoured.startIfStopped(this.tickCount);
-                } else {
-                    this.scIdleNotArmoured.stop();
-                }
-                */
-                if (!armoured) {
-                    this.scIdleNotArmoured.startIfStopped(this.tickCount);
-                } else if (isPart3Skin) {
-                    this.scGuardRightBreak.startIfStopped(this.tickCount);
-                } else {
-                    this.scGuardLeftBreak.startIfStopped(this.tickCount);
-                }
-            } else {
-                if (!armoured) {
-                    this.scIdleNotArmoured.stop();
-                } else if (isPart3Skin) {
-                    this.scGuardRightBreak.stop();
-                } else {
-                    this.scGuardLeftBreak.stop();
-                }
-            }
-            if (animationState == SC_FALL_BRACE) {
-                // this.scFallBrace.startIfStopped(this.tickCount);
                 if (isPart3Skin) {
                     this.scGuardRightBreak.startIfStopped(this.tickCount);
                 } else {
                     this.scGuardLeftBreak.startIfStopped(this.tickCount);
                 }
             } else {
-                // this.scFallBrace.stop();
                 if (isPart3Skin) {
                     this.scGuardRightBreak.stop();
                 } else {
