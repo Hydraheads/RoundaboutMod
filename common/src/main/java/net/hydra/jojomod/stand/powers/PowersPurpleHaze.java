@@ -1636,7 +1636,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         this.setAttackTimeDuring(0);
         this.setActivePower(PowerIndex.POWER_2_SNEAK);
         this.poseStand(OffsetIndex.GUARD);
-        this.animateStand(PurpleHazeEntity.KICK_WINDUP); //PLACEHOLDER
+        this.animateStand(PurpleHazeEntity.KICK_ATTACK);
         playSoundsIfNearby(IMPALE_CHARGE_NOISE, 27, false);
         return true;
     }
@@ -1644,7 +1644,6 @@ public class PowersPurpleHaze extends NewPunchingStand {
     public void updateSalimo() {
         if (this.attackTimeDuring > -1) {
             if (this.attackTimeDuring > 24) {
-                this.animateStand(PurpleHazeEntity.KICK_ATTACK); //PLACEHOLDER
                 this.standSalimo();
             } else if (!this.getSelf().level().isClientSide() && this.attackTimeDuring % 4 == 0) {
                 sendParticlesIfPossible(self.level(), ModParticles.MENACING,
