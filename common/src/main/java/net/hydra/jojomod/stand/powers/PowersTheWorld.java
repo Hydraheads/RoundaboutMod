@@ -1745,8 +1745,6 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             return ModSounds.THE_WORLD_ASSAULT_EVENT;
         } else if (soundChoice == IMPALE_NOISE) {
             return ModSounds.IMPALE_CHARGE_EVENT;
-        } else if (soundChoice == TIME_STOP_CHARGE){
-            return ModSounds.TIME_STOP_CHARGE_THE_WORLD_EVENT;
         } else if (soundChoice == TIME_STOP_VOICE){
             if (bt == TheWorldEntity.OVA_SKIN) {
                 return ModSounds.OVA_THE_WORLD_EVENT;
@@ -1773,8 +1771,6 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             return ModSounds.TIME_STOP_VOICE_THE_WORLD3_EVENT;
         } else if (soundChoice == TIME_STOP_ENDING_NOISE){
             return ModSounds.TIME_STOP_RESUME_THE_WORLD_EVENT;
-        } else if (soundChoice == TIME_STOP_ENDING_NOISE_2){
-            return ModSounds.TIME_STOP_RESUME_THE_WORLD2_EVENT;
         } else if (soundChoice == TIME_STOP_TICKING){
             return ModSounds.TIME_STOP_TICKING_EVENT;
         }
