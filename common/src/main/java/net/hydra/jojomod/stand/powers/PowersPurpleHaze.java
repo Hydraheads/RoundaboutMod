@@ -547,7 +547,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     @Override
     public boolean cancelSprintJump(){
-        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2|| this.getActivePower() == PowerIndex.POWER_2_SNEAK) {
+        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2
+                || this.getActivePower() == PowerIndex.POWER_2_SNEAK|| this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
             return true;
         }
 
@@ -804,12 +805,16 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
     @Override
     public void standBarrageHit(){
+        /*
         if (forwardBarrage) {
             StandEntity stand = getStandEntity(this.self);
             if (this.self instanceof Player) {
                 if (isPacketPlayer() && Objects.nonNull(stand)) {
                     C2SPacketUtil.standBarrageHitPacket(getTargetEntityId2(2.7F, stand, 50), this.attackTimeDuring);
-                    if (this.isBarraging() && this.attackTimeDuring == this.getBarrageLength()) {
+
+                    if (this.activePower == PowerIndex.BARRAGE_2 && this.attackTimeDuring == this.getKickBarrageLength()){
+                        this.attackTimeDuring = -10;
+                    } else if (this.isBarraging() && this.attackTimeDuring == this.getBarrageLength()){
                         this.attackTimeDuring = -10;
                     }
                 }
@@ -819,10 +824,71 @@ public class PowersPurpleHaze extends NewPunchingStand {
             }
             findDeflectables();
             return;
+        }else {
+
+        }*/
+        StandEntity stand = getStandEntity(this.self);
+        if (this.self instanceof Player){
+            if (isPacketPlayer()){
+                if (forwardBarrage && Objects.nonNull(stand)) {
+                    C2SPacketUtil.standBarrageHitPacket(getTargetEntityId2(2.7F,stand,50), this.attackTimeDuring);
+                } else {
+                    List<Entity> listE = getTargetEntityList(this.self,-1);
+                    int id = -1;
+                    if (storeEnt != null){
+                        id = storeEnt.getId();
+                    }
+                    C2SPacketUtil.standBarrageHitPacket(id, this.attackTimeDuring);
+                    if (!listE.isEmpty() && ClientNetworking.getAppropriateConfig().generalStandSettings.barrageHasAreaOfEffect){
+                        for (int i = 0; i< listE.size(); i++){
+                            if (!(storeEnt != null && listE.get(i).is(storeEnt))) {
+                                if (!(listE.get(i) instanceof StandEntity) && listE.get(i).distanceTo(this.self) < 3.5) {
+                                    C2SPacketUtil.standBarrageHitPacket(listE.get(i).getId(), this.attackTimeDuring + 1000);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (this.activePower == PowerIndex.BARRAGE_2 && this.attackTimeDuring == this.getKickBarrageLength()){
+                    this.attackTimeDuring = -10;
+                } else if (this.isBarraging() && this.attackTimeDuring == this.getBarrageLength()){
+                    this.attackTimeDuring = -10;
+                }
+            }
+        } else {
+            /*Caps how far out the barrage hit goes*/
+            Entity targetEntity;
+            if (forwardBarrage && Objects.nonNull(stand)) {
+                targetEntity = getTargetEntity(stand,2.7F,50);
+                barrageImpact(targetEntity, this.attackTimeDuring);
+            } else {
+                List<Entity> listE = getTargetEntityList(this.self,-1);
+                barrageImpact(storeEnt, this.attackTimeDuring);
+                if (!listE.isEmpty()){
+                    for (int i = 0; i< listE.size(); i++){
+                        if (!(storeEnt != null && listE.get(i).is(storeEnt))) {
+                            if (!(listE.get(i) instanceof StandEntity) && listE.get(i).distanceTo(this.self) < 3.5) {
+                                barrageImpact(listE.get(i), this.attackTimeDuring + 1000);
+                            }
+                        }
+                    }
+                }
+            }
         }
+
+        findDeflectables();
         super.standBarrageHit();
     }
 
+
+    @Override
+    public void updateMovesFromPacket(byte activePower){
+        if (activePower == PowerIndex.BARRAGE_2){
+            this.setActivePowerPhase(this.activePowerPhaseMax);
+        }
+        super.updateMovesFromPacket(activePower);
+    }
 
     public void faceForwardBarrageDirection(StandEntity stand){
         Vec2 rot;
@@ -1258,6 +1324,12 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     @Override
     public float inputSpeedModifiers(float basis) {
+        if (this.activePower == PowerIndex.BARRAGE_CHARGE_2) {
+            basis*=0.5f;
+        } else if (this.activePower == PowerIndex.BARRAGE_2) {
+            basis *= 0.3f;
+        }
+
         if (isEatingCapsule()) {
             basis *= 0.0f;
         }
@@ -1637,7 +1709,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         this.setAttackTimeDuring(0);
         this.setActivePower(PowerIndex.POWER_2_SNEAK);
         this.poseStand(OffsetIndex.GUARD);
-        this.animateStand(PurpleHazeEntity.KICK_WINDUP); //PLACEHOLDER
+        this.animateStand(PurpleHazeEntity.KICK_ATTACK);
         playSoundsIfNearby(IMPALE_CHARGE_NOISE, 27, false);
         return true;
     }
@@ -1645,7 +1717,6 @@ public class PowersPurpleHaze extends NewPunchingStand {
     public void updateSalimo() {
         if (this.attackTimeDuring > -1) {
             if (this.attackTimeDuring > 24) {
-                this.animateStand(PurpleHazeEntity.KICK_ATTACK); //PLACEHOLDER
                 this.standSalimo();
             } else if (!this.getSelf().level().isClientSide() && this.attackTimeDuring % 4 == 0) {
                 sendParticlesIfPossible(self.level(), ModParticles.MENACING,
