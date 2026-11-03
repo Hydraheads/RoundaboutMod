@@ -353,7 +353,7 @@ public class ModItems {
         addToVisageStore(POLNAREFF_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(BLACK_POLNAREFF_MASK,page, characterCostExp, characterCostEmerald);
 
-        page++; // 19 / 25
+        page++; // 20 / 25
         addToVisageStore(JOTARO_4_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(AYA_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(MISTA_MASK,page, characterCostExp, characterCostEmerald);
@@ -363,6 +363,7 @@ public class ModItems {
         addToVisageStore(BOSS_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(DIAVOLO_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(DOPPIO_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(ABBACCHIO_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(JOTARO_6_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(JOHNGALLIA_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(ANASUI_MASK,page, characterCostExp, characterCostEmerald);
@@ -374,7 +375,7 @@ public class ModItems {
         addToVisageStore(KOSAKU_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(HAYATO_KAWAJIRI_MASK,page, characterCostExp, characterCostEmerald);
 
-        page++; // 14 / 25
+        page++; // 15 / 25
         addToVisageStore(JOHNNY_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(GYRO_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(LUCY_MASK,page, characterCostExp, characterCostEmerald);
@@ -383,6 +384,7 @@ public class ModItems {
         addToVisageStore(DIEGO_2_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(SANDMAN_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(POCOLOCO_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(OYECOMOVA_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(TIM_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(SHERIFF_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(RINGO_MASK,page, characterCostExp, characterCostEmerald);

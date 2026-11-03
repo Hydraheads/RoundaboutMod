@@ -379,6 +379,8 @@ public class FabricItems {
     public static Item DIEGO_2_MASK = registerItem("diego_2_mask", new MaskItem(new Item.Properties().stacksTo(1), new Diego2Visage(null)));
     public static Item VALENTINE_MASK = registerItem("valentine_mask", new MaskItem(new Item.Properties().stacksTo(1), new ValentineVisage(null)));
     public static Item LUCY_MASK = registerItem("lucy_mask", new MaskItem(new Item.Properties().stacksTo(1), new LucyVisage(null)));
+    public static Item ABBACCHIO_MASK = registerItem("abbacchio_mask", new MaskItem(new Item.Properties().stacksTo(1), new AbbacchioVisage(null)));
+    public static Item OYECOMOVA_MASK = registerItem("oyecomova_mask", new MaskItem(new Item.Properties().stacksTo(1), new OyecomovaVisage(null)));
     public static Item STEVEN_MASK = registerItem("steven_mask", new MaskItem(new Item.Properties().stacksTo(1), new StevenVisage(null)));
     public static Item SHERIFF_MASK = registerItem("sheriff_mask", new MaskItem(new Item.Properties().stacksTo(1), new SheriffVisage(null)));
     public static Item JOHNNY_MASK = registerItem("johnny_mask", new MaskItem(new Item.Properties().stacksTo(1), new JohnnyVisage(null)));
@@ -584,6 +586,7 @@ public class FabricItems {
                         entries.accept(JOTARO_4_MASK);
                         entries.accept(AYA_MASK);
                         entries.accept(MISTA_MASK);
+                        entries.accept(ABBACCHIO_MASK);
                         entries.accept(FUGO_MASK);
                         entries.accept(FUGO_FEEDBACK_MASK);
                         entries.accept(BOSS_MASK);
@@ -609,6 +612,7 @@ public class FabricItems {
                         entries.accept(DIEGO_2_MASK);
                         entries.accept(SANDMAN_MASK);
                         entries.accept(POCOLOCO_MASK);
+                        entries.accept(OYECOMOVA_MASK);
                         entries.accept(TIM_MASK);
                         entries.accept(SHERIFF_MASK);
                         entries.accept(RINGO_MASK);
@@ -1105,6 +1109,8 @@ public class FabricItems {
         ModItems.GYRO_MASK = GYRO_MASK;
         ModItems.SANDMAN_MASK = SANDMAN_MASK;
         ModItems.TIM_MASK = TIM_MASK;
+        ModItems.OYECOMOVA_MASK = OYECOMOVA_MASK;
+        ModItems.ABBACCHIO_MASK = ABBACCHIO_MASK;
         ModItems.SHADOW_DIO_MASK = SHADOW_DIO_MASK;
         ModItems.DIO_VAMPIRE_MASK = DIO_VAMPIRE_MASK;
         ModItems.AVDOL_MASK = AVDOL_MASK;

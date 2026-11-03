@@ -29,4 +29,5 @@ public class OyecomovaVisage extends VisageData {
     public String getSkinPath(){
         return "oyecomova";
     }
+    public boolean rendersOyecomovaHat() {return true;}
 }

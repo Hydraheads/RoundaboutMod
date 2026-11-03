@@ -183,4 +183,5 @@ public class VisageData {
     }
     public boolean rendersExtraHair() {return false;}
     public boolean rendersExtraHairDetails() {return false;}
+    public boolean rendersOyecomovaHat() {return false;}
 }

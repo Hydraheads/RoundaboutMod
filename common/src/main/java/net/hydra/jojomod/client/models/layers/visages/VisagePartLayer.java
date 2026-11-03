@@ -269,6 +269,11 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             renderExtraHairDecorationPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
+                        if (vd.rendersOyecomovaHat() && !isHoldingBowlerHat && !isBodyFrozen
+                                && !hideExtraPartsWithSuit) {
+                            renderOyecomovaHatPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                    r, g, b);
+                        }
                         if (vd.rendersLucyHair() && !isBodyFrozen && !hideExtraPartsWithSuit) {
                             renderLucyHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
@@ -1479,6 +1484,15 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         ClientUtil.pushPoseAndCooperate(poseStack,49);
         getParentModel().head.translateAndRotate(poseStack);
         ModStrayModels.extraHairDecorationPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,49);
+    }
+    public void  renderOyecomovaHatPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity,
+                                     float xx, float yy, float zz, float partialTicks, String path,
+                                         float r, float g, float b) {
+        ClientUtil.pushPoseAndCooperate(poseStack,49);
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.oyecomovaHatPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
         ClientUtil.popPoseAndCooperate(poseStack,49);
     }
