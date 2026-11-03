@@ -803,12 +803,16 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
     @Override
     public void standBarrageHit(){
+
         if (forwardBarrage) {
             StandEntity stand = getStandEntity(this.self);
             if (this.self instanceof Player) {
                 if (isPacketPlayer() && Objects.nonNull(stand)) {
                     C2SPacketUtil.standBarrageHitPacket(getTargetEntityId2(2.7F, stand, 50), this.attackTimeDuring);
-                    if (this.isBarraging() && this.attackTimeDuring == this.getBarrageLength()) {
+
+                    if (this.activePower == PowerIndex.BARRAGE_2 && this.attackTimeDuring == this.getKickBarrageLength()){
+                        this.attackTimeDuring = -10;
+                    } else if (this.isBarraging() && this.attackTimeDuring == this.getBarrageLength()){
                         this.attackTimeDuring = -10;
                     }
                 }
@@ -818,6 +822,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
             }
             findDeflectables();
             return;
+        }else {
+
         }
         super.standBarrageHit();
     }
