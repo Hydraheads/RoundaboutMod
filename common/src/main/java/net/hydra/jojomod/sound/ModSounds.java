@@ -1535,6 +1535,10 @@ public class ModSounds {
     public static final ResourceLocation SILVER_CHARIOT_SELF_THROW_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_SELF_THROW);
     public static SoundEvent SILVER_CHARIOT_SELF_THROW_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_SELF_THROW_ID);
 
+    public static final String SILVER_CHARIOT_RAPIER_SPIN = "silver_chariot_rapier_spin";
+    public static final ResourceLocation SILVER_CHARIOT_RAPIER_SPIN_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_RAPIER_SPIN);
+    public static SoundEvent SILVER_CHARIOT_RAPIER_SPIN_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_RAPIER_SPIN_ID);
+
     public static final String RATT_SUMMON = "ratt_summon";
     public static final ResourceLocation RATT_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+RATT_SUMMON);
     public static SoundEvent RATT_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(RATT_SUMMON_ID);

@@ -4782,6 +4782,12 @@
       "roundabout:silver_chariot_self_throw"
     ]
   },
+  "silver_chariot_rapier_spin": {
+    "subtitle": "sounds.roundabout.silver_chariot_rapier_spin",
+    "sounds": [
+      "roundabout:silver_chariot_rapier_spin"
+    ]
+  },
   "bc_parachute_open": {
     "subtitle" : "sounds.roundabout.bc_parachute_open",
     "sounds": [
