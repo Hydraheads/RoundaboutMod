@@ -31,12 +31,21 @@ public class BlackSabbathRangedAttackGoal<T extends BlackSabbathEntity & RangedA
 
     @Override
     public boolean canUse() {
-        return this.mob.targetSabbath() == null ? false : mob.getThrowable() && ((mob.getUser() != null && ((StandUser)mob.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pbs && pbs.moveMode == 3)) && !mob.isBlackSabbathUnderLight() && mob.targetSabbath() != null && MainUtil.cheapDistanceTo2(mob.getX(), mob.getZ(), mob.targetSabbath().getX(), mob.targetSabbath().getZ()) < 7.5;
+        return this.mob.targetSabbath() == null ? false : !mob.isBlackSabbathUnderLight() && mob.getThrowable() && (mob.getHunting()) && MainUtil.cheapDistanceTo2(mob.getX(), mob.getZ(), mob.targetSabbath().getX(), mob.targetSabbath().getZ()) < 6.5 && mob.hasLineOfSight(mob.targetSabbath());
     }
 
     @Override
     public boolean canContinueToUse() {
-        return mob.targetSabbath() == null  ? false : !mob.isBlackSabbathUnderLight() && (this.canUse() || mob.getThrowable() && (MainUtil.cheapDistanceTo2(mob.getX(), mob.getZ(), mob.targetSabbath().getX(), mob.targetSabbath().getZ()) < 12.5 && mob.seeTime > 0) && !mob.getHeldItemSabbath().is(ItemStack.EMPTY.getItem()) && mob.getTridentLoyalty());
+        if(mob.targetSabbath() != null) {
+            if (!mob.isBlackSabbathUnderLight() && mob.getThrowable() && (mob.getHunting()) && MainUtil.cheapDistanceTo2(mob.getX(), mob.getZ(), mob.targetSabbath().getX(), mob.targetSabbath().getZ()) < 13.5 && mob.seeTime >= 0) {
+                return true;
+            } else if (!mob.getThrowable() && mob.getTridentLoyalty()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -47,6 +56,7 @@ public class BlackSabbathRangedAttackGoal<T extends BlackSabbathEntity & RangedA
     @Override
     public void start() {
         super.start();
+        this.mob.seeTime = 60;
         this.mob.setStrafing(true);
     }
 
@@ -56,7 +66,7 @@ public class BlackSabbathRangedAttackGoal<T extends BlackSabbathEntity & RangedA
         this.mob.setStrafing(false);
         this.seeTime = 0;
         this.seeTime2 = 0;
-        mob.seeTime = 0;
+        mob.seeTime = -1;
     }
 
     @Override
@@ -71,14 +81,8 @@ public class BlackSabbathRangedAttackGoal<T extends BlackSabbathEntity & RangedA
             }
             if (mob.hasLineOfSight($$0)) {
                 this.seeTime++;
-                    if (mob.seeTime != 60) {
-                        mob.seeTime = 60;
-                    }
             } else {
                 this.seeTime--;
-                if(mob.seeTime >= -1) {
-                    mob.seeTime--;
-                }
             }
 
             if (!($$1 > (double)this.attackRadiusSqr) && this.seeTime >= 20) {

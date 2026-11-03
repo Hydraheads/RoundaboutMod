@@ -120,13 +120,16 @@ public class FancyLighterItem extends BlockItem {
                                             if(pbs.tickDown2 <= -9) {
                                                 if (!pbs.blackSabbathTargets.contains($$0)) {
                                                     pbs.selectTargetSecond($$0);
-                                                    pbs.setThree();
-                                                    pbs.setTickBeforeHunt(20);
-                                                    if (pbs.blackSelect != null) {
-                                                        pbs.blackSelect.forceDespawnSet = true;
-                                                    }
-                                                    if (pbs.getStandEntity(pbs.self) != null) {
-                                                        pbs.getStandEntity(pbs.self).forceDespawnSet = true;
+                                                }
+                                                    if(pbs.moveMode != 3) {
+                                                        pbs.setThree();
+                                                        pbs.setTickBeforeHunt(20);
+                                                        if (pbs.blackSelect != null) {
+                                                            pbs.blackSelect.forceDespawnSet = true;
+                                                        }
+                                                        if (pbs.getStandEntity(pbs.self) != null) {
+                                                            pbs.getStandEntity(pbs.self).forceDespawnSet = true;
+                                                        }
                                                     }
 
                                                     List<LivingEntity> lvent = $$0.level().getEntitiesOfClass(LivingEntity.class, $$0.getBoundingBox().inflate(ClientNetworking.getAppropriateConfig().blackSabbathSettings.lighterWitnessRange), (livingEntity) -> {
@@ -142,7 +145,6 @@ public class FancyLighterItem extends BlockItem {
                                                         }
                                                     }
                                                 }
-                                            }
                                         }
                                     }
                                 }
