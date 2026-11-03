@@ -319,11 +319,12 @@ public class PowersPurpleHaze extends NewPunchingStand {
         return ClientNetworking.getAppropriateConfig().PurpleHazeSettings.PurpleHazeGuardPoints;
     }
 
-    @Override public float getPunchStrength(Entity entity){
+    @Override
+    public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.31F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.26F));
         } else {
-            return levelupDamageMod(multiplyPowerByStandConfigMobs(4.5f));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(4.0F));
         }
     }
     @Override
