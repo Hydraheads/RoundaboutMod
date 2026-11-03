@@ -39,7 +39,6 @@ import net.hydra.jojomod.client.models.layers.MagiciansRedSpinEffectLayer;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.npcs.ZombieAestheticianModel;
 import net.hydra.jojomod.client.models.npcs.renderers.ZombieAestheticianRenderer;
-import net.hydra.jojomod.entity.stand.MandomEntity;
 import net.minecraft.client.model.SilverfishModel;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
@@ -121,10 +120,12 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.DIVER_DOWN_BETA, DiverDownBetaRenderer::new);
         EntityRendererRegistry.register(FabricEntities.DIVER_DOWN_WORLD, DiverDownWorldRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GOLD_EXPERIENCE, GoldExperienceRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.GOLD_EXPERIENCE_BETA, GoldExperienceBetaRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GE_BRAMBLE, GEBrambleRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GE_BAT, GEBatRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GE_FROG, GEFrogRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GE_BEE, GEBeeRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.GE_FISH, GEFishRenderer::new);
         EntityRendererRegistry.register(FabricEntities.DIVER_DROWNED, DiverDrownedRenderer::new);
         EntityRendererRegistry.register(FabricEntities.DIVER_KICK, DiverKickEntityRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SILVER_CHARIOT, SilverChariotRenderer::new);
@@ -332,6 +333,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DIVER_DROWNED_LAYER, DiverDrownedModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DIVER_DOWN_WORLD_LAYER, DiverDownWorldModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GOLD_EXPERIENCE_LAYER, GoldExperienceModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GOLD_EXPERIENCE_BETA_LAYER, GoldExperienceBetaModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GE_BRAMBLE_LAYER, GEBrambleModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SILVER_CHARIOT_LAYER, SilverChariotModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SILVER_CHARIOT_PHARAOH_LAYER, SilverChariotPharaohModel::getTexturedModelData);
@@ -474,6 +476,7 @@ public class FabricEntityClient {
         ModStrayModels.RightHeel = new RightHeelPart();
         ModStrayModels.JohngalliaTiePart = new JohngalliaTiePart();
         ModStrayModels.extraHairPart = new ExtraHairPart();
+        ModStrayModels.oyecomovaHatPart = new OyecomovaHatPart();
         ModStrayModels.extraHairDecorationPart = new ExtraHairDecorationPart();
 
         ModStrayModels.GoatHeadPart = new GoatHeadPart();

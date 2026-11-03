@@ -429,6 +429,7 @@ public interface StandUser {
     void roundabout$setRibcageTrap(boolean trap);
     boolean roundabout$hasSpringLegs();
     void roundabout$setSpringLegs(boolean legs);
+    /// dw about these, I'm not sure if I'll use them yet
     boolean roundabout$hasInfiniteSpin();
     void roundabout$clearInfiniteSpin();
 }

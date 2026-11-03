@@ -230,7 +230,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
         return $$1;
     }
-    private static final int SECRET_SKIN_TICKS = 40;
+    private static final int SECRET_SKIN_TICKS = 25;
     private int secretSkinTicks = 0;
     private boolean secretSkinObtained = false;
 
@@ -319,11 +319,12 @@ public class PowersPurpleHaze extends NewPunchingStand {
         return ClientNetworking.getAppropriateConfig().PurpleHazeSettings.PurpleHazeGuardPoints;
     }
 
-    @Override public float getPunchStrength(Entity entity){
+    @Override
+    public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.31F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.26F));
         } else {
-            return levelupDamageMod(multiplyPowerByStandConfigMobs(4.5f));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(4.0F));
         }
     }
     @Override
@@ -421,18 +422,20 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 if ((jojoveinLikeKeys && !this.onCooldown(PowerIndex.SKILL_3)) ||
                         (!jojoveinLikeKeys && !this.onCooldown(PowerIndex.GLOBAL_DASH))) {
                     if (canExecuteMoveWithLevel(getLeapLevel())) {
-                        if (jojoveinLikeKeys) {
-                            this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
-                        } else {
-                            this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
-                           // this.setCooldown(PowerIndex.SKILL_1_SNEAK, 10);
+                        if(this.getActivePower() == PowerIndex.NONE){
+                            if (jojoveinLikeKeys) {
+                                this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
+                            } else {
+                                this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
+                            // this.setCooldown(PowerIndex.SKILL_1_SNEAK, 10);
+                            }
+                            bonusLeapCount = 3;
+                            bigLeap(this.getSelf(), 20, 1);
+                            ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
+                            ((StandUser) this.getSelf()).roundabout$setLeapIntentionally(true);
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SNEAK_MOVEMENT, true);
+                            tryPowerPacket(PowerIndex.SNEAK_MOVEMENT);
                         }
-                        bonusLeapCount = 3;
-                        bigLeap(this.getSelf(), 20, 1);
-                        ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
-                        ((StandUser) this.getSelf()).roundabout$setLeapIntentionally(true);
-                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SNEAK_MOVEMENT, true);
-                        tryPowerPacket(PowerIndex.SNEAK_MOVEMENT);
                     }
                 }
             }
@@ -544,7 +547,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     @Override
     public boolean cancelSprintJump(){
-        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2|| this.getActivePower() == PowerIndex.POWER_2_SNEAK) {
+        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2
+                || this.getActivePower() == PowerIndex.POWER_2_SNEAK|| this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
             return true;
         }
 
@@ -801,12 +805,16 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
     @Override
     public void standBarrageHit(){
+        /*
         if (forwardBarrage) {
             StandEntity stand = getStandEntity(this.self);
             if (this.self instanceof Player) {
                 if (isPacketPlayer() && Objects.nonNull(stand)) {
                     C2SPacketUtil.standBarrageHitPacket(getTargetEntityId2(2.7F, stand, 50), this.attackTimeDuring);
-                    if (this.isBarraging() && this.attackTimeDuring == this.getBarrageLength()) {
+
+                    if (this.activePower == PowerIndex.BARRAGE_2 && this.attackTimeDuring == this.getKickBarrageLength()){
+                        this.attackTimeDuring = -10;
+                    } else if (this.isBarraging() && this.attackTimeDuring == this.getBarrageLength()){
                         this.attackTimeDuring = -10;
                     }
                 }
@@ -816,10 +824,71 @@ public class PowersPurpleHaze extends NewPunchingStand {
             }
             findDeflectables();
             return;
+        }else {
+
+        }*/
+        StandEntity stand = getStandEntity(this.self);
+        if (this.self instanceof Player){
+            if (isPacketPlayer()){
+                if (forwardBarrage && Objects.nonNull(stand)) {
+                    C2SPacketUtil.standBarrageHitPacket(getTargetEntityId2(2.7F,stand,50), this.attackTimeDuring);
+                } else {
+                    List<Entity> listE = getTargetEntityList(this.self,-1);
+                    int id = -1;
+                    if (storeEnt != null){
+                        id = storeEnt.getId();
+                    }
+                    C2SPacketUtil.standBarrageHitPacket(id, this.attackTimeDuring);
+                    if (!listE.isEmpty() && ClientNetworking.getAppropriateConfig().generalStandSettings.barrageHasAreaOfEffect){
+                        for (int i = 0; i< listE.size(); i++){
+                            if (!(storeEnt != null && listE.get(i).is(storeEnt))) {
+                                if (!(listE.get(i) instanceof StandEntity) && listE.get(i).distanceTo(this.self) < 3.5) {
+                                    C2SPacketUtil.standBarrageHitPacket(listE.get(i).getId(), this.attackTimeDuring + 1000);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (this.activePower == PowerIndex.BARRAGE_2 && this.attackTimeDuring == this.getKickBarrageLength()){
+                    this.attackTimeDuring = -10;
+                } else if (this.isBarraging() && this.attackTimeDuring == this.getBarrageLength()){
+                    this.attackTimeDuring = -10;
+                }
+            }
+        } else {
+            /*Caps how far out the barrage hit goes*/
+            Entity targetEntity;
+            if (forwardBarrage && Objects.nonNull(stand)) {
+                targetEntity = getTargetEntity(stand,2.7F,50);
+                barrageImpact(targetEntity, this.attackTimeDuring);
+            } else {
+                List<Entity> listE = getTargetEntityList(this.self,-1);
+                barrageImpact(storeEnt, this.attackTimeDuring);
+                if (!listE.isEmpty()){
+                    for (int i = 0; i< listE.size(); i++){
+                        if (!(storeEnt != null && listE.get(i).is(storeEnt))) {
+                            if (!(listE.get(i) instanceof StandEntity) && listE.get(i).distanceTo(this.self) < 3.5) {
+                                barrageImpact(listE.get(i), this.attackTimeDuring + 1000);
+                            }
+                        }
+                    }
+                }
+            }
         }
+
+        findDeflectables();
         super.standBarrageHit();
     }
 
+
+    @Override
+    public void updateMovesFromPacket(byte activePower){
+        if (activePower == PowerIndex.BARRAGE_2){
+            this.setActivePowerPhase(this.activePowerPhaseMax);
+        }
+        super.updateMovesFromPacket(activePower);
+    }
 
     public void faceForwardBarrageDirection(StandEntity stand){
         Vec2 rot;
@@ -1255,6 +1324,12 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     @Override
     public float inputSpeedModifiers(float basis) {
+        if (this.activePower == PowerIndex.BARRAGE_CHARGE_2) {
+            basis*=0.5f;
+        } else if (this.activePower == PowerIndex.BARRAGE_2) {
+            basis *= 0.3f;
+        }
+
         if (isEatingCapsule()) {
             basis *= 0.0f;
         }
@@ -1634,7 +1709,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         this.setAttackTimeDuring(0);
         this.setActivePower(PowerIndex.POWER_2_SNEAK);
         this.poseStand(OffsetIndex.GUARD);
-        this.animateStand(PurpleHazeEntity.KICK_WINDUP); //PLACEHOLDER
+        this.animateStand(PurpleHazeEntity.KICK_ATTACK);
         playSoundsIfNearby(IMPALE_CHARGE_NOISE, 27, false);
         return true;
     }
@@ -1642,7 +1717,6 @@ public class PowersPurpleHaze extends NewPunchingStand {
     public void updateSalimo() {
         if (this.attackTimeDuring > -1) {
             if (this.attackTimeDuring > 24) {
-                this.animateStand(PurpleHazeEntity.KICK_ATTACK); //PLACEHOLDER
                 this.standSalimo();
             } else if (!this.getSelf().level().isClientSide() && this.attackTimeDuring % 4 == 0) {
                 sendParticlesIfPossible(self.level(), ModParticles.MENACING,
@@ -1723,7 +1797,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
         return super.canFallBrace();
     }
     private static final float FALL_BRACE_SHOCKWAVE_RADIUS = 4.0F;
-    private static final float FALL_BRACE_SHOCKWAVE_DAMAGE = 3.0F;
+    private static final float FALL_BRACE_SHOCKWAVE_MIN_DAMAGE = 1.5F;
+    private static final float FALL_BRACE_SHOCKWAVE_MAX_DAMAGE = 10.0F;
+    private static final float FALL_BRACE_DAMAGE_SCALE = 0.2F;
 
     @Override
     public boolean fallBrace() {
@@ -1771,11 +1847,27 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
         AABB sweep = new AABB(pos, pos).inflate(FALL_BRACE_SHOCKWAVE_RADIUS, 1.5, FALL_BRACE_SHOCKWAVE_RADIUS);
         List<Entity> nearby = self.level().getEntities(self, sweep);
+        float shockwaveDamage = getFallBraceShockwaveDamage();
         for (Entity e : nearby) {
             if (e instanceof LivingEntity le && le.isAlive() && !le.isInvulnerable()) {
-                StandDamageEntityAttack(le, FALL_BRACE_SHOCKWAVE_DAMAGE, 0.6F, self);
+                StandDamageEntityAttack(le, shockwaveDamage, 0.6F, self);
             }
         }
+    }
+    private float getFallBraceShockwaveDamage() {
+        float dist = (float) Math.max(fallBraceOriginalDistance, 0.0);
+
+        float bonus;
+        if (dist <= 3.0F) {
+            bonus = dist * 4.0F;
+        } else if (dist <= 8.0F) {
+            bonus = 12.0F + (dist - 3.0F) * 2.0F;
+        } else {
+            bonus = 22.0F + (dist - 8.0F);
+        }
+
+        float dmg = FALL_BRACE_SHOCKWAVE_MIN_DAMAGE + bonus * FALL_BRACE_DAMAGE_SCALE;
+        return Mth.clamp(dmg, FALL_BRACE_SHOCKWAVE_MIN_DAMAGE, FALL_BRACE_SHOCKWAVE_MAX_DAMAGE);
     }
     private double fallBraceOriginalDistance = 0;
     private static final int FALLING_HIT_START_TICKS = 5;  //

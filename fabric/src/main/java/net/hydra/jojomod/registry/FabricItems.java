@@ -117,6 +117,10 @@ public class FabricItems {
             new MaskItem(new Item.Properties().stacksTo(1), new KiraPartFourVisage(null)));
     public static final Item KOSAKU_MASK = registerItem("kosaku_mask",
         new MaskItem(new Item.Properties().stacksTo(1), new KosakuVisage(null)));
+    public static final Item FUGO_MASK = registerItem("pannacotta_fugo_mask",
+        new MaskItem(new Item.Properties().stacksTo(1), new FugoVisage(null)));
+    public static final Item FUGO_FEEDBACK_MASK = registerItem("pannacotta_fugo_feedback_mask",
+        new MaskItem(new Item.Properties().stacksTo(1), new FugoFeedbackVisage(null)));
     public static final Item KIRASAKU_MASK = registerItem("kirasaku_mask",
         new MaskItem(new Item.Properties().stacksTo(1), new KirasakuVisage(null)));
     public static final Item HAYATO_KAWAJIRI_MASK = registerItem("hayato_kawajiri_mask",
@@ -375,6 +379,8 @@ public class FabricItems {
     public static Item DIEGO_2_MASK = registerItem("diego_2_mask", new MaskItem(new Item.Properties().stacksTo(1), new Diego2Visage(null)));
     public static Item VALENTINE_MASK = registerItem("valentine_mask", new MaskItem(new Item.Properties().stacksTo(1), new ValentineVisage(null)));
     public static Item LUCY_MASK = registerItem("lucy_mask", new MaskItem(new Item.Properties().stacksTo(1), new LucyVisage(null)));
+    public static Item ABBACCHIO_MASK = registerItem("abbacchio_mask", new MaskItem(new Item.Properties().stacksTo(1), new AbbacchioVisage(null)));
+    public static Item OYECOMOVA_MASK = registerItem("oyecomova_mask", new MaskItem(new Item.Properties().stacksTo(1), new OyecomovaVisage(null)));
     public static Item STEVEN_MASK = registerItem("steven_mask", new MaskItem(new Item.Properties().stacksTo(1), new StevenVisage(null)));
     public static Item SHERIFF_MASK = registerItem("sheriff_mask", new MaskItem(new Item.Properties().stacksTo(1), new SheriffVisage(null)));
     public static Item JOHNNY_MASK = registerItem("johnny_mask", new MaskItem(new Item.Properties().stacksTo(1), new JohnnyVisage(null)));
@@ -580,6 +586,9 @@ public class FabricItems {
                         entries.accept(JOTARO_4_MASK);
                         entries.accept(AYA_MASK);
                         entries.accept(MISTA_MASK);
+                        entries.accept(ABBACCHIO_MASK);
+                        entries.accept(FUGO_MASK);
+                        entries.accept(FUGO_FEEDBACK_MASK);
                         entries.accept(BOSS_MASK);
                         entries.accept(DIAVOLO_MASK);
                         entries.accept(DOPPIO_MASK);
@@ -603,6 +612,7 @@ public class FabricItems {
                         entries.accept(DIEGO_2_MASK);
                         entries.accept(SANDMAN_MASK);
                         entries.accept(POCOLOCO_MASK);
+                        entries.accept(OYECOMOVA_MASK);
                         entries.accept(TIM_MASK);
                         entries.accept(SHERIFF_MASK);
                         entries.accept(RINGO_MASK);
@@ -1099,6 +1109,8 @@ public class FabricItems {
         ModItems.GYRO_MASK = GYRO_MASK;
         ModItems.SANDMAN_MASK = SANDMAN_MASK;
         ModItems.TIM_MASK = TIM_MASK;
+        ModItems.OYECOMOVA_MASK = OYECOMOVA_MASK;
+        ModItems.ABBACCHIO_MASK = ABBACCHIO_MASK;
         ModItems.SHADOW_DIO_MASK = SHADOW_DIO_MASK;
         ModItems.DIO_VAMPIRE_MASK = DIO_VAMPIRE_MASK;
         ModItems.AVDOL_MASK = AVDOL_MASK;
@@ -1142,6 +1154,8 @@ public class FabricItems {
         ModItems.KIRA_PART_FOUR_MASK = KIRA_PART_FOUR_MASK;
         ModItems.KIRA_PART_EIGHT_MASK = KIRA_PART_EIGHT_MASK;
         ModItems.KOSAKU_MASK = KOSAKU_MASK;
+        ModItems.FUGO_MASK = FUGO_MASK;
+        ModItems.FUGO_FEEDBACK_MASK = FUGO_FEEDBACK_MASK;
         ModItems.KIRASAKU_MASK = KIRASAKU_MASK;
         ModItems.HAYATO_KAWAJIRI_MASK = HAYATO_KAWAJIRI_MASK;
         ModItems.TERRIER_SPAWN_EGG = TERRIER_SPAWN_EGG;

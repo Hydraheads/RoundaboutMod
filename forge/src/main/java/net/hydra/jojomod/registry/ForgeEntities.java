@@ -711,6 +711,13 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "gold_experience").toString())
             );
+    public static final RegistryObject<EntityType<GoldExperienceBetaEntity>> GOLD_EXPERIENCE_BETA =
+            ENTITY_TYPES.register("gold_experience_beta", () ->
+                    EntityType.Builder.of(GoldExperienceBetaEntity::new, MobCategory.MISC)
+                            .sized(0.75f, 2.05f)
+                            .clientTrackingRange(14)
+                            .build(new ResourceLocation(Roundabout.MOD_ID, "gold_experience_beta").toString())
+            );
     public static final RegistryObject<EntityType<GEBrambleEntity>> GE_BRAMBLE = ENTITY_TYPES.register("ge_bramble",
             () -> EntityType.Builder.<GEBrambleEntity>of(GEBrambleEntity::new, MobCategory.MISC)
                     .sized(0.8f, 1.8f)
@@ -732,6 +739,11 @@ public class ForgeEntities {
                     .sized(0.5f, 0.9f)
                     .clientTrackingRange(5)
                     .build(Roundabout.MOD_ID + ":ge_bee"));
+    public static final RegistryObject<EntityType<GEFishEntity>> GE_FISH = ENTITY_TYPES.register("ge_fish",
+            () -> EntityType.Builder.of(GEFishEntity::new, MobCategory.CREATURE)
+                    .sized(0.5f, 0.9f)
+                    .clientTrackingRange(5)
+                    .build(Roundabout.MOD_ID + ":ge_fish"));
     public static final RegistryObject<EntityType<SilverChariotEntity>> SILVER_CHARIOT =
             ENTITY_TYPES.register("silver_chariot", () ->
                     EntityType.Builder.of(SilverChariotEntity::new, MobCategory.MISC).sized(0.75f, 2.05f).

@@ -111,11 +111,6 @@ public class PurpleSmokeEntity extends StandEntity {
         if (user == null) {
             this.discard();
         } else {
-            if (user.isUsingItem() && user.getMainHandItem().getItem().getFoodProperties() != null) {
-                if (user.isUsingItem() && user.getMainHandItem().getItem().getFoodProperties().getNutrition() > 0) {
-                    this.discard();
-                }
-            }
             if (!getUser().isAlive()) {
                 this.discard();
             }

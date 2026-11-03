@@ -792,7 +792,7 @@ public class PowersGreenDay extends NewPunchingStand {
 
     }
     public void attemptMainArmSpin(){
-        if(canExecuteMoveWithLevel(3)) {
+        if(canExecuteMoveWithLevel(5)) {
             MainArmSpin();
         }
 

@@ -38,6 +38,7 @@ import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.ambient.Bat;
 import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.animal.Salmon;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.item.Items;
@@ -118,6 +119,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.DIVER_DOWN_WORLD.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.DIVER_DROWNED.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.GOLD_EXPERIENCE.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.GOLD_EXPERIENCE_BETA.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SILVER_CHARIOT.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SILVER_CHARIOT_PHARAOH.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.OVA_ENYA.get(), OVAEnyaNPC.createAttributes().build());
@@ -157,6 +159,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.GE_BAT.get(), Bat.createAttributes().build());
         event.put(ForgeEntities.GE_FROG.get(), Frog.createAttributes().build());
         event.put(ForgeEntities.GE_BEE.get(), Bee.createAttributes().build());
+        event.put(ForgeEntities.GE_FISH.get(), Salmon.createAttributes().build());
         event.put(ForgeEntities.VILLAGER_MINION.get(), VillagerMinion.createAttributes().build());
         event.put(ForgeEntities.AXOLOTL_MINION.get(), AxolotlMinion.createAttributes().build());
         event.put(ForgeEntities.OCELOT_MINION.get(), OcelotMinion.createAttributes().build());
@@ -648,6 +651,8 @@ public class ForgeEvents {
         ModItems.VALENTINE_MASK = ForgeItems.VALENTINE_MASK.get();
         ModItems.JOSUKE_PART_EIGHT_MASK = ForgeItems.JOSUKE_PART_EIGHT_MASK.get();
         ModItems.MISTA_MASK = ForgeItems.MISTA_MASK.get();
+        ModItems.FUGO_MASK = ForgeItems.FUGO_MASK.get();
+        ModItems.FUGO_FEEDBACK_MASK = ForgeItems.FUGO_FEEDBACK_MASK.get();
         ModItems.GHIACCIO_MASK = ForgeItems.GHIACCIO_MASK.get();
         ModItems.AYA_MASK = ForgeItems.AYA_MASK.get();
         ModItems.AESTHETICIAN_MASK_1 = ForgeItems.AESTHETICIAN_MASK_1.get();
@@ -661,6 +666,8 @@ public class ForgeEvents {
         ModItems.DIEGO_MASK = ForgeItems.DIEGO_MASK.get();
         ModItems.DIEGO_2_MASK = ForgeItems.DIEGO_2_MASK.get();
         ModItems.TIM_MASK = ForgeItems.TIM_MASK.get();
+        ModItems.OYECOMOVA_MASK = ForgeItems.OYECOMOVA_MASK.get();
+        ModItems.ABBACCHIO_MASK = ForgeItems.ABBACCHIO_MASK.get();
         ModItems.SHERIFF_MASK = ForgeItems.SHERIFF_MASK.get();
         ModItems.RINGO_MASK = ForgeItems.RINGO_MASK.get();
         ModItems.HATO_MASK = ForgeItems.HATO_MASK.get();
@@ -915,10 +922,12 @@ public class ForgeEvents {
         ModEntities.DIVER_KICK = ForgeEntities.DIVER_KICK.get();
         ModEntities.BONE_PROJECTILE = ForgeEntities.BONE_PROJECTILE.get();
         ModEntities.GOLD_EXPERIENCE = ForgeEntities.GOLD_EXPERIENCE.get();
+        ModEntities.GOLD_EXPERIENCE_BETA = ForgeEntities.GOLD_EXPERIENCE_BETA.get();
         ModEntities.GE_BRAMBLE = ForgeEntities.GE_BRAMBLE.get();
         ModEntities.GE_BAT = ForgeEntities.GE_BAT.get();
         ModEntities.GE_FROG = ForgeEntities.GE_FROG.get();
         ModEntities.GE_BEE = ForgeEntities.GE_BEE.get();
+        ModEntities.GE_FISH = ForgeEntities.GE_FISH.get();
         ModEntities.SILVER_CHARIOT = ForgeEntities.SILVER_CHARIOT.get();
         ModEntities.SILVER_CHARIOT_PHARAOH = ForgeEntities.SILVER_CHARIOT_PHARAOH.get();
         ModEntities.SILVER_CHARIOT_RAPIER = ForgeEntities.SILVER_CHARIOT_RAPIER.get();

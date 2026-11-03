@@ -986,6 +986,8 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new SandmanVisage(null))));
     public static final RegistryObject<Item> POCOLOCO_MASK = addToTab(ITEMS.register("pocoloco_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new PocolocoVisage(null))));
+    public static final RegistryObject<Item> OYECOMOVA_MASK = addToTab(ITEMS.register("oyecomova_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new OyecomovaVisage(null))));
     public static final RegistryObject<Item> TIM_MASK = addToTab(ITEMS.register("tim_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new TimVisage(null))));
     public static final RegistryObject<Item> SHERIFF_MASK = addToTab(ITEMS.register("sheriff_mask",
@@ -1010,6 +1012,12 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new AyaVisage(null))));
     public static final RegistryObject<Item> MISTA_MASK = addToTab(ITEMS.register("mista_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new MistaVisage(null))));
+    public static final RegistryObject<Item> ABBACCHIO_MASK = addToTab(ITEMS.register("abbacchio_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new AbbacchioVisage(null))));
+    public static final RegistryObject<Item> FUGO_MASK = addToTab(ITEMS.register("pannacotta_fugo_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new FugoVisage(null))));
+    public static final RegistryObject<Item> FUGO_FEEDBACK_MASK = addToTab(ITEMS.register("pannacotta_fugo_feedback_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new FugoFeedbackVisage(null))));
     public static final RegistryObject<Item> ANASUI_MASK = addToTab(ITEMS.register("anasui_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new AnasuiVisage(null))));
     public static final RegistryObject<Item> FEM_ANASUI_MASK = addToTab(ITEMS.register("fem_anasui_mask",
