@@ -881,6 +881,14 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
 
 
+    @Override
+    public void updateMovesFromPacket(byte activePower){
+        if (activePower == PowerIndex.BARRAGE_2){
+            this.setActivePowerPhase(this.activePowerPhaseMax);
+        }
+        super.updateMovesFromPacket(activePower);
+    }
+
     public void faceForwardBarrageDirection(StandEntity stand){
         Vec2 rot;
         if (ClientNetworking.getAppropriateConfig().PurpleHazeSettings.forwardBarrageCanSteer) {
