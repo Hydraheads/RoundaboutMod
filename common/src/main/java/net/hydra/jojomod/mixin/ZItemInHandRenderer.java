@@ -259,6 +259,20 @@ public abstract class ZItemInHandRenderer {
 
         StandUser standUser = (StandUser) abstractClientPlayer;
 
+        if (standUser.roundabout$getStandPowers() instanceof PowersGreenDay) {
+            if (!((PowersGreenDay)standUser.roundabout$getStandPowers()).HasMainArm && interactionHand == InteractionHand.MAIN_HAND){
+                ci.cancel();
+                return;
+            }
+        }
+
+        if (standUser.roundabout$getStandPowers() instanceof PowersGreenDay) {
+            if (!((PowersGreenDay)standUser.roundabout$getStandPowers()).HasOffHand && interactionHand == InteractionHand.OFF_HAND){
+                ci.cancel();
+                return;
+            }
+        }
+
         boolean emperorFP =
                 standUser.roundabout$getStandPowers() instanceof PowersEmperor
                         && standUser.roundabout$getCombatMode();

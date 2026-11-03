@@ -11,12 +11,12 @@ public class GoldExperienceEntity extends FollowingStandEntity {
         super(entityType, world);
     }
 
-    public static final byte PART_5 = 0;
+    public static final byte PART_5 = 0,
+            BETA = 1;
 
     public final AnimationState lifePunch = new AnimationState();
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState hideLeg = new AnimationState();
-    public final AnimationState hideLifePunch = new AnimationState();
     public final AnimationState kick_barrage = new AnimationState();
     public final AnimationState kick_barrage_end = new AnimationState();
     public final AnimationState kick_barrage_windup = new AnimationState();
@@ -35,11 +35,6 @@ public class GoldExperienceEntity extends FollowingStandEntity {
             this.hideFists.stop();
         }
 
-        if (this.getAnimation() != LIFE_PUNCH) {
-            this.hideLifePunch.startIfStopped(this.tickCount);
-        } else {
-            this.hideLifePunch.stop();
-        }
         if (animation == LIFE_PUNCH) {
             this.lifePunch.startIfStopped(this.tickCount);
         } else {

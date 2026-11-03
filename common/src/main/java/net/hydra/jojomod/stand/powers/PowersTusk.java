@@ -81,6 +81,7 @@ import oshi.util.tuples.Pair;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class PowersTusk extends NewDashPreset {
@@ -530,20 +531,23 @@ public class PowersTusk extends NewDashPreset {
                     threeVec = RotationUtil.vecPlayerToWorld(threeVec,gdir);
 
                     stand.setPos(this.getSelf().getEyePosition(0));
-                    Entity target = getTargetEntity(this.getSelf(),5F,40);
-                    if (target != null) {
-                        if (target instanceof Mob) {
-                            ((StandUser)target).roundabout$setDazed((byte)20);
-                        }
-                        this.tryPower(PowersTusk.ADVANCE_BARRAGE);
-                        this.tryPowerPacket(PowersTusk.ADVANCE_BARRAGE);
-                        return true;
-                    }
                     stand.setYRot(twoVec.x);
                     stand.setXRot(twoVec.y);
                     advanceVec = DamageHandler.getRotationVector(
                             twoVecGrav.y, (twoVecGrav.x)).scale(1.1F).add(threeVec.x,threeVec.y,threeVec.z);
                     stand.setPos(this.getSelf().position().add(advanceVec));
+
+                    if (!isClient()) {
+                        Entity target = getTargetEntity(this.getSelf(), 4F, 40);
+                        if (target != null) {
+                            if (target instanceof Mob) {
+                                ((StandUser) target).roundabout$setDazed((byte) 20);
+                            }
+                            stand.setPos(target.getPosition(0).subtract(advanceVec));
+                            beginAdvanceBarrage();
+                            return true;
+                        }
+                    }
 
                 }
             }
@@ -717,11 +721,11 @@ public class PowersTusk extends NewDashPreset {
                 }
             }
             case PowersTusk.DEATH_PUNCH -> {
-                if (this.getAttackTimeDuring() == 33) {
+                if (this.getAttackTimeDuring() == 20) {
                     if (!isClient()) {
                         deathPunch();
                     }
-                } else if (this.getAttackTimeDuring() > 40) {
+                } else if (this.getAttackTimeDuring() > 30) {
                     deathTarget = null;
                     this.setPowerNone();
                 } else {
@@ -816,8 +820,13 @@ public class PowersTusk extends NewDashPreset {
                                 if (!state.isAir()) {
                                     ReturningObjectEntity ret = new ReturningObjectEntity(ModEntities.RETURNING_OBJECT,this.getSelf().level(),delta,start,end);
                                     ret.setPos(delta.getCenter());
-                                    MainUtil.takeKnockbackWithY(ret,0.5F,0,-1,0);
-                                    ret.setLifetime(40);
+                                    Vec3 kbDir = alignBlockPos(blockPos,0,0,0,dir).getCenter().subtract(alignBlockPos(blockPos,1,0,0,dir).getCenter()).normalize().reverse();
+                                    kbDir.offsetRandom(this.getSelf().getRandom(), 1);
+                                    double randx = (Math.random()*2F-1F)*0.3F;
+                                    double randy = (Math.random()*2F-1F)*0.3F;
+                                    double randz = (Math.random()*2F-1F)*0.3F;
+                                    MainUtil.takeKnockbackWithY(ret, 0.8F ,kbDir.x+randx,kbDir.y+randy,kbDir.z+randz);
+                                    ret.setLifetime(100);
                                     ret.setState(state);
                                     this.getSelf().level().addFreshEntity(ret);
                                     this.getSelf().level().destroyBlock(delta,false);
@@ -1874,20 +1883,24 @@ public class PowersTusk extends NewDashPreset {
                             if (target != null) {
                                 if (target instanceof Mob ) {
                                     ((StandUser)target).roundabout$setDazed((byte)20);
+                                    beginAdvanceBarrage();
                                 }
-                                this.setActivePower(PowersTusk.ADVANCE_BARRAGE);
-                                if (this.getSelf() instanceof Player P) {
-                                    S2CPacketUtil.sendIntPowerDataPacket(P,PowersTusk.ADVANCE_BARRAGE,0);
-                                }
-                                this.setAttackTimeDuring(0);
-                                this.playBarrageChargeSound();
-                                this.animateStand(StandEntity.BARRAGE_CHARGE);
                             }
                         }
                     }
                 }
             }
         }
+    }
+
+    private void beginAdvanceBarrage() {
+        this.setActivePower(PowersTusk.ADVANCE_BARRAGE);
+        if (this.getSelf() instanceof Player P) {
+            S2CPacketUtil.sendIntPowerDataPacket(P,PowersTusk.ADVANCE_BARRAGE,0);
+        }
+        this.setAttackTimeDuring(0);
+        this.playBarrageChargeSound();
+        this.animateStand(StandEntity.BARRAGE_CHARGE);
     }
 
 
@@ -2118,6 +2131,7 @@ public class PowersTusk extends NewDashPreset {
         this.setPowerNone();
     }
 
+/// sets up death punch. see deathPunch() for the actual attack
     public void punchOfDeath(TuskNailEntity nail, Entity target) {
         deathShot = null;
         if (!isClient()) {
@@ -2544,24 +2558,20 @@ public class PowersTusk extends NewDashPreset {
 
     private static final String location = "textures/stand/tusk/act_";
     public static void buildSkins() {
-        for(int i=0;i<4;i++) {
-            MANGA_SKIN[i] = new ResourceLocation(Roundabout.MOD_ID,location+(i+1)+ "/manga.png");
-            BLUE_SKIN[i] = new ResourceLocation(Roundabout.MOD_ID,location+(i+1)+ "/blue.png");
-            RESONANCE_SKIN[i] = new ResourceLocation(Roundabout.MOD_ID,location+(i+1)+ "/resonance.png");
-            BREAKER_SKIN[i] = new ResourceLocation(Roundabout.MOD_ID,location+(i+1)+ "/breaker.png");
-            FRIGID_SKIN[i] = new ResourceLocation(Roundabout.MOD_ID,location+(i+1)+ "/frigid.png");
+        for(int i=0;i<PowersTusk.skinLoader.length;i++) {
+            ResourceLocation[] skins = new ResourceLocation[4];
+            for (int n=0;n<4;n++){
+                skins[n] = new ResourceLocation(Roundabout.MOD_ID,location+(n+1)+ "/" + skinLoader[i] + ".png");
+            }
+            SKINS.put((byte)(i+1),skins);
         }
     }
     public static ResourceLocation getSkin(byte skin, int act) {
-        if (MANGA_SKIN[0] == null) {buildSkins();}
-        ResourceLocation[] skins = switch (skin) {
-            case MANGA -> MANGA_SKIN;
-            case BLUE -> BLUE_SKIN;
-            case RESONANCE -> RESONANCE_SKIN;
-            case FRIGID -> FRIGID_SKIN;
-            case BREAKER -> BREAKER_SKIN;
-            default -> MANGA_SKIN;
-        };
+        if (SKINS.isEmpty()) {buildSkins();}
+        if (skin == 0) {
+            return SKINS.get(MANGA)[act-1];
+        }
+        ResourceLocation[] skins = SKINS.get(skin);
         return skins[act-1];
     }
 
@@ -2571,18 +2581,24 @@ public class PowersTusk extends NewDashPreset {
         return List.of((byte)0);
     }
 
-    private static ResourceLocation[] MANGA_SKIN = new ResourceLocation[4];
-    private static ResourceLocation[] BLUE_SKIN = new ResourceLocation[4];
-    private static ResourceLocation[] RESONANCE_SKIN = new ResourceLocation[4];
-    private static ResourceLocation[] BREAKER_SKIN = new ResourceLocation[4];
-    private static ResourceLocation[] FRIGID_SKIN = new ResourceLocation[4];
+
+    public static HashMap<Byte,ResourceLocation[]> SKINS = new HashMap<>();
 
     public static final byte
             MANGA = 1,
             BLUE = 2,
             RESONANCE = 3,
             BREAKER = 4,
-            FRIGID = 5;
+            FRIGID = 5,
+            ELEGANT = 6;
+    private static final String[] skinLoader = {
+            "manga",
+            "blue",
+            "resonance",
+            "breaker",
+            "frigid",
+            "elegant"
+    };
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
@@ -2590,6 +2606,7 @@ public class PowersTusk extends NewDashPreset {
                 BLUE,
                 BREAKER,
                 FRIGID
+            //    ELEGANT
           //      RESONANCE
         );
     }
@@ -2600,6 +2617,7 @@ public class PowersTusk extends NewDashPreset {
             case RESONANCE -> Component.translatable("skins.roundabout.tusk.resonance");
             case BREAKER -> Component.translatable("skins.roundabout.tusk.breaker");
             case FRIGID -> Component.translatable("skins.roundabout.tusk.frigid");
+            case ELEGANT -> Component.translatable("skins.roundabout.tusk.elegant");
 
             default -> Component.translatable("skins.roundabout.tusk.manga");
         };

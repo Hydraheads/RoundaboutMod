@@ -2,6 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.GEBushBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -10,20 +11,24 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.*;
 import net.hydra.jojomod.entity.gold_experience.*;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
+import net.hydra.jojomod.entity.stand.DiverDownEntity;
 import net.hydra.jojomod.entity.stand.GoldExperienceEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
+import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.mixin.StandUserEntity;
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.BlockGrabPreset;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.config.ClientConfig;
@@ -50,10 +55,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BoneMealItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.VineBlock;
@@ -271,6 +273,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
         else if (move == LIFEFORM_CREATION) {
             return executeLifeformCreation();
         }
+        else if (move == PowerIndex.SNEAK_ATTACK) {
+            return executeDualPunch();
+        }
         return super.setPowerOther(move, lastMove);
     }
 
@@ -289,6 +294,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public void updateUniqueMoves() {
         if (this.getActivePower() == LIFE_PUNCH) {
             updateLifePunch();
+        }
+        // dual punch
+        if (this.getActivePower() == PowerIndex.SNEAK_ATTACK) {
+            updateDualPunch();
         }
         //kick barrage
         if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
@@ -312,6 +321,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
         if (this.getActivePower() == LIFE_PUNCH) {
             lifePunchImpact(target);
         }
+        else if (this.getActivePower() == PowerIndex.SNEAK_ATTACK) {
+            boolean isSecondHit = this.attackTimeDuring >= 10;
+            dualPunchImpact(target, isSecondHit);
+        }
     }
 
     private void tryToDashClient() {
@@ -321,6 +334,140 @@ public class PowersGoldExperience extends BlockGrabPreset {
             dash();
         }
     }
+
+    // 1-2 sneak attack punch start
+
+    @Override
+    public void buttonInputAttack(boolean keyIsDown, Options options) {
+        if (!consumeClickInput) {
+                if (keyIsDown) {
+                    if (!isHoldingSneak()) {
+                        super.buttonInputAttack(keyIsDown, options);
+                    } else {
+                        if (this.canAttack()) {
+                            this.tryPower(PowerIndex.SNEAK_ATTACK, true);
+                            tryPowerPacket(PowerIndex.SNEAK_ATTACK);
+                        } else {
+                            super.buttonInputAttack(keyIsDown, options);
+                        }
+                    }
+                }
+        }
+    }
+
+    // god i hate doing attacks
+    private boolean executeDualPunch() {
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand)) {
+            this.activePowerPhase = this.getActivePowerPhaseMax();
+            this.attackTimeDuring = 0;
+            this.attackTimeMax = ClientNetworking.getAppropriateConfig().generalStandSettings.finalStandPunchInStringCooldown;
+            this.setActivePower(PowerIndex.SNEAK_ATTACK);
+            this.setAttackTime(0);
+
+            // TODO: animations lol
+            poseStand(OffsetIndex.ATTACK);
+            return true;
+        }
+        return false;
+    }
+
+    private void updateDualPunch() {
+        if (this.attackTimeDuring > -1) {
+            if (this.attackTimeDuring > this.attackTimeMax) {
+                this.attackTime = -1;
+                this.attackTimeMax = 0;
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+            } else {
+                if (this.attackTimeDuring == 5 || this.attackTimeDuring == 11) {
+                    boolean isSecondHit = (this.attackTimeDuring == 11);
+                    this.standDualPunch(isSecondHit);
+                }
+            }
+        }
+    }
+
+    private void standDualPunch(boolean isSecondHit) {
+        if (this.self instanceof Player pl) {
+            if (isPacketPlayer()) {
+                if (isSecondHit) {
+                    this.attackTimeDuring = -10;
+                }
+                tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK, getTargetEntityId(getPunchAngle()));
+
+                if (self.getMainHandItem().getItem() instanceof TieredItem) {
+                    pl.resetAttackStrengthTicker();
+                }
+            }
+        } else {
+            Entity targetEntity = getTargetEntity(this.self, -1, getPunchAngle());
+            dualPunchImpact(targetEntity, isSecondHit);
+        }
+    }
+
+    private void dualPunchImpact(Entity entity, boolean isSecondHit) {
+        if (entity != null && entity.distanceTo(self) > getReach() + 1) {
+            entity = null;
+        }
+
+        if (entity != null) {
+            // for some reason halfing the damage made it stronger thaan the normal punches so.. i need to make it slightly more than a half reduction
+            float pow = getHeavyPunchStrength(entity) * 0.42F;
+
+            float knockbackStrength = isSecondHit ? 1.4F : 0.3F;
+
+            if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
+                if (entity instanceof LivingEntity LE) {
+                    addEXP(isSecondHit ? 2 : 1, LE);
+                }
+                takeDeterminedKnockback(this.self, entity, knockbackStrength);
+            } else {
+                if (entity instanceof LivingEntity LE) {
+                    knockShield2(entity, isSecondHit ? 60 : 20);
+                }
+            }
+            hitParticles(entity);
+        } else {
+            float distMax = this.getDistanceOut(this.self, this.getReach(), false);
+            float halfReach = (float) (distMax * 0.5);
+            Vec3 pointVec = DamageHandler.getRayPoint(self, halfReach);
+            if (!this.self.level().isClientSide) {
+                sendParticlesIfPossible(self.level(), ModParticles.PUNCH_MISS, pointVec.x, pointVec.y, pointVec.z,
+                        1, 0.0, 0.0, 0.0, 1);
+            }
+        }
+
+        SoundEvent SE;
+        float pitch = 1.0F;
+        float volume = 0.95F;
+        if (isSecondHit) {
+            if (!this.self.level().isClientSide()) {
+                playTheLastHitSound();
+            }
+
+            if (entity != null) {
+                SE = getPunchLandLastSound();
+                pitch = getPunchLandLastPitch();
+                volume = getPunchLandLastVolume();
+            } else {
+                SE = ModSounds.PUNCH_2_SOUND_EVENT;
+            }
+        } else {
+            if (entity != null) {
+                SE = getPunchLandSound();
+                pitch = getPunchLandPitch();
+                volume = getPunchLandVolume();
+            } else {
+                SE = getPunchMissSound();
+            }
+        }
+
+        if (!this.self.level().isClientSide()) {
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(), SE, SoundSource.PLAYERS, volume, pitch);
+        }
+    }
+
+    // 1 -2 sneak attack punch end
 
     // animal creation (X) start
 
@@ -351,6 +498,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
             }
             else if (this.animalType == AnimalTypes.BEE.id) {
                 typeToSpawn = ModEntities.GE_BEE;
+            }
+            else if (this.animalType == AnimalTypes.FISH.id) {
+                typeToSpawn = ModEntities.GE_FISH;
             }
 
             if (typeToSpawn != null) {
@@ -1174,6 +1324,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public Component getSkinName(byte skinId) {
         switch (skinId) {
+            case GoldExperienceEntity.BETA -> {
+                return Component.translatable("skins.roundabout.gold_experience.beta");
+            }
             default -> {
                 return Component.translatable("skins.roundabout.gold_experience.base");
             }
@@ -1184,7 +1337,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public List<Byte> getSkinList() {
         List<Byte> l = Lists.newArrayList();
         l.add(GoldExperienceEntity.PART_5);
-        /*if (this.getSelf() instanceof Player PE) {
+        if (this.getSelf() instanceof Player PE) {
             byte Level = ((IPlayerEntity) PE).roundabout$getStandLevel();
             ItemStack goldDisc = ((StandUser) PE).roundabout$getStandDisc();
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
@@ -1199,10 +1352,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
             if (Level > 5 || bypass) {
             }
             if (Level > 6 || bypass) {
+                l.add(GoldExperienceEntity.BETA);
             }
             if (((IPlayerEntity) PE).roundabout$getUnlockedBonusSkin() || bypass) {
             }
-        }*/
+        }
 
         return l;
     }
@@ -1210,6 +1364,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public StandEntity getNewStandEntity() {
         byte skin = ((StandUser) this.getSelf()).roundabout$getStandSkin();
+        if (skin == GoldExperienceEntity.BETA) {
+            return ModEntities.GOLD_EXPERIENCE_BETA.create(this.getSelf().level());
+        }
         return ModEntities.GOLD_EXPERIENCE.create(this.getSelf().level());
     }
 

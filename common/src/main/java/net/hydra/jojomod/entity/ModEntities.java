@@ -116,10 +116,12 @@ public class ModEntities {
     public static EntityType<DiverKickEntity> DIVER_KICK;
     public static EntityType<BoneProjectileEntity> BONE_PROJECTILE;
     public static EntityType<GoldExperienceEntity> GOLD_EXPERIENCE;
+    public static EntityType<GoldExperienceBetaEntity> GOLD_EXPERIENCE_BETA;
     public static EntityType<GEBrambleEntity> GE_BRAMBLE;
     public static EntityType<GEBatEntity> GE_BAT;
     public static EntityType<GEFrogEntity> GE_FROG;
     public static EntityType<GEBeeEntity> GE_BEE;
+    public static EntityType<GEFishEntity> GE_FISH;
     public static EntityType<SilverChariotEntity> SILVER_CHARIOT;
     public static EntityType<SilverChariotEntity> SILVER_CHARIOT_PHARAOH;
     public static EntityType<SilverChariotRapierShotEntity> SILVER_CHARIOT_RAPIER;
