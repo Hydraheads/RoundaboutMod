@@ -546,7 +546,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     @Override
     public boolean cancelSprintJump(){
-        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2|| this.getActivePower() == PowerIndex.POWER_2_SNEAK) {
+        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2
+                || this.getActivePower() == PowerIndex.POWER_2_SNEAK|| this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
             return true;
         }
 
@@ -1263,6 +1264,12 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     @Override
     public float inputSpeedModifiers(float basis) {
+        if (this.activePower == PowerIndex.BARRAGE_CHARGE_2) {
+            basis*=0.5f;
+        } else if (this.activePower == PowerIndex.BARRAGE_2) {
+            basis *= 0.3f;
+        }
+
         if (isEatingCapsule()) {
             basis *= 0.0f;
         }
