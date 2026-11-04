@@ -928,6 +928,7 @@ public class ForgeEvents {
         ModEntities.GE_FROG = ForgeEntities.GE_FROG.get();
         ModEntities.GE_BEE = ForgeEntities.GE_BEE.get();
         ModEntities.GE_FISH = ForgeEntities.GE_FISH.get();
+        ModEntities.GE_FOX = ForgeEntities.GE_FOX.get();
         ModEntities.SILVER_CHARIOT = ForgeEntities.SILVER_CHARIOT.get();
         ModEntities.SILVER_CHARIOT_PHARAOH = ForgeEntities.SILVER_CHARIOT_PHARAOH.get();
         ModEntities.SILVER_CHARIOT_RAPIER = ForgeEntities.SILVER_CHARIOT_RAPIER.get();

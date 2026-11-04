@@ -5,10 +5,8 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IKeyMapping;
-import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.event.index.AnimalTypes;
-import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.config.ClientConfig;
@@ -26,7 +24,6 @@ import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 import java.util.Optional;
@@ -258,8 +255,8 @@ public class AnimalSelectScreen extends Screen implements NoCancelInputScreen {
                 "textures/gui/ge_animal_icons/snake.png"),AnimalTypes.SNAKE.id,28,61, Component.translatable("roundabout.gold_experience_animal.snake.desc")),
         FROG(Component.translatable("roundabout.gold_experience_animal.frog"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/ge_animal_icons/frog.png"),AnimalTypes.FROG.id,-28,61, Component.translatable("roundabout.gold_experience_animal.frog.desc")),
-        RABBIT(Component.translatable("roundabout.gold_experience_animal.rabbit"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/ge_animal_icons/rabbit.png"),AnimalTypes.RABBIT.id,0,78, Component.translatable("roundabout.gold_experience_animal.rabbit.desc")),
+        FOX(Component.translatable("roundabout.gold_experience_animal.fox"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/ge_animal_icons/fox.png"),AnimalTypes.FOX.id,0,78, Component.translatable("roundabout.gold_experience_animal.fox.desc")),
 
         NONE(Component.translatable("roundabout.gold_experience_animal.none"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/ge_animal_icons/main_stand.png"),(byte)0,0,31, Component.translatable("roundabout.stand_switch.main.desc"));
@@ -299,7 +296,7 @@ public class AnimalSelectScreen extends Screen implements NoCancelInputScreen {
                     PIRAHNA,
                     SNAKE,
                     FROG,
-                    RABBIT,
+                    FOX,
                     NONE
             };
         }

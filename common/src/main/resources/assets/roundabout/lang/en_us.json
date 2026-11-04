@@ -3618,8 +3618,8 @@
   "roundabout.gold_experience_animal.snake.desc": "placeholder, rework these after finishing the mobs cuz the doc is kinda vague.",
   "roundabout.gold_experience_animal.frog": "Frog",
   "roundabout.gold_experience_animal.frog.desc": "Hops around erratically.",
-  "roundabout.gold_experience_animal.rabbit": "Rabbit",
-  "roundabout.gold_experience_animal.rabbit.desc": "placeholder, rework these after finishing the mobs cuz the doc is kinda vague.",
+  "roundabout.gold_experience_animal.fox": "Fox",
+  "roundabout.gold_experience_animal.fox.desc": "Finds nearby items and fetches them for you.",
 
   "roundabout.pose.giorno": "Requiem",
   "roundabout.pose.joseph": "Bloody Stream",

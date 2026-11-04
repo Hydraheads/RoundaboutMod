@@ -11,7 +11,6 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.*;
 import net.hydra.jojomod.entity.gold_experience.*;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
-import net.hydra.jojomod.entity.stand.DiverDownEntity;
 import net.hydra.jojomod.entity.stand.GoldExperienceEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -23,24 +22,19 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.MaxStandDiscItem;
-import net.hydra.jojomod.mixin.StandUserEntity;
-import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.BlockGrabPreset;
-import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
-import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -48,12 +42,10 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
@@ -64,12 +56,9 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.zetalasis.networking.message.api.ModMessageEvents;
 import org.joml.Vector3f;
 
 import java.util.*;
-
-import static com.mojang.text2speech.Narrator.LOGGER;
 
 public class PowersGoldExperience extends BlockGrabPreset {
     // move bytes
@@ -501,6 +490,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
             }
             else if (this.animalType == AnimalTypes.FISH.id) {
                 typeToSpawn = ModEntities.GE_FISH;
+            }
+            else if (this.animalType == AnimalTypes.FOX.id) {
+                typeToSpawn = ModEntities.GE_FOX;
             }
 
             if (typeToSpawn != null) {

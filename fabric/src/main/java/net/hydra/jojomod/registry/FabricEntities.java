@@ -36,6 +36,7 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.ambient.Bat;
 import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.animal.Fox;
 import net.minecraft.world.entity.animal.Salmon;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.animal.frog.Frog;
@@ -850,6 +851,14 @@ public class FabricEntities {
                     .clientTrackingRange(5)
                     .build(Roundabout.MOD_ID + ":ge_fish")
     );
+    public static final EntityType<GEFoxEntity> GE_FOX = Registry.register(
+            BuiltInRegistries.ENTITY_TYPE,
+            new ResourceLocation(Roundabout.MOD_ID, "ge_fox"),
+            EntityType.Builder.of(GEFoxEntity::new, MobCategory.CREATURE)
+                    .sized(0.5f, 0.9f)
+                    .clientTrackingRange(5)
+                    .build(Roundabout.MOD_ID + ":ge_fox")
+    );
         public static final EntityType<SilverChariotEntity> SILVER_CHARIOT =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -1472,6 +1481,7 @@ public class FabricEntities {
         ModEntities.GE_FROG = GE_FROG;
         ModEntities.GE_BEE = GE_BEE;
         ModEntities.GE_FISH = GE_FISH;
+        ModEntities.GE_FOX = GE_FOX;
                 ModEntities.SILVER_CHARIOT = SILVER_CHARIOT;
                 ModEntities.SILVER_CHARIOT_PHARAOH =  SILVER_CHARIOT_PHARAOH;
                 ModEntities.THROWN_HARPOON = THROWN_HARPOON;
@@ -1651,6 +1661,7 @@ public class FabricEntities {
         FabricDefaultAttributeRegistry.register(GE_FROG, Frog.createAttributes());
         FabricDefaultAttributeRegistry.register(GE_BEE, Bee.createAttributes());
         FabricDefaultAttributeRegistry.register(GE_FISH, Salmon.createAttributes());
+        FabricDefaultAttributeRegistry.register(GE_FOX, Fox.createAttributes());
 
                 FabricDefaultAttributeRegistry.register(ROAD_ROLLER_ENTITY, RoadRollerEntity.createAttributes().build());
 

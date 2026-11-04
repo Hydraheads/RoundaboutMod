@@ -122,6 +122,7 @@ public class ModEntities {
     public static EntityType<GEFrogEntity> GE_FROG;
     public static EntityType<GEBeeEntity> GE_BEE;
     public static EntityType<GEFishEntity> GE_FISH;
+    public static EntityType<GEFoxEntity> GE_FOX;
     public static EntityType<SilverChariotEntity> SILVER_CHARIOT;
     public static EntityType<SilverChariotEntity> SILVER_CHARIOT_PHARAOH;
     public static EntityType<SilverChariotRapierShotEntity> SILVER_CHARIOT_RAPIER;

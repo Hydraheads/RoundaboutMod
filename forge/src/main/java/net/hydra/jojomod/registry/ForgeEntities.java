@@ -744,6 +744,11 @@ public class ForgeEntities {
                     .sized(0.5f, 0.9f)
                     .clientTrackingRange(5)
                     .build(Roundabout.MOD_ID + ":ge_fish"));
+    public static final RegistryObject<EntityType<GEFoxEntity>> GE_FOX = ENTITY_TYPES.register("ge_fox",
+            () -> EntityType.Builder.of(GEFoxEntity::new, MobCategory.CREATURE)
+                    .sized(0.5f, 0.9f)
+                    .clientTrackingRange(5)
+                    .build(Roundabout.MOD_ID + ":ge_fox"));
     public static final RegistryObject<EntityType<SilverChariotEntity>> SILVER_CHARIOT =
             ENTITY_TYPES.register("silver_chariot", () ->
                     EntityType.Builder.of(SilverChariotEntity::new, MobCategory.MISC).sized(0.75f, 2.05f).
