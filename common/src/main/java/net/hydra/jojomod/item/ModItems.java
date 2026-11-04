@@ -373,7 +373,7 @@ public class ModItems {
         addToVisageStore(VALENTINE_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(DOT_HAN_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(AVDUL_MASK,page, characterCostExp, characterCostEmerald);
-        addToVisageStore(BLACKMORE_MASK,page, characterCostExp, characterCostEmerald);
+        //addToVisageStore(BLACKMORE_MASK,page, characterCostExp, characterCostEmerald);
 
         page++;
         addToVisageStore(JOSUKE_PART_EIGHT_MASK,page, characterCostExp, characterCostEmerald);
