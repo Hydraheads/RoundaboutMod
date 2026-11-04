@@ -163,37 +163,6 @@ public class GEFoxEntity extends Fox implements GELifeform {
     }
 
     @Override
-    public void die(DamageSource cause) {
-        if (!this.level().isClientSide()) {
-            dropSourceItem();
-            dropHeldItem();
-            if (this.level() instanceof ServerLevel serverLevel) {
-                serverLevel.sendParticles(ModParticles.VITAL_ESSENCE,
-                        this.getX(), this.getY(0.5), this.getZ(),
-                        20, 0.2, 0.2, 0.2, 0.05);
-            }
-            this.level().playSound(null, this.blockPosition(),
-                    ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.NEUTRAL, 1.0F, 1.0F);
-        }
-        this.discard();
-    }
-
-    private void dropSourceItem() {
-        if (!this.sourceItem.isEmpty()) {
-            this.spawnAtLocation(this.sourceItem);
-            this.sourceItem = ItemStack.EMPTY;
-        }
-    }
-
-    private void dropHeldItem() {
-        ItemStack heldItem = this.getItemBySlot(EquipmentSlot.MAINHAND);
-        if (!heldItem.isEmpty()) {
-            this.spawnAtLocation(heldItem);
-            this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
-        }
-    }
-
-    @Override
     protected void registerGoals() {
         // lobotomize the fox
     }

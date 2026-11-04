@@ -5657,6 +5657,38 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    // for GE lifeforms, the normal die isn't cancellable which caused crashes and stuff
+    @Inject(method = "die", at = @At(value = "HEAD"), cancellable = true)
+    private void roundabout$die3(DamageSource damageSource, CallbackInfo ci) {
+        if ((Object) this instanceof GELifeform lifeform) {
+            LivingEntity entity = (LivingEntity) (Object) this;
+
+            if (!entity.level().isClientSide()) {
+                ItemStack sourceStack = lifeform.getSourceItem();
+                if (!sourceStack.isEmpty()) {
+                    entity.spawnAtLocation(sourceStack);
+                    lifeform.setSourceItem(ItemStack.EMPTY);
+                }
+                for (EquipmentSlot slot : EquipmentSlot.values()) {
+                    ItemStack equippedItem = entity.getItemBySlot(slot);
+                    if (!equippedItem.isEmpty()) {
+                        entity.spawnAtLocation(equippedItem);
+                        entity.setItemSlot(slot, ItemStack.EMPTY);
+                    }
+                }
+                if (entity.level() instanceof ServerLevel serverLevel) {
+                    serverLevel.sendParticles(ModParticles.VITAL_ESSENCE,
+                            entity.getX(), entity.getY(0.5), entity.getZ(),
+                            20, 0.2, 0.2, 0.2, 0.05);
+                }
+                entity.level().playSound(null, entity.blockPosition(),
+                        ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.NEUTRAL, 1.0F, 1.0F);
+                entity.discard();
+            }
+            ci.cancel();
+        }
+    }
+
     @SuppressWarnings("deprecation")
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true, require = 0)
     private void roundabout$roundabouthurt(DamageSource damageSource, float $$1, CallbackInfoReturnable<Boolean> ci) {
