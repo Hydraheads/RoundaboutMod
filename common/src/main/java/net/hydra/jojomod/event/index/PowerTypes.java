@@ -435,7 +435,7 @@ public enum PowerTypes {
     public static Entity findNearbyParallelCopy(Entity entity) {
         if (!(entity.level() instanceof ServerLevel sl) ||
                 (entity instanceof LivingEntity lv && ((StandUser)lv).roundabout$getStandPowers() instanceof PowersD4C && !PowersD4C.debugCollision)
-                || (entity instanceof D4CCloneEntity dce && dce.safeCopy && !PowersD4C.debugCollision)
+                || (entity instanceof D4CCloneEntity dce && dce.getSafeCopy() && !PowersD4C.debugCollision)
         ) {
             return null;
         }
@@ -459,7 +459,7 @@ public enum PowerTypes {
                                 (((IEntityAndData) other).rdbt$getNativeCopy() != null &&
                                         ((IEntityAndData) other).rdbt$getNativeCopy().equals(parallelUUID)))
                                 && other.distanceTo(entity) <= 7
-                                && !(other instanceof D4CCloneEntity dce && dce.safeCopy && !PowersD4C.debugCollision)
+                                && !(other instanceof D4CCloneEntity dce && dce.getSafeCopy() && !PowersD4C.debugCollision)
                                 && !(other instanceof LivingEntity lv && ((StandUser)lv).roundabout$getStandPowers() instanceof PowersD4C)
         );
 
