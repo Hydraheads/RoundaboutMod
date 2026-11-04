@@ -6280,7 +6280,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (this.tickCount % 20 == 0 && !this.level().isClientSide() && this.isAlive()) {
                 MobEffectInstance inst = this.getEffect(ModEffects.DISTORTION_VIRUS);
                 if (inst != null) {
-                    float damage = inst.getAmplifier() + 1;
+                    int level = inst.getAmplifier() + 1;
+                    float damage = level;
+                    if (level == 2) {
+                        damage += 0.25F;   //extra at Niv.2
+                    } else if (level >= 3) {
+                        damage += 0.5F;   //extra at Niv.3
+                    }
                     if (((StandUser) this).roundabout$getStandPowers() instanceof PowersPurpleHaze) {
                         damage *= 0.66F;
                     }
