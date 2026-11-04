@@ -1455,6 +1455,33 @@ public class ModSounds {
     public static SoundEvent PURPLE_HAZE_SWITCH_POD_EVENT = SoundEvent.createVariableRangeEvent(PURPLE_HAZE_SWITCH_POD_ID);
 
 
+    public static final String POLNAREFF_SC_SUMMON_1 = "pol_summon_1";
+    public static final ResourceLocation POLNAREFF_SC_SUMMON_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+POLNAREFF_SC_SUMMON_1);
+    public static SoundEvent POLNAREFF_SC_SUMMON_1_EVENT = SoundEvent.createVariableRangeEvent(POLNAREFF_SC_SUMMON_1_ID);
+    public static final String POLNAREFF_SC_SUMMON_2 = "pol_summon_2";
+    public static final ResourceLocation POLNAREFF_SC_SUMMON_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+POLNAREFF_SC_SUMMON_2);
+    public static SoundEvent POLNAREFF_SC_SUMMON_2_EVENT = SoundEvent.createVariableRangeEvent(POLNAREFF_SC_SUMMON_2_ID);
+
+    public static final String POLNAREFF_SC_HURT_1 = "pol_hurt_1";
+    public static final ResourceLocation POLNAREFF_SC_HURT_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+POLNAREFF_SC_HURT_1);
+    public static SoundEvent POLNAREFF_SC_HURT_1_EVENT = SoundEvent.createVariableRangeEvent(POLNAREFF_SC_SUMMON_1_ID);
+    public static final String POLNAREFF_SC_HURT_2 = "pol_hurt_2";
+    public static final ResourceLocation POLNAREFF_SC_HURT_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+POLNAREFF_SC_HURT_2);
+    public static SoundEvent POLNAREFF_SC_HURT_2_EVENT = SoundEvent.createVariableRangeEvent(POLNAREFF_SC_SUMMON_2_ID);
+
+    public static final String POLNAREFF_SC_IDLE_1 = "pol_idle_1";
+    public static final ResourceLocation POLNAREFF_SC_IDLE_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+POLNAREFF_SC_IDLE_1);
+    public static SoundEvent POLNAREFF_SC_IDLE_1_EVENT = SoundEvent.createVariableRangeEvent(POLNAREFF_SC_IDLE_1_ID);
+
+    public static final String POLNAREFF_SC_DIE_1 = "pol_die_1";
+    public static final ResourceLocation POLNAREFF_SC_DIE_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+POLNAREFF_SC_DIE_1);
+    public static SoundEvent POLNAREFF_SC_DIE_1_EVENT = SoundEvent.createVariableRangeEvent(POLNAREFF_SC_DIE_1_ID);
+
+    public static final String POLNAREFF_SC_ARMOR_OFF = "pol_armor_off";
+    public static final ResourceLocation POLNAREFF_SC_ARMOR_OFF_ID = new ResourceLocation(Roundabout.MOD_ID+":"+POLNAREFF_SC_ARMOR_OFF);
+    public static SoundEvent POLNAREFF_SC_ARMOR_OFF_EVENT = SoundEvent.createVariableRangeEvent(POLNAREFF_SC_ARMOR_OFF_ID);
+
+
     public static final String SILVER_CHARIOT_SUMMON = "silver_chariot_summon";
     public static final ResourceLocation SILVER_CHARIOT_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_SUMMON);
     public static SoundEvent SILVER_CHARIOT_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_SUMMON_ID);
