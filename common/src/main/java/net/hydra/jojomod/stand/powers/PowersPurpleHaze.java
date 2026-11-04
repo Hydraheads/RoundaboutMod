@@ -971,13 +971,10 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
         }
 
-        if (onCooldown(PowerIndex.SKILL_1)) {
-            CooldownInstance cd = getCooldown(PowerIndex.SKILL_1);
-            if (cd != null) {
-                int ClashTime = Math.round(((float) cd.time / cd.maxTime) * 15);
-                context.blit(StandIcons.JOJO_ICONS, k, j+17, 213, 97, 15, 4);
-                context.blit(StandIcons.JOJO_ICONS, k, j+17, 213, 102, ClashTime, 4);
-            }
+        if (podRegenClient != -1) {
+            int ClashTime = Math.round(((float) podRegenClient / POD_RECHARGE_TIME) * 15);
+            context.blit(StandIcons.JOJO_ICONS, k, j+17, 213, 97, 15, 4);
+            context.blit(StandIcons.JOJO_ICONS, k, j+17, 213, 102, ClashTime, 4);
         }
     }
 
@@ -1255,6 +1252,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
         //System.out.println("PURPLE HAZE PODS RESET! DAY " + day);
     }
+    private boolean wasRecharging = false;
+
     private void tickPodRecharge() {
         if (self == null || self.level().isClientSide()) {
             return;
@@ -1273,6 +1272,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
         if (getPods() >= MAX_PODS) {
             podRechargeTicks = 0;
             return;
+        }else if (!wasRecharging) {
+            wasRecharging = true;
+            S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowerIndex.POWER_4_BONUS, 1); // started recharging, we dont want it to spam package
         }
 
         podRechargeTicks++;
@@ -1280,12 +1282,30 @@ public class PowersPurpleHaze extends NewPunchingStand {
         if (podRechargeTicks >= POD_RECHARGE_TIME || PL.isCreative()) {
             setPods(Math.min(MAX_PODS, getPods() + 1));
             podRechargeTicks = 0;
+            wasRecharging = getPods() < MAX_PODS;
+
+            S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowerIndex.POWER_4_BONUS, !wasRecharging ? 0 : 1); // 0: No recharge, 1: recharge
         }
     }
     public void attemptDistortion() {
         if (canExecuteMoveWithLevel(getDistortionAndPodBiteLevel()) && !(activePower == PowerIndex.BARRAGE || activePower == PowerIndex.BARRAGE_2
                 || activePower == PowerIndex.BARRAGE_CHARGE || activePower == PowerIndex.BARRAGE_CHARGE_2) && getPods()>0 ) {
             Distortion();
+        }
+    }
+
+    private int podRegenClient = -1;
+
+    @Override
+    public void updatePowerInt(byte activePower, int data) {
+        if (activePower == PowerIndex.POWER_4_BONUS) {
+            if (data == 0) {
+                podRegenClient = -1;
+            }else {
+                podRegenClient = 0;
+            }
+        }else {
+            super.updatePowerInt(activePower, data);
         }
     }
 
@@ -2208,6 +2228,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
     private int leapEndTicks = -1;
     @Override
     public void tickPower() {
+        if (podRegenClient != -1) { podRegenClient++; }
+
         if (purpleHazeFieldGone) {
             purpleHazeFieldGone = false;
         }
