@@ -100,10 +100,7 @@ import net.zetalasis.networking.message.api.ModMessageEvents;
 import org.jetbrains.annotations.Async;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -112,6 +109,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.*;
 import java.util.function.Predicate;
+
+import static net.hydra.jojomod.util.MainUtil.sendParticlesIfPossible;
 
 @Mixin(value = LivingEntity.class, priority = 103)
 public abstract class StandUserEntity extends Entity implements StandUser {
@@ -2877,6 +2876,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$setCBVanishTicks(int set) {
         roundabout$CBVanishTicks = Mth.clamp(set, 0, 10);
     }
+
+    @Unique
+    public int roundabout$CatchTheRainbowVanishTicks = 0;
+
+    @Unique
+    @Override
+    public int roundabout$getCatchTheRainbowVanishTicks(){
+        return roundabout$CatchTheRainbowVanishTicks;
+    }
+    public void roundabout$setCatchTheRainbowVanishTicks(int set){roundabout$CatchTheRainbowVanishTicks = Mth.clamp(set, 0, 10);}
 
     @Unique
     public int roundabout$anubisVanishTicks = 0;
@@ -6203,6 +6212,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         } else {
             roundabout$setCBVanishTicks(roundabout$getCBVanishTicks() - 1);
         }
+        if (roundabout$getStandPowers() instanceof PowersCatchTheRainbow && active){
+            roundabout$setCatchTheRainbowVanishTicks(roundabout$getCatchTheRainbowVanishTicks() + 1);
+        } else{
+            roundabout$setCatchTheRainbowVanishTicks(roundabout$getCatchTheRainbowVanishTicks() - 1);
+        }
 
         /** Soft and Wet Bubble Encase launch */
         if (roundabout$isLaunchBubbleEncased() && !this.level().isClientSide()) {
@@ -7296,5 +7310,58 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$clearDisguise() {
         this.entityData.set(ROUNDABOUT$DISGUISE_ID, Optional.empty());
         this.entityData.set(ROUNDABOUT$DISGUISE_NAME, "");
+    }
+
+    @Unique
+    @Override
+    public boolean roundabout$getIsRainWalking(){
+        return roundabout$isRainWalking;
+    }
+
+    @Unique
+    @Override
+    public void roundabout$setIsRainWalking(boolean bool){
+        roundabout$isRainWalking = bool;
+    }
+
+    @Unique
+    private boolean roundabout$isRainWalking = false;
+
+    @Inject(method = "travel",at = @At("HEAD"),cancellable = true)
+    private void roundabout$rainWalk(CallbackInfo ci) {
+        if (((StandUser) this).roundabout$getStandPowers() instanceof PowersCatchTheRainbow pctr && pctr.isInRain() && pctr.hasStandActive(pctr.self)) {
+            if (!pctr.self.isCrouching() && !pctr.self.onGround() && roundabout$getIsRainWalking()) {
+                if (this.getDeltaMovement().y < 0) {
+                    this.setOnGround(true);
+
+                    if (this.isSprinting()) {
+                        this.setSprinting(true);
+                    }
+                    if (!this.jumping) {
+                        this.setDeltaMovement(this.getDeltaMovement().x, 0, this.getDeltaMovement().z);
+                    } else {
+                        roundabout$setIsRainWalking(false);
+
+                        Vec3 vec3 = this.getDeltaMovement();
+                        this.setDeltaMovement(vec3.x, (double) this.getJumpPower(), vec3.z);
+                        if (this.isSprinting()) {
+                            float f = this.getYRot() * ((float) Math.PI / 180F);
+                            this.setDeltaMovement(this.getDeltaMovement().add((double) (-Mth.sin(f) * 0.2F), 0.0D, (double) (Mth.cos(f) * 0.2F)));
+                        }
+                        this.hasImpulse = true;
+                    }
+
+                    double randX = Roundabout.RANDOM.nextDouble(-0.5, 0.5);
+                    double randZ = Roundabout.RANDOM.nextDouble(-0.5, 0.5);
+                    if (Math.random() > 0.4) {
+                        sendParticlesIfPossible(this, level(), ParticleTypes.DRIPPING_DRIPSTONE_WATER,
+                                this.getX() + randX,
+                                this.getY() - 0.5f,
+                                this.getZ() + randZ,
+                                1, 0, 0, 0, 0);
+                    }
+                }
+            }
+        }
     }
 }

@@ -183,6 +183,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.SHEER_HEART_ATTACK.get(), SheerHeartAttackEntity.createStandAttributes().build());
         event.put(ForgeEntities.BAD_COMPANY_SOLDIER.get(), BCSoldier.createStandAttributes().build());
         event.put(ForgeEntities.BAD_COMPANY_TANK.get(), BCTank.createStandAttributes().build());
+        event.put(ForgeEntities.CTR_BARRIER.get(), CTRbarrierEntity.createStandAttributes().build());
     }
 
     @SubscribeEvent
@@ -482,6 +483,8 @@ public class ForgeEvents {
 
         ModItems.STAND_DISC_PEARL_JAM = ForgeItems.STAND_DISC_PEARL_JAM.get();
 
+        ModItems.STAND_DISC_CATCH_THE_RAINBOW = ForgeItems.STAND_DISC_CATCH_THE_RAINBOW.get();
+
         ModItems.STAND_DISC_CINDERELLA = ForgeItems.STAND_DISC_CINDERELLA.get();
         ModItems.STAND_DISC_CALIFORNIA_KING_BED = ForgeItems.STAND_DISC_CALIFORNIA_KING_BED.get();
         ModItems.STAND_DISC_MANHATTAN_TRANSFER = ForgeItems.STAND_DISC_MANHATTAN_TRANSFER.get();
@@ -643,6 +646,7 @@ public class ForgeEvents {
         ModItems.ANASUI_MASK = ForgeItems.ANASUI_MASK.get();
         ModItems.FEM_ANASUI_MASK = ForgeItems.FEM_ANASUI_MASK.get();
         ModItems.ANAKISS_MASK = ForgeItems.ANAKISS_MASK.get();
+        ModItems.BLACKMORE_MASK = ForgeItems.BLACKMORE_MASK.get();
         ModItems.ENYA_MASK = ForgeItems.ENYA_MASK.get();
         ModItems.DAIYA_MASK = ForgeItems.DAIYA_MASK.get();
         ModItems.DAIYA_2_MASK = ForgeItems.DAIYA_2_MASK.get();
@@ -996,6 +1000,7 @@ public class ForgeEvents {
         ModEntities.TUSK_NAIL = ForgeEntities.TUSK_NAIL.get();
         ModEntities.TUSK_HOLE = ForgeEntities.TUSK_HOLE.get();
         ModEntities.PH_CAPSULE = ForgeEntities.PH_CAPSULE.get();
+        ModEntities.CTR_BARRIER = ForgeEntities.CTR_BARRIER.get();
 
         ModEntities.BAD_COMPANY_SOLDIER = ForgeEntities.BAD_COMPANY_SOLDIER.get();
         ModEntities.BAD_COMPANY_TANK = ForgeEntities.BAD_COMPANY_TANK.get();

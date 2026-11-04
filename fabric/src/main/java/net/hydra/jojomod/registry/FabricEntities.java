@@ -921,6 +921,14 @@ public class FabricEntities {
                             sized(PHCapsuleEntity.eWidth, PHCapsuleEntity.eHeight).
                             clientTrackingRange(10).build(Roundabout.MOD_ID+":ph_capsule")
             );
+    public static final EntityType<CTRbarrierEntity> CTR_BARRIER =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "ctr_barrier"),
+                    EntityType.Builder.<CTRbarrierEntity>of(CTRbarrierEntity::new, MobCategory.MISC).
+                            sized(4f, 4f).
+                            clientTrackingRange(15).build(Roundabout.MOD_ID+":ctrbarrier")
+            );
     public static final EntityType<BlockWallEntity> BLOCK_WALL =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
@@ -1480,6 +1488,7 @@ public class FabricEntities {
                 ModEntities.BAD_COMPANY_BULLET_ENTITY = BAD_COMPANY_BULLET_ENTITY;
                 ModEntities.THROWN_KNIFE = THROWN_KNIFE;
                 ModEntities.PH_CAPSULE = PH_CAPSULE;
+                ModEntities.CTR_BARRIER = CTR_BARRIER;
                 ModEntities.BONE_PROJECTILE = BONE_PROJECTILE;
                 ModEntities.BLOCK_WALL = BLOCK_WALL;
                 ModEntities.PARALLEL_CHEST = PARALLEL_CHEST;
@@ -1731,6 +1740,8 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(PURPLE_SMOKE, PurpleSmokeEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(BAD_COMPANY_SOLDIER, BCSoldier.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(BAD_COMPANY_TANK, BCTank.createStandAttributes());
+
+        FabricDefaultAttributeRegistry.register(CTR_BARRIER, CTRbarrierEntity.createStandAttributes());
 
                 FabricDefaultAttributeRegistry.register(SHEER_HEART_ATTACK, SheerHeartAttackEntity.createStandAttributes());
 
