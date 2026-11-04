@@ -139,6 +139,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
         return true;
     }
 
+    /*
     private static final EntityDataAccessor<Boolean> IS_FAKE = SynchedEntityData.defineId(
             SilverChariotEntity.class, EntityDataSerializers.BOOLEAN
     );
@@ -155,6 +156,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
         }
         return false;
     }
+    */
 
     private static final EntityDataAccessor<Boolean> IS_DUAL_WIELDING = SynchedEntityData.defineId(
             SilverChariotEntity.class, EntityDataSerializers.BOOLEAN
@@ -309,7 +311,9 @@ public class SilverChariotEntity extends FollowingStandEntity {
         byte animationState = getAnimation();
         byte idle = getIdleAnimation();
         boolean isPart3Skin = getSkin() != PART_5;
+        boolean isRightHanded = true;
         byte activeHand = getActiveHand();
+        boolean armoured = this.getArmoured();
 
         if (this.getUser() != null) {
             if (animationState == BARRAGE) {
@@ -354,12 +358,12 @@ public class SilverChariotEntity extends FollowingStandEntity {
                 }
             }
 
-            if (animationState == IDLE && idle == 0) {
+            if (animationState == IDLE && idle == 0 && armoured) {
                 this.scIdleArmoured.startIfStopped(this.tickCount);
             } else {
                 this.scIdleArmoured.stop();
             }
-            if (animationState == IDLE && idle == 0 && !this.getArmoured()) {
+            if (animationState == IDLE && idle == 0 && !armoured) {
                 this.scIdleNotArmoured.startIfStopped(this.tickCount);
             } else {
                 this.scIdleNotArmoured.stop();
@@ -454,7 +458,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
                 }
             }
             if (animationState == SC_TOGGLE_ARMOUR_ON) {
-                this.scToggleNotArmouredState.stop();
+                // this.scToggleNotArmouredState.stop();
             }
 
             if (animationState == SC_GUARD_HIT) {
@@ -541,14 +545,9 @@ public class SilverChariotEntity extends FollowingStandEntity {
                 this.scBarrageDamage.stop();
             }
             if (animationState == BROKEN_GUARD) {
-                if (!this.getArmoured()) {
-                    this.scIdleNotArmoured.startIfStopped(this.tickCount);
-                } else {
-                    this.scIdleNotArmoured.stop();
-                }
-                if (isPart3Skin && this.getArmoured()) {
+                if (isPart3Skin) {
                     this.scGuardRightBreak.startIfStopped(this.tickCount);
-                } else if (!isPart3Skin && this.getArmoured()) {
+                } else {
                     this.scGuardLeftBreak.startIfStopped(this.tickCount);
                 }
             } else {
@@ -557,11 +556,6 @@ public class SilverChariotEntity extends FollowingStandEntity {
                 } else {
                     this.scGuardLeftBreak.stop();
                 }
-            }
-            if (animationState == SC_FALL_BRACE) {
-                this.scFallBrace.startIfStopped(this.tickCount);
-            } else {
-                this.scFallBrace.stop();
             }
 
             if (animationState == SC_VAULT) {
@@ -620,6 +614,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
                 this.scLeftRapierShotRelease.stop();
             }
 
+            /*
             if (isPart3Skin) {
                 this.scToggleRightSword.start(this.tickCount);
                 this.scToggleLeftSword.stop();
@@ -627,11 +622,16 @@ public class SilverChariotEntity extends FollowingStandEntity {
                 this.scToggleLeftSword.start(this.tickCount);
                 this.scToggleRightSword.stop();
             }
+            */
 
-            if (!this.getArmoured()) {
+            if (!armoured) {
                 this.scToggleNotArmouredState.startIfStopped(this.tickCount);
             } else {
                 this.scToggleNotArmouredState.stop();
+            }
+        } else {
+            if(this.getBsGrabbed() != 0){
+                this.grabbedStandByBlackSabbath.startIfStopped(this.tickCount);
             }
         }
     }
@@ -643,7 +643,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
         entityData.define(IS_ARMOURED, true);
         entityData.define(HAS_RAPIER, true);
         entityData.define(ACTIVE_HAND, RIGHT_HAND);
-        entityData.define(IS_FAKE, false);
+        // entityData.define(IS_FAKE, false);
         entityData.define(IS_DUAL_WIELDING, false);
         entityData.define(IS_CARRYING_USER, false);
         entityData.define(HELD_ITEM_SILVER_CHARIOT, ItemStack.EMPTY);
@@ -683,7 +683,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
     public boolean isRemoteControlled() {
         // return entityData.get(CONTROL_MODE) != CONTROL_MODE_NONE;
         // return super.isRemoteControlled();
-        return entityData.get(REMOTE_MODE) != REMOTE_MODE_NONE;
+        return entityData.get(REMOTE_MODE) == REMOTE_MODE_CONTROL;
     }
 
 
@@ -826,7 +826,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
             if (this.onGround()) {
                 this.noGravityCarryTicks = 0;
             } else {
-                this.noGravityCarryTicks = 0;
+                this.noGravityCarryTicks++;
             }
             // updateSelfCarry();
         }
@@ -881,11 +881,20 @@ public class SilverChariotEntity extends FollowingStandEntity {
     }
 
     @Override
-    protected void positionRider(Entity $$0, MoveFunction $$1) {
-        if ($$0 instanceof Player) {
-            $$1.accept($$0,this.getX(),this.getY()+1.85d,this.getZ());
+    protected void positionRider(Entity passenger, MoveFunction moveFunction) {
+        if (passenger instanceof Player && this.level().isClientSide) {
+            moveFunction.accept(
+                    passenger,
+                    this.getX(),
+                    this.getY() + 1.85D,
+                    this.getZ()
+            );
+
+            passenger.xo = passenger.getX();
+            passenger.yo = passenger.getY();
+            passenger.zo = passenger.getZ();
         } else {
-            super.positionRider($$0,$$1);
+            super.positionRider(passenger, moveFunction);
         }
     }
 
@@ -944,7 +953,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     @Override
     public boolean skipAttackInteraction(Entity attacker) {
-        return super.skipAttackInteraction(attacker);
+        return !isRemoteControlled() && super.skipAttackInteraction(attacker);
     }
 
     @Override
@@ -1051,6 +1060,12 @@ public class SilverChariotEntity extends FollowingStandEntity {
     @Override
     public boolean hurt(DamageSource source, float amount) {
         // TODO: Silver Chariot should receive more damage while not armoured
+        float amountNew = amount;
+        if (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersSilverChariot PSC) {
+            if (PSC.getArmoured()) {
+                amountNew = amount * 1.20F;
+            }
+        }
         if (source.is(DamageTypes.GENERIC_KILL) || source.is(DamageTypes.FELL_OUT_OF_WORLD)){
             discard();
             return false;
@@ -1058,7 +1073,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
         LivingEntity user = getUser();
         if (isRemoteControlled() && user != null) {
             Vec3 userVelocity = user.getDeltaMovement();
-            boolean damaged = user.hurt(withoutShieldBlocking(source), amount);
+            boolean damaged = user.hurt(withoutShieldBlocking(source), amountNew);
             user.setDeltaMovement(userVelocity);
             if (damaged) {
                 hurtTime = 10;
@@ -1071,7 +1086,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
             }
             return damaged;
         }
-        return super.hurt(source, amount);
+        return super.hurt(source, amountNew);
     }
 
     private DamageSource withoutShieldBlocking(DamageSource source) {
@@ -1101,7 +1116,8 @@ public class SilverChariotEntity extends FollowingStandEntity {
                 new SilverChariotAfterimageState(
                         this.position(),
                         this.getXRot(),
-                        this.getYRot()
+                        this.getYRot(),
+                        this.getDeltaMovement()
                 )
         );
 

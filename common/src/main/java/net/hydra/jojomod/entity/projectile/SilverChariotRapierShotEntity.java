@@ -270,15 +270,19 @@ public class SilverChariotRapierShotEntity extends AbstractArrow implements Unbu
                 BlockState BSS = this.level().getBlockState($$0.getBlockPos());
                 BSS.onProjectileHit(this.level(), BSS, $$0, this);
                 Vec3 $$1 = $$0.getLocation().subtract(this.getX(), this.getY(), this.getZ());
-                this.setDeltaMovement($$1);
+                // this.setDeltaMovement($$1);
+                this.setDeltaMovement(Vec3.ZERO);
                 Vec3 $$2 = $$1.normalize().scale(1.0F);
-                this.setPosRaw(this.getX() - $$2.x, this.getY() - $$2.y, this.getZ() - $$2.z);
+                // this.setPosRaw(this.getX() - $$2.x, this.getY() - $$2.y, this.getZ() - $$2.z);
                 this.playSound(ModSounds.SILVER_CHARIOT_RAPIER_SHOT_BLOCK_IMPACT_EVENT, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
-                this.inGround = true;
-                this.shakeTime = 7;
+                // this.inGround = true;
+                // this.shakeTime = 7;
+                inGroundCheck = true;
             }
         }
     }
+
+    private boolean inGroundCheck = false;
 
     private void createPlatform(BlockHitResult $$0) {
         // byte skin = ((StandUser) this.getUser()).roundabout$getStandSkin();
@@ -576,7 +580,10 @@ public class SilverChariotRapierShotEntity extends AbstractArrow implements Unbu
         }
         */
 
-        this.tickRotateFromVelocity();
+        if (!inGroundCheck) {
+            this.tickRotateFromVelocity();
+        }
+        // this.tickRotateFromVelocity();
 
         // Vec3 delta =  getDeltaMovement();
         if (inGroundTime >= 160) {

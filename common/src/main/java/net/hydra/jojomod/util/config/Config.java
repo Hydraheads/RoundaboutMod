@@ -635,6 +635,8 @@ public class Config implements Cloneable {
         public Integer goBeyondTicksUntilItCanHit;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer waterShieldDurationInTicks;
+        @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
+        public Integer woundPlugHealAmount;
         @IntOption(group = "inherit", value = 35, min = 1, max = 72000)
         public Integer bubbleBarrageRecoilCooldown;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
@@ -657,6 +659,7 @@ public class Config implements Cloneable {
         public Integer basicBubbleShotCooldown;
         @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
         public Integer encasementBubbleCreateCooldown;
+
     }
     public static class MagiciansRedSettings {
 
@@ -885,6 +888,8 @@ public class Config implements Cloneable {
         public Integer StrangleCooldown;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer PodThrowCooldown;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer SalimoCooldown;
         @BooleanOption(group = "inherit", value = false)
         public Boolean ThirdPunchCapsuleBreak;
         @BooleanOption(group = "inherit", value = false)

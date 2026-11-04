@@ -107,4 +107,13 @@ public class TuskEntity extends FollowingStandEntity {
     public float getAnchorPlaceModified() {
         return super.getAnchorPlaceModified() + (this.getAct() == 2 ? 10 : 0);
     }
+
+    @Override
+    public float blackSabbathGrabOffset(){
+        return switch (this.getAct()) {
+            case 1, 2 -> 0.4f;
+            case 4 -> 1.35f;
+            default -> 1f;
+        };
+    }
 }

@@ -29,4 +29,9 @@ public class PearlJamEntity extends FollowingStandEntity{
         }
         return super.getDistanceOutModified();
     }
+
+    @Override
+    public float blackSabbathGrabOffset(){
+        return 0.45f;
+    }
 }

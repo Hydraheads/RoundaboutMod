@@ -6,7 +6,9 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRe
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.*;
 import net.hydra.jojomod.entity.badCompanyTroops.*;
+import net.hydra.jojomod.entity.gold_experience.*;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
+import net.hydra.jojomod.entity.mobs.FalconEntity;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
@@ -32,7 +34,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.ambient.Bat;
+import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.animal.Fox;
+import net.minecraft.world.entity.animal.Salmon;
 import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.levelgen.Heightmap;
 
@@ -45,6 +52,13 @@ public class FabricEntities {
                         EntityType.Builder.of(TerrierEntity::new, MobCategory.CREATURE).
                                 sized(0.6f, 0.55f).clientTrackingRange(10).build(Roundabout.MOD_ID+":terrier")
                 );
+    public static final EntityType<FalconEntity> FALCON =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "falcon"),
+                    EntityType.Builder.of(FalconEntity::new, MobCategory.CREATURE).
+                            sized(0.3f, 0.65f).clientTrackingRange(10).build(Roundabout.MOD_ID+":falcon")
+            );
     public static final EntityType<Zombiefish> ZOMBIEFISH =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
@@ -668,6 +682,20 @@ public class FabricEntities {
                     EntityType.Builder.of(GrabbedMobSoulPlayerSlim::new, MobCategory.MISC).
                             sized(0.4F, 1.8f).clientTrackingRange(14).build(Roundabout.MOD_ID+":bs_player_soul_slim")
             );
+    public static final EntityType<MandomEntity> GRABBED_MANDOM =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "mandom_bs"),
+                    EntityType.Builder.of(MandomEntity::new, MobCategory.MISC).
+                            sized(0.5F, 0.6f).clientTrackingRange(14).build(Roundabout.MOD_ID+":mandom_bs")
+            );
+    public static final EntityType<HeyYaEntity> GRABBED_HEY_YA =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "hey_ya_bs"),
+                    EntityType.Builder.of(HeyYaEntity::new, MobCategory.MISC).
+                            sized(0.3F, 0.5f).clientTrackingRange(14).build(Roundabout.MOD_ID+":hey_ya_bs")
+            );
         public static final EntityType<WalkingHeartEntity> WALKING_HEART =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -775,6 +803,62 @@ public class FabricEntities {
                     EntityType.Builder.of(GoldExperienceEntity::new, MobCategory.MISC).
                             sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":gold_experience")
             );
+    public static final EntityType<GoldExperienceBetaEntity> GOLD_EXPERIENCE_BETA =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    Roundabout.location("gold_experience_beta"),
+                    EntityType.Builder.of(GoldExperienceBetaEntity::new, MobCategory.MISC)
+                            .sized(0.75f, 2.05f)
+                            .clientTrackingRange(14)
+                            .build(Roundabout.MOD_ID + ":gold_experience_beta")
+            );
+    public static final EntityType<GEBrambleEntity> GE_BRAMBLE =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "ge_bramble"),
+                    EntityType.Builder.<GEBrambleEntity>of(GEBrambleEntity::new, MobCategory.MISC).
+                            sized(0.8f, 1.8f).clientTrackingRange(16).build(Roundabout.MOD_ID + ":ge_bramble")
+            );
+    public static final EntityType<GEBatEntity> GE_BAT = Registry.register(
+            BuiltInRegistries.ENTITY_TYPE,
+            new ResourceLocation(Roundabout.MOD_ID, "ge_bat"),
+            EntityType.Builder.of(GEBatEntity::new, MobCategory.AMBIENT)
+                    .sized(0.5f, 0.9f)
+                    .clientTrackingRange(5)
+                    .build(Roundabout.MOD_ID + ":ge_bat")
+    );
+    public static final EntityType<GEFrogEntity> GE_FROG = Registry.register(
+            BuiltInRegistries.ENTITY_TYPE,
+            new ResourceLocation(Roundabout.MOD_ID, "ge_frog"),
+            EntityType.Builder.of(GEFrogEntity::new, MobCategory.CREATURE)
+                    .sized(0.5f, 0.9f)
+                    .clientTrackingRange(5)
+                    .build(Roundabout.MOD_ID + ":ge_frog")
+    );
+    public static final EntityType<GEBeeEntity> GE_BEE = Registry.register(
+            BuiltInRegistries.ENTITY_TYPE,
+            new ResourceLocation(Roundabout.MOD_ID, "ge_bee"),
+            EntityType.Builder.of(GEBeeEntity::new, MobCategory.CREATURE)
+                    .sized(0.5f, 0.9f)
+                    .clientTrackingRange(5)
+                    .build(Roundabout.MOD_ID + ":ge_bee")
+    );
+    public static final EntityType<GEFishEntity> GE_FISH = Registry.register(
+            BuiltInRegistries.ENTITY_TYPE,
+            new ResourceLocation(Roundabout.MOD_ID, "ge_fish"),
+            EntityType.Builder.of(GEFishEntity::new, MobCategory.CREATURE)
+                    .sized(0.5f, 0.9f)
+                    .clientTrackingRange(5)
+                    .build(Roundabout.MOD_ID + ":ge_fish")
+    );
+    public static final EntityType<GEFoxEntity> GE_FOX = Registry.register(
+            BuiltInRegistries.ENTITY_TYPE,
+            new ResourceLocation(Roundabout.MOD_ID, "ge_fox"),
+            EntityType.Builder.of(GEFoxEntity::new, MobCategory.CREATURE)
+                    .sized(0.5f, 0.9f)
+                    .clientTrackingRange(5)
+                    .build(Roundabout.MOD_ID + ":ge_fox")
+    );
         public static final EntityType<SilverChariotEntity> SILVER_CHARIOT =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -1343,6 +1427,7 @@ public class FabricEntities {
                 ModEntities.KING_CRIMSON_REAPER = KING_CRIMSON_REAPER;
                 ModEntities.THE_WORLD_ULTIMATE = THE_WORLD_ULTIMATE;
                 ModEntities.TERRIER_DOG = TERRIER_DOG;
+                ModEntities.FALCON = FALCON;
                 ModEntities.ZOMBIEFISH = ZOMBIEFISH;
                 ModEntities.ANUBIS_GUARDIAN = ANUBIS_GUARDIAN;
                 ModEntities.STAR_PLATINUM = STAR_PLATINUM;
@@ -1381,6 +1466,8 @@ public class FabricEntities {
                 ModEntities.GRABBED_MOB_SOUL = GRABBED_MOB_SOUL;
                 ModEntities.GRABBED_PLAYER_SOUL = GRABBED_PLAYER_SOUL;
                 ModEntities.GRABBED_PLAYER_SOUL_SLIM = GRABBED_PLAYER_SOUL_SLIM;
+                ModEntities.GRABBED_MANDOM = GRABBED_MANDOM;
+                ModEntities.GRABBED_HEY_YA = GRABBED_HEY_YA;
                 ModEntities.WALKING_HEART = WALKING_HEART;
                 ModEntities.PEARL_JAM = PEARL_JAM;
                 ModEntities.JUSTICE_PIRATE = JUSTICE_PIRATE;
@@ -1396,6 +1483,13 @@ public class FabricEntities {
                 ModEntities.DIVER_DROWNED = DIVER_DROWNED;
                 ModEntities.DIVER_KICK = DIVER_KICK;
         ModEntities.GOLD_EXPERIENCE = GOLD_EXPERIENCE;
+        ModEntities.GOLD_EXPERIENCE_BETA = GOLD_EXPERIENCE_BETA;
+        ModEntities.GE_BRAMBLE = GE_BRAMBLE;
+        ModEntities.GE_BAT = GE_BAT;
+        ModEntities.GE_FROG = GE_FROG;
+        ModEntities.GE_BEE = GE_BEE;
+        ModEntities.GE_FISH = GE_FISH;
+        ModEntities.GE_FOX = GE_FOX;
                 ModEntities.SILVER_CHARIOT = SILVER_CHARIOT;
                 ModEntities.SILVER_CHARIOT_PHARAOH =  SILVER_CHARIOT_PHARAOH;
                 ModEntities.THROWN_HARPOON = THROWN_HARPOON;
@@ -1525,6 +1619,7 @@ public class FabricEntities {
 
                 /*Attributes*/
                 FabricDefaultAttributeRegistry.register(TERRIER_DOG, Wolf.createAttributes());
+        FabricDefaultAttributeRegistry.register(FALCON, FalconEntity.createAttributes());
                 FabricDefaultAttributeRegistry.register(STRAY_CAT, StrayCatEntity.createAttributes());
                 FabricDefaultAttributeRegistry.register(ZOMBIEFISH, Zombiefish.createAttributes());
                 FabricDefaultAttributeRegistry.register(ANUBIS_GUARDIAN, AnubisGuardian.createAttributes());
@@ -1570,6 +1665,12 @@ public class FabricEntities {
             FabricDefaultAttributeRegistry.register(DOG_MINION, DogMinion.createAttributes());
             FabricDefaultAttributeRegistry.register(OCELOT_MINION, OcelotMinion.createAttributes());
             FabricDefaultAttributeRegistry.register(PARROT_MINION, ParrotMinion.createAttributes());
+
+        FabricDefaultAttributeRegistry.register(GE_BAT, Bat.createAttributes());
+        FabricDefaultAttributeRegistry.register(GE_FROG, Frog.createAttributes());
+        FabricDefaultAttributeRegistry.register(GE_BEE, Bee.createAttributes());
+        FabricDefaultAttributeRegistry.register(GE_FISH, Salmon.createAttributes());
+        FabricDefaultAttributeRegistry.register(GE_FOX, Fox.createAttributes());
 
                 FabricDefaultAttributeRegistry.register(ROAD_ROLLER_ENTITY, RoadRollerEntity.createAttributes().build());
 
@@ -1622,12 +1723,15 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(GRABBED_MOB_SOUL, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(GRABBED_PLAYER_SOUL, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(GRABBED_PLAYER_SOUL_SLIM, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(GRABBED_MANDOM, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(GRABBED_HEY_YA, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(WALKING_HEART, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(DIVER_DOWN, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(DIVER_DOWN_BETA, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(DIVER_DOWN_WORLD, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(DIVER_DROWNED, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(GOLD_EXPERIENCE, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(GOLD_EXPERIENCE_BETA, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SILVER_CHARIOT, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SILVER_CHARIOT_PHARAOH, StandEntity.createStandAttributes());
 

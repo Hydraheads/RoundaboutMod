@@ -23,6 +23,10 @@ public class AnubisEntity extends FollowingStandEntity {
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
+        if(this.getUser() == null && this.getBsGrabbed() != 0){
+            this.grabbedStandByBlackSabbath.startIfStopped(this.tickCount);
+            return;
+        }
         this.idlePoseAnubis.startIfStopped(this.tickCount);
     }
 }

@@ -91,6 +91,7 @@ public class JusticeEntity extends FollowingStandEntity {
     public final AnimationState idleAnimation = new AnimationState();
     public final AnimationState idleAnimation2 = new AnimationState();
     public final AnimationState cackleAnimation = new AnimationState();
+    public final AnimationState grabbedStandByBlackSabbath = new AnimationState();
     @Override
     public void setupAnimationStates() {
         if (this.getUser() != null) {
@@ -108,6 +109,10 @@ public class JusticeEntity extends FollowingStandEntity {
                 this.cackleAnimation.startIfStopped(this.tickCount);
             } else {
                 this.cackleAnimation.stop();
+            }
+        } else {
+            if(this.getBsGrabbed() != 0){
+                grabbedStandByBlackSabbath.startIfStopped(this.tickCount);
             }
         }
     }
@@ -310,5 +315,12 @@ public class JusticeEntity extends FollowingStandEntity {
         }
     }
 
+    @Override
+    public float blackSabbathGrabOffset(){
+        if(this instanceof DarkMirageEntity) {
+            return 1.5f;
+        }
+        return 0.75f;
+    }
 }
 

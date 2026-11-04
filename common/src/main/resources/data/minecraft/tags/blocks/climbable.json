@@ -3,6 +3,8 @@
   "values": [
     "roundabout:bubble_scaffold",
     "roundabout:diver_limb",
-    "roundabout:climbing_wire"
+    "roundabout:sc_rapier_platform",
+    "roundabout:climbing_wire",
+    "roundabout:ge_vine"
   ]
 }

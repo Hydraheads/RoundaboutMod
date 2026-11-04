@@ -4064,6 +4064,27 @@
       }
     ]
   },
+  "green_day_punch": {
+    "subtitle": "sounds.roundabout.green_day_punch",
+    "sounds": [
+      "roundabout:gd_hit_2"
+    ]
+  },
+  "green_day_heavy_punch": {
+    "subtitle": "sounds.roundabout.green_day_heavy_punch",
+    "sounds": [
+      "roundabout:gd_hit_1"
+    ]
+  },
+  "green_day_barrage_hit": {
+    "subtitle": "sounds.roundabout.stand_barrage_hit_soft",
+    "sounds": [
+      "roundabout:gd_hit_1",
+      "roundabout:gd_hit_2",
+      "roundabout:gd_hit_3",
+      "roundabout:gd_hit_4"
+    ]
+  },
   "purple_haze_summon": {
     "subtitle": "sounds.roundabout.purple_haze_summon",
     "sounds": [
@@ -4073,20 +4094,38 @@
   "purple_haze_barrage_cry": {
     "subtitle": "sounds.roundabout.purple_haze_barrage_cry",
     "sounds": [
-      "roundabout:purple_haze_barrage_cry"
+      "roundabout:ph_barrage"
+    ]
+  },
+  "purple_haze_kick_barrage_cry": {
+    "subtitle": "sounds.roundabout.purple_haze_barrage_cry",
+    "sounds": [
+      "roundabout:ph_kick_barrage"
     ]
   },
   "purple_haze_barrage_hit": {
     "subtitle": "sounds.roundabout.stand_barrage_hit_soft",
     "sounds": [
-      "roundabout:ph_hit_1",
-      "roundabout:ph_hit_2",
-      "roundabout:ph_hit_3",
+      "roundabout:ph_barrage_hit_1",
+      "roundabout:ph_barrage_hit_2",
+      "roundabout:ph_barrage_hit_3",
+      "roundabout:ph_barrage_hit_4"
+    ]
+  },
+  "purple_haze_punch": {
+    "subtitle": "sounds.roundabout.purple_haze_punch",
+    "sounds": [
       "roundabout:ph_hit_4"
     ]
   },
+  "purple_haze_heavy_punch": {
+    "subtitle": "sounds.roundabout.purple_haze_heavy_punch",
+    "sounds": [
+      "roundabout:ph_hit_2"
+    ]
+  },
   "purple_haze_barrage_finisher": {
-    "subtitle": "sounds.roundabout.purple_haze_barrage_finisher",
+    "subtitle": "sounds.roundabout.purple_haze_heavy_punch",
     "sounds": [
       "roundabout:ph_finisher"
     ]
@@ -4107,6 +4146,36 @@
     "subtitle": "sounds.roundabout.purple_haze_pod_bite",
     "sounds": [
       "roundabout:purple_haze_pod_bite"
+    ]
+  },
+  "ph_pod_launch": {
+    "subtitle": "sounds.roundabout.ph_pod_launch",
+    "sounds": [
+      "roundabout:ph_pod_launch"
+    ]
+  },
+  "ph_strangle": {
+    "subtitle": "sounds.roundabout.ph_strangle",
+    "sounds": [
+      "roundabout:ph_strangle"
+    ]
+  },
+  "ph_strangle_run": {
+    "subtitle": "sounds.roundabout.ph_strangle_run",
+    "sounds": [
+      "roundabout:ph_strangle_run"
+    ]
+  },
+  "ph_strangle_grab": {
+    "subtitle": "sounds.roundabout.ph_strangle_grab",
+    "sounds": [
+      "roundabout:ph_strangle_grab"
+    ]
+  },
+  "ph_type_switch": {
+    "subtitle": "sounds.roundabout.ph_type_switch",
+    "sounds": [
+      "roundabout:ph_type_switch"
     ]
   },
   "planet_waves_summon": {
@@ -4711,6 +4780,12 @@
     "subtitle": "sounds.roundabout.silver_chariot_self_throw",
     "sounds": [
       "roundabout:silver_chariot_self_throw"
+    ]
+  },
+  "silver_chariot_rapier_spin": {
+    "subtitle": "sounds.roundabout.silver_chariot_rapier_spin",
+    "sounds": [
+      "roundabout:silver_chariot_rapier_spin"
     ]
   },
   "bc_parachute_open": {

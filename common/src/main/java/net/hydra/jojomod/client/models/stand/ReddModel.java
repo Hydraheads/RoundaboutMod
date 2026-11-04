@@ -7,6 +7,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.models.stand.animations.RattAnimations;
+import net.hydra.jojomod.client.models.substand.zsabbathsouls.animations.MobSoulAnimation;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.stand.ReddEntity;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -151,5 +152,6 @@ public class ReddModel<T extends ReddEntity> extends RattModel<T> {
 	public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
         super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
         torch.xRot = -this.head.xRot;
+        this.animate(pEntity.grabbedStandByBlackSabbath, MobSoulAnimation.grabbed_ratt, pAgeInTicks, 1f);
     }
 }

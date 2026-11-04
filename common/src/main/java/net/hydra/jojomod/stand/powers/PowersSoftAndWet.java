@@ -1303,8 +1303,13 @@ public class PowersSoftAndWet extends NewPunchingStand {
             }
 
             if (ent instanceof LivingEntity LV && ent.isAlive()) {
+
                 this.setCooldown(PowerIndex.SKILL_4_SNEAK, ClientNetworking.getAppropriateConfig().softAndWetSettings.woundPlugCooldown);
-                LV.heal(1f);
+                if((LV.getMaxHealth() - LV.getHealth()) > ClientNetworking.getAppropriateConfig().softAndWetSettings.woundPlugHealAmount) {
+                    LV.heal(ClientNetworking.getAppropriateConfig().softAndWetSettings.woundPlugHealAmount);
+                }else{
+                    LV.setHealth(LV.getMaxHealth());
+                }
                 playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.CINDERELLA_SPARKLE_EVENT, SoundSource.PLAYERS, 1F, 1.5F);
 
                 sendParticlesIfPossible(self.level(),ModParticles.SMALL_EXPLOSION, LV.getEyePosition().x,

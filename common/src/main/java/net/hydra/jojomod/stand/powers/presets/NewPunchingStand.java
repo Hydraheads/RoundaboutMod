@@ -534,6 +534,7 @@ public class NewPunchingStand extends NewDashPreset {
 
         SoundEvent SE;
         float pitch = 1F;
+        float volume = 0.95F;
         if (this.activePowerPhase >= this.activePowerPhaseMax) {
 
             if (!this.self.level().isClientSide()) {
@@ -543,6 +544,7 @@ public class NewPunchingStand extends NewDashPreset {
             if (entity != null) {
                 SE = getPunchLandLastSound();
                 pitch = getPunchLandLastPitch();
+                volume = getPunchLandLastVolume();
             } else {
                 SE = ModSounds.PUNCH_2_SOUND_EVENT;
             }
@@ -550,6 +552,7 @@ public class NewPunchingStand extends NewDashPreset {
             if (entity != null) {
                 SE = getPunchLandSound();
                 pitch = getPunchLandPitch();
+                volume = getPunchLandVolume();
             } else {
                 SE = getPunchMissSound();
             }
@@ -560,7 +563,7 @@ public class NewPunchingStand extends NewDashPreset {
                 hitParticles(entity);
             } else {
             }
-            playSoundIfPossible(self.level(),null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), SE, SoundSource.PLAYERS, volume, pitch);
         }
     }
 
@@ -582,6 +585,12 @@ public class NewPunchingStand extends NewDashPreset {
     }
     public float getPunchLandLastPitch(){
         return 1.2F;
+    }
+    public float getPunchLandVolume(){
+        return 0.95F;
+    }
+    public float getPunchLandLastVolume(){
+        return 0.95F;
     }
 
     public SoundEvent getPunchLandSound(){
