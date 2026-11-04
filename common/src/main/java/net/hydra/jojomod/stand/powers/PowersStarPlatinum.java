@@ -513,6 +513,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
     @Override
     public void powerActivate(PowerContext context) {
+        if (self.hasEffect(ModEffects.SWITCH)){
+            return;
+        }
         switch (context) {
 
             case SKILL_1_NORMAL -> {
@@ -1897,8 +1900,6 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             return ModSounds.STAR_FINGER_SILENT_EVENT;
         } else if (soundChoice == IMPALE_NOISE) {
             return ModSounds.IMPALE_CHARGE_EVENT;
-        } else if (soundChoice == TIME_STOP_CHARGE){
-            return ModSounds.TIME_STOP_CHARGE_THE_WORLD_EVENT;
         } else if (soundChoice == TIME_STOP_VOICE){
             if (((StandUser)this.getSelf()).roundabout$getStandSkin() == StarPlatinumEntity.OVA_SKIN) {
                 return ModSounds.OVA_PLATINUM_ORA_4_EVENT;
@@ -1917,12 +1918,6 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             }
         } else if (soundChoice == TIME_STOP_VOICE_3){
             return ModSounds.TIME_STOP_VOICE_THE_WORLD3_EVENT;
-        } else if (soundChoice == TIME_STOP_ENDING_NOISE){
-            return ModSounds.TIME_STOP_RESUME_THE_WORLD_EVENT;
-        } else if (soundChoice == TIME_STOP_ENDING_NOISE_2){
-            return ModSounds.TIME_STOP_RESUME_THE_WORLD2_EVENT;
-        } else if (soundChoice == TIME_STOP_TICKING){
-            return ModSounds.TIME_STOP_TICKING_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }

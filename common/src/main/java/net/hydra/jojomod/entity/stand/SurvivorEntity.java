@@ -282,4 +282,9 @@ public class SurvivorEntity extends MultipleTypeStand {
         setActivated($$0.getBoolean("roundabout.activated"));
         super.readAdditionalSaveData($$0);
     }
+
+    @Override
+    public float blackSabbathGrabOffset(){
+        return 0.4f;
+    }
 }

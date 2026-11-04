@@ -8,6 +8,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.client.models.stand.animations.SilverChariotAnimations;
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
+import net.hydra.jojomod.client.models.substand.zsabbathsouls.animations.MobSoulAnimation;
 import net.hydra.jojomod.entity.stand.SilverChariotEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.stand.powers.PowersSilverChariot;
@@ -355,12 +356,12 @@ public class SilverChariotModel<T extends SilverChariotEntity> extends StandMode
 		this.animate(pEntity.scLeftHit2, SilverChariotAnimations.LeftHit2(), pAgeInTicks, full);
 		this.animate(pEntity.scLeftHit3, SilverChariotAnimations.LeftHit3(), pAgeInTicks, full);
 		this.animate(pEntity.scLeftBarrageWindup, SilverChariotAnimations.LeftBarrageWindup(), pAgeInTicks, windupLength);
-		this.animate(pEntity.scLeftBarrage, SilverChariotAnimations.LeftBarrage(), pAgeInTicks, 1f);
+		this.animate(pEntity.scLeftBarrage, SilverChariotAnimations.LeftBarrage(), pAgeInTicks, 1.1f);
 		this.animate(pEntity.scRightHit1, SilverChariotAnimations.RightHit1(), pAgeInTicks, partial);
 		this.animate(pEntity.scRightHit2, SilverChariotAnimations.RightHit2(), pAgeInTicks, full);
 		this.animate(pEntity.scRightHit3, SilverChariotAnimations.RightHit3(), pAgeInTicks, full);
 		this.animate(pEntity.scRightBarrageWindup, SilverChariotAnimations.RightBarrageWindup(), pAgeInTicks, 1f);
-		this.animate(pEntity.scRightBarrage, SilverChariotAnimations.RightBarrage(), pAgeInTicks, 1f);
+		this.animate(pEntity.scRightBarrage, SilverChariotAnimations.RightBarrage(), pAgeInTicks, 1.1f);
 		this.animate(pEntity.scIdleArmoured, SilverChariotAnimations.Idle(), pAgeInTicks, 1f);
 		this.animate(pEntity.scIdleNotArmoured, SilverChariotAnimations.IdleArmorless(), pAgeInTicks, 1f);
 		this.animate(pEntity.scPart3Pose, SilverChariotAnimations.Part3Pose(), pAgeInTicks, 1f);
@@ -373,14 +374,14 @@ public class SilverChariotModel<T extends SilverChariotEntity> extends StandMode
 		this.animate(pEntity.scLeftVault, SilverChariotAnimations.LeftVault(), pAgeInTicks, 1f);
 		this.animate(pEntity.scRightRapierSpin, SilverChariotAnimations.RightRapierSpin(), pAgeInTicks, 1f);
 		this.animate(pEntity.scLeftRapierSpin, SilverChariotAnimations.LeftRapierSpin(), pAgeInTicks, 1f);
-		// this.animate(pEntity.scRightRapierSlash, SilverChariotAnimations.RightRapierSlash(), pAgeInTicks, 1f);
-		// this.animate(pEntity.scLeftRapierSlash, SilverChariotAnimations.LeftRapierSlash(), pAgeInTicks, 1f);
-		this.animate(pEntity.scRightRapierSlash, SilverChariotAnimations.RightHit2(), pAgeInTicks, 1f);
-		this.animate(pEntity.scLeftRapierSlash, SilverChariotAnimations.LeftHit2(), pAgeInTicks, 1f);
-		this.animate(pEntity.scRightSlabCutting, SilverChariotAnimations.RightHit2(), pAgeInTicks, 1f);
-		this.animate(pEntity.scLeftSlabCutting, SilverChariotAnimations.LeftHit2(), pAgeInTicks, 1f);
-		this.animate(pEntity.scRightOffhandSwipe, SilverChariotAnimations.RightOffhandSwipe(), pAgeInTicks, 1f);
-		this.animate(pEntity.scLeftOffhandSwipe, SilverChariotAnimations.LeftOffhandSwipe(), pAgeInTicks, 1f);
+		this.animate(pEntity.scRightRapierSlash, SilverChariotAnimations.RightRapierSlash(), pAgeInTicks, 1.3f);
+		this.animate(pEntity.scLeftRapierSlash, SilverChariotAnimations.LeftRapierSlash(), pAgeInTicks, 1.3f);
+		// this.animate(pEntity.scRightRapierSlash, SilverChariotAnimations.RightHit2(), pAgeInTicks, 1.3f);
+		// this.animate(pEntity.scLeftRapierSlash, SilverChariotAnimations.LeftHit2(), pAgeInTicks, 1.3f);
+		this.animate(pEntity.scRightSlabCutting, SilverChariotAnimations.RightHit2(), pAgeInTicks, 1.3f);
+		this.animate(pEntity.scLeftSlabCutting, SilverChariotAnimations.LeftHit2(), pAgeInTicks, 1.3f);
+		this.animate(pEntity.scRightOffhandSwipe, SilverChariotAnimations.RightOffhandSwipe(), pAgeInTicks, 1.4f);
+		this.animate(pEntity.scLeftOffhandSwipe, SilverChariotAnimations.LeftOffhandSwipe(), pAgeInTicks, 1.4f);
 		this.animate(pEntity.scUserCarry, SilverChariotAnimations.UserCarry(), pAgeInTicks, 1f);
 		this.animate(pEntity.scUserCarryIdle, SilverChariotAnimations.CarryIdle(), pAgeInTicks, 1f);
 		this.animate(pEntity.scUserThrow, SilverChariotAnimations.UserThrow(), pAgeInTicks, 1f);
@@ -397,6 +398,7 @@ public class SilverChariotModel<T extends SilverChariotEntity> extends StandMode
 		this.animate(pEntity.scMiningBarrageLeft, SilverChariotAnimations.LeftBarrage(), pAgeInTicks, 1.65f);
 		this.animate(pEntity.scBarrageFinisherRight, SilverChariotAnimations.RightHit3(), pAgeInTicks, 2.2f);
 		this.animate(pEntity.scBarrageFinisherLeft, SilverChariotAnimations.LeftHit3(), pAgeInTicks, 2.2f);
+        this.animate(pEntity.grabbedStandByBlackSabbath, MobSoulAnimation.grabbed_humanoid_stand,  pAgeInTicks, 1f);
 	}
 
 	@Override

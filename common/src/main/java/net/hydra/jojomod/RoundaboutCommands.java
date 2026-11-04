@@ -79,21 +79,25 @@ public class RoundaboutCommands {
         String name = "";
         for (Entity entity : targets) {
             if (entity instanceof LivingEntity LE) {
-                    StandUser user = ((StandUser) LE);
-                    ItemStack disc = ItemStack.EMPTY;
+                StandUser user = ((StandUser) LE);
+                ItemStack disc = ItemStack.EMPTY;
 
-                    for (Item i : BuiltInRegistries.ITEM)
+                if (user.roundabout$getStandPowers() != null) {
+                    user.roundabout$getStandPowers().onStandSwitch();
+                }
+
+                for (Item i : BuiltInRegistries.ITEM)
+                {
+                    // in the future: this code should be changed to support addons
+                    if (BuiltInRegistries.ITEM.getKey(i).equals(Roundabout.location(standType.toLowerCase()+"_disc")))
                     {
-                        // in the future: this code should be changed to support addons
-                        if (BuiltInRegistries.ITEM.getKey(i).equals(Roundabout.location(standType.toLowerCase()+"_disc")))
-                        {
-                            disc = i.getDefaultInstance();
-                            name = "item.roundabout."+standType.toLowerCase()+"_disc.desc";
-                            break;
-                        }
+                        disc = i.getDefaultInstance();
+                        name = "item.roundabout."+standType.toLowerCase()+"_disc.desc";
+                        break;
                     }
+                }
 
-                    user.roundabout$setStandDisc(disc);
+                user.roundabout$setStandDisc(disc);
                 if (disc != ItemStack.EMPTY && disc.getItem() instanceof StandDiscItem SD) {
 
                     user.roundabout$setStandSkin(skin);

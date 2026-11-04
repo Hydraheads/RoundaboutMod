@@ -217,6 +217,8 @@ public class ClientConfig implements Cloneable {
         public Integer killerQueenCurrentBombConfig;
         @IntOption(group = "inherit", value = 1, min = 0, max = 2)
         public Integer killerQueenCurrentBombSize;
+        @IntOption(group = "inherit", value = 1, min = 1, max = 8)
+        public Integer goldExperienceCurrentAnimal;
     }
     public static class VanillaMCTweaks {
         @BooleanOption(group = "inherit", value = true)
@@ -265,14 +267,14 @@ public class ClientConfig implements Cloneable {
         // public Boolean silverChariotControlModeVisualEffectLostSight;
         @BooleanOption(group = "inherit", value = true)
         public Boolean silverChariotRenderAfterimages;
-        @IntOption(group = "inherit", value = 5, min = 1, max = 10)
+        @IntOption(group = "inherit", value = 5, min = 2, max = 10)
         public Integer silverChariotAfterimagesMaxAmount;
-        @IntOption(group = "inherit", value = 5, min = 1, max = 20)
+        @IntOption(group = "inherit", value = 10, min = 1, max = 20)
         public Integer silverChariotTickIntervalBetweenAfterimage;
-        @FloatOption(group = "inherit", value = 1F, min = 0, max = 1)
-        public Float silverChariotAfterimageOpacity;
+        // @FloatOption(group = "inherit", value = 1F, min = 0, max = 1)
+        // public Float silverChariotAfterimageOpacity;
         @BooleanOption(group = "inherit", value = true)
-        public Boolean silverChariotShouldRenderAfterimagesWhileUserInFirstPerson;
+        public Boolean silverChariotShouldRenderAfterimagesForUserWhileInFirstPerson;
     }
     public static class LyinEyesSettings {
         @BooleanOption(group = "inherit", value = false)

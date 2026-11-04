@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
 import net.hydra.jojomod.client.models.stand.animations.StandIdles;
+import net.hydra.jojomod.client.models.substand.zsabbathsouls.animations.MobSoulAnimation;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
@@ -105,6 +106,20 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
         this.animate(entity.idleAnimationGoldenExperience2, StandIdles.Mozart, animationProgress, 1f);
         this.animate(entity.idleAnimationStickyFingers1, StandIdles.Brown_Sugar, animationProgress, 1f);
         this.animate(entity.idleAnimationStickyFingers2, StandIdles.Capo, animationProgress, 1f);
+        this.animate(entity.grabbedStandByBlackSabbath, MobSoulAnimation.grabbed_humanoid_stand, animationProgress, 1f);
+    }
+
+    public void animatePunches(T entity, float animationProgress) {
+        float partial = 1.4f;
+        float full = 1.16666f;
+        if (entity.getMeltLevel() > 0){
+            partial = 1.4f - Math.min(0.5f,0.9f*((float) entity.getMeltLevel()));
+            full = 1.16666f - Math.min(0.5f,0.07f*((float) entity.getMeltLevel()));
+        }
+
+        this.animate(entity.punchState1, StandAnimations.COMBO1, animationProgress, partial);
+        this.animate(entity.punchState2, StandAnimations.COMBO2, animationProgress, full); /*1.1666 for 6 ticks, 1.4 for 5*/
+        this.animate(entity.punchState3, StandAnimations.COMBO3, animationProgress, full);
     }
 
     /**Most humanoid stands share these animations.*/
@@ -112,15 +127,9 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
         this.animateIdles(entity, animationProgress);
 
         Entity owner = entity.getUser();
-        float partial = 1.4f;
-        float full = 1.16666f;
-        if (entity.getMeltLevel() > 0){
-            partial = 1.4f - Math.min(0.5f,0.9f*((float) entity.getMeltLevel()));
-            full = 1.16666f - Math.min(0.5f,0.07f*((float) entity.getMeltLevel()));
-        }
-        this.animate(entity.punchState1, StandAnimations.COMBO1, animationProgress, partial);
-        this.animate(entity.punchState2, StandAnimations.COMBO2, animationProgress, full); /*1.1666 for 6 ticks, 1.4 for 5*/
-        this.animate(entity.punchState3, StandAnimations.COMBO3, animationProgress, full);
+
+        animatePunches(entity, animationProgress);
+
         this.animate(entity.blockAnimationState, StandAnimations.BLOCK, animationProgress, 1f);
         this.animate(entity.barrageChargeAnimationState, StandAnimations.BARRAGECHARGE, animationProgress, windupLength);
         this.animate(entity.barrageAnimationState, StandAnimations.BARRAGE, animationProgress, 1f);

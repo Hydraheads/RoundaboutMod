@@ -121,6 +121,10 @@ public class FabricItems {
             new MaskItem(new Item.Properties().stacksTo(1), new KiraPartFourVisage(null)));
     public static final Item KOSAKU_MASK = registerItem("kosaku_mask",
         new MaskItem(new Item.Properties().stacksTo(1), new KosakuVisage(null)));
+    public static final Item FUGO_MASK = registerItem("pannacotta_fugo_mask",
+        new MaskItem(new Item.Properties().stacksTo(1), new FugoVisage(null)));
+    public static final Item FUGO_FEEDBACK_MASK = registerItem("pannacotta_fugo_feedback_mask",
+        new MaskItem(new Item.Properties().stacksTo(1), new FugoFeedbackVisage(null)));
     public static final Item KIRASAKU_MASK = registerItem("kirasaku_mask",
         new MaskItem(new Item.Properties().stacksTo(1), new KirasakuVisage(null)));
     public static final Item HAYATO_KAWAJIRI_MASK = registerItem("hayato_kawajiri_mask",
@@ -303,11 +307,27 @@ public class FabricItems {
 
 
     public static Item CHAMOMILE_SEEDS = registerItem("chamomile_seeds", new ItemNameBlockItem(ModBlocks.CHAMOMILE, new Item.Properties()));
-    public static Item CHAMOMILE = registerItem("chamomile", new Item(new Item.Properties().food(ModFoodComponents.CHAMOMILE)));
+    public static Item CHAMOMILE = registerItem("chamomile", new Item(new Item.Properties()
+            .food(new FoodProperties.Builder()
+                    .nutrition(2)
+                    .saturationMod(0.1F)
+                    .effect(new MobEffectInstance(ModEffects.REFRESHED,ModItems.CHAMOMILE_DURATION),1.0F)
+                    .alwaysEat()
+                    .build())));
     public static Item MINT_SEEDS = registerItem("mint_seeds", new ItemNameBlockItem(ModBlocks.MINT, new Item.Properties())  );
-    public static Item MINT = registerItem("mint", new Item(new Item.Properties().food(ModFoodComponents.MINT)));
-    public static Item HERB_TEA = registerItem("herb_tea", new Item(new Item.Properties().food(ModFoodComponents.TEA)));
-    public static Item METEORITE = registerItem("meteorite", new Item(new Item.Properties()));
+    public static Item MINT = registerItem("mint", new Item(new Item.Properties().food(
+            new FoodProperties.Builder()
+                    .nutrition(2)
+                    .saturationMod(0.1F)
+                    .effect(new MobEffectInstance(ModEffects.REFRESHED,ModItems.MINT_DURATION),1.0F)
+                    .alwaysEat()
+                    .build())));
+    public static Item HERB_TEA = registerItem("herb_tea", new Item(new Item.Properties().food(
+            new FoodProperties.Builder()
+                    .nutrition(8)
+                    .saturationMod(0.25F)
+                    .effect(new MobEffectInstance(ModEffects.REFRESHED,ModItems.TEA_DURATION),1.0F)
+                    .build())));    public static Item METEORITE = registerItem("meteorite", new Item(new Item.Properties()));
     public static Item ANUBIS_2D = registerItem("anubis_sword_2d", new Item(new Item.Properties()));
     public static Item AJA = registerItem("aja", new Item(new Item.Properties()));
     public static Item METEORITE_INGOT = registerItem("meteorite_ingot", new Item(new Item.Properties()));
@@ -354,6 +374,7 @@ public class FabricItems {
     public static Item DOT_HAN_MASK = registerItem("dot_han_mask", new MaskItem(new Item.Properties().stacksTo(1), new DotHanVisage(null)));
     public static Item AVDUL_MASK = registerItem("avdul_mask", new MaskItem(new Item.Properties().stacksTo(1), new AvdulVisage(null)));
     public static Item DIO_MASK = registerItem("dio_mask", new MaskItem(new Item.Properties().stacksTo(1), new DIOVisage(null)));
+    public static Item KHAN_MASK = registerItem("khan_mask", new MaskItem(new Item.Properties().stacksTo(1), new KhanVisage(null)));
     public static Item GYRO_MASK = registerItem("gyro_mask", new MaskItem(new Item.Properties().stacksTo(1), new GyroVisage(null)));
     public static Item SANDMAN_MASK = registerItem("sandman_mask", new MaskItem(new Item.Properties().stacksTo(1), new SandmanVisage(null)));
     public static Item TIM_MASK = registerItem("tim_mask", new MaskItem(new Item.Properties().stacksTo(1), new TimVisage(null)));
@@ -365,6 +386,8 @@ public class FabricItems {
     public static Item DIEGO_2_MASK = registerItem("diego_2_mask", new MaskItem(new Item.Properties().stacksTo(1), new Diego2Visage(null)));
     public static Item VALENTINE_MASK = registerItem("valentine_mask", new MaskItem(new Item.Properties().stacksTo(1), new ValentineVisage(null)));
     public static Item LUCY_MASK = registerItem("lucy_mask", new MaskItem(new Item.Properties().stacksTo(1), new LucyVisage(null)));
+    public static Item ABBACCHIO_MASK = registerItem("abbacchio_mask", new MaskItem(new Item.Properties().stacksTo(1), new AbbacchioVisage(null)));
+    public static Item OYECOMOVA_MASK = registerItem("oyecomova_mask", new MaskItem(new Item.Properties().stacksTo(1), new OyecomovaVisage(null)));
     public static Item STEVEN_MASK = registerItem("steven_mask", new MaskItem(new Item.Properties().stacksTo(1), new StevenVisage(null)));
     public static Item SHERIFF_MASK = registerItem("sheriff_mask", new MaskItem(new Item.Properties().stacksTo(1), new SheriffVisage(null)));
     public static Item JOHNNY_MASK = registerItem("johnny_mask", new MaskItem(new Item.Properties().stacksTo(1), new JohnnyVisage(null)));
@@ -388,6 +411,8 @@ public class FabricItems {
     public static Item AYA_MASK = registerItem("aya_mask", new MaskItem(new Item.Properties().stacksTo(1), new AyaVisage(null)));
     public static Item RINGO_MASK = registerItem("ringo_mask", new MaskItem(new Item.Properties().stacksTo(1), new RingoVisage(null)));
     public static Item POCOLOCO_MASK = registerItem("pocoloco_mask", new MaskItem(new Item.Properties().stacksTo(1), new PocolocoVisage(null)));
+    public static Item POLNAREFF_MASK = registerItem("polnareff_mask", new MaskItem(new Item.Properties().stacksTo(1), new PolnareffVisage(null)));
+    public static Item BLACK_POLNAREFF_MASK = registerItem("black_polnareff_mask", new MaskItem(new Item.Properties().stacksTo(1), new BlackPolnareffVisage(null)));
 
     public static Item COFFIN_BLOCK_ITEM = registerItem("coffin_block",
             new CoffinBlockItem(DyeColor.BLACK, FabricBlocks.COFFIN_BLOCK, new Item.Properties().stacksTo(1)));
@@ -443,6 +468,8 @@ public class FabricItems {
 
     public static final Item TERRIER_SPAWN_EGG = registerItem("terrier_spawn_egg", new SpawnEggItem(FabricEntities.TERRIER_DOG,
             0xc9c071, 0xfffded, new Item.Properties()));
+    public static final Item FALCON_SPAWN_EGG = registerItem("falcon_spawn_egg", new SpawnEggItem(FabricEntities.FALCON,
+            0x93503c, 0xbba17e, new Item.Properties()));
     public static final Item ZOMBIE_MINION_SPAWN_EGG = registerItem("zombie_minion_spawn_egg", new SpawnEggItem(FabricEntities.VILLAGER_MINION,
             0xC1FF4F, 0x53A667, new Item.Properties()));
 
@@ -556,6 +583,9 @@ public class FabricItems {
                         entries.accept(JOTARO_MASK);
                         entries.accept(AVDOL_MASK);
                         entries.accept(KAKYOIN_MASK);
+                        entries.accept(POLNAREFF_MASK);
+                        entries.accept(KHAN_MASK);
+                        entries.accept(BLACK_POLNAREFF_MASK);
                         entries.accept(SPEEDWAGON_FOUNDATION_MASK);
                         entries.accept(SHADOW_DIO_MASK);
                         entries.accept(DIO_MASK);
@@ -564,6 +594,9 @@ public class FabricItems {
                         entries.accept(JOTARO_4_MASK);
                         entries.accept(AYA_MASK);
                         entries.accept(MISTA_MASK);
+                        entries.accept(ABBACCHIO_MASK);
+                        entries.accept(FUGO_MASK);
+                        entries.accept(FUGO_FEEDBACK_MASK);
                         entries.accept(BOSS_MASK);
                         entries.accept(DIAVOLO_MASK);
                         entries.accept(DOPPIO_MASK);
@@ -587,6 +620,7 @@ public class FabricItems {
                         entries.accept(DIEGO_2_MASK);
                         entries.accept(SANDMAN_MASK);
                         entries.accept(POCOLOCO_MASK);
+                        entries.accept(OYECOMOVA_MASK);
                         entries.accept(TIM_MASK);
                         entries.accept(SHERIFF_MASK);
                         entries.accept(RINGO_MASK);
@@ -792,7 +826,7 @@ public class FabricItems {
                     .icon(() -> new ItemStack(AJA)).displayItems((displayContext, entries) -> {
                         //Add all items from the Jojo mod tab here
                     	//entries.accept(ModBlocks.CHESSBOARD_BLOCK);
-                        //entries.accept(ModBlocks.HAND_BLOCK);
+                        entries.accept(FALCON_SPAWN_EGG);
                         entries.accept(STAND_DISC_D4C);
                         entries.accept(MAX_STAND_DISC_D4C);
                         entries.accept(STAND_DISC_GOLD_EXPERIENCE);
@@ -1084,9 +1118,12 @@ public class FabricItems {
         ModItems.JOTARO_4_MASK = JOTARO_4_MASK;
         ModItems.JOTARO_6_MASK = JOTARO_6_MASK;
         ModItems.DIO_MASK = DIO_MASK;
+        ModItems.KHAN_MASK = KHAN_MASK;
         ModItems.GYRO_MASK = GYRO_MASK;
         ModItems.SANDMAN_MASK = SANDMAN_MASK;
         ModItems.TIM_MASK = TIM_MASK;
+        ModItems.OYECOMOVA_MASK = OYECOMOVA_MASK;
+        ModItems.ABBACCHIO_MASK = ABBACCHIO_MASK;
         ModItems.SHADOW_DIO_MASK = SHADOW_DIO_MASK;
         ModItems.DIO_VAMPIRE_MASK = DIO_VAMPIRE_MASK;
         ModItems.AVDOL_MASK = AVDOL_MASK;
@@ -1094,6 +1131,8 @@ public class FabricItems {
         ModItems.DIEGO_MASK = DIEGO_MASK;
         ModItems.DIEGO_2_MASK = DIEGO_2_MASK;
         ModItems.POCOLOCO_MASK = POCOLOCO_MASK;
+        ModItems.POLNAREFF_MASK = POLNAREFF_MASK;
+        ModItems.BLACK_POLNAREFF_MASK = BLACK_POLNAREFF_MASK;
         ModItems.RINGO_MASK = RINGO_MASK;
         ModItems.VALENTINE_MASK = VALENTINE_MASK;
         ModItems.LUCY_MASK = LUCY_MASK;
@@ -1129,9 +1168,12 @@ public class FabricItems {
         ModItems.KIRA_PART_FOUR_MASK = KIRA_PART_FOUR_MASK;
         ModItems.KIRA_PART_EIGHT_MASK = KIRA_PART_EIGHT_MASK;
         ModItems.KOSAKU_MASK = KOSAKU_MASK;
+        ModItems.FUGO_MASK = FUGO_MASK;
+        ModItems.FUGO_FEEDBACK_MASK = FUGO_FEEDBACK_MASK;
         ModItems.KIRASAKU_MASK = KIRASAKU_MASK;
         ModItems.HAYATO_KAWAJIRI_MASK = HAYATO_KAWAJIRI_MASK;
         ModItems.TERRIER_SPAWN_EGG = TERRIER_SPAWN_EGG;
+        ModItems.FALCON_SPAWN_EGG = FALCON_SPAWN_EGG;
         ModItems.ZOMBIE_MINION_SPAWN_EGG = ZOMBIE_MINION_SPAWN_EGG;
         ModItems.AESTHETICIAN_SPAWN_EGG = AESTHETICIAN_SPAWN_EGG;
         ModItems.ZOMBIE_AESTHETICIAN_SPAWN_EGG = ZOMBIE_AESTHETICIAN_SPAWN_EGG;

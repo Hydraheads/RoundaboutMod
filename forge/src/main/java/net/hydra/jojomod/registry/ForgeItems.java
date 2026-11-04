@@ -586,14 +586,7 @@ public class ForgeItems {
             () -> new Item(new Item.Properties())));
     public static final RegistryObject<Item> AJA = addToTab(ITEMS.register("aja",
             () -> new Item(new Item.Properties())));
-    /*public static final RegistryObject<Item> HAND = addToWIPTab(ITEMS.register("player_hand",
-            () -> new Item(new Item.Properties())));
-    public static final RegistryObject<Item> VILLAGER_HAND = addToWIPTab(ITEMS.register("villager_hand",
-            () -> new Item(new Item.Properties())));
-    public static final RegistryObject<Item> ILLAGER_HAND = addToWIPTab(ITEMS.register("illager_hand",
-            () -> new Item(new Item.Properties())));
-    public static final RegistryObject<Item> ROTTEN_HAND = addToWIPTab(ITEMS.register("rotten_hand",
-            () -> new Item(new Item.Properties())));*/
+
     public static final RegistryObject<Item> FANCY_LIGHTER = addToWIPTab(ITEMS.register("fancy_lighter_block",
             () -> new FancyLighterItem(ForgeBlocks.FANCY_LIGHTER_BLOCK.get(), new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> ULTRAVIOLET_BLASTER = addToTab(ITEMS.register("ultraviolet_blaster",
@@ -657,14 +650,33 @@ public class ForgeItems {
     public static final RegistryObject<Item> CHAMOMILE_SEEDS = addToTab(ITEMS.register("chamomile_seeds",
             () -> new ItemNameBlockItem(ForgeBlocks.CHAMOMILE.get(), new Item.Properties()) ));
     public static final RegistryObject<Item> CHAMOMILE = addToTab(ITEMS.register("chamomile",
-            () -> new Item(new Item.Properties().food(ModFoodComponents.CHAMOMILE))));
+            () -> new Item(new Item.Properties()
+                    .food(new FoodProperties.Builder()
+                            .nutrition(2)
+                            .saturationMod(0.1F)
+                            .effect(() -> new MobEffectInstance(ForgeEffects.REFRESHED.get(),ModItems.CHAMOMILE_DURATION),1.0F)
+                            .alwaysEat()
+                            .build()))
+    ));
     public static final RegistryObject<Item> MINT_SEEDS = addToTab(ITEMS.register("mint_seeds",
             () -> new ItemNameBlockItem(ForgeBlocks.MINT.get(), new Item.Properties()) ));
     public static final RegistryObject<Item> MINT = addToTab(ITEMS.register("mint",
-            () -> new Item(new Item.Properties().food(ModFoodComponents.MINT))));
+            () -> new Item(new Item.Properties().food(
+                    new FoodProperties.Builder()
+                            .nutrition(2)
+                            .saturationMod(0.1F)
+                            .effect(() -> new MobEffectInstance(ForgeEffects.REFRESHED.get(),ModItems.MINT_DURATION),1.0F)
+                            .alwaysEat()
+                            .build()))
+    ));
     public static final RegistryObject<Item> HERB_TEA = addToTab(ITEMS.register("herb_tea",
-            () -> new Item(new Item.Properties().food(ModFoodComponents.TEA))));
-
+            () -> new Item(new Item.Properties().food(
+                    new FoodProperties.Builder()
+                            .nutrition(8)
+                            .saturationMod(0.25F)
+                            .effect(() -> new MobEffectInstance(ForgeEffects.REFRESHED.get(),ModItems.TEA_DURATION),1.0F)
+                            .build())
+            )));
     public static final RegistryObject<Item> MUSIC_DISC_TORTURE_DANCE = addToTab(ITEMS.register("music_disc_torture_dance",
             () -> new RecordItem(1, ForgeSounds.TORTURE_DANCE,
                     (new Item.Properties()).stacksTo(1).rarity(Rarity.RARE), 2840)));
@@ -684,6 +696,9 @@ public class ForgeItems {
     public static final RegistryObject<ForgeSpawnEggItem> TERRIER_SPAWN_EGG = addToTab(ITEMS.register("terrier_spawn_egg",
             () -> new ForgeSpawnEggItem(ForgeEntities.TERRIER_DOG,
                     0xc9c071, 0xfffded, new Item.Properties())));
+    public static final RegistryObject<ForgeSpawnEggItem> FALCON_SPAWN_EGG = addToWIPTab(ITEMS.register("falcon_spawn_egg",
+            () -> new ForgeSpawnEggItem(ForgeEntities.FALCON,
+                    0x93503c, 0xbba17e, new Item.Properties())));
     public static final RegistryObject<ForgeSpawnEggItem> AESTHETICIAN_SPAWN_EGG = addToTab(ITEMS.register("aesthetician_spawn_egg",
             () -> new ForgeSpawnEggItem(ForgeEntities.AESTHETICIAN,
                     0xfffef2, 0xffa8e8, new Item.Properties())));
@@ -904,6 +919,7 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new NonCharacterVisage(null))));
     public static final RegistryObject<Item> MODIFICATION_MASK = addToTab(ITEMS.register("modification_mask",
             () -> new ModificationMaskItem(new Item.Properties().stacksTo(1), new ModificationVisage(null))));
+
     public static final RegistryObject<Item> SPEEDWAGON_MASK = addToTab(ITEMS.register("speedwagon_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new SpeedwagonVisage(null))));
     public static final RegistryObject<Item> STRAIZO_VAMPIRE_MASK = addToTab(ITEMS.register("straizo_vampire_mask",
@@ -928,6 +944,12 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new AvdolVisage(null))));
     public static final RegistryObject<Item> KAKYOIN_MASK = addToTab(ITEMS.register("kakyoin_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new KakyoinVisage(null))));
+    public static final RegistryObject<Item> POLNAREFF_MASK = addToTab(ITEMS.register("polnareff_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new PolnareffVisage(null))));
+    public static final RegistryObject<Item> KHAN_MASK = addToTab(ITEMS.register("khan_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new KhanVisage(null))));
+    public static final RegistryObject<Item> BLACK_POLNAREFF_MASK = addToTab(ITEMS.register("black_polnareff_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new BlackPolnareffVisage(null))));
     public static final RegistryObject<Item> SPEEDWAGON_FOUNDATION_MASK = addToTab(ITEMS.register("speedwagon_foundation_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new SpeedwagonFoundationVisage(null))));
     public static final RegistryObject<Item> GHIACCIO_MASK = addToTab(ITEMS.register("ghiaccio_mask",
@@ -966,6 +988,8 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new SandmanVisage(null))));
     public static final RegistryObject<Item> POCOLOCO_MASK = addToTab(ITEMS.register("pocoloco_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new PocolocoVisage(null))));
+    public static final RegistryObject<Item> OYECOMOVA_MASK = addToTab(ITEMS.register("oyecomova_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new OyecomovaVisage(null))));
     public static final RegistryObject<Item> TIM_MASK = addToTab(ITEMS.register("tim_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new TimVisage(null))));
     public static final RegistryObject<Item> SHERIFF_MASK = addToTab(ITEMS.register("sheriff_mask",
@@ -990,6 +1014,12 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new AyaVisage(null))));
     public static final RegistryObject<Item> MISTA_MASK = addToTab(ITEMS.register("mista_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new MistaVisage(null))));
+    public static final RegistryObject<Item> ABBACCHIO_MASK = addToTab(ITEMS.register("abbacchio_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new AbbacchioVisage(null))));
+    public static final RegistryObject<Item> FUGO_MASK = addToTab(ITEMS.register("pannacotta_fugo_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new FugoVisage(null))));
+    public static final RegistryObject<Item> FUGO_FEEDBACK_MASK = addToTab(ITEMS.register("pannacotta_fugo_feedback_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new FugoFeedbackVisage(null))));
     public static final RegistryObject<Item> ANASUI_MASK = addToTab(ITEMS.register("anasui_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new AnasuiVisage(null))));
     public static final RegistryObject<Item> FEM_ANASUI_MASK = addToTab(ITEMS.register("fem_anasui_mask",

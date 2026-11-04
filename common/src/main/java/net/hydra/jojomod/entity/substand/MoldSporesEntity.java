@@ -169,7 +169,7 @@ public class MoldSporesEntity extends StandEntity {
 
                             float fallDistance = (((StandUser) entity).getStaringYPos() - (float) entity.getPosition(1).y());
 
-                            if (fallDistance > ClientNetworking.getAppropriateConfig().greenDaySettings.playerMinFalldistance || !(entity instanceof Player)){
+
                                 double width = entity.getBbWidth() / 2;
                                 double height = entity.getBbHeight() / 2;
                                 ((ServerLevel) level()).sendParticles(ModParticles.MOLD
@@ -192,8 +192,8 @@ public class MoldSporesEntity extends StandEntity {
                                     damage = 4;
                                 }
                                 damage = (int) (damage * (fallDistance * 0.6F));
-                                if (((StandUser) entity).getStaringYPos() - entity.getY() < 1) {
-                                    damage = damage * 0.25;
+                                if (!(fallDistance > ClientNetworking.getAppropriateConfig().greenDaySettings.playerMinFalldistance || !(entity instanceof Player))){
+                                    damage=0.1;
                                 }
                                 entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), (float) (damage * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldDMGPlayersMultiplier / 100F)));
                                 ((StandUser)entity).roundabout$setJumpImunityTicks(10);
@@ -208,7 +208,7 @@ public class MoldSporesEntity extends StandEntity {
                                 if (Math.random() < 0.2) {
                                     ((StandUser) User).roundabout$getStandPowers().addEXP(1);
                                 }
-                            }
+
                         }
                     }
                 }

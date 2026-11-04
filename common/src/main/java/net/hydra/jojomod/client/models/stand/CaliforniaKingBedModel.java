@@ -3,6 +3,7 @@ package net.hydra.jojomod.client.models.stand;
 import net.hydra.jojomod.client.models.layers.animations.KingBedAnimations;
 import net.hydra.jojomod.client.models.stand.animations.DiverDownAnimations;
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
+import net.hydra.jojomod.client.models.substand.zsabbathsouls.animations.MobSoulAnimation;
 import net.hydra.jojomod.entity.stand.CaliforniaKingBedEntity;
 import net.hydra.jojomod.entity.stand.DiverDownEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -95,6 +96,7 @@ public class CaliforniaKingBedModel<T extends CaliforniaKingBedEntity> extends S
         this.animate(pEntity.sleep, KingBedAnimations.Sleep, pAgeInTicks, 1f);
         this.animate(pEntity.idleAnimationState2, KingBedAnimations.Normal, pAgeInTicks, 1f);
         this.animate(pEntity.idleAnimationState, KingBedAnimations.Whimsical, pAgeInTicks, 0.9F);
+        this.animate(pEntity.grabbedStandByBlackSabbath, MobSoulAnimation.grabbed_california, pAgeInTicks, 0.75f);
     }
 
     @Override

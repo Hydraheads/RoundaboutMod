@@ -15,6 +15,7 @@ import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.entity.visages.mobs.DIONPC;
 import net.hydra.jojomod.entity.visages.mobs.DiegoNPC;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
@@ -1029,6 +1030,9 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
     @Override
     public void powerActivate(PowerContext context) {
+        if (self.hasEffect(ModEffects.SWITCH)){
+            return;
+        }
         switch (context) {
 
             case SKILL_1_NORMAL -> {
@@ -1745,8 +1749,6 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             return ModSounds.THE_WORLD_ASSAULT_EVENT;
         } else if (soundChoice == IMPALE_NOISE) {
             return ModSounds.IMPALE_CHARGE_EVENT;
-        } else if (soundChoice == TIME_STOP_CHARGE){
-            return ModSounds.TIME_STOP_CHARGE_THE_WORLD_EVENT;
         } else if (soundChoice == TIME_STOP_VOICE){
             if (bt == TheWorldEntity.OVA_SKIN) {
                 return ModSounds.OVA_THE_WORLD_EVENT;
@@ -1773,8 +1775,6 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             return ModSounds.TIME_STOP_VOICE_THE_WORLD3_EVENT;
         } else if (soundChoice == TIME_STOP_ENDING_NOISE){
             return ModSounds.TIME_STOP_RESUME_THE_WORLD_EVENT;
-        } else if (soundChoice == TIME_STOP_ENDING_NOISE_2){
-            return ModSounds.TIME_STOP_RESUME_THE_WORLD2_EVENT;
         } else if (soundChoice == TIME_STOP_TICKING){
             return ModSounds.TIME_STOP_TICKING_EVENT;
         }

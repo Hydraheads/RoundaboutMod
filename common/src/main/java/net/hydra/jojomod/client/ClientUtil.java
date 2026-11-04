@@ -1761,6 +1761,10 @@ public class ClientUtil {
     public static void openHairspryUI(){
         Minecraft.getInstance().setScreen(new HairColorChangeScreen());
     }
+    /**Ignore this for now*/
+    public static void openMandomClockUI(){
+       // Minecraft.getInstance().setScreen(new MandomClockChangeScreen());
+    }
     public static void openBombConfigScreen() {Minecraft.getInstance().setScreen(new BombConfigScreen());}
     public static void openMemoryRecordScreen(boolean recording){Minecraft.getInstance().setScreen(new MemoryRecordScreen(recording));}
     public static void openTuskActScreen(){Minecraft.getInstance().setScreen(new TuskActScreen());}
@@ -1778,6 +1782,8 @@ public class ClientUtil {
     public static void openAfflictionSelect() {Minecraft.getInstance().setScreen(new DiverDownAfflictionSelection());}
     public static void openDisguiseScreen() {Minecraft.getInstance().setScreen(new DiverDownDisguiseScreen());}
     //Diver Down UI end
+
+    public static void openAnimalSelect(){Minecraft.getInstance().setScreen(new AnimalSelectScreen());}
 
     public static void strikePose(Player player, Minecraft C, boolean keyIsDown, Options option) {
         if (keyIsDown){

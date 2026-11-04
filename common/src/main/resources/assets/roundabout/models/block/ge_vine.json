@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/vine",
+  "textures": {
+    "vine": "minecraft:block/vine"
+  },
+  "render_type": "minecraft:cutout"
+}

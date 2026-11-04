@@ -271,7 +271,8 @@ public class ManhattanTransferEntity extends StandEntity {
                                         this.setHeldItemManhattan(ii.copyAndClear());
                                         setKnockbackArrow(AA.getKnockback());
                                         piercingArrow = AA.getPierceLevel();
-                                        if(AA.getDeltaMovement().length() > 0.7){
+                                       // System.out.println(AA.getDeltaMovement().length());
+                                        if(AA.getDeltaMovement().length() > 1.5){
                                             isArrowTooSlow = false;
                                         } else {
                                             isArrowTooSlow = true;
@@ -370,6 +371,10 @@ public class ManhattanTransferEntity extends StandEntity {
         return super.hurt(source, amount);
     }
 
+    @Override
+    public float blackSabbathGrabOffset(){
+        return 0.4f;
+    }
 
     public void itemEject() {
         if (hasItem && this.canAcquireHeldItem) {
@@ -1070,6 +1075,10 @@ public class ManhattanTransferEntity extends StandEntity {
         AnimationState leftSlow = this.slow_manhattan_left;
         AnimationState rightSlow = this.slow_manhattan_right;
 
+        if(getBsGrabbed() != 0){
+            loaded.startIfStopped(this.tickCount);
+            return;
+        }
 
         if (this.level().isClientSide) {
             if (!this.isInRain()) {

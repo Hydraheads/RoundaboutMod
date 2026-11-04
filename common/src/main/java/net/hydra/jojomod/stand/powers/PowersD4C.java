@@ -606,7 +606,7 @@ public class PowersD4C extends NewPunchingStand {
                 if (jentity instanceof D4CCloneEntity d4cclone){
                     Optional<UUID> uuid = d4cclone.getPlayerUUID();
                     if (uuid != null && uuid.isPresent()){
-                        if (uuid.get().equals(self.getUUID()) && jentity.isAlive()){
+                        if (uuid.get().equals(self.getUUID()) && jentity.isAlive() && d4cclone.getSafeCopy()){
                             cloneInReach = d4cclone;
                         } else {
                             cloneInReach = null;
@@ -626,7 +626,7 @@ public class PowersD4C extends NewPunchingStand {
                 if (jentity instanceof D4CCloneEntity d4cclone){
                     Optional<UUID> uuid = d4cclone.getPlayerUUID();
                     if (uuid != null && uuid.isPresent()){
-                        if (uuid.get().equals(self.getUUID()) && jentity.isAlive()){
+                        if (uuid.get().equals(self.getUUID()) && jentity.isAlive() && d4cclone.getSafeCopy()){
                             cloneInStore = d4cclone;
                         } else {
                             cloneInStore = null;
@@ -1180,7 +1180,7 @@ public class PowersD4C extends NewPunchingStand {
 
 
         if (original.getUUID().equals(self.getUUID())){
-            copy.safeCopy = true;
+            copy.setSafeCopy(true);
         }
         IPlayerEntity pl = ((IPlayerEntity) original);
         ItemStack visage = pl.roundabout$getMaskSlot();

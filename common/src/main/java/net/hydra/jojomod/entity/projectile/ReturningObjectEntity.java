@@ -1,25 +1,35 @@
 package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 import java.util.List;
 
-public class ReturningObjectEntity extends Entity {
+
+// It doesn't need to be a ThrowableItemProjectile but tbh it just made the deltaMovement work, call me lazy
+public class ReturningObjectEntity extends ThrowableItemProjectile {
     private static final EntityDataAccessor<BlockPos> RETURN_POS = SynchedEntityData.defineId(ReturningObjectEntity.class, EntityDataSerializers.BLOCK_POS);
     private static final EntityDataAccessor<BlockState> BLOCK_STATE = SynchedEntityData.defineId(ReturningObjectEntity.class, EntityDataSerializers.BLOCK_STATE);
     private static final EntityDataAccessor<Integer> LIFETIME = SynchedEntityData.defineId(ReturningObjectEntity.class, EntityDataSerializers.INT);
@@ -28,11 +38,11 @@ public class ReturningObjectEntity extends Entity {
     private static final EntityDataAccessor<BlockPos> BOX_END = SynchedEntityData.defineId(ReturningObjectEntity.class, EntityDataSerializers.BLOCK_POS);
 
 
-    public ReturningObjectEntity(EntityType<?> $$0, Level $$1) {
+    public ReturningObjectEntity(EntityType<? extends ThrowableItemProjectile> $$0, Level $$1) {
         super($$0, $$1);
     }
 
-    public ReturningObjectEntity(EntityType<?> $$0, Level $$1, BlockPos ret, BlockPos start, BlockPos end) {
+    public ReturningObjectEntity(EntityType<? extends ThrowableItemProjectile> $$0, Level $$1, BlockPos ret, BlockPos start, BlockPos end) {
         super($$0, $$1);
         this.entityData.set(RETURN_POS,ret);
         this.entityData.set(BOX_START,start);
@@ -50,6 +60,11 @@ public class ReturningObjectEntity extends Entity {
     public BlockPos getReturnPos() {return this.entityData.get(RETURN_POS);}
     public BlockPos getBoxStart() {return this.entityData.get(BOX_START);}
     public BlockPos getBoxEnd() {return this.entityData.get(BOX_END);}
+
+    @Override
+    protected Item getDefaultItem() {
+        return Items.AIR;
+    }
 
     @Override
     protected void defineSynchedData() {
@@ -124,30 +139,53 @@ public class ReturningObjectEntity extends Entity {
     public boolean isPickable() {return false;}
     @Override
     public boolean isPushedByFluid() {return false;}
+    @Override
+    public boolean isNoGravity() {return true;}
+
+    private int soundDelay = 0;
+
+    /// to whomever uses this next, add different byte types for CD, Tusk, etc, unless you're okay with them all sounding the same/having the same particles
 
     @Override
     public void tick() {
         super.tick();
-        Roundabout.LOGGER.info(""+getDeltaMovement());
-        if (!level().isClientSide()) {
-            if (this.getLifetime() > 0) {
-                this.setLifetime(this.getLifetime() - 1);
-             //   this.setDeltaMovement(this.getDeltaMovement().scale(0.98F));
-            } else {
-                BlockPos ret = this.getReturnPos();
-                if (ret != null) {
-                    Vec3 center = ret.getCenter();
+
+        if (soundDelay == 0) {
+            this.soundDelay = 22;
+            this.level().playSound(null,this.blockPosition(), ModSounds.TUSK_HOLE_MOVE_EVENT, SoundSource.PLAYERS,0.5F,1F);
+        } else if (soundDelay > 0) {
+            soundDelay--;
+        }
+
+        if (!this.level().isClientSide() && this.tickCount % 3 == 0) {
+            ((ServerLevel)this.level()).sendParticles(new DustParticleOptions(new Vector3f(1, 1, 1
+            ), 1f),this.getX(), this.getY()+0.5F, this.getZ(),
+                    0, 0, 0, 0, 0);
+        }
+
+        if (this.getLifetime() > 0) {
+            this.setLifetime(this.getLifetime() - 1);
+            this.setDeltaMovement(this.getDeltaMovement().scale(0.85F));
+            if (this.getLifetime() == 0) {
+                this.setDeltaMovement(this.getDeltaMovement().reverse());
+                this.hasImpulse = true;
+            }
+        } else {
+            BlockPos ret = this.getReturnPos();
+            if (ret != null) {
+                Vec3 center = ret.getCenter();
+                if (!this.level().isClientSide()) {
                     BlockPos start = getBoxStart();
                     BlockPos end = getBoxEnd();
                     List<Entity> entities = this.level().getEntities(null, new AABB(
-                            start.getX(),start.getY(),start.getZ(),
-                            end.getX(),end.getY(),end.getZ()).inflate(1.05F));
+                            start.getX(), start.getY(), start.getZ(),
+                            end.getX(), end.getY(), end.getZ()).inflate(1.05F));
                     entities.removeIf(entity -> !entity.isPickable());
                     if (entities.isEmpty()) {
                         Vec3 dir = center.subtract(this.getPosition(0)).normalize();
-                        this.setPos(getPosition(0).add(dir));
-                        if (this.getPosition(0).distanceTo(center) <= 1.3) {
-                            this.level().setBlock(ret,this.getState(),3);
+                        this.setDeltaMovement(dir);
+                        if (this.getPosition(0).distanceTo(center) <= 1) {
+                            this.level().setBlock(ret, this.getState(), 3);
                             this.discard();
                         }
                     }

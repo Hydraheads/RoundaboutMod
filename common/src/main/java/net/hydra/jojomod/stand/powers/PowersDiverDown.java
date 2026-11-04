@@ -3971,6 +3971,7 @@ public class PowersDiverDown extends NewPunchingStand {
         if (host instanceof StandUser su) {
             // just need this for the key disabling, nothing else
             su.roundabout$setSpringLegs(true);
+            su.rdbt$setSpringPlacer(this);
         }
         emergeServer();
     }
@@ -4037,6 +4038,7 @@ public class PowersDiverDown extends NewPunchingStand {
     public void clearSpringLegs() {
         if (this.springTarget instanceof StandUser su) {
             su.roundabout$setSpringLegs(false);
+            su.rdbt$setSpringPlacer(null);
         }
         this.springTarget = null;
         this.springLegsTicks = 0;
@@ -4218,6 +4220,7 @@ public class PowersDiverDown extends NewPunchingStand {
     public void clearRibcageTrap() {
         if (this.ribcageTarget instanceof StandUser su) {
             su.roundabout$setRibcageTrap(false);
+            su.rdbt$setRibcagePlacer(null);
         }
         if (this.ribcageTarget instanceof Mob mob) {
             mob.getNavigation().stop();

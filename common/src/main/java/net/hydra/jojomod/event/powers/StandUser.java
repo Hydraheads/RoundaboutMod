@@ -323,6 +323,9 @@ public interface StandUser {
     void roundabout$setGrabbedSoul(boolean grabbedSoul);
     boolean roundabout$getGrabbedSoul();
 
+    void roundabout$setGrabberSabbath(int grabbedSoul);
+    int roundabout$getGrabberSabbath();
+
     byte roundabout$getStandSkin();
     byte roundabout$getLastStandSkin();
     void roundabout$setLastStandSkin(byte lastStandSkin);
@@ -406,6 +409,8 @@ public interface StandUser {
 
     @Nullable PowersDiverDown rdbt$getRibcagePlacer();
     void rdbt$setRibcagePlacer(@Nullable PowersDiverDown e);
+    @Nullable PowersDiverDown rdbt$getSpringPlacer();
+    void rdbt$setSpringPlacer(@Nullable PowersDiverDown e);
 
     List<CooldownInstance> rdbt$initPowerCooldowns();
     List<CooldownInstance> rdbt$getPowerCooldowns();
@@ -426,6 +431,7 @@ public interface StandUser {
     void roundabout$setRibcageTrap(boolean trap);
     boolean roundabout$hasSpringLegs();
     void roundabout$setSpringLegs(boolean legs);
+    /// dw about these, I'm not sure if I'll use them yet
     boolean roundabout$hasInfiniteSpin();
     void roundabout$clearInfiniteSpin();
 
