@@ -57,7 +57,7 @@ public class BCTroop extends MultipleTypeStand {
 
     @Override
     public boolean needsActive(){
-        return false;
+        return true;
     }
 
     @Override
