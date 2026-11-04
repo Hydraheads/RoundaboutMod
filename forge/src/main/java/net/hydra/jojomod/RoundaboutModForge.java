@@ -45,6 +45,7 @@ public class RoundaboutModForge {
         ForgeBlocks.BLOCKS.register(bus);
         ForgeBlocks.BLOCK_ENTITIES.register(bus);
         ForgeItems.ITEMS.register(bus);
+        com.example.jjf.forge.JJFEmbeddedForge.initialize(bus);
         ForgeItems.POTIONS.register(bus);
         ForgeCreativeTab.TABS.register(bus);
         ForgeParticles.PARTICLES.register(bus);
