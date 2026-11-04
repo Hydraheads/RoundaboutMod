@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "jjf:item/jumpin_jack_flash_disc"
+  }
+}
