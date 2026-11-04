@@ -1120,15 +1120,15 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public void onHitGuard(float amt, DamageSource sauce) {
-        // super.onHitGuard(amt, sauce);
-        this.setAttackTimeDuring(-5);
+        super.onHitGuard(amt, sauce);
+        this.setAttackTimeDuring(-10);
         if (hasHandsOut()) {
             getStandUserSelf().roundabout$setStandAnimation(SilverChariotEntity.SC_GUARD_HIT);
         } else {
             this.animateStand(SilverChariotEntity.SC_GUARD_HIT);
         }
         // this.poseStand(OffsetIndex.GUARD);
-        // this.setPowerNone();
+        this.setPowerGuard();
     }
 
     @Override
