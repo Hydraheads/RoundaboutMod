@@ -4,10 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.*;
 import net.hydra.jojomod.entity.badCompanyTroops.*;
 import net.hydra.jojomod.entity.gold_experience.*;
-import net.hydra.jojomod.entity.mobs.AnubisGuardian;
-import net.hydra.jojomod.entity.mobs.FalconEntity;
-import net.hydra.jojomod.entity.mobs.StrayCatEntity;
-import net.hydra.jojomod.entity.mobs.TerrierEntity;
+import net.hydra.jojomod.entity.mobs.*;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
@@ -48,6 +45,12 @@ public class ForgeEntities {
                     EntityType.Builder.of(FalconEntity::new, MobCategory.CREATURE)
                             .sized(0.3f, 0.65f).clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "falcon").toString())
+            );
+    public static final RegistryObject<EntityType<Snake>> SNAKE =
+            ENTITY_TYPES.register("snake", () ->
+                    EntityType.Builder.of(Snake::new, MobCategory.CREATURE)
+                            .sized(0.6f, 0.4f).clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "snake").toString())
             );
     public static final RegistryObject<EntityType<Zombiefish>> ZOMBIEFISH =
             ENTITY_TYPES.register("zombiefish", () ->
