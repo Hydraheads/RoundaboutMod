@@ -9,6 +9,7 @@ import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.objects.GentlyWeepsEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -778,7 +779,11 @@ private void bridgePlace(BlockHitResult $$0,Player P) {
                 fire = true;
             }
         }
-        if (getStyle() == STAND_DAMAGE && this.getOwner() != null &&
+        if (this.getStyle() == BRIDGETHROW && this.getOwner() != null && $$1.hurt($$5,this.getDamage($$1))) {
+            if ($$1 instanceof LivingEntity LE) {
+                LE.addEffect(new MobEffectInstance(ModEffects.CRIPPLED,1000,0));
+            }
+        } else if (getStyle() == STAND_DAMAGE && this.getOwner() != null &&
                 DamageHandler.StandDamageEntity($$1,this.getDamage($$1),this.getOwner())) {
             if ($$1.getType() == EntityType.ENDERMAN) {
                 return;

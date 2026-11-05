@@ -48,9 +48,9 @@ public class TuskNailRenderer extends EntityRenderer<TuskNailEntity> {
         return ACT_2;
     }
 
-    public void render(TuskNailEntity $$0, float $$1, float partialTicks, PoseStack poseStack, MultiBufferSource $$4, int $$5) {
+    public void render(TuskNailEntity $$0, float $$1, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int $$5) {
         if ($$0.getOwner() != null && $$0.getOwner() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersTusk PT) {
-            VertexConsumer $$6 = ItemRenderer.getFoilBufferDirect($$4, this.model.renderType(this.getTextureLocation($$0)), false, false);// $$0.isFoil());
+            VertexConsumer $$6 = ItemRenderer.getFoilBufferDirect(bufferSource, this.model.renderType(this.getTextureLocation($$0)), false, false);// $$0.isFoil());
             poseStack.pushPose();
             poseStack.scale(1.6F, 1.6F, 1.6F);
             poseStack.translate(0, -1.3, 0);
@@ -72,18 +72,23 @@ public class TuskNailRenderer extends EntityRenderer<TuskNailEntity> {
             b *= (1 - scale) + (float) Math.sin(partialTicks + 3) * scale;
             this.model.renderToBuffer(poseStack, $$6, $$5, OverlayTexture.NO_OVERLAY, r, g, b, 1.0F);
             poseStack.popPose();
-            super.render($$0, $$1, partialTicks, poseStack, $$4, $$5);
+            super.render($$0, $$1, partialTicks, poseStack, bufferSource, $$5);
 
             // for rendering the bullet trail
             Vec3 anchor = $$0.getPosition(partialTicks);
             List<Vec3> points = $$0.getTrailPoints();
+            List<Vec3> spirals = $$0.getSpiralPoints();
 
 
             Vector3f color = PT.getNailColor();
-            if ($$0.getExtra() == TuskNailEntity.GOLDEN) {color = new Vector3f(1,1,0.3F);}
             TrailRenderer.Settings settings = new TrailRenderer.Settings(
-                    10.0F, 0.03f, 0.12f,
+                    15F, 0.03f, 0.12f,
                     color, color,
+                    0.4F, 0.4F
+            );
+            TrailRenderer.Settings golden = new TrailRenderer.Settings(
+                    15F, 0.03f, 0.12f,
+                    new Vector3f(1,1,0.3F), new Vector3f(1,1,0.3F),
                     0.4F, 0.4F
             );
 
@@ -96,8 +101,21 @@ public class TuskNailRenderer extends EntityRenderer<TuskNailEntity> {
                         $$5,
                         partialTicks,
                         settings,
-                        $$4
+                        bufferSource
                 );
+
+                /// spiral
+                TrailRenderer.drawTrailRaw(
+                        anchor,
+                        spirals,
+                        poseStack.last(),
+                        $$5,
+                        partialTicks,
+                        golden,
+                        bufferSource
+                );
+
+
                 poseStack.popPose();
             }
         }

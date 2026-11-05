@@ -45,7 +45,6 @@ public class D4CCloneEntity extends CloneEntity {
     @Unique
     private static final EntityDataAccessor<Boolean> SAFE_COPY = SynchedEntityData.defineId(D4CCloneEntity.class,
             EntityDataSerializers.BOOLEAN);
-    public boolean safeCopy = false;
     public int timer = 0;
     public D4CCloneEntity(EntityType<? extends PathfinderMob> $$0, Level $$1) {
         super($$0, $$1);
