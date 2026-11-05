@@ -3734,7 +3734,12 @@ public class AbilityScapeBasis {
     private int infinite_spin = 0;
     private boolean infinite_spinning = false;
     public int getInfiniteSpin() {return infinite_spin;}
-    public void setInfiniteSpin(int value) {infinite_spin = Mth.clamp(value,0,getMaxInfiniteSpin());}
+    public void setInfiniteSpin(int value) {
+        infinite_spin = Mth.clamp(value,0,getMaxInfiniteSpin());
+        if (infinite_spin == 0) {
+            infinite_spinning = false;
+        }
+    }
     public int getMaxInfiniteSpin() {return 40*20;} // can be overridden for balance etc.
 
     public boolean isInfiniteSpinning() {return infinite_spinning;}
