@@ -103,7 +103,6 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                         this.getSelf().getY() + randY,
                         this.getSelf().getZ() + randZ,
                         0,0,0.2,0,0);
-
             }
         }
     }
@@ -405,7 +404,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     //rain speed
     @Override
     public float inputSpeedModifiers(float basis) {
-        if (isInRain() && PowerTypes.hasStandActive(self)){
+        if (isInRain() && PowerTypes.hasStandActive(self) && !getStandUserSelf().roundabout$getIsRainWalking()){
             if (!(this.getSelf() instanceof Mob)) {
                 basis *= this.getSelf().isSprinting() ? 1.35F : 1F;
             }
@@ -720,6 +719,18 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                 if(!(Off_hand_entity == null)){
                     Off_hand_entity.discard();
                 }
+
+                for(int i = 0; i < 23; i = i + 1) {
+                    double randX = Roundabout.RANDOM.nextDouble(-1.5, 1.5);
+                    double randY = Roundabout.RANDOM.nextDouble(0, 1.5);
+                    double randZ = Roundabout.RANDOM.nextDouble(-1.5, 1.5);
+                    sendParticlesIfPossible(self.level(),ParticleTypes.SPLASH,
+                            this.getSelf().getX() + randX,
+                            this.getSelf().getY() + randY,
+                            this.getSelf().getZ() + randZ,
+                            0,0,0.2,0,0);
+                }
+
                 Off_hand_entity = SAE;
                 SAE.setUser(this.self);
                 SAE.setXRot(this.self.getXRot());
