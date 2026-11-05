@@ -22,8 +22,8 @@ public class ModItems {
 
     // 'refreshed' effect durations for foods.
     public static final int CHAMOMILE_DURATION = 150;
-    public static final int MINT_DURATION = 125;
-    public static final int TEA_DURATION = 1000;
+    public static final int MINT_DURATION = 150;
+    public static final int TEA_DURATION = 1100;
 
     public static Item STAND_ARROW;
     public static Item STAND_BEETLE_ARROW;
@@ -131,6 +131,8 @@ public class ModItems {
     public static Item AESTHETICIAN_SPAWN_EGG;
     public static Item ZOMBIE_AESTHETICIAN_SPAWN_EGG;
     public static Item ANUBIS_GUARDIAN_SPAWN_EGG;
+    public static Item SNAKE_SPAWN_EGG;
+    public static Item SNAKE_SKIN;
     public static Item ROAD_ROLLER;
 
     public static Item IRON_BALL_CROSSBOW;

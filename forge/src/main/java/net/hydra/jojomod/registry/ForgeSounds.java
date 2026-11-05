@@ -1281,6 +1281,21 @@ public class ForgeSounds {
     public static final RegistryObject<SoundEvent> PURPLE_HAZE_STRANGLE_RUN =
                 register(ModSounds.PURPLE_HAZE_STRANGLE_RUN, ModSounds.PURPLE_HAZE_STRANGLE_RUN_ID);
 
+    public static final RegistryObject<SoundEvent> POLNAREFF_SC_ARMOR_OFF =
+                register(ModSounds.POLNAREFF_SC_ARMOR_OFF, ModSounds.POLNAREFF_SC_ARMOR_OFF_ID);
+    public static final RegistryObject<SoundEvent> POLNAREFF_SC_SUMMON_1 =
+                register(ModSounds.POLNAREFF_SC_SUMMON_1, ModSounds.POLNAREFF_SC_SUMMON_1_ID);
+    public static final RegistryObject<SoundEvent> POLNAREFF_SC_SUMMON_2 =
+                register(ModSounds.POLNAREFF_SC_SUMMON_2, ModSounds.POLNAREFF_SC_SUMMON_2_ID);
+    public static final RegistryObject<SoundEvent> POLNAREFF_SC_HURT_1 =
+                register(ModSounds.POLNAREFF_SC_HURT_1, ModSounds.POLNAREFF_SC_HURT_1_ID);
+    public static final RegistryObject<SoundEvent> POLNAREFF_SC_HURT_2 =
+                register(ModSounds.POLNAREFF_SC_HURT_2, ModSounds.POLNAREFF_SC_HURT_2_ID);
+    public static final RegistryObject<SoundEvent> POLNAREFF_SC_IDLE_1 =
+                register(ModSounds.POLNAREFF_SC_IDLE_1, ModSounds.POLNAREFF_SC_IDLE_1_ID);
+    public static final RegistryObject<SoundEvent> POLNAREFF_SC_DIE_1 =
+                register(ModSounds.POLNAREFF_SC_DIE_1, ModSounds.POLNAREFF_SC_DIE_1_ID);
+
     public static final RegistryObject<SoundEvent> SILVER_CHARIOT_SUMMON =
             register(ModSounds.SILVER_CHARIOT_SUMMON, ModSounds.SILVER_CHARIOT_SUMMON_ID);
     public static final RegistryObject<SoundEvent> SILVER_CHARIOT_BARRAGE =

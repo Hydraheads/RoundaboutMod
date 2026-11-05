@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRe
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.*;
 import net.hydra.jojomod.entity.badCompanyTroops.*;
+import net.hydra.jojomod.entity.mobs.Snake;
 import net.hydra.jojomod.entity.gold_experience.*;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.FalconEntity;
@@ -58,6 +59,13 @@ public class FabricEntities {
                     new ResourceLocation(Roundabout.MOD_ID, "falcon"),
                     EntityType.Builder.of(FalconEntity::new, MobCategory.CREATURE).
                             sized(0.3f, 0.65f).clientTrackingRange(10).build(Roundabout.MOD_ID+":falcon")
+            );
+    public static final EntityType<Snake> SNAKE =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "snake"),
+                    EntityType.Builder.of(Snake::new, MobCategory.CREATURE).
+                            sized(0.6f, 0.4f).clientTrackingRange(10).build(Roundabout.MOD_ID+":snake")
             );
     public static final EntityType<Zombiefish> ZOMBIEFISH =
             Registry.register(
@@ -1428,6 +1436,7 @@ public class FabricEntities {
                 ModEntities.THE_WORLD_ULTIMATE = THE_WORLD_ULTIMATE;
                 ModEntities.TERRIER_DOG = TERRIER_DOG;
                 ModEntities.FALCON = FALCON;
+                ModEntities.SNAKE = SNAKE;
                 ModEntities.ZOMBIEFISH = ZOMBIEFISH;
                 ModEntities.ANUBIS_GUARDIAN = ANUBIS_GUARDIAN;
                 ModEntities.STAR_PLATINUM = STAR_PLATINUM;
@@ -1620,6 +1629,7 @@ public class FabricEntities {
                 /*Attributes*/
                 FabricDefaultAttributeRegistry.register(TERRIER_DOG, Wolf.createAttributes());
         FabricDefaultAttributeRegistry.register(FALCON, FalconEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(SNAKE, Snake.createAttributes());
                 FabricDefaultAttributeRegistry.register(STRAY_CAT, StrayCatEntity.createAttributes());
                 FabricDefaultAttributeRegistry.register(ZOMBIEFISH, Zombiefish.createAttributes());
                 FabricDefaultAttributeRegistry.register(ANUBIS_GUARDIAN, AnubisGuardian.createAttributes());

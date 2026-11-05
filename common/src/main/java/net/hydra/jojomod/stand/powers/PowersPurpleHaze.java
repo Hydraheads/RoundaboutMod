@@ -2,6 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -51,10 +52,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec2;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.*;
 import org.joml.Vector3f;
 import net.minecraft.server.level.ServerLevel;
 
@@ -482,14 +480,14 @@ public class PowersPurpleHaze extends NewPunchingStand {
         if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
             return true;
         }
-        if (this.getActivePower() == PowerIndex.POWER_2_SNEAK) {
+        /*if (this.getActivePower() == PowerIndex.POWER_2_SNEAK) {
             int cdr = ClientNetworking.getAppropriateConfig().PurpleHazeSettings.SalimoCooldown;
             if (this.getSelf() instanceof ServerPlayer sp) {
                 S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.SKILL_2_SNEAK, cdr);
             }
             this.setCooldown(PowerIndex.SKILL_2_SNEAK, cdr);
             return true;
-        }
+        }*/
         return super.canInterruptPower(sauce, interrupter);
     }
 
@@ -878,7 +876,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
 
         findDeflectables();
-        super.standBarrageHit();
+
     }
 
 
@@ -971,13 +969,10 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
         }
 
-        if (onCooldown(PowerIndex.SKILL_1)) {
-            CooldownInstance cd = getCooldown(PowerIndex.SKILL_1);
-            if (cd != null) {
-                int ClashTime = Math.round(((float) cd.time / cd.maxTime) * 15);
-                context.blit(StandIcons.JOJO_ICONS, k, j+17, 213, 97, 15, 4);
-                context.blit(StandIcons.JOJO_ICONS, k, j+17, 213, 102, ClashTime, 4);
-            }
+        if (podRegenClient != -1) {
+            int ClashTime = Math.round(((float) podRegenClient / POD_RECHARGE_TIME) * 15);
+            context.blit(StandIcons.JOJO_ICONS, k, j+17, 213, 97, 15, 4);
+            context.blit(StandIcons.JOJO_ICONS, k, j+17, 213, 102, ClashTime, 4);
         }
     }
 
@@ -1255,6 +1250,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
         //System.out.println("PURPLE HAZE PODS RESET! DAY " + day);
     }
+    private boolean wasRecharging = false;
+
     private void tickPodRecharge() {
         if (self == null || self.level().isClientSide()) {
             return;
@@ -1273,6 +1270,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
         if (getPods() >= MAX_PODS) {
             podRechargeTicks = 0;
             return;
+        }else if (!wasRecharging) {
+            wasRecharging = true;
+            S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowerIndex.POWER_4_BONUS, 1); // started recharging, we dont want it to spam package
         }
 
         podRechargeTicks++;
@@ -1280,12 +1280,30 @@ public class PowersPurpleHaze extends NewPunchingStand {
         if (podRechargeTicks >= POD_RECHARGE_TIME || PL.isCreative()) {
             setPods(Math.min(MAX_PODS, getPods() + 1));
             podRechargeTicks = 0;
+            wasRecharging = getPods() < MAX_PODS;
+
+            S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowerIndex.POWER_4_BONUS, !wasRecharging ? 0 : 1); // 0: No recharge, 1: recharge
         }
     }
     public void attemptDistortion() {
         if (canExecuteMoveWithLevel(getDistortionAndPodBiteLevel()) && !(activePower == PowerIndex.BARRAGE || activePower == PowerIndex.BARRAGE_2
                 || activePower == PowerIndex.BARRAGE_CHARGE || activePower == PowerIndex.BARRAGE_CHARGE_2) && getPods()>0 ) {
             Distortion();
+        }
+    }
+
+    private int podRegenClient = -1;
+
+    @Override
+    public void updatePowerInt(byte activePower, int data) {
+        if (activePower == PowerIndex.POWER_4_BONUS) {
+            if (data == 0) {
+                podRegenClient = -1;
+            }else {
+                podRegenClient = 0;
+            }
+        }else {
+            super.updatePowerInt(activePower, data);
         }
     }
 
@@ -1943,7 +1961,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     private void setSneakAttackCharge() {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.SNEAK_ATTACK_CHARGE);
-        this.animateStand(PurpleHazeEntity.SNEAK_CHARGE);
+        this.animateStand(PurpleHazeEntity.HEAVY_PUNCH_WINDUP);
         this.poseStand(OffsetIndex.GUARD);
     }
 
@@ -1954,11 +1972,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
         this.poseStand(OffsetIndex.ATTACK);
         chargedFinal = Math.min(this.chargedFinal,getMaxSneakAttackCharge());
 
-        if (chargedFinal >= getMaxSneakAttackCharge()){
-            this.animateStand(PurpleHazeEntity.SNEAK_ATTACK);
-        } else {
-            this.animateStand(PurpleHazeEntity.SNEAK_ATTACK);
-        }
+        this.animateStand(PurpleHazeEntity.HEAVY_PUNCH);
+
         return true;
     }
 
@@ -2005,12 +2020,12 @@ public class PowersPurpleHaze extends NewPunchingStand {
     public int chargedFinal;
 
     public float getSneakAttackKnockback(){
-        return (1.2f + ((float)this.chargedFinal/(float)getMaxSneakAttackCharge())*1.6F);
+        return (0.15f + ((float)this.chargedFinal/(float)getMaxSneakAttackCharge())*0.45F);
     }
     public int getSneakAttackKnockShieldTime(){ return 40; }
 
     public float getSneakAttackStrength(Entity entity){
-        float punchD = this.getPunchStrength(entity)*1.9F+this.getHeavyPunchStrength(entity);
+        float punchD = this.getPunchStrength(entity)*1.9F+this.getHeavyPunchStrength(entity)*1.15F;
 
         if (this.getReducedDamage(entity)){
             return (((float)this.chargedFinal/(float)getMaxSneakAttackCharge())*punchD);
@@ -2026,11 +2041,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             entity = null;
         }
         if (entity != null) {
-            if (chargedFinal < getMaxSneakAttackCharge()) {
-                hitParticles(entity);
-            }else {
-                hitParticlesCenter(entity);
-            }
+            hitParticlesCenter(entity);
 
             float pow;
             float knockbackStrength;
@@ -2051,6 +2062,12 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     knockShield2(entity, getSneakAttackKnockShieldTime());
                 }
             }
+            if (getPods() > 0) {
+                if (!(self instanceof Player pl && pl.isCreative())) {
+                    setPods(getPods() - 1);
+                }
+                activatePurpleHazeField(entity.position(), indistortionmode);
+            }
 
         } else {
             // This is less accurate raycasting as it is server sided but it is important for particle effects
@@ -2060,6 +2077,22 @@ public class PowersPurpleHaze extends NewPunchingStand {
             if (!this.self.level().isClientSide) {
                 sendParticlesIfPossible(self.level(),ModParticles.PUNCH_MISS, pointVec.x, pointVec.y, pointVec.z,
                         1, 0.0, 0.0, 0.0, 1);
+            }
+
+            if (getPods() > 0) {
+                Vec3 vec3d = this.getSelf().getEyePosition(0);
+                Vec3 vec3d2 = this.getSelf().getViewVector(0);
+                Vec3 vec3d3 = vec3d.add(vec3d2.x * (distMax+0.75), vec3d2.y * (distMax+0.75), vec3d2.z * (distMax+0.75));
+
+                BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this.getSelf()));
+                if (blockHit.getType() == HitResult.Type.BLOCK) {
+                    if (!(self instanceof Player pl && pl.isCreative())) {
+                        setPods(getPods() - 1);
+                    }
+                    Roundabout.LOGGER.info("Test");
+                    activatePurpleHazeField(blockHit.getLocation(), indistortionmode);
+                }
+
             }
         }
 
@@ -2083,7 +2116,6 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
         if (!this.self.level().isClientSide()) {
             playSoundIfPossible(self.level(),null, this.self.blockPosition(), SE, SoundSource.PLAYERS, volume, pitch);
-
         }
     }
 
@@ -2208,6 +2240,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
     private int leapEndTicks = -1;
     @Override
     public void tickPower() {
+        if (podRegenClient != -1) { podRegenClient++; }
+
         if (purpleHazeFieldGone) {
             purpleHazeFieldGone = false;
         }

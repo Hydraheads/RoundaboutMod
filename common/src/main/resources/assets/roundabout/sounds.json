@@ -4662,6 +4662,48 @@
       "roundabout:pucci_response_anasui_2"
     ]
   },
+  "pol_summon_1": {
+    "subtitle": "sounds.roundabout.polnareff_summon",
+    "sounds": [
+      "roundabout:pol_summon_1"
+    ]
+  },
+  "pol_summon_2": {
+    "subtitle": "sounds.roundabout.polnareff_summon",
+    "sounds": [
+      "roundabout:pol_summon_2"
+    ]
+  },
+  "pol_hurt_1": {
+    "subtitle": "sounds.roundabout.polnareff_hurt",
+    "sounds": [
+      "roundabout:pol_hurt_1"
+    ]
+  },
+  "pol_hurt_2": {
+    "subtitle": "sounds.roundabout.polnareff_hurt",
+    "sounds": [
+      "roundabout:pol_hurt_2"
+    ]
+  },
+  "pol_idle_1": {
+    "subtitle": "sounds.roundabout.polnareff_idle",
+    "sounds": [
+      "roundabout:pol_idle"
+    ]
+  },
+  "pol_die_1": {
+    "subtitle": "sounds.roundabout.polnareff_die",
+    "sounds": [
+      "roundabout:pol_die"
+    ]
+  },
+  "pol_armor_off": {
+    "subtitle": "sounds.roundabout.polnareff_armor_off",
+    "sounds": [
+      "roundabout:pol_armor_off"
+    ]
+  },
   "silver_chariot_summon": {
     "subtitle": "sounds.roundabout.silver_chariot_summon",
     "sounds": [

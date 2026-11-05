@@ -7313,9 +7313,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private void roundabout$tickInfiniteSpin(CallbackInfo ci) {
         MobEffectInstance instance = this.getEffect(ModEffects.INFINITE_SPIN);
         if (instance != null) {
-            if (this.tickCount % 10 == 0 && !this.roundabout$isDazed() && this.isAlive()) {
+            if (this.tickCount % 10 == 0 && !this.roundabout$isDazed() && this.isAlive() && this.isAttackable()) {
                 this.level().playSound(null,this.blockPosition(),ModSounds.VAMPIRE_CRUMBLE_EVENT,SoundSource.PLAYERS,0.3F,1F);
-                this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.INFINITE_SPIN), (float) Math.pow(2, 1+instance.getAmplifier()*0.4F));
+                this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.INFINITE_SPIN), (float)Math.min(Math.pow(2, 1+instance.getAmplifier()*0.4F),20) );
                 this.addEffect(new MobEffectInstance(ModEffects.INFINITE_SPIN, instance.getDuration(), instance.getAmplifier() + 1));
             }
         }
