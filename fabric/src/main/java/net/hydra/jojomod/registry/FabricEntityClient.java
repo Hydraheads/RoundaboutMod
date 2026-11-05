@@ -126,6 +126,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.GE_FROG, GEFrogRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GE_BEE, GEBeeRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GE_FISH, GEFishRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.GE_FOX, GEFoxRenderer::new);
         EntityRendererRegistry.register(FabricEntities.DIVER_DROWNED, DiverDrownedRenderer::new);
         EntityRendererRegistry.register(FabricEntities.DIVER_KICK, DiverKickEntityRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SILVER_CHARIOT, SilverChariotRenderer::new);
@@ -244,6 +245,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.LEFT_SEPERATED_ARM, LeftSeperatedArmRenderer::new);
         EntityRendererRegistry.register(FabricEntities.LEFT_SEPERATED_ARM_SLIM, LeftSeperatedArmSlimRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SHEER_HEART_ATTACK, SheerHeartAttackRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.CTR_BARRIER, CTRbarrierRenderer::new);
 
         EntityRendererRegistry.register(FabricEntities.METALLICA_KNIFE, KnifeRenderer::new);
 
@@ -400,6 +402,8 @@ public class FabricEntityClient {
         ModStrayModels.TUSK_NAIL = new TuskNailModel();
         ModStrayModels.TUSK_DRILL_NAIL = new TuskDrillNailModel();
         ModStrayModels.HEY_YA = new HeyYaModel();
+        ModStrayModels.CATCH_THE_RAINBOW = new CatchTheRainbowModel();
+        ModStrayModels.CATCH_THE_RAINBOW_UMVUTHI = new CatchTheRainbowUmvuthiModel();
         ModStrayModels.CENTURY_BOY = new CenturyBoyModel();
         ModStrayModels.BOWLER_HAT = new BowlerHatModel();
         ModStrayModels.UV_BLASTER = new UVBlasterModel();
@@ -429,6 +433,7 @@ public class FabricEntityClient {
         ModStrayModels.KakyoinHairPart = new KakyoinHairPart();
         ModStrayModels.gyroHatPart = new GyroHatPart();
         ModStrayModels.anakissHatPart = new AnakissHatPart();
+        ModStrayModels.blackmorePonytailPart = new BlackmorePonytailPart();
         ModStrayModels.steelBallsPart = new SteelBallsPart();
         ModStrayModels.DiegoHatPart = new DiegoHatPart();
         ModStrayModels.kosakuHairPart = new KosakuHairPart();

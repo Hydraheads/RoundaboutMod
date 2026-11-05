@@ -827,6 +827,14 @@ public class FabricSounds {
         addSound(ModSounds.PURPLE_HAZE_STRANGLE_GRAB_ID,ModSounds.PURPLE_HAZE_STRANGLE_GRAB_EVENT);
         addSound(ModSounds.PURPLE_HAZE_SWITCH_POD_ID,ModSounds.PURPLE_HAZE_SWITCH_POD_EVENT);
 
+        addSound(ModSounds.POLNAREFF_SC_SUMMON_1_ID,ModSounds.POLNAREFF_SC_SUMMON_1_EVENT);
+        addSound(ModSounds.POLNAREFF_SC_SUMMON_2_ID,ModSounds.POLNAREFF_SC_SUMMON_2_EVENT);
+        addSound(ModSounds.POLNAREFF_SC_HURT_1_ID,ModSounds.POLNAREFF_SC_HURT_1_EVENT);
+        addSound(ModSounds.POLNAREFF_SC_HURT_2_ID,ModSounds.POLNAREFF_SC_HURT_2_EVENT);
+        addSound(ModSounds.POLNAREFF_SC_DIE_1_ID,ModSounds.POLNAREFF_SC_DIE_1_EVENT);
+        addSound(ModSounds.POLNAREFF_SC_IDLE_1_ID,ModSounds.POLNAREFF_SC_IDLE_1_EVENT);
+        addSound(ModSounds.POLNAREFF_SC_ARMOR_OFF_ID,ModSounds.POLNAREFF_SC_ARMOR_OFF_EVENT);
+
         addSound(ModSounds.SILVER_CHARIOT_SUMMON_ID,ModSounds.SILVER_CHARIOT_SUMMON_EVENT);
         addSound(ModSounds.SILVER_CHARIOT_BARRAGE_ID,ModSounds.SILVER_CHARIOT_BARRAGE_EVENT);
         addSound(ModSounds.SILVER_CHARIOT_BARRAGE_CRY_ID,ModSounds.SILVER_CHARIOT_BARRAGE_CRY_EVENT);
@@ -856,5 +864,15 @@ public class FabricSounds {
         addSound(ModSounds.EMPEROR_METAL_ID,ModSounds.EMPEROR_METAL_EVENT);
         addSound(ModSounds.EMPEROR_NON_BLEED_ID,ModSounds.EMPEROR_NON_BLEED_EVENT);
         addSound(ModSounds.EMPEROR_SQUINT_ID,ModSounds.EMPEROR_SQUINT_EVENT);
+
+        addSound(ModSounds.CTR_SUMMON_ID,ModSounds.CTR_SUMMON_EVENT);
+        addSound(ModSounds.CTR_HEAL_ID,ModSounds.CTR_HEAL_EVENT);
+        addSound(ModSounds.CTR_LIFE_CLUTCH_ID,ModSounds.CTR_LIFE_CLUTCH_EVENT);
+        addSound(ModSounds.CTR_DETACH_1_ID,ModSounds.CTR_DETACH_1_EVENT);
+        addSound(ModSounds.CTR_DETACH_2_ID,ModSounds.CTR_DETACH_2_EVENT);
+        addSound(ModSounds.CTR_RAIN_STABILIZING_ID,ModSounds.CTR_RAIN_STABILIZING_EVENT);
+        addSound(ModSounds.CTR_RAIN_STEP_1_ID,ModSounds.CTR_RAIN_STEP_1_EVENT);
+        addSound(ModSounds.CTR_RAIN_STEP_2_ID,ModSounds.CTR_RAIN_STEP_2_EVENT);
+        addSound(ModSounds.CTR_RAIN_STEP_3_ID,ModSounds.CTR_RAIN_STEP_3_EVENT);
     }
 }

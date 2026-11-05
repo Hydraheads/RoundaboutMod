@@ -69,28 +69,6 @@ public class GEFrogEntity extends Frog implements GELifeform {
     }
 
     @Override
-    public void die(DamageSource cause) {
-        if (!this.level().isClientSide()) {
-            dropSourceItem();
-            if (this.level() instanceof ServerLevel serverLevel) {
-                serverLevel.sendParticles(ModParticles.VITAL_ESSENCE,
-                        this.getX(), this.getY(0.5), this.getZ(),
-                        20, 0.2, 0.2, 0.2, 0.05);
-            }
-            this.level().playSound(null, this.blockPosition(),
-                    ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.NEUTRAL, 1.0F, 1.0F);
-        }
-        this.discard();
-    }
-
-    private void dropSourceItem() {
-        if (!this.sourceItem.isEmpty()) {
-            this.spawnAtLocation(this.sourceItem);
-            this.sourceItem = ItemStack.EMPTY;
-        }
-    }
-
-    @Override
     public boolean isReflectingDamage() { return isReflectingDamage; }
     @Override
     public void setReflectingDamage(boolean reflecting) { this.isReflectingDamage = reflecting; }

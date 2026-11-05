@@ -38,6 +38,7 @@ import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.ambient.Bat;
 import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.animal.Fox;
 import net.minecraft.world.entity.animal.Salmon;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.animal.frog.Frog;
@@ -160,6 +161,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.GE_FROG.get(), Frog.createAttributes().build());
         event.put(ForgeEntities.GE_BEE.get(), Bee.createAttributes().build());
         event.put(ForgeEntities.GE_FISH.get(), Salmon.createAttributes().build());
+        event.put(ForgeEntities.GE_FOX.get(), Fox.createAttributes().build());
         event.put(ForgeEntities.VILLAGER_MINION.get(), VillagerMinion.createAttributes().build());
         event.put(ForgeEntities.AXOLOTL_MINION.get(), AxolotlMinion.createAttributes().build());
         event.put(ForgeEntities.OCELOT_MINION.get(), OcelotMinion.createAttributes().build());
@@ -183,6 +185,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.SHEER_HEART_ATTACK.get(), SheerHeartAttackEntity.createStandAttributes().build());
         event.put(ForgeEntities.BAD_COMPANY_SOLDIER.get(), BCSoldier.createStandAttributes().build());
         event.put(ForgeEntities.BAD_COMPANY_TANK.get(), BCTank.createStandAttributes().build());
+        event.put(ForgeEntities.CTR_BARRIER.get(), CTRbarrierEntity.createStandAttributes().build());
     }
 
     @SubscribeEvent
@@ -482,6 +485,8 @@ public class ForgeEvents {
 
         ModItems.STAND_DISC_PEARL_JAM = ForgeItems.STAND_DISC_PEARL_JAM.get();
 
+        ModItems.STAND_DISC_CATCH_THE_RAINBOW = ForgeItems.STAND_DISC_CATCH_THE_RAINBOW.get();
+
         ModItems.STAND_DISC_CINDERELLA = ForgeItems.STAND_DISC_CINDERELLA.get();
         ModItems.STAND_DISC_CALIFORNIA_KING_BED = ForgeItems.STAND_DISC_CALIFORNIA_KING_BED.get();
         ModItems.STAND_DISC_MANHATTAN_TRANSFER = ForgeItems.STAND_DISC_MANHATTAN_TRANSFER.get();
@@ -643,6 +648,7 @@ public class ForgeEvents {
         ModItems.ANASUI_MASK = ForgeItems.ANASUI_MASK.get();
         ModItems.FEM_ANASUI_MASK = ForgeItems.FEM_ANASUI_MASK.get();
         ModItems.ANAKISS_MASK = ForgeItems.ANAKISS_MASK.get();
+        ModItems.BLACKMORE_MASK = ForgeItems.BLACKMORE_MASK.get();
         ModItems.ENYA_MASK = ForgeItems.ENYA_MASK.get();
         ModItems.DAIYA_MASK = ForgeItems.DAIYA_MASK.get();
         ModItems.DAIYA_2_MASK = ForgeItems.DAIYA_2_MASK.get();
@@ -928,6 +934,7 @@ public class ForgeEvents {
         ModEntities.GE_FROG = ForgeEntities.GE_FROG.get();
         ModEntities.GE_BEE = ForgeEntities.GE_BEE.get();
         ModEntities.GE_FISH = ForgeEntities.GE_FISH.get();
+        ModEntities.GE_FOX = ForgeEntities.GE_FOX.get();
         ModEntities.SILVER_CHARIOT = ForgeEntities.SILVER_CHARIOT.get();
         ModEntities.SILVER_CHARIOT_PHARAOH = ForgeEntities.SILVER_CHARIOT_PHARAOH.get();
         ModEntities.SILVER_CHARIOT_RAPIER = ForgeEntities.SILVER_CHARIOT_RAPIER.get();
@@ -996,6 +1003,7 @@ public class ForgeEvents {
         ModEntities.TUSK_NAIL = ForgeEntities.TUSK_NAIL.get();
         ModEntities.TUSK_HOLE = ForgeEntities.TUSK_HOLE.get();
         ModEntities.PH_CAPSULE = ForgeEntities.PH_CAPSULE.get();
+        ModEntities.CTR_BARRIER = ForgeEntities.CTR_BARRIER.get();
 
         ModEntities.BAD_COMPANY_SOLDIER = ForgeEntities.BAD_COMPANY_SOLDIER.get();
         ModEntities.BAD_COMPANY_TANK = ForgeEntities.BAD_COMPANY_TANK.get();

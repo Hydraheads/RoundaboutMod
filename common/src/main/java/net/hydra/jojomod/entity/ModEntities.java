@@ -122,6 +122,7 @@ public class ModEntities {
     public static EntityType<GEFrogEntity> GE_FROG;
     public static EntityType<GEBeeEntity> GE_BEE;
     public static EntityType<GEFishEntity> GE_FISH;
+    public static EntityType<GEFoxEntity> GE_FOX;
     public static EntityType<SilverChariotEntity> SILVER_CHARIOT;
     public static EntityType<SilverChariotEntity> SILVER_CHARIOT_PHARAOH;
     public static EntityType<SilverChariotRapierShotEntity> SILVER_CHARIOT_RAPIER;
@@ -185,6 +186,7 @@ public class ModEntities {
     public static EntityType<PurpleSmokeEntity> PURPLE_SMOKE;
     public static EntityType<StrayCatAirBubble> STRAY_CAT_AIRBUBBLE;
     public static EntityType<PHCapsuleEntity> PH_CAPSULE;
+    public static EntityType<CTRbarrierEntity> CTR_BARRIER;
 
     public static EntityType<GoBeyondEntity> GO_BEYOND;
     public static EntityType<EncasementBubbleEntity> ENCASEMENT_BUBBLE;

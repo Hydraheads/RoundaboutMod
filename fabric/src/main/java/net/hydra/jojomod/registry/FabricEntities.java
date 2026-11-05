@@ -36,6 +36,7 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.ambient.Bat;
 import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.animal.Fox;
 import net.minecraft.world.entity.animal.Salmon;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.animal.frog.Frog;
@@ -850,6 +851,14 @@ public class FabricEntities {
                     .clientTrackingRange(5)
                     .build(Roundabout.MOD_ID + ":ge_fish")
     );
+    public static final EntityType<GEFoxEntity> GE_FOX = Registry.register(
+            BuiltInRegistries.ENTITY_TYPE,
+            new ResourceLocation(Roundabout.MOD_ID, "ge_fox"),
+            EntityType.Builder.of(GEFoxEntity::new, MobCategory.CREATURE)
+                    .sized(0.5f, 0.9f)
+                    .clientTrackingRange(5)
+                    .build(Roundabout.MOD_ID + ":ge_fox")
+    );
         public static final EntityType<SilverChariotEntity> SILVER_CHARIOT =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -920,6 +929,14 @@ public class FabricEntities {
                     EntityType.Builder.<PHCapsuleEntity>of(PHCapsuleEntity::new, MobCategory.MISC).
                             sized(PHCapsuleEntity.eWidth, PHCapsuleEntity.eHeight).
                             clientTrackingRange(10).build(Roundabout.MOD_ID+":ph_capsule")
+            );
+    public static final EntityType<CTRbarrierEntity> CTR_BARRIER =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "ctr_barrier"),
+                    EntityType.Builder.<CTRbarrierEntity>of(CTRbarrierEntity::new, MobCategory.MISC).
+                            sized(4f, 4f).
+                            clientTrackingRange(15).build(Roundabout.MOD_ID+":ctrbarrier")
             );
     public static final EntityType<BlockWallEntity> BLOCK_WALL =
             Registry.register(
@@ -1472,6 +1489,7 @@ public class FabricEntities {
         ModEntities.GE_FROG = GE_FROG;
         ModEntities.GE_BEE = GE_BEE;
         ModEntities.GE_FISH = GE_FISH;
+        ModEntities.GE_FOX = GE_FOX;
                 ModEntities.SILVER_CHARIOT = SILVER_CHARIOT;
                 ModEntities.SILVER_CHARIOT_PHARAOH =  SILVER_CHARIOT_PHARAOH;
                 ModEntities.THROWN_HARPOON = THROWN_HARPOON;
@@ -1480,6 +1498,7 @@ public class FabricEntities {
                 ModEntities.BAD_COMPANY_BULLET_ENTITY = BAD_COMPANY_BULLET_ENTITY;
                 ModEntities.THROWN_KNIFE = THROWN_KNIFE;
                 ModEntities.PH_CAPSULE = PH_CAPSULE;
+                ModEntities.CTR_BARRIER = CTR_BARRIER;
                 ModEntities.BONE_PROJECTILE = BONE_PROJECTILE;
                 ModEntities.BLOCK_WALL = BLOCK_WALL;
                 ModEntities.PARALLEL_CHEST = PARALLEL_CHEST;
@@ -1651,6 +1670,7 @@ public class FabricEntities {
         FabricDefaultAttributeRegistry.register(GE_FROG, Frog.createAttributes());
         FabricDefaultAttributeRegistry.register(GE_BEE, Bee.createAttributes());
         FabricDefaultAttributeRegistry.register(GE_FISH, Salmon.createAttributes());
+        FabricDefaultAttributeRegistry.register(GE_FOX, Fox.createAttributes());
 
                 FabricDefaultAttributeRegistry.register(ROAD_ROLLER_ENTITY, RoadRollerEntity.createAttributes().build());
 
@@ -1731,6 +1751,8 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(PURPLE_SMOKE, PurpleSmokeEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(BAD_COMPANY_SOLDIER, BCSoldier.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(BAD_COMPANY_TANK, BCTank.createStandAttributes());
+
+        FabricDefaultAttributeRegistry.register(CTR_BARRIER, CTRbarrierEntity.createStandAttributes());
 
                 FabricDefaultAttributeRegistry.register(SHEER_HEART_ATTACK, SheerHeartAttackEntity.createStandAttributes());
 
