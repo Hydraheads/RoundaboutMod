@@ -6,7 +6,7 @@
  * @author Author
  */
 public class unknownAnimation {
-	public static final AnimationDefinition kick = AnimationDefinition.Builder.withLength(1.3333F)
+	public static final AnimationDefinition kickWIndupNew = AnimationDefinition.Builder.withLength(1.3333F)
 		.addAnimation("stand2", new AnimationChannel(AnimationChannel.Targets.ROTATION, 
 			new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
 			new Keyframe(0.75F, KeyframeAnimations.degreeVec(0.0F, 10.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -97,7 +97,7 @@ public class unknownAnimation {
 		))
 		.addAnimation("right_leg", new AnimationChannel(AnimationChannel.Targets.ROTATION, 
 			new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-			new Keyframe(0.75F, KeyframeAnimations.degreeVec(14.66F, -3.2113F, 19.5868F), AnimationChannel.Interpolations.CATMULLROM),
+			new Keyframe(0.75F, KeyframeAnimations.degreeVec(14.8774F, -1.9359F, 14.7472F), AnimationChannel.Interpolations.CATMULLROM),
 			new Keyframe(0.9583F, KeyframeAnimations.degreeVec(14.8774F, -1.9359F, 14.7472F), AnimationChannel.Interpolations.LINEAR),
 			new Keyframe(1.125F, KeyframeAnimations.degreeVec(14.8774F, -1.9359F, 14.7472F), AnimationChannel.Interpolations.LINEAR),
 			new Keyframe(1.1667F, KeyframeAnimations.degreeVec(-68.9872F, 9.7465F, 7.8492F), AnimationChannel.Interpolations.CATMULLROM),
