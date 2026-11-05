@@ -876,7 +876,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
 
         findDeflectables();
-        super.standBarrageHit();
+        
     }
 
 
