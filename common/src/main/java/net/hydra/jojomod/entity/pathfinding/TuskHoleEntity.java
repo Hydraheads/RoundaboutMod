@@ -339,7 +339,6 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
     }
 
     public void vortexify() {
-        Roundabout.LOGGER.info("vortex???");
         lifeSpan = 20;
         this.entityData.set(VORTEX,true);
     }
