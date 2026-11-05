@@ -1,5 +1,7 @@
 package net.hydra.jojomod.client.gui;
 
+import com.example.jjf.client.JJFHudSettings;
+import com.example.jjf.stand.powers.PowersJumpinJackFlash;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.Lighting;
@@ -614,6 +616,7 @@ public class PowerInventoryScreen
         //this.recipeBookComponent.renderTooltip(context, this.leftPos, this.topPos, mouseX, mouseY);
         this.xMouse = (float)mouseX;
         this.yMouse = (float)mouseY;
+        jjf$renderHudSettings(context, mouseX, mouseY);
         //leftPos-=leftposModifier;
     }
 
@@ -954,6 +957,9 @@ public class PowerInventoryScreen
     }
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int $$2) {
+        if (jjf$handleHudSettingsClick(mouseX, mouseY, $$2)) {
+            return true;
+        }
         Player pl = Minecraft.getInstance().player;
         if (pl != null) {
             if (pl.isSpectator()) {
@@ -1153,6 +1159,47 @@ public class PowerInventoryScreen
          **/
             return this.widthTooNarrow ? false : super.mouseClicked(mouseX, mouseY, $$2);
         //}
+    }
+
+    private boolean jjf$showSettings() {
+        Player player = Minecraft.getInstance().player;
+        return player != null
+                && isOptionsOut
+                && pageNumber == 2
+                && ConfigManager.getClientConfig().dynamicSettings.currentPowerInventoryTab == 2
+                && ((StandUser) player).roundabout$getStandPowers() instanceof PowersJumpinJackFlash;
+    }
+
+    private void jjf$renderHudSettings(GuiGraphics context, int mouseX, int mouseY) {
+        if (!jjf$showSettings()) {
+            return;
+        }
+        int left = this.leftPos;
+        int top = this.topPos;
+        context.drawString(this.font, JJFHudSettings.ammoMessage(), left - 135,
+                top + 125, isSurelyHovering(left - 136, top + 123, 118, 11, mouseX, mouseY)
+                        ? 0xFFFFFF : 0xA0A0A0, false);
+        context.drawString(this.font, JJFHudSettings.launcherMessage(), left - 135,
+                top + 136, isSurelyHovering(left - 136, top + 134, 118, 11, mouseX, mouseY)
+                        ? 0xFFFFFF : 0xA0A0A0, false);
+    }
+
+    private boolean jjf$handleHudSettingsClick(double mouseX, double mouseY, int button) {
+        if (button != 0 || !jjf$showSettings()) {
+            return false;
+        }
+        int left = this.leftPos;
+        int top = this.topPos;
+        if (isSurelyHovering(left - 136, top + 123, 118, 11, mouseX, mouseY)) {
+            JJFHudSettings.toggleAmmoText();
+        } else if (isSurelyHovering(left - 136, top + 134, 118, 11, mouseX, mouseY)) {
+            JJFHudSettings.toggleLauncherText();
+        } else {
+            return false;
+        }
+        Minecraft.getInstance().getSoundManager()
+                .play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+        return true;
     }
 
     public void gearChange(){

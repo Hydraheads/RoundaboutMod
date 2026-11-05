@@ -27,6 +27,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -344,6 +345,7 @@ private static final ResourceLocation NORMAL_GRAVITY_ICON =
     @Override
     public void tickPower() {
         super.tickPower();
+        jjf$tickMobAI();
 
         if (!jjf$spinAttackHeld) {
             return;
@@ -374,6 +376,42 @@ private static final ResourceLocation NORMAL_GRAVITY_ICON =
         if (!minecraft.options.keyAttack.isDown()) {
             releaseJJFSpinAttackClient();
         }
+    }
+
+    private void jjf$tickMobAI() {
+        if (!(this.getSelf() instanceof Mob mob) || mob.level().isClientSide()) {
+            return;
+        }
+        LivingEntity target = mob.getTarget();
+        if (target == null || !target.isAlive()) {
+            return;
+        }
+        if (this.getActivePower() != PowerIndex.NONE) {
+            return;
+        }
+        double distance = mob.distanceTo(target);
+        if (distance < 6.0D || distance > 20.0D) {
+            return;
+        }
+        if (target instanceof ZeroGravityAccess access && access.jjf$getZeroGravityState().isSpread()) {
+            return;
+        }
+        if (this.onCooldown(PowerIndex.SKILL_2)) {
+            return;
+        }
+        jjf$fireMobSpit(mob, target);
+        this.setCooldown(PowerIndex.SKILL_2, 80);
+    }
+
+    private void jjf$fireMobSpit(Mob mob, LivingEntity target) {
+        JJFSpitEntity spit = new JJFSpitEntity(mob.level(), mob);
+        Vec3 start = new Vec3(mob.getX(), mob.getEyeY() - 0.12D, mob.getZ());
+        Vec3 direction = new Vec3(target.getX(), target.getEyeY(), target.getZ())
+                .subtract(start).normalize();
+        start = start.add(direction.scale(0.35D));
+        spit.setPos(start.x, start.y, start.z);
+        spit.shoot(direction.x, direction.y, direction.z, 1.6F, 0.6F);
+        mob.level().addFreshEntity(spit);
     }
 
     @Override
