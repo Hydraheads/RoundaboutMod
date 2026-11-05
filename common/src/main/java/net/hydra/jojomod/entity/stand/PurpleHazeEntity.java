@@ -104,16 +104,17 @@ public class PurpleHazeEntity extends FollowingStandEntity{
             }
 
             if (this.getAnimation() == POD_LAUNCH) {
-                if (getUser() instanceof Player PL && ((IPlayerEntity) PL).roundabout$getPurpleHazePods() < 3) {
+                /*if (getUser() instanceof Player PL && ((IPlayerEntity) PL).roundabout$getPurpleHazePods() < 3) {
                     this.podLaunch.stop();
                     this.podLaunch2.startIfStopped(this.tickCount);
                 }else {
                     this.podLaunch2.stop();
                     this.podLaunch.startIfStopped(this.tickCount);
-                }
+                }*/
+                this.podLaunch.startIfStopped(this.tickCount);
             } else {
                 this.podLaunch.stop();
-                this.podLaunch2.stop();
+                //this.podLaunch2.stop();
             }
 
             if (this.getAnimation() == 43) {
