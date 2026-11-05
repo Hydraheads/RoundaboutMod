@@ -69,7 +69,7 @@ public class PurpleHazeEntity extends FollowingStandEntity{
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
-        boolean isNotDistortionSkin = getSkin() != DISTORTION && getSkin() != GREEN_DSITORTION;
+
         if (this.getUser() != null) {
             if (this.getAnimation() != 12) {
                 this.hideFists.startIfStopped(this.tickCount);

@@ -51,10 +51,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec2;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.*;
 import org.joml.Vector3f;
 import net.minecraft.server.level.ServerLevel;
 
@@ -2022,12 +2019,12 @@ public class PowersPurpleHaze extends NewPunchingStand {
     public int chargedFinal;
 
     public float getSneakAttackKnockback(){
-        return (1.2f + ((float)this.chargedFinal/(float)getMaxSneakAttackCharge())*1.6F);
+        return (0.15f + ((float)this.chargedFinal/(float)getMaxSneakAttackCharge())*0.45F);
     }
     public int getSneakAttackKnockShieldTime(){ return 40; }
 
     public float getSneakAttackStrength(Entity entity){
-        float punchD = this.getPunchStrength(entity)*1.9F+this.getHeavyPunchStrength(entity);
+        float punchD = this.getPunchStrength(entity)*1.9F+this.getHeavyPunchStrength(entity)*1.15F;
 
         if (this.getReducedDamage(entity)){
             return (((float)this.chargedFinal/(float)getMaxSneakAttackCharge())*punchD);
@@ -2043,11 +2040,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             entity = null;
         }
         if (entity != null) {
-            if (chargedFinal < getMaxSneakAttackCharge()) {
-                hitParticles(entity);
-            }else {
-                hitParticlesCenter(entity);
-            }
+            hitParticlesCenter(entity);
 
             float pow;
             float knockbackStrength;
@@ -2068,6 +2061,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     knockShield2(entity, getSneakAttackKnockShieldTime());
                 }
             }
+            activatePurpleHazeField(entity.position(), indistortionmode);
 
         } else {
             // This is less accurate raycasting as it is server sided but it is important for particle effects
@@ -2077,6 +2071,14 @@ public class PowersPurpleHaze extends NewPunchingStand {
             if (!this.self.level().isClientSide) {
                 sendParticlesIfPossible(self.level(),ModParticles.PUNCH_MISS, pointVec.x, pointVec.y, pointVec.z,
                         1, 0.0, 0.0, 0.0, 1);
+            }
+            Vec3 vec3d = this.getSelf().getEyePosition(0);
+            Vec3 vec3d2 = this.getSelf().getViewVector(0);
+            Vec3 vec3d3 = vec3d.add(vec3d2.x * distMax, vec3d2.y * distMax, vec3d2.z * distMax);
+
+            BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this.getSelf()));
+            if (blockHit.getType() == HitResult.Type.BLOCK) {
+                activatePurpleHazeField(blockHit.getLocation(), indistortionmode);
             }
         }
 
@@ -2100,7 +2102,6 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
         if (!this.self.level().isClientSide()) {
             playSoundIfPossible(self.level(),null, this.self.blockPosition(), SE, SoundSource.PLAYERS, volume, pitch);
-
         }
     }
 
