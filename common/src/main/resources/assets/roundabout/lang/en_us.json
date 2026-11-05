@@ -756,6 +756,12 @@
   "entity.roundabout.left_seperated_arm": "Left Seperated Arm",
   "entity.roundabout.left_seperated_arm_slim": "Left Aeperated Arm Slim",
   "entity.roundabout.zombiefish": "Zombiefish",
+  "entity.roundabout.snake": "Snake",
+  "entity.roundabout.ge_bat": "Bat",
+  "entity.roundabout.ge_frog": "Frog",
+  "entity.roundabout.ge_bee": "Bee",
+  "entity.roundabout.ge_fish": "Fish",
+  "entity.roundabout.ge_fox": "Fox",
 
   "entity.roundabout.sheer_heart_attack": "Sheer Heart Attack",
   "entity.roundabout.totem_of_doom": "Totem Of Doom",
