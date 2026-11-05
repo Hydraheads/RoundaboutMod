@@ -198,6 +198,7 @@ public class SavedSecond {
         this.headYRotation,this.rotationVec.x);
             if (ent instanceof LivingEntity LE) {
                 ((StandUser) LE).roundabout$setStartingYpos((float) position.y);
+                ((StandUser) LE).roundabout$setGoingDown(false);
             }
             ent.hurtMarked = true;
             ent.setDeltaMovement(this.deltaMovement);
