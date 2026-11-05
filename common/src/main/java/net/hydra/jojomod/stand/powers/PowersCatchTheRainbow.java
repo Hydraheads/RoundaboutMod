@@ -435,6 +435,8 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                     if (this.self instanceof StandUser su){
                         su.roundabout$setIsRainWalking(true);
                     }
+                }else{
+                    canCreatePlatform = false;
                 }
             } else if (canCreatePlatform && !self.onGround()) {
                 rainWalk();
@@ -675,7 +677,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                     0,
                     3,
                     0);
-            dropTimer = 20;
+            dropTimer = 60;
         }
     }
 
@@ -878,6 +880,9 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                     int cdTime = ClientNetworking.getAppropriateConfig().generalStandSettings.dashCooldown / 6;
                     if (this.getSelf() instanceof Player) {
                         ((IPlayerEntity) this.getSelf()).roundabout$setClientDodgeTime(0);
+                    }
+                    if (this.self instanceof StandUser su){
+                        su.roundabout$setIsRainWalking(false);
                     }
                     this.setCooldown(PowerIndex.GLOBAL_DASH, cdTime);
                     MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 0.91F,
