@@ -1,8 +1,13 @@
 package net.hydra.jojomod.entity.stand;
 
+import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersPurpleHaze;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
 public class PurpleHazeEntity extends FollowingStandEntity{
@@ -44,6 +49,7 @@ public class PurpleHazeEntity extends FollowingStandEntity{
     public final AnimationState fallinghitimpact= new AnimationState();
     public final AnimationState kickAttack = new AnimationState();
     public final AnimationState podLaunch = new AnimationState();
+    public final AnimationState podLaunch2 = new AnimationState();
     public final AnimationState heavyPunchWindup = new AnimationState();
     public final AnimationState heavyPunch = new AnimationState();
 
@@ -98,9 +104,16 @@ public class PurpleHazeEntity extends FollowingStandEntity{
             }
 
             if (this.getAnimation() == POD_LAUNCH) {
-                this.podLaunch.startIfStopped(this.tickCount);
+                if (getUser() instanceof Player PL && ((IPlayerEntity) PL).roundabout$getPurpleHazePods() < 3) {
+                    this.podLaunch.stop();
+                    this.podLaunch2.startIfStopped(this.tickCount);
+                }else {
+                    this.podLaunch2.stop();
+                    this.podLaunch.startIfStopped(this.tickCount);
+                }
             } else {
                 this.podLaunch.stop();
+                this.podLaunch2.stop();
             }
 
             if (this.getAnimation() == 43) {

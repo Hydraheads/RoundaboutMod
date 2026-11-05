@@ -227,6 +227,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.PURPLE_SMOKE.get(), NoRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BAD_COMPANY_SOLDIER.get(), BCSoldierRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BAD_COMPANY_TANK.get(), BCTankRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.CTR_BARRIER.get(), CTRbarrierRenderer::new);
         event.registerEntityRenderer(ForgeEntities.OVA_ENYA.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ENYA.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.JOTARO.get(), VisageBasisRenderer::new);
