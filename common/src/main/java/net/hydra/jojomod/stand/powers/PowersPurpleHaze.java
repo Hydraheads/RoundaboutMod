@@ -2,6 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -479,14 +480,14 @@ public class PowersPurpleHaze extends NewPunchingStand {
         if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
             return true;
         }
-        if (this.getActivePower() == PowerIndex.POWER_2_SNEAK) {
+        /*if (this.getActivePower() == PowerIndex.POWER_2_SNEAK) {
             int cdr = ClientNetworking.getAppropriateConfig().PurpleHazeSettings.SalimoCooldown;
             if (this.getSelf() instanceof ServerPlayer sp) {
                 S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.SKILL_2_SNEAK, cdr);
             }
             this.setCooldown(PowerIndex.SKILL_2_SNEAK, cdr);
             return true;
-        }
+        }*/
         return super.canInterruptPower(sauce, interrupter);
     }
 
@@ -2061,7 +2062,12 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     knockShield2(entity, getSneakAttackKnockShieldTime());
                 }
             }
-            activatePurpleHazeField(entity.position(), indistortionmode);
+            if (getPods() > 0) {
+                if (!(self instanceof Player pl && pl.isCreative())) {
+                    setPods(getPods() - 1);
+                }
+                activatePurpleHazeField(entity.position(), indistortionmode);
+            }
 
         } else {
             // This is less accurate raycasting as it is server sided but it is important for particle effects
@@ -2072,13 +2078,21 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 sendParticlesIfPossible(self.level(),ModParticles.PUNCH_MISS, pointVec.x, pointVec.y, pointVec.z,
                         1, 0.0, 0.0, 0.0, 1);
             }
-            Vec3 vec3d = this.getSelf().getEyePosition(0);
-            Vec3 vec3d2 = this.getSelf().getViewVector(0);
-            Vec3 vec3d3 = vec3d.add(vec3d2.x * distMax, vec3d2.y * distMax, vec3d2.z * distMax);
 
-            BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this.getSelf()));
-            if (blockHit.getType() == HitResult.Type.BLOCK) {
-                activatePurpleHazeField(blockHit.getLocation(), indistortionmode);
+            if (getPods() > 0) {
+                Vec3 vec3d = this.getSelf().getEyePosition(0);
+                Vec3 vec3d2 = this.getSelf().getViewVector(0);
+                Vec3 vec3d3 = vec3d.add(vec3d2.x * (distMax+0.75), vec3d2.y * (distMax+0.75), vec3d2.z * (distMax+0.75));
+
+                BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this.getSelf()));
+                if (blockHit.getType() == HitResult.Type.BLOCK) {
+                    if (!(self instanceof Player pl && pl.isCreative())) {
+                        setPods(getPods() - 1);
+                    }
+                    Roundabout.LOGGER.info("Test");
+                    activatePurpleHazeField(blockHit.getLocation(), indistortionmode);
+                }
+
             }
         }
 
