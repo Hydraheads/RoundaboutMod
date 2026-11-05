@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.mobs;
 
+import net.hydra.jojomod.entity.goals.NightAggroGoal;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
@@ -8,11 +9,20 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BiomeTags;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.Chicken;
+import net.minecraft.world.entity.animal.Fox;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biome;
@@ -30,6 +40,7 @@ public class Snake extends Animal {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(VARIANT_ID, 0);
+        this.entityData.define(IS_AGGRO, false);
     }
 
     @Override
@@ -44,9 +55,59 @@ public class Snake extends Animal {
     public void tick() {
         super.tick();
 
-        if (this.level().isClientSide()) {
+        if (!this.level().isClientSide()) {
+            // only used for client sync so that the snake can play the tongue thing
+            boolean hasTarget = this.getTarget() != null && this.getTarget().isAlive();
+            if (this.isAggressive() != hasTarget) {
+                this.setAggressive(hasTarget);
+            }
+        } else {
             setupAnimationStates();
         }
+    }
+
+    @Override
+    protected void registerGoals() {
+        this.goalSelector.addGoal(0, new FloatGoal(this));
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.05D, true));
+        this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 1.0D));
+        this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class, 6.0F));
+        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
+
+        // neutral behavior
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+
+        // it's RACIST against chickens and foxes
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Chicken.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Fox.class, true));
+
+        // spiderrrr aggrooo
+        this.targetSelector.addGoal(4, new NightAggroGoal<>(this, Player.class));
+    }
+
+    @Override
+    public boolean doHurtTarget(Entity target) {
+        if (super.doHurtTarget(target)) {
+            if (target instanceof LivingEntity livingTarget) {
+                int durationInSeconds = 0;
+
+                // poison scales with difficulty, like cave spiders
+                if (this.level().getDifficulty() == Difficulty.NORMAL) {
+                    durationInSeconds = 5;
+                } else if (this.level().getDifficulty() == Difficulty.HARD) {
+                    durationInSeconds = 12;
+                }
+
+                if (durationInSeconds > 0) {
+                    livingTarget.addEffect(
+                            new MobEffectInstance(MobEffects.POISON, durationInSeconds * 20, 0),
+                            this
+                    );
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     // for the different spawn variants
@@ -71,7 +132,7 @@ public class Snake extends Animal {
         } else if (biome.is(BiomeTags.IS_SAVANNA)) {
             setVariant(4); // Warm
         } else {
-            setVariant(0); // Plains/literally everything else
+            setVariant(0); // Plains/literally everywhere else
         }
     }
 
@@ -92,18 +153,29 @@ public class Snake extends Animal {
             this.idleAnimationState.startIfStopped(this.tickCount);
         }
 
-        if (this.getTarget() != null && this.getTarget().isAlive()) {
+        if (this.isAggressive()) {
             this.aggressiveAnimationState.startIfStopped(this.tickCount);
         } else {
             this.aggressiveAnimationState.stop();
         }
     }
 
+    private static final EntityDataAccessor<Boolean> IS_AGGRO =
+            SynchedEntityData.defineId(Snake.class, EntityDataSerializers.BOOLEAN);
+
+    public boolean isAggressive() {
+        return this.entityData.get(IS_AGGRO);
+    }
+
+    public void setAggressive(boolean aggro) {
+        this.entityData.set(IS_AGGRO, aggro);
+    }
+
     // animations end
 
     public static AttributeSupplier.Builder createAttributes() {
         return Animal.createMobAttributes().add(Attributes.MAX_HEALTH, 10.0)
-                .add(Attributes.MOVEMENT_SPEED, 0.45)
+                .add(Attributes.MOVEMENT_SPEED, 0.32)
                 .add(Attributes.ATTACK_DAMAGE, 2.0)
                 .add(Attributes.FOLLOW_RANGE, 16.0D);
     }

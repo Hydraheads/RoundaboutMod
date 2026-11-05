@@ -84,7 +84,7 @@ public class SnakeAnimations {
             ))
             .build();
 
-    public static final AnimationDefinition AGGRO = AnimationDefinition.Builder.withLength(0.875F)
+    public static final AnimationDefinition AGGRO = AnimationDefinition.Builder.withLength(0.875F).looping()
             .addAnimation("Tongue", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(57.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.0833F, KeyframeAnimations.degreeVec(-57.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
