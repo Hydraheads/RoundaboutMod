@@ -1963,7 +1963,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     private void setSneakAttackCharge() {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.SNEAK_ATTACK_CHARGE);
-        this.animateStand(PurpleHazeEntity.SNEAK_CHARGE);
+        this.animateStand(PurpleHazeEntity.HEAVY_PUNCH_WINDUP);
         this.poseStand(OffsetIndex.GUARD);
     }
 
@@ -1974,11 +1974,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
         this.poseStand(OffsetIndex.ATTACK);
         chargedFinal = Math.min(this.chargedFinal,getMaxSneakAttackCharge());
 
-        if (chargedFinal >= getMaxSneakAttackCharge()){
-            this.animateStand(PurpleHazeEntity.SNEAK_ATTACK);
-        } else {
-            this.animateStand(PurpleHazeEntity.SNEAK_ATTACK);
-        }
+        this.animateStand(PurpleHazeEntity.HEAVY_PUNCH);
+
         return true;
     }
 
