@@ -9,10 +9,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.entity.AgeableMob;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Animal;
@@ -43,6 +40,15 @@ public class Snake extends Animal {
         return super.finalizeSpawn(level, difficulty, spawnType, spawnData, dataTag);
     }
 
+    @Override
+    public void tick() {
+        super.tick();
+
+        if (this.level().isClientSide()) {
+            setupAnimationStates();
+        }
+    }
+
     // for the different spawn variants
 
     public int getVariant() {
@@ -71,9 +77,35 @@ public class Snake extends Animal {
 
     // spawn variants end
 
+    // animations and whatnot
+
+    public final AnimationState idleAnimationState = new AnimationState();
+    public final AnimationState walkAnimationState = new AnimationState();
+    public final AnimationState aggressiveAnimationState = new AnimationState();
+
+    private void setupAnimationStates() {
+        if (this.getDeltaMovement().horizontalDistanceSqr() > 1.0E-6D) {
+            this.idleAnimationState.stop();
+            this.walkAnimationState.startIfStopped(this.tickCount);
+        } else {
+            this.walkAnimationState.stop();
+            this.idleAnimationState.startIfStopped(this.tickCount);
+        }
+
+        if (this.getTarget() != null && this.getTarget().isAlive()) {
+            this.aggressiveAnimationState.startIfStopped(this.tickCount);
+        } else {
+            this.aggressiveAnimationState.stop();
+        }
+    }
+
+    // animations end
+
     public static AttributeSupplier.Builder createAttributes() {
         return Animal.createMobAttributes().add(Attributes.MAX_HEALTH, 10.0)
-                .add(Attributes.MOVEMENT_SPEED, 0.45).add(Attributes.ATTACK_DAMAGE, 2.0);
+                .add(Attributes.MOVEMENT_SPEED, 0.45)
+                .add(Attributes.ATTACK_DAMAGE, 2.0)
+                .add(Attributes.FOLLOW_RANGE, 16.0D);
     }
 
     @Override

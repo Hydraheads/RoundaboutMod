@@ -3,17 +3,20 @@ package net.hydra.jojomod.client.models.mobs;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.models.mobs.animations.SnakeAnimations;
 import net.hydra.jojomod.entity.mobs.Snake;
-import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 
-public class SnakeModel<T extends Snake> extends EntityModel<T> {
+public class SnakeModel<T extends Snake> extends HierarchicalModel<T> {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "snake"), "main");
+
+    private final ModelPart root;
     private final ModelPart Snake;
     private final ModelPart Neck;
     private final ModelPart Head;
@@ -23,6 +26,7 @@ public class SnakeModel<T extends Snake> extends EntityModel<T> {
     private final ModelPart Rattle;
 
     public SnakeModel(ModelPart root) {
+        this.root = root;
         this.Snake = root.getChild("Snake");
         this.Neck = this.Snake.getChild("Neck");
         this.Head = this.Neck.getChild("Head");
@@ -30,6 +34,11 @@ public class SnakeModel<T extends Snake> extends EntityModel<T> {
         this.Tail1 = this.Snake.getChild("Tail1");
         this.Tail2 = this.Tail1.getChild("Tail2");
         this.Rattle = this.Tail2.getChild("Rattle");
+    }
+
+    @Override
+    public ModelPart root() {
+        return this.root;
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -57,8 +66,14 @@ public class SnakeModel<T extends Snake> extends EntityModel<T> {
     }
 
     @Override
-    public void setupAnim(Snake entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
+    public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        this.root().getAllParts().forEach(ModelPart::resetPose);
+        //head tracking, not part of the animations
+        this.Head.xRot = headPitch * ((float) Math.PI / 180F);
+        this.Head.yRot = netHeadYaw * ((float) Math.PI / 180F);
+        this.animate(entity.idleAnimationState, SnakeAnimations.IDLE, ageInTicks);
+        this.animateWalk(SnakeAnimations.SLITHER, limbSwing, limbSwingAmount, 2.0F, 2.5F);
+        this.animate(entity.aggressiveAnimationState, SnakeAnimations.AGGRO, ageInTicks);
     }
 
     @Override
