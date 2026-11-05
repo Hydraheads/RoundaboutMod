@@ -589,6 +589,8 @@ public class ForgeItems {
 
     public static final RegistryObject<Item> SNAKE_SKIN = addToWIPTab(ITEMS.register("snake_skin",
             () -> new Item(new Item.Properties())));
+    public static final RegistryObject<Item> SNAKE_OIL = addToWIPTab(ITEMS.register("snake_oil",
+            () -> new DrinkableItem(new Item.Properties())));
 
     public static final RegistryObject<Item> FANCY_LIGHTER = addToWIPTab(ITEMS.register("fancy_lighter_block",
             () -> new FancyLighterItem(ForgeBlocks.FANCY_LIGHTER_BLOCK.get(), new Item.Properties().stacksTo(1))));
