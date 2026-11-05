@@ -4324,6 +4324,9 @@ public class PowersKillerQueen extends NewPunchingStand {
                     int timeToDust = bitedTheDust.get(id);
 
                     if (timeToDust == this.btdTicks) {
+                        if (((StandUser)target).roundabout$getStandPowers() instanceof PowersKingCrimson PKC && PKC.timeEraseActive) {
+                            target = PKC.activeClone;
+                        }
                         DamageSource dmg = ModDamageTypes.of(target.level(), ModDamageTypes.BITES_THE_DUST, self);
 
                         if (target instanceof LivingEntity LE && ClientNetworking.getAppropriateConfig().killerQueenSettings.sneakyKilling
@@ -4385,7 +4388,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                                     PowersKingCrimson pkc && pkc.timeEraseActive){
                                 target = pkc.activeClone;
                             } else {
-                                target = null;
+                                //target = null;
                             }
                         }
 
