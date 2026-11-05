@@ -587,6 +587,9 @@ public class ForgeItems {
     public static final RegistryObject<Item> AJA = addToTab(ITEMS.register("aja",
             () -> new Item(new Item.Properties())));
 
+    public static final RegistryObject<Item> SNAKE_SKIN = addToWIPTab(ITEMS.register("snake_skin",
+            () -> new Item(new Item.Properties())));
+
     public static final RegistryObject<Item> FANCY_LIGHTER = addToWIPTab(ITEMS.register("fancy_lighter_block",
             () -> new FancyLighterItem(ForgeBlocks.FANCY_LIGHTER_BLOCK.get(), new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> ULTRAVIOLET_BLASTER = addToTab(ITEMS.register("ultraviolet_blaster",
