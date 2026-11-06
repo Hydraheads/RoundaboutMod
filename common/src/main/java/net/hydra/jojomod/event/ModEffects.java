@@ -6,6 +6,7 @@ import net.minecraft.world.effect.MobEffects;
 public class ModEffects {
 
     public static MobEffect BLEED;
+    public static MobEffect STITCHED;
     public static MobEffect HEX;
     public static MobEffect BANISH;
     public static MobEffect DOOMED;

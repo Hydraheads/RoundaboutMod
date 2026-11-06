@@ -827,6 +827,7 @@ public class ForgeEvents {
         ((IFireBlock) fire).roundabout$bootstrap();
 
         ModEffects.BLEED = ForgeEffects.BLEED.get();
+        ModEffects.STITCHED = ForgeEffects.STITCHED.get();
         ModEffects.HEX = ForgeEffects.HEX.get();
         ModEffects.BANISH = ForgeEffects.BANISH.get();
         ModEffects.DOOMED = ForgeEffects.DOOMED.get();

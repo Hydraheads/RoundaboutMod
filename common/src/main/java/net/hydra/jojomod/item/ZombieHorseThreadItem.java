@@ -31,13 +31,10 @@ public class ZombieHorseThreadItem extends Item {
         }else{
             MobEffectInstance bleed = entity.getEffect(ModEffects.BLEED);
             if (bleed != null) {
-                if (bleed.getAmplifier() > 0) {
-                    int amp = bleed.getAmplifier() - 1;
-                    entity.removeEffect(bleed.getEffect());
-                    entity.addEffect(new MobEffectInstance(ModEffects.BLEED, bleed.getDuration(), amp));
-                } else {
-                    entity.removeEffect(bleed.getEffect());
-                }
+                int amp = bleed.getAmplifier();
+                int dur = bleed.getDuration();
+                entity.removeEffect(bleed.getEffect());
+                entity.addEffect(new MobEffectInstance(ModEffects.STITCHED, dur, amp));
             }
         }
     }
