@@ -652,9 +652,9 @@ public class ForgeItems {
     public static final RegistryObject<Item> NEW_LOCACACA = addToTab(ITEMS.register("new_locacaca",
             () -> new NewLocacacaItem(new Item.Properties().food(ModFoodComponents.LOCACACA))));
 
-    public static final RegistryObject<Item> CHAMOMILE_SEEDS = addToTab(ITEMS.register("chamomile_seeds",
+    public static final RegistryObject<Item> CHAMOMILE_SEEDS = addToWIPTab(ITEMS.register("chamomile_seeds",
             () -> new ItemNameBlockItem(ForgeBlocks.CHAMOMILE.get(), new Item.Properties()) ));
-    public static final RegistryObject<Item> CHAMOMILE = addToTab(ITEMS.register("chamomile",
+    public static final RegistryObject<Item> CHAMOMILE = addToWIPTab(ITEMS.register("chamomile",
             () -> new Item(new Item.Properties()
                     .food(new FoodProperties.Builder()
                             .nutrition(2)
@@ -663,9 +663,9 @@ public class ForgeItems {
                             .alwaysEat()
                             .build()))
     ));
-    public static final RegistryObject<Item> MINT_SEEDS = addToTab(ITEMS.register("mint_seeds",
+    public static final RegistryObject<Item> MINT_SEEDS = addToWIPTab(ITEMS.register("mint_seeds",
             () -> new ItemNameBlockItem(ForgeBlocks.MINT.get(), new Item.Properties()) ));
-    public static final RegistryObject<Item> MINT = addToTab(ITEMS.register("mint",
+    public static final RegistryObject<Item> MINT = addToWIPTab(ITEMS.register("mint",
             () -> new Item(new Item.Properties().food(
                     new FoodProperties.Builder()
                             .nutrition(2)
@@ -674,7 +674,7 @@ public class ForgeItems {
                             .alwaysEat()
                             .build()))
     ));
-    public static final RegistryObject<Item> HERB_TEA = addToTab(ITEMS.register("herb_tea",
+    public static final RegistryObject<Item> HERB_TEA = addToWIPTab(ITEMS.register("herb_tea",
             () -> new Item(new Item.Properties().food(
                     new FoodProperties.Builder()
                             .nutrition(8)

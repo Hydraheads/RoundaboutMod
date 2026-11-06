@@ -186,11 +186,6 @@ public class TuskNailEntity extends AbstractArrow {
     protected void onHitBlock(BlockHitResult $$0) {
         if (!this.level().isClientSide() && !this.isRemoved()   ) {
 
-            if (this.getExtra() == GOLDEN) {
-                ((ServerLevel) this.level()).sendParticles(ModParticles.SMALL_EXPLOSION,
-                        this.getX(), this.getY() + this.getBbHeight(), this.getZ(),
-                        0, 0, 0, 0, 0.7);
-            }
 
             ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.level().getBlockState($$0.getBlockPos())),
                     $$0.getLocation().x, $$0.getLocation().y, $$0.getLocation().z,
@@ -302,10 +297,14 @@ public class TuskNailEntity extends AbstractArrow {
     }
 
     private void radialExplosion(){
-        if (!this.level().isClientSide() && this.getOwner() instanceof LivingEntity user    ){
+        if (!this.level().isClientSide() && this.getOwner() instanceof LivingEntity user){
+            ((ServerLevel) this.level()).sendParticles(ModParticles.SMALL_EXPLOSION,
+                    this.getX(), this.getY() + this.getBbHeight(), this.getZ(),
+                    0, 0, 0, 0, 0.7);
+
             if (((StandUser) user).roundabout$getStandPowers() instanceof PowersTusk PT) {
                 List<Entity> entityList = DamageHandler.genHitbox(user, this.getX(), this.getY(),
-                        this.getZ(), 1, 1, 1);
+                        this.getZ(), 1.5F, 1.5F, 1.5F);
                 if (!entityList.isEmpty()){
                     for (Entity value : entityList) {
                         if (value.isPickable() && value.isAttackable()){
