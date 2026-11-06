@@ -1099,6 +1099,13 @@
   "sounds.roundabout.whitesnake_inventory_open": "Disc Inventory",
   "sounds.roundabout.whitesnake_inventory_close": "Disc Inventory",
 
+  "sounds.roundabout.century_boy_summon": "20th Century Boy summon",
+  "sounds.roundabout.century_boy_hit": "20th Century Boy Hit",
+  "sounds.roundabout.century_boy_normal_stance": "Normal Stance",
+  "sounds.roundabout.century_boy_propel_stance": "Propel Stance",
+  "sounds.roundabout.century_boy_output_stance": "Output Stance",
+  "sounds.roundabout.century_boy_ground_stance": "Ground Stance",
+
   "sounds.roundabout.emperor_summon": "Stand summoned",
   "sounds.roundabout.emperor_shoot": "Shoot the emperor",
   "sounds.roundabout.emperor_impact": "Emperor bullet impact",
