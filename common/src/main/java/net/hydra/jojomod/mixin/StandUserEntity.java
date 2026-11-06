@@ -80,6 +80,7 @@ import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.WanderingTrader;
+import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -7362,7 +7363,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "travel",at = @At("HEAD"),cancellable = true)
     private void roundabout$rainWalk(CallbackInfo ci) {
         if (((StandUser) this).roundabout$getStandPowers() instanceof PowersCatchTheRainbow pctr && pctr.isInRain() && pctr.hasStandActive(pctr.self)) {
-            if (!pctr.self.isCrouching() && !pctr.self.onGround() && roundabout$getIsRainWalking()) {
+            if (!pctr.self.isCrouching() && !pctr.self.onGround() && !this.isFallFlying() && roundabout$getIsRainWalking()) {
                 if (this.getDeltaMovement().y < 0) {
                     this.setOnGround(true);
 
@@ -7372,8 +7373,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     if (!this.jumping) {
                         this.setDeltaMovement(this.getDeltaMovement().x, 0, this.getDeltaMovement().z);
                     } else {
-                        roundabout$setIsRainWalking(false);
-
                         Vec3 vec3 = this.getDeltaMovement();
                         this.setDeltaMovement(vec3.x, (double) this.getJumpPower(), vec3.z);
                         if (this.isSprinting()) {

@@ -949,6 +949,8 @@ public class StandIcons {
     public static final ResourceLocation POD_BITE = Roundabout.location("textures/gui/icons/purple_haze/pod_bite.png");
     public static final ResourceLocation POD_THROW = Roundabout.location("textures/gui/icons/purple_haze/pod_throw.png");
     public static final ResourceLocation FALLING_ATTACK = Roundabout.location("textures/gui/icons/purple_haze/falling_attack.png");
+    public static final ResourceLocation PH_HEAVY_PUNCH = Roundabout.location("textures/gui/icons/purple_haze/ph_heavy_punch.png");
+    public static final ResourceLocation PH_HEAVY_KICK = Roundabout.location("textures/gui/icons/purple_haze/ph_heavy_kick.png");
 
     public static final ResourceLocation ANUBIS_MEMORY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/anubis_memory.png");

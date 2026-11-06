@@ -27,6 +27,7 @@
     "ZGossipContainer",
     "ZItemCooldowns",
     "ZLevel",
+    "ZMerchantOfferMixin",
     "ZMob",
     "ZSculkSensorBlock",
     "ZSculkShriekerBlock",

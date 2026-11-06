@@ -342,6 +342,8 @@ public class FabricItems {
     public static Item LOCACACA = registerItem("locacaca", new LocacacaItem(new Item.Properties().food(ModFoodComponents.LOCACACA)));
     public static Item NEW_LOCACACA = registerItem("new_locacaca", new NewLocacacaItem(new Item.Properties().food(ModFoodComponents.LOCACACA)));
     public static Item LUCKY_LIPSTICK = registerItem("lucky_lipstick", new LuckyLipstickItem(new Item.Properties().stacksTo(1)));
+    public static Item SNAKE_SKIN = registerItem("snake_skin", new Item(new Item.Properties()));
+    public static Item SNAKE_OIL = registerItem("snake_oil", new DrinkableItem(new Item.Properties()));
 
     public static Item MEMORY_PAWN = registerItem("memory_pawn", new MemoryChessPieceItem(ModBlocks.CHESS_PIECE, new Item.Properties().stacksTo(1)));
     public static Item MEMORY_ROOK = registerItem("memory_rook", new MemoryChessPieceItem(ModBlocks.CHESS_PIECE, new Item.Properties().stacksTo(1)));
@@ -832,6 +834,8 @@ public class FabricItems {
                     	//entries.accept(ModBlocks.CHESSBOARD_BLOCK);
                         entries.accept(FALCON_SPAWN_EGG);
                         entries.accept(SNAKE_SPAWN_EGG);
+                        entries.accept(SNAKE_SKIN);
+                        entries.accept(SNAKE_OIL);
                         entries.accept(STAND_DISC_D4C);
                         entries.accept(MAX_STAND_DISC_D4C);
                         entries.accept(STAND_DISC_GOLD_EXPERIENCE);
@@ -1077,6 +1081,8 @@ public class FabricItems {
         ModItems.METEORITE_INGOT = METEORITE_INGOT;
         ModItems.IRON_BALL_CROSSBOW = IRON_BALL_CROSSBOW;
         ModItems.LOCACACA_PIT = LOCACACA_PIT;
+        ModItems.SNAKE_SKIN = SNAKE_SKIN;
+        ModItems.SNAKE_OIL = SNAKE_OIL;
 
         ModItems.STRAY_CAT_ANIME = STRAY_CAT_ANIME;
         ModItems.STRAY_CAT_MANGA = STRAY_CAT_MANGA;
