@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_snake_oil": {
+    "has_snake_skin": {
       "conditions": {
         "items": [
           {
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "has_snake_oil",
+      "has_snake_skin",
       "has_the_recipe"
     ]
   ],
