@@ -73,6 +73,8 @@ public class StandIcons {
             "textures/gui/move_square2.png");
     public static final ResourceLocation SQUARE_GOLD = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/move_square_gold.png");
+    public static final ResourceLocation SQUARE_GOLDER = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/move_square_golder.png");
     public static final ResourceLocation SQUARE_PINK = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/move_square_pink.png");
     public static final ResourceLocation SQUARE_ICON_BLOOD = new ResourceLocation(Roundabout.MOD_ID,
