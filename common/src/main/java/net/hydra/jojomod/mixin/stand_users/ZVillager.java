@@ -15,6 +15,7 @@ import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersLyinEyes;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.TradeLockoutHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -33,6 +34,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.behavior.*;
 import net.minecraft.world.entity.ai.gossip.GossipContainer;
+import net.minecraft.world.entity.ai.gossip.GossipType;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
@@ -111,6 +113,9 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
         if (this.roundabout$getTensionState() != TENSION_UNROLLED) {
             $$0.putByte("roundabout.tensionState", this.roundabout$getTensionState());
         }
+        if (this.roundabout$getSnakeOilLockout() != 0) {
+            $$0.putInt("roundabout.snakeOilLockout", this.roundabout$getSnakeOilLockout());
+        }
     }
 
     @Inject(method = "readAdditionalSaveData",at = @At("HEAD"))
@@ -121,6 +126,9 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
         }
         if ($$0.contains("roundabout.tensionState")) {
             this.roundabout$setTensionState($$0.getByte("roundabout.tensionState"));
+        }
+        if ($$0.contains("roundabout.snakeOilLockout")) {
+            this.roundabout$setSnakeOilLockout($$0.getInt("roundabout.snakeOilLockout"));
         }
     }
 
@@ -135,6 +143,9 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
         }
         if (!this.getEntityData().hasItem(ROUNDABOUT$CALLOUT_EFFECT_TICKS)) {
             this.getEntityData().define(ROUNDABOUT$CALLOUT_EFFECT_TICKS, 0);
+        }
+        if (!this.getEntityData().hasItem(ROUNDABOUT$SNAKE_OIL_LOCKOUT)) {
+            this.getEntityData().define(ROUNDABOUT$SNAKE_OIL_LOCKOUT, 0);
         }
     }
     /// currently broken, unsure why
@@ -204,7 +215,11 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
     public void roundabout$villagerTick(CallbackInfo ci) {
         int at = this.roundabout$getAnubisTicks();
         int calloutTick = this.roundabout$getCalloutTicks();
+        int lockout = this.getEntityData().get(ROUNDABOUT$SNAKE_OIL_LOCKOUT);
         if (!isClientSide()) {
+            if (lockout > 0) {
+                this.getEntityData().set(ROUNDABOUT$SNAKE_OIL_LOCKOUT, lockout - 1);
+            }
             if (at >= 0) {
                 at--;
 
@@ -333,6 +348,50 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
         Player player = This.level().getNearestPlayer(This,10);
         if (player != null) {
             player.displayClientMessage(Component.translatable("item.roundabout.anubis_item.sword_cleansed").withStyle(ChatFormatting.WHITE), true);
+        }
+    }
+
+    // snake oil salesman stuff
+    @Unique
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$SNAKE_OIL_LOCKOUT = SynchedEntityData.defineId(Villager.class, EntityDataSerializers.INT);
+
+    @Unique
+    @Override
+    public boolean roundabout$isSnakeOilLockedOut() {
+        if (roundabout$getSnakeOilLockout() == 0) {
+            return false;
+        }
+        return true;
+    }
+
+    @Unique
+    @Override
+    public void roundabout$setSnakeOilLockout(int ticks) {
+        this.getEntityData().set(ROUNDABOUT$SNAKE_OIL_LOCKOUT, ticks);
+    }
+
+    @Unique
+    @Override
+    public int roundabout$getSnakeOilLockout() {
+        return this.getEntityData().get(ROUNDABOUT$SNAKE_OIL_LOCKOUT);
+    }
+
+    @Unique
+    @Override
+    public void roundabout$applySnakeOilScam(Player player) {
+        net.minecraft.world.phys.AABB box = this.getBoundingBox().inflate(48.0, 16.0, 48.0);
+        for (Villager nearbyVillager : this.level().getEntitiesOfClass(Villager.class, box)) {
+            ((IVillagerAccess) nearbyVillager).roundabout$setSnakeOilLockout(72000);
+        }
+        if (player != null) {
+            this.gossips.add(player.getUUID(), GossipType.MAJOR_NEGATIVE, 25);
+        }
+    }
+
+    @Inject(method = "mobInteract", at = @At("HEAD"))
+    private void roundabout$trackClientVillager(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
+        if (this.isClientSide()) {
+            TradeLockoutHelper.CLIENT_INTERACTED_VILLAGER = (Villager) (Object) this;
         }
     }
 

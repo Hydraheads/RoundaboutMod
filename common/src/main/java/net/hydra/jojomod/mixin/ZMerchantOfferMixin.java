@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.util.TradeLockoutHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.MerchantOffer;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,6 +22,12 @@ public abstract class ZMerchantOfferMixin {
         boolean inputBIsSnakeOil = playerInputB.is(ModItems.SNAKE_OIL);
 
         if (inputAIsSnakeOil || inputBIsSnakeOil) {
+            // AHHH IT'S A SCAMMER D:
+            if (TradeLockoutHelper.IS_LOCKED_OUT.get()) {
+                cir.setReturnValue(false);
+                return;
+            }
+
             boolean validA = (inputAIsSnakeOil && playerInputA.getCount() >= 1)
                     || (this.getBaseCostA().isEmpty() || ItemStack.isSameItemSameTags(playerInputA, this.getBaseCostA()) && playerInputA.getCount() >= this.getBaseCostA().getCount());
 
