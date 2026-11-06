@@ -386,17 +386,33 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
 
             if (SU.roundabout$getStandPowers() instanceof PowersTusk PT){
+                byte animByte = SU.roundabout$getStandAnimation();
                 AnimationDefinition anim = PowersTusk.getAnimation(SU);
                 if (anim != null){
                     if (ipe.roundabout$GetPoseEmote() != Poses.NONE.id) {
                         ipe.roundabout$SetPoseEmote(Poses.NONE.id);
                     }
+
                     this.leftArm.resetPose();
                     this.rightArm.resetPose();
-                    this.leftLeg.resetPose();
-                    this.rightLeg.resetPose();
+                    if (animByte == PowersTusk.FLATTEN
+                            || animByte == PowersTusk.PILOT
+                            || animByte == PowersTusk.PILOT_EXIT) {
+                        this.leftLeg.resetPose();
+                        this.rightLeg.resetPose();
+                    }
                     SU.roundabout$getWornStandAnimation().startIfStopped($$0.tickCount);
                     this.roundabout$animate(SU.roundabout$getWornStandAnimation(),anim,$$3,1F);
+
+                    if (PT.isShooting(HumanoidArm.RIGHT)) {
+                        this.rightArm.yRot = -0.1F + this.head.yRot;
+                        this.rightArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
+                    }
+                    if (PT.isShooting(HumanoidArm.LEFT)) {
+                        this.leftArm.yRot = 0.1F + this.head.yRot;
+                        this.leftArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
+                    }
+
                 } else {
                     SU.roundabout$getWornStandAnimation().stop();
                 }

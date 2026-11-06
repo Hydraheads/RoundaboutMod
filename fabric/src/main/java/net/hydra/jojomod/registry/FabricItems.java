@@ -839,6 +839,11 @@ public class FabricItems {
                         entries.accept(STAND_DISC_20_CENTURY_BOY);
                         entries.accept(STAND_DISC_TUSK);
                         entries.accept(MAX_STAND_DISC_TUSK);
+                        entries.accept(CHAMOMILE_SEEDS);
+                        entries.accept(CHAMOMILE);
+                        entries.accept(MINT_SEEDS);
+                        entries.accept(MINT);
+                        entries.accept(HERB_TEA);
                         entries.accept(STAND_DISC_METALLICA);
                         entries.accept(MAX_STAND_DISC_METALLICA);
                         entries.accept(STAND_DISC_PURPLE_HAZE);

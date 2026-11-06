@@ -12,6 +12,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 
@@ -77,12 +78,17 @@ public class Tusk1NailModel extends PsuedoHierarchicalModel {
 
     @Override
     public void setupAnim(Entity var1, float ageInTicks) {
+        float uppies = Mth.DEG_TO_RAD * var1.getXRot();
+
+        nail1.xRot = -uppies;
         nail1.yRot = ageInTicks;
+        nail2.xRot = -uppies;
         nail2.yRot = -ageInTicks;
 
 
-        Vec3 d = var1.getDeltaMovement();
-        act_2.yRot = (float) Math.atan(d.x/d.z);
+
+        act_2.yRot = Mth.DEG_TO_RAD * var1.getYRot();
+        act_2.xRot = -uppies;
      //   nail2_1.zRot = ageInTicks*0.1F;
         nail2_2.zRot = -ageInTicks;
         nail2_3.zRot = ageInTicks;
