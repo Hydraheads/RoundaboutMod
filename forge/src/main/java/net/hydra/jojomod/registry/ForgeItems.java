@@ -1106,6 +1106,9 @@ public class ForgeItems {
     public static final RegistryObject<Item> EXP_BISHOP = addToTab(ITEMS.register("exp_bishop",
             () -> new ExperienceBishopItem(ForgeBlocks.CHESS_PIECE.get(),new Item.Properties())));
 
+    public static final RegistryObject<Item> ZOMBIE_HORSE_THREAD = addToWIPTab(ITEMS.register("zombie_horse_thread",
+            () -> new ZombieHorseThreadItem(new Item.Properties().stacksTo(1).durability(16))));
+
     public static final RegistryObject<BlockItem> GAMBLING_TABLE_ITEM = addToWIPTab(ITEMS.register("gambling_table",
             () -> new BlockItem(ForgeBlocks.GAMBLING_TABLE.get(), new Item.Properties())));
 
