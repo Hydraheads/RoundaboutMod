@@ -322,6 +322,9 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             invincibleState = false;
             staticMode = 0;
         }
+        if (!isClient() && self instanceof ServerPlayer PL) {
+            S2CPacketUtil.syncCurrentStance20THCB(PL.getId(), staticMode, invincibleState ? 1 : 0);
+        }
     }
 
     private List<BlockPos> getClosestImpactBlock(LivingEntity player) {
