@@ -48,7 +48,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
-import org.apache.commons.compress.utils.Lists;
+import com.google.common.collect.Lists;
 
 import java.lang.module.ModuleDescriptor;
 import java.util.*;
@@ -321,6 +321,9 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         } else {
             invincibleState = false;
             staticMode = 0;
+        }
+        if (!isClient() && self instanceof ServerPlayer PL) {
+            S2CPacketUtil.syncCurrentStance20THCB(PL.getId(), staticMode, invincibleState ? 1 : 0);
         }
     }
 

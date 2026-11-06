@@ -211,17 +211,18 @@ public class PowersPurpleHaze extends NewPunchingStand {
             if (Level > 1 || bypass){
                 $$1.add(PurpleHazeEntity.BLACK);
                 $$1.add(PurpleHazeEntity.GREEN);
-                $$1.add(PurpleHazeEntity.NETHERITE);
+                $$1.add(PurpleHazeEntity.MIRROR_BATTLE);
             } if (Level > 2 || bypass) {
                 $$1.add(PurpleHazeEntity.BLAZING_HAZE);
-                $$1.add(PurpleHazeEntity.MIRROR_BATTLE);
-                $$1.add(PurpleHazeEntity.ROTT);
+                $$1.add(PurpleHazeEntity.NETHERITE);
                 $$1.add(PurpleHazeEntity.PEPPERMINT);
             } if (Level > 3 || bypass) {
                 $$1.add(PurpleHazeEntity.DISTORTION);
                 $$1.add(PurpleHazeEntity.GREEN_DSITORTION);
+            } if (Level > 4 || bypass) {
                 $$1.add(PurpleHazeEntity.GREENER);
-            }if (((IPlayerEntity) PE).roundabout$getUnlockedBonusSkin() || bypass) {
+                $$1.add(PurpleHazeEntity.ROTT);
+            } if (((IPlayerEntity) PE).roundabout$getUnlockedBonusSkin() || bypass) {
                 $$1.add(PurpleHazeEntity.PLAGUE_RED);
                 $$1.add(PurpleHazeEntity.PLAGUE_BLUE);
             }
@@ -1314,7 +1315,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     ModEffects.VIRUS_IMMUNITY, 100));
             if (!(self instanceof Player pl && pl.isCreative())) {
                 this.eatCapsuleServer();
-                self.hurt(ModDamageTypes.of(self.level(), DamageTypes.GENERIC_KILL), 2F);
+                self.hurt(ModDamageTypes.of(self.level(), ModDamageTypes.POD_BITE), 2F);
             }
             if (!(self instanceof Player pl && pl.isCreative())) {
                 setPods(getPods() - 1);

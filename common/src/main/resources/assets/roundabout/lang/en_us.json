@@ -1100,6 +1100,13 @@
   "sounds.roundabout.whitesnake_inventory_open": "Disc Inventory",
   "sounds.roundabout.whitesnake_inventory_close": "Disc Inventory",
 
+  "sounds.roundabout.century_boy_summon": "20th Century Boy summon",
+  "sounds.roundabout.century_boy_hit": "20th Century Boy Hit",
+  "sounds.roundabout.century_boy_normal_stance": "Normal Stance",
+  "sounds.roundabout.century_boy_propel_stance": "Propel Stance",
+  "sounds.roundabout.century_boy_output_stance": "Output Stance",
+  "sounds.roundabout.century_boy_ground_stance": "Ground Stance",
+
   "sounds.roundabout.emperor_summon": "Stand summoned",
   "sounds.roundabout.emperor_shoot": "Shoot the emperor",
   "sounds.roundabout.emperor_impact": "Emperor bullet impact",
@@ -1259,6 +1266,8 @@
   "death.attack.haze_virus": "%1$s was consumed by the Purple Haze.",
   "death.attack.distortion_virus.player": "%1$s was consumed by the Distortion Virus.",
   "death.attack.distortion_virus": "%1$s was consumed by the Distortion Virus.",
+  "death.attack.pod_bite": "%1$s bit off more than they could chew",
+  "death.attack.pod_bite.player": "%1$s bit off more than they could chew",
   "death.attack.diver_redirection": "%1$s died for the sake of others",
   "death.attack.diver_redirection.player": "%1$s died for the sake of %2$s",
   "death.attack.brain_dead": "%1$s stopped thinking",
