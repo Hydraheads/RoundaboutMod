@@ -1315,7 +1315,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     ModEffects.VIRUS_IMMUNITY, 100));
             if (!(self instanceof Player pl && pl.isCreative())) {
                 this.eatCapsuleServer();
-                self.hurt(ModDamageTypes.of(self.level(), DamageTypes.GENERIC_KILL), 2F);
+                self.hurt(ModDamageTypes.of(self.level(), ModDamageTypes.POD_BITE), 2F);
             }
             if (!(self instanceof Player pl && pl.isCreative())) {
                 setPods(getPods() - 1);
