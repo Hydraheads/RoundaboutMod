@@ -225,7 +225,10 @@ public class PurpleHazeModel<T extends PurpleHazeEntity> extends StandModel<T> {
         this.animate(pEntity.fallinghitlong, PurpleHazeAnimations.FALLINGHITLONG, pAgeInTicks, 1f);
         this.animate(pEntity.fallinghitimpact, PurpleHazeAnimations.FALLINGHITIMPACT, pAgeInTicks, 1f);
         this.animate(pEntity.kickAttack, PurpleHazeAnimations.kick, pAgeInTicks, 1f);
-        this.animate(pEntity.podLaunch, PurpleHazeAnimations.pod_launch, pAgeInTicks, 1f);
+        this.animate(pEntity.podLaunch, PurpleHazeAnimations.pod_launch, pAgeInTicks, 1.2f);
+        this.animate(pEntity.podLaunch2, PurpleHazeAnimations.pod_launch2, pAgeInTicks, 1.2f);
+        this.animate(pEntity.heavyPunchWindup, PurpleHazeAnimations.HeavyPunchWindup, pAgeInTicks, 1f);
+        this.animate(pEntity.heavyPunch, PurpleHazeAnimations.HeavyPunch, pAgeInTicks, 1f);
     }
     @Override
     public ModelPart root() {

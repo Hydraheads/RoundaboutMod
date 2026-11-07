@@ -909,7 +909,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                 }
             }
         }
-
         getValidPlacement();
         cycleThroughBlackSabbathTargets();
         super.tickPower();
@@ -1014,7 +1013,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
     public final Boolean getThrowable(Player pl) {
         IPlayerEntity play = ((IPlayerEntity) pl);
         ItemStack blackFS = play.roundabout$getBlckSabbathPlayerInventory().getItem(0);
-        return (blackFS.getItem() instanceof ArrowItem || blackFS.getItem() instanceof KnifeItem
+        return (blackFS.getItem() instanceof ArrowItem && !(blackFS.getItem() instanceof RoundaboutArrowItem) || blackFS.getItem() instanceof KnifeItem
                 || blackFS.is(ModItems.KNIFE_BUNDLE) || blackFS.getItem() instanceof TridentItem && EnchantmentHelper.getRiptide(blackFS) <= 0
                 || blackFS.getItem() instanceof EggItem || blackFS.getItem() instanceof SnowballItem || blackFS.getItem() instanceof ThrowablePotionItem
                 || blackFS.getItem() instanceof EnderpearlItem || blackFS.getItem() instanceof GasolineBucketItem || blackFS.getItem() instanceof GasolineCanItem
@@ -1046,13 +1045,15 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                             if(BE.getUser() != null && BE.getUser() instanceof Player pl) {
                                 IPlayerEntity play = ((IPlayerEntity) pl);
                                 ItemStack blackFS = play.roundabout$getBlckSabbathPlayerInventory().getItem(0);
-                                BE.setHeldItemSabbath(blackFS);
-                                if(blackFS.is(ItemStack.EMPTY.getItem())){
-                                    BE.setMoveMode(0);
-                                } else if (getThrowable(pl)){
-                                    BE.setMoveMode(1);
-                                } else {
-                                    BE.setMoveMode(2);
+                                if(!isClient()) {
+                                    BE.setHeldItemSabbath(blackFS);
+                                    if (blackFS.is(ItemStack.EMPTY.getItem())) {
+                                        BE.setMoveMode(0);
+                                    } else if (getThrowable(pl)) {
+                                        BE.setMoveMode(1);
+                                    } else {
+                                        BE.setMoveMode(2);
+                                    }
                                 }
                             }
                             this.self.level().addFreshEntity(BE);

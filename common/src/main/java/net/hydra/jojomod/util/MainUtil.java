@@ -76,6 +76,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -1617,6 +1618,8 @@ public class MainUtil {
         playerNames.put("Gyro_Zeppeli", UUID.fromString("d07c2758-de5c-4388-a104-c69c1262e054"));
         playerNames.put("wojtonix", UUID.fromString("da472ff1-040f-4fd6-9d9d-25722fcf6408"));
         playerNames.put("ChaoticRobot_", UUID.fromString("95637d52-928d-48f9-b211-e53a8cd3e7d5"));
+        playerNames.put("Tweenwms", UUID.fromString("594c69f7-35ec-4b4c-b521-f8ad907e6bdd"));
+        playerNames.put("IStealMuffins", UUID.fromString("09fbefb3-c52c-47ab-8615-67144247252d"));
         playerNames.put("IShootMuffins", UUID.fromString("ef5ff7af-c6d6-440a-a111-2f0932ed0131"));
         playerNames.put("TheChaseyOne", UUID.fromString("8e86263a-2740-4d0f-a83f-afe0e6fd3c3d"));
         playerNames.put("FieldstormDapper", UUID.fromString("4813e816-05b2-438b-8c59-5bfe9d78aa01"));
@@ -2790,6 +2793,7 @@ public class MainUtil {
                 || sauce.is(ModDamageTypes.INFINITE_SPIN)
                 || sauce.is(ModDamageTypes.HAZE_VIRUS)
                 || sauce.is(ModDamageTypes.DISTORTION_VIRUS)
+                || sauce.is(ModDamageTypes.POD_BITE)
                 || sauce.is(ModDamageTypes.BITES_THE_DUST)){
             return true;
         }
@@ -2824,6 +2828,18 @@ public class MainUtil {
             return true;
         }
         return false;
+    }
+
+    public static boolean CenturyBoyReactionBacklistDamage(DamageSource source) {
+
+        boolean isPassive = source.getEntity() == null;
+
+        return (isPassive && !(source.is(DamageTypes.FALL)
+                || source.is(DamageTypes.FALLING_ANVIL)
+                || source.is(DamageTypes.FALLING_BLOCK)
+                || source.is(DamageTypes.UNATTRIBUTED_FIREBALL)
+                || source.is(DamageTypes.FALLING_STALACTITE)
+        ));
     }
 
     /** Returns the vertical angle between two mobs in degrees */

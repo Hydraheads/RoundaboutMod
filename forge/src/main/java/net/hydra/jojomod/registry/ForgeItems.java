@@ -9,12 +9,14 @@ import net.hydra.jojomod.item.paintings.BirthOfVenusPaintingItem;
 import net.hydra.jojomod.item.paintings.MonaLisaPaintingItem;
 import net.hydra.jojomod.item.paintings.VanGoughPaintingItem;
 import net.hydra.jojomod.stand.powers.*;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -41,6 +43,25 @@ public class ForgeItems {
                             .effect(new MobEffectInstance(ForgeEffects.WARDING.get(), 2400, 0), 1.0F)
                             .build())
             )));
+
+    public static final RegistryObject<Item> SNAKE_SKIN = addToTab(ITEMS.register("snake_skin",
+            () -> new Item(new Item.Properties())));
+    public static final RegistryObject<Item> SNAKE_OIL = addToTab(ITEMS.register("snake_oil",
+            () -> new DrinkableItem(new Item.Properties())));
+    public static final RegistryObject<Item> SNAKE_SKIN_BOOTS = addToTab(ITEMS.register("snake_skin_boots",
+            () -> new ArmorItem(SnakeSkinBootsItem.SNAKE_ARMOR, ArmorItem.Type.BOOTS, new Item.Properties())));
+
+    public static final RegistryObject<Item> PIRANHA_BUCKET = addToWIPTab(ITEMS.register("piranha_bucket",
+            () -> new MobBucketItem(
+                    ForgeEntities.PIRANHA,
+                    () -> Fluids.WATER,
+                    () -> SoundEvents.BUCKET_EMPTY_FISH,
+                    new Item.Properties().stacksTo(1)
+            )));
+    public static final RegistryObject<Item> PIRANHA = addToWIPTab(ITEMS.register("piranha",
+            () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationMod(0.1F).build()))));
+    public static final RegistryObject<Item> COOKED_PIRANHA = addToWIPTab(ITEMS.register("cooked_piranha",
+            () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationMod(1.2F).build()))));
 
     public static final RegistryObject<Item> STAND_ARROW = addToTab(ITEMS.register("stand_arrow",
             () -> new StandArrowItem(new Item.Properties().stacksTo(1).durability(5))));
@@ -647,9 +668,9 @@ public class ForgeItems {
     public static final RegistryObject<Item> NEW_LOCACACA = addToTab(ITEMS.register("new_locacaca",
             () -> new NewLocacacaItem(new Item.Properties().food(ModFoodComponents.LOCACACA))));
 
-    public static final RegistryObject<Item> CHAMOMILE_SEEDS = addToTab(ITEMS.register("chamomile_seeds",
+    public static final RegistryObject<Item> CHAMOMILE_SEEDS = addToWIPTab(ITEMS.register("chamomile_seeds",
             () -> new ItemNameBlockItem(ForgeBlocks.CHAMOMILE.get(), new Item.Properties()) ));
-    public static final RegistryObject<Item> CHAMOMILE = addToTab(ITEMS.register("chamomile",
+    public static final RegistryObject<Item> CHAMOMILE = addToWIPTab(ITEMS.register("chamomile",
             () -> new Item(new Item.Properties()
                     .food(new FoodProperties.Builder()
                             .nutrition(2)
@@ -658,9 +679,9 @@ public class ForgeItems {
                             .alwaysEat()
                             .build()))
     ));
-    public static final RegistryObject<Item> MINT_SEEDS = addToTab(ITEMS.register("mint_seeds",
+    public static final RegistryObject<Item> MINT_SEEDS = addToWIPTab(ITEMS.register("mint_seeds",
             () -> new ItemNameBlockItem(ForgeBlocks.MINT.get(), new Item.Properties()) ));
-    public static final RegistryObject<Item> MINT = addToTab(ITEMS.register("mint",
+    public static final RegistryObject<Item> MINT = addToWIPTab(ITEMS.register("mint",
             () -> new Item(new Item.Properties().food(
                     new FoodProperties.Builder()
                             .nutrition(2)
@@ -669,7 +690,7 @@ public class ForgeItems {
                             .alwaysEat()
                             .build()))
     ));
-    public static final RegistryObject<Item> HERB_TEA = addToTab(ITEMS.register("herb_tea",
+    public static final RegistryObject<Item> HERB_TEA = addToWIPTab(ITEMS.register("herb_tea",
             () -> new Item(new Item.Properties().food(
                     new FoodProperties.Builder()
                             .nutrition(8)
@@ -711,6 +732,15 @@ public class ForgeItems {
     public static final RegistryObject<ForgeSpawnEggItem> ZOMBIE_MINION_SPAWN_EGG = addToTab(ITEMS.register("zombie_minion_spawn_egg",
             () -> new ForgeSpawnEggItem(ForgeEntities.VILLAGER_MINION,
                     0xC1FF4F, 0x53A667, new Item.Properties())));
+    public static final RegistryObject<ForgeSpawnEggItem> SNAKE_SPAWN_EGG = addToTab(ITEMS.register("snake_spawn_egg",
+            () -> new ForgeSpawnEggItem(ForgeEntities.SNAKE,
+                    0x6dcd4c, 0xf9f07b, new Item.Properties())));
+    public static final RegistryObject<ForgeSpawnEggItem> PIRANHA_SPAWN_EGG = addToWIPTab(ITEMS.register("piranha_spawn_egg",
+            () -> new ForgeSpawnEggItem(ForgeEntities.PIRANHA,
+                    0x8fbbdd, 0xe89e4d, new Item.Properties())));
+    public static final RegistryObject<ForgeSpawnEggItem> BUTTERFLY_SPAWN_EGG = addToWIPTab(ITEMS.register("butterfly_spawn_egg",
+            () -> new ForgeSpawnEggItem(ForgeEntities.BUTTERFLY,
+                    0x95caff, 0xe880c6, new Item.Properties())));
     public static final RegistryObject<Potion> HEX_POTION = POTIONS.register("roundabout.hex",
             () -> new Potion(new MobEffectInstance(ForgeEffects.HEX.get(), 9600, 0)));
     public static final RegistryObject<Potion> HEX_POTION_EXTENDED = POTIONS.register("roundabout.long_hex",
@@ -881,6 +911,8 @@ public class ForgeItems {
 
     public static final RegistryObject<Item> STAND_DISC_PEARL_JAM = addToWIPTab(ITEMS.register("pearl_jam_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersPearlJam(null))));
+    public static final RegistryObject<Item> STAND_DISC_CATCH_THE_RAINBOW = addToWIPTab(ITEMS.register("catch_the_rainbow_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCatchTheRainbow(null))));
 
   /*  public static final RegistryObject<Item> STAND_DISC_D4C = ITEMS.register("d4c_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));
@@ -1024,6 +1056,8 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new FemAnasuiVisage(null))));
     public static final RegistryObject<Item> ANAKISS_MASK = addToTab(ITEMS.register("anakiss_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new AnakissVisage(null))));
+    public static final RegistryObject<Item> BLACKMORE_MASK = addToWIPTab(ITEMS.register("blackmore_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new BlackmoreVisage(null))));
     public static final RegistryObject<Item> GUCCIO_MASK = addToTab(ITEMS.register("guccio_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new GuccioVisage(null))));
     public static final RegistryObject<Item> VALENTINE_MASK = addToTab(ITEMS.register("valentine_mask",

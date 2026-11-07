@@ -57,7 +57,7 @@ public class BCTroop extends MultipleTypeStand {
 
     @Override
     public boolean needsActive(){
-        return false;
+        return true;
     }
 
     @Override
@@ -78,7 +78,7 @@ public class BCTroop extends MultipleTypeStand {
             return false;
         }
 
-        return userEntity.isAlive() && validatePowers(userEntity);
+        return userEntity.isAlive() && validatePowers(userEntity) && userActive;
     }
 
     public static int getTroopValue() {

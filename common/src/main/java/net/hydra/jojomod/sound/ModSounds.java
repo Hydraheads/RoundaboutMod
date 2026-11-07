@@ -23,9 +23,24 @@ public class ModSounds {
     public static final String INHALE = "inhale";
     public static final ResourceLocation INHALE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+INHALE);
     public static SoundEvent INHALE_EVENT = SoundEvent.createVariableRangeEvent(INHALE_ID);
+
     public static final String TERRIER_SOUND = "terrier_pass";
     public static final ResourceLocation TERRIER_SOUND_ID = new ResourceLocation(Roundabout.MOD_ID+":"+TERRIER_SOUND);
     public static SoundEvent TERRIER_SOUND_EVENT = SoundEvent.createVariableRangeEvent(TERRIER_SOUND_ID);
+
+    public static final String SNAKE_IDLE = "snake_idle";
+    public static final ResourceLocation SNAKE_IDLE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SNAKE_IDLE);
+    public static SoundEvent SNAKE_IDLE_EVENT = SoundEvent.createVariableRangeEvent(SNAKE_IDLE_ID);
+    public static final String SNAKE_HURT = "snake_hurt";
+    public static final ResourceLocation SNAKE_HURT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SNAKE_HURT);
+    public static SoundEvent SNAKE_HURT_EVENT = SoundEvent.createVariableRangeEvent(SNAKE_HURT_ID);
+    public static final String SNAKE_ATTACK = "snake_attack";
+    public static final ResourceLocation SNAKE_ATTACK_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SNAKE_ATTACK);
+    public static SoundEvent SNAKE_ATTACK_EVENT = SoundEvent.createVariableRangeEvent(SNAKE_ATTACK_ID);
+    public static final String SNAKE_DIE = "snake_die";
+    public static final ResourceLocation SNAKE_DIE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SNAKE_DIE);
+    public static SoundEvent SNAKE_DIE_EVENT = SoundEvent.createVariableRangeEvent(SNAKE_DIE_ID);
+
     public static final String SIGN_HIT = "sign_hit";
     public static final ResourceLocation SIGN_HIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SIGN_HIT);
     public static SoundEvent SIGN_HIT_EVENT = SoundEvent.createVariableRangeEvent(SIGN_HIT_ID);
@@ -1455,6 +1470,33 @@ public class ModSounds {
     public static SoundEvent PURPLE_HAZE_SWITCH_POD_EVENT = SoundEvent.createVariableRangeEvent(PURPLE_HAZE_SWITCH_POD_ID);
 
 
+    public static final String POLNAREFF_SC_SUMMON_1 = "pol_summon_1";
+    public static final ResourceLocation POLNAREFF_SC_SUMMON_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+POLNAREFF_SC_SUMMON_1);
+    public static SoundEvent POLNAREFF_SC_SUMMON_1_EVENT = SoundEvent.createVariableRangeEvent(POLNAREFF_SC_SUMMON_1_ID);
+    public static final String POLNAREFF_SC_SUMMON_2 = "pol_summon_2";
+    public static final ResourceLocation POLNAREFF_SC_SUMMON_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+POLNAREFF_SC_SUMMON_2);
+    public static SoundEvent POLNAREFF_SC_SUMMON_2_EVENT = SoundEvent.createVariableRangeEvent(POLNAREFF_SC_SUMMON_2_ID);
+
+    public static final String POLNAREFF_SC_HURT_1 = "pol_hurt_1";
+    public static final ResourceLocation POLNAREFF_SC_HURT_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+POLNAREFF_SC_HURT_1);
+    public static SoundEvent POLNAREFF_SC_HURT_1_EVENT = SoundEvent.createVariableRangeEvent(POLNAREFF_SC_SUMMON_1_ID);
+    public static final String POLNAREFF_SC_HURT_2 = "pol_hurt_2";
+    public static final ResourceLocation POLNAREFF_SC_HURT_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+POLNAREFF_SC_HURT_2);
+    public static SoundEvent POLNAREFF_SC_HURT_2_EVENT = SoundEvent.createVariableRangeEvent(POLNAREFF_SC_SUMMON_2_ID);
+
+    public static final String POLNAREFF_SC_IDLE_1 = "pol_idle_1";
+    public static final ResourceLocation POLNAREFF_SC_IDLE_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+POLNAREFF_SC_IDLE_1);
+    public static SoundEvent POLNAREFF_SC_IDLE_1_EVENT = SoundEvent.createVariableRangeEvent(POLNAREFF_SC_IDLE_1_ID);
+
+    public static final String POLNAREFF_SC_DIE_1 = "pol_die_1";
+    public static final ResourceLocation POLNAREFF_SC_DIE_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+POLNAREFF_SC_DIE_1);
+    public static SoundEvent POLNAREFF_SC_DIE_1_EVENT = SoundEvent.createVariableRangeEvent(POLNAREFF_SC_DIE_1_ID);
+
+    public static final String POLNAREFF_SC_ARMOR_OFF = "pol_armor_off";
+    public static final ResourceLocation POLNAREFF_SC_ARMOR_OFF_ID = new ResourceLocation(Roundabout.MOD_ID+":"+POLNAREFF_SC_ARMOR_OFF);
+    public static SoundEvent POLNAREFF_SC_ARMOR_OFF_EVENT = SoundEvent.createVariableRangeEvent(POLNAREFF_SC_ARMOR_OFF_ID);
+
+
     public static final String SILVER_CHARIOT_SUMMON = "silver_chariot_summon";
     public static final ResourceLocation SILVER_CHARIOT_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_SUMMON);
     public static SoundEvent SILVER_CHARIOT_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_SUMMON_ID);
@@ -2722,6 +2764,33 @@ public class ModSounds {
     public static final ResourceLocation PUCCI_RESPONSE_ANASUI_2_ID = Roundabout.location(PUCCI_RESPONSE_ANASUI_2);
     public static final SoundEvent PUCCI_RESPONSE_ANASUI_2_EVENT = SoundEvent.createVariableRangeEvent(PUCCI_RESPONSE_ANASUI_2_ID);
 
+    public static final String CTR_SUMMON = "ctr_summon";
+    public static final ResourceLocation CTR_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CTR_SUMMON);
+    public static SoundEvent CTR_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(CTR_SUMMON_ID);
+    public static final String CTR_HEAL = "ctr_heal";
+    public static final ResourceLocation CTR_HEAL_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CTR_HEAL);
+    public static SoundEvent CTR_HEAL_EVENT = SoundEvent.createVariableRangeEvent(CTR_HEAL_ID);
+    public static final String CTR_LIFE_CLUTCH = "ctr_life_clutch";
+    public static final ResourceLocation CTR_LIFE_CLUTCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CTR_LIFE_CLUTCH);
+    public static SoundEvent CTR_LIFE_CLUTCH_EVENT = SoundEvent.createVariableRangeEvent(CTR_LIFE_CLUTCH_ID);
+    public static final String CTR_DETACH_1 = "ctr_detach_1";
+    public static final ResourceLocation CTR_DETACH_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CTR_DETACH_1);
+    public static SoundEvent CTR_DETACH_1_EVENT = SoundEvent.createVariableRangeEvent(CTR_DETACH_1_ID);
+    public static final String CTR_DETACH_2 = "ctr_detach_2";
+    public static final ResourceLocation CTR_DETACH_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CTR_DETACH_2);
+    public static SoundEvent CTR_DETACH_2_EVENT = SoundEvent.createVariableRangeEvent(CTR_DETACH_2_ID);
+    public static final String CTR_RAIN_STABILIZING = "ctr_rain_stabilizing";
+    public static final ResourceLocation CTR_RAIN_STABILIZING_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CTR_RAIN_STABILIZING);
+    public static SoundEvent CTR_RAIN_STABILIZING_EVENT = SoundEvent.createVariableRangeEvent(CTR_RAIN_STABILIZING_ID);
+    public static final String CTR_RAIN_STEP_1 = "ctr_rain_step_1";
+    public static final ResourceLocation CTR_RAIN_STEP_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CTR_RAIN_STEP_1);
+    public static SoundEvent CTR_RAIN_STEP_1_EVENT = SoundEvent.createVariableRangeEvent(CTR_RAIN_STEP_1_ID);
+    public static final String CTR_RAIN_STEP_2 = "ctr_rain_step_2";
+    public static final ResourceLocation CTR_RAIN_STEP_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CTR_RAIN_STEP_2);
+    public static SoundEvent CTR_RAIN_STEP_2_EVENT = SoundEvent.createVariableRangeEvent(CTR_RAIN_STEP_2_ID);
+    public static final String CTR_RAIN_STEP_3 = "ctr_rain_step_3";
+    public static final ResourceLocation CTR_RAIN_STEP_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CTR_RAIN_STEP_3);
+    public static SoundEvent CTR_RAIN_STEP_3_EVENT = SoundEvent.createVariableRangeEvent(CTR_RAIN_STEP_3_ID);
 
 
     public static void registerSoundEvents(){

@@ -35,14 +35,16 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
+import org.spongepowered.asm.mixin.Unique;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
 
 public class D4CCloneEntity extends CloneEntity {
-
-    public boolean safeCopy = false;
+    @Unique
+    private static final EntityDataAccessor<Boolean> SAFE_COPY = SynchedEntityData.defineId(D4CCloneEntity.class,
+            EntityDataSerializers.BOOLEAN);
     public int timer = 0;
     public D4CCloneEntity(EntityType<? extends PathfinderMob> $$0, Level $$1) {
         super($$0, $$1);
@@ -53,7 +55,7 @@ public class D4CCloneEntity extends CloneEntity {
     }
 
     public boolean letsNotAttackOurMasterOrPeers(Entity isMaster){
-        if (safeCopy && PowerTypes.isNativeToOurWorld(this)){
+        if (getSafeCopy() && PowerTypes.isNativeToOurWorld(this)){
             if (isMaster != null && getPlayerUUID().isPresent()){
                 if (isMaster.getUUID().equals(getPlayerUUID().get())) {
                     return true;
@@ -157,13 +159,13 @@ public class D4CCloneEntity extends CloneEntity {
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
 
-        tag.putBoolean("safeCopy",safeCopy);
+        tag.putBoolean("safeCopy",getSafeCopy());
     }
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         if (tag.contains("safeCopy", 10)) {
-            safeCopy = tag.getBoolean("safeCopy");
+            setSafeCopy(tag.getBoolean("safeCopy"));
         }
     }
 
@@ -606,8 +608,15 @@ public class D4CCloneEntity extends CloneEntity {
         if (!this.entityData.hasItem(STRATEGY)) {
             super.defineSynchedData();
             this.entityData.define(STRATEGY, 0);
+            this.entityData.define(SAFE_COPY, false);
             this.entityData.define(SPAWNED, false);
         }
+    }
+    public boolean getSafeCopy(){
+        return entityData.get(SAFE_COPY);
+    }
+    public void setSafeCopy(boolean spawned){
+        entityData.set(SAFE_COPY,spawned);
     }
     public boolean getSpawned(){
         return entityData.get(SPAWNED);

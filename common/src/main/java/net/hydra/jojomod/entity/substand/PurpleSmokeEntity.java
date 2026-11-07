@@ -16,9 +16,12 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.mixin.PlayerEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.particles.HazeColorParticleOptions;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.hydra.jojomod.mixin.justice.JusticeCreeper;
@@ -161,6 +164,13 @@ public class PurpleSmokeEntity extends StandEntity {
             if (user != null && StandUU.roundabout$getStandPowers() instanceof PowersPurpleHaze ph) {
                 skin = ph.getStandSkin();
             }
+            if (isDistortionMode()) {
+                int t = getDistortionTier();
+                if (t > lastTier) {
+                    spawnTierBurst(t);
+                }
+                lastTier = t;
+            }
             spawnFieldParticles(skin);
 
             S2CPacketUtil.sync_mold_duration(lifetime, this.getId());
@@ -173,6 +183,16 @@ public class PurpleSmokeEntity extends StandEntity {
             Roundabout.LOGGER.info("ServerRange= " + range);
         }*/
         super.tick();
+    }
+    public static final int DISTORTION_TIER_2_TICKS = 100;
+    public static final int DISTORTION_TIER_3_TICKS = 200;
+
+    /*0 = Distortion Virus I - 1 = Distortion VirusII - 2 = Distortion Virus III.
+     */
+    public int getDistortionTier() {
+        if (ticksAlive >= DISTORTION_TIER_3_TICKS) return 2;
+        if (ticksAlive >= DISTORTION_TIER_2_TICKS) return 1;
+        return 0;
     }
     private int getLightDecayAmount() {
         if (!(this.level() instanceof ServerLevel sl)) return 0;
@@ -241,6 +261,43 @@ public class PurpleSmokeEntity extends StandEntity {
             }
         }
     }
+    private net.minecraft.core.particles.ParticleOptions getFieldParticleOptions(byte skin) {
+        if (isDistortionMode()) {
+            return ModParticles.DISTORTION_SMOKE;
+        }
+        int color = SKIN_COLORS.getOrDefault(skin, DEFAULT_HAZE_COLOR);
+        return HazeColorParticleOptions.fromPackedColor(ModParticles.PURPLE_HAZE_SMOKE, color);
+    }
+
+    private int lastTier = 0;
+
+    private void spawnTierBurst(int tier) {
+        if (!(this.level() instanceof ServerLevel sl)) return;
+
+        double cx = this.getX();
+        double cy = this.getY();
+        double cz = this.getZ();
+        double radius = Math.max(range * 0.95, 0.5);
+
+        int count = 60 + tier * 60;
+        double speed = 0.15 + tier * 0.05;
+
+        for (int i = 0; i < count; i++) {
+            double y = this.random.nextDouble() * 2 - 1;
+            double theta = this.random.nextDouble() * Math.PI * 2;
+            double ring = Math.sqrt(1 - y * y);
+            double dirX = Math.cos(theta) * ring;
+            double dirY = y;
+            double dirZ = Math.sin(theta) * ring;
+
+
+            sl.sendParticles(ModParticles.DISTORTION_SMOKE,
+                    cx + dirX * radius * 0.5, cy + dirY * radius * 0.5, cz + dirZ * radius * 0.5,
+                    0, dirX, dirY, dirZ, speed);
+        }
+
+        sl.playSound(null, this.blockPosition(), ModSounds.PURPLE_HAZE_DISTORTION_SMOKE_EVENT, SoundSource.HOSTILE, 0.6F, 0.5F + tier * 0.2F);
+    }
     private void spawnFieldParticles(byte skin) {
         if (!(this.level() instanceof ServerLevel sl)) return;
 
@@ -250,18 +307,15 @@ public class PurpleSmokeEntity extends StandEntity {
 
         double radius = Math.max(range * 0.95, 0.5);
 
-        net.minecraft.core.particles.ParticleOptions options;
-        if (isDistortionMode()) {
-            options = ModParticles.DISTORTION_SMOKE;
-        } else {
-            int color = SKIN_COLORS.getOrDefault(skin, DEFAULT_HAZE_COLOR);
-            options = HazeColorParticleOptions.fromPackedColor(ModParticles.PURPLE_HAZE_SMOKE, color);
-        }
+        net.minecraft.core.particles.ParticleOptions options = getFieldParticleOptions(skin);
+        int tier = isDistortionMode() ? getDistortionTier() : 0;
 
-//interior
+        //interior
+        int interiorTarget = 20 + tier * 30; //particle count
+        int maxAttempts = interiorTarget * 3;
         int spawned = 0;
         int attempts = 0;
-        while (spawned < 20 && attempts < 60) {
+        while (spawned < interiorTarget && attempts < maxAttempts) {
             attempts++;
             double dx = (this.random.nextDouble() * 2 - 1) * radius;
             double dy = (this.random.nextDouble() * 2 - 1) * radius;
@@ -271,8 +325,8 @@ public class PurpleSmokeEntity extends StandEntity {
             spawned++;
         }
 
-    //exterior
-        int borderCount = (int) (12 + range * 4);
+        //exterior
+        int borderCount = (int) (12 + range * 4) + tier * 30;
         for (int i = 0; i < borderCount; i++) {
             double y = this.random.nextDouble() * 2 - 1;
             double theta = this.random.nextDouble() * Math.PI * 2;
@@ -321,19 +375,20 @@ public class PurpleSmokeEntity extends StandEntity {
 
             if (!((StandUser) living).roundabout$isBubbleEncased() && !(living instanceof StrayCatEntity c && c.getBubbleShield()) && PowerTypes.isExistentiallyElsewhereTogether(this, living)) {
 
-                int effectDuration = living instanceof Player ? 150 : 150; //for when it was less duration to you. It was 100 : 150
+                int effectDuration = living instanceof Player ? 160 : 160; //for when it was less duration to you. It was 100 : 150
                 boolean isSelf = living == user;
 
                 if (isDistortionMode()) {
+                    int tier = getDistortionTier();
                     boolean alreadyHasVirus = living.hasEffect(ModEffects.DISTORTION_VIRUS);
-                    living.addEffect(new MobEffectInstance(ModEffects.DISTORTION_VIRUS, effectDuration));
+                    living.addEffect(new MobEffectInstance(ModEffects.DISTORTION_VIRUS, effectDuration, tier));
                     ((StandUser) living).SetInDistortionHazeTicks(5);
 
                     if (!isSelf && !alreadyHasVirus && expGrantedTo.add(living.getId())) {
                         ((StandUser) user).roundabout$getStandPowers().addEXP(2);
                     }
                     if (ClientNetworking.getAppropriateConfig().PurpleHazeSettings.HazeMelts) {
-                        living.addEffect(new MobEffectInstance(ModEffects.MELTING, 150, 2));
+                        living.addEffect(new MobEffectInstance(ModEffects.MELTING, 160, 2));
                     }
                 } else {
                     boolean alreadyHasVirus = living.hasEffect(ModEffects.HAZE_VIRUS);

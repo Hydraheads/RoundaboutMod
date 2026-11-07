@@ -11,13 +11,13 @@ public class CenturyBoyAnimations {
 					new Keyframe(0F, KeyframeAnimations.degreeVec(-60F, -45.0F, 47.5F), AnimationChannel.Interpolations.LINEAR)
 			))
 			.addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.POSITION,
-					new Keyframe(0F, KeyframeAnimations.posVec(0.9554F, -9.0427F, 1.4142F), AnimationChannel.Interpolations.LINEAR)
+					new Keyframe(0F, KeyframeAnimations.posVec(0.9554F + 0.7f, -9.0427F, 1.4142F), AnimationChannel.Interpolations.LINEAR)
 			))
 			.addAnimation("left_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 					new Keyframe(0F, KeyframeAnimations.degreeVec(-60.0F, 50.0F, -47.5F), AnimationChannel.Interpolations.LINEAR)
 			))
 			.addAnimation("left_arm", new AnimationChannel(AnimationChannel.Targets.POSITION,
-					new Keyframe(0F, KeyframeAnimations.posVec(-1.0351F, -9.1296F, 1.2856F), AnimationChannel.Interpolations.LINEAR)
+					new Keyframe(0F, KeyframeAnimations.posVec(-1.0351F - 0.7f, -9.1296F, 1.2856F), AnimationChannel.Interpolations.LINEAR)
 			))
 			.build();
 

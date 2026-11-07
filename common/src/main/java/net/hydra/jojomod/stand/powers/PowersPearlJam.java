@@ -44,7 +44,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import org.apache.commons.compress.utils.Lists;
+import com.google.common.collect.Lists;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 

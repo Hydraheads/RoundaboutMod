@@ -147,6 +147,8 @@ public interface StandUser {
     void roundabout$setOasisVanishTicks(int set);
     int roundabout$getDiverDownVanishTicks();
     void roundabout$setDiverDownVanishTicks(int set);
+    int roundabout$getCatchTheRainbowVanishTicks();
+    void roundabout$setCatchTheRainbowVanishTicks(int set);
 
     int getJumpImmunityTicks();
 
@@ -432,4 +434,8 @@ public interface StandUser {
     /// dw about these, I'm not sure if I'll use them yet
     boolean roundabout$hasInfiniteSpin();
     void roundabout$clearInfiniteSpin();
+
+    /** catch the rainbow **/
+    boolean roundabout$getIsRainWalking();
+    void roundabout$setIsRainWalking(boolean bool);
 }

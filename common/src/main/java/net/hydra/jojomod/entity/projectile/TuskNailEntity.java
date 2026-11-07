@@ -5,6 +5,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersTusk;
@@ -21,13 +22,11 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.EnderMan;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -40,9 +39,13 @@ public class TuskNailEntity extends AbstractArrow {
 
     /// trails
     private final List<Vec3> trailPoints = new ArrayList<>();
-    private static final int MAX_TRAIL_POINTS = 10;
+    private final List<Vec3> spiralPoints = new ArrayList<>();
+    private static final int MAX_TRAIL_POINTS = 15;
     public List<Vec3> getTrailPoints() {
         return this.trailPoints;
+    }
+    public List<Vec3> getSpiralPoints() {
+        return this.spiralPoints;
     }
 
     @Override
@@ -106,6 +109,10 @@ public class TuskNailEntity extends AbstractArrow {
         return true;
     }
 
+    public boolean isWeaker() {
+        return this.getAct() == 1 && this.life > 7;
+    }
+
     public void tick() {
         super.tick();
 
@@ -113,31 +120,39 @@ public class TuskNailEntity extends AbstractArrow {
         // for getting the trail
         if (this.level().isClientSide()) {
             if (!this.inGround && !this.isRemoved()) {
-                this.trailPoints.add(this.position().add(0, 0.3, 0));
-                if (this.trailPoints.size() > MAX_TRAIL_POINTS) {
-                    this.trailPoints.remove(0);
+                Vec3 point = this.position().add(0, 0.3, 0);
+                this.trailPoints.add(point);
+
+                if (this.getAct() > 1) {
+                    Vec3 dir = this.getDeltaMovement().normalize();
+                    Vec3 reference = (Math.abs(dir.y) < 1) ? new Vec3(0, 1, 0) : new Vec3(1, 0, 0);
+                    Vec3 tangent = dir.cross(reference).normalize();
+                    Vec3 bitangent = dir.cross(tangent).normalize();
+                    double mulX = Math.cos(((tickCount / 3F) * Math.PI)) * 0.35F;
+                    double mulY = Math.sin(((tickCount / 3F) * Math.PI)) * 0.35F;
+                    spiralPoints.add(point.add(tangent.scale(mulX)).add(bitangent.scale(mulY)));
+                }
+
+                if (this.trailPoints.size() > MAX_TRAIL_POINTS || (this.trailPoints.size() > MAX_TRAIL_POINTS/2 && this.isWeaker()) ) {
+                    if (!trailPoints.isEmpty()) {
+                        this.trailPoints.remove(0);
+                    }
+                    if (!spiralPoints.isEmpty()) {
+                        this.spiralPoints.remove(0);
+                    }
                 }
             } else if (this.inGround) {
                 this.trailPoints.clear();
+                this.spiralPoints.clear();
             }
         }
 
         this.life += 1;
-        if (this.life > 100 || (this.getAct() == 1 && life > 7) ) {
+        if (this.life > 100 || (this.getAct() == 1 && life > 15) || this.getAct() == 4 && life > 60 ) {
             this.discard();
         }
+
         if (!this.level().isClientSide() && this.getOwner() != null && this.getOwner() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersTusk PT) {
-
-     /*       float r = PT.getNailColor().x;
-            float g = PT.getNailColor().y;
-            float b = PT.getNailColor().z;
-            if (this.getExtra() == GOLDEN && tickCount % 2 == 0) {r = 1; g = 1; b = 0.33F;}
-            ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(r,g,b),1F),
-                    this.getX(), this.getY() + this.getBbHeight() / 2, this.getZ(),
-                    0, 0, 0, 0, 0.015);*/
-
-
-
             if (!isRemoved()) {
 
                 Vec3 currentPos = this.position();
@@ -171,21 +186,18 @@ public class TuskNailEntity extends AbstractArrow {
     protected void onHitBlock(BlockHitResult $$0) {
         if (!this.level().isClientSide() && !this.isRemoved()   ) {
 
-            if (this.getExtra() == GOLDEN) {
-                ((ServerLevel) this.level()).sendParticles(ModParticles.SMALL_EXPLOSION,
-                        this.getX(), this.getY() + this.getBbHeight(), this.getZ(),
-                        0, 0, 0, 0, 0.7);
-            }
 
             ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.level().getBlockState($$0.getBlockPos())),
                     $$0.getLocation().x, $$0.getLocation().y, $$0.getLocation().z,
                     30, 0.2, 0.05, 0.2, 0.3);
 
 
-            BlockState bs = this.level().getBlockState($$0.getBlockPos());
             if (this.getAct() == 2 || this.getAct() == 3) {
                 if (!this.isInWater()) {
                     createHole($$0);
+                    if (this.getExtra() == GOLDEN) {
+                        radialExplosion();
+                    }
                 }
             }
             this.discard();
@@ -203,10 +215,10 @@ public class TuskNailEntity extends AbstractArrow {
                     tuskHoleEntity.setClinging(dir);
                     pos = tuskHoleEntity.alignToDirection(pos, dir);
                 }
-                tuskHoleEntity.setPos(pos);
-                this.level().addFreshEntity(tuskHoleEntity);
-                return tuskHoleEntity;
             }
+            tuskHoleEntity.setPos(pos);
+            this.level().addFreshEntity(tuskHoleEntity);
+            return tuskHoleEntity;
         }
         return null;
     }
@@ -229,24 +241,21 @@ public class TuskNailEntity extends AbstractArrow {
             if (!(ent instanceof TuskNailEntity)) {
                 if (this.getOwner() instanceof LivingEntity LE && ((StandUser) LE).roundabout$getStandPowers() instanceof PowersTusk PT) {
                     if (!(MainUtil.isMobOrItsMounts(ent, getOwner())) && !MainUtil.isCreativeOrInvincible(ent)) {
+
+                        if (this.getExtra() == GOLDEN) {
+                            radialExplosion();
+                        }
+
                         float str = PT.getNailDamage(this,ent,this.getAct());
-
-
                         if (ent.hurt(ModDamageTypes.of(ent.level(), ModDamageTypes.EXPLOSIVE_STAND, this.getOwner()), str)) {;
-                            float knockbackStrength = this.getAct() == 1 ? 0.4F : 0.6F;
-                            if (this.getExtra() == GOLDEN) {
-                                knockbackStrength *= 1.6F;
-                            }
+                            float knockbackStrength = this.getAct() == 1 ? 0.5F : 0.6F;
+                            if (this.getExtra() == GOLDEN) {knockbackStrength *= 1.6F;}
+                            if (this.isWeaker()) {knockbackStrength *= 0.5F;}
                             PowersTusk.takeDeterminedKnockbackWithY2(LE, ent, knockbackStrength);
 
 
                             if (this.getAct() == 2 || this.getAct() == 3) {
-                                TuskHoleEntity tuskHole = createHole(null,ent.getPosition(0));
-                                if (tuskHole != null) {
-                                    if ( (this.getOwner() instanceof Player P && (P.getLastHurtMob() == null || P.getLastHurtMob() == ent)) || !(this.getOwner() instanceof Player)  ) {
-                                        tuskHole.doHurtTarget(ent);
-                                    }
-                                }
+                                TuskHoleEntity.bleedTarget(ent);
                             } else if (this.getAct() == 4) {
                                 MainUtil.takeUnresistableKnockbackWithY(ent,0.05F,0,-1,0);
                                 if (ent instanceof Mob && !MainUtil.isBossMob(ent) && !MainUtil.getReducedDamage(ent)) {
@@ -285,5 +294,35 @@ public class TuskNailEntity extends AbstractArrow {
     @Override
     protected float getWaterInertia() {
         return 0.99F;
+    }
+
+    private void radialExplosion(){
+        if (!this.level().isClientSide() && this.getOwner() instanceof LivingEntity user){
+            ((ServerLevel) this.level()).sendParticles(ModParticles.SMALL_EXPLOSION,
+                    this.getX(), this.getY() + this.getBbHeight(), this.getZ(),
+                    0, 0, 0, 0, 0.7);
+
+            if (((StandUser) user).roundabout$getStandPowers() instanceof PowersTusk PT) {
+                List<Entity> entityList = DamageHandler.genHitbox(user, this.getX(), this.getY(),
+                        this.getZ(), 1.5F, 1.5F, 1.5F);
+                if (!entityList.isEmpty()){
+                    for (Entity value : entityList) {
+                        if (value.isPickable() && value.isAttackable()){
+                            blastEntity(value, PT);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    private void blastEntity(Entity target, PowersTusk PT) {
+        if (target !=null && this.getOwner() instanceof LivingEntity user && !MainUtil.isMobOrItsMounts(target,this.getOwner())) {
+            target.hurt(ModDamageTypes.of(this.level(),ModDamageTypes.STAND),PT.getRadialDamage(target,this));
+            float degrees = MainUtil.getLookAtEntityYaw(this, target);
+            MainUtil.takeKnockbackWithY(target, 0.3F,
+                    Mth.sin(degrees * ((float) Math.PI / 180)),
+                    Mth.sin(-17 * ((float) Math.PI / 180)),
+                    -Mth.cos(degrees * ((float) Math.PI / 180)));
+        }
     }
 }

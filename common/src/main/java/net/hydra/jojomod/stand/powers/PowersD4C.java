@@ -565,10 +565,47 @@ public class PowersD4C extends NewPunchingStand {
     public int rech = 0;
     D4CCloneEntity cloneInReach = null;
     D4CCloneEntity cloneInStore = null;
+    private List<D4CCloneEntity> selectedClones = new ArrayList<>();
+    public void cycleThroughSelectedEntities(){
+        if (selectedClones == null){
+            selectedClones = new ArrayList<>();
+        }
+        List<D4CCloneEntity> d4cControlledEntities = new ArrayList<>(selectedClones) {};
+        if (!d4cControlledEntities.isEmpty()){
+            for (D4CCloneEntity value : d4cControlledEntities) {
+                if (value.isRemoved() || !value.isAlive()) {
+                    removeSelectedEntities(value);
+                }
+            }
+        }
+    }
+    public List<D4CCloneEntity> addSelectedEntities(LivingEntity LE){
+        if (selectedClones == null){
+            selectedClones = new ArrayList<>();
+        }
+        if (LE instanceof D4CCloneEntity d4CClone) {
+            selectedClones.add(d4CClone);
+        }
+        return selectedClones;
+    }
+    public List<D4CCloneEntity> removeSelectedEntities(LivingEntity LE){
+        if (selectedClones == null){
+            selectedClones = new ArrayList<>();
+        }
+
+        if (LE instanceof D4CCloneEntity d4CClone) {
+            selectedClones.remove(d4CClone);
+        }
+        return selectedClones;
+    }
+
     @Override
     public boolean highlightsEntity(Entity ent,Player player){
         if (isInSelectionMode) {
             if (cloneInStore != null && ent != null && cloneInStore.getUUID().equals(ent.getUUID())) {
+                return true;
+            }
+            if (ent instanceof D4CCloneEntity drc && selectedClones != null && selectedClones.contains(drc)){
                 return true;
             }
         } else {
@@ -580,8 +617,14 @@ public class PowersD4C extends NewPunchingStand {
     }
     @Override
     public int highlightsEntityColor(Entity ent, Player player){
-        if (isInSelectionMode) {
-            return 54527;
+        if (isInSelectionMode && ent instanceof D4CCloneEntity dcent) {
+            if (selectedClones != null && selectedClones.contains(dcent)){
+                return 65400;
+            } else if (cloneInStore != null && cloneInStore.getUUID().equals(ent.getUUID())) {
+                return 54527;
+            } else {
+                return 65400;
+            }
         } else {
             return 15151775;
         }
@@ -590,6 +633,7 @@ public class PowersD4C extends NewPunchingStand {
     public void tickPower() {
         super.tickPower();
         if (self.level().isClientSide()){
+            cycleThroughSelectedEntities();
             if (seesBetween){
                 tickBetween();
             }
@@ -606,7 +650,7 @@ public class PowersD4C extends NewPunchingStand {
                 if (jentity instanceof D4CCloneEntity d4cclone){
                     Optional<UUID> uuid = d4cclone.getPlayerUUID();
                     if (uuid != null && uuid.isPresent()){
-                        if (uuid.get().equals(self.getUUID()) && jentity.isAlive()){
+                        if (uuid.get().equals(self.getUUID()) && jentity.isAlive() && d4cclone.getSafeCopy()){
                             cloneInReach = d4cclone;
                         } else {
                             cloneInReach = null;
@@ -626,7 +670,7 @@ public class PowersD4C extends NewPunchingStand {
                 if (jentity instanceof D4CCloneEntity d4cclone){
                     Optional<UUID> uuid = d4cclone.getPlayerUUID();
                     if (uuid != null && uuid.isPresent()){
-                        if (uuid.get().equals(self.getUUID()) && jentity.isAlive()){
+                        if (uuid.get().equals(self.getUUID()) && jentity.isAlive() && d4cclone.getSafeCopy()){
                             cloneInStore = d4cclone;
                         } else {
                             cloneInStore = null;
@@ -1180,7 +1224,7 @@ public class PowersD4C extends NewPunchingStand {
 
 
         if (original.getUUID().equals(self.getUUID())){
-            copy.safeCopy = true;
+            copy.setSafeCopy(true);
         }
         IPlayerEntity pl = ((IPlayerEntity) original);
         ItemStack visage = pl.roundabout$getMaskSlot();

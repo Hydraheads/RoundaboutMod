@@ -4,10 +4,7 @@ package net.hydra.jojomod.entity;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.badCompanyTroops.*;
 import net.hydra.jojomod.entity.gold_experience.*;
-import net.hydra.jojomod.entity.mobs.AnubisGuardian;
-import net.hydra.jojomod.entity.mobs.FalconEntity;
-import net.hydra.jojomod.entity.mobs.StrayCatEntity;
-import net.hydra.jojomod.entity.mobs.TerrierEntity;
+import net.hydra.jojomod.entity.mobs.*;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
@@ -42,6 +39,9 @@ public class ModEntities {
     public static float justiceWidth = 0.65F;
     public static EntityType<TerrierEntity> TERRIER_DOG;
     public static EntityType<FalconEntity> FALCON;
+    public static EntityType<Snake> SNAKE;
+    public static EntityType<Piranha> PIRANHA;
+    public static EntityType<Butterfly> BUTTERFLY;
     public static EntityType<Zombiefish> ZOMBIEFISH;
     public static EntityType<AnubisGuardian> ANUBIS_GUARDIAN;
     public static EntityType<TheWorldEntity> THE_WORLD;
@@ -122,6 +122,8 @@ public class ModEntities {
     public static EntityType<GEFrogEntity> GE_FROG;
     public static EntityType<GEBeeEntity> GE_BEE;
     public static EntityType<GEFishEntity> GE_FISH;
+    public static EntityType<GEFoxEntity> GE_FOX;
+    public static EntityType<GESnakeEntity> GE_SNAKE;
     public static EntityType<SilverChariotEntity> SILVER_CHARIOT;
     public static EntityType<SilverChariotEntity> SILVER_CHARIOT_PHARAOH;
     public static EntityType<SilverChariotRapierShotEntity> SILVER_CHARIOT_RAPIER;
@@ -186,6 +188,7 @@ public class ModEntities {
     public static EntityType<PurpleSmokeEntity> PURPLE_SMOKE;
     public static EntityType<StrayCatAirBubble> STRAY_CAT_AIRBUBBLE;
     public static EntityType<PHCapsuleEntity> PH_CAPSULE;
+    public static EntityType<CTRbarrierEntity> CTR_BARRIER;
 
     public static EntityType<GoBeyondEntity> GO_BEYOND;
     public static EntityType<EncasementBubbleEntity> ENCASEMENT_BUBBLE;

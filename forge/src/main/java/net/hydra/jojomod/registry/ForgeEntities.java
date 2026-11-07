@@ -4,10 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.*;
 import net.hydra.jojomod.entity.badCompanyTroops.*;
 import net.hydra.jojomod.entity.gold_experience.*;
-import net.hydra.jojomod.entity.mobs.AnubisGuardian;
-import net.hydra.jojomod.entity.mobs.FalconEntity;
-import net.hydra.jojomod.entity.mobs.StrayCatEntity;
-import net.hydra.jojomod.entity.mobs.TerrierEntity;
+import net.hydra.jojomod.entity.mobs.*;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
@@ -48,6 +45,24 @@ public class ForgeEntities {
                     EntityType.Builder.of(FalconEntity::new, MobCategory.CREATURE)
                             .sized(0.3f, 0.65f).clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "falcon").toString())
+            );
+    public static final RegistryObject<EntityType<Snake>> SNAKE =
+            ENTITY_TYPES.register("snake", () ->
+                    EntityType.Builder.of(Snake::new, MobCategory.CREATURE)
+                            .sized(0.6f, 0.4f).clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "snake").toString())
+            );
+    public static final RegistryObject<EntityType<Piranha>> PIRANHA =
+            ENTITY_TYPES.register("piranha", () ->
+                    EntityType.Builder.of(Piranha::new, MobCategory.CREATURE)
+                            .sized(0.6f, 0.5f).clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "piranha").toString())
+            );
+    public static final RegistryObject<EntityType<Butterfly>> BUTTERFLY =
+            ENTITY_TYPES.register("butterfly", () ->
+                    EntityType.Builder.of(Butterfly::new, MobCategory.AMBIENT)
+                            .sized(0.5f, 0.5f).clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "butterfly").toString())
             );
     public static final RegistryObject<EntityType<Zombiefish>> ZOMBIEFISH =
             ENTITY_TYPES.register("zombiefish", () ->
@@ -744,6 +759,16 @@ public class ForgeEntities {
                     .sized(0.5f, 0.9f)
                     .clientTrackingRange(5)
                     .build(Roundabout.MOD_ID + ":ge_fish"));
+    public static final RegistryObject<EntityType<GEFoxEntity>> GE_FOX = ENTITY_TYPES.register("ge_fox",
+            () -> EntityType.Builder.of(GEFoxEntity::new, MobCategory.CREATURE)
+                    .sized(0.5f, 0.9f)
+                    .clientTrackingRange(5)
+                    .build(Roundabout.MOD_ID + ":ge_fox"));
+    public static final RegistryObject<EntityType<GESnakeEntity>> GE_SNAKE = ENTITY_TYPES.register("ge_snake",
+            () -> EntityType.Builder.of(GESnakeEntity::new, MobCategory.CREATURE)
+                    .sized(0.6f, 0.4f)
+                    .clientTrackingRange(5)
+                    .build(Roundabout.MOD_ID + ":ge_snake"));
     public static final RegistryObject<EntityType<SilverChariotEntity>> SILVER_CHARIOT =
             ENTITY_TYPES.register("silver_chariot", () ->
                     EntityType.Builder.of(SilverChariotEntity::new, MobCategory.MISC).sized(0.75f, 2.05f).
@@ -1178,5 +1203,12 @@ public class ForgeEntities {
                             sized(PHCapsuleEntity.eWidth, PHCapsuleEntity.eHeight).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "ph_capsule").toString())
+            );
+    public static final RegistryObject<EntityType<CTRbarrierEntity>> CTR_BARRIER =
+            ENTITY_TYPES.register("ctrbarrier", () ->
+                    EntityType.Builder.<CTRbarrierEntity>of(CTRbarrierEntity::new, MobCategory.MISC).
+                            sized(4f, 4f).
+                            clientTrackingRange(15).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "ctrbarrier").toString())
             );
 }

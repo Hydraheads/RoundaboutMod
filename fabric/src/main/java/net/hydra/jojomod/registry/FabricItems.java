@@ -18,10 +18,15 @@ import net.hydra.jojomod.item.paintings.MonaLisaPaintingItem;
 import net.hydra.jojomod.item.paintings.VanGoughPaintingItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.*;
+import net.hydra.jojomod.item.CommandDiscItem;
+import net.hydra.jojomod.item.HearingDiscItem;
+import net.hydra.jojomod.item.MemoryDiscItem;
+import net.hydra.jojomod.item.SightDiscItem;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
@@ -29,6 +34,7 @@ import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Fluids;
 
 public class FabricItems {
     public static Item STAND_ARROW = registerItem("stand_arrow", new StandArrowItem(new Item.Properties().stacksTo(1).durability(5)));
@@ -180,6 +186,9 @@ public class FabricItems {
     public static Item STAND_DISC_PEARL_JAM = registerItem("pearl_jam_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersPearlJam(null)));
 
+    public static Item STAND_DISC_CATCH_THE_RAINBOW = registerItem("catch_the_rainbow_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCatchTheRainbow(null)));
+
     public static Item STAND_DISC_CINDERELLA = registerItem("cinderella_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCinderella(null)));
     public static Item STAND_DISC_PLANET_WAVES = registerItem("planet_waves_disc",
@@ -205,7 +214,7 @@ public class FabricItems {
     public static Item STAND_DISC_ACHTUNG = registerItem("achtung_baby_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAchtungBaby(null)));
 
-    public static Item STAND_DISC_DIVER_DOWN = registerItem("diver_down_disc",
+   public static Item STAND_DISC_DIVER_DOWN = registerItem("diver_down_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null)));
     public static Item MAX_STAND_DISC_DIVER_DOWN = registerItem("max_diver_down_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null)));
@@ -335,6 +344,15 @@ public class FabricItems {
     public static Item LOCACACA = registerItem("locacaca", new LocacacaItem(new Item.Properties().food(ModFoodComponents.LOCACACA)));
     public static Item NEW_LOCACACA = registerItem("new_locacaca", new NewLocacacaItem(new Item.Properties().food(ModFoodComponents.LOCACACA)));
     public static Item LUCKY_LIPSTICK = registerItem("lucky_lipstick", new LuckyLipstickItem(new Item.Properties().stacksTo(1)));
+    public static Item SNAKE_SKIN = registerItem("snake_skin", new Item(new Item.Properties()));
+    public static Item SNAKE_OIL = registerItem("snake_oil", new DrinkableItem(new Item.Properties()));
+    public static Item SNAKE_SKIN_BOOTS = registerItem("snake_skin_boots", new ArmorItem(SnakeSkinBootsItem.SNAKE_ARMOR, ArmorItem.Type.BOOTS, new Item.Properties()));
+    public static final Item PIRANHA_BUCKET = Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Roundabout.MOD_ID, "piranha_bucket"),
+            new MobBucketItem(FabricEntities.PIRANHA, Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1)));
+    public static final Item PIRANHA = Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Roundabout.MOD_ID, "piranha"),
+            new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationMod(0.1F).build())));
+    public static final Item COOKED_PIRANHA = Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Roundabout.MOD_ID, "cooked_piranha"),
+            new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationMod(1.2F).build())));
 
     public static Item MEMORY_PAWN = registerItem("memory_pawn", new MemoryChessPieceItem(ModBlocks.CHESS_PIECE, new Item.Properties().stacksTo(1)));
     public static Item MEMORY_ROOK = registerItem("memory_rook", new MemoryChessPieceItem(ModBlocks.CHESS_PIECE, new Item.Properties().stacksTo(1)));
@@ -392,6 +410,7 @@ public class FabricItems {
     public static Item ANASUI_MASK = registerItem("anasui_mask", new MaskItem(new Item.Properties().stacksTo(1), new AnasuiVisage(null)));
     public static Item FEM_ANASUI_MASK = registerItem("fem_anasui_mask", new MaskItem(new Item.Properties().stacksTo(1), new FemAnasuiVisage(null)));
     public static Item ANAKISS_MASK = registerItem("anakiss_mask", new MaskItem(new Item.Properties().stacksTo(1), new AnakissVisage(null)));
+    public static Item BLACKMORE_MASK = registerItem("blackmore_mask", new MaskItem(new Item.Properties().stacksTo(1), new BlackmoreVisage(null)));
     public static Item HATO_MASK = registerItem("hato_mask", new MaskItem(new Item.Properties().stacksTo(1), new HatoVisage(null)));
     public static Item SHIZUKA_MASK = registerItem("shizuka_mask", new MaskItem(new Item.Properties().stacksTo(1), new ShizukaVisage(null)));
     public static Item CHAKA_MASK = registerItem("chaka_mask", new MaskItem(new Item.Properties().stacksTo(1), new ChakaVisage(null)));
@@ -471,6 +490,14 @@ public class FabricItems {
             0x66BB6A, 0xffa8e8, new Item.Properties()));
     public static final Item ANUBIS_GUARDIAN_SPAWN_EGG = registerItem("anubis_guardian_spawn_egg", new SpawnEggItem(FabricEntities.ANUBIS_GUARDIAN,
             0x8E9393, 0x24395E, new Item.Properties()));
+
+    public static final Item SNAKE_SPAWN_EGG = registerItem("snake_spawn_egg", new SpawnEggItem(FabricEntities.SNAKE,
+            0x6dcd4c, 0xf9f07b, new Item.Properties()));
+    public static final Item PIRANHA_SPAWN_EGG = registerItem("piranha_spawn_egg", new SpawnEggItem(FabricEntities.PIRANHA,
+            0x8fbbdd, 0xe89e4d, new Item.Properties()));
+    public static final Item BUTTERFLY_SPAWN_EGG = registerItem("butterfly_spawn_egg", new SpawnEggItem(FabricEntities.BUTTERFLY,
+            0x95caff, 0xe880c6, new Item.Properties()));
+
     public static final Potion HEX_POTION =
             Registry.register(BuiltInRegistries.POTION, new ResourceLocation(Roundabout.MOD_ID, "roundabout.hex"),
                     new Potion(new MobEffectInstance(ModEffects.HEX, 9600, 0)));
@@ -548,12 +575,16 @@ public class FabricItems {
                         entries.accept(TERRIER_SPAWN_EGG);
                         entries.accept(ANUBIS_GUARDIAN_SPAWN_EGG);
                         entries.accept(ZOMBIE_MINION_SPAWN_EGG);
+                        entries.accept(SNAKE_SPAWN_EGG);
                         entries.accept(COFFEE_GUM);
                         entries.accept(LOCACACA_PIT.asItem());
                         entries.accept(LOCACACA);
                         entries.accept(LOCACACA_BRANCH.asItem());
                         entries.accept(NEW_LOCACACA);
                         entries.accept(CHERRIES);
+                        entries.accept(SNAKE_SKIN);
+                        entries.accept(SNAKE_SKIN_BOOTS);
+                        entries.accept(SNAKE_OIL);
                         entries.accept(METEORITE);
                         entries.accept(METEORITE_INGOT);
                         entries.accept(AJA);
@@ -819,6 +850,11 @@ public class FabricItems {
                         //Add all items from the Jojo mod tab here
                     	//entries.accept(ModBlocks.CHESSBOARD_BLOCK);
                         entries.accept(FALCON_SPAWN_EGG);
+                        entries.accept(PIRANHA_SPAWN_EGG);
+                        entries.accept(PIRANHA_BUCKET);
+                        entries.accept(PIRANHA);
+                        entries.accept(COOKED_PIRANHA);
+                        entries.accept(BUTTERFLY_SPAWN_EGG);
                         entries.accept(STAND_DISC_D4C);
                         entries.accept(MAX_STAND_DISC_D4C);
                         entries.accept(STAND_DISC_GOLD_EXPERIENCE);
@@ -826,6 +862,11 @@ public class FabricItems {
                         entries.accept(STAND_DISC_20_CENTURY_BOY);
                         entries.accept(STAND_DISC_TUSK);
                         entries.accept(MAX_STAND_DISC_TUSK);
+                        entries.accept(CHAMOMILE_SEEDS);
+                        entries.accept(CHAMOMILE);
+                        entries.accept(MINT_SEEDS);
+                        entries.accept(MINT);
+                        entries.accept(HERB_TEA);
                         entries.accept(STAND_DISC_METALLICA);
                         entries.accept(MAX_STAND_DISC_METALLICA);
                         entries.accept(STAND_DISC_PURPLE_HAZE);
@@ -841,6 +882,11 @@ public class FabricItems {
                         entries.accept(STAND_DISC_OASIS);
                         entries.accept(MAX_STAND_DISC_OASIS);
                         entries.accept(STAND_DISC_PEARL_JAM);
+                        entries.accept(STAND_DISC_DIVER_DOWN);
+                        entries.accept(MAX_STAND_DISC_DIVER_DOWN);
+                        entries.accept(STAND_DISC_CATCH_THE_RAINBOW);
+                        entries.accept(BLACKMORE_MASK);
+
                         entries.accept(STAND_DISC_SILVER_CHARIOT);
                         entries.accept(MAX_STAND_DISC_SILVER_CHARIOT);
                         entries.accept(STAND_DISC_WHITESNAKE);
@@ -1054,6 +1100,12 @@ public class FabricItems {
         ModItems.METEORITE_INGOT = METEORITE_INGOT;
         ModItems.IRON_BALL_CROSSBOW = IRON_BALL_CROSSBOW;
         ModItems.LOCACACA_PIT = LOCACACA_PIT;
+        ModItems.SNAKE_SKIN = SNAKE_SKIN;
+        ModItems.SNAKE_SKIN_BOOTS = SNAKE_SKIN_BOOTS;
+        ModItems.SNAKE_OIL = SNAKE_OIL;
+        ModItems.PIRANHA_BUCKET = PIRANHA_BUCKET;
+        ModItems.PIRANHA = PIRANHA;
+        ModItems.COOKED_PIRANHA = COOKED_PIRANHA;
 
         ModItems.STRAY_CAT_ANIME = STRAY_CAT_ANIME;
         ModItems.STRAY_CAT_MANGA = STRAY_CAT_MANGA;
@@ -1135,6 +1187,7 @@ public class FabricItems {
         ModItems.ANASUI_MASK = ANASUI_MASK;
         ModItems.FEM_ANASUI_MASK = FEM_ANASUI_MASK;
         ModItems.ANAKISS_MASK = ANAKISS_MASK;
+        ModItems.BLACKMORE_MASK = BLACKMORE_MASK;
         ModItems.GUCCIO_MASK = GUCCIO_MASK;
         ModItems.HATO_MASK = HATO_MASK;
         ModItems.SHIZUKA_MASK = SHIZUKA_MASK;
@@ -1160,6 +1213,9 @@ public class FabricItems {
         ModItems.HAYATO_KAWAJIRI_MASK = HAYATO_KAWAJIRI_MASK;
         ModItems.TERRIER_SPAWN_EGG = TERRIER_SPAWN_EGG;
         ModItems.FALCON_SPAWN_EGG = FALCON_SPAWN_EGG;
+        ModItems.SNAKE_SPAWN_EGG = SNAKE_SPAWN_EGG;
+        ModItems.PIRANHA_SPAWN_EGG = PIRANHA_SPAWN_EGG;
+        ModItems.BUTTERFLY_SPAWN_EGG = BUTTERFLY_SPAWN_EGG;
         ModItems.ZOMBIE_MINION_SPAWN_EGG = ZOMBIE_MINION_SPAWN_EGG;
         ModItems.AESTHETICIAN_SPAWN_EGG = AESTHETICIAN_SPAWN_EGG;
         ModItems.ZOMBIE_AESTHETICIAN_SPAWN_EGG = ZOMBIE_AESTHETICIAN_SPAWN_EGG;

@@ -152,7 +152,7 @@ public class ReturningObjectEntity extends ThrowableItemProjectile {
 
         if (soundDelay == 0) {
             this.soundDelay = 22;
-            this.level().playSound(null,this.blockPosition(), ModSounds.TUSK_HOLE_MOVE_EVENT, SoundSource.PLAYERS,0.5F,1F);
+            this.level().playSound(null,this.blockPosition(), ModSounds.TUSK_HOLE_MOVE_EVENT, SoundSource.PLAYERS,0.2F,0.75F);
         } else if (soundDelay > 0) {
             soundDelay--;
         }
@@ -181,7 +181,7 @@ public class ReturningObjectEntity extends ThrowableItemProjectile {
                             start.getX(), start.getY(), start.getZ(),
                             end.getX(), end.getY(), end.getZ()).inflate(1.05F));
                     entities.removeIf(entity -> !entity.isPickable());
-                    if (entities.isEmpty()) {
+                    if (entities.isEmpty() && this.level().getBlockState(this.getReturnPos()).isAir() ) {
                         Vec3 dir = center.subtract(this.getPosition(0)).normalize();
                         this.setDeltaMovement(dir);
                         if (this.getPosition(0).distanceTo(center) <= 1) {

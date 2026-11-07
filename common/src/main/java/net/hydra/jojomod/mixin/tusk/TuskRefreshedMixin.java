@@ -31,7 +31,7 @@ public abstract class TuskRefreshedMixin {
             StandUser SU = (StandUser) $$0;
             if (SU.roundabout$getStandPowers() instanceof PowersTusk PT && PT.getUsedNails() > 0) {
                 final int bonus = 14;
-                PT.tickNails(bonus);
+                PT.tickNailsFaster(bonus);
                 for(int i=0;i<bonus;i++) {this.tickDownDuration();}
             }
         }

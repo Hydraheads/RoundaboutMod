@@ -199,15 +199,15 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                     this.animate(standUser.roundabout$getWornStandIdleAnimation(),anim,partialTicks,1F);
                 }
                 if (standUser.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB && PowerTypes.isUsingStand(player)){
-                    if (PCB.invincibleState){
+                    AnimationDefinition anim = PCB.getAnimation(standUser, true);
+                    //if (PCB.invincibleState){
 
-                        AnimationDefinition anim = PCB.getAnimation(standUser, true);
-                        if (standUser.roundabout$getStandAnimation() == PowerIndex.NONE) {
-                            standUser.roundabout$getWornStandAnimation().startIfStopped(player.tickCount);
-                        }
-                        this.animate(standUser.roundabout$getWornStandAnimation(),anim,partialTicks,1F);
+                    //if (standUser.roundabout$getStandAnimation() == PowerIndex.NONE) {
+                    standUser.roundabout$getWornStandAnimation().animateWhen(anim!=null, player.tickCount);
+                    this.animate(standUser.roundabout$getWornStandAnimation(),anim,partialTicks,1F);
+                    //}
 
-                    }
+
                 }
 
                 Mob shapeShift = ((IPlayerRenderer)PR).roundabout$getShapeShift(player);
