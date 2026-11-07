@@ -24,6 +24,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 
+import java.util.List;
+
 public class Piranha extends AbstractSchoolingFish {
     public Piranha(EntityType<? extends Piranha> $$0, Level $$1) {
         super($$0, $$1);
@@ -36,7 +38,7 @@ public class Piranha extends AbstractSchoolingFish {
     @Override
     protected void registerGoals() {
         // eeeek bitey fish :(
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.2D, true));
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.4D, true));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
         // other goals, can't call super because panic goal is higher than the biter fish goal
         this.goalSelector.addGoal(4, new RandomSwimmingGoal(this, 1.0D, 40) {
@@ -46,6 +48,22 @@ public class Piranha extends AbstractSchoolingFish {
             }
         });
         this.goalSelector.addGoal(5, new FollowFlockLeaderGoal(this));
+    }
+
+    // manual anger trigger on death, because setAlertOthers doesn't work on 1 shots
+    @Override
+    public void die(DamageSource cause) {
+        super.die(cause);
+        Entity attacker = cause.getEntity();
+        if (attacker instanceof LivingEntity livingAttacker) {
+            List<Piranha> nearbyPiranhas = this.level().getEntitiesOfClass(Piranha.class, this.getBoundingBox().inflate(16.0D));
+
+            for (Piranha piranha : nearbyPiranhas) {
+                if (piranha.isAlive() && piranha.getTarget() == null) {
+                    piranha.setTarget(livingAttacker);
+                }
+            }
+        }
     }
 
     @Override
