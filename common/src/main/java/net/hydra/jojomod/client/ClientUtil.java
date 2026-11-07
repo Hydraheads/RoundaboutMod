@@ -941,15 +941,7 @@ public class ClientUtil {
                     if (target instanceof LivingEntity LE) {
                         ((StandUser)LE).rdbt$setHideDeath(true);
                     }
-                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.CurrentStance20thCB.value)) {
-                    int i = (int) vargs[0];
-                    Entity target = player.level().getEntity(i);
-                    if (target instanceof LivingEntity LE) {
-                        if (((StandUser)LE).roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB) {
-                            PCB.staticMode = (int)vargs[1];
-                            PCB.invincibleState = ((int)vargs[2]) == 1;
-                        }
-                    }
+
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncAllies.value)) {;
                     String data = (String) vargs[0];
                     if(((StandUser) player).roundabout$getStandPowers() instanceof PowersGreenDay PGD){

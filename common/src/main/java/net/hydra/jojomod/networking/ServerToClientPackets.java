@@ -61,7 +61,6 @@ public class ServerToClientPackets {
             SyncMoldRange("sync_mold_range"),
             SyncMoldDuration("sync_mold_duration"),
             SyncGdArms("SyncGdArms"),
-            CurrentStance20thCB("CurrentStance20thCB"),
             SyncPurpleHazePods("sync_purple_haze_pods"),
             AddEpitaph("add_epitaph"),
             ClearEpitaph("clear_epitaph"),

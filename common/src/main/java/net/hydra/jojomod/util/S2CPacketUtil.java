@@ -427,15 +427,6 @@ public class S2CPacketUtil {
             );
     }
 
-    public static void syncCurrentStance20THCB(int playerID, int stance, int activated) {
-        ModMessageEvents.sendToAll(
-                ServerToClientPackets.S2CPackets.MESSAGES.CurrentStance20thCB.value,
-                playerID,
-                stance,
-                activated // 1 true, 0 false
-        );
-    }
-
     public static void addEpitaph(Player player, int id, Vec3 vec3, float xrot, float yrot) {
         if(player instanceof ServerPlayer SP) {
             ModMessageEvents.sendToPlayer(SP,
