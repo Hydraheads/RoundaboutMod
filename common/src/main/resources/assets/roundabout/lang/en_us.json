@@ -4426,6 +4426,10 @@
   "config.roundabout.HazeMelts.desc": "If the Purple Haze adds an effect of Melting and the Distortion Haze add an effect of Melting 2.",
   "config.roundabout.CanonDistortion.name": "Canon Distortion",
   "config.roundabout.CanonDistortion.desc": "If the distortion becomes a far stronger virus.",
+  "config.roundabout.SmokeRadius.name": "Smoke Radius",
+  "config.roundabout.SmokeRadius.desc": "The radius of the smoke cloud. (Big numbers will impact performance)",
+  "config.roundabout.SmokeExpansionTicks.name": "Smoke Expansion Ticks",
+  "config.roundabout.SmokeExpansionTicks.desc": "The amount of ticks it takes until the smoke reaches its full size.",
 
   "config.roundabout.enableSilverChariot.name": "Enable Silver Chariot",
   "config.roundabout.enableSilverChariot.desc": "Enable Silver Chariot",
