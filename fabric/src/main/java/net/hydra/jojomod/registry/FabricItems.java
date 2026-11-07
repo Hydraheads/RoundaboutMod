@@ -485,6 +485,8 @@ public class FabricItems {
 
     public static final Item SNAKE_SPAWN_EGG = registerItem("snake_spawn_egg", new SpawnEggItem(FabricEntities.SNAKE,
             0x6dcd4c, 0xf9f07b, new Item.Properties()));
+    public static final Item PIRANHA_SPAWN_EGG = registerItem("piranha_spawn_egg", new SpawnEggItem(FabricEntities.PIRANHA,
+            0x8fbbdd, 0xe89e4d, new Item.Properties()));
 
     public static final Potion HEX_POTION =
             Registry.register(BuiltInRegistries.POTION, new ResourceLocation(Roundabout.MOD_ID, "roundabout.hex"),
@@ -838,6 +840,7 @@ public class FabricItems {
                         entries.accept(SNAKE_SKIN);
                         entries.accept(SNAKE_SKIN_BOOTS);
                         entries.accept(SNAKE_OIL);
+                        entries.accept(PIRANHA_SPAWN_EGG);
                         entries.accept(STAND_DISC_D4C);
                         entries.accept(MAX_STAND_DISC_D4C);
                         entries.accept(STAND_DISC_GOLD_EXPERIENCE);
@@ -1194,6 +1197,7 @@ public class FabricItems {
         ModItems.TERRIER_SPAWN_EGG = TERRIER_SPAWN_EGG;
         ModItems.FALCON_SPAWN_EGG = FALCON_SPAWN_EGG;
         ModItems.SNAKE_SPAWN_EGG = SNAKE_SPAWN_EGG;
+        ModItems.PIRANHA_SPAWN_EGG = PIRANHA_SPAWN_EGG;
         ModItems.ZOMBIE_MINION_SPAWN_EGG = ZOMBIE_MINION_SPAWN_EGG;
         ModItems.AESTHETICIAN_SPAWN_EGG = AESTHETICIAN_SPAWN_EGG;
         ModItems.ZOMBIE_AESTHETICIAN_SPAWN_EGG = ZOMBIE_AESTHETICIAN_SPAWN_EGG;
