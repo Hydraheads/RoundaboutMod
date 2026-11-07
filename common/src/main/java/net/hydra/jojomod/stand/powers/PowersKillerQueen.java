@@ -677,7 +677,8 @@ public class PowersKillerQueen extends NewPunchingStand {
         GREY = 22,
         SAMURAI = 23,
         SPIRIT = 24,
-        BETA = 25;
+        BETA = 25,
+        WEAKNESS = 26;
 
     @Override
     public List<Byte> getSkinList() {
@@ -710,6 +711,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (Level > 3 || bypass){
                 l.add(CRACKED);
                 l.add(DEADLY);
+                l.add(WEAKNESS);
                 l.add(CREEPER);
                 l.add(GREY);
             }
@@ -5125,6 +5127,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             case KillerQueenEntity.SAMURAI -> {return Component.translatable("skins.roundabout.killer_queen.samurai");}
             case KillerQueenEntity.SPIRIT -> {return Component.translatable("skins.roundabout.killer_queen.spirit");}
             case KillerQueenEntity.BETA -> {return Component.translatable("skins.roundabout.killer_queen.beta");}
+            case KillerQueenEntity.WEAKNESS -> {return Component.translatable("skins.roundabout.killer_queen.weakness");}
         }
         return Component.translatable("skins.roundabout.killer_queen.anime");
     }
