@@ -126,11 +126,6 @@ public class Piranha extends AbstractSchoolingFish {
     }
 
     @Override
-    public int getMaxSchoolSize() {
-        return 5;
-    }
-
-    @Override
     protected SoundEvent getAmbientSound() {
         return SoundEvents.SALMON_AMBIENT;
     }

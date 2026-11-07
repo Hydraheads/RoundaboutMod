@@ -349,6 +349,10 @@ public class FabricItems {
     public static Item SNAKE_SKIN_BOOTS = registerItem("snake_skin_boots", new ArmorItem(SnakeSkinBootsItem.SNAKE_ARMOR, ArmorItem.Type.BOOTS, new Item.Properties()));
     public static final Item PIRANHA_BUCKET = Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Roundabout.MOD_ID, "piranha_bucket"),
             new MobBucketItem(FabricEntities.PIRANHA, Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1)));
+    public static final Item PIRANHA = Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Roundabout.MOD_ID, "piranha"),
+            new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationMod(0.1F).build())));
+    public static final Item COOKED_PIRANHA = Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Roundabout.MOD_ID, "cooked_piranha"),
+            new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationMod(1.2F).build())));
 
     public static Item MEMORY_PAWN = registerItem("memory_pawn", new MemoryChessPieceItem(ModBlocks.CHESS_PIECE, new Item.Properties().stacksTo(1)));
     public static Item MEMORY_ROOK = registerItem("memory_rook", new MemoryChessPieceItem(ModBlocks.CHESS_PIECE, new Item.Properties().stacksTo(1)));
@@ -846,6 +850,8 @@ public class FabricItems {
                         entries.accept(FALCON_SPAWN_EGG);
                         entries.accept(PIRANHA_SPAWN_EGG);
                         entries.accept(PIRANHA_BUCKET);
+                        entries.accept(PIRANHA);
+                        entries.accept(COOKED_PIRANHA);
                         entries.accept(STAND_DISC_D4C);
                         entries.accept(MAX_STAND_DISC_D4C);
                         entries.accept(STAND_DISC_GOLD_EXPERIENCE);
@@ -1095,6 +1101,8 @@ public class FabricItems {
         ModItems.SNAKE_SKIN_BOOTS = SNAKE_SKIN_BOOTS;
         ModItems.SNAKE_OIL = SNAKE_OIL;
         ModItems.PIRANHA_BUCKET = PIRANHA_BUCKET;
+        ModItems.PIRANHA = PIRANHA;
+        ModItems.COOKED_PIRANHA = COOKED_PIRANHA;
 
         ModItems.STRAY_CAT_ANIME = STRAY_CAT_ANIME;
         ModItems.STRAY_CAT_MANGA = STRAY_CAT_MANGA;

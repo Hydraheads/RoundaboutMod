@@ -58,6 +58,10 @@ public class ForgeItems {
                     () -> SoundEvents.BUCKET_EMPTY_FISH,
                     new Item.Properties().stacksTo(1)
             )));
+    public static final RegistryObject<Item> PIRANHA = addToWIPTab(ITEMS.register("piranha",
+            () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationMod(0.1F).build()))));
+    public static final RegistryObject<Item> COOKED_PIRANHA = addToWIPTab(ITEMS.register("cooked_piranha",
+            () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationMod(1.2F).build()))));
 
     public static final RegistryObject<Item> STAND_ARROW = addToTab(ITEMS.register("stand_arrow",
             () -> new StandArrowItem(new Item.Properties().stacksTo(1).durability(5))));
