@@ -48,7 +48,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
-import org.apache.commons.compress.utils.Lists;
+import com.google.common.collect.Lists;
 
 import java.lang.module.ModuleDescriptor;
 import java.util.*;
@@ -321,6 +321,10 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         } else {
             invincibleState = false;
             staticMode = 0;
+        }
+        if (!isClient() && self instanceof ServerPlayer PL) {
+            ((StandUser)PL).roundabout$setStandAnimation((byte)staticMode);
+            //S2CPacketUtil.syncCurrentStance20THCB(PL.getId(), staticMode, invincibleState ? 1 : 0);
         }
     }
 
@@ -659,14 +663,14 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         AnimationDefinition anim = null;
         if (SU.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB && PCB.invincibleState){
             if (!fp){
-                switch (PCB.staticMode){
+                switch (SU.roundabout$getStandAnimation()){
                     case 1 -> anim = CenturyBoyAnimations.ground;
                     case 2 -> anim = CenturyBoyAnimations.neutral;
                     case 3 -> anim = CenturyBoyAnimations.knockback;
                     case 4 -> anim = CenturyBoyAnimations.redstone;
                 }
             } else{
-                switch (PCB.staticMode){
+                switch (SU.roundabout$getStandAnimation()){
                     case 1 -> anim = CenturyBoyAnimations.FPground;
                     case 2 -> anim = CenturyBoyAnimations.FPneutral;
                     case 3 -> anim = CenturyBoyAnimations.FPknockback;

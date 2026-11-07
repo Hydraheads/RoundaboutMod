@@ -56,8 +56,8 @@ public class CTRbarrierEntity extends StandEntity {
     @Override
     public void tick() {
         if (!this.level().isClientSide()) {
-            if (User != null && ((StandUser) User).roundabout$getStandPowers() instanceof PowersCatchTheRainbow
-                    && (((PowersCatchTheRainbow) ((StandUser) User).roundabout$getStandPowers()).isInRain())
+            if (User != null && ((StandUser) User).roundabout$getStandPowers() instanceof PowersCatchTheRainbow PCR
+                    && PCR.isInRain()
                     && User.isAlive()) {
                 if (followTimer != 10) {
                     this.setPos(User.getX(), User.getY(), User.getZ());

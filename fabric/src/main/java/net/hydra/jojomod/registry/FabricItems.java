@@ -26,6 +26,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
@@ -33,6 +34,7 @@ import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Fluids;
 
 public class FabricItems {
     public static Item STAND_ARROW = registerItem("stand_arrow", new StandArrowItem(new Item.Properties().stacksTo(1).durability(5)));
@@ -342,6 +344,15 @@ public class FabricItems {
     public static Item LOCACACA = registerItem("locacaca", new LocacacaItem(new Item.Properties().food(ModFoodComponents.LOCACACA)));
     public static Item NEW_LOCACACA = registerItem("new_locacaca", new NewLocacacaItem(new Item.Properties().food(ModFoodComponents.LOCACACA)));
     public static Item LUCKY_LIPSTICK = registerItem("lucky_lipstick", new LuckyLipstickItem(new Item.Properties().stacksTo(1)));
+    public static Item SNAKE_SKIN = registerItem("snake_skin", new Item(new Item.Properties()));
+    public static Item SNAKE_OIL = registerItem("snake_oil", new DrinkableItem(new Item.Properties()));
+    public static Item SNAKE_SKIN_BOOTS = registerItem("snake_skin_boots", new ArmorItem(SnakeSkinBootsItem.SNAKE_ARMOR, ArmorItem.Type.BOOTS, new Item.Properties()));
+    public static final Item PIRANHA_BUCKET = Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Roundabout.MOD_ID, "piranha_bucket"),
+            new MobBucketItem(FabricEntities.PIRANHA, Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1)));
+    public static final Item PIRANHA = Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Roundabout.MOD_ID, "piranha"),
+            new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationMod(0.1F).build())));
+    public static final Item COOKED_PIRANHA = Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Roundabout.MOD_ID, "cooked_piranha"),
+            new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationMod(1.2F).build())));
 
     public static Item MEMORY_PAWN = registerItem("memory_pawn", new MemoryChessPieceItem(ModBlocks.CHESS_PIECE, new Item.Properties().stacksTo(1)));
     public static Item MEMORY_ROOK = registerItem("memory_rook", new MemoryChessPieceItem(ModBlocks.CHESS_PIECE, new Item.Properties().stacksTo(1)));
@@ -484,6 +495,8 @@ public class FabricItems {
 
     public static final Item SNAKE_SPAWN_EGG = registerItem("snake_spawn_egg", new SpawnEggItem(FabricEntities.SNAKE,
             0x6dcd4c, 0xf9f07b, new Item.Properties()));
+    public static final Item PIRANHA_SPAWN_EGG = registerItem("piranha_spawn_egg", new SpawnEggItem(FabricEntities.PIRANHA,
+            0x8fbbdd, 0xe89e4d, new Item.Properties()));
 
     public static final Potion HEX_POTION =
             Registry.register(BuiltInRegistries.POTION, new ResourceLocation(Roundabout.MOD_ID, "roundabout.hex"),
@@ -562,12 +575,16 @@ public class FabricItems {
                         entries.accept(TERRIER_SPAWN_EGG);
                         entries.accept(ANUBIS_GUARDIAN_SPAWN_EGG);
                         entries.accept(ZOMBIE_MINION_SPAWN_EGG);
+                        entries.accept(SNAKE_SPAWN_EGG);
                         entries.accept(COFFEE_GUM);
                         entries.accept(LOCACACA_PIT.asItem());
                         entries.accept(LOCACACA);
                         entries.accept(LOCACACA_BRANCH.asItem());
                         entries.accept(NEW_LOCACACA);
                         entries.accept(CHERRIES);
+                        entries.accept(SNAKE_SKIN);
+                        entries.accept(SNAKE_SKIN_BOOTS);
+                        entries.accept(SNAKE_OIL);
                         entries.accept(METEORITE);
                         entries.accept(METEORITE_INGOT);
                         entries.accept(AJA);
@@ -833,7 +850,10 @@ public class FabricItems {
                         //Add all items from the Jojo mod tab here
                     	//entries.accept(ModBlocks.CHESSBOARD_BLOCK);
                         entries.accept(FALCON_SPAWN_EGG);
-                        entries.accept(SNAKE_SPAWN_EGG);
+                        entries.accept(PIRANHA_SPAWN_EGG);
+                        entries.accept(PIRANHA_BUCKET);
+                        entries.accept(PIRANHA);
+                        entries.accept(COOKED_PIRANHA);
                         entries.accept(STAND_DISC_D4C);
                         entries.accept(MAX_STAND_DISC_D4C);
                         entries.accept(STAND_DISC_GOLD_EXPERIENCE);
@@ -841,6 +861,11 @@ public class FabricItems {
                         entries.accept(STAND_DISC_20_CENTURY_BOY);
                         entries.accept(STAND_DISC_TUSK);
                         entries.accept(MAX_STAND_DISC_TUSK);
+                        entries.accept(CHAMOMILE_SEEDS);
+                        entries.accept(CHAMOMILE);
+                        entries.accept(MINT_SEEDS);
+                        entries.accept(MINT);
+                        entries.accept(HERB_TEA);
                         entries.accept(STAND_DISC_METALLICA);
                         entries.accept(MAX_STAND_DISC_METALLICA);
                         entries.accept(STAND_DISC_PURPLE_HAZE);
@@ -1076,6 +1101,12 @@ public class FabricItems {
         ModItems.METEORITE_INGOT = METEORITE_INGOT;
         ModItems.IRON_BALL_CROSSBOW = IRON_BALL_CROSSBOW;
         ModItems.LOCACACA_PIT = LOCACACA_PIT;
+        ModItems.SNAKE_SKIN = SNAKE_SKIN;
+        ModItems.SNAKE_SKIN_BOOTS = SNAKE_SKIN_BOOTS;
+        ModItems.SNAKE_OIL = SNAKE_OIL;
+        ModItems.PIRANHA_BUCKET = PIRANHA_BUCKET;
+        ModItems.PIRANHA = PIRANHA;
+        ModItems.COOKED_PIRANHA = COOKED_PIRANHA;
 
         ModItems.STRAY_CAT_ANIME = STRAY_CAT_ANIME;
         ModItems.STRAY_CAT_MANGA = STRAY_CAT_MANGA;
@@ -1184,6 +1215,7 @@ public class FabricItems {
         ModItems.TERRIER_SPAWN_EGG = TERRIER_SPAWN_EGG;
         ModItems.FALCON_SPAWN_EGG = FALCON_SPAWN_EGG;
         ModItems.SNAKE_SPAWN_EGG = SNAKE_SPAWN_EGG;
+        ModItems.PIRANHA_SPAWN_EGG = PIRANHA_SPAWN_EGG;
         ModItems.ZOMBIE_MINION_SPAWN_EGG = ZOMBIE_MINION_SPAWN_EGG;
         ModItems.AESTHETICIAN_SPAWN_EGG = AESTHETICIAN_SPAWN_EGG;
         ModItems.ZOMBIE_AESTHETICIAN_SPAWN_EGG = ZOMBIE_AESTHETICIAN_SPAWN_EGG;

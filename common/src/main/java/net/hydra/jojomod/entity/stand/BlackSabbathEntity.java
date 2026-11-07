@@ -744,6 +744,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         if(this.getUser() != null && this.getUser() instanceof Player pl){
             IPlayerEntity play = ((IPlayerEntity)pl);
             ItemStack blackSabbathFirstSlot = play.roundabout$getBlckSabbathPlayerInventory().getItem(0);
+       //     System.out.println(getHeldItemSabbath());
                 if(blackSabbathFirstSlot != getHeldItemSabbath()){
                     if(!this.level().isClientSide()) {
                         setHeldItemSabbath(blackSabbathFirstSlot);
@@ -913,7 +914,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     private static final EntityDataAccessor<Boolean> IS_TRIDENT =
             SynchedEntityData.defineId(BlackSabbathEntity.class, EntityDataSerializers.BOOLEAN);
     public final Boolean getThrowable() {
-        return (this.getHeldItemSabbath().getItem() instanceof ArrowItem || this.getHeldItemSabbath().getItem() instanceof KnifeItem
+        return (this.getHeldItemSabbath().getItem() instanceof ArrowItem && !(this.getHeldItemSabbath().getItem() instanceof RoundaboutArrowItem) || this.getHeldItemSabbath().getItem() instanceof KnifeItem
                 || this.getHeldItemSabbath().is(ModItems.KNIFE_BUNDLE) || this.getHeldItemSabbath().getItem() instanceof TridentItem && EnchantmentHelper.getRiptide(getHeldItemSabbath()) <= 0
                 || this.getHeldItemSabbath().getItem() instanceof EggItem || this.getHeldItemSabbath().getItem() instanceof SnowballItem || this.getHeldItemSabbath().getItem() instanceof ThrowablePotionItem
                 || this.getHeldItemSabbath().getItem() instanceof EnderpearlItem || this.getHeldItemSabbath().getItem() instanceof GasolineBucketItem || this.getHeldItemSabbath().getItem() instanceof GasolineCanItem

@@ -1,0 +1,17 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": {
+    "type": "forge:or",
+    "values": [
+      "minecraft:desert",
+      "#minecraft:is_badlands",
+      "#minecraft:is_savanna"
+    ]
+  },
+  "spawners": {
+    "type": "roundabout:snake",
+    "weight": 8,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

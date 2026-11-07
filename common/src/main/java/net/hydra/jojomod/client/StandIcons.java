@@ -73,6 +73,8 @@ public class StandIcons {
             "textures/gui/move_square2.png");
     public static final ResourceLocation SQUARE_GOLD = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/move_square_gold.png");
+    public static final ResourceLocation SQUARE_GOLDER = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/move_square_golder.png");
     public static final ResourceLocation SQUARE_PINK = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/move_square_pink.png");
     public static final ResourceLocation SQUARE_ICON_BLOOD = new ResourceLocation(Roundabout.MOD_ID,
@@ -947,6 +949,8 @@ public class StandIcons {
     public static final ResourceLocation POD_BITE = Roundabout.location("textures/gui/icons/purple_haze/pod_bite.png");
     public static final ResourceLocation POD_THROW = Roundabout.location("textures/gui/icons/purple_haze/pod_throw.png");
     public static final ResourceLocation FALLING_ATTACK = Roundabout.location("textures/gui/icons/purple_haze/falling_attack.png");
+    public static final ResourceLocation PH_HEAVY_PUNCH = Roundabout.location("textures/gui/icons/purple_haze/ph_heavy_punch.png");
+    public static final ResourceLocation PH_HEAVY_KICK = Roundabout.location("textures/gui/icons/purple_haze/ph_heavy_kick.png");
 
     public static final ResourceLocation ANUBIS_MEMORY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/anubis_memory.png");

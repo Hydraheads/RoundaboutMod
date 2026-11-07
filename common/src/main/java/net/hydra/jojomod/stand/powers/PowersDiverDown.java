@@ -882,7 +882,7 @@ public class PowersDiverDown extends NewPunchingStand {
         }
         // block disassembly
         if (slot == 1 && isHoldingSneak() && !isGuarding()) {
-            if (!canTargetDisassembleBlock() || !ClientNetworking.getAppropriateConfig().diverDownSettings.disableBlockDisassembly) {
+            if (!canTargetDisassembleBlock() || ClientNetworking.getAppropriateConfig().diverDownSettings.disableBlockDisassembly) {
                 return true;
             }
         }

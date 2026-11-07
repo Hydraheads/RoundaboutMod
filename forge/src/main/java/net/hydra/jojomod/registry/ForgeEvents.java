@@ -39,14 +39,19 @@ import net.minecraft.world.entity.animal.Fox;
 import net.minecraft.world.entity.animal.Salmon;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.animal.frog.Frog;
+import net.minecraft.world.entity.npc.VillagerProfession;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
+import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -59,6 +64,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.TERRIER_DOG.get(), Wolf.createAttributes().build());
         event.put(ForgeEntities.FALCON.get(), FalconEntity.createAttributes().build());
         event.put(ForgeEntities.SNAKE.get(), Snake.createAttributes().build());
+        event.put(ForgeEntities.PIRANHA.get(), Piranha.createAttributes().build());
         event.put(ForgeEntities.ZOMBIEFISH.get(), Zombiefish.createAttributes().build());
         event.put(ForgeEntities.STRAY_CAT.get(), StrayCatEntity.createAttributes().build());
         event.put(ForgeEntities.ANUBIS_GUARDIAN.get(), AnubisGuardian.createAttributes().build());
@@ -195,8 +201,25 @@ public class ForgeEvents {
                 TerrierEntity::canSpawn,
                 SpawnPlacementRegisterEvent.Operation.OR
         );
+        event.register(
+                ForgeEntities.SNAKE.get(),
+                SpawnPlacements.Type.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Snake::checkMobSpawnRules,
+                SpawnPlacementRegisterEvent.Operation.OR
+        );
     }
 
+    // custom villager trades
+    public static void onVillagerTrades(VillagerTradesEvent event) {
+        if (event.getType() == VillagerProfession.FISHERMAN) {
+            event.getTrades().get(1).add((trader, random) -> new MerchantOffer(
+                    new ItemStack(ModItems.PIRANHA, 6),
+                    new ItemStack(Items.EMERALD, 1),
+                    16, 2, 0.05F
+            ));
+        }
+    }
 
     @SubscribeEvent
     public static void registerRoundaboutBridge(FMLCommonSetupEvent event){
@@ -589,7 +612,12 @@ public class ForgeEvents {
         ModItems.LOCACACA_BRANCH = ForgeItems.LOCACACA_BRANCH.get();
         ModItems.NEW_LOCACACA = ForgeItems.NEW_LOCACACA.get();
         ModItems.LUCKY_LIPSTICK = ForgeItems.LUCKY_LIPSTICK.get();
-
+        ModItems.SNAKE_SKIN = ForgeItems.SNAKE_SKIN.get();
+        ModItems.SNAKE_SKIN_BOOTS = ForgeItems.SNAKE_SKIN_BOOTS.get();
+        ModItems.SNAKE_OIL = ForgeItems.SNAKE_OIL.get();
+        ModItems.PIRANHA_BUCKET = ForgeItems.PIRANHA_BUCKET.get();
+        ModItems.PIRANHA = ForgeItems.PIRANHA.get();
+        ModItems.COOKED_PIRANHA = ForgeItems.COOKED_PIRANHA.get();
         ModItems.MEMORY_PAWN = ForgeItems.MEMORY_PAWN.get();
         ModItems.MEMORY_KING = ForgeItems.MEMORY_KING.get();
         ModItems.MEMORY_QUEEN = ForgeItems.MEMORY_QUEEN.get();
@@ -697,6 +725,7 @@ public class ForgeEvents {
         ModItems.ZOMBIE_AESTHETICIAN_SPAWN_EGG = ForgeItems.ZOMBIE_AESTHETICIAN_SPAWN_EGG.get();
         ModItems.ANUBIS_GUARDIAN_SPAWN_EGG = ForgeItems.ANUBIS_GUARDIAN_SPAWN_EGG.get();
         ModItems.SNAKE_SPAWN_EGG = ForgeItems.SNAKE_SPAWN_EGG.get();
+        ModItems.PIRANHA_SPAWN_EGG = ForgeItems.PIRANHA_SPAWN_EGG.get();
         ModItems.MUSIC_DISC_TORTURE_DANCE = ForgeItems.MUSIC_DISC_TORTURE_DANCE.get();
         ModItems.MUSIC_DISC_HALLELUJAH = ForgeItems.MUSIC_DISC_HALLELUJAH.get();
         ModItems.MUSIC_DISC_CHAKA_HFTF = ForgeItems.MUSIC_DISC_CHAKA_HFTF.get();
@@ -875,6 +904,7 @@ public class ForgeEvents {
         ModEntities.TERRIER_DOG = ForgeEntities.TERRIER_DOG.get();
         ModEntities.FALCON = ForgeEntities.FALCON.get();
         ModEntities.SNAKE = ForgeEntities.SNAKE.get();
+        ModEntities.PIRANHA = ForgeEntities.PIRANHA.get();
         ModEntities.ZOMBIEFISH = ForgeEntities.ZOMBIEFISH.get();
         ModEntities.ANUBIS_GUARDIAN = ForgeEntities.ANUBIS_GUARDIAN.get();
         ModEntities.STAR_PLATINUM = ForgeEntities.STAR_PLATINUM.get();
@@ -1062,6 +1092,7 @@ public class ForgeEvents {
         ConfigManager.loadBlacklists2();
         ConfigManager.loadFoodClear();
         ConfigManager.foodParticleParser();
+        MinecraftForge.EVENT_BUS.addListener(ForgeEvents::onVillagerTrades);
     }
 
     /**

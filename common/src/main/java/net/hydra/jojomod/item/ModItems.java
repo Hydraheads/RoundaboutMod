@@ -10,6 +10,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -132,7 +133,13 @@ public class ModItems {
     public static Item ZOMBIE_AESTHETICIAN_SPAWN_EGG;
     public static Item ANUBIS_GUARDIAN_SPAWN_EGG;
     public static Item SNAKE_SPAWN_EGG;
+    public static Item PIRANHA_SPAWN_EGG;
     public static Item SNAKE_SKIN;
+    public static Item SNAKE_OIL;
+    public static Item SNAKE_SKIN_BOOTS;
+    public static Item PIRANHA_BUCKET;
+    public static Item PIRANHA;
+    public static Item COOKED_PIRANHA;
     public static Item ROAD_ROLLER;
 
     public static Item IRON_BALL_CROSSBOW;

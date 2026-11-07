@@ -23,9 +23,24 @@ public class ModSounds {
     public static final String INHALE = "inhale";
     public static final ResourceLocation INHALE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+INHALE);
     public static SoundEvent INHALE_EVENT = SoundEvent.createVariableRangeEvent(INHALE_ID);
+
     public static final String TERRIER_SOUND = "terrier_pass";
     public static final ResourceLocation TERRIER_SOUND_ID = new ResourceLocation(Roundabout.MOD_ID+":"+TERRIER_SOUND);
     public static SoundEvent TERRIER_SOUND_EVENT = SoundEvent.createVariableRangeEvent(TERRIER_SOUND_ID);
+
+    public static final String SNAKE_IDLE = "snake_idle";
+    public static final ResourceLocation SNAKE_IDLE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SNAKE_IDLE);
+    public static SoundEvent SNAKE_IDLE_EVENT = SoundEvent.createVariableRangeEvent(SNAKE_IDLE_ID);
+    public static final String SNAKE_HURT = "snake_hurt";
+    public static final ResourceLocation SNAKE_HURT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SNAKE_HURT);
+    public static SoundEvent SNAKE_HURT_EVENT = SoundEvent.createVariableRangeEvent(SNAKE_HURT_ID);
+    public static final String SNAKE_ATTACK = "snake_attack";
+    public static final ResourceLocation SNAKE_ATTACK_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SNAKE_ATTACK);
+    public static SoundEvent SNAKE_ATTACK_EVENT = SoundEvent.createVariableRangeEvent(SNAKE_ATTACK_ID);
+    public static final String SNAKE_DIE = "snake_die";
+    public static final ResourceLocation SNAKE_DIE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SNAKE_DIE);
+    public static SoundEvent SNAKE_DIE_EVENT = SoundEvent.createVariableRangeEvent(SNAKE_DIE_ID);
+
     public static final String SIGN_HIT = "sign_hit";
     public static final ResourceLocation SIGN_HIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SIGN_HIT);
     public static SoundEvent SIGN_HIT_EVENT = SoundEvent.createVariableRangeEvent(SIGN_HIT_ID);
