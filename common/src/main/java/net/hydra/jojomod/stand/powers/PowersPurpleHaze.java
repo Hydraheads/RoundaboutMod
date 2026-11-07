@@ -970,7 +970,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
         }
 
-        if (podRegenClient != -1) {
+        if (podRegenClient != -1 && getPods() < MAX_PODS) {
             int ClashTime = Math.round(((float) podRegenClient / POD_RECHARGE_TIME) * 15);
             context.blit(StandIcons.JOJO_ICONS, k, j+17, 213, 97, 15, 4);
             context.blit(StandIcons.JOJO_ICONS, k, j+17, 213, 102, ClashTime, 4);
@@ -1293,7 +1293,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
     }
 
-    private int podRegenClient = -1;
+    public int podRegenClient = -1;
 
     @Override
     public void updatePowerInt(byte activePower, int data) {
