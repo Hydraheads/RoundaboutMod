@@ -7,6 +7,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -59,6 +60,16 @@ public class Butterfly extends AmbientCreature {
 
     @Override
     protected void checkFallDamage(double y, boolean onGround, BlockState state, BlockPos pos) {
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if (!this.level().isClientSide() && this.isResting()) {
+            // Instantly interrupt resting upon taking damage
+            this.setResting(false);
+            this.flowerPos = null;
+        }
+        return super.hurt(source, amount);
     }
 
     public boolean isResting() {
@@ -181,7 +192,7 @@ public class Butterfly extends AmbientCreature {
                 if (!this.butterfly.isResting()) {
                     this.butterfly.setResting(true);
                     this.butterfly.getNavigation().stop();
-                    this.restTicks = 100 + this.butterfly.getRandom().nextInt(200); // Perch for 5 to 15 seconds
+                    this.restTicks = 100 + this.butterfly.getRandom().nextInt(101);
                 } else {
                     --this.restTicks;
                     if (this.restTicks <= 0) {
@@ -194,13 +205,14 @@ public class Butterfly extends AmbientCreature {
 
         @Override
         public boolean canContinueToUse() {
-            return this.butterfly.flowerPos != null && (this.butterfly.isResting() || this.butterfly.getNavigation().isInProgress());
+            return this.butterfly.flowerPos != null && (this.butterfly.isResting() ? this.restTicks > 0 : this.butterfly.getNavigation().isInProgress());
         }
 
         @Override
         public void stop() {
             this.butterfly.setResting(false);
             this.butterfly.flowerPos = null;
+            this.restTicks = 0;
         }
     }
 
@@ -268,6 +280,8 @@ public class Butterfly extends AmbientCreature {
             } else {
                 this.flyingAnimationState.stop();
             }
+        } else {
+            this.setNoGravity(!this.isResting());
         }
     }
 
