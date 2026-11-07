@@ -83,7 +83,8 @@ public class KillerQueenEntity extends FollowingStandEntity {
             BROWN = 21,
             GREY = 22,
             SAMURAI = 23,
-            SPIRIT = 24;
+            SPIRIT = 24,
+            BETA = 25;
 
     public final AnimationState lid_open = new AnimationState();
     public final AnimationState hideFists = new AnimationState();
