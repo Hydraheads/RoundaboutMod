@@ -196,6 +196,13 @@ public class ForgeEvents {
                 TerrierEntity::canSpawn,
                 SpawnPlacementRegisterEvent.Operation.OR
         );
+        event.register(
+                ForgeEntities.SNAKE.get(),
+                SpawnPlacements.Type.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Snake::checkMobSpawnRules,
+                SpawnPlacementRegisterEvent.Operation.OR
+        );
     }
 
 
