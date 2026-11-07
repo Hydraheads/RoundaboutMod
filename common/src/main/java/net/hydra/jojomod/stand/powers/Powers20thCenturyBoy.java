@@ -440,9 +440,10 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                 } else if (PCB.staticMode == 1) {
 
                     if (!ClientNetworking.getAppropriateConfig().centuryBoySettings.buffedGroundStance) {
-                        if (source.is(DamageTypes.STARVE) || source.is(DamageTypes.IN_FIRE) ||
+                        /*if (source.is(DamageTypes.STARVE) || source.is(DamageTypes.IN_FIRE) ||
                                 source.is(DamageTypes.LAVA) || source.is(DamageTypes.DROWN) ||
-                                source.is(ModDamageTypes.SUNLIGHT)) {
+                                source.is(ModDamageTypes.SUNLIGHT)) {*/
+                        if (MainUtil.CenturyBoyReactionBacklistDamage(source)) {
                             return true;
                         }
                     }
@@ -537,9 +538,10 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             if (staticMode == 1) {
                 deflect();
                 if (!ClientNetworking.getAppropriateConfig().centuryBoySettings.buffedGroundStance) {
-                    if (source.is(DamageTypes.STARVE) || source.is(DamageTypes.IN_FIRE) ||
+                    /*if (source.is(DamageTypes.STARVE) || source.is(DamageTypes.IN_FIRE) ||
                             source.is(DamageTypes.LAVA) || source.is(DamageTypes.DROWN) ||
-                            source.is(ModDamageTypes.SUNLIGHT)) {
+                            source.is(ModDamageTypes.SUNLIGHT)) {*/
+                    if (MainUtil.CenturyBoyReactionBacklistDamage(source)) {
                         return false;
                     }
                 }
