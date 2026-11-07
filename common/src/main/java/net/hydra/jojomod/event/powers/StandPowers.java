@@ -949,6 +949,8 @@ public class StandPowers extends AbilityScapeBasis {
             return ModSounds.RIPPER_EYES_BEAM_EVENT;
         } else if (soundChoice == SoundIndex.RIPPER_EYES_CHARGE) {
             return ModSounds.RIPPER_EYES_CHARGE_EVENT;
+        } else if (soundChoice == SoundIndex.ZOMBIEHORSE_STITCHING) {
+            return ModSounds.ZOMBIEHORSE_STITCHING_EVENT;
         }
         return null;
     }
@@ -1032,6 +1034,8 @@ public class StandPowers extends AbilityScapeBasis {
         } else if (soundChoice <= SoundIndex.REVOLVER_RELOAD) {
             return SoundIndex.ITEM_GROUP;
         } else if (soundChoice <= SoundIndex.GLAIVE_CHARGE) {
+            return SoundIndex.ITEM_GROUP;
+        } else if (soundChoice <= SoundIndex.ZOMBIEHORSE_STITCHING) {
             return SoundIndex.ITEM_GROUP;
         }
 

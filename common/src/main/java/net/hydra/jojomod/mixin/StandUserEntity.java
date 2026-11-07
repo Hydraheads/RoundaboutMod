@@ -7341,6 +7341,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.entityData.set(ROUNDABOUT$DISGUISE_NAME, "");
     }
 
+    @Inject(method = "hurt", at = @At(value = "HEAD"), cancellable = true, require = 0)
+    private void roundabout$stitchedGiveBleed(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci) {
+        MobEffectInstance instance = this.getEffect(ModEffects.STITCHED);
+        if (instance != null) {
+            int amp = instance.getAmplifier();
+            int dur = instance.getDuration();
+            this.removeEffect(instance.getEffect());
+            this.addEffect(new MobEffectInstance(ModEffects.BLEED, dur, amp));
+        }
+    }
+
     @Unique
     @Override
     public boolean roundabout$getIsRainWalking(){
