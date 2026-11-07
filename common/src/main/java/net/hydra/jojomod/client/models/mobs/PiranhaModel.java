@@ -14,7 +14,6 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 
 public class PiranhaModel<T extends Piranha> extends HierarchicalModel<T> {
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "piranha"), "main");
     private final ModelPart root;
     private final ModelPart Piranha;
     private final ModelPart body;

@@ -132,6 +132,7 @@ public class ModItems {
     public static Item ZOMBIE_AESTHETICIAN_SPAWN_EGG;
     public static Item ANUBIS_GUARDIAN_SPAWN_EGG;
     public static Item SNAKE_SPAWN_EGG;
+    public static Item PIRANHA_SPAWN_EGG;
     public static Item SNAKE_SKIN;
     public static Item SNAKE_OIL;
     public static Item SNAKE_SKIN_BOOTS;
