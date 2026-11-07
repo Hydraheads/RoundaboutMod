@@ -2,10 +2,14 @@ package net.hydra.jojomod.mixin.effects.warding;
 
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,6 +31,26 @@ public abstract class WardingEntityMixin {
                 if (!(isInLava() || MainUtil.isPlayerInFireBlock(LE))){
                     ci.cancel();
                 }
+            }
+        }
+    }
+
+    // there are so many entity mixins, i might as well just put this one here
+    @Inject(method = "playStepSound", at = @At(value = "HEAD"), cancellable = true)
+    private void roundabout$silenceSnakeSkinBootsMob(BlockPos pos, BlockState state, CallbackInfo ci) {
+        // mob footstep cancellation
+        if ((Object) this instanceof LivingEntity entity) {
+            if (entity.getItemBySlot(EquipmentSlot.FEET).is(ModItems.SNAKE_SKIN_BOOTS)) {
+                ci.cancel();
+            }
+        }
+    }
+
+    @Inject(method = "spawnSprintParticle", at = @At(value = "HEAD"), cancellable = true)
+    private void roundabout$silenceSnakeSkinParticles(CallbackInfo ci) {
+        if ((Object) this instanceof LivingEntity entity) {
+            if (entity.getItemBySlot(EquipmentSlot.FEET).is(ModItems.SNAKE_SKIN_BOOTS)) {
+                ci.cancel();
             }
         }
     }

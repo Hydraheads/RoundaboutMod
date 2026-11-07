@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "S": {
+      "item": "roundabout:snake_skin"
+    }
+  },
+  "pattern": [
+    "S S",
+    "S S"
+  ],
+  "result": {
+    "count": 1,
+    "item": "roundabout:snake_skin_boots"
+  },
+  "show_notification": true
+}

@@ -120,6 +120,13 @@ public abstract class VisageHumanoidArmorLayer<T extends LivingEntity, M extends
         if (ClientUtil.hideLegs($$2) && (($$3 == EquipmentSlot.LEGS) || ($$3 == EquipmentSlot.FEET))){
             ci.cancel();
         }
+
+        if (((StandUser) $$2).roundabout$getStandPowers() instanceof PowersCatchTheRainbow pctr) {
+            boolean headpart = $$3.getName().equals("head");
+            if (pctr.hasStandActive(pctr.self) && headpart) {
+                ci.cancel();
+            }
+        }
     }
     /**Shadows, ignore
      * -------------------------------------------------------------------------------------------------------------

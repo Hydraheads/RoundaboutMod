@@ -14,9 +14,7 @@ import net.hydra.jojomod.client.models.gold_experience.*;
 import net.hydra.jojomod.client.models.minions.*;
 import net.hydra.jojomod.client.models.minions.head_parts.*;
 import net.hydra.jojomod.client.models.minions.renderers.*;
-import net.hydra.jojomod.client.models.mobs.AnubisGuardianModel;
-import net.hydra.jojomod.client.models.mobs.FalconModel;
-import net.hydra.jojomod.client.models.mobs.StrayCatEntityModel;
+import net.hydra.jojomod.client.models.mobs.*;
 import net.hydra.jojomod.client.models.mobs.renderers.*;
 import net.hydra.jojomod.client.models.paintings.MonaLisaPaintingRenderer;
 import net.hydra.jojomod.client.models.paintings.VanGoghPaintingRenderer;
@@ -37,7 +35,6 @@ import net.hydra.jojomod.client.models.visages.*;
 import net.hydra.jojomod.client.models.visages.parts.*;
 import net.hydra.jojomod.client.models.visages.renderers.*;
 import net.hydra.jojomod.client.models.worn_stand.*;
-import net.hydra.jojomod.client.models.mobs.TerrierEntityModel;
 import net.hydra.jojomod.client.models.layers.MagiciansRedSpinEffectLayer;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.npcs.ZombieAestheticianModel;
@@ -87,6 +84,8 @@ public class ClientForgeEvents {
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(ForgeEntities.TERRIER_DOG.get(), TerrierEntityRenderer::new);
         event.registerEntityRenderer(ForgeEntities.FALCON.get(), FalconRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.SNAKE.get(), SnakeRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.PIRANHA.get(), PiranhaRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ZOMBIEFISH.get(), ZombiefishRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ANUBIS_GUARDIAN.get(), AnubisGuardianRenderer::new);
         event.registerEntityRenderer(ForgeEntities.STAR_PLATINUM.get(), StarPlatinumRenderer::new);
@@ -157,6 +156,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.GE_FROG.get(), GEFrogRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GE_BEE.get(), GEBeeRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GE_FISH.get(), GEFishRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.GE_FOX.get(), GEFoxRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT.get(), SilverChariotRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT_PHARAOH.get(), SilverChariotPharaohRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT_RAPIER.get(), SilverChariotRapierRenderer::new);
@@ -227,6 +227,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.PURPLE_SMOKE.get(), NoRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BAD_COMPANY_SOLDIER.get(), BCSoldierRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BAD_COMPANY_TANK.get(), BCTankRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.CTR_BARRIER.get(), CTRbarrierRenderer::new);
         event.registerEntityRenderer(ForgeEntities.OVA_ENYA.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ENYA.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.JOTARO.get(), VisageBasisRenderer::new);
@@ -293,6 +294,8 @@ public class ClientForgeEvents {
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(ModEntityRendererClient.STRAY_CAT_ENTITY_LAYER, StrayCatEntityModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.FALCON_LAYER, FalconModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.SNAKE_LAYER, SnakeModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.PIRANHA_LAYER, PiranhaModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.WOLF_LAYER, TerrierEntityModel::createBodyLayerTerrier);
         event.registerLayerDefinition(ModEntityRendererClient.ZOMBIEFISH_LAYER, SilverfishModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.ANUBIS_GUARDIAN_LAYER, AnubisGuardianModel::createBodyLayer);
@@ -428,6 +431,8 @@ public class ClientForgeEvents {
         ModStrayModels.TUSK_NAIL = new TuskNailModel();
         ModStrayModels.TUSK_DRILL_NAIL = new TuskDrillNailModel();
         ModStrayModels.HEY_YA = new HeyYaModel();
+        ModStrayModels.CATCH_THE_RAINBOW = new CatchTheRainbowModel();
+        ModStrayModels.CATCH_THE_RAINBOW_UMVUTHI = new CatchTheRainbowUmvuthiModel();
         ModStrayModels.CENTURY_BOY = new CenturyBoyModel();
         ModStrayModels.BOWLER_HAT = new BowlerHatModel();
         ModStrayModels.UV_BLASTER = new UVBlasterModel();
@@ -457,6 +462,7 @@ public class ClientForgeEvents {
         ModStrayModels.KakyoinHairPart = new KakyoinHairPart();
         ModStrayModels.gyroHatPart = new GyroHatPart();
         ModStrayModels.anakissHatPart = new AnakissHatPart();
+        ModStrayModels.blackmorePonytailPart = new BlackmorePonytailPart();
         ModStrayModels.steelBallsPart = new SteelBallsPart();
         ModStrayModels.DiegoHatPart = new DiegoHatPart();
         ModStrayModels.Diego2HatPart = new Diego2HatPart();

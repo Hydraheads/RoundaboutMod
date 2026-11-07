@@ -2790,6 +2790,7 @@ public class MainUtil {
                 || sauce.is(ModDamageTypes.INFINITE_SPIN)
                 || sauce.is(ModDamageTypes.HAZE_VIRUS)
                 || sauce.is(ModDamageTypes.DISTORTION_VIRUS)
+                || sauce.is(ModDamageTypes.POD_BITE)
                 || sauce.is(ModDamageTypes.BITES_THE_DUST)){
             return true;
         }

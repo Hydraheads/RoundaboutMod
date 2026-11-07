@@ -9,7 +9,7 @@ public enum AnimalTypes {
     PIRAHNA((byte) 5),
     SNAKE((byte) 6),
     FROG((byte) 7),
-    RABBIT((byte) 8);
+    FOX((byte) 8);
 
     public final byte id;
 
@@ -32,8 +32,8 @@ public enum AnimalTypes {
             return SNAKE;
         } if (bt== FROG.id) {
             return FROG;
-        } if (bt== RABBIT.id) {
-            return RABBIT;
+        } if (bt== FOX.id) {
+            return FOX;
         }
         return NONE;
     }

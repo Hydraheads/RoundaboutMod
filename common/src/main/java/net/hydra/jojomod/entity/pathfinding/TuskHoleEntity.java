@@ -95,9 +95,7 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
 
             if (target.hurt(ModDamageTypes.of(this.level(),ModDamageTypes.PENETRATING_STAND,this,this.getUser()),PT.getHoleDamage(target) ) ){
                 this.level().playSound(null,this.blockPosition(),ModSounds.TUSK_HOLE_IMPACT_EVENT,SoundSource.PLAYERS,1F,0.9F+((float) Math.random()*0.2F));
-                if (MainUtil.getMobBleed(target)) {
-                    MainUtil.makeBleed(target,1,120,this.getUser());
-                }
+                bleedTarget(target);
                 
                 if (!target.isAlive()) {
                     LivingEntity nearest = MainUtil.findClosestEntity(this.level(),target.getPosition(0),10,livingEntity -> (
@@ -116,6 +114,14 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
         }
         this.discard();
         return false;
+    }
+
+    public static void bleedTarget(Entity target) {
+        if (target instanceof LivingEntity LE) {
+            if (MainUtil.getMobBleed(LE)) {
+                MainUtil.makeBleed(LE,1,100,null);
+            }
+        }
     }
 
     @Override

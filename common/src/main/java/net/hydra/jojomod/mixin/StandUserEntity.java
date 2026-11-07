@@ -80,6 +80,7 @@ import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.WanderingTrader;
+import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -100,10 +101,7 @@ import net.zetalasis.networking.message.api.ModMessageEvents;
 import org.jetbrains.annotations.Async;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -112,6 +110,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.*;
 import java.util.function.Predicate;
+
+import static net.hydra.jojomod.util.MainUtil.sendParticlesIfPossible;
 
 @Mixin(value = LivingEntity.class, priority = 103)
 public abstract class StandUserEntity extends Entity implements StandUser {
@@ -2877,6 +2877,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$setCBVanishTicks(int set) {
         roundabout$CBVanishTicks = Mth.clamp(set, 0, 10);
     }
+
+    @Unique
+    public int roundabout$CatchTheRainbowVanishTicks = 0;
+
+    @Unique
+    @Override
+    public int roundabout$getCatchTheRainbowVanishTicks(){
+        return roundabout$CatchTheRainbowVanishTicks;
+    }
+    public void roundabout$setCatchTheRainbowVanishTicks(int set){roundabout$CatchTheRainbowVanishTicks = Mth.clamp(set, 0, 10);}
 
     @Unique
     public int roundabout$anubisVanishTicks = 0;
@@ -5657,6 +5667,38 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    // for GE lifeforms, the normal die isn't cancellable which caused crashes and stuff
+    @Inject(method = "die", at = @At(value = "HEAD"), cancellable = true)
+    private void roundabout$die3(DamageSource damageSource, CallbackInfo ci) {
+        if ((Object) this instanceof GELifeform lifeform) {
+            LivingEntity entity = (LivingEntity) (Object) this;
+
+            if (!entity.level().isClientSide()) {
+                ItemStack sourceStack = lifeform.getSourceItem();
+                if (!sourceStack.isEmpty()) {
+                    entity.spawnAtLocation(sourceStack);
+                    lifeform.setSourceItem(ItemStack.EMPTY);
+                }
+                for (EquipmentSlot slot : EquipmentSlot.values()) {
+                    ItemStack equippedItem = entity.getItemBySlot(slot);
+                    if (!equippedItem.isEmpty()) {
+                        entity.spawnAtLocation(equippedItem);
+                        entity.setItemSlot(slot, ItemStack.EMPTY);
+                    }
+                }
+                if (entity.level() instanceof ServerLevel serverLevel) {
+                    serverLevel.sendParticles(ModParticles.VITAL_ESSENCE,
+                            entity.getX(), entity.getY(0.5), entity.getZ(),
+                            20, 0.2, 0.2, 0.2, 0.05);
+                }
+                entity.level().playSound(null, entity.blockPosition(),
+                        ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.NEUTRAL, 1.0F, 1.0F);
+                entity.discard();
+            }
+            ci.cancel();
+        }
+    }
+
     @SuppressWarnings("deprecation")
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true, require = 0)
     private void roundabout$roundabouthurt(DamageSource damageSource, float $$1, CallbackInfoReturnable<Boolean> ci) {
@@ -6203,6 +6245,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         } else {
             roundabout$setCBVanishTicks(roundabout$getCBVanishTicks() - 1);
         }
+        if (roundabout$getStandPowers() instanceof PowersCatchTheRainbow && active){
+            roundabout$setCatchTheRainbowVanishTicks(roundabout$getCatchTheRainbowVanishTicks() + 1);
+        } else{
+            roundabout$setCatchTheRainbowVanishTicks(roundabout$getCatchTheRainbowVanishTicks() - 1);
+        }
 
         /** Soft and Wet Bubble Encase launch */
         if (roundabout$isLaunchBubbleEncased() && !this.level().isClientSide()) {
@@ -6280,7 +6327,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (this.tickCount % 20 == 0 && !this.level().isClientSide() && this.isAlive()) {
                 MobEffectInstance inst = this.getEffect(ModEffects.DISTORTION_VIRUS);
                 if (inst != null) {
-                    float damage = inst.getAmplifier() + 1;
+                    int level = inst.getAmplifier() + 1;
+                    float damage = level;
+                    if (level == 2) {
+                        damage += 0.25F;   //extra at Niv.2
+                    } else if (level >= 3) {
+                        damage += 0.5F;   //extra at Niv.3
+                    }
                     if (((StandUser) this).roundabout$getStandPowers() instanceof PowersPurpleHaze) {
                         damage *= 0.66F;
                     }
@@ -7260,9 +7313,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private void roundabout$tickInfiniteSpin(CallbackInfo ci) {
         MobEffectInstance instance = this.getEffect(ModEffects.INFINITE_SPIN);
         if (instance != null) {
-            if (this.tickCount % 10 == 0 && !this.roundabout$isDazed() && this.isAlive()) {
+            if (this.tickCount % 10 == 0 && !this.roundabout$isDazed() && this.isAlive() && this.isAttackable()) {
                 this.level().playSound(null,this.blockPosition(),ModSounds.VAMPIRE_CRUMBLE_EVENT,SoundSource.PLAYERS,0.3F,1F);
-                this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.INFINITE_SPIN), (float) Math.pow(2, 1+instance.getAmplifier()*0.4F));
+                this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.INFINITE_SPIN), (float)Math.min(Math.pow(2, 1+instance.getAmplifier()*0.4F),20) );
                 this.addEffect(new MobEffectInstance(ModEffects.INFINITE_SPIN, instance.getDuration(), instance.getAmplifier() + 1));
             }
         }
@@ -7290,5 +7343,56 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$clearDisguise() {
         this.entityData.set(ROUNDABOUT$DISGUISE_ID, Optional.empty());
         this.entityData.set(ROUNDABOUT$DISGUISE_NAME, "");
+    }
+
+    @Unique
+    @Override
+    public boolean roundabout$getIsRainWalking(){
+        return roundabout$isRainWalking;
+    }
+
+    @Unique
+    @Override
+    public void roundabout$setIsRainWalking(boolean bool){
+        roundabout$isRainWalking = bool;
+    }
+
+    @Unique
+    private boolean roundabout$isRainWalking = false;
+
+    @Inject(method = "travel",at = @At("HEAD"),cancellable = true)
+    private void roundabout$rainWalk(CallbackInfo ci) {
+        if (((StandUser) this).roundabout$getStandPowers() instanceof PowersCatchTheRainbow pctr && pctr.isInRain() && pctr.hasStandActive(pctr.self)) {
+            if (!pctr.self.isCrouching() && !pctr.self.onGround() && !this.isFallFlying() && roundabout$getIsRainWalking()) {
+                if (this.getDeltaMovement().y < 0) {
+                    this.setOnGround(true);
+
+                    if (this.isSprinting()) {
+                        this.setSprinting(true);
+                    }
+                    if (!this.jumping) {
+                        this.setDeltaMovement(this.getDeltaMovement().x, 0, this.getDeltaMovement().z);
+                    } else {
+                        Vec3 vec3 = this.getDeltaMovement();
+                        this.setDeltaMovement(vec3.x, (double) this.getJumpPower(), vec3.z);
+                        if (this.isSprinting()) {
+                            float f = this.getYRot() * ((float) Math.PI / 180F);
+                            this.setDeltaMovement(this.getDeltaMovement().add((double) (-Mth.sin(f) * 0.2F), 0.0D, (double) (Mth.cos(f) * 0.2F)));
+                        }
+                        this.hasImpulse = true;
+                    }
+
+                    double randX = Roundabout.RANDOM.nextDouble(-0.5, 0.5);
+                    double randZ = Roundabout.RANDOM.nextDouble(-0.5, 0.5);
+                    if (Math.random() > 0.4) {
+                        sendParticlesIfPossible(this, level(), ParticleTypes.DRIPPING_DRIPSTONE_WATER,
+                                this.getX() + randX,
+                                this.getY() - 0.5f,
+                                this.getZ() + randZ,
+                                1, 0, 0, 0, 0);
+                    }
+                }
+            }
+        }
     }
 }
