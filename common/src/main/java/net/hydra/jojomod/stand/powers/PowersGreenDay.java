@@ -772,6 +772,19 @@ public class PowersGreenDay extends NewPunchingStand {
         return true;
     }
 
+    @Override
+    public void onStandSwitch() {
+        this.clearArm();
+        super.onStandSwitch();
+    }
+
+    private void clearArm(){
+        if (!this.self.level().isClientSide){
+            if (!HasOffHand) {
+                Off_hand_entity.removearm();
+            }
+        }
+    }
 
     /**
      * getting the right hand for left handed mobs = players n stuff idk look man

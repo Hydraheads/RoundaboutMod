@@ -293,6 +293,19 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         return super.isAttackIneptVisually(activeP, slot);
     }
 
+    @Override
+    public void onStandSwitch(){
+        this.clearArm();
+        super.onStandSwitch();
+    }
+
+    private void clearArm(){
+        if (!this.self.level().isClientSide){
+            if (!HasOffHand){
+                Off_hand_entity.removearm();
+            }
+        }
+    }
 
     private static final byte
     RAINMEND = 53,
