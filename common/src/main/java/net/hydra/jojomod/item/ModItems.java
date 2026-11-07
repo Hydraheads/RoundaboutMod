@@ -314,6 +314,7 @@ public class ModItems {
     public static Item ULTRAVIOLET_BLASTER;
     public static Item FLESH_BUCKET;
     public static Item CHERRIES;
+    public static Item ZOMBIE_HORSE_THREAD;
 
     public static CreativeModeTab FOG_BLOCK_ITEMS;
 

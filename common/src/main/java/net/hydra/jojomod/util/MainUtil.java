@@ -2968,7 +2968,7 @@ public class MainUtil {
                 value.equals(ModEffects.SINGE)
                 || value.equals(ModEffects.STAND_MELTING) ||
                 value.equals(ModEffects.CAPTURING_LOVE) || value.equals(ModEffects.MELTING)
-                || value.equals(ModEffects.MOLD);
+                || value.equals(ModEffects.MOLD) || value.equals(ModEffects.STITCHED);
     }
 
     public static boolean hidesPotionEffectSwirl(MobEffect value) {
@@ -2979,7 +2979,7 @@ public class MainUtil {
                 || value.equals(ModEffects.SWITCH) || value.equals(ModEffects.MELTING) ||
                 value.equals(ModEffects.IMPRINTING) || value.equals(ModEffects.SWAPPED)
                 || value.equals(ModEffects.STAND_MELTING) ||
-                value.equals(ModEffects.SINGE);
+                value.equals(ModEffects.SINGE) || value.equals(ModEffects.STITCHED);
     }
 
     public static boolean isKnockbackResilient(LivingEntity LE) {

@@ -3910,7 +3910,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 stand.setYHeadRot(roundabout$User.getYHeadRot() % 360);
                 if (OffsetIndex.OffsetStyle(OT) == OffsetIndex.FIXED_STYLE) {
                     float rot;
-                    if (OT == OffsetIndex.BENEATH || OT == OffsetIndex.BENEATH_2) {
+                    if (OT == OffsetIndex.BENEATH || OT == OffsetIndex.BENEATH_2 || OT == OffsetIndex.BENEATH_CARRY_USER) {
                         rot = (roundabout$User.getYRot()) % 360;
                     } else if (OT == OffsetIndex.GUARD_AND_TRACE) {
                         BlockHitResult dd = roundabout$getStandPowers().getAheadVec(30);
@@ -7339,6 +7339,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$clearDisguise() {
         this.entityData.set(ROUNDABOUT$DISGUISE_ID, Optional.empty());
         this.entityData.set(ROUNDABOUT$DISGUISE_NAME, "");
+    }
+
+    @Inject(method = "hurt", at = @At(value = "HEAD"), cancellable = true, require = 0)
+    private void roundabout$stitchedGiveBleed(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci) {
+        MobEffectInstance instance = this.getEffect(ModEffects.STITCHED);
+        if (instance != null) {
+            int amp = instance.getAmplifier();
+            int dur = instance.getDuration();
+            this.removeEffect(instance.getEffect());
+            this.addEffect(new MobEffectInstance(ModEffects.BLEED, dur, amp));
+        }
     }
 
     @Unique

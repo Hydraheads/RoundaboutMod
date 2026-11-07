@@ -293,6 +293,19 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         return super.isAttackIneptVisually(activeP, slot);
     }
 
+    @Override
+    public void onStandSwitch(){
+        this.clearArm();
+        super.onStandSwitch();
+    }
+
+    private void clearArm(){
+        if (!this.self.level().isClientSide){
+            if (!HasOffHand){
+                Off_hand_entity.removearm();
+            }
+        }
+    }
 
     private static final byte
     RAINMEND = 53,
@@ -597,9 +610,9 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                 playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.CTR_HEAL_EVENT, SoundSource.PLAYERS, 0.6F, (float)Roundabout.RANDOM.nextDouble(0.9, 1.1));
                 for (int i = 0; i < 11; i = i + 1) {
                     sendParticlesIfPossible(self.level(), ParticleTypes.SPLASH,
-                            this.getSelf().getX() + (diameter * Math.sin(i * 6)) * Math.cos(Xangle),
+                            this.getSelf().getX() + (diameter * Math.sin(i * 4)) * Math.cos(Xangle),
                             this.getSelf().getY() + (this.getSelf().getEyeHeight() * 0.7),
-                            this.getSelf().getZ() + (diameter * Math.cos(i * 6)) * Math.cos(Zangle),
+                            this.getSelf().getZ() + (diameter * Math.cos(i * 4)) * Math.cos(Zangle),
                             0, 0, 0, 0, 0);
                 }
             }
@@ -808,9 +821,9 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.CTR_HEAL_EVENT, SoundSource.PLAYERS, 0.35F, (float)Roundabout.RANDOM.nextDouble(0.65, 0.85));
             for (int i = 0; i < 11; i = i + 1) {
                 sendParticlesIfPossible(self.level(), ParticleTypes.SPLASH,
-                        this.getSelf().getX() + (diameter * Math.sin(i * 6)) * Math.cos(Xangle),
+                        this.getSelf().getX() + (diameter * Math.sin(i * 4)) * Math.cos(Xangle),
                         this.getSelf().getY() + (this.getSelf().getEyeHeight() * 0.7),
-                        this.getSelf().getZ() + (diameter * Math.cos(i * 6)) * Math.cos(Zangle),
+                        this.getSelf().getZ() + (diameter * Math.cos(i * 4)) * Math.cos(Zangle),
                         0, 0, 0, 0, 0);
             }
         }

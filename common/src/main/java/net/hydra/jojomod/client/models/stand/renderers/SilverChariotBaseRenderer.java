@@ -279,8 +279,8 @@ public class SilverChariotBaseRenderer<T extends StandEntity> extends StandRende
             matrixStack.mulPose((Axis.ZP.rotationDegrees(180.0F)));
             this.scale(mobEntity, matrixStack, g);
 
-            // VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderType.entityTranslucent(getTextureLocation(mobEntity)));
-            VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(mobEntity)));
+            VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderType.entityTranslucent(getTextureLocation(mobEntity)));
+            // VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(mobEntity)));
             // this.model.head.visible = true;
             this.model.renderToBuffer(matrixStack, vertexConsumer, i, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, alpha);
             matrixStack.popPose();

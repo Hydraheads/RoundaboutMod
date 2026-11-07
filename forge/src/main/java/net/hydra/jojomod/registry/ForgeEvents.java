@@ -738,6 +738,7 @@ public class ForgeEvents {
         ModItems.MUSIC_DISC_TORTURE_DANCE = ForgeItems.MUSIC_DISC_TORTURE_DANCE.get();
         ModItems.MUSIC_DISC_HALLELUJAH = ForgeItems.MUSIC_DISC_HALLELUJAH.get();
         ModItems.MUSIC_DISC_CHAKA_HFTF = ForgeItems.MUSIC_DISC_CHAKA_HFTF.get();
+        ModItems.ZOMBIE_HORSE_THREAD = ForgeItems.ZOMBIE_HORSE_THREAD.get();
         ModItems.FOG_BLOCK_ITEMS = ForgeCreativeTab.FOG_GROUP.get();
 
      //   ModItems.INTERDIMENSIONAL_KEY = ForgeItems.INTERDIMENSIONAL_KEY.get();
@@ -814,6 +815,7 @@ public class ForgeEvents {
         ModParticles.BRIEF_MAGIC_DUST = ForgeParticles.BRIEF_MAGIC_DUST.get();
         ModParticles.D4C_LINES = ForgeParticles.D4C_LINES.get();
         ModParticles.STITCH = ForgeParticles.STITCH.get();
+        ModParticles.ZOMBIE_STITCH = ForgeParticles.ZOMBIE_STITCH.get();
         ModParticles.OCCULT = ForgeParticles.OCCULT.get();
         ModParticles.AIRBUBBLE_PINK = ForgeParticles.AIRBUBBLE_PINK.get();
         ModParticles.AIRBUBBLE_GREEN = ForgeParticles.AIRBUBBLE_GREEN.get();
@@ -864,6 +866,7 @@ public class ForgeEvents {
         ((IFireBlock) fire).roundabout$bootstrap();
 
         ModEffects.BLEED = ForgeEffects.BLEED.get();
+        ModEffects.STITCHED = ForgeEffects.STITCHED.get();
         ModEffects.HEX = ForgeEffects.HEX.get();
         ModEffects.BANISH = ForgeEffects.BANISH.get();
         ModEffects.DOOMED = ForgeEffects.DOOMED.get();
@@ -984,6 +987,7 @@ public class ForgeEvents {
         ModEntities.SILVER_CHARIOT_PHARAOH = ForgeEntities.SILVER_CHARIOT_PHARAOH.get();
         ModEntities.SILVER_CHARIOT_RAPIER = ForgeEntities.SILVER_CHARIOT_RAPIER.get();
         ModEntities.SILVER_CHARIOT_RAPIER_PLATFORM = ForgeEntities.SILVER_CHARIOT_RAPIER_PLATFORM.get();
+        ModEntities.SC_MOUNT = ForgeEntities.SC_MOUNT.get();
         ModEntities.THROWN_HARPOON = ForgeEntities.THROWN_HARPOON.get();
         ModEntities.BLADED_BOWLER_HAT = ForgeEntities.BLADED_BOWLER_HAT.get();
         ModEntities.ROUNDABOUT_BULLET_ENTITY = ForgeEntities.ROUNDABOUT_BULLET_ENTITY.get();

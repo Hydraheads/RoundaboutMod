@@ -4975,6 +4975,7 @@
       "roundabout:ctr_stabilizing_rain"
     ]
   },
+<<<<<<< HEAD
   "jumpin_jack_flash_summon": {
     "sounds": [
       "roundabout:jumpin_jack_flash_summon"
@@ -4999,6 +5000,12 @@
   "launcher_burst": {
     "sounds": [
       "roundabout:shoot_burst"
+    ]
+  },
+  "zombiehorse_stitching": {
+    "subtitle": "sounds.roundabout.zombiehorse_stitching",
+    "sounds": [
+      "roundabout:zombiehorse_stitching"
     ]
   }
 }

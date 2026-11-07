@@ -2808,6 +2808,10 @@ public class ModSounds {
     public static final ResourceLocation CTR_RAIN_STEP_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CTR_RAIN_STEP_3);
     public static SoundEvent CTR_RAIN_STEP_3_EVENT = SoundEvent.createVariableRangeEvent(CTR_RAIN_STEP_3_ID);
 
+    public static final String ZOMBIEHORSE_STITCHING = "zombiehorse_stitching";
+    public static final ResourceLocation ZOMBIEHORSE_STITCHING_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ZOMBIEHORSE_STITCHING);
+    public static SoundEvent ZOMBIEHORSE_STITCHING_EVENT = SoundEvent.createVariableRangeEvent(ZOMBIEHORSE_STITCHING_ID);
+
 
     public static void registerSoundEvents(){
     }
