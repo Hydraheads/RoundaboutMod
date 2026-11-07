@@ -76,6 +76,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -2825,6 +2826,18 @@ public class MainUtil {
             return true;
         }
         return false;
+    }
+
+    public static boolean CenturyBoyReactionBacklistDamage(DamageSource source) {
+
+        boolean isPassive = source.getEntity() == null;
+
+        return (isPassive && !(source.is(DamageTypes.FALL)
+                || source.is(DamageTypes.FALLING_ANVIL)
+                || source.is(DamageTypes.FALLING_BLOCK)
+                || source.is(DamageTypes.UNATTRIBUTED_FIREBALL)
+                || source.is(DamageTypes.FALLING_STALACTITE)
+        ));
     }
 
     /** Returns the vertical angle between two mobs in degrees */
