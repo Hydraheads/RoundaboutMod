@@ -11,6 +11,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation WOLF_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "wolf"), "main");
     public static final ModelLayerLocation SNAKE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "snake"), "main");
     public static final ModelLayerLocation PIRANHA_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "piranha"), "main");
+    public static final ModelLayerLocation BUTTERFLY_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "butterfly"), "main");
     public static final ModelLayerLocation ZOMBIEFISH_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "zombiefish"), "main");
 
     public static final ModelLayerLocation VILLAGER_MINION_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "villager_minion"), "main");

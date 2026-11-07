@@ -58,6 +58,12 @@ public class ForgeEntities {
                             .sized(0.6f, 0.5f).clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "piranha").toString())
             );
+    public static final RegistryObject<EntityType<Butterfly>> BUTTERFLY =
+            ENTITY_TYPES.register("butterfly", () ->
+                    EntityType.Builder.of(Butterfly::new, MobCategory.AMBIENT)
+                            .sized(0.5f, 0.5f).clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "butterfly").toString())
+            );
     public static final RegistryObject<EntityType<Zombiefish>> ZOMBIEFISH =
             ENTITY_TYPES.register("zombiefish", () ->
                     EntityType.Builder.of(Zombiefish::new, MobCategory.MISC).sized(0.44F, 0.33F).
@@ -758,6 +764,11 @@ public class ForgeEntities {
                     .sized(0.5f, 0.9f)
                     .clientTrackingRange(5)
                     .build(Roundabout.MOD_ID + ":ge_fox"));
+    public static final RegistryObject<EntityType<GESnakeEntity>> GE_SNAKE = ENTITY_TYPES.register("ge_snake",
+            () -> EntityType.Builder.of(GESnakeEntity::new, MobCategory.CREATURE)
+                    .sized(0.6f, 0.4f)
+                    .clientTrackingRange(5)
+                    .build(Roundabout.MOD_ID + ":ge_snake"));
     public static final RegistryObject<EntityType<SilverChariotEntity>> SILVER_CHARIOT =
             ENTITY_TYPES.register("silver_chariot", () ->
                     EntityType.Builder.of(SilverChariotEntity::new, MobCategory.MISC).sized(0.75f, 2.05f).
@@ -781,6 +792,12 @@ public class ForgeEntities {
                     EntityType.Builder.<SilverChariotRapierPlatformEntity>of(SilverChariotRapierPlatformEntity::new, MobCategory.MISC).sized(1.0f, 0.2f).
                             clientTrackingRange(16).
                             build(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_rapier_platform").toString())
+            );
+    public static final RegistryObject<EntityType<SilverChariotMountEntity>> SC_MOUNT =
+            ENTITY_TYPES.register("sc_mount", () ->
+                    EntityType.Builder.<SilverChariotMountEntity>of(SilverChariotMountEntity::new, MobCategory.MISC).sized(0.6f, 2f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "sc_mount").toString())
             );
     public static final RegistryObject<EntityType<KnifeEntity>> THROWN_KNIFE =
             ENTITY_TYPES.register("knife", () ->

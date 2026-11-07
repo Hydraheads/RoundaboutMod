@@ -75,6 +75,16 @@ public class BlackSabbathModel<T extends BlackSabbathEntity> extends StandModel<
         super.defaultModifiers(entity);
     }
 
+    @Override
+    public ModelPart getHead(){
+        return this.head;
+    }
+
+    @Override
+    public ModelPart getBody(){
+        return this.body;
+    }
+
     public BlackSabbathModel(ModelPart root) {
         this.stand = root.getChild("stand");
 

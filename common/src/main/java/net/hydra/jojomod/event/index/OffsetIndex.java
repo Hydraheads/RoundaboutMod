@@ -17,6 +17,9 @@ public class OffsetIndex {
     public static final byte BEHIND = 11;
     //made this for diver down since the stand's pilot mode's animations weren't made to rotate with the camera
     public static final byte LOOSE_NOLEAN = 12;
+    // Lazy work around for stands that should be able to carry their user
+    public static final byte BENEATH_CARRY_USER = 13;
+    public static final byte BENEATH_CARRY_IDLE = 14;
 
 
 
@@ -26,10 +29,10 @@ public class OffsetIndex {
 
     public static byte OffsetStyle(byte offsetType){
         if (offsetType == FOLLOW || offsetType == FOLLOW_NOLEAN ||
-                offsetType == BEHIND){
+                offsetType == BEHIND || offsetType == BENEATH_CARRY_IDLE){
             return FOLLOW_STYLE;
         } else if (offsetType == ATTACK || offsetType == GUARD || offsetType == BENEATH|| offsetType == BENEATH_2 || offsetType == GUARD_AND_TRACE
-                || offsetType == GUARD_FURTHER_RIGHT){
+                || offsetType == GUARD_FURTHER_RIGHT || offsetType == BENEATH_CARRY_USER){
             return FIXED_STYLE;
         } else if (offsetType == LOOSE || offsetType == LOOSE_NOLEAN){
             return LOOSE_STYLE;

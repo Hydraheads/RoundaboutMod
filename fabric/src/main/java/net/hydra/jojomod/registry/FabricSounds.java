@@ -29,6 +29,10 @@ public class FabricSounds {
         addSound(ModSounds.BLOOD_SLICE_ID, ModSounds.BLOOD_SLICE_EVENT);
         addSound(ModSounds.HOLOGRAM_START_ID, ModSounds.HOLOGRAM_START_EVENT);
         addSound(ModSounds.TERRIER_SOUND_ID, ModSounds.TERRIER_SOUND_EVENT);
+        addSound(ModSounds.SNAKE_IDLE_ID, ModSounds.SNAKE_IDLE_EVENT);
+        addSound(ModSounds.SNAKE_HURT_ID, ModSounds.SNAKE_HURT_EVENT);
+        addSound(ModSounds.SNAKE_ATTACK_ID, ModSounds.SNAKE_ATTACK_EVENT);
+        addSound(ModSounds.SNAKE_DIE_ID, ModSounds.SNAKE_DIE_EVENT);
         addSound(ModSounds.STAR_SUMMON_SOUND_ID, ModSounds.STAR_SUMMON_SOUND_EVENT);
         addSound(ModSounds.SUMMON_MANDOM_ID, ModSounds.SUMMON_MANDOM_EVENT);
         addSound(ModSounds.WHITE_ALBUM_SUMMON_ID, ModSounds.WHITE_ALBUM_SUMMON_EVENT);

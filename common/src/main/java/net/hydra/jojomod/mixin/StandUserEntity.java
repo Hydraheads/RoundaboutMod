@@ -3910,7 +3910,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 stand.setYHeadRot(roundabout$User.getYHeadRot() % 360);
                 if (OffsetIndex.OffsetStyle(OT) == OffsetIndex.FIXED_STYLE) {
                     float rot;
-                    if (OT == OffsetIndex.BENEATH || OT == OffsetIndex.BENEATH_2) {
+                    if (OT == OffsetIndex.BENEATH || OT == OffsetIndex.BENEATH_2 || OT == OffsetIndex.BENEATH_CARRY_USER) {
                         rot = (roundabout$User.getYRot()) % 360;
                     } else if (OT == OffsetIndex.GUARD_AND_TRACE) {
                         BlockHitResult dd = roundabout$getStandPowers().getAheadVec(30);
@@ -6295,14 +6295,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
         if (this.hasEffect(ModEffects.HAZE_VIRUS) && !this.hasEffect(ModEffects.VIRUS_IMMUNITY)) {
-            if (this.tickCount % 15 == 0 && !this.level().isClientSide() && this.isAlive()) {
+            if (this.tickCount % 30 == 0 && !this.level().isClientSide() && this.isAlive()) {
                 MobEffectInstance inst = this.getEffect(ModEffects.HAZE_VIRUS);
                 if (inst != null) {
                     this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.HAZE_VIRUS),
-                            inst.getAmplifier() + 1);
+                            (inst.getAmplifier() + 1) * 1.5F);
                 }
             }
-
             MobEffectInstance spreadInst = this.getEffect(ModEffects.HAZE_VIRUS);
             if (spreadInst != null && this.tickCount % 5 == 0
                     && !this.level().isClientSide() && this.isAlive()) {
@@ -6324,7 +6323,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
 
         if (this.hasEffect(ModEffects.DISTORTION_VIRUS) && !this.hasEffect(ModEffects.VIRUS_IMMUNITY)) {
-            if (this.tickCount % 20 == 0 && !this.level().isClientSide() && this.isAlive()) {
+            if (this.tickCount % 40 == 0 && !this.level().isClientSide() && this.isAlive()) {
                 MobEffectInstance inst = this.getEffect(ModEffects.DISTORTION_VIRUS);
                 if (inst != null) {
                     int level = inst.getAmplifier() + 1;
@@ -6340,13 +6339,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     if (ClientNetworking.getAppropriateConfig().PurpleHazeSettings.CanonDistortion) {
                         damage *= 4;
                     }
+                    damage *= 2;
                     this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISTORTION_VIRUS), damage);
-                    rdbt$reduceOtherEffectDurations(20, ModEffects.DISTORTION_VIRUS, ModEffects.VIRUS_IMMUNITY);
+                    rdbt$reduceOtherEffectDurations(40, ModEffects.DISTORTION_VIRUS, ModEffects.VIRUS_IMMUNITY);
                 }
             }
-
-
-
             MobEffectInstance spreadInst = this.getEffect(ModEffects.DISTORTION_VIRUS);
             if (spreadInst != null && this.tickCount % 5 == 0
                     && !this.level().isClientSide() && this.isAlive()) {
@@ -6368,7 +6365,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
     }
-
     @Override
     @Unique
     public Vec3 roundabout$frictionSave() {
