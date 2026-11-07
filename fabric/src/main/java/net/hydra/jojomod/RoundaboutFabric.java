@@ -3,16 +3,22 @@ package net.hydra.jojomod;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.commands.RoundaboutCom;
 import net.hydra.jojomod.item.DispenserRegistry;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.particles.FabricParticles;
 import net.hydra.jojomod.registry.*;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.world.FabricGamerules;
 import net.hydra.jojomod.world.gen.ModWorldGeneration;
+import net.minecraft.world.entity.npc.VillagerProfession;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.trading.MerchantOffer;
 
 public class RoundaboutFabric implements ModInitializer {
 
@@ -59,6 +65,14 @@ public class RoundaboutFabric implements ModInitializer {
         });
         ModWorldGeneration.generateWorldGen();
         DispenserRegistry.init();
+        //villager trades
+        TradeOfferHelper.registerVillagerOffers(VillagerProfession.FISHERMAN, 1, factories -> {
+            factories.add((trader, random) -> new MerchantOffer(
+                    new ItemStack(ModItems.PIRANHA, 5),
+                    new ItemStack(Items.EMERALD, 1),
+                    16, 2, 0.05F
+            ));
+        });
         Roundabout.init(false);
         ModSounds.registerSoundEvents();
         ConfigManager.loadBlacklists2();

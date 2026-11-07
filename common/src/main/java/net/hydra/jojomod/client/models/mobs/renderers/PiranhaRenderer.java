@@ -5,6 +5,7 @@ import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.mobs.PiranhaModel;
+import net.hydra.jojomod.client.models.mobs.layers.PiranhaEyesLayer;
 import net.hydra.jojomod.entity.mobs.Piranha;
 import net.hydra.jojomod.entity.mobs.Piranha;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -17,6 +18,7 @@ public class PiranhaRenderer<T extends Piranha> extends MobRenderer<T, PiranhaMo
 
     public PiranhaRenderer(EntityRendererProvider.Context context) {
         super(context,new PiranhaModel<>(context.bakeLayer(ModEntityRendererClient.PIRANHA_LAYER)),0.15F);
+        this.addLayer(new PiranhaEyesLayer<>(this));
     }
 
     @Override

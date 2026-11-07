@@ -28,14 +28,12 @@ import net.hydra.jojomod.entity.zombie_minion.*;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.ambient.Bat;
-import net.minecraft.world.entity.animal.Bee;
-import net.minecraft.world.entity.animal.Fox;
-import net.minecraft.world.entity.animal.Salmon;
-import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -69,6 +67,13 @@ public class FabricEntities {
                     new ResourceLocation(Roundabout.MOD_ID, "piranha"),
                     EntityType.Builder.of(Piranha::new, MobCategory.CREATURE).
                             sized(0.6f, 0.5f).clientTrackingRange(10).build(Roundabout.MOD_ID+":piranha")
+            );
+    public static final EntityType<Butterfly> BUTTERFLY =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "butterfly"),
+                    EntityType.Builder.of(Butterfly::new, MobCategory.AMBIENT).
+                            sized(0.5f, 0.5f).clientTrackingRange(10).build(Roundabout.MOD_ID+":butterfly")
             );
     public static final EntityType<Zombiefish> ZOMBIEFISH =
             Registry.register(
@@ -870,6 +875,14 @@ public class FabricEntities {
                     .clientTrackingRange(5)
                     .build(Roundabout.MOD_ID + ":ge_fox")
     );
+    public static final EntityType<GESnakeEntity> GE_SNAKE = Registry.register(
+            BuiltInRegistries.ENTITY_TYPE,
+            new ResourceLocation(Roundabout.MOD_ID, "ge_snake"),
+            EntityType.Builder.of(GESnakeEntity::new, MobCategory.CREATURE)
+                    .sized(0.6f, 0.4f)
+                    .clientTrackingRange(5)
+                    .build(Roundabout.MOD_ID + ":ge_snake")
+    );
         public static final EntityType<SilverChariotEntity> SILVER_CHARIOT =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -1441,6 +1454,7 @@ public class FabricEntities {
                 ModEntities.FALCON = FALCON;
                 ModEntities.SNAKE = SNAKE;
                 ModEntities.PIRANHA = PIRANHA;
+                ModEntities.BUTTERFLY = BUTTERFLY;
                 ModEntities.ZOMBIEFISH = ZOMBIEFISH;
                 ModEntities.ANUBIS_GUARDIAN = ANUBIS_GUARDIAN;
                 ModEntities.STAR_PLATINUM = STAR_PLATINUM;
@@ -1503,6 +1517,7 @@ public class FabricEntities {
         ModEntities.GE_BEE = GE_BEE;
         ModEntities.GE_FISH = GE_FISH;
         ModEntities.GE_FOX = GE_FOX;
+        ModEntities.GE_SNAKE = GE_SNAKE;
                 ModEntities.SILVER_CHARIOT = SILVER_CHARIOT;
                 ModEntities.SILVER_CHARIOT_PHARAOH =  SILVER_CHARIOT_PHARAOH;
                 ModEntities.THROWN_HARPOON = THROWN_HARPOON;
@@ -1635,6 +1650,7 @@ public class FabricEntities {
         FabricDefaultAttributeRegistry.register(FALCON, FalconEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(SNAKE, Snake.createAttributes());
         FabricDefaultAttributeRegistry.register(PIRANHA, Piranha.createAttributes());
+        FabricDefaultAttributeRegistry.register(BUTTERFLY, Butterfly.createAttributes());
                 FabricDefaultAttributeRegistry.register(STRAY_CAT, StrayCatEntity.createAttributes());
                 FabricDefaultAttributeRegistry.register(ZOMBIEFISH, Zombiefish.createAttributes());
                 FabricDefaultAttributeRegistry.register(ANUBIS_GUARDIAN, AnubisGuardian.createAttributes());
@@ -1686,6 +1702,7 @@ public class FabricEntities {
         FabricDefaultAttributeRegistry.register(GE_BEE, Bee.createAttributes());
         FabricDefaultAttributeRegistry.register(GE_FISH, Salmon.createAttributes());
         FabricDefaultAttributeRegistry.register(GE_FOX, Fox.createAttributes());
+        FabricDefaultAttributeRegistry.register(GE_SNAKE, Snake.createAttributes());
 
                 FabricDefaultAttributeRegistry.register(ROAD_ROLLER_ENTITY, RoadRollerEntity.createAttributes().build());
 
@@ -1769,16 +1786,51 @@ public class FabricEntities {
 
         FabricDefaultAttributeRegistry.register(CTR_BARRIER, CTRbarrierEntity.createStandAttributes());
 
-                FabricDefaultAttributeRegistry.register(SHEER_HEART_ATTACK, SheerHeartAttackEntity.createStandAttributes());
+        FabricDefaultAttributeRegistry.register(SHEER_HEART_ATTACK, SheerHeartAttackEntity.createStandAttributes());
 
-                /*Spawn Weights and Biomes*/
-                BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.DESERT), MobCategory.CREATURE,
-                        ModEntities.TERRIER_DOG, 2, 1, 1);
-                 BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.TAIGA), MobCategory.CREATURE,
-                         ModEntities.TERRIER_DOG, 1, 1, 3);
+        /*Spawn Weights and Biomes*/
+        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.DESERT), MobCategory.CREATURE,
+                ModEntities.TERRIER_DOG, 2, 1, 1);
+        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.TAIGA), MobCategory.CREATURE,
+                ModEntities.TERRIER_DOG, 1, 1, 3);
 
-                /*Spawn Placement rules*/
-                 SpawnPlacements.register(ModEntities.TERRIER_DOG, SpawnPlacements.Type.ON_GROUND,
-                         Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TerrierEntity::canSpawn);
+        BiomeModifications.addSpawn(
+                BiomeSelectors.includeByKey(Biomes.DESERT)
+                        .or(BiomeSelectors.tag(BiomeTags.IS_BADLANDS))
+                        .or(BiomeSelectors.tag(BiomeTags.IS_SAVANNA)),
+                MobCategory.CREATURE,
+                ModEntities.SNAKE, 8, 1, 2
+        );
+        BiomeModifications.addSpawn(
+                BiomeSelectors.tag(BiomeTags.IS_JUNGLE),
+                MobCategory.CREATURE,
+                ModEntities.SNAKE, 10, 1, 3
+        );
+        BiomeModifications.addSpawn(
+                BiomeSelectors.includeByKey(
+                        Biomes.SNOWY_PLAINS, Biomes.ICE_SPIKES, Biomes.SNOWY_TAIGA,
+                        Biomes.SNOWY_BEACH, Biomes.SNOWY_SLOPES, Biomes.JAGGED_PEAKS,
+                        Biomes.FROZEN_PEAKS, Biomes.GROVE, Biomes.FROZEN_OCEAN,
+                        Biomes.DEEP_FROZEN_OCEAN, Biomes.FROZEN_RIVER
+                ),
+                MobCategory.CREATURE,
+                ModEntities.SNAKE, 7, 1, 2
+        );
+        BiomeModifications.addSpawn(
+                BiomeSelectors.tag(BiomeTags.IS_FOREST)
+                        .or(BiomeSelectors.tag(BiomeTags.IS_TAIGA))
+                        .or(BiomeSelectors.includeByKey(
+                                Biomes.PLAINS, Biomes.SUNFLOWER_PLAINS,
+                                Biomes.SWAMP, Biomes.MANGROVE_SWAMP, Biomes.MEADOW
+                        )),
+                MobCategory.CREATURE,
+                ModEntities.SNAKE, 6, 1, 2
+        );
+
+        /*Spawn Placement rules*/
+        SpawnPlacements.register(ModEntities.TERRIER_DOG, SpawnPlacements.Type.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TerrierEntity::canSpawn);
+        SpawnPlacements.register(ModEntities.SNAKE, SpawnPlacements.Type.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Snake::checkMobSpawnRules);
         }
 }
