@@ -40,6 +40,8 @@ public class ModEntities {
     public static EntityType<TerrierEntity> TERRIER_DOG;
     public static EntityType<FalconEntity> FALCON;
     public static EntityType<Snake> SNAKE;
+    public static EntityType<Piranha> PIRANHA;
+    public static EntityType<Butterfly> BUTTERFLY;
     public static EntityType<Zombiefish> ZOMBIEFISH;
     public static EntityType<AnubisGuardian> ANUBIS_GUARDIAN;
     public static EntityType<TheWorldEntity> THE_WORLD;
@@ -121,6 +123,7 @@ public class ModEntities {
     public static EntityType<GEBeeEntity> GE_BEE;
     public static EntityType<GEFishEntity> GE_FISH;
     public static EntityType<GEFoxEntity> GE_FOX;
+    public static EntityType<GESnakeEntity> GE_SNAKE;
     public static EntityType<SilverChariotEntity> SILVER_CHARIOT;
     public static EntityType<SilverChariotEntity> SILVER_CHARIOT_PHARAOH;
     public static EntityType<SilverChariotRapierShotEntity> SILVER_CHARIOT_RAPIER;

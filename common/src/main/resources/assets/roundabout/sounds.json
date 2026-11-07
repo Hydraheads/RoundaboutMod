@@ -3128,6 +3128,31 @@
       "roundabout:terrier_pass"
     ]
   },
+  "snake_idle": {
+    "subtitle": "sounds.roundabout.snake_idle",
+    "sounds": [
+      "roundabout:snake_idle"
+    ]
+  },
+  "snake_attack": {
+    "subtitle": "sounds.roundabout.snake_attack",
+    "sounds": [
+      "roundabout:snake_attack"
+    ]
+  },
+  "snake_hurt": {
+    "subtitle": "sounds.roundabout.snake_hurt",
+    "sounds": [
+      "roundabout:snake_hurt"
+    ]
+  },
+  "snake_die": {
+    "subtitle": "sounds.roundabout.snake_die",
+    "sounds": [
+      "roundabout:snake_die"
+    ]
+  },
+
   "summon_world": {
     "subtitle": "sounds.roundabout.summon_world",
     "sounds": [

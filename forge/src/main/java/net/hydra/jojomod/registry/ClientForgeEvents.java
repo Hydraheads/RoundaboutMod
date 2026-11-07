@@ -85,11 +85,14 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.TERRIER_DOG.get(), TerrierEntityRenderer::new);
         event.registerEntityRenderer(ForgeEntities.FALCON.get(), FalconRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SNAKE.get(), SnakeRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.PIRANHA.get(), PiranhaRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.BUTTERFLY.get(), ButterflyRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ZOMBIEFISH.get(), ZombiefishRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ANUBIS_GUARDIAN.get(), AnubisGuardianRenderer::new);
         event.registerEntityRenderer(ForgeEntities.STAR_PLATINUM.get(), StarPlatinumRenderer::new);
         event.registerEntityRenderer(ForgeEntities.STAR_PLATINUM_BASEBALL.get(), StarPlatinumBaseballRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THE_WORLD.get(), TheWorldRenderer::new);
+        com.example.jjf.forge.JJFEmbeddedForgeClient.registerRenderers(event);
         event.registerEntityRenderer(ForgeEntities.THE_WORLD_ULTIMATE.get(), TheWorldUltimateRenderer::new);
         event.registerEntityRenderer(ForgeEntities.KING_CRIMSON.get(), KingCrimsonRenderer::new);
         event.registerEntityRenderer(ForgeEntities.WHITESNAKE.get(), WhitesnakeRenderer::new);
@@ -155,6 +158,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.GE_BEE.get(), GEBeeRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GE_FISH.get(), GEFishRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GE_FOX.get(), GEFoxRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.GE_SNAKE.get(), GESnakeRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT.get(), SilverChariotRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT_PHARAOH.get(), SilverChariotPharaohRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT_RAPIER.get(), SilverChariotRapierRenderer::new);
@@ -293,6 +297,8 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.STRAY_CAT_ENTITY_LAYER, StrayCatEntityModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.FALCON_LAYER, FalconModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.SNAKE_LAYER, SnakeModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.PIRANHA_LAYER, PiranhaModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.BUTTERFLY_LAYER, ButterflyModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.WOLF_LAYER, TerrierEntityModel::createBodyLayerTerrier);
         event.registerLayerDefinition(ModEntityRendererClient.ZOMBIEFISH_LAYER, SilverfishModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.ANUBIS_GUARDIAN_LAYER, AnubisGuardianModel::createBodyLayer);
@@ -311,6 +317,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.OCELOT_MINION_LAYER, OcelotMinionModel::createBodyLayer);
 
         event.registerLayerDefinition(ModEntityRendererClient.THE_WORLD_LAYER, TheWorldModel::getTexturedModelData);
+        com.example.jjf.forge.JJFEmbeddedForgeClient.registerLayers(event);
         event.registerLayerDefinition(ModEntityRendererClient.THE_WORLD_ULTIMATE_LAYER, TheWorldUltimateModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.STAR_PLATINUM_LAYER, StarPlatinumModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.COFFIN_LEFT_LAYER, CoffinRenderer::createDoubleBodyLeftLayer);
