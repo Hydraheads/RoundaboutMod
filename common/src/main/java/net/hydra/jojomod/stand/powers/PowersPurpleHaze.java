@@ -89,9 +89,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     public float getSalimoPunchStrength(Entity entity) {
         if (this.getReducedDamage(entity)) {
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(0.5F));  // KQ impale: 2F
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.5F));  // KQ impale: 2F
         }
-        return levelupDamageMod(multiplyPowerByStandConfigMobs(1.5F));         // KQ impale: 12
+        return levelupDamageMod(multiplyPowerByStandConfigMobs(5.0F));
     }
     public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
@@ -321,9 +321,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
     @Override
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.26F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.31F));
         } else {
-            return levelupDamageMod(multiplyPowerByStandConfigMobs(4.0F));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(4.5F));
         }
     }
     @Override
