@@ -738,6 +738,9 @@ public class ForgeItems {
     public static final RegistryObject<ForgeSpawnEggItem> PIRANHA_SPAWN_EGG = addToWIPTab(ITEMS.register("piranha_spawn_egg",
             () -> new ForgeSpawnEggItem(ForgeEntities.PIRANHA,
                     0x8fbbdd, 0xe89e4d, new Item.Properties())));
+    public static final RegistryObject<ForgeSpawnEggItem> BUTTERFLY_SPAWN_EGG = addToWIPTab(ITEMS.register("butterfly_spawn_egg",
+            () -> new ForgeSpawnEggItem(ForgeEntities.BUTTERFLY,
+                    0x95caff, 0xe880c6, new Item.Properties())));
     public static final RegistryObject<Potion> HEX_POTION = POTIONS.register("roundabout.hex",
             () -> new Potion(new MobEffectInstance(ForgeEffects.HEX.get(), 9600, 0)));
     public static final RegistryObject<Potion> HEX_POTION_EXTENDED = POTIONS.register("roundabout.long_hex",

@@ -58,6 +58,12 @@ public class ForgeEntities {
                             .sized(0.6f, 0.5f).clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "piranha").toString())
             );
+    public static final RegistryObject<EntityType<Butterfly>> BUTTERFLY =
+            ENTITY_TYPES.register("butterfly", () ->
+                    EntityType.Builder.of(Butterfly::new, MobCategory.AMBIENT)
+                            .sized(0.5f, 0.5f).clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "butterfly").toString())
+            );
     public static final RegistryObject<EntityType<Zombiefish>> ZOMBIEFISH =
             ENTITY_TYPES.register("zombiefish", () ->
                     EntityType.Builder.of(Zombiefish::new, MobCategory.MISC).sized(0.44F, 0.33F).

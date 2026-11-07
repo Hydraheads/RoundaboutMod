@@ -648,6 +648,7 @@
   "item.roundabout.zombie_minion_spawn_egg": "Zombie Minion Spawn Egg",
   "item.roundabout.snake_spawn_egg": "Snake Spawn Egg",
   "item.roundabout.piranha_spawn_egg": "Piranha Spawn Egg",
+  "item.roundabout.butterfly_spawn_egg": "Butterfly Spawn Egg",
 
   "item.roundabout.painting_van_gough": "Van Gogh's Self-Portrait",
   "item.roundabout.painting_mona_lisa": "Mona Lisa",
@@ -766,6 +767,7 @@
   "entity.roundabout.zombiefish": "Zombiefish",
   "entity.roundabout.snake": "Snake",
   "entity.roundabout.piranha": "Piranha",
+  "entity.roundabout.butterfly": "Butterfly",
   "entity.roundabout.ge_bat": "Bat",
   "entity.roundabout.ge_frog": "Frog",
   "entity.roundabout.ge_bee": "Bee",

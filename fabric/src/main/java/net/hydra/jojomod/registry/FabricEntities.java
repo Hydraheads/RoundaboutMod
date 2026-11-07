@@ -68,6 +68,13 @@ public class FabricEntities {
                     EntityType.Builder.of(Piranha::new, MobCategory.CREATURE).
                             sized(0.6f, 0.5f).clientTrackingRange(10).build(Roundabout.MOD_ID+":piranha")
             );
+    public static final EntityType<Butterfly> BUTTERFLY =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "butterfly"),
+                    EntityType.Builder.of(Butterfly::new, MobCategory.AMBIENT).
+                            sized(0.5f, 0.5f).clientTrackingRange(10).build(Roundabout.MOD_ID+":butterfly")
+            );
     public static final EntityType<Zombiefish> ZOMBIEFISH =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
@@ -1439,6 +1446,7 @@ public class FabricEntities {
                 ModEntities.FALCON = FALCON;
                 ModEntities.SNAKE = SNAKE;
                 ModEntities.PIRANHA = PIRANHA;
+                ModEntities.BUTTERFLY = BUTTERFLY;
                 ModEntities.ZOMBIEFISH = ZOMBIEFISH;
                 ModEntities.ANUBIS_GUARDIAN = ANUBIS_GUARDIAN;
                 ModEntities.STAR_PLATINUM = STAR_PLATINUM;
@@ -1633,6 +1641,7 @@ public class FabricEntities {
         FabricDefaultAttributeRegistry.register(FALCON, FalconEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(SNAKE, Snake.createAttributes());
         FabricDefaultAttributeRegistry.register(PIRANHA, Piranha.createAttributes());
+        FabricDefaultAttributeRegistry.register(BUTTERFLY, Butterfly.createAttributes());
                 FabricDefaultAttributeRegistry.register(STRAY_CAT, StrayCatEntity.createAttributes());
                 FabricDefaultAttributeRegistry.register(ZOMBIEFISH, Zombiefish.createAttributes());
                 FabricDefaultAttributeRegistry.register(ANUBIS_GUARDIAN, AnubisGuardian.createAttributes());

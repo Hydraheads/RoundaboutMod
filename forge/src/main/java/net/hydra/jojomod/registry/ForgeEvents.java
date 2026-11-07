@@ -65,6 +65,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.FALCON.get(), FalconEntity.createAttributes().build());
         event.put(ForgeEntities.SNAKE.get(), Snake.createAttributes().build());
         event.put(ForgeEntities.PIRANHA.get(), Piranha.createAttributes().build());
+        event.put(ForgeEntities.BUTTERFLY.get(), Butterfly.createAttributes().build());
         event.put(ForgeEntities.ZOMBIEFISH.get(), Zombiefish.createAttributes().build());
         event.put(ForgeEntities.STRAY_CAT.get(), StrayCatEntity.createAttributes().build());
         event.put(ForgeEntities.ANUBIS_GUARDIAN.get(), AnubisGuardian.createAttributes().build());
@@ -726,6 +727,7 @@ public class ForgeEvents {
         ModItems.ANUBIS_GUARDIAN_SPAWN_EGG = ForgeItems.ANUBIS_GUARDIAN_SPAWN_EGG.get();
         ModItems.SNAKE_SPAWN_EGG = ForgeItems.SNAKE_SPAWN_EGG.get();
         ModItems.PIRANHA_SPAWN_EGG = ForgeItems.PIRANHA_SPAWN_EGG.get();
+        ModItems.BUTTERFLY_SPAWN_EGG = ForgeItems.BUTTERFLY_SPAWN_EGG.get();
         ModItems.MUSIC_DISC_TORTURE_DANCE = ForgeItems.MUSIC_DISC_TORTURE_DANCE.get();
         ModItems.MUSIC_DISC_HALLELUJAH = ForgeItems.MUSIC_DISC_HALLELUJAH.get();
         ModItems.MUSIC_DISC_CHAKA_HFTF = ForgeItems.MUSIC_DISC_CHAKA_HFTF.get();
@@ -902,6 +904,7 @@ public class ForgeEvents {
         ModEntities.FALCON = ForgeEntities.FALCON.get();
         ModEntities.SNAKE = ForgeEntities.SNAKE.get();
         ModEntities.PIRANHA = ForgeEntities.PIRANHA.get();
+        ModEntities.BUTTERFLY = ForgeEntities.BUTTERFLY.get();
         ModEntities.ZOMBIEFISH = ForgeEntities.ZOMBIEFISH.get();
         ModEntities.ANUBIS_GUARDIAN = ForgeEntities.ANUBIS_GUARDIAN.get();
         ModEntities.STAR_PLATINUM = ForgeEntities.STAR_PLATINUM.get();
