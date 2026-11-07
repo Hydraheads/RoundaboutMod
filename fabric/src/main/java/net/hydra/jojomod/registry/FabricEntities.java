@@ -68,6 +68,13 @@ public class FabricEntities {
                     EntityType.Builder.of(Piranha::new, MobCategory.CREATURE).
                             sized(0.6f, 0.5f).clientTrackingRange(10).build(Roundabout.MOD_ID+":piranha")
             );
+    public static final EntityType<Butterfly> BUTTERFLY =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "butterfly"),
+                    EntityType.Builder.of(Butterfly::new, MobCategory.AMBIENT).
+                            sized(0.5f, 0.5f).clientTrackingRange(10).build(Roundabout.MOD_ID+":butterfly")
+            );
     public static final EntityType<Zombiefish> ZOMBIEFISH =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
@@ -868,6 +875,14 @@ public class FabricEntities {
                     .clientTrackingRange(5)
                     .build(Roundabout.MOD_ID + ":ge_fox")
     );
+    public static final EntityType<GESnakeEntity> GE_SNAKE = Registry.register(
+            BuiltInRegistries.ENTITY_TYPE,
+            new ResourceLocation(Roundabout.MOD_ID, "ge_snake"),
+            EntityType.Builder.of(GESnakeEntity::new, MobCategory.CREATURE)
+                    .sized(0.6f, 0.4f)
+                    .clientTrackingRange(5)
+                    .build(Roundabout.MOD_ID + ":ge_snake")
+    );
         public static final EntityType<SilverChariotEntity> SILVER_CHARIOT =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -895,6 +910,13 @@ public class FabricEntities {
                     Roundabout.location("silver_chariot_rapier_platform"),
                     EntityType.Builder.<SilverChariotRapierPlatformEntity>of(SilverChariotRapierPlatformEntity::new, MobCategory.MISC).
                             sized(2.0f, 0.2f).clientTrackingRange(16).build(Roundabout.MOD_ID+":silver_chariot_rapier_platform")
+            );
+    public static final EntityType<SilverChariotMountEntity> SC_MOUNT =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "sc_mount"),
+                    EntityType.Builder.<SilverChariotMountEntity>of(SilverChariotMountEntity::new, MobCategory.MISC).
+                            sized(0.6f, 2f).clientTrackingRange(10).build(Roundabout.MOD_ID+":sc_mount")
             );
         public static final EntityType<HarpoonEntity> THROWN_HARPOON =
                 Registry.register(
@@ -1439,6 +1461,7 @@ public class FabricEntities {
                 ModEntities.FALCON = FALCON;
                 ModEntities.SNAKE = SNAKE;
                 ModEntities.PIRANHA = PIRANHA;
+                ModEntities.BUTTERFLY = BUTTERFLY;
                 ModEntities.ZOMBIEFISH = ZOMBIEFISH;
                 ModEntities.ANUBIS_GUARDIAN = ANUBIS_GUARDIAN;
                 ModEntities.STAR_PLATINUM = STAR_PLATINUM;
@@ -1501,6 +1524,7 @@ public class FabricEntities {
         ModEntities.GE_BEE = GE_BEE;
         ModEntities.GE_FISH = GE_FISH;
         ModEntities.GE_FOX = GE_FOX;
+        ModEntities.GE_SNAKE = GE_SNAKE;
                 ModEntities.SILVER_CHARIOT = SILVER_CHARIOT;
                 ModEntities.SILVER_CHARIOT_PHARAOH =  SILVER_CHARIOT_PHARAOH;
                 ModEntities.THROWN_HARPOON = THROWN_HARPOON;
@@ -1568,6 +1592,7 @@ public class FabricEntities {
                 ModEntities.TUSK_HOLE = TUSK_HOLE;
                 ModEntities.SILVER_CHARIOT_RAPIER = SILVER_CHARIOT_RAPIER;
                 ModEntities.SILVER_CHARIOT_RAPIER_PLATFORM = SILVER_CHARIOT_RAPIER_PLATFORM;
+                ModEntities.SC_MOUNT = SC_MOUNT;
                 ModEntities.VIRUS_SPIT = VIRUS_SPIT;
 
                 ModEntities.BAD_COMPANY_SOLDIER = BAD_COMPANY_SOLDIER;
@@ -1633,6 +1658,7 @@ public class FabricEntities {
         FabricDefaultAttributeRegistry.register(FALCON, FalconEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(SNAKE, Snake.createAttributes());
         FabricDefaultAttributeRegistry.register(PIRANHA, Piranha.createAttributes());
+        FabricDefaultAttributeRegistry.register(BUTTERFLY, Butterfly.createAttributes());
                 FabricDefaultAttributeRegistry.register(STRAY_CAT, StrayCatEntity.createAttributes());
                 FabricDefaultAttributeRegistry.register(ZOMBIEFISH, Zombiefish.createAttributes());
                 FabricDefaultAttributeRegistry.register(ANUBIS_GUARDIAN, AnubisGuardian.createAttributes());
@@ -1684,6 +1710,7 @@ public class FabricEntities {
         FabricDefaultAttributeRegistry.register(GE_BEE, Bee.createAttributes());
         FabricDefaultAttributeRegistry.register(GE_FISH, Salmon.createAttributes());
         FabricDefaultAttributeRegistry.register(GE_FOX, Fox.createAttributes());
+        FabricDefaultAttributeRegistry.register(GE_SNAKE, Snake.createAttributes());
 
                 FabricDefaultAttributeRegistry.register(ROAD_ROLLER_ENTITY, RoadRollerEntity.createAttributes().build());
 

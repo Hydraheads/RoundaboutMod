@@ -65,6 +65,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.FALCON.get(), FalconEntity.createAttributes().build());
         event.put(ForgeEntities.SNAKE.get(), Snake.createAttributes().build());
         event.put(ForgeEntities.PIRANHA.get(), Piranha.createAttributes().build());
+        event.put(ForgeEntities.BUTTERFLY.get(), Butterfly.createAttributes().build());
         event.put(ForgeEntities.ZOMBIEFISH.get(), Zombiefish.createAttributes().build());
         event.put(ForgeEntities.STRAY_CAT.get(), StrayCatEntity.createAttributes().build());
         event.put(ForgeEntities.ANUBIS_GUARDIAN.get(), AnubisGuardian.createAttributes().build());
@@ -166,6 +167,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.GE_BEE.get(), Bee.createAttributes().build());
         event.put(ForgeEntities.GE_FISH.get(), Salmon.createAttributes().build());
         event.put(ForgeEntities.GE_FOX.get(), Fox.createAttributes().build());
+        event.put(ForgeEntities.GE_SNAKE.get(), Snake.createAttributes().build());
         event.put(ForgeEntities.VILLAGER_MINION.get(), VillagerMinion.createAttributes().build());
         event.put(ForgeEntities.AXOLOTL_MINION.get(), AxolotlMinion.createAttributes().build());
         event.put(ForgeEntities.OCELOT_MINION.get(), OcelotMinion.createAttributes().build());
@@ -726,6 +728,7 @@ public class ForgeEvents {
         ModItems.ANUBIS_GUARDIAN_SPAWN_EGG = ForgeItems.ANUBIS_GUARDIAN_SPAWN_EGG.get();
         ModItems.SNAKE_SPAWN_EGG = ForgeItems.SNAKE_SPAWN_EGG.get();
         ModItems.PIRANHA_SPAWN_EGG = ForgeItems.PIRANHA_SPAWN_EGG.get();
+        ModItems.BUTTERFLY_SPAWN_EGG = ForgeItems.BUTTERFLY_SPAWN_EGG.get();
         ModItems.MUSIC_DISC_TORTURE_DANCE = ForgeItems.MUSIC_DISC_TORTURE_DANCE.get();
         ModItems.MUSIC_DISC_HALLELUJAH = ForgeItems.MUSIC_DISC_HALLELUJAH.get();
         ModItems.MUSIC_DISC_CHAKA_HFTF = ForgeItems.MUSIC_DISC_CHAKA_HFTF.get();
@@ -905,6 +908,7 @@ public class ForgeEvents {
         ModEntities.FALCON = ForgeEntities.FALCON.get();
         ModEntities.SNAKE = ForgeEntities.SNAKE.get();
         ModEntities.PIRANHA = ForgeEntities.PIRANHA.get();
+        ModEntities.BUTTERFLY = ForgeEntities.BUTTERFLY.get();
         ModEntities.ZOMBIEFISH = ForgeEntities.ZOMBIEFISH.get();
         ModEntities.ANUBIS_GUARDIAN = ForgeEntities.ANUBIS_GUARDIAN.get();
         ModEntities.STAR_PLATINUM = ForgeEntities.STAR_PLATINUM.get();
@@ -968,10 +972,12 @@ public class ForgeEvents {
         ModEntities.GE_BEE = ForgeEntities.GE_BEE.get();
         ModEntities.GE_FISH = ForgeEntities.GE_FISH.get();
         ModEntities.GE_FOX = ForgeEntities.GE_FOX.get();
+        ModEntities.GE_SNAKE = ForgeEntities.GE_SNAKE.get();
         ModEntities.SILVER_CHARIOT = ForgeEntities.SILVER_CHARIOT.get();
         ModEntities.SILVER_CHARIOT_PHARAOH = ForgeEntities.SILVER_CHARIOT_PHARAOH.get();
         ModEntities.SILVER_CHARIOT_RAPIER = ForgeEntities.SILVER_CHARIOT_RAPIER.get();
         ModEntities.SILVER_CHARIOT_RAPIER_PLATFORM = ForgeEntities.SILVER_CHARIOT_RAPIER_PLATFORM.get();
+        ModEntities.SC_MOUNT = ForgeEntities.SC_MOUNT.get();
         ModEntities.THROWN_HARPOON = ForgeEntities.THROWN_HARPOON.get();
         ModEntities.BLADED_BOWLER_HAT = ForgeEntities.BLADED_BOWLER_HAT.get();
         ModEntities.ROUNDABOUT_BULLET_ENTITY = ForgeEntities.ROUNDABOUT_BULLET_ENTITY.get();

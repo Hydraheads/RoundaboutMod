@@ -30,6 +30,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 public class Snake extends Animal {
@@ -191,6 +192,11 @@ public class Snake extends Animal {
     @Override
     protected SoundEvent getDeathSound() {
         return ModSounds.SNAKE_DIE_EVENT;
+    }
+
+    @Override
+    protected void playStepSound(BlockPos pos, BlockState state) {
+
     }
 
     public static AttributeSupplier.Builder createAttributes() {

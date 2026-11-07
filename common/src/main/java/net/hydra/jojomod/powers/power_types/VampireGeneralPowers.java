@@ -1358,8 +1358,8 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
     public void iceClutch(){
         this.attackTimeDuring = 0;
-        setActivePower(ICE_CLUTCH);
         if (!self.level().isClientSide()) {
+            setActivePower(ICE_CLUTCH);
 
             int clutchCooldown = ClientNetworking.getAppropriateConfig().vampireSettings.clutchCooldown;
             setCooldown(PowerIndex.GENERAL_2,clutchCooldown);
@@ -1404,8 +1404,8 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
     public void bloodClutch(){
         this.attackTimeDuring = 0;
-        setActivePower(BLOOD_CLUTCH);
         if (!self.level().isClientSide()) {
+            setActivePower(BLOOD_CLUTCH);
 
             int clutchCooldown = ClientNetworking.getAppropriateConfig().vampireSettings.clutchCooldown;
             setCooldown(PowerIndex.GENERAL_2,clutchCooldown);

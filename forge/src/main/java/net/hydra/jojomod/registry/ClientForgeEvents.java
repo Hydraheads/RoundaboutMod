@@ -86,6 +86,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.FALCON.get(), FalconRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SNAKE.get(), SnakeRenderer::new);
         event.registerEntityRenderer(ForgeEntities.PIRANHA.get(), PiranhaRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.BUTTERFLY.get(), ButterflyRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ZOMBIEFISH.get(), ZombiefishRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ANUBIS_GUARDIAN.get(), AnubisGuardianRenderer::new);
         event.registerEntityRenderer(ForgeEntities.STAR_PLATINUM.get(), StarPlatinumRenderer::new);
@@ -157,10 +158,12 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.GE_BEE.get(), GEBeeRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GE_FISH.get(), GEFishRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GE_FOX.get(), GEFoxRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.GE_SNAKE.get(), GESnakeRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT.get(), SilverChariotRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT_PHARAOH.get(), SilverChariotPharaohRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT_RAPIER.get(), SilverChariotRapierRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT_RAPIER_PLATFORM.get(), SilverChariotRapierPlatformRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.SC_MOUNT.get(), NoRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_HARPOON.get(), HarpoonRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BLADED_BOWLER_HAT.get(), BladedBowlerHatRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ROUNDABOUT_BULLET_ENTITY.get(), RoundaboutBulletEntityRenderer::new);
@@ -296,6 +299,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.FALCON_LAYER, FalconModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.SNAKE_LAYER, SnakeModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.PIRANHA_LAYER, PiranhaModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.BUTTERFLY_LAYER, ButterflyModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.WOLF_LAYER, TerrierEntityModel::createBodyLayerTerrier);
         event.registerLayerDefinition(ModEntityRendererClient.ZOMBIEFISH_LAYER, SilverfishModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.ANUBIS_GUARDIAN_LAYER, AnubisGuardianModel::createBodyLayer);

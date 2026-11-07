@@ -125,8 +125,12 @@ public class PurpleSmokeEntity extends StandEntity {
             this.setDeltaMovement(0, -0.2, 0);
         }
         if (!client) {
-            float expansionProgress = Math.min(1.0F, (float) ticksAlive / 60);
-            range = 1.0F + (8.0F - 1.0F) * expansionProgress;
+            var cfg = ClientNetworking.getAppropriateConfig().PurpleHazeSettings;
+            float maxRange = Mth.clamp(cfg.SmokeRadius, 1.0F, 32.0F);
+            int expansionTicks = Math.max(1, cfg.SmokeExpansionTicks);
+
+            float expansionProgress = Math.min(1.0F, (float) ticksAlive / expansionTicks);
+            range = 1.0F + (maxRange - 1.0F) * expansionProgress;
             range = Math.max(range, 1.0F);
         }
         //if (!((TimeStop) level()).inTimeStopRange(this)) {
@@ -375,7 +379,7 @@ public class PurpleSmokeEntity extends StandEntity {
 
             if (!((StandUser) living).roundabout$isBubbleEncased() && !(living instanceof StrayCatEntity c && c.getBubbleShield()) && PowerTypes.isExistentiallyElsewhereTogether(this, living)) {
 
-                int effectDuration = living instanceof Player ? 150 : 150; //for when it was less duration to you. It was 100 : 150
+                int effectDuration = living instanceof Player ? 160 : 160; //for when it was less duration to you. It was 100 : 150
                 boolean isSelf = living == user;
 
                 if (isDistortionMode()) {
@@ -388,7 +392,7 @@ public class PurpleSmokeEntity extends StandEntity {
                         ((StandUser) user).roundabout$getStandPowers().addEXP(2);
                     }
                     if (ClientNetworking.getAppropriateConfig().PurpleHazeSettings.HazeMelts) {
-                        living.addEffect(new MobEffectInstance(ModEffects.MELTING, 150, 2));
+                        living.addEffect(new MobEffectInstance(ModEffects.MELTING, 160, 2));
                     }
                 } else {
                     boolean alreadyHasVirus = living.hasEffect(ModEffects.HAZE_VIRUS);

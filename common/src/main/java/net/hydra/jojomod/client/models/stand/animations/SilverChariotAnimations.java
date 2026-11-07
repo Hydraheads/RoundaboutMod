@@ -293,47 +293,8 @@ public class SilverChariotAnimations {
 				.addAnimation("lower_left_leg", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 						new Keyframe(0.0F, KeyframeAnimations.degreeVec(15.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
 				))
-				.addAnimation("left_shoulder_ARMOR", new AnimationChannel(AnimationChannel.Targets.SCALE,
-						new Keyframe(0.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
-				))
-				.addAnimation("right_shoulder_ARMOR", new AnimationChannel(AnimationChannel.Targets.SCALE,
-						new Keyframe(0.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
-				))
-				.addAnimation("chest_armor", new AnimationChannel(AnimationChannel.Targets.SCALE,
-						new Keyframe(0.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
-				))
-				.addAnimation("lower_armor", new AnimationChannel(AnimationChannel.Targets.SCALE,
-						new Keyframe(0.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
-				))
 				.addAnimation("left_elbow", new AnimationChannel(AnimationChannel.Targets.POSITION,
 						new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, -0.5F, -1.25F), AnimationChannel.Interpolations.CATMULLROM)
-				))
-				.addAnimation("head_armor", new AnimationChannel(AnimationChannel.Targets.SCALE,
-						new Keyframe(0.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
-				))
-				.addAnimation("right_leg_ARMOR", new AnimationChannel(AnimationChannel.Targets.SCALE,
-						new Keyframe(0.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
-				))
-				.addAnimation("left_leg_ARMOR", new AnimationChannel(AnimationChannel.Targets.SCALE,
-						new Keyframe(0.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
-				))
-				.addAnimation("right_foot_ARMOR", new AnimationChannel(AnimationChannel.Targets.SCALE,
-						new Keyframe(0.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
-				))
-				.addAnimation("left_foot_ARMOR", new AnimationChannel(AnimationChannel.Targets.SCALE,
-						new Keyframe(0.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
-				))
-				.addAnimation("right_wrist_ARMOR", new AnimationChannel(AnimationChannel.Targets.SCALE,
-						new Keyframe(0.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
-				))
-				.addAnimation("left_wrist_ARMOR", new AnimationChannel(AnimationChannel.Targets.SCALE,
-						new Keyframe(0.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
-				))
-				.addAnimation("right_elbow_ARMOR", new AnimationChannel(AnimationChannel.Targets.SCALE,
-						new Keyframe(0.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
-				))
-				.addAnimation("left_elbow_ARMOR", new AnimationChannel(AnimationChannel.Targets.SCALE,
-						new Keyframe(0.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
 				))
 				.addAnimation("right_sword", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 						new Keyframe(0.0F, KeyframeAnimations.degreeVec(4.0462F, -6.3202F, -125.2233F), AnimationChannel.Interpolations.CATMULLROM)

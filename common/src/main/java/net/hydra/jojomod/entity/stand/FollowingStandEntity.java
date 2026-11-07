@@ -102,6 +102,9 @@ public class FollowingStandEntity extends StandEntity{
                 return 0.7F;
             }
         }
+        if (getOffsetType() == OffsetIndex.BENEATH_CARRY_IDLE) {
+            return 1.85F;
+        }
         return this.entityData.get(IDLE_Y_OFFSET);
     }
 
@@ -224,9 +227,13 @@ public class FollowingStandEntity extends StandEntity{
         if (ot == OffsetIndex.BENEATH) {
             Vec3 frontVectors = FrontVectors(standUser, 180, 0F);
             return new Vec3(frontVectors.x, frontVectors.y - 1.1, frontVectors.z);
-        } else if (ot == OffsetIndex.BENEATH_2){
+        } else if (ot == OffsetIndex.BENEATH_2) {
             Vec3 frontVectors = FrontVectors(standUser, 180, 0F);
             return new Vec3(frontVectors.x, frontVectors.y - 0.5, frontVectors.z);
+        } else if (ot == OffsetIndex.BENEATH_CARRY_USER) {
+            // Silver Chariot's control mode
+            Vec3 frontVectors = FrontVectors(standUser, 0, 0F);
+            return new Vec3(frontVectors.x, frontVectors.y - 1.85, frontVectors.z);
         } else {
             float distanceFront;
             float standrotDir2 = 0;

@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.mobs;
 
 import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.goals.StrayCatBegGoal;
 import net.hydra.jojomod.entity.projectile.StrayCatAirBubble;
@@ -349,6 +350,7 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
                 || state.is(Blocks.FARMLAND)
                 || state.is(Blocks.GRASS_BLOCK)
                 || state.is(Blocks.MYCELIUM)
+                || state.is(ModBlocks.INVISIBLOCK)
                 || state.is(Blocks.DIRT_PATH)
                 || state.is(Blocks.COARSE_DIRT)
                 || state.is(Blocks.ROOTED_DIRT)
