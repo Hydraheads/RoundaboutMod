@@ -39,14 +39,19 @@ import net.minecraft.world.entity.animal.Fox;
 import net.minecraft.world.entity.animal.Salmon;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.animal.frog.Frog;
+import net.minecraft.world.entity.npc.VillagerProfession;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
+import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -205,6 +210,16 @@ public class ForgeEvents {
         );
     }
 
+    // custom villager trades
+    public static void onVillagerTrades(VillagerTradesEvent event) {
+        if (event.getType() == VillagerProfession.FISHERMAN) {
+            event.getTrades().get(1).add((trader, random) -> new MerchantOffer(
+                    new ItemStack(ModItems.PIRANHA, 6),
+                    new ItemStack(Items.EMERALD, 1),
+                    16, 2, 0.05F
+            ));
+        }
+    }
 
     @SubscribeEvent
     public static void registerRoundaboutBridge(FMLCommonSetupEvent event){
@@ -1074,6 +1089,7 @@ public class ForgeEvents {
         ConfigManager.loadBlacklists2();
         ConfigManager.loadFoodClear();
         ConfigManager.foodParticleParser();
+        MinecraftForge.EVENT_BUS.addListener(ForgeEvents::onVillagerTrades);
     }
 
     /**
