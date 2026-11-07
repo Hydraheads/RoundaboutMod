@@ -777,6 +777,7 @@ public class ForgeEvents {
         ModParticles.BRIEF_MAGIC_DUST = ForgeParticles.BRIEF_MAGIC_DUST.get();
         ModParticles.D4C_LINES = ForgeParticles.D4C_LINES.get();
         ModParticles.STITCH = ForgeParticles.STITCH.get();
+        ModParticles.ZOMBIE_STITCH = ForgeParticles.ZOMBIE_STITCH.get();
         ModParticles.OCCULT = ForgeParticles.OCCULT.get();
         ModParticles.AIRBUBBLE_PINK = ForgeParticles.AIRBUBBLE_PINK.get();
         ModParticles.AIRBUBBLE_GREEN = ForgeParticles.AIRBUBBLE_GREEN.get();
