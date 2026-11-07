@@ -136,6 +136,7 @@ public class ModItems {
     public static Item SNAKE_SKIN;
     public static Item SNAKE_OIL;
     public static Item SNAKE_SKIN_BOOTS;
+    public static Item PIRANHA_BUCKET;
     public static Item ROAD_ROLLER;
 
     public static Item IRON_BALL_CROSSBOW;

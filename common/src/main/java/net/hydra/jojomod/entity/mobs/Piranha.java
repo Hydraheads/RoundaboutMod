@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.mobs;
 
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -121,7 +122,7 @@ public class Piranha extends AbstractSchoolingFish {
 
     @Override
     public ItemStack getBucketItemStack() {
-        return null;
+        return new ItemStack(ModItems.PIRANHA_BUCKET);
     }
 
     @Override

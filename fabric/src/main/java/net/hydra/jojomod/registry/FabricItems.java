@@ -26,6 +26,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
@@ -33,6 +34,7 @@ import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Fluids;
 
 public class FabricItems {
     public static Item STAND_ARROW = registerItem("stand_arrow", new StandArrowItem(new Item.Properties().stacksTo(1).durability(5)));
@@ -345,6 +347,8 @@ public class FabricItems {
     public static Item SNAKE_SKIN = registerItem("snake_skin", new Item(new Item.Properties()));
     public static Item SNAKE_OIL = registerItem("snake_oil", new DrinkableItem(new Item.Properties()));
     public static Item SNAKE_SKIN_BOOTS = registerItem("snake_skin_boots", new ArmorItem(SnakeSkinBootsItem.SNAKE_ARMOR, ArmorItem.Type.BOOTS, new Item.Properties()));
+    public static final Item PIRANHA_BUCKET = Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Roundabout.MOD_ID, "piranha_bucket"),
+            new MobBucketItem(FabricEntities.PIRANHA, Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1)));
 
     public static Item MEMORY_PAWN = registerItem("memory_pawn", new MemoryChessPieceItem(ModBlocks.CHESS_PIECE, new Item.Properties().stacksTo(1)));
     public static Item MEMORY_ROOK = registerItem("memory_rook", new MemoryChessPieceItem(ModBlocks.CHESS_PIECE, new Item.Properties().stacksTo(1)));
@@ -841,6 +845,7 @@ public class FabricItems {
                     	//entries.accept(ModBlocks.CHESSBOARD_BLOCK);
                         entries.accept(FALCON_SPAWN_EGG);
                         entries.accept(PIRANHA_SPAWN_EGG);
+                        entries.accept(PIRANHA_BUCKET);
                         entries.accept(STAND_DISC_D4C);
                         entries.accept(MAX_STAND_DISC_D4C);
                         entries.accept(STAND_DISC_GOLD_EXPERIENCE);
@@ -1089,6 +1094,7 @@ public class FabricItems {
         ModItems.SNAKE_SKIN = SNAKE_SKIN;
         ModItems.SNAKE_SKIN_BOOTS = SNAKE_SKIN_BOOTS;
         ModItems.SNAKE_OIL = SNAKE_OIL;
+        ModItems.PIRANHA_BUCKET = PIRANHA_BUCKET;
 
         ModItems.STRAY_CAT_ANIME = STRAY_CAT_ANIME;
         ModItems.STRAY_CAT_MANGA = STRAY_CAT_MANGA;

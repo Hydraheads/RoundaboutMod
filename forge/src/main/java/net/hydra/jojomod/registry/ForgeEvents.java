@@ -600,6 +600,7 @@ public class ForgeEvents {
         ModItems.SNAKE_SKIN = ForgeItems.SNAKE_SKIN.get();
         ModItems.SNAKE_SKIN_BOOTS = ForgeItems.SNAKE_SKIN_BOOTS.get();
         ModItems.SNAKE_OIL = ForgeItems.SNAKE_OIL.get();
+        ModItems.PIRANHA_BUCKET = ForgeItems.PIRANHA_BUCKET.get();
 
         ModItems.MEMORY_PAWN = ForgeItems.MEMORY_PAWN.get();
         ModItems.MEMORY_KING = ForgeItems.MEMORY_KING.get();
