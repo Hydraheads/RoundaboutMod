@@ -753,6 +753,11 @@ public class FabricSounds {
         addSound(ModSounds.VSONG_DAMNABLE_CEREMONY_ID, ModSounds.VSONG_DAMNABLE_CEREMONY_EVENT);
         addSound(ModSounds.VSONG_BLOODCURDLING_MOMENTS_ID, ModSounds.VSONG_BLOODCURDLING_MOMENTS_EVENT);
 
+        addSound(ModSounds.JUMPIN_JACK_FLASH_SUMMON_ID, ModSounds.JUMPIN_JACK_FLASH_SUMMON_EVENT);
+        addSound(ModSounds.SUCTION_LAUNCH_ID, ModSounds.SUCTION_LAUNCH_EVENT);
+        addSound(ModSounds.LAUNCHER_SHOOT_ID, ModSounds.LAUNCHER_SHOOT_EVENT);
+        addSound(ModSounds.LAUNCHER_BURST_ID, ModSounds.LAUNCHER_BURST_EVENT);
+
         addSound(ModSounds.FLESH_BUD_ID, ModSounds.FLESH_BUD_EVENT);
         addSound(ModSounds.FLESH_BUD_REMOVAL_ID, ModSounds.FLESH_BUD_REMOVAL_EVENT);
         addSound(ModSounds.HAIR_TOGGLE_ID, ModSounds.HAIR_TOGGLE_EVENT);

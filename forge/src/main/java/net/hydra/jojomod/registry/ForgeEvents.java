@@ -90,6 +90,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.SOFT_AND_WET_DEBUT.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SOFT_AND_WET_KILLER_QUEEN.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.KILLER_QUEEN.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.JUMPIN_JACK_FLASH.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.BLOCK_BOMB.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.CINDERELLA.get(), CinderellaEntity.createStandAttributes().build());
         event.put(ForgeEntities.CALIFORNIA_KING_BED.get(), CaliforniaKingBedEntity.createStandAttributes().build());
@@ -450,6 +451,11 @@ public class ForgeEvents {
         ModItems.STAND_DISC_KING_CRIMSON = ForgeItems.STAND_DISC_KING_CRIMSON.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_KING_CRIMSON.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_KING_CRIMSON.get());
         ModItems.MAX_STAND_DISC_KING_CRIMSON = ForgeItems.MAX_STAND_DISC_KING_CRIMSON.get();
+
+        ModItems.STAND_DISC_JJF = ForgeItems.STAND_DISC_JJF.get();
+        ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_JJF.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_JJF.get());
+        ModItems.MAX_STAND_DISC_JJF = ForgeItems.STAND_DISC_JJF.get();
+
         ModItems.STAND_DISC_WHITESNAKE = ForgeItems.STAND_DISC_WHITESNAKE.get();
         ((MaxStandDiscItem) ForgeItems.MAX_STAND_DISC_WHITESNAKE.get()).baseDisc =
                 (StandDiscItem) ForgeItems.STAND_DISC_WHITESNAKE.get();
@@ -929,7 +935,11 @@ public class ForgeEvents {
         ModEntities.SOFT_AND_WET_DEBUT = ForgeEntities.SOFT_AND_WET_DEBUT.get();
         ModEntities.SOFT_AND_WET_KILLER_QUEEN = ForgeEntities.SOFT_AND_WET_KILLER_QUEEN.get();
         ModEntities.KILLER_QUEEN = ForgeEntities.KILLER_QUEEN.get();
-        ModEntities.setBlockBomb(ForgeEntities.BLOCK_BOMB.get());
+        ModEntities.JUMPIN_JACK_FLASH = ForgeEntities.JUMPIN_JACK_FLASH.get();
+        ModEntities.JJF_PROJECTILE = ForgeEntities.JJF_PROJECTILE.get();
+        ModEntities.JJF_GUNPOWDER_CLOUD = ForgeEntities.JJF_GUNPOWDER_CLOUD.get();
+        ModEntities.JJF_SPIT = ForgeEntities.JJF_SPIT.get();
+        ModEntities.BLOCK_BOMB = ForgeEntities.BLOCK_BOMB.get();
         ModEntities.SHEER_HEART_ATTACK = ForgeEntities.SHEER_HEART_ATTACK.get();
         ModEntities.CINDERELLA = ForgeEntities.CINDERELLA.get();
         ModEntities.CALIFORNIA_KING_BED = ForgeEntities.CALIFORNIA_KING_BED.get();

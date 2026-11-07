@@ -676,7 +676,8 @@ public class PowersKillerQueen extends NewPunchingStand {
         BROWN = 21,
         GREY = 22,
         SAMURAI = 23,
-        SPIRIT = 24;
+        SPIRIT = 24,
+        BETA = 25;
 
     @Override
     public List<Byte> getSkinList() {
@@ -727,6 +728,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 l.add(NOTW);
                 l.add(STARDUST);
                 l.add(MINESWEEPER);
+                l.add(BETA);
             }
             if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
                 l.add(SAMURAI);
@@ -3612,7 +3614,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             BlockPos pos = blockHit.getBlockPos();
 
-            this.bombBlock = ModEntities.getBlockBomb().create(this.getSelf().level());
+            this.bombBlock = ModEntities.BLOCK_BOMB.create(this.getSelf().level());
             this.bombBlock.setUser(this.self);
             this.bombBlock.setOnContact(isContactModeEnabled());
             PowerTypes.copyPlaneOfExisting(self, bombBlock);
@@ -3646,7 +3648,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         this.currentBombStatus = BOMB_BLOCK;
 
         this.syncBombStatus(BOMB_BLOCK);
-        this.bombBlock = ModEntities.getBlockBomb().create(this.getSelf().level());
+        this.bombBlock = ModEntities.BLOCK_BOMB.create(this.getSelf().level());
         this.bombBlock.setUser(this.self);
         this.bombBlock.setOnContact(isContactModeEnabled());
         PowerTypes.copyPlaneOfExisting(self, bombBlock);
@@ -5122,6 +5124,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             case KillerQueenEntity.GREY -> {return Component.translatable("skins.roundabout.killer_queen.grey");}
             case KillerQueenEntity.SAMURAI -> {return Component.translatable("skins.roundabout.killer_queen.samurai");}
             case KillerQueenEntity.SPIRIT -> {return Component.translatable("skins.roundabout.killer_queen.spirit");}
+            case KillerQueenEntity.BETA -> {return Component.translatable("skins.roundabout.killer_queen.beta");}
         }
         return Component.translatable("skins.roundabout.killer_queen.anime");
     }

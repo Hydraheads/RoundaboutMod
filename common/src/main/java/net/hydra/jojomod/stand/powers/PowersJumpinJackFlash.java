@@ -1,15 +1,12 @@
-package com.example.jjf.stand.powers;
+package net.hydra.jojomod.stand.powers;
 
-import com.example.jjf.entity.projectile.JJFProjectileEntity;
+import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.projectile.JJFProjectileEntity;
 import com.example.jjf.client.JJFHudSettings;
 import com.example.jjf.launcher.JJFLauncherAccess;
 import com.example.jjf.launcher.JJFLauncherState;
-import com.example.jjf.registry.ModEntities;
-import com.example.jjf.registry.ModSounds;
-import com.example.jjf.zero_gravity.ZeroGravityAccess;
-import com.example.jjf.zero_gravity.ZeroGravitySource;
-import com.example.jjf.zero_gravity.ZeroGravityState;
-import com.example.jjf.zero_gravity.ZeroGravitySystem;
+import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.event.powers.jumpingJackFlash.*;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.item.MaxStandDiscItem;
@@ -37,7 +34,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import com.example.jjf.entity.projectile.JJFSpitEntity;
+import net.hydra.jojomod.entity.projectile.JJFSpitEntity;
 import net.minecraft.world.entity.Entity;
 import com.example.jjf.launcher.JJFLauncherAmmoItem;
 import net.minecraft.world.item.SpawnEggItem;
@@ -54,8 +51,7 @@ import net.hydra.jojomod.event.AbilityIconInstance;
 import java.util.List;
 import com.google.common.collect.Lists;
 import java.util.UUID;
-import net.minecraft.client.Minecraft;
-import net.minecraft.world.phys.HitResult;
+
 import net.minecraft.world.phys.AABB;
 
 public class PowersJumpinJackFlash extends NewPunchingStand {
@@ -115,53 +111,6 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
     private boolean jjf$spinAttackHeld = false;
     private int jjf$spinAttackTicks = 0;
 
-private static final ResourceLocation NORMAL_GRAVITY_ICON =
-            new ResourceLocation(
-                    "roundabout",
-                    "textures/mob_effect/gravity_flip.png"
-            );
-
-    private static final ResourceLocation ZERO_GRAVITY_ON =
-            new ResourceLocation(
-                    "jjf",
-                    "textures/gui/jjf/zero_gravity_on.png"
-            );
-
-    private static final ResourceLocation LOADING_ICON =
-            new ResourceLocation(
-                    "jjf",
-                    "textures/gui/jjf/load.png"
-            );
-
-    private static final ResourceLocation SHOOTING_ICON =
-            new ResourceLocation(
-                    "jjf",
-                    "textures/gui/jjf/shoot.png"
-            );
-
-    private static final ResourceLocation UNLOADING_ICON =
-            new ResourceLocation(
-                    "jjf",
-                    "textures/gui/jjf/unload.png"
-            );
-
-    private static final ResourceLocation SPIT_ICON =
-            new ResourceLocation(
-                    "jjf",
-                    "textures/gui/jjf/spit.png"
-            );
-
-    private static final ResourceLocation PUNCH_ICON =
-            new ResourceLocation(
-                    "jjf",
-                    "textures/gui/jjf/punch.png"
-            );
-
-    private static final ResourceLocation GUARD_ICON =
-            new ResourceLocation(
-                    "jjf",
-                    "textures/gui/jjf/guard.png"
-            );
     private boolean jjf$skill4WasDown = false;
     private int jjf$loadHoldTicks = 0;
 
@@ -198,7 +147,7 @@ private static final ResourceLocation NORMAL_GRAVITY_ICON =
         this.getSelf().level().playSound(
                 null,
                 this.getSelf().blockPosition(),
-                ModSounds.JUMPIN_JACK_FLASH_SUMMON,
+                ModSounds.JUMPIN_JACK_FLASH_SUMMON_EVENT,
                 SoundSource.PLAYERS,
                 1.0F,
                 1.0F
@@ -1287,7 +1236,7 @@ private static final ResourceLocation NORMAL_GRAVITY_ICON =
         player.level().playSound(
                 null,
                 player.blockPosition(),
-                ModSounds.LAUNCHER_SHOOT,
+                ModSounds.LAUNCHER_SHOOT_EVENT,
                 SoundSource.PLAYERS,
                 soundVolume,
                 soundPitch
@@ -1473,7 +1422,7 @@ private static final ResourceLocation NORMAL_GRAVITY_ICON =
         player.level().playSound(
                 null,
                 player.blockPosition(),
-                ModSounds.LAUNCHER_BURST,
+                ModSounds.LAUNCHER_BURST_EVENT,
                 SoundSource.PLAYERS,
                 soundVolume,
                 soundPitch
@@ -1569,7 +1518,7 @@ private static final ResourceLocation NORMAL_GRAVITY_ICON =
         player.level().playSound(
                 null,
                 player.blockPosition(),
-                ModSounds.LAUNCHER_BURST,
+                ModSounds.LAUNCHER_BURST_EVENT,
                 SoundSource.PLAYERS,
                 soundVolume,
                 soundPitch
@@ -2691,8 +2640,7 @@ private static final ResourceLocation NORMAL_GRAVITY_ICON =
             int x,
             int y
     ) {
-        ResourceLocation zeroGravityIcon =
-                NORMAL_GRAVITY_ICON;
+        ResourceLocation zeroGravityIcon = StandIcons.JJF_NORMAL_GRAVITY_ICON;
 
         if (this.getSelf()
                 instanceof ZeroGravityAccess access) {
@@ -2700,8 +2648,7 @@ private static final ResourceLocation NORMAL_GRAVITY_ICON =
                     access.jjf$getZeroGravityState();
 
             if (state.isSafeUserZeroGravity()) {
-                zeroGravityIcon =
-                        ZERO_GRAVITY_ON;
+                zeroGravityIcon = StandIcons.JJF_ZERO_GRAVITY_ON;
             }
         }
 
@@ -2719,7 +2666,7 @@ private static final ResourceLocation NORMAL_GRAVITY_ICON =
                 x,
                 y,
                 2,
-                SPIT_ICON,
+                StandIcons.JJF_SPIT_ICON,
                 PowerIndex.SKILL_2
         );
 
@@ -2733,14 +2680,14 @@ private static final ResourceLocation NORMAL_GRAVITY_ICON =
         );
 
         ResourceLocation launcherIcon =
-                LOADING_ICON;
+                StandIcons.JJF_LOADING_ICON;
 
         if (jjf$useWasDown) {
             launcherIcon =
-                    SHOOTING_ICON;
+                    StandIcons.JJF_SHOOTING_ICON;
         } else if (isGuarding()) {
             launcherIcon =
-                    UNLOADING_ICON;
+                    StandIcons.JJF_UNLOADING_ICON;
         }
 
         setSkillIcon(
@@ -2775,7 +2722,7 @@ private static final ResourceLocation NORMAL_GRAVITY_ICON =
                 0,
                 "ability.jjf.punch",
                 "instruction.jjf.punch",
-                PUNCH_ICON,
+                StandIcons.JJF_PUNCH_ICON,
                 0,
                 level,
                 bypass
@@ -2789,7 +2736,7 @@ private static final ResourceLocation NORMAL_GRAVITY_ICON =
                 0,
                 "ability.jjf.guard",
                 "instruction.jjf.guard",
-                GUARD_ICON,
+                StandIcons.JJF_GUARD_ICON,
                 0,
                 level,
                 bypass
@@ -2803,7 +2750,7 @@ private static final ResourceLocation NORMAL_GRAVITY_ICON =
                 0,
                 "ability.jjf.zero_gravity",
                 "instruction.jjf.zero_gravity",
-                ZERO_GRAVITY_ON,
+                StandIcons.JJF_ZERO_GRAVITY_ON,
                 1,
                 level,
                 bypass
@@ -2817,7 +2764,7 @@ private static final ResourceLocation NORMAL_GRAVITY_ICON =
                 0,
                 "ability.jjf.spit",
                 "instruction.jjf.spit",
-                SPIT_ICON,
+                StandIcons.JJF_SPIT_ICON,
                 2,
                 level,
                 bypass
@@ -2845,7 +2792,7 @@ private static final ResourceLocation NORMAL_GRAVITY_ICON =
                 0,
                 "ability.jjf.load",
                 "instruction.jjf.load",
-                LOADING_ICON,
+                StandIcons.JJF_LOADING_ICON,
                 4,
                 level,
                 bypass
@@ -2859,7 +2806,7 @@ private static final ResourceLocation NORMAL_GRAVITY_ICON =
                 0,
                 "ability.jjf.unload",
                 "instruction.jjf.unload",
-                UNLOADING_ICON,
+                StandIcons.JJF_UNLOADING_ICON,
                 4,
                 level,
                 bypass
@@ -2873,7 +2820,7 @@ private static final ResourceLocation NORMAL_GRAVITY_ICON =
                 0,
                 "ability.jjf.launcher",
                 "instruction.jjf.launcher",
-                SHOOTING_ICON,
+                StandIcons.JJF_SHOOTING_ICON,
                 4,
                 level,
                 bypass
@@ -3011,7 +2958,7 @@ private static final ResourceLocation NORMAL_GRAVITY_ICON =
                 barHeight,
                 BURST_6_TICKS
         );
-
+/*
         if (JJFHudSettings.showAmmoText()) {
             String ammoText =
                     "AMMO "
@@ -3075,7 +3022,7 @@ private static final ResourceLocation NORMAL_GRAVITY_ICON =
                         true
                 );
             }
-        }
+        }*/
     }
 
     private void drawChargeMarker(

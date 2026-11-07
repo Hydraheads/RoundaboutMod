@@ -1,8 +1,9 @@
-package com.example.jjf.client.models.stand.renderers;
+package net.hydra.jojomod.client.models.stand.renderers;
 
-import com.example.jjf.client.models.stand.JumpinJackFlashModel;
-import com.example.jjf.entity.stand.JumpinJackFlashEntity;
-import net.hydra.jojomod.client.models.stand.renderers.StandRenderer;
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
+import net.hydra.jojomod.client.models.stand.JumpinJackFlashModel;
+import net.hydra.jojomod.entity.stand.JumpinJackFlashEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
@@ -11,8 +12,8 @@ public class JumpinJackFlashRenderer
 
     public static final ResourceLocation TEXTURE =
             new ResourceLocation(
-                    "jjf",
-                    "textures/stand/jumpin_jack_flash.png"
+                    Roundabout.MOD_ID,
+                    "textures/stand/jjf/jumpin_jack_flash.png"
             );
 
     public JumpinJackFlashRenderer(EntityRendererProvider.Context context) {
@@ -20,7 +21,7 @@ public class JumpinJackFlashRenderer
                 context,
                 new JumpinJackFlashModel<>(
                         context.bakeLayer(
-                                JumpinJackFlashModel.LAYER_LOCATION
+                                ModEntityRendererClient.JUMPIN_JACK_FLASH_LAYER
                         )
                 ),
                 0.0F

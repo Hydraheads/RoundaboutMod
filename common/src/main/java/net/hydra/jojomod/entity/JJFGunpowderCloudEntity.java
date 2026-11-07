@@ -1,4 +1,4 @@
-package com.example.jjf.entity;
+package net.hydra.jojomod.entity;
 
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;

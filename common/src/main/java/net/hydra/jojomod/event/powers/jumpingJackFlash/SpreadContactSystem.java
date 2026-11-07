@@ -1,4 +1,4 @@
-package com.example.jjf.zero_gravity;
+package net.hydra.jojomod.event.powers.jumpingJackFlash;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
