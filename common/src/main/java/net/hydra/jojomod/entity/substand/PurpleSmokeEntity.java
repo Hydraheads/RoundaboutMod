@@ -375,7 +375,7 @@ public class PurpleSmokeEntity extends StandEntity {
 
             if (!((StandUser) living).roundabout$isBubbleEncased() && !(living instanceof StrayCatEntity c && c.getBubbleShield()) && PowerTypes.isExistentiallyElsewhereTogether(this, living)) {
 
-                int effectDuration = living instanceof Player ? 150 : 150; //for when it was less duration to you. It was 100 : 150
+                int effectDuration = living instanceof Player ? 160 : 160; //for when it was less duration to you. It was 100 : 150
                 boolean isSelf = living == user;
 
                 if (isDistortionMode()) {
@@ -388,7 +388,7 @@ public class PurpleSmokeEntity extends StandEntity {
                         ((StandUser) user).roundabout$getStandPowers().addEXP(2);
                     }
                     if (ClientNetworking.getAppropriateConfig().PurpleHazeSettings.HazeMelts) {
-                        living.addEffect(new MobEffectInstance(ModEffects.MELTING, 150, 2));
+                        living.addEffect(new MobEffectInstance(ModEffects.MELTING, 160, 2));
                     }
                 } else {
                     boolean alreadyHasVirus = living.hasEffect(ModEffects.HAZE_VIRUS);
