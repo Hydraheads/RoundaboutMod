@@ -1,0 +1,6 @@
+{
+  "message_id": "jjf.air_pressure",
+  "scaling": "never",
+  "exhaustion": 0.1,
+  "effects": "drowning"
+}
