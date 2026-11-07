@@ -1137,6 +1137,8 @@
   "sounds.roundabout.ctr_rain_step_3": "Rain stabilized",
   "sounds.roundabout.ctr_stabilizing_rain": "Rain stabilizing",
 
+  "sounds.roundabout.zombiehorse_stitching": "Stitching...",
+
   "death.attack.stand": "%1$s died to a mysterious power whilst fighting %2$s",
   "death.attack.stand.item": "%1$s died to a mysterious power whilst fighting %2$s",
   "death.attack.stand_brawl": "%1$s died to a mysterious power whilst fighting %2$s",
