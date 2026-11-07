@@ -69,12 +69,15 @@ public class PiranhaModel<T extends Piranha> extends HierarchicalModel<T> {
 
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        this.root().getAllParts().forEach(ModelPart::resetPose);
         // tail animation, taken directly from the tropical fish
         float tailSway = 1.0F;
         if (!entity.isInWater()) {
             tailSway = 1.5F;
         }
         this.tail.yRot = -tailSway * 0.45F * Mth.sin(0.6F * ageInTicks);
+
+        this.animate(entity.attackAnimationState, ATTACK, ageInTicks);
     }
 
     // I don't want to make a new animation class for 1 ANIMATION
