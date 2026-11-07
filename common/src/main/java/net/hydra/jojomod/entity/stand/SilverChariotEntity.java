@@ -568,13 +568,17 @@ public class SilverChariotEntity extends FollowingStandEntity {
                 this.scBarrageDamage.stop();
             }
             if (animationState == BROKEN_GUARD) {
-                if (isPart3Skin) {
+                if (!armoured) {
+                    this.scIdleNotArmoured.startIfStopped(this.tickCount);
+                } else if (isPart3Skin) {
                     this.scGuardRightBreak.startIfStopped(this.tickCount);
                 } else {
                     this.scGuardLeftBreak.startIfStopped(this.tickCount);
                 }
             } else {
-                if (isPart3Skin) {
+                if (!armoured) {
+                    this.scIdleNotArmoured.stop();
+                } else if (isPart3Skin) {
                     this.scGuardRightBreak.stop();
                 } else {
                     this.scGuardLeftBreak.stop();
