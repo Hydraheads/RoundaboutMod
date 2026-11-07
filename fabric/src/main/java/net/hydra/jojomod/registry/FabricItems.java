@@ -87,6 +87,11 @@ public class FabricItems {
     public static Item MAX_STAND_DISC_KING_CRIMSON = registerItem("max_king_crimson_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersKingCrimson(null)));
 
+    public static final Item STAND_DISC_JJF = registerItem("jumpin_jack_flash_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersJumpinJackFlash(null)));
+    public static final Item MAX_STAND_DISC_JJF = registerItem("max_jumpin_jack_flash_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersJumpinJackFlash(null)));
+
     public static final Item STAND_DISC_WHITESNAKE = registerItem("whitesnake_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersWhitesnake(null)));
     public static final Item MAX_STAND_DISC_WHITESNAKE = registerItem("max_whitesnake_disc",
@@ -884,8 +889,8 @@ public class FabricItems {
                         entries.accept(STAND_DISC_OASIS);
                         entries.accept(MAX_STAND_DISC_OASIS);
                         entries.accept(STAND_DISC_PEARL_JAM);
-                        entries.accept(STAND_DISC_DIVER_DOWN);
-                        entries.accept(MAX_STAND_DISC_DIVER_DOWN);
+                        entries.accept(STAND_DISC_JJF);
+                        entries.accept(MAX_STAND_DISC_JJF);
                         entries.accept(STAND_DISC_CATCH_THE_RAINBOW);
                         entries.accept(BLACKMORE_MASK);
 
@@ -966,6 +971,9 @@ public class FabricItems {
         ModItems.STAND_DISC_KING_CRIMSON = STAND_DISC_KING_CRIMSON;
         ((MaxStandDiscItem)MAX_STAND_DISC_KING_CRIMSON).baseDisc = ((StandDiscItem)STAND_DISC_KING_CRIMSON);
         ModItems.MAX_STAND_DISC_KING_CRIMSON = MAX_STAND_DISC_KING_CRIMSON;
+        ModItems.STAND_DISC_JJF = STAND_DISC_JJF;
+        ((MaxStandDiscItem)MAX_STAND_DISC_JJF).baseDisc = ((StandDiscItem)STAND_DISC_JJF);
+        ModItems.MAX_STAND_DISC_JJF = MAX_STAND_DISC_JJF;
         ModItems.STAND_DISC_WHITESNAKE = STAND_DISC_WHITESNAKE;
         ((MaxStandDiscItem) MAX_STAND_DISC_WHITESNAKE).baseDisc = (StandDiscItem) STAND_DISC_WHITESNAKE;
         ModItems.MAX_STAND_DISC_WHITESNAKE = MAX_STAND_DISC_WHITESNAKE;

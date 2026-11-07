@@ -74,7 +74,8 @@ public class ModEntities {
     public static EntityType<SoftAndWetEntity> SOFT_AND_WET_DEBUT;
     public static EntityType<SoftAndWetEntity> SOFT_AND_WET_KILLER_QUEEN;
     public static EntityType<KillerQueenEntity> KILLER_QUEEN;
-    private static EntityType<BlockBombEntity> BLOCK_BOMB;
+    public static EntityType<JumpinJackFlashEntity> JUMPIN_JACK_FLASH;
+    public static EntityType<BlockBombEntity> BLOCK_BOMB;
     public static EntityType<SheerHeartAttackEntity> SHEER_HEART_ATTACK;
     public static EntityType<CinderellaEntity> CINDERELLA;
     public static EntityType<CaliforniaKingBedEntity> CALIFORNIA_KING_BED;
@@ -241,6 +242,9 @@ public class ModEntities {
     public static EntityType<BlockD4CEntity> D4C_BLOCK;
     public static EntityType<StepRuleEntity> STEP_RULE;
     public static EntityType<FallingBannerEntity> FALLING_BANNER;
+    public static EntityType<JJFProjectileEntity> JJF_PROJECTILE;
+    public static EntityType<JJFGunpowderCloudEntity> JJF_GUNPOWDER_CLOUD;
+    public static EntityType<JJFSpitEntity> JJF_SPIT;
 
     public static EntityType<StrayCatEntity> STRAY_CAT;
 
@@ -276,11 +280,4 @@ public class ModEntities {
         );
     }
 
-    public static EntityType<BlockBombEntity> getBlockBomb() {
-        return BLOCK_BOMB;
-    }
-
-    public static void setBlockBomb(EntityType<BlockBombEntity> blockBomb) {
-        BLOCK_BOMB = blockBomb;
-    }
 }

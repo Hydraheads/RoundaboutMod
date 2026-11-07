@@ -1,6 +1,6 @@
 package com.example.jjf.forge.network;
 
-import com.example.jjf.zero_gravity.ZeroGravitySync;
+import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravitySync;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;

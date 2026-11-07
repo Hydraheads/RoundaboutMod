@@ -803,6 +803,10 @@ public class ForgeItems {
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersKingCrimson(null))));
     public static final RegistryObject<Item> MAX_STAND_DISC_KING_CRIMSON = addToDiscTab(ITEMS.register("max_king_crimson_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersKingCrimson(null))));
+    public static final RegistryObject<Item> STAND_DISC_JJF = addToWIPTab(ITEMS.register("jumpin_jack_flash_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersJumpinJackFlash(null))));
+    public static final RegistryObject<Item> MAX_STAND_DISC_JJF = addToWIPTab(ITEMS.register("max_jumpin_jack_flash_disc",
+            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersJumpinJackFlash(null))));
 
     public static final RegistryObject<Item> STAND_DISC_GREEN_DAY = addToDiscTab(ITEMS.register("green_day_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersGreenDay(null))));

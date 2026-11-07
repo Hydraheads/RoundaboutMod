@@ -1,9 +1,5 @@
 package com.example.jjf.fabric.registry;
 
-import com.example.jjf.JJFMod;
-import com.example.jjf.registry.ModEntities;
-import com.example.jjf.registry.ModItems;
-import com.example.jjf.registry.ModSounds;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 
@@ -11,7 +7,7 @@ public final class FabricJJFRegistries {
 
     private FabricJJFRegistries() {
     }
-
+    /*
     public static void register() {
         ModEntities.JUMPIN_JACK_FLASH =
                 Registry.register(
@@ -92,7 +88,7 @@ public final class FabricJJFRegistries {
                                 "launcher_burst"
                         )
                 );
-
+        /*
         ModItems.JJF_STAND_DISC =
                 Registry.register(
                         BuiltInRegistries.ITEM,
@@ -112,5 +108,5 @@ public final class FabricJJFRegistries {
                                 ModItems.JJF_STAND_DISC
                         )
                 );
-    }
+    }*/
 }
