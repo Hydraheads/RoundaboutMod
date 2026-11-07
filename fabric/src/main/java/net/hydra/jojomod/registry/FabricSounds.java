@@ -501,6 +501,15 @@ public class FabricSounds {
         addSound(ModSounds.WH_PULL_ID, ModSounds.WH_PULL_EVENT);
         addSound(ModSounds.WH_PUSH_ID, ModSounds.WH_PUSH_EVENT);
 
+
+        addSound(ModSounds.D4C_MENU_BLOCK_END_ID, ModSounds.D4C_MENU_BLOCK_END_EVENT);
+        addSound(ModSounds.D4C_MENU_BLOCK_START_ID, ModSounds.D4C_MENU_BLOCK_START_EVENT);
+        addSound(ModSounds.D4C_MENU_CLONE_SELECT_ID, ModSounds.D4C_MENU_CLONE_SELECT_EVENT);
+        addSound(ModSounds.D4C_MENU_CLONE_DESELECT_ID, ModSounds.D4C_MENU_CLONE_DESELECT_EVENT);
+        addSound(ModSounds.D4C_MENU_CLONE_MASS_SELECT_ID, ModSounds.D4C_MENU_CLONE_MASS_SELECT_EVENT);
+        addSound(ModSounds.D4C_MENU_CLONE_TASK_ID, ModSounds.D4C_MENU_CLONE_TASK_EVENT);
+        addSound(ModSounds.D4C_MENU_TOGGLE_ON_ID, ModSounds.D4C_MENU_TOGGLE_ON_EVENT);
+
         addSound(ModSounds.TIME_STOP_TICKING_ID, ModSounds.TIME_STOP_TICKING_EVENT);
         addSound(ModSounds.CAN_BOUNCE_ID, ModSounds.CAN_BOUNCE_EVENT);
         addSound(ModSounds.CAN_BOUNCE_END_ID, ModSounds.CAN_BOUNCE_END_EVENT);

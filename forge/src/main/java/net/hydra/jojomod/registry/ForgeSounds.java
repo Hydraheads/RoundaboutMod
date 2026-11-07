@@ -883,6 +883,22 @@ public class ForgeSounds {
     public static final RegistryObject<SoundEvent> WH_PULL =
             register(ModSounds.WH_PULL, ModSounds.WH_PULL_ID);
 
+
+    public static final RegistryObject<SoundEvent> D4C_MENU_BLOCK_END =
+            register(ModSounds.D4C_MENU_BLOCK_END, ModSounds.D4C_MENU_BLOCK_END_ID);
+    public static final RegistryObject<SoundEvent> D4C_MENU_BLOCK_START =
+            register(ModSounds.D4C_MENU_BLOCK_START, ModSounds.D4C_MENU_BLOCK_START_ID);
+    public static final RegistryObject<SoundEvent> D4C_MENU_CLONE_SELECT =
+            register(ModSounds.D4C_MENU_CLONE_SELECT, ModSounds.D4C_MENU_CLONE_SELECT_ID);
+    public static final RegistryObject<SoundEvent> D4C_MENU_CLONE_DESELECT =
+            register(ModSounds.D4C_MENU_CLONE_DESELECT, ModSounds.D4C_MENU_CLONE_DESELECT_ID);
+    public static final RegistryObject<SoundEvent> D4C_MENU_MASS_SELECT =
+            register(ModSounds.D4C_MENU_CLONE_MASS_SELECT, ModSounds.D4C_MENU_CLONE_MASS_SELECT_ID);
+    public static final RegistryObject<SoundEvent> D4C_MENU_CLONE_TASK =
+            register(ModSounds.D4C_MENU_CLONE_TASK, ModSounds.D4C_MENU_CLONE_TASK_ID);
+    public static final RegistryObject<SoundEvent> D4C_MENU_TOGGLE_ON =
+            register(ModSounds.D4C_MENU_TOGGLE_ON, ModSounds.D4C_MENU_TOGGLE_ON_ID);
+
     public static final RegistryObject<SoundEvent> THE_WORLD_OVER_HEAVEN_EVENT =
             register(ModSounds.THE_WORLD_OVER_HEAVEN, ModSounds.THE_WORLD_OVER_HEAVEN_ID);
     public static final RegistryObject<SoundEvent> EXPLOSIVE_BAT_EVENT =
