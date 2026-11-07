@@ -1321,6 +1321,29 @@ public class ModSounds {
     public static final ResourceLocation WH_PUSH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+WH_PUSH);
     public static SoundEvent WH_PUSH_EVENT = SoundEvent.createVariableRangeEvent(WH_PUSH_ID);
 
+
+    public static final String D4C_MENU_BLOCK_END = "4c_menu_block_end";
+    public static final ResourceLocation D4C_MENU_BLOCK_END_ID = new ResourceLocation(Roundabout.MOD_ID+":"+D4C_MENU_BLOCK_END);
+    public static SoundEvent D4C_MENU_BLOCK_END_EVENT = SoundEvent.createVariableRangeEvent(D4C_MENU_BLOCK_END_ID);
+    public static final String D4C_MENU_BLOCK_START = "4c_menu_block_start";
+    public static final ResourceLocation D4C_MENU_BLOCK_START_ID = new ResourceLocation(Roundabout.MOD_ID+":"+D4C_MENU_BLOCK_START);
+    public static SoundEvent D4C_MENU_BLOCK_START_EVENT = SoundEvent.createVariableRangeEvent(D4C_MENU_BLOCK_START_ID);
+    public static final String D4C_MENU_CLONE_SELECT = "4c_menu_clone_select";
+    public static final ResourceLocation D4C_MENU_CLONE_SELECT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+D4C_MENU_CLONE_SELECT);
+    public static SoundEvent D4C_MENU_CLONE_SELECT_EVENT = SoundEvent.createVariableRangeEvent(D4C_MENU_CLONE_SELECT_ID);
+    public static final String D4C_MENU_CLONE_DESELECT = "4c_menu_clone_deselect";
+    public static final ResourceLocation D4C_MENU_CLONE_DESELECT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+D4C_MENU_CLONE_DESELECT);
+    public static SoundEvent D4C_MENU_CLONE_DESELECT_EVENT = SoundEvent.createVariableRangeEvent(D4C_MENU_CLONE_DESELECT_ID);
+    public static final String D4C_MENU_CLONE_MASS_SELECT = "4c_menu_mass_select";
+    public static final ResourceLocation D4C_MENU_CLONE_MASS_SELECT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+D4C_MENU_CLONE_MASS_SELECT);
+    public static SoundEvent D4C_MENU_CLONE_MASS_SELECT_EVENT = SoundEvent.createVariableRangeEvent(D4C_MENU_CLONE_MASS_SELECT_ID);
+    public static final String D4C_MENU_CLONE_TASK = "4c_menu_clone_task";
+    public static final ResourceLocation D4C_MENU_CLONE_TASK_ID = new ResourceLocation(Roundabout.MOD_ID+":"+D4C_MENU_CLONE_TASK);
+    public static SoundEvent D4C_MENU_CLONE_TASK_EVENT = SoundEvent.createVariableRangeEvent(D4C_MENU_CLONE_TASK_ID);
+    public static final String D4C_MENU_TOGGLE_ON = "4c_menu_toggle_on";
+    public static final ResourceLocation D4C_MENU_TOGGLE_ON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+D4C_MENU_TOGGLE_ON);
+    public static SoundEvent D4C_MENU_TOGGLE_ON_EVENT = SoundEvent.createVariableRangeEvent(D4C_MENU_TOGGLE_ON_ID);
+
     public static final String  ARCADE_TIMESTOP = "arcade_timestop";
     public static final ResourceLocation ARCADE_TIMESTOP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ARCADE_TIMESTOP);
     public static SoundEvent ARCADE_TIMESTOP_EVENT = SoundEvent.createVariableRangeEvent(ARCADE_TIMESTOP_ID);

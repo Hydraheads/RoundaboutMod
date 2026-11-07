@@ -1772,6 +1772,7 @@ public class PowersD4C extends NewPunchingStand {
 
     public void flipSelectionMode(){
         isInSelectionMode = !isInSelectionMode;
+        this.self.playSound(ModSounds.D4C_MENU_TOGGLE_ON_EVENT, 200F, 1.0F);
     }
 
     public void worldHop2Client(){
@@ -2082,11 +2083,13 @@ public class PowersD4C extends NewPunchingStand {
     private static final TargetingConditions HURT_BY_TARGETING = TargetingConditions.forCombat().ignoreLineOfSight().ignoreInvisibilityTesting();
     public void selectOrDeselectAll(){
         if (selectedClones.isEmpty()){
+            this.self.playSound(ModSounds.D4C_MENU_CLONE_MASS_SELECT_EVENT, 200F, 1.0F);
             for (D4CCloneEntity target : self.level().getNearbyEntities(D4CCloneEntity.class, HURT_BY_TARGETING,self,self.getBoundingBox().inflate(30)))
                 if (target.getSafeCopy() && target.getPlayerUUID().isPresent() && target.getPlayerUUID().get().equals(self.getUUID())) {
                     selectedClones.add(target);
                 }
         } else {
+            this.self.playSound(ModSounds.D4C_MENU_CLONE_DESELECT_EVENT, 200F, 0.8F);
                     selectedClones.clear();
         }
     }
@@ -2620,7 +2623,13 @@ public class PowersD4C extends NewPunchingStand {
                     if (keyIsDown) {
                         consumeClickInput = true;
                         if (cloneInStore != null){
-                            selectedClones.add(cloneInStore);
+                            if (selectedClones.contains(cloneInStore)){
+                                this.self.playSound(ModSounds.D4C_MENU_CLONE_DESELECT_EVENT, 200F, 1.0F);
+                                selectedClones.remove(cloneInStore);
+                            } else {
+                                this.self.playSound(ModSounds.D4C_MENU_CLONE_SELECT_EVENT, 200F, 1.0F);
+                                selectedClones.add(cloneInStore);
+                            }
                         }
                     }
                     return;
