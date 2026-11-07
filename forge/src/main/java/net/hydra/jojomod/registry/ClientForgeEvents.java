@@ -91,7 +91,6 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.STAR_PLATINUM.get(), StarPlatinumRenderer::new);
         event.registerEntityRenderer(ForgeEntities.STAR_PLATINUM_BASEBALL.get(), StarPlatinumBaseballRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THE_WORLD.get(), TheWorldRenderer::new);
-        com.example.jjf.forge.JJFEmbeddedForgeClient.registerRenderers(event);
         event.registerEntityRenderer(ForgeEntities.THE_WORLD_ULTIMATE.get(), TheWorldUltimateRenderer::new);
         event.registerEntityRenderer(ForgeEntities.KING_CRIMSON.get(), KingCrimsonRenderer::new);
         event.registerEntityRenderer(ForgeEntities.WHITESNAKE.get(), WhitesnakeRenderer::new);
@@ -314,7 +313,6 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.OCELOT_MINION_LAYER, OcelotMinionModel::createBodyLayer);
 
         event.registerLayerDefinition(ModEntityRendererClient.THE_WORLD_LAYER, TheWorldModel::getTexturedModelData);
-        com.example.jjf.forge.JJFEmbeddedForgeClient.registerLayers(event);
         event.registerLayerDefinition(ModEntityRendererClient.THE_WORLD_ULTIMATE_LAYER, TheWorldUltimateModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.STAR_PLATINUM_LAYER, StarPlatinumModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.COFFIN_LEFT_LAYER, CoffinRenderer::createDoubleBodyLeftLayer);
