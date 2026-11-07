@@ -2600,6 +2600,13 @@ public class PowersD4C extends NewPunchingStand {
                 }
             } else {
                 if (isInSelectionMode){
+                    // Highlight clones by left clicking them
+                    if (keyIsDown) {
+                        consumeClickInput = true;
+                        if (cloneInStore != null){
+                            selectedClones.add(cloneInStore);
+                        }
+                    }
                     return;
                 }
                 if (keyIsDown) {
