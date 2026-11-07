@@ -911,6 +911,13 @@ public class FabricEntities {
                     EntityType.Builder.<SilverChariotRapierPlatformEntity>of(SilverChariotRapierPlatformEntity::new, MobCategory.MISC).
                             sized(2.0f, 0.2f).clientTrackingRange(16).build(Roundabout.MOD_ID+":silver_chariot_rapier_platform")
             );
+    public static final EntityType<SilverChariotMountEntity> SC_MOUNT =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "sc_mount"),
+                    EntityType.Builder.<SilverChariotMountEntity>of(SilverChariotMountEntity::new, MobCategory.MISC).
+                            sized(0.6f, 2f).clientTrackingRange(10).build(Roundabout.MOD_ID+":sc_mount")
+            );
         public static final EntityType<HarpoonEntity> THROWN_HARPOON =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -1585,6 +1592,7 @@ public class FabricEntities {
                 ModEntities.TUSK_HOLE = TUSK_HOLE;
                 ModEntities.SILVER_CHARIOT_RAPIER = SILVER_CHARIOT_RAPIER;
                 ModEntities.SILVER_CHARIOT_RAPIER_PLATFORM = SILVER_CHARIOT_RAPIER_PLATFORM;
+                ModEntities.SC_MOUNT = SC_MOUNT;
                 ModEntities.VIRUS_SPIT = VIRUS_SPIT;
 
                 ModEntities.BAD_COMPANY_SOLDIER = BAD_COMPANY_SOLDIER;
