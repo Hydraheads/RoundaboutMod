@@ -1230,6 +1230,15 @@ public class ForgeSounds {
     public static final RegistryObject<SoundEvent> VSONG_DAMNABLE_CEREMONY =
             register(ModSounds.VSONG_DAMNABLE_CEREMONY, ModSounds.VSONG_DAMNABLE_CEREMONY_ID);
 
+    public static final RegistryObject<SoundEvent> LAUNCHER_BURST =
+            register(ModSounds.LAUNCHER_BURST, ModSounds.LAUNCHER_BURST_ID);
+    public static final RegistryObject<SoundEvent> LAUNCHER_SHOOT =
+            register(ModSounds.LAUNCHER_SHOOT, ModSounds.LAUNCHER_SHOOT_ID);
+    public static final RegistryObject<SoundEvent> SUCTION_LAUNCH =
+            register(ModSounds.SUCTION_LAUNCH, ModSounds.SUCTION_LAUNCH_ID);
+    public static final RegistryObject<SoundEvent> JUMPIN_JACK_FLASH_SUMMON =
+            register(ModSounds.JUMPIN_JACK_FLASH_SUMMON, ModSounds.JUMPIN_JACK_FLASH_SUMMON_ID);
+
     public static final RegistryObject<SoundEvent> BC_UI_SELECT =
             register(ModSounds.BC_UI_SELECT, ModSounds.BC_UI_SELECT_ID);
     public static final RegistryObject<SoundEvent> BC_SUMMON =

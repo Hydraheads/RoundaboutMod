@@ -1,6 +1,6 @@
-package com.example.jjf.client.models.stand.renderers;
+package net.hydra.jojomod.client.models.projectile.renderers;
 
-import com.example.jjf.entity.projectile.JJFSpitEntity;
+import net.hydra.jojomod.entity.projectile.JJFSpitEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.LlamaSpitModel;
 import net.minecraft.client.model.geom.ModelLayers;

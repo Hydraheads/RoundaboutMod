@@ -1,10 +1,12 @@
-package com.example.jjf.entity.projectile;
+package net.hydra.jojomod.entity.projectile;
 
-import com.example.jjf.entity.JJFGunpowderCloudEntity;
-import com.example.jjf.registry.ModEntities;
-import com.example.jjf.zero_gravity.ZeroGravityAccess;
-import com.example.jjf.zero_gravity.ZeroGravitySource;
-import com.example.jjf.zero_gravity.ZeroGravityState;
+import net.hydra.jojomod.entity.JJFGunpowderCloudEntity;
+
+import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.stand.JumpinJackFlashEntity;
+import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravityAccess;
+import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravitySource;
+import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravityState;
 import net.hydra.jojomod.event.ModEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -90,11 +92,9 @@ public class JJFProjectileEntity extends ThrowableItemProjectile {
     private boolean initialized;
     private int bounceCount;
 
-    public JJFProjectileEntity(
-            EntityType<? extends JJFProjectileEntity> type,
-            Level level
-    ) {
-        super(type, level);
+
+    public JJFProjectileEntity(EntityType<JJFProjectileEntity> entityEntityType, Level level) {
+        super(entityEntityType, level);
         setNoGravity(true);
     }
 
@@ -105,6 +105,10 @@ public class JJFProjectileEntity extends ThrowableItemProjectile {
         super(ModEntities.JJF_PROJECTILE, owner, level);
         setNoGravity(true);
     }
+
+
+
+
 
     @Override
     public boolean ignoreExplosion() {

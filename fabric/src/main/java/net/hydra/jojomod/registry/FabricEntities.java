@@ -570,6 +570,34 @@ public class FabricEntities {
                         EntityType.Builder.of(KillerQueenEntity::new, MobCategory.MISC).
                                 sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":killer_queen")
                 );
+        public static final EntityType<JumpinJackFlashEntity> JUMPIN_JACK_FLASH =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        Roundabout.location("jumping_flash_jack"),
+                        EntityType.Builder.of(JumpinJackFlashEntity::new, MobCategory.MISC).
+                                sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":jumping_flash_jack")
+                );
+        public static final EntityType<JJFProjectileEntity> JJF_PROJECTILE =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        Roundabout.location("jjf_projectile"),
+                        EntityType.Builder.<JJFProjectileEntity>of(JJFProjectileEntity::new, MobCategory.MISC).
+                                sized(0.25F, 0.25F).clientTrackingRange(14).build(Roundabout.MOD_ID+":jjf_projectile")
+                );
+        public static final EntityType<JJFGunpowderCloudEntity> JJF_GUNPOWDER_CLOUD =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        Roundabout.location("jjf_gunpowder_cloud"),
+                        EntityType.Builder.<JJFGunpowderCloudEntity>of(JJFGunpowderCloudEntity::new, MobCategory.MISC).
+                                sized(3.5F, 2.0F).clientTrackingRange(14).build(Roundabout.MOD_ID+":jjf_gunpowder_cloud")
+                );
+        public static final EntityType<JJFSpitEntity> JJF_SPIT =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        Roundabout.location("jjf_spit"),
+                        EntityType.Builder.<JJFSpitEntity>of(JJFSpitEntity::new, MobCategory.MISC).
+                                sized(0.18F, 0.18F).clientTrackingRange(14).build(Roundabout.MOD_ID+":jjf_spit")
+                );
         public static final EntityType<BlockBombEntity> BLOCK_BOMB =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -1477,7 +1505,11 @@ public class FabricEntities {
                 ModEntities.SOFT_AND_WET_KING = SOFT_AND_WET_KING;
                 ModEntities.SOFT_AND_WET_KILLER_QUEEN = SOFT_AND_WET_KILLER_QUEEN;
                 ModEntities.KILLER_QUEEN = KILLER_QUEEN;
-                ModEntities.setBlockBomb(BLOCK_BOMB);
+                ModEntities.JUMPIN_JACK_FLASH = JUMPIN_JACK_FLASH;
+                ModEntities.JJF_PROJECTILE = JJF_PROJECTILE;
+                ModEntities.JJF_GUNPOWDER_CLOUD = JJF_GUNPOWDER_CLOUD;
+                ModEntities.JJF_SPIT = JJF_SPIT;
+                ModEntities.BLOCK_BOMB = BLOCK_BOMB;
                 ModEntities.CINDERELLA = CINDERELLA;
                 ModEntities.CALIFORNIA_KING_BED = CALIFORNIA_KING_BED;
                 ModEntities.PLANET_WAVES = PLANET_WAVES;
@@ -1730,6 +1762,9 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(SOFT_AND_WET_KING, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SOFT_AND_WET_KILLER_QUEEN, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(KILLER_QUEEN, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(JUMPIN_JACK_FLASH, StandEntity.createStandAttributes());
+                //FabricDefaultAttributeRegistry.register(JJF_GUNPOWDER_CLOUD, JJFGunpowderCloudEntity);
+                //FabricDefaultAttributeRegistry.register(JJF_PROJECTILE, JJFProjectileEntity.create);
                 FabricDefaultAttributeRegistry.register(BLOCK_BOMB, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(JUSTICE, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(JUSTICE_PIRATE, StandEntity.createStandAttributes());

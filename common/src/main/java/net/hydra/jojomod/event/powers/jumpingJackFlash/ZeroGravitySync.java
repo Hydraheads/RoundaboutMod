@@ -1,4 +1,4 @@
-package com.example.jjf.zero_gravity;
+package net.hydra.jojomod.event.powers.jumpingJackFlash;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;

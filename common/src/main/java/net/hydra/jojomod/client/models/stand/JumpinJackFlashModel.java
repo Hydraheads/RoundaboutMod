@@ -1,7 +1,6 @@
 
-package com.example.jjf.client.models.stand;
+package net.hydra.jojomod.client.models.stand;
 
-import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -15,12 +14,6 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.resources.ResourceLocation;
 
 public class JumpinJackFlashModel<T extends FollowingStandEntity> extends StandModel<T> {
-
-    public static final ModelLayerLocation LAYER_LOCATION =
-            new ModelLayerLocation(
-                    new ResourceLocation("jjf", "jumpin_jack_flash"),
-                    "main"
-            );
 
     private final ModelPart stand2;
     private final ModelPart head2;
@@ -348,9 +341,6 @@ public class JumpinJackFlashModel<T extends FollowingStandEntity> extends StandM
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
 
-    public static LayerDefinition getTexturedModelData() {
-        return createBodyLayer();
-    }
 
     public void setCuffsSpinning(boolean spinning) {
         right_spin_off.visible = !spinning;

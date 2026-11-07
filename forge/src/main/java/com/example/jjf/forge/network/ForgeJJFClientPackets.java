@@ -1,6 +1,6 @@
 package com.example.jjf.forge.network;
 
-import com.example.jjf.zero_gravity.ZeroGravitySync;
+import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravitySync;
 import net.minecraft.client.Minecraft;
 
 public final class ForgeJJFClientPackets {

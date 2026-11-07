@@ -9,7 +9,6 @@
                    "CrossbowItemMixin",
                    "BowItemMixin",
                    "PlayerMixin",
-                   "JJFMobStandPoolMixin",
                    "ServerGamePacketListenerMixin",
                    "ServerPlayerZeroGravitySyncMixin"
                ],

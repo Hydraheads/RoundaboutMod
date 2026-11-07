@@ -3612,7 +3612,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             BlockPos pos = blockHit.getBlockPos();
 
-            this.bombBlock = ModEntities.getBlockBomb().create(this.getSelf().level());
+            this.bombBlock = ModEntities.BLOCK_BOMB.create(this.getSelf().level());
             this.bombBlock.setUser(this.self);
             this.bombBlock.setOnContact(isContactModeEnabled());
             PowerTypes.copyPlaneOfExisting(self, bombBlock);
@@ -3646,7 +3646,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         this.currentBombStatus = BOMB_BLOCK;
 
         this.syncBombStatus(BOMB_BLOCK);
-        this.bombBlock = ModEntities.getBlockBomb().create(this.getSelf().level());
+        this.bombBlock = ModEntities.BLOCK_BOMB.create(this.getSelf().level());
         this.bombBlock.setUser(this.self);
         this.bombBlock.setOnContact(isContactModeEnabled());
         PowerTypes.copyPlaneOfExisting(self, bombBlock);

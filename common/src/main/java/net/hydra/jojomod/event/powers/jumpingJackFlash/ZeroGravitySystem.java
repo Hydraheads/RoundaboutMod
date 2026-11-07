@@ -1,5 +1,6 @@
-package com.example.jjf.zero_gravity;
+package net.hydra.jojomod.event.powers.jumpingJackFlash;
 
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -14,7 +15,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.entity.Pose;
-import com.example.jjf.registry.ModSounds;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Mob;
 
@@ -624,7 +624,7 @@ public class ZeroGravitySystem {
             player.level().playSound(
                     null,
                     player.blockPosition(),
-                    ModSounds.SUCTION_LAUNCH,
+                    ModSounds.SUCTION_LAUNCH_EVENT,
                     SoundSource.PLAYERS,
                     1.0F,
                     1.0F

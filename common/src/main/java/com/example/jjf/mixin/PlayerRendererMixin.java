@@ -1,8 +1,8 @@
 package com.example.jjf.mixin;
 
 import com.example.jjf.client.JJFPlayerWallPose;
-import com.example.jjf.zero_gravity.ZeroGravityAccess;
-import com.example.jjf.zero_gravity.ZeroGravityState;
+import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravityAccess;
+import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravityState;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;

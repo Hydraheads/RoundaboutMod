@@ -1,6 +1,6 @@
 package com.example.jjf.mixin;
 
-import com.example.jjf.zero_gravity.ZeroGravitySystem;
+import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravitySystem;
 import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

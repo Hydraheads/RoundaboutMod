@@ -4974,5 +4974,31 @@
     "sounds": [
       "roundabout:ctr_stabilizing_rain"
     ]
+  },
+  "jumpin_jack_flash_summon": {
+    "sounds": [
+      "roundabout:jumpin_jack_flash_summon"
+    ]
+  },
+
+  "suction_launch": {
+    "sounds": [
+      "roundabout:suction_launch"
+    ]
+  },
+
+  "launcher_shoot": {
+    "sounds": [
+      "roundabout:shoot_1",
+      "roundabout:shoot_2",
+      "roundabout:shoot_3",
+      "roundabout:shoot_4"
+    ]
+  },
+
+  "launcher_burst": {
+    "sounds": [
+      "roundabout:shoot_burst"
+    ]
   }
 }

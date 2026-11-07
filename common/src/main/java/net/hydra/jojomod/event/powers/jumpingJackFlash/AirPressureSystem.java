@@ -1,7 +1,8 @@
-package com.example.jjf.zero_gravity;
+package net.hydra.jojomod.event.powers.jumpingJackFlash;
 
-import com.example.jjf.registry.ModItems;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersJumpinJackFlash;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -20,11 +21,6 @@ public final class AirPressureSystem {
     private static final int DAMAGE_INTERVAL_TICKS = 20 * 5;
     private static final float DAMAGE_PER_PULSE_FRACTION = 0.10F;
 
-    private static final ResourceKey<DamageType> AIR_PRESSURE_DAMAGE =
-            ResourceKey.create(
-                    Registries.DAMAGE_TYPE,
-                    new ResourceLocation("jjf", "air_pressure")
-            );
 
     private AirPressureSystem() {
     }
@@ -46,7 +42,7 @@ public final class AirPressureSystem {
         }
 
         int ticks = state.getAirPressureTicks();
-        DamageSource damageSource = getAirPressureDamage(entity);
+        DamageSource damageSource = ModDamageTypes.of(entity.level(), ModDamageTypes.AIR_PRESSURE);
 
         if (ticks >= FULL_PRESSURE_TICKS) {
             finishAirPressure(entity, damageSource);
@@ -64,13 +60,6 @@ public final class AirPressureSystem {
         }
     }
 
-    private static DamageSource getAirPressureDamage(LivingEntity entity) {
-        return new DamageSource(
-                entity.level().registryAccess()
-                        .registryOrThrow(Registries.DAMAGE_TYPE)
-                        .getHolderOrThrow(AIR_PRESSURE_DAMAGE)
-        );
-    }
 
     private static void finishAirPressure(LivingEntity entity, DamageSource damageSource) {
         if (entity.isInvulnerableTo(damageSource)) {
@@ -122,18 +111,6 @@ public final class AirPressureSystem {
             return false;
         }
 
-        ItemStack disc = standUser.roundabout$getStandDisc();
-        if (!disc.isEmpty()) {
-            if (ModItems.JJF_STAND_DISC != null && disc.is(ModItems.JJF_STAND_DISC)) {
-                return true;
-            }
-            if (ModItems.JJF_STAND_DISC_MAX != null && disc.is(ModItems.JJF_STAND_DISC_MAX)) {
-                return true;
-            }
-        }
-
-        return standUser.roundabout$getStandPowers() != null
-                && standUser.roundabout$getStandPowers().getClass().getName().equals(
-                        "com.example.jjf.stand.powers.PowersJumpinJackFlash");
+        return  (standUser.roundabout$getStandPowers() instanceof PowersJumpinJackFlash);
     }
 }

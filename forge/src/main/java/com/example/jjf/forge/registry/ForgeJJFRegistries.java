@@ -1,13 +1,10 @@
 package com.example.jjf.forge.registry;
 
-import com.example.jjf.JJFMod;
-import com.example.jjf.entity.JJFGunpowderCloudEntity;
-import com.example.jjf.entity.projectile.JJFProjectileEntity;
-import com.example.jjf.entity.projectile.JJFSpitEntity;
-import com.example.jjf.entity.stand.JumpinJackFlashEntity;
-import com.example.jjf.registry.ModEntities;
-import com.example.jjf.registry.ModItems;
-import com.example.jjf.registry.ModSounds;
+import net.hydra.jojomod.entity.JJFGunpowderCloudEntity;
+import net.hydra.jojomod.entity.projectile.JJFProjectileEntity;
+import net.hydra.jojomod.entity.projectile.JJFSpitEntity;
+import net.hydra.jojomod.entity.stand.JumpinJackFlashEntity;
+
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.minecraft.sounds.SoundEvent;
@@ -20,59 +17,8 @@ import net.minecraftforge.registries.RegistryObject;
 
 public final class ForgeJJFRegistries {
 
-    public static final DeferredRegister<Item>
-            ITEMS =
-            DeferredRegister.create(
-                    ForgeRegistries.ITEMS,
-                    JJFMod.MODID
-            );
 
-    public static final DeferredRegister<EntityType<?>>
-            ENTITY_TYPES =
-            DeferredRegister.create(
-                    ForgeRegistries.ENTITY_TYPES,
-                    JJFMod.MODID
-            );
-
-    public static final DeferredRegister<SoundEvent>
-            SOUND_EVENTS =
-            DeferredRegister.create(
-                    ForgeRegistries.SOUND_EVENTS,
-                    JJFMod.MODID
-            );
-
-    public static final RegistryObject<StandDiscItem>
-            JJF_STAND_DISC =
-            ITEMS.register(
-                    "jumpin_jack_flash_disc",
-                    () -> {
-                        StandDiscItem value =
-                                ModItems.createStandDisc();
-
-                        ModItems.JJF_STAND_DISC =
-                                value;
-
-                        return value;
-                    }
-            );
-
-    public static final RegistryObject<MaxStandDiscItem>
-            JJF_STAND_DISC_MAX =
-            ITEMS.register(
-                    "jumpin_jack_flash_disc_max",
-                    () -> {
-                        MaxStandDiscItem value =
-                                ModItems.createMaxStandDisc(
-                                        JJF_STAND_DISC.get()
-                                );
-
-                        ModItems.JJF_STAND_DISC_MAX =
-                                value;
-
-                        return value;
-                    }
-            );
-
+    /*
     public static final RegistryObject<EntityType<JumpinJackFlashEntity>>
             JUMPIN_JACK_FLASH =
             ENTITY_TYPES.register(
@@ -199,24 +145,10 @@ public final class ForgeJJFRegistries {
 
                         return value;
                     }
-            );
+            );*/
 
     private ForgeJJFRegistries() {
     }
 
-    public static void register(
-            IEventBus bus
-    ) {
-        ITEMS.register(
-                bus
-        );
 
-        ENTITY_TYPES.register(
-                bus
-        );
-
-        SOUND_EVENTS.register(
-                bus
-        );
-    }
 }

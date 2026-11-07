@@ -1,4 +1,4 @@
-package com.example.jjf.zero_gravity;
+package net.hydra.jojomod.event.powers.jumpingJackFlash;
 
 public interface ZeroGravityAccess {
     ZeroGravityState jjf$getZeroGravityState();

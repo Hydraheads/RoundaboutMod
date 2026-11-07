@@ -2667,6 +2667,22 @@ public class ModSounds {
     public static final ResourceLocation VSONG_DAMNABLE_CEREMONY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+VSONG_DAMNABLE_CEREMONY);
     public static SoundEvent VSONG_DAMNABLE_CEREMONY_EVENT = SoundEvent.createVariableRangeEvent(VSONG_DAMNABLE_CEREMONY_ID);
 
+    public static String JUMPIN_JACK_FLASH_SUMMON = "jumpin_jack_flash_summon";
+    public static final ResourceLocation JUMPIN_JACK_FLASH_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+JUMPIN_JACK_FLASH_SUMMON);
+    public static SoundEvent JUMPIN_JACK_FLASH_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(JUMPIN_JACK_FLASH_SUMMON_ID);
+
+    public static String SUCTION_LAUNCH = "suction_launch";
+    public static final ResourceLocation SUCTION_LAUNCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUCTION_LAUNCH);
+    public static SoundEvent SUCTION_LAUNCH_EVENT = SoundEvent.createVariableRangeEvent(SUCTION_LAUNCH_ID);
+
+    public static String LAUNCHER_SHOOT = "launcher_shoot";
+    public static final ResourceLocation LAUNCHER_SHOOT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+LAUNCHER_SHOOT);
+    public static SoundEvent LAUNCHER_SHOOT_EVENT = SoundEvent.createVariableRangeEvent(LAUNCHER_SHOOT_ID);
+
+    public static String LAUNCHER_BURST = "launcher_burst";
+    public static final ResourceLocation LAUNCHER_BURST_ID = new ResourceLocation(Roundabout.MOD_ID+":"+LAUNCHER_BURST);
+    public static SoundEvent LAUNCHER_BURST_EVENT = SoundEvent.createVariableRangeEvent(LAUNCHER_BURST_ID);
+
     public static final String WHITESNAKE_SUMMON = "whitesnake_summon";
     public static final ResourceLocation WHITESNAKE_SUMMON_ID = Roundabout.location(WHITESNAKE_SUMMON);
     public static final SoundEvent WHITESNAKE_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(WHITESNAKE_SUMMON_ID);

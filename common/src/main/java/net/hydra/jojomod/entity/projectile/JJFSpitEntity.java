@@ -1,9 +1,9 @@
-package com.example.jjf.entity.projectile;
+package net.hydra.jojomod.entity.projectile;
 
-import com.example.jjf.registry.ModEntities;
-import com.example.jjf.zero_gravity.ZeroGravityAccess;
-import com.example.jjf.zero_gravity.ZeroGravitySource;
-import com.example.jjf.zero_gravity.ZeroGravityState;
+import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravityAccess;
+import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravitySource;
+import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravityState;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
