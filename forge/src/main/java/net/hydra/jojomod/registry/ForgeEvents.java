@@ -59,6 +59,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.TERRIER_DOG.get(), Wolf.createAttributes().build());
         event.put(ForgeEntities.FALCON.get(), FalconEntity.createAttributes().build());
         event.put(ForgeEntities.SNAKE.get(), Snake.createAttributes().build());
+        event.put(ForgeEntities.PIRANHA.get(), Piranha.createAttributes().build());
         event.put(ForgeEntities.ZOMBIEFISH.get(), Zombiefish.createAttributes().build());
         event.put(ForgeEntities.STRAY_CAT.get(), StrayCatEntity.createAttributes().build());
         event.put(ForgeEntities.ANUBIS_GUARDIAN.get(), AnubisGuardian.createAttributes().build());
@@ -875,6 +876,7 @@ public class ForgeEvents {
         ModEntities.TERRIER_DOG = ForgeEntities.TERRIER_DOG.get();
         ModEntities.FALCON = ForgeEntities.FALCON.get();
         ModEntities.SNAKE = ForgeEntities.SNAKE.get();
+        ModEntities.PIRANHA = ForgeEntities.PIRANHA.get();
         ModEntities.ZOMBIEFISH = ForgeEntities.ZOMBIEFISH.get();
         ModEntities.ANUBIS_GUARDIAN = ForgeEntities.ANUBIS_GUARDIAN.get();
         ModEntities.STAR_PLATINUM = ForgeEntities.STAR_PLATINUM.get();

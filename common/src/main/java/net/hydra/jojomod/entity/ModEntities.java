@@ -40,6 +40,7 @@ public class ModEntities {
     public static EntityType<TerrierEntity> TERRIER_DOG;
     public static EntityType<FalconEntity> FALCON;
     public static EntityType<Snake> SNAKE;
+    public static EntityType<Piranha> PIRANHA;
     public static EntityType<Zombiefish> ZOMBIEFISH;
     public static EntityType<AnubisGuardian> ANUBIS_GUARDIAN;
     public static EntityType<TheWorldEntity> THE_WORLD;
