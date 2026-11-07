@@ -277,6 +277,8 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
                     cRZ = 180 * Mth.DEG_TO_RAD;
                 } else if (animationNumber == OffsetIndex.BENEATH_2) {
                     cRX = 0;
+                } else if (animationNumber == OffsetIndex.BENEATH_CARRY_USER) {
+                    cRX = 0;
                 }
             } else if (animationStyle == OffsetIndex.LOOSE_STYLE || animationNumber == OffsetIndex.GUARD_AND_TRACE) {
                 if (animationNumber == OffsetIndex.LOOSE_NOLEAN) {

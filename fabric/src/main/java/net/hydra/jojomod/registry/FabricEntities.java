@@ -850,13 +850,13 @@ public class FabricEntities {
                     .clientTrackingRange(5)
                     .build(Roundabout.MOD_ID + ":ge_fish")
     );
-        public static final EntityType<SilverChariotEntity> SILVER_CHARIOT =
-                Registry.register(
-                        BuiltInRegistries.ENTITY_TYPE,
-                        Roundabout.location("silver_chariot"),
-                        EntityType.Builder.of(SilverChariotEntity::new, MobCategory.MISC).
-                                sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":silver_chariot")
-                );
+    public static final EntityType<SilverChariotEntity> SILVER_CHARIOT =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    Roundabout.location("silver_chariot"),
+                    EntityType.Builder.of(SilverChariotEntity::new, MobCategory.MISC).
+                            sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":silver_chariot")
+            );
     public static final EntityType<SilverChariotEntity> SILVER_CHARIOT_PHARAOH =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
@@ -864,19 +864,26 @@ public class FabricEntities {
                     EntityType.Builder.of(SilverChariotEntity::new, MobCategory.MISC).
                             sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":silver_chariot_pharaoh")
             );
-        public static final EntityType<SilverChariotRapierShotEntity> SILVER_CHARIOT_RAPIER =
-                Registry.register(
-                        BuiltInRegistries.ENTITY_TYPE,
-                        Roundabout.location("silver_chariot_rapier"),
-                        EntityType.Builder.<SilverChariotRapierShotEntity>of(SilverChariotRapierShotEntity::new, MobCategory.MISC).
-                                sized(0.5f, 0.5f).clientTrackingRange(16).build(Roundabout.MOD_ID+":silver_chariot_rapier")
-                );
+    public static final EntityType<SilverChariotRapierShotEntity> SILVER_CHARIOT_RAPIER =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    Roundabout.location("silver_chariot_rapier"),
+                    EntityType.Builder.<SilverChariotRapierShotEntity>of(SilverChariotRapierShotEntity::new, MobCategory.MISC).
+                            sized(0.5f, 0.5f).clientTrackingRange(16).build(Roundabout.MOD_ID+":silver_chariot_rapier")
+            );
     public static final EntityType<SilverChariotRapierPlatformEntity> SILVER_CHARIOT_RAPIER_PLATFORM =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
                     Roundabout.location("silver_chariot_rapier_platform"),
                     EntityType.Builder.<SilverChariotRapierPlatformEntity>of(SilverChariotRapierPlatformEntity::new, MobCategory.MISC).
                             sized(2.0f, 0.2f).clientTrackingRange(16).build(Roundabout.MOD_ID+":silver_chariot_rapier_platform")
+            );
+    public static final EntityType<SilverChariotMountEntity> SC_MOUNT =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "sc_mount"),
+                    EntityType.Builder.<SilverChariotMountEntity>of(SilverChariotMountEntity::new, MobCategory.MISC).
+                            sized(0.6f, 2f).clientTrackingRange(10).build(Roundabout.MOD_ID+":sc_mount")
             );
         public static final EntityType<HarpoonEntity> THROWN_HARPOON =
                 Registry.register(
@@ -1538,6 +1545,7 @@ public class FabricEntities {
                 ModEntities.TUSK_HOLE = TUSK_HOLE;
                 ModEntities.SILVER_CHARIOT_RAPIER = SILVER_CHARIOT_RAPIER;
                 ModEntities.SILVER_CHARIOT_RAPIER_PLATFORM = SILVER_CHARIOT_RAPIER_PLATFORM;
+                ModEntities.SC_MOUNT = SC_MOUNT;
                 ModEntities.VIRUS_SPIT = VIRUS_SPIT;
 
                 ModEntities.BAD_COMPANY_SOLDIER = BAD_COMPANY_SOLDIER;
