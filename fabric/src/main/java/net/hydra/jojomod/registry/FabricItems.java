@@ -565,12 +565,16 @@ public class FabricItems {
                         entries.accept(TERRIER_SPAWN_EGG);
                         entries.accept(ANUBIS_GUARDIAN_SPAWN_EGG);
                         entries.accept(ZOMBIE_MINION_SPAWN_EGG);
+                        entries.accept(SNAKE_SPAWN_EGG);
                         entries.accept(COFFEE_GUM);
                         entries.accept(LOCACACA_PIT.asItem());
                         entries.accept(LOCACACA);
                         entries.accept(LOCACACA_BRANCH.asItem());
                         entries.accept(NEW_LOCACACA);
                         entries.accept(CHERRIES);
+                        entries.accept(SNAKE_SKIN);
+                        entries.accept(SNAKE_SKIN_BOOTS);
+                        entries.accept(SNAKE_OIL);
                         entries.accept(METEORITE);
                         entries.accept(METEORITE_INGOT);
                         entries.accept(AJA);
@@ -836,10 +840,6 @@ public class FabricItems {
                         //Add all items from the Jojo mod tab here
                     	//entries.accept(ModBlocks.CHESSBOARD_BLOCK);
                         entries.accept(FALCON_SPAWN_EGG);
-                        entries.accept(SNAKE_SPAWN_EGG);
-                        entries.accept(SNAKE_SKIN);
-                        entries.accept(SNAKE_SKIN_BOOTS);
-                        entries.accept(SNAKE_OIL);
                         entries.accept(PIRANHA_SPAWN_EGG);
                         entries.accept(STAND_DISC_D4C);
                         entries.accept(MAX_STAND_DISC_D4C);

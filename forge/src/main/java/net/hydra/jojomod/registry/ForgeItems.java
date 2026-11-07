@@ -42,6 +42,13 @@ public class ForgeItems {
                             .build())
             )));
 
+    public static final RegistryObject<Item> SNAKE_SKIN = addToTab(ITEMS.register("snake_skin",
+            () -> new Item(new Item.Properties())));
+    public static final RegistryObject<Item> SNAKE_OIL = addToTab(ITEMS.register("snake_oil",
+            () -> new DrinkableItem(new Item.Properties())));
+    public static final RegistryObject<Item> SNAKE_SKIN_BOOTS = addToTab(ITEMS.register("snake_skin_boots",
+            () -> new ArmorItem(SnakeSkinBootsItem.SNAKE_ARMOR, ArmorItem.Type.BOOTS, new Item.Properties())));
+
     public static final RegistryObject<Item> STAND_ARROW = addToTab(ITEMS.register("stand_arrow",
             () -> new StandArrowItem(new Item.Properties().stacksTo(1).durability(5))));
     public static final RegistryObject<Item> STAND_BEETLE_ARROW = addToTab(ITEMS.register("stand_beetle_arrow",
@@ -587,13 +594,6 @@ public class ForgeItems {
     public static final RegistryObject<Item> AJA = addToTab(ITEMS.register("aja",
             () -> new Item(new Item.Properties())));
 
-    public static final RegistryObject<Item> SNAKE_SKIN = addToWIPTab(ITEMS.register("snake_skin",
-            () -> new Item(new Item.Properties())));
-    public static final RegistryObject<Item> SNAKE_OIL = addToWIPTab(ITEMS.register("snake_oil",
-            () -> new DrinkableItem(new Item.Properties())));
-    public static final RegistryObject<Item> SNAKE_SKIN_BOOTS = addToWIPTab(ITEMS.register("snake_skin_boots",
-            () -> new ArmorItem(SnakeSkinBootsItem.SNAKE_ARMOR, ArmorItem.Type.BOOTS, new Item.Properties())));
-
     public static final RegistryObject<Item> FANCY_LIGHTER = addToWIPTab(ITEMS.register("fancy_lighter_block",
             () -> new FancyLighterItem(ForgeBlocks.FANCY_LIGHTER_BLOCK.get(), new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> ULTRAVIOLET_BLASTER = addToTab(ITEMS.register("ultraviolet_blaster",
@@ -718,7 +718,7 @@ public class ForgeItems {
     public static final RegistryObject<ForgeSpawnEggItem> ZOMBIE_MINION_SPAWN_EGG = addToTab(ITEMS.register("zombie_minion_spawn_egg",
             () -> new ForgeSpawnEggItem(ForgeEntities.VILLAGER_MINION,
                     0xC1FF4F, 0x53A667, new Item.Properties())));
-    public static final RegistryObject<ForgeSpawnEggItem> SNAKE_SPAWN_EGG = addToWIPTab(ITEMS.register("snake_spawn_egg",
+    public static final RegistryObject<ForgeSpawnEggItem> SNAKE_SPAWN_EGG = addToTab(ITEMS.register("snake_spawn_egg",
             () -> new ForgeSpawnEggItem(ForgeEntities.SNAKE,
                     0x6dcd4c, 0xf9f07b, new Item.Properties())));
     public static final RegistryObject<ForgeSpawnEggItem> PIRANHA_SPAWN_EGG = addToWIPTab(ITEMS.register("piranha_spawn_egg",
