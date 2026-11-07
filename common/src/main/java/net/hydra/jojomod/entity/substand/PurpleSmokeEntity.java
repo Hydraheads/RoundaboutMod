@@ -125,8 +125,12 @@ public class PurpleSmokeEntity extends StandEntity {
             this.setDeltaMovement(0, -0.2, 0);
         }
         if (!client) {
-            float expansionProgress = Math.min(1.0F, (float) ticksAlive / 60);
-            range = 1.0F + (8.0F - 1.0F) * expansionProgress;
+            var cfg = ClientNetworking.getAppropriateConfig().PurpleHazeSettings;
+            float maxRange = Mth.clamp(cfg.SmokeRadius, 1.0F, 32.0F);
+            int expansionTicks = Math.max(1, cfg.SmokeExpansionTicks);
+
+            float expansionProgress = Math.min(1.0F, (float) ticksAlive / expansionTicks);
+            range = 1.0F + (maxRange - 1.0F) * expansionProgress;
             range = Math.max(range, 1.0F);
         }
         //if (!((TimeStop) level()).inTimeStopRange(this)) {

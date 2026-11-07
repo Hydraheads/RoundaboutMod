@@ -898,6 +898,11 @@ public class Config implements Cloneable {
         public Boolean HazeMelts;
         @BooleanOption(group = "inherit", value = false)
         public Boolean CanonDistortion;
+        @IntOption(group = "inherit", value = 5, min = 0, max = 30)
+        public Integer SmokeRadius;
+        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
+        public Integer SmokeExpansionTicks;
+
     }
     public static class LyinEyesSettings {
         @BooleanOption(group = "inherit", value = true)
