@@ -9,6 +9,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.item.GlaiveItem;
 import net.hydra.jojomod.item.RoundaboutArrowItem;
 import net.hydra.jojomod.item.StandArrowItem;
+import net.hydra.jojomod.item.WarhammerItem;
 import net.minecraft.client.model.FoxModel;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -34,7 +35,7 @@ public class BlackSabbathItemRenderer <T extends BlackSabbathEntity, M extends S
         boolean flag1 = this.getParentModel().young;
         ItemStack it = blackSabbathEntity.getHeldItemSabbath();
          if(!it.isEmpty() && !(it.getItem() instanceof BlockItem && !(it.is(Items.HOPPER))) && blackSabbathEntity.getGrabbing() != 0){
-             boolean flag2 = it.getItem() instanceof RoundaboutArrowItem || it.getItem() instanceof SwordItem || it.getItem() instanceof GlaiveItem || it.getItem() instanceof HoeItem || it.getItem() instanceof PickaxeItem || it.getItem() instanceof AxeItem || it.getItem() instanceof ShovelItem || it.getItem() instanceof ShearsItem || it.getItem() instanceof BrushItem;
+             boolean flag2 = it.getItem() instanceof RoundaboutArrowItem || it.getItem() instanceof SwordItem || it.getItem() instanceof GlaiveItem || it.getItem() instanceof HoeItem || it.getItem() instanceof PickaxeItem || it.getItem() instanceof AxeItem || it.getItem() instanceof ShovelItem || it.getItem() instanceof ShearsItem || it.getItem() instanceof BrushItem || it.getItem() instanceof WarhammerItem;
              boolean flag3 = it.getItem() instanceof PotionItem || it.getItem() instanceof ArmorItem || it.getItem() instanceof BucketItem || it.is(Items.HOPPER);
             poseStack.pushPose();
             if(!flag1 && !flag2) {
@@ -47,9 +48,9 @@ public class BlackSabbathItemRenderer <T extends BlackSabbathEntity, M extends S
                  poseStack.scale(0.34F, 0.34F, 0.34F);
              }
              if(flag2) {
-                 poseStack.translate(((this.getParentModel()).head.x / 16.0F) - 0.1F, ((this.getParentModel()).head.y / 19.0F) + 1.12F, ((this.getParentModel()).head.z / 16.0F) - 0.3F);
+                 poseStack.translate(((this.getParentModel()).head.x / 16.0F) - 0.1F, ((this.getParentModel()).head.y / 19.0F) + 1.12F, ((this.getParentModel()).head.z / 16.0F) - 0.27F);
              } else if (flag3){
-                 poseStack.translate(((this.getParentModel()).head.x / 16.0F), ((this.getParentModel()).head.y / 19.0F) + 1.12F, ((this.getParentModel()).head.z / 16.0F) - 0.3F);
+                 poseStack.translate(((this.getParentModel()).head.x / 16.0F), ((this.getParentModel()).head.y / 19.0F) + 1.12F, ((this.getParentModel()).head.z / 16.0F) - 0.27F);
              }else {
                  poseStack.translate(((this.getParentModel()).head.x / 16.0F) - 0F, ((this.getParentModel()).head.y / 19.0F) + 1.15F, ((this.getParentModel()).head.z / 16.0F) - 0.55F);
              }
@@ -66,9 +67,5 @@ public class BlackSabbathItemRenderer <T extends BlackSabbathEntity, M extends S
 
             poseStack.popPose();
         }
-    }
-
-    protected void renderArmWithItem(LivingEntity livingEntity, ItemStack itemStack, ItemDisplayContext displayContext, HumanoidArm humanoidArm, PoseStack poseStack, MultiBufferSource bufferSource, int p_117191_) {
-
     }
 }

@@ -46,6 +46,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.*;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
@@ -915,11 +916,11 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             SynchedEntityData.defineId(BlackSabbathEntity.class, EntityDataSerializers.BOOLEAN);
     public final Boolean getThrowable() {
         return (this.getHeldItemSabbath().getItem() instanceof ArrowItem && !(this.getHeldItemSabbath().getItem() instanceof RoundaboutArrowItem) || this.getHeldItemSabbath().getItem() instanceof KnifeItem
-                || this.getHeldItemSabbath().is(ModItems.KNIFE_BUNDLE) || this.getHeldItemSabbath().getItem() instanceof TridentItem && EnchantmentHelper.getRiptide(getHeldItemSabbath()) <= 0
+                || this.getHeldItemSabbath().is(ModItems.KNIFE_BUNDLE) || this.getHeldItemSabbath().getItem() instanceof TridentItem && EnchantmentHelper.getRiptide(getHeldItemSabbath()) <= 0 && !(getHeldItemSabbath().getDamageValue() >= getHeldItemSabbath().getMaxDamage() - 1)
                 || this.getHeldItemSabbath().getItem() instanceof EggItem || this.getHeldItemSabbath().getItem() instanceof SnowballItem || this.getHeldItemSabbath().getItem() instanceof ThrowablePotionItem
                 || this.getHeldItemSabbath().getItem() instanceof EnderpearlItem || this.getHeldItemSabbath().getItem() instanceof GasolineBucketItem || this.getHeldItemSabbath().getItem() instanceof GasolineCanItem
                 || this.getHeldItemSabbath().getItem() instanceof MatchItem || this.getHeldItemSabbath().is(ModItems.MATCH_BUNDLE) || this.getHeldItemSabbath().getItem() instanceof FleshBucketItem
-                ||this.getHeldItemSabbath().getItem() instanceof HarpoonItem) && !(this.getHeldItemSabbath().is(ItemStack.EMPTY.getItem()));
+                ||this.getHeldItemSabbath().getItem() instanceof HarpoonItem  && !(getHeldItemSabbath().getDamageValue() >= getHeldItemSabbath().getMaxDamage() - 1)) && !(this.getHeldItemSabbath().is(ItemStack.EMPTY.getItem()));
     }
     @Override
     protected void defineSynchedData() {
@@ -1496,8 +1497,10 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                 performRangedAttackUnique(this, targetSabbath());
                             }
                         } else if (getHeldItemSabbath().getItem() instanceof TridentItem || getHeldItemSabbath().getItem() instanceof HarpoonItem) {
-                            tickShootCooldown = 50;
-                            performRangedAttackUnique(this, targetSabbath());
+                            if(!(getHeldItemSabbath().getDamageValue() >= getHeldItemSabbath().getMaxDamage() - 1)) {
+                                tickShootCooldown = 50;
+                                performRangedAttackUnique(this, targetSabbath());
+                            }
                         } else {
                             tickShootCooldown = 50;
                             performRangedAttackUnique(this, targetSabbath());
@@ -1512,7 +1515,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             }
         }
         if(targetSabbath() != null){
-            System.out.println(animationTick2);
             if(getStrafing()){
                 if (this.hasLineOfSight(targetSabbath())) {
                     this.seeTime = 60;
@@ -1888,6 +1890,27 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         return new Vec3(0, 0, 0);
     }
 
+    public Vec3 ItemSlider(float x, float y, float z){
+        return new Vec3(x, y, z);
+    }
+
+    private void swordHit(float damage, LivingEntity attacked, Entity attacker, ItemStack item){
+        if(this.getUser() != null) {
+            if(attacker instanceof Player){
+                attacked.hurt(ModDamageTypes.of(level(), DamageTypes.PLAYER_ATTACK, this.getUser()), damage + 1);
+            } else {
+                attacked.hurt(ModDamageTypes.of(level(), DamageTypes.MOB_ATTACK, this.getUser()), damage + 1);
+            }
+            if (item.getItem() instanceof GlaiveItem) {
+                MainUtil.makeBleed(attacked, 0, 300, this.getUser());
+            }
+            int ench = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FIRE_ASPECT, item);
+            if (ench >= 1) {
+                attacked.setSecondsOnFire((ench) * 4);
+            }
+        }
+    }
+
     private void soulGrabbingTick(){
         ItemStack i = this.getHeldItemSabbath();
         Entity le = this.level().getEntity(getGrabbing());
@@ -1897,7 +1920,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             if(!this.level().isClientSide()){
                 setUnrender(false);
             }
-            if (le instanceof LivingEntity e) {
+            if (le != null && le instanceof LivingEntity e) {
                     if (meleeInteractionTicks > 1) {
                         if(!this.level().isClientSide) {
                             ((StandUser) e).roundabout$sealStand(1);
@@ -1911,6 +1934,34 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                         if(!e.isAlive() || e.isDeadOrDying() || e.isRemoved()){
                             setMeleeInteractionTicks(5);
                         }
+                        /*FUN STUFF starts >:D */
+                        /*Initial ticks: 220 (or 12 seconds)*/
+                        //TODO: SWING VISUALS BLA BLA BLA
+                        float itemDamage = 0;
+                        if(!i.isEmpty() && !(i.getDamageValue() >= i.getMaxDamage() - 1)){
+                            if(meleeInteractionTicks == 125 || meleeInteractionTicks == 100 && !(i.getItem() instanceof GlaiveItem || i.getItem() instanceof WarhammerItem) || meleeInteractionTicks == 175) {
+                                if (i.getItem() instanceof SwordItem SI) {
+                                    itemDamage = SI.getDamage();
+                                    itemDamage += EnchantmentHelper.getDamageBonus(i, ((LivingEntity)e).getMobType());
+                                    swordHit(itemDamage, e, this.getUser(), i);
+                                } else if (i.getItem() instanceof DiggerItem SI) {
+                                    itemDamage = SI.getAttackDamage();
+                                    itemDamage += EnchantmentHelper.getDamageBonus(i, ((LivingEntity)e).getMobType());
+                                    swordHit(itemDamage, e, this.getUser(), i);
+                                } else if (i.getItem() instanceof GlaiveItem SI) {
+                                    itemDamage = SI.getDamage();
+                                    itemDamage += EnchantmentHelper.getDamageBonus(i, ((LivingEntity)e).getMobType());
+                                    swordHit(itemDamage, e, this.getUser(), i);
+                                }
+                                if(i.getItem() instanceof WarhammerItem) {
+                                    i.hurtAndBreak(2, this, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+                                } else {
+                                    i.hurtAndBreak(1, this, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+                                }
+                            }
+                        }
+
+
                     } else {
                         if(!this.level().isClientSide) {
                             ((StandUser) e).roundabout$updateSealedTicks(-1);
@@ -1924,19 +1975,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         }
         }
     }
-
-    //TODO:
-    //TODO:
-    //TODO:
-    //TODO:
-    //TODO:
-    //TODO:REMEMBER TO FIX ALL UNRENDERING PISSUES
-    //TODO:
-    //TODO:
-    //TODO:
-    //TODO:
-    //TODO:
-
     public final Vec3 getLookAngle(float $$0, Entity selfie) {
         return ((StandUser)selfie).roundabout$calculateViewVectorButICanUseIt(0, selfie.getYRot());
     }
