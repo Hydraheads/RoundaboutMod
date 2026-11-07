@@ -773,6 +773,7 @@
   "entity.roundabout.ge_bee": "Bee",
   "entity.roundabout.ge_fish": "Fish",
   "entity.roundabout.ge_fox": "Fox",
+  "entity.roundabout.ge_snake": "Snake",
 
   "entity.roundabout.sheer_heart_attack": "Sheer Heart Attack",
   "entity.roundabout.totem_of_doom": "Totem Of Doom",
@@ -3711,7 +3712,7 @@
   "roundabout.gold_experience_animal.pirahna": "Pirahna",
   "roundabout.gold_experience_animal.pirahna.desc": "placeholder, rework these after finishing the mobs cuz the doc is kinda vague.",
   "roundabout.gold_experience_animal.snake": "Snake",
-  "roundabout.gold_experience_animal.snake.desc": "placeholder, rework these after finishing the mobs cuz the doc is kinda vague.",
+  "roundabout.gold_experience_animal.snake.desc": "Rushes to the last enemy you hit, or who hit you, and bites them, inflicting poison.",
   "roundabout.gold_experience_animal.frog": "Frog",
   "roundabout.gold_experience_animal.frog.desc": "Hops around erratically.",
   "roundabout.gold_experience_animal.fox": "Fox",
