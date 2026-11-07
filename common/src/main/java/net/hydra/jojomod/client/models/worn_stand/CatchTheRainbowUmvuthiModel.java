@@ -88,7 +88,7 @@ public class CatchTheRainbowUmvuthiModel extends PsuedoHierarchicalModel {
 			"textures/stand/catch_the_rainbow/umvuthi_off.png");
 
 	public ResourceLocation getTextureLocation(Entity context, byte skin) {
-		if (!(((PowersCatchTheRainbow) ((StandUser) context).roundabout$getStandPowers()).isInRain())) {
+		if (((StandUser) context).roundabout$getStandPowers() instanceof PowersCatchTheRainbow PCR && !PCR.isInRain()) {
 			switch (skin) {
 				default -> {
 					return umvuthi_off;
