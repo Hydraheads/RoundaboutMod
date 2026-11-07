@@ -285,6 +285,13 @@ public class Butterfly extends AmbientCreature {
         }
     }
 
+    // sound stuff
+
+    @Override
+    protected void playStepSound(BlockPos pos, BlockState state) {
+
+    }
+
     // attribute builder, like Bats
 
     public static AttributeSupplier.Builder createAttributes() {
