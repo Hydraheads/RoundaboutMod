@@ -468,7 +468,7 @@ public class ForgeEvents {
 
         ModItems.STAND_DISC_JJF = ForgeItems.STAND_DISC_JJF.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_JJF.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_JJF.get());
-        ModItems.MAX_STAND_DISC_JJF = ForgeItems.STAND_DISC_JJF.get();
+        ModItems.MAX_STAND_DISC_JJF = ForgeItems.MAX_STAND_DISC_JJF.get();
 
         ModItems.STAND_DISC_WHITESNAKE = ForgeItems.STAND_DISC_WHITESNAKE.get();
         ((MaxStandDiscItem) ForgeItems.MAX_STAND_DISC_WHITESNAKE.get()).baseDisc =

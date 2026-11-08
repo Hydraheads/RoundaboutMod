@@ -1,6 +1,6 @@
 package net.hydra.jojomod.client.gui;
 
-import com.example.jjf.client.JJFHudSettings;
+import net.hydra.jojomod.client.JJFHudSettings;
 import net.hydra.jojomod.stand.powers.PowersJumpinJackFlash;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;

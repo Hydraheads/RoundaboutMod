@@ -9,8 +9,10 @@ import net.hydra.jojomod.client.models.layers.animations.HeyYaAnimations;
 import net.hydra.jojomod.client.models.layers.animations.MandomAnimations;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
 import net.hydra.jojomod.stand.powers.PowersHeyYa;
 import net.hydra.jojomod.stand.powers.PowersMandom;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
@@ -153,7 +155,9 @@ public class MandomModel extends PsuedoHierarchicalModel {
     public void rotateHead(Entity context, float partialTicks, StandUser user){
         if (this.root().getChild("stand").getChild("stand2").hasChild("head")) {
             ModelPart head = this.root().getChild("stand").getChild("stand2").getChild("head");
-            if (user.roundabout$getIdlePos() == 1) {
+            /*if ((user.roundabout$getStandPowers() instanceof PowersMandom && user.roundabout$getIdlePos() == 1)
+                    || (user.roundabout$getPreviousStandPowers() instanceof PowersMandom && user.roundabout$getPreviousPose() == 1)) { */
+            if (MainUtil.getWornStandIdleSafe(user, PowersMandom.class) == 1) {
                 head.setRotation((((context.getViewXRot(partialTicks)) * Mth.DEG_TO_RAD)), 0, 0);
             } else {
                 head.setRotation(0, 0, 0);
@@ -176,7 +180,10 @@ public class MandomModel extends PsuedoHierarchicalModel {
             StandUser user = ((StandUser) LE);
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
             rotateHead(context,partialTicks,user);
-            if (user.roundabout$getIdlePos() == 2) {
+            /*if ((user.roundabout$getStandPowers() instanceof PowersMandom && user.roundabout$getIdlePos() == 2)
+                    || (user.roundabout$getPreviousStandPowers() instanceof PowersMandom && user.roundabout$getPreviousPose() == 2)) {
+                */
+            if (MainUtil.getWornStandIdleSafe(user, PowersMandom.class) == 2) {
                 user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
             } else {
                 user.roundabout$getWornStandIdleAnimation().stop();

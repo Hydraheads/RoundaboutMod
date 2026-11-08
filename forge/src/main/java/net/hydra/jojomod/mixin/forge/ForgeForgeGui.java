@@ -33,7 +33,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ForgeGui.class)
 public abstract class ForgeForgeGui extends Gui {
 
-    @Shadow public int rightHeight;
+    @Shadow(remap = false) public int rightHeight;
 
     public ForgeForgeGui(Minecraft p_232355_, ItemRenderer p_232356_) {
         super(p_232355_, p_232356_);
