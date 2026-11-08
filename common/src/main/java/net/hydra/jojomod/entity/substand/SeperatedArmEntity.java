@@ -269,41 +269,40 @@ public class SeperatedArmEntity extends StandEntity {
     public void tick() {
         this.entityData.set(HELD_ITEM,this.getMainHandItem());
         tickeffects();
+        if(this.getUser() != null) {
+            if (((((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersCatchTheRainbow))) {
+                if (!this.level().isClientSide) {
+                    if (grabbedEntity != null) {
+                        List<Entity> getNearEntity = MainUtil.getEntitiesInRange(this.level(), this.blockPosition(), 5F, this);
+                        if (!getNearEntity.contains(grabbedEntity)) {
+                            grabbedEntity = null;
+                        }
+                        if (isInRain() && grabbedEntity != null && grabbedEntity instanceof LivingEntity) {
+                            this.setPos(rayCastFromGrabbedEntity(0.5).subtract(0, 0.35, 0));
+                            this.lookAt(EntityAnchorArgument.Anchor.EYES, grabbedEntity.getEyePosition());
 
-        if (((((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersCatchTheRainbow))) {
-            if (!this.level().isClientSide) {
-                if (grabbedEntity != null){
-                    List<Entity> getNearEntity = MainUtil.getEntitiesInRange(this.level(), this.blockPosition(), 5F, this);
-                    if (!getNearEntity.contains(grabbedEntity)){
-                        grabbedEntity = null;
-                    }
-                    if (isInRain() && grabbedEntity != null && grabbedEntity instanceof LivingEntity) {
-                        this.setPos(rayCastFromGrabbedEntity(0.5).subtract(0, 0.35, 0));
-                        this.lookAt(EntityAnchorArgument.Anchor.EYES, grabbedEntity.getEyePosition());
-
-                        ((LivingEntity) grabbedEntity).addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, 2), grabbedEntity);
-                    }else{
-                        grabbedEntity = null;
-                    }
-                } else {
-                    if (StartupTicks == 0) {
-                        if (User != null && ((((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersCatchTheRainbow))) {
-                            this.lookAt(EntityAnchorArgument.Anchor.EYES, User.getEyePosition());
-                            this.setDeltaMovement(this.getLookAngle().multiply(0.4, 0.4, 0.4));
+                            ((LivingEntity) grabbedEntity).addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, 2), grabbedEntity);
                         } else {
-                            this.discard();
+                            grabbedEntity = null;
                         }
                     } else {
-                        if (isInRain())
-                            StartupTicks--;
-                        else
-                            StartupTicks = 0;
+                        if (StartupTicks == 0) {
+                            if (User != null && ((((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersCatchTheRainbow))) {
+                                this.lookAt(EntityAnchorArgument.Anchor.EYES, User.getEyePosition());
+                                this.setDeltaMovement(this.getLookAngle().multiply(0.4, 0.4, 0.4));
+                            } else {
+                                this.discard();
+                            }
+                        } else {
+                            if (isInRain())
+                                StartupTicks--;
+                            else
+                                StartupTicks = 0;
+                        }
                     }
                 }
-            }
-        }else{
-            if (!this.level().isClientSide) {
-                if (!((((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersGreenDay))) {
+            } else {
+                if (!this.level().isClientSide) {
                     this.setUser(null);
                     removearm();
                 }
