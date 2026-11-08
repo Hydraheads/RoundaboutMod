@@ -1,7 +1,7 @@
-package com.example.jjf.mixin;
+package net.hydra.jojomod.mixin.jumpin_jack_flash;
 
-import com.example.jjf.launcher.JJFLauncherAccess;
-import com.example.jjf.launcher.JJFLauncherState;
+import net.hydra.jojomod.event.powers.jumpingJackFlash.JJFLauncherAccess;
+import net.hydra.jojomod.event.powers.jumpingJackFlash.JJFLauncherState;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.player.Player;

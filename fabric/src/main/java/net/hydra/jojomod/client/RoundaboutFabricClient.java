@@ -82,7 +82,7 @@ public class RoundaboutFabricClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(), ModBlocks.WALL_LANTERN);
         FabricParticlesClient.registerClientParticles();
         FabricEntityClient.register();
-        new com.example.jjf.fabric.JJFModFabricClient().onInitializeClient();
+        net.hydra.jojomod.networking.FabricJJFClientPackets.register();
         //diver down custom workbench menus registry
         MenuScreens.register(FabricMenus.DIVER_DOWN_CRAFTING, DiverDownCraftingScreen::new);
         MenuScreens.register(FabricMenus.DIVER_DOWN_ANVIL, DiverDownAnvilScreen::new);

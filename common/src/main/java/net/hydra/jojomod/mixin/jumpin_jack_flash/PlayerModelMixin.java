@@ -1,6 +1,6 @@
-package com.example.jjf.mixin;
+package net.hydra.jojomod.mixin.jumpin_jack_flash;
 
-import com.example.jjf.client.JJFPlayerWallPose;
+import net.hydra.jojomod.client.JJFPlayerWallPose;
 import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravityAccess;
 import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravityState;
 
@@ -106,7 +106,7 @@ public abstract class PlayerModelMixin<T extends LivingEntity>
             );
         }
 
-        // Make the outer skin layers follow the new pose
+        
         rightSleeve.copyFrom(this.rightArm);
         leftSleeve.copyFrom(this.leftArm);
 

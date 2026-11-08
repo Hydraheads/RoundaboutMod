@@ -1,4 +1,4 @@
-package com.example.jjf.mixin;
+package net.hydra.jojomod.mixin.jumpin_jack_flash;
 
 import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravityAccess;
 import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravityState;
@@ -37,13 +37,13 @@ public abstract class KeyboardInputMixin extends Input {
             return;
         }
 
-        // Surface movement stays normal.
+        
         if (ZeroGravitySystem.isTouchingGround(player)) {
             return;
         }
 
-        // Free-floating in 0G:
-        // WASD can influence you slightly, but cannot freely fly you around.
+        
+        
         this.leftImpulse *= 0.08F;
         this.forwardImpulse *= 0.08F;
     }

@@ -1,4 +1,4 @@
-package com.example.jjf.launcher;
+package net.hydra.jojomod.event.powers.jumpingJackFlash;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
