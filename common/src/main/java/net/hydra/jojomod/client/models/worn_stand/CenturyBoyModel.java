@@ -12,6 +12,8 @@ import net.hydra.jojomod.client.models.layers.animations.CenturyBoyAnimations;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
+import net.hydra.jojomod.stand.powers.PowersHeyYa;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -258,12 +260,13 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 		StandUser user = ((StandUser) LE);
 		user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
 
-		byte idle = (byte)0;
+		byte idle = MainUtil.getWornStandIdleSafe(user, Powers20thCenturyBoy.class);
+		/*(byte)0;
 		if (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy) {
 			idle = user.roundabout$getIdlePos();
 		}else if (user.roundabout$getPreviousStandPowers() instanceof Powers20thCenturyBoy) {
 			idle = user.roundabout$getPreviousPose();
-		}
+		}*/
 
 		if (idle == 2){
 			this.animate(user.roundabout$getWornStandIdleAnimation(), CenturyBoyAnimations.standanim.hat,partialTicks, 1f);

@@ -12,6 +12,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
 import net.hydra.jojomod.stand.powers.PowersCatchTheRainbow;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -166,12 +167,13 @@ public class CatchTheRainbowModel extends PsuedoHierarchicalModel {
 			user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
 
 
-			byte idle = (byte)0;
+			byte idle = MainUtil.getWornStandIdleSafe(user, PowersCatchTheRainbow.class);
+			/*byte idle = (byte)0;
 			if (user.roundabout$getStandPowers() instanceof PowersCatchTheRainbow) {
 				idle = user.roundabout$getIdlePos();
 			}else if (user.roundabout$getPreviousStandPowers() instanceof PowersCatchTheRainbow) {
 				idle = user.roundabout$getPreviousPose();
-			}
+			}*/
 
 
 			if (idle != 0) {

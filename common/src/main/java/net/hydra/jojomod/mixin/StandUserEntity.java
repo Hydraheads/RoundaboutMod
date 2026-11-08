@@ -3583,7 +3583,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         this.roundabout$setPreviousStandPowers(this.roundabout$Powers);
         this.roundabout$setPreviousSkin(this.roundabout$lastSkin);
-        this.roundabout$setPreviousPose(this.roundabout$Powers.idlePos);
+        if (this.roundabout$Powers != null) {
+            this.roundabout$setPreviousPose(this.roundabout$Powers.idlePos);
+        }
         this.roundabout$setPreviousStandVanishTicks(this.roundabout$getCurrentStandVanishTicks());
         this.roundabout$setCurrentStandVanishTicks(0);
         this.roundabout$Powers = standPowers;

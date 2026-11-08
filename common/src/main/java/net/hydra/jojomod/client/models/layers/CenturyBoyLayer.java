@@ -14,6 +14,7 @@ import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
 import net.hydra.jojomod.stand.powers.PowersHeyYa;
 import net.hydra.jojomod.stand.powers.PowersMandom;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -48,14 +49,15 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 boolean hasCB = (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy);
                 boolean standOut = (PowerTypes.hasStandActive(entity) && hasCB);
                 if (!entity.isInvisible()) {
-                    int CBticks = 0;
-                    //int CBticks = user.roundabout$getCBVanishTicks();
+                    int CBticks = MainUtil.getWornStandVanishticksSafe(user, Powers20thCenturyBoy.class);
 
+                    /*
+                    int CBticks = 0;
                     if (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy) {
                         CBticks = user.roundabout$getCurrentStandVanishTicks();
                     }else if (user.roundabout$getPreviousStandPowers() instanceof Powers20thCenturyBoy) {
                         CBticks = user.roundabout$getPreviousStandVanishTicks();
-                    }
+                    }*/
 
                     /// skin definition
                     if (CBticks > 0 || standOut) {
@@ -112,12 +114,13 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                         /// ps. translate means moving it
                         getParentModel().body.translateAndRotate(poseStack);
 
-                        byte idle = (byte)0;
+                        byte idle = MainUtil.getWornStandIdleSafe(user, Powers20thCenturyBoy.class);
+                        /* (byte)0;
                         if (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy) {
                             idle = user.roundabout$getIdlePos();
                         }else if (user.roundabout$getPreviousStandPowers() instanceof Powers20thCenturyBoy) {
                             idle = user.roundabout$getPreviousPose();
-                        }
+                        }*/
 
                         /// for unlatch...
                         if (idle == 1) {

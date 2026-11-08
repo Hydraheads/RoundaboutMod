@@ -8,7 +8,9 @@ import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.layers.animations.HeyYaAnimations;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.PowersCatchTheRainbow;
 import net.hydra.jojomod.stand.powers.PowersHeyYa;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
@@ -183,8 +185,10 @@ public class HeyYaModel extends PsuedoHierarchicalModel {
         if (this.root().getChild("stand").getChild("stand2").hasChild("head")) {
             ModelPart head = this.root().getChild("stand").getChild("stand2").getChild("head");
 
-            if ((user.roundabout$getStandPowers() instanceof PowersHeyYa && user.roundabout$getIdlePos() == 1)
+            /*if ((user.roundabout$getStandPowers() instanceof PowersHeyYa && user.roundabout$getIdlePos() == 1)
                     || (user.roundabout$getPreviousStandPowers() instanceof PowersHeyYa && user.roundabout$getPreviousPose() == 1)) {
+             */
+            if (MainUtil.getWornStandIdleSafe(user, PowersHeyYa.class) == 1) {
                 head.setRotation((((context.getViewXRot(partialTicks)) * Mth.DEG_TO_RAD)), 0, 0);
             } else {
                 head.setRotation(0, 0, 0);
