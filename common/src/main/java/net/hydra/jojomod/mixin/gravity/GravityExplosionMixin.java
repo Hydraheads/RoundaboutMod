@@ -72,7 +72,7 @@ public abstract class GravityExplosionMixin {
 
     @Inject(
             method = "explode",
-            at = @At(value = "INVOKE", target = "Lit/unimi/dsi/fastutil/objects/ObjectArrayList;addAll(Ljava/util/Collection;)Z",
+            at = @At(value = "INVOKE", target = "Lit/unimi/dsi/fastutil/objects/ObjectArrayList;addAll(Ljava/util/Collection;)Z", remap = false,
             shift = At.Shift.AFTER),
             cancellable = true
     )

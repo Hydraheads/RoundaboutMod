@@ -573,9 +573,9 @@ public class FabricEntities {
         public static final EntityType<JumpinJackFlashEntity> JUMPIN_JACK_FLASH =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
-                        Roundabout.location("jumping_flash_jack"),
+                        Roundabout.location("jumpin_jack_flash"),
                         EntityType.Builder.of(JumpinJackFlashEntity::new, MobCategory.MISC).
-                                sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":jumping_flash_jack")
+                                sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":jumpin_jack_flash")
                 );
         public static final EntityType<JJFProjectileEntity> JJF_PROJECTILE =
                 Registry.register(

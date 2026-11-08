@@ -11,7 +11,7 @@ import java.util.function.BiConsumer;
 
 public final class ZeroGravitySync {
 
-    public static final ResourceLocation CHANNEL = new ResourceLocation("jjf", "zero_gravity_sync");
+    public static final ResourceLocation CHANNEL = new ResourceLocation("roundabout", "zero_gravity_sync");
 
     private static BiConsumer<ServerPlayer, Snapshot> sender;
     private static boolean clientMeterVisible;
