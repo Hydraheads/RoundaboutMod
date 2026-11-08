@@ -169,6 +169,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.GE_FISH.get(), Salmon.createAttributes().build());
         event.put(ForgeEntities.GE_FOX.get(), Fox.createAttributes().build());
         event.put(ForgeEntities.GE_SNAKE.get(), Snake.createAttributes().build());
+        event.put(ForgeEntities.GE_PIRANHA.get(), Piranha.createAttributes().build());
         event.put(ForgeEntities.VILLAGER_MINION.get(), VillagerMinion.createAttributes().build());
         event.put(ForgeEntities.AXOLOTL_MINION.get(), AxolotlMinion.createAttributes().build());
         event.put(ForgeEntities.OCELOT_MINION.get(), OcelotMinion.createAttributes().build());
@@ -983,6 +984,7 @@ public class ForgeEvents {
         ModEntities.GE_FISH = ForgeEntities.GE_FISH.get();
         ModEntities.GE_FOX = ForgeEntities.GE_FOX.get();
         ModEntities.GE_SNAKE = ForgeEntities.GE_SNAKE.get();
+        ModEntities.GE_PIRANHA = ForgeEntities.GE_PIRANHA.get();
         ModEntities.SILVER_CHARIOT = ForgeEntities.SILVER_CHARIOT.get();
         ModEntities.SILVER_CHARIOT_PHARAOH = ForgeEntities.SILVER_CHARIOT_PHARAOH.get();
         ModEntities.SILVER_CHARIOT_RAPIER = ForgeEntities.SILVER_CHARIOT_RAPIER.get();
