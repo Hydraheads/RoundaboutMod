@@ -51,15 +51,15 @@ public class HeyYaLayer<T extends LivingEntity, A extends HumanoidModel<T>> exte
 
                     if (heyTicks > 0 || hasHeyYaOut) {
                         byte skin = user.roundabout$getStandSkin();
-                        if (user.roundabout$getLastStandSkin() != skin){
-                            user.roundabout$setLastStandSkin(skin);
-                            heyTicks = 0;
+                        if (user.roundabout$getStandPowers() instanceof PowersHeyYa) {
+                            if (user.roundabout$getLastStandSkin() != skin){
+                                user.roundabout$setLastStandSkin(skin);
+                                heyTicks = 0;
 
-                            if (user.roundabout$getStandPowers() instanceof PowersHeyYa) {
                                 user.roundabout$setCurrentStandVanishTicks(0);
-                            }else {
-                                user.roundabout$setPreviousStandVanishTicks(0);
                             }
+                        }else {
+                            skin = user.roundabout$getPreviousSkin();
                         }
 
                         float heyFull = 0;

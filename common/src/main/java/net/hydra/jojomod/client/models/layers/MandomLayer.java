@@ -59,14 +59,14 @@ public class MandomLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
 
                     if (mandomTicks > 0 || hasMandomOut) {
                         byte skin = user.roundabout$getStandSkin();
-                        if (user.roundabout$getLastStandSkin() != skin) {
-                            user.roundabout$setLastStandSkin(skin);
-                            mandomTicks = 0;
-                            if (user.roundabout$getStandPowers() instanceof PowersMandom) {
+                        if (user.roundabout$getStandPowers() instanceof PowersMandom) {
+                            if (user.roundabout$getLastStandSkin() != skin) {
+                                user.roundabout$setLastStandSkin(skin);
+                                mandomTicks = 0;
                                 user.roundabout$setCurrentStandVanishTicks(0);
-                            }else {
-                                user.roundabout$setPreviousStandVanishTicks(0);
                             }
+                        }else {
+                            skin = user.roundabout$getPreviousSkin();
                         }
 
                         float heyFull = 0;
