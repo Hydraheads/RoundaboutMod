@@ -1523,6 +1523,12 @@
   "sounds.roundabout.ph_strangle_grab": "Strangle grab",
   "sounds.roundabout.ph_type_switch": "Distortion switch",
   "sounds.roundabout.ph_pod_launch": "Pod launch",
+  "sounds.roundabout.ph_kick": "Kicked",
+  "sounds.roundabout.ph_phase_1": "Distortion Smoke Spreads",
+  "sounds.roundabout.ph_phase_2": "Distortion Smoke Expands",
+  "sounds.roundabout.ph_phase_3": "Distortion Smoke Expands",
+  "sounds.roundabout.ph_spit": "Virus Spit",
+
 
   "sounds.roundabout.bullet_ricochet":  "Bullet ricocheted",
 
