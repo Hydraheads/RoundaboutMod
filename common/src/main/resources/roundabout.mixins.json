@@ -47,6 +47,7 @@
     "access.AccessEnderMan",
     "access.AccessFire",
     "access.AccessFireworkRocket",
+    "access.AccessInstrumentItem",
     "access.AccessInventory",
     "access.AccessLivingEntity",
     "access.AccessMinecartItem",

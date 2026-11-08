@@ -1246,7 +1246,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             if (TE instanceof LivingEntity LE) {
                 if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){
                     if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e && be.level().getEntity(be.getGrabbing()).is(LE)){
-                        be.setMeleeInteractionTicks(0);
+                        be.setMeleeInteractionTicks(-1);
                         ((StandUser)e).roundabout$setGrabbedSoul(false);
                         ((StandUser) e).roundabout$updateSealedTicks(-1);
                         be.killSoul();
@@ -1499,10 +1499,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
     }
     @Override
     public boolean returnFakeStandForHud(){
-        if(this.self != null) {
-            return true;
-        }
-        return false;
+        return true;
     }
     public StandEntity getStandForHUDIfFake(){
         if (displayStand == null){
