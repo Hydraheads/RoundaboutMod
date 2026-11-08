@@ -10,6 +10,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
@@ -196,7 +197,7 @@ public class Snake extends Animal {
 
     @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
-
+        this.playSound(ModSounds.SNAKE_STEP_EVENT, 1.0F, 1.0F);
     }
 
     public static AttributeSupplier.Builder createAttributes() {

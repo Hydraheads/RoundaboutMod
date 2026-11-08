@@ -40,6 +40,19 @@ public class ModSounds {
     public static final String SNAKE_DIE = "snake_die";
     public static final ResourceLocation SNAKE_DIE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SNAKE_DIE);
     public static SoundEvent SNAKE_DIE_EVENT = SoundEvent.createVariableRangeEvent(SNAKE_DIE_ID);
+    public static final String SNAKE_STEP = "snake_step";
+    public static final ResourceLocation SNAKE_STEP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SNAKE_STEP);
+    public static SoundEvent SNAKE_STEP_EVENT = SoundEvent.createVariableRangeEvent(SNAKE_STEP_ID);
+
+    public static final String PIRANHA_HURT = "piranha_hurt";
+    public static final ResourceLocation PIRANHA_HURT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PIRANHA_HURT);
+    public static SoundEvent PIRANHA_HURT_EVENT = SoundEvent.createVariableRangeEvent(PIRANHA_HURT_ID);
+    public static final String PIRANHA_DIES = "piranha_dies";
+    public static final ResourceLocation PIRANHA_DIES_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PIRANHA_DIES);
+    public static SoundEvent PIRANHA_DIES_EVENT = SoundEvent.createVariableRangeEvent(PIRANHA_DIES_ID);
+    public static final String PIRANHA_FLOP = "piranha_flop";
+    public static final ResourceLocation PIRANHA_FLOP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PIRANHA_FLOP);
+    public static SoundEvent PIRANHA_FLOP_EVENT = SoundEvent.createVariableRangeEvent(PIRANHA_FLOP_ID);
 
     public static final String SIGN_HIT = "sign_hit";
     public static final ResourceLocation SIGN_HIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SIGN_HIT);

@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.mobs;
 
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -117,7 +118,7 @@ public class Piranha extends AbstractSchoolingFish {
 
     @Override
     protected SoundEvent getFlopSound() {
-        return SoundEvents.COD_FLOP;
+        return ModSounds.PIRANHA_FLOP_EVENT;
     }
 
     @Override
@@ -132,12 +133,12 @@ public class Piranha extends AbstractSchoolingFish {
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.SALMON_DEATH;
+        return ModSounds.PIRANHA_DIES_EVENT;
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource $$0) {
-        return SoundEvents.SALMON_HURT;
+        return ModSounds.PIRANHA_HURT_EVENT;
     }
 
     public static AttributeSupplier.Builder createAttributes() {
