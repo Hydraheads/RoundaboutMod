@@ -54,7 +54,7 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<Piranha>> PIRANHA =
             ENTITY_TYPES.register("piranha", () ->
-                    EntityType.Builder.of(Piranha::new, MobCategory.CREATURE)
+                    EntityType.Builder.of(Piranha::new, MobCategory.WATER_CREATURE)
                             .sized(0.6f, 0.5f).clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "piranha").toString())
             );

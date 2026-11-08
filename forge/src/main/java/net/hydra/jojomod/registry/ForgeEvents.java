@@ -33,11 +33,9 @@ import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.ambient.AmbientCreature;
 import net.minecraft.world.entity.ambient.Bat;
-import net.minecraft.world.entity.animal.Bee;
-import net.minecraft.world.entity.animal.Fox;
-import net.minecraft.world.entity.animal.Salmon;
-import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.item.ItemStack;
@@ -210,6 +208,20 @@ public class ForgeEvents {
                 SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Snake::checkMobSpawnRules,
+                SpawnPlacementRegisterEvent.Operation.OR
+        );
+        event.register(
+                ForgeEntities.PIRANHA.get(),
+                SpawnPlacements.Type.IN_WATER,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Piranha::checkSurfaceWaterAnimalSpawnRules,
+                SpawnPlacementRegisterEvent.Operation.OR
+        );
+        event.register(
+                ForgeEntities.BUTTERFLY.get(),
+                SpawnPlacements.Type.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Butterfly::checkMobSpawnRules,
                 SpawnPlacementRegisterEvent.Operation.OR
         );
     }
