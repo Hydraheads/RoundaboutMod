@@ -150,6 +150,14 @@ public interface StandUser {
     int roundabout$getCatchTheRainbowVanishTicks();
     void roundabout$setCatchTheRainbowVanishTicks(int set);
 
+    int roundabout$getCurrentStandVanishTicks();
+    void roundabout$setCurrentStandVanishTicks(int set);
+    int roundabout$getPreviousStandVanishTicks();
+    void roundabout$setPreviousStandVanishTicks(int set);
+    StandPowers roundabout$getPreviousStandPowers();
+    void roundabout$setPreviousStandPowers(StandPowers SP);
+
+
     int getJumpImmunityTicks();
 
     boolean rdbt$hasLeftHandGone();

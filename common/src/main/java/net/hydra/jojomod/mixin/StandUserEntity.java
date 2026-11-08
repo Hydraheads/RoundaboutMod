@@ -2760,6 +2760,53 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return 9F;
     }
 
+
+    @Unique
+    private StandPowers roundabout$oldStandPowers = null;
+
+    @Unique
+    @Override
+    public void roundabout$setPreviousStandPowers(StandPowers SP) {
+        this.roundabout$oldStandPowers = SP;
+    }
+
+    @Unique
+    @Override
+    public StandPowers roundabout$getPreviousStandPowers() {
+        return this.roundabout$oldStandPowers;
+    }
+
+
+    @Unique
+    public int roundabout$currentStandVanishTicks = 0;
+
+    @Unique
+    @Override
+    public int roundabout$getCurrentStandVanishTicks() {
+        return roundabout$currentStandVanishTicks;
+    }
+
+    @Unique
+    @Override
+    public void roundabout$setCurrentStandVanishTicks(int set) {
+        roundabout$currentStandVanishTicks = Mth.clamp(set, 0, 10);
+    }
+
+    @Unique
+    public int roundabout$previousStandVanishTicks = 0;
+
+    @Unique
+    @Override
+    public int roundabout$getPreviousStandVanishTicks() {
+        return roundabout$previousStandVanishTicks;
+    }
+
+    @Unique
+    @Override
+    public void roundabout$setPreviousStandVanishTicks(int set) {
+        roundabout$previousStandVanishTicks = Mth.clamp(set, 0, 10);
+    }
+
     @Unique
     public int roundabout$heyYaVanishTicks = 0;
 
@@ -3557,6 +3604,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 roundabout$changingStandPowers = false;
             }
         }
+        this.roundabout$setPreviousStandPowers(this.roundabout$Powers);
+        this.roundabout$setPreviousStandVanishTicks(this.roundabout$getCurrentStandVanishTicks());
+        this.roundabout$setCurrentStandVanishTicks(0);
         this.roundabout$Powers = standPowers;
     }
 
