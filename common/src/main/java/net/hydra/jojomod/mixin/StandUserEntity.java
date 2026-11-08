@@ -6249,10 +6249,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         } else {
             roundabout$setArmVanishTicks(roundabout$getArmVanishTicks() - 1);
         }
-        if (roundabout$getStandPowers() instanceof PowersHeyYa && active) {
-            roundabout$setHeyYaVanishTicks(roundabout$getHeyYaVanishTicks() + 1);
-        } else {
-            roundabout$setHeyYaVanishTicks(roundabout$getHeyYaVanishTicks() - 1);
+
+        if (active) {
+            roundabout$setCurrentStandVanishTicks(roundabout$getCurrentStandVanishTicks() + 1);
+        }else{
+            roundabout$setCurrentStandVanishTicks(roundabout$getCurrentStandVanishTicks() - 1);
+        }
+        if (roundabout$getPreviousStandVanishTicks() > 0) {
+            roundabout$setPreviousStandVanishTicks(roundabout$getPreviousStandVanishTicks() - 1);
         }
 
         if (roundabout$getStandPowers() instanceof PowersOasis && active) {
@@ -6273,11 +6277,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             roundabout$setDiverDownVanishTicks(roundabout$getDiverDownVanishTicks() - 1);
         }
 
-        if (roundabout$getStandPowers() instanceof PowersMandom && active) {
-            roundabout$setMandomVanishTicks(roundabout$getMandomVanishTicks() + 1);
-        } else {
-            roundabout$setMandomVanishTicks(roundabout$getMandomVanishTicks() - 1);
-        }
         /** RattShoulder fade ticks */
         if (PowerTypes.hasStandActive(rdbt$this()) && roundabout$getStandPowers() instanceof PowersRatt &&
                 !((PowersRatt) roundabout$getStandPowers()).isPlaced()) {

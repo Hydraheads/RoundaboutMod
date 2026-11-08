@@ -39,7 +39,13 @@ public class HeyYaLayer<T extends LivingEntity, A extends HumanoidModel<T>> exte
             if (!entity.isInvisible()) {
                 if (entity != null) {
                     StandUser user = ((StandUser) livent);
-                    int heyTicks = user.roundabout$getHeyYaVanishTicks();
+                    int heyTicks = 0;
+                    if (user.roundabout$getStandPowers() instanceof PowersHeyYa) {
+                        heyTicks = user.roundabout$getCurrentStandVanishTicks();
+                    }else if (user.roundabout$getPreviousStandPowers() instanceof PowersHeyYa) {
+                        heyTicks = user.roundabout$getPreviousStandVanishTicks();
+                    }
+
                     boolean hasHeyYaOut = (PowerTypes.hasStandActive(livent) && user.roundabout$getStandPowers() instanceof PowersHeyYa);
 
 
@@ -48,7 +54,12 @@ public class HeyYaLayer<T extends LivingEntity, A extends HumanoidModel<T>> exte
                         if (user.roundabout$getLastStandSkin() != skin){
                             user.roundabout$setLastStandSkin(skin);
                             heyTicks = 0;
-                            user.roundabout$setHeyYaVanishTicks(0);
+
+                            if (user.roundabout$getStandPowers() instanceof PowersHeyYa) {
+                                user.roundabout$setCurrentStandVanishTicks(0);
+                            }else {
+                                user.roundabout$setPreviousStandVanishTicks(0);
+                            }
                         }
 
                         float heyFull = 0;
