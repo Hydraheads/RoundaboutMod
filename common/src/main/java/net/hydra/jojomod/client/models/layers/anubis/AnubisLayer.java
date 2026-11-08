@@ -122,19 +122,21 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
 
 
             }
+            byte idle = MainUtil.getWornStandIdleSafe(SU, PowersAnubis.class);
+
             // unsummoned, sheathed anubis
-            if (SU.roundabout$getStandPowers() instanceof PowersAnubis && !PowerTypes.hasStandActive(entity) && SU.roundabout$getIdlePos() != 3 ) {
+            if (SU.roundabout$getStandPowers() instanceof PowersAnubis && !PowerTypes.hasStandActive(entity) && idle != 3 ) {
                 ClientUtil.pushPoseAndCooperate(poseStack, 60);
 
                 getParentModel().body.translateAndRotate(poseStack);
 
-                if (SU.roundabout$getIdlePos() == 2) {
+                if (idle == 2) {
                     poseStack.translate(0.2,0.3,0.22);
                     poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,0,1,45),0.2F,0.2F,0.3F);
                     renderSheathedAnubis(poseStack, bufferSource, packedLight, entity, partialTicks, 0.8F);
                 } else {
                     poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0, 1, 0, 90), 0, 0, 0);
-                    if (SU.roundabout$getIdlePos() == 1) {
+                    if (idle == 1) {
                         poseStack.translate(0.18, 0.7, -0.21);
                     } else {
                         poseStack.translate(0.18, 0.7, 0.32);
