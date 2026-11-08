@@ -1913,7 +1913,8 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             } else {
                 attacked.hurt(ModDamageTypes.of(level(), DamageTypes.MOB_ATTACK, this.getUser()), damage + 1);
             }
-            attacked.hurt(ModDamageTypes.of(level(), ModDamageTypes.STAND, this.getUser()), damage + 1);
+            attacked.invulnerableTime = 0;
+            attacked.hurt(ModDamageTypes.of(level(), ModDamageTypes.STAND, this.getUser()), 2);
             if (item.getItem() instanceof GlaiveItem) {
                 MainUtil.makeBleed(attacked, 0, 300, this.getUser());
             }
