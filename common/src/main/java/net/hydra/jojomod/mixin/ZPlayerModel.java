@@ -405,12 +405,12 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                     this.roundabout$animate(SU.roundabout$getWornStandAnimation(),anim,$$3,1F);
 
                     if (PT.isShooting(HumanoidArm.RIGHT)) {
-                        this.rightArm.yRot = -0.1F + this.head.yRot;
-                        this.rightArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
+                        this.rightArm.yRot += -0.1F + this.head.yRot;
+                        this.rightArm.xRot += (float) (-Math.PI / 2) + this.head.xRot;
                     }
                     if (PT.isShooting(HumanoidArm.LEFT)) {
-                        this.leftArm.yRot = 0.1F + this.head.yRot;
-                        this.leftArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
+                        this.leftArm.yRot += 0.1F + this.head.yRot;
+                        this.leftArm.xRot += (float) (-Math.PI / 2) + this.head.xRot;
                     }
 
                 } else {
