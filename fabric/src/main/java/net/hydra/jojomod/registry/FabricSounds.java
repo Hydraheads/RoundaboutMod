@@ -848,6 +848,11 @@ public class FabricSounds {
         addSound(ModSounds.PURPLE_HAZE_STRANGLE_RUN_ID,ModSounds.PURPLE_HAZE_STRANGLE_RUN_EVENT);
         addSound(ModSounds.PURPLE_HAZE_STRANGLE_GRAB_ID,ModSounds.PURPLE_HAZE_STRANGLE_GRAB_EVENT);
         addSound(ModSounds.PURPLE_HAZE_SWITCH_POD_ID,ModSounds.PURPLE_HAZE_SWITCH_POD_EVENT);
+        addSound(ModSounds.PURPLE_HAZE_KICK_ID,ModSounds.PURPLE_HAZE_KICK_EVENT);
+        addSound(ModSounds.PURPLE_HAZE_PHASE_1_ID,ModSounds.PURPLE_HAZE_PHASE_1_EVENT);
+        addSound(ModSounds.PURPLE_HAZE_PHASE_2_ID,ModSounds.PURPLE_HAZE_PHASE_2_EVENT);
+        addSound(ModSounds.PURPLE_HAZE_PHASE_3_ID,ModSounds.PURPLE_HAZE_PHASE_3_EVENT);
+        addSound(ModSounds.PURPLE_HAZE_SPIT_ID,ModSounds.PURPLE_HAZE_SPIT_EVENT);
 
         addSound(ModSounds.POLNAREFF_SC_SUMMON_1_ID,ModSounds.POLNAREFF_SC_SUMMON_1_EVENT);
         addSound(ModSounds.POLNAREFF_SC_SUMMON_2_ID,ModSounds.POLNAREFF_SC_SUMMON_2_EVENT);
@@ -878,6 +883,8 @@ public class FabricSounds {
         addSound(ModSounds.SILVER_CHARIOT_SELF_GRAB_ID, ModSounds.SILVER_CHARIOT_SELF_GRAB_EVENT);
         addSound(ModSounds.SILVER_CHARIOT_SELF_THROW_ID, ModSounds.SILVER_CHARIOT_SELF_THROW_EVENT);
         addSound(ModSounds.SILVER_CHARIOT_RAPIER_SPIN_ID, ModSounds.SILVER_CHARIOT_RAPIER_SPIN_EVENT);
+        addSound(ModSounds.SILVER_CHARIOT_VAULT_ID, ModSounds.SILVER_CHARIOT_VAULT_EVENT);
+        addSound(ModSounds.SILVER_CHARIOT_REBOUND_ID, ModSounds.SILVER_CHARIOT_REBOUND_EVENT);
 
         addSound(ModSounds.EMPEROR_SUMMON_ID,ModSounds.EMPEROR_SUMMON_EVENT);
         addSound(ModSounds.EMPEROR_IMPACT_ID,ModSounds.EMPEROR_IMPACT_EVENT);

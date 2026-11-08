@@ -777,6 +777,7 @@
   "entity.roundabout.ge_fox": "Fox",
   "entity.roundabout.ge_snake": "Snake",
   "entity.roundabout.ge_piranha": "Piranha",
+  "entity.roundabout.ge_butterfly": "Butterfly",
 
   "entity.roundabout.sheer_heart_attack": "Sheer Heart Attack",
   "entity.roundabout.totem_of_doom": "Totem Of Doom",
@@ -1522,6 +1523,12 @@
   "sounds.roundabout.ph_strangle_grab": "Strangle grab",
   "sounds.roundabout.ph_type_switch": "Distortion switch",
   "sounds.roundabout.ph_pod_launch": "Pod launch",
+  "sounds.roundabout.ph_kick": "Kicked",
+  "sounds.roundabout.ph_phase_1": "Distortion Smoke Spreads",
+  "sounds.roundabout.ph_phase_2": "Distortion Haze Expands",
+  "sounds.roundabout.ph_phase_3": "Distortion Haze Expands",
+  "sounds.roundabout.ph_spit": "Virus Spit",
+
 
   "sounds.roundabout.bullet_ricochet":  "Bullet ricocheted",
 
@@ -1980,6 +1987,8 @@
   "sounds.roundabout.silver_chariot_self_grab": "Self grab",
   "sounds.roundabout.silver_chariot_self_throw": "Self throw",
   "sounds.roundabout.silver_chariot_rapier_spin": "Rapier spin",
+  "sounds.roundabout.silver_chariot_vault": "Vault",
+  "sounds.roundabout.silver_chariot_rebound": "Rebound",
 
   "sounds.roundabout.blood_suck":  "Blood",
   "sounds.roundabout.blood_suck_crit":  "Blood",
@@ -3725,7 +3734,7 @@
 
   "roundabout.gold_experience_animal.none": "Lifeform Selection",
   "roundabout.gold_experience_animal.butterfly": "Butterfly",
-  "roundabout.gold_experience_animal.butterfly.desc": "placeholder, rework these after finishing the mobs cuz the doc is kinda vague.",
+  "roundabout.gold_experience_animal.butterfly.desc": "Flies to where your curser is pointed at and stops once it hits something.",
   "roundabout.gold_experience_animal.bee": "Bee",
   "roundabout.gold_experience_animal.bee.desc": "Flies to the last target that you hit, or who hit you. Reverts back into an item upon contact.",
   "roundabout.gold_experience_animal.bat": "Bat",
@@ -3733,7 +3742,7 @@
   "roundabout.gold_experience_animal.fish": "Fish",
   "roundabout.gold_experience_animal.fish.desc": "Swims in a straight line from where it spawned. You can interact with the fish to have it carry you.",
   "roundabout.gold_experience_animal.pirahna": "Pirahna",
-  "roundabout.gold_experience_animal.pirahna.desc": "placeholder, rework these after finishing the mobs cuz the doc is kinda vague.",
+  "roundabout.gold_experience_animal.pirahna.desc": "Rushes to the last enemy you hit, or who hit you, and bites them, inflicting bleed.",
   "roundabout.gold_experience_animal.snake": "Snake",
   "roundabout.gold_experience_animal.snake.desc": "Rushes to the last enemy you hit, or who hit you, and bites them, inflicting poison.",
   "roundabout.gold_experience_animal.frog": "Frog",

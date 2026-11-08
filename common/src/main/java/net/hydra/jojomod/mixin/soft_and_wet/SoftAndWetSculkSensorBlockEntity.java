@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+@SuppressWarnings("public-target")
 @Mixin(targets = "net/minecraft/world/level/block/entity/SculkSensorBlockEntity$VibrationUser")
 public class SoftAndWetSculkSensorBlockEntity {
     /**This mixin is in relation to plundering sound.

@@ -215,6 +215,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
             case SKILL_2_NORMAL -> {
                 tryMakeAnimalClient();
             }
+            // item throw
+            case SKILL_2_CROUCH -> {
+                itemGrabClient();
+            }
             // dash or vine climb
             case SKILL_3_NORMAL -> {
                 tryToDashClient();
@@ -324,25 +328,41 @@ public class PowersGoldExperience extends BlockGrabPreset {
         }
     }
 
-    // 1-2 sneak attack punch start
-
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (!consumeClickInput) {
-                if (keyIsDown) {
-                    if (!isHoldingSneak()) {
-                        super.buttonInputAttack(keyIsDown, options);
+            if (keyIsDown) {
+                if (!isHoldingSneak()) {
+                    super.buttonInputAttack(keyIsDown, options);
+                } else {
+                    if (this.canAttack()) {
+                        this.tryPower(PowerIndex.SNEAK_ATTACK, true);
+                        tryPowerPacket(PowerIndex.SNEAK_ATTACK);
                     } else {
-                        if (this.canAttack()) {
-                            this.tryPower(PowerIndex.SNEAK_ATTACK, true);
-                            tryPowerPacket(PowerIndex.SNEAK_ATTACK);
-                        } else {
-                            super.buttonInputAttack(keyIsDown, options);
-                        }
+                        super.buttonInputAttack(keyIsDown, options);
                     }
                 }
+            }
+        }
+        else {
+            if (!keyIsDown) {
+                consumeClickInput = false;
+            }
         }
     }
+
+    // item throw start
+
+    public void itemGrabClient(){
+        // TODO: level lock here
+        //if (canExecuteMoveWithLevel(getItemThrowLevel())) {
+            super.itemGrabClient();
+        //}
+    }
+
+    // item throw end
+
+    // 1-2 sneak attack punch start
 
     // god i hate doing attacks
     private boolean executeDualPunch() {
@@ -500,6 +520,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
             else if (this.animalType == AnimalTypes.PIRAHNA.id) {
                 typeToSpawn = ModEntities.GE_PIRANHA;
             }
+            else if (this.animalType == AnimalTypes.BUTTERFLY.id) {
+                typeToSpawn = ModEntities.GE_BUTTERFLY;
+            }
 
             if (typeToSpawn != null) {
                 return spawnLifeform(typeToSpawn);
@@ -521,6 +544,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 consumedItem.setCount(1);
                 lifeform.setSourceItem(consumedItem);
                 this.self.getMainHandItem().shrink(1);
+            }
+
+            if (livingEntity instanceof Mob mob && this.self.level() instanceof ServerLevel serverLevel) {
+                mob.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(mob.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
             }
 
             this.self.level().addFreshEntity(livingEntity);

@@ -4277,6 +4277,37 @@
       "roundabout:ph_type_switch"
     ]
   },
+  "ph_kick": {
+    "subtitle": "sounds.roundabout.ph_kick",
+    "sounds": [
+      "roundabout:ph_kick"
+    ]
+  },
+  "ph_phase_1": {
+    "subtitle": "sounds.roundabout.ph_phase_1",
+    "sounds": [
+      "roundabout:ph_phase_1"
+    ]
+  },
+  "ph_phase_2": {
+    "subtitle": "sounds.roundabout.ph_phase_2",
+    "sounds": [
+      "roundabout:ph_phase_2"
+    ]
+  },
+  "ph_phase_3": {
+    "subtitle": "sounds.roundabout.ph_phase_3",
+    "sounds": [
+      "roundabout:ph_phase_3"
+    ]
+  },
+  "ph_spit": {
+    "subtitle": "sounds.roundabout.ph_spit",
+    "sounds": [
+      "roundabout:ph_spit"
+    ]
+  },
+
   "planet_waves_summon": {
     "subtitle": "sounds.roundabout.planet_waves_summon",
     "sounds": [
@@ -4927,6 +4958,18 @@
     "subtitle": "sounds.roundabout.silver_chariot_rapier_spin",
     "sounds": [
       "roundabout:silver_chariot_rapier_spin"
+    ]
+  },
+  "silver_chariot_vault": {
+    "subtitle": "sounds.roundabout.silver_chariot_vault",
+    "sounds": [
+      "roundabout:silver_chariot_vault"
+    ]
+  },
+  "silver_chariot_rebound": {
+    "subtitle": "sounds.roundabout.silver_chariot_rebound",
+    "sounds": [
+      "roundabout:silver_chariot_rebound"
     ]
   },
   "bc_parachute_open": {

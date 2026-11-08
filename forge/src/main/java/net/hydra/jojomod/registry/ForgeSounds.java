@@ -1321,6 +1321,16 @@ public class ForgeSounds {
                 register(ModSounds.PURPLE_HAZE_STRANGLE_GRAB, ModSounds.PURPLE_HAZE_STRANGLE_GRAB_ID);
     public static final RegistryObject<SoundEvent> PURPLE_HAZE_STRANGLE_RUN =
                 register(ModSounds.PURPLE_HAZE_STRANGLE_RUN, ModSounds.PURPLE_HAZE_STRANGLE_RUN_ID);
+    public static final RegistryObject<SoundEvent> PURPLE_HAZE_KICK =
+            register(ModSounds.PURPLE_HAZE_KICK, ModSounds.PURPLE_HAZE_KICK_ID);
+    public static final RegistryObject<SoundEvent> PURPLE_HAZE_PHASE1 =
+            register(ModSounds.PURPLE_HAZE_PHASE_1, ModSounds.PURPLE_HAZE_PHASE_1_ID);
+    public static final RegistryObject<SoundEvent> PURPLE_HAZE_PHASE2 =
+            register(ModSounds.PURPLE_HAZE_PHASE_2, ModSounds.PURPLE_HAZE_PHASE_2_ID);
+    public static final RegistryObject<SoundEvent> PURPLE_HAZE_PHASE_3 =
+            register(ModSounds.PURPLE_HAZE_PHASE_3, ModSounds.PURPLE_HAZE_PHASE_3_ID);
+    public static final RegistryObject<SoundEvent> PURPLE_HAZE_SPIT =
+            register(ModSounds.PURPLE_HAZE_SPIT, ModSounds.PURPLE_HAZE_SPIT_ID);
 
     public static final RegistryObject<SoundEvent> POLNAREFF_SC_ARMOR_OFF =
                 register(ModSounds.POLNAREFF_SC_ARMOR_OFF, ModSounds.POLNAREFF_SC_ARMOR_OFF_ID);
@@ -1379,6 +1389,10 @@ public class ForgeSounds {
             register(ModSounds.SILVER_CHARIOT_SELF_THROW, ModSounds.SILVER_CHARIOT_SELF_THROW_ID);
     public static final RegistryObject<SoundEvent> SILVER_CHARIOT_RAPIER_SPIN =
             register(ModSounds.SILVER_CHARIOT_RAPIER_SPIN, ModSounds.SILVER_CHARIOT_RAPIER_SPIN_ID);
+    public static final RegistryObject<SoundEvent> SILVER_CHARIOT_VAULT =
+            register(ModSounds.SILVER_CHARIOT_VAULT, ModSounds.SILVER_CHARIOT_VAULT_ID);
+    public static final RegistryObject<SoundEvent> SILVER_CHARIOT_REBOUND =
+            register(ModSounds.SILVER_CHARIOT_REBOUND, ModSounds.SILVER_CHARIOT_REBOUND_ID);
 
     public static final RegistryObject<SoundEvent> EMPEROR_SUMMON =
             register(ModSounds.EMPEROR_SUMMON, ModSounds.EMPEROR_SUMMON_ID);

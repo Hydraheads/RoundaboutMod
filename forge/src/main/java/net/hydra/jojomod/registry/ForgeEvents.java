@@ -168,6 +168,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.GE_FOX.get(), Fox.createAttributes().build());
         event.put(ForgeEntities.GE_SNAKE.get(), Snake.createAttributes().build());
         event.put(ForgeEntities.GE_PIRANHA.get(), Piranha.createAttributes().build());
+        event.put(ForgeEntities.GE_BUTTERFLY.get(), Butterfly.createAttributes().build());
         event.put(ForgeEntities.VILLAGER_MINION.get(), VillagerMinion.createAttributes().build());
         event.put(ForgeEntities.AXOLOTL_MINION.get(), AxolotlMinion.createAttributes().build());
         event.put(ForgeEntities.OCELOT_MINION.get(), OcelotMinion.createAttributes().build());
@@ -467,7 +468,7 @@ public class ForgeEvents {
 
         ModItems.STAND_DISC_JJF = ForgeItems.STAND_DISC_JJF.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_JJF.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_JJF.get());
-        ModItems.MAX_STAND_DISC_JJF = ForgeItems.STAND_DISC_JJF.get();
+        ModItems.MAX_STAND_DISC_JJF = ForgeItems.MAX_STAND_DISC_JJF.get();
 
         ModItems.STAND_DISC_WHITESNAKE = ForgeItems.STAND_DISC_WHITESNAKE.get();
         ((MaxStandDiscItem) ForgeItems.MAX_STAND_DISC_WHITESNAKE.get()).baseDisc =
@@ -997,6 +998,7 @@ public class ForgeEvents {
         ModEntities.GE_FOX = ForgeEntities.GE_FOX.get();
         ModEntities.GE_SNAKE = ForgeEntities.GE_SNAKE.get();
         ModEntities.GE_PIRANHA = ForgeEntities.GE_PIRANHA.get();
+        ModEntities.GE_BUTTERFLY = ForgeEntities.GE_BUTTERFLY.get();
         ModEntities.SILVER_CHARIOT = ForgeEntities.SILVER_CHARIOT.get();
         ModEntities.SILVER_CHARIOT_PHARAOH = ForgeEntities.SILVER_CHARIOT_PHARAOH.get();
         ModEntities.SILVER_CHARIOT_RAPIER = ForgeEntities.SILVER_CHARIOT_RAPIER.get();
