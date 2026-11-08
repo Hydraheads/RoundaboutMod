@@ -112,10 +112,15 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                         /// ps. translate means moving it
                         getParentModel().body.translateAndRotate(poseStack);
 
-
+                        byte idle = (byte)0;
+                        if (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy) {
+                            idle = user.roundabout$getIdlePos();
+                        }else if (user.roundabout$getPreviousStandPowers() instanceof Powers20thCenturyBoy) {
+                            idle = user.roundabout$getPreviousPose();
+                        }
 
                         /// for unlatch...
-                        if (user.roundabout$getIdlePos() == 1) {
+                        if (idle == 1) {
                             poseStack.translate(0.0, -0.2, 0.3);
                             ModStrayModels.CENTURY_BOY.renderAll(entity, partialTicks, poseStack, bufferSource,
                                     packedLight, r, g, b, heyfull, skin);
@@ -196,7 +201,7 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             if (entity instanceof  IPlayerEntity IPL && IPL.roundabout$getMaskSlot().getItem() instanceof
                                     MaskItem MI) {
                                 if (MI.visageData.generateVisageData(entity).rendersBreast() || MI.visageData.generateVisageData(entity).rendersPlayerBreastPart() ||
-                                        (MI.visageData.generateVisageData(entity).rendersSmallBreast() && user.roundabout$getIdlePos() != 0)){
+                                        (MI.visageData.generateVisageData(entity).rendersSmallBreast() && idle != 0)){
                                     ClientUtil.pushPoseAndCooperate(poseStack, 26);
                                 if (entity.isBaby()) {
                                     poseStack.scale(0.6F, 0.6F, 0.6F);

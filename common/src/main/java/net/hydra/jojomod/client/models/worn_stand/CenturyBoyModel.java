@@ -257,10 +257,18 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 
 		StandUser user = ((StandUser) LE);
 		user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
-		if (user.roundabout$getIdlePos() == 2){
+
+		byte idle = (byte)0;
+		if (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy) {
+			idle = user.roundabout$getIdlePos();
+		}else if (user.roundabout$getPreviousStandPowers() instanceof Powers20thCenturyBoy) {
+			idle = user.roundabout$getPreviousPose();
+		}
+
+		if (idle == 2){
 			this.animate(user.roundabout$getWornStandIdleAnimation(), CenturyBoyAnimations.standanim.hat,partialTicks, 1f);
 		}
-		if (user.roundabout$getIdlePos() == 1){
+		if (idle == 1){
 			this.animate(user.roundabout$getWornStandIdleAnimation(), CenturyBoyAnimations.standanim.unlatch,partialTicks, 1f);
 		}
 
