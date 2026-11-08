@@ -21,5 +21,5 @@ public class AccessRenderSystem implements IRenderSystem {
     /**Shadows, ignore
      * -------------------------------------------------------------------------------------------------------------
      * */
-    @Shadow @Final private static Vector3f[] shaderLightDirections;
+    @Shadow(remap = false) @Final private static Vector3f[] shaderLightDirections;
 }
