@@ -1383,7 +1383,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     public void VirusSpit() {
         if (!this.onCooldown(PowerIndex.POWER_1_BONUS)) {
-            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.PLANET_WAVES_METEOR_SHOWER_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.PURPLE_HAZE_SPIT_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
             self.removeEffect(ModEffects.VIRUS_IMMUNITY);
 
             VirusSpitEntity spit = new VirusSpitEntity(
@@ -1716,7 +1716,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
     }
     private static final float SALIMO_RANGE = 3.5F;
-    private static final float SALIMO_KNOCKBACK = 3.2F;      // KQ impale is 1.3 so maybe this is ok idk
+    private static final float SALIMO_KNOCKBACK = 2.5F;      // KQ impale is 1.3 so maybe this is ok idk
     private static final byte IMPALE_CHARGE_NOISE = 105;
     public int salimoTicks = 0;
 
@@ -1790,7 +1790,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
             se = getImpaleMissSound();
         }
         if (!this.self.level().isClientSide()) {
-            playSoundIfPossible(self.level(), null, this.self.blockPosition(), se, SoundSource.PLAYERS, 0.95F, pitch);
+
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                    ModSounds.PURPLE_HAZE_KICK_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
         }
     }
     private void tickFallingHitAnimation() {
@@ -1946,7 +1948,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
 
         playSoundIfPossible(self.level(), null, BlockPos.containing(position),
-                distortionMode ? ModSounds.PURPLE_HAZE_DISTORTION_SMOKE_EVENT : ModSounds.PURPLE_HAZE_SMOKE_EVENT,
+                distortionMode ? ModSounds.PURPLE_HAZE_DISTORTION_SMOKE_EVENT : ModSounds.PURPLE_HAZE_SMOKE_EVENT, //distortionMode ? ModSounds.PURPLE_HAZE_DISTORTION_SMOKE_EVENT : ModSounds.PURPLE_HAZE_SMOKE_EVENT,
                 distortionMode ? SoundSource.NEUTRAL : SoundSource.PLAYERS, 4.0F, 1.0F);
     }
 

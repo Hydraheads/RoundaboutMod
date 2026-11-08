@@ -848,6 +848,11 @@ public class FabricSounds {
         addSound(ModSounds.PURPLE_HAZE_STRANGLE_RUN_ID,ModSounds.PURPLE_HAZE_STRANGLE_RUN_EVENT);
         addSound(ModSounds.PURPLE_HAZE_STRANGLE_GRAB_ID,ModSounds.PURPLE_HAZE_STRANGLE_GRAB_EVENT);
         addSound(ModSounds.PURPLE_HAZE_SWITCH_POD_ID,ModSounds.PURPLE_HAZE_SWITCH_POD_EVENT);
+        addSound(ModSounds.PURPLE_HAZE_KICK_ID,ModSounds.PURPLE_HAZE_KICK_EVENT);
+        addSound(ModSounds.PURPLE_HAZE_PHASE_1_ID,ModSounds.PURPLE_HAZE_PHASE_1_EVENT);
+        addSound(ModSounds.PURPLE_HAZE_PHASE_2_ID,ModSounds.PURPLE_HAZE_PHASE_2_EVENT);
+        addSound(ModSounds.PURPLE_HAZE_PHASE_3_ID,ModSounds.PURPLE_HAZE_PHASE_3_EVENT);
+        addSound(ModSounds.PURPLE_HAZE_SPIT_ID,ModSounds.PURPLE_HAZE_SPIT_EVENT);
 
         addSound(ModSounds.POLNAREFF_SC_SUMMON_1_ID,ModSounds.POLNAREFF_SC_SUMMON_1_EVENT);
         addSound(ModSounds.POLNAREFF_SC_SUMMON_2_ID,ModSounds.POLNAREFF_SC_SUMMON_2_EVENT);
