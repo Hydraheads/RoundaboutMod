@@ -218,7 +218,8 @@ public class SilverChariotEntity extends FollowingStandEntity {
     @Override
     public boolean standHasGravity() {
         // return isSelfCarryModeActive() && noGravityCarryTicks > maxNoGravityCarryTicks;
-        return entityData.get(REMOTE_MODE) == REMOTE_MODE_SELF_CARRY;
+        // return entityData.get(REMOTE_MODE) == REMOTE_MODE_SELF_CARRY;
+        return false;
     }
 
     /*
@@ -227,6 +228,11 @@ public class SilverChariotEntity extends FollowingStandEntity {
         return !isSelfCarryModeActive() || noGravityCarryTicks < maxNoGravityCarryTicks;
     }
     */
+
+    @Override
+    public boolean isNoGravity() {
+        return true;
+    }
 
     private boolean controlDimensionsActive;
 
