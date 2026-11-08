@@ -177,7 +177,7 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 
 	public void render(Entity context, PoseStack poseStack, MultiBufferSource bufferSource, int light) {
 		VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, (byte)0)));
-		root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
+		root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
 	}
 
 	public void renderBody(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
