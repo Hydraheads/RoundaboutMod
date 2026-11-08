@@ -49,7 +49,6 @@ public class MoldLeftArmLayer<T extends LivingEntity, A extends HumanoidModel<T>
             }
             if (!entity.isInvisible()) {
                 if (MoldedRightArm) {
-                    Roundabout.LOGGER.info("rendering");
 
                     poseStack.pushPose();
                     getParentModel().body.translateAndRotate(poseStack);
