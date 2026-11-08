@@ -19,6 +19,7 @@ import net.hydra.jojomod.entity.KingCrimsonProjectionEntity;
 import net.hydra.jojomod.entity.ParallelChestEntity;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.corpses.FallenPhantom;
+import net.hydra.jojomod.entity.gold_experience.GELifeform;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
@@ -2810,7 +2811,7 @@ public class MainUtil {
     }
 
     public static boolean getReducedDamage(Entity entity) {
-        return (entity instanceof Player || entity instanceof StandEntity ||
+        return (entity instanceof Player || entity instanceof StandEntity || entity instanceof GELifeform ||
                 ((entity instanceof LivingEntity LE && !((StandUser) LE).roundabout$getStandDisc().isEmpty()) &&
                         ClientNetworking
                                 .getAppropriateConfig().generalStandUserMobSettings.standUserMobsTakePlayerDamageMultipliers));
