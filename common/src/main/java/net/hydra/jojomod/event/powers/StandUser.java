@@ -135,8 +135,6 @@ public interface StandUser {
     void roundabout$setArmVanishTicks(int set);
     int roundabout$getRattShoulderVanishTicks();
     void roundabout$setRattShoulderVanishTicks(int set);
-    int roundabout$getAnubisVanishTicks();
-    void roundabout$setAnubisVanishTicks(int set);
     int roundabout$getWhiteAlbumVanishTicks();
     void roundabout$setWhiteAlbumVanishTicks(int set);
     int roundabout$getOasisVanishTicks();

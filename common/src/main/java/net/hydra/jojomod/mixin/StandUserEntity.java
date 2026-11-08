@@ -6246,11 +6246,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             roundabout$setOasisVanishTicks(roundabout$getOasisVanishTicks() - 1);
         }
 
+        /*
         if (roundabout$getStandPowers() instanceof PowersWhiteAlbum && active) {
             roundabout$setWhiteAlbumVanishTicks(roundabout$getWhiteAlbumVanishTicks() + 1);
         } else {
             roundabout$setWhiteAlbumVanishTicks(roundabout$getWhiteAlbumVanishTicks() - 1);
-        }
+        }*/
 
         if (roundabout$hasDiverArms()) {
             roundabout$setDiverDownVanishTicks(roundabout$getDiverDownVanishTicks() + 1);
