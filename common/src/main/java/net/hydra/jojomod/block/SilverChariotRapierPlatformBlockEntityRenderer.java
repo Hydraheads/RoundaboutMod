@@ -45,7 +45,10 @@ public class SilverChariotRapierPlatformBlockEntityRenderer implements BlockEnti
                 }
             }
             poseStack.scale(1.0F, -1.0F, -1.0F);
-            VertexConsumer vertexConsumer = multiBufferSource.getBuffer(RenderType.entityCutoutNoCull(SilverChariotBaseRenderer.getSkin(silverChariotRapierPlatformBlockEntity.standSkin)));
+            // VertexConsumer vertexConsumer = multiBufferSource.getBuffer(RenderType.entityCutoutNoCull(SilverChariotBaseRenderer.getSkin(silverChariotRapierPlatformBlockEntity.standSkin)));
+            VertexConsumer vertexConsumer = multiBufferSource.getBuffer(RenderType.entityTranslucent(SilverChariotBaseRenderer.getSkin(silverChariotRapierPlatformBlockEntity.standSkin)));
+
+
             ClientUtil.popPoseAndCooperate(poseStack,6);
         }
     }

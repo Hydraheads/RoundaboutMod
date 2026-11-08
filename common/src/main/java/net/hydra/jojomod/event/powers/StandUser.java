@@ -141,6 +141,8 @@ public interface StandUser {
     void roundabout$setOasisVanishTicks(int set);
     int roundabout$getDiverDownVanishTicks();
     void roundabout$setDiverDownVanishTicks(int set);
+    int roundabout$getAnubisVanishTicks();
+    void roundabout$setAnubisVanishTicks(int set);
 
     /// Worn stand vanishticks system
     int roundabout$getCurrentStandVanishTicks();

@@ -142,6 +142,7 @@
   "item.roundabout.piranha_bucket": "Bucket of Piranha",
   "item.roundabout.piranha": "Raw Piranha",
   "item.roundabout.cooked_piranha": "Cooked Piranha",
+  "item.roundabout.zombie_horse_thread": "Zombie Horse's Thread",
 
   "item.roundabout.memory_pawn": "Memory Pawn",
   "item.roundabout.memory_rook": "Memory Rook",
@@ -606,6 +607,7 @@
 
   "effect.roundabout.fortification": "Fortification",
   "effect.roundabout.bleed": "Bleed",
+  "effect.roundabout.stitched": "Stitched",
   "effect.roundabout.doom_immunity": "Doom Immunity",
   "effect.roundabout.banish": "Banish",
   "effect.roundabout.doom": "Doomed",
@@ -648,6 +650,7 @@
   "item.roundabout.zombie_minion_spawn_egg": "Zombie Minion Spawn Egg",
   "item.roundabout.snake_spawn_egg": "Snake Spawn Egg",
   "item.roundabout.piranha_spawn_egg": "Piranha Spawn Egg",
+  "item.roundabout.butterfly_spawn_egg": "Butterfly Spawn Egg",
 
   "item.roundabout.painting_van_gough": "Van Gogh's Self-Portrait",
   "item.roundabout.painting_mona_lisa": "Mona Lisa",
@@ -766,11 +769,15 @@
   "entity.roundabout.zombiefish": "Zombiefish",
   "entity.roundabout.snake": "Snake",
   "entity.roundabout.piranha": "Piranha",
+  "entity.roundabout.butterfly": "Butterfly",
   "entity.roundabout.ge_bat": "Bat",
   "entity.roundabout.ge_frog": "Frog",
   "entity.roundabout.ge_bee": "Bee",
   "entity.roundabout.ge_fish": "Fish",
   "entity.roundabout.ge_fox": "Fox",
+  "entity.roundabout.ge_snake": "Snake",
+  "entity.roundabout.ge_piranha": "Piranha",
+  "entity.roundabout.ge_butterfly": "Butterfly",
 
   "entity.roundabout.sheer_heart_attack": "Sheer Heart Attack",
   "entity.roundabout.totem_of_doom": "Totem Of Doom",
@@ -1023,6 +1030,15 @@
   "sounds.roundabout.hologram_end": "Blip",
   "sounds.roundabout.king_hologram": "Projection",
 
+
+  "sounds.roundabout.4c_menu_block_end": "Menu",
+  "sounds.roundabout.4c_menu_block_start": "Menu",
+  "sounds.roundabout.4c_menu_clone_select": "Menu",
+  "sounds.roundabout.4c_menu_clone_deselect": "Menu",
+  "sounds.roundabout.4c_menu_mass_select": "Menu",
+  "sounds.roundabout.4c_menu_clone_task": "Menu",
+  "sounds.roundabout.4c_menu_toggle_on": "Menu",
+
   "sounds.roundabout.bc_summon": "Bad Company summon",
   "sounds.roundabout.bc_troop_summon": "Bad Company troop summoning",
   "sounds.roundabout.bc_bundle_summon": "Bad Company group summoning",
@@ -1131,6 +1147,8 @@
   "sounds.roundabout.ctr_rain_step_2": "Rain stabilized",
   "sounds.roundabout.ctr_rain_step_3": "Rain stabilized",
   "sounds.roundabout.ctr_stabilizing_rain": "Rain stabilizing",
+
+  "sounds.roundabout.zombiehorse_stitching": "Stitching...",
 
   "death.attack.stand": "%1$s died to a mysterious power whilst fighting %2$s",
   "death.attack.stand.item": "%1$s died to a mysterious power whilst fighting %2$s",
@@ -1282,6 +1300,9 @@
   "death.attack.arn_throw": "%1$s died",
   "death.attack.arm_throw_player": "%1$s was slain by %2$s",
   "death.attack.sharp_raindrop": "%1$s was sliced by the rain",
+  "death.attack.air_pressure": "%1$s ran out of air",
+  "death.attack.air_pressure.player": "%1$s ran out of air",
+
 
   "item.glaive.charge_power": "Charge Attack",
 
@@ -1502,6 +1523,12 @@
   "sounds.roundabout.ph_strangle_grab": "Strangle grab",
   "sounds.roundabout.ph_type_switch": "Distortion switch",
   "sounds.roundabout.ph_pod_launch": "Pod launch",
+  "sounds.roundabout.ph_kick": "Kicked",
+  "sounds.roundabout.ph_phase_1": "Distortion Smoke Spreads",
+  "sounds.roundabout.ph_phase_2": "Distortion Haze Expands",
+  "sounds.roundabout.ph_phase_3": "Distortion Haze Expands",
+  "sounds.roundabout.ph_spit": "Virus Spit",
+
 
   "sounds.roundabout.bullet_ricochet":  "Bullet ricocheted",
 
@@ -1584,6 +1611,10 @@
   "sounds.roundabout.snake_attack": "Snake Bites",
   "sounds.roundabout.snake_hurt": "Snake Hisses",
   "sounds.roundabout.snake_die": "Snake Dies",
+  "sounds.roundabout.snake_step": "Snake Slithers",
+  "sounds.roundabout.piranha_hurt": "Piranha Hurt",
+  "sounds.roundabout.piranha_dies": "Piranha Dies",
+  "sounds.roundabout.piranha_flop": "Piranha Flops",
   "sounds.roundabout.the_world_assault":  "Drifting force",
   "sounds.roundabout.the_world_wry":  "WRY!",
   "sounds.roundabout.twau_timestop":  "Time was Stopped!",
@@ -1956,6 +1987,8 @@
   "sounds.roundabout.silver_chariot_self_grab": "Self grab",
   "sounds.roundabout.silver_chariot_self_throw": "Self throw",
   "sounds.roundabout.silver_chariot_rapier_spin": "Rapier spin",
+  "sounds.roundabout.silver_chariot_vault": "Vault",
+  "sounds.roundabout.silver_chariot_rebound": "Rebound",
 
   "sounds.roundabout.blood_suck":  "Blood",
   "sounds.roundabout.blood_suck_crit":  "Blood",
@@ -2872,7 +2905,7 @@
   "ability.purple_haze.punch":"Punch",
   "ability.purple_haze.punch.desc": "Throws a punch directly in front of you. Hold it down for a 3 hit-combo! Be careful, if the last hit of a combo connects a capsule will break.",
   "ability.purple_haze.capsule_throw":"Capsule Throw",
-  "ability.purple_haze.capsule_throw.desc": "Launch a capsule on a short distance, it breaks on impact. When the capsule breaks, it takes a very short moment before spreading the virus into the air, infecting everything in  a short range around where the capsule broke.",
+  "ability.purple_haze.capsule_throw.desc": "Launch a capsule on a short distance, it breaks on impact. When the capsule breaks, it takes a very short moment before spreading the virus into the air, infecting everything in a short range around where the capsule broke.",
   "ability.purple_haze.punch_barrage": "Barrage of Punches",
   "ability.purple_haze.punch_barrage.desc": "Trap your enemy in a flurry of blows, breaking a capsule and sending them flying at the end.",
   "ability.purple_haze.kick_barrage":"Barrage of Kicks",
@@ -2880,19 +2913,19 @@
   "ability.purple_haze.daily_capsule_recharge": "Capsule Recharge",
   "ability.purple_haze.daily_capsule_recharge.desc": "At the start of each day, all your capsules are reloaded, putting you back to the maximum amount.",
   "ability.purple_haze.distortion": "Distortion",
-  "ability.purple_haze.distortion.desc": "Bite a pod, destroying it in the process but granting you immunity to the virus for a small amount of time. Once the immunity ends, any virus infection will be cleared.",
+  "ability.purple_haze.distortion.desc": "Bite a pod, hurting you and and destroying the pod while giving you immunity to the virus for a small amount of time. Once the immunity ends, any virus infection will be cleared.",
   "ability.purple_haze.virus_spit": "Virus Spit",
-  "ability.purple_haze.virus_spit.desc": "While under the effect of the virus immunity, spit forward the contents of the bitten pod to inflict the virus to the enemy. However this will remove the effect of the immunity without clearing infections.",
+  "ability.purple_haze.virus_spit.desc": "While under the effect of the virus immunity, spit forward the contents of the bitten pod to inflict the distortion virus to the enemy. However this will remove the effect of the immunity without clearing infections.",
   "ability.purple_haze.haze_switch": "Haze Switch",
   "ability.purple_haze.haze_switch.desc": "Change between the 2 modes of virus: Purple and Distortion.",
   "ability.purple_haze.purple_smoke": "Purple Haze",
   "ability.purple_haze.purple_smoke.desc": "A ruthless virus unleashed from Purple Haze's capsules that destroys anything living including you. Haze cloud duration is drastically reduced by light exposure being sterilized in no time when exposed to direct sunlight",
   "ability.purple_haze.distortion_smoke": "Distortion Haze",
-  "ability.purple_haze.distortion_smoke.desc": "Virus begins to consume itself dealing less damage overall to opponents while dealing considerably less to you. As a result of the virus eating everything including itself it will also eat through the duration of other status effects.",
+  "ability.purple_haze.distortion_smoke.desc": "Virus begins to consume itself dealing more damage as time goes on. It deals less damage overall to opponents while dealing considerably less to you. As a result of the virus eating everything including itself it will also eat through the duration of other status effects.",
   "ability.purple_haze.strangle": "Strangle",
   "ability.purple_haze.strangle.desc": "Purple Haze charges up for a brief period before launching forward, choking any enemy it hits and holding them in place for a few seconds.",
   "ability.purple_haze.falling_hit": "Falling Attack",
-  "ability.purple_haze.falling_hit.desc": "While falling Purple Haze prepares a punch, which on landing does a damaging shockwave and breaks a capsule. Also acts a way to reduce fall damage",
+  "ability.purple_haze.falling_hit.desc": "While falling Purple Haze prepares a punch, which on landing does a damaging shockwave and breaks a capsule. Also acts as a way to reduce fall damage",
   "ability.purple_haze.capsule_count": "Capsule Count",
   "ability.purple_haze.capsule_count.desc": "Displays the number of remaining capsule when active, so you can more easily track it. You can have a maximum of 6 capsules at a time",
   "ability.purple_haze.capsule_advanced_recharge": "Capsule Advanced Recharge",
@@ -3363,6 +3396,8 @@
   "skins.roundabout.killer_queen.minesweeper": "Minesweeper",
   "skins.roundabout.killer_queen.samurai": "Samurai",
   "skins.roundabout.killer_queen.spirit": "Spirit",
+  "skins.roundabout.killer_queen.beta": "Beta",
+  "skins.roundabout.killer_queen.weakness": "Weakness",
 
   "skins.roundabout.diver_down.base": "Part 6",
   "skins.roundabout.diver_down.betadiver": "Beta",
@@ -3699,7 +3734,7 @@
 
   "roundabout.gold_experience_animal.none": "Lifeform Selection",
   "roundabout.gold_experience_animal.butterfly": "Butterfly",
-  "roundabout.gold_experience_animal.butterfly.desc": "placeholder, rework these after finishing the mobs cuz the doc is kinda vague.",
+  "roundabout.gold_experience_animal.butterfly.desc": "Flies to where your curser is pointed at and stops once it hits something.",
   "roundabout.gold_experience_animal.bee": "Bee",
   "roundabout.gold_experience_animal.bee.desc": "Flies to the last target that you hit, or who hit you. Reverts back into an item upon contact.",
   "roundabout.gold_experience_animal.bat": "Bat",
@@ -3707,9 +3742,9 @@
   "roundabout.gold_experience_animal.fish": "Fish",
   "roundabout.gold_experience_animal.fish.desc": "Swims in a straight line from where it spawned. You can interact with the fish to have it carry you.",
   "roundabout.gold_experience_animal.pirahna": "Pirahna",
-  "roundabout.gold_experience_animal.pirahna.desc": "placeholder, rework these after finishing the mobs cuz the doc is kinda vague.",
+  "roundabout.gold_experience_animal.pirahna.desc": "Rushes to the last enemy you hit, or who hit you, and bites them, inflicting bleed.",
   "roundabout.gold_experience_animal.snake": "Snake",
-  "roundabout.gold_experience_animal.snake.desc": "placeholder, rework these after finishing the mobs cuz the doc is kinda vague.",
+  "roundabout.gold_experience_animal.snake.desc": "Rushes to the last enemy you hit, or who hit you, and bites them, inflicting poison.",
   "roundabout.gold_experience_animal.frog": "Frog",
   "roundabout.gold_experience_animal.frog.desc": "Hops around erratically.",
   "roundabout.gold_experience_animal.fox": "Fox",
@@ -4423,6 +4458,10 @@
   "config.roundabout.HazeMelts.desc": "If the Purple Haze adds an effect of Melting and the Distortion Haze add an effect of Melting 2.",
   "config.roundabout.CanonDistortion.name": "Canon Distortion",
   "config.roundabout.CanonDistortion.desc": "If the distortion becomes a far stronger virus.",
+  "config.roundabout.SmokeRadius.name": "Smoke Radius",
+  "config.roundabout.SmokeRadius.desc": "The radius of the smoke cloud. (Big numbers will impact performance)",
+  "config.roundabout.SmokeExpansionTicks.name": "Smoke Expansion Ticks",
+  "config.roundabout.SmokeExpansionTicks.desc": "The amount of ticks it takes until the smoke reaches its full size.",
 
   "config.roundabout.enableSilverChariot.name": "Enable Silver Chariot",
   "config.roundabout.enableSilverChariot.desc": "Enable Silver Chariot",
@@ -4440,6 +4479,8 @@
   "config.roundabout.silverChariotRemoteControlRange.desc": "How far you and Silver Chariot can distance until it despawns.",
   "config.roundabout.silverChariotCooldownRapierSpin.name": "Rapier Spin Cooldown",
   "config.roundabout.silverChariotCooldownRapierSpin.desc": "The cooldown of Rapier Spin.",
+  "config.roundabout.silverChariotCooldownRapierSpinDuration.name": "Rapier Spin duration",
+  "config.roundabout.silverChariotCooldownRapierSpinDuration.desc": "The duration of Rapier Spin.",
   "config.roundabout.silverChariotCooldownRapierSlash.name": "Rapier Slash Cooldown",
   "config.roundabout.silverChariotCooldownRapierSlash.desc": "The cooldown of Rapier Slash.",
   "config.roundabout.silverChariotCooldownRapierShot.name": "Rapier Shot Cooldown",
@@ -4472,6 +4513,8 @@
   "config.roundabout.silverChariotShouldRenderAfterimagesWhileUserInFirstPerson.desc": "Toggles if Silver Chariot's user should see afterimages in first person.",
   "config.roundabout.silverChariotArmourShedStandSealTime.name": "Armour Recover Stand Seal Time",
   "config.roundabout.silverChariotArmourShedStandSealTime.desc": "How long Silver Chariot is sealed after desummoning your stand while the stand's armour is off.",
+  "config.roundabout.silverChariotSelfCarryModeMaxHoverCharge.name": "Self carry mode max hover charge",
+  "config.roundabout.silverChariotSelfCarryModeMaxHoverCharge.desc": "Duration of hovering in self carry mode.",
 
   "config.roundabout.enableCatchTheRainbow.name": "Enable Catch The Rainbow",
   "config.roundabout.enableCatchTheRainbow.desc": "Enable Catch The Rainbow",
@@ -4496,6 +4539,9 @@
 
   "config.roundabout.catchTheRainbowFullDodgeCooldown.name": "Full Dodge Cooldown",
   "config.roundabout.catchTheRainbowFullDodgeCooldown.desc": "The cooldown of the \"Come The Dawn\" ability, by default it is 200 ticks (10 seconds)",
+
+  "config.roundabout.catchTheRainbowAlternateRainWalk.name": "Alternate Rain Walk",
+  "config.roundabout.catchTheRainbowAlternateRainWalk.desc": "While Rain Walking, jumping removes the Rain Walk state, but dodging keeps you in the air. (By default it is the opposite)",
 
   "config.roundabout.manhattanTransferMaxRange.name": "Manhattan Transfer Max Range",
   "config.roundabout.manhattanTransferMaxRange.desc": "How far you and Manhattan Transfer can distance until it despawns.",
@@ -5823,5 +5869,42 @@
   "config.roundabout.z.name": "",
   "config.roundabout.z.desc": "",
   "config.roundabout.x.name": "Applies Invis Potion",
-  "config.roundabout.x.desc": "of everything beneath this being translated, it is a lot of work. But if you really"
+  "config.roundabout.x.desc": "of everything beneath this being translated, it is a lot of work. But if you really",
+
+
+  "item.roundabout.jumpin_jack_flash_disc": "Stand Disc",
+  "item.roundabout.jumpin_jack_flash_disc.desc": "Jumpin' Jack Flash",
+  "item.roundabout.max_jumpin_jack_flash_disc": "Stand Disc+",
+  "item.roundabout.max_jumpin_jack_flash_disc.desc": "Jumpin' Jack Flash",
+
+
+  "ability.roundabout.zero_gravity": "Zero Gravity",
+
+  "ability.roundabout.zero_gravity.desc": "Take away your own gravity and float freely.",
+  "ability.roundabout.spit": "Zero Gravity Spit",
+
+  "ability.roundabout.spit.desc": "Spit at an enemy to make them lose their gravity.",
+  "ability.roundabout.load": "Load Ammo",
+
+  "ability.roundabout.load.desc": "Load the item you're holding into your Stand.",
+  "ability.roundabout.unload": "Unload Ammo",
+
+  "ability.roundabout.unload.desc": "Take your loaded ammo back.",
+  "ability.roundabout.launcher": "Launcher",
+
+  "ability.roundabout.launcher.desc": "Charge up and fire your loaded ammo. Hold longer to fire more at once.",
+
+  "setting.roundabout.ammo_text.on": "Ammo Text: ON",
+  "setting.roundabout.ammo_text.off": "Ammo Text: OFF",
+  "setting.roundabout.launcher_text.on": "Launcher Text: ON",
+  "setting.roundabout.launcher_text.off": "Launcher Text: OFF",
+  "hud.jjf.ammo": "AMMO %s",
+  "hud.jjf.no_ammo": "NO AMMO",
+  "hud.jjf.cone": "CONE",
+  "hud.jjf.burst_3": "BURST 3",
+  "hud.jjf.burst_4": "BURST 4",
+  "hud.jjf.burst_5": "BURST 5",
+  "hud.jjf.burst_6": "BURST 6",
+  "hud.roundabout.air_pressure": "AIR PRESSURE %s%%"
+
 }
