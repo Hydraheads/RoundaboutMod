@@ -52,7 +52,7 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
         this.setMaxUpStep(0.0F);
     }
 
-    private static final Ingredient TEMPT_INGREDIENT = Ingredient.of(Items.COD, Items.SALMON, Items.TROPICAL_FISH);
+    private static final Ingredient TEMPT_INGREDIENT = Ingredient.of(Items.COD, Items.SALMON, Items.TROPICAL_FISH, ModItems.PIRANHA);
 
     private static final EntityDataAccessor<Byte> BREED = SynchedEntityData.defineId(StrayCatEntity.class,
             EntityDataSerializers.BYTE);;
