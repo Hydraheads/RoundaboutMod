@@ -1,4 +1,4 @@
-package com.example.jjf.launcher;
+package net.hydra.jojomod.event.powers.jumpingJackFlash;
 
 public interface JJFLauncherAccess {
 

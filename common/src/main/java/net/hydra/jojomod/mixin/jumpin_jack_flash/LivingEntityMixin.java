@@ -1,4 +1,4 @@
-package com.example.jjf.mixin;
+package net.hydra.jojomod.mixin.jumpin_jack_flash;
 
 import net.hydra.jojomod.event.powers.jumpingJackFlash.AirPressureSystem;
 import net.hydra.jojomod.event.powers.jumpingJackFlash.SpreadContactSystem;

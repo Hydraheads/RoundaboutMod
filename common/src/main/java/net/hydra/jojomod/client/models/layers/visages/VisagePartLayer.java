@@ -167,15 +167,21 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
 
 
                 boolean hasWhiteAlbumOut =user.roundabout$getStandPowers() instanceof PowersWhiteAlbum pw && pw.renderHelmet();
-                int whiteAlbumTicks = user.roundabout$getWhiteAlbumVanishTicks();
+                //int whiteAlbumTicks = user.roundabout$getWhiteAlbumVanishTicks();
+                int whiteAlbumTicks = MainUtil.getWornStandVanishticksSafe(user, PowersWhiteAlbum.class);
                 boolean hideExtraPartsWithSuit = false;
                 float heyFull = 0;
                 byte skin = user.roundabout$getStandSkin();
                 if (hasWhiteAlbumOut || whiteAlbumTicks > 0){
-                    if (user.roundabout$getLastStandSkin() != skin){
-                        user.roundabout$setLastStandSkin(skin);
-                        whiteAlbumTicks = 0;
-                        user.roundabout$setWhiteAlbumVanishTicks(0);
+                    if (user.roundabout$getStandPowers() instanceof PowersWhiteAlbum) {
+                        if (user.roundabout$getLastStandSkin() != skin){
+                            user.roundabout$setLastStandSkin(skin);
+                            whiteAlbumTicks = 0;
+                            //user.roundabout$setWhiteAlbumVanishTicks(0);
+                            user.roundabout$setCurrentStandVanishTicks(0);
+                        }
+                    }else {
+                        skin = user.roundabout$getPreviousSkin();
                     }
 
                     float partialTicks2 = partialTicks % 1;

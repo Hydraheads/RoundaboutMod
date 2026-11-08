@@ -135,8 +135,6 @@ public interface StandUser {
     void roundabout$setArmVanishTicks(int set);
     int roundabout$getRattShoulderVanishTicks();
     void roundabout$setRattShoulderVanishTicks(int set);
-    int roundabout$getAnubisVanishTicks();
-    void roundabout$setAnubisVanishTicks(int set);
     int roundabout$getWhiteAlbumVanishTicks();
     void roundabout$setWhiteAlbumVanishTicks(int set);
     int roundabout$getOasisVanishTicks();
@@ -151,6 +149,10 @@ public interface StandUser {
     void roundabout$setPreviousStandVanishTicks(int set);
     StandPowers roundabout$getPreviousStandPowers();
     void roundabout$setPreviousStandPowers(StandPowers SP);
+    void roundabout$setPreviousSkin(byte skin);
+    byte roundabout$getPreviousSkin();
+    void roundabout$setPreviousPose(byte pose);
+    byte roundabout$getPreviousPose();
 
 
     int getJumpImmunityTicks();

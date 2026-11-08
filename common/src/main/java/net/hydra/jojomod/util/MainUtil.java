@@ -4732,6 +4732,41 @@ public class MainUtil {
         return false;
     }
 
+    public static byte getWornStandIdleSafe(StandUser user, Class<? extends StandPowers> SP) {
+        byte idle = (byte)0;
+
+        if (user.roundabout$getStandPowers() != null && user.roundabout$getStandPowers().getClass().equals(SP)) {
+            idle = user.roundabout$getIdlePos();
+        }else {
+            idle = user.roundabout$getPreviousPose();
+        }
+
+        return idle;
+    }
+
+    public static byte getWornStandSkinSafe(StandUser user, Class<? extends StandPowers> SP) {
+        byte idle = (byte)0;
+
+        if (user.roundabout$getStandPowers() != null && user.roundabout$getStandPowers().getClass().equals(SP)) {
+            idle = user.roundabout$getStandSkin();
+        }else if (user.roundabout$getPreviousStandPowers() != null && user.roundabout$getPreviousStandPowers().getClass().equals(SP)) {
+            idle = user.roundabout$getPreviousSkin();
+        }
+
+        return idle;
+    }
+    public static int getWornStandVanishticksSafe(StandUser user, Class<? extends StandPowers> SP) {
+        int heyticks = 0;
+
+        if (user.roundabout$getStandPowers() != null && user.roundabout$getStandPowers().getClass().equals(SP)) {
+            heyticks = user.roundabout$getCurrentStandVanishTicks();
+        }else if (user.roundabout$getPreviousStandPowers() != null && user.roundabout$getPreviousStandPowers().getClass().equals(SP)) {
+            heyticks = user.roundabout$getPreviousStandVanishTicks();
+        }
+
+        return heyticks;
+    }
+
     public static ResourceLocation getPlayerSkinWithRespectToVisage(Player player) {
 
         if (player instanceof AbstractClientPlayer lpe) {

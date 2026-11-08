@@ -4,6 +4,7 @@ import net.hydra.jojomod.Utils.commands.ForgeCommandRegistry;
 import net.hydra.jojomod.biome_modifiers.BiomeCodec;
 import net.hydra.jojomod.client.ClientClass;
 import net.hydra.jojomod.networking.ForgeNetworkHandler;
+import net.hydra.jojomod.networking.ForgeJJFNetwork;
 import net.hydra.jojomod.registry.*;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraftforge.api.distmarker.Dist;
@@ -79,6 +80,7 @@ public class RoundaboutModForge {
     private void commonSetup(final FMLCommonSetupEvent event){
         event.enqueueWork(() -> {
             ForgeNetworkHandler.register();
+            ForgeJJFNetwork.register();
             ForgeMenus.initialize();
         });
     }

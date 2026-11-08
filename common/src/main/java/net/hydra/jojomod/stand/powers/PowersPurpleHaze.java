@@ -1948,7 +1948,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
 
         playSoundIfPossible(self.level(), null, BlockPos.containing(position),
-                distortionMode ? ModSounds.PURPLE_HAZE_PHASE_1_EVENT : ModSounds.PURPLE_HAZE_SMOKE_EVENT, //distortionMode ? ModSounds.PURPLE_HAZE_DISTORTION_SMOKE_EVENT : ModSounds.PURPLE_HAZE_SMOKE_EVENT,
+                distortionMode ? ModSounds.PURPLE_HAZE_DISTORTION_SMOKE_EVENT : ModSounds.PURPLE_HAZE_SMOKE_EVENT, //distortionMode ? ModSounds.PURPLE_HAZE_DISTORTION_SMOKE_EVENT : ModSounds.PURPLE_HAZE_SMOKE_EVENT,
                 distortionMode ? SoundSource.NEUTRAL : SoundSource.PLAYERS, 4.0F, 1.0F);
     }
 

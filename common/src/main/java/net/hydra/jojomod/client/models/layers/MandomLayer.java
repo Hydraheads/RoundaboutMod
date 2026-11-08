@@ -12,8 +12,10 @@ import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
 import net.hydra.jojomod.stand.powers.PowersHeyYa;
 import net.hydra.jojomod.stand.powers.PowersMandom;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -50,23 +52,23 @@ public class MandomLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
             boolean hasMandomOut = (PowerTypes.hasStandActive(entity) && hasMandom);
             if (ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
                 if (!entity.isInvisible()) {
-                    int mandomTicks = 0;
+                    int mandomTicks = MainUtil.getWornStandVanishticksSafe(user, PowersMandom.class);/*0;
                     if (user.roundabout$getStandPowers() instanceof PowersMandom) {
                         mandomTicks = user.roundabout$getCurrentStandVanishTicks();
                     }else if (user.roundabout$getPreviousStandPowers() instanceof PowersMandom) {
                         mandomTicks = user.roundabout$getPreviousStandVanishTicks();
-                    }
+                    }*/
 
                     if (mandomTicks > 0 || hasMandomOut) {
                         byte skin = user.roundabout$getStandSkin();
-                        if (user.roundabout$getLastStandSkin() != skin) {
-                            user.roundabout$setLastStandSkin(skin);
-                            mandomTicks = 0;
-                            if (user.roundabout$getStandPowers() instanceof PowersMandom) {
+                        if (user.roundabout$getStandPowers() instanceof PowersMandom) {
+                            if (user.roundabout$getLastStandSkin() != skin) {
+                                user.roundabout$setLastStandSkin(skin);
+                                mandomTicks = 0;
                                 user.roundabout$setCurrentStandVanishTicks(0);
-                            }else {
-                                user.roundabout$setPreviousStandVanishTicks(0);
                             }
+                        }else {
+                            skin = user.roundabout$getPreviousSkin();
                         }
 
                         float heyFull = 0;

@@ -1,4 +1,4 @@
-package com.example.jjf.forge.network;
+package net.hydra.jojomod.networking;
 
 import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravitySync;
 import net.minecraft.resources.ResourceLocation;
@@ -15,7 +15,7 @@ public final class ForgeJJFNetwork {
     private static final String PROTOCOL_VERSION = "1";
 
     private static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation("jjf", "network"),
+            new ResourceLocation("roundabout", "jjf_network"),
             () -> PROTOCOL_VERSION,
             PROTOCOL_VERSION::equals,
             PROTOCOL_VERSION::equals

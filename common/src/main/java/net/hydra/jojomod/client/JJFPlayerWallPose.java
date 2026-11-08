@@ -1,4 +1,4 @@
-package com.example.jjf.client;
+package net.hydra.jojomod.client;
 
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.core.Direction;

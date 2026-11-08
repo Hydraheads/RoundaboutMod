@@ -1,4 +1,4 @@
-package com.example.jjf.launcher;
+package net.hydra.jojomod.event.powers.jumpingJackFlash;
 
 import net.hydra.jojomod.entity.projectile.JJFProjectileEntity;
 import net.minecraft.world.entity.Entity;
