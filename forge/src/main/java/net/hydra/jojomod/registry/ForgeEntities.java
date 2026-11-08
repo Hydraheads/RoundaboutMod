@@ -54,7 +54,7 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<Piranha>> PIRANHA =
             ENTITY_TYPES.register("piranha", () ->
-                    EntityType.Builder.of(Piranha::new, MobCategory.CREATURE)
+                    EntityType.Builder.of(Piranha::new, MobCategory.WATER_CREATURE)
                             .sized(0.6f, 0.5f).clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "piranha").toString())
             );
@@ -793,6 +793,16 @@ public class ForgeEntities {
                     .sized(0.6f, 0.4f)
                     .clientTrackingRange(5)
                     .build(Roundabout.MOD_ID + ":ge_snake"));
+    public static final RegistryObject<EntityType<GEPiranhaEntity>> GE_PIRANHA = ENTITY_TYPES.register("ge_piranha",
+            () -> EntityType.Builder.of(GEPiranhaEntity::new, MobCategory.CREATURE)
+                    .sized(0.6f, 0.5f)
+                    .clientTrackingRange(5)
+                    .build(Roundabout.MOD_ID + ":ge_piranha"));
+    public static final RegistryObject<EntityType<GEButterflyEntity>> GE_BUTTERFLY = ENTITY_TYPES.register("ge_butterfly",
+            () -> EntityType.Builder.of(GEButterflyEntity::new, MobCategory.AMBIENT)
+                    .sized(0.5f, 0.5f)
+                    .clientTrackingRange(5)
+                    .build(Roundabout.MOD_ID + ":ge_butterfly"));
     public static final RegistryObject<EntityType<SilverChariotEntity>> SILVER_CHARIOT =
             ENTITY_TYPES.register("silver_chariot", () ->
                     EntityType.Builder.of(SilverChariotEntity::new, MobCategory.MISC).sized(0.75f, 2.05f).

@@ -53,8 +53,6 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
         this.setMaxUpStep(0.0F);
     }
 
-    private static final Ingredient TEMPT_INGREDIENT = Ingredient.of(Items.COD, Items.SALMON, Items.TROPICAL_FISH);
-
     private static final EntityDataAccessor<Byte> BREED = SynchedEntityData.defineId(StrayCatEntity.class,
             EntityDataSerializers.BYTE);;
     private static final EntityDataAccessor<Byte> ANIM = SynchedEntityData.defineId(StrayCatEntity.class,
@@ -408,8 +406,17 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
         return super.hurt(DMG, f);
     }
 
+    private static Ingredient TEMPT_INGREDIENT;
+
+    private static Ingredient getTemptIngredient() {
+        if (TEMPT_INGREDIENT == null) {
+            TEMPT_INGREDIENT = Ingredient.of(Items.COD, Items.SALMON, Items.TROPICAL_FISH, ModItems.PIRANHA);
+        }
+        return TEMPT_INGREDIENT;
+    }
+
     public boolean isYummy(ItemStack stack) {
-        return TEMPT_INGREDIENT.test(stack);
+        return getTemptIngredient().test(stack);
     }
 
     @Override

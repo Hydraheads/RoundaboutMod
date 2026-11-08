@@ -49,6 +49,14 @@ public class ForgeSounds {
             register(ModSounds.SNAKE_ATTACK, ModSounds.SNAKE_ATTACK_ID);
     public static final RegistryObject<SoundEvent> SNAKE_DIE_EVENT =
             register(ModSounds.SNAKE_DIE, ModSounds.SNAKE_DIE_ID);
+    public static final RegistryObject<SoundEvent> SNAKE_STEP_EVENT =
+            register(ModSounds.SNAKE_STEP, ModSounds.SNAKE_STEP_ID);
+    public static final RegistryObject<SoundEvent> PIRANHA_DIES_EVENT =
+            register(ModSounds.PIRANHA_DIES, ModSounds.PIRANHA_DIES_ID);
+    public static final RegistryObject<SoundEvent> PIRANHA_HURT_EVENT =
+            register(ModSounds.PIRANHA_HURT, ModSounds.PIRANHA_HURT_ID);
+    public static final RegistryObject<SoundEvent> PIRANHA_FLOP_EVENT =
+            register(ModSounds.PIRANHA_FLOP, ModSounds.PIRANHA_FLOP_ID);
     public static final RegistryObject<SoundEvent> WORLD_SUMMON_SOUND_EVENT =
             register(ModSounds.WORLD_SUMMON_SOUND, ModSounds.WORLD_SUMMON_SOUND_ID);
     public static final RegistryObject<SoundEvent> J_ANUBIS_HIT_1_EVENT =

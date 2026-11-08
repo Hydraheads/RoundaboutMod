@@ -3152,7 +3152,39 @@
       "roundabout:snake_die"
     ]
   },
-
+  "snake_step": {
+    "subtitle": "sounds.roundabout.snake_step",
+    "sounds": [
+      "roundabout:snake_step_1",
+      "roundabout:snake_step_2",
+      "roundabout:snake_step_3",
+      "roundabout:snake_step_4"
+    ]
+  },
+  "piranha_hurt": {
+    "subtitle": "sounds.roundabout.piranha_hurt",
+    "sounds": [
+      "roundabout:piranha_hurt_1",
+      "roundabout:piranha_hurt_2",
+      "roundabout:piranha_hurt_3",
+      "roundabout:piranha_hurt_4"
+    ]
+  },
+  "piranha_dies": {
+    "subtitle": "sounds.roundabout.piranha_dies",
+    "sounds": [
+      "roundabout:piranha_dies"
+    ]
+  },
+  "piranha_flop": {
+    "subtitle": "sounds.roundabout.piranha_flop",
+    "sounds": [
+      "minecraft:entity/fish/flop1",
+      "minecraft:entity/fish/flop2",
+      "minecraft:entity/fish/flop3",
+      "minecraft:entity/fish/flop4"
+    ]
+  },
   "summon_world": {
     "subtitle": "sounds.roundabout.summon_world",
     "sounds": [
@@ -5017,7 +5049,6 @@
       "roundabout:ctr_stabilizing_rain"
     ]
   },
-<<<<<<< HEAD
   "jumpin_jack_flash_summon": {
     "sounds": [
       "roundabout:jumpin_jack_flash_summon"

@@ -12,6 +12,7 @@ import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.PowersHeyYa;
 import net.hydra.jojomod.stand.powers.PowersMandom;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
@@ -49,15 +50,23 @@ public class MandomLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
             boolean hasMandomOut = (PowerTypes.hasStandActive(entity) && hasMandom);
             if (ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
                 if (!entity.isInvisible()) {
-                    int mandomTicks = user.roundabout$getMandomVanishTicks();
-
+                    int mandomTicks = 0;
+                    if (user.roundabout$getStandPowers() instanceof PowersMandom) {
+                        mandomTicks = user.roundabout$getCurrentStandVanishTicks();
+                    }else if (user.roundabout$getPreviousStandPowers() instanceof PowersMandom) {
+                        mandomTicks = user.roundabout$getPreviousStandVanishTicks();
+                    }
 
                     if (mandomTicks > 0 || hasMandomOut) {
                         byte skin = user.roundabout$getStandSkin();
                         if (user.roundabout$getLastStandSkin() != skin) {
                             user.roundabout$setLastStandSkin(skin);
                             mandomTicks = 0;
-                            user.roundabout$setMandomVanishTicks(0);
+                            if (user.roundabout$getStandPowers() instanceof PowersMandom) {
+                                user.roundabout$setCurrentStandVanishTicks(0);
+                            }else {
+                                user.roundabout$setPreviousStandVanishTicks(0);
+                            }
                         }
 
                         float heyFull = 0;

@@ -193,7 +193,16 @@ public class PowersTusk extends NewDashPreset {
     @Override public boolean canCombatModeUse(Item item) {return true;}
     public boolean isShooting(HumanoidArm arm) {
         byte animation = this.getStandUserSelf().roundabout$getStandAnimation();
-        if (animation == PowersTusk.CHARGE_NAIL || animation == PowersTusk.CHARGE_NAILS) {
+        if (animation == PowersTusk.CHARGE_NAIL
+                || animation == PowersTusk.CHARGE_NAILS
+                || animation == PowersTusk.FIRE_BOTH_NAILS
+                || animation == PowersTusk.FIRE_NAIL
+                || animation == PowersTusk.SHOCKWAVE
+                || animation == PowersTusk.SPIN_LAUNCH
+                || animation == PowersTusk.DRILL
+                || animation == PowersTusk.DRILL_FINISH
+                || animation == PowersTusk.BRUSHING
+                || animation == PowersTusk.SLASH) {
             if (renderBothArms()) {
                 return true;
             }
@@ -385,10 +394,12 @@ public class PowersTusk extends NewDashPreset {
             case FIRE_NAIL -> {
                 expendNails();
 
-                if (this.getAct() == 1 && this.nailCharge > 5) {
-                    this.setAnimation(PowersTusk.FIRE_BOTH_NAILS);
-                } else if (!isInHole()) {
-                    this.setAnimation(PowersTusk.FIRE_NAIL);
+                if (isPacketPlayer()) {
+                    if (this.getAct() == 1 && this.nailCharge > 5) {
+                        this.setAnimation(PowersTusk.FIRE_BOTH_NAILS);
+                    } else if (!isInHole()) {
+                        this.setAnimation(PowersTusk.FIRE_NAIL);
+                    }
                 }
 
                 if (!isClient()) {
@@ -606,7 +617,6 @@ public class PowersTusk extends NewDashPreset {
         if (nailFireDelay > 0) {nailFireDelay --;}
         if (this.getActivePower() != PowersTusk.CHARGE_NAILS) {nailCharge = 0;}
 
-        if (this.getStandUserSelf().roundabout$getStandAnimation() == PowersTusk.FIRE_BOTH_NAILS && this.getAttackTime() > 5) {this.setAnimation(PowerIndex.NONE);}
         if (isClient()) {
             StandUser SU = this.getStandUserSelf();
             if (SU.roundabout$getStandAnimation() != PowerIndex.NONE
@@ -733,6 +743,8 @@ public class PowersTusk extends NewDashPreset {
                     if (!isClient()) {
                         this.deathShot();
                     }
+                    this.setAnimation(PowersTusk.FIRE_NAIL);
+
                     if (deathShot == null) this.setPowerNone();
                 }
             }
@@ -1544,6 +1556,7 @@ public class PowersTusk extends NewDashPreset {
 
     public void beginSlashAttack() {
         if (this.getSelf() instanceof Player){
+          //  this.setAnimation(PowersTusk.SLASH);
             this.getSelf().swing(InteractionHand.MAIN_HAND);
             if (isPacketPlayer()){
                 this.setAttackTimeDuring(-10);
@@ -2665,10 +2678,7 @@ public class PowersTusk extends NewDashPreset {
 
     public void setAnimation(byte b) {setAnimation(b,true);}
     public void setAnimation(byte b,boolean reset) {
-//        if (this.getStandUserSelf().roundabout$getStandAnimation() == PowersTusk.PILOT && b == PowerIndex.NONE) {
-//            ItemStack a = null;
-//            a.getItem();
-//        }
+       // Roundabout.LOGGER.info(this.getStandUserSelf().roundabout$getStandAnimation() + " -> " + b);
         this.getStandUserSelf().roundabout$setStandAnimation(b);
         if (reset) {
             this.getStandUserSelf().roundabout$getWornStandAnimation().stop();
@@ -2901,6 +2911,17 @@ public class PowersTusk extends NewDashPreset {
                 case PowersTusk.CHARGE_NAIL, PowersTusk.CHARGE_NAILS -> {return TuskAnimations.CHARGE;}
                 case PowersTusk.FIRE_NAIL -> {return PT.getSelf().getMainArm() == HumanoidArm.RIGHT ? TuskAnimations.FIRE_RIGHT : TuskAnimations.FIRE_LEFT;}
                 case PowersTusk.FIRE_BOTH_NAILS -> {return TuskAnimations.FIRE_BOTH;}
+                case PowersTusk.SHOCKWAVE -> {return PT.getSelf().getMainArm() == HumanoidArm.RIGHT ? TuskAnimations.SHOCKWAVE_RIGHT : TuskAnimations.SHOCKWAVE_LEFT;}
+                case PowersTusk.SPIN_LAUNCH -> {return PT.getSelf().getMainArm() == HumanoidArm.RIGHT ? TuskAnimations.THROW_RIGHT : TuskAnimations.THROW_LEFT;}
+                case PowersTusk.DRILL,PowersTusk.DRILL_FINISH,PowersTusk.BRUSHING -> {return PT.getSelf().getMainArm() == HumanoidArm.RIGHT ? TuskAnimations.PUSH_RIGHT : TuskAnimations.PUSH_LEFT;}
+             /*   case PowersTusk.SLASH -> {
+                    if (PT.getActivePowerPhase() == PT.getActivePowerPhaseMax()) {
+                        return PT.getSelf().getMainArm() == HumanoidArm.RIGHT ? TuskAnimations.SLASH_RIGHT_2 : TuskAnimations.SLASH_LEFT_2;
+                    } else {
+                        return PT.getSelf().getMainArm() == HumanoidArm.RIGHT ? TuskAnimations.SLASH_RIGHT : TuskAnimations.SLASH_LEFT;
+                    }
+                } */
+
             }
         }
         return null;

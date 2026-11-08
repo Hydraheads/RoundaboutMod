@@ -30,6 +30,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.ambient.Bat;
@@ -65,7 +66,7 @@ public class FabricEntities {
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "piranha"),
-                    EntityType.Builder.of(Piranha::new, MobCategory.CREATURE).
+                    EntityType.Builder.of(Piranha::new, MobCategory.WATER_CREATURE).
                             sized(0.6f, 0.5f).clientTrackingRange(10).build(Roundabout.MOD_ID+":piranha")
             );
     public static final EntityType<Butterfly> BUTTERFLY =
@@ -911,6 +912,22 @@ public class FabricEntities {
                     .clientTrackingRange(5)
                     .build(Roundabout.MOD_ID + ":ge_snake")
     );
+    public static final EntityType<GEPiranhaEntity> GE_PIRANHA = Registry.register(
+            BuiltInRegistries.ENTITY_TYPE,
+            new ResourceLocation(Roundabout.MOD_ID, "ge_piranha"),
+            EntityType.Builder.of(GEPiranhaEntity::new, MobCategory.CREATURE)
+                    .sized(0.6f, 0.5f)
+                    .clientTrackingRange(5)
+                    .build(Roundabout.MOD_ID + ":ge_piranha")
+    );
+    public static final EntityType<GEButterflyEntity> GE_BUTTERFLY = Registry.register(
+            BuiltInRegistries.ENTITY_TYPE,
+            new ResourceLocation(Roundabout.MOD_ID, "ge_butterfly"),
+            EntityType.Builder.of(GEButterflyEntity::new, MobCategory.AMBIENT)
+                    .sized(0.5f, 0.5f)
+                    .clientTrackingRange(5)
+                    .build(Roundabout.MOD_ID + ":ge_butterfly")
+    );
         public static final EntityType<SilverChariotEntity> SILVER_CHARIOT =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -1557,6 +1574,8 @@ public class FabricEntities {
         ModEntities.GE_FISH = GE_FISH;
         ModEntities.GE_FOX = GE_FOX;
         ModEntities.GE_SNAKE = GE_SNAKE;
+        ModEntities.GE_PIRANHA = GE_PIRANHA;
+        ModEntities.GE_BUTTERFLY = GE_BUTTERFLY;
                 ModEntities.SILVER_CHARIOT = SILVER_CHARIOT;
                 ModEntities.SILVER_CHARIOT_PHARAOH =  SILVER_CHARIOT_PHARAOH;
                 ModEntities.THROWN_HARPOON = THROWN_HARPOON;
@@ -1743,6 +1762,8 @@ public class FabricEntities {
         FabricDefaultAttributeRegistry.register(GE_FISH, Salmon.createAttributes());
         FabricDefaultAttributeRegistry.register(GE_FOX, Fox.createAttributes());
         FabricDefaultAttributeRegistry.register(GE_SNAKE, Snake.createAttributes());
+        FabricDefaultAttributeRegistry.register(GE_PIRANHA, Piranha.createAttributes());
+        FabricDefaultAttributeRegistry.register(GE_BUTTERFLY, Butterfly.createAttributes());
 
                 FabricDefaultAttributeRegistry.register(ROAD_ROLLER_ENTITY, RoadRollerEntity.createAttributes().build());
 
@@ -1869,11 +1890,29 @@ public class FabricEntities {
                 MobCategory.CREATURE,
                 ModEntities.SNAKE, 6, 1, 2
         );
+        BiomeModifications.addSpawn(
+                BiomeSelectors.tag(BiomeTags.IS_RIVER).or(BiomeSelectors.tag(BiomeTags.IS_OCEAN)),
+                MobCategory.WATER_CREATURE,
+                ModEntities.PIRANHA, 15, 3, 6
+        );
+        BiomeModifications.addSpawn(
+                BiomeSelectors.includeByKey(
+                        Biomes.PLAINS, Biomes.SUNFLOWER_PLAINS, Biomes.FLOWER_FOREST,
+                        Biomes.MEADOW, Biomes.BIRCH_FOREST, Biomes.OLD_GROWTH_BIRCH_FOREST,
+                        Biomes.FOREST, Biomes.LUSH_CAVES
+                ),
+                MobCategory.AMBIENT,
+                ModEntities.BUTTERFLY, 25, 2, 4
+        );
 
         /*Spawn Placement rules*/
         SpawnPlacements.register(ModEntities.TERRIER_DOG, SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TerrierEntity::canSpawn);
         SpawnPlacements.register(ModEntities.SNAKE, SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Snake::checkMobSpawnRules);
-        }
+        SpawnPlacements.register(ModEntities.PIRANHA, SpawnPlacements.Type.IN_WATER,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Piranha::checkSurfaceWaterAnimalSpawnRules);
+        SpawnPlacements.register(ModEntities.BUTTERFLY, SpawnPlacements.Type.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
+    }
 }
