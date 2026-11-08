@@ -364,8 +364,8 @@ public class SilverChariotPharaohModel<T extends SilverChariotEntity> extends St
         this.animate(pEntity.scToggleLeftSword, SilverChariotAnimations.LeftSword(), pAgeInTicks, 1f);
         this.animate(pEntity.scHideRapiers, StandAnimations.HIDE_FISTS, pAgeInTicks, 1f);
         this.animate(pEntity.scToggleNotArmouredState, SilverChariotAnimations.Armorless(), pAgeInTicks, 1f);
-        this.animate(pEntity.scRightVault, SilverChariotAnimations.RightVault(), pAgeInTicks, 1f);
-        this.animate(pEntity.scLeftVault, SilverChariotAnimations.LeftVault(), pAgeInTicks, 1f);
+        this.animate(pEntity.scRightVault, SilverChariotAnimations.RightVault(), pAgeInTicks, 1.5f);
+        this.animate(pEntity.scLeftVault, SilverChariotAnimations.LeftVault(), pAgeInTicks, 1.5f);
         this.animate(pEntity.scRightRapierSpin, SilverChariotAnimations.RightRapierSpin(), pAgeInTicks, 1f);
         this.animate(pEntity.scLeftRapierSpin, SilverChariotAnimations.LeftRapierSpin(), pAgeInTicks, 1f);
         this.animate(pEntity.scRightRapierSlash, SilverChariotAnimations.RightRapierSlash(), pAgeInTicks, 1.3f);
