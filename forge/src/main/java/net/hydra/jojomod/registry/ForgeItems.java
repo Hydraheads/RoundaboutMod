@@ -803,6 +803,10 @@ public class ForgeItems {
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersKingCrimson(null))));
     public static final RegistryObject<Item> MAX_STAND_DISC_KING_CRIMSON = addToDiscTab(ITEMS.register("max_king_crimson_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersKingCrimson(null))));
+    public static final RegistryObject<Item> STAND_DISC_JJF = addToWIPTab(ITEMS.register("jumpin_jack_flash_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersJumpinJackFlash(null))));
+    public static final RegistryObject<Item> MAX_STAND_DISC_JJF = addToWIPTab(ITEMS.register("max_jumpin_jack_flash_disc",
+            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersJumpinJackFlash(null))));
 
     public static final RegistryObject<Item> STAND_DISC_GREEN_DAY = addToDiscTab(ITEMS.register("green_day_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersGreenDay(null))));
@@ -1132,6 +1136,9 @@ public class ForgeItems {
             () -> new MemoryChessPieceItem(ForgeBlocks.CHESS_PIECE.get(),new Item.Properties())));
     public static final RegistryObject<Item> EXP_BISHOP = addToTab(ITEMS.register("exp_bishop",
             () -> new ExperienceBishopItem(ForgeBlocks.CHESS_PIECE.get(),new Item.Properties())));
+
+    public static final RegistryObject<Item> ZOMBIE_HORSE_THREAD = addToWIPTab(ITEMS.register("zombie_horse_thread",
+            () -> new ZombieHorseThreadItem(new Item.Properties().stacksTo(1).durability(16))));
 
     public static final RegistryObject<BlockItem> GAMBLING_TABLE_ITEM = addToWIPTab(ITEMS.register("gambling_table",
             () -> new BlockItem(ForgeBlocks.GAMBLING_TABLE.get(), new Item.Properties())));

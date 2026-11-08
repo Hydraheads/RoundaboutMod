@@ -89,9 +89,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     public float getSalimoPunchStrength(Entity entity) {
         if (this.getReducedDamage(entity)) {
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(0.5F));  // KQ impale: 2F
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.5F));  // KQ impale: 2F
         }
-        return levelupDamageMod(multiplyPowerByStandConfigMobs(1.5F));         // KQ impale: 12
+        return levelupDamageMod(multiplyPowerByStandConfigMobs(5.0F));
     }
     public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
@@ -321,9 +321,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
     @Override
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.26F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.31F));
         } else {
-            return levelupDamageMod(multiplyPowerByStandConfigMobs(4.0F));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(4.5F));
         }
     }
     @Override
@@ -970,7 +970,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
         }
 
-        if (podRegenClient != -1) {
+        if (podRegenClient != -1 && getPods() < MAX_PODS) {
             int ClashTime = Math.round(((float) podRegenClient / POD_RECHARGE_TIME) * 15);
             context.blit(StandIcons.JOJO_ICONS, k, j+17, 213, 97, 15, 4);
             context.blit(StandIcons.JOJO_ICONS, k, j+17, 213, 102, ClashTime, 4);
@@ -1034,7 +1034,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     @Override
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas){
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        int startPos = 0;
+        int startPos = -8;
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos,topPos+80,0, "ability.roundabout.punch",
                 "instruction.roundabout.press_attack", StandIcons.PH_PUNCH,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos, topPos+99,0, "ability.roundabout.guard",
@@ -1293,7 +1293,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
     }
 
-    private int podRegenClient = -1;
+    public int podRegenClient = -1;
 
     @Override
     public void updatePowerInt(byte activePower, int data) {

@@ -1325,6 +1325,10 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Override
     public void roundabout$setPurpleHazePods(byte pods) {
         purpleHazePods = pods;
+        if (pods == 6 && ((StandUser) this).roundabout$getStandPowers() instanceof PowersPurpleHaze PH) {
+            PH.podRegenClient = -1;
+        }
+
     }
     @Unique
     public VampireData rdbt$vampireData = new VampireData(level());

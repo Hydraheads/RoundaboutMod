@@ -18,6 +18,7 @@ import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
+import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
@@ -848,6 +849,8 @@ public class PowersD4C extends NewPunchingStand {
                                 && !(entity instanceof StandEntity)
                                 && !(entity instanceof StrayCatEntity)
                                 && !(entity instanceof CloneEntity)
+                                && !(entity instanceof FallenMob)
+                                && !(entity instanceof BaseMinion)
                                 && MainUtil.canCopyMob(entity)
                                 && PowerTypes.originatedFromOurWorld(entity)
                                 && PowerTypes.getPlaneOfExisting(entity) == 0
@@ -1769,6 +1772,7 @@ public class PowersD4C extends NewPunchingStand {
 
     public void flipSelectionMode(){
         isInSelectionMode = !isInSelectionMode;
+        this.self.playSound(ModSounds.D4C_MENU_TOGGLE_ON_EVENT, 200F, 1.0F);
     }
 
     public void worldHop2Client(){
@@ -2076,9 +2080,23 @@ public class PowersD4C extends NewPunchingStand {
         }
         tickBetween();
     }
+    private static final TargetingConditions HURT_BY_TARGETING = TargetingConditions.forCombat().ignoreLineOfSight().ignoreInvisibilityTesting();
+    public void selectOrDeselectAll(){
+        if (selectedClones.isEmpty()){
+            this.self.playSound(ModSounds.D4C_MENU_CLONE_MASS_SELECT_EVENT, 200F, 1.0F);
+            for (D4CCloneEntity target : self.level().getNearbyEntities(D4CCloneEntity.class, HURT_BY_TARGETING,self,self.getBoundingBox().inflate(30)))
+                if (target.getSafeCopy() && target.getPlayerUUID().isPresent() && target.getPlayerUUID().get().equals(self.getUUID())) {
+                    selectedClones.add(target);
+                }
+        } else {
+            this.self.playSound(ModSounds.D4C_MENU_CLONE_DESELECT_EVENT, 200F, 0.8F);
+                    selectedClones.clear();
+        }
+    }
     public void dashOrBlockSwitchClient(){
 
         if (isInSelectionMode){
+            selectOrDeselectAll();
             return;
         }
         if (!doVault()) {
@@ -2088,6 +2106,7 @@ public class PowersD4C extends NewPunchingStand {
     public void chopClient(){
 
         if (isInSelectionMode){
+            selectOrDeselectAll();
             return;
         }
         if (!doVault()) {
@@ -2600,6 +2619,19 @@ public class PowersD4C extends NewPunchingStand {
                 }
             } else {
                 if (isInSelectionMode){
+                    // Highlight clones by left clicking them
+                    if (keyIsDown) {
+                        consumeClickInput = true;
+                        if (cloneInStore != null){
+                            if (selectedClones.contains(cloneInStore)){
+                                this.self.playSound(ModSounds.D4C_MENU_CLONE_DESELECT_EVENT, 200F, 1.0F);
+                                selectedClones.remove(cloneInStore);
+                            } else {
+                                this.self.playSound(ModSounds.D4C_MENU_CLONE_SELECT_EVENT, 200F, 1.0F);
+                                selectedClones.add(cloneInStore);
+                            }
+                        }
+                    }
                     return;
                 }
                 if (keyIsDown) {
@@ -2947,6 +2979,11 @@ public class PowersD4C extends NewPunchingStand {
     @Override
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
         if (this.activePower == PowerIndex.POWER_3_BLOCK) {
+            return true;
+        }
+
+        if (isInSelectionMode){
+
             return true;
         }
         return super.buttonInputGuard(keyIsDown,options);

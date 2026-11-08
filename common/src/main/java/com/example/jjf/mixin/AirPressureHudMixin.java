@@ -1,9 +1,9 @@
 package com.example.jjf.mixin;
 
-import com.example.jjf.zero_gravity.AirPressureSystem;
-import com.example.jjf.zero_gravity.ZeroGravityAccess;
-import com.example.jjf.zero_gravity.ZeroGravityState;
-import com.example.jjf.zero_gravity.ZeroGravitySync;
+import net.hydra.jojomod.event.powers.jumpingJackFlash.AirPressureSystem;
+import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravityAccess;
+import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravityState;
+import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravitySync;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class AirPressureHudMixin {
 
     private static final ResourceLocation TEXTURE =
-            new ResourceLocation("jjf", "textures/gui/jjf/air_pressure_meter.png");
+            new ResourceLocation("jjf", "textures/gui/icons/jjf/air_pressure_meter.png");
 
     private static final int WIDTH = 30;
     private static final int HEIGHT = 80;

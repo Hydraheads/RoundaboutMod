@@ -38,6 +38,7 @@ import net.hydra.jojomod.client.models.npcs.ZombieAestheticianModel;
 import net.hydra.jojomod.client.models.npcs.renderers.ZombieAestheticianRenderer;
 import net.minecraft.client.model.SilverfishModel;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -91,6 +92,10 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.SOFT_AND_WET_DROWNED, SoftAndWetDrownedRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SOFT_AND_WET_DEBUT, SoftAndWetDebutRenderer::new);
         EntityRendererRegistry.register(FabricEntities.KILLER_QUEEN, KillerQueenRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.JUMPIN_JACK_FLASH, JumpinJackFlashRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.JJF_PROJECTILE, ThrownItemRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.JJF_GUNPOWDER_CLOUD, NoopRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.JJF_SPIT, JJFSpitRenderer::new);
         EntityRendererRegistry.register(FabricEntities.CINDERELLA, CinderellaRenderer::new);
         EntityRendererRegistry.register(FabricEntities.CALIFORNIA_KING_BED, CaliforniaRenderer::new);
         EntityRendererRegistry.register(FabricEntities.PLANET_WAVES, PlanetWavesRenderer::new);
@@ -134,6 +139,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.SILVER_CHARIOT_PHARAOH, SilverChariotPharaohRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SILVER_CHARIOT_RAPIER, SilverChariotRapierRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SILVER_CHARIOT_RAPIER_PLATFORM, SilverChariotRapierPlatformRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.SC_MOUNT, NoRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_HARPOON, HarpoonRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_KNIFE, KnifeRenderer::new);
         EntityRendererRegistry.register(FabricEntities.PH_CAPSULE, PHCapsuleRenderer::new);
@@ -351,6 +357,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.TUSK_HOLE_LAYER, TuskHoleModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ROUNDABOUT_BULLET_LAYER, RoundaboutBulletModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.KNIFE_LAYER, KnifeModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.JUMPIN_JACK_FLASH_LAYER, JumpinJackFlashModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.RATT_DART_LAYER, RattDartModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.TUSK1_NAIL_MODEL, Tusk1NailModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.CROSSFIRE_LAYER, CrossfireHurricaneModel::createBodyLayer);

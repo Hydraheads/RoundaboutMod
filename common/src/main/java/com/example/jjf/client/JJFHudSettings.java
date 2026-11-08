@@ -1,6 +1,5 @@
 package com.example.jjf.client;
 
-import com.example.jjf.JJFMod;
 import net.minecraft.network.chat.Component;
 
 import java.io.IOException;
@@ -11,7 +10,7 @@ import java.nio.file.Path;
 import java.util.Properties;
 
 public final class JJFHudSettings {
-
+/*
     private static boolean showAmmoText = true;
     private static boolean showLauncherText = true;
 
@@ -151,4 +150,6 @@ public final class JJFHudSettings {
         } catch (IOException ignored) {
         }
     }
+    */
+
 }

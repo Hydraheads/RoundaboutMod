@@ -55,7 +55,6 @@ public class RoundaboutFabric implements ModInitializer {
         FabricSounds.register();
         FabricBlocks.register();
         FabricItems.register();
-        new com.example.jjf.fabric.JJFModFabric().onInitialize();
         FabricMenus.register();
         FabricParticles.registerParticles();
         FabricGamerules.registerGamerules();

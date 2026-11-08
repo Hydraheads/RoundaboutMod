@@ -488,7 +488,31 @@ public class ForgeEntities {
             ENTITY_TYPES.register("killer_queen", () ->
                     EntityType.Builder.of(KillerQueenEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
                             clientTrackingRange(14).
-                            build(new ResourceLocation(Roundabout.MOD_ID, "d4c").toString())
+                            build(new ResourceLocation(Roundabout.MOD_ID, "killer_queen").toString())
+            );
+    public static final RegistryObject<EntityType<JumpinJackFlashEntity>> JUMPIN_JACK_FLASH =
+            ENTITY_TYPES.register("jumpin_jack_flash", () ->
+                    EntityType.Builder.of(JumpinJackFlashEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "jumpin_jack_flash").toString())
+            );
+    public static final RegistryObject<EntityType<JJFProjectileEntity>> JJF_PROJECTILE =
+            ENTITY_TYPES.register("jjf_projectile", () ->
+                    EntityType.Builder.<JJFProjectileEntity>of(JJFProjectileEntity::new, MobCategory.MISC).sized(0.25F, 0.25F).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "jjf_projectile").toString())
+            );
+    public static final RegistryObject<EntityType<JJFSpitEntity>> JJF_SPIT =
+            ENTITY_TYPES.register("jjf_spit", () ->
+                    EntityType.Builder.<JJFSpitEntity>of(JJFSpitEntity::new, MobCategory.MISC).sized(0.18F, 0.18F).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "jjf_spit").toString())
+            );
+    public static final RegistryObject<EntityType<JJFGunpowderCloudEntity>> JJF_GUNPOWDER_CLOUD =
+            ENTITY_TYPES.register("jjf_gunpowder_cloud", () ->
+                    EntityType.Builder.<JJFGunpowderCloudEntity>of(JJFGunpowderCloudEntity::new, MobCategory.MISC).sized(3.5F, 2F).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "jjf_gunpowder_cloud").toString())
             );
     public static final RegistryObject<EntityType<BlockBombEntity>> BLOCK_BOMB =
             ENTITY_TYPES.register("block_bomb", () ->
@@ -792,6 +816,12 @@ public class ForgeEntities {
                     EntityType.Builder.<SilverChariotRapierPlatformEntity>of(SilverChariotRapierPlatformEntity::new, MobCategory.MISC).sized(1.0f, 0.2f).
                             clientTrackingRange(16).
                             build(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_rapier_platform").toString())
+            );
+    public static final RegistryObject<EntityType<SilverChariotMountEntity>> SC_MOUNT =
+            ENTITY_TYPES.register("sc_mount", () ->
+                    EntityType.Builder.<SilverChariotMountEntity>of(SilverChariotMountEntity::new, MobCategory.MISC).sized(0.6f, 2f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "sc_mount").toString())
             );
     public static final RegistryObject<EntityType<KnifeEntity>> THROWN_KNIFE =
             ENTITY_TYPES.register("knife", () ->

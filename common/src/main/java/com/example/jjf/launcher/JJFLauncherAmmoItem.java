@@ -1,6 +1,6 @@
 package com.example.jjf.launcher;
 
-import com.example.jjf.entity.projectile.JJFProjectileEntity;
+import net.hydra.jojomod.entity.projectile.JJFProjectileEntity;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
