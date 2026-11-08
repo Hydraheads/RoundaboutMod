@@ -1,8 +1,8 @@
 package com.example.jjf.mixin;
 
-import com.example.jjf.zero_gravity.ZeroGravityAccess;
-import com.example.jjf.zero_gravity.ZeroGravityState;
-import com.example.jjf.zero_gravity.ZeroGravitySync;
+import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravityAccess;
+import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravityState;
+import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravitySync;
 import net.minecraft.server.level.ServerPlayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;

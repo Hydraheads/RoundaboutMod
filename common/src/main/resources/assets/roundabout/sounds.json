@@ -3152,7 +3152,39 @@
       "roundabout:snake_die"
     ]
   },
-
+  "snake_step": {
+    "subtitle": "sounds.roundabout.snake_step",
+    "sounds": [
+      "roundabout:snake_step_1",
+      "roundabout:snake_step_2",
+      "roundabout:snake_step_3",
+      "roundabout:snake_step_4"
+    ]
+  },
+  "piranha_hurt": {
+    "subtitle": "sounds.roundabout.piranha_hurt",
+    "sounds": [
+      "roundabout:piranha_hurt_1",
+      "roundabout:piranha_hurt_2",
+      "roundabout:piranha_hurt_3",
+      "roundabout:piranha_hurt_4"
+    ]
+  },
+  "piranha_dies": {
+    "subtitle": "sounds.roundabout.piranha_dies",
+    "sounds": [
+      "roundabout:piranha_dies"
+    ]
+  },
+  "piranha_flop": {
+    "subtitle": "sounds.roundabout.piranha_flop",
+    "sounds": [
+      "minecraft:entity/fish/flop1",
+      "minecraft:entity/fish/flop2",
+      "minecraft:entity/fish/flop3",
+      "minecraft:entity/fish/flop4"
+    ]
+  },
   "summon_world": {
     "subtitle": "sounds.roundabout.summon_world",
     "sounds": [
@@ -3295,6 +3327,48 @@
     "subtitle": "sounds.roundabout.can_bounce_end",
     "sounds": [
       "roundabout:can_bounce_end"
+    ]
+  },
+  "4c_menu_block_end": {
+    "subtitle": "sounds.roundabout.4c_menu_block_end",
+    "sounds": [
+      "roundabout:4c_menu_block_end"
+    ]
+  },
+  "4c_menu_block_start": {
+    "subtitle": "sounds.roundabout.4c_menu_block_start",
+    "sounds": [
+      "roundabout:4c_menu_block_start"
+    ]
+  },
+  "4c_menu_clone_select": {
+    "subtitle": "sounds.roundabout.4c_menu_clone_select",
+    "sounds": [
+      "roundabout:4c_menu_clone_select"
+    ]
+  },
+  "4c_menu_clone_deselect": {
+    "subtitle": "sounds.roundabout.4c_menu_clone_deselect",
+    "sounds": [
+      "roundabout:4c_menu_clone_deselect"
+    ]
+  },
+  "4c_menu_mass_select": {
+    "subtitle": "sounds.roundabout.4c_menu_mass_select",
+    "sounds": [
+      "roundabout:4c_menu_mass_select"
+    ]
+  },
+  "4c_menu_clone_task": {
+    "subtitle": "sounds.roundabout.4c_menu_clone_task",
+    "sounds": [
+      "roundabout:4c_menu_clone_task"
+    ]
+  },
+  "4c_menu_toggle_on": {
+    "subtitle": "sounds.roundabout.4c_menu_toggle_on",
+    "sounds": [
+      "roundabout:4c_menu_toggle_on"
     ]
   },
   "timestop_impact": {
@@ -4985,6 +5059,38 @@
     "subtitle": "sounds.roundabout.ctr_stabilizing_rain",
     "sounds": [
       "roundabout:ctr_stabilizing_rain"
+    ]
+  },
+  "jumpin_jack_flash_summon": {
+    "sounds": [
+      "roundabout:jumpin_jack_flash_summon"
+    ]
+  },
+
+  "suction_launch": {
+    "sounds": [
+      "roundabout:suction_launch"
+    ]
+  },
+
+  "launcher_shoot": {
+    "sounds": [
+      "roundabout:shoot_1",
+      "roundabout:shoot_2",
+      "roundabout:shoot_3",
+      "roundabout:shoot_4"
+    ]
+  },
+
+  "launcher_burst": {
+    "sounds": [
+      "roundabout:shoot_burst"
+    ]
+  },
+  "zombiehorse_stitching": {
+    "subtitle": "sounds.roundabout.zombiehorse_stitching",
+    "sounds": [
+      "roundabout:zombiehorse_stitching"
     ]
   }
 }

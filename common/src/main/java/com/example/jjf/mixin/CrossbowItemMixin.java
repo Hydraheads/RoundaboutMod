@@ -1,7 +1,7 @@
 package com.example.jjf.mixin;
 
-import com.example.jjf.zero_gravity.ZeroGravityAccess;
-import com.example.jjf.zero_gravity.ZeroGravitySystem;
+import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravityAccess;
+import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravitySystem;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.CrossbowItem;

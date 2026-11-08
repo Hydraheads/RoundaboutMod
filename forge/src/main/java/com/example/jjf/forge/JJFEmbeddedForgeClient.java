@@ -1,8 +1,8 @@
 package com.example.jjf.forge;
 
-import com.example.jjf.client.models.stand.JumpinJackFlashModel;
-import com.example.jjf.client.models.stand.renderers.JJFSpitRenderer;
-import com.example.jjf.client.models.stand.renderers.JumpinJackFlashRenderer;
+import net.hydra.jojomod.client.models.stand.JumpinJackFlashModel;
+import net.hydra.jojomod.client.models.projectile.renderers.JJFSpitRenderer;
+import net.hydra.jojomod.client.models.stand.renderers.JumpinJackFlashRenderer;
 import com.example.jjf.forge.registry.ForgeJJFRegistries;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
@@ -12,7 +12,7 @@ public final class JJFEmbeddedForgeClient {
 
     private JJFEmbeddedForgeClient() {
     }
-
+    /*
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(
                 ForgeJJFRegistries.JUMPIN_JACK_FLASH.get(),
@@ -37,5 +37,5 @@ public final class JJFEmbeddedForgeClient {
                 JumpinJackFlashModel.LAYER_LOCATION,
                 JumpinJackFlashModel::createBodyLayer
         );
-    }
+    }*/
 }

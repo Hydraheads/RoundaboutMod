@@ -51,16 +51,16 @@ public class ForgeItems {
     public static final RegistryObject<Item> SNAKE_SKIN_BOOTS = addToTab(ITEMS.register("snake_skin_boots",
             () -> new ArmorItem(SnakeSkinBootsItem.SNAKE_ARMOR, ArmorItem.Type.BOOTS, new Item.Properties())));
 
-    public static final RegistryObject<Item> PIRANHA_BUCKET = addToWIPTab(ITEMS.register("piranha_bucket",
+    public static final RegistryObject<Item> PIRANHA_BUCKET = addToTab(ITEMS.register("piranha_bucket",
             () -> new MobBucketItem(
                     ForgeEntities.PIRANHA,
                     () -> Fluids.WATER,
                     () -> SoundEvents.BUCKET_EMPTY_FISH,
                     new Item.Properties().stacksTo(1)
             )));
-    public static final RegistryObject<Item> PIRANHA = addToWIPTab(ITEMS.register("piranha",
+    public static final RegistryObject<Item> PIRANHA = addToTab(ITEMS.register("piranha",
             () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationMod(0.1F).build()))));
-    public static final RegistryObject<Item> COOKED_PIRANHA = addToWIPTab(ITEMS.register("cooked_piranha",
+    public static final RegistryObject<Item> COOKED_PIRANHA = addToTab(ITEMS.register("cooked_piranha",
             () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationMod(1.2F).build()))));
 
     public static final RegistryObject<Item> STAND_ARROW = addToTab(ITEMS.register("stand_arrow",
@@ -735,10 +735,10 @@ public class ForgeItems {
     public static final RegistryObject<ForgeSpawnEggItem> SNAKE_SPAWN_EGG = addToTab(ITEMS.register("snake_spawn_egg",
             () -> new ForgeSpawnEggItem(ForgeEntities.SNAKE,
                     0x6dcd4c, 0xf9f07b, new Item.Properties())));
-    public static final RegistryObject<ForgeSpawnEggItem> PIRANHA_SPAWN_EGG = addToWIPTab(ITEMS.register("piranha_spawn_egg",
+    public static final RegistryObject<ForgeSpawnEggItem> PIRANHA_SPAWN_EGG = addToTab(ITEMS.register("piranha_spawn_egg",
             () -> new ForgeSpawnEggItem(ForgeEntities.PIRANHA,
                     0x8fbbdd, 0xe89e4d, new Item.Properties())));
-    public static final RegistryObject<ForgeSpawnEggItem> BUTTERFLY_SPAWN_EGG = addToWIPTab(ITEMS.register("butterfly_spawn_egg",
+    public static final RegistryObject<ForgeSpawnEggItem> BUTTERFLY_SPAWN_EGG = addToTab(ITEMS.register("butterfly_spawn_egg",
             () -> new ForgeSpawnEggItem(ForgeEntities.BUTTERFLY,
                     0x95caff, 0xe880c6, new Item.Properties())));
     public static final RegistryObject<Potion> HEX_POTION = POTIONS.register("roundabout.hex",
@@ -803,6 +803,10 @@ public class ForgeItems {
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersKingCrimson(null))));
     public static final RegistryObject<Item> MAX_STAND_DISC_KING_CRIMSON = addToDiscTab(ITEMS.register("max_king_crimson_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersKingCrimson(null))));
+    public static final RegistryObject<Item> STAND_DISC_JJF = addToWIPTab(ITEMS.register("jumpin_jack_flash_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersJumpinJackFlash(null))));
+    public static final RegistryObject<Item> MAX_STAND_DISC_JJF = addToWIPTab(ITEMS.register("max_jumpin_jack_flash_disc",
+            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersJumpinJackFlash(null))));
 
     public static final RegistryObject<Item> STAND_DISC_GREEN_DAY = addToDiscTab(ITEMS.register("green_day_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersGreenDay(null))));

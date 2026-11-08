@@ -1,10 +1,10 @@
 package com.example.jjf.mixin;
 
-import com.example.jjf.zero_gravity.AirPressureSystem;
-import com.example.jjf.zero_gravity.SpreadContactSystem;
-import com.example.jjf.zero_gravity.ZeroGravityAccess;
-import com.example.jjf.zero_gravity.ZeroGravityState;
-import com.example.jjf.zero_gravity.ZeroGravitySystem;
+import net.hydra.jojomod.event.powers.jumpingJackFlash.AirPressureSystem;
+import net.hydra.jojomod.event.powers.jumpingJackFlash.SpreadContactSystem;
+import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravityAccess;
+import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravityState;
+import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravitySystem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;

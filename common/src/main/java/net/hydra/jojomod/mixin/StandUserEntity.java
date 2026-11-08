@@ -2760,19 +2760,51 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return 9F;
     }
 
+
     @Unique
-    public int roundabout$heyYaVanishTicks = 0;
+    private StandPowers roundabout$oldStandPowers = null;
 
     @Unique
     @Override
-    public int roundabout$getHeyYaVanishTicks() {
-        return roundabout$heyYaVanishTicks;
+    public void roundabout$setPreviousStandPowers(StandPowers SP) {
+        this.roundabout$oldStandPowers = SP;
     }
 
     @Unique
     @Override
-    public void roundabout$setHeyYaVanishTicks(int set) {
-        roundabout$heyYaVanishTicks = Mth.clamp(set, 0, 10);
+    public StandPowers roundabout$getPreviousStandPowers() {
+        return this.roundabout$oldStandPowers;
+    }
+
+
+    @Unique
+    public int roundabout$currentStandVanishTicks = 0;
+
+    @Unique
+    @Override
+    public int roundabout$getCurrentStandVanishTicks() {
+        return roundabout$currentStandVanishTicks;
+    }
+
+    @Unique
+    @Override
+    public void roundabout$setCurrentStandVanishTicks(int set) {
+        roundabout$currentStandVanishTicks = Mth.clamp(set, 0, 10);
+    }
+
+    @Unique
+    public int roundabout$previousStandVanishTicks = 0;
+
+    @Unique
+    @Override
+    public int roundabout$getPreviousStandVanishTicks() {
+        return roundabout$previousStandVanishTicks;
+    }
+
+    @Unique
+    @Override
+    public void roundabout$setPreviousStandVanishTicks(int set) {
+        roundabout$previousStandVanishTicks = Mth.clamp(set, 0, 10);
     }
 
     @Unique
@@ -2849,44 +2881,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$setRattShoulderVanishTicks(int set) {
         roundabout$RattShoulderVanishTicks = Mth.clamp(set, 0, 10);
     }
-
-    @Unique
-    public int roundabout$mandomVanishTicks = 0;
-
-    @Unique
-    @Override
-    public int roundabout$getMandomVanishTicks() {
-        return roundabout$mandomVanishTicks;
-    }
-
-    @Unique
-    @Override
-    public void roundabout$setMandomVanishTicks(int set) {
-        roundabout$mandomVanishTicks = Mth.clamp(set, 0, 10);
-    }
-
-    @Unique
-    public int roundabout$CBVanishTicks = 0;
-
-    @Unique
-    @Override
-    public int roundabout$getCBVanishTicks() {
-        return roundabout$CBVanishTicks;
-    }
-
-    public void roundabout$setCBVanishTicks(int set) {
-        roundabout$CBVanishTicks = Mth.clamp(set, 0, 10);
-    }
-
-    @Unique
-    public int roundabout$CatchTheRainbowVanishTicks = 0;
-
-    @Unique
-    @Override
-    public int roundabout$getCatchTheRainbowVanishTicks(){
-        return roundabout$CatchTheRainbowVanishTicks;
-    }
-    public void roundabout$setCatchTheRainbowVanishTicks(int set){roundabout$CatchTheRainbowVanishTicks = Mth.clamp(set, 0, 10);}
 
     @Unique
     public int roundabout$anubisVanishTicks = 0;
@@ -3557,6 +3551,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 roundabout$changingStandPowers = false;
             }
         }
+        this.roundabout$setPreviousStandPowers(this.roundabout$Powers);
+        this.roundabout$setPreviousStandVanishTicks(this.roundabout$getCurrentStandVanishTicks());
+        this.roundabout$setCurrentStandVanishTicks(0);
         this.roundabout$Powers = standPowers;
     }
 
@@ -6199,10 +6196,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         } else {
             roundabout$setArmVanishTicks(roundabout$getArmVanishTicks() - 1);
         }
-        if (roundabout$getStandPowers() instanceof PowersHeyYa && active) {
-            roundabout$setHeyYaVanishTicks(roundabout$getHeyYaVanishTicks() + 1);
-        } else {
-            roundabout$setHeyYaVanishTicks(roundabout$getHeyYaVanishTicks() - 1);
+
+        if (active) {
+            roundabout$setCurrentStandVanishTicks(roundabout$getCurrentStandVanishTicks() + 1);
+        }else{
+            roundabout$setCurrentStandVanishTicks(roundabout$getCurrentStandVanishTicks() - 1);
+        }
+        if (roundabout$getPreviousStandVanishTicks() > 0) {
+            roundabout$setPreviousStandVanishTicks(roundabout$getPreviousStandVanishTicks() - 1);
         }
 
         if (roundabout$getStandPowers() instanceof PowersOasis && active) {
@@ -6223,11 +6224,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             roundabout$setDiverDownVanishTicks(roundabout$getDiverDownVanishTicks() - 1);
         }
 
-        if (roundabout$getStandPowers() instanceof PowersMandom && active) {
-            roundabout$setMandomVanishTicks(roundabout$getMandomVanishTicks() + 1);
-        } else {
-            roundabout$setMandomVanishTicks(roundabout$getMandomVanishTicks() - 1);
-        }
         /** RattShoulder fade ticks */
         if (PowerTypes.hasStandActive(rdbt$this()) && roundabout$getStandPowers() instanceof PowersRatt &&
                 !((PowersRatt) roundabout$getStandPowers()).isPlaced()) {
@@ -6239,16 +6235,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             roundabout$setAnubisVanishTicks(roundabout$getAnubisVanishTicks() + 1);
         } else {
             roundabout$setAnubisVanishTicks(roundabout$getAnubisVanishTicks() - 1);
-        }
-        if (roundabout$getStandPowers() instanceof Powers20thCenturyBoy && active) {
-            roundabout$setCBVanishTicks(roundabout$getCBVanishTicks() + 1);
-        } else {
-            roundabout$setCBVanishTicks(roundabout$getCBVanishTicks() - 1);
-        }
-        if (roundabout$getStandPowers() instanceof PowersCatchTheRainbow && active){
-            roundabout$setCatchTheRainbowVanishTicks(roundabout$getCatchTheRainbowVanishTicks() + 1);
-        } else{
-            roundabout$setCatchTheRainbowVanishTicks(roundabout$getCatchTheRainbowVanishTicks() - 1);
         }
 
         /** Soft and Wet Bubble Encase launch */

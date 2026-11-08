@@ -44,6 +44,7 @@ public class SoundIndex {
     public static final byte BITES_THE_DUST_COMBAT = 21;
     public static final byte BITES_THE_DUST_DAY = 22;
     public static final byte BITES_THE_DUST_MINESWEEPER = 23;
+    public static final byte ZOMBIEHORSE_STITCHING = 114;
 
     /**Sound group cancel ids, used to cancel sound events like barrages uniformly*/
     public static final byte BARRAGE_SOUND_GROUP = 100;

@@ -1,10 +1,11 @@
 package com.example.jjf.fabric;
 
-import com.example.jjf.client.models.stand.JumpinJackFlashModel;
-import com.example.jjf.client.models.stand.renderers.JJFSpitRenderer;
-import com.example.jjf.client.models.stand.renderers.JumpinJackFlashRenderer;
-import com.example.jjf.registry.ModEntities;
-import com.example.jjf.zero_gravity.ZeroGravitySync;
+import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
+import net.hydra.jojomod.client.models.stand.JumpinJackFlashModel;
+import net.hydra.jojomod.client.models.projectile.renderers.JJFSpitRenderer;
+import net.hydra.jojomod.client.models.stand.renderers.JumpinJackFlashRenderer;
+
+import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravitySync;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
@@ -15,9 +16,9 @@ import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 public final class JJFModFabricClient implements ClientModInitializer {
 
     @Override
-    public void onInitializeClient() {
+    public void onInitializeClient() { /*
         EntityModelLayerRegistry.registerModelLayer(
-                JumpinJackFlashModel.LAYER_LOCATION,
+                ModEntityRendererClient.JUMPIN_JACK_FLASH_LAYER,
                 JumpinJackFlashModel::createBodyLayer
         );
 
@@ -40,7 +41,7 @@ public final class JJFModFabricClient implements ClientModInitializer {
                 ModEntities.JJF_SPIT,
                 JJFSpitRenderer::new
         );
-
+*/
         ClientPlayNetworking.registerGlobalReceiver(ZeroGravitySync.CHANNEL,
                 (client, handler, buffer, responseSender) -> {
                     ZeroGravitySync.Snapshot snapshot = ZeroGravitySync.read(buffer);

@@ -33,11 +33,9 @@ import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.ambient.AmbientCreature;
 import net.minecraft.world.entity.ambient.Bat;
-import net.minecraft.world.entity.animal.Bee;
-import net.minecraft.world.entity.animal.Fox;
-import net.minecraft.world.entity.animal.Salmon;
-import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.item.ItemStack;
@@ -90,6 +88,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.SOFT_AND_WET_DEBUT.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SOFT_AND_WET_KILLER_QUEEN.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.KILLER_QUEEN.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.JUMPIN_JACK_FLASH.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.BLOCK_BOMB.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.CINDERELLA.get(), CinderellaEntity.createStandAttributes().build());
         event.put(ForgeEntities.CALIFORNIA_KING_BED.get(), CaliforniaKingBedEntity.createStandAttributes().build());
@@ -168,6 +167,8 @@ public class ForgeEvents {
         event.put(ForgeEntities.GE_FISH.get(), Salmon.createAttributes().build());
         event.put(ForgeEntities.GE_FOX.get(), Fox.createAttributes().build());
         event.put(ForgeEntities.GE_SNAKE.get(), Snake.createAttributes().build());
+        event.put(ForgeEntities.GE_PIRANHA.get(), Piranha.createAttributes().build());
+        event.put(ForgeEntities.GE_BUTTERFLY.get(), Butterfly.createAttributes().build());
         event.put(ForgeEntities.VILLAGER_MINION.get(), VillagerMinion.createAttributes().build());
         event.put(ForgeEntities.AXOLOTL_MINION.get(), AxolotlMinion.createAttributes().build());
         event.put(ForgeEntities.OCELOT_MINION.get(), OcelotMinion.createAttributes().build());
@@ -208,6 +209,20 @@ public class ForgeEvents {
                 SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Snake::checkMobSpawnRules,
+                SpawnPlacementRegisterEvent.Operation.OR
+        );
+        event.register(
+                ForgeEntities.PIRANHA.get(),
+                SpawnPlacements.Type.IN_WATER,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Piranha::checkSurfaceWaterAnimalSpawnRules,
+                SpawnPlacementRegisterEvent.Operation.OR
+        );
+        event.register(
+                ForgeEntities.BUTTERFLY.get(),
+                SpawnPlacements.Type.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Butterfly::checkMobSpawnRules,
                 SpawnPlacementRegisterEvent.Operation.OR
         );
     }
@@ -450,6 +465,11 @@ public class ForgeEvents {
         ModItems.STAND_DISC_KING_CRIMSON = ForgeItems.STAND_DISC_KING_CRIMSON.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_KING_CRIMSON.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_KING_CRIMSON.get());
         ModItems.MAX_STAND_DISC_KING_CRIMSON = ForgeItems.MAX_STAND_DISC_KING_CRIMSON.get();
+
+        ModItems.STAND_DISC_JJF = ForgeItems.STAND_DISC_JJF.get();
+        ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_JJF.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_JJF.get());
+        ModItems.MAX_STAND_DISC_JJF = ForgeItems.STAND_DISC_JJF.get();
+
         ModItems.STAND_DISC_WHITESNAKE = ForgeItems.STAND_DISC_WHITESNAKE.get();
         ((MaxStandDiscItem) ForgeItems.MAX_STAND_DISC_WHITESNAKE.get()).baseDisc =
                 (StandDiscItem) ForgeItems.STAND_DISC_WHITESNAKE.get();
@@ -929,7 +949,11 @@ public class ForgeEvents {
         ModEntities.SOFT_AND_WET_DEBUT = ForgeEntities.SOFT_AND_WET_DEBUT.get();
         ModEntities.SOFT_AND_WET_KILLER_QUEEN = ForgeEntities.SOFT_AND_WET_KILLER_QUEEN.get();
         ModEntities.KILLER_QUEEN = ForgeEntities.KILLER_QUEEN.get();
-        ModEntities.setBlockBomb(ForgeEntities.BLOCK_BOMB.get());
+        ModEntities.JUMPIN_JACK_FLASH = ForgeEntities.JUMPIN_JACK_FLASH.get();
+        ModEntities.JJF_PROJECTILE = ForgeEntities.JJF_PROJECTILE.get();
+        ModEntities.JJF_GUNPOWDER_CLOUD = ForgeEntities.JJF_GUNPOWDER_CLOUD.get();
+        ModEntities.JJF_SPIT = ForgeEntities.JJF_SPIT.get();
+        ModEntities.BLOCK_BOMB = ForgeEntities.BLOCK_BOMB.get();
         ModEntities.SHEER_HEART_ATTACK = ForgeEntities.SHEER_HEART_ATTACK.get();
         ModEntities.CINDERELLA = ForgeEntities.CINDERELLA.get();
         ModEntities.CALIFORNIA_KING_BED = ForgeEntities.CALIFORNIA_KING_BED.get();
@@ -973,6 +997,8 @@ public class ForgeEvents {
         ModEntities.GE_FISH = ForgeEntities.GE_FISH.get();
         ModEntities.GE_FOX = ForgeEntities.GE_FOX.get();
         ModEntities.GE_SNAKE = ForgeEntities.GE_SNAKE.get();
+        ModEntities.GE_PIRANHA = ForgeEntities.GE_PIRANHA.get();
+        ModEntities.GE_BUTTERFLY = ForgeEntities.GE_BUTTERFLY.get();
         ModEntities.SILVER_CHARIOT = ForgeEntities.SILVER_CHARIOT.get();
         ModEntities.SILVER_CHARIOT_PHARAOH = ForgeEntities.SILVER_CHARIOT_PHARAOH.get();
         ModEntities.SILVER_CHARIOT_RAPIER = ForgeEntities.SILVER_CHARIOT_RAPIER.get();

@@ -10,6 +10,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
@@ -48,11 +49,40 @@ public class Snake extends Animal {
     }
 
     @Override
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putInt("Variant", this.getVariant());
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        if (tag.contains("Variant")) {
+            this.setVariant(tag.getInt("Variant"));
+        }
+    }
+
+    @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty,
                                         MobSpawnType spawnType, @Nullable SpawnGroupData spawnData,
                                         @Nullable CompoundTag dataTag) {
-        determineSpawnVariant();
+        determineSpawnVariant(level, this.blockPosition());
         return super.finalizeSpawn(level, difficulty, spawnType, spawnData, dataTag);
+    }
+
+    private void determineSpawnVariant(ServerLevelAccessor level, BlockPos pos) {
+        Holder<Biome> biome = level.getBiome(pos);
+        if (biome.is(Biomes.DESERT) || biome.is(BiomeTags.IS_BADLANDS)) {
+            setVariant(1); // Rattlesnake
+        } else if (biome.is(BiomeTags.IS_JUNGLE)) {
+            setVariant(2); // Tropical
+        } else if (biome.value().coldEnoughToSnow(pos)) {
+            setVariant(3); // Cold
+        } else if (biome.is(BiomeTags.IS_SAVANNA)) {
+            setVariant(4); // Warm
+        } else {
+            setVariant(0); // Plains/default
+        }
     }
 
     @Override
@@ -196,7 +226,7 @@ public class Snake extends Animal {
 
     @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
-
+        this.playSound(ModSounds.SNAKE_STEP_EVENT, 1.0F, 1.0F);
     }
 
     public static AttributeSupplier.Builder createAttributes() {

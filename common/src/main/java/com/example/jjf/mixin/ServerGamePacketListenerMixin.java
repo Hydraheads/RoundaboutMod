@@ -1,6 +1,6 @@
 package com.example.jjf.mixin;
 
-import com.example.jjf.zero_gravity.ZeroGravityAccess;
+import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravityAccess;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import org.spongepowered.asm.mixin.Mixin;
