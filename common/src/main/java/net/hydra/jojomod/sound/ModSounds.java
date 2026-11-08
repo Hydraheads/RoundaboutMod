@@ -1504,6 +1504,21 @@ public class ModSounds {
     public static final String PURPLE_HAZE_SWITCH_POD = "ph_type_switch";
     public static final ResourceLocation PURPLE_HAZE_SWITCH_POD_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PURPLE_HAZE_SWITCH_POD);
     public static SoundEvent PURPLE_HAZE_SWITCH_POD_EVENT = SoundEvent.createVariableRangeEvent(PURPLE_HAZE_SWITCH_POD_ID);
+    public static final String PURPLE_HAZE_KICK = "ph_kick";
+    public static final ResourceLocation PURPLE_HAZE_KICK_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PURPLE_HAZE_KICK);
+    public static SoundEvent PURPLE_HAZE_KICK_EVENT = SoundEvent.createVariableRangeEvent(PURPLE_HAZE_KICK_ID);
+    public static final String PURPLE_HAZE_PHASE_1 = "ph_phase_1";
+    public static final ResourceLocation PURPLE_HAZE_PHASE_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PURPLE_HAZE_PHASE_1);
+    public static SoundEvent PURPLE_HAZE_PHASE_1_EVENT = SoundEvent.createVariableRangeEvent(PURPLE_HAZE_PHASE_1_ID);
+    public static final String PURPLE_HAZE_PHASE_2 = "ph_phase_2";
+    public static final ResourceLocation PURPLE_HAZE_PHASE_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PURPLE_HAZE_PHASE_2);
+    public static SoundEvent PURPLE_HAZE_PHASE_2_EVENT = SoundEvent.createVariableRangeEvent(PURPLE_HAZE_PHASE_2_ID);
+    public static final String PURPLE_HAZE_PHASE_3 = "ph_phase_3";
+    public static final ResourceLocation PURPLE_HAZE_PHASE_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PURPLE_HAZE_PHASE_3);
+    public static SoundEvent PURPLE_HAZE_PHASE_3_EVENT = SoundEvent.createVariableRangeEvent(PURPLE_HAZE_PHASE_3_ID);
+    public static final String PURPLE_HAZE_SPIT = "ph_spit";
+    public static final ResourceLocation PURPLE_HAZE_SPIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PURPLE_HAZE_SPIT);
+    public static SoundEvent PURPLE_HAZE_SPIT_EVENT = SoundEvent.createVariableRangeEvent(PURPLE_HAZE_SPIT_ID);
 
 
     public static final String POLNAREFF_SC_SUMMON_1 = "pol_summon_1";
