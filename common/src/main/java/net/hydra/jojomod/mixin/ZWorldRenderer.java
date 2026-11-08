@@ -172,13 +172,47 @@ public class ZWorldRenderer {
 
         if (ClientUtil.getPlayer() != null
                 && ((StandUser) ClientUtil.getPlayer()).roundabout$getStandPowers() instanceof PowersD4C pd4) {
-            if (pd4.altBlockPos != null) {
-                ClientEffectUtil.renderPurpleBox(
-                        poseStack,
-                        mc.renderBuffers().bufferSource(),
-                        camera,
-                        pd4.altBlockPos,
-                        pd4.altBlockPos);
+            if (pd4.isInSelectionMode) {
+                if (pd4.altStartBlockPos != null) {
+                    if (pd4.altEndBlockPos != null) {
+                        ClientEffectUtil.renderPurpleBox(
+                                poseStack,
+                                mc.renderBuffers().bufferSource(),
+                                camera,
+                                pd4.altStartBlockPos,
+                                pd4.altEndBlockPos,
+                                0.61F,  // R
+                                1.0F,  // G
+                                0.58F,  // B
+                                1.0F);   // A
+                    } else {
+                        if (pd4.isInBlockMode) {
+                            ClientEffectUtil.renderPurpleBox(
+                                    poseStack,
+                                    mc.renderBuffers().bufferSource(),
+                                    camera,
+                                    pd4.altStartBlockPos,
+                                    pd4.altStartBlockPos,
+                                    1.0F,  // R
+                                    0.68F,  // G
+                                    0.94F,  // B
+                                    1.0F);   // A
+                        }
+                    }
+                }
+            } else {
+                if (pd4.altBlockPos != null) {
+                    ClientEffectUtil.renderPurpleBox(
+                            poseStack,
+                            mc.renderBuffers().bufferSource(),
+                            camera,
+                            pd4.altBlockPos,
+                            pd4.altBlockPos,
+                            0.7F,  // R
+                            0.0F,  // G
+                            1.0F,  // B
+                            1.0F);   // A
+                }
             }
         }
         // hijacking d4c's block highlight for diver down ore highlight

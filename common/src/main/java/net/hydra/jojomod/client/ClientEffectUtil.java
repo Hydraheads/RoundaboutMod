@@ -121,7 +121,11 @@ public class ClientEffectUtil {
             MultiBufferSource buffer,
             Camera camera,
             BlockPos pos1,
-            BlockPos pos2
+            BlockPos pos2,
+            float r,
+            float g,
+            float b,
+            float a
     ) {
         int minX = Math.min(pos1.getX(), pos2.getX());
         int minY = Math.min(pos1.getY(), pos2.getY());
@@ -160,10 +164,10 @@ public class ClientEffectUtil {
                 poseStack,
                 vertexConsumer,
                 box,
-                0.7F,  // R
-                0.0F,  // G
-                1.0F,  // B
-                1.0F   // A
+                r,  // R
+                g,  // G
+                b,  // B
+                a   // A
         );
 
         poseStack.popPose();
