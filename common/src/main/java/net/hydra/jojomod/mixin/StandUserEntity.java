@@ -2793,6 +2793,21 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     @Unique
+    private byte roundabout$oldStandPose = (byte)0;
+
+    @Unique
+    @Override
+    public void roundabout$setPreviousPose(byte pose) {
+        this.roundabout$oldStandPose = pose;
+    }
+
+    @Unique
+    @Override
+    public byte roundabout$getPreviousPose() {
+        return this.roundabout$oldStandPose;
+    }
+
+    @Unique
     public int roundabout$currentStandVanishTicks = 0;
 
     @Unique
@@ -3568,6 +3583,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         this.roundabout$setPreviousStandPowers(this.roundabout$Powers);
         this.roundabout$setPreviousSkin(this.roundabout$lastSkin);
+        this.roundabout$setPreviousPose(this.roundabout$Powers.idlePos);
         this.roundabout$setPreviousStandVanishTicks(this.roundabout$getCurrentStandVanishTicks());
         this.roundabout$setCurrentStandVanishTicks(0);
         this.roundabout$Powers = standPowers;

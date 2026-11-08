@@ -153,6 +153,8 @@ public interface StandUser {
     void roundabout$setPreviousStandPowers(StandPowers SP);
     void roundabout$setPreviousSkin(byte skin);
     byte roundabout$getPreviousSkin();
+    void roundabout$setPreviousPose(byte pose);
+    byte roundabout$getPreviousPose();
 
 
     int getJumpImmunityTicks();
