@@ -9,6 +9,7 @@ import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StoneMaskBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.SilverChariotMountEntity;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
@@ -1207,10 +1208,12 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             if (rticks < 50){
                 cir.setReturnValue(false);
             }
-        } else if (this.getVehicle() != null && this.getVehicle() instanceof SilverChariotEntity silverChariot) {
+        } else if (this.getVehicle() != null && this.getVehicle() instanceof SilverChariotMountEntity scme) {
+            /*
             if (silverChariot.isSelfCarryModeActive()) {
                 cir.setReturnValue(false);
             }
+            */
         }
     }
     @Inject(method = "rideTick", at = @At(value = "HEAD"), cancellable = true)
@@ -1240,7 +1243,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                     ci.cancel();
                 }
             }
-        } else if (this.getVehicle() != null && this.getVehicle() instanceof SilverChariotEntity sc && sc.isSelfCarryModeActive()) {
+        } else if (this.getVehicle() != null && this.getVehicle() instanceof SilverChariotEntity scme) {
             this.setShiftKeyDown(false);
         }
     }
@@ -1325,6 +1328,10 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Override
     public void roundabout$setPurpleHazePods(byte pods) {
         purpleHazePods = pods;
+        if (pods == 6 && ((StandUser) this).roundabout$getStandPowers() instanceof PowersPurpleHaze PH) {
+            PH.podRegenClient = -1;
+        }
+
     }
     @Unique
     public VampireData rdbt$vampireData = new VampireData(level());

@@ -10,7 +10,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -46,6 +45,8 @@ public class ModItems {
     public static Item STAND_DISC_KING_CRIMSON;
     public static Item MAX_STAND_DISC_KING_CRIMSON;
 
+    public static Item STAND_DISC_JJF;
+    public static Item MAX_STAND_DISC_JJF;
     public static Item STAND_DISC_RATT;
     public static Item MAX_STAND_DISC_RATT;
     public static Item STAND_DISC_ANUBIS;
@@ -134,6 +135,7 @@ public class ModItems {
     public static Item ANUBIS_GUARDIAN_SPAWN_EGG;
     public static Item SNAKE_SPAWN_EGG;
     public static Item PIRANHA_SPAWN_EGG;
+    public static Item BUTTERFLY_SPAWN_EGG;
     public static Item SNAKE_SKIN;
     public static Item SNAKE_OIL;
     public static Item SNAKE_SKIN_BOOTS;
@@ -312,6 +314,7 @@ public class ModItems {
     public static Item ULTRAVIOLET_BLASTER;
     public static Item FLESH_BUCKET;
     public static Item CHERRIES;
+    public static Item ZOMBIE_HORSE_THREAD;
 
     public static CreativeModeTab FOG_BLOCK_ITEMS;
 

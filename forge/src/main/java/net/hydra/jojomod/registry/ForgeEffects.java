@@ -20,6 +20,10 @@ public class ForgeEffects{
             POTION_EFFECTS.register("bleed", () ->
                     new Effect(MobEffectCategory.HARMFUL, 11994666)
             );
+    public static final RegistryObject<MobEffect> STITCHED =
+            POTION_EFFECTS.register("stitched", () ->
+                    new Effect(MobEffectCategory.NEUTRAL, 11994666)
+            );
     public static final RegistryObject<MobEffect> HEX =
             POTION_EFFECTS.register("hex", () ->
                     new Effect(MobEffectCategory.HARMFUL, 11606258)

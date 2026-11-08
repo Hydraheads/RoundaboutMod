@@ -35,6 +35,7 @@ import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
@@ -2760,19 +2761,65 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return 9F;
     }
 
+
     @Unique
-    public int roundabout$heyYaVanishTicks = 0;
+    private StandPowers roundabout$oldStandPowers = null;
 
     @Unique
     @Override
-    public int roundabout$getHeyYaVanishTicks() {
-        return roundabout$heyYaVanishTicks;
+    public void roundabout$setPreviousStandPowers(StandPowers SP) {
+        this.roundabout$oldStandPowers = SP;
     }
 
     @Unique
     @Override
-    public void roundabout$setHeyYaVanishTicks(int set) {
-        roundabout$heyYaVanishTicks = Mth.clamp(set, 0, 10);
+    public StandPowers roundabout$getPreviousStandPowers() {
+        return this.roundabout$oldStandPowers;
+    }
+
+    @Unique
+    private byte roundabout$oldStandSkin = (byte)0;
+
+    @Unique
+    @Override
+    public void roundabout$setPreviousSkin(byte skin) {
+        this.roundabout$oldStandSkin = skin;
+    }
+
+    @Unique
+    @Override
+    public byte roundabout$getPreviousSkin() {
+        return this.roundabout$oldStandSkin;
+    }
+
+    @Unique
+    public int roundabout$currentStandVanishTicks = 0;
+
+    @Unique
+    @Override
+    public int roundabout$getCurrentStandVanishTicks() {
+        return roundabout$currentStandVanishTicks;
+    }
+
+    @Unique
+    @Override
+    public void roundabout$setCurrentStandVanishTicks(int set) {
+        roundabout$currentStandVanishTicks = Mth.clamp(set, 0, 10);
+    }
+
+    @Unique
+    public int roundabout$previousStandVanishTicks = 0;
+
+    @Unique
+    @Override
+    public int roundabout$getPreviousStandVanishTicks() {
+        return roundabout$previousStandVanishTicks;
+    }
+
+    @Unique
+    @Override
+    public void roundabout$setPreviousStandVanishTicks(int set) {
+        roundabout$previousStandVanishTicks = Mth.clamp(set, 0, 10);
     }
 
     @Unique
@@ -2849,44 +2896,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$setRattShoulderVanishTicks(int set) {
         roundabout$RattShoulderVanishTicks = Mth.clamp(set, 0, 10);
     }
-
-    @Unique
-    public int roundabout$mandomVanishTicks = 0;
-
-    @Unique
-    @Override
-    public int roundabout$getMandomVanishTicks() {
-        return roundabout$mandomVanishTicks;
-    }
-
-    @Unique
-    @Override
-    public void roundabout$setMandomVanishTicks(int set) {
-        roundabout$mandomVanishTicks = Mth.clamp(set, 0, 10);
-    }
-
-    @Unique
-    public int roundabout$CBVanishTicks = 0;
-
-    @Unique
-    @Override
-    public int roundabout$getCBVanishTicks() {
-        return roundabout$CBVanishTicks;
-    }
-
-    public void roundabout$setCBVanishTicks(int set) {
-        roundabout$CBVanishTicks = Mth.clamp(set, 0, 10);
-    }
-
-    @Unique
-    public int roundabout$CatchTheRainbowVanishTicks = 0;
-
-    @Unique
-    @Override
-    public int roundabout$getCatchTheRainbowVanishTicks(){
-        return roundabout$CatchTheRainbowVanishTicks;
-    }
-    public void roundabout$setCatchTheRainbowVanishTicks(int set){roundabout$CatchTheRainbowVanishTicks = Mth.clamp(set, 0, 10);}
 
     @Unique
     public int roundabout$anubisVanishTicks = 0;
@@ -3557,6 +3566,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 roundabout$changingStandPowers = false;
             }
         }
+        this.roundabout$setPreviousStandPowers(this.roundabout$Powers);
+        this.roundabout$setPreviousSkin(this.roundabout$lastSkin);
+        this.roundabout$setPreviousStandVanishTicks(this.roundabout$getCurrentStandVanishTicks());
+        this.roundabout$setCurrentStandVanishTicks(0);
         this.roundabout$Powers = standPowers;
     }
 
@@ -3910,7 +3923,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 stand.setYHeadRot(roundabout$User.getYHeadRot() % 360);
                 if (OffsetIndex.OffsetStyle(OT) == OffsetIndex.FIXED_STYLE) {
                     float rot;
-                    if (OT == OffsetIndex.BENEATH || OT == OffsetIndex.BENEATH_2) {
+                    if (OT == OffsetIndex.BENEATH || OT == OffsetIndex.BENEATH_2 || OT == OffsetIndex.BENEATH_CARRY_USER) {
                         rot = (roundabout$User.getYRot()) % 360;
                     } else if (OT == OffsetIndex.GUARD_AND_TRACE) {
                         BlockHitResult dd = roundabout$getStandPowers().getAheadVec(30);
@@ -6199,10 +6212,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         } else {
             roundabout$setArmVanishTicks(roundabout$getArmVanishTicks() - 1);
         }
-        if (roundabout$getStandPowers() instanceof PowersHeyYa && active) {
-            roundabout$setHeyYaVanishTicks(roundabout$getHeyYaVanishTicks() + 1);
-        } else {
-            roundabout$setHeyYaVanishTicks(roundabout$getHeyYaVanishTicks() - 1);
+
+        if (active) {
+            roundabout$setCurrentStandVanishTicks(roundabout$getCurrentStandVanishTicks() + 1);
+        }else{
+            roundabout$setCurrentStandVanishTicks(roundabout$getCurrentStandVanishTicks() - 1);
+        }
+        if (roundabout$getPreviousStandVanishTicks() > 0) {
+            roundabout$setPreviousStandVanishTicks(roundabout$getPreviousStandVanishTicks() - 1);
         }
 
         if (roundabout$getStandPowers() instanceof PowersOasis && active) {
@@ -6223,11 +6240,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             roundabout$setDiverDownVanishTicks(roundabout$getDiverDownVanishTicks() - 1);
         }
 
-        if (roundabout$getStandPowers() instanceof PowersMandom && active) {
-            roundabout$setMandomVanishTicks(roundabout$getMandomVanishTicks() + 1);
-        } else {
-            roundabout$setMandomVanishTicks(roundabout$getMandomVanishTicks() - 1);
-        }
         /** RattShoulder fade ticks */
         if (PowerTypes.hasStandActive(rdbt$this()) && roundabout$getStandPowers() instanceof PowersRatt &&
                 !((PowersRatt) roundabout$getStandPowers()).isPlaced()) {
@@ -6235,21 +6247,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         } else {
             roundabout$setRattShoulderVanishTicks(0);
         }
+        /*
         if (roundabout$getStandPowers() instanceof PowersAnubis && active) {
             roundabout$setAnubisVanishTicks(roundabout$getAnubisVanishTicks() + 1);
         } else {
             roundabout$setAnubisVanishTicks(roundabout$getAnubisVanishTicks() - 1);
-        }
-        if (roundabout$getStandPowers() instanceof Powers20thCenturyBoy && active) {
-            roundabout$setCBVanishTicks(roundabout$getCBVanishTicks() + 1);
-        } else {
-            roundabout$setCBVanishTicks(roundabout$getCBVanishTicks() - 1);
-        }
-        if (roundabout$getStandPowers() instanceof PowersCatchTheRainbow && active){
-            roundabout$setCatchTheRainbowVanishTicks(roundabout$getCatchTheRainbowVanishTicks() + 1);
-        } else{
-            roundabout$setCatchTheRainbowVanishTicks(roundabout$getCatchTheRainbowVanishTicks() - 1);
-        }
+        }*/
 
         /** Soft and Wet Bubble Encase launch */
         if (roundabout$isLaunchBubbleEncased() && !this.level().isClientSide()) {
@@ -6295,14 +6298,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
         if (this.hasEffect(ModEffects.HAZE_VIRUS) && !this.hasEffect(ModEffects.VIRUS_IMMUNITY)) {
-            if (this.tickCount % 15 == 0 && !this.level().isClientSide() && this.isAlive()) {
+            if (this.tickCount % 30 == 0 && !this.level().isClientSide() && this.isAlive()) {
                 MobEffectInstance inst = this.getEffect(ModEffects.HAZE_VIRUS);
                 if (inst != null) {
                     this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.HAZE_VIRUS),
-                            inst.getAmplifier() + 1);
+                            (inst.getAmplifier() + 1) * 1.5F);
                 }
             }
-
             MobEffectInstance spreadInst = this.getEffect(ModEffects.HAZE_VIRUS);
             if (spreadInst != null && this.tickCount % 5 == 0
                     && !this.level().isClientSide() && this.isAlive()) {
@@ -6324,7 +6326,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
 
         if (this.hasEffect(ModEffects.DISTORTION_VIRUS) && !this.hasEffect(ModEffects.VIRUS_IMMUNITY)) {
-            if (this.tickCount % 20 == 0 && !this.level().isClientSide() && this.isAlive()) {
+            if (this.tickCount % 40 == 0 && !this.level().isClientSide() && this.isAlive()) {
                 MobEffectInstance inst = this.getEffect(ModEffects.DISTORTION_VIRUS);
                 if (inst != null) {
                     int level = inst.getAmplifier() + 1;
@@ -6340,13 +6342,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     if (ClientNetworking.getAppropriateConfig().PurpleHazeSettings.CanonDistortion) {
                         damage *= 4;
                     }
+                    damage *= 2;
                     this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISTORTION_VIRUS), damage);
-                    rdbt$reduceOtherEffectDurations(20, ModEffects.DISTORTION_VIRUS, ModEffects.VIRUS_IMMUNITY);
+                    rdbt$reduceOtherEffectDurations(40, ModEffects.DISTORTION_VIRUS, ModEffects.VIRUS_IMMUNITY);
                 }
             }
-
-
-
             MobEffectInstance spreadInst = this.getEffect(ModEffects.DISTORTION_VIRUS);
             if (spreadInst != null && this.tickCount % 5 == 0
                     && !this.level().isClientSide() && this.isAlive()) {
@@ -6368,7 +6368,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
     }
-
     @Override
     @Unique
     public Vec3 roundabout$frictionSave() {
@@ -7345,6 +7344,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.entityData.set(ROUNDABOUT$DISGUISE_NAME, "");
     }
 
+    @Inject(method = "hurt", at = @At(value = "HEAD"), cancellable = true, require = 0)
+    private void roundabout$stitchedGiveBleed(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci) {
+        MobEffectInstance instance = this.getEffect(ModEffects.STITCHED);
+        if (instance != null) {
+            int amp = instance.getAmplifier();
+            int dur = instance.getDuration();
+            this.removeEffect(instance.getEffect());
+            this.addEffect(new MobEffectInstance(ModEffects.BLEED, dur, amp));
+        }
+    }
+
     @Unique
     @Override
     public boolean roundabout$getIsRainWalking(){
@@ -7373,6 +7383,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     if (!this.jumping) {
                         this.setDeltaMovement(this.getDeltaMovement().x, 0, this.getDeltaMovement().z);
                     } else {
+                        if(ConfigManager.getClientConfig().catchTheRainbowSettings.catchTheRainbowAlternateRainWalk){
+                            roundabout$setIsRainWalking(false);
+                        }
                         Vec3 vec3 = this.getDeltaMovement();
                         this.setDeltaMovement(vec3.x, (double) this.getJumpPower(), vec3.z);
                         if (this.isSprinting()) {

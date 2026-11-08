@@ -11,6 +11,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation WOLF_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "wolf"), "main");
     public static final ModelLayerLocation SNAKE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "snake"), "main");
     public static final ModelLayerLocation PIRANHA_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "piranha"), "main");
+    public static final ModelLayerLocation BUTTERFLY_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "butterfly"), "main");
     public static final ModelLayerLocation ZOMBIEFISH_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "zombiefish"), "main");
 
     public static final ModelLayerLocation VILLAGER_MINION_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "villager_minion"), "main");
@@ -33,6 +34,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation FALCON_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "falcon"), "main");
     public static final ModelLayerLocation ANUBIS_GUARDIAN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "anubis_guardian"), "main");
     public static final ModelLayerLocation THE_WORLD_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "the_world"), "main");
+    public static final ModelLayerLocation JUMPIN_JACK_FLASH_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "jumpin_jack_flash"), "main");
     public static final ModelLayerLocation KING_CRIMSON_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "king_crimson"), "main");
     public static final ModelLayerLocation WHITESNAKE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "whitesnake"), "main");
     public static final ModelLayerLocation D4C_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "d4c"), "main");

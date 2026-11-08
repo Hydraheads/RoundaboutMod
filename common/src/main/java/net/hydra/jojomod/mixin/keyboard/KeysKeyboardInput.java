@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.keyboard;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.KeyboardPilotInput;
+import net.hydra.jojomod.entity.SilverChariotMountEntity;
 import net.hydra.jojomod.entity.corpses.FallenPhantom;
 import net.hydra.jojomod.entity.stand.SilverChariotEntity;
 import net.hydra.jojomod.event.powers.StandUser;

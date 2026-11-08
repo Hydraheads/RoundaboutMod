@@ -19,7 +19,9 @@ import net.hydra.jojomod.entity.KingCrimsonProjectionEntity;
 import net.hydra.jojomod.entity.ParallelChestEntity;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.corpses.FallenPhantom;
+import net.hydra.jojomod.entity.gold_experience.GELifeform;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
+import net.hydra.jojomod.entity.mobs.Butterfly;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
@@ -59,6 +61,7 @@ import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.client.resources.SkinManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.particles.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -76,6 +79,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -1657,6 +1661,7 @@ public class MainUtil {
 
     public static boolean hasBlueBlood(Entity target) {
         if (isWhitelistedBlueBlood(target) || target instanceof Spider || target instanceof Bee
+                || target instanceof Butterfly
                 || target instanceof Silverfish || target instanceof Squid) {
             return true;
         } else {
@@ -2808,7 +2813,7 @@ public class MainUtil {
     }
 
     public static boolean getReducedDamage(Entity entity) {
-        return (entity instanceof Player || entity instanceof StandEntity ||
+        return (entity instanceof Player || entity instanceof StandEntity || entity instanceof GELifeform ||
                 ((entity instanceof LivingEntity LE && !((StandUser) LE).roundabout$getStandDisc().isEmpty()) &&
                         ClientNetworking
                                 .getAppropriateConfig().generalStandUserMobSettings.standUserMobsTakePlayerDamageMultipliers));
@@ -2827,6 +2832,18 @@ public class MainUtil {
             return true;
         }
         return false;
+    }
+
+    public static boolean CenturyBoyReactionBacklistDamage(DamageSource source) {
+
+        boolean isPassive = source.getEntity() == null;
+
+        return (isPassive && !(source.is(DamageTypes.FALL)
+                || source.is(DamageTypes.FALLING_ANVIL)
+                || source.is(DamageTypes.FALLING_BLOCK)
+                || source.is(DamageTypes.UNATTRIBUTED_FIREBALL)
+                || source.is(DamageTypes.FALLING_STALACTITE)
+        ));
     }
 
     /** Returns the vertical angle between two mobs in degrees */
@@ -2954,7 +2971,7 @@ public class MainUtil {
                 value.equals(ModEffects.SINGE)
                 || value.equals(ModEffects.STAND_MELTING) ||
                 value.equals(ModEffects.CAPTURING_LOVE) || value.equals(ModEffects.MELTING)
-                || value.equals(ModEffects.MOLD);
+                || value.equals(ModEffects.MOLD) || value.equals(ModEffects.STITCHED);
     }
 
     public static boolean hidesPotionEffectSwirl(MobEffect value) {
@@ -2965,7 +2982,7 @@ public class MainUtil {
                 || value.equals(ModEffects.SWITCH) || value.equals(ModEffects.MELTING) ||
                 value.equals(ModEffects.IMPRINTING) || value.equals(ModEffects.SWAPPED)
                 || value.equals(ModEffects.STAND_MELTING) ||
-                value.equals(ModEffects.SINGE);
+                value.equals(ModEffects.SINGE) || value.equals(ModEffects.STITCHED);
     }
 
     public static boolean isKnockbackResilient(LivingEntity LE) {

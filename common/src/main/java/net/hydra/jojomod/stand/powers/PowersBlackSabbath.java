@@ -909,7 +909,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                 }
             }
         }
-
         getValidPlacement();
         cycleThroughBlackSabbathTargets();
         super.tickPower();
@@ -1014,12 +1013,12 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
     public final Boolean getThrowable(Player pl) {
         IPlayerEntity play = ((IPlayerEntity) pl);
         ItemStack blackFS = play.roundabout$getBlckSabbathPlayerInventory().getItem(0);
-        return (blackFS.getItem() instanceof ArrowItem || blackFS.getItem() instanceof KnifeItem
-                || blackFS.is(ModItems.KNIFE_BUNDLE) || blackFS.getItem() instanceof TridentItem && EnchantmentHelper.getRiptide(blackFS) <= 0
+        return (blackFS.getItem() instanceof ArrowItem && !(blackFS.getItem() instanceof RoundaboutArrowItem) || blackFS.getItem() instanceof KnifeItem
+                || blackFS.is(ModItems.KNIFE_BUNDLE) || blackFS.getItem() instanceof TridentItem && EnchantmentHelper.getRiptide(blackFS) <= 0 && !(blackFS.getDamageValue() >= blackFS.getMaxDamage() - 1)) && !(blackFS.is(ItemStack.EMPTY.getItem())
                 || blackFS.getItem() instanceof EggItem || blackFS.getItem() instanceof SnowballItem || blackFS.getItem() instanceof ThrowablePotionItem
                 || blackFS.getItem() instanceof EnderpearlItem || blackFS.getItem() instanceof GasolineBucketItem || blackFS.getItem() instanceof GasolineCanItem
                 || blackFS.getItem() instanceof MatchItem || blackFS.is(ModItems.MATCH_BUNDLE) || blackFS.getItem() instanceof FleshBucketItem
-                ||blackFS.getItem() instanceof HarpoonItem) && !(blackFS.is(ItemStack.EMPTY.getItem()));
+                ||blackFS.getItem() instanceof HarpoonItem  && !(blackFS.getDamageValue() >= blackFS.getMaxDamage() - 1)) && !(blackFS.is(ItemStack.EMPTY.getItem()));
     }
     public void createTheMightyHunterOfTheShadows(Vec3 pos){
         if(isHunting()) {
@@ -1046,13 +1045,15 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                             if(BE.getUser() != null && BE.getUser() instanceof Player pl) {
                                 IPlayerEntity play = ((IPlayerEntity) pl);
                                 ItemStack blackFS = play.roundabout$getBlckSabbathPlayerInventory().getItem(0);
-                                BE.setHeldItemSabbath(blackFS);
-                                if(blackFS.is(ItemStack.EMPTY.getItem())){
-                                    BE.setMoveMode(0);
-                                } else if (getThrowable(pl)){
-                                    BE.setMoveMode(1);
-                                } else {
-                                    BE.setMoveMode(2);
+                                if(!isClient()) {
+                                    BE.setHeldItemSabbath(blackFS);
+                                    if (blackFS.is(ItemStack.EMPTY.getItem())) {
+                                        BE.setMoveMode(0);
+                                    } else if (getThrowable(pl)) {
+                                        BE.setMoveMode(1);
+                                    } else {
+                                        BE.setMoveMode(2);
+                                    }
                                 }
                             }
                             this.self.level().addFreshEntity(BE);
@@ -1245,7 +1246,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             if (TE instanceof LivingEntity LE) {
                 if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){
                     if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e && be.level().getEntity(be.getGrabbing()).is(LE)){
-                        be.setMeleeInteractionTicks(0);
+                        be.setMeleeInteractionTicks(-1);
                         ((StandUser)e).roundabout$setGrabbedSoul(false);
                         ((StandUser) e).roundabout$updateSealedTicks(-1);
                         be.killSoul();
@@ -1498,10 +1499,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
     }
     @Override
     public boolean returnFakeStandForHud(){
-        if(this.self != null) {
-            return true;
-        }
-        return false;
+        return true;
     }
     public StandEntity getStandForHUDIfFake(){
         if (displayStand == null){

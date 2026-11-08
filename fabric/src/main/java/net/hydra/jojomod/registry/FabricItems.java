@@ -87,6 +87,11 @@ public class FabricItems {
     public static Item MAX_STAND_DISC_KING_CRIMSON = registerItem("max_king_crimson_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersKingCrimson(null)));
 
+    public static final Item STAND_DISC_JJF = registerItem("jumpin_jack_flash_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersJumpinJackFlash(null)));
+    public static final Item MAX_STAND_DISC_JJF = registerItem("max_jumpin_jack_flash_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersJumpinJackFlash(null)));
+
     public static final Item STAND_DISC_WHITESNAKE = registerItem("whitesnake_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersWhitesnake(null)));
     public static final Item MAX_STAND_DISC_WHITESNAKE = registerItem("max_whitesnake_disc",
@@ -467,6 +472,8 @@ public class FabricItems {
     public static Item PAINTING_VAN_GOUGH = registerItem("painting_van_gough", new VanGoughPaintingItem(new Item.Properties().stacksTo(1)));
     public static Item PAINTING_MONA_LISA = registerItem("painting_mona_lisa", new MonaLisaPaintingItem(new Item.Properties().stacksTo(1)));
 
+    public static Item ZOMBIE_HORSE_THREAD = registerItem("zombie_horse_thread", new ZombieHorseThreadItem(new Item.Properties().stacksTo(1).durability(16)));
+
     public static Item MUSIC_DISC_TORTURE_DANCE = registerItem("music_disc_torture_dance",
             new RecordItem(1, ModSounds.TORTURE_DANCE_EVENT,
                     (new Item.Properties()).stacksTo(1).rarity(Rarity.RARE), 2840));
@@ -495,6 +502,8 @@ public class FabricItems {
             0x6dcd4c, 0xf9f07b, new Item.Properties()));
     public static final Item PIRANHA_SPAWN_EGG = registerItem("piranha_spawn_egg", new SpawnEggItem(FabricEntities.PIRANHA,
             0x8fbbdd, 0xe89e4d, new Item.Properties()));
+    public static final Item BUTTERFLY_SPAWN_EGG = registerItem("butterfly_spawn_egg", new SpawnEggItem(FabricEntities.BUTTERFLY,
+            0x95caff, 0xe880c6, new Item.Properties()));
 
     public static final Potion HEX_POTION =
             Registry.register(BuiltInRegistries.POTION, new ResourceLocation(Roundabout.MOD_ID, "roundabout.hex"),
@@ -574,6 +583,8 @@ public class FabricItems {
                         entries.accept(ANUBIS_GUARDIAN_SPAWN_EGG);
                         entries.accept(ZOMBIE_MINION_SPAWN_EGG);
                         entries.accept(SNAKE_SPAWN_EGG);
+                        entries.accept(PIRANHA_SPAWN_EGG);
+                        entries.accept(BUTTERFLY_SPAWN_EGG);
                         entries.accept(COFFEE_GUM);
                         entries.accept(LOCACACA_PIT.asItem());
                         entries.accept(LOCACACA);
@@ -583,6 +594,9 @@ public class FabricItems {
                         entries.accept(SNAKE_SKIN);
                         entries.accept(SNAKE_SKIN_BOOTS);
                         entries.accept(SNAKE_OIL);
+                        entries.accept(PIRANHA_BUCKET);
+                        entries.accept(PIRANHA);
+                        entries.accept(COOKED_PIRANHA);
                         entries.accept(METEORITE);
                         entries.accept(METEORITE_INGOT);
                         entries.accept(AJA);
@@ -848,10 +862,6 @@ public class FabricItems {
                         //Add all items from the Jojo mod tab here
                     	//entries.accept(ModBlocks.CHESSBOARD_BLOCK);
                         entries.accept(FALCON_SPAWN_EGG);
-                        entries.accept(PIRANHA_SPAWN_EGG);
-                        entries.accept(PIRANHA_BUCKET);
-                        entries.accept(PIRANHA);
-                        entries.accept(COOKED_PIRANHA);
                         entries.accept(STAND_DISC_D4C);
                         entries.accept(MAX_STAND_DISC_D4C);
                         entries.accept(STAND_DISC_GOLD_EXPERIENCE);
@@ -879,8 +889,8 @@ public class FabricItems {
                         entries.accept(STAND_DISC_OASIS);
                         entries.accept(MAX_STAND_DISC_OASIS);
                         entries.accept(STAND_DISC_PEARL_JAM);
-                        entries.accept(STAND_DISC_DIVER_DOWN);
-                        entries.accept(MAX_STAND_DISC_DIVER_DOWN);
+                        entries.accept(STAND_DISC_JJF);
+                        entries.accept(MAX_STAND_DISC_JJF);
                         entries.accept(STAND_DISC_CATCH_THE_RAINBOW);
                         entries.accept(BLACKMORE_MASK);
 
@@ -908,6 +918,8 @@ public class FabricItems {
                         entries.accept(HALLUCINATORY_ACID_WALL);
                         entries.accept(ModBlocks.GAMBLING_TABLE);
                         entries.accept(ModBlocks.MAGICIANS_STATUE_BLOCK);
+
+                        entries.accept(ZOMBIE_HORSE_THREAD);
                     }).build());
     public static final CreativeModeTab FOG_BLOCK_ITEMS = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
             new ResourceLocation(Roundabout.MOD_ID, "justice_fog_items"),
@@ -959,6 +971,9 @@ public class FabricItems {
         ModItems.STAND_DISC_KING_CRIMSON = STAND_DISC_KING_CRIMSON;
         ((MaxStandDiscItem)MAX_STAND_DISC_KING_CRIMSON).baseDisc = ((StandDiscItem)STAND_DISC_KING_CRIMSON);
         ModItems.MAX_STAND_DISC_KING_CRIMSON = MAX_STAND_DISC_KING_CRIMSON;
+        ModItems.STAND_DISC_JJF = STAND_DISC_JJF;
+        ((MaxStandDiscItem)MAX_STAND_DISC_JJF).baseDisc = ((StandDiscItem)STAND_DISC_JJF);
+        ModItems.MAX_STAND_DISC_JJF = MAX_STAND_DISC_JJF;
         ModItems.STAND_DISC_WHITESNAKE = STAND_DISC_WHITESNAKE;
         ((MaxStandDiscItem) MAX_STAND_DISC_WHITESNAKE).baseDisc = (StandDiscItem) STAND_DISC_WHITESNAKE;
         ModItems.MAX_STAND_DISC_WHITESNAKE = MAX_STAND_DISC_WHITESNAKE;
@@ -1212,6 +1227,7 @@ public class FabricItems {
         ModItems.FALCON_SPAWN_EGG = FALCON_SPAWN_EGG;
         ModItems.SNAKE_SPAWN_EGG = SNAKE_SPAWN_EGG;
         ModItems.PIRANHA_SPAWN_EGG = PIRANHA_SPAWN_EGG;
+        ModItems.BUTTERFLY_SPAWN_EGG = BUTTERFLY_SPAWN_EGG;
         ModItems.ZOMBIE_MINION_SPAWN_EGG = ZOMBIE_MINION_SPAWN_EGG;
         ModItems.AESTHETICIAN_SPAWN_EGG = AESTHETICIAN_SPAWN_EGG;
         ModItems.ZOMBIE_AESTHETICIAN_SPAWN_EGG = ZOMBIE_AESTHETICIAN_SPAWN_EGG;
@@ -1241,6 +1257,8 @@ public class FabricItems {
         ModItems.PAINTING_VAN_GOUGH = PAINTING_VAN_GOUGH;
         ModItems.PAINTING_MONA_LISA = PAINTING_MONA_LISA;
         ModItems.PAINTING_BIRTH_OF_VENUS = PAINTING_BIRTH_OF_VENUS;
+
+        ModItems.ZOMBIE_HORSE_THREAD = ZOMBIE_HORSE_THREAD;
 
         ModItems.initializeVisageStore();
         //ModItems.STAND_ARROW_POOL.add((StandDiscItem)STAND_DISC_D4C);

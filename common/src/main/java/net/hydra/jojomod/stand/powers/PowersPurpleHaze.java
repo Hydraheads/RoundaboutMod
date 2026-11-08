@@ -89,9 +89,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     public float getSalimoPunchStrength(Entity entity) {
         if (this.getReducedDamage(entity)) {
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(0.5F));  // KQ impale: 2F
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.5F));  // KQ impale: 2F
         }
-        return levelupDamageMod(multiplyPowerByStandConfigMobs(1.5F));         // KQ impale: 12
+        return levelupDamageMod(multiplyPowerByStandConfigMobs(5.0F));
     }
     public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
@@ -321,9 +321,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
     @Override
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.26F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.31F));
         } else {
-            return levelupDamageMod(multiplyPowerByStandConfigMobs(4.0F));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(4.5F));
         }
     }
     @Override
@@ -970,7 +970,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
         }
 
-        if (podRegenClient != -1) {
+        if (podRegenClient != -1 && getPods() < MAX_PODS) {
             int ClashTime = Math.round(((float) podRegenClient / POD_RECHARGE_TIME) * 15);
             context.blit(StandIcons.JOJO_ICONS, k, j+17, 213, 97, 15, 4);
             context.blit(StandIcons.JOJO_ICONS, k, j+17, 213, 102, ClashTime, 4);
@@ -1034,7 +1034,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     @Override
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas){
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        int startPos = 0;
+        int startPos = -8;
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos,topPos+80,0, "ability.roundabout.punch",
                 "instruction.roundabout.press_attack", StandIcons.PH_PUNCH,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos, topPos+99,0, "ability.roundabout.guard",
@@ -1293,7 +1293,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
     }
 
-    private int podRegenClient = -1;
+    public int podRegenClient = -1;
 
     @Override
     public void updatePowerInt(byte activePower, int data) {
@@ -1383,7 +1383,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     public void VirusSpit() {
         if (!this.onCooldown(PowerIndex.POWER_1_BONUS)) {
-            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.PLANET_WAVES_METEOR_SHOWER_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.PURPLE_HAZE_SPIT_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
             self.removeEffect(ModEffects.VIRUS_IMMUNITY);
 
             VirusSpitEntity spit = new VirusSpitEntity(
@@ -1716,7 +1716,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
     }
     private static final float SALIMO_RANGE = 3.5F;
-    private static final float SALIMO_KNOCKBACK = 3.2F;      // KQ impale is 1.3 so maybe this is ok idk
+    private static final float SALIMO_KNOCKBACK = 2.5F;      // KQ impale is 1.3 so maybe this is ok idk
     private static final byte IMPALE_CHARGE_NOISE = 105;
     public int salimoTicks = 0;
 
@@ -1790,7 +1790,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
             se = getImpaleMissSound();
         }
         if (!this.self.level().isClientSide()) {
-            playSoundIfPossible(self.level(), null, this.self.blockPosition(), se, SoundSource.PLAYERS, 0.95F, pitch);
+
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                    ModSounds.PURPLE_HAZE_KICK_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
         }
     }
     private void tickFallingHitAnimation() {
@@ -1946,7 +1948,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
 
         playSoundIfPossible(self.level(), null, BlockPos.containing(position),
-                distortionMode ? ModSounds.PURPLE_HAZE_DISTORTION_SMOKE_EVENT : ModSounds.PURPLE_HAZE_SMOKE_EVENT,
+                distortionMode ? ModSounds.PURPLE_HAZE_DISTORTION_SMOKE_EVENT : ModSounds.PURPLE_HAZE_SMOKE_EVENT, //distortionMode ? ModSounds.PURPLE_HAZE_DISTORTION_SMOKE_EVENT : ModSounds.PURPLE_HAZE_SMOKE_EVENT,
                 distortionMode ? SoundSource.NEUTRAL : SoundSource.PLAYERS, 4.0F, 1.0F);
     }
 

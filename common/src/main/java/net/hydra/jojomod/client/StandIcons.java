@@ -542,6 +542,24 @@ public class StandIcons {
     public static final ResourceLocation PLANET_WAVES_COSMIC_ICON= new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/planet_waves/cosmic_icon.png");
 
+
+    public static final ResourceLocation JJF_NORMAL_GRAVITY_ICON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/mob_effect/gravity_flip.png");
+    public static final ResourceLocation JJF_ZERO_GRAVITY_ON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/jjf/zero_gravity_on.png");
+    public static final ResourceLocation JJF_LOADING_ICON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/jjf/load.png");
+    public static final ResourceLocation JJF_SHOOTING_ICON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/jjf/shoot.png");
+    public static final ResourceLocation JJF_UNLOADING_ICON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/jjf/unload.png" );
+    public static final ResourceLocation JJF_SPIT_ICON = new ResourceLocation( Roundabout.MOD_ID,
+            "textures/gui/icons/jjf/spit.png");
+    public static final ResourceLocation JJF_PUNCH_ICON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/jjf/punch.png");
+    public static final ResourceLocation JJF_GUARD_ICON = new ResourceLocation( Roundabout.MOD_ID,
+            "textures/gui/icons/jjf/guard.png" );
+
     public static final ResourceLocation SILVER_CHARIOT_JAB = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/silver_chariot/jab.png");
     public static final ResourceLocation SILVER_CHARIOT_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,

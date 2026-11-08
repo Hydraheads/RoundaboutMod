@@ -63,6 +63,7 @@ public class ForgePlatformHelper implements IPlatformHelper {
         return !FMLLoader.isProduction();
     }
 
+    @SuppressWarnings("removal")
     public boolean getFluidTagPushCode(Entity ent, TagKey<Fluid> $$0, double $$1){
         ent.updateFluidHeightAndDoFluidPushing();
         if($$0 == FluidTags.WATER) return ent.isInFluidType(net.minecraftforge.common.ForgeMod.WATER_TYPE.get());

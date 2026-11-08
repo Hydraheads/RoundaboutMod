@@ -8,16 +8,16 @@ import net.minecraft.client.animation.KeyframeAnimations;
 public class CenturyBoyAnimations {
 	public static final AnimationDefinition FPknockback = AnimationDefinition.Builder.withLength(0.25F)
 			.addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-					new Keyframe(0F, KeyframeAnimations.degreeVec(-60F, -45.0F, 47.5F), AnimationChannel.Interpolations.LINEAR)
+					new Keyframe(0F, KeyframeAnimations.degreeVec(-70F, -90.0F, -60.5F), AnimationChannel.Interpolations.LINEAR)
 			))
 			.addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.POSITION,
-					new Keyframe(0F, KeyframeAnimations.posVec(0.9554F + 0.7f, -9.0427F, 1.4142F), AnimationChannel.Interpolations.LINEAR)
+					new Keyframe(0F, KeyframeAnimations.posVec(2.9554F + 0.7f, -9.0427F, 0F), AnimationChannel.Interpolations.LINEAR)
 			))
 			.addAnimation("left_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-					new Keyframe(0F, KeyframeAnimations.degreeVec(-60.0F, 50.0F, -47.5F), AnimationChannel.Interpolations.LINEAR)
+					new Keyframe(0F, KeyframeAnimations.degreeVec(-70.0F, 90.0F, 60.5F), AnimationChannel.Interpolations.LINEAR)
 			))
 			.addAnimation("left_arm", new AnimationChannel(AnimationChannel.Targets.POSITION,
-					new Keyframe(0F, KeyframeAnimations.posVec(-1.0351F - 0.7f, -9.1296F, 1.2856F), AnimationChannel.Interpolations.LINEAR)
+					new Keyframe(0F, KeyframeAnimations.posVec(-3.0351F - 0.7f, -9.1296F, 0F), AnimationChannel.Interpolations.LINEAR)
 			))
 			.build();
 
@@ -27,13 +27,13 @@ public class CenturyBoyAnimations {
 					new Keyframe(0.25F, KeyframeAnimations.degreeVec(-42.5F, 180.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
 			))
 			.addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.POSITION,
-					new Keyframe(0.25F, KeyframeAnimations.posVec(2.6719F, -11.7443F, -2.6719F), AnimationChannel.Interpolations.LINEAR)
+					new Keyframe(0.25F, KeyframeAnimations.posVec(4.6719F, -11.7443F, -2.6719F), AnimationChannel.Interpolations.LINEAR)
 			))
 			.addAnimation("left_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 					new Keyframe(0.25F, KeyframeAnimations.degreeVec(-76.6205F, -260.5226F, -15.9281F), AnimationChannel.Interpolations.LINEAR)
 			))
 			.addAnimation("left_arm", new AnimationChannel(AnimationChannel.Targets.POSITION,
-					new Keyframe(0.25F, KeyframeAnimations.posVec(1.0F, -11.0F, 3.0F), AnimationChannel.Interpolations.LINEAR)
+					new Keyframe(0.25F, KeyframeAnimations.posVec(-1.0F, -11.0F, 3.0F), AnimationChannel.Interpolations.LINEAR)
 			))
 			.build();
 
@@ -42,27 +42,27 @@ public class CenturyBoyAnimations {
 					new Keyframe(0.0F, KeyframeAnimations.degreeVec(-65.0F, -220.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
 			))
 			.addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.POSITION,
-					new Keyframe(0.0F, KeyframeAnimations.posVec(1.0F, -9.7F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+					new Keyframe(0.0F, KeyframeAnimations.posVec(4.0F, -9.7F, 0.0F), AnimationChannel.Interpolations.LINEAR)
 			))
 			.addAnimation("left_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 					new Keyframe(0.0F, KeyframeAnimations.degreeVec(-65.0F, 220.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
 			))
 			.addAnimation("left_arm", new AnimationChannel(AnimationChannel.Targets.POSITION,
-					new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, -9.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+					new Keyframe(0.0F, KeyframeAnimations.posVec(-3.0F, -9.0F,-0.0F), AnimationChannel.Interpolations.LINEAR)
 			))
 			.build();
 	public static final AnimationDefinition FPground = AnimationDefinition.Builder.withLength(0.25F)
 			.addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-					new Keyframe(0.0F, KeyframeAnimations.degreeVec(20.0F, 100.0F, -90.0F), AnimationChannel.Interpolations.LINEAR)
+					new Keyframe(0.0F, KeyframeAnimations.degreeVec(20.0F, 0.0F, -90.0F), AnimationChannel.Interpolations.LINEAR)
 			))
 			.addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.POSITION,
-					new Keyframe(0.0F, KeyframeAnimations.posVec(2.0F, -12.0F, -2.0F), AnimationChannel.Interpolations.LINEAR)
+					new Keyframe(0.0F, KeyframeAnimations.posVec(2.0F, -10.0F, 2.0F), AnimationChannel.Interpolations.LINEAR)
 			))
 			.addAnimation("left_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-					new Keyframe(0.0F, KeyframeAnimations.degreeVec(20.0F, -100.0F, 90.0F), AnimationChannel.Interpolations.LINEAR)
+					new Keyframe(0.0F, KeyframeAnimations.degreeVec(20.0F, -0.0F, 90.0F), AnimationChannel.Interpolations.LINEAR)
 			))
 			.addAnimation("left_arm", new AnimationChannel(AnimationChannel.Targets.POSITION,
-					new Keyframe(0.0F, KeyframeAnimations.posVec(-2.0F, -12.0F, -2.0F), AnimationChannel.Interpolations.LINEAR)
+					new Keyframe(0.0F, KeyframeAnimations.posVec(-2.0F, -10.0F, 2.0F), AnimationChannel.Interpolations.LINEAR)
 			))
 			.build();
 

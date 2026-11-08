@@ -19,6 +19,7 @@ import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -293,6 +294,19 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         return super.isAttackIneptVisually(activeP, slot);
     }
 
+    @Override
+    public void onStandSwitch(){
+        this.clearArm();
+        super.onStandSwitch();
+    }
+
+    private void clearArm(){
+        if (!this.self.level().isClientSide){
+            if (!HasOffHand){
+                Off_hand_entity.removearm();
+            }
+        }
+    }
 
     private static final byte
     RAINMEND = 53,
@@ -597,9 +611,9 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                 playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.CTR_HEAL_EVENT, SoundSource.PLAYERS, 0.6F, (float)Roundabout.RANDOM.nextDouble(0.9, 1.1));
                 for (int i = 0; i < 11; i = i + 1) {
                     sendParticlesIfPossible(self.level(), ParticleTypes.SPLASH,
-                            this.getSelf().getX() + (diameter * Math.sin(i * 6)) * Math.cos(Xangle),
+                            this.getSelf().getX() + (diameter * Math.sin(i * 4)) * Math.cos(Xangle),
                             this.getSelf().getY() + (this.getSelf().getEyeHeight() * 0.7),
-                            this.getSelf().getZ() + (diameter * Math.cos(i * 6)) * Math.cos(Zangle),
+                            this.getSelf().getZ() + (diameter * Math.cos(i * 4)) * Math.cos(Zangle),
                             0, 0, 0, 0, 0);
                 }
             }
@@ -808,9 +822,9 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.CTR_HEAL_EVENT, SoundSource.PLAYERS, 0.35F, (float)Roundabout.RANDOM.nextDouble(0.65, 0.85));
             for (int i = 0; i < 11; i = i + 1) {
                 sendParticlesIfPossible(self.level(), ParticleTypes.SPLASH,
-                        this.getSelf().getX() + (diameter * Math.sin(i * 6)) * Math.cos(Xangle),
+                        this.getSelf().getX() + (diameter * Math.sin(i * 4)) * Math.cos(Xangle),
                         this.getSelf().getY() + (this.getSelf().getEyeHeight() * 0.7),
-                        this.getSelf().getZ() + (diameter * Math.cos(i * 6)) * Math.cos(Zangle),
+                        this.getSelf().getZ() + (diameter * Math.cos(i * 4)) * Math.cos(Zangle),
                         0, 0, 0, 0, 0);
             }
         }
@@ -882,7 +896,9 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                         ((IPlayerEntity) this.getSelf()).roundabout$setClientDodgeTime(0);
                     }
                     if (this.self instanceof StandUser su){
-                        su.roundabout$setIsRainWalking(false);
+                        if (!ConfigManager.getClientConfig().catchTheRainbowSettings.catchTheRainbowAlternateRainWalk) {
+                            su.roundabout$setIsRainWalking(false);
+                        }
                     }
                     this.setCooldown(PowerIndex.GLOBAL_DASH, cdTime);
                     MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 0.91F,

@@ -20,6 +20,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -125,8 +126,12 @@ public class PurpleSmokeEntity extends StandEntity {
             this.setDeltaMovement(0, -0.2, 0);
         }
         if (!client) {
-            float expansionProgress = Math.min(1.0F, (float) ticksAlive / 60);
-            range = 1.0F + (8.0F - 1.0F) * expansionProgress;
+            var cfg = ClientNetworking.getAppropriateConfig().PurpleHazeSettings;
+            float maxRange = Mth.clamp(cfg.SmokeRadius, 1.0F, 32.0F);
+            int expansionTicks = Math.max(1, cfg.SmokeExpansionTicks);
+
+            float expansionProgress = Math.min(1.0F, (float) ticksAlive / expansionTicks);
+            range = 1.0F + (maxRange - 1.0F) * expansionProgress;
             range = Math.max(range, 1.0F);
         }
         //if (!((TimeStop) level()).inTimeStopRange(this)) {
@@ -273,6 +278,7 @@ public class PurpleSmokeEntity extends StandEntity {
 
     private void spawnTierBurst(int tier) {
         if (!(this.level() instanceof ServerLevel sl)) return;
+        if (tier < 1) return;
 
         double cx = this.getX();
         double cy = this.getY();
@@ -290,13 +296,24 @@ public class PurpleSmokeEntity extends StandEntity {
             double dirY = y;
             double dirZ = Math.sin(theta) * ring;
 
-
             sl.sendParticles(ModParticles.DISTORTION_SMOKE,
                     cx + dirX * radius * 0.5, cy + dirY * radius * 0.5, cz + dirZ * radius * 0.5,
                     0, dirX, dirY, dirZ, speed);
         }
 
-        sl.playSound(null, this.blockPosition(), ModSounds.PURPLE_HAZE_DISTORTION_SMOKE_EVENT, SoundSource.HOSTILE, 0.6F, 0.5F + tier * 0.2F);
+        SoundEvent tierSound = (tier == 1)
+                ? ModSounds.PURPLE_HAZE_PHASE_2_EVENT  // Distortion Virus II
+                : ModSounds.PURPLE_HAZE_PHASE_3_EVENT; // Distortion Virus III
+        float volume = (tier == 1) ? 0.8F : 1.0F;
+        float pitch = (float) (1.00f + Math.random() * 0.03f);
+
+        LivingEntity user = this.getUser();
+        if (user != null) {
+            ((StandUser) user).roundabout$getStandPowers().playSoundIfPossible(
+                    sl, null, this.blockPosition(), tierSound, SoundSource.HOSTILE, volume, pitch);
+        } else {
+            sl.playSound(null, this.blockPosition(), tierSound, SoundSource.HOSTILE, volume, pitch);
+        }
     }
     private void spawnFieldParticles(byte skin) {
         if (!(this.level() instanceof ServerLevel sl)) return;
@@ -375,7 +392,7 @@ public class PurpleSmokeEntity extends StandEntity {
 
             if (!((StandUser) living).roundabout$isBubbleEncased() && !(living instanceof StrayCatEntity c && c.getBubbleShield()) && PowerTypes.isExistentiallyElsewhereTogether(this, living)) {
 
-                int effectDuration = living instanceof Player ? 150 : 150; //for when it was less duration to you. It was 100 : 150
+                int effectDuration = living instanceof Player ? 160 : 160; //for when it was less duration to you. It was 100 : 150
                 boolean isSelf = living == user;
 
                 if (isDistortionMode()) {
@@ -388,7 +405,7 @@ public class PurpleSmokeEntity extends StandEntity {
                         ((StandUser) user).roundabout$getStandPowers().addEXP(2);
                     }
                     if (ClientNetworking.getAppropriateConfig().PurpleHazeSettings.HazeMelts) {
-                        living.addEffect(new MobEffectInstance(ModEffects.MELTING, 150, 2));
+                        living.addEffect(new MobEffectInstance(ModEffects.MELTING, 160, 2));
                     }
                 } else {
                     boolean alreadyHasVirus = living.hasEffect(ModEffects.HAZE_VIRUS);
