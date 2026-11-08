@@ -35,6 +35,7 @@ import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
@@ -7366,6 +7367,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     if (!this.jumping) {
                         this.setDeltaMovement(this.getDeltaMovement().x, 0, this.getDeltaMovement().z);
                     } else {
+                        if(ConfigManager.getClientConfig().catchTheRainbowSettings.catchTheRainbowAlternateRainWalk){
+                            roundabout$setIsRainWalking(false);
+                        }
                         Vec3 vec3 = this.getDeltaMovement();
                         this.setDeltaMovement(vec3.x, (double) this.getJumpPower(), vec3.z);
                         if (this.isSprinting()) {

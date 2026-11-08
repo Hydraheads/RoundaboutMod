@@ -4534,6 +4534,9 @@
   "config.roundabout.catchTheRainbowFullDodgeCooldown.name": "Full Dodge Cooldown",
   "config.roundabout.catchTheRainbowFullDodgeCooldown.desc": "The cooldown of the \"Come The Dawn\" ability, by default it is 200 ticks (10 seconds)",
 
+  "config.roundabout.catchTheRainbowAlternateRainWalk.name": "Alternate Rain Walk",
+  "config.roundabout.catchTheRainbowAlternateRainWalk.desc": "While Rain Walking, jumping removes the Rain Walk state, but dodging keeps you in the air. (By default it is the opposite)",
+
   "config.roundabout.manhattanTransferMaxRange.name": "Manhattan Transfer Max Range",
   "config.roundabout.manhattanTransferMaxRange.desc": "How far you and Manhattan Transfer can distance until it despawns.",
   "config.roundabout.getAutoSpeed.name":"Automatic Speed Modifier",
