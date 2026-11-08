@@ -464,9 +464,11 @@ public class PowersSilverChariot extends NewPunchingStand {
     }
     */
 
+    /*
     public int getCooldownArmorShed() {
         return ClientNetworking.getAppropriateConfig().silverChariotSettings.silverChariotCooldownArmorShed;
     }
+    */
 
     public int getCooldownSelfGrab() {
         return ClientNetworking.getAppropriateConfig().silverChariotSettings.silverChariotCooldownSelfGrab;
@@ -496,9 +498,11 @@ public class PowersSilverChariot extends NewPunchingStand {
         return ClientNetworking.getAppropriateConfig().silverChariotSettings.silverChariotCooldownRapierShot;
     }
 
+    /*
     public int getCooldownRapierShotInterrupt() {
         return ClientNetworking.getAppropriateConfig().silverChariotSettings.silverChariotCooldownRapierShotInterrupt;
     }
+    */
 
     /*
     public int getCooldownRapierShotPlatform() {
@@ -507,7 +511,7 @@ public class PowersSilverChariot extends NewPunchingStand {
     */
 
     public int getMinimumCooldownCrouchAttack() {
-        return ClientNetworking.getAppropriateConfig().silverChariotSettings.silverChariotMinimumCooldownOffhandAttack;
+        return ClientNetworking.getAppropriateConfig().silverChariotSettings.silverChariotMinimumCooldownCrouchAttack;
     }
 
 
@@ -1258,10 +1262,12 @@ public class PowersSilverChariot extends NewPunchingStand {
     public void onStandSwitchInto() {
         super.onStandSwitchInto();
         if (!self.level().isClientSide()) {
+            /*
             int co = this.getCooldownRapierShot();
             if (!onCooldown(PowerIndex.SKILL_4) || getCooldown(PowerIndex.SKILL_4).time < co) {
                 setCooldown(PowerIndex.SKILL_4, co);
             }
+            */
         }
     }
 
@@ -3474,6 +3480,7 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public StandEntity getStandForHUDIfFake() {
+        boolean armoured = this.getArmoured();
         if (displayStand == null){
             displayStand = getNewStandEntity();
         }
@@ -3487,6 +3494,12 @@ public class PowersSilverChariot extends NewPunchingStand {
             StandUser su = (StandUser) this.self;
             displayStand.setUser(this.self);
             displayStand.tickCount = this.self.tickCount;
+
+            if (displayStand instanceof SilverChariotEntity SCE) {
+                SCE.setArmoured(armoured);
+                displayStand.setAnimation(armoured ? SilverChariotEntity.SC_TOGGLE_ARMOUR_ON : SilverChariotEntity.SC_TOGGLE_ARMOUR_OFF);
+                SCE.setHasRapier(!this.onCooldown(PowerIndex.SKILL_4));
+            }
 
             displayStand.setAnimation(su.roundabout$getStandAnimation());
             displayStand.setIdleAnimation(su.roundabout$getIdlePos());
@@ -3523,7 +3536,12 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public boolean returnFakeStandForHud() {
-        return !this.getStandUserSelf().roundabout$getActive() || this.isPiloting() || !this.getArmoured();
+        // return !this.getStandUserSelf().roundabout$getActive() || this.isPiloting() || !this.getArmoured();
+        if(this.self != null) {
+            // return !(this.getStandEntity(this.self) != null);
+            // return true;
+        }
+        return false;
     }
 
     @Override
@@ -3671,10 +3689,8 @@ public class PowersSilverChariot extends NewPunchingStand {
                 refreshArms();
             }
         } else {
-            if (((StandUser)this.self).roundabout$getGuardBroken() && this.getArmoured()) {
+            if (((StandUser)this.self).roundabout$getGuardBroken()) {
                 animateStand(StandEntity.BROKEN_GUARD);
-            } else if (((StandUser)this.self).roundabout$getGuardBroken() && !this.getArmoured()) {
-                animateStand(StandEntity.IDLE);
             } else {
                 animateStand(StandEntity.BLOCK);
             }
