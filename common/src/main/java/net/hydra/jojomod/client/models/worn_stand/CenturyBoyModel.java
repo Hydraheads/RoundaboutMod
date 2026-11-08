@@ -176,8 +176,8 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 
 
 	public void render(Entity context, PoseStack poseStack, MultiBufferSource bufferSource, int light) {
-		VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(context, (byte)0)));
-		root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
+		VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, (byte)0)));
+		root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
 	}
 
 	public void renderBody(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
@@ -185,7 +185,7 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 		if (context instanceof LivingEntity LE) {
 			VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
 
-			Body.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
+			Body.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
 		}
 	}
 	public void renderHead(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
@@ -193,7 +193,7 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 		if (context instanceof LivingEntity LE) {
 			VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
 
-			Head.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
+			Head.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
 		}
 	}
 	public void renderRightArm(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
@@ -201,7 +201,7 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 		if (context instanceof LivingEntity LE) {
 			VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
 
-			RightArm.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
+			RightArm.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
 		}
 	}
 	public void renderLeftArm(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
@@ -209,7 +209,7 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 		if (context instanceof LivingEntity) {
 			VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
 
-			LeftArm.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
+			LeftArm.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
 		}
 	}
 	public void renderRightArmSlim(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
@@ -217,7 +217,7 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 		if (context instanceof LivingEntity LE) {
 			VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
 
-			RightArmSlim.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
+			RightArmSlim.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
 		}
 	}
 	public void renderLeftArmSlim(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
@@ -225,7 +225,7 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 		if (context instanceof LivingEntity) {
 			VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
 
-			LeftArmSlim.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
+			LeftArmSlim.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
 		}
 	}
 	public void renderBreast(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
@@ -236,7 +236,7 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 			if (ClientUtil.hasChangedBody(context)) {
 				consumer = bufferSource.getBuffer(RenderType.entityTranslucent(ClientUtil.getChangedBodyBreastTexture(context)));
 			}
-			Breast.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
+			Breast.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
 
 		}
 	}
@@ -245,10 +245,10 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 		if (context instanceof LivingEntity) {
 			VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
 
-			Body.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
-			Head.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
-			RightArm.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
-			LeftArm.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
+			Body.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
+			Head.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
+			RightArm.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
+			LeftArm.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
 		}
 	}
 

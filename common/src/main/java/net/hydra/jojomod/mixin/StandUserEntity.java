@@ -2808,21 +2808,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     @Unique
-    public int roundabout$heyYaVanishTicks = 0;
-
-    @Unique
-    @Override
-    public int roundabout$getHeyYaVanishTicks() {
-        return roundabout$heyYaVanishTicks;
-    }
-
-    @Unique
-    @Override
-    public void roundabout$setHeyYaVanishTicks(int set) {
-        roundabout$heyYaVanishTicks = Mth.clamp(set, 0, 10);
-    }
-
-    @Unique
     public int roundabout$armVanishTicks = 0;
 
     @Unique
@@ -2896,44 +2881,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$setRattShoulderVanishTicks(int set) {
         roundabout$RattShoulderVanishTicks = Mth.clamp(set, 0, 10);
     }
-
-    @Unique
-    public int roundabout$mandomVanishTicks = 0;
-
-    @Unique
-    @Override
-    public int roundabout$getMandomVanishTicks() {
-        return roundabout$mandomVanishTicks;
-    }
-
-    @Unique
-    @Override
-    public void roundabout$setMandomVanishTicks(int set) {
-        roundabout$mandomVanishTicks = Mth.clamp(set, 0, 10);
-    }
-
-    @Unique
-    public int roundabout$CBVanishTicks = 0;
-
-    @Unique
-    @Override
-    public int roundabout$getCBVanishTicks() {
-        return roundabout$CBVanishTicks;
-    }
-
-    public void roundabout$setCBVanishTicks(int set) {
-        roundabout$CBVanishTicks = Mth.clamp(set, 0, 10);
-    }
-
-    @Unique
-    public int roundabout$CatchTheRainbowVanishTicks = 0;
-
-    @Unique
-    @Override
-    public int roundabout$getCatchTheRainbowVanishTicks(){
-        return roundabout$CatchTheRainbowVanishTicks;
-    }
-    public void roundabout$setCatchTheRainbowVanishTicks(int set){roundabout$CatchTheRainbowVanishTicks = Mth.clamp(set, 0, 10);}
 
     @Unique
     public int roundabout$anubisVanishTicks = 0;
@@ -6288,16 +6235,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             roundabout$setAnubisVanishTicks(roundabout$getAnubisVanishTicks() + 1);
         } else {
             roundabout$setAnubisVanishTicks(roundabout$getAnubisVanishTicks() - 1);
-        }
-        if (roundabout$getStandPowers() instanceof Powers20thCenturyBoy && active) {
-            roundabout$setCBVanishTicks(roundabout$getCBVanishTicks() + 1);
-        } else {
-            roundabout$setCBVanishTicks(roundabout$getCBVanishTicks() - 1);
-        }
-        if (roundabout$getStandPowers() instanceof PowersCatchTheRainbow && active){
-            roundabout$setCatchTheRainbowVanishTicks(roundabout$getCatchTheRainbowVanishTicks() + 1);
-        } else{
-            roundabout$setCatchTheRainbowVanishTicks(roundabout$getCatchTheRainbowVanishTicks() - 1);
         }
 
         /** Soft and Wet Bubble Encase launch */
