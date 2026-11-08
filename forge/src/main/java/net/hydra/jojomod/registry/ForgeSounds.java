@@ -1346,6 +1346,10 @@ public class ForgeSounds {
             register(ModSounds.SILVER_CHARIOT_SELF_THROW, ModSounds.SILVER_CHARIOT_SELF_THROW_ID);
     public static final RegistryObject<SoundEvent> SILVER_CHARIOT_RAPIER_SPIN =
             register(ModSounds.SILVER_CHARIOT_RAPIER_SPIN, ModSounds.SILVER_CHARIOT_RAPIER_SPIN_ID);
+    public static final RegistryObject<SoundEvent> SILVER_CHARIOT_VAULT =
+            register(ModSounds.SILVER_CHARIOT_VAULT, ModSounds.SILVER_CHARIOT_VAULT_ID);
+    public static final RegistryObject<SoundEvent> SILVER_CHARIOT_REBOUND =
+            register(ModSounds.SILVER_CHARIOT_REBOUND, ModSounds.SILVER_CHARIOT_REBOUND_ID);
 
     public static final RegistryObject<SoundEvent> EMPEROR_SUMMON =
             register(ModSounds.EMPEROR_SUMMON, ModSounds.EMPEROR_SUMMON_ID);

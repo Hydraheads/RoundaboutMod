@@ -4855,6 +4855,18 @@
       "roundabout:silver_chariot_rapier_spin"
     ]
   },
+  "silver_chariot_vault": {
+    "subtitle": "sounds.roundabout.silver_chariot_vault",
+    "sounds": [
+      "roundabout:silver_chariot_vault"
+    ]
+  },
+  "silver_chariot_rebound": {
+    "subtitle": "sounds.roundabout.silver_chariot_rebound",
+    "sounds": [
+      "roundabout:silver_chariot_rebound"
+    ]
+  },
   "bc_parachute_open": {
     "subtitle" : "sounds.roundabout.bc_parachute_open",
     "sounds": [
