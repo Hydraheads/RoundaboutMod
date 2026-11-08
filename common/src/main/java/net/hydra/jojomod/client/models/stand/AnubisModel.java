@@ -242,7 +242,13 @@ public class AnubisModel extends PsuedoHierarchicalModel {
         byte skin = (byte) 0;
 
         StandUser user = (StandUser) entity;
-        float ticks = user.roundabout$getAnubisVanishTicks();
+        int ticks = 0;
+        if (user.roundabout$getStandPowers() instanceof PowersAnubis) {
+            ticks = user.roundabout$getCurrentStandVanishTicks();
+        }else if (user.roundabout$getPreviousStandPowers() instanceof PowersAnubis) {
+            ticks = user.roundabout$getPreviousStandVanishTicks();
+        }
+
         float alphaTicks = AnubisLayer.getTicks(entity,partialTicks);
 
 

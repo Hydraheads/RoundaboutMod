@@ -15,6 +15,7 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.AnubisItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
+import net.hydra.jojomod.stand.powers.PowersMandom;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -52,7 +53,9 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
         if ((entity.getMainHandItem().getItem() instanceof AnubisItem && !user.roundabout$getEffectiveCombatMode())
                 || user.roundabout$getPossessor() instanceof AnubisPossessorEntity
                 || (user.roundabout$getStandPowers() instanceof PowersAnubis && PowerTypes.hasStandActive(entity))
-                || user.roundabout$getAnubisVanishTicks() > 0 ) {
+                || (user.roundabout$getStandPowers() instanceof PowersAnubis && user.roundabout$getCurrentStandVanishTicks() > 0
+                || user.roundabout$getPreviousStandPowers() instanceof PowersAnubis && user.roundabout$getPreviousStandVanishTicks() > 0) ) {
+                //|| (user.roundabout$getAnubisVanishTicks() > 0) ) {
 
             return entity.getMainArm();
         }
@@ -150,7 +153,14 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
 
         StandUser user = ((StandUser)entity );
         boolean hasAnubisOut = (PowerTypes.hasStandActive(entity) && user.roundabout$getStandPowers() instanceof PowersAnubis);
-        int heyTicks = user.roundabout$getAnubisVanishTicks();
+        //int heyTicks = user.roundabout$getAnubisVanishTicks();
+        int heyTicks = 0;
+        if (user.roundabout$getStandPowers() instanceof PowersAnubis) {
+            heyTicks = user.roundabout$getCurrentStandVanishTicks();
+        }else if (user.roundabout$getPreviousStandPowers() instanceof PowersAnubis) {
+            heyTicks = user.roundabout$getPreviousStandVanishTicks();
+        }
+
         float heyFull = 0;
         float fixedPartial = partialTicks - (int) partialTicks;
         if (((TimeStop)entity.level()).CanTimeStopEntity(entity)){
@@ -172,7 +182,13 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
     public static float getTicks(LivingEntity livingEntity, float partialTicks) {
         StandUser SU = (StandUser) livingEntity;
         boolean active = (PowerTypes.hasStandActive(livingEntity) && SU.roundabout$getStandPowers() instanceof PowersAnubis);
-        int heyTicks = SU.roundabout$getAnubisVanishTicks();
+        //int heyTicks = SU.roundabout$getAnubisVanishTicks();
+        int heyTicks = 0;
+        if (SU.roundabout$getStandPowers() instanceof PowersAnubis) {
+            heyTicks = SU.roundabout$getCurrentStandVanishTicks();
+        }else if (SU.roundabout$getPreviousStandPowers() instanceof PowersAnubis) {
+            heyTicks = SU.roundabout$getPreviousStandVanishTicks();
+        }
         float heyFull = 0;
         float fixedPartial = partialTicks - (int) partialTicks;
         if (((TimeStop)livingEntity.level()).CanTimeStopEntity(livingEntity)){
@@ -202,12 +218,14 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
 
         float heyFull = getTicks(entity,partialTicks);
 
+        boolean hasVanishTicks = (user.roundabout$getStandPowers() instanceof PowersAnubis && user.roundabout$getCurrentStandVanishTicks() != 0
+                || user.roundabout$getPreviousStandPowers() instanceof PowersAnubis && user.roundabout$getPreviousStandVanishTicks() != 0);
 
         byte skin = 0;
         if (user.roundabout$getPossessor() instanceof AnubisPossessorEntity) {
             ModStrayModels.ANUBIS.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                     1, 1, 1, 1F, (byte) 1);
-        } else if ( (user.roundabout$getStandPowers() instanceof PowersAnubis && PowerTypes.hasStandActive(entity) ) || (user.roundabout$getAnubisVanishTicks() != 0 && !entity.getMainHandItem().is(ModItems.ANUBIS_ITEM)   ) ) {
+        } else if ( (user.roundabout$getStandPowers() instanceof PowersAnubis && PowerTypes.hasStandActive(entity) ) || (hasVanishTicks && !entity.getMainHandItem().is(ModItems.ANUBIS_ITEM)   ) ) {
             ModStrayModels.ANUBIS.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                     1, 1, 1, heyFull, user.roundabout$getStandSkin() );
             if (user.roundabout$getStandAnimation() == PowersAnubis.FLURRY) {

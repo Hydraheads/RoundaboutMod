@@ -6231,11 +6231,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         } else {
             roundabout$setRattShoulderVanishTicks(0);
         }
+        /*
         if (roundabout$getStandPowers() instanceof PowersAnubis && active) {
             roundabout$setAnubisVanishTicks(roundabout$getAnubisVanishTicks() + 1);
         } else {
             roundabout$setAnubisVanishTicks(roundabout$getAnubisVanishTicks() - 1);
-        }
+        }*/
 
         /** Soft and Wet Bubble Encase launch */
         if (roundabout$isLaunchBubbleEncased() && !this.level().isClientSide()) {
