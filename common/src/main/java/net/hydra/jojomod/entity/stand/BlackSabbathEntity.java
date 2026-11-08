@@ -1913,6 +1913,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             } else {
                 attacked.hurt(ModDamageTypes.of(level(), DamageTypes.MOB_ATTACK, this.getUser()), damage + 1);
             }
+            attacked.hurt(ModDamageTypes.of(level(), ModDamageTypes.STAND, this.getUser()), damage + 1);
             if (item.getItem() instanceof GlaiveItem) {
                 MainUtil.makeBleed(attacked, 0, 300, this.getUser());
             }
@@ -1968,7 +1969,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                         }
                         /*FUN STUFF starts >:D */
                         /*Initial ticks: 220 (or 12 seconds)*/
-                        //TODO: SWING VISUALS BLA BLA BLA
                         float itemDamage = 0;
                         boolean flag1 = i.getItem() instanceof SwordItem || i.getItem() instanceof DiggerItem || i.getItem() instanceof GlaiveItem || i.getItem() instanceof WarhammerItem;
                         boolean flag2 = i.getItem() instanceof RoundaboutArrowItem;
