@@ -128,6 +128,9 @@ public class VisageData {
     public boolean rendersKosakuHair(){
         return false;
     }
+    public boolean rendersCioccolataHair(){
+        return false;
+    }
     public boolean rendersDiego2Hat(){
         return false;
     }
