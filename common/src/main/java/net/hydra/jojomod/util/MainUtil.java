@@ -21,6 +21,7 @@ import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.corpses.FallenPhantom;
 import net.hydra.jojomod.entity.gold_experience.GELifeform;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
+import net.hydra.jojomod.entity.mobs.Butterfly;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
@@ -1660,6 +1661,7 @@ public class MainUtil {
 
     public static boolean hasBlueBlood(Entity target) {
         if (isWhitelistedBlueBlood(target) || target instanceof Spider || target instanceof Bee
+                || target instanceof Butterfly
                 || target instanceof Silverfish || target instanceof Squid) {
             return true;
         } else {
