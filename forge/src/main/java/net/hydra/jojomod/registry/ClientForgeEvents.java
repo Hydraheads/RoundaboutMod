@@ -164,6 +164,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.GE_FOX.get(), GEFoxRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GE_SNAKE.get(), GESnakeRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GE_PIRANHA.get(), GEPiranhaRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.GE_BUTTERFLY.get(), GEButterflyRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT.get(), SilverChariotRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT_PHARAOH.get(), SilverChariotPharaohRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT_RAPIER.get(), SilverChariotRapierRenderer::new);

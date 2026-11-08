@@ -920,6 +920,14 @@ public class FabricEntities {
                     .clientTrackingRange(5)
                     .build(Roundabout.MOD_ID + ":ge_piranha")
     );
+    public static final EntityType<GEButterflyEntity> GE_BUTTERFLY = Registry.register(
+            BuiltInRegistries.ENTITY_TYPE,
+            new ResourceLocation(Roundabout.MOD_ID, "ge_butterfly"),
+            EntityType.Builder.of(GEButterflyEntity::new, MobCategory.AMBIENT)
+                    .sized(0.5f, 0.5f)
+                    .clientTrackingRange(5)
+                    .build(Roundabout.MOD_ID + ":ge_butterfly")
+    );
         public static final EntityType<SilverChariotEntity> SILVER_CHARIOT =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -1567,6 +1575,7 @@ public class FabricEntities {
         ModEntities.GE_FOX = GE_FOX;
         ModEntities.GE_SNAKE = GE_SNAKE;
         ModEntities.GE_PIRANHA = GE_PIRANHA;
+        ModEntities.GE_BUTTERFLY = GE_BUTTERFLY;
                 ModEntities.SILVER_CHARIOT = SILVER_CHARIOT;
                 ModEntities.SILVER_CHARIOT_PHARAOH =  SILVER_CHARIOT_PHARAOH;
                 ModEntities.THROWN_HARPOON = THROWN_HARPOON;
@@ -1754,6 +1763,7 @@ public class FabricEntities {
         FabricDefaultAttributeRegistry.register(GE_FOX, Fox.createAttributes());
         FabricDefaultAttributeRegistry.register(GE_SNAKE, Snake.createAttributes());
         FabricDefaultAttributeRegistry.register(GE_PIRANHA, Piranha.createAttributes());
+        FabricDefaultAttributeRegistry.register(GE_BUTTERFLY, Butterfly.createAttributes());
 
                 FabricDefaultAttributeRegistry.register(ROAD_ROLLER_ENTITY, RoadRollerEntity.createAttributes().build());
 

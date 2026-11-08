@@ -500,6 +500,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
             else if (this.animalType == AnimalTypes.PIRAHNA.id) {
                 typeToSpawn = ModEntities.GE_PIRANHA;
             }
+            else if (this.animalType == AnimalTypes.BUTTERFLY.id) {
+                typeToSpawn = ModEntities.GE_BUTTERFLY;
+            }
 
             if (typeToSpawn != null) {
                 return spawnLifeform(typeToSpawn);
@@ -521,6 +524,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 consumedItem.setCount(1);
                 lifeform.setSourceItem(consumedItem);
                 this.self.getMainHandItem().shrink(1);
+            }
+
+            if (livingEntity instanceof Mob mob && this.self.level() instanceof ServerLevel serverLevel) {
+                mob.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(mob.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
             }
 
             this.self.level().addFreshEntity(livingEntity);
