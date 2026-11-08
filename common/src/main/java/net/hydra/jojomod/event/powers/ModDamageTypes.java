@@ -66,10 +66,12 @@ public class ModDamageTypes {
         public static final ResourceKey<DamageType> BITES_THE_DUST = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "bites_the_dust"));
         public static final ResourceKey<DamageType> HAZE_VIRUS = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "haze_virus"));
         public static final ResourceKey<DamageType> DISTORTION_VIRUS = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "distortion_virus"));
+        public static final ResourceKey<DamageType> POD_BITE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "pod_bite"));
         public static final ResourceKey<DamageType> INFINITE_SPIN = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "infinite_spin"));
         public static final ResourceKey<DamageType> BRAIN_DEAD = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "brain_dead"));
         public static final ResourceKey<DamageType> DIVER_REDIRECTION = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "diver_redirection"));
         public static final ResourceKey<DamageType> SHARP_RAINDROP = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "sharp_raindrop"));
+        public static final ResourceKey<DamageType> AIR_PRESSURE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "air_pressure"));
 
         public static DamageSource of(Level world, ResourceKey<DamageType> key, Entity attacker) {
             return new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(key), attacker, attacker);

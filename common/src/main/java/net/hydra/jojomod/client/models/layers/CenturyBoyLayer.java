@@ -12,6 +12,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
+import net.hydra.jojomod.stand.powers.PowersHeyYa;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -46,7 +47,14 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 boolean hasCB = (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy);
                 boolean standOut = (PowerTypes.hasStandActive(entity) && hasCB);
                 if (!entity.isInvisible()) {
-                    int CBticks = user.roundabout$getCBVanishTicks();
+                    int CBticks = 0;
+                    //int CBticks = user.roundabout$getCBVanishTicks();
+
+                    if (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy) {
+                        CBticks = user.roundabout$getCurrentStandVanishTicks();
+                    }else if (user.roundabout$getPreviousStandPowers() instanceof Powers20thCenturyBoy) {
+                        CBticks = user.roundabout$getPreviousStandVanishTicks();
+                    }
 
                     /// skin definition
                     if (CBticks > 0 || standOut) {
@@ -54,7 +62,13 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                         if (user.roundabout$getLastStandSkin() != skin) {
                             user.roundabout$setLastStandSkin(skin);
                             CBticks = 0;
-                            user.roundabout$setCBVanishTicks(0);
+                            //user.roundabout$setCBVanishTicks(0);
+
+                            if (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy) {
+                                user.roundabout$setCurrentStandVanishTicks(0);
+                            }else {
+                                user.roundabout$setPreviousStandVanishTicks(0);
+                            }
                         }
 
                         /// from my understanding these are the ticks that 20thcb are able to render basically

@@ -919,7 +919,7 @@ public class StandHudRender {
         context.drawString(renderer, $$6, $$7, $$8 - 1, 0, false);
         context.drawString(renderer, $$6, $$7, $$8, y, false);
     }
-    public static void renderDistanceHUDPilotingSphere(GuiGraphics context, Player playerEntity,
+    public static void renderDistanceHUDPilotingCube(GuiGraphics context, Player playerEntity,
                                                  int scaledWidth, int scaledHeight, int x, LivingEntity stand) {
         // Silver Chariot uses a cubical range instead of a rectangular range
         Minecraft client = Minecraft.getInstance();
@@ -936,6 +936,9 @@ public class StandHudRender {
         } else if (mode == 2){
             // distance = (int) MainUtil.cheapDistanceTo2(stand.getX(),stand.getZ(),playerEntity.getX(),playerEntity.getZ());
             distance = (int) MainUtil.cheapDistanceTo3d(stand.getX(),stand.getY(),stand.getZ(),playerEntity.getX(),playerEntity.getY(),playerEntity.getZ());
+        }
+        if (distance > maxDistance) {
+            distance = maxDistance;
         }
         int blt = (int) Math.floor(((double) 182 /maxDistance)*(distance));
         l = scaledHeight - 32 + 3;

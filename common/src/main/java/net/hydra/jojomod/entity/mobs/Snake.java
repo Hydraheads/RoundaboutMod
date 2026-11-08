@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.mobs;
 
 import net.hydra.jojomod.entity.goals.NightAggroGoal;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
@@ -8,9 +9,12 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -27,6 +31,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 public class Snake extends Animal {
@@ -44,11 +49,40 @@ public class Snake extends Animal {
     }
 
     @Override
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putInt("Variant", this.getVariant());
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        if (tag.contains("Variant")) {
+            this.setVariant(tag.getInt("Variant"));
+        }
+    }
+
+    @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty,
                                         MobSpawnType spawnType, @Nullable SpawnGroupData spawnData,
                                         @Nullable CompoundTag dataTag) {
-        determineSpawnVariant();
+        determineSpawnVariant(level, this.blockPosition());
         return super.finalizeSpawn(level, difficulty, spawnType, spawnData, dataTag);
+    }
+
+    private void determineSpawnVariant(ServerLevelAccessor level, BlockPos pos) {
+        Holder<Biome> biome = level.getBiome(pos);
+        if (biome.is(Biomes.DESERT) || biome.is(BiomeTags.IS_BADLANDS)) {
+            setVariant(1); // Rattlesnake
+        } else if (biome.is(BiomeTags.IS_JUNGLE)) {
+            setVariant(2); // Tropical
+        } else if (biome.value().coldEnoughToSnow(pos)) {
+            setVariant(3); // Cold
+        } else if (biome.is(BiomeTags.IS_SAVANNA)) {
+            setVariant(4); // Warm
+        } else {
+            setVariant(0); // Plains/default
+        }
     }
 
     @Override
@@ -88,6 +122,7 @@ public class Snake extends Animal {
     @Override
     public boolean doHurtTarget(Entity target) {
         if (super.doHurtTarget(target)) {
+            this.playSound(ModSounds.SNAKE_ATTACK_EVENT, 1.0F, 1.0F);
             if (target instanceof LivingEntity livingTarget) {
                 int durationInSeconds = 0;
 
@@ -172,6 +207,27 @@ public class Snake extends Animal {
     }
 
     // animations end
+
+    // sounds
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return ModSounds.SNAKE_IDLE_EVENT;
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        return ModSounds.SNAKE_HURT_EVENT;
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return ModSounds.SNAKE_DIE_EVENT;
+    }
+
+    @Override
+    protected void playStepSound(BlockPos pos, BlockState state) {
+        this.playSound(ModSounds.SNAKE_STEP_EVENT, 1.0F, 1.0F);
+    }
 
     public static AttributeSupplier.Builder createAttributes() {
         return Animal.createMobAttributes().add(Attributes.MAX_HEALTH, 10.0)

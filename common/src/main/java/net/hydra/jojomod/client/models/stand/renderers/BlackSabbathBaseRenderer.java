@@ -2,25 +2,13 @@ package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
-import net.hydra.jojomod.client.models.stand.BlackSabbathModel;
-import net.hydra.jojomod.client.models.stand.CaliforniaKingBedModel;
 import net.hydra.jojomod.client.models.stand.StandModel;
-import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
-import net.hydra.jojomod.entity.stand.CaliforniaKingBedEntity;
-import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
-import net.hydra.jojomod.entity.stand.PollinationTransferEntity;
-import net.hydra.jojomod.entity.zombie_minion.AxolotlMinion;
-import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
-import net.minecraft.client.Minecraft;
+import net.hydra.jojomod.entity.stand.*;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Nullable;
 
 public class BlackSabbathBaseRenderer extends StandRenderer<BlackSabbathEntity> {
@@ -52,6 +40,7 @@ public class BlackSabbathBaseRenderer extends StandRenderer<BlackSabbathEntity> 
 
     public BlackSabbathBaseRenderer(EntityRendererProvider.Context context, StandModel<BlackSabbathEntity> entityModel, float f) {
         super(context, entityModel,f);
+        this.addLayer(new BlackSabbathItemRenderer(this, context.getItemInHandRenderer()));
     }
 
     @Override
@@ -133,14 +122,14 @@ public class BlackSabbathBaseRenderer extends StandRenderer<BlackSabbathEntity> 
     }
 
     @Override
-    public void render(BlackSabbathEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
+    public void render(BlackSabbathEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int packedLight) {
         float factor = 1;
         if(mobEntity.isBaby()){
             matrixStack.scale(0.60f * factor, 0.60f * factor, 0.60f * factor);
         } else {
             matrixStack.scale(0.80f * factor, 0.80f * factor, 0.80f * factor);
         }
-        super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
+        super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, packedLight);
     }
 
     @Nullable

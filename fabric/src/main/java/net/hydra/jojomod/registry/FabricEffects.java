@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.FireBlock;
 public class FabricEffects extends MobEffect{
 
     public static final MobEffect BLEED = register("bleed", new FabricEffects(MobEffectCategory.HARMFUL, 11994666));
+    public static final MobEffect STITCHED = register("stitched", new FabricEffects(MobEffectCategory.NEUTRAL, 11994666));
     public static final MobEffect HEX = register("hex", new FabricEffects(MobEffectCategory.HARMFUL, 11606258)); //old color 16762706
     public static final MobEffect BANISH = register("banish", new FabricEffects(MobEffectCategory.NEUTRAL, 15099838)); //old color 16762706
     public static final MobEffect DOOMED = register("doom", new FabricEffects(MobEffectCategory.HARMFUL, 0));
@@ -88,6 +89,7 @@ public class FabricEffects extends MobEffect{
 
     public static void register(){
         ModEffects.BLEED = BLEED;
+        ModEffects.STITCHED = STITCHED;
         ModEffects.HEX = HEX;
         ModEffects.BANISH = BANISH;
         ModEffects.DOOMED = DOOMED;

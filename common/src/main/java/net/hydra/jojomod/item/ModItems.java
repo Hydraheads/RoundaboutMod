@@ -45,6 +45,8 @@ public class ModItems {
     public static Item STAND_DISC_KING_CRIMSON;
     public static Item MAX_STAND_DISC_KING_CRIMSON;
 
+    public static Item STAND_DISC_JJF;
+    public static Item MAX_STAND_DISC_JJF;
     public static Item STAND_DISC_RATT;
     public static Item MAX_STAND_DISC_RATT;
     public static Item STAND_DISC_ANUBIS;
@@ -132,8 +134,14 @@ public class ModItems {
     public static Item ZOMBIE_AESTHETICIAN_SPAWN_EGG;
     public static Item ANUBIS_GUARDIAN_SPAWN_EGG;
     public static Item SNAKE_SPAWN_EGG;
+    public static Item PIRANHA_SPAWN_EGG;
+    public static Item BUTTERFLY_SPAWN_EGG;
     public static Item SNAKE_SKIN;
     public static Item SNAKE_OIL;
+    public static Item SNAKE_SKIN_BOOTS;
+    public static Item PIRANHA_BUCKET;
+    public static Item PIRANHA;
+    public static Item COOKED_PIRANHA;
     public static Item ROAD_ROLLER;
 
     public static Item IRON_BALL_CROSSBOW;
@@ -306,6 +314,7 @@ public class ModItems {
     public static Item ULTRAVIOLET_BLASTER;
     public static Item FLESH_BUCKET;
     public static Item CHERRIES;
+    public static Item ZOMBIE_HORSE_THREAD;
 
     public static CreativeModeTab FOG_BLOCK_ITEMS;
 

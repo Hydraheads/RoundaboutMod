@@ -19,7 +19,9 @@ import net.hydra.jojomod.entity.KingCrimsonProjectionEntity;
 import net.hydra.jojomod.entity.ParallelChestEntity;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.corpses.FallenPhantom;
+import net.hydra.jojomod.entity.gold_experience.GELifeform;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
+import net.hydra.jojomod.entity.mobs.Butterfly;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
@@ -59,6 +61,7 @@ import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.client.resources.SkinManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.particles.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -76,6 +79,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -1617,6 +1621,8 @@ public class MainUtil {
         playerNames.put("Gyro_Zeppeli", UUID.fromString("d07c2758-de5c-4388-a104-c69c1262e054"));
         playerNames.put("wojtonix", UUID.fromString("da472ff1-040f-4fd6-9d9d-25722fcf6408"));
         playerNames.put("ChaoticRobot_", UUID.fromString("95637d52-928d-48f9-b211-e53a8cd3e7d5"));
+        playerNames.put("Tweenwms", UUID.fromString("594c69f7-35ec-4b4c-b521-f8ad907e6bdd"));
+        playerNames.put("IStealMuffins", UUID.fromString("09fbefb3-c52c-47ab-8615-67144247252d"));
         playerNames.put("IShootMuffins", UUID.fromString("ef5ff7af-c6d6-440a-a111-2f0932ed0131"));
         playerNames.put("TheChaseyOne", UUID.fromString("8e86263a-2740-4d0f-a83f-afe0e6fd3c3d"));
         playerNames.put("FieldstormDapper", UUID.fromString("4813e816-05b2-438b-8c59-5bfe9d78aa01"));
@@ -1655,6 +1661,7 @@ public class MainUtil {
 
     public static boolean hasBlueBlood(Entity target) {
         if (isWhitelistedBlueBlood(target) || target instanceof Spider || target instanceof Bee
+                || target instanceof Butterfly
                 || target instanceof Silverfish || target instanceof Squid) {
             return true;
         } else {
@@ -2790,6 +2797,7 @@ public class MainUtil {
                 || sauce.is(ModDamageTypes.INFINITE_SPIN)
                 || sauce.is(ModDamageTypes.HAZE_VIRUS)
                 || sauce.is(ModDamageTypes.DISTORTION_VIRUS)
+                || sauce.is(ModDamageTypes.POD_BITE)
                 || sauce.is(ModDamageTypes.BITES_THE_DUST)){
             return true;
         }
@@ -2805,7 +2813,7 @@ public class MainUtil {
     }
 
     public static boolean getReducedDamage(Entity entity) {
-        return (entity instanceof Player || entity instanceof StandEntity ||
+        return (entity instanceof Player || entity instanceof StandEntity || entity instanceof GELifeform ||
                 ((entity instanceof LivingEntity LE && !((StandUser) LE).roundabout$getStandDisc().isEmpty()) &&
                         ClientNetworking
                                 .getAppropriateConfig().generalStandUserMobSettings.standUserMobsTakePlayerDamageMultipliers));
@@ -2824,6 +2832,18 @@ public class MainUtil {
             return true;
         }
         return false;
+    }
+
+    public static boolean CenturyBoyReactionBacklistDamage(DamageSource source) {
+
+        boolean isPassive = source.getEntity() == null;
+
+        return (isPassive && !(source.is(DamageTypes.FALL)
+                || source.is(DamageTypes.FALLING_ANVIL)
+                || source.is(DamageTypes.FALLING_BLOCK)
+                || source.is(DamageTypes.UNATTRIBUTED_FIREBALL)
+                || source.is(DamageTypes.FALLING_STALACTITE)
+        ));
     }
 
     /** Returns the vertical angle between two mobs in degrees */
@@ -2951,7 +2971,7 @@ public class MainUtil {
                 value.equals(ModEffects.SINGE)
                 || value.equals(ModEffects.STAND_MELTING) ||
                 value.equals(ModEffects.CAPTURING_LOVE) || value.equals(ModEffects.MELTING)
-                || value.equals(ModEffects.MOLD);
+                || value.equals(ModEffects.MOLD) || value.equals(ModEffects.STITCHED);
     }
 
     public static boolean hidesPotionEffectSwirl(MobEffect value) {
@@ -2962,7 +2982,7 @@ public class MainUtil {
                 || value.equals(ModEffects.SWITCH) || value.equals(ModEffects.MELTING) ||
                 value.equals(ModEffects.IMPRINTING) || value.equals(ModEffects.SWAPPED)
                 || value.equals(ModEffects.STAND_MELTING) ||
-                value.equals(ModEffects.SINGE);
+                value.equals(ModEffects.SINGE) || value.equals(ModEffects.STITCHED);
     }
 
     public static boolean isKnockbackResilient(LivingEntity LE) {

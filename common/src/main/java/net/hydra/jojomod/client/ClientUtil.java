@@ -941,6 +941,7 @@ public class ClientUtil {
                     if (target instanceof LivingEntity LE) {
                         ((StandUser)LE).rdbt$setHideDeath(true);
                     }
+
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncAllies.value)) {;
                     String data = (String) vargs[0];
                     if(((StandUser) player).roundabout$getStandPowers() instanceof PowersGreenDay PGD){

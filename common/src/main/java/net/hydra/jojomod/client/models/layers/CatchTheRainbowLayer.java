@@ -8,6 +8,7 @@ import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
 import net.hydra.jojomod.stand.powers.PowersCatchTheRainbow;
 import net.hydra.jojomod.stand.powers.PowersHeyYa;
 import net.minecraft.client.model.HumanoidModel;
@@ -39,16 +40,29 @@ public class CatchTheRainbowLayer<T extends LivingEntity, A extends HumanoidMode
             if (!entity.isInvisible()) {
                 if (entity != null) {
                     StandUser user = ((StandUser) livent);
-                    int heyTicks = user.roundabout$getCatchTheRainbowVanishTicks();
                     boolean hasCatchTheRainbowOut = (PowerTypes.hasStandActive(livent) && user.roundabout$getStandPowers() instanceof PowersCatchTheRainbow);
 
+                    int heyTicks = 0;
+                    //int heyTicks = user.roundabout$getCatchTheRainbowVanishTicks();
+
+                    if (user.roundabout$getStandPowers() instanceof PowersCatchTheRainbow) {
+                        heyTicks = user.roundabout$getCurrentStandVanishTicks();
+                    }else if (user.roundabout$getPreviousStandPowers() instanceof PowersCatchTheRainbow) {
+                        heyTicks = user.roundabout$getPreviousStandVanishTicks();
+                    }
 
                     if (heyTicks > 0 || hasCatchTheRainbowOut) {
                         byte skin = user.roundabout$getStandSkin();
                         if (user.roundabout$getLastStandSkin() != skin){
                             user.roundabout$setLastStandSkin(skin);
                             heyTicks = 0;
-                            user.roundabout$setCatchTheRainbowVanishTicks(0);
+                            //user.roundabout$setCatchTheRainbowVanishTicks(0);
+
+                            if (user.roundabout$getStandPowers() instanceof PowersCatchTheRainbow) {
+                                user.roundabout$setCurrentStandVanishTicks(0);
+                            }else {
+                                user.roundabout$setPreviousStandVanishTicks(0);
+                            }
                         }
 
                         float heyFull = 0;

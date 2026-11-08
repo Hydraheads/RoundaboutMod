@@ -47,6 +47,7 @@ import net.minecraft.client.particle.ExplodeParticle;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraftforge.api.distmarker.Dist;
@@ -85,11 +86,14 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.TERRIER_DOG.get(), TerrierEntityRenderer::new);
         event.registerEntityRenderer(ForgeEntities.FALCON.get(), FalconRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SNAKE.get(), SnakeRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.PIRANHA.get(), PiranhaRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.BUTTERFLY.get(), ButterflyRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ZOMBIEFISH.get(), ZombiefishRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ANUBIS_GUARDIAN.get(), AnubisGuardianRenderer::new);
         event.registerEntityRenderer(ForgeEntities.STAR_PLATINUM.get(), StarPlatinumRenderer::new);
         event.registerEntityRenderer(ForgeEntities.STAR_PLATINUM_BASEBALL.get(), StarPlatinumBaseballRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THE_WORLD.get(), TheWorldRenderer::new);
+        //com.example.jjf.forge.JJFEmbeddedForgeClient.registerRenderers(event);
         event.registerEntityRenderer(ForgeEntities.THE_WORLD_ULTIMATE.get(), TheWorldUltimateRenderer::new);
         event.registerEntityRenderer(ForgeEntities.KING_CRIMSON.get(), KingCrimsonRenderer::new);
         event.registerEntityRenderer(ForgeEntities.WHITESNAKE.get(), WhitesnakeRenderer::new);
@@ -113,7 +117,10 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.SOFT_AND_WET_DEBUT.get(), SoftAndWetDebutRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SOFT_AND_WET_KILLER_QUEEN.get(), SoftAndWetKillerQueenRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SOFT_AND_WET_KING.get(), SoftAndWetKingRenderer::new);
-        event.registerEntityRenderer(ForgeEntities.KILLER_QUEEN.get(), KillerQueenRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.JUMPIN_JACK_FLASH.get(), JumpinJackFlashRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.JJF_PROJECTILE.get(), ThrownItemRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.JJF_GUNPOWDER_CLOUD.get(), NoopRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.JJF_SPIT.get(), JJFSpitRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BLOCK_BOMB.get(), BlockBombRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SHEER_HEART_ATTACK.get(), SheerHeartAttackRenderer::new);
         event.registerEntityRenderer(ForgeEntities.CINDERELLA.get(), CinderellaRenderer::new);
@@ -155,10 +162,13 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.GE_BEE.get(), GEBeeRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GE_FISH.get(), GEFishRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GE_FOX.get(), GEFoxRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.GE_SNAKE.get(), GESnakeRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.GE_PIRANHA.get(), GEPiranhaRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT.get(), SilverChariotRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT_PHARAOH.get(), SilverChariotPharaohRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT_RAPIER.get(), SilverChariotRapierRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT_RAPIER_PLATFORM.get(), SilverChariotRapierPlatformRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.SC_MOUNT.get(), NoRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_HARPOON.get(), HarpoonRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BLADED_BOWLER_HAT.get(), BladedBowlerHatRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ROUNDABOUT_BULLET_ENTITY.get(), RoundaboutBulletEntityRenderer::new);
@@ -293,6 +303,8 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.STRAY_CAT_ENTITY_LAYER, StrayCatEntityModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.FALCON_LAYER, FalconModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.SNAKE_LAYER, SnakeModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.PIRANHA_LAYER, PiranhaModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.BUTTERFLY_LAYER, ButterflyModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.WOLF_LAYER, TerrierEntityModel::createBodyLayerTerrier);
         event.registerLayerDefinition(ModEntityRendererClient.ZOMBIEFISH_LAYER, SilverfishModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.ANUBIS_GUARDIAN_LAYER, AnubisGuardianModel::createBodyLayer);
@@ -311,6 +323,8 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.OCELOT_MINION_LAYER, OcelotMinionModel::createBodyLayer);
 
         event.registerLayerDefinition(ModEntityRendererClient.THE_WORLD_LAYER, TheWorldModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.JUMPIN_JACK_FLASH_LAYER, JumpinJackFlashModel::createBodyLayer);
+        //com.example.jjf.forge.JJFEmbeddedForgeClient.registerLayers(event);
         event.registerLayerDefinition(ModEntityRendererClient.THE_WORLD_ULTIMATE_LAYER, TheWorldUltimateModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.STAR_PLATINUM_LAYER, StarPlatinumModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.COFFIN_LEFT_LAYER, CoffinRenderer::createDoubleBodyLeftLayer);

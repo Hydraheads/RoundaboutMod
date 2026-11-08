@@ -303,8 +303,10 @@ public class SeperatedArmEntity extends StandEntity {
             }
         }else{
             if (!this.level().isClientSide) {
-                this.setUser(null);
-                removearm();
+                if (!((((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersGreenDay))) {
+                    this.setUser(null);
+                    removearm();
+                }
             }
         }
     }
@@ -327,24 +329,24 @@ public class SeperatedArmEntity extends StandEntity {
                     removearm();
                 } else if (user != null) {
 
-                    if (((StandUser) user).roundabout$getStandPowers() instanceof PowersGreenDay){
-                        if ((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity != null) && (((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm != null)) {
-                            if (!((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm.equals(this)) || (((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity.equals(this)))) {
+                    if (((StandUser) user).roundabout$getStandPowers() instanceof PowersGreenDay PGD){
+                        if (((PGD.Off_hand_entity != null) && (PGD.Main_arm != null))) {
+                            if (!((PGD.Main_arm.equals(this)) || PGD.Off_hand_entity.equals(this))) {
                                 removearm();
                             }
-                        } else if ((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm != null)) {
-                            if (!((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm.equals(this)))) {
+                        } else if (PGD.Main_arm != null) {
+                            if (!PGD.Main_arm.equals(this)) {
                                 removearm();
                             }
-                        } else if ((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity != null)) {
-                            if (!((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity.equals(this)))) {
+                        } else if (PGD.Off_hand_entity != null) {
+                            if (!PGD.Off_hand_entity.equals(this)) {
                                 removearm();
                             }
                         }
                     }
-                    if ((((StandUser) user).roundabout$getStandPowers() instanceof PowersCatchTheRainbow)) {
-                        if ((((PowersCatchTheRainbow) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity != null)) {
-                            if (!((((PowersCatchTheRainbow) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity.equals(this)))) {
+                    if ((((StandUser) user).roundabout$getStandPowers() instanceof PowersCatchTheRainbow PCR)) {
+                        if (PCR.Off_hand_entity != null) {
+                            if (!((PCR.Off_hand_entity.equals(this)))) {
                                 removearm();
                             }
                         }

@@ -1,5 +1,7 @@
 package net.hydra.jojomod.client.gui;
 
+import com.example.jjf.client.JJFHudSettings;
+import net.hydra.jojomod.stand.powers.PowersJumpinJackFlash;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.Lighting;
@@ -24,12 +26,10 @@ import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
 import net.hydra.jojomod.stand.powers.PowersTusk;
 import net.hydra.jojomod.util.C2SPacketUtil;
-import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.GraphicsStatus;
@@ -38,7 +38,6 @@ import net.minecraft.client.OptionInstance;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;
@@ -50,14 +49,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
-import java.util.StringTokenizer;
 
 
 public class PowerInventoryScreen
@@ -614,6 +611,7 @@ public class PowerInventoryScreen
         //this.recipeBookComponent.renderTooltip(context, this.leftPos, this.topPos, mouseX, mouseY);
         this.xMouse = (float)mouseX;
         this.yMouse = (float)mouseY;
+        jjf$renderHudSettings(context, mouseX, mouseY);
         //leftPos-=leftposModifier;
     }
 
@@ -954,6 +952,9 @@ public class PowerInventoryScreen
     }
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int $$2) {
+        if (jjf$handleHudSettingsClick(mouseX, mouseY, $$2)) {
+            return true;
+        }
         Player pl = Minecraft.getInstance().player;
         if (pl != null) {
             if (pl.isSpectator()) {
@@ -1153,6 +1154,51 @@ public class PowerInventoryScreen
          **/
             return this.widthTooNarrow ? false : super.mouseClicked(mouseX, mouseY, $$2);
         //}
+    }
+
+    private boolean jjf$showSettings() {
+        Player player = Minecraft.getInstance().player;
+        return player != null
+                && isOptionsOut
+                && pageNumber == 2
+                && ConfigManager.getClientConfig().dynamicSettings.currentPowerInventoryTab == 2
+                && ((StandUser) player).roundabout$getStandPowers() instanceof PowersJumpinJackFlash;
+    }
+
+    private void jjf$renderHudSettings(GuiGraphics context, int mouseX, int mouseY) {
+        /*if (!jjf$showSettings()) {
+            return;
+        }
+        int left = this.leftPos;
+        int top = this.topPos;
+        context.drawString(this.font, JJFHudSettings.ammoMessage(), left - 135,
+                top + 125, isSurelyHovering(left - 136, top + 123, 118, 11, mouseX, mouseY)
+                        ? 0xFFFFFF : 0xA0A0A0, false);
+        context.drawString(this.font, JJFHudSettings.launcherMessage(), left - 135,
+                top + 136, isSurelyHovering(left - 136, top + 134, 118, 11, mouseX, mouseY)
+                        ? 0xFFFFFF : 0xA0A0A0, false);
+
+         */
+    }
+
+
+    private boolean jjf$handleHudSettingsClick(double mouseX, double mouseY, int button) {
+        /*if (button != 0 || !jjf$showSettings()) {
+            return false;
+        }
+        int left = this.leftPos;
+        int top = this.topPos;
+        if (isSurelyHovering(left - 136, top + 123, 118, 11, mouseX, mouseY)) {
+            JJFHudSettings.toggleAmmoText();
+        } else if (isSurelyHovering(left - 136, top + 134, 118, 11, mouseX, mouseY)) {
+            JJFHudSettings.toggleLauncherText();
+        } else {
+            return false;
+        }
+        Minecraft.getInstance().getSoundManager()
+                .play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+        return true;*/
+        return false;
     }
 
     public void gearChange(){

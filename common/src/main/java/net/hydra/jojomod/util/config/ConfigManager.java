@@ -392,9 +392,9 @@ public abstract class ConfigManager {
             MainUtil.vampireSunDamageWorlds.clear();
             MainUtil.vampireSunDamageWorlds.addAll(getAdvancedConfig().vampireSunDamageWorlds);
         }
-        if (getAdvancedConfig().foodThatGivesBloodListV6 != null)
+        if (getAdvancedConfig().foodThatGivesBloodListV7 != null)
         {
-            MainUtil.foodMap = MainUtil.parseFoodList(getAdvancedConfig().foodThatGivesBloodListV6);
+            MainUtil.foodMap = MainUtil.parseFoodList(getAdvancedConfig().foodThatGivesBloodListV7);
         }
         if (getAdvancedConfig().foodThatHasEffectsForVampiresV1 != null)
         {

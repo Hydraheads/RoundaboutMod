@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.mobs;
 
 import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.goals.StrayCatBegGoal;
 import net.hydra.jojomod.entity.projectile.StrayCatAirBubble;
@@ -51,8 +52,6 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
         super($$0, $$1);
         this.setMaxUpStep(0.0F);
     }
-
-    private static final Ingredient TEMPT_INGREDIENT = Ingredient.of(Items.COD, Items.SALMON, Items.TROPICAL_FISH);
 
     private static final EntityDataAccessor<Byte> BREED = SynchedEntityData.defineId(StrayCatEntity.class,
             EntityDataSerializers.BYTE);;
@@ -349,6 +348,7 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
                 || state.is(Blocks.FARMLAND)
                 || state.is(Blocks.GRASS_BLOCK)
                 || state.is(Blocks.MYCELIUM)
+                || state.is(ModBlocks.INVISIBLOCK)
                 || state.is(Blocks.DIRT_PATH)
                 || state.is(Blocks.COARSE_DIRT)
                 || state.is(Blocks.ROOTED_DIRT)
@@ -406,8 +406,17 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
         return super.hurt(DMG, f);
     }
 
+    private static Ingredient TEMPT_INGREDIENT;
+
+    private static Ingredient getTemptIngredient() {
+        if (TEMPT_INGREDIENT == null) {
+            TEMPT_INGREDIENT = Ingredient.of(Items.COD, Items.SALMON, Items.TROPICAL_FISH, ModItems.PIRANHA);
+        }
+        return TEMPT_INGREDIENT;
+    }
+
     public boolean isYummy(ItemStack stack) {
-        return TEMPT_INGREDIENT.test(stack);
+        return getTemptIngredient().test(stack);
     }
 
     @Override
