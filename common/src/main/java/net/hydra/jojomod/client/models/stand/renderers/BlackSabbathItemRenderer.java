@@ -49,7 +49,7 @@ public class BlackSabbathItemRenderer <T extends BlackSabbathEntity, M extends S
                  poseStack.scale(0.34F, 0.34F, 0.34F);
              }
              if(flag2) {
-                 poseStack.translate(((this.getParentModel()).head.x / 16.0F) - 0.1F, ((this.getParentModel()).head.y / 19.0F) + 1.12F + ((float) blackSabbathEntity.slideTicks / 350), ((this.getParentModel()).head.z / 16.0F) - 0.25F - ((float) blackSabbathEntity.slideTicks / 98));
+                 poseStack.translate(((this.getParentModel()).head.x / 16.0F) - 0.1F, ((this.getParentModel()).head.y / 19.0F) + 1.12F + ((float) blackSabbathEntity.slideTicks / 350), ((this.getParentModel()).head.z / 16.0F) - 0.24F - ((float) blackSabbathEntity.slideTicks / 98));
              } else if (flag3){
                  poseStack.translate(((this.getParentModel()).head.x / 16.0F), ((this.getParentModel()).head.y / 19.0F) + 1.12F  + ((float) blackSabbathEntity.slideTicks / 350), ((this.getParentModel()).head.z / 16.0F) - 0.28  - ((float) blackSabbathEntity.slideTicks / 98));
              }else {
