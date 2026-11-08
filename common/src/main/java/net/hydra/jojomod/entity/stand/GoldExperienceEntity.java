@@ -20,6 +20,13 @@ public class GoldExperienceEntity extends FollowingStandEntity {
     public final AnimationState kick_barrage = new AnimationState();
     public final AnimationState kick_barrage_end = new AnimationState();
     public final AnimationState kick_barrage_windup = new AnimationState();
+    public final AnimationState entityGrabAnimation = new AnimationState();
+    public final AnimationState blockThrowAnimation = new AnimationState();
+    public final AnimationState blockGrabAnimation = new AnimationState();
+    public final AnimationState itemGrabAnimation = new AnimationState();
+    public final AnimationState itemThrowAnimation = new AnimationState();
+    public final AnimationState blockRetractAnimation = new AnimationState();
+    public final AnimationState itemRetractAnimation = new AnimationState();
 
     //used for animations later
     public static final byte
@@ -59,5 +66,40 @@ public class GoldExperienceEntity extends FollowingStandEntity {
             this.kick_barrage_end.stop();
         }
 
+        if (this.getAnimation() == ITEM_GRAB) {
+            this.itemGrabAnimation.startIfStopped(this.tickCount);
+        } else {
+            this.itemGrabAnimation.stop();
+        }
+        if (this.getAnimation() == ITEM_THROW) {
+            this.itemThrowAnimation.startIfStopped(this.tickCount);
+        } else {
+            this.itemThrowAnimation.stop();
+        }
+        if (this.getAnimation() == ITEM_RETRACT) {
+            this.itemRetractAnimation.startIfStopped(this.tickCount);
+        } else {
+            this.itemRetractAnimation.stop();
+        }
+        if (this.getAnimation() == BLOCK_GRAB) {
+            this.blockGrabAnimation.startIfStopped(this.tickCount);
+        } else {
+            this.blockGrabAnimation.stop();
+        }
+        if (this.getAnimation() == BLOCK_THROW) {
+            this.blockThrowAnimation.startIfStopped(this.tickCount);
+        } else {
+            this.blockThrowAnimation.stop();
+        }
+        if (this.getAnimation() == BLOCK_RETRACT) {
+            this.blockRetractAnimation.startIfStopped(this.tickCount);
+        } else {
+            this.blockRetractAnimation.stop();
+        }
+        if (this.getAnimation() == ENTITY_GRAB) {
+            this.entityGrabAnimation.startIfStopped(this.tickCount);
+        } else {
+            this.entityGrabAnimation.stop();
+        }
     }
 }
