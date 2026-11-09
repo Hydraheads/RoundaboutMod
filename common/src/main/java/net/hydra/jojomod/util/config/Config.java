@@ -886,7 +886,7 @@ public class Config implements Cloneable {
         public Integer DistortionModeChangeCooldown;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer StrangleCooldown;
-        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
         public Integer PodThrowCooldown;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer SalimoCooldown;

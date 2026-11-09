@@ -392,7 +392,7 @@ public class PurpleSmokeEntity extends StandEntity {
 
             if (!((StandUser) living).roundabout$isBubbleEncased() && !(living instanceof StrayCatEntity c && c.getBubbleShield()) && PowerTypes.isExistentiallyElsewhereTogether(this, living)) {
 
-                int effectDuration = living instanceof Player ? 160 : 160; //for when it was less duration to you. It was 100 : 150
+                int effectDuration = living instanceof Player ? 80 : 80; //for when it was less duration to you. It was 100 : 150
                 boolean isSelf = living == user;
 
                 if (isDistortionMode()) {
@@ -405,19 +405,19 @@ public class PurpleSmokeEntity extends StandEntity {
                         ((StandUser) user).roundabout$getStandPowers().addEXP(2);
                     }
                     if (ClientNetworking.getAppropriateConfig().PurpleHazeSettings.HazeMelts) {
-                        living.addEffect(new MobEffectInstance(ModEffects.MELTING, 160, 2));
+                        living.addEffect(new MobEffectInstance(ModEffects.MELTING, 80, 2));
                     }
                 } else {
                     boolean alreadyHasVirus = living.hasEffect(ModEffects.HAZE_VIRUS);
                     ((StandUser) living).SetInPurpleHazeTicks(5);
                     ((StandUser) living).SetPurpleHazeSkin(this.getStandSkin());
-                    living.addEffect(new MobEffectInstance(ModEffects.HAZE_VIRUS, 150));
+                    living.addEffect(new MobEffectInstance(ModEffects.HAZE_VIRUS, 75));
 
                     if (!isSelf && !alreadyHasVirus && expGrantedTo.add(living.getId())) {
                         ((StandUser) user).roundabout$getStandPowers().addEXP(3);
                     }
                     if (ClientNetworking.getAppropriateConfig().PurpleHazeSettings.HazeMelts) {
-                        living.addEffect(new MobEffectInstance(ModEffects.MELTING, 150, 1));
+                        living.addEffect(new MobEffectInstance(ModEffects.MELTING, 75, 1));
                     }
                 }
             }

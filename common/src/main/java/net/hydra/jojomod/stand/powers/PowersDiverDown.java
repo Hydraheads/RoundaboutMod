@@ -3,16 +3,13 @@ package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.logging.LogUtils;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.DiverLimbBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
-import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.client.ClientUtil;
-import net.hydra.jojomod.client.DiverDownControlsClient;
-import net.hydra.jojomod.client.KeyboardPilotInput;
-import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.client.*;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.BoneProjectileEntity;
 import net.hydra.jojomod.entity.stand.*;
@@ -41,6 +38,7 @@ import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerPlayer;
@@ -2743,6 +2741,17 @@ public class PowersDiverDown extends NewPunchingStand {
             }
         }
         super.getReplacementHUD(context, cameraPlayer, screenWidth, screenHeight, x, removeNum);
+    }
+
+    public boolean shouldRenderIconEntity(LivingEntity LE) {
+        if (isDiveActive() && !isSelfDive() && submergedTarget == LE && LE != self) {
+            return true;
+        }
+        return false;
+    }
+
+    public void renderIconEntity(LivingEntity LE, PoseStack matrixStack, MultiBufferSource bufferSource) {
+        DiverDownPointerRenderer.render(LE, matrixStack, bufferSource);
     }
 
     /**

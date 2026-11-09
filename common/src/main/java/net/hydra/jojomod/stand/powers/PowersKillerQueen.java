@@ -2,12 +2,10 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.FancyLighterBlock;
+import net.hydra.jojomod.client.BitesTheDustIndicatorRenderer;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
@@ -46,15 +44,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -91,8 +86,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.phys.*;
 import net.minecraft.nbt.CompoundTag;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 import java.util.*;
@@ -4899,48 +4892,24 @@ public class PowersKillerQueen extends NewPunchingStand {
         return super.highlightsEntityColor(ent, player);
     }
 
-    public void bitesTheDustRender(LivingEntity LE, PoseStack matrixStack, MultiBufferSource bufferSource) {
+    public boolean shouldRenderIconEntity(LivingEntity LE) {
         if (LE != null && LE.getId() != this.getSelf().getId()) {
-            Minecraft mc = Minecraft.getInstance();
             if (this.getSelf() instanceof Player && this.getSelf().distanceToSqr(LE) <= 1024
                     && bitesTheDustPlantedEntity != null && isAffectedByBitesTheDust(LE)) {
-
-                float size = 0.3f;
-                ResourceLocation icon = StandIcons.BITES_THE_DUST_TARGET;
-                if (LE.getId() == bitesTheDustPlantedEntity.getId()) {
-                    icon = StandIcons.BITES_THE_DUST_PLANTED;
-                    size = 0.25f;
-                }
-
-                if (LE.getId() == bitesTheDustPlantedEntity.getId() || LE.distanceTo(bitesTheDustPlantedEntity) <= btdRange && LE.hasLineOfSight(bitesTheDustPlantedEntity)) {
-                    matrixStack.pushPose();
-
-                    float height = (LE.getNameTagOffsetY() + 0.275F);
-
-                    // Orient the texture
-                    matrixStack.scale(1, 1, 1);
-                    matrixStack.translate(0, height, 0);
-                    matrixStack.mulPose(mc.getEntityRenderDispatcher().cameraOrientation());
-                    matrixStack.mulPose(Axis.YP.rotationDegrees(180.0F));
-
-                    // Draw flat quad here
-                    VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.entityTranslucent(icon)).color(1.0f, 1.0f, 1.0f, 1.0f);
-                    Matrix4f matrix = matrixStack.last().pose();
-                    Matrix3f normal = matrixStack.last().normal();
-
-                    vertexConsumer.vertex(matrix, -size, -size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(normal, 0, 0, -1).endVertex();
-                    vertexConsumer.vertex(matrix, size, -size, 0.0f).color(255, 255, 255, 255).uv(1.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(normal, 0, 0, -1).endVertex();
-                    vertexConsumer.vertex(matrix, size, size, 0.0f).color(255, 255, 255, 255).uv(1.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(normal, 0, 0, -1).endVertex();
-                    vertexConsumer.vertex(matrix, -size, size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(normal, 0, 0, -1).endVertex();
-
-
-                    RenderSystem.enableDepthTest();
-                    matrixStack.popPose();
-                }
+                return true;
             }
         }
+        return false;
     }
 
+    public void renderIconEntity(LivingEntity LE, PoseStack matrixStack, MultiBufferSource bufferSource) {
+        Minecraft mc = Minecraft.getInstance();
+        if (LE.getId() == bitesTheDustPlantedEntity.getId()) {
+            BitesTheDustIndicatorRenderer.renderHost(LE, matrixStack, bufferSource, mc.getEntityRenderDispatcher());
+        }else {
+            BitesTheDustIndicatorRenderer.renderTarget(LE, matrixStack, bufferSource, mc.getEntityRenderDispatcher());
+        }
+    }
 
     // more GUI things
 
@@ -5096,9 +5065,9 @@ public class PowersKillerQueen extends NewPunchingStand {
                     flashAlpha, otherFlashAlpha);
         }
     }
-   
+
     @Override public Component getSkinName(byte skinId) {
-    	
+
     	switch (skinId)
         {
             case KillerQueenEntity.PART_4 -> {return Component.translatable("skins.roundabout.killer_queen.anime");}
@@ -5489,7 +5458,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (this.getActivePower() == DETONATE) { this.setPowerNone(); }
     	return true;
     }
-    
+
     public boolean detonate() {
     	if (!this.isClient() && this.detonateTimer == -1 && getActivePower() != PowerIndex.POWER_1) {
             if (this.self instanceof ServerPlayer pl) {
@@ -5508,7 +5477,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 this.setActivePower(DETONATE);
             }
         }
-    	
+
     	return true;
     }
 
