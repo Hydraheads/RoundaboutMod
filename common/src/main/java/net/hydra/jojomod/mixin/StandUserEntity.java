@@ -6350,10 +6350,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 if (inst != null) {
                     int level = inst.getAmplifier() + 1;
                     float damage = level;
-                    if (level == 2) {
-                        damage += 0.25F;   //extra at Niv.2
-                    } else if (level >= 3) {
-                        damage += 0.5F;   //extra at Niv.3
+
+                    if (level == 1) {
+                        damage += 1.0F;
+                    }
+                    else if (level == 2) {
+                    damage += 1.0F;   //extra at Niv.2
+                    }
+                    else if (level == 3) {
+                        damage += 1.0F;   //extra at Niv.3
                     }
                     if (((StandUser) this).roundabout$getStandPowers() instanceof PowersPurpleHaze) {
                         damage *= 0.66F;
@@ -6361,7 +6366,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     if (ClientNetworking.getAppropriateConfig().PurpleHazeSettings.CanonDistortion) {
                         damage *= 4;
                     }
-                    damage *= 2;
                     this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISTORTION_VIRUS), damage);
                     rdbt$reduceOtherEffectDurations(40, ModEffects.DISTORTION_VIRUS, ModEffects.VIRUS_IMMUNITY);
                 }
