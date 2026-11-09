@@ -69,7 +69,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
         WALL_VINES = 56,
         HEAL = 57,
         BRAMBLES = 58,
-        LIFEFORM_CREATION = 59;
+        LIFEFORM_CREATION = 59,
+        ITEM_THROW = 60;
 
     // for life punch
     private LifePunchCloneEntity lifePunchClone = null;
@@ -86,6 +87,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
     //for lifeforms
     /**For mob ai, change the animalType before trypower to set what kind of plunder it has*/
     private byte animalType = AnimalTypes.FROG.id;
+
+    // for item throw
+    private boolean isThrowingItem = false;
 
     // basic stand registry stuff
     public PowersGoldExperience(LivingEntity self) {super(self);}
@@ -276,9 +280,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
     passedInt could be what animal you're making
     */
     public boolean tryIntPower(int move, boolean forced, int passedInt){
-        //note, put item throw here later too
-        if (move == LIFEFORM_CREATION) {
-            animalType = (byte)passedInt;
+        if (move == LIFEFORM_CREATION || move == ITEM_THROW) {
+            this.animalType = (byte) passedInt;
+            if (move == ITEM_THROW) {
+                return false;
+            }
         }
         return super.tryIntPower(move, forced, passedInt);
     }
@@ -353,11 +359,30 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     // item throw start
 
-    public void itemGrabClient(){
+    @Override
+    public void itemGrabClient() {
+        // GE animal sync
+        int animalClientConfig = 1;
+        ClientConfig clientConfig = ConfigManager.getClientConfig();
+        if (clientConfig != null && clientConfig.dynamicSettings != null) {
+            animalClientConfig = clientConfig.dynamicSettings.goldExperienceCurrentAnimal;
+        }
+        this.animalType = (byte) animalClientConfig;
+        tryIntPowerPacket(ITEM_THROW, animalClientConfig);
+
         // TODO: level lock here
         //if (canExecuteMoveWithLevel(getItemThrowLevel())) {
             super.itemGrabClient();
         //}
+    }
+
+    @Override
+    public byte getThrowStyleType(){
+        return ThrownObjectEntity.GETHROW;
+    }
+
+    public byte getSelectedAnimalType() {
+        return this.animalType;
     }
 
     // item throw end
@@ -493,6 +518,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
     private boolean executeLifeformCreation() {
         if (!this.self.level().isClientSide()) {
 
+            if (this.self.isCrouching()) {
+                return false;
+            }
+
             if(!isHoldingItem()){
                 return false;
             }
@@ -525,25 +554,31 @@ public class PowersGoldExperience extends BlockGrabPreset {
             }
 
             if (typeToSpawn != null) {
-                return spawnLifeform(typeToSpawn);
+                Vec3 spawnPos = this.self.position().add(this.self.getLookAngle().scale(1.2));
+                spawnPos = new Vec3(spawnPos.x, spawnPos.y + 1.0, spawnPos.z);
+
+                ItemStack handItem = this.self.getMainHandItem();
+
+                if (spawnLifeform(typeToSpawn, spawnPos, handItem)) {
+                    handItem.shrink(1);
+                    return true;
+                }
             }
         }
         return false;
     }
 
-    private boolean spawnLifeform(EntityType<?> entityType) {
+    public boolean spawnLifeform(EntityType<?> entityType, Vec3 spawnPos, ItemStack sourceItem) {
         Entity entity = entityType.create(this.self.level());
 
         if (entity instanceof LivingEntity livingEntity) {
-            Vec3 spawnPos = this.self.position().add(this.self.getLookAngle().scale(1.2));
-            livingEntity.moveTo(spawnPos.x, spawnPos.y + 1.0, spawnPos.z, this.self.getYRot(), 0.0F);
+            livingEntity.moveTo(spawnPos.x, spawnPos.y, spawnPos.z, this.self.getYRot(), 0.0F);
 
             if (livingEntity instanceof GELifeform lifeform) {
                 lifeform.setCreator(this.getSelf());
-                ItemStack consumedItem = this.self.getMainHandItem().copy();
+                ItemStack consumedItem = sourceItem.copy();
                 consumedItem.setCount(1);
                 lifeform.setSourceItem(consumedItem);
-                this.self.getMainHandItem().shrink(1);
             }
 
             if (livingEntity instanceof Mob mob && this.self.level() instanceof ServerLevel serverLevel) {
@@ -551,7 +586,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             }
 
             this.self.level().addFreshEntity(livingEntity);
-            playSoundIfPossible(this.self.level(), null, this.self.blockPosition(),
+            playSoundIfPossible(this.self.level(), null, BlockPos.containing(spawnPos),
                     ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
             return true;
         }
@@ -1414,7 +1449,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
             setSkillIcon(context, x, y, 1, StandIcons.GOLD_EXPERIENCE_LIFEFORM_SELECT, PowerIndex.SKILL_1);
         }
         // Ability 2 (X)
-        setSkillIcon(context, x, y, 2, StandIcons.GOLD_EXPERIENCE_LIFEFORM_CREATION, PowerIndex.SKILL_2);
+        if (isHoldingSneak()) {
+            setSkillIcon(context, x, y, 2, StandIcons.GOLD_EXPERIENCE_ITEM_THROW, PowerIndex.SKILL_3_CROUCH_GUARD);
+        } else {
+            setSkillIcon(context, x, y, 2, StandIcons.GOLD_EXPERIENCE_LIFEFORM_CREATION, PowerIndex.SKILL_2);
+        }
         // Ability 3 (C)
         if (isGuarding()){
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
@@ -1458,8 +1497,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 "instruction.roundabout.press_skill_item", StandIcons.GOLD_EXPERIENCE_DNA_CREATION, 1, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.gold_experience_lifeform_creation",
                 "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_LIFEFORM_CREATION, 2, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.gold_experience_placeholder",
-                "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 2, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.gold_experience_item_throw",
+                "instruction.roundabout.press_skill_crouch", StandIcons.GOLD_EXPERIENCE_ITEM_THROW, 2, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, 0, "ability.roundabout.gold_experience_placeholder",
                 "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 2, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 99, 0, "ability.roundabout.dodge",

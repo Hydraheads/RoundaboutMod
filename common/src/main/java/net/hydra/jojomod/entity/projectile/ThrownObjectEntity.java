@@ -11,12 +11,17 @@ import net.hydra.jojomod.entity.objects.GentlyWeepsEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.AnimalTypes;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.whitesnake.disc.MusicDiscController;
 import net.hydra.jojomod.item.*;
+import net.hydra.jojomod.mixin.StandUserEntity;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersGoldExperience;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
@@ -149,188 +154,216 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             SOFTTHROW = 3,
             SPINTHROW = 4,
             STAND_DAMAGE = 5,
-            BRIDGETHROW = 6;
+            BRIDGETHROW = 6,
+            GETHROW = 7;
     public static boolean throwAnObject(LivingEntity thrower, boolean canSnipe, ItemStack item, float getShotAccuracy,
                                      float getBundleAccuracy,
                                      float getThrowAngle1, float getThrowAngle2, float getThrowAngle3,
                                      boolean getCanPlace, byte styleType, float xRot, float yRot,Vec3 pos,
                                         boolean playSounds, float mult, boolean canGiveYouItem){
-        if (item.getItem() instanceof ThrowablePotionItem) {
-            ThrownPotion $$4 = new ThrownPotion(thrower.level(), thrower);
-            $$4.setPos(pos);
-            $$4.setItem(item);
-            $$4.shootFromRotation(thrower, xRot, yRot, -3.0F, 1.4F*mult, getShotAccuracy);
-            thrower.level().addFreshEntity($$4);
-            if (playSounds){
-                thrower.level().playSound(null, $$4, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
-            }
-        } else if (item.getItem() instanceof SnowballItem){
-            Snowball $$4 = new Snowball(thrower.level(), thrower);
-            $$4.setPos(pos);
-            $$4.setItem(item);
-            $$4.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F*mult, getShotAccuracy);
-            thrower.level().addFreshEntity($$4);
-            if (playSounds){
-                thrower.level().playSound(null, $$4, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
-            }
-        } else if (item.is(ModItems.KNIFE)){
-            KnifeEntity $$7 = new KnifeEntity(thrower.level(), thrower, item);
-            $$7.setPos(pos);
-            $$7.shootFromRotation(thrower, xRot, yRot, getThrowAngle3, 2.4F*mult, getShotAccuracy);
-
-            if (canSnipe){
-                ((ISuperThrownAbstractArrow)$$7).roundabout$starThrowInit();
-            }
-            thrower.level().addFreshEntity($$7);
-            if (playSounds){
-                thrower.level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
-            }
-        } else if (item.is(ModItems.KNIFE_BUNDLE)){
-            for (int i = 0; i< 4; i++) {
+        // all these throwable object things create a new entity that ISN'T a ThrownObjectEntity
+        // I need to disable the special interactions for GE so that it can actually transform thrown stuff into mobs later
+        if (styleType != GETHROW) {
+            if (item.getItem() instanceof ThrowablePotionItem) {
+                ThrownPotion $$4 = new ThrownPotion(thrower.level(), thrower);
+                $$4.setPos(pos);
+                $$4.setItem(item);
+                $$4.shootFromRotation(thrower, xRot, yRot, -3.0F, 1.4F * mult, getShotAccuracy);
+                thrower.level().addFreshEntity($$4);
+                if (playSounds) {
+                    thrower.level().playSound(null, $$4, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+                }
+            } else if (item.getItem() instanceof SnowballItem) {
+                Snowball $$4 = new Snowball(thrower.level(), thrower);
+                $$4.setPos(pos);
+                $$4.setItem(item);
+                $$4.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F * mult, getShotAccuracy);
+                thrower.level().addFreshEntity($$4);
+                if (playSounds) {
+                    thrower.level().playSound(null, $$4, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+                }
+            } else if (item.is(ModItems.KNIFE)) {
                 KnifeEntity $$7 = new KnifeEntity(thrower.level(), thrower, item);
-                $$7.shootFromRotationWithVariance(thrower, xRot, yRot, -3.0F, 2.4F*mult, getBundleAccuracy);
                 $$7.setPos(pos);
-                thrower.level().addFreshEntity($$7);
-                if (i ==0) {
-                    if (playSounds){
-                        thrower.level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
-                    }
-                }
-            }
-        } else if (item.is(ModItems.GASOLINE_CAN)){
-            if (thrower instanceof Player PE && ((Player) thrower).getCooldowns().isOnCooldown(item.getItem())) {
-                return false;
-            } else {
-                GasolineCanEntity $$7 = new GasolineCanEntity(thrower, thrower.level());
-                $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 1.5F*mult, getShotAccuracy);
-                $$7.setPos(pos);
+                $$7.shootFromRotation(thrower, xRot, yRot, getThrowAngle3, 2.4F * mult, getShotAccuracy);
+
                 if (canSnipe) {
-                    $$7.starThrowInit();
+                    ((ISuperThrownAbstractArrow) $$7).roundabout$starThrowInit();
                 }
                 thrower.level().addFreshEntity($$7);
-                if (playSounds){
+                if (playSounds) {
                     thrower.level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
                 }
-            }
-        } else if (item.is(ModItems.MATCH)){
-                MatchEntity $$7 = new MatchEntity(thrower, thrower.level());
-                $$7.shootFromRotation(thrower, xRot, yRot, getThrowAngle3, 2.5F*mult, getShotAccuracy);
-            $$7.setPos(pos);
-                if (canSnipe) {
-                    $$7.starThrowInit();
-                }
-                thrower.level().addFreshEntity($$7);
-            if (playSounds){
-                thrower.level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
-            }
-        } else if (item.is(ModItems.MATCH_BUNDLE)){
+            } else if (item.is(ModItems.KNIFE_BUNDLE)) {
                 for (int i = 0; i < 4; i++) {
-                    MatchEntity $$7 = new MatchEntity(thrower, thrower.level());
-                    $$7.shootFromRotationWithVariance(thrower, xRot, yRot, -3.0F, 2.5F*mult, getBundleAccuracy);
+                    KnifeEntity $$7 = new KnifeEntity(thrower.level(), thrower, item);
+                    $$7.shootFromRotationWithVariance(thrower, xRot, yRot, -3.0F, 2.4F * mult, getBundleAccuracy);
                     $$7.setPos(pos);
                     thrower.level().addFreshEntity($$7);
                     if (i == 0) {
-                        if (playSounds){
+                        if (playSounds) {
                             thrower.level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
                         }
                     }
                 }
-        } else if ((item.getItem() instanceof StandArrowItem && !(item.getDamageValue() >= item.getMaxDamage())) ||
-                item.getItem() instanceof WorthyArrowItem){
-            StandArrowEntity $$4 = new StandArrowEntity(thrower.level(), thrower, item);
-            $$4.setPos(pos);
-            $$4.shootFromRotation(thrower, xRot, yRot, 0F, 3F*mult, getShotAccuracy);
-            thrower.level().addFreshEntity($$4);
-            if (playSounds){
-                thrower.level().playSound(null, $$4, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
-            }
-        } else if (item.getItem() instanceof EggItem){
-            ThrownEgg $$4 = new ThrownEgg(thrower.level(), thrower);
-            $$4.setPos(pos);
-            $$4.setItem(item);
-            $$4.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F*mult, getShotAccuracy);
-            thrower.level().addFreshEntity($$4);
-            if (playSounds){
-                thrower.level().playSound(null, $$4, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
-            }
-        } else if (item.getItem() instanceof ExperienceBottleItem){
-            ThrownExperienceBottle $$4 = new ThrownExperienceBottle(thrower.level(), thrower);
-            $$4.setPos(pos);
-            $$4.setItem(item);
-            $$4.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F*mult, getShotAccuracy);
-            thrower.level().addFreshEntity($$4);
-            if (playSounds){
-                thrower.level().playSound(null, $$4, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
-            }
-        } else if (item.getItem() instanceof EnderpearlItem){
-            ThrownEnderpearl $$4 = new ThrownEnderpearl(thrower.level(), thrower);
-            $$4.setPos(pos);
-            if (thrower instanceof Player PE && ((Player) thrower).getCooldowns().isOnCooldown(item.getItem())){
-                return false;
-            } else {
-                if (thrower instanceof Player PE) {
-                    PE.getCooldowns().addCooldown(item.getItem(), 20);
+            } else if (item.is(ModItems.GASOLINE_CAN)) {
+                if (thrower instanceof Player PE && ((Player) thrower).getCooldowns().isOnCooldown(item.getItem())) {
+                    return false;
+                } else {
+                    GasolineCanEntity $$7 = new GasolineCanEntity(thrower, thrower.level());
+                    $$7.shootFromRotation(thrower, xRot, yRot, -3.0F, 1.5F * mult, getShotAccuracy);
+                    $$7.setPos(pos);
+                    if (canSnipe) {
+                        $$7.starThrowInit();
+                    }
+                    thrower.level().addFreshEntity($$7);
+                    if (playSounds) {
+                        thrower.level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+                    }
                 }
-                $$4.shootFromRotation(thrower, xRot, yRot, -0F, 1.8F*mult, getShotAccuracy);
+            } else if (item.is(ModItems.MATCH)) {
+                MatchEntity $$7 = new MatchEntity(thrower, thrower.level());
+                $$7.shootFromRotation(thrower, xRot, yRot, getThrowAngle3, 2.5F * mult, getShotAccuracy);
+                $$7.setPos(pos);
+                if (canSnipe) {
+                    $$7.starThrowInit();
+                }
+                thrower.level().addFreshEntity($$7);
+                if (playSounds) {
+                    thrower.level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+                }
+            } else if (item.is(ModItems.MATCH_BUNDLE)) {
+                for (int i = 0; i < 4; i++) {
+                    MatchEntity $$7 = new MatchEntity(thrower, thrower.level());
+                    $$7.shootFromRotationWithVariance(thrower, xRot, yRot, -3.0F, 2.5F * mult, getBundleAccuracy);
+                    $$7.setPos(pos);
+                    thrower.level().addFreshEntity($$7);
+                    if (i == 0) {
+                        if (playSounds) {
+                            thrower.level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+                        }
+                    }
+                }
+            } else if ((item.getItem() instanceof StandArrowItem && !(item.getDamageValue() >= item.getMaxDamage())) ||
+                    item.getItem() instanceof WorthyArrowItem) {
+                StandArrowEntity $$4 = new StandArrowEntity(thrower.level(), thrower, item);
+                $$4.setPos(pos);
+                $$4.shootFromRotation(thrower, xRot, yRot, 0F, 3F * mult, getShotAccuracy);
                 thrower.level().addFreshEntity($$4);
-                if (playSounds){
+                if (playSounds) {
                     thrower.level().playSound(null, $$4, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
                 }
-            }
-        } else if (item.getItem() instanceof ArrowItem && !(item.getItem() instanceof RoundaboutArrowItem)) {
-            ArrowItem $$10 = (ArrowItem) item.getItem();
-            AbstractArrow $$11 = $$10.createArrow(thrower.level(), item, thrower);
-            $$11.setPos(pos);
-            $$11.shootFromRotation(thrower, xRot, yRot, 0.0F, 3.0F * mult, getShotAccuracy);
-            $$11.setCritArrow(true);
-            StandEntity standEntity = ((StandUser) thrower).roundabout$getStand();
-            if (standEntity != null && (styleType == SPTHROW || styleType == TWTHROW)) {
-                if (!standEntity.canAcquireHeldItem) {
+            } else if (item.getItem() instanceof EggItem) {
+                ThrownEgg $$4 = new ThrownEgg(thrower.level(), thrower);
+                $$4.setPos(pos);
+                $$4.setItem(item);
+                $$4.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F * mult, getShotAccuracy);
+                thrower.level().addFreshEntity($$4);
+                if (playSounds) {
+                    thrower.level().playSound(null, $$4, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+                }
+            } else if (item.getItem() instanceof ExperienceBottleItem) {
+                ThrownExperienceBottle $$4 = new ThrownExperienceBottle(thrower.level(), thrower);
+                $$4.setPos(pos);
+                $$4.setItem(item);
+                $$4.shootFromRotation(thrower, xRot, yRot, -3.0F, 2F * mult, getShotAccuracy);
+                thrower.level().addFreshEntity($$4);
+                if (playSounds) {
+                    thrower.level().playSound(null, $$4, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+                }
+            } else if (item.getItem() instanceof EnderpearlItem) {
+                ThrownEnderpearl $$4 = new ThrownEnderpearl(thrower.level(), thrower);
+                $$4.setPos(pos);
+                if (thrower instanceof Player PE && ((Player) thrower).getCooldowns().isOnCooldown(item.getItem())) {
+                    return false;
+                } else {
+                    if (thrower instanceof Player PE) {
+                        PE.getCooldowns().addCooldown(item.getItem(), 20);
+                    }
+                    $$4.shootFromRotation(thrower, xRot, yRot, -0F, 1.8F * mult, getShotAccuracy);
+                    thrower.level().addFreshEntity($$4);
+                    if (playSounds) {
+                        thrower.level().playSound(null, $$4, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+                    }
+                }
+            } else if (item.getItem() instanceof ArrowItem && !(item.getItem() instanceof RoundaboutArrowItem)) {
+                ArrowItem $$10 = (ArrowItem) item.getItem();
+                AbstractArrow $$11 = $$10.createArrow(thrower.level(), item, thrower);
+                $$11.setPos(pos);
+                $$11.shootFromRotation(thrower, xRot, yRot, 0.0F, 3.0F * mult, getShotAccuracy);
+                $$11.setCritArrow(true);
+                StandEntity standEntity = ((StandUser) thrower).roundabout$getStand();
+                if (standEntity != null && (styleType == SPTHROW || styleType == TWTHROW)) {
+                    if (!standEntity.canAcquireHeldItem) {
+                        $$11.pickup = AbstractArrow.Pickup.DISALLOWED;
+                    }
+                }
+
+                if (!canGiveYouItem) {
                     $$11.pickup = AbstractArrow.Pickup.DISALLOWED;
                 }
-            }
 
-            if (!canGiveYouItem) {
-                $$11.pickup = AbstractArrow.Pickup.DISALLOWED;
-            }
+                if (canSnipe) {
+                    ((ISuperThrownAbstractArrow) $$11).roundabout$starThrowInit();
+                }
+                thrower.level().addFreshEntity($$11);
+                if (playSounds) {
+                    thrower.level().playSound(null, $$11, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+                }
+            } else if (item.is(Items.TRIDENT)) {
+                if (!item.hurt(1, thrower.level().getRandom(), null)) {
+                    ThrownTrident $$7 = new ThrownTrident(thrower.level(), thrower, item);
+                    $$7.setPos(pos);
+                    $$7.shootFromRotation(thrower, xRot, yRot, 0.0F, 3.0F * mult, getShotAccuracy);
+                    if (canSnipe) {
+                        ((ISuperThrownAbstractArrow) $$7).roundabout$starThrowInit2();
+                    }
+                    thrower.level().addFreshEntity($$7);
+                    if (playSounds) {
+                        thrower.level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+                    }
+                }
+            } else if (item.getItem() instanceof HarpoonItem) {
+                if (!item.hurt(1, thrower.level().getRandom(), null)) {
+                    HarpoonEntity $$7 = new HarpoonEntity(thrower.level(), thrower, item);
+                    $$7.setPos(pos);
+                    $$7.shootFromRotation(thrower, xRot, yRot, 0.0F, 3.0F * mult, getShotAccuracy);
+                    if (canSnipe) {
+                        ((ISuperThrownAbstractArrow) $$7).roundabout$starThrowInit2();
+                    }
+                    if ((styleType == SPTHROW || styleType == TWTHROW)) {
+                        $$7.isThrown = true;
+                    }
+                    thrower.level().addFreshEntity($$7);
+                    if (playSounds) {
+                        thrower.level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+                    }
+                }
+            } else {
+                boolean canPlace = getCanPlace;
+                ThrownObjectEntity thrownBlockOrItem = new ThrownObjectEntity(thrower, thrower.level(), item, canPlace);
+                thrownBlockOrItem.setPos(pos);
 
-            if (canSnipe) {
-                ((ISuperThrownAbstractArrow) $$11).roundabout$starThrowInit();
-            }
-            thrower.level().addFreshEntity($$11);
-            if (playSounds) {
-                thrower.level().playSound(null, $$11, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
-            }
-        } else if (item.is(Items.TRIDENT)){
-            if (!item.hurt(1,thrower.level().getRandom(),null)){
-                ThrownTrident $$7 = new ThrownTrident(thrower.level(), thrower, item);
-                $$7.setPos(pos);
-                $$7.shootFromRotation(thrower, xRot, yRot, 0.0F, 3.0F*mult, getShotAccuracy);
+                thrownBlockOrItem.shootFromRotation(thrower, xRot,
+                        yRot, getThrowAngle1, 1.7F*mult, getThrowAngle2);
                 if (canSnipe){
-                    ((ISuperThrownAbstractArrow)$$7).roundabout$starThrowInit2();
+                    thrownBlockOrItem.starThrowInit();
                 }
-                thrower.level().addFreshEntity($$7);
-                if (playSounds){
-                    thrower.level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
-                }
-            }
-        } else if (item.getItem() instanceof HarpoonItem){
-            if (!item.hurt(1,thrower.level().getRandom(),null)){
-                HarpoonEntity $$7 = new HarpoonEntity(thrower.level(), thrower, item);
-                $$7.setPos(pos);
-                $$7.shootFromRotation(thrower, xRot, yRot, 0.0F, 3.0F*mult, getShotAccuracy);
-                if (canSnipe){
-                    ((ISuperThrownAbstractArrow)$$7).roundabout$starThrowInit2();
-                }
-                if ((styleType == SPTHROW || styleType == TWTHROW)) {
-                    $$7.isThrown = true;
-                }
-                thrower.level().addFreshEntity($$7);
-                if (playSounds){
-                    thrower.level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+                thrownBlockOrItem.setStyle(styleType);
+                thrower.level().addFreshEntity(thrownBlockOrItem);
+
+                if (playSounds) {
+                    if (item.is(Items.IRON_NUGGET) || item.is(Items.GOLD_NUGGET) || item.is(Items.DIAMOND) || item.is(Items.FLINT) || item.is(ModItems.SNUBNOSE_AMMO) || item.is(ModItems.TOMMY_AMMO)
+                            || item.is(ModItems.SNIPER_AMMO)) {
+                        thrower.level().playSound(null, thrownBlockOrItem, ModSounds.BALL_BEARING_SHOT_EVENT, SoundSource.PLAYERS, 1.0F, 1F);
+                    } else {
+                        thrower.level().playSound(null, thrownBlockOrItem, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+                    }
                 }
             }
-        } else {
+        }
+        // gold experience normal item throw stuff
+        else {
             boolean canPlace = getCanPlace;
             ThrownObjectEntity thrownBlockOrItem = new ThrownObjectEntity(thrower, thrower.level(), item, canPlace);
             thrownBlockOrItem.setPos(pos);
@@ -472,6 +505,12 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
 
         if (!this.level().isClientSide) {
             if (!this.getItem().isEmpty()) {
+                // gold experience transformation thing start
+                Vec3 landingPos = $$0.getLocation().add(0, 0.1, 0);
+                if (tryTransformIntoLifeform(landingPos)) {
+                    return;
+                }
+
                 BlockPos pos = $$0.getBlockPos().relative($$0.getDirection());
                 BlockState state = this.level().getBlockState(pos);
                 if (this.getItem().getItem() instanceof BlockItem) {
@@ -712,7 +751,10 @@ private void bridgePlace(BlockHitResult $$0,Player P) {
         } else if (getStyle() == SPINTHROW) {
             damage*= (float) (ClientNetworking.getAppropriateConfig().generalStandSettings.standThrownObjectMultiplier *0.01);// make this spinThrowObjectMultiplier
             damage*= 0.75F;
-        }else {
+        } else if (getStyle() == GETHROW) {
+            damage*= (float) (ClientNetworking.getAppropriateConfig().generalStandSettings.standThrownObjectMultiplier *0.01);
+            damage*= 0.65F;
+        } else {
             damage*= (float) (ClientNetworking.getAppropriateConfig().generalStandSettings.standThrownObjectMultiplier *0.01);
         }
         return damage;
@@ -732,6 +774,12 @@ private void bridgePlace(BlockHitResult $$0,Player P) {
         if ($$0.getEntity().level().isClientSide()){
             return;
         }
+
+        // ge transform
+        if (tryTransformIntoLifeform($$0.getEntity().position())) {
+            return;
+        }
+
         if (handleDiscImpact($$0)) return;
         if (getStyle() == STAND_DAMAGE){
             if ($$0.getEntity() instanceof BlockWallEntity bwe && bwe.isWhiteAlbumWall){
@@ -1080,6 +1128,32 @@ private void bridgePlace(BlockHitResult $$0,Player P) {
                     ((Mob) entity).setPersistenceRequired();
                 }
                 return true;
+            }
+        }
+        return false;
+    }
+
+    // GE
+    private boolean tryTransformIntoLifeform(Vec3 spawnPos) {
+        if (this.getStyle() == GETHROW && this.getOwner() instanceof StandUser entity) {
+            StandPowers powers = entity.roundabout$getStandPowers();
+
+            if (powers instanceof PowersGoldExperience gePowers) {
+                byte selectedAnimal = gePowers.getSelectedAnimalType();
+                EntityType<?> typeToSpawn = ModEntities.GE_FROG;
+
+                if (selectedAnimal == AnimalTypes.BAT.id) typeToSpawn = ModEntities.GE_BAT;
+                else if (selectedAnimal == AnimalTypes.BEE.id) typeToSpawn = ModEntities.GE_BEE;
+                else if (selectedAnimal == AnimalTypes.FISH.id) typeToSpawn = ModEntities.GE_FISH;
+                else if (selectedAnimal == AnimalTypes.FOX.id) typeToSpawn = ModEntities.GE_FOX;
+                else if (selectedAnimal == AnimalTypes.SNAKE.id) typeToSpawn = ModEntities.GE_SNAKE;
+                else if (selectedAnimal == AnimalTypes.PIRAHNA.id) typeToSpawn = ModEntities.GE_PIRANHA;
+                else if (selectedAnimal == AnimalTypes.BUTTERFLY.id) typeToSpawn = ModEntities.GE_BUTTERFLY;
+
+                if (gePowers.spawnLifeform(typeToSpawn, spawnPos, this.getItem())) {
+                    this.discard();
+                    return true;
+                }
             }
         }
         return false;
