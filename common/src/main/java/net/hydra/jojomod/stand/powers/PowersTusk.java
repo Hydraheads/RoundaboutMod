@@ -120,6 +120,7 @@ public class PowersTusk extends NewDashPreset {
         ADVANCE_BARRAGE = 55,
         REVERSE = 56,
         WALL_BREAK = 57,
+        WALL_BREAK_2 = 61,
         DEATH_NAIL = 58,
         DEATH_PUNCH = 59;
 
@@ -179,7 +180,13 @@ public class PowersTusk extends NewDashPreset {
 
     @Override
     public boolean canSummonStandAsEntity() {
-        return this.getSelf() instanceof Player P && ( ((IPlayerEntity)P).roundabout$getStandLevel() != 1 || P.isCreative() || this.getStandUserSelf().roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem)&& this.getActivePower() != PowersTusk.DEATH_NAIL && this.getActivePower() != PowersTusk.DEATH_PUNCH && !(this.deathShot != null && !this.deathShot.isRemoved());
+        return this.getSelf() instanceof Player P
+                && ( ((IPlayerEntity)P).roundabout$getStandLevel() != 1 || P.isCreative() || this.getStandUserSelf().roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem)
+                && this.getActivePower() != PowersTusk.DEATH_NAIL
+                && this.getActivePower() != PowersTusk.DEATH_PUNCH
+                && this.getActivePower() != PowersTusk.WALL_BREAK
+                //&& this.getActivePower() != PowersTusk.WALL_BREAK_2
+                && !(this.deathShot != null && !this.deathShot.isRemoved());
     }
 
     @Override
@@ -483,6 +490,12 @@ public class PowersTusk extends NewDashPreset {
                     if (!isClient()) {
                         Vec3 pos = this.getPilotingStand().getPosition(0);
                         this.getSelf().teleportTo(pos.x, pos.y, pos.z);
+                    } else {
+                        Entity cam = Minecraft.getInstance().cameraEntity;;
+                        if (cam != null) {
+                            this.getSelf().setYRot(getPilotingStand().getYRot());
+                            this.getSelf().setXRot(getPilotingStand().getXRot());
+                        }
                     }
                     this.setPiloting(0);
                     this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.TUSK_WARP_EVENT, SoundSource.PLAYERS, 1F, 1F);
@@ -509,7 +522,7 @@ public class PowersTusk extends NewDashPreset {
                     this.setAttackTime(0);
                     this.setAttackTimeDuring(0);
                 } else {
-                    this.setAttackTimeDuring(PowersTusk.flattenTime); // automatically triggers the end of flattening
+                    this.setAttackTimeDuring(PowersTusk.flattenTime+1); // automatically triggers the end of flattening
                     this.updateUniqueMoves();
                 }
             }
@@ -563,6 +576,17 @@ public class PowersTusk extends NewDashPreset {
 
             case PowersTusk.DEATH_NAIL -> {
                 this.setActivePower(PowersTusk.DEATH_NAIL);
+                this.setAttackTime(0);
+                this.setAttackTimeDuring(0);
+                this.setAnimation(PowersTusk.CHARGE_NAIL);
+                StandEntity stand = this.getStandEntity(this.getSelf());
+                if (stand != null) {
+                    stand.forceDespawn(true);
+                }
+            }
+
+            case PowersTusk.WALL_BREAK -> {
+                this.setActivePower(PowersTusk.WALL_BREAK);
                 this.setAttackTime(0);
                 this.setAttackTimeDuring(0);
                 this.setAnimation(PowersTusk.CHARGE_NAIL);
@@ -733,6 +757,7 @@ public class PowersTusk extends NewDashPreset {
             case PowersTusk.FLATTEN -> {
                 if (this.getAttackTimeDuring() > flattenTime) {
                     this.setPowerNone();
+                    this.setCooldown(PowerIndex.SKILL_1,160);
                 }
             }
             case PowersTusk.ADVANCE -> tickAdvance();
@@ -767,6 +792,31 @@ public class PowersTusk extends NewDashPreset {
                     }
                 }
             }
+
+            case PowersTusk.WALL_BREAK -> {
+                this.setCooldown(PowerIndex.SKILL_1,200);
+                if (this.getAttackTimeDuring() == 10) {
+                    if (!isClient()) {
+                        this.expendNails();
+                        this.playSoundIfPossible(this.getSelf().level(), null, this.getSelf().blockPosition(), ModSounds.TUSK_2_SHOOT_EVENT, SoundSource.PLAYERS, 1F, 1F);
+                        TuskNailEntity nail = this.shootNail(1F, 0.0F);
+                        nail.setExtra(TuskNailEntity.WALL_BREAKER);
+                        this.setAnimation(PowersTusk.FIRE_NAIL);
+                    }
+                    setActivePower(PowersTusk.WALL_BREAK);
+                }
+            }
+            case PowersTusk.WALL_BREAK_2 -> {
+                if (this.getAttackTimeDuring() == 20) {
+                    if (!isClient()) {
+                        wallBreaker();
+                    }
+                } else if (this.getAttackTimeDuring() > 30) {
+                    deathTarget = null;
+                    this.setPowerNone();
+                }
+            }
+
             case PowersTusk.CHARGE_NAILS -> {
                 if (this.nailCharge == getMaxActiveNails() && this.getAttackTimeDuring() > 20) {
                     this.shootRelease();
@@ -838,49 +888,63 @@ public class PowersTusk extends NewDashPreset {
         return super.tryIntPower(move, forced, value);
     }
 
-    @Override
-    public boolean tryBlockPosPower(int move, boolean forced, BlockPos blockPos) {
-        switch (move) {
-            case PowersTusk.WALL_BREAK -> {
-                this.setCooldown(PowerIndex.SKILL_1,150);
 
-                if (!isClient()) {
-                    Vec3 vec3d = this.getSelf().getEyePosition(0);
-                    Vec3 vec3d2 = blockPos.getCenter().subtract(this.getSelf().getEyePosition()).normalize();
-                    Vec3 vec3d3 = vec3d.add(vec3d2.multiply(3,3,3));
-                    BlockHitResult result = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3,
-                            ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
-                    Direction dir = result.getDirection().getOpposite();
+    private BlockHitResult blockHitResult = null;
+    public void startWallBreaker(BlockHitResult bhs) {
+        if (!isClient()) {
+            if (this.getSelf() instanceof Player P) {
+                S2CPacketUtil.sendIntPowerDataPacket(P, PowersTusk.WALL_BREAK_2, 0);
+            }
+            this.setActivePower(PowersTusk.WALL_BREAK_2);
+            this.setAttackTimeDuring(0);
 
-                    BlockPos start = alignBlockPos(blockPos,0,-1,-1,dir);
-                    BlockPos end = alignBlockPos(blockPos,2,1,1,dir);
-                    for(int i=0;i<3;i++) {
-                        for (int x = -1; x < 2; x++) {
-                            for (int y = -1; y < 2; y++) {
-                                BlockPos delta = alignBlockPos(blockPos,i,x,y,dir);
-                                BlockState state = this.getSelf().level().getBlockState(delta);
-                                if (!state.isAir()) {
-                                    ReturningObjectEntity ret = new ReturningObjectEntity(ModEntities.RETURNING_OBJECT,this.getSelf().level(),delta,start,end);
-                                    ret.setPos(delta.getCenter());
-                                    Vec3 kbDir = alignBlockPos(blockPos,0,0,0,dir).getCenter().subtract(alignBlockPos(blockPos,1,0,0,dir).getCenter()).normalize().reverse();
-                                    kbDir.offsetRandom(this.getSelf().getRandom(), 1);
-                                    double randx = (Math.random()*2F-1F)*0.3F;
-                                    double randy = (Math.random()*2F-1F)*0.3F;
-                                    double randz = (Math.random()*2F-1F)*0.3F;
-                                    MainUtil.takeKnockbackWithY(ret, 0.8F ,kbDir.x+randx,kbDir.y+randy,kbDir.z+randz);
-                                    ret.setLifetime(100);
-                                    ret.setState(state);
-                                    this.getSelf().level().addFreshEntity(ret);
-                                    this.getSelf().level().destroyBlock(delta,false);
+            this.getStandUserSelf().roundabout$summonStand(this.getSelf().level(),true,false);
+            StandEntity stand = this.getStandEntity(this.getSelf());
+            if (stand != null) {
+                if (stand instanceof FollowingStandEntity FSE) {
+                    FSE.setOffsetType(OffsetIndex.LOOSE);
+                }
+                stand.setPos(bhs.getLocation());
+                Vec2 rot = MainUtil.getRotationsBetween(stand.getPosition(0),bhs.getLocation());
+                stand.setXRot(rot.x);
+                stand.setYRot(rot.y);
+                stand.setAnimation(TuskEntity.WALL_BREAKER);
+            }
+        }
 
-                                }
-                            }
+        blockHitResult = bhs;
+    }
+    public void wallBreaker() {
+        if (!isClient()) {
+            BlockPos blockPos = blockHitResult.getBlockPos();
+            Direction dir = blockHitResult.getDirection().getOpposite();
+
+            BlockPos start = alignBlockPos(blockPos,0,-1,-1,dir);
+            BlockPos end = alignBlockPos(blockPos,2,1,1,dir);
+            for(int i=0;i<3;i++) {
+                for (int x = -1; x < 2; x++) {
+                    for (int y = -1; y < 2; y++) {
+                        BlockPos delta = alignBlockPos(blockPos,i,x,y,dir);
+                        BlockState state = this.getSelf().level().getBlockState(delta);
+                        if (!state.isAir() && MainUtil.isDestructible(this.getSelf().level(),blockPos,state)) {
+                            ReturningObjectEntity ret = new ReturningObjectEntity(ModEntities.RETURNING_OBJECT,this.getSelf().level(),delta,start,end);
+                            ret.setPos(delta.getCenter());
+                            Vec3 kbDir = alignBlockPos(blockPos,0,0,0,dir).getCenter().subtract(alignBlockPos(blockPos,1,0,0,dir).getCenter()).normalize().reverse();
+                            kbDir.offsetRandom(this.getSelf().getRandom(), 1);
+                            double randx = (Math.random()*2F-1F)*0.3F;
+                            double randy = (Math.random()*2F-1F)*0.3F;
+                            double randz = (Math.random()*2F-1F)*0.3F;
+                            MainUtil.takeKnockbackWithY(ret, 0.8F ,kbDir.x+randx,kbDir.y+randy,kbDir.z+randz);
+                            ret.setLifetime(100);
+                            ret.setState(state);
+                            this.getSelf().level().addFreshEntity(ret);
+                            this.getSelf().level().destroyBlock(delta,false);
+
                         }
                     }
                 }
             }
         }
-        return super.tryBlockPosPower(move, forced, blockPos);
     }
 
     private BlockPos alignBlockPos(BlockPos blockPos,int i, int x, int y, Direction dir) {
@@ -932,6 +996,10 @@ public class PowersTusk extends NewDashPreset {
             }
             case PowersTusk.REVERSE -> {
                 this.setInfiniteSpin(0);
+            }
+            case PowersTusk.WALL_BREAK_2 -> {
+                this.setActivePower(PowersTusk.WALL_BREAK_2);
+                this.setAttackTimeDuring(0);
             }
         }
         super.updatePowerInt(activePower, data);
@@ -1774,12 +1842,16 @@ public class PowersTusk extends NewDashPreset {
     public void buttonInputWarp(boolean keyIsDown, Options options) {
         if (keyIsDown && canUseHole() && this.getAttackTime() > 5) {
             if (targetHole != null) {
+
                 this.setAttackTime(0);
                 this.nailFireDelay = 10;
                 this.setPiloting(targetHole.getId());
                 setAnimation(PowersTusk.PILOT);
                 tryPowerPacket(PowersTusk.PILOT);
                 tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, targetHole.getId());
+
+                targetHole.setYRot(this.getSelf().getYRot());
+                targetHole.setXRot(this.getSelf().getXRot());
             }
 
         }
@@ -2218,11 +2290,11 @@ public class PowersTusk extends NewDashPreset {
     private Pair<Direction,Direction> EASTWEST = new Pair<>(Direction.NORTH,Direction.UP);
 
     public void clientWallBreaker() {
-        BlockPos result = getTargetBlock().getBlockPos();
-        if (!onCooldown(PowerIndex.SKILL_1) && !this.getSelf().level().getBlockState(result).isAir()) {
-            tryBlockPosPower(PowersTusk.WALL_BREAK,true,result);
-            tryBlockPosPowerPacket(PowersTusk.WALL_BREAK,result);
+        if (!onCooldown(PowerIndex.SKILL_1)) {
+            tryPower(PowersTusk.WALL_BREAK);
+            tryPowerPacket(PowersTusk.WALL_BREAK);
         }
+
     }
 
     private BlockHitResult getTargetBlock() {
@@ -2556,7 +2628,7 @@ public class PowersTusk extends NewDashPreset {
             }
             case 4 -> {
                 StandEntity stand = this.getStandEntity(this.getSelf());
-                if (this.getMode() == MELEE && stand != null) {
+                if (this.getMode() == MELEE && stand != null && this.getActivePower() != PowersTusk.WALL_BREAK) {
                     TE = getTargetEntity(this.getSelf(), 3.5F, 45);
                     if (this.getActivePower() == PowersTusk.ADVANCE || this.getActivePower() == PowersTusk.ADVANCE_BARRAGE) {
                         float dist = 0;
@@ -2577,8 +2649,8 @@ public class PowersTusk extends NewDashPreset {
                         int barTexture = TE != null ? 12 : 0;
                         context.blit(StandIcons.JOJO_ICONS, k, j, 193, barTexture, 15, 6);
                     }
-                } else if (this.getMode() == RANGED) {
-                    if (this.getActivePower() == PowersTusk.DEATH_NAIL && this.getAttackTimeDuring() < 10) {
+                } else if (this.getMode() == RANGED || this.getActivePower() == PowersTusk.WALL_BREAK) {
+                    if ( (this.getActivePower() == PowersTusk.DEATH_NAIL || this.getActivePower() == PowersTusk.WALL_BREAK) && this.getAttackTimeDuring() < 10) {
                         float attackTimeFinal = (float) this.getAttackTimeDuring() / 10F;
                         int progress = Math.round(attackTimeFinal*15);
                         int barTexture = 30;
@@ -2593,47 +2665,6 @@ public class PowersTusk extends NewDashPreset {
                 }
             }
         }
-
-/*        if (this.getAct() == 3 && isPiloting() && this.getPilotingStand() instanceof TuskHoleEntity THE) {
-            float dist = this.getSelf().distanceTo(this.getPilotingStand());
-            int count = (int) ( THE.getTimeInHole()/(20+3*dist) *15);
-
-            if (count > 15) {
-                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 24, 15, 6);
-            } else {
-                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
-                context.blit(StandIcons.JOJO_ICONS, k, j, 193, barTexture, count, 6);
-            }
-        } else if (attackTimeMax > 0) {
-            float attackTime = standUser.roundabout$getAttackTime();
-            float finalATime = attackTime / attackTimeMax;
-            if (finalATime <= 1) {
-
-                if (this.getActivePowerPhase() == this.getActivePowerPhaseMax()) {
-                    barTexture = 24;
-                } else {
-                    if (TE != null) {
-                        barTexture = 12;
-                    } else {
-                        barTexture = 18;
-                    }
-                }
-
-                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
-                int finalATimeInt;
-                if (this.getActivePower() == PowersTusk.DRILL || this.getActivePower() == PowersTusk.DRILL_FINISH) {
-                    finalATimeInt = Math.round(((float)maxDrillTime-this.getAttackTimeMax())/maxDrillTime*15);
-                } else {
-                    finalATimeInt = Math.round(finalATime * 15);
-                }
-                context.blit(StandIcons.JOJO_ICONS, k, j, 193, barTexture, finalATimeInt, 6);
-
-
-            }
-        } else if (TE != null && PowerTypes.isUsingStand(this.getSelf()) && this.getAct() < 3) {
-            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
-        } */
-
         super.renderAttackHud(context, playerEntity, scaledWidth, scaledHeight, ticks, vehicleHeartCount, flashAlpha, otherFlashAlpha);
     }
 
@@ -2820,14 +2851,16 @@ public class PowersTusk extends NewDashPreset {
             RESONANCE = 3,
             BREAKER = 4,
             FRIGID = 5,
-            ELEGANT = 6;
+            ELEGANT = 6,
+            LEGACY = 7;
     private static final String[] skinLoader = {
             "manga",
             "blue",
             "resonance",
             "breaker",
             "frigid",
-            "elegant"
+            "elegant",
+            "legacy"
     };
     @Override
     public List<Byte> getSkinList() {
@@ -2835,7 +2868,8 @@ public class PowersTusk extends NewDashPreset {
                 MANGA,
                 BLUE,
                 BREAKER,
-                FRIGID
+                FRIGID,
+                LEGACY
             //    ELEGANT
           //      RESONANCE
         );
@@ -2848,6 +2882,7 @@ public class PowersTusk extends NewDashPreset {
             case BREAKER -> Component.translatable("skins.roundabout.tusk.breaker");
             case FRIGID -> Component.translatable("skins.roundabout.tusk.frigid");
             case ELEGANT -> Component.translatable("skins.roundabout.tusk.elegant");
+            case LEGACY -> Component.translatable("skins.roundabout.tusk.legacy");
 
             default -> Component.translatable("skins.roundabout.tusk.manga");
         };
