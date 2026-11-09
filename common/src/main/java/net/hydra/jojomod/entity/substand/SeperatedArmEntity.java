@@ -301,7 +301,7 @@ public class SeperatedArmEntity extends StandEntity {
                         }
                     }
                 }
-            } else {
+            } else if (!((((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersGreenDay))){
                 if (!this.level().isClientSide) {
                     this.setUser(null);
                     removearm();
