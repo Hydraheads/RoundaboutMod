@@ -156,11 +156,14 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
         }
         LocalPlayer player = Minecraft.getInstance().player;
 
-        if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ) {
-            PKQ.bitesTheDustRender(entity, matrixStack, buffer);
+
+        if (player != null && ((StandUser)player).roundabout$getStandPowers() != null
+                && ((StandUser)player).roundabout$getStandPowers().shouldRenderIconEntity(entity)) {
+            ((StandUser)player).roundabout$getStandPowers().renderIconEntity(entity, matrixStack, buffer);
         }
+
         HallucinationIndicatorRenderer.render(entity, matrixStack, buffer);
-        DiverDownPointerRenderer.render(entity, matrixStack, buffer);
+        //DiverDownPointerRenderer.render(entity, matrixStack, buffer);
         // lyin eyes highlighter
         if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof PowersLyinEyes LE
                 && LE.getVisionModeClient() && LE.isActive()) {

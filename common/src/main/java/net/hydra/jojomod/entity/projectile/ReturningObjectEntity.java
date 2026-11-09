@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
@@ -158,9 +159,8 @@ public class ReturningObjectEntity extends ThrowableItemProjectile {
         }
 
         if (!this.level().isClientSide() && this.tickCount % 3 == 0) {
-            ((ServerLevel)this.level()).sendParticles(new DustParticleOptions(new Vector3f(1, 1, 1
-            ), 1f),this.getX(), this.getY()+0.5F, this.getZ(),
-                    0, 0, 0, 0, 0);
+    //        ((ServerLevel)this.level()).sendParticles(ModParticles.GOLDEN_SPIRAL,this.getX(), this.getY()+0.5F, this.getZ(),
+     //               0, 0, 0, 0, 0);
         }
 
         if (this.getLifetime() > 0) {
@@ -180,7 +180,7 @@ public class ReturningObjectEntity extends ThrowableItemProjectile {
                     List<Entity> entities = this.level().getEntities(null, new AABB(
                             start.getX(), start.getY(), start.getZ(),
                             end.getX(), end.getY(), end.getZ()).inflate(1.05F));
-                    entities.removeIf(entity -> !entity.isPickable());
+                    entities.removeIf(entity -> !entity.isPickable() || entity instanceof ReturningObjectEntity || entity instanceof StandEntity);
                     if (entities.isEmpty() && this.level().getBlockState(this.getReturnPos()).isAir() ) {
                         Vec3 dir = center.subtract(this.getPosition(0)).normalize();
                         this.setDeltaMovement(dir);

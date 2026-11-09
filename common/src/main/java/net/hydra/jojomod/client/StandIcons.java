@@ -1002,7 +1002,7 @@ public class StandIcons {
             new ResourceLocation(Roundabout.MOD_ID,"textures/gui/icons/tusk/act_4.png")
     };
     public static final ResourceLocation TUSK_SPINTHROW = Roundabout.location("textures/gui/icons/tusk/spin_throw.png");
-    public static final ResourceLocation TUSK_SHOCKWAVE = Roundabout.location("textures/gui/icons/tusk/shockwave.png");
+    public static final ResourceLocation TUSK_SHOCKWAVE = Roundabout.location("textures/gui/icons/tusk/shockwave_2.png");
     public static final ResourceLocation TUSK_NAILLEAP = Roundabout.location("textures/gui/icons/tusk/spin_leap.png");
     public static final ResourceLocation TUSK_BALL_BRIDGE = Roundabout.location("textures/gui/icons/tusk/ball_bridge.png");
     public static final ResourceLocation TUSK_TARGET = Roundabout.location("textures/gui/icons/tusk/target.png");
@@ -1010,6 +1010,16 @@ public class StandIcons {
     public static final ResourceLocation TUSK_FLATTEN = Roundabout.location("textures/gui/icons/tusk/flatten.png");
     public static final ResourceLocation TUSK_GRASP = Roundabout.location("textures/gui/icons/tusk/grasp.png");
     public static final ResourceLocation TUSK_WORMHOLE = Roundabout.location("textures/gui/icons/tusk/wormhole.png");
+    public static final ResourceLocation TUSK_SHOOT_MODE = Roundabout.location("textures/gui/icons/tusk/shoot_mode.png");
+    public static final ResourceLocation TUSK_SLASH = Roundabout.location("textures/gui/icons/tusk/slash.png");
+    public static final ResourceLocation TUSK_DRILL = Roundabout.location("textures/gui/icons/tusk/drill_attack.png");
+    public static final ResourceLocation TUSK_FOCUS = Roundabout.location("textures/gui/icons/tusk/focus.png");
+    public static final ResourceLocation TUSK_ADVANCE = Roundabout.location("textures/gui/icons/tusk/advance.png");
+    public static final ResourceLocation TUSK_SHOOT_1 = Roundabout.location("textures/gui/icons/tusk/shoot_1.png");
+    public static final ResourceLocation TUSK_SHOOT_2 = Roundabout.location("textures/gui/icons/tusk/shoot_2.png");
+    public static final ResourceLocation TUSK_SHOOT_4 = Roundabout.location("textures/gui/icons/tusk/shoot_4.png");
+    public static final ResourceLocation TUSK_OPPOSITE = Roundabout.location("textures/gui/icons/tusk/opposite.png");
+    public static final ResourceLocation TUSK_WALL_BREAKER = Roundabout.location("textures/gui/icons/tusk/wall_breaker.png");
 
 
     public static final ResourceLocation SOFT_AND_WET_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
@@ -1189,6 +1199,8 @@ public class StandIcons {
             "textures/gui/icons/gold_experience/lifeform_select.png");
     public static final ResourceLocation GOLD_EXPERIENCE_LIFEFORM_CREATION = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/gold_experience/lifeform_creation.png");
+    public static final ResourceLocation GOLD_EXPERIENCE_ITEM_THROW = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/gold_experience/item_throw.png");
 
     // gold experience icons end
 

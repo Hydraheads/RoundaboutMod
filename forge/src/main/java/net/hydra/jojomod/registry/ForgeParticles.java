@@ -408,6 +408,10 @@ public class ForgeParticles {
             "tusk_hole",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> GOLDEN_SPIRAL = PARTICLES.register(
+            "golden_spiral",
+            () -> new SimpleParticleType(true)
+    );
 
     public static final RegistryObject<SimpleParticleType> METALLICA_FIELD_PNG = PARTICLES.register("metallica_field_png", () -> new SimpleParticleType(true));
 

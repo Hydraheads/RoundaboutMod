@@ -5,11 +5,13 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersTusk;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -22,6 +24,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
@@ -72,7 +75,8 @@ public class TuskNailEntity extends AbstractArrow {
         NONE = (byte) 0,
         GUARD_BREAK = (byte) 1,
         REDUCED = (byte) 2,
-        GOLDEN = (byte) 3;
+        GOLDEN = (byte) 3,
+        WALL_BREAKER = (byte) 4;
 
 
     private static final EntityDataAccessor<Integer> ROUNDABOUT$ACT = SynchedEntityData.defineId(TuskNailEntity.class, EntityDataSerializers.INT);
@@ -150,6 +154,7 @@ public class TuskNailEntity extends AbstractArrow {
         this.life += 1;
         if (this.life > 100 || (this.getAct() == 1 && life > 15) || this.getAct() == 4 && life > 60 ) {
             this.discard();
+            onDiscard();
         }
 
         if (!this.level().isClientSide() && this.getOwner() != null && this.getOwner() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersTusk PT) {
@@ -174,19 +179,28 @@ public class TuskNailEntity extends AbstractArrow {
                 TuskHoleEntity THE = this.createHole(null);
                 if (THE != null) {
                     THE.vortexify();
+                    onDiscard();
                     this.discard();
                 }
             }
         }
     }
 
+    public void onDiscard() {
+        if (this.getExtra() == WALL_BREAKER) {
+            if (this.getOwner() instanceof Player P && ((StandUser)this.getOwner()).roundabout$getStandPowers() instanceof PowersTusk PT) {
+                PT.setPowerNone();
+                if (!this.level().isClientSide()) {
+                    S2CPacketUtil.sendActivePowerPacket(P, PowerIndex.NONE);
+                }
+            }
+        }
+    }
 
     @SuppressWarnings("deprecation")
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
         if (!this.level().isClientSide() && !this.isRemoved()   ) {
-
-
             ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.level().getBlockState($$0.getBlockPos())),
                     $$0.getLocation().x, $$0.getLocation().y, $$0.getLocation().z,
                     30, 0.2, 0.05, 0.2, 0.3);
@@ -200,6 +214,13 @@ public class TuskNailEntity extends AbstractArrow {
                     }
                 }
             }
+
+            if (this.getExtra() == WALL_BREAKER) {
+                if (this.getOwner() != null  && ((StandUser)this.getOwner()).roundabout$getStandPowers() instanceof PowersTusk PT) {
+                    PT.startWallBreaker($$0);
+                }
+            }
+
             this.discard();
         }
     }
@@ -256,7 +277,7 @@ public class TuskNailEntity extends AbstractArrow {
 
                             if (this.getAct() == 2 || this.getAct() == 3) {
                                 TuskHoleEntity.bleedTarget(ent);
-                            } else if (this.getAct() == 4) {
+                            } else if (this.getAct() == 4 && getExtra() != WALL_BREAKER) {
                                 MainUtil.takeUnresistableKnockbackWithY(ent,0.05F,0,-1,0);
                                 if (ent instanceof Mob && !MainUtil.isBossMob(ent) && !MainUtil.getReducedDamage(ent)) {
                                     ((StandUser)ent).roundabout$setDazed((byte) 2);
@@ -280,12 +301,13 @@ public class TuskNailEntity extends AbstractArrow {
                             }
                         }
 
-                        if (this.getAct() == 4) {
+                        if (this.getAct() == 4 && this.getExtra() != WALL_BREAKER) {
                             PT.punchOfDeath(this,$$0.getEntity());
                         }
 
                     }
                 }
+                onDiscard();
                 this.discard();
             }
         }
@@ -303,6 +325,7 @@ public class TuskNailEntity extends AbstractArrow {
                     0, 0, 0, 0, 0.7);
 
             if (((StandUser) user).roundabout$getStandPowers() instanceof PowersTusk PT) {
+                float radius = getAct() == 4 ? 3 : 1.5F;
                 List<Entity> entityList = DamageHandler.genHitbox(user, this.getX(), this.getY(),
                         this.getZ(), 1.5F, 1.5F, 1.5F);
                 if (!entityList.isEmpty()){
