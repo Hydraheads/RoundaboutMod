@@ -13,6 +13,7 @@ import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.SoundIndex;
@@ -611,20 +612,32 @@ public class PowersRatt extends NewDashPreset {
     static final float balancingSpeed = 0.85F;
     static final float balancingSpeedCharged = 1F;
 
+    private void muzzleFlash(ServerLevel SL, Vec3 pos) {
+        SL.sendParticles(ModParticles.FLASH,pos.x,pos.y,pos.z,0,220,71,122,1.0);
+    }
+
     public void placeBurst() {
         this.animateStand(RattEntity.FIRE);
         this.setPowerNone();
-        playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.RATT_FIRING_EVENT, SoundSource.PLAYERS, 1.7F, 0.9F+(float)Math.random()*0.2F);
-        for (int i = 0; i < 3; i++) {
-            if (this.getStandEntity(this.getSelf()) instanceof RattEntity RE) {
+        if (this.getStandEntity(this.getSelf()) instanceof RattEntity RE && this.getSelf().level() instanceof ServerLevel SL) {
+            Vec3 v = this.getRotations(this.getShootTarget());
+
+
+            playSoundIfPossible(self.level(), null, this.getSelf().blockPosition(), ModSounds.RATT_FIRING_EVENT, SoundSource.PLAYERS, 1.7F, 0.9F + (float) Math.random() * 0.2F);
+            for (int i = 0; i < 3; i++) {
                 RattDartEntity e = new RattDartEntity(RE.level(), this.getSelf());
-                Vec3 v = this.getRotations(this.getShootTarget());
                 float rand = 0.84F;
-                if (isAutoMining()){e.setBlockBreak(true); rand = 0.74F;}
+                if (isAutoMining()) {
+                    e.setBlockBreak(true);
+                    rand = 0.74F;
+                }
                 e.shootFromRotation(RE, (float) v.x * 180 / (float) Math.PI + 180, (float) v.y * 180 / (float) Math.PI,
-                        -0.5F, ShotPowerFloats[1]*balancingSpeed, rand);
+                        -0.5F, ShotPowerFloats[1] * balancingSpeed, rand);
                 e.setSuperthrowTicks(50);
                 RE.level().addFreshEntity(e);
+
+                Vec3 pos = RE.getEyeP(0).add(e.getDeltaMovement().normalize().scale(0.75F)).add(0,0.1,0);
+                muzzleFlash(SL,pos);
             }
         }
 
@@ -769,6 +782,9 @@ public class PowersRatt extends NewDashPreset {
 
 
     public void FireDart(byte type, float accuracy, float modifier) {
+        if (this.getSelf().level() instanceof ServerLevel SL) {
+            muzzleFlash(SL,this.getSelf().getEyePosition().add(this.getSelf().getViewVector(0).scale(0.7F)));
+        }
         RattDartEntity e = new RattDartEntity(this.getSelf().level(),this.getSelf(), type );
         e.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -0.5F, ShotPowerFloats[1]*modifier, accuracy);
         e.setSuperthrowTicks(50);
@@ -777,6 +793,10 @@ public class PowersRatt extends NewDashPreset {
     }
 
     public void FireDart(int i, float accuracy) {
+        if (this.getSelf().level() instanceof ServerLevel SL) {
+            muzzleFlash(SL,this.getSelf().getEyePosition().add(this.getSelf().getViewVector(0).scale(0.7F)));
+        }
+
         float power = 0;
         for (int b=ShotThresholds.length-1;b>=0;b--) {
             if ( (i == -1 ? 51 : i) >= ShotThresholds[b]) {
