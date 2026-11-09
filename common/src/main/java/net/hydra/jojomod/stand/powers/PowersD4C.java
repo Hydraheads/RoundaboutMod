@@ -191,7 +191,7 @@ public class PowersD4C extends NewPunchingStand {
         for (BlockPos pos : BlockPos.betweenClosed(min, max)) {
             BlockState state = level.getBlockState(pos);
 
-            if (!(state.getBlock() instanceof DoorBlock)) {
+            if (!(state.getBlock() instanceof DoorBlock && !PowerTypes.isInD4CWorld(self))) {
                 continue;
             }
 
@@ -566,7 +566,7 @@ public class PowersD4C extends NewPunchingStand {
                 .hasNext();
     }
     public boolean hasBanner(){
-        return MainUtil.isHoldingBanner(self);
+        return MainUtil.isHoldingBanner(self) && self.onGround();
     }
 
     public int getRechargeTime(){
