@@ -24,32 +24,32 @@ public final class DiverDownPointerRenderer {
     private DiverDownPointerRenderer() {}
 
     public static void render(LivingEntity entity, PoseStack poseStack, MultiBufferSource bufferSource) {
-        LocalPlayer viewer = Minecraft.getInstance().player;
+        /* LocalPlayer viewer = Minecraft.getInstance().player;
         if (viewer == null || entity == viewer) {
             return;
         }
 
         if (((StandUser) viewer).roundabout$getStandPowers() instanceof PowersDiverDown dd) {
-            if (dd.isDiveActive() && !dd.isSelfDive() && dd.submergedTarget == entity) {
-                float size = 0.30F;
+            if (dd.isDiveActive() && !dd.isSelfDive() && dd.submergedTarget == entity) { */
+        float size = 0.30F;
 
-                poseStack.pushPose();
-                poseStack.translate(0, entity.getBbHeight() + 0.86F, 0);
-                poseStack.mulPose(Minecraft.getInstance().getEntityRenderDispatcher().cameraOrientation());
-                poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
+        poseStack.pushPose();
+        poseStack.translate(0, entity.getBbHeight() + 0.86F, 0);
+        poseStack.mulPose(Minecraft.getInstance().getEntityRenderDispatcher().cameraOrientation());
+        poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
 
-                VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.text(POINTER_ICON));
-                Matrix4f matrix = poseStack.last().pose();
-                Matrix3f normal = poseStack.last().normal();
+        VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.text(POINTER_ICON));
+        Matrix4f matrix = poseStack.last().pose();
+        Matrix3f normal = poseStack.last().normal();
 
-                vertexConsumer.vertex(matrix, -size, -size, 0.0F).color(255, 255, 255, 255).uv(0.0F, 1.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(normal, 0, 0, -1).endVertex();
-                vertexConsumer.vertex(matrix, size, -size, 0.0F).color(255, 255, 255, 255).uv(1.0F, 1.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(normal, 0, 0, -1).endVertex();
-                vertexConsumer.vertex(matrix, size, size, 0.0F).color(255, 255, 255, 255).uv(1.0F, 0.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(normal, 0, 0, -1).endVertex();
-                vertexConsumer.vertex(matrix, -size, size, 0.0F).color(255, 255, 255, 255).uv(0.0F, 0.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(normal, 0, 0, -1).endVertex();
+        vertexConsumer.vertex(matrix, -size, -size, 0.0F).color(255, 255, 255, 255).uv(0.0F, 1.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(normal, 0, 0, -1).endVertex();
+        vertexConsumer.vertex(matrix, size, -size, 0.0F).color(255, 255, 255, 255).uv(1.0F, 1.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(normal, 0, 0, -1).endVertex();
+        vertexConsumer.vertex(matrix, size, size, 0.0F).color(255, 255, 255, 255).uv(1.0F, 0.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(normal, 0, 0, -1).endVertex();
+        vertexConsumer.vertex(matrix, -size, size, 0.0F).color(255, 255, 255, 255).uv(0.0F, 0.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(normal, 0, 0, -1).endVertex();
 
-                RenderSystem.enableDepthTest();
-                poseStack.popPose();
-            }
-        }
+        RenderSystem.enableDepthTest();
+        poseStack.popPose();
+        /*    }
+        }*/
     }
 }
