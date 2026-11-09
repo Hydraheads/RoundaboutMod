@@ -99,7 +99,12 @@ public class AnubisMobLayer<T extends LivingEntity, M extends HierarchicalModel<
         poseStack.translate(0.55,0,-0.06);
 
         boolean hasHeyYaOut = (PowerTypes.hasStandActive(W) && SU.roundabout$getStandPowers() instanceof PowersAnubis);
-        int heyTicks = SU.roundabout$getAnubisVanishTicks();
+        int heyTicks = 0;
+        if (SU.roundabout$getStandPowers() instanceof PowersAnubis) {
+            heyTicks = SU.roundabout$getCurrentStandVanishTicks();
+        }else if (SU.roundabout$getPreviousStandPowers() instanceof PowersAnubis) {
+            heyTicks = SU.roundabout$getPreviousStandVanishTicks();
+        }
         float heyFull = 0;
         float fixedPartial = partialTicks - (int) partialTicks;
         if (((TimeStop)W.level()).CanTimeStopEntity(W)){
@@ -134,7 +139,12 @@ public class AnubisMobLayer<T extends LivingEntity, M extends HierarchicalModel<
 
 
         boolean hasHeyYaOut = (PowerTypes.hasStandActive(F) && SU.roundabout$getStandPowers() instanceof PowersAnubis);
-        int heyTicks = SU.roundabout$getAnubisVanishTicks();
+        int heyTicks = 0;
+        if (SU.roundabout$getStandPowers() instanceof PowersAnubis) {
+            heyTicks = SU.roundabout$getCurrentStandVanishTicks();
+        }else if (SU.roundabout$getPreviousStandPowers() instanceof PowersAnubis) {
+            heyTicks = SU.roundabout$getPreviousStandVanishTicks();
+        }
         float heyFull = 0;
         float fixedPartial = partialTicks - (int) partialTicks;
         if (((TimeStop)F.level()).CanTimeStopEntity(F)){

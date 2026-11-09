@@ -5,6 +5,12 @@
   "refmap": "${mod_id}.refmap.json",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "jumpin_jack_flash.LivingEntityMixin",
+    "jumpin_jack_flash.CrossbowItemMixin",
+    "jumpin_jack_flash.BowItemMixin",
+    "jumpin_jack_flash.PlayerMixin",
+    "jumpin_jack_flash.ServerGamePacketListenerMixin",
+    "jumpin_jack_flash.ServerPlayerZeroGravitySyncMixin",
     "AbsurdBrainFix",
     "AbsurdPiglinAiFix",
     "AbsurdPiglinBruteAiFix",
@@ -47,6 +53,7 @@
     "access.AccessEnderMan",
     "access.AccessFire",
     "access.AccessFireworkRocket",
+    "access.AccessInstrumentItem",
     "access.AccessInventory",
     "access.AccessLivingEntity",
     "access.AccessMinecartItem",
@@ -316,6 +323,11 @@
     "whitesnake.memory.horse.LobotomizedHorseMovementMixin"
   ],
   "client": [
+    "jumpin_jack_flash.AirPressureHudMixin",
+    "jumpin_jack_flash.LocalPlayerMixin",
+    "jumpin_jack_flash.KeyboardInputMixin",
+    "jumpin_jack_flash.PlayerModelMixin",
+    "jumpin_jack_flash.PlayerRendererMixin",
     "HudRendering",
     "InputEvents",
     "PlayerEntityAbstractClient",

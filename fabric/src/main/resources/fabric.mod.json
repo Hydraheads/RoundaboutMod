@@ -28,8 +28,7 @@
     },
     "mixins": [
         "${mod_id}.mixins.json",
-        "${mod_id}.fabric.mixins.json",
-        "jjf.mixins.json"
+        "${mod_id}.fabric.mixins.json"
     ],
     "custom": {
         "fabric-loom:injected_interfaces": [],

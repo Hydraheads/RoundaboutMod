@@ -12,6 +12,7 @@ import net.hydra.jojomod.client.models.layers.animations.CatchTheRainbowAnimatio
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersCatchTheRainbow;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -118,17 +119,19 @@ public class CatchTheRainbowUmvuthiModel extends PsuedoHierarchicalModel {
 			VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
 			user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
 
-			if (user.roundabout$getIdlePos() != 0) {
+			byte idle = MainUtil.getWornStandIdleSafe(user, PowersCatchTheRainbow.class);
+
+			if (idle != 0) {
 				user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
 			}
 			else {
 				user.roundabout$getWornStandIdleAnimation().stop();
 			}
 
-			if (user.roundabout$getIdlePos() == 1) {
+			if (idle == 1) {
 				this.animate(user.roundabout$getWornStandIdleAnimation(), CatchTheRainbowAnimations.umvuthiright, partialTicks, 1f);
 			}
-			if (user.roundabout$getIdlePos() == 2) {
+			if (idle == 2) {
 				this.animate(user.roundabout$getWornStandIdleAnimation(), CatchTheRainbowAnimations.umvuthileft, partialTicks, 1f);
 			}
 

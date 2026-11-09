@@ -1014,11 +1014,11 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         IPlayerEntity play = ((IPlayerEntity) pl);
         ItemStack blackFS = play.roundabout$getBlckSabbathPlayerInventory().getItem(0);
         return (blackFS.getItem() instanceof ArrowItem && !(blackFS.getItem() instanceof RoundaboutArrowItem) || blackFS.getItem() instanceof KnifeItem
-                || blackFS.is(ModItems.KNIFE_BUNDLE) || blackFS.getItem() instanceof TridentItem && EnchantmentHelper.getRiptide(blackFS) <= 0
+                || blackFS.is(ModItems.KNIFE_BUNDLE) || blackFS.getItem() instanceof TridentItem && EnchantmentHelper.getRiptide(blackFS) <= 0 && !(blackFS.getDamageValue() >= blackFS.getMaxDamage() - 1)) && !(blackFS.is(ItemStack.EMPTY.getItem())
                 || blackFS.getItem() instanceof EggItem || blackFS.getItem() instanceof SnowballItem || blackFS.getItem() instanceof ThrowablePotionItem
                 || blackFS.getItem() instanceof EnderpearlItem || blackFS.getItem() instanceof GasolineBucketItem || blackFS.getItem() instanceof GasolineCanItem
                 || blackFS.getItem() instanceof MatchItem || blackFS.is(ModItems.MATCH_BUNDLE) || blackFS.getItem() instanceof FleshBucketItem
-                ||blackFS.getItem() instanceof HarpoonItem) && !(blackFS.is(ItemStack.EMPTY.getItem()));
+                ||blackFS.getItem() instanceof HarpoonItem  && !(blackFS.getDamageValue() >= blackFS.getMaxDamage() - 1)) && !(blackFS.is(ItemStack.EMPTY.getItem()));
     }
     public void createTheMightyHunterOfTheShadows(Vec3 pos){
         if(isHunting()) {
@@ -1240,13 +1240,29 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         tryIntPower(PowersBlackSabbath.CLIENT_SYNC_TARGET, true, 0);
         tryIntPowerPacket(PowersBlackSabbath.CLIENT_SYNC_TARGET, 0);
     }
+    public void removeTargetSingular(LivingEntity LE){
+        if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){
+            if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e && be.level().getEntity(be.getGrabbing()).is(LE)){
+                be.setMeleeInteractionTicks(-1);
+                ((StandUser)e).roundabout$setGrabbedSoul(false);
+                ((StandUser) e).roundabout$updateSealedTicks(-1);
+                be.killSoul();
+                ((StandUser)e).roundabout$setGrabberSabbath(0);
+            }
+        }
+        if(blackSabbathTargets.contains(LE)) {
+            this.removeTargetEntities(LE);
+            tryIntPower(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET, true, LE.getId());
+            tryIntPowerPacket(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET, LE.getId());
+        }
+    }
     public void unselectClient(){
         Entity TE = getTarget();
         if (TE != null) {
             if (TE instanceof LivingEntity LE) {
                 if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){
                     if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e && be.level().getEntity(be.getGrabbing()).is(LE)){
-                        be.setMeleeInteractionTicks(0);
+                        be.setMeleeInteractionTicks(-1);
                         ((StandUser)e).roundabout$setGrabbedSoul(false);
                         ((StandUser) e).roundabout$updateSealedTicks(-1);
                         be.killSoul();
@@ -1499,10 +1515,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
     }
     @Override
     public boolean returnFakeStandForHud(){
-        if(this.self != null) {
-            return true;
-        }
-        return false;
+        return true;
     }
     public StandEntity getStandForHUDIfFake(){
         if (displayStand == null){

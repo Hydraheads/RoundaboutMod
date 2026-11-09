@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.SilverChariotAfterimageState;
+import net.hydra.jojomod.client.gui.PowerInventoryMenu;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.stand.SilverChariotModel;
 import net.hydra.jojomod.client.models.stand.StandModel;
@@ -18,6 +19,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -162,7 +164,8 @@ public class SilverChariotBaseRenderer<T extends StandEntity> extends StandRende
         float alpha = 1.0F;
         boolean renderAfterimages = ConfigManager.getClientConfig().silverChariotSettings.silverChariotRenderAfterimages;
         boolean renderAfterimagesInFirstPerson = ConfigManager.getClientConfig().silverChariotSettings.silverChariotShouldRenderAfterimagesForUserWhileInFirstPerson;
-        if (renderAfterimages && !mobEntity.getArmoured() && mobEntity.getAfterimageStates().size() >= 2) {
+        boolean isInPowerInventory = mobEntity.getUser() instanceof Player player && player.containerMenu instanceof PowerInventoryMenu;
+        if (!isInPowerInventory && renderAfterimages && !mobEntity.getArmoured() && mobEntity.getAfterimageStates().size() >= 2) {
             // renderAfterimage1(mobEntity, entityYaw, partialTicks, matrixStack, vertexConsumerProvider, packedLight, alpha, 2.5D, -2.0D, -1.5D);
             // renderAfterimage1(mobEntity, entityYaw, partialTicks, matrixStack, vertexConsumerProvider, packedLight, alpha, 1.5D, -2.0D, 3.5D);
             // renderAfterimage1(mobEntity, entityYaw, partialTicks, matrixStack, vertexConsumerProvider, packedLight, alpha, -1.5D, -2.0D, 3.5D);
