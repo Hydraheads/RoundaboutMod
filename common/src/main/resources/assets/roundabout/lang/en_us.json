@@ -2833,6 +2833,8 @@
   "ability.roundabout.gold_experience_lifeform_select.desc": "Opens a selection screen to choose an animal to create. The screen gives detailed descriptions of every animal.",
   "ability.roundabout.gold_experience_lifeform_creation": "Lifeform Creation",
   "ability.roundabout.gold_experience_lifeform_creation.desc": "Create a mob that you chose with Lifeform Selection. This mob will reflect all damage done to it, except from you.",
+  "ability.roundabout.gold_experience_item_throw": "Lifeform Creation (Thrown)",
+  "ability.roundabout.gold_experience_item_throw.desc": "Grabs the item you are holding in your inventory to throw. Upon landing, the item transforms into your selected lifeform.",
 
   "ability.roundabout.emperor_shoot": "Shoot",
   "ability.roundabout.emperor_shoot.desc": "Shoot a bullet from the emperor.",

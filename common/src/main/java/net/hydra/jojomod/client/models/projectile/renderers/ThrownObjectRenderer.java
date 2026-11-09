@@ -85,7 +85,8 @@ public class ThrownObjectRenderer<T extends Entity>
                     entity instanceof ThrownObjectEntity TOE &&
                     (TOE.getStyle() == ThrownObjectEntity.SPTHROW
                     || TOE.getStyle() == ThrownObjectEntity.TWTHROW
-                    || TOE.getStyle() == ThrownObjectEntity.STAND_DAMAGE)
+                    || TOE.getStyle() == ThrownObjectEntity.STAND_DAMAGE
+                    || TOE.getStyle() == ThrownObjectEntity.GETHROW)
             ){
                 poseStack.scale((float) (this.scale*3), (float) (this.scale*3), (float) (this.scale*3));
             } else {
