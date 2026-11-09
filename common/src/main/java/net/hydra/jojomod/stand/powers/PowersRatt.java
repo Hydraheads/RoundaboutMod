@@ -783,7 +783,7 @@ public class PowersRatt extends NewDashPreset {
 
     public void FireDart(byte type, float accuracy, float modifier) {
         if (this.getSelf().level() instanceof ServerLevel SL) {
-            muzzleFlash(SL,this.getSelf().getEyePosition().add(this.getSelf().getViewVector(0).scale(0.5F)));
+            muzzleFlash(SL,this.getSelf().getEyePosition().add(this.getSelf().getViewVector(0).scale(0.7F)));
         }
         RattDartEntity e = new RattDartEntity(this.getSelf().level(),this.getSelf(), type );
         e.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -0.5F, ShotPowerFloats[1]*modifier, accuracy);
@@ -793,6 +793,10 @@ public class PowersRatt extends NewDashPreset {
     }
 
     public void FireDart(int i, float accuracy) {
+        if (this.getSelf().level() instanceof ServerLevel SL) {
+            muzzleFlash(SL,this.getSelf().getEyePosition().add(this.getSelf().getViewVector(0).scale(0.7F)));
+        }
+
         float power = 0;
         for (int b=ShotThresholds.length-1;b>=0;b--) {
             if ( (i == -1 ? 51 : i) >= ShotThresholds[b]) {
