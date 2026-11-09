@@ -160,6 +160,8 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
                 chargeTicks = -1;
             }
         }
+
+
     }
 
 

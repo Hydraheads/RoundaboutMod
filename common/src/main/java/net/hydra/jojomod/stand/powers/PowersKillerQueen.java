@@ -8,6 +8,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.FancyLighterBlock;
+import net.hydra.jojomod.client.BitesTheDustIndicatorRenderer;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
@@ -4899,6 +4900,25 @@ public class PowersKillerQueen extends NewPunchingStand {
         return super.highlightsEntityColor(ent, player);
     }
 
+    public boolean shouldRenderIconEntity(LivingEntity LE) {
+        if (LE != null && LE.getId() != this.getSelf().getId()) {
+            if (this.getSelf() instanceof Player && this.getSelf().distanceToSqr(LE) <= 1024
+                    && bitesTheDustPlantedEntity != null && isAffectedByBitesTheDust(LE)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void renderIconEntity(LivingEntity LE, PoseStack matrixStack, MultiBufferSource bufferSource) {
+        Minecraft mc = Minecraft.getInstance();
+        if (LE.getId() == bitesTheDustPlantedEntity.getId()) {
+            BitesTheDustIndicatorRenderer.renderHost(LE, matrixStack, bufferSource, mc.getEntityRenderDispatcher());
+        }else {
+            BitesTheDustIndicatorRenderer.renderTarget(LE, matrixStack, bufferSource, mc.getEntityRenderDispatcher());
+        }
+    }
+
     public void bitesTheDustRender(LivingEntity LE, PoseStack matrixStack, MultiBufferSource bufferSource) {
         if (LE != null && LE.getId() != this.getSelf().getId()) {
             Minecraft mc = Minecraft.getInstance();
@@ -5096,9 +5116,9 @@ public class PowersKillerQueen extends NewPunchingStand {
                     flashAlpha, otherFlashAlpha);
         }
     }
-   
+
     @Override public Component getSkinName(byte skinId) {
-    	
+
     	switch (skinId)
         {
             case KillerQueenEntity.PART_4 -> {return Component.translatable("skins.roundabout.killer_queen.anime");}
@@ -5489,7 +5509,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (this.getActivePower() == DETONATE) { this.setPowerNone(); }
     	return true;
     }
-    
+
     public boolean detonate() {
     	if (!this.isClient() && this.detonateTimer == -1 && getActivePower() != PowerIndex.POWER_1) {
             if (this.self instanceof ServerPlayer pl) {
@@ -5508,7 +5528,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 this.setActivePower(DETONATE);
             }
         }
-    	
+
     	return true;
     }
 
