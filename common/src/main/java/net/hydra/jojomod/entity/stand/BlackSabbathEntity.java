@@ -1959,23 +1959,41 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     public int slideTicks = 0;
     void setShouldSlide(boolean yes){shouldSlide = yes;}
     public boolean shouldSlide = false;
+    void setShouldSlidePotionsAndFood(boolean yes){shouldSlidePotionsAndFood = yes;}
+    public boolean shouldSlidePotionsAndFood = false;
 
     private void soulGrabbingTick(){
         ItemStack i = this.getHeldItemSabbath();
         Entity le = this.level().getEntity(getGrabbing());
+        boolean flag1 = i.getItem() instanceof SwordItem || i.getItem() instanceof DiggerItem || i.getItem() instanceof GlaiveItem || i.getItem() instanceof WarhammerItem;
+        boolean flag2 = i.getItem() instanceof RoundaboutArrowItem;
+        boolean flag3 = i.getItem() instanceof ArmorItem || i.getItem() instanceof ElytraItem;
+        boolean flag4 = i.getItem() instanceof PotionItem;
 
         if(!level().isClientSide && this.getUser() != null){
             setSlider(slideTicks);
         }
 
         int inte = slideTicks;
-        if(shouldSlide){
-            if(slideTicks <= 20){
-                slideTicks = inte + 10;
+        if(!flag4) {
+            if (shouldSlide) {
+                if (slideTicks <= 20) {
+                    slideTicks = inte + 10;
+                }
+            } else {
+                if (slideTicks > 0) {
+                    slideTicks = inte - 5;
+                }
             }
         } else {
-            if(slideTicks > 0){
-                slideTicks = inte - 5;
+            if (shouldSlidePotionsAndFood) {
+                if (slideTicks <= 20) {
+                    slideTicks = inte + 2;
+                }
+            } else {
+                if (slideTicks > 0) {
+                    slideTicks = 0;
+                }
             }
         }
 
@@ -2001,9 +2019,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                         /*FUN STUFF starts >:D */
                         /*Initial ticks: 220 (or 12 seconds)*/
                         float itemDamage = 0;
-                        boolean flag1 = i.getItem() instanceof SwordItem || i.getItem() instanceof DiggerItem || i.getItem() instanceof GlaiveItem || i.getItem() instanceof WarhammerItem;
-                        boolean flag2 = i.getItem() instanceof RoundaboutArrowItem;
-                        boolean flag3 = i.getItem() instanceof ArmorItem || i.getItem() instanceof ElytraItem;
                         if(flag1){
                             if(meleeInteractionTicks == 135 || meleeInteractionTicks == 180 || meleeInteractionTicks == 90 && !(i.getItem() instanceof GlaiveItem || i.getItem() instanceof WarhammerItem)){
                                 setShouldSlide(true);
@@ -2021,11 +2036,13 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                 }
                             }
                         }
-
+                        if(flag4 && meleeInteractionTicks == 160){
+                            setShouldSlidePotionsAndFood(true);
+                        }
 
                         if(!i.isEmpty()) {
                             if(flag1){
-                            if (!(i.getDamageValue() >= i.getMaxDamage() - 1)) {
+                            if (!(i.getDamageValue() >= i.getMaxDamage() - 2)) {
                                 if (meleeInteractionTicks == 130 || meleeInteractionTicks == 85 && !(i.getItem() instanceof GlaiveItem || i.getItem() instanceof WarhammerItem) || meleeInteractionTicks == 175) {
                                     if (i.getItem() instanceof SwordItem SI) {
                                         itemDamage = SI.getDamage();
@@ -2050,7 +2067,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                             }
                             if (i.is(Items.BELL)) {
                                 if (meleeInteractionTicks > 160 && this.tickCount % 20 == 0 || meleeInteractionTicks < 160 && meleeInteractionTicks > 100 && this.tickCount % 10 == 0 || meleeInteractionTicks < 100 && meleeInteractionTicks >= 5 && this.tickCount % 5 == 0) {
-                                    this.level().playSound((Player) null, this, SoundEvents.BELL_BLOCK, SoundSource.BLOCKS, 10.0F, 1.0F);
+                                    this.level().playSound((Player) null, this, SoundEvents.BELL_BLOCK, SoundSource.BLOCKS, 10.0F, 2.0F);
                                 }
                             }
                             if (meleeInteractionTicks == 150) {
@@ -2079,6 +2096,22 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                     }
                                 }
                             }
+                            if(i.getItem() instanceof PotionItem pi){
+                                if(meleeInteractionTicks == 140 || meleeInteractionTicks == 110 || meleeInteractionTicks == 85){
+                                    this.level().playSound((Player) null, this, SoundEvents.GENERIC_DRINK, SoundSource.PLAYERS, 2.0F, 1F);
+                                }
+                                if(meleeInteractionTicks == 80) {
+                                    if(i.getItem() instanceof PotionItem){
+                                        pi.finishUsingItem(i, this.level(), e);
+                                        if (this.getUser() instanceof Player pl) {
+                                            IPlayerEntity play = ((IPlayerEntity) pl);
+                                            play.roundabout$getBlckSabbathPlayerInventory().setItem(0, new ItemStack(Items.GLASS_BOTTLE));
+                                        } else {
+                                            this.setHeldItemSabbath(new ItemStack(Items.GLASS_BOTTLE));
+                                        }
+                                    }
+                                }
+                            }
                         }
 
                     } else {
@@ -2086,11 +2119,11 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                             ((StandUser) e).roundabout$updateSealedTicks(-1);
                         }
                         lungeTicks = 51;
+                        setShouldSlidePotionsAndFood(false);
                         ((StandUser) e).roundabout$setGrabbedSoul(false);
                         ((StandUser)e).roundabout$setGrabberSabbath(0);
                         killSoul();
                         if(getNotRenderItem()){
-                            //  pbs.killTargetListServerToClient();
                             pbs.removeTargetSingular(e);
                         }
                     }
@@ -2099,11 +2132,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         }
     }
 
-    private void removeTarget(LivingEntity ent){
-        if(this.getUser() != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pbs){
-            pbs.removeTargetEntities(ent);
-        }
-    }
 
     public final Vec3 getLookAngle(float $$0, Entity selfie) {
         return ((StandUser)selfie).roundabout$calculateViewVectorButICanUseIt(0, selfie.getYRot());
