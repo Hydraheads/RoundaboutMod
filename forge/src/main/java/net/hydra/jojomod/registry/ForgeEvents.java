@@ -468,7 +468,7 @@ public class ForgeEvents {
 
         ModItems.STAND_DISC_JJF = ForgeItems.STAND_DISC_JJF.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_JJF.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_JJF.get());
-        ModItems.MAX_STAND_DISC_JJF = ForgeItems.STAND_DISC_JJF.get();
+        ModItems.MAX_STAND_DISC_JJF = ForgeItems.MAX_STAND_DISC_JJF.get();
 
         ModItems.STAND_DISC_WHITESNAKE = ForgeItems.STAND_DISC_WHITESNAKE.get();
         ((MaxStandDiscItem) ForgeItems.MAX_STAND_DISC_WHITESNAKE.get()).baseDisc =
@@ -862,6 +862,7 @@ public class ForgeEvents {
         ModParticles.ROAD_ROLLER_EXPLOSION = ForgeParticles.ROAD_ROLLER_EXPLOSION.get();
         ModParticles.ROAD_ROLLER_SMOKE = ForgeParticles.ROAD_ROLLER_SMOKE.get();
         ModParticles.TUSK_HOLE = ForgeParticles.TUSK_HOLE.get();
+        ModParticles.GOLDEN_SPIRAL = ForgeParticles.GOLDEN_SPIRAL.get();
         ModParticles.KILLER_QUEEN_EXPLOSION = ForgeParticles.KILLER_QUEEN_EXPLOSION.get();
         ModParticles.TOOTH = ForgeParticles.TOOTH.get();
         ModParticles.PW_FIREBALL_EXPLOSION = ForgeParticles.PW_FIREBALL_EXPLOSION.get();

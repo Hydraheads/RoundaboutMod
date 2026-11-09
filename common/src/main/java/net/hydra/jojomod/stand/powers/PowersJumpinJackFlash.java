@@ -2,9 +2,9 @@ package net.hydra.jojomod.stand.powers;
 
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.JJFProjectileEntity;
-import com.example.jjf.client.JJFHudSettings;
-import com.example.jjf.launcher.JJFLauncherAccess;
-import com.example.jjf.launcher.JJFLauncherState;
+import net.hydra.jojomod.client.JJFHudSettings;
+import net.hydra.jojomod.event.powers.jumpingJackFlash.JJFLauncherAccess;
+import net.hydra.jojomod.event.powers.jumpingJackFlash.JJFLauncherState;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.event.powers.jumpingJackFlash.*;
 import net.hydra.jojomod.client.StandIcons;
@@ -36,7 +36,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.hydra.jojomod.entity.projectile.JJFSpitEntity;
 import net.minecraft.world.entity.Entity;
-import com.example.jjf.launcher.JJFLauncherAmmoItem;
+import net.hydra.jojomod.event.powers.jumpingJackFlash.JJFLauncherAmmoItem;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
@@ -2557,11 +2557,31 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
         );
     }
 
+    private int jjf$dashCooldownTicks(boolean jumping) {
+        int configuredTicks = jumping
+                ? net.hydra.jojomod.client.ClientNetworking.getAppropriateConfig().generalStandSettings.jumpingDashCooldown
+                : net.hydra.jojomod.client.ClientNetworking.getAppropriateConfig().generalStandSettings.dashCooldown;
+        return Math.max(jumping ? 160 : 120, configuredTicks);
+    }
+
+    @Override
+    public boolean setPowerMovement(int lastMove) {
+        boolean jumping = storedInt > 500;
+        boolean handled = super.setPowerMovement(lastMove);
+        if (handled && !getSelf().level().isClientSide() && getSelf() instanceof Player) {
+            setCooldown(PowerIndex.GLOBAL_DASH, jjf$dashCooldownTicks(jumping));
+        }
+        return handled;
+    }
     @Override
     public void dash() {
         if (!canJJFDash()) {
             return;
         }
+
+        boolean dashWasReady = !onCooldown(PowerIndex.GLOBAL_DASH);
+        boolean jumpingDash = getSelf().level().isClientSide()
+                && Minecraft.getInstance().options.keyJump.isDown();
 
         boolean zeroGravityGroundDash =
                 !getSelf().onGround()
@@ -2580,6 +2600,12 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
         }
 
         super.dash();
+
+        if (getSelf().level().isClientSide()
+                && dashWasReady
+                && onCooldown(PowerIndex.GLOBAL_DASH)) {
+            setCooldown(PowerIndex.GLOBAL_DASH, jjf$dashCooldownTicks(jumpingDash));
+        }
 
         if (zeroGravityGroundDash) {
             Vec3 motion =
@@ -2855,8 +2881,8 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
             return;
         }
 
-        int barWidth = 72;
-        int barHeight = 5;
+        int barWidth = 96;
+        int barHeight = 7;
 
         int x =
                 scaledWidth / 2
@@ -2881,11 +2907,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
                         CONE_READY_TICKS
                 );
 
-        float progress =
-                noAmmo
-                        ? 0.0F
-                        : (float) charge
-                        / (float) CONE_READY_TICKS;
+        float progress = (float) charge / (float) CONE_READY_TICKS;
 
         int fillWidth =
                 Mth.clamp(
@@ -2914,13 +2936,14 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
         );
 
         if (fillWidth > 0) {
-            context.fill(
-                    x,
-                    y,
-                    x + fillWidth,
-                    y + barHeight,
-                    0xFFFFFFFF
-            );
+            int chargeColor = charge >= CONE_READY_TICKS ? 0xFFFFD46B
+                    : charge >= BURST_6_TICKS ? 0xFF63E6BA
+                    : charge >= BURST_4_TICKS ? 0xFF56C8F4
+                    : charge >= BURST_READY_TICKS ? 0xFF509FFF
+                    : 0xFF4569DE;
+            context.fill(x, y, x + fillWidth, y + barHeight, chargeColor);
+            context.fill(x, y, x + fillWidth, y + 1, 0xFFBDEFFF);
+            context.fill(x + fillWidth - 1, y, x + fillWidth, y + barHeight, 0xFFFFFFFF);
         }
 
         drawChargeMarker(
@@ -2958,71 +2981,71 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
                 barHeight,
                 BURST_6_TICKS
         );
-/*
-        if (JJFHudSettings.showAmmoText()) {
-            String ammoText =
-                    "AMMO "
-                            + ammoCount;
+ 
 
-            context.drawString(
-                    Minecraft.getInstance()
-                            .font,
-                    ammoText,
-                    x + barWidth + 6,
-                    y - 2,
-                    0xFFFFFF,
-                    true
-            );
-        }
 
-        if (JJFHudSettings.showLauncherText()) {
-            String statusText = null;
 
-            if (noAmmo) {
-                statusText =
-                        "NO AMMO";
-            } else if (charge
-                    >= CONE_READY_TICKS) {
-                statusText =
-                        "CONE";
-            } else if (charge
-                    >= BURST_6_TICKS) {
-                statusText =
-                        "BURST 6";
-            } else if (charge
-                    >= BURST_5_TICKS) {
-                statusText =
-                        "BURST 5";
-            } else if (charge
-                    >= BURST_4_TICKS) {
-                statusText =
-                        "BURST 4";
-            } else if (charge
-                    >= BURST_READY_TICKS) {
-                statusText =
-                        "BURST 3";
-            }
 
-            if (statusText != null) {
-                int textWidth =
-                        Minecraft.getInstance()
-                                .font
-                                .width(
-                                        statusText
-                                );
 
-                context.drawString(
-                        Minecraft.getInstance()
-                                .font,
-                        statusText,
-                        scaledWidth / 2
-                                - textWidth / 2,
-                        y - 10,
-                        0xFFFFFF,
-                        true
-                );
-            }
-        }*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     private void drawChargeMarker(

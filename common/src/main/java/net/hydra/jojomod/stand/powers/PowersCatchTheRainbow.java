@@ -19,6 +19,7 @@ import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -895,7 +896,9 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                         ((IPlayerEntity) this.getSelf()).roundabout$setClientDodgeTime(0);
                     }
                     if (this.self instanceof StandUser su){
-                        su.roundabout$setIsRainWalking(false);
+                        if (!ConfigManager.getClientConfig().catchTheRainbowSettings.catchTheRainbowAlternateRainWalk) {
+                            su.roundabout$setIsRainWalking(false);
+                        }
                     }
                     this.setCooldown(PowerIndex.GLOBAL_DASH, cdTime);
                     MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 0.91F,

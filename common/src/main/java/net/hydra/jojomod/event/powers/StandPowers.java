@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers;
 
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.*;
@@ -22,6 +23,7 @@ import net.hydra.jojomod.event.powers.whitesnake.disc.DiscItemData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -2319,6 +2321,15 @@ public class StandPowers extends AbilityScapeBasis {
                 SE.roundabout$setIdlePosX(poses.get(skinind));
             }
         }
+    }
+
+    /// For further context look at pearl jam and killer queen
+    public boolean shouldRenderIconEntity(LivingEntity entity) {
+        return false;
+    }
+
+    public void renderIconEntity(LivingEntity LE, PoseStack matrixStack, MultiBufferSource bufferSource) {
+
     }
 
 

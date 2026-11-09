@@ -23,7 +23,7 @@ public abstract class ForgeMilkBucketMixin {
     @Unique
     List<MobEffectInstance> effects = new ArrayList<>();
 
-    @Inject(method = "finishUsingItem",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;curePotionEffects(Lnet/minecraft/world/item/ItemStack;)Z"),require = 0)
+    @Inject(method = "finishUsingItem",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;curePotionEffects(Lnet/minecraft/world/item/ItemStack;)Z", remap = false),require = 0)
     public void roundabout$beforeMilkClear(ItemStack itemStack, Level level, LivingEntity livingEntity, CallbackInfoReturnable<ItemStack> cir) {
         for (MobEffectInstance effect : livingEntity.getActiveEffects()) {
             if (MainUtil.isSpecialEffect(effect)) {
@@ -32,7 +32,7 @@ public abstract class ForgeMilkBucketMixin {
         }
     }
 
-    @Inject(method = "finishUsingItem",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;curePotionEffects(Lnet/minecraft/world/item/ItemStack;)Z",shift = At.Shift.AFTER))
+    @Inject(method = "finishUsingItem",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;curePotionEffects(Lnet/minecraft/world/item/ItemStack;)Z", remap = false,shift = At.Shift.AFTER))
     public void roundabout$afterMilkClear(ItemStack itemStack, Level level, LivingEntity livingEntity, CallbackInfoReturnable<ItemStack> cir) {
         for (MobEffectInstance effect : effects) {
             livingEntity.addEffect(effect);
