@@ -535,7 +535,7 @@ public class RattDartEntity extends AbstractArrow {
         /// trail ticking
         if (this.level().isClientSide()) {
             if (!this.isRemoved()) {
-                this.trailPoints.add(this.position().add(0, 0.3, 0));
+                this.trailPoints.add(this.position());
                 if (this.trailPoints.size() > MAX_TRAIL_POINTS) {
                     this.trailPoints.remove(0);
                 }

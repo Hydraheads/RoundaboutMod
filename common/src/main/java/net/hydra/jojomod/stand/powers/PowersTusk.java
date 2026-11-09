@@ -1249,7 +1249,7 @@ public class PowersTusk extends NewDashPreset {
         }
     }
     private void spawnParticles(double x, double y, double z) {
-        Vector3f color = new Vector3f(62 / 255F, 180 / 255F, 202 / 255F);
+        Vector3f color = Math.random() > 0.5 ? new Vector3f(0.85F,0.85F,1F) :  new Vector3f(62 / 255F, 180 / 255F, 202 / 255F);
         BlockPos blockPos = new BlockPos((int)x,(int)y,(int)z);
         for(int i=0;i<4;i++) {
             if (!this.getSelf().level().getBlockState(blockPos).isSolid()) {
@@ -1265,7 +1265,7 @@ public class PowersTusk extends NewDashPreset {
                     0, 0, 0, 0, 0);
 
             float n = 0;
-            while (n < 1 && Math.random()>0.5F) {
+            while (n < 1.3 && Math.random()>0.5F) {
                 ((ServerLevel) this.getSelf().level()).sendParticles(new DustParticleOptions(color, 1f),
                         x, blockPos.getY() + 1.1 + n, z,
                         0, 1, 1, 1, 0);
