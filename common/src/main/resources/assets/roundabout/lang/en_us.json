@@ -2537,7 +2537,7 @@
   "ability.roundabout.tusk_inverse": "Opposite Spin",
   "ability.roundabout.tusk_inverse.desc": "Undo either your or a target's infinite spin, consuming your infinite spin charge in the process.",
   "ability.roundabout.tusk_wall_breaker": "Wall Breaker",
-  "ability.roundabout.tusk_wall_breaker.desc": "Split apart a wall temporarily, allowing you to pass through freely.",
+  "ability.roundabout.tusk_wall_breaker.desc": "Shoot a nail that splits apart a wall, floor, or ceiling temporarily, allowing you to pass through freely.",
   "ability.roundabout.tusk_charge": "Charge",
   "ability.roundabout.tusk_charge.desc": "Holding attack builds up the nail's strength, increasing the potency and duration of the holes. Holes pursue targets autonomously, inflicting a debuff which reduces their projectile accuracy.",
   "ability.roundabout.tusk_charge_4": "Charge",
@@ -2833,6 +2833,8 @@
   "ability.roundabout.gold_experience_lifeform_select.desc": "Opens a selection screen to choose an animal to create. The screen gives detailed descriptions of every animal.",
   "ability.roundabout.gold_experience_lifeform_creation": "Lifeform Creation",
   "ability.roundabout.gold_experience_lifeform_creation.desc": "Create a mob that you chose with Lifeform Selection. This mob will reflect all damage done to it, except from you.",
+  "ability.roundabout.gold_experience_item_throw": "Lifeform Creation (Thrown)",
+  "ability.roundabout.gold_experience_item_throw.desc": "Grabs the item you are holding in your inventory to throw. Upon landing, the item transforms into your selected lifeform.",
 
   "ability.roundabout.emperor_shoot": "Shoot",
   "ability.roundabout.emperor_shoot.desc": "Shoot a bullet from the emperor.",
@@ -3581,6 +3583,7 @@
   "skins.roundabout.tusk.breaker" : "Breaker",
   "skins.roundabout.tusk.frigid" : "Frigid",
   "skins.roundabout.tusk.elegant" : "Elegant",
+  "skins.roundabout.tusk.legacy" : "Legacy",
 
 
   "roundabout.tusk.act_1": "Act 1",

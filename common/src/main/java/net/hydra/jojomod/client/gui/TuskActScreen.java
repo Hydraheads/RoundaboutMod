@@ -100,7 +100,7 @@ public class TuskActScreen extends Screen implements NoCancelInputScreen {
         RenderSystem.enableBlend();
         int k = this.width / 2 - 62;
         int l = this.height / 2 - 31 - 39;
-        guiGraphics.blit(MEMORY_LOCATION, k, l, 0.0f, 0.0f, 125, 24 , 256, 256);
+        guiGraphics.blit(MEMORY_LOCATION, k, l, 0.0f, 0.0f, 125, 20 , 256, 256);
         guiGraphics.pose().popPose();
         super.render(guiGraphics, i, j, f);
 

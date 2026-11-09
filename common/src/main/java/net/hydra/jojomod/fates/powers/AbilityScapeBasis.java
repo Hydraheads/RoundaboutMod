@@ -3758,6 +3758,20 @@ public class AbilityScapeBasis {
     public void tickInfiniteSpin() {
         if (ableToSpin()) {
             int delta = isInfiniteSpinning() ? -2 : -1;
+
+            if (isInfiniteSpinning()) {
+                if (this.getSelf().tickCount%20 == 0) {
+                    if (!isClient()) {
+                        Vec3 pos = this.getSelf().getPosition(0);
+                   /*     sendParticlesIfPossible(self.level(), ModParticles.GOLDEN_SPIRAL, pos.x(),
+                                pos.y(), pos.z(),
+                                0   ,
+                                0,0,0,
+                                0.08); */
+                    }
+                }
+            }
+
             if (this.getSelf().isPassenger() && this.getSelf().getVehicle() instanceof AbstractHorse AH) {
                 if (AH.hurtTime == 0) {
                     if (AH.isTamed() && AH.isSaddled() && (true /* is moving around */)) {

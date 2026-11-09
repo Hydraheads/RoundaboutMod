@@ -32,7 +32,7 @@ public class BlackSabbathItemRenderer <T extends BlackSabbathEntity, M extends S
         int slider = blackSabbathEntity.slider();
          if(!it.isEmpty() && !blackSabbathEntity.getNotRenderItem() && !(it.getItem() instanceof BlockItem && !((it.is(Items.HOPPER)) || it.is(Items.BELL))) && blackSabbathEntity.getGrabbing() != 0){
              boolean flag2 = it.getItem() instanceof RoundaboutArrowItem || it.getItem() instanceof SwordItem || it.getItem() instanceof GlaiveItem || it.getItem() instanceof HoeItem || it.getItem() instanceof PickaxeItem || it.getItem() instanceof AxeItem || it.getItem() instanceof ShovelItem || it.getItem() instanceof ShearsItem || it.getItem() instanceof BrushItem || it.getItem() instanceof WarhammerItem;
-             boolean flag3 = it.getItem() instanceof PotionItem || it.getItem() instanceof ElytraItem || it.getItem() instanceof ArmorItem || it.getItem() instanceof BucketItem || it.is(Items.HOPPER) /*|| it.is(Items.BELL)*/;
+             boolean flag3 = it.getItem() instanceof PotionItem || it.getItem() instanceof BottleItem || it.getItem() instanceof ElytraItem || it.getItem() instanceof ArmorItem || it.getItem() instanceof BucketItem || it.is(Items.HOPPER) /*|| it.is(Items.BELL)*/;
              boolean flag4 = it.getItem() instanceof InstrumentItem && it.is(Items.GOAT_HORN);
             poseStack.pushPose();
             if(!flag1 && !flag2) {
