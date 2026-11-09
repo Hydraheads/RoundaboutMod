@@ -509,44 +509,23 @@
   "ge_summon": {
     "subtitle": "sounds.roundabout.lyin_eyes_summon",
     "sounds": [
-      {
-        "name": "roundabout:ge_stand",
-        "volume": 0.8
-      }
+      "roundabout:ge_summon"
     ]
   },
   "ge_life": {
     "subtitle": "sounds.roundabout.ge_life",
     "sounds": [
-      {
-        "name": "roundabout:ge_life_1",
-        "volume": 0.8
-      },
-      {
-        "name": "roundabout:ge_life_2",
-        "volume": 0.8
-      }
+      "roundabout:ge_life_1",
+      "roundabout:ge_life_2"
     ]
   },
   "ge_hit": {
     "subtitle": "sounds.roundabout.ge_hit",
     "sounds": [
-      {
-        "name": "roundabout:ge_hit_1",
-        "volume": 0.8
-      },
-      {
-        "name": "roundabout:ge_hit_2",
-        "volume": 0.8
-      },
-      {
-        "name": "roundabout:ge_hit_3",
-        "volume": 0.8
-      },
-      {
-        "name": "roundabout:ge_hit_4",
-        "volume": 0.8
-      }
+      "roundabout:ge_hit_1",
+      "roundabout:ge_hit_2",
+      "roundabout:ge_hit_3",
+      "roundabout:ge_hit_4"
     ]
   },
   "ge_life_punch": {
