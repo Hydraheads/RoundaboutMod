@@ -947,64 +947,68 @@ public class PowersTusk extends NewDashPreset {
 
     @Override
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
+        context.blit(StandIcons.TUSK_ACTS,leftPos+5,topPos+80,0,90,168,68);
+
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
 
         byte isAct1 = this.getAct() == 1 || level >= 6 ? level : 0;
         int toeLevel = bypass ? 3 : Math.min(level,3);
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,level < 4 ? 1 : 6, "ability.roundabout.tusk_saw",
-                "instruction.roundabout.press_attack", StandIcons.ANUBIS_SLASH,0,isAct1,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+99,level < 4 ? 1 : 6, "ability.roundabout.tusk_spinthrow",
-                "instruction.roundabout.press_skill_crouch", StandIcons.TUSK_SPINTHROW,1,isAct1,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,level < 4 ? 1 : 6, "ability.roundabout.tusk_shockwave",
-                "instruction.roundabout.press_skill", StandIcons.TUSK_SHOCKWAVE,1,isAct1,bypass));
-
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,level < 4 ? 1 : 6, "ability.roundabout.tusk_blast",
-                "instruction.roundabout.hold_attack", StandIcons.SOFT_SHOOTING_MODE,0,isAct1,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,level < 4 ? 1 : 6, "ability.roundabout.tusk_leap_"+toeLevel,
-                "instruction.roundabout.press_skill_crouch", StandIcons.TUSK_NAILLEAP,3,isAct1,bypass));
-
-
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80, 4, "ability.roundabout.tusk_drill",
-                "instruction.roundabout.hold_attack", StandIcons.STAR_PLATINUM_PUNCH,0,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99, 4, "ability.roundabout.tusk_target",
-                "instruction.roundabout.press_skill", StandIcons.TUSK_TARGET,1,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118, 4, "ability.roundabout.tusk_brush",
-                "instruction.roundabout.press_skill", StandIcons.TUSK_DRILL_BRUSH,1,level,bypass));
-
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80, 5, "ability.roundabout.tusk_ball_bridge",
-                "instruction.roundabout.press_skill_steel", StandIcons.TUSK_BALL_BRIDGE,1,level,bypass));
-
-
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos+96, topPos+80, 6, "ability.roundabout.tusk_focus",
-                "instruction.roundabout.press_attack", StandIcons.RATT_SCOPE_IN,3,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+99,6, "ability.roundabout.tusk_flatten",
-                "instruction.roundabout.press_skill", StandIcons.TUSK_FLATTEN,1,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+118,6, "ability.roundabout.tusk_grab",
-                "instruction.roundabout.press_skill_hole", StandIcons.TUSK_GRASP,2,level,bypass));
-
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+80,6, "ability.roundabout.tusk_warp",
-                "instruction.roundabout.press_skill", StandIcons.TUSK_WORMHOLE,4,level,bypass));
-
-
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+80,7, "ability.roundabout.tusk_advance",
-                "instruction.roundabout.press_attack", StandIcons.THE_WORLD_ASSAULT,0,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+99,7, "ability.roundabout.tusk_inverse",
-                "instruction.roundabout.press_skill_crouch", StandIcons.SELF_BURN,3,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+118,7, "ability.roundabout.tusk_wall_breaker",
-                "instruction.roundabout.press_skill", StandIcons.THE_WORLD_GRAB_BLOCK,1,level,bypass));
 
         String charge = "charge";
         if (this.isInfiniteSpinning()) {
             charge = "charge_4";
         }
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+153,topPos+80,4, "ability.roundabout.tusk_"+charge,
-                this.isInfiniteSpinning() ? "instruction.roundabout.press_attack" : "instruction.roundabout.hold_attack", StandIcons.GO_BEYOND,1,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+153,topPos+99,4, "ability.roundabout.tusk_change_modes",
-                "instruction.roundabout.press_skill", StandIcons.SOFT_SHOOTING_MODE,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+153,topPos+118,6, "ability.roundabout.tusk_act_change",
+        ResourceLocation chargeIcon = this.getAct() == 4 ? StandIcons.TUSK_SHOOT_4 : StandIcons.TUSK_SHOOT_2;
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+9,topPos+82,4, "ability.roundabout.tusk_"+charge,
+                this.isInfiniteSpinning() ? "instruction.roundabout.press_attack" : "instruction.roundabout.hold_attack", chargeIcon,1,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+9,topPos+101,0, "ability.roundabout.tusk_change_modes",
+                "instruction.roundabout.press_skill", StandIcons.TUSK_SHOOT_MODE,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+9,topPos+120,6, "ability.roundabout.tusk_act_change",
                 "instruction.roundabout.press_skill", StandIcons.TUSK_ICONS[this.getAct()],4,level,bypass));
 
+
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+31,topPos+82,level < 4 ? 1 : 6, "ability.roundabout.tusk_saw",
+                "instruction.roundabout.press_attack", StandIcons.TUSK_SLASH,0,isAct1,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+31,topPos+101,level < 4 ? 1 : 6, "ability.roundabout.tusk_shockwave",
+                "instruction.roundabout.press_skill", StandIcons.TUSK_SHOCKWAVE,1,isAct1,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+31,topPos+120,level < 4 ? 1 : 6, "ability.roundabout.tusk_leap_"+toeLevel,
+                "instruction.roundabout.press_skill_crouch", StandIcons.TUSK_NAILLEAP,3,isAct1,bypass));
+
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+50,topPos+82,level < 4 ? 1 : 6, "ability.roundabout.tusk_blast",
+                "instruction.roundabout.hold_attack", StandIcons.TUSK_SHOOT_1,0,isAct1,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+50, topPos+101,level < 4 ? 1 : 6, "ability.roundabout.tusk_spinthrow",
+                "instruction.roundabout.press_skill_crouch", StandIcons.TUSK_SPINTHROW,1,isAct1,bypass));
+
+
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+71,topPos+82, 4, "ability.roundabout.tusk_drill",
+                "instruction.roundabout.hold_attack", StandIcons.TUSK_DRILL,0,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+71,topPos+101, 4, "ability.roundabout.tusk_target",
+                "instruction.roundabout.press_skill", StandIcons.TUSK_TARGET,1,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+71,topPos+120, 4, "ability.roundabout.tusk_brush",
+                "instruction.roundabout.press_skill", StandIcons.TUSK_DRILL_BRUSH,1,level,bypass));
+
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+90,topPos+82, 5, "ability.roundabout.tusk_ball_bridge",
+                "instruction.roundabout.press_skill_steel", StandIcons.TUSK_BALL_BRIDGE,1,level,bypass));
+
+
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos+111, topPos+82, 6, "ability.roundabout.tusk_focus",
+                "instruction.roundabout.press_attack", StandIcons.TUSK_FOCUS,3,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+111,topPos+101,6, "ability.roundabout.tusk_flatten",
+                "instruction.roundabout.press_skill", StandIcons.TUSK_FLATTEN,1,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+111,topPos+120,6, "ability.roundabout.tusk_grab",
+                "instruction.roundabout.press_skill_hole", StandIcons.TUSK_GRASP,2,level,bypass));
+
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+130,topPos+82,6, "ability.roundabout.tusk_warp",
+                "instruction.roundabout.press_skill", StandIcons.TUSK_WORMHOLE,4,level,bypass));
+
+
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+151,topPos+82,7, "ability.roundabout.tusk_advance",
+                "instruction.roundabout.press_attack", StandIcons.TUSK_ADVANCE,0,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+151,topPos+101,7, "ability.roundabout.tusk_inverse",
+                "instruction.roundabout.press_skill_crouch", StandIcons.TUSK_OPPOSITE,3,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+151,topPos+120,7, "ability.roundabout.tusk_wall_breaker",
+                "instruction.roundabout.press_skill", StandIcons.TUSK_WALL_BREAKER,1,level,bypass));
 
         return $$1;
     }
@@ -1021,14 +1025,22 @@ public class PowersTusk extends NewDashPreset {
         setSkillIcon(context,x,y,1,switch(act) {
             case 2 -> this.getActivePower() == PowersTusk.CHARGE_NAIL ? (canExecuteMoveWithLevel(5) ? StandIcons.TUSK_BALL_BRIDGE : StandIcons.LOCKED)  : (this.isBrushable()  ? StandIcons.TUSK_DRILL_BRUSH : StandIcons.TUSK_TARGET);
             case 3 -> StandIcons.TUSK_FLATTEN;
-            case 4 -> StandIcons.THE_WORLD_GRAB_BLOCK; // wall breaker
+            case 4 -> StandIcons.TUSK_WALL_BREAKER;
             default -> this.isHoldingSneak() ? StandIcons.TUSK_SPINTHROW : StandIcons.TUSK_SHOCKWAVE;
         }, (act == 2 && !isCharging() ) ? PowerIndex.NO_CD : PowerIndex.SKILL_1);
 
         if (this.getAct() == 3 && this.isInHole()) {
             setSkillIcon(context,x,y,2,StandIcons.TUSK_GRASP,PowerIndex.SKILL_3);
         } else {
-            setSkillIcon(context,x,y,2,this.getMode() == RANGED ? StandIcons.SOFT_SHOOTING_MODE : StandIcons.THE_WORLD_IMPALE, PowerIndex.NO_CD);
+            ResourceLocation melee = StandIcons.TUSK_SLASH;
+            switch (act) {
+                    case 1 -> melee = StandIcons.TUSK_SLASH;
+                    case 2 -> melee = StandIcons.TUSK_DRILL;
+                    case 3 -> melee = StandIcons.TUSK_FOCUS;
+                    case 4 -> melee = StandIcons.TUSK_ADVANCE;
+                };
+            setSkillIcon(context,x,y,2,
+                    this.getMode() == RANGED ? StandIcons.TUSK_SHOOT_MODE : melee, PowerIndex.NO_CD);
         }
 
 
@@ -1037,7 +1049,7 @@ public class PowersTusk extends NewDashPreset {
         } else if (this.getAct() == 3 && isInHole()) {
             setSkillIcon(context,x,y,3,StandIcons.TUSK_WORMHOLE,PowerIndex.NO_CD);
         } else if (this.getAct() == 4 && isHoldingSneak()) {
-            setSkillIcon(context,x,y,3,StandIcons.SELF_BURN,PowerIndex.GLOBAL_DASH); // opposite spin
+            setSkillIcon(context,x,y,3,StandIcons.TUSK_OPPOSITE,PowerIndex.NO_CD);
         } else {
             setSkillIcon(context,x,y,3,StandIcons.DODGE,PowerIndex.GLOBAL_DASH);
         }
@@ -1213,9 +1225,7 @@ public class PowersTusk extends NewDashPreset {
             int max = 20;
             for (int i=0;i<max;i++) {
                 Vec3 delta = start.lerp(end,(float)i/max);
-                for(int k=0;k<2;k++) {
-                    spawnParticles(delta.x, delta.y, delta.z);
-                }
+                spawnParticles(delta.x, delta.y, delta.z);
             }
 
             List<Entity> targets = ShockwaveHitbox(DamageHandler.genHitbox(self, mid.x, mid.y,
@@ -1239,6 +1249,7 @@ public class PowersTusk extends NewDashPreset {
         }
     }
     private void spawnParticles(double x, double y, double z) {
+        Vector3f color = Math.random() > 0.5 ? new Vector3f(0.85F,0.85F,1F) :  new Vector3f(62 / 255F, 180 / 255F, 202 / 255F);
         BlockPos blockPos = new BlockPos((int)x,(int)y,(int)z);
         for(int i=0;i<4;i++) {
             if (!this.getSelf().level().getBlockState(blockPos).isSolid()) {
@@ -1253,11 +1264,15 @@ public class PowersTusk extends NewDashPreset {
             ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, blockState), x, blockPos.getY() + 0.8, z,
                     0, 0, 0, 0, 0);
 
-            if (Math.random() < 0.2) {
-                ((ServerLevel) this.getSelf().level()).sendParticles(new DustParticleOptions(new Vector3f(1F, 1F, 1F
-                        ), 1f),
-                        x, blockPos.getY() + 1.1, z,
+            float n = 0;
+            while (n < 1.3 && Math.random()>0.5F) {
+                ((ServerLevel) this.getSelf().level()).sendParticles(new DustParticleOptions(color, 1f),
+                        x, blockPos.getY() + 1.1 + n, z,
                         0, 1, 1, 1, 0);
+                ((ServerLevel) this.getSelf().level()).sendParticles(new DustParticleOptions(color, 1f),
+                        x, blockPos.getY() + 1.1 + n/2, z,
+                        0, 1, 1, 1, 0);
+                n+=0.3F;
             }
         }
 
@@ -1427,8 +1442,7 @@ public class PowersTusk extends NewDashPreset {
         boolean bl = MainUtil.getReducedDamage(target);
         float damage = switch (act) {
             case 1 -> bl ? 0.7F : 3.0F;
-            case 2 -> bl ? 2.4F : 5F;
-            case 3 -> bl ? 2.5F : 5.5F;
+            case 2,3 -> bl ? 2.4F : 5F;
             case 4 -> bl ? 2 : 4;
             default -> 1.0F;
         };
@@ -2446,8 +2460,8 @@ public class PowersTusk extends NewDashPreset {
             case 1 -> {
                 boolean toeBlast = this.getActivePower() == PowerIndex.SNEAK_MOVEMENT && canExecuteMoveWithLevel(3);
                 if (this.getMode() == MELEE) {
-                    if (attackTimeMax > 0 || toeBlast) {
-                        float attackTimeFinal = toeBlast ? 1 :  (float) this.getAttackTime() / this.getAttackTimeMax();
+                    if (attackTimeMax > 0) {
+                        float attackTimeFinal = (float) this.getAttackTime() / this.getAttackTimeMax();
                         int progress = Math.round(attackTimeFinal*15);
                         int barTexture = 18;
                         if (this.getActivePowerPhase() == this.getActivePowerPhaseMax()) {

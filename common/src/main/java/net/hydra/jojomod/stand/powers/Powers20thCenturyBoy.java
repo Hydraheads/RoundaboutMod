@@ -8,6 +8,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.client.models.layers.animations.CenturyBoyAnimations;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
@@ -23,6 +24,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -47,6 +49,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import com.google.common.collect.Lists;
 
@@ -400,8 +403,14 @@ public class Powers20thCenturyBoy extends NewDashPreset {
 
                 if (PCB.staticMode == 4) {
                     self.hurtMarked = true;
-                    BlockPos playerPos = self.getOnPos();
                     Level level = self.level();
+
+                    if (!level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_REDSTONE_INTERFERENCE)) {
+                        deflect();
+                        return true;
+                    }
+
+                    BlockPos playerPos = self.getOnPos();
 
                     int range = (amount < 10) ? 2 : (amount <= 20) ? 3 : (amount > 20) ? 4 : 2;
                     BlockPos corner1 = playerPos.offset(-range, -range, -range);
@@ -421,28 +430,26 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                             if (!level.getBlockTicks().hasScheduledTick(targetPos, block)) {
                                 level.gameEvent(self, GameEvent.PROJECTILE_LAND, self.position());
                             }
-                        } else if (block instanceof DoorBlock door) {
-                            if (state.getValue(DoorBlock.HALF) != DoubleBlockHalf.LOWER) {
-                                boolean isOpen = state.getValue(DoorBlock.OPEN);
-                                door.setOpen(null, level, state, targetPos, !isOpen);
-                            }
-                        } else if (block instanceof TrapDoorBlock) {
-                            boolean isOpen = state.getValue(DoorBlock.OPEN);
-                            level.setBlock(targetPos, state.setValue(TrapDoorBlock.OPEN, !isOpen), 3);
+                        } else if (((block instanceof LeverBlock) || (block instanceof ButtonBlock)
+                                || (block instanceof DoorBlock) || (block instanceof TrapDoorBlock)
+                                || (block instanceof FenceGateBlock))
+                                            && this.getSelf() instanceof Player PE) {
+                            BlockHitResult blockHit = new BlockHitResult(
+                                    new Vec3(targetPos.getX(), targetPos.getY(), targetPos.getZ()), Direction.UP,
+                                    targetPos, false);
+
+                            block.use(state, this.getSelf().level(), targetPos, PE, PE.getUsedItemHand(), blockHit);
                         } else if (block instanceof RedstoneLampBlock lamp) {
                             boolean lit = state.getValue(RedstoneLampBlock.LIT);
                             level.setBlock(targetPos, state.setValue(RedstoneLampBlock.LIT, !lit), 3);
                             level.scheduleTick(targetPos, lamp, 50);
                         }
                     }
+
                     deflect();
                     return true;
                 } else if (PCB.staticMode == 1) {
-
                     if (!ClientNetworking.getAppropriateConfig().centuryBoySettings.buffedGroundStance) {
-                        /*if (source.is(DamageTypes.STARVE) || source.is(DamageTypes.IN_FIRE) ||
-                                source.is(DamageTypes.LAVA) || source.is(DamageTypes.DROWN) ||
-                                source.is(ModDamageTypes.SUNLIGHT)) {*/
                         if (MainUtil.CenturyBoyReactionBacklistDamage(source)) {
                             return true;
                         }
@@ -450,6 +457,16 @@ public class Powers20thCenturyBoy extends NewDashPreset {
 
                     self.hurtMarked = true;
                     Level level = self.level();
+
+                    if (ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims
+                            || !level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)
+                            || !(this.getSelf() instanceof Player && MainUtil.getIsGamemodeApproriateForGrief(self))
+
+                    ) {
+                        deflect();
+                        return true;
+                    }
+
 
                     long currentTime = System.currentTimeMillis();
                     UUID playerUUID = self.getUUID();
@@ -481,8 +498,9 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                             BLOCK_DMG_MAP.put(immut, newDmg);
                             level.destroyBlockProgress(crackId, immut, newDmg);
                         }
+
+                        deflect();
                     }
-                    deflect();
                     return true;
                 } else if (PCB.staticMode == 3) {
                     self.hurtMarked = true;
