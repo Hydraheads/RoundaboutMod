@@ -2537,7 +2537,7 @@
   "ability.roundabout.tusk_inverse": "Opposite Spin",
   "ability.roundabout.tusk_inverse.desc": "Undo either your or a target's infinite spin, consuming your infinite spin charge in the process.",
   "ability.roundabout.tusk_wall_breaker": "Wall Breaker",
-  "ability.roundabout.tusk_wall_breaker.desc": "Split apart a wall temporarily, allowing you to pass through freely.",
+  "ability.roundabout.tusk_wall_breaker.desc": "Shoot a nail that splits apart a wall, floor, or ceiling temporarily, allowing you to pass through freely.",
   "ability.roundabout.tusk_charge": "Charge",
   "ability.roundabout.tusk_charge.desc": "Holding attack builds up the nail's strength, increasing the potency and duration of the holes. Holes pursue targets autonomously, inflicting a debuff which reduces their projectile accuracy.",
   "ability.roundabout.tusk_charge_4": "Charge",
@@ -3583,6 +3583,7 @@
   "skins.roundabout.tusk.breaker" : "Breaker",
   "skins.roundabout.tusk.frigid" : "Frigid",
   "skins.roundabout.tusk.elegant" : "Elegant",
+  "skins.roundabout.tusk.legacy" : "Legacy",
 
 
   "roundabout.tusk.act_1": "Act 1",
