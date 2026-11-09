@@ -48,6 +48,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.VineBlock;
@@ -85,9 +86,19 @@ public class PowersGoldExperience extends BlockGrabPreset {
     private int brambleSpawnTimer = 0;
     private record BrambleSpawnData(Vec3 pos, float yRot) {}
 
-    //for lifeforms
+    // for lifeforms
     /**For mob ai, change the animalType before trypower to set what kind of plunder it has*/
     private byte animalType = AnimalTypes.FROG.id;
+
+    // for tree growth
+    private final List<TreeBlockSpawnData> pendingTreeBlocks = new ArrayList<>();
+    private int treeSpawnTimer = 0;
+    private record TreeBlockSpawnData(
+            Vector3f startPos,
+            Vector3f finalPos,
+            BlockState state,
+            int delayTicks
+    ) {}
 
     // basic stand registry stuff
     public PowersGoldExperience(LivingEntity self) {super(self);}
@@ -104,6 +115,33 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public void tickPower() {
         if (!this.self.level().isClientSide()) {
+            //tree spawning
+            if (!pendingTreeBlocks.isEmpty()) {
+                treeSpawnTimer++;
+
+                Iterator<TreeBlockSpawnData> iterator = pendingTreeBlocks.iterator();
+                while (iterator.hasNext()) {
+                    TreeBlockSpawnData data = iterator.next();
+
+                    if (treeSpawnTimer >= data.delayTicks()) {
+                        BlockWallEntity treePart = new BlockWallEntity(
+                                this.self.level(),
+                                data.startPos().x(),
+                                data.startPos().y(),
+                                data.startPos().z(),
+                                data.state()
+                        );
+
+                        treePart.setDataFinalPos(data.finalPos());
+                        //despawn timer of 15 seconds
+                        treePart.timing = 300;
+                        treePart.isWhiteAlbumWall = false;
+
+                        this.self.level().addFreshEntity(treePart);
+                        iterator.remove();
+                    }
+                }
+            }
             // bramble staggered deploy time
             if (!pendingBrambles.isEmpty()) {
                 brambleSpawnTimer++;
@@ -394,29 +432,79 @@ public class PowersGoldExperience extends BlockGrabPreset {
     private void finishTree() {
         if (!this.self.level().isClientSide()) {
             Level level = this.self.level();
-            BlockPos base = this.self.blockPosition();
 
-            BlockPos[] treeParts = new BlockPos[]{
-                    base,
-                    base.above(1),
-                    base.above(1).east()
-            };
+            Vec3 eyePos = this.self.getEyePosition(1.0F);
+            Vec3 lookVec = this.self.getViewVector(1.0F);
+            Vec3 reachVec = eyePos.add(lookVec.scale(4.0D));
 
-            for (BlockPos pos : treeParts) {
-                BlockWallEntity treePart = new BlockWallEntity(
-                        level,
-                        pos.getX() + 0.5D,
-                        pos.getY(),
-                        pos.getZ() + 0.5D,
-                        Blocks.OAK_LOG.defaultBlockState()
+            BlockHitResult blockHit = level.clip(new ClipContext(
+                    eyePos,
+                    reachVec,
+                    ClipContext.Block.COLLIDER,
+                    ClipContext.Fluid.NONE,
+                    this.self
+            ));
+
+            BlockPos base;
+            Direction growthDirection = Direction.UP;
+
+            if (blockHit.getType() == HitResult.Type.BLOCK) {
+                base = blockHit.getBlockPos().relative(blockHit.getDirection());
+            } else {
+                base = BlockPos.containing(reachVec);
+            }
+
+            pendingTreeBlocks.clear();
+            treeSpawnTimer = 0;
+
+            int maxHeight = 10;
+            int delayStep = 1;
+
+            for (int y = 0; y < maxHeight; y++) {
+                BlockPos trunkPos = base.relative(growthDirection, y);
+
+                Vector3f trunkStart = new Vector3f(
+                        trunkPos.getX() + 0.5f,
+                        trunkPos.getY() - 1.0f,
+                        trunkPos.getZ() + 0.5f
+                );
+                Vector3f trunkFinal = new Vector3f(
+                        trunkPos.getX() + 0.5f,
+                        trunkPos.getY(),
+                        trunkPos.getZ() + 0.5f
                 );
 
-                treePart.setDataFinalPos(new Vector3f(pos.getX() + 0.5f, pos.getY(), pos.getZ() + 0.5f));
+                pendingTreeBlocks.add(new TreeBlockSpawnData(
+                        trunkStart,
+                        trunkFinal,
+                        Blocks.OAK_LOG.defaultBlockState(),
+                        y * delayStep
+                ));
 
-                treePart.isWhiteAlbumWall = false;
+                Direction branchDir = Direction.from2DDataValue(y % 4);
+                BlockPos branchPos = trunkPos.relative(branchDir);
 
-                level.addFreshEntity(treePart);
+                Vector3f branchStart = new Vector3f(
+                        trunkPos.getX() + 0.5f,
+                        trunkPos.getY() - 0.5f,
+                        trunkPos.getZ() + 0.5f
+                );
+                Vector3f branchFinal = new Vector3f(
+                        branchPos.getX() + 0.5f,
+                        branchPos.getY(),
+                        branchPos.getZ() + 0.5f
+                );
+
+                pendingTreeBlocks.add(new TreeBlockSpawnData(
+                        branchStart,
+                        branchFinal,
+                        Blocks.OAK_LOG.defaultBlockState(),
+                        (y * delayStep) + 1
+                ));
             }
+
+            playSoundIfPossible(level, null, base, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.9F, 1F);
+            addEXP(10);
             this.setAttackTimeDuring(-5);
         }
     }
