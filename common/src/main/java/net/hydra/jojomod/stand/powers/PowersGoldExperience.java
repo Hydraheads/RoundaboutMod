@@ -70,7 +70,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
         HEAL = 57,
         BRAMBLES = 58,
         LIFEFORM_CREATION = 59,
-        ITEM_THROW = 60;
+        ITEM_THROW = 60,
+        TREE = 61;
 
     // for life punch
     private LifePunchCloneEntity lifePunchClone = null;
@@ -87,9 +88,6 @@ public class PowersGoldExperience extends BlockGrabPreset {
     //for lifeforms
     /**For mob ai, change the animalType before trypower to set what kind of plunder it has*/
     private byte animalType = AnimalTypes.FROG.id;
-
-    // for item throw
-    private boolean isThrowingItem = false;
 
     // basic stand registry stuff
     public PowersGoldExperience(LivingEntity self) {super(self);}
@@ -231,6 +229,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
             case SKILL_3_CROUCH -> {
                 tryLifePunch();
             }
+            // tree growth
+            case SKILL_4_NORMAL -> {
+                tryGrowTree();
+            }
             // bush growth move
             case SKILL_4_GUARD -> {
                 tryGrowBush();
@@ -273,6 +275,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
         else if (move == PowerIndex.SNEAK_ATTACK) {
             return executeDualPunch();
         }
+        else if (move == TREE) {
+            return startTreeWindup();
+        }
         return super.setPowerOther(move, lastMove);
     }
 
@@ -311,6 +316,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
         // bramble
         if (this.getActivePower() == BRAMBLES) {
             updateBramble();
+        }
+        // tree
+        if (this.getActivePower() == TREE) {
+            updateTree();
         }
         super.updateUniqueMoves();
     }
@@ -356,6 +365,63 @@ public class PowersGoldExperience extends BlockGrabPreset {
             }
         }
     }
+
+    // tree creation start
+
+    private void tryGrowTree() {
+        ((StandUser) this.getSelf()).roundabout$tryPower(TREE, true);
+        tryPowerPacket(TREE);
+    }
+
+    private boolean startTreeWindup() {
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand)) {
+            this.setAttackTimeDuring(0);
+            this.setActivePower(TREE);
+            //animate stand here
+            this.poseStand(OffsetIndex.GUARD);
+            return true;
+        }
+        return false;
+    }
+
+    private void updateTree() {
+        if (this.attackTimeDuring > 10) {
+            finishTree();
+        }
+    }
+
+    private void finishTree() {
+        if (!this.self.level().isClientSide()) {
+            Level level = this.self.level();
+            BlockPos base = this.self.blockPosition();
+
+            BlockPos[] treeParts = new BlockPos[]{
+                    base,
+                    base.above(1),
+                    base.above(1).east()
+            };
+
+            for (BlockPos pos : treeParts) {
+                BlockWallEntity treePart = new BlockWallEntity(
+                        level,
+                        pos.getX() + 0.5D,
+                        pos.getY(),
+                        pos.getZ() + 0.5D,
+                        Blocks.OAK_LOG.defaultBlockState()
+                );
+
+                treePart.setDataFinalPos(new Vector3f(pos.getX() + 0.5f, pos.getY(), pos.getZ() + 0.5f));
+
+                treePart.isWhiteAlbumWall = false;
+
+                level.addFreshEntity(treePart);
+            }
+            this.setAttackTimeDuring(-5);
+        }
+    }
+
+    // tree creation end
 
     // item throw start
 
