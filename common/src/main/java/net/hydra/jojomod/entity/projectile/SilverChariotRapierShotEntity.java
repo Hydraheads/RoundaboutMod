@@ -1,6 +1,9 @@
 package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.access.IAbstractArrowAccess;
+import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.block.SilverChariotRapierPlatformBlock;
+import net.hydra.jojomod.block.SilverChariotRapierPlatformBlockEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.entity.stand.SilverChariotEntity;
@@ -13,6 +16,7 @@ import net.hydra.jojomod.stand.powers.PowersSilverChariot;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
@@ -240,7 +244,8 @@ public class SilverChariotRapierShotEntity extends AbstractArrow implements Unbu
         // super.onHitBlock($$0);
         if (!this.level().isClientSide()) {
             if (this.getRapierShotType() == PLATFORM_SHOT) {
-                this.createPlatform($$0);
+                // this.createPlatform($$0);
+                // this.createPlatformBlock($$0);
                 this.playSound(ModSounds.SILVER_CHARIOT_RAPIER_SHOT_BLOCK_IMPACT_EVENT, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
                 this.discard();
             } else if (this.getRapierShotType() == BASE_SHOT && this.getBounces() > 0) {
@@ -273,7 +278,7 @@ public class SilverChariotRapierShotEntity extends AbstractArrow implements Unbu
                 // this.setDeltaMovement($$1);
                 this.setDeltaMovement(Vec3.ZERO);
                 Vec3 $$2 = $$1.normalize().scale(1.0F);
-                // this.setPosRaw(this.getX() - $$2.x, this.getY() - $$2.y, this.getZ() - $$2.z);
+                this.setPosRaw(this.getX() - $$2.x, this.getY() - $$2.y, this.getZ() - $$2.z);
                 this.playSound(ModSounds.SILVER_CHARIOT_RAPIER_SHOT_BLOCK_IMPACT_EVENT, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
                 // this.inGround = true;
                 // this.shakeTime = 7;
@@ -303,6 +308,29 @@ public class SilverChariotRapierShotEntity extends AbstractArrow implements Unbu
         platform.setXRot(this.getXRot());
 
         this.level().addFreshEntity(platform);
+    }
+
+    private void createPlatformBlock(BlockHitResult $$0) {
+        byte bt = this.getUser() != null ? ((StandUser) this.getUser()).roundabout$getStandSkin() : 0;
+        BlockPos targetPos = $$0.getBlockPos().relative($$0.getDirection());
+        Level level = this.level();
+        if (level.getBlockState(targetPos).canBeReplaced() && !level.getBlockState(targetPos).is(ModBlocks.SC_RAPIER_PLATFORM)) {
+            if (!level.isClientSide()) {
+                Direction facing = $$0.getDirection().getOpposite();
+                BlockState state = ModBlocks.SC_RAPIER_PLATFORM.defaultBlockState();
+
+                level.setBlockAndUpdate(targetPos, state);
+
+                if (level.getBlockEntity(targetPos) instanceof SilverChariotRapierPlatformBlockEntity be) {
+                    be.ownerUUID = this.getUser().getUUID();
+                    be.facing = facing;
+                    be.standSkin = this.getUser() != null ? ((StandUser) this.getUser()).roundabout$getStandSkin() : 0;
+                    be.setChanged();
+                    BlockState currentState = level.getBlockState(targetPos);
+                    level.sendBlockUpdated(targetPos, currentState, currentState, 3);
+                }
+            }
+        }
     }
 
     public void shootFromRotationDeltaAgnostic(Entity $$0, float $$1, float $$2, float $$3, float $$4, float $$5) {

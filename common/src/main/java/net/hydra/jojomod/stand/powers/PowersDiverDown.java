@@ -3706,8 +3706,11 @@ public class PowersDiverDown extends NewPunchingStand {
                 S2CPacketUtil.sendIntPowerDataPacket(player, DIVER_SUBMERGE_START, this.submergedTarget.getId());
             }
             StandEntity stand = this.getStandEntity(this.self);
-            if (stand instanceof DiverDownEntity ddEntity) {
-                ddEntity.setSubmerged(true);
+            if (stand != null) {
+                if (stand instanceof DiverDownEntity ddEntity) {
+                    ddEntity.setSubmerged(true);
+                }
+                stand.discard(); // Despawns the Stand for everyone, just like Self Dive
             }
             // desummon stand in renderer
             addEXP(3);

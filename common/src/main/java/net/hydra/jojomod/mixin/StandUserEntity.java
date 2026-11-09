@@ -35,6 +35,7 @@ import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
@@ -2792,6 +2793,21 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     @Unique
+    private byte roundabout$oldStandPose = (byte)0;
+
+    @Unique
+    @Override
+    public void roundabout$setPreviousPose(byte pose) {
+        this.roundabout$oldStandPose = pose;
+    }
+
+    @Unique
+    @Override
+    public byte roundabout$getPreviousPose() {
+        return this.roundabout$oldStandPose;
+    }
+
+    @Unique
     public int roundabout$currentStandVanishTicks = 0;
 
     @Unique
@@ -3567,6 +3583,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         this.roundabout$setPreviousStandPowers(this.roundabout$Powers);
         this.roundabout$setPreviousSkin(this.roundabout$lastSkin);
+        if (this.roundabout$Powers != null) {
+            this.roundabout$setPreviousPose(this.roundabout$Powers.idlePos);
+        }
         this.roundabout$setPreviousStandVanishTicks(this.roundabout$getCurrentStandVanishTicks());
         this.roundabout$setCurrentStandVanishTicks(0);
         this.roundabout$Powers = standPowers;
@@ -6227,11 +6246,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             roundabout$setOasisVanishTicks(roundabout$getOasisVanishTicks() - 1);
         }
 
+        /*
         if (roundabout$getStandPowers() instanceof PowersWhiteAlbum && active) {
             roundabout$setWhiteAlbumVanishTicks(roundabout$getWhiteAlbumVanishTicks() + 1);
         } else {
             roundabout$setWhiteAlbumVanishTicks(roundabout$getWhiteAlbumVanishTicks() - 1);
-        }
+        }*/
 
         if (roundabout$hasDiverArms()) {
             roundabout$setDiverDownVanishTicks(roundabout$getDiverDownVanishTicks() + 1);
@@ -7382,6 +7402,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     if (!this.jumping) {
                         this.setDeltaMovement(this.getDeltaMovement().x, 0, this.getDeltaMovement().z);
                     } else {
+                        if(ConfigManager.getClientConfig().catchTheRainbowSettings.catchTheRainbowAlternateRainWalk){
+                            roundabout$setIsRainWalking(false);
+                        }
                         Vec3 vec3 = this.getDeltaMovement();
                         this.setDeltaMovement(vec3.x, (double) this.getJumpPower(), vec3.z);
                         if (this.isSprinting()) {

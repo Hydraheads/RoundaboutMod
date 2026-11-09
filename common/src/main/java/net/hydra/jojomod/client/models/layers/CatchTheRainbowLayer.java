@@ -11,6 +11,7 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
 import net.hydra.jojomod.stand.powers.PowersCatchTheRainbow;
 import net.hydra.jojomod.stand.powers.PowersHeyYa;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
@@ -42,14 +43,14 @@ public class CatchTheRainbowLayer<T extends LivingEntity, A extends HumanoidMode
                     StandUser user = ((StandUser) livent);
                     boolean hasCatchTheRainbowOut = (PowerTypes.hasStandActive(livent) && user.roundabout$getStandPowers() instanceof PowersCatchTheRainbow);
 
-                    int rainbowTicks = 0;
                     //int heyTicks = user.roundabout$getCatchTheRainbowVanishTicks();
+                    int rainbowTicks = MainUtil.getWornStandVanishticksSafe(user, PowersCatchTheRainbow.class);/*0;
 
                     if (user.roundabout$getStandPowers() instanceof PowersCatchTheRainbow) {
                         rainbowTicks = user.roundabout$getCurrentStandVanishTicks();
                     }else if (user.roundabout$getPreviousStandPowers() instanceof PowersCatchTheRainbow) {
                         rainbowTicks = user.roundabout$getPreviousStandVanishTicks();
-                    }
+                    }*/
 
                     if (rainbowTicks > 0 || hasCatchTheRainbowOut) {
                         byte skin = user.roundabout$getStandSkin();
