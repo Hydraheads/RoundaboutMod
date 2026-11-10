@@ -363,6 +363,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             if (source.getEntity() instanceof Player || MainUtil.isBossMob(source.getEntity())){
                 waitTicks = 200;
                 shouldDefenceTick = true;
+                S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowerIndex.POWER_1_BONUS, 1);
             }
             StandUser user = getStandUserSelf();
 
@@ -672,6 +673,9 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         switch (activePower){
             case Powers20thCenturyBoy.CLIENT_SYNC -> {
                 this.mode = data;
+            }
+            case PowerIndex.POWER_1_BONUS -> {
+                shouldDefenceTick = data == 1;
             }
         }
         super.updatePowerInt(activePower,data);
