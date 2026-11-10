@@ -36,6 +36,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -665,6 +666,17 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     public boolean disableMobAiAttack() {
         return invincibleState;
     }
+
+    /** @Override
+    public void tickStandRejection(MobEffectInstance effect) {
+        this.invincibleState = true;
+        mode = 1;
+        staticMode = 1;
+        for (int i = 0; i < 200; i++){
+            //waiting, waiting
+        };
+        this.invincibleState = false;
+    }*/
 
     @Override
     public void updatePowerInt(byte activePower, int data) {
