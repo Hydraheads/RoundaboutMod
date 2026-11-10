@@ -2125,7 +2125,7 @@ public class PowersD4C extends NewPunchingStand {
         return isInSelectionMode;
     }
     @Override
-    public boolean cancelAllRandomMiningThatBreaksMoves(){
+    public boolean cancelAllRandomMiningThatBreaksMoves2(){
         return isInSelectionMode || super.cancelAllRandomMiningThatBreaksMoves();
     }
     private static final TargetingConditions HURT_BY_TARGETING = TargetingConditions.forCombat().ignoreLineOfSight().ignoreInvisibilityTesting();

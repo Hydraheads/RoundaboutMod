@@ -451,7 +451,12 @@ public abstract class InputEvents implements IInputEvents {
 
                 }
             }
+            if (powers.cancelAllRandomMiningThatBreaksMoves2()){
+                ci.setReturnValue(false);
+                return;
+            }
         }
+
     }
 
     @Unique

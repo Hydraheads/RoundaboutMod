@@ -1279,9 +1279,15 @@ public class StandPowers extends AbilityScapeBasis {
         return !hasStandActive(self);
     }
 
+    //Called immediately
     public boolean cancelAllRandomMiningThatBreaksMoves(){
         return isBarraging() || isBarrageCharging();
     }
+    //Called Later as to not bother with roundabout intercepts (like m1s)
+    public boolean cancelAllRandomMiningThatBreaksMoves2(){
+        return false;
+    }
+    //This is a more deep mining problem that needs to be addressed
     public boolean superCancelMining(){
         return false;
     }
