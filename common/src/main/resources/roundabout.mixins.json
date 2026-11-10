@@ -98,6 +98,7 @@
     "century_boy.CenturyBoyHeal",
     "century_boy.CenturyBoyPotion",
     "century_boy.CenturyBoyPotionDuration",
+    "century_boy.CenturyBoyRangedAttack",
     "cinderella.CinderellaVillager",
     "cinderella.ZCreeper",
     "cream.CreamCancelHealthRegenMixin",

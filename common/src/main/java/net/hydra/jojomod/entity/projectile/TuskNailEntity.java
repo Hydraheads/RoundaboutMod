@@ -30,10 +30,7 @@ import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,7 +115,11 @@ public class TuskNailEntity extends AbstractArrow {
     }
 
     public void tick() {
+        boolean b = this.getAct() == 4 && this.getExtra() != WALL_BREAKER;
+        this.noPhysics = b;
         super.tick();
+        if (b) {this.noPhysics = false;}
+        this.inGround = false;
 
 
         // for getting the trail
@@ -210,7 +211,7 @@ public class TuskNailEntity extends AbstractArrow {
                 if (!this.isInWater()) {
                     createHole($$0);
                     if (this.getExtra() == GOLDEN) {
-                        radialExplosion();
+                        radialExplosion(null);
                     }
                 }
             }
@@ -239,6 +240,9 @@ public class TuskNailEntity extends AbstractArrow {
             }
             tuskHoleEntity.setPos(pos);
             this.level().addFreshEntity(tuskHoleEntity);
+            if (((StandUser)LE).roundabout$getStandPowers() instanceof PowersTusk PT) {
+                PT.setLastHole(tuskHoleEntity);
+            }
             return tuskHoleEntity;
         }
         return null;
@@ -264,7 +268,7 @@ public class TuskNailEntity extends AbstractArrow {
                     if (!(MainUtil.isMobOrItsMounts(ent, getOwner())) && !MainUtil.isCreativeOrInvincible(ent)) {
 
                         if (this.getExtra() == GOLDEN) {
-                            radialExplosion();
+                            radialExplosion(ent);
                         }
 
                         float str = PT.getNailDamage(this,ent,this.getAct());
@@ -287,9 +291,15 @@ public class TuskNailEntity extends AbstractArrow {
                             if (ent instanceof LivingEntity LIVE) {
                                 if (this.getAct() == 2) {
                                     LIVE.addEffect(new MobEffectInstance(ModEffects.UNBALANCED, 140));
+                                } else if (this.getAct() == 1) {
+                                    if (MainUtil.getMobBleed(LIVE)) {
+                                        MainUtil.makeBleed(LIVE,0,10,this.getOwner());
+                                    }
                                 }
                                 LE.setLastHurtMob(LIVE);
-                                PT.addEXP(this.getAct() == 1 ? 1 : 2);
+                                if (Math.random() > 0.5F) {
+                                    PT.addEXP(this.getAct() == 1 ? 1 : 2);
+                                }
                             }
                         } else if (ent instanceof LivingEntity LIVE) {
 
@@ -318,16 +328,19 @@ public class TuskNailEntity extends AbstractArrow {
         return 0.99F;
     }
 
-    private void radialExplosion(){
+    private void radialExplosion(Entity target) {
         if (!this.level().isClientSide() && this.getOwner() instanceof LivingEntity user){
             ((ServerLevel) this.level()).sendParticles(ModParticles.SMALL_EXPLOSION,
                     this.getX(), this.getY() + this.getBbHeight(), this.getZ(),
                     0, 0, 0, 0, 0.7);
 
             if (((StandUser) user).roundabout$getStandPowers() instanceof PowersTusk PT) {
-                float radius = getAct() == 4 ? 3 : 1.5F;
+                float radius = 1.5F;
                 List<Entity> entityList = DamageHandler.genHitbox(user, this.getX(), this.getY(),
                         this.getZ(), 1.5F, 1.5F, 1.5F);
+                if (target != null) {
+                    entityList.remove(target);
+                }
                 if (!entityList.isEmpty()){
                     for (Entity value : entityList) {
                         if (value.isPickable() && value.isAttackable()){

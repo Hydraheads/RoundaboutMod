@@ -14,6 +14,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.gui.FogInventoryMenu;
 import net.hydra.jojomod.client.gui.PowerInventoryMenu;
+import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.KingCrimsonProjectionEntity;
 import net.hydra.jojomod.entity.ParallelChestEntity;
@@ -2436,7 +2437,7 @@ public class MainUtil {
                 || !MainUtil.getIsGamemodeApproriateForGrief(player)) {
             return true;
         }
-        return player.level().mayInteract(player, pos) && canPlaceOnClaim(player, pos);
+        return player.level().mayInteract(player, pos);
     }
 
     // Couldn't find better wording but this tests if you're on claimed land that
@@ -2814,6 +2815,7 @@ public class MainUtil {
 
     public static boolean getReducedDamage(Entity entity) {
         return (entity instanceof Player || entity instanceof StandEntity || entity instanceof GELifeform ||
+                (entity instanceof BlockWallEntity BWE && BWE.isGoldExperienceTree == true) ||
                 ((entity instanceof LivingEntity LE && !((StandUser) LE).roundabout$getStandDisc().isEmpty()) &&
                         ClientNetworking
                                 .getAppropriateConfig().generalStandUserMobSettings.standUserMobsTakePlayerDamageMultipliers));

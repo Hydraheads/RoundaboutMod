@@ -726,6 +726,7 @@ public class ForgeEvents {
         ModItems.RINGO_MASK = ForgeItems.RINGO_MASK.get();
         ModItems.HATO_MASK = ForgeItems.HATO_MASK.get();
         ModItems.LAEM_MASK = ForgeItems.LAEM_MASK.get();
+        ModItems.CIOCCOLATA_MASK = ForgeItems.CIOCCOLATA_MASK.get();
         ModItems.SHIZUKA_MASK = ForgeItems.SHIZUKA_MASK.get();
         ModItems.JOHNNY_MASK = ForgeItems.JOHNNY_MASK.get();
         ModItems.JOHNGALLIA_MASK = ForgeItems.JOHNGALLIA_MASK.get();
@@ -753,6 +754,8 @@ public class ForgeEvents {
         ModItems.MUSIC_DISC_HALLELUJAH = ForgeItems.MUSIC_DISC_HALLELUJAH.get();
         ModItems.MUSIC_DISC_CHAKA_HFTF = ForgeItems.MUSIC_DISC_CHAKA_HFTF.get();
         ModItems.ZOMBIE_HORSE_THREAD = ForgeItems.ZOMBIE_HORSE_THREAD.get();
+        ModItems.ZOMBIE_HORSE_MURAL = ForgeItems.ZOMBIE_HORSE_MURAL.get();
+        ModItems.PAINTING_ZOMBIE_HORSE = ForgeItems.PAINTING_ZOMBIE_HORSE.get();
         ModItems.FOG_BLOCK_ITEMS = ForgeCreativeTab.FOG_GROUP.get();
 
      //   ModItems.INTERDIMENSIONAL_KEY = ForgeItems.INTERDIMENSIONAL_KEY.get();
@@ -918,6 +921,8 @@ public class ForgeEvents {
         ModEntities.VAN_GOUGH_PAINTING = ForgeEntities.VAN_GOUGH_PAINTING.get();
         ModEntities.MONA_LISA_PAINTING = ForgeEntities.MONA_LISA_PAINTING.get();
         ModEntities.BIRTH_OF_VENUS_PAINTING = ForgeEntities.BIRTH_OF_VENUS_PAINTING.get();
+        ModEntities.ZOMBIE_HORSE_MURAL = ForgeEntities.ZOMBIE_HORSE_MURAL.get();
+        ModEntities.ZOMBIE_HORSE_PAINTING = ForgeEntities.ZOMBIE_HORSE_PAINTING.get();
         ModEntities.THE_WORLD = ForgeEntities.THE_WORLD.get();
         ModEntities.THE_WORLD_ULTIMATE = ForgeEntities.THE_WORLD_ULTIMATE.get();
         ModEntities.KING_CRIMSON = ForgeEntities.KING_CRIMSON.get();
@@ -1053,6 +1058,7 @@ public class ForgeEvents {
         ModEntities.VIRUS_SPIT = ForgeEntities.VIRUS_SPIT.get();
 
         ModEntities.THROWN_OBJECT = ForgeEntities.THROWN_OBJECT.get();
+        ModEntities.RETURNING_OBJECT = ForgeEntities.RETURNING_OBJECT.get();
         ModEntities.THROWN_ANUBIS = ForgeEntities.THROWN_ANUBIS.get();
         ModEntities.CONCEALED_FLAME_OBJECT = ForgeEntities.CONCEALED_FLAME_OBJECT.get();
         ModEntities.GROUND_HURRICANE = ForgeEntities.GROUND_HURRICANE.get();

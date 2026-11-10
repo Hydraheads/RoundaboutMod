@@ -28,6 +28,7 @@ public class PurpleHazeRenderer extends StandRenderer<PurpleHazeEntity> {
     public static final ResourceLocation GREEN_DSITORTION = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/distorted_green.png");
     public static final ResourceLocation PLAGUE_RED = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/plague_red.png");
     public static final ResourceLocation PLAGUE_BLUE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/plague_blue.png");
+    public static final ResourceLocation CREAKING = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/creaking.png");
 
     public PurpleHazeRenderer(EntityRendererProvider.Context context) {
         super(context, new PurpleHazeModel<>(context.bakeLayer(ModEntityRendererClient.PURPLE_HAZE_LAYER)), 0f);
@@ -63,6 +64,8 @@ public class PurpleHazeRenderer extends StandRenderer<PurpleHazeEntity> {
                 return PLAGUE_RED;
             case (PurpleHazeEntity.PLAGUE_BLUE):
                 return PLAGUE_BLUE;
+            case (PurpleHazeEntity.CREAKING):
+                return CREAKING;
             default:
                 return ANIME;
         }

@@ -301,7 +301,7 @@ public class SeperatedArmEntity extends StandEntity {
                         }
                     }
                 }
-            } else {
+            } else if (!((((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersGreenDay))){
                 if (!this.level().isClientSide) {
                     this.setUser(null);
                     removearm();
@@ -364,8 +364,7 @@ public class SeperatedArmEntity extends StandEntity {
                         if (user instanceof ServerPlayer PE) {
                             mine = !((!this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) ||
                              (PE.blockActionRestricted(PE.serverLevel(), MiningPos, PE.gameMode.getGameModeForPlayer())) ||
-                             (!this.level().mayInteract(PE, MiningPos)) ||
-                             (!MainUtil.canPlaceOnClaim(PE, MiningPos)));
+                             (!this.level().mayInteract(PE, MiningPos)));
                         }
                         if(mine) {
 

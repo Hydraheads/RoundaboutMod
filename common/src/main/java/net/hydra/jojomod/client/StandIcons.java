@@ -1201,6 +1201,8 @@ public class StandIcons {
             "textures/gui/icons/gold_experience/lifeform_creation.png");
     public static final ResourceLocation GOLD_EXPERIENCE_ITEM_THROW = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/gold_experience/item_throw.png");
+    public static final ResourceLocation GOLD_EXPERIENCE_TREE_GROWTH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/gold_experience/tree_growth.png");
 
     // gold experience icons end
 

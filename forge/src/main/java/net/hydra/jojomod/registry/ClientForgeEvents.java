@@ -16,9 +16,7 @@ import net.hydra.jojomod.client.models.minions.head_parts.*;
 import net.hydra.jojomod.client.models.minions.renderers.*;
 import net.hydra.jojomod.client.models.mobs.*;
 import net.hydra.jojomod.client.models.mobs.renderers.*;
-import net.hydra.jojomod.client.models.paintings.MonaLisaPaintingRenderer;
-import net.hydra.jojomod.client.models.paintings.VanGoghPaintingRenderer;
-import net.hydra.jojomod.client.models.paintings.VenusPaintingRenderer;
+import net.hydra.jojomod.client.models.paintings.*;
 import net.hydra.jojomod.client.models.projectile.*;
 import net.hydra.jojomod.client.models.projectile.renderers.*;
 import net.hydra.jojomod.client.models.stand.*;
@@ -281,6 +279,8 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.VAN_GOUGH_PAINTING.get(), VanGoghPaintingRenderer::new);
         event.registerEntityRenderer(ForgeEntities.MONA_LISA_PAINTING.get(), MonaLisaPaintingRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BIRTH_OF_VENUS_PAINTING.get(), VenusPaintingRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.ZOMBIE_HORSE_MURAL.get(), ZombieHorseMuralRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.ZOMBIE_HORSE_PAINTING.get(), ZombieHorsePaintingRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.CHESS_PIECE_BLOCK_ENTITY.get(), ChessPieceRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.STAND_FIRE_BLOCK_ENTITY.get(), StandFireRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.MIRROR_BLOCK_ENTITY.get(), MirrorBlockEntityRenderer::new);
@@ -480,6 +480,7 @@ public class ClientForgeEvents {
         ModStrayModels.DoppioHairPart = new DoppioHairPart();
         ModStrayModels.JohnnyHatPart = new JohnnyHatPart();
         ModStrayModels.kosakuHairPart = new KosakuHairPart();
+        ModStrayModels.cioccolataHairPart = new CioccolataHairPart();
         ModStrayModels.DaiyaEarsPart = new DaiyaEarsPart();
         ModStrayModels.DaiyaFluffPart = new DaiyaFluffPart();
         ModStrayModels.laemBreastsPart = new LaemBreastsPart();

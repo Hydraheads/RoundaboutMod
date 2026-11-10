@@ -886,7 +886,7 @@ public class Config implements Cloneable {
         public Integer DistortionModeChangeCooldown;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer StrangleCooldown;
-        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
         public Integer PodThrowCooldown;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer SalimoCooldown;
@@ -1043,6 +1043,10 @@ public class Config implements Cloneable {
         public Boolean oldKnockbackStance;
         @BooleanOption(group = "inherit", value = false)
         public Boolean buffedGroundStance;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean antiStallSetting;
+        @IntOption(group = "inherit", min = 0, max = 10000000, value = 80)
+        public Integer invincibilityCooldown;
     }
 
     public static class CaliforniaKingBedSettings {
