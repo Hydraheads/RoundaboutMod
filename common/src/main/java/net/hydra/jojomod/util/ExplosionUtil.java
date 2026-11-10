@@ -205,7 +205,6 @@ public class ExplosionUtil {
 
 			if (causer instanceof ServerPlayer PL) {
 				if (PL.blockActionRestricted(level, pos, PL.gameMode.getGameModeForPlayer())
-					|| !MainUtil.canPlaceOnClaim(PL, pos)
 				) {
 					continue;
 				}
