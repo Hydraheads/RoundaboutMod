@@ -681,7 +681,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     /** animation thingy **/
     public static AnimationDefinition getAnimation(StandUser SU, boolean fp){
         AnimationDefinition anim = null;
-        if (SU.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB && PCB.invincibleState){
+        if (SU.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB){
             if (!fp){
                 switch (SU.roundabout$getStandAnimation()){
                     case 1 -> anim = CenturyBoyAnimations.ground;
