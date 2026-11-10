@@ -24,11 +24,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
-<<<<<<< Updated upstream
 import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
-=======
->>>>>>> Stashed changes
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -48,7 +44,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
