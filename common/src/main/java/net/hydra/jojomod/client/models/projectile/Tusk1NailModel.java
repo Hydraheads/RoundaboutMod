@@ -19,7 +19,7 @@ import net.minecraft.world.phys.Vec3;
 public class Tusk1NailModel extends PsuedoHierarchicalModel {
 	private final ModelPart model;
     private final ModelPart nail1;
-    //private final ModelPart nail2;
+    private final ModelPart nail2;
 
     private final ModelPart act_2;
    // private final ModelPart nail2_1;
@@ -31,10 +31,10 @@ public class Tusk1NailModel extends PsuedoHierarchicalModel {
 		super(RenderType::entityTranslucent);
 		this.model = root;
         this.nail1 = root.getChild("nail1");
-       // this.nail2 = root.getChild("nail2");
+        this.nail2 = root.getChild("nail2");
 
         this.act_2 = root.getChild("act_2");
-     //   this.nail2_1 = act_2.getChild("nail2_1");
+    //this.nail2_1 = act_2.getChild("nail2_1");
         this.nail2_2 = act_2.getChild("nail2_2");
         this.nail2_3 = act_2.getChild("nail2_3");
 
@@ -47,7 +47,7 @@ public class Tusk1NailModel extends PsuedoHierarchicalModel {
 
         PartDefinition nail1 = partdefinition.addOrReplaceChild("nail1", CubeListBuilder.create().texOffs(-2, 2).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 0.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 24, 0.0F));
 
-      //  PartDefinition nail2 = partdefinition.addOrReplaceChild("nail2", CubeListBuilder.create().texOffs(-2, 0).addBox(-1.0F, -0.5F, -1.0F, 2.0F, 0.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 24.0F, 0.0F));
+        PartDefinition nail2 = partdefinition.addOrReplaceChild("nail2", CubeListBuilder.create().texOffs(-2, 0).addBox(-1.0F, -0.5F, -1.0F, 2.0F, 0.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 24.0F, 0.0F));
 
         PartDefinition act_2 = partdefinition.addOrReplaceChild("act_2", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
 
@@ -82,8 +82,8 @@ public class Tusk1NailModel extends PsuedoHierarchicalModel {
 
         nail1.xRot = -uppies;
         nail1.yRot = ageInTicks;
-      //  nail2.xRot = -uppies;
-      //  nail2.yRot = -ageInTicks;
+        nail2.xRot = -uppies;
+        nail2.yRot = -ageInTicks;
 
 
 

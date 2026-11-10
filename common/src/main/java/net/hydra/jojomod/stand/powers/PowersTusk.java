@@ -1982,10 +1982,6 @@ public class PowersTusk extends NewDashPreset {
             if (this.getAct() == 3 && !(this.getPilotingStand() != null && this.getPilotingStand().equals(ent)) ) {
                 return ent.equals(this.targetHole) || (this.isHoldingSneak() && ent instanceof TuskHoleEntity) && ent.distanceTo(player) < 25;
             }
-            Entity targetEntity = this.getTargetEntity(this.getSelf(),2);
-            if (this.getAct() == 4 && targetEntity instanceof LivingEntity LE && ((StandUser) LE).roundabout$hasInfiniteSpin()) {
-                return true;
-            }
         }
         return false;
     }
@@ -1997,10 +1993,6 @@ public class PowersTusk extends NewDashPreset {
                 return 2676479;
             } else if (this.isHoldingSneak()) {
                 return 16777215;
-            }
-        } else if (this.getAct() == 4) {
-            if (ent.equals(this.getTargetEntity(this.getSelf(),2))) {
-                return 16411584;
             }
         }
         return 2676479;
