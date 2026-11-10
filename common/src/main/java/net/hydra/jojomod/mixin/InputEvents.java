@@ -513,6 +513,10 @@ public abstract class InputEvents implements IInputEvents {
                         return;
                     }
                 }
+                if (powers.superCancelMining()){
+                    ci.cancel();
+                    return;
+                }
                 if (powers instanceof Powers20thCenturyBoy PCB){
                     if (PCB.invincibleState) ci.cancel(); return;
                 }

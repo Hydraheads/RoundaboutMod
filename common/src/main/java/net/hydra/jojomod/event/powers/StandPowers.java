@@ -1282,6 +1282,9 @@ public class StandPowers extends AbilityScapeBasis {
     public boolean cancelAllRandomMiningThatBreaksMoves(){
         return isBarraging() || isBarrageCharging();
     }
+    public boolean superCancelMining(){
+        return false;
+    }
 
     /**if the above is true, override this to actually create a fake stand for the power inventory display.*/
     public StandEntity getStandForHUDIfFake(){
