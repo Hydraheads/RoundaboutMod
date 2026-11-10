@@ -3619,7 +3619,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Override
     public void roundabout$sealStand(int ticks) {
-        Roundabout.LOGGER.info(this.roundabout$getMaxSealedTicks() + " / " + ticks);
         if (this.roundabout$getMaxSealedTicks() < ticks) {
             this.roundabout$setSealedTicks(ticks);
         }
@@ -7321,16 +7320,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     // for diver down end
 
 
-    @Unique
-    private boolean roundabout$hasInfiniteSpin = false;
 
-    @Unique
-    public boolean roundabout$hasInfiniteSpin() {return roundabout$hasInfiniteSpin;}
-    public void roundabout$clearInfiniteSpin() {
-        Roundabout.LOGGER.info(rdbt$this().getName().getString());
-        this.roundabout$hasInfiniteSpin = false;
-        this.removeEffect(ModEffects.INFINITE_SPIN);
-    }
     @Inject(method = "tickEffects",at = @At("HEAD"))
     private void roundabout$tickInfiniteSpin(CallbackInfo ci) {
         MobEffectInstance instance = this.getEffect(ModEffects.INFINITE_SPIN);

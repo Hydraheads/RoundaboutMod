@@ -170,7 +170,7 @@ public class PowersTusk extends NewDashPreset {
 
     @Override
     public StandEntity getNewStandEntity() {
-        return switch (this.act) {
+        return switch (act) {
             case 2 -> ModEntities.TUSK_A2.create(this.getSelf().level());
             case 3 -> ModEntities.TUSK_A3.create(this.getSelf().level());
             case 4 -> ModEntities.TUSK_A4.create(this.getSelf().level());
@@ -180,12 +180,11 @@ public class PowersTusk extends NewDashPreset {
 
     @Override
     public boolean canSummonStandAsEntity() {
-        return this.getSelf() instanceof Player P
-                && ( ((IPlayerEntity)P).roundabout$getStandLevel() != 1 || P.isCreative() || this.getStandUserSelf().roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem)
+        return (this.getSelf() instanceof Player P
+                && ( ((IPlayerEntity)P).roundabout$getStandLevel() != 1 || P.isCreative() || this.getStandUserSelf().roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem) )
                 && this.getActivePower() != PowersTusk.DEATH_NAIL
                 && this.getActivePower() != PowersTusk.DEATH_PUNCH
                 && this.getActivePower() != PowersTusk.WALL_BREAK
-                //&& this.getActivePower() != PowersTusk.WALL_BREAK_2
                 && !(this.deathShot != null && !this.deathShot.isRemoved());
     }
 
@@ -327,7 +326,7 @@ public class PowersTusk extends NewDashPreset {
             this.act = Mth.clamp(a, 1, 4);
             ConfigManager.saveClientConfig();
 
-            if (summon) {
+            if (summon && !isClient() && !this.getSelf().isRemoved() && this.getSelf().isAlive()) {
                 this.getStandUserSelf().roundabout$removeStandOut();
                 this.getStandUserSelf().roundabout$summonStand(this.getSelf().level(), true, true);
             }
@@ -371,7 +370,7 @@ public class PowersTusk extends NewDashPreset {
         } else if (slot == 3) {
             if (this.getAct() == 3 && this.isInHole() && this.getPilotingStand() instanceof TuskHoleEntity) {
                 return !this.canWarpHoles();
-            } else {
+            } else if (isHoldingSneak()) {
                 return !hasNail() || this.nailCharge > 5 || this.getActivePower() == PowersTusk.FLATTEN;
             }
         } else if (slot == 4) {
@@ -528,11 +527,6 @@ public class PowersTusk extends NewDashPreset {
             }
 
             case PowersTusk.PILOT -> {
-           /*     if (!isClient()) {
-                    TuskHoleEntity tuskHoleEntity = new TuskHoleEntity(this.getSelf().level(), this.getSelf());
-                    tuskHoleEntity.setPos(this.getSelf().getPosition(0));
-                    this.getSelf().level().addFreshEntity(tuskHoleEntity);
-                } */
                 this.setAnimation(PowersTusk.PILOT);
             }
             case PowersTusk.PILOT_EXIT -> exitPilot();
@@ -825,7 +819,12 @@ public class PowersTusk extends NewDashPreset {
             }
 
             case PowersTusk.CHARGE_NAILS -> {
-                if (this.nailCharge == getMaxActiveNails() && this.getAttackTimeDuring() > 20) {
+                if (this.nailCharge == getMaxActiveNails() && this.getAttackTimeDuring() > 40) {
+                    this.shootRelease();
+                }
+            }
+            case PowersTusk.CHARGE_NAIL -> {
+                if (getAttackTimeDuring() > CHARGE_MAX+40) {
                     this.shootRelease();
                 }
             }
@@ -1231,7 +1230,7 @@ public class PowersTusk extends NewDashPreset {
                 || itemStack.is(ModItems.SNUBNOSE_AMMO);
     }
     public void clientSpinLaunch() {
-        if (!onCooldown(PowerIndex.SKILL_1_SNEAK) && hasNail() && !isCharging()) {
+        if (!onCooldown(PowerIndex.SKILL_1) && hasNail() && !isCharging()) {
             if (this.getSelf() instanceof Player P) {
                 IPlayerEntity IPE = (IPlayerEntity) P;
                 if (canLaunchItem(IPE.roundabout$getForRealMainHand())
@@ -1246,6 +1245,7 @@ public class PowersTusk extends NewDashPreset {
         this.setAnimation(PowersTusk.SPIN_LAUNCH);
         this.getSelf().level().playSound(null,getSelf().blockPosition(),ModSounds.TUSK_SPIN_THROW_EVENT,SoundSource.PLAYERS,1F,1F);
 
+        this.addEXP(1);
 
         this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.BLOCK_THROW_EVENT,SoundSource.PLAYERS,0.5F,0.9F+(float)(Math.random()*0.2F));
         this.setCooldown(PowerIndex.SKILL_1,50);
@@ -1339,6 +1339,7 @@ public class PowersTusk extends NewDashPreset {
                             MainUtil.makeBleed(LE,0,100,this.getSelf());
                         }
                     }
+                    addEXP(1);
                 } else {
                     if (target instanceof LivingEntity LE) {
                         if (LE.isBlocking()) {
@@ -1598,6 +1599,16 @@ public class PowersTusk extends NewDashPreset {
         }
         return false;
     }
+
+
+    @Override
+    public boolean interceptGuard() {return this.isCharging();}
+    @Override
+    public boolean buttonInputGuard(boolean keyIsDown, Options options) {
+        return false;
+    }
+    @Override
+    public boolean canCombatModeUse(ItemStack stack) {return !isCharging();}
 
     @Override public boolean onClickRelease() {return true;}
     @Override
@@ -2318,13 +2329,7 @@ public class PowersTusk extends NewDashPreset {
 
     }
 
-    private BlockHitResult getTargetBlock() {
-        Vec3 vec3d = this.getSelf().getEyePosition(0);
-        Vec3 vec3d2 = this.getSelf().getViewVector(0);
-        Vec3 vec3d3 = vec3d.add(vec3d2.x * 3, vec3d2.y * 3, vec3d2.z * 3);
-        return this.getSelf().level().clip(new ClipContext(vec3d, vec3d3,
-                ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
-    }
+
 
     public Entity deathTarget = null;
     private TuskNailEntity deathShot = null;
@@ -2435,7 +2440,6 @@ public class PowersTusk extends NewDashPreset {
         }
     }
 
-    // muzzle flash for all guns
     private void spawnMuzzleFlash(ServerLevel level, Vec3 position) {
         Vector3f color = this.getNailColor();
         Vector3f col = new Vector3f(color.x,color.y,color.z).mul(255,255,255);
@@ -2562,10 +2566,10 @@ public class PowersTusk extends NewDashPreset {
 
         switch (act) {
             case 1 -> {
-                boolean toeBlast = this.getActivePower() == PowerIndex.SNEAK_MOVEMENT && canExecuteMoveWithLevel(3);
+                boolean toeBlast = this.getActivePower() == PowerIndex.SNEAK_MOVEMENT && canExecuteMoveWithLevel(3) && !onCooldown(PowerIndex.SKILL_EXTRA);
                 if (this.getMode() == MELEE) {
-                    if (attackTimeMax > 0) {
-                        float attackTimeFinal = (float) this.getAttackTime() / this.getAttackTimeMax();
+                    if (attackTimeMax > 0 || toeBlast) {
+                        float attackTimeFinal = toeBlast ? 1 : (float) this.getAttackTime() / this.getAttackTimeMax();
                         int progress = Math.round(attackTimeFinal*15);
                         int barTexture = 18;
                         if (this.getActivePowerPhase() == this.getActivePowerPhaseMax()) {
@@ -2579,8 +2583,8 @@ public class PowersTusk extends NewDashPreset {
                     }
                 } else if (this.getMode() == RANGED) {
                     if (nailCharge > 0 || toeBlast) {
-                        float attackTimeFinal = nailCharge / 10F;
-                        int progress = toeBlast ? 1 : Math.round(attackTimeFinal*15);
+                        float attackTimeFinal = toeBlast ? 1 : nailCharge / 10F;
+                        int progress = Math.round(attackTimeFinal*15);
                         int barTexture = 30;
                         if (progress == nailReduce) {
                             barTexture = 45;
@@ -2921,13 +2925,6 @@ public class PowersTusk extends NewDashPreset {
     }
 
 
-    @Override
-    public Vector3f getLeapColor() {
-        return getNailColor();
-    }
-
-
-
     private Vector3f nailColor = new Vector3f(127/255F,194/255F,249/255F);
     public Vector3f getNailColor() {
         return nailColor;
@@ -2938,6 +2935,7 @@ public class PowersTusk extends NewDashPreset {
             S2CPacketUtil.sendIntPowerDataPacket(P,PowersTusk.SYNC_NAILS,(int)(this.nailColor.x*255)*1000000 + (int)(this.nailColor.y*255)*1000 + (int)(this.nailColor.z*255) );
         }
     }
+    @Override public Vector3f getLeapColor() {return getNailColor();}
 
     @Override
     public void addAdditionalSaveData(CompoundTag $$0) {
@@ -2964,7 +2962,7 @@ public class PowersTusk extends NewDashPreset {
             this.convertArrayToCD($$0.getIntArray("nailCooldowns"));
         }
         if ($$0.contains("act")) {
-            this.setAct((int)$$0.getByte("act"),true);
+            this.setAct((int) $$0.getByte("act"), false);
         }
     }
 
@@ -3006,6 +3004,18 @@ public class PowersTusk extends NewDashPreset {
             }
         }
         return null;
+    }
+
+    @Override
+    public int getExpForLevelUp(int currentLevel){
+        int amt;
+        if (currentLevel == 1) {
+            amt = 50;
+        } else {
+            amt = (100+((currentLevel-1)*150));
+        }
+        amt= (int) (amt*(getLevelMultiplier()));
+        return amt;
     }
 
 }

@@ -290,9 +290,15 @@ public class TuskNailEntity extends AbstractArrow {
                             if (ent instanceof LivingEntity LIVE) {
                                 if (this.getAct() == 2) {
                                     LIVE.addEffect(new MobEffectInstance(ModEffects.UNBALANCED, 140));
+                                } else if (this.getAct() == 1) {
+                                    if (MainUtil.getMobBleed(LIVE)) {
+                                        MainUtil.makeBleed(LIVE,0,10,this.getOwner());
+                                    }
                                 }
                                 LE.setLastHurtMob(LIVE);
-                                PT.addEXP(this.getAct() == 1 ? 1 : 2);
+                                if (Math.random() > 0.5F) {
+                                    PT.addEXP(this.getAct() == 1 ? 1 : 2);
+                                }
                             }
                         } else if (ent instanceof LivingEntity LIVE) {
 
