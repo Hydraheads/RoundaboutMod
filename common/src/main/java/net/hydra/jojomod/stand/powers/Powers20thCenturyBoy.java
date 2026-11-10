@@ -66,6 +66,9 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     private boolean shouldAntiStall() {
         return ClientNetworking.getAppropriateConfig().centuryBoySettings.antiStallSetting;
     }
+    public boolean isCameraMovementLocked() {
+        return (!ClientNetworking.getAppropriateConfig().centuryBoySettings.CBCanMoveCamera) && invincibleState;
+    }
 
     /** general definition stuff **/
     @Override

@@ -311,6 +311,9 @@ public class ModItems {
     public static Item PAINTING_VAN_GOUGH;
     public static Item PAINTING_MONA_LISA;
     public static Item PAINTING_BIRTH_OF_VENUS;
+    public static Item PAINTING_ZOMBIE_HORSE;
+
+    public static Item ZOMBIE_HORSE_MURAL;
 
     public static Item ULTRAVIOLET_BLASTER;
     public static Item FLESH_BUCKET;
