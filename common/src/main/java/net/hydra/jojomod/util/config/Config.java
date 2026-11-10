@@ -1037,12 +1037,12 @@ public class Config implements Cloneable {
         public Integer CBDurability;
         @BooleanOption(group = "inherit", value = false)
         public Boolean CBchangesFOV;
-        @BooleanOption(group = "inherit", value = true)
-        public Boolean CBCanMoveCamera;
         @BooleanOption(group = "inherit", value = false)
         public Boolean oldKnockbackStance;
         @BooleanOption(group = "inherit", value = false)
         public Boolean buffedGroundStance;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean antiStallSetting;
     }
 
     public static class CaliforniaKingBedSettings {
