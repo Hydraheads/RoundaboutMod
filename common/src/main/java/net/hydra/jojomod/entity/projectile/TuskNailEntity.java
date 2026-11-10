@@ -206,11 +206,11 @@ public class TuskNailEntity extends AbstractArrow {
                     30, 0.2, 0.05, 0.2, 0.3);
 
 
-            if (this.getAct() == 2 || this.getAct() == 3) {
+            if (this.getAct() == 2 || this.getAct() == 3 || this.getAct() == 4) {
                 if (!this.isInWater()) {
                     createHole($$0);
-                    if (this.getExtra() == GOLDEN) {
-                        radialExplosion();
+                    if (this.getExtra() == GOLDEN || this.getAct() == 4) {
+                        radialExplosion(null);
                     }
                 }
             }
@@ -239,6 +239,9 @@ public class TuskNailEntity extends AbstractArrow {
             }
             tuskHoleEntity.setPos(pos);
             this.level().addFreshEntity(tuskHoleEntity);
+            if (((StandUser)LE).roundabout$getStandPowers() instanceof PowersTusk PT) {
+                PT.setLastHole(tuskHoleEntity);
+            }
             return tuskHoleEntity;
         }
         return null;
@@ -263,8 +266,8 @@ public class TuskNailEntity extends AbstractArrow {
                 if (this.getOwner() instanceof LivingEntity LE && ((StandUser) LE).roundabout$getStandPowers() instanceof PowersTusk PT) {
                     if (!(MainUtil.isMobOrItsMounts(ent, getOwner())) && !MainUtil.isCreativeOrInvincible(ent)) {
 
-                        if (this.getExtra() == GOLDEN) {
-                            radialExplosion();
+                        if (this.getExtra() == GOLDEN || this.getAct() == 4) {
+                            radialExplosion(ent);
                         }
 
                         float str = PT.getNailDamage(this,ent,this.getAct());
@@ -318,7 +321,7 @@ public class TuskNailEntity extends AbstractArrow {
         return 0.99F;
     }
 
-    private void radialExplosion(){
+    private void radialExplosion(Entity target) {
         if (!this.level().isClientSide() && this.getOwner() instanceof LivingEntity user){
             ((ServerLevel) this.level()).sendParticles(ModParticles.SMALL_EXPLOSION,
                     this.getX(), this.getY() + this.getBbHeight(), this.getZ(),
@@ -328,6 +331,9 @@ public class TuskNailEntity extends AbstractArrow {
                 float radius = getAct() == 4 ? 3 : 1.5F;
                 List<Entity> entityList = DamageHandler.genHitbox(user, this.getX(), this.getY(),
                         this.getZ(), 1.5F, 1.5F, 1.5F);
+                if (target != null) {
+                    entityList.remove(target);
+                }
                 if (!entityList.isEmpty()){
                     for (Entity value : entityList) {
                         if (value.isPickable() && value.isAttackable()){
