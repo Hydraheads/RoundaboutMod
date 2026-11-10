@@ -3970,7 +3970,7 @@ public class PowersSilverChariot extends NewPunchingStand {
             BlockState bs = this.self.level().getBlockState(bp);
 
             Block slab = MainUtil.SILVER_CHARIOT_BLOCK_TO_SLAB.get(bs.getBlock());
-            if (slab != null && !(self instanceof Player pl && !MainUtil.canPlaceOnClaim(pl, bp))) {
+            if (slab != null ) {
                 self.level().setBlock(
                         bp,
                         slab.defaultBlockState(),
@@ -4017,7 +4017,7 @@ public class PowersSilverChariot extends NewPunchingStand {
             BlockState bs = this.self.level().getBlockState(bp);
 
             Block slab = MainUtil.SILVER_CHARIOT_BLOCK_TO_SLAB.get(bs.getBlock());
-            if (slab != null && !(self instanceof Player pl && !MainUtil.canPlaceOnClaim(pl, bp))) {
+            if (slab != null) {
                 return true;
             }
         }

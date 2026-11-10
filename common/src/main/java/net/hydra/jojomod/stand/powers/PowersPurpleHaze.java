@@ -81,6 +81,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             case PurpleHazeEntity.GREEN_DSITORTION -> {return Component.translatable("skins.roundabout.purple_haze.green_distortion");}
             case PurpleHazeEntity.PLAGUE_BLUE -> {return Component.translatable("skins.roundabout.purple_haze.plague_blue");}
             case PurpleHazeEntity.PLAGUE_RED -> {return Component.translatable("skins.roundabout.purple_haze.plague_red");}
+            case PurpleHazeEntity.CREAKING -> {return Component.translatable("skins.roundabout.purple_haze.creaking");}
             default -> {
                 return Component.translatable("skins.roundabout.purple_haze.anime");
             }
@@ -222,6 +223,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             } if (Level > 4 || bypass) {
                 $$1.add(PurpleHazeEntity.GREENER);
                 $$1.add(PurpleHazeEntity.ROTT);
+                $$1.add(PurpleHazeEntity.CREAKING);
             } if (((IPlayerEntity) PE).roundabout$getUnlockedBonusSkin() || bypass) {
                 $$1.add(PurpleHazeEntity.PLAGUE_RED);
                 $$1.add(PurpleHazeEntity.PLAGUE_BLUE);

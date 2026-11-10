@@ -513,7 +513,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
 
                 BlockPos pos = $$0.getBlockPos().relative($$0.getDirection());
                 BlockState state = this.level().getBlockState(pos);
-                if (this.getItem().getItem() instanceof BlockItem) {
+                if (this.getItem().getItem() instanceof BlockItem bs && !(bs instanceof SolidBucketItem)) {
                     if (this.places) {
                         if (tryHitBlock($$0, pos, state)) {
                         } else if (tryHitBlock($$0, pos.relative(this.tempDirection), state)) {
