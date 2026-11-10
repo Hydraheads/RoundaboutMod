@@ -51,6 +51,7 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
     public int getTimeInHole() {
         return timeInHole;
     }
+    public void resetTime() {timeInHole = 0;}
     private static final EntityDataAccessor<Boolean> VORTEX = SynchedEntityData.defineId(TuskHoleEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Direction> CLINGING = SynchedEntityData.defineId(TuskHoleEntity.class, EntityDataSerializers.DIRECTION);
     @Override
