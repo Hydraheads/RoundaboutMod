@@ -362,6 +362,9 @@ public class PowersTusk extends NewDashPreset {
                 case 3 -> {
                     return !canFlatten();
                 }
+                case 4 -> {
+                    return this.getStandEntity(this.getSelf()) == null;
+                }
             }
         } else if (slot == 2) {
             if (this.getAct() == 3 && isInHole()) {
@@ -1626,16 +1629,19 @@ public class PowersTusk extends NewDashPreset {
                     tryPower(PowersTusk.FIRE_EXTRA_NAILS);
                     tryPowerPacket(PowersTusk.FIRE_EXTRA_NAILS);
                 }
-            } else if (this.getMode() == RANGED && !this.getSelf().isUsingItem()) {
-                buttonInputShoot(keyIsDown, options);
-            } else {
-                switch (this.act) {
-                    case 1 -> buttonInputSlash(keyIsDown, options);
-                    case 2 -> buttonInputDrill(keyIsDown, options);
-                    case 3 -> buttonInputWarp(keyIsDown, options);
-                    case 4 -> buttonInputAdvance(keyIsDown, options);
+            } else if (this.getStandEntity(this.getSelf()) != null) {
+                if (this.getMode() == RANGED && !this.getSelf().isUsingItem()) {
+                    buttonInputShoot(keyIsDown, options);
+                } else {
+                    switch (this.act) {
+                        case 1 -> buttonInputSlash(keyIsDown, options);
+                        case 2 -> buttonInputDrill(keyIsDown, options);
+                        case 3 -> buttonInputWarp(keyIsDown, options);
+                        case 4 -> buttonInputAdvance(keyIsDown, options);
+                    }
                 }
             }
+
         }
     }
 
@@ -2314,7 +2320,7 @@ public class PowersTusk extends NewDashPreset {
     private Pair<Direction,Direction> EASTWEST = new Pair<>(Direction.NORTH,Direction.UP);
 
     public void clientWallBreaker() {
-        if (!onCooldown(PowerIndex.SKILL_1)) {
+        if (!onCooldown(PowerIndex.SKILL_1) && this.getStandEntity(this.getSelf()) != null) {
             tryPower(PowersTusk.WALL_BREAK);
             tryPowerPacket(PowersTusk.WALL_BREAK);
         }
