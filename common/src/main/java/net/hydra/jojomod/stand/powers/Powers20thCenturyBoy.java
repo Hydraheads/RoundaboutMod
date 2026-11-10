@@ -1,6 +1,5 @@
 package net.hydra.jojomod.stand.powers;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
@@ -35,13 +34,11 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Skeleton;
-import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -53,7 +50,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import com.google.common.collect.Lists;
 
-import java.lang.module.ModuleDescriptor;
 import java.util.*;
 
 public class Powers20thCenturyBoy extends NewDashPreset {
@@ -67,7 +63,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     public int maxDefenceTicks = 400;
     public boolean shouldDefenceTick = false;
     private int waitTicks = 0;
-
+    private boolean shouldAntiStall = ClientNetworking.getAppropriateConfig().centuryBoySettings.antiStallSetting;
 
     /** general definition stuff **/
     @Override
@@ -357,12 +353,13 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     private static final Map<BlockPos, Integer> BLOCK_DMG_MAP = new HashMap<>();
     private static final Map<UUID, Long> GROUND_STANCE_COOLDOWN = new HashMap<>();
     @Override
-    /// this is soo shit dont use this for reference use WA or something
     public boolean interceptIncomingHarm(DamageSource source, float amount) {
         if (invincibleState) {
-            if (source.getEntity() instanceof Player || MainUtil.isBossMob(source.getEntity())){
-                waitTicks = 200;
-                shouldDefenceTick = true;
+            if (shouldAntiStall) {
+                if (source.getEntity() instanceof Player || MainUtil.isBossMob(source.getEntity())) {
+                    waitTicks = 200;
+                    shouldDefenceTick = true;
+                }
             }
             StandUser user = getStandUserSelf();
 
