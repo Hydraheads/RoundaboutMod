@@ -13,7 +13,7 @@ public class WardingArrowMixin {
     /**Warding negates potion effects from arrows specifically*/
     @Inject(method = "doPostHurtEffects(Lnet/minecraft/world/entity/LivingEntity;)V", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$doPostHurtEffects(LivingEntity $$0, CallbackInfo ci) {
-        if ($$0.hasEffect(ModEffects.WARDING)) {
+        if ($$0.hasEffect(ModEffects.BANISH)) {
             ci.cancel();
             return;
         }

@@ -49,6 +49,10 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.monster.RangedAttackMob;
+import net.minecraft.world.entity.monster.Skeleton;
+import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.monster.piglin.Piglin;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.*;
 import net.minecraft.world.item.*;
@@ -78,7 +82,10 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Boolean> SLIM_SOUL = SynchedEntityData.defineId(BlackSabbathEntity.class,
             EntityDataSerializers.BOOLEAN);
-
+    private static final EntityDataAccessor<Boolean> NOT_RENDER_IT = SynchedEntityData.defineId(BlackSabbathEntity.class,
+            EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> SLIDER =
+            SynchedEntityData.defineId(BlackSabbathEntity.class, EntityDataSerializers.INT);
     public BlackSabbathEntity(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
         this.setPathfindingMalus(BlockPathTypes.BLOCKED, -1.0F);
@@ -883,6 +890,22 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     public final void setGrabbing(Integer le) {
         this.entityData.set(IS_GRABBING, le);
     }
+
+    /**item slider*/
+    public final Integer slider() {
+        return this.entityData.get(SLIDER);
+    }
+    public final void setSlider(Integer i) {
+        this.entityData.set(SLIDER, i);
+    }
+
+    public final Boolean getNotRenderItem() {
+        return this.entityData.get(NOT_RENDER_IT);
+    }
+    public final void setNotRenderItem(Boolean bool) {
+        this.entityData.set(NOT_RENDER_IT, bool);
+    }
+
     private static final EntityDataAccessor<Boolean> IS_STRAFING =
             SynchedEntityData.defineId(BlackSabbathEntity.class, EntityDataSerializers.BOOLEAN);
     public final Boolean getStrafing() {
@@ -940,6 +963,8 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             this.entityData.define(IS_RIDING, false);
             this.entityData.define(IS_HUNTING, false);
             this.entityData.define(IS_GRABBING, 0);
+            this.entityData.define(SLIDER, 0);
+            this.entityData.define(NOT_RENDER_IT, false);
             this.entityData.define(IS_STRAFING, false);
             this.entityData.define(IS_TRIDENT, false);
             this.entityData.define(MOVEMENT_MODE, 0);
@@ -1934,22 +1959,45 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     public int slideTicks = 0;
     void setShouldSlide(boolean yes){shouldSlide = yes;}
     public boolean shouldSlide = false;
+    void setShouldSlidePotionsAndFood(boolean yes){shouldSlidePotionsAndFood = yes;}
+    public boolean shouldSlidePotionsAndFood = false;
 
     private void soulGrabbingTick(){
         ItemStack i = this.getHeldItemSabbath();
         Entity le = this.level().getEntity(getGrabbing());
+        boolean flag1 = i.getItem() instanceof SwordItem || i.getItem() instanceof DiggerItem || i.getItem() instanceof GlaiveItem || i.getItem() instanceof WarhammerItem;
+        boolean flag2 = i.getItem() instanceof RoundaboutArrowItem;
+        boolean flag3 = i.getItem() instanceof ArmorItem || i.getItem() instanceof ElytraItem;
+        boolean flag4 = i.getItem() instanceof PotionItem;
 
-        if(this.getUser() != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pbs){
-            int inte = slideTicks;
-            if(shouldSlide){
-                if(slideTicks <= 20){
+        if(!level().isClientSide && this.getUser() != null){
+            setSlider(slideTicks);
+        }
+
+        int inte = slideTicks;
+        if(!flag4) {
+            if (shouldSlide) {
+                if (slideTicks <= 20) {
                     slideTicks = inte + 10;
                 }
             } else {
-                if(slideTicks > 0){
+                if (slideTicks > 0) {
                     slideTicks = inte - 5;
                 }
             }
+        } else {
+            if (shouldSlidePotionsAndFood) {
+                if (slideTicks <= 20) {
+                    slideTicks = inte + 2;
+                }
+            } else {
+                if (slideTicks > 0) {
+                    slideTicks = 0;
+                }
+            }
+        }
+
+        if(this.getUser() != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pbs){
         if(meleeInteractionTicks > 0) {
             if(!this.level().isClientSide()){
                 setUnrender(false);
@@ -1971,8 +2019,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                         /*FUN STUFF starts >:D */
                         /*Initial ticks: 220 (or 12 seconds)*/
                         float itemDamage = 0;
-                        boolean flag1 = i.getItem() instanceof SwordItem || i.getItem() instanceof DiggerItem || i.getItem() instanceof GlaiveItem || i.getItem() instanceof WarhammerItem;
-                        boolean flag2 = i.getItem() instanceof RoundaboutArrowItem;
                         if(flag1){
                             if(meleeInteractionTicks == 135 || meleeInteractionTicks == 180 || meleeInteractionTicks == 90 && !(i.getItem() instanceof GlaiveItem || i.getItem() instanceof WarhammerItem)){
                                 setShouldSlide(true);
@@ -1981,9 +2027,22 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                 setShouldSlide(false);
                             }
                         }
+                        if(flag3 && e instanceof Player p && !getNotRenderItem()){
+                            EquipmentSlot equipmentslot = Mob.getEquipmentSlotForItem(i);
+                            ItemStack stack = p.getItemBySlot(equipmentslot);
+                            if (!EnchantmentHelper.hasBindingCurse(i) && stack.isEmpty()) {
+                                if (meleeInteractionTicks == 114) {
+                                    setShouldSlide(true);
+                                }
+                            }
+                        }
+                        if(flag4 && meleeInteractionTicks == 160){
+                            setShouldSlidePotionsAndFood(true);
+                        }
 
                         if(!i.isEmpty()) {
-                            if (!(i.getDamageValue() >= i.getMaxDamage() - 1)) {
+                            if(flag1){
+                            if (!(i.getDamageValue() >= i.getMaxDamage() - 2)) {
                                 if (meleeInteractionTicks == 130 || meleeInteractionTicks == 85 && !(i.getItem() instanceof GlaiveItem || i.getItem() instanceof WarhammerItem) || meleeInteractionTicks == 175) {
                                     if (i.getItem() instanceof SwordItem SI) {
                                         itemDamage = SI.getDamage();
@@ -2005,13 +2064,13 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                     }
                                 }
                             }
-                            if(i.is(Items.BELL)){
-                                if(meleeInteractionTicks > 160 && this.tickCount % 20 == 0 || meleeInteractionTicks < 160 && meleeInteractionTicks > 100 && this.tickCount % 10 == 0 || meleeInteractionTicks < 100 && meleeInteractionTicks >= 5 && this.tickCount % 5 == 0){
-                                   this.level().playSound((Player) null, this, SoundEvents.BELL_BLOCK, SoundSource.BLOCKS, 10.0F, 1.0F);
-                                   // bs.level().playSound(null, bs.getX(), bs.getY(), bs.getZ(), SoundEvents.SPLASH_POTION_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (bs.getRandom().nextFloat() * 0.4F + 0.8F));
-                               }
                             }
-                            if(meleeInteractionTicks == 150) {
+                            if (i.is(Items.BELL)) {
+                                if (meleeInteractionTicks > 160 && this.tickCount % 20 == 0 || meleeInteractionTicks < 160 && meleeInteractionTicks > 100 && this.tickCount % 10 == 0 || meleeInteractionTicks < 100 && meleeInteractionTicks >= 5 && this.tickCount % 5 == 0) {
+                                    this.level().playSound((Player) null, this, SoundEvents.BELL_BLOCK, SoundSource.BLOCKS, 10.0F, 2.0F);
+                                }
+                            }
+                            if (meleeInteractionTicks == 150) {
                                 if (i.getItem() instanceof InstrumentItem horn) {
                                     if (this.level() instanceof ServerLevel sl) {
                                         Optional<? extends Holder<Instrument>> optional = ((IInstrumentItemAccess) horn).roundabout$GetInstrument(i);
@@ -2022,22 +2081,58 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                     }
                                 }
                             }
+                            if (i.getItem() instanceof ArmorItem || i.getItem() instanceof ElytraItem) {
+                                if (meleeInteractionTicks == 110) {
+                                    if (e instanceof Player p) {
+                                        EquipmentSlot equipmentslot = Mob.getEquipmentSlotForItem(i);
+                                        ItemStack stack = p.getItemBySlot(equipmentslot);
+                                        if (!EnchantmentHelper.hasBindingCurse(i) && stack.isEmpty()) {
+                                            ItemStack itemstackArmor = i.copyAndClear();
+                                            e.setItemSlot(equipmentslot, itemstackArmor);
+                                            if(!level().isClientSide){
+                                                setNotRenderItem(true);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            if(i.getItem() instanceof PotionItem pi){
+                                if(meleeInteractionTicks == 140 || meleeInteractionTicks == 110 || meleeInteractionTicks == 85){
+                                    this.level().playSound((Player) null, this, SoundEvents.GENERIC_DRINK, SoundSource.PLAYERS, 2.0F, 1F);
+                                }
+                                if(meleeInteractionTicks == 80) {
+                                    if(i.getItem() instanceof PotionItem){
+                                        pi.finishUsingItem(i, this.level(), e);
+                                        if (this.getUser() instanceof Player pl) {
+                                            IPlayerEntity play = ((IPlayerEntity) pl);
+                                            play.roundabout$getBlckSabbathPlayerInventory().setItem(0, new ItemStack(Items.GLASS_BOTTLE));
+                                        } else {
+                                            this.setHeldItemSabbath(new ItemStack(Items.GLASS_BOTTLE));
+                                        }
+                                    }
+                                }
+                            }
                         }
-
 
                     } else {
                         if(!this.level().isClientSide) {
                             ((StandUser) e).roundabout$updateSealedTicks(-1);
                         }
                         lungeTicks = 51;
+                        setShouldSlidePotionsAndFood(false);
                         ((StandUser) e).roundabout$setGrabbedSoul(false);
                         ((StandUser)e).roundabout$setGrabberSabbath(0);
                         killSoul();
+                        if(getNotRenderItem()){
+                            pbs.removeTargetSingular(e);
+                        }
                     }
             }
         }
         }
     }
+
+
     public final Vec3 getLookAngle(float $$0, Entity selfie) {
         return ((StandUser)selfie).roundabout$calculateViewVectorButICanUseIt(0, selfie.getYRot());
     }

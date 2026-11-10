@@ -1213,13 +1213,16 @@ public class PowersWhiteAlbum extends NewDashPreset {
         if (entity instanceof LivingEntity LE) {
             StandUser user = ((StandUser) LE);
             boolean hasWhiteAlbumOut = user.roundabout$getStandPowers() instanceof PowersWhiteAlbum pw && pw.renderHelmet();
-            int whiteAlbumTicks = user.roundabout$getWhiteAlbumVanishTicks();
+            //int whiteAlbumTicks = user.roundabout$getWhiteAlbumVanishTicks();
+            int whiteAlbumTicks = MainUtil.getWornStandVanishticksSafe(user, PowersWhiteAlbum.class);
             if (hasWhiteAlbumOut || whiteAlbumTicks > 0) {
                 byte skin = user.roundabout$getStandSkin();
-                if (user.roundabout$getLastStandSkin() != skin) {
-                    user.roundabout$setLastStandSkin(skin);
-                    whiteAlbumTicks = 0;
-                    user.roundabout$setWhiteAlbumVanishTicks(0);
+                if (user.roundabout$getStandPowers() instanceof PowersWhiteAlbum) {
+                    if (user.roundabout$getLastStandSkin() != skin) {
+                        user.roundabout$setLastStandSkin(skin);
+                        whiteAlbumTicks = 0;
+                        user.roundabout$setCurrentStandVanishTicks(0);
+                    }
                 }
 
                 float partialTicks2 = partialTicks % 1;

@@ -1520,7 +1520,6 @@ public class PowersAnubis extends NewDashPreset {
             }
             removeBubble();
         } else {
-            this.getStandUserSelf().roundabout$setAnubisVanishTicks(0);
             this.getStandUserSelf().roundabout$setCurrentStandVanishTicks(0);
             super.setPowerNone();
             if (!this.self.level().isClientSide()){

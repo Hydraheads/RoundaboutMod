@@ -167,15 +167,21 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
 
 
                 boolean hasWhiteAlbumOut =user.roundabout$getStandPowers() instanceof PowersWhiteAlbum pw && pw.renderHelmet();
-                int whiteAlbumTicks = user.roundabout$getWhiteAlbumVanishTicks();
+                //int whiteAlbumTicks = user.roundabout$getWhiteAlbumVanishTicks();
+                int whiteAlbumTicks = MainUtil.getWornStandVanishticksSafe(user, PowersWhiteAlbum.class);
                 boolean hideExtraPartsWithSuit = false;
                 float heyFull = 0;
                 byte skin = user.roundabout$getStandSkin();
                 if (hasWhiteAlbumOut || whiteAlbumTicks > 0){
-                    if (user.roundabout$getLastStandSkin() != skin){
-                        user.roundabout$setLastStandSkin(skin);
-                        whiteAlbumTicks = 0;
-                        user.roundabout$setWhiteAlbumVanishTicks(0);
+                    if (user.roundabout$getStandPowers() instanceof PowersWhiteAlbum) {
+                        if (user.roundabout$getLastStandSkin() != skin){
+                            user.roundabout$setLastStandSkin(skin);
+                            whiteAlbumTicks = 0;
+                            //user.roundabout$setWhiteAlbumVanishTicks(0);
+                            user.roundabout$setCurrentStandVanishTicks(0);
+                        }
+                    }else {
+                        skin = user.roundabout$getPreviousSkin();
                     }
 
                     float partialTicks2 = partialTicks % 1;
@@ -297,6 +303,10 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                         }
                         if (vd.rendersKosakuHair() && !isBodyFrozen && !hideExtraPartsWithSuit && !isHoldingBowlerHat && !hasCTRactive) {
                             renderKosakuHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                    r, g, b);
+                        }
+                        if (vd.rendersCioccolataHair() && !isBodyFrozen && !hideExtraPartsWithSuit && !isHoldingBowlerHat && !hasCTRactive) {
+                            renderCioccolataHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
                         if (vd.rendersKakyoinHair() && !isHoldingBowlerHat && !isBodyFrozen
@@ -940,6 +950,16 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         ClientUtil.pushPoseAndCooperate(poseStack,36);
         getParentModel().head.translateAndRotate(poseStack);
         ModStrayModels.kosakuHairPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+
+    public void renderCioccolataHair(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                 float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.cioccolataHairPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
         ClientUtil.popPoseAndCooperate(poseStack,36);
     }

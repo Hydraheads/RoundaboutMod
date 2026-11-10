@@ -51,6 +51,7 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
     public int getTimeInHole() {
         return timeInHole;
     }
+    public void resetTime() {timeInHole = 0;}
     private static final EntityDataAccessor<Boolean> VORTEX = SynchedEntityData.defineId(TuskHoleEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Direction> CLINGING = SynchedEntityData.defineId(TuskHoleEntity.class, EntityDataSerializers.DIRECTION);
     @Override
@@ -96,6 +97,8 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
             if (target.hurt(ModDamageTypes.of(this.level(),ModDamageTypes.PENETRATING_STAND,this,this.getUser()),PT.getHoleDamage(target) ) ){
                 this.level().playSound(null,this.blockPosition(),ModSounds.TUSK_HOLE_IMPACT_EVENT,SoundSource.PLAYERS,1F,0.9F+((float) Math.random()*0.2F));
                 bleedTarget(target);
+
+                PT.addEXP(1);
                 
                 if (!target.isAlive()) {
                     LivingEntity nearest = MainUtil.findClosestEntity(this.level(),target.getPosition(0),10,livingEntity -> (

@@ -425,16 +425,18 @@ public class StandHudRender {
             int st = PCB.getMaxDefenceTicks();
             int sc = PCB.getDefenceTicks();
             sc = Mth.clamp(sc, 0, st);
-            int blt2 = 182 - (int) Math.floor(((double) 182 / st) * (sc));
+            //int blt2 = 182 - (int) Math.floor(((double) 182 / st) * (sc));
+            int blt2 = (int) Math.floor(((double) 182 / st) * (sc));
+
 
             int bleh = 71;
-            if (!PCB.invincibleState){
-                bleh+=5;
-            }
 
             context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, bleh, 182, 5);
             if (blt2 > 0) {
                 bleh+=5;
+                if (!PCB.invincibleState){
+                    bleh+=5;
+                }
                 context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, bleh, blt2, 5);
             }
 

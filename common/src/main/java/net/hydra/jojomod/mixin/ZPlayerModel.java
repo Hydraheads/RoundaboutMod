@@ -393,8 +393,12 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         ipe.roundabout$SetPoseEmote(Poses.NONE.id);
                     }
 
-                    this.leftArm.resetPose();
-                    this.rightArm.resetPose();
+                    if (PT.isShooting(HumanoidArm.LEFT) || animByte == PowersTusk.DRILL) {
+                        this.leftArm.resetPose();
+                    }
+                    if (PT.isShooting(HumanoidArm.RIGHT) || animByte == PowersTusk.DRILL) {
+                        this.rightArm.resetPose();
+                    }
                     if (animByte == PowersTusk.FLATTEN
                             || animByte == PowersTusk.PILOT
                             || animByte == PowersTusk.PILOT_EXIT) {

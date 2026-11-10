@@ -286,6 +286,7 @@ public class ModItems {
     public static Item DAIYA_MASK;
     public static Item DAIYA_2_MASK;
     public static Item LAEM_MASK;
+    public static Item CIOCCOLATA_MASK;
     public static Item INTERDIMENSIONAL_KEY;
 
     public static Item ANUBIS_ITEM;
@@ -373,24 +374,25 @@ public class ModItems {
         page++; // 20 / 25
         addToVisageStore(JOTARO_4_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(AYA_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(KIRA_PART_FOUR_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(KIRASAKU_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(KOSAKU_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(HAYATO_KAWAJIRI_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(MISTA_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(ABBACCHIO_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(FUGO_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(FUGO_FEEDBACK_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(GHIACCIO_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(BOSS_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(DIAVOLO_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(DOPPIO_MASK,page, characterCostExp, characterCostEmerald);
-        addToVisageStore(ABBACCHIO_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(CIOCCOLATA_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(JOTARO_6_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(JOHNGALLIA_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(ANASUI_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(FEM_ANASUI_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(ANAKISS_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(GUCCIO_MASK,page, characterCostExp, characterCostEmerald);
-        addToVisageStore(KIRA_PART_FOUR_MASK,page, characterCostExp, characterCostEmerald);
-        addToVisageStore(KIRASAKU_MASK,page, characterCostExp, characterCostEmerald);
-        addToVisageStore(KOSAKU_MASK,page, characterCostExp, characterCostEmerald);
-        addToVisageStore(HAYATO_KAWAJIRI_MASK,page, characterCostExp, characterCostEmerald);
 
         page++; // 15 / 25
         addToVisageStore(JOHNNY_MASK,page, characterCostExp, characterCostEmerald);

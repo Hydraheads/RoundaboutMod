@@ -886,7 +886,7 @@ public class Config implements Cloneable {
         public Integer DistortionModeChangeCooldown;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer StrangleCooldown;
-        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
         public Integer PodThrowCooldown;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer SalimoCooldown;
@@ -1043,6 +1043,10 @@ public class Config implements Cloneable {
         public Boolean oldKnockbackStance;
         @BooleanOption(group = "inherit", value = false)
         public Boolean buffedGroundStance;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean antiStallSetting;
+        @IntOption(group = "inherit", min = 0, max = 10000000, value = 80)
+        public Integer invincibilityCooldown;
     }
 
     public static class CaliforniaKingBedSettings {
@@ -1523,12 +1527,12 @@ public class Config implements Cloneable {
         public Integer silverChariotCooldownSelfThrowRebound;
         // @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
         // public Integer silverChariotCooldownControlModeToggle;
-        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
-        public Integer silverChariotCooldownArmorShed;
+        // @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
+        // public Integer silverChariotCooldownArmorShed;
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer silverChariotCooldownRapierShot;
-        @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
-        public Integer silverChariotCooldownRapierShotInterrupt;
+        // @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
+        // public Integer silverChariotCooldownRapierShotInterrupt;
         // @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
         // public Integer silverChariotCooldownRapierShotPlatform;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
@@ -1536,7 +1540,7 @@ public class Config implements Cloneable {
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer silverChariotCooldownRapierSlash;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
-        public Integer silverChariotMinimumCooldownOffhandAttack;
+        public Integer silverChariotMinimumCooldownCrouchAttack;
         // @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
         // public Integer silverChariotRapierSlashRadius;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)

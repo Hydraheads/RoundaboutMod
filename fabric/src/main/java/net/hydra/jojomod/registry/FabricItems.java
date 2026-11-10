@@ -84,7 +84,6 @@ public class FabricItems {
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersKingCrimson(null)));
     public static Item MAX_STAND_DISC_KING_CRIMSON = registerItem("max_king_crimson_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersKingCrimson(null)));
-
     public static final Item STAND_DISC_JJF = registerItem("jumpin_jack_flash_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersJumpinJackFlash(null)));
     public static final Item MAX_STAND_DISC_JJF = registerItem("max_jumpin_jack_flash_disc",
@@ -427,6 +426,7 @@ public class FabricItems {
     public static Item POCOLOCO_MASK = registerItem("pocoloco_mask", new MaskItem(new Item.Properties().stacksTo(1), new PocolocoVisage(null)));
     public static Item POLNAREFF_MASK = registerItem("polnareff_mask", new MaskItem(new Item.Properties().stacksTo(1), new PolnareffVisage(null)));
     public static Item BLACK_POLNAREFF_MASK = registerItem("black_polnareff_mask", new MaskItem(new Item.Properties().stacksTo(1), new BlackPolnareffVisage(null)));
+    public static Item CIOCCOLATA_MASK = registerItem("cioccolata_mask", new MaskItem(new Item.Properties().stacksTo(1), new CioccolataVisage(null)));
 
     public static Item COFFIN_BLOCK_ITEM = registerItem("coffin_block",
             new CoffinBlockItem(DyeColor.BLACK, FabricBlocks.COFFIN_BLOCK, new Item.Properties().stacksTo(1)));
@@ -636,6 +636,7 @@ public class FabricItems {
                         entries.accept(DIAVOLO_MASK);
                         entries.accept(DOPPIO_MASK);
                         entries.accept(GHIACCIO_MASK);
+                        entries.accept(CIOCCOLATA_MASK);
                         entries.accept(JOTARO_6_MASK);
                         entries.accept(KIRA_PART_FOUR_MASK);
                         entries.accept(KOSAKU_MASK);
@@ -918,7 +919,6 @@ public class FabricItems {
                         entries.accept(HALLUCINATORY_ACID_WALL);
                         entries.accept(ModBlocks.GAMBLING_TABLE);
                         entries.accept(ModBlocks.MAGICIANS_STATUE_BLOCK);
-
                         entries.accept(ZOMBIE_HORSE_THREAD);
                         entries.accept(ZOMBIE_HORSE_MURAL);
                         entries.accept(PAINTING_ZOMBIE_HORSE);
@@ -1222,6 +1222,7 @@ public class FabricItems {
         ModItems.KIRA_PART_EIGHT_MASK = KIRA_PART_EIGHT_MASK;
         ModItems.KOSAKU_MASK = KOSAKU_MASK;
         ModItems.FUGO_MASK = FUGO_MASK;
+        ModItems.CIOCCOLATA_MASK = CIOCCOLATA_MASK;
         ModItems.FUGO_FEEDBACK_MASK = FUGO_FEEDBACK_MASK;
         ModItems.KIRASAKU_MASK = KIRASAKU_MASK;
         ModItems.HAYATO_KAWAJIRI_MASK = HAYATO_KAWAJIRI_MASK;

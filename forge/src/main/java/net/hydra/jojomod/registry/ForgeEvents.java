@@ -726,6 +726,7 @@ public class ForgeEvents {
         ModItems.RINGO_MASK = ForgeItems.RINGO_MASK.get();
         ModItems.HATO_MASK = ForgeItems.HATO_MASK.get();
         ModItems.LAEM_MASK = ForgeItems.LAEM_MASK.get();
+        ModItems.CIOCCOLATA_MASK = ForgeItems.CIOCCOLATA_MASK.get();
         ModItems.SHIZUKA_MASK = ForgeItems.SHIZUKA_MASK.get();
         ModItems.JOHNNY_MASK = ForgeItems.JOHNNY_MASK.get();
         ModItems.JOHNGALLIA_MASK = ForgeItems.JOHNGALLIA_MASK.get();
@@ -864,6 +865,7 @@ public class ForgeEvents {
         ModParticles.ROAD_ROLLER_EXPLOSION = ForgeParticles.ROAD_ROLLER_EXPLOSION.get();
         ModParticles.ROAD_ROLLER_SMOKE = ForgeParticles.ROAD_ROLLER_SMOKE.get();
         ModParticles.TUSK_HOLE = ForgeParticles.TUSK_HOLE.get();
+        ModParticles.GOLDEN_SPIRAL = ForgeParticles.GOLDEN_SPIRAL.get();
         ModParticles.KILLER_QUEEN_EXPLOSION = ForgeParticles.KILLER_QUEEN_EXPLOSION.get();
         ModParticles.TOOTH = ForgeParticles.TOOTH.get();
         ModParticles.PW_FIREBALL_EXPLOSION = ForgeParticles.PW_FIREBALL_EXPLOSION.get();
@@ -1056,6 +1058,7 @@ public class ForgeEvents {
         ModEntities.VIRUS_SPIT = ForgeEntities.VIRUS_SPIT.get();
 
         ModEntities.THROWN_OBJECT = ForgeEntities.THROWN_OBJECT.get();
+        ModEntities.RETURNING_OBJECT = ForgeEntities.RETURNING_OBJECT.get();
         ModEntities.THROWN_ANUBIS = ForgeEntities.THROWN_ANUBIS.get();
         ModEntities.CONCEALED_FLAME_OBJECT = ForgeEntities.CONCEALED_FLAME_OBJECT.get();
         ModEntities.GROUND_HURRICANE = ForgeEntities.GROUND_HURRICANE.get();

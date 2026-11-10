@@ -480,6 +480,7 @@ public class ClientForgeEvents {
         ModStrayModels.DoppioHairPart = new DoppioHairPart();
         ModStrayModels.JohnnyHatPart = new JohnnyHatPart();
         ModStrayModels.kosakuHairPart = new KosakuHairPart();
+        ModStrayModels.cioccolataHairPart = new CioccolataHairPart();
         ModStrayModels.DaiyaEarsPart = new DaiyaEarsPart();
         ModStrayModels.DaiyaFluffPart = new DaiyaFluffPart();
         ModStrayModels.laemBreastsPart = new LaemBreastsPart();
@@ -670,6 +671,7 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.ROAD_ROLLER_EXPLOSION.get(), RoadRollerExplosionParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.ROAD_ROLLER_SMOKE.get(), RoadRollerSmokeParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.TUSK_HOLE.get(), TuskHoleParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.GOLDEN_SPIRAL.get(), GoldenSpiralParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.KILLER_QUEEN_EXPLOSION.get(), KQExplosionParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.TOOTH.get(), ToothParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.PW_FIREBALL_EXPLOSION.get(), PWFireballExplosionParticle.Provider::new);
