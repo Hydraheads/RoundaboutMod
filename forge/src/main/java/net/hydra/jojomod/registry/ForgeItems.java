@@ -5,9 +5,7 @@ import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.event.powers.visagedata.*;
 import net.hydra.jojomod.event.powers.visagedata.aesthetician.*;
 import net.hydra.jojomod.item.*;
-import net.hydra.jojomod.item.paintings.BirthOfVenusPaintingItem;
-import net.hydra.jojomod.item.paintings.MonaLisaPaintingItem;
-import net.hydra.jojomod.item.paintings.VanGoughPaintingItem;
+import net.hydra.jojomod.item.paintings.*;
 import net.hydra.jojomod.stand.powers.*;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -1139,6 +1137,10 @@ public class ForgeItems {
 
     public static final RegistryObject<Item> ZOMBIE_HORSE_THREAD = addToWIPTab(ITEMS.register("zombie_horse_thread",
             () -> new ZombieHorseThreadItem(new Item.Properties().stacksTo(1).durability(16))));
+    public static final RegistryObject<Item> ZOMBIE_HORSE_MURAL = addToWIPTab(ITEMS.register("zombie_horse_mural_item",
+            () -> new ZombieHorseMuralItem(new Item.Properties().stacksTo(1))));
+    public static final RegistryObject<Item> PAINTING_ZOMBIE_HORSE = addToWIPTab(ITEMS.register("zombie_horse_painting_item",
+            () -> new ZombieHorsePaintingItem(new Item.Properties().stacksTo(1))));
 
     public static final RegistryObject<BlockItem> GAMBLING_TABLE_ITEM = addToWIPTab(ITEMS.register("gambling_table",
             () -> new BlockItem(ForgeBlocks.GAMBLING_TABLE.get(), new Item.Properties())));

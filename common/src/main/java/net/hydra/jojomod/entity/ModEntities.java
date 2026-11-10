@@ -9,9 +9,7 @@ import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.objects.*;
-import net.hydra.jojomod.entity.paintings.BirthOfVenusPainting;
-import net.hydra.jojomod.entity.paintings.MonaLisaPainting;
-import net.hydra.jojomod.entity.paintings.VanGoughPainting;
+import net.hydra.jojomod.entity.paintings.*;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.pathfinding.CommandDiscPossession;
 import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
@@ -205,6 +203,9 @@ public class ModEntities {
     public static EntityType<VanGoughPainting> VAN_GOUGH_PAINTING;
     public static EntityType<MonaLisaPainting> MONA_LISA_PAINTING;
     public static EntityType<BirthOfVenusPainting> BIRTH_OF_VENUS_PAINTING;
+    public static EntityType<ZombieHorsePainting> ZOMBIE_HORSE_PAINTING;
+
+    public static EntityType<ZombieHorseMural> ZOMBIE_HORSE_MURAL;
 
     public static EntityType<DIONPC> DIO;
     public static EntityType<AvdolNPC> AVDOL;

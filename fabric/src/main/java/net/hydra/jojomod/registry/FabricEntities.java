@@ -12,9 +12,7 @@ import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.objects.*;
-import net.hydra.jojomod.entity.paintings.BirthOfVenusPainting;
-import net.hydra.jojomod.entity.paintings.MonaLisaPainting;
-import net.hydra.jojomod.entity.paintings.VanGoughPainting;
+import net.hydra.jojomod.entity.paintings.*;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.pathfinding.CommandDiscPossession;
 import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
@@ -1402,6 +1400,22 @@ public class FabricEntities {
                                 sized(0.5F, 0.5F).updateInterval(Integer.MAX_VALUE).
                                 clientTrackingRange(10).build(Roundabout.MOD_ID+":mona_lisa")
                 );
+    public static final EntityType<ZombieHorsePainting> ZOMBIE_HORSE_PAINTING =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "zombie_horse_painting"),
+                    EntityType.Builder.<ZombieHorsePainting>of(ZombieHorsePainting::new, MobCategory.MISC).
+                            sized(0.5F, 0.5F).updateInterval(Integer.MAX_VALUE).
+                            clientTrackingRange(10).build(Roundabout.MOD_ID+":zombie_horse_painting")
+            );
+    public static final EntityType<ZombieHorseMural> ZOMBIE_HORSE_MURAL =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "zombie_horse_mural"),
+                    EntityType.Builder.<ZombieHorseMural>of(ZombieHorseMural::new, MobCategory.MISC).
+                            sized(0.5F, 0.5F).updateInterval(Integer.MAX_VALUE).
+                            clientTrackingRange(10).build(Roundabout.MOD_ID+":zombie_horse_mural")
+            );
     public static final EntityType<RoadRollerEntity> ROAD_ROLLER_ENTITY =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
@@ -1698,6 +1712,9 @@ public class FabricEntities {
                 ModEntities.VAN_GOUGH_PAINTING = VAN_GOUGH_PAINTING;
                 ModEntities.MONA_LISA_PAINTING = MONA_LISA_PAINTING;
                 ModEntities.BIRTH_OF_VENUS_PAINTING = VENUS_PAINTING;
+                ModEntities.ZOMBIE_HORSE_PAINTING = ZOMBIE_HORSE_PAINTING;
+
+                ModEntities.ZOMBIE_HORSE_MURAL = ZOMBIE_HORSE_MURAL;
 
                 ModEntities.METALLICA_KNIFE = METALLICA_KNIFE;
                 ModEntities.SHEER_HEART_ATTACK = SHEER_HEART_ATTACK;

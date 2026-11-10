@@ -13,9 +13,7 @@ import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.visagedata.*;
 import net.hydra.jojomod.event.powers.visagedata.aesthetician.*;
 import net.hydra.jojomod.item.*;
-import net.hydra.jojomod.item.paintings.BirthOfVenusPaintingItem;
-import net.hydra.jojomod.item.paintings.MonaLisaPaintingItem;
-import net.hydra.jojomod.item.paintings.VanGoughPaintingItem;
+import net.hydra.jojomod.item.paintings.*;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.item.CommandDiscItem;
@@ -471,7 +469,9 @@ public class FabricItems {
     public static Item PAINTING_BIRTH_OF_VENUS = registerItem("painting_venus", new BirthOfVenusPaintingItem(new Item.Properties().stacksTo(1)));
     public static Item PAINTING_VAN_GOUGH = registerItem("painting_van_gough", new VanGoughPaintingItem(new Item.Properties().stacksTo(1)));
     public static Item PAINTING_MONA_LISA = registerItem("painting_mona_lisa", new MonaLisaPaintingItem(new Item.Properties().stacksTo(1)));
+    public static Item PAINTING_ZOMBIE_HORSE = registerItem("zombie_horse_painting_item", new ZombieHorsePaintingItem(new Item.Properties().stacksTo(1)));
 
+    public static Item ZOMBIE_HORSE_MURAL = registerItem("zombie_horse_mural_item", new ZombieHorseMuralItem(new Item.Properties().stacksTo(1)));
     public static Item ZOMBIE_HORSE_THREAD = registerItem("zombie_horse_thread", new ZombieHorseThreadItem(new Item.Properties().stacksTo(1).durability(16)));
 
     public static Item MUSIC_DISC_TORTURE_DANCE = registerItem("music_disc_torture_dance",
@@ -920,6 +920,8 @@ public class FabricItems {
                         entries.accept(ModBlocks.MAGICIANS_STATUE_BLOCK);
 
                         entries.accept(ZOMBIE_HORSE_THREAD);
+                        entries.accept(ZOMBIE_HORSE_MURAL);
+                        entries.accept(PAINTING_ZOMBIE_HORSE);
                     }).build());
     public static final CreativeModeTab FOG_BLOCK_ITEMS = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
             new ResourceLocation(Roundabout.MOD_ID, "justice_fog_items"),
@@ -1257,7 +1259,9 @@ public class FabricItems {
         ModItems.PAINTING_VAN_GOUGH = PAINTING_VAN_GOUGH;
         ModItems.PAINTING_MONA_LISA = PAINTING_MONA_LISA;
         ModItems.PAINTING_BIRTH_OF_VENUS = PAINTING_BIRTH_OF_VENUS;
+        ModItems.PAINTING_ZOMBIE_HORSE = PAINTING_ZOMBIE_HORSE;
 
+        ModItems.ZOMBIE_HORSE_MURAL = ZOMBIE_HORSE_MURAL;
         ModItems.ZOMBIE_HORSE_THREAD = ZOMBIE_HORSE_THREAD;
 
         ModItems.initializeVisageStore();
