@@ -20,6 +20,7 @@ import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.gui.GuiGraphics;
@@ -263,7 +264,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                     tryPower(PowerIndex.POWER_2, true);
                     this.tryPowerPacket(PowerIndex.POWER_2);
                     if (!this.invincibleState){
-                        this.setCooldown(PowerIndex.SKILL_2, 80);
+                        this.setCooldown(PowerIndex.SKILL_2, ConfigManager.getConfig().centuryBoySettings.invincibilityCooldown);
                     }
                 }
             }
@@ -601,7 +602,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     public void tickPower() {
         if (!hasStandActive(this.getSelf())){
             if (invincibleState){
-                this.setCooldown(PowerIndex.SKILL_2, 80);
+                this.setCooldown(PowerIndex.SKILL_2, ConfigManager.getConfig().centuryBoySettings.invincibilityCooldown);
                 invincibleState = false;
             }
             staticMode = 0;
