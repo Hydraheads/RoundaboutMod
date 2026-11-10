@@ -613,9 +613,9 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         }
         if (!isClient() && self instanceof Mob) {
             StandUser SU = ((StandUser)self);
-            if (invincibleState && SU.roundabout$getIdlePos() != 0) {
+            if (invincibleState && SU.roundabout$getIdlePos() != (byte)0) {
                 SU.roundabout$setIdlePosX((byte)0);
-            }else if (SU.roundabout$getIdlePos() != 1){
+            }else if (SU.roundabout$getIdlePos() != (byte)1){
                 ((StandUser)self).roundabout$setIdlePosX((byte)1);
             }
         }
