@@ -518,7 +518,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                         newVec.x,
                         newVec.y,
                         newVec.z,
-                        Blocks.OAK_LOG.defaultBlockState()
+                        Blocks.OAK_WOOD.defaultBlockState()
                 );
                 trunk.setDataFinalPos(newVec.add(0, actualHeight, 0));
                 trunk.timing = 200;
