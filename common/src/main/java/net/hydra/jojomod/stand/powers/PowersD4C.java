@@ -629,7 +629,11 @@ public class PowersD4C extends NewPunchingStand {
     public int highlightsEntityColor(Entity ent, Player player){
         if (isInSelectionMode && ent instanceof D4CCloneEntity dcent) {
             if (selectedClones != null && selectedClones.contains(dcent)){
-                return 65400;
+                if (cloneInStore != null && cloneInStore.getUUID().equals(ent.getUUID())) {
+                    return 16449791;
+                } else {
+                    return 65400;
+                }
             } else if (cloneInStore != null && cloneInStore.getUUID().equals(ent.getUUID())) {
                 return 54527;
             } else {
@@ -643,6 +647,9 @@ public class PowersD4C extends NewPunchingStand {
     public void tickPower() {
         super.tickPower();
         if (self.level().isClientSide()){
+            if (isInSelectionMode && !hasActive(self)){
+                isInSelectionMode = false;
+            }
             cycleThroughSelectedEntities();
             if (seesBetween){
                 tickBetween();
@@ -679,13 +686,15 @@ public class PowersD4C extends NewPunchingStand {
 
                 if (isInBlockMode){
                     // The clone selection mode's block selection
-                    BlockPos pos;
-                    if (self.isCrouching()){
+                    if (altBlockPhase == 0 || altBlockPhase == 1){
+                        BlockPos pos;
                         pos =getAnyPickBlock();
-                    } else {
-                        pos =getAnyPickBlockOut();
+                        if (altBlockPhase == 0){
+                            altStartBlockPos = pos;
+                        } else {
+                            altEndBlockPos = pos;
+                        }
                     }
-                    altStartBlockPos = pos;
                 }
 
                 Entity jentity = getTargetEntity(self,40);
@@ -1863,6 +1872,7 @@ public class PowersD4C extends NewPunchingStand {
     public BlockPos altBlockPos = null;
     public BlockPos altStartBlockPos = null;
     public BlockPos altEndBlockPos = null;
+    public int altBlockPhase = 0;
     BlockState altState = null;
     @SuppressWarnings("deprecation")
     public void altBlockGrab(){
@@ -2110,17 +2120,37 @@ public class PowersD4C extends NewPunchingStand {
         }
         tickBetween();
     }
+    @Override
+    public boolean superCancelMining(){
+        return isInSelectionMode;
+    }
+    @Override
+    public boolean cancelAllRandomMiningThatBreaksMoves2(){
+        return isInSelectionMode || super.cancelAllRandomMiningThatBreaksMoves();
+    }
     private static final TargetingConditions HURT_BY_TARGETING = TargetingConditions.forCombat().ignoreLineOfSight().ignoreInvisibilityTesting();
     public void selectOrDeselectAll(){
-        if (selectedClones.isEmpty()){
-            this.self.playSound(ModSounds.D4C_MENU_CLONE_MASS_SELECT_EVENT, 200F, 1.0F);
-            for (D4CCloneEntity target : self.level().getNearbyEntities(D4CCloneEntity.class, HURT_BY_TARGETING,self,self.getBoundingBox().inflate(30)))
-                if (target.getSafeCopy() && target.getPlayerUUID().isPresent() && target.getPlayerUUID().get().equals(self.getUUID())) {
-                    selectedClones.add(target);
-                }
+        if (isInBlockMode){
+            if (altBlockPhase > 0){
+                altBlockPhase = 0;
+                altStartBlockPos = null;
+                altEndBlockPos = null;
+                this.self.playSound(ModSounds.D4C_MENU_CLONE_DESELECT_EVENT, 200F, 0.8F);
+            }
         } else {
-            this.self.playSound(ModSounds.D4C_MENU_CLONE_DESELECT_EVENT, 200F, 0.8F);
-                    selectedClones.clear();
+            if (selectedClones.isEmpty()) {
+                List<D4CCloneEntity> lev = self.level().getNearbyEntities(D4CCloneEntity.class, HURT_BY_TARGETING, self, self.getBoundingBox().inflate(30));
+                if (!lev.isEmpty()) {
+                    this.self.playSound(ModSounds.D4C_MENU_CLONE_MASS_SELECT_EVENT, 200F, 1.0F);
+                    for (D4CCloneEntity target : lev)
+                        if (target.getSafeCopy() && target.getPlayerUUID().isPresent() && target.getPlayerUUID().get().equals(self.getUUID())) {
+                            selectedClones.add(target);
+                        }
+                }
+            } else {
+                this.self.playSound(ModSounds.D4C_MENU_CLONE_DESELECT_EVENT, 200F, 0.8F);
+                selectedClones.clear();
+            }
         }
     }
     public void dashOrBlockSwitchClient(){
@@ -2652,13 +2682,32 @@ public class PowersD4C extends NewPunchingStand {
                     // Highlight clones by left clicking them
                     if (keyIsDown) {
                         consumeClickInput = true;
-                        if (cloneInStore != null){
-                            if (selectedClones.contains(cloneInStore)){
-                                this.self.playSound(ModSounds.D4C_MENU_CLONE_DESELECT_EVENT, 200F, 1.0F);
-                                selectedClones.remove(cloneInStore);
-                            } else {
-                                this.self.playSound(ModSounds.D4C_MENU_CLONE_SELECT_EVENT, 200F, 1.0F);
-                                selectedClones.add(cloneInStore);
+                        if (isInBlockMode){
+                            if (altBlockPhase == 2){
+                                return;
+                            }
+                            if (altBlockPhase == 0){
+                                if (altStartBlockPos == null) {
+                                    altStartBlockPos = getAnyPickBlock();
+                                }
+                                altBlockPhase = 1;
+                                this.self.playSound(ModSounds.D4C_MENU_BLOCK_START_EVENT, 200F, 1.0F);
+                            } else if (altBlockPhase == 1){
+                                if (altEndBlockPos == null) {
+                                    altEndBlockPos = getAnyPickBlock();
+                                }
+                                altBlockPhase = 2;
+                                this.self.playSound(ModSounds.D4C_MENU_BLOCK_END_EVENT, 200F, 1.0F);
+                            }
+                        } else {
+                            if (cloneInStore != null){
+                                if (selectedClones.contains(cloneInStore)){
+                                    this.self.playSound(ModSounds.D4C_MENU_CLONE_DESELECT_EVENT, 200F, 1.0F);
+                                    selectedClones.remove(cloneInStore);
+                                } else {
+                                    this.self.playSound(ModSounds.D4C_MENU_CLONE_SELECT_EVENT, 200F, 1.0F);
+                                    selectedClones.add(cloneInStore);
+                                }
                             }
                         }
                     }
@@ -3259,6 +3308,9 @@ public class PowersD4C extends NewPunchingStand {
     }
 
     public BlockPos getAnyPickBlock(){
+        if (!isHoldingSneak()){
+            return getAnyPickBlockOut();
+        }
         if (self.level().isClientSide()){
             BlockHitResult result = getAnyBlockHit(self,5);
             if (result != null){

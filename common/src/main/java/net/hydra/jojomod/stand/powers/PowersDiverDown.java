@@ -2838,7 +2838,8 @@ public class PowersDiverDown extends NewPunchingStand {
         // this is like my third attempt to fix claims with chests. bruh
         StandEntity stand = getStandEntity(this.self);
         BlockPos standPos = stand != null ? stand.blockPosition() : serverPlayer.blockPosition();
-        if (!MainUtil.canInteractWithBlock(serverPlayer, chestPos) || !MainUtil.canPlaceOnClaim(serverPlayer, standPos)) {
+        if (!MainUtil.canInteractWithBlock(serverPlayer, chestPos) ||
+                (ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims)) {
             return false;
         }
 
@@ -4764,7 +4765,7 @@ public class PowersDiverDown extends NewPunchingStand {
             if (!level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) return false;
             if (PE.blockActionRestricted(PE.serverLevel(), pos, PE.gameMode.getGameModeForPlayer())) return false;
             if (!level.mayInteract(PE, pos)) return false;
-            if (!MainUtil.canPlaceOnClaim(PE, pos)) return false;
+            if (ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims) return false;
         }
 
         // must have an associated Item
