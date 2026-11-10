@@ -672,16 +672,21 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         return invincibleState;
     }
 
-    /** @Override
+    @Override
     public void tickStandRejection(MobEffectInstance effect) {
         this.invincibleState = true;
         mode = 1;
         staticMode = 1;
-        for (int i = 0; i < 200; i++){
-            //waiting, waiting
-        };
-        this.invincibleState = false;
-    }*/
+        if (!isClient()) {
+            if (self instanceof ServerPlayer PL) {
+                ((StandUser) PL).roundabout$setStandAnimation((byte) staticMode);
+            }
+            
+            if (effect.getDuration() == 10) {
+                this.invincibleState = false;
+            }
+        }
+    }
 
     @Override
     public void updatePowerInt(byte activePower, int data) {
