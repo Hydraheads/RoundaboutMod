@@ -40,6 +40,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
@@ -610,6 +611,17 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             }
             staticMode = 0;
         }
+        if (!isClient() && self instanceof Mob) {
+            StandUser SU = ((StandUser)self);
+            if (invincibleState && SU.roundabout$getIdlePos() != 0) {
+                SU.roundabout$setIdlePosX((byte)0);
+            }else if (SU.roundabout$getIdlePos() != 1){
+                ((StandUser)self).roundabout$setIdlePosX((byte)1);
+            }
+        }
+
+        if (deflectTicks > 0) deflectTicks--;
+
         if (!invincibleState){
             if (currentDefenseTicks < maxDefenceTicks){
                 currentDefenseTicks += chargingDefenseTicks;
@@ -648,19 +660,22 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             }
 
             if (gticks <= 0){
-            if (dist <= 6 && !invincibleState) {
-                if (!this.onCooldown(PowerIndex.POWER_2)){
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, false);}
-                if (isSkel){
-                    ///  to do: make a target selector for the sacos
+                if (dist <= 6 && !invincibleState && currentDefenseTicks > 180) {
+                    if (!this.onCooldown(PowerIndex.POWER_2)){
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, false);}
+                    if (isSkel){
+                        ///  to do: make a target selector for the sacos
+                    }
+                } else if (dist > 6 && invincibleState) {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, false);
+                    gticks += 80;
+                } else if (dist <= 2 && !isSkel && invincibleState){
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, false);
+                    gticks += 80;
+                } else if (currentDefenseTicks < 90 && invincibleState) {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, false);
+                    gticks += 80;
                 }
-            } else if (dist > 6 && invincibleState) {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, false);
-                gticks += 80;
-            } else if (dist <= 2 && !isSkel && invincibleState){
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, false);
-                gticks += 80;
-            }
             }else {
                 gticks--;
             }
@@ -681,7 +696,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             if (self instanceof ServerPlayer PL) {
                 ((StandUser) PL).roundabout$setStandAnimation((byte) staticMode);
             }
-            
+
             if (effect.getDuration() == 10) {
                 this.invincibleState = false;
             }
@@ -765,8 +780,13 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         return super.getSoundFromByte(soundChoice);
     }
 
+    private int deflectTicks = 0;
+
     /** particles **/
     private void deflect(){
+        if (deflectTicks > 0) {
+            return;
+        }
         Level level = this.self.level();
         BlockPos playerpos = this.self.getOnPos();
         BlockState state = level.getBlockState(playerpos);
@@ -785,6 +805,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             } else {
                 level.playSound(null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_HIT_EVENT, SoundSource.PLAYERS, 1F, 1.0F);
             }
+            deflectTicks += 8;
         }
     }
 
