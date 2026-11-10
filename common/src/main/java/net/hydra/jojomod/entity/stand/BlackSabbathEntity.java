@@ -15,6 +15,7 @@ import net.hydra.jojomod.entity.objects.GrabbedMobSoul;
 import net.hydra.jojomod.entity.objects.GrabbedMobSoulPlayerLarge;
 import net.hydra.jojomod.entity.objects.GrabbedMobSoulPlayerSlim;
 import net.hydra.jojomod.entity.projectile.*;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -51,6 +52,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.Animal;
@@ -624,6 +627,10 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         return true;
     }
     @Override
+    public boolean canBeAffected(MobEffectInstance $$0){
+        return $$0.getEffect() == ModEffects.INFINITE_SPIN;
+    }
+    @Override
     public boolean lockPos(){
         if(this.getUser() != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb){
             return pb.moveMode == 2 || getRiding();
@@ -1054,6 +1061,8 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                             position3.x, position3.y, position3.z,
                             0, 0.2, 0.5, 0.2, 0.2);
                 }
+            } else if (source.is(ModDamageTypes.INFINITE_SPIN)){
+                setUnrender(true);
             }
         }
     }
@@ -1108,13 +1117,17 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                     } else if (source.is(ModDamageTypes.GO_BEYOND)) {
                         return super.hurt(source, amount * 30);
                     } else if (source.is(ModDamageTypes.INFINITE_SPIN)){
-                        return super.hurt(source, amount);
+                        return super.hurt(source, amount * 1.618f);
                     }
                 }
             } else if (source.is(DamageTypes.ON_FIRE) || source.is(DamageTypes.IN_FIRE) || source.is(ModDamageTypes.STAND_FIRE) || source.is(DamageTypes.HOT_FLOOR) || source.is(DamageTypes.LAVA)) {
                 return super.hurt(source, amount);
-            } else if (MainUtil.isStandDamage(source) && this.getRemainingFireTicks() > 0) {
-                return super.hurt(source, amount * 0.85F);
+            } else if (source.is(ModDamageTypes.GO_BEYOND)) {
+                return super.hurt(source, amount * 30);
+            }else if (source.is(ModDamageTypes.INFINITE_SPIN)){
+                return super.hurt(source, amount * 1.618f);
+            } else if (MainUtil.isStandDamage(source) && (this.getRemainingFireTicks() > 0 || isBlackSabbathUnderLight())) {
+                return super.hurt(source, amount * 3);
             }
             this.markHurt();
             return super.hurt(source, 0.0F);
@@ -1122,7 +1135,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             if (source.is(ModDamageTypes.GO_BEYOND)) {
                 return super.hurt(source, amount * 30);
             } else if (source.is(ModDamageTypes.INFINITE_SPIN)){
-                return super.hurt(source, amount);
+                return super.hurt(source, amount * 1.618f);
             }
             this.markHurt();
         }
