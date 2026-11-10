@@ -777,7 +777,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 lifeform.setSourceItem(consumedItem);
             }
 
-            if (livingEntity instanceof Mob mob && this.self.level() instanceof ServerLevel serverLevel) {
+            if (livingEntity instanceof Mob mob && !(mob instanceof GEFoxEntity) && this.self.level() instanceof ServerLevel serverLevel) {
                 mob.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(mob.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
             }
 
