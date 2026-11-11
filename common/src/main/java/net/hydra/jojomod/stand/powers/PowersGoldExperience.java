@@ -25,6 +25,7 @@ import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.BlockGrabPreset;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.config.ClientConfig;
@@ -35,6 +36,9 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -147,7 +151,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
                         treePart.setDataFinalPos(data.finalPos());
                         //despawn timer of 15 seconds
-                        treePart.timing = 300;
+                        treePart.timing = Math.max(1, 200 - data.delayTicks());
                         treePart.isWhiteAlbumWall = false;
                         treePart.isGoldExperienceTree = true;
                         treePart.creator = this.getSelf();
@@ -386,6 +390,16 @@ public class PowersGoldExperience extends BlockGrabPreset {
             boolean isSecondHit = this.attackTimeDuring >= 10;
             dualPunchImpact(target, isSecondHit);
         }
+        else if (this.getActivePower() == PowerIndex.BARRAGE) {
+            rootBarrageImpact(target, false);
+        }
+    }
+
+    @Override
+    public void handleStandAttack2(Player player, Entity target) {
+        if (this.getActivePower() == PowerIndex.BARRAGE) {
+            rootBarrageImpact(target, true);
+        }
     }
 
     private void tryToDashClient() {
@@ -418,6 +432,150 @@ public class PowersGoldExperience extends BlockGrabPreset {
             }
         }
     }
+
+    // unique root barrage start
+
+    @Override
+    public void updateBarrage() {
+        if (this.attackTimeDuring == -2 && this.getSelf() instanceof Player) {
+            ((StandUser) this.self).roundabout$tryPower(PowerIndex.GUARD, true);
+        } else {
+            if (this.attackTimeDuring > this.getBarrageLength()) {
+                this.attackTimeDuring = -20;
+            } else if (this.attackTimeDuring > 0) {
+                drawRoots();
+                this.setAttackTime((getBarrageRecoilTime() - 1) -
+                        Math.round(((float) this.attackTimeDuring / this.getBarrageLength())
+                                * (getBarrageRecoilTime() - 1)));
+                standBarrageHit();
+            }
+        }
+    }
+
+    @Override
+    public void standBarrageHit() {
+        // call super method first for normal hits, otherwise continue to the ranged barrage
+        super.standBarrageHit();
+
+        // long range done by adding the extra range + normal range
+        float extendedReach = 3.0F + 8.0F;
+        boolean lastHit = (this.attackTimeDuring >= this.getBarrageLength());
+
+        if (this.self instanceof Player) {
+            if (isPacketPlayer()) {
+                List<Entity> listE = getTargetEntityList(this.self, extendedReach);
+
+                if (!listE.isEmpty()) {
+                    for (Entity e : listE) {
+                        if (e == null) continue;
+                        if (e.distanceTo(this.self) >= 3.5F && e.distanceTo(this.self) <= extendedReach) {
+                            if (!(e instanceof StandEntity SE && !SE.canBeHitByStands()) && !PowerTypes.isInADifferentExistence(e, self)) {
+                                if (lastHit) {
+                                    tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK_2, e.getId());
+                                } else {
+                                    tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK, e.getId());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            List<Entity> listE = getTargetEntityList(this.self, extendedReach);
+
+            if (!listE.isEmpty()) {
+                for (Entity e : listE) {
+                    if (e == null) continue;
+                    if (e.distanceTo(this.self) >= 3.5F && e.distanceTo(this.self) <= extendedReach) {
+                        if (!(e instanceof StandEntity SE && !SE.canBeHitByStands()) && !PowerTypes.isInADifferentExistence(e, self)) {
+                            rootBarrageImpact(e, lastHit);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void rootBarrageImpact(Entity entity, boolean lastHit) {
+        // basically everything here was taken from magician's red.
+        if (entity == null) return;
+
+        float pow = lastHit ? 4.0F : 0.25F;
+        /**By saving the velocity before hitting, we can let people approach barraging foes
+         * through shields.*/
+        Vec3 prevVelocity = entity.getDeltaMovement();
+
+        if (StandDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
+            if (!this.self.level().isClientSide()) {
+                if (this.self.tickCount % 4 == 0 || lastHit) {
+                    playSoundIfPossible(self.level(), null, entity.blockPosition(), SoundEvents.ROOTS_BREAK, SoundSource.PLAYERS, 1.2F, 1.0F);
+                }
+            }
+
+            if (entity instanceof LivingEntity LE) {
+                setDazed(LE, lastHit ? (byte) 0 : (byte) 3);
+            }
+
+            if (lastHit) {
+                barrageImpact2(entity, true, 0.3F);
+            } else {
+                entity.setDeltaMovement(prevVelocity);
+                entity.hurtMarked = true;
+            }
+        } else {
+            entity.setDeltaMovement(prevVelocity);
+            if (lastHit) {
+                knockShield2(entity, 100);
+            }
+        }
+    }
+
+    // draws the root cone
+    private void drawRoots() {
+        if (!this.self.level().isClientSide()) {
+            StandEntity stand = this.getStandEntity(this.self);
+            if (stand != null) {
+                float maxReach = 3.0F + 8.0F;
+                Vec3 vector = getRayBlock(this.self, maxReach);
+
+                if (vector != null) {
+                    DustParticleOptions brownDust = new DustParticleOptions(new org.joml.Vector3f(0.45F, 0.28F, 0.12F), 1.2F);
+
+                    Level level = this.self.level();
+                    Vec3 origin = stand.position();
+
+                    Vec3 forward = new Vec3(vector.x - stand.getX(), 0, vector.z - stand.getZ()).normalize();
+                    Vec3 right = new Vec3(-forward.z, 0, forward.x);
+
+                    int distanceSteps = 6;
+                    for (int i = 1; i <= distanceSteps; i++) {
+                        double stepDist = (i / (double) distanceSteps) * maxReach;
+                        double spreadWidth = (i / (double) distanceSteps) * 3.5D;
+
+                        int particlesPerStep = 4;
+                        for (int p = 0; p < particlesPerStep; p++) {
+                            double offset = (level.random.nextDouble() - 0.5D) * 2.0D * spreadWidth;
+                            double lengthJitter = (level.random.nextDouble() - 0.5D) * 1.5D;
+
+                            Vec3 samplePos = origin.add(forward.scale(stepDist + lengthJitter)).add(right.scale(offset));
+                            sendParticlesIfPossible(level,
+                                    brownDust,
+                                    samplePos.x, stand.getY() + 0.15D, samplePos.z,
+                                    1, 0.15, 0.02, 0.15, 0.01);
+                            if (level.random.nextFloat() < 0.15F) {
+                                sendParticlesIfPossible(level,
+                                        new BlockParticleOption(ParticleTypes.BLOCK, Blocks.ROOTED_DIRT.defaultBlockState()),
+                                        samplePos.x, stand.getY() + 0.15D, samplePos.z,
+                                        1, 0.15, 0.05, 0.15, 0.01);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // unique root barrage end
 
     // tree creation start
 
@@ -1461,6 +1619,12 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     @Override
     public float inputSpeedModifiers(float basis) {
+        if (this.activePower == PowerIndex.BARRAGE_CHARGE_2) {
+            basis*=0.5f;
+        } else if (this.activePower == PowerIndex.BARRAGE_2) {
+            basis *= 0.3f;
+        }
+
         if (this.getActivePower() == HEAL){
             // slows you down by 70% while healing
             basis *= 0.7f;
