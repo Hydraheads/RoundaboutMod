@@ -2218,14 +2218,14 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                             }
                         }
                         if(flag5 && !(i.getDamageValue() >= i.getMaxDamage() - 1)){
-                           if(meleeInteractionTicks == 125){
-                               if(this.getUser() != null && this.getUser() instanceof Player p) {
-                                  if(e instanceof Sheep sheep && !(sheep.isSheared())) {
-                                      sheep.shear(SoundSource.HOSTILE);
+                            if(e instanceof Sheep sheep && !(sheep.isSheared())) {
+                                if (meleeInteractionTicks == 125) {
+                                    if (this.getUser() != null && this.getUser() instanceof Player p) {
+                                        sheep.shear(SoundSource.HOSTILE);
                                         sheep.gameEvent(GameEvent.SHEAR, p);
-                                      i.hurtAndBreak(1, this, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
-                                  }
-                               }
+                                        i.hurtAndBreak(1, this, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+                                    }
+                                }
                            }
                         }
                     }
