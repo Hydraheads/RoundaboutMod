@@ -57,6 +57,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.monster.Skeleton;
@@ -1959,8 +1960,9 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             }
             attacked.invulnerableTime = 0;
             attacked.hurt(ModDamageTypes.of(level(), ModDamageTypes.STAND, this.getUser()), 2);
-            if (item.getItem() instanceof GlaiveItem || item.getItem() instanceof SacrificialDaggerItem) {
-                MainUtil.makeMobBleed(attacked);
+            if (item.getItem() instanceof GlaiveItem || item.getItem() instanceof SacrificialDaggerItem
+                    || item.getItem() instanceof ScissorItem || item.getItem() instanceof ShearsItem) {
+                if(item.getItem() instanceof GlaiveItem || item.getItem() instanceof SacrificialDaggerItem) {MainUtil.makeMobBleed(attacked);}
                 MainUtil.makeBleed(attacked, 0, 300, this.getUser());
             }
             int ench = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FIRE_ASPECT, item);
@@ -1984,11 +1986,11 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     private void soulGrabbingTick(){
         ItemStack i = this.getHeldItemSabbath();
         Entity le = this.level().getEntity(getGrabbing());
-        boolean flag1 = i.getItem() instanceof SwordItem || i.getItem() instanceof SacrificialDaggerItem || i.getItem() instanceof DiggerItem || i.getItem() instanceof GlaiveItem || i.getItem() instanceof WarhammerItem;
+        boolean flag1 = (i.getItem() instanceof ShearsItem || i.getItem() instanceof ScissorItem) && !(le instanceof Sheep) || i.getItem() instanceof SwordItem || i.getItem() instanceof SacrificialDaggerItem || i.getItem() instanceof DiggerItem || i.getItem() instanceof GlaiveItem || i.getItem() instanceof WarhammerItem;
         boolean flag2 = i.getItem() instanceof RoundaboutArrowItem;
         boolean flag3 = i.getItem() instanceof ArmorItem || i.getItem() instanceof ElytraItem;
         boolean flag4 = i.getItem() instanceof PotionItem || i.getItem().getFoodProperties() != null;
-
+        boolean flag5 = (i.getItem() instanceof ShearsItem || i.getItem() instanceof ScissorItem) && le instanceof Sheep sheep && !(sheep.isSheared());
 
         boolean allYouCanEat = le instanceof Player p && i.getItem().getFoodProperties() != null && p.canEat(i.getItem().getFoodProperties().canAlwaysEat()) || le instanceof Animal || le instanceof Villager;
         if(!level().isClientSide && this.getUser() != null){
@@ -1996,7 +1998,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         }
 
         int inte = slideTicks;
-        if(!flag4) {
+        if(!flag4 && !flag5) {
             if (shouldSlide) {
                 if (slideTicks <= 20) {
                     slideTicks = inte + 10;
@@ -2048,6 +2050,13 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                             setShouldSlide(false);
                         }
                     }
+                    if(flag5){
+                        if(meleeInteractionTicks == 150){
+                            setShouldSlide(true);
+                        } else if (meleeInteractionTicks == 100){
+                            setShouldSlide(false);
+                        }
+                    }
                     if (flag3 && e instanceof Player p && !getNotRenderItem()) {
                         EquipmentSlot equipmentslot = Mob.getEquipmentSlotForItem(i);
                         ItemStack stack = p.getItemBySlot(equipmentslot);
@@ -2081,6 +2090,14 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                         itemDamage = SI.getDamage();
                                         itemDamage += EnchantmentHelper.getDamageBonus(i, ((LivingEntity) e).getMobType());
                                         swordHit(itemDamage, e, this.getUser(), i);
+                                    } else if (i.getItem() instanceof ScissorItem SI){
+                                        itemDamage = SI.getDamage();
+                                        itemDamage += EnchantmentHelper.getDamageBonus(i, ((LivingEntity) e).getMobType());
+                                        swordHit(itemDamage, e, this.getUser(), i);
+                                    } else if (i.getItem() instanceof ShearsItem){
+                                        itemDamage = 3;
+                                        itemDamage += EnchantmentHelper.getDamageBonus(i, ((LivingEntity) e).getMobType());
+                                        swordHit(itemDamage, e, this.getUser(), i);
                                     }
                                     if (i.getItem() instanceof WarhammerItem) {
                                         i.hurtAndBreak(2, this, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
@@ -2092,7 +2109,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                         }
                         if (i.is(Items.BELL)) {
                             if (meleeInteractionTicks > 160 && this.tickCount % 20 == 0 || meleeInteractionTicks < 160 && meleeInteractionTicks > 100 && this.tickCount % 10 == 0 || meleeInteractionTicks < 100 && meleeInteractionTicks >= 5 && this.tickCount % 5 == 0) {
-                                this.level().playSound((Player) null, this, SoundEvents.BELL_BLOCK, SoundSource.HOSTILE, 10.0F, 1.0F);
+                                this.level().playSound((Player) null, this, SoundEvents.BELL_BLOCK, SoundSource.HOSTILE, 10.0F, ((float) random.nextInt(8, 11) / 10));
                             }
                         }
                         if (meleeInteractionTicks == 150) {
@@ -2199,6 +2216,17 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                     }
                                 }
                             }
+                        }
+                        if(flag5 && !(i.getDamageValue() >= i.getMaxDamage() - 1)){
+                            if(e instanceof Sheep sheep && !(sheep.isSheared())) {
+                                if (meleeInteractionTicks == 125) {
+                                    if (this.getUser() != null && this.getUser() instanceof Player p) {
+                                        sheep.shear(SoundSource.HOSTILE);
+                                        sheep.gameEvent(GameEvent.SHEAR, p);
+                                        i.hurtAndBreak(1, this, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+                                    }
+                                }
+                           }
                         }
                     }
                     } else {
