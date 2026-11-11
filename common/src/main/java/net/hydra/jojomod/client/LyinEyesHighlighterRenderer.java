@@ -13,27 +13,44 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.npc.Villager;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
-import org.joml.Random;
 
 public class LyinEyesHighlighterRenderer {
-    private static final ResourceLocation[] ICONS = {
+    private static final ResourceLocation[] PASSIVE_ICONS = {
         new ResourceLocation("roundabout", "textures/particle/lyin_eyes_highlight_1.png"),
         new ResourceLocation("roundabout", "textures/particle/lyin_eyes_highlight_2.png"),
         new ResourceLocation("roundabout", "textures/particle/lyin_eyes_highlight_3.png"),
         new ResourceLocation("roundabout", "textures/particle/lyin_eyes_highlight_4.png")
     };
-    private static final ResourceLocation[] ICONS_THICK = {
+    private static final ResourceLocation[] PASSIVE_ICONS_THICK = {
             new ResourceLocation("roundabout", "textures/particle/lyin_eyes_thick_1.png"),
             new ResourceLocation("roundabout", "textures/particle/lyin_eyes_thick_2.png"),
             new ResourceLocation("roundabout", "textures/particle/lyin_eyes_thick_3.png"),
             new ResourceLocation("roundabout", "textures/particle/lyin_eyes_thick_4.png")
+    };
+    private static final ResourceLocation[] ICONS_NEUTRAL = {
+        new ResourceLocation("roundabout", "textures/particle/lyin_eyes_neutral_1.png"),
+        new ResourceLocation("roundabout", "textures/particle/lyin_eyes_neutral_2.png"),
+        new ResourceLocation("roundabout", "textures/particle/lyin_eyes_neutral_3.png"),
+        new ResourceLocation("roundabout", "textures/particle/lyin_eyes_neutral_4.png")
+    };
+    private static final ResourceLocation[] ICONS_NEUTRAL_THICK = {
+            new ResourceLocation("roundabout", "textures/particle/lyin_eyes_neutral_thick_1.png"),
+            new ResourceLocation("roundabout", "textures/particle/lyin_eyes_neutral_thick_2.png"),
+            new ResourceLocation("roundabout", "textures/particle/lyin_eyes_neutral_thick_3.png"),
+            new ResourceLocation("roundabout", "textures/particle/lyin_eyes_neutral_thick_4.png")
+    };
+    private static final ResourceLocation[] ICONS_HOSTILE = {
+            new ResourceLocation("roundabout", "textures/particle/lyin_eyes_hostile_1.png"),
+            new ResourceLocation("roundabout", "textures/particle/lyin_eyes_hostile_2.png"),
+            new ResourceLocation("roundabout", "textures/particle/lyin_eyes_hostile_3.png"),
+            new ResourceLocation("roundabout", "textures/particle/lyin_eyes_hostile_4.png")
     };
 
     /**
      * Billboarded circle
      */
     public static void render(LivingEntity entity, PoseStack poseStack, MultiBufferSource bufferSource,
-                                           int r, int g, int b, int a, float radius) {
+                                           int r, int g, int b, int a, float radius, byte type) {
         poseStack.pushPose();
         // Position at entity center
         poseStack.translate(0, entity.getBbHeight() * 0.5F, 0);
@@ -43,7 +60,7 @@ public class LyinEyesHighlighterRenderer {
         poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
 
         // RenderType.textSeeThrough makes it visible through walls
-        ResourceLocation icon = getNextIcon(entity);
+        ResourceLocation icon = getNextIcon(entity, type);
         VertexConsumer consumer = bufferSource.getBuffer(RenderType.textSeeThrough(icon));
         Matrix4f matrix = poseStack.last().pose();
         Matrix3f normal = poseStack.last().normal();
@@ -63,7 +80,12 @@ public class LyinEyesHighlighterRenderer {
         poseStack.popPose();
     }
 
-    private static ResourceLocation getNextIcon(LivingEntity entity) {
+    private static final byte
+        PASSIVE = 0,
+        NEUTRAL = 1,
+        HOSTILE = 2;
+
+    private static ResourceLocation getNextIcon(LivingEntity entity, byte type) {
         // low health = 30% health left, slightly higher than the shaking hearts thing that happens
         boolean isLowHealth = (entity.getHealth() / entity.getMaxHealth()) <= 0.3F;
 
@@ -84,21 +106,28 @@ public class LyinEyesHighlighterRenderer {
         // tense villager check
         if(entity instanceof Villager V && (((IVillagerAccess) V).roundabout$isTense() || ((IVillagerAccess) V).roundabout$isUnnerved()))
         {
-            return ICONS_THICK[order[stepInRound]];
+            if (type == NEUTRAL) {
+                return ICONS_NEUTRAL_THICK[order[stepInRound]];
+            }
+            return PASSIVE_ICONS_THICK[order[stepInRound]];
         }
-        else return ICONS[order[stepInRound]];
+
+        if (type == NEUTRAL) {
+            return ICONS_NEUTRAL[order[stepInRound]];
+        }else if (type == HOSTILE) {
+            return ICONS_HOSTILE[order[stepInRound]];
+        }
+
+        else return PASSIVE_ICONS[order[stepInRound]];
     }
 
     public static void renderPassive(LivingEntity entity, PoseStack poseStack, MultiBufferSource bufferSource) {
-        render(entity, poseStack, bufferSource, 0, 255, 0, 200, 0.7F);
-        /// TODO add accesibility icons here
+        render(entity, poseStack, bufferSource, 0, 255, 0, 200, 0.7F, PASSIVE);
     }
     public static void renderNeutral(LivingEntity entity, PoseStack poseStack, MultiBufferSource bufferSource) {
-        render(entity, poseStack, bufferSource, 255, 255, 0, 200, 0.7F);
-        /// TODO add accesibility icons here
+        render(entity, poseStack, bufferSource, 255, 255, 0, 200, 0.7F, NEUTRAL);
     }
     public static void renderEnemy(LivingEntity entity, PoseStack poseStack, MultiBufferSource bufferSource) {
-        render(entity, poseStack, bufferSource, 255, 0, 0, 200, 0.7F);
-        /// TODO add accesibility icons here
+        render(entity, poseStack, bufferSource, 255, 0, 0, 200, 0.7F, HOSTILE);
     }
 }
