@@ -22,9 +22,11 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.List;
+import java.util.UUID;
 
 public class PowersLyinEyes extends NewDashPreset {
     // for move ids accessed here. update public bytes every time this is edited.
@@ -33,12 +35,12 @@ public class PowersLyinEyes extends NewDashPreset {
         FINISH_READ_INVENTORY = 54,
         FINISH_OPEN_MAP = 55;
     // for mob ai, a new attribute is needed to increase the detection range
-    private static final net.minecraft.world.entity.ai.attributes.AttributeModifier DETECTION_BOOST =
-            new net.minecraft.world.entity.ai.attributes.AttributeModifier(
-                    java.util.UUID.fromString("d8f3b2a0-4e2a-4b9d-8f2c-1a2b3c4d5e6f"),
+    private static final AttributeModifier DETECTION_BOOST =
+            new AttributeModifier(
+                    UUID.fromString("d8f3b2a0-4e2a-4b9d-8f2c-1a2b3c4d5e6f"),
                     "Lyin Eyes Range Boost",
                     20.0D,
-                    net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION
+                    AttributeModifier.Operation.ADDITION
             );
     // stand summoning variable
     private int summonOverlayTicks = 0;
