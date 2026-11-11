@@ -1,10 +1,15 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.LyinEyesHighlighterRenderer;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.menu.LyinEyesInventoryMenu;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -15,6 +20,7 @@ import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -22,9 +28,14 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.NeutralMob;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.List;
+import java.util.UUID;
 
 public class PowersLyinEyes extends NewDashPreset {
     // for move ids accessed here. update public bytes every time this is edited.
@@ -33,12 +44,12 @@ public class PowersLyinEyes extends NewDashPreset {
         FINISH_READ_INVENTORY = 54,
         FINISH_OPEN_MAP = 55;
     // for mob ai, a new attribute is needed to increase the detection range
-    private static final net.minecraft.world.entity.ai.attributes.AttributeModifier DETECTION_BOOST =
-            new net.minecraft.world.entity.ai.attributes.AttributeModifier(
-                    java.util.UUID.fromString("d8f3b2a0-4e2a-4b9d-8f2c-1a2b3c4d5e6f"),
+    private static final AttributeModifier DETECTION_BOOST =
+            new AttributeModifier(
+                    UUID.fromString("d8f3b2a0-4e2a-4b9d-8f2c-1a2b3c4d5e6f"),
                     "Lyin Eyes Range Boost",
                     20.0D,
-                    net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION
+                    AttributeModifier.Operation.ADDITION
             );
     // stand summoning variable
     private int summonOverlayTicks = 0;
@@ -89,6 +100,38 @@ public class PowersLyinEyes extends NewDashPreset {
     }
 
     // stand summoning end
+
+    // Render stuff on entities start
+
+    public boolean shouldRenderIconEntity(LivingEntity entity) {
+        if (getVisionModeClient() && isActive()) {
+            float maxDetectionRange = ClientNetworking.getAppropriateConfig().lyinEyesSettings.maxDetectionRange;
+            if (entity != self && entity.isAlive() && self.distanceToSqr(entity) <= (maxDetectionRange * maxDetectionRange)
+                    && !(entity instanceof StandEntity)
+                    && !(entity instanceof FallenMob)
+                    && ((entity instanceof Mob) || (entity instanceof Player))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void renderIconEntity(LivingEntity entity, PoseStack matrixStack, MultiBufferSource buffer) {
+        // hostile mobs
+        if (entity instanceof Enemy && !(entity instanceof NeutralMob)) {
+            LyinEyesHighlighterRenderer.renderEnemy(entity, matrixStack, buffer);
+        }
+        // neutral mobs
+        else if (entity instanceof NeutralMob || entity instanceof Player || ((StandUser) entity).roundabout$hasAStand()) {
+            LyinEyesHighlighterRenderer.renderNeutral(entity, matrixStack, buffer);
+        }
+        // passive mobs
+        else if (!(entity instanceof Enemy) && !(entity instanceof NeutralMob)) {
+            LyinEyesHighlighterRenderer.renderPassive(entity, matrixStack, buffer);
+        }
+    }
+
+    // Render stuff on entities end
 
     // tick power start
 

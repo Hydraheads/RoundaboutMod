@@ -186,7 +186,6 @@ public class PowersDiverDown extends NewPunchingStand {
         public int ticks;
         public Direction face;
         public Vec3 launchVector;
-        public int playerContactTicks = 0;
 
         public KickTrap(int ticks, Direction face, Vec3 launchVector) {
             this.ticks = ticks;
@@ -1269,40 +1268,23 @@ public class PowersDiverDown extends NewPunchingStand {
                     if (this.isAutoRelease) {
                         List<LivingEntity> victims = detectTrapTrigger(trapPos, trap.face);
                         if (!victims.isEmpty()) {
-                            boolean hasPlayer = false;
-                            boolean hasMob = false;
+                            boolean hasVictim = false;
 
                             for (LivingEntity v : victims) {
-                                if (v instanceof Player) {
-                                    hasPlayer = true;
-                                    // doesn't trigger if it's a pet
-                                } else if (!(v instanceof TamableAnimal TA && TA.getOwner() != null && TA.getOwner().is(this.getSelf()))) {
-                                    hasMob = true;
+                                if (!(v instanceof TamableAnimal TA && TA.getOwner() != null && TA.getOwner().is(this.getSelf()))) {
+                                    hasVictim = true;
                                 }
-                            }
-
-                            if (hasPlayer) {
-                                trap.playerContactTicks++;
-                            } else {
-                                trap.playerContactTicks = 0;
                             }
 
                             // trigger the traps auto on mobs, or after 1 second has passed for players
-                            boolean shouldTrigger = hasMob || (trap.playerContactTicks >= 20);
+                            boolean shouldTrigger = hasVictim;
 
                             if (shouldTrigger) {
-                                // remove players from the victim list, in case they were standing with mobs
-                                if (trap.playerContactTicks < 20) {
-                                    victims.removeIf(v -> v instanceof Player);
-                                }
                                 if (!victims.isEmpty()) {
                                     triggerKickTrap(victims, trapPos, trap);
                                     it.remove(); // delete the triggered trap
                                 }
                             }
-                        } else {
-                            // reset timer if player leaves the trap block
-                            trap.playerContactTicks = 0;
                         }
                     }
                 }
@@ -3491,7 +3473,7 @@ public class PowersDiverDown extends NewPunchingStand {
     private List<LivingEntity> detectTrapTrigger(BlockPos pos, Direction face) {
         // Check area directly on top of the trapped block
         BlockPos triggerPos = pos.relative(face);
-        AABB triggerBox = new AABB(triggerPos).inflate(-0.05);
+        AABB triggerBox = new AABB(triggerPos).inflate(0.15);
         List<LivingEntity> victims = new ArrayList<>();
         for (LivingEntity target : this.self.level().getEntitiesOfClass(LivingEntity.class, triggerBox)) {
             if (target.equals(this.self)

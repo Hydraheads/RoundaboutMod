@@ -1037,8 +1037,6 @@ public class StandPowers extends AbilityScapeBasis {
             return SoundIndex.ITEM_GROUP;
         } else if (soundChoice <= SoundIndex.GLAIVE_CHARGE) {
             return SoundIndex.ITEM_GROUP;
-        } else if (soundChoice <= SoundIndex.ZOMBIEHORSE_STITCHING) {
-            return SoundIndex.ITEM_GROUP;
         }
 
         return soundChoice;
