@@ -5074,18 +5074,6 @@
       "roundabout:ctr_rain_step_3"
     ]
   },
-  "ctr_rain_step_4": {
-    "subtitle": "sounds.roundabout.ctr_rain_step_4",
-    "sounds": [
-      "roundabout:ctr_rain_step_4"
-    ]
-  },
-  "ctr_rain_step_5": {
-    "subtitle": "sounds.roundabout.ctr_rain_step_5",
-    "sounds": [
-      "roundabout:ctr_rain_step_5"
-    ]
-  },
   "ctr_stabilizing_rain": {
     "subtitle": "sounds.roundabout.ctr_stabilizing_rain",
     "sounds": [

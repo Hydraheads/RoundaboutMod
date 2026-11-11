@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.substand.CTRbarrierEntity;
 import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -463,14 +464,16 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             List<Entity> getNearEntity = MainUtil.getEntitiesInRange(this.self.level(), this.getSelf().blockPosition(), 2F, this.self);
             AABB dropHitbox = this.self.getBoundingBox().move(0,0.4,0).inflate(0.4F);
 
-            for (Entity ent : getNearEntity){
-                if (dropHitbox.intersects(ent.getBoundingBox())) {
-                    MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 0.8F,
-                            0,
-                            -1,
-                            0);
-                    ent.hurt(ModDamageTypes.of(this.self.level(), ModDamageTypes.SHARP_RAINDROP, self, self), 5);
-                    dropTimer = 0;
+            for (Entity ent : getNearEntity) {
+                if (ent instanceof LivingEntity && !(ent instanceof StandEntity)) {
+                    if (dropHitbox.intersects(ent.getBoundingBox())) {
+                        MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 0.8F,
+                                0,
+                                -1,
+                                0);
+                        ent.hurt(ModDamageTypes.of(this.self.level(), ModDamageTypes.SHARP_RAINDROP, self, self), 5);
+                        dropTimer = 0;
+                    }
                 }
             }
         }
