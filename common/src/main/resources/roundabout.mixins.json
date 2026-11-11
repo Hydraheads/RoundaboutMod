@@ -23,6 +23,7 @@
     "WorldTickServer",
     "ZAbstractFish",
     "ZAbstractSkeleton",
+    "ZAbstractVillager",
     "ZAxolotl",
     "ZBlaze",
     "ZBreedGoal",
