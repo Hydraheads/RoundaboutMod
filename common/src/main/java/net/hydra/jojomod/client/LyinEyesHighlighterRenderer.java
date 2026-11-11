@@ -88,4 +88,17 @@ public class LyinEyesHighlighterRenderer {
         }
         else return ICONS[order[stepInRound]];
     }
+
+    public static void renderPassive(LivingEntity entity, PoseStack poseStack, MultiBufferSource bufferSource) {
+        render(entity, poseStack, bufferSource, 0, 255, 0, 200, 0.7F);
+        /// TODO add accesibility icons here
+    }
+    public static void renderNeutral(LivingEntity entity, PoseStack poseStack, MultiBufferSource bufferSource) {
+        render(entity, poseStack, bufferSource, 255, 255, 0, 200, 0.7F);
+        /// TODO add accesibility icons here
+    }
+    public static void renderEnemy(LivingEntity entity, PoseStack poseStack, MultiBufferSource bufferSource) {
+        render(entity, poseStack, bufferSource, 255, 0, 0, 200, 0.7F);
+        /// TODO add accesibility icons here
+    }
 }

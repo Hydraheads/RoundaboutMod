@@ -1601,7 +1601,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Inject(method = "jumpFromGround", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$Jump(CallbackInfo ci) {
         if (((StandUser) this).roundabout$isClashing() || ((StandUser) this).roundabout$getStandPowers().cancelJump()
-                || ((IFatePlayer)this).rdbt$getFatePowers().cancelJump()
+                || ((IFatePlayer)this).rdbt$getFatePowers().cancelJump() || ((StandUser)this).roundabout$getGrabbedSoul()
         || FateTypes.isTransforming(this) ||
         FateTypes.takesSunlightDamage(this) && FateTypes.isInSunlight(this)
                 && !FateTypes.canCurrentlyAvoidSunlight(this)&& !FateTypes.isHidden(this)) {
