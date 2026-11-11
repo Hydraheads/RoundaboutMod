@@ -425,7 +425,9 @@ public class StandHudRender {
             int st = PCB.getMaxDefenceTicks();
             int sc = PCB.getDefenceTicks();
             sc = Mth.clamp(sc, 0, st);
-            int blt2 = 182 - (int) Math.floor(((double) 182 / st) * (sc));
+            //int blt2 = 182 - (int) Math.floor(((double) 182 / st) * (sc));
+            int blt2 = (int) Math.floor(((double) 182 / st) * (sc));
+
 
             int bleh = 71;
 

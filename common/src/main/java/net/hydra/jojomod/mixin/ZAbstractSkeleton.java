@@ -1,7 +1,10 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.entity.zombie_minion.DogMinion;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.monster.Monster;
@@ -21,6 +24,13 @@ public abstract class ZAbstractSkeleton extends Monster
         this.goalSelector.addGoal(3, new AvoidEntityGoal<DogMinion>(this, DogMinion.class, 6.0f, 1.0, 1.2));
     }
 
+    @Inject(method = "performRangedAttack", at = @At(value = "HEAD"), cancellable = true)
+    public void roundabout$performRangedAttack(LivingEntity $$0, float $$1, CallbackInfo ci) {
+        if (((StandUser) (Object)this).roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB && PCB.invincibleState) {
+            ci.cancel();
+            return;
+        }
+    }
 
     /**Shadows, ignore
      * -------------------------------------------------------------------------------------------------------------

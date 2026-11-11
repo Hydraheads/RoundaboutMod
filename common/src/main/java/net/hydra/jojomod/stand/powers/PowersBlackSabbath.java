@@ -834,7 +834,9 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         //System.out.println(tickDown2 + ". " + test);
        // System.out.println(blackSabbathTargets + ". " + test);
        // System.out.println(moveMode + ". " + test);
-        if(EntityTargetOne != null) {
+
+        //TODO: REWRITE THIS PART BELOW
+    /*    if(EntityTargetOne != null) {
             DimensionType T = this.getSelf().level().dimensionType();
             DimensionType t = this.EntityTargetOne.level().dimensionType();
             if (EntityTargetOne.isRemoved() || !EntityTargetOne.isAlive()) {
@@ -844,7 +846,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                 EntityTargetOne = null;
                 selectTargetNull();
             }
-        }
+        }*/
 
         if(isClient()){
             StandEntity s = this.getStandEntity(this.getSelf());
@@ -1235,10 +1237,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             }
         }
         return target;
-    }
-    public void selectTargetNull(){
-        tryIntPower(PowersBlackSabbath.CLIENT_SYNC_TARGET, true, 0);
-        tryIntPowerPacket(PowersBlackSabbath.CLIENT_SYNC_TARGET, 0);
     }
     public void removeTargetSingular(LivingEntity LE){
         if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){
