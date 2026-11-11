@@ -92,6 +92,11 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         return new Powers20thCenturyBoy(entity);
     }
 
+    @Override
+    public void onStandSummon(boolean desummon) {
+        super.onStandSummon(desummon);
+        invincibleState = false;
+    }
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
@@ -244,8 +249,9 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             case PowerIndex.POWER_1, PowerIndex.POWER_1_SNEAK -> {
                 switchMode();
             }
-            case PowerIndex.POWER_2, PowerIndex.POWER_2_SNEAK -> {
-                toggleInvincibility();
+            case PowerIndex.POWER_2-> {
+                //toggleInvincibility();
+                setInvincibleState(invincibleState);
             }
 
         }
@@ -263,11 +269,14 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             }
             case SKILL_2_NORMAL,SKILL_2_CROUCH -> {
                 if (!this.onCooldown(PowerIndex.SKILL_2)) {
-                    tryPower(PowerIndex.POWER_2, true);
-                    this.tryPowerPacket(PowerIndex.POWER_2);
+                    //tryPower(PowerIndex.POWER_2, true);
+                    //this.tryPowerPacket(PowerIndex.POWER_2);
+                    /*
                     if (!this.invincibleState){
                         this.setCooldown(PowerIndex.SKILL_2, ConfigManager.getConfig().centuryBoySettings.invincibilityCooldown);
                     }
+                     */
+                    toggleInvicibilityClient();
                 }
             }
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
@@ -278,6 +287,23 @@ public class Powers20thCenturyBoy extends NewDashPreset {
 
     }
 
+    private void toggleInvicibilityClient() {
+        invincibleState = !invincibleState;
+        this.tryIntPowerPacket(PowerIndex.POWER_2, invincibleState ? 1 : 0);
+
+        if (!this.invincibleState){
+            this.setCooldown(PowerIndex.SKILL_2, ConfigManager.getConfig().centuryBoySettings.invincibilityCooldown);
+        }
+    }
+
+    @Override
+    public boolean tryIntPower(int move, boolean forced, int chargeTime){
+        if (move == PowerIndex.POWER_2) {
+            invincibleState = chargeTime == 1;
+        }
+
+        return super.tryIntPower(move, forced, chargeTime);
+    }
 
     public void switchMode(){
         if (mode == 1){
@@ -300,9 +326,12 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     }
 
     public void toggleInvincibility(){
+        setInvincibleState(!invincibleState);
+    }
 
-        if (!invincibleState) {
-            invincibleState = true;
+    public void setInvincibleState(boolean invincible) {
+        invincibleState = invincible;
+        if (invincible) {
             switch (mode) {
                 case 1 -> {
                     staticMode = 1;
@@ -324,12 +353,21 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             this.self.stopUsingItem();
             if(this.isClient()){ClientUtil.stopDestroyingBlock();}
         } else {
-            invincibleState = false;
             staticMode = 0;
         }
-        if (!isClient() && self instanceof ServerPlayer PL) {
-            ((StandUser)PL).roundabout$setStandAnimation((byte)staticMode);
-            //S2CPacketUtil.syncCurrentStance20THCB(PL.getId(), staticMode, invincibleState ? 1 : 0);
+        if (!isClient()) {
+            if (self instanceof ServerPlayer PL) {
+                ((StandUser) PL).roundabout$setStandAnimation((byte) staticMode);
+            }
+
+            if (self instanceof Mob) {
+                StandUser SU = ((StandUser)self);
+                if (invincible) {
+                    SU.roundabout$setIdlePosX((byte)0);
+                }else if (SU.roundabout$getIdlePos() != (byte)1){
+                    ((StandUser)self).roundabout$setIdlePosX((byte)1);
+                }
+            }
         }
     }
 
@@ -611,14 +649,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             }
             staticMode = 0;
         }
-        if (!isClient() && self instanceof Mob) {
-            StandUser SU = ((StandUser)self);
-            if (invincibleState && SU.roundabout$getIdlePos() != (byte)0) {
-                SU.roundabout$setIdlePosX((byte)0);
-            }else if (SU.roundabout$getIdlePos() != (byte)1){
-                ((StandUser)self).roundabout$setIdlePosX((byte)1);
-            }
-        }
+
 
         if (deflectTicks > 0) deflectTicks--;
 
@@ -660,7 +691,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             }
 
             if (gticks <= 0){
-                if (dist <= 6 && !invincibleState && currentDefenseTicks > 180) {
+                /*if (dist <= 6 && !invincibleState && currentDefenseTicks > 180) {
                     if (!this.onCooldown(PowerIndex.POWER_2)){
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, false);}
                     if (isSkel){
@@ -675,7 +706,28 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                 } else if (currentDefenseTicks < 90 && invincibleState) {
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, false);
                     gticks += 80;
+                }*/
+                if (currentDefenseTicks < 50) {
+                    setInvincibleState(false);
+                } else if (currentDefenseTicks > 90 || invincibleState) {
+                    if (isSkel) {
+                        if (invincibleState && dist > 6) {
+                            setInvincibleState(false);
+                            gticks += 80;
+                        } else if (!invincibleState) {
+                            setInvincibleState(true);
+                        }
+                    } else {
+                        if (invincibleState && dist <= 2) {
+                            setInvincibleState(false);
+                            gticks += 80;
+                        } else if (!invincibleState) {
+                            setInvincibleState(true);
+                        }
+                    }
                 }
+
+
             }else {
                 gticks--;
             }
