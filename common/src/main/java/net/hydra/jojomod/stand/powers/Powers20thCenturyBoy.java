@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
@@ -28,6 +29,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -95,7 +97,38 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     @Override
     public void onStandSummon(boolean desummon) {
         super.onStandSummon(desummon);
-        invincibleState = false;
+        setInvincibleState(false);
+    }
+
+    @Override
+    public void onStandSwitch() {
+        super.onStandSwitch();
+        setInvincibleState(false);
+        Roundabout.LOGGER.info("On stand switch");
+    }
+
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag $$0) {
+        super.addAdditionalSaveData($$0);
+
+        $$0.putInt("currentDefenseTicks", currentDefenseTicks);
+        $$0.putInt("staticMode", staticMode);
+        $$0.putInt("defenseMode", mode);
+        $$0.putBoolean("defenseActive", invincibleState);
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        Roundabout.LOGGER.info("data read, client: " + isClient());
+
+        if (tag.contains("currentDefenseTicks")) { currentDefenseTicks = tag.getInt("currentDefenseTicks"); }
+        if (tag.contains("staticMode")) { staticMode = tag.getInt("staticMode"); }
+        if (tag.contains("defenseMode")) { mode = tag.getInt("defenseMode"); }
+        if (tag.contains("defenseActive")) {
+            setInvincibleState(tag.getBoolean("defenseActive"), true);
+        }
     }
 
     @Override
@@ -325,11 +358,11 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         }
     }
 
-    public void toggleInvincibility(){
-        setInvincibleState(!invincibleState);
-    }
 
     public void setInvincibleState(boolean invincible) {
+        setInvincibleState(invincible, false);
+    }
+    public void setInvincibleState(boolean invincible, boolean loading) {
         invincibleState = invincible;
         if (invincible) {
             switch (mode) {
@@ -368,6 +401,9 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                     ((StandUser)self).roundabout$setIdlePosX((byte)1);
                 }
             }
+        }
+        if (!loading) {
+            saveDiscAndSync();
         }
     }
 
