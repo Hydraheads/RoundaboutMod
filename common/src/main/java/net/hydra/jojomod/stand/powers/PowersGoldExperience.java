@@ -699,7 +699,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 Vector3f branchFinal = new Vector3f(branchPos.getX() + 0.5f, branchPos.getY(), branchPos.getZ() + 0.5f);
 
                 BlockState branch = Blocks.OAK_WOOD.defaultBlockState();
-                if (level.random.nextFloat() < 0.50F && y >= actualHeight - 3){
+                if (level.random.nextFloat() < 0.70F && y >= actualHeight - 3){
                     branch = Blocks.OAK_LEAVES.defaultBlockState();
                 }
 
