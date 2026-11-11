@@ -1,10 +1,15 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.LyinEyesHighlighterRenderer;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.menu.LyinEyesInventoryMenu;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -15,6 +20,7 @@ import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -22,7 +28,10 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.NeutralMob;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.List;
@@ -91,6 +100,38 @@ public class PowersLyinEyes extends NewDashPreset {
     }
 
     // stand summoning end
+
+    // Render stuff on entities start
+
+    public boolean shouldRenderIconEntity(LivingEntity entity) {
+        if (getVisionModeClient() && isActive()) {
+            float maxDetectionRange = ClientNetworking.getAppropriateConfig().lyinEyesSettings.maxDetectionRange;
+            if (entity != self && entity.isAlive() && self.distanceToSqr(entity) <= (maxDetectionRange * maxDetectionRange)
+                    && !(entity instanceof StandEntity)
+                    && !(entity instanceof FallenMob)
+                    && ((entity instanceof Mob) || (entity instanceof Player))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void renderIconEntity(LivingEntity entity, PoseStack matrixStack, MultiBufferSource buffer) {
+        // hostile mobs
+        if (entity instanceof Enemy && !(entity instanceof NeutralMob)) {
+            LyinEyesHighlighterRenderer.renderEnemy(entity, matrixStack, buffer);
+        }
+        // neutral mobs
+        else if (entity instanceof NeutralMob || entity instanceof Player || ((StandUser) entity).roundabout$hasAStand()) {
+            LyinEyesHighlighterRenderer.renderNeutral(entity, matrixStack, buffer);
+        }
+        // passive mobs
+        else if (!(entity instanceof Enemy) && !(entity instanceof NeutralMob)) {
+            LyinEyesHighlighterRenderer.renderPassive(entity, matrixStack, buffer);
+        }
+    }
+
+    // Render stuff on entities end
 
     // tick power start
 
