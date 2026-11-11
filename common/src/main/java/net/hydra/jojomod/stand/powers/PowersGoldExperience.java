@@ -25,6 +25,7 @@ import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.BlockGrabPreset;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.config.ClientConfig;
@@ -35,6 +36,9 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -54,6 +58,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.VineBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -99,6 +104,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             BlockState state,
             int delayTicks
     ) {}
+    private double treeRoofY = -500.0;
 
     // basic stand registry stuff
     public PowersGoldExperience(LivingEntity self) {super(self);}
@@ -115,6 +121,17 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public void tickPower() {
         if (!this.self.level().isClientSide()) {
+            if (this.treeRoofY > -100.0) {
+                AABB checkArea = this.self.getBoundingBox().inflate(0.5, 1.0, 0.5);
+                for (BlockWallEntity wall : this.self.level().getEntitiesOfClass(BlockWallEntity.class, checkArea)) {
+                    if (wall.isGoldExperienceTree) {
+                        this.self.fallDistance = 0.0F;
+                        if (this.self.getY() >= this.treeRoofY - 0.5 && this.self.getDeltaMovement().y > 0.0) {
+                            this.self.setDeltaMovement(this.self.getDeltaMovement().x, 0.0, this.self.getDeltaMovement().z);
+                        }
+                    }
+                }
+            }
             //tree spawning
             if (!pendingTreeBlocks.isEmpty()) {
                 treeSpawnTimer++;
@@ -134,8 +151,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
                         treePart.setDataFinalPos(data.finalPos());
                         //despawn timer of 15 seconds
-                        treePart.timing = 300;
+                        treePart.timing = Math.max(1, 200 - data.delayTicks());
                         treePart.isWhiteAlbumWall = false;
+                        treePart.isGoldExperienceTree = true;
+                        treePart.creator = this.getSelf();
 
                         this.self.level().addFreshEntity(treePart);
                         iterator.remove();
@@ -371,6 +390,16 @@ public class PowersGoldExperience extends BlockGrabPreset {
             boolean isSecondHit = this.attackTimeDuring >= 10;
             dualPunchImpact(target, isSecondHit);
         }
+        else if (this.getActivePower() == PowerIndex.BARRAGE) {
+            rootBarrageImpact(target, false);
+        }
+    }
+
+    @Override
+    public void handleStandAttack2(Player player, Entity target) {
+        if (this.getActivePower() == PowerIndex.BARRAGE) {
+            rootBarrageImpact(target, true);
+        }
     }
 
     private void tryToDashClient() {
@@ -404,6 +433,150 @@ public class PowersGoldExperience extends BlockGrabPreset {
         }
     }
 
+    // unique root barrage start
+
+    @Override
+    public void updateBarrage() {
+        if (this.attackTimeDuring == -2 && this.getSelf() instanceof Player) {
+            ((StandUser) this.self).roundabout$tryPower(PowerIndex.GUARD, true);
+        } else {
+            if (this.attackTimeDuring > this.getBarrageLength()) {
+                this.attackTimeDuring = -20;
+            } else if (this.attackTimeDuring > 0) {
+                drawRoots();
+                this.setAttackTime((getBarrageRecoilTime() - 1) -
+                        Math.round(((float) this.attackTimeDuring / this.getBarrageLength())
+                                * (getBarrageRecoilTime() - 1)));
+                standBarrageHit();
+            }
+        }
+    }
+
+    @Override
+    public void standBarrageHit() {
+        // call super method first for normal hits, otherwise continue to the ranged barrage
+        super.standBarrageHit();
+
+        // long range done by adding the extra range + normal range
+        float extendedReach = 3.0F + 8.0F;
+        boolean lastHit = (this.attackTimeDuring >= this.getBarrageLength());
+
+        if (this.self instanceof Player) {
+            if (isPacketPlayer()) {
+                List<Entity> listE = getTargetEntityList(this.self, extendedReach);
+
+                if (!listE.isEmpty()) {
+                    for (Entity e : listE) {
+                        if (e == null) continue;
+                        if (e.distanceTo(this.self) >= 3.5F && e.distanceTo(this.self) <= extendedReach) {
+                            if (!(e instanceof StandEntity SE && !SE.canBeHitByStands()) && !PowerTypes.isInADifferentExistence(e, self)) {
+                                if (lastHit) {
+                                    tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK_2, e.getId());
+                                } else {
+                                    tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK, e.getId());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            List<Entity> listE = getTargetEntityList(this.self, extendedReach);
+
+            if (!listE.isEmpty()) {
+                for (Entity e : listE) {
+                    if (e == null) continue;
+                    if (e.distanceTo(this.self) >= 3.5F && e.distanceTo(this.self) <= extendedReach) {
+                        if (!(e instanceof StandEntity SE && !SE.canBeHitByStands()) && !PowerTypes.isInADifferentExistence(e, self)) {
+                            rootBarrageImpact(e, lastHit);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void rootBarrageImpact(Entity entity, boolean lastHit) {
+        // basically everything here was taken from magician's red.
+        if (entity == null) return;
+
+        float pow = lastHit ? 4.0F : 0.25F;
+        /**By saving the velocity before hitting, we can let people approach barraging foes
+         * through shields.*/
+        Vec3 prevVelocity = entity.getDeltaMovement();
+
+        if (StandDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
+            if (!this.self.level().isClientSide()) {
+                if (this.self.tickCount % 4 == 0 || lastHit) {
+                    playSoundIfPossible(self.level(), null, entity.blockPosition(), SoundEvents.ROOTS_BREAK, SoundSource.PLAYERS, 1.2F, 1.0F);
+                }
+            }
+
+            if (entity instanceof LivingEntity LE) {
+                setDazed(LE, lastHit ? (byte) 0 : (byte) 3);
+            }
+
+            if (lastHit) {
+                barrageImpact2(entity, true, 0.3F);
+            } else {
+                entity.setDeltaMovement(prevVelocity);
+                entity.hurtMarked = true;
+            }
+        } else {
+            entity.setDeltaMovement(prevVelocity);
+            if (lastHit) {
+                knockShield2(entity, 100);
+            }
+        }
+    }
+
+    // draws the root cone
+    private void drawRoots() {
+        if (!this.self.level().isClientSide()) {
+            StandEntity stand = this.getStandEntity(this.self);
+            if (stand != null) {
+                float maxReach = 3.0F + 8.0F;
+                Vec3 vector = getRayBlock(this.self, maxReach);
+
+                if (vector != null) {
+                    DustParticleOptions brownDust = new DustParticleOptions(new org.joml.Vector3f(0.45F, 0.28F, 0.12F), 1.2F);
+
+                    Level level = this.self.level();
+                    Vec3 origin = stand.position();
+
+                    Vec3 forward = new Vec3(vector.x - stand.getX(), 0, vector.z - stand.getZ()).normalize();
+                    Vec3 right = new Vec3(-forward.z, 0, forward.x);
+
+                    int distanceSteps = 6;
+                    for (int i = 1; i <= distanceSteps; i++) {
+                        double stepDist = (i / (double) distanceSteps) * maxReach;
+                        double spreadWidth = (i / (double) distanceSteps) * 3.5D;
+
+                        int particlesPerStep = 4;
+                        for (int p = 0; p < particlesPerStep; p++) {
+                            double offset = (level.random.nextDouble() - 0.5D) * 2.0D * spreadWidth;
+                            double lengthJitter = (level.random.nextDouble() - 0.5D) * 1.5D;
+
+                            Vec3 samplePos = origin.add(forward.scale(stepDist + lengthJitter)).add(right.scale(offset));
+                            sendParticlesIfPossible(level,
+                                    brownDust,
+                                    samplePos.x, stand.getY() + 0.15D, samplePos.z,
+                                    1, 0.15, 0.02, 0.15, 0.01);
+                            if (level.random.nextFloat() < 0.15F) {
+                                sendParticlesIfPossible(level,
+                                        new BlockParticleOption(ParticleTypes.BLOCK, Blocks.ROOTED_DIRT.defaultBlockState()),
+                                        samplePos.x, stand.getY() + 0.15D, samplePos.z,
+                                        1, 0.15, 0.05, 0.15, 0.01);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // unique root barrage end
+
     // tree creation start
 
     private void tryGrowTree() {
@@ -430,83 +603,110 @@ public class PowersGoldExperience extends BlockGrabPreset {
     }
 
     private void finishTree() {
-        if (!this.self.level().isClientSide()) {
-            Level level = this.self.level();
+        Level level = this.self.level();
+        BlockPos centerPos;
 
-            Vec3 eyePos = this.self.getEyePosition(1.0F);
-            Vec3 lookVec = this.self.getViewVector(1.0F);
-            Vec3 reachVec = eyePos.add(lookVec.scale(4.0D));
+        if (this.isHoldingSneak()) {
+            centerPos = this.self.blockPosition();
+        } else {
+            HitResult hit = pick(3, 0.0F, false);
 
-            BlockHitResult blockHit = level.clip(new ClipContext(
-                    eyePos,
-                    reachVec,
-                    ClipContext.Block.COLLIDER,
-                    ClipContext.Fluid.NONE,
-                    this.self
-            ));
-
-            BlockPos base;
-            Direction growthDirection = Direction.UP;
-
-            if (blockHit.getType() == HitResult.Type.BLOCK) {
-                base = blockHit.getBlockPos().relative(blockHit.getDirection());
+            if (hit.getType() == HitResult.Type.BLOCK) {
+                BlockHitResult blockHit = (BlockHitResult) hit;
+                centerPos = blockHit.getBlockPos().relative(blockHit.getDirection());
             } else {
-                base = BlockPos.containing(reachVec);
+                Vec3 eyePos = this.self.getEyePosition(1.0F);
+                Vec3 lookVec = this.self.getViewVector(1.0F);
+                Vec3 reachVec = eyePos.add(lookVec.scale(3.0D));
+                centerPos = BlockPos.containing(reachVec);
             }
+        }
 
+        boolean isSafe = false;
+        for (int i = 0; i < 5; i++) {
+            if (level.getBlockState(centerPos.below(i)).isSolid()) {
+                centerPos = centerPos.below(i).above();
+                isSafe = true;
+                break;
+            }
+        }
+
+        if (!isSafe) {
+            this.setAttackTimeDuring(-5);
+            return;
+        }
+
+        BlockPos base = new BlockPos(centerPos.getX(), Math.min(centerPos.getY(), this.self.blockPosition().getY()), centerPos.getZ());
+        Direction growthDirection = Direction.UP;
+
+        int maxHeight = 7;
+        int actualHeight = 0;
+
+        for (int y = 0; y < maxHeight; y++) {
+            BlockPos trunkPos = base.relative(growthDirection, y);
+
+            if (!level.getBlockState(trunkPos).canBeReplaced() ||
+                    !level.getBlockState(trunkPos.above(1)).canBeReplaced() ||
+                    !level.getBlockState(trunkPos.above(2)).canBeReplaced()) {
+                break;
+            }
+            actualHeight++;
+        }
+
+        if (actualHeight == 0) {
+            this.setAttackTimeDuring(-5);
+            return;
+        }
+
+        this.treeRoofY = base.getY() + actualHeight;
+
+        if (!level.isClientSide()) {
             pendingTreeBlocks.clear();
             treeSpawnTimer = 0;
 
-            int maxHeight = 10;
-            int delayStep = 1;
+            float yOffset = -actualHeight;
 
-            for (int y = 0; y < maxHeight; y++) {
+            for (int y = 0; y < actualHeight; y++) {
                 BlockPos trunkPos = base.relative(growthDirection, y);
 
-                Vector3f trunkStart = new Vector3f(
-                        trunkPos.getX() + 0.5f,
-                        trunkPos.getY() - 1.0f,
-                        trunkPos.getZ() + 0.5f
-                );
-                Vector3f trunkFinal = new Vector3f(
-                        trunkPos.getX() + 0.5f,
-                        trunkPos.getY(),
-                        trunkPos.getZ() + 0.5f
-                );
+                Vector3f newVec = new Vector3f((float) (trunkPos.getX() + 0.5), (float) trunkPos.getY(), (float) (trunkPos.getZ() + 0.5)).add(0, yOffset, 0);
 
-                pendingTreeBlocks.add(new TreeBlockSpawnData(
-                        trunkStart,
-                        trunkFinal,
-                        Blocks.OAK_LOG.defaultBlockState(),
-                        y * delayStep
-                ));
+                BlockWallEntity trunk = new BlockWallEntity(
+                        level,
+                        newVec.x,
+                        newVec.y,
+                        newVec.z,
+                        Blocks.OAK_WOOD.defaultBlockState()
+                );
+                trunk.setDataFinalPos(newVec.add(0, actualHeight, 0));
+                trunk.timing = 200;
+                trunk.tsmove = true;
+                trunk.isGoldExperienceTree = true;
+                trunk.creator = this.self;
+                PowerTypes.copyPlaneOfExisting(this.self, trunk);
+                level.addFreshEntity(trunk);
 
                 Direction branchDir = Direction.from2DDataValue(y % 4);
                 BlockPos branchPos = trunkPos.relative(branchDir);
 
-                Vector3f branchStart = new Vector3f(
-                        trunkPos.getX() + 0.5f,
-                        trunkPos.getY() - 0.5f,
-                        trunkPos.getZ() + 0.5f
-                );
-                Vector3f branchFinal = new Vector3f(
-                        branchPos.getX() + 0.5f,
-                        branchPos.getY(),
-                        branchPos.getZ() + 0.5f
-                );
+                Vector3f branchStart = new Vector3f(trunkPos.getX() + 0.5f, trunkPos.getY() - 0.5f, trunkPos.getZ() + 0.5f);
+                Vector3f branchFinal = new Vector3f(branchPos.getX() + 0.5f, branchPos.getY(), branchPos.getZ() + 0.5f);
 
-                pendingTreeBlocks.add(new TreeBlockSpawnData(
-                        branchStart,
-                        branchFinal,
-                        Blocks.OAK_LOG.defaultBlockState(),
-                        (y * delayStep) + 1
-                ));
+                pendingTreeBlocks.add(new TreeBlockSpawnData(branchStart, branchFinal, Blocks.OAK_WOOD.defaultBlockState(), 12 + (y * 2)));
             }
 
             playSoundIfPossible(level, null, base, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.9F, 1F);
-            addEXP(10);
+            addEXP(5);
             this.setAttackTimeDuring(-5);
         }
+    }
+
+    // taken directly from white album
+    private HitResult pick(double $$0, float $$1, boolean $$2) {
+        Vec3 $$3 = this.self.getEyePosition($$1);
+        Vec3 $$4 = this.self.getViewVector($$1);
+        Vec3 $$5 = $$3.add($$4.x * $$0, $$4.y * $$0, $$4.z * $$0);
+        return this.self.level().clip(new ClipContext($$3, $$5, ClipContext.Block.COLLIDER, $$2 ? net.minecraft.world.level.ClipContext.Fluid.ANY : net.minecraft.world.level.ClipContext.Fluid.NONE, self));
     }
 
     // tree creation end
@@ -735,7 +935,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 lifeform.setSourceItem(consumedItem);
             }
 
-            if (livingEntity instanceof Mob mob && this.self.level() instanceof ServerLevel serverLevel) {
+            if (livingEntity instanceof Mob mob && !(mob instanceof GEFoxEntity) && this.self.level() instanceof ServerLevel serverLevel) {
                 mob.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(mob.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
             }
 
@@ -1419,6 +1619,12 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     @Override
     public float inputSpeedModifiers(float basis) {
+        if (this.activePower == PowerIndex.BARRAGE_CHARGE_2) {
+            basis*=0.5f;
+        } else if (this.activePower == PowerIndex.BARRAGE_2) {
+            basis *= 0.3f;
+        }
+
         if (this.getActivePower() == HEAL){
             // slows you down by 70% while healing
             basis *= 0.7f;
@@ -1624,7 +1830,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
         } else if (isGuarding()){
             setSkillIcon(context, x, y, 4, StandIcons.GOLD_EXPERIENCE_BRAMBLE_TRAP, PowerIndex.SKILL_4_GUARD);
         } else {
-            setSkillIcon(context, x, y, 4, StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, PowerIndex.SKILL_1);
+            setSkillIcon(context, x, y, 4, StandIcons.GOLD_EXPERIENCE_TREE_GROWTH, PowerIndex.SKILL_4);
         }
     }
 
@@ -1671,8 +1877,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 "instruction.roundabout.passive", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 4, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 96, topPos + 118, 0, "ability.roundabout.gold_experience_placeholder",
                 "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 4, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 80, 0, "ability.roundabout.gold_experience_placeholder",
-                "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 4, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 80, 0, "ability.roundabout.gold_experience_tree_growth",
+                "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_TREE_GROWTH, 4, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 99, 0, "ability.roundabout.gold_experience_violent_brambles",
                 "instruction.roundabout.press_skill_crouch", StandIcons.GOLD_EXPERIENCE_BRAMBLES, 4, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 118, 0, "ability.roundabout.gold_experience_bramble_trap",

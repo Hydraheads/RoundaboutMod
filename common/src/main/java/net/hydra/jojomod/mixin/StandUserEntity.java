@@ -3619,7 +3619,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Override
     public void roundabout$sealStand(int ticks) {
-        Roundabout.LOGGER.info(this.roundabout$getMaxSealedTicks() + " / " + ticks);
         if (this.roundabout$getMaxSealedTicks() < ticks) {
             this.roundabout$setSealedTicks(ticks);
         }
@@ -6337,7 +6336,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     if (target == rdbt$this() || target.hasEffect(ModEffects.HAZE_VIRUS))
                         continue;
                     if (this.random.nextFloat() < 1.0F) {
-                        target.addEffect(new MobEffectInstance(ModEffects.HAZE_VIRUS, 200, amplifier, false, true),
+                        target.addEffect(new MobEffectInstance(ModEffects.HAZE_VIRUS, 75, amplifier, false, true),
                                 rdbt$this());
                     }
                 }
@@ -6384,7 +6383,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         continue;
                     if (this.random.nextFloat() < 1.0F) {
                         target.addEffect(
-                                new MobEffectInstance(ModEffects.DISTORTION_VIRUS, 200, amplifier, false, true),
+                                new MobEffectInstance(ModEffects.DISTORTION_VIRUS, 75, amplifier, false, true),
                                 rdbt$this());
                     }
                 }
@@ -7321,16 +7320,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     // for diver down end
 
 
-    @Unique
-    private boolean roundabout$hasInfiniteSpin = false;
 
-    @Unique
-    public boolean roundabout$hasInfiniteSpin() {return roundabout$hasInfiniteSpin;}
-    public void roundabout$clearInfiniteSpin() {
-        Roundabout.LOGGER.info(rdbt$this().getName().getString());
-        this.roundabout$hasInfiniteSpin = false;
-        this.removeEffect(ModEffects.INFINITE_SPIN);
-    }
     @Inject(method = "tickEffects",at = @At("HEAD"))
     private void roundabout$tickInfiniteSpin(CallbackInfo ci) {
         MobEffectInstance instance = this.getEffect(ModEffects.INFINITE_SPIN);

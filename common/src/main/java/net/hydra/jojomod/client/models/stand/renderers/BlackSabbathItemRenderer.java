@@ -6,15 +6,13 @@ import net.hydra.jojomod.client.models.stand.BlackSabbathModel;
 import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.item.GlaiveItem;
-import net.hydra.jojomod.item.RoundaboutArrowItem;
-import net.hydra.jojomod.item.StandArrowItem;
-import net.hydra.jojomod.item.WarhammerItem;
+import net.hydra.jojomod.item.*;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.block.CakeBlock;
 
 public class BlackSabbathItemRenderer <T extends BlackSabbathEntity, M extends StandModel<T>> extends RenderLayer<T, M> {
 
@@ -30,9 +28,10 @@ public class BlackSabbathItemRenderer <T extends BlackSabbathEntity, M extends S
         boolean flag1 = this.getParentModel().young;
         ItemStack it = blackSabbathEntity.getHeldItemSabbath();
         int slider = blackSabbathEntity.slider();
-         if(!it.isEmpty() && !blackSabbathEntity.getNotRenderItem() && !(it.getItem() instanceof BlockItem && !((it.is(Items.HOPPER)) || it.is(Items.BELL))) && blackSabbathEntity.getGrabbing() != 0){
-             boolean flag2 = it.getItem() instanceof RoundaboutArrowItem || it.getItem() instanceof SwordItem || it.getItem() instanceof GlaiveItem || it.getItem() instanceof HoeItem || it.getItem() instanceof PickaxeItem || it.getItem() instanceof AxeItem || it.getItem() instanceof ShovelItem || it.getItem() instanceof ShearsItem || it.getItem() instanceof BrushItem || it.getItem() instanceof WarhammerItem;
-             boolean flag3 = it.getItem() instanceof PotionItem || it.getItem() instanceof BottleItem || it.getItem() instanceof ElytraItem || it.getItem() instanceof ArmorItem || it.getItem() instanceof BucketItem || it.is(Items.HOPPER) /*|| it.is(Items.BELL)*/;
+         if(!it.isEmpty() && !blackSabbathEntity.getNotRenderItem() && !(it.getItem() instanceof BlockItem && !((it.is(Items.HOPPER)) || it.is(Items.BELL) ||
+                 (it.getItem().getFoodProperties() != null && it.isEdible() && !it.is(Items.CAKE)))) && blackSabbathEntity.getGrabbing() != 0){
+             boolean flag2 = it.getItem() instanceof RoundaboutArrowItem || it.getItem() instanceof SacrificialDaggerItem || it.getItem() instanceof SwordItem || it.getItem() instanceof GlaiveItem || it.getItem() instanceof HoeItem || it.getItem() instanceof PickaxeItem || it.getItem() instanceof AxeItem || it.getItem() instanceof ShovelItem || it.getItem() instanceof ShearsItem || it.getItem() instanceof BrushItem || it.getItem() instanceof WarhammerItem;
+             boolean flag3 =  it.getItem().getFoodProperties() != null && it.isEdible() && !it.is(Items.CAKE) || it.getItem() instanceof PotionItem || it.getItem() instanceof BottleItem || it.getItem() instanceof ElytraItem || it.getItem() instanceof ArmorItem || it.getItem() instanceof BucketItem || it.is(Items.HOPPER) /*|| it.is(Items.BELL)*/;
              boolean flag4 = it.getItem() instanceof InstrumentItem && it.is(Items.GOAT_HORN);
             poseStack.pushPose();
             if(!flag1 && !flag2) {
