@@ -433,6 +433,12 @@ public class PowersGoldExperience extends BlockGrabPreset {
         }
     }
 
+    // item imbue start
+
+
+
+    // item imbue end
+
     // unique root barrage start
 
     @Override
@@ -692,7 +698,12 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 Vector3f branchStart = new Vector3f(trunkPos.getX() + 0.5f, trunkPos.getY() - 0.5f, trunkPos.getZ() + 0.5f);
                 Vector3f branchFinal = new Vector3f(branchPos.getX() + 0.5f, branchPos.getY(), branchPos.getZ() + 0.5f);
 
-                pendingTreeBlocks.add(new TreeBlockSpawnData(branchStart, branchFinal, Blocks.OAK_WOOD.defaultBlockState(), 12 + (y * 2)));
+                BlockState branch = Blocks.OAK_WOOD.defaultBlockState();
+                if (level.random.nextFloat() < 0.30F){
+                    branch = Blocks.OAK_LEAVES.defaultBlockState();
+                }
+
+                pendingTreeBlocks.add(new TreeBlockSpawnData(branchStart, branchFinal, branch, 12 + (y * 2)));
             }
 
             playSoundIfPossible(level, null, base, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.9F, 1F);
