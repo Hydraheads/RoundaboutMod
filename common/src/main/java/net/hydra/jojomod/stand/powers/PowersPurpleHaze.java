@@ -447,7 +447,13 @@ public class PowersPurpleHaze extends NewPunchingStand {
     @Override
     public boolean tryIntPower(int move, boolean forced, int chargeTime) {
         if (move == PowerIndex.SNEAK_ATTACK) {
-            this.chargedFinal = chargeTime;
+            if (this.getActivePower() != PowerIndex.SNEAK_ATTACK_CHARGE) {
+                return false;
+            }
+
+            this.chargedFinal = Mth.clamp(
+                    chargeTime, 0, getMaxSneakAttackCharge()
+            );
         }
 
         return super.tryIntPower(move, forced, chargeTime);
@@ -603,7 +609,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 setSneakAttackCharge();
             }
             case PowerIndex.SNEAK_ATTACK -> {
-                setPowerSneakAttack();
+                return setPowerSneakAttack();
             }
             case PowerIndex.EXTRA -> {
                 return this.fallBraceInit();
@@ -1964,6 +1970,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
 
     private void setSneakAttackCharge() {
+        this.sneakAttackImpactDone = false;
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.SNEAK_ATTACK_CHARGE);
         this.animateStand(PurpleHazeEntity.HEAVY_PUNCH_WINDUP);
@@ -1972,21 +1979,31 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     // charges resolutions:
     public boolean setPowerSneakAttack() {
+        if (this.getActivePower() != PowerIndex.SNEAK_ATTACK_CHARGE) {
+            return false;
+        }
+
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.SNEAK_ATTACK);
         this.poseStand(OffsetIndex.ATTACK);
-        chargedFinal = Math.min(this.chargedFinal,getMaxSneakAttackCharge());
+
+        chargedFinal = Mth.clamp(
+                this.chargedFinal, 0, getMaxSneakAttackCharge()
+        );
 
         this.animateStand(PurpleHazeEntity.HEAVY_PUNCH);
 
         return true;
     }
 
+
     private int getMaxSneakAttackCharge() { return 25+(getMeltLevel()*2);}
 
     public void updateSneakAttack(){
         if (this.attackTimeDuring > -1) {
-            if (this.attackTimeDuring == 5) {
+            if (this.attackTimeDuring == 5 && !this.sneakAttackImpactDone) {
+                this.sneakAttackImpactDone = true;
+
                 if (chargedFinal >= getMaxSneakAttackCharge()) {
                     this.setAttackTimeMax((int) (ClientNetworking.getAppropriateConfig().killerQueenSettings.kickMinimumCooldown + chargedFinal * 1.5));
                 } else {
@@ -2019,10 +2036,13 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     tryIntPowerPacket(PowerIndex.SNEAK_ATTACK,atd);
                 }
             }
+            if (this.attackTimeDuring == 5 && this.sneakAttackImpactDone) {
+            }
         }
     }
 
     public int chargedFinal;
+    private boolean sneakAttackImpactDone = false;
 
     public float getSneakAttackKnockback(){
         return (0.15f + ((float)this.chargedFinal/(float)getMaxSneakAttackCharge())*0.45F);
@@ -2094,7 +2114,6 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     if (!(self instanceof Player pl && pl.isCreative())) {
                         setPods(getPods() - 1);
                     }
-                    Roundabout.LOGGER.info("Test");
                     activatePurpleHazeField(blockHit.getLocation(), indistortionmode);
                 }
 
