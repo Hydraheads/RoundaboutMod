@@ -325,7 +325,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         this.tryIntPowerPacket(PowerIndex.POWER_2, invincibleState ? 1 : 0);
 
         if (!this.invincibleState){
-            this.setCooldown(PowerIndex.SKILL_2, ConfigManager.getConfig().centuryBoySettings.invincibilityCooldown);
+            setCooldownCheck();
         }
     }
 
@@ -401,6 +401,9 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                     ((StandUser)self).roundabout$setIdlePosX((byte)1);
                 }
             }
+        }else {
+
+            stallingTicks = 0;
         }
         if (!loading) {
             saveDiscAndSync();
@@ -676,11 +679,25 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     @Override public boolean cancelSprintParticles() {return invincibleState;}
 
 
+    private int stallingTicks = 0;
+
+    private void setCooldownCheck() {
+        int normalCooldown = ConfigManager.getConfig().centuryBoySettings.invincibilityCooldown;
+        int punishment = 0;
+        if (stallingTicks > 200) {
+            punishment = (int)((stallingTicks - 200) * 1.5f);
+        }
+        stallingTicks = 0;
+
+        this.setCooldown(PowerIndex.SKILL_2, normalCooldown + punishment);
+    }
+
     @Override
     public void tickPower() {
         if (!hasStandActive(this.getSelf())){
             if (invincibleState){
-                this.setCooldown(PowerIndex.SKILL_2, ConfigManager.getConfig().centuryBoySettings.invincibilityCooldown);
+                setCooldownCheck();
+                //this.setCooldown(PowerIndex.SKILL_2, ConfigManager.getConfig().centuryBoySettings.invincibilityCooldown);
                 invincibleState = false;
             }
             staticMode = 0;
@@ -699,10 +716,16 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         } else {
             if (shouldDefenceTick){
                 currentDefenseTicks--;
+                stallingTicks++;
             }
             if (currentDefenseTicks < 1){
-                this.getSelf().hurt(ModDamageTypes.of(self.level(), ModDamageTypes.BRAIN_DEAD, this.self),
-                        1000);
+                if (ClientNetworking.getAppropriateConfig().centuryBoySettings.useOldStallSytem) {
+                    this.getSelf().hurt(ModDamageTypes.of(self.level(), ModDamageTypes.BRAIN_DEAD, this.self),
+                            self.getMaxHealth() + 4f);
+                } else {
+                    setInvincibleState(false);
+                    setCooldownCheck();
+                }
             }
         }
         if (waitTicks < 0){
@@ -727,25 +750,10 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             }
 
             if (gticks <= 0){
-                /*if (dist <= 6 && !invincibleState && currentDefenseTicks > 180) {
-                    if (!this.onCooldown(PowerIndex.POWER_2)){
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, false);}
-                    if (isSkel){
-                        ///  to do: make a target selector for the sacos
-                    }
-                } else if (dist > 6 && invincibleState) {
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, false);
-                    gticks += 80;
-                } else if (dist <= 2 && !isSkel && invincibleState){
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, false);
-                    gticks += 80;
-                } else if (currentDefenseTicks < 90 && invincibleState) {
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, false);
-                    gticks += 80;
-                }*/
-                if (currentDefenseTicks < 50) {
+
+                if (currentDefenseTicks < 40) {
                     setInvincibleState(false);
-                } else if (currentDefenseTicks > 90 || invincibleState) {
+                } else if (currentDefenseTicks > 100 || invincibleState) {
                     if (isSkel) {
                         if (invincibleState && dist > 6) {
                             setInvincibleState(false);
