@@ -60,6 +60,10 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 
 		PartDefinition head = stand.addOrReplaceChild("head", CubeListBuilder.create().texOffs(32, 31).addBox(-4.0F, -7.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.55F)), PartPose.offset(0.0F, 0.0F, -8.4F));
 
+		PartDefinition RightAntennaExtra_r1 = head.addOrReplaceChild("RightAntennaExtra_r1", CubeListBuilder.create().texOffs(72, 6).addBox(0.0F, -10.0F, -7.0F, 0.0F, 17.0F, 14.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-3.0F, -8.0F, -1.0F, 0.0F, 1.5708F, -0.0873F));
+
+		PartDefinition leftAntennaExtra_r1 = head.addOrReplaceChild("leftAntennaExtra_r1", CubeListBuilder.create().texOffs(72, 6).addBox(0.0F, -10.0F, -7.0F, 0.0F, 17.0F, 14.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.0F, -8.0F, -1.0F, 0.0F, -1.5708F, 0.0873F));
+
 		PartDefinition rightAntennaR1 = head.addOrReplaceChild("RightAntenna_r1", CubeListBuilder.create().texOffs(28, 0).addBox(0.0F, -10.0F, -7.0F, 0.0F, 17.0F, 14.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-3.0F, -7.0F, -2.0F, 0.0F, 0.0F, -0.0873F));
 
 		PartDefinition leftAntennaR1 = head.addOrReplaceChild("leftAntenna_r1", CubeListBuilder.create().texOffs(28, 0).addBox(0.0F, -10.0F, -7.0F, 0.0F, 17.0F, 14.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.0F, -7.0F, -2.0F, 0.0F, 0.0F, 0.0873F));
@@ -146,6 +150,8 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 			"textures/stand/20_centuryboy/ghost.png");
 	public static ResourceLocation wandering = new ResourceLocation(Roundabout.MOD_ID,
 			"textures/stand/20_centuryboy/wandering.png");
+	public static ResourceLocation parasite = new ResourceLocation(Roundabout.MOD_ID,
+			"textures/stand/20_centuryboy/parasite.png");
 
 
 	public ResourceLocation getTextureLocation(Entity context, byte skin){
@@ -171,6 +177,7 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 			case Powers20thCenturyBoy.EVIL_PUMPKIN -> {return  evil_pumpkin;}
 			case Powers20thCenturyBoy.GHOST -> {return  ghost;}
 			case Powers20thCenturyBoy.WANDERING -> {return  wandering;}
+			case Powers20thCenturyBoy.PARASITE -> {return  parasite;}
 			default -> {return manga;}
 		}
 	}
