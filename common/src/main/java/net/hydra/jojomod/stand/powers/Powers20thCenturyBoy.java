@@ -685,8 +685,8 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     private void setCooldownCheck() {
         int normalCooldown = ConfigManager.getConfig().centuryBoySettings.invincibilityCooldown;
         int punishment = 0;
-        if (stallingTicks > 200) {
-            punishment = (int)((stallingTicks - 200) * 1.5f);
+        if (stallingTicks > 120) {
+            punishment = (int)((stallingTicks - 120) * 1.5f);
         }
         stallingTicks = 0;
 
