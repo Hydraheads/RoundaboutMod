@@ -282,6 +282,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
             case SKILL_2_NORMAL -> {
                 tryMakeAnimalClient();
             }
+            // item imbue
+            case SKILL_2_GUARD -> {
+                tryOpenItemImbue();
+            }
             // item throw
             case SKILL_2_CROUCH -> {
                 itemGrabClient();
@@ -440,7 +444,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     // item imbue start
 
-
+    private void tryOpenItemImbue() {
+        ClientUtil.openItemImbue();
+    }
 
     // item imbue end
 
