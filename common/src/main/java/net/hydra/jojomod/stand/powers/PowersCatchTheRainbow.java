@@ -5,15 +5,13 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.substand.CTRbarrierEntity;
 import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
-import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.index.PowerTypes;
-import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
-import net.hydra.jojomod.mixin.StandUserEntity;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
@@ -49,7 +47,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import com.google.common.collect.Lists;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -288,8 +285,13 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                 return true;
             }
         }
-        if (slot == 1 && !canUseRainMend() && isHoldingSneak())
+        if (slot == 1) {
+            if ((!canUseRainMend() && isHoldingSneak()) || ctrDodgeTicks != 0)
+                return true;
+        }
+        if (slot == 2 && ctrDodgeTicks != 0){
             return true;
+        }
 
         return super.isAttackIneptVisually(activeP, slot);
     }
@@ -311,9 +313,13 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     private static final byte
     RAINMEND = 53,
     DROPDOWN = 54,
-    OFF_HAND_THROW_SLIM = 55,
-    RETURN = 56,
-    DEATH_TIMER = 57;
+    DROP_TIMER = 55,
+    OFF_HAND_THROW_SLIM = 56,
+    RETURN = 57,
+    DEATH_TIMER = 58,
+    DODGE_TICKS = 59,
+    FULL_DODGE = 60,
+    STUN_TICKS = 61;
 
     @Override
     public void powerActivate(PowerContext context){
@@ -341,6 +347,15 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             case SKILL_2_CROUCH -> {
                 if (isInRain())
                 {OffHandThrow();}
+            }
+
+            case SKILL_4_NORMAL -> {
+                if (isInRain())
+                {fullDodgeClient();}
+            }
+            case SKILL_4_CROUCH -> {
+                if (isInRain())
+                {fullDodgeClient();}
             }
         }
     }
@@ -379,6 +394,9 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         else if (move == RETURN) {
             return OffHandReturnServer();
         }
+        else if (move == FULL_DODGE) {
+            fullDodgeServer();
+        }
         return super.setPowerOther(move,lastMove);
     }
     @Override
@@ -390,6 +408,15 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             }
             case DEATH_TIMER -> {
                 deathTimer = data;
+            }
+            case DROP_TIMER -> {
+                dropTimer = data;
+            }
+            case DODGE_TICKS -> {
+                ctrDodgeTicks = data;
+            }
+            case STUN_TICKS -> {
+                stunTicks = data;
             }
         }
         super.updatePowerInt(activePower,data);
@@ -418,9 +445,15 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     //rain speed
     @Override
     public float inputSpeedModifiers(float basis) {
-        if (isInRain() && PowerTypes.hasStandActive(self) && !getStandUserSelf().roundabout$getIsRainWalking()){
-            if (!(this.getSelf() instanceof Mob)) {
-                basis *= this.getSelf().isSprinting() ? 1.35F : 1F;
+        if (isInRain() && PowerTypes.hasStandActive(self)){
+            if (!getStandUserSelf().roundabout$getIsRainWalking()) {
+                if (!(this.getSelf() instanceof Mob)) {
+                    basis *= this.getSelf().isSprinting() ? 1.35F : 1F;
+                }
+            }else if (ctrDodgeTicks != 0){
+                if (!(this.getSelf() instanceof Mob)) {
+                    basis *= this.getSelf().isSprinting() ? 1.35F : 1F;
+                }
             }
         }
         return super.inputSpeedModifiers(basis);
@@ -433,6 +466,11 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     public void tickPower() {
         super.tickPower();
         if (deathTimer != 0) deathTimer --;
+        if (stunTicks != 0) stunTicks --;
+
+        if (ctrDodgeTicks != 0){
+            ctrDodgeTicks --;
+        }
 
         if (self.onGround()) {
             dropTimer = 0;
@@ -463,14 +501,16 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             List<Entity> getNearEntity = MainUtil.getEntitiesInRange(this.self.level(), this.getSelf().blockPosition(), 2F, this.self);
             AABB dropHitbox = this.self.getBoundingBox().move(0,0.4,0).inflate(0.4F);
 
-            for (Entity ent : getNearEntity){
-                if (dropHitbox.intersects(ent.getBoundingBox())) {
-                    MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 0.8F,
-                            0,
-                            -1,
-                            0);
-                    ent.hurt(ModDamageTypes.of(this.self.level(), ModDamageTypes.SHARP_RAINDROP, self, self), 5);
-                    dropTimer = 0;
+            for (Entity ent : getNearEntity) {
+                if (ent instanceof LivingEntity && !(ent instanceof StandEntity)) {
+                    if (dropHitbox.intersects(ent.getBoundingBox())) {
+                        MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 0.8F,
+                                0,
+                                -1,
+                                0);
+                        ent.hurt(ModDamageTypes.of(this.self.level(), ModDamageTypes.SHARP_RAINDROP, self, self), 5);
+                        dropTimer = 0;
+                    }
                 }
             }
         }
@@ -495,6 +535,15 @@ public class PowersCatchTheRainbow extends NewDashPreset {
 
                 this.updatePowerInt(DEATH_TIMER, deathTimer);
                 S2CPacketUtil.sendIntPowerDataPacket((Player) this.self, PowersCatchTheRainbow.DEATH_TIMER, deathTimer);
+
+                this.updatePowerInt(DROP_TIMER, dropTimer);
+                S2CPacketUtil.sendIntPowerDataPacket((Player) this.self, PowersCatchTheRainbow.DROP_TIMER, dropTimer);
+
+                this.updatePowerInt(DODGE_TICKS, ctrDodgeTicks);
+                S2CPacketUtil.sendIntPowerDataPacket((Player) this.self, PowersCatchTheRainbow.DODGE_TICKS, ctrDodgeTicks);
+
+                this.updatePowerInt(STUN_TICKS, stunTicks);
+                S2CPacketUtil.sendIntPowerDataPacket((Player) this.self, PowersCatchTheRainbow.STUN_TICKS, stunTicks);
 
                 if(Off_hand_entity == null){
                     HasOffHand = true;
@@ -578,7 +627,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     }
 
     private boolean canUseRainMend(){
-        if (isInRain()) {
+        if (isInRain() && ctrDodgeTicks == 0) {
             return (self.getHealth() < self.getMaxHealth() || self.hasEffect(ModEffects.BLEED)) ||
                     (self instanceof Player PE && PE.isCreative() || getMendTarget() != null);
         }
@@ -640,10 +689,17 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         }
     }
 
+    public int stunTicks = 0;
+
+    @Override
+    public void onActuallyHurt(DamageSource $$0, float $$1){
+        stunTicks = 20;
+    }
+
     //barrier
 
     private void barrierClient(){
-        if (!this.onCooldown(PowerIndex.SKILL_1) && isInRain()) {
+        if (!this.onCooldown(PowerIndex.SKILL_1) && isInRain() && ctrDodgeTicks == 0) {
             this.tryPower(POWER_1, true);
             tryPowerPacket(POWER_1);
         }
@@ -773,7 +829,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     }
 
     private void OffHandThrow(){
-        if (!this.onCooldown(PowerIndex.SKILL_2) && isInRain() && !this.self.isUsingItem()) {
+        if (!this.onCooldown(PowerIndex.SKILL_2) && isInRain() && !this.self.isUsingItem() && ctrDodgeTicks == 0) {
 
                 if (HasOffHandCharge && !HasOffHand) {
                     HasOffHandCharge = false;
@@ -834,12 +890,61 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     public void addAdditionalSaveData(CompoundTag $$0) {
         super.addAdditionalSaveData($$0);
         $$0.putBoolean("hasoffhand",HasOffHand);
+        $$0.putInt("ctrDodgeTicks", ctrDodgeTicks);
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
         super.readAdditionalSaveData($$0);
         if ($$0.contains("hasoffhand")) {
             HasOffHand = $$0.getBoolean("hasoffhand");
+        }
+        if ($$0.contains("ctrDodgeTicks")) {
+            ctrDodgeTicks = $$0.getInt("ctrDodgeTicks");
+        }
+    }
+
+    //come the dawn
+    public int ctrDodgeTicks = 0;
+
+    private void fullDodgeClient(){
+        if (!this.onCooldown(PowerIndex.SKILL_4)) {
+            this.setCooldown(PowerIndex.SKILL_4, ClientNetworking.getAppropriateConfig().catchTheRainbowSettings.catchTheRainbowFullDodgeCooldown);
+            this.tryPower(FULL_DODGE, true);
+            tryPowerPacket(FULL_DODGE);
+        }
+    }
+
+    private void fullDodgeServer(){
+        ctrDodgeTicks = 25;
+    }
+
+    @Override
+    public boolean interceptDamageEvent(DamageSource $$0, float $$1){
+        if (ctrDodgeTicks != 0){
+            return !MainUtil.isSpecialDamage($$0);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean phaseThroughProjectile(Entity ent){
+        return this.ctrDodgeTicks != 0;
+    }
+
+    @Override
+    public boolean interceptAttack(){
+         if (ctrDodgeTicks != 0){
+             return true;
+         }else{
+             return false;
+         }
+    }
+    @Override
+    public boolean interceptAllInteractions(){
+        if (ctrDodgeTicks != 0){
+            return true;
+        }else{
+            return false;
         }
     }
 
