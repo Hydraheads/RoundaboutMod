@@ -125,6 +125,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.GOLD_EXPERIENCE, GoldExperienceRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GOLD_EXPERIENCE_BETA, GoldExperienceBetaRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GE_BRAMBLE, GEBrambleRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.GE_THORN, GEThornRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GE_BAT, GEBatRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GE_FROG, GEFrogRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GE_BEE, GEBeeRenderer::new);
@@ -349,6 +350,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GOLD_EXPERIENCE_LAYER, GoldExperienceModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GOLD_EXPERIENCE_BETA_LAYER, GoldExperienceBetaModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GE_BRAMBLE_LAYER, GEBrambleModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GE_THORN_LAYER, GEThornModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SILVER_CHARIOT_LAYER, SilverChariotModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SILVER_CHARIOT_PHARAOH_LAYER, SilverChariotPharaohModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SILVER_CHARIOT_RAPIER_LAYER, SilverChariotRapierModel::createBodyLayer);

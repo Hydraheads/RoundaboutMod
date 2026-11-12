@@ -2803,12 +2803,14 @@ public class PowersD4C extends NewPunchingStand {
                 List<MobEffectInstance> selfEffects = self.getActiveEffects().stream()
                         .filter(effect -> effect.getEffect() != ModEffects.IMPRINTING)
                         .filter(effect -> effect.getEffect() != ModEffects.SWAPPED)
+                        .filter(effect -> effect.getEffect() != ModEffects.INFINITE_SPIN)
                         .map(MobEffectInstance::new)
                         .toList();
 
                 List<MobEffectInstance> cloneEffects = cloneInReach.getActiveEffects().stream()
                         .filter(effect -> effect.getEffect() != ModEffects.IMPRINTING)
                         .filter(effect -> effect.getEffect() != ModEffects.SWAPPED)
+                        .filter(effect -> effect.getEffect() != ModEffects.INFINITE_SPIN)
                         .map(MobEffectInstance::new)
                         .toList();
 

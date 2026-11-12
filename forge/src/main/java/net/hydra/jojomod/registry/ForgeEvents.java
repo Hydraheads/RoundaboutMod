@@ -997,6 +997,7 @@ public class ForgeEvents {
         ModEntities.GOLD_EXPERIENCE = ForgeEntities.GOLD_EXPERIENCE.get();
         ModEntities.GOLD_EXPERIENCE_BETA = ForgeEntities.GOLD_EXPERIENCE_BETA.get();
         ModEntities.GE_BRAMBLE = ForgeEntities.GE_BRAMBLE.get();
+        ModEntities.GE_THORN = ForgeEntities.GE_THORN.get();
         ModEntities.GE_BAT = ForgeEntities.GE_BAT.get();
         ModEntities.GE_FROG = ForgeEntities.GE_FROG.get();
         ModEntities.GE_BEE = ForgeEntities.GE_BEE.get();
