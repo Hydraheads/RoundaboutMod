@@ -1,18 +1,26 @@
 package net.hydra.jojomod.client.models.stand;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.client.models.stand.animations.KillerQueenAnimations;
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
 import net.hydra.jojomod.client.models.stand.animations.PurpleHazeAnimations;
 import net.hydra.jojomod.entity.stand.PurpleHazeEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
 import net.hydra.jojomod.stand.powers.PowersPurpleHaze;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.world.entity.Entity;
 
 public class PurpleHazeModel<T extends PurpleHazeEntity> extends StandModel<T> {
+
     public PurpleHazeModel(ModelPart root) {
         this.stand = root.getChild("stand");
         this.head = stand.getChild("stand2").getChild("head");
@@ -21,7 +29,7 @@ public class PurpleHazeModel<T extends PurpleHazeEntity> extends StandModel<T> {
                 .getChild("torso").getChild("upper_chest").getChild("left_arm").getChild("lower_left_arm");
         this.rightHand = stand.getChild("stand2").getChild("body").getChild("body2")
                 .getChild("torso").getChild("upper_chest").getChild("right_arm").getChild("lower_right_arm");
-        }
+    }
 
     public static LayerDefinition getTexturedModelData() {
         MeshDefinition meshdefinition = new MeshDefinition();
@@ -230,6 +238,7 @@ public class PurpleHazeModel<T extends PurpleHazeEntity> extends StandModel<T> {
         this.animate(pEntity.heavyPunchWindup, PurpleHazeAnimations.HeavyPunchWindup, pAgeInTicks, 1f);
         this.animate(pEntity.heavyPunch, PurpleHazeAnimations.HeavyPunch, pAgeInTicks, 1f);
     }
+
     @Override
     public ModelPart root() {
         return stand;

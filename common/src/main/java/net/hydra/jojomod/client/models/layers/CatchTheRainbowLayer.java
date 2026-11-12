@@ -92,16 +92,12 @@ public class CatchTheRainbowLayer<T extends LivingEntity, A extends HumanoidMode
                             poseStack.scale(0.6F, 0.6F, 0.6F);
                             poseStack.translate(0.3, 3, -0.3);
                             }
-                        boolean isHurt = livent.hurtTime > 0;
-                        float r = isHurt ? 1.0F : 1.0F;
-                        float g = isHurt ? 0.0F : 1.0F;
-                        float b = isHurt ? 0.0F : 1.0F;
                         if (skin != 10) {
                             ModStrayModels.CATCH_THE_RAINBOW.render(livent, partialTicks, poseStack, bufferSource, packedLight,
-                                    r, g, b, heyFull, skin);
+                                    1, 1, 1, heyFull, skin);
                         }else {
                             ModStrayModels.CATCH_THE_RAINBOW_UMVUTHI.render(livent, partialTicks, poseStack, bufferSource, packedLight,
-                                    r, g, b, heyFull, skin);
+                                    1, 1, 1, heyFull, skin);
                         }
                         ClientUtil.popPoseAndCooperate(poseStack,24);
                     }
@@ -110,4 +106,3 @@ public class CatchTheRainbowLayer<T extends LivingEntity, A extends HumanoidMode
         }
     }
 }
-

@@ -70,6 +70,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import static net.hydra.jojomod.util.MainUtil.roundaboutGetUsedItem;
 import static net.hydra.jojomod.util.MainUtil.sendParticlesIfPossible;
 
 public class SeperatedArmEntity extends StandEntity {
@@ -324,11 +325,11 @@ public class SeperatedArmEntity extends StandEntity {
             LivingEntity user = this.getUser();
             if (!client) {
 
-                } else if ((!(((StandUser) user).roundabout$getStandPowers() instanceof PowersGreenDay)) && (!(((StandUser) user).roundabout$getStandPowers() instanceof PowersCatchTheRainbow)) || (!user.isAlive())) {
+                if ((!(((StandUser) user).roundabout$getStandPowers() instanceof PowersGreenDay)) && (!(((StandUser) user).roundabout$getStandPowers() instanceof PowersCatchTheRainbow)) || (!user.isAlive())) {
                     removearm();
                 } else if (user != null) {
 
-                    if (((StandUser) user).roundabout$getStandPowers() instanceof PowersGreenDay PGD){
+                    if (((StandUser) user).roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
                         if (((PGD.Off_hand_entity != null) && (PGD.Main_arm != null))) {
                             if (!((PGD.Main_arm.equals(this)) || PGD.Off_hand_entity.equals(this))) {
                                 removearm();
@@ -351,22 +352,24 @@ public class SeperatedArmEntity extends StandEntity {
                         }
                     }
                 }
-                
+
                 if (!onGround()) {
                     flyingTicks += 1;
                 } else {
                     flyingTicks = 0;
                 }
+
                 if (Can_activate_special || (Can_activate)) {
+
                     ItemStack item = (this.getMainHandItem());
                     if ((MainUtil.cheapDistanceTo(this.getX(), this.getY(), this.getZ(), MiningPos.getX(), MiningPos.getY(), MiningPos.getZ()) < 2)) {
                         boolean mine = true;
                         if (user instanceof ServerPlayer PE) {
                             mine = !((!this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) ||
-                             (PE.blockActionRestricted(PE.serverLevel(), MiningPos, PE.gameMode.getGameModeForPlayer())) ||
-                             (!this.level().mayInteract(PE, MiningPos)));
+                                    (PE.blockActionRestricted(PE.serverLevel(), MiningPos, PE.gameMode.getGameModeForPlayer())) ||
+                                    (!this.level().mayInteract(PE, MiningPos)));
                         }
-                        if(mine) {
+                        if (mine) {
 
                             BlockState block = (this.level().getBlockState(MiningPos));
 
@@ -402,17 +405,17 @@ public class SeperatedArmEntity extends StandEntity {
                                     BlockState bstate = this.level().getBlockState(targetpos);
                                     BlockEntity blockEnt = bstate.hasBlockEntity() ? this.level().getBlockEntity(targetpos) : null;
                                     Block.dropResources(bstate, this.level(), targetpos, blockEnt, this, this.getMainHandItem());
-                                    level.destroyBlock(targetpos,false);
+                                    level.destroyBlock(targetpos, false);
 
                                     this.setDeltaMovement(0, 0, 0);
 
-                                    if (Can_activate) {
+
                                         if (!((Player) user).isCreative()) {
                                             if (!(this.getMainHandItem().getItem() instanceof FleshBucketItem)) {
                                                 this.getMainHandItem().hurt(1, this.level().getRandom(), null);
                                             }
                                         }
-                                    }
+
                                     Can_activate = false;
                                 }
 
@@ -423,14 +426,14 @@ public class SeperatedArmEntity extends StandEntity {
                                     BlockEntity blockEnt = bstate.hasBlockEntity() ? this.level().getBlockEntity(targetpos) : null;
                                     Block.dropResources(bstate, this.level(), targetpos, blockEnt, this, this.getMainHandItem());
                                     this.setDeltaMovement(0, 0, 0);
-                                    level.destroyBlock(targetpos,false);
-                                    if (Can_activate) {
+                                    level.destroyBlock(targetpos, false);
+
                                         if (!((Player) user).isCreative()) {
                                             if (!(this.getMainHandItem().getItem() instanceof FleshBucketItem)) {
                                                 this.getMainHandItem().hurt(1, this.level().getRandom(), null);
                                             }
                                         }
-                                    }
+
                                     Can_activate = false;
                                 }
 
@@ -440,22 +443,23 @@ public class SeperatedArmEntity extends StandEntity {
                                     BlockState bstate = this.level().getBlockState(targetpos);
                                     BlockEntity blockEnt = bstate.hasBlockEntity() ? this.level().getBlockEntity(targetpos) : null;
                                     Block.dropResources(bstate, this.level(), targetpos, blockEnt, this, this.getMainHandItem());
-                                    level.destroyBlock(targetpos,false);
+                                    level.destroyBlock(targetpos, false);
                                     this.setDeltaMovement(0, 0, 0);
-                                    if (Can_activate) {
+
                                         if (!((Player) user).isCreative()) {
                                             if (!(this.getMainHandItem().getItem() instanceof FleshBucketItem)) {
                                                 this.getMainHandItem().hurt(1, this.level().getRandom(), null);
                                             }
                                         }
-                                    }
+
                                     Can_activate = false;
                                 }
 
+                            }
                         }
+                        doAttack();
+                        Can_activate_special = false;
                     }
-                    doAttack();
-                    Can_activate_special = false;
                 }
                 attractMobs();
                 pickUpItems();
@@ -471,7 +475,6 @@ public class SeperatedArmEntity extends StandEntity {
                             1, 0, 0, 0, 0);
 
                 }
-
                 for (int i = 0; i < 2; i = i + 1) {
                     double randX = Roundabout.RANDOM.nextDouble(-0.2, 0.2);
                     double randY = Roundabout.RANDOM.nextDouble(-0.1, 0.1);
@@ -482,7 +485,7 @@ public class SeperatedArmEntity extends StandEntity {
                                 this.getY() + randY + 0.15,
                                 this.getZ() + randZ,
                                 1, 0, 0, 0, 0);
-                    }else if (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersCatchTheRainbow){
+                    } else if (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersCatchTheRainbow) {
                         ((ServerLevel) this.level()).sendParticles(ParticleTypes.SPLASH,
                                 this.getX(),
                                 this.getY() + 0.15,
@@ -497,7 +500,7 @@ public class SeperatedArmEntity extends StandEntity {
                                 this.getY() + 0.15,
                                 this.getZ(),
                                 1, 0, 0, 0, 0);
-                    }else if (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersCatchTheRainbow){
+                    } else if (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersCatchTheRainbow) {
                         ((ServerLevel) this.level()).sendParticles(ParticleTypes.SPLASH,
                                 this.getX(),
                                 this.getY() + 0.15,

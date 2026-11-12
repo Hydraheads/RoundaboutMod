@@ -213,6 +213,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         EVIL_PUMPKIN = 20,
         GHOST = 21,
         WANDERING = 22,
+        PARASITE = 23,
 
         // dont mind me
         CLIENT_SYNC = 100;
@@ -240,7 +241,8 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                 PUMPKIN,
                 EVIL_PUMPKIN,
                 GHOST,
-                WANDERING
+                WANDERING,
+                PARASITE
 
         );
     }
@@ -269,6 +271,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             case Powers20thCenturyBoy.EVIL_PUMPKIN -> Component.translatable("skins.roundabout.20_centuryboy.evil_pumpkin");
             case Powers20thCenturyBoy.GHOST -> Component.translatable("skins.roundabout.20_centuryboy.ghost");
             case Powers20thCenturyBoy.WANDERING -> Component.translatable("skins.roundabout.20_centuryboy.wandering");
+            case Powers20thCenturyBoy.PARASITE -> Component.translatable("skins.roundabout.20_centuryboy.parasite");
             default -> Component.translatable("skins.roundabout.20_centuryboy.manga");
         };
     }
@@ -401,10 +404,8 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                     ((StandUser)self).roundabout$setIdlePosX((byte)1);
                 }
             }
-        }else {
-
-            stallingTicks = 0;
         }
+
         if (!loading) {
             saveDiscAndSync();
         }
@@ -435,6 +436,8 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     }
     private static final Map<BlockPos, Integer> BLOCK_DMG_MAP = new HashMap<>();
     private static final Map<UUID, Long> GROUND_STANCE_COOLDOWN = new HashMap<>();
+
+    @SuppressWarnings("deprecation")
     @Override
     public boolean interceptIncomingHarm(DamageSource source, float amount) {
         if (invincibleState) {
@@ -671,7 +674,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     @Override
     public float inputSpeedModifiers(float basis) {
         if (invincibleState){
-         return 0;
+            return 0;
         }
         return super.inputSpeedModifiers(basis);
     }
@@ -684,8 +687,8 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     private void setCooldownCheck() {
         int normalCooldown = ConfigManager.getConfig().centuryBoySettings.invincibilityCooldown;
         int punishment = 0;
-        if (stallingTicks > 200) {
-            punishment = (int)((stallingTicks - 200) * 1.5f);
+        if (stallingTicks > 120) {
+            punishment = (int)((stallingTicks - 120) * 1.5f);
         }
         stallingTicks = 0;
 
