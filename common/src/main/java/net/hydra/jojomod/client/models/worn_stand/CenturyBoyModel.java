@@ -60,13 +60,13 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 
 		PartDefinition head = stand.addOrReplaceChild("head", CubeListBuilder.create().texOffs(32, 31).addBox(-4.0F, -7.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.55F)), PartPose.offset(0.0F, 0.0F, -8.4F));
 
-		PartDefinition RightAntennaExtra_r1 = head.addOrReplaceChild("RightAntennaExtra_r1", CubeListBuilder.create().texOffs(72, 6).addBox(0.0F, -10.0F, -7.0F, 0.0F, 17.0F, 14.0F, new CubeDeformation(0.02F)), PartPose.offsetAndRotation(-3.0F, -8.0F, -1.0F, 0.0F, 1.5708F, -0.0873F));
+		PartDefinition RightAntennaExtra_r1 = head.addOrReplaceChild("RightAntennaExtra_r1", CubeListBuilder.create().texOffs(72, 6).addBox(0.0F, -10.0F, -7.0F, 0.0F, 17.0F, 14.0F, new CubeDeformation(0F)), PartPose.offsetAndRotation(-3.0F, -8.0F, -1.0F, 0.0F, 1.5708F, -0.0873F));
 
-		PartDefinition leftAntennaExtra_r1 = head.addOrReplaceChild("leftAntennaExtra_r1", CubeListBuilder.create().texOffs(72, 6).addBox(0.0F, -10.0F, -7.0F, 0.0F, 17.0F, 14.0F, new CubeDeformation(0.02F)), PartPose.offsetAndRotation(3.0F, -8.0F, -1.0F, 0.0F, -1.5708F, 0.0873F));
+		PartDefinition leftAntennaExtra_r1 = head.addOrReplaceChild("leftAntennaExtra_r1", CubeListBuilder.create().texOffs(72, 6).addBox(0.0F, -10.0F, -7.0F, 0.0F, 17.0F, 14.0F, new CubeDeformation(0F)), PartPose.offsetAndRotation(3.0F, -8.0F, -1.0F, 0.0F, -1.5708F, 0.0873F));
 
-		PartDefinition rightAntennaR1 = head.addOrReplaceChild("RightAntenna_r1", CubeListBuilder.create().texOffs(28, 0).addBox(0.0F, -10.0F, -7.0F, 0.0F, 17.0F, 14.0F, new CubeDeformation(0.02F)), PartPose.offsetAndRotation(-3.0F, -7.0F, -2.0F, 0.0F, 0.0F, -0.0873F));
+		PartDefinition rightAntennaR1 = head.addOrReplaceChild("RightAntenna_r1", CubeListBuilder.create().texOffs(28, 0).addBox(0.0F, -10.0F, -7.0F, 0.0F, 17.0F, 14.0F, new CubeDeformation(0F)), PartPose.offsetAndRotation(-3.0F, -7.0F, -2.0F, 0.0F, 0.0F, -0.0873F));
 
-		PartDefinition leftAntennaR1 = head.addOrReplaceChild("leftAntenna_r1", CubeListBuilder.create().texOffs(28, 0).addBox(0.0F, -10.0F, -7.0F, 0.0F, 17.0F, 14.0F, new CubeDeformation(0.02F)), PartPose.offsetAndRotation(3.0F, -7.0F, -2.0F, 0.0F, 0.0F, 0.0873F));
+		PartDefinition leftAntennaR1 = head.addOrReplaceChild("leftAntenna_r1", CubeListBuilder.create().texOffs(28, 0).addBox(0.0F, -10.0F, -7.0F, 0.0F, 17.0F, 14.0F, new CubeDeformation(0F)), PartPose.offsetAndRotation(3.0F, -7.0F, -2.0F, 0.0F, 0.0F, 0.0873F));
 
 		PartDefinition body = stand.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 47).addBox(-4.0F, -1.0F, -2.0F, 8.0F, 12.0F, 4.0F, new CubeDeformation(0.3F))
 				.texOffs(64, 59).addBox(11.0F, -4.0F, -3.0F, 0.0F, 6.0F, 6.0F, new CubeDeformation(0.0F))
