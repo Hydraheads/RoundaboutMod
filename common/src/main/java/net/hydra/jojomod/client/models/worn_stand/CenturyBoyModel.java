@@ -153,6 +153,9 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 	public static ResourceLocation parasite = new ResourceLocation(Roundabout.MOD_ID,
 			"textures/stand/20_centuryboy/parasite.png");
 
+	public static ResourceLocation parasite_overlay = new ResourceLocation(Roundabout.MOD_ID,
+			"textures/stand/20_centuryboy/parasite_overlay.png");
+
 
 	public ResourceLocation getTextureLocation(Entity context, byte skin){
 		switch (skin){
@@ -203,6 +206,10 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 			VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
 
 			Head.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
+			if (skin == Powers20thCenturyBoy.PARASITE) {
+				VertexConsumer consumer2 = bufferSource.getBuffer(RenderType.entityTranslucent(parasite_overlay));
+				Head.render(poseStack, consumer2, 15728880, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
+			}
 		}
 	}
 	public void renderRightArm(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
@@ -256,6 +263,10 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 
 			Body.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
 			Head.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
+			if (skin == Powers20thCenturyBoy.PARASITE) {
+				VertexConsumer consumer2 = bufferSource.getBuffer(RenderType.entityTranslucent(parasite_overlay));
+				Head.render(poseStack, consumer2, 15728880, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
+			}
 			RightArm.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
 			LeftArm.render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
 		}
