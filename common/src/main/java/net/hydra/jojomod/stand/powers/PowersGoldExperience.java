@@ -151,7 +151,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
                         treePart.setDataFinalPos(data.finalPos());
                         //despawn timer of 15 seconds
-                        treePart.timing = Math.max(1, 200 - data.delayTicks());
+                        treePart.timing = Math.max(1, 400 - data.delayTicks());
                         treePart.isWhiteAlbumWall = false;
                         treePart.isGoldExperienceTree = true;
                         treePart.creator = this.getSelf();
@@ -685,25 +685,53 @@ public class PowersGoldExperience extends BlockGrabPreset {
                         Blocks.OAK_WOOD.defaultBlockState()
                 );
                 trunk.setDataFinalPos(newVec.add(0, actualHeight, 0));
-                trunk.timing = 200;
+                trunk.timing = 400;
                 trunk.tsmove = true;
                 trunk.isGoldExperienceTree = true;
                 trunk.creator = this.self;
                 PowerTypes.copyPlaneOfExisting(this.self, trunk);
                 level.addFreshEntity(trunk);
 
-                Direction branchDir = Direction.from2DDataValue(y % 4);
-                BlockPos branchPos = trunkPos.relative(branchDir);
+                // all branches ecept for last and first with leaves
+                if (y != actualHeight - 1 && y != 0) {
+                    Direction branchDir = Direction.from2DDataValue(y % 4);
+                    BlockPos branchPos = trunkPos.relative(branchDir);
 
-                Vector3f branchStart = new Vector3f(trunkPos.getX() + 0.5f, trunkPos.getY() - 0.5f, trunkPos.getZ() + 0.5f);
-                Vector3f branchFinal = new Vector3f(branchPos.getX() + 0.5f, branchPos.getY(), branchPos.getZ() + 0.5f);
+                    Vector3f branchStart = new Vector3f(trunkPos.getX() + 0.5f, trunkPos.getY() - 0.5f, trunkPos.getZ() + 0.5f);
 
-                BlockState branch = Blocks.OAK_WOOD.defaultBlockState();
-                if (level.random.nextFloat() < 0.70F && y >= actualHeight - 3){
-                    branch = Blocks.OAK_LEAVES.defaultBlockState();
+                    BlockState branchState = Blocks.OAK_LOG.defaultBlockState().setValue(BlockStateProperties.AXIS, branchDir.getAxis());
+                    BlockState leafState = Blocks.OAK_LEAVES.defaultBlockState().setValue(BlockStateProperties.PERSISTENT, true);
+
+                    Vector3f branchFinal = new Vector3f(branchPos.getX() + 0.5f, branchPos.getY(), branchPos.getZ() + 0.5f);
+                    pendingTreeBlocks.add(new TreeBlockSpawnData(branchStart, branchFinal, branchState, 12 + (y * 2)));
+
+                    BlockPos centerWoodPos = branchPos.relative(branchDir).above();
+                    Vector3f centerFinal = new Vector3f(centerWoodPos.getX() + 0.5f, centerWoodPos.getY(), centerWoodPos.getZ() + 0.5f);
+                    pendingTreeBlocks.add(new TreeBlockSpawnData(branchStart, centerFinal, branchState, 14 + (y * 2)));
+
+                    BlockPos[] leafPositions = new BlockPos[]{
+                            centerWoodPos.above(),
+                            centerWoodPos.below(),
+                            centerWoodPos.relative(branchDir.getClockWise()),
+                            centerWoodPos.relative(branchDir.getCounterClockWise()),
+                            centerWoodPos.relative(branchDir)
+                    };
+
+                    for (BlockPos leafPos : leafPositions) {
+                        Vector3f leafFinal = new Vector3f(leafPos.getX() + 0.5f, leafPos.getY(), leafPos.getZ() + 0.5f);
+                        pendingTreeBlocks.add(new TreeBlockSpawnData(branchStart, leafFinal, leafState, 16 + (y * 2)));
+                    }
                 }
+                // first branch root thing for jumping
+                else if (y == 0) {
+                    Direction branchDir = Direction.from2DDataValue(y % 4);
+                    BlockPos branchPos = trunkPos.relative(branchDir);
 
-                pendingTreeBlocks.add(new TreeBlockSpawnData(branchStart, branchFinal, branch, 12 + (y * 2)));
+                    Vector3f branchStart = new Vector3f(trunkPos.getX() + 0.5f, trunkPos.getY() - 0.5f, trunkPos.getZ() + 0.5f);
+                    Vector3f branchFinal = new Vector3f(branchPos.getX() + 0.5f, branchPos.getY(), branchPos.getZ() + 0.5f);
+
+                    pendingTreeBlocks.add(new TreeBlockSpawnData(branchStart, branchFinal, Blocks.OAK_WOOD.defaultBlockState(), 12 + (y * 2)));
+                }
             }
 
             playSoundIfPossible(level, null, base, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.9F, 1F);
