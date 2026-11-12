@@ -162,7 +162,7 @@ public class PowersTusk extends NewDashPreset {
 
     public static final int ACT_ONE_CD = 6 *20;
     public static final int ACT_TWO_CD = 60 *20;
-    public static final int CHARGE_MIN = 5;
+    public static final int CHARGE_MIN = 10;
     public static final int CHARGE_MAX = 35;
 
     private static final int NAIL_LAUNCH_DELAY = 12;
@@ -433,7 +433,7 @@ public class PowersTusk extends NewDashPreset {
                     spawnMuzzleFlash(SL,pos);
                 }
 
-                nailFireDelay = this.getAct() == 1 ? 4 : 6;
+                nailFireDelay = this.getAct() == 1 ? 7 : 2;
                 nailCharge = 0;
                 this.setActivePower(PowersTusk.FIRE_NAIL);
                 this.setAttackTimeDuring(-5);
@@ -700,7 +700,7 @@ public class PowersTusk extends NewDashPreset {
             if (this.getAct() == 3 && PowerTypes.isUsingStand(this.getSelf())) {
                 Entity target = MainUtil.raytraceGroundThingsThroughWalls(this.getSelf().level(), this.getSelf(), 40);
                 if (target != null) {
-                    if (target instanceof TuskHoleEntity THE && !THE.isVortex()) {
+                    if (target instanceof TuskHoleEntity THE && !THE.isVortex() && THE.getUser().equals(this.getSelf())) {
                         this.targetHole = THE;
                     }
                 }
@@ -1847,7 +1847,7 @@ public class PowersTusk extends NewDashPreset {
     public boolean canWarpHoles() {
         if (this.getAct() == 3) {
             if (isInHole() && this.getPilotingStand() instanceof TuskHoleEntity THE) {
-                if (THE.getTimeInHole() > 10 + THE.distanceTo(this.getSelf())*1.5) {
+                if (THE.getTimeInHole() > getDistanceCharge()) {
                     return true; // fix?
                 }
             }
@@ -1867,7 +1867,7 @@ public class PowersTusk extends NewDashPreset {
     }
 
     public boolean canFlatten() {
-        return this.getSelf().onGround() && canUseHole() && !this.getSelf().isPassenger() || this.getActivePower() == PowersTusk.FLATTEN;
+        return this.getSelf().onGround() && !isInHole() && canUseHole() && !this.getSelf().isPassenger() || this.getActivePower() == PowersTusk.FLATTEN;
     }
 
     public Entity getGrabEntity() {
@@ -1885,7 +1885,7 @@ public class PowersTusk extends NewDashPreset {
     }
 
     public boolean canUseHole() {
-        return this.hasNail() || this.isInHole() || this.getActivePower() == PowersTusk.FLATTEN;
+        return this.hasNail() || this.getActivePower() == PowersTusk.FLATTEN;
     }
 
     public TuskHoleEntity targetHole = null;
@@ -1986,7 +1986,7 @@ public class PowersTusk extends NewDashPreset {
             }
 
             if (this.getAct() == 3 && !(this.getPilotingStand() != null && this.getPilotingStand().equals(ent)) ) {
-                return ent.equals(this.targetHole) || (this.isHoldingSneak() && ent instanceof TuskHoleEntity) && ent.distanceTo(player) < 25;
+                return ent.equals(this.targetHole) || (this.isHoldingSneak() && ent instanceof TuskHoleEntity THE && THE.getUser().equals(this.getSelf())) && ent.distanceTo(player) < 25;
             }
         }
         return false;
@@ -2243,9 +2243,7 @@ public class PowersTusk extends NewDashPreset {
 
                 if (entity.hurt(ModDamageTypes.of(this.getSelf().level(),ModDamageTypes.INFINITE_SPIN,this.getSelf()),pow) ) {
                     if (entity instanceof LivingEntity LE) {
-                        if (!LE.hasEffect(ModEffects.INFINITE_SPIN) && !MainUtil.isBossMob(LE)) {
-                            LE.addEffect(new MobEffectInstance(ModEffects.INFINITE_SPIN,-1));
-                        }
+                        applyInfiniteSpin(LE);
                         if (lastHit) {
                             setDazed((LivingEntity) entity, (byte) 0);
 
@@ -2375,14 +2373,23 @@ public class PowersTusk extends NewDashPreset {
                         Vec3 dir = deathTarget.getPosition(0).subtract(stand.getPosition(0)).normalize().reverse();
                         MainUtil.takeKnockbackWithY(deathTarget,0.2F,dir.x,dir.y-0.1F,dir.z);
                         if (deathTarget instanceof LivingEntity LE) {
-                            if (MainUtil.isBossMob(LE)) {
-                                deathTarget.hurt(ModDamageTypes.of(this.getSelf().level(), ModDamageTypes.INFINITE_SPIN), 15);
-                            } else {
-                                LE.addEffect(new MobEffectInstance(ModEffects.INFINITE_SPIN, -1));
-                            }
+                            applyInfiniteSpin(LE);
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private void applyInfiniteSpin(LivingEntity LE) {
+        if (MainUtil.isBossMob(LE)) {
+            LE.hurt(ModDamageTypes.of(this.getSelf().level(),ModDamageTypes.INFINITE_SPIN),30);
+        } else {
+            if (LE.hasEffect(ModEffects.INFINITE_SPIN)) {
+                LE.removeEffect(ModEffects.INFINITE_SPIN);
+            } else {
+                LE.addEffect(new MobEffectInstance(ModEffects.INFINITE_SPIN,-1));
+                ((StandUser)LE).roundabout$setInfiniteSpinPoint(LE.position());
             }
         }
     }
@@ -2398,8 +2405,10 @@ public class PowersTusk extends NewDashPreset {
 
 
     public void shootRelease() {
-        if ( (getAct() == 1 && this.nailCharge > 0 )
-                || isCharging()) {
+        if (
+                (getAct() == 1 && this.nailCharge > 0 )
+                || (isCharging() && this.getAttackTimeDuring() > CHARGE_MIN)
+        ) {
             if (nailFireDelay == 0) {
                 tryPower(FIRE_NAIL);
                 tryPowerPacket(FIRE_NAIL);
@@ -2549,6 +2558,10 @@ public class PowersTusk extends NewDashPreset {
         return super.getIconYes(slot);
     }
 
+
+    public float getDistanceCharge() {
+        return 20 + this.getSelf().distanceTo(this.getPilotingStand())*1.7F;
+    }
     @Override
     public void renderAttackHud(GuiGraphics context, Player playerEntity, int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount, float flashAlpha, float otherFlashAlpha) {
         int j = scaledHeight / 2 - 7 - 4;
@@ -2631,8 +2644,7 @@ public class PowersTusk extends NewDashPreset {
                 if (this.getMode() == MELEE) {
                     int targetJ = j+3;
                     if (this.isInHole() && this.getPilotingStand() instanceof TuskHoleEntity THE) {
-                        float dist = this.getSelf().distanceTo(this.getPilotingStand());
-                        int count = (int) ( THE.getTimeInHole()/(10 +dist*1.5) *15);
+                        int count = (int) ( THE.getTimeInHole()/getDistanceCharge() *15);
 
                         if (count > 15) {
                             context.blit(StandIcons.TUSK_ACTS, k, targetJ, 15, 21 + 45, 15, 15);
@@ -2839,8 +2851,6 @@ public class PowersTusk extends NewDashPreset {
     }
 
     @Override
-    public void tickStandRejection(MobEffectInstance effect) {}
-    @Override
     public void tickMobAI(LivingEntity attackTarget){}
     public byte worthinessType(){return HUMANOID_WORTHY;}
 
@@ -3014,6 +3024,20 @@ public class PowersTusk extends NewDashPreset {
         }
         amt= (int) (amt*(getLevelMultiplier()));
         return amt;
+    }
+
+    @Override
+    public void tickStandRejection(MobEffectInstance effect){
+        if (!this.getSelf().level().isClientSide()) {
+            if (effect.getDuration() % 40 == 0) {
+                this.getSelf().addEffect(new MobEffectInstance(ModEffects.UNBALANCED, 30, 2));
+                this.getSelf().addEffect(new MobEffectInstance(ModEffects.CRIPPLED, 10, 0));
+                this.getSelf().hurt(ModDamageTypes.of(this.getSelf().level(), ModDamageTypes.STAND), 0.75F);
+            }
+            if (effect.getDuration() % 100 == 0) {
+                playSoundIfPossible(this.getSelf().level(), null, ModSounds.TUSK_HOLE_MOVE_EVENT, SoundSource.PLAYERS, 1F, 1F);
+            }
+        }
     }
 
 }

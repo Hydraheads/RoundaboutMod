@@ -185,7 +185,7 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                 boolean renderLeft = true;
                 boolean renderRight = true;
 
-                if (standUser.roundabout$getStandPowers() instanceof PowersTusk PT && PowerTypes.isUsingStand(player)) {
+                if (standUser.roundabout$getStandPowers() instanceof PowersTusk PT && PowerTypes.isUsingStand(player) && !player.isUsingItem()) {
                     if (!PT.renderBothArms()) {
                         renderLeft = player.getMainArm() == HumanoidArm.LEFT;
                         renderRight = player.getMainArm() == HumanoidArm.RIGHT;
@@ -299,7 +299,7 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
 
                 StandUser user = ((StandUser) player);
 
-                if (user.roundabout$getStandPowers() instanceof PowersTusk PT && PowerTypes.isUsingStand(player)) {
+                if (user.roundabout$getStandPowers() instanceof PowersTusk PT && PowerTypes.isUsingStand(player) && !player.isUsingItem()) {
                   if  (PT.renderDrill()) {
                         if (renderRight) {
                             poseStack.pushPose();
