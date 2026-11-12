@@ -489,7 +489,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                     BlockPos groundPos = findGroundPosition(level, BlockPos.containing(targetX, this.self.getY(), targetZ));
 
                     if (groundPos != null) {
-                        GEBrambleEntity rootEntity = new GEBrambleEntity(ModEntities.GE_BRAMBLE, level);
+                        GEBrambleEntity rootEntity = new GEBrambleEntity(ModEntities.GE_THORN, level);
                         rootEntity.setOwner(this.getSelf());
                         rootEntity.setPos(targetX, groundPos.getY() + 1.0, targetZ);
 
