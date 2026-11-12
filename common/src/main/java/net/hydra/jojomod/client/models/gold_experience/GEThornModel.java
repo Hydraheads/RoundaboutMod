@@ -2,6 +2,7 @@ package net.hydra.jojomod.client.models.gold_experience;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.hydra.jojomod.client.models.stand.animations.GoldExperienceAnimations;
 import net.hydra.jojomod.entity.gold_experience.GEBrambleEntity;
 import net.hydra.jojomod.entity.gold_experience.GEThornEntity;
 import net.minecraft.client.model.HierarchicalModel;
@@ -59,7 +60,9 @@ public class GEThornModel extends HierarchicalModel<GEThornEntity> {
 
     @Override
     public void setupAnim(GEThornEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
+        this.root().getAllParts().forEach(ModelPart::resetPose);
+        this.animate(entity.growAnimationState, GoldExperienceAnimations.THORN_GROW, ageInTicks);
+        this.animate(entity.wiltAnimationState, GoldExperienceAnimations.THORN_WILT, ageInTicks);
     }
 
     @Override

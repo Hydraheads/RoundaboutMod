@@ -46,6 +46,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
@@ -105,6 +106,13 @@ public class PowersGoldExperience extends BlockGrabPreset {
             int delayTicks
     ) {}
     private double treeRoofY = -500.0;
+
+    // for ground barrage thorns
+    private int groundBarrageTicks = 0;
+    private boolean isGroundBarraging = false;
+    public boolean isGroundBarraging() {
+        return this.isGroundBarraging && this.getActivePower() == PowerIndex.BARRAGE && this.getAttackTimeDuring() >= 0;
+    }
 
     // basic stand registry stuff
     public PowersGoldExperience(LivingEntity self) {super(self);}
@@ -390,16 +398,6 @@ public class PowersGoldExperience extends BlockGrabPreset {
             boolean isSecondHit = this.attackTimeDuring >= 10;
             dualPunchImpact(target, isSecondHit);
         }
-        else if (this.getActivePower() == PowerIndex.BARRAGE) {
-            rootBarrageImpact(target, false);
-        }
-    }
-
-    @Override
-    public void handleStandAttack2(Player player, Entity target) {
-        if (this.getActivePower() == PowerIndex.BARRAGE) {
-            rootBarrageImpact(target, true);
-        }
     }
 
     private void tryToDashClient() {
@@ -433,6 +431,13 @@ public class PowersGoldExperience extends BlockGrabPreset {
         }
     }
 
+    @Override
+    public boolean setPowerNone() {
+        this.groundBarrageTicks = 0;
+        this.isGroundBarraging = false;
+        return super.setPowerNone();
+    }
+
     // item imbue start
 
 
@@ -442,17 +447,28 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // unique root barrage start
 
     @Override
+    public void setPowerBarrage() {
+        this.groundBarrageTicks = 0;
+        this.isGroundBarraging = false;
+        super.setPowerBarrage();
+    }
+
+    @Override
     public void updateBarrage() {
         if (this.attackTimeDuring == -2 && this.getSelf() instanceof Player) {
+            this.groundBarrageTicks = 0;
             ((StandUser) this.self).roundabout$tryPower(PowerIndex.GUARD, true);
         } else {
             if (this.attackTimeDuring > this.getBarrageLength()) {
                 this.attackTimeDuring = -20;
+                this.groundBarrageTicks = 0;
             } else if (this.attackTimeDuring > 0) {
                 this.setAttackTime((getBarrageRecoilTime() - 1) -
                         Math.round(((float) this.attackTimeDuring / this.getBarrageLength())
                                 * (getBarrageRecoilTime() - 1)));
                 standBarrageHit();
+            } else {
+                this.groundBarrageTicks = 0;
             }
         }
     }
@@ -465,23 +481,48 @@ public class PowersGoldExperience extends BlockGrabPreset {
         BlockHitResult blockHit = this.getRayBlockOutline(this.self, punchRange);
 
         // entity vs block check
-        if (targetInCrosshair == null && blockHit.getType() == HitResult.Type.BLOCK) {
+        if ((targetInCrosshair == null || targetInCrosshair instanceof GEThornEntity) && blockHit.getType() == HitResult.Type.BLOCK) {
+            this.isGroundBarraging = true;
+
+            if (this.self instanceof Player) {
+                if (isPacketPlayer()) {
+                    C2SPacketUtil.standBarrageHitPacket(-1, this.attackTimeDuring);
+                    if (this.attackTimeDuring == this.getBarrageLength()) {
+                        this.attackTimeDuring = -10;
+                    }
+                }
+            } else {
+                barrageImpact(null, this.attackTimeDuring);
+            }
+
             if (!this.self.level().isClientSide()) {
+                // sounds
+                if (this.attackTimeDuring >= this.getBarrageLength()) {
+                    playBarrageEndNoise(0, null);
+                } else {
+                    playBarrageNoise(this.attackTimeDuring, null);
+                }
+
+                this.groundBarrageTicks++;
+
                 Level level = this.self.level();
                 Vec3 lookVec = this.self.getLookAngle();
                 Vec3 dir = new Vec3(lookVec.x, 0, lookVec.z).normalize();
                 Vec3 right = new Vec3(-dir.z, 0, dir.x);
 
-                float progress = (float) this.attackTimeDuring / this.getBarrageLength();
-                double maxReach = 11.0;
-                double currentDist = Math.max(1.5, progress * maxReach);
-                double spreadWidth = currentDist * 0.45;
+                //spawns the thorns
+                float progress = Math.min(1.0F, (float) this.groundBarrageTicks / (this.getBarrageLength() * 0.75F));
+                double startDist = 1.2;
+                double maxReach = 12.0;
+                double currentDist = startDist + (progress * (maxReach - startDist));
+                double spreadWidth = 0.8 + (currentDist * 0.4);
 
                 int entitiesPerHit = 2;
 
                 for (int i = 0; i < entitiesPerHit; i++) {
-                    double offset = (level.random.nextDouble() - 0.5D) * 2.0D * spreadWidth;
-                    double lengthJitter = (level.random.nextDouble() - 0.5D) * 1.5D;
+                    double sideBias = (i == 0 ? -0.5 : 0.5) + (level.random.nextDouble() - 0.5D) * 0.8D;
+                    double offset = sideBias * spreadWidth;
+                    double lengthJitter = (level.random.nextDouble() - 0.5D) * 1.2D;
 
                     double targetX = this.self.getX() + dir.x * (currentDist + lengthJitter) + right.x * offset;
                     double targetZ = this.self.getZ() + dir.z * (currentDist + lengthJitter) + right.z * offset;
@@ -489,7 +530,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                     BlockPos groundPos = findGroundPosition(level, BlockPos.containing(targetX, this.self.getY(), targetZ));
 
                     if (groundPos != null) {
-                        GEBrambleEntity rootEntity = new GEBrambleEntity(ModEntities.GE_THORN, level);
+                        GEThornEntity rootEntity = new GEThornEntity(ModEntities.GE_THORN, level);
                         rootEntity.setOwner(this.getSelf());
                         rootEntity.setPos(targetX, groundPos.getY() + 1.0, targetZ);
 
@@ -498,41 +539,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 }
             }
         } else {
+            this.isGroundBarraging = false;
             super.standBarrageHit();
-        }
-    }
-
-    private void rootBarrageImpact(Entity entity, boolean lastHit) {
-        // basically everything here was taken from magician's red.
-        if (entity == null) return;
-
-        float pow = lastHit ? 4.0F : 0.25F;
-        /**By saving the velocity before hitting, we can let people approach barraging foes
-         * through shields.*/
-        Vec3 prevVelocity = entity.getDeltaMovement();
-
-        if (StandDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
-            if (!this.self.level().isClientSide()) {
-                if (this.self.tickCount % 4 == 0 || lastHit) {
-                    playSoundIfPossible(self.level(), null, entity.blockPosition(), SoundEvents.ROOTS_BREAK, SoundSource.PLAYERS, 1.2F, 1.0F);
-                }
-            }
-
-            if (entity instanceof LivingEntity LE) {
-                setDazed(LE, lastHit ? (byte) 0 : (byte) 3);
-            }
-
-            if (lastHit) {
-                barrageImpact2(entity, true, 0.3F);
-            } else {
-                entity.setDeltaMovement(prevVelocity);
-                entity.hurtMarked = true;
-            }
-        } else {
-            entity.setDeltaMovement(prevVelocity);
-            if (lastHit) {
-                knockShield2(entity, 100);
-            }
         }
     }
 

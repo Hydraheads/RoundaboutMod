@@ -49,7 +49,7 @@ public class GEBrambleEntity extends Entity {
         }
     }
 
-    public LivingEntity getOwner() {
+    private LivingEntity getOwner() {
         if (this.owner == null && this.ownerUUID != null && this.level() instanceof ServerLevel serverLevel) {
             Entity ent = serverLevel.getEntity(this.ownerUUID);
             if (ent instanceof LivingEntity living) {
