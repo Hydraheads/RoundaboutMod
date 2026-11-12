@@ -378,7 +378,20 @@ public class ForgeEvents {
         ModBlocks.MELON_PARFAIT = ForgeBlocks.MELON_PARFAIT.get();
         ModBlocks.CHAMOMILE = ForgeBlocks.CHAMOMILE.get();
         ModBlocks.MINT = ForgeBlocks.MINT.get();
-
+        ModBlocks.GINKGO_LOG = ForgeBlocks.GINKGO_LOG.get();
+        ModBlocks.GINKGO_PLANKS = ForgeBlocks.GINKGO_PLANKS.get();
+        ModBlocks.GINKGO_LEAVES = ForgeBlocks.GINKGO_LEAVES.get();
+        ModBlocks.GINKGO_WOOD = ForgeBlocks.GINKGO_WOOD.get();
+        ModBlocks.STRIPPED_GINKGO_WOOD = ForgeBlocks.STRIPPED_GINKGO_WOOD.get();
+        ModBlocks.STRIPPED_GINKGO_LOG = ForgeBlocks.STRIPPED_GINKGO_LOG.get();
+        ModBlocks.GINKGO_SAPLING = ForgeBlocks.GINKGO_SAPLING.get();
+        ModBlocks.GINKGO_DOOR = ForgeBlocks.GINKGO_DOOR.get();
+        ModBlocks.FANCY_GINKGO_DOOR  = ForgeBlocks.FANCY_GINKGO_DOOR .get();
+        ModBlocks.GINKGO_SIGN = ForgeBlocks.GINKGO_SIGN.get();
+        ModBlocks.GINKGO_WALL_SIGN = ForgeBlocks.GINKGO_WALL_SIGN.get();
+        ModBlocks.GINKGO_HANGING_SIGN  = ForgeBlocks.GINKGO_HANGING_SIGN .get();
+        ModBlocks.GINKGO_WALL_HANGING_SIGN = ForgeBlocks.GINKGO_WALL_HANGING_SIGN.get();
+        ModBlocks.GINKGO_TRAPDOOR  = ForgeBlocks.GINKGO_TRAPDOOR .get();
         ModBlocks.ORANGE_FIRE = ForgeBlocks.ORANGE_FIRE.get();
         ModBlocks.BLUE_FIRE = ForgeBlocks.BLUE_FIRE.get();
         ModBlocks.PURPLE_FIRE = ForgeBlocks.PURPLE_FIRE.get();
@@ -663,6 +676,21 @@ public class ForgeEvents {
         ModItems.HAYATO_KAWAJIRI_MASK = ForgeItems.HAYATO_KAWAJIRI_MASK.get();
 
         ModItems.IRON_BALL_CROSSBOW = ForgeItems.IRON_BALL_CROSSBOW.get();
+
+        ModBlocks.GINKGO_LOG = ForgeBlocks.GINKGO_LOG.get();
+        ModBlocks.GINKGO_PLANKS = ForgeBlocks.GINKGO_PLANKS.get();
+        ModBlocks.GINKGO_LEAVES = ForgeBlocks.GINKGO_LEAVES.get();
+        ModBlocks.GINKGO_WOOD = ForgeBlocks.GINKGO_WOOD.get();
+        ModBlocks.STRIPPED_GINKGO_WOOD = ForgeBlocks.STRIPPED_GINKGO_WOOD.get();
+        ModBlocks.STRIPPED_GINKGO_LOG = ForgeBlocks.STRIPPED_GINKGO_LOG.get();
+        ModBlocks.GINKGO_SAPLING = ForgeBlocks.GINKGO_SAPLING.get();
+        ModBlocks.GINKGO_DOOR = ForgeBlocks.GINKGO_DOOR.get();
+        ModBlocks.FANCY_GINKGO_DOOR = ForgeBlocks.FANCY_GINKGO_DOOR.get();
+        ModBlocks.GINKGO_SIGN = ForgeBlocks.GINKGO_SIGN.get();
+        ModBlocks.GINKGO_WALL_SIGN = ForgeBlocks.GINKGO_WALL_SIGN.get();
+        ModBlocks.GINKGO_HANGING_SIGN = ForgeBlocks.GINKGO_HANGING_SIGN.get();
+        ModBlocks.GINKGO_WALL_HANGING_SIGN = ForgeBlocks.GINKGO_WALL_HANGING_SIGN.get();
+        ModBlocks.GINKGO_TRAPDOOR = ForgeBlocks.GINKGO_TRAPDOOR.get();
 
         ModItems.CAT_REMAINS = ForgeItems.CAT_REMAINS.get();
         ModItems.OCELOT_REMAINS = ForgeItems.OCELOT_REMAINS.get();

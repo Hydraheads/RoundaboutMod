@@ -208,6 +208,22 @@ public class ModBlocks {
 
     public static Block MELON_PARFAIT;
 
+    public static Block GINKGO_LOG;
+    public static Block GINKGO_PLANKS;
+    public static Block GINKGO_LEAVES;
+    public static Block GINKGO_WOOD;
+    public static Block STRIPPED_GINKGO_WOOD;
+    public static Block STRIPPED_GINKGO_LOG;
+    public static Block GINKGO_SAPLING;
+    public static Block GINKGO_DOOR;
+    public static Block FANCY_GINKGO_DOOR;
+    public static Block GINKGO_SIGN;
+    public static Block GINKGO_WALL_SIGN;
+    public static Block GINKGO_HANGING_SIGN;
+    public static Block GINKGO_WALL_HANGING_SIGN;
+    public static Block GINKGO_TRAPDOOR;
+
+
     public static Block GAMBLING_TABLE;
     public static final EnumProperty<GamblingTablePart> GAMBLING_TABLE_PART = EnumProperty.create("part", GamblingTablePart.class);
     public static BlockEntityType<GamblingTableBlockEntity> GAMBLING_TABLE_BLOCK_ENTITY;
@@ -1074,6 +1090,127 @@ public class ModBlocks {
                     .instrument(NoteBlockInstrument.BASS)
                     .strength(2.5F)
                     .sound(SoundType.WOOD)
+                    .noOcclusion()
+                    .ignitedByLava()
+    );
+
+    public static Block GINKGO_LOG_PROPERTIES = new RotatedPillarBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .instrument(NoteBlockInstrument.BASS)
+                    .strength(2.0F)
+                    .sound(SoundType.WOOD)
+                    .ignitedByLava()
+    );
+    public static final Block GINKGO_PLANKS_PROPERTIES = new Block(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .instrument(NoteBlockInstrument.BASS)
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.WOOD)
+                    .ignitedByLava()
+    );
+    public static final Block GINKGO_LEAVES_PROPERTIES = new LeavesBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.PLANT)
+                    .strength(0.2F)
+                    .randomTicks()
+                    .sound(SoundType.GRASS)
+                    .noOcclusion()
+                    .isValidSpawn((state, level, pos, entityType) -> entityType == EntityType.OCELOT || entityType == EntityType.PARROT)
+                    .isSuffocating((state, level, pos) -> false)
+                    .isViewBlocking((state, level, pos) -> false)
+                    .ignitedByLava()
+                    .pushReaction(PushReaction.DESTROY)
+                    .isRedstoneConductor((state, level, pos) -> false)
+    );
+    public static Block GINKGO_WOOD_PROPERTIES = new Block(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .instrument(NoteBlockInstrument.BASS)
+                    .strength(2.0F)
+                    .sound(SoundType.WOOD)
+                    .ignitedByLava()
+    );
+    public static Block STRIPPED_GINKGO_WOOD_PROPERTIES = new Block(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .instrument(NoteBlockInstrument.BASS)
+                    .strength(2.0F)
+                    .sound(SoundType.WOOD)
+                    .ignitedByLava()
+    );
+    public static Block STRIPPED_GINKGO_LOG_PROPERTIES = new RotatedPillarBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .instrument(NoteBlockInstrument.BASS)
+                    .strength(2.0F)
+                    .sound(SoundType.WOOD)
+                    .ignitedByLava()
+    );
+    public static Block GINKGO_SAPLING_PROPERTIES = new GinkgoSaplingBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.PLANT)
+                    .noCollission()
+                    .randomTicks()
+                    .instabreak()
+                    .sound(SoundType.GRASS)
+                    .pushReaction(PushReaction.DESTROY)
+    );
+    public static Block GINKGO_DOOR_PROPERTIES = new GinkgoDoorBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .strength(3.0F)
+                    .noOcclusion()
+                    .ignitedByLava()
+    );
+    public static Block FANCY_GINKGO_DOOR_PROPERTIES = new GinkgoDoorBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .strength(3.0F)
+                    .noOcclusion()
+                    .ignitedByLava()
+    );
+    public static Block GINKGO_SIGN_PROPERTIES = new StandingSignBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .strength(1.0F)
+                    .noOcclusion()
+                    .ignitedByLava(),
+            WoodType.OAK
+    );
+
+    public static Block GINKGO_WALL_SIGN_PROPERTIES = new WallSignBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .strength(1.0F)
+                    .noOcclusion()
+                    .ignitedByLava(),
+            WoodType.OAK
+    );
+
+    public static Block GINKGO_HANGING_SIGN_PROPERTIES = new CeilingHangingSignBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .strength(1.0F)
+                    .noOcclusion()
+                    .ignitedByLava(),
+            WoodType.OAK
+    );
+
+    public static Block GINKGO_WALL_HANGING_SIGN_PROPERTIES = new WallHangingSignBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .strength(1.0F)
+                    .noOcclusion()
+                    .ignitedByLava(),
+            WoodType.OAK
+    );
+
+    public static Block GINKGO_TRAPDOOR_PROPERTIES = new GinkgoTrapDoorBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .strength(3.0F)
                     .noOcclusion()
                     .ignitedByLava()
     );

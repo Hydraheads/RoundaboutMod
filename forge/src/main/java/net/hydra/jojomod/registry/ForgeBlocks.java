@@ -426,6 +426,34 @@ public class ForgeBlocks {
             () -> ModBlocks.GAMBLING_TABLE_PROPERTIES);
     public static final RegistryObject<BlockEntityType<GamblingTableBlockEntity>> GAMBLING_TABLE_BLOCK_ENTITY =
             BLOCK_ENTITIES.register("gambling_table", () -> BlockEntityType.Builder.of(GamblingTableBlockEntity::new, GAMBLING_TABLE.get()).build(null));
+    public static final RegistryObject<Block> GINKGO_LOG = BLOCKS.register("ginkgo_log",
+            () -> GINKGO_LOG_PROPERTIES);
+    public static final RegistryObject<Block> GINKGO_PLANKS = BLOCKS.register("ginkgo_planks",
+            () -> GINKGO_PLANKS_PROPERTIES);
+    public static final RegistryObject<Block> GINKGO_LEAVES = BLOCKS.register("ginkgo_leaves",
+            () -> GINKGO_LEAVES_PROPERTIES);
+    public static final RegistryObject<Block> GINKGO_WOOD = BLOCKS.register("ginkgo_wood",
+            () -> GINKGO_WOOD_PROPERTIES);
+    public static final RegistryObject<Block> STRIPPED_GINKGO_WOOD = BLOCKS.register("stripped_ginkgo_wood",
+            () -> STRIPPED_GINKGO_WOOD_PROPERTIES);
+    public static final RegistryObject<Block> STRIPPED_GINKGO_LOG = BLOCKS.register("stripped_ginkgo_log",
+            () -> STRIPPED_GINKGO_LOG_PROPERTIES);
+    public static final RegistryObject<Block> GINKGO_SAPLING = BLOCKS.register("ginkgo_sapling",
+            () -> GINKGO_SAPLING_PROPERTIES);
+    public static final RegistryObject<Block> GINKGO_DOOR = BLOCKS.register("ginkgo_door",
+            () -> GINKGO_DOOR_PROPERTIES);
+    public static final RegistryObject<Block> FANCY_GINKGO_DOOR = BLOCKS.register("fancy_ginkgo_door",
+            () -> FANCY_GINKGO_DOOR_PROPERTIES);
+    public static final RegistryObject<Block> GINKGO_SIGN = BLOCKS.register("ginkgo_sign",
+            () -> GINKGO_SIGN_PROPERTIES);
+    public static final RegistryObject<Block> GINKGO_WALL_SIGN = BLOCKS.register("ginkgo_wall_sign",
+            () -> GINKGO_WALL_SIGN_PROPERTIES);
+    public static final RegistryObject<Block> GINKGO_HANGING_SIGN= BLOCKS.register("ginkgo_hanging_sign",
+            () -> GINKGO_HANGING_SIGN_PROPERTIES);
+    public static final RegistryObject<Block> GINKGO_WALL_HANGING_SIGN= BLOCKS.register("ginkgo_wall_hanging_sign",
+            () -> GINKGO_WALL_HANGING_SIGN_PROPERTIES);
+    public static final RegistryObject<Block> GINKGO_TRAPDOOR = BLOCKS.register("ginkgo_trapdoor",
+            () -> GINKGO_TRAPDOOR_PROPERTIES);
 
     public static final RegistryObject<BlockEntityType<OasisMudBlockEntity>> OASIS_MUD_BLOCK_ENTITY = BLOCK_ENTITIES.register("oasis_mud_block",
             () -> BlockEntityType.Builder.of(OasisMudBlockEntity::new, OASIS_MUD_BLOCK.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "oasis_mud_block")));
