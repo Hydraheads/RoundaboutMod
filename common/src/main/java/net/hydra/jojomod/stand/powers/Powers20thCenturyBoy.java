@@ -401,10 +401,8 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                     ((StandUser)self).roundabout$setIdlePosX((byte)1);
                 }
             }
-        }else {
-
-            stallingTicks = 0;
         }
+
         if (!loading) {
             saveDiscAndSync();
         }
@@ -671,7 +669,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     @Override
     public float inputSpeedModifiers(float basis) {
         if (invincibleState){
-         return 0;
+            return 0;
         }
         return super.inputSpeedModifiers(basis);
     }
