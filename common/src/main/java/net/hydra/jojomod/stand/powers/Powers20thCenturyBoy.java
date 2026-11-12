@@ -436,6 +436,8 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     }
     private static final Map<BlockPos, Integer> BLOCK_DMG_MAP = new HashMap<>();
     private static final Map<UUID, Long> GROUND_STANCE_COOLDOWN = new HashMap<>();
+
+    @SuppressWarnings("deprecation")
     @Override
     public boolean interceptIncomingHarm(DamageSource source, float amount) {
         if (invincibleState) {
