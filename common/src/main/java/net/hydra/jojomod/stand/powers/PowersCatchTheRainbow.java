@@ -446,17 +446,19 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     @Override
     public float inputSpeedModifiers(float basis) {
         if (isInRain() && PowerTypes.hasStandActive(self)){
-            if (!getStandUserSelf().roundabout$getIsRainWalking()) {
-                if (!(this.getSelf() instanceof Mob)) {
-                    basis *= this.getSelf().isSprinting() ? 1.35F : 1F;
-                }
-            }else if (ctrDodgeTicks != 0){
-                if (!(this.getSelf() instanceof Mob)) {
-                    basis *= this.getSelf().isSprinting() ? 1.35F : 1F;
-                }
+            if (!(this.getSelf() instanceof Mob)) {
+                basis *= this.getSelf().isSprinting() ? 1.35F : 1F;
             }
         }
         return super.inputSpeedModifiers(basis);
+    }
+
+    @Override
+    public int getJumpHeightAddon(){
+        if (isInRain() && PowerTypes.hasStandActive(self)){
+            if (!isHoldingSneak()) return 1;
+        }
+        return super.getJumpHeightAddon();
     }
 
     private int deathTimer = 0;
@@ -693,7 +695,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
 
     @Override
     public void onActuallyHurt(DamageSource $$0, float $$1){
-        stunTicks = 20;
+        stunTicks = 10;
     }
 
     //barrier

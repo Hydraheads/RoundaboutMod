@@ -7408,7 +7408,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                             roundabout$setIsRainWalking(false);
                         }
                         Vec3 vec3 = this.getDeltaMovement();
-                        this.setDeltaMovement(vec3.x, (double) this.getJumpPower(), vec3.z);
+                        this.setDeltaMovement(vec3.x, (double) this.getJumpPower() + 0.15, vec3.z);
                         if (this.isSprinting()) {
                             float f = this.getYRot() * ((float) Math.PI / 180F);
                             this.setDeltaMovement(this.getDeltaMovement().add((double) (-Mth.sin(f) * 0.2F), 0.0D, (double) (Mth.cos(f) * 0.2F)));
