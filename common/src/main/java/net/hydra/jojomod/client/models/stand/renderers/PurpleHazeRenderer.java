@@ -32,6 +32,7 @@ public class PurpleHazeRenderer extends StandRenderer<PurpleHazeEntity> {
 
     public PurpleHazeRenderer(EntityRendererProvider.Context context) {
         super(context, new PurpleHazeModel<>(context.bakeLayer(ModEntityRendererClient.PURPLE_HAZE_LAYER)), 0f);
+        this.addLayer(new PurpleHazeCreakingGlowingLayer<>(this));
     }
 
     @Override
