@@ -754,6 +754,8 @@ public class ForgeEvents {
         ModItems.MUSIC_DISC_HALLELUJAH = ForgeItems.MUSIC_DISC_HALLELUJAH.get();
         ModItems.MUSIC_DISC_CHAKA_HFTF = ForgeItems.MUSIC_DISC_CHAKA_HFTF.get();
         ModItems.ZOMBIE_HORSE_THREAD = ForgeItems.ZOMBIE_HORSE_THREAD.get();
+        ModItems.ZOMBIE_HORSE_MURAL = ForgeItems.ZOMBIE_HORSE_MURAL.get();
+        ModItems.PAINTING_ZOMBIE_HORSE = ForgeItems.PAINTING_ZOMBIE_HORSE.get();
         ModItems.FOG_BLOCK_ITEMS = ForgeCreativeTab.FOG_GROUP.get();
 
      //   ModItems.INTERDIMENSIONAL_KEY = ForgeItems.INTERDIMENSIONAL_KEY.get();
@@ -919,6 +921,8 @@ public class ForgeEvents {
         ModEntities.VAN_GOUGH_PAINTING = ForgeEntities.VAN_GOUGH_PAINTING.get();
         ModEntities.MONA_LISA_PAINTING = ForgeEntities.MONA_LISA_PAINTING.get();
         ModEntities.BIRTH_OF_VENUS_PAINTING = ForgeEntities.BIRTH_OF_VENUS_PAINTING.get();
+        ModEntities.ZOMBIE_HORSE_MURAL = ForgeEntities.ZOMBIE_HORSE_MURAL.get();
+        ModEntities.ZOMBIE_HORSE_PAINTING = ForgeEntities.ZOMBIE_HORSE_PAINTING.get();
         ModEntities.THE_WORLD = ForgeEntities.THE_WORLD.get();
         ModEntities.THE_WORLD_ULTIMATE = ForgeEntities.THE_WORLD_ULTIMATE.get();
         ModEntities.KING_CRIMSON = ForgeEntities.KING_CRIMSON.get();
