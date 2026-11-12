@@ -109,6 +109,10 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         if (((StandUser)player).roundabout$getStandPowers() instanceof Powers20thCenturyBoy CB && CB.invincibleState && PowerTypes.isUsingStand(player)) {
             return;
         }
+        if (((StandUser)player).roundabout$getStandPowers() instanceof PowersCatchTheRainbow PCR && PCR.ctrDodgeTicks != 0 && PowerTypes.isUsingStand(player)) {
+            ci.cancel();
+            return;
+        }
         byte curse = ((StandUser) player).roundabout$getLocacacaCurse();
         float delta = ClientUtil.getDelta();
         if (((TimeStop) player.level()).CanTimeStopEntity(player)) {
@@ -208,6 +212,10 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     @Inject(method = "renderLeftHand", at = @At(value = "TAIL"))
     public void roundabout$renderLeftHand(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, AbstractClientPlayer player, CallbackInfo ci) {
         if (((StandUser)player).roundabout$getStandPowers() instanceof Powers20thCenturyBoy CB && CB.invincibleState && PowerTypes.isUsingStand(player)) {
+            return;
+        }
+        if (((StandUser)player).roundabout$getStandPowers() instanceof PowersCatchTheRainbow PCR && PCR.ctrDodgeTicks != 0 && PowerTypes.isUsingStand(player)) {
+            ci.cancel();
             return;
         }
 

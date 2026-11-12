@@ -7386,7 +7386,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "travel",at = @At("HEAD"),cancellable = true)
     private void roundabout$rainWalk(CallbackInfo ci) {
         if (((StandUser) this).roundabout$getStandPowers() instanceof PowersCatchTheRainbow pctr && pctr.isInRain() && pctr.hasStandActive(pctr.self)) {
-            if (!pctr.self.isCrouching() && !pctr.self.onGround() && !this.isFallFlying() && roundabout$getIsRainWalking()) {
+            if (!pctr.self.isCrouching() && !pctr.self.onGround() && !this.isFallFlying() && pctr.stunTicks == 0 && roundabout$getIsRainWalking()) {
                 if (this.getDeltaMovement().y < 0) {
                     this.setOnGround(true);
 
