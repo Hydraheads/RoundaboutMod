@@ -127,7 +127,7 @@ public class VirusSpitEntity extends ThrowableProjectile {
             SoundEvent $$6 = SoundEvents.GENERIC_SPLASH;
             this.playSound($$6, 1F, 1.5F);
             if ($$0.getEntity() instanceof LivingEntity LE ) {
-                LE.addEffect(new MobEffectInstance(ModEffects.HAZE_VIRUS, 200,0), getOwner());
+                LE.addEffect(new MobEffectInstance(ModEffects.HAZE_VIRUS, 60,2), getOwner());
             }
             if (getOwner() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers()
                     instanceof PowersPurpleHaze pph){

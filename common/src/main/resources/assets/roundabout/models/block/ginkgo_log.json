@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "roundabout:block/ginkgo_log_top",
+    "side": "roundabout:block/ginkgo_log"
+  }
+}
