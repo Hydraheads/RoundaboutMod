@@ -771,6 +771,12 @@ public class ForgeEntities {
                     .clientTrackingRange(16)
                     .updateInterval(20)
                     .build(new ResourceLocation(Roundabout.MOD_ID, "ge_bramble").toString()));
+    public static final RegistryObject<EntityType<GEThornEntity>> GE_THORN = ENTITY_TYPES.register("ge_thorn",
+            () -> EntityType.Builder.<GEThornEntity>of(GEThornEntity::new, MobCategory.MISC)
+                    .sized(1f, 0.5f)
+                    .clientTrackingRange(16)
+                    .updateInterval(20)
+                    .build(new ResourceLocation(Roundabout.MOD_ID, "ge_thorn").toString()));
     public static final RegistryObject<EntityType<GEBatEntity>> GE_BAT = ENTITY_TYPES.register("ge_bat",
             () -> EntityType.Builder.of(GEBatEntity::new, MobCategory.AMBIENT)
                     .sized(0.5f, 0.9f)
