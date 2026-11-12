@@ -150,7 +150,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                         );
 
                         treePart.setDataFinalPos(data.finalPos());
-                        //despawn timer of 15 seconds
+                        //despawn timer of 20 seconds
                         treePart.timing = Math.max(1, 400 - data.delayTicks());
                         treePart.isWhiteAlbumWall = false;
                         treePart.isGoldExperienceTree = true;
@@ -449,7 +449,6 @@ public class PowersGoldExperience extends BlockGrabPreset {
             if (this.attackTimeDuring > this.getBarrageLength()) {
                 this.attackTimeDuring = -20;
             } else if (this.attackTimeDuring > 0) {
-                drawRoots();
                 this.setAttackTime((getBarrageRecoilTime() - 1) -
                         Math.round(((float) this.attackTimeDuring / this.getBarrageLength())
                                 * (getBarrageRecoilTime() - 1)));
@@ -460,45 +459,46 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     @Override
     public void standBarrageHit() {
-        // call super method first for normal hits, otherwise continue to the ranged barrage
-        super.standBarrageHit();
+        float punchRange = 4.5F;
 
-        // long range done by adding the extra range + normal range
-        float extendedReach = 3.0F + 8.0F;
-        boolean lastHit = (this.attackTimeDuring >= this.getBarrageLength());
+        Entity targetInCrosshair = getTargetEntity(this.self, punchRange);
+        BlockHitResult blockHit = this.getRayBlockOutline(this.self, punchRange);
 
-        if (this.self instanceof Player) {
-            if (isPacketPlayer()) {
-                List<Entity> listE = getTargetEntityList(this.self, extendedReach);
+        // entity vs block check
+        if (targetInCrosshair == null && blockHit.getType() == HitResult.Type.BLOCK) {
+            if (!this.self.level().isClientSide()) {
+                Level level = this.self.level();
+                Vec3 lookVec = this.self.getLookAngle();
+                Vec3 dir = new Vec3(lookVec.x, 0, lookVec.z).normalize();
+                Vec3 right = new Vec3(-dir.z, 0, dir.x);
 
-                if (!listE.isEmpty()) {
-                    for (Entity e : listE) {
-                        if (e == null) continue;
-                        if (e.distanceTo(this.self) >= 3.5F && e.distanceTo(this.self) <= extendedReach) {
-                            if (!(e instanceof StandEntity SE && !SE.canBeHitByStands()) && !PowerTypes.isInADifferentExistence(e, self)) {
-                                if (lastHit) {
-                                    tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK_2, e.getId());
-                                } else {
-                                    tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK, e.getId());
-                                }
-                            }
-                        }
+                float progress = (float) this.attackTimeDuring / this.getBarrageLength();
+                double maxReach = 11.0;
+                double currentDist = Math.max(1.5, progress * maxReach);
+                double spreadWidth = currentDist * 0.45;
+
+                int entitiesPerHit = 2;
+
+                for (int i = 0; i < entitiesPerHit; i++) {
+                    double offset = (level.random.nextDouble() - 0.5D) * 2.0D * spreadWidth;
+                    double lengthJitter = (level.random.nextDouble() - 0.5D) * 1.5D;
+
+                    double targetX = this.self.getX() + dir.x * (currentDist + lengthJitter) + right.x * offset;
+                    double targetZ = this.self.getZ() + dir.z * (currentDist + lengthJitter) + right.z * offset;
+
+                    BlockPos groundPos = findGroundPosition(level, BlockPos.containing(targetX, this.self.getY(), targetZ));
+
+                    if (groundPos != null) {
+                        GEBrambleEntity rootEntity = new GEBrambleEntity(ModEntities.GE_BRAMBLE, level);
+                        rootEntity.setOwner(this.getSelf());
+                        rootEntity.setPos(targetX, groundPos.getY() + 1.0, targetZ);
+
+                        level.addFreshEntity(rootEntity);
                     }
                 }
             }
         } else {
-            List<Entity> listE = getTargetEntityList(this.self, extendedReach);
-
-            if (!listE.isEmpty()) {
-                for (Entity e : listE) {
-                    if (e == null) continue;
-                    if (e.distanceTo(this.self) >= 3.5F && e.distanceTo(this.self) <= extendedReach) {
-                        if (!(e instanceof StandEntity SE && !SE.canBeHitByStands()) && !PowerTypes.isInADifferentExistence(e, self)) {
-                            rootBarrageImpact(e, lastHit);
-                        }
-                    }
-                }
-            }
+            super.standBarrageHit();
         }
     }
 
@@ -532,51 +532,6 @@ public class PowersGoldExperience extends BlockGrabPreset {
             entity.setDeltaMovement(prevVelocity);
             if (lastHit) {
                 knockShield2(entity, 100);
-            }
-        }
-    }
-
-    // draws the root cone
-    private void drawRoots() {
-        if (!this.self.level().isClientSide()) {
-            StandEntity stand = this.getStandEntity(this.self);
-            if (stand != null) {
-                float maxReach = 3.0F + 8.0F;
-                Vec3 vector = getRayBlock(this.self, maxReach);
-
-                if (vector != null) {
-                    DustParticleOptions brownDust = new DustParticleOptions(new org.joml.Vector3f(0.45F, 0.28F, 0.12F), 1.2F);
-
-                    Level level = this.self.level();
-                    Vec3 origin = stand.position();
-
-                    Vec3 forward = new Vec3(vector.x - stand.getX(), 0, vector.z - stand.getZ()).normalize();
-                    Vec3 right = new Vec3(-forward.z, 0, forward.x);
-
-                    int distanceSteps = 6;
-                    for (int i = 1; i <= distanceSteps; i++) {
-                        double stepDist = (i / (double) distanceSteps) * maxReach;
-                        double spreadWidth = (i / (double) distanceSteps) * 3.5D;
-
-                        int particlesPerStep = 4;
-                        for (int p = 0; p < particlesPerStep; p++) {
-                            double offset = (level.random.nextDouble() - 0.5D) * 2.0D * spreadWidth;
-                            double lengthJitter = (level.random.nextDouble() - 0.5D) * 1.5D;
-
-                            Vec3 samplePos = origin.add(forward.scale(stepDist + lengthJitter)).add(right.scale(offset));
-                            sendParticlesIfPossible(level,
-                                    brownDust,
-                                    samplePos.x, stand.getY() + 0.15D, samplePos.z,
-                                    1, 0.15, 0.02, 0.15, 0.01);
-                            if (level.random.nextFloat() < 0.15F) {
-                                sendParticlesIfPossible(level,
-                                        new BlockParticleOption(ParticleTypes.BLOCK, Blocks.ROOTED_DIRT.defaultBlockState()),
-                                        samplePos.x, stand.getY() + 0.15D, samplePos.z,
-                                        1, 0.15, 0.05, 0.15, 0.01);
-                            }
-                        }
-                    }
-                }
             }
         }
     }
