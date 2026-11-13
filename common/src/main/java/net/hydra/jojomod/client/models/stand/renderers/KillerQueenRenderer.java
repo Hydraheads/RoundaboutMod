@@ -169,12 +169,18 @@ public class KillerQueenRenderer extends StandRenderer<KillerQueenEntity>{
     private static final RenderType UMBRA_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/umbra.png"));
     private static final RenderType ARTWORK_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/artwork.png"));
     private static final RenderType CRACKED_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/cracked.png"));
-    private static final RenderType CREEPER_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/creeper.png"));
 
 
     @Override
     public boolean hasGlowingParts(byte skin) {
-        return skin != KillerQueenEntity.MINESWEEPER && skin != KillerQueenEntity.WEAKNESS && skin != KillerQueenEntity.SPIRIT && skin != KillerQueenEntity.BETA;
+        return skin != KillerQueenEntity.MINESWEEPER && skin != KillerQueenEntity.CREEPER
+                && skin != KillerQueenEntity.WEAKNESS && skin != KillerQueenEntity.SPIRIT
+                && skin != KillerQueenEntity.BETA;
+    }
+
+
+    public int getGlowAmount(byte skin) {
+        return 628640;
     }
 
     @Override
@@ -191,8 +197,6 @@ public class KillerQueenRenderer extends StandRenderer<KillerQueenEntity>{
             return ARTWORK_GLOW;
         } else if (BT == KillerQueenEntity.CRACKED) {
             return CRACKED_GLOW;
-        } else if (BT == KillerQueenEntity.CREEPER) {
-            return CREEPER_GLOW;
         } else if (BT == KillerQueenEntity.STRAY) {
             return STRAY_GLOW;
         } else if (BT == KillerQueenEntity.NIGHTMARE) {

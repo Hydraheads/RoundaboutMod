@@ -38,7 +38,7 @@ public class StandGlowingLayer<T extends StandEntity, M extends StandModel<T>> e
         if (ClientUtil.canSeeStands(Minecraft.getInstance().player)
         && (mobEntity.getFadeOut() >= mobEntity.getMaxFade()) && standRenderer.getGlowingReference(mobEntity.getSkin()) != null){
             VertexConsumer $$10 = $$1.getBuffer(standRenderer.getGlowingReference(mobEntity.getSkin()));
-            this.getParentModel().renderToBuffer($$0, $$10, 15728640, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, mobEntity.fadePercent);
+            this.getParentModel().renderToBuffer($$0, $$10, standRenderer.getGlowAmount(mobEntity.getSkin()), OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, mobEntity.fadePercent);
 
         }
     }

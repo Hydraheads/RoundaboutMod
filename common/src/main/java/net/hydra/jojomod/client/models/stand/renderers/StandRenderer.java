@@ -208,8 +208,12 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
 
     public boolean hasGlowingParts(byte skin) {  return false; }
 
-    public  RenderType getGlowingReference(byte skin) {
+    public RenderType getGlowingReference(byte skin) {
         return null;
+    }
+
+    public int getGlowAmount(byte skin) {
+        return 15728640;
     }
 
 }
