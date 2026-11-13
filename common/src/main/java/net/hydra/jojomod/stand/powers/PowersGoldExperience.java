@@ -394,7 +394,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
             }
         }
         else if (move == ITEM_IMBUE) {
-            return executeItemImbue((byte) passedInt);
+            byte imbueType = (byte) ((passedInt >> 8) & 0xFF);
+            byte animalId = (byte) (passedInt & 0xFF);
+            return executeItemImbue(imbueType, animalId);
         }
         return super.tryIntPower(move, forced, passedInt);
     }
@@ -514,7 +516,24 @@ public class PowersGoldExperience extends BlockGrabPreset {
         stack.getOrCreateTag().put(IMBUE_TAG, data);
     }
 
-    public boolean executeItemImbue(byte animalId) {
+    // tree imbue start
+
+    public static void applyTreeImbue(ItemStack stack, UUID imbueId, UUID ownerId) {
+        CompoundTag data = createBaseImbueTag(imbueId, ownerId, IMBUE_TREE);
+        stack.getOrCreateTag().put(IMBUE_TAG, data);
+    }
+
+    // diisguise imbue start
+
+    public static void applyDisguiseImbue(ItemStack stack, UUID imbueId, UUID ownerId) {
+        //do the stuff here
+    }
+
+    public static int packImbueData(byte imbueType, byte animalId) {
+        return ((imbueType & 0xFF) << 8) | (animalId & 0xFF);
+    }
+
+    public boolean executeItemImbue(byte imbueType, byte animalId) {
         if (this.self.level().isClientSide()) return false;
 
         ItemStack heldItem = this.self.getMainHandItem();
@@ -526,13 +545,19 @@ public class PowersGoldExperience extends BlockGrabPreset {
         }
         clearImbue(heldItem);
 
-        // IMPORTANT: make sure that the item gets separated so only 1 is imbued
+        // Separate 1 item from the stack so only 1 gets imbued
         ItemStack targetStack = heldItem.getCount() > 1 ? heldItem.split(1) : heldItem;
 
         UUID imbueId = UUID.randomUUID();
         this.activeImbuedItemId = imbueId;
 
-        applyAnimalImbue(targetStack, imbueId, this.self.getUUID(), animalId);
+        if (imbueType == IMBUE_TREE) {
+            applyTreeImbue(targetStack, imbueId, this.self.getUUID());
+        } else if (imbueType == IMBUE_DISGUISE) {
+            applyDisguiseImbue(targetStack, imbueId, this.self.getUUID());
+        } else {
+            applyAnimalImbue(targetStack, imbueId, this.self.getUUID(), animalId);
+        }
 
         if (targetStack != heldItem && this.self instanceof Player player) {
             if (!player.getInventory().add(targetStack)) {
@@ -624,12 +649,29 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
             Vec3 spawnPos = holder.position().add(holder.getLookAngle().scale(1.2)).add(0, 1.0, 0);
             if (gePowers.spawnLifeform(typeToSpawn, spawnPos, cleanSource)) {
+                clearImbue(stack);
                 stack.shrink(1);
                 gePowers.setActiveImbuedItemId(null);
                 return true;
             }
         } else if (imbueType == IMBUE_TREE) {
-            // PLACEHOLDER, ROOT THE ENEMY HERE
+            ItemStack cleanSource = stack.copyWithCount(1);
+            clearImbue(cleanSource);
+            if (holder instanceof StandUser su) {
+                if (!su.roundabout$getGERootedItem().isEmpty()) {
+                    holder.spawnAtLocation(su.roundabout$getGERootedItem());
+                }
+                su.roundabout$setGERootedItem(cleanSource);
+                su.roundabout$setGERooted(true);
+                // just need this for the key disabling, nothing else
+                su.roundabout$setGERooted(true);
+                gePowers.playSoundIfPossible(serverLevel, null, holder.blockPosition(),
+                        ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.7F, 1.0F);
+                clearImbue(stack);
+                stack.shrink(1);
+                gePowers.setActiveImbuedItemId(null);
+                return true;
+            }
         } else if (imbueType == IMBUE_DISGUISE) {
             // PLACEHOLDER, DISGUISE STUFF IS HERE
         }

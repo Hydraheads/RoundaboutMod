@@ -58,22 +58,29 @@ public class ItemImbueScreen extends Screen {
                 new ItemStack(Items.CHICKEN_SPAWN_EGG),
                 Component.translatable("roundabout.gold_experience_item_imbue.animal"),
                 Component.translatable("roundabout.gold_experience_item_imbue.animal.desc"),
-                this::selectAnimalImbue
+                () -> selectImbue(PowersGoldExperience.IMBUE_ANIMAL)
+        ));
+        this.options.add(new ImbueOption(
+                new ItemStack(Items.OAK_SAPLING),
+                Component.translatable("roundabout.gold_experience_item_imbue.tree"),
+                Component.translatable("roundabout.gold_experience_item_imbue.tree.desc"),
+                () -> selectImbue(PowersGoldExperience.IMBUE_TREE)
         ));
     }
 
-    private void selectAnimalImbue() {
+    private void selectImbue(byte imbueType) {
         if (this.minecraft == null || this.minecraft.player == null) return;
 
         if (((StandUser) this.minecraft.player).roundabout$getStandPowers() instanceof PowersGoldExperience powers) {
-            int animalId = AnimalTypes.FROG.id;
+            byte animalId = AnimalTypes.FROG.id;
             ClientConfig clientConfig = ConfigManager.getClientConfig();
             if (clientConfig != null && clientConfig.dynamicSettings != null) {
-                animalId = clientConfig.dynamicSettings.goldExperienceCurrentAnimal;
+                animalId = clientConfig.dynamicSettings.goldExperienceCurrentAnimal.byteValue();
             }
 
-            powers.tryIntPower(PowersGoldExperience.ITEM_IMBUE, true, animalId);
-            powers.tryIntPowerPacket(PowersGoldExperience.ITEM_IMBUE, animalId);
+            int packedData = PowersGoldExperience.packImbueData(imbueType, animalId);
+            powers.tryIntPower(PowersGoldExperience.ITEM_IMBUE, true, packedData);
+            powers.tryIntPowerPacket(PowersGoldExperience.ITEM_IMBUE, packedData);
         }
     }
 

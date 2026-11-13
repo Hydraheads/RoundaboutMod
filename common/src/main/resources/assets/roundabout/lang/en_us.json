@@ -3779,6 +3779,8 @@
 
   "roundabout.gold_experience_item_imbue.animal": "Animal Imbue",
   "roundabout.gold_experience_item_imbue.animal.desc": "Transforms into an animal when used.",
+  "roundabout.gold_experience_item_imbue.tree": "Tree Imbue",
+  "roundabout.gold_experience_item_imbue.tree.desc": "Roots enemies when used.",
 
   "tooltip.roundabout.ge_imbue.animal": "Imbued with Life Energy (%s)",
   "tooltip.roundabout.ge_imbue.tree": "Imbued with Life Energy (Tree)",

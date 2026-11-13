@@ -87,10 +87,10 @@ public class PowersItemStack {
                     .withStyle(ChatFormatting.GOLD));
         } else if (imbueType == PowersGoldExperience.IMBUE_TREE) {
             lines.add(1, Component.translatable("tooltip.roundabout.ge_imbue.tree")
-                    .withStyle(ChatFormatting.DARK_GREEN));
+                    .withStyle(ChatFormatting.GOLD));
         } else if (imbueType == PowersGoldExperience.IMBUE_DISGUISE) {
             lines.add(1, Component.translatable("tooltip.roundabout.ge_imbue.disguise")
-                    .withStyle(ChatFormatting.AQUA));
+                    .withStyle(ChatFormatting.GOLD));
         }
     }
 
