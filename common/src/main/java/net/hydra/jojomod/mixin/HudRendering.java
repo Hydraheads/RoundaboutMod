@@ -250,8 +250,14 @@ public abstract class HudRendering implements IHudAccess {
                 //Distortion Haze overlay
                 if (MainUtil.isInDistortionHaze(this.minecraft.player)) {
                     RenderSystem.enableBlend();
+                    int frame = 0;
+                    if (!ConfigManager.getClientConfig().purpleHazeSettings.disablePHazeOverlayAnimation) {
+                        frame = (minecraft.player.tickCount / 3 % 10);
+                    }
+                    
                     roundabout$renderTextureOverlay($$1, new ResourceLocation(Roundabout.MOD_ID,
-                            "textures/misc/distortion_overlay/distortion_overlay" + (minecraft.player.tickCount / 3 % 10) + ".png"), 0.7F, 1F, 1F, 1F);
+                            "textures/misc/distortion_overlay/distortion_overlay" + frame + ".png"),
+                            ConfigManager.getClientConfig().generalSettings.hazeFieldOpacity, 1F, 1F, 1F);
                 }
                 //Vampire freeze overlay
                 if (HeatUtil.isCold(this.minecraft.player) && !(this.minecraft.player.getTicksFrozen() > 0)) {
