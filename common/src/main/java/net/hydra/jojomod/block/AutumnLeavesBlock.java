@@ -3,14 +3,18 @@ package net.hydra.jojomod.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -26,29 +30,46 @@ public class AutumnLeavesBlock extends BushBlock {
 
     private static final int TRAVEL_DISTANCE = 12;
 
+    public static final BooleanProperty COOLDOWN =
+            BooleanProperty.create("cooldown");
+
+    private static final int COOLDOWN_TICKS = 60;
     public AutumnLeavesBlock(Properties properties) {
         super(properties);
 
         this.registerDefaultState(
                 this.stateDefinition.any()
                         .setValue(FACING, Direction.NORTH)
+                        .setValue(COOLDOWN, false)
         );
     }
 
     @Override
     protected void createBlockStateDefinition(
-            StateDefinition.Builder<net.minecraft.world.level.block.Block, BlockState> builder) {
-        builder.add(FACING);
+            StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(FACING, COOLDOWN);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return this.defaultBlockState().setValue(
-                FACING,
-                context.getHorizontalDirection()
-        );
+        return this.defaultBlockState()
+                .setValue(FACING, context.getHorizontalDirection())
+                .setValue(COOLDOWN, true);
     }
+    @Override
+    public void onPlace(BlockState state, Level level,
+                        BlockPos pos, BlockState oldState,
+                        boolean isMoving) {
 
+        super.onPlace(state, level, pos, oldState, isMoving);
+
+        if (!level.isClientSide
+                && !oldState.is(this)
+                && state.getValue(COOLDOWN)) {
+
+            level.scheduleTick(pos, this, COOLDOWN_TICKS);
+        }
+    }
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level,
                                BlockPos pos, CollisionContext context) {
@@ -56,13 +77,22 @@ public class AutumnLeavesBlock extends BushBlock {
     }
 
 
+
     @Override
     public void entityInside(BlockState state, Level level,
                              BlockPos pos, Entity entity) {
 
-        if (level.isClientSide) {
+        if (level.isClientSide || state.getValue(COOLDOWN)) {
             return;
         }
+
+        level.setBlock(
+                pos,
+                state.setValue(COOLDOWN, true),
+                3
+        );
+
+        level.scheduleTick(pos, this, COOLDOWN_TICKS);
 
         Direction direction = state.getValue(FACING);
 
@@ -138,4 +168,16 @@ public class AutumnLeavesBlock extends BushBlock {
         }
     }
 
+    @Override
+    public void tick(BlockState state, ServerLevel level,
+                     BlockPos pos, RandomSource random) {
+
+        if (state.getValue(COOLDOWN)) {
+            level.setBlock(
+                    pos,
+                    state.setValue(COOLDOWN, false),
+                    3
+            );
+        }
+    }
 }
