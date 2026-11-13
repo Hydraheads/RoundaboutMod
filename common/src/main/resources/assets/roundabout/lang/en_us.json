@@ -4709,6 +4709,10 @@
   "config.roundabout.mapOpacity.desc": "What is the opacity of the map overlay in first person? 1.0 is the default. (Change this as a decimal point, i.e. 0.5 for 50%)",
   "config.roundabout.spinMapInsteadOfArrow.name": "Spin Map Instead Of Arrow",
   "config.roundabout.spinMapInsteadOfArrow.desc": "Spins the minimap of the second ability instead of the player arrow.",
+  "config.roundabout.scoleciphobiaMode.name": "Scoleciphobia Mode",
+  "config.roundabout.scoleciphobiaMode.desc": "Disables the idle animation of the nematodes in first person.",
+  "config.roundabout.scoleciphobiaModeUsing.name": "Scoleciphobia-2 Mode",
+  "config.roundabout.scoleciphobiaModeUsing.desc": "Disables the transition animation of the nematodes in first person.",
 
   "config.roundabout.goldExperienceCurrentAnimal.name": "Selected Animal Type",
   "config.roundabout.goldExperienceCurrentAnimal.desc": "For Gold Experience, your client remembers what animal is presently selected.",

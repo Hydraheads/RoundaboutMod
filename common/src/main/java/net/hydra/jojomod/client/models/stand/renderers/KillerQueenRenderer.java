@@ -170,18 +170,13 @@ public class KillerQueenRenderer extends StandRenderer<KillerQueenEntity>{
     private static final RenderType ARTWORK_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/artwork.png"));
     private static final RenderType CRACKED_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/cracked.png"));
 
-
     @Override
-    public boolean hasGlowingParts(byte skin) {
+    public boolean hasGlowingParts(byte skin, int packedLight) {
         return skin != KillerQueenEntity.MINESWEEPER && skin != KillerQueenEntity.CREEPER
                 && skin != KillerQueenEntity.WEAKNESS && skin != KillerQueenEntity.SPIRIT
                 && skin != KillerQueenEntity.BETA;
     }
 
-
-    public int getGlowAmount(byte skin) {
-        return 628640;
-    }
 
     @Override
     public  RenderType getGlowingReference(byte BT) {

@@ -295,7 +295,11 @@ public abstract class HudRendering implements IHudAccess {
                     if (lyinEyes.getSummonOverlayTicks() >= 12) {
                         // idle anim
                         int idleFrameCount = 4;
-                        int idleFrame = 1 + ((lyinEyes.getIdleOverlayTicks() / 3) % idleFrameCount);
+                        int idleFrame = 1;
+                        if (!ConfigManager.getClientConfig().lyinEyesSettings.scoleciphobiaMode) {
+                            idleFrame += ((lyinEyes.getIdleOverlayTicks() / 3) % idleFrameCount);
+                        }
+
                         texture = new ResourceLocation(Roundabout.MOD_ID,
                                 "textures/misc/lyin_eyes/idle_f" + idleFrame + ".png");
                     } else {
@@ -315,7 +319,13 @@ public abstract class HudRendering implements IHudAccess {
                     float gatherOpacity = 1.0F - lyinEyes.getMapOpacity();
                     if (gatherOpacity > 0.0F) {
                         // need to stop the thing from reaching 0, so i put an extra math method to clamp it.
-                        int frame = Math.max(1, Math.min(lyinEyes.getGatherOverlayTicks(), 5));
+
+                        int frame = 1;
+
+                        if (!ConfigManager.getClientConfig().lyinEyesSettings.scoleciphobiaModeUsing) {
+                            frame = Math.max(1, Math.min(lyinEyes.getGatherOverlayTicks(), 5));
+                        }
+
                         // this copies PH distortion gui formatting since this is also an animation
                         ResourceLocation texture = new ResourceLocation(Roundabout.MOD_ID,
                                 "textures/misc/lyin_eyes/pileup_f" + frame + ".png");

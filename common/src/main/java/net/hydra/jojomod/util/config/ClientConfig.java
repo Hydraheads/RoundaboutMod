@@ -279,6 +279,10 @@ public class ClientConfig implements Cloneable {
     public static class LyinEyesSettings {
         @BooleanOption(group = "inherit", value = false)
         public Boolean spinMapInsteadOfArrow;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean scoleciphobiaMode;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean scoleciphobiaModeUsing;
         @FloatOption(group = "inherit", value = 1F, min = 0, max = 1)
         public Float nematodeOpacity;
         @FloatOption(group = "inherit", value = 1F, min = 0, max = 1)
