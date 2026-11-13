@@ -37,7 +37,7 @@ public abstract class KeysKeyboardInput extends Input {
                     || (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy CB && CB.invincibleState)
                     || (user.roundabout$getStandPowers() instanceof PowersCream PC && PC.getTransformTimer() > 0)
                     || (user.roundabout$getStandPowers() instanceof PowersTusk PT && PT.getActivePower() == PowersTusk.FLATTEN)
-                    || user.roundabout$hasSpringLegs();
+                    || user.roundabout$hasSpringLegs() || user.roundabout$hasGERooted();
                     // || (user.roundabout$getStand() instanceof SilverChariotEntity sc && sc.isSelfCarryModeActive());
 
             boolean forwardKeys = user.roundabout$hasRibcageTrap();
