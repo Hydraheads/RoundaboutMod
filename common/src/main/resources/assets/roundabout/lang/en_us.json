@@ -3777,6 +3777,15 @@
   "roundabout.gold_experience_animal.fox": "Fox",
   "roundabout.gold_experience_animal.fox.desc": "Finds nearby items and fetches them for you.",
 
+  "roundabout.gold_experience_item_imbue.animal": "Animal Imbue",
+  "roundabout.gold_experience_item_imbue.animal.desc": "Transforms into an animal when used.",
+  "roundabout.gold_experience_item_imbue.tree": "Tree Imbue",
+  "roundabout.gold_experience_item_imbue.tree.desc": "Roots enemies when used.",
+
+  "tooltip.roundabout.ge_imbue.animal": "Imbued with Life Energy (%s)",
+  "tooltip.roundabout.ge_imbue.tree": "Imbued with Life Energy (Tree)",
+  "tooltip.roundabout.ge_imbue.disguise": "Imbued with Life Energy (Disguise)",
+
   "roundabout.pose.giorno": "Requiem",
   "roundabout.pose.joseph": "Bloody Stream",
   "roundabout.pose.koichi": "Bizarre Town",

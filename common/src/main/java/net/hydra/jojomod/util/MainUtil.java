@@ -855,7 +855,7 @@ public class MainUtil {
     public static double getWorthyOdds(Mob mob) {
         if ((isBossMob(mob)
                 && !ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.bossMobsCanNaturallyHaveStands)
-                || mob instanceof JojoNPC || mob instanceof FallenMob || mob instanceof CloneEntity || isMobStandUserBlacklisted(mob)) {
+                || mob instanceof JojoNPC || mob instanceof StrayCatEntity || mob instanceof FallenMob || mob instanceof CloneEntity || isMobStandUserBlacklisted(mob)) {
             return 0;
         }
         return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.worthyMobOdds;
@@ -879,7 +879,7 @@ public class MainUtil {
     public static double getStandUserOdds(Mob mob) {
         if ((isBossMob(mob)
                 && !ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.bossMobsCanNaturallyHaveStands)
-                || mob instanceof JojoNPC || mob instanceof FallenMob || mob instanceof CloneEntity || mob instanceof ZombieAesthetician
+                || mob instanceof JojoNPC || mob instanceof StrayCatEntity || mob instanceof FallenMob || mob instanceof CloneEntity || mob instanceof ZombieAesthetician
                 || isMobStandUserBlacklisted(mob)) {
             return 0;
         } else if (mob instanceof AbstractVillager) {
@@ -1779,6 +1779,9 @@ public class MainUtil {
 
         mob.rdbt$setExperienceTaken(compoundtag.getBoolean("expTaken"));
         StandPowers powers = mob.roundabout$getStandPowers();
+        if (tag.hasUUID("GEActiveImbueId") && powers instanceof PowersGoldExperience gePowers) {
+            gePowers.setActiveImbuedItemId(tag.getUUID("GEActiveImbueId"));
+        }
         List<CooldownInstance> CDCopy = new ArrayList<>(mob.rdbt$getPowerCooldowns()) {
         };
         if (!CDCopy.isEmpty()) {
@@ -1821,6 +1824,12 @@ public class MainUtil {
         }
 
         StandPowers powers = mob.roundabout$getStandPowers();
+        if (powers instanceof PowersGoldExperience gePowers) {
+            UUID activeId = gePowers.getActiveImbuedItemId();
+            if (activeId != null) {
+                tag.putUUID("GEActiveImbueId", activeId);
+            }
+        }
         List<CooldownInstance> CDCopy = new ArrayList<>(mob.rdbt$getPowerCooldowns()) {
         };
         if (!CDCopy.isEmpty()) {
@@ -1915,8 +1924,8 @@ public class MainUtil {
 
     public static boolean canGrantStand(Entity ent) {
         if (ent instanceof Mob ME) {
-            if (!(ME instanceof StandEntity)) {
-                if (((StandUser) ME).roundabout$getStandDisc().isEmpty() && !(ent instanceof StrayCatEntity)) {
+            if (!(ME instanceof StandEntity) && !(ME instanceof StrayCatEntity) && !(ME instanceof FallenMob)) {
+                if (((StandUser) ME).roundabout$getStandDisc().isEmpty()) {
                     return ((IMob) ME).roundabout$isWorthy();
                 }
             }

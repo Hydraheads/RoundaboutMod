@@ -439,6 +439,11 @@ public interface StandUser {
     boolean roundabout$hasSpringLegs();
     void roundabout$setSpringLegs(boolean legs);
 
+    boolean roundabout$hasGERooted();
+    void roundabout$setGERooted(boolean tree);
+    ItemStack roundabout$getGERootedItem();
+    void roundabout$setGERootedItem(ItemStack stack);
+
     /** catch the rainbow **/
     boolean roundabout$getIsRainWalking();
     void roundabout$setIsRainWalking(boolean bool);

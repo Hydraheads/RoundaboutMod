@@ -1989,10 +1989,10 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         boolean flag1 = (i.getItem() instanceof ShearsItem || i.getItem() instanceof ScissorItem) && !(le instanceof Sheep) || i.getItem() instanceof SwordItem || i.getItem() instanceof SacrificialDaggerItem || i.getItem() instanceof DiggerItem || i.getItem() instanceof GlaiveItem || i.getItem() instanceof WarhammerItem;
         boolean flag2 = i.getItem() instanceof RoundaboutArrowItem;
         boolean flag3 = i.getItem() instanceof ArmorItem || i.getItem() instanceof ElytraItem;
-        boolean flag4 = i.getItem() instanceof PotionItem || i.getItem().getFoodProperties() != null;
+        boolean flag4 = i.getItem() instanceof PotionItem || i.getItem().getFoodProperties() != null || i.getItem() instanceof MilkBucketItem;
         boolean flag5 = (i.getItem() instanceof ShearsItem || i.getItem() instanceof ScissorItem) && le instanceof Sheep sheep && !(sheep.isSheared());
 
-        boolean allYouCanEat = le instanceof Player p && i.getItem().getFoodProperties() != null && p.canEat(i.getItem().getFoodProperties().canAlwaysEat()) || le instanceof Animal || le instanceof Villager;
+        boolean allYouCanEat = le instanceof Player p && i.getItem().getFoodProperties() != null && p.canEat(i.getItem().getFoodProperties().canAlwaysEat()) || le instanceof Animal || le instanceof Villager || i.getItem() instanceof MilkBucketItem;
         if(!level().isClientSide && this.getUser() != null){
             setSlider(slideTicks);
         }
@@ -2154,11 +2154,14 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                 }
                             }
                         }
-                        if (i.getItem().getFoodProperties() != null) {
-                            if (e instanceof Player && i.isEdible() || e instanceof Animal a && a.isFood(i)) {
-
+                        if (i.getItem().getFoodProperties() != null || i.getItem() instanceof MilkBucketItem) {
+                            if (i.getItem() instanceof MilkBucketItem || (e instanceof Player && i.isEdible() || e instanceof Animal a && a.isFood(i) || e instanceof Villager)) {
                                 if ((meleeInteractionTicks == 140 || meleeInteractionTicks == 110 || meleeInteractionTicks == 85 || meleeInteractionTicks == 70 && i.getItem() instanceof NewLocacacaItem) && allYouCanEat) {
-                                    this.level().playSound((Player) null, this, SoundEvents.GENERIC_EAT, SoundSource.HOSTILE, 2.0F, 1F);
+                                    if(i.getItem() instanceof MilkBucketItem){
+                                        this.level().playSound((Player) null, this, SoundEvents.GENERIC_DRINK, SoundSource.HOSTILE, 2.0F, 1F);
+                                    } else {
+                                        this.level().playSound((Player) null, this, SoundEvents.GENERIC_EAT, SoundSource.HOSTILE, 2.0F, 1F);
+                                    }
                                 }
                                 if(i.getItem() instanceof NewLocacacaItem && meleeInteractionTicks < 140 && meleeInteractionTicks > 60){
                                     if(i.getItem() instanceof NewLocacacaItem){
@@ -2169,29 +2172,43 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                 }
                                 if (!(i.getItem() instanceof NewLocacacaItem) && meleeInteractionTicks == 80
                                         || i.getItem() instanceof NewLocacacaItem && meleeInteractionTicks == 60) {
-                                    if (e instanceof Player p) {
-                                        if (p.canEat(i.getItem().getFoodProperties().canAlwaysEat())) {
-                                            if(!this.level().isClientSide()) {
-                                                i.finishUsingItem(this.level(), p);
-                                            }
-                                        }
-                                    } else if (e instanceof Animal an) {
-                                        if (an.getHealth() < an.getMaxHealth()) {
-                                            an.heal((float) i.getItem().getFoodProperties().getNutrition());
-                                        } else if (an.canFallInLove()) {
-                                            if(this.getUser() instanceof Player P) {
-                                                an.setInLove(P);
+                                    if((i.getItem() instanceof MilkBucketItem)){
+                                        if (!this.level().isClientSide()) {
+                                            i.finishUsingItem(this.level(), e);
+                                            if (this.getUser() instanceof Player pl) {
+                                                IPlayerEntity play = ((IPlayerEntity) pl);
+                                                play.roundabout$getBlckSabbathPlayerInventory().setItem(0, new ItemStack(Items.BUCKET));
                                             } else {
-                                                an.setInLoveTime(600);
+                                                this.setHeldItemSabbath(new ItemStack(Items.BUCKET));
                                             }
                                         }
-                                    }
-                                    if (this.getUser() instanceof Player pl) {
-                                        IPlayerEntity play = ((IPlayerEntity) pl);
-                                        play.roundabout$getBlckSabbathPlayerInventory().getItem(0).shrink(1);
-                                        if(!level().isClientSide) {
-                                            if (play.roundabout$getBlckSabbathPlayerInventory().getItem(0).getCount() == 0) {
-                                                setNotRenderItem(true);
+                                    } else {
+                                        if (e instanceof Player p) {
+                                            if (p.canEat(i.getItem().getFoodProperties().canAlwaysEat())) {
+                                                if (!this.level().isClientSide()) {
+                                                    i.finishUsingItem(this.level(), p);
+                                                }
+                                            }
+                                        } else if (e instanceof Animal an) {
+                                            if (an.getHealth() < an.getMaxHealth()) {
+                                                an.heal((float) i.getItem().getFoodProperties().getNutrition());
+                                            } else if (an.canFallInLove()) {
+                                                if (this.getUser() instanceof Player P) {
+                                                    an.setInLove(P);
+                                                } else {
+                                                    if(an.getInLoveTime() < 1) {
+                                                        an.setInLoveTime(600);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        if (this.getUser() instanceof Player pl) {
+                                            IPlayerEntity play = ((IPlayerEntity) pl);
+                                            play.roundabout$getBlckSabbathPlayerInventory().getItem(0).shrink(1);
+                                            if (!level().isClientSide) {
+                                                if (play.roundabout$getBlckSabbathPlayerInventory().getItem(0).getCount() == 0) {
+                                                    setNotRenderItem(true);
+                                                }
                                             }
                                         }
                                     }
