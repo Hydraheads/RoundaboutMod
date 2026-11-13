@@ -105,6 +105,8 @@ public class ClientConfig implements Cloneable {
     @NestedOption(group = "modded")
     public ClientConfig.KillerQueenSettings killerQueenSettings;
     @NestedOption(group = "modded")
+    public ClientConfig.PurpleHazeSettings purpleHazeSettings;
+    @NestedOption(group = "modded")
     public ClientConfig.WhitesnakeSettings whitesnakeSettings;
     @NestedOption(group = "modded")
     public ClientConfig.DiverDownSettings diverDownSettings;
@@ -237,6 +239,10 @@ public class ClientConfig implements Cloneable {
         public Boolean advancedTimeStopShader;
         @BooleanOption(group = "inherit", value = true)
         public Boolean simpleTimeStopShader;
+    }
+    public static class PurpleHazeSettings {
+    	@BooleanOption(group = "inherit", value = false)
+        public Boolean disablePHazeOverlayAnimation;
     }
     public static class KillerQueenSettings {
     	@BooleanOption(group = "inherit", value = true)

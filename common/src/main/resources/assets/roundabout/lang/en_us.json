@@ -4714,6 +4714,9 @@
   "config.roundabout.scoleciphobiaModeUsing.name": "Scoleciphobia-2 Mode",
   "config.roundabout.scoleciphobiaModeUsing.desc": "Disables the transition animation of the nematodes in first person.",
 
+  "config.roundabout.disablePHazeOverlayAnimation.name": "Disable Haze Overlay Animation",
+  "config.roundabout.disablePHazeOverlayAnimation.desc": "Disables the idle animation of the haze in first person.",
+
   "config.roundabout.goldExperienceCurrentAnimal.name": "Selected Animal Type",
   "config.roundabout.goldExperienceCurrentAnimal.desc": "For Gold Experience, your client remembers what animal is presently selected.",
 
