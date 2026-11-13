@@ -20,17 +20,17 @@ public abstract class ForgeCoffinSleepAtDayMixin {
 
     @Inject(method = "fireSleepingTimeCheck(Lnet/minecraft/world/entity/player/Player;Ljava/util/Optional;)Z", at = @At(value = "HEAD"), cancellable = true, remap = false)
     private static void forgeAllowCoffinSleepAtDay(Player player, Optional<BlockPos> sleepingLocation, CallbackInfoReturnable<Boolean> cir) {
-        ServerPlayer serverPlayer = (ServerPlayer)(Object)player;
+
 
         if (sleepingLocation.isPresent()) {
-            if (serverPlayer.level().getBlockState(sleepingLocation.get()).getBlock() instanceof CoffinBlock) {
+            if (player.level().getBlockState(sleepingLocation.get()).getBlock() instanceof CoffinBlock) {
                 cir.setReturnValue(true);
 
                 SleepingTimeCheckEvent evt = new SleepingTimeCheckEvent(player, sleepingLocation);
                 MinecraftForge.EVENT_BUS.post(evt);
 
                 Event.Result canContinueSleep = evt.getResult();
-                if (serverPlayer.level().isDay() || serverPlayer.level().isThundering()) {
+                if (player.level().isDay() || player.level().isThundering()) {
                     cir.setReturnValue(true);
                 } else {
                     cir.setReturnValue(false);
