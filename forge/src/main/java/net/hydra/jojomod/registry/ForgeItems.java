@@ -1203,6 +1203,10 @@ public class ForgeItems {
             addToWIPTab(ITEMS.register("ginkgo_trapdoor",
                     () -> new BlockItem(ForgeBlocks.GINKGO_TRAPDOOR.get(),
                             new Item.Properties())));
+    public static final RegistryObject<BlockItem> AUTUMN_LEAVES_ITEM =
+            addToWIPTab(ITEMS.register("autumn_leaves",
+                    () -> new BlockItem(ForgeBlocks.AUTUMN_LEAVES.get(),
+                            new Item.Properties())));
 
     public static void assignStupidForge(){
         DispenserBlock.registerBehavior(ForgeItems.KNIFE.get(), DispenserRegistry.KNIFE);

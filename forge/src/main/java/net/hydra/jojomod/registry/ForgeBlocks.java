@@ -454,6 +454,8 @@ public class ForgeBlocks {
             () -> GINKGO_WALL_HANGING_SIGN_PROPERTIES);
     public static final RegistryObject<Block> GINKGO_TRAPDOOR = BLOCKS.register("ginkgo_trapdoor",
             () -> GINKGO_TRAPDOOR_PROPERTIES);
+    public static final RegistryObject<Block> AUTUMN_LEAVES = BLOCKS.register("autumn_leaves",
+            () -> AUTUMN_LEAVES_PROPERTIES);
 
     public static final RegistryObject<BlockEntityType<OasisMudBlockEntity>> OASIS_MUD_BLOCK_ENTITY = BLOCK_ENTITIES.register("oasis_mud_block",
             () -> BlockEntityType.Builder.of(OasisMudBlockEntity::new, OASIS_MUD_BLOCK.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "oasis_mud_block")));

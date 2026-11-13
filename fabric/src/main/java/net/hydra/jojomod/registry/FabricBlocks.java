@@ -337,6 +337,7 @@ public class FabricBlocks {
     public static final Block GINKGO_WALL_HANGING_SIGN =
             registerBlockItemless("ginkgo_wall_hanging_sign", ModBlocks.GINKGO_WALL_HANGING_SIGN_PROPERTIES);
     public static final Block GINKGO_TRAPDOOR = registerBlock("ginkgo_trapdoor",ModBlocks.GINKGO_TRAPDOOR_PROPERTIES);
+    public static final Block AUTUMN_LEAVES = registerBlock("autumn_leaves",ModBlocks.AUTUMN_LEAVES_PROPERTIES);
 
     private static <T extends BlockEntity> BlockEntityType<T> registerBE(String $$0, BlockEntityType.Builder<T> $$1) {
         Type<?> $$2 = Util.fetchChoiceType(References.BLOCK_ENTITY, $$0);
@@ -583,6 +584,7 @@ public class FabricBlocks {
         ModBlocks.GINKGO_HANGING_SIGN = GINKGO_HANGING_SIGN;
         ModBlocks.GINKGO_WALL_HANGING_SIGN = GINKGO_WALL_HANGING_SIGN;
         ModBlocks.GINKGO_TRAPDOOR = GINKGO_TRAPDOOR;
+        ModBlocks.AUTUMN_LEAVES = AUTUMN_LEAVES;
 
         //ModBlocks.CHESSBOARD_BLOCK = CHESSBOARD_BLOCK;
 

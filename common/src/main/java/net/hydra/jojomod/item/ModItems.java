@@ -158,6 +158,7 @@ public class ModItems {
     public static Item GINKGO_SIGN;
     public static Item GINKGO_HANGING_SIGN;
     public static Item GINKGO_TRAPDOOR;
+    public static Item AUTUMN_LEAVES;
 
     public static Item CAT_REMAINS;
     public static Item OCELOT_REMAINS;

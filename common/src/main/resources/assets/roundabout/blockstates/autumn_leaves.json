@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "roundabout:block/autumn_leaves_2"
+    },
+    "facing=east": {
+      "model": "roundabout:block/autumn_leaves_3"
+    },
+    "facing=south": {
+      "model": "roundabout:block/autumn_leaves_0"
+    },
+    "facing=west": {
+      "model": "roundabout:block/autumn_leaves_1"
+    }
+  }
+}
