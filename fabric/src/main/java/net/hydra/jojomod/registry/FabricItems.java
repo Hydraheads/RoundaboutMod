@@ -337,6 +337,7 @@ public class FabricItems {
             )
     );
     public static Item GINKGO_TRAPDOOR = ModBlocks.GINKGO_TRAPDOOR.asItem();
+    public static Item AUTUMN_LEAVES = ModBlocks.AUTUMN_LEAVES.asItem();
 
     public static Item CHAMOMILE_SEEDS = registerItem("chamomile_seeds", new ItemNameBlockItem(ModBlocks.CHAMOMILE, new Item.Properties()));
     public static Item CHAMOMILE = registerItem("chamomile", new Item(new Item.Properties()
@@ -962,6 +963,7 @@ public class FabricItems {
                         entries.accept(ModBlocks.GINKGO_SIGN);
                         entries.accept(ModBlocks.GINKGO_HANGING_SIGN);
                         entries.accept(ModBlocks.GINKGO_TRAPDOOR);
+                        entries.accept(ModBlocks.AUTUMN_LEAVES);
                     }).build());
     public static final CreativeModeTab FOG_BLOCK_ITEMS = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
             new ResourceLocation(Roundabout.MOD_ID, "justice_fog_items"),
@@ -1153,6 +1155,7 @@ public class FabricItems {
         ModItems.GINKGO_SIGN = GINKGO_SIGN;
         ModItems.GINKGO_HANGING_SIGN = GINKGO_HANGING_SIGN;
         ModItems.GINKGO_TRAPDOOR = GINKGO_TRAPDOOR;
+        ModItems.AUTUMN_LEAVES = AUTUMN_LEAVES;
 
 
 

@@ -75,6 +75,7 @@ public class RoundaboutFabricClient implements ClientModInitializer {
                 ModBlocks.MELON_PARFAIT,
                 ModBlocks.GINKGO_SAPLING,
                 ModBlocks.FANCY_GINKGO_DOOR,
+                ModBlocks.AUTUMN_LEAVES,
                 ModBlocks.GE_BUSH,
                 ModBlocks.GE_VINE);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.translucent(), ModBlocks.WHITE_ALBUM_ICE_BLOCK,

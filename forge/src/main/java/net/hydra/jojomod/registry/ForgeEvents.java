@@ -392,6 +392,7 @@ public class ForgeEvents {
         ModBlocks.GINKGO_HANGING_SIGN  = ForgeBlocks.GINKGO_HANGING_SIGN .get();
         ModBlocks.GINKGO_WALL_HANGING_SIGN = ForgeBlocks.GINKGO_WALL_HANGING_SIGN.get();
         ModBlocks.GINKGO_TRAPDOOR  = ForgeBlocks.GINKGO_TRAPDOOR .get();
+        ModBlocks.AUTUMN_LEAVES  = ForgeBlocks.AUTUMN_LEAVES .get();
         ModBlocks.ORANGE_FIRE = ForgeBlocks.ORANGE_FIRE.get();
         ModBlocks.BLUE_FIRE = ForgeBlocks.BLUE_FIRE.get();
         ModBlocks.PURPLE_FIRE = ForgeBlocks.PURPLE_FIRE.get();
@@ -691,6 +692,7 @@ public class ForgeEvents {
         ModBlocks.GINKGO_HANGING_SIGN = ForgeBlocks.GINKGO_HANGING_SIGN.get();
         ModBlocks.GINKGO_WALL_HANGING_SIGN = ForgeBlocks.GINKGO_WALL_HANGING_SIGN.get();
         ModBlocks.GINKGO_TRAPDOOR = ForgeBlocks.GINKGO_TRAPDOOR.get();
+        ModBlocks.AUTUMN_LEAVES = ForgeBlocks.AUTUMN_LEAVES.get();
 
         ModItems.CAT_REMAINS = ForgeItems.CAT_REMAINS.get();
         ModItems.OCELOT_REMAINS = ForgeItems.OCELOT_REMAINS.get();

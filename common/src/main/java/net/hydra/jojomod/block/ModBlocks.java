@@ -222,6 +222,7 @@ public class ModBlocks {
     public static Block GINKGO_HANGING_SIGN;
     public static Block GINKGO_WALL_HANGING_SIGN;
     public static Block GINKGO_TRAPDOOR;
+    public static Block AUTUMN_LEAVES;
 
 
     public static Block GAMBLING_TABLE;
@@ -1213,6 +1214,14 @@ public class ModBlocks {
                     .strength(3.0F)
                     .noOcclusion()
                     .ignitedByLava()
+    );
+    public static Block AUTUMN_LEAVES_PROPERTIES = new AutumnLeavesBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.PLANT)
+                    .strength(0.1F)
+                    .noCollission()
+                    .noOcclusion()
+                    .instabreak()
     );
 
     public static List<String> dontGenState = new ArrayList<String>();

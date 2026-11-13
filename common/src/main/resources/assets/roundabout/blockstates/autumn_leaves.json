@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "facing=north,cooldown=false": {
+      "model": "roundabout:block/autumn_leaves_2"
+    },
+    "facing=north,cooldown=true": {
+      "model": "roundabout:block/autumn_leaves_2"
+    },
+    "facing=east,cooldown=false": {
+      "model": "roundabout:block/autumn_leaves_3"
+    },
+    "facing=east,cooldown=true": {
+      "model": "roundabout:block/autumn_leaves_3"
+    },
+    "facing=south,cooldown=false": {
+      "model": "roundabout:block/autumn_leaves_0"
+    },
+    "facing=south,cooldown=true": {
+      "model": "roundabout:block/autumn_leaves_0"
+    },
+    "facing=west,cooldown=false": {
+      "model": "roundabout:block/autumn_leaves_1"
+    },
+    "facing=west,cooldown=true": {
+      "model": "roundabout:block/autumn_leaves_1"
+    }
+  }
+}
