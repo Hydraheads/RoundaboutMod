@@ -457,9 +457,9 @@ public class SeperatedArmEntity extends StandEntity {
 
                             }
                         }
-                        doAttack();
+
                         Can_activate_special = false;
-                    }
+                    }doAttack();
                 }
                 attractMobs();
                 pickUpItems();
@@ -673,7 +673,7 @@ public class SeperatedArmEntity extends StandEntity {
         Item item = (this.getMainHandItem().getItem());
         List<Entity> damages = List.of();
         if(Can_activate_special || Can_activate) {
-             damages = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), 1, 1, 1);
+             damages = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), 0.8, 0.8, 0.8);
             if (SpinTicks > 0) {
                 damages = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), 1.3, 0.6, 1.3);
             }
@@ -694,7 +694,6 @@ public class SeperatedArmEntity extends StandEntity {
                     }
                 }
                 if ( SpinTicks > 0) {
-                    Roundabout.LOGGER.info(Double.toString(Math.abs(this.getY()-(entity.getOnPos().getY()))));
                     if (Math.abs(this.getY()-(entity.getOnPos().getY())) < 2 ) {
                         entity.addDeltaMovement(new Vec3(0, 0.17, 0));
                         ((ServerLevel) this.level()).sendParticles(ParticleTypes.CRIT, this.getX(),
