@@ -144,6 +144,8 @@ public class ClientConfig implements Cloneable {
         public Float timeSkipOpacity;
         @FloatOption(group = "inherit", value = 0.6F, min = 0, max = 1)
         public Float bitesTheDustOpacity;
+        @FloatOption(group = "inherit", value = 0.7F, min = 0, max = 1)
+        public Float hazeFieldOpacity;
     }
     public static class ConfigSettings {
 

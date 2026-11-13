@@ -244,7 +244,8 @@ public abstract class HudRendering implements IHudAccess {
 
                     roundabout$renderTextureOverlay($$1, new ResourceLocation(Roundabout.MOD_ID,
                                     "textures/misc/purple_overlay/purple_overlay" + frame + ".png"),
-                            0.7F, roundabout$hazeTint[0], roundabout$hazeTint[1], roundabout$hazeTint[2]);
+                            ConfigManager.getClientConfig().generalSettings.hazeFieldOpacity,
+                            roundabout$hazeTint[0], roundabout$hazeTint[1], roundabout$hazeTint[2]);
                 }
                 //Distortion Haze overlay
                 if (MainUtil.isInDistortionHaze(this.minecraft.player)) {

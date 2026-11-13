@@ -4608,6 +4608,8 @@
 
   "config.roundabout.bitesTheDustOpacity.name":"BTD Opacity",
   "config.roundabout.bitesTheDustOpacity.desc":"How see through Bites The Dust effect is.",
+  "config.roundabout.hazeFieldOpacity.name":"Purple Haze Overlay Opacity",
+  "config.roundabout.hazeFieldOpacity.desc":"How see through of Purple Haze effect is.",
 
   "config.roundabout.killerQueenCurrentBombConfig.name":"Bomb Config",
   "config.roundabout.killerQueenCurrentBombConfig.desc":"Current Bomb Settings.",
