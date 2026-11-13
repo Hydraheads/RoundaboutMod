@@ -1,14 +1,27 @@
 package net.hydra.jojomod.client.gui;
 
-import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.event.index.AnimalTypes;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersGoldExperience;
+import net.hydra.jojomod.util.config.ClientConfig;
+import net.hydra.jojomod.util.config.ConfigManager;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class ItemImbueScreen extends Screen {
     private static final ResourceLocation MENU_TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/gui/ge_item_imbue.png");
@@ -23,8 +36,10 @@ public class ItemImbueScreen extends Screen {
 
     private final int totalColumns = 9;
     private final int visibleRows = 5;
-    //PLACEHOLDER
-    private int totalItems = 100;
+
+    private final List<ImbueOption> options = new ArrayList<>();
+
+    private record ImbueOption(ItemStack icon, Component title, Component description, Runnable onSelect) {}
 
     public ItemImbueScreen() {
         super(GameNarrator.NO_TITLE);
@@ -35,6 +50,31 @@ public class ItemImbueScreen extends Screen {
         super.init();
         this.leftPos = (this.width - this.imageWidth) / 2;
         this.topPos = (this.height - this.imageHeight) / 2;
+
+        this.options.clear();
+
+        // Animal imbue for slot 0
+        this.options.add(new ImbueOption(
+                new ItemStack(Items.CHICKEN_SPAWN_EGG),
+                Component.translatable("roundabout.gold_experience_item_imbue.animal"),
+                Component.translatable("roundabout.gold_experience_item_imbue.animal.desc"),
+                this::selectAnimalImbue
+        ));
+    }
+
+    private void selectAnimalImbue() {
+        if (this.minecraft == null || this.minecraft.player == null) return;
+
+        if (((StandUser) this.minecraft.player).roundabout$getStandPowers() instanceof PowersGoldExperience powers) {
+            int animalId = AnimalTypes.FROG.id;
+            ClientConfig clientConfig = ConfigManager.getClientConfig();
+            if (clientConfig != null && clientConfig.dynamicSettings != null) {
+                animalId = clientConfig.dynamicSettings.goldExperienceCurrentAnimal;
+            }
+
+            powers.tryIntPower(PowersGoldExperience.ITEM_IMBUE, true, animalId);
+            powers.tryIntPowerPacket(PowersGoldExperience.ITEM_IMBUE, animalId);
+        }
     }
 
     @Override
@@ -52,28 +92,42 @@ public class ItemImbueScreen extends Screen {
 
         guiGraphics.blit(MENU_TEXTURE, scrollBarX, currentScrollY, 195, 0, 12, 15);
 
+        ImbueOption hoveredOption = null;
         int startRow = getScrollRow();
+
         for (int i = 0; i < visibleRows * totalColumns; i++) {
             int itemIndex = (startRow * totalColumns) + i;
-            if (itemIndex >= this.totalItems) break;
+            if (itemIndex >= this.options.size()) break;
 
             int col = i % totalColumns;
             int row = i / totalColumns;
 
-            int slotX = this.leftPos + 8 + (col * 18);
+            int slotX = this.leftPos + 9 + (col * 18);
             int slotY = this.topPos + 18 + (row * 18);
 
-            //TODO: replace this with the items and stuff
-            guiGraphics.fill(slotX, slotY, slotX + 16, slotY + 16, 0x80FFAA00);
+            ImbueOption option = this.options.get(itemIndex);
+            guiGraphics.renderItem(option.icon(), slotX, slotY);
+
+            if (isHoveringSlot(slotX, slotY, mouseX, mouseY)) {
+                hoveredOption = option;
+                guiGraphics.fill(slotX, slotY, slotX + 16, slotY + 16, 0x80FFFFFF);
+            }
         }
 
         super.render(guiGraphics, mouseX, mouseY, partialTicks);
+
+        if (hoveredOption != null) {
+            List<Component> tooltip = new ArrayList<>();
+            tooltip.add(hoveredOption.title().copy().withStyle(ChatFormatting.GOLD));
+            tooltip.add(hoveredOption.description().copy().withStyle(ChatFormatting.GRAY));
+            guiGraphics.renderTooltip(this.font, tooltip, Optional.empty(), mouseX, mouseY);
+        }
     }
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
         if (this.canScroll()) {
-            int totalRows = Mth.ceil((float) this.totalItems / (float) this.totalColumns);
+            int totalRows = Mth.ceil((float) this.options.size() / (float) this.totalColumns);
             int hiddenRows = totalRows - this.visibleRows;
 
             this.scrollOffs = (float) ((double) this.scrollOffs - delta / (double) hiddenRows);
@@ -89,6 +143,27 @@ public class ItemImbueScreen extends Screen {
             if (this.isHoveringScrollbar(mouseX, mouseY)) {
                 this.isScrolling = this.canScroll();
                 return true;
+            }
+
+            int startRow = getScrollRow();
+            for (int i = 0; i < visibleRows * totalColumns; i++) {
+                int itemIndex = (startRow * totalColumns) + i;
+                if (itemIndex >= this.options.size()) break;
+
+                int col = i % totalColumns;
+                int row = i / totalColumns;
+
+                int slotX = this.leftPos + 8 + (col * 18);
+                int slotY = this.topPos + 18 + (row * 18);
+
+                if (isHoveringSlot(slotX, slotY, mouseX, mouseY)) {
+                    if (this.minecraft != null) {
+                        this.minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                    }
+                    this.options.get(itemIndex).onSelect().run();
+                    this.onClose();
+                    return true;
+                }
             }
         }
         return super.mouseClicked(mouseX, mouseY, button);
@@ -116,6 +191,10 @@ public class ItemImbueScreen extends Screen {
         return super.mouseReleased(mouseX, mouseY, button);
     }
 
+    private boolean isHoveringSlot(int slotX, int slotY, double mouseX, double mouseY) {
+        return mouseX >= slotX && mouseX < slotX + 16 && mouseY >= slotY && mouseY < slotY + 16;
+    }
+
     private boolean isHoveringScrollbar(double mouseX, double mouseY) {
         int scrollXMin = this.leftPos + 175;
         int scrollXMax = scrollXMin + 12;
@@ -125,11 +204,11 @@ public class ItemImbueScreen extends Screen {
     }
 
     private boolean canScroll() {
-        return this.totalItems > this.visibleRows * this.totalColumns;
+        return this.options.size() > this.visibleRows * this.totalColumns;
     }
 
     private int getScrollRow() {
-        int totalRows = Mth.ceil((float) this.totalItems / (float) this.totalColumns);
+        int totalRows = Mth.ceil((float) this.options.size() / (float) this.totalColumns);
         int hiddenRows = Math.max(0, totalRows - this.visibleRows);
         return (int) ((double) (this.scrollOffs * (float) hiddenRows) + 0.5D);
     }

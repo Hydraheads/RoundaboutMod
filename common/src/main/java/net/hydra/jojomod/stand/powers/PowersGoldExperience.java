@@ -39,6 +39,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -65,6 +67,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class PowersGoldExperience extends BlockGrabPreset {
@@ -79,6 +82,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
         LIFEFORM_CREATION = 59,
         ITEM_THROW = 60,
         TREE = 61;
+
+    // move bytes found in other moves
+    public static final byte ITEM_IMBUE = 62;
 
     // for life punch
     private LifePunchCloneEntity lifePunchClone = null;
@@ -95,6 +101,18 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // for lifeforms
     /**For mob ai, change the animalType before trypower to set what kind of plunder it has*/
     private byte animalType = AnimalTypes.FROG.id;
+    @Nullable
+    public static EntityType<?> getAnimalEntityType(byte animalId) {
+        if (animalId == AnimalTypes.BAT.id) return ModEntities.GE_BAT;
+        if (animalId == AnimalTypes.FROG.id) return ModEntities.GE_FROG;
+        if (animalId == AnimalTypes.BEE.id) return ModEntities.GE_BEE;
+        if (animalId == AnimalTypes.FISH.id) return ModEntities.GE_FISH;
+        if (animalId == AnimalTypes.FOX.id) return ModEntities.GE_FOX;
+        if (animalId == AnimalTypes.SNAKE.id) return ModEntities.GE_SNAKE;
+        if (animalId == AnimalTypes.PIRAHNA.id) return ModEntities.GE_PIRANHA;
+        if (animalId == AnimalTypes.BUTTERFLY.id) return ModEntities.GE_BUTTERFLY;
+        return null;
+    }
 
     // for tree growth
     private final List<TreeBlockSpawnData> pendingTreeBlocks = new ArrayList<>();
@@ -112,6 +130,21 @@ public class PowersGoldExperience extends BlockGrabPreset {
     private boolean isGroundBarraging = false;
     public boolean isGroundBarraging() {
         return this.isGroundBarraging && this.getActivePower() == PowerIndex.BARRAGE && this.getAttackTimeDuring() >= 0;
+    }
+
+    // for item imbue
+    public static final String IMBUE_TAG = "GEImbue";
+    public static final byte IMBUE_ANIMAL = 1;
+    public static final byte IMBUE_TREE = 2;
+    public static final byte IMBUE_DISGUISE = 3;
+    @Nullable
+    private UUID activeImbuedItemId = null;
+    @Nullable
+    public UUID getActiveImbuedItemId() {
+        return this.activeImbuedItemId;
+    }
+    public void setActiveImbuedItemId(@Nullable UUID id) {
+        this.activeImbuedItemId = id;
     }
 
     // basic stand registry stuff
@@ -360,6 +393,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 return false;
             }
         }
+        else if (move == ITEM_IMBUE) {
+            return executeItemImbue((byte) passedInt);
+        }
         return super.tryIntPower(move, forced, passedInt);
     }
 
@@ -447,6 +483,161 @@ public class PowersGoldExperience extends BlockGrabPreset {
     private void tryOpenItemImbue() {
         ClientUtil.openItemImbue();
     }
+
+    private static CompoundTag createBaseImbueTag(UUID imbueId, UUID ownerId, byte type) {
+        CompoundTag data = new CompoundTag();
+        data.putUUID("Id", imbueId);
+        data.putUUID("Owner", ownerId);
+        data.putByte("Type", type);
+        return data;
+    }
+
+    @Nullable
+    public static CompoundTag getImbueData(ItemStack stack) {
+        if (!stack.isEmpty() && stack.hasTag() && stack.getTag().contains(IMBUE_TAG, Tag.TAG_COMPOUND)) {
+            return stack.getTag().getCompound(IMBUE_TAG);
+        }
+        return null;
+    }
+
+    public static void clearImbue(ItemStack stack) {
+        if (!stack.isEmpty() && stack.hasTag()) {
+            stack.removeTagKey(IMBUE_TAG);
+        }
+    }
+
+    // animal imbue start
+
+    public static void applyAnimalImbue(ItemStack stack, UUID imbueId, UUID ownerId, byte animalId) {
+        CompoundTag data = createBaseImbueTag(imbueId, ownerId, IMBUE_ANIMAL);
+        data.putByte("AnimalId", animalId);
+        stack.getOrCreateTag().put(IMBUE_TAG, data);
+    }
+
+    public boolean executeItemImbue(byte animalId) {
+        if (this.self.level().isClientSide()) return false;
+
+        ItemStack heldItem = this.self.getMainHandItem();
+        if (heldItem.isEmpty()) return false;
+
+        // Clear any previously imbued item immediately
+        if (this.activeImbuedItemId != null) {
+            clearPreviousImbuedItem(this.activeImbuedItemId);
+        }
+        clearImbue(heldItem);
+
+        // IMPORTANT: make sure that the item gets separated so only 1 is imbued
+        ItemStack targetStack = heldItem.getCount() > 1 ? heldItem.split(1) : heldItem;
+
+        UUID imbueId = UUID.randomUUID();
+        this.activeImbuedItemId = imbueId;
+
+        applyAnimalImbue(targetStack, imbueId, this.self.getUUID(), animalId);
+
+        if (targetStack != heldItem && this.self instanceof Player player) {
+            if (!player.getInventory().add(targetStack)) {
+                player.drop(targetStack, false);
+            }
+        }
+
+        playSoundIfPossible(this.self.level(), null, this.self.blockPosition(),
+                ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.85F, 1F);
+        return true;
+    }
+
+    private void clearPreviousImbuedItem(UUID oldId) {
+        if (this.self.level() instanceof ServerLevel serverLevel && serverLevel.getServer() != null) {
+            // lots of checks here to ensure that any item gets cleared
+            for (ServerPlayer serverPlayer : serverLevel.getServer().getPlayerList().getPlayers()) {
+                for (int i = 0; i < serverPlayer.getInventory().getContainerSize(); i++) {
+                    ItemStack invStack = serverPlayer.getInventory().getItem(i);
+                    if (hasMatchingImbueId(invStack, oldId)) {
+                        clearImbue(invStack);
+                    }
+                }
+                ItemStack carried = serverPlayer.containerMenu.getCarried();
+                if (hasMatchingImbueId(carried, oldId)) {
+                    clearImbue(carried);
+                }
+            }
+            for (ServerLevel level : serverLevel.getServer().getAllLevels()) {
+                for (Entity entity : level.getAllEntities()) {
+                    if (entity instanceof net.minecraft.world.entity.item.ItemEntity itemEntity) {
+                        ItemStack entityStack = itemEntity.getItem();
+                        if (hasMatchingImbueId(entityStack, oldId)) {
+                            clearImbue(entityStack);
+                            itemEntity.setItem(entityStack);
+                        }
+                    }
+                }
+            }
+        } else {
+            for (EquipmentSlot slot : EquipmentSlot.values()) {
+                ItemStack slotStack = this.self.getItemBySlot(slot);
+                if (hasMatchingImbueId(slotStack, oldId)) {
+                    clearImbue(slotStack);
+                }
+            }
+        }
+    }
+
+    private static boolean hasMatchingImbueId(ItemStack stack, UUID targetId) {
+        CompoundTag imbue = getImbueData(stack);
+        return imbue != null && imbue.hasUUID("Id") && targetId.equals(imbue.getUUID("Id"));
+    }
+
+    // This is where the magic happens. This method transforms the item into an animal
+    public static boolean tryActivateImbuedItem(LivingEntity holder, ItemStack stack) {
+        if (holder.level().isClientSide() || !(holder.level() instanceof ServerLevel serverLevel)) {
+            return false;
+        }
+
+        CompoundTag imbue = getImbueData(stack);
+        if (imbue == null || !imbue.hasUUID("Id") || !imbue.hasUUID("Owner")) {
+            return false;
+        }
+
+        UUID imbueId = imbue.getUUID("Id");
+        UUID ownerId = imbue.getUUID("Owner");
+
+        Entity ownerEntity = serverLevel.getEntity(ownerId);
+        if (!(ownerEntity instanceof LivingEntity ownerLiving)
+                || !(((StandUser) ownerLiving).roundabout$getStandPowers() instanceof PowersGoldExperience gePowers)) {
+            return false;
+        }
+
+        // 1 item limit, clears the old tags to make way for the new one
+        if (!imbueId.equals(gePowers.getActiveImbuedItemId())) {
+            clearImbue(stack);
+            return false;
+        }
+
+        byte imbueType = imbue.getByte("Type");
+
+        if (imbueType == IMBUE_ANIMAL) {
+            byte animalId = imbue.getByte("AnimalId");
+            EntityType<?> typeToSpawn = getAnimalEntityType(animalId);
+            if (typeToSpawn == null) return false;
+
+            ItemStack cleanSource = stack.copyWithCount(1);
+            clearImbue(cleanSource);
+
+            Vec3 spawnPos = holder.position().add(holder.getLookAngle().scale(1.2)).add(0, 1.0, 0);
+            if (gePowers.spawnLifeform(typeToSpawn, spawnPos, cleanSource)) {
+                stack.shrink(1);
+                gePowers.setActiveImbuedItemId(null);
+                return true;
+            }
+        } else if (imbueType == IMBUE_TREE) {
+            // PLACEHOLDER, ROOT THE ENEMY HERE
+        } else if (imbueType == IMBUE_DISGUISE) {
+            // PLACEHOLDER, DISGUISE STUFF IS HERE
+        }
+
+        return false;
+    }
+
+    // animal imbue end
 
     // item imbue end
 
@@ -888,32 +1079,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 return false;
             }
 
-            EntityType<?> typeToSpawn = null;
-
-            if (this.animalType == AnimalTypes.BAT.id) {
-                typeToSpawn = ModEntities.GE_BAT;
-            }
-            else if (this.animalType == AnimalTypes.FROG.id) {
-                typeToSpawn = ModEntities.GE_FROG;
-            }
-            else if (this.animalType == AnimalTypes.BEE.id) {
-                typeToSpawn = ModEntities.GE_BEE;
-            }
-            else if (this.animalType == AnimalTypes.FISH.id) {
-                typeToSpawn = ModEntities.GE_FISH;
-            }
-            else if (this.animalType == AnimalTypes.FOX.id) {
-                typeToSpawn = ModEntities.GE_FOX;
-            }
-            else if (this.animalType == AnimalTypes.SNAKE.id) {
-                typeToSpawn = ModEntities.GE_SNAKE;
-            }
-            else if (this.animalType == AnimalTypes.PIRAHNA.id) {
-                typeToSpawn = ModEntities.GE_PIRANHA;
-            }
-            else if (this.animalType == AnimalTypes.BUTTERFLY.id) {
-                typeToSpawn = ModEntities.GE_BUTTERFLY;
-            }
+            EntityType<?> typeToSpawn = getAnimalEntityType(this.animalType);
 
             if (typeToSpawn != null) {
                 Vec3 spawnPos = this.self.position().add(this.self.getLookAngle().scale(1.2));
