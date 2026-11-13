@@ -55,6 +55,7 @@ public class AutumnLeavesBlock extends BushBlock {
         return SHAPE;
     }
 
+
     @Override
     public void entityInside(BlockState state, Level level,
                              BlockPos pos, Entity entity) {
@@ -75,7 +76,7 @@ public class AutumnLeavesBlock extends BushBlock {
         double step = 0.25;
 
         for (double distance = step;
-             distance <= TRAVEL_DISTANCE;
+             distance <= 12.0;
              distance += step) {
 
             double nextX = startX + direction.getStepX() * distance;
@@ -91,6 +92,43 @@ public class AutumnLeavesBlock extends BushBlock {
                 break;
             }
 
+            BlockPos groundPos = BlockPos.containing(
+                    nextX,
+                    startY + 0.01,
+                    nextZ
+            );
+
+            BlockState groundState = level.getBlockState(groundPos);
+
+            if (!groundPos.equals(pos)
+                    && groundState.getBlock() instanceof AutumnLeavesBlock) {
+
+                double targetX = groundPos.getX() + 0.5;
+                double targetZ = groundPos.getZ() + 0.5;
+
+                AABB targetBox = entity.getBoundingBox().move(
+                        targetX - startX,
+                        0,
+                        targetZ - startZ
+                );
+
+                if (level.noCollision(entity, targetBox)) {
+                    entity.teleportTo(
+                            targetX,
+                            startY,
+                            targetZ
+                    );
+                } else {
+                    entity.teleportTo(
+                            lastSafeX,
+                            startY,
+                            lastSafeZ
+                    );
+                }
+
+                return;
+            }
+
             lastSafeX = nextX;
             lastSafeZ = nextZ;
         }
@@ -99,4 +137,5 @@ public class AutumnLeavesBlock extends BushBlock {
             entity.teleportTo(lastSafeX, startY, lastSafeZ);
         }
     }
+
 }
