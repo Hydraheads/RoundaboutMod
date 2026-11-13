@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "roundabout:block/stripped_ginkgo_log"
+    },
+    "axis=x": {
+      "model": "roundabout:block/stripped_ginkgo_log",
+      "x": 90,
+      "y": 90
+    },
+    "axis=z": {
+      "model": "roundabout:block/stripped_ginkgo_log",
+      "x": 90
+    }
+  }
+}
