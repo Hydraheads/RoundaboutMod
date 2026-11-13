@@ -763,11 +763,11 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
         } else if (standOn && this.getActivePower() == PowerIndex.RANGED_BARRAGE && attackTimeDuring > -1) {
-            int ClashTime = 15 - Math.round(((float) attackTimeDuring / this.getRangedBarrageLength()) * 15);
+            int ClashTime = 15 - Math.round((Math.min((float) attackTimeDuring,getRangedBarrageLength()) / this.getRangedBarrageLength()) * 15);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
         } else if (standOn && isRangedBarrage2Charging()) {
-            int ClashTime = Math.round(((float) attackTimeDuring / getRangedBarrageWindup2()) * 15);
+            int ClashTime = Math.round((Math.min((float) attackTimeDuring,getRangedBarrageWindup2()) / getRangedBarrageWindup2()) * 15);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
 
@@ -1603,15 +1603,23 @@ public class PowersMagiciansRed extends NewPunchingStand {
         return 35;
     }
     public void updateRangedBarrageCharge(){
-        if (this.attackTimeDuring >= this.getRangedBarrageWindup()) {
-            ((StandUser) this.self).roundabout$tryPower(PowerIndex.RANGED_BARRAGE, true);
-        }
+            if (this.attackTimeDuring >= this.getRangedBarrageWindup()) {
+                if (!self.level().isClientSide() && !(self instanceof Player)) {
+                    ((StandUser) this.self).roundabout$tryPower(PowerIndex.RANGED_BARRAGE, true);
+                } else if (self.level().isClientSide() && isPacketPlayer()){
+                    tryPowerPacket(PowerIndex.RANGED_BARRAGE);
+                }
+            }
     }
 
     public void updateRangedBarrageCharge2(){
-        if (this.attackTimeDuring >= this.getRangedBarrageWindup2()) {
-            ((StandUser) this.self).roundabout$tryPower(PowerIndex.RANGED_BARRAGE_2, true);
-        }
+            if (this.attackTimeDuring >= this.getRangedBarrageWindup2()) {
+                if (!self.level().isClientSide() && !(self instanceof Player)) {
+                    ((StandUser) this.self).roundabout$tryPower(PowerIndex.RANGED_BARRAGE_2, true);
+                } else if (self.level().isClientSide() && isPacketPlayer()){
+                    tryPowerPacket(PowerIndex.RANGED_BARRAGE_2);
+                }
+            }
     }
     @Override
     public int getKickBarrageWindup(){
