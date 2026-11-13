@@ -6362,15 +6362,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     int level = inst.getAmplifier() + 1;
                     float damage = level;
 
-                    if (level == 1) {
-                        damage += 1.0F;
-                    }
-                    else if (level == 2) {
-                    damage += 1.0F;   //extra at Niv.2
-                    }
-                    else if (level == 3) {
-                        damage += 1.0F;   //extra at Niv.3
-                    }
                     if (((StandUser) this).roundabout$getStandPowers() instanceof PowersPurpleHaze) {
                         damage *= 0.66F;
                     }
