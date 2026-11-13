@@ -862,6 +862,13 @@ public class FabricEntities {
                     EntityType.Builder.<GEBrambleEntity>of(GEBrambleEntity::new, MobCategory.MISC).
                             sized(0.8f, 1.8f).clientTrackingRange(16).build(Roundabout.MOD_ID + ":ge_bramble")
             );
+    public static final EntityType<GEThornEntity> GE_THORN =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "ge_thorn"),
+                    EntityType.Builder.<GEThornEntity>of(GEThornEntity::new, MobCategory.MISC).
+                            sized(1f, 0.5f).clientTrackingRange(16).build(Roundabout.MOD_ID + ":ge_thorn")
+            );
     public static final EntityType<GEBatEntity> GE_BAT = Registry.register(
             BuiltInRegistries.ENTITY_TYPE,
             new ResourceLocation(Roundabout.MOD_ID, "ge_bat"),
@@ -1582,6 +1589,7 @@ public class FabricEntities {
         ModEntities.GOLD_EXPERIENCE = GOLD_EXPERIENCE;
         ModEntities.GOLD_EXPERIENCE_BETA = GOLD_EXPERIENCE_BETA;
         ModEntities.GE_BRAMBLE = GE_BRAMBLE;
+        ModEntities.GE_THORN = GE_THORN;
         ModEntities.GE_BAT = GE_BAT;
         ModEntities.GE_FROG = GE_FROG;
         ModEntities.GE_BEE = GE_BEE;

@@ -15,6 +15,7 @@ import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
+import net.hydra.jojomod.stand.powers.PowersCatchTheRainbow;
 import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.model.ArmedModel;
@@ -72,6 +73,10 @@ public class ZItemInHandLayer<T extends LivingEntity, M extends EntityModel<T> &
             return;
         }
         if (((StandUser)entity).roundabout$getStandPowers() instanceof Powers20thCenturyBoy CB && CB.invincibleState && PowerTypes.isUsingStand(entity)) {
+            ci.cancel();
+            return;
+        }
+        if (((StandUser)entity).roundabout$getStandPowers() instanceof PowersCatchTheRainbow PCR && PCR.ctrDodgeTicks != 0 && PowerTypes.isUsingStand(entity)) {
             ci.cancel();
             return;
         }

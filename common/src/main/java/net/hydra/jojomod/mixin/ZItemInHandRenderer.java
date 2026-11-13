@@ -19,10 +19,7 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.*;
-import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
-import net.hydra.jojomod.stand.powers.PowersEmperor;
-import net.hydra.jojomod.stand.powers.PowersGreenDay;
-import net.hydra.jojomod.stand.powers.PowersRatt;
+import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
@@ -243,6 +240,11 @@ public abstract class ZItemInHandRenderer {
         }
 
         if (((StandUser)abstractClientPlayer).roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB && PCB.invincibleState) {
+            ci.cancel();
+            return;
+        }
+
+        if (((StandUser)abstractClientPlayer).roundabout$getStandPowers() instanceof PowersCatchTheRainbow PCR && PCR.ctrDodgeTicks != 0) {
             ci.cancel();
             return;
         }

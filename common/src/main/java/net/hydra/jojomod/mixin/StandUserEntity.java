@@ -24,8 +24,6 @@ import net.hydra.jojomod.entity.zombie_minion.VillagerMinion;
 import net.hydra.jojomod.event.*;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
-import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
-import net.hydra.jojomod.networking.ClientToServerPackets;
 import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
@@ -73,7 +71,6 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Cat;
-import net.minecraft.world.entity.animal.CatVariant;
 import net.minecraft.world.entity.animal.Turtle;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.monster.*;
@@ -81,16 +78,13 @@ import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.WanderingTrader;
-import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
@@ -98,8 +92,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.zetalasis.networking.message.api.ModMessageEvents;
-import org.jetbrains.annotations.Async;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.*;
@@ -7321,16 +7313,32 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
 
 
+    @Unique private Vec3 roundabout$spinLocation = null;
     @Inject(method = "tickEffects",at = @At("HEAD"))
     private void roundabout$tickInfiniteSpin(CallbackInfo ci) {
         MobEffectInstance instance = this.getEffect(ModEffects.INFINITE_SPIN);
         if (instance != null) {
-            if (this.tickCount % 10 == 0 && !this.roundabout$isDazed() && this.isAlive() && this.isAttackable()) {
+            if (this.tickCount % 10 == 0 && !this.roundabout$isDazed() && this.isAlive() && this.isAttackable() && !MainUtil.isBossMob(rdbt$this()) ) {
                 this.level().playSound(null,this.blockPosition(),ModSounds.VAMPIRE_CRUMBLE_EVENT,SoundSource.PLAYERS,0.3F,1F);
-                this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.INFINITE_SPIN), (float)Math.min(Math.pow(2, 1+instance.getAmplifier()*0.4F),20) );
+                this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.INFINITE_SPIN), (float)Math.min(Math.pow(1.4F, 1+instance.getAmplifier()*0.4F),20) );
                 this.addEffect(new MobEffectInstance(ModEffects.INFINITE_SPIN, instance.getDuration(), instance.getAmplifier() + 1));
+
+                if (roundabout$spinLocation != null) {
+                    if (rdbt$this().position().distanceTo(roundabout$spinLocation) > 10 && !PowerTypes.isExistentiallyElsewhere(rdbt$this()) ) {
+                        rdbt$this().teleportTo(roundabout$spinLocation.x,roundabout$spinLocation.y,roundabout$spinLocation.z);
+                        MainUtil.takeKnockbackWithY(rdbt$this(),0,0,1,0);
+                        this.roundabout$setDazed((byte)2);
+                        /// TODO: PLAY INFINITE SPIN PARTICLES
+                    }
+                }
             }
         }
+    }
+
+    @Unique
+    @Override
+    public void roundabout$setInfiniteSpinPoint(Vec3 vec3) {
+        roundabout$spinLocation = vec3;
     }
 
     @Override
@@ -7386,7 +7394,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "travel",at = @At("HEAD"),cancellable = true)
     private void roundabout$rainWalk(CallbackInfo ci) {
         if (((StandUser) this).roundabout$getStandPowers() instanceof PowersCatchTheRainbow pctr && pctr.isInRain() && pctr.hasStandActive(pctr.self)) {
-            if (!pctr.self.isCrouching() && !pctr.self.onGround() && !this.isFallFlying() && roundabout$getIsRainWalking()) {
+            if (!pctr.self.isCrouching() && !pctr.self.onGround() && !this.isFallFlying() && pctr.stunTicks == 0 && roundabout$getIsRainWalking()) {
                 if (this.getDeltaMovement().y < 0) {
                     this.setOnGround(true);
 
@@ -7400,7 +7408,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                             roundabout$setIsRainWalking(false);
                         }
                         Vec3 vec3 = this.getDeltaMovement();
-                        this.setDeltaMovement(vec3.x, (double) this.getJumpPower(), vec3.z);
+                        this.setDeltaMovement(vec3.x, (double) this.getJumpPower() + 0.15, vec3.z);
                         if (this.isSprinting()) {
                             float f = this.getYRot() * ((float) Math.PI / 180F);
                             this.setDeltaMovement(this.getDeltaMovement().add((double) (-Mth.sin(f) * 0.2F), 0.0D, (double) (Mth.cos(f) * 0.2F)));

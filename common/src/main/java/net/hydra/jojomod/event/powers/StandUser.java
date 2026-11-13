@@ -442,4 +442,6 @@ public interface StandUser {
     /** catch the rainbow **/
     boolean roundabout$getIsRainWalking();
     void roundabout$setIsRainWalking(boolean bool);
+
+    void roundabout$setInfiniteSpinPoint(Vec3 v);
 }

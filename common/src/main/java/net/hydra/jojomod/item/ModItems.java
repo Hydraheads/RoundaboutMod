@@ -146,6 +146,19 @@ public class ModItems {
 
     public static Item IRON_BALL_CROSSBOW;
 
+    public static Item GINKGO_LOG;
+    public static Item GINKGO_PLANKS;
+    public static Item GINKGO_LEAVES;
+    public static Item GINKGO_WOOD;
+    public static Item STRIPPED_GINKGO_WOOD;
+    public static Item STRIPPED_GINKGO_LOG;
+    public static Item GINKGO_SAPLING;
+    public static Item GINKGO_DOOR;
+    public static Item FANCY_GINKGO_DOOR;
+    public static Item GINKGO_SIGN;
+    public static Item GINKGO_HANGING_SIGN;
+    public static Item GINKGO_TRAPDOOR;
+
     public static Item CAT_REMAINS;
     public static Item OCELOT_REMAINS;
     public static Item PARROT_REMAINS;

@@ -24,6 +24,8 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -166,6 +168,10 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
         boolean client = this.level().isClientSide();
         LivingEntity user = this.getUser();
         super.tick();
+
+        if (this.onClimbable() && !isPiloted()) {
+            this.setDeltaMovement(0,this.getDeltaMovement().y(),0);
+        }
 
         if (this.level().isClientSide()) {
             if (isPiloted()) {
@@ -408,9 +414,13 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
        }
     }
 
+    protected PathNavigation createNavigation(Level level) {
+        return new WallClimberNavigation(this, level);
+    }
+
     @Override
     public boolean onClimbable() {
-        return this.isPiloted() && this.horizontalCollision;
+        return this.horizontalCollision && (isPiloted() || (this.getTarget() != null && this.getTarget().getY() >= this.getY()) );
     }
 
     public Vec3 alignToDirection(Direction dir) {return alignToDirection(this.getPosition(0),dir);}
@@ -445,7 +455,7 @@ class TuskHoleAttackGoal extends MeleeAttackGoal {
 
     @Override
     protected void checkAndPerformAttack(LivingEntity $$0, double $$1) {
-        double $$2 = 2;
+        double $$2 = 1.5F;
         if ($$1 <= $$2) {
             this.mob.doHurtTarget($$0);
         }

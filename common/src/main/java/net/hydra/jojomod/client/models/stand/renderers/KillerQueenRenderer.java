@@ -3,9 +3,11 @@ package net.hydra.jojomod.client.models.stand.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.models.layers.StandGlowingLayer;
 import net.hydra.jojomod.client.models.stand.KillerQueenModel;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
+import net.hydra.jojomod.entity.stand.PurpleHazeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
@@ -115,6 +117,7 @@ public class KillerQueenRenderer extends StandRenderer<KillerQueenEntity>{
     
     public KillerQueenRenderer(EntityRendererProvider.Context context) {
         super(context, new KillerQueenModel<>(context.bakeLayer(ModEntityRendererClient.KILLER_QUEEN_LAYER)), 0f);
+        this.addLayer(new StandGlowingLayer<>(this, this));
     }
     @Override
     public void render(KillerQueenEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
@@ -142,5 +145,88 @@ public class KillerQueenRenderer extends StandRenderer<KillerQueenEntity>{
     @Override
     public boolean skipLighting(KillerQueenEntity entity){
         return entity.getSkin() == KillerQueenEntity.SPIRIT;
+    }
+
+    private static final RenderType ANIME_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/anime.png"));
+    private static final RenderType MANGA_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/manga.png"));
+    private static final RenderType AGOGO_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/agogo.png"));
+    private static final RenderType DEADLY_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/deadly.png"));
+    private static final RenderType STRAY_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/stray.png"));
+    private static final RenderType NIGHTMARE_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/nightmare.png"));
+    private static final RenderType JOJOLION_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/jojolion.png"));
+    private static final RenderType GUNPOWDER_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/gunpowder.png"));
+    private static final RenderType FINAL_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/finalshowdown.png"));
+    private static final RenderType YELLOW_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/yellow.png"));
+    private static final RenderType TAMA_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/tama.png"));
+    private static final RenderType NOTW_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/notw.png"));
+    private static final RenderType MEMENTO_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/mementomorioh.png"));
+    private static final RenderType LIMBUSMORTIS_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/limbusmortis.png"));
+    private static final RenderType STARDUST_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/stardust.png"));
+    private static final RenderType MINUET_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/minuet.png"));
+    private static final RenderType BROWN_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/brown.png"));
+    private static final RenderType GREY_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/grey.png"));
+    private static final RenderType SAMURAI_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/samurai.png"));
+    private static final RenderType UMBRA_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/umbra.png"));
+    private static final RenderType ARTWORK_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/artwork.png"));
+    private static final RenderType CRACKED_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/cracked.png"));
+    private static final RenderType CREEPER_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/creeper.png"));
+
+
+    @Override
+    public boolean hasGlowingParts(byte skin) {
+        return skin != KillerQueenEntity.MINESWEEPER && skin != KillerQueenEntity.WEAKNESS && skin != KillerQueenEntity.SPIRIT && skin != KillerQueenEntity.BETA;
+    }
+
+    @Override
+    public  RenderType getGlowingReference(byte BT) {
+        if (BT == KillerQueenEntity.PART_4) {
+            return ANIME_GLOW;
+        } else if (BT == KillerQueenEntity.MANGA) {
+            return MANGA_GLOW;
+        } else if (BT == KillerQueenEntity.UMBRA) {
+            return UMBRA_GLOW;
+        } else if (BT == KillerQueenEntity.GOGO) {
+            return AGOGO_GLOW;
+        } else if (BT == KillerQueenEntity.ARTWORK) {
+            return ARTWORK_GLOW;
+        } else if (BT == KillerQueenEntity.CRACKED) {
+            return CRACKED_GLOW;
+        } else if (BT == KillerQueenEntity.CREEPER) {
+            return CREEPER_GLOW;
+        } else if (BT == KillerQueenEntity.STRAY) {
+            return STRAY_GLOW;
+        } else if (BT == KillerQueenEntity.NIGHTMARE) {
+            return NIGHTMARE_GLOW;
+        } else if (BT == KillerQueenEntity.LIMBUSMORTIS) {
+            return LIMBUSMORTIS_GLOW;
+        } else if (BT == KillerQueenEntity.JOJOLION) {
+            return JOJOLION_GLOW;
+        } else if (BT == KillerQueenEntity.GUNPOWDER) {
+            return GUNPOWDER_GLOW;
+        } else if (BT == KillerQueenEntity.FINAL) {
+            return FINAL_GLOW;
+        } else if (BT == KillerQueenEntity.DEADLY) {
+            return DEADLY_GLOW;
+        } else if (BT == KillerQueenEntity.YELLOW) {
+            return YELLOW_GLOW;
+        } else if (BT == KillerQueenEntity.TAMA) {
+            return TAMA_GLOW;
+        } else if (BT == KillerQueenEntity.NOTW) {
+            return NOTW_GLOW;
+        } else if (BT == KillerQueenEntity.MEMENTO) {
+            return MEMENTO_GLOW;
+        } else if (BT == KillerQueenEntity.STARDUST) {
+            return STARDUST_GLOW;
+        } else if (BT == KillerQueenEntity.MINUET) {
+            return MINUET_GLOW;
+        } else if (BT == KillerQueenEntity.BROWN) {
+            return BROWN_GLOW;
+        } else if (BT == KillerQueenEntity.GREY) {
+            return GREY_GLOW;
+        } else if (BT == KillerQueenEntity.SAMURAI) {
+            return SAMURAI_GLOW;
+        }
+
+        return null;
     }
 }

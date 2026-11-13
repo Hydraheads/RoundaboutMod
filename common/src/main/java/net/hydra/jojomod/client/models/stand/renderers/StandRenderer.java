@@ -205,4 +205,11 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
     protected RenderType getRenderType(T entity, boolean showBody, boolean translucent, boolean showOutline) {
         return super.getRenderType(entity, showBody, true, showOutline);
     }
+
+    public boolean hasGlowingParts(byte skin) {  return false; }
+
+    public  RenderType getGlowingReference(byte skin) {
+        return null;
+    }
+
 }

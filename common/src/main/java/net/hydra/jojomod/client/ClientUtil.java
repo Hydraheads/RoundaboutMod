@@ -1784,7 +1784,9 @@ public class ClientUtil {
     public static void openDisguiseScreen() {Minecraft.getInstance().setScreen(new DiverDownDisguiseScreen());}
     //Diver Down UI end
 
+    //GE UI
     public static void openAnimalSelect(){Minecraft.getInstance().setScreen(new AnimalSelectScreen());}
+    public static void openItemImbue(){Minecraft.getInstance().setScreen(new ItemImbueScreen());}
 
     public static void strikePose(Player player, Minecraft C, boolean keyIsDown, Options option) {
         if (keyIsDown){

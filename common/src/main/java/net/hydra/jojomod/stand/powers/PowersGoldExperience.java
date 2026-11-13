@@ -46,6 +46,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
@@ -106,6 +107,13 @@ public class PowersGoldExperience extends BlockGrabPreset {
     ) {}
     private double treeRoofY = -500.0;
 
+    // for ground barrage thorns
+    private int groundBarrageTicks = 0;
+    private boolean isGroundBarraging = false;
+    public boolean isGroundBarraging() {
+        return this.isGroundBarraging && this.getActivePower() == PowerIndex.BARRAGE && this.getAttackTimeDuring() >= 0;
+    }
+
     // basic stand registry stuff
     public PowersGoldExperience(LivingEntity self) {super(self);}
     @Override
@@ -150,8 +158,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
                         );
 
                         treePart.setDataFinalPos(data.finalPos());
-                        //despawn timer of 15 seconds
-                        treePart.timing = Math.max(1, 200 - data.delayTicks());
+                        //despawn timer of 20 seconds
+                        treePart.timing = Math.max(1, 400 - data.delayTicks());
                         treePart.isWhiteAlbumWall = false;
                         treePart.isGoldExperienceTree = true;
                         treePart.creator = this.getSelf();
@@ -274,6 +282,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
             case SKILL_2_NORMAL -> {
                 tryMakeAnimalClient();
             }
+            // item imbue
+            case SKILL_2_GUARD -> {
+                tryOpenItemImbue();
+            }
             // item throw
             case SKILL_2_CROUCH -> {
                 itemGrabClient();
@@ -390,16 +402,6 @@ public class PowersGoldExperience extends BlockGrabPreset {
             boolean isSecondHit = this.attackTimeDuring >= 10;
             dualPunchImpact(target, isSecondHit);
         }
-        else if (this.getActivePower() == PowerIndex.BARRAGE) {
-            rootBarrageImpact(target, false);
-        }
-    }
-
-    @Override
-    public void handleStandAttack2(Player player, Entity target) {
-        if (this.getActivePower() == PowerIndex.BARRAGE) {
-            rootBarrageImpact(target, true);
-        }
     }
 
     private void tryToDashClient() {
@@ -433,145 +435,118 @@ public class PowersGoldExperience extends BlockGrabPreset {
         }
     }
 
+    @Override
+    public boolean setPowerNone() {
+        this.groundBarrageTicks = 0;
+        this.isGroundBarraging = false;
+        return super.setPowerNone();
+    }
+
+    // item imbue start
+
+    private void tryOpenItemImbue() {
+        ClientUtil.openItemImbue();
+    }
+
+    // item imbue end
+
     // unique root barrage start
+
+    @Override
+    public void setPowerBarrage() {
+        this.groundBarrageTicks = 0;
+        this.isGroundBarraging = false;
+        super.setPowerBarrage();
+    }
 
     @Override
     public void updateBarrage() {
         if (this.attackTimeDuring == -2 && this.getSelf() instanceof Player) {
+            this.groundBarrageTicks = 0;
             ((StandUser) this.self).roundabout$tryPower(PowerIndex.GUARD, true);
         } else {
             if (this.attackTimeDuring > this.getBarrageLength()) {
                 this.attackTimeDuring = -20;
+                this.groundBarrageTicks = 0;
             } else if (this.attackTimeDuring > 0) {
-                drawRoots();
                 this.setAttackTime((getBarrageRecoilTime() - 1) -
                         Math.round(((float) this.attackTimeDuring / this.getBarrageLength())
                                 * (getBarrageRecoilTime() - 1)));
                 standBarrageHit();
+            } else {
+                this.groundBarrageTicks = 0;
             }
         }
     }
 
     @Override
     public void standBarrageHit() {
-        // call super method first for normal hits, otherwise continue to the ranged barrage
-        super.standBarrageHit();
+        float punchRange = 4.5F;
 
-        // long range done by adding the extra range + normal range
-        float extendedReach = 3.0F + 8.0F;
-        boolean lastHit = (this.attackTimeDuring >= this.getBarrageLength());
+        Entity targetInCrosshair = getTargetEntity(this.self, punchRange);
+        BlockHitResult blockHit = this.getRayBlockOutline(this.self, punchRange);
 
-        if (this.self instanceof Player) {
-            if (isPacketPlayer()) {
-                List<Entity> listE = getTargetEntityList(this.self, extendedReach);
+        // entity vs block check
+        if ((targetInCrosshair == null || targetInCrosshair instanceof GEThornEntity) && blockHit.getType() == HitResult.Type.BLOCK) {
+            this.isGroundBarraging = true;
 
-                if (!listE.isEmpty()) {
-                    for (Entity e : listE) {
-                        if (e == null) continue;
-                        if (e.distanceTo(this.self) >= 3.5F && e.distanceTo(this.self) <= extendedReach) {
-                            if (!(e instanceof StandEntity SE && !SE.canBeHitByStands()) && !PowerTypes.isInADifferentExistence(e, self)) {
-                                if (lastHit) {
-                                    tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK_2, e.getId());
-                                } else {
-                                    tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK, e.getId());
-                                }
-                            }
-                        }
+            if (this.self instanceof Player) {
+                if (isPacketPlayer()) {
+                    C2SPacketUtil.standBarrageHitPacket(-1, this.attackTimeDuring);
+                    if (this.attackTimeDuring == this.getBarrageLength()) {
+                        this.attackTimeDuring = -10;
                     }
                 }
-            }
-        } else {
-            List<Entity> listE = getTargetEntityList(this.self, extendedReach);
-
-            if (!listE.isEmpty()) {
-                for (Entity e : listE) {
-                    if (e == null) continue;
-                    if (e.distanceTo(this.self) >= 3.5F && e.distanceTo(this.self) <= extendedReach) {
-                        if (!(e instanceof StandEntity SE && !SE.canBeHitByStands()) && !PowerTypes.isInADifferentExistence(e, self)) {
-                            rootBarrageImpact(e, lastHit);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private void rootBarrageImpact(Entity entity, boolean lastHit) {
-        // basically everything here was taken from magician's red.
-        if (entity == null) return;
-
-        float pow = lastHit ? 4.0F : 0.25F;
-        /**By saving the velocity before hitting, we can let people approach barraging foes
-         * through shields.*/
-        Vec3 prevVelocity = entity.getDeltaMovement();
-
-        if (StandDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
-            if (!this.self.level().isClientSide()) {
-                if (this.self.tickCount % 4 == 0 || lastHit) {
-                    playSoundIfPossible(self.level(), null, entity.blockPosition(), SoundEvents.ROOTS_BREAK, SoundSource.PLAYERS, 1.2F, 1.0F);
-                }
-            }
-
-            if (entity instanceof LivingEntity LE) {
-                setDazed(LE, lastHit ? (byte) 0 : (byte) 3);
-            }
-
-            if (lastHit) {
-                barrageImpact2(entity, true, 0.3F);
             } else {
-                entity.setDeltaMovement(prevVelocity);
-                entity.hurtMarked = true;
+                barrageImpact(null, this.attackTimeDuring);
             }
-        } else {
-            entity.setDeltaMovement(prevVelocity);
-            if (lastHit) {
-                knockShield2(entity, 100);
-            }
-        }
-    }
 
-    // draws the root cone
-    private void drawRoots() {
-        if (!this.self.level().isClientSide()) {
-            StandEntity stand = this.getStandEntity(this.self);
-            if (stand != null) {
-                float maxReach = 3.0F + 8.0F;
-                Vec3 vector = getRayBlock(this.self, maxReach);
+            if (!this.self.level().isClientSide()) {
+                // sounds
+                if (this.attackTimeDuring >= this.getBarrageLength()) {
+                    playBarrageEndNoise(0, null);
+                } else {
+                    playBarrageNoise(this.attackTimeDuring, null);
+                }
 
-                if (vector != null) {
-                    DustParticleOptions brownDust = new DustParticleOptions(new org.joml.Vector3f(0.45F, 0.28F, 0.12F), 1.2F);
+                this.groundBarrageTicks++;
 
-                    Level level = this.self.level();
-                    Vec3 origin = stand.position();
+                Level level = this.self.level();
+                Vec3 lookVec = this.self.getLookAngle();
+                Vec3 dir = new Vec3(lookVec.x, 0, lookVec.z).normalize();
+                Vec3 right = new Vec3(-dir.z, 0, dir.x);
 
-                    Vec3 forward = new Vec3(vector.x - stand.getX(), 0, vector.z - stand.getZ()).normalize();
-                    Vec3 right = new Vec3(-forward.z, 0, forward.x);
+                //spawns the thorns
+                float progress = Math.min(1.0F, (float) this.groundBarrageTicks / (this.getBarrageLength() * 0.75F));
+                double startDist = 1.2;
+                double maxReach = 12.0;
+                double currentDist = startDist + (progress * (maxReach - startDist));
+                double spreadWidth = 0.8 + (currentDist * 0.4);
 
-                    int distanceSteps = 6;
-                    for (int i = 1; i <= distanceSteps; i++) {
-                        double stepDist = (i / (double) distanceSteps) * maxReach;
-                        double spreadWidth = (i / (double) distanceSteps) * 3.5D;
+                int entitiesPerHit = 2;
 
-                        int particlesPerStep = 4;
-                        for (int p = 0; p < particlesPerStep; p++) {
-                            double offset = (level.random.nextDouble() - 0.5D) * 2.0D * spreadWidth;
-                            double lengthJitter = (level.random.nextDouble() - 0.5D) * 1.5D;
+                for (int i = 0; i < entitiesPerHit; i++) {
+                    double sideBias = (i == 0 ? -0.5 : 0.5) + (level.random.nextDouble() - 0.5D) * 0.8D;
+                    double offset = sideBias * spreadWidth;
+                    double lengthJitter = (level.random.nextDouble() - 0.5D) * 1.2D;
 
-                            Vec3 samplePos = origin.add(forward.scale(stepDist + lengthJitter)).add(right.scale(offset));
-                            sendParticlesIfPossible(level,
-                                    brownDust,
-                                    samplePos.x, stand.getY() + 0.15D, samplePos.z,
-                                    1, 0.15, 0.02, 0.15, 0.01);
-                            if (level.random.nextFloat() < 0.15F) {
-                                sendParticlesIfPossible(level,
-                                        new BlockParticleOption(ParticleTypes.BLOCK, Blocks.ROOTED_DIRT.defaultBlockState()),
-                                        samplePos.x, stand.getY() + 0.15D, samplePos.z,
-                                        1, 0.15, 0.05, 0.15, 0.01);
-                            }
-                        }
+                    double targetX = this.self.getX() + dir.x * (currentDist + lengthJitter) + right.x * offset;
+                    double targetZ = this.self.getZ() + dir.z * (currentDist + lengthJitter) + right.z * offset;
+
+                    BlockPos groundPos = findGroundPosition(level, BlockPos.containing(targetX, this.self.getY(), targetZ));
+
+                    if (groundPos != null) {
+                        GEThornEntity rootEntity = new GEThornEntity(ModEntities.GE_THORN, level);
+                        rootEntity.setOwner(this.getSelf());
+                        rootEntity.setPos(targetX, groundPos.getY() + 1.0, targetZ);
+
+                        level.addFreshEntity(rootEntity);
                     }
                 }
             }
+        } else {
+            this.isGroundBarraging = false;
+            super.standBarrageHit();
         }
     }
 
@@ -679,20 +654,53 @@ public class PowersGoldExperience extends BlockGrabPreset {
                         Blocks.OAK_WOOD.defaultBlockState()
                 );
                 trunk.setDataFinalPos(newVec.add(0, actualHeight, 0));
-                trunk.timing = 200;
+                trunk.timing = 400;
                 trunk.tsmove = true;
                 trunk.isGoldExperienceTree = true;
                 trunk.creator = this.self;
                 PowerTypes.copyPlaneOfExisting(this.self, trunk);
                 level.addFreshEntity(trunk);
 
-                Direction branchDir = Direction.from2DDataValue(y % 4);
-                BlockPos branchPos = trunkPos.relative(branchDir);
+                // all branches ecept for last and first with leaves
+                if (y != actualHeight - 1 && y != 0) {
+                    Direction branchDir = Direction.from2DDataValue(y % 4);
+                    BlockPos branchPos = trunkPos.relative(branchDir);
 
-                Vector3f branchStart = new Vector3f(trunkPos.getX() + 0.5f, trunkPos.getY() - 0.5f, trunkPos.getZ() + 0.5f);
-                Vector3f branchFinal = new Vector3f(branchPos.getX() + 0.5f, branchPos.getY(), branchPos.getZ() + 0.5f);
+                    Vector3f branchStart = new Vector3f(trunkPos.getX() + 0.5f, trunkPos.getY() - 0.5f, trunkPos.getZ() + 0.5f);
 
-                pendingTreeBlocks.add(new TreeBlockSpawnData(branchStart, branchFinal, Blocks.OAK_WOOD.defaultBlockState(), 12 + (y * 2)));
+                    BlockState branchState = Blocks.OAK_LOG.defaultBlockState().setValue(BlockStateProperties.AXIS, branchDir.getAxis());
+                    BlockState leafState = Blocks.OAK_LEAVES.defaultBlockState().setValue(BlockStateProperties.PERSISTENT, true);
+
+                    Vector3f branchFinal = new Vector3f(branchPos.getX() + 0.5f, branchPos.getY(), branchPos.getZ() + 0.5f);
+                    pendingTreeBlocks.add(new TreeBlockSpawnData(branchStart, branchFinal, branchState, 12 + (y * 2)));
+
+                    BlockPos centerWoodPos = branchPos.relative(branchDir).above();
+                    Vector3f centerFinal = new Vector3f(centerWoodPos.getX() + 0.5f, centerWoodPos.getY(), centerWoodPos.getZ() + 0.5f);
+                    pendingTreeBlocks.add(new TreeBlockSpawnData(branchStart, centerFinal, branchState, 14 + (y * 2)));
+
+                    BlockPos[] leafPositions = new BlockPos[]{
+                            centerWoodPos.above(),
+                            centerWoodPos.below(),
+                            centerWoodPos.relative(branchDir.getClockWise()),
+                            centerWoodPos.relative(branchDir.getCounterClockWise()),
+                            centerWoodPos.relative(branchDir)
+                    };
+
+                    for (BlockPos leafPos : leafPositions) {
+                        Vector3f leafFinal = new Vector3f(leafPos.getX() + 0.5f, leafPos.getY(), leafPos.getZ() + 0.5f);
+                        pendingTreeBlocks.add(new TreeBlockSpawnData(branchStart, leafFinal, leafState, 16 + (y * 2)));
+                    }
+                }
+                // first branch root thing for jumping
+                else if (y == 0) {
+                    Direction branchDir = Direction.from2DDataValue(y % 4);
+                    BlockPos branchPos = trunkPos.relative(branchDir);
+
+                    Vector3f branchStart = new Vector3f(trunkPos.getX() + 0.5f, trunkPos.getY() - 0.5f, trunkPos.getZ() + 0.5f);
+                    Vector3f branchFinal = new Vector3f(branchPos.getX() + 0.5f, branchPos.getY(), branchPos.getZ() + 0.5f);
+
+                    pendingTreeBlocks.add(new TreeBlockSpawnData(branchStart, branchFinal, Blocks.OAK_WOOD.defaultBlockState(), 12 + (y * 2)));
+                }
             }
 
             playSoundIfPossible(level, null, base, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.9F, 1F);
