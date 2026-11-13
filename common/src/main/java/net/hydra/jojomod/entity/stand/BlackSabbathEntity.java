@@ -1992,7 +1992,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         boolean flag4 = i.getItem() instanceof PotionItem || i.getItem().getFoodProperties() != null || i.getItem() instanceof MilkBucketItem;
         boolean flag5 = (i.getItem() instanceof ShearsItem || i.getItem() instanceof ScissorItem) && le instanceof Sheep sheep && !(sheep.isSheared());
 
-        boolean allYouCanEat = le instanceof Player p && i.getItem().getFoodProperties() != null && p.canEat(i.getItem().getFoodProperties().canAlwaysEat()) || le instanceof Animal || le instanceof Villager;
+        boolean allYouCanEat = le instanceof Player p && i.getItem().getFoodProperties() != null && p.canEat(i.getItem().getFoodProperties().canAlwaysEat()) || le instanceof Animal || le instanceof Villager || i.getItem() instanceof MilkBucketItem;
         if(!level().isClientSide && this.getUser() != null){
             setSlider(slideTicks);
         }
@@ -2155,7 +2155,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                             }
                         }
                         if (i.getItem().getFoodProperties() != null || i.getItem() instanceof MilkBucketItem) {
-                            if (e instanceof Player && (i.isEdible() || i.getItem() instanceof MilkBucketItem) || e instanceof Animal a && (a.isFood(i) || i.getItem() instanceof MilkBucketItem)|| e instanceof Villager && i.getItem() instanceof MilkBucketItem) {
+                            if (i.getItem() instanceof MilkBucketItem || (e instanceof Player && i.isEdible() || e instanceof Animal a && a.isFood(i) || e instanceof Villager)) {
                                 if ((meleeInteractionTicks == 140 || meleeInteractionTicks == 110 || meleeInteractionTicks == 85 || meleeInteractionTicks == 70 && i.getItem() instanceof NewLocacacaItem) && allYouCanEat) {
                                     if(i.getItem() instanceof MilkBucketItem){
                                         this.level().playSound((Player) null, this, SoundEvents.GENERIC_DRINK, SoundSource.HOSTILE, 2.0F, 1F);
