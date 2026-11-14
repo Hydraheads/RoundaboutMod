@@ -10,6 +10,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -106,6 +108,10 @@ public class AutumnLeavesBlock extends BushBlock {
 
         boolean shouldFall = false;
 
+        if (entity instanceof ItemEntity itemEntity) {
+            itemEntity.setNoPickUpDelay();
+        }
+
         for (int distance = 1; distance <= TRAVEL_DISTANCE; distance++) {
 
             double nextX = startX + direction.getStepX() * distance;
@@ -169,6 +175,29 @@ public class AutumnLeavesBlock extends BushBlock {
             }
 
             currentY = nextY;
+
+            if (entity instanceof ItemEntity itemEntity) {
+
+                AABB pickupBox = entity.getBoundingBox().move(
+                        nextX - startX,
+                        currentY - startY,
+                        nextZ - startZ
+                ).inflate(0.5, 0.25, 0.5);
+
+                for (Player player : level.getEntitiesOfClass(
+                        Player.class, pickupBox)) {
+
+                    if (player.isSpectator()) {
+                        continue;
+                    }
+
+                    itemEntity.playerTouch(player);
+
+                    if (itemEntity.isRemoved()) {
+                        return;
+                    }
+                }
+            }
 
             BlockPos leavesPos = BlockPos.containing(
                     nextX,
