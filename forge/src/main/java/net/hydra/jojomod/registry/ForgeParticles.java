@@ -376,6 +376,10 @@ public class ForgeParticles {
             "autumn_leaves",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> GINKGO_LEAVES = PARTICLES.register(
+            "ginkgo_leaves",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> RAGING_LIGHT = PARTICLES.register(
             "raging_light",
             () -> new SimpleParticleType(true)

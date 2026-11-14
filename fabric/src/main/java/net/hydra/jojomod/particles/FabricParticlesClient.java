@@ -125,5 +125,6 @@ public class FabricParticlesClient {
         ParticleFactoryRegistry.getInstance().register(FabricParticles.VITAL_ESSENCE, VitalEssenceParticle.Provider::new);
 
         ParticleFactoryRegistry.getInstance().register(FabricParticles.AUTUMN_LEAVES, AutumnLeavesParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.GINKGO_LEAVES, GinkgoLeavesParticle.Provider::new);
     }
 }

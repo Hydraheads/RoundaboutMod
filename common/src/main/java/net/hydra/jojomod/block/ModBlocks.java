@@ -1116,7 +1116,7 @@ public class ModBlocks {
                     .sound(SoundType.WOOD)
                     .ignitedByLava()
     );
-    public static final Block GINKGO_LEAVES_PROPERTIES = new LeavesBlock(
+    public static final Block GINKGO_LEAVES_PROPERTIES = new GinkgoLeavesBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.PLANT)
                     .strength(0.2F)
