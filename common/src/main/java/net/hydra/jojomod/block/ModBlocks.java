@@ -3,6 +3,7 @@ package net.hydra.jojomod.block;
 import net.hydra.jojomod.block.handBlock.AbstractHandBlock;
 import net.hydra.jojomod.block.handBlock.HandBlock;
 import net.hydra.jojomod.block.handBlock.HandBlockEntity;
+import net.hydra.jojomod.mixin.access.AccessWoodType;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
@@ -207,6 +208,11 @@ public class ModBlocks {
     public static Block D4C_LIGHT_BLOCK;
 
     public static Block MELON_PARFAIT;
+
+    public static final WoodType GINKGO_WOOD_TYPE =
+            AccessWoodType.roundabout$register(
+                    new WoodType("ginkgo", BlockSetType.OAK)
+            );
 
     public static Block GINKGO_LOG;
     public static Block GINKGO_PLANKS;
@@ -1184,7 +1190,7 @@ public class ModBlocks {
                     .strength(1.0F)
                     .noOcclusion()
                     .ignitedByLava(),
-            WoodType.OAK
+            GINKGO_WOOD_TYPE
     );
 
     public static Block GINKGO_WALL_SIGN_PROPERTIES = new WallSignBlock(
@@ -1193,7 +1199,7 @@ public class ModBlocks {
                     .strength(1.0F)
                     .noOcclusion()
                     .ignitedByLava(),
-            WoodType.OAK
+            GINKGO_WOOD_TYPE
     );
 
     public static Block GINKGO_HANGING_SIGN_PROPERTIES = new CeilingHangingSignBlock(
@@ -1202,7 +1208,7 @@ public class ModBlocks {
                     .strength(1.0F)
                     .noOcclusion()
                     .ignitedByLava(),
-            WoodType.OAK
+            GINKGO_WOOD_TYPE
     );
 
     public static Block GINKGO_WALL_HANGING_SIGN_PROPERTIES = new WallHangingSignBlock(
@@ -1211,7 +1217,7 @@ public class ModBlocks {
                     .strength(1.0F)
                     .noOcclusion()
                     .ignitedByLava(),
-            WoodType.OAK
+            GINKGO_WOOD_TYPE
     );
 
     public static Block GINKGO_TRAPDOOR_PROPERTIES = new GinkgoTrapDoorBlock(

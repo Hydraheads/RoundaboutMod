@@ -1191,14 +1191,19 @@ public class ForgeItems {
                             new Item.Properties())));
     public static final RegistryObject<BlockItem> GINKGO_SIGN_ITEM =
             addToWIPTab(ITEMS.register("ginkgo_sign",
-                    () -> new BlockItem(ForgeBlocks.GINKGO_SIGN.get(),
-                            new Item.Properties())));
+                    () -> new SignItem(
+                            new Item.Properties().stacksTo(16),
+                            ForgeBlocks.GINKGO_SIGN.get(),
+                            ForgeBlocks.GINKGO_WALL_SIGN.get()
+                    )));
 
     public static final RegistryObject<BlockItem> GINKGO_HANGING_SIGN_ITEM =
             addToWIPTab(ITEMS.register("ginkgo_hanging_sign",
-                    () -> new BlockItem(ForgeBlocks.GINKGO_HANGING_SIGN.get(),
-                            new Item.Properties())));
-
+                    () -> new HangingSignItem(
+                            ForgeBlocks.GINKGO_HANGING_SIGN.get(),
+                            ForgeBlocks.GINKGO_WALL_HANGING_SIGN.get(),
+                            new Item.Properties().stacksTo(16)
+                    )));
     public static final RegistryObject<BlockItem> GINKGO_TRAPDOOR_ITEM =
             addToWIPTab(ITEMS.register("ginkgo_trapdoor",
                     () -> new BlockItem(ForgeBlocks.GINKGO_TRAPDOOR.get(),

@@ -7,6 +7,19 @@
     "roundabout:ginkgo_log",
     "roundabout:ginkgo_wood",
     "roundabout:stripped_ginkgo_log",
-    "roundabout:stripped_ginkgo_wood"
+    "roundabout:stripped_ginkgo_wood",
+    "roundabout:ginkgo_planks",
+    "roundabout:ginkgo_stairs",
+    "roundabout:ginkgo_slab",
+    "roundabout:ginkgo_fence",
+    "roundabout:ginkgo_fence_gate",
+    "roundabout:ginkgo_door",
+    "roundabout:ginkgo_trapdoor",
+    "roundabout:ginkgo_button",
+    "roundabout:ginkgo_pressure_plate",
+    "roundabout:ginkgo_sign",
+    "roundabout:ginkgo_wall_sign",
+    "roundabout:ginkgo_hanging_sign",
+    "roundabout:ginkgo_wall_hanging_sign"
   ]
 }

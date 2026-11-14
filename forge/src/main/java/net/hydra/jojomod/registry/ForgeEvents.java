@@ -44,6 +44,7 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FireBlock;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
@@ -53,6 +54,11 @@ import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.hydra.jojomod.mixin.access.AccessBlockEntityType;
+import net.minecraft.world.level.block.Block;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Collections;
 
 @Mod.EventBusSubscriber(modid = Roundabout.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ForgeEvents {
@@ -391,6 +397,17 @@ public class ForgeEvents {
         ModBlocks.GINKGO_WALL_SIGN = ForgeBlocks.GINKGO_WALL_SIGN.get();
         ModBlocks.GINKGO_HANGING_SIGN  = ForgeBlocks.GINKGO_HANGING_SIGN .get();
         ModBlocks.GINKGO_WALL_HANGING_SIGN = ForgeBlocks.GINKGO_WALL_HANGING_SIGN.get();
+        addSupportedBlocks(
+                BlockEntityType.SIGN,
+                ModBlocks.GINKGO_SIGN,
+                ModBlocks.GINKGO_WALL_SIGN
+        );
+
+        addSupportedBlocks(
+                BlockEntityType.HANGING_SIGN,
+                ModBlocks.GINKGO_HANGING_SIGN,
+                ModBlocks.GINKGO_WALL_HANGING_SIGN
+        );
         ModBlocks.GINKGO_TRAPDOOR  = ForgeBlocks.GINKGO_TRAPDOOR .get();
         ModBlocks.AUTUMN_LEAVES  = ForgeBlocks.AUTUMN_LEAVES .get();
         ModBlocks.GINKGO_STAIRS  = ForgeBlocks.GINKGO_STAIRS .get();
@@ -400,6 +417,8 @@ public class ForgeEvents {
         ModBlocks.GINKGO_PRESSURE_PLATE  = ForgeBlocks.GINKGO_PRESSURE_PLATE.get();
         ModBlocks.GINKGO_BUTTON  = ForgeBlocks.GINKGO_BUTTON.get();
         ModBlocks.GINKGO_FALLEN_LEAVES  = ForgeBlocks.GINKGO_FALLEN_LEAVES .get();
+        ModItems.GINKGO_BOAT = ForgeItems.GINKGO_BOAT.get();
+        ModItems.GINKGO_CHEST_BOAT = ForgeItems.GINKGO_CHEST_BOAT.get();
 
         ModBlocks.ORANGE_FIRE = ForgeBlocks.ORANGE_FIRE.get();
         ModBlocks.BLUE_FIRE = ForgeBlocks.BLUE_FIRE.get();
@@ -1183,7 +1202,17 @@ public class ForgeEvents {
         ConfigManager.foodParticleParser();
         MinecraftForge.EVENT_BUS.addListener(ForgeEvents::onVillagerTrades);
     }
+    private static void addSupportedBlocks(BlockEntityType<?> type, Block... blocks) {
+        AccessBlockEntityType accessor = (AccessBlockEntityType) type;
 
+        Set<Block> validBlocks = new HashSet<>(
+                accessor.roundabout$getValidBlocks()
+        );
+
+        Collections.addAll(validBlocks, blocks);
+
+        accessor.roundabout$setValidBlocks(validBlocks);
+    }
     /**
     @SubscribeEvent
     public static void commonSetup(FMLCommonSetupEvent event) {
