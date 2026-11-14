@@ -56,6 +56,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
@@ -84,7 +85,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
         BRAMBLES = 58,
         LIFEFORM_CREATION = 59,
         ITEM_THROW = 60,
-        TREE = 61;
+        TREE = 61,
+        LIFE_SENSOR = 63;
 
     // move bytes found in other moves
     public static final byte ITEM_IMBUE = 62;
@@ -240,6 +242,12 @@ public class PowersGoldExperience extends BlockGrabPreset {
         return disguiseOptions;
     }
 
+    // for life sensor
+    public boolean lifeSensorActive = false;
+    private int sensedImbueEntityId = -1;
+    private static final double LIFE_SENSOR_NORMAL_RANGE = 15.0;
+    private static final double LIFE_SENSOR_IMBUE_RANGE = 150.0;
+
     // basic stand registry stuff
     public PowersGoldExperience(LivingEntity self) {super(self);}
     @Override
@@ -255,6 +263,31 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public void tickPower() {
         if (!this.self.level().isClientSide()) {
+            // life sensor scanning for imbued item
+            if (this.lifeSensorActive) {
+                if (!this.isGuarding() || !PowerTypes.hasStandActive(this.self)) {
+                    this.lifeSensorActive = false;
+                    this.sensedImbueEntityId = -1;
+                } else if (this.self.tickCount % 5 == 0 && this.self instanceof ServerPlayer sp) {
+                    int foundId = -1;
+                    if (this.activeImbuedItemId != null) {
+                        AABB searchBox = this.self.getBoundingBox().inflate(LIFE_SENSOR_IMBUE_RANGE);
+                        for (Entity target : this.self.level().getEntities(this.self, searchBox,
+                                e -> e != this.self && !PowerTypes.isInADifferentExistence(e, this.self))) {
+                            if (target.distanceToSqr(this.self) <= (LIFE_SENSOR_IMBUE_RANGE * LIFE_SENSOR_IMBUE_RANGE)
+                                    && isHoldingImbuedItem(target)) {
+                                foundId = target.getId();
+                                break;
+                            }
+                        }
+                    }
+                    if (foundId != this.sensedImbueEntityId) {
+                        this.sensedImbueEntityId = foundId;
+                        S2CPacketUtil.sendIntPowerDataPacket(sp, LIFE_SENSOR, foundId);
+                    }
+                }
+            }
+            //tree spawning
             if (this.treeRoofY > -100.0) {
                 AABB checkArea = this.self.getBoundingBox().inflate(0.5, 1.0, 0.5);
                 for (BlockWallEntity wall : this.self.level().getEntitiesOfClass(BlockWallEntity.class, checkArea)) {
@@ -266,7 +299,6 @@ public class PowersGoldExperience extends BlockGrabPreset {
                     }
                 }
             }
-            //tree spawning
             if (!pendingTreeBlocks.isEmpty()) {
                 treeSpawnTimer++;
 
@@ -409,6 +441,13 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 }
             }
         }
+        // client side stuff
+        else {
+            if (this.lifeSensorActive && (!this.isGuarding() || !PowerTypes.hasStandActive(this.self))) {
+                this.lifeSensorActive = false;
+                this.sensedImbueEntityId = -1;
+            }
+        }
         super.tickPower();
     }
 
@@ -433,6 +472,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
             // heal
             case SKILL_1_CROUCH -> {
                 tryHeal();
+            }
+            case SKILL_1_GUARD -> {
+                tryLifeSensor();
             }
             // lifeform creation
             case SKILL_2_NORMAL -> {
@@ -503,6 +545,12 @@ public class PowersGoldExperience extends BlockGrabPreset {
         else if (move == TREE) {
             return finishTree();
         }
+        else if (move == LIFE_SENSOR) {
+            if (!this.self.level().isClientSide() && this.isGuarding()) {
+                this.lifeSensorActive = true;
+            }
+            return false;
+        }
         return super.setPowerOther(move, lastMove);
     }
 
@@ -522,6 +570,15 @@ public class PowersGoldExperience extends BlockGrabPreset {
             return executeItemImbue(imbueType, animalId);
         }
         return super.tryIntPower(move, forced, passedInt);
+    }
+
+    @Override
+    public void updatePowerInt(byte activePower, int data) {
+        if (activePower == LIFE_SENSOR) {
+            this.sensedImbueEntityId = data;
+            return;
+        }
+        super.updatePowerInt(activePower, data);
     }
 
     @Override
@@ -598,6 +655,74 @@ public class PowersGoldExperience extends BlockGrabPreset {
         this.isGroundBarraging = false;
         return super.setPowerNone();
     }
+
+    // life sensor start
+
+    private void tryLifeSensor() {
+        if (!this.lifeSensorActive) {
+            this.sensedImbueEntityId = -1;
+            this.lifeSensorActive = true;
+            this.self.playSound(ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, 0.85F, 1.3F);
+            tryPowerPacket(LIFE_SENSOR);
+        }
+    }
+
+    private boolean isHoldingImbuedItem(Entity ent) {
+        if (this.activeImbuedItemId == null) {
+            return false;
+        }
+        if (ent instanceof Player player) {
+            for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+                if (hasMatchingImbueId(player.getInventory().getItem(i), this.activeImbuedItemId)) {
+                    return true;
+                }
+            }
+            ItemStack carried = player.containerMenu.getCarried();
+            if (hasMatchingImbueId(carried, this.activeImbuedItemId)) {
+                return true;
+            }
+        } else if (ent instanceof LivingEntity living) {
+            for (ItemStack slotStack : living.getAllSlots()) {
+                if (hasMatchingImbueId(slotStack, this.activeImbuedItemId)) {
+                    return true;
+                }
+            }
+        } else if (ent instanceof net.minecraft.world.entity.item.ItemEntity itemEntity) {
+            return hasMatchingImbueId(itemEntity.getItem(), this.activeImbuedItemId);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean highlightsEntity(Entity ent, Player player) {
+        if (this.lifeSensorActive && this.isGuarding() && PowerTypes.hasStandActive(this.self)) {
+            if (ent != this.self && !PowerTypes.isInADifferentExistence(ent, this.self)) {
+                double distSq = ent.distanceToSqr(this.self);
+
+                if (ent.getId() == this.sensedImbueEntityId) {
+                    return distSq <= (LIFE_SENSOR_IMBUE_RANGE * LIFE_SENSOR_IMBUE_RANGE);
+                }
+
+                if (ent instanceof LivingEntity living
+                        && !(ent instanceof StandEntity)
+                        && !(ent instanceof ArmorStand)
+                        && living.isAlive()) {
+                    return distSq <= (LIFE_SENSOR_NORMAL_RANGE * LIFE_SENSOR_NORMAL_RANGE);
+                }
+            }
+        }
+        return super.highlightsEntity(ent, player);
+    }
+
+    @Override
+    public int highlightsEntityColor(Entity ent, Player player) {
+        if (this.lifeSensorActive) {
+            return 16766720;
+        }
+        return super.highlightsEntityColor(ent, player);
+    }
+
+    // life sensor end
 
     // item imbue start
 
@@ -2135,7 +2260,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         // Ability 1 (Z)
-        if (isHoldingSneak()) {
+        if (isGuarding()){
+            setSkillIcon(context, x, y, 1, StandIcons.GOLD_EXPERIENCE_LIFE_SENSOR, PowerIndex.SKILL_1_GUARD);
+        } else if (isHoldingSneak()) {
             setSkillIcon(context, x, y, 1, StandIcons.GOLD_EXPERIENCE_HEAL, PowerIndex.SKILL_1_SNEAK);
         } else if (canDNACreate()) {
             setSkillIcon(context, x, y, 1, StandIcons.GOLD_EXPERIENCE_DNA_CREATION, PowerIndex.SKILL_1);
@@ -2187,8 +2314,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_LIFEFORM_SELECT, 1, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.gold_experience_heal",
                 "instruction.roundabout.press_skill_crouch", StandIcons.GOLD_EXPERIENCE_HEAL, 1, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.gold_experience_placeholder",
-                "instruction.roundabout.passive", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 1, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.gold_experience_life_sensor",
+                "instruction.roundabout.press_skill_block", StandIcons.GOLD_EXPERIENCE_LIFE_SENSOR, 1, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.gold_experience_dna_creation",
                 "instruction.roundabout.press_skill_item", StandIcons.GOLD_EXPERIENCE_DNA_CREATION, 1, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.gold_experience_lifeform_creation",
