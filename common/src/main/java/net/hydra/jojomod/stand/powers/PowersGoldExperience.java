@@ -612,6 +612,14 @@ public class PowersGoldExperience extends BlockGrabPreset {
     }
 
     @Override
+    public void updateMovesFromPacket(byte activePower){
+        if (activePower == PowerIndex.BARRAGE_2){
+            this.setActivePowerPhase(this.activePowerPhaseMax);
+        }
+        super.updateMovesFromPacket(activePower);
+    }
+
+    @Override
     public void handleStandAttack(Player player, Entity target) {
         if (this.getActivePower() == LIFE_PUNCH) {
             lifePunchImpact(target);
