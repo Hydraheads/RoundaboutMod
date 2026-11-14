@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity;
 
 import net.hydra.jojomod.item.ModItems;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.Item;

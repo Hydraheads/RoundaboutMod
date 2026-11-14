@@ -347,6 +347,8 @@
     "ZPlayerModel",
     "ZPlayerRender",
     "ZWorldRenderer",
+    "access.AccessBlockEntityType",
+    "access.AccessWoodType",
     "access.AccessBoatRenderer",
     "access.AccessParticle",
     "access.AccessRenderSystem",

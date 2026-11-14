@@ -8,6 +8,7 @@ import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.block.handBlock.HandBlockEntity;
 import net.hydra.jojomod.item.*;
+import net.hydra.jojomod.mixin.access.AccessBlockEntityType;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.Util;
 import net.minecraft.core.Registry;
@@ -25,6 +26,10 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import static net.hydra.jojomod.block.ModBlocks.*;
 
@@ -600,6 +605,17 @@ public class FabricBlocks {
         ModBlocks.GINKGO_WALL_SIGN = GINKGO_WALL_SIGN;
         ModBlocks.GINKGO_HANGING_SIGN = GINKGO_HANGING_SIGN;
         ModBlocks.GINKGO_WALL_HANGING_SIGN = GINKGO_WALL_HANGING_SIGN;
+        addSupportedBlocks(
+                BlockEntityType.SIGN,
+                GINKGO_SIGN,
+                GINKGO_WALL_SIGN
+        );
+
+        addSupportedBlocks(
+                BlockEntityType.HANGING_SIGN,
+                GINKGO_HANGING_SIGN,
+                GINKGO_WALL_HANGING_SIGN
+        );
         ModBlocks.GINKGO_TRAPDOOR = GINKGO_TRAPDOOR;
         ModBlocks.AUTUMN_LEAVES = AUTUMN_LEAVES;
         ModBlocks.GINKGO_STAIRS = GINKGO_STAIRS;
@@ -616,6 +632,19 @@ public class FabricBlocks {
         ((IFireBlock) fire).roundabout$bootstrap();
 
         registerDynamicFogBlocks();
+    }
+    private static void addSupportedBlocks(BlockEntityType<?> type,
+                                           Block... blocks) {
+
+        AccessBlockEntityType accessor =
+                (AccessBlockEntityType) (Object) type;
+
+        Set<Block> validBlocks =
+                new HashSet<>(accessor.roundabout$getValidBlocks());
+
+        Collections.addAll(validBlocks, blocks);
+
+        accessor.roundabout$setValidBlocks(validBlocks);
     }
     public static void registerDynamicFogBlocks()
     {
