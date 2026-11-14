@@ -1169,6 +1169,8 @@ public class ForgeEvents {
         ModEntities.LIFE_PUNCH_CLONE = ForgeEntities.LIFE_PUNCH_CLONE.get();
         ModEntities.KING_CRIMSON_PROJECTION = ForgeEntities.KING_CRIMSON_PROJECTION.get();
         ModEntities.DNA_CREATION_SPAWNER = ForgeEntities.DNA_CREATION_SPAWNER.get();
+        ModEntities.GINKGO_BOAT = ForgeEntities.GINKGO_BOAT.get();
+        ModEntities.GINKGO_CHEST_BOAT = ForgeEntities.GINKGO_CHEST_BOAT.get();
 
         ForgeItems.assignStupidForge();
         ConfigManager.loadBlacklists2();

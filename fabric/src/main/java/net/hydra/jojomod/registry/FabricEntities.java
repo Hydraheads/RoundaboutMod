@@ -1513,6 +1513,33 @@ public class FabricEntities {
                     EntityType.Builder.of(SheerHeartAttackEntity::new, MobCategory.CREATURE).
                             sized(SheerHeartAttackEntity.width, SheerHeartAttackEntity.height).clientTrackingRange(15).build(Roundabout.MOD_ID+":sheer_heart_attack")
             );
+    public static final EntityType<GinkgoBoatEntity> GINKGO_BOAT =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "ginkgo_boat"),
+                    EntityType.Builder
+                            .<GinkgoBoatEntity>of(
+                                    GinkgoBoatEntity::new,
+                                    MobCategory.MISC
+                            )
+                            .sized(1.375F, 0.5625F)
+                            .clientTrackingRange(10)
+                            .build("ginkgo_boat")
+            );
+
+    public static final EntityType<GinkgoChestBoatEntity> GINKGO_CHEST_BOAT =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "ginkgo_chest_boat"),
+                    EntityType.Builder
+                            .<GinkgoChestBoatEntity>of(
+                                    GinkgoChestBoatEntity::new,
+                                    MobCategory.MISC
+                            )
+                            .sized(1.375F, 0.5625F)
+                            .clientTrackingRange(10)
+                            .build("ginkgo_chest_boat")
+            );
 
     public static void register() {
                 /*Common Code Bridge*/
@@ -1667,6 +1694,8 @@ public class FabricEntities {
                 ModEntities.SILVER_CHARIOT_RAPIER_PLATFORM = SILVER_CHARIOT_RAPIER_PLATFORM;
                 ModEntities.SC_MOUNT = SC_MOUNT;
                 ModEntities.VIRUS_SPIT = VIRUS_SPIT;
+                ModEntities.GINKGO_BOAT = GINKGO_BOAT;
+                ModEntities.GINKGO_CHEST_BOAT = GINKGO_CHEST_BOAT;
 
                 ModEntities.BAD_COMPANY_SOLDIER = BAD_COMPANY_SOLDIER;
                 ModEntities.BAD_COMPANY_TANK = BAD_COMPANY_TANK;

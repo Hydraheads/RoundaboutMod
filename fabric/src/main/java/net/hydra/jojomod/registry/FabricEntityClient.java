@@ -43,6 +43,9 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.client.renderer.entity.BoatRenderer;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.hydra.jojomod.registry.FabricEntities;
 
 public class FabricEntityClient {
 
@@ -256,6 +259,8 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.LEFT_SEPERATED_ARM_SLIM, LeftSeperatedArmSlimRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SHEER_HEART_ATTACK, SheerHeartAttackRenderer::new);
         EntityRendererRegistry.register(FabricEntities.CTR_BARRIER, CTRbarrierRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.GINKGO_BOAT, context -> new GinkgoBoatRenderer(context, false));
+        EntityRendererRegistry.register(FabricEntities.GINKGO_CHEST_BOAT, context -> new GinkgoBoatRenderer(context, true));
 
         EntityRendererRegistry.register(FabricEntities.METALLICA_KNIFE, KnifeRenderer::new);
 
