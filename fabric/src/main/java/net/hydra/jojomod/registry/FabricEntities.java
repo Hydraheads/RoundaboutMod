@@ -12,9 +12,7 @@ import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.objects.*;
-import net.hydra.jojomod.entity.paintings.BirthOfVenusPainting;
-import net.hydra.jojomod.entity.paintings.MonaLisaPainting;
-import net.hydra.jojomod.entity.paintings.VanGoughPainting;
+import net.hydra.jojomod.entity.paintings.*;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.pathfinding.CommandDiscPossession;
 import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
@@ -864,6 +862,13 @@ public class FabricEntities {
                     EntityType.Builder.<GEBrambleEntity>of(GEBrambleEntity::new, MobCategory.MISC).
                             sized(0.8f, 1.8f).clientTrackingRange(16).build(Roundabout.MOD_ID + ":ge_bramble")
             );
+    public static final EntityType<GEThornEntity> GE_THORN =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "ge_thorn"),
+                    EntityType.Builder.<GEThornEntity>of(GEThornEntity::new, MobCategory.MISC).
+                            sized(1f, 0.5f).clientTrackingRange(16).build(Roundabout.MOD_ID + ":ge_thorn")
+            );
     public static final EntityType<GEBatEntity> GE_BAT = Registry.register(
             BuiltInRegistries.ENTITY_TYPE,
             new ResourceLocation(Roundabout.MOD_ID, "ge_bat"),
@@ -1402,6 +1407,22 @@ public class FabricEntities {
                                 sized(0.5F, 0.5F).updateInterval(Integer.MAX_VALUE).
                                 clientTrackingRange(10).build(Roundabout.MOD_ID+":mona_lisa")
                 );
+    public static final EntityType<ZombieHorsePainting> ZOMBIE_HORSE_PAINTING =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "zombie_horse_painting"),
+                    EntityType.Builder.<ZombieHorsePainting>of(ZombieHorsePainting::new, MobCategory.MISC).
+                            sized(0.5F, 0.5F).updateInterval(Integer.MAX_VALUE).
+                            clientTrackingRange(10).build(Roundabout.MOD_ID+":zombie_horse_painting")
+            );
+    public static final EntityType<ZombieHorseMural> ZOMBIE_HORSE_MURAL =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "zombie_horse_mural"),
+                    EntityType.Builder.<ZombieHorseMural>of(ZombieHorseMural::new, MobCategory.MISC).
+                            sized(0.5F, 0.5F).updateInterval(Integer.MAX_VALUE).
+                            clientTrackingRange(10).build(Roundabout.MOD_ID+":zombie_horse_mural")
+            );
     public static final EntityType<RoadRollerEntity> ROAD_ROLLER_ENTITY =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
@@ -1492,6 +1513,33 @@ public class FabricEntities {
                     EntityType.Builder.of(SheerHeartAttackEntity::new, MobCategory.CREATURE).
                             sized(SheerHeartAttackEntity.width, SheerHeartAttackEntity.height).clientTrackingRange(15).build(Roundabout.MOD_ID+":sheer_heart_attack")
             );
+    public static final EntityType<GinkgoBoatEntity> GINKGO_BOAT =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "ginkgo_boat"),
+                    EntityType.Builder
+                            .<GinkgoBoatEntity>of(
+                                    GinkgoBoatEntity::new,
+                                    MobCategory.MISC
+                            )
+                            .sized(1.375F, 0.5625F)
+                            .clientTrackingRange(10)
+                            .build("ginkgo_boat")
+            );
+
+    public static final EntityType<GinkgoChestBoatEntity> GINKGO_CHEST_BOAT =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "ginkgo_chest_boat"),
+                    EntityType.Builder
+                            .<GinkgoChestBoatEntity>of(
+                                    GinkgoChestBoatEntity::new,
+                                    MobCategory.MISC
+                            )
+                            .sized(1.375F, 0.5625F)
+                            .clientTrackingRange(10)
+                            .build("ginkgo_chest_boat")
+            );
 
     public static void register() {
                 /*Common Code Bridge*/
@@ -1568,6 +1616,7 @@ public class FabricEntities {
         ModEntities.GOLD_EXPERIENCE = GOLD_EXPERIENCE;
         ModEntities.GOLD_EXPERIENCE_BETA = GOLD_EXPERIENCE_BETA;
         ModEntities.GE_BRAMBLE = GE_BRAMBLE;
+        ModEntities.GE_THORN = GE_THORN;
         ModEntities.GE_BAT = GE_BAT;
         ModEntities.GE_FROG = GE_FROG;
         ModEntities.GE_BEE = GE_BEE;
@@ -1645,6 +1694,8 @@ public class FabricEntities {
                 ModEntities.SILVER_CHARIOT_RAPIER_PLATFORM = SILVER_CHARIOT_RAPIER_PLATFORM;
                 ModEntities.SC_MOUNT = SC_MOUNT;
                 ModEntities.VIRUS_SPIT = VIRUS_SPIT;
+                ModEntities.GINKGO_BOAT = GINKGO_BOAT;
+                ModEntities.GINKGO_CHEST_BOAT = GINKGO_CHEST_BOAT;
 
                 ModEntities.BAD_COMPANY_SOLDIER = BAD_COMPANY_SOLDIER;
                 ModEntities.BAD_COMPANY_TANK = BAD_COMPANY_TANK;
@@ -1698,6 +1749,9 @@ public class FabricEntities {
                 ModEntities.VAN_GOUGH_PAINTING = VAN_GOUGH_PAINTING;
                 ModEntities.MONA_LISA_PAINTING = MONA_LISA_PAINTING;
                 ModEntities.BIRTH_OF_VENUS_PAINTING = VENUS_PAINTING;
+                ModEntities.ZOMBIE_HORSE_PAINTING = ZOMBIE_HORSE_PAINTING;
+
+                ModEntities.ZOMBIE_HORSE_MURAL = ZOMBIE_HORSE_MURAL;
 
                 ModEntities.METALLICA_KNIFE = METALLICA_KNIFE;
                 ModEntities.SHEER_HEART_ATTACK = SHEER_HEART_ATTACK;
@@ -1914,6 +1968,6 @@ public class FabricEntities {
         SpawnPlacements.register(ModEntities.PIRANHA, SpawnPlacements.Type.IN_WATER,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Piranha::checkSurfaceWaterAnimalSpawnRules);
         SpawnPlacements.register(ModEntities.BUTTERFLY, SpawnPlacements.Type.ON_GROUND,
-                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Butterfly::canSpawn);
     }
 }

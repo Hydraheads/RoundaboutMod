@@ -438,11 +438,15 @@ public interface StandUser {
     void roundabout$setRibcageTrap(boolean trap);
     boolean roundabout$hasSpringLegs();
     void roundabout$setSpringLegs(boolean legs);
-    /// dw about these, I'm not sure if I'll use them yet
-    boolean roundabout$hasInfiniteSpin();
-    void roundabout$clearInfiniteSpin();
+
+    boolean roundabout$hasGERooted();
+    void roundabout$setGERooted(boolean tree);
+    ItemStack roundabout$getGERootedItem();
+    void roundabout$setGERootedItem(ItemStack stack);
 
     /** catch the rainbow **/
     boolean roundabout$getIsRainWalking();
     void roundabout$setIsRainWalking(boolean bool);
+
+    void roundabout$setInfiniteSpinPoint(Vec3 v);
 }

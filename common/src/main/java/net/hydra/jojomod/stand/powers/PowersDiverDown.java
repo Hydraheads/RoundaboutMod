@@ -186,7 +186,6 @@ public class PowersDiverDown extends NewPunchingStand {
         public int ticks;
         public Direction face;
         public Vec3 launchVector;
-        public int playerContactTicks = 0;
 
         public KickTrap(int ticks, Direction face, Vec3 launchVector) {
             this.ticks = ticks;
@@ -1051,7 +1050,7 @@ public class PowersDiverDown extends NewPunchingStand {
             }
         }
         // force crawl mode in zippy time
-        if (inZipMode()) {
+        if (inZipMode() && MainUtil.isHumanoid(this.self)) {
             this.self.setSprinting(false);
             ((StandUser) this.self).rdbt$SetCrawlTicks(5);
             this.self.setPose(Pose.SWIMMING);
@@ -1269,40 +1268,23 @@ public class PowersDiverDown extends NewPunchingStand {
                     if (this.isAutoRelease) {
                         List<LivingEntity> victims = detectTrapTrigger(trapPos, trap.face);
                         if (!victims.isEmpty()) {
-                            boolean hasPlayer = false;
-                            boolean hasMob = false;
+                            boolean hasVictim = false;
 
                             for (LivingEntity v : victims) {
-                                if (v instanceof Player) {
-                                    hasPlayer = true;
-                                    // doesn't trigger if it's a pet
-                                } else if (!(v instanceof TamableAnimal TA && TA.getOwner() != null && TA.getOwner().is(this.getSelf()))) {
-                                    hasMob = true;
+                                if (!(v instanceof TamableAnimal TA && TA.getOwner() != null && TA.getOwner().is(this.getSelf()))) {
+                                    hasVictim = true;
                                 }
-                            }
-
-                            if (hasPlayer) {
-                                trap.playerContactTicks++;
-                            } else {
-                                trap.playerContactTicks = 0;
                             }
 
                             // trigger the traps auto on mobs, or after 1 second has passed for players
-                            boolean shouldTrigger = hasMob || (trap.playerContactTicks >= 20);
+                            boolean shouldTrigger = hasVictim;
 
                             if (shouldTrigger) {
-                                // remove players from the victim list, in case they were standing with mobs
-                                if (trap.playerContactTicks < 20) {
-                                    victims.removeIf(v -> v instanceof Player);
-                                }
                                 if (!victims.isEmpty()) {
                                     triggerKickTrap(victims, trapPos, trap);
                                     it.remove(); // delete the triggered trap
                                 }
                             }
-                        } else {
-                            // reset timer if player leaves the trap block
-                            trap.playerContactTicks = 0;
                         }
                     }
                 }
@@ -2838,7 +2820,8 @@ public class PowersDiverDown extends NewPunchingStand {
         // this is like my third attempt to fix claims with chests. bruh
         StandEntity stand = getStandEntity(this.self);
         BlockPos standPos = stand != null ? stand.blockPosition() : serverPlayer.blockPosition();
-        if (!MainUtil.canInteractWithBlock(serverPlayer, chestPos) || !MainUtil.canPlaceOnClaim(serverPlayer, standPos)) {
+        if (!MainUtil.canInteractWithBlock(serverPlayer, chestPos) ||
+                (ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims)) {
             return false;
         }
 
@@ -3093,9 +3076,11 @@ public class PowersDiverDown extends NewPunchingStand {
 
     public void toggleZip(boolean toggle) {
         if (!toggle) {
-            ((StandUser) this.self).rdbt$SetCrawlTicks(0);
-            this.self.setSwimming(false);
-            this.self.setPose(Pose.STANDING);
+            if (MainUtil.isHumanoid(this.self)) {
+                ((StandUser) this.self).rdbt$SetCrawlTicks(0);
+                this.self.setSwimming(false);
+                this.self.setPose(Pose.STANDING);
+            }
             this.setPowerNone();
             if (inZipMode())
                 setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().diverDownSettings.diverZipCooldown);
@@ -3490,7 +3475,7 @@ public class PowersDiverDown extends NewPunchingStand {
     private List<LivingEntity> detectTrapTrigger(BlockPos pos, Direction face) {
         // Check area directly on top of the trapped block
         BlockPos triggerPos = pos.relative(face);
-        AABB triggerBox = new AABB(triggerPos).inflate(-0.05);
+        AABB triggerBox = new AABB(triggerPos).inflate(0.15);
         List<LivingEntity> victims = new ArrayList<>();
         for (LivingEntity target : this.self.level().getEntitiesOfClass(LivingEntity.class, triggerBox)) {
             if (target.equals(this.self)
@@ -4764,7 +4749,7 @@ public class PowersDiverDown extends NewPunchingStand {
             if (!level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) return false;
             if (PE.blockActionRestricted(PE.serverLevel(), pos, PE.gameMode.getGameModeForPlayer())) return false;
             if (!level.mayInteract(PE, pos)) return false;
-            if (!MainUtil.canPlaceOnClaim(PE, pos)) return false;
+            if (ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims) return false;
         }
 
         // must have an associated Item

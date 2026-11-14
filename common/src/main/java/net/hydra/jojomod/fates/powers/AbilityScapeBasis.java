@@ -3775,7 +3775,7 @@ public class AbilityScapeBasis {
             if (this.getSelf().isPassenger() && this.getSelf().getVehicle() instanceof AbstractHorse AH) {
                 if (AH.hurtTime == 0) {
                     if (AH.isTamed() && AH.isSaddled() && (true /* is moving around */)) {
-                        delta = 20;
+                        delta = 4;
                     }
                 } else {
                     delta = -4;

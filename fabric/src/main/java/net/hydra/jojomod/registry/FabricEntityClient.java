@@ -17,9 +17,7 @@ import net.hydra.jojomod.client.models.minions.head_parts.*;
 import net.hydra.jojomod.client.models.minions.renderers.*;
 import net.hydra.jojomod.client.models.mobs.*;
 import net.hydra.jojomod.client.models.mobs.renderers.*;
-import net.hydra.jojomod.client.models.paintings.MonaLisaPaintingRenderer;
-import net.hydra.jojomod.client.models.paintings.VanGoghPaintingRenderer;
-import net.hydra.jojomod.client.models.paintings.VenusPaintingRenderer;
+import net.hydra.jojomod.client.models.paintings.*;
 import net.hydra.jojomod.client.models.projectile.*;
 import net.hydra.jojomod.client.models.projectile.renderers.*;
 import net.hydra.jojomod.client.models.stand.*;
@@ -45,6 +43,9 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.client.renderer.entity.BoatRenderer;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.hydra.jojomod.registry.FabricEntities;
 
 public class FabricEntityClient {
 
@@ -127,6 +128,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.GOLD_EXPERIENCE, GoldExperienceRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GOLD_EXPERIENCE_BETA, GoldExperienceBetaRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GE_BRAMBLE, GEBrambleRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.GE_THORN, GEThornRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GE_BAT, GEBatRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GE_FROG, GEFrogRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GE_BEE, GEBeeRenderer::new);
@@ -247,6 +249,8 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.VAN_GOUGH_PAINTING, VanGoghPaintingRenderer::new);
         EntityRendererRegistry.register(FabricEntities.VENUS_PAINTING, VenusPaintingRenderer::new);
         EntityRendererRegistry.register(FabricEntities.MONA_LISA_PAINTING, MonaLisaPaintingRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.ZOMBIE_HORSE_PAINTING, ZombieHorsePaintingRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.ZOMBIE_HORSE_MURAL, ZombieHorseMuralRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ROAD_ROLLER_ENTITY, RoadRollerEntityRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SEPERATED_LEGS, SeperatedLegsRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SEPERATED_ARM, SeperatedArmRenderer::new);
@@ -255,6 +259,8 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.LEFT_SEPERATED_ARM_SLIM, LeftSeperatedArmSlimRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SHEER_HEART_ATTACK, SheerHeartAttackRenderer::new);
         EntityRendererRegistry.register(FabricEntities.CTR_BARRIER, CTRbarrierRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.GINKGO_BOAT, context -> new GinkgoBoatRenderer(context, false));
+        EntityRendererRegistry.register(FabricEntities.GINKGO_CHEST_BOAT, context -> new GinkgoBoatRenderer(context, true));
 
         EntityRendererRegistry.register(FabricEntities.METALLICA_KNIFE, KnifeRenderer::new);
 
@@ -349,6 +355,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GOLD_EXPERIENCE_LAYER, GoldExperienceModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GOLD_EXPERIENCE_BETA_LAYER, GoldExperienceBetaModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GE_BRAMBLE_LAYER, GEBrambleModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GE_THORN_LAYER, GEThornModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SILVER_CHARIOT_LAYER, SilverChariotModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SILVER_CHARIOT_PHARAOH_LAYER, SilverChariotPharaohModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SILVER_CHARIOT_SWORD_PROJECTILE_LAYER, SilverChariotSwordProjectileModel::createBodyLayer);
@@ -450,6 +457,7 @@ public class FabricEntityClient {
         ModStrayModels.steelBallsPart = new SteelBallsPart();
         ModStrayModels.DiegoHatPart = new DiegoHatPart();
         ModStrayModels.kosakuHairPart = new KosakuHairPart();
+        ModStrayModels.cioccolataHairPart = new CioccolataHairPart();
         ModStrayModels.Diego2HatPart = new Diego2HatPart();
         ModStrayModels.DoppioHairPart = new DoppioHairPart();
         ModStrayModels.DaiyaEarsPart = new DaiyaEarsPart();

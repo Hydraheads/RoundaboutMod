@@ -122,7 +122,7 @@ public class PowersPlanetWaves extends NewDashPreset {
     }
     @Override
     public Component ifWipListDevStatus(){
-        return Component.translatable(  "roundabout.dev_status.paused").withStyle(ChatFormatting.YELLOW);
+        return Component.translatable(  "roundabout.dev_status.dropped").withStyle(ChatFormatting.YELLOW);
     }
     @Override
     public Component ifWipListDev(){

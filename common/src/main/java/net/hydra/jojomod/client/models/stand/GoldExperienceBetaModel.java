@@ -91,6 +91,8 @@ public class GoldExperienceBetaModel<T extends GoldExperienceEntity> extends Sta
         this.LeftArmBAM = this.BAM.getChild("LeftArmBAM");
         this.LeftArmBAM4 = this.BAM.getChild("LeftArmBAM4");
         this.LeftArmBAM3 = this.BAM.getChild("LeftArmBAM3");
+        this.rightHand = this.lower_right_arm;
+        this.leftHand = this.lower_left_arm;
     }
 
     public static LayerDefinition getTexturedModelData() {
@@ -255,6 +257,12 @@ public class GoldExperienceBetaModel<T extends GoldExperienceEntity> extends Sta
         defaultModifiers(pEntity);
         defaultAnimations(pEntity, pAgeInTicks, 1/((float) Power.getBarrageWindup() /20));
         this.animate(pEntity.lifePunch, GoldExperienceAnimations.LIFE_PUNCH, pAgeInTicks, 1f);
+        this.animate(pEntity.doublePunch, GoldExperienceAnimations.DOUBLE_PUNCH, pAgeInTicks, 1f);
+        this.animate(pEntity.healWindup, GoldExperienceAnimations.HEAL_WINDUP, pAgeInTicks, 1f);
+        this.animate(pEntity.healOthers, GoldExperienceAnimations.HEAL_OTHERS, pAgeInTicks, 1f);
+        this.animate(pEntity.healSelf, GoldExperienceAnimations.HEAL_SELF, pAgeInTicks, 1.1f);
+        this.animate(pEntity.groundPunch, GoldExperienceAnimations.TREE, pAgeInTicks, 1f);
+
         this.animate(pEntity.hideLeg, StandAnimations.HIDE_LEG, pAgeInTicks, 1f);
         this.animate(pEntity.kick_barrage, StandAnimations.KICK_BARRAGE, pAgeInTicks, 1.25f);
         this.animate(pEntity.kick_barrage_windup, StandAnimations.KICK_BARRAGE_CHARGE, pAgeInTicks, 1f);

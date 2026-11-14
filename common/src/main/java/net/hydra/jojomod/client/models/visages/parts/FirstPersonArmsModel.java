@@ -191,7 +191,7 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
                 boolean renderLeft = true;
                 boolean renderRight = true;
 
-                if (standUser.roundabout$getStandPowers() instanceof PowersTusk PT && PowerTypes.isUsingStand(player)) {
+                if (standUser.roundabout$getStandPowers() instanceof PowersTusk PT && PowerTypes.isUsingStand(player) && !player.isUsingItem()) {
                     if (!PT.renderBothArms()) {
                         renderLeft = player.getMainArm() == HumanoidArm.LEFT;
                         renderRight = player.getMainArm() == HumanoidArm.RIGHT;
@@ -206,15 +206,11 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
 
 
                 if (standUser.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB && PowerTypes.isUsingStand(player)){
-                    AnimationDefinition anim = PCB.getAnimation(standUser, true);
-
-                    //if (PCB.invincibleState){
-
-                        //if (standUser.roundabout$getStandAnimation() == PowerIndex.NONE) {
-                    standUser.roundabout$getWornStandAnimation().animateWhen(anim != null, player.tickCount);
-                        //}
-
-                    this.animate(standUser.roundabout$getWornStandAnimation(), anim, partialTicks, 1F);
+                    AnimationDefinition anim = Powers20thCenturyBoy.getAnimation(standUser, true);
+                    if (anim != null) {
+                        this.animate(standUser.roundabout$getWornStandAnimation(), anim, partialTicks, 1F);
+                        standUser.roundabout$getWornStandAnimation().startIfStopped(player.tickCount);
+                    }
                 }
 
                 Mob shapeShift = ((IPlayerRenderer)PR).roundabout$getShapeShift(player);
@@ -307,7 +303,7 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
 
                 StandUser user = ((StandUser) player);
 
-                if (user.roundabout$getStandPowers() instanceof PowersTusk PT && PowerTypes.isUsingStand(player)) {
+                if (user.roundabout$getStandPowers() instanceof PowersTusk PT && PowerTypes.isUsingStand(player) && !player.isUsingItem()) {
                     if (PT.renderDrill()) {
                         if (renderRight) {
                             poseStack.pushPose();

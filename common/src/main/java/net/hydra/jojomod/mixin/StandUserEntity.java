@@ -24,8 +24,6 @@ import net.hydra.jojomod.entity.zombie_minion.VillagerMinion;
 import net.hydra.jojomod.event.*;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
-import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
-import net.hydra.jojomod.networking.ClientToServerPackets;
 import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
@@ -73,7 +71,6 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Cat;
-import net.minecraft.world.entity.animal.CatVariant;
 import net.minecraft.world.entity.animal.Turtle;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.monster.*;
@@ -81,16 +78,13 @@ import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.WanderingTrader;
-import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
@@ -98,8 +92,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.zetalasis.networking.message.api.ModMessageEvents;
-import org.jetbrains.annotations.Async;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.*;
@@ -413,6 +405,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private boolean roundabout$loadingStandData;
     @Unique
     private int roundabout$springLegsTicks;
+    @Unique
+    private int roundabout$GERootTicks;
     @Unique
     private StandPowers roundabout$RejectionStandPowers = null;
     @Unique
@@ -1723,6 +1717,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (!this.level().isClientSide()) {
             if (roundabout$hasSpringLegs() && --roundabout$springLegsTicks <= 0) {
                 roundabout$setSpringLegs(false);
+            }
+            if (roundabout$hasGERooted() && --roundabout$GERootTicks <= 0) {
+                roundabout$setGERooted(false);
+                if (!this.roundabout$GERootedItem.isEmpty()) {
+                    this.spawnAtLocation(this.roundabout$GERootedItem);
+                    this.roundabout$GERootedItem = ItemStack.EMPTY;
+                }
+                this.level().playSound(null, this.blockPosition(),
+                        ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.7F, 1.0F);
             }
             if (roundabout$getBoundTo() != null && (!roundabout$getBoundTo().isAlive()
                     || roundabout$getBoundToID() != roundabout$getBoundTo().getId())) {
@@ -3619,7 +3622,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Override
     public void roundabout$sealStand(int ticks) {
-        Roundabout.LOGGER.info(this.roundabout$getMaxSealedTicks() + " / " + ticks);
         if (this.roundabout$getMaxSealedTicks() < ticks) {
             this.roundabout$setSealedTicks(ticks);
         }
@@ -3732,7 +3734,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     @Unique
     public boolean roundabout$isSealed() {
-        return roundabout$sealedTicks > -1 || (rdbt$this() instanceof Player PE && PE.isSpectator());
+        return roundabout$sealedTicks > -1 || (rdbt$this() instanceof Player PE && PE.isSpectator()) || roundabout$getGrabbedSoul();
     }
 
     @Override
@@ -4010,6 +4012,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$SPRING_LEGS, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$GRABBED_SOUL, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$GRABBER_ID, 0);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$GE_TREE_ROOT, false);
         }
     }
 
@@ -5523,10 +5526,33 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             dd.clearSpringLegs();
         }
 
+        if (this.roundabout$hasGERooted()) {
+            this.roundabout$setGERooted(false);
+            if (!this.level().isClientSide() && !this.roundabout$GERootedItem.isEmpty()) {
+                this.spawnAtLocation(this.roundabout$GERootedItem);
+                this.roundabout$GERootedItem = ItemStack.EMPTY;
+            }
+        }
+
         if(this.roundabout$getGrabberSabbath() != 0){
             Entity z = this.level().getEntity(roundabout$getGrabberSabbath());
             if(z != null && z instanceof BlackSabbathEntity be){
-                if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser) e).roundabout$updateSealedTicks(-1);be.killSoul();((StandUser)e).roundabout$setGrabberSabbath(0);}
+                if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);/*((StandUser) e).roundabout$updateSealedTicks(-1)*/;be.killSoul();((StandUser)e).roundabout$setGrabberSabbath(0);}
+            }
+        }
+
+        if(this.roundabout$getStandPowers() instanceof PowersBlackSabbath pbs){
+            if (pbs.getStandEntity(pbs.self) != null && pbs.getStandEntity(pbs.self) instanceof BlackSabbathEntity BE) {
+                if (BE.getGrabbing() != 0) {
+                    Entity ent = BE.level().getEntity(BE.getGrabbing());
+                    if (ent != null && ent instanceof LivingEntity LE) {
+                        BE.setMeleeInteractionTicks(-1);
+                        ((StandUser) LE).roundabout$setGrabbedSoul(false);
+                        //((StandUser) LE).roundabout$updateSealedTicks(-1);
+                        BE.killSoul();
+                        ((StandUser) LE).roundabout$setGrabberSabbath(0);
+                    }
+                }
             }
         }
 
@@ -6341,7 +6367,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     if (target == rdbt$this() || target.hasEffect(ModEffects.HAZE_VIRUS))
                         continue;
                     if (this.random.nextFloat() < 1.0F) {
-                        target.addEffect(new MobEffectInstance(ModEffects.HAZE_VIRUS, 200, amplifier, false, true),
+                        target.addEffect(new MobEffectInstance(ModEffects.HAZE_VIRUS, 75, amplifier, false, true),
                                 rdbt$this());
                     }
                 }
@@ -6354,18 +6380,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 if (inst != null) {
                     int level = inst.getAmplifier() + 1;
                     float damage = level;
-                    if (level == 2) {
-                        damage += 0.25F;   //extra at Niv.2
-                    } else if (level >= 3) {
-                        damage += 0.5F;   //extra at Niv.3
-                    }
+
                     if (((StandUser) this).roundabout$getStandPowers() instanceof PowersPurpleHaze) {
                         damage *= 0.66F;
                     }
                     if (ClientNetworking.getAppropriateConfig().PurpleHazeSettings.CanonDistortion) {
                         damage *= 4;
                     }
-                    damage *= 2;
                     this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISTORTION_VIRUS), damage);
                     rdbt$reduceOtherEffectDurations(40, ModEffects.DISTORTION_VIRUS, ModEffects.VIRUS_IMMUNITY);
                 }
@@ -6384,7 +6405,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         continue;
                     if (this.random.nextFloat() < 1.0F) {
                         target.addEffect(
-                                new MobEffectInstance(ModEffects.DISTORTION_VIRUS, 200, amplifier, false, true),
+                                new MobEffectInstance(ModEffects.DISTORTION_VIRUS, 75, amplifier, false, true),
                                 rdbt$this());
                     }
                 }
@@ -7320,27 +7341,63 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     // for diver down end
 
-
     @Unique
-    private boolean roundabout$hasInfiniteSpin = false;
+    private static final EntityDataAccessor<Boolean> ROUNDABOUT$GE_TREE_ROOT = SynchedEntityData.defineId(
+            LivingEntity.class, EntityDataSerializers.BOOLEAN);
 
-    @Unique
-    public boolean roundabout$hasInfiniteSpin() {return roundabout$hasInfiniteSpin;}
-    public void roundabout$clearInfiniteSpin() {
-        Roundabout.LOGGER.info(rdbt$this().getName().getString());
-        this.roundabout$hasInfiniteSpin = false;
-        this.removeEffect(ModEffects.INFINITE_SPIN);
+    @Override
+    public boolean roundabout$hasGERooted() {
+        return this.entityData.get(ROUNDABOUT$GE_TREE_ROOT);
     }
+
+    @Override
+    public void roundabout$setGERooted(boolean spring) {
+        if (!level().isClientSide()) {
+            roundabout$GERootTicks = spring ? 100 : 0;
+        }
+        this.entityData.set(ROUNDABOUT$GE_TREE_ROOT, spring);
+    }
+
+    @Unique
+    private ItemStack roundabout$GERootedItem = ItemStack.EMPTY;
+
+    @Override
+    public ItemStack roundabout$getGERootedItem() {
+        return this.roundabout$GERootedItem;
+    }
+
+    @Override
+    public void roundabout$setGERootedItem(ItemStack stack) {
+        this.roundabout$GERootedItem = stack == null ? ItemStack.EMPTY : stack;
+    }
+
+
+    @Unique private Vec3 roundabout$spinLocation = null;
     @Inject(method = "tickEffects",at = @At("HEAD"))
     private void roundabout$tickInfiniteSpin(CallbackInfo ci) {
         MobEffectInstance instance = this.getEffect(ModEffects.INFINITE_SPIN);
         if (instance != null) {
-            if (this.tickCount % 10 == 0 && !this.roundabout$isDazed() && this.isAlive() && this.isAttackable()) {
+            if (this.tickCount % 10 == 0 && !this.roundabout$isDazed() && this.isAlive() && this.isAttackable() && !MainUtil.isBossMob(rdbt$this()) ) {
                 this.level().playSound(null,this.blockPosition(),ModSounds.VAMPIRE_CRUMBLE_EVENT,SoundSource.PLAYERS,0.3F,1F);
-                this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.INFINITE_SPIN), (float)Math.min(Math.pow(2, 1+instance.getAmplifier()*0.4F),20) );
+                this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.INFINITE_SPIN), (float)Math.min(Math.pow(1.4F, 1+instance.getAmplifier()*0.4F),20) );
                 this.addEffect(new MobEffectInstance(ModEffects.INFINITE_SPIN, instance.getDuration(), instance.getAmplifier() + 1));
+
+                if (roundabout$spinLocation != null) {
+                    if (rdbt$this().position().distanceTo(roundabout$spinLocation) > 10 && !PowerTypes.isExistentiallyElsewhere(rdbt$this()) ) {
+                        rdbt$this().teleportTo(roundabout$spinLocation.x,roundabout$spinLocation.y,roundabout$spinLocation.z);
+                        MainUtil.takeKnockbackWithY(rdbt$this(),0,0,1,0);
+                        this.roundabout$setDazed((byte)2);
+                        /// TODO: PLAY INFINITE SPIN PARTICLES
+                    }
+                }
             }
         }
+    }
+
+    @Unique
+    @Override
+    public void roundabout$setInfiniteSpinPoint(Vec3 vec3) {
+        roundabout$spinLocation = vec3;
     }
 
     @Override
@@ -7396,7 +7453,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "travel",at = @At("HEAD"),cancellable = true)
     private void roundabout$rainWalk(CallbackInfo ci) {
         if (((StandUser) this).roundabout$getStandPowers() instanceof PowersCatchTheRainbow pctr && pctr.isInRain() && pctr.hasStandActive(pctr.self)) {
-            if (!pctr.self.isCrouching() && !pctr.self.onGround() && !this.isFallFlying() && roundabout$getIsRainWalking()) {
+            if (!pctr.self.isCrouching() && !pctr.self.onGround() && !this.isFallFlying() && pctr.stunTicks == 0 && roundabout$getIsRainWalking()) {
                 if (this.getDeltaMovement().y < 0) {
                     this.setOnGround(true);
 
@@ -7410,7 +7467,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                             roundabout$setIsRainWalking(false);
                         }
                         Vec3 vec3 = this.getDeltaMovement();
-                        this.setDeltaMovement(vec3.x, (double) this.getJumpPower(), vec3.z);
+                        this.setDeltaMovement(vec3.x, (double) this.getJumpPower() + 0.15, vec3.z);
                         if (this.isSprinting()) {
                             float f = this.getYRot() * ((float) Math.PI / 180F);
                             this.setDeltaMovement(this.getDeltaMovement().add((double) (-Mth.sin(f) * 0.2F), 0.0D, (double) (Mth.cos(f) * 0.2F)));

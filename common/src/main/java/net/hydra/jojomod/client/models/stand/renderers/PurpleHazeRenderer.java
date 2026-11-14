@@ -3,6 +3,7 @@ package net.hydra.jojomod.client.models.stand.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
+import net.hydra.jojomod.client.models.layers.StandGlowingLayer;
 import net.hydra.jojomod.client.models.stand.PurpleHazeModel;
 import net.hydra.jojomod.entity.stand.PurpleHazeEntity;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -28,9 +29,12 @@ public class PurpleHazeRenderer extends StandRenderer<PurpleHazeEntity> {
     public static final ResourceLocation GREEN_DSITORTION = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/distorted_green.png");
     public static final ResourceLocation PLAGUE_RED = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/plague_red.png");
     public static final ResourceLocation PLAGUE_BLUE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/plague_blue.png");
+    public static final ResourceLocation CREAKING = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/creaking.png");
 
     public PurpleHazeRenderer(EntityRendererProvider.Context context) {
         super(context, new PurpleHazeModel<>(context.bakeLayer(ModEntityRendererClient.PURPLE_HAZE_LAYER)), 0f);
+        //this.addLayer(new PurpleHazeCreakingGlowingLayer<>(this));
+        this.addLayer(new StandGlowingLayer<>(this, this));
     }
 
     @Override
@@ -63,6 +67,8 @@ public class PurpleHazeRenderer extends StandRenderer<PurpleHazeEntity> {
                 return PLAGUE_RED;
             case (PurpleHazeEntity.PLAGUE_BLUE):
                 return PLAGUE_BLUE;
+            case (PurpleHazeEntity.CREAKING):
+                return CREAKING;
             default:
                 return ANIME;
         }
@@ -84,5 +90,18 @@ public class PurpleHazeRenderer extends StandRenderer<PurpleHazeEntity> {
     @Override
     protected RenderType getRenderType(PurpleHazeEntity entity, boolean showBody, boolean translucent, boolean showOutline) {
         return super.getRenderType(entity, showBody, true, showOutline);
+    }
+
+    private static final RenderType CREAKING_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/purple_haze/creaking_glowing.png"));
+
+    @Override
+    public boolean hasGlowingParts(byte skin, int packedlight) {  return skin == PurpleHazeEntity.CREAKING; }
+
+    @Override
+    public  RenderType getGlowingReference(byte skin) {
+        if (skin == PurpleHazeEntity.CREAKING) {
+            return CREAKING_GLOW;
+        }
+        return null;
     }
 }

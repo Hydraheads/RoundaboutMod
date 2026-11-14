@@ -284,6 +284,13 @@ public class PowerInventoryScreen
             } else {
                 context.blit(POWER_INVENTORY_LOCATION, leftGearPos, topGearPos, 178, 0, 19, 18);
             }
+            /*
+            if (isSurelyHovering(leftGearPos, topGearPos + 20, 19, 18, mouseX, mouseY)) {
+                context.blit(POWER_INVENTORY_LOCATION, leftGearPos, topGearPos + 20, 200, 19, 19, 18);
+            } else {
+                context.blit(POWER_INVENTORY_LOCATION, leftGearPos, topGearPos + 20, 200, 0, 19, 18);
+            }*/
+
         }
 
         $$2.set($$3);

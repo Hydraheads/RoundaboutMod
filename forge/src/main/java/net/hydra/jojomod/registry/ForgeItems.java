@@ -5,9 +5,7 @@ import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.event.powers.visagedata.*;
 import net.hydra.jojomod.event.powers.visagedata.aesthetician.*;
 import net.hydra.jojomod.item.*;
-import net.hydra.jojomod.item.paintings.BirthOfVenusPaintingItem;
-import net.hydra.jojomod.item.paintings.MonaLisaPaintingItem;
-import net.hydra.jojomod.item.paintings.VanGoughPaintingItem;
+import net.hydra.jojomod.item.paintings.*;
 import net.hydra.jojomod.stand.powers.*;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -988,6 +986,8 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new SpeedwagonFoundationVisage(null))));
     public static final RegistryObject<Item> GHIACCIO_MASK = addToTab(ITEMS.register("ghiaccio_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new GhiaccioVisage(null))));
+    public static final RegistryObject<Item> CIOCCOLATA_MASK = addToTab(ITEMS.register("cioccolata_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new CioccolataVisage(null))));
     public static final RegistryObject<Item> BOSS_MASK = addToTab(ITEMS.register("boss_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new BossVisage(null))));
     public static final RegistryObject<Item> DIAVOLO_MASK = addToTab(ITEMS.register("diavolo_mask",
@@ -1139,10 +1139,111 @@ public class ForgeItems {
 
     public static final RegistryObject<Item> ZOMBIE_HORSE_THREAD = addToWIPTab(ITEMS.register("zombie_horse_thread",
             () -> new ZombieHorseThreadItem(new Item.Properties().stacksTo(1).durability(16))));
+    public static final RegistryObject<Item> ZOMBIE_HORSE_MURAL = addToWIPTab(ITEMS.register("zombie_horse_mural_item",
+            () -> new ZombieHorseMuralItem(new Item.Properties().stacksTo(1))));
+    public static final RegistryObject<Item> PAINTING_ZOMBIE_HORSE = addToWIPTab(ITEMS.register("zombie_horse_painting_item",
+            () -> new ZombieHorsePaintingItem(new Item.Properties().stacksTo(1))));
 
     public static final RegistryObject<BlockItem> GAMBLING_TABLE_ITEM = addToWIPTab(ITEMS.register("gambling_table",
             () -> new BlockItem(ForgeBlocks.GAMBLING_TABLE.get(), new Item.Properties())));
 
+    public static final RegistryObject<BlockItem> GINKGO_LOG_ITEM =
+            addToWIPTab(ITEMS.register("ginkgo_log",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_LOG.get(),
+                            new Item.Properties())));
+
+    public static final RegistryObject<BlockItem> GINKGO_PLANKS_ITEM =
+            addToWIPTab(ITEMS.register("ginkgo_planks",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_PLANKS.get(),
+                            new Item.Properties())));
+
+    public static final RegistryObject<BlockItem> GINKGO_LEAVES_ITEM =
+            addToWIPTab(ITEMS.register("ginkgo_leaves",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_LEAVES.get(),
+                            new Item.Properties())));
+    public static final RegistryObject<BlockItem> GINKGO_WOOD_ITEM =
+            addToWIPTab(ITEMS.register("ginkgo_wood",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_WOOD.get(),
+                            new Item.Properties())));
+
+    public static final RegistryObject<BlockItem> STRIPPED_GINKGO_WOOD_ITEM =
+            addToWIPTab(ITEMS.register("stripped_ginkgo_wood",
+                    () -> new BlockItem(ForgeBlocks.STRIPPED_GINKGO_WOOD.get(),
+                            new Item.Properties())));
+
+    public static final RegistryObject<BlockItem> STRIPPED_GINKGO_LOG_ITEM =
+            addToWIPTab(ITEMS.register("stripped_ginkgo_log",
+                    () -> new BlockItem(ForgeBlocks.STRIPPED_GINKGO_LOG.get(),
+                            new Item.Properties())));
+    public static final RegistryObject<BlockItem> GINKGO_SAPLING_ITEM =
+            addToWIPTab(ITEMS.register("ginkgo_sapling",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_SAPLING.get(),
+                            new Item.Properties())));
+
+    public static final RegistryObject<BlockItem> GINKGO_DOOR_ITEM =
+            addToWIPTab(ITEMS.register("ginkgo_door",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_DOOR.get(),
+                            new Item.Properties())));
+
+    public static final RegistryObject<BlockItem> FANCY_GINKGO_DOOR_ITEM =
+            addToWIPTab(ITEMS.register("fancy_ginkgo_door",
+                    () -> new BlockItem(ForgeBlocks.FANCY_GINKGO_DOOR.get(),
+                            new Item.Properties())));
+    public static final RegistryObject<BlockItem> GINKGO_SIGN_ITEM =
+            addToWIPTab(ITEMS.register("ginkgo_sign",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_SIGN.get(),
+                            new Item.Properties())));
+
+    public static final RegistryObject<BlockItem> GINKGO_HANGING_SIGN_ITEM =
+            addToWIPTab(ITEMS.register("ginkgo_hanging_sign",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_HANGING_SIGN.get(),
+                            new Item.Properties())));
+
+    public static final RegistryObject<BlockItem> GINKGO_TRAPDOOR_ITEM =
+            addToWIPTab(ITEMS.register("ginkgo_trapdoor",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_TRAPDOOR.get(),
+                            new Item.Properties())));
+    public static final RegistryObject<BlockItem> AUTUMN_LEAVES_ITEM =
+            addToWIPTab(ITEMS.register("autumn_leaves",
+                    () -> new BlockItem(ForgeBlocks.AUTUMN_LEAVES.get(),
+                            new Item.Properties())));
+    public static final RegistryObject<BlockItem> GINKGO_STAIRS_ITEM =
+            addToWIPTab(ITEMS.register("ginkgo_stairs",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_STAIRS.get(),
+                            new Item.Properties())));
+    public static final RegistryObject<BlockItem> GINKGO_SLAB_ITEM =
+            addToWIPTab(ITEMS.register("ginkgo_slab",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_SLAB.get(),
+                            new Item.Properties())));
+    public static final RegistryObject<BlockItem> GINKGO_FENCE_ITEM =
+            addToWIPTab(ITEMS.register("ginkgo_fence",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_FENCE.get(),
+                            new Item.Properties())));
+    public static final RegistryObject<BlockItem> GINKGO_FENCE_GATE_ITEM =
+            addToWIPTab(ITEMS.register("ginkgo_fence_gate",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_FENCE_GATE.get(),
+                            new Item.Properties())));
+    public static final RegistryObject<BlockItem> GINKGO_PRESSURE_PLATE_ITEM =
+            addToWIPTab(ITEMS.register("ginkgo_pressure_plate",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_PRESSURE_PLATE.get(),
+                            new Item.Properties())));
+    public static final RegistryObject<BlockItem> GINKGO_BUTTON_ITEM =
+            addToWIPTab(ITEMS.register("ginkgo_button",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_BUTTON.get(),
+                            new Item.Properties())));
+    public static final RegistryObject<Item> GINKGO_BOAT =
+            addToWIPTab(ITEMS.register("ginkgo_boat",
+                    () -> new GinkgoBoatItem(false,
+                            new Item.Properties().stacksTo(1))));
+
+    public static final RegistryObject<Item> GINKGO_CHEST_BOAT =
+            addToWIPTab(ITEMS.register("ginkgo_chest_boat",
+                    () -> new GinkgoBoatItem(true,
+                            new Item.Properties().stacksTo(1))));
+    public static final RegistryObject<BlockItem> GINKGO_FALLEN_LEAVES_ITEM =
+            addToWIPTab(ITEMS.register("ginkgo_fallen_leaves",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_FALLEN_LEAVES.get(),
+                            new Item.Properties())));
     public static void assignStupidForge(){
         DispenserBlock.registerBehavior(ForgeItems.KNIFE.get(), DispenserRegistry.KNIFE);
 

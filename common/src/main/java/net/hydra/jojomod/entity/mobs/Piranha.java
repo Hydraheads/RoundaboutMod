@@ -20,12 +20,14 @@ import net.minecraft.world.entity.ai.goal.FollowFlockLeaderGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomSwimmingGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.AbstractFish;
 import net.minecraft.world.entity.animal.AbstractSchoolingFish;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class Piranha extends AbstractSchoolingFish {
@@ -42,6 +44,8 @@ public class Piranha extends AbstractSchoolingFish {
         // eeeek bitey fish :(
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.4D, true));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 10, false, false,
+                (target) -> target != null && !(target instanceof Piranha)  && target.isAlive() && target.hasEffect(ModEffects.BLEED)));
         // other goals, can't call super because panic goal is higher than the biter fish goal
         this.goalSelector.addGoal(4, new RandomSwimmingGoal(this, 1.0D, 40) {
             @Override
@@ -105,6 +109,20 @@ public class Piranha extends AbstractSchoolingFish {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void setTarget(@Nullable LivingEntity target) {
+        super.setTarget(target);
+        // KILL KILL KILL KILL KILL KILL
+        if (target != null && target.isAlive() && !this.level().isClientSide()) {
+            List<Piranha> nearby = this.level().getEntitiesOfClass(Piranha.class, this.getBoundingBox().inflate(12.0D));
+            for (Piranha piranha : nearby) {
+                if (piranha.isAlive() && piranha.getTarget() == null) {
+                    piranha.setTarget(target);
+                }
+            }
+        }
     }
 
     @Override

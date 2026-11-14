@@ -461,7 +461,12 @@ public abstract class InputEvents implements IInputEvents {
 
                 }
             }
+            if (powers.cancelAllRandomMiningThatBreaksMoves2()){
+                ci.setReturnValue(false);
+                return;
+            }
         }
+
     }
 
     @Unique
@@ -522,6 +527,10 @@ public abstract class InputEvents implements IInputEvents {
                         ci.cancel();
                         return;
                     }
+                }
+                if (powers.superCancelMining()){
+                    ci.cancel();
+                    return;
                 }
                 if (powers instanceof Powers20thCenturyBoy PCB){
                     if (PCB.invincibleState) ci.cancel(); return;

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/leaves",
+  "textures": {
+    "all": "roundabout:block/ginkgo_leaves"
+  }
+}

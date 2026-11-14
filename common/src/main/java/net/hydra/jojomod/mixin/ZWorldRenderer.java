@@ -175,16 +175,29 @@ public class ZWorldRenderer {
             if (pd4.isInSelectionMode) {
                 if (pd4.altStartBlockPos != null) {
                     if (pd4.altEndBlockPos != null) {
-                        ClientEffectUtil.renderPurpleBox(
-                                poseStack,
-                                mc.renderBuffers().bufferSource(),
-                                camera,
-                                pd4.altStartBlockPos,
-                                pd4.altEndBlockPos,
-                                0.61F,  // R
-                                1.0F,  // G
-                                0.58F,  // B
-                                1.0F);   // A
+                        if (pd4.altBlockPhase == 2){
+                            ClientEffectUtil.renderPurpleBox(
+                                    poseStack,
+                                    mc.renderBuffers().bufferSource(),
+                                    camera,
+                                    pd4.altStartBlockPos,
+                                    pd4.altEndBlockPos,
+                                    0.61F,  // R
+                                    1.0F,  // G
+                                    0.58F,  // B
+                                    1.0F);   // A
+                        } else {
+                            ClientEffectUtil.renderPurpleBox(
+                                    poseStack,
+                                    mc.renderBuffers().bufferSource(),
+                                    camera,
+                                    pd4.altStartBlockPos,
+                                    pd4.altEndBlockPos,
+                                    1.0F,  // R
+                                    0.68F,  // G
+                                    0.94F,  // B
+                                    1.0F);   // A
+                        }
                     } else {
                         if (pd4.isInBlockMode) {
                             ClientEffectUtil.renderPurpleBox(

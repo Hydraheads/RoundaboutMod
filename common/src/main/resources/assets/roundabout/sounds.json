@@ -1509,6 +1509,24 @@
       "roundabout:bs_select_confirm"
     ]
   },
+  "bs_hurt": {
+    "subtitle": "sounds.roundabout.bs_hurt",
+    "sounds": [
+      "roundabout:bs_hurt"
+    ]
+  },
+  "bs_grab": {
+    "subtitle": "sounds.roundabout.bs_grab",
+    "sounds": [
+      "roundabout:bs_grab"
+    ]
+  },
+  "bs_stab": {
+    "subtitle": "sounds.roundabout.bs_stab",
+    "sounds": [
+      "roundabout:bs_stab"
+    ]
+  },
   "century_boy_summon": {
     "subtitle": "sounds.roundabout.century_boy_summon",
     "sounds": [
@@ -5072,18 +5090,6 @@
     "subtitle": "sounds.roundabout.ctr_rain_step_3",
     "sounds": [
       "roundabout:ctr_rain_step_3"
-    ]
-  },
-  "ctr_rain_step_4": {
-    "subtitle": "sounds.roundabout.ctr_rain_step_4",
-    "sounds": [
-      "roundabout:ctr_rain_step_4"
-    ]
-  },
-  "ctr_rain_step_5": {
-    "subtitle": "sounds.roundabout.ctr_rain_step_5",
-    "sounds": [
-      "roundabout:ctr_rain_step_5"
     ]
   },
   "ctr_stabilizing_rain": {

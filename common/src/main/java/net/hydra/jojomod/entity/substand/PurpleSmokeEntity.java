@@ -79,6 +79,7 @@ public class PurpleSmokeEntity extends StandEntity {
         SKIN_COLORS.put(PurpleHazeEntity.GREEN_DSITORTION, 0x60ed24);//
         SKIN_COLORS.put(PurpleHazeEntity.PLAGUE_BLUE, 0xA62AAD);//
         SKIN_COLORS.put(PurpleHazeEntity.PLAGUE_RED, 0x980909);//
+        SKIN_COLORS.put(PurpleHazeEntity.CREAKING, 0xFFEB6123);//
     }
     public static final int DEFAULT_HAZE_COLOR = 0xA62AAD;
 

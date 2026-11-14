@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_bottom",
+  "textures": {
+    "bottom": "roundabout:block/fancy_ginkgo_door_bottom",
+    "particle": "roundabout:block/fancy_ginkgo_door_bottom"
+  }
+}

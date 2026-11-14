@@ -244,6 +244,11 @@ public abstract class ZItemInHandRenderer {
             return;
         }
 
+        if (((StandUser)abstractClientPlayer).roundabout$getStandPowers() instanceof PowersCatchTheRainbow PCR && PCR.ctrDodgeTicks != 0) {
+            ci.cancel();
+            return;
+        }
+
         if (ClientUtil.isRenderingFlag(abstractClientPlayer)) {
 
             ItemStack renderedStack = this.mainHandItem;

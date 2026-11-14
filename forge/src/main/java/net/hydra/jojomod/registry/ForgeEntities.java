@@ -9,9 +9,7 @@ import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.objects.*;
-import net.hydra.jojomod.entity.paintings.BirthOfVenusPainting;
-import net.hydra.jojomod.entity.paintings.MonaLisaPainting;
-import net.hydra.jojomod.entity.paintings.VanGoughPainting;
+import net.hydra.jojomod.entity.paintings.*;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.pathfinding.CommandDiscPossession;
 import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
@@ -340,6 +338,16 @@ public class ForgeEntities {
             ENTITY_TYPES.register("painting_venus", () ->
                     EntityType.Builder.of(BirthOfVenusPainting::new, MobCategory.MISC).sized(0.5F, 0.5F).updateInterval(Integer.MAX_VALUE).clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "painting_venus").toString())
+            );
+    public static final RegistryObject<EntityType<ZombieHorsePainting>> ZOMBIE_HORSE_PAINTING =
+            ENTITY_TYPES.register("zombie_horse_painting", () ->
+                    EntityType.Builder.of(ZombieHorsePainting::new, MobCategory.MISC).sized(0.5F, 0.5F).updateInterval(Integer.MAX_VALUE).clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "zombie_horse_painting").toString())
+            );
+    public static final RegistryObject<EntityType<ZombieHorseMural>> ZOMBIE_HORSE_MURAL =
+            ENTITY_TYPES.register("zombie_horse_mural", () ->
+                    EntityType.Builder.of(ZombieHorseMural::new, MobCategory.MISC).sized(0.5F, 0.5F).updateInterval(Integer.MAX_VALUE).clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "zombei_horse_mural").toString())
             );
 
     public static final RegistryObject<EntityType<TheWorldEntity>> THE_WORLD =
@@ -763,6 +771,12 @@ public class ForgeEntities {
                     .clientTrackingRange(16)
                     .updateInterval(20)
                     .build(new ResourceLocation(Roundabout.MOD_ID, "ge_bramble").toString()));
+    public static final RegistryObject<EntityType<GEThornEntity>> GE_THORN = ENTITY_TYPES.register("ge_thorn",
+            () -> EntityType.Builder.<GEThornEntity>of(GEThornEntity::new, MobCategory.MISC)
+                    .sized(1f, 0.5f)
+                    .clientTrackingRange(16)
+                    .updateInterval(20)
+                    .build(new ResourceLocation(Roundabout.MOD_ID, "ge_thorn").toString()));
     public static final RegistryObject<EntityType<GEBatEntity>> GE_BAT = ENTITY_TYPES.register("ge_bat",
             () -> EntityType.Builder.of(GEBatEntity::new, MobCategory.AMBIENT)
                     .sized(0.5f, 0.9f)
@@ -1238,6 +1252,20 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "ph_capsule").toString())
             );
+    public static final RegistryObject<EntityType<GinkgoBoatEntity>> GINKGO_BOAT =
+            ENTITY_TYPES.register("ginkgo_boat", () ->
+                    EntityType.Builder.<GinkgoBoatEntity>of(GinkgoBoatEntity::new, MobCategory.MISC).
+                            sized(1.375F, 0.5625F).
+                            clientTrackingRange(10).
+                            build("roundabout:ginkgo_boat"));
+
+    public static final RegistryObject<EntityType<GinkgoChestBoatEntity>> GINKGO_CHEST_BOAT =
+            ENTITY_TYPES.register("ginkgo_chest_boat", () ->
+                    EntityType.Builder.<GinkgoChestBoatEntity>of(
+                            GinkgoChestBoatEntity::new, MobCategory.MISC).
+                            sized(1.375F, 0.5625F).
+                            clientTrackingRange(10).
+                            build("roundabout:ginkgo_chest_boat"));
     public static final RegistryObject<EntityType<CTRbarrierEntity>> CTR_BARRIER =
             ENTITY_TYPES.register("ctrbarrier", () ->
                     EntityType.Builder.<CTRbarrierEntity>of(CTRbarrierEntity::new, MobCategory.MISC).

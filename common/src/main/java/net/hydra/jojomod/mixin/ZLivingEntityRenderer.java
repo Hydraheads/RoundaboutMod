@@ -163,6 +163,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
         }
 
         HallucinationIndicatorRenderer.render(entity, matrixStack, buffer);
+        /*
         //DiverDownPointerRenderer.render(entity, matrixStack, buffer);
         // lyin eyes highlighter
         if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof PowersLyinEyes LE
@@ -185,7 +186,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
                     LyinEyesHighlighterRenderer.render(entity, matrixStack, buffer, 0, 255, 0, 200, 0.7F);
                 }
             }
-        }
+        }*/
     }
 
     @Inject(method = "shouldShowName(Lnet/minecraft/world/entity/LivingEntity;)Z", at=@At("HEAD"), cancellable = true)

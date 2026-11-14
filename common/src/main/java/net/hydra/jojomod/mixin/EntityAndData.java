@@ -718,6 +718,10 @@ public abstract class EntityAndData implements IEntityAndData {
                 ci.cancel();
                 return;
             }
+            if(((StandUser)this).roundabout$getGrabbedSoul()){
+                ci.cancel();
+                return;
+            }
             if (thirs instanceof Player pl) {
                 if (((IPowersPlayer) pl).rdbt$getPowers().cancelSprintParticles()) {
                     ci.cancel();

@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin.century_boy;
 
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
 import net.minecraft.world.effect.MobEffect;
@@ -22,8 +23,9 @@ public abstract class CenturyBoyPotion {
 
         if (entity instanceof StandUser user && user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy pcb) {
             if (pcb.invincibleState) {
-                if (effect != MobEffects.WITHER)
+                if (effect != MobEffects.WITHER || effect != ModEffects.STAND_VIRUS) {
                     ci.cancel();
+                }
             }
         }
     }

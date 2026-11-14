@@ -16,9 +16,7 @@ import net.hydra.jojomod.client.models.minions.head_parts.*;
 import net.hydra.jojomod.client.models.minions.renderers.*;
 import net.hydra.jojomod.client.models.mobs.*;
 import net.hydra.jojomod.client.models.mobs.renderers.*;
-import net.hydra.jojomod.client.models.paintings.MonaLisaPaintingRenderer;
-import net.hydra.jojomod.client.models.paintings.VanGoghPaintingRenderer;
-import net.hydra.jojomod.client.models.paintings.VenusPaintingRenderer;
+import net.hydra.jojomod.client.models.paintings.*;
 import net.hydra.jojomod.client.models.projectile.*;
 import net.hydra.jojomod.client.models.projectile.renderers.*;
 import net.hydra.jojomod.client.models.stand.*;
@@ -47,6 +45,7 @@ import net.minecraft.client.particle.ExplodeParticle;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.BoatRenderer;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.world.level.FoliageColor;
@@ -156,6 +155,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.GOLD_EXPERIENCE.get(), GoldExperienceRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GOLD_EXPERIENCE_BETA.get(), GoldExperienceBetaRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GE_BRAMBLE.get(), GEBrambleRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.GE_THORN.get(), GEThornRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GE_BAT.get(), GEBatRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GE_FROG.get(), GEFrogRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GE_BEE.get(), GEBeeRenderer::new);
@@ -281,6 +281,8 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.VAN_GOUGH_PAINTING.get(), VanGoghPaintingRenderer::new);
         event.registerEntityRenderer(ForgeEntities.MONA_LISA_PAINTING.get(), MonaLisaPaintingRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BIRTH_OF_VENUS_PAINTING.get(), VenusPaintingRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.ZOMBIE_HORSE_MURAL.get(), ZombieHorseMuralRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.ZOMBIE_HORSE_PAINTING.get(), ZombieHorsePaintingRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.CHESS_PIECE_BLOCK_ENTITY.get(), ChessPieceRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.STAND_FIRE_BLOCK_ENTITY.get(), StandFireRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.MIRROR_BLOCK_ENTITY.get(), MirrorBlockEntityRenderer::new);
@@ -296,6 +298,8 @@ public class ClientForgeEvents {
         event.registerBlockEntityRenderer(ForgeBlocks.HALLUCINATORY_ACID_BLOCK_ENTITY.get(),
                 HallucinatoryAcidBlockEntityRenderer::new);
         event.registerEntityRenderer(ForgeEntities.PH_CAPSULE.get(), PHCapsuleRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.GINKGO_BOAT.get(), context -> new GinkgoBoatRenderer(context, false));
+        event.registerEntityRenderer(ForgeEntities.GINKGO_CHEST_BOAT.get(), context -> new GinkgoBoatRenderer(context, true));
     }
 
     @SubscribeEvent
@@ -389,6 +393,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.GOLD_EXPERIENCE_LAYER, GoldExperienceModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.GOLD_EXPERIENCE_BETA_LAYER, GoldExperienceBetaModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.GE_BRAMBLE_LAYER, GEBrambleModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.GE_THORN_LAYER, GEThornModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.SILVER_CHARIOT_LAYER, SilverChariotModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.SILVER_CHARIOT_PHARAOH_LAYER, SilverChariotPharaohModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.SILVER_CHARIOT_SWORD_PROJECTILE_LAYER, SilverChariotSwordProjectileModel::createBodyLayer);
@@ -480,6 +485,7 @@ public class ClientForgeEvents {
         ModStrayModels.DoppioHairPart = new DoppioHairPart();
         ModStrayModels.JohnnyHatPart = new JohnnyHatPart();
         ModStrayModels.kosakuHairPart = new KosakuHairPart();
+        ModStrayModels.cioccolataHairPart = new CioccolataHairPart();
         ModStrayModels.DaiyaEarsPart = new DaiyaEarsPart();
         ModStrayModels.DaiyaFluffPart = new DaiyaFluffPart();
         ModStrayModels.laemBreastsPart = new LaemBreastsPart();
@@ -683,6 +689,10 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.PURPLE_HAZE_BLASTWAVE.get(), PurpleHazeSmokeParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.DISTORTION_SMOKE.get(), DistortionSmokeParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.VITAL_ESSENCE.get(), VitalEssenceParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.AUTUMN_LEAVES.get(), AutumnLeavesParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.GINKGO_LEAVES.get(), GinkgoLeavesParticle.Provider::new
+
+        );
     }
 
     @SubscribeEvent

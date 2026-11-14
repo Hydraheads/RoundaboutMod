@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "roundabout:block/ginkgo_slab"
+    },
+    "type=top": {
+      "model": "roundabout:block/ginkgo_slab_top"
+    },
+    "type=double": {
+      "model": "roundabout:block/ginkgo_planks"
+    }
+  }
+}
