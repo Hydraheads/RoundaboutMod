@@ -79,6 +79,18 @@ public class PowersBlackSabbath extends NewDashPreset {
             for (LivingEntity value : fogControlledEntities2) {
                 if (value.isRemoved() || !value.isAlive() || value.isDeadOrDying() || value instanceof Player P && (P.isSpectator() || P.isCreative())) {
                     removeTargetEntities(value);
+                    if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity BE){
+                        if(BE.getGrabbing() != 0){
+                            Entity ent = BE.level().getEntity(BE.getGrabbing());
+                                if(ent != null && ent instanceof LivingEntity LE){
+                                    BE.setMeleeInteractionTicks(-1);
+                                    ((StandUser)LE).roundabout$setGrabbedSoul(false);
+                                    ((StandUser) LE).roundabout$updateSealedTicks(-1);
+                                    BE.killSoul();
+                                    ((StandUser)LE).roundabout$setGrabberSabbath(0);
+                                }
+                        }
+                    }
                 }
             }
         }
@@ -135,6 +147,14 @@ public class PowersBlackSabbath extends NewDashPreset {
             }
             case PowersBlackSabbath.C2S_SYNC_DESTROY_LIST -> {
                 this.clearTargetEntities();
+            }
+            case PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET -> {
+                if(this.getSelf() != null) {
+                    Entity ent = this.getSelf().level().getEntity(data);
+                    if(ent instanceof LivingEntity lent) {
+                        this.removeTargetEntities(lent);
+                    }
+                }
             }
         }
         super.updatePowerInt(activePower,data);
@@ -835,18 +855,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
        // System.out.println(blackSabbathTargets + ". " + test);
        // System.out.println(moveMode + ". " + test);
 
-        //TODO: REWRITE THIS PART BELOW
-    /*    if(EntityTargetOne != null) {
-            DimensionType T = this.getSelf().level().dimensionType();
-            DimensionType t = this.EntityTargetOne.level().dimensionType();
-            if (EntityTargetOne.isRemoved() || !EntityTargetOne.isAlive()) {
-                EntityTargetOne = null;
-                selectTargetNull();
-            } else if(t != T){
-                EntityTargetOne = null;
-                selectTargetNull();
-            }
-        }*/
+        //TODO: REWRITE DIMENSION CHANGING STUFF
 
         if(isClient()){
             StandEntity s = this.getStandEntity(this.getSelf());
@@ -1252,6 +1261,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             this.removeTargetEntities(LE);
             tryIntPower(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET, true, LE.getId());
             tryIntPowerPacket(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET, LE.getId());
+            S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(),PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET, LE.getId());
         }
     }
     public void unselectClient(){

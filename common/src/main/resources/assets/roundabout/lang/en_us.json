@@ -592,6 +592,7 @@
   "item.roundabout.stand_arrow.haveStand": "You already have a stand, to remove it use stand disc",
   "item.roundabout.stand_arrow.acquireStand": "Stand Acquired! Press the summon key!",
   "item.roundabout.stand_arrow.acquireStand_2": "Press the power inventory key to see skills!",
+  "item.roundabout.stand_arrow.acquireStandBlackSabbath": "You followed the path of the chosen! Press the summon key!",
   "item.roundabout.stand_arrow.acquireZombie1": "You have been zombified!",
   "item.roundabout.stand_arrow.acquireVampire1": "You are now a Vampire",
   "item.roundabout.stand_arrow.acquireVampire2": "The Summon Key switches Attack Modes",
@@ -1533,6 +1534,9 @@
   "sounds.roundabout.bs_select_confirm":  "Confirmed targets!",
   "sounds.roundabout.bs_select_cancel":  "Removed all targets!",
   "sounds.roundabout.black_sabbath_emerge":  "Black Sabbath emerges",
+  "sounds.roundabout.bs_hurt":  "Black Sabbath is hurt",
+  "sounds.roundabout.bs_grab":  "Grabbing the soul",
+  "sounds.roundabout.bs_stab":  "Stabbing the soul",
 
   "sounds.roundabout.planet_waves_summon":  "Stand summoned",
   "sounds.roundabout.planet_waves_meteor_shower":  "Meteors Approaching",

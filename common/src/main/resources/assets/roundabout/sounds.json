@@ -1509,6 +1509,24 @@
       "roundabout:bs_select_confirm"
     ]
   },
+  "bs_hurt": {
+    "subtitle": "sounds.roundabout.bs_hurt",
+    "sounds": [
+      "roundabout:bs_hurt"
+    ]
+  },
+  "bs_grab": {
+    "subtitle": "sounds.roundabout.bs_grab",
+    "sounds": [
+      "roundabout:bs_grab"
+    ]
+  },
+  "bs_stab": {
+    "subtitle": "sounds.roundabout.bs_stab",
+    "sounds": [
+      "roundabout:bs_stab"
+    ]
+  },
   "century_boy_summon": {
     "subtitle": "sounds.roundabout.century_boy_summon",
     "sounds": [

@@ -498,6 +498,15 @@ public class ModSounds {
     public static final String BLACK_SABBATH_SELECT_CONFIRM = "bs_select_confirm";
     public static final ResourceLocation BLACK_SABBATH_SELECT_CONFIRM_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BLACK_SABBATH_SELECT_CONFIRM);
     public static SoundEvent BLACK_SABBATH_SELECT_CONFIRM_EVENT = SoundEvent.createVariableRangeEvent(BLACK_SABBATH_SELECT_CONFIRM_ID);
+    public static final String BLACK_SABBATH_HURT = "bs_hurt";
+    public static final ResourceLocation BLACK_SABBATH_HURT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BLACK_SABBATH_HURT);
+    public static SoundEvent BLACK_SABBATH_HURT_EVENT = SoundEvent.createVariableRangeEvent(BLACK_SABBATH_HURT_ID);
+    public static final String BLACK_SABBATH_GRAB = "bs_grab";
+    public static final ResourceLocation BLACK_SABBATH_GRAB_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BLACK_SABBATH_GRAB);
+    public static SoundEvent BLACK_SABBATH_GRAB_EVENT = SoundEvent.createVariableRangeEvent(BLACK_SABBATH_GRAB_ID);
+    public static final String BLACK_SABBATH_STAB = "bs_stab";
+    public static final ResourceLocation BLACK_SABBATH_STAB_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BLACK_SABBATH_STAB);
+    public static SoundEvent BLACK_SABBATH_STAB_EVENT = SoundEvent.createVariableRangeEvent(BLACK_SABBATH_STAB_ID);
 
     public static final String CENTURY_BOY_SUMMON = "century_boy_summon";
     public static final ResourceLocation CENTURY_BOY_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CENTURY_BOY_SUMMON);
