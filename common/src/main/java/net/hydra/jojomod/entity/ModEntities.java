@@ -159,6 +159,8 @@ public class ModEntities {
     public static EntityType<BombPlantedEnderpearl> BOMB_PLANTED_ENDERPEARL;
     public static EntityType<BombPlantedSpectralArrow> BOMB_PLANTED_SPECTRAL_ARROW;
     public static EntityType<VirusSpitEntity> VIRUS_SPIT;
+    public static EntityType<GinkgoBoatEntity> GINKGO_BOAT;
+    public static EntityType<GinkgoChestBoatEntity> GINKGO_CHEST_BOAT;
 
     public static EntityType<IceTwisterEntity> COLD_TWISTER;
     public static EntityType<GentlyWeepsEntity> GENTLY_WEEPS;

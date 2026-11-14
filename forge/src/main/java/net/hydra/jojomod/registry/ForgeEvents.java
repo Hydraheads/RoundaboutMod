@@ -921,6 +921,8 @@ public class ForgeEvents {
         ModParticles.PURPLE_HAZE_BLASTWAVE = ForgeParticles.PURPLE_HAZE_BLASTWAVE.get();
         ModParticles.DISTORTION_SMOKE = ForgeParticles.DISTORTION_SMOKE.get();
         ModParticles.VITAL_ESSENCE = ForgeParticles.VITAL_ESSENCE.get();
+        ModParticles.AUTUMN_LEAVES = ForgeParticles.AUTUMN_LEAVES.get();
+        ModParticles.GINKGO_LEAVES = ForgeParticles.GINKGO_LEAVES.get();
 
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();
@@ -1169,6 +1171,8 @@ public class ForgeEvents {
         ModEntities.LIFE_PUNCH_CLONE = ForgeEntities.LIFE_PUNCH_CLONE.get();
         ModEntities.KING_CRIMSON_PROJECTION = ForgeEntities.KING_CRIMSON_PROJECTION.get();
         ModEntities.DNA_CREATION_SPAWNER = ForgeEntities.DNA_CREATION_SPAWNER.get();
+        ModEntities.GINKGO_BOAT = ForgeEntities.GINKGO_BOAT.get();
+        ModEntities.GINKGO_CHEST_BOAT = ForgeEntities.GINKGO_CHEST_BOAT.get();
 
         ForgeItems.assignStupidForge();
         ConfigManager.loadBlacklists2();

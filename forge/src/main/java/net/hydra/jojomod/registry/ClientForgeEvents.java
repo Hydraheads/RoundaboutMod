@@ -45,6 +45,7 @@ import net.minecraft.client.particle.ExplodeParticle;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.BoatRenderer;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.world.level.FoliageColor;
@@ -297,6 +298,8 @@ public class ClientForgeEvents {
         event.registerBlockEntityRenderer(ForgeBlocks.HALLUCINATORY_ACID_BLOCK_ENTITY.get(),
                 HallucinatoryAcidBlockEntityRenderer::new);
         event.registerEntityRenderer(ForgeEntities.PH_CAPSULE.get(), PHCapsuleRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.GINKGO_BOAT.get(), context -> new GinkgoBoatRenderer(context, false));
+        event.registerEntityRenderer(ForgeEntities.GINKGO_CHEST_BOAT.get(), context -> new GinkgoBoatRenderer(context, true));
     }
 
     @SubscribeEvent
@@ -686,6 +689,10 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.PURPLE_HAZE_BLASTWAVE.get(), PurpleHazeSmokeParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.DISTORTION_SMOKE.get(), DistortionSmokeParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.VITAL_ESSENCE.get(), VitalEssenceParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.AUTUMN_LEAVES.get(), AutumnLeavesParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.GINKGO_LEAVES.get(), GinkgoLeavesParticle.Provider::new
+
+        );
     }
 
     @SubscribeEvent

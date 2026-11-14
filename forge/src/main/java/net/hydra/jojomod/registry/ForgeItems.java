@@ -1231,6 +1231,15 @@ public class ForgeItems {
             addToWIPTab(ITEMS.register("ginkgo_button",
                     () -> new BlockItem(ForgeBlocks.GINKGO_BUTTON.get(),
                             new Item.Properties())));
+    public static final RegistryObject<Item> GINKGO_BOAT =
+            addToWIPTab(ITEMS.register("ginkgo_boat",
+                    () -> new GinkgoBoatItem(false,
+                            new Item.Properties().stacksTo(1))));
+
+    public static final RegistryObject<Item> GINKGO_CHEST_BOAT =
+            addToWIPTab(ITEMS.register("ginkgo_chest_boat",
+                    () -> new GinkgoBoatItem(true,
+                            new Item.Properties().stacksTo(1))));
     public static void assignStupidForge(){
         DispenserBlock.registerBehavior(ForgeItems.KNIFE.get(), DispenserRegistry.KNIFE);
 

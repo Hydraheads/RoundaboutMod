@@ -134,5 +134,8 @@ public class ModParticles {
     public static SimpleParticleType DISTORTION_SMOKE;
     public static ParticleType<HazeColorParticleOptions> PURPLE_HAZE_BLASTWAVE;
 
+    public static SimpleParticleType AUTUMN_LEAVES;
+    public static SimpleParticleType GINKGO_LEAVES;
+
     public static SimpleParticleType VITAL_ESSENCE;
 }

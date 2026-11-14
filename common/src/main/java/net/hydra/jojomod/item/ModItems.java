@@ -340,6 +340,9 @@ public class ModItems {
     public static Item CHERRIES;
     public static Item ZOMBIE_HORSE_THREAD;
 
+    public static Item GINKGO_BOAT;
+    public static Item GINKGO_CHEST_BOAT;
+
     public static CreativeModeTab FOG_BLOCK_ITEMS;
 
     public static ArrayList<StandDiscItem> STAND_ARROW_POOL = Lists.newArrayList();

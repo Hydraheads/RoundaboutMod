@@ -1252,6 +1252,20 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "ph_capsule").toString())
             );
+    public static final RegistryObject<EntityType<GinkgoBoatEntity>> GINKGO_BOAT =
+            ENTITY_TYPES.register("ginkgo_boat", () ->
+                    EntityType.Builder.<GinkgoBoatEntity>of(GinkgoBoatEntity::new, MobCategory.MISC).
+                            sized(1.375F, 0.5625F).
+                            clientTrackingRange(10).
+                            build("roundabout:ginkgo_boat"));
+
+    public static final RegistryObject<EntityType<GinkgoChestBoatEntity>> GINKGO_CHEST_BOAT =
+            ENTITY_TYPES.register("ginkgo_chest_boat", () ->
+                    EntityType.Builder.<GinkgoChestBoatEntity>of(
+                            GinkgoChestBoatEntity::new, MobCategory.MISC).
+                            sized(1.375F, 0.5625F).
+                            clientTrackingRange(10).
+                            build("roundabout:ginkgo_chest_boat"));
     public static final RegistryObject<EntityType<CTRbarrierEntity>> CTR_BARRIER =
             ENTITY_TYPES.register("ctrbarrier", () ->
                     EntityType.Builder.<CTRbarrierEntity>of(CTRbarrierEntity::new, MobCategory.MISC).
