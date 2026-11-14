@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WSW",
+    "WSW"
+  ],
+  "key": {
+    "W": {
+      "item": "roundabout:ginkgo_planks"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "roundabout:ginkgo_fence",
+    "count": 3
+  }
+}

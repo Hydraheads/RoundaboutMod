@@ -225,7 +225,8 @@ public class ModBlocks {
     public static Block AUTUMN_LEAVES;
     public static Block GINKGO_STAIRS;
     public static Block GINKGO_SLAB;
-
+    public static Block GINKGO_FENCE;
+    public static Block GINKGO_FENCE_GATE;
 
     public static Block GAMBLING_TABLE;
     public static final EnumProperty<GamblingTablePart> GAMBLING_TABLE_PART = EnumProperty.create("part", GamblingTablePart.class);
@@ -1239,6 +1240,21 @@ public class ModBlocks {
                     .strength(2.0F, 3.0F)
                     .sound(SoundType.WOOD)
                     .ignitedByLava()
+    );
+    public static Block GINKGO_FENCE_PROPERTIES = new FenceBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.WOOD)
+                    .ignitedByLava()
+    );
+    public static Block GINKGO_FENCE_GATE_PROPERTIES = new FenceGateBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.WOOD)
+                    .ignitedByLava(),
+            WoodType.OAK
     );
     public static List<String> dontGenState = new ArrayList<String>();
     public static List<String> blockBlacklist = Arrays.asList(

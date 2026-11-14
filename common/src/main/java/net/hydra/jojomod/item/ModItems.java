@@ -161,6 +161,8 @@ public class ModItems {
     public static Item AUTUMN_LEAVES;
     public static Item GINKGO_STAIRS;
     public static Item GINKGO_SLAB;
+    public static Item GINKGO_FENCE;
+    public static Item GINKGO_FENCE_GATE;
 
     public static Item CAT_REMAINS;
     public static Item OCELOT_REMAINS;
