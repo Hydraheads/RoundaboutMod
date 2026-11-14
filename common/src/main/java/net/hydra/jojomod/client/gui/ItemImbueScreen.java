@@ -12,6 +12,7 @@ import net.minecraft.client.GameNarrator;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -157,7 +158,7 @@ public class ItemImbueScreen extends Screen {
 
         int scrollBarX = this.leftPos + 175;
         int scrollBarYMin = this.topPos + 18;
-        int scrollBarYMax = this.topPos + 127;
+        int scrollBarYMax = this.topPos + 128;
         int scrollRange = scrollBarYMax - scrollBarYMin - 15;
         int currentScrollY = scrollBarYMin + (int) (this.scrollOffs * scrollRange);
 
@@ -185,7 +186,7 @@ public class ItemImbueScreen extends Screen {
 
             if (isHoveringSlot(slotX, slotY, mouseX, mouseY)) {
                 hoveredOption = option;
-                guiGraphics.fill(slotX, slotY, slotX + 16, slotY + 16, 0x80FFFFFF);
+                AbstractContainerScreen.renderSlotHighlight(guiGraphics, slotX, slotY, 0);
             }
         }
 
@@ -248,7 +249,7 @@ public class ItemImbueScreen extends Screen {
     public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
         if (this.isScrolling) {
             int scrollBarYMin = this.topPos + 18;
-            int scrollBarYMax = this.topPos + 127;
+            int scrollBarYMax = this.topPos + 128;
             int scrollRange = scrollBarYMax - scrollBarYMin - 15;
 
             this.scrollOffs = ((float) mouseY - (float) scrollBarYMin - 7.5F) / (float) scrollRange;
@@ -274,7 +275,7 @@ public class ItemImbueScreen extends Screen {
         int scrollXMin = this.leftPos + 175;
         int scrollXMax = scrollXMin + 12;
         int scrollYMin = this.topPos + 18;
-        int scrollYMax = this.topPos + 127;
+        int scrollYMax = this.topPos + 128;
         return mouseX >= scrollXMin && mouseX <= scrollXMax && mouseY >= scrollYMin && mouseY <= scrollYMax;
     }
 
