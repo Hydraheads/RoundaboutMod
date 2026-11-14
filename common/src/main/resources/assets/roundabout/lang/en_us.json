@@ -269,6 +269,7 @@
   "item.roundabout.tusk_disc.desc": "Tusk",
   "text.roundabout.tusk_nail_color": "Change Nail Color",
   "text.roundabout.killer_queen_remove_stray_cat": "Remove Stray Cat",
+  "text.roundabout.lying_eyes_accesibility": "Lying Eyes Accessibility",
   "item.roundabout.max_tusk_disc.desc": "Tusk",
   "item.roundabout.achtung_baby_disc.desc": "Achtung Baby",
   "item.roundabout.survivor_disc.desc": "Survivor",
@@ -597,6 +598,7 @@
   "item.roundabout.stand_arrow.haveStand": "You already have a stand, to remove it use stand disc",
   "item.roundabout.stand_arrow.acquireStand": "Stand Acquired! Press the summon key!",
   "item.roundabout.stand_arrow.acquireStand_2": "Press the power inventory key to see skills!",
+  "item.roundabout.stand_arrow.acquireStandBlackSabbath": "You followed the path of the chosen! Press the summon key!",
   "item.roundabout.stand_arrow.acquireZombie1": "You have been zombified!",
   "item.roundabout.stand_arrow.acquireVampire1": "You are now a Vampire",
   "item.roundabout.stand_arrow.acquireVampire2": "The Summon Key switches Attack Modes",
@@ -817,7 +819,7 @@
   "entity.roundabout.road_roller_entity": "Road Roller",
   "entity.roundabout.anubis_possessor": "Anubis Possessor",
   "entity.roundabout.anubis_slipstream": "Anubis Slipstream",
-  "entity.roundabout.silver_chariot_rapier": "Rapier",
+  "entity.roundabout.silver_chariot_sword_projectile": "Sword projectile",
   "entity.roundabout.silver_chariot_rapier_platform": "Rapier Platform",
 
   "entity.roundabout.villager_minion": "Zombie Minion",
@@ -971,6 +973,11 @@
   "block.roundabout.ginkgo_fence_gate": "Ginkgo Fence Gate",
   "block.roundabout.ginkgo_pressure_plate": "Ginkgo Pressure Plate",
   "block.roundabout.ginkgo_button": "Ginkgo Button",
+  "item.roundabout.ginkgo_boat": "Ginkgo Boat",
+  "item.roundabout.ginkgo_chest_boat": "Ginkgo Boat with Chest",
+  "entity.roundabout.ginkgo_boat": "Ginkgo Boat",
+  "entity.roundabout.ginkgo_chest_boat": "Ginkgo Boat with Chest",
+  "block.roundabout.ginkgo_fallen_leaves": "Ginkgo Fallen Leaves",
 
   "itemgroup.jojo": "Roundabout",
   "itemgroup.jojo_discs": "Stand Discs",
@@ -1539,6 +1546,9 @@
   "sounds.roundabout.bs_select_confirm":  "Confirmed targets!",
   "sounds.roundabout.bs_select_cancel":  "Removed all targets!",
   "sounds.roundabout.black_sabbath_emerge":  "Black Sabbath emerges",
+  "sounds.roundabout.bs_hurt":  "Black Sabbath is hurt",
+  "sounds.roundabout.bs_grab":  "Grabbing the soul",
+  "sounds.roundabout.bs_stab":  "Stabbing the soul",
 
   "sounds.roundabout.planet_waves_summon":  "Stand summoned",
   "sounds.roundabout.planet_waves_meteor_shower":  "Meteors Approaching",
@@ -2077,6 +2087,7 @@
   "instruction.roundabout.press_skill_phase_item": "Press Skill %1$s While using Phase Item",
   "instruction.roundabout.press_skill_tracking": "Press Skill %1$s While Tracking",
   "instruction.roundabout.press_skill_item": "Press Skill %1$s With A Compatible Item",
+  "instruction.roundabout.press_skill_crouch_block": "Press Skill %1$s While Crouching, and Holding Interact",
 
 
   "ability.roundabout.ice_guard": "Guard",
@@ -2778,9 +2789,9 @@
   "ability.roundabout.silver_chariot_slab_cutting":"Slab Cutting",
   "ability.roundabout.silver_chariot_slab_cutting.desc":"Cuts a slab from a block, if possible.",
   "ability.roundabout.silver_chariot_rapier_slash":"Rapier Slash",
-  "ability.roundabout.silver_chariot_rapier_slash.desc":"",
+  "ability.roundabout.silver_chariot_rapier_slash.desc":"Silver Chariot slashes with it's sword in stand attack range dealing small amount of damage, bleed along with destroying tall grass and fire.",
   "ability.roundabout.silver_chariot_rapier_spin":"Rapier Spin",
-  "ability.roundabout.silver_chariot_rapier_spin.desc":"",
+  "ability.roundabout.silver_chariot_rapier_spin.desc":"Silver Chariot spins it's rapier and intercepts most projectiles, and dealing small damage to entities and large knockback.",
   "ability.roundabout.silver_chariot_offhand_weapon_render":"Offhand Weapon Render/Final attack",
   "ability.roundabout.silver_chariot_offhand_weapon_render.desc":"Silver Chariot renders the user's held item in it's offhand and attacks with it, if the user is not holding an item a final attack is instead charged.",
   "ability.roundabout.silver_chariot_arm_summon":"Arm Summon",
@@ -4763,6 +4774,11 @@
   "config.roundabout.scoleciphobiaMode.desc": "Disables the idle animation of the nematodes in first person.",
   "config.roundabout.scoleciphobiaModeUsing.name": "Scoleciphobia-2 Mode",
   "config.roundabout.scoleciphobiaModeUsing.desc": "Disables the transition animation of the nematodes in first person.",
+  "config.roundabout.liyingEyesColorBlindMode.name": "Color Blind Mode",
+  "config.roundabout.liyingEyesColorBlindMode.desc": "Makes Passive, Neutral and Hostile highlights have different shapes.",
+
+  "config.roundabout.highlightSize.name": "Highlight Size",
+  "config.roundabout.highlightSize.desc": "Set how big the highlight of mobs should be.",
 
   "config.roundabout.disablePHazeOverlayAnimation.name": "Disable Haze Overlay Animation",
   "config.roundabout.disablePHazeOverlayAnimation.desc": "Disables the idle animation of the haze in first person.",

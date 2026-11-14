@@ -41,6 +41,7 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FireBlock;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
@@ -50,6 +51,11 @@ import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.hydra.jojomod.mixin.access.AccessBlockEntityType;
+import net.minecraft.world.level.block.Block;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Collections;
 
 @Mod.EventBusSubscriber(modid = Roundabout.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ForgeEvents {
@@ -176,6 +182,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.GROUND_HURRICANE.get(), GroundHurricaneEntity.createStandAttributes().build());
         event.put(ForgeEntities.TUSK_HOLE.get(), TuskHoleEntity.createStandAttributes().build());
         event.put(ForgeEntities.ANUBIS_POSSESSOR.get(), AnubisPossessorEntity.createStandAttributes().build());
+        event.put(ForgeEntities.SC_MOUNT.get(), SilverChariotMountEntity.createStandAttributes().build());
         event.put(ForgeEntities.COMMAND_DISC_POSSESSION.get(), CommandDiscPossession.createAttributes().build());
         event.put(ForgeEntities.GROUND_BUBBLE.get(), GroundBubbleEntity.createStandAttributes().build());
         event.put(ForgeEntities.LIFE_TRACKER.get(), LifeTrackerEntity.createStandAttributes().build());
@@ -389,6 +396,17 @@ public class ForgeEvents {
         ModBlocks.GINKGO_WALL_SIGN = ForgeBlocks.GINKGO_WALL_SIGN.get();
         ModBlocks.GINKGO_HANGING_SIGN  = ForgeBlocks.GINKGO_HANGING_SIGN .get();
         ModBlocks.GINKGO_WALL_HANGING_SIGN = ForgeBlocks.GINKGO_WALL_HANGING_SIGN.get();
+        addSupportedBlocks(
+                BlockEntityType.SIGN,
+                ModBlocks.GINKGO_SIGN,
+                ModBlocks.GINKGO_WALL_SIGN
+        );
+
+        addSupportedBlocks(
+                BlockEntityType.HANGING_SIGN,
+                ModBlocks.GINKGO_HANGING_SIGN,
+                ModBlocks.GINKGO_WALL_HANGING_SIGN
+        );
         ModBlocks.GINKGO_TRAPDOOR  = ForgeBlocks.GINKGO_TRAPDOOR .get();
         ModBlocks.AUTUMN_LEAVES  = ForgeBlocks.AUTUMN_LEAVES .get();
         ModBlocks.GINKGO_STAIRS  = ForgeBlocks.GINKGO_STAIRS .get();
@@ -397,6 +415,10 @@ public class ForgeEvents {
         ModBlocks.GINKGO_FENCE_GATE  = ForgeBlocks.GINKGO_FENCE_GATE.get();
         ModBlocks.GINKGO_PRESSURE_PLATE  = ForgeBlocks.GINKGO_PRESSURE_PLATE.get();
         ModBlocks.GINKGO_BUTTON  = ForgeBlocks.GINKGO_BUTTON.get();
+        ModBlocks.GINKGO_FALLEN_LEAVES  = ForgeBlocks.GINKGO_FALLEN_LEAVES .get();
+        ModItems.GINKGO_BOAT = ForgeItems.GINKGO_BOAT.get();
+        ModItems.GINKGO_CHEST_BOAT = ForgeItems.GINKGO_CHEST_BOAT.get();
+
         ModBlocks.ORANGE_FIRE = ForgeBlocks.ORANGE_FIRE.get();
         ModBlocks.BLUE_FIRE = ForgeBlocks.BLUE_FIRE.get();
         ModBlocks.PURPLE_FIRE = ForgeBlocks.PURPLE_FIRE.get();
@@ -705,6 +727,7 @@ public class ForgeEvents {
         ModBlocks.GINKGO_FENCE_GATE = ForgeBlocks.GINKGO_FENCE_GATE.get();
         ModBlocks.GINKGO_PRESSURE_PLATE = ForgeBlocks.GINKGO_PRESSURE_PLATE.get();
         ModBlocks.GINKGO_BUTTON = ForgeBlocks.GINKGO_BUTTON.get();
+        ModBlocks.GINKGO_FALLEN_LEAVES = ForgeBlocks.GINKGO_FALLEN_LEAVES.get();
 
         ModItems.CAT_REMAINS = ForgeItems.CAT_REMAINS.get();
         ModItems.OCELOT_REMAINS = ForgeItems.OCELOT_REMAINS.get();
@@ -923,6 +946,8 @@ public class ForgeEvents {
         ModParticles.DISTORTION_SMOKE = ForgeParticles.DISTORTION_SMOKE.get();
         ModParticles.PUZZLE_PARTICLE = ForgeParticles.PUZZLE_PARTICLE.get();
         ModParticles.VITAL_ESSENCE = ForgeParticles.VITAL_ESSENCE.get();
+        ModParticles.AUTUMN_LEAVES = ForgeParticles.AUTUMN_LEAVES.get();
+        ModParticles.GINKGO_LEAVES = ForgeParticles.GINKGO_LEAVES.get();
 
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();
@@ -1054,7 +1079,7 @@ public class ForgeEvents {
         ModEntities.GE_BUTTERFLY = ForgeEntities.GE_BUTTERFLY.get();
         ModEntities.SILVER_CHARIOT = ForgeEntities.SILVER_CHARIOT.get();
         ModEntities.SILVER_CHARIOT_PHARAOH = ForgeEntities.SILVER_CHARIOT_PHARAOH.get();
-        ModEntities.SILVER_CHARIOT_RAPIER = ForgeEntities.SILVER_CHARIOT_RAPIER.get();
+        ModEntities.SILVER_CHARIOT_SWORD_PROJECTILE = ForgeEntities.SILVER_CHARIOT_SWORD_PROJECTILE.get();
         ModEntities.SILVER_CHARIOT_RAPIER_PLATFORM = ForgeEntities.SILVER_CHARIOT_RAPIER_PLATFORM.get();
         ModEntities.SC_MOUNT = ForgeEntities.SC_MOUNT.get();
         ModEntities.THROWN_HARPOON = ForgeEntities.THROWN_HARPOON.get();
@@ -1173,6 +1198,8 @@ public class ForgeEvents {
         ModEntities.LIFE_PUNCH_CLONE = ForgeEntities.LIFE_PUNCH_CLONE.get();
         ModEntities.KING_CRIMSON_PROJECTION = ForgeEntities.KING_CRIMSON_PROJECTION.get();
         ModEntities.DNA_CREATION_SPAWNER = ForgeEntities.DNA_CREATION_SPAWNER.get();
+        ModEntities.GINKGO_BOAT = ForgeEntities.GINKGO_BOAT.get();
+        ModEntities.GINKGO_CHEST_BOAT = ForgeEntities.GINKGO_CHEST_BOAT.get();
 
         ForgeItems.assignStupidForge();
         ConfigManager.loadBlacklists2();
@@ -1180,7 +1207,17 @@ public class ForgeEvents {
         ConfigManager.foodParticleParser();
         MinecraftForge.EVENT_BUS.addListener(ForgeEvents::onVillagerTrades);
     }
+    private static void addSupportedBlocks(BlockEntityType<?> type, Block... blocks) {
+        AccessBlockEntityType accessor = (AccessBlockEntityType) type;
 
+        Set<Block> validBlocks = new HashSet<>(
+                accessor.roundabout$getValidBlocks()
+        );
+
+        Collections.addAll(validBlocks, blocks);
+
+        accessor.roundabout$setValidBlocks(validBlocks);
+    }
     /**
     @SubscribeEvent
     public static void commonSetup(FMLCommonSetupEvent event) {

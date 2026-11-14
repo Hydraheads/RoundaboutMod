@@ -297,6 +297,10 @@ public class ClientConfig implements Cloneable {
         public Boolean scoleciphobiaMode;
         @BooleanOption(group = "inherit", value = false)
         public Boolean scoleciphobiaModeUsing;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean liyingEyesColorBlindMode;
+        @FloatOption(group = "inherit", value = 0.7F, min = 0, max = 1)
+        public Float highlightSize;
         @FloatOption(group = "inherit", value = 1F, min = 0, max = 1)
         public Float nematodeOpacity;
         @FloatOption(group = "inherit", value = 1F, min = 0, max = 1)

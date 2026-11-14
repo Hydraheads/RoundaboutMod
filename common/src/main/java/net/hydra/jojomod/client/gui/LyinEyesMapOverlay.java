@@ -27,11 +27,11 @@ public class LyinEyesMapOverlay {
     private static final int ARROW_U = 10, ARROW_V = 0;
     private static final int SOLID_U = 0, SOLID_V = 0;
     private static final int LIQUID_U = 0, LIQUID_V = 8;
-    private static final int OUTLINE_U = 56, HOSTILE_OUTLINE_V = 24, NEUTRAL_OUTLINE_V = 12, PASSIVE_OUTLINE_V = 0;
+    private static final int OUTLINE_U = 56, HOSTILE_OUTLINE_V = 24, NEUTRAL_OUTLINE_V = 12, PASSIVE_OUTLINE_V = 0, GENERIC_OUTLINE_U = 68;
     private static final int CHEST_U = 32, CHEST_V = 0;
     private static final int PLUS_U = 51, PLUS_V = 7;
     private static final int MINUS_U = 51, MINUS_V = 19;
-    private static final int BASE_MOB_U = 20, PASSIVE_MOB_V = 0, NEUTRAL_MOB_V = 12, HOSTILE_MOB_V = 24;
+    private static final int BASE_MOB_U = 20, PASSIVE_MOB_V = 0, NEUTRAL_MOB_V = 12, HOSTILE_MOB_V = 24, GENERIC_MOB_V = 24;
 
     public static void renderMap(GuiGraphics guiGraphics, float partialTick) {
         Minecraft mc = Minecraft.getInstance();
@@ -103,28 +103,30 @@ public class LyinEyesMapOverlay {
                     if (target.type == LyinEyesScanner.TargetType.CONTAINER) {
                         guiGraphics.blit(MAP_ICONS, targetDrawX, targetDrawY, 9, 9, CHEST_U, CHEST_V, TEX_HIGHLIGHTER_ICON_SIZE, TEX_HIGHLIGHTER_ICON_SIZE, 256, 256);
                     } else {
-                        int outlineV;
-                        int baseV;
+                        int outlineV = PASSIVE_OUTLINE_V;
+                        int baseV = PASSIVE_MOB_V;
+                        int outlineU = OUTLINE_U;
 
-                        if (target.type == LyinEyesScanner.TargetType.HOSTILE) {
-                            // red outline
-                            outlineV = HOSTILE_OUTLINE_V;
-                            baseV = HOSTILE_MOB_V;
-                        } else if (target.type == LyinEyesScanner.TargetType.NEUTRAL) {
-                            // yellow outline
-                            outlineV = NEUTRAL_OUTLINE_V;
-                            baseV = NEUTRAL_MOB_V;
-                        } else {
-                            // green outline
-                            outlineV = PASSIVE_OUTLINE_V;
-                            baseV = PASSIVE_MOB_V;
+                        if (ConfigManager.getClientConfig().lyinEyesSettings.liyingEyesColorBlindMode) {
+                            if (target.type == LyinEyesScanner.TargetType.HOSTILE) {
+                                // red outline
+                                outlineV = HOSTILE_OUTLINE_V;
+                                baseV = HOSTILE_MOB_V;
+                            } else if (target.type == LyinEyesScanner.TargetType.NEUTRAL) {
+                                // yellow outline
+                                outlineV = NEUTRAL_OUTLINE_V;
+                                baseV = NEUTRAL_MOB_V;
+                            }
+                        }else {
+                            outlineU = GENERIC_OUTLINE_U;
+                            baseV = GENERIC_MOB_V;
                         }
 
                         // neutral base drawing
                         guiGraphics.blit(MAP_ICONS, targetDrawX, targetDrawY, 9, 9, BASE_MOB_U, baseV, TEX_HIGHLIGHTER_ICON_SIZE, TEX_HIGHLIGHTER_ICON_SIZE, 256, 256);
 
                         // put the outline over the normal thing
-                        guiGraphics.blit(MAP_ICONS, targetDrawX, targetDrawY, 9, 9, OUTLINE_U, outlineV, TEX_HIGHLIGHTER_ICON_SIZE, TEX_HIGHLIGHTER_ICON_SIZE, 256, 256);
+                        guiGraphics.blit(MAP_ICONS, targetDrawX, targetDrawY, 9, 9, outlineU, outlineV, TEX_HIGHLIGHTER_ICON_SIZE, TEX_HIGHLIGHTER_ICON_SIZE, 256, 256);
                     }
 
                     // draw the + or -

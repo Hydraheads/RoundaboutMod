@@ -91,6 +91,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // move bytes found in other moves
     public static final byte ITEM_IMBUE = 62;
 
+    // for healing
+    private boolean hasHealed = false;
+    private int healTargetId = -1;
+
     // for life punch
     private LifePunchCloneEntity lifePunchClone = null;
     private LivingEntity lifePunchVictim = null;
@@ -1236,8 +1240,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             this.attackTimeMax = ClientNetworking.getAppropriateConfig().generalStandSettings.finalStandPunchInStringCooldown;
             this.setActivePower(PowerIndex.SNEAK_ATTACK);
             this.setAttackTime(0);
-
-            // TODO: animations lol
+            this.animateStand(GoldExperienceEntity.DOUBLE_PUNCH);
             poseStand(OffsetIndex.ATTACK);
             return true;
         }
@@ -1436,7 +1439,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
         if (Objects.nonNull(stand)) {
             this.setAttackTimeDuring(0);
             this.setActivePower(BRAMBLES);
-            //animate stand here
+            this.animateStand(GoldExperienceEntity.GROUND_PUNCH);
             this.poseStand(OffsetIndex.ATTACK);
             return true;
         }
@@ -1511,9 +1514,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
     private boolean startHealWindup() {
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)) {
+            this.hasHealed = false;
+            this.healTargetId = -1;
             this.setAttackTimeDuring(0);
             this.setActivePower(HEAL);
-            //animate stand here
+            this.animateStand(GoldExperienceEntity.HEAL_WINDUP);
             this.poseStand(OffsetIndex.GUARD);
             return true;
         }
@@ -1522,16 +1527,34 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     private void updateHeal() {
         if (this.attackTimeDuring > -1) {
-            if (this.attackTimeDuring > 9) {
+            if (this.attackTimeDuring == 15) {
+                startHealAnimation();
+            }
+            if (this.attackTimeDuring >= 22 && !this.hasHealed) {
                 finishHeal();
             }
         }
     }
 
-    private void finishHeal(){
+    private void startHealAnimation() {
         if (!this.self.level().isClientSide()) {
             Entity target = MainUtil.getTargetEntity(this.getSelf(), 5f);
-            if (target instanceof LivingEntity livingHeal && livingHeal != null) {
+            if (target instanceof LivingEntity livingHeal) {
+                this.healTargetId = livingHeal.getId();
+                this.animateStand(GoldExperienceEntity.HEAL_OTHERS);
+            } else {
+                this.healTargetId = -1;
+                this.animateStand(GoldExperienceEntity.HEAL_SELF);
+            }
+        }
+    }
+
+    private void finishHeal() {
+        if (!this.self.level().isClientSide()) {
+            this.hasHealed = true;
+            Entity lockedTarget = this.healTargetId != -1 ? this.self.level().getEntity(this.healTargetId) : null;
+
+            if (lockedTarget instanceof LivingEntity livingHeal && livingHeal.isAlive()) {
                 // for healing others
                 livingHeal.heal(1f);
                 livingHeal.addEffect(new MobEffectInstance(ModEffects.RECONSTRUCTION, 400, 0, false, true, true));
@@ -1542,7 +1565,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 this.self.addEffect(new MobEffectInstance(ModEffects.RECONSTRUCTION, 400, 0, false, true, true));
                 playSoundIfPossible(this.self.level(), this.self, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
             }
-            this.setAttackTimeDuring(-5);
+            this.setAttackTimeDuring(-20);
         }
     }
 

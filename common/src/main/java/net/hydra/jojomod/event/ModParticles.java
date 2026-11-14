@@ -137,5 +137,8 @@ public class ModParticles {
 
     public static ParticleType<PuzzleColorParticleOptions> PUZZLE_PARTICLE;
 
+    public static SimpleParticleType AUTUMN_LEAVES;
+    public static SimpleParticleType GINKGO_LEAVES;
+
     public static SimpleParticleType VITAL_ESSENCE;
 }

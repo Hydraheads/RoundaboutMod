@@ -1196,14 +1196,19 @@ public class ForgeItems {
                             new Item.Properties())));
     public static final RegistryObject<BlockItem> GINKGO_SIGN_ITEM =
             addToWIPTab(ITEMS.register("ginkgo_sign",
-                    () -> new BlockItem(ForgeBlocks.GINKGO_SIGN.get(),
-                            new Item.Properties())));
+                    () -> new SignItem(
+                            new Item.Properties().stacksTo(16),
+                            ForgeBlocks.GINKGO_SIGN.get(),
+                            ForgeBlocks.GINKGO_WALL_SIGN.get()
+                    )));
 
     public static final RegistryObject<BlockItem> GINKGO_HANGING_SIGN_ITEM =
             addToWIPTab(ITEMS.register("ginkgo_hanging_sign",
-                    () -> new BlockItem(ForgeBlocks.GINKGO_HANGING_SIGN.get(),
-                            new Item.Properties())));
-
+                    () -> new HangingSignItem(
+                            ForgeBlocks.GINKGO_HANGING_SIGN.get(),
+                            ForgeBlocks.GINKGO_WALL_HANGING_SIGN.get(),
+                            new Item.Properties().stacksTo(16)
+                    )));
     public static final RegistryObject<BlockItem> GINKGO_TRAPDOOR_ITEM =
             addToWIPTab(ITEMS.register("ginkgo_trapdoor",
                     () -> new BlockItem(ForgeBlocks.GINKGO_TRAPDOOR.get(),
@@ -1235,6 +1240,19 @@ public class ForgeItems {
     public static final RegistryObject<BlockItem> GINKGO_BUTTON_ITEM =
             addToWIPTab(ITEMS.register("ginkgo_button",
                     () -> new BlockItem(ForgeBlocks.GINKGO_BUTTON.get(),
+                            new Item.Properties())));
+    public static final RegistryObject<Item> GINKGO_BOAT =
+            addToWIPTab(ITEMS.register("ginkgo_boat",
+                    () -> new GinkgoBoatItem(false,
+                            new Item.Properties().stacksTo(1))));
+
+    public static final RegistryObject<Item> GINKGO_CHEST_BOAT =
+            addToWIPTab(ITEMS.register("ginkgo_chest_boat",
+                    () -> new GinkgoBoatItem(true,
+                            new Item.Properties().stacksTo(1))));
+    public static final RegistryObject<BlockItem> GINKGO_FALLEN_LEAVES_ITEM =
+            addToWIPTab(ITEMS.register("ginkgo_fallen_leaves",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_FALLEN_LEAVES.get(),
                             new Item.Properties())));
     public static void assignStupidForge(){
         DispenserBlock.registerBehavior(ForgeItems.KNIFE.get(), DispenserRegistry.KNIFE);

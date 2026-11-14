@@ -113,7 +113,7 @@ public class FabricParticles {
     public static final ParticleType<HazeColorParticleOptions> PURPLE_HAZE_SMOKE =
             new net.minecraft.core.particles.ParticleType<>(false, HazeColorParticleOptions.DESERIALIZER) {
                 @Override
-                public com.mojang.serialization.Codec<HazeColorParticleOptions> codec() {
+                public Codec<HazeColorParticleOptions> codec() {
                     return HazeColorParticleOptions.codec(this);
                 }
             };
@@ -121,10 +121,12 @@ public class FabricParticles {
     public static final ParticleType<HazeColorParticleOptions> PURPLE_HAZE_BLASTWAVE =
             new net.minecraft.core.particles.ParticleType<>(false, HazeColorParticleOptions.DESERIALIZER) {
                 @Override
-                public com.mojang.serialization.Codec<HazeColorParticleOptions> codec() {
+                public Codec<HazeColorParticleOptions> codec() {
                     return HazeColorParticleOptions.codec(this);
                 }
             };
+    public static final SimpleParticleType AUTUMN_LEAVES = FabricParticleTypes.simple();
+    public static final SimpleParticleType GINKGO_LEAVES = FabricParticleTypes.simple();
 
     public static final ParticleType<PuzzleColorParticleOptions> PUZZLE_PARTICLE =
             new ParticleType<>(false, PuzzleColorParticleOptions.DESERIALIZER) {
@@ -250,6 +252,9 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("purple_haze_blastwave"), PURPLE_HAZE_BLASTWAVE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("kn_piece"), PUZZLE_PARTICLE);
 
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("autumn_leaves"), AUTUMN_LEAVES);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("ginkgo_leaves"), GINKGO_LEAVES);
+
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("road_roller_explosion"), ROAD_ROLLER_EXPLOSION);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("road_roller_smoke"), ROAD_ROLLER_SMOKE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("road_roller_scrap"), ROAD_ROLLER_SCRAP);
@@ -368,6 +373,9 @@ public class FabricParticles {
         ModParticles.PURPLE_HAZE_BLASTWAVE = PURPLE_HAZE_BLASTWAVE;
 
         ModParticles.PUZZLE_PARTICLE = PUZZLE_PARTICLE;
+
+        ModParticles.AUTUMN_LEAVES = AUTUMN_LEAVES;
+        ModParticles.GINKGO_LEAVES = GINKGO_LEAVES;
 
         ModParticles.ROAD_ROLLER_EXPLOSION = ROAD_ROLLER_EXPLOSION;
         ModParticles.ROAD_ROLLER_SMOKE = ROAD_ROLLER_SMOKE;

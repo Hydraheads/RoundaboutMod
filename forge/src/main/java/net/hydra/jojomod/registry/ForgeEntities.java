@@ -825,21 +825,21 @@ public class ForgeEntities {
                     .build(Roundabout.MOD_ID + ":ge_butterfly"));
     public static final RegistryObject<EntityType<SilverChariotEntity>> SILVER_CHARIOT =
             ENTITY_TYPES.register("silver_chariot", () ->
-                    EntityType.Builder.of(SilverChariotEntity::new, MobCategory.MISC).sized(0.75f, 2.05f).
+                    EntityType.Builder.of(SilverChariotEntity::new, MobCategory.MISC).sized(SilverChariotEntity.eWidth, SilverChariotEntity.eHeight).
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot").toString())
             );
     public static final RegistryObject<EntityType<SilverChariotEntity>> SILVER_CHARIOT_PHARAOH =
             ENTITY_TYPES.register("silver_chariot_pharaoh", () ->
-                    EntityType.Builder.of(SilverChariotEntity::new, MobCategory.MISC).sized(0.75f, 2.05f).
+                    EntityType.Builder.of(SilverChariotEntity::new, MobCategory.MISC).sized(SilverChariotEntity.eWidth, SilverChariotEntity.eHeight).
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_pharaoh").toString())
             );
-    public static final RegistryObject<EntityType<SilverChariotRapierShotEntity>> SILVER_CHARIOT_RAPIER =
-            ENTITY_TYPES.register("silver_chariot_rapier", () ->
-                    EntityType.Builder.<SilverChariotRapierShotEntity>of(SilverChariotRapierShotEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).
+    public static final RegistryObject<EntityType<SilverChariotSwordProjectile>> SILVER_CHARIOT_SWORD_PROJECTILE =
+            ENTITY_TYPES.register("silver_chariot_sword_projectile", () ->
+                    EntityType.Builder.<SilverChariotSwordProjectile>of(SilverChariotSwordProjectile::new, MobCategory.MISC).sized(0.5f, 0.5f).
                             clientTrackingRange(16).
-                            build(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_rapier").toString())
+                            build(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_sword_projectile").toString())
             );
     public static final RegistryObject<EntityType<SilverChariotRapierPlatformEntity>> SILVER_CHARIOT_RAPIER_PLATFORM =
             ENTITY_TYPES.register("silver_chariot_rapier_platform", () ->
@@ -849,7 +849,7 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<SilverChariotMountEntity>> SC_MOUNT =
             ENTITY_TYPES.register("sc_mount", () ->
-                    EntityType.Builder.<SilverChariotMountEntity>of(SilverChariotMountEntity::new, MobCategory.MISC).sized(0.6f, 2f).
+                    EntityType.Builder.<SilverChariotMountEntity>of(SilverChariotMountEntity::new, MobCategory.MISC).sized((float) SilverChariotMountEntity.eWidth, (float) SilverChariotMountEntity.eHeight).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "sc_mount").toString())
             );
@@ -1258,6 +1258,20 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "ph_capsule").toString())
             );
+    public static final RegistryObject<EntityType<GinkgoBoatEntity>> GINKGO_BOAT =
+            ENTITY_TYPES.register("ginkgo_boat", () ->
+                    EntityType.Builder.<GinkgoBoatEntity>of(GinkgoBoatEntity::new, MobCategory.MISC).
+                            sized(1.375F, 0.5625F).
+                            clientTrackingRange(10).
+                            build("roundabout:ginkgo_boat"));
+
+    public static final RegistryObject<EntityType<GinkgoChestBoatEntity>> GINKGO_CHEST_BOAT =
+            ENTITY_TYPES.register("ginkgo_chest_boat", () ->
+                    EntityType.Builder.<GinkgoChestBoatEntity>of(
+                            GinkgoChestBoatEntity::new, MobCategory.MISC).
+                            sized(1.375F, 0.5625F).
+                            clientTrackingRange(10).
+                            build("roundabout:ginkgo_chest_boat"));
     public static final RegistryObject<EntityType<CTRbarrierEntity>> CTR_BARRIER =
             ENTITY_TYPES.register("ctrbarrier", () ->
                     EntityType.Builder.<CTRbarrierEntity>of(CTRbarrierEntity::new, MobCategory.MISC).
