@@ -227,6 +227,8 @@ public class ModBlocks {
     public static Block GINKGO_SLAB;
     public static Block GINKGO_FENCE;
     public static Block GINKGO_FENCE_GATE;
+    public static Block GINKGO_PRESSURE_PLATE;
+    public static Block GINKGO_BUTTON;
 
     public static Block GAMBLING_TABLE;
     public static final EnumProperty<GamblingTablePart> GAMBLING_TABLE_PART = EnumProperty.create("part", GamblingTablePart.class);
@@ -1255,6 +1257,25 @@ public class ModBlocks {
                     .sound(SoundType.WOOD)
                     .ignitedByLava(),
             WoodType.OAK
+    );
+    public static Block GINKGO_PRESSURE_PLATE_PROPERTIES = new GinkgoPressurePlateBlock(
+            PressurePlateBlock.Sensitivity.EVERYTHING,
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.WOOD)
+                    .ignitedByLava(),
+            BlockSetType.OAK
+    );
+    public static Block GINKGO_BUTTON_PROPERTIES = new GinkgoButtonBlock(
+            BlockBehaviour.Properties.of()
+                    .noCollission()
+                    .strength(0.5F)
+                    .sound(SoundType.WOOD)
+                    .ignitedByLava(),
+            BlockSetType.OAK,
+            30,
+            true
     );
     public static List<String> dontGenState = new ArrayList<String>();
     public static List<String> blockBlacklist = Arrays.asList(

@@ -1223,6 +1223,14 @@ public class ForgeItems {
             addToWIPTab(ITEMS.register("ginkgo_fence_gate",
                     () -> new BlockItem(ForgeBlocks.GINKGO_FENCE_GATE.get(),
                             new Item.Properties())));
+    public static final RegistryObject<BlockItem> GINKGO_PRESSURE_PLATE_ITEM =
+            addToWIPTab(ITEMS.register("ginkgo_pressure_plate",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_PRESSURE_PLATE.get(),
+                            new Item.Properties())));
+    public static final RegistryObject<BlockItem> GINKGO_BUTTON_ITEM =
+            addToWIPTab(ITEMS.register("ginkgo_button",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_BUTTON.get(),
+                            new Item.Properties())));
     public static void assignStupidForge(){
         DispenserBlock.registerBehavior(ForgeItems.KNIFE.get(), DispenserRegistry.KNIFE);
 

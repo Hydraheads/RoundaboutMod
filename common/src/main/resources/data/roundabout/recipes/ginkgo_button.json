@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "roundabout:ginkgo_planks"
+    }
+  ],
+  "result": {
+    "item": "roundabout:ginkgo_button",
+    "count": 1
+  }
+}

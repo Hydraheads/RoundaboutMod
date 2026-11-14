@@ -464,6 +464,10 @@ public class ForgeBlocks {
             () -> GINKGO_FENCE_PROPERTIES);
     public static final RegistryObject<Block> GINKGO_FENCE_GATE = BLOCKS.register("ginkgo_fence_gate",
             () -> GINKGO_FENCE_GATE_PROPERTIES);
+    public static final RegistryObject<Block> GINKGO_PRESSURE_PLATE = BLOCKS.register("ginkgo_pressure_plate",
+            () -> GINKGO_PRESSURE_PLATE_PROPERTIES);
+    public static final RegistryObject<Block> GINKGO_BUTTON = BLOCKS.register("ginkgo_button",
+            () -> GINKGO_BUTTON_PROPERTIES);
 
     public static final RegistryObject<BlockEntityType<OasisMudBlockEntity>> OASIS_MUD_BLOCK_ENTITY = BLOCK_ENTITIES.register("oasis_mud_block",
             () -> BlockEntityType.Builder.of(OasisMudBlockEntity::new, OASIS_MUD_BLOCK.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "oasis_mud_block")));
