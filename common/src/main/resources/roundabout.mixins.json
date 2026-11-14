@@ -424,6 +424,7 @@
     "items.FirearmItemInHandMixin",
     "items.FirearmItemRendererMixin",
     "items.FirearmMinecraftStartAttackMixin",
+    "items.GEItemDisguiseMixin",
     "items.RoadRollerItemInHandMixin",
     "items.RoadRollerItemRendererMixin",
     "items.RoadRollerPlayerRendererMixin",

@@ -2858,8 +2858,10 @@
   "ability.roundabout.gold_experience_lifeform_creation.desc": "Create a mob that you chose with Lifeform Selection. This mob will reflect all damage done to it, except from you.",
   "ability.roundabout.gold_experience_item_throw": "Lifeform Creation (Thrown)",
   "ability.roundabout.gold_experience_item_throw.desc": "Grabs the item you are holding in your inventory to throw. Upon landing, the item transforms into your selected lifeform.",
-  "ability.roundabout.gold_experience_tree growth": "Tree Growth",
+  "ability.roundabout.gold_experience_tree_growth": "Tree Growth",
   "ability.roundabout.gold_experience_tree_growth.desc": "Grow a barren tree from the ground. This tree lets you ride on it to the top, or parkour up it's branches. Enemies that hit the tree will have the damage reflected back to them.",
+  "ability.roundabout.gold_experience_item_imbue": "Item Imbue",
+  "ability.roundabout.gold_experience_item_imbue.desc": "This move opens a menu that lets you imbue an item with life energy. This lets you give unique properties to the item, such as being able to turn the item into an animal, root enemies in place, and disguise the item.",
 
   "ability.roundabout.emperor_shoot": "Shoot",
   "ability.roundabout.emperor_shoot.desc": "Shoot a bullet from the emperor.",
@@ -3784,10 +3786,12 @@
   "roundabout.gold_experience_item_imbue.animal.desc": "Transforms into an animal when used.",
   "roundabout.gold_experience_item_imbue.tree": "Tree Imbue",
   "roundabout.gold_experience_item_imbue.tree.desc": "Roots enemies when used.",
+  "roundabout.gold_experience_item_imbue.disguise": "Disguise: %s",
+  "roundabout.gold_experience_item_imbue.disguise.desc": "Disguises the held item as this item.",
 
   "tooltip.roundabout.ge_imbue.animal": "Imbued with Life Energy (%s)",
   "tooltip.roundabout.ge_imbue.tree": "Imbued with Life Energy (Tree)",
-  "tooltip.roundabout.ge_imbue.disguise": "Imbued with Life Energy (Disguise)",
+  "tooltip.roundabout.ge_imbue.disguise": "(Disguised as %s)",
 
   "roundabout.pose.giorno": "Requiem",
   "roundabout.pose.joseph": "Bloody Stream",

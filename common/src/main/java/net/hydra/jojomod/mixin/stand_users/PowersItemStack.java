@@ -32,6 +32,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -89,8 +90,16 @@ public class PowersItemStack {
             lines.add(1, Component.translatable("tooltip.roundabout.ge_imbue.tree")
                     .withStyle(ChatFormatting.GOLD));
         } else if (imbueType == PowersGoldExperience.IMBUE_DISGUISE) {
-            lines.add(1, Component.translatable("tooltip.roundabout.ge_imbue.disguise")
-                    .withStyle(ChatFormatting.GOLD));
+            ItemStack fake = PowersGoldExperience.getDisguisedDisplayStack(self);
+            if (!fake.isEmpty()) {
+                lines.clear();
+                lines.addAll(fake.getTooltipLines(player, flag));
+            }
+            // the user can see the real item that way they don't get shot in the head by their own banana gun
+            if (player != null && imbue.hasUUID("Owner") && player.getUUID().equals(imbue.getUUID("Owner"))) {
+                lines.add(1, Component.translatable("tooltip.roundabout.ge_imbue.disguise", self.getItem().getDescription())
+                        .withStyle(ChatFormatting.GOLD));
+            }
         }
     }
 
@@ -136,6 +145,15 @@ public class PowersItemStack {
                 PowersGoldExperience.tryActivateImbuedItem(player, self);
             }
             cir.setReturnValue(InteractionResult.sidedSuccess(level.isClientSide()));
+        }
+    }
+
+    @Inject(method = "getHoverName", at = @At("HEAD"), cancellable = true)
+    private void roundabout$disguiseHoverName(CallbackInfoReturnable<Component> cir) {
+        ItemStack self = (ItemStack) (Object) this;
+        ItemStack fake = PowersGoldExperience.getDisguisedDisplayStack(self);
+        if (!fake.isEmpty()) {
+            cir.setReturnValue(fake.getHoverName());
         }
     }
 
