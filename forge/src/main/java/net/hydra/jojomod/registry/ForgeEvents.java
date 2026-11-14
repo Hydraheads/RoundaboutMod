@@ -395,6 +395,8 @@ public class ForgeEvents {
         ModBlocks.AUTUMN_LEAVES  = ForgeBlocks.AUTUMN_LEAVES .get();
         ModBlocks.GINKGO_STAIRS  = ForgeBlocks.GINKGO_STAIRS .get();
         ModBlocks.GINKGO_SLAB  = ForgeBlocks.GINKGO_SLAB .get();
+        ModBlocks.GINKGO_FENCE  = ForgeBlocks.GINKGO_FENCE.get();
+        ModBlocks.GINKGO_FENCE_GATE  = ForgeBlocks.GINKGO_FENCE_GATE.get();
         ModBlocks.ORANGE_FIRE = ForgeBlocks.ORANGE_FIRE.get();
         ModBlocks.BLUE_FIRE = ForgeBlocks.BLUE_FIRE.get();
         ModBlocks.PURPLE_FIRE = ForgeBlocks.PURPLE_FIRE.get();
@@ -697,6 +699,8 @@ public class ForgeEvents {
         ModBlocks.AUTUMN_LEAVES = ForgeBlocks.AUTUMN_LEAVES.get();
         ModBlocks.GINKGO_STAIRS = ForgeBlocks.GINKGO_STAIRS.get();
         ModBlocks.GINKGO_SLAB = ForgeBlocks.GINKGO_SLAB.get();
+        ModBlocks.GINKGO_FENCE = ForgeBlocks.GINKGO_FENCE.get();
+        ModBlocks.GINKGO_FENCE_GATE = ForgeBlocks.GINKGO_FENCE_GATE.get();
 
         ModItems.CAT_REMAINS = ForgeItems.CAT_REMAINS.get();
         ModItems.OCELOT_REMAINS = ForgeItems.OCELOT_REMAINS.get();

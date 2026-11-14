@@ -961,6 +961,8 @@
   "block.roundabout.autumn_leaves": "Autumn Leaves",
   "block.roundabout.ginkgo_stairs": "Ginkgo Stairs",
   "block.roundabout.ginkgo_slab": "Ginkgo Slab",
+  "block.roundabout.ginkgo_fence": "Ginkgo Fence",
+  "block.roundabout.ginkgo_fence_gate": "Ginkgo Fence Gate",
 
   "itemgroup.jojo": "Roundabout",
   "itemgroup.jojo_discs": "Stand Discs",

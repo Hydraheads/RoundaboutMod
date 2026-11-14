@@ -1207,7 +1207,22 @@ public class ForgeItems {
             addToWIPTab(ITEMS.register("autumn_leaves",
                     () -> new BlockItem(ForgeBlocks.AUTUMN_LEAVES.get(),
                             new Item.Properties())));
-
+    public static final RegistryObject<BlockItem> GINKGO_STAIRS_ITEM =
+            addToWIPTab(ITEMS.register("ginkgo_stairs",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_STAIRS.get(),
+                            new Item.Properties())));
+    public static final RegistryObject<BlockItem> GINKGO_SLAB_ITEM =
+            addToWIPTab(ITEMS.register("ginkgo_slab",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_SLAB.get(),
+                            new Item.Properties())));
+    public static final RegistryObject<BlockItem> GINKGO_FENCE_ITEM =
+            addToWIPTab(ITEMS.register("ginkgo_fence",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_FENCE.get(),
+                            new Item.Properties())));
+    public static final RegistryObject<BlockItem> GINKGO_FENCE_GATE_ITEM =
+            addToWIPTab(ITEMS.register("ginkgo_fence_gate",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_FENCE_GATE.get(),
+                            new Item.Properties())));
     public static void assignStupidForge(){
         DispenserBlock.registerBehavior(ForgeItems.KNIFE.get(), DispenserRegistry.KNIFE);
 
