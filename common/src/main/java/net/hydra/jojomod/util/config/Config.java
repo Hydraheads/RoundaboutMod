@@ -1553,6 +1553,10 @@ public class Config implements Cloneable {
         public Integer silverChariotArmourShedStandSealTime;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer silverChariotSelfCarryModeMaxHoverCharge;
+        @FloatOption(group = "inherit", value = 2.1F, min = 0, max = 72000F)
+        public Float bonusPlayerDMGArmSummon;
+        @FloatOption(group = "inherit", value = 6.0F, min = 0, max = 72000F)
+        public Float bonusMobDMGArmSummon;
     }
 
     public static class CatchTheRainbowSettings {

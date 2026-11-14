@@ -128,7 +128,7 @@ public class ModEntities {
     public static EntityType<GEButterflyEntity> GE_BUTTERFLY;
     public static EntityType<SilverChariotEntity> SILVER_CHARIOT;
     public static EntityType<SilverChariotEntity> SILVER_CHARIOT_PHARAOH;
-    public static EntityType<SilverChariotRapierShotEntity> SILVER_CHARIOT_RAPIER;
+    public static EntityType<SilverChariotSwordProjectile> SILVER_CHARIOT_SWORD_PROJECTILE;
     public static EntityType<SilverChariotRapierPlatformEntity> SILVER_CHARIOT_RAPIER_PLATFORM;
     public static EntityType<SilverChariotMountEntity> SC_MOUNT;
     public static EntityType<HarpoonEntity> THROWN_HARPOON;
