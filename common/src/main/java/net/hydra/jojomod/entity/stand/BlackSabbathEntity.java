@@ -1643,7 +1643,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         if(grab != null && grab instanceof LivingEntity l){
             StandPowers sp = ((StandUser)l).roundabout$getStandPowers();
             StandEntity s = sp.getNewStandEntity();
-            boolean regSoul = s == null && (!(sp instanceof PowersBadCompany) && !(sp instanceof PowersBlackSabbath));
+            boolean regSoul = s == null && (!(sp instanceof PowersBadCompany)) && (!(sp instanceof PowersBlackSabbath));
             if(!regSoul) {
                 if (s != null) {
                     return s;
