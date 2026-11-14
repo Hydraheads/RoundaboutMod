@@ -2865,7 +2865,7 @@
   "ability.roundabout.gold_experience_tree_growth": "Tree Growth",
   "ability.roundabout.gold_experience_tree_growth.desc": "Grow a barren tree from the ground. This tree lets you ride on it to the top, or parkour up it's branches. Enemies that hit the tree will have the damage reflected back to them.",
   "ability.roundabout.gold_experience_item_imbue": "Item Imbue",
-  "ability.roundabout.gold_experience_item_imbue.desc": "This move opens a menu that lets you imbue an item with life energy. This lets you give unique properties to the item, such as being able to turn the item into an animal, root enemies in place, and disguise the item.",
+  "ability.roundabout.gold_experience_item_imbue.desc": "This move opens a menu that lets you imbue an item with life energy. This lets you give unique properties to the item, such as being able to turn the item into an animal, root enemies in place, and disguise the item. Only 1 item may be imbued at a time.",
   "ability.roundabout.gold_experience_life_sensor": "Life Sensor",
   "ability.roundabout.gold_experience_life_sensor.desc": "Gold experience scans the nearby area for lifeforms. If someone has an imbued item on them, you will be able to see their aura from a lot further away.",
 
@@ -3797,7 +3797,7 @@
 
   "tooltip.roundabout.ge_imbue.animal": "Imbued with Life Energy (%s)",
   "tooltip.roundabout.ge_imbue.tree": "Imbued with Life Energy (Tree)",
-  "tooltip.roundabout.ge_imbue.disguise": "(Disguised as %s)",
+  "tooltip.roundabout.ge_imbue.disguise": "(Original Item: %s)",
 
   "roundabout.pose.giorno": "Requiem",
   "roundabout.pose.joseph": "Bloody Stream",
