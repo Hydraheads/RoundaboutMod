@@ -148,7 +148,7 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
         }
         (this.model).setAlpha(mobEntity.fadePercent);
 
-        if (mobEntity.fadePercent <= 0){
+        if (mobEntity.fadePercent <= 0  || maxfade <= 0){
             return;
         }
 
