@@ -1130,7 +1130,7 @@ public class ModBlocks {
                     .pushReaction(PushReaction.DESTROY)
                     .isRedstoneConductor((state, level, pos) -> false)
     );
-    public static Block GINKGO_WOOD_PROPERTIES = new Block(
+    public static Block GINKGO_WOOD_PROPERTIES = new RotatedPillarBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOD)
                     .instrument(NoteBlockInstrument.BASS)
@@ -1138,7 +1138,7 @@ public class ModBlocks {
                     .sound(SoundType.WOOD)
                     .ignitedByLava()
     );
-    public static Block STRIPPED_GINKGO_WOOD_PROPERTIES = new Block(
+    public static Block STRIPPED_GINKGO_WOOD_PROPERTIES = new RotatedPillarBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOD)
                     .instrument(NoteBlockInstrument.BASS)

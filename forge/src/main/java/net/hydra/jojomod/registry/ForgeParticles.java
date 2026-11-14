@@ -372,6 +372,10 @@ public class ForgeParticles {
                     return HazeColorParticleOptions.codec(this);
                 }
             });
+    public static final RegistryObject<SimpleParticleType> AUTUMN_LEAVES = PARTICLES.register(
+            "autumn_leaves",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> RAGING_LIGHT = PARTICLES.register(
             "raging_light",
             () -> new SimpleParticleType(true)

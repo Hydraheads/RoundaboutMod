@@ -1,6 +1,7 @@
 package net.hydra.jojomod.registry;
 
 import com.mojang.datafixers.types.Type;
+import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFireBlock;
@@ -580,6 +581,15 @@ public class FabricBlocks {
         ModBlocks.GINKGO_PLANKS = GINKGO_PLANKS;
         ModBlocks.GINKGO_LEAVES = GINKGO_LEAVES;
         ModBlocks.GINKGO_WOOD = GINKGO_WOOD;
+        StrippableBlockRegistry.register(
+                GINKGO_LOG,
+                STRIPPED_GINKGO_LOG
+        );
+
+        StrippableBlockRegistry.register(
+                GINKGO_WOOD,
+                STRIPPED_GINKGO_WOOD
+        );
         ModBlocks.STRIPPED_GINKGO_LOG = STRIPPED_GINKGO_LOG;
         ModBlocks.STRIPPED_GINKGO_WOOD = STRIPPED_GINKGO_WOOD;
         ModBlocks.GINKGO_SAPLING = GINKGO_SAPLING;

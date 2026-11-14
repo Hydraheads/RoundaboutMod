@@ -123,6 +123,7 @@ public class FabricParticles {
                     return HazeColorParticleOptions.codec(this);
                 }
             };
+    public static final SimpleParticleType AUTUMN_LEAVES = FabricParticleTypes.simple();
 
     public static final SimpleParticleType DUST_CRUMBLE = FabricParticleTypes.simple();
     public static final SimpleParticleType FIRE_CRUMBLE = FabricParticleTypes.simple();
@@ -238,6 +239,8 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("purple_haze_smoke"), PURPLE_HAZE_SMOKE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("distortion_smoke"), DISTORTION_SMOKE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("purple_haze_blastwave"), PURPLE_HAZE_BLASTWAVE);
+
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("autumn_leaves"), AUTUMN_LEAVES);
 
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("road_roller_explosion"), ROAD_ROLLER_EXPLOSION);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("road_roller_smoke"), ROAD_ROLLER_SMOKE);
@@ -355,6 +358,8 @@ public class FabricParticles {
         ModParticles.PURPLE_HAZE_SMOKE = PURPLE_HAZE_SMOKE;
         ModParticles.DISTORTION_SMOKE = DISTORTION_SMOKE;
         ModParticles.PURPLE_HAZE_BLASTWAVE = PURPLE_HAZE_BLASTWAVE;
+
+        ModParticles.AUTUMN_LEAVES = AUTUMN_LEAVES;
 
         ModParticles.ROAD_ROLLER_EXPLOSION = ROAD_ROLLER_EXPLOSION;
         ModParticles.ROAD_ROLLER_SMOKE = ROAD_ROLLER_SMOKE;

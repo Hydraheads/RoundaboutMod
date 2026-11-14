@@ -1,9 +1,13 @@
 
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.event.ModParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -210,17 +214,49 @@ public class AutumnLeavesBlock extends BushBlock {
             }
         }
     }
+    @Override
+    public void animateTick(BlockState state, Level level,
+                            BlockPos pos, RandomSource random) {
 
+        super.animateTick(state, level, pos, random);
+
+        if (state.getValue(COOLDOWN)) {
+            return;
+        }
+
+        for (int i = 0; i < 3; i++) {
+
+            double x = pos.getX() + random.nextDouble();
+            double y = pos.getY() + 0.1;
+            double z = pos.getZ() + random.nextDouble();
+
+            level.addParticle(
+                    ModParticles.AUTUMN_LEAVES,
+                    x, y, z,
+                    0.0, 0.025, 0.0
+            );
+        }
+    }
 
     @Override
     public void tick(BlockState state, ServerLevel level,
                      BlockPos pos, RandomSource random) {
 
         if (state.getValue(COOLDOWN)) {
+
             level.setBlock(
                     pos,
                     state.setValue(COOLDOWN, false),
                     3
+            );
+
+            level.playSound(
+                    null,
+                    pos,
+                    SoundEvents.AMETHYST_BLOCK_CHIME,
+                    SoundSource.BLOCKS,
+                    0.7F,
+                    1.2F
             );
         }
     }

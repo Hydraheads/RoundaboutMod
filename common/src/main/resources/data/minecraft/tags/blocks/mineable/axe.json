@@ -3,6 +3,10 @@
   "values": [
     "roundabout:regal_wall",
     "roundabout:regal_floor",
-    "roundabout:wooden_manor_table"
+    "roundabout:wooden_manor_table",
+    "roundabout:ginkgo_log",
+    "roundabout:ginkgo_wood",
+    "roundabout:stripped_ginkgo_log",
+    "roundabout:stripped_ginkgo_wood"
   ]
 }
