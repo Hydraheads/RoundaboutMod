@@ -146,7 +146,9 @@ public class AutumnLeavesBlock extends BushBlock {
                         nextZ
                 );
 
-                boolean isLeaves = level.getBlockState(feetPos)
+                // Ignore the Autumn Leaves block that launched the entity.
+                boolean isLeaves = !feetPos.equals(pos)
+                        && level.getBlockState(feetPos)
                         .getBlock() instanceof AutumnLeavesBlock;
 
                 if (hasGround || isLeaves) {
@@ -176,6 +178,7 @@ public class AutumnLeavesBlock extends BushBlock {
 
             currentY = nextY;
 
+            // Allow players to collect items along the path.
             if (entity instanceof ItemEntity itemEntity) {
 
                 AABB pickupBox = entity.getBoundingBox().move(
@@ -187,7 +190,7 @@ public class AutumnLeavesBlock extends BushBlock {
                 for (Player player : level.getEntitiesOfClass(
                         Player.class, pickupBox)) {
 
-                    if (player.isSpectator()) {
+                    if (player.isSpectator() || !player.isAlive()) {
                         continue;
                     }
 
@@ -205,9 +208,13 @@ public class AutumnLeavesBlock extends BushBlock {
                     nextZ
             );
 
+            BlockState leavesState = level.getBlockState(leavesPos);
+
+            // Only stop at a different, charged Autumn Leaves block.
+            // This allows combos without stopping at the original block.
             if (!leavesPos.equals(pos)
-                    && level.getBlockState(leavesPos)
-                    .getBlock() instanceof AutumnLeavesBlock) {
+                    && leavesState.getBlock() instanceof AutumnLeavesBlock
+                    && !leavesState.getValue(COOLDOWN)) {
 
                 lastSafeX = leavesPos.getX() + 0.5;
                 lastSafeY = currentY;
