@@ -178,6 +178,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.GROUND_HURRICANE.get(), GroundHurricaneEntity.createStandAttributes().build());
         event.put(ForgeEntities.TUSK_HOLE.get(), TuskHoleEntity.createStandAttributes().build());
         event.put(ForgeEntities.ANUBIS_POSSESSOR.get(), AnubisPossessorEntity.createStandAttributes().build());
+        event.put(ForgeEntities.SC_MOUNT.get(), SilverChariotMountEntity.createStandAttributes().build());
         event.put(ForgeEntities.COMMAND_DISC_POSSESSION.get(), CommandDiscPossession.createAttributes().build());
         event.put(ForgeEntities.GROUND_BUBBLE.get(), GroundBubbleEntity.createStandAttributes().build());
         event.put(ForgeEntities.LIFE_TRACKER.get(), LifeTrackerEntity.createStandAttributes().build());
@@ -1002,7 +1003,7 @@ public class ForgeEvents {
         ModEntities.GE_BUTTERFLY = ForgeEntities.GE_BUTTERFLY.get();
         ModEntities.SILVER_CHARIOT = ForgeEntities.SILVER_CHARIOT.get();
         ModEntities.SILVER_CHARIOT_PHARAOH = ForgeEntities.SILVER_CHARIOT_PHARAOH.get();
-        ModEntities.SILVER_CHARIOT_RAPIER = ForgeEntities.SILVER_CHARIOT_RAPIER.get();
+        ModEntities.SILVER_CHARIOT_SWORD_PROJECTILE = ForgeEntities.SILVER_CHARIOT_SWORD_PROJECTILE.get();
         ModEntities.SILVER_CHARIOT_RAPIER_PLATFORM = ForgeEntities.SILVER_CHARIOT_RAPIER_PLATFORM.get();
         ModEntities.SC_MOUNT = ForgeEntities.SC_MOUNT.get();
         ModEntities.THROWN_HARPOON = ForgeEntities.THROWN_HARPOON.get();

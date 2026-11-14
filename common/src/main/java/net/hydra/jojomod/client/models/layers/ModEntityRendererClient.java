@@ -94,7 +94,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation GE_BRAMBLE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "ge_bramble"), "main");
     public static final ModelLayerLocation SILVER_CHARIOT_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot"), "main");
     public static final ModelLayerLocation SILVER_CHARIOT_PHARAOH_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_pharaoh"), "main");
-    public static final ModelLayerLocation SILVER_CHARIOT_RAPIER_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_rapier"), "main");
+    public static final ModelLayerLocation SILVER_CHARIOT_SWORD_PROJECTILE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_sword_projectile"), "main");
     public static final ModelLayerLocation SILVER_CHARIOT_RAPIER_PLATFORM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_rapier_platform"), "main");
     public static final ModelLayerLocation HARPOON_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "harpoon"), "main");
     //public static final ModelLayerLocation CHESSBOARD_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "chessboard"), "main");

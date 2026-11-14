@@ -493,6 +493,9 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         SU.roundabout$getWornStandAnimation().stop();
                     }
                 }
+                if (SU.roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PowerTypes.hasStandActive(P) && PSC.hasHandsOut()) {
+
+                }
                 if (SU.roundabout$hasSpringLegs() && !P.isPassenger() && !P.isSleeping()) {
                     this.leftLeg.resetPose();
                     this.rightLeg.resetPose();

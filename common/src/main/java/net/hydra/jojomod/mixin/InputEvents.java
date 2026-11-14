@@ -281,6 +281,16 @@ public abstract class InputEvents implements IInputEvents {
                 }
             }
 
+            // Silver Chariot's arm should render over the player and functions as a sword.
+            /*
+            if (powers instanceof PowersSilverChariot PSC) {
+                if (PSC.getArmSummonActive()) {
+                    ci.setReturnValue(false);
+                    return;
+                }
+            }
+            */
+
             if (powers.isPiloting()){
                 ci.setReturnValue(false);
                 powers.pilotInputAttack();
@@ -516,6 +526,14 @@ public abstract class InputEvents implements IInputEvents {
                 if (powers instanceof Powers20thCenturyBoy PCB){
                     if (PCB.invincibleState) ci.cancel(); return;
                 }
+                /*
+                if (powers instanceof PowersSilverChariot PSC) {
+                    if (PSC.getArmSummonActive()) {
+                        ci.cancel();
+                        return;
+                    }
+                }
+                */
 
 
                 if (powers.isPiloting()){

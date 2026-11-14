@@ -6259,6 +6259,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             roundabout$setDiverDownVanishTicks(roundabout$getDiverDownVanishTicks() - 1);
         }
 
+        if (roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PowerTypes.hasStandActive(rdbt$this()) && PSC.hasHandsOut()) {
+
+        }
+
         /** RattShoulder fade ticks */
         if (PowerTypes.hasStandActive(rdbt$this()) && roundabout$getStandPowers() instanceof PowersRatt &&
                 !((PowersRatt) roundabout$getStandPowers()).isPlaced()) {
