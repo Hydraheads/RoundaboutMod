@@ -3734,7 +3734,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     @Unique
     public boolean roundabout$isSealed() {
-        return roundabout$sealedTicks > -1 || (rdbt$this() instanceof Player PE && PE.isSpectator());
+        return roundabout$sealedTicks > -1 || (rdbt$this() instanceof Player PE && PE.isSpectator()) || roundabout$getGrabbedSoul();
     }
 
     @Override
@@ -5537,7 +5537,22 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if(this.roundabout$getGrabberSabbath() != 0){
             Entity z = this.level().getEntity(roundabout$getGrabberSabbath());
             if(z != null && z instanceof BlackSabbathEntity be){
-                if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser) e).roundabout$updateSealedTicks(-1);be.killSoul();((StandUser)e).roundabout$setGrabberSabbath(0);}
+                if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);/*((StandUser) e).roundabout$updateSealedTicks(-1)*/;be.killSoul();((StandUser)e).roundabout$setGrabberSabbath(0);}
+            }
+        }
+
+        if(this.roundabout$getStandPowers() instanceof PowersBlackSabbath pbs){
+            if (pbs.getStandEntity(pbs.self) != null && pbs.getStandEntity(pbs.self) instanceof BlackSabbathEntity BE) {
+                if (BE.getGrabbing() != 0) {
+                    Entity ent = BE.level().getEntity(BE.getGrabbing());
+                    if (ent != null && ent instanceof LivingEntity LE) {
+                        BE.setMeleeInteractionTicks(-1);
+                        ((StandUser) LE).roundabout$setGrabbedSoul(false);
+                        //((StandUser) LE).roundabout$updateSealedTicks(-1);
+                        BE.killSoul();
+                        ((StandUser) LE).roundabout$setGrabberSabbath(0);
+                    }
+                }
             }
         }
 
