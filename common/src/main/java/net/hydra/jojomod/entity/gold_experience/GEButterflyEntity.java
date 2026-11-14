@@ -66,14 +66,14 @@ public class GEButterflyEntity extends Butterfly implements GELifeform {
                 this.lifespan--;
                 gotoTarget();
             } else {
-                revertToItem();
+                this.die(this.damageSources().generic());
             }
         }
     }
 
     private void gotoTarget() {
         if (this.horizontalCollision || this.verticalCollision) {
-            revertToItem();
+            this.die(this.damageSources().generic());
             return;
         }
 
@@ -98,7 +98,7 @@ public class GEButterflyEntity extends Butterfly implements GELifeform {
 
             // reverts into an item once it reaches the cursor target position
             if (this.position().distanceToSqr(this.targetPos) <= 1.44D) {
-                revertToItem();
+                this.die(this.damageSources().generic());
             }
         } else {
             // lobotomizes the bee if there's no target
@@ -106,20 +106,6 @@ public class GEButterflyEntity extends Butterfly implements GELifeform {
                 this.getNavigation().stop();
                 this.setDeltaMovement(Vec3.ZERO);
             }
-        }
-    }
-
-    private void revertToItem() {
-        if (!this.level().isClientSide()) {
-            if (!this.sourceItem.isEmpty()) {
-                ItemEntity itemEntity = new ItemEntity(
-                        this.level(),
-                        this.getX(), this.getY(), this.getZ(),
-                        this.sourceItem.copy()
-                );
-                this.level().addFreshEntity(itemEntity);
-            }
-            this.discard();
         }
     }
 
