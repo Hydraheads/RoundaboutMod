@@ -178,6 +178,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.GROUND_HURRICANE.get(), GroundHurricaneEntity.createStandAttributes().build());
         event.put(ForgeEntities.TUSK_HOLE.get(), TuskHoleEntity.createStandAttributes().build());
         event.put(ForgeEntities.ANUBIS_POSSESSOR.get(), AnubisPossessorEntity.createStandAttributes().build());
+        event.put(ForgeEntities.SC_MOUNT.get(), SilverChariotMountEntity.createStandAttributes().build());
         event.put(ForgeEntities.COMMAND_DISC_POSSESSION.get(), CommandDiscPossession.createAttributes().build());
         event.put(ForgeEntities.GROUND_BUBBLE.get(), GroundBubbleEntity.createStandAttributes().build());
         event.put(ForgeEntities.LIFE_TRACKER.get(), LifeTrackerEntity.createStandAttributes().build());
@@ -222,7 +223,7 @@ public class ForgeEvents {
                 ForgeEntities.BUTTERFLY.get(),
                 SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                Butterfly::checkMobSpawnRules,
+                Butterfly::canSpawn,
                 SpawnPlacementRegisterEvent.Operation.OR
         );
     }
@@ -393,6 +394,14 @@ public class ForgeEvents {
         ModBlocks.GINKGO_WALL_HANGING_SIGN = ForgeBlocks.GINKGO_WALL_HANGING_SIGN.get();
         ModBlocks.GINKGO_TRAPDOOR  = ForgeBlocks.GINKGO_TRAPDOOR .get();
         ModBlocks.AUTUMN_LEAVES  = ForgeBlocks.AUTUMN_LEAVES .get();
+        ModBlocks.GINKGO_STAIRS  = ForgeBlocks.GINKGO_STAIRS .get();
+        ModBlocks.GINKGO_SLAB  = ForgeBlocks.GINKGO_SLAB .get();
+        ModBlocks.GINKGO_FENCE  = ForgeBlocks.GINKGO_FENCE.get();
+        ModBlocks.GINKGO_FENCE_GATE  = ForgeBlocks.GINKGO_FENCE_GATE.get();
+        ModBlocks.GINKGO_PRESSURE_PLATE  = ForgeBlocks.GINKGO_PRESSURE_PLATE.get();
+        ModBlocks.GINKGO_BUTTON  = ForgeBlocks.GINKGO_BUTTON.get();
+        ModBlocks.GINKGO_FALLEN_LEAVES  = ForgeBlocks.GINKGO_FALLEN_LEAVES .get();
+
         ModBlocks.ORANGE_FIRE = ForgeBlocks.ORANGE_FIRE.get();
         ModBlocks.BLUE_FIRE = ForgeBlocks.BLUE_FIRE.get();
         ModBlocks.PURPLE_FIRE = ForgeBlocks.PURPLE_FIRE.get();
@@ -693,6 +702,13 @@ public class ForgeEvents {
         ModBlocks.GINKGO_WALL_HANGING_SIGN = ForgeBlocks.GINKGO_WALL_HANGING_SIGN.get();
         ModBlocks.GINKGO_TRAPDOOR = ForgeBlocks.GINKGO_TRAPDOOR.get();
         ModBlocks.AUTUMN_LEAVES = ForgeBlocks.AUTUMN_LEAVES.get();
+        ModBlocks.GINKGO_STAIRS = ForgeBlocks.GINKGO_STAIRS.get();
+        ModBlocks.GINKGO_SLAB = ForgeBlocks.GINKGO_SLAB.get();
+        ModBlocks.GINKGO_FENCE = ForgeBlocks.GINKGO_FENCE.get();
+        ModBlocks.GINKGO_FENCE_GATE = ForgeBlocks.GINKGO_FENCE_GATE.get();
+        ModBlocks.GINKGO_PRESSURE_PLATE = ForgeBlocks.GINKGO_PRESSURE_PLATE.get();
+        ModBlocks.GINKGO_BUTTON = ForgeBlocks.GINKGO_BUTTON.get();
+        ModBlocks.GINKGO_FALLEN_LEAVES = ForgeBlocks.GINKGO_FALLEN_LEAVES.get();
 
         ModItems.CAT_REMAINS = ForgeItems.CAT_REMAINS.get();
         ModItems.OCELOT_REMAINS = ForgeItems.OCELOT_REMAINS.get();
@@ -909,6 +925,8 @@ public class ForgeEvents {
         ModParticles.PURPLE_HAZE_BLASTWAVE = ForgeParticles.PURPLE_HAZE_BLASTWAVE.get();
         ModParticles.DISTORTION_SMOKE = ForgeParticles.DISTORTION_SMOKE.get();
         ModParticles.VITAL_ESSENCE = ForgeParticles.VITAL_ESSENCE.get();
+        ModParticles.AUTUMN_LEAVES = ForgeParticles.AUTUMN_LEAVES.get();
+        ModParticles.GINKGO_LEAVES = ForgeParticles.GINKGO_LEAVES.get();
 
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();
@@ -1038,7 +1056,7 @@ public class ForgeEvents {
         ModEntities.GE_BUTTERFLY = ForgeEntities.GE_BUTTERFLY.get();
         ModEntities.SILVER_CHARIOT = ForgeEntities.SILVER_CHARIOT.get();
         ModEntities.SILVER_CHARIOT_PHARAOH = ForgeEntities.SILVER_CHARIOT_PHARAOH.get();
-        ModEntities.SILVER_CHARIOT_RAPIER = ForgeEntities.SILVER_CHARIOT_RAPIER.get();
+        ModEntities.SILVER_CHARIOT_SWORD_PROJECTILE = ForgeEntities.SILVER_CHARIOT_SWORD_PROJECTILE.get();
         ModEntities.SILVER_CHARIOT_RAPIER_PLATFORM = ForgeEntities.SILVER_CHARIOT_RAPIER_PLATFORM.get();
         ModEntities.SC_MOUNT = ForgeEntities.SC_MOUNT.get();
         ModEntities.THROWN_HARPOON = ForgeEntities.THROWN_HARPOON.get();
@@ -1157,6 +1175,8 @@ public class ForgeEvents {
         ModEntities.LIFE_PUNCH_CLONE = ForgeEntities.LIFE_PUNCH_CLONE.get();
         ModEntities.KING_CRIMSON_PROJECTION = ForgeEntities.KING_CRIMSON_PROJECTION.get();
         ModEntities.DNA_CREATION_SPAWNER = ForgeEntities.DNA_CREATION_SPAWNER.get();
+        ModEntities.GINKGO_BOAT = ForgeEntities.GINKGO_BOAT.get();
+        ModEntities.GINKGO_CHEST_BOAT = ForgeEntities.GINKGO_CHEST_BOAT.get();
 
         ForgeItems.assignStupidForge();
         ConfigManager.loadBlacklists2();

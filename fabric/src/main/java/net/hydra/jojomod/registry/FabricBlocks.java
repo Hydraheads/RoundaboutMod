@@ -1,6 +1,7 @@
 package net.hydra.jojomod.registry;
 
 import com.mojang.datafixers.types.Type;
+import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFireBlock;
@@ -338,6 +339,13 @@ public class FabricBlocks {
             registerBlockItemless("ginkgo_wall_hanging_sign", ModBlocks.GINKGO_WALL_HANGING_SIGN_PROPERTIES);
     public static final Block GINKGO_TRAPDOOR = registerBlock("ginkgo_trapdoor",ModBlocks.GINKGO_TRAPDOOR_PROPERTIES);
     public static final Block AUTUMN_LEAVES = registerBlock("autumn_leaves",ModBlocks.AUTUMN_LEAVES_PROPERTIES);
+    public static final Block GINKGO_STAIRS = registerBlock("ginkgo_stairs",ModBlocks.GINKGO_STAIRS_PROPERTIES);
+    public static final Block GINKGO_SLAB = registerBlock("ginkgo_slab",ModBlocks.GINKGO_SLAB_PROPERTIES);
+    public static final Block GINKGO_FENCE = registerBlock("ginkgo_fence",ModBlocks.GINKGO_FENCE_PROPERTIES);
+    public static final Block GINKGO_FENCE_GATE = registerBlock("ginkgo_fence_gate",ModBlocks.GINKGO_FENCE_GATE_PROPERTIES);
+    public static final Block GINKGO_PRESSURE_PLATE = registerBlock("ginkgo_pressure_plate",ModBlocks.GINKGO_PRESSURE_PLATE_PROPERTIES);
+    public static final Block GINKGO_BUTTON = registerBlock("ginkgo_button",ModBlocks.GINKGO_BUTTON_PROPERTIES);
+    public static final Block GINKGO_FALLEN_LEAVES = registerBlock("ginkgo_fallen_leaves",ModBlocks.GINKGO_FALLEN_LEAVES_PROPERTIES);
 
     private static <T extends BlockEntity> BlockEntityType<T> registerBE(String $$0, BlockEntityType.Builder<T> $$1) {
         Type<?> $$2 = Util.fetchChoiceType(References.BLOCK_ENTITY, $$0);
@@ -574,6 +582,15 @@ public class FabricBlocks {
         ModBlocks.GINKGO_PLANKS = GINKGO_PLANKS;
         ModBlocks.GINKGO_LEAVES = GINKGO_LEAVES;
         ModBlocks.GINKGO_WOOD = GINKGO_WOOD;
+        StrippableBlockRegistry.register(
+                GINKGO_LOG,
+                STRIPPED_GINKGO_LOG
+        );
+
+        StrippableBlockRegistry.register(
+                GINKGO_WOOD,
+                STRIPPED_GINKGO_WOOD
+        );
         ModBlocks.STRIPPED_GINKGO_LOG = STRIPPED_GINKGO_LOG;
         ModBlocks.STRIPPED_GINKGO_WOOD = STRIPPED_GINKGO_WOOD;
         ModBlocks.GINKGO_SAPLING = GINKGO_SAPLING;
@@ -585,6 +602,13 @@ public class FabricBlocks {
         ModBlocks.GINKGO_WALL_HANGING_SIGN = GINKGO_WALL_HANGING_SIGN;
         ModBlocks.GINKGO_TRAPDOOR = GINKGO_TRAPDOOR;
         ModBlocks.AUTUMN_LEAVES = AUTUMN_LEAVES;
+        ModBlocks.GINKGO_STAIRS = GINKGO_STAIRS;
+        ModBlocks.GINKGO_SLAB = GINKGO_SLAB;
+        ModBlocks.GINKGO_FENCE = GINKGO_FENCE;
+        ModBlocks.GINKGO_FENCE_GATE = GINKGO_FENCE_GATE;
+        ModBlocks.GINKGO_PRESSURE_PLATE = GINKGO_PRESSURE_PLATE;
+        ModBlocks.GINKGO_BUTTON = GINKGO_BUTTON;
+        ModBlocks.GINKGO_FALLEN_LEAVES = GINKGO_FALLEN_LEAVES;
 
         //ModBlocks.CHESSBOARD_BLOCK = CHESSBOARD_BLOCK;
 

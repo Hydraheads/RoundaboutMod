@@ -1203,6 +1203,10 @@ public class StandIcons {
             "textures/gui/icons/gold_experience/item_throw.png");
     public static final ResourceLocation GOLD_EXPERIENCE_TREE_GROWTH = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/gold_experience/tree_growth.png");
+    public static final ResourceLocation GOLD_EXPERIENCE_ITEM_IMBUE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/gold_experience/item_imbue.png");
+    public static final ResourceLocation GOLD_EXPERIENCE_LIFE_SENSOR = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/gold_experience/life_sensor.png");
 
     // gold experience icons end
 

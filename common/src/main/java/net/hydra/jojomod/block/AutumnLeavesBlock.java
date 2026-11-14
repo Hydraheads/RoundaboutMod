@@ -1,9 +1,13 @@
 
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.event.ModParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -77,7 +81,6 @@ public class AutumnLeavesBlock extends BushBlock {
     }
 
 
-
     @Override
     public void entityInside(BlockState state, Level level,
                              BlockPos pos, Entity entity) {
@@ -86,12 +89,7 @@ public class AutumnLeavesBlock extends BushBlock {
             return;
         }
 
-        level.setBlock(
-                pos,
-                state.setValue(COOLDOWN, true),
-                3
-        );
-
+        level.setBlock(pos, state.setValue(COOLDOWN, true), 3);
         level.scheduleTick(pos, this, COOLDOWN_TICKS);
 
         Direction direction = state.getValue(FACING);
@@ -100,71 +98,143 @@ public class AutumnLeavesBlock extends BushBlock {
         double startY = entity.getY();
         double startZ = entity.getZ();
 
+        double currentY = startY;
+
         double lastSafeX = startX;
+        double lastSafeY = startY;
         double lastSafeZ = startZ;
 
-        double step = 0.25;
+        boolean shouldFall = false;
 
-        for (double distance = step;
-             distance <= 12.0;
-             distance += step) {
+        for (int distance = 1; distance <= TRAVEL_DISTANCE; distance++) {
 
             double nextX = startX + direction.getStepX() * distance;
             double nextZ = startZ + direction.getStepZ() * distance;
 
-            AABB nextBox = entity.getBoundingBox().move(
-                    nextX - startX,
-                    0,
-                    nextZ - startZ
-            );
+            boolean foundValidPosition = false;
+            double nextY = currentY;
 
-            if (!level.noCollision(entity, nextBox)) {
+            double[] heightOffsets = {0.0, 1.0, -1.0};
+
+            for (double offset : heightOffsets) {
+
+                double candidateY = currentY + offset;
+
+                AABB candidateBox = entity.getBoundingBox().move(
+                        nextX - startX,
+                        candidateY - startY,
+                        nextZ - startZ
+                );
+
+                if (!level.noCollision(entity, candidateBox)) {
+                    continue;
+                }
+
+                AABB floorBox = candidateBox.move(0, -0.1, 0);
+
+                boolean hasGround = !level.noCollision(entity, floorBox);
+
+                BlockPos feetPos = BlockPos.containing(
+                        nextX,
+                        candidateY + 0.01,
+                        nextZ
+                );
+
+                boolean isLeaves = level.getBlockState(feetPos)
+                        .getBlock() instanceof AutumnLeavesBlock;
+
+                if (hasGround || isLeaves) {
+                    nextY = candidateY;
+                    foundValidPosition = true;
+                    break;
+                }
+            }
+
+            if (!foundValidPosition) {
+
+                AABB forwardBox = entity.getBoundingBox().move(
+                        nextX - startX,
+                        currentY - startY,
+                        nextZ - startZ
+                );
+
+                if (level.noCollision(entity, forwardBox)) {
+                    lastSafeX = nextX;
+                    lastSafeY = currentY;
+                    lastSafeZ = nextZ;
+                    shouldFall = true;
+                }
+
                 break;
             }
 
-            BlockPos groundPos = BlockPos.containing(
+            currentY = nextY;
+
+            BlockPos leavesPos = BlockPos.containing(
                     nextX,
-                    startY + 0.01,
+                    currentY + 0.01,
                     nextZ
             );
 
-            BlockState groundState = level.getBlockState(groundPos);
+            if (!leavesPos.equals(pos)
+                    && level.getBlockState(leavesPos)
+                    .getBlock() instanceof AutumnLeavesBlock) {
 
-            if (!groundPos.equals(pos)
-                    && groundState.getBlock() instanceof AutumnLeavesBlock) {
+                lastSafeX = leavesPos.getX() + 0.5;
+                lastSafeY = currentY;
+                lastSafeZ = leavesPos.getZ() + 0.5;
 
-                double targetX = groundPos.getX() + 0.5;
-                double targetZ = groundPos.getZ() + 0.5;
-
-                AABB targetBox = entity.getBoundingBox().move(
-                        targetX - startX,
-                        0,
-                        targetZ - startZ
-                );
-
-                if (level.noCollision(entity, targetBox)) {
-                    entity.teleportTo(
-                            targetX,
-                            startY,
-                            targetZ
-                    );
-                } else {
-                    entity.teleportTo(
-                            lastSafeX,
-                            startY,
-                            lastSafeZ
-                    );
-                }
-
-                return;
+                break;
             }
 
             lastSafeX = nextX;
+            lastSafeY = currentY;
             lastSafeZ = nextZ;
         }
 
-        if (lastSafeX != startX || lastSafeZ != startZ) {
-            entity.teleportTo(lastSafeX, startY, lastSafeZ);
+        if (lastSafeX != startX
+                || lastSafeY != startY
+                || lastSafeZ != startZ) {
+
+            entity.teleportTo(
+                    lastSafeX,
+                    lastSafeY,
+                    lastSafeZ
+            );
+
+            if (shouldFall) {
+                entity.setDeltaMovement(
+                        entity.getDeltaMovement().x,
+                        -0.1,
+                        entity.getDeltaMovement().z
+                );
+
+                entity.setOnGround(false);
+                entity.hurtMarked = true;
+            }
+        }
+    }
+    @Override
+    public void animateTick(BlockState state, Level level,
+                            BlockPos pos, RandomSource random) {
+
+        super.animateTick(state, level, pos, random);
+
+        if (state.getValue(COOLDOWN)) {
+            return;
+        }
+
+        for (int i = 0; i < 3; i++) {
+
+            double x = pos.getX() + random.nextDouble();
+            double y = pos.getY() + 0.1;
+            double z = pos.getZ() + random.nextDouble();
+
+            level.addParticle(
+                    ModParticles.AUTUMN_LEAVES,
+                    x, y, z,
+                    0.0, 0.025, 0.0
+            );
         }
     }
 
@@ -173,10 +243,20 @@ public class AutumnLeavesBlock extends BushBlock {
                      BlockPos pos, RandomSource random) {
 
         if (state.getValue(COOLDOWN)) {
+
             level.setBlock(
                     pos,
                     state.setValue(COOLDOWN, false),
                     3
+            );
+
+            level.playSound(
+                    null,
+                    pos,
+                    SoundEvents.AMETHYST_BLOCK_CHIME,
+                    SoundSource.BLOCKS,
+                    0.7F,
+                    1.2F
             );
         }
     }

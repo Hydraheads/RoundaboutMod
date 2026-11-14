@@ -159,6 +159,13 @@ public class ModItems {
     public static Item GINKGO_HANGING_SIGN;
     public static Item GINKGO_TRAPDOOR;
     public static Item AUTUMN_LEAVES;
+    public static Item GINKGO_STAIRS;
+    public static Item GINKGO_SLAB;
+    public static Item GINKGO_FENCE;
+    public static Item GINKGO_FENCE_GATE;
+    public static Item GINKGO_PRESSURE_PLATE;
+    public static Item GINKGO_BUTTON;
+    public static Item GINKGO_FALLEN_LEAVES;
 
     public static Item CAT_REMAINS;
     public static Item OCELOT_REMAINS;
@@ -333,6 +340,9 @@ public class ModItems {
     public static Item FLESH_BUCKET;
     public static Item CHERRIES;
     public static Item ZOMBIE_HORSE_THREAD;
+
+    public static Item GINKGO_BOAT;
+    public static Item GINKGO_CHEST_BOAT;
 
     public static CreativeModeTab FOG_BLOCK_ITEMS;
 

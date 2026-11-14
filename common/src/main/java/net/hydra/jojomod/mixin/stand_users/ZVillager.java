@@ -45,6 +45,7 @@ import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.entity.schedule.Schedule;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffer;
@@ -57,6 +58,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.List;
 
 @Mixin(Villager.class)
 public abstract class ZVillager extends AbstractVillager implements ReputationEventHandler, VillagerDataHolder, IVillagerAccess {
@@ -243,7 +246,7 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
     }
 
     // handles tension for interaction
-    @Inject(method = "mobInteract", at = @At("HEAD"))
+    @Inject(method = "mobInteract", at = @At("HEAD"), cancellable = true)
     private void roundabout$handleTensionOnInteract(
             Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
         if (!isClientSide()
@@ -256,6 +259,20 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
             }
             if (this.roundabout$isTense()) {
                 this.roundabout$setUnnerved();
+                Villager This = (Villager) (Object) this;
+                if (This.getVillagerData().getProfession() == VillagerProfession.NITWIT) {
+                    List<Item> junkItems = List.of(
+                            Items.STICK,
+                            Items.DIRT,
+                            Items.POISONOUS_POTATO,
+                            Items.DEAD_BUSH,
+                            Items.GRAVEL,
+                            Items.GRASS
+                    );
+                    Item chosen = junkItems.get(This.getRandom().nextInt(junkItems.size()));
+                    BehaviorUtils.throwItem(This, new ItemStack(chosen), player.position());
+                    cir.setReturnValue(InteractionResult.SUCCESS);
+                }
             }
         }
     }

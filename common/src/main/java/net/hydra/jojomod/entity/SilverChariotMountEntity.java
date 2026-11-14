@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity;
 
 import net.hydra.jojomod.access.NoHitboxRendering;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.stand.SilverChariotEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -9,7 +10,10 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.DismountHelper;
 import net.minecraft.world.item.ItemStack;
@@ -19,8 +23,13 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 
-public class SilverChariotMountEntity extends LivingEntity implements NoHitboxRendering {
+
+public class SilverChariotMountEntity extends LivingEntity implements PlayerRideable {
+
+    public static final double eHeight = SilverChariotEntity.eHeight;
+    public static final double eWidth = SilverChariotEntity.eWidth;
 
     public SilverChariotMountEntity(EntityType<? extends SilverChariotMountEntity> $$0, Level $$1) {
         super($$0, $$1);
@@ -28,6 +37,56 @@ public class SilverChariotMountEntity extends LivingEntity implements NoHitboxRe
 
     public SilverChariotMountEntity(Level $$0) {
         this(ModEntities.SC_MOUNT, $$0);
+    }
+
+    public static AttributeSupplier.Builder createStandAttributes() {
+        return LivingEntity.createLivingAttributes()
+                .add(Attributes.MAX_HEALTH, 20.0D)
+                .add(Attributes.MOVEMENT_SPEED, 0.01D)
+                .add(Attributes.FOLLOW_RANGE, 0.0D);
+    }
+
+    @Override
+    public boolean isInvulnerableTo(DamageSource $$0) {
+        if ($$0.is(DamageTypes.IN_WALL)
+                || $$0.is(DamageTypes.DROWN)
+                || $$0.is(DamageTypes.FREEZE)
+                || $$0.is(DamageTypes.HOT_FLOOR)
+                || $$0.is(DamageTypes.SWEET_BERRY_BUSH)
+                || $$0.is(DamageTypes.WITHER)
+                || $$0.is(DamageTypes.CACTUS)
+                || $$0.is(DamageTypes.IN_FIRE)
+                || $$0.is(DamageTypes.ON_FIRE)) {
+            return true;
+        }
+        return super.isInvulnerableTo($$0);
+    }
+
+    @Override
+    public boolean hurt(DamageSource $$0, float $$1) {
+        // return super.hurt($$0, $$1);
+        return false;
+    }
+
+    /*
+    @Override
+    public boolean isInvisible() {
+        return true;
+    }
+    */
+
+    @Override
+    public boolean isPickable() {
+        return false;
+    }
+
+    @Override
+    public boolean isAttackable() {
+        return false;
+    }
+
+    @Override
+    public void setSecondsOnFire(int seconds) {
     }
 
     private static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(SilverChariotMountEntity.class, EntityDataSerializers.INT);
@@ -64,8 +123,10 @@ public class SilverChariotMountEntity extends LivingEntity implements NoHitboxRe
 
     public void resetHoverTicks() {
         // hoverTicks = 0;
-        this.entityData.set(HOVER_CHARGE, 0);
+        this.entityData.set(HOVER_CHARGE, this.getMaxHoverTicks());
     }
+
+    private int tickLifeNoRiding = 0;
 
     @Override
     public void tick() {
@@ -73,6 +134,12 @@ public class SilverChariotMountEntity extends LivingEntity implements NoHitboxRe
 
         if (!this.level().isClientSide()) {
             tickHovering();
+            if (!this.isVehicle()) {
+                tickLifeNoRiding++;
+            }
+            if (tickLifeNoRiding > 100) {
+                this.discard();
+            }
         }
     }
 
@@ -101,6 +168,7 @@ public class SilverChariotMountEntity extends LivingEntity implements NoHitboxRe
     @Override
     public void travel(Vec3 $$0) {
         // super.travel($$0);
+        /*
         int hoverTicks = this.getHoverTicks();
         int maxHoverTicks = this.getMaxHoverTicks();
         if (this.isControlledByLocalInstance()) {
@@ -111,27 +179,49 @@ public class SilverChariotMountEntity extends LivingEntity implements NoHitboxRe
                 this.setDeltaMovement(this.getDeltaMovement().add(0, $$0.y*yboost, 0));
             }
         }
+        */
+        if (isVehicle() && getControllingPassenger() instanceof Player player) {
+            setYRot(player.getYRot());
+            setXRot(player.getXRot() * 0.5F);
+
+            yRotO = getYRot();
+            xRotO = getXRot();
+
+            float forward = player.zza;
+            float sideways = player.xxa;
+
+            if (forward < 0) {
+                forward *= 0.25F;
+            }
+
+            float speed = 0.2F;
+
+            setSpeed(speed);
+            super.travel(new Vec3(sideways, $$0.y, forward));
+            return;
+        }
+
+        super.travel($$0);
+    }
+
+    @Override
+    protected void tickRidden(Player $$0, Vec3 $$1) {
+        super.tickRidden($$0, $$1);
     }
 
     @Override
     public HumanoidArm getMainArm() {
-        return null;
-    }
-
-    @Override
-    public boolean hurt(DamageSource $$0, float $$1) {
-        // return super.hurt($$0, $$1);
-        return false;
+        return HumanoidArm.RIGHT;
     }
 
     @Override
     public Iterable<ItemStack> getArmorSlots() {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
     public ItemStack getItemBySlot(EquipmentSlot equipmentSlot) {
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override
@@ -150,7 +240,7 @@ public class SilverChariotMountEntity extends LivingEntity implements NoHitboxRe
         float $$4 = $$0.zza;
         // float $$4 = $$0.zza * 2;
         if ($$4 <= 0.0F) {
-            // $$4 *= 0.25F;
+            $$4 *= 0.25F;
         }
 
         return new Vec3((double) $$2, $$3, (double) $$4);
@@ -169,7 +259,19 @@ public class SilverChariotMountEntity extends LivingEntity implements NoHitboxRe
     }
 
     @Override
+    public double getPassengersRidingOffset() {
+        return SilverChariotMountEntity.eHeight * 0.75D;
+    }
+
+    @Override
     protected void positionRider(Entity $$0, MoveFunction $$1) {
+        /*
+        if ($$0 instanceof Player) {
+            $$1.accept($$0,this.getX(),this.getY()+1.35D,this.getZ());
+        } else {
+            super.positionRider($$0,$$1);
+        }
+        */
         super.positionRider($$0, $$1);
     }
 

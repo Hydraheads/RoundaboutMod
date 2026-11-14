@@ -256,11 +256,9 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                     if (mr.emitsFlameCycle() && !isInWaterOrRain()){
                         mr.cycleFlames.startIfStopped(this.tickCount);
                         mr.hideFlames.stop();
-                        System.out.println("aaa");
                     } else {
                         mr.cycleFlames.stop();
                         mr.hideFlames.startIfStopped(this.tickCount);
-                        System.out.println("bbb");
                     }
                 }
                 return;

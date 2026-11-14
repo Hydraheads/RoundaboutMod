@@ -338,6 +338,18 @@ public class FabricItems {
     );
     public static Item GINKGO_TRAPDOOR = ModBlocks.GINKGO_TRAPDOOR.asItem();
     public static Item AUTUMN_LEAVES = ModBlocks.AUTUMN_LEAVES.asItem();
+    public static Item GINKGO_STAIRS = ModBlocks.GINKGO_STAIRS.asItem();
+    public static Item GINKGO_SLAB = ModBlocks.GINKGO_SLAB.asItem();
+    public static Item GINKGO_FENCE = ModBlocks.GINKGO_FENCE.asItem();
+    public static Item GINKGO_FENCE_GATE = ModBlocks.GINKGO_FENCE_GATE.asItem();
+    public static Item GINKGO_PRESSURE_PLATE = ModBlocks.GINKGO_PRESSURE_PLATE.asItem();
+    public static Item GINKGO_BUTTON = ModBlocks.GINKGO_BUTTON.asItem();
+    public static Item GINKGO_BOAT = registerItem("ginkgo_boat",
+            new GinkgoBoatItem(false, new Item.Properties().stacksTo(1)));
+
+    public static Item GINKGO_CHEST_BOAT = registerItem("ginkgo_chest_boat",
+            new GinkgoBoatItem(true, new Item.Properties().stacksTo(1)));
+    public static Item GINKGO_FALLEN_LEAVES = ModBlocks.GINKGO_FALLEN_LEAVES.asItem();
 
     public static Item CHAMOMILE_SEEDS = registerItem("chamomile_seeds", new ItemNameBlockItem(ModBlocks.CHAMOMILE, new Item.Properties()));
     public static Item CHAMOMILE = registerItem("chamomile", new Item(new Item.Properties()
@@ -964,6 +976,15 @@ public class FabricItems {
                         entries.accept(ModBlocks.GINKGO_HANGING_SIGN);
                         entries.accept(ModBlocks.GINKGO_TRAPDOOR);
                         entries.accept(ModBlocks.AUTUMN_LEAVES);
+                        entries.accept(ModBlocks.GINKGO_STAIRS);
+                        entries.accept(ModBlocks.GINKGO_SLAB);
+                        entries.accept(ModBlocks.GINKGO_FENCE);
+                        entries.accept(ModBlocks.GINKGO_FENCE_GATE);
+                        entries.accept(ModBlocks.GINKGO_PRESSURE_PLATE);
+                        entries.accept(ModBlocks.GINKGO_BUTTON);
+                        entries.accept(GINKGO_BOAT);
+                        entries.accept(GINKGO_CHEST_BOAT);
+                        entries.accept(ModBlocks.GINKGO_FALLEN_LEAVES);
                     }).build());
     public static final CreativeModeTab FOG_BLOCK_ITEMS = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
             new ResourceLocation(Roundabout.MOD_ID, "justice_fog_items"),
@@ -1156,6 +1177,15 @@ public class FabricItems {
         ModItems.GINKGO_HANGING_SIGN = GINKGO_HANGING_SIGN;
         ModItems.GINKGO_TRAPDOOR = GINKGO_TRAPDOOR;
         ModItems.AUTUMN_LEAVES = AUTUMN_LEAVES;
+        ModItems.GINKGO_STAIRS = GINKGO_STAIRS;
+        ModItems.GINKGO_SLAB = GINKGO_SLAB;
+        ModItems.GINKGO_FENCE = GINKGO_FENCE;
+        ModItems.GINKGO_FENCE_GATE = GINKGO_FENCE_GATE;
+        ModItems.GINKGO_PRESSURE_PLATE = GINKGO_PRESSURE_PLATE;
+        ModItems.GINKGO_BUTTON = GINKGO_BUTTON;
+        ModItems.GINKGO_BOAT = GINKGO_BOAT;
+        ModItems.GINKGO_CHEST_BOAT = GINKGO_CHEST_BOAT;
+        ModItems.GINKGO_FALLEN_LEAVES = GINKGO_FALLEN_LEAVES ;
 
 
 
