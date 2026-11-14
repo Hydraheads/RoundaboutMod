@@ -103,8 +103,8 @@ public class LyinEyesMapOverlay {
                     if (target.type == LyinEyesScanner.TargetType.CONTAINER) {
                         guiGraphics.blit(MAP_ICONS, targetDrawX, targetDrawY, 9, 9, CHEST_U, CHEST_V, TEX_HIGHLIGHTER_ICON_SIZE, TEX_HIGHLIGHTER_ICON_SIZE, 256, 256);
                     } else {
-                        int outlineV;
-                        int baseV;
+                        int outlineV = PASSIVE_OUTLINE_V;
+                        int baseV = PASSIVE_MOB_V;
 
                         if (target.type == LyinEyesScanner.TargetType.HOSTILE) {
                             // red outline
@@ -114,10 +114,6 @@ public class LyinEyesMapOverlay {
                             // yellow outline
                             outlineV = NEUTRAL_OUTLINE_V;
                             baseV = NEUTRAL_MOB_V;
-                        } else {
-                            // green outline
-                            outlineV = PASSIVE_OUTLINE_V;
-                            baseV = PASSIVE_MOB_V;
                         }
 
                         // neutral base drawing
