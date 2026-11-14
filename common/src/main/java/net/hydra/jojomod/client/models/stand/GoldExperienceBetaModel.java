@@ -91,6 +91,8 @@ public class GoldExperienceBetaModel<T extends GoldExperienceEntity> extends Sta
         this.LeftArmBAM = this.BAM.getChild("LeftArmBAM");
         this.LeftArmBAM4 = this.BAM.getChild("LeftArmBAM4");
         this.LeftArmBAM3 = this.BAM.getChild("LeftArmBAM3");
+        this.rightHand = this.lower_right_arm;
+        this.leftHand = this.lower_left_arm;
     }
 
     public static LayerDefinition getTexturedModelData() {
