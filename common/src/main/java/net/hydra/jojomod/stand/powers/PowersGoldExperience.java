@@ -1005,7 +1005,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
             if (this.self instanceof Player) {
                 if (isPacketPlayer()) {
                     C2SPacketUtil.standBarrageHitPacket(-1, this.attackTimeDuring);
-                    if (this.attackTimeDuring == this.getBarrageLength()) {
+
+                    if (this.activePower == PowerIndex.BARRAGE_2 && this.attackTimeDuring == this.getKickBarrageLength()){
+                        this.attackTimeDuring = -10;
+                    } else if (this.isBarraging() && this.attackTimeDuring == this.getBarrageLength()){
                         this.attackTimeDuring = -10;
                     }
                 }
