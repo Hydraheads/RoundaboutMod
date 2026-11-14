@@ -342,6 +342,8 @@ public class FabricItems {
     public static Item GINKGO_SLAB = ModBlocks.GINKGO_SLAB.asItem();
     public static Item GINKGO_FENCE = ModBlocks.GINKGO_FENCE.asItem();
     public static Item GINKGO_FENCE_GATE = ModBlocks.GINKGO_FENCE_GATE.asItem();
+    public static Item GINKGO_PRESSURE_PLATE = ModBlocks.GINKGO_PRESSURE_PLATE.asItem();
+    public static Item GINKGO_BUTTON = ModBlocks.GINKGO_BUTTON.asItem();
 
 
     public static Item CHAMOMILE_SEEDS = registerItem("chamomile_seeds", new ItemNameBlockItem(ModBlocks.CHAMOMILE, new Item.Properties()));
@@ -973,6 +975,8 @@ public class FabricItems {
                         entries.accept(ModBlocks.GINKGO_SLAB);
                         entries.accept(ModBlocks.GINKGO_FENCE);
                         entries.accept(ModBlocks.GINKGO_FENCE_GATE);
+                        entries.accept(ModBlocks.GINKGO_PRESSURE_PLATE);
+                        entries.accept(ModBlocks.GINKGO_BUTTON);
                     }).build());
     public static final CreativeModeTab FOG_BLOCK_ITEMS = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
             new ResourceLocation(Roundabout.MOD_ID, "justice_fog_items"),
@@ -1169,6 +1173,8 @@ public class FabricItems {
         ModItems.GINKGO_SLAB = GINKGO_SLAB;
         ModItems.GINKGO_FENCE = GINKGO_FENCE;
         ModItems.GINKGO_FENCE_GATE = GINKGO_FENCE_GATE;
+        ModItems.GINKGO_PRESSURE_PLATE = GINKGO_PRESSURE_PLATE;
+        ModItems.GINKGO_BUTTON = GINKGO_BUTTON;
 
 
 
