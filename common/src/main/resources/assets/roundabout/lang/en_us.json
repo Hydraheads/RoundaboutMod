@@ -3784,7 +3784,7 @@
   "roundabout.gold_experience_animal.snake": "Snake",
   "roundabout.gold_experience_animal.snake.desc": "Rushes to the last enemy you hit, or who hit you, and bites them, inflicting poison.",
   "roundabout.gold_experience_animal.frog": "Frog",
-  "roundabout.gold_experience_animal.frog.desc": "Hops around erratically.",
+  "roundabout.gold_experience_animal.frog.desc": "Pulls in the closest enemy within 10 blocks using it's tongue.",
   "roundabout.gold_experience_animal.fox": "Fox",
   "roundabout.gold_experience_animal.fox.desc": "Finds nearby items and fetches them for you.",
 
