@@ -229,6 +229,12 @@ public class ForgeSounds {
             register(ModSounds.BLACK_SABBATH_SELECT_CANCEL, ModSounds.BLACK_SABBATH_SELECT_CANCEL_ID);
     public static final RegistryObject<SoundEvent> BLACK_SABBATH_SELECT_CONFIRM_EVENT =
             register(ModSounds.BLACK_SABBATH_SELECT_CONFIRM, ModSounds.BLACK_SABBATH_SELECT_CONFIRM_ID);
+    public static final RegistryObject<SoundEvent> BLACK_SABBATH_HURT_EVENT =
+            register(ModSounds.BLACK_SABBATH_HURT, ModSounds.BLACK_SABBATH_HURT_ID);
+    public static final RegistryObject<SoundEvent> BLACK_SABBATH_GRAB_EVENT =
+            register(ModSounds.BLACK_SABBATH_GRAB, ModSounds.BLACK_SABBATH_GRAB_ID);
+    public static final RegistryObject<SoundEvent> BLACK_SABBATH_STAB_EVENT =
+            register(ModSounds.BLACK_SABBATH_STAB, ModSounds.BLACK_SABBATH_STAB_ID);
 
 
     public static final RegistryObject<SoundEvent> CENTURY_BOY_SUMMON_EVENT =

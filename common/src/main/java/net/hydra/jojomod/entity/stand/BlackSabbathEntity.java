@@ -1,15 +1,14 @@
 package net.hydra.jojomod.entity.stand;
 
 import com.google.common.collect.ImmutableSet;
-import net.hydra.jojomod.access.AccessThrownTrident;
-import net.hydra.jojomod.access.IInstrumentItemAccess;
-import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.access.IPlayerEntityServer;
+import net.hydra.jojomod.access.*;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.models.stand.MandomBlackSabbathModel;
 import net.hydra.jojomod.client.models.stand.RattModel;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.badCompanyTroops.BCTroop;
 import net.hydra.jojomod.entity.goals.BlackSabbathRangedAttackGoal;
+import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.navigation.BlackSabbathNavigation;
 import net.hydra.jojomod.entity.objects.GrabbedMobSoul;
 import net.hydra.jojomod.entity.objects.GrabbedMobSoulPlayerLarge;
@@ -28,6 +27,7 @@ import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -39,12 +39,15 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -55,8 +58,10 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.RangedAttackMob;
@@ -1144,13 +1149,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     }
     @Override
     protected SoundEvent getHurtSound(DamageSource $$0) {
-        if($$0.is(ModDamageTypes.GO_BEYOND)){
-            return SoundEvents.BEACON_DEACTIVATE;
-        }
-        if($$0.is(DamageTypes.ON_FIRE) || $$0.is(DamageTypes.IN_FIRE) || $$0.is(ModDamageTypes.STAND_FIRE) || $$0.is(ModDamageTypes.STAND_FIRE) || $$0.is(DamageTypes.LAVA) || $$0.is(DamageTypes.HOT_FLOOR)) {
-            return SoundEvents.PLAYER_HURT_ON_FIRE;
-        }
-        return SoundEvents.PLAYER_HURT;
+        return ModSounds.BLACK_SABBATH_HURT_EVENT;
     }
 
     public void travelAhead(Entity.MoveFunction positionUpdater) {
@@ -1252,7 +1251,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         return false;
     }
     public boolean isTouchingTarget(LivingEntity lent){
-        AABB abba = this.getBoundingBox().inflate(1.15, 9, 1.15);
+        AABB abba = this.getBoundingBox().expandTowards(0.15, 9, 0.15);
         List<LivingEntity> lvent = this.level().getEntitiesOfClass(LivingEntity.class, abba, (livingEntity) -> {
             return true;
         });
@@ -1447,7 +1446,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                                 if (lungeTicks < 1) {
                                                     if (getUnrender()) {
                                                         setUnrender(false);
-                                                        this.level().playSound(null, this, ModSounds.BLACK_SABBATH_EMERGE_EVENT, SoundSource.HOSTILE, 0.95F, 1.0F);
+                                                        this.level().playSound(null, this, ModSounds.BLACK_SABBATH_EMERGE_EVENT, SoundSource.HOSTILE, 0.95F, (float) (0.85F + Math.random() * 0.12f));
                                                     }
                                                     attemptGrab();
                                                 }
@@ -1457,7 +1456,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                 }
                                 if (lungeTicks < 215 && this.emerge.isStarted() || lungeTicks > 207 && walk.isStarted()) {
                                     if (getUnrender()) {
-                                        this.level().playSound(null, this, ModSounds.BLACK_SABBATH_EMERGE_EVENT, SoundSource.HOSTILE, 0.95F, 1.0F);
+                                        this.level().playSound(null, this, ModSounds.BLACK_SABBATH_EMERGE_EVENT, SoundSource.HOSTILE, 0.95F, (float) (0.85F + Math.random() * 0.12f));
                                     }
                                     setUnrender(false);
                                 }
@@ -1471,7 +1470,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                             if (!this.level().isClientSide()) {
                                                 setGrabbing(targetSabbath().getId());
                                                 if(level().getEntity(getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(true); ((StandUser)e).roundabout$setGrabberSabbath(this.getId());}
-                                                this.level().playSound(null, this, ModSounds.BLOCK_GRAB_EVENT, SoundSource.HOSTILE, 0.95F, 1.0F);
+                                                this.level().playSound(null, this, ModSounds.BLACK_SABBATH_GRAB_EVENT, SoundSource.HOSTILE, 0.95F, (float) (0.85F + Math.random() * 0.12f));
                                             }
                                             lungeTicks = 51;
                                             if(!this.level().isClientSide) {
@@ -1486,7 +1485,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                         this.getNavigation().setSpeedModifier((float) 0);
                                     }
                                 }
-                                    if (lungeTicks < 30 && lungeTicks >= 1) {
+                                    if (lungeTicks < 40 && lungeTicks >= 1) {
                                         if (!getUnrender()) {
                                             setUnrender(true);
                                         }
@@ -1947,10 +1946,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         return new Vec3(0, 0, 0);
     }
 
-    public Vec3 ItemSlider(float x, float y, float z){
-        return new Vec3(x, y, z);
-    }
-
     private void swordHit(float damage, LivingEntity attacked, Entity attacker, ItemStack item){
         if(this.getUser() != null) {
             if(attacker instanceof Player){
@@ -1958,6 +1953,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             } else {
                 attacked.hurt(ModDamageTypes.of(level(), DamageTypes.MOB_ATTACK, this.getUser()), damage + 1);
             }
+            this.level().playSound((Player) null, this, ModSounds.BLACK_SABBATH_STAB_EVENT, SoundSource.HOSTILE, 2.0F, (float) (0.85F + Math.random() * 0.12f));
             attacked.invulnerableTime = 0;
             attacked.hurt(ModDamageTypes.of(level(), ModDamageTypes.STAND, this.getUser()), 2);
             if (item.getItem() instanceof GlaiveItem || item.getItem() instanceof SacrificialDaggerItem
@@ -1987,7 +1983,8 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         ItemStack i = this.getHeldItemSabbath();
         Entity le = this.level().getEntity(getGrabbing());
         boolean flag1 = (i.getItem() instanceof ShearsItem || i.getItem() instanceof ScissorItem) && !(le instanceof Sheep) || i.getItem() instanceof SwordItem || i.getItem() instanceof SacrificialDaggerItem || i.getItem() instanceof DiggerItem || i.getItem() instanceof GlaiveItem || i.getItem() instanceof WarhammerItem;
-        boolean flag2 = i.getItem() instanceof RoundaboutArrowItem;
+        boolean flag2 = i.getItem() instanceof StandArrowItem && !(i.getDamageValue() >= i.getMaxDamage()) || i.getItem() instanceof WorthyArrowItem && this.getUser() instanceof Player p && p.isCreative();
+        boolean flag2visual = i.getItem() instanceof StandArrowItem || i.getItem() instanceof WorthyArrowItem && this.getUser() instanceof Player p && p.isCreative();
         boolean flag3 = i.getItem() instanceof ArmorItem || i.getItem() instanceof ElytraItem;
         boolean flag4 = i.getItem() instanceof PotionItem || i.getItem().getFoodProperties() != null || i.getItem() instanceof MilkBucketItem;
         boolean flag5 = (i.getItem() instanceof ShearsItem || i.getItem() instanceof ScissorItem) && le instanceof Sheep sheep && !(sheep.isSheared());
@@ -2057,6 +2054,13 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                             setShouldSlide(false);
                         }
                     }
+                    if(flag2visual){
+                        if(meleeInteractionTicks == 110){
+                            setShouldSlide(true);
+                        } else if (meleeInteractionTicks == 70){
+                            setShouldSlide(false);
+                        }
+                    }
                     if (flag3 && e instanceof Player p && !getNotRenderItem()) {
                         EquipmentSlot equipmentslot = Mob.getEquipmentSlotForItem(i);
                         ItemStack stack = p.getItemBySlot(equipmentslot);
@@ -2109,7 +2113,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                         }
                         if (i.is(Items.BELL)) {
                             if (meleeInteractionTicks > 160 && this.tickCount % 20 == 0 || meleeInteractionTicks < 160 && meleeInteractionTicks > 100 && this.tickCount % 10 == 0 || meleeInteractionTicks < 100 && meleeInteractionTicks >= 5 && this.tickCount % 5 == 0) {
-                                this.level().playSound((Player) null, this, SoundEvents.BELL_BLOCK, SoundSource.HOSTILE, 10.0F, ((float) random.nextInt(8, 11) / 10));
+                                this.level().playSound((Player) null, this, SoundEvents.BELL_BLOCK, SoundSource.HOSTILE, 10.0F, (float) (0.95F + Math.random() * -0.05f));
                             }
                         }
                         if (meleeInteractionTicks == 150) {
@@ -2181,12 +2185,16 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                             } else {
                                                 this.setHeldItemSabbath(new ItemStack(Items.BUCKET));
                                             }
+                                            hasStabbed = true;
                                         }
                                     } else {
                                         if (e instanceof Player p) {
                                             if (p.canEat(i.getItem().getFoodProperties().canAlwaysEat())) {
                                                 if (!this.level().isClientSide()) {
                                                     i.finishUsingItem(this.level(), p);
+                                                    if(i.getItem() instanceof LocacacaItem || i.getItem() instanceof NewLocacacaItem){
+                                                        hasStabbed = true;
+                                                    }
                                                 }
                                             }
                                         } else if (e instanceof Animal an) {
@@ -2245,6 +2253,29 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                 }
                            }
                         }
+
+                        /*Stand Arrow!*/
+                        if(i.getItem() instanceof RoundaboutArrowItem sa){
+                            boolean isWorthyArrow = sa instanceof WorthyArrowItem;
+                            if(meleeInteractionTicks == 100){
+                                if(isWorthyArrow){
+                                    if(this.getUser() instanceof Player p && p.isCreative()) {
+                                        worthyEntitySabbath(e, sa);
+                                    }
+                                } else if (i.getItem() instanceof StandArrowItem st) {
+                                    if(!(i.getDamageValue() >= i.getMaxDamage())) {
+
+                                        CompoundTag tag = i.isEmpty() ? null : i.getTagElement("StandDisc");
+                                        CompoundTag tag2 = tag != null ? tag.getCompound("DiscItem") : null;
+                                        if(tag2 == null){
+                                            int in = random.nextInt(1, 3);
+                                            StandArrowItem.rerollStand(i, in > 1);
+                                        }
+                                        requiemArrowHypeAndAuraTopTenMomentsInAllAnime(e, st);
+                                    }
+                                }
+                            }
+                        }
                     }
                     } else {
                         if(!this.level().isClientSide) {
@@ -2255,12 +2286,143 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                         ((StandUser) e).roundabout$setGrabbedSoul(false);
                         ((StandUser)e).roundabout$setGrabberSabbath(0);
                         killSoul();
-                        if(getNotRenderItem()){
+                        if(getNotRenderItem() || i.is(Items.BUCKET) && hasStabbed){
                             pbs.killTargetListServerToClient();
+                        }
+                        if((flag2 || i.getItem() instanceof RoundaboutArrowItem || i.getItem() instanceof NewLocacacaItem || i.getItem() instanceof LocacacaItem) && hasStabbed){
+                            pbs.removeTargetSingular(e);
                         }
                     }
             }
         }
+        }
+    }
+
+    boolean hasStabbed = false;
+
+    void requiemArrowHypeAndAuraTopTenMomentsInAllAnime(LivingEntity $$1, StandArrowItem sa){
+        ItemStack i = this.getHeldItemSabbath();
+
+        DamageSource $$6;
+        $$6 = this.damageSources().mobAttack(this.getUser());
+        boolean hadStandEffect = false;
+
+        CompoundTag tag = i.isEmpty() ? null : i.getTagElement("StandDisc");
+        CompoundTag tag2 = tag != null ? tag.getCompound("DiscItem") : null;
+        int get = ClientNetworking.getAppropriateConfig().itemSettings.levelsToGetStand;
+        boolean isMobWorthy = (!($$1 instanceof Player) && $$1 instanceof Mob mob && MainUtil.canGrantStand(mob));
+        boolean isPlayerWorthy = $$1 instanceof Player;
+
+        if(!isMobWorthy && !isPlayerWorthy) {
+            if(!level().isClientSide) {
+                if ($$1 instanceof Mob mb) {
+                    hadStandEffect = mb.getEffect(ModEffects.STAND_VIRUS) != null;
+                }
+                if (this.getUser() instanceof LivingEntity) {
+                    ((LivingEntity) this.getUser()).setLastHurtMob($$1);
+                }
+                $$1.hurt($$6, 8);
+                ItemStack StandDisc = ((StandUser) $$1).roundabout$getStandDisc();
+                if (StandDisc == ItemStack.EMPTY) {
+                    if (MainUtil.canCauseRejection($$1)) {
+                        $$1.addEffect(new MobEffectInstance(ModEffects.STAND_VIRUS, 200, 0), this.getUser());
+                        StandArrowItem.grantMobRejection(i, this.level(), $$1);
+                    }
+                    if (!$$1.isAlive() && !hadStandEffect && $$1 instanceof Cat C && !C.isTame()) {
+                        StrayCatEntity.tryToSpawnStrayCat(C);
+                    }
+                }
+                this.level().playSound((Player) null, this, ModSounds.BLACK_SABBATH_STAB_EVENT, SoundSource.HOSTILE, 2.0F, (float) (0.85F + Math.random() * 0.12f));
+                i.removeTagKey("StandDisc");
+            }
+        } else {
+            if (!level().isClientSide) {
+                if (isMobWorthy) {
+                    if (sa.isWorthinessType(i, ((LivingEntity) $$1))) {
+                        this.level().playSound((Player) null, this, ModSounds.BLACK_SABBATH_STAB_EVENT, SoundSource.HOSTILE, 2.0F, (float) (0.85F + Math.random() * 0.12f));
+                        StandArrowItem.grantMobStand(i, this.level(), (LivingEntity) $$1);
+                    }
+                }
+                if ($$1 instanceof Player PE) {
+                    if (tag2 != null) {
+                        ItemStack itemstack = ItemStack.of(tag2);
+                        if (itemstack.getItem() instanceof StandDiscItem de) {
+                            this.level().playSound((Player) null, this, ModSounds.BLACK_SABBATH_STAB_EVENT, SoundSource.HOSTILE, 2.0F, (float) (0.85F + Math.random() * 0.12f));
+                            if (de.standPowers.isSecondaryStand()) {
+                                get = 0;
+                            }
+                            if (de.standPowers.isSecondaryStand() || PE.experienceLevel >= get) {
+                                if (sa.grantStand(itemstack, $$1)) {
+                                    this.level().playSound((Player) null, this, ModSounds.BLACK_SABBATH_STAB_EVENT, SoundSource.HOSTILE, 2.0F, (float) (0.85F + Math.random() * 0.12f));
+                                    this.level().playSound(null, $$1.blockPosition(), ModSounds.STAND_ARROW_USE_EVENT, SoundSource.PLAYERS, 1.5F, 1F);
+                                    PE.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireStandBlackSabbath").withStyle(ChatFormatting.GOLD).withStyle(ChatFormatting.BOLD), true);
+                                    ((IPlayerEntity) PE).roundabout$qmessage(1);
+                                    ((ServerLevel) level()).sendParticles(ParticleTypes.FIREWORK, $$1.getX(),
+                                            $$1.getY() + $$1.getEyeHeight(), $$1.getZ(),
+                                            20, 0, 0, 0, 0.4);
+                                    if (!PE.isCreative() && get > 0) {
+                                        PE.giveExperienceLevels(-get);
+                                    }
+                                    i.removeTagKey("StandDisc");
+                                }
+
+                            } else {
+                                $$1.hurt($$6, 8);
+                                this.level().playSound((Player) null, this, ModSounds.BLACK_SABBATH_STAB_EVENT, SoundSource.HOSTILE, 2.0F, (float) (0.85F + Math.random() * 0.12f));
+                                if (MainUtil.canCauseRejection($$1)) {
+                                    $$1.addEffect(new MobEffectInstance(ModEffects.STAND_VIRUS, 200, 0), this.getUser());
+                                    StandArrowItem.grantMobRejection(i, this.level(), $$1);
+                                }
+                                if (!$$1.isAlive() && !hadStandEffect && $$1 instanceof Cat C && !C.isTame()) {
+                                    StrayCatEntity.tryToSpawnStrayCat(C);
+                                }
+                                i.removeTagKey("StandDisc");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        i.hurt(1, this.level().getRandom(), null);
+        hasStabbed = true;
+    }
+
+    void worthyEntitySabbath(LivingEntity $$1, RoundaboutArrowItem rai){
+        if (rai instanceof WorthyArrowItem WI && ($$1 instanceof Mob || $$1 instanceof Player)) {
+            this.level().playSound((Player) null, this, ModSounds.BLACK_SABBATH_STAB_EVENT, SoundSource.HOSTILE, 2.0F, (float) (0.45F + Math.random() * 0.12f));
+            if (this.getUser() instanceof Player PE && PE.isCreative() && !((StandUser)$$1).roundabout$getStandDisc().isEmpty()){
+                if (PowerTypes.hasStandActive($$1)){
+                    ((StandUser)$$1).roundabout$setActive(false);
+                }
+                ((StandUser)$$1).roundabout$setStandDisc(ItemStack.EMPTY);
+                if ($$1 instanceof Mob mb) {
+                    ((IMob) $$1).roundabout$setWorthy(false);
+                }
+                particleStorm(this.level(),$$1);
+                return;
+            } else if ($$1 instanceof Mob mb){
+                if (((IMob)mb).roundabout$isWorthy()){
+                    if (this.getUser() instanceof Player PE && PE.isCreative()){
+                        ((IMob)mb).roundabout$setWorthy(false);
+                        particleStorm(this.level(),$$1);
+                        return;
+                    }
+                } else {
+                    ((IMob)mb).roundabout$setWorthy(true);
+                    particleStorm(this.level(),$$1);
+                    return;
+                }
+            }
+            hasStabbed = true;
+        }
+    }
+
+    private void particleStorm(Level level, Entity live){
+        if (!level.isClientSide()) {
+            level.playSound(null, live.blockPosition(), ModSounds.STAND_ARROW_USE_EVENT, SoundSource.PLAYERS, 1.5F, 1F);
+            ((ServerLevel) level).sendParticles(ParticleTypes.FIREWORK, live.getX(),
+                    live.getY() + live.getEyeHeight(), live.getZ(),
+                    20, 0, 0, 0, 0.4);
         }
     }
 
