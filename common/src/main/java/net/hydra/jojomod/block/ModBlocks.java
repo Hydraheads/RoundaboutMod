@@ -223,6 +223,8 @@ public class ModBlocks {
     public static Block GINKGO_WALL_HANGING_SIGN;
     public static Block GINKGO_TRAPDOOR;
     public static Block AUTUMN_LEAVES;
+    public static Block GINKGO_STAIRS;
+    public static Block GINKGO_SLAB;
 
 
     public static Block GAMBLING_TABLE;
@@ -1223,7 +1225,21 @@ public class ModBlocks {
                     .noOcclusion()
                     .instabreak()
     );
-
+    public static Block GINKGO_STAIRS_PROPERTIES = new GinkgoStairBlock(
+            GINKGO_PLANKS_PROPERTIES.defaultBlockState(),
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.WOOD)
+                    .ignitedByLava()
+    );
+    public static Block GINKGO_SLAB_PROPERTIES = new SlabBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.WOOD)
+                    .ignitedByLava()
+    );
     public static List<String> dontGenState = new ArrayList<String>();
     public static List<String> blockBlacklist = Arrays.asList(
             "soul_fire", "air", "allium", "lava_cauldron", "end_gateway", "cave_air", "void_air", "infested_stone",
