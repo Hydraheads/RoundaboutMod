@@ -229,6 +229,7 @@ public class ModBlocks {
     public static Block GINKGO_FENCE_GATE;
     public static Block GINKGO_PRESSURE_PLATE;
     public static Block GINKGO_BUTTON;
+    public static Block GINKGO_FALLEN_LEAVES;
 
     public static Block GAMBLING_TABLE;
     public static final EnumProperty<GamblingTablePart> GAMBLING_TABLE_PART = EnumProperty.create("part", GamblingTablePart.class);
@@ -1221,6 +1222,14 @@ public class ModBlocks {
                     .ignitedByLava()
     );
     public static Block AUTUMN_LEAVES_PROPERTIES = new AutumnLeavesBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.PLANT)
+                    .strength(0.1F)
+                    .noCollission()
+                    .noOcclusion()
+                    .instabreak()
+    );
+    public static Block GINKGO_FALLEN_LEAVES_PROPERTIES = new GinkgoFallenLeavesBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.PLANT)
                     .strength(0.1F)

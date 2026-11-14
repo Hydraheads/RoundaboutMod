@@ -349,7 +349,7 @@ public class FabricItems {
 
     public static Item GINKGO_CHEST_BOAT = registerItem("ginkgo_chest_boat",
             new GinkgoBoatItem(true, new Item.Properties().stacksTo(1)));
-
+    public static Item GINKGO_FALLEN_LEAVES = ModBlocks.GINKGO_FALLEN_LEAVES.asItem();
 
     public static Item CHAMOMILE_SEEDS = registerItem("chamomile_seeds", new ItemNameBlockItem(ModBlocks.CHAMOMILE, new Item.Properties()));
     public static Item CHAMOMILE = registerItem("chamomile", new Item(new Item.Properties()
@@ -984,6 +984,7 @@ public class FabricItems {
                         entries.accept(ModBlocks.GINKGO_BUTTON);
                         entries.accept(GINKGO_BOAT);
                         entries.accept(GINKGO_CHEST_BOAT);
+                        entries.accept(ModBlocks.GINKGO_FALLEN_LEAVES);
                     }).build());
     public static final CreativeModeTab FOG_BLOCK_ITEMS = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
             new ResourceLocation(Roundabout.MOD_ID, "justice_fog_items"),
@@ -1184,6 +1185,7 @@ public class FabricItems {
         ModItems.GINKGO_BUTTON = GINKGO_BUTTON;
         ModItems.GINKGO_BOAT = GINKGO_BOAT;
         ModItems.GINKGO_CHEST_BOAT = GINKGO_CHEST_BOAT;
+        ModItems.GINKGO_FALLEN_LEAVES = GINKGO_FALLEN_LEAVES ;
 
 
 

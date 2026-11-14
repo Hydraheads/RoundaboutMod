@@ -165,6 +165,7 @@ public class ModItems {
     public static Item GINKGO_FENCE_GATE;
     public static Item GINKGO_PRESSURE_PLATE;
     public static Item GINKGO_BUTTON;
+    public static Item GINKGO_FALLEN_LEAVES;
 
     public static Item CAT_REMAINS;
     public static Item OCELOT_REMAINS;

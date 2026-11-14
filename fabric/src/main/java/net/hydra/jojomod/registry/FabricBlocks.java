@@ -345,6 +345,7 @@ public class FabricBlocks {
     public static final Block GINKGO_FENCE_GATE = registerBlock("ginkgo_fence_gate",ModBlocks.GINKGO_FENCE_GATE_PROPERTIES);
     public static final Block GINKGO_PRESSURE_PLATE = registerBlock("ginkgo_pressure_plate",ModBlocks.GINKGO_PRESSURE_PLATE_PROPERTIES);
     public static final Block GINKGO_BUTTON = registerBlock("ginkgo_button",ModBlocks.GINKGO_BUTTON_PROPERTIES);
+    public static final Block GINKGO_FALLEN_LEAVES = registerBlock("ginkgo_fallen_leaves",ModBlocks.GINKGO_FALLEN_LEAVES_PROPERTIES);
 
     private static <T extends BlockEntity> BlockEntityType<T> registerBE(String $$0, BlockEntityType.Builder<T> $$1) {
         Type<?> $$2 = Util.fetchChoiceType(References.BLOCK_ENTITY, $$0);
@@ -607,7 +608,7 @@ public class FabricBlocks {
         ModBlocks.GINKGO_FENCE_GATE = GINKGO_FENCE_GATE;
         ModBlocks.GINKGO_PRESSURE_PLATE = GINKGO_PRESSURE_PLATE;
         ModBlocks.GINKGO_BUTTON = GINKGO_BUTTON;
-
+        ModBlocks.GINKGO_FALLEN_LEAVES = GINKGO_FALLEN_LEAVES;
 
         //ModBlocks.CHESSBOARD_BLOCK = CHESSBOARD_BLOCK;
 
