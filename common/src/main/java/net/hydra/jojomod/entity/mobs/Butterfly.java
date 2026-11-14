@@ -6,6 +6,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -18,7 +19,10 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ambient.AmbientCreature;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -299,5 +303,27 @@ public class Butterfly extends AmbientCreature {
                 .add(Attributes.MAX_HEALTH, 6.0D)
                 .add(Attributes.FLYING_SPEED, 0.6F)
                 .add(Attributes.MOVEMENT_SPEED, 0.3F);
+    }
+
+    public static boolean canSpawn(EntityType<Butterfly> type, LevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
+        if (spawnType == MobSpawnType.SPAWNER || spawnType == MobSpawnType.COMMAND || spawnType == MobSpawnType.SPAWN_EGG) {
+            return true;
+        }
+
+        BlockState below = level.getBlockState(pos.below());
+        boolean isLushCaves = level.getBiome(pos).is(Biomes.LUSH_CAVES);
+
+        boolean validSurface = below.is(BlockTags.DIRT)
+                || below.is(BlockTags.LEAVES)
+                || below.is(Blocks.GRASS_BLOCK)
+                || (isLushCaves && (below.is(Blocks.MOSS_BLOCK)));
+
+        boolean validLightingAndSky = isLushCaves
+                ? level.getRawBrightness(pos, 0) > 4
+                : (level.canSeeSky(pos) && level.getRawBrightness(pos, 0) > 8);
+
+        return validSurface
+                && validLightingAndSky
+                && Mob.checkMobSpawnRules(type, level, spawnType, pos, random);
     }
 }

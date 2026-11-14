@@ -222,7 +222,7 @@ public class ForgeEvents {
                 ForgeEntities.BUTTERFLY.get(),
                 SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                Butterfly::checkMobSpawnRules,
+                Butterfly::canSpawn,
                 SpawnPlacementRegisterEvent.Operation.OR
         );
     }

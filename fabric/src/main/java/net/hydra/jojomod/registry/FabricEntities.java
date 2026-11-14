@@ -1938,6 +1938,6 @@ public class FabricEntities {
         SpawnPlacements.register(ModEntities.PIRANHA, SpawnPlacements.Type.IN_WATER,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Piranha::checkSurfaceWaterAnimalSpawnRules);
         SpawnPlacements.register(ModEntities.BUTTERFLY, SpawnPlacements.Type.ON_GROUND,
-                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Butterfly::canSpawn);
     }
 }
