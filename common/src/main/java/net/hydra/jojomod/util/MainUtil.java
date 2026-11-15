@@ -2982,7 +2982,7 @@ public class MainUtil {
                 value.equals(ModEffects.SINGE)
                 || value.equals(ModEffects.STAND_MELTING) ||
                 value.equals(ModEffects.CAPTURING_LOVE) || value.equals(ModEffects.MELTING)
-                || value.equals(ModEffects.MOLD) || value.equals(ModEffects.STITCHED);
+                || value.equals(ModEffects.MOLD) || value.equals(ModEffects.STITCHED) || value.equals(ModEffects.RECONSTRUCTION);
     }
 
     public static boolean hidesPotionEffectSwirl(MobEffect value) {

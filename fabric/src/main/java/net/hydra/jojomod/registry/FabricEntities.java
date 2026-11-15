@@ -938,21 +938,21 @@ public class FabricEntities {
                         BuiltInRegistries.ENTITY_TYPE,
                         Roundabout.location("silver_chariot"),
                         EntityType.Builder.of(SilverChariotEntity::new, MobCategory.MISC).
-                                sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":silver_chariot")
+                                sized(SilverChariotEntity.eWidth, SilverChariotEntity.eHeight).clientTrackingRange(14).build(Roundabout.MOD_ID+":silver_chariot")
                 );
     public static final EntityType<SilverChariotEntity> SILVER_CHARIOT_PHARAOH =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
                     Roundabout.location("silver_chariot_pharaoh"),
                     EntityType.Builder.of(SilverChariotEntity::new, MobCategory.MISC).
-                            sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":silver_chariot_pharaoh")
+                            sized(SilverChariotEntity.eWidth, SilverChariotEntity.eHeight).clientTrackingRange(14).build(Roundabout.MOD_ID+":silver_chariot_pharaoh")
             );
-        public static final EntityType<SilverChariotRapierShotEntity> SILVER_CHARIOT_RAPIER =
+        public static final EntityType<SilverChariotSwordProjectile> SILVER_CHARIOT_SWORD_PROJECTILE =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
-                        Roundabout.location("silver_chariot_rapier"),
-                        EntityType.Builder.<SilverChariotRapierShotEntity>of(SilverChariotRapierShotEntity::new, MobCategory.MISC).
-                                sized(0.5f, 0.5f).clientTrackingRange(16).build(Roundabout.MOD_ID+":silver_chariot_rapier")
+                        Roundabout.location("silver_chariot_sword_projectile"),
+                        EntityType.Builder.<SilverChariotSwordProjectile>of(SilverChariotSwordProjectile::new, MobCategory.MISC).
+                                sized(0.5f, 0.5f).clientTrackingRange(16).build(Roundabout.MOD_ID+":silver_chariot_sword_projectile")
                 );
     public static final EntityType<SilverChariotRapierPlatformEntity> SILVER_CHARIOT_RAPIER_PLATFORM =
             Registry.register(
@@ -966,7 +966,7 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "sc_mount"),
                     EntityType.Builder.<SilverChariotMountEntity>of(SilverChariotMountEntity::new, MobCategory.MISC).
-                            sized(0.6f, 2f).clientTrackingRange(10).build(Roundabout.MOD_ID+":sc_mount")
+                            sized((float) SilverChariotMountEntity.eWidth, (float) SilverChariotMountEntity.eHeight).clientTrackingRange(10).build(Roundabout.MOD_ID+":sc_mount")
             );
         public static final EntityType<HarpoonEntity> THROWN_HARPOON =
                 Registry.register(
@@ -1513,6 +1513,33 @@ public class FabricEntities {
                     EntityType.Builder.of(SheerHeartAttackEntity::new, MobCategory.CREATURE).
                             sized(SheerHeartAttackEntity.width, SheerHeartAttackEntity.height).clientTrackingRange(15).build(Roundabout.MOD_ID+":sheer_heart_attack")
             );
+    public static final EntityType<GinkgoBoatEntity> GINKGO_BOAT =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "ginkgo_boat"),
+                    EntityType.Builder
+                            .<GinkgoBoatEntity>of(
+                                    GinkgoBoatEntity::new,
+                                    MobCategory.MISC
+                            )
+                            .sized(1.375F, 0.5625F)
+                            .clientTrackingRange(10)
+                            .build("ginkgo_boat")
+            );
+
+    public static final EntityType<GinkgoChestBoatEntity> GINKGO_CHEST_BOAT =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "ginkgo_chest_boat"),
+                    EntityType.Builder
+                            .<GinkgoChestBoatEntity>of(
+                                    GinkgoChestBoatEntity::new,
+                                    MobCategory.MISC
+                            )
+                            .sized(1.375F, 0.5625F)
+                            .clientTrackingRange(10)
+                            .build("ginkgo_chest_boat")
+            );
 
     public static void register() {
                 /*Common Code Bridge*/
@@ -1663,10 +1690,12 @@ public class FabricEntities {
                 ModEntities.ANUBIS_SLIPSTREAM = ANUBIS_SLIPSTREAM;
                 ModEntities.TUSK_NAIL = TUSK_NAIL;
                 ModEntities.TUSK_HOLE = TUSK_HOLE;
-                ModEntities.SILVER_CHARIOT_RAPIER = SILVER_CHARIOT_RAPIER;
+                ModEntities.SILVER_CHARIOT_SWORD_PROJECTILE = SILVER_CHARIOT_SWORD_PROJECTILE;
                 ModEntities.SILVER_CHARIOT_RAPIER_PLATFORM = SILVER_CHARIOT_RAPIER_PLATFORM;
                 ModEntities.SC_MOUNT = SC_MOUNT;
                 ModEntities.VIRUS_SPIT = VIRUS_SPIT;
+                ModEntities.GINKGO_BOAT = GINKGO_BOAT;
+                ModEntities.GINKGO_CHEST_BOAT = GINKGO_CHEST_BOAT;
 
                 ModEntities.BAD_COMPANY_SOLDIER = BAD_COMPANY_SOLDIER;
                 ModEntities.BAD_COMPANY_TANK = BAD_COMPANY_TANK;
@@ -1860,6 +1889,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(GROUND_HURRICANE, GroundHurricaneEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(TUSK_HOLE, TuskHoleEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(ANUBIS_POSSESSOR, AnubisPossessorEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(SC_MOUNT, SilverChariotMountEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(COMMAND_DISC_POSSESSION, CommandDiscPossession.createAttributes());
                 FabricDefaultAttributeRegistry.register(GROUND_BUBBLE, GroundHurricaneEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(LIFE_TRACKER, LifeTrackerEntity.createStandAttributes());
