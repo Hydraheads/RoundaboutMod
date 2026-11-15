@@ -117,10 +117,6 @@ public class GEFishEntity extends Salmon implements GELifeform {
             double offsetY = -0.2D;
 
             moveFunction.accept(passenger, this.getX() + offsetX, this.getY() + offsetY, this.getZ() + offsetZ);
-
-            // camera lock
-            passenger.setYRot(this.getYRot());
-            passenger.setYBodyRot(this.getYRot());
         } else {
             super.positionRider(passenger, moveFunction);
         }

@@ -15,6 +15,11 @@ public class GoldExperienceEntity extends FollowingStandEntity {
             BETA = 1;
 
     public final AnimationState lifePunch = new AnimationState();
+    public final AnimationState doublePunch = new AnimationState();
+    public final AnimationState healWindup = new AnimationState();
+    public final AnimationState healOthers = new AnimationState();
+    public final AnimationState healSelf = new AnimationState();
+    public final AnimationState groundPunch = new AnimationState();
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState hideLeg = new AnimationState();
     public final AnimationState kick_barrage = new AnimationState();
@@ -30,7 +35,12 @@ public class GoldExperienceEntity extends FollowingStandEntity {
 
     //used for animations later
     public static final byte
-        LIFE_PUNCH = 82;
+        LIFE_PUNCH = 82,
+        DOUBLE_PUNCH = 83,
+        HEAL_WINDUP = 84,
+        HEAL_OTHERS = 85,
+        HEAL_SELF = 86,
+        GROUND_PUNCH = 87;
 
     @Override
     public void setupAnimationStates() {
@@ -46,6 +56,34 @@ public class GoldExperienceEntity extends FollowingStandEntity {
             this.lifePunch.startIfStopped(this.tickCount);
         } else {
             this.lifePunch.stop();
+        }
+
+        if (animation == DOUBLE_PUNCH) {
+            this.doublePunch.startIfStopped(this.tickCount);
+        } else {
+            this.doublePunch.stop();
+        }
+
+        if (animation == HEAL_WINDUP) {
+            this.healWindup.startIfStopped(this.tickCount);
+        } else {
+            this.healWindup.stop();
+        }
+        if (animation == HEAL_OTHERS) {
+            this.healOthers.startIfStopped(this.tickCount);
+        } else {
+            this.healOthers.stop();
+        }
+        if (animation == HEAL_SELF) {
+            this.healSelf.startIfStopped(this.tickCount);
+        } else {
+            this.healSelf.stop();
+        }
+
+        if (animation == GROUND_PUNCH) {
+            this.groundPunch.startIfStopped(this.tickCount);
+        } else {
+            this.groundPunch.stop();
         }
 
         if (this.getAnimation() != KICK_BARRAGE) {

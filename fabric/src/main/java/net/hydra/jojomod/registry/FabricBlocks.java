@@ -1,12 +1,14 @@
 package net.hydra.jojomod.registry;
 
 import com.mojang.datafixers.types.Type;
+import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.block.handBlock.HandBlockEntity;
 import net.hydra.jojomod.item.*;
+import net.hydra.jojomod.mixin.access.AccessBlockEntityType;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.Util;
 import net.minecraft.core.Registry;
@@ -24,6 +26,10 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import static net.hydra.jojomod.block.ModBlocks.*;
 
@@ -344,6 +350,7 @@ public class FabricBlocks {
     public static final Block GINKGO_FENCE_GATE = registerBlock("ginkgo_fence_gate",ModBlocks.GINKGO_FENCE_GATE_PROPERTIES);
     public static final Block GINKGO_PRESSURE_PLATE = registerBlock("ginkgo_pressure_plate",ModBlocks.GINKGO_PRESSURE_PLATE_PROPERTIES);
     public static final Block GINKGO_BUTTON = registerBlock("ginkgo_button",ModBlocks.GINKGO_BUTTON_PROPERTIES);
+    public static final Block GINKGO_FALLEN_LEAVES = registerBlock("ginkgo_fallen_leaves",ModBlocks.GINKGO_FALLEN_LEAVES_PROPERTIES);
 
     private static <T extends BlockEntity> BlockEntityType<T> registerBE(String $$0, BlockEntityType.Builder<T> $$1) {
         Type<?> $$2 = Util.fetchChoiceType(References.BLOCK_ENTITY, $$0);
@@ -580,6 +587,15 @@ public class FabricBlocks {
         ModBlocks.GINKGO_PLANKS = GINKGO_PLANKS;
         ModBlocks.GINKGO_LEAVES = GINKGO_LEAVES;
         ModBlocks.GINKGO_WOOD = GINKGO_WOOD;
+        StrippableBlockRegistry.register(
+                GINKGO_LOG,
+                STRIPPED_GINKGO_LOG
+        );
+
+        StrippableBlockRegistry.register(
+                GINKGO_WOOD,
+                STRIPPED_GINKGO_WOOD
+        );
         ModBlocks.STRIPPED_GINKGO_LOG = STRIPPED_GINKGO_LOG;
         ModBlocks.STRIPPED_GINKGO_WOOD = STRIPPED_GINKGO_WOOD;
         ModBlocks.GINKGO_SAPLING = GINKGO_SAPLING;
@@ -589,6 +605,17 @@ public class FabricBlocks {
         ModBlocks.GINKGO_WALL_SIGN = GINKGO_WALL_SIGN;
         ModBlocks.GINKGO_HANGING_SIGN = GINKGO_HANGING_SIGN;
         ModBlocks.GINKGO_WALL_HANGING_SIGN = GINKGO_WALL_HANGING_SIGN;
+        addSupportedBlocks(
+                BlockEntityType.SIGN,
+                GINKGO_SIGN,
+                GINKGO_WALL_SIGN
+        );
+
+        addSupportedBlocks(
+                BlockEntityType.HANGING_SIGN,
+                GINKGO_HANGING_SIGN,
+                GINKGO_WALL_HANGING_SIGN
+        );
         ModBlocks.GINKGO_TRAPDOOR = GINKGO_TRAPDOOR;
         ModBlocks.AUTUMN_LEAVES = AUTUMN_LEAVES;
         ModBlocks.GINKGO_STAIRS = GINKGO_STAIRS;
@@ -597,7 +624,7 @@ public class FabricBlocks {
         ModBlocks.GINKGO_FENCE_GATE = GINKGO_FENCE_GATE;
         ModBlocks.GINKGO_PRESSURE_PLATE = GINKGO_PRESSURE_PLATE;
         ModBlocks.GINKGO_BUTTON = GINKGO_BUTTON;
-
+        ModBlocks.GINKGO_FALLEN_LEAVES = GINKGO_FALLEN_LEAVES;
 
         //ModBlocks.CHESSBOARD_BLOCK = CHESSBOARD_BLOCK;
 
@@ -605,6 +632,19 @@ public class FabricBlocks {
         ((IFireBlock) fire).roundabout$bootstrap();
 
         registerDynamicFogBlocks();
+    }
+    private static void addSupportedBlocks(BlockEntityType<?> type,
+                                           Block... blocks) {
+
+        AccessBlockEntityType accessor =
+                (AccessBlockEntityType) (Object) type;
+
+        Set<Block> validBlocks =
+                new HashSet<>(accessor.roundabout$getValidBlocks());
+
+        Collections.addAll(validBlocks, blocks);
+
+        accessor.roundabout$setValidBlocks(validBlocks);
     }
     public static void registerDynamicFogBlocks()
     {

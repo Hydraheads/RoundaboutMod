@@ -235,6 +235,7 @@ public class SilverChariotArmsPart extends PsuedoHierarchicalModel {
 
 				VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(LE)));
 				//The number at the end is inversely proportional so 2 is half speed
+				/*
 				this.animate(user.roundabout$getWornStandIdleAnimation(), SilverChariotAnimations.Idle(), partialTicks, 1f);
 				// this.animate(user.roundabout$getWornStandIdleAnimation(), SilverChariotAnimations.Idle(), partialTicks, 1f);
 				// user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
@@ -294,6 +295,7 @@ public class SilverChariotArmsPart extends PsuedoHierarchicalModel {
 
 					// root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, heyFull);
 				}
+				*/
 				root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, heyFull);
 			}
 		}

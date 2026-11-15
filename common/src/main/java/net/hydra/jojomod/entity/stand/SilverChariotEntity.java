@@ -31,6 +31,9 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public class SilverChariotEntity extends FollowingStandEntity {
+    public static final float eWidth = 0.6F;
+    public static final float eHeight = 1.8F;
+
     public SilverChariotEntity(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
     }
@@ -64,6 +67,10 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     public boolean isPart5Skin() {
         byte skin = this.getSkin();
+        return skin == PART_5;
+    }
+
+    public static boolean isPart5Skin(byte skin) {
         return skin == PART_5;
     }
 
@@ -1091,10 +1098,8 @@ public class SilverChariotEntity extends FollowingStandEntity {
     public boolean hurt(DamageSource source, float amount) {
         // TODO: Silver Chariot should receive more damage while not armoured
         float amountNew = amount;
-        if (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersSilverChariot PSC) {
-            if (PSC.getArmoured()) {
-                amountNew = amount * 1.20F;
-            }
+        if (!this.getArmoured()) {
+            amountNew = amount * 1.20F;
         }
         if (source.is(DamageTypes.GENERIC_KILL) || source.is(DamageTypes.FELL_OUT_OF_WORLD)){
             discard();

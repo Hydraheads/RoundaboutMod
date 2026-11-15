@@ -157,5 +157,14 @@ public class PowersItemStack {
         }
     }
 
+    // stops the durability bar from showing up
+    @Inject(method = "isBarVisible", at = @At("HEAD"), cancellable = true)
+    private void roundabout$disguiseBarVisible(CallbackInfoReturnable<Boolean> cir) {
+        ItemStack self = (ItemStack) (Object) this;
+        if (!PowersGoldExperience.getDisguisedDisplayStack(self).isEmpty()) {
+            cir.setReturnValue(false);
+        }
+    }
+
     // Gold Experience item imbue end
 }
