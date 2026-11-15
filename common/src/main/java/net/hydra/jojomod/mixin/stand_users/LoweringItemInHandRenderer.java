@@ -7,6 +7,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.GasolineCanItem;
+import net.hydra.jojomod.stand.powers.PowersCatchTheRainbow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
@@ -56,6 +57,14 @@ public class LoweringItemInHandRenderer implements AccessLoweringRenderer {
                         }
                     }
 
+                }
+            }
+            if (((StandUser) clientPlayerEntity2).roundabout$getStandPowers() instanceof PowersCatchTheRainbow PCR && PCR.ctrDodgeTicks != 0){
+                if (this.mainHandHeight > 0.0) {
+                    this.mainHandHeight = Mth.clamp(this.mainHandHeight - 0.4f, 0.0f, 1.0f);
+                }
+                if (this.offHandHeight > 0.0) {
+                    this.offHandHeight = Mth.clamp(this.offHandHeight - 0.4f, 0.0f, 1.0f);
                 }
             }
         }

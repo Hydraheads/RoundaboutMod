@@ -629,9 +629,8 @@ public class VampireFate extends VampiricFate {
                         sendParticlesIfPossible(self.level(),ModParticles.MENACING,
                                 self.getX(), self.getY(), self.getZ(),
                                 10, 0, 0, 0, 0.1);
-
+                    return true;
                 }
-                return true;
             }
         }
         return false;
