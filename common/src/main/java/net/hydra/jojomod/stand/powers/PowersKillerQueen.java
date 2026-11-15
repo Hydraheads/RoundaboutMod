@@ -2971,24 +2971,28 @@ public class PowersKillerQueen extends NewPunchingStand {
                 this.explode();
             }
         }else {
+            defuseServer();
             syncBombStatus(NONE);
         }
     }
 
     public void contactDetonate(Entity ent) {
-        syncBombStatus(ARROW_CONTACT);
-        setBombEntityAndSync(ent);
-
-        if (this.self instanceof Player) {
-            S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(),
-                    PowersKillerQueen.ENTITY_BOMB, bombEntity.getId());
-        }
-
         if (this.isContactModeEnabled() || this.detonateTimer > -1) {
+            syncBombStatus(ARROW_CONTACT);
+            setBombEntityAndSync(ent);
+
+            if (this.self instanceof Player) {
+                S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(),
+                        PowersKillerQueen.ENTITY_BOMB, bombEntity.getId());
+            }
+
+
             if (this.detonateTimer == -1) {
                 detonate();
-
             }
+        }else {
+            defuseServer();
+            syncBombStatus(NONE);
         }
     }
 
@@ -4110,8 +4114,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if(Objects.nonNull(bombPlantedItem) && bombPlantedItem.safeContactTicks <= 0) {
                     Entity contact = detectContact(bombPlantedItem, 0.2);
                     if (contact != null) {
-                        syncBombStatus(ITEM_CONTACT);
                         bombPlantedItem.defuse();
+                        syncBombStatus(ITEM_CONTACT);
                         setBombEntityAndSync(contact);
                         this.detonate();
                     }

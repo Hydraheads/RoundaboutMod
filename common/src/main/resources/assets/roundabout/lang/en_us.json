@@ -268,6 +268,7 @@
   "item.roundabout.tusk_disc.desc": "Tusk",
   "text.roundabout.tusk_nail_color": "Change Nail Color",
   "text.roundabout.killer_queen_remove_stray_cat": "Remove Stray Cat",
+  "text.roundabout.lying_eyes_accesibility": "Lying Eyes Accessibility",
   "item.roundabout.max_tusk_disc.desc": "Tusk",
   "item.roundabout.achtung_baby_disc.desc": "Achtung Baby",
   "item.roundabout.survivor_disc.desc": "Survivor",
@@ -812,7 +813,7 @@
   "entity.roundabout.road_roller_entity": "Road Roller",
   "entity.roundabout.anubis_possessor": "Anubis Possessor",
   "entity.roundabout.anubis_slipstream": "Anubis Slipstream",
-  "entity.roundabout.silver_chariot_rapier": "Rapier",
+  "entity.roundabout.silver_chariot_sword_projectile": "Sword projectile",
   "entity.roundabout.silver_chariot_rapier_platform": "Rapier Platform",
 
   "entity.roundabout.villager_minion": "Zombie Minion",
@@ -966,6 +967,11 @@
   "block.roundabout.ginkgo_fence_gate": "Ginkgo Fence Gate",
   "block.roundabout.ginkgo_pressure_plate": "Ginkgo Pressure Plate",
   "block.roundabout.ginkgo_button": "Ginkgo Button",
+  "item.roundabout.ginkgo_boat": "Ginkgo Boat",
+  "item.roundabout.ginkgo_chest_boat": "Ginkgo Boat with Chest",
+  "entity.roundabout.ginkgo_boat": "Ginkgo Boat",
+  "entity.roundabout.ginkgo_chest_boat": "Ginkgo Boat with Chest",
+  "block.roundabout.ginkgo_fallen_leaves": "Ginkgo Fallen Leaves",
 
   "itemgroup.jojo": "Roundabout",
   "itemgroup.jojo_discs": "Stand Discs",
@@ -2070,6 +2076,7 @@
   "instruction.roundabout.distortion_spit": "While having Haze immunity, Press Skill %1$s while crouching",
   "instruction.roundabout.press_skill_submerged": "Press Skill %1$s While Submerged",
   "instruction.roundabout.press_skill_item": "Press Skill %1$s With A Compatible Item",
+  "instruction.roundabout.press_skill_crouch_block": "Press Skill %1$s While Crouching, and Holding Interact",
 
 
   "ability.roundabout.ice_guard": "Guard",
@@ -2758,9 +2765,9 @@
   "ability.roundabout.silver_chariot_slab_cutting":"Slab Cutting",
   "ability.roundabout.silver_chariot_slab_cutting.desc":"Cuts a slab from a block, if possible.",
   "ability.roundabout.silver_chariot_rapier_slash":"Rapier Slash",
-  "ability.roundabout.silver_chariot_rapier_slash.desc":"",
+  "ability.roundabout.silver_chariot_rapier_slash.desc":"Silver Chariot slashes with it's sword in stand attack range dealing small amount of damage, bleed along with destroying tall grass and fire.",
   "ability.roundabout.silver_chariot_rapier_spin":"Rapier Spin",
-  "ability.roundabout.silver_chariot_rapier_spin.desc":"",
+  "ability.roundabout.silver_chariot_rapier_spin.desc":"Silver Chariot spins it's rapier and intercepts most projectiles, and dealing small damage to entities and large knockback.",
   "ability.roundabout.silver_chariot_offhand_weapon_render":"Offhand Weapon Render/Final attack",
   "ability.roundabout.silver_chariot_offhand_weapon_render.desc":"Silver Chariot renders the user's held item in it's offhand and attacks with it, if the user is not holding an item a final attack is instead charged.",
   "ability.roundabout.silver_chariot_arm_summon":"Arm Summon",
@@ -3262,6 +3269,8 @@
   "skins.roundabout.d4c.reverse": "Reverse",
   "skins.roundabout.d4c.inverse": "Inverse",
   "skins.roundabout.d4c.chocolate": "Chocolate",
+  "skins.roundabout.d4c.melon": "Melon",
+  "skins.roundabout.d4c.portal": "Portal",
 
   "skins.roundabout.walking_heart.base": "Manga",
   "skins.roundabout.walking_heart.model": "Model",
@@ -4734,6 +4743,11 @@
   "config.roundabout.scoleciphobiaMode.desc": "Disables the idle animation of the nematodes in first person.",
   "config.roundabout.scoleciphobiaModeUsing.name": "Scoleciphobia-2 Mode",
   "config.roundabout.scoleciphobiaModeUsing.desc": "Disables the transition animation of the nematodes in first person.",
+  "config.roundabout.liyingEyesColorBlindMode.name": "Color Blind Mode",
+  "config.roundabout.liyingEyesColorBlindMode.desc": "Makes Passive, Neutral and Hostile highlights have different shapes.",
+
+  "config.roundabout.highlightSize.name": "Highlight Size",
+  "config.roundabout.highlightSize.desc": "Set how big the highlight of mobs should be.",
 
   "config.roundabout.disablePHazeOverlayAnimation.name": "Disable Haze Overlay Animation",
   "config.roundabout.disablePHazeOverlayAnimation.desc": "Disables the idle animation of the haze in first person.",

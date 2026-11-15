@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "X X",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "roundabout:stripped_ginkgo_log"
+    },
+    "X": {
+      "item": "minecraft:chain"
+    }
+  },
+  "result": {
+    "item": "roundabout:ginkgo_hanging_sign",
+    "count": 6
+  }
+}

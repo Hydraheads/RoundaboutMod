@@ -2,12 +2,9 @@ package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.block.ModBlocks;
-import net.hydra.jojomod.block.SilverChariotRapierPlatformBlock;
 import net.hydra.jojomod.block.SilverChariotRapierPlatformBlockEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.UnburnableProjectile;
-import net.hydra.jojomod.entity.stand.SilverChariotEntity;
-import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -18,9 +15,6 @@ import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -28,32 +22,28 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
-import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
 
 import java.util.UUID;
 
-public class SilverChariotRapierShotEntity extends AbstractArrow implements UnburnableProjectile {
+public class SilverChariotSwordProjectile extends AbstractArrow implements UnburnableProjectile {
     // private static final EntityDataAccessor<Integer> ROUNDABOUT$BOUNCES = SynchedEntityData.defineId(SilverChariotRapierShotEntity.class, EntityDataSerializers.INT);
     // private static final EntityDataAccessor<Byte> ROUNDABOUT$TYPE = SynchedEntityData.defineId(SilverChariotRapierShotEntity.class, EntityDataSerializers.BYTE);
     // private static final EntityDataAccessor<Byte> SKIN = SynchedEntityData.defineId(SilverChariotRapierShotEntity.class, EntityDataSerializers.BYTE);
     // private static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(SilverChariotRapierShotEntity.class, EntityDataSerializers.INT);
 
-    public SilverChariotRapierShotEntity(EntityType<? extends SilverChariotRapierShotEntity> $$0, Level $$1) {
+    public SilverChariotSwordProjectile(EntityType<? extends SilverChariotSwordProjectile> $$0, Level $$1) {
         super($$0, $$1);
     }
 
-    protected SilverChariotRapierShotEntity(EntityType<? extends SilverChariotRapierShotEntity> $$0, double $$1, double $$2, double $$3, Level $$4) {
+    protected SilverChariotSwordProjectile(EntityType<? extends SilverChariotSwordProjectile> $$0, double $$1, double $$2, double $$3, Level $$4) {
         this($$0, $$4);
         this.setPos($$1, $$2, $$3);
     }
@@ -65,8 +55,8 @@ public class SilverChariotRapierShotEntity extends AbstractArrow implements Unbu
         return this.skin;
     }
 
-    public SilverChariotRapierShotEntity(LivingEntity $$0, double $$1, double $$2, double $$3, Level $$4, byte type, byte skin) {
-        this(ModEntities.SILVER_CHARIOT_RAPIER, $$1, $$2, $$3, $$4);
+    public SilverChariotSwordProjectile(LivingEntity $$0, double $$1, double $$2, double $$3, Level $$4, byte type, byte skin) {
+        this(ModEntities.SILVER_CHARIOT_SWORD_PROJECTILE, $$1, $$2, $$3, $$4);
         this.setRapierShotType(type);
         if (type == BASE_SHOT) {
             this.setBounces(1);
@@ -77,7 +67,7 @@ public class SilverChariotRapierShotEntity extends AbstractArrow implements Unbu
         this.skin = skin;
     }
 
-    private static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(SilverChariotRapierShotEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(SilverChariotSwordProjectile.class, EntityDataSerializers.INT);
 
     public LivingEntity standUser;
     public UUID standUserUUID;
@@ -450,7 +440,7 @@ public class SilverChariotRapierShotEntity extends AbstractArrow implements Unbu
             this.playSound(ModSounds.SILVER_CHARIOT_RAPIER_SHOT_ENTITY_IMPACT_EVENT, 1.0F, (this.random.nextFloat() * 0.2F + 0.9F));
         } else if (gotten instanceof LivingEntity le && le.isBlocking()) {
             int breakShield = 160;
-            MainUtil.knockShield(le, breakShield);
+            MainUtil.knockShieldPlusStand(le, breakShield);
         }
 
         float degrees = MainUtil.getLookAtEntityYaw(proj, gotten);

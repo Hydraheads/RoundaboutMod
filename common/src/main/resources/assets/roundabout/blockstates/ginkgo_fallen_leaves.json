@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "": [
+      { "model": "roundabout:block/ginkgo_fallen_leaves" },
+      { "model": "roundabout:block/ginkgo_fallen_leaves", "y": 90 },
+      { "model": "roundabout:block/ginkgo_fallen_leaves", "y": 180 },
+      { "model": "roundabout:block/ginkgo_fallen_leaves", "y": 270 }
+    ]
+  }
+}

@@ -1,11 +1,17 @@
 
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.event.ModParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -102,6 +108,10 @@ public class AutumnLeavesBlock extends BushBlock {
 
         boolean shouldFall = false;
 
+        if (entity instanceof ItemEntity itemEntity) {
+            itemEntity.setNoPickUpDelay();
+        }
+
         for (int distance = 1; distance <= TRAVEL_DISTANCE; distance++) {
 
             double nextX = startX + direction.getStepX() * distance;
@@ -136,7 +146,9 @@ public class AutumnLeavesBlock extends BushBlock {
                         nextZ
                 );
 
-                boolean isLeaves = level.getBlockState(feetPos)
+                // Ignore the Autumn Leaves block that launched the entity.
+                boolean isLeaves = !feetPos.equals(pos)
+                        && level.getBlockState(feetPos)
                         .getBlock() instanceof AutumnLeavesBlock;
 
                 if (hasGround || isLeaves) {
@@ -166,15 +178,43 @@ public class AutumnLeavesBlock extends BushBlock {
 
             currentY = nextY;
 
+            // Allow players to collect items along the path.
+            if (entity instanceof ItemEntity itemEntity) {
+
+                AABB pickupBox = entity.getBoundingBox().move(
+                        nextX - startX,
+                        currentY - startY,
+                        nextZ - startZ
+                ).inflate(0.5, 0.25, 0.5);
+
+                for (Player player : level.getEntitiesOfClass(
+                        Player.class, pickupBox)) {
+
+                    if (player.isSpectator() || !player.isAlive()) {
+                        continue;
+                    }
+
+                    itemEntity.playerTouch(player);
+
+                    if (itemEntity.isRemoved()) {
+                        return;
+                    }
+                }
+            }
+
             BlockPos leavesPos = BlockPos.containing(
                     nextX,
                     currentY + 0.01,
                     nextZ
             );
 
+            BlockState leavesState = level.getBlockState(leavesPos);
+
+            // Only stop at a different, charged Autumn Leaves block.
+            // This allows combos without stopping at the original block.
             if (!leavesPos.equals(pos)
-                    && level.getBlockState(leavesPos)
-                    .getBlock() instanceof AutumnLeavesBlock) {
+                    && leavesState.getBlock() instanceof AutumnLeavesBlock
+                    && !leavesState.getValue(COOLDOWN)) {
 
                 lastSafeX = leavesPos.getX() + 0.5;
                 lastSafeY = currentY;
@@ -210,17 +250,49 @@ public class AutumnLeavesBlock extends BushBlock {
             }
         }
     }
+    @Override
+    public void animateTick(BlockState state, Level level,
+                            BlockPos pos, RandomSource random) {
 
+        super.animateTick(state, level, pos, random);
+
+        if (state.getValue(COOLDOWN)) {
+            return;
+        }
+
+        for (int i = 0; i < 3; i++) {
+
+            double x = pos.getX() + random.nextDouble();
+            double y = pos.getY() + 0.1;
+            double z = pos.getZ() + random.nextDouble();
+
+            level.addParticle(
+                    ModParticles.AUTUMN_LEAVES,
+                    x, y, z,
+                    0.0, 0.025, 0.0
+            );
+        }
+    }
 
     @Override
     public void tick(BlockState state, ServerLevel level,
                      BlockPos pos, RandomSource random) {
 
         if (state.getValue(COOLDOWN)) {
+
             level.setBlock(
                     pos,
                     state.setValue(COOLDOWN, false),
                     3
+            );
+
+            level.playSound(
+                    null,
+                    pos,
+                    SoundEvents.AMETHYST_BLOCK_CHIME,
+                    SoundSource.BLOCKS,
+                    0.7F,
+                    1.2F
             );
         }
     }

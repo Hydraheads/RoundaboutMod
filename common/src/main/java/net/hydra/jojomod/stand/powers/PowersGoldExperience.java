@@ -612,6 +612,14 @@ public class PowersGoldExperience extends BlockGrabPreset {
     }
 
     @Override
+    public void updateMovesFromPacket(byte activePower){
+        if (activePower == PowerIndex.BARRAGE_2){
+            this.setActivePowerPhase(this.activePowerPhaseMax);
+        }
+        super.updateMovesFromPacket(activePower);
+    }
+
+    @Override
     public void handleStandAttack(Player player, Entity target) {
         if (this.getActivePower() == LIFE_PUNCH) {
             lifePunchImpact(target);
@@ -997,7 +1005,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
             if (this.self instanceof Player) {
                 if (isPacketPlayer()) {
                     C2SPacketUtil.standBarrageHitPacket(-1, this.attackTimeDuring);
-                    if (this.attackTimeDuring == this.getBarrageLength()) {
+
+                    if (this.activePower == PowerIndex.BARRAGE_2 && this.attackTimeDuring == this.getKickBarrageLength()){
+                        this.attackTimeDuring = -10;
+                    } else if (this.isBarraging() && this.attackTimeDuring == this.getBarrageLength()){
                         this.attackTimeDuring = -10;
                     }
                 }
