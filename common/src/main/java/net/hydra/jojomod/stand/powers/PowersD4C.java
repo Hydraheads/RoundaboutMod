@@ -3514,15 +3514,12 @@ public class PowersD4C extends NewPunchingStand {
         return switch (skinId)
         {
             case D4CEntity.BASE -> "base";
-            case D4CEntity.COVER -> "cover";
             case D4CEntity.SPINE -> "spine";
             case D4CEntity.VELLER -> "veller";
-            case D4CEntity.ROA -> "roa";
             case D4CEntity.DEPARTURE -> "departure";
             case D4CEntity.PROMO -> "promo";
             case D4CEntity.FOUNTAIN_BOY -> "fountain_boy";
             case D4CEntity.CONCEPT_ART -> "concept_art";
-            case D4CEntity.EOH_BLUE -> "eoh_blue";
             case D4CEntity.EOH_PINK -> "eoh_pink";
             case D4CEntity.EOH_PURPLE -> "eoh_purple";
             case D4CEntity.EOH_YELLOW -> "eoh_yellow";
@@ -3531,11 +3528,12 @@ public class PowersD4C extends NewPunchingStand {
             case D4CEntity.CURSED_CARD -> "cursed_card";
             case D4CEntity.ULTRA_BRAND -> "ultra_brand";
             case D4CEntity.KEYHOLDER -> "keyholder";
-            case D4CEntity.GRAY -> "gray";
             case D4CEntity.BLACK_WHITE -> "black_white";
             case D4CEntity.REVERSE -> "reverse";
             case D4CEntity.CHOCOLATE -> "chocolate";
             case D4CEntity.INVERSE -> "inverse";
+            case D4CEntity.MELON -> "melon";
+            case D4CEntity.PORTAL -> "portal";
             default -> "base";
         };
     }
@@ -3548,27 +3546,25 @@ public class PowersD4C extends NewPunchingStand {
             ItemStack goldDisc = ((StandUser)PE).roundabout$getStandDisc();
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
             if (Level > 1 || bypass){
-                $$1.add(D4CEntity.COVER);
                 $$1.add(D4CEntity.SPINE);
-                $$1.add(D4CEntity.CHOCOLATE);
-            } if (Level > 2 || bypass){
                 $$1.add(D4CEntity.VELLER);
-                $$1.add(D4CEntity.ROA);
+                $$1.add(D4CEntity.MELON);
+            } if (Level > 2 || bypass){
+                $$1.add(D4CEntity.PORTAL);
                 $$1.add(D4CEntity.BLACK_WHITE);
                 $$1.add(D4CEntity.REVERSE);
             } if (Level > 3 || bypass){
+                $$1.add(D4CEntity.CHOCOLATE);
                 $$1.add(D4CEntity.DEPARTURE);
                 $$1.add(D4CEntity.PROMO);
-                $$1.add(D4CEntity.KEYHOLDER);
-                $$1.add(D4CEntity.GRAY);
             } if (Level > 4 || bypass){
-                $$1.add(D4CEntity.EOH_BLUE);
+                $$1.add(D4CEntity.KEYHOLDER);
                 $$1.add(D4CEntity.EOH_PINK);
                 $$1.add(D4CEntity.EOH_PURPLE);
                 $$1.add(D4CEntity.EOH_YELLOW);
             } if (Level > 5 || bypass){
-                $$1.add(D4CEntity.FOUNTAIN_BOY);
                 $$1.add(D4CEntity.CONCEPT_ART);
+                $$1.add(D4CEntity.FOUNTAIN_BOY);
                 $$1.add(D4CEntity.CURSED_CARD);
                 $$1.add(D4CEntity.ULTRA_BRAND);
             } if (Level > 6 || bypass){
