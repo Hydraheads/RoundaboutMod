@@ -7,6 +7,9 @@ import net.hydra.jojomod.particles.PuzzleParticle;
 import net.hydra.jojomod.stand.powers.PowersKingNothing;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeMap;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 
 public class TrackingCloudEntity extends StandEntity {
@@ -23,23 +26,15 @@ public class TrackingCloudEntity extends StandEntity {
     }
 
     @Override
-    public boolean needsActive() {
-        return false;
-    }
-
-    @Override
     public void tick() {
-        super.tick();
-        if (getUser().isAlive() && getUserData(getUser()).roundabout$getStandPowers() instanceof PowersKingNothing KN) {
-            KN.sendParticlesIfPossible(this.level(),
-                    PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE,
-                            KN.getVisualInfo().color1()), this.getX(), this.getY(), this.getZ(), 0, 0, 0);
-        }
+        if (getUser() == null || !getUser().isAlive() || !(getUserData(
+                getUser()).roundabout$getStandPowers() instanceof PowersKingNothing)) {
+                    this.discard();
+                }
     }
 
-    @Override
-    public boolean isNoGravity() {
-        return true;
+    public static AttributeSupplier.Builder createStandAttributes() {
+        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED,
+                0.2F).add(Attributes.MAX_HEALTH, 20.0).add(Attributes.ATTACK_DAMAGE, 2.0);
     }
-
 }

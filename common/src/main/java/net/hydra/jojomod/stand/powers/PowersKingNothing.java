@@ -125,6 +125,7 @@ public class PowersKingNothing extends NewDashPreset {
     int returnAnimTicks = 0;
     int disintegrateAnimTicks = 0;
     int passiveParticlesCounter = 0;
+    private boolean trackingCloudOut = false;
     TrackingCloudEntity trackingCloud = null;
     private Block memorizedBlock = null;
     private EntityType<?> memorizedEntityType = null;
@@ -182,7 +183,7 @@ public class PowersKingNothing extends NewDashPreset {
 
     @Override
     public boolean canSummonStandAsEntity() {
-        return !isTrackingItem();
+        return !isTrackingItem() && !isTrackingMemorizedScent();
     }
 
     @Override
@@ -312,7 +313,7 @@ public class PowersKingNothing extends NewDashPreset {
             setSkillIcon(context, x, y, 2, StandIcons.KING_NOTHING_PHASE_GRAB, PowerIndex.SKILL_2);
             normalXIcon = false;
         }
-        else if (isTrackingItem()) {
+        else if (isTrackingItem() || isTrackingMemorizedScent()) {
             setSkillIcon(context, x, y, 1, StandIcons.KING_NOTHING_REFORM, PowerIndex.SKILL_1_SNEAK);
             normalZIcon = false;
         }
@@ -569,6 +570,15 @@ public class PowersKingNothing extends NewDashPreset {
             }
             else {
                 passiveParticlesCounter++;
+            }
+        }
+        if (getSelf().isAlive() && !getSelf().isRemoved() && trackingCloud != null) {
+            VisualData pdata = getVisualInfo();
+            for (int i = 0; i < 2; i++) {
+                int color = Roundabout.RANDOM.nextFloat() > pdata.percentOther() ? pdata.color1() : pdata.color2();
+                MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
+                        PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
+                        trackingCloud.getX(), trackingCloud.getY(), trackingCloud.getZ(), 1, 0.1, 0.1, 0.1, 0.01);
             }
         }
     }
@@ -1066,6 +1076,10 @@ public class PowersKingNothing extends NewDashPreset {
     public boolean isTrackingItem() {
         return trackedItem != null;
     }
+    
+    private boolean isTrackingMemorizedScent() {
+        return trackingCloudOut;
+    }
 
     @Override
     public void powerActivate(PowerContext context) {
@@ -1078,9 +1092,14 @@ public class PowersKingNothing extends NewDashPreset {
                 tryEndItemTrack();
                 return;
             }
+            else if (isTrackingMemorizedScent()) {
+                Roundabout.LOGGER.debug("I AM MEMORIZING SCENT AND TRYING TO STOP");
+                tryEndMemorizedScentTrack();
+                return;
+            }
         }
         switch (context) {
-//            case SKILL_1_NORMAL -> tryTrackMemorizedScent();
+            case SKILL_1_NORMAL -> tryTrackMemorizedScent();
             case SKILL_1_CROUCH -> tryItemTrack();
             case SKILL_2_NORMAL -> phaseGrabClient();
             case SKILL_2_CROUCH -> phaseItemClient();
@@ -1133,6 +1152,9 @@ public class PowersKingNothing extends NewDashPreset {
             case PowerIndex.EXTRA_2 -> {
                 return this.endItemTrack();
             }
+            case PowerIndex.POWER_1_BONUS -> {
+                return this.endMemorizedScentTrack();
+            }
             case PowerIndex.POWER_4_BONUS -> {
                 return this.memorizeEntity();
             }
@@ -1142,13 +1164,15 @@ public class PowersKingNothing extends NewDashPreset {
 
     private boolean startMemorizedScentTrack() {
         animateStand(KingNothingEntity.DISINTEGRATE);
+        trackingCloudOut = true;
         if (!getSelf().level().isClientSide()) {
             TrackingCloudEntity tc = ModEntities.TRACKING_CLOUD.create(this.getSelf().level());
             tc.setUser(this.getSelf());
             tc.setXRot(getStandEntity(getSelf()).getXRot());
             tc.setYRot(getStandEntity(getSelf()).getYRot());
-            tc.setPos(getStandEntity(getSelf()).position());
+            tc.setPos(getStandEntity(getSelf()).getBoundingBox().getCenter());
             this.getSelf().level().addFreshEntity(tc);
+            this.trackingCloud = tc;
         }
         return true;
     }
@@ -1201,6 +1225,13 @@ public class PowersKingNothing extends NewDashPreset {
         }
     }
 
+    private void tryEndMemorizedScentTrack() {
+        if (!onCooldown(PowerIndex.POWER_1)) {
+            this.getStandUserSelf().roundabout$tryPower(PowerIndex.POWER_1_BONUS, true);
+            tryPowerPacket(PowerIndex.POWER_1_BONUS);
+        }
+    }
+
     public boolean endItemTrack() {
         if (isTrackingItem() && !onCooldown(PowerIndex.SKILL_1_SNEAK)) {
             this.trackedItem = null;
@@ -1210,6 +1241,20 @@ public class PowersKingNothing extends NewDashPreset {
             if (getSelf() instanceof ServerPlayer) {
                 S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, 20);
                 this.setCooldown(PowerIndex.SKILL_1_SNEAK, 20);
+            }
+            playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);
+            animateStand(KingNothingEntity.RETURN);
+            setPowerNone();
+        }
+        return true;
+    }
+
+    private boolean endMemorizedScentTrack() {
+        if (isTrackingMemorizedScent() && !onCooldown(PowerIndex.SKILL_1)) {
+            this.trackingCloudOut = false;
+            if (!this.getSelf().level().isClientSide()) {
+                this.trackingCloud.discard();
+                this.trackingCloud = null;
             }
             playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);
             animateStand(KingNothingEntity.RETURN);
