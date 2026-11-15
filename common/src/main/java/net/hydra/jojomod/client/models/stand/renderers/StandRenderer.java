@@ -148,7 +148,7 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
         }
         (this.model).setAlpha(mobEntity.fadePercent);
 
-        if (mobEntity.fadePercent <= 0){
+        if (mobEntity.fadePercent <= 0  || maxfade <= 0){
             return;
         }
 
@@ -206,10 +206,14 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
         return super.getRenderType(entity, showBody, true, showOutline);
     }
 
-    public boolean hasGlowingParts(byte skin) {  return false; }
+    public boolean hasGlowingParts(byte skin, int packedLight) {  return false; }
 
-    public  RenderType getGlowingReference(byte skin) {
+    public RenderType getGlowingReference(byte skin) {
         return null;
+    }
+
+    public int getGlowAmount(byte skin) {
+        return 15728640;
     }
 
 }

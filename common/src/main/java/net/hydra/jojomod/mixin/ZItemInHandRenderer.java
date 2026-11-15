@@ -281,6 +281,13 @@ public abstract class ZItemInHandRenderer {
             }
         }
 
+        if (standUser.roundabout$getStandPowers() instanceof PowersSilverChariot PSC) {
+            if (PowerTypes.hasStandActive(abstractClientPlayer) && PSC.hasHandsOut()) {
+                // ci.cancel();
+                // return;
+            }
+        }
+
         boolean emperorFP =
                 standUser.roundabout$getStandPowers() instanceof PowersEmperor
                         && standUser.roundabout$getCombatMode();

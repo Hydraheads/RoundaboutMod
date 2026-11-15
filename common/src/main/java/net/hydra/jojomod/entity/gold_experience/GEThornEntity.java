@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.gold_experience;
 
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.DamageHandler;
@@ -21,6 +22,8 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 public class GEThornEntity extends Entity {
@@ -51,14 +54,38 @@ public class GEThornEntity extends Entity {
 
         if (!this.level().isClientSide()) {
             if (!this.entityData.get(IS_WILTING)) {
+                LivingEntity caster = getOwner();
+                UUID casterUUID = this.ownerUUID != null ? this.ownerUUID : (caster != null ? caster.getUUID() : null);
+                Set<LivingEntity> damagedVictims = new HashSet<>();
+
                 for (LivingEntity target : this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox())) {
-                    if ((this.owner != null && target == owner || PowerTypes.isInADifferentExistence(target, this))) continue;
+                    if (!target.isAlive() || target.isSpectator()) continue;
+                    if (PowerTypes.isInADifferentExistence(target, this)) continue;
                     if (target.invulnerableTime > 10) continue;
 
+                    // user exclusion
+                    if (caster != null && target.is(caster)) continue;
+                    if (casterUUID != null && casterUUID.equals(target.getUUID())) continue;
+
+                    // stand pair to user stuff
+                    if (target instanceof StandEntity stand) {
+                        LivingEntity standUser = stand.getUser();
+                        if (standUser != null) {
+                            if (caster != null && standUser.is(caster)) continue;
+                            if (casterUUID != null && casterUUID.equals(standUser.getUUID())) continue;
+                        }
+                    }
+
+                    LivingEntity actualVictim = (target instanceof StandEntity stand && stand.getUser() != null)
+                            ? stand.getUser()
+                            : target;
+                    if (damagedVictims.contains(actualVictim)) continue;
+
                     Vec3 prevVelocity = target.getDeltaMovement();
-                    if (DamageHandler.StandDamageEntity(target, 0.6F, getOwner())) {
+                    if (DamageHandler.StandDamageEntity(target, 0.6F, caster)) {
                         target.setDeltaMovement(prevVelocity);
                         target.hurtMarked = true;
+                        damagedVictims.add(actualVictim);
                     }
                 }
             }

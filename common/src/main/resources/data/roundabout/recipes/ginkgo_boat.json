@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "# #",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "roundabout:ginkgo_planks"
+    }
+  },
+  "result": {
+    "item": "roundabout:ginkgo_boat",
+    "count": 1
+  }
+}

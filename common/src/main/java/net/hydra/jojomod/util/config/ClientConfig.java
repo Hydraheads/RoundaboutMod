@@ -105,6 +105,8 @@ public class ClientConfig implements Cloneable {
     @NestedOption(group = "modded")
     public ClientConfig.KillerQueenSettings killerQueenSettings;
     @NestedOption(group = "modded")
+    public ClientConfig.PurpleHazeSettings purpleHazeSettings;
+    @NestedOption(group = "modded")
     public ClientConfig.WhitesnakeSettings whitesnakeSettings;
     @NestedOption(group = "modded")
     public ClientConfig.DiverDownSettings diverDownSettings;
@@ -142,6 +144,8 @@ public class ClientConfig implements Cloneable {
         public Float timeSkipOpacity;
         @FloatOption(group = "inherit", value = 0.6F, min = 0, max = 1)
         public Float bitesTheDustOpacity;
+        @FloatOption(group = "inherit", value = 0.7F, min = 0, max = 1)
+        public Float hazeFieldOpacity;
     }
     public static class ConfigSettings {
 
@@ -238,6 +242,10 @@ public class ClientConfig implements Cloneable {
         @BooleanOption(group = "inherit", value = true)
         public Boolean simpleTimeStopShader;
     }
+    public static class PurpleHazeSettings {
+    	@BooleanOption(group = "inherit", value = false)
+        public Boolean disablePHazeOverlayAnimation;
+    }
     public static class KillerQueenSettings {
     	@BooleanOption(group = "inherit", value = true)
         public Boolean bombOverlayHideOnF1;
@@ -279,6 +287,14 @@ public class ClientConfig implements Cloneable {
     public static class LyinEyesSettings {
         @BooleanOption(group = "inherit", value = false)
         public Boolean spinMapInsteadOfArrow;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean scoleciphobiaMode;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean scoleciphobiaModeUsing;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean liyingEyesColorBlindMode;
+        @FloatOption(group = "inherit", value = 0.7F, min = 0, max = 1)
+        public Float highlightSize;
         @FloatOption(group = "inherit", value = 1F, min = 0, max = 1)
         public Float nematodeOpacity;
         @FloatOption(group = "inherit", value = 1F, min = 0, max = 1)

@@ -95,7 +95,7 @@ public class PurpleHazeRenderer extends StandRenderer<PurpleHazeEntity> {
     private static final RenderType CREAKING_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/purple_haze/creaking_glowing.png"));
 
     @Override
-    public boolean hasGlowingParts(byte skin) {  return skin == PurpleHazeEntity.CREAKING; }
+    public boolean hasGlowingParts(byte skin, int packedlight) {  return skin == PurpleHazeEntity.CREAKING; }
 
     @Override
     public  RenderType getGlowingReference(byte skin) {

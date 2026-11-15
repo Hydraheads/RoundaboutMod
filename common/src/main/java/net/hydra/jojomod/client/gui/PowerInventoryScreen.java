@@ -28,6 +28,7 @@ import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
+import net.hydra.jojomod.stand.powers.PowersLyinEyes;
 import net.hydra.jojomod.stand.powers.PowersTusk;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -284,6 +285,7 @@ public class PowerInventoryScreen
             } else {
                 context.blit(POWER_INVENTORY_LOCATION, leftGearPos, topGearPos, 178, 0, 19, 18);
             }
+
         }
 
         $$2.set($$3);
@@ -1139,6 +1141,12 @@ public class PowerInventoryScreen
                 soundmanager.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
                 return true;
             }
+            if (isSurelyHovering(leftGearPos, topGearPos-19, 18, 18, mouseX, mouseY)) {
+                openAccesibilityTab();
+                SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
+                soundmanager.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                return true;
+            }
 
 
 
@@ -1209,6 +1217,10 @@ public class PowerInventoryScreen
             this.isOptionsOut = true;
             this.leftPos += leftposModifier;
         }
+    }
+
+    public void openAccesibilityTab(){
+
     }
 
     @Override

@@ -1050,7 +1050,7 @@ public class PowersDiverDown extends NewPunchingStand {
             }
         }
         // force crawl mode in zippy time
-        if (inZipMode()) {
+        if (inZipMode() && MainUtil.isHumanoid(this.self)) {
             this.self.setSprinting(false);
             ((StandUser) this.self).rdbt$SetCrawlTicks(5);
             this.self.setPose(Pose.SWIMMING);
@@ -3076,9 +3076,11 @@ public class PowersDiverDown extends NewPunchingStand {
 
     public void toggleZip(boolean toggle) {
         if (!toggle) {
-            ((StandUser) this.self).rdbt$SetCrawlTicks(0);
-            this.self.setSwimming(false);
-            this.self.setPose(Pose.STANDING);
+            if (MainUtil.isHumanoid(this.self)) {
+                ((StandUser) this.self).rdbt$SetCrawlTicks(0);
+                this.self.setSwimming(false);
+                this.self.setPose(Pose.STANDING);
+            }
             this.setPowerNone();
             if (inZipMode())
                 setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().diverDownSettings.diverZipCooldown);

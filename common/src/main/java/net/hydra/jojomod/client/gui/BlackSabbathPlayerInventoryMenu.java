@@ -84,7 +84,6 @@ public class BlackSabbathPlayerInventoryMenu extends AbstractContainerMenu {
                     return true;
                 }
             } else {
-                System.out.println($$0.level());
                 StandUser user = ((StandUser) $$0);
                 StandPowers powers = user.roundabout$getStandPowers();
                 if(powers instanceof PowersBlackSabbath pb){

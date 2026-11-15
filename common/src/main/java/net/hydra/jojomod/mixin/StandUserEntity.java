@@ -406,6 +406,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     private int roundabout$springLegsTicks;
     @Unique
+    private int roundabout$GERootTicks;
+    @Unique
     private StandPowers roundabout$RejectionStandPowers = null;
     @Unique
     private ItemStack roundabout$RejectionStandDisc = null;
@@ -1715,6 +1717,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (!this.level().isClientSide()) {
             if (roundabout$hasSpringLegs() && --roundabout$springLegsTicks <= 0) {
                 roundabout$setSpringLegs(false);
+            }
+            if (roundabout$hasGERooted() && --roundabout$GERootTicks <= 0) {
+                roundabout$setGERooted(false);
+                if (!this.roundabout$GERootedItem.isEmpty()) {
+                    this.spawnAtLocation(this.roundabout$GERootedItem);
+                    this.roundabout$GERootedItem = ItemStack.EMPTY;
+                }
+                this.level().playSound(null, this.blockPosition(),
+                        ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.7F, 1.0F);
             }
             if (roundabout$getBoundTo() != null && (!roundabout$getBoundTo().isAlive()
                     || roundabout$getBoundToID() != roundabout$getBoundTo().getId())) {
@@ -3723,7 +3734,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     @Unique
     public boolean roundabout$isSealed() {
-        return roundabout$sealedTicks > -1 || (rdbt$this() instanceof Player PE && PE.isSpectator());
+        return roundabout$sealedTicks > -1 || (rdbt$this() instanceof Player PE && PE.isSpectator()) || roundabout$getGrabbedSoul();
     }
 
     @Override
@@ -4001,6 +4012,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$SPRING_LEGS, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$GRABBED_SOUL, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$GRABBER_ID, 0);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$GE_TREE_ROOT, false);
         }
     }
 
@@ -5514,10 +5526,33 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             dd.clearSpringLegs();
         }
 
+        if (this.roundabout$hasGERooted()) {
+            this.roundabout$setGERooted(false);
+            if (!this.level().isClientSide() && !this.roundabout$GERootedItem.isEmpty()) {
+                this.spawnAtLocation(this.roundabout$GERootedItem);
+                this.roundabout$GERootedItem = ItemStack.EMPTY;
+            }
+        }
+
         if(this.roundabout$getGrabberSabbath() != 0){
             Entity z = this.level().getEntity(roundabout$getGrabberSabbath());
             if(z != null && z instanceof BlackSabbathEntity be){
-                if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);((StandUser) e).roundabout$updateSealedTicks(-1);be.killSoul();((StandUser)e).roundabout$setGrabberSabbath(0);}
+                if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);/*((StandUser) e).roundabout$updateSealedTicks(-1)*/;be.killSoul();((StandUser)e).roundabout$setGrabberSabbath(0);}
+            }
+        }
+
+        if(this.roundabout$getStandPowers() instanceof PowersBlackSabbath pbs){
+            if (pbs.getStandEntity(pbs.self) != null && pbs.getStandEntity(pbs.self) instanceof BlackSabbathEntity BE) {
+                if (BE.getGrabbing() != 0) {
+                    Entity ent = BE.level().getEntity(BE.getGrabbing());
+                    if (ent != null && ent instanceof LivingEntity LE) {
+                        BE.setMeleeInteractionTicks(-1);
+                        ((StandUser) LE).roundabout$setGrabbedSoul(false);
+                        //((StandUser) LE).roundabout$updateSealedTicks(-1);
+                        BE.killSoul();
+                        ((StandUser) LE).roundabout$setGrabberSabbath(0);
+                    }
+                }
             }
         }
 
@@ -6250,6 +6285,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             roundabout$setDiverDownVanishTicks(roundabout$getDiverDownVanishTicks() - 1);
         }
 
+        if (roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PowerTypes.hasStandActive(rdbt$this()) && PSC.hasHandsOut()) {
+
+        }
+
         /** RattShoulder fade ticks */
         if (PowerTypes.hasStandActive(rdbt$this()) && roundabout$getStandPowers() instanceof PowersRatt &&
                 !((PowersRatt) roundabout$getStandPowers()).isPlaced()) {
@@ -6342,15 +6381,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     int level = inst.getAmplifier() + 1;
                     float damage = level;
 
-                    if (level == 1) {
-                        damage += 1.0F;
-                    }
-                    else if (level == 2) {
-                    damage += 1.0F;   //extra at Niv.2
-                    }
-                    else if (level == 3) {
-                        damage += 1.0F;   //extra at Niv.3
-                    }
                     if (((StandUser) this).roundabout$getStandPowers() instanceof PowersPurpleHaze) {
                         damage *= 0.66F;
                     }
@@ -7311,6 +7341,35 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     // for diver down end
 
+    @Unique
+    private static final EntityDataAccessor<Boolean> ROUNDABOUT$GE_TREE_ROOT = SynchedEntityData.defineId(
+            LivingEntity.class, EntityDataSerializers.BOOLEAN);
+
+    @Override
+    public boolean roundabout$hasGERooted() {
+        return this.entityData.get(ROUNDABOUT$GE_TREE_ROOT);
+    }
+
+    @Override
+    public void roundabout$setGERooted(boolean spring) {
+        if (!level().isClientSide()) {
+            roundabout$GERootTicks = spring ? 100 : 0;
+        }
+        this.entityData.set(ROUNDABOUT$GE_TREE_ROOT, spring);
+    }
+
+    @Unique
+    private ItemStack roundabout$GERootedItem = ItemStack.EMPTY;
+
+    @Override
+    public ItemStack roundabout$getGERootedItem() {
+        return this.roundabout$GERootedItem;
+    }
+
+    @Override
+    public void roundabout$setGERootedItem(ItemStack stack) {
+        this.roundabout$GERootedItem = stack == null ? ItemStack.EMPTY : stack;
+    }
 
 
     @Unique private Vec3 roundabout$spinLocation = null;

@@ -4,15 +4,20 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.event.IVillagerAccess;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
+
+import static org.apache.commons.lang3.StringUtils.substring;
 
 public class LyinEyesHighlighterRenderer {
     private static final ResourceLocation[] PASSIVE_ICONS = {
@@ -50,7 +55,7 @@ public class LyinEyesHighlighterRenderer {
      * Billboarded circle
      */
     public static void render(LivingEntity entity, PoseStack poseStack, MultiBufferSource bufferSource,
-                                           int r, int g, int b, int a, float radius, byte type) {
+                                           int r, int g, int b, int a, byte type) {
         poseStack.pushPose();
         // Position at entity center
         poseStack.translate(0, entity.getBbHeight() * 0.5F, 0);
@@ -71,6 +76,8 @@ public class LyinEyesHighlighterRenderer {
         boolean isLowHealth = entity.getHealth() / entity.getMaxHealth() <= 0.3F;
         float pulse = (float) ((Math.sin(entity.tickCount * 0.15F) + 1.0) * 0.5);
         float brightness = isLowHealth ? 0.5F + 0.5F * pulse : 1.0F;
+
+        float radius = ConfigManager.getClientConfig().lyinEyesSettings.highlightSize;
 
         consumer.vertex(matrix, -radius, -radius, 0.0F).color((int) (r * brightness), (int) (g * brightness), (int) (b * brightness), a).uv(0.0F, 1.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(normal, 0, 0, -1).endVertex();
         consumer.vertex(matrix,  radius, -radius, 0.0F).color((int) (r * brightness), (int) (g * brightness), (int) (b * brightness), a).uv(1.0F, 1.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(normal, 0, 0, -1).endVertex();
@@ -106,28 +113,30 @@ public class LyinEyesHighlighterRenderer {
         // tense villager check
         if(entity instanceof Villager V && (((IVillagerAccess) V).roundabout$isTense() || ((IVillagerAccess) V).roundabout$isUnnerved()))
         {
-            if (type == NEUTRAL) {
+            if (ConfigManager.getClientConfig().lyinEyesSettings.liyingEyesColorBlindMode && type == NEUTRAL) {
                 return ICONS_NEUTRAL_THICK[order[stepInRound]];
             }
             return PASSIVE_ICONS_THICK[order[stepInRound]];
         }
 
-        if (type == NEUTRAL) {
-            return ICONS_NEUTRAL[order[stepInRound]];
-        }else if (type == HOSTILE) {
-            return ICONS_HOSTILE[order[stepInRound]];
+        if (ConfigManager.getClientConfig().lyinEyesSettings.liyingEyesColorBlindMode) {
+            if (type == NEUTRAL) {
+                return ICONS_NEUTRAL[order[stepInRound]];
+            } else if (type == HOSTILE) {
+                return ICONS_HOSTILE[order[stepInRound]];
+            }
         }
 
-        else return PASSIVE_ICONS[order[stepInRound]];
+        return PASSIVE_ICONS[order[stepInRound]];
     }
 
     public static void renderPassive(LivingEntity entity, PoseStack poseStack, MultiBufferSource bufferSource) {
-        render(entity, poseStack, bufferSource, 0, 255, 0, 200, 0.7F, PASSIVE);
+        render(entity, poseStack, bufferSource, 0, 255, 0, 200, PASSIVE);
     }
     public static void renderNeutral(LivingEntity entity, PoseStack poseStack, MultiBufferSource bufferSource) {
-        render(entity, poseStack, bufferSource, 255, 255, 0, 200, 0.7F, NEUTRAL);
+        render(entity, poseStack, bufferSource, 255, 255, 0, 200,  NEUTRAL);
     }
     public static void renderEnemy(LivingEntity entity, PoseStack poseStack, MultiBufferSource bufferSource) {
-        render(entity, poseStack, bufferSource, 255, 0, 0, 200, 0.7F, HOSTILE);
+        render(entity, poseStack, bufferSource, 255, 0, 0, 200,  HOSTILE);
     }
 }

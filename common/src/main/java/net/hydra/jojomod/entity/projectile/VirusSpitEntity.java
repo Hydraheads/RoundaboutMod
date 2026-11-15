@@ -132,7 +132,7 @@ public class VirusSpitEntity extends ThrowableProjectile {
             if (getOwner() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers()
                     instanceof PowersPurpleHaze pph){
 
-                pph.addEXP(4);
+                pph.addEXP(6);
             }
 
             this.discard();

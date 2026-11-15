@@ -6,11 +6,10 @@ import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
-import net.hydra.jojomod.client.models.projectile.SilverChariotRapierModel;
-import net.hydra.jojomod.entity.projectile.SilverChariotRapierShotEntity;
+import net.hydra.jojomod.client.models.projectile.SilverChariotSwordProjectileModel;
+import net.hydra.jojomod.entity.projectile.SilverChariotSwordProjectile;
 import net.hydra.jojomod.entity.stand.SilverChariotEntity;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -21,13 +20,13 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-public class SilverChariotRapierRenderer extends EntityRenderer<SilverChariotRapierShotEntity> {
+public class SilverChariotSwordProjectileRenderer extends EntityRenderer<SilverChariotSwordProjectile> {
 
-    private final SilverChariotRapierModel model;
+    private final SilverChariotSwordProjectileModel model;
 
-    public SilverChariotRapierRenderer(EntityRendererProvider.Context $$0) {
+    public SilverChariotSwordProjectileRenderer(EntityRendererProvider.Context $$0) {
         super($$0);
-        this.model = new SilverChariotRapierModel<>($$0.bakeLayer(ModEntityRendererClient.SILVER_CHARIOT_RAPIER_LAYER));
+        this.model = new SilverChariotSwordProjectileModel<>($$0.bakeLayer(ModEntityRendererClient.SILVER_CHARIOT_SWORD_PROJECTILE_LAYER));
     }
 
     //  static final ResourceLocation ANIME_PART_3 = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/anime_part_3_rapier.png");
@@ -55,7 +54,7 @@ public class SilverChariotRapierRenderer extends EntityRenderer<SilverChariotRap
     private static final ResourceLocation PHARAOH = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/silver_chariot/pharaoh_silver_chariot.png");
 
     @Override
-    public void render(SilverChariotRapierShotEntity $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5) {
+    public void render(SilverChariotSwordProjectile $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5) {
         // super.render($$0, $$1, $$2, $$3, $$4, $$5);
         if (ClientUtil.canSeeStands(Minecraft.getInstance().player)) {
             $$3.pushPose();
@@ -146,7 +145,7 @@ public class SilverChariotRapierRenderer extends EntityRenderer<SilverChariotRap
     }
 
     @Override
-    public ResourceLocation getTextureLocation(SilverChariotRapierShotEntity entity) {
+    public ResourceLocation getTextureLocation(SilverChariotSwordProjectile entity) {
         // byte bt = ((StandUser) entity.getUser()).roundabout$getStandSkin();
         byte bt = entity.getUser() != null ? ((StandUser) entity.getUser()).roundabout$getStandSkin() : 0;
         return getSkin(bt);

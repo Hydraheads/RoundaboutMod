@@ -1,0 +1,33 @@
+{
+  "variants": {
+    "facing=east,half=bottom,shape=straight": { "model": "roundabout:block/ginkgo_stairs" },
+    "facing=west,half=bottom,shape=straight": { "model": "roundabout:block/ginkgo_stairs", "y": 180 },
+    "facing=south,half=bottom,shape=straight": { "model": "roundabout:block/ginkgo_stairs", "y": 90 },
+    "facing=north,half=bottom,shape=straight": { "model": "roundabout:block/ginkgo_stairs", "y": 270 },
+
+    "facing=east,half=top,shape=straight": { "model": "roundabout:block/ginkgo_stairs", "x": 180 },
+    "facing=west,half=top,shape=straight": { "model": "roundabout:block/ginkgo_stairs", "x": 180, "y": 180 },
+    "facing=south,half=top,shape=straight": { "model": "roundabout:block/ginkgo_stairs", "x": 180, "y": 90 },
+    "facing=north,half=top,shape=straight": { "model": "roundabout:block/ginkgo_stairs", "x": 180, "y": 270 },
+
+    "facing=east,half=bottom,shape=inner_left": { "model": "roundabout:block/ginkgo_inner_stairs" },
+    "facing=west,half=bottom,shape=inner_left": { "model": "roundabout:block/ginkgo_inner_stairs", "y": 180 },
+    "facing=south,half=bottom,shape=inner_left": { "model": "roundabout:block/ginkgo_inner_stairs", "y": 90 },
+    "facing=north,half=bottom,shape=inner_left": { "model": "roundabout:block/ginkgo_inner_stairs", "y": 270 },
+
+    "facing=east,half=bottom,shape=inner_right": { "model": "roundabout:block/ginkgo_inner_stairs", "y": 270 },
+    "facing=west,half=bottom,shape=inner_right": { "model": "roundabout:block/ginkgo_inner_stairs", "y": 90 },
+    "facing=south,half=bottom,shape=inner_right": { "model": "roundabout:block/ginkgo_inner_stairs", "y": 180 },
+    "facing=north,half=bottom,shape=inner_right": { "model": "roundabout:block/ginkgo_inner_stairs", "y": 0 },
+
+    "facing=east,half=bottom,shape=outer_left": { "model": "roundabout:block/ginkgo_outer_stairs" },
+    "facing=west,half=bottom,shape=outer_left": { "model": "roundabout:block/ginkgo_outer_stairs", "y": 180 },
+    "facing=south,half=bottom,shape=outer_left": { "model": "roundabout:block/ginkgo_outer_stairs", "y": 90 },
+    "facing=north,half=bottom,shape=outer_left": { "model": "roundabout:block/ginkgo_outer_stairs", "y": 270 },
+
+    "facing=east,half=bottom,shape=outer_right": { "model": "roundabout:block/ginkgo_outer_stairs", "y": 270 },
+    "facing=west,half=bottom,shape=outer_right": { "model": "roundabout:block/ginkgo_outer_stairs", "y": 90 },
+    "facing=south,half=bottom,shape=outer_right": { "model": "roundabout:block/ginkgo_outer_stairs", "y": 180 },
+    "facing=north,half=bottom,shape=outer_right": { "model": "roundabout:block/ginkgo_outer_stairs", "y": 0 }
+  }
+}

@@ -3,6 +3,7 @@ package net.hydra.jojomod.block;
 import net.hydra.jojomod.block.handBlock.AbstractHandBlock;
 import net.hydra.jojomod.block.handBlock.HandBlock;
 import net.hydra.jojomod.block.handBlock.HandBlockEntity;
+import net.hydra.jojomod.mixin.access.AccessWoodType;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
@@ -208,6 +209,11 @@ public class ModBlocks {
 
     public static Block MELON_PARFAIT;
 
+    public static final WoodType GINKGO_WOOD_TYPE =
+            AccessWoodType.roundabout$register(
+                    new WoodType("ginkgo", BlockSetType.OAK)
+            );
+
     public static Block GINKGO_LOG;
     public static Block GINKGO_PLANKS;
     public static Block GINKGO_LEAVES;
@@ -222,7 +228,14 @@ public class ModBlocks {
     public static Block GINKGO_HANGING_SIGN;
     public static Block GINKGO_WALL_HANGING_SIGN;
     public static Block GINKGO_TRAPDOOR;
-
+    public static Block AUTUMN_LEAVES;
+    public static Block GINKGO_STAIRS;
+    public static Block GINKGO_SLAB;
+    public static Block GINKGO_FENCE;
+    public static Block GINKGO_FENCE_GATE;
+    public static Block GINKGO_PRESSURE_PLATE;
+    public static Block GINKGO_BUTTON;
+    public static Block GINKGO_FALLEN_LEAVES;
 
     public static Block GAMBLING_TABLE;
     public static final EnumProperty<GamblingTablePart> GAMBLING_TABLE_PART = EnumProperty.create("part", GamblingTablePart.class);
@@ -1110,7 +1123,7 @@ public class ModBlocks {
                     .sound(SoundType.WOOD)
                     .ignitedByLava()
     );
-    public static final Block GINKGO_LEAVES_PROPERTIES = new LeavesBlock(
+    public static final Block GINKGO_LEAVES_PROPERTIES = new GinkgoLeavesBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.PLANT)
                     .strength(0.2F)
@@ -1124,7 +1137,7 @@ public class ModBlocks {
                     .pushReaction(PushReaction.DESTROY)
                     .isRedstoneConductor((state, level, pos) -> false)
     );
-    public static Block GINKGO_WOOD_PROPERTIES = new Block(
+    public static Block GINKGO_WOOD_PROPERTIES = new RotatedPillarBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOD)
                     .instrument(NoteBlockInstrument.BASS)
@@ -1132,7 +1145,7 @@ public class ModBlocks {
                     .sound(SoundType.WOOD)
                     .ignitedByLava()
     );
-    public static Block STRIPPED_GINKGO_WOOD_PROPERTIES = new Block(
+    public static Block STRIPPED_GINKGO_WOOD_PROPERTIES = new RotatedPillarBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOD)
                     .instrument(NoteBlockInstrument.BASS)
@@ -1177,7 +1190,7 @@ public class ModBlocks {
                     .strength(1.0F)
                     .noOcclusion()
                     .ignitedByLava(),
-            WoodType.OAK
+            GINKGO_WOOD_TYPE
     );
 
     public static Block GINKGO_WALL_SIGN_PROPERTIES = new WallSignBlock(
@@ -1186,7 +1199,7 @@ public class ModBlocks {
                     .strength(1.0F)
                     .noOcclusion()
                     .ignitedByLava(),
-            WoodType.OAK
+            GINKGO_WOOD_TYPE
     );
 
     public static Block GINKGO_HANGING_SIGN_PROPERTIES = new CeilingHangingSignBlock(
@@ -1195,7 +1208,7 @@ public class ModBlocks {
                     .strength(1.0F)
                     .noOcclusion()
                     .ignitedByLava(),
-            WoodType.OAK
+            GINKGO_WOOD_TYPE
     );
 
     public static Block GINKGO_WALL_HANGING_SIGN_PROPERTIES = new WallHangingSignBlock(
@@ -1204,7 +1217,7 @@ public class ModBlocks {
                     .strength(1.0F)
                     .noOcclusion()
                     .ignitedByLava(),
-            WoodType.OAK
+            GINKGO_WOOD_TYPE
     );
 
     public static Block GINKGO_TRAPDOOR_PROPERTIES = new GinkgoTrapDoorBlock(
@@ -1214,7 +1227,71 @@ public class ModBlocks {
                     .noOcclusion()
                     .ignitedByLava()
     );
-
+    public static Block AUTUMN_LEAVES_PROPERTIES = new AutumnLeavesBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.PLANT)
+                    .strength(0.1F)
+                    .noCollission()
+                    .noOcclusion()
+                    .instabreak()
+    );
+    public static Block GINKGO_FALLEN_LEAVES_PROPERTIES = new GinkgoFallenLeavesBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.PLANT)
+                    .strength(0.1F)
+                    .noCollission()
+                    .noOcclusion()
+                    .instabreak()
+    );
+    public static Block GINKGO_STAIRS_PROPERTIES = new GinkgoStairBlock(
+            GINKGO_PLANKS_PROPERTIES.defaultBlockState(),
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.WOOD)
+                    .ignitedByLava()
+    );
+    public static Block GINKGO_SLAB_PROPERTIES = new SlabBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.WOOD)
+                    .ignitedByLava()
+    );
+    public static Block GINKGO_FENCE_PROPERTIES = new FenceBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.WOOD)
+                    .ignitedByLava()
+    );
+    public static Block GINKGO_FENCE_GATE_PROPERTIES = new FenceGateBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.WOOD)
+                    .ignitedByLava(),
+            WoodType.OAK
+    );
+    public static Block GINKGO_PRESSURE_PLATE_PROPERTIES = new GinkgoPressurePlateBlock(
+            PressurePlateBlock.Sensitivity.EVERYTHING,
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .strength(2.0F, 3.0F)
+                    .sound(SoundType.WOOD)
+                    .ignitedByLava(),
+            BlockSetType.OAK
+    );
+    public static Block GINKGO_BUTTON_PROPERTIES = new GinkgoButtonBlock(
+            BlockBehaviour.Properties.of()
+                    .noCollission()
+                    .strength(0.5F)
+                    .sound(SoundType.WOOD)
+                    .ignitedByLava(),
+            BlockSetType.OAK,
+            30,
+            true
+    );
     public static List<String> dontGenState = new ArrayList<String>();
     public static List<String> blockBlacklist = Arrays.asList(
             "soul_fire", "air", "allium", "lava_cauldron", "end_gateway", "cave_air", "void_air", "infested_stone",

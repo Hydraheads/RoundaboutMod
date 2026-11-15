@@ -686,10 +686,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 this.tryPowerPacket(PowerIndex.POWER_2_SNEAK);
             }
             case SKILL_3_NORMAL -> {
-                if (!(activePower == PowerIndex.BARRAGE || activePower == PowerIndex.BARRAGE_2
-                        || activePower == PowerIndex.BARRAGE_CHARGE || activePower == PowerIndex.BARRAGE_CHARGE_2)) {
-                    tryToDashClient();
-                }
+                tryToDashClient();
             }
             case SKILL_3_CROUCH -> tryToStandLeapClient();
         }
