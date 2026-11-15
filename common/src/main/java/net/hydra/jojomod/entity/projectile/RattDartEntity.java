@@ -236,7 +236,7 @@ public class RattDartEntity extends AbstractArrow {
                 return;
             } else if (getBounces() > 0) {
 
-                if (this.getShotType() != BASIC && this.getOwner() != null && this.distanceTo(this.getOwner()) > 10) {
+                if (this.getShotType() != BASIC && this.getOwner() != null && this.distanceTo(this.getOwner()) > 15) {
                     targetBounce($$0);
                 } else {
                     bounce($$0);
