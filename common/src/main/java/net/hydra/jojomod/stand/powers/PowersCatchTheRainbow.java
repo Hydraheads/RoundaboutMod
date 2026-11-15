@@ -33,6 +33,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -922,8 +923,13 @@ public class PowersCatchTheRainbow extends NewDashPreset {
 
     @Override
     public boolean interceptDamageEvent(DamageSource $$0, float $$1){
-        if (ctrDodgeTicks != 0){
-            return !MainUtil.isSpecialDamage($$0);
+        if (!MainUtil.isSpecialDamage($$0) &&
+                !$$0.is(DamageTypes.LAVA) &&
+                !$$0.is(ModDamageTypes.BITES_THE_DUST) &&
+                !$$0.is(ModDamageTypes.HAZE_VIRUS) &&
+                !$$0.is(DamageTypes.STARVE) &&
+                !$$0.is(DamageTypes.WITHER)){
+            return ctrDodgeTicks != 0;
         }
         return false;
     }
@@ -935,19 +941,11 @@ public class PowersCatchTheRainbow extends NewDashPreset {
 
     @Override
     public boolean interceptAttack(){
-         if (ctrDodgeTicks != 0){
-             return true;
-         }else{
-             return false;
-         }
+        return ctrDodgeTicks != 0;
     }
     @Override
     public boolean interceptAllInteractions(){
-        if (ctrDodgeTicks != 0){
-            return true;
-        }else{
-            return false;
-        }
+            return ctrDodgeTicks != 0;
     }
 
     //rain dodge

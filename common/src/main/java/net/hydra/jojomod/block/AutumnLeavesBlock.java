@@ -99,6 +99,8 @@ public class AutumnLeavesBlock extends BushBlock {
         double startX = entity.getX();
         double startY = entity.getY();
         double startZ = entity.getZ();
+        double centerX = pos.getX() + 0.5;
+        double centerZ = pos.getZ() + 0.5;
 
         double currentY = startY;
 
@@ -114,8 +116,8 @@ public class AutumnLeavesBlock extends BushBlock {
 
         for (int distance = 1; distance <= TRAVEL_DISTANCE; distance++) {
 
-            double nextX = startX + direction.getStepX() * distance;
-            double nextZ = startZ + direction.getStepZ() * distance;
+            double nextX = centerX + direction.getStepX() * distance;
+            double nextZ = centerZ + direction.getStepZ() * distance;
 
             boolean foundValidPosition = false;
             double nextY = currentY;
