@@ -243,6 +243,7 @@ public class AutumnLeavesBlock extends BushBlock {
                 || lastSafeZ != startZ) {
 
             playMovementSound(level, pos, entity);
+            playMovementParticles(level, pos, direction);
 
             entity.teleportTo(
                     lastSafeX,
@@ -319,5 +320,39 @@ public class AutumnLeavesBlock extends BushBlock {
         }
 
         LAST_MOVEMENT.put(entity, currentTick);
+    }
+    private void playMovementParticles(Level level, BlockPos pos,
+                                       Direction direction) {
+
+        if (!(level instanceof ServerLevel serverLevel)) {
+            return;
+        }
+
+        RandomSource random = level.getRandom();
+
+        for (int i = 0; i < 20; i++) {
+
+            double x = pos.getX() + random.nextDouble();
+            double y = pos.getY() + 0.1;
+            double z = pos.getZ() + random.nextDouble();
+
+            double speed = 0.25 + random.nextDouble() * 0.10;
+
+            double vx = direction.getStepX() * speed
+                    + (random.nextDouble() - 0.5) * 0.02;
+
+            double vy = 0.0;
+
+            double vz = direction.getStepZ() * speed
+                    + (random.nextDouble() - 0.5) * 0.02;
+
+            serverLevel.sendParticles(
+                    ModParticles.AUTUMN_LEAVES,
+                    x, y, z,
+                    0,
+                    vx, vy, vz,
+                    1.0
+            );
+        }
     }
 }
