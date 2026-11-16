@@ -636,7 +636,7 @@ public class PowersAnubis extends NewDashPreset {
 
             case PowersAnubis.CLEAVE -> setPowerVariant(PowersAnubis.CLEAVE,120);
             case PowersAnubis.SPIN -> {
-                setPowerVariant(PowersAnubis.SPIN,140);
+                setPowerVariant(PowersAnubis.SPIN,160);
             }
 
             case PowersAnubis.FLURRY -> {
@@ -2486,7 +2486,7 @@ public class PowersAnubis extends NewDashPreset {
     @Override
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.4F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.2F));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(5F));
         }
@@ -2494,14 +2494,14 @@ public class PowersAnubis extends NewDashPreset {
     @Override
     public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(2F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.7F));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(6F));
         }
     }
 
     public float getUppercutStrength(Entity entity){
-        float punchD = this.getPunchStrength(entity)+this.getHeavyPunchStrength(entity);
+        float punchD = this.getPunchStrength(entity)+this.getHeavyPunchStrength(entity)*1.3F;
         float scale = (float) Math.min(((float)this.chargedFinal/(float)maxSuperHitTime)+0.2,1);
         if (this.getReducedDamage(entity)){
             return (scale*punchD);

@@ -23,7 +23,7 @@ public class ModItems {
     // 'refreshed' effect durations for foods.
     public static final int CHAMOMILE_DURATION = 150;
     public static final int MINT_DURATION = 150;
-    public static final int TEA_DURATION = 1100;
+    public static final int TEA_DURATION = 900;
 
     public static Item STAND_ARROW;
     public static Item STAND_BEETLE_ARROW;
@@ -87,6 +87,7 @@ public class ModItems {
     public static Item MAX_STAND_DISC_DIVER_DOWN;
     public static Item STAND_DISC_GOLD_EXPERIENCE;
     public static Item MAX_STAND_DISC_GOLD_EXPERIENCE;
+    public static Item CREATIVE_STAND_DISC_GER;
     public static Item STAND_DISC_SILVER_CHARIOT;
     public static Item MAX_STAND_DISC_SILVER_CHARIOT;
     public static Item STAND_DISC_METALLICA;

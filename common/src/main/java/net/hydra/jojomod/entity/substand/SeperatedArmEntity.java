@@ -884,7 +884,7 @@ public class SeperatedArmEntity extends StandEntity {
 
     @Override
     public boolean hasNoPhysics() {
-        return false;
+        return StartupTicks == 0;
     }
 
     @Override
