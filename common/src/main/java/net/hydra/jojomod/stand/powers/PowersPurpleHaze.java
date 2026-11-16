@@ -1668,7 +1668,13 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 animateStand(PurpleHazeEntity.STRANGLE_HOLD);
             }
         }
-        double lift = STRANGLE_LIFT_HEIGHT * ((double) strangleGrabTicks / STRANGLE_GRAB_TICKS);
+        double heightCompensation = Math.max(
+                0.0,
+                1.8 - strangleVictim.getBbHeight()
+        );
+
+        double lift = (STRANGLE_LIFT_HEIGHT + heightCompensation)
+                * ((double) strangleGrabTicks / STRANGLE_GRAB_TICKS);
 
         strangleVictim.setPos(strangleVictim.getX(), strangleBaseY + lift, strangleVictim.getZ());
         strangleVictim.setDeltaMovement(Vec3.ZERO);
@@ -2412,7 +2418,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     @Override
     public boolean isWip(){
-        return true;
+        return false;
     }
     @Override
     public Component ifWipListDevStatus(){

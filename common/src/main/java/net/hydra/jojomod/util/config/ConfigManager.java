@@ -8,6 +8,7 @@ import com.mojang.datafixers.util.Pair;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
+import net.hydra.jojomod.stand.powers.PowersGoldExperience;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.config.annotation.*;
 import net.hydra.jojomod.util.option.ConfigOptionReference;
@@ -282,9 +283,9 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getAdvancedConfig().purpleHazeDecayBlocksAndRatesV2 != null) {
+        if (getAdvancedConfig().purpleHazeDecayBlocksAndRatesV4 != null) {
             MainUtil.PURPLE_HAZE_DECAY_BLOCKS.clear();
-            for (String entry : getAdvancedConfig().purpleHazeDecayBlocksAndRatesV2) {
+            for (String entry : getAdvancedConfig().purpleHazeDecayBlocksAndRatesV4) {
                 try {
                     String[] split = entry.split(":");
                     if (split.length != 5) {
@@ -336,6 +337,22 @@ public abstract class ConfigManager {
                 }
                 catch (Exception e) {
                     Roundabout.LOGGER.error("Failed to parse Gold Experience DNA entry '{}'", entry, e);
+                }
+            }
+        }
+        if (getAdvancedConfig().goldExperienceDisguiseItemsv1 != null) {
+            MainUtil.GOLD_EXPERIENCE_DISGUISE_ITEMS.clear();
+            for (String entry : getAdvancedConfig().goldExperienceDisguiseItemsv1) {
+                try {
+                    ResourceLocation itemId = ResourceLocation.tryParse(entry);
+                    if (itemId == null || !BuiltInRegistries.ITEM.containsKey(itemId)) {
+                        Roundabout.LOGGER.warn("Invalid Gold Experience disguise item entry: {}", entry);
+                        continue;
+                    }
+                    Item item = BuiltInRegistries.ITEM.get(itemId);
+                    MainUtil.GOLD_EXPERIENCE_DISGUISE_ITEMS.add(item);
+                } catch (Exception e) {
+                    Roundabout.LOGGER.error("Failed to parse Gold Experience disguise item entry '{}'", entry, e);
                 }
             }
         }
@@ -500,11 +517,11 @@ public abstract class ConfigManager {
 
     public static void loadStandArrowPool()
     {
-        if (getAdvancedConfig().standArrowPoolv9 != null)
+        if (getAdvancedConfig().standArrowPoolv10 != null)
         {
             ModItems.STAND_ARROW_POOL.clear();
 
-            for (String disc : getAdvancedConfig().standArrowPoolv9)
+            for (String disc : getAdvancedConfig().standArrowPoolv10)
             {
                 String[] split = disc.split(":");
 

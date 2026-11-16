@@ -8,6 +8,7 @@ import net.hydra.jojomod.client.models.minions.head_parts.*;
 import net.hydra.jojomod.client.models.projectile.*;
 import net.hydra.jojomod.client.models.stand.AnubisModel;
 import net.hydra.jojomod.client.models.stand.EmperorModel;
+import net.hydra.jojomod.client.models.stand.SilverChariotSwordModel;
 import net.hydra.jojomod.client.models.visages.parts.*;
 import net.hydra.jojomod.client.models.worn_stand.*;
 
@@ -38,6 +39,7 @@ public class ModStrayModels {
     public static ChairRattShoulderModel CHAIR_RATT_SHOULDER;
     public static MandomModel MANDOM;
     public static AnubisModel ANUBIS;
+    public static SilverChariotSwordModel SILVER_CHARIOT_SWORD;
     public static WatchModel MANDOM_WATCH;
     public static SmallWatchModel MANDOM_WATCH_SMALL;
     public static KingCrimsonArmsPart kingCrimsonArmsPart;
