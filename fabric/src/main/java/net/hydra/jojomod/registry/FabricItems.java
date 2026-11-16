@@ -899,6 +899,8 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_RATT);
                         entries.accept(STAND_DISC_KILLER_QUEEN);
                         entries.accept(MAX_STAND_DISC_KILLER_QUEEN);
+                        entries.accept(STAND_DISC_PURPLE_HAZE);
+                        entries.accept(MAX_STAND_DISC_PURPLE_HAZE);
                         entries.accept(STAND_DISC_WHITE_ALBUM);
                         entries.accept(MAX_STAND_DISC_WHITE_ALBUM);
                         entries.accept(STAND_DISC_KING_CRIMSON);
@@ -944,8 +946,6 @@ public class FabricItems {
                         entries.accept(HERB_TEA);
                         entries.accept(STAND_DISC_METALLICA);
                         entries.accept(MAX_STAND_DISC_METALLICA);
-                        entries.accept(STAND_DISC_PURPLE_HAZE);
-                        entries.accept(MAX_STAND_DISC_PURPLE_HAZE);
                         entries.accept(STAND_DISC_BAD_COMPANY);
                         entries.accept(MAX_STAND_DISC_BAD_COMPANY);
                         entries.accept(STAND_DISC_EMPEROR);

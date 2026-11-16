@@ -884,9 +884,9 @@ public class ForgeItems {
     public static final RegistryObject<Item> MAX_STAND_DISC_KILLER_QUEEN = addToDiscTab(ITEMS.register("max_killer_queen_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersKillerQueen(null))));
 
-    public static final RegistryObject<Item> STAND_DISC_PURPLE_HAZE = addToWIPTab(ITEMS.register("purple_haze_disc",
+    public static final RegistryObject<Item> STAND_DISC_PURPLE_HAZE = addToDiscTab(ITEMS.register("purple_haze_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersPurpleHaze(null))));
-    public static final RegistryObject<Item> MAX_STAND_DISC_PURPLE_HAZE = addToWIPTab(ITEMS.register("max_purple_haze_disc",
+    public static final RegistryObject<Item> MAX_STAND_DISC_PURPLE_HAZE = addToDiscTab(ITEMS.register("max_purple_haze_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersPurpleHaze(null))));
 
  	public static final RegistryObject<Item> STAND_DISC_BAD_COMPANY = addToWIPTab(ITEMS.register("bad_company_disc",
