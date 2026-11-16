@@ -195,6 +195,12 @@ public class PowersGoldExperience extends BlockGrabPreset {
     private int brambleSpawnTimer = 0;
     private record BrambleSpawnData(Vec3 pos, float yRot) {}
 
+    // for bush
+    private final List<BushSpawnData> pendingBushes = new ArrayList<>();
+    private Vec3 bushWaveOrigin = null;
+    private int bushWaveTick = 0;
+    private record BushSpawnData(BlockPos pos, double distSq) {}
+
     // for lifeforms
     /**For mob ai, change the animalType before trypower to set what kind of plunder it has*/
     private byte animalType = AnimalTypes.FROG.id;
@@ -270,6 +276,39 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public void tickPower() {
         if (!this.self.level().isClientSide()) {
+            // bramble bush expanding ring
+            if (this.bushWaveOrigin != null && this.self.level() instanceof ServerLevel serverLevel) {
+                this.bushWaveTick++;
+
+                double maxRadius = 7.0;
+                int durationTicks = 10;
+                double currentRadius = Math.min(maxRadius, (this.bushWaveTick / (double) durationTicks) * maxRadius);
+                double currentRadiusSq = currentRadius * currentRadius;
+
+                BlockState bushState = ModBlocks.GE_BUSH.defaultBlockState();
+                Iterator<BushSpawnData> it = this.pendingBushes.iterator();
+                while (it.hasNext()) {
+                    BushSpawnData data = it.next();
+                    if (data.distSq() <= currentRadiusSq) {
+                        BlockPos pos = data.pos();
+                        if (serverLevel.getBlockState(pos).canBeReplaced()
+                                && !serverLevel.getBlockState(pos).is(ModBlocks.GE_BUSH)
+                                && bushState.canSurvive(serverLevel, pos)) {
+                            serverLevel.setBlock(pos, bushState, 3);
+                            if (serverLevel.getBlockEntity(pos) instanceof GEBushBlockEntity bushBE) {
+                                bushBE.setOwner(this.getSelf().getUUID());
+                            }
+                        }
+                        it.remove();
+                    }
+                }
+
+                if (this.bushWaveTick >= durationTicks) {
+                    this.pendingBushes.clear();
+                    this.bushWaveOrigin = null;
+                    this.bushWaveTick = 0;
+                }
+            }
             // life sensor scanning for imbued item
             if (this.lifeSensorActive) {
                 if (!this.isGuarding() || !PowerTypes.hasStandActive(this.self)) {
@@ -481,7 +520,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             case SKILL_1_CROUCH -> {
                 tryHeal();
             }
-            case SKILL_1_GUARD -> {
+            case SKILL_1_GUARD, SKILL_1_CROUCH_GUARD -> {
                 tryLifeSensor();
             }
             // lifeform creation
@@ -489,7 +528,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 tryMakeAnimalClient();
             }
             // tree creation
-            case SKILL_2_GUARD -> {
+            case SKILL_2_GUARD, SKILL_2_CROUCH_GUARD -> {
                 tryGrowTree();
             }
             // item throw
@@ -509,7 +548,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 tryGrowBramble();
             }
             // bush growth move
-            case SKILL_4_GUARD -> {
+            case SKILL_4_GUARD, SKILL_4_CROUCH_GUARD -> {
                 tryGrowBush();
             }
             // item imbue
@@ -533,7 +572,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             return this.setPowerKickBarrage();
         }
         else if (move == BUSH_CREATION) {
-            return executeBushCreation();
+            return startBushWindup();
         }
         else if (move == WALL_VINES) {
             return executeWallVines();
@@ -551,7 +590,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             return executeDualPunch();
         }
         else if (move == TREE) {
-            return finishTree();
+            return startTreeWindup();
         }
         else if (move == LIFE_SENSOR) {
             if (!this.self.level().isClientSide() && this.isGuarding()) {
@@ -611,6 +650,14 @@ public class PowersGoldExperience extends BlockGrabPreset {
         // bramble
         if (this.getActivePower() == BRAMBLES) {
             updateBramble();
+        }
+        // bush
+        if (this.getActivePower() == BUSH_CREATION) {
+            updateBush();
+        }
+        // tree
+        if (this.getActivePower() == TREE) {
+            updateTree();
         }
         super.updateUniqueMoves();
     }
@@ -680,6 +727,18 @@ public class PowersGoldExperience extends BlockGrabPreset {
             return true;
         }
         return super.isServerControlledCooldown(num);
+    }
+
+    // lets animations happen while blocking
+    @Override
+    public boolean buttonInputGuard(boolean keyIsDown, Options options) {
+        if (suspendGuard) {
+            return false;
+        }
+        if (this.activePower == TREE || this.activePower == BUSH_CREATION) {
+            return false;
+        }
+        return super.buttonInputGuard(keyIsDown, options);
     }
 
     // life sensor start
@@ -1093,6 +1152,24 @@ public class PowersGoldExperience extends BlockGrabPreset {
         }
     }
 
+    private boolean startTreeWindup() {
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand)) {
+            this.setAttackTimeDuring(0);
+            this.setActivePower(TREE);
+            this.animateStand(GoldExperienceEntity.GROUND_PUNCH);
+            this.poseStand(OffsetIndex.ATTACK);
+            return true;
+        }
+        return false;
+    }
+
+    private void updateTree() {
+        if (this.attackTimeDuring >= 10) {
+            finishTree();
+        }
+    }
+
     private boolean finishTree() {
         Level level = this.self.level();
         BlockPos centerPos;
@@ -1217,6 +1294,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             this.setCooldown(PowerIndex.GENERAL_2, getTreeCooldown());
             this.setAttackTimeDuring(-5);
         }
+        this.setAttackTimeDuring(-10);
         return true;
     }
 
@@ -1725,60 +1803,75 @@ public class PowersGoldExperience extends BlockGrabPreset {
         }
     }
 
-    private boolean executeBushCreation() {
-        if (this.self.level().isClientSide()) return false;
-        Level level = this.self.level();
-        BlockPos origin = this.self.blockPosition();
-        BlockState bushState = ModBlocks.GE_BUSH.defaultBlockState();
-
-        boolean createdAny = false;
-        int radius = 7;
-        double radiusSq = radius * radius;
-        for (BlockPos columnPos : BlockPos.betweenClosed(
-                origin.offset(-radius, 0, -radius),
-                origin.offset(radius, 0, radius))) {
-
-            // limit to the radius
-            if (columnPos.distSqr(origin) > radiusSq) continue;
-
-            // 70% chance of creation
-            if (level.random.nextFloat() > 0.70F) continue;
-
-            // using the move on ONLY flat surfaces would feel bad
-            // so i fix this by letting bushes be placed 1 up or down
-            BlockPos targetPos = null;
-            for (int yOffset : new int[]{0, 1, -1}) {
-                BlockPos checkPos = columnPos.above(yOffset);
-                BlockState checkState = level.getBlockState(checkPos);
-
-                if (checkState.canBeReplaced()
-                        && !checkState.is(ModBlocks.GE_BUSH)
-                        && bushState.canSurvive(level, checkPos)) {
-                    targetPos = checkPos;
-                    break;
-                }
-            }
-
-            // places the bush
-            if (targetPos != null) {
-                level.setBlock(targetPos, bushState, 3);
-
-                if (level.getBlockEntity(targetPos) instanceof GEBushBlockEntity bushBE) {
-                    bushBE.setOwner(this.getSelf().getUUID());
-                }
-
-                createdAny = true;
-            }
+    private boolean startBushWindup() {
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand)) {
+            this.setAttackTimeDuring(0);
+            this.setActivePower(BUSH_CREATION);
+            this.animateStand(GoldExperienceEntity.GROUND_PUNCH);
+            this.poseStand(OffsetIndex.GUARD);
+            return true;
         }
+        return false;
+    }
 
-        if (createdAny) {
-            playSoundIfPossible(level, null, this.self.blockPosition(),
-                    ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.85F, 1.0F);
+    private void updateBush() {
+        if (this.attackTimeDuring >= 10) {
+            finishBushCreation();
+        }
+    }
+
+    private void finishBushCreation() {
+        if (!this.self.level().isClientSide()) {
+            Level level = this.self.level();
+            BlockPos origin = this.self.blockPosition();
+            BlockState bushState = ModBlocks.GE_BUSH.defaultBlockState();
+
+            this.pendingBushes.clear();
+            this.bushWaveOrigin = new Vec3(origin.getX() + 0.5, origin.getY(), origin.getZ() + 0.5);
+            this.bushWaveTick = 0;
+
+            int radius = 7;
+            double radiusSq = radius * radius;
+            for (BlockPos columnPos : BlockPos.betweenClosed(
+                    origin.offset(-radius, 0, -radius),
+                    origin.offset(radius, 0, radius))) {
+
+                double distSq = columnPos.distSqr(origin);
+                if (distSq > radiusSq) continue;
+                if (level.random.nextFloat() > 0.70F) continue;
+
+                for (int yOffset : new int[]{0, 1, -1}) {
+                    BlockPos checkPos = columnPos.above(yOffset);
+                    BlockState checkState = level.getBlockState(checkPos);
+
+                    if (checkState.canBeReplaced()
+                            && !checkState.is(ModBlocks.GE_BUSH)
+                            && bushState.canSurvive(level, checkPos)) {
+                        this.pendingBushes.add(new BushSpawnData(checkPos.immutable(), distSq));
+                        break;
+                    }
+                }
+            }
+
+            this.pendingBushes.sort(Comparator.comparingDouble(BushSpawnData::distSq));
+
+            if (!this.pendingBushes.isEmpty()) {
+                playSoundIfPossible(level, null, origin,
+                        ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.85F, 1.0F);
+                if (level instanceof ServerLevel serverLevel) {
+                    sendParticlesIfPossible(serverLevel, ModParticles.GE_WAVE,
+                            this.bushWaveOrigin.x, this.bushWaveOrigin.y, this.bushWaveOrigin.z,
+                            1, 0.0, 0.0, 0.0, 0.0);
+                }
+            } else {
+                this.bushWaveOrigin = null;
+            }
+
             addEXP(5);
             this.setCooldown(PowerIndex.GENERAL_4, getBushCooldown());
+            this.setAttackTimeDuring(-8);
         }
-
-        return createdAny;
     }
 
     // bramble bush end
