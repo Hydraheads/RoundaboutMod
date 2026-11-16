@@ -3,6 +3,7 @@ package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -99,7 +100,7 @@ public class AutumnLeavesBlock extends BushBlock {
     public void entityInside(BlockState state, Level level,
                              BlockPos pos, Entity entity) {
 
-        if (level.isClientSide || state.getValue(COOLDOWN)) {
+        if (level.isClientSide || state.getValue(COOLDOWN) || MainUtil.isBossMob(entity)) {
             return;
         }
 
