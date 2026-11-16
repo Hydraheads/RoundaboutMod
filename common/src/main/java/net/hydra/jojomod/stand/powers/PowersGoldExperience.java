@@ -2393,6 +2393,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
         if (slot == 2 && !isHoldingSneak() && !isGuarding() && !isHoldingItem()) {
             return true;
         }
+        // item imbue
+        if (slot == 4 && isHoldingSneak() && !isHoldingItem()) {
+            return true;
+        }
         return super.isAttackIneptVisually(activeP, slot);
     }
 
