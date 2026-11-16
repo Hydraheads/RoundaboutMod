@@ -31,7 +31,7 @@ public class AdvancedConfig implements Cloneable {
         SERVER_OINLY_INSTANCE = config;
     }
 
-    public Set<String> standArrowPoolv9 = new HashSet<>(
+    public Set<String> standArrowPoolv10 = new HashSet<>(
             Arrays.asList(
                     "roundabout:star_platinum_disc",
                     "roundabout:the_world_disc",
@@ -44,7 +44,8 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:ratt_disc",
                     "roundabout:killer_queen_disc",
                     "roundabout:diver_down_disc",
-                    "roundabout:green_day_disc"
+                    "roundabout:green_day_disc",
+                    "roundabout:purple_haze_disc"
                     // "roundabout:silver_chariot_disc"
             )
     );
@@ -181,7 +182,7 @@ public class AdvancedConfig implements Cloneable {
             )
     );
 
-    public Set<String> purpleHazeDecayBlocksAndRatesV2 = new HashSet<>(
+    public Set<String> purpleHazeDecayBlocksAndRatesV4 = new HashSet<>(
             Arrays.asList(
                     "minecraft:grass_block:minecraft:dirt:0.45",
                     "minecraft:mycelium:minecraft:dirt:0.45",
@@ -190,6 +191,7 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:rooted_dirt:minecraft:dirt:0.45",
                     "minecraft:dandelion:minecraft:air:0.6",
                     "minecraft:poppy:minecraft:air:0.6",
+                    "minecraft:pink_petals:minecraft:air:0.6",
                     "minecraft:blue_orchid:minecraft:air:0.6",
                     "minecraft:allium:minecraft:air:0.6",
                     "minecraft:azure_bluet:minecraft:air:0.6",
@@ -274,7 +276,10 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:jungle_sapling:minecraft:dead_bush:0.3",
                     "minecraft:mangrove_propagule:minecraft:dead_bush:0.3",
                     "minecraft:oak_sapling:minecraft:dead_bush:0.3",
-                    "minecraft:spruce_sapling:minecraft:dead_bush:0.3"
+                    "minecraft:spruce_sapling:minecraft:dead_bush:0.3",
+                    "roundabout:ginkgo_sapling:minecraft:dead_bush:0.3",
+                    "roundabout:ginkgo_leaves:minecraft:air:0.3",
+                    "roundabout:ginkgo_fallen_leaves:minecraft:air:0.6"
 
             )
     );
