@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity.stand;
 import com.google.common.collect.ImmutableSet;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.gui.BlackSabbathPlayerInventoryMenu;
 import net.hydra.jojomod.client.models.stand.MandomBlackSabbathModel;
 import net.hydra.jojomod.client.models.stand.RattModel;
 import net.hydra.jojomod.entity.ModEntities;
@@ -23,9 +24,11 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.*;
+import net.hydra.jojomod.mixin.PlayerEntity;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
+import net.hydra.jojomod.util.BlackSabbathPlayerInventory;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
@@ -802,7 +805,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         if(getHunting()){
             huntingTick();
             hurtBlackSabbath();
-            //System.out.println(this.level());
             if(meleeInteractionTicks > -1){
                 meleeInteractionTicks--;
                 soulGrabbingTick();
@@ -1087,9 +1089,9 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                             if(((StandUser)value).roundabout$getGrabberSabbath() != 0 && ((StandUser)value).roundabout$getGrabberSabbath() != this.getId()){
                                 targent2.remove(value);
                             }
-                            if(value.isRemoved() || value.isDeadOrDying() || !value.isAlive()){
+                           /* if(value.isRemoved() || value.isDeadOrDying() || !value.isAlive()){
                                 targent2.remove(value);
-                            }
+                            }*/
                         }
                         targent = targent2;
                     }
@@ -2298,6 +2300,102 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         }
     }
 
+    public void pickUpTheItemsAroundTheCadaver(LivingEntity LE){
+        AABB abba = LE.getBoundingBox().expandTowards(0.1, 0.1, 0.1);
+        List<ItemEntity> lvent = this.level().getEntitiesOfClass(ItemEntity.class, abba, (itemEntity) -> {
+            return true;
+        });
+        List<ItemEntity> items = new ArrayList<>(lvent) {};
+
+        if(lvent != null && !lvent.isEmpty()) {
+            if(!items.isEmpty()) {
+                for (ItemEntity value : lvent) {
+                    if (value != null) {
+                        if (value.getItem().getItem() instanceof AirItem || value.getItem().isEmpty()) {
+                            items.remove(value);
+                        } else if (value.getAge() > 1) {
+                            items.remove(value);
+                        } else {
+                            if(this.getUser() instanceof Player P){
+                                BlackSabbathPlayerInventory bs = ((IPlayerEntity)P).roundabout$getBlckSabbathPlayerInventory();
+                                if(bs.canAddItem(value.getItem())) {
+                                        this.addItem(value.getItem(), bs, value);
+                                        //System.out.println(value.getItem().getCount());
+                                       // value.discard();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            lvent = items;
+        }
+    }
+
+    public ItemStack addItem(ItemStack item, BlackSabbathPlayerInventory bs, ItemEntity it) {
+        if (item.isEmpty()) {
+            return ItemStack.EMPTY;
+        } else {
+            ItemStack itemstack = item.copy();
+            this.moveItemToOccupiedSlotsWithSameType(itemstack, bs, it);
+            if (itemstack.isEmpty()) {
+                return ItemStack.EMPTY;
+            } else {
+                this.moveItemToEmptySlots(itemstack, bs, it);
+                return itemstack.isEmpty() ? ItemStack.EMPTY : itemstack;
+            }
+        }
+    }
+
+    private final int size = 8;
+
+    private void moveItemToEmptySlots(ItemStack item, BlackSabbathPlayerInventory bs, ItemEntity it) {
+        for(int i = 0; i <= this.size; ++i) {
+            if(i != 0 && i < 9) {
+                ItemStack itemstack = bs.getItem(i);
+                if (itemstack.isEmpty()) {
+                    bs.setItem(i, item.copyAndClear());
+                    it.discard();
+                    return;
+                }
+            }
+        }
+
+    }
+
+    private void moveItemToOccupiedSlotsWithSameType(ItemStack item, BlackSabbathPlayerInventory bs, ItemEntity it) {
+        for(int i = 0; i <= this.size; ++i) {
+            if(i != 0) {
+                ItemStack itemstack = bs.getItem(i);
+                if (ItemStack.isSameItemSameTags(itemstack, item)) {
+                    this.moveItemsBetweenStacks(item, itemstack, bs, it);
+                    if (item.isEmpty()) {
+                        return;
+                    }
+                }
+            }
+        }
+
+    }
+
+    private void moveItemsBetweenStacks(ItemStack p_19186_, ItemStack p_19187_, BlackSabbathPlayerInventory bs, ItemEntity it) {
+        int i = Math.min(bs.getMaxStackSize(), p_19187_.getMaxStackSize());
+        int j = Math.min(p_19186_.getCount(), i - p_19187_.getCount());
+
+        System.out.println(j);
+
+        if (j > 0) {
+            p_19187_.grow(j);
+            p_19186_.shrink(j);
+            it.getItem().setCount(it.getItem().getCount() - j);
+            bs.setChanged();
+            if(it.getItem().getCount() == 0){
+                System.out.println("delete" + "  " + it.getItem());
+                it.discard();
+            }
+        }
+
+    }
     boolean hasStabbed = false;
 
     void requiemArrowHypeAndAuraTopTenMomentsInAllAnime(LivingEntity $$1, StandArrowItem sa){
