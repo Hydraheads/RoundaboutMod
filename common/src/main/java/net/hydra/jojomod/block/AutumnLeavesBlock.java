@@ -261,29 +261,6 @@ public class AutumnLeavesBlock extends BushBlock {
             entity.hurtMarked = true;
         }
     }
-    @Override
-    public void animateTick(BlockState state, Level level,
-                            BlockPos pos, RandomSource random) {
-
-        super.animateTick(state, level, pos, random);
-
-        if (state.getValue(COOLDOWN)) {
-            return;
-        }
-
-        for (int i = 0; i < 3; i++) {
-
-            double x = pos.getX() + random.nextDouble();
-            double y = pos.getY() + 0.1;
-            double z = pos.getZ() + random.nextDouble();
-
-            level.addParticle(
-                    ModParticles.AUTUMN_LEAVES,
-                    x, y, z,
-                    0.0, 0.025, 0.0
-            );
-        }
-    }
 
     @Override
     public void tick(BlockState state, ServerLevel level,
@@ -305,6 +282,21 @@ public class AutumnLeavesBlock extends BushBlock {
                     0.7F,
                     1.2F
             );
+
+            for (int i = 0; i < 12; i++) {
+
+                double x = pos.getX() + random.nextDouble();
+                double y = pos.getY() + 0.1;
+                double z = pos.getZ() + random.nextDouble();
+
+                level.sendParticles(
+                        ModParticles.AUTUMN_LEAVES,
+                        x, y, z,
+                        0,
+                        0.0, 0.025, 0.0,
+                        1.0
+                );
+            }
         }
     }
     private void playMovementSound(Level level, BlockPos pos, Entity entity) {

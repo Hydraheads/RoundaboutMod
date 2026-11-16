@@ -197,9 +197,9 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getAdvancedConfig().purpleHazeDecayBlocksAndRatesV2 != null) {
+        if (getAdvancedConfig().purpleHazeDecayBlocksAndRatesV4 != null) {
             MainUtil.PURPLE_HAZE_DECAY_BLOCKS.clear();
-            for (String entry : getAdvancedConfig().purpleHazeDecayBlocksAndRatesV2) {
+            for (String entry : getAdvancedConfig().purpleHazeDecayBlocksAndRatesV4) {
                 try {
                     String[] split = entry.split(":");
                     if (split.length != 5) {
@@ -423,11 +423,11 @@ public abstract class ConfigManager {
 
     public static void loadStandArrowPool()
     {
-        if (getAdvancedConfig().standArrowPoolv9 != null)
+        if (getAdvancedConfig().standArrowPoolv10 != null)
         {
             ModItems.STAND_ARROW_POOL.clear();
 
-            for (String disc : getAdvancedConfig().standArrowPoolv9)
+            for (String disc : getAdvancedConfig().standArrowPoolv10)
             {
                 String[] split = disc.split(":");
 
