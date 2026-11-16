@@ -25,4 +25,5 @@ public class ModFeatures {
     public static final ResourceLocation LOCACACA_PLACED = new ResourceLocation(Roundabout.MOD_ID, "placed_locacaca");
     public static final ResourceLocation AJA_ORE = new ResourceLocation(Roundabout.MOD_ID, "ore_aja");
     public static final ResourceLocation AJA_ORE_DESERT = new ResourceLocation(Roundabout.MOD_ID, "ore_aja_desert");
+    public static final ResourceLocation GINKGO_TREE_PLACED = new ResourceLocation(Roundabout.MOD_ID, "ginkgo_tree_placed");
 }

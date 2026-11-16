@@ -809,4 +809,9 @@ public class WhitesnakeEntity extends FollowingStandEntity {
         if (animation == PHASE_GRAB) this.phaseGrab.startIfStopped(this.tickCount);
         else this.phaseGrab.stop();
     }
+
+
+    public boolean standCanShowName() {
+        return !isDisguised();
+    }
 }

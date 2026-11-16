@@ -2,6 +2,7 @@
 package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -291,9 +292,9 @@ public class AutumnLeavesBlock extends BushBlock {
             level.playSound(
                     null,
                     pos,
-                    SoundEvents.AMETHYST_BLOCK_CHIME,
+                    ModSounds.AL_CHARGE_EVENT,
                     SoundSource.BLOCKS,
-                    0.7F,
+                    0.15F,
                     1.2F
             );
         }
