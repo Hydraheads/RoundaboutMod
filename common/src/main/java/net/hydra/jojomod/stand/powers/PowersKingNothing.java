@@ -99,6 +99,8 @@ public class PowersKingNothing extends NewDashPreset {
             DISINTEGRATE = 32,
             PHASE = 33;
 
+    public static final byte SYNC_TRACKING = 50;
+
     // tags
     public static final String
             MEMORIZED_BLOCK_TAG = "memorizedBlock",
@@ -147,6 +149,21 @@ public class PowersKingNothing extends NewDashPreset {
 
     public PowersKingNothing(LivingEntity self) {
         super(self);
+    }
+
+    @Override
+    public List<Byte> getSkinList() {
+        List<Byte> $$1 = Lists.newArrayList();
+        isTrackingItem();
+        $$1.add(MANGA);
+        $$1.add(SPINE);
+        $$1.add(SOMETHING);
+        $$1.add(NOTE);
+        $$1.add(WARDEN);
+        $$1.add(SNIFFER);
+        $$1.add(RAM);
+        $$1.add(BETA);
+        return $$1;
     }
 
     public static String getSkinString(byte id) {
@@ -570,8 +587,7 @@ public class PowersKingNothing extends NewDashPreset {
             }
         }
         if (trackingCloudOut && (trackingCloud != null && trackingCloud.isRemoved())) {
-            trackingCloudOut = false;
-            S2CPacketUtil.sendGenericIntToClientPacket((Player) getSelf(), PacketDataIndex.S2C_SYNC_KN_TRACKING, 0);
+            syncTracking(false);
             trackingCloud = null;
             playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);
         }
@@ -583,6 +599,14 @@ public class PowersKingNothing extends NewDashPreset {
                         PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
                         trackingCloud.getX(), trackingCloud.getY(), trackingCloud.getZ(), 1, 0.1, 0.1, 0.1, 0.01);
             }
+        }
+    }
+
+    private void syncTracking(boolean isOut) {
+        int status = (isOut ? 1 : 0);
+        this.updatePowerInt(SYNC_TRACKING, status);
+        if (this.getSelf() instanceof Player) {
+            S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), SYNC_TRACKING, status);
         }
     }
 
@@ -1047,21 +1071,6 @@ public class PowersKingNothing extends NewDashPreset {
     }
 
     @Override
-    public List<Byte> getSkinList() {
-        List<Byte> $$1 = Lists.newArrayList();
-        isTrackingItem();
-        $$1.add(MANGA);
-        $$1.add(SPINE);
-        $$1.add(SOMETHING);
-        $$1.add(NOTE);
-        $$1.add(WARDEN);
-        $$1.add(SNIFFER);
-        $$1.add(RAM);
-        $$1.add(BETA);
-        return $$1;
-    }
-
-    @Override
     public Component getSkinName(byte skinId) {
         return Component.translatable("skins.roundabout.king_nothing." + getSkinString(skinId));
     }
@@ -1154,6 +1163,21 @@ public class PowersKingNothing extends NewDashPreset {
             }
         }
         return super.setPowerOther(move, lastMove);
+    }
+
+    @Override
+    public void updatePowerInt(byte activePower, int data) {
+        switch (activePower) {
+            case SYNC_TRACKING -> {
+                if (data == 0) {
+                    this.trackingCloudOut = false;
+                }
+                else if (data == 1) {
+                    trackingCloudOut = true;
+                }
+            }
+        }
+        super.updatePowerInt(activePower, data);
     }
 
     private boolean startMemorizedScentTrack() {
