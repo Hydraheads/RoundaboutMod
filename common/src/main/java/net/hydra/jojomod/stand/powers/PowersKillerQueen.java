@@ -2990,7 +2990,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (this.detonateTimer == -1) {
                 detonate();
             }
-        }else {
+        } else {
             defuseServer();
             syncBombStatus(NONE);
         }

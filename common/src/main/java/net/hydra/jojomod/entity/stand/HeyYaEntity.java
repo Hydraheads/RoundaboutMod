@@ -58,4 +58,8 @@ public class HeyYaEntity extends FollowingStandEntity {
     public float blackSabbathGrabOffset(){
         return 0.95f;
     }
+
+    public boolean standCanShowName() {
+        return false;
+    }
 }

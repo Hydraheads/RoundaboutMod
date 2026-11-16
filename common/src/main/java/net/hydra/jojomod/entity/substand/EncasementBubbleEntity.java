@@ -176,4 +176,8 @@ public class EncasementBubbleEntity extends Entity implements PenetratableWithPr
         }
         this.discard();
     }
+
+    public boolean standCanShowName() {
+        return false;
+    }
 }

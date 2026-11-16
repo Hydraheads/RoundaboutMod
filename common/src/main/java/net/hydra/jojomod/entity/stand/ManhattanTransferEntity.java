@@ -1239,4 +1239,9 @@ public class ManhattanTransferEntity extends StandEntity {
             }
         }
     }
+
+
+    public boolean standCanShowName() {
+        return false;
+    }
 }
