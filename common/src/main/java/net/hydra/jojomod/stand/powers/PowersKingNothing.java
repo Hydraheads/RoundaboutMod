@@ -916,9 +916,9 @@ public class PowersKingNothing extends NewDashPreset {
             this.setCooldown(PowerIndex.SKILL_2,
                     ClientNetworking.getAppropriateConfig().generalStandSettings.objectPocketCooldown);
             S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2_SNEAK,
-                    ClientNetworking.getAppropriateConfig().generalStandSettings.objectPocketCooldown);
+                    ClientNetworking.getAppropriateConfig().kingNothingSettings.kingNothingPhasePlaceCd);
             this.setCooldown(PowerIndex.SKILL_2_SNEAK,
-                    ClientNetworking.getAppropriateConfig().generalStandSettings.objectPocketCooldown);
+                    ClientNetworking.getAppropriateConfig().kingNothingSettings.kingNothingPhasePlaceCd);
             playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);
             animateStand(KingNothingEntity.RETURN);
         }
@@ -955,9 +955,9 @@ public class PowersKingNothing extends NewDashPreset {
             this.setCooldown(PowerIndex.SKILL_2,
                     ClientNetworking.getAppropriateConfig().generalStandSettings.objectPocketCooldown);
             S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2_SNEAK,
-                    ClientNetworking.getAppropriateConfig().generalStandSettings.objectPocketCooldown);
+                    ClientNetworking.getAppropriateConfig().kingNothingSettings.kingNothingPhaseMineCd);
             this.setCooldown(PowerIndex.SKILL_2_SNEAK,
-                    ClientNetworking.getAppropriateConfig().generalStandSettings.objectPocketCooldown);
+                    ClientNetworking.getAppropriateConfig().kingNothingSettings.kingNothingPhaseMineCd);
             playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);
             animateStand(KingNothingEntity.RETURN);
         }
@@ -1008,15 +1008,15 @@ public class PowersKingNothing extends NewDashPreset {
             else if (blockItem instanceof SolidBucketItem) {
                 stand.setHeldItem(Items.BUCKET.getDefaultInstance());
             }
-            getStandUserSelf().roundabout$tryPower(PowerIndex.NONE, true);
+            setPowerNone();
             S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2,
                     ClientNetworking.getAppropriateConfig().generalStandSettings.objectPocketCooldown);
             this.setCooldown(PowerIndex.SKILL_2,
                     ClientNetworking.getAppropriateConfig().generalStandSettings.objectPocketCooldown);
             S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2_SNEAK,
-                    ClientNetworking.getAppropriateConfig().generalStandSettings.objectPocketCooldown);
+                    ClientNetworking.getAppropriateConfig().kingNothingSettings.kingNothingPhasePlaceCd);
             this.setCooldown(PowerIndex.SKILL_2_SNEAK,
-                    ClientNetworking.getAppropriateConfig().generalStandSettings.objectPocketCooldown);
+                    ClientNetworking.getAppropriateConfig().kingNothingSettings.kingNothingPhasePlaceCd);
             playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);
             animateStand(KingNothingEntity.RETURN);
         }
@@ -1033,7 +1033,7 @@ public class PowersKingNothing extends NewDashPreset {
             }
             damageHeld(held, stand, this.getSelf());
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-            int cooldown = ClientNetworking.getAppropriateConfig().generalStandSettings.objectPocketCooldown;
+            int cooldown = ClientNetworking.getAppropriateConfig().kingNothingSettings.kingNothingPhaseMineCd;
             S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2,
                     ClientNetworking.getAppropriateConfig().generalStandSettings.objectPocketCooldown);
             this.setCooldown(PowerIndex.SKILL_2,
@@ -1050,16 +1050,14 @@ public class PowersKingNothing extends NewDashPreset {
     public List<Byte> getSkinList() {
         List<Byte> $$1 = Lists.newArrayList();
         isTrackingItem();
-        if (true) {
-            $$1.add(MANGA);
-            $$1.add(SPINE);
-            $$1.add(SOMETHING);
-            $$1.add(NOTE);
-            $$1.add(WARDEN);
-            $$1.add(SNIFFER);
-            $$1.add(RAM);
-            $$1.add(BETA);
-        }
+        $$1.add(MANGA);
+        $$1.add(SPINE);
+        $$1.add(SOMETHING);
+        $$1.add(NOTE);
+        $$1.add(WARDEN);
+        $$1.add(SNIFFER);
+        $$1.add(RAM);
+        $$1.add(BETA);
         return $$1;
     }
 
@@ -1467,7 +1465,10 @@ public class PowersKingNothing extends NewDashPreset {
                     else if ($$4.isAttackable() && !($$4 instanceof Player PE && (PE.isCreative() || PE.isSpectator()))
                             && !($$4 instanceof OwnableEntity OE && Objects.equals(OE.getOwner(), getSelf())) && !(
                             $$4 instanceof Boat || $$4 instanceof Minecart)) {
-                        cooldown += (int) (1F / stand.getAttributeValue(Attributes.ATTACK_SPEED) * 20);
+                        cooldown = ClientNetworking.getAppropriateConfig().kingNothingSettings.kingNothingPhaseAttackCd;
+                        if (ClientNetworking.getAppropriateConfig().kingNothingSettings.kingNothingDynamicPhaseAttackCd) {
+                            cooldown += (int) (1F / stand.getAttributeValue(Attributes.ATTACK_SPEED) * 20);
+                        }
                         doPhaseAttack(held, stand, self, $$4);
                         didThing = true;
                     }

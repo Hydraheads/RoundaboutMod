@@ -4187,6 +4187,8 @@
   "config.roundabout.enableDiverDown.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableKingCrimson.name": "Enable Stand",
   "config.roundabout.enableKingCrimson.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
+  "config.roundabout.enableKingNothing.name": "Enable Stand",
+  "config.roundabout.enableKingNothing.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
 
   "config.roundabout.enableSkippingCooldowns.name": "Item CD Skip",
   "config.roundabout.enableSkippingCooldowns.desc": "Enable skipping item cooldowns. It's cool, but oppressive in pvp.",
@@ -4726,6 +4728,16 @@
   "config.roundabout.getMiningTierCream.desc": "Tier 0 is the default, it does not replace tools for harvesting blocks. Tier 1 is wood tier, tier 2 is stone tier, tier 3 is iron tier, and tier 4 is diamond tier.",
   "config.roundabout.creamVoidTime.name": "Void Time",
   "config.roundabout.creamVoidTime.desc": "How long you are able to stay in the void mode attack for",
+
+  "config.roundabout.kingNothingSettings.name": "King Nothing",
+  "config.roundabout.kingNothingPhaseAttackCd.name": "Phase Item Attack Cooldown",
+  "config.roundabout.kingNothingPhaseAttackCd.desc": "The cooldown for Phase Item after Attacking Mobs and Players.",
+  "config.roundabout.kingNothingDynamicPhaseAttackCd.name": "Dynamic Phase Item Attack Cooldown",
+  "config.roundabout.kingNothingDynamicPhaseAttackCd.desc": "If enabled, Phase Attack cooldown is increased by the item's attack cooldown.",
+  "config.roundabout.kingNothingPhaseMineCd.name": "Phase Item Mine Cooldown",
+  "config.roundabout.kingNothingPhaseMineCd.desc": "The cooldown for Phase Item after Mining a Block.",
+  "config.roundabout.kingNothingPhasePlaceCd.name": "Phase Item Place Cooldown",
+  "config.roundabout.kingNothingPhasePlaceCd.desc": "The cooldown for Phase Item after Placing a Block.",
 
   "config.roundabout.diverDownAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.diverDownAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
