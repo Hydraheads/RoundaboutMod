@@ -279,15 +279,15 @@ public class ModBlocks {
                     .lightLevel((L) -> {
                         return 1;
                     }).
-                    randomTicks().friction(0.98F).strength(0.5F).forceSolidOff().sound(SoundType.GLASS).replaceable().
-                    noCollission().noOcclusion().pushReaction(PushReaction.DESTROY));
+                    randomTicks().friction(0.98F).strength(0.5F).forceSolidOff().sound(SoundType.GLASS).
+                    noCollission().noOcclusion().pushReaction(PushReaction.IGNORE));
     public static Block ICE_SPIKE_PROPERTIES =
             new IceSpikeBlock(BlockBehaviour.Properties.of().mapColor(MapColor.ICE).friction(0.98F)
                     .lightLevel((L) -> {
                         return 1;
                     }).
                     randomTicks().friction(0.98F).strength(0.5F).forceSolidOff().sound(SoundType.GLASS).
-                    noCollission().noOcclusion().pushReaction(PushReaction.DESTROY));
+                    noCollission().noOcclusion().pushReaction(PushReaction.IGNORE));
 
     public static Block OASIS_MUD_BLOCK_PROPERTIES =
             new OasisMudBlock(BlockBehaviour.Properties.of()
