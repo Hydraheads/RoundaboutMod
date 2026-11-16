@@ -302,7 +302,7 @@ public class AutumnLeavesBlock extends BushBlock {
                     pos,
                     ModSounds.AL_CHARGE_EVENT,
                     SoundSource.BLOCKS,
-                    0.3F,
+                    0.7F,
                     1.2F
             );
         }
@@ -321,7 +321,7 @@ public class AutumnLeavesBlock extends BushBlock {
                     entity,
                     ModSounds.AL_MOVE_EVENT,
                     SoundSource.PLAYERS,
-                    0.3F,
+                    0.7F,
                     1.0F
             );
         }
