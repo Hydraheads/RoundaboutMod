@@ -400,6 +400,108 @@ public class ForgeItems {
             () -> new BlockItem(ForgeBlocks.WOOL_STAIRS_BROWN.get(),
                     new Item.Properties()
             )));
+    public static final RegistryObject<BlockItem> GINKGO_LOG_ITEM =
+            addToBuildingTab(ITEMS.register("ginkgo_log",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_LOG.get(),
+                            new Item.Properties())));
+
+    public static final RegistryObject<BlockItem> GINKGO_PLANKS_ITEM =
+            addToBuildingTab(ITEMS.register("ginkgo_planks",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_PLANKS.get(),
+                            new Item.Properties())));
+
+    public static final RegistryObject<BlockItem> GINKGO_LEAVES_ITEM =
+            addToBuildingTab(ITEMS.register("ginkgo_leaves",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_LEAVES.get(),
+                            new Item.Properties())));
+    public static final RegistryObject<BlockItem> GINKGO_WOOD_ITEM =
+            addToBuildingTab(ITEMS.register("ginkgo_wood",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_WOOD.get(),
+                            new Item.Properties())));
+
+    public static final RegistryObject<BlockItem> STRIPPED_GINKGO_WOOD_ITEM =
+            addToBuildingTab(ITEMS.register("stripped_ginkgo_wood",
+                    () -> new BlockItem(ForgeBlocks.STRIPPED_GINKGO_WOOD.get(),
+                            new Item.Properties())));
+
+    public static final RegistryObject<BlockItem> STRIPPED_GINKGO_LOG_ITEM =
+            addToBuildingTab(ITEMS.register("stripped_ginkgo_log",
+                    () -> new BlockItem(ForgeBlocks.STRIPPED_GINKGO_LOG.get(),
+                            new Item.Properties())));
+    public static final RegistryObject<BlockItem> GINKGO_SAPLING_ITEM =
+            addToBuildingTab(ITEMS.register("ginkgo_sapling",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_SAPLING.get(),
+                            new Item.Properties())));
+
+    public static final RegistryObject<BlockItem> GINKGO_DOOR_ITEM =
+            addToBuildingTab(ITEMS.register("ginkgo_door",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_DOOR.get(),
+                            new Item.Properties())));
+
+    public static final RegistryObject<BlockItem> FANCY_GINKGO_DOOR_ITEM =
+            addToBuildingTab(ITEMS.register("fancy_ginkgo_door",
+                    () -> new BlockItem(ForgeBlocks.FANCY_GINKGO_DOOR.get(),
+                            new Item.Properties())));
+    public static final RegistryObject<BlockItem> GINKGO_SIGN_ITEM =
+            addToBuildingTab(ITEMS.register("ginkgo_sign",
+                    () -> new SignItem(
+                            new Item.Properties().stacksTo(16),
+                            ForgeBlocks.GINKGO_SIGN.get(),
+                            ForgeBlocks.GINKGO_WALL_SIGN.get()
+                    )));
+
+    public static final RegistryObject<BlockItem> GINKGO_HANGING_SIGN_ITEM =
+            addToBuildingTab(ITEMS.register("ginkgo_hanging_sign",
+                    () -> new HangingSignItem(
+                            ForgeBlocks.GINKGO_HANGING_SIGN.get(),
+                            ForgeBlocks.GINKGO_WALL_HANGING_SIGN.get(),
+                            new Item.Properties().stacksTo(16)
+                    )));
+    public static final RegistryObject<BlockItem> GINKGO_TRAPDOOR_ITEM =
+            addToBuildingTab(ITEMS.register("ginkgo_trapdoor",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_TRAPDOOR.get(),
+                            new Item.Properties())));
+    public static final RegistryObject<BlockItem> AUTUMN_LEAVES_ITEM =
+            addToBuildingTab(ITEMS.register("autumn_leaves",
+                    () -> new BlockItem(ForgeBlocks.AUTUMN_LEAVES.get(),
+                            new Item.Properties())));
+    public static final RegistryObject<BlockItem> GINKGO_STAIRS_ITEM =
+            addToBuildingTab(ITEMS.register("ginkgo_stairs",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_STAIRS.get(),
+                            new Item.Properties())));
+    public static final RegistryObject<BlockItem> GINKGO_SLAB_ITEM =
+            addToBuildingTab(ITEMS.register("ginkgo_slab",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_SLAB.get(),
+                            new Item.Properties())));
+    public static final RegistryObject<BlockItem> GINKGO_FENCE_ITEM =
+            addToBuildingTab(ITEMS.register("ginkgo_fence",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_FENCE.get(),
+                            new Item.Properties())));
+    public static final RegistryObject<BlockItem> GINKGO_FENCE_GATE_ITEM =
+            addToBuildingTab(ITEMS.register("ginkgo_fence_gate",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_FENCE_GATE.get(),
+                            new Item.Properties())));
+    public static final RegistryObject<BlockItem> GINKGO_PRESSURE_PLATE_ITEM =
+            addToBuildingTab(ITEMS.register("ginkgo_pressure_plate",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_PRESSURE_PLATE.get(),
+                            new Item.Properties())));
+    public static final RegistryObject<BlockItem> GINKGO_BUTTON_ITEM =
+            addToBuildingTab(ITEMS.register("ginkgo_button",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_BUTTON.get(),
+                            new Item.Properties())));
+    public static final RegistryObject<Item> GINKGO_BOAT =
+            addToBuildingTab(ITEMS.register("ginkgo_boat",
+                    () -> new GinkgoBoatItem(false,
+                            new Item.Properties().stacksTo(1))));
+
+    public static final RegistryObject<Item> GINKGO_CHEST_BOAT =
+            addToBuildingTab(ITEMS.register("ginkgo_chest_boat",
+                    () -> new GinkgoBoatItem(true,
+                            new Item.Properties().stacksTo(1))));
+    public static final RegistryObject<BlockItem> GINKGO_FALLEN_LEAVES_ITEM =
+            addToBuildingTab(ITEMS.register("ginkgo_fallen_leaves",
+                    () -> new BlockItem(ForgeBlocks.GINKGO_FALLEN_LEAVES.get(),
+                            new Item.Properties())));
     public static final RegistryObject<BlockItem> CULTIVATION_POT_ITEM = addToBuildingTab(ITEMS.register("cultivation_pot",
             () -> new BlockItem(ForgeBlocks.CULTIVATION_POT.get(),
                     new Item.Properties()
@@ -782,9 +884,9 @@ public class ForgeItems {
     public static final RegistryObject<Item> MAX_STAND_DISC_KILLER_QUEEN = addToDiscTab(ITEMS.register("max_killer_queen_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersKillerQueen(null))));
 
-    public static final RegistryObject<Item> STAND_DISC_PURPLE_HAZE = addToWIPTab(ITEMS.register("purple_haze_disc",
+    public static final RegistryObject<Item> STAND_DISC_PURPLE_HAZE = addToDiscTab(ITEMS.register("purple_haze_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersPurpleHaze(null))));
-    public static final RegistryObject<Item> MAX_STAND_DISC_PURPLE_HAZE = addToWIPTab(ITEMS.register("max_purple_haze_disc",
+    public static final RegistryObject<Item> MAX_STAND_DISC_PURPLE_HAZE = addToDiscTab(ITEMS.register("max_purple_haze_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersPurpleHaze(null))));
 
  	public static final RegistryObject<Item> STAND_DISC_BAD_COMPANY = addToWIPTab(ITEMS.register("bad_company_disc",
@@ -1149,108 +1251,7 @@ public class ForgeItems {
     public static final RegistryObject<BlockItem> GAMBLING_TABLE_ITEM = addToWIPTab(ITEMS.register("gambling_table",
             () -> new BlockItem(ForgeBlocks.GAMBLING_TABLE.get(), new Item.Properties())));
 
-    public static final RegistryObject<BlockItem> GINKGO_LOG_ITEM =
-            addToWIPTab(ITEMS.register("ginkgo_log",
-                    () -> new BlockItem(ForgeBlocks.GINKGO_LOG.get(),
-                            new Item.Properties())));
 
-    public static final RegistryObject<BlockItem> GINKGO_PLANKS_ITEM =
-            addToWIPTab(ITEMS.register("ginkgo_planks",
-                    () -> new BlockItem(ForgeBlocks.GINKGO_PLANKS.get(),
-                            new Item.Properties())));
-
-    public static final RegistryObject<BlockItem> GINKGO_LEAVES_ITEM =
-            addToWIPTab(ITEMS.register("ginkgo_leaves",
-                    () -> new BlockItem(ForgeBlocks.GINKGO_LEAVES.get(),
-                            new Item.Properties())));
-    public static final RegistryObject<BlockItem> GINKGO_WOOD_ITEM =
-            addToWIPTab(ITEMS.register("ginkgo_wood",
-                    () -> new BlockItem(ForgeBlocks.GINKGO_WOOD.get(),
-                            new Item.Properties())));
-
-    public static final RegistryObject<BlockItem> STRIPPED_GINKGO_WOOD_ITEM =
-            addToWIPTab(ITEMS.register("stripped_ginkgo_wood",
-                    () -> new BlockItem(ForgeBlocks.STRIPPED_GINKGO_WOOD.get(),
-                            new Item.Properties())));
-
-    public static final RegistryObject<BlockItem> STRIPPED_GINKGO_LOG_ITEM =
-            addToWIPTab(ITEMS.register("stripped_ginkgo_log",
-                    () -> new BlockItem(ForgeBlocks.STRIPPED_GINKGO_LOG.get(),
-                            new Item.Properties())));
-    public static final RegistryObject<BlockItem> GINKGO_SAPLING_ITEM =
-            addToWIPTab(ITEMS.register("ginkgo_sapling",
-                    () -> new BlockItem(ForgeBlocks.GINKGO_SAPLING.get(),
-                            new Item.Properties())));
-
-    public static final RegistryObject<BlockItem> GINKGO_DOOR_ITEM =
-            addToWIPTab(ITEMS.register("ginkgo_door",
-                    () -> new BlockItem(ForgeBlocks.GINKGO_DOOR.get(),
-                            new Item.Properties())));
-
-    public static final RegistryObject<BlockItem> FANCY_GINKGO_DOOR_ITEM =
-            addToWIPTab(ITEMS.register("fancy_ginkgo_door",
-                    () -> new BlockItem(ForgeBlocks.FANCY_GINKGO_DOOR.get(),
-                            new Item.Properties())));
-    public static final RegistryObject<BlockItem> GINKGO_SIGN_ITEM =
-            addToWIPTab(ITEMS.register("ginkgo_sign",
-                    () -> new SignItem(
-                            new Item.Properties().stacksTo(16),
-                            ForgeBlocks.GINKGO_SIGN.get(),
-                            ForgeBlocks.GINKGO_WALL_SIGN.get()
-                    )));
-
-    public static final RegistryObject<BlockItem> GINKGO_HANGING_SIGN_ITEM =
-            addToWIPTab(ITEMS.register("ginkgo_hanging_sign",
-                    () -> new HangingSignItem(
-                            ForgeBlocks.GINKGO_HANGING_SIGN.get(),
-                            ForgeBlocks.GINKGO_WALL_HANGING_SIGN.get(),
-                            new Item.Properties().stacksTo(16)
-                    )));
-    public static final RegistryObject<BlockItem> GINKGO_TRAPDOOR_ITEM =
-            addToWIPTab(ITEMS.register("ginkgo_trapdoor",
-                    () -> new BlockItem(ForgeBlocks.GINKGO_TRAPDOOR.get(),
-                            new Item.Properties())));
-    public static final RegistryObject<BlockItem> AUTUMN_LEAVES_ITEM =
-            addToWIPTab(ITEMS.register("autumn_leaves",
-                    () -> new BlockItem(ForgeBlocks.AUTUMN_LEAVES.get(),
-                            new Item.Properties())));
-    public static final RegistryObject<BlockItem> GINKGO_STAIRS_ITEM =
-            addToWIPTab(ITEMS.register("ginkgo_stairs",
-                    () -> new BlockItem(ForgeBlocks.GINKGO_STAIRS.get(),
-                            new Item.Properties())));
-    public static final RegistryObject<BlockItem> GINKGO_SLAB_ITEM =
-            addToWIPTab(ITEMS.register("ginkgo_slab",
-                    () -> new BlockItem(ForgeBlocks.GINKGO_SLAB.get(),
-                            new Item.Properties())));
-    public static final RegistryObject<BlockItem> GINKGO_FENCE_ITEM =
-            addToWIPTab(ITEMS.register("ginkgo_fence",
-                    () -> new BlockItem(ForgeBlocks.GINKGO_FENCE.get(),
-                            new Item.Properties())));
-    public static final RegistryObject<BlockItem> GINKGO_FENCE_GATE_ITEM =
-            addToWIPTab(ITEMS.register("ginkgo_fence_gate",
-                    () -> new BlockItem(ForgeBlocks.GINKGO_FENCE_GATE.get(),
-                            new Item.Properties())));
-    public static final RegistryObject<BlockItem> GINKGO_PRESSURE_PLATE_ITEM =
-            addToWIPTab(ITEMS.register("ginkgo_pressure_plate",
-                    () -> new BlockItem(ForgeBlocks.GINKGO_PRESSURE_PLATE.get(),
-                            new Item.Properties())));
-    public static final RegistryObject<BlockItem> GINKGO_BUTTON_ITEM =
-            addToWIPTab(ITEMS.register("ginkgo_button",
-                    () -> new BlockItem(ForgeBlocks.GINKGO_BUTTON.get(),
-                            new Item.Properties())));
-    public static final RegistryObject<Item> GINKGO_BOAT =
-            addToWIPTab(ITEMS.register("ginkgo_boat",
-                    () -> new GinkgoBoatItem(false,
-                            new Item.Properties().stacksTo(1))));
-
-    public static final RegistryObject<Item> GINKGO_CHEST_BOAT =
-            addToWIPTab(ITEMS.register("ginkgo_chest_boat",
-                    () -> new GinkgoBoatItem(true,
-                            new Item.Properties().stacksTo(1))));
-    public static final RegistryObject<BlockItem> GINKGO_FALLEN_LEAVES_ITEM =
-            addToWIPTab(ITEMS.register("ginkgo_fallen_leaves",
-                    () -> new BlockItem(ForgeBlocks.GINKGO_FALLEN_LEAVES.get(),
-                            new Item.Properties())));
     public static void assignStupidForge(){
         DispenserBlock.registerBehavior(ForgeItems.KNIFE.get(), DispenserRegistry.KNIFE);
 
