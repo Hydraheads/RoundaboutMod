@@ -138,4 +138,5 @@ public class ModParticles {
     public static SimpleParticleType GINKGO_LEAVES;
 
     public static SimpleParticleType VITAL_ESSENCE;
+    public static SimpleParticleType GE_WAVE;
 }

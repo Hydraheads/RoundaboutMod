@@ -911,4 +911,8 @@ public class SeperatedArmEntity extends StandEntity {
     public boolean isOnPortalCooldown() {
         return true;
     }
+
+    public boolean standCanShowName() {
+        return false;
+    }
 }

@@ -232,6 +232,7 @@
   "item.roundabout.max_diver_down_disc": "Stand Disc+",
   "item.roundabout.gold_experience_disc": "Stand Disc",
   "item.roundabout.max_gold_experience_disc": "Stand Disc+",
+  "item.roundabout.creative_gold_experience_requiem_disc": "Stand Disc++",
   "item.roundabout.whitesnake_disc": "Stand Disc",
   "item.roundabout.max_whitesnake_disc": "Stand Disc+",
   "item.roundabout.d4c_disc.desc": "D4C",
@@ -279,6 +280,7 @@
   "item.roundabout.max_diver_down_disc.desc": "Diver Down",
   "item.roundabout.gold_experience_disc.desc": "Gold Experience",
   "item.roundabout.max_gold_experience_disc.desc": "Gold Experience",
+  "item.roundabout.creative_gold_experience_requiem_disc.desc": "Gold Experience Requiem",
   "item.roundabout.lyin_eyes_disc.desc": "Lyin' Eyes",
   "item.roundabout.manhattan_transfer_disc.desc": "Manhattan Transfer",
   "item.roundabout.black_sabbath_disc.desc": "Black Sabbath",
@@ -1567,6 +1569,9 @@
   "sounds.roundabout.ph_phase_2": "Distortion Haze Expands",
   "sounds.roundabout.ph_phase_3": "Distortion Haze Expands",
   "sounds.roundabout.ph_spit": "Virus Spit",
+
+  "sounds.roundabout.al_charge": "Autumn Leaves Recharges",
+  "sounds.roundabout.al_move": "Autumn Leaves Swoosh",
 
 
   "sounds.roundabout.bullet_ricochet":  "Bullet ricocheted",
@@ -4161,6 +4166,8 @@
 
   "config.roundabout.timeEraseBlocks.name": "Render TE Blocks",
   "config.roundabout.timeEraseBlocks.desc": "If blocks in time erase should render.",
+  "config.roundabout.standShowName.name": "Stands Show Their Name",
+  "config.roundabout.standShowName.desc": "If stands should show their nametag. Intended for people that have difficulties to identify stands cause of colorblindess.",
 
   "config.roundabout.whiteListModdedMobs.name": "Whitelist Modded Mobs",
   "config.roundabout.whiteListModdedMobs.desc": "By default, d4c creates parallel mobs for modded mobs with world merging. It operates through a blacklist in the advanced config. Turning this on makes it a whitelist in case you want to keep these parallel mobs strictly vanilla to avoid conflicts.",

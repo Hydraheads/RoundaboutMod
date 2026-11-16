@@ -177,6 +177,11 @@ public class CTRbarrierEntity extends StandEntity {
         return true;
     }
 
+
+    public boolean standCanShowName() {
+        return false;
+    }
+
     @Override
     public boolean fireImmune() {
         return true;

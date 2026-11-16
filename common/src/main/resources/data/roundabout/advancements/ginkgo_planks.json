@@ -1,0 +1,23 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_logs": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "roundabout:ginkgo_log",
+              "roundabout:ginkgo_wood",
+              "roundabout:stripped_ginkgo_log",
+              "roundabout:stripped_ginkgo_wood"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "rewards": {
+    "recipes": ["roundabout:ginkgo_planks"]
+  }
+}

@@ -2,6 +2,7 @@
 package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -26,6 +27,9 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import java.util.Map;
+import java.util.WeakHashMap;
+
 public class AutumnLeavesBlock extends BushBlock {
 
     public static final DirectionProperty FACING =
@@ -40,6 +44,10 @@ public class AutumnLeavesBlock extends BushBlock {
             BooleanProperty.create("cooldown");
 
     private static final int COOLDOWN_TICKS = 60;
+    private static final int SOUND_COOLDOWN_TICKS = 10;
+
+    private static final Map<Entity, Long> LAST_MOVEMENT =
+            new WeakHashMap<>();
     public AutumnLeavesBlock(Properties properties) {
         super(properties);
 
@@ -102,7 +110,7 @@ public class AutumnLeavesBlock extends BushBlock {
         double centerX = pos.getX() + 0.5;
         double centerZ = pos.getZ() + 0.5;
 
-        double currentY = startY;
+        double currentY = pos.getY();
 
         double lastSafeX = startX;
         double lastSafeY = startY;
@@ -234,45 +242,23 @@ public class AutumnLeavesBlock extends BushBlock {
                 || lastSafeY != startY
                 || lastSafeZ != startZ) {
 
+            playMovementSound(level, pos, entity);
+
             entity.teleportTo(
                     lastSafeX,
                     lastSafeY,
                     lastSafeZ
             );
 
-            if (shouldFall) {
-                entity.setDeltaMovement(
-                        entity.getDeltaMovement().x,
-                        -0.1,
-                        entity.getDeltaMovement().z
-                );
-
-                entity.setOnGround(false);
-                entity.hurtMarked = true;
-            }
-        }
-    }
-    @Override
-    public void animateTick(BlockState state, Level level,
-                            BlockPos pos, RandomSource random) {
-
-        super.animateTick(state, level, pos, random);
-
-        if (state.getValue(COOLDOWN)) {
-            return;
-        }
-
-        for (int i = 0; i < 3; i++) {
-
-            double x = pos.getX() + random.nextDouble();
-            double y = pos.getY() + 0.1;
-            double z = pos.getZ() + random.nextDouble();
-
-            level.addParticle(
-                    ModParticles.AUTUMN_LEAVES,
-                    x, y, z,
-                    0.0, 0.025, 0.0
+            entity.setDeltaMovement(
+                    entity.getDeltaMovement().x,
+                    shouldFall ? -0.1 : 0.0,
+                    entity.getDeltaMovement().z
             );
+
+            entity.fallDistance = 0.0F;
+            entity.setOnGround(!shouldFall);
+            entity.hurtMarked = true;
         }
     }
 
@@ -291,11 +277,47 @@ public class AutumnLeavesBlock extends BushBlock {
             level.playSound(
                     null,
                     pos,
-                    SoundEvents.AMETHYST_BLOCK_CHIME,
+                    ModSounds.AL_CHARGE_EVENT,
                     SoundSource.BLOCKS,
                     0.7F,
                     1.2F
             );
+
+            for (int i = 0; i < 12; i++) {
+
+                double x = pos.getX() + random.nextDouble();
+                double y = pos.getY() + 0.1;
+                double z = pos.getZ() + random.nextDouble();
+
+                level.sendParticles(
+                        ModParticles.AUTUMN_LEAVES,
+                        x, y, z,
+                        0,
+                        0.0, 0.025, 0.0,
+                        1.0
+                );
+            }
         }
+    }
+    private void playMovementSound(Level level, BlockPos pos, Entity entity) {
+
+        long currentTick = level.getGameTime();
+
+        Long lastMovement = LAST_MOVEMENT.get(entity);
+
+        if (lastMovement == null
+                || currentTick - lastMovement >= SOUND_COOLDOWN_TICKS) {
+
+            level.playSound(
+                    null,
+                    entity,
+                    ModSounds.AL_MOVE_EVENT,
+                    SoundSource.PLAYERS,
+                    0.7F,
+                    1.0F
+            );
+        }
+
+        LAST_MOVEMENT.put(entity, currentTick);
     }
 }

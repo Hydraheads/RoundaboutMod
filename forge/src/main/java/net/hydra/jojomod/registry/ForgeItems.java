@@ -864,6 +864,8 @@ public class ForgeItems {
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersGoldExperience(null))));
     public static final RegistryObject<Item> MAX_STAND_DISC_GOLD_EXPERIENCE = addToWIPTab(ITEMS.register("max_gold_experience_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersGoldExperience(null))));
+    public static final RegistryObject<Item> CREATIVE_STAND_DISC_GER = addToWIPTab(ITEMS.register("creative_gold_experience_requiem_disc",
+            () -> new CreativeStandDiscItem(new Item.Properties().stacksTo(1), new PowersGER(null))));
 
     public static final RegistryObject<Item> STAND_DISC_OASIS = addToWIPTab(ITEMS.register("oasis_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersOasis(null))));
