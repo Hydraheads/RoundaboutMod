@@ -142,6 +142,7 @@ public class FabricParticles {
     public static final SimpleParticleType TOOTH = FabricParticleTypes.simple();
 
     public static final SimpleParticleType VITAL_ESSENCE = FabricParticleTypes.simple();
+    public static final SimpleParticleType GE_WAVE = FabricParticleTypes.simple();
 
     public static void registerParticles(){
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("hit_impact"), HIT_IMPACT);
@@ -264,6 +265,7 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("tooth"), TOOTH);
 
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("vital_essence"), VITAL_ESSENCE);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("ge_wave"), GE_WAVE);
 
         ModParticles.MELTING = MELTING;
         ModParticles.HALLUCINATORY_ACID_DRIP = HALLUCINATORY_ACID_DRIP;
@@ -384,5 +386,6 @@ public class FabricParticles {
         ModParticles.TOOTH = TOOTH;
 
         ModParticles.VITAL_ESSENCE = VITAL_ESSENCE;
+        ModParticles.GE_WAVE = GE_WAVE;
     }
 }

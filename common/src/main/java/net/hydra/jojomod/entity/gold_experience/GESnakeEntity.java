@@ -124,8 +124,8 @@ public class GESnakeEntity extends Snake implements GELifeform {
             this.playSound(ModSounds.SNAKE_ATTACK_EVENT, 1.0F, 1.0F);
 
             if (target instanceof LivingEntity livingTarget) {
-                // 5 seconds of poison 1
-                livingTarget.addEffect(new MobEffectInstance(MobEffects.POISON, 100, 0), this);
+                // 4 seconds of poison 1
+                livingTarget.addEffect(new MobEffectInstance(MobEffects.POISON, 80, 0), this);
             }
             return true;
         }
