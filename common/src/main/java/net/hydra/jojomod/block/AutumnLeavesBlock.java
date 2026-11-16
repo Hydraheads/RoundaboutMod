@@ -1,6 +1,7 @@
 
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
@@ -48,6 +49,15 @@ public class AutumnLeavesBlock extends BushBlock {
     private static final int SOUND_COOLDOWN_TICKS = 10;
 
     private static final Map<Entity, Long> LAST_MOVEMENT =
+            new WeakHashMap<>();
+
+    private static final int MAX_COMBO = ClientNetworking.getAppropriateConfig().AutumnLeavesSettings.MaxCombo;
+    private static final int COMBO_RESET_TICKS = ClientNetworking.getAppropriateConfig().AutumnLeavesSettings.CooldownAfterCombo;
+
+    private static final Map<Entity, Integer> COMBO_COUNT =
+            new WeakHashMap<>();
+
+    private static final Map<Entity, Long> LAST_COMBO_TICK =
             new WeakHashMap<>();
     public AutumnLeavesBlock(Properties properties) {
         super(properties);
@@ -104,8 +114,26 @@ public class AutumnLeavesBlock extends BushBlock {
             return;
         }
 
+        long currentTick = level.getGameTime();
+
+        long lastComboTick = LAST_COMBO_TICK.getOrDefault(
+                entity, -1000L
+        );
+
+        if (currentTick - lastComboTick >= COMBO_RESET_TICKS) {
+            COMBO_COUNT.remove(entity);
+        }
+
+        int combo = COMBO_COUNT.getOrDefault(entity, 0);
+
         level.setBlock(pos, state.setValue(COOLDOWN, true), 3);
         level.scheduleTick(pos, this, COOLDOWN_TICKS);
+
+        if (combo >= MAX_COMBO) {
+            COMBO_COUNT.remove(entity);
+            LAST_COMBO_TICK.remove(entity);
+            return;
+        }
 
         Direction direction = state.getValue(FACING);
 
@@ -246,6 +274,9 @@ public class AutumnLeavesBlock extends BushBlock {
         if (lastSafeX != startX
                 || lastSafeY != startY
                 || lastSafeZ != startZ) {
+
+            COMBO_COUNT.put(entity, combo + 1);
+            LAST_COMBO_TICK.put(entity, currentTick);
 
             playMovementSound(level, pos, entity);
             playMovementParticles(level, pos, direction);
