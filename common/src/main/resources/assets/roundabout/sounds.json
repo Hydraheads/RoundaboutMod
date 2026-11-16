@@ -4326,6 +4326,18 @@
     ]
   },
 
+  "al_charge": {
+    "subtitle": "sounds.roundabout.al_charge",
+    "sounds": [
+      "roundabout:al_charge"
+    ]
+  },
+  "al_move": {
+    "subtitle": "sounds.roundabout.al_move",
+    "sounds": [
+      "roundabout:al_move"
+    ]
+  },
   "planet_waves_summon": {
     "subtitle": "sounds.roundabout.planet_waves_summon",
     "sounds": [

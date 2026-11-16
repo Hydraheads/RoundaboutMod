@@ -7,6 +7,10 @@ import net.hydra.jojomod.networking.ForgeNetworkHandler;
 import net.hydra.jojomod.networking.ForgeJJFNetwork;
 import net.hydra.jojomod.registry.*;
 import net.hydra.jojomod.util.config.ConfigManager;
+import net.hydra.jojomod.worldgen.AutumnLeavesDecorator;
+import net.hydra.jojomod.worldgen.ModTreeDecorators;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerStartedEvent;
@@ -18,11 +22,31 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 
 import static net.hydra.jojomod.registry.ForgeBlocks.registerDynamicFogBlocks;
 
 @Mod(Roundabout.MOD_ID)
 public class RoundaboutModForge {
+
+    public static final DeferredRegister<TreeDecoratorType<?>> TREE_DECORATORS =
+            DeferredRegister.create(
+                    Registries.TREE_DECORATOR_TYPE,
+                    Roundabout.MOD_ID
+            );
+
+    public static final RegistryObject<TreeDecoratorType<AutumnLeavesDecorator>>
+            AUTUMN_LEAVES = TREE_DECORATORS.register(
+            "autumn_leaves",
+            () -> {
+                ModTreeDecorators.AUTUMN_LEAVES =
+                        new TreeDecoratorType<>(AutumnLeavesDecorator.CODEC);
+
+                return ModTreeDecorators.AUTUMN_LEAVES;
+            }
+    );
+
     public RoundaboutModForge() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 
@@ -56,6 +80,7 @@ public class RoundaboutModForge {
         //
         BiomeCodec.BIOME_MODIFIER_SERIALIZERS.register(bus);
         ForgeLootModifiers.LOOT_MODIFIERS.register(bus);
+        TREE_DECORATORS.register(bus);
 
         bus.addListener(this::clientSetup);
         bus.addListener(this::commonSetup);
