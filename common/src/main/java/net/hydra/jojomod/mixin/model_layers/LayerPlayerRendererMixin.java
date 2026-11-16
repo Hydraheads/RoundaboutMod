@@ -51,7 +51,7 @@ public abstract class LayerPlayerRendererMixin<T extends LivingEntity, M extends
         this.addLayer(new DiverLegsLayer<>($$0, this));
         this.addLayer(new DiverArmsLayer<>($$0, this));
         this.addLayer(new LyinEyesLayer<>($$0, this));
-        this.addLayer(new SilverChariotArmsLayer<>($$0, this));
+        // this.addLayer(new SilverChariotArmsLayer<>($$0, this));
     }
 
     /**Shadows, ignore
