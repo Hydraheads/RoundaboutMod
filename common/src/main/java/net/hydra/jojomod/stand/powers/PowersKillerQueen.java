@@ -2975,9 +2975,29 @@ public class PowersKillerQueen extends NewPunchingStand {
             syncBombStatus(NONE);
         }
     }
+   public void contactExplodeKnife(Entity ent) {
+        if (this.isContactModeEnabled() || this.detonateTimer > -1) {
+            setBombEntityAndSync(ent);
+            syncBombStatus(ARROW_CONTACT);
+            if (this.detonateTimer == -1) {
+                this.explode();
+            }
+        }else {
+            defuseServer();
+            syncBombStatus(NONE);
+        }
+    }
 
     public void contactDetonate(Entity ent) {
-        if (this.isContactModeEnabled() || this.detonateTimer > -1) {
+        syncBombStatus(ARROW_CONTACT);
+        setBombEntityAndSync(ent);
+
+        if (this.isContactModeEnabled()) {
+            if (this.detonateTimer == -1) {
+                detonate();
+            }
+        }
+        /*if (this.isContactModeEnabled() || this.detonateTimer > -1) {
             syncBombStatus(ARROW_CONTACT);
             setBombEntityAndSync(ent);
 
@@ -2993,7 +3013,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         } else {
             defuseServer();
             syncBombStatus(NONE);
-        }
+        }*/
     }
 
     public void blockContact(Entity ent) {
