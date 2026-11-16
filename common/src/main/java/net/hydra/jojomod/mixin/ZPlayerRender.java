@@ -110,10 +110,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         if (((StandUser)player).roundabout$getStandPowers() instanceof Powers20thCenturyBoy CB && CB.invincibleState && PowerTypes.isUsingStand(player)) {
             return;
         }
-        if (((StandUser)player).roundabout$getStandPowers() instanceof PowersCatchTheRainbow PCR && PCR.ctrDodgeTicks != 0 && PowerTypes.isUsingStand(player)) {
-            ci.cancel();
-            return;
-        }
+
         byte curse = ((StandUser) player).roundabout$getLocacacaCurse();
         float delta = ClientUtil.getDelta();
         if (((TimeStop) player.level()).CanTimeStopEntity(player)) {
@@ -174,7 +171,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             // had my own diver arms thing that i made before realizing it should also appear in first person, so all the code for that goes there.
             DiverArmsLayer.renderFirstPersonArm(poseStack, bufferSource, packedLight, player, this.model.rightArm, true, 1.0F);
         } else if (((StandUser) player).roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PowerTypes.hasStandActive(player) && PSC.hasHandsOut() && !SilverChariotEntity.isPart5Skin(((StandUser) player).roundabout$getStandSkin())) {
-            SilverChariotArmsLayer.renderFirstPersonArm(poseStack, bufferSource, packedLight, player, this.model.rightArm, true, 1.0F);
+            // SilverChariotArmsLayer.renderFirstPersonArm(poseStack, bufferSource, packedLight, player, this.model.rightArm, true, 1.0F);
         } else if (curse == LocacacaCurseIndex.RIGHT_HAND) {
             this.model.rightSleeve.xScale += 0.04F;
             this.model.rightSleeve.zScale += 0.04F;
@@ -215,10 +212,6 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     @Inject(method = "renderLeftHand", at = @At(value = "TAIL"))
     public void roundabout$renderLeftHand(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, AbstractClientPlayer player, CallbackInfo ci) {
         if (((StandUser)player).roundabout$getStandPowers() instanceof Powers20thCenturyBoy CB && CB.invincibleState && PowerTypes.isUsingStand(player)) {
-            return;
-        }
-        if (((StandUser)player).roundabout$getStandPowers() instanceof PowersCatchTheRainbow PCR && PCR.ctrDodgeTicks != 0 && PowerTypes.isUsingStand(player)) {
-            ci.cancel();
             return;
         }
 
@@ -280,7 +273,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             // had my own diver arms thing that i made before realizing it should also appear in first person, so all the code for that goes there.
             DiverArmsLayer.renderFirstPersonArm(poseStack, bufferSource, packedLight, player, this.model.leftArm, false, 1.0F);
         } else if (((StandUser) player).roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PowerTypes.hasStandActive(player) && PSC.hasHandsOut() && SilverChariotEntity.isPart5Skin(((StandUser) player).roundabout$getStandSkin())) {
-            SilverChariotArmsLayer.renderFirstPersonArm(poseStack, bufferSource, packedLight, player, this.model.leftArm, false, 1.0F);
+            // SilverChariotArmsLayer.renderFirstPersonArm(poseStack, bufferSource, packedLight, player, this.model.leftArm, false, 1.0F);
         } else if (curse == LocacacaCurseIndex.LEFT_HAND) {
             this.model.leftSleeve.xScale += 0.04F;
             this.model.leftSleeve.zScale += 0.04F;

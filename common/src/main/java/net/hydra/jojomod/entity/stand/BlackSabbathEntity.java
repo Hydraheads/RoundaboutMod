@@ -2642,4 +2642,8 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     @Override
     public void performRangedAttack(LivingEntity var1, float var2) {
     }
+
+    public boolean standCanShowName() {
+        return false;
+    }
 }

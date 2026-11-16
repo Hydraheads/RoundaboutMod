@@ -235,9 +235,8 @@ public class PowersDiverDown extends NewPunchingStand {
     // for cooldowns
     private final int getAfflictionCooldown() {
         return 200;
-    }
+    };
 
-    ;
     /* TAKING NOTE OF GENERAL COOLDOWNS HERE:
         GENERAL_1 = AFFLICTION SELECTION
         GENERAL_2 = SELF DIVE
@@ -1268,22 +1267,18 @@ public class PowersDiverDown extends NewPunchingStand {
                     if (this.isAutoRelease) {
                         List<LivingEntity> victims = detectTrapTrigger(trapPos, trap.face);
                         if (!victims.isEmpty()) {
-                            boolean hasVictim = false;
-
-                            for (LivingEntity v : victims) {
-                                if (!(v instanceof TamableAnimal TA && TA.getOwner() != null && TA.getOwner().is(this.getSelf()))) {
-                                    hasVictim = true;
-                                }
-                            }
+                            int ticksActive = MAX_TRAP_DURATION - trap.ticks;
+                            boolean isArmedForPlayers = ticksActive >= 20; //1 second windup for players
 
                             // trigger the traps auto on mobs, or after 1 second has passed for players
-                            boolean shouldTrigger = hasVictim;
+                            victims.removeIf(v ->
+                                    (v instanceof TamableAnimal TA && TA.getOwner() != null && TA.getOwner().is(this.getSelf()))
+                                            || (v instanceof Player && !isArmedForPlayers)
+                            );
 
-                            if (shouldTrigger) {
-                                if (!victims.isEmpty()) {
-                                    triggerKickTrap(victims, trapPos, trap);
-                                    it.remove(); // delete the triggered trap
-                                }
+                            if (!victims.isEmpty()) {
+                                triggerKickTrap(victims, trapPos, trap);
+                                it.remove(); // delete the triggered trap
                             }
                         }
                     }
@@ -5093,18 +5088,20 @@ public class PowersDiverDown extends NewPunchingStand {
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
 
-        if (standOn && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
-            float charge = (float) this.attackTimeDuring / this.getMaxPhasePunchTime();
-            int barWidth = Math.min(15, Math.round(charge * 15));
-            // Background frame
-            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
-            // There was this light green bar with some pink in the center that's perfect
-            // for
-            // a DD charge punch. I'm using that.
-            context.blit(StandIcons.JOJO_ICONS, k, j, 213, 89, barWidth, 6);
-        } else {
-            super.renderAttackHud(context, playerEntity, scaledWidth, scaledHeight, ticks,
-                    vehicleHeartCount, flashAlpha, otherFlashAlpha);
+        if (!isDiveActive() && !hasLimbsDeployed() && !isPiloting()) {
+            if (standOn && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+                float charge = (float) this.attackTimeDuring / this.getMaxPhasePunchTime();
+                int barWidth = Math.min(15, Math.round(charge * 15));
+                // Background frame
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+                // There was this light green bar with some pink in the center that's perfect
+                // for
+                // a DD charge punch. I'm using that.
+                context.blit(StandIcons.JOJO_ICONS, k, j, 213, 89, barWidth, 6);
+            } else {
+                super.renderAttackHud(context, playerEntity, scaledWidth, scaledHeight, ticks,
+                        vehicleHeartCount, flashAlpha, otherFlashAlpha);
+            }
         }
     }
 

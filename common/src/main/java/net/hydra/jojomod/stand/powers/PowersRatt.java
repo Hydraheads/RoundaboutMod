@@ -293,7 +293,7 @@ public class PowersRatt extends NewDashPreset {
             }
         } else {
             ResourceLocation ScopeIcon = StandIcons.RATT_SCOPE_IN;
-            if (scopeLevel == 1) {
+            if (scopeLevel > 0) {
                 ScopeIcon = StandIcons.RATT_SCOPE_OUT;
             }
             LockedOrNot(context,x,y,1,ScopeIcon,PowersRatt.SCOPE,2);
@@ -443,6 +443,13 @@ public class PowersRatt extends NewDashPreset {
     public void tickPower() {
         super.tickPower();
 
+        if (isPacketPlayer() && scopeLevel > 0) {
+            if (isHoldingSneak()) {
+                scopeLevel = 2;
+            } else {
+                scopeLevel = 1;
+            }
+        }
 
         if (!active) {this.Placement = null;}
         if (isPlaced()) {
@@ -669,7 +676,7 @@ public class PowersRatt extends NewDashPreset {
                 }
             }
             case SKILL_2_NORMAL, SKILL_2_CROUCH -> {
-                if (scopeLevel != 0)  {
+                if (scopeLevel > 0)  {
                     if(canExecuteMoveWithLevel(3)) {
                         ToggleBursting();
                     }
@@ -715,10 +722,10 @@ public class PowersRatt extends NewDashPreset {
     }
     public void RattScope() {
         if (!this.onCooldown(PowersRatt.SCOPE)) {
-            int nl = scopeLevel + 1;
-            tryIntPower(PowersRatt.NET_SCOPE, true,nl == 2 ? 0 : nl);
-            tryIntPowerPacket(PowersRatt.NET_SCOPE,nl == 2 ? 0 : nl);
-            this.getSelf().playSound(nl != 2 ? ModSounds.RATT_SCOPE_EVENT : ModSounds.RATT_DESCOPE_EVENT, 1.0F, (float) (0.98F + (Math.random() * 0.04F)));
+            int nl = scopeLevel > 0 ? 0 : 1;
+            tryIntPower(PowersRatt.NET_SCOPE, true, nl);
+            tryIntPowerPacket(PowersRatt.NET_SCOPE, nl);
+            this.getSelf().playSound(ModSounds.RATT_SCOPE_EVENT, 1.0F, (float) (0.98F + (Math.random() * 0.04F)));
         }
 
     }
@@ -736,7 +743,7 @@ public class PowersRatt extends NewDashPreset {
                 this.setCooldown(PowersRatt.SCOPE,5);
                 this.setAttackTime(-1);
                 setScopeLevel(chargeTime);
-                this.getStandUserSelf().roundabout$setCombatMode(scopeLevel != 0);
+                this.getStandUserSelf().roundabout$setCombatMode(scopeLevel > 0);
             }
             case PowersRatt.UPDATE_CHARGE -> this.chargeTime = chargeTime;
 
@@ -943,7 +950,7 @@ public class PowersRatt extends NewDashPreset {
 
     @Override
     public float inputSpeedModifiers(float basis) {
-        if (scopeLevel != 0){
+        if (scopeLevel > 0){
             basis*=0.7f;
         }
         return super.inputSpeedModifiers(basis);
@@ -978,7 +985,7 @@ public class PowersRatt extends NewDashPreset {
                 }
             }
             case PowersRatt.CHANGE_MODE -> {
-                if (scopeLevel != 0) {
+                if (scopeLevel > 0) {
                     if (getChargeTime() <= MinThreshold || shotcooldown != 0) {
                         return true;
                     }
@@ -1001,11 +1008,11 @@ public class PowersRatt extends NewDashPreset {
     }
 
     @Override
-    public boolean interceptAttack() {return  scopeLevel != 0;}
+    public boolean interceptAttack() {return  scopeLevel > 0;}
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (keyIsDown) {
-            if (scopeLevel != 0 && this.chargeTime >= PowersRatt.MinThreshold) {
+            if (scopeLevel > 0 && this.chargeTime >= PowersRatt.MinThreshold) {
                 if (this.getActivePower() == PowerIndex.NONE) {
                     if (!isAttackIneptVisually(PowersRatt.CHANGE_MODE, 2)) {
                         this.getSelf().playSound(ModSounds.RATT_FIRING_EVENT, 1.0F, (float) (0.98F + (Math.random() * 0.04F)));
@@ -1024,7 +1031,7 @@ public class PowersRatt extends NewDashPreset {
     }
 
     @Override
-    public boolean interceptGuard() {return scopeLevel != 0;}
+    public boolean interceptGuard() {return scopeLevel > 0;}
     @Override
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
         if (this.getActivePower() == PowerIndex.NONE) {
@@ -1134,7 +1141,7 @@ public class PowersRatt extends NewDashPreset {
 
         if(PowerTypes.hasStandActive(self)) {
 
-            if (getValidPlacement() != null && !isPlaced() || shotcooldown != 0 || scopeLevel != 0) {
+            if (getValidPlacement() != null && !isPlaced() || shotcooldown != 0 || scopeLevel > 0) {
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             }
 

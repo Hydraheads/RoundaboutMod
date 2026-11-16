@@ -686,10 +686,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 this.tryPowerPacket(PowerIndex.POWER_2_SNEAK);
             }
             case SKILL_3_NORMAL -> {
-                if (!(activePower == PowerIndex.BARRAGE || activePower == PowerIndex.BARRAGE_2
-                        || activePower == PowerIndex.BARRAGE_CHARGE || activePower == PowerIndex.BARRAGE_CHARGE_2)) {
-                    tryToDashClient();
-                }
+                tryToDashClient();
             }
             case SKILL_3_CROUCH -> tryToStandLeapClient();
         }
@@ -1671,7 +1668,13 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 animateStand(PurpleHazeEntity.STRANGLE_HOLD);
             }
         }
-        double lift = STRANGLE_LIFT_HEIGHT * ((double) strangleGrabTicks / STRANGLE_GRAB_TICKS);
+        double heightCompensation = Math.max(
+                0.0,
+                1.8 - strangleVictim.getBbHeight()
+        );
+
+        double lift = (STRANGLE_LIFT_HEIGHT + heightCompensation)
+                * ((double) strangleGrabTicks / STRANGLE_GRAB_TICKS);
 
         strangleVictim.setPos(strangleVictim.getX(), strangleBaseY + lift, strangleVictim.getZ());
         strangleVictim.setDeltaMovement(Vec3.ZERO);
@@ -2415,7 +2418,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     @Override
     public boolean isWip(){
-        return true;
+        return false;
     }
     @Override
     public Component ifWipListDevStatus(){

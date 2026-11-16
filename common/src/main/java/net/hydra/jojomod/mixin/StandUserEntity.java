@@ -4239,8 +4239,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         // GE mobs damage reflection
         if (this instanceof GELifeform lifeform) {
             Entity attacker = $$0.getEntity() != null ? $$0.getEntity() : $$0.getDirectEntity();
+            boolean isCreator = attacker != null
+                    && lifeform.getCreatorUUID() != null
+                    && lifeform.getCreatorUUID().equals(attacker.getUUID());
             // normal generic kill stuff should go through
-            if ($$0.is(DamageTypes.FELL_OUT_OF_WORLD) || $$0.is(DamageTypes.GENERIC_KILL) || attacker == lifeform.getCreator()) {
+            if ($$0.is(DamageTypes.FELL_OUT_OF_WORLD) || $$0.is(DamageTypes.GENERIC_KILL) || isCreator) {
                 return;
             }
 

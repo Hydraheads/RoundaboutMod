@@ -249,5 +249,10 @@ public class RattEntity extends StandEntity {
     public boolean isPickable() {return true;}
     @Override
     public boolean skipAttackInteraction(Entity $$0) {return false;}
+
+
+    public boolean standCanShowName() {
+        return false;
+    }
 }
 

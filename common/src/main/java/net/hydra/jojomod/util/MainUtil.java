@@ -254,6 +254,7 @@ public class MainUtil {
     public static final Map<Item, EntityType> GOLD_EXPERIENCE_DNA_DROPS = new HashMap<>();
     public static final Map<Item, Float> GOLD_EXPERIENCE_TRANSFORM_RATE = new HashMap<>();
     public static final Map<Item, Boolean> GOLD_EXPERIENCE_IS_BABY = new HashMap<>();
+    public static final List<Item> GOLD_EXPERIENCE_DISGUISE_ITEMS = new ArrayList<>();
 
     public static final Map<Item, List<MobEffect>> foodCuresThat = new HashMap<>();
     public static final Map<Item, List<MobEffect>> foodAddsThat = new HashMap<>();
@@ -2982,7 +2983,7 @@ public class MainUtil {
                 value.equals(ModEffects.SINGE)
                 || value.equals(ModEffects.STAND_MELTING) ||
                 value.equals(ModEffects.CAPTURING_LOVE) || value.equals(ModEffects.MELTING)
-                || value.equals(ModEffects.MOLD) || value.equals(ModEffects.STITCHED);
+                || value.equals(ModEffects.MOLD) || value.equals(ModEffects.STITCHED) || value.equals(ModEffects.RECONSTRUCTION);
     }
 
     public static boolean hidesPotionEffectSwirl(MobEffect value) {

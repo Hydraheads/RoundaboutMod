@@ -224,6 +224,8 @@ public class FabricItems {
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersGoldExperience(null)));
     public static Item MAX_STAND_DISC_GOLD_EXPERIENCE = registerItem("max_gold_experience_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersGoldExperience(null)));
+    public static Item CREATIVE_STAND_DISC_GER = registerItem("creative_gold_experience_requiem_disc",
+            new CreativeStandDiscItem(new Item.Properties().stacksTo(1), new PowersGER(null)));
 
  /*   public static Item STAND_DISC_CREAM = registerItem("cream_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCream(null)));
@@ -811,6 +813,29 @@ public class FabricItems {
                         entries.accept(ModBlocks.SHINY_QUARTZ_TILES);
                         entries.accept(ModBlocks.REGAL_FLOOR);
                         entries.accept(ModBlocks.REGAL_WALL);
+
+                        entries.accept(ModBlocks.GINKGO_LOG);
+                        entries.accept(ModBlocks.GINKGO_PLANKS);
+                        entries.accept(ModBlocks.GINKGO_LEAVES);
+                        entries.accept(ModBlocks.GINKGO_WOOD);
+                        entries.accept(ModBlocks.STRIPPED_GINKGO_WOOD);
+                        entries.accept(ModBlocks.STRIPPED_GINKGO_LOG);
+                        entries.accept(ModBlocks.GINKGO_SAPLING);
+                        entries.accept(ModBlocks.GINKGO_DOOR);
+                        entries.accept(ModBlocks.FANCY_GINKGO_DOOR);
+                        entries.accept(ModBlocks.GINKGO_SIGN);
+                        entries.accept(ModBlocks.GINKGO_HANGING_SIGN);
+                        entries.accept(ModBlocks.GINKGO_TRAPDOOR);
+                        entries.accept(ModBlocks.AUTUMN_LEAVES);
+                        entries.accept(ModBlocks.GINKGO_STAIRS);
+                        entries.accept(ModBlocks.GINKGO_SLAB);
+                        entries.accept(ModBlocks.GINKGO_FENCE);
+                        entries.accept(ModBlocks.GINKGO_FENCE_GATE);
+                        entries.accept(ModBlocks.GINKGO_PRESSURE_PLATE);
+                        entries.accept(ModBlocks.GINKGO_BUTTON);
+                        entries.accept(GINKGO_BOAT);
+                        entries.accept(GINKGO_CHEST_BOAT);
+                        entries.accept(ModBlocks.GINKGO_FALLEN_LEAVES);
                         entries.accept(ModBlocks.GODDESS_STATUE_BLOCK);
                         entries.accept(ModBlocks.WALL_STREET_SIGN_DIO);
                         entries.accept(ModBlocks.WALL_STREET_SIGN_RIGHT);
@@ -874,6 +899,8 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_RATT);
                         entries.accept(STAND_DISC_KILLER_QUEEN);
                         entries.accept(MAX_STAND_DISC_KILLER_QUEEN);
+                        entries.accept(STAND_DISC_PURPLE_HAZE);
+                        entries.accept(MAX_STAND_DISC_PURPLE_HAZE);
                         entries.accept(STAND_DISC_WHITE_ALBUM);
                         entries.accept(MAX_STAND_DISC_WHITE_ALBUM);
                         entries.accept(STAND_DISC_KING_CRIMSON);
@@ -908,6 +935,7 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_D4C);
                         entries.accept(STAND_DISC_GOLD_EXPERIENCE);
                         entries.accept(MAX_STAND_DISC_GOLD_EXPERIENCE);
+                        entries.accept(CREATIVE_STAND_DISC_GER);
                         entries.accept(STAND_DISC_20_CENTURY_BOY);
                         entries.accept(STAND_DISC_TUSK);
                         entries.accept(MAX_STAND_DISC_TUSK);
@@ -918,8 +946,6 @@ public class FabricItems {
                         entries.accept(HERB_TEA);
                         entries.accept(STAND_DISC_METALLICA);
                         entries.accept(MAX_STAND_DISC_METALLICA);
-                        entries.accept(STAND_DISC_PURPLE_HAZE);
-                        entries.accept(MAX_STAND_DISC_PURPLE_HAZE);
                         entries.accept(STAND_DISC_BAD_COMPANY);
                         entries.accept(MAX_STAND_DISC_BAD_COMPANY);
                         entries.accept(STAND_DISC_EMPEROR);
@@ -963,28 +989,6 @@ public class FabricItems {
                         entries.accept(ZOMBIE_HORSE_THREAD);
                         entries.accept(ZOMBIE_HORSE_MURAL);
                         entries.accept(PAINTING_ZOMBIE_HORSE);
-                        entries.accept(ModBlocks.GINKGO_LOG);
-                        entries.accept(ModBlocks.GINKGO_PLANKS);
-                        entries.accept(ModBlocks.GINKGO_LEAVES);
-                        entries.accept(ModBlocks.GINKGO_WOOD);
-                        entries.accept(ModBlocks.STRIPPED_GINKGO_WOOD);
-                        entries.accept(ModBlocks.STRIPPED_GINKGO_LOG);
-                        entries.accept(ModBlocks.GINKGO_SAPLING);
-                        entries.accept(ModBlocks.GINKGO_DOOR);
-                        entries.accept(ModBlocks.FANCY_GINKGO_DOOR);
-                        entries.accept(ModBlocks.GINKGO_SIGN);
-                        entries.accept(ModBlocks.GINKGO_HANGING_SIGN);
-                        entries.accept(ModBlocks.GINKGO_TRAPDOOR);
-                        entries.accept(ModBlocks.AUTUMN_LEAVES);
-                        entries.accept(ModBlocks.GINKGO_STAIRS);
-                        entries.accept(ModBlocks.GINKGO_SLAB);
-                        entries.accept(ModBlocks.GINKGO_FENCE);
-                        entries.accept(ModBlocks.GINKGO_FENCE_GATE);
-                        entries.accept(ModBlocks.GINKGO_PRESSURE_PLATE);
-                        entries.accept(ModBlocks.GINKGO_BUTTON);
-                        entries.accept(GINKGO_BOAT);
-                        entries.accept(GINKGO_CHEST_BOAT);
-                        entries.accept(ModBlocks.GINKGO_FALLEN_LEAVES);
                     }).build());
     public static final CreativeModeTab FOG_BLOCK_ITEMS = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
             new ResourceLocation(Roundabout.MOD_ID, "justice_fog_items"),
@@ -1109,6 +1113,7 @@ public class FabricItems {
         ModItems.STAND_DISC_GOLD_EXPERIENCE = STAND_DISC_GOLD_EXPERIENCE;
         ((MaxStandDiscItem)MAX_STAND_DISC_GOLD_EXPERIENCE).baseDisc = ((StandDiscItem)STAND_DISC_GOLD_EXPERIENCE);
         ModItems.MAX_STAND_DISC_GOLD_EXPERIENCE = MAX_STAND_DISC_GOLD_EXPERIENCE;
+        ModItems.CREATIVE_STAND_DISC_GER = CREATIVE_STAND_DISC_GER;
        /* ModItems.STAND_DISC_CREAM = STAND_DISC_CREAM;
         ((MaxStandDiscItem)MAX_STAND_DISC_CREAM).baseDisc = ((StandDiscItem)STAND_DISC_CREAM);
         ModItems.MAX_STAND_DISC_CREAM = MAX_STAND_DISC_CREAM;*/

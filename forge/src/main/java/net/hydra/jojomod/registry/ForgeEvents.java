@@ -594,6 +594,7 @@ public class ForgeEvents {
         ModItems.STAND_DISC_GOLD_EXPERIENCE = ForgeItems.STAND_DISC_GOLD_EXPERIENCE.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_GOLD_EXPERIENCE.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_GOLD_EXPERIENCE.get());
         ModItems.MAX_STAND_DISC_GOLD_EXPERIENCE = ForgeItems.MAX_STAND_DISC_GOLD_EXPERIENCE.get();
+        ModItems.CREATIVE_STAND_DISC_GER = ForgeItems.CREATIVE_STAND_DISC_GER.get();
 
         /*ModItems.STAND_DISC_CREAM = ForgeItems.STAND_DISC_CREAM.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_CREAM.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_CREAM.get());
@@ -944,6 +945,7 @@ public class ForgeEvents {
         ModParticles.PURPLE_HAZE_BLASTWAVE = ForgeParticles.PURPLE_HAZE_BLASTWAVE.get();
         ModParticles.DISTORTION_SMOKE = ForgeParticles.DISTORTION_SMOKE.get();
         ModParticles.VITAL_ESSENCE = ForgeParticles.VITAL_ESSENCE.get();
+        ModParticles.GE_WAVE = ForgeParticles.GE_WAVE.get();
         ModParticles.AUTUMN_LEAVES = ForgeParticles.AUTUMN_LEAVES.get();
         ModParticles.GINKGO_LEAVES = ForgeParticles.GINKGO_LEAVES.get();
 
