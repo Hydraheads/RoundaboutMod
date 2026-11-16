@@ -1338,6 +1338,11 @@ public class ForgeSounds {
     public static final RegistryObject<SoundEvent> PURPLE_HAZE_SPIT =
             register(ModSounds.PURPLE_HAZE_SPIT, ModSounds.PURPLE_HAZE_SPIT_ID);
 
+    public static final RegistryObject<SoundEvent> AL_CHARGE =
+            register(ModSounds.AL_CHARGE, ModSounds.AL_CHARGE_ID);
+    public static final RegistryObject<SoundEvent> AL_MOVE =
+            register(ModSounds.AL_MOVE, ModSounds.AL_MOVE_ID);
+
     public static final RegistryObject<SoundEvent> POLNAREFF_SC_ARMOR_OFF =
                 register(ModSounds.POLNAREFF_SC_ARMOR_OFF, ModSounds.POLNAREFF_SC_ARMOR_OFF_ID);
     public static final RegistryObject<SoundEvent> POLNAREFF_SC_SUMMON_1 =

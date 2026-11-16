@@ -1,21 +1,12 @@
 package net.hydra.jojomod.entity.gold_experience;
 
-import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.sound.ModSounds;
-import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.animal.Salmon;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -23,9 +14,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.UUID;
+
 public class GEFishEntity extends Salmon implements GELifeform {
     private boolean isReflectingDamage = false;
-    private LivingEntity creator;
+    @Nullable
+    private UUID creatorUUID;
     private int lifespan = 600;
 
     private ItemStack sourceItem = ItemStack.EMPTY;
@@ -123,15 +117,62 @@ public class GEFishEntity extends Salmon implements GELifeform {
     }
 
     @Override
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        if (this.creatorUUID != null) {
+            tag.putUUID("CreatorUUID", this.creatorUUID);
+        }
+        tag.putInt("GELifespan", this.lifespan);
+        if (!this.sourceItem.isEmpty()) {
+            tag.put("GESourceItem", this.sourceItem.save(new CompoundTag()));
+        }
+        tag.putBoolean("HasLockedRotation", this.hasLockedRotation);
+        tag.putFloat("LockedXRot", this.lockedXRot);
+        tag.putFloat("LockedYRot", this.lockedYRot);
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        if (tag.hasUUID("CreatorUUID")) {
+            this.creatorUUID = tag.getUUID("CreatorUUID");
+        }
+        if (tag.contains("GELifespan")) {
+            this.lifespan = tag.getInt("GELifespan");
+        }
+        if (tag.contains("GESourceItem")) {
+            this.sourceItem = ItemStack.of(tag.getCompound("GESourceItem"));
+        }
+        if (tag.contains("HasLockedRotation")) {
+            this.hasLockedRotation = tag.getBoolean("HasLockedRotation");
+            this.lockedXRot = tag.getFloat("LockedXRot");
+            this.lockedYRot = tag.getFloat("LockedYRot");
+        }
+    }
+
+    @Override
     public boolean isReflectingDamage() { return isReflectingDamage; }
     @Override
     public void setReflectingDamage(boolean reflecting) { this.isReflectingDamage = reflecting; }
     @Override
     @Nullable
-    public LivingEntity getCreator() { return creator; }
+    public UUID getCreatorUUID() { return this.creatorUUID; }
+    @Override
+    public void setCreatorUUID(@Nullable UUID uuid) { this.creatorUUID = uuid; }
+    @Override
+    @Nullable
+    public LivingEntity getCreator() {
+        if (this.creatorUUID != null && this.level() instanceof ServerLevel serverLevel) {
+            Entity entity = serverLevel.getEntity(this.creatorUUID);
+            if (entity instanceof LivingEntity living) {
+                return living;
+            }
+        }
+        return null;
+    }
     @Override
     public void setCreator(@Nullable LivingEntity creator) {
-        this.creator = creator;
+        this.creatorUUID = (creator != null) ? creator.getUUID() : null;
         // unique to the fish, it needs to face where the creator is facing
         if (creator != null) {
             this.lockedXRot = creator.getXRot();

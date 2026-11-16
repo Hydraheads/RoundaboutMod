@@ -235,9 +235,8 @@ public class PowersDiverDown extends NewPunchingStand {
     // for cooldowns
     private final int getAfflictionCooldown() {
         return 200;
-    }
+    };
 
-    ;
     /* TAKING NOTE OF GENERAL COOLDOWNS HERE:
         GENERAL_1 = AFFLICTION SELECTION
         GENERAL_2 = SELF DIVE
