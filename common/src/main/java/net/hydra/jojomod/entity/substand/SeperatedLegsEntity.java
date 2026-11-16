@@ -132,4 +132,7 @@ public class SeperatedLegsEntity extends StandEntity {
     }
 
 
+    public boolean standCanShowName() {
+        return false;
+    }
 }

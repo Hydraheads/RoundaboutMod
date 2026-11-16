@@ -1232,6 +1232,11 @@ public class SheerHeartAttackEntity extends StandEntity {
 		return false;
 	}
 
+
+	public boolean standCanShowName() {
+		return false;
+	}
+
 	@Override public boolean canBeLeashed(Player p_21418_) { return false;}
 	@Override public boolean isPickable() { return true;}
 	@Override public boolean isPushedByFluid() { return true;}

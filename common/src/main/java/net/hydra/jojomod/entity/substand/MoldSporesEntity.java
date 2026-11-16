@@ -268,6 +268,11 @@ public class MoldSporesEntity extends StandEntity {
         return false;
     }
 
+
+    public boolean standCanShowName() {
+        return false;
+    }
+
     @Override
     protected boolean isHorizontalCollisionMinor(Vec3 $$0) {
         return super.isHorizontalCollisionMinor($$0);

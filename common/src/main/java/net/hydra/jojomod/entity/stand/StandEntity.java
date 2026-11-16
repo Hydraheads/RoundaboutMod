@@ -14,6 +14,7 @@ import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -1274,5 +1275,17 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
     //For people with nasa space shuttle eyes complaining about perfect rotations on stands on time erase
     public void tryHardTimeEraseRendering(){
 
+    }
+
+    public boolean standCanShowName() {
+        return true;
+    }
+
+    public boolean shouldShowName() {
+        if (!standCanShowName() || ClientUtil.isPlayer(getUser()) || MainUtil.getEntityIsTrulyInvisible(this)) {
+            return super.shouldShowName();
+        }
+
+        return ConfigManager.getClientConfig().generalSettings.standShowName;
     }
 }
