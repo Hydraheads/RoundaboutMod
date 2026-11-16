@@ -456,4 +456,7 @@ public class FollowingStandEntity extends StandEntity{
     }
 
 
+    public boolean standCanShowName() {
+        return true;
+    }
 }

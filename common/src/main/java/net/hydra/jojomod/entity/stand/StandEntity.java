@@ -1278,11 +1278,11 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
     }
 
     public boolean standCanShowName() {
-        return true;
+        return false;
     }
 
     public boolean shouldShowName() {
-        if (!standCanShowName() || ClientUtil.isPlayer(getUser()) || MainUtil.getEntityIsTrulyInvisible(this)) {
+        if (!standCanShowName() || ClientUtil.isPlayer(getUser()) || MainUtil.getEntityIsTrulyInvisible(this) || getUser() instanceof Player PL && PL.isCrouching()) {
             return super.shouldShowName();
         }
 
