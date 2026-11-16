@@ -1017,7 +1017,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 // just need this for the key disabling, nothing else
                 su.roundabout$setGERooted(true);
                 gePowers.playSoundIfPossible(serverLevel, null, holder.blockPosition(),
-                        ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.7F, 1.0F);
+                        ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.85F, 1.0F);
                 clearImbue(stack);
                 stack.shrink(1);
                 gePowers.setActiveImbuedItemId(null);
