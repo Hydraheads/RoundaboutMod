@@ -1,6 +1,7 @@
 
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
@@ -50,8 +51,8 @@ public class AutumnLeavesBlock extends BushBlock {
     private static final Map<Entity, Long> LAST_MOVEMENT =
             new WeakHashMap<>();
 
-    private static final int MAX_COMBO = 4;
-    private static final int COMBO_RESET_TICKS = 60;
+    private static final int MAX_COMBO = ClientNetworking.getAppropriateConfig().AutumnLeavesSettings.MaxCombo;
+    private static final int COMBO_RESET_TICKS = ClientNetworking.getAppropriateConfig().AutumnLeavesSettings.CooldownAfterCombo;
 
     private static final Map<Entity, Integer> COMBO_COUNT =
             new WeakHashMap<>();

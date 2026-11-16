@@ -84,6 +84,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public PurpleHazeSettings PurpleHazeSettings;
     @NestedOption(group = "modded")
+    public AutumnLeavesSettings AutumnLeavesSettings;
+    @NestedOption(group = "modded")
     public LyinEyesSettings lyinEyesSettings;
     @NestedOption(group = "modded")
     public ManhattanTransferSettings manhattanTransferSettings;
@@ -902,6 +904,13 @@ public class Config implements Cloneable {
         public Integer SmokeRadius;
         @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
         public Integer SmokeExpansionTicks;
+
+    }
+    public static class AutumnLeavesSettings {
+        @IntOption(group = "inherit", value = 4, min = 0, max = 72000)
+        public Integer MaxCombo;
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        public Integer CooldownAfterCombo;
 
     }
     public static class LyinEyesSettings {

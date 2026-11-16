@@ -4549,6 +4549,12 @@
   "config.roundabout.SmokeExpansionTicks.name": "Smoke Expansion Ticks",
   "config.roundabout.SmokeExpansionTicks.desc": "The amount of ticks it takes until the smoke reaches its full size.",
 
+  "config.roundabout.MaxCombo.name": "Max Combo",
+  "config.roundabout.MaxCombo.desc": "The amount of Autumn Leaves you can move with in a row before the next going on cooldown.",
+  "config.roundabout.CooldownAfterCombo.name": "Cooldown After Combo",
+  "config.roundabout.CooldownAfterCombo.desc": "The amount of ticks the next leaf after a combo will go on cooldown for.",
+
+
   "config.roundabout.enableSilverChariot.name": "Enable Silver Chariot",
   "config.roundabout.enableSilverChariot.desc": "Enable Silver Chariot",
   "config.roundabout.silverChariotAttackMultOnMobs.name": "Mob Damage Multiplier",
@@ -5754,6 +5760,7 @@
   "config.roundabout.anubisSettings.name": "Anubis",
   "config.roundabout.planetWavesSettings.name": "Planet Waves",
   "config.roundabout.PurpleHazeSettings.name": "Purple Haze",
+  "config.roundabout.AutumnLeavesSettings.name": "Purple Haze",
   "config.roundabout.softAndWetSettings.name": "Soft And Wet",
   "config.roundabout.killerQueenSettings.name": "Killer Queen",
   "config.roundabout.purpleHazeSettings.name": "Purple Haze",
