@@ -155,7 +155,7 @@ public class KillerQueenRenderer extends StandRenderer<KillerQueenEntity>{
     private static final RenderType TAMA_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/tama.png"));
     private static final RenderType SAMURAI_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/samurai.png"));
     private static final RenderType UMBRA_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/umbra.png"));
-    //private static final RenderType SPIRIT_GLOW = RenderType.eyes(SPIRIT_SKIN);
+    private static final RenderType SPIRIT_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/spirit.png"));
 
     @Override
     public boolean hasGlowingParts(byte skin, int packedLight) {
@@ -166,7 +166,7 @@ public class KillerQueenRenderer extends StandRenderer<KillerQueenEntity>{
                 || skin == KillerQueenEntity.DEADLY
                 || skin == KillerQueenEntity.TAMA
                 || skin == KillerQueenEntity.SAMURAI
-                /*|| skin == KillerQueenEntity.SPIRIT*/;
+                || skin == KillerQueenEntity.SPIRIT;
     }
 
 
@@ -186,8 +186,8 @@ public class KillerQueenRenderer extends StandRenderer<KillerQueenEntity>{
             return TAMA_GLOW;
         } else if (BT == KillerQueenEntity.SAMURAI) {
             return SAMURAI_GLOW;
-        //} else if (BT == KillerQueenEntity.SPIRIT) {
-           // return SPIRIT_GLOW;
+        } else if (BT == KillerQueenEntity.SPIRIT) {
+           return SPIRIT_GLOW;
         }
 
         return null;
