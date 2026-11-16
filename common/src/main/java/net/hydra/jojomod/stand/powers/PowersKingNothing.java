@@ -560,8 +560,7 @@ public class PowersKingNothing extends NewDashPreset {
                 if (this.getSelf().tickCount % 5 == 0) {
                     VisualData pdata = getVisualInfo();
                     for (int i = 0; i < 2; i++) {
-                        int color =
-                                Roundabout.RANDOM.nextFloat() > pdata.percentOther() ? pdata.color1() : pdata.color2();
+                        int color = getParticleColor(pdata);
                         Vec3 offset = getSelf().getEyePosition().offsetRandom(level.getRandom(), 5);
                         MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
                                 PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
@@ -579,7 +578,7 @@ public class PowersKingNothing extends NewDashPreset {
         if (getSelf().isAlive() && !getSelf().isRemoved() && trackingCloud != null) {
             VisualData pdata = getVisualInfo();
             for (int i = 0; i < 2; i++) {
-                int color = Roundabout.RANDOM.nextFloat() > pdata.percentOther() ? pdata.color1() : pdata.color2();
+                int color = getParticleColor(pdata);
                 MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
                         PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
                         trackingCloud.getX(), trackingCloud.getY(), trackingCloud.getZ(), 1, 0.1, 0.1, 0.1, 0.01);
@@ -656,8 +655,8 @@ public class PowersKingNothing extends NewDashPreset {
                     }
                     locatedChests.add(pos);
                     VisualData pdata = getVisualInfo();
-                    int color = Roundabout.RANDOM.nextFloat() > pdata.percentOther() ? pdata.color1() : pdata.color2();
-                    int color2 = Roundabout.RANDOM.nextFloat() > pdata.percentOther() ? pdata.color1() : pdata.color2();
+                    int color = getParticleColor(pdata);
+                    int color2 = getParticleColor(pdata);
                     Vec3 spawnPos = otherChestPos == null ? pos.getCenter() :
                             pos.getCenter().lerp(otherChestPos.getCenter(), 0.5);
                     int yOffset = 1 + (level.getBlockState(pos.above()).isAir() || (level.getBlockEntity(
@@ -741,10 +740,8 @@ public class PowersKingNothing extends NewDashPreset {
                     foundTem = true;
                     if (!level.isClientSide()) {
                         VisualData pdata = getVisualInfo();
-                        int color =
-                                Roundabout.RANDOM.nextFloat() > pdata.percentOther() ? pdata.color1() : pdata.color2();
-                        int color2 =
-                                Roundabout.RANDOM.nextFloat() > pdata.percentOther() ? pdata.color1() : pdata.color2();
+                        int color = getParticleColor(pdata);
+                        int color2 = getParticleColor(pdata);
                         MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
                                 PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
                                 ent.getX(), ent.getY() + ent.getEyeHeight() + 0.5, ent.getZ(), 1, 0.1, 0.05, 0.1, 0.01);
@@ -779,10 +776,8 @@ public class PowersKingNothing extends NewDashPreset {
                     StandEntity stand = getStandEntity(this.self);
                     if (Objects.nonNull(stand)) {
                         VisualData pdata = getVisualInfo();
-                        int color =
-                                Roundabout.RANDOM.nextFloat() > pdata.percentOther() ? pdata.color1() : pdata.color2();
-                        int color2 =
-                                Roundabout.RANDOM.nextFloat() > pdata.percentOther() ? pdata.color1() : pdata.color2();
+                        int color = getParticleColor(pdata);
+                        int color2 = getParticleColor(pdata);
                         AABB BB1 = stand.getBoundingBox();
                         double x = BB1.getCenter().x();
                         double y = BB1.getCenter().y() + (((FollowingStandEntity) stand).getSizePercent() - 1) / 2;
@@ -898,6 +893,10 @@ public class PowersKingNothing extends NewDashPreset {
                 }
             }
         }
+    }
+
+    public int getParticleColor(VisualData pdata) {
+        return Roundabout.RANDOM.nextFloat() > pdata.percentOther() ? pdata.color1() : pdata.color2();
     }
 
     private boolean tryBucketPlace(BucketItem bucket, StandEntity stand, BlockPos bpos, BlockHitResult blockHit) {
