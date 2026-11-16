@@ -128,7 +128,7 @@ public class PowersKingNothing extends NewDashPreset {
 
     // memorized scent cloud stuff
     TrackingCloudEntity trackingCloud = null;
-    public boolean trackingCloudOut = false;
+    private boolean trackingCloudOut = false;
 
     // memorized scents
     private Block memorizedBlock = null;
@@ -570,6 +570,12 @@ public class PowersKingNothing extends NewDashPreset {
                 }
             }
         }
+        if (trackingCloudOut && (trackingCloud != null && trackingCloud.isRemoved())) {
+            trackingCloudOut = false;
+            S2CPacketUtil.sendGenericIntToClientPacket((Player) getSelf(), PacketDataIndex.S2C_SYNC_KN_TRACKING, 0);
+            trackingCloud = null;
+            playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);
+        }
         if (getSelf().isAlive() && !getSelf().isRemoved() && trackingCloud != null) {
             VisualData pdata = getVisualInfo();
             for (int i = 0; i < 2; i++) {
@@ -874,7 +880,7 @@ public class PowersKingNothing extends NewDashPreset {
                             }
                         }
 
-                        if ((stand.isTechnicallyInImpassableWall())
+                        if (stand.isTechnicallyInImpassableWall() || (isHoldingItem && stand.isTechnicallyInWall())
                                 || stand.position().distanceTo(this.getSelf().position()) > 15) {
                             this.stopSoundsIfNearby(PHASE, 32, false);
                             S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2,
@@ -1743,14 +1749,14 @@ public class PowersKingNothing extends NewDashPreset {
                 && !MainUtil.isBlockSniffBlacklisted(block);
     }
 
-    private void setMemorizedScent(Block memorizedBlock) {
+    public void setMemorizedScent(Block memorizedBlock) {
         this.memorizedBlock = memorizedBlock;
         this.memorizedEntityType = null;
         this.memorizedPlayer = null;
         saveDiscAndSync();
     }
 
-    private void setMemorizedScent(LivingEntity entity) {
+    public void setMemorizedScent(LivingEntity entity) {
         if (entity instanceof Player PE) {
             this.memorizedPlayer = PE.getUUID();
             this.memorizedEntityType = null;
@@ -1765,6 +1771,10 @@ public class PowersKingNothing extends NewDashPreset {
         }
         this.memorizedBlock = null;
         saveDiscAndSync();
+    }
+
+    public void setTrackingCloudStatus(boolean isOut) {
+        trackingCloudOut = isOut;
     }
 
     @Override

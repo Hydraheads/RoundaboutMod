@@ -1,16 +1,15 @@
 package net.hydra.jojomod.entity.substand;
 
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.particles.PuzzleColorParticleOptions;
-import net.hydra.jojomod.particles.PuzzleParticle;
 import net.hydra.jojomod.stand.powers.PowersKingNothing;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public class TrackingCloudEntity extends StandEntity {
     /**
@@ -25,12 +24,25 @@ public class TrackingCloudEntity extends StandEntity {
         super(entityType, world);
     }
 
+    public BlockPos targetBlockPos = null;
+    public Entity targetEntity = null;
+
     @Override
     public void tick() {
         if (getUser() == null || !getUser().isAlive() || !(getUserData(
                 getUser()).roundabout$getStandPowers() instanceof PowersKingNothing)) {
                     this.discard();
                 }
+    }
+
+    public Vec3 getTargetPos() {
+        if (targetBlockPos != null) {
+            return targetBlockPos.getCenter();
+        }
+        else if (targetEntity != null) {
+            return targetEntity.getBoundingBox().getCenter();
+        }
+        return new Vec3(1, 1, 1);
     }
 
     public static AttributeSupplier.Builder createStandAttributes() {

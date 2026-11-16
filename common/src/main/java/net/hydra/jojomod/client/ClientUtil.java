@@ -1260,10 +1260,14 @@ public class ClientUtil {
             if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingNothing kn) {
                 kn.addItemEntity(data);
             }
-        }
-        else if (context == PacketDataIndex.S2C_KN_REMOVE_HIGHLIGHT_ENTITY) {
+        } else if (context == PacketDataIndex.S2C_KN_REMOVE_HIGHLIGHT_ENTITY) {
             if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingNothing kn) {
                 kn.removeItemEntity(data);
+            }
+        } else if (context == PacketDataIndex.S2C_SYNC_KN_TRACKING) {
+            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingNothing kn) {
+                if (data == 0) kn.setTrackingCloudStatus(false);
+                else if (data == 1) kn.setTrackingCloudStatus(true);
             }
         }
     }
