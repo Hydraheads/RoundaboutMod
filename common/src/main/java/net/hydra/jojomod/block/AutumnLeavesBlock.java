@@ -27,6 +27,9 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import java.util.Map;
+import java.util.WeakHashMap;
+
 public class AutumnLeavesBlock extends BushBlock {
 
     public static final DirectionProperty FACING =
@@ -41,6 +44,10 @@ public class AutumnLeavesBlock extends BushBlock {
             BooleanProperty.create("cooldown");
 
     private static final int COOLDOWN_TICKS = 60;
+    private static final int SOUND_COOLDOWN_TICKS = 10;
+
+    private static final Map<Entity, Long> LAST_MOVEMENT =
+            new WeakHashMap<>();
     public AutumnLeavesBlock(Properties properties) {
         super(properties);
 
@@ -103,7 +110,7 @@ public class AutumnLeavesBlock extends BushBlock {
         double centerX = pos.getX() + 0.5;
         double centerZ = pos.getZ() + 0.5;
 
-        double currentY = startY;
+        double currentY = pos.getY();
 
         double lastSafeX = startX;
         double lastSafeY = startY;
@@ -235,22 +242,23 @@ public class AutumnLeavesBlock extends BushBlock {
                 || lastSafeY != startY
                 || lastSafeZ != startZ) {
 
+            playMovementSound(level, pos, entity);
+
             entity.teleportTo(
                     lastSafeX,
                     lastSafeY,
                     lastSafeZ
             );
 
-            if (shouldFall) {
-                entity.setDeltaMovement(
-                        entity.getDeltaMovement().x,
-                        -0.1,
-                        entity.getDeltaMovement().z
-                );
+            entity.setDeltaMovement(
+                    entity.getDeltaMovement().x,
+                    shouldFall ? -0.1 : 0.0,
+                    entity.getDeltaMovement().z
+            );
 
-                entity.setOnGround(false);
-                entity.hurtMarked = true;
-            }
+            entity.fallDistance = 0.0F;
+            entity.setOnGround(!shouldFall);
+            entity.hurtMarked = true;
         }
     }
     @Override
@@ -294,9 +302,30 @@ public class AutumnLeavesBlock extends BushBlock {
                     pos,
                     ModSounds.AL_CHARGE_EVENT,
                     SoundSource.BLOCKS,
-                    0.15F,
+                    0.3F,
                     1.2F
             );
         }
+    }
+    private void playMovementSound(Level level, BlockPos pos, Entity entity) {
+
+        long currentTick = level.getGameTime();
+
+        Long lastMovement = LAST_MOVEMENT.get(entity);
+
+        if (lastMovement == null
+                || currentTick - lastMovement >= SOUND_COOLDOWN_TICKS) {
+
+            level.playSound(
+                    null,
+                    entity,
+                    ModSounds.AL_MOVE_EVENT,
+                    SoundSource.PLAYERS,
+                    0.3F,
+                    1.0F
+            );
+        }
+
+        LAST_MOVEMENT.put(entity, currentTick);
     }
 }
