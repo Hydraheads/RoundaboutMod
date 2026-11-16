@@ -974,6 +974,10 @@ public class PowersKingNothing extends NewDashPreset {
     public boolean tryPlaceBlock(BlockItem blockItem, BlockHitResult blockHit, BlockPos bpos, BlockState bstate,
             StandEntity stand, ItemStack held) {
         Direction dir = blockHit.getDirection();
+        Direction placeDir = dir;
+        if (dir.getAxis() == Direction.Axis.X || dir.getAxis() == Direction.Axis.Z) {
+            placeDir = dir.getOpposite();
+        }
         BlockPos placePos = bpos.relative(dir);
         BlockState placeState = stand.level().getBlockState(placePos);
         ItemStack returnStack = stand.getHeldItem().copy();
@@ -993,9 +997,9 @@ public class PowersKingNothing extends NewDashPreset {
         }
         boolean placesfrfr = doubleSlabbinItFr || ((bstate.isAir() || bstate.canBeReplaced()) && canModifyPos(bpos)
                 && stand.level().isFluidAtPosition(bpos, FluidState::isEmpty)
-                && blockItem.place(new DirectionalPlaceContext(stand.level(), bpos, dir, held, dir))
+                && blockItem.place(new DirectionalPlaceContext(stand.level(), bpos, placeDir, held, placeDir))
                 != InteractionResult.FAIL) || ((placeState.isAir() || placeState.canBeReplaced()) && canModifyPos(
-                placePos) && blockItem.place(new DirectionalPlaceContext(stand.level(), placePos, dir, held, dir))
+                placePos) && blockItem.place(new DirectionalPlaceContext(stand.level(), placePos, placeDir, held, placeDir))
                 != InteractionResult.FAIL);
         if (placesfrfr) {
             if (getCreative()) {

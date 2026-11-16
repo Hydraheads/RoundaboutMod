@@ -189,8 +189,8 @@ public class KingNothingEntity extends FollowingStandEntity {
                             BlockState $$2 = this.level().getBlockState($$1x);
                             return !$$2.isAir() && !($$2.getBlock() instanceof IronBarsBlock)
                                     && !($$2.getBlock() instanceof FenceBlock)
-                                    && !($$2.getBlock() instanceof FenceGateBlock) && !(
-                                    $$2.getBlock() instanceof SlabBlock
+                                    && !($$2.getBlock() instanceof FenceGateBlock)
+                                    && !($$2.getBlock() instanceof SlabBlock
                                             && $$2.getValue(BlockStateProperties.SLAB_TYPE) != SlabType.DOUBLE)
                                     && !($$2.getBlock() instanceof AnvilBlock) && !($$2.getBlock() instanceof BellBlock)
                                     && !($$2.getBlock() instanceof RodBlock) && $$2.isSuffocating(this.level(), $$1x)
