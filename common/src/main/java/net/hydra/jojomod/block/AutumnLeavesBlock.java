@@ -89,7 +89,11 @@ public class AutumnLeavesBlock extends BushBlock {
                                BlockPos pos, CollisionContext context) {
         return SHAPE;
     }
-
+    @Override
+    protected boolean mayPlaceOn(BlockState state, BlockGetter level,
+                                 BlockPos pos) {
+        return state.isFaceSturdy(level, pos, Direction.UP);
+    }
 
     @Override
     public void entityInside(BlockState state, Level level,
