@@ -131,6 +131,17 @@ public abstract class ZItemInHandRenderer {
                 ci.cancel();
             }
 
+            if (user.roundabout$getStandPowers() instanceof PowersSilverChariot PSC && user.roundabout$getCombatMode()) {
+                /*
+                poseStack.pushPose();
+                poseStack.translate(0.3, -0.25, -0.7);
+                poseStack.mulPose(Axis.XP.rotationDegrees(290.0F));
+                poseStack.mulPose(Axis.YP.rotationDegrees(135.0F));
+                poseStack.mulPose(Axis.ZP.rotationDegrees(-30.0F));
+                poseStack.scale(0.9F, 0.9F, 0.9F);
+                */
+            }
+
 
             if (powers.isPiloting()){
                 LivingEntity stand = powers.getPilotingStand();

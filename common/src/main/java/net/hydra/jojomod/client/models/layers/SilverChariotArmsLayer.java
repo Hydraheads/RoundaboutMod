@@ -2,6 +2,7 @@ package net.hydra.jojomod.client.models.layers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.stand.renderers.SilverChariotBaseRenderer;
 import net.hydra.jojomod.entity.stand.SilverChariotEntity;
@@ -73,13 +74,15 @@ public class SilverChariotArmsLayer<T extends LivingEntity, A extends HumanoidMo
                 if (SilverChariotEntity.isPart5Skin(skin) || (entity instanceof Player player && player.getMainArm() == HumanoidArm.LEFT)) {
                     poseStack.pushPose();
                     this.getParentModel().leftArm.translateAndRotate(poseStack);
-                    poseStack.scale(1.05F, 1.02F, 1.05F);
+                    // poseStack.scale(1.05F, 1.02F, 1.05F);
+                    poseStack.scale(1.15F, 1.12F, 1.15F);
                     arms.leftArm.render(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 0.70F);
                     poseStack.popPose();
                 } else {
                     poseStack.pushPose();
                     this.getParentModel().rightArm.translateAndRotate(poseStack);
-                    poseStack.scale(1.05F, 1.02F, 1.05F);
+                    // poseStack.scale(1.05F, 1.02F, 1.05F);
+                    poseStack.scale(1.15F, 1.12F, 1.15F);
                     arms.rightArm.render(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 0.70F);
                     poseStack.popPose();
                 }
@@ -106,10 +109,13 @@ public class SilverChariotArmsLayer<T extends LivingEntity, A extends HumanoidMo
         armToRender.setPos(isRightArm ? 1.0F : -1.0F, -1.0F, 0.0F);
         if (isRightArm) {
             // swordToRender.setRotation(45.0F * Mth.DEG_TO_RAD, 0.0F, 0.0F);
+            poseStack.mulPose(Axis.XP.rotationDegrees(45));
         } else {
             // swordToRender.setRotation(-45.0F * Mth.DEG_TO_RAD, 0.0F, 0.0F);
+            poseStack.mulPose(Axis.XP.rotationDegrees(-45));
         }
         // armToRender.setPos(isRightArm ? 1.0F : -1.0F, -1.0F, 0.0F);
+        // poseStack.translate();
 
         ClientUtil.pushPoseAndCooperate(poseStack, 8);
         playerArm.translateAndRotate(poseStack);
