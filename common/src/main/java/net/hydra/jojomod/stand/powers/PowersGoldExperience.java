@@ -91,6 +91,45 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // move bytes found in other moves
     public static final byte ITEM_IMBUE = 62;
 
+    // for cooldowns
+
+    /*
+    NOTE:
+    GENERAL_EXTRA is for DNA creation
+    GENERAL_1, GENERAL_2, GENERAL_4 are all for guard versions of moves
+     */
+
+    private final int getDNACooldown() {
+        return 300;
+    }; //
+    private final int getAnimalCreationCooldown() {
+        return 400;
+    }; //
+    private final int getHealCooldown() {
+        return 200;
+    }; //
+    private final int getLifeSensorCooldown() {
+        return 60;
+    }; //
+    private final int getItemImbueCooldown() {
+        return 600;
+    }; //
+    private final int getLifePunchCooldown() {
+        return 800;
+    }; //
+    private final int getVineCooldown() {
+        return 60;
+    }; //
+    private final int getTreeCooldown() {
+        return 300;
+    }; //
+    private final int getBrambleCooldown() {
+        return 240;
+    }; //
+    private final int getBushCooldown() {
+        return 320;
+    };
+
     // for healing
     private boolean hasHealed = false;
     private int healTargetId = -1;
@@ -450,6 +489,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             if (this.lifeSensorActive && (!this.isGuarding() || !PowerTypes.hasStandActive(this.self))) {
                 this.lifeSensorActive = false;
                 this.sensedImbueEntityId = -1;
+                this.setCooldown(PowerIndex.GENERAL_1, getLifeSensorCooldown());
             }
         }
         super.tickPower();
@@ -668,10 +708,20 @@ public class PowersGoldExperience extends BlockGrabPreset {
         return super.setPowerNone();
     }
 
+    //server controller cooldowns
+    @Override
+    public boolean isServerControlledCooldown(byte num) {
+        if (num == PowerIndex.GENERAL_EXTRA || num == PowerIndex.SKILL_1_SNEAK || num == PowerIndex.SKILL_4_SNEAK
+                || num == PowerIndex.SKILL_3 || num == PowerIndex.GENERAL_2 || num == PowerIndex.SKILL_4 || num == PowerIndex.GENERAL_4) {
+            return true;
+        }
+        return super.isServerControlledCooldown(num);
+    }
+
     // life sensor start
 
     private void tryLifeSensor() {
-        if (!this.lifeSensorActive) {
+        if (!this.lifeSensorActive && !this.onCooldown(PowerIndex.GENERAL_1)) {
             this.sensedImbueEntityId = -1;
             this.lifeSensorActive = true;
             this.self.playSound(ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, 0.85F, 1.3F);
@@ -739,7 +789,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // item imbue start
 
     private void tryOpenItemImbue() {
-        ClientUtil.openItemImbue();
+        if(!this.onCooldown(PowerIndex.SKILL_4_SNEAK)) {
+            ClientUtil.openItemImbue();
+        }
     }
 
     private static CompoundTag createBaseImbueTag(UUID imbueId, UUID ownerId, byte type) {
@@ -840,6 +892,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             }
         }
 
+        setCooldown(PowerIndex.SKILL_4_SNEAK, getItemImbueCooldown());
         playSoundIfPossible(this.self.level(), null, this.self.blockPosition(),
                 ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.85F, 1F);
         return true;
@@ -1070,8 +1123,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // tree creation start
 
     private void tryGrowTree() {
-        ((StandUser) this.getSelf()).roundabout$tryPower(TREE, true);
-        tryPowerPacket(TREE);
+        if(!this.onCooldown(PowerIndex.GENERAL_2)) {
+            ((StandUser) this.getSelf()).roundabout$tryPower(TREE, true);
+            tryPowerPacket(TREE);
+        }
     }
 
     private boolean finishTree() {
@@ -1195,6 +1250,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
             playSoundIfPossible(level, null, base, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.9F, 1F);
             addEXP(5);
+            this.setCooldown(PowerIndex.GENERAL_2, getTreeCooldown());
             this.setAttackTimeDuring(-5);
         }
         return true;
@@ -1214,19 +1270,40 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     @Override
     public void itemGrabClient() {
-        // GE animal sync
-        int animalClientConfig = 1;
-        ClientConfig clientConfig = ConfigManager.getClientConfig();
-        if (clientConfig != null && clientConfig.dynamicSettings != null) {
-            animalClientConfig = clientConfig.dynamicSettings.goldExperienceCurrentAnimal;
-        }
-        this.animalType = (byte) animalClientConfig;
-        tryIntPowerPacket(ITEM_THROW, animalClientConfig);
+        if (!this.onCooldown(PowerIndex.SKILL_2)) {
+            // GE animal sync
+            int animalClientConfig = 1;
+            ClientConfig clientConfig = ConfigManager.getClientConfig();
+            if (clientConfig != null && clientConfig.dynamicSettings != null) {
+                animalClientConfig = clientConfig.dynamicSettings.goldExperienceCurrentAnimal;
+            }
+            this.animalType = (byte) animalClientConfig;
+            tryIntPowerPacket(ITEM_THROW, animalClientConfig);
 
-        // TODO: level lock here
-        //if (canExecuteMoveWithLevel(getItemThrowLevel())) {
+            // TODO: level lock here
+            //if (canExecuteMoveWithLevel(getItemThrowLevel())) {
             super.itemGrabClient();
-        //}
+            //}
+        }
+    }
+
+    @Override
+    public boolean throwObject(ItemStack item){
+        this.setCooldown(PowerIndex.SKILL_2, getAnimalCreationCooldown());
+        /***/
+
+        Vec3 pos = new Vec3(this.self.getX(), this.self.getEyeY() - 0.1F, this.self.getZ());
+        Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+        if (gravD != Direction.DOWN){
+            pos = RotationUtil.vecPlayerToWorld(
+                    new Vec3(0, this.self.getEyeHeight() - 0.1F, 0
+                    ),gravD);
+            pos = new Vec3(this.self.getX()+pos.x,this.self.getY()+pos.y,this.self.getZ()+pos.z);
+        }
+
+        return ThrownObjectEntity.throwAnObject(this.self,canSnipe(),item,getShotAccuracy(),getBundleAccuracy(),getThrowAngle(),
+                getThrowAngle2(),getThrowAngle3(),getCanPlace(),getThrowStyleType(),this.self.getXRot(),this.self.getYRot(),
+                new Vec3(pos.x,pos.y,pos.z),true,1, true);
     }
 
     @Override
@@ -1358,13 +1435,15 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // animal creation (X) start
 
     private void tryMakeAnimalClient() {
-        int animalClientConfig = 1;
-        ClientConfig clientConfig = ConfigManager.getClientConfig();
-        if (clientConfig != null && clientConfig.dynamicSettings != null) {
-            animalClientConfig = clientConfig.dynamicSettings.goldExperienceCurrentAnimal;
+        if (!this.onCooldown(PowerIndex.SKILL_2)) {
+            int animalClientConfig = 1;
+            ClientConfig clientConfig = ConfigManager.getClientConfig();
+            if (clientConfig != null && clientConfig.dynamicSettings != null) {
+                animalClientConfig = clientConfig.dynamicSettings.goldExperienceCurrentAnimal;
+            }
+            this.tryIntPower(LIFEFORM_CREATION, true, animalClientConfig);
+            tryIntPowerPacket(LIFEFORM_CREATION, animalClientConfig);
         }
-        this.tryIntPower(LIFEFORM_CREATION, true, animalClientConfig);
-        tryIntPowerPacket(LIFEFORM_CREATION, animalClientConfig);
     }
 
     private boolean executeLifeformCreation() {
@@ -1387,6 +1466,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 ItemStack handItem = this.self.getMainHandItem();
 
                 if (spawnLifeform(typeToSpawn, spawnPos, handItem)) {
+                    setCooldown(PowerIndex.SKILL_2, getAnimalCreationCooldown());
                     handItem.shrink(1);
                     return true;
                 }
@@ -1441,8 +1521,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // bramble spikes start
 
     private void tryGrowBramble() {
-        ((StandUser) this.getSelf()).roundabout$tryPower(BRAMBLES, true);
-        tryPowerPacket(BRAMBLES);
+        if (!this.onCooldown(PowerIndex.SKILL_4)) {
+            ((StandUser) this.getSelf()).roundabout$tryPower(BRAMBLES, true);
+            tryPowerPacket(BRAMBLES);
+        }
     }
 
     private boolean startBrambleWindup() {
@@ -1494,7 +1576,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             playSoundIfPossible(level, null, this.self.blockPosition(),
                     ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 1.0F, 1F);
             addEXP(7);
-
+            this.setCooldown(PowerIndex.SKILL_4, getBrambleCooldown());
             this.setAttackTimeDuring(-5);
         }
     }
@@ -1518,8 +1600,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // heal start
 
     private void tryHeal() {
-        ((StandUser) this.getSelf()).roundabout$tryPower(HEAL, true);
-        tryPowerPacket(HEAL);
+        if(!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
+            ((StandUser) this.getSelf()).roundabout$tryPower(HEAL, true);
+            tryPowerPacket(HEAL);
+        }
     }
 
     private boolean startHealWindup() {
@@ -1577,6 +1661,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 playSoundIfPossible(this.self.level(), this.self, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
             }
             this.setAttackTimeDuring(-20);
+            setCooldown(PowerIndex.SKILL_1_SNEAK, getHealCooldown());
         }
     }
 
@@ -1585,8 +1670,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // wall vines start
 
     private void tryWallVines() {
-        ((StandUser) this.getSelf()).roundabout$tryPower(WALL_VINES, true);
-        tryPowerPacket(WALL_VINES);
+        if (!this.onCooldown(PowerIndex.SKILL_3)) {
+            ((StandUser) this.getSelf()).roundabout$tryPower(WALL_VINES, true);
+            tryPowerPacket(WALL_VINES);
+        }
     }
 
     // this move was actually stupidly easy to make. it's like if diver zip didn't have any of the convuluted gravity nonsense.
@@ -1622,6 +1709,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
         }
 
         if (createdAny) {
+            this.setCooldown(PowerIndex.SKILL_3, getVineCooldown());
             playSoundIfPossible(level, null, this.self.blockPosition(),
                     ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.85F, 1.0F);
             addEXP(5);
@@ -1667,8 +1755,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // bramble bush start
 
     private void tryGrowBush() {
-        ((StandUser) this.getSelf()).roundabout$tryPower(BUSH_CREATION, true);
-        tryPowerPacket(BUSH_CREATION);
+        if(!this.onCooldown(PowerIndex.GENERAL_4)) {
+            ((StandUser) this.getSelf()).roundabout$tryPower(BUSH_CREATION, true);
+            tryPowerPacket(BUSH_CREATION);
+        }
     }
 
     private boolean executeBushCreation() {
@@ -1721,6 +1811,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             playSoundIfPossible(level, null, this.self.blockPosition(),
                     ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.85F, 1.0F);
             addEXP(5);
+            this.setCooldown(PowerIndex.GENERAL_4, getBushCooldown());
         }
 
         return createdAny;
@@ -1781,7 +1872,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             playSoundIfPossible(self.level(), null, this.self.blockPosition(),
                     ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.85F, 1F);
 
-            // eventually, add the cd here
+            setCooldown(PowerIndex.GENERAL_EXTRA, getDNACooldown());
             return true;
         }
 
@@ -1789,8 +1880,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
     }
 
     private void tryDNACreate() {
-        ((StandUser) this.getSelf()).roundabout$tryPower(DNA_CREATE, true);
-        tryPowerPacket(DNA_CREATE);
+        if (!this.onCooldown(PowerIndex.GENERAL_EXTRA)) {
+            ((StandUser) this.getSelf()).roundabout$tryPower(DNA_CREATE, true);
+            tryPowerPacket(DNA_CREATE);
+        }
     }
 
     //checks to see if the player is holding a valid item
@@ -2065,11 +2158,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 }
             }
 
-            int cooldownTicks = 100;
             if (this.getSelf() instanceof Player serverPlayer && !this.getSelf().level().isClientSide()) {
-                S2CPacketUtil.sendCooldownSyncPacket((net.minecraft.server.level.ServerPlayer) serverPlayer, LIFE_PUNCH, cooldownTicks);
+                S2CPacketUtil.sendCooldownSyncPacket((ServerPlayer) serverPlayer, PowerIndex.SKILL_3_CROUCH_GUARD, getLifePunchCooldown());
             }
-            this.setCooldown(LIFE_PUNCH, cooldownTicks);
+            this.setCooldown(PowerIndex.SKILL_3_CROUCH_GUARD, getLifePunchCooldown());
         }
     }
 
@@ -2295,19 +2387,19 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public void renderIcons(GuiGraphics context, int x, int y) {
         // Ability 1 (Z)
         if (isGuarding()){
-            setSkillIcon(context, x, y, 1, StandIcons.GOLD_EXPERIENCE_LIFE_SENSOR, PowerIndex.SKILL_1_GUARD);
+            setSkillIcon(context, x, y, 1, StandIcons.GOLD_EXPERIENCE_LIFE_SENSOR, PowerIndex.GENERAL_1);
         } else if (isHoldingSneak()) {
             setSkillIcon(context, x, y, 1, StandIcons.GOLD_EXPERIENCE_HEAL, PowerIndex.SKILL_1_SNEAK);
         } else if (canDNACreate()) {
-            setSkillIcon(context, x, y, 1, StandIcons.GOLD_EXPERIENCE_DNA_CREATION, PowerIndex.SKILL_1);
+            setSkillIcon(context, x, y, 1, StandIcons.GOLD_EXPERIENCE_DNA_CREATION, PowerIndex.GENERAL_EXTRA);
         } else {
             setSkillIcon(context, x, y, 1, StandIcons.GOLD_EXPERIENCE_LIFEFORM_SELECT, PowerIndex.SKILL_1);
         }
         // Ability 2 (X)
         if (isGuarding()){
-            setSkillIcon(context, x, y, 2, StandIcons.GOLD_EXPERIENCE_TREE_GROWTH, PowerIndex.SKILL_2_GUARD);
+            setSkillIcon(context, x, y, 2, StandIcons.GOLD_EXPERIENCE_TREE_GROWTH, PowerIndex.GENERAL_2);
         } else if (isHoldingSneak()) {
-            setSkillIcon(context, x, y, 2, StandIcons.GOLD_EXPERIENCE_ITEM_THROW, PowerIndex.SKILL_2_SNEAK);
+            setSkillIcon(context, x, y, 2, StandIcons.GOLD_EXPERIENCE_ITEM_THROW, PowerIndex.SKILL_2);
         } else {
             setSkillIcon(context, x, y, 2, StandIcons.GOLD_EXPERIENCE_LIFEFORM_CREATION, PowerIndex.SKILL_2);
         }
@@ -2325,7 +2417,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
         if (isHoldingSneak()) {
             setSkillIcon(context, x, y, 4, StandIcons.GOLD_EXPERIENCE_ITEM_IMBUE, PowerIndex.SKILL_4_SNEAK);
         } else if (isGuarding()){
-            setSkillIcon(context, x, y, 4, StandIcons.GOLD_EXPERIENCE_BRAMBLE_TRAP, PowerIndex.SKILL_4_GUARD);
+            setSkillIcon(context, x, y, 4, StandIcons.GOLD_EXPERIENCE_BRAMBLE_TRAP, PowerIndex.GENERAL_4);
         } else {
             setSkillIcon(context, x, y, 4, StandIcons.GOLD_EXPERIENCE_BRAMBLES, PowerIndex.SKILL_4);
         }
