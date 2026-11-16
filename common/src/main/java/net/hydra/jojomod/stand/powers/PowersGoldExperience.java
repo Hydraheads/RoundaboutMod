@@ -101,34 +101,83 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     private final int getDNACooldown() {
         return 300;
-    }; //
+    };
     private final int getAnimalCreationCooldown() {
         return 400;
-    }; //
+    };
     private final int getHealCooldown() {
         return 200;
-    }; //
+    };
     private final int getLifeSensorCooldown() {
         return 60;
-    }; //
+    };
     private final int getItemImbueCooldown() {
         return 600;
-    }; //
+    };
     private final int getLifePunchCooldown() {
         return 800;
-    }; //
+    };
     private final int getVineCooldown() {
         return 60;
-    }; //
+    };
     private final int getTreeCooldown() {
         return 300;
-    }; //
+    };
     private final int getBrambleCooldown() {
         return 240;
-    }; //
+    };
     private final int getBushCooldown() {
         return 320;
     };
+
+    // for damage
+
+    @Override
+    public float getPunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return 1.15F;
+        } else {
+            return 4;
+        }
+    }
+    @Override
+    public float getHeavyPunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return 1.6F;
+        } else {
+            return 5;
+        }
+    }
+    @Override
+    public float getBarrageFinisherStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return 1.8F;
+        } else {
+            return 6;
+        }
+    }
+    @Override
+    public float getBarrageDamagePlayer(){
+        return 7;
+    }
+    @Override
+    public float getBarrageDamageMob(){
+        return 14;
+    }
+    public float getBrambleDamage(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return 2.2F;
+        } else {
+            return 7;
+        }
+    }
+    public float getThornDamage(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return 1.2F;
+        } else {
+            return 5.5F;
+        }
+    }
 
     // for healing
     private boolean hasHealed = false;
@@ -196,8 +245,6 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public void setActiveImbuedItemId(@Nullable UUID id) {
         this.activeImbuedItemId = id;
     }
-    public static final List<Item> disguiseOptions = new ArrayList<>();
-
     public static List<Item> getDisguiseOptions() {
         return MainUtil.GOLD_EXPERIENCE_DISGUISE_ITEMS;
     }
@@ -1875,7 +1922,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     private void lifePunchImpact(Entity entity) {
         if (this.activePower == LIFE_PUNCH) {
-            this.setAttackTimeDuring(-20);
+            this.setAttackTimeDuring(-25);
             float range = 3.5F + 0.75F;
 
             if (entity != null && entity.distanceTo(self) > range) {
