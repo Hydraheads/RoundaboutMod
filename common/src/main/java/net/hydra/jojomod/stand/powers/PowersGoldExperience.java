@@ -2170,8 +2170,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
                         }
                         // special logic for saplings that way they insta grow
                         else if (centerState.is(BlockTags.SAPLINGS)) {
-                            // bonemeal spalings up to 5 times, breaking the loop early if the block is no longer a sapling
-                            for (int i = 0; i < 5; i++) {
+                            // bonemeal spalings up to 10 times, breaking the loop early if the block is no longer a sapling
+                            for (int i = 0; i < 10; i++) {
                                 BoneMealItem.growCrop(boneMeal, this.self.level(), centerPos);
                                 if (!this.self.level().getBlockState(centerPos).is(BlockTags.SAPLINGS)) {
                                     break;
