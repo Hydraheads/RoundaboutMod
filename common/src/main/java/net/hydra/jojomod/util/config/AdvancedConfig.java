@@ -283,7 +283,7 @@ public class AdvancedConfig implements Cloneable {
             )
     );
 
-    public Set<String> kingNothingFormPredictions = new HashSet<>(
+    public Set<String> kingNothingBlockFormPredictions = new HashSet<>(
             Arrays.asList(
                     "minecraft:coal:minecraft:coal_ore",
                     "minecraft:raw_iron:minecraft:iron_ore",
@@ -306,6 +306,15 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:beetroot:minecraft:beetroots",
                     "roundabout:locacaca:roundabout:locacaca_plant",
                     "roundabout:new_locacaca:roundabout:new_locacaca_plant"
+            )
+    );
+    public Set<String> kingNothingEntityFormPredictions = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:phantom_membrane:minecraft:phantom",
+                    "minecraft:wither_skeleton_skull:minecraft:wither_skeleton",
+                    "minecraft:blaze_rod:minecraft:blaze",
+                    "minecraft:blaze_powder:minecraft:blaze",
+                    "minecraft:ender_pearl:minecraft:enderman"
             )
     );
 

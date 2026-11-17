@@ -1264,9 +1264,13 @@ public class ClientUtil {
             if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingNothing kn) {
                 kn.removeItemEntity(data);
             }
-        } else if (context == PacketDataIndex.S2C_KN_SYNC_FORM_PREDICT) {
+        } else if (context == PacketDataIndex.S2C_KN_SYNC_FORM_PREDICT_BLOCK) {
             if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingNothing kn) {
                 kn.setMemorizedScent(BuiltInRegistries.BLOCK.byId(data));
+            }
+        } else if (context == PacketDataIndex.S2C_KN_SYNC_FORM_PREDICT_ENTITY) {
+            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingNothing kn) {
+                kn.setMemorizedScent(BuiltInRegistries.ENTITY_TYPE.byId(data));
             }
         }
     }

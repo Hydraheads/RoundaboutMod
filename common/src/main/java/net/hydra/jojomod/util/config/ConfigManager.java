@@ -8,7 +8,6 @@ import com.mojang.datafixers.util.Pair;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
-import net.hydra.jojomod.stand.powers.PowersGoldExperience;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.config.annotation.*;
 import net.hydra.jojomod.util.option.ConfigOptionReference;
@@ -146,33 +145,67 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getAdvancedConfig().kingNothingFormPredictions != null) {
-            MainUtil.KING_NOTHING_FORM_PREDICT.clear();
-            for (String entry : getAdvancedConfig().kingNothingFormPredictions) {
+        if (getAdvancedConfig().kingNothingBlockFormPredictions != null) {
+            MainUtil.KING_NOTHING_BLOCK_FORM_PREDICT.clear();
+            for (String entry : getAdvancedConfig().kingNothingBlockFormPredictions) {
                 try {
                     String[] split = entry.split(":");
 
                     if (split.length != 4) {
-                        Roundabout.LOGGER.warn("Invalid form predict entry: {}", entry);
+                        Roundabout.LOGGER.warn("Invalid block form predict entry: {}", entry);
                         continue;
                     }
 
                     ResourceLocation sourceId = new ResourceLocation(split[0], split[1]);
                     Item sourceItem = BuiltInRegistries.ITEM.get(sourceId);
                     if (sourceItem.equals(Items.AIR)) {
-                        Roundabout.LOGGER.warn("Invalid form predict input: {}", sourceId);
+                        Roundabout.LOGGER.warn("Invalid block form predict input: {}", sourceId);
                         continue;
                     }
                     ResourceLocation targetId = new ResourceLocation(split[2], split[3]);
                     Block targetBlock = BuiltInRegistries.BLOCK.get(targetId);
                     if (targetBlock.asItem().equals(Items.AIR) || targetBlock.equals(Blocks.AIR)
                             || targetBlock.defaultDestroyTime() < 0) {
-                        Roundabout.LOGGER.warn("Invalid form predict output: {}", targetId);
+                        Roundabout.LOGGER.warn("Invalid block form predict output: {}", targetId);
                         continue;
                     }
-                    MainUtil.KING_NOTHING_FORM_PREDICT.put(sourceItem, targetBlock);
+                    MainUtil.KING_NOTHING_BLOCK_FORM_PREDICT.put(sourceItem, targetBlock);
                 } catch (Exception e) {
-                    Roundabout.LOGGER.error("Failed to parse form predict entry '{}'", entry, e);
+                    Roundabout.LOGGER.error("Failed to parse block form predict entry '{}'", entry, e);
+                }
+            }
+        }
+
+        if (getAdvancedConfig().kingNothingEntityFormPredictions != null) {
+            MainUtil.KING_NOTHING_ENTITY_FORM_PREDICT.clear();
+            for (String entry : getAdvancedConfig().kingNothingEntityFormPredictions) {
+                try {
+                    String[] split = entry.split(":");
+
+                    if (split.length != 4) {
+                        Roundabout.LOGGER.warn("Invalid entity form predict entry: {}", entry);
+                        continue;
+                    }
+
+                    ResourceLocation sourceId = new ResourceLocation(split[0], split[1]);
+                    Item sourceItem = BuiltInRegistries.ITEM.get(sourceId);
+                    if (sourceItem.equals(Items.AIR)) {
+                        Roundabout.LOGGER.warn("Invalid entity form predict input: {}", sourceId);
+                        continue;
+                    }
+                    if (MainUtil.KING_NOTHING_BLOCK_FORM_PREDICT.containsKey(sourceItem)) {
+                        Roundabout.LOGGER.warn("Form predict input '{}' is already in the block form predict list", sourceId);
+                        continue;
+                    }
+                    ResourceLocation targetId = new ResourceLocation(split[2], split[3]);
+                    EntityType<?> targetEntity = BuiltInRegistries.ENTITY_TYPE.get(targetId);
+                    if (targetEntity.equals(EntityType.PIG) && !targetId.equals(new ResourceLocation("minecraft", "pig"))) {
+                        Roundabout.LOGGER.warn("Invalid entity form predict output: {}", targetId);
+                        continue;
+                    }
+                    MainUtil.KING_NOTHING_ENTITY_FORM_PREDICT.put(sourceItem, targetEntity);
+                } catch (Exception e) {
+                    Roundabout.LOGGER.error("Failed to parse entity form predict entry '{}'", entry, e);
                 }
             }
         }

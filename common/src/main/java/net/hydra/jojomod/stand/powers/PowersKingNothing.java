@@ -66,7 +66,6 @@ import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.entity.vehicle.Minecart;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.DirectionalPlaceContext;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ClipContext;
@@ -379,7 +378,7 @@ public class PowersKingNothing extends NewDashPreset {
             }
             case 3 -> {
                 if ((isHoldingSneak() && (isTrackingItem()
-                        || getFormPrediction(getSelf().getMainHandItem().getItem()) == null))) {
+                        || !hasFormPrediction(getSelf().getMainHandItem().getItem())))) {
                     return true;
                 }
             }
@@ -1715,26 +1714,75 @@ public class PowersKingNothing extends NewDashPreset {
     public boolean formPredict() {
         if (!getSelf().level().isClientSide()) {
             Item held = this.getSelf().getMainHandItem().getItem();
-            Block potentialBlock = getFormPrediction(held);
+            Block potentialBlock = getBlockFormPrediction(held);
             if (potentialBlock != null) {
                 this.setMemorizedScent(potentialBlock);
                 if (getSelf() instanceof Player PE) {
                     int id = BuiltInRegistries.BLOCK.getId(potentialBlock);
-                    S2CPacketUtil.sendGenericIntToClientPacket(PE, PacketDataIndex.S2C_KN_SYNC_FORM_PREDICT, id);
+                    S2CPacketUtil.sendGenericIntToClientPacket(PE, PacketDataIndex.S2C_KN_SYNC_FORM_PREDICT_BLOCK, id);
                     PE.displayClientMessage(potentialBlock.getName().withStyle(ChatFormatting.DARK_PURPLE), true);
+                }
+                return true;
+            }
+            EntityType<?> potentialEntity = getEntityFormPrediction(held);
+            if (potentialEntity != null) {
+                this.setMemorizedScent(potentialEntity);
+                if (getSelf() instanceof Player PE) {
+                    int id = BuiltInRegistries.ENTITY_TYPE.getId(potentialEntity);
+                    S2CPacketUtil.sendGenericIntToClientPacket(PE, PacketDataIndex.S2C_KN_SYNC_FORM_PREDICT_ENTITY, id);
                 }
             }
         }
         return true;
     }
 
-    public Block getFormPrediction(Item item) {
-        return getFormPrediction(item, true);
+    public boolean hasFormPrediction(Item item) {
+        return getEntityFormPrediction(item) != null || getBlockFormPrediction(item) != null;
     }
 
-    public Block getFormPrediction(Item item, boolean doRecursion) {
-        if (MainUtil.KING_NOTHING_FORM_PREDICT.get(item) != null) {
-            return MainUtil.KING_NOTHING_FORM_PREDICT.get(item);
+    public EntityType<?> getEntityFormPrediction(Item item) {
+        return getEntityFormPrediction(item, true);
+    }
+
+    public EntityType<?> getEntityFormPrediction(Item item, boolean doRecursion) {
+        if (MainUtil.KING_NOTHING_ENTITY_FORM_PREDICT.get(item) != null) {
+            return MainUtil.KING_NOTHING_ENTITY_FORM_PREDICT.get(item);
+        }
+        else if ((item instanceof TieredItem || item instanceof ArmorItem) && doRecursion) {
+            Set<Item> ingredients = new HashSet<>();
+            ItemStack[] ingredientStacks = new ItemStack[0];
+            EntityType<?> toReturn = null;
+            if (item instanceof TieredItem TI) {
+                ingredientStacks = TI.getTier().getRepairIngredient().getItems();
+            }
+            else if (item instanceof ArmorItem AI) {
+                ingredientStacks = AI.getMaterial().getRepairIngredient().getItems();
+            }
+            for (ItemStack stack : ingredientStacks) {
+                ingredients.add(stack.getItem());
+            }
+            for (Item ingItem : ingredients) {
+                EntityType<?> current = getEntityFormPrediction(ingItem, false);
+                if (toReturn == null) {
+                    toReturn = current;
+                }
+                else if (!current.equals(toReturn)) {
+                    toReturn = null;
+                    break;
+                }
+            }
+            return toReturn;
+        }
+        return null;
+    }
+
+    public Block getBlockFormPrediction(Item item) {
+        return getBlockFormPrediction(item, true);
+    }
+
+    public Block getBlockFormPrediction(Item item, boolean doRecursion) {
+        if (MainUtil.KING_NOTHING_BLOCK_FORM_PREDICT.get(item) != null) {
+            return MainUtil.KING_NOTHING_BLOCK_FORM_PREDICT.get(item);
         }
         else if ((item instanceof TieredItem || item instanceof ArmorItem) && doRecursion) {
             Set<Item> ingredients = new HashSet<>();
@@ -1750,7 +1798,7 @@ public class PowersKingNothing extends NewDashPreset {
                 ingredients.add(stack.getItem());
             }
             for (Item ingItem : ingredients) {
-                Block current = getFormPrediction(ingItem, false);
+                Block current = getBlockFormPrediction(ingItem, false);
                 if (toReturn == null) {
                     toReturn = current;
                 }
@@ -1760,9 +1808,6 @@ public class PowersKingNothing extends NewDashPreset {
                 }
             }
             return toReturn;
-        }
-        else if (item instanceof BlockItem BI && isMemorizableBlock(BI.getBlock())) {
-            return BI.getBlock();
         }
         return null;
     }
@@ -1829,6 +1874,19 @@ public class PowersKingNothing extends NewDashPreset {
         }
         this.memorizedBlock = null;
         saveDiscAndSync();
+    }
+
+    public void setMemorizedScent(EntityType<?> entityType) {
+        this.memorizedEntityType = entityType;
+        this.memorizedBlock = null;
+        this.memorizedPlayer = null;
+        if (getSelf() instanceof Player PE && getSelf().level().isClientSide()) {
+            Entity tity = entityType.create(this.getSelf().level());
+            if (tity != null) {
+                PE.displayClientMessage(tity.getName().copy().withStyle(ChatFormatting.DARK_PURPLE), true);
+                tity.discard();
+            }
+        }
     }
 
     @Override
