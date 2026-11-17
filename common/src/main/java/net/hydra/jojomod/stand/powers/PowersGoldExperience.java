@@ -97,10 +97,13 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public static final byte ITEM_IMBUE = 62;
 
     @Override
-    public boolean canUseStandArrow() { return true; }
+    public boolean canUseStandArrow() { return canUseRequiem(); }
 
     public boolean canUseRequiem() {
         return hasGoldenDisc() || canExecuteMoveWithLevel(getMaxLevel());
+    }
+    public boolean isPossibleToRequiem() {
+        return resolvePoints >= getNeededResolvePoints();
     }
 
     private float resolvePoints = 0F;
@@ -110,7 +113,27 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     @Override
     public boolean onStandArrowUse() {
-        /// Do ya thingy here
+        if (this.self instanceof Player PE) {
+            if (isPossibleToRequiem()) {
+                sendParticlesIfPossible(self.level(),ParticleTypes.FIREWORK, PE.getX(),
+                        PE.getY() + PE.getEyeHeight(), PE.getZ(),
+                        20, 0, 0, 0, 0.4);
+
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.BITES_THE_DUST_ARROW_EVENT, SoundSource.PLAYERS, 0.85F, 1.0f);
+
+                if (!isClient()) {
+                    ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.requiem_activated").
+                            withStyle(ChatFormatting.YELLOW), true);
+                }
+
+                return true;
+            }else {
+                if (!isClient()) {
+                    ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.requiem_failed").
+                            withStyle(ChatFormatting.RED), true);
+                }
+            }
+        }
         return false;
     }
 

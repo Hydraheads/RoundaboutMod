@@ -402,11 +402,24 @@ public class SilverChariotModel<T extends SilverChariotEntity> extends StandMode
 		this.animate(pEntity.scBarrageFinisherRight, SilverChariotAnimations.RightHit3(), pAgeInTicks, 2.2f);
 		this.animate(pEntity.scBarrageFinisherLeft, SilverChariotAnimations.LeftHit3(), pAgeInTicks, 2.2f);
         this.animate(pEntity.grabbedStandByBlackSabbath, MobSoulAnimation.grabbed_humanoid_stand,  pAgeInTicks, 1f);
+		if (!pEntity.getArmoured()) {
+			float time = (pEntity.tickCount + pAgeInTicks) * 0.1F;
+			float minAlpha = 0.35F;
+			float maxAlpha = 0.85F;
+			float alphaRange = maxAlpha - minAlpha;
+			float afterimageAlpha = minAlpha +
+					(Mth.sin(time) + 1.0F) / 2.0F * alphaRange;
+			this.setAlpha(afterimageAlpha);
+		}
 	}
 
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
 		// stand.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		if (alpha < 0F) {
+			stand.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, -alpha);
+			return;
+		}
 		super.renderToBuffer(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
 	}
 
