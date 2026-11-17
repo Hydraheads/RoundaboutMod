@@ -4328,11 +4328,11 @@ public class PowersSilverChariot extends NewPunchingStand {
     public float armSummonDamage(Entity entity) {
         if (this.getReducedDamage(entity)) {
             return levelupDamageMod(
-                    multiplyPowerByStandConfigPlayers(ClientNetworking.getAppropriateConfig().silverChariotSettings.bonusPlayerDMGArmSummon)
+                    multiplyPowerByStandConfigPlayers(ClientNetworking.getAppropriateConfig().silverChariotSettings.silverChariotBonusPlayerDMGArmSummon)
             );
         } else {
             return levelupDamageMod(
-                    multiplyPowerByStandConfigMobs(ClientNetworking.getAppropriateConfig().silverChariotSettings.bonusMobDMGArmSummon)
+                    multiplyPowerByStandConfigMobs(ClientNetworking.getAppropriateConfig().silverChariotSettings.silverChariotBonusMobDMGArmSummon)
             );
         }
     }

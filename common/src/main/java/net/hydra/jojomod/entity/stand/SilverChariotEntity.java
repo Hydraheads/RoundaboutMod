@@ -897,10 +897,11 @@ public class SilverChariotEntity extends FollowingStandEntity {
         previousCarryPosition = carryPos;
     }
 
-    private static final int AFTERIMAGE_TICK_INTERVAL = ConfigManager.getClientConfig().silverChariotSettings.silverChariotTickIntervalBetweenAfterimage;
-    private static final int AFTERIMAGE_MAX_AMOUNT = ConfigManager.getClientConfig().silverChariotSettings.silverChariotAfterimagesMaxAmount;
+    public static final int AFTERIMAGE_TICK_INTERVAL = ConfigManager.getClientConfig().silverChariotSettings.silverChariotTickIntervalBetweenAfterimage;
+    public static final int AFTERIMAGE_MAX_AMOUNT = ConfigManager.getClientConfig().silverChariotSettings.silverChariotAfterimagesMaxAmount;
     private int afterImageTicks = 0;
     private Deque<SilverChariotAfterimageState> silverChariotAfterimageStates = new ArrayDeque<>();
+    private float alpha = 1.0F;
 
     @Override
     public void tick() {
@@ -925,6 +926,10 @@ public class SilverChariotEntity extends FollowingStandEntity {
             }
             // updateSelfCarry();
         }
+    }
+
+    public int getAfterImageTicks() {
+        return afterImageTicks;
     }
 
     private void tickControlBodyRotation() {
