@@ -185,6 +185,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // for healing
     private boolean hasHealed = false;
     private int healTargetId = -1;
+    private boolean healOthers = false;
+    private boolean healButtonHeld = false;
+    private boolean healModeLocked = false;
 
     // for life punch
     private LifePunchCloneEntity lifePunchClone = null;
@@ -619,6 +622,13 @@ public class PowersGoldExperience extends BlockGrabPreset {
             byte animalId = (byte) (passedInt & 0xFF);
             return executeItemImbue(imbueType, animalId);
         }
+        else if (move == HEAL) {
+            this.healOthers = (passedInt == 1);
+            if (this.getActivePower() == HEAL) {
+                return false;
+            }
+            return startHealWindup();
+        }
         return super.tryIntPower(move, forced, passedInt);
     }
 
@@ -719,6 +729,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public boolean setPowerNone() {
         this.groundBarrageTicks = 0;
         this.isGroundBarraging = false;
+        this.healButtonHeld = false;
+        this.healModeLocked = false;
         return super.setPowerNone();
     }
 
@@ -2058,8 +2070,22 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     // heal start
 
+    @Override
+    public void buttonInput1(boolean keyIsDown, Options options) {
+        this.healButtonHeld = keyIsDown;
+        if (!keyIsDown && this.getActivePower() == HEAL && !this.healModeLocked) {
+            this.healModeLocked = true;
+            this.healOthers = false;
+            tryIntPowerPacket(HEAL, 0);
+        }
+        super.buttonInput1(keyIsDown, options);
+    }
+
     private void tryHeal() {
-        if(!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
+        if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
+            this.healButtonHeld = true;
+            this.healModeLocked = false;
+            this.healOthers = false;
             ((StandUser) this.getSelf()).roundabout$tryPower(HEAL, true);
             tryPowerPacket(HEAL);
         }
@@ -2081,6 +2107,18 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     private void updateHeal() {
         if (this.attackTimeDuring > -1) {
+            if (this.self.level().isClientSide() && !this.healModeLocked) {
+                if (!this.healButtonHeld) {
+                    this.healModeLocked = true;
+                    this.healOthers = false;
+                    tryIntPowerPacket(HEAL, 0);
+                } else if (this.attackTimeDuring >= 8) {
+                    this.healModeLocked = true;
+                    this.healOthers = true;
+                    tryIntPowerPacket(HEAL, 1);
+                }
+            }
+
             if (this.attackTimeDuring == 15) {
                 startHealAnimation();
             }
@@ -2092,9 +2130,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     private void startHealAnimation() {
         if (!this.self.level().isClientSide()) {
-            Entity target = MainUtil.getTargetEntity(this.getSelf(), 5f);
-            if (target instanceof LivingEntity livingHeal) {
-                this.healTargetId = livingHeal.getId();
+            if (this.healOthers) {
+                Entity target = MainUtil.getTargetEntity(this.getSelf(), 5f);
+                this.healTargetId = (target instanceof LivingEntity livingHeal) ? livingHeal.getId() : -1;
                 this.animateStand(GoldExperienceEntity.HEAL_OTHERS);
             } else {
                 this.healTargetId = -1;
@@ -2106,15 +2144,14 @@ public class PowersGoldExperience extends BlockGrabPreset {
     private void finishHeal() {
         if (!this.self.level().isClientSide()) {
             this.hasHealed = true;
-            Entity lockedTarget = this.healTargetId != -1 ? this.self.level().getEntity(this.healTargetId) : null;
-
-            if (lockedTarget instanceof LivingEntity livingHeal && livingHeal.isAlive()) {
-                // for healing others
-                livingHeal.heal(1f);
-                livingHeal.addEffect(new MobEffectInstance(ModEffects.RECONSTRUCTION, 400, 0, false, true, true));
-                playSoundIfPossible(this.self.level(), livingHeal, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            if (this.healOthers) {
+                Entity lockedTarget = this.healTargetId != -1 ? this.self.level().getEntity(this.healTargetId) : MainUtil.getTargetEntity(this.getSelf(), 5f);
+                if (lockedTarget instanceof LivingEntity livingHeal && livingHeal.isAlive()) {
+                    livingHeal.heal(1f);
+                    livingHeal.addEffect(new MobEffectInstance(ModEffects.RECONSTRUCTION, 400, 0, false, true, true));
+                    playSoundIfPossible(this.self.level(), livingHeal, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+                }
             } else {
-                // for healing yourself
                 this.self.heal(1f);
                 this.self.addEffect(new MobEffectInstance(ModEffects.RECONSTRUCTION, 400, 0, false, true, true));
                 playSoundIfPossible(this.self.level(), this.self, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
