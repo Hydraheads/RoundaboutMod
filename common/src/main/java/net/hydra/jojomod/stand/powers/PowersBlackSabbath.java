@@ -1023,9 +1023,9 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                 double x = lent.getX() + Math.cos(angle) * distance;
                 double z = lent.getZ() + Math.sin(angle) * distance;
                 int baseY = Mth.floor(lent.getY());
-                double y = baseY + yOffset;
+                double y = Mth.floor(baseY + yOffset);
                 Vec3 candidate = new Vec3(x, y, z);
-                BlockPos bpos = BlockPos.containing(x, y - 0.1, z);
+                BlockPos bpos = BlockPos.containing(x, y, z);
                 var blockState = this.self.level().getBlockState(bpos);
                 AABB yesbox = ModEntities.BLACK_SABBATH.getAABB(lent.getX(), Mth.floor(lent.getY()), lent.getZ());
                 AABB testBox = yesbox.move(
@@ -1042,9 +1042,9 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                                 + Math.sqrt(Math.random()) * (radius - minDistance);
                         double x2 = lent.getX() + Math.cos(angle) * distance2;
                         double z2 = lent.getZ() + Math.sin(angle) * distance2;
-                        double y2 = baseY + yOffset2;
+                        double y2 = Mth.floor(baseY + yOffset2);
                         Vec3 candidate2 = new Vec3(x2, y2, z2);
-                        BlockPos bpos2 = BlockPos.containing(x, y2 - 0.1, z);
+                        BlockPos bpos2 = BlockPos.containing(x, y2, z);
                         var blockState2 = this.self.level().getBlockState(bpos2);
                         AABB yesbox2 = ModEntities.BLACK_SABBATH.getAABB(lent.getX(), lent.getY(), lent.getZ());
                         AABB testBox2 = yesbox2.move(
@@ -1052,7 +1052,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                                 candidate2.y - lent.getY(),
                                 candidate2.z - lent.getZ()
                         );
-                       // System.out.print(candidate2 + " a ");
                         if (level.noCollision(lent, testBox2) && !blockState.is(Blocks.LAVA) && !blockState2.isAir() && checkIfBposIsInDark(candidate)) {
                         return candidate2;
                         }
