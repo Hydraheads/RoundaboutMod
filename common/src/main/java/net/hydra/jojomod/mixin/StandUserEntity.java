@@ -5611,10 +5611,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$die2(DamageSource $$0, CallbackInfo ci) {
         /** Corspe dropping, for Justice */
         if ($$0.getDirectEntity() != null) {
-            if (($$0.getDirectEntity() instanceof Player PE && (PE.getMainHandItem().is(ModItems.EXECUTIONER_AXE)
-                    || (PE.getMainHandItem().is(ModItems.SCISSORS)
-                            && ((StandUser) PE).roundabout$getStandPowers() instanceof PowersJustice)))
-                    && ($$0.is(DamageTypes.PLAYER_ATTACK) || $$0.is(DamageTypes.MOB_ATTACK))) {
+            if ($$0.getDirectEntity() instanceof Player PE && ((PE.getMainHandItem().is(ModItems.EXECUTIONER_AXE)
+                    && ($$0.is(DamageTypes.PLAYER_ATTACK) || $$0.is(DamageTypes.MOB_ATTACK)))
+                    //|| (PE.getMainHandItem().is(ModItems.SCISSORS)
+                    //|| (hasEffect(ModEffects.BLEED)
+                    //        && (((StandUser) PE).roundabout$getStandPowers() instanceof PowersJustice)))
+            || ((((StandUser) PE).roundabout$getStandPowers() instanceof PowersJustice) && ((StandUser)PE).roundabout$getActive()))
+            ) {
                 LivingEntity ths = ((LivingEntity) (Object) this);
                 boolean marked = false;
                 FallenMob mb = null;
@@ -5736,7 +5739,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (!entity.level().isClientSide()) {
                 ItemStack sourceStack = lifeform.getSourceItem();
                 if (!sourceStack.isEmpty()) {
-                    entity.spawnAtLocation(sourceStack);
+                    PowersGoldExperience.handleLifeformRevertItem(entity, lifeform, sourceStack);
                     lifeform.setSourceItem(ItemStack.EMPTY);
                 }
                 for (EquipmentSlot slot : EquipmentSlot.values()) {
