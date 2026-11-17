@@ -505,7 +505,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
 
         if (!this.level().isClientSide) {
             if (!this.getItem().isEmpty()) {
-                // gold experience transformation thing start
+                // gold experience transformation thing
                 Vec3 landingPos = $$0.getLocation().add(0, 0.1, 0);
                 if (tryTransformIntoLifeform(landingPos)) {
                     return;

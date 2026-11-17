@@ -366,6 +366,9 @@ public class SilverChariotModel<T extends SilverChariotEntity> extends StandMode
 		this.animate(pEntity.scIdleNotArmoured, SilverChariotAnimations.IdleArmorless(), pAgeInTicks, 1f);
 		this.animate(pEntity.scPart3Pose, SilverChariotAnimations.Part3Pose(), pAgeInTicks, 1f);
 		this.animate(pEntity.scPart5Pose, SilverChariotAnimations.Part5Pose(), pAgeInTicks, 1f);
+		this.animate(pEntity.scIdleArmouredFake, SilverChariotAnimations.Idle(), pAgeInTicks, 1f);
+		this.animate(pEntity.scPart3PoseFake, SilverChariotAnimations.Part3Pose(), pAgeInTicks, 1f);
+		this.animate(pEntity.scPart5PoseFake, SilverChariotAnimations.Part5Pose(), pAgeInTicks, 1f);
 		this.animate(pEntity.scToggleRightSword, SilverChariotAnimations.RightSword(), pAgeInTicks, 1f);
 		this.animate(pEntity.scToggleLeftSword, SilverChariotAnimations.LeftSword(), pAgeInTicks, 1f);
 		this.animate(pEntity.scHideRapiers, StandAnimations.HIDE_FISTS, pAgeInTicks, 1f);
