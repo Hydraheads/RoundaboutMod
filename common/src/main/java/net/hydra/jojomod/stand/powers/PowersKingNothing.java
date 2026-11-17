@@ -1012,6 +1012,9 @@ public class PowersKingNothing extends NewDashPreset {
                         BlockStateProperties.WATERLOGGED))) {
             return false;
         }
+        // STOLEN FROM GOLD EXPERIENCE BECAUSE IM EVIL
+        Vec3 oldPos = stand.getPosition(1);
+        stand.setPos(0,0,0);
         boolean placesfrfr = doubleSlabbinItFr || ((bstate.isAir() || bstate.canBeReplaced()) && canModifyPos(bpos)
                 && stand.level().isFluidAtPosition(bpos, FluidState::isEmpty)
                 && blockItem.place(new DirectionalPlaceContext(stand.level(), bpos, placeDir, held, placeDir))
@@ -1036,6 +1039,9 @@ public class PowersKingNothing extends NewDashPreset {
                     ClientNetworking.getAppropriateConfig().kingNothingSettings.kingNothingPhasePlaceCd);
             playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);
             animateStand(KingNothingEntity.RETURN);
+        }
+        else {
+            stand.setPos(oldPos);
         }
         return placesfrfr;
     }
@@ -1311,8 +1317,7 @@ public class PowersKingNothing extends NewDashPreset {
             playSoundsIfNearby(PHASE, 27, false);
             this.setActivePower(PowerIndex.POWER_2);
             this.poseStand(OffsetIndex.LOOSE);
-
-            Vec2 twoVec = new Vec2((this.getSelf().getYHeadRot() % 360), (this.getSelf().getXRot()));
+            Vec2 twoVec = new Vec2(((this.getSelf().getYHeadRot()) % 360), (this.getSelf().getXRot()));
             Direction gdir = ((IGravityEntity) this.self).roundabout$getGravityDirection();
             Vec2 twoVecGrav = RotationUtil.rotPlayerToWorld(twoVec, gdir);
             Vec3 threeVec = new Vec3(0, 0.25, 0);
