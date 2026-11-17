@@ -976,7 +976,10 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
 
         if (podRegenClient != -1 && getPods() < MAX_PODS) {
-            int ClashTime = Math.round(((float) podRegenClient / POD_RECHARGE_TIME) * 15);
+            int ClashTime = Mth.clamp(
+                    Math.round(((float) podRegenClient / getPodRechargeTime()) * 15),
+                    0, 15
+            );
             context.blit(StandIcons.JOJO_ICONS, k, j+17, 213, 97, 15, 4);
             context.blit(StandIcons.JOJO_ICONS, k, j+17, 213, 102, ClashTime, 4);
         }
@@ -984,8 +987,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        if ((activePower == PowerIndex.BARRAGE || activePower == PowerIndex.BARRAGE_2
-                || activePower == PowerIndex.BARRAGE_CHARGE || activePower == PowerIndex.BARRAGE_CHARGE_2)) {
+        if (this.isBarrageAttacking() || this.getActivePower() == PowerIndex.BARRAGE_2) {
             setSkillIcon(context, x, y, 1, StandIcons.PH_FORWARD_BARRAGE, PowerIndex.NO_CD);
         }
         else if (isGuarding()){
@@ -1211,7 +1213,10 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     //Pod count
     private static final int MAX_PODS = 6;
-    private static final int POD_RECHARGE_TIME = 800;
+    private int getPodRechargeTime() {
+        return Math.max(1, ClientNetworking.getAppropriateConfig()
+                .PurpleHazeSettings.PodRechargeTime);
+    }
     private int podRechargeTicks = 0;
     private boolean podsSyncedOnJoin = false;
     //private int podsRemaining = MAX_PODS;
@@ -1283,7 +1288,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
         podRechargeTicks++;
 
-        if (podRechargeTicks >= POD_RECHARGE_TIME || PL.isCreative()) {
+        if (podRechargeTicks >= getPodRechargeTime() || PL.isCreative()) {
             setPods(Math.min(MAX_PODS, getPods() + 1));
             podRechargeTicks = 0;
             wasRecharging = getPods() < MAX_PODS;
@@ -2407,9 +2412,21 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
         return super.getSoundFromByte(soundChoice);
     }
+
+    // makes the easy block work with kick barrage
+    @Override
+    public boolean buttonInputGuard(boolean keyIsDown, Options options) {
+        if (this.activePower == PowerIndex.BARRAGE_CHARGE_2 || this.activePower == PowerIndex.BARRAGE_2) {
+            return false;
+        }
+        return super.buttonInputGuard(keyIsDown, options);
+    }
+
     @Override
     public byte getSoundCancelingGroupByte(byte soundChoice) {
-        if (soundChoice == SoundIndex.BARRAGE_CRY_SOUND || soundChoice == SoundIndex.BARRAGE_CRY_SOUND_2) { return SoundIndex.BARRAGE_SOUND_GROUP; }
+        if (soundChoice == SoundIndex.BARRAGE_CRY_SOUND || soundChoice == SoundIndex.BARRAGE_CRY_SOUND_2 || soundChoice == SoundIndex.ALT_CHARGE_SOUND_1) {
+            return SoundIndex.BARRAGE_SOUND_GROUP;
+        }
         return super.getSoundCancelingGroupByte(soundChoice);
     }
 
