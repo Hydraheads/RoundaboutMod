@@ -3511,7 +3511,7 @@ public class PowersSilverChariot extends NewPunchingStand {
     public void armourShedClient() {
         if (!getRegainingArmourFromDesummon() && !this.onCooldown(PowerIndex.SKILL_2_GUARD) && canExecuteMoveWithLevel(getArmourShedLevel()) && getArmoured()) {
             // armoured = false;
-            // setArmoured(false);
+            setArmoured(false);
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BLOCK, true);
             tryPowerPacket(PowerIndex.POWER_2_BLOCK);
         }
@@ -3519,7 +3519,7 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     public void armourShedServer() {
         if (!this.getArmoured()) {
-            return;
+            // return;
         }
         this.setAttackTimeDuring(-40);
         this.animateStand(SilverChariotEntity.SC_ARMOUR_SHED);
