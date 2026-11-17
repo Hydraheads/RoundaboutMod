@@ -104,7 +104,6 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     public void onStandSwitch() {
         super.onStandSwitch();
         setInvincibleState(false);
-        Roundabout.LOGGER.info("On stand switch");
     }
 
 
@@ -121,7 +120,6 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        Roundabout.LOGGER.info("data read, client: " + isClient());
 
         if (tag.contains("currentDefenseTicks")) { currentDefenseTicks = tag.getInt("currentDefenseTicks"); }
         if (tag.contains("staticMode")) { staticMode = tag.getInt("staticMode"); }

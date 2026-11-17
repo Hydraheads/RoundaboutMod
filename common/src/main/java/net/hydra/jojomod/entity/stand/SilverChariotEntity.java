@@ -252,6 +252,9 @@ public class SilverChariotEntity extends FollowingStandEntity {
     public final AnimationState scPart3Pose = new AnimationState();
     public final AnimationState scPart5Pose = new AnimationState();
     public final AnimationState scIdleArmoured = new AnimationState();
+    public final AnimationState scPart3PoseFake = new AnimationState();
+    public final AnimationState scPart5PoseFake = new AnimationState();
+    public final AnimationState scIdleArmouredFake = new AnimationState();
     public final AnimationState scIdleNotArmoured = new AnimationState();
     public final AnimationState scArmourShed = new AnimationState();
     public final AnimationState scToggleNotArmouredState = new AnimationState();
@@ -332,9 +335,13 @@ public class SilverChariotEntity extends FollowingStandEntity {
             SC_SLAB_CUTTING = 62,
             SC_USER_CARRY_IDLE = 63,
             SC_HIDE_RIGHT_ARM = 64,
-            SC_HIDE_LEFT_ARM = 65;
+            SC_HIDE_LEFT_ARM = 65,
+            FAKE_SC_ARMOUR_OFF = 66,
+            FAKE_SC_ARMOUR_ON = 67;
 
     public boolean isArmored = false;
+
+    public static final byte SC_UNARMOURED_IDLE_OFFSET = 3;
 
     @Override
     public void setupAnimationStates() {
@@ -389,6 +396,50 @@ public class SilverChariotEntity extends FollowingStandEntity {
                 }
             }
 
+            /*
+            if (animationState == IDLE && selfCarryMode) {
+                this.scUserCarryIdle.startIfStopped(this.tickCount);
+            } else {
+                this.scUserCarryIdle.stop();
+            }
+            */
+            if (animationState == IDLE && idle == 0) {
+                this.scIdleArmoured.startIfStopped(this.tickCount);
+            } else {
+                this.scIdleArmoured.stop();
+            }
+            if (animationState == IDLE && idle == 1) {
+                this.scPart3Pose.startIfStopped(this.tickCount);
+            } else {
+                this.scPart3Pose.stop();
+            }
+            if (animationState == IDLE && idle == 2) {
+                this.scPart5Pose.startIfStopped(this.tickCount);
+            } else {
+                this.scPart5Pose.stop();
+            }
+
+            // Fake idle animations for unarmoured mode
+            if (animationState == IDLE && idle == 3) {
+                this.scToggleNotArmouredState.startIfStopped(this.tickCount);
+                this.scIdleArmouredFake.startIfStopped(this.tickCount);
+            } else {
+                this.scPart3PoseFake.stop();
+            }
+            if (animationState == IDLE && idle == 4) {
+                this.scToggleNotArmouredState.startIfStopped(this.tickCount);
+                this.scPart3PoseFake.startIfStopped(this.tickCount);
+            } else {
+                this.scPart3PoseFake.stop();
+            }
+            if (animationState == IDLE && idle == 5) {
+                this.scToggleNotArmouredState.startIfStopped(this.tickCount);
+                this.scPart5PoseFake.startIfStopped(this.tickCount);
+            } else {
+                this.scPart3PoseFake.stop();
+            }
+
+            /*
             if (animationState == IDLE && idle == 0 && !selfCarryMode) {
                 this.scIdleArmoured.startIfStopped(this.tickCount);
             } else {
@@ -414,6 +465,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
             } else {
                 this.scUserCarryIdle.stop();
             }
+            */
 
             if (animationState == SC_) {
 
@@ -664,10 +716,12 @@ public class SilverChariotEntity extends FollowingStandEntity {
             }
             */
 
-            if (!armoured) {
-                this.scToggleNotArmouredState.startIfStopped(this.tickCount);
-            } else {
-                this.scToggleNotArmouredState.stop();
+            if (animationState == IDLE && idle >= 0 && idle < 3) {
+                if (!armoured) {
+                    this.scToggleNotArmouredState.startIfStopped(this.tickCount);
+                } else {
+                    this.scToggleNotArmouredState.stop();
+                }
             }
         } else {
             if(this.getBsGrabbed() != 0){
