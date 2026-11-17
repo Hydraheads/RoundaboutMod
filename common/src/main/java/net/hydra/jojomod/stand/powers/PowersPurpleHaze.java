@@ -2407,9 +2407,21 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
         return super.getSoundFromByte(soundChoice);
     }
+
+    // makes the easy block work with kick barrage
+    @Override
+    public boolean buttonInputGuard(boolean keyIsDown, Options options) {
+        if (this.activePower == PowerIndex.BARRAGE_CHARGE_2 || this.activePower == PowerIndex.BARRAGE_2) {
+            return false;
+        }
+        return super.buttonInputGuard(keyIsDown, options);
+    }
+
     @Override
     public byte getSoundCancelingGroupByte(byte soundChoice) {
-        if (soundChoice == SoundIndex.BARRAGE_CRY_SOUND || soundChoice == SoundIndex.BARRAGE_CRY_SOUND_2) { return SoundIndex.BARRAGE_SOUND_GROUP; }
+        if (soundChoice == SoundIndex.BARRAGE_CRY_SOUND || soundChoice == SoundIndex.BARRAGE_CRY_SOUND_2 || soundChoice == SoundIndex.ALT_CHARGE_SOUND_1) {
+            return SoundIndex.BARRAGE_SOUND_GROUP;
+        }
         return super.getSoundCancelingGroupByte(soundChoice);
     }
 
