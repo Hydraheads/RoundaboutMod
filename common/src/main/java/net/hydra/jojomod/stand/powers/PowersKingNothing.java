@@ -1021,6 +1021,7 @@ public class PowersKingNothing extends NewDashPreset {
                 != InteractionResult.FAIL) || ((placeState.isAir() || placeState.canBeReplaced()) && canModifyPos(
                 placePos) && blockItem.place(new DirectionalPlaceContext(stand.level(), placePos, placeDir, held, placeDir))
                 != InteractionResult.FAIL);
+        stand.setPos(oldPos);
         if (placesfrfr) {
             if (getCreative()) {
                 stand.setHeldItem(returnStack);
@@ -1039,9 +1040,6 @@ public class PowersKingNothing extends NewDashPreset {
                     ClientNetworking.getAppropriateConfig().kingNothingSettings.kingNothingPhasePlaceCd);
             playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);
             animateStand(KingNothingEntity.RETURN);
-        }
-        else {
-            stand.setPos(oldPos);
         }
         return placesfrfr;
     }
