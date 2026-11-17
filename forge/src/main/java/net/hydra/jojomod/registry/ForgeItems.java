@@ -45,7 +45,7 @@ public class ForgeItems {
     public static final RegistryObject<Item> SNAKE_SKIN = addToTab(ITEMS.register("snake_skin",
             () -> new Item(new Item.Properties())));
     public static final RegistryObject<Item> SNAKE_OIL = addToTab(ITEMS.register("snake_oil",
-            () -> new DrinkableItem(new Item.Properties())));
+            () -> new DrinkableItem(new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> SNAKE_SKIN_BOOTS = addToTab(ITEMS.register("snake_skin_boots",
             () -> new ArmorItem(SnakeSkinBootsItem.SNAKE_ARMOR, ArmorItem.Type.BOOTS, new Item.Properties())));
 
