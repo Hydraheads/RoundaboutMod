@@ -1286,6 +1286,25 @@ public class PowersGoldExperience extends BlockGrabPreset {
         }
     }
 
+    public static void clearImbueFromConsumedStack(Level level, ItemStack stack) {
+        CompoundTag imbue = getImbueData(stack);
+        if (imbue == null) {
+            return;
+        }
+        if (!level.isClientSide() && level instanceof ServerLevel serverLevel
+                && imbue.hasUUID("Id") && imbue.hasUUID("Owner")) {
+            UUID imbueId = imbue.getUUID("Id");
+            UUID ownerId = imbue.getUUID("Owner");
+            Entity ownerEntity = serverLevel.getEntity(ownerId);
+            if (ownerEntity instanceof LivingEntity ownerLiving
+                    && ((StandUser) ownerLiving).roundabout$getStandPowers() instanceof PowersGoldExperience gePowers
+                    && imbueId.equals(gePowers.getActiveImbuedItemId())) {
+                gePowers.setActiveImbuedItemId(null);
+            }
+        }
+        clearImbue(stack);
+    }
+
     // animal imbue start
 
     public static void applyAnimalImbue(ItemStack stack, UUID imbueId, UUID ownerId, byte animalId) {
@@ -1974,6 +1993,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 lifeform.setCreator(this.getSelf());
                 ItemStack consumedItem = sourceItem.copy();
                 consumedItem.setCount(1);
+                clearImbueFromConsumedStack(this.self.level(), consumedItem);
                 lifeform.setSourceItem(consumedItem);
             }
 
