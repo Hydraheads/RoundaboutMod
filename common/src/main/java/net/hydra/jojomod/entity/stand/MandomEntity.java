@@ -52,4 +52,8 @@ public class MandomEntity extends FollowingStandEntity {
     public float blackSabbathGrabOffset(){
         return 0.98f;
     }
+
+    public boolean standCanShowName() {
+        return false;
+    }
 }

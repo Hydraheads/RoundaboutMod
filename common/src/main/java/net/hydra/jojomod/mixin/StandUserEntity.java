@@ -4239,8 +4239,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         // GE mobs damage reflection
         if (this instanceof GELifeform lifeform) {
             Entity attacker = $$0.getEntity() != null ? $$0.getEntity() : $$0.getDirectEntity();
+            boolean isCreator = attacker != null
+                    && lifeform.getCreatorUUID() != null
+                    && lifeform.getCreatorUUID().equals(attacker.getUUID());
             // normal generic kill stuff should go through
-            if ($$0.is(DamageTypes.FELL_OUT_OF_WORLD) || $$0.is(DamageTypes.GENERIC_KILL) || attacker == lifeform.getCreator()) {
+            if ($$0.is(DamageTypes.FELL_OUT_OF_WORLD) || $$0.is(DamageTypes.GENERIC_KILL) || isCreator) {
                 return;
             }
 
@@ -5607,11 +5610,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "die(Lnet/minecraft/world/damagesource/DamageSource;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;setPose(Lnet/minecraft/world/entity/Pose;)V", shift = At.Shift.BEFORE), cancellable = true, require = 0)
     public void roundabout$die2(DamageSource $$0, CallbackInfo ci) {
         /** Corspe dropping, for Justice */
-        if ($$0.getDirectEntity() != null) {
-            if (($$0.getDirectEntity() instanceof Player PE && (PE.getMainHandItem().is(ModItems.EXECUTIONER_AXE)
-                    || (PE.getMainHandItem().is(ModItems.SCISSORS)
-                            && ((StandUser) PE).roundabout$getStandPowers() instanceof PowersJustice)))
-                    && ($$0.is(DamageTypes.PLAYER_ATTACK) || $$0.is(DamageTypes.MOB_ATTACK))) {
+        //if ($$0.getDirectEntity() != null) {
+            if ($$0.getDirectEntity() instanceof Player PE && ((PE.getMainHandItem().is(ModItems.EXECUTIONER_AXE)
+                    && ($$0.is(DamageTypes.PLAYER_ATTACK) || $$0.is(DamageTypes.MOB_ATTACK))))
+                    || $$0.getEntity() instanceof Player PE2
+                    && ((((StandUser) PE2).roundabout$getStandPowers() instanceof PowersJustice) && ((StandUser)PE2).roundabout$getActive())
+            ) {
                 LivingEntity ths = ((LivingEntity) (Object) this);
                 boolean marked = false;
                 FallenMob mb = null;
@@ -5655,7 +5659,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
             }
 
-        }
+        //}
 
         // Players have their own die event
         if (FateTypes.takesSunlightDamage(rdbt$this())) {
@@ -5733,7 +5737,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (!entity.level().isClientSide()) {
                 ItemStack sourceStack = lifeform.getSourceItem();
                 if (!sourceStack.isEmpty()) {
-                    entity.spawnAtLocation(sourceStack);
+                    PowersGoldExperience.handleLifeformRevertItem(entity, lifeform, sourceStack);
                     lifeform.setSourceItem(ItemStack.EMPTY);
                 }
                 for (EquipmentSlot slot : EquipmentSlot.values()) {
@@ -5963,6 +5967,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         && ((IPowersPlayer) pl).rdbt$getPowers().interceptDamageEvent(damageSource, $$1)) {
                     ci.setReturnValue(false);
                     return;
+                }
+
+                if (damageSource.getEntity() instanceof LivingEntity attacker) {
+                    if (living instanceof Player PL && ((StandUser) attacker).roundabout$getStandPowers() instanceof PowersGoldExperience PGE) {
+                        PGE.onPlayerHurt(PL, damageSource, $$1);
+                    }
                 }
             }
 

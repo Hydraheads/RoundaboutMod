@@ -96,6 +96,12 @@ public class PowersBlackSabbath extends NewDashPreset {
             for (LivingEntity value : fogControlledEntities2) {
                 if (value != null) {
                     if (value.isRemoved() || !value.isAlive() || value.isDeadOrDying() || value instanceof Player P && (P.isSpectator() || P.isCreative())) {
+                        if(this.getStandEntity(self) instanceof BlackSabbathEntity BE){
+                            BE.setMeleeInteractionTicks(-1);
+                            if(MainUtil.cheapDistanceTo(BE.getX(), BE.getY(), BE.getZ(), value.getX(), value.getY(), value.getZ()) < 10) {
+                                BE.pickUpTheItemsAroundTheCadaver(value);
+                            }
+                        }
                         removeTargetEntities(value);
                         if (this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity BE) {
                             if (BE.getGrabbing() != 0) {
@@ -1680,16 +1686,22 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
     }
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.danger_yap",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.black_sabbath_premise",
+                "instruction.roundabout.passive", StandIcons.LOCKED, 1, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.black_sabbath_weakness",
+                "instruction.roundabout.passive", StandIcons.LOCKED,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.black_sabbath_inventory",
                 "instruction.roundabout.press_skill", StandIcons.POLPO_INVENTORY, 1, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.mining_yap",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.black_sabbath_target_selection_tutorial",
                 "instruction.roundabout.press_skill", StandIcons.POLPO_SELECTING_TARGET_MODE,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.yap_yap",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.black_sabbath_biting_finger",
                 "instruction.roundabout.press_skill", StandIcons.BITE_FINGERS_POLPO,4,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.yap_yap",
-                "instruction.roundabout.press_skill", StandIcons.POLPO_SELECTING_TARGET_NULL,4,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, 0, "ability.roundabout.black_sabbath_lighter_mechanics",
+                "instruction.roundabout.passive", StandIcons.POLPO_SELECTING_TARGET_NULL,4,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 99, 0, "ability.roundabout.black_sabbath_attack_slot_mechanics",
+                "instruction.roundabout.passive", StandIcons.LOCKED,4,level,bypass));
         return $$1;
     }
     @Override

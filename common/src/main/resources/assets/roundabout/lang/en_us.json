@@ -232,6 +232,7 @@
   "item.roundabout.max_diver_down_disc": "Stand Disc+",
   "item.roundabout.gold_experience_disc": "Stand Disc",
   "item.roundabout.max_gold_experience_disc": "Stand Disc+",
+  "item.roundabout.creative_gold_experience_requiem_disc": "Stand Disc++",
   "item.roundabout.whitesnake_disc": "Stand Disc",
   "item.roundabout.max_whitesnake_disc": "Stand Disc+",
   "item.roundabout.d4c_disc.desc": "D4C",
@@ -279,6 +280,7 @@
   "item.roundabout.max_diver_down_disc.desc": "Diver Down",
   "item.roundabout.gold_experience_disc.desc": "Gold Experience",
   "item.roundabout.max_gold_experience_disc.desc": "Gold Experience",
+  "item.roundabout.creative_gold_experience_requiem_disc.desc": "Gold Experience Requiem",
   "item.roundabout.lyin_eyes_disc.desc": "Lyin' Eyes",
   "item.roundabout.manhattan_transfer_disc.desc": "Manhattan Transfer",
   "item.roundabout.black_sabbath_disc.desc": "Black Sabbath",
@@ -1568,6 +1570,9 @@
   "sounds.roundabout.ph_phase_3": "Distortion Haze Expands",
   "sounds.roundabout.ph_spit": "Virus Spit",
 
+  "sounds.roundabout.al_charge": "Autumn Leaves Recharges",
+  "sounds.roundabout.al_move": "Autumn Leaves Swoosh",
+
 
   "sounds.roundabout.bullet_ricochet":  "Bullet ricocheted",
 
@@ -2251,7 +2256,7 @@
   "ability.roundabout.fog_blocks": "Illusion Blocks",
   "ability.roundabout.fog_blocks.desc": "Create limitless fog blocks, on demand. When placed, they can only be seen while fog is cast, and can be walked through (as they are just illusions).",
   "ability.roundabout.corpse_army": "Corpse Army",
-  "ability.roundabout.corpse_army.desc": "Acquire corpses with Executioner's Axe or Scissors (Justice User only), and craft a body bag to store them in. You can control these corpses if they are in your fog range. Corpses must be inactive or full health to be picked up by a body bag. Zombies, Skeletons, Creepers, Spiders, Villagers/Illagers, and Phantoms can become corpses. Interact with spider corpses you control to ride them.",
+  "ability.roundabout.corpse_army.desc": "Acquire corpses with Executioner's Axe or kill them with justice summoned, and craft a body bag to store them in. You can control these corpses if they are in your fog range. Corpses must be inactive or full health to be picked up by a body bag. Zombies, Skeletons, Creepers, Spiders, Villagers/Illagers, and Phantoms can become corpses. Interact with spider corpses you control to ride them.",
   "ability.roundabout.zombie_corpse": "Fallen Zombie",
   "ability.roundabout.zombie_corpse.desc": "Zombie corpses can be acquired from zombies and husks. When activated, they are the most basic and well balanced army unit. If you crouch and interact with them, you can give them your held item, or trade their held item back. They can place blocks they are given if commanded to directly with interact in control mode, and can use mining tools to mine with the same control. Note that held items trade off corpse armor piercing damage. Healed with rotten flesh while inactive.",
   "ability.roundabout.villager_corpse": "Fallen Villager",
@@ -2469,7 +2474,7 @@
   "ability.roundabout.place_invis.desc": "Place blocks, passing your invisibility duration down to them. Only works while you are invisible. To activate this skill, you must be holding a block and invisible.",
 
   "ability.roundabout.ratt_scope": "Scoped Mode",
-  "ability.roundabout.ratt_scope.desc": "Hold Ratt and scope in, allowing you to shoot while moving. Interacting builds charge, and attacking releases it as a flurry of darts. After 10 blocks of travel, the darts automatically bounce to the nearest target.",
+  "ability.roundabout.ratt_scope.desc": "Hold Ratt and scope in, allowing you to shoot directly. Holding sneak zooms in further. Interacting builds charge, and attacking releases it as a flurry of darts. After 10 blocks of travel, the darts automatically bounce to the nearest target.",
   "ability.roundabout.ratt_fire": "Fire Darts",
   "ability.roundabout.ratt_fire.desc": "Shoots a volley of three darts, inflicting melt and disabling guard on the final hit.",
   "ability.roundabout.ratt_mode_change": "Mode Change",
@@ -2803,6 +2808,21 @@
   "ability.roundabout.manhattan_dodge": "Manhattan Transfer Dash",
   "ability.roundabout.manhattan_dodge.desc": "Your stand gets a quick burst of speed. Ideal for dodging stand projectiles, which are one of your greatest weakness",
 
+  "ability.roundabout.black_sabbath_premise": "How To Use",
+  "ability.roundabout.black_sabbath_premise.desc": "[WIP]",
+  "ability.roundabout.black_sabbath_weakness": "Weakness",
+  "ability.roundabout.black_sabbath_weakness.desc": "[WIP]",
+  "ability.roundabout.black_sabbath_target_selection_tutorial": "Target Selection",
+  "ability.roundabout.black_sabbath_target_selection_tutorial.desc": "[WIP]",
+  "ability.roundabout.black_sabbath_inventory": "Shadow's Depot",
+  "ability.roundabout.black_sabbath_inventory.desc": "[WIP]",
+  "ability.roundabout.black_sabbath_biting_finger": "Finger Bite",
+  "ability.roundabout.black_sabbath_biting_finger.desc": "[WIP]",
+  "ability.roundabout.black_sabbath_lighter_mechanics": "Fancy Lighter Mechanics",
+  "ability.roundabout.black_sabbath_lighter_mechanics.desc": "[WIP]",
+  "ability.roundabout.black_sabbath_attack_slot_mechanics": "Attack Slot Mechanics",
+  "ability.roundabout.black_sabbath_attack_slot_mechanics.desc": "[WIP]",
+
   "ability.roundabout.diver_phase_punch": "Phase Punch",
   "ability.roundabout.diver_phase_punch.desc": "Charge up a powerful blow! At maximum charge, your punches will go through multiple mobs, walls, and even through shields!",
   "ability.roundabout.diver_submerge": "Diver Submerge",
@@ -2866,13 +2886,13 @@
   "ability.roundabout.gold_experience_vine_climb": "Vine Climb",
   "ability.roundabout.gold_experience_vine_climb.desc": "Grow vines on a wall and climb on them. These vines stay for a while, allowing others to climb on them as well.",
   "ability.roundabout.gold_experience_heal": "Parts Maker",
-  "ability.roundabout.gold_experience_heal.desc": "Grow parts of something to heal it. Getting healed by this move makes your regenerate health over time, but getting hit ends it early. You can use the move on either yourself, or others.",
+  "ability.roundabout.gold_experience_heal.desc": "Grow parts of something to heal it. Getting healed by this move makes your regenerate health over time, but getting hit ends it early. Tap the move to use it on yourself, hold to use it on others.",
   "ability.roundabout.gold_experience_violent_brambles": "Violent Brambles",
   "ability.roundabout.gold_experience_violent_brambles.desc": "Grow brambles out of the ground in a line. If these brambles hit an enemy, they will take damage and bleed.",
   "ability.roundabout.gold_experience_lifeform_select": "Lifeform Selection",
   "ability.roundabout.gold_experience_lifeform_select.desc": "Opens a selection screen to choose an animal to create. The screen gives detailed descriptions of every animal.",
   "ability.roundabout.gold_experience_lifeform_creation": "Lifeform Creation",
-  "ability.roundabout.gold_experience_lifeform_creation.desc": "Create a mob that you chose with Lifeform Selection. This mob will reflect all damage done to it, except from you.",
+  "ability.roundabout.gold_experience_lifeform_creation.desc": "Create a mob that you chose with Lifeform Selection. This mob will reflect all damage done to it, except from you. Some items have special interactions when mobs revert.",
   "ability.roundabout.gold_experience_item_throw": "Lifeform Creation (Thrown)",
   "ability.roundabout.gold_experience_item_throw.desc": "Grabs the item you are holding in your inventory to throw. Upon landing, the item transforms into your selected lifeform.",
   "ability.roundabout.gold_experience_tree_growth": "Tree Growth",
@@ -4161,6 +4181,8 @@
 
   "config.roundabout.timeEraseBlocks.name": "Render TE Blocks",
   "config.roundabout.timeEraseBlocks.desc": "If blocks in time erase should render.",
+  "config.roundabout.standShowName.name": "Stands Show Their Name",
+  "config.roundabout.standShowName.desc": "If stands should show their nametag. Intended for people that have difficulties to identify stands cause of colorblindess.",
 
   "config.roundabout.whiteListModdedMobs.name": "Whitelist Modded Mobs",
   "config.roundabout.whiteListModdedMobs.desc": "By default, d4c creates parallel mobs for modded mobs with world merging. It operates through a blacklist in the advanced config. Turning this on makes it a whitelist in case you want to keep these parallel mobs strictly vanilla to avoid conflicts.",
@@ -4526,6 +4548,12 @@
   "config.roundabout.SmokeRadius.desc": "The radius of the smoke cloud. (Big numbers will impact performance)",
   "config.roundabout.SmokeExpansionTicks.name": "Smoke Expansion Ticks",
   "config.roundabout.SmokeExpansionTicks.desc": "The amount of ticks it takes until the smoke reaches its full size.",
+
+  "config.roundabout.MaxCombo.name": "Max Combo",
+  "config.roundabout.MaxCombo.desc": "The amount of Autumn Leaves you can move with in a row before the next going on cooldown.",
+  "config.roundabout.CooldownAfterCombo.name": "Cooldown After Combo",
+  "config.roundabout.CooldownAfterCombo.desc": "The amount of ticks the next leaf after a combo will go on cooldown for.",
+
 
   "config.roundabout.enableSilverChariot.name": "Enable Silver Chariot",
   "config.roundabout.enableSilverChariot.desc": "Enable Silver Chariot",
@@ -5732,6 +5760,7 @@
   "config.roundabout.anubisSettings.name": "Anubis",
   "config.roundabout.planetWavesSettings.name": "Planet Waves",
   "config.roundabout.PurpleHazeSettings.name": "Purple Haze",
+  "config.roundabout.AutumnLeavesSettings.name": "Autumn Leaves",
   "config.roundabout.softAndWetSettings.name": "Soft And Wet",
   "config.roundabout.killerQueenSettings.name": "Killer Queen",
   "config.roundabout.purpleHazeSettings.name": "Purple Haze",

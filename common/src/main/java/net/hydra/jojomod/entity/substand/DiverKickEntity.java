@@ -75,4 +75,8 @@ public class DiverKickEntity extends Entity {
         tag.putInt("Facing", getFacing().get3DDataValue());
         tag.putByte("Skin", getSkin());
     }
+
+    public boolean standCanShowName() {
+        return false;
+    }
 }

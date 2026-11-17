@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin.silver_chariot;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.ICamera;
 import net.hydra.jojomod.client.SilverChariotClient;
+import net.hydra.jojomod.client.gui.PowerInventoryMenu;
 import net.hydra.jojomod.entity.stand.SilverChariotEntity;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -54,6 +55,10 @@ public class SilverChariotEntityRenderDispatcherMixin {
         }
 
         if (entity == controlEntity) {
+            return;
+        }
+
+        if (minecraft.player != null && minecraft.player.containerMenu instanceof PowerInventoryMenu) {
             return;
         }
 

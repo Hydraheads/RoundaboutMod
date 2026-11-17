@@ -1529,6 +1529,13 @@ public class ModSounds {
     public static final ResourceLocation PURPLE_HAZE_SPIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PURPLE_HAZE_SPIT);
     public static SoundEvent PURPLE_HAZE_SPIT_EVENT = SoundEvent.createVariableRangeEvent(PURPLE_HAZE_SPIT_ID);
 
+    public static final String AL_CHARGE = "al_charge";
+    public static final ResourceLocation AL_CHARGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+AL_CHARGE);
+    public static SoundEvent AL_CHARGE_EVENT = SoundEvent.createVariableRangeEvent(AL_CHARGE_ID);
+    public static final String AL_MOVE = "al_move";
+    public static final ResourceLocation AL_MOVE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+AL_MOVE);
+    public static SoundEvent AL_MOVE_EVENT = SoundEvent.createVariableRangeEvent(AL_MOVE_ID);
+
 
     public static final String POLNAREFF_SC_SUMMON_1 = "pol_summon_1";
     public static final ResourceLocation POLNAREFF_SC_SUMMON_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+POLNAREFF_SC_SUMMON_1);

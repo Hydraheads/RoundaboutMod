@@ -15,6 +15,7 @@ import net.hydra.jojomod.entity.stand.CinderellaEntity;
 import net.hydra.jojomod.entity.stand.GreenDayEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.WalkingHeartEntity;
+import net.hydra.jojomod.entity.substand.LeftSeperatedArmEntity;
 import net.hydra.jojomod.entity.substand.MoldSporesEntity;
 import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
 import net.hydra.jojomod.entity.substand.SeperatedLegsEntity;
@@ -355,7 +356,7 @@ public class PowersGreenDay extends NewPunchingStand {
                 return StitchHeal(1.0f, this.self);
             }
             case PowerIndex.POWER_2 -> {
-                return OffHandThrowServer(ModEntities.SEPERATED_ARM.create(this.self.level()));
+                return OffHandThrowServer(ModEntities.LEFT_SEPERATED_ARM.create(this.self.level()));
             }
 
             case PowerIndex.POWER_2_SNEAK -> {
@@ -367,7 +368,7 @@ public class PowersGreenDay extends NewPunchingStand {
             }
 
             case OFF_HAND_THROW_SLIM -> {
-                return OffHandThrowServer(ModEntities.SEPERATED_ARM_SLIM.create(this.self.level()));
+                return OffHandThrowServer(ModEntities.LEFT_SEPERATED_ARM_SLIM.create(this.self.level()));
             }
             case PowerIndex.POWER_1 -> {
                 return MainArmThrowServer(ModEntities.SEPERATED_ARM.create(this.self.level()));
@@ -880,7 +881,7 @@ public class PowersGreenDay extends NewPunchingStand {
     public ItemStack OffhandItemToReturn;
 
 
-    public boolean OffHandThrowServer(SeperatedArmEntity SAE){
+    public boolean OffHandThrowServer(LeftSeperatedArmEntity SAE){
 
         if (Off_hand_entity == null) {
             if (SAE != null) {
@@ -1047,7 +1048,7 @@ public class PowersGreenDay extends NewPunchingStand {
     }
 
     public void OffHandSpinAndThrow(){
-        OffHandThrowServer(ModEntities.SEPERATED_ARM.create(this.self.level()));
+        OffHandThrowServer(ModEntities.LEFT_SEPERATED_ARM.create(this.self.level()));
         playSoundIfPossible(self.level(),null, Off_hand_entity.blockPosition(), ModSounds.GREEN_DAY_ARM_SPIN_EVENT, SoundSource.PLAYERS, 1.0F, 2.0F);
         Off_hand_entity.setNeuteredSpinTicks(25);
         Off_hand_entity.setSpinTicks(ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinDuration);
@@ -1055,7 +1056,7 @@ public class PowersGreenDay extends NewPunchingStand {
     }
 
     public void OffHandSpinAndThrowSlim(){
-        OffHandThrowServer(ModEntities.SEPERATED_ARM_SLIM.create(this.self.level()));
+        OffHandThrowServer(ModEntities.LEFT_SEPERATED_ARM_SLIM.create(this.self.level()));
         Off_hand_entity.setNeuteredSpinTicks(25);
         playSoundIfPossible(self.level(),null, Off_hand_entity.blockPosition(), ModSounds.GREEN_DAY_ARM_SPIN_EVENT, SoundSource.PLAYERS, 1.0F, 2.0F);
         Off_hand_entity.setSpinTicks(ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinDuration);
@@ -1829,7 +1830,7 @@ public class PowersGreenDay extends NewPunchingStand {
     @Override
     public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.87F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.7F));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(5.0F));
         }

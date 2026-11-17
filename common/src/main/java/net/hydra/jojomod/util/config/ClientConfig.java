@@ -146,6 +146,8 @@ public class ClientConfig implements Cloneable {
         public Float bitesTheDustOpacity;
         @FloatOption(group = "inherit", value = 0.7F, min = 0, max = 1)
         public Float hazeFieldOpacity;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean standShowName;
     }
     public static class ConfigSettings {
 

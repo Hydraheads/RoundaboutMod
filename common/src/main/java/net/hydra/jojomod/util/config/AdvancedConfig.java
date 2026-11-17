@@ -31,7 +31,7 @@ public class AdvancedConfig implements Cloneable {
         SERVER_OINLY_INSTANCE = config;
     }
 
-    public Set<String> standArrowPoolv9 = new HashSet<>(
+    public Set<String> standArrowPoolv10 = new HashSet<>(
             Arrays.asList(
                     "roundabout:star_platinum_disc",
                     "roundabout:the_world_disc",
@@ -44,7 +44,8 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:ratt_disc",
                     "roundabout:killer_queen_disc",
                     "roundabout:diver_down_disc",
-                    "roundabout:green_day_disc"
+                    "roundabout:green_day_disc",
+                    "roundabout:purple_haze_disc"
                     // "roundabout:silver_chariot_disc"
             )
     );
@@ -181,7 +182,7 @@ public class AdvancedConfig implements Cloneable {
             )
     );
 
-    public Set<String> purpleHazeDecayBlocksAndRatesV2 = new HashSet<>(
+    public Set<String> purpleHazeDecayBlocksAndRatesV4 = new HashSet<>(
             Arrays.asList(
                     "minecraft:grass_block:minecraft:dirt:0.45",
                     "minecraft:mycelium:minecraft:dirt:0.45",
@@ -190,6 +191,7 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:rooted_dirt:minecraft:dirt:0.45",
                     "minecraft:dandelion:minecraft:air:0.6",
                     "minecraft:poppy:minecraft:air:0.6",
+                    "minecraft:pink_petals:minecraft:air:0.6",
                     "minecraft:blue_orchid:minecraft:air:0.6",
                     "minecraft:allium:minecraft:air:0.6",
                     "minecraft:azure_bluet:minecraft:air:0.6",
@@ -274,7 +276,10 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:jungle_sapling:minecraft:dead_bush:0.3",
                     "minecraft:mangrove_propagule:minecraft:dead_bush:0.3",
                     "minecraft:oak_sapling:minecraft:dead_bush:0.3",
-                    "minecraft:spruce_sapling:minecraft:dead_bush:0.3"
+                    "minecraft:spruce_sapling:minecraft:dead_bush:0.3",
+                    "roundabout:ginkgo_sapling:minecraft:dead_bush:0.3",
+                    "roundabout:ginkgo_leaves:minecraft:air:0.3",
+                    "roundabout:ginkgo_fallen_leaves:minecraft:air:0.6"
 
             )
     );
@@ -291,6 +296,90 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:mutton:minecraft:sheep:2400:baby",
                     "minecraft:goat_horn:minecraft:goat:1500:baby",
                     "minecraft:scute:minecraft:turtle:1800:baby"
+            )
+    );
+    public List<String> goldExperienceDisguiseItemsv1 = new ArrayList<>(
+            Arrays.asList(
+                    "minecraft:apple",
+                    "minecraft:melon_slice",
+                    "minecraft:sweet_berries",
+                    "minecraft:glow_berries",
+                    "minecraft:chorus_fruit",
+                    "minecraft:carrot",
+                    "minecraft:potato",
+                    "minecraft:beetroot",
+                    "minecraft:sugar_cane",
+                    "roundabout:cherries",
+                    "minecraft:beef",
+                    "minecraft:porkchop",
+                    "minecraft:mutton",
+                    "minecraft:chicken",
+                    "minecraft:egg",
+                    "minecraft:rabbit",
+                    "minecraft:cod",
+                    "minecraft:salmon",
+                    "minecraft:tropical_fish",
+                    "minecraft:pufferfish",
+                    "minecraft:acacia_sapling",
+                    "minecraft:birch_sapling",
+                    "minecraft:cherry_sapling",
+                    "minecraft:dark_oak_sapling",
+                    "minecraft:jungle_sapling",
+                    "minecraft:oak_sapling",
+                    "minecraft:spruce_sapling",
+                    "minecraft:mangrove_propagule",
+                    "minecraft:brown_mushroom",
+                    "minecraft:red_mushroom",
+                    "minecraft:crimson_fungus",
+                    "minecraft:warped_fungus",
+                    "minecraft:grass",
+                    "minecraft:tall_grass",
+                    "minecraft:fern",
+                    "minecraft:large_fern",
+                    "minecraft:dandelion",
+                    "minecraft:poppy",
+                    "minecraft:blue_orchid",
+                    "minecraft:allium",
+                    "minecraft:azure_bluet",
+                    "minecraft:red_tulip",
+                    "minecraft:orange_tulip",
+                    "minecraft:white_tulip",
+                    "minecraft:pink_tulip",
+                    "minecraft:oxeye_daisy",
+                    "minecraft:cornflower",
+                    "minecraft:lily_of_the_valley",
+                    "minecraft:torchflower",
+                    "minecraft:pink_petals",
+                    "minecraft:sunflower",
+                    "minecraft:lilac",
+                    "minecraft:rose_bush",
+                    "minecraft:peony",
+                    "minecraft:crimson_roots",
+                    "minecraft:warped_roots",
+                    "minecraft:nether_sprouts",
+                    "minecraft:weeping_vines",
+                    "minecraft:twisting_vines",
+                    "minecraft:vine",
+                    "minecraft:wheat_seeds",
+                    "minecraft:cocoa_beans",
+                    "minecraft:pumpkin_seeds",
+                    "minecraft:melon_seeds",
+                    "minecraft:beetroot_seeds",
+                    "minecraft:torchflower_seeds",
+                    "minecraft:lily_pad",
+                    "minecraft:seagrass",
+                    "minecraft:sea_pickle",
+                    "minecraft:kelp",
+                    "minecraft:tube_coral",
+                    "minecraft:brain_coral",
+                    "minecraft:bubble_coral",
+                    "minecraft:fire_coral",
+                    "minecraft:horn_coral",
+                    "minecraft:tube_coral_fan",
+                    "minecraft:brain_coral_fan",
+                    "minecraft:bubble_coral_fan",
+                    "minecraft:fire_coral_fan",
+                    "minecraft:horn_coral_fan"
             )
     );
 

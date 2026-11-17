@@ -82,7 +82,11 @@ public class GEThornEntity extends Entity {
                     if (damagedVictims.contains(actualVictim)) continue;
 
                     Vec3 prevVelocity = target.getDeltaMovement();
-                    if (DamageHandler.StandDamageEntity(target, 0.6F, caster)) {
+                    float damage = 1.2F;
+                    if (caster != null && ((StandUser) caster).roundabout$getStandPowers() instanceof PowersGoldExperience gePowers) {
+                        damage = gePowers.getBrambleDamage(actualVictim);
+                    }
+                    if (DamageHandler.StandDamageEntity(target, damage, caster)) {
                         target.setDeltaMovement(prevVelocity);
                         target.hurtMarked = true;
                         damagedVictims.add(actualVictim);

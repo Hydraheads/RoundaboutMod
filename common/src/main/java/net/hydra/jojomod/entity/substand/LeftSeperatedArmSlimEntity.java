@@ -3,7 +3,7 @@ package net.hydra.jojomod.entity.substand;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 
-public class LeftSeperatedArmSlimEntity extends SeperatedArmEntity {
+public class LeftSeperatedArmSlimEntity extends LeftSeperatedArmEntity {
 
 
     public LeftSeperatedArmSlimEntity(EntityType<LeftSeperatedArmSlimEntity> $$0, Level $$1) {
