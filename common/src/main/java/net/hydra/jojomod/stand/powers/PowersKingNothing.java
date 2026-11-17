@@ -679,22 +679,19 @@ public class PowersKingNothing extends NewDashPreset {
                     }
                     locatedChests.add(pos);
                     VisualData pdata = getVisualInfo();
-                    int color = getParticleColor(pdata);
-                    int color2 = getParticleColor(pdata);
                     Vec3 spawnPos = otherChestPos == null ? pos.getCenter() :
                             pos.getCenter().lerp(otherChestPos.getCenter(), 0.5);
                     int yOffset = 1 + (level.getBlockState(pos.above()).isAir() || (level.getBlockEntity(
                             pos.above()) instanceof RandomizableContainerBlockEntity) || otherChestPos != null && (
                             level.getBlockState(otherChestPos).isAir() || (level.getBlockEntity(
                                     otherChestPos.above()) instanceof RandomizableContainerBlockEntity)) ? 0 : 1);
-                    MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
-                            PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
-                            spawnPos.x(), spawnPos.y() + yOffset, spawnPos.z(), 1 + (otherChestPos == null ? 0 : 1),
-                            0.1 + xSpreadBonus, 0.1, 0.1 + zSpreadBonus, 0.01);
-                    MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
-                            PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color2),
-                            spawnPos.x(), spawnPos.y() + yOffset, spawnPos.z(), 1 + (otherChestPos == null ? 0 : 1),
-                            0.1 + xSpreadBonus, 0.1, 0.1 + zSpreadBonus, 0.01);
+                    for (int i = 0; i < 2 + (otherChestPos == null ? 0 : 2); i++) {
+                        int color = getParticleColor(pdata);
+                        MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
+                                PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
+                                spawnPos.x(), spawnPos.y() + yOffset, spawnPos.z(), 1 + (otherChestPos == null ? 0 : 1),
+                                0.1 + xSpreadBonus, 0.1, 0.1 + zSpreadBonus, 0.01);
+                    }
                 }
                 else {
                     if (this.itemHoldingBlocks.contains(pos)) {
@@ -764,14 +761,13 @@ public class PowersKingNothing extends NewDashPreset {
                     foundTem = true;
                     if (!level.isClientSide()) {
                         VisualData pdata = getVisualInfo();
-                        int color = getParticleColor(pdata);
-                        int color2 = getParticleColor(pdata);
-                        MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
-                                PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
-                                ent.getX(), ent.getY() + ent.getEyeHeight() + 0.5, ent.getZ(), 1, 0.1, 0.05, 0.1, 0.01);
-                        MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
-                                PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color2),
-                                ent.getX(), ent.getY() + ent.getEyeHeight() + 0.5, ent.getZ(), 1, 0.1, 0.05, 0.1, 0.01);
+                        for (int j = 0; j < 2; j++) {
+                            int color = getParticleColor(pdata);
+                            MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
+                                    PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
+                                    ent.getX(), ent.getY() + ent.getEyeHeight() + 0.5, ent.getZ(), 1, 0.1, 0.05, 0.1,
+                                    0.01);
+                        }
                     }
                 }
                 else if (level.isClientSide() && renderHighlights) {
@@ -800,18 +796,16 @@ public class PowersKingNothing extends NewDashPreset {
                     StandEntity stand = getStandEntity(this.self);
                     if (Objects.nonNull(stand)) {
                         VisualData pdata = getVisualInfo();
-                        int color = getParticleColor(pdata);
-                        int color2 = getParticleColor(pdata);
                         AABB BB1 = stand.getBoundingBox();
                         double x = BB1.getCenter().x();
                         double y = BB1.getCenter().y() + (((FollowingStandEntity) stand).getSizePercent() - 1) / 2;
                         double z = BB1.getCenter().z();
-                        MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
-                                PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color), x, y,
-                                z, 1, 0.1, 0.1, 0.1, 0.01);
-                        MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
-                                PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color2), x, y,
-                                z, 1, 0.1, 0.1, 0.1, 0.01);
+                        for (int i = 0; i < 2; i++) {
+                            int color = getParticleColor(pdata);
+                            MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
+                                    PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color), x, y,
+                                    z, 1, 0.1, 0.1, 0.1, 0.01);
+                        }
                         Vec3 vec3d = this.getSelf().getEyePosition(0);
                         Vec3 vec3d2 = this.getSelf().getViewVector(0);
                         Vec3 vec3d3 = vec3d.add(vec3d2.x * 20, vec3d2.y * 20, vec3d2.z * 20);
