@@ -5610,13 +5610,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "die(Lnet/minecraft/world/damagesource/DamageSource;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;setPose(Lnet/minecraft/world/entity/Pose;)V", shift = At.Shift.BEFORE), cancellable = true, require = 0)
     public void roundabout$die2(DamageSource $$0, CallbackInfo ci) {
         /** Corspe dropping, for Justice */
-        if ($$0.getDirectEntity() != null) {
+        //if ($$0.getDirectEntity() != null) {
             if ($$0.getDirectEntity() instanceof Player PE && ((PE.getMainHandItem().is(ModItems.EXECUTIONER_AXE)
-                    && ($$0.is(DamageTypes.PLAYER_ATTACK) || $$0.is(DamageTypes.MOB_ATTACK)))
-                    //|| (PE.getMainHandItem().is(ModItems.SCISSORS)
-                    //|| (hasEffect(ModEffects.BLEED)
-                    //        && (((StandUser) PE).roundabout$getStandPowers() instanceof PowersJustice)))
-            || ((((StandUser) PE).roundabout$getStandPowers() instanceof PowersJustice) && ((StandUser)PE).roundabout$getActive()))
+                    && ($$0.is(DamageTypes.PLAYER_ATTACK) || $$0.is(DamageTypes.MOB_ATTACK))))
+                    || $$0.getEntity() instanceof Player PE2
+                    && ((((StandUser) PE2).roundabout$getStandPowers() instanceof PowersJustice) && ((StandUser)PE2).roundabout$getActive())
             ) {
                 LivingEntity ths = ((LivingEntity) (Object) this);
                 boolean marked = false;
@@ -5661,7 +5659,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
             }
 
-        }
+        //}
 
         // Players have their own die event
         if (FateTypes.takesSunlightDamage(rdbt$this())) {
