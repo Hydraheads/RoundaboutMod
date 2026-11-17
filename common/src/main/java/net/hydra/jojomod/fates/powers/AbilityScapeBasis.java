@@ -1673,7 +1673,7 @@ public class AbilityScapeBasis {
     public void cancelPlayerPose(){
         if (self instanceof Player player) {
             Poses poseEmote = Poses.getPosFromByte(((IPlayerEntity)player).roundabout$GetPoseEmote());
-            if (poseEmote != Poses.NONE && poseEmote != Poses.VAMPIRE_TRANSFORMATION) {
+            if (poseEmote != Poses.NONE && poseEmote != Poses.VAMPIRE_TRANSFORMATION && poseEmote != Poses.FULLBODYDODGE) {
                 ((IPlayerEntity) player).roundabout$SetPos(Poses.NONE.id);
                 C2SPacketUtil.byteToServerPacket(PacketDataIndex.BYTE_STRIKE_POSE, Poses.NONE.id);
             }

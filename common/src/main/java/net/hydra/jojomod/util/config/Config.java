@@ -906,6 +906,8 @@ public class Config implements Cloneable {
         public Integer SmokeRadius;
         @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
         public Integer SmokeExpansionTicks;
+        @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
+        public Integer PodRechargeTime;
 
     }
     public static class AutumnLeavesSettings {
