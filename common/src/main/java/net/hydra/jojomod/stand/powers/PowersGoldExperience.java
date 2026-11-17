@@ -741,6 +741,30 @@ public class PowersGoldExperience extends BlockGrabPreset {
         return super.buttonInputGuard(keyIsDown, options);
     }
 
+    // item interactions (lifeform creation) start
+
+    public static void handleLifeformRevertItem(LivingEntity entity, GELifeform lifeform, ItemStack sourceStack) {
+        Level level = entity.level();
+        Vec3 pos = entity.position();
+        LivingEntity creator = lifeform.getCreator();
+
+        // copied from ThrownObjectEntity, this is basically just one long "if else" chain that defines what an object should do when reverting
+        if (sourceStack.is(Items.TNT)) {
+            net.minecraft.world.entity.item.PrimedTnt tnt = new net.minecraft.world.entity.item.PrimedTnt(
+                    level, pos.x, pos.y, pos.z, creator
+            );
+            tnt.setFuse(80);
+            level.addFreshEntity(tnt);
+            level.playSound(null, tnt.getX(), tnt.getY(), tnt.getZ(), SoundEvents.TNT_PRIMED, SoundSource.BLOCKS, 1.0F, 1.0F);
+            return;
+        }
+
+        // default revert to item
+        entity.spawnAtLocation(sourceStack);
+    }
+
+    // item interactions (lifeform creation) start
+
     // life sensor start
 
     private void tryLifeSensor() {
