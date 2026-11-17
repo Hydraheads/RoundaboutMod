@@ -256,14 +256,20 @@ public class BlockWallEntity extends Entity {
         refreshDimensions();
 
         AABB wallBox = this.getBoundingBox();
+        Vec3 target = new Vec3(getFinalPos().x, getFinalPos().y, getFinalPos().z);
+        boolean isStillGrowing = this.position().distanceToSqr(target) > 0.01;
 
-        for (LivingEntity mob : level().getEntitiesOfClass(
-                LivingEntity.class,
-                wallBox.inflate(0.1))) {
+        if (!this.isGoldExperienceTree || (this.tsmove && isStillGrowing)) {
+            for (LivingEntity mob : level().getEntitiesOfClass(
+                    LivingEntity.class,
+                    wallBox.inflate(0.1))) {
 
-            if (mob.getBoundingBox().intersects(wallBox)) {
-                if (mob.isControlledByLocalInstance()) {
-                    mob.push(0, 0.2, 0);
+                if (mob.getBoundingBox().intersects(wallBox)) {
+                    if (mob.isControlledByLocalInstance()) {
+                        if (mob.getDeltaMovement().y < 0.35) {
+                            mob.push(0, 0.2, 0);
+                        }
+                    }
                 }
             }
         }
