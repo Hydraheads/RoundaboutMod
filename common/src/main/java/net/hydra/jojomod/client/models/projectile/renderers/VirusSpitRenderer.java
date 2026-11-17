@@ -19,7 +19,7 @@ import org.joml.Vector3f;
 
 public class VirusSpitRenderer extends EntityRenderer<VirusSpitEntity> {
     private static final ResourceLocation DEFAULTSPIT = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/entity/projectile/blood_1.png");
+            "textures/entity/projectile/virus_spit.png");
 
 
     private final float scale;
@@ -35,47 +35,10 @@ public class VirusSpitRenderer extends EntityRenderer<VirusSpitEntity> {
     }
 
     @Override
-    public void render(VirusSpitEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
-        if (((TimeStop)entity.level()).inTimeStopRange(entity)){
-            partialTicks = 0;
-        }
-        if (entity != null) {
-            poseStack.pushPose();
-
-            // Orient the texture
-            poseStack.scale(this.scale, this.scale, this.scale);
-            poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
-            poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
-            poseStack.translate(0, entity.getBbWidth()/2, 0);
-
-            // Draw flat quad here
-            VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity)));
-            Matrix4f matrix = poseStack.last().pose();
-            Vector3f normal = Minecraft.getInstance().gameRenderer.getMainCamera().getLookVector();
-            normal.normalize();
-
-            /**This one is good*/
-            Vector3f coursecorrect = new Vector3f(0.577f, 0.577f, 0.577f);
-            if (normal.y > 0) {
-                /**This one needs serial fixing*/
-                coursecorrect = new Vector3f(0.01f, 1f, 0.01f);
-                if (normal.y > 0.95) {
-                    coursecorrect = new Vector3f(-0.577f, -0.577f, -0.577f);
-                }
-            }
-
-
-            float size = 0.4f; // Adjust to your needs
-
-            vertexConsumer.vertex(matrix, -size, -size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
-            vertexConsumer.vertex(matrix, size, -size, 0.0f).color(255, 255, 255, 255).uv(1.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
-            vertexConsumer.vertex(matrix, size, size, 0.0f).color(255, 255, 255, 255).uv(1.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
-            vertexConsumer.vertex(matrix, -size, size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
-
-
-            poseStack.popPose();
-            super.render(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
-        }
+    public void render(VirusSpitEntity entity, float entityYaw, float partialTicks,
+                       PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
+        // Invisible projectile model.
+        // VirusSpitEntity handles the visible particle trail.
     }
 
     @Override

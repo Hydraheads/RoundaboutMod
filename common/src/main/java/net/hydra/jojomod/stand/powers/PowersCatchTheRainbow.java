@@ -473,6 +473,8 @@ public class PowersCatchTheRainbow extends NewDashPreset {
 
         if (ctrDodgeTicks != 0){
             ctrDodgeTicks --;
+        }else{
+            if (!self.level().isClientSide()) setNoAnimation();
         }
 
         if (self.onGround()) {
@@ -598,9 +600,10 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                     deathTimer = (ClientNetworking.getAppropriateConfig().catchTheRainbowSettings.catchTheRainbowLifeClutchCooldown);
                     PE.setHealth(1);
                     PE.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 1), PE);
-                    PE.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 40, 10), PE);
+                    PE.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 60, 10), PE);
                     getStandUserSelf().roundabout$setDazed((byte) 0);
                     OffHandReturnServer();
+                    this.ctrDodgeTicks = 30;
                     playSoundIfPossible(self.level(), null, self.blockPosition(), ModSounds.VAMPIRE_AWAKEN_EVENT,
                             SoundSource.PLAYERS, 1F, 1F);
                     playSoundIfPossible(self.level(), null, self.blockPosition(), ModSounds.CTR_LIFE_CLUTCH_EVENT,
@@ -919,6 +922,18 @@ public class PowersCatchTheRainbow extends NewDashPreset {
 
     private void fullDodgeServer(){
         ctrDodgeTicks = 25;
+        setFullDodgeAnimation();
+    }
+
+    public void setFullDodgeAnimation(){
+        if (self instanceof Player pl ){
+            ((IPlayerEntity)pl).roundabout$SetPoseEmote((byte) 43);
+        }
+    }
+    public void setNoAnimation(){
+        if (self instanceof Player pl ){
+            ((IPlayerEntity)pl).roundabout$SetPoseEmote((byte) 0);
+        }
     }
 
     @Override
