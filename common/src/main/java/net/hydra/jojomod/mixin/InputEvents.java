@@ -1360,7 +1360,7 @@ public abstract class InputEvents implements IInputEvents {
                 }
 
                 Poses poseEmote = Poses.getPosFromByte(((IPlayerEntity) player).roundabout$GetPoseEmote());
-                if (poseEmote != Poses.NONE && poseEmote != Poses.VAMPIRE_TRANSFORMATION){
+                if (poseEmote != Poses.NONE && poseEmote != Poses.VAMPIRE_TRANSFORMATION && poseEmote != Poses.FULLBODYDODGE){
                     if (((options.keyUp.isDown() || options.keyDown.isDown() ||
                     options.keyLeft.isDown() || options.keyRight.isDown() || options.keyJump.isDown())
                             && (poseEmote != Poses.COWER && poseEmote != Poses.BITE_FINGERS))
