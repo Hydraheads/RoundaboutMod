@@ -490,7 +490,7 @@ public class PowersKingNothing extends NewDashPreset {
     }
 
     public void addItemEntity(int id) {
-        if (getSelf().level().isClientSide()
+        if (isClient()
                 && ConfigManager.getClientConfig().kingNothingSettings.highlightInItemTrack) {
             Entity ent = getSelf().level().getEntity(id);
             itemHoldingEntities.add(ent);
@@ -498,7 +498,7 @@ public class PowersKingNothing extends NewDashPreset {
     }
 
     public void removeItemEntity(int id) {
-        if (getSelf().level().isClientSide()
+        if (isClient()
                 && ConfigManager.getClientConfig().kingNothingSettings.highlightInItemTrack) {
             Entity ent = getSelf().level().getEntity(id);
             itemHoldingEntities.remove(ent);
@@ -506,14 +506,14 @@ public class PowersKingNothing extends NewDashPreset {
     }
 
     public void addItemBlockPos(BlockPos pos) {
-        if (getSelf().level().isClientSide()
+        if (isClient()
                 && ConfigManager.getClientConfig().kingNothingSettings.highlightInItemTrack) {
             this.itemHoldingBlocks.add(pos);
         }
     }
 
     public void removeItemBlockPos(BlockPos pos) {
-        if (getSelf().level().isClientSide()
+        if (isClient()
                 && ConfigManager.getClientConfig().kingNothingSettings.highlightInItemTrack) {
             this.itemHoldingBlocks.remove(pos);
         }
@@ -785,7 +785,7 @@ public class PowersKingNothing extends NewDashPreset {
         super.tickPowerEnd();
         if (getSelf().isAlive() && !getSelf().isRemoved()) {
             /**Tick Phase Grab*/
-            if (isPhasing() && !this.getSelf().level().isClientSide()) {
+            if (isPhasing() && !this.isClient()) {
                 if (this.attackTimeDuring == 108) {
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                     playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);
@@ -1014,14 +1014,13 @@ public class PowersKingNothing extends NewDashPreset {
         }
         // STOLEN FROM GOLD EXPERIENCE BECAUSE IM EVIL
         Vec3 oldPos = stand.getPosition(1);
-        stand.setPos(0,0,0);
+        stand.setPos(0, 0, 0);
         boolean placesfrfr = doubleSlabbinItFr || ((bstate.isAir() || bstate.canBeReplaced()) && canModifyPos(bpos)
                 && stand.level().isFluidAtPosition(bpos, FluidState::isEmpty)
                 && blockItem.place(new DirectionalPlaceContext(stand.level(), bpos, placeDir, held, placeDir))
                 != InteractionResult.FAIL) || ((placeState.isAir() || placeState.canBeReplaced()) && canModifyPos(
                 placePos) && blockItem.place(new DirectionalPlaceContext(stand.level(), placePos, placeDir, held, placeDir))
                 != InteractionResult.FAIL);
-        stand.setPos(oldPos);
         if (placesfrfr) {
             if (getCreative()) {
                 stand.setHeldItem(returnStack);
@@ -1040,6 +1039,9 @@ public class PowersKingNothing extends NewDashPreset {
                     ClientNetworking.getAppropriateConfig().kingNothingSettings.kingNothingPhasePlaceCd);
             playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);
             animateStand(KingNothingEntity.RETURN);
+        }
+        else {
+            stand.setPos(oldPos);
         }
         return placesfrfr;
     }
@@ -1185,7 +1187,7 @@ public class PowersKingNothing extends NewDashPreset {
         playSoundsIfNearby(DISINTEGRATE, 27, false);
         trackingCloudOut = true;
         disintegrateAnimTicks = 0;
-        if (!getSelf().level().isClientSide()) {
+        if (!isClient()) {
             TrackingCloudEntity tc = ModEntities.TRACKING_CLOUD.create(this.getSelf().level());
             tc.setUser(this.getSelf());
             tc.setXRot(getStandEntity(getSelf()).getXRot());
@@ -1269,7 +1271,7 @@ public class PowersKingNothing extends NewDashPreset {
     private boolean endMemorizedScentTrack() {
         if (isTrackingMemorizedScent() && !onCooldown(PowerIndex.SKILL_1)) {
             this.trackingCloudOut = false;
-            if (!this.getSelf().level().isClientSide()) {
+            if (!this.isClient()) {
                 this.trackingCloud.discard();
                 this.trackingCloud = null;
             }
@@ -1374,7 +1376,7 @@ public class PowersKingNothing extends NewDashPreset {
     }
 
     public boolean inventoryGrab() {
-        if (!this.getSelf().level().isClientSide()) {
+        if (!this.isClient()) {
             StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
             if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()
                     && this.getSelf() instanceof Player PE) {
@@ -1586,7 +1588,7 @@ public class PowersKingNothing extends NewDashPreset {
     }
 
     public void addItem(StandEntity standEntity) {
-        if (!this.getSelf().level().isClientSide()) {
+        if (!this.isClient()) {
             addItemLight(standEntity);
         }
         standEntity.setHeldItem(ItemStack.EMPTY);
@@ -1677,7 +1679,7 @@ public class PowersKingNothing extends NewDashPreset {
 
     public boolean dropPhaseItem() {
         StandEntity stand = getStandEntity(getSelf());
-        if (!getSelf().level().isClientSide()) {
+        if (!isClient()) {
             ItemEntity $$4 =
                     new ItemEntity(this.getSelf().level(), stand.getX(), stand.getY() + (stand.getEyeHeight() / 2.0),
                             stand.getZ(), stand.getHeldItem(), 0, 0.2, 0);
@@ -1715,7 +1717,7 @@ public class PowersKingNothing extends NewDashPreset {
     }
 
     public boolean formPredict() {
-        if (!getSelf().level().isClientSide()) {
+        if (!isClient()) {
             Item held = this.getSelf().getMainHandItem().getItem();
             Block potentialBlock = getBlockFormPrediction(held);
             if (potentialBlock != null) {
@@ -1883,7 +1885,7 @@ public class PowersKingNothing extends NewDashPreset {
         this.memorizedEntityType = entityType;
         this.memorizedBlock = null;
         this.memorizedPlayer = null;
-        if (getSelf() instanceof Player PE && getSelf().level().isClientSide()) {
+        if (getSelf() instanceof Player PE && isClient()) {
             Entity tity = entityType.create(this.getSelf().level());
             if (tity != null) {
                 PE.displayClientMessage(tity.getName().copy().withStyle(ChatFormatting.DARK_PURPLE), true);
