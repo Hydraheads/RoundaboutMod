@@ -1928,7 +1928,7 @@ public class PowersSilverChariot extends NewPunchingStand {
             case PowerIndex.POWER_3_SNEAK -> {
                 return true;
             }
-            case PowerIndex.POWER_3_BLOCK -> {
+            case SILVER_CHARIOT_ARM_SUMMON -> {
                 armRenderServer();
                 return true;
             }
@@ -4336,6 +4336,7 @@ public class PowersSilverChariot extends NewPunchingStand {
             animateStand(SilverChariotEntity.IDLE);
             xTryPower(PowerIndex.NONE, true);
             if (!hasArmsOut) {
+                // this.getStandUserSelf().roundabout$setCombatMode(true);
                 StandEntity standEntity = this.getStandUserSelf().roundabout$getStand();
                 if (standEntity != null) {
                     standEntity.forceDespawn(true);
@@ -4346,6 +4347,8 @@ public class PowersSilverChariot extends NewPunchingStand {
                 if (!this.self.isCrouching()) {
                     playStandUserOnlySoundsIfNearby(SUMMON_ARM_SOUND, 10, true, false);
                 }
+            } else {
+                // this.getStandUserSelf().roundabout$setCombatMode(false);
             }
             hasArmsOut = !hasArmsOut;
             saveDiscAndSync();

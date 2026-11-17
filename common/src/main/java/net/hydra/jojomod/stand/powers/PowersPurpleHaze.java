@@ -2418,7 +2418,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     @Override
     public boolean isWip(){
-        return true;
+        return false;
     }
     @Override
     public Component ifWipListDevStatus(){

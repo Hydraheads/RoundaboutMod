@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "roundabout:ginkgo_log"
+          "name": "roundabout:ginkgo_fallen_leaves"
         }
       ],
       "conditions": [

@@ -279,15 +279,15 @@ public class ModBlocks {
                     .lightLevel((L) -> {
                         return 1;
                     }).
-                    randomTicks().friction(0.98F).strength(0.5F).forceSolidOff().sound(SoundType.GLASS).replaceable().
-                    noCollission().noOcclusion().pushReaction(PushReaction.DESTROY));
+                    randomTicks().friction(0.98F).strength(0.5F).forceSolidOff().sound(SoundType.GLASS).
+                    noCollission().noOcclusion().pushReaction(PushReaction.IGNORE));
     public static Block ICE_SPIKE_PROPERTIES =
             new IceSpikeBlock(BlockBehaviour.Properties.of().mapColor(MapColor.ICE).friction(0.98F)
                     .lightLevel((L) -> {
                         return 1;
                     }).
                     randomTicks().friction(0.98F).strength(0.5F).forceSolidOff().sound(SoundType.GLASS).
-                    noCollission().noOcclusion().pushReaction(PushReaction.DESTROY));
+                    noCollission().noOcclusion().pushReaction(PushReaction.IGNORE));
 
     public static Block OASIS_MUD_BLOCK_PROPERTIES =
             new OasisMudBlock(BlockBehaviour.Properties.of()
@@ -1207,6 +1207,7 @@ public class ModBlocks {
                     .mapColor(MapColor.WOOD)
                     .strength(1.0F)
                     .noOcclusion()
+                    .sound(SoundType.HANGING_SIGN)
                     .ignitedByLava(),
             GINKGO_WOOD_TYPE
     );
@@ -1215,6 +1216,7 @@ public class ModBlocks {
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOD)
                     .strength(1.0F)
+                    .sound(SoundType.HANGING_SIGN)
                     .noOcclusion()
                     .ignitedByLava(),
             GINKGO_WOOD_TYPE
@@ -1233,6 +1235,7 @@ public class ModBlocks {
                     .strength(0.1F)
                     .noCollission()
                     .noOcclusion()
+                    .sound(SoundType.PINK_PETALS)
                     .instabreak()
     );
     public static Block GINKGO_FALLEN_LEAVES_PROPERTIES = new GinkgoFallenLeavesBlock(
@@ -1241,6 +1244,7 @@ public class ModBlocks {
                     .strength(0.1F)
                     .noCollission()
                     .noOcclusion()
+                    .sound(SoundType.PINK_PETALS)
                     .instabreak()
     );
     public static Block GINKGO_STAIRS_PROPERTIES = new GinkgoStairBlock(

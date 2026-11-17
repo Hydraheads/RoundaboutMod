@@ -1,8 +1,10 @@
 
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -48,6 +50,15 @@ public class AutumnLeavesBlock extends BushBlock {
 
     private static final Map<Entity, Long> LAST_MOVEMENT =
             new WeakHashMap<>();
+
+    private static final int MAX_COMBO = ClientNetworking.getAppropriateConfig().AutumnLeavesSettings.MaxCombo;
+    private static final int COMBO_RESET_TICKS = ClientNetworking.getAppropriateConfig().AutumnLeavesSettings.CooldownAfterCombo;
+
+    private static final Map<Entity, Integer> COMBO_COUNT =
+            new WeakHashMap<>();
+
+    private static final Map<Entity, Long> LAST_COMBO_TICK =
+            new WeakHashMap<>();
     public AutumnLeavesBlock(Properties properties) {
         super(properties);
 
@@ -89,18 +100,40 @@ public class AutumnLeavesBlock extends BushBlock {
                                BlockPos pos, CollisionContext context) {
         return SHAPE;
     }
-
+    @Override
+    protected boolean mayPlaceOn(BlockState state, BlockGetter level,
+                                 BlockPos pos) {
+        return state.isFaceSturdy(level, pos, Direction.UP);
+    }
 
     @Override
     public void entityInside(BlockState state, Level level,
                              BlockPos pos, Entity entity) {
 
-        if (level.isClientSide || state.getValue(COOLDOWN)) {
+        if (level.isClientSide || state.getValue(COOLDOWN) || MainUtil.isBossMob(entity)) {
             return;
         }
 
+        long currentTick = level.getGameTime();
+
+        long lastComboTick = LAST_COMBO_TICK.getOrDefault(
+                entity, -1000L
+        );
+
+        if (currentTick - lastComboTick >= COMBO_RESET_TICKS) {
+            COMBO_COUNT.remove(entity);
+        }
+
+        int combo = COMBO_COUNT.getOrDefault(entity, 0);
+
         level.setBlock(pos, state.setValue(COOLDOWN, true), 3);
         level.scheduleTick(pos, this, COOLDOWN_TICKS);
+
+        if (combo >= MAX_COMBO) {
+            COMBO_COUNT.remove(entity);
+            LAST_COMBO_TICK.remove(entity);
+            return;
+        }
 
         Direction direction = state.getValue(FACING);
 
@@ -242,7 +275,11 @@ public class AutumnLeavesBlock extends BushBlock {
                 || lastSafeY != startY
                 || lastSafeZ != startZ) {
 
+            COMBO_COUNT.put(entity, combo + 1);
+            LAST_COMBO_TICK.put(entity, currentTick);
+
             playMovementSound(level, pos, entity);
+            playMovementParticles(level, pos, direction);
 
             entity.teleportTo(
                     lastSafeX,
@@ -319,5 +356,39 @@ public class AutumnLeavesBlock extends BushBlock {
         }
 
         LAST_MOVEMENT.put(entity, currentTick);
+    }
+    private void playMovementParticles(Level level, BlockPos pos,
+                                       Direction direction) {
+
+        if (!(level instanceof ServerLevel serverLevel)) {
+            return;
+        }
+
+        RandomSource random = level.getRandom();
+
+        for (int i = 0; i < 20; i++) {
+
+            double x = pos.getX() + random.nextDouble();
+            double y = pos.getY() + 0.1;
+            double z = pos.getZ() + random.nextDouble();
+
+            double speed = 0.25 + random.nextDouble() * 0.10;
+
+            double vx = direction.getStepX() * speed
+                    + (random.nextDouble() - 0.5) * 0.02;
+
+            double vy = 0.0;
+
+            double vz = direction.getStepZ() * speed
+                    + (random.nextDouble() - 0.5) * 0.02;
+
+            serverLevel.sendParticles(
+                    ModParticles.AUTUMN_LEAVES,
+                    x, y, z,
+                    0,
+                    vx, vy, vz,
+                    1.0
+            );
+        }
     }
 }
