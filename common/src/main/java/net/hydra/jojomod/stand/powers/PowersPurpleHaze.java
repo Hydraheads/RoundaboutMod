@@ -984,8 +984,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        if ((activePower == PowerIndex.BARRAGE || activePower == PowerIndex.BARRAGE_2
-                || activePower == PowerIndex.BARRAGE_CHARGE || activePower == PowerIndex.BARRAGE_CHARGE_2)) {
+        if (this.isBarrageAttacking() || this.getActivePower() == PowerIndex.BARRAGE_2) {
             setSkillIcon(context, x, y, 1, StandIcons.PH_FORWARD_BARRAGE, PowerIndex.NO_CD);
         }
         else if (isGuarding()){
