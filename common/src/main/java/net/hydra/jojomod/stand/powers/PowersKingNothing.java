@@ -66,6 +66,7 @@ import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.entity.vehicle.Minecart;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.DirectionalPlaceContext;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ClipContext;
@@ -154,7 +155,6 @@ public class PowersKingNothing extends NewDashPreset {
     @Override
     public List<Byte> getSkinList() {
         List<Byte> $$1 = Lists.newArrayList();
-        isTrackingItem();
         $$1.add(MANGA);
         $$1.add(SPINE);
         $$1.add(SOMETHING);
@@ -1077,8 +1077,12 @@ public class PowersKingNothing extends NewDashPreset {
         return trackedItem != null;
     }
 
-    private boolean isTrackingMemorizedScent() {
+    public boolean isTrackingMemorizedScent() {
         return trackingCloudOut;
+    }
+
+    public boolean isStandHere() {
+        return !isPhasing() && !isTrackingItem() && !isTrackingMemorizedScent();
     }
 
     @Override
@@ -1093,7 +1097,6 @@ public class PowersKingNothing extends NewDashPreset {
                 return;
             }
             else if (isTrackingMemorizedScent()) {
-                Roundabout.LOGGER.debug("I AM MEMORIZING SCENT AND TRYING TO STOP");
                 tryEndMemorizedScentTrack();
                 return;
             }
@@ -1275,7 +1278,7 @@ public class PowersKingNothing extends NewDashPreset {
     }
 
     public void tryFormPredict() {
-        if (!isPhasing() && !isTrackingItem()) {
+        if (isStandHere()) {
             getStandUserSelf().roundabout$tryPower(PowerIndex.POWER_3_SNEAK, true);
             tryPowerPacket(PowerIndex.POWER_3_SNEAK);
         }
@@ -1650,7 +1653,7 @@ public class PowersKingNothing extends NewDashPreset {
     }
 
     public void tryMemorize() {
-        if (!isPhasing() && !isTrackingItem()) {
+        if (isStandHere()) {
             Entity targEnt = MainUtil.getTargetEntity(this.getSelf(), SMELL_RANGE, 0);
             if (targEnt instanceof LivingEntity && !MainUtil.isMobSniffBlacklisted(targEnt)) {
                 this.getStandUserSelf().roundabout$tryPower(PowerIndex.POWER_4_BONUS, true);
@@ -1710,20 +1713,53 @@ public class PowersKingNothing extends NewDashPreset {
     }
 
     public boolean formPredict() {
-        Item held = this.getSelf().getMainHandItem().getItem();
-        Block potentialBlock = getFormPrediction(held);
-        if (potentialBlock != null) {
-            this.setMemorizedScent(potentialBlock);
-            if (getSelf() instanceof Player PE) {
-                PE.displayClientMessage(potentialBlock.getName().withStyle(ChatFormatting.DARK_PURPLE), true);
+        if (!getSelf().level().isClientSide()) {
+            Item held = this.getSelf().getMainHandItem().getItem();
+            Block potentialBlock = getFormPrediction(held);
+            if (potentialBlock != null) {
+                this.setMemorizedScent(potentialBlock);
+                if (getSelf() instanceof Player PE) {
+                    int id = BuiltInRegistries.BLOCK.getId(potentialBlock);
+                    S2CPacketUtil.sendGenericIntToClientPacket(PE, PacketDataIndex.S2C_KN_SYNC_FORM_PREDICT, id);
+                    PE.displayClientMessage(potentialBlock.getName().withStyle(ChatFormatting.DARK_PURPLE), true);
+                }
             }
         }
         return true;
     }
 
     public Block getFormPrediction(Item item) {
+        return getFormPrediction(item, true);
+    }
+
+    public Block getFormPrediction(Item item, boolean doRecursion) {
         if (MainUtil.KING_NOTHING_FORM_PREDICT.get(item) != null) {
             return MainUtil.KING_NOTHING_FORM_PREDICT.get(item);
+        }
+        else if ((item instanceof TieredItem || item instanceof ArmorItem) && doRecursion) {
+            Set<Item> ingredients = new HashSet<>();
+            ItemStack[] ingredientStacks = new ItemStack[0];
+            Block toReturn = null;
+            if (item instanceof TieredItem TI) {
+                ingredientStacks = TI.getTier().getRepairIngredient().getItems();
+            }
+            else if (item instanceof ArmorItem AI) {
+                ingredientStacks = AI.getMaterial().getRepairIngredient().getItems();
+            }
+            for (ItemStack stack : ingredientStacks) {
+                ingredients.add(stack.getItem());
+            }
+            for (Item ingItem : ingredients) {
+                Block current = getFormPrediction(ingItem, false);
+                if (toReturn == null) {
+                    toReturn = current;
+                }
+                else if (!current.equals(toReturn)) {
+                    toReturn = null;
+                    break;
+                }
+            }
+            return toReturn;
         }
         else if (item instanceof BlockItem BI && isMemorizableBlock(BI.getBlock())) {
             return BI.getBlock();
@@ -1793,10 +1829,6 @@ public class PowersKingNothing extends NewDashPreset {
         }
         this.memorizedBlock = null;
         saveDiscAndSync();
-    }
-
-    public void setTrackingCloudStatus(boolean isOut) {
-        trackingCloudOut = isOut;
     }
 
     @Override

@@ -1264,6 +1264,10 @@ public class ClientUtil {
             if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingNothing kn) {
                 kn.removeItemEntity(data);
             }
+        } else if (context == PacketDataIndex.S2C_KN_SYNC_FORM_PREDICT) {
+            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingNothing kn) {
+                kn.setMemorizedScent(BuiltInRegistries.BLOCK.byId(data));
+            }
         }
     }
     public static void handleDoubleIntPacketS2C(Player player, int data, int data2, byte context) {

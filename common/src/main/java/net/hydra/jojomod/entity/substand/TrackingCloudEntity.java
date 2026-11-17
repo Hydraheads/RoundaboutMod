@@ -12,12 +12,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 public class TrackingCloudEntity extends StandEntity {
-    /**
-     * Initialize Stands
-     *
-     * @param entityType
-     * @param world
-     */
+
+    public static final byte
+            NONE = 0,
+            ENTITY = 1,
+            BLOCK = 2;
+
     public TrackingCloudEntity(
             EntityType<? extends Mob> entityType,
             Level world) {
@@ -32,18 +32,17 @@ public class TrackingCloudEntity extends StandEntity {
         if (getUser() == null || !getUser().isAlive() || !(getUserData(
                 getUser()).roundabout$getStandPowers() instanceof PowersKingNothing)) {
                     this.discard();
+                    return;
                 }
+        if (this.tickCount % 10 == 0) {
+            recalculateMovementVector();
+        }
     }
 
-    public Vec3 getTargetPos() {
-        if (targetBlockPos != null) {
-            return targetBlockPos.getCenter();
-        }
-        else if (targetEntity != null) {
-            return targetEntity.getBoundingBox().getCenter();
-        }
-        return new Vec3(1, 1, 1);
+    private void recalculateMovementVector() {
+
     }
+
 
     public static AttributeSupplier.Builder createStandAttributes() {
         return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED,
