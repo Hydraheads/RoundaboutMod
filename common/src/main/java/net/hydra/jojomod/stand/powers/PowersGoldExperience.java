@@ -753,10 +753,19 @@ public class PowersGoldExperience extends BlockGrabPreset {
         if (suspendGuard) {
             return false;
         }
-        if (this.activePower == TREE || this.activePower == BUSH_CREATION) {
+        if (this.activePower == TREE || this.activePower == BUSH_CREATION
+                || this.activePower == PowerIndex.BARRAGE_CHARGE_2 || this.activePower == PowerIndex.BARRAGE_2) {
             return false;
         }
         return super.buttonInputGuard(keyIsDown, options);
+    }
+
+    @Override
+    public byte getSoundCancelingGroupByte(byte soundChoice) {
+        if (soundChoice == SoundIndex.ALT_CHARGE_SOUND_1) {
+            return SoundIndex.BARRAGE_SOUND_GROUP;
+        }
+        return super.getSoundCancelingGroupByte(soundChoice);
     }
 
     // item interactions (lifeform creation) start
