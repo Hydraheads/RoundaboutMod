@@ -5736,7 +5736,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (!entity.level().isClientSide()) {
                 ItemStack sourceStack = lifeform.getSourceItem();
                 if (!sourceStack.isEmpty()) {
-                    entity.spawnAtLocation(sourceStack);
+                    PowersGoldExperience.handleLifeformRevertItem(entity, lifeform, sourceStack);
                     lifeform.setSourceItem(ItemStack.EMPTY);
                 }
                 for (EquipmentSlot slot : EquipmentSlot.values()) {
