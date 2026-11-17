@@ -2145,7 +2145,7 @@
   "ability.roundabout.fog_blocks": "İlüzyon Blokları",
   "ability.roundabout.fog_blocks.desc": "Sınırsız bir şekilde istediğin kadar sis bloğu yarat. Yere koyuldukları zaman tıpkı bir blok gibi görünürler ama içinden gecebilirsin (Çünkü mantıkken bunlar sadece bir ilüzyondur).",
   "ability.roundabout.corpse_army": "Ceset Ordusu",
-  "ability.roundabout.corpse_army.desc": "Cellat Baltası ve makaslar ile ceset alabilirsin (Justice kullanıcılarına özel), ve Ceset Torbası craft ederek onları içine koyabilirsin. Eğer bu cesetler sis'in içindelerse onları kontrol edebilirsin. Cesetlerin canı tam ve yerde durmaları gerekir. Zombiler, iskeletler, creeperlar, örümcekler, köylüler/yağmacılar, hayaletler ceset olabilir. Örümcek ve Hayalet cesetleriyle etkileşime geçip onları sürebilirsin.",
+  "ability.roundabout.corpse_army.desc": "Öldürdüğün seçili moblar Justice çağrılmış iken cesetlere dönüşür, Cellat Baltasıda aynı işlevi görür (Justice kullanıcılarına özel) ve Ceset Torbası craft ederek onları içine koyabilirsin. Eğer bu cesetler sis'in içindelerse onları kontrol edebilirsin. Cesetlerin canı tam ve yerde durmaları gerekir. Zombiler, iskeletler, creeperlar, örümcekler, köylüler/yağmacılar, hayaletler ceset olabilir. Örümcek ve Hayalet cesetleriyle etkileşime geçip onları sürebilirsin.",
   "ability.roundabout.zombie_corpse": "Düşen Zombi",
   "ability.roundabout.zombie_corpse.desc": "Zombi cesetleri Zombiler ve Zombi kuruları tarafından alınır. Aktif edildikleri ordunun en basit ve dengeli güçlü olanlarıdır. Eğer eğilirsen ve etkileşime geçersen, onların ellerine eşya verebilirsin. Onlara blok verirsen kontrol modunda blokları istediğin yere koyabilir, yada onlara kazma verip bir bloğu kazdırabilirsin (Tek-tek). Unutma ki eşya verirsen zırhları umursayamazlar. Yerde dururken çürük et vererek onları iyileştirebilirsin.",
   "ability.roundabout.villager_corpse": "Düşen Köylü",
@@ -2650,7 +2650,7 @@
   "ability.roundabout.forced_dissintegration":"Zorla Yok Et",
   "ability.roundabout.forced_dissintegration.desc":"Bütün meteorları yok eder. Bu hareket kazaları önlemek için iyidir.",
   "ability.roundabout.grab":"Tutma",
-  "ability.roundabout.grab.desc":"Stand Hedeflemesi sırasında kim Stand'a yaklaşırsa ona yapışır.",
+  "ability.roundabout.grab.desc": "Stand Hedeflemesi sırasında kim Stand'a yaklaşırsa ona yapışır.",
 
   "ability.roundabout.silver_chariot_statue_cutting":"Statue Cutting",
   "ability.roundabout.silver_chariot_statue_cutting.desc":"Cuts a statue from a column of 3 stone blocks, if possible. Use the ability at the bottom of the blocks",
