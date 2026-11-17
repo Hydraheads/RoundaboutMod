@@ -883,6 +883,14 @@ public class StandIcons {
             "textures/gui/icons/black_sabbath/target_manual_selection_confirm.png");
     public static final ResourceLocation POLPO_SELECTING_TARGET_UNSELECTION = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/black_sabbath/target_manual_unselection.png");
+    public static final ResourceLocation POLPO_TUTORIAL = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/black_sabbath/black_sabbath_use.png");
+    public static final ResourceLocation POLPO_WEAKNESS = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/black_sabbath/black_sabbath_weakness.png");
+    public static final ResourceLocation POLPO_INVENTORY_ATTACK = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/black_sabbath/black_sabbath_attack_slot.png");
+    public static final ResourceLocation POLPO_LIGHTER_TUTORIAL = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/black_sabbath/black_sabbath_lighter_mechanics.png");
 
     public static final ResourceLocation D4C_BETWEEN_VISION = Roundabout.location("textures/gui/icons/d4c/between_vision.png");
     public static final ResourceLocation D4C_DIMENSION_KIDNAP = Roundabout.location("textures/gui/icons/d4c/dimension_kidnap.png");

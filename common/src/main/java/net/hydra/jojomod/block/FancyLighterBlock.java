@@ -250,7 +250,6 @@ public class FancyLighterBlock extends BaseEntityBlock implements CancelDataDriv
                     if(compoundtag == null || !compoundtag.hasUUID("StuffOther")) {
                         if (FE.getOwner() != null) {
                             stack.getOrCreateTagElement("UserIdUUID").putUUID("StuffOther", FE.getOwner());
-                            System.out.println(stack.getOrCreateTagElement("UserIdUUID").getUUID("StuffOther"));
                         }
                     }
                 }

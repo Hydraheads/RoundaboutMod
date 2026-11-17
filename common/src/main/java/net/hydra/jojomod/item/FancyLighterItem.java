@@ -217,7 +217,6 @@ public class FancyLighterItem extends BlockItem {
                                                 if (compoundtag != null) {
                                                     if(compoundtag.hasUUID("StuffOther")) {
                                                         FLBE.setValue($$6.getTagElement("UserIdUUID").getUUID("StuffOther"));
-                                                        System.out.println(FLBE.getOwner());
                                                     }
                                                 } else {
                                                 }

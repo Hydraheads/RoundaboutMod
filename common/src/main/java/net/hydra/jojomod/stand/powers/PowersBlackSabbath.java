@@ -1023,9 +1023,9 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                 double x = lent.getX() + Math.cos(angle) * distance;
                 double z = lent.getZ() + Math.sin(angle) * distance;
                 int baseY = Mth.floor(lent.getY());
-                double y = baseY + yOffset;
+                double y = Mth.floor(baseY + yOffset);
                 Vec3 candidate = new Vec3(x, y, z);
-                BlockPos bpos = BlockPos.containing(x, y - 0.1, z);
+                BlockPos bpos = BlockPos.containing(x, y, z);
                 var blockState = this.self.level().getBlockState(bpos);
                 AABB yesbox = ModEntities.BLACK_SABBATH.getAABB(lent.getX(), Mth.floor(lent.getY()), lent.getZ());
                 AABB testBox = yesbox.move(
@@ -1042,9 +1042,9 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                                 + Math.sqrt(Math.random()) * (radius - minDistance);
                         double x2 = lent.getX() + Math.cos(angle) * distance2;
                         double z2 = lent.getZ() + Math.sin(angle) * distance2;
-                        double y2 = baseY + yOffset2;
+                        double y2 = Mth.floor(baseY + yOffset2);
                         Vec3 candidate2 = new Vec3(x2, y2, z2);
-                        BlockPos bpos2 = BlockPos.containing(x, y2 - 0.1, z);
+                        BlockPos bpos2 = BlockPos.containing(x, y2, z);
                         var blockState2 = this.self.level().getBlockState(bpos2);
                         AABB yesbox2 = ModEntities.BLACK_SABBATH.getAABB(lent.getX(), lent.getY(), lent.getZ());
                         AABB testBox2 = yesbox2.move(
@@ -1052,7 +1052,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                                 candidate2.y - lent.getY(),
                                 candidate2.z - lent.getZ()
                         );
-                       // System.out.print(candidate2 + " a ");
                         if (level.noCollision(lent, testBox2) && !blockState.is(Blocks.LAVA) && !blockState2.isAir() && checkIfBposIsInDark(candidate)) {
                         return candidate2;
                         }
@@ -1687,21 +1686,23 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.black_sabbath_premise",
-                "instruction.roundabout.passive", StandIcons.LOCKED, 1, level, bypass));
+                "instruction.roundabout.passive", StandIcons.POLPO_TUTORIAL, 1, level, bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.black_sabbath_weakness",
-                "instruction.roundabout.passive", StandIcons.LOCKED,2,level,bypass));
+                "instruction.roundabout.passive", StandIcons.POLPO_WEAKNESS,2,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.black_sabbath_inventory",
                 "instruction.roundabout.press_skill", StandIcons.POLPO_INVENTORY, 1, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.black_sabbath_target_selection_tutorial",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.black_sabbath_attack_slot_mechanics",
+                "instruction.roundabout.passive", StandIcons.POLPO_INVENTORY_ATTACK,4,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.black_sabbath_target_selection_tutorial",
                 "instruction.roundabout.press_skill", StandIcons.POLPO_SELECTING_TARGET_MODE,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.dodge",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.black_sabbath_target_selection_tutorial_2",
+                "instruction.roundabout.passive", StandIcons.POLPO_SELECTING_TARGET_CONFIRM,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.black_sabbath_biting_finger",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 99, 0, "ability.roundabout.black_sabbath_biting_finger",
                 "instruction.roundabout.press_skill", StandIcons.BITE_FINGERS_POLPO,4,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, 0, "ability.roundabout.black_sabbath_lighter_mechanics",
-                "instruction.roundabout.passive", StandIcons.POLPO_SELECTING_TARGET_NULL,4,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 99, 0, "ability.roundabout.black_sabbath_attack_slot_mechanics",
-                "instruction.roundabout.passive", StandIcons.LOCKED,4,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 118, 0, "ability.roundabout.black_sabbath_lighter_mechanics",
+                "instruction.roundabout.passive", StandIcons.POLPO_LIGHTER_TUTORIAL,4,level,bypass));
         return $$1;
     }
     @Override
