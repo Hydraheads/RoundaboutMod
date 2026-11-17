@@ -934,38 +934,49 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 placePos = placePos.above();
             }
 
-            // Infer which surface the mob was moving toward/resting on for pillar orientation
-            Vec3 vel = entity.getDeltaMovement();
-            Direction hitFace = Direction.UP;
-            if (entity.verticalCollision) {
-                hitFace = vel.y > 0 ? Direction.DOWN : Direction.UP;
-            } else if (entity.horizontalCollision) {
-                hitFace = entity.getDirection().getOpposite();
-            }
-
-            Direction placeDir = entity.getDirection();
-            if (placeDir.getAxis() == Direction.Axis.X) {
-                placeDir = placeDir.getOpposite();
-            }
-            if (blockItem.getBlock() instanceof RotatedPillarBlock) {
-                placeDir = hitFace;
-            }
-
-            // Move the dying mob's hitbox out of placePos so BlockItem.canPlace doesn't fail on self-collision
-            Vec3 originalPos = entity.position();
-            entity.setPos(originalPos.x, originalPos.y + 100.0D, originalPos.z);
-
-            BlockState candidateState = level.getBlockState(placePos);
-            if ((candidateState.isAir() || candidateState.canBeReplaced())
-                    && MainUtil.tryPlaceBlock(owner, placePos)) {
-                ItemStack placeStack = sourceStack.copy();
-                if (blockItem.place(new DirectionalPlaceContext(level, placePos, placeDir, placeStack, placeDir)) != InteractionResult.FAIL) {
-                    entity.setPos(originalPos.x, originalPos.y, originalPos.z);
-                    return;
+            boolean hasSupport = false;
+            for (Direction dir : Direction.values()) {
+                BlockPos neighborPos = placePos.relative(dir);
+                if (level.getBlockState(neighborPos).isFaceSturdy(level, neighborPos, dir.getOpposite())) {
+                    hasSupport = true;
+                    break;
                 }
             }
 
-            entity.setPos(originalPos.x, originalPos.y, originalPos.z);
+            if (hasSupport) {
+                // orientation fix maybe
+                Vec3 vel = entity.getDeltaMovement();
+                Direction hitFace = Direction.UP;
+                if (entity.verticalCollision) {
+                    hitFace = vel.y > 0 ? Direction.DOWN : Direction.UP;
+                } else if (entity.horizontalCollision) {
+                    hitFace = entity.getDirection().getOpposite();
+                }
+
+                Direction placeDir = entity.getDirection();
+                if (placeDir.getAxis() == Direction.Axis.X) {
+                    placeDir = placeDir.getOpposite();
+                }
+                if (blockItem.getBlock() instanceof RotatedPillarBlock) {
+                    placeDir = hitFace;
+                }
+
+                // prevents blocks from not being placed due to entity hitbox
+                Vec3 originalPos = entity.position();
+                entity.setPos(originalPos.x, originalPos.y + 100.0D, originalPos.z);
+
+                BlockState candidateState = level.getBlockState(placePos);
+                if ((candidateState.isAir() || candidateState.canBeReplaced())
+                        && MainUtil.tryPlaceBlock(owner, placePos)) {
+                    ItemStack placeStack = sourceStack.copy();
+                    if (blockItem.place(new DirectionalPlaceContext(level, placePos, placeDir, placeStack, placeDir)) != InteractionResult.FAIL) {
+                        entity.setPos(originalPos.x, originalPos.y, originalPos.z);
+                        return;
+                    }
+                }
+
+                entity.setPos(originalPos.x, originalPos.y, originalPos.z);
+            }
         } else if (sourceStack.getItem() instanceof BoneMealItem) {
             ItemStack mealStack = sourceStack.copy();
             BlockPos targetPos = !level.getBlockState(blockPos).isAir() ? blockPos : blockPos.below();
