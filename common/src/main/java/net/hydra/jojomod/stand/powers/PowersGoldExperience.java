@@ -80,16 +80,17 @@ import java.util.*;
 public class PowersGoldExperience extends BlockGrabPreset {
     // move bytes
     private static final byte
-        LIFE_PUNCH = 53,
-        DNA_CREATE = 54,
-        BUSH_CREATION = 55,
-        WALL_VINES = 56,
-        HEAL = 57,
-        BRAMBLES = 58,
-        LIFEFORM_CREATION = 59,
-        ITEM_THROW = 60,
-        TREE = 61,
-        LIFE_SENSOR = 63;
+            LIFE_PUNCH = 53,
+            DNA_CREATE = 54,
+            BUSH_CREATION = 55,
+            WALL_VINES = 56,
+            HEAL = 57,
+            BRAMBLES = 58,
+            LIFEFORM_CREATION = 59,
+            ITEM_THROW = 60,
+            TREE = 61,
+            LIFE_SENSOR = 63,
+            HEAL_CHARGE = 64;
 
     // move bytes found in other moves
     public static final byte ITEM_IMBUE = 62;
@@ -183,8 +184,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
     }
 
     // for healing
+    public boolean holdDownHeal = false;
     private boolean hasHealed = false;
     private int healTargetId = -1;
+    private boolean healOthers = false;
+    private static final int MAX_HEAL_CHARGE_TICKS = 15;
 
     // for life punch
     private LifePunchCloneEntity lifePunchClone = null;
@@ -580,8 +584,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
         else if (move == WALL_VINES) {
             return executeWallVines();
         }
+        else if (move == HEAL_CHARGE) {
+            return startHealCharge();
+        }
         else if (move == HEAL) {
-            return startHealWindup();
+            return startHealRelease();
         }
         else if (move == BRAMBLES) {
             return startBrambleWindup();
@@ -607,6 +614,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     /* note: passedInt could be anything, it could be charge time, etc. for the purposes of life punch, for example
     passedInt could be what animal you're making
     */
+    @Override
     public boolean tryIntPower(int move, boolean forced, int passedInt){
         if (move == LIFEFORM_CREATION || move == ITEM_THROW) {
             this.animalType = (byte) passedInt;
@@ -618,6 +626,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
             byte imbueType = (byte) ((passedInt >> 8) & 0xFF);
             byte animalId = (byte) (passedInt & 0xFF);
             return executeItemImbue(imbueType, animalId);
+        }
+        else if (move == HEAL_CHARGE) {
+            this.healOthers = (passedInt == 1);
+            return false;
         }
         return super.tryIntPower(move, forced, passedInt);
     }
@@ -647,7 +659,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
             updateKickBarrage();
         }
         // heal
-        if (this.getActivePower() == HEAL) {
+        if (this.getActivePower() == HEAL_CHARGE) {
+            updateHealCharge();
+        } else if (this.getActivePower() == HEAL) {
             updateHeal();
         }
         // bramble
@@ -719,6 +733,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public boolean setPowerNone() {
         this.groundBarrageTicks = 0;
         this.isGroundBarraging = false;
+        this.holdDownHeal = false;
         return super.setPowerNone();
     }
 
@@ -1024,7 +1039,13 @@ public class PowersGoldExperience extends BlockGrabPreset {
                     if (!state.isAir()
                             && state.getDestroySpeed(level, checkPos) >= 0
                             && sourceStack.isCorrectToolForDrops(state)) {
-                        if (level.destroyBlock(checkPos, true, owner)) {
+                        // thank you king nothing dev guy
+                        BlockEntity blockEntity = state.hasBlockEntity() ? level.getBlockEntity(checkPos) : null;
+                        if (level.destroyBlock(checkPos, false, owner)) {
+                            boolean isCreative = owner instanceof Player player && player.getAbilities().instabuild;
+                            if (!isCreative) {
+                                Block.dropResources(state, level, checkPos, blockEntity, owner, sourceStack);
+                            }
                             sourceStack.hurt(1, level.getRandom(), null);
                             break;
                         }
@@ -2058,20 +2079,42 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     // heal start
 
+    @Override
+    public void buttonInput1(boolean keyIsDown, Options options) {
+        if (holdDownHeal) {
+            if (!keyIsDown) {
+                holdDownHeal = false;
+                if (this.getActivePower() == HEAL_CHARGE && this.attackTimeDuring < MAX_HEAL_CHARGE_TICKS) {
+                    this.healOthers = false;
+                    tryIntPowerPacket(HEAL_CHARGE, 0);
+                }
+            }
+            return;
+        }
+        super.buttonInput1(keyIsDown, options);
+    }
+
     private void tryHeal() {
-        if(!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
-            ((StandUser) this.getSelf()).roundabout$tryPower(HEAL, true);
-            tryPowerPacket(HEAL);
+        if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)
+                && this.getActivePower() != HEAL_CHARGE
+                && this.getActivePower() != HEAL) {
+            this.holdDownHeal = true;
+            this.healOthers = true;
+            this.tryPower(HEAL_CHARGE, true);
+            tryPowerPacket(HEAL_CHARGE);
         }
     }
 
-    private boolean startHealWindup() {
+    private boolean startHealCharge() {
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)) {
             this.hasHealed = false;
             this.healTargetId = -1;
+            if (!this.self.level().isClientSide()) {
+                this.healOthers = true;
+            }
             this.setAttackTimeDuring(0);
-            this.setActivePower(HEAL);
+            this.setActivePower(HEAL_CHARGE);
             this.animateStand(GoldExperienceEntity.HEAL_WINDUP);
             this.poseStand(OffsetIndex.GUARD);
             return true;
@@ -2079,42 +2122,56 @@ public class PowersGoldExperience extends BlockGrabPreset {
         return false;
     }
 
-    private void updateHeal() {
-        if (this.attackTimeDuring > -1) {
-            if (this.attackTimeDuring == 15) {
-                startHealAnimation();
+    private void updateHealCharge() {
+        if (this.attackTimeDuring >= MAX_HEAL_CHARGE_TICKS) {
+            if (this.self.level().isClientSide() && isPacketPlayer()) {
+                this.healOthers = this.holdDownHeal;
+                this.holdDownHeal = false;
             }
-            if (this.attackTimeDuring >= 22 && !this.hasHealed) {
-                finishHeal();
-            }
+            startHealRelease();
         }
     }
 
-    private void startHealAnimation() {
-        if (!this.self.level().isClientSide()) {
-            Entity target = MainUtil.getTargetEntity(this.getSelf(), 5f);
-            if (target instanceof LivingEntity livingHeal) {
-                this.healTargetId = livingHeal.getId();
-                this.animateStand(GoldExperienceEntity.HEAL_OTHERS);
-            } else {
-                this.healTargetId = -1;
-                this.animateStand(GoldExperienceEntity.HEAL_SELF);
+    private boolean startHealRelease() {
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand)) {
+            this.hasHealed = false;
+            this.setAttackTimeDuring(0);
+            this.setActivePower(HEAL);
+            if (!this.self.level().isClientSide()) {
+                if (this.healOthers) {
+                    Entity target = MainUtil.getTargetEntity(this.getSelf(), 5f);
+                    this.healTargetId = (target instanceof LivingEntity livingHeal) ? livingHeal.getId() : -1;
+                    this.animateStand(GoldExperienceEntity.HEAL_OTHERS);
+                } else {
+                    this.healTargetId = -1;
+                    this.animateStand(GoldExperienceEntity.HEAL_SELF);
+                }
             }
+            return true;
+        }
+        return false;
+    }
+
+    private void updateHeal() {
+        if (this.attackTimeDuring >= 7 && !this.hasHealed) {
+            finishHeal();
         }
     }
 
     private void finishHeal() {
         if (!this.self.level().isClientSide()) {
             this.hasHealed = true;
-            Entity lockedTarget = this.healTargetId != -1 ? this.self.level().getEntity(this.healTargetId) : null;
-
-            if (lockedTarget instanceof LivingEntity livingHeal && livingHeal.isAlive()) {
-                // for healing others
-                livingHeal.heal(1f);
-                livingHeal.addEffect(new MobEffectInstance(ModEffects.RECONSTRUCTION, 400, 0, false, true, true));
-                playSoundIfPossible(this.self.level(), livingHeal, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            if (this.healOthers) {
+                Entity lockedTarget = this.healTargetId != -1
+                        ? this.self.level().getEntity(this.healTargetId)
+                        : MainUtil.getTargetEntity(this.getSelf(), 5f);
+                if (lockedTarget instanceof LivingEntity livingHeal && livingHeal.isAlive()) {
+                    livingHeal.heal(1f);
+                    livingHeal.addEffect(new MobEffectInstance(ModEffects.RECONSTRUCTION, 400, 0, false, true, true));
+                    playSoundIfPossible(this.self.level(), livingHeal, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+                }
             } else {
-                // for healing yourself
                 this.self.heal(1f);
                 this.self.addEffect(new MobEffectInstance(ModEffects.RECONSTRUCTION, 400, 0, false, true, true));
                 playSoundIfPossible(this.self.level(), this.self, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
@@ -2684,7 +2741,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             basis *= 0.3f;
         }
 
-        if (this.getActivePower() == HEAL){
+        if (this.getActivePower() == HEAL || this.getActivePower() == HEAL_CHARGE){
             // slows you down by 70% while healing
             basis *= 0.7f;
         }
@@ -2704,7 +2761,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public boolean cancelSprintJump(){
         if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2
-            || this.getActivePower() == HEAL) {
+            || this.getActivePower() == HEAL || this.getActivePower() == HEAL_CHARGE) {
             return true;
         }
         return super.cancelSprintJump();
