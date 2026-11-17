@@ -115,7 +115,7 @@ public class PowersItemStack {
     @Inject(method = "use", at = @At("HEAD"), cancellable = true)
     private void roundabout$onUseGEImbuedItem(Level level, Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
         ItemStack self = (ItemStack) (Object) this;
-        if (PowersGoldExperience.getImbueData(self) != null) {
+        if (PowersGoldExperience.getImbueData(self) != null && !PowersGoldExperience.isTreeImbuedProjectileItem(self)) {
             if (!level.isClientSide()) {
                 PowersGoldExperience.tryActivateImbuedItem(player, self);
             }
@@ -127,7 +127,7 @@ public class PowersItemStack {
     private void roundabout$onUseOnGEImbuedItem(UseOnContext context, CallbackInfoReturnable<InteractionResult> cir) {
         ItemStack self = (ItemStack) (Object) this;
         Player player = context.getPlayer();
-        if (player != null && PowersGoldExperience.getImbueData(self) != null) {
+        if (player != null && PowersGoldExperience.getImbueData(self) != null && !PowersGoldExperience.isTreeImbuedProjectileItem(self)) {
             Level level = context.getLevel();
             if (!level.isClientSide()) {
                 PowersGoldExperience.tryActivateImbuedItem(player, self);
@@ -139,7 +139,7 @@ public class PowersItemStack {
     @Inject(method = "interactLivingEntity", at = @At("HEAD"), cancellable = true)
     private void roundabout$onInteractEntityGEImbuedItem(Player player, LivingEntity target, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
         ItemStack self = (ItemStack) (Object) this;
-        if (PowersGoldExperience.getImbueData(self) != null) {
+        if (PowersGoldExperience.getImbueData(self) != null && !PowersGoldExperience.isTreeImbuedProjectileItem(self)) {
             Level level = player.level();
             if (!level.isClientSide()) {
                 PowersGoldExperience.tryActivateImbuedItem(player, self);
