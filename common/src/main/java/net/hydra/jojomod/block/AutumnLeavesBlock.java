@@ -51,14 +51,27 @@ public class AutumnLeavesBlock extends BushBlock {
     private static final Map<Entity, Long> LAST_MOVEMENT =
             new WeakHashMap<>();
 
-    private static final int MAX_COMBO = ClientNetworking.getAppropriateConfig().AutumnLeavesSettings.MaxCombo;
-    private static final int COMBO_RESET_TICKS = ClientNetworking.getAppropriateConfig().AutumnLeavesSettings.CooldownAfterCombo;
+    private static final int COMBO_RESET_TICKS = 10;
+
+    private static int getMaxCombo() {
+        return ClientNetworking.getAppropriateConfig()
+                .AutumnLeavesSettings.MaxCombo;
+    }
+
+    private static int getCooldownAfterCombo() {
+        return ClientNetworking.getAppropriateConfig()
+                .AutumnLeavesSettings.CooldownAfterCombo;
+    }
 
     private static final Map<Entity, Integer> COMBO_COUNT =
             new WeakHashMap<>();
 
     private static final Map<Entity, Long> LAST_COMBO_TICK =
             new WeakHashMap<>();
+
+    private static final Map<Entity, Long> COMBO_BLOCKED_UNTIL =
+            new WeakHashMap<>();
+
     public AutumnLeavesBlock(Properties properties) {
         super(properties);
 
@@ -107,18 +120,22 @@ public class AutumnLeavesBlock extends BushBlock {
     }
 
     @Override
-    public void entityInside(BlockState state, Level level,
-                             BlockPos pos, Entity entity) {
+    public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
 
-        if (level.isClientSide || state.getValue(COOLDOWN) || MainUtil.isBossMob(entity)) {
+        if (level.isClientSide || state.getValue(COOLDOWN)) {
             return;
         }
 
         long currentTick = level.getGameTime();
 
-        long lastComboTick = LAST_COMBO_TICK.getOrDefault(
-                entity, -1000L
-        );
+        // lets block that specific entitiy from using al
+        long blockedUntil = COMBO_BLOCKED_UNTIL.getOrDefault(entity, 0L);
+
+        if (currentTick < blockedUntil) {
+            return;
+        }
+
+        long lastComboTick = LAST_COMBO_TICK.getOrDefault(entity, -1000L);
 
         if (currentTick - lastComboTick >= COMBO_RESET_TICKS) {
             COMBO_COUNT.remove(entity);
@@ -126,14 +143,19 @@ public class AutumnLeavesBlock extends BushBlock {
 
         int combo = COMBO_COUNT.getOrDefault(entity, 0);
 
-        level.setBlock(pos, state.setValue(COOLDOWN, true), 3);
-        level.scheduleTick(pos, this, COOLDOWN_TICKS);
+        if (combo >= getMaxCombo()) {
+            COMBO_BLOCKED_UNTIL.put(
+                    entity,
+                    currentTick + getCooldownAfterCombo()
+            );
 
-        if (combo >= MAX_COMBO) {
             COMBO_COUNT.remove(entity);
             LAST_COMBO_TICK.remove(entity);
             return;
         }
+
+        level.setBlock(pos, state.setValue(COOLDOWN, true), 3);
+        level.scheduleTick(pos, this, COOLDOWN_TICKS);
 
         Direction direction = state.getValue(FACING);
 

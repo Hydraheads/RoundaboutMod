@@ -1284,9 +1284,9 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                 double z = lent.getZ() + Math.sin(angle) * distance;
                 int baseY = Mth.floor(lent.getY());
                 for (int yOffset = 0; yOffset <= 10; yOffset++) {
-                    double y = baseY + yOffset;
+                    double y = Mth.floor(baseY + yOffset);
                     Vec3 candidate = new Vec3(x, y, z);
-                    BlockPos bpos = BlockPos.containing(x, y - 0.1, z);
+                    BlockPos bpos = BlockPos.containing(x, y, z);
                     var blockState = this.level().getBlockState(bpos);
                     AABB yesbox = ModEntities.BLACK_SABBATH.getAABB(lent.getX(), lent.getY(), lent.getZ());
                     AABB testBox = yesbox.move(
@@ -1298,9 +1298,9 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                         return candidate;
                     } else {
                         for (int yOffset2 = -1; yOffset2 >= -8; yOffset2--) {
-                            double y2 = baseY + yOffset2;
+                            double y2 = Mth.floor(baseY + yOffset2);
                             Vec3 candidate2 = new Vec3(x, y2, z);
-                            BlockPos bpos2 = BlockPos.containing(x, y2 - 0.1, z);
+                            BlockPos bpos2 = BlockPos.containing(x, y2, z);
                             var blockState2 = this.level().getBlockState(bpos2);
                             AABB yesbox2 = ModEntities.BLACK_SABBATH.getAABB(lent.getX(), lent.getY(), lent.getZ());
                             AABB testBox2 = yesbox2.move(
@@ -2313,15 +2313,15 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                     if (value != null) {
                         if (value.getItem().getItem() instanceof AirItem || value.getItem().isEmpty()) {
                             items.remove(value);
-                        } else if (value.getAge() > 1) {
+                        } else if (value.getAge() > 5) {
                             items.remove(value);
                         } else {
                             if(this.getUser() instanceof Player P){
                                 BlackSabbathPlayerInventory bs = ((IPlayerEntity)P).roundabout$getBlckSabbathPlayerInventory();
                                 if(bs.canAddItem(value.getItem())) {
+                                    if(!this.level().isClientSide()) {
                                         this.addItem(value.getItem(), bs, value);
-                                        //System.out.println(value.getItem().getCount());
-                                       // value.discard();
+                                    }
                                 }
                             }
                         }
@@ -2350,11 +2350,12 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     private final int size = 8;
 
     private void moveItemToEmptySlots(ItemStack item, BlackSabbathPlayerInventory bs, ItemEntity it) {
-        for(int i = 0; i <= this.size; ++i) {
+        for(int i = 0; i <= this.size; i++) {
             if(i != 0 && i < 9) {
                 ItemStack itemstack = bs.getItem(i);
                 if (itemstack.isEmpty()) {
                     bs.setItem(i, item.copyAndClear());
+                    System.out.println("2a");
                     it.discard();
                     return;
                 }
@@ -2364,11 +2365,12 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     }
 
     private void moveItemToOccupiedSlotsWithSameType(ItemStack item, BlackSabbathPlayerInventory bs, ItemEntity it) {
-        for(int i = 0; i <= this.size; ++i) {
-            if(i != 0) {
+        for(int i = 0; i <= this.size; i++) {
+            if(i != 0 && i < 9) {
                 ItemStack itemstack = bs.getItem(i);
                 if (ItemStack.isSameItemSameTags(itemstack, item)) {
                     this.moveItemsBetweenStacks(item, itemstack, bs, it);
+                    System.out.println("2b");
                     if (item.isEmpty()) {
                         return;
                     }
@@ -2382,15 +2384,13 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         int i = Math.min(bs.getMaxStackSize(), p_19187_.getMaxStackSize());
         int j = Math.min(p_19186_.getCount(), i - p_19187_.getCount());
 
-        System.out.println(j);
-
         if (j > 0) {
             p_19187_.grow(j);
             p_19186_.shrink(j);
             it.getItem().setCount(it.getItem().getCount() - j);
             bs.setChanged();
+            System.out.println("3");
             if(it.getItem().getCount() == 0){
-                System.out.println("delete" + "  " + it.getItem());
                 it.discard();
             }
         }

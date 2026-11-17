@@ -3,14 +3,13 @@ package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.block.GEBushBlockEntity;
-import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.*;
 import net.hydra.jojomod.entity.gold_experience.*;
-import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
+import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.GoldExperienceEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -21,8 +20,7 @@ import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.item.MaxStandDiscItem;
-import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.BlockGrabPreset;
@@ -52,17 +50,23 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.item.PrimedTnt;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.*;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.context.DirectionalPlaceContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.VineBlock;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.JukeboxBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
@@ -77,19 +81,98 @@ import java.util.*;
 public class PowersGoldExperience extends BlockGrabPreset {
     // move bytes
     private static final byte
-        LIFE_PUNCH = 53,
-        DNA_CREATE = 54,
-        BUSH_CREATION = 55,
-        WALL_VINES = 56,
-        HEAL = 57,
-        BRAMBLES = 58,
-        LIFEFORM_CREATION = 59,
-        ITEM_THROW = 60,
-        TREE = 61,
-        LIFE_SENSOR = 63;
+            LIFE_PUNCH = 53,
+            DNA_CREATE = 54,
+            BUSH_CREATION = 55,
+            WALL_VINES = 56,
+            HEAL = 57,
+            BRAMBLES = 58,
+            LIFEFORM_CREATION = 59,
+            ITEM_THROW = 60,
+            TREE = 61,
+            LIFE_SENSOR = 63,
+            HEAL_CHARGE = 64;
 
     // move bytes found in other moves
     public static final byte ITEM_IMBUE = 62;
+
+    @Override
+    public boolean canUseStandArrow() { return true; }
+
+    public boolean canUseRequiem() {
+        return hasGoldenDisc() || canExecuteMoveWithLevel(getMaxLevel());
+    }
+
+    private float resolvePoints = 0F;
+
+    public float getResolvePoints() { return resolvePoints; }
+    public float getNeededResolvePoints() { return 300.0F; }
+
+    @Override
+    public boolean onStandArrowUse() {
+        /// Do ya thingy here
+        return false;
+    }
+
+    private float getResolvePointsObtainingCap() { return 30.0F; }
+
+    public boolean onKilledEntity(ServerLevel $$0, LivingEntity victim){
+        if (!(canUseRequiem())) {
+            return super.onKilledEntity($$0, victim);
+        }
+
+        if (resolvePoints < getNeededResolvePoints()) {
+            if (victim instanceof Mob) {
+                float amount = victim.getMaxHealth();
+
+                if (!((StandUser)victim).roundabout$getStandDisc().isEmpty() && (victim instanceof Monster ||
+                        victim instanceof NeutralMob)){
+                    if (victim.getMaxHealth() >= 100){
+                        amount = (int)( amount*0.5);
+                    }
+                    amount = amount * 2.5f;
+                } else {
+                    if (victim.getMaxHealth() >= 100){
+                        amount = (int)( amount*0.5);
+                    }
+                }
+
+                addResolvePoints(amount);
+            }
+        }
+
+        return super.onKilledEntity($$0,victim); // DO NOT RETURN 'true' OR ELSE IT WILL STOP ENTITIES FROM DYIENG
+    }
+
+    public void onPlayerHurt(Player PL, DamageSource src, float damage) {
+        if (!(canUseRequiem())) {
+            return;
+        }
+        addResolvePoints(damage*3.5f);
+    }
+
+    private void addResolvePoints(float amount) {
+        resolvePoints += Math.min(amount, getResolvePointsObtainingCap());
+        if (resolvePoints > getNeededResolvePoints()) {
+            resolvePoints = getNeededResolvePoints();
+        }
+        saveDiscAndSync();
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag tag) {
+        tag.putFloat("resolvePoints", resolvePoints);
+
+        super.addAdditionalSaveData(tag);
+    }
+    @Override
+    public void readAdditionalSaveData(CompoundTag tag) {
+        if (tag.contains("resolvePoints")) {
+            resolvePoints = tag.getFloat("resolvePoints");
+        }
+
+        super.readAdditionalSaveData(tag);
+    }
 
     // for cooldowns
 
@@ -180,8 +263,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
     }
 
     // for healing
+    public boolean holdDownHeal = false;
     private boolean hasHealed = false;
     private int healTargetId = -1;
+    private boolean healOthers = false;
+    private static final int MAX_HEAL_CHARGE_TICKS = 15;
 
     // for life punch
     private LifePunchCloneEntity lifePunchClone = null;
@@ -577,8 +663,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
         else if (move == WALL_VINES) {
             return executeWallVines();
         }
+        else if (move == HEAL_CHARGE) {
+            return startHealCharge();
+        }
         else if (move == HEAL) {
-            return startHealWindup();
+            return startHealRelease();
         }
         else if (move == BRAMBLES) {
             return startBrambleWindup();
@@ -604,6 +693,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     /* note: passedInt could be anything, it could be charge time, etc. for the purposes of life punch, for example
     passedInt could be what animal you're making
     */
+    @Override
     public boolean tryIntPower(int move, boolean forced, int passedInt){
         if (move == LIFEFORM_CREATION || move == ITEM_THROW) {
             this.animalType = (byte) passedInt;
@@ -615,6 +705,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
             byte imbueType = (byte) ((passedInt >> 8) & 0xFF);
             byte animalId = (byte) (passedInt & 0xFF);
             return executeItemImbue(imbueType, animalId);
+        }
+        else if (move == HEAL_CHARGE) {
+            this.healOthers = (passedInt == 1);
+            return false;
         }
         return super.tryIntPower(move, forced, passedInt);
     }
@@ -644,7 +738,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
             updateKickBarrage();
         }
         // heal
-        if (this.getActivePower() == HEAL) {
+        if (this.getActivePower() == HEAL_CHARGE) {
+            updateHealCharge();
+        } else if (this.getActivePower() == HEAL) {
             updateHeal();
         }
         // bramble
@@ -716,6 +812,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public boolean setPowerNone() {
         this.groundBarrageTicks = 0;
         this.isGroundBarraging = false;
+        this.holdDownHeal = false;
         return super.setPowerNone();
     }
 
@@ -735,27 +832,443 @@ public class PowersGoldExperience extends BlockGrabPreset {
         if (suspendGuard) {
             return false;
         }
-        if (this.activePower == TREE || this.activePower == BUSH_CREATION) {
+        if (this.activePower == TREE || this.activePower == BUSH_CREATION
+                || this.activePower == PowerIndex.BARRAGE_CHARGE_2 || this.activePower == PowerIndex.BARRAGE_2) {
             return false;
         }
         return super.buttonInputGuard(keyIsDown, options);
     }
 
+    @Override
+    public byte getSoundCancelingGroupByte(byte soundChoice) {
+        if (soundChoice == SoundIndex.ALT_CHARGE_SOUND_1) {
+            return SoundIndex.BARRAGE_SOUND_GROUP;
+        }
+        return super.getSoundCancelingGroupByte(soundChoice);
+    }
+
     // item interactions (lifeform creation) start
+
+    private static Vec3 getRevertBoost(Level level, Vec3 pos, LivingEntity entity, LivingEntity owner, double speed) {
+        double range = 10.0;
+        AABB box = new AABB(pos, pos).inflate(range);
+        LivingEntity closest = null;
+        double closestDistSq = range * range;
+
+        for (LivingEntity candidate : level.getEntitiesOfClass(LivingEntity.class, box)) {
+            if (candidate == entity || candidate == owner || !candidate.isAlive()
+                    || candidate instanceof StandEntity || candidate instanceof ArmorStand
+                    || PowerTypes.isInADifferentExistence(candidate, owner)) {
+                continue;
+            }
+            double distSq = candidate.distanceToSqr(pos);
+            if (distSq < closestDistSq) {
+                closestDistSq = distSq;
+                closest = candidate;
+            }
+        }
+
+        if (closest != null) {
+            Vec3 targetPos = closest.position().add(0, closest.getBbHeight() * 0.5, 0);
+            Vec3 dir = targetPos.subtract(pos);
+            if (dir.lengthSqr() > 1.0E-4) {
+                return dir.normalize().scale(speed).add(0, 0.08, 0);
+            }
+        }
+        return new Vec3(0, -0.1, 0);
+    }
 
     public static void handleLifeformRevertItem(LivingEntity entity, GELifeform lifeform, ItemStack sourceStack) {
         Level level = entity.level();
-        Vec3 pos = entity.position();
+        Vec3 pos = entity.position().add(0, 0.25, 0);
         LivingEntity creator = lifeform.getCreator();
+        LivingEntity owner = creator != null ? creator : entity;
+        BlockPos blockPos = entity.blockPosition();
 
         // copied from ThrownObjectEntity, this is basically just one long "if else" chain that defines what an object should do when reverting
         if (sourceStack.is(Items.TNT)) {
-            net.minecraft.world.entity.item.PrimedTnt tnt = new net.minecraft.world.entity.item.PrimedTnt(
+            PrimedTnt tnt = new PrimedTnt(
                     level, pos.x, pos.y, pos.z, creator
             );
             tnt.setFuse(80);
             level.addFreshEntity(tnt);
             level.playSound(null, tnt.getX(), tnt.getY(), tnt.getZ(), SoundEvents.TNT_PRIMED, SoundSource.BLOCKS, 1.0F, 1.0F);
+            return;
+        } else if (sourceStack.getItem() instanceof ThrowablePotionItem) {
+            ThrownPotion potion = new ThrownPotion(level, owner);
+            potion.setPos(pos);
+            potion.setItem(sourceStack.copy());
+            potion.setDeltaMovement(getRevertBoost(level, pos, entity, owner, 0.55));
+            level.addFreshEntity(potion);
+            return;
+        } else if (sourceStack.getItem() instanceof SnowballItem) {
+            Snowball snowball = new Snowball(level, owner);
+            snowball.setPos(pos);
+            snowball.setItem(sourceStack.copy());
+            snowball.setDeltaMovement(getRevertBoost(level, pos, entity, owner, 0.65));
+            level.addFreshEntity(snowball);
+            return;
+        } else if (sourceStack.is(ModItems.KNIFE)) {
+            KnifeEntity knife = new KnifeEntity(level, owner, sourceStack.copy());
+            knife.setPos(pos);
+            knife.setDeltaMovement(getRevertBoost(level, pos, entity, owner, 0.75));
+            level.addFreshEntity(knife);
+            return;
+        } else if (sourceStack.is(ModItems.KNIFE_BUNDLE)) {
+            Vec3 baseBoost = getRevertBoost(level, pos, entity, owner, 0.75);
+            for (int i = 0; i < 4; i++) {
+                KnifeEntity knife = new KnifeEntity(level, owner, sourceStack.copy());
+                knife.setPos(pos);
+                knife.setDeltaMovement(baseBoost.add(
+                        (level.random.nextDouble() - 0.5) * 0.14,
+                        (level.random.nextDouble() - 0.5) * 0.08,
+                        (level.random.nextDouble() - 0.5) * 0.14
+                ));
+                level.addFreshEntity(knife);
+            }
+            return;
+        } else if (sourceStack.is(ModItems.GASOLINE_CAN)) {
+            GasolineCanEntity gasCan = new GasolineCanEntity(owner, level);
+            gasCan.setPos(pos);
+            gasCan.setDeltaMovement(getRevertBoost(level, pos, entity, owner, 0.45));
+            level.addFreshEntity(gasCan);
+            return;
+        } else if (sourceStack.is(ModItems.MATCH)) {
+            MatchEntity match = new MatchEntity(owner, level);
+            match.setPos(pos);
+            match.setDeltaMovement(getRevertBoost(level, pos, entity, owner, 0.55));
+            level.addFreshEntity(match);
+            return;
+        } else if (sourceStack.is(ModItems.MATCH_BUNDLE)) {
+            Vec3 baseBoost = getRevertBoost(level, pos, entity, owner, 0.55);
+            for (int i = 0; i < 4; i++) {
+                MatchEntity match = new MatchEntity(owner, level);
+                match.setPos(pos);
+                match.setDeltaMovement(baseBoost.add(
+                        (level.random.nextDouble() - 0.5) * 0.14,
+                        (level.random.nextDouble() - 0.5) * 0.08,
+                        (level.random.nextDouble() - 0.5) * 0.14
+                ));
+                level.addFreshEntity(match);
+            }
+            return;
+        } else if ((sourceStack.getItem() instanceof StandArrowItem && !(sourceStack.getDamageValue() >= sourceStack.getMaxDamage()))
+                || sourceStack.getItem() instanceof WorthyArrowItem) {
+            StandArrowEntity arrow = new StandArrowEntity(level, owner, sourceStack.copy());
+            arrow.setPos(pos);
+            arrow.setDeltaMovement(getRevertBoost(level, pos, entity, owner, 0.75));
+            level.addFreshEntity(arrow);
+            return;
+        } else if (sourceStack.getItem() instanceof EggItem) {
+            ThrownEgg egg = new ThrownEgg(level, owner);
+            egg.setPos(pos);
+            egg.setItem(sourceStack.copy());
+            egg.setDeltaMovement(getRevertBoost(level, pos, entity, owner, 0.65));
+            level.addFreshEntity(egg);
+            return;
+        } else if (sourceStack.getItem() instanceof ExperienceBottleItem) {
+            ThrownExperienceBottle xpBottle = new ThrownExperienceBottle(level, owner);
+            xpBottle.setPos(pos);
+            xpBottle.setItem(sourceStack.copy());
+            xpBottle.setDeltaMovement(0, -0.1, 0);
+            level.addFreshEntity(xpBottle);
+            return;
+        } else if (sourceStack.getItem() instanceof EnderpearlItem) {
+            ThrownEnderpearl pearl = new ThrownEnderpearl(level, owner);
+            pearl.setPos(pos);
+            pearl.setDeltaMovement(0, -0.1, 0);
+            level.addFreshEntity(pearl);
+            return;
+        } else if (sourceStack.getItem() instanceof ArrowItem arrowItem && !(sourceStack.getItem() instanceof RoundaboutArrowItem)) {
+            AbstractArrow arrow = arrowItem.createArrow(level, sourceStack.copy(), owner);
+            arrow.setPos(pos);
+            arrow.setDeltaMovement(getRevertBoost(level, pos, entity, owner, 0.75));
+            level.addFreshEntity(arrow);
+            return;
+        } else if (sourceStack.is(Items.TRIDENT)) {
+            if (!sourceStack.hurt(1, level.getRandom(), null)) {
+                ThrownTrident trident = new ThrownTrident(level, owner, sourceStack.copy());
+                trident.setPos(pos);
+                trident.setDeltaMovement(getRevertBoost(level, pos, entity, owner, 0.75));
+                level.addFreshEntity(trident);
+            }
+            return;
+        } else if (sourceStack.getItem() instanceof HarpoonItem) {
+            if (!sourceStack.hurt(1, level.getRandom(), null)) {
+                HarpoonEntity harpoon = new HarpoonEntity(level, owner, sourceStack.copy());
+                harpoon.setPos(pos);
+                harpoon.setDeltaMovement(getRevertBoost(level, pos, entity, owner, 0.75));
+                level.addFreshEntity(harpoon);
+            }
+            return;
+        } else if (sourceStack.getItem() instanceof BlockItem blockItem && !(blockItem instanceof SolidBucketItem)
+                && !(blockItem.getBlock() instanceof SnowLayerBlock)) {
+            Vec3 center = entity.getBoundingBox().getCenter();
+            BlockPos placePos = BlockPos.containing(center);
+
+            if (!level.getBlockState(placePos).canBeReplaced()) {
+                placePos = blockPos;
+            }
+            if (!level.getBlockState(placePos).canBeReplaced()) {
+                placePos = placePos.above();
+            }
+
+            boolean hasSupport = false;
+            for (Direction dir : Direction.values()) {
+                BlockPos neighborPos = placePos.relative(dir);
+                if (level.getBlockState(neighborPos).isFaceSturdy(level, neighborPos, dir.getOpposite())) {
+                    hasSupport = true;
+                    break;
+                }
+            }
+
+            if (hasSupport) {
+                // orientation fix maybe
+                Vec3 vel = entity.getDeltaMovement();
+                Direction hitFace = Direction.UP;
+                if (entity.verticalCollision) {
+                    hitFace = vel.y > 0 ? Direction.DOWN : Direction.UP;
+                } else if (entity.horizontalCollision) {
+                    hitFace = entity.getDirection().getOpposite();
+                }
+
+                Direction placeDir = entity.getDirection();
+                if (placeDir.getAxis() == Direction.Axis.X) {
+                    placeDir = placeDir.getOpposite();
+                }
+                if (blockItem.getBlock() instanceof RotatedPillarBlock) {
+                    placeDir = hitFace;
+                }
+
+                // prevents blocks from not being placed due to entity hitbox
+                Vec3 originalPos = entity.position();
+                entity.setPos(originalPos.x, originalPos.y + 100.0D, originalPos.z);
+
+                BlockState candidateState = level.getBlockState(placePos);
+                if ((candidateState.isAir() || candidateState.canBeReplaced())
+                        && MainUtil.tryPlaceBlock(owner, placePos)) {
+                    ItemStack placeStack = sourceStack.copy();
+                    if (blockItem.place(new DirectionalPlaceContext(level, placePos, placeDir, placeStack, placeDir)) != InteractionResult.FAIL) {
+                        entity.setPos(originalPos.x, originalPos.y, originalPos.z);
+                        return;
+                    }
+                }
+
+                entity.setPos(originalPos.x, originalPos.y, originalPos.z);
+            }
+        } else if (sourceStack.getItem() instanceof BoneMealItem) {
+            ItemStack mealStack = sourceStack.copy();
+            BlockPos targetPos = !level.getBlockState(blockPos).isAir() ? blockPos : blockPos.below();
+            if (BoneMealItem.growCrop(mealStack, level, targetPos)) {
+                level.levelEvent(1505, targetPos, 0);
+                return;
+            }
+            BlockState state = level.getBlockState(targetPos);
+            if (state.isFaceSturdy(level, targetPos, Direction.UP)
+                    && BoneMealItem.growWaterPlant(mealStack, level, targetPos.above(), Direction.UP)) {
+                level.levelEvent(1505, targetPos.above(), 0);
+                return;
+            }
+        } else if (sourceStack.getItem() instanceof HangingEntityItem hangingItem) {
+            Direction facing = entity.getDirection();
+            BlockPos wallPos = blockPos.relative(facing.getOpposite());
+            ItemStack hangStack = sourceStack.copy();
+            if (hangingItem.useOn(new DirectionalPlaceContext(level, wallPos, facing, hangStack, facing)) != InteractionResult.FAIL) {
+                return;
+            }
+        } else if (sourceStack.getItem() instanceof SpawnEggItem spawnEgg) {
+            BlockPos spawnPos = level.getBlockState(blockPos).canBeReplaced() ? blockPos.below() : blockPos;
+            ItemStack eggStack = sourceStack.copy();
+            if (spawnEgg.useOn(new DirectionalPlaceContext(level, spawnPos, Direction.UP, eggStack, Direction.UP)) != InteractionResult.FAIL) {
+                return;
+            }
+        } else if (sourceStack.getItem() instanceof RecordItem) {
+            BlockPos[] checks = new BlockPos[]{blockPos, blockPos.below()};
+            for (BlockPos checkPos : checks) {
+                BlockEntity be = level.getBlockEntity(checkPos);
+                if (be instanceof JukeboxBlockEntity je && je.getFirstItem().isEmpty()) {
+                    je.setItem(0, sourceStack.copy());
+                    return;
+                } else if (be instanceof StereoBlockEntity se && se.getFirstItem().isEmpty()) {
+                    se.setItem(0, sourceStack.copy());
+                    return;
+                }
+            }
+        } else if (sourceStack.getItem() instanceof SwordItem || sourceStack.getItem() instanceof DiggerItem) {
+            //weapon damage
+            float weaponDamage = 1.0F;
+            if (sourceStack.getItem() instanceof SwordItem sword) {
+                weaponDamage = sword.getDamage() + 1.0F;
+            } else if (sourceStack.getItem() instanceof DiggerItem digger) {
+                weaponDamage = digger.getAttackDamage() + 1.0F;
+            }
+
+            //hits entities if close enough
+            boolean hitAny = false;
+            AABB hitBox = entity.getBoundingBox().inflate(0.8);
+            for (LivingEntity target : level.getEntitiesOfClass(LivingEntity.class, hitBox)) {
+                if (target == entity || target == owner || !target.isAlive()
+                        || target instanceof StandEntity || target instanceof ArmorStand
+                        || PowerTypes.isInADifferentExistence(target, owner)) {
+                    continue;
+                }
+                DamageSource dmgSource = owner instanceof Player player
+                        ? level.damageSources().playerAttack(player)
+                        : level.damageSources().mobAttack(owner);
+                if (target.hurt(dmgSource, weaponDamage)) {
+                    hitAny = true;
+                }
+            }
+
+            //for hits
+            if (hitAny) {
+                level.playSound(null, pos.x, pos.y, pos.z, SoundEvents.PLAYER_ATTACK_STRONG, SoundSource.PLAYERS, 0.85F, 1.0F);
+                sourceStack.hurt(1, level.getRandom(), null);
+            }
+            // mining stuff if it's a mining tool
+            else if (sourceStack.getItem() instanceof DiggerItem) {
+                BlockPos[] checks = new BlockPos[]{
+                        blockPos,
+                        blockPos.below(),
+                        blockPos.relative(entity.getDirection()),
+                        blockPos.above()
+                };
+                for (BlockPos checkPos : checks) {
+                    BlockState state = level.getBlockState(checkPos);
+                    if (!state.isAir()
+                            && state.getDestroySpeed(level, checkPos) >= 0
+                            && sourceStack.isCorrectToolForDrops(state)) {
+                        // thank you king nothing dev guy
+                        BlockEntity blockEntity = state.hasBlockEntity() ? level.getBlockEntity(checkPos) : null;
+                        if (level.destroyBlock(checkPos, false, owner)) {
+                            boolean isCreative = owner instanceof Player player && player.getAbilities().instabuild;
+                            if (!isCreative) {
+                                Block.dropResources(state, level, checkPos, blockEntity, owner, sourceStack);
+                            }
+                            sourceStack.hurt(1, level.getRandom(), null);
+                            break;
+                        }
+                    }
+                }
+            }
+        } else if (sourceStack.getItem() instanceof FireChargeItem) {
+            level.playSound(null, pos.x, pos.y, pos.z, SoundEvents.FIRECHARGE_USE, SoundSource.BLOCKS, 1.0F, (level.random.nextFloat() - level.random.nextFloat()) * 0.2F + 1.0F);
+            int radius = 2;
+            for (int x = -radius; x <= radius; x++) {
+                for (int y = -1; y <= 1; y++) {
+                    for (int z = -radius; z <= radius; z++) {
+                        if (x * x + z * z > radius * radius) continue;
+                        BlockPos firePos = blockPos.offset(x, y, z);
+                        BlockState state = level.getBlockState(firePos);
+                        if ((state.isAir() || state.canBeReplaced())
+                                && !state.liquid()
+                                && MainUtil.tryPlaceBlock(owner, firePos)
+                                && MainUtil.getIsGamemodeApproriateForGrief(owner)) {
+                            BlockState fireState = BaseFireBlock.getState(level, firePos);
+                            if (fireState.canSurvive(level, firePos)) {
+                                level.setBlockAndUpdate(firePos, fireState);
+                            }
+                        }
+                    }
+                }
+            }
+
+            AABB fireBox = entity.getBoundingBox().inflate(2.0);
+            for (LivingEntity target : level.getEntitiesOfClass(LivingEntity.class, fireBox)) {
+                if (target == entity || target == owner || !target.isAlive()
+                        || target instanceof StandEntity || target instanceof ArmorStand
+                        || PowerTypes.isInADifferentExistence(target, owner)) {
+                    continue;
+                }
+                target.setSecondsOnFire(5);
+            }
+            return;
+        }
+        // look at SoftAndWetPlunderBubbleEntity for more info on splashing buckets
+        else if (sourceStack.is(Items.WATER_BUCKET)) {
+            if (level instanceof ServerLevel serverLevel) {
+                serverLevel.sendParticles(
+                        new BlockParticleOption(ParticleTypes.BLOCK, Blocks.WATER.defaultBlockState()),
+                        pos.x, pos.y + 0.25, pos.z,
+                        80, 1.0, 1.0, 1.0, 0.4
+                );
+            }
+            level.playSound(null, pos.x, pos.y, pos.z, SoundEvents.GENERIC_SPLASH, SoundSource.PLAYERS, 1.0F, 1.5F);
+
+            AABB splashBox = entity.getBoundingBox().inflate(4.0);
+            for (Entity target : level.getEntities(entity, splashBox)) {
+                if (target instanceof LivingEntity living) {
+                    if (((StandUser) living).roundabout$isOnStandFire()) {
+                        ((StandUser) living).roundabout$setRemainingStandFireTicks(0);
+                    }
+                }
+                if (target.isOnFire()) {
+                    target.clearFire();
+                }
+            }
+            int radius = 3;
+            for (int x = -radius; x <= radius; x++) {
+                for (int y = -1; y <= 2; y++) {
+                    for (int z = -radius; z <= radius; z++) {
+                        if (x * x + z * z > radius * radius) continue;
+                        BlockPos firePos = blockPos.offset(x, y, z);
+                        BlockState state = level.getBlockState(firePos);
+                        if (state.getBlock() instanceof BaseFireBlock || state.getBlock() instanceof StandFireBlock) {
+                            level.removeBlock(firePos, false);
+                        }
+                    }
+                }
+            }
+            entity.spawnAtLocation(new ItemStack(Items.BUCKET));
+            return;
+        } else if (sourceStack.is(Items.LAVA_BUCKET)) {
+            if (level instanceof ServerLevel serverLevel) {
+                serverLevel.sendParticles(
+                        new BlockParticleOption(ParticleTypes.BLOCK, Blocks.LAVA.defaultBlockState()),
+                        pos.x, pos.y + 0.25, pos.z,
+                        80, 1.0, 1.0, 1.0, 0.4
+                );
+            }
+            level.playSound(null, pos.x, pos.y, pos.z, SoundEvents.GENERIC_SPLASH, SoundSource.PLAYERS, 1.0F, 1.5F);
+
+            AABB splashBox = entity.getBoundingBox().inflate(4.0);
+            for (Entity target : level.getEntities(entity, splashBox)) {
+                if (target == owner || target instanceof StandEntity || target instanceof ArmorStand
+                        || PowerTypes.isInADifferentExistence(target, owner)) {
+                    continue;
+                }
+                target.setRemainingFireTicks(180 + target.getRemainingFireTicks());
+            }
+            entity.spawnAtLocation(new ItemStack(Items.BUCKET));
+            return;
+        } else if (sourceStack.is(Items.MILK_BUCKET)) {
+            if (level instanceof ServerLevel serverLevel) {
+                serverLevel.sendParticles(
+                        new BlockParticleOption(ParticleTypes.BLOCK, Blocks.WHITE_CONCRETE_POWDER.defaultBlockState()),
+                        pos.x, pos.y + 0.25, pos.z,
+                        80, 1.0, 1.0, 1.0, 0.4
+                );
+            }
+            level.playSound(null, pos.x, pos.y, pos.z, SoundEvents.GENERIC_SPLASH, SoundSource.PLAYERS, 1.0F, 1.5F);
+
+            AABB splashBox = entity.getBoundingBox().inflate(3.0);
+            for (LivingEntity target : level.getEntitiesOfClass(LivingEntity.class, splashBox)) {
+                if (target == entity || target instanceof StandEntity || target instanceof ArmorStand
+                        || PowerTypes.isInADifferentExistence(target, owner)) {
+                    continue;
+                }
+                List<MobEffectInstance> preserved = new ArrayList<>();
+                for (MobEffectInstance effect : target.getActiveEffects()) {
+                    if (MainUtil.isSpecialEffect(effect)) {
+                        preserved.add(effect);
+                    }
+                }
+                target.removeAllEffects();
+                for (MobEffectInstance effect : preserved) {
+                    target.addEffect(effect);
+                }
+            }
+            entity.spawnAtLocation(new ItemStack(Items.BUCKET));
             return;
         }
 
@@ -763,7 +1276,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
         entity.spawnAtLocation(sourceStack);
     }
 
-    // item interactions (lifeform creation) start
+    // item interactions (lifeform creation) end
 
     // life sensor start
 
@@ -861,6 +1374,25 @@ public class PowersGoldExperience extends BlockGrabPreset {
         if (!stack.isEmpty() && stack.hasTag()) {
             stack.removeTagKey(IMBUE_TAG);
         }
+    }
+
+    public static void clearImbueFromConsumedStack(Level level, ItemStack stack) {
+        CompoundTag imbue = getImbueData(stack);
+        if (imbue == null) {
+            return;
+        }
+        if (!level.isClientSide() && level instanceof ServerLevel serverLevel
+                && imbue.hasUUID("Id") && imbue.hasUUID("Owner")) {
+            UUID imbueId = imbue.getUUID("Id");
+            UUID ownerId = imbue.getUUID("Owner");
+            Entity ownerEntity = serverLevel.getEntity(ownerId);
+            if (ownerEntity instanceof LivingEntity ownerLiving
+                    && ((StandUser) ownerLiving).roundabout$getStandPowers() instanceof PowersGoldExperience gePowers
+                    && imbueId.equals(gePowers.getActiveImbuedItemId())) {
+                gePowers.setActiveImbuedItemId(null);
+            }
+        }
+        clearImbue(stack);
     }
 
     // animal imbue start
@@ -1551,6 +2083,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 lifeform.setCreator(this.getSelf());
                 ItemStack consumedItem = sourceItem.copy();
                 consumedItem.setCount(1);
+                clearImbueFromConsumedStack(this.self.level(), consumedItem);
                 lifeform.setSourceItem(consumedItem);
             }
 
@@ -1665,20 +2198,42 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     // heal start
 
+    @Override
+    public void buttonInput1(boolean keyIsDown, Options options) {
+        if (holdDownHeal) {
+            if (!keyIsDown) {
+                holdDownHeal = false;
+                if (this.getActivePower() == HEAL_CHARGE && this.attackTimeDuring < MAX_HEAL_CHARGE_TICKS) {
+                    this.healOthers = false;
+                    tryIntPowerPacket(HEAL_CHARGE, 0);
+                }
+            }
+            return;
+        }
+        super.buttonInput1(keyIsDown, options);
+    }
+
     private void tryHeal() {
-        if(!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
-            ((StandUser) this.getSelf()).roundabout$tryPower(HEAL, true);
-            tryPowerPacket(HEAL);
+        if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)
+                && this.getActivePower() != HEAL_CHARGE
+                && this.getActivePower() != HEAL) {
+            this.holdDownHeal = true;
+            this.healOthers = true;
+            this.tryPower(HEAL_CHARGE, true);
+            tryPowerPacket(HEAL_CHARGE);
         }
     }
 
-    private boolean startHealWindup() {
+    private boolean startHealCharge() {
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)) {
             this.hasHealed = false;
             this.healTargetId = -1;
+            if (!this.self.level().isClientSide()) {
+                this.healOthers = true;
+            }
             this.setAttackTimeDuring(0);
-            this.setActivePower(HEAL);
+            this.setActivePower(HEAL_CHARGE);
             this.animateStand(GoldExperienceEntity.HEAL_WINDUP);
             this.poseStand(OffsetIndex.GUARD);
             return true;
@@ -1686,42 +2241,56 @@ public class PowersGoldExperience extends BlockGrabPreset {
         return false;
     }
 
-    private void updateHeal() {
-        if (this.attackTimeDuring > -1) {
-            if (this.attackTimeDuring == 15) {
-                startHealAnimation();
+    private void updateHealCharge() {
+        if (this.attackTimeDuring >= MAX_HEAL_CHARGE_TICKS) {
+            if (this.self.level().isClientSide() && isPacketPlayer()) {
+                this.healOthers = this.holdDownHeal;
+                this.holdDownHeal = false;
             }
-            if (this.attackTimeDuring >= 22 && !this.hasHealed) {
-                finishHeal();
-            }
+            startHealRelease();
         }
     }
 
-    private void startHealAnimation() {
-        if (!this.self.level().isClientSide()) {
-            Entity target = MainUtil.getTargetEntity(this.getSelf(), 5f);
-            if (target instanceof LivingEntity livingHeal) {
-                this.healTargetId = livingHeal.getId();
-                this.animateStand(GoldExperienceEntity.HEAL_OTHERS);
-            } else {
-                this.healTargetId = -1;
-                this.animateStand(GoldExperienceEntity.HEAL_SELF);
+    private boolean startHealRelease() {
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand)) {
+            this.hasHealed = false;
+            this.setAttackTimeDuring(0);
+            this.setActivePower(HEAL);
+            if (!this.self.level().isClientSide()) {
+                if (this.healOthers) {
+                    Entity target = MainUtil.getTargetEntity(this.getSelf(), 5f);
+                    this.healTargetId = (target instanceof LivingEntity livingHeal) ? livingHeal.getId() : -1;
+                    this.animateStand(GoldExperienceEntity.HEAL_OTHERS);
+                } else {
+                    this.healTargetId = -1;
+                    this.animateStand(GoldExperienceEntity.HEAL_SELF);
+                }
             }
+            return true;
+        }
+        return false;
+    }
+
+    private void updateHeal() {
+        if (this.attackTimeDuring >= 7 && !this.hasHealed) {
+            finishHeal();
         }
     }
 
     private void finishHeal() {
         if (!this.self.level().isClientSide()) {
             this.hasHealed = true;
-            Entity lockedTarget = this.healTargetId != -1 ? this.self.level().getEntity(this.healTargetId) : null;
-
-            if (lockedTarget instanceof LivingEntity livingHeal && livingHeal.isAlive()) {
-                // for healing others
-                livingHeal.heal(1f);
-                livingHeal.addEffect(new MobEffectInstance(ModEffects.RECONSTRUCTION, 400, 0, false, true, true));
-                playSoundIfPossible(this.self.level(), livingHeal, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            if (this.healOthers) {
+                Entity lockedTarget = this.healTargetId != -1
+                        ? this.self.level().getEntity(this.healTargetId)
+                        : MainUtil.getTargetEntity(this.getSelf(), 5f);
+                if (lockedTarget instanceof LivingEntity livingHeal && livingHeal.isAlive()) {
+                    livingHeal.heal(1f);
+                    livingHeal.addEffect(new MobEffectInstance(ModEffects.RECONSTRUCTION, 400, 0, false, true, true));
+                    playSoundIfPossible(this.self.level(), livingHeal, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+                }
             } else {
-                // for healing yourself
                 this.self.heal(1f);
                 this.self.addEffect(new MobEffectInstance(ModEffects.RECONSTRUCTION, 400, 0, false, true, true));
                 playSoundIfPossible(this.self.level(), this.self, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
@@ -1981,7 +2550,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // life punch start
 
     private void tryLifePunch() {
-        if (!this.onCooldown(LIFE_PUNCH)) {
+        if (!this.onCooldown(PowerIndex.GENERAL_3)) {
             if (this.activePower == LIFE_PUNCH) {
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                 tryPowerPacket(PowerIndex.NONE);
@@ -2240,9 +2809,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
             }
 
             if (this.getSelf() instanceof Player serverPlayer && !this.getSelf().level().isClientSide()) {
-                S2CPacketUtil.sendCooldownSyncPacket((ServerPlayer) serverPlayer, PowerIndex.SKILL_3_CROUCH_GUARD, getLifePunchCooldown());
+                S2CPacketUtil.sendCooldownSyncPacket((ServerPlayer) serverPlayer, PowerIndex.GENERAL_3, getLifePunchCooldown());
             }
-            this.setCooldown(PowerIndex.SKILL_3_CROUCH_GUARD, getLifePunchCooldown());
+            this.setCooldown(PowerIndex.GENERAL_3, getLifePunchCooldown());
         }
     }
 
@@ -2291,7 +2860,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             basis *= 0.3f;
         }
 
-        if (this.getActivePower() == HEAL){
+        if (this.getActivePower() == HEAL || this.getActivePower() == HEAL_CHARGE){
             // slows you down by 70% while healing
             basis *= 0.7f;
         }
@@ -2311,7 +2880,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public boolean cancelSprintJump(){
         if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2
-            || this.getActivePower() == HEAL) {
+            || this.getActivePower() == HEAL || this.getActivePower() == HEAL_CHARGE) {
             return true;
         }
         return super.cancelSprintJump();
@@ -2488,7 +3057,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
         if (isGuarding()){
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         } else if (isHoldingSneak()) {
-            setSkillIcon(context, x, y, 3, StandIcons.GOLD_EXPERIENCE_LIFE_PUNCH, PowerIndex.SKILL_3_CROUCH_GUARD);
+            setSkillIcon(context, x, y, 3, StandIcons.GOLD_EXPERIENCE_LIFE_PUNCH, PowerIndex.GENERAL_3);
         } else if (canLatchOntoWall()) {
             setSkillIcon(context, x, y, 3, StandIcons.GOLD_EXPERIENCE_VINE_CLIMB, PowerIndex.SKILL_3);
         } else {

@@ -290,6 +290,8 @@ public class StandPowers extends AbilityScapeBasis {
         return false;
     }
 
+    public boolean isRequiemStand() {return false;}
+
     /**This gets set to true when you begin using a forward barrage, not many stands will use this mechanic likely*/
     public boolean forwardBarrage = false;
 
