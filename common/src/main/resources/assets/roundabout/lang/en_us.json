@@ -4550,6 +4550,8 @@
   "config.roundabout.SmokeRadius.desc": "The radius of the smoke cloud. (Big numbers will impact performance)",
   "config.roundabout.SmokeExpansionTicks.name": "Smoke Expansion Ticks",
   "config.roundabout.SmokeExpansionTicks.desc": "The amount of ticks it takes until the smoke reaches its full size.",
+  "config.roundabout.PodRechargeTime.name": "Pod Recharge Time",
+  "config.roundabout.PodRechargeTime.desc": "The amount of ticks it takes until the pods regenerate when at max level.",
 
   "config.roundabout.MaxCombo.name": "Max Combo",
   "config.roundabout.MaxCombo.desc": "The amount of Autumn Leaves you can move with in a row before the next going on cooldown.",
