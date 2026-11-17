@@ -75,22 +75,24 @@ public class MoldSporesEntity extends StandEntity {
         }
 
 
-        if (user.isUsingItem() && user.getMainHandItem().getItem().getFoodProperties() != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
-            if (user.isUsingItem() && user.getMainHandItem().getItem().getFoodProperties().getNutrition() > 0) {
-                if (ClientNetworking.getAppropriateConfig().greenDaySettings.eatingCancelsMold) {
-                    this.discard();
-                    PGD.setCooldown(PowerIndex.SKILL_4, ClientNetworking.getAppropriateConfig().greenDaySettings.moldSpreadForceCooldown);
+        if((StandUU.roundabout$getStandPowers() instanceof PowersGreenDay PGD)){
+            if (user.isUsingItem() && user.getMainHandItem().getItem().getFoodProperties() != null) {
+                if (user.isUsingItem() && user.getMainHandItem().getItem().getFoodProperties().getNutrition() > 0) {
+                    if (ClientNetworking.getAppropriateConfig().greenDaySettings.eatingCancelsMold) {
+                        this.discard();
+                        PGD.setCooldown(PowerIndex.SKILL_4, ClientNetworking.getAppropriateConfig().greenDaySettings.moldSpreadForceCooldown);
+                    }
                 }
             }
-        }if((StandUU.roundabout$getStandPowers() instanceof PowersGreenDay)){
-            if(((PowersGreenDay)StandUU.roundabout$getStandPowers()).MoldGone){
+
+            if(PGD.MoldGone){
                 this.discard();
             }
         }
         if (!getUser().isAlive()) {
             this.discard();
         }
-        ;
+
 
         if (this.getDeltaMovement().y > 0.2) {
             this.setDeltaMovement(this.getDeltaMovement().add(0, -00.06, 0));
