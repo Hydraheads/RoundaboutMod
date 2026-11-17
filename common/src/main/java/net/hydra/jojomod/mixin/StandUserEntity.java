@@ -5968,6 +5968,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     ci.setReturnValue(false);
                     return;
                 }
+
+                if (damageSource.getEntity() instanceof LivingEntity attacker) {
+                    if (living instanceof Player PL && ((StandUser) attacker).roundabout$getStandPowers() instanceof PowersGoldExperience PGE) {
+                        PGE.onPlayerHurt(PL, damageSource, $$1);
+                    }
+                }
             }
 
             /*
