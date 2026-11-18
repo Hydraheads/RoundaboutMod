@@ -724,6 +724,14 @@ public class PowersKingNothing extends NewDashPreset {
                     }
                 }
             }
+            Set<BlockPos> removalSet = new HashSet<>();
+            for (BlockPos pos : itemHoldingBlocks) {
+                if (!locatedChests.contains(pos)) {
+                    removalSet.add(pos);
+                    S2CPacketUtil.knRemoveItemContainer(((Player) getSelf()), pos);
+                }
+            }
+            itemHoldingBlocks.removeAll(removalSet);
         }
         return foundTem;
     }
