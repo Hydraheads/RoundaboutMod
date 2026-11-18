@@ -10,6 +10,7 @@ import net.hydra.jojomod.stand.powers.PowersGoldExperience;
 import net.hydra.jojomod.stand.powers.PowersWhitesnake;
 import net.hydra.jojomod.event.powers.whitesnake.WhitesnakeControlInventory;
 import net.minecraft.ChatFormatting;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -40,6 +41,7 @@ public abstract class FirearmItem extends Item {
     public static final String AMMO_COUNT_TAG = "AmmoCount";
     public static final String RELOADING_TAG = "IsReloading";
     public static final String TREE_IMBUED_SHOTS_TAG = "TreeImbuedShots";
+    public static final String TREE_IMBUED_OWNER_TAG = "TreeImbuedOwner";
     public static boolean cycleReload = false;
 
     public FirearmItem(Properties properties) {
@@ -77,6 +79,10 @@ public abstract class FirearmItem extends Item {
                     int remove = Math.min(stack.getCount(), amount);
                     int currentImbued = gunStack.getOrCreateTag().getInt(TREE_IMBUED_SHOTS_TAG);
                     gunStack.getOrCreateTag().putInt(TREE_IMBUED_SHOTS_TAG, currentImbued + remove);
+                    CompoundTag imbue = PowersGoldExperience.getImbueData(stack);
+                    if (imbue != null && imbue.hasUUID("Owner")) {
+                        gunStack.getOrCreateTag().putUUID(TREE_IMBUED_OWNER_TAG, imbue.getUUID("Owner"));
+                    }
                     PowersGoldExperience.clearImbueFromConsumedStack(player.level(), stack);
                     if (!player.isCreative()) {
                         stack.shrink(remove);
@@ -91,6 +97,10 @@ public abstract class FirearmItem extends Item {
                     int remove = Math.min(stack.getCount(), amount);
                     int currentImbued = gunStack.getOrCreateTag().getInt(TREE_IMBUED_SHOTS_TAG);
                     gunStack.getOrCreateTag().putInt(TREE_IMBUED_SHOTS_TAG, currentImbued + remove);
+                    CompoundTag imbue = PowersGoldExperience.getImbueData(stack);
+                    if (imbue != null && imbue.hasUUID("Owner")) {
+                        gunStack.getOrCreateTag().putUUID(TREE_IMBUED_OWNER_TAG, imbue.getUUID("Owner"));
+                    }
                     PowersGoldExperience.clearImbueFromConsumedStack(player.level(), stack);
                     if (!player.isCreative()) {
                         stack.shrink(remove);
@@ -208,6 +218,12 @@ public abstract class FirearmItem extends Item {
             if (imbuedShots > 0) {
                 itemStack.getOrCreateTag().putInt(TREE_IMBUED_SHOTS_TAG, imbuedShots - 1);
                 ((IGEProjectile) bullet).roundabout$setGETreeImbue(true);
+                if (itemStack.getOrCreateTag().hasUUID(TREE_IMBUED_OWNER_TAG)) {
+                    ((IGEProjectile) bullet).roundabout$setGETreeImbueOwner(itemStack.getOrCreateTag().getUUID(TREE_IMBUED_OWNER_TAG));
+                    if (imbuedShots - 1 <= 0) {
+                        itemStack.getOrCreateTag().remove(TREE_IMBUED_OWNER_TAG);
+                    }
+                }
             }
             level.addFreshEntity(bullet);
             applyRecoil(player);

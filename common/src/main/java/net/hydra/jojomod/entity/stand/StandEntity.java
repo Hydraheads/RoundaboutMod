@@ -261,6 +261,8 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                         mr.cycleFlames.stop();
                         mr.hideFlames.startIfStopped(this.tickCount);
                     }
+                } else if (this instanceof KillerQueenEntity kq){
+                    kq.hideBubble.startIfStopped(this.tickCount);
                 }
                 return;
             }

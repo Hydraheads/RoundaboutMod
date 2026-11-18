@@ -128,6 +128,7 @@ public class KnifeEntity extends AbstractArrow {
 
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
+        PowersGoldExperience.applyTreeImbueOnBlockHit(this, $$0);
         ((IAbstractArrowAccess)this).roundabout$setLastState(this.level().getBlockState($$0.getBlockPos()));
         BlockState BSS = this.level().getBlockState($$0.getBlockPos());
         BSS.onProjectileHit(this.level(), BSS, $$0, this);
@@ -247,6 +248,11 @@ public class KnifeEntity extends AbstractArrow {
             }
             this.playSound($$6, 1.0F, (this.random.nextFloat() * 0.2F + 0.9F));
             this.discard();
+        }
+        else if ($$4 instanceof LivingEntity LE) {
+            if (((StandUser)$$4).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && is(KQ.bombEntity) && KQ.getCurrentBombStatus() == 10) {
+                KQ.defuseServer();
+            }
         }
 
     }

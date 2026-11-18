@@ -1040,6 +1040,12 @@
       "roundabout:btd_arrow"
     ]
   },
+  "ge_requiem_obtain": {
+    "subtitle": "sounds.roundabout.ge_requiem_obtain",
+    "sounds": [
+      "roundabout:ge_requiem_obtain"
+    ]
+  },
   "killer_queen_bomb_detonate": {
     "subtitle": "sounds.roundabout.killer_queen_bomb_detonate",
     "sounds": [
