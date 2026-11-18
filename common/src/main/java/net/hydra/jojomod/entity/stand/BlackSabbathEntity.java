@@ -1284,9 +1284,9 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                 double z = lent.getZ() + Math.sin(angle) * distance;
                 int baseY = Mth.floor(lent.getY());
                 for (int yOffset = 0; yOffset <= 10; yOffset++) {
-                    double y = baseY + yOffset;
+                    double y = Mth.floor(baseY + yOffset);
                     Vec3 candidate = new Vec3(x, y, z);
-                    BlockPos bpos = BlockPos.containing(x, y - 0.1, z);
+                    BlockPos bpos = BlockPos.containing(x, y, z);
                     var blockState = this.level().getBlockState(bpos);
                     AABB yesbox = ModEntities.BLACK_SABBATH.getAABB(lent.getX(), lent.getY(), lent.getZ());
                     AABB testBox = yesbox.move(
@@ -1298,9 +1298,9 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                         return candidate;
                     } else {
                         for (int yOffset2 = -1; yOffset2 >= -8; yOffset2--) {
-                            double y2 = baseY + yOffset2;
+                            double y2 = Mth.floor(baseY + yOffset2);
                             Vec3 candidate2 = new Vec3(x, y2, z);
-                            BlockPos bpos2 = BlockPos.containing(x, y2 - 0.1, z);
+                            BlockPos bpos2 = BlockPos.containing(x, y2, z);
                             var blockState2 = this.level().getBlockState(bpos2);
                             AABB yesbox2 = ModEntities.BLACK_SABBATH.getAABB(lent.getX(), lent.getY(), lent.getZ());
                             AABB testBox2 = yesbox2.move(

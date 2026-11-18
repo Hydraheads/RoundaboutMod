@@ -21,6 +21,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.*;
+import net.hydra.jojomod.access.IGEProjectile;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.BlockGrabPreset;
@@ -36,7 +37,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -49,7 +49,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -97,10 +96,13 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public static final byte ITEM_IMBUE = 62;
 
     @Override
-    public boolean canUseStandArrow() { return true; }
+    public boolean canUseStandArrow() { return canUseRequiem(); }
 
     public boolean canUseRequiem() {
         return hasGoldenDisc() || canExecuteMoveWithLevel(getMaxLevel());
+    }
+    public boolean isPossibleToRequiem() {
+        return resolvePoints >= getNeededResolvePoints();
     }
 
     private float resolvePoints = 0F;
@@ -110,7 +112,27 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     @Override
     public boolean onStandArrowUse() {
-        /// Do ya thingy here
+        if (this.self instanceof Player PE) {
+            if (isPossibleToRequiem()) { /// do epic aura farm animation here or something
+                sendParticlesIfPossible(self.level(),ParticleTypes.FIREWORK, PE.getX(),
+                        PE.getY() + PE.getEyeHeight(), PE.getZ(),
+                        20, 0, 0, 0, 0.4);
+
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.BITES_THE_DUST_ARROW_EVENT, SoundSource.PLAYERS, 0.85F, 1.0f);
+
+                if (!isClient()) {
+                    ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.requiem_activated").
+                            withStyle(ChatFormatting.YELLOW), true);
+                }
+
+                return true;
+            }else {
+                if (!isClient()) {
+                    ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.requiem_failed").
+                            withStyle(ChatFormatting.RED), true);
+                }
+            }
+        }
         return false;
     }
 
@@ -788,6 +810,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (!consumeClickInput) {
+            if (impaleTicks > 0){
+                return;
+            }
             if (keyIsDown) {
                 if (!isHoldingSneak()) {
                     super.buttonInputAttack(keyIsDown, options);
@@ -829,7 +854,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // lets animations happen while blocking
     @Override
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
-        if (suspendGuard) {
+        if (impaleTicks > 0) {
             return false;
         }
         if (this.activePower == TREE || this.activePower == BUSH_CREATION
@@ -1274,6 +1299,62 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
         // default revert to item
         entity.spawnAtLocation(sourceStack);
+    }
+
+    // item imbue tree interactions
+
+    public static boolean isProjectileImbueItem(ItemStack stack) {
+        if (stack.isEmpty()) return false;
+        Item item = stack.getItem();
+        return item instanceof ArrowItem
+                || item instanceof SnowballItem
+                || item instanceof EggItem
+                || item instanceof AmmoItem
+                || stack.is(ModItems.KNIFE)
+                || stack.is(ModItems.KNIFE_BUNDLE)
+                || stack.is(ModItems.MATCH)
+                || stack.is(ModItems.MATCH_BUNDLE);
+    }
+
+    public static boolean isTreeImbuedProjectileItem(ItemStack stack) {
+        CompoundTag imbue = getImbueData(stack);
+        return imbue != null && imbue.getByte("Type") == IMBUE_TREE && isProjectileImbueItem(stack);
+    }
+
+    public static void transferTreeImbueToProjectile(Level level, ItemStack sourceStack, Projectile projectile) {
+        CompoundTag imbue = getImbueData(sourceStack);
+        if (imbue == null || imbue.getByte("Type") != IMBUE_TREE) return;
+
+        if (!level.isClientSide() && level instanceof ServerLevel serverLevel
+                && imbue.hasUUID("Id") && imbue.hasUUID("Owner")) {
+            UUID imbueId = imbue.getUUID("Id");
+            UUID ownerId = imbue.getUUID("Owner");
+            Entity ownerEntity = serverLevel.getEntity(ownerId);
+            if (ownerEntity instanceof LivingEntity ownerLiving
+                    && ((StandUser) ownerLiving).roundabout$getStandPowers() instanceof PowersGoldExperience gePowers
+                    && imbueId.equals(gePowers.getActiveImbuedItemId())) {
+                ((IGEProjectile) projectile).roundabout$setGETreeImbue(true);
+                gePowers.setActiveImbuedItemId(null);
+            }
+        }
+        clearImbue(sourceStack);
+    }
+
+    public static void applyTreeImbueOnProjectileHit(Projectile projectile, Entity target) {
+        if (projectile.level().isClientSide() || !(target instanceof LivingEntity victim)) return;
+        if (!((IGEProjectile) projectile).roundabout$hasGETreeImbue()) return;
+
+        ((IGEProjectile) projectile).roundabout$setGETreeImbue(false);
+
+        if (victim instanceof StandUser su) {
+            if (!su.roundabout$getGERootedItem().isEmpty()) {
+                victim.spawnAtLocation(su.roundabout$getGERootedItem());
+            }
+            su.roundabout$setGERootedItem(ItemStack.EMPTY);
+            su.roundabout$setGERooted(true);
+            victim.level().playSound(null, victim.blockPosition(),
+                    ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.85F, 1.0F);
+        }
     }
 
     // item interactions (lifeform creation) end
@@ -2594,8 +2675,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
     private void standLifePunch() {
         if (this.self instanceof Player) {
             if (isPacketPlayer()) {
-                this.setAttackTimeDuring(-20);
-                impaleTicks = 15;
+                this.setAttackTimeDuring(-25);
+                impaleTicks = 20;
                 tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK, getTargetEntityId2(impaleRange));
             }
         } else {

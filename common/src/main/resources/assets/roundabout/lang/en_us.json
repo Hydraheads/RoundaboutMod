@@ -3053,6 +3053,8 @@
   "leveling.roundabout.levelup.memory": "Stand Development: New Memory Slot!",
   "leveling.roundabout.levelup.memory_and_ability": "Stand Development: New Ability and Memory Slot!",
   "leveling.roundabout.levelup.max.memory": "Max Development: New Memory Slot!",
+  "leveling.roundabout.requiem_activated": "This is... requiem",
+  "leveling.roundabout.requiem_failed": "You're still not worthy...",
 
   "leveling.roundabout.levelup.vampire": "You Became Stronger, Skill Point Unlocked!",
 
@@ -3848,7 +3850,7 @@
   "roundabout.gold_experience_animal.bat": "Bat",
   "roundabout.gold_experience_animal.bat.desc": "Bats will find the closest entity and fly erraticaly in their face to bait reflection hits.",
   "roundabout.gold_experience_animal.fish": "Fish",
-  "roundabout.gold_experience_animal.fish.desc": "Swims in a straight line from where it spawned. You can interact with the fish to have it carry you.",
+  "roundabout.gold_experience_animal.fish.desc": "Swims in a straight line based on where you're looking when it spawned. You can interact with the fish to have it carry you.",
   "roundabout.gold_experience_animal.pirahna": "Pirahna",
   "roundabout.gold_experience_animal.pirahna.desc": "Rushes to the last enemy you hit, or who hit you, and bites them, inflicting bleed.",
   "roundabout.gold_experience_animal.snake": "Snake",
@@ -4644,14 +4646,17 @@
   "config.roundabout.silverChariotAfterimageOpacity.desc": "Opacity of the rendered afterimages.",
   "config.roundabout.silverChariotShouldRenderAfterimagesWhileUserInFirstPerson.name": "Toggle first person afterimages",
   "config.roundabout.silverChariotShouldRenderAfterimagesWhileUserInFirstPerson.desc": "Toggles if Silver Chariot's user should see afterimages in first person.",
-  "config.roundabout.silverChariotArmourShedStandSealTime.name": "Armor Rec. Seal Time",
+  "config.roundabout.silverChariotArmourShedStandSealTime.name": "Armour Resummon Seal Time",
   "config.roundabout.silverChariotArmourShedStandSealTime.desc": "How long Silver Chariot is sealed after desummoning your stand while the stand's armour is off.",
-
   "config.roundabout.silverChariotSelfCarryModeMaxHoverCharge.name": "Carry Max Hover Charge",
   "config.roundabout.silverChariotSelfCarryModeMaxHoverCharge.desc": "Duration of hovering in self carry mode.",
-
   "config.roundabout.silverChariotMinimumCooldownCrouchAttack.name": "Minimum Cooldown Crouch Attack",
   "config.roundabout.silverChariotMinimumCooldownCrouchAttack.desc": "Minimum cooldown of the item swipe attack.",
+  "config.roundabout.silverChariotBonusPlayerDMGArmSummon.name": "Bonus damage from Arm Summon against players",
+  "config.roundabout.silverChariotBonusPlayerDMGArmSummon.desc": "This % melee damage increase from Arm Summon against players.",
+  "config.roundabout.silverChariotBonusMobDMGArmSummon.name": "Bonus damage from Arm Summon against mobs",
+  "config.roundabout.silverChariotBonusMobDMGArmSummon.desc": "This % melee damage increase from Arm Summon against players.",
+
   "config.roundabout.enableCatchTheRainbow.name": "Enable Catch The Rainbow",
   "config.roundabout.enableCatchTheRainbow.desc": "Enable Catch The Rainbow",
 

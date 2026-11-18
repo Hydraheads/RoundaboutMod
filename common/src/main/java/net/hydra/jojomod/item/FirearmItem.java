@@ -1,10 +1,12 @@
 package net.hydra.jojomod.item;
 
+import net.hydra.jojomod.access.IGEProjectile;
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersGoldExperience;
 import net.hydra.jojomod.stand.powers.PowersWhitesnake;
 import net.hydra.jojomod.event.powers.whitesnake.WhitesnakeControlInventory;
 import net.minecraft.ChatFormatting;
@@ -37,6 +39,7 @@ public abstract class FirearmItem extends Item {
 
     public static final String AMMO_COUNT_TAG = "AmmoCount";
     public static final String RELOADING_TAG = "IsReloading";
+    public static final String TREE_IMBUED_SHOTS_TAG = "TreeImbuedShots";
     public static boolean cycleReload = false;
 
     public FirearmItem(Properties properties) {
@@ -59,13 +62,44 @@ public abstract class FirearmItem extends Item {
     }
 
     // ammo consumption
-    protected int consumeAmmoFromInventory(Player player, int amount) {
+    protected int consumeAmmoFromInventory(Player player, ItemStack gunStack, int amount) {
         if (canWhitesnakeUse() && WhitesnakeControlInventory.isActive(player)) {
             return player.isCreative() ? getMaxAmmo() : WhitesnakeControlInventory.consumeAmmo(player, amount);
         }
         Inventory inv = player.getInventory();
         int consumed = 0;
 
+        // prioritizes imbue shots first
+        if (!gunStack.isEmpty()) {
+            for (int i = 0; i < inv.offhand.size() && amount > 0; i++) {
+                ItemStack stack = inv.offhand.get(i);
+                if (stack.getItem() == getAmmoItem() && PowersGoldExperience.isTreeImbuedProjectileItem(stack)) {
+                    int remove = Math.min(stack.getCount(), amount);
+                    int currentImbued = gunStack.getOrCreateTag().getInt(TREE_IMBUED_SHOTS_TAG);
+                    gunStack.getOrCreateTag().putInt(TREE_IMBUED_SHOTS_TAG, currentImbued + remove);
+                    PowersGoldExperience.clearImbueFromConsumedStack(player.level(), stack);
+                    if (!player.isCreative()) {
+                        stack.shrink(remove);
+                    }
+                    consumed += remove;
+                    amount -= remove;
+                }
+            }
+            for (int i = 0; i < inv.items.size() && amount > 0; i++) {
+                ItemStack stack = inv.items.get(i);
+                if (stack.getItem() == getAmmoItem() && PowersGoldExperience.isTreeImbuedProjectileItem(stack)) {
+                    int remove = Math.min(stack.getCount(), amount);
+                    int currentImbued = gunStack.getOrCreateTag().getInt(TREE_IMBUED_SHOTS_TAG);
+                    gunStack.getOrCreateTag().putInt(TREE_IMBUED_SHOTS_TAG, currentImbued + remove);
+                    PowersGoldExperience.clearImbueFromConsumedStack(player.level(), stack);
+                    if (!player.isCreative()) {
+                        stack.shrink(remove);
+                    }
+                    consumed += remove;
+                    amount -= remove;
+                }
+            }
+        }
         for (int i = 0; i < inv.items.size() && amount > 0; i++) {
             ItemStack stack = inv.items.get(i);
             if (stack.getItem() == getAmmoItem() && !player.isCreative()) {
@@ -138,7 +172,7 @@ public abstract class FirearmItem extends Item {
 
         if (isReloading(stack) && !player.getCooldowns().isOnCooldown(this) && (player.getMainHandItem() == stack || player.getOffhandItem() == stack)) {
             int ammoNeeded = getMaxAmmo() - getAmmo(stack);
-            int ammoLoaded = consumeAmmoFromInventory(player, ammoNeeded);
+            int ammoLoaded = consumeAmmoFromInventory(player, stack, ammoNeeded);
 
             if (ammoLoaded > 0) {
                 setAmmo(stack, player.isCreative() ? getMaxAmmo() : getAmmo(stack) + ammoLoaded);
@@ -168,8 +202,13 @@ public abstract class FirearmItem extends Item {
                 bullet.setPos(shotSource.getX(), shotSource.getEyeY() - 0.15D, shotSource.getZ());
             }
 
+            int imbuedShots = itemStack.getOrCreateTag().getInt(TREE_IMBUED_SHOTS_TAG);
             configureBulletTrajectory(bullet, shotSource);
             bullet.setAmmoType(getBulletType());
+            if (imbuedShots > 0) {
+                itemStack.getOrCreateTag().putInt(TREE_IMBUED_SHOTS_TAG, imbuedShots - 1);
+                ((IGEProjectile) bullet).roundabout$setGETreeImbue(true);
+            }
             level.addFreshEntity(bullet);
             applyRecoil(player);
 
