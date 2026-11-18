@@ -59,13 +59,11 @@ public abstract class KeysKeyboardInput extends Input {
                 }
                 roundabout$keyRider.tick($$0,$$1);
 
-            } else if (user.roundabout$getStandPowers() instanceof PowersSilverChariot psc && psc.getSelfCarryMode()) {
-                /*
+            } else if (player.isPassenger() && player.getVehicle() instanceof SilverChariotMountEntity scme) {
                 if (roundabout$keyRider == null){
                     roundabout$keyRider = new KeyboardPilotInput(this.options);
                 }
                 roundabout$keyRider.tick($$0,$$1);
-                */
             }
 
             if (noKeys) {
