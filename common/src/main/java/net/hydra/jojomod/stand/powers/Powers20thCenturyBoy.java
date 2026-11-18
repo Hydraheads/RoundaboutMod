@@ -752,7 +752,6 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             }
 
             if (gticks <= 0){
-
                 if (currentDefenseTicks < 40) {
                     if (invincibleState) {
                         setInvincibleState(false, true);
