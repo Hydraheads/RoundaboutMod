@@ -1179,6 +1179,9 @@ public class ForgeSounds {
     public static final RegistryObject<SoundEvent> GOLD_EXPERIENCE_LIFE_PUNCH =
             register(ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH, ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_ID);
 
+    public static final RegistryObject<SoundEvent> GE_REQUIEM_ARROW =
+            register(ModSounds.GE_REQUIEM_ARROW, ModSounds.GE_REQUIEM_ARROW_ID);
+
     public static final RegistryObject<SoundEvent> SUMMON_GREEN_DAY =
             register(ModSounds.SUMMON_GREEN_DAY, ModSounds.SUMMON_GREEN_DAY_ID);
     public static final RegistryObject<SoundEvent> GREEN_DAY_SPIN =

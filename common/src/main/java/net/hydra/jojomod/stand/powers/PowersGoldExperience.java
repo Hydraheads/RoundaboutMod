@@ -118,7 +118,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                         PE.getY() + PE.getEyeHeight(), PE.getZ(),
                         20, 0, 0, 0, 0.4);
 
-                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.BITES_THE_DUST_ARROW_EVENT, SoundSource.PLAYERS, 0.85F, 1.0f);
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.GE_REQUIEM_ARROW_EVENT, SoundSource.PLAYERS, 0.85F, 1.0f);
 
                 if (!isClient()) {
                     ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.requiem_activated").
