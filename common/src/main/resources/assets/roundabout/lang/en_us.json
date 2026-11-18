@@ -4611,14 +4611,17 @@
   "config.roundabout.silverChariotAfterimageOpacity.desc": "Opacity of the rendered afterimages.",
   "config.roundabout.silverChariotShouldRenderAfterimagesWhileUserInFirstPerson.name": "Toggle first person afterimages",
   "config.roundabout.silverChariotShouldRenderAfterimagesWhileUserInFirstPerson.desc": "Toggles if Silver Chariot's user should see afterimages in first person.",
-  "config.roundabout.silverChariotArmourShedStandSealTime.name": "Armor Rec. Seal Time",
+  "config.roundabout.silverChariotArmourShedStandSealTime.name": "Armour Resummon Seal Time",
   "config.roundabout.silverChariotArmourShedStandSealTime.desc": "How long Silver Chariot is sealed after desummoning your stand while the stand's armour is off.",
-
   "config.roundabout.silverChariotSelfCarryModeMaxHoverCharge.name": "Carry Max Hover Charge",
   "config.roundabout.silverChariotSelfCarryModeMaxHoverCharge.desc": "Duration of hovering in self carry mode.",
-
   "config.roundabout.silverChariotMinimumCooldownCrouchAttack.name": "Minimum Cooldown Crouch Attack",
   "config.roundabout.silverChariotMinimumCooldownCrouchAttack.desc": "Minimum cooldown of the item swipe attack.",
+  "config.roundabout.silverChariotBonusPlayerDMGArmSummon.name": "Bonus damage from Arm Summon against players",
+  "config.roundabout.silverChariotBonusPlayerDMGArmSummon.desc": "This % melee damage increase from Arm Summon against players.",
+  "config.roundabout.silverChariotBonusMobDMGArmSummon.name": "Bonus damage from Arm Summon against mobs",
+  "config.roundabout.silverChariotBonusMobDMGArmSummon.desc": "This % melee damage increase from Arm Summon against players.",
+
   "config.roundabout.enableCatchTheRainbow.name": "Enable Catch The Rainbow",
   "config.roundabout.enableCatchTheRainbow.desc": "Enable Catch The Rainbow",
 

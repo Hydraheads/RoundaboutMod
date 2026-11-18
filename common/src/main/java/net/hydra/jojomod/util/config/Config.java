@@ -904,7 +904,7 @@ public class Config implements Cloneable {
         public Integer SmokeRadius;
         @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
         public Integer SmokeExpansionTicks;
-        @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 800, min = 0, max = 72000)
         public Integer PodRechargeTime;
 
     }
@@ -1565,9 +1565,9 @@ public class Config implements Cloneable {
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer silverChariotSelfCarryModeMaxHoverCharge;
         @FloatOption(group = "inherit", value = 2.1F, min = 0, max = 72000F)
-        public Float bonusPlayerDMGArmSummon;
+        public Float silverChariotBonusPlayerDMGArmSummon;
         @FloatOption(group = "inherit", value = 6.0F, min = 0, max = 72000F)
-        public Float bonusMobDMGArmSummon;
+        public Float silverChariotBonusMobDMGArmSummon;
     }
 
     public static class CatchTheRainbowSettings {
