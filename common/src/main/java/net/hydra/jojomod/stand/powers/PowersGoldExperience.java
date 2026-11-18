@@ -1309,11 +1309,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
         return item instanceof ArrowItem
                 || item instanceof SnowballItem
                 || item instanceof EggItem
-                || item instanceof TridentItem
-                || item instanceof HarpoonItem
                 || stack.is(ModItems.KNIFE)
                 || stack.is(ModItems.KNIFE_BUNDLE)
-                || stack.is(ModItems.GASOLINE_CAN)
                 || stack.is(ModItems.MATCH)
                 || stack.is(ModItems.MATCH_BUNDLE)
                 || stack.is(ModItems.SNUBNOSE_AMMO)
