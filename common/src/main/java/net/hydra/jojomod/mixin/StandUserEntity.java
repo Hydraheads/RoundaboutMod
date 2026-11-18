@@ -104,6 +104,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.*;
 import java.util.function.Predicate;
 
+import static net.hydra.jojomod.util.MainUtil.isBossMob;
 import static net.hydra.jojomod.util.MainUtil.sendParticlesIfPossible;
 
 @Mixin(value = LivingEntity.class, priority = 103)
@@ -1718,14 +1719,23 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (roundabout$hasSpringLegs() && --roundabout$springLegsTicks <= 0) {
                 roundabout$setSpringLegs(false);
             }
-            if (roundabout$hasGERooted() && --roundabout$GERootTicks <= 0) {
-                roundabout$setGERooted(false);
-                if (!this.roundabout$GERootedItem.isEmpty()) {
-                    this.spawnAtLocation(this.roundabout$GERootedItem);
-                    this.roundabout$GERootedItem = ItemStack.EMPTY;
+            if (roundabout$hasGERooted()) {
+                if (this.tickCount % 3 == 0) {
+                    float halfWidth = this.getBbWidth() * 0.4F;
+                    MainUtil.sendParticlesIfPossible(this, level(),
+                            new BlockParticleOption(ParticleTypes.BLOCK, Blocks.OAK_WOOD.defaultBlockState()),
+                            this.getX(), this.getY() + 0.15, this.getZ(),
+                            2, halfWidth, 0.05, halfWidth, 0.02);
                 }
-                this.level().playSound(null, this.blockPosition(),
-                        ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.7F, 1.0F);
+                if (--roundabout$GERootTicks <= 0) {
+                    roundabout$setGERooted(false);
+                    if (!this.roundabout$GERootedItem.isEmpty()) {
+                        this.spawnAtLocation(this.roundabout$GERootedItem);
+                        this.roundabout$GERootedItem = ItemStack.EMPTY;
+                    }
+                    this.level().playSound(null, this.blockPosition(),
+                            ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.7F, 1.0F);
+                }
             }
             if (roundabout$getBoundTo() != null && (!roundabout$getBoundTo().isAlive()
                     || roundabout$getBoundToID() != roundabout$getBoundTo().getId())) {
@@ -4832,7 +4842,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
      */
     @ModifyVariable(method = "travel(Lnet/minecraft/world/phys/Vec3;)V", at = @At(value = "HEAD"))
     private Vec3 roundabout$Travel(Vec3 $$0) {
-        if (this.roundabout$isDazed()) {
+        if (this.roundabout$isDazed() || (this.roundabout$hasGERooted() && !(isBossMob(this)))) {
             return new Vec3(0, 0, 0);
         } else {
             return $$0;
@@ -6581,6 +6591,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "jumpFromGround", at = @At(value = "HEAD"), cancellable = true, require = 0)
     protected void roundabout$jumpFromGround(CallbackInfo ci) {
 
+        if ((this.roundabout$hasGERooted() && !(isBossMob(this)))) {
+            ci.cancel();
+            return;
+        }
+
         this.roundabout$getStandPowers().onJump();
         if (rdbt$this() instanceof Player pl) {
             ((IFatePlayer) pl).rdbt$getFatePowers().onJump();
@@ -6614,6 +6629,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "getSpeed", at = @At(value = "HEAD"), cancellable = true, require = 0)
     public void roundabout$getSpeed(CallbackInfoReturnable<Float> cir) {
         float basis = this.speed;
+        if ((this.roundabout$hasGERooted() && !(isBossMob(this)))) {
+            cir.setReturnValue(0.0F);
+            return;
+        }
         if (!roundabout$getStandDisc().isEmpty()) {
             if (roundabout$isClashing()) {
                 cir.setReturnValue((float) 0);
