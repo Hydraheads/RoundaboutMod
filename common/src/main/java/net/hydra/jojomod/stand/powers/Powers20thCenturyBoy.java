@@ -97,13 +97,13 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     @Override
     public void onStandSummon(boolean desummon) {
         super.onStandSummon(desummon);
-        setInvincibleState(false);
+        setInvincibleState(false, true);
     }
 
     @Override
     public void onStandSwitch() {
         super.onStandSwitch();
-        setInvincibleState(false);
+        setInvincibleState(false, true);
     }
 
 
@@ -364,6 +364,8 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         setInvincibleState(invincible, false);
     }
     public void setInvincibleState(boolean invincible, boolean loading) {
+        if (isDazed(self)) { return; }
+
         invincibleState = invincible;
         if (invincible) {
             switch (mode) {
@@ -741,7 +743,6 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             double dist = attackTarget.distanceTo(this.getSelf());
             boolean isSkel = this.getSelf() instanceof Skeleton;
 
-
             if (isSkel) {
                 staticMode = 3;
                 mode = 3;
@@ -751,23 +752,28 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             }
 
             if (gticks <= 0){
-
                 if (currentDefenseTicks < 40) {
-                    setInvincibleState(false);
+                    if (invincibleState) {
+                        setInvincibleState(false, true);
+                    }
                 } else if (currentDefenseTicks > 100 || invincibleState) {
                     if (isSkel) {
-                        if (invincibleState && dist > 6) {
-                            setInvincibleState(false);
-                            gticks += 80;
+                        if (dist > 6) {
+                            if (invincibleState) {
+                                setInvincibleState(false, true);
+                                gticks += 80;
+                            }
                         } else if (!invincibleState) {
-                            setInvincibleState(true);
+                            setInvincibleState(true,true);
                         }
                     } else {
-                        if (invincibleState && dist <= 2) {
-                            setInvincibleState(false);
-                            gticks += 80;
-                        } else if (!invincibleState) {
-                            setInvincibleState(true);
+                        if (dist <= 2) {
+                            if (invincibleState) {
+                                setInvincibleState(false, true);
+                                gticks += 80;
+                            }
+                        } else if (!invincibleState && dist > 2) {
+                            setInvincibleState(true, true);
                         }
                     }
                 }
@@ -902,7 +908,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             } else {
                 level.playSound(null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_HIT_EVENT, SoundSource.PLAYERS, 1F, 1.0F);
             }
-            deflectTicks += 8;
+            deflectTicks += 4;
         }
     }
 

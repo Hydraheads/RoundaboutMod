@@ -24,6 +24,7 @@ import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
@@ -1214,11 +1215,14 @@ public class PowersPurpleHaze extends NewPunchingStand {
     //Pod count
     private static final int MAX_PODS = 6;
     private int getPodRechargeTime() {
-        return Math.max(1, ClientNetworking.getAppropriateConfig()
-                .PurpleHazeSettings.PodRechargeTime);
+        Integer rechargeTime = ClientNetworking.getAppropriateConfig()
+                .PurpleHazeSettings.PodRechargeTime;
+
+        return rechargeTime != null ? rechargeTime : 800;
     }
     private int podRechargeTicks = 0;
     private boolean podsSyncedOnJoin = false;
+    private ResourceKey<Level> lastPodSyncDimension = null;
     //private int podsRemaining = MAX_PODS;
 
     private int getPods() {
@@ -1230,8 +1234,14 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     private void setPods(int pods) {
         if (self instanceof Player player) {
-            ((IPlayerEntity) self).roundabout$setPurpleHazePods((byte) pods);
-            S2CPacketUtil.syncPurpleHazePods(player, (byte) pods);
+            pods = Mth.clamp(pods, 0, MAX_PODS);
+
+            ((IPlayerEntity) self)
+                    .roundabout$setPurpleHazePods((byte) pods);
+
+            if (!player.level().isClientSide()) {
+                S2CPacketUtil.syncPurpleHazePods(player, (byte) pods);
+            }
         }
     }
     //summon minecraft:husk ~ ~ ~ {roundabout.StandDisc:{id:"roundabout:max_purple_haze_disc",tag:{Memory:{Pose:0b,Skin:1b}},Count:1b}}
@@ -2298,9 +2308,17 @@ public class PowersPurpleHaze extends NewPunchingStand {
             tickSecretSkinObtaining();
             tickFallingHitAnimation();
 
-            if (!podsSyncedOnJoin && self instanceof ServerPlayer sp) {
-                podsSyncedOnJoin = true;
-                S2CPacketUtil.syncPurpleHazePods(sp, (byte) getPods());
+            if (self instanceof ServerPlayer sp) {
+                ResourceKey<Level> currentDimension = sp.level().dimension();
+
+                if (!podsSyncedOnJoin ||
+                        !currentDimension.equals(lastPodSyncDimension)) {
+
+                    podsSyncedOnJoin = true;
+                    lastPodSyncDimension = currentDimension;
+
+                    S2CPacketUtil.syncPurpleHazePods(sp, (byte) getPods());
+                }
             }
         }
 

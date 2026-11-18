@@ -2589,7 +2589,7 @@ public class ClientUtil {
             }
 
             Item item = play.getUseItem().getItem();
-            if (item instanceof FirearmItem) {
+            if (item instanceof FirearmItem && PowersGoldExperience.getDisguisedDisplayStack(play.getUseItem()).isEmpty()) {
                 stack.pushPose();
 
                 FirstPersonArmsModel.player = play;

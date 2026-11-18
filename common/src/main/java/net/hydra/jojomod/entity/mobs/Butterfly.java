@@ -300,7 +300,7 @@ public class Butterfly extends AmbientCreature {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 6.0D)
+                .add(Attributes.MAX_HEALTH, 2.0D)
                 .add(Attributes.FLYING_SPEED, 0.6F)
                 .add(Attributes.MOVEMENT_SPEED, 0.3F);
     }

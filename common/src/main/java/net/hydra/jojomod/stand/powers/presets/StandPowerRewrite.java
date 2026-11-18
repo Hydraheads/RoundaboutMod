@@ -15,4 +15,5 @@ public class StandPowerRewrite extends StandPowers {
         return true;
     }
 
+
 }

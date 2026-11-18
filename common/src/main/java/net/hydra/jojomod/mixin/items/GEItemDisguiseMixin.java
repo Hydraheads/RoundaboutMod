@@ -7,24 +7,16 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
-@Mixin(ItemRenderer.class)
+@Mixin(value = ItemRenderer.class, priority = 20)
 public abstract class GEItemDisguiseMixin {
 
-    @ModifyVariable(
-            method = "getModel",
-            at = @At("HEAD"),
-            argsOnly = true
-    )
+    @ModifyVariable(method = "getModel", at = @At("HEAD"), argsOnly = true)
     private ItemStack roundabout$disguiseGetModel(ItemStack stack) {
         ItemStack fake = PowersGoldExperience.getDisguisedDisplayStack(stack);
         return fake.isEmpty() ? stack : fake;
     }
 
-    @ModifyVariable(
-            method = "render",
-            at = @At("HEAD"),
-            argsOnly = true
-    )
+    @ModifyVariable(method = "render", at = @At("HEAD"), argsOnly = true)
     private ItemStack roundabout$disguiseRender(ItemStack stack) {
         ItemStack fake = PowersGoldExperience.getDisguisedDisplayStack(stack);
         return fake.isEmpty() ? stack : fake;

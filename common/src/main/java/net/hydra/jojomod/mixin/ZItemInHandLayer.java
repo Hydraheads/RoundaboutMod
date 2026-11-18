@@ -13,10 +13,7 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
-import net.hydra.jojomod.stand.powers.PowersAnubis;
-import net.hydra.jojomod.stand.powers.PowersCatchTheRainbow;
-import net.hydra.jojomod.stand.powers.PowersRatt;
+import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.model.ArmedModel;
 import net.minecraft.client.model.EntityModel;
@@ -114,6 +111,9 @@ public class ZItemInHandLayer<T extends LivingEntity, M extends EntityModel<T> &
         if (entity instanceof JojoNPC jnpc && jnpc.host != null && ((StandUser)jnpc.host).roundabout$getEffectiveCombatMode()){
             host = jnpc.host;
         }
+
+
+
         if (host != null && ((StandUser)host).roundabout$getEffectiveCombatMode() && !host.isUsingItem()){
             boolean bl = true;
             if (((StandUser)host).roundabout$getStandPowers() instanceof PowersAnubis PA) {

@@ -2971,7 +2971,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 this.explode();
             }
         }else {
-            defuseServer();
+            //defuseServer();
             syncBombStatus(NONE);
         }
     }
@@ -2983,7 +2983,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 this.explode();
             }
         }else {
-            defuseServer();
+            //defuseServer();
             syncBombStatus(NONE);
         }
     }

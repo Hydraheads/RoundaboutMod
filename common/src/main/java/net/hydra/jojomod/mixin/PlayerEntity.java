@@ -1259,6 +1259,24 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                     }
                 }
                 cir.setReturnValue(this.getAbilities().instabuild ? new ItemStack(Items.IRON_INGOT) : ItemStack.EMPTY);
+                return;
+            }
+
+            //GE tree imbued arrows get prioritized for crossbows and bows
+            Predicate<ItemStack> heldPredicate = pi.getSupportedHeldProjectiles();
+            for (ItemStack stack : this.inventory.offhand) {
+                if (heldPredicate.test(stack) && PowersGoldExperience.isTreeImbuedProjectileItem(stack)) {
+                    cir.setReturnValue(stack);
+                    return;
+                }
+            }
+            Predicate<ItemStack> allPredicate = pi.getAllSupportedProjectiles();
+            for (int i = 0; i < this.inventory.getContainerSize(); i++) {
+                ItemStack stack = this.inventory.getItem(i);
+                if (allPredicate.test(stack) && PowersGoldExperience.isTreeImbuedProjectileItem(stack)) {
+                    cir.setReturnValue(stack);
+                    return;
+                }
             }
         }
     }

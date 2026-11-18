@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.items;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.item.FirearmItem;
+import net.hydra.jojomod.stand.powers.PowersGoldExperience;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -18,7 +19,7 @@ public class FirearmHideArmsMixin {
 
     @Inject(method = "renderArmWithItem", at = @At("HEAD"), cancellable = true)
     private void hideArmWithItem(AbstractClientPlayer player, float p_109347_, float p_109348_, InteractionHand hand, float p_109350_, ItemStack stack, float p_109352_, PoseStack poseStack, MultiBufferSource buffer, int light, CallbackInfo ci) {
-        if (player.isUsingItem() && player.getUseItem().getItem() instanceof FirearmItem) {
+        if (player.isUsingItem() && player.getUseItem().getItem() instanceof FirearmItem && PowersGoldExperience.getDisguisedDisplayStack(player.getUseItem()).isEmpty()) {
             ci.cancel();
         }
     }
@@ -26,7 +27,7 @@ public class FirearmHideArmsMixin {
     @Inject(method = "renderPlayerArm", at = @At("HEAD"), cancellable = true)
     private void hideOtherArm(PoseStack $$0, MultiBufferSource $$1, int $$2, float $$3, float $$4, HumanoidArm $$5, CallbackInfo ci) {
         ItemStack itemStack = net.minecraft.client.Minecraft.getInstance().player.getUseItem();
-        if (itemStack.getItem() instanceof FirearmItem) {
+        if (itemStack.getItem() instanceof FirearmItem && PowersGoldExperience.getDisguisedDisplayStack(itemStack).isEmpty()) {
             ci.cancel();
         }
     }
