@@ -1033,6 +1033,21 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         }
     }
 
+    /*so ugly even the weather rejects me 💔*/
+    public void tickStandRejection(MobEffectInstance effect){
+        if (!this.getSelf().level().isClientSide()) {
+            if (this.isInRain()){
+                MainUtil.makeBleed(this.self, 1, 25, this.self);
+                if (this.self.getDeltaMovement().y < 0.75) {
+                    MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 0.5F,
+                            0,
+                            1,
+                            0);
+                }
+            }
+        }
+    }
+
     //wip description
     @Override
     public boolean isWip(){

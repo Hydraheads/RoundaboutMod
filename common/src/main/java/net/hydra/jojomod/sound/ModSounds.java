@@ -2214,6 +2214,10 @@ public class ModSounds {
     public static final ResourceLocation GOLD_EXPERIENCE_LIFE_PUNCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+GOLD_EXPERIENCE_LIFE_PUNCH);
     public static SoundEvent GOLD_EXPERIENCE_LIFE_PUNCH_EVENT = SoundEvent.createVariableRangeEvent(GOLD_EXPERIENCE_LIFE_PUNCH_ID);
 
+    public static final String GE_REQUIEM_ARROW = "ge_requiem_obtain";
+    public static final ResourceLocation GE_REQUIEM_ARROW_ID = new ResourceLocation(Roundabout.MOD_ID+":"+GE_REQUIEM_ARROW);
+    public static SoundEvent GE_REQUIEM_ARROW_EVENT = SoundEvent.createVariableRangeEvent(GE_REQUIEM_ARROW_ID);
+
     public static final String SUMMON_GREEN_DAY = "summon_green_day";
     public static final ResourceLocation SUMMON_GREEN_DAY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_GREEN_DAY);
     public static SoundEvent SUMMON_GREEN_DAY_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_GREEN_DAY_ID);
