@@ -255,6 +255,11 @@ public abstract class ZItemInHandRenderer {
             return;
         }
 
+        if (((StandUser)abstractClientPlayer).roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PSC.isRenderingArms) {
+            ci.cancel();
+            return;
+        }
+
         if (((StandUser)abstractClientPlayer).roundabout$getStandPowers() instanceof PowersCatchTheRainbow PCR && PCR.ctrDodgeTicks != 0) {
             ci.cancel();
             return;
