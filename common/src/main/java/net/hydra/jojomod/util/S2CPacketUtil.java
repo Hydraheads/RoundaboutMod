@@ -28,12 +28,20 @@ public class S2CPacketUtil {
         }
     }
 
-    public static void knUpdateItemContainers(Player player, BlockPos pos, boolean remove) {
+    public static void knAddItemContainer(Player player, BlockPos pos, BlockPos pos2) {
         if (player instanceof ServerPlayer SP) {
             ModMessageEvents.sendToPlayer(SP,
-                    ServerToClientPackets.S2CPackets.MESSAGES.KnUpdateItemContainers.value,
+                    ServerToClientPackets.S2CPackets.MESSAGES.KnAddItemContainer.value,
                     pos,
-                    remove);
+                    pos2);
+        }
+    }
+
+    public static void knRemoveItemContainer(Player player, BlockPos pos) {
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.KnRemoveItemContainer.value,
+                    pos);
         }
     }
 

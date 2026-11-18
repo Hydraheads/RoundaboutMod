@@ -1101,12 +1101,18 @@ public class ClientUtil {
                     }
                 }
 
-                else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.KnUpdateItemContainers.value)) {
+                else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.KnAddItemContainer.value)) {
                     BlockPos pos = (BlockPos) vargs[0];
-                    boolean remove = (Boolean) vargs[1];
+                    BlockPos pos2 = (BlockPos) vargs[1];
                     if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingNothing pkn) {
-                        if (remove) pkn.removeItemBlockPos(pos);
-                        else pkn.addItemBlockPos(pos);
+                        pkn.addItemBlockPos(pos, pos2);
+                    }
+                }
+
+                else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.KnRemoveItemContainer.value)) {
+                    BlockPos pos = (BlockPos) vargs[0];
+                    if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingNothing pkn) {
+                        pkn.removeItemBlockPos(pos);
                     }
                 }
 

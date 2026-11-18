@@ -79,6 +79,7 @@ import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.*;
+import oshi.util.tuples.Pair;
 
 import java.util.*;
 
@@ -124,6 +125,7 @@ public class PowersKingNothing extends NewDashPreset {
     // item tracking sets
     public final Set<Entity> itemHoldingEntities = new HashSet<>();
     public final Set<BlockPos> itemHoldingBlocks = new HashSet<>();
+    public final Set<Pair<BlockPos, BlockPos>> itemHoldingBlockPairs = new HashSet<>();
 
     // idk what this is exactly but its used in the phase grab stuff
     public Vec3 moveVec = Vec3.ZERO;
@@ -509,10 +511,14 @@ public class PowersKingNothing extends NewDashPreset {
         }
     }
 
-    public void addItemBlockPos(BlockPos pos) {
+    public void addItemBlockPos(BlockPos pos1, BlockPos pos2) {
         if (isClient()
                 && ConfigManager.getClientConfig().kingNothingSettings.highlightInItemTrack) {
-            this.itemHoldingBlocks.add(pos);
+            this.itemHoldingBlocks.add(pos1);
+            this.itemHoldingBlocks.add(pos2);
+            if (!pos1.equals(pos2)) {
+                this.itemHoldingBlockPairs.add(new Pair<>(pos1, pos2));
+            }
         }
     }
 
@@ -520,6 +526,7 @@ public class PowersKingNothing extends NewDashPreset {
         if (isClient()
                 && ConfigManager.getClientConfig().kingNothingSettings.highlightInItemTrack) {
             this.itemHoldingBlocks.remove(pos);
+            itemHoldingBlockPairs.removeIf(pair -> pair.getA().equals(pos) || pair.getB().equals(pos));
         }
     }
 
@@ -666,16 +673,24 @@ public class PowersKingNothing extends NewDashPreset {
                             break;
                         }
                     }
+                    if (otherChestPos != null &&
+                            level.getBlockEntity(otherChestPos) instanceof RandomizableContainerBlockEntity OCO) {
+                        for (int i = 0; i < OCO.getContainerSize(); i++) {
+                            if (OCO.getItem(i).is(trackedItem)) {
+                                chestHasItem = true;
+                                break;
+                            }
+                        }
+                    }
                 }
                 if (chestHasItem) {
                     foundTem = true;
-                    if (!this.itemHoldingBlocks.contains(pos)) {
+                    if (!this.itemHoldingBlocks.contains(pos) || (otherChestPos != null && this.itemHoldingBlocks.contains(otherChestPos))) {
                         this.itemHoldingBlocks.add(pos);
-                        S2CPacketUtil.knUpdateItemContainers(((Player) getSelf()), pos, false);
-                    }
-                    if (otherChestPos != null && !this.itemHoldingBlocks.contains(otherChestPos)) {
-                        this.itemHoldingBlocks.add(otherChestPos);
-                        S2CPacketUtil.knUpdateItemContainers(((Player) getSelf()), otherChestPos, false);
+                        if (otherChestPos != null) {
+                            this.itemHoldingBlocks.add(otherChestPos);
+                        }
+                        S2CPacketUtil.knAddItemContainer(((Player) getSelf()), pos, otherChestPos != null ? otherChestPos : pos);
                     }
                     if (otherChestPos != null) {
                         locatedChests.add(otherChestPos);
@@ -699,12 +714,12 @@ public class PowersKingNothing extends NewDashPreset {
                 else {
                     if (this.itemHoldingBlocks.contains(pos)) {
                         this.itemHoldingBlocks.remove(pos);
-                        S2CPacketUtil.knUpdateItemContainers(((Player) getSelf()), pos, true);
+                        S2CPacketUtil.knRemoveItemContainer(((Player) getSelf()), pos);
                     }
                     if (otherChestPos != null) {
                         if (this.itemHoldingBlocks.contains(otherChestPos)) {
                             this.itemHoldingBlocks.remove(otherChestPos);
-                            S2CPacketUtil.knUpdateItemContainers(((Player) getSelf()), otherChestPos, true);
+                            S2CPacketUtil.knRemoveItemContainer(((Player) getSelf()), otherChestPos);
                         }
                     }
                 }
@@ -1210,12 +1225,14 @@ public class PowersKingNothing extends NewDashPreset {
         disintegrateAnimTicks = 0;
         if (!isClient()) {
             TrackingCloudEntity tc = ModEntities.TRACKING_CLOUD.create(this.getSelf().level());
-            tc.setUser(this.getSelf());
-            tc.setXRot(getStandEntity(getSelf()).getXRot());
-            tc.setYRot(getStandEntity(getSelf()).getYRot());
-            tc.setPos(getStandEntity(getSelf()).getBoundingBox().getCenter());
-            this.getSelf().level().addFreshEntity(tc);
-            this.trackingCloud = tc;
+            if (tc != null) {
+                tc.setUser(this.getSelf());
+                tc.setXRot(getStandEntity(getSelf()).getXRot());
+                tc.setYRot(getStandEntity(getSelf()).getYRot());
+                tc.setPos(getStandEntity(getSelf()).getBoundingBox().getCenter());
+                this.getSelf().level().addFreshEntity(tc);
+                this.trackingCloud = tc;
+            }
         }
         return true;
     }

@@ -33,8 +33,11 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+import oshi.util.tuples.Pair;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 @Mixin(LevelRenderer.class)
 public class ZWorldRenderer {
@@ -252,16 +255,31 @@ public class ZWorldRenderer {
                 && ((StandUser) ClientUtil.getPlayer()).roundabout$getStandPowers() instanceof PowersKingNothing pkn) {
             if (pkn.isTrackingItem()) {
                 int color = pkn.getVisualInfo().highlightColor();
+                Set<BlockPos> alreadyRendered = new HashSet<>();
+                for (Pair<BlockPos, BlockPos> posPair : pkn.itemHoldingBlockPairs) {
+                    ClientEffectUtil.renderPurpleBox(poseStack,
+                            mc.renderBuffers().bufferSource(),
+                            camera,
+                            posPair.getA(),
+                            posPair.getB(),
+                         ((color >> 16) & 0xFF) / 255.0F,
+                         ((color >> 8) & 0xFF) / 255.0F,
+                         (color & 0xFF) / 255.0F,
+                         1.0f);
+                    alreadyRendered.add(posPair.getA());
+                    alreadyRendered.add(posPair.getB());
+                }
                 for (BlockPos pos : pkn.itemHoldingBlocks) {
+                    if (alreadyRendered.contains(pos)) continue;
                     ClientEffectUtil.renderPurpleBox(poseStack,
                             mc.renderBuffers().bufferSource(),
                             camera,
                             pos,
                             pos,
-                         ((color >> 16) & 0xFF) / 255.0F,
-                         ((color >> 8) & 0xFF) / 255.0F,
-                         (color & 0xFF) / 255.0F,
-                         1.0f);
+                            ((color >> 16) & 0xFF) / 255.0F,
+                            ((color >> 8) & 0xFF) / 255.0F,
+                            (color & 0xFF) / 255.0F,
+                            1.0f);
                 }
             }
         }
