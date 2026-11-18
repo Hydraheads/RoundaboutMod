@@ -24,6 +24,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.FatePowers;
+import net.hydra.jojomod.item.FirearmItem;
 import net.hydra.jojomod.item.JackalRifleItem;
 import net.hydra.jojomod.item.WarhammerItem;
 import net.hydra.jojomod.powers.GeneralPowers;
@@ -408,7 +409,7 @@ public abstract class HudRendering implements IHudAccess {
             ItemStack heldItem = this.minecraft.player.getMainHandItem();
 
             // check if the main hand item is a firearm, don't render with jackal rifle cuz like... it's 1 ammo...
-            if (heldItem.getItem() instanceof net.hydra.jojomod.item.FirearmItem gun) {
+            if (heldItem.getItem() instanceof FirearmItem gun && PowersGoldExperience.getDisguisedDisplayStack(heldItem).isEmpty()) {
                 String ammoText;
                 int color = 0xFFFFFF; // white
 
