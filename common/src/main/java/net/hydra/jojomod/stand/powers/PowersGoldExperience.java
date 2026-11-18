@@ -2709,7 +2709,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             BlockState airState = level.getBlockState(currentAirPos);
             BlockState wallState = level.getBlockState(wallPos);
 
-            if (airState.canBeReplaced() && wallState.isFaceSturdy(level, wallPos, wallFace)) {
+            if (airState.canBeReplaced() && VineBlock.isAcceptableNeighbour(level, wallPos, facing)) {
                 BlockState vineState = ModBlocks.GE_VINE.defaultBlockState()
                         .setValue(VineBlock.getPropertyForFace(facing), true);
 
