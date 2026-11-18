@@ -577,6 +577,19 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
      }
     }
 
+    @Override
+    public void push(Entity $$0) {
+        super.push($$0);
+    }
+    @Override
+    protected void pushEntities() {
+        super.pushEntities();
+    }
+    @Override
+    public void doPush(Entity $$0) {
+        super.doPush($$0);
+    }
+
     int animationTick2 = 14;
     @Override
     public boolean canStandBeHurt(){
