@@ -7,6 +7,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModItemModels;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.stand.powers.PowersGoldExperience;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -24,8 +25,11 @@ public class RegisterBlockEntityWithoutLevelRenderer implements IBlockEntityWith
     /**Difficult to explain the significance here, but the harpoon can exist without a harpoon entity
      * and needs this to render, similar to tridents
      * */
-    @Inject(method = "renderByItem", at = @At(value = "TAIL"))
+    @Inject(method = "renderByItem", at = @At(value = "TAIL"), cancellable = true)
     public void roundabout$render2(ItemStack $$0, ItemDisplayContext $$1, PoseStack $$2, MultiBufferSource $$3, int $$4, int $$5, CallbackInfo ci){
+        if (!PowersGoldExperience.getDisguisedDisplayStack($$0).isEmpty()) {
+            return;
+        }
 
         if ($$0.is(ModItems.HARPOON)) {
             ClientUtil.pushPoseAndCooperate($$2,19);

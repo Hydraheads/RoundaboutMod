@@ -976,7 +976,10 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
 
         if (podRegenClient != -1 && getPods() < MAX_PODS) {
-            int ClashTime = Math.round(((float) podRegenClient / POD_RECHARGE_TIME) * 15);
+            int ClashTime = Mth.clamp(
+                    Math.round(((float) podRegenClient / getPodRechargeTime()) * 15),
+                    0, 15
+            );
             context.blit(StandIcons.JOJO_ICONS, k, j+17, 213, 97, 15, 4);
             context.blit(StandIcons.JOJO_ICONS, k, j+17, 213, 102, ClashTime, 4);
         }
@@ -984,8 +987,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        if ((activePower == PowerIndex.BARRAGE || activePower == PowerIndex.BARRAGE_2
-                || activePower == PowerIndex.BARRAGE_CHARGE || activePower == PowerIndex.BARRAGE_CHARGE_2)) {
+        if (this.isBarrageAttacking() || this.getActivePower() == PowerIndex.BARRAGE_2) {
             setSkillIcon(context, x, y, 1, StandIcons.PH_FORWARD_BARRAGE, PowerIndex.NO_CD);
         }
         else if (isGuarding()){
@@ -1211,7 +1213,12 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     //Pod count
     private static final int MAX_PODS = 6;
-    private static final int POD_RECHARGE_TIME = 800;
+    private int getPodRechargeTime() {
+        Integer rechargeTime = ClientNetworking.getAppropriateConfig()
+                .PurpleHazeSettings.PodRechargeTime;
+
+        return rechargeTime != null ? rechargeTime : 800;
+    }
     private int podRechargeTicks = 0;
     private boolean podsSyncedOnJoin = false;
     //private int podsRemaining = MAX_PODS;
@@ -1283,7 +1290,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
         podRechargeTicks++;
 
-        if (podRechargeTicks >= POD_RECHARGE_TIME || PL.isCreative()) {
+        if (podRechargeTicks >= getPodRechargeTime() || PL.isCreative()) {
             setPods(Math.min(MAX_PODS, getPods() + 1));
             podRechargeTicks = 0;
             wasRecharging = getPods() < MAX_PODS;

@@ -12,6 +12,7 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersGoldExperience;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
 import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
 import net.hydra.jojomod.util.MainUtil;
@@ -127,6 +128,7 @@ public class KnifeEntity extends AbstractArrow {
 
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
+        PowersGoldExperience.applyTreeImbueOnBlockHit(this, $$0);
         ((IAbstractArrowAccess)this).roundabout$setLastState(this.level().getBlockState($$0.getBlockPos()));
         BlockState BSS = this.level().getBlockState($$0.getBlockPos());
         BSS.onProjectileHit(this.level(), BSS, $$0, this);
@@ -222,6 +224,8 @@ public class KnifeEntity extends AbstractArrow {
                 if (((StandUser)$$4).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && is(KQ.bombEntity) && KQ.getCurrentBombStatus() == 10) {
                     KQ.contactExplodeKnife($$1);
                 }
+
+                PowersGoldExperience.applyTreeImbueOnProjectileHit(this, $$1);
             }
                 if (MainUtil.getMobBleed($$1)){
                     MainUtil.makeBleed($$1,0,400,getOwner());
