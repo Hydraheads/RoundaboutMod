@@ -1214,8 +1214,10 @@ public class PowersPurpleHaze extends NewPunchingStand {
     //Pod count
     private static final int MAX_PODS = 6;
     private int getPodRechargeTime() {
-        return Math.max(1, ClientNetworking.getAppropriateConfig()
-                .PurpleHazeSettings.PodRechargeTime);
+        Integer rechargeTime = ClientNetworking.getAppropriateConfig()
+                .PurpleHazeSettings.PodRechargeTime;
+
+        return rechargeTime != null ? rechargeTime : 800;
     }
     private int podRechargeTicks = 0;
     private boolean podsSyncedOnJoin = false;

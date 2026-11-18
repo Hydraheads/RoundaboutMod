@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.items;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.item.FirearmItem;
+import net.hydra.jojomod.stand.powers.PowersGoldExperience;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.world.entity.HumanoidArm;
@@ -20,7 +21,7 @@ public class FirearmItemInHandMixin {
 
     private void hideFirearmItem(LivingEntity $$0, ItemStack $$1, ItemDisplayContext $$2, HumanoidArm $$3, PoseStack $$4, MultiBufferSource $$5, int $$6, CallbackInfo ci) {
 
-        if (!$$1.isEmpty() && $$1.getItem() instanceof FirearmItem) {
+        if (!$$1.isEmpty() && $$1.getItem() instanceof FirearmItem && PowersGoldExperience.getDisguisedDisplayStack($$1).isEmpty()) {
             ci.cancel();
         }
     }

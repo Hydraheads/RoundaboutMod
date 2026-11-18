@@ -8,6 +8,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.*;
+import net.hydra.jojomod.stand.powers.PowersGoldExperience;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -137,8 +138,8 @@ public class FirearmLayer<T extends LivingEntity, A extends HumanoidModel<T>> ex
         ItemStack held = entity.getMainHandItem();
         ItemStack offHeld = entity.getOffhandItem();
 
-        boolean isHoldingFirearmRight = (held.getItem() instanceof FirearmItem);
-        boolean isHoldingFirearmLeft = (offHeld.getItem() instanceof FirearmItem);
+        boolean isHoldingFirearmRight = (held.getItem() instanceof FirearmItem && PowersGoldExperience.getDisguisedDisplayStack(held).isEmpty());
+        boolean isHoldingFirearmLeft = (offHeld.getItem() instanceof FirearmItem && PowersGoldExperience.getDisguisedDisplayStack(offHeld).isEmpty());
 
         boolean mainArmRight = entity instanceof Player player && player.getMainArm() == HumanoidArm.RIGHT;
 

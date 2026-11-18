@@ -128,6 +128,7 @@ public class KnifeEntity extends AbstractArrow {
 
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
+        PowersGoldExperience.applyTreeImbueOnBlockHit(this, $$0);
         ((IAbstractArrowAccess)this).roundabout$setLastState(this.level().getBlockState($$0.getBlockPos()));
         BlockState BSS = this.level().getBlockState($$0.getBlockPos());
         BSS.onProjectileHit(this.level(), BSS, $$0, this);
