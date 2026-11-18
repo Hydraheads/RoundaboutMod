@@ -112,10 +112,7 @@ public class ZItemInHandLayer<T extends LivingEntity, M extends EntityModel<T> &
             host = jnpc.host;
         }
 
-        if (((StandUser)host).roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PSC.isRenderingArms) {
-            ci.cancel();
-            return;
-        }
+
 
         if (host != null && ((StandUser)host).roundabout$getEffectiveCombatMode() && !host.isUsingItem()){
             boolean bl = true;

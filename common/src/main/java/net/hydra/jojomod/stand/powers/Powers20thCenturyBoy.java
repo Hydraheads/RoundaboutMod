@@ -364,7 +364,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         setInvincibleState(invincible, false);
     }
     public void setInvincibleState(boolean invincible, boolean loading) {
-        if (invincible == invincibleState || isDazed(self)) { return; }
+        if (isDazed(self)) { return; }
 
         invincibleState = invincible;
         if (invincible) {
@@ -754,7 +754,9 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             if (gticks <= 0){
 
                 if (currentDefenseTicks < 40) {
-                    setInvincibleState(false, true);
+                    if (invincibleState) {
+                        setInvincibleState(false, true);
+                    }
                 } else if (currentDefenseTicks > 100 || invincibleState) {
                     if (isSkel) {
                         if (invincibleState && dist > 6) {
