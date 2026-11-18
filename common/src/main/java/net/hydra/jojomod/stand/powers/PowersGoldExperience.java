@@ -378,6 +378,59 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public boolean isStandEnabled(){return true;}
 
+    // stand rejection start
+
+    @Override
+    public void tickStandRejection(MobEffectInstance effect){
+        if (!this.getSelf().level().isClientSide()) {
+            if (effect.getDuration() == 200) {
+                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_EVENT, SoundSource.PLAYERS, 0.95F, 1.1F);
+                LivingEntity LE = this.getSelf();
+                if (LE instanceof Player) {
+                    // IMPORTANT FAILSAFE: If someone else gets Life Punched, restore previous victim first
+                    if (lifePunchVictim != null && lifePunchVictim != LE) {
+                        restoreLifePunchVictim();
+                    }
+                    // punch the SOUL outta them
+                    PowerTypes.setPlaneOfExisting(LE, (byte) 12);
+                    // spawn a Life Punch Clone in their place
+                    LifePunchCloneEntity clone = ModEntities.LIFE_PUNCH_CLONE.create(this.self.level());
+                    if (clone != null) {
+                        clone.setPlayer((Player) LE);
+                        clone.copyPosition(LE);
+                        clone.setHealth(LE.getHealth());
+                        clone.getAttribute(Attributes.MAX_HEALTH).setBaseValue(LE.getMaxHealth());
+                        // copy inventory
+                        for (EquipmentSlot slot : EquipmentSlot.values()) {
+                            clone.setItemSlot(slot, LE.getItemBySlot(slot).copy());
+                        }
+                        clone.setTarget((LivingEntity) this.self);
+                        this.self.level().addFreshEntity(clone);
+                        // track the victim
+                        lifePunchVictim = LE;
+                        lifePunchClone = clone;
+                        lifePunchTimer = 180; // 9 seconds
+                        lastKnownHealth = clone.getHealth();
+                    }
+                } else if (LE instanceof Mob mob) {
+                    ((StandUser) mob).roundabout$deeplyRemoveAttackTarget();
+                    mob.getNavigation().stop();
+                    disabledMobTimers.put(LE.getId(), 180);
+                }
+            }
+            tickLifePunch();
+            // failsafe just in case it doesn't tick properly
+            if (effect.getDuration() <= 1 && lifePunchVictim != null) {
+                if (lifePunchClone != null) {
+                    lifePunchVictim.teleportTo(lifePunchClone.getX(), lifePunchClone.getY(), lifePunchClone.getZ());
+                }
+                restoreLifePunchVictim();
+            }
+        }
+    }
+
+    // stand rejection end
+
     // start of move methods
 
     // tick power start
@@ -535,74 +588,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
                     this.self.level().addFreshEntity(bramble);
                 }
             }
-            // tick down Life Punch timer
-            if (lifePunchTimer > 0 && lifePunchVictim != null && lifePunchClone != null) {
-                if (!this.self.isAlive()) {
-                    restoreLifePunchVictim();
-                }
-                // check if either entity is gone
-                if (!lifePunchVictim.isAlive() || !lifePunchClone.isAlive()) {
-                    if (lifePunchVictim.isAlive()) {
-                        // clone died, victim takes fatal damage
-                        lifePunchVictim.hurt(lifePunchVictim.damageSources().generic(), 9999);
-                    }
-                    restoreLifePunchVictim();
-                } else {
-                    // transfer damage from clone to victim
-                    float currentHealth = lifePunchClone.getHealth();
-                    if (currentHealth < lastKnownHealth) {
-                        float damage = lastKnownHealth - currentHealth;
-                        lifePunchVictim.hurt(lifePunchVictim.damageSources().generic(), damage);
-                        lifePunchClone.setHealth(lastKnownHealth); // reset clone health
-                    }
-                    lastKnownHealth = lifePunchClone.getHealth();
-
-                    // transfer effects from clone to victim
-                    for (MobEffectInstance effect : lifePunchClone.getActiveEffects()) {
-                        if (!lifePunchVictim.hasEffect(effect.getEffect())) {
-                            lifePunchVictim.addEffect(new MobEffectInstance(effect));
-                        }
-                    }
-
-                    // tick down timer
-                    lifePunchTimer--;
-                    if (lifePunchTimer <= 0) {
-                        // restore the victim
-                        Vector3f blipVec = new Vector3f(
-                                (float) lifePunchClone.getX(),
-                                (float) lifePunchClone.getY(),
-                                (float) lifePunchClone.getZ()
-                        );
-                        packetNearby(blipVec, lifePunchVictim.getId());
-                        lifePunchVictim.teleportTo(lifePunchClone.getX(), lifePunchClone.getY(), lifePunchClone.getZ());
-                        lifePunchVictim.setYRot(lifePunchClone.getYRot());
-                        lifePunchVictim.setXRot(lifePunchClone.getXRot());
-                        lifePunchVictim.setDeltaMovement(Vec3.ZERO);
-                        restoreLifePunchVictim();
-                    }
-                }
-            }
-            // for mob life punch stuff
-            Iterator<Map.Entry<Integer, Integer>> it = disabledMobTimers.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry<Integer, Integer> entry = it.next();
-                int mobId = entry.getKey();
-                int ticksLeft = entry.getValue();
-                Entity mobEntity = this.self.level().getEntity(mobId);
-
-                if (mobEntity == null || !mobEntity.isAlive() || ticksLeft <= 0) {
-                    if (mobEntity instanceof Mob mob) {
-                        mob.getNavigation().recomputePath();
-                    }
-                    it.remove();
-                } else {
-                    if (mobEntity instanceof Mob mob) {
-                        ((StandUser) mob).roundabout$deeplyRemoveAttackTarget();
-                        mob.getNavigation().stop();
-                    }
-                    entry.setValue(ticksLeft - 1);
-                }
-            }
+            // life punch stuff
+            tickLifePunch();
         }
         // client side stuff
         else {
@@ -3224,6 +3211,79 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 if (blockPos.closerToCenterThan(userLocation, 100)) {
                     S2CPacketUtil.sendBlipPacket(serverPlayerEntity, (byte) 2, entId,blip);
                 }
+            }
+        }
+    }
+
+    // life punch is used for stand rejection as wlel, so i need to have a method for both rejection and normal tick
+    private void tickLifePunch() {
+        // tick down Life Punch timer
+        if (lifePunchTimer > 0 && lifePunchVictim != null && lifePunchClone != null) {
+            if (!this.self.isAlive()) {
+                restoreLifePunchVictim();
+            }
+            // check if either entity is gone
+            if (!lifePunchVictim.isAlive() || !lifePunchClone.isAlive()) {
+                if (lifePunchVictim.isAlive()) {
+                    // clone died, victim takes fatal damage
+                    lifePunchVictim.hurt(lifePunchVictim.damageSources().generic(), 9999);
+                }
+                restoreLifePunchVictim();
+            } else {
+                // transfer damage from clone to victim
+                float currentHealth = lifePunchClone.getHealth();
+                if (currentHealth < lastKnownHealth) {
+                    float damage = lastKnownHealth - currentHealth;
+                    lifePunchVictim.hurt(lifePunchVictim.damageSources().generic(), damage);
+                    lifePunchClone.setHealth(lastKnownHealth); // reset clone health
+                }
+                lastKnownHealth = lifePunchClone.getHealth();
+
+                // transfer effects from clone to victim
+                for (MobEffectInstance effect : lifePunchClone.getActiveEffects()) {
+                    if (!lifePunchVictim.hasEffect(effect.getEffect())) {
+                        lifePunchVictim.addEffect(new MobEffectInstance(effect));
+                    }
+                }
+
+                // tick down timer
+                lifePunchTimer--;
+                if (lifePunchTimer <= 0) {
+                    // restore the victim
+                    Vector3f blipVec = new Vector3f(
+                            (float) lifePunchClone.getX(),
+                            (float) lifePunchClone.getY(),
+                            (float) lifePunchClone.getZ()
+                    );
+                    packetNearby(blipVec, lifePunchVictim.getId());
+                    lifePunchVictim.teleportTo(lifePunchClone.getX(), lifePunchClone.getY(), lifePunchClone.getZ());
+                    lifePunchVictim.setYRot(lifePunchClone.getYRot());
+                    lifePunchVictim.setXRot(lifePunchClone.getXRot());
+                    lifePunchVictim.setDeltaMovement(Vec3.ZERO);
+                    restoreLifePunchVictim();
+                }
+            }
+        }
+
+        // for mob life punch stuff
+        Iterator<Map.Entry<Integer, Integer>> it = disabledMobTimers.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<Integer, Integer> entry = it.next();
+            int mobId = entry.getKey();
+            int ticksLeft = entry.getValue();
+            Entity mobEntity = this.self.level().getEntity(mobId);
+
+            if (mobEntity == null || !mobEntity.isAlive() || ticksLeft <= 0) {
+                if (mobEntity instanceof Mob mob) {
+                    mob.getNavigation().recomputePath();
+                }
+                it.remove();
+            } else {
+                if (mobEntity instanceof Mob mob) {
+                    ((StandUser) mob).roundabout$deeplyRemoveAttackTarget();
+                    mob.getNavigation().stop();
+                }
+                entry.setValue(ticksLeft - 1);
             }
         }
     }
