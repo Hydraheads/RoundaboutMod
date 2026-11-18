@@ -1961,12 +1961,12 @@ public class FabricEntities {
         );
         BiomeModifications.addSpawn(
                 BiomeSelectors.includeByKey(
-                        Biomes.PLAINS, Biomes.SUNFLOWER_PLAINS, Biomes.FLOWER_FOREST,
+                        Biomes.SUNFLOWER_PLAINS, Biomes.FLOWER_FOREST,
                         Biomes.MEADOW, Biomes.BIRCH_FOREST, Biomes.OLD_GROWTH_BIRCH_FOREST,
                         Biomes.FOREST, Biomes.LUSH_CAVES
                 ),
                 MobCategory.AMBIENT,
-                ModEntities.BUTTERFLY, 25, 2, 4
+                ModEntities.BUTTERFLY, 15, 2, 4
         );
 
         /*Spawn Placement rules*/
