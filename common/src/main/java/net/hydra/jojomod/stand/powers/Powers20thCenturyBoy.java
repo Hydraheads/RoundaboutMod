@@ -758,16 +758,20 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                     }
                 } else if (currentDefenseTicks > 100 || invincibleState) {
                     if (isSkel) {
-                        if (invincibleState && dist > 6) {
-                            setInvincibleState(false, true);
-                            gticks += 80;
+                        if (dist > 6) {
+                            if (invincibleState) {
+                                setInvincibleState(false, true);
+                                gticks += 80;
+                            }
                         } else if (!invincibleState) {
                             setInvincibleState(true,true);
                         }
                     } else {
-                        if (invincibleState && dist <= 2) {
-                            setInvincibleState(false, true);
-                            gticks += 80;
+                        if (dist <= 2) {
+                            if (invincibleState) {
+                                setInvincibleState(false, true);
+                                gticks += 80;
+                            }
                         } else if (!invincibleState && dist > 2) {
                             setInvincibleState(true, true);
                         }
