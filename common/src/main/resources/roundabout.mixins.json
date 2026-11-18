@@ -128,6 +128,8 @@
     "fates.FateVillagerHostilesSensor",
     "fates.FateVillagerMixin",
     "freezing.FrozenLookControl",
+    "gold_experience.GEBowItemMixin",
+    "gold_experience.GECrossbowItemMixin",
     "gold_experience.GEEggItemMixin",
     "gold_experience.GEProjectileMixin",
     "gold_experience.GESnowballItemMixin",

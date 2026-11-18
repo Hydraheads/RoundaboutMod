@@ -1309,14 +1309,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
         return item instanceof ArrowItem
                 || item instanceof SnowballItem
                 || item instanceof EggItem
+                || item instanceof AmmoItem
                 || stack.is(ModItems.KNIFE)
                 || stack.is(ModItems.KNIFE_BUNDLE)
                 || stack.is(ModItems.MATCH)
-                || stack.is(ModItems.MATCH_BUNDLE)
-                || stack.is(ModItems.SNUBNOSE_AMMO)
-                || stack.is(ModItems.TOMMY_AMMO)
-                || stack.is(ModItems.SNIPER_AMMO)
-                || stack.is(ModItems.PISTOL_AMMO);
+                || stack.is(ModItems.MATCH_BUNDLE);
     }
 
     public static boolean isTreeImbuedProjectileItem(ItemStack stack) {
