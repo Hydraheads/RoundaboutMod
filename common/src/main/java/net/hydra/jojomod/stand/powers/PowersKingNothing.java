@@ -147,6 +147,10 @@ public class PowersKingNothing extends NewDashPreset {
     private int returnAnimTicks = 0;
     private int disintegrateAnimTicks = 0;
 
+    private boolean startPhaseTickAfter = false;
+    private boolean startingGrab = false;
+    private boolean startingItem = false;
+
     public PowersKingNothing(LivingEntity self) {
         super(self);
     }
@@ -784,6 +788,23 @@ public class PowersKingNothing extends NewDashPreset {
     public void tickPowerEnd() {
         super.tickPowerEnd();
         if (getSelf().isAlive() && !getSelf().isRemoved()) {
+            if (startPhaseTickAfter) {
+                boolean didAnything = false;
+                startPhaseTickAfter = false;
+                if (startingGrab) {
+                    phaseGrab();
+                    didAnything = true;
+                }
+                else if (startingItem) {
+                    phaseItem();
+                    didAnything = true;
+                }
+                if (didAnything) {
+                    getStandEntity(getSelf()).setFadePercent(100);
+                }
+                startingGrab = false;
+                startingItem = false;
+            }
             /**Tick Phase Grab*/
             if (isPhasing() && !this.isClient()) {
                 if (this.attackTimeDuring == 108) {
@@ -1312,22 +1333,13 @@ public class PowersKingNothing extends NewDashPreset {
     public boolean phaseGrab() {
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)) {
-            animateStand(KingNothingEntity.REACH);
-            this.attackTimeDuring = 0;
-            playSoundsIfNearby(PHASE, 27, false);
-            this.setActivePower(PowerIndex.POWER_2);
-            this.poseStand(OffsetIndex.LOOSE);
-            Vec2 twoVec = new Vec2(((this.getSelf().getYHeadRot()) % 360), (this.getSelf().getXRot()));
-            Direction gdir = ((IGravityEntity) this.self).roundabout$getGravityDirection();
-            Vec2 twoVecGrav = RotationUtil.rotPlayerToWorld(twoVec, gdir);
-            Vec3 threeVec = new Vec3(0, 0.25, 0);
-            threeVec = RotationUtil.vecPlayerToWorld(threeVec, gdir);
-
-            stand.setXRot(twoVec.y);
-            stand.setYRot(twoVec.x);
-            moveVec = DamageHandler.getRotationVector(twoVecGrav.y, twoVecGrav.x).scale(1.8).add(threeVec.x, threeVec.y,
-                    threeVec.z);
-            stand.setPos(this.getSelf().getPosition(1).add(moveVec));
+            if (startPhaseTickAfter) {
+                startingGrab = true;
+            }
+            else {
+                this.setActivePower(PowerIndex.POWER_2);
+                startPhaseMovement(stand);
+            }
             return true;
         }
         return false;
@@ -1351,28 +1363,36 @@ public class PowersKingNothing extends NewDashPreset {
     public boolean phaseItem() {
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)) {
+            if (startPhaseTickAfter) {
+                startingItem = true;
+                return true;
+            }
             if (this.inventoryGrab()) {
-                animateStand(KingNothingEntity.REACH);
-                playSoundsIfNearby(PHASE, 27, false);
-                this.attackTimeDuring = 0;
                 this.setActivePower(PowerIndex.POWER_2_SNEAK);
-                this.poseStand(OffsetIndex.LOOSE);
-
-                Vec2 twoVec = new Vec2((this.getSelf().getYHeadRot() % 360), (this.getSelf().getXRot()));
-                Direction gdir = ((IGravityEntity) this.self).roundabout$getGravityDirection();
-                Vec2 twoVecGrav = RotationUtil.rotPlayerToWorld(twoVec, gdir);
-                Vec3 threeVec = new Vec3(0, 0.25, 0);
-                threeVec = RotationUtil.vecPlayerToWorld(threeVec, gdir);
-
-                stand.setYRot(twoVec.x);
-                stand.setXRot(twoVec.y);
-                moveVec = DamageHandler.getRotationVector(twoVecGrav.y, twoVecGrav.x).scale(1.8).add(threeVec.x,
-                        threeVec.y, threeVec.z);
-                stand.setPos(this.getSelf().getPosition(1).add(moveVec));
+                startPhaseMovement(stand);
                 return true;
             }
         }
         return false;
+    }
+
+    public void startPhaseMovement(StandEntity stand) {
+        this.poseStand(OffsetIndex.LOOSE);
+        animateStand(KingNothingEntity.REACH);
+        this.attackTimeDuring = 0;
+        playSoundsIfNearby(PHASE, 27, false);
+
+        Vec2 twoVec = new Vec2((this.getSelf().getYHeadRot() % 360), (this.getSelf().getXRot()));
+        Direction gdir = ((IGravityEntity) this.self).roundabout$getGravityDirection();
+        Vec2 twoVecGrav = RotationUtil.rotPlayerToWorld(twoVec, gdir);
+        Vec3 threeVec = new Vec3(0, 0.25, 0);
+        threeVec = RotationUtil.vecPlayerToWorld(threeVec, gdir);
+
+        stand.setYRot(twoVec.x);
+        stand.setXRot(twoVec.y);
+        moveVec = DamageHandler.getRotationVector(twoVecGrav.y, twoVecGrav.x).scale(1.8).add(threeVec.x,
+                threeVec.y, threeVec.z);
+        stand.setPos(this.getSelf().getPosition(1).add(moveVec));
     }
 
     public boolean inventoryGrab() {
@@ -1708,11 +1728,17 @@ public class PowersKingNothing extends NewDashPreset {
             this.trackedItem = null;
             this.itemHoldingEntities.clear();
             this.itemHoldingBlocks.clear();
+            this.trackingCloudOut = false;
+            if (trackingCloud != null) {
+                this.trackingCloud.discard();
+                this.trackingCloud = null;
+            }
         }
         else if (!isOut && canSummonStandAsEntity()) {
             isOut = true;
             returnAnimTicks = 0;
             animateStand(KingNothingEntity.RETURN);
+            startPhaseTickAfter = true;
         }
     }
 
