@@ -113,7 +113,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public boolean onStandArrowUse() {
         if (this.self instanceof Player PE) {
-            if (isPossibleToRequiem()) {
+            if (isPossibleToRequiem()) { /// do epic aura farm animation here or something
                 sendParticlesIfPossible(self.level(),ParticleTypes.FIREWORK, PE.getX(),
                         PE.getY() + PE.getEyeHeight(), PE.getZ(),
                         20, 0, 0, 0, 0.4);
