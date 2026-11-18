@@ -329,6 +329,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     private final List<TreeBlockSpawnData> pendingTreeBlocks = new ArrayList<>();
     private int treeSpawnTimer = 0;
     private BlockPos treeBasePos = null;
+    private Direction treeGrowthDir = Direction.UP;
     private record TreeBlockSpawnData(
             Vector3f startPos,
             Vector3f finalPos,
@@ -458,21 +459,29 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
                 if (treeSpawnTimer < 0 && this.treeBasePos != null && this.self.level() instanceof ServerLevel serverLevel) {
                     if (treeSpawnTimer % 2 == 0) {
-                        BlockState groundState = serverLevel.getBlockState(this.treeBasePos.below());
-                        double x = this.treeBasePos.getX() + 0.5;
-                        double y = this.treeBasePos.getY() + 0.05;
-                        double z = this.treeBasePos.getZ() + 0.5;
+                        BlockPos supportPos = this.treeBasePos.relative(this.treeGrowthDir.getOpposite());
+                        BlockState groundState = serverLevel.getBlockState(supportPos);
+
+                        double x = this.treeBasePos.getX() + 0.5 - (this.treeGrowthDir.getStepX() * 0.45);
+                        double y = this.treeBasePos.getY() + 0.5 - (this.treeGrowthDir.getStepY() * 0.45);
+                        double z = this.treeBasePos.getZ() + 0.5 - (this.treeGrowthDir.getStepZ() * 0.45);
+
+                        double spreadX = this.treeGrowthDir.getAxis() == Direction.Axis.X ? 0.05 : 0.3;
+                        double spreadY = this.treeGrowthDir.getAxis() == Direction.Axis.Y ? 0.05 : 0.3;
+                        double spreadZ = this.treeGrowthDir.getAxis() == Direction.Axis.Z ? 0.05 : 0.3;
 
                         sendParticlesIfPossible(serverLevel,
                                 ModParticles.VITAL_ESSENCE,
-                                x, y + 0.1, z,
-                                3, 0.3, 0.05, 0.3, 0.02);
+                                x + (this.treeGrowthDir.getStepX() * 0.1),
+                                y + (this.treeGrowthDir.getStepY() * 0.1),
+                                z + (this.treeGrowthDir.getStepZ() * 0.1),
+                                3, spreadX, spreadY, spreadZ, 0.02);
 
                         if (!groundState.isAir()) {
                             sendParticlesIfPossible(serverLevel,
                                     new BlockParticleOption(ParticleTypes.BLOCK, groundState),
                                     x, y, z,
-                                    4, 0.25, 0.02, 0.25, 0.05);
+                                    4, spreadX, spreadY, spreadZ, 0.05);
                         }
                     }
                 }
@@ -1334,6 +1343,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                     && ((StandUser) ownerLiving).roundabout$getStandPowers() instanceof PowersGoldExperience gePowers
                     && imbueId.equals(gePowers.getActiveImbuedItemId())) {
                 ((IGEProjectile) projectile).roundabout$setGETreeImbue(true);
+                ((IGEProjectile) projectile).roundabout$setGETreeImbueOwner(ownerId);
                 gePowers.setActiveImbuedItemId(null);
             }
         }
@@ -1354,6 +1364,35 @@ public class PowersGoldExperience extends BlockGrabPreset {
             su.roundabout$setGERooted(true);
             victim.level().playSound(null, victim.blockPosition(),
                     ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.85F, 1.0F);
+        }
+    }
+
+    public static void applyTreeImbueOnBlockHit(Projectile projectile, BlockHitResult result) {
+        if (projectile.level().isClientSide() || !(projectile.level() instanceof ServerLevel serverLevel)) return;
+        if (!(projectile instanceof IGEProjectile geProj) || !geProj.roundabout$hasGETreeImbue()) return;
+
+        geProj.roundabout$setGETreeImbue(false);
+
+        PowersGoldExperience gePowers = null;
+        UUID ownerId = geProj.roundabout$getGETreeImbueOwner();
+        if (ownerId != null && serverLevel.getEntity(ownerId) instanceof LivingEntity imbuer
+                && ((StandUser) imbuer).roundabout$getStandPowers() instanceof PowersGoldExperience powers) {
+            gePowers = powers;
+        } else if (projectile.getOwner() instanceof LivingEntity shooter
+                && ((StandUser) shooter).roundabout$getStandPowers() instanceof PowersGoldExperience powers) {
+            gePowers = powers;
+        }
+
+        if (gePowers == null) return;
+
+        BlockPos hitPos = result.getBlockPos();
+        Direction face = result.getDirection();
+        BlockPos placePos = hitPos.relative(face);
+
+        if (face == Direction.UP) {
+            gePowers.growGETreeAt(placePos, false);
+        } else if (face.getAxis().isHorizontal()) {
+            gePowers.growGEWallBranchAt(placePos, face);
         }
     }
 
@@ -1808,7 +1847,6 @@ public class PowersGoldExperience extends BlockGrabPreset {
     }
 
     private boolean finishTree() {
-        Level level = this.self.level();
         BlockPos centerPos;
 
         if (this.isHoldingSneak()) {
@@ -1827,6 +1865,12 @@ public class PowersGoldExperience extends BlockGrabPreset {
             }
         }
 
+        return growGETreeAt(centerPos, true);
+    }
+
+    public boolean growGETreeAt(BlockPos centerPos, boolean fromSkill) {
+        Level level = this.self.level();
+
         boolean isSafe = false;
         for (int i = 0; i < 5; i++) {
             if (level.getBlockState(centerPos.below(i)).isSolid()) {
@@ -1840,7 +1884,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
             return false;
         }
 
-        BlockPos base = new BlockPos(centerPos.getX(), Math.min(centerPos.getY(), this.self.blockPosition().getY()), centerPos.getZ());
+        BlockPos base = fromSkill
+                ? new BlockPos(centerPos.getX(), Math.min(centerPos.getY(), this.self.blockPosition().getY()), centerPos.getZ())
+                : centerPos;
         Direction growthDirection = Direction.UP;
 
         int maxHeight = 7;
@@ -1867,6 +1913,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             pendingTreeBlocks.clear();
             treeSpawnTimer = -30;
             this.treeBasePos = base;
+            this.treeGrowthDir = Direction.UP;
 
             float yOffset = -actualHeight;
 
@@ -1927,11 +1974,87 @@ public class PowersGoldExperience extends BlockGrabPreset {
             }
 
             playSoundIfPossible(level, null, base, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.9F, 1F);
-            addEXP(5);
-            this.setCooldown(PowerIndex.GENERAL_2, getTreeCooldown());
-            this.setAttackTimeDuring(-5);
+            if (fromSkill) {
+                addEXP(5);
+                this.setCooldown(PowerIndex.GENERAL_2, getTreeCooldown());
+                this.setAttackTimeDuring(-5);
+            }
         }
-        this.setAttackTimeDuring(-10);
+        if (fromSkill) {
+            this.setAttackTimeDuring(-10);
+        }
+        return true;
+    }
+
+    public boolean growGEWallBranchAt(BlockPos placePos, Direction outwardDir) {
+        Level level = this.self.level();
+        if (level.isClientSide() || !outwardDir.getAxis().isHorizontal()) return false;
+
+        BlockPos log1 = placePos;
+        BlockPos log2 = placePos.relative(outwardDir);
+        BlockPos topLog = log2.relative(outwardDir).above();
+
+        if (!level.getBlockState(log1).canBeReplaced() || !level.getBlockState(log2).canBeReplaced()) {
+            return false;
+        }
+
+        BlockState branchState = Blocks.OAK_LOG.defaultBlockState().setValue(BlockStateProperties.AXIS, outwardDir.getAxis());
+        BlockState leafState = Blocks.OAK_LEAVES.defaultBlockState().setValue(BlockStateProperties.PERSISTENT, true);
+
+        BlockPos wallAnchor = placePos.relative(outwardDir.getOpposite());
+        Vector3f branchStart = new Vector3f(wallAnchor.getX() + 0.5f, wallAnchor.getY(), wallAnchor.getZ() + 0.5f);
+
+        pendingTreeBlocks.clear();
+        treeSpawnTimer = -30;
+        this.treeBasePos = placePos;
+        this.treeGrowthDir = outwardDir;
+
+        pendingTreeBlocks.add(new TreeBlockSpawnData(
+                branchStart,
+                new Vector3f(log1.getX() + 0.5f, log1.getY(), log1.getZ() + 0.5f),
+                branchState,
+                0,
+                true
+        ));
+        pendingTreeBlocks.add(new TreeBlockSpawnData(
+                branchStart,
+                new Vector3f(log2.getX() + 0.5f, log2.getY(), log2.getZ() + 0.5f),
+                branchState,
+                2,
+                true
+        ));
+
+        if (level.getBlockState(topLog).canBeReplaced()) {
+            pendingTreeBlocks.add(new TreeBlockSpawnData(
+                    branchStart,
+                    new Vector3f(topLog.getX() + 0.5f, topLog.getY(), topLog.getZ() + 0.5f),
+                    branchState,
+                    4,
+                    true
+            ));
+
+            BlockPos[] leafPositions = new BlockPos[]{
+                    topLog.above(),
+                    topLog.below(),
+                    topLog.relative(outwardDir),
+                    topLog.relative(outwardDir.getClockWise()),
+                    topLog.relative(outwardDir.getCounterClockWise())
+            };
+
+            for (BlockPos leafPos : leafPositions) {
+                if (level.getBlockState(leafPos).canBeReplaced()) {
+                    pendingTreeBlocks.add(new TreeBlockSpawnData(
+                            branchStart,
+                            new Vector3f(leafPos.getX() + 0.5f, leafPos.getY(), leafPos.getZ() + 0.5f),
+                            leafState,
+                            6,
+                            false
+                    ));
+                }
+            }
+        }
+
+        playSoundIfPossible(level, null, placePos, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.9F, 1.0F);
         return true;
     }
 

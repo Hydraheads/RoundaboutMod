@@ -453,6 +453,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
 
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
+        PowersGoldExperience.applyTreeImbueOnBlockHit(this, $$0);
         this.setSuperThrown(false);
         this.setDeltaMovement(Vec3.ZERO);
         if (!level().isClientSide) {
