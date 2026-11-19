@@ -2182,6 +2182,16 @@ public class PowersGoldExperience extends BlockGrabPreset {
         if (attackTimeDuring >= 240) {
             setPowerNone();
             // TODO: Change to GER
+            ItemStack discy = ((StandUser)self).roundabout$getStandDisc();
+            //CompoundTag compoundtag = new CompoundTag();
+            ItemStack savedDisc = MainUtil.saveToDiscData(self, discy);
+
+            //onStandSwitch();
+            ((StandUser)self).roundabout$setStandDisc(new ItemStack(ModItems.CREATIVE_STAND_DISC_GER));
+            ((StandUser)self).roundabout$getStandPowers().onStandSwitchInto();
+            if (((StandUser)self).roundabout$getStandPowers() instanceof PowersGER GER) {
+                GER.setOriginalDisc(savedDisc);
+            }
         }
     }
 
