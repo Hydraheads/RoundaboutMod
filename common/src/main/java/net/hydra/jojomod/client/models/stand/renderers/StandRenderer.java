@@ -215,5 +215,6 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
     public int getGlowAmount(byte skin) {
         return 15728640;
     }
+    public PoseStack modifyStack(PoseStack stack) {return stack;}
 
 }
