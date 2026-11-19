@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity;
 import net.hydra.jojomod.access.NoHitboxRendering;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.stand.SilverChariotEntity;
+import net.hydra.jojomod.stand.powers.PowersSilverChariot;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -26,9 +27,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collections;
 
 
-public class SilverChariotMountEntity extends LivingEntity implements PlayerRideable {
+public class SilverChariotMountEntity extends LivingEntity {
 
-    public static final double eHeight = SilverChariotEntity.eHeight;
+    public static final double eHeight = SilverChariotEntity.eHeight + 1D;
     public static final double eWidth = SilverChariotEntity.eWidth;
 
     public SilverChariotMountEntity(EntityType<? extends SilverChariotMountEntity> $$0, Level $$1) {
@@ -94,11 +95,12 @@ public class SilverChariotMountEntity extends LivingEntity implements PlayerRide
     private static final EntityDataAccessor<Integer> MAX_HOVER_CHARGE = SynchedEntityData.defineId(SilverChariotMountEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> IS_HOVERING = SynchedEntityData.defineId(SilverChariotMountEntity.class, EntityDataSerializers.BOOLEAN);
 
-    // private int maxHoverTicks = 200;
-    // private int hoverTicks = 0;
-
-    private static int configuredSelfCarryHoveringCharge() {
+    private static int configuredSelfCarryMaxHoveringCharge() {
         return Math.max(1, ClientNetworking.getAppropriateConfig().silverChariotSettings.silverChariotSelfCarryModeMaxHoverCharge);
+    }
+
+    private static int configuredSelfCarryHoverRechargeRate() {
+        return Math.max(1, ClientNetworking.getAppropriateConfig().silverChariotSettings.silverChariotSelfCarryModeHoverRechargeRate);
     }
 
     public int getMaxHoverTicks() {
@@ -108,7 +110,7 @@ public class SilverChariotMountEntity extends LivingEntity implements PlayerRide
 
     public void setMaxHoverTicks(int ticks) {
         // this.maxHoverTicks = ticks;
-        this.entityData.set(MAX_HOVER_CHARGE, ticks);
+        this.entityData.set(MAX_HOVER_CHARGE, Math.max(0, ticks));
     }
 
     public int getHoverTicks() {
@@ -122,8 +124,16 @@ public class SilverChariotMountEntity extends LivingEntity implements PlayerRide
     }
 
     public void resetHoverTicks() {
-        // hoverTicks = 0;
-        this.entityData.set(HOVER_CHARGE, this.getMaxHoverTicks());
+        // hoverTicks = maxHoverTicks;
+        setHoverTicks(getMaxHoverTicks());
+    }
+
+    public boolean isHovering() {
+        return entityData.get(IS_HOVERING);
+    }
+
+    public void setHovering(boolean hovering) {
+        entityData.set(IS_HOVERING, hovering);
     }
 
     private int tickLifeNoRiding = 0;
@@ -137,7 +147,7 @@ public class SilverChariotMountEntity extends LivingEntity implements PlayerRide
             if (!this.isVehicle()) {
                 tickLifeNoRiding++;
             }
-            if (tickLifeNoRiding > 100) {
+            if (tickLifeNoRiding > 10) {
                 this.discard();
             }
         }
@@ -145,60 +155,36 @@ public class SilverChariotMountEntity extends LivingEntity implements PlayerRide
 
     private void tickHovering() {
         int hoverTicks = this.getHoverTicks();
-        int maxHoverTicks = this.getMaxHoverTicks();
-        if (onGround()) {
-            resetHoverTicks();
-        } else {
-            /*
-            hoverTicks++;
-            if (hoverTicks > maxHoverTicks) {
-                hoverTicks = maxHoverTicks;
-            }
-            */
+        if (!isHovering() && isVehicle()) {
+            // resetHoverTicks();
+            setHoverTicks(hoverTicks + configuredSelfCarryHoverRechargeRate());
+        } else if (isHovering() && isVehicle() && hoverTicks > 0) {
+            setHoverTicks(hoverTicks - 1);
         }
+    }
 
-        /*
-        if (hoverTicks > maxHoverTicks) {
-        } else {
-            this.resetFallDistance();
-        }
-        */
+    @Override
+    public boolean isNoGravity() {
+        // return super.isNoGravity();
+        return (isVehicle() && isHovering() && getHoverTicks() > 0) || super.isNoGravity();
+        // return (isVehicle()) || super.isNoGravity();
     }
 
     @Override
     public void travel(Vec3 $$0) {
-        // super.travel($$0);
-        /*
-        int hoverTicks = this.getHoverTicks();
-        int maxHoverTicks = this.getMaxHoverTicks();
-        if (this.isControlledByLocalInstance()) {
-            boolean veh = this.isVehicle() && !this.getPassengers().isEmpty();
-            if (veh) {
-                float yboost = hoverTicks > maxHoverTicks ? 0.06f : 0.3f;
-                this.moveRelative(3.0F, $$0);
-                this.setDeltaMovement(this.getDeltaMovement().add(0, $$0.y*yboost, 0));
-            }
-        }
-        */
         if (isVehicle() && getControllingPassenger() instanceof Player player) {
             setYRot(player.getYRot());
             setXRot(player.getXRot() * 0.5F);
 
             yRotO = getYRot();
             xRotO = getXRot();
+        }
 
-            float forward = player.zza;
-            float sideways = player.xxa;
+        if (isVehicle() && isHovering() && getHoverTicks() > 0) {
+            Vec3 velocity = getDeltaMovement();
 
-            if (forward < 0) {
-                forward *= 0.25F;
-            }
-
-            float speed = 0.2F;
-
-            setSpeed(speed);
-            super.travel(new Vec3(sideways, $$0.y, forward));
-            return;
+            setDeltaMovement(velocity.x, 0.1D, velocity.z);
+            hasImpulse = true;
         }
 
         super.travel($$0);
@@ -235,15 +221,22 @@ public class SilverChariotMountEntity extends LivingEntity implements PlayerRide
 
     @Override
     protected Vec3 getRiddenInput(Player $$0, Vec3 $$1) {
-        float $$2 = $$0.xxa;
+        float $$2 = $$0.xxa / 1.5F;
         float $$3 = yaccel;
-        float $$4 = $$0.zza;
+        float $$4 = $$0.zza / 1.5F;
         // float $$4 = $$0.zza * 2;
         if ($$4 <= 0.0F) {
             $$4 *= 0.25F;
         }
 
-        return new Vec3((double) $$2, $$3, (double) $$4);
+        return new Vec3($$2, 0D, $$4);
+
+        // return new Vec3((double) $$2, $$3, (double) $$4);
+    }
+
+    @Override
+    protected float getRiddenSpeed(Player player) {
+        return 0.25F;
     }
 
     @Override
@@ -260,7 +253,7 @@ public class SilverChariotMountEntity extends LivingEntity implements PlayerRide
 
     @Override
     public double getPassengersRidingOffset() {
-        return SilverChariotMountEntity.eHeight * 0.75D;
+        return SilverChariotMountEntity.eHeight * 0.65D;
     }
 
     @Override
@@ -333,7 +326,7 @@ public class SilverChariotMountEntity extends LivingEntity implements PlayerRide
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        int hoverCharge = configuredSelfCarryHoveringCharge();
+        int hoverCharge = configuredSelfCarryMaxHoveringCharge();
         entityData.define(HOVER_CHARGE, hoverCharge);
         entityData.define(MAX_HOVER_CHARGE, hoverCharge);
         entityData.define(IS_HOVERING, false);
