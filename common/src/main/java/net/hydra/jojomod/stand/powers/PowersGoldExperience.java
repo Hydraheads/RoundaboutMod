@@ -455,6 +455,124 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     // stand rejection end
 
+    // mob ai start
+
+    private int attackCD = 0;
+
+    @Override
+    public void tickMobAI(LivingEntity attackTarget) {
+        if (this.self.level().isClientSide()) return;
+
+        if (this.attackCD > 0) {
+            this.attackCD--;
+        }
+
+        if ((this.getActivePower() == HEAL_CHARGE || this.getActivePower() == HEAL)
+                && this.healOthers
+                && this.healTargetId != -1
+                && this.self.level().getEntity(this.healTargetId) instanceof LivingEntity healTarget
+                && healTarget.isAlive()) {
+            rotateMobHead(healTarget);
+            return;
+        }
+
+        if (this.getActivePower() != PowerIndex.NONE && this.getActivePower() != PowerIndex.ATTACK) {
+            if (attackTarget != null && attackTarget.isAlive()) {
+                rotateMobHead(attackTarget);
+            }
+            return;
+        }
+
+        boolean canHeal = !this.onCooldown(PowerIndex.SKILL_1_SNEAK);
+
+        // selfheal below half
+        if (canHeal && this.self.getHealth() < this.self.getMaxHealth() * 0.5F) {
+            this.healOthers = false;
+            this.healTargetId = -1;
+            ((StandUser) this.getSelf()).roundabout$tryPower(HEAL_CHARGE, true);
+            return;
+        }
+
+        // villagers heal others
+        if (this.self instanceof AbstractVillager villager) {
+            boolean isFleeing = ((IMob) villager).roundabout$getFightOrFlight();
+
+            if (canHeal) {
+                List<LivingEntity> nearbyAllies = this.self.level().getEntitiesOfClass(
+                        LivingEntity.class,
+                        this.self.getBoundingBox().inflate(6.0),
+                        e -> e != this.self
+                                && e.isAlive()
+                                && e.getHealth() < e.getMaxHealth() * 0.75F
+                                && (e instanceof AbstractVillager || e instanceof IronGolem)
+                );
+
+                if (!nearbyAllies.isEmpty()) {
+                    LivingEntity allyToHeal = nearbyAllies.get(0);
+                    this.healOthers = true;
+                    this.healTargetId = allyToHeal.getId();
+                    rotateMobHead(allyToHeal);
+                    ((StandUser) this.getSelf()).roundabout$tryPower(HEAL_CHARGE, true);
+                    return;
+                }
+            }
+        }
+
+        if (attackTarget != null && attackTarget.isAlive() && !this.isDazed(this.getSelf())) {
+            double dist = attackTarget.distanceTo(this.getSelf());
+
+            if (dist <= 9.0) {
+                rotateMobHead(attackTarget);
+            }
+
+            // just make something lol
+            if (this.self instanceof Creeper) {
+                animalType = AnimalTypes.FROG.id;
+            } else if (this.self instanceof AbstractSkeleton) {
+                animalType = AnimalTypes.BAT.id;
+            } else if (this.self instanceof Drowned) {
+                animalType = AnimalTypes.PIRAHNA.id;
+            }
+            // everything else makes one of the good "pvp" mobs
+            else {
+                double rng = Math.random();
+                if (rng < 1.0 / 3.0) {
+                    animalType = AnimalTypes.FROG.id;
+                } else if (rng < 2.0 / 3.0) {
+                    animalType = AnimalTypes.BAT.id;
+                } else {
+                    animalType = AnimalTypes.SNAKE.id;
+                }
+            }
+
+            // close range
+            if (dist <= 4.0 && this.canAttack() && !this.onCooldown(PowerIndex.GENERAL_3) && Math.random() < 0.3 && this.attackCD <= 0) {
+                ((StandUser) this.getSelf()).roundabout$tryPower(LIFE_PUNCH, true);
+                this.attackCD = 100;
+                return;
+            }
+
+            // mid range
+            else if (dist <= 8.0 && !this.onCooldown(PowerIndex.SKILL_4) && Math.random() < 0.25 && this.attackCD <= 0) {
+                ((StandUser) this.getSelf()).roundabout$tryPower(BRAMBLES, true);
+                this.attackCD = 100;
+                return;
+            }
+
+            // util
+            else if (dist <= 9.0 && !this.onCooldown(PowerIndex.SKILL_2) && this.attackCD <= 0) {
+                ((StandUser) this.getSelf()).roundabout$tryIntPower(LIFEFORM_CREATION, true, animalType);
+                this.attackCD = 100;
+                return;
+            }
+
+            // barrage and whatever
+            else {super.tickMobAI(attackTarget);}
+        }
+    }
+
+    // mob ai end
+
     // start of move methods
 
     // tick power start
