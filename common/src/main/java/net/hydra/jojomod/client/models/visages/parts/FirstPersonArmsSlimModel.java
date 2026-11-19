@@ -202,7 +202,7 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                     AnimationDefinition anim = PCB.getAnimation(standUser, true);
                     if (anim != null) {
                         this.animate(standUser.roundabout$getWornStandAnimation(), anim, partialTicks, 1F);
-                        standUser.roundabout$getWornStandAnimation().startIfStopped(player.tickCount);
+                        standUser.roundabout$getWornStandAnimation().startIfStopped(player.tickCount - 15);
                     }
                 }
 

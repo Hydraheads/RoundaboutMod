@@ -2217,21 +2217,26 @@ public class PowersGoldExperience extends BlockGrabPreset {
             setPowerNone();
             // TODO: Change to GER
             ItemStack discy = ((StandUser)self).roundabout$getStandDisc();
-            //CompoundTag compoundtag = new CompoundTag();
             ItemStack savedDisc = MainUtil.saveToDiscData(self, discy);
 
             //onStandSwitch();
+
+            ((StandUser)self).roundabout$setStandDisc(new ItemStack(ModItems.CREATIVE_STAND_DISC_GER));
+            ((StandUser)self).roundabout$getStandPowers().onStandSwitchInto();
+            if (((StandUser)self).roundabout$getStandPowers() instanceof PowersGER GER) {
+                GER.idlePos = idlePos;
+                GER.standSkin = standSkin;
+
+                GER.setOriginalDisc(savedDisc);
+            }
+
+
+
             if (((StandUser)self).roundabout$getStand() != null) {
                 ((StandUser)self).roundabout$getStand().discard();
                 ((StandUser)self).roundabout$setStand(null);
             }
             ((StandUser)self).roundabout$summonStand(self.level(), true, true);
-
-            ((StandUser)self).roundabout$setStandDisc(new ItemStack(ModItems.CREATIVE_STAND_DISC_GER));
-            ((StandUser)self).roundabout$getStandPowers().onStandSwitchInto();
-            if (((StandUser)self).roundabout$getStandPowers() instanceof PowersGER GER) {
-                GER.setOriginalDisc(savedDisc);
-            }
         }
     }
 
