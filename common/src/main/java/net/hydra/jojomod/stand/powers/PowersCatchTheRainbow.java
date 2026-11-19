@@ -12,6 +12,7 @@ import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
+import net.hydra.jojomod.item.FirearmItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
@@ -473,6 +474,11 @@ public class PowersCatchTheRainbow extends NewDashPreset {
 
         if (ctrDodgeTicks != 0){
             ctrDodgeTicks --;
+            if (this.self.getItemInHand(this.self.getUsedItemHand()).getItem() instanceof FirearmItem){
+                ItemStack stack = this.self.getItemInHand(this.self.getUsedItemHand());
+                FirearmItem gun = (FirearmItem) stack.getItem();
+                gun.cancelReload(stack, (Player)this.self);
+            }
         }else{
             if (!self.level().isClientSide()) setNoAnimation();
         }
@@ -509,12 +515,14 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             for (Entity ent : getNearEntity) {
                 if (ent instanceof LivingEntity && !(ent instanceof StandEntity)) {
                     if (dropHitbox.intersects(ent.getBoundingBox())) {
-                        MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 0.8F,
-                                0,
-                                -1,
-                                0);
-                        ent.hurt(ModDamageTypes.of(this.self.level(), ModDamageTypes.SHARP_RAINDROP, self, self), 5);
-                        dropTimer = 0;
+                        if (this.ctrDodgeTicks == 0) {
+                            MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 0.8F,
+                                    0,
+                                    -1,
+                                    0);
+                            ent.hurt(ModDamageTypes.of(this.self.level(), ModDamageTypes.SHARP_RAINDROP, self, self), 5);
+                            dropTimer = 0;
+                        }
                     }
                 }
             }
@@ -923,6 +931,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     private void fullDodgeServer(){
         ctrDodgeTicks = 25;
         setFullDodgeAnimation();
+        this.self.stopUsingItem();
     }
 
     public void setFullDodgeAnimation(){
@@ -948,7 +957,6 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         }
         return false;
     }
-
     @Override
     public boolean phaseThroughProjectile(Entity ent){
         return this.ctrDodgeTicks != 0;
@@ -961,6 +969,10 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     @Override
     public boolean interceptAllInteractions(){
             return ctrDodgeTicks != 0;
+    }
+    @Override
+    public boolean superCancelMining(){
+        return this.ctrDodgeTicks != 0;
     }
 
     //rain dodge
