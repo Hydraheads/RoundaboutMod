@@ -111,6 +111,7 @@ public class ModStrayModels {
     public static OyecomovaHatPart oyecomovaHatPart;
     public static ExtraHairDecorationPart extraHairDecorationPart;
 
+    public static GERootsModel GERoots;
 
     public static CatHeadPart CatHeadPart;
     public static LlamaHeadPart LlamaHeadPart;

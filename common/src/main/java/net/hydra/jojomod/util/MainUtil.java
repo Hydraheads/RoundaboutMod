@@ -2829,7 +2829,8 @@ public class MainUtil {
                 || sauce.is(ModDamageTypes.HAZE_VIRUS)
                 || sauce.is(ModDamageTypes.DISTORTION_VIRUS)
                 || sauce.is(ModDamageTypes.POD_BITE)
-                || sauce.is(ModDamageTypes.BITES_THE_DUST)){
+                || sauce.is(ModDamageTypes.BITES_THE_DUST)
+                || sauce.is(ModDamageTypes.BRAMBLE)){
             return true;
         }
         return false;
@@ -2860,7 +2861,7 @@ public class MainUtil {
                 || sauce.is(ModDamageTypes.EXPLOSIVE_STAND) || sauce.is(ModDamageTypes.HEEL_SPIKE) ||
                 sauce.is(ModDamageTypes.CORPSE_ARROW) || sauce.is(ModDamageTypes.STAND_RUSH)
                 || sauce.is(ModDamageTypes.CROSSFIRE) ||
-                sauce.is(ModDamageTypes.CORPSE_EXPLOSION)) {
+                sauce.is(ModDamageTypes.CORPSE_EXPLOSION) || sauce.is(ModDamageTypes.BRAMBLE)) {
             return true;
         }
         return false;
