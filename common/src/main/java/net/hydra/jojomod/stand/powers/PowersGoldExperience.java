@@ -143,34 +143,34 @@ public class PowersGoldExperience extends BlockGrabPreset {
      */
 
     private final int getDNACooldown() {
-        return 300;
+        return geConfig().goldExperienceCooldownDNA;
     };
     private final int getAnimalCreationCooldown() {
-        return 400;
+        return geConfig().goldExperienceCooldownAnimal;
     };
     private final int getHealCooldown() {
-        return 200;
+        return geConfig().goldExperienceCooldownHeal;
     };
     private final int getLifeSensorCooldown() {
-        return 60;
+        return geConfig().goldExperienceCooldownLifeSensor;
     };
     private final int getItemImbueCooldown() {
-        return 600;
+        return geConfig().goldExperienceCooldownItemImbue;
     };
     private final int getLifePunchCooldown() {
-        return 800;
+        return geConfig().goldExperienceCooldownLifePunch;
     };
     private final int getVineCooldown() {
-        return 60;
+        return geConfig().goldExperienceCooldownVine;
     };
     private final int getTreeCooldown() {
-        return 300;
+        return geConfig().goldExperienceCooldownTree;
     };
     private final int getBrambleCooldown() {
-        return 240;
+        return geConfig().goldExperienceCooldownBramble;
     };
     private final int getBushCooldown() {
-        return 320;
+        return geConfig().goldExperienceCooldownBush;
     };
 
     // for damage
@@ -2661,6 +2661,15 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
             EntityType<?> typeToSpawn = getAnimalEntityType(this.animalType);
 
+            int cooldown = getAnimalCreationCooldown();
+
+            if(animalType == AnimalTypes.SNAKE.id || animalType == AnimalTypes.PIRAHNA.id || animalType == AnimalTypes.BAT.id) {
+                cooldown += 200;
+            }
+            if(animalType == AnimalTypes.FROG.id || animalType == AnimalTypes.BEE.id) {
+                cooldown += 100;
+            }
+
             if (typeToSpawn != null) {
                 Vec3 spawnPos = this.self.position().add(this.self.getLookAngle().scale(1.2));
                 spawnPos = new Vec3(spawnPos.x, spawnPos.y + 1.0, spawnPos.z);
@@ -2669,7 +2678,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 ItemStack sourceStack = (isMob) ? ItemStack.EMPTY : handItem;
 
                 if (spawnLifeform(typeToSpawn, spawnPos, sourceStack)) {
-                    setCooldown(PowerIndex.SKILL_2, getAnimalCreationCooldown());
+                    setCooldown(PowerIndex.SKILL_2, cooldown);
                     if (!isMob || !handItem.isEmpty()) {
                         handItem.shrink(1);
                     }
@@ -3273,6 +3282,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 if (!this.self.level().isClientSide()) {
                     playSoundIfPossible(self.level(), null, this.self.blockPosition(), sound, SoundSource.PLAYERS, 0.95F, 1.1F);
                 }
+                if (this.getSelf() instanceof Player serverPlayer && !this.getSelf().level().isClientSide()) {
+                    S2CPacketUtil.sendCooldownSyncPacket((ServerPlayer) serverPlayer, PowerIndex.GENERAL_3, getLifePunchCooldown() + 400);
+                }
+                this.setCooldown(PowerIndex.GENERAL_3, getLifePunchCooldown() + 400);
+                return;
             }
             // all of this is for the block version of life punch
             else {
