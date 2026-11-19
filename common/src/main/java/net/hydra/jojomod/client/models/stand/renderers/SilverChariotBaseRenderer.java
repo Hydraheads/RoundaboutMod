@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.SilverChariotAfterimageState;
 import net.hydra.jojomod.client.gui.PowerInventoryMenu;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
@@ -13,6 +14,7 @@ import net.hydra.jojomod.entity.stand.SilverChariotEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -171,7 +173,8 @@ public class SilverChariotBaseRenderer<T extends StandEntity> extends StandRende
         boolean renderAfterimagesInFirstPerson = ConfigManager.getClientConfig().silverChariotSettings.silverChariotShouldRenderAfterimagesWhileUserInFirstPerson;
         boolean isInPowerInventory = mobEntity.getUser() instanceof Player player && player.containerMenu instanceof PowerInventoryMenu;
         boolean isStandVisible = this.model.stand.visible;
-        if (!isInPowerInventory && renderAfterimages && !mobEntity.getArmoured() && mobEntity.getAfterimageStates().size() >= 2) {
+        LocalPlayer lp = Minecraft.getInstance().player;
+        if (ClientUtil.canSeeStands(lp) && !isInPowerInventory && renderAfterimages && !mobEntity.getArmoured() && mobEntity.getAfterimageStates().size() >= 2) {
             this.model.stand.visible = !(!renderAfterimagesInFirstPerson
                     && mobEntity.getUser() == minecraft.player
                     && minecraft.options.getCameraType().isFirstPerson());
@@ -206,7 +209,13 @@ public class SilverChariotBaseRenderer<T extends StandEntity> extends StandRende
         float initOffset = -1.6F;
         float offsetSpacing = 0.8F;
 
-        for (SilverChariotAfterimageState state : mobEntity.getAfterimageStates()) {
+        List<SilverChariotAfterimageState> states = new ArrayList<>(mobEntity.getAfterimageStates());
+
+        int count = Math.min(SilverChariotEntity.AFTERIMAGE_MAX_AMOUNT, states.size());
+
+        // for (SilverChariotAfterimageState state : mobEntity.getAfterimageStates()) {
+        for (int j = 0; j < count; j++) {
+            SilverChariotAfterimageState state = states.get(j);
             // Vec3 prevPos = state.getPos();
             Vec3 prevPos = getInterpolatedFakePos(
                     mobEntity,
@@ -276,7 +285,9 @@ public class SilverChariotBaseRenderer<T extends StandEntity> extends StandRende
 
         Vec3 nextPos = states.get(posIndex + 1).getPos();
 
-        float progress = (
+        float speedFactor = ConfigManager.getClientConfig().silverChariotSettings.silverChariotAfterimageSpeed;
+
+        float progress = speedFactor * (
                 mobEntity.getAfterImageTicks() + pt
         ) / (float) SilverChariotEntity.AFTERIMAGE_TICK_INTERVAL;
 

@@ -1329,6 +1329,16 @@ public class ClientUtil {
         return false;
     }
 
+    public static boolean canSilverChariotControlModeSeeParticles() {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PSC.isPiloting()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static float getGameTimeStart(){
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null){

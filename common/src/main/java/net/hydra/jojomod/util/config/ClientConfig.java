@@ -285,12 +285,14 @@ public class ClientConfig implements Cloneable {
         public Boolean silverChariotRenderAfterimages;
         @IntOption(group = "inherit", value = 4, min = 2, max = 10)
         public Integer silverChariotAfterimagesMaxAmount;
-        @IntOption(group = "inherit", value = 2, min = 1, max = 20)
+        @IntOption(group = "inherit", value = 5, min = 1, max = 20)
         public Integer silverChariotTickIntervalBetweenAfterimage;
         // @FloatOption(group = "inherit", value = 1F, min = 0, max = 1)
         // public Float silverChariotAfterimageOpacity;
         @BooleanOption(group = "inherit", value = false)
         public Boolean silverChariotShouldRenderAfterimagesWhileUserInFirstPerson;
+        @FloatOption(group = "inherit", value = 0.9F, min = 0.01F, max = 1F)
+        public Float silverChariotAfterimageSpeed;
     }
     public static class LyinEyesSettings {
         @BooleanOption(group = "inherit", value = false)
