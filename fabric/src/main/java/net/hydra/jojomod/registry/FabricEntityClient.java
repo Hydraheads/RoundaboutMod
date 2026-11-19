@@ -507,6 +507,8 @@ public class FabricEntityClient {
         ModStrayModels.oyecomovaHatPart = new OyecomovaHatPart();
         ModStrayModels.extraHairDecorationPart = new ExtraHairDecorationPart();
 
+        ModStrayModels.GERoots = new GERootsModel();
+
         ModStrayModels.GoatHeadPart = new GoatHeadPart();
         ModStrayModels.CatHeadPart = new CatHeadPart();
         ModStrayModels.VillagerHeadPart = new VillagerHeadPart();

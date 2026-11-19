@@ -86,6 +86,7 @@ public class StandGlowingLayer<T extends StandEntity, M extends StandModel<T>> e
             if (mobEntity.fadePercent <= 0.2 || maxfade <= 0.2){
                 return;
             }
+            $$0 = standRenderer.modifyStack($$0);
             VertexConsumer $$10 = $$1.getBuffer(standRenderer.getGlowingReference(mobEntity.getSkin()));
             this.getParentModel().renderToBuffer($$0, $$10, standRenderer.getGlowAmount(mobEntity.getSkin()), OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, maxfade*mobEntity.fadePercent);
 

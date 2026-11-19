@@ -126,6 +126,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public SilverChariotSettings silverChariotSettings;
     @NestedOption(group = "modded")
+    public GoldExperienceSettings goldExperienceSettings;
+    @NestedOption(group = "modded")
     public KingCrimsonSettings kingCrimsonSettings;
     @NestedOption(group = "modded")
     public CatchTheRainbowSettings catchTheRainbowSettings;
@@ -1292,7 +1294,40 @@ public class Config implements Cloneable {
         @IntOption(group = "inherit", value = 0, min = 0, max = 4)
         public Integer getMiningTierD4c;
     }
-
+    public static class GoldExperienceSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableGoldExperience;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
+        public Integer getMiningTierGoldExperience;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer miningSpeedMultiplierGoldExperience;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer goldExperienceAttackMultOnPlayers;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer goldExperienceAttackMultOnMobs;
+        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        public Integer goldExperienceGuardPoints;
+        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
+        public Integer goldExperienceCooldownDNA;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer goldExperienceCooldownAnimal;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer goldExperienceCooldownHeal;
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        public Integer goldExperienceCooldownLifeSensor;
+        @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
+        public Integer goldExperienceCooldownItemImbue;
+        @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
+        public Integer goldExperienceCooldownLifePunch;
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        public Integer goldExperienceCooldownVine;
+        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
+        public Integer goldExperienceCooldownTree;
+        @IntOption(group = "inherit", value = 240, min = 0, max = 72000)
+        public Integer goldExperienceCooldownBramble;
+        @IntOption(group = "inherit", value = 320, min = 0, max = 72000)
+        public Integer goldExperienceCooldownBush;
+    }
     public static class KingCrimsonSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableKingCrimson;

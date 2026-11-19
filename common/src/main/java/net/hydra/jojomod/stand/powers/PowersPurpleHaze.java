@@ -1000,23 +1000,23 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     setSkillIcon(context, x, y, 1, StandIcons.PURPLE_HAZE_MODE, PowerIndex.SKILL_1_GUARD);
 
                 }
-            } else setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD);}
+            } else setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD, true);}
         else if (isHoldingSneak()){
             if (canExecuteMoveWithLevel(getDistortionAndPodBiteLevel())) {
                 if (self.hasEffect(ModEffects.VIRUS_IMMUNITY)) {
                     setSkillIcon(context, x, y, 1, StandIcons.VIRUS_SPIT, PowerIndex.POWER_1_BONUS);
                 } else setSkillIcon(context, x, y, 1, StandIcons.POD_BITE, PowerIndex.SKILL_1_SNEAK);
-            } else setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD);
+            } else setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD, true);
         }
         else setSkillIcon(context, x, y, 1, StandIcons.POD_THROW, PowerIndex.SKILL_1);
 
         if (isHoldingSneak()){
             if (canExecuteMoveWithLevel(getStrangleLevel())) {
             setSkillIcon(context, x, y, 2, StandIcons.PH_HEAVY_KICK, PowerIndex.SKILL_2_SNEAK);
-            } else setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD);
+            } else setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD, true);
         }else if (canExecuteMoveWithLevel(getStrangleLevel())) {
             setSkillIcon(context, x, y, 2, StandIcons.PURPLE_HAZE_STRANGLE, PowerIndex.SKILL_2);
-        } else setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD);
+        } else setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD, true);
 
         if (isHoldingSneak()) {
             if (canExecuteMoveWithLevel(getLeapLevel())) {
@@ -1026,7 +1026,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 } else {
                     setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_PURPLE_HAZE, PowerIndex.GLOBAL_DASH);
                 }
-            } else setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD);
+            } else setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD, true);
         } else {
             if (!(((StandUser) this.getSelf()).roundabout$getLeapTicks() > -1) && !this.getSelf().onGround() && canVault()) {
                 setSkillIcon(context, x, y, 3, StandIcons.PURPLE_HAZE_LEDGE_GRAB, PowerIndex.GLOBAL_DASH);
@@ -1372,9 +1372,19 @@ public class PowersPurpleHaze extends NewPunchingStand {
         if (isEatingCapsule()) {
             basis *= 0.0f;
         }
-        if (this.getActivePower() == PowerIndex.POWER_2_SNEAK && this.getSelf().isCrouching()) {
-            float f = Mth.clamp(0.3F + EnchantmentHelper.getSneakingSpeedBonus(this.getSelf()), 0.0F, 1.0F);
-            basis *= 1 / f;
+        if (this.getActivePower() == PowerIndex.POWER_2_SNEAK
+                && this.getAttackTimeDuring() >= 0) {
+
+            if (this.getSelf().isCrouching()) {
+                float f = Mth.clamp(
+                        0.75F + EnchantmentHelper.getSneakingSpeedBonus(this.getSelf()),
+                        0.0F, 1.0F
+                );
+                basis *= 1 / f;
+            }
+
+            basis *= 0.3F;
+
         } else if (this.activePower == PowerIndex.SNEAK_ATTACK_CHARGE){
             if (this.getSelf().isCrouching()) {
                 float f = Mth.clamp(0.3F + EnchantmentHelper.getSneakingSpeedBonus(this.getSelf()), 0.0F, 1.0F);

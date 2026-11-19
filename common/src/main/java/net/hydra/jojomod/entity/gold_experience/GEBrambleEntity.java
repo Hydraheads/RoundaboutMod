@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.gold_experience;
 
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.DamageHandler;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersGoldExperience;
 import net.hydra.jojomod.util.MainUtil;
@@ -146,7 +147,7 @@ public class GEBrambleEntity extends Entity {
                 damage = gePowers.getBrambleDamage(actualVictim);
             }
             if (!damagedVictims.contains(actualVictim)) {
-                if (DamageHandler.StandDamageEntity(target, damage, caster != null ? caster : this)) {
+                if (target.hurt(ModDamageTypes.of(target.level(), ModDamageTypes.BRAMBLE, caster != null ? caster : this), damage)) {
                     MainUtil.makeBleed(actualVictim, 0, 200, null);
                     damagedVictims.add(actualVictim);
                 }
