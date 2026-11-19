@@ -308,7 +308,6 @@ public class SilverChariotPharaohModel<T extends SilverChariotEntity> extends St
         Minecraft minecraft = Minecraft.getInstance();
         super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
         defaultModifiers(pEntity);
-        // defaultAnimations(pEntity, pAgeInTicks, 1 / ((float) Power.getBarrageWindup() / 20));
         float windupLength = 1/((float) powers.getBarrageWindup() / 20f);
         float partial = 1.4f;
         float full = 1.16666f;
@@ -316,22 +315,17 @@ public class SilverChariotPharaohModel<T extends SilverChariotEntity> extends St
             partial = 1.4f - Math.min(0.5f,0.9f*((float) pEntity.getMeltLevel()));
             full = 1.16666f - Math.min(0.5f,0.07f*((float) pEntity.getMeltLevel()));
         }
-
-        // this.animate(pEntity.scBlock, SilverChariotAnimations.Block, pAgeInTicks, 1f);
-        // this.animate(pEntity.scBarrage, SilverChariotAnimations.Barrage, pAgeInTicks, 1f);
-        // this.animate(pEntity.scBarrageDamage, SilverChariotAnimations.BarrageDamage, pAgeInTicks, 1f);
-        // this.animate(pEntity.scBarrageCharge, SilverChariotAnimations.BarrageCharge, pAgeInTicks, 1f);
-        // this.animate(pEntity, SilverChariotAnimations, pAgeInTicks, 1f);
         this.head.visible = !(pEntity.isRemoteControlled()
                 && pEntity.getUser() == minecraft.player
                 && minecraft.options.getCameraType().isFirstPerson());
-        if (!pEntity.isPart5Skin()) {
+        // if (!pEntity.isPart5Skin()) {
+        if (pEntity.isRightHanded()) {
             this.right_sword.visible = true;
             this.left_sword.visible = false;
         } else {
             this.right_sword.visible = false;
             // this.left_sword.visible = true;
-            if (pEntity.getAnimation() == SilverChariotEntity.SC_OFFHAND_WEAPON_SWIPE) {
+            if (pEntity.isPart5Skin() && pEntity.getAnimation() == SilverChariotEntity.SC_OFFHAND_WEAPON_SWIPE) {
                 this.left_sword.visible = false;
             } else {
                 this.left_sword.visible = true;
@@ -373,8 +367,6 @@ public class SilverChariotPharaohModel<T extends SilverChariotEntity> extends St
         this.animate(pEntity.scLeftRapierSpin, SilverChariotAnimations.LeftRapierSpin(), pAgeInTicks, 1f);
         this.animate(pEntity.scRightRapierSlash, SilverChariotAnimations.RightRapierSlash(), pAgeInTicks, 1.3f);
         this.animate(pEntity.scLeftRapierSlash, SilverChariotAnimations.LeftRapierSlash(), pAgeInTicks, 1.3f);
-        // this.animate(pEntity.scRightRapierSlash, SilverChariotAnimations.RightHit2(), pAgeInTicks, 1.3f);
-        // this.animate(pEntity.scLeftRapierSlash, SilverChariotAnimations.LeftHit2(), pAgeInTicks, 1.3f);
         this.animate(pEntity.scRightSlabCutting, SilverChariotAnimations.RightHit2(), pAgeInTicks, 1.3f);
         this.animate(pEntity.scLeftSlabCutting, SilverChariotAnimations.LeftHit2(), pAgeInTicks, 1.3f);
         this.animate(pEntity.scRightOffhandSwipe, SilverChariotAnimations.RightOffhandSwipe(), pAgeInTicks, 1.4f);

@@ -57,6 +57,7 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -75,19 +76,14 @@ public class PowersSilverChariot extends NewPunchingStand {
     public int bonusLeapCount = -1;
     public int spacedJumpTime = -1;
 
-    private int tickCountUntilArmoured = 0;
-    private boolean desummon = false;
-
     public static final float
             SILVER_CHARIOT_STANDARD_PUNCH_RANGE = 5.0F,
             SILVER_CHARIOT_CONTROL_MODE_PUNCH_RANGE = 3.0F;
 
     public static final byte
-            SILVER_CHARIOT_CONTROL_MODE_NONE = 82,
             SILVER_CHARIOT_CONTROL_MODE = 83,
-            SILVER_CHARIOT_CONTROL_MODE_UPDATE = 84,
             SILVER_CHARIOT_SELF_GRAB = 85,
-            SILVER_CHARIOT_SELF_GRAB_UPDATE = 86,
+            SILVER_CHARIOT_SELF_GRAB_IDLE = 86,
             SILVER_CHARIOT_THROW_USER = 87,
             SILVER_CHARIOT_RAPIER_SHOT = 88,
             SILVER_CHARIOT_RAPIER_SHOT_HOLD = 89,
@@ -98,19 +94,12 @@ public class PowersSilverChariot extends NewPunchingStand {
             SILVER_CHARIOT_ARMOURED = 94,
             SILVER_CHARIOT_HAS_RAPIER = 95,
             SILVER_CHARIOT_REGAINING_ARMOUR_FROM_DESUMMON = 96,
-            SILVER_CHARIOT_OFFHAND_ITEM = 97,
             SILVER_CHARIOT_PILOT_DODGE = 98,
-            SILVER_CHARIOT_SLAB_CUTTING_UPDATE_COMPLETE = 99,
             SILVER_CHARIOT_STATUE_CUTTING_UPDATE_COMPLETE = 100,
-            SILVER_CHARIOT_SELF_GRAB_MODE = 101,
             SILVER_CHARIOT_ARM_SUMMON = 102;
 
     public static final byte
             SKILL_SILVER_CHARIOT_SWORD_SHOOT_INDEX = PowerIndex.SKILL_4_SNEAK;
-
-    public static final byte
-            BASE = (byte) 1,
-            PLATFORM = (byte) 2;
 
     public static final byte
             RIGHT = 1,
@@ -343,11 +332,29 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public float inputSpeedModifiers(float basis) {
-        if (this.getActivePower() == PowerIndex.POWER_1) {
-            basis *= 0.3f;
+        if ( PowerTypes.hasStandActive(self)
+                && this.getActivePower() != PowerIndex.GUARD
+                && this.getActivePower() != PowerIndex.BARRAGE_CHARGE) {
+            if (!(this.getSelf() instanceof Mob)) {
+                basis *= this.getSelf().isSprinting() ? 1.6F : 1F;
+            }
+        }
+        if (activePower == PowerIndex.SNEAK_ATTACK_CHARGE) {
+            if (this.getSelf().isCrouching()) {
+                float f = Mth.clamp(0.3F + EnchantmentHelper.getSneakingSpeedBonus(this.getSelf()), 0.0F, 1.0F);
+                float g = 1 / f;
+                basis *= g;
+            }
+            basis *= 0.3F;
+        }
+        if (activePower == PowerIndex.POWER_1) {
+            basis *= 0.3F;
+        }
+        if (activePower == PowerIndex.POWER_4_BLOCK) {
+            basis *= 0.3F;
         }
         if (isBusyFromRapierShot()) {
-            basis *= 0.3f;
+            basis *= 0.3F;
         }
         return super.inputSpeedModifiers(basis);
     }
@@ -355,6 +362,12 @@ public class PowersSilverChariot extends NewPunchingStand {
     @Override
     public boolean cancelSprintJump() {
         if (this.getActivePower() == SILVER_CHARIOT_RAPIER_SPIN || this.getActivePower() == SILVER_CHARIOT_RAPIER_SPIN_UPDATE) {
+            return true;
+        }
+        if (activePower == PowerIndex.SNEAK_ATTACK_CHARGE || activePower == PowerIndex.SNEAK_ATTACK) {
+            return true;
+        }
+        if (activePower == PowerIndex.POWER_4_BLOCK) {
             return true;
         }
         if (isBusyFromRapierShot()) {
@@ -995,6 +1008,10 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     public boolean hasRapier = true;
 
+    public boolean hasRapier() {
+        return hasRapier;
+    }
+
     private float CONTROL_MODE_RANGE = 3f;
 
     @Override
@@ -1315,6 +1332,12 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
+        if (getSelfCarryMode()) {
+            return false;
+        }
+        if (activePower == PowerIndex.POWER_1_BLOCK || activePower == PowerIndex.POWER_4_BLOCK) {
+            return false;
+        }
         return super.buttonInputGuard(keyIsDown, options);
     }
 
@@ -1590,8 +1613,8 @@ public class PowersSilverChariot extends NewPunchingStand {
                     setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD, true);
                 }
 
-                if (canExecuteMoveWithLevel(getSelfGrabLevel())) {
-                    setSkillIcon(context, x, y, 4, StandIcons.SILVER_CHARIOT_SELF_GRAB, PowerIndex.SKILL_4);
+                if (this.canExecuteMoveWithLevel(this.getRapierShotLevel())) {
+                    setSkillIcon(context, x, y, 4, StandIcons.SILVER_CHARIOT_RAPIER_SHOT, PowerIndex.SKILL_4_SNEAK);
                 } else {
                     setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD,true);
                 }
@@ -1657,8 +1680,8 @@ public class PowersSilverChariot extends NewPunchingStand {
                     setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD,true);
                 }
 
-                if (this.canExecuteMoveWithLevel(this.getRapierShotLevel())) {
-                    setSkillIcon(context, x, y, 4, StandIcons.SILVER_CHARIOT_RAPIER_SHOT, PowerIndex.SKILL_4_SNEAK);
+                if (canExecuteMoveWithLevel(getSelfGrabLevel())) {
+                    setSkillIcon(context, x, y, 4, StandIcons.SILVER_CHARIOT_SELF_GRAB, PowerIndex.SKILL_4);
                 } else {
                     setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD,true);
                 }
@@ -1768,20 +1791,17 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public boolean replaceHudActively() {
-        return isPiloting();
+        return isPiloting() || isUsableMountEntity(mountEntity);
     }
 
     @Override
     public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x, boolean removeNum) {
-        if (isPiloting()) {
-            StandHudRender.renderDistanceHUDPilotingCube(context, cameraPlayer, screenWidth, screenHeight, x, getPilotingStand());
-            return;
-        } else if (this.self.getVehicle() instanceof SilverChariotMountEntity scme) {
+        if (isUsableMountEntity(this.mountEntity)) {
             int hoverTicks = 0;
             int maxHoverTicks = 1;
             StandEntity stand = getStandEntity(self);
-            hoverTicks = scme.getHoverTicks();
-            maxHoverTicks = scme.getMaxHoverTicks();
+            hoverTicks = mountEntity.getHoverTicks();
+            maxHoverTicks = mountEntity.getMaxHoverTicks();
             if (hoverTicks > maxHoverTicks) {
                 hoverTicks = maxHoverTicks;
             }
@@ -1796,6 +1816,9 @@ public class PowersSilverChariot extends NewPunchingStand {
             }
             */
 
+            return;
+        } else if (isPiloting()) {
+            StandHudRender.renderDistanceHUDPilotingCube(context, cameraPlayer, screenWidth, screenHeight, x, getPilotingStand());
             return;
         }
         super.getReplacementHUD(context, cameraPlayer, screenWidth, screenHeight, x, removeNum);
@@ -1958,7 +1981,7 @@ public class PowersSilverChariot extends NewPunchingStand {
 
             }
             case SILVER_CHARIOT_THROW_USER -> {
-
+                return selfThrowServer();
             }
         }
         return super.setPowerOther(move, lastMove);
@@ -2149,35 +2172,58 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     public boolean holdDownClick = false;
 
+    public static final int MAX_SELF_THROW_BUTTON_ATTACK_GRACE_TICKS = 100;
+    private int selfThrowButtonAttackGraceTicks = 0;
+
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         /*
         if (isRegainingArmourFromDesummon() || onCooldown(PowerIndex.SKILL_4)) {
             return;
         }
-        */
-        /*
-        if (false) {
-            return;
+        this.setSelfCarryMode(false);
+        if (this.getStandEntity(self) instanceof SilverChariotEntity silverChariot) {
+            silverChariot.setSelfCarryMode(false);
         }
-        */
-        if (this.getSelfCarryMode() ||(isUsableMountEntity(mountEntity) && this.self.getVehicle().is(mountEntity))) {
-            if (!consumeClickInput) {
-                if (!holdDownClick) {
-                    if (keyIsDown) {
-                        // super.buttonInputAttack(true, options);
-                        // BlockPos bp = this.self.blockPosition();
-                        // this.getStandUserSelf().roundabout$tryBlockPosPower(SILVER_CHARIOT_THROW_USER, true, bp);
-                        // tryBlockPosPowerPacket(SILVER_CHARIOT_THROW_USER, bp);
+        this.setAttackTimeDuring(-20);
+        if (!this.self.level().isClientSide()) {
+            if (isUsableMountEntity(mountEntity)) {
+                mountEntity.ejectPassengers();
+                mountEntity.discard();
+                this.animateStand(SilverChariotEntity.SC_USER_THROW);
+                if (this.getStandEntity(self) instanceof SilverChariotEntity silverChariot) {
+                    silverChariot.setOffsetType(OffsetIndex.LOOSE_NOLEAN);
+                    if (this.getSelf() instanceof Player) {
+                        S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) this.getSelf()),
+                                PacketDataIndex.S2C_INT_ATD, -20);
 
-                        // Ascertain the original position where self throw was initiated.
-                        Vec3 pos = this.self.position();
-                        this.getStandUserSelf().roundabout$tryPosPower(SILVER_CHARIOT_THROW_USER, true, pos);
-                        tryPosPowerPacket(SILVER_CHARIOT_THROW_USER, pos);
-                        return;
+                        this.setSelfCarryMode(false);
+                        silverChariot.setSelfCarryMode(false);
+
+                        int degrees = (int) (this.getSelf().getYRot() % 360);
+                        int degreesY = (int) this.getSelf().getXRot();
+                        float strength = 2.8F;
+                        float ybias = (90F - Math.abs(degreesY)) / 90F;
+
+                        // MainUtil.takeUnresistableKnockbackWithY(this.self, strength * (0.75 + (ybias / 4f)),
+                        MainUtil.takeUnresistableKnockbackWithY(this.self, strength,
+                                Mth.sin(((degrees * ((float) Math.PI / 180)))),
+                                Mth.sin(degreesY * ((float) Math.PI / 180)),
+                                -Mth.cos((degrees * ((float) Math.PI / 180))));
                     }
                 }
             }
+        }
+        */
+
+        if (this.selfThrowButtonAttackGraceTicks > -1) {
+            return;
+        }
+        if (isRegainingArmourFromDesummon()) {
+            return;
+        }
+        if (onCooldown(SKILL_SILVER_CHARIOT_SWORD_SHOOT_INDEX)) {
+            return;
         }
         if (!consumeClickInput) {
             if (!holdDownClick) {
@@ -2290,6 +2336,13 @@ public class PowersSilverChariot extends NewPunchingStand {
         return super.tryBlockPosPower(move, forced, blockPos);
     }
 
+    private Vec3 posPower = null;
+
+    @Override
+    public boolean tryPosPower(int move, boolean forced, Vec3 pos) {
+        return super.tryPosPower(move, forced, pos);
+    }
+
     @Override
     public void timeTick() {
         super.timeTick();
@@ -2377,6 +2430,10 @@ public class PowersSilverChariot extends NewPunchingStand {
             }
         }
 
+        if (this.selfThrowButtonAttackGraceTicks > -1) {
+            this.selfThrowButtonAttackGraceTicks--;
+        }
+
         if (getRegainingArmourFromDesummon()) {
             if (!this.self.level().isClientSide()) {
                 if (stand instanceof SilverChariotEntity SCE) {
@@ -2391,6 +2448,7 @@ public class PowersSilverChariot extends NewPunchingStand {
             this.setArmoured(true);
             this.setRegainingArmourFromDesummon(false);
             this.sealFromArmorShed();
+            this.regenGuard();
         }
         if (this.hasFullGuard() && getRegainingArmourFromDesummon()) {
             // regainingArmourFromDesummon = false;
@@ -2464,198 +2522,6 @@ public class PowersSilverChariot extends NewPunchingStand {
             // if (this.getActivePower() == SILVER_CHARIOT_SELF_GRAB) {}
         }
         super.tickPowerEnd();
-    }
-
-    public boolean tryReboundLeap(){
-        if (!this.getSelf().onGround() && ((StandUser) this.getSelf()).roundabout$getLeapTicks() > -1) {
-            /*Stand leap rebounds*/
-            standRebound();
-            return true;
-        }
-        return false;
-    }
-
-    public boolean canStandRebound(){
-        Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
-        boolean isUpOrDown = (gravD == Direction.UP || gravD == Direction.DOWN);
-        boolean isEastOrWest = (gravD == Direction.EAST || gravD == Direction.WEST);
-        boolean isNorthOrSouth = (gravD == Direction.NORTH || gravD == Direction.SOUTH);
-
-        if (!isUpOrDown){
-            if (
-                    this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).above()).isSolid() ||
-                            this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).below()).isSolid() ||
-
-                            this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).above()).isSolid() ||
-                            this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).below()).isSolid()
-            ){
-                return true;
-            }
-
-            if (!isEastOrWest){
-                if (this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).above().east()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).below().east()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).above().west()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).below().west()).isSolid() ||
-
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).above().east()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).below().east()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).above().west()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).below().west()).isSolid()
-                ){
-                    return true;
-                }
-            }
-
-            if (!isNorthOrSouth){
-                if (this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).above().north()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).below().north()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).above().south()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).below().south()).isSolid() ||
-
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).above().north()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).below().north()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).above().south()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).below().south()).isSolid()
-                ){
-                    return true;
-                }
-            }
-        }
-
-        if (!isEastOrWest){
-            if (
-                    this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).east()).isSolid() ||
-                            this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).west()).isSolid() ||
-
-                            this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).east()).isSolid() ||
-                            this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).west()).isSolid()
-            ){
-                return true;
-            }
-
-            if (!isUpOrDown){
-                if (this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).east().above()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).west().above()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).east().below()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).west().below()).isSolid() ||
-
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).east().above()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).west().above()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).east().below()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).west().below()).isSolid()
-                ){
-                    return true;
-                }
-            }
-
-            if (!isNorthOrSouth){
-                if (this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).east().north()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).west().north()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).east().south()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).west().south()).isSolid() ||
-
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).east().north()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).west().north()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).east().south()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).west().south()).isSolid()
-                ){
-                    return true;
-                }
-            }
-        }
-
-        if (!isNorthOrSouth){
-            if (
-                    this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).north()).isSolid() ||
-                            this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).south()).isSolid() ||
-
-                            this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).north()).isSolid() ||
-                            this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).south()).isSolid()
-            ){
-                return true;
-            }
-
-            if (!isEastOrWest){
-                if (this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).north().east()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).south().east()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).north().west()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).south().west()).isSolid() ||
-
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).north().east()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).south().east()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).north().west()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).south().west()).isSolid()
-                ){
-                    return true;
-                }
-            }
-
-            if (!isUpOrDown){
-                if (this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).north().above()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).south().above()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).north().below()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).south().below()).isSolid() ||
-
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).north().above()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).south().above()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).north().below()).isSolid() ||
-                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).south().below()).isSolid()
-                ){
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    public void standRebound(){
-
-        if (!this.getSelf().onGround()) {
-            if (bonusLeapCount > 0 && spacedJumpTime < 0 && !this.onCooldown(PowerIndex.EXTRA) && canStandRebound()) {
-                spacedJumpTime = 5;
-
-                bigLeap(this.getSelf(), 20F, (float) (0.17+(bonusLeapCount*0.17)));
-                bonusLeapCount--;
-                if (bonusLeapCount <=0){
-                    this.setCooldown(PowerIndex.EXTRA, 100);
-                }
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.BOUNCE,true);
-                tryPowerPacket(PowerIndex.BOUNCE);
-            }
-        }
-    }
-
-    public void bigLeap(LivingEntity entity,float range, float mult){
-        Vec3 vec3d = entity.getEyePosition(1);
-        Vec3 vec3d2 = entity.getViewVector(1);
-        Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
-        BlockHitResult blockHit = entity.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
-
-        double mag = this.getSelf().getPosition(1).distanceTo(
-                new Vec3(blockHit.getLocation().x, blockHit.getLocation().y,blockHit.getLocation().z))*0.75+1;
-        Vec3 vec3 = new Vec3(
-                (blockHit.getLocation().x - this.getSelf().getX())/mag,
-                (blockHit.getLocation().y - this.getSelf().getY())/mag,
-                (blockHit.getLocation().z - this.getSelf().getZ())/mag
-        );
-        Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
-        if (gravD != Direction.DOWN){
-            vec3 = RotationUtil.vecWorldToPlayer(vec3,gravD);
-        }
-        vec3= new Vec3(
-                vec3.x*mult,
-                0.6+Math.max(vec3.y,0)*mult,
-                vec3.z*mult
-        );
-
-        MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),
-                vec3.x,
-                vec3.y,
-                vec3.z
-        );
-
     }
 
     public void tryToDashClient(){
@@ -3147,6 +3013,7 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     public void offhandWeaponHitImpact(Entity target) {
         this.setAttackTimeDuring(-20);
+        LivingEntity origin = actionOrigin();
         if (target != null) {
             hitParticlesCenter(target);
             float pow;
@@ -3169,9 +3036,14 @@ public class PowersSilverChariot extends NewPunchingStand {
                 }
             }
         } else {
+            float distMax = this.getDistanceOut(origin, this.getReach(), false);
+            float halfReach = (float) (distMax * 0.5);
+            Vec3 pointVec = DamageHandler.getRayPoint(origin, halfReach);
+            /*
             float distMax = this.getDistanceOut(this.self, this.getReach(), false);
             float halfReach = (float) (distMax * 0.5);
             Vec3 pointVec = DamageHandler.getRayPoint(self, halfReach);
+            */
             if (!this.self.level().isClientSide) {
                 sendParticlesIfPossible(self.level(),ModParticles.PUNCH_MISS, pointVec.x, pointVec.y, pointVec.z,
                         1, 0.0, 0.0, 0.0, 1);
@@ -3244,7 +3116,7 @@ public class PowersSilverChariot extends NewPunchingStand {
         if (!this.self.level().isClientSide()) {
             this.animateStand(SilverChariotEntity.SC_RAPIER_SPIN);
             // playStandUserOnlySoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false,true);
-            playSoundIfPossible(self.level(),null, origin.blockPosition(), ModSounds.GREEN_DAY_ARM_SPIN_EVENT, SoundSource.PLAYERS, 1F, (float) (1.2f + Math.random() * 0.03f));
+            playSoundIfPossible(self.level(),null, origin.blockPosition(), ModSounds.SILVER_CHARIOT_RAPIER_SPIN_EVENT, SoundSource.PLAYERS, 1F, (float) (1.2f + Math.random() * 0.03f));
             sendParticlesIfPossible(
                     self.level(), ModParticles.VACUUM,
                     origin.getX(), origin.getY(), origin.getZ(),
@@ -3615,47 +3487,21 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public boolean setPowerAttack() {
-        // if (onCooldown(PowerIndex.SKILL_4) || isRegainingArmourFromDesummon()) {
+        // if (onCooldown(SKILL_SILVER_CHARIOT_SWORD_SHOOT_INDEX) || isRegainingArmourFromDesummon()) {
+        if (this.selfThrowButtonAttackGraceTicks > -1) {
+            return false;
+        }
         if (isRegainingArmourFromDesummon()) {
             return false;
         }
-        if (this.self instanceof Player && getSelfCarryMode()) {
-            StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
-            if (isUsableStand(standEntity) && standEntity instanceof SilverChariotEntity SCE) {
-            if (!this.self.level().isClientSide()) {
-                if (mountEntity != null) {
-                    mountEntity.ejectPassengers();
-                    mountEntity.discard();
-                    animateStand(SilverChariotEntity.SC_USER_THROW);
-                    if (hasDetachedStand()) {
-                        SCE.setOffsetType(OffsetIndex.LOOSE_NOLEAN);
-                    } else {
-                        SCE.setOffsetType(OffsetIndex.FOLLOW);
-                        poseStand(OffsetIndex.FOLLOW);
-                    }
-                    if (this.getSelf() instanceof Player) {
-                        S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) this.getSelf()),
-                                PacketDataIndex.S2C_INT_ATD, -10);
-                    }
-                    this.setAttackTimeDuring(-10);
-                    this.setSelfCarryMode(false);
-                    SCE.setSelfCarryMode(false);
-
-                    int degrees = (int) (this.getSelf().getYRot() % 360);
-                    int degreesY = (int) this.getSelf().getXRot();
-                    float strength = 2.3F;
-                    float ybias = (90F - Math.abs(degreesY)) / 90F;
-
-                    MainUtil.takeUnresistableKnockbackWithYBias(this.self, strength * (0.5 + (ybias / 2)),
-                            Mth.sin(((degrees * ((float) Math.PI / 180)))),
-                            Mth.sin(degreesY * ((float) Math.PI / 180)),
-                            -Mth.cos((degrees * ((float) Math.PI / 180))),
-                            ybias);
-
-                    return true;
-                }
-                }
-            }
+        if (isUsableMountEntity(mountEntity) && this.self.isPassenger() && this.self.getVehicle() == mountEntity) {
+            bonusLeapCount = 3;
+            bigLeap(this.getSelf(), 20, 1);
+            ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
+            ((StandUser) this.getSelf()).roundabout$setLeapIntentionally(true);
+            ((StandUser) this.getSelf()).roundabout$tryPower(SILVER_CHARIOT_THROW_USER, true);
+            tryPowerPacket(SILVER_CHARIOT_THROW_USER);
+            this.selfThrowButtonAttackGraceTicks = MAX_SELF_THROW_BUTTON_ATTACK_GRACE_TICKS;
             return false;
         }
         if (onCooldown(SKILL_SILVER_CHARIOT_SWORD_SHOOT_INDEX)) {
@@ -4229,10 +4075,217 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     }
 
-    public void selfThrowServer() {
+    public boolean selfThrowServer() {
+        this.setAttackTimeDuring(-20);
+        this.animateStand(SilverChariotEntity.SC_USER_THROW);
         if (!this.self.level().isClientSide()) {
-
+            if (isUsableMountEntity(mountEntity)) {
+                mountEntity.ejectPassengers();
+                mountEntity.discard();
+                if (this.getStandEntity(self) instanceof SilverChariotEntity silverChariot) {
+                    silverChariot.setOffsetType(OffsetIndex.LOOSE_NOLEAN);
+                }
+                if (Math.random() > 0.5) {
+                    addEXP(1);
+                }
+                ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
+                ((StandUser) this.getSelf()).roundabout$setLeapIntentionally(true);
+                playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.STAND_LEAP_EVENT, SoundSource.PLAYERS, 2.3F, (float) (0.98 + (Math.random() * 0.04)));
+            }
         }
+        return true;
+    }
+
+    public boolean tryReboundLeap(){
+        if (!this.getSelf().onGround() && ((StandUser) this.getSelf()).roundabout$getLeapTicks() > -1) {
+            /*Stand leap rebounds*/
+            standRebound();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean canStandRebound(){
+        Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+        boolean isUpOrDown = (gravD == Direction.UP || gravD == Direction.DOWN);
+        boolean isEastOrWest = (gravD == Direction.EAST || gravD == Direction.WEST);
+        boolean isNorthOrSouth = (gravD == Direction.NORTH || gravD == Direction.SOUTH);
+
+        if (!isUpOrDown){
+            if (
+                    this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).above()).isSolid() ||
+                            this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).below()).isSolid() ||
+
+                            this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).above()).isSolid() ||
+                            this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).below()).isSolid()
+            ){
+                return true;
+            }
+
+            if (!isEastOrWest){
+                if (this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).above().east()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).below().east()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).above().west()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).below().west()).isSolid() ||
+
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).above().east()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).below().east()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).above().west()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).below().west()).isSolid()
+                ){
+                    return true;
+                }
+            }
+
+            if (!isNorthOrSouth){
+                if (this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).above().north()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).below().north()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).above().south()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).below().south()).isSolid() ||
+
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).above().north()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).below().north()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).above().south()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).below().south()).isSolid()
+                ){
+                    return true;
+                }
+            }
+        }
+
+        if (!isEastOrWest){
+            if (
+                    this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).east()).isSolid() ||
+                            this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).west()).isSolid() ||
+
+                            this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).east()).isSolid() ||
+                            this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).west()).isSolid()
+            ){
+                return true;
+            }
+
+            if (!isUpOrDown){
+                if (this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).east().above()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).west().above()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).east().below()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).west().below()).isSolid() ||
+
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).east().above()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).west().above()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).east().below()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).west().below()).isSolid()
+                ){
+                    return true;
+                }
+            }
+
+            if (!isNorthOrSouth){
+                if (this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).east().north()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).west().north()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).east().south()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).west().south()).isSolid() ||
+
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).east().north()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).west().north()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).east().south()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).west().south()).isSolid()
+                ){
+                    return true;
+                }
+            }
+        }
+
+        if (!isNorthOrSouth){
+            if (
+                    this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).north()).isSolid() ||
+                            this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).south()).isSolid() ||
+
+                            this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).north()).isSolid() ||
+                            this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).south()).isSolid()
+            ){
+                return true;
+            }
+
+            if (!isEastOrWest){
+                if (this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).north().east()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).south().east()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).north().west()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).south().west()).isSolid() ||
+
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).north().east()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).south().east()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).north().west()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).south().west()).isSolid()
+                ){
+                    return true;
+                }
+            }
+
+            if (!isUpOrDown){
+                if (this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).north().above()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).south().above()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).north().below()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).south().below()).isSolid() ||
+
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).north().above()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).south().above()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).north().below()).isSolid() ||
+                        this.getSelf().level().getBlockState(this.getSelf().getOnPos().relative(gravD.getOpposite()).relative(gravD.getOpposite()).south().below()).isSolid()
+                ){
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public void standRebound(){
+
+        if (!this.getSelf().onGround()) {
+            if (bonusLeapCount > 0 && spacedJumpTime < 0 && !this.onCooldown(PowerIndex.EXTRA) && canStandRebound()) {
+                spacedJumpTime = 5;
+
+                bigLeap(this.getSelf(), 20F, (float) (0.17+(bonusLeapCount*0.17)));
+                bonusLeapCount--;
+                if (bonusLeapCount <=0){
+                    this.setCooldown(PowerIndex.EXTRA, 100);
+                }
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.BOUNCE,true);
+                tryPowerPacket(PowerIndex.BOUNCE);
+            }
+        }
+    }
+
+    public void bigLeap(LivingEntity entity,float range, float mult){
+        Vec3 vec3d = entity.getEyePosition(1);
+        Vec3 vec3d2 = entity.getViewVector(1);
+        Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
+        BlockHitResult blockHit = entity.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
+
+        double mag = this.getSelf().getPosition(1).distanceTo(
+                new Vec3(blockHit.getLocation().x, blockHit.getLocation().y,blockHit.getLocation().z))*0.75+1;
+        Vec3 vec3 = new Vec3(
+                (blockHit.getLocation().x - this.getSelf().getX())/mag,
+                (blockHit.getLocation().y - this.getSelf().getY())/mag,
+                (blockHit.getLocation().z - this.getSelf().getZ())/mag
+        );
+        Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+        if (gravD != Direction.DOWN){
+            vec3 = RotationUtil.vecWorldToPlayer(vec3,gravD);
+        }
+        vec3= new Vec3(
+                vec3.x*mult,
+                0.6+Math.max(vec3.y,0)*mult,
+                vec3.z*mult
+        );
+
+        MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),
+                vec3.x,
+                vec3.y,
+                vec3.z
+        );
+
     }
 
     public boolean canGrab(){
