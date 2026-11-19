@@ -86,6 +86,7 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
         this.addLayer(new RoadRollerLayer<>(context, this));
         this.addLayer(new WornStoneMaskLayer<>(context, this));
         this.addLayer(new MoldSpineLayer<>(context, this));
+        this.addLayer(new GERootsLayer<>(context, this));
         this.addLayer(new FakeCapeLayer(this));
         this.addLayer(new ItemInHandLayer<>(this, context.getItemInHandRenderer()));
 
