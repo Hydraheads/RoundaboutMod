@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity;
 
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.access.IPlayerEntityServer;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.goals.AvoidLearnedAnnihilatorGoal;
@@ -20,9 +21,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.world.Container;
-import net.minecraft.world.ContainerListener;
-import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.*;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -31,6 +30,7 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
+import net.minecraft.world.entity.animal.horse.Donkey;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.EnderMan;
@@ -63,8 +63,8 @@ public class D4CCloneEntity extends CloneEntity implements ContainerListener,Has
         this.createInventory();
     }
 
-    protected int getInventorySize() {
-        return 2;
+    public int getInventorySize() {
+        return 17;
     }
     protected void createInventory() {
         SimpleContainer simplecontainer = this.inventory;
@@ -255,6 +255,10 @@ public class D4CCloneEntity extends CloneEntity implements ContainerListener,Has
             }
         };
     }
+    public boolean hasInventoryChanged(Container p_149512_) {
+        return this.inventory != p_149512_;
+    }
+
     public int getInventoryColumns() {
         return 5;
     }
@@ -774,8 +778,21 @@ public class D4CCloneEntity extends CloneEntity implements ContainerListener,Has
 
     }
 
-    @Override
     public void openCustomInventoryScreen(Player player) {
+        if (!this.level().isClientSide) {
+            ((IPlayerEntityServer)player).roundabout$openD4CCloneInventory(this, this.inventory);
+        }
+    }
 
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        if (getPlayerUUID().isPresent()) {
+            if (player.getUUID().equals(getPlayerUUID().get())) {
+                this.openCustomInventoryScreen(player);
+                return InteractionResult.sidedSuccess(this.level().isClientSide);
+            }
+        }
+
+
+        return super.mobInteract(player, hand);
     }
 }
