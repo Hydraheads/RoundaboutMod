@@ -2076,7 +2076,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public boolean canUseStandArrow() { return canUseRequiem(); }
 
     public boolean canUseRequiem() {
-        return canExecuteMoveWithLevel(getMaxLevel());
+        return canExecuteMoveWithLevel(getMaxLevel()) && Objects.nonNull(getStandEntity(this.self));
     }
     public boolean isPossibleToRequiem() {
         return resolvePoints >= getNeededResolvePoints();
@@ -2090,7 +2090,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public boolean onStandArrowUse() {
         if (this.self instanceof Player PE && activePower == PowerIndex.NONE) {
-            if (isPossibleToRequiem()) { /// do epic aura farm animation here or something
+            if (isPossibleToRequiem()) {
                 sendParticlesIfPossible(self.level(),ParticleTypes.FIREWORK, PE.getX(),
                         PE.getY() + PE.getEyeHeight(), PE.getZ(),
                         20, 0, 0, 0, 0.4);
@@ -2170,7 +2170,12 @@ public class PowersGoldExperience extends BlockGrabPreset {
     private void setRequiem() {
         this.setAttackTimeDuring(0);
         setActivePower(PowerIndex.SPECIAL);
+
+        this.animateStand(StandEntity.HURT_BY_BARRAGE);
+        this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
+
         // TODO: Animation
+        /// do epic aura farm animation here or something
     }
 
     private void updateRequiem() {
