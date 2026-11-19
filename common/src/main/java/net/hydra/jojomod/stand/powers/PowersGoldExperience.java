@@ -308,6 +308,26 @@ public class PowersGoldExperience extends BlockGrabPreset {
         }
     }
 
+    // for levels
+    private final int getLifePunchLevel() {
+        return 2;
+    };
+    private final int getTreeLevel() {
+        return 3;
+    };
+    private final int getHealLevel() {
+        return 4;
+    };
+    private final int getItemImbueLevel() {
+        return 5;
+    };
+    private final int getBushLevel() {
+        return 6;
+    };
+    private final int getBrambleLevel() {
+        return 7;
+    };
+
     // for healing
     public boolean holdDownHeal = false;
     private boolean hasHealed = false;
@@ -1783,7 +1803,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // item imbue start
 
     private void tryOpenItemImbue() {
-        if(!this.onCooldown(PowerIndex.SKILL_4_SNEAK)) {
+        if(!this.onCooldown(PowerIndex.SKILL_4_SNEAK) && canExecuteMoveWithLevel(getItemImbueLevel())) {
             ClientUtil.openItemImbue();
         }
     }
@@ -2135,7 +2155,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // tree creation start
 
     private void tryGrowTree() {
-        if(!this.onCooldown(PowerIndex.GENERAL_2)) {
+        if(!this.onCooldown(PowerIndex.GENERAL_2) && canExecuteMoveWithLevel(getTreeLevel())) {
             ((StandUser) this.getSelf()).roundabout$tryPower(TREE, true);
             tryPowerPacket(TREE);
         }
@@ -2641,7 +2661,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // bramble spikes start
 
     private void tryGrowBramble() {
-        if (!this.onCooldown(PowerIndex.SKILL_4)) {
+        if (!this.onCooldown(PowerIndex.SKILL_4) && canExecuteMoveWithLevel(getBrambleLevel())) {
             ((StandUser) this.getSelf()).roundabout$tryPower(BRAMBLES, true);
             tryPowerPacket(BRAMBLES);
         }
@@ -2737,7 +2757,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
     private void tryHeal() {
         if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)
                 && this.getActivePower() != HEAL_CHARGE
-                && this.getActivePower() != HEAL) {
+                && this.getActivePower() != HEAL
+                && canExecuteMoveWithLevel(getHealLevel())) {
             this.holdDownHeal = true;
             this.healOthers = true;
             this.tryPower(HEAL_CHARGE, true);
@@ -2911,7 +2932,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // bramble bush start
 
     private void tryGrowBush() {
-        if(!this.onCooldown(PowerIndex.GENERAL_4)) {
+        if(!this.onCooldown(PowerIndex.GENERAL_4) && canExecuteMoveWithLevel(getBushLevel())) {
             ((StandUser) this.getSelf()).roundabout$tryPower(BUSH_CREATION, true);
             tryPowerPacket(BUSH_CREATION);
         }
@@ -3071,7 +3092,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // life punch start
 
     private void tryLifePunch() {
-        if (!this.onCooldown(PowerIndex.GENERAL_3)) {
+        if (!this.onCooldown(PowerIndex.GENERAL_3) && canExecuteMoveWithLevel(getLifePunchLevel())) {
             if (this.activePower == LIFE_PUNCH) {
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                 tryPowerPacket(PowerIndex.NONE);
@@ -3483,6 +3504,43 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     // end of move methods
 
+    // levels start
+
+    @Override
+    public byte getMaxLevel() {
+        return 7;
+    }
+
+    @Override
+    public void levelUp() {
+        if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE) {
+            IPlayerEntity ipe = ((IPlayerEntity) PE);
+            byte level = ipe.roundabout$getStandLevel();
+            if (level == 7) {
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.max.both").
+                        withStyle(ChatFormatting.AQUA), true);
+            } else {
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.both").
+                        withStyle(ChatFormatting.AQUA), true);
+            }
+        }
+        super.levelUp();
+    }
+
+    @Override
+    public int getExpForLevelUp(int currentLevel) {
+        int amt;
+        if (currentLevel == 1) {
+            amt = 100;
+        } else {
+            amt = (100 + ((currentLevel - 1) * 65));
+        }
+        amt = (int) (amt * getLevelMultiplier());
+        return amt;
+    }
+
+    // levels end
+
     // sounds start
 
     @Override
@@ -3634,7 +3692,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
         if (isGuarding()){
             setSkillIcon(context, x, y, 1, StandIcons.GOLD_EXPERIENCE_LIFE_SENSOR, PowerIndex.GENERAL_1);
         } else if (isHoldingSneak()) {
-            setSkillIcon(context, x, y, 1, StandIcons.GOLD_EXPERIENCE_HEAL, PowerIndex.SKILL_1_SNEAK);
+            if (canExecuteMoveWithLevel(getHealLevel())) {
+                setSkillIcon(context, x, y, 1, StandIcons.GOLD_EXPERIENCE_HEAL, PowerIndex.SKILL_1_SNEAK);
+            } else {
+                setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+            }
         } else if (canDNACreate()) {
             setSkillIcon(context, x, y, 1, StandIcons.GOLD_EXPERIENCE_DNA_CREATION, PowerIndex.GENERAL_EXTRA);
         } else {
@@ -3642,7 +3704,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
         }
         // Ability 2 (X)
         if (isGuarding()){
-            setSkillIcon(context, x, y, 2, StandIcons.GOLD_EXPERIENCE_TREE_GROWTH, PowerIndex.GENERAL_2);
+            if (canExecuteMoveWithLevel(getTreeLevel())) {
+                setSkillIcon(context, x, y, 2, StandIcons.GOLD_EXPERIENCE_TREE_GROWTH, PowerIndex.GENERAL_2);
+            } else {
+                setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+            }
         } else if (isHoldingSneak()) {
             setSkillIcon(context, x, y, 2, StandIcons.GOLD_EXPERIENCE_ITEM_THROW, PowerIndex.SKILL_2);
         } else {
@@ -3652,7 +3718,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
         if (isGuarding()){
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         } else if (isHoldingSneak()) {
-            setSkillIcon(context, x, y, 3, StandIcons.GOLD_EXPERIENCE_LIFE_PUNCH, PowerIndex.GENERAL_3);
+            if (canExecuteMoveWithLevel(getLifePunchLevel())) {
+                setSkillIcon(context, x, y, 3, StandIcons.GOLD_EXPERIENCE_LIFE_PUNCH, PowerIndex.GENERAL_3);
+            } else {
+                setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+            }
         } else if (canLatchOntoWall()) {
             setSkillIcon(context, x, y, 3, StandIcons.GOLD_EXPERIENCE_VINE_CLIMB, PowerIndex.SKILL_3);
         } else {
@@ -3660,11 +3730,23 @@ public class PowersGoldExperience extends BlockGrabPreset {
         }
         // Ability 4 (V)
         if (isHoldingSneak()) {
-            setSkillIcon(context, x, y, 4, StandIcons.GOLD_EXPERIENCE_ITEM_IMBUE, PowerIndex.SKILL_4_SNEAK);
+            if (canExecuteMoveWithLevel(getItemImbueLevel())) {
+                setSkillIcon(context, x, y, 4, StandIcons.GOLD_EXPERIENCE_ITEM_IMBUE, PowerIndex.SKILL_4_SNEAK);
+            } else {
+                setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+            }
         } else if (isGuarding()){
-            setSkillIcon(context, x, y, 4, StandIcons.GOLD_EXPERIENCE_BRAMBLE_TRAP, PowerIndex.GENERAL_4);
+            if (canExecuteMoveWithLevel(getBrambleLevel())) {
+                setSkillIcon(context, x, y, 4, StandIcons.GOLD_EXPERIENCE_BRAMBLE_TRAP, PowerIndex.GENERAL_4);
+            } else {
+                setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+            }
         } else {
-            setSkillIcon(context, x, y, 4, StandIcons.GOLD_EXPERIENCE_BRAMBLES, PowerIndex.SKILL_4);
+            if (canExecuteMoveWithLevel(getBushLevel())) {
+                setSkillIcon(context, x, y, 4, StandIcons.GOLD_EXPERIENCE_BRAMBLES, PowerIndex.SKILL_4);
+            } else {
+                setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+            }
         }
     }
 
@@ -3687,7 +3769,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.gold_experience_lifeform_select",
                 "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_LIFEFORM_SELECT, 1, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.gold_experience_heal",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, getHealLevel(), "ability.roundabout.gold_experience_heal",
                 "instruction.roundabout.press_skill_crouch", StandIcons.GOLD_EXPERIENCE_HEAL, 1, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.gold_experience_life_sensor",
                 "instruction.roundabout.press_skill_block", StandIcons.GOLD_EXPERIENCE_LIFE_SENSOR, 1, level, bypas));
@@ -3697,11 +3779,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_LIFEFORM_CREATION, 2, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.gold_experience_item_throw",
                 "instruction.roundabout.press_skill_crouch", StandIcons.GOLD_EXPERIENCE_ITEM_THROW, 2, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, 0, "ability.roundabout.gold_experience_tree_growth",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, getTreeLevel(), "ability.roundabout.gold_experience_tree_growth",
                 "instruction.roundabout.press_skill_block", StandIcons.GOLD_EXPERIENCE_TREE_GROWTH, 2, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 99, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE, 3, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 118, 0, "ability.roundabout.gold_experience_life_punch",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 118, getLifePunchLevel(), "ability.roundabout.gold_experience_life_punch",
                 "instruction.roundabout.press_skill_crouch", StandIcons.GOLD_EXPERIENCE_LIFE_PUNCH, 3, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 80, 0, "ability.roundabout.gold_experience_vine_climb",
                 "instruction.roundabout.press_skill_air", StandIcons.GOLD_EXPERIENCE_VINE_CLIMB, 3, level, bypas));
@@ -3715,11 +3797,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 "instruction.roundabout.passive", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 4, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 96, topPos + 118, 0, "ability.roundabout.gold_experience_placeholder",
                 "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_PLACEHOLDER, 4, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 80, 0, "ability.roundabout.gold_experience_violent_brambles",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 80, getBrambleLevel(), "ability.roundabout.gold_experience_violent_brambles",
                 "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_BRAMBLES, 4, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 99, 0, "ability.roundabout.gold_experience_item_imbue",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 99, getItemImbueLevel(), "ability.roundabout.gold_experience_item_imbue",
                 "instruction.roundabout.press_skill_crouch", StandIcons.GOLD_EXPERIENCE_ITEM_IMBUE, 4, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 118, 0, "ability.roundabout.gold_experience_bramble_trap",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 118, getBushLevel(), "ability.roundabout.gold_experience_bramble_trap",
                 "instruction.roundabout.press_skill_block", StandIcons.GOLD_EXPERIENCE_BRAMBLE_TRAP, 4, level, bypas));
         return $$1;
     }
