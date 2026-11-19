@@ -295,16 +295,16 @@ public class PowersGoldExperience extends BlockGrabPreset {
     }
     public float getBrambleDamage(Entity entity){
         if (this.getReducedDamage(entity)){
-            return 1.2F;
+            return 1.5F;
         } else {
-            return 5;
+            return 6;
         }
     }
     public float getThornDamage(Entity entity){
         if (this.getReducedDamage(entity)){
             return 0.6F;
         } else {
-            return 4.5F;
+            return 4F;
         }
     }
 

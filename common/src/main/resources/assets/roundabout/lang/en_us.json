@@ -1340,6 +1340,8 @@
   "death.attack.sharp_raindrop": "%1$s was sliced by the rain",
   "death.attack.air_pressure": "%1$s ran out of air",
   "death.attack.air_pressure.player": "%1$s ran out of air",
+  "death.attack.bramble": "%1$s was pricked to death by %2$s",
+  "death.attack.bramble.player": "%1$s was pricked to death by %2$s",
 
 
   "item.glaive.charge_power": "Charge Attack",
