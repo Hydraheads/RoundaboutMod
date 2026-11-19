@@ -7,6 +7,7 @@ import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.*;
 import net.hydra.jojomod.entity.gold_experience.*;
 import net.hydra.jojomod.entity.projectile.*;
@@ -180,6 +181,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
             resolvePoints = getNeededResolvePoints();
         }
         saveDiscAndSync();
+        if (!isClient() && self instanceof Player PL) {
+            S2CPacketUtil.sendIntPowerDataPacket(PL, PowerIndex.SPECIAL_CHARGED, 0);
+        }
     }
 
     @Override
@@ -447,6 +451,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     @Override
     public void tickPower() {
+        if (resolveRenderTicks > 0) {
+            resolveRenderTicks--;
+        }
         if (!this.self.level().isClientSide()) {
             // bramble bush expanding ring
             if (this.bushWaveOrigin != null && this.self.level() instanceof ServerLevel serverLevel) {
@@ -745,6 +752,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public void updatePowerInt(byte activePower, int data) {
         if (activePower == LIFE_SENSOR) {
             this.sensedImbueEntityId = data;
+            return;
+        }
+        if (activePower == PowerIndex.SPECIAL_CHARGED) {
+            resolveRenderTicks = 50;
             return;
         }
         super.updatePowerInt(activePower, data);
@@ -3601,6 +3612,18 @@ public class PowersGoldExperience extends BlockGrabPreset {
             super.renderAttackHud(context,playerEntity,
                     scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
         }
+    }
+
+    private int resolveRenderTicks = 0;
+
+    /** hud **/
+    @Override
+    public boolean replaceHudActively() {
+        return resolveRenderTicks > 0;
+    }
+    public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x,
+                                  boolean removeNum){
+        StandHudRender.renderRequiemBarr(context,cameraPlayer,screenWidth,screenHeight,x, (int)resolvePoints, (int)getNeededResolvePoints());
     }
 
     // stand icons and info screen end
