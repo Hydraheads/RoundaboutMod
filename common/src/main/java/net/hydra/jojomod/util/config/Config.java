@@ -1327,6 +1327,16 @@ public class Config implements Cloneable {
         public Integer goldExperienceCooldownBramble;
         @IntOption(group = "inherit", value = 320, min = 0, max = 72000)
         public Integer goldExperienceCooldownBush;
+        @FloatOption(group = "inherit", value = 1, min = 0, max = 20)
+        public Float initialHealBurst;
+        @IntOption(group = "inherit", value = 7, min = 0, max = 72000)
+        public Integer treeMaxHeight;
+        @FloatOption(group = "inherit", value = 15, min = 0, max = 72000)
+        public Float lifeSenseRange;
+        @FloatOption(group = "inherit", value = 150, min = 0, max = 72000)
+        public Float lifeSenseImbueRange;
+        @IntOption(group = "inherit", value = 8, min = 0, max = 72000)
+        public Integer brambleAmount;
     }
     public static class KingCrimsonSettings {
         @BooleanOption(group = "inherit", value = true)

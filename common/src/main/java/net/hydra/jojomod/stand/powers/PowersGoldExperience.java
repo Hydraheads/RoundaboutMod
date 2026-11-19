@@ -340,8 +340,6 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // for life sensor
     public boolean lifeSensorActive = false;
     private int sensedImbueEntityId = -1;
-    private static final double LIFE_SENSOR_NORMAL_RANGE = 15.0;
-    private static final double LIFE_SENSOR_IMBUE_RANGE = 150.0;
 
     // basic stand registry stuff
     public PowersGoldExperience(LivingEntity self) {super(self);}
@@ -591,10 +589,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 } else if (this.self.tickCount % 5 == 0 && this.self instanceof ServerPlayer sp) {
                     int foundId = -1;
                     if (this.activeImbuedItemId != null) {
-                        AABB searchBox = this.self.getBoundingBox().inflate(LIFE_SENSOR_IMBUE_RANGE);
+                        AABB searchBox = this.self.getBoundingBox().inflate(geConfig().lifeSenseImbueRange);
                         for (Entity target : this.self.level().getEntities(this.self, searchBox,
                                 e -> e != this.self && !PowerTypes.isInADifferentExistence(e, this.self))) {
-                            if (target.distanceToSqr(this.self) <= (LIFE_SENSOR_IMBUE_RANGE * LIFE_SENSOR_IMBUE_RANGE)
+                            if (target.distanceToSqr(this.self) <= (geConfig().lifeSenseImbueRange * geConfig().lifeSenseImbueRange)
                                     && isHoldingImbuedItem(target)) {
                                 foundId = target.getId();
                                 break;
@@ -1728,14 +1726,14 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 double distSq = ent.distanceToSqr(this.self);
 
                 if (ent.getId() == this.sensedImbueEntityId) {
-                    return distSq <= (LIFE_SENSOR_IMBUE_RANGE * LIFE_SENSOR_IMBUE_RANGE);
+                    return distSq <= (geConfig().lifeSenseImbueRange * geConfig().lifeSenseImbueRange);
                 }
 
                 if (ent instanceof LivingEntity living
                         && !(ent instanceof StandEntity)
                         && !(ent instanceof ArmorStand)
                         && living.isAlive()) {
-                    return distSq <= (LIFE_SENSOR_NORMAL_RANGE * LIFE_SENSOR_NORMAL_RANGE);
+                    return distSq <= (geConfig().lifeSenseRange * geConfig().lifeSenseRange);
                 }
             }
         }
@@ -2313,7 +2311,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 : centerPos;
         Direction growthDirection = Direction.UP;
 
-        int maxHeight = 7;
+        int maxHeight = geConfig().treeMaxHeight;
         int actualHeight = 0;
 
         for (int y = 0; y < maxHeight; y++) {
@@ -2791,7 +2789,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             double startY = this.self.getY();
             double startZ = this.self.getZ();
 
-            int spikeCount = 8;
+            int spikeCount = geConfig().brambleAmount;
             double spacing = 1.3D;
 
             // Clear any old queued spikes before adding new ones
@@ -2924,12 +2922,12 @@ public class PowersGoldExperience extends BlockGrabPreset {
                         ? this.self.level().getEntity(this.healTargetId)
                         : MainUtil.getTargetEntity(this.getSelf(), 5f);
                 if (lockedTarget instanceof LivingEntity livingHeal && livingHeal.isAlive()) {
-                    livingHeal.heal(1f);
+                    livingHeal.heal(geConfig().initialHealBurst);
                     livingHeal.addEffect(new MobEffectInstance(ModEffects.RECONSTRUCTION, 400, 0, false, true, true));
                     playSoundIfPossible(this.self.level(), livingHeal, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
                 }
             } else {
-                this.self.heal(1f);
+                this.self.heal(geConfig().initialHealBurst);
                 this.self.addEffect(new MobEffectInstance(ModEffects.RECONSTRUCTION, 400, 0, false, true, true));
                 playSoundIfPossible(this.self.level(), this.self, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
             }
