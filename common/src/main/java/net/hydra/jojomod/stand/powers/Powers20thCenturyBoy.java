@@ -16,6 +16,7 @@ import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.FirearmItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
@@ -27,6 +28,7 @@ import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -45,6 +47,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
@@ -368,6 +372,11 @@ public class Powers20thCenturyBoy extends NewDashPreset {
 
         invincibleState = invincible;
         if (invincible) {
+            if (this.self.getItemInHand(this.self.getUsedItemHand()).getItem() instanceof FirearmItem){
+                ItemStack stack = this.self.getItemInHand(this.self.getUsedItemHand());
+                FirearmItem gun = (FirearmItem) stack.getItem();
+                gun.cancelReload(stack, (Player) this.self);
+            }
             switch (mode) {
                 case 1 -> {
                     staticMode = 1;
@@ -681,6 +690,10 @@ public class Powers20thCenturyBoy extends NewDashPreset {
 
     @Override public boolean cancelSprintParticles() {return invincibleState;}
 
+    @Override
+    public boolean cancelItemUse() {
+        return invincibleState;
+    }
 
     private int stallingTicks = 0;
 
