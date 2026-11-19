@@ -59,6 +59,28 @@ public final class SilverChariotItemLayer<T extends SilverChariotEntity, M exten
         model.root().getChild("stand2")
                 .getChild("body").getChild("body2")
                 .getChild("torso").getChild("upper_chest").translateAndRotate(poseStack);
+
+        if (silverChariot.isRightHanded() || silverChariot.isPart5Skin()) {
+            model.root().getChild("stand2")
+                    .getChild("body").getChild("body2")
+                    .getChild("torso").getChild("upper_chest")
+                    .getChild("left_arm").translateAndRotate(poseStack);
+            model.root().getChild("stand2")
+                    .getChild("body").getChild("body2")
+                    .getChild("torso").getChild("upper_chest")
+                    .getChild("left_arm").getChild("lower_left_arm").translateAndRotate(poseStack);
+        } else {
+            model.root().getChild("stand2")
+                    .getChild("body").getChild("body2")
+                    .getChild("torso").getChild("upper_chest")
+                    .getChild("right_arm").translateAndRotate(poseStack);
+            model.root().getChild("stand2")
+                    .getChild("body").getChild("body2")
+                    .getChild("torso").getChild("upper_chest")
+                    .getChild("right_arm").getChild("lower_right_arm").translateAndRotate(poseStack);
+        }
+
+        /*
         model.root().getChild("stand2")
                 .getChild("body").getChild("body2")
                 .getChild("torso").getChild("upper_chest")
@@ -67,6 +89,8 @@ public final class SilverChariotItemLayer<T extends SilverChariotEntity, M exten
                 .getChild("body").getChild("body2")
                 .getChild("torso").getChild("upper_chest")
                 .getChild("left_arm").getChild("lower_left_arm").translateAndRotate(poseStack);
+        */
+
         // model.body.translateAndRotate(poseStack);
         // model.leftHand.translateAndRotate(poseStack);
         // poseStack.translate(0.0D, 0.5D, 0.0D);

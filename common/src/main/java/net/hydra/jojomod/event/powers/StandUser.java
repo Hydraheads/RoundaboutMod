@@ -443,6 +443,8 @@ public interface StandUser {
     void roundabout$setGERooted(boolean tree);
     ItemStack roundabout$getGERootedItem();
     void roundabout$setGERootedItem(ItemStack stack);
+    AnimationState roundabout$getGERootsAnimation();
+    int roundabout$getGERootsShrinkTicks();
 
     /** catch the rainbow **/
     boolean roundabout$getIsRainWalking();

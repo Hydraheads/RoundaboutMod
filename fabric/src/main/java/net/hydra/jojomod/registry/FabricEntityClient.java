@@ -126,6 +126,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.DIVER_DOWN_BETA, DiverDownBetaRenderer::new);
         EntityRendererRegistry.register(FabricEntities.DIVER_DOWN_WORLD, DiverDownWorldRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GOLD_EXPERIENCE, GoldExperienceRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.GOLD_EXPERIENCE_REQUIEM, GoldExperienceRequiemRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GOLD_EXPERIENCE_BETA, GoldExperienceBetaRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GE_BRAMBLE, GEBrambleRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GE_THORN, GEThornRenderer::new);
@@ -354,6 +355,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DIVER_DOWN_WORLD_LAYER, DiverDownWorldModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GOLD_EXPERIENCE_LAYER, GoldExperienceModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GOLD_EXPERIENCE_BETA_LAYER, GoldExperienceBetaModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GOLD_EXPERIENCE_REQUIEM_LAYER, GoldExperienceRequiemModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GE_BRAMBLE_LAYER, GEBrambleModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GE_THORN_LAYER, GEThornModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SILVER_CHARIOT_LAYER, SilverChariotModel::getTexturedModelData);
@@ -504,6 +506,8 @@ public class FabricEntityClient {
         ModStrayModels.extraHairPart = new ExtraHairPart();
         ModStrayModels.oyecomovaHatPart = new OyecomovaHatPart();
         ModStrayModels.extraHairDecorationPart = new ExtraHairDecorationPart();
+
+        ModStrayModels.GERoots = new GERootsModel();
 
         ModStrayModels.GoatHeadPart = new GoatHeadPart();
         ModStrayModels.CatHeadPart = new CatHeadPart();

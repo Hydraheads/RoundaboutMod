@@ -115,6 +115,7 @@ public class ModEntities {
     public static EntityType<DiverKickEntity> DIVER_KICK;
     public static EntityType<BoneProjectileEntity> BONE_PROJECTILE;
     public static EntityType<GoldExperienceEntity> GOLD_EXPERIENCE;
+    public static EntityType<GoldExperienceRequiemEntity> GOLD_EXPERIENCE_REQUIEM;
     public static EntityType<GoldExperienceBetaEntity> GOLD_EXPERIENCE_BETA;
     public static EntityType<GEBrambleEntity> GE_BRAMBLE;
     public static EntityType<GEThornEntity> GE_THORN;

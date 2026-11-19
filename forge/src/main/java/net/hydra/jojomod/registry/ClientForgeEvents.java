@@ -158,6 +158,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.DIVER_KICK.get(), DiverKickEntityRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BONE_PROJECTILE.get(), BoneProjectileRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GOLD_EXPERIENCE.get(), GoldExperienceRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.GOLD_EXPERIENCE_REQUIEM.get(), GoldExperienceRequiemRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GOLD_EXPERIENCE_BETA.get(), GoldExperienceBetaRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GE_BRAMBLE.get(), GEBrambleRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GE_THORN.get(), GEThornRenderer::new);
@@ -397,6 +398,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.DIVER_DROWNED_LAYER, DiverDrownedModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.GOLD_EXPERIENCE_LAYER, GoldExperienceModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.GOLD_EXPERIENCE_BETA_LAYER, GoldExperienceBetaModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.GOLD_EXPERIENCE_REQUIEM_LAYER, GoldExperienceRequiemModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.GE_BRAMBLE_LAYER, GEBrambleModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.GE_THORN_LAYER, GEThornModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.SILVER_CHARIOT_LAYER, SilverChariotModel::getTexturedModelData);
@@ -533,6 +535,8 @@ public class ClientForgeEvents {
         ModStrayModels.extraHairPart = new ExtraHairPart();
         ModStrayModels.oyecomovaHatPart = new OyecomovaHatPart();
         ModStrayModels.extraHairDecorationPart = new ExtraHairDecorationPart();
+
+        ModStrayModels.GERoots = new GERootsModel();
 
         ModStrayModels.GoatHeadPart = new GoatHeadPart();
         ModStrayModels.CatHeadPart = new CatHeadPart();
