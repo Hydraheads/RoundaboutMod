@@ -4182,6 +4182,8 @@
   "config.roundabout.enableDiverDown.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableKingCrimson.name": "Enable Stand",
   "config.roundabout.enableKingCrimson.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
+  "config.roundabout.enableGoldExperience.name": "Enable Stand",
+  "config.roundabout.enableGoldExperience.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
 
   "config.roundabout.enableSkippingCooldowns.name": "Item CD Skip",
   "config.roundabout.enableSkippingCooldowns.desc": "Enable skipping item cooldowns. It's cool, but oppressive in pvp.",
@@ -4790,9 +4792,19 @@
   "config.roundabout.scoleciphobiaModeUsing.desc": "Disables the transition animation of the nematodes in first person.",
   "config.roundabout.liyingEyesColorBlindMode.name": "Color Blind Mode",
   "config.roundabout.liyingEyesColorBlindMode.desc": "Makes Passive, Neutral and Hostile highlights have different shapes.",
-
   "config.roundabout.highlightSize.name": "Highlight Size",
   "config.roundabout.highlightSize.desc": "Set how big the highlight of mobs should be.",
+
+  "config.roundabout.goldExperienceAttackMultOnPlayers.name": "Player Damage Multiplier",
+  "config.roundabout.goldExperienceAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
+  "config.roundabout.goldExperienceAttackMultOnMobs.name": "Mob Damage Multiplier",
+  "config.roundabout.goldExperienceAttackMultOnMobs.desc": "How much damage the stand deals to every other mob, same math as above.",
+  "config.roundabout.goldExperienceGuardPoints.name": "Guard Points",
+  "config.roundabout.goldExperienceGuardPoints.desc": "How much raw, unreduced damage can the stand take before its guard breaks?",
+  "config.roundabout.miningSpeedMultiplierGoldExperience.name": "Mining Speed Multiplier",
+  "config.roundabout.miningSpeedMultiplierGoldExperience.desc": "Adjust how fast the stand can mine.",
+  "config.roundabout.getMiningTierGoldExperience.name": "Mining Tier",
+  "config.roundabout.getMiningTierGoldExperience.desc": "Tier 0 is the default, it does not replace tools for harvesting blocks. Tier 1 is wood tier, tier 2 is stone tier, tier 3 is iron tier, and tier 4 is diamond tier.",
 
   "config.roundabout.disablePHazeOverlayAnimation.name": "Disable Haze Overlay Animation",
   "config.roundabout.disablePHazeOverlayAnimation.desc": "Disables the idle animation of the haze in first person.",
@@ -5803,6 +5815,7 @@
   "config.roundabout.whiteAlbumSettings.name": "White Album",
   "config.roundabout.PlanetWavesSettings.name": "Planet Waves",
   "config.roundabout.theWorldSettings.name": "The World",
+  "config.roundabout.goldExperienceSettings.name": "Gold Experience",
   "config.roundabout.kingCrimsonSettings.name": "King Crimson",
   "config.roundabout.d4cSettings.name": "D4C",
   "config.roundabout.whitesnakeSettings.name": "Whitesnake",
