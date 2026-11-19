@@ -61,10 +61,6 @@ public class SilverChariotEntity extends FollowingStandEntity {
             YELLOW = 20,
             PHARAOH = 21;
 
-    public static final byte
-            IS_PART_3_SKIN = 1,
-            IS_PART_5_SKIN = 2;
-
     public boolean isPart5Skin() {
         byte skin = this.getSkin();
         return skin == PART_5;
@@ -72,6 +68,12 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     public static boolean isPart5Skin(byte skin) {
         return skin == PART_5;
+    }
+
+    public boolean isRightHanded() {
+        byte skin = this.getSkin();
+        byte idle = this.getIdleAnimation();
+        return !isPart5Skin(skin) && idle % 3 != 2;
     }
 
     private static final EntityDataAccessor<Boolean> IS_CARRYING_USER = SynchedEntityData.defineId(
@@ -146,25 +148,6 @@ public class SilverChariotEntity extends FollowingStandEntity {
         }
         return true;
     }
-
-    /*
-    private static final EntityDataAccessor<Boolean> IS_FAKE = SynchedEntityData.defineId(
-            SilverChariotEntity.class, EntityDataSerializers.BOOLEAN
-    );
-
-    public void setIsFake(boolean value) {
-        if (this.entityData.hasItem(IS_FAKE)) {
-            this.entityData.set(IS_FAKE, value);
-        }
-    }
-
-    public boolean getIsFake() {
-        if (this.entityData.hasItem(IS_FAKE)) {
-            return this.entityData.get(IS_FAKE);
-        }
-        return false;
-    }
-    */
 
     private static final EntityDataAccessor<Boolean> IS_DUAL_WIELDING = SynchedEntityData.defineId(
             SilverChariotEntity.class, EntityDataSerializers.BOOLEAN
@@ -333,13 +316,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
             SC_RAPIER_SLASH = 60,
             SC_STATUE_CUTTING = 61,
             SC_SLAB_CUTTING = 62,
-            SC_USER_CARRY_IDLE = 63,
-            SC_HIDE_RIGHT_ARM = 64,
-            SC_HIDE_LEFT_ARM = 65,
-            FAKE_SC_ARMOUR_OFF = 66,
-            FAKE_SC_ARMOUR_ON = 67;
-
-    public boolean isArmored = false;
+            SC_USER_CARRY_IDLE = 63;
 
     public static final byte SC_UNARMOURED_IDLE_OFFSET = 3;
 
@@ -347,22 +324,24 @@ public class SilverChariotEntity extends FollowingStandEntity {
     public void setupAnimationStates() {
         byte animationState = getAnimation();
         byte idle = getIdleAnimation();
-        boolean isPart3Skin = getSkin() != PART_5;
-        boolean isRightHanded = true;
+        byte skin = getSkin();
+        boolean isPart3Skin = skin != PART_5;
+        boolean isPart5Skin = isPart5Skin();
+        boolean isRightHanded = isRightHanded();
         byte activeHand = getActiveHand();
         boolean armoured = this.getArmoured();
         boolean selfCarryMode = this.isSelfCarryModeActive();
 
         if (this.getUser() != null) {
             if (animationState == BARRAGE) {
-                if (isPart3Skin) {
+                if (isRightHanded) {
                     this.scRightBarrage.startIfStopped(this.tickCount);
                 } else {
                     this.scLeftBarrage.startIfStopped(this.tickCount);
                 }
                 this.scHideRapiers.stop();
             } else {
-                if (isPart3Skin) {
+                if (isRightHanded) {
                     this.scRightBarrage.stop();
                 } else {
                     this.scLeftBarrage.stop();
@@ -370,26 +349,26 @@ public class SilverChariotEntity extends FollowingStandEntity {
                 this.scHideRapiers.startIfStopped(this.tickCount);
             }
             if (animationState == MINING_BARRAGE) {
-                if (isPart3Skin) {
+                if (isRightHanded) {
                     this.scMiningBarrageRight.startIfStopped(this.tickCount);
                 } else {
                     this.scMiningBarrageLeft.startIfStopped(this.tickCount);
                 }
             } else {
-                if (isPart3Skin) {
+                if (isRightHanded) {
                     this.scMiningBarrageRight.stop();
                 } else {
                     this.scMiningBarrageLeft.stop();
                 }
             }
             if (animationState == BARRAGE_FINISHER) {
-                if (isPart3Skin) {
+                if (isRightHanded) {
                     this.scBarrageFinisherRight.startIfStopped(this.tickCount);
                 } else {
                     this.scBarrageFinisherLeft.startIfStopped(this.tickCount);
                 }
             } else {
-                if (isPart3Skin) {
+                if (isRightHanded) {
                     this.scBarrageFinisherRight.stop();
                 } else {
                     this.scBarrageFinisherLeft.stop();
@@ -439,34 +418,6 @@ public class SilverChariotEntity extends FollowingStandEntity {
                 this.scPart3PoseFake.stop();
             }
 
-            /*
-            if (animationState == IDLE && idle == 0 && !selfCarryMode) {
-                this.scIdleArmoured.startIfStopped(this.tickCount);
-            } else {
-                this.scIdleArmoured.stop();
-            }
-            if (animationState == IDLE && !armoured && !selfCarryMode) {
-                this.scIdleNotArmoured.startIfStopped(this.tickCount);
-            } else {
-                this.scIdleNotArmoured.stop();
-            }
-            if (animationState == IDLE && idle == 1 && armoured && !selfCarryMode) {
-                this.scPart3Pose.startIfStopped(this.tickCount);
-            } else {
-                this.scPart3Pose.stop();
-            }
-            if (animationState == IDLE && idle == 2 && armoured && !selfCarryMode) {
-                this.scPart5Pose.startIfStopped(this.tickCount);
-            } else {
-                this.scPart5Pose.stop();
-            }
-            if (animationState == IDLE && selfCarryMode) {
-                this.scUserCarryIdle.startIfStopped(this.tickCount);
-            } else {
-                this.scUserCarryIdle.stop();
-            }
-            */
-
             if (animationState == SC_) {
 
             } else {
@@ -474,45 +425,56 @@ public class SilverChariotEntity extends FollowingStandEntity {
             }
 
             if (animationState == SC_RAPIER_SPIN) {
-                if (isPart3Skin) {
+                if (isRightHanded) {
                     this.scRightRapierSpin.startIfStopped(this.tickCount);
                 } else {
                     this.scLeftRapierSpin.startIfStopped(this.tickCount);
                 }
             } else {
-                if (isPart3Skin) {
+                if (isRightHanded) {
                     this.scRightRapierSpin.stop();
                 } else {
                     this.scLeftRapierSpin.stop();
                 }
             }
             if (animationState == SC_RAPIER_SLASH) {
-                if (isPart3Skin) {
+                if (isRightHanded) {
                     this.scRightRapierSlash.startIfStopped(this.tickCount);
                 } else {
                     this.scLeftRapierSlash.startIfStopped(this.tickCount);
                 }
             } else {
-                if (isPart3Skin) {
+                if (isRightHanded) {
                     this.scRightRapierSlash.stop();
                 } else {
                     this.scLeftRapierSlash.stop();
                 }
             }
             if (animationState == SC_OFFHAND_WEAPON_SWIPE) {
+                if (isRightHanded || isPart5Skin) {
+                    this.scRightOffhandSwipe.startIfStopped(this.tickCount);
+                    // this.scLeftOffhandSwipe.startIfStopped(this.tickCount);
+                } else {
+                    // this.scRightOffhandSwipe.startIfStopped(this.tickCount);
+                    this.scLeftOffhandSwipe.startIfStopped(this.tickCount);
+                }
+
+                /*
                 if (isPart3Skin) {
                     this.scRightOffhandSwipe.startIfStopped(this.tickCount);
                 } else {
-                    // this.scToggleLeftSword.stop();
                     this.scRightOffhandSwipe.startIfStopped(this.tickCount);
                 }
-            } else {
-                this.scRightOffhandSwipe.stop();
-                /*
-                if (!isPart3Skin) {
-                    this.scToggleLeftSword.start(this.tickCount);
-                }
                 */
+            } else {
+                if (isRightHanded || isPart5Skin) {
+                    this.scRightOffhandSwipe.stop();
+                    // this.scLeftOffhandSwipe.stop();
+                } else {
+                    // this.scRightOffhandSwipe.stop();
+                    this.scLeftOffhandSwipe.stop();
+                }
+                // this.scRightOffhandSwipe.stop();
             }
             if (animationState == SC_ARM_SUMMON) {
                 this.scArmIdle.startIfStopped(this.tickCount);
@@ -520,26 +482,26 @@ public class SilverChariotEntity extends FollowingStandEntity {
                 this.scArmIdle.stop();
             }
             if (animationState == SC_STATUE_CUTTING) {
-                if (isPart3Skin) {
+                if (isRightHanded) {
                     this.scRightStatueCutting.startIfStopped(this.tickCount);
                 } else {
                     this.scLeftStatueCutting.startIfStopped(this.tickCount);
                 }
             } else {
-                if (isPart3Skin) {
+                if (isRightHanded) {
                     this.scRightStatueCutting.stop();
                 } else {
                     this.scLeftStatueCutting.stop();
                 }
             }
             if (animationState == SC_SLAB_CUTTING) {
-                if (isPart3Skin) {
+                if (isRightHanded) {
                     this.scRightSlabCutting.startIfStopped(this.tickCount);
                 } else {
                     this.scLeftSlabCutting.startIfStopped(this.tickCount);
                 }
             } else {
-                if (isPart3Skin) {
+                if (isRightHanded) {
                     this.scRightSlabCutting.stop();
                 } else {
                     this.scLeftSlabCutting.stop();
@@ -550,78 +512,78 @@ public class SilverChariotEntity extends FollowingStandEntity {
             }
 
             if (animationState == SC_GUARD_HIT) {
-                if (isPart3Skin) {
+                if (isRightHanded) {
                     this.scGuardRightHit.startIfStopped(this.tickCount);
                 } else {
                     this.scGuardLeftHit.startIfStopped(this.tickCount);
                 }
             } else {
-                if (isPart3Skin) {
+                if (isRightHanded) {
                     this.scGuardRightHit.stop();
                 } else {
                     this.scGuardLeftHit.stop();
                 }
             }
             if (animationState == FIRST_PUNCH) {
-                if (isPart3Skin) {
+                if (isRightHanded) {
                     this.scRightHit1.startIfStopped(this.tickCount);
                 } else {
                     this.scLeftHit1.startIfStopped(this.tickCount);
                 }
             } else {
-                if (isPart3Skin) {
+                if (isRightHanded) {
                     this.scRightHit1.stop();
                 } else {
                     this.scLeftHit1.stop();
                 }
             }
             if (animationState == SECOND_PUNCH) {
-                if (isPart3Skin) {
+                if (isRightHanded) {
                     this.scRightHit2.startIfStopped(this.tickCount);
                 } else {
                     this.scLeftHit2.startIfStopped(this.tickCount);
                 }
             } else {
-                if (isPart3Skin) {
+                if (isRightHanded) {
                     this.scRightHit2.stop();
                 } else {
                     this.scLeftHit2.stop();
                 }
             }
             if (animationState == THIRD_PUNCH) {
-                if (isPart3Skin) {
+                if (isRightHanded) {
                     this.scRightHit3.startIfStopped(this.tickCount);
                 } else {
                     this.scLeftHit3.startIfStopped(this.tickCount);
                 }
             } else {
-                if (isPart3Skin) {
+                if (isRightHanded) {
                     this.scRightHit3.stop();
                 } else {
                     this.scLeftHit3.stop();
                 }
             }
             if (animationState == BLOCK) {
-                if (isPart3Skin) {
+                if (isRightHanded) {
                     this.scGuardRightStart.startIfStopped(this.tickCount);
                 } else {
                     this.scGuardLeftStart.startIfStopped(this.tickCount);
                 }
             } else {
-                if (isPart3Skin) {
+                if (isRightHanded) {
                     this.scGuardRightStart.stop();
                 } else  {
                     this.scGuardLeftStart.stop();
                 }
             }
             if (animationState == BARRAGE_CHARGE) {
-                if (isPart3Skin) {
+                if (isRightHanded) {
                     this.scRightBarrageWindup.startIfStopped(this.tickCount);
                 } else {
                     this.scLeftBarrageWindup.startIfStopped(this.tickCount);
                 }
             } else {
-                if (isPart3Skin) {
+                if (isRightHanded) {
                     this.scRightBarrageWindup.stop();
                 } else {
                     this.scLeftBarrageWindup.stop();
@@ -635,7 +597,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
             if (animationState == BROKEN_GUARD) {
                 if (!armoured) {
                     this.scIdleNotArmoured.startIfStopped(this.tickCount);
-                } else if (isPart3Skin) {
+                } else if (isRightHanded) {
                     this.scGuardRightBreak.startIfStopped(this.tickCount);
                 } else {
                     this.scGuardLeftBreak.startIfStopped(this.tickCount);
@@ -643,7 +605,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
             } else {
                 if (!armoured) {
                     this.scIdleNotArmoured.stop();
-                } else if (isPart3Skin) {
+                } else if (isRightHanded) {
                     this.scGuardRightBreak.stop();
                 } else {
                     this.scGuardLeftBreak.stop();
@@ -651,13 +613,13 @@ public class SilverChariotEntity extends FollowingStandEntity {
             }
 
             if (animationState == SC_VAULT) {
-                if (isPart3Skin) {
+                if (isRightHanded) {
                     this.scRightVault.startIfStopped(this.tickCount);
                 } else {
                     this.scLeftVault.startIfStopped(this.tickCount);
                 }
             } else {
-                if (isPart3Skin) {
+                if (isRightHanded) {
                     this.scRightVault.stop();
                 } else {
                     this.scLeftVault.stop();
@@ -685,7 +647,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
                 this.scArmourShed.stop();
             }
             if (animationState == SC_RAPIER_SHOT_HOLD) {
-                if (isPart3Skin) {
+                if (isRightHanded) {
                     this.scRightRapierShotHold.startIfStopped(this.tickCount);
                 } else {
                     this.scLeftRapierShotHold.startIfStopped(this.tickCount);
@@ -695,7 +657,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
                 this.scLeftRapierShotHold.stop();
             }
             if (animationState == SC_RAPIER_SHOT_RELASE) {
-                if (isPart3Skin) {
+                if (isRightHanded) {
                     this.scRightRapierShotRelease.startIfStopped(this.tickCount);
                 } else {
                     this.scLeftRapierShotRelease.startIfStopped(this.tickCount);
@@ -1086,7 +1048,8 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     @Override
     public HumanoidArm getMainArm() {
-        return !this.isPart5Skin() ? HumanoidArm.RIGHT : HumanoidArm.LEFT;
+        // return !this.isPart5Skin() ? HumanoidArm.RIGHT : HumanoidArm.LEFT;
+        return isRightHanded() ? HumanoidArm.RIGHT : HumanoidArm.LEFT;
     }
 
     @Override

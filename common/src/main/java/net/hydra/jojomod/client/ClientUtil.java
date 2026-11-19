@@ -87,6 +87,8 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.animal.allay.Allay;
+import net.minecraft.world.entity.monster.Vex;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.*;
 import net.hydra.jojomod.entity.corpses.FallenMob;
@@ -466,7 +468,7 @@ public class ClientUtil {
         }
     }
 
-    public static void preRenderGrabbedSoul(BlackSabbathEntity ent, StandEntity se, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6) {
+    public static void preRenderGrabbedSoul(BlackSabbathEntity ent, StandEntity se, Entity allayVex , double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6) {
         float lerpYRot = (float) ((ILivingEntityAccess)ent).roundabout$getLerpYRot();
         ent.yRotO = lerpYRot;
         ent.setYRot(lerpYRot);
@@ -475,7 +477,13 @@ public class ClientUtil {
         LivingEntity user = ent.getUser();
         LivingEntity user2 = ent.getUser();
         if (user != null){
-            ent.travelAheadSoulRender($$4, se);
+            if(se != null) {
+                ent.travelAheadSoulRender($$4, se, null);
+            } else {
+                if(allayVex != null && (allayVex instanceof Allay || allayVex instanceof Vex)) {
+                    ent.travelAheadSoulRender($$4, null, allayVex);
+                }
+            }
         }
     }
 
@@ -1300,6 +1308,16 @@ public class ClientUtil {
             }
         }
         return false;
+    }
+
+    public static boolean canSilverChariotControlModeSeeParticles() {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PSC.isPiloting()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static float getGameTimeStart(){

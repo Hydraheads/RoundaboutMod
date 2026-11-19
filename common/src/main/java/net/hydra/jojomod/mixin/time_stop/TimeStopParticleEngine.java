@@ -77,6 +77,10 @@ public class TimeStopParticleEngine {
     private TextureManager textureManager;
     @Inject(method = "render", at = @At(value = "HEAD"), cancellable = true)
     private void doNotDeltaTickParticlesWhenTimeIsStopped(PoseStack $$0, MultiBufferSource.BufferSource $$1, LightTexture $$2, Camera $$3, float $$4, CallbackInfo ci) {
+        if (!ClientUtil.canSilverChariotControlModeSeeParticles()) {
+            ci.cancel();
+            return;
+        }
 
         if (ClientUtil.isUsingEpitaph() && !ConfigManager.getClientConfig().generalSettings.epitaphSeePresentEntitiesAndParticles){
             ci.cancel();

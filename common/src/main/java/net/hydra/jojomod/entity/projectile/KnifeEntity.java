@@ -249,6 +249,11 @@ public class KnifeEntity extends AbstractArrow {
             this.playSound($$6, 1.0F, (this.random.nextFloat() * 0.2F + 0.9F));
             this.discard();
         }
+        else if ($$4 instanceof LivingEntity LE) {
+            if (((StandUser)$$4).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && is(KQ.bombEntity) && KQ.getCurrentBombStatus() == 10) {
+                KQ.defuseServer();
+            }
+        }
 
     }
 

@@ -409,6 +409,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     private int roundabout$GERootTicks;
     @Unique
+    private final AnimationState roundabout$geRootsAnimation = new AnimationState();
+    @Unique
+    private int roundabout$geRootsShrinkTicks = 0;
+    @Unique
+    private boolean roundabout$geRootsWasRooted = false;
+    @Unique
     private StandPowers roundabout$RejectionStandPowers = null;
     @Unique
     private ItemStack roundabout$RejectionStandDisc = null;
@@ -1823,6 +1829,19 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 roundabout$zappedTicks--;
             }
             roundabout$zappedTicks = Mth.clamp(roundabout$zappedTicks, -1, 10);
+
+            boolean currentlyRooted = this.roundabout$hasGERooted();
+            if (currentlyRooted != this.roundabout$geRootsWasRooted) {
+                this.roundabout$geRootsWasRooted = currentlyRooted;
+                this.roundabout$geRootsAnimation.stop();
+                this.roundabout$geRootsAnimation.start(this.tickCount);
+                this.roundabout$geRootsShrinkTicks = currentlyRooted ? 0 : 6;
+            } else if (this.roundabout$geRootsShrinkTicks > 0) {
+                this.roundabout$geRootsShrinkTicks--;
+                if (this.roundabout$geRootsShrinkTicks == 0) {
+                    this.roundabout$geRootsAnimation.stop();
+                }
+            }
         }
         this.roundabout$getStandPowers().tickPower();
         if (rdbt$this() instanceof Player PL) {
@@ -7398,6 +7417,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public void roundabout$setGERootedItem(ItemStack stack) {
         this.roundabout$GERootedItem = stack == null ? ItemStack.EMPTY : stack;
+    }
+
+    @Override
+    public AnimationState roundabout$getGERootsAnimation() {
+        return this.roundabout$geRootsAnimation;
+    }
+
+    @Override
+    public int roundabout$getGERootsShrinkTicks() {
+        return this.roundabout$geRootsShrinkTicks;
     }
 
 

@@ -85,9 +85,6 @@ public class SilverChariotAnimations {
 				.addAnimation("right_sword", new AnimationChannel(AnimationChannel.Targets.POSITION,
 						new Keyframe(0.0F, KeyframeAnimations.posVec(-0.2246F, 0.051F, -1.4822F), AnimationChannel.Interpolations.LINEAR)
 				))
-				.addAnimation("left_sword", new AnimationChannel(AnimationChannel.Targets.SCALE,
-						new Keyframe(0.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
-				))
 				.build();
 	}
 
