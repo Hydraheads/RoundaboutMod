@@ -32,6 +32,7 @@ import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.config.ClientConfig;
+import net.hydra.jojomod.util.config.Config;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
@@ -221,6 +222,16 @@ public class PowersGoldExperience extends BlockGrabPreset {
         }
     }
 
+    @Override
+    public float multiplyPowerByStandConfigPlayers(float power){
+        return (float) (power*(geConfig().goldExperienceAttackMultOnPlayers *0.01));
+    }
+
+    @Override
+    public float multiplyPowerByStandConfigMobs(float power){
+        return (float) (power*(geConfig().goldExperienceAttackMultOnMobs *0.01));
+    }
+
     // for levels
     private final int getLifePunchLevel() {
         return 2;
@@ -240,6 +251,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
     private final int getBrambleLevel() {
         return 7;
     };
+
+    // for configs
+    private Config.GoldExperienceSettings geConfig() {
+        return ClientNetworking.getAppropriateConfig().goldExperienceSettings;
+    }
 
     // for healing
     public boolean holdDownHeal = false;
@@ -331,9 +347,27 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public PowersGoldExperience(LivingEntity self) {super(self);}
     @Override
     public StandPowers generateStandPowers(LivingEntity entity) {return new PowersGoldExperience(entity);}
-    //TODO: replace this with the GE enable config
     @Override
-    public boolean isStandEnabled(){return true;}
+    public boolean isStandEnabled(){return geConfig().enableGoldExperience;}
+
+    // configs start
+
+    @Override
+    public float getMiningMultiplier() {
+        return (float) (1F*(geConfig().miningSpeedMultiplierGoldExperience *0.01));
+    }
+
+    @Override
+    public int getMiningLevel() {
+        return geConfig().getMiningTierGoldExperience;
+    }
+
+    @Override
+    public int getMaxGuardPoints(){
+        return geConfig().goldExperienceGuardPoints;
+    }
+
+    // configs end
 
     // stand rejection start
 
@@ -2460,11 +2494,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             }
             this.animalType = (byte) animalClientConfig;
             tryIntPowerPacket(ITEM_THROW, animalClientConfig);
-
-            // TODO: level lock here
-            //if (canExecuteMoveWithLevel(getItemThrowLevel())) {
             super.itemGrabClient();
-            //}
         }
     }
 
