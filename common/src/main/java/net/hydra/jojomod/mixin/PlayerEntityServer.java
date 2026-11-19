@@ -207,7 +207,7 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
         }
         this.nextContainerCounter();
         Services.PACKET_HELPER.sendD4CCloneInventoryOpenPacket((ServerPlayer) (Object) this, $$0, $$1);
-        this.containerMenu = new D4CCloneInventoryMenu(this.containerCounter, this.getInventory(), $$0);
+        this.containerMenu = new D4CCloneInventoryMenu(this.containerCounter, this.getInventory(), $$0, $$0.inventory);
         this.initMenu(this.containerMenu);
     }
 

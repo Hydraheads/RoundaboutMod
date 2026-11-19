@@ -37,7 +37,7 @@ public class FabricPacketHelperClient implements IPacketHelperClient{
             client.execute(() -> {
                 Player pl = client.player;
                 if (pl.level().getEntity(cloneId) instanceof D4CCloneEntity CE) {
-                    D4CCloneInventoryMenu blackSabbathMenu = new D4CCloneInventoryMenu(containerId, pl.getInventory(), CE);
+                    D4CCloneInventoryMenu blackSabbathMenu = new D4CCloneInventoryMenu(containerId, pl.getInventory(), CE, CE.inventory);
                     client.player.containerMenu = blackSabbathMenu;
                     Minecraft.getInstance().setScreen(new D4CCloneInventoryScreen(blackSabbathMenu, pl.getInventory(), CE));
                 }

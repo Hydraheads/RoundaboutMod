@@ -18,9 +18,10 @@ public class D4CCloneInventoryMenu extends AbstractContainerMenu {
     private final Container horseContainer;
     private final D4CCloneEntity horse;
 
-    public D4CCloneInventoryMenu(int p_39656_, Inventory p_39657_, final D4CCloneEntity p_39659_) {
+    public D4CCloneInventoryMenu(int p_39656_, Inventory p_39657_, final D4CCloneEntity p_39659_, SimpleContainer container) {
         super((MenuType<?>)null, p_39656_);
-        this.horseContainer = new SimpleContainer(p_39659_.getInventorySize());
+        //this.horseContainer = new SimpleContainer(p_39659_.getInventorySize());
+        this.horseContainer = container;
         this.horse = p_39659_;
         int i = 3;
         this.horseContainer.startOpen(p_39657_.player);

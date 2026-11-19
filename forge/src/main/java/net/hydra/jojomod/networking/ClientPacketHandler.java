@@ -31,7 +31,7 @@ public class ClientPacketHandler {
         Entity entity = level.getEntity(message.entityId);
 
         if (entity instanceof D4CCloneEntity clone) {
-            D4CCloneInventoryMenu blackSabbathMenu = new D4CCloneInventoryMenu(message.containerId, pl.getInventory(), clone);
+            D4CCloneInventoryMenu blackSabbathMenu = new D4CCloneInventoryMenu(message.containerId, pl.getInventory(), clone, clone.inventory);
             pl.containerMenu = blackSabbathMenu;
             Minecraft.getInstance().setScreen(new D4CCloneInventoryScreen(blackSabbathMenu, pl.getInventory(), clone));
         }
