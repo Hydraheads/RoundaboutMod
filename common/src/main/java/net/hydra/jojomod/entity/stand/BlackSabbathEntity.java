@@ -562,7 +562,11 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                  }
                              }
                          } else {
-                             setBsAnimations((byte)17);
+                             if(isBlackSabbathUnderLight()){
+                                 setBsAnimations((byte)7);
+                             } else {
+                                 setBsAnimations((byte) 17);
+                             }
                          }
                      }
                  }
@@ -571,6 +575,19 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
              setBsAnimations((byte)0);
          }
      }
+    }
+
+    @Override
+    public void push(Entity $$0) {
+        super.push($$0);
+    }
+    @Override
+    protected void pushEntities() {
+        super.pushEntities();
+    }
+    @Override
+    public void doPush(Entity $$0) {
+        super.doPush($$0);
     }
 
     int animationTick2 = 14;
@@ -1077,9 +1094,11 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                             if(((StandUser)value).roundabout$getGrabberSabbath() != 0 && ((StandUser)value).roundabout$getGrabberSabbath() != this.getId()){
                                 targent2.remove(value);
                             }
-                           /* if(value.isRemoved() || value.isDeadOrDying() || !value.isAlive()){
-                                targent2.remove(value);
-                            }*/
+                            if(this.isUnderSunlight(value)){
+                                if(!((StandUser)value).roundabout$getGrabbedSoul()) {
+                                    targent2.remove(value);
+                                }
+                            }
                         }
                         targent = targent2;
                     }
