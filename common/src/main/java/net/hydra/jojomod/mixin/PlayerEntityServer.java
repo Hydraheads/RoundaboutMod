@@ -5,6 +5,8 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerEntityServer;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.gui.BlackSabbathPlayerInventoryMenu;
+import net.hydra.jojomod.client.gui.D4CCloneInventoryMenu;
+import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -196,6 +198,16 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
         this.nextContainerCounter();
         Services.PACKET_HELPER.sendBlackSabbathChestOpenPacket((ServerPlayer) (Object) this, $$1);
         this.containerMenu = new BlackSabbathPlayerInventoryMenu(this.getInventory(), this, this.containerCounter);
+        this.initMenu(this.containerMenu);
+    }
+    public void roundabout$openD4CCloneInventory(D4CCloneEntity $$0, Container $$1) {
+        ServerPlayer player = (ServerPlayer) (Object) this;
+        if(this.containerMenu != this.inventoryMenu){
+            this.closeContainer();
+        }
+        this.nextContainerCounter();
+        Services.PACKET_HELPER.sendD4CCloneInventoryOpenPacket((ServerPlayer) (Object) this, $$0, $$1);
+        this.containerMenu = new D4CCloneInventoryMenu(this.containerCounter, this.getInventory(), $$0, $$0.inventory);
         this.initMenu(this.containerMenu);
     }
 
