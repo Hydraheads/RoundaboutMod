@@ -107,94 +107,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // move bytes found in other moves
     public static final byte ITEM_IMBUE = 62;
 
-    @Override
-    public boolean canUseStandArrow() { return canUseRequiem(); }
 
-    public boolean canUseRequiem() {
-        return hasGoldenDisc() || canExecuteMoveWithLevel(getMaxLevel());
-    }
-    public boolean isPossibleToRequiem() {
-        return resolvePoints >= getNeededResolvePoints();
-    }
-
-    private float resolvePoints = 0F;
-
-    public float getResolvePoints() { return resolvePoints; }
-    public float getNeededResolvePoints() { return 300.0F; }
-
-    @Override
-    public boolean onStandArrowUse() {
-        if (this.self instanceof Player PE) {
-            if (isPossibleToRequiem()) { /// do epic aura farm animation here or something
-                sendParticlesIfPossible(self.level(),ParticleTypes.FIREWORK, PE.getX(),
-                        PE.getY() + PE.getEyeHeight(), PE.getZ(),
-                        20, 0, 0, 0, 0.4);
-
-                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.GE_REQUIEM_ARROW_EVENT, SoundSource.PLAYERS, 0.85F, 1.0f);
-
-                if (!isClient()) {
-                    ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.requiem_activated").
-                            withStyle(ChatFormatting.YELLOW), true);
-                }
-
-                return true;
-            }else {
-                if (!isClient()) {
-                    ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.requiem_failed").
-                            withStyle(ChatFormatting.RED), true);
-                }
-            }
-        }
-        return false;
-    }
-
-    private float getResolvePointsObtainingCap() { return 30.0F; }
-
-    public boolean onKilledEntity(ServerLevel $$0, LivingEntity victim){
-        if (!(canUseRequiem())) {
-            return super.onKilledEntity($$0, victim);
-        }
-
-        if (resolvePoints < getNeededResolvePoints()) {
-            if (victim instanceof Mob) {
-                float amount = victim.getMaxHealth();
-
-                if (!((StandUser)victim).roundabout$getStandDisc().isEmpty() && (victim instanceof Monster ||
-                        victim instanceof NeutralMob)){
-                    if (victim.getMaxHealth() >= 100){
-                        amount = (int)( amount*0.5);
-                    }
-                    amount = amount * 2.5f;
-                } else {
-                    if (victim.getMaxHealth() >= 100){
-                        amount = (int)( amount*0.5);
-                    }
-                }
-
-                addResolvePoints(amount);
-            }
-        }
-
-        return super.onKilledEntity($$0,victim); // DO NOT RETURN 'true' OR ELSE IT WILL STOP ENTITIES FROM DYIENG
-    }
-
-    public void onPlayerHurt(Player PL, DamageSource src, float damage) {
-        if (!(canUseRequiem())) {
-            return;
-        }
-        addResolvePoints(damage*3.5f);
-    }
-
-    private void addResolvePoints(float amount) {
-        resolvePoints += Math.min(amount, getResolvePointsObtainingCap());
-        if (resolvePoints > getNeededResolvePoints()) {
-            resolvePoints = getNeededResolvePoints();
-        }
-        saveDiscAndSync();
-        if (!isClient() && self instanceof Player PL) {
-            S2CPacketUtil.sendIntPowerDataPacket(PL, PowerIndex.SPECIAL_CHARGED, 0);
-        }
-    }
 
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
@@ -941,6 +854,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
         // tree
         if (this.getActivePower() == TREE) {
             updateTree();
+        }
+
+        // this is requiem...
+        if (this.getActivePower() == PowerIndex.SPECIAL) {
+            updateRequiem();
         }
         super.updateUniqueMoves();
     }
@@ -2151,6 +2069,119 @@ public class PowersGoldExperience extends BlockGrabPreset {
     }
 
     // unique root barrage end
+
+    // requiem system start
+
+    @Override
+    public boolean canUseStandArrow() { return canUseRequiem(); }
+
+    public boolean canUseRequiem() {
+        return canExecuteMoveWithLevel(getMaxLevel());
+    }
+    public boolean isPossibleToRequiem() {
+        return resolvePoints >= getNeededResolvePoints();
+    }
+
+    private float resolvePoints = 0F;
+
+    public float getResolvePoints() { return resolvePoints; }
+    public float getNeededResolvePoints() { return 300.0F; }
+
+    @Override
+    public boolean onStandArrowUse() {
+        if (this.self instanceof Player PE && activePower == PowerIndex.NONE) {
+            if (isPossibleToRequiem()) { /// do epic aura farm animation here or something
+                sendParticlesIfPossible(self.level(),ParticleTypes.FIREWORK, PE.getX(),
+                        PE.getY() + PE.getEyeHeight(), PE.getZ(),
+                        20, 0, 0, 0, 0.4);
+
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.GE_REQUIEM_ARROW_EVENT, SoundSource.PLAYERS, 1.05F, 1.0f);
+
+                if (!isClient()) {
+                    ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.requiem_activated").
+                            withStyle(ChatFormatting.YELLOW), true);
+                }
+
+                setRequiem();
+
+                return true;
+            }else {
+                if (!isClient()) {
+                    ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.requiem_failed").
+                            withStyle(ChatFormatting.RED), true);
+                }
+            }
+        }
+        return false;
+    }
+
+    private float getResolvePointsObtainingCap() { return 30.0F; }
+
+    public boolean onKilledEntity(ServerLevel $$0, LivingEntity victim){
+        if (!(canUseRequiem())) {
+            return super.onKilledEntity($$0, victim);
+        }
+
+        if (resolvePoints < getNeededResolvePoints()) {
+            if (victim instanceof Mob) {
+                float amount = victim.getMaxHealth();
+
+                if (!((StandUser)victim).roundabout$getStandDisc().isEmpty() && (victim instanceof Monster ||
+                        victim instanceof NeutralMob)){
+                    if (victim.getMaxHealth() >= 100){
+                        amount = (int)( amount*0.5);
+                    }
+                    amount = amount * 2.5f;
+                } else {
+                    if (victim.getMaxHealth() >= 100){
+                        amount = (int)( amount*0.5);
+                    }
+                }
+
+                addResolvePoints(amount);
+            }
+        }
+
+        return super.onKilledEntity($$0,victim); // DO NOT RETURN 'true' OR ELSE IT WILL STOP ENTITIES FROM DYIENG
+    }
+
+    public void onPlayerHurt(Player PL, DamageSource src, float damage) {
+        if (!(canUseRequiem())) {
+            return;
+        }
+        addResolvePoints(damage*3.5f);
+    }
+
+    private void addResolvePoints(float amount) {
+        resolvePoints += Math.min(amount, getResolvePointsObtainingCap());
+        if (resolvePoints > getNeededResolvePoints()) {
+            resolvePoints = getNeededResolvePoints();
+        }
+        saveDiscAndSync();
+        if (!isClient() && self instanceof Player PL) {
+            S2CPacketUtil.sendIntPowerDataPacket(PL, PowerIndex.SPECIAL_CHARGED, 0);
+        }
+    }
+
+    // requiem system end
+
+    // requiem animation start
+
+    private void setRequiem() {
+        this.setAttackTimeDuring(0);
+        setActivePower(PowerIndex.SPECIAL);
+        // TODO: Animation
+    }
+
+    private void updateRequiem() {
+        if (attackTimeDuring >= 240) {
+            setPowerNone();
+            // TODO: Change to GER
+        }
+    }
+
+
+    // requiem animation end
 
     // tree creation start
 
