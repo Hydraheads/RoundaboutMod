@@ -492,7 +492,7 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
         if (uuid.isPresent() && ClientUtil.isPlayerUUID(uuid.get())){
             return false;
         }
-        return !ClientUtil.isPlayer($$0.getPlayer());
+        return !ClientUtil.isPlayer($$0.getPlayer()) && super.shouldShowName($$0);
     }
 
     public record SkinData(ResourceLocation texture, boolean slim) {

@@ -23,6 +23,7 @@
     "ForgeHumanoidArmorLayer",
     "ForgeKillsScreenInputsFix",
     "ForgeScreenEffectRenderer",
+    "ForgeSilverChariotParticleEngineMixin",
     "SaddleLayerManhattan"
   ],
   "server": [

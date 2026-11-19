@@ -27,6 +27,7 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -63,6 +64,7 @@ import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.apache.logging.log4j.core.pattern.AbstractStyleNameConverter;
+import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -635,6 +637,28 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                             this.blackSabbathTargets.add(attackTarget);
                         }
                     }
+                }
+            }
+        }
+    }
+    @Override
+    public void tickStandRejection(MobEffectInstance effect) {
+        if (!this.getSelf().level().isClientSide()) {
+            if (effect.getDuration() == 50) {
+                playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.BLACK_SABBATH_HURT_EVENT, SoundSource.PLAYERS, 0.5F, 1F);
+                self.hurt(ModDamageTypes.of(this.self.level(), ModDamageTypes.STAND), 4f);
+            }
+            if(effect.getDuration() > 35 && effect.getDuration() < 65){
+                Random random = new Random();
+                float flute5 = random.nextFloat(0F, 0.15F);
+                float flute6 = random.nextFloat(-0.35F, 0.35F);
+                float flute7 = random.nextFloat(-0.35F, 0.35F);
+                if(this.self.onGround()) {
+                    ((ServerLevel) self.level()).sendParticles((new DustParticleOptions(new Vector3f(flute5, flute5, flute5), 1.75f)), self.getX() + flute6,
+                            self.getY() - 0.175, self.getZ() + flute7,
+                            200,
+                            0.01, 0.01, 0.01,
+                            0.1);
                 }
             }
         }

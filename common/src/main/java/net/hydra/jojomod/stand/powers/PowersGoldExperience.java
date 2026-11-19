@@ -8,6 +8,7 @@ import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.*;
 import net.hydra.jojomod.entity.gold_experience.*;
 import net.hydra.jojomod.entity.projectile.*;
@@ -53,6 +54,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -128,7 +130,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                         PE.getY() + PE.getEyeHeight(), PE.getZ(),
                         20, 0, 0, 0, 0.4);
 
-                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.BITES_THE_DUST_ARROW_EVENT, SoundSource.PLAYERS, 0.85F, 1.0f);
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.GE_REQUIEM_ARROW_EVENT, SoundSource.PLAYERS, 0.85F, 1.0f);
 
                 if (!isClient()) {
                     ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.requiem_activated").
@@ -189,6 +191,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
             resolvePoints = getNeededResolvePoints();
         }
         saveDiscAndSync();
+        if (!isClient() && self instanceof Player PL) {
+            S2CPacketUtil.sendIntPowerDataPacket(PL, PowerIndex.SPECIAL_CHARGED, 0);
+        }
     }
 
     @Override
@@ -204,6 +209,15 @@ public class PowersGoldExperience extends BlockGrabPreset {
         }
 
         super.readAdditionalSaveData(tag);
+    }
+
+    @Override
+    public boolean interceptIncomingHarm(DamageSource source, float amount) {
+        if (activePower == PowerIndex.SPECIAL) {
+            return !source.is(DamageTypes.GENERIC_KILL);
+        }
+
+        return super.interceptIncomingHarm(source, amount);
     }
 
     // for cooldowns
@@ -447,6 +461,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     @Override
     public void tickPower() {
+        if (resolveRenderTicks > 0) {
+            resolveRenderTicks--;
+        }
         if (!this.self.level().isClientSide()) {
             // bramble bush expanding ring
             if (this.bushWaveOrigin != null && this.self.level() instanceof ServerLevel serverLevel) {
@@ -747,6 +764,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
             this.sensedImbueEntityId = data;
             return;
         }
+        if (activePower == PowerIndex.SPECIAL_CHARGED) {
+            resolveRenderTicks = 50;
+            return;
+        }
         super.updatePowerInt(activePower, data);
     }
 
@@ -816,6 +837,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (!consumeClickInput) {
+            if (activePower == PowerIndex.SPECIAL) {return; }
             if (impaleTicks > 0){
                 return;
             }
@@ -860,7 +882,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // lets animations happen while blocking
     @Override
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
-        if (impaleTicks > 0) {
+        if (impaleTicks > 0 || this.activePower == PowerIndex.SPECIAL) {
             return false;
         }
         if (this.activePower == TREE || this.activePower == BUSH_CREATION
@@ -3308,6 +3330,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     @Override
     public float inputSpeedModifiers(float basis) {
+        if (this.activePower == PowerIndex.SPECIAL) { return 0f; }
         if (this.activePower == PowerIndex.BARRAGE_CHARGE_2) {
             basis*=0.5f;
         } else if (this.activePower == PowerIndex.BARRAGE_2) {
@@ -3323,18 +3346,18 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     @Override
     public boolean cancelItemUse() {
-        return (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2);
+        return (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2 || this.getActivePower() == PowerIndex.SPECIAL);
     }
 
     @Override
     public boolean clickRelease(){
-        return (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2);
+        return (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2 || this.getActivePower() == PowerIndex.SPECIAL);
     }
 
     @Override
     public boolean cancelSprintJump(){
         if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2
-            || this.getActivePower() == HEAL || this.getActivePower() == HEAL_CHARGE) {
+            || this.getActivePower() == HEAL || this.getActivePower() == HEAL_CHARGE || this.getActivePower() == PowerIndex.SPECIAL) {
             return true;
         }
         return super.cancelSprintJump();
@@ -3603,6 +3626,18 @@ public class PowersGoldExperience extends BlockGrabPreset {
             super.renderAttackHud(context,playerEntity,
                     scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
         }
+    }
+
+    private int resolveRenderTicks = 0;
+
+    /** hud **/
+    @Override
+    public boolean replaceHudActively() {
+        return resolveRenderTicks > 0;
+    }
+    public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x,
+                                  boolean removeNum){
+        StandHudRender.renderRequiemBarr(context,cameraPlayer,screenWidth,screenHeight,x, (int)resolvePoints, (int)getNeededResolvePoints());
     }
 
     // stand icons and info screen end

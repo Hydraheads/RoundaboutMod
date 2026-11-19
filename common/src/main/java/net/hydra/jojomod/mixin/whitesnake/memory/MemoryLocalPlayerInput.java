@@ -1,7 +1,9 @@
 package net.hydra.jojomod.mixin.whitesnake.memory;
 
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.whitesnake.disc.DiscItemData;
 import net.hydra.jojomod.access.DiscBearer;
+import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
 import net.minecraft.client.player.Input;
 import net.minecraft.client.player.LocalPlayer;
 import org.spongepowered.asm.mixin.Mixin;

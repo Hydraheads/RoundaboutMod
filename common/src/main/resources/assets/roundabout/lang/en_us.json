@@ -4621,6 +4621,8 @@
   "config.roundabout.silverChariotBonusPlayerDMGArmSummon.desc": "This % melee damage increase from Arm Summon against players.",
   "config.roundabout.silverChariotBonusMobDMGArmSummon.name": "Bonus damage from Arm Summon against mobs",
   "config.roundabout.silverChariotBonusMobDMGArmSummon.desc": "This % melee damage increase from Arm Summon against players.",
+  "config.roundabout.silverChariotAfterimageSpeed.name": "Afterimage Speed Modifier",
+  "config.roundabout.silverChariotAfterimageSpeed.desc": "% increase in speed where lower values make the afteriamges slower.",
 
   "config.roundabout.enableCatchTheRainbow.name": "Enable Catch The Rainbow",
   "config.roundabout.enableCatchTheRainbow.desc": "Enable Catch The Rainbow",
