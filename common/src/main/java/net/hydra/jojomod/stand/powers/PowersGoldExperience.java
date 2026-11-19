@@ -2,6 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -12,6 +13,7 @@ import net.hydra.jojomod.entity.gold_experience.*;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.GoldExperienceEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -54,11 +56,19 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.item.PrimedTnt;
+import net.minecraft.world.entity.monster.AbstractSkeleton;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Drowned;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.*;
+import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.DirectionalPlaceContext;
 import net.minecraft.world.level.ClipContext;
@@ -271,16 +281,16 @@ public class PowersGoldExperience extends BlockGrabPreset {
     }
     public float getBrambleDamage(Entity entity){
         if (this.getReducedDamage(entity)){
-            return 2.2F;
+            return 1.2F;
         } else {
-            return 7;
+            return 5;
         }
     }
     public float getThornDamage(Entity entity){
         if (this.getReducedDamage(entity)){
-            return 1.2F;
+            return 0.6F;
         } else {
-            return 5.5F;
+            return 4.5F;
         }
     }
 
@@ -2413,12 +2423,13 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     private boolean executeLifeformCreation() {
         if (!this.self.level().isClientSide()) {
+            boolean isMob = !(this.self instanceof Player);
 
-            if (this.self.isCrouching()) {
+            if (!isMob && this.self.isCrouching()) {
                 return false;
             }
 
-            if(!isHoldingItem()){
+            if (!isMob && !isHoldingItem()) {
                 return false;
             }
 
@@ -2429,10 +2440,13 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 spawnPos = new Vec3(spawnPos.x, spawnPos.y + 1.0, spawnPos.z);
 
                 ItemStack handItem = this.self.getMainHandItem();
+                ItemStack sourceStack = (isMob) ? ItemStack.EMPTY : handItem;
 
-                if (spawnLifeform(typeToSpawn, spawnPos, handItem)) {
+                if (spawnLifeform(typeToSpawn, spawnPos, sourceStack)) {
                     setCooldown(PowerIndex.SKILL_2, getAnimalCreationCooldown());
-                    handItem.shrink(1);
+                    if (!isMob || !handItem.isEmpty()) {
+                        handItem.shrink(1);
+                    }
                     return true;
                 }
             }
