@@ -367,6 +367,12 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     public void setInvincibleState(boolean invincible, boolean loading) {
         if (isDazed(self)) { return; }
 
+        if (self instanceof Mob) {
+            if (invincible == invincibleState) {
+                return;
+            }
+        }
+
         invincibleState = invincible;
         if (invincible) {
             if (this.self.getItemInHand(this.self.getUsedItemHand()).getItem() instanceof FirearmItem){
