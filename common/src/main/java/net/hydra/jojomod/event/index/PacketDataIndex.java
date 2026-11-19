@@ -92,6 +92,7 @@ public class PacketDataIndex {
     public static final byte BYTE_RESPAWN_STRATEGY = 11;
     public static final byte BYTE_SWITCH_POWERS = 12;
     public static final byte BYTE_UPDATE_COOLDOWN = 51;
+    public static final byte BYTE_MOUNT_HOVER_INPUT = 54;
 
     /**S2C Simple packets*/
     public static final byte S2C_SIMPLE_GENERATE_POWERS = 1;
