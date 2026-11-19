@@ -3652,12 +3652,16 @@
 
   "message.tusk.nearby_hole": "Must Be Near Another Hole",
   "skins.roundabout.tusk.manga" : "Manga",
-  "skins.roundabout.tusk.blue" : "Blue",
-  "skins.roundabout.tusk.resonance" : "Resonance",
-  "skins.roundabout.tusk.breaker" : "Breaker",
-  "skins.roundabout.tusk.frigid" : "Frigid",
-  "skins.roundabout.tusk.elegant" : "Elegant",
-  "skins.roundabout.tusk.legacy" : "Legacy",
+  "skins.roundabout.tusk.anime" : "Anime",
+  "skins.roundabout.tusk.amethyst" : "Amethyst",
+  "skins.roundabout.tusk.dark" : "Dark",
+  "skins.roundabout.tusk.green" : "Green",
+  "skins.roundabout.tusk.hamon" : "Hamon",
+  "skins.roundabout.tusk.jack" : "Jack",
+  "skins.roundabout.tusk.magma" : "Magma",
+  "skins.roundabout.tusk.ruby" : "Ruby",
+  "skins.roundabout.tusk.creaking" : "Creaking",
+
 
 
   "roundabout.tusk.act_1": "Act 1",
