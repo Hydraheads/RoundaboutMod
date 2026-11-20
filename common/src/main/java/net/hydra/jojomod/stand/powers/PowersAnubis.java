@@ -173,7 +173,7 @@ public class PowersAnubis extends NewDashPreset {
             boolean bypass = (P.isCreative()) || (this.getStandUserSelf().roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem);
             IPlayerEntity IPE = (IPlayerEntity) P;
 
-            return (int) (ConfigManager.getConfig().anubisSettings.anubisMaxMemory * (bypass ? 1 : 0.5 + (0.5 * ((float) IPE.roundabout$getStandLevel() / this.getMaxLevel()  )) ) );
+            return (int) (ClientNetworking.getAppropriateConfig().anubisSettings.anubisMaxMemory * (bypass ? 1 : 0.5 + (0.5 * ((float) IPE.roundabout$getStandLevel() / this.getMaxLevel()  )) ) );
         }
         return -1;
     }
@@ -441,7 +441,7 @@ public class PowersAnubis extends NewDashPreset {
 
         AnubisMemory memory = this.getUsedMemory();
         List<AnubisMoment> moments = memory.moments;
-        int time = (ConfigManager.getConfig().anubisSettings.anubisMaxMemory-this.playTime)+1;
+        int time = (ClientNetworking.getAppropriateConfig().anubisSettings.anubisMaxMemory-this.playTime)+1;
         for (Byte playByte : playBytes) {
             if (isPressed(playByte, time)) {
                 moments.add(new AnubisMoment(playByte, Math.min(this.getMaxPlayTime(), time), false));
@@ -549,7 +549,7 @@ public class PowersAnubis extends NewDashPreset {
                 enablePogo();
                 this.setAttackTimeDuring(0);
                 this.setActivePower(PowerIndex.SNEAK_MOVEMENT);
-                this.setCooldown(PowerIndex.GLOBAL_DASH, ConfigManager.getConfig().anubisSettings.anubisBackflipCooldown);
+                this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().anubisSettings.anubisBackflipCooldown);
                 playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.ANUBIS_BACKFLIP_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
 
                 if (!isClient()) {
@@ -1120,7 +1120,7 @@ public class PowersAnubis extends NewDashPreset {
     public void tryBasicAttack(byte move) {
         this.activePowerPhase++;
         if (this.activePowerPhase == 3) {
-            this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.finalStandPunchInStringCooldown-7;
+            this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.finalStandPunchInStringCooldown-3;
         } else {
             this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.standPunchCooldown;
         }
@@ -2376,6 +2376,16 @@ public class PowersAnubis extends NewDashPreset {
             }
         }
         super.onStandSummon(desummon);
+
+        if (!desummon) {
+            if (this.getActivePowerPhase() != this.getActivePowerPhaseMax()) {
+                this.setActivePowerPhase((byte) 2);
+            }
+            if (this.getAttackTime() >= this.getAttackTimeMax()) {
+                this.setAttackTimeMax(ClientNetworking.getAppropriateConfig().experimentalSettings.summonPunchTime);
+            }
+            this.setAttackTime(0);
+        }
     }
 
     @Override
@@ -2523,7 +2533,7 @@ public class PowersAnubis extends NewDashPreset {
 
     @Override
     public int getMaxGuardPoints() {
-        return ConfigManager.getConfig().anubisSettings.anubisGuardPoints;
+        return ClientNetworking.getAppropriateConfig().anubisSettings.anubisGuardPoints;
     }
 
     private boolean shouldShowBarrage() {
@@ -2996,7 +3006,7 @@ public class PowersAnubis extends NewDashPreset {
         if (moments.isEmpty()) {return;}
         visualMouse = this.memories.get(slot).canMouse();
 
-        int maxTime = Math.min(ConfigManager.getConfig().anubisSettings.anubisMaxMemory,moments.get(moments.size()-1).time);
+        int maxTime = Math.min(ClientNetworking.getAppropriateConfig().anubisSettings.anubisMaxMemory,moments.get(moments.size()-1).time);
 
         for(int time = 0; time<maxTime; time++ ) {
             List<Byte> value = new ArrayList<>();

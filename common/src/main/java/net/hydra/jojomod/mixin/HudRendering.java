@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.gui.LyinEyesMapOverlay;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
+import net.hydra.jojomod.entity.SilverChariotMountEntity;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
@@ -859,6 +860,8 @@ public abstract class HudRendering implements IHudAccess {
                     }
                     return true;
                 }
+            } else if (user.roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PSC.getActivePower() == PowersSilverChariot.SILVER_CHARIOT_SELF_GRAB) {
+                // StandHudRender.renderSelfCarryHoverHud(context, this.getCameraPlayer(), screenWidth, screenHeight, x, PSC);
             } else if (isTSEntity || (user.roundabout$getStandPowers().getMaxTSTime() > 0
                     && (user.roundabout$getStandPowers().getActivePower() == PowerIndex.SPECIAL) ||  user.roundabout$getStandPowers().getActivePower() == PowerIndex.LEAD_IN)) {
 
@@ -1107,6 +1110,15 @@ public abstract class HudRendering implements IHudAccess {
         if (rdbt$tempEnt !=null){
             this.minecraft.crosshairPickEntity = rdbt$tempEnt;
             rdbt$tempEnt = null;
+        }
+    }
+
+    @Inject(method = "renderVehicleHealth", at = @At("HEAD"), cancellable = true)
+    private void rdbt$renderVehicleHealthMixinHead(GuiGraphics $$0, CallbackInfo info) {
+        LivingEntity vehicle = this.getPlayerVehicleWithHealth();
+
+        if (vehicle instanceof SilverChariotMountEntity scme) {
+            info.cancel();
         }
     }
 

@@ -209,7 +209,7 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
                     AnimationDefinition anim = Powers20thCenturyBoy.getAnimation(standUser, true);
                     if (anim != null) {
                         this.animate(standUser.roundabout$getWornStandAnimation(), anim, partialTicks, 1F);
-                        standUser.roundabout$getWornStandAnimation().startIfStopped(player.tickCount);
+                        standUser.roundabout$getWornStandAnimation().startIfStopped(player.tickCount - 15);
                     }
                 }
 

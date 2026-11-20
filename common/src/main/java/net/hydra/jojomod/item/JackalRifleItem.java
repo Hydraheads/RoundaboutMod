@@ -15,7 +15,7 @@ import java.util.Random;
 public class JackalRifleItem extends FirearmItem implements Vanishable {
 
     public JackalRifleItem(Properties properties) {
-        super(properties.durability(200));
+        super(properties.durability(200),-3);
     }
 
     @Override
