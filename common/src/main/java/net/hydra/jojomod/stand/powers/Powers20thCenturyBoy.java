@@ -373,6 +373,8 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             }
         }
 
+        self.dismountTo(self.getX(), self.getY(), self.getZ());
+        
         invincibleState = invincible;
         if (invincible) {
             if (this.self.getItemInHand(this.self.getUsedItemHand()).getItem() instanceof FirearmItem){
