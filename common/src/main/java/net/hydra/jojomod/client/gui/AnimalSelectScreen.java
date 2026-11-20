@@ -131,7 +131,7 @@ public class AnimalSelectScreen extends Screen implements NoCancelInputScreen {
                 setWidgetNumber(MobSlot.icon.id);
                 if (this.currentlyHovered == standRerollIcon.NONE) {
                     SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
-                    soundmanager.play(SimpleSoundInstance.forUI(ModSounds.BUBBLE_HOVERED_OVER_EVENT, (float) (0.95 + (Math.random() * 0.1F))));
+                    soundmanager.play(SimpleSoundInstance.forUI(ModSounds.GOLD_EXPERIENCE_MENU_EVENT, (float) (0.95 + (Math.random() * 0.1F))));
                 }
             }
             this.currentlyHovered = MobSlot.icon;

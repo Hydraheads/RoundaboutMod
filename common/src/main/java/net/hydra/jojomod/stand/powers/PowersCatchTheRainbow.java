@@ -10,6 +10,7 @@ import net.hydra.jojomod.entity.substand.CTRbarrierEntity;
 import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.FirearmItem;
@@ -435,6 +436,10 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     private int LeftArmState = 0;
 
     public boolean isInRain() {
+        return rainExtraTime != 0;
+    }
+
+    private boolean isActuallyInRain() {
         if (ClientNetworking.getAppropriateConfig().catchTheRainbowSettings.catchTheRainbowCanAlwaysUse) {
             return true;
         }else{
@@ -464,7 +469,9 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     }
 
     private int deathTimer = 0;
-    private int dropTimer = 0;
+    public int dropTimer = 0;
+
+    private int rainExtraTime = 0;
 
     @Override
     public void tickPower() {
@@ -528,8 +535,11 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             }
         }
 
-        if (isInRain() && hasStandActive(self)) {
+        if (isActuallyInRain() && hasStandActive(self)) {
             this.getSelf().resetFallDistance();
+            rainExtraTime = 20;
+        } else if (rainExtraTime != 0){
+            rainExtraTime --;
         }
         if(this.self instanceof Player) {
             if(armGoneTicks>0) {
@@ -673,9 +683,10 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                 double diameter = 0.6d;
                 playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.CTR_HEAL_EVENT, SoundSource.PLAYERS, 0.6F, (float)Roundabout.RANDOM.nextDouble(0.9, 1.1));
                 for (int i = 0; i < 11; i = i + 1) {
-                    sendParticlesIfPossible(self.level(), ParticleTypes.SPLASH,
+                    double randY = Roundabout.RANDOM.nextDouble(-0.5, 0.25);
+                    sendParticlesIfPossible(self.level(), ModParticles.RAIN_BUBBLE,
                             this.getSelf().getX() + (diameter * Math.sin(i * 4)) * Math.cos(Xangle),
-                            this.getSelf().getY() + (this.getSelf().getEyeHeight() * 0.7),
+                            this.getSelf().getY() + (this.getSelf().getEyeHeight() * 0.7) + randY,
                             this.getSelf().getZ() + (diameter * Math.cos(i * 4)) * Math.cos(Zangle),
                             0, 0, 0, 0, 0);
                 }
@@ -891,7 +902,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
 
             playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.CTR_HEAL_EVENT, SoundSource.PLAYERS, 0.35F, (float)Roundabout.RANDOM.nextDouble(0.65, 0.85));
             for (int i = 0; i < 11; i = i + 1) {
-                sendParticlesIfPossible(self.level(), ParticleTypes.SPLASH,
+                sendParticlesIfPossible(self.level(), ModParticles.RAIN_BUBBLE,
                         this.getSelf().getX() + (diameter * Math.sin(i * 4)) * Math.cos(Xangle),
                         this.getSelf().getY() + (this.getSelf().getEyeHeight() * 0.7),
                         this.getSelf().getZ() + (diameter * Math.cos(i * 4)) * Math.cos(Zangle),
@@ -932,6 +943,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         ctrDodgeTicks = 25;
         setFullDodgeAnimation();
         this.self.stopUsingItem();
+        this.self.unRide();
     }
 
     public void setFullDodgeAnimation(){

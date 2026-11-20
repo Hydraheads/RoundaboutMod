@@ -93,6 +93,17 @@ public class DNACreationEntity extends LivingEntity {
                 return;
             }
 
+            if (this.tickCount % 20 == 0) {
+                this.level().playSound(
+                        null,
+                        this.blockPosition(),
+                        ModSounds.GOLD_EXPERIENCE_DNA_GROW_EVENT,
+                        SoundSource.NEUTRAL,
+                        0.3F,
+                        1.0F
+                );
+            }
+
             if (this.tickCount % 7 == 0) {
                 MainUtil.sendParticlesIfPossible(
                         this,

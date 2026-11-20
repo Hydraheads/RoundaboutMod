@@ -116,7 +116,7 @@ public class GEFrogEntity extends Frog implements GELifeform {
         }
 
         // summon windup before pulling
-        if (this.tickCount >= 5) {
+        if (this.tickCount >= 30) {
             LivingEntity target = findTarget();
             if (target != null) {
                 this.lookAt(EntityAnchorArgument.Anchor.EYES, target.getEyePosition());

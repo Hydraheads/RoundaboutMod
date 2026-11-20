@@ -1,5 +1,7 @@
 package net.hydra.jojomod.item;
 
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 import net.hydra.jojomod.access.IGEProjectile;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
@@ -25,8 +27,12 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -37,7 +43,7 @@ import net.minecraft.world.phys.Vec3;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public abstract class FirearmItem extends SwordItem {
+public abstract class FirearmItem extends Item {
 
     public static final String AMMO_COUNT_TAG = "AmmoCount";
     public static final String RELOADING_TAG = "IsReloading";
@@ -45,8 +51,25 @@ public abstract class FirearmItem extends SwordItem {
     public static final String TREE_IMBUED_OWNER_TAG = "TreeImbuedOwner";
     public static boolean cycleReload = false;
 
-    public FirearmItem(Item.Properties $$3,float speed) {super(Tiers.IRON,1,speed,$$3);}
-    public FirearmItem(Item.Properties $$3) {super(Tiers.IRON, 0, -2, $$3);}
+    private final Multimap<Attribute, AttributeModifier> defaultModifiers;
+    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot equipmentSlot) {
+        return equipmentSlot == EquipmentSlot.MAINHAND ? this.defaultModifiers : super.getDefaultAttributeModifiers(equipmentSlot);
+    }
+
+    public FirearmItem(Item.Properties $$3,float speed) {
+        super($$3);
+
+        ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
+        builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Tool modifier", speed, AttributeModifier.Operation.ADDITION));
+        this.defaultModifiers = builder.build();
+    }
+    public FirearmItem(Item.Properties $$3) {
+        super($$3);
+        ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
+        builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Tool modifier", -2, AttributeModifier.Operation.ADDITION));
+        this.defaultModifiers = builder.build();
+
+    }
     // checks if there's ammo in inventory
     protected boolean hasAmmoInInventory(Player player) {
         if (canWhitesnakeUse() && WhitesnakeControlInventory.isActive(player)) {

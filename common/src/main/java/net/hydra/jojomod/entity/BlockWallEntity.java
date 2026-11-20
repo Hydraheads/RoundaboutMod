@@ -187,10 +187,10 @@ public class BlockWallEntity extends Entity {
                 return true;
             }
 
-            // GE tree redirection
+            // GE tree reflection
             if (!level().isClientSide() && isGoldExperienceTree && $$0.getEntity() instanceof LivingEntity LE) {
                 if (this.creator == null || LE != this.creator) {
-                    LE.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.STAND, this), damage);
+                    LE.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.STAND, this), damage / 0.5f);
                     if (this.level() instanceof ServerLevel serverLevel) {
                         serverLevel.sendParticles(
                                 ModParticles.VITAL_ESSENCE,

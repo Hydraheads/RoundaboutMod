@@ -9,12 +9,14 @@ import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
+import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
 import net.hydra.jojomod.stand.powers.PowersDiverDown;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.GEntityTags;
@@ -609,6 +611,11 @@ public abstract class GravityEntityMixin implements IGravityEntity {
                     && CD.getCrossNumber() != 7) {
                 roundabout$setGravityDirection(GravityAPI.getGravityDirection(CD.getUser()));
                 roundabout$currGravityStrength = GravityAPI.getGravityStrength(CD.getUser());
+            } else if(rdbt$this() instanceof BlackSabbathEntity BE && BE.getUser() != null){
+                if(((StandUser)BE.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb && !BE.getHunting()) {
+                    roundabout$setGravityDirection(GravityAPI.getGravityDirection(BE.getUser()));
+                    roundabout$currGravityStrength = GravityAPI.getGravityStrength(BE.getUser());
+                }
             } else if (rdbt$this() instanceof LivingEntity LE && LE.isSleeping()) {
                 roundabout$setGravityDirection(Direction.DOWN);
             } else {

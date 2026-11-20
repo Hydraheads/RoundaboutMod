@@ -357,6 +357,7 @@ public interface StandUser {
     /**Metallica*/
     void roundabout$setMetallicaInvis(int invis);
     int roundabout$getMetallicaInvis();
+
     Vec3 roundabout$calculateViewVectorButICanUseIt(float $$0, float $$1);
 
     /**Gravity Direction*/
