@@ -556,6 +556,36 @@
       "roundabout:ge_muda_3"
     ]
   },
+  "ge_menu": {
+    "subtitle": "sounds.roundabout.ge_menu",
+    "sounds": [
+      "roundabout:ge_menu"
+    ]
+  },
+  "ge_dna_grow": {
+    "subtitle": "sounds.roundabout.ge_dna_grow",
+    "sounds": [
+      "roundabout:ge_dna_grow"
+    ]
+  },
+  "ge_spikes": {
+    "subtitle": "sounds.roundabout.ge_spikes",
+    "sounds": [
+      "roundabout:ge_spikes"
+    ]
+  },
+  "ge_tree": {
+    "subtitle": "sounds.roundabout.ge_life",
+    "sounds": [
+      "roundabout:ge_tree"
+    ]
+  },
+  "ge_vine": {
+    "subtitle": "sounds.roundabout.ge_life",
+    "sounds": [
+      "roundabout:ge_vine"
+    ]
+  },
   "summon_king_crimson": {
     "subtitle": "sounds.roundabout.summon_king_crimson",
     "sounds": [

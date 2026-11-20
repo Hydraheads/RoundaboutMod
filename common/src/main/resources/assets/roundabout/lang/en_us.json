@@ -1448,6 +1448,9 @@
   "sounds.roundabout.ge_life_punch":  "Heavy Impact",
   "sounds.roundabout.ge_life_punch_windup":  "Windup",
   "sounds.roundabout.ge_life":  "Life Creation",
+  "sounds.roundabout.ge_menu":  "Selection",
+  "sounds.roundabout.ge_dna_grow":  "Lifeform Thumps",
+  "sounds.roundabout.ge_spikes":  "Brambles Snap",
 
   "sounds.roundabout.vampire_dive":  "Whoosh",
   "sounds.roundabout.punch_sfx1":  "Air Cracks",

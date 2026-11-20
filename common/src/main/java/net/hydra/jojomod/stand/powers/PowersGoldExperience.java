@@ -2401,7 +2401,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 }
             }
 
-            playSoundIfPossible(level, null, base, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.9F, 1F);
+            playSoundIfPossible(level, null, base, ModSounds.GOLD_EXPERIENCE_TREE_EVENT, SoundSource.PLAYERS, 0.9F, 1F);
             if (fromSkill) {
                 addEXP(5);
                 this.setCooldown(PowerIndex.GENERAL_2, getTreeCooldown());
@@ -2988,7 +2988,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
         if (createdAny) {
             this.setCooldown(PowerIndex.SKILL_3, getVineCooldown());
             playSoundIfPossible(level, null, this.self.blockPosition(),
-                    ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.85F, 1.0F);
+                    ModSounds.GOLD_EXPERIENCE_VINE_EVENT, SoundSource.PLAYERS, 0.9F, 1.0F);
             addEXP(5);
         }
 
