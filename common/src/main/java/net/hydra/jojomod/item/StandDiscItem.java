@@ -5,6 +5,7 @@ import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersGER;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.event.powers.whitesnake.disc.DiscItemData;
 import net.hydra.jojomod.util.S2CPacketUtil;
@@ -94,6 +95,13 @@ public class StandDiscItem extends Item {
         } else {
             $$3 = $$1.getItemBySlot(EquipmentSlot.OFFHAND);
         }
+        if ($$1 != null && ((StandUser)$$1).roundabout$getStandPowers() instanceof PowersGER GER) {
+            if (GER.hasNormalGEDisc()) {
+                GER.goBackToGE();
+                //return InteractionResultHolder.fail($$3);
+            }
+        }
+
         if (!$$0.isClientSide && $$1 instanceof ServerPlayer sp) {
             if (!$$3.isEmpty() && $$3.getItem() instanceof StandDiscItem) {
                 discNearby($$1,50,sp.getId());

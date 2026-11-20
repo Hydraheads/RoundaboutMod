@@ -516,4 +516,12 @@ public class S2CPacketUtil {
             );
         }
     }
+    public static void syncKqInflaton(Player player, int targetID, int inflate) {
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.SyncKqInflaton.value,
+                    targetID, inflate
+            );
+        }
+    }
 }

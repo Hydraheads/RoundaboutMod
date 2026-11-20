@@ -14,6 +14,7 @@ import net.hydra.jojomod.entity.gold_experience.*;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.GoldExperienceEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
@@ -143,34 +144,34 @@ public class PowersGoldExperience extends BlockGrabPreset {
      */
 
     private final int getDNACooldown() {
-        return 300;
+        return geConfig().goldExperienceCooldownDNA;
     };
     private final int getAnimalCreationCooldown() {
-        return 400;
+        return geConfig().goldExperienceCooldownAnimal;
     };
     private final int getHealCooldown() {
-        return 200;
+        return geConfig().goldExperienceCooldownHeal;
     };
     private final int getLifeSensorCooldown() {
-        return 60;
+        return geConfig().goldExperienceCooldownLifeSensor;
     };
     private final int getItemImbueCooldown() {
-        return 600;
+        return geConfig().goldExperienceCooldownItemImbue;
     };
     private final int getLifePunchCooldown() {
-        return 800;
+        return geConfig().goldExperienceCooldownLifePunch;
     };
     private final int getVineCooldown() {
-        return 60;
+        return geConfig().goldExperienceCooldownVine;
     };
     private final int getTreeCooldown() {
-        return 300;
+        return geConfig().goldExperienceCooldownTree;
     };
     private final int getBrambleCooldown() {
-        return 240;
+        return geConfig().goldExperienceCooldownBramble;
     };
     private final int getBushCooldown() {
-        return 320;
+        return geConfig().goldExperienceCooldownBush;
     };
 
     // for damage
@@ -336,12 +337,16 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public static List<Item> getDisguiseOptions() {
         return MainUtil.GOLD_EXPERIENCE_DISGUISE_ITEMS;
     }
+    private record KnifeSpawnData(KnifeEntity knife, int delayTicks) {}
+    private final List<KnifeSpawnData> pendingKnives = new ArrayList<>();
 
     // for life sensor
     public boolean lifeSensorActive = false;
     private int sensedImbueEntityId = -1;
-    private static final double LIFE_SENSOR_NORMAL_RANGE = 15.0;
-    private static final double LIFE_SENSOR_IMBUE_RANGE = 150.0;
+
+    // for sounds
+    private static final byte BARRAGE_NOISE = 20;
+    private static final byte LAST_HIT_NOISE = 21;
 
     // basic stand registry stuff
     public PowersGoldExperience(LivingEntity self) {super(self);}
@@ -550,6 +555,19 @@ public class PowersGoldExperience extends BlockGrabPreset {
             resolveRenderTicks--;
         }
         if (!this.self.level().isClientSide()) {
+            // 1 second knife animal fire delay
+            if (!this.pendingKnives.isEmpty()) {
+                Level level = this.getSelf().level();
+                Iterator<KnifeSpawnData> it = this.pendingKnives.iterator();
+                while (it.hasNext()) {
+                    KnifeSpawnData data = it.next();
+                    if (data.delayTicks() <= 0) {
+                        level.addFreshEntity(data.knife());
+                        it.remove();
+                    }
+                }
+                this.pendingKnives.replaceAll(d -> new KnifeSpawnData(d.knife(), d.delayTicks() - 1));
+            }
             // bramble bush expanding ring
             if (this.bushWaveOrigin != null && this.self.level() instanceof ServerLevel serverLevel) {
                 this.bushWaveTick++;
@@ -591,10 +609,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 } else if (this.self.tickCount % 5 == 0 && this.self instanceof ServerPlayer sp) {
                     int foundId = -1;
                     if (this.activeImbuedItemId != null) {
-                        AABB searchBox = this.self.getBoundingBox().inflate(LIFE_SENSOR_IMBUE_RANGE);
+                        AABB searchBox = this.self.getBoundingBox().inflate(geConfig().lifeSenseImbueRange);
                         for (Entity target : this.self.level().getEntities(this.self, searchBox,
                                 e -> e != this.self && !PowerTypes.isInADifferentExistence(e, this.self))) {
-                            if (target.distanceToSqr(this.self) <= (LIFE_SENSOR_IMBUE_RANGE * LIFE_SENSOR_IMBUE_RANGE)
+                            if (target.distanceToSqr(this.self) <= (geConfig().lifeSenseImbueRange * geConfig().lifeSenseImbueRange)
                                     && isHoldingImbuedItem(target)) {
                                 foundId = target.getId();
                                 break;
@@ -1059,6 +1077,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
             return;
         } else if (sourceStack.is(ModItems.KNIFE_BUNDLE)) {
             Vec3 baseBoost = getRevertBoost(level, pos, entity, owner, 0.75);
+            PowersGoldExperience gePowers = ((StandUser) owner).roundabout$getStandPowers() instanceof PowersGoldExperience ge ? ge : null;
+
             for (int i = 0; i < 4; i++) {
                 KnifeEntity knife = new KnifeEntity(level, owner, sourceStack.copy());
                 knife.setPos(pos);
@@ -1067,7 +1087,13 @@ public class PowersGoldExperience extends BlockGrabPreset {
                         (level.random.nextDouble() - 0.5) * 0.08,
                         (level.random.nextDouble() - 0.5) * 0.14
                 ));
-                level.addFreshEntity(knife);
+                if (gePowers != null) {
+                    // 1 second delay
+                    gePowers.pendingKnives.add(new KnifeSpawnData(knife, 20));
+                } else {
+                    // fallback
+                    level.addFreshEntity(knife);
+                }
             }
             return;
         } else if (sourceStack.is(ModItems.GASOLINE_CAN)) {
@@ -1728,14 +1754,14 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 double distSq = ent.distanceToSqr(this.self);
 
                 if (ent.getId() == this.sensedImbueEntityId) {
-                    return distSq <= (LIFE_SENSOR_IMBUE_RANGE * LIFE_SENSOR_IMBUE_RANGE);
+                    return distSq <= (geConfig().lifeSenseImbueRange * geConfig().lifeSenseImbueRange);
                 }
 
                 if (ent instanceof LivingEntity living
                         && !(ent instanceof StandEntity)
                         && !(ent instanceof ArmorStand)
                         && living.isAlive()) {
-                    return distSq <= (LIFE_SENSOR_NORMAL_RANGE * LIFE_SENSOR_NORMAL_RANGE);
+                    return distSq <= (geConfig().lifeSenseRange * geConfig().lifeSenseRange);
                 }
             }
         }
@@ -1755,7 +1781,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // item imbue start
 
     private void tryOpenItemImbue() {
-        if(!this.onCooldown(PowerIndex.SKILL_4_SNEAK) && canExecuteMoveWithLevel(getItemImbueLevel())) {
+        if(!this.onCooldown(PowerIndex.SKILL_4_SNEAK) && canExecuteMoveWithLevel(getItemImbueLevel()) && isHoldingItem()) {
             ClientUtil.openItemImbue();
         }
     }
@@ -2036,7 +2062,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
         BlockHitResult blockHit = this.getRayBlockOutline(this.self, punchRange);
 
         // entity vs block check
-        if ((targetInCrosshair == null || targetInCrosshair instanceof GEThornEntity) && blockHit.getType() == HitResult.Type.BLOCK) {
+        if (this.activePower != PowerIndex.BARRAGE_2 && (targetInCrosshair == null || targetInCrosshair instanceof GEThornEntity) && blockHit.getType() == HitResult.Type.BLOCK) {
             this.isGroundBarraging = true;
 
             if (this.self instanceof Player) {
@@ -2109,14 +2135,16 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public boolean canUseStandArrow() { return canUseRequiem(); }
 
+    @Override public boolean shouldStandArrowShake() { return isPossibleToRequiem() && canUseRequiem(); }
+
     public boolean canUseRequiem() {
-        return canExecuteMoveWithLevel(getMaxLevel()) && Objects.nonNull(getStandEntity(this.self));
+        return canExecuteMoveWithLevel(getMaxLevel());
     }
     public boolean isPossibleToRequiem() {
         return resolvePoints >= getNeededResolvePoints();
     }
 
-    private float resolvePoints = 0F;
+    protected float resolvePoints = 0F;
 
     public float getResolvePoints() { return resolvePoints; }
     public float getNeededResolvePoints() { return 300.0F; }
@@ -2125,6 +2153,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public boolean onStandArrowUse() {
         if (this.self instanceof Player PE && activePower == PowerIndex.NONE) {
             if (isPossibleToRequiem()) {
+                ((StandUser) self).roundabout$summonStand(self.level(), true, true);
                 sendParticlesIfPossible(self.level(),ParticleTypes.FIREWORK, PE.getX(),
                         PE.getY() + PE.getEyeHeight(), PE.getZ(),
                         20, 0, 0, 0, 0.4);
@@ -2204,6 +2233,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     private void setRequiem() {
         this.setAttackTimeDuring(0);
         setActivePower(PowerIndex.SPECIAL);
+        syncActivePower();
 
         this.animateStand(StandEntity.HURT_BY_BARRAGE);
         this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
@@ -2226,6 +2256,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             if (((StandUser)self).roundabout$getStandPowers() instanceof PowersGER GER) {
                 GER.idlePos = idlePos;
                 GER.standSkin = standSkin;
+                GER.resolvePoints = resolvePoints;
 
                 GER.setOriginalDisc(savedDisc);
             }
@@ -2313,7 +2344,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 : centerPos;
         Direction growthDirection = Direction.UP;
 
-        int maxHeight = 7;
+        int maxHeight = geConfig().treeMaxHeight;
         int actualHeight = 0;
 
         for (int y = 0; y < maxHeight; y++) {
@@ -2397,7 +2428,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 }
             }
 
-            playSoundIfPossible(level, null, base, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.9F, 1F);
+            playSoundIfPossible(level, null, base, ModSounds.GOLD_EXPERIENCE_TREE_EVENT, SoundSource.PLAYERS, 0.9F, 1F);
             if (fromSkill) {
                 addEXP(5);
                 this.setCooldown(PowerIndex.GENERAL_2, getTreeCooldown());
@@ -2682,6 +2713,15 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
             EntityType<?> typeToSpawn = getAnimalEntityType(this.animalType);
 
+            int cooldown = getAnimalCreationCooldown();
+
+            if(animalType == AnimalTypes.SNAKE.id || animalType == AnimalTypes.PIRAHNA.id || animalType == AnimalTypes.BAT.id) {
+                cooldown += 200;
+            }
+            if(animalType == AnimalTypes.FROG.id || animalType == AnimalTypes.BEE.id) {
+                cooldown += 100;
+            }
+
             if (typeToSpawn != null) {
                 Vec3 spawnPos = this.self.position().add(this.self.getLookAngle().scale(1.2));
                 spawnPos = new Vec3(spawnPos.x, spawnPos.y + 1.0, spawnPos.z);
@@ -2690,7 +2730,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 ItemStack sourceStack = (isMob) ? ItemStack.EMPTY : handItem;
 
                 if (spawnLifeform(typeToSpawn, spawnPos, sourceStack)) {
-                    setCooldown(PowerIndex.SKILL_2, getAnimalCreationCooldown());
+                    setCooldown(PowerIndex.SKILL_2, cooldown);
                     if (!isMob || !handItem.isEmpty()) {
                         handItem.shrink(1);
                     }
@@ -2782,7 +2822,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             double startY = this.self.getY();
             double startZ = this.self.getZ();
 
-            int spikeCount = 8;
+            int spikeCount = geConfig().brambleAmount;
             double spacing = 1.3D;
 
             // Clear any old queued spikes before adding new ones
@@ -2915,12 +2955,12 @@ public class PowersGoldExperience extends BlockGrabPreset {
                         ? this.self.level().getEntity(this.healTargetId)
                         : MainUtil.getTargetEntity(this.getSelf(), 5f);
                 if (lockedTarget instanceof LivingEntity livingHeal && livingHeal.isAlive()) {
-                    livingHeal.heal(1f);
+                    livingHeal.heal(geConfig().initialHealBurst);
                     livingHeal.addEffect(new MobEffectInstance(ModEffects.RECONSTRUCTION, 400, 0, false, true, true));
                     playSoundIfPossible(this.self.level(), livingHeal, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
                 }
             } else {
-                this.self.heal(1f);
+                this.self.heal(geConfig().initialHealBurst);
                 this.self.addEffect(new MobEffectInstance(ModEffects.RECONSTRUCTION, 400, 0, false, true, true));
                 playSoundIfPossible(this.self.level(), this.self, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
             }
@@ -2975,7 +3015,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
         if (createdAny) {
             this.setCooldown(PowerIndex.SKILL_3, getVineCooldown());
             playSoundIfPossible(level, null, this.self.blockPosition(),
-                    ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 0.85F, 1.0F);
+                    ModSounds.GOLD_EXPERIENCE_VINE_EVENT, SoundSource.PLAYERS, 0.9F, 1.0F);
             addEXP(5);
         }
 
@@ -3053,7 +3093,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             this.bushWaveOrigin = new Vec3(origin.getX() + 0.5, origin.getY(), origin.getZ() + 0.5);
             this.bushWaveTick = 0;
 
-            int radius = 7;
+            int radius = 4;
             double radiusSq = radius * radius;
             for (BlockPos columnPos : BlockPos.betweenClosed(
                     origin.offset(-radius, 0, -radius),
@@ -3294,6 +3334,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 if (!this.self.level().isClientSide()) {
                     playSoundIfPossible(self.level(), null, this.self.blockPosition(), sound, SoundSource.PLAYERS, 0.95F, 1.1F);
                 }
+                if (this.getSelf() instanceof Player serverPlayer && !this.getSelf().level().isClientSide()) {
+                    S2CPacketUtil.sendCooldownSyncPacket((ServerPlayer) serverPlayer, PowerIndex.GENERAL_3, getLifePunchCooldown() + 200);
+                }
+                this.setCooldown(PowerIndex.GENERAL_3, getLifePunchCooldown() + 200);
+                return;
             }
             // all of this is for the block version of life punch
             else {
@@ -3589,6 +3634,19 @@ public class PowersGoldExperience extends BlockGrabPreset {
         return super.cancelSprintJump();
     }
 
+    @Override
+    public boolean cancelJump(){
+        return getActivePower() == PowerIndex.SPECIAL;
+    }
+
+    public boolean cancelSprintParticles(){
+        return getActivePower() == PowerIndex.SPECIAL;
+    }
+    /**Cancel all sprinting*/
+    public boolean cancelSprint(){
+        return getActivePower() == PowerIndex.SPECIAL;
+    }
+
     // end of move methods
 
     // levels start
@@ -3634,11 +3692,23 @@ public class PowersGoldExperience extends BlockGrabPreset {
     protected Byte getSummonSound() {return SoundIndex.SUMMON_SOUND;}
 
     @Override
+    public Byte getLastHitSound(){
+
+        double rand = Math.random();
+        byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        return LAST_HIT_NOISE;
+    }
+
+    @Override
     public SoundEvent getSoundFromByte(byte soundChoice) {
         if (soundChoice == SoundIndex.SUMMON_SOUND) {
             return ModSounds.SUMMON_GOLD_EXPERIENCE_EVENT;
         } else if (soundChoice == IMPALE_NOISE || soundChoice == SoundIndex.ALT_CHARGE_SOUND_1) {
             return ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_WINDUP_EVENT;
+        } else if (soundChoice == BARRAGE_NOISE) {
+            return ModSounds.GOLD_EXPERIENCE_MUDA_RUSH_EVENT;
+        } else if (soundChoice == LAST_HIT_NOISE) {
+            return ModSounds.GOLD_EXPERIENCE_MUDA_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
@@ -3674,6 +3744,13 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 }
             }
         }
+    }
+
+    @Override
+    public byte chooseBarrageSound(){
+        double rand = Math.random();
+        byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        return BARRAGE_NOISE;
     }
 
     @Override

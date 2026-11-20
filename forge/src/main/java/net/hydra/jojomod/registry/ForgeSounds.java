@@ -1178,6 +1178,20 @@ public class ForgeSounds {
             register(ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_WINDUP, ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_WINDUP_ID);
     public static final RegistryObject<SoundEvent> GOLD_EXPERIENCE_LIFE_PUNCH =
             register(ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH, ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_ID);
+    public static final RegistryObject<SoundEvent> GOLD_EXPERIENCE_MUDA_RUSH =
+            register(ModSounds.GOLD_EXPERIENCE_MUDA_RUSH, ModSounds.GOLD_EXPERIENCE_MUDA_RUSH_ID);
+    public static final RegistryObject<SoundEvent> GOLD_EXPERIENCE_MUDA =
+            register(ModSounds.GOLD_EXPERIENCE_MUDA, ModSounds.GOLD_EXPERIENCE_MUDA_ID);
+    public static final RegistryObject<SoundEvent> GOLD_EXPERIENCE_DNA_GROW =
+            register(ModSounds.GOLD_EXPERIENCE_DNA_GROW, ModSounds.GOLD_EXPERIENCE_DNA_GROW_ID);
+    public static final RegistryObject<SoundEvent> GOLD_EXPERIENCE_MENU =
+            register(ModSounds.GOLD_EXPERIENCE_MENU, ModSounds.GOLD_EXPERIENCE_MENU_ID);
+    public static final RegistryObject<SoundEvent> GOLD_EXPERIENCE_SPIKES =
+            register(ModSounds.GOLD_EXPERIENCE_SPIKES, ModSounds.GOLD_EXPERIENCE_SPIKES_ID);
+    public static final RegistryObject<SoundEvent> GOLD_EXPERIENCE_TREE =
+            register(ModSounds.GOLD_EXPERIENCE_TREE, ModSounds.GOLD_EXPERIENCE_TREE_ID);
+    public static final RegistryObject<SoundEvent> GOLD_EXPERIENCE_VINE =
+            register(ModSounds.GOLD_EXPERIENCE_VINE, ModSounds.GOLD_EXPERIENCE_VINE_ID);
 
     public static final RegistryObject<SoundEvent> GE_REQUIEM_ARROW =
             register(ModSounds.GE_REQUIEM_ARROW, ModSounds.GE_REQUIEM_ARROW_ID);

@@ -2965,7 +2965,9 @@
 
   "leveling.roundabout.levelup.memory": "Развитие стенда: новый слот памяти!",
   "leveling.roundabout.levelup.memory_and_ability": "Развитие стенда: новая способность и слот памяти!",
-  "leveling.roundabout.levelup.max.memory": "Макс. развитие: новый слот памяти!",
+  "leveling.roundabout.levelup.max.memory": "Максимальное развитие: новый слот памяти!",
+  "leveling.roundabout.requiem_activated": "Это... Реквием.",
+  "leveling.roundabout.requiem_failed": "Ты всё ещё недостоин...",
 
   "leveling.roundabout.levelup.vampire": "Вы стали сильнее, разблокировано очко навыков!",
 
@@ -3727,7 +3729,7 @@
   "roundabout.gold_experience_animal.bat": "Летучая мышь",
   "roundabout.gold_experience_animal.bat.desc": "Находит ближайшую сущность и хаотично летает прямо перед её лицом, чтобы спровоцировать её на удар и активировать отражение урона.",
   "roundabout.gold_experience_animal.fish": "Рыба",
-  "roundabout.gold_experience_animal.fish.desc": "Плывёт по прямой линии от места своего появления. Вы можете взаимодействовать с рыбой, чтобы она везла вас на себе.",
+  "roundabout.gold_experience_animal.fish.desc": "Плывёт по прямой в направлении вашего взгляда при призыве. С рыбой можно взаимодействовать, чтобы она вас везла.",
   "roundabout.gold_experience_animal.pirahna": "Пиранья",
   "roundabout.gold_experience_animal.pirahna.desc": "Устремляется к последнему врагу, которого вы ударили или который ударил вас, и кусает его, вызывая кровотечение.",
   "roundabout.gold_experience_animal.snake": "Змея",
@@ -4503,14 +4505,17 @@
   "config.roundabout.silverChariotAfterimageOpacity.desc": "Opacity of the rendered afterimages.",
   "config.roundabout.silverChariotShouldRenderAfterimagesWhileUserInFirstPerson.name": "Toggle first person afterimages",
   "config.roundabout.silverChariotShouldRenderAfterimagesWhileUserInFirstPerson.desc": "Toggles if Silver Chariot's user should see afterimages in first person.",
-  "config.roundabout.silverChariotArmourShedStandSealTime.name": "Armor Rec. Seal Time",
+  "config.roundabout.silverChariotArmourShedStandSealTime.name": "Armor Resummon Seal Time",
   "config.roundabout.silverChariotArmourShedStandSealTime.desc": "How long Silver Chariot is sealed after desummoning your stand while the stand's armour is off.",
-
   "config.roundabout.silverChariotSelfCarryModeMaxHoverCharge.name": "Carry Max Hover Charge",
   "config.roundabout.silverChariotSelfCarryModeMaxHoverCharge.desc": "Duration of hovering in self carry mode.",
-
   "config.roundabout.silverChariotMinimumCooldownCrouchAttack.name": "Minimum Cooldown Crouch Attack",
   "config.roundabout.silverChariotMinimumCooldownCrouchAttack.desc": "Minimum cooldown of the item swipe attack.",
+  "config.roundabout.silverChariotBonusPlayerDMGArmSummon.name": "Bonus damage from Arm Summon against players",
+  "config.roundabout.silverChariotBonusPlayerDMGArmSummon.desc": "This % melee damage increase from Arm Summon against players.",
+  "config.roundabout.silverChariotBonusMobDMGArmSummon.name": "Bonus damage from Arm Summon against mobs",
+  "config.roundabout.silverChariotBonusMobDMGArmSummon.desc": "This % melee damage increase from Arm Summon against players.",
+
   "config.roundabout.enableCatchTheRainbow.name": "Enable Catch The Rainbow",
   "config.roundabout.enableCatchTheRainbow.desc": "Enable Catch The Rainbow",
 

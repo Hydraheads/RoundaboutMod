@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
@@ -372,6 +373,9 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                 return;
             }
         }
+
+        self.dismountTo(self.getX(), self.getY(), self.getZ());
+        ((ILivingEntityAccess) self).roundabout$setSharedFlag(7, false);
 
         invincibleState = invincible;
         if (invincible) {
