@@ -7378,7 +7378,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public void roundabout$setGERooted(boolean spring) {
         if (!level().isClientSide()) {
-            roundabout$GERootTicks = spring ? 100 : 0;
+            roundabout$GERootTicks = spring ? 60 : 0;
         }
         this.entityData.set(ROUNDABOUT$GE_TREE_ROOT, spring);
     }

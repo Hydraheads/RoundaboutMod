@@ -1758,7 +1758,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // item imbue start
 
     private void tryOpenItemImbue() {
-        if(!this.onCooldown(PowerIndex.SKILL_4_SNEAK) && canExecuteMoveWithLevel(getItemImbueLevel())) {
+        if(!this.onCooldown(PowerIndex.SKILL_4_SNEAK) && canExecuteMoveWithLevel(getItemImbueLevel()) && isHoldingItem()) {
             ClientUtil.openItemImbue();
         }
     }
@@ -3066,7 +3066,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             this.bushWaveOrigin = new Vec3(origin.getX() + 0.5, origin.getY(), origin.getZ() + 0.5);
             this.bushWaveTick = 0;
 
-            int radius = 7;
+            int radius = 4;
             double radiusSq = radius * radius;
             for (BlockPos columnPos : BlockPos.betweenClosed(
                     origin.offset(-radius, 0, -radius),
