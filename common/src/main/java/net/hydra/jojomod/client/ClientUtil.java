@@ -1120,6 +1120,21 @@ public class ClientUtil {
                     }
                 }
 
+                else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.KnAddItemContainer.value)) {
+                    BlockPos pos = (BlockPos) vargs[0];
+                    BlockPos pos2 = (BlockPos) vargs[1];
+                    if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingNothing pkn) {
+                        pkn.addItemBlockPos(pos, pos2);
+                    }
+                }
+
+                else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.KnRemoveItemContainer.value)) {
+                    BlockPos pos = (BlockPos) vargs[0];
+                    if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingNothing pkn) {
+                        pkn.removeItemBlockPos(pos);
+                    }
+                }
+
                 // theoretical deregister dynamic worlds packet
                 // String name = buf.readUtf();
                 //        ResourceKey<Level> LEVEL_KEY = ResourceKey.create(Registries.DIMENSION, Roundabout.location(name));
@@ -1271,6 +1286,22 @@ public class ClientUtil {
             StandUser user = ((StandUser) player);
             if (user.roundabout$getStandPowers() instanceof PowersKingCrimson ckb){
                 ckb.disengageTargetInt = data;
+            }
+        } else if (context == PacketDataIndex.S2C_KN_ADD_HIGHLIGHT_ENTITY) {
+            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingNothing kn) {
+                kn.addItemEntity(data);
+            }
+        } else if (context == PacketDataIndex.S2C_KN_REMOVE_HIGHLIGHT_ENTITY) {
+            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingNothing kn) {
+                kn.removeItemEntity(data);
+            }
+        } else if (context == PacketDataIndex.S2C_KN_SYNC_FORM_PREDICT_BLOCK) {
+            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingNothing kn) {
+                kn.setMemorizedScent(BuiltInRegistries.BLOCK.byId(data));
+            }
+        } else if (context == PacketDataIndex.S2C_KN_SYNC_FORM_PREDICT_ENTITY) {
+            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingNothing kn) {
+                kn.setMemorizedScent(BuiltInRegistries.ENTITY_TYPE.byId(data));
             }
         }
     }

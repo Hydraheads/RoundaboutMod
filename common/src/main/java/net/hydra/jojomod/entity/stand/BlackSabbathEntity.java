@@ -1985,8 +1985,8 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                     $$7.shootFromRotation(bs, X, Y, -7, 0.6F, 1.0F);
                     bs.level().addFreshEntity($$7);
                     bs.level().playSound(null, $$7, SoundEvents.BUCKET_EMPTY, SoundSource.PLAYERS, 0.85F, 1.0F);
-                } else if(item.getItem() instanceof FleshBucketItem fb){
-                    FleshPileEntity $$7 = new FleshPileEntity(bs, bs.level(),fb.getMaxDamage()-item.getDamageValue());
+                } else if(item.getItem() instanceof FleshBucketItem){
+                    FleshPileEntity $$7 = new FleshPileEntity(bs, bs.level(),FleshBucketItem.BASE_CAPACITY-FleshBucketItem.getFleshMissing(item));
                     $$7.shootFromRotation(bs, X, Y, -7, 0.6F, 1.0F);
                     bs.level().addFreshEntity($$7);
                     bs.level().playSound(null, $$7, SoundEvents.BUCKET_EMPTY, SoundSource.PLAYERS, 0.85F, 1.0F);

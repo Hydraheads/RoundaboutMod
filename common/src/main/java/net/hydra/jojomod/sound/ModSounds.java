@@ -1440,6 +1440,16 @@ public class ModSounds {
     public static final String CINDERELLA_VISAGE_CREATION = "cinderella_visage_creation";
     public static final ResourceLocation CINDERELLA_VISAGE_CREATION_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CINDERELLA_VISAGE_CREATION);
     public static SoundEvent CINDERELLA_VISAGE_CREATION_EVENT = SoundEvent.createVariableRangeEvent(CINDERELLA_VISAGE_CREATION_ID);
+    
+    public static final String KING_NOTHING_SUMMON = "king_nothing_summon";
+    public static final ResourceLocation KING_NOTHING_SUMMON_ID = Roundabout.location(KING_NOTHING_SUMMON);
+    public static SoundEvent KING_NOTHING_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(KING_NOTHING_SUMMON_ID);
+    public static final String KING_NOTHING_PHASE = "king_nothing_phase";
+    public static final ResourceLocation KING_NOTHING_PHASE_ID = Roundabout.location(KING_NOTHING_PHASE);
+    public static SoundEvent KING_NOTHING_PHASE_EVENT = SoundEvent.createVariableRangeEvent(KING_NOTHING_PHASE_ID);
+    public static final String KING_NOTHING_DESUMMON = "king_nothing_desummon";
+    public static final ResourceLocation KING_NOTHING_DESUMMON_ID = Roundabout.location(KING_NOTHING_DESUMMON);
+    public static SoundEvent KING_NOTHING_DESUMMON_EVENT = SoundEvent.createVariableRangeEvent(KING_NOTHING_DESUMMON_ID);
 
 
     public static final String PLANET_WAVES_SUMMON = "planet_waves_summon";
@@ -2907,6 +2917,12 @@ public class ModSounds {
     public static final String CTR_RAIN_STEP_3 = "ctr_rain_step_3";
     public static final ResourceLocation CTR_RAIN_STEP_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CTR_RAIN_STEP_3);
     public static SoundEvent CTR_RAIN_STEP_3_EVENT = SoundEvent.createVariableRangeEvent(CTR_RAIN_STEP_3_ID);
+    public static final String CTR_BARRIER = "ctr_barrier";
+    public static final ResourceLocation CTR_BARRIER_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CTR_BARRIER);
+    public static SoundEvent CTR_BARRIER_EVENT = SoundEvent.createVariableRangeEvent(CTR_BARRIER_ID);
+    public static final String CTR_FULL_BODY_DODGE = "ctr_full_body_dodge";
+    public static final ResourceLocation CTR_FULL_BODY_DODGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CTR_FULL_BODY_DODGE);
+    public static SoundEvent CTR_FULL_BODY_DODGE_EVENT = SoundEvent.createVariableRangeEvent(CTR_FULL_BODY_DODGE_ID);
 
     public static final String ZOMBIEHORSE_STITCHING = "zombiehorse_stitching";
     public static final ResourceLocation ZOMBIEHORSE_STITCHING_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ZOMBIEHORSE_STITCHING);

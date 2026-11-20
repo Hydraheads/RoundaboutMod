@@ -9,6 +9,7 @@ import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersGoldExperience;
 import net.hydra.jojomod.stand.powers.PowersWhitesnake;
@@ -218,6 +219,11 @@ public abstract class FirearmItem extends Item {
     // firing logic
     public void fireBullet(Level level, Player player, InteractionHand hand) {
         if (!level.isClientSide && player.getCooldowns().isOnCooldown(this)) return;
+        if (ClientNetworking.getAppropriateConfig().timeStopSettings.timestopCancelsGuns &&
+                ((TimeStop) player.level()).inTimeStopRange(player)
+        ){
+            return;
+        }
 
         ItemStack itemStack = player.getItemInHand(hand);
         if (getAmmo(itemStack) > 0) {

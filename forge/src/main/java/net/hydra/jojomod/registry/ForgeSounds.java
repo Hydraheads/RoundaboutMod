@@ -772,6 +772,13 @@ public class ForgeSounds {
     public static final RegistryObject<SoundEvent> CINDERELLA_VISAGE_CREATION_EVENT =
             register(ModSounds.CINDERELLA_VISAGE_CREATION, ModSounds.CINDERELLA_VISAGE_CREATION_ID);
 
+    public static final RegistryObject<SoundEvent> KING_NOTHING_SUMMON_EVENT =
+            register(ModSounds.KING_NOTHING_SUMMON, ModSounds.KING_NOTHING_SUMMON_ID);
+    public static final RegistryObject<SoundEvent> KING_NOTHING_PHASE_EVENT =
+            register(ModSounds.KING_NOTHING_PHASE, ModSounds.KING_NOTHING_PHASE_ID);
+    public static final RegistryObject<SoundEvent> KING_NOTHING_DESUMMON_EVENT =
+            register(ModSounds.KING_NOTHING_DESUMMON, ModSounds.KING_NOTHING_DESUMMON_ID);
+
     public static final RegistryObject<SoundEvent> RATT_SUMMON_EVENT =
             register(ModSounds.RATT_SUMMON, ModSounds.RATT_SUMMON_ID);
     public static final RegistryObject<SoundEvent> RATT_PLACE_EVENT =
@@ -1727,6 +1734,10 @@ public class ForgeSounds {
             register(ModSounds.CTR_RAIN_STEP_2, ModSounds.CTR_RAIN_STEP_2_ID);
     public static final RegistryObject<SoundEvent> CTR_RAIN_STEP_3_EVENT =
             register(ModSounds.CTR_RAIN_STEP_3, ModSounds.CTR_RAIN_STEP_3_ID);
+    public static final RegistryObject<SoundEvent> CTR_BARRIER_EVENT =
+            register(ModSounds.CTR_BARRIER, ModSounds.CTR_BARRIER_ID);
+    public static final RegistryObject<SoundEvent> CTR_FULL_BODY_DODGE_EVENT =
+            register(ModSounds.CTR_FULL_BODY_DODGE, ModSounds.CTR_FULL_BODY_DODGE_ID);
 
     public static final RegistryObject<SoundEvent> ZOMBIEHORSE_STITCHING_EVENT =
             register(ModSounds.ZOMBIEHORSE_STITCHING, ModSounds.ZOMBIEHORSE_STITCHING_ID);

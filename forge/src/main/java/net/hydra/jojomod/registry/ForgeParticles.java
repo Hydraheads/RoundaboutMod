@@ -2,6 +2,7 @@ package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.particles.HazeColorParticleOptions;
+import net.hydra.jojomod.particles.PuzzleColorParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.registries.DeferredRegister;
@@ -361,6 +362,14 @@ public class ForgeParticles {
                 }
             });
 
+    public static final RegistryObject<ParticleType<PuzzleColorParticleOptions>> PUZZLE_PARTICLE =
+            PARTICLES.register("kn_piece", () -> new ParticleType<>(false, PuzzleColorParticleOptions.DESERIALIZER) {
+                @Override
+                public com.mojang.serialization.Codec<PuzzleColorParticleOptions> codec() {
+                    return PuzzleColorParticleOptions.codec(this);
+                }
+            });
+
     public static final RegistryObject<SimpleParticleType> DISTORTION_SMOKE = PARTICLES.register(
             "distortion_smoke",
             () -> new SimpleParticleType(true)
@@ -448,4 +457,9 @@ public class ForgeParticles {
             () -> new SimpleParticleType(true));
     public static final RegistryObject<SimpleParticleType> GE_WAVE = PARTICLES.register("ge_wave",
             () -> new SimpleParticleType(true));
+
+    public static final RegistryObject<SimpleParticleType> RAIN_BUBBLE = PARTICLES.register(
+            "rain_bubble",
+            () -> new SimpleParticleType(true)
+    );
 }

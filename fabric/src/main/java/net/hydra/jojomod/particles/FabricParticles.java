@@ -1,9 +1,11 @@
 package net.hydra.jojomod.particles;
 
+import com.mojang.serialization.Codec;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.ModParticles;
 import net.minecraft.core.Registry;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 
@@ -108,23 +110,31 @@ public class FabricParticles {
     public static final SimpleParticleType PW_BLUE_BLASTWAVE_EXPLOSION = FabricParticleTypes.simple();
     public static final SimpleParticleType PW_BLUE_MUSHROOM_EXPLOSION = FabricParticleTypes.simple();
 
-    public static final net.minecraft.core.particles.ParticleType<HazeColorParticleOptions> PURPLE_HAZE_SMOKE =
+    public static final ParticleType<HazeColorParticleOptions> PURPLE_HAZE_SMOKE =
             new net.minecraft.core.particles.ParticleType<>(false, HazeColorParticleOptions.DESERIALIZER) {
                 @Override
-                public com.mojang.serialization.Codec<HazeColorParticleOptions> codec() {
+                public Codec<HazeColorParticleOptions> codec() {
                     return HazeColorParticleOptions.codec(this);
                 }
             };
     public static final SimpleParticleType DISTORTION_SMOKE = FabricParticleTypes.simple();
-    public static final net.minecraft.core.particles.ParticleType<HazeColorParticleOptions> PURPLE_HAZE_BLASTWAVE =
+    public static final ParticleType<HazeColorParticleOptions> PURPLE_HAZE_BLASTWAVE =
             new net.minecraft.core.particles.ParticleType<>(false, HazeColorParticleOptions.DESERIALIZER) {
                 @Override
-                public com.mojang.serialization.Codec<HazeColorParticleOptions> codec() {
+                public Codec<HazeColorParticleOptions> codec() {
                     return HazeColorParticleOptions.codec(this);
                 }
             };
     public static final SimpleParticleType AUTUMN_LEAVES = FabricParticleTypes.simple();
     public static final SimpleParticleType GINKGO_LEAVES = FabricParticleTypes.simple();
+
+    public static final ParticleType<PuzzleColorParticleOptions> PUZZLE_PARTICLE =
+            new ParticleType<>(false, PuzzleColorParticleOptions.DESERIALIZER) {
+                @Override
+                public Codec<PuzzleColorParticleOptions> codec() {
+                    return PuzzleColorParticleOptions.codec(this);
+                }
+            };
 
     public static final SimpleParticleType DUST_CRUMBLE = FabricParticleTypes.simple();
     public static final SimpleParticleType FIRE_CRUMBLE = FabricParticleTypes.simple();
@@ -143,6 +153,8 @@ public class FabricParticles {
 
     public static final SimpleParticleType VITAL_ESSENCE = FabricParticleTypes.simple();
     public static final SimpleParticleType GE_WAVE = FabricParticleTypes.simple();
+
+    public static final SimpleParticleType RAIN_BUBBLE = FabricParticleTypes.simple();
 
     public static void registerParticles(){
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("hit_impact"), HIT_IMPACT);
@@ -241,6 +253,7 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("purple_haze_smoke"), PURPLE_HAZE_SMOKE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("distortion_smoke"), DISTORTION_SMOKE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("purple_haze_blastwave"), PURPLE_HAZE_BLASTWAVE);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("kn_piece"), PUZZLE_PARTICLE);
 
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("autumn_leaves"), AUTUMN_LEAVES);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("ginkgo_leaves"), GINKGO_LEAVES);
@@ -266,6 +279,8 @@ public class FabricParticles {
 
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("vital_essence"), VITAL_ESSENCE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("ge_wave"), GE_WAVE);
+
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("rain_bubble"), RAIN_BUBBLE);
 
         ModParticles.MELTING = MELTING;
         ModParticles.HALLUCINATORY_ACID_DRIP = HALLUCINATORY_ACID_DRIP;
@@ -363,6 +378,8 @@ public class FabricParticles {
         ModParticles.DISTORTION_SMOKE = DISTORTION_SMOKE;
         ModParticles.PURPLE_HAZE_BLASTWAVE = PURPLE_HAZE_BLASTWAVE;
 
+        ModParticles.PUZZLE_PARTICLE = PUZZLE_PARTICLE;
+
         ModParticles.AUTUMN_LEAVES = AUTUMN_LEAVES;
         ModParticles.GINKGO_LEAVES = GINKGO_LEAVES;
 
@@ -387,5 +404,7 @@ public class FabricParticles {
 
         ModParticles.VITAL_ESSENCE = VITAL_ESSENCE;
         ModParticles.GE_WAVE = GE_WAVE;
+
+        ModParticles.RAIN_BUBBLE = RAIN_BUBBLE;
     }
 }

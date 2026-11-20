@@ -2,8 +2,10 @@ package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.stand.StandModel;
+import net.hydra.jojomod.entity.stand.KingNothingEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
@@ -44,7 +46,14 @@ public class StandHeldItemLayer <T extends StandEntity, M extends StandModel<T>>
             if (itemstack.getItem() instanceof BlockItem){
                 //p_117204_.scale(3,3,3);
             }
-            this.renderArmWithItem(entity, itemstack, ItemDisplayContext.THIRD_PERSON_LEFT_HAND, HumanoidArm.LEFT, stack, bufferSource, p_117206_);
+            if (entity instanceof KingNothingEntity) {
+                this.renderArmWithItem(entity, itemstack,
+                        ItemDisplayContext.THIRD_PERSON_RIGHT_HAND,
+                        HumanoidArm.RIGHT, stack, bufferSource, p_117206_);
+            }
+            else this.renderArmWithItem(entity, itemstack,
+                    ItemDisplayContext.THIRD_PERSON_LEFT_HAND,
+                    HumanoidArm.LEFT, stack, bufferSource, p_117206_);
             stack.popPose();
         }
     }
@@ -55,7 +64,17 @@ public class StandHeldItemLayer <T extends StandEntity, M extends StandModel<T>>
             float shiftZ = 1.3F;
             float shiftY = 1;
             float shiftX = 3F;
-            if (MainUtil.isThrownBlockItem((itemStack.getItem()))){
+            if (livingEntity instanceof KingNothingEntity) {
+                float angle = livingEntity.getViewXRot(0);
+                // these numbers need tweaks but i think id go insane if i kept going for now
+                float zMult = angle < 0 ? 0.4f : 1f;
+                float yMult = angle > 0 ? 1.1f : -2.2f;
+                float single = (float) Math.sin(Math.toRadians(angle));
+                shiftX = -0.5f;
+                shiftZ = 4.5f - (single * 12f * zMult);
+                shiftY = 7f - (single * 4.5f * yMult);
+            }
+            else if (MainUtil.isThrownBlockItem((itemStack.getItem()))){
                 if(!(livingEntity instanceof SeperatedArmEntity)) {
                     if (((StandEntity) livingEntity).getUser() != null) {
                         shiftZ = 0 - Math.max(0, Math.min(((StandUser) ((StandEntity) livingEntity).getUser()).roundabout$getAttackTimeDuring(), 10F)) * 1.4F;
@@ -67,19 +86,26 @@ public class StandHeldItemLayer <T extends StandEntity, M extends StandModel<T>>
                 shiftZ = -1F;
             }
             this.getParentModel().translateToHand(humanoidArm, poseStack, shiftZ, shiftY, shiftX);
-            if (!(livingEntity instanceof SeperatedArmEntity) && MainUtil.isThrownBlockItem((itemStack.getItem()))) {
+            if (livingEntity instanceof KingNothingEntity) {
+                poseStack.mulPose(Axis.XP.rotationDegrees(livingEntity.getViewXRot(0) - 65));
+            }
+            else if (!(livingEntity instanceof SeperatedArmEntity) &&
+                    MainUtil.isThrownBlockItem((itemStack.getItem()))) {
                 poseStack.mulPose(Axis.XP.rotationDegrees(-90.0F));
             } else {
                 poseStack.mulPose(Axis.XP.rotationDegrees(-65.0F));
             }
-            if(livingEntity instanceof SeperatedArmEntity){
+            if (livingEntity instanceof SeperatedArmEntity){
                 poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,-90),0,0.7F,0.5F);
+            }
+            if (livingEntity instanceof KingNothingEntity) {
+                poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,-45),0,0.7F,0.5F);
             }
             poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
             boolean flag = humanoidArm == HumanoidArm.LEFT;
             poseStack.translate((float)(flag ? -1 : 1) / 16.0F, 0.125F, -0.625F);
 
-            if (!(livingEntity instanceof SeperatedArmEntity) && MainUtil.isThrownBlockItem(itemStack.getItem())){
+            if (!(livingEntity instanceof SeperatedArmEntity || livingEntity instanceof KingNothingEntity) && MainUtil.isThrownBlockItem(itemStack.getItem())){
                 poseStack.scale(3,3,3);
             }
             if (itemStack.getItem() instanceof AnubisItem) {

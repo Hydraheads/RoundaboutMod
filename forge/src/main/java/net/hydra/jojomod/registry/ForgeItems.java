@@ -649,6 +649,9 @@ public class ForgeItems {
     public static final RegistryObject<Item> MAX_STAND_DISC_D4C = addToWIPTab(ITEMS.register("max_d4c_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null))));
 
+    public static final RegistryObject<Item> STAND_DISC_KING_NOTHING = addToWIPTab(ITEMS.register("king_nothing_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersKingNothing(null))));
+
 
 
     public static final RegistryObject<Item> SNUBNOSE_REVOLVER = addToTab(ITEMS.register("snubnose_revolver",
@@ -813,7 +816,7 @@ public class ForgeItems {
                     new Item.Properties().food(ModFoodComponents.FLESH_CHUNK)
             )));
     public static final RegistryObject<Item> FLESH_BUCKET = addToBuildingTab(ITEMS.register("flesh_bucket",
-            () -> new FleshBucketItem(new Item.Properties().stacksTo(1).durability(16))));
+            () -> new FleshBucketItem(new Item.Properties().stacksTo(1))));
     public static final RegistryObject<ForgeSpawnEggItem> TERRIER_SPAWN_EGG = addToTab(ITEMS.register("terrier_spawn_egg",
             () -> new ForgeSpawnEggItem(ForgeEntities.TERRIER_DOG,
                     0xc9c071, 0xfffded, new Item.Properties())));
@@ -1144,6 +1147,8 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new Daiya2Visage(null))));
     public static final RegistryObject<Item> HATO_MASK = addToTab(ITEMS.register("hato_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new HatoVisage(null))));
+    public static final RegistryObject<Item> NORISUKE_MASK = addToWIPTab(ITEMS.register("norisuke_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new NorisukeVisage(null))));
     public static final RegistryObject<Item> LAEM_MASK = addToTab(ITEMS.register("laem_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new LaemVisage(null))));
     public static final RegistryObject<Item> JOSUKE_PART_EIGHT_MASK = addToTab(ITEMS.register("josuke_part_eight_mask",

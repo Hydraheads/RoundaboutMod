@@ -19,10 +19,7 @@ import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
-import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
-import net.hydra.jojomod.entity.stand.CaliforniaKingBedEntity;
-import net.hydra.jojomod.entity.stand.CinderellaEntity;
-import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.*;
 import net.hydra.jojomod.entity.visages.mobs.*;
 import net.hydra.jojomod.entity.zombie_minion.*;
@@ -120,6 +117,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.MAGICIANS_RED_OVA.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SURVIVOR.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.DARK_MIRAGE.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.KING_NOTHING.get(), KingNothingEntity.createStandAttributes().build());
         event.put(ForgeEntities.TUSK_A1.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.TUSK_A2.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.TUSK_A3.get(), StandEntity.createStandAttributes().build());
@@ -622,6 +620,8 @@ public class ForgeEvents {
         ModItems.MAX_STAND_DISC_D4C = ForgeItems.MAX_STAND_DISC_D4C.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_D4C.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_D4C.get());
 
+        ModItems.STAND_DISC_KING_NOTHING = ForgeItems.STAND_DISC_KING_NOTHING.get();
+
 
         ModItems.STAND_DISC_EMPEROR = ForgeItems.STAND_DISC_EMPEROR.get();
         ModItems.MAX_STAND_DISC_EMPEROR = ForgeItems.MAX_STAND_DISC_EMPEROR.get();
@@ -792,6 +792,7 @@ public class ForgeEvents {
         ModItems.SHERIFF_MASK = ForgeItems.SHERIFF_MASK.get();
         ModItems.RINGO_MASK = ForgeItems.RINGO_MASK.get();
         ModItems.HATO_MASK = ForgeItems.HATO_MASK.get();
+        ModItems.NORISUKE_MASK = ForgeItems.NORISUKE_MASK.get();
         ModItems.LAEM_MASK = ForgeItems.LAEM_MASK.get();
         ModItems.CIOCCOLATA_MASK = ForgeItems.CIOCCOLATA_MASK.get();
         ModItems.SHIZUKA_MASK = ForgeItems.SHIZUKA_MASK.get();
@@ -945,10 +946,12 @@ public class ForgeEvents {
         ModParticles.PURPLE_HAZE_SMOKE = ForgeParticles.PURPLE_HAZE_SMOKE.get();
         ModParticles.PURPLE_HAZE_BLASTWAVE = ForgeParticles.PURPLE_HAZE_BLASTWAVE.get();
         ModParticles.DISTORTION_SMOKE = ForgeParticles.DISTORTION_SMOKE.get();
+        ModParticles.PUZZLE_PARTICLE = ForgeParticles.PUZZLE_PARTICLE.get();
         ModParticles.VITAL_ESSENCE = ForgeParticles.VITAL_ESSENCE.get();
         ModParticles.GE_WAVE = ForgeParticles.GE_WAVE.get();
         ModParticles.AUTUMN_LEAVES = ForgeParticles.AUTUMN_LEAVES.get();
         ModParticles.GINKGO_LEAVES = ForgeParticles.GINKGO_LEAVES.get();
+        ModParticles.RAIN_BUBBLE = ForgeParticles.RAIN_BUBBLE.get();
 
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();
@@ -1052,6 +1055,8 @@ public class ForgeEvents {
         ModEntities.WALKING_HEART = ForgeEntities.WALKING_HEART.get();
         ModEntities.JUSTICE_PIRATE = ForgeEntities.JUSTICE_PIRATE.get();
         ModEntities.DARK_MIRAGE = ForgeEntities.DARK_MIRAGE.get();
+        ModEntities.KING_NOTHING = ForgeEntities.KING_NOTHING.get();
+        ModEntities.TRACKING_CLOUD = ForgeEntities.TRACKING_CLOUD.get();
         ModEntities.TUSK_A1 = ForgeEntities.TUSK_A1.get();
         ModEntities.TUSK_A2 = ForgeEntities.TUSK_A2.get();
         ModEntities.TUSK_A3 = ForgeEntities.TUSK_A3.get();
