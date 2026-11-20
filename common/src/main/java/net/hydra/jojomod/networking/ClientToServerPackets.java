@@ -102,8 +102,7 @@ public class ClientToServerPackets {
             GunRecoil("gun_recoil"),
             ZombieMinionTactic("zombie_minion_tactics"),
             DimensionHopD4C("thread_hop_d4c_request_dimension_hop"),
-            GamblingAction( "gambling_action "),
-            SyncGreenDayMold("sync_green_day_mold");
+            GamblingAction( "gambling_action ");
 
             public final String value;
 

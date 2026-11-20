@@ -365,21 +365,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             EntityDataSerializers.INT);
 
     @Unique
-    private static final EntityDataAccessor<Integer> ROUNDABOUT$MOLD_JUMP_IMUNITY_TICKS = SynchedEntityData.defineId(
-            LivingEntity.class,
-            EntityDataSerializers.INT);
-
-    @Unique
-    private static final EntityDataAccessor<Float> ROUNDABOUT$MOLD_STARTING_Y_POS = SynchedEntityData.defineId(
-            LivingEntity.class,
-            EntityDataSerializers.FLOAT);
-
-    @Unique
-    private static final EntityDataAccessor<Boolean> ROUNDABOUT$GOING_DOWN = SynchedEntityData.defineId(
-            LivingEntity.class,
-            EntityDataSerializers.BOOLEAN);
-
-    @Unique
     private static final EntityDataAccessor<Integer> ROUNDABOUT$PURPLE_HAZE_TICKS = SynchedEntityData
             .defineId(LivingEntity.class, EntityDataSerializers.INT);
     @Unique
@@ -4013,9 +3998,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_ACTIVE, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_ANIMATION, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$UNIQUE_STAND_MODE_TOGGLE, false);
-            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$MOLD_JUMP_IMUNITY_TICKS, 4);
-            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$MOLD_STARTING_Y_POS, 0.0f);
-            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$GOING_DOWN, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$PURPLE_HAZE_TICKS, 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$PURPLE_HAZE_SKIN, PurpleHazeEntity.ANIME);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DISTORTION_HAZE_TICKS, 0);
@@ -4033,7 +4015,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Override
     public void roundabout$setStartingYpos(float amount) {
-        this.entityData.set(ROUNDABOUT$MOLD_STARTING_Y_POS, amount);
+        StartingYPos = amount;
     }
 
     @Override
@@ -4048,12 +4030,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Override
     public void roundabout$setJumpImunityTicks(int amount) {
-        this.entityData.set(ROUNDABOUT$MOLD_JUMP_IMUNITY_TICKS, amount);
+        jumpImmunityTicks = amount;
     }
 
     @Override
     public void roundabout$setGoingDown(boolean amount) {
-        this.entityData.set(ROUNDABOUT$GOING_DOWN, amount);
+        this.movingDown = amount;
     }
 
     @Unique
@@ -6879,18 +6861,20 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return false;
     }
 
+    @Unique
     public int jumpImmunityTicks = 4;
 
+    @Unique
     public double StartingYPos = getY();
 
     @Override
     public float getStaringYPos() {
-        return this.getEntityData().get(ROUNDABOUT$MOLD_STARTING_Y_POS);
+        return (float) StartingYPos;
     }
 
     @Override
     public int getJumpImmunityTicks() {
-        return this.getEntityData().get(ROUNDABOUT$MOLD_JUMP_IMUNITY_TICKS);
+        return this.jumpImmunityTicks;
     }
 
     @Unique
@@ -6936,21 +6920,19 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_MOLD_JUMP_TICKS, jumpImmunityTicks);
                 C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_MOLD_GOING_DOWN, movingDown ? 1 : 0);
                 C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_MOLD_STARTING_Y_POS, (float) StartingYPos);
-            } else if (!this.level().isClientSide()) {
-                this.getEntityData().set(ROUNDABOUT$MOLD_JUMP_IMUNITY_TICKS, jumpImmunityTicks);
-                this.getEntityData().set(ROUNDABOUT$MOLD_STARTING_Y_POS, (float) StartingYPos);
-                this.getEntityData().set(ROUNDABOUT$GOING_DOWN, movingDown);
             }
         }
 
     }
 
     public int CrawlTicks = 0;
+
+    @Unique
     boolean movingDown = false;
 
     @Override
     public boolean GoingDown() {
-        return this.getEntityData().get(ROUNDABOUT$GOING_DOWN);
+        return movingDown;
     }
 
     @Unique
