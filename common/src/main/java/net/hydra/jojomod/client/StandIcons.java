@@ -507,6 +507,15 @@ public class StandIcons {
     public static final ResourceLocation KILLER_QUEEN_HANDS_ACTIVE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/killer_queen/hands_active.png");
 
+    public static final ResourceLocation KING_NOTHING_TRACKING = Roundabout.location("textures/gui/icons/king_nothing/tracking.png");
+    public static final ResourceLocation KING_NOTHING_REFORM = Roundabout.location("textures/gui/icons/king_nothing/reform.png");
+    public static final ResourceLocation KING_NOTHING_SNIFF_ITEM = Roundabout.location("textures/gui/icons/king_nothing/sniff_item.png");
+    public static final ResourceLocation KING_NOTHING_PHASE_GRAB = Roundabout.location("textures/gui/icons/king_nothing/phase_grab.png");
+    public static final ResourceLocation KING_NOTHING_PHASE_ITEM = Roundabout.location("textures/gui/icons/king_nothing/phase_item.png");
+    public static final ResourceLocation KING_NOTHING_FORM_PREDICT = Roundabout.location("textures/gui/icons/king_nothing/form_predict.png");
+    public static final ResourceLocation KING_NOTHING_DROP_ITEM = Roundabout.location(
+            "textures/gui/icons/king_nothing/item_drop.png");
+
     public static final ResourceLocation BITES_THE_DUST_PLANTED = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/killer_queen/bites_the_dust_planted.png");
     public static final ResourceLocation BITES_THE_DUST_TARGET = new ResourceLocation(Roundabout.MOD_ID,

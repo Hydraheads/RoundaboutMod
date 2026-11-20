@@ -2,6 +2,7 @@ package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.particles.HazeColorParticleOptions;
+import net.hydra.jojomod.particles.PuzzleColorParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.registries.DeferredRegister;
@@ -358,6 +359,14 @@ public class ForgeParticles {
                 @Override
                 public com.mojang.serialization.Codec<HazeColorParticleOptions> codec() {
                     return HazeColorParticleOptions.codec(this);
+                }
+            });
+
+    public static final RegistryObject<ParticleType<PuzzleColorParticleOptions>> PUZZLE_PARTICLE =
+            PARTICLES.register("kn_piece", () -> new ParticleType<>(false, PuzzleColorParticleOptions.DESERIALIZER) {
+                @Override
+                public com.mojang.serialization.Codec<PuzzleColorParticleOptions> codec() {
+                    return PuzzleColorParticleOptions.codec(this);
                 }
             });
 

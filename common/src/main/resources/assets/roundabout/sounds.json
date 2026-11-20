@@ -760,6 +760,24 @@
       "roundabout:chess_break"
     ]
   },
+  "king_nothing_summon": {
+    "subtitle": "sounds.roundabout.summon_stand",
+    "sounds": [
+      "roundabout:king_nothing_summon"
+    ]
+  },
+  "king_nothing_phase": {
+    "subtitle": "sounds.roundabout.king_nothing_phase",
+    "sounds": [
+      "roundabout:king_nothing_phase"
+    ]
+  },
+  "king_nothing_desummon": {
+    "subtitle": "sounds.roundabout.king_nothing_desummon",
+    "sounds": [
+      "roundabout:king_nothing_desummon"
+    ]
+  },
   "ice_blast_charge": {
     "subtitle": "sounds.roundabout.ice_blast_charge",
     "sounds": [

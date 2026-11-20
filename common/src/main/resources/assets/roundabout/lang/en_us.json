@@ -235,6 +235,7 @@
   "item.roundabout.creative_gold_experience_requiem_disc": "Stand Disc++",
   "item.roundabout.whitesnake_disc": "Stand Disc",
   "item.roundabout.max_whitesnake_disc": "Stand Disc+",
+  "item.roundabout.king_nothing_disc": "Stand Disc",
   "item.roundabout.d4c_disc.desc": "D4C",
   "item.roundabout.silver_chariot_disc.desc": "Silver Chariot",
   "item.roundabout.green_day_disc.desc": "Green Day",
@@ -290,6 +291,7 @@
   "item.roundabout.california_king_bed_disc.desc.short": "CA King Bed",
   "item.roundabout.king_crimson_disc.desc": "King Crimson",
   "item.roundabout.whitesnake_disc.desc": "Whitesnake",
+  "item.roundabout.king_nothing_disc.desc": "King Nothing",
   "item.roundabout.none_disc.desc": "None",
 
   "item.roundabout.memory_disc": "Memory Disc",
@@ -567,6 +569,9 @@
   "item.roundabout.hato_mask": "Hato Visage",
   "item.roundabout.hato_mask.desc": "Hato Higashikata",
   "item.roundabout.hato_mask.tag": "Hato",
+  "item.roundabout.norisuke_mask": "Norisuke Visage",
+  "item.roundabout.norisuke_mask.desc": "Norisuke Higashikata IV",
+  "item.roundabout.norisuke_mask.tag": "Norisuke",
   "item.roundabout.shizuka_mask": "Shizuka Visage",
   "item.roundabout.shizuka_mask.desc": "Shizuka (JoJovein / JoJo Stars)",
   "item.roundabout.shizuka_mask.tag": "Shizuka",
@@ -682,6 +687,7 @@
   "entity.roundabout.iron_ball": "Iron Ball",
   "entity.roundabout.king_crimson": "King Crimson",
   "entity.roundabout.king_crimson_reaper": "King Crimson",
+  "entity.roundabout.king_nothing": "King Nothing",
   "entity.roundabout.d4c_clone": "Player",
   "entity.roundabout.king_crimson_clone": "Player",
   "entity.roundabout.life_punch_clone": "Player",
@@ -1880,6 +1886,9 @@
   "sounds.roundabout.btd_full_reset": "Bites the dust Day",
   "sounds.roundabout.btd_arrow": "Bites the dust obtainment",
 
+  "sounds.roundabout.king_nothing_phase": "King Nothing Phases",
+  "sounds.roundabout.king_nothing_desummon": "Disintegrating Baby",
+
   "sounds.roundabout.levelup": "Development Level Up!",
 
   "sounds.roundabout.vampire_drain": "Blood drain",
@@ -2088,6 +2097,8 @@
   "instruction.roundabout.whitesnake_auto_mode_attack": "While in Auto Mode, Press Skill %1$s",
   "instruction.roundabout.distortion_spit": "While having Haze immunity, Press Skill %1$s while crouching",
   "instruction.roundabout.press_skill_submerged": "Press Skill %1$s While Submerged",
+  "instruction.roundabout.press_skill_phase_item": "Press Skill %1$s While using Phase Item",
+  "instruction.roundabout.press_skill_tracking": "Press Skill %1$s While Tracking",
   "instruction.roundabout.press_skill_item": "Press Skill %1$s With A Compatible Item",
   "instruction.roundabout.press_skill_crouch_block": "Press Skill %1$s While Crouching, and Holding Interact",
 
@@ -2599,6 +2610,19 @@
   "ability.roundabout.tusk_change_modes.desc": "Swap between Melee and Ranged modes. Your right click is unaffected by the stand.",
   "ability.roundabout.tusk_act_change": "Act Change",
   "ability.roundabout.tusk_act_change.desc": "Swap between acts.",
+
+  "ability.roundabout.kn_smell_track": "Track Scent (TODO)",
+  "ability.roundabout.kn_smell_track.desc": "Send out King Nothing to track the scent of the Block, Mob, or Player you currently have memorized.",
+  "ability.roundabout.kn_track_item": "Track Item",
+  "ability.roundabout.kn_track_item.desc": "King Nothing smells your held item and detects other Players or Chests which have that item.",
+  "ability.roundabout.kn_phase_item": "Phase Item",
+  "ability.roundabout.kn_phase_item.desc": "King Nothing will take your held item and use it to do different things. It can do things like place blocks, mine blocks, and even attack enemies!",
+  "ability.roundabout.kn_drop_item": "Drop Item",
+  "ability.roundabout.kn_drop_item.desc": "King Nothing will drop its currently held item where it is. This is so I DONT NEED TO MAKE PILOT MODE LETS GO!!!",
+  "ability.roundabout.kn_form_predict": "Form Prediction",
+  "ability.roundabout.kn_form_predict.desc": "Memorize the scent of the original form of your currently held item.",
+  "ability.roundabout.kn_sniff": "Memorize Scent",
+  "ability.roundabout.kn_sniff.desc": "Memorize the scent of the Block, Mob, or Player you are currently looking at.",
 
 
 
@@ -3167,6 +3191,15 @@
   "skins.roundabout.king_crimson.blue": "Blue",
   "skins.roundabout.king_crimson.concept": "Concept Art",
   "skins.roundabout.king_crimson.vision": "Vision",
+
+  "skins.roundabout.king_nothing.manga": "Manga",
+  "skins.roundabout.king_nothing.spine": "Spine Art",
+  "skins.roundabout.king_nothing.note_block": "Note Block",
+  "skins.roundabout.king_nothing.beta": "\"Beta\"",
+  "skins.roundabout.king_nothing.warden": "Warden",
+  "skins.roundabout.king_nothing.sniffer": "Sniffer",
+  "skins.roundabout.king_nothing.something": "Something",
+  "skins.roundabout.king_nothing.ram": "Ram King",
 
   "skins.roundabout.star_platinum.base": "Part 3",
   "skins.roundabout.star_platinum.manga": "Manga",
@@ -4190,6 +4223,8 @@
   "config.roundabout.enableDiverDown.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableKingCrimson.name": "Enable Stand",
   "config.roundabout.enableKingCrimson.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
+  "config.roundabout.enableKingNothing.name": "Enable Stand",
+  "config.roundabout.enableKingNothing.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableGoldExperience.name": "Enable Stand",
   "config.roundabout.enableGoldExperience.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
 
@@ -4746,6 +4781,16 @@
   "config.roundabout.getMiningTierCream.desc": "Tier 0 is the default, it does not replace tools for harvesting blocks. Tier 1 is wood tier, tier 2 is stone tier, tier 3 is iron tier, and tier 4 is diamond tier.",
   "config.roundabout.creamVoidTime.name": "Void Time",
   "config.roundabout.creamVoidTime.desc": "How long you are able to stay in the void mode attack for",
+
+  "config.roundabout.kingNothingSettings.name": "King Nothing",
+  "config.roundabout.kingNothingPhaseAttackCd.name": "Phase Item Attack Cooldown",
+  "config.roundabout.kingNothingPhaseAttackCd.desc": "The cooldown for Phase Item after Attacking Mobs and Players.",
+  "config.roundabout.kingNothingDynamicPhaseAttackCd.name": "Dynamic Phase Item Attack Cooldown",
+  "config.roundabout.kingNothingDynamicPhaseAttackCd.desc": "If enabled, Phase Attack cooldown is increased by the item's attack cooldown.",
+  "config.roundabout.kingNothingPhaseMineCd.name": "Phase Item Mine Cooldown",
+  "config.roundabout.kingNothingPhaseMineCd.desc": "The cooldown for Phase Item after Mining a Block.",
+  "config.roundabout.kingNothingPhasePlaceCd.name": "Phase Item Place Cooldown",
+  "config.roundabout.kingNothingPhasePlaceCd.desc": "The cooldown for Phase Item after Placing a Block.",
 
   "config.roundabout.diverDownAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.diverDownAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",

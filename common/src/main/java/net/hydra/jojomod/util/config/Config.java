@@ -118,6 +118,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public GreenDaySettings greenDaySettings;
     @NestedOption(group = "modded")
+    public KingNothingSettings kingNothingSettings;
+    @NestedOption(group = "modded")
     public D4CSettings d4cSettings;
     @NestedOption(group = "modded")
     public DiverDownSettings diverDownSettings;
@@ -1262,6 +1264,20 @@ public class Config implements Cloneable {
         @IntOption(group = "inherit", value = 6, min = 0, max = 72000)
         public Integer emperorBulletDamage;
     }
+
+    public static class KingNothingSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableKingNothing;
+        @IntOption(group = "inherit", value = 70, min = 0, max = 72000)
+        public Integer kingNothingPhaseAttackCd;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean kingNothingDynamicPhaseAttackCd;
+        @IntOption(group = "inherit", value = 70, min = 0, max = 72000)
+        public Integer kingNothingPhaseMineCd;
+        @IntOption(group = "inherit", value = 70, min = 0, max = 72000)
+        public Integer kingNothingPhasePlaceCd;
+    }
+
     public static class D4CSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableD4c;

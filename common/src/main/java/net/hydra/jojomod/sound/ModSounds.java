@@ -1440,6 +1440,16 @@ public class ModSounds {
     public static final String CINDERELLA_VISAGE_CREATION = "cinderella_visage_creation";
     public static final ResourceLocation CINDERELLA_VISAGE_CREATION_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CINDERELLA_VISAGE_CREATION);
     public static SoundEvent CINDERELLA_VISAGE_CREATION_EVENT = SoundEvent.createVariableRangeEvent(CINDERELLA_VISAGE_CREATION_ID);
+    
+    public static final String KING_NOTHING_SUMMON = "king_nothing_summon";
+    public static final ResourceLocation KING_NOTHING_SUMMON_ID = Roundabout.location(KING_NOTHING_SUMMON);
+    public static SoundEvent KING_NOTHING_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(KING_NOTHING_SUMMON_ID);
+    public static final String KING_NOTHING_PHASE = "king_nothing_phase";
+    public static final ResourceLocation KING_NOTHING_PHASE_ID = Roundabout.location(KING_NOTHING_PHASE);
+    public static SoundEvent KING_NOTHING_PHASE_EVENT = SoundEvent.createVariableRangeEvent(KING_NOTHING_PHASE_ID);
+    public static final String KING_NOTHING_DESUMMON = "king_nothing_desummon";
+    public static final ResourceLocation KING_NOTHING_DESUMMON_ID = Roundabout.location(KING_NOTHING_DESUMMON);
+    public static SoundEvent KING_NOTHING_DESUMMON_EVENT = SoundEvent.createVariableRangeEvent(KING_NOTHING_DESUMMON_ID);
 
 
     public static final String PLANET_WAVES_SUMMON = "planet_waves_summon";
