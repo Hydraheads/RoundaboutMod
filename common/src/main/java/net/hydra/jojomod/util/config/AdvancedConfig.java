@@ -319,7 +319,7 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:stand_beetle_arrow:roundabout:ancient_meteor"
             )
     );
-    public Set<String> kingNothingEntityFormPredictions = new HashSet<>(
+    public Set<String> kingNothingEntityFormPredictionsv2 = new HashSet<>(
             Arrays.asList(
                     "minecraft:phantom_membrane:minecraft:phantom",
                     "minecraft:wither_skeleton_skull:minecraft:wither_skeleton",
@@ -387,7 +387,7 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:salmon_bucket:minecraft:salmon",
                     "minecraft:tropical_fish_bucket:minecraft:tropical_fish",
                     "minecraft:pufferfish_bucket:minecraft:pufferfish",
-                    "mindecraft:axolotl_bucket:minecraft:axolotl",
+                    "minecraft:axolotl_bucket:minecraft:axolotl",
                     "minecraft:tadpole_bucket:minecraft:tadpole",
                     "roundabout:piranha_bucket:roundabout:piranha",
                     "minecraft:goat_horn:minecraft:goat",

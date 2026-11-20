@@ -536,7 +536,7 @@ public class D4CCloneEntity extends CloneEntity implements ContainerListener,Has
 
     public void setInteractedPlayer(@Nullable Player $$0) {
         boolean $$1 = this.getInteractedPlayer() != null && $$0 == null;
-        this.interactedPlayer = player;
+        this.interactedPlayer = $$0;
         if ($$1) {
             this.stopInteraction();
         }

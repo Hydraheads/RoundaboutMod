@@ -176,9 +176,9 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getAdvancedConfig().kingNothingEntityFormPredictions != null) {
+        if (getAdvancedConfig().kingNothingEntityFormPredictionsv2 != null) {
             MainUtil.KING_NOTHING_ENTITY_FORM_PREDICT.clear();
-            for (String entry : getAdvancedConfig().kingNothingEntityFormPredictions) {
+            for (String entry : getAdvancedConfig().kingNothingEntityFormPredictionsv2) {
                 try {
                     String[] split = entry.split(":");
 
