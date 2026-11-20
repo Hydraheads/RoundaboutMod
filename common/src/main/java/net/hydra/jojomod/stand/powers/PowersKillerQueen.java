@@ -102,7 +102,8 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override public StandEntity getNewStandEntity(){ return ModEntities.KILLER_QUEEN.create(this.getSelf().level());}
 
     @Override public boolean canUseStandArrow() { return !canBitesTheDust(); }
-	
+	@Override public boolean shouldStandArrowShake() { return !canBitesTheDust() && this.canExecuteMoveWithLevel(this.getBitesTheDustLevel())}
+
 	private static final byte
 		PLANTED=53,
 		DETONATE=54,

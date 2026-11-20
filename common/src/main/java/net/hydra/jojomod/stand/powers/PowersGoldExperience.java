@@ -2135,8 +2135,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public boolean canUseStandArrow() { return canUseRequiem(); }
 
+    @Override public boolean shouldStandArrowShake() { return isPossibleToRequiem() && canUseRequiem(); }
+
     public boolean canUseRequiem() {
-        return canExecuteMoveWithLevel(getMaxLevel()) && Objects.nonNull(getStandEntity(this.self));
+        return canExecuteMoveWithLevel(getMaxLevel());
     }
     public boolean isPossibleToRequiem() {
         return resolvePoints >= getNeededResolvePoints();
@@ -2151,6 +2153,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public boolean onStandArrowUse() {
         if (this.self instanceof Player PE && activePower == PowerIndex.NONE) {
             if (isPossibleToRequiem()) {
+                ((StandUser) self).roundabout$summonStand(self.level(), true, true);
                 sendParticlesIfPossible(self.level(),ParticleTypes.FIREWORK, PE.getX(),
                         PE.getY() + PE.getEyeHeight(), PE.getZ(),
                         20, 0, 0, 0, 0.4);
