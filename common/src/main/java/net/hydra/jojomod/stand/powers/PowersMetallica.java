@@ -104,7 +104,7 @@ public class PowersMetallica extends NewDashPreset {
         if (self != null) {
             getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
 
-            ((StandUser)self).roundabout$setMetallicaInvisibility(-1);
+            //((StandUser)self).roundabout$setMetallicaInvisibility(-1);
             self.removeEffect(MobEffects.INVISIBILITY);
             this.camoAlpha = 0.0f;
             this.prevCamoAlpha = 0.0f;
@@ -796,10 +796,10 @@ public class PowersMetallica extends NewDashPreset {
     public boolean toggleInvis() {
         StandUser data = (StandUser) self;
         if (data.roundabout$getMetallicaInvisibility() > -1) {
-            data.roundabout$setMetallicaInvisibility(-1);
+            //data.roundabout$setMetallicaInvisibility(-1);
             self.removeEffect(MobEffects.INVISIBILITY);
         } else {
-            data.roundabout$setMetallicaInvisibility(10000);
+            //data.roundabout$setMetallicaInvisibility(10000);
         }
         return true;
     }
