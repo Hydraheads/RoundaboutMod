@@ -31,11 +31,13 @@ import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.BlackSabbathPlayerInventory;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Position;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -92,6 +94,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.pathfinder.*;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
@@ -1172,9 +1175,26 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     public void travelAhead(Entity.MoveFunction positionUpdater) {
         if (this.getUser() != null) {
             if(((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb && (pb.moveMode == 2) && !getHunting()) {
-                Vec3 lvec = pb.getLookAngleChest(this.getUser().getYRot(), this.getUser());
-                Position pn = this.getUser().getEyePosition().add(lvec.scale(-0.90F));
-                positionUpdater.accept(this, pn.x(), this.getUser().getY() + (this.getUser().getBbHeight() / 2.45), pn.z());
+                Direction gravityDirection = GravityAPI.getGravityDirection(pb.self);
+                if(gravityDirection == Direction.DOWN) {
+                    Vec3 lvec = pb.getLookAngleChest(this.getUser().getYRot(), this.getUser());
+                    Position pn = this.getUser().getEyePosition().add(lvec.scale(-0.90F));
+                    positionUpdater.accept(this, pn.x(), this.getUser().getY() + (this.getUser().getBbHeight() / 2.45), pn.z());
+                } else {
+                    Vec3 lvec = pb.self.getLookAngle();
+                    Position pn = pb.self.getEyePosition().add(lvec.scale(-0.90F));
+                    if(gravityDirection == Direction.UP){
+                        positionUpdater.accept(this, pn.x(), this.getUser().getY() - (this.getUser().getBbHeight() / 2.45), pn.z());
+                    } else if (gravityDirection == Direction.NORTH){
+                        positionUpdater.accept(this, pn.x(), pn.y(), this.getUser().getZ()  + (this.getUser().getBbHeight() / 2.45));
+                    }else if (gravityDirection == Direction.SOUTH){
+                        positionUpdater.accept(this, pn.x(), pn.y(), this.getUser().getZ()  - (this.getUser().getBbHeight() / 2.45));
+                    }else if (gravityDirection == Direction.EAST){
+                        positionUpdater.accept(this, this.getUser().getX() - (this.getUser().getBbHeight() / 2.45), pn.y(), pn.z());
+                    } else if (gravityDirection == Direction.WEST) {
+                        positionUpdater.accept(this, this.getUser().getX() + (this.getUser().getBbHeight() / 2.45), pn.y(), pn.z());
+                    }
+                }
             }
         }
     }
@@ -2573,11 +2593,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                 ));
             }
         }
-    }
-
-
-    public final Vec3 getLookAngle(float $$0, Entity selfie) {
-        return ((StandUser)selfie).roundabout$calculateViewVectorButICanUseIt(0, selfie.getYRot());
     }
 
     private float yVerticalOffset(StandEntity s){
