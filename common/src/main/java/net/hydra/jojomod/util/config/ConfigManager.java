@@ -256,7 +256,6 @@ public abstract class ConfigManager {
             MainUtil.kingNothingMobSniffBlacklist.addAll(getAdvancedConfig().kingNothingMobSniffBlacklist);
         }
 
-        if (getAdvancedConfig().silverChariotBlocksToSlabs != null)
         if (getAdvancedConfig().silverChariotBlocksToSlabsV2 != null)
         {
             MainUtil.SILVER_CHARIOT_BLOCK_TO_SLAB.clear();
@@ -317,9 +316,9 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getAdvancedConfig().purpleHazeDecayBlocksAndRatesV4 != null) {
+        if (getAdvancedConfig().purpleHazeDecayBlocksAndRatesV5 != null) {
             MainUtil.PURPLE_HAZE_DECAY_BLOCKS.clear();
-            for (String entry : getAdvancedConfig().purpleHazeDecayBlocksAndRatesV4) {
+            for (String entry : getAdvancedConfig().purpleHazeDecayBlocksAndRatesV5) {
                 try {
                     String[] split = entry.split(":");
                     if (split.length != 5) {
