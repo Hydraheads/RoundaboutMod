@@ -114,11 +114,10 @@ public class PowersBlackSabbath extends NewDashPreset {
                                 BE.pickUpTheItemsAroundTheCadaver(value);
                             }
                         }
-                        removeTargetEntities(value);
                         if (this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity BE) {
                             if (BE.getGrabbing() != 0) {
                                 Entity ent = BE.level().getEntity(BE.getGrabbing());
-                                if (ent != null && ent instanceof LivingEntity LE) {
+                                if (ent != null && ent instanceof LivingEntity LE && LE.is(value)) {
                                     BE.setMeleeInteractionTicks(-1);
                                     ((StandUser) LE).roundabout$setGrabbedSoul(false);
                                     BE.killSoul();
@@ -126,6 +125,7 @@ public class PowersBlackSabbath extends NewDashPreset {
                                 }
                             }
                         }
+                        removeTargetEntities(value);
                     }
                     if(this.getStandEntity(self) instanceof BlackSabbathEntity BE){
                         DimensionType t = BE.level().dimensionType();
@@ -819,7 +819,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         if (slot == 2 && ((!this.checkIfYouAreInDark() && !(moveMode == 3) || this.getStandEntity(self) != null && moveMode != 2 && moveMode != 3|| this.securityTickDown > 1 && this.blackSabbathTargets.isEmpty()))) {
             return true;
         }
-        //TODO: FINSH THAT STUPID CHEST GRAVITY CODE!!!
         if(slot == 1 && (!this.checkIfYouAreInDark() || getValidPlacement() == null || self.isSwimming() || this.getStandEntity(self) != null || this.moveMode == 3 || this.securityTickDown > 1 || gravityDirection != Direction.DOWN)){
             return true;
         }

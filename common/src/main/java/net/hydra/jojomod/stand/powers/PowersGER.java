@@ -3,10 +3,13 @@ package net.hydra.jojomod.stand.powers;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.GoldExperienceEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.SavedSecond;
+import net.hydra.jojomod.event.index.OffsetIndex;
+import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaxStandDiscItem;
@@ -148,4 +151,68 @@ public class PowersGER extends PowersGoldExperience {
 
         return super.interceptIncomingHarm(source, amount);
     }
+    // Buffs
+
+    // for damage
+
+    @Override
+    public float getPunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return 2.55F;
+        } else {
+            return 6;
+        }
+    }
+    @Override
+    public float getHeavyPunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return 2.6F;
+        } else {
+            return 8;
+        }
+    }
+    @Override
+    public float getBarrageFinisherStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return 3.8F;
+        } else {
+            return 8;
+        }
+    }
+    @Override
+    public float getBarrageDamagePlayer(){
+        return 8;
+    }
+    @Override
+    public float getBarrageDamageMob(){
+        return 19;
+    }
+
+    private float attackSpeedModifier() {return 0.65f; } /// faster than Silver Chariot
+
+    @Override
+    public boolean setPowerAttack(){
+        if (this.activePowerPhase >= 3){
+            this.activePowerPhase = 1;
+        } else {
+            this.activePowerPhase++;
+            if (this.activePowerPhase == 3) {
+                this.attackTimeMax= Math.round(ClientNetworking.getAppropriateConfig().generalStandSettings.finalStandPunchInStringCooldown*attackSpeedModifier())
+                        + (getMeltLevel()*3) + getExtraPunchTime();
+            } else {
+                this.attackTimeMax= Math.round(ClientNetworking.getAppropriateConfig().generalStandSettings.standPunchCooldown*attackSpeedModifier())
+                        + (getMeltLevel()*3) + getExtraPunchTime();
+            }
+
+        }
+
+        this.attackTimeDuring = 0;
+        this.setActivePower(PowerIndex.ATTACK);
+        this.setAttackTime(0);
+
+        animateStand(this.activePowerPhase);
+        poseStand(OffsetIndex.ATTACK);
+        return true;
+    }
+
 }

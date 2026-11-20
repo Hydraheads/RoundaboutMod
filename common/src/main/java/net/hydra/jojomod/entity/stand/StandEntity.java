@@ -884,20 +884,20 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
 
     @Override
     public void push(Entity $$0) {
-        if(this instanceof BlackSabbathEntity bs && bs.getHunting() && !bs.getUnrender()){
+        if(this instanceof BlackSabbathEntity bs && (bs.getStrafing() || bs.getGrabbing() != 0) && !bs.getUnrender()){
             super.push($$0);
         }
     }
 
     @Override
     protected void pushEntities() {
-        if(this instanceof BlackSabbathEntity bs && bs.getHunting() && !bs.getUnrender()){
+        if(this instanceof BlackSabbathEntity bs && (bs.getStrafing() || bs.getGrabbing() != 0) && !bs.getUnrender()){
             super.pushEntities();
         }
     }
     @Override
     public void doPush(Entity $$0) {
-        if(this instanceof BlackSabbathEntity bs && bs.getHunting() && !bs.getUnrender()){
+        if(this instanceof BlackSabbathEntity bs && (bs.getStrafing() || bs.getGrabbing() != 0) && !bs.getUnrender()){
             super.doPush($$0);
         }
     }
