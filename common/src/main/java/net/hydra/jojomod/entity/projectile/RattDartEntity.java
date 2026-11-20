@@ -480,11 +480,15 @@ public class RattDartEntity extends AbstractArrow {
                     if (LE.hasEffect(ModEffects.STAND_MELTING)){
                         MobEffectInstance mei = LE.getEffect(ModEffects.STAND_MELTING);
                         if (mei != null){
-                            LE.addEffect(new MobEffectInstance(ModEffects.STAND_MELTING,240,
-                                    Math.min(6,mei.getAmplifier()+1)));
+                            if (!level().isClientSide) {
+                                LE.addEffect(new MobEffectInstance(ModEffects.STAND_MELTING, 240,
+                                        Math.min(6, mei.getAmplifier() + 1)));
+                            }
                         }
                     } else {
-                        LE.addEffect(new MobEffectInstance(ModEffects.STAND_MELTING,240,0));
+                        if (!level().isClientSide) {
+                            LE.addEffect(new MobEffectInstance(ModEffects.STAND_MELTING, 240, 0));
+                        }
                     }
                 }
             }

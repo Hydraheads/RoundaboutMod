@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
@@ -14,6 +15,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
@@ -144,9 +146,9 @@ public class ReturningObjectEntity extends ThrowableItemProjectile {
     public boolean isNoGravity() {return true;}
 
     private int soundDelay = 0;
+    private int ticks = 0;
 
     /// to whomever uses this next, add different byte types for CD, Tusk, etc, unless you're okay with them all sounding the same/having the same particles
-
     @Override
     public void tick() {
         super.tick();
@@ -159,11 +161,13 @@ public class ReturningObjectEntity extends ThrowableItemProjectile {
         }
 
         if (!this.level().isClientSide() && this.tickCount % 3 == 0) {
-    //        ((ServerLevel)this.level()).sendParticles(ModParticles.GOLDEN_SPIRAL,this.getX(), this.getY()+0.5F, this.getZ(),
-     //               0, 0, 0, 0, 0);
+            ((ServerLevel)this.level()).sendParticles(ModParticles.GOLDEN_SPIRAL,this.getX(), this.getY()+0.5F, this.getZ(),
+                    0, 0, 0, 0, 0);
         }
 
         if (this.getLifetime() > 0) {
+            if (ticks < MAX_TICKS) {ticks++;}
+
             this.setLifetime(this.getLifetime() - 1);
             this.setDeltaMovement(this.getDeltaMovement().scale(0.85F));
             if (this.getLifetime() == 0) {
@@ -171,6 +175,8 @@ public class ReturningObjectEntity extends ThrowableItemProjectile {
                 this.hasImpulse = true;
             }
         } else {
+            if (ticks > 0) {ticks--;}
+
             BlockPos ret = this.getReturnPos();
             if (ret != null) {
                 Vec3 center = ret.getCenter();
@@ -185,12 +191,37 @@ public class ReturningObjectEntity extends ThrowableItemProjectile {
                         Vec3 dir = center.subtract(this.getPosition(0)).normalize();
                         this.setDeltaMovement(dir);
                         if (this.getPosition(0).distanceTo(center) <= 1) {
-                            this.level().setBlock(ret, this.getState(), 3);
+                            this.level().setBlockAndUpdate(ret, this.getState());
+                            this.level().blockUpdated(ret,Blocks.AIR);
+
+                            BlockPos s = this.getBoxStart();
+                            BlockPos e = this.getBoxEnd();
+                            int Sx = Math.min(s.getX(), e.getX());
+                            int Sy = Math.min(s.getY(), e.getY());
+                            int Sz = Math.min(s.getY(), e.getY());
+                            int Ex = Math.max(s.getX(), e.getX());
+                            int Ey = Math.max(s.getY(), e.getY());
+                            int Ez = Math.max(s.getY(), e.getY());
+                            for(int x=Sx;x<Ex-Sx;x++) {
+                                for(int y=Sy;y<Ey-Sy;y++) {
+                                    for(int z=Sz;z<Ez-Sz;z++) {
+                                        BlockPos updater = new BlockPos(x,y,z);
+                                        Roundabout.LOGGER.info(""+updater);
+                                        this.level().blockUpdated(updater,Blocks.AIR);
+                                    }
+                                }
+                            }
+
                             this.discard();
                         }
                     }
                 }
             }
         }
+    }
+
+    private static final int MAX_TICKS = 20;
+    public float getTicks(float partialTicks) {
+        return Mth.clamp(ticks/(float)MAX_TICKS + partialTicks * this.getLifetime() > 0 ? 1 : -1,0,1);
     }
 }

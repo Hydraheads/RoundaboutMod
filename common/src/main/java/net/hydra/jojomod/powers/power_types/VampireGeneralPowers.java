@@ -919,6 +919,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         return (float) (dmg*(((float)ClientNetworking.getAppropriateConfig().vampireSettings.vampireAttackMultOnPlayers)*0.01));
     }
 
+    public boolean canBrawlBreakShields() {
+        return false;
+    }
     public float getBrawlPunchStrength(Entity entity){
         if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampireFate vp) {
             if (this.getReducedDamage(entity)){
@@ -1093,6 +1096,17 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 || getActivePower() == RIPPER_EYES
                 || getActivePower() == RIPPER_EYES_ACTIVATED
                 || super.bigJumpBlocker();
+    }
+
+    @Override
+    public boolean canUseAirAttack() {
+        if (self.level().isClientSide()) {
+            return !this.getSelf().onGround()
+                    && !self.isInWater()
+                    && (this.fallTime > 7)
+                    && (this.airTime > (ClientNetworking.getAppropriateConfig().experimentalSettings.vampireStompNerfs ? ClientNetworking.getAppropriateConfig().experimentalSettings.vampireStompAirtime : 6) );
+        }
+        return false;
     }
 
     @Override
@@ -1598,6 +1612,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             Vec3 lower = self.getDeltaMovement();
             self.setDeltaMovement(lower.x(),-1.8,lower.z());
         }
+        if (ClientNetworking.getAppropriateConfig() .experimentalSettings.vampireStompNerfs) {
+            this.setCooldown(PowerIndex.GENERAL_1,ClientNetworking.getAppropriateConfig().vampireSettings.diveAttackCooldown);
+        }
     }
 
     public void doSuckHit(){
@@ -1893,42 +1910,40 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     }
 
     public void diveImpact(Entity entity) {
-        if (!onCooldown(PowerIndex.GENERAL_1)) {
-            if (!this.self.level().isClientSide()) {
-                if (entity != null) {
-                    if (entity.distanceTo(self) > 3.5){
-                        return;
-                    }
-                    attackTargetId = 0;
-                    float pow;
-                    float knockbackStrength;
-                    pow = getDiveStrength(entity);
-                    pow = applyComboDamage(pow);
-                    knockbackStrength = 0.10F;
-                    int diveCooldown = ClientNetworking.getAppropriateConfig().vampireSettings.diveAttackCooldown;
-                    setCooldown(PowerIndex.GENERAL_1, diveCooldown);
-                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
-                            PowerIndex.GENERAL_1, diveCooldown);
+        if (!this.self.level().isClientSide()) {
+            if (entity != null) {
+                if (entity.distanceTo(self) > 3.5) {
+                    return;
+                }
+                attackTargetId = 0;
+                float pow;
+                float knockbackStrength;
+                pow = getDiveStrength(entity);
+                pow = applyComboDamage(pow);
+                knockbackStrength = 0.10F;
+                int diveCooldown = ClientNetworking.getAppropriateConfig().vampireSettings.diveAttackCooldown;
+                setCooldown(PowerIndex.GENERAL_1, diveCooldown);
+                S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
+                        PowerIndex.GENERAL_1, diveCooldown);
 
-                    if (DamageHandler.VampireDamageEntity(entity, pow, this.self)) {
-                        if (entity instanceof LivingEntity livingEntity) {
-                            sendClutchCooldowns(12);
-                            setDazed(livingEntity,(byte) 12);
-                        }
-                        sendParticlesIfPossible(self.level(),ParticleTypes.CRIT,
-                                entity.getEyePosition().x, entity.getEyePosition().y, entity.getEyePosition().z,
-                                10,
-                                0.2,
-                                0.2,
-                                0.2,
-                                0.01);
-                        takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
-                        playSoundIfPossible(self.level(),null, this.self.blockPosition(), getBrawlPunchSound(), SoundSource.PLAYERS, 1F, (float) (0.7f + Math.random() * 0.1f));
-                        addToCombo(entity);
-                    } else {
-                        if (!this.self.level().isClientSide()) {
-                            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
-                        }
+                if (DamageHandler.VampireDamageEntity(entity, pow, this.self)) {
+                    if (entity instanceof LivingEntity livingEntity) {
+                        sendClutchCooldowns(12);
+                        setDazed(livingEntity, (byte) 12);
+                    }
+                    sendParticlesIfPossible(self.level(), ParticleTypes.CRIT,
+                            entity.getEyePosition().x, entity.getEyePosition().y, entity.getEyePosition().z,
+                            10,
+                            0.2,
+                            0.2,
+                            0.2,
+                            0.01);
+                    takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
+                    playSoundIfPossible(self.level(), null, this.self.blockPosition(), getBrawlPunchSound(), SoundSource.PLAYERS, 1F, (float) (0.7f + Math.random() * 0.1f));
+                    addToCombo(entity);
+                } else {
+                    if (!this.self.level().isClientSide()) {
+                        playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
                     }
                 }
             }

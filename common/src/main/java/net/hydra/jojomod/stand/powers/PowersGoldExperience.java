@@ -2119,7 +2119,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
         return resolvePoints >= getNeededResolvePoints();
     }
 
-    private float resolvePoints = 0F;
+    protected float resolvePoints = 0F;
 
     public float getResolvePoints() { return resolvePoints; }
     public float getNeededResolvePoints() { return 300.0F; }
@@ -2229,6 +2229,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             if (((StandUser)self).roundabout$getStandPowers() instanceof PowersGER GER) {
                 GER.idlePos = idlePos;
                 GER.standSkin = standSkin;
+                GER.resolvePoints = resolvePoints;
 
                 GER.setOriginalDisc(savedDisc);
             }

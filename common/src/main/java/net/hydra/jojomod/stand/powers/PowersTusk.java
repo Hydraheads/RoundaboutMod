@@ -20,6 +20,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.TuskEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
@@ -66,6 +67,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BrushableBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BrushableBlockEntity;
@@ -363,7 +365,7 @@ public class PowersTusk extends NewDashPreset {
                     return !canFlatten();
                 }
                 case 4 -> {
-                    return this.getStandEntity(this.getSelf()) == null;
+                    return this.getStandEntity(this.getSelf()) == null || !this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING);
                 }
             }
         } else if (slot == 2) {
@@ -935,7 +937,10 @@ public class PowersTusk extends NewDashPreset {
                     for (int y = -1; y < 2; y++) {
                         BlockPos delta = alignBlockPos(blockPos,i,x,y,dir);
                         BlockState state = this.getSelf().level().getBlockState(delta);
-                        if (!state.isAir() && MainUtil.isDestructible(this.getSelf().level(),blockPos,state)) {
+                        BlockHitResult blockHitResult = new BlockHitResult(delta.getCenter(),dir,delta,false);
+                        if (!state.isAir()
+                                && MainUtil.isDestructible(this.getSelf().level(),blockPos,state)
+                                && MainUtil.canPlaceOnClaim((Player)this.getSelf(),blockHitResult)) {
                             ReturningObjectEntity ret = new ReturningObjectEntity(ModEntities.RETURNING_OBJECT,this.getSelf().level(),delta,start,end);
                             ret.setPos(delta.getCenter());
                             Vec3 kbDir = alignBlockPos(blockPos,0,0,0,dir).getCenter().subtract(alignBlockPos(blockPos,1,0,0,dir).getCenter()).normalize().reverse();
@@ -948,6 +953,7 @@ public class PowersTusk extends NewDashPreset {
                             ret.setState(state);
                             this.getSelf().level().addFreshEntity(ret);
                             this.getSelf().level().destroyBlock(delta,false);
+                            this.getSelf().level().updateNeighborsAt(delta, Blocks.AIR);
 
                         }
                     }
@@ -2318,7 +2324,7 @@ public class PowersTusk extends NewDashPreset {
     private Pair<Direction,Direction> EASTWEST = new Pair<>(Direction.NORTH,Direction.UP);
 
     public void clientWallBreaker() {
-        if (!onCooldown(PowerIndex.SKILL_1) && this.getStandEntity(this.getSelf()) != null) {
+        if (!onCooldown(PowerIndex.SKILL_1) && this.getStandEntity(this.getSelf()) != null && this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
             tryPower(PowersTusk.WALL_BREAK);
             tryPowerPacket(PowersTusk.WALL_BREAK);
         }

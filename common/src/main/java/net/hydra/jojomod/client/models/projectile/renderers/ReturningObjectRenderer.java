@@ -24,7 +24,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
 
-public class ReturningObjectRenderer<T extends Entity>
+public class ReturningObjectRenderer<T extends ReturningObjectEntity>
         extends EntityRenderer<T> {
     private static final float MIN_CAMERA_DISTANCE_SQUARED = 12.25f;
     private final ItemRenderer itemRenderer;
@@ -44,23 +44,28 @@ public class ReturningObjectRenderer<T extends Entity>
 
     @Override
     protected int getBlockLightLevel(T entity, BlockPos blockPos) {
-        return 15;
+        if (fullBright) {
+            return 15;
+        }
+        return super.getBlockLightLevel(entity,blockPos);
     }
 
 
 
     @Override
     public void render(T entity, float f, float g, PoseStack poseStack, MultiBufferSource multiBufferSource, int i) {
-
-
-
         poseStack.pushPose();
 
+        float ticks = entity.getTicks(f);
         poseStack.scale( this.scale*3, this.scale*3, this.scale*3);
         poseStack.mulPose(Axis.YP.rotationDegrees(180.0f));
+      //  poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,1,0,ticks*340)  ,0,0,0);
+      //  poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,ticks*-200),0,0,0);
+      //  poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,0,1,ticks*150),0,0,0);
+
 
         this.itemRenderer.renderStatic(
-                ((ReturningObjectEntity)entity).getState().getBlock().asItem().getDefaultInstance(),
+                entity.getState().getBlock().asItem().getDefaultInstance(),
                 ItemDisplayContext.GROUND,
                 i,
                 OverlayTexture.NO_OVERLAY,
@@ -74,7 +79,7 @@ public class ReturningObjectRenderer<T extends Entity>
     }
 
     @Override
-    public ResourceLocation getTextureLocation(Entity entity) {
+    public ResourceLocation getTextureLocation(T entity) {
         return TextureAtlas.LOCATION_BLOCKS;
     }
 }

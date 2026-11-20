@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.objects;
 
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.visages.CloneEntity;
@@ -77,7 +78,11 @@ public class IceTwisterEntity extends WhiteAlbumFreezingEntity {
                         if (mob instanceof Player || mob instanceof CloneEntity){
                             if (this.tickCount%2==0){
                                 if (HeatUtil.getHeat(mob)> -102 && this.tickCount > 4) {
-                                    HeatUtil.addHeat(mob, -1);
+                                    int amt = -1;
+                                    if (!HeatUtil.isArmsFrozen(mob) && ClientNetworking.getAppropriateConfig().experimentalSettings.whiteAlbumTwisterFast) {
+                                        amt = -2;
+                                    }
+                                    HeatUtil.addHeat(mob, amt);
                                 }
                             }
                         } else {
