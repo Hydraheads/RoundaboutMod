@@ -3671,7 +3671,9 @@ public class PowersDiverDown extends NewPunchingStand {
             }
             // transfers stand hits into the user of the stand
             if (target instanceof StandEntity stand && stand.getUser() != null) {
-                target = stand.getUser();
+                if(!(stand instanceof BlackSabbathEntity)) {
+                    target = stand.getUser();
+                }
             }
             // cooldown if whiffed
             if (!(target instanceof LivingEntity) || target instanceof StandEntity || target == null) {

@@ -1688,6 +1688,23 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
 
+        if(this.roundabout$getGrabbedSoul()){
+            Entity ent = this.level().getEntity(roundabout$getGrabberSabbath());
+            if(ent == null){
+                System.out.println("aaa");
+                this.roundabout$setGrabbedSoul(false);
+                this.roundabout$setGrabberSabbath(0);
+            } else if(ent instanceof LivingEntity lent) {
+                if (lent != null && (lent.isRemoved() || !lent.isAlive() || lent.isDeadOrDying())) {
+                    this.roundabout$setGrabbedSoul(false);
+                    this.roundabout$setGrabberSabbath(0);
+                } else if (lent == null) {
+                    this.roundabout$setGrabbedSoul(false);
+                    this.roundabout$setGrabberSabbath(0);
+                }
+            }
+        }
+
         // if (StandID > -1) {
         if (!this.level().isClientSide()) {
             if (roundabout$hasSpringLegs() && --roundabout$springLegsTicks <= 0) {
@@ -5515,7 +5532,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if(this.roundabout$getGrabberSabbath() != 0){
             Entity z = this.level().getEntity(roundabout$getGrabberSabbath());
             if(z != null && z instanceof BlackSabbathEntity be){
-                if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);/*((StandUser) e).roundabout$updateSealedTicks(-1)*/;be.killSoul();((StandUser)e).roundabout$setGrabberSabbath(0);}
+                if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);be.killSoul();((StandUser)e).roundabout$setGrabberSabbath(0);}
             }
         }
 
@@ -5526,7 +5543,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     if (ent != null && ent instanceof LivingEntity LE) {
                         BE.setMeleeInteractionTicks(-1);
                         ((StandUser) LE).roundabout$setGrabbedSoul(false);
-                        //((StandUser) LE).roundabout$updateSealedTicks(-1);
                         BE.killSoul();
                         ((StandUser) LE).roundabout$setGrabberSabbath(0);
                     }
