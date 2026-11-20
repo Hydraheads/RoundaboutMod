@@ -365,12 +365,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             EntityDataSerializers.INT);
 
     @Unique
-    private static final EntityDataAccessor<Integer> ROUNDABOUT$EXPLOSION_INFLATE = SynchedEntityData.defineId(
-            LivingEntity.class,
-            EntityDataSerializers.INT);
-
-
-    @Unique
     private static final EntityDataAccessor<Integer> ROUNDABOUT$MOLD_JUMP_IMUNITY_TICKS = SynchedEntityData.defineId(
             LivingEntity.class,
             EntityDataSerializers.INT);
@@ -1476,17 +1470,19 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return this.getEntityData().get(ROUNDABOUT$HEAT);
     }
 
+
+
     @Unique
     @Override
     public void roundabout$setExplosionInflation(int e) {
-        roundabout$explosionInflatTimer = PowersKillerQueen.getDetonateWindup() + 2;
-        this.getEntityData().set(ROUNDABOUT$EXPLOSION_INFLATE, e);
+        roundabout$explosionInflatTimer = PowersKillerQueen.getDetonateWindup() + 4;
+        roundabout$explosionInflation = e;
     }
 
     @Unique
     @Override
     public int roundabout$getExplosionInflation() {
-        return this.getEntityData().get(ROUNDABOUT$EXPLOSION_INFLATE);
+        return roundabout$explosionInflation;
     }
 
     @Unique
@@ -4008,7 +4004,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BUBBLE_ENCASED, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$POSSESSOR, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$HEAT, 0);
-            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$EXPLOSION_INFLATE, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BOUND_TO, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_ZAPPED_TO_ATTACK, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$TRUE_INVISIBILITY, -1);
@@ -6193,12 +6188,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Unique
     public int roundabout$encasedTimer = 0;
-    /**
-     * made to make sure that mobs and players dont stay bigger
-     * in case the kq user logs off, die or switch stands
-     */
-    @Unique
-    public int roundabout$explosionInflatTimer = 0;
 
     @Unique
     public void rdbt$reduceOtherEffectDurations(int ticks, MobEffect... exclude) {
@@ -6244,6 +6233,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             this.removeEffect(effect);
         }
     }
+
+    /**
+     * made to make sure that mobs and players dont stay bigger
+     * in case the kq user logs off, die or switch stands
+     */
+    @Unique
+    public int roundabout$explosionInflatTimer = 0;
+    @Unique
+    public int roundabout$explosionInflation = -1;
 
     /** Stone Heart and Potion Ticks */
     @Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;tickEffects()V", shift = At.Shift.BEFORE))
@@ -6293,13 +6291,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             roundabout$setOasisVanishTicks(roundabout$getOasisVanishTicks() - 1);
         }
 
-        /*
-        if (roundabout$getStandPowers() instanceof PowersWhiteAlbum && active) {
-            roundabout$setWhiteAlbumVanishTicks(roundabout$getWhiteAlbumVanishTicks() + 1);
-        } else {
-            roundabout$setWhiteAlbumVanishTicks(roundabout$getWhiteAlbumVanishTicks() - 1);
-        }*/
-
         if (roundabout$hasDiverArms()) {
             roundabout$setDiverDownVanishTicks(roundabout$getDiverDownVanishTicks() + 1);
         } else {
@@ -6317,21 +6308,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         } else {
             roundabout$setRattShoulderVanishTicks(0);
         }
-        /*
-        if (roundabout$getStandPowers() instanceof PowersAnubis && active) {
-            roundabout$setAnubisVanishTicks(roundabout$getAnubisVanishTicks() + 1);
-        } else {
-            roundabout$setAnubisVanishTicks(roundabout$getAnubisVanishTicks() - 1);
-        }*/
+
+        /// Killer queen inflation when exploding
+        if (roundabout$explosionInflatTimer > 0) {
+            roundabout$explosionInflatTimer--;
+        }
+        if (roundabout$explosionInflatTimer <= 0) {
+            roundabout$setExplosionInflation(-1);
+        }
 
         /** Soft and Wet Bubble Encase launch */
         if (roundabout$isLaunchBubbleEncased() && !this.level().isClientSide()) {
-            if (roundabout$explosionInflatTimer > 0) {
-                roundabout$explosionInflatTimer--;
-            }
-            if (roundabout$explosionInflatTimer <= 0) {
-                roundabout$setExplosionInflation(-1);
-            }
+
             if (roundabout$encasedTimer > 0) {
                 roundabout$encasedTimer--;
                 Vec3 storedVec = roundabout$getStoredVelocity();

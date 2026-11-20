@@ -2135,7 +2135,24 @@ public class PowersKillerQueen extends NewPunchingStand {
     	super.updateUniqueMoves();
     }
 
-    public void updateDetonate() {
+    private void sendDetonationInflation(Entity target, int value) {
+        if (!this.self.level().isClientSide && target instanceof LivingEntity LE) {
+            ServerLevel serverWorld = ((ServerLevel) this.self.level());
+            int targetId = LE.getId();
+
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
+
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+
+                S2CPacketUtil.syncKqInflaton(serverPlayerEntity, targetId, value);
+            }
+        }
+    }
+
+    private void updateDetonate() {
         if (this.currentBombStatus == BOMB_NONE) {
             this.detonateTimer = -1;
             if (this.getActivePower() == DETONATE) {
@@ -2146,7 +2163,8 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (detonateTimer > getDetonateWindup() - 2) {
                 if (bombEntity instanceof StrayCatEntity SC && SC.getBubbleShield()) {
                     detonateTimer = getDetonateWindup() - 2;
-                    ((StandUser)bombEntity).roundabout$setExplosionInflation(-1);
+                    sendDetonationInflation(bombEntity, -1);
+                    //((StandUser)bombEntity).roundabout$setExplosionInflation(-1);
                     if (this.getActivePower() == DETONATE) {
                         this.setPowerNone();
                     }
@@ -2197,7 +2215,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                     && (currentBombStatus != ARROW_BOMB && isEntityBomb(currentBombStatus))) {
                 float percent = detonateTimer / (float) getDetonateWindup();
                 if (bombEntity instanceof LivingEntity && bombEntity.isAlive()) {
-                    ((StandUser)bombEntity).roundabout$setExplosionInflation((int)(percent * 18));
+                    //((StandUser)bombEntity).roundabout$setExplosionInflation((int)(percent * 18));
+                    sendDetonationInflation(bombEntity, (int)(percent * 18));
                 }
                 if (bombEntity != null && self.tickCount % 3 == 0 && percent > 0.1f) {
                     Vec3 vec = getRandPos(bombEntity);
@@ -2850,7 +2869,8 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (this.isClient()) { return true; }
 
         if (isEntityBomb(currentBombStatus) && bombEntity instanceof LivingEntity) {
-            ((StandUser)bombEntity).roundabout$setExplosionInflation(-1);
+            //((StandUser)bombEntity).roundabout$setExplosionInflation(-1);
+            sendDetonationInflation(bombEntity, -1);
         }
         if (getStandEntity(getSelf()) instanceof FollowingStandEntity standEntity && standEntity.isAlive() && !standEntity.isRemoved() &&
                 !standEntity.getHeldItem().isEmpty()) {
@@ -5293,7 +5313,8 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                 if (target != null) {
                     if (target instanceof LivingEntity) {
-                        ((StandUser) target).roundabout$setExplosionInflation(-1);
+                        //((StandUser) target).roundabout$setExplosionInflation(-1);
+                        sendDetonationInflation(target, -1);
                     }
                     vPos = target.getPosition(1);
                     bPos = new BlockPos(target.getBlockX(), target.getBlockY(), target.getBlockZ());

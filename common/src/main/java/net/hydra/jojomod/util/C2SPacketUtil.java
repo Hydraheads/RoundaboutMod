@@ -423,6 +423,14 @@ public class C2SPacketUtil {
         );
     }
 
+    public static void sendSyncGreenDayMoldPacket(int actionId, int extraData) {
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.SyncGreenDayMold.value,
+                actionId,
+                extraData
+        );
+    }
+
     /**reading packets from the server*/
 
 }

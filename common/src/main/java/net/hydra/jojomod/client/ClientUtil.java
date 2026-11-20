@@ -1112,6 +1112,17 @@ public class ClientUtil {
                         }
                     }
                 }
+                else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncKqInflaton.value)) {
+                    Player pl = Minecraft.getInstance().player;
+
+                    if (pl != null && pl.level() != null) {
+                        int targetID = (int) vargs[0];
+                        int inflation = (int) vargs[1];
+                        if (pl.level().getEntity(targetID) instanceof LivingEntity LE) {
+                            ((StandUser)LE).roundabout$setExplosionInflation(inflation);
+                        }
+                    }
+                }
 
                 // theoretical deregister dynamic worlds packet
                 // String name = buf.readUtf();
