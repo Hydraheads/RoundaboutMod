@@ -1697,6 +1697,8 @@ public class Config implements Cloneable {
         public Integer timestopLeapCooldown;
         @BooleanOption(group = "inherit", value = true)
         public Boolean timestopCancelsFood;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean timestopCancelsGuns;
     }
 
     public static class ExperimentalSettings {

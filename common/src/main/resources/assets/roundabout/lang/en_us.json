@@ -5536,6 +5536,9 @@
   "config.roundabout.timestopCancelsFood.desc": "While in stopped time, you cannot gain healing from food",
   "config.roundabout.postTESoften.name": "Post TE Soften",
   "config.roundabout.postTESoften.desc": "If ending time erase makes certain damage after it ends weaker like time stop does. Good to prevent rushdown abuse.",
+  "config.roundabout.timestopCancelsGuns.name": "Time Stop Cancels Guns",
+  "config.roundabout.timestopCancelsGuns.desc": "Apparently Diego couldn't shoot guns in time stop, he was doing incredibly specific things like shooting the moment time resumes or punching bullets to set one up without shooting the gun normally.",
+
 
   "config.roundabout.nerfedTEDamage.name": "Nerfed TE PVP",
   "config.roundabout.nerfedTEDamage.desc": "Makes the fated self less physically strong with its punches by a small amount for balancing.",
