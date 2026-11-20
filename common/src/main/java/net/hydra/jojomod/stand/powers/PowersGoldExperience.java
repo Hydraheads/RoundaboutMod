@@ -2039,7 +2039,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
         BlockHitResult blockHit = this.getRayBlockOutline(this.self, punchRange);
 
         // entity vs block check
-        if ((targetInCrosshair == null || targetInCrosshair instanceof GEThornEntity) && blockHit.getType() == HitResult.Type.BLOCK) {
+        if (this.activePower != PowerIndex.BARRAGE_2 && (targetInCrosshair == null || targetInCrosshair instanceof GEThornEntity) && blockHit.getType() == HitResult.Type.BLOCK) {
             this.isGroundBarraging = true;
 
             if (this.self instanceof Player) {
