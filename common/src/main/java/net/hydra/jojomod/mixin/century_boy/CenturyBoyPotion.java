@@ -7,15 +7,12 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MobEffect.class)
 public abstract class CenturyBoyPotion {
-
-    @Shadow public abstract boolean isDurationEffectTick(int $$0, int $$1);
 
     @Inject(method = "applyEffectTick", at=@At("HEAD"), cancellable = true)
     private void cancelRegen(LivingEntity entity, int $$1, CallbackInfo ci){
