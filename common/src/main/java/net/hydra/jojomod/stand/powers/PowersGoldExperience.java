@@ -2235,11 +2235,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
         setActivePower(PowerIndex.SPECIAL);
         syncActivePower();
 
-        this.animateStand(StandEntity.HURT_BY_BARRAGE);
+        this.animateStand(GoldExperienceEntity.REQUIEM);
         this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
-
-        // TODO: Animation
-        /// do epic aura farm animation here or something
     }
 
     private void updateRequiem() {
