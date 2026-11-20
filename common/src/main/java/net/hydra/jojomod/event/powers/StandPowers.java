@@ -272,22 +272,12 @@ public class StandPowers extends AbilityScapeBasis {
      * Returns false when it fails, and true when sucessfull
      * override it to yours needs*/
     public boolean onStandArrowUse() {
-        /** Requiem stands like Golden Experience and silver chariot should
-         * probably make something like this
-         *
-         * if (this.self instanceof Player PL) {
-         *      if (PL.experienceLevel >= 50) {
-         *          // do requiem stuff here
-         *
-         *          if (!PE.isCreative()) {
-         *              PE.giveExperienceLevels(-50);
-         *          }
-         *          return true;
-         *      }else {
-         *          return false;
-         *      }
-         * }
-         */
+
+        return false;
+    }
+
+    /// Intended for requiem
+    public boolean onStandArrowUseClient() {
 
         return false;
     }
