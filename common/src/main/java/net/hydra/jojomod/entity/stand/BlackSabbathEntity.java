@@ -642,6 +642,10 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             super.knockback($$0 * 1.25D, $$1, $$2 * 1.25D);
         }
     }
+    @Override
+    public boolean canChangeDimensions() {
+        return false;
+    }
     public boolean shouldFloat = false;
     public void setShouldFloat(boolean bool){shouldFloat = bool;}
     public boolean shouldSelect = false;

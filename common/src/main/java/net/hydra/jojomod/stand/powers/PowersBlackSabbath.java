@@ -127,6 +127,22 @@ public class PowersBlackSabbath extends NewDashPreset {
                             }
                         }
                     }
+                    if(this.getStandEntity(self) instanceof BlackSabbathEntity BE){
+                        DimensionType t = BE.level().dimensionType();
+                        DimensionType T = value.level().dimensionType();
+                        if (t != T) {
+                            if (BE.getGrabbing() != 0) {
+                                Entity ent = BE.level().getEntity(BE.getGrabbing());
+                                if (ent != null && ent instanceof LivingEntity LE && ent.is(value)) {
+                                    BE.setMeleeInteractionTicks(-1);
+                                    ((StandUser) LE).roundabout$setGrabbedSoul(false);
+                                    BE.killSoul();
+                                    ((StandUser) LE).roundabout$setGrabberSabbath(0);
+                                }
+                            }
+                            removeTargetEntities(value);
+                        }
+                    }
                 }
             }
         }
@@ -1014,8 +1030,32 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         //System.out.println(tickDown2 + ". " + test);
        // System.out.println(blackSabbathTargets + ". " + test);
        // System.out.println(moveMode + ". " + test);
-
-        //TODO: REWRITE DIMENSION CHANGING STUFF
+if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be) {
+    DimensionType t = be.level().dimensionType();
+    DimensionType T = this.getSelf().level().dimensionType();
+    if (t != T) {
+        if (moveMode != 0) {
+            be.forceDespawn(true);
+            active = false;
+            if(moveMode == 2){
+                this.selecting = false;
+            }
+            if(moveMode == 3){
+                if (be.getGrabbing() != 0) {
+                    Entity ent = be.level().getEntity(be.getGrabbing());
+                    if (ent != null && ent instanceof LivingEntity LE) {
+                        be.setMeleeInteractionTicks(-1);
+                        ((StandUser) be).roundabout$setGrabbedSoul(false);
+                        be.killSoul();
+                        ((StandUser) LE).roundabout$setGrabberSabbath(0);
+                    }
+                }
+                this.clearTargetEntitiesOnStandDeath();
+            }
+            setNull();
+        }
+    }
+}
 
         if(isClient()){
             StandEntity s = this.getStandEntity(this.getSelf());
