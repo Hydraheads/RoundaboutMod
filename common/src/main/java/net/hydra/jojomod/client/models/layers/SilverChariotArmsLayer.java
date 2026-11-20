@@ -68,8 +68,8 @@ public class SilverChariotArmsLayer<T extends LivingEntity, A extends HumanoidMo
 
             arms.rightArm().setRotation(0.0F, 0.0F, 0.0F);
             arms.leftArm().setRotation(0.0F, 0.0F, 0.0F);
-            arms.rightArm().setPos(1.0F, -1.0F, 0.0F);
-            arms.leftArm().setPos(-1.0F, -1.0F, 0.0F);
+            arms.rightArm().setPos(1.1F, -1.0F, 0.0F);
+            arms.leftArm().setPos(-1.1F, -1.0F, 0.0F);
 
             if (SU.roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PSC.hasHandsOut()) {
                 // Has to use the left arm for part 5 skins
@@ -77,14 +77,14 @@ public class SilverChariotArmsLayer<T extends LivingEntity, A extends HumanoidMo
                     poseStack.pushPose();
                     this.getParentModel().leftArm.translateAndRotate(poseStack);
                     // poseStack.scale(1.05F, 1.02F, 1.05F);
-                    poseStack.scale(1.15F, 1.12F, 1.15F);
+                    poseStack.scale(1.20F, 1.12F, 1.20F);
                     arms.leftArm.render(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 0.70F);
                     poseStack.popPose();
                 } else {
                     poseStack.pushPose();
                     this.getParentModel().rightArm.translateAndRotate(poseStack);
                     // poseStack.scale(1.05F, 1.02F, 1.05F);
-                    poseStack.scale(1.15F, 1.12F, 1.15F);
+                    poseStack.scale(1.20F, 1.12F, 1.20F);
                     arms.rightArm.render(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 0.70F);
                     poseStack.popPose();
                 }
