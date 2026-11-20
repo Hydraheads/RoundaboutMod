@@ -104,7 +104,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
             ITEM_THROW = 60,
             TREE = 61,
             LIFE_SENSOR = 63,
-            HEAL_CHARGE = 64;
+            HEAL_CHARGE = 64,
+            REQUIEM = 65;
 
     // move bytes found in other moves
     public static final byte ITEM_IMBUE = 62;
@@ -128,7 +129,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     @Override
     public boolean interceptIncomingHarm(DamageSource source, float amount) {
-        if (activePower == PowerIndex.SPECIAL) {
+        if (activePower == REQUIEM) {
             return !source.is(DamageTypes.GENERIC_KILL);
         }
 
@@ -909,7 +910,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
         }
 
         // this is requiem...
-        if (this.getActivePower() == PowerIndex.SPECIAL) {
+        if (this.getActivePower() == REQUIEM) {
             updateRequiem();
         }
         super.updateUniqueMoves();
@@ -945,7 +946,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (!consumeClickInput) {
-            if (activePower == PowerIndex.SPECIAL) {return; }
+            if (activePower == REQUIEM) {return; }
             if (impaleTicks > 0){
                 return;
             }
@@ -990,7 +991,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // lets animations happen while blocking
     @Override
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
-        if (impaleTicks > 0 || this.activePower == PowerIndex.SPECIAL) {
+        if (impaleTicks > 0 || this.activePower == REQUIEM) {
             return false;
         }
         if (this.activePower == TREE || this.activePower == BUSH_CREATION
@@ -2141,7 +2142,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
         return canExecuteMoveWithLevel(getMaxLevel());
     }
     public boolean isPossibleToRequiem() {
-        return resolvePoints >= getNeededResolvePoints();
+        return resolvePoints >= getNeededResolvePoints() && ((StandUser)self).roundabout$getActive();
     }
 
     protected float resolvePoints = 0F;
@@ -2153,7 +2154,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public boolean onStandArrowUse() {
         if (this.self instanceof Player PE && activePower == PowerIndex.NONE) {
             if (isPossibleToRequiem()) {
-                ((StandUser) self).roundabout$summonStand(self.level(), true, true);
+                //((StandUser) self).roundabout$summonStand(self.level(), true, true);
                 sendParticlesIfPossible(self.level(),ParticleTypes.FIREWORK, PE.getX(),
                         PE.getY() + PE.getEyeHeight(), PE.getZ(),
                         20, 0, 0, 0, 0.4);
@@ -2232,14 +2233,12 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     private void setRequiem() {
         this.setAttackTimeDuring(0);
-        setActivePower(PowerIndex.SPECIAL);
-        syncActivePower();
+        setActivePower(REQUIEM);
+        //tryPower(REQUIEM, true);
+        //syncActivePower();
 
-        this.animateStand(StandEntity.HURT_BY_BARRAGE);
+        this.animateStand(GoldExperienceEntity.REQUIEM);
         this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
-
-        // TODO: Animation
-        /// do epic aura farm animation here or something
     }
 
     private void updateRequiem() {
@@ -3601,7 +3600,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     @Override
     public float inputSpeedModifiers(float basis) {
-        if (this.activePower == PowerIndex.SPECIAL) { return 0f; }
+        if (this.activePower == REQUIEM) { return 0f; }
         if (this.activePower == PowerIndex.BARRAGE_CHARGE_2) {
             basis*=0.5f;
         } else if (this.activePower == PowerIndex.BARRAGE_2) {
@@ -3617,18 +3616,18 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     @Override
     public boolean cancelItemUse() {
-        return (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2 || this.getActivePower() == PowerIndex.SPECIAL);
+        return (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2 || this.getActivePower() == REQUIEM);
     }
 
     @Override
     public boolean clickRelease(){
-        return (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2 || this.getActivePower() == PowerIndex.SPECIAL);
+        return (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2 || this.getActivePower() == REQUIEM);
     }
 
     @Override
     public boolean cancelSprintJump(){
         if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2 || this.getActivePower() == PowerIndex.BARRAGE_2
-            || this.getActivePower() == HEAL || this.getActivePower() == HEAL_CHARGE || this.getActivePower() == PowerIndex.SPECIAL) {
+            || this.getActivePower() == HEAL || this.getActivePower() == HEAL_CHARGE || this.getActivePower() == REQUIEM) {
             return true;
         }
         return super.cancelSprintJump();
@@ -3636,15 +3635,15 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     @Override
     public boolean cancelJump(){
-        return getActivePower() == PowerIndex.SPECIAL;
+        return getActivePower() == REQUIEM;
     }
 
     public boolean cancelSprintParticles(){
-        return getActivePower() == PowerIndex.SPECIAL;
+        return getActivePower() == REQUIEM;
     }
     /**Cancel all sprinting*/
     public boolean cancelSprint(){
-        return getActivePower() == PowerIndex.SPECIAL;
+        return getActivePower() == REQUIEM;
     }
 
     // end of move methods
