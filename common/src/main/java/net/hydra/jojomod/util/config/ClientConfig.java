@@ -227,6 +227,8 @@ public class ClientConfig implements Cloneable {
         public Integer killerQueenCurrentBombSize;
         @IntOption(group = "inherit", value = 1, min = 1, max = 8)
         public Integer goldExperienceCurrentAnimal;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 1)
+        public Integer silverChariotSwordProjectileType;
     }
     public static class VanillaMCTweaks {
         @BooleanOption(group = "inherit", value = true)
