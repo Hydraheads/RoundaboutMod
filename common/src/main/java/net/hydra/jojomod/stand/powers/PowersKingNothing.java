@@ -116,7 +116,7 @@ public class PowersKingNothing extends NewDashPreset {
         VISUAL_INFO.put(SPINE, new VisualData(0xff7abc, 0xececec, 0xff7abc, 0.15f));
         VISUAL_INFO.put(NOTE, new VisualData(0x78b898, 0xe4806d, 0x78b898, 0.5f));
         VISUAL_INFO.put(BETA, new VisualData(0xae41ff, 0x82ff00, 0xae41ff, 0.15f));
-        VISUAL_INFO.put(WARDEN, new VisualData(0x022d38, 0x1d9ca4, 0x1d9ca4, 0.25f));
+        VISUAL_INFO.put(WARDEN, new VisualData(0x022d38, 0x1d9ca4, 0x1d9ca4, 0.65f));
         VISUAL_INFO.put(SNIFFER, new VisualData(0x93311d, 0x459d8a, 0x459d8a, 0.25f));
         VISUAL_INFO.put(SOMETHING, new VisualData(0xA8DF81, 0x58E990, 0xA8DF81, 0.2f));
         VISUAL_INFO.put(RAM, new VisualData(0xde9c64, 0xd77f5b, 0xde9c64, 0.2f));
