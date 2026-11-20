@@ -7136,37 +7136,31 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public void SetInPurpleHazeTicks(int e) {
         this.purpleHazeTicks = e;
-        //this.entityData.set(ROUNDABOUT$PURPLE_HAZE_TICKS, e);
     }
 
     @Override
     public void SetPurpleHazeSkin(byte skin) {
         this.purpleHazeSkin = skin;
-        //this.entityData.set(ROUNDABOUT$PURPLE_HAZE_SKIN, skin);
     }
 
     @Override
     public byte getPurpleHazeSkin() {
         return this.purpleHazeSkin;
-        //return this.entityData.get(ROUNDABOUT$PURPLE_HAZE_SKIN);
     }
 
     @Override
     public int getPurpleHazeTicks() {
         return this.purpleHazeTicks;
-        //return this.entityData.get(ROUNDABOUT$PURPLE_HAZE_TICKS);
     }
 
     @Override
     public void SetInDistortionHazeTicks(int e) {
         distortionHazeTicks = e;
-        //this.entityData.set(ROUNDABOUT$DISTORTION_HAZE_TICKS, e);
     }
 
     @Override
     public int getDistortionHazeTicks() {
         return distortionHazeTicks;
-        //return this.entityData.get(ROUNDABOUT$DISTORTION_HAZE_TICKS);
     }
 
     //for disguises
