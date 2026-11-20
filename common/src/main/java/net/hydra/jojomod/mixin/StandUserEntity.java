@@ -7514,6 +7514,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (!pctr.self.isCrouching() && !pctr.self.onGround() && !this.isFallFlying() && pctr.stunTicks == 0 && roundabout$getIsRainWalking()) {
                 if (this.getDeltaMovement().y < 0) {
                     this.setOnGround(true);
+                    pctr.dropTimer = 0;
 
                     if (this.isSprinting()) {
                         this.setSprinting(true);
