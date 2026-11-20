@@ -2235,7 +2235,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
         this.setAttackTimeDuring(0);
         setActivePower(REQUIEM);
         //tryPower(REQUIEM, true);
-        syncActivePower();
+        //syncActivePower();
 
         this.animateStand(GoldExperienceEntity.REQUIEM);
         this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
