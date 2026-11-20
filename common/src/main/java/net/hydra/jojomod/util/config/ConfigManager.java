@@ -8,7 +8,6 @@ import com.mojang.datafixers.util.Pair;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
-import net.hydra.jojomod.stand.powers.PowersGoldExperience;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.config.annotation.*;
 import net.hydra.jojomod.util.option.ConfigOptionReference;
@@ -28,7 +27,9 @@ import net.zetalasis.hjson.JsonValue;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public abstract class ConfigManager {
     public static final Gson GSON = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
@@ -96,8 +97,15 @@ public abstract class ConfigManager {
                             new ResourceLocation(split[2], split[3]);
 
                     Block sourceBlock = BuiltInRegistries.BLOCK.get(sourceId);
+                    if (sourceBlock == Blocks.AIR && !sourceId.toString().equals("minecraft:air")) {
+                        Roundabout.LOGGER.warn("Invalid freezable block entry: source block '{}' does not exist", sourceId);
+                        continue;
+                    }
                     Block targetBlock = BuiltInRegistries.BLOCK.get(targetId);
-
+                    if (targetBlock == Blocks.AIR && !targetId.toString().equals("minecraft:air")) {
+                        Roundabout.LOGGER.warn("Invalid freezable block entry: source block '{}' does not exist", sourceId);
+                        continue;
+                    }
 
                     MainUtil.FREEZABLE_BLOCKS.put(sourceBlock, targetBlock);
 
@@ -137,10 +145,121 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getAdvancedConfig().silverChariotBlocksToSlabs != null)
+        if (getAdvancedConfig().kingNothingBlockFormPredictions != null) {
+            MainUtil.KING_NOTHING_BLOCK_FORM_PREDICT.clear();
+            for (String entry : getAdvancedConfig().kingNothingBlockFormPredictions) {
+                try {
+                    String[] split = entry.split(":");
+
+                    if (split.length != 4) {
+                        Roundabout.LOGGER.warn("Invalid block form predict entry: {}", entry);
+                        continue;
+                    }
+
+                    ResourceLocation sourceId = new ResourceLocation(split[0], split[1]);
+                    Item sourceItem = BuiltInRegistries.ITEM.get(sourceId);
+                    if (sourceItem.equals(Items.AIR)) {
+                        Roundabout.LOGGER.warn("Invalid block form predict input: {}", sourceId);
+                        continue;
+                    }
+                    ResourceLocation targetId = new ResourceLocation(split[2], split[3]);
+                    Block targetBlock = BuiltInRegistries.BLOCK.get(targetId);
+                    if (targetBlock.asItem().equals(Items.AIR) || targetBlock.equals(Blocks.AIR)
+                            || targetBlock.defaultDestroyTime() < 0) {
+                        Roundabout.LOGGER.warn("Invalid block form predict output: {}", targetId);
+                        continue;
+                    }
+                    MainUtil.KING_NOTHING_BLOCK_FORM_PREDICT.put(sourceItem, targetBlock);
+                } catch (Exception e) {
+                    Roundabout.LOGGER.error("Failed to parse block form predict entry '{}'", entry, e);
+                }
+            }
+        }
+
+        if (getAdvancedConfig().kingNothingEntityFormPredictionsv2 != null) {
+            MainUtil.KING_NOTHING_ENTITY_FORM_PREDICT.clear();
+            for (String entry : getAdvancedConfig().kingNothingEntityFormPredictionsv2) {
+                try {
+                    String[] split = entry.split(":");
+
+                    if (split.length != 4) {
+                        Roundabout.LOGGER.warn("Invalid entity form predict entry: {}", entry);
+                        continue;
+                    }
+
+                    ResourceLocation sourceId = new ResourceLocation(split[0], split[1]);
+                    Item sourceItem = BuiltInRegistries.ITEM.get(sourceId);
+                    if (sourceItem.equals(Items.AIR)) {
+                        Roundabout.LOGGER.warn("Invalid entity form predict input: {}", sourceId);
+                        continue;
+                    }
+                    if (MainUtil.KING_NOTHING_BLOCK_FORM_PREDICT.containsKey(sourceItem)) {
+                        Roundabout.LOGGER.warn("Form predict input '{}' is already in the block form predict list", sourceId);
+                        continue;
+                    }
+                    ResourceLocation targetId = new ResourceLocation(split[2], split[3]);
+                    EntityType<?> targetEntity = BuiltInRegistries.ENTITY_TYPE.get(targetId);
+                    if (targetEntity.equals(EntityType.PIG) && !targetId.equals(new ResourceLocation("minecraft", "pig"))) {
+                        Roundabout.LOGGER.warn("Invalid entity form predict output: {}", targetId);
+                        continue;
+                    }
+                    MainUtil.KING_NOTHING_ENTITY_FORM_PREDICT.put(sourceItem, targetEntity);
+                } catch (Exception e) {
+                    Roundabout.LOGGER.error("Failed to parse entity form predict entry '{}'", entry, e);
+                }
+            }
+        }
+
+        if (getAdvancedConfig().kingNothingBlockGroups != null) {
+            MainUtil.KING_NOTHING_BLOCK_GROUPS.clear();
+            MainUtil.KING_NOTHING_BLOCK_KEYS.clear();
+            for (String entry : getAdvancedConfig().kingNothingBlockGroups) {
+                try {
+                    String[] split = entry.split(":");
+                    if (split.length < 4 && split.length % 2 != 0) {
+                        Roundabout.LOGGER.warn("Invalid block group entry: {}", entry);
+                        continue;
+                    }
+                    Set<Block> group = new HashSet<>();
+                    ResourceLocation sourceId = new ResourceLocation(split[0],split[1]);
+                    Block sourceBlock = BuiltInRegistries.BLOCK.get(sourceId);
+                    if (sourceBlock.asItem().equals(Items.AIR) || sourceBlock.equals(Blocks.AIR)
+                            || sourceBlock.defaultDestroyTime() < 0) {
+                        Roundabout.LOGGER.warn("Invalid block group key: {}", sourceBlock);
+                        continue;
+                    }
+                    for (int i = 0; i < split.length; i += 2) {
+                        ResourceLocation targetId = new ResourceLocation(split[i], split[i + 1]);
+                        Block targetBlock = BuiltInRegistries.BLOCK.get(targetId);
+                        if (targetBlock.asItem().equals(Items.AIR) || targetBlock.equals(Blocks.AIR)
+                                || targetBlock.defaultDestroyTime() < 0 || group.contains(targetBlock)) {
+                            Roundabout.LOGGER.warn("Invalid block group value: {}", targetBlock);
+                            continue;
+                        }
+                        MainUtil.KING_NOTHING_BLOCK_KEYS.put(targetBlock, sourceBlock);
+                        group.add(targetBlock);
+                    }
+                    MainUtil.KING_NOTHING_BLOCK_GROUPS.put(sourceBlock, group);
+                } catch (Exception e) {
+                    Roundabout.LOGGER.error("Failed to parse block group entry '{}'", entry, e);
+                }
+            }
+        }
+
+        if (getAdvancedConfig().kingNothingBlockSniffBlacklist != null) {
+            MainUtil.kingNothingBlockSniffBlacklist.clear();
+            MainUtil.kingNothingBlockSniffBlacklist.addAll(getAdvancedConfig().kingNothingBlockSniffBlacklist);
+        }
+
+        if (getAdvancedConfig().kingNothingMobSniffBlacklist != null) {
+            MainUtil.kingNothingMobSniffBlacklist.clear();
+            MainUtil.kingNothingMobSniffBlacklist.addAll(getAdvancedConfig().kingNothingMobSniffBlacklist);
+        }
+
+        if (getAdvancedConfig().silverChariotBlocksToSlabsV2 != null)
         {
             MainUtil.SILVER_CHARIOT_BLOCK_TO_SLAB.clear();
-            for (String entry : getAdvancedConfig().silverChariotBlocksToSlabs)
+            for (String entry : getAdvancedConfig().silverChariotBlocksToSlabsV2)
             {
                 try
                 {
@@ -197,9 +316,9 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getAdvancedConfig().purpleHazeDecayBlocksAndRatesV4 != null) {
+        if (getAdvancedConfig().purpleHazeDecayBlocksAndRatesV5 != null) {
             MainUtil.PURPLE_HAZE_DECAY_BLOCKS.clear();
-            for (String entry : getAdvancedConfig().purpleHazeDecayBlocksAndRatesV4) {
+            for (String entry : getAdvancedConfig().purpleHazeDecayBlocksAndRatesV5) {
                 try {
                     String[] split = entry.split(":");
                     if (split.length != 5) {
@@ -210,7 +329,15 @@ public abstract class ConfigManager {
                     ResourceLocation targetId = new ResourceLocation(split[2],split[3]);
                     Float decayRate = Float.parseFloat(split[4]);
                     Block sourceBlock = BuiltInRegistries.BLOCK.get(sourceId);
+                    if (sourceBlock == Blocks.AIR && !sourceId.toString().equals("minecraft:air")) {
+                        Roundabout.LOGGER.warn("Invalid Purple Haze block decay entry: source block '{}' does not exist", sourceId);
+                        continue;
+                    }
                     Block targetBlock = BuiltInRegistries.BLOCK.get(targetId);
+                    if (targetBlock == Blocks.AIR && !targetId.toString().equals("minecraft:air")) {
+                        Roundabout.LOGGER.warn("Invalid Purple Haze block decay entry: target block '{}' does not exist", targetId);
+                        continue;
+                    }
                     MainUtil.PURPLE_HAZE_DECAY_BLOCKS.put(sourceBlock, targetBlock);
                     MainUtil.PURPLE_HAZE_DECAY_RATE.put(sourceBlock, decayRate);
                 }

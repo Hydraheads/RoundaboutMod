@@ -647,9 +647,6 @@ public class PowersD4C extends NewPunchingStand {
     public void tickPower() {
         super.tickPower();
         if (self.level().isClientSide()){
-            if (isInSelectionMode && !hasActive(self)){
-                isInSelectionMode = false;
-            }
             cycleThroughSelectedEntities();
             if (seesBetween){
                 tickBetween();
@@ -714,6 +711,11 @@ public class PowersD4C extends NewPunchingStand {
                 }
             } else {
                 cloneInStore = null;
+            }
+        } else {
+            if (isInSelectionMode && !hasActive(self)){
+                isInSelectionMode = false;
+                saveDiscAndSync();
             }
         }
         if (!this.self.level().isClientSide() && self instanceof ServerPlayer sp){
@@ -1801,8 +1803,12 @@ public class PowersD4C extends NewPunchingStand {
     }
 
     public void flipSelectionMode(){
-        isInSelectionMode = !isInSelectionMode;
+        tryPowerPacket(PowerIndex.SPECIAL_FINISH);
         this.self.playSound(ModSounds.D4C_MENU_TOGGLE_ON_EVENT, 200F, 1.0F);
+    }
+    public void flipSelectionModeServer(){
+        isInSelectionMode = !isInSelectionMode;
+        saveDiscAndSync();
     }
 
     public void worldHop2Client(){
@@ -3020,8 +3026,11 @@ public class PowersD4C extends NewPunchingStand {
         } else if (move == PowerIndex.POWER_2_BONUS) {
             this.grabMobIntoWorld();
             return false;
-        } else if (move == PowerIndex.POWER_2_SNEAK){
+        } else if (move == PowerIndex.POWER_2_SNEAK) {
             this.replaceBody();
+            return false;
+        } else if (move== PowerIndex.SPECIAL_FINISH){
+            flipSelectionModeServer();
             return false;
         } else if (move == PowerIndex.POWER_3_SNEAK){
             return this.chopAttack();
@@ -3622,7 +3631,7 @@ public class PowersD4C extends NewPunchingStand {
             $$0.remove("altBlockY");
             $$0.remove("altBlockZ");
         }
-
+        $$0.putBoolean("isInSelectionMode",isInSelectionMode);
     }
 
     @Override
@@ -3639,6 +3648,9 @@ public class PowersD4C extends NewPunchingStand {
         } else {
             altBlockPos = null;
         }
+
+
+        isInSelectionMode = $$0.getBoolean("isInSelectionMode");
 
     }
     public boolean isWip(){

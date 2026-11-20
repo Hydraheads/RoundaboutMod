@@ -96,6 +96,7 @@ public class ModItems {
     public static Item MAX_STAND_DISC_CREAM;
     public static Item STAND_DISC_EMPEROR;
     public static Item MAX_STAND_DISC_EMPEROR;
+    public static Item STAND_DISC_KING_NOTHING;
     public static Item STAND_DISC;
     public static Item SIGHT_DISC;
     public static Item MEMORY_DISC;
@@ -303,6 +304,7 @@ public class ModItems {
     public static Item BLACKMORE_MASK;
     public static Item GUCCIO_MASK;
     public static Item HATO_MASK;
+    public static Item NORISUKE_MASK;
     public static Item SHIZUKA_MASK;
     public static Item CHAKA_MASK;
     public static Item DAIYA_MASK;

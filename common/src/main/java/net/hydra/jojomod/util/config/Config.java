@@ -118,6 +118,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public GreenDaySettings greenDaySettings;
     @NestedOption(group = "modded")
+    public KingNothingSettings kingNothingSettings;
+    @NestedOption(group = "modded")
     public D4CSettings d4cSettings;
     @NestedOption(group = "modded")
     public DiverDownSettings diverDownSettings;
@@ -1262,6 +1264,20 @@ public class Config implements Cloneable {
         @IntOption(group = "inherit", value = 6, min = 0, max = 72000)
         public Integer emperorBulletDamage;
     }
+
+    public static class KingNothingSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableKingNothing;
+        @IntOption(group = "inherit", value = 70, min = 0, max = 72000)
+        public Integer kingNothingPhaseAttackCd;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean kingNothingDynamicPhaseAttackCd;
+        @IntOption(group = "inherit", value = 70, min = 0, max = 72000)
+        public Integer kingNothingPhaseMineCd;
+        @IntOption(group = "inherit", value = 70, min = 0, max = 72000)
+        public Integer kingNothingPhasePlaceCd;
+    }
+
     public static class D4CSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableD4c;
@@ -1617,6 +1633,48 @@ public class Config implements Cloneable {
         public Float silverChariotBonusPlayerDMGArmSummon;
         @FloatOption(group = "inherit", value = 6.0F, min = 0, max = 72000F)
         public Float silverChariotBonusMobDMGArmSummon;
+
+        // Debugging, please do not remove it yet, I will remove it later
+        /*
+        @FloatOption(group = "inherit", value = 180F, min = -360F, max = 360F)
+        public Float poseStack_Axis_NORTH_YP;
+        @FloatOption(group = "inherit", value = 0F, min = -360F, max = 360F)
+        public Float poseStack_Axis_NORTH_XP;
+        @FloatOption(group = "inherit", value = 90F, min = -360F, max = 360F)
+        public Float poseStack_Axis_EAST_YP;
+        @FloatOption(group = "inherit", value = 0F, min = -360F, max = 360F)
+        public Float poseStack_Axis_EAST_XP;
+        @FloatOption(group = "inherit", value = 0F, min = -360F, max = 360F)
+        public Float poseStack_Axis_SOUTH_YP;
+        @FloatOption(group = "inherit", value = 0F, min = -360F, max = 360F)
+        public Float poseStack_Axis_SOUTH_XP;
+        @FloatOption(group = "inherit", value = -90F, min = -360F, max = 360F)
+        public Float poseStack_Axis_WEST_YP;
+        @FloatOption(group = "inherit", value = 0F, min = -360F, max = 360F)
+        public Float poseStack_Axis_WEST_XP;
+        @FloatOption(group = "inherit", value = 0F, min = -360F, max = 360F)
+        public Float poseStack_Axis_DOWN_YP;
+        @FloatOption(group = "inherit", value = 90F, min = -360F, max = 360F)
+        public Float poseStack_Axis_DOWN_XP;
+        @FloatOption(group = "inherit", value = 0F, min = -360F, max = 360F)
+        public Float poseStack_Axis_UP_YP;
+        @FloatOption(group = "inherit", value = -90F, min = -360F, max = 360F)
+        public Float poseStack_Axis_UP_XP;
+        @FloatOption(group = "inherit", value = 0F, min = -100F, max = 100F)
+        public Float poseStack_Translate_x;
+        @FloatOption(group = "inherit", value = 0F, min = -100F, max = 100F)
+        public Float poseStack_Translate_y;
+        @FloatOption(group = "inherit", value = 0F, min = -100F, max = 100F)
+        public Float poseStack_Translate_z;
+        @FloatOption(group = "inherit", value = 1F, min = -100F, max = 100F)
+        public Float poseStack_Scale_x;
+        @FloatOption(group = "inherit", value = 1F, min = -100F, max = 100F)
+        public Float poseStack_Scale_y;
+        @FloatOption(group = "inherit", value = 1F, min = -100F, max = 100F)
+        public Float poseStack_Scale_z;
+        @FloatOption(group = "inherit", value = 0.3F, min = -100F, max = 100F)
+        public Float poseStack_Depth_Offset;
+        */
     }
 
     public static class CatchTheRainbowSettings {

@@ -115,6 +115,8 @@ public class ClientConfig implements Cloneable {
     @NestedOption(group = "modded")
     public ClientConfig.LyinEyesSettings lyinEyesSettings;
     @NestedOption(group = "modded")
+    public ClientConfig.KingNothingSettings kingNothingSettings;
+    @NestedOption(group = "modded")
     public ClientConfig.CatchTheRainbowSettings catchTheRainbowSettings;
   /*  @NestedOption(group = "modded")
     public ClientConfig.StandTweakSettings standTweakSettings; */
@@ -225,6 +227,8 @@ public class ClientConfig implements Cloneable {
         public Integer killerQueenCurrentBombSize;
         @IntOption(group = "inherit", value = 1, min = 1, max = 8)
         public Integer goldExperienceCurrentAnimal;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 1)
+        public Integer silverChariotSwordProjectileType;
     }
     public static class VanillaMCTweaks {
         @BooleanOption(group = "inherit", value = true)
@@ -255,6 +259,10 @@ public class ClientConfig implements Cloneable {
         public Boolean bombConfigFastToggle;
         @BooleanOption(group = "inherit", value = true)
         public Boolean itemToolsProtection;
+    }
+    public static class KingNothingSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean highlightInItemTrack;
     }
     public static class WhitesnakeSettings {
         @BooleanOption(group = "inherit", value = false)

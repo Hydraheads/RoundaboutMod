@@ -5,12 +5,17 @@ import net.hydra.jojomod.entity.projectile.FleshPileEntity;
 import net.hydra.jojomod.entity.projectile.RattDartEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
+import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.FleshBucketItem;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -27,6 +32,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BucketPickup;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -40,9 +46,11 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
+
 
 public class FleshBlock
-        extends Block {
+        extends Block implements BucketPickup {
     public static final int MAX_HEIGHT = 4;
     public static final IntegerProperty LAYERS = ModBlocks.FLESH_LAYER;
     protected static final VoxelShape[] VISUAL_SHAPE = new VoxelShape[]{Shapes.empty(), Block.box(0.0, 0.0, 0.0, 16.0, 4.0, 16.0), Block.box(0.0, 0.0, 0.0, 16.0, 8.0, 16.0), Block.box(0.0, 0.0, 0.0, 16.0, 12.0, 16.0), Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 16.0)};
@@ -195,6 +203,45 @@ public class FleshBlock
 
         }
         return InteractionResult.FAIL;
+    }
+
+    @Override
+    public ItemStack pickupBlock(LevelAccessor level, BlockPos blockPos, BlockState blockState) {
+        ItemStack stack = new ItemStack(ModItems.FLESH_BUCKET);
+        int bucketFill = 0;
+        for (int x=-2;x<3;x++) {
+            for (int z=-2;z<3;z++) {
+                for (int y=1;y>-2;y--) {
+                    if (bucketFill == FleshBucketItem.BASE_CAPACITY) {break;}
+                    BlockPos pos = blockPos.offset(x, y, z);
+                    BlockState BS = level.getBlockState(pos);
+                    if (BS.getBlock() instanceof FleshBlock) {
+                        int amount = BS.getValue(ModBlocks.FLESH_LAYER);
+                        int newAmount = bucketFill+amount;
+
+                        if (newAmount > FleshBucketItem.BASE_CAPACITY) {
+                            int extra = newAmount - FleshBucketItem.BASE_CAPACITY;
+                            if (level instanceof Level LV) {
+                                LV.setBlockAndUpdate(pos, BS.setValue(ModBlocks.FLESH_LAYER, extra));
+                            }
+                        } else {
+                            level.removeBlock(pos,false);
+                        }
+                        bucketFill = Math.min(newAmount, FleshBucketItem.BASE_CAPACITY);
+
+
+                    }
+                }
+
+            }
+        }
+        FleshBucketItem.setFleshMissing(stack, FleshBucketItem.BASE_CAPACITY - bucketFill);
+        return stack;
+    }
+
+    @Override
+    public Optional<SoundEvent> getPickupSound() {
+        return Optional.of(SoundEvents.BUCKET_FILL) ;
     }
 }
 

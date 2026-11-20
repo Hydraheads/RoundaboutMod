@@ -364,7 +364,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             for (int $$4 = 0; $$4 < $$3.size(); $$4++) {
                 Entity $$5 = $$3.get($$4);
                 if ($$5 instanceof ItemEntity IE && stand.getSensing().hasLineOfSight($$5)){
-                    if (!(IE.getItem().getItem() instanceof BlockItem BI && (BI.getBlock() instanceof ShulkerBoxBlock || BI.getBlock() instanceof FancyLighterBlock))){
+                    if (!(IE.getItem().getItem() instanceof BlockItem BI &&
+                            (BI.getBlock() instanceof ShulkerBoxBlock || BI.getBlock() instanceof FancyLighterBlock))){
                         stand.canAcquireHeldItem = true;
                         stand.setHeldItem(IE.getItem().copyWithCount(1));
                         playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.7F, 1.3F);

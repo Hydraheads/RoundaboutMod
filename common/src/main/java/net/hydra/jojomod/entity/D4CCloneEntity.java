@@ -13,6 +13,7 @@ import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.nbt.CompoundTag;
@@ -536,7 +537,7 @@ public class D4CCloneEntity extends CloneEntity implements ContainerListener,Has
 
     public void setInteractedPlayer(@Nullable Player $$0) {
         boolean $$1 = this.getInteractedPlayer() != null && $$0 == null;
-        this.interactedPlayer = player;
+        this.interactedPlayer = $$0;
         if ($$1) {
             this.stopInteraction();
         }
@@ -812,9 +813,13 @@ public class D4CCloneEntity extends CloneEntity implements ContainerListener,Has
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (getPlayerUUID().isPresent()) {
             if (player.getUUID().equals(getPlayerUUID().get())) {
-                setInteractedPlayer(player);
-                this.openCustomInventoryScreen(player);
-                return InteractionResult.sidedSuccess(this.level().isClientSide);
+                if (((StandUser)player).roundabout$getStandPowers() instanceof PowersD4C pd4c && pd4c.isInSelectionMode
+                    || !((StandUser)player).roundabout$getActive()
+                ) {
+                    setInteractedPlayer(player);
+                    this.openCustomInventoryScreen(player);
+                    return InteractionResult.sidedSuccess(this.level().isClientSide);
+                }
             }
         }
 

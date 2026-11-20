@@ -951,8 +951,7 @@ private void bridgePlace(BlockHitResult $$0,Player P) {
                     Item tem = stack.getItem();
                     if (stack.isDamageableItem()
                     ) {
-                        if (!(tem instanceof FleshBucketItem)
-                                && !(tem instanceof FishingRodItem)
+                        if (!(tem instanceof FishingRodItem)
                                 && !(tem instanceof LuckyLipstickItem)
                                 && !(tem instanceof MemoryChessPieceItem)
                                 && !(tem instanceof ExperienceBishopItem)

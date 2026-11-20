@@ -211,7 +211,7 @@ public class ModBlocks {
 
     public static final WoodType GINKGO_WOOD_TYPE =
             AccessWoodType.roundabout$register(
-                    new WoodType("ginkgo", BlockSetType.OAK)
+                    new WoodType("roundabout_ginkgo", BlockSetType.OAK)
             );
 
     public static Block GINKGO_LOG;
