@@ -3308,9 +3308,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
                     playSoundIfPossible(self.level(), null, this.self.blockPosition(), sound, SoundSource.PLAYERS, 0.95F, 1.1F);
                 }
                 if (this.getSelf() instanceof Player serverPlayer && !this.getSelf().level().isClientSide()) {
-                    S2CPacketUtil.sendCooldownSyncPacket((ServerPlayer) serverPlayer, PowerIndex.GENERAL_3, getLifePunchCooldown() + 400);
+                    S2CPacketUtil.sendCooldownSyncPacket((ServerPlayer) serverPlayer, PowerIndex.GENERAL_3, getLifePunchCooldown() + 200);
                 }
-                this.setCooldown(PowerIndex.GENERAL_3, getLifePunchCooldown() + 400);
+                this.setCooldown(PowerIndex.GENERAL_3, getLifePunchCooldown() + 200);
                 return;
             }
             // all of this is for the block version of life punch
