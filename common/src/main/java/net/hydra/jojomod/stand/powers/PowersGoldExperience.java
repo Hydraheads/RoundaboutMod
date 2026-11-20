@@ -2202,6 +2202,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     private void setRequiem() {
         this.setAttackTimeDuring(0);
         setActivePower(PowerIndex.SPECIAL);
+        syncActivePower();
 
         this.animateStand(StandEntity.HURT_BY_BARRAGE);
         this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
@@ -3600,6 +3601,19 @@ public class PowersGoldExperience extends BlockGrabPreset {
             return true;
         }
         return super.cancelSprintJump();
+    }
+
+    @Override
+    public boolean cancelJump(){
+        return getActivePower() == PowerIndex.SPECIAL;
+    }
+
+    public boolean cancelSprintParticles(){
+        return getActivePower() == PowerIndex.SPECIAL;
+    }
+    /**Cancel all sprinting*/
+    public boolean cancelSprint(){
+        return getActivePower() == PowerIndex.SPECIAL;
     }
 
     // end of move methods
