@@ -22,6 +22,10 @@ public class ForgeNetworkHandler {
                 .encoder(ClientboundBlackSabbathOpenPacket::encode)
                 .decoder(ClientboundBlackSabbathOpenPacket::decode)
                 .consumerMainThread(ClientboundBlackSabbathOpenPacket::handle).add();
+        INSTANCE.messageBuilder(ClientboundD4CCloneOpenPacket.class, index++)
+                .encoder(ClientboundD4CCloneOpenPacket::encode)
+                .decoder(ClientboundD4CCloneOpenPacket::decode)
+                .consumerMainThread(ClientboundD4CCloneOpenPacket::handle).add();
     }
 
     public static <MSG> void sendToClient(MSG message, ServerPlayer serverPlayer) {

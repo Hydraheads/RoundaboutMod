@@ -126,6 +126,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public SilverChariotSettings silverChariotSettings;
     @NestedOption(group = "modded")
+    public GoldExperienceSettings goldExperienceSettings;
+    @NestedOption(group = "modded")
     public KingCrimsonSettings kingCrimsonSettings;
     @NestedOption(group = "modded")
     public CatchTheRainbowSettings catchTheRainbowSettings;
@@ -1294,7 +1296,50 @@ public class Config implements Cloneable {
         @IntOption(group = "inherit", value = 0, min = 0, max = 4)
         public Integer getMiningTierD4c;
     }
-
+    public static class GoldExperienceSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableGoldExperience;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
+        public Integer getMiningTierGoldExperience;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer miningSpeedMultiplierGoldExperience;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer goldExperienceAttackMultOnPlayers;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer goldExperienceAttackMultOnMobs;
+        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        public Integer goldExperienceGuardPoints;
+        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
+        public Integer goldExperienceCooldownDNA;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer goldExperienceCooldownAnimal;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer goldExperienceCooldownHeal;
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        public Integer goldExperienceCooldownLifeSensor;
+        @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
+        public Integer goldExperienceCooldownItemImbue;
+        @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
+        public Integer goldExperienceCooldownLifePunch;
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        public Integer goldExperienceCooldownVine;
+        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
+        public Integer goldExperienceCooldownTree;
+        @IntOption(group = "inherit", value = 240, min = 0, max = 72000)
+        public Integer goldExperienceCooldownBramble;
+        @IntOption(group = "inherit", value = 320, min = 0, max = 72000)
+        public Integer goldExperienceCooldownBush;
+        @FloatOption(group = "inherit", value = 1, min = 0, max = 20)
+        public Float initialHealBurst;
+        @IntOption(group = "inherit", value = 7, min = 0, max = 72000)
+        public Integer treeMaxHeight;
+        @FloatOption(group = "inherit", value = 15, min = 0, max = 72000)
+        public Float lifeSenseRange;
+        @FloatOption(group = "inherit", value = 150, min = 0, max = 72000)
+        public Float lifeSenseImbueRange;
+        @IntOption(group = "inherit", value = 8, min = 0, max = 72000)
+        public Integer brambleAmount;
+    }
     public static class KingCrimsonSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableKingCrimson;
@@ -1564,8 +1609,10 @@ public class Config implements Cloneable {
         // public Integer silverChariotRapierSpinWindup;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer silverChariotArmourShedStandSealTime;
-        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
         public Integer silverChariotSelfCarryModeMaxHoverCharge;
+        @IntOption(group = "inherit", value = 1, min = 1, max = 72000)
+        public Integer silverChariotSelfCarryModeHoverRechargeRate;
         @FloatOption(group = "inherit", value = 2.1F, min = 0, max = 72000F)
         public Float silverChariotBonusPlayerDMGArmSummon;
         @FloatOption(group = "inherit", value = 6.0F, min = 0, max = 72000F)

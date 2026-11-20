@@ -6,7 +6,9 @@ import com.mojang.math.Axis;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.stand.renderers.SilverChariotBaseRenderer;
 import net.hydra.jojomod.entity.stand.SilverChariotEntity;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersSilverChariot;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -69,7 +71,7 @@ public class SilverChariotArmsLayer<T extends LivingEntity, A extends HumanoidMo
             arms.rightArm().setPos(1.0F, -1.0F, 0.0F);
             arms.leftArm().setPos(-1.0F, -1.0F, 0.0F);
 
-            if (SU.roundabout$getStandPowers().hasHandsOut()) {
+            if (SU.roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PSC.hasHandsOut()) {
                 // Has to use the left arm for part 5 skins
                 if (SilverChariotEntity.isPart5Skin(skin) || (entity instanceof Player player && player.getMainArm() == HumanoidArm.LEFT)) {
                     poseStack.pushPose();

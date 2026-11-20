@@ -3,8 +3,10 @@ package net.hydra.jojomod.client;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.SilverChariotMountEntity;
 import net.hydra.jojomod.entity.corpses.FallenPhantom;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.mixin.InputEvents;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -80,15 +82,8 @@ public class KeyboardPilotInput extends Input {
                 }
                 
             } else if (player.isPassenger() && player.getVehicle() instanceof SilverChariotMountEntity scme) {
-                if (this.jumping && this.dashKeyDown) {
-                    scme.yaccel = 0;
-                } else if (this.jumping){
-                    scme.yaccel = scme.changeByHeight;
-                } else if (this.dashKeyDown) {
-                    scme.yaccel = -scme.changeByHeight;
-                } else {
-                    scme.yaccel = 0;
-                }
+                byte jumpData = (byte) (this.jumping ? 1 : 0);
+                C2SPacketUtil.byteToServerPacket(PacketDataIndex.BYTE_MOUNT_HOVER_INPUT, jumpData);
             }
         }
     }

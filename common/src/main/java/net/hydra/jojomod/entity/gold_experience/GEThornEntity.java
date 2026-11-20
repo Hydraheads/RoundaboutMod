@@ -4,6 +4,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.DamageHandler;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersGoldExperience;
@@ -86,7 +87,7 @@ public class GEThornEntity extends Entity {
                     if (caster != null && ((StandUser) caster).roundabout$getStandPowers() instanceof PowersGoldExperience gePowers) {
                         damage = gePowers.getBrambleDamage(actualVictim);
                     }
-                    if (DamageHandler.StandDamageEntity(target, damage, caster)) {
+                    if (target.hurt(ModDamageTypes.of(target.level(), ModDamageTypes.BRAMBLE, caster != null ? caster : this), damage)) {
                         target.setDeltaMovement(prevVelocity);
                         target.hurtMarked = true;
                         damagedVictims.add(actualVictim);
