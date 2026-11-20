@@ -722,8 +722,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         BlockPos bposExtra = BlockPos.containing(Vec3.ZERO);
         var blockState = this.self.level().getBlockState(bpos);
         var blockState2 = this.self.level().getBlockState(bposExtra);
-
-
         if(gravityDirection == Direction.DOWN) {
             lvec = getLookAngleChest(self.getYRot(), self);
             pn = self.getEyePosition().add(lvec.scale(1));
@@ -736,74 +734,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                 setShouldBSummonBot(true);
                 return bposExtra;
             }
-        } else {
-            //TODO: to anyone: DON'T REMOVE THE CODE PLEASE.
-           /* Vec2 vecGravity = RotationUtil.rotPlayerToWorld(self.getYRot(), self.getXRot(), gravityDirection);
-            if (gravityDirection == Direction.UP) {
-                lvec = getLookAngleChest(vecGravity.x, self);
-                pn = self.getEyePosition().add(lvec.scale(1));
-                bpos = BlockPos.containing(pn.x(), Math.round(self.getY() -1), pn.z());
-                bposExtra = BlockPos.containing(pn.x(), Math.round(self.getY()), pn.z());
-                if (this.self.level().getBlockState(bpos.above()).isSolid()) {
-                    setShouldBSummonBot(false);
-                    return bpos;
-                } else if (this.self.level().getBlockState(bposExtra.above()).isSolid()) {
-                    setShouldBSummonBot(true);
-                    return bposExtra;
-                }
-            } else if (gravityDirection == Direction.NORTH) {
-                lvec = getLookAngleChest(vecGravity.x, self);
-                pn = self.getEyePosition().add(lvec.scale(1));
-                bpos = BlockPos.containing(pn.x(), pn.y(), Math.round(self.getZ()));
-                bposExtra = BlockPos.containing(pn.x(), pn.y(), Math.round(self.getZ()) + 1);
-                if (this.self.level().getBlockState(bpos.north()).isSolid()) {
-                    setShouldBSummonBot(false);
-                    return bpos;
-                } else if (this.self.level().getBlockState(bposExtra.north()).isSolid()) {
-                    setShouldBSummonBot(true);
-                    return bposExtra;
-                }
-            } else if (gravityDirection == Direction.SOUTH) {
-                lvec = getLookAngleChest(vecGravity.x, self);
-                pn = self.getEyePosition().add(lvec.scale(1));
-                bpos = BlockPos.containing(pn.x(), pn.y(), Math.round(self.getZ()));
-                bposExtra = BlockPos.containing(pn.x(), pn.y(), Math.round(self.getZ()) - 1);
-                if (this.self.level().getBlockState(bpos.south()).isSolid()) {
-                    setShouldBSummonBot(false);
-                    return bpos;
-                } else if (this.self.level().getBlockState(bposExtra.south()).isSolid()) {
-                    setShouldBSummonBot(true);
-                    return bposExtra;
-                }
-            } else if (gravityDirection == Direction.EAST) {
-                lvec = getLookAngleChest(vecGravity.x, self);
-                pn = self.getEyePosition().add(lvec.scale(1));
-                bpos = BlockPos.containing(Math.round(self.getX()), pn.y(), pn.z());
-                bposExtra = BlockPos.containing(Math.round(self.getX()) + 1, pn.y(), pn.z());
-                if (self.onGround()) {
-                    if (this.self.level().getBlockState(bpos.east()).isSolid()) {
-                        setShouldBSummonBot(false);
-                        return bpos;
-                    } else if (this.self.level().getBlockState(bposExtra.east()).isSolid()) {
-                        setShouldBSummonBot(true);
-                        return bposExtra;
-                    }
-                }
-            } else if (gravityDirection == Direction.WEST) {
-                lvec = getLookAngleChest(vecGravity.x, self);
-                pn = self.getEyePosition().add(lvec.scale(1));
-                bpos = BlockPos.containing(Math.round(self.getX()), pn.y(), pn.z());
-                bposExtra = BlockPos.containing(Math.round(self.getX()) - 1,pn.y(), pn.z());
-                if (self.onGround()) {
-                    if (this.self.level().getBlockState(bpos.west()).isSolid()) {
-                        setShouldBSummonBot(false);
-                        return bpos;
-                    } else if (this.self.level().getBlockState(bposExtra.west()).isSolid()) {
-                        setShouldBSummonBot(true);
-                        return bposExtra;
-                    }
-                }
-            }*/
         }
         if ((!blockState.canOcclude() || blockState.isAir()) && (!blockState2.canOcclude() || blockState2.isAir())) {
             return null;
@@ -819,7 +749,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         if (slot == 2 && ((!this.checkIfYouAreInDark() && !(moveMode == 3) || this.getStandEntity(self) != null && moveMode != 2 && moveMode != 3|| this.securityTickDown > 1 && this.blackSabbathTargets.isEmpty()))) {
             return true;
         }
-        if(slot == 1 && (!this.checkIfYouAreInDark() || getValidPlacement() == null || self.isSwimming() || this.getStandEntity(self) != null || this.moveMode == 3 || this.securityTickDown > 1 || gravityDirection != Direction.DOWN)){
+        if(slot == 1 && (!this.checkIfYouAreInDark() || getValidPlacement() == null || self.isSwimming() || this.getStandEntity(self) != null || this.moveMode == 3 || this.securityTickDown > 1 || gravityDirection != Direction.DOWN || !self.onGround())){
             return true;
         }
         return super.isAttackIneptVisually(activeP, slot);

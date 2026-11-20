@@ -795,6 +795,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     @Override
     public boolean setPowerOther(int move, int lastMove) {
+        if (move == REQUIEM) {
+            inventoryGrab();
+            return setRequiem();
+        }
+
         if (move == LIFE_PUNCH) {
             return startLifePunch();
         }
@@ -858,7 +863,12 @@ public class PowersGoldExperience extends BlockGrabPreset {
         else if (move == HEAL_CHARGE) {
             this.healOthers = (passedInt == 1);
             return false;
+        } else if (move == REQUIEM) {
+            grabInventorySlot = passedInt;
+            return false;
         }
+
+
         return super.tryIntPower(move, forced, passedInt);
     }
 
@@ -872,6 +882,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
             resolveRenderTicks = 50;
             return;
         }
+        /*if (activePower == REQUIEM) {
+            this.tryPower(REQUIEM, true);
+            tryPowerPacket(REQUIEM);
+            return;
+        }*/
         super.updatePowerInt(activePower, data);
     }
 
@@ -2134,7 +2149,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // requiem system start
 
     @Override
-    public boolean canUseStandArrow() { return canUseRequiem(); }
+    public boolean canUseStandArrow() { return canUseRequiem() && ((StandUser)self).roundabout$getActive(); }
 
     @Override public boolean shouldStandArrowShake() { return isPossibleToRequiem() && canUseRequiem(); }
 
@@ -2166,14 +2181,32 @@ public class PowersGoldExperience extends BlockGrabPreset {
                             withStyle(ChatFormatting.YELLOW), true);
                 }
 
-                setRequiem();
-
                 return true;
             }else {
                 if (!isClient()) {
                     ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.requiem_failed").
                             withStyle(ChatFormatting.RED), true);
                 }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onStandArrowUseClient() {
+        if (this.self instanceof Player && activePower == PowerIndex.NONE) {
+            if (isPossibleToRequiem()) {
+                /*((StandUser)self).roundabout$tryPower(REQUIEM, true);
+                tryPowerPacket(REQUIEM);*/
+                if (!isAppropriateToGrab()) {
+                    putDownClient();
+                }
+                ((StandUser) this.getSelf()).roundabout$tryIntPower(REQUIEM, true,
+                        ((Player) this.getSelf()).getInventory().selected);
+                tryIntPowerPacket(REQUIEM,
+                        ((Player) this.getSelf()).getInventory().selected);
+
+                return true;
             }
         }
         return false;
@@ -2231,20 +2264,23 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     // requiem animation start
 
-    private void setRequiem() {
-        this.setAttackTimeDuring(0);
-        setActivePower(REQUIEM);
-        //tryPower(REQUIEM, true);
-        //syncActivePower();
-
-        this.animateStand(GoldExperienceEntity.REQUIEM);
-        this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
+    private boolean setRequiem() {
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand)) {
+            this.setAttackTimeDuring(0);
+            this.setActivePower(REQUIEM);
+            //playSoundsIfNearby(IMPALE_NOISE, 27, false);
+            this.animateStand(GoldExperienceEntity.REQUIEM);
+            this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
+            return true;
+        }
+        return false;
     }
 
     private void updateRequiem() {
-        if (attackTimeDuring >= 240) {
+        if (attackTimeDuring >= 240 && activePower == REQUIEM) {
             setPowerNone();
-            // TODO: Change to GER
+
             ItemStack discy = ((StandUser)self).roundabout$getStandDisc();
             ItemStack savedDisc = MainUtil.saveToDiscData(self, discy);
 

@@ -328,7 +328,9 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                     } else if (entity instanceof LifeTrackerEntity pre) {
                         ClientUtil.preRenderLifeTracker(pre, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
                     } else if(entity instanceof BlackSabbathEntity bs){
-                        ClientUtil.preRenderFloatSabbath(bs, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
+                        if(!bs.getHunting()) {
+                            ClientUtil.preRenderFloatSabbath(bs, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
+                        }
                     } else if (entity instanceof StandEntity se) {
                         if(se.getBsGrabbed() != 0 || se instanceof GrabbedMobSoul) {
                             Entity e = level.getEntity(se.getBsGrabbed());
