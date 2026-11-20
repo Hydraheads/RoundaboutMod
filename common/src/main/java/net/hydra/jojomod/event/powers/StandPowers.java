@@ -266,6 +266,7 @@ public class StandPowers extends AbilityScapeBasis {
      *   and Killer Queen (Bites the Dust)
      */
     public boolean canUseStandArrow() { return false; }
+    public boolean shouldStandArrowShake() { return false; }
 
     /** called when the standArrow is used (and the method above is true),
      * Returns false when it fails, and true when sucessfull

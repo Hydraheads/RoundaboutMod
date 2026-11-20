@@ -435,6 +435,10 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     private int LeftArmState = 0;
 
     public boolean isInRain() {
+        return rainExtraTime != 0;
+    }
+
+    private boolean isActuallyInRain() {
         if (ClientNetworking.getAppropriateConfig().catchTheRainbowSettings.catchTheRainbowCanAlwaysUse) {
             return true;
         }else{
@@ -464,7 +468,9 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     }
 
     private int deathTimer = 0;
-    private int dropTimer = 0;
+    public int dropTimer = 0;
+
+    private int rainExtraTime = 0;
 
     @Override
     public void tickPower() {
@@ -528,8 +534,11 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             }
         }
 
-        if (isInRain() && hasStandActive(self)) {
+        if (isActuallyInRain() && hasStandActive(self)) {
             this.getSelf().resetFallDistance();
+            rainExtraTime = 20;
+        } else if (rainExtraTime != 0){
+            rainExtraTime --;
         }
         if(this.self instanceof Player) {
             if(armGoneTicks>0) {
@@ -932,6 +941,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         ctrDodgeTicks = 25;
         setFullDodgeAnimation();
         this.self.stopUsingItem();
+        this.self.unRide();
     }
 
     public void setFullDodgeAnimation(){

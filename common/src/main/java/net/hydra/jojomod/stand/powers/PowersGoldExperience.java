@@ -337,6 +337,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public static List<Item> getDisguiseOptions() {
         return MainUtil.GOLD_EXPERIENCE_DISGUISE_ITEMS;
     }
+    private record KnifeSpawnData(KnifeEntity knife, int delayTicks) {}
+    private final List<KnifeSpawnData> pendingKnives = new ArrayList<>();
 
     // for life sensor
     public boolean lifeSensorActive = false;
@@ -553,6 +555,19 @@ public class PowersGoldExperience extends BlockGrabPreset {
             resolveRenderTicks--;
         }
         if (!this.self.level().isClientSide()) {
+            // 1 second knife animal fire delay
+            if (!this.pendingKnives.isEmpty()) {
+                Level level = this.getSelf().level();
+                Iterator<KnifeSpawnData> it = this.pendingKnives.iterator();
+                while (it.hasNext()) {
+                    KnifeSpawnData data = it.next();
+                    if (data.delayTicks() <= 0) {
+                        level.addFreshEntity(data.knife());
+                        it.remove();
+                    }
+                }
+                this.pendingKnives.replaceAll(d -> new KnifeSpawnData(d.knife(), d.delayTicks() - 1));
+            }
             // bramble bush expanding ring
             if (this.bushWaveOrigin != null && this.self.level() instanceof ServerLevel serverLevel) {
                 this.bushWaveTick++;
@@ -1062,6 +1077,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
             return;
         } else if (sourceStack.is(ModItems.KNIFE_BUNDLE)) {
             Vec3 baseBoost = getRevertBoost(level, pos, entity, owner, 0.75);
+            PowersGoldExperience gePowers = ((StandUser) owner).roundabout$getStandPowers() instanceof PowersGoldExperience ge ? ge : null;
+
             for (int i = 0; i < 4; i++) {
                 KnifeEntity knife = new KnifeEntity(level, owner, sourceStack.copy());
                 knife.setPos(pos);
@@ -1070,7 +1087,13 @@ public class PowersGoldExperience extends BlockGrabPreset {
                         (level.random.nextDouble() - 0.5) * 0.08,
                         (level.random.nextDouble() - 0.5) * 0.14
                 ));
-                level.addFreshEntity(knife);
+                if (gePowers != null) {
+                    // 1 second delay
+                    gePowers.pendingKnives.add(new KnifeSpawnData(knife, 20));
+                } else {
+                    // fallback
+                    level.addFreshEntity(knife);
+                }
             }
             return;
         } else if (sourceStack.is(ModItems.GASOLINE_CAN)) {
@@ -2112,8 +2135,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public boolean canUseStandArrow() { return canUseRequiem(); }
 
+    @Override public boolean shouldStandArrowShake() { return isPossibleToRequiem() && canUseRequiem(); }
+
     public boolean canUseRequiem() {
-        return canExecuteMoveWithLevel(getMaxLevel()) && Objects.nonNull(getStandEntity(this.self));
+        return canExecuteMoveWithLevel(getMaxLevel());
     }
     public boolean isPossibleToRequiem() {
         return resolvePoints >= getNeededResolvePoints();
@@ -2128,6 +2153,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public boolean onStandArrowUse() {
         if (this.self instanceof Player PE && activePower == PowerIndex.NONE) {
             if (isPossibleToRequiem()) {
+                ((StandUser) self).roundabout$summonStand(self.level(), true, true);
                 sendParticlesIfPossible(self.level(),ParticleTypes.FIREWORK, PE.getX(),
                         PE.getY() + PE.getEyeHeight(), PE.getZ(),
                         20, 0, 0, 0, 0.4);
@@ -2207,6 +2233,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     private void setRequiem() {
         this.setAttackTimeDuring(0);
         setActivePower(PowerIndex.SPECIAL);
+        syncActivePower();
 
         this.animateStand(StandEntity.HURT_BY_BARRAGE);
         this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
@@ -3605,6 +3632,19 @@ public class PowersGoldExperience extends BlockGrabPreset {
             return true;
         }
         return super.cancelSprintJump();
+    }
+
+    @Override
+    public boolean cancelJump(){
+        return getActivePower() == PowerIndex.SPECIAL;
+    }
+
+    public boolean cancelSprintParticles(){
+        return getActivePower() == PowerIndex.SPECIAL;
+    }
+    /**Cancel all sprinting*/
+    public boolean cancelSprint(){
+        return getActivePower() == PowerIndex.SPECIAL;
     }
 
     // end of move methods
