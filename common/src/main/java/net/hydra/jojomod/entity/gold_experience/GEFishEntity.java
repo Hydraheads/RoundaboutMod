@@ -2,6 +2,8 @@ package net.hydra.jojomod.entity.gold_experience;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -38,8 +40,17 @@ public class GEFishEntity extends Salmon implements GELifeform {
         if (!this.level().isClientSide()) {
             if (this.lifespan > 0) {
                 this.lifespan--;
+                this.setNoGravity(this.isInWater());
 
-                if (this.hasLockedRotation) {
+                Entity rider = this.getFirstPassenger();
+                if (rider instanceof LivingEntity livingRider) {
+                    float targetYRot = livingRider.getYRot();
+                    float targetXRot = Mth.clamp(livingRider.getXRot(), -60.0F, 60.0F);
+                    this.setYRot(Mth.rotLerp(0.25F, this.getYRot(), targetYRot));
+                    this.setXRot(Mth.lerp(0.25F, this.getXRot(), targetXRot));
+                    this.yBodyRot = this.getYRot();
+                    this.yHeadRot = this.getYRot();
+                } else if (this.hasLockedRotation) {
                     this.setXRot(this.lockedXRot);
                     this.setYRot(this.lockedYRot);
                     this.yBodyRot = this.lockedYRot;
@@ -58,7 +69,14 @@ public class GEFishEntity extends Salmon implements GELifeform {
         if (this.tickCount > 40) {
             if (this.isInWater()) {
                 Vec3 forwardDir = Vec3.directionFromRotation(this.getXRot(), this.getYRot());
-                this.setDeltaMovement(forwardDir.scale(0.4D));
+                Vec3 move = forwardDir.scale(0.5D);
+
+                boolean atSurface = !this.level().getFluidState(this.blockPosition().above()).is(FluidTags.WATER);
+                if (atSurface && move.y > 0.0D) {
+                    move = new Vec3(move.x, 0.0D, move.z);
+                }
+
+                this.setDeltaMovement(move);
             }
         } else {
             if (this.isInWater()) {
@@ -69,12 +87,9 @@ public class GEFishEntity extends Salmon implements GELifeform {
 
     @Override
     public boolean isInWater() {
-        if (this.level().isClientSide()) {
-            // used to make the fih not use the flop animation while it's skimming on the surface of water
-            boolean isWaterBelow = this.level().getFluidState(this.blockPosition().below()).is(net.minecraft.tags.FluidTags.WATER);
-            return super.isInWater() || isWaterBelow;
-        }
-        return super.isInWater();
+        // used to make the fih not use the flop animation while it's skimming on the surface of water
+        boolean isWaterBelow = this.level().getFluidState(this.blockPosition().below()).is(FluidTags.WATER);
+        return super.isInWater() || isWaterBelow;
     }
 
     @Override

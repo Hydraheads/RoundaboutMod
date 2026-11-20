@@ -26,8 +26,8 @@ public class GoldenSpiralParticle extends TextureSheetParticle {
     protected GoldenSpiralParticle(ClientLevel $$0, double $$1, double $$2, double $$3, double $$4, double $$5, double $$6, SpriteSet $$7) {
         super($$0, $$1, $$2, $$3, 0.0, 0.0, 0.0);
         this.age = 0;
-        this.lifetime = 40;
-        this.quadSize = 0.55F;
+        this.lifetime = 10;
+        this.quadSize = 0.35F;
         this.sprites = $$7;
         this.setSpriteFromAge($$7);
     }

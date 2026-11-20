@@ -137,6 +137,8 @@ public class Config implements Cloneable {
     public StarPlatinumSettings starPlatinumSettings;
     @NestedOption(group = "modded")
     public TimeStopSettings timeStopSettings;
+    @NestedOption(group = "modded")
+    public ExperimentalSettings experimentalSettings;
 
     public static class VanillaMCTweaks {
         @BooleanOption(group = "inherit", value = true)
@@ -1309,7 +1311,7 @@ public class Config implements Cloneable {
         public Integer goldExperienceGuardPoints;
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer goldExperienceCooldownDNA;
-        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 160, min = 0, max = 72000)
         public Integer goldExperienceCooldownAnimal;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer goldExperienceCooldownHeal;
@@ -1695,5 +1697,26 @@ public class Config implements Cloneable {
         public Integer timestopLeapCooldown;
         @BooleanOption(group = "inherit", value = true)
         public Boolean timestopCancelsFood;
+    }
+
+    public static class ExperimentalSettings {
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean summonPunch;
+        @IntOption(group = "inherit", value = 16)
+        public Integer summonPunchTime;
+        @IntOption(group = "inherit", value = 10)
+        public Integer summonPunchBonusCooldown;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean whiteAlbumPunches;
+        @IntOption(group = "inherit", value = 20)
+        public Integer whiteAlbumCritPunchCooldown;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean whiteAlbumTwisterFast;
+        @FloatOption(group = "inherit", value = 0.64F, min = 0, max = 2F)
+        public Float whiteAlbumPunchKnockback;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean vampireStompNerfs;
+        @IntOption(group = "inherit", value = 10, min = 6)
+        public Integer vampireStompAirtime;
     }
 }
