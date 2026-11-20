@@ -540,6 +540,22 @@
       "roundabout:ge_life_punch_windup"
     ]
   },
+  "ge_muda_rush": {
+    "subtitle": "sounds.roundabout.the_world_muda",
+    "sounds": [
+      "roundabout:ge_muda_rush_1",
+      "roundabout:ge_muda_rush_2",
+      "roundabout:ge_muda_rush_3"
+    ]
+  },
+  "ge_muda": {
+    "subtitle": "sounds.roundabout.the_world_muda",
+    "sounds": [
+      "roundabout:ge_muda_1",
+      "roundabout:ge_muda_2",
+      "roundabout:ge_muda_3"
+    ]
+  },
   "summon_king_crimson": {
     "subtitle": "sounds.roundabout.summon_king_crimson",
     "sounds": [

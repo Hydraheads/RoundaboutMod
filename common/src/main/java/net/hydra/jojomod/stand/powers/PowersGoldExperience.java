@@ -14,6 +14,7 @@ import net.hydra.jojomod.entity.gold_experience.*;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.GoldExperienceEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
@@ -340,6 +341,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // for life sensor
     public boolean lifeSensorActive = false;
     private int sensedImbueEntityId = -1;
+
+    // for sounds
+    private static final byte BARRAGE_NOISE = 20;
+    private static final byte LAST_HIT_NOISE = 21;
 
     // basic stand registry stuff
     public PowersGoldExperience(LivingEntity self) {super(self);}
@@ -3646,11 +3651,23 @@ public class PowersGoldExperience extends BlockGrabPreset {
     protected Byte getSummonSound() {return SoundIndex.SUMMON_SOUND;}
 
     @Override
+    public Byte getLastHitSound(){
+
+        double rand = Math.random();
+        byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        return LAST_HIT_NOISE;
+    }
+
+    @Override
     public SoundEvent getSoundFromByte(byte soundChoice) {
         if (soundChoice == SoundIndex.SUMMON_SOUND) {
             return ModSounds.SUMMON_GOLD_EXPERIENCE_EVENT;
         } else if (soundChoice == IMPALE_NOISE || soundChoice == SoundIndex.ALT_CHARGE_SOUND_1) {
             return ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_WINDUP_EVENT;
+        } else if (soundChoice == BARRAGE_NOISE) {
+            return ModSounds.GOLD_EXPERIENCE_MUDA_RUSH_EVENT;
+        } else if (soundChoice == LAST_HIT_NOISE) {
+            return ModSounds.GOLD_EXPERIENCE_MUDA_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
@@ -3686,6 +3703,13 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 }
             }
         }
+    }
+
+    @Override
+    public byte chooseBarrageSound(){
+        double rand = Math.random();
+        byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        return BARRAGE_NOISE;
     }
 
     @Override

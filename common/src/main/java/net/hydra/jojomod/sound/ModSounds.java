@@ -2213,6 +2213,12 @@ public class ModSounds {
     public static final String GOLD_EXPERIENCE_LIFE_PUNCH = "ge_life_punch";
     public static final ResourceLocation GOLD_EXPERIENCE_LIFE_PUNCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+GOLD_EXPERIENCE_LIFE_PUNCH);
     public static SoundEvent GOLD_EXPERIENCE_LIFE_PUNCH_EVENT = SoundEvent.createVariableRangeEvent(GOLD_EXPERIENCE_LIFE_PUNCH_ID);
+    public static final String GOLD_EXPERIENCE_MUDA_RUSH = "ge_muda_rush";
+    public static final ResourceLocation GOLD_EXPERIENCE_MUDA_RUSH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+GOLD_EXPERIENCE_MUDA_RUSH);
+    public static SoundEvent GOLD_EXPERIENCE_MUDA_RUSH_EVENT = SoundEvent.createVariableRangeEvent(GOLD_EXPERIENCE_MUDA_RUSH_ID);
+    public static final String GOLD_EXPERIENCE_MUDA = "ge_muda";
+    public static final ResourceLocation GOLD_EXPERIENCE_MUDA_ID = new ResourceLocation(Roundabout.MOD_ID+":"+GOLD_EXPERIENCE_MUDA);
+    public static SoundEvent GOLD_EXPERIENCE_MUDA_EVENT = SoundEvent.createVariableRangeEvent(GOLD_EXPERIENCE_MUDA_ID);
 
     public static final String GE_REQUIEM_ARROW = "ge_requiem_obtain";
     public static final ResourceLocation GE_REQUIEM_ARROW_ID = new ResourceLocation(Roundabout.MOD_ID+":"+GE_REQUIEM_ARROW);
