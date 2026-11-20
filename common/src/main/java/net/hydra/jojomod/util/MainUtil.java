@@ -14,10 +14,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.gui.FogInventoryMenu;
 import net.hydra.jojomod.client.gui.PowerInventoryMenu;
-import net.hydra.jojomod.entity.BlockWallEntity;
-import net.hydra.jojomod.entity.D4CCloneEntity;
-import net.hydra.jojomod.entity.KingCrimsonProjectionEntity;
-import net.hydra.jojomod.entity.ParallelChestEntity;
+import net.hydra.jojomod.entity.*;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.corpses.FallenPhantom;
 import net.hydra.jojomod.entity.gold_experience.GELifeform;
@@ -3833,6 +3830,15 @@ public class MainUtil {
         } else if (context == PacketDataIndex.BYTE_SWITCH_POWERS) {
             if (PowerTypes.canHavePower(player, data)) {
                 PowerTypes.setPowerTypeWithPenalty(player, data);
+            }
+        } else if (context == PacketDataIndex.BYTE_MOUNT_HOVER_INPUT) {
+            // System.out.println("Received hover input: " + data);
+            if (player.getVehicle() != null && player.getVehicle() instanceof SilverChariotMountEntity scme) {
+                scme.setHovering(data == 1);
+                // System.out.println("Server hover state: " + scme.isHovering());
+                // System.out.println("Server hover charge: " + scme.getHoverTicks());
+            } else {
+                // System.out.println("Player is not riding Silver Chariot Mount!");
             }
         }
     }

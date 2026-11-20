@@ -143,34 +143,34 @@ public class PowersGoldExperience extends BlockGrabPreset {
      */
 
     private final int getDNACooldown() {
-        return 300;
+        return geConfig().goldExperienceCooldownDNA;
     };
     private final int getAnimalCreationCooldown() {
-        return 400;
+        return geConfig().goldExperienceCooldownAnimal;
     };
     private final int getHealCooldown() {
-        return 200;
+        return geConfig().goldExperienceCooldownHeal;
     };
     private final int getLifeSensorCooldown() {
-        return 60;
+        return geConfig().goldExperienceCooldownLifeSensor;
     };
     private final int getItemImbueCooldown() {
-        return 600;
+        return geConfig().goldExperienceCooldownItemImbue;
     };
     private final int getLifePunchCooldown() {
-        return 800;
+        return geConfig().goldExperienceCooldownLifePunch;
     };
     private final int getVineCooldown() {
-        return 60;
+        return geConfig().goldExperienceCooldownVine;
     };
     private final int getTreeCooldown() {
-        return 300;
+        return geConfig().goldExperienceCooldownTree;
     };
     private final int getBrambleCooldown() {
-        return 240;
+        return geConfig().goldExperienceCooldownBramble;
     };
     private final int getBushCooldown() {
-        return 320;
+        return geConfig().goldExperienceCooldownBush;
     };
 
     // for damage
@@ -340,8 +340,6 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // for life sensor
     public boolean lifeSensorActive = false;
     private int sensedImbueEntityId = -1;
-    private static final double LIFE_SENSOR_NORMAL_RANGE = 15.0;
-    private static final double LIFE_SENSOR_IMBUE_RANGE = 150.0;
 
     // basic stand registry stuff
     public PowersGoldExperience(LivingEntity self) {super(self);}
@@ -591,10 +589,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 } else if (this.self.tickCount % 5 == 0 && this.self instanceof ServerPlayer sp) {
                     int foundId = -1;
                     if (this.activeImbuedItemId != null) {
-                        AABB searchBox = this.self.getBoundingBox().inflate(LIFE_SENSOR_IMBUE_RANGE);
+                        AABB searchBox = this.self.getBoundingBox().inflate(geConfig().lifeSenseImbueRange);
                         for (Entity target : this.self.level().getEntities(this.self, searchBox,
                                 e -> e != this.self && !PowerTypes.isInADifferentExistence(e, this.self))) {
-                            if (target.distanceToSqr(this.self) <= (LIFE_SENSOR_IMBUE_RANGE * LIFE_SENSOR_IMBUE_RANGE)
+                            if (target.distanceToSqr(this.self) <= (geConfig().lifeSenseImbueRange * geConfig().lifeSenseImbueRange)
                                     && isHoldingImbuedItem(target)) {
                                 foundId = target.getId();
                                 break;
@@ -1728,14 +1726,14 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 double distSq = ent.distanceToSqr(this.self);
 
                 if (ent.getId() == this.sensedImbueEntityId) {
-                    return distSq <= (LIFE_SENSOR_IMBUE_RANGE * LIFE_SENSOR_IMBUE_RANGE);
+                    return distSq <= (geConfig().lifeSenseImbueRange * geConfig().lifeSenseImbueRange);
                 }
 
                 if (ent instanceof LivingEntity living
                         && !(ent instanceof StandEntity)
                         && !(ent instanceof ArmorStand)
                         && living.isAlive()) {
-                    return distSq <= (LIFE_SENSOR_NORMAL_RANGE * LIFE_SENSOR_NORMAL_RANGE);
+                    return distSq <= (geConfig().lifeSenseRange * geConfig().lifeSenseRange);
                 }
             }
         }
@@ -2116,7 +2114,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
         return resolvePoints >= getNeededResolvePoints();
     }
 
-    private float resolvePoints = 0F;
+    protected float resolvePoints = 0F;
 
     public float getResolvePoints() { return resolvePoints; }
     public float getNeededResolvePoints() { return 300.0F; }
@@ -2226,6 +2224,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             if (((StandUser)self).roundabout$getStandPowers() instanceof PowersGER GER) {
                 GER.idlePos = idlePos;
                 GER.standSkin = standSkin;
+                GER.resolvePoints = resolvePoints;
 
                 GER.setOriginalDisc(savedDisc);
             }
@@ -2313,7 +2312,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 : centerPos;
         Direction growthDirection = Direction.UP;
 
-        int maxHeight = 7;
+        int maxHeight = geConfig().treeMaxHeight;
         int actualHeight = 0;
 
         for (int y = 0; y < maxHeight; y++) {
@@ -2682,6 +2681,15 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
             EntityType<?> typeToSpawn = getAnimalEntityType(this.animalType);
 
+            int cooldown = getAnimalCreationCooldown();
+
+            if(animalType == AnimalTypes.SNAKE.id || animalType == AnimalTypes.PIRAHNA.id || animalType == AnimalTypes.BAT.id) {
+                cooldown += 200;
+            }
+            if(animalType == AnimalTypes.FROG.id || animalType == AnimalTypes.BEE.id) {
+                cooldown += 100;
+            }
+
             if (typeToSpawn != null) {
                 Vec3 spawnPos = this.self.position().add(this.self.getLookAngle().scale(1.2));
                 spawnPos = new Vec3(spawnPos.x, spawnPos.y + 1.0, spawnPos.z);
@@ -2690,7 +2698,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 ItemStack sourceStack = (isMob) ? ItemStack.EMPTY : handItem;
 
                 if (spawnLifeform(typeToSpawn, spawnPos, sourceStack)) {
-                    setCooldown(PowerIndex.SKILL_2, getAnimalCreationCooldown());
+                    setCooldown(PowerIndex.SKILL_2, cooldown);
                     if (!isMob || !handItem.isEmpty()) {
                         handItem.shrink(1);
                     }
@@ -2782,7 +2790,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             double startY = this.self.getY();
             double startZ = this.self.getZ();
 
-            int spikeCount = 8;
+            int spikeCount = geConfig().brambleAmount;
             double spacing = 1.3D;
 
             // Clear any old queued spikes before adding new ones
@@ -2915,12 +2923,12 @@ public class PowersGoldExperience extends BlockGrabPreset {
                         ? this.self.level().getEntity(this.healTargetId)
                         : MainUtil.getTargetEntity(this.getSelf(), 5f);
                 if (lockedTarget instanceof LivingEntity livingHeal && livingHeal.isAlive()) {
-                    livingHeal.heal(1f);
+                    livingHeal.heal(geConfig().initialHealBurst);
                     livingHeal.addEffect(new MobEffectInstance(ModEffects.RECONSTRUCTION, 400, 0, false, true, true));
                     playSoundIfPossible(this.self.level(), livingHeal, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
                 }
             } else {
-                this.self.heal(1f);
+                this.self.heal(geConfig().initialHealBurst);
                 this.self.addEffect(new MobEffectInstance(ModEffects.RECONSTRUCTION, 400, 0, false, true, true));
                 playSoundIfPossible(this.self.level(), this.self, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
             }
@@ -3294,6 +3302,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 if (!this.self.level().isClientSide()) {
                     playSoundIfPossible(self.level(), null, this.self.blockPosition(), sound, SoundSource.PLAYERS, 0.95F, 1.1F);
                 }
+                if (this.getSelf() instanceof Player serverPlayer && !this.getSelf().level().isClientSide()) {
+                    S2CPacketUtil.sendCooldownSyncPacket((ServerPlayer) serverPlayer, PowerIndex.GENERAL_3, getLifePunchCooldown() + 400);
+                }
+                this.setCooldown(PowerIndex.GENERAL_3, getLifePunchCooldown() + 400);
+                return;
             }
             // all of this is for the block version of life punch
             else {

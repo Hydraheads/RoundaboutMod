@@ -447,12 +447,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
     double lastY = 0;
     @Override
     public void tickPower() {
-        if (stallTicks > 0){
-            stallTicks--;
-        }
-        if (inGWRange > 0){
-            inGWRange--;
-        }
+        if (stallTicks > 0){stallTicks--;}
+        if (inGWRange > 0){inGWRange--;}
+        if (airAttackCooldown > 0) {airAttackCooldown--;}
 
         if (!self.level().isClientSide()) {
             if (!isBrawling()) {
@@ -831,6 +828,10 @@ public class PowersWhiteAlbum extends NewDashPreset {
         } else {
             gwNear = null;
         }
+        if (move == PowerIndex.POWER_4_BONUS && !isClient()) {
+            attackTargetId = chargeTime;
+        }
+
         return super.tryIntPower(move, forced, chargeTime);
     }
     public void gentlyWeepsClient(){
@@ -1252,43 +1253,59 @@ public class PowersWhiteAlbum extends NewDashPreset {
             case PowerIndex.POWER_1 -> {
                 return toggleSkates();
             }
-            case PowerIndex.POWER_1_BONUS -> {
-                toggleFists();
+            case PowerIndex.POWER_1_BONUS -> toggleFists();
+            case PowerIndex.POWER_2 -> iceTwister();
+            case PowerIndex.POWER_2_SNEAK -> gentlyWeeps();
+            case PowerIndex.POWER_2_SNEAK_EXTRA -> gentlyWeepsAttach();
+            case PowerIndex.POWER_3 -> iceWallServer(false);
+            case PowerIndex.EXTRA -> setPowerColdBlast();
+            case PowerIndex.EXTRA_2 -> setPowerColdBlastShot();
+            case PowerIndex.POWER_4_BLOCK -> setPowerColdBlastShot2();
+            case PowerIndex.POWER_3_BLOCK -> iceWallServer(true);
+            case PowerIndex.POWER_1_SNEAK -> iceCancelServer();
+            case PowerIndex.POWER_4_SNEAK -> freezeBlocksServer();
+
+            case PowerIndex.SNEAK_ATTACK_CHARGE -> { // charge punch
+                this.setActivePower(PowerIndex.SNEAK_ATTACK_CHARGE);
+                this.setAttackTimeMax(15);
+                this.setAttackTime(0);
+                this.setAttackTimeDuring(0);
+                this.setAttackTimeMax(0);
             }
-            case PowerIndex.POWER_2 -> {
-                iceTwister();
-            }
-            case PowerIndex.POWER_2_SNEAK -> {
-                gentlyWeeps();
-            }
-            case PowerIndex.POWER_2_SNEAK_EXTRA -> {
-                gentlyWeepsAttach();
-            }
-            case PowerIndex.POWER_3 -> {
-                iceWallServer(false);
-            }
-            case PowerIndex.EXTRA -> {
-                setPowerColdBlast();
-            }
-            case PowerIndex.EXTRA_2 -> {
-                setPowerColdBlastShot();
-            }
-            case PowerIndex.POWER_4_BLOCK -> {
-                setPowerColdBlastShot2();
-            }
-            case PowerIndex.POWER_3_BLOCK -> {
-                iceWallServer(true);
-            }
-            case PowerIndex.POWER_1_SNEAK -> {
-                iceCancelServer();
-            }
-            case PowerIndex.POWER_4_SNEAK -> {
-                freezeBlocksServer();
-            }
+            case PowerIndex.SNEAK_ATTACK -> setAttack(); // charge punch release
+
+            case PowerIndex.POWER_4_BONUS -> setAirAttack();
         }
         return super.setPowerOther(move,lastMove);
     }
 
+    private final float AIR_ATTACK_RANGE = 2F;
+    private int airAttackCooldown = 0;
+    public void setAirAttack(){
+        this.airAttackCooldown = ClientNetworking.getAppropriateConfig().experimentalSettings.whiteAlbumCritPunchCooldown;
+        if (HeatUtil.isArmsFrozen(self)){
+            this.attackTimeMax= 12;
+        } else {
+            this.attackTimeMax= 7;
+        }
+        this.setAttackTime(0);
+        setActivePower(PowerIndex.POWER_4_BONUS);
+        setActivePowerPhase((byte) 1);
+        if (!self.level().isClientSide()) {
+            Entity target = null;
+            if (attackTargetId > 0) {
+                target = self.level().getEntity(attackTargetId);
+            }
+            brawlPunchImpact(target);
+        } else {
+            Entity TE = getTargetEntity(self, AIR_ATTACK_RANGE, getBrawlPunchAngle());
+            int id = 0;
+            if (TE != null){
+                id = TE.getId();
+            }
+            tryIntPowerPacket(PowerIndex.POWER_4_BONUS,id);
+        }
+    }
 
     public void setPowerColdBlast() {
         this.attackTimeDuring = 0;
@@ -1580,11 +1597,6 @@ public class PowersWhiteAlbum extends NewDashPreset {
         super.updateIntMove(in);
     }
 
-    @Override
-    public void updateUniqueMoves() {
-        super.updateUniqueMoves();
-    }
-
     public static final byte
             BASE = 1,
             BETA =2,
@@ -1767,10 +1779,11 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
     @Override
-    public boolean setPowerAttack(){
+    public boolean setPowerAttack() {
         setAttack();
         return false;
     }
+    private boolean prevKey = false;
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (self instanceof Player pl &&  ((IPlayerEntity)pl).roundabout$getAttackStrengthTicker() < 5) {
@@ -1779,24 +1792,40 @@ public class PowersWhiteAlbum extends NewDashPreset {
         if (keyIsDown) {
             if (activePowerPhase == 0){
                 if (isBrawling()) {
-                    if (!isChargingCold() &&
-                            !isBarraging()) {
-                        this.tryPower(PowerIndex.ATTACK);
+                    if (!isChargingCold()) {
+                        if (!ClientNetworking.getAppropriateConfig().experimentalSettings.whiteAlbumPunches) {
+                            this.tryPower(PowerIndex.ATTACK);
+                            return;
+                        }
+                        if (!this.getSelf().onGround() && !prevKey && airAttackCooldown == 0) {
+                            this.tryPower(PowerIndex.POWER_4_BONUS);
+                            this.tryPowerPacket(PowerIndex.POWER_4_BONUS);
+                        } else {
+                            if (isHoldingSneak()) {
+                                this.tryPower(PowerIndex.ATTACK);
+                            } else if (!prevKey) {
+                                this.tryPower(PowerIndex.SNEAK_ATTACK_CHARGE);
+                                this.tryPowerPacket(PowerIndex.SNEAK_ATTACK_CHARGE);
+                            }
+                        }
                     }
                 }
             }
+        } else if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE && prevKey) {
+            this.tryPower(PowerIndex.SNEAK_ATTACK);
+            this.tryPowerPacket(PowerIndex.SNEAK_ATTACK);
+
         }
+        prevKey = keyIsDown;
     }
 
-    @Override
-    public void buttonInputBarrage(boolean keyIsDown, Options options) {
-        if (keyIsDown) {
-            if (activePowerPhase == 0){
-                if (isBrawling()) {
 
-                }
-            }
-        }
+    private final int ATTACK_MAX = 13;
+    public float getAttackCharge() {
+        return Mth.clamp(this.getAttackTimeDuring()/(float)ATTACK_MAX,0.3F,1);
+    }
+    public float attackChargeMult(float amt) {
+        return amt * (0.5F + getAttackCharge() * 2.5F);
     }
 
     public int getWhiteAlbumChargeLength(){
@@ -1833,13 +1862,13 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 int ClashTime =  Math.round(attackTimeDuring / Math.max(getWhiteAlbumChargeLength(),attackTimeDuring) * 15);
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 104, ClashTime, 6);
             }
-        } else if (powerOn && isBarrageCharging()) {
-            int ClashTime = Math.round((attackTimeDuring / getBarrageWindup()) * 15);
+        } else if (powerOn && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+            int chargeTime = Math.round(( Math.min(this.getAttackTimeDuring()/(float)ATTACK_MAX,1)) * 15);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
-            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, chargeTime, 6);
         } else {
             int barTexture = 0;
-            Entity TE = getTargetEntity(playerEntity, 3, getBrawlPunchAngle());
+            Entity TE = getTargetEntity(playerEntity, this.getSelf().onGround() ? 3 : AIR_ATTACK_RANGE, getBrawlPunchAngle());
             float attackTimeMax = getAttackTimeMax();
             if (attackTimeMax > 0) {
                 float attackTime = getAttackTime();
@@ -1867,6 +1896,10 @@ public class PowersWhiteAlbum extends NewDashPreset {
                         context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
                     }
                 }
+                if (this.airAttackCooldown != 0) {
+                    int progress = Math.round(7 * ((float)airAttackCooldown/ClientNetworking.getAppropriateConfig().experimentalSettings.whiteAlbumCritPunchCooldown) );
+                    context.blit(StandIcons.JOJO_ICONS, k+4, j + 12, 197, 95, progress, 6);
+                }
             }
         }
     }
@@ -1875,14 +1908,14 @@ public class PowersWhiteAlbum extends NewDashPreset {
     public float getBrawlPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
             if (!MainUtil.canFreeze(entity)){
-                return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.0F));
+                return attackChargeMult(levelupDamageMod(multiplyPowerByStandConfigPlayers(1.05F)));
             }
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(0.95F));
+            return attackChargeMult(levelupDamageMod(multiplyPowerByStandConfigPlayers(0.85F)));
         } else {
             if (!MainUtil.canFreeze(entity)){
-                return levelupDamageMod(multiplyPowerByStandConfigMobs(2.5F));
+                return attackChargeMult(levelupDamageMod(multiplyPowerByStandConfigMobs(2.5F)));
             }
-            return levelupDamageMod(multiplyPowerByStandConfigMobs(2.2F));
+            return attackChargeMult(levelupDamageMod(multiplyPowerByStandConfigMobs(2.2F)));
         }
     }
     @Override
@@ -1940,11 +1973,15 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.5F));
     }
 
+    public boolean canBrawlBreakShields() {
+        return this.getAttackCharge() == 1;
+    }
     @Override
     public void addToCombo(Entity targ){
         if (targ instanceof LivingEntity LV){
             addEXP(1,LV);
         }
+        float amt = -1;
         if (targ instanceof Player PL){
             AABB checkBoxOG = PL.getBoundingBox().inflate(-0.05);
 
@@ -1962,22 +1999,34 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 }
             }
             if (!HeatUtil.isArmsFrozen(PL)){
-                HeatUtil.addHeat(PL, -4);
+                amt = -4;
             } else {
                 if (!HeatUtil.isLegsFrozen(PL)){
-                    HeatUtil.addHeat(PL, -3);
+                    amt = -3;
                 } else {
                     if (cracked){
-                        HeatUtil.addHeat(PL, -2);
+                        amt = -2;
                     } else {
-                        HeatUtil.addHeat(PL, -3);
+                        amt = -3;
                     }
                     //2?
                 }
             }
-        } else if (targ instanceof LivingEntity LE){
-            HeatUtil.addHeat(LE,-13);
+        } else if (targ instanceof LivingEntity){
+            amt = -13;
         }
+        amt *= (getAttackCharge() + 1);
+        if (this.getActivePower() == PowerIndex.POWER_4_BONUS) { // air punch
+            MainUtil.takeUnresistableKnockbackWithY(targ,0.2F,0,-1,0);
+            this.playSoundIfPossible(this.getSelf().level(),null,this.getSelf().blockPosition(), SoundEvents.PLAYER_ATTACK_CRIT,SoundSource.PLAYERS,1F,1F);
+
+        } else {
+            Vec3 dir = targ.position().subtract(this.getSelf().position()).normalize().reverse();
+            MainUtil.takeUnresistableKnockbackWithY(targ, (ClientNetworking.getAppropriateConfig().experimentalSettings.whiteAlbumPunchKnockback)*getAttackCharge(),dir.x,-0.7F,dir.z);
+        }
+        HeatUtil.addHeat(targ,Math.round(amt));
+
+        this.setPowerNone();
     }
 
     @Override

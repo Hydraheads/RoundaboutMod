@@ -81,6 +81,7 @@ public class PowersSilverChariot extends NewPunchingStand {
             SILVER_CHARIOT_CONTROL_MODE_PUNCH_RANGE = 3.0F;
 
     public static final byte
+            SILVER_CHARIOT_SWORD_PROJECTILE_TYPE_CHANGE = 82,
             SILVER_CHARIOT_CONTROL_MODE = 83,
             SILVER_CHARIOT_SELF_GRAB = 85,
             SILVER_CHARIOT_SELF_GRAB_IDLE = 86,
@@ -332,7 +333,9 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public float inputSpeedModifiers(float basis) {
-        if ( PowerTypes.hasStandActive(self)
+        if (PowerTypes.hasStandActive(self)
+                && !this.getArmoured()
+                && this.getActivePower() != PowerIndex.SNEAK_ATTACK_CHARGE
                 && this.getActivePower() != PowerIndex.GUARD
                 && this.getActivePower() != PowerIndex.BARRAGE_CHARGE) {
             if (!(this.getSelf() instanceof Mob)) {
@@ -999,11 +1002,13 @@ public class PowersSilverChariot extends NewPunchingStand {
     public boolean summonRestPeriod = false;
 
     public float getArmouredTimeModifier() {
-        return 0.75F;
+        // return 0.75F;
+        return 0.85F;
     }
 
     public float getUnarmouredTimeModifier() {
-        return 0.50F;
+        // return 0.50F;
+        return 0.70F;
     }
 
     public boolean hasRapier = true;
@@ -1791,17 +1796,14 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public boolean replaceHudActively() {
-        return isPiloting() || isUsableMountEntity(mountEntity);
+        return isPiloting();
     }
 
     @Override
     public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x, boolean removeNum) {
         if (isUsableMountEntity(this.mountEntity)) {
-            int hoverTicks = 0;
-            int maxHoverTicks = 1;
-            StandEntity stand = getStandEntity(self);
-            hoverTicks = mountEntity.getHoverTicks();
-            maxHoverTicks = mountEntity.getMaxHoverTicks();
+            int hoverTicks = mountEntity.getHoverTicks();
+            int maxHoverTicks = mountEntity.getMaxHoverTicks();
             if (hoverTicks > maxHoverTicks) {
                 hoverTicks = maxHoverTicks;
             }
@@ -1997,6 +1999,10 @@ public class PowersSilverChariot extends NewPunchingStand {
         */
         if (moveStarted) moveStarted = false;
         if (move == PowerIndex.BARRAGE_CHARGE_2 || move == PowerIndex.BARRAGE_2) return false;
+        if (!this.getSelf().level().isClientSide() && move == SILVER_CHARIOT_THROW_USER && this.isClashing()) {
+            ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
+            ((StandUser) this.getSelf()).roundabout$setLeapIntentionally(true);
+        }
         if (move == SILVER_CHARIOT_PILOT_DODGE) {
             if (this.getStandEntity(self) != null && this.getStandEntity(self) instanceof SilverChariotEntity SCE) {
                 if (!SCE.level().isClientSide()) {
@@ -2268,13 +2274,16 @@ public class PowersSilverChariot extends NewPunchingStand {
             return;
         }
         if (!keyIsDown) return;
-        if (!isHoldingSneak()) {
+        if (!isHoldingSneak() && this.selfThrowButtonAttackGraceTicks > -1) {
             super.buttonInputAttack(true, options);
-        } else if (canAttack()) {
+        } else if (canAttack() && this.selfThrowButtonAttackGraceTicks > -1) {
             tryPower(PowerIndex.SNEAK_ATTACK_CHARGE, true);
             tryPowerPacket(PowerIndex.SNEAK_ATTACK_CHARGE);
             holdDownClick = true;
         } else {
+            if (this.selfThrowButtonAttackGraceTicks > -1) {
+                return;
+            }
             super.buttonInputAttack(true, options);
         }
         /*
@@ -2513,7 +2522,7 @@ public class PowersSilverChariot extends NewPunchingStand {
     }
 
     private boolean isWithinRemoteRange(Entity entity) {
-        return MainUtil.cheapDistanceTo3d(entity.getX(), entity.getY(), entity.getZ(), this.self.getX(), this.self.getY(), this.self.getZ()) < getMaxPilotRange() + 2d;
+        return MainUtil.cheapDistanceTo3d(entity.getX(), entity.getY(), entity.getZ(), this.self.getX(), this.self.getY(), this.self.getZ()) < getMaxPilotRange() * 2D;
     }
 
     @Override
@@ -3495,6 +3504,8 @@ public class PowersSilverChariot extends NewPunchingStand {
             return false;
         }
         if (isUsableMountEntity(mountEntity) && this.self.isPassenger() && this.self.getVehicle() == mountEntity) {
+            // Self throw ability
+
             bonusLeapCount = 3;
             bigLeap(this.getSelf(), 20, 1);
             ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
@@ -4028,11 +4039,28 @@ public class PowersSilverChariot extends NewPunchingStand {
     }
 
     // private SilverChariotEntity mountedEntity;
-    private SilverChariotMountEntity mountEntity;
+    public SilverChariotMountEntity mountEntity;
+
+    private int selfCarryHoverTicks = maxSelfCarryHoverTicks;
+
+    public int getSelfCarryHoverTicks() {
+        return selfCarryHoverTicks;
+    }
+
+    public void setSelfCarryHoverTicks(int selfCarryHoverTicks) {
+        this.selfCarryHoverTicks = selfCarryHoverTicks;
+    }
+
+    private static final int maxSelfCarryHoverTicks = 100;
+
+    public int getMaxSelfCarryHoverTicks() {
+        return maxSelfCarryHoverTicks;
+    }
 
     public void selfGrabServer() {
         // this.setAttackTimeDuring(-20);
-        if (!this.self.level().isClientSide() && this.self instanceof Player player && !this.isPiloting()) {
+        this.setActivePower(SILVER_CHARIOT_SELF_GRAB);
+        if (!this.self.level().isClientSide() && !this.isPiloting()) {
             this.setSelfCarryMode(true);
             StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
             if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved() && standEntity instanceof SilverChariotEntity silverChariot) {
@@ -4275,9 +4303,9 @@ public class PowersSilverChariot extends NewPunchingStand {
             vec3 = RotationUtil.vecWorldToPlayer(vec3,gravD);
         }
         vec3= new Vec3(
-                vec3.x*mult,
-                0.6+Math.max(vec3.y,0)*mult,
-                vec3.z*mult
+                vec3.x*mult*1.75,
+                Math.max(vec3.y,0)*mult,
+                vec3.z*mult*1.75
         );
 
         MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),

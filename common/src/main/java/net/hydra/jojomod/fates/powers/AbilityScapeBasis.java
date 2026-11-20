@@ -3574,6 +3574,9 @@ public class AbilityScapeBasis {
 
     }
 
+    public boolean canBrawlBreakShields() {
+        return true;
+    }
     public long impactTimeStamp = 0;
     public void brawlPunchImpact(Entity entity) {
         if (!this.self.level().isClientSide()) {
@@ -3600,7 +3603,7 @@ public class AbilityScapeBasis {
                     if (bool && entity instanceof LivingEntity LE) {
                         LE.setLastHurtMob(entity);
                     } else if (entity instanceof LivingEntity LE){
-                        if (isUsingShield(LE)){
+                        if (isUsingShield(LE) && this.canBrawlBreakShields()){
                             knockShield2(LE, 200);
                         }
                     }
@@ -3620,6 +3623,7 @@ public class AbilityScapeBasis {
                 }
             }
         }
+        this.setPowerNone();
     }
     public float applyComboDamage(float dmg){
         return dmg;
@@ -3706,7 +3710,6 @@ public class AbilityScapeBasis {
         } else {
             this.attackTimeMax= 7;
         }
-        this.attackTimeDuring = 0;
         this.setAttackTime(0);
         setActivePower(PowerIndex.NONE);
         setActivePowerPhase((byte) 1);

@@ -3914,11 +3914,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
 
     @Override
-    public int getExtraPunchTime(){
-        return 0;
-    }
-
-    @Override
     public void setAttack(){
         if (!self.level().isClientSide()){
             if (isUsingTimeErase()){

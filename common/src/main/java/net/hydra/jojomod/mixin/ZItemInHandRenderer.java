@@ -131,7 +131,7 @@ public abstract class ZItemInHandRenderer {
                 ci.cancel();
             }
 
-            if (user.roundabout$getStandPowers() instanceof PowersSilverChariot PSC && user.roundabout$getCombatMode()) {
+            if (user.roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PowerTypes.hasStandActive(localPlayer) && PowerTypes.hasHandsActive(localPlayer)) {
                 /*
                 poseStack.pushPose();
                 poseStack.translate(0.3, -0.25, -0.7);
