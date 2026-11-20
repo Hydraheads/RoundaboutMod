@@ -741,6 +741,9 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                 barrier.setPos(getRayBlock(this.self, 0.0f).add(0, -1.6, 0));
                 this.self.level().addFreshEntity(barrier);
             }
+
+            playSoundIfPossible(self.level(), null, self.blockPosition(), ModSounds.CTR_BARRIER_EVENT,
+                    SoundSource.PLAYERS, 1F, 1F);
         }
     }
 
@@ -944,6 +947,9 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         setFullDodgeAnimation();
         this.self.stopUsingItem();
         this.self.unRide();
+
+        playSoundIfPossible(self.level(), null, self.blockPosition(), ModSounds.CTR_FULL_BODY_DODGE_EVENT,
+                SoundSource.PLAYERS, 1F, 1F);
     }
 
     public void setFullDodgeAnimation(){

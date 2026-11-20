@@ -1727,6 +1727,10 @@ public class ForgeSounds {
             register(ModSounds.CTR_RAIN_STEP_2, ModSounds.CTR_RAIN_STEP_2_ID);
     public static final RegistryObject<SoundEvent> CTR_RAIN_STEP_3_EVENT =
             register(ModSounds.CTR_RAIN_STEP_3, ModSounds.CTR_RAIN_STEP_3_ID);
+    public static final RegistryObject<SoundEvent> CTR_BARRIER_EVENT =
+            register(ModSounds.CTR_BARRIER, ModSounds.CTR_BARRIER_ID);
+    public static final RegistryObject<SoundEvent> CTR_FULL_BODY_DODGE_EVENT =
+            register(ModSounds.CTR_FULL_BODY_DODGE, ModSounds.CTR_FULL_BODY_DODGE_ID);
 
     public static final RegistryObject<SoundEvent> ZOMBIEHORSE_STITCHING_EVENT =
             register(ModSounds.ZOMBIEHORSE_STITCHING, ModSounds.ZOMBIEHORSE_STITCHING_ID);

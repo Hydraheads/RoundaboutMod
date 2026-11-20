@@ -1174,6 +1174,7 @@
   "sounds.roundabout.ripper_eyes_charge": "Fluid Buildup",
   "sounds.roundabout.ripper_eyes_beam": "Ripper Eyes",
   "sounds.roundabout.ripper_eyes_short": "Ripper Eyes",
+
   "sounds.roundabout.ctr_heal": "Wounds cured",
   "sounds.roundabout.ctr_summon": "Stand summoned",
   "sounds.roundabout.ctr_detach_1": "Arm thrown",
@@ -1183,6 +1184,8 @@
   "sounds.roundabout.ctr_rain_step_2": "Rain stabilized",
   "sounds.roundabout.ctr_rain_step_3": "Rain stabilized",
   "sounds.roundabout.ctr_stabilizing_rain": "Rain stabilizing",
+  "sounds.roundabout.ctr_barrier": "Rain sharpened",
+  "sounds.roundabout.ctr_full_body_dodge": "Body disassembled",
 
   "sounds.roundabout.zombiehorse_stitching": "Stitching...",
 
