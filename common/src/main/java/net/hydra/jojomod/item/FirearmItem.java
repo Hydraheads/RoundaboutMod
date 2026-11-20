@@ -1,6 +1,8 @@
 package net.hydra.jojomod.item;
 
 import net.hydra.jojomod.access.IGEProjectile;
+import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.SoundIndex;
@@ -10,6 +12,7 @@ import net.hydra.jojomod.stand.powers.PowersGoldExperience;
 import net.hydra.jojomod.stand.powers.PowersWhitesnake;
 import net.hydra.jojomod.event.powers.whitesnake.WhitesnakeControlInventory;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -26,17 +29,14 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public abstract class FirearmItem extends Item {
+public abstract class FirearmItem extends SwordItem {
 
     public static final String AMMO_COUNT_TAG = "AmmoCount";
     public static final String RELOADING_TAG = "IsReloading";
@@ -44,10 +44,8 @@ public abstract class FirearmItem extends Item {
     public static final String TREE_IMBUED_OWNER_TAG = "TreeImbuedOwner";
     public static boolean cycleReload = false;
 
-    public FirearmItem(Properties properties) {
-        super(properties);
-    }
-
+    public FirearmItem(Item.Properties $$3,float speed) {super(Tiers.IRON,1,speed,$$3);}
+    public FirearmItem(Item.Properties $$3) {super(Tiers.IRON, 0, -2, $$3);}
     // checks if there's ammo in inventory
     protected boolean hasAmmoInInventory(Player player) {
         if (canWhitesnakeUse() && WhitesnakeControlInventory.isActive(player)) {
@@ -138,6 +136,9 @@ public abstract class FirearmItem extends Item {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
         if (!(itemStack.getItem() instanceof FirearmItem)) return InteractionResultHolder.fail(itemStack);
+        if(player.getAttackStrengthScale(1) < 1F || (player.level().isClientSide && ClientUtil.hasAttributeSwapped(Minecraft.getInstance())) ) {
+            return InteractionResultHolder.fail(itemStack);
+        }
 
         if ((isCrouchingOrSomething(player, itemStack) && hasAmmoInInventory(player) && getAmmo(itemStack) != getMaxAmmo()) || (isCrouchingOrSomething(player, itemStack) && player.isCreative())) {
             if (!isReloading(itemStack)) {

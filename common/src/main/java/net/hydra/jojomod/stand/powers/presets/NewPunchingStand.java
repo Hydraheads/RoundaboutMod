@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers.presets;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
@@ -15,9 +16,6 @@ import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.item.GlaiveItem;
-import net.hydra.jojomod.networking.ModPacketHandler;
-import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersStarPlatinum;
 import net.hydra.jojomod.stand.powers.PowersTheWorld;
@@ -26,11 +24,9 @@ import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -40,8 +36,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.AxeItem;
-import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.phys.Vec3;
 
@@ -491,6 +485,12 @@ public class NewPunchingStand extends NewDashPreset {
             if (this.getActivePowerPhase() >= this.getActivePowerPhaseMax()) {
                 /*The last hit in a string has more power and knockback if you commit to it*/
                 pow = getHeavyPunchStrength(entity);
+                if (didSummonPunch()) {
+                    if (!MainUtil.getReducedDamage(entity)) {
+                        Roundabout.LOGGER.info("boost");
+                        pow += getPunchStrength(entity) * 2;
+                    }
+                }
                 knockbackStrength = 1F;
                 lasthit = true;
             } else {
@@ -853,6 +853,7 @@ public class NewPunchingStand extends NewDashPreset {
                 meltIFrames--;
             }
         }
+        if (this.summonPunchTicks > 0) {summonPunchTicks--;}
         super.tickPower();
     }
 
@@ -988,4 +989,26 @@ public class NewPunchingStand extends NewDashPreset {
     }
 
 
+    private int summonPunchTicks = 0;
+    public boolean didSummonPunch() {return this.getActivePowerPhase() == this.getActivePowerPhaseMax() && summonPunchTicks > 0;}
+    public void trySummonPunchCooldown() {
+        this.setAttackTimeMax(this.getAttackTimeMax()+ConfigManager.getConfig().experimentalSettings.summonPunchBonusCooldown);
+    }
+    @Override
+    public void onStandSummon(boolean desummon) {
+        super.onStandSummon(desummon);
+        if (!desummon && ClientNetworking.getAppropriateConfig().experimentalSettings.summonPunch) {
+            int t = ClientNetworking.getAppropriateConfig().experimentalSettings.summonPunchTime;
+            if (this.getActivePowerPhase() != this.getActivePowerPhaseMax() && t > 0) {
+                this.setActivePowerPhase((byte) 2);
+            }
+            if (this.getAttackTime() >= this.getAttackTimeMax() && t > 0) {
+                this.setAttackTimeMax(t);
+                this.summonPunchTicks = t;
+                this.setAttackTime(0);
+            } else if (this.getAttackTimeMax()-this.getAttackTime() < t) {
+                this.setAttackTime(this.getAttackTimeMax()-t);
+            }
+        }
+    }
 }

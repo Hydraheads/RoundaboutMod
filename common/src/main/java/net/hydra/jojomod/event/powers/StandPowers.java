@@ -15,6 +15,7 @@ import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
@@ -630,6 +631,11 @@ public class StandPowers extends AbilityScapeBasis {
                     this.setPowerNone();
                 } else if (move == PowerIndex.ATTACK) {
                     this.setPowerAttack();
+                    if (this instanceof NewPunchingStand NPS) {
+                        if (NPS.didSummonPunch()) {
+                            NPS.trySummonPunchCooldown();
+                        }
+                    }
                 } else if (move == PowerIndex.GUARD) {
                     this.setPowerGuard();
                 } else if (move == PowerIndex.BARRAGE_CHARGE) {
