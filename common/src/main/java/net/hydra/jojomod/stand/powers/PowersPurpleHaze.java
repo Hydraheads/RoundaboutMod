@@ -1005,18 +1005,20 @@ public class PowersPurpleHaze extends NewPunchingStand {
             if (canExecuteMoveWithLevel(getDistortionAndPodBiteLevel())) {
                 if (self.hasEffect(ModEffects.VIRUS_IMMUNITY)) {
                     setSkillIcon(context, x, y, 1, StandIcons.VIRUS_SPIT, PowerIndex.POWER_1_BONUS);
-                } else setSkillIcon(context, x, y, 1, StandIcons.POD_BITE, PowerIndex.SKILL_1_SNEAK);
-            } else setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+                } else {
+                    setSkillIcon(context, x, y, 1, StandIcons.POD_BITE, PowerIndex.SKILL_1_SNEAK);
+                }
+            } else {
+                setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+            }
         }
         else setSkillIcon(context, x, y, 1, StandIcons.POD_THROW, PowerIndex.SKILL_1);
 
         if (isHoldingSneak()){
-            if (canExecuteMoveWithLevel(getStrangleLevel())) {
-            setSkillIcon(context, x, y, 2, StandIcons.PH_HEAVY_KICK, PowerIndex.SKILL_2_SNEAK);
-            } else setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD, true);
-        }else if (canExecuteMoveWithLevel(getStrangleLevel())) {
-            setSkillIcon(context, x, y, 2, StandIcons.PURPLE_HAZE_STRANGLE, PowerIndex.SKILL_2);
-        } else setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+            LockedOrNot(context, x, y, 2, StandIcons.PH_HEAVY_KICK, PowerIndex.SKILL_2_SNEAK,getStrangleLevel());
+        } else {
+            LockedOrNot(context, x, y, 2, StandIcons.PURPLE_HAZE_STRANGLE, PowerIndex.SKILL_2,getStrangleLevel());
+        }
 
         if (isHoldingSneak()) {
             if (canExecuteMoveWithLevel(getLeapLevel())) {
@@ -1026,7 +1028,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 } else {
                     setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_PURPLE_HAZE, PowerIndex.GLOBAL_DASH);
                 }
-            } else setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+            } else {
+                setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+            }
         } else {
             if (!(((StandUser) this.getSelf()).roundabout$getLeapTicks() > -1) && !this.getSelf().onGround() && canVault()) {
                 setSkillIcon(context, x, y, 3, StandIcons.PURPLE_HAZE_LEDGE_GRAB, PowerIndex.GLOBAL_DASH);

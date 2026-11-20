@@ -17,6 +17,8 @@ public class GoldExperienceBaseRenderer extends StandRenderer<GoldExperienceEnti
     public GoldExperienceBaseRenderer(EntityRendererProvider.Context context, StandModel<GoldExperienceEntity> entityModel, float f) {
         super(context, entityModel, f);
         this.addLayer(new GoldExperienceLifePunchLayer(this));
+        this.addLayer(new GoldExperienceCrackLayer(this));
+        this.addLayer(new GoldExperienceEyeLayer<>(this, this));
     }
 
     public static ResourceLocation getSkin(byte bt) {

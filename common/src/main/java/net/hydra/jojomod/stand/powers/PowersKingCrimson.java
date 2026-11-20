@@ -3155,7 +3155,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         setCooldown(PowerIndex.SKILL_3, 140);
         animateStand(KingCrimsonEntity.BLOOD_SPLASH_WINDUP);
         if (self.level() instanceof ServerLevel sl) {
-            int bloodTime = 180;
+            int bloodTime = 120;
             MobEffectInstance instance = self.getEffect(ModEffects.BLEED);
             boolean isBigOuchie = false;
             if (instance != null){
@@ -3911,11 +3911,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
 
         return super.setPowerAttack();
-    }
-
-    @Override
-    public int getExtraPunchTime(){
-        return 0;
     }
 
     @Override

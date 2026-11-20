@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IPlayerEntityServer;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.goals.AvoidLearnedAnnihilatorGoal;
+import net.hydra.jojomod.entity.goals.D4CCloneLookAtMaster;
 import net.hydra.jojomod.entity.goals.D4CCloneObeyMasterGoal;
 import net.hydra.jojomod.entity.goals.D4CMeleeAttackGoal;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -113,7 +114,8 @@ public class D4CCloneEntity extends CloneEntity implements ContainerListener,Has
                 1,
                 new AvoidLearnedAnnihilatorGoal(this)
         );
-        this.goalSelector.addGoal(2, new D4CCloneObeyMasterGoal(this));
+        this.goalSelector.addGoal(1, new D4CCloneObeyMasterGoal(this));
+        this.goalSelector.addGoal(1, new D4CCloneLookAtMaster(this));
 
         this.goalSelector.addGoal(2, new D4CMeleeAttackGoal(this, 1.0D, false));
 

@@ -949,6 +949,7 @@ public class ForgeEvents {
         ModParticles.GE_WAVE = ForgeParticles.GE_WAVE.get();
         ModParticles.AUTUMN_LEAVES = ForgeParticles.AUTUMN_LEAVES.get();
         ModParticles.GINKGO_LEAVES = ForgeParticles.GINKGO_LEAVES.get();
+        ModParticles.RAIN_BUBBLE = ForgeParticles.RAIN_BUBBLE.get();
 
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();

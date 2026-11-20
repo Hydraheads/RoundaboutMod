@@ -19,10 +19,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.fates.FatePowers;
-import net.hydra.jojomod.item.ExperienceBishopItem;
-import net.hydra.jojomod.item.FirearmItem;
-import net.hydra.jojomod.item.MemoryChessPieceItem;
-import net.hydra.jojomod.item.WarhammerItem;
+import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.mixin.access.MinecraftAccessor;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.stand.powers.*;
@@ -317,7 +314,8 @@ public abstract class InputEvents implements IInputEvents {
                 return;
             } else if ((PowerTypes.hasStandActive(player) && standComp.roundabout$getStandPowers().interceptAttack())
                     || (PowerTypes.hasPowerActive(player) && (((IPowersPlayer)player).rdbt$getPowers().interceptAttack()))
-            || (((IFatePlayer)player).rdbt$getFatePowers().interceptAttack())) {
+            || (((IFatePlayer)player).rdbt$getFatePowers().interceptAttack())
+            || (player.getUseItem().getItem() instanceof FirearmItem) ) {
                 if (this.hitResult != null) {
                     boolean $$1 = false;
                     if (isMining) {
