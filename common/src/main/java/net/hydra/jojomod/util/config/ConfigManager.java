@@ -137,10 +137,10 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getAdvancedConfig().silverChariotBlocksToSlabs != null)
+        if (getAdvancedConfig().silverChariotBlocksToSlabsV2 != null)
         {
             MainUtil.SILVER_CHARIOT_BLOCK_TO_SLAB.clear();
-            for (String entry : getAdvancedConfig().silverChariotBlocksToSlabs)
+            for (String entry : getAdvancedConfig().silverChariotBlocksToSlabsV2)
             {
                 try
                 {

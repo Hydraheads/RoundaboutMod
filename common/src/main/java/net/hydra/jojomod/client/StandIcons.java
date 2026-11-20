@@ -584,10 +584,12 @@ public class StandIcons {
             "textures/gui/icons/silver_chariot/rapier_slash.png");
     public static final ResourceLocation SILVER_CHARIOT_RAPIER_SPIN = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/silver_chariot/rapier_spin.png");
-    public static final ResourceLocation SILVER_CHARIOT_RAPIER_SHOT = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/silver_chariot/rapier_shot.png");
-    public static final ResourceLocation SILVER_CHARIOT_RAPIER_SHOT_PLATFORM = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/silver_chariot/rapier_shot_platform.png");
+    public static final ResourceLocation SILVER_CHARIOT_SWORD_PROJECTILE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/silver_chariot/sword_projectile.png");
+    public static final ResourceLocation SILVER_CHARIOT_SWORD_PROJECTILE_PLATFORM = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/silver_chariot/sword_projectile_platform.png");
+    public static final ResourceLocation SILVER_CHARIOT_SWORD_PROJECTILE_TOGGLE_SWITCH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/silver_chariot/sword_projectile_toggle_switch.png");
     public static final ResourceLocation SILVER_CHARIOT_CONTROL_MODE_ON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/silver_chariot/control_mode_on.png");
     public static final ResourceLocation SILVER_CHARIOT_CONTROL_MODE_OFF = new ResourceLocation(Roundabout.MOD_ID,

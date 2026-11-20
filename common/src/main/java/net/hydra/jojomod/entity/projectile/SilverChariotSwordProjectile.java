@@ -235,7 +235,7 @@ public class SilverChariotSwordProjectile extends AbstractArrow implements Unbur
         if (!this.level().isClientSide()) {
             if (this.getRapierShotType() == PLATFORM_SHOT) {
                 // this.createPlatform($$0);
-                // this.createPlatformBlock($$0);
+                this.createPlatformBlock($$0);
                 this.playSound(ModSounds.SILVER_CHARIOT_RAPIER_SHOT_BLOCK_IMPACT_EVENT, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
                 this.discard();
             } else if (this.getRapierShotType() == BASE_SHOT && this.getBounces() > 0) {
@@ -267,7 +267,7 @@ public class SilverChariotSwordProjectile extends AbstractArrow implements Unbur
                 Vec3 $$1 = $$0.getLocation().subtract(this.getX(), this.getY(), this.getZ());
                 // this.setDeltaMovement($$1);
                 this.setDeltaMovement(Vec3.ZERO);
-                Vec3 $$2 = $$1.normalize().scale(1.0F);
+                Vec3 $$2 = $$1.normalize().scale(0.05F);
                 this.setPosRaw(this.getX() - $$2.x, this.getY() - $$2.y, this.getZ() - $$2.z);
                 this.playSound(ModSounds.SILVER_CHARIOT_RAPIER_SHOT_BLOCK_IMPACT_EVENT, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
                 // this.inGround = true;
@@ -479,8 +479,8 @@ public class SilverChariotSwordProjectile extends AbstractArrow implements Unbur
      */
 
     public static final byte
-                BASE_SHOT = (byte) 1,
-                PLATFORM_SHOT = (byte) 2;
+                BASE_SHOT = (byte) 0,
+                PLATFORM_SHOT = (byte) 1;
 
     @Override
     protected void defineSynchedData() {
