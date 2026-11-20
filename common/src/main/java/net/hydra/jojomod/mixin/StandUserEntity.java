@@ -4258,7 +4258,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     lifeform.setReflectingDamage(true);
                     try {
                         // reflect the damage
-                        attacker.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.STAND, (LivingEntity) (Object) this), $$1);
+                        attacker.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.STAND, (LivingEntity) (Object) this), $$1 / 0.5f);
 
                         if (this.level() instanceof ServerLevel serverLevel) {
                             serverLevel.sendParticles(
