@@ -13,7 +13,6 @@ import net.hydra.jojomod.client.gui.diverdown.*;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.client.models.visages.parts.FirstPersonArmsModel;
 import net.hydra.jojomod.client.models.visages.parts.FirstPersonArmsSlimModel;
-import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.KingCrimsonProjectionEntity;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerAmbientSound;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerExplosionSound;
@@ -40,7 +39,6 @@ import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.entity.TickableSoundInstances.BowlerHatFlyingSound;
 import net.hydra.jojomod.menu.GamblingTableMenu;
 import net.hydra.jojomod.menu.gambling_games.CoinDropGame;
-import net.hydra.jojomod.platform.ClientServices;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
@@ -67,10 +65,8 @@ import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.hydra.jojomod.networking.ServerToClientPackets;
@@ -1262,6 +1258,12 @@ public class ClientUtil {
             if (user.roundabout$getStandPowers() instanceof PowersCalifornia ckb){
                 ckb.leadedInt = data;
             }
+        } else if (context == PacketDataIndex.S2C_IN_PURPLE_HAZE_TICKS) {
+            ((StandUser) player).SetInPurpleHazeTicks(data);
+        } else if (context == PacketDataIndex.S2C_IN_DISTORTION_HAZE_TICKS) {
+            ((StandUser) player).SetInDistortionHazeTicks(data);
+        } else if (context == PacketDataIndex.S2C_PURPLE_HAZE_SKIN) {
+            ((StandUser) player).SetPurpleHazeSkin((byte)data);
         } else if (context == PacketDataIndex.S2C_INT_LVL_DECREASE) {
             IPlayerEntity ipe = ((IPlayerEntity) player);
             ipe.rdbt$setLevelDecreaseTicks(data);

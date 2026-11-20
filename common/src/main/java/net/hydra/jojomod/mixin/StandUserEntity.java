@@ -365,16 +365,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             EntityDataSerializers.INT);
 
     @Unique
-    private static final EntityDataAccessor<Integer> ROUNDABOUT$PURPLE_HAZE_TICKS = SynchedEntityData
-            .defineId(LivingEntity.class, EntityDataSerializers.INT);
-    @Unique
-    private static final EntityDataAccessor<Byte> ROUNDABOUT$PURPLE_HAZE_SKIN = SynchedEntityData
-            .defineId(LivingEntity.class, EntityDataSerializers.BYTE);
-    @Unique
-    private static final EntityDataAccessor<Integer> ROUNDABOUT$DISTORTION_HAZE_TICKS = SynchedEntityData
-            .defineId(LivingEntity.class, EntityDataSerializers.INT);
-
-    @Unique
     private StandPowers roundabout$Powers;
     @Unique
     private boolean roundabout$changingStandPowers;
@@ -3998,9 +3988,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_ACTIVE, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_ANIMATION, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$UNIQUE_STAND_MODE_TOGGLE, false);
-            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$PURPLE_HAZE_TICKS, 0);
-            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$PURPLE_HAZE_SKIN, PurpleHazeEntity.ANIME);
-            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DISTORTION_HAZE_TICKS, 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DISGUISE_ID, Optional.empty());
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DISGUISE_NAME, "");
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DIVER_LEGS, false);
@@ -7136,34 +7123,50 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return MoldTicks;
     }
 
+
+    @Unique
+    public byte purpleHazeSkin = PurpleHazeEntity.ANIME;
+
+    @Unique
+    public int purpleHazeTicks = 0;
+
+    @Unique
+    public int distortionHazeTicks = 0;
+
     @Override
     public void SetInPurpleHazeTicks(int e) {
-        this.entityData.set(ROUNDABOUT$PURPLE_HAZE_TICKS, e);
+        this.purpleHazeTicks = e;
+        //this.entityData.set(ROUNDABOUT$PURPLE_HAZE_TICKS, e);
     }
 
     @Override
     public void SetPurpleHazeSkin(byte skin) {
-        this.entityData.set(ROUNDABOUT$PURPLE_HAZE_SKIN, skin);
+        this.purpleHazeSkin = skin;
+        //this.entityData.set(ROUNDABOUT$PURPLE_HAZE_SKIN, skin);
     }
 
     @Override
     public byte getPurpleHazeSkin() {
-        return this.entityData.get(ROUNDABOUT$PURPLE_HAZE_SKIN);
+        return this.purpleHazeSkin;
+        //return this.entityData.get(ROUNDABOUT$PURPLE_HAZE_SKIN);
     }
 
     @Override
     public int getPurpleHazeTicks() {
-        return this.entityData.get(ROUNDABOUT$PURPLE_HAZE_TICKS);
+        return this.purpleHazeTicks;
+        //return this.entityData.get(ROUNDABOUT$PURPLE_HAZE_TICKS);
     }
 
     @Override
     public void SetInDistortionHazeTicks(int e) {
-        this.entityData.set(ROUNDABOUT$DISTORTION_HAZE_TICKS, e);
+        distortionHazeTicks = e;
+        //this.entityData.set(ROUNDABOUT$DISTORTION_HAZE_TICKS, e);
     }
 
     @Override
     public int getDistortionHazeTicks() {
-        return this.entityData.get(ROUNDABOUT$DISTORTION_HAZE_TICKS);
+        return distortionHazeTicks;
+        //return this.entityData.get(ROUNDABOUT$DISTORTION_HAZE_TICKS);
     }
 
     //for disguises
