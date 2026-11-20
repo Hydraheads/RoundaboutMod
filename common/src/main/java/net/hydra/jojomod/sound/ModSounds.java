@@ -2907,6 +2907,12 @@ public class ModSounds {
     public static final String CTR_RAIN_STEP_3 = "ctr_rain_step_3";
     public static final ResourceLocation CTR_RAIN_STEP_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CTR_RAIN_STEP_3);
     public static SoundEvent CTR_RAIN_STEP_3_EVENT = SoundEvent.createVariableRangeEvent(CTR_RAIN_STEP_3_ID);
+    public static final String CTR_BARRIER = "ctr_barrier";
+    public static final ResourceLocation CTR_BARRIER_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CTR_BARRIER);
+    public static SoundEvent CTR_BARRIER_EVENT = SoundEvent.createVariableRangeEvent(CTR_BARRIER_ID);
+    public static final String CTR_FULL_BODY_DODGE = "ctr_full_body_dodge";
+    public static final ResourceLocation CTR_FULL_BODY_DODGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CTR_FULL_BODY_DODGE);
+    public static SoundEvent CTR_FULL_BODY_DODGE_EVENT = SoundEvent.createVariableRangeEvent(CTR_FULL_BODY_DODGE_ID);
 
     public static final String ZOMBIEHORSE_STITCHING = "zombiehorse_stitching";
     public static final ResourceLocation ZOMBIEHORSE_STITCHING_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ZOMBIEHORSE_STITCHING);

@@ -5162,6 +5162,18 @@
       "roundabout:ctr_stabilizing_rain"
     ]
   },
+  "ctr_barrier": {
+    "subtitle": "sounds.roundabout.ctr_barrier",
+    "sounds": [
+      "roundabout:ctr_barrier"
+    ]
+  },
+  "ctr_full_body_dodge": {
+    "subtitle": "sounds.roundabout.ctr_full_body_dodge",
+    "sounds": [
+      "roundabout:ctr_full_body_dodge"
+    ]
+  },
   "jumpin_jack_flash_summon": {
     "sounds": [
       "roundabout:jumpin_jack_flash_summon"
