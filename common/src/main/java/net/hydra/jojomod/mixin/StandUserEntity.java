@@ -369,9 +369,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             LivingEntity.class,
             EntityDataSerializers.INT);
 
-    @Unique
-    private static final EntityDataAccessor<Float> ROUNDABOUT$METAL_METER = SynchedEntityData
-            .defineId(LivingEntity.class, EntityDataSerializers.FLOAT);
 
     @Unique
     private static final EntityDataAccessor<Integer> ROUNDABOUT$MOLD_JUMP_IMUNITY_TICKS = SynchedEntityData.defineId(
@@ -4012,7 +4009,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$POSSESSOR, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$HEAT, 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$EXPLOSION_INFLATE, -1);
-            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$METAL_METER, 0F);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_BOUND_TO, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$IS_ZAPPED_TO_ATTACK, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$TRUE_INVISIBILITY, -1);
@@ -4047,15 +4043,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Override
     public void roundabout$setMetalMeter(float amount) {
-        this.entityData.set(ROUNDABOUT$METAL_METER, amount);
     }
 
     @Unique
     @Override
     public float roundabout$getMetalMeter() {
-        if (this.entityData.hasItem(ROUNDABOUT$METAL_METER)) {
-            return this.entityData.get(ROUNDABOUT$METAL_METER);
-        }
         return 0f;
     }
 
