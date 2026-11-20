@@ -11,12 +11,6 @@
     },
     "level=3": {
       "model": "roundabout:block/virus_spit_splatter_4"
-    },
-    "level=4": {
-      "model": "roundabout:block/virus_spit_splatter_5"
-    },
-    "level=5": {
-      "model": "roundabout:block/virus_spit_splatter_6"
     }
   }
 }

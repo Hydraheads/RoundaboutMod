@@ -1,7 +1,5 @@
 package net.hydra.jojomod.event.index;
 
-import net.hydra.jojomod.networking.ModPacketHandler;
-
 public class PacketDataIndex {
     /**Contexts for packets to interpret*/
     public static final byte NONE = 0;
@@ -139,6 +137,9 @@ public class PacketDataIndex {
     public static final byte S2C_DISC_REMOVE_INT = 28;
     public static final byte S2C_MERGE_TIME_INT = 29;
     public static final byte S2C_HALLUCINATION_INDICATOR = 30;
+    public static final byte S2C_IN_PURPLE_HAZE_TICKS = 31;
+    public static final byte S2C_IN_DISTORTION_HAZE_TICKS = 32;
+    public static final byte S2C_PURPLE_HAZE_SKIN = 33;
 
 
     /**S2C BUNDLE packets*/
