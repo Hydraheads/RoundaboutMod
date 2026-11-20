@@ -147,11 +147,10 @@ public class PowersKingNothing extends NewDashPreset {
     // anim stuff
     private boolean isOut = false;
     private int returnAnimTicks = 0;
+    private int summonAnimTicks = 0;
     private int disintegrateAnimTicks = 0;
 
     private boolean startPhaseTickAfter = false;
-    private boolean startingGrab = false;
-    private boolean startingItem = false;
 
     public PowersKingNothing(LivingEntity self) {
         super(self);
@@ -547,9 +546,21 @@ public class PowersKingNothing extends NewDashPreset {
         // handle idle stuffs
         if (getSelf().isAlive() && !getSelf().isRemoved() && getStandEntity(getSelf()) != null) {
             StandEntity stand = getStandEntity(getSelf());
+            if (stand.getAnimation() == KingNothingEntity.SUMMON) {
+                if (summonAnimTicks < 17) {
+                    summonAnimTicks++;
+                }
+                else {
+                    animateStand(StandEntity.IDLE);
+                    summonAnimTicks = 0;
+                }
+            }
+            else {
+                summonAnimTicks = 0;
+            }
             if (stand.getAnimation() == KingNothingEntity.RETURN) {
-                if (returnAnimTicks < 27) {
-                    returnAnimTicks++;
+                if (returnAnimTicks < 26) {
+                    summonAnimTicks++;
                 }
                 else {
                     animateStand(StandEntity.IDLE);
@@ -811,25 +822,12 @@ public class PowersKingNothing extends NewDashPreset {
     public void tickPowerEnd() {
         super.tickPowerEnd();
         if (getSelf().isAlive() && !getSelf().isRemoved()) {
-            if (startPhaseTickAfter) {
-                boolean didAnything = false;
-                startPhaseTickAfter = false;
-                if (startingGrab) {
-                    phaseGrab();
-                    didAnything = true;
-                }
-                else if (startingItem) {
-                    phaseItem();
-                    didAnything = true;
-                }
-                if (didAnything) {
-                    getStandEntity(getSelf()).setFadePercent(100);
-                }
-                startingGrab = false;
-                startingItem = false;
-            }
             /**Tick Phase Grab*/
             if (isPhasing() && !this.isClient()) {
+                if (startPhaseTickAfter) {
+                    startPhaseTickAfter = false;
+                    startPhaseMovement(getStandEntity(getSelf()));
+                }
                 if (this.attackTimeDuring == 108) {
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                     playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);
@@ -1358,13 +1356,8 @@ public class PowersKingNothing extends NewDashPreset {
     public boolean phaseGrab() {
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)) {
-            if (startPhaseTickAfter) {
-                startingGrab = true;
-            }
-            else {
-                this.setActivePower(PowerIndex.POWER_2);
-                startPhaseMovement(stand);
-            }
+            this.setActivePower(PowerIndex.POWER_2);
+            startPhaseMovement(stand);
             return true;
         }
         return false;
@@ -1388,10 +1381,6 @@ public class PowersKingNothing extends NewDashPreset {
     public boolean phaseItem() {
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)) {
-            if (startPhaseTickAfter) {
-                startingItem = true;
-                return true;
-            }
             if (this.inventoryGrab()) {
                 this.setActivePower(PowerIndex.POWER_2_SNEAK);
                 startPhaseMovement(stand);
@@ -1402,22 +1391,24 @@ public class PowersKingNothing extends NewDashPreset {
     }
 
     public void startPhaseMovement(StandEntity stand) {
-        this.poseStand(OffsetIndex.LOOSE);
-        animateStand(KingNothingEntity.REACH);
-        this.attackTimeDuring = 0;
-        playSoundsIfNearby(PHASE, 27, false);
+        if (!startPhaseTickAfter) {
+            this.poseStand(OffsetIndex.LOOSE);
+            animateStand(KingNothingEntity.REACH);
+            this.attackTimeDuring = 0;
+            playSoundsIfNearby(PHASE, 27, false);
 
-        Vec2 twoVec = new Vec2((this.getSelf().getYHeadRot() % 360), (this.getSelf().getXRot()));
-        Direction gdir = ((IGravityEntity) this.self).roundabout$getGravityDirection();
-        Vec2 twoVecGrav = RotationUtil.rotPlayerToWorld(twoVec, gdir);
-        Vec3 threeVec = new Vec3(0, 0.25, 0);
-        threeVec = RotationUtil.vecPlayerToWorld(threeVec, gdir);
+            Vec2 twoVec = new Vec2((this.getSelf().getYHeadRot() % 360), (this.getSelf().getXRot()));
+            Direction gdir = ((IGravityEntity) this.self).roundabout$getGravityDirection();
+            Vec2 twoVecGrav = RotationUtil.rotPlayerToWorld(twoVec, gdir);
+            Vec3 threeVec = new Vec3(0, 0.25, 0);
+            threeVec = RotationUtil.vecPlayerToWorld(threeVec, gdir);
 
-        stand.setYRot(twoVec.x);
-        stand.setXRot(twoVec.y);
-        moveVec = DamageHandler.getRotationVector(twoVecGrav.y, twoVecGrav.x).scale(1.8).add(threeVec.x,
-                threeVec.y, threeVec.z);
-        stand.setPos(this.getSelf().getPosition(1).add(moveVec));
+            stand.setYRot(twoVec.x);
+            stand.setXRot(twoVec.y);
+            moveVec = DamageHandler.getRotationVector(twoVecGrav.y, twoVecGrav.x).scale(1.8).add(threeVec.x,
+                    threeVec.y, threeVec.z);
+            stand.setPos(this.getSelf().getPosition(1).add(moveVec));
+        }
     }
 
     public boolean inventoryGrab() {
@@ -1761,8 +1752,8 @@ public class PowersKingNothing extends NewDashPreset {
         }
         else if (!isOut && canSummonStandAsEntity()) {
             isOut = true;
-            returnAnimTicks = 0;
-            animateStand(KingNothingEntity.RETURN);
+            summonAnimTicks = 0;
+            animateStand(KingNothingEntity.SUMMON);
             startPhaseTickAfter = true;
         }
     }

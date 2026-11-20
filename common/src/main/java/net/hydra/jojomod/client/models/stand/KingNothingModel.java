@@ -193,6 +193,7 @@ public class KingNothingModel<T extends KingNothingEntity> extends StandModel<T>
         this.animate(pEntity.disintegrate, KingNothingAnimations.DISINTEGRATE, pAgeInTicks, 1f);
         this.animate(pEntity.reach, KingNothingAnimations.REACH, pAgeInTicks, 2f);
         this.animate(pEntity.returning, KingNothingAnimations.RETURN, pAgeInTicks, 1f);
+        this.animate(pEntity.summon, KingNothingAnimations.RETURN, pAgeInTicks, 1.5f);
         this.animate(pEntity.hideHorns, KingNothingAnimations.HIDE_HORNS, pAgeInTicks, 1f);
     }
 
