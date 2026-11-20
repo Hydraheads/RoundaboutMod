@@ -457,4 +457,9 @@ public class ForgeParticles {
             () -> new SimpleParticleType(true));
     public static final RegistryObject<SimpleParticleType> GE_WAVE = PARTICLES.register("ge_wave",
             () -> new SimpleParticleType(true));
+
+    public static final RegistryObject<SimpleParticleType> RAIN_BUBBLE = PARTICLES.register(
+            "rain_bubble",
+            () -> new SimpleParticleType(true)
+    );
 }

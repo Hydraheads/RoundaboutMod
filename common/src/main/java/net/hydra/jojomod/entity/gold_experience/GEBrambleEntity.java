@@ -4,6 +4,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersGoldExperience;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.particles.ParticleTypes;
@@ -109,7 +110,7 @@ public class GEBrambleEntity extends Entity {
 
     private void triggerImpact() {
         this.dealtDamage = true;
-        this.level().playSound(null, this.blockPosition(), SoundEvents.EVOKER_FANGS_ATTACK, SoundSource.PLAYERS, 0.8F, 1.1F);
+        this.level().playSound(null, this.blockPosition(), ModSounds.GOLD_EXPERIENCE_SPIKES_EVENT, SoundSource.PLAYERS, 0.8F, 1.1F);
 
         LivingEntity caster = getOwner();
         UUID casterUUID = this.ownerUUID != null ? this.ownerUUID : (caster != null ? caster.getUUID() : null);

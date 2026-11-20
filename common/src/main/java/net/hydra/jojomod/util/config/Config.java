@@ -1327,7 +1327,7 @@ public class Config implements Cloneable {
         public Integer goldExperienceGuardPoints;
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer goldExperienceCooldownDNA;
-        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 160, min = 0, max = 72000)
         public Integer goldExperienceCooldownAnimal;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer goldExperienceCooldownHeal;
@@ -1713,6 +1713,8 @@ public class Config implements Cloneable {
         public Integer timestopLeapCooldown;
         @BooleanOption(group = "inherit", value = true)
         public Boolean timestopCancelsFood;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean timestopCancelsGuns;
     }
 
     public static class ExperimentalSettings {

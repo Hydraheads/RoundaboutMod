@@ -154,6 +154,8 @@ public class FabricParticles {
     public static final SimpleParticleType VITAL_ESSENCE = FabricParticleTypes.simple();
     public static final SimpleParticleType GE_WAVE = FabricParticleTypes.simple();
 
+    public static final SimpleParticleType RAIN_BUBBLE = FabricParticleTypes.simple();
+
     public static void registerParticles(){
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("hit_impact"), HIT_IMPACT);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("punch_miss"), PUNCH_MISS);
@@ -278,6 +280,8 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("vital_essence"), VITAL_ESSENCE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("ge_wave"), GE_WAVE);
 
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("rain_bubble"), RAIN_BUBBLE);
+
         ModParticles.MELTING = MELTING;
         ModParticles.HALLUCINATORY_ACID_DRIP = HALLUCINATORY_ACID_DRIP;
         ModParticles.BLOOD = BLOOD;
@@ -400,5 +404,7 @@ public class FabricParticles {
 
         ModParticles.VITAL_ESSENCE = VITAL_ESSENCE;
         ModParticles.GE_WAVE = GE_WAVE;
+
+        ModParticles.RAIN_BUBBLE = RAIN_BUBBLE;
     }
 }

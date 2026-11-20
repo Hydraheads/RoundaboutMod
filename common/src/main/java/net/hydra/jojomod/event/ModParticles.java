@@ -142,4 +142,6 @@ public class ModParticles {
 
     public static SimpleParticleType VITAL_ESSENCE;
     public static SimpleParticleType GE_WAVE;
+
+    public static SimpleParticleType RAIN_BUBBLE;
 }

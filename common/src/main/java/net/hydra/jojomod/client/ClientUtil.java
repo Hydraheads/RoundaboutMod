@@ -1108,6 +1108,17 @@ public class ClientUtil {
                         }
                     }
                 }
+                else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncKqInflaton.value)) {
+                    Player pl = Minecraft.getInstance().player;
+
+                    if (pl != null && pl.level() != null) {
+                        int targetID = (int) vargs[0];
+                        int inflation = (int) vargs[1];
+                        if (pl.level().getEntity(targetID) instanceof LivingEntity LE) {
+                            ((StandUser)LE).roundabout$setExplosionInflation(inflation);
+                        }
+                    }
+                }
 
                 else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.KnAddItemContainer.value)) {
                     BlockPos pos = (BlockPos) vargs[0];
@@ -1262,6 +1273,12 @@ public class ClientUtil {
             if (user.roundabout$getStandPowers() instanceof PowersCalifornia ckb){
                 ckb.leadedInt = data;
             }
+        } else if (context == PacketDataIndex.S2C_IN_PURPLE_HAZE_TICKS) {
+            ((StandUser) player).SetInPurpleHazeTicks(data);
+        } else if (context == PacketDataIndex.S2C_IN_DISTORTION_HAZE_TICKS) {
+            ((StandUser) player).SetInDistortionHazeTicks(data);
+        } else if (context == PacketDataIndex.S2C_PURPLE_HAZE_SKIN) {
+            ((StandUser) player).SetPurpleHazeSkin((byte)data);
         } else if (context == PacketDataIndex.S2C_INT_LVL_DECREASE) {
             IPlayerEntity ipe = ((IPlayerEntity) player);
             ipe.rdbt$setLevelDecreaseTicks(data);

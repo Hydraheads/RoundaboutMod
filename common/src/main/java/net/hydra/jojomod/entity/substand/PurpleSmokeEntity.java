@@ -1,43 +1,35 @@
 package net.hydra.jojomod.entity.substand;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.RoundaboutLoadServer;
 import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.stand.PurpleHazeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
-import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.mixin.PlayerEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.particles.HazeColorParticleOptions;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.hydra.jojomod.mixin.justice.JusticeCreeper;
-import net.hydra.jojomod.mixin.justice.JusticeZombie;
 import net.hydra.jojomod.stand.powers.PowersPurpleHaze;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
-import net.minecraft.core.Holder;
-import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -154,13 +146,13 @@ public class PurpleSmokeEntity extends StandEntity {
             for (int j = 0; j < damages.size(); j++) {
                 if (Objects.nonNull(this.getUser())) {
                     Entity entity = damages.get(j);
-                    if (entity instanceof LivingEntity LE) {
+                    if (entity instanceof ServerPlayer LE) {
                         if (/*!((StandUser) LE).roundabout$isBubbleEncased() && !(LE instanceof StrayCatEntity c && c.getBubbleShield()) && */PowerTypes.isExistentiallyElsewhereTogether(this, LE)) {
                             if (isDistortionMode()) {
-                                ((StandUser) LE).SetInDistortionHazeTicks(5);
+                                S2CPacketUtil.sendGenericIntToClientPacket(LE, PacketDataIndex.S2C_IN_DISTORTION_HAZE_TICKS, 5);
                             } else {
-                                ((StandUser) LE).SetInPurpleHazeTicks(5);
-                                ((StandUser) LE).SetPurpleHazeSkin(this.getStandSkin());
+                                S2CPacketUtil.sendGenericIntToClientPacket(LE, PacketDataIndex.S2C_IN_PURPLE_HAZE_TICKS, 5);
+                                S2CPacketUtil.sendGenericIntToClientPacket(LE, PacketDataIndex.S2C_PURPLE_HAZE_SKIN, this.getStandSkin());
                             }
                         }
                     }

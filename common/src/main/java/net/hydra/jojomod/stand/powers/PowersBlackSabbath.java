@@ -10,6 +10,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -20,13 +21,17 @@ import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.gravity.GravityAPI;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
+import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -57,11 +62,16 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.apache.logging.log4j.core.pattern.AbstractStyleNameConverter;
 import org.joml.Vector3f;
@@ -104,17 +114,33 @@ public class PowersBlackSabbath extends NewDashPreset {
                                 BE.pickUpTheItemsAroundTheCadaver(value);
                             }
                         }
-                        removeTargetEntities(value);
                         if (this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity BE) {
                             if (BE.getGrabbing() != 0) {
                                 Entity ent = BE.level().getEntity(BE.getGrabbing());
-                                if (ent != null && ent instanceof LivingEntity LE) {
+                                if (ent != null && ent instanceof LivingEntity LE && LE.is(value)) {
                                     BE.setMeleeInteractionTicks(-1);
                                     ((StandUser) LE).roundabout$setGrabbedSoul(false);
                                     BE.killSoul();
                                     ((StandUser) LE).roundabout$setGrabberSabbath(0);
                                 }
                             }
+                        }
+                        removeTargetEntities(value);
+                    }
+                    if(this.getStandEntity(self) instanceof BlackSabbathEntity BE){
+                        DimensionType t = BE.level().dimensionType();
+                        DimensionType T = value.level().dimensionType();
+                        if (t != T) {
+                            if (BE.getGrabbing() != 0) {
+                                Entity ent = BE.level().getEntity(BE.getGrabbing());
+                                if (ent != null && ent instanceof LivingEntity LE && ent.is(value)) {
+                                    BE.setMeleeInteractionTicks(-1);
+                                    ((StandUser) LE).roundabout$setGrabbedSoul(false);
+                                    BE.killSoul();
+                                    ((StandUser) LE).roundabout$setGrabberSabbath(0);
+                                }
+                            }
+                            removeTargetEntities(value);
                         }
                     }
                 }
@@ -689,12 +715,20 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
     }
 
     private BlockPos getValidPlacement(){
-        Vec3 lvec = getLookAngleChest(self.getYRot(), self);
-        Position pn = self.getEyePosition().add(lvec.scale(1));
-        BlockPos bpos = BlockPos.containing(pn.x(), Math.round(self.getY()), pn.z());
-        BlockPos myPos = BlockPos.containing(self.getX(), self.getY(), self.getZ());
-        BlockPos bposExtra =BlockPos.containing(pn.x(), Math.round(self.getY()) - 1, pn.z());
-        if (self.onGround()) {
+        Direction gravityDirection = GravityAPI.getGravityDirection(self);
+        Vec3 lvec = Vec3.ZERO;
+        Position pn = Vec3.ZERO;
+        BlockPos bpos = BlockPos.containing(Vec3.ZERO);
+        BlockPos bposExtra = BlockPos.containing(Vec3.ZERO);
+        var blockState = this.self.level().getBlockState(bpos);
+        var blockState2 = this.self.level().getBlockState(bposExtra);
+
+
+        if(gravityDirection == Direction.DOWN) {
+            lvec = getLookAngleChest(self.getYRot(), self);
+            pn = self.getEyePosition().add(lvec.scale(1));
+             bpos = BlockPos.containing(pn.x(), Math.round(self.getY()), pn.z());
+            bposExtra = BlockPos.containing(pn.x(), Math.round(self.getY()) - 1, pn.z());
             if (this.self.level().getBlockState(bpos.below()).isSolid()) {
                 setShouldBSummonBot(false);
                 return bpos;
@@ -702,9 +736,75 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                 setShouldBSummonBot(true);
                 return bposExtra;
             }
+        } else {
+            //TODO: to anyone: DON'T REMOVE THE CODE PLEASE.
+           /* Vec2 vecGravity = RotationUtil.rotPlayerToWorld(self.getYRot(), self.getXRot(), gravityDirection);
+            if (gravityDirection == Direction.UP) {
+                lvec = getLookAngleChest(vecGravity.x, self);
+                pn = self.getEyePosition().add(lvec.scale(1));
+                bpos = BlockPos.containing(pn.x(), Math.round(self.getY() -1), pn.z());
+                bposExtra = BlockPos.containing(pn.x(), Math.round(self.getY()), pn.z());
+                if (this.self.level().getBlockState(bpos.above()).isSolid()) {
+                    setShouldBSummonBot(false);
+                    return bpos;
+                } else if (this.self.level().getBlockState(bposExtra.above()).isSolid()) {
+                    setShouldBSummonBot(true);
+                    return bposExtra;
+                }
+            } else if (gravityDirection == Direction.NORTH) {
+                lvec = getLookAngleChest(vecGravity.x, self);
+                pn = self.getEyePosition().add(lvec.scale(1));
+                bpos = BlockPos.containing(pn.x(), pn.y(), Math.round(self.getZ()));
+                bposExtra = BlockPos.containing(pn.x(), pn.y(), Math.round(self.getZ()) + 1);
+                if (this.self.level().getBlockState(bpos.north()).isSolid()) {
+                    setShouldBSummonBot(false);
+                    return bpos;
+                } else if (this.self.level().getBlockState(bposExtra.north()).isSolid()) {
+                    setShouldBSummonBot(true);
+                    return bposExtra;
+                }
+            } else if (gravityDirection == Direction.SOUTH) {
+                lvec = getLookAngleChest(vecGravity.x, self);
+                pn = self.getEyePosition().add(lvec.scale(1));
+                bpos = BlockPos.containing(pn.x(), pn.y(), Math.round(self.getZ()));
+                bposExtra = BlockPos.containing(pn.x(), pn.y(), Math.round(self.getZ()) - 1);
+                if (this.self.level().getBlockState(bpos.south()).isSolid()) {
+                    setShouldBSummonBot(false);
+                    return bpos;
+                } else if (this.self.level().getBlockState(bposExtra.south()).isSolid()) {
+                    setShouldBSummonBot(true);
+                    return bposExtra;
+                }
+            } else if (gravityDirection == Direction.EAST) {
+                lvec = getLookAngleChest(vecGravity.x, self);
+                pn = self.getEyePosition().add(lvec.scale(1));
+                bpos = BlockPos.containing(Math.round(self.getX()), pn.y(), pn.z());
+                bposExtra = BlockPos.containing(Math.round(self.getX()) + 1, pn.y(), pn.z());
+                if (self.onGround()) {
+                    if (this.self.level().getBlockState(bpos.east()).isSolid()) {
+                        setShouldBSummonBot(false);
+                        return bpos;
+                    } else if (this.self.level().getBlockState(bposExtra.east()).isSolid()) {
+                        setShouldBSummonBot(true);
+                        return bposExtra;
+                    }
+                }
+            } else if (gravityDirection == Direction.WEST) {
+                lvec = getLookAngleChest(vecGravity.x, self);
+                pn = self.getEyePosition().add(lvec.scale(1));
+                bpos = BlockPos.containing(Math.round(self.getX()), pn.y(), pn.z());
+                bposExtra = BlockPos.containing(Math.round(self.getX()) - 1,pn.y(), pn.z());
+                if (self.onGround()) {
+                    if (this.self.level().getBlockState(bpos.west()).isSolid()) {
+                        setShouldBSummonBot(false);
+                        return bpos;
+                    } else if (this.self.level().getBlockState(bposExtra.west()).isSolid()) {
+                        setShouldBSummonBot(true);
+                        return bposExtra;
+                    }
+                }
+            }*/
         }
-        var blockState = this.self.level().getBlockState(bpos);
-        var blockState2 = this.self.level().getBlockState(bposExtra);
         if ((!blockState.canOcclude() || blockState.isAir()) && (!blockState2.canOcclude() || blockState2.isAir())) {
             return null;
         }
@@ -712,13 +812,14 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
     }
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot) {
+        Direction gravityDirection = GravityAPI.getGravityDirection(self);
         if(slot == 4 && this.getSelf().getHealth() <= 1) {
             return  true;
         }
         if (slot == 2 && ((!this.checkIfYouAreInDark() && !(moveMode == 3) || this.getStandEntity(self) != null && moveMode != 2 && moveMode != 3|| this.securityTickDown > 1 && this.blackSabbathTargets.isEmpty()))) {
             return true;
         }
-        if(slot == 1 && (!this.checkIfYouAreInDark() || getValidPlacement() == null || self.isSwimming() || this.getStandEntity(self) != null || this.moveMode == 3 || this.securityTickDown > 1)){
+        if(slot == 1 && (!this.checkIfYouAreInDark() || getValidPlacement() == null || self.isSwimming() || this.getStandEntity(self) != null || this.moveMode == 3 || this.securityTickDown > 1 || gravityDirection != Direction.DOWN)){
             return true;
         }
         return super.isAttackIneptVisually(activeP, slot);
@@ -928,8 +1029,32 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         //System.out.println(tickDown2 + ". " + test);
        // System.out.println(blackSabbathTargets + ". " + test);
        // System.out.println(moveMode + ". " + test);
-
-        //TODO: REWRITE DIMENSION CHANGING STUFF
+if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be) {
+    DimensionType t = be.level().dimensionType();
+    DimensionType T = this.getSelf().level().dimensionType();
+    if (t != T) {
+        if (moveMode != 0) {
+            be.forceDespawn(true);
+            active = false;
+            if(moveMode == 2){
+                this.selecting = false;
+            }
+            if(moveMode == 3){
+                if (be.getGrabbing() != 0) {
+                    Entity ent = be.level().getEntity(be.getGrabbing());
+                    if (ent != null && ent instanceof LivingEntity LE) {
+                        be.setMeleeInteractionTicks(-1);
+                        ((StandUser) be).roundabout$setGrabbedSoul(false);
+                        be.killSoul();
+                        ((StandUser) LE).roundabout$setGrabberSabbath(0);
+                    }
+                }
+                this.clearTargetEntitiesOnStandDeath();
+            }
+            setNull();
+        }
+    }
+}
 
         if(isClient()){
             StandEntity s = this.getStandEntity(this.getSelf());
@@ -1018,7 +1143,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             if(this.getStandEntity(this.getSelf()) != null && this.getStandEntity(this.getSelf()) instanceof BlackSabbathEntity BE) {
                 BE.discard();
             }
-            createTheMightyHunterOfTheShadows((findBlackSabbathSpawnPosition(sl, le, 20D)));
+            createTheMightyHunterOfTheShadows((findBlackSabbathSpawnPosition(sl, le, 25D)));
         }
     }
 
@@ -1253,16 +1378,33 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                 if (!this.self.level().isClientSide()) {
                     value.setOldPosAndRot();
                 }
+                Direction gravityDirection = GravityAPI.getGravityDirection(this.self);
                 if (this.self.level().isClientSide()) {
-                    value.setYRot(value.getUser().getYHeadRot() % 360);
-                    value.setXRot(value.getUser().getXRot());
-                    value.setYBodyRot(value.getUser().getYHeadRot() % 360);
-                    value.setYHeadRot(value.getUser().getYHeadRot() % 360);
+                    if (gravityDirection != Direction.DOWN) {
+                        Vec2 vecGravity = RotationUtil.rotPlayerToWorld(self.getYRot(), self.getXRot(), gravityDirection);
+                        value.setXRot(vecGravity.y);
+                        value.setYRot(vecGravity.x % 360);
+                        value.setYBodyRot(self.getYHeadRot() % 360);
+                        value.setYHeadRot(self.getYHeadRot() % 360);
+                    } else {
+                        value.setYRot(value.getUser().getYHeadRot() % 360);
+                        value.setXRot(value.getUser().getXRot());
+                        value.setYBodyRot(value.getUser().getYHeadRot() % 360);
+                        value.setYHeadRot(value.getUser().getYHeadRot() % 360);
+                    }
                 } else {
-                    value.setYRot(value.getUser().getYHeadRot() % 360);
-                    value.setXRot(value.getUser().getXRot());
-                    value.setYBodyRot(value.getUser().getYHeadRot() % 360);
-                    value.setYHeadRot(value.getUser().getYHeadRot() % 360);
+                    if (gravityDirection != Direction.DOWN) {
+                        Vec2 vecGravity = RotationUtil.rotPlayerToWorld(self.getYRot(), self.getXRot(), gravityDirection);
+                        value.setXRot(vecGravity.y);
+                        value.setYRot(vecGravity.x % 360);
+                        value.setYBodyRot(self.getYHeadRot() % 360);
+                        value.setYHeadRot(self.getYHeadRot() % 360);
+                    } else {
+                        value.setYRot(value.getUser().getYHeadRot() % 360);
+                        value.setXRot(value.getUser().getXRot());
+                        value.setYBodyRot(value.getUser().getYHeadRot() % 360);
+                        value.setYHeadRot(value.getUser().getYHeadRot() % 360);
+                    }
                 }
             }
         }
@@ -1298,13 +1440,21 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
     }
 
     public final Vec3 getLookAngleChest(float $$0, Entity selfie) {
-        return ((StandUser)selfie).roundabout$calculateViewVectorButICanUseIt(0, selfie.getYRot());
+        Direction gravityDirection = GravityAPI.getGravityDirection(selfie);
+
+        if(gravityDirection != Direction.DOWN ){
+            Vec2 vecGravity = RotationUtil.rotPlayerToWorld(selfie.getYRot(), selfie.getXRot(), gravityDirection);
+            return ((StandUser) selfie).roundabout$calculateViewVectorButICanUseIt(0, vecGravity.x);
+        } else {
+            return ((StandUser)selfie).roundabout$calculateViewVectorButICanUseIt(0, selfie.getYRot());
+        }
     }
 
     public void blipStand(Vec3 pos, Player PL) {
         StandEntity stand = getNewStandEntity();
         Vec3 lvec = getLookAngleChest(self.getYRot(), self);
         Position pn = self.getEyePosition().add(lvec.scale(1));
+        BlockPos position = this.getValidPlacement();
         if (self.level() instanceof ServerLevel sl){
             playSoundIfPossible(self.level(),null, this.self.blockPosition(),
                     ModSounds.OPEN_BLACK_SABBATH_CHEST_EVENT, SoundSource.PLAYERS, 1F,

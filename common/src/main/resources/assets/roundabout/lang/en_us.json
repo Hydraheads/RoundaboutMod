@@ -1180,6 +1180,7 @@
   "sounds.roundabout.ripper_eyes_charge": "Fluid Buildup",
   "sounds.roundabout.ripper_eyes_beam": "Ripper Eyes",
   "sounds.roundabout.ripper_eyes_short": "Ripper Eyes",
+
   "sounds.roundabout.ctr_heal": "Wounds cured",
   "sounds.roundabout.ctr_summon": "Stand summoned",
   "sounds.roundabout.ctr_detach_1": "Arm thrown",
@@ -1189,6 +1190,8 @@
   "sounds.roundabout.ctr_rain_step_2": "Rain stabilized",
   "sounds.roundabout.ctr_rain_step_3": "Rain stabilized",
   "sounds.roundabout.ctr_stabilizing_rain": "Rain stabilizing",
+  "sounds.roundabout.ctr_barrier": "Rain sharpened",
+  "sounds.roundabout.ctr_full_body_dodge": "Body disassembled",
 
   "sounds.roundabout.zombiehorse_stitching": "Stitching...",
 
@@ -1454,6 +1457,9 @@
   "sounds.roundabout.ge_life_punch":  "Heavy Impact",
   "sounds.roundabout.ge_life_punch_windup":  "Windup",
   "sounds.roundabout.ge_life":  "Life Creation",
+  "sounds.roundabout.ge_menu":  "Selection",
+  "sounds.roundabout.ge_dna_grow":  "Lifeform Thumps",
+  "sounds.roundabout.ge_spikes":  "Brambles Snap",
 
   "sounds.roundabout.vampire_dive":  "Whoosh",
   "sounds.roundabout.punch_sfx1":  "Air Cracks",
@@ -3856,7 +3862,7 @@
   "roundabout.gold_experience_animal.bat": "Bat",
   "roundabout.gold_experience_animal.bat.desc": "Bats will find the closest entity and fly erraticaly in their face to bait reflection hits.",
   "roundabout.gold_experience_animal.fish": "Fish",
-  "roundabout.gold_experience_animal.fish.desc": "Swims in a straight line based on where you're looking when it spawned. You can interact with the fish to have it carry you.",
+  "roundabout.gold_experience_animal.fish.desc": "Swims in a straight line based on where you're looking when it spawned. You can interact with the fish to have it carry you. Riding the fish lets you control it by looking around.",
   "roundabout.gold_experience_animal.pirahna": "Pirahna",
   "roundabout.gold_experience_animal.pirahna.desc": "Rushes to the last enemy you hit, or who hit you, and bites them, inflicting bleed.",
   "roundabout.gold_experience_animal.snake": "Snake",
@@ -5581,6 +5587,9 @@
   "config.roundabout.timestopCancelsFood.desc": "While in stopped time, you cannot gain healing from food",
   "config.roundabout.postTESoften.name": "Post TE Soften",
   "config.roundabout.postTESoften.desc": "If ending time erase makes certain damage after it ends weaker like time stop does. Good to prevent rushdown abuse.",
+  "config.roundabout.timestopCancelsGuns.name": "Time Stop Cancels Guns",
+  "config.roundabout.timestopCancelsGuns.desc": "Apparently Diego couldn't shoot guns in time stop, he was doing incredibly specific things like shooting the moment time resumes or punching bullets to set one up without shooting the gun normally.",
+
 
   "config.roundabout.nerfedTEDamage.name": "Nerfed TE PVP",
   "config.roundabout.nerfedTEDamage.desc": "Makes the fated self less physically strong with its punches by a small amount for balancing.",

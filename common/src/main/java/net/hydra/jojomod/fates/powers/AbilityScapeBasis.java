@@ -3763,14 +3763,15 @@ public class AbilityScapeBasis {
             int delta = isInfiniteSpinning() ? -2 : -1;
 
             if (isInfiniteSpinning()) {
-                if (this.getSelf().tickCount%20 == 0) {
+                if (this.getSelf().tickCount%10 == 0) {
                     if (!isClient()) {
-                        Vec3 pos = this.getSelf().getPosition(0);
-                   /*     sendParticlesIfPossible(self.level(), ModParticles.GOLDEN_SPIRAL, pos.x(),
+                        Vec3 pos = this.getSelf().getEyePosition(0);
+                        pos.add(Math.random()-0.5F,Math.random()-0.5F,Math.random()-0.5F);
+                        sendParticlesIfPossible(self.level(), ModParticles.GOLDEN_SPIRAL, pos.x(),
                                 pos.y(), pos.z(),
                                 0   ,
-                                0,0,0,
-                                0.08); */
+                                1,0.5,1,
+                                1);
                     }
                 }
             }
@@ -3778,7 +3779,7 @@ public class AbilityScapeBasis {
             if (this.getSelf().isPassenger() && this.getSelf().getVehicle() instanceof AbstractHorse AH) {
                 if (AH.hurtTime == 0) {
                     if (AH.isTamed() && AH.isSaddled() && (true /* is moving around */)) {
-                        delta = 4;
+                        delta = (this.getSelf() instanceof Player P && P.isCreative()) ? 20 : 4;
                     }
                 } else {
                     delta = -4;
