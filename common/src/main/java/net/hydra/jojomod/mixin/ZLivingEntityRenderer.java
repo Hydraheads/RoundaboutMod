@@ -41,6 +41,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -48,6 +49,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -164,6 +166,32 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
         }
 
         HallucinationIndicatorRenderer.render(entity, matrixStack, buffer);
+
+        if (entity instanceof GELifeform lifeform && lifeform.isGrowing(entity)) {
+            ItemStack sourceStack = lifeform.getSourceItem();
+            if (!sourceStack.isEmpty()) {
+                float itemScale = lifeform.getItemShrinkScale(entity, $$2);
+                if (itemScale > 0.02F) {
+                    float progress = lifeform.getGrowthProgress(entity, $$2);
+                    matrixStack.pushPose();
+                    float itemYOffset = (entity.getBbHeight() * 0.15F) + (progress * 0.24F);
+                    matrixStack.translate(0.0D, itemYOffset, 0.0D);
+                    matrixStack.scale(itemScale, itemScale, itemScale);
+                    Minecraft.getInstance().getItemRenderer().renderStatic(
+                            sourceStack,
+                            ItemDisplayContext.GROUND,
+                            $$5,
+                            OverlayTexture.NO_OVERLAY,
+                            matrixStack,
+                            buffer,
+                            entity.level(),
+                            entity.getId()
+                    );
+                    matrixStack.popPose();
+                }
+            }
+        }
+
         /*
         //DiverDownPointerRenderer.render(entity, matrixStack, buffer);
         // lyin eyes highlighter
