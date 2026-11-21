@@ -1469,6 +1469,9 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                 }
                 if(!getThrowable() && getGrabbing() == 0) {
                     if (lungeTicks >= 1) {
+                        if (lungeTicks < 140 && lungeTicks > 62) {
+                            lungeTicks--;
+                        }
                         lungeTicks--;
                     }
                 }
