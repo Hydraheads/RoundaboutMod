@@ -3906,7 +3906,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     // stand icons and info screen start
 
-    /**
+    /*
      * Renders the icons for the stand's abilities on the GUI. Comments will specify
      * if icon is for courching, blocking, or normal.
      */
