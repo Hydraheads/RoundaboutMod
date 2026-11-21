@@ -12,6 +12,7 @@ import net.hydra.jojomod.client.models.layers.BigBubbleLayer;
 import net.hydra.jojomod.client.models.layers.FrozenLayer;
 import net.hydra.jojomod.client.models.stand.renderers.*;
 import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.entity.gold_experience.GELifeform;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.pathfinding.CommandDiscPossession;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -448,6 +449,15 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
                 }
                 ci.cancel();
             }
+        }
+    }
+
+    // gold experience mobs scale growing
+    @Inject(method = "scale", at = @At("TAIL"))
+    private void roundabout$scaleGELifeformGrowth(T entity, PoseStack poseStack, float partialTicks, CallbackInfo ci) {
+        if (entity instanceof GELifeform lifeform && lifeform.isGrowing(entity)) {
+            float scale = lifeform.getGrowthScale(entity, partialTicks);
+            poseStack.scale(scale, scale, scale);
         }
     }
 }

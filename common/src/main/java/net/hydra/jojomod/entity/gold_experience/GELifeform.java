@@ -23,4 +23,15 @@ public interface GELifeform {
 
     ItemStack getSourceItem();
     void setSourceItem(ItemStack stack);
+
+    int GROW_DURATION_TICKS = 10;
+
+    default boolean isGrowing(LivingEntity self) {
+        return self.tickCount < GROW_DURATION_TICKS;
+    }
+
+    default float getGrowthScale(LivingEntity self, float partialTicks) {
+        float progress = Math.min(1.0F, (self.tickCount + partialTicks) / (float) GROW_DURATION_TICKS);
+        return 0.05F + 0.95F * (1.0F - (float) Math.pow(1.0F - progress, 3.0));
+    }
 }
