@@ -109,6 +109,8 @@ public class FabricParticles {
     public static final SimpleParticleType PW_BLUE_FIREBALL_EXPLOSION = FabricParticleTypes.simple();
     public static final SimpleParticleType PW_BLUE_BLASTWAVE_EXPLOSION = FabricParticleTypes.simple();
     public static final SimpleParticleType PW_BLUE_MUSHROOM_EXPLOSION = FabricParticleTypes.simple();
+    public static final SimpleParticleType BLACK_SABBATH_MOVING_RIPPLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType BLACK_SABBATH_IDLE_RIPPLE = FabricParticleTypes.simple();
 
     public static final ParticleType<HazeColorParticleOptions> PURPLE_HAZE_SMOKE =
             new net.minecraft.core.particles.ParticleType<>(false, HazeColorParticleOptions.DESERIALIZER) {
@@ -243,6 +245,8 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("magic_dust"), MAGIC_DUST);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("brief_magic_dust"), BRIEF_MAGIC_DUST);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("killer_queen_explosion"), KILLER_QUEEN_EXPLOSION);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("black_sabbath_moving_ripple"), BLACK_SABBATH_MOVING_RIPPLE);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("black_sabbath_idle_ripple"), BLACK_SABBATH_IDLE_RIPPLE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("pw_fireball_explosion"), PW_FIREBALL_EXPLOSION);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("pw_blastwave_explosion"), PW_BLASTWAVE_EXPLOSION);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("pw_mushroom_explosion"), PW_MUSHROOM_EXPLOSION);
@@ -373,6 +377,8 @@ public class FabricParticles {
         ModParticles.PW_BLUE_FIREBALL_EXPLOSION = PW_BLUE_FIREBALL_EXPLOSION;
         ModParticles.PW_BLUE_BLASTWAVE_EXPLOSION = PW_BLUE_BLASTWAVE_EXPLOSION;
         ModParticles.PW_BLUE_MUSHROOM_EXPLOSION = PW_BLUE_MUSHROOM_EXPLOSION;
+        ModParticles.BLACK_SABBATH_MOVING_RIPPLE = BLACK_SABBATH_MOVING_RIPPLE;
+        ModParticles.BLACK_SABBATH_IDLE_RIPPLE = BLACK_SABBATH_IDLE_RIPPLE;
 
         ModParticles.PURPLE_HAZE_SMOKE = PURPLE_HAZE_SMOKE;
         ModParticles.DISTORTION_SMOKE = DISTORTION_SMOKE;

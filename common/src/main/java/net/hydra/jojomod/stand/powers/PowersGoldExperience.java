@@ -1020,14 +1020,6 @@ public class PowersGoldExperience extends BlockGrabPreset {
         return super.buttonInputGuard(keyIsDown, options);
     }
 
-    @Override
-    public byte getSoundCancelingGroupByte(byte soundChoice) {
-        if (soundChoice == SoundIndex.ALT_CHARGE_SOUND_1) {
-            return SoundIndex.BARRAGE_SOUND_GROUP;
-        }
-        return super.getSoundCancelingGroupByte(soundChoice);
-    }
-
     // item interactions (lifeform creation) start
 
     private static Vec3 getRevertBoost(Level level, Vec3 pos, LivingEntity entity, LivingEntity owner, double speed) {
@@ -3834,6 +3826,16 @@ public class PowersGoldExperience extends BlockGrabPreset {
         return super.tryPower(move, forced);
     }
 
+    @Override
+    public byte getSoundCancelingGroupByte(byte soundChoice) {
+        if (soundChoice == BARRAGE_NOISE) {
+            return SoundIndex.BARRAGE_SOUND_GROUP;
+        } else if (soundChoice == SoundIndex.ALT_CHARGE_SOUND_1) {
+            return SoundIndex.BARRAGE_SOUND_GROUP;
+        }
+        return super.getSoundCancelingGroupByte(soundChoice);
+    }
+
     // sounds end
 
     // skins and entity start
@@ -3843,6 +3845,15 @@ public class PowersGoldExperience extends BlockGrabPreset {
         switch (skinId) {
             case GoldExperienceEntity.BETA -> {
                 return Component.translatable("skins.roundabout.gold_experience.beta");
+            }
+            case GoldExperienceEntity.DIAMOND -> {
+                return Component.translatable("skins.roundabout.gold_experience.diamond");
+            }
+            case GoldExperienceEntity.GUARD -> {
+                return Component.translatable("skins.roundabout.gold_experience.guard");
+            }
+            case GoldExperienceEntity.PS2 -> {
+                return Component.translatable("skins.roundabout.gold_experience.ps2");
             }
             default -> {
                 return Component.translatable("skins.roundabout.gold_experience.base");
@@ -3863,15 +3874,19 @@ public class PowersGoldExperience extends BlockGrabPreset {
             if (Level > 2 || bypass) {
             }
             if (Level > 3 || bypass) {
+                l.add(GoldExperienceEntity.PS2);
             }
             if (Level > 4 || bypass) {
+                l.add(GoldExperienceEntity.DIAMOND);
             }
             if (Level > 5 || bypass) {
+                l.add(GoldExperienceEntity.GUARD);
             }
             if (Level > 6 || bypass) {
                 l.add(GoldExperienceEntity.BETA);
             }
             if (((IPlayerEntity) PE).roundabout$getUnlockedBonusSkin() || bypass) {
+                // deimos GE goes here
             }
         }
 

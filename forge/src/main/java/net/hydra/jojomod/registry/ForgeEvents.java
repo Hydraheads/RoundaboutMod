@@ -798,6 +798,7 @@ public class ForgeEvents {
         ModItems.SHIZUKA_MASK = ForgeItems.SHIZUKA_MASK.get();
         ModItems.JOHNNY_MASK = ForgeItems.JOHNNY_MASK.get();
         ModItems.JOHNGALLIA_MASK = ForgeItems.JOHNGALLIA_MASK.get();
+        ModItems.POLPO_MASK = ForgeItems.POLPO_MASK.get();
         ModItems.DOT_HAN_MASK = ForgeItems.DOT_HAN_MASK.get();
         ModItems.AVDUL_MASK = ForgeItems.AVDUL_MASK.get();
         ModItems.LUCY_MASK = ForgeItems.LUCY_MASK.get();
@@ -936,6 +937,8 @@ public class ForgeEvents {
         ModParticles.GOLDEN_SPIRAL = ForgeParticles.GOLDEN_SPIRAL.get();
         ModParticles.KILLER_QUEEN_EXPLOSION = ForgeParticles.KILLER_QUEEN_EXPLOSION.get();
         ModParticles.TOOTH = ForgeParticles.TOOTH.get();
+        ModParticles.BLACK_SABBATH_MOVING_RIPPLE = ForgeParticles.BLACK_SABBATH_MOVING_RIPPLE.get();
+        ModParticles.BLACK_SABBATH_IDLE_RIPPLE = ForgeParticles.BLACK_SABBATH_IDLE_RIPPLE.get();
         ModParticles.PW_FIREBALL_EXPLOSION = ForgeParticles.PW_FIREBALL_EXPLOSION.get();
         ModParticles.PW_BLASTWAVE_EXPLOSION = ForgeParticles.PW_BLASTWAVE_EXPLOSION.get();
         ModParticles.PW_MUSHROOM_EXPLOSION = ForgeParticles.PW_MUSHROOM_EXPLOSION.get();

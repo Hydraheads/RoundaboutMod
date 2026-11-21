@@ -94,7 +94,8 @@ public class PowersKingNothing extends NewDashPreset {
             WARDEN = 5,
             SNIFFER = 6,
             SOMETHING = 7,
-            RAM = 8;
+            RAM = 8,
+            CHRISTMAS = 9;
 
     // sounds
     public static final byte
@@ -122,6 +123,7 @@ public class PowersKingNothing extends NewDashPreset {
         VISUAL_INFO.put(SNIFFER, new VisualData(0x93311d, 0x459d8a, 0x459d8a, 0.25f));
         VISUAL_INFO.put(SOMETHING, new VisualData(0xA8DF81, 0x58E990, 0xA8DF81, 0.2f));
         VISUAL_INFO.put(RAM, new VisualData(0xde9c64, 0xd77f5b, 0xde9c64, 0.2f));
+        VISUAL_INFO.put(CHRISTMAS, new VisualData(0xec4040, 0xe6e1e1, 0xec4040, 0.2f));
     }
 
     // item tracking sets
@@ -165,6 +167,7 @@ public class PowersKingNothing extends NewDashPreset {
         $$1.add(MANGA);
         $$1.add(SPINE);
         $$1.add(SOMETHING);
+        $$1.add(CHRISTMAS);
         $$1.add(NOTE);
         $$1.add(WARDEN);
         $$1.add(SNIFFER);
@@ -182,6 +185,7 @@ public class PowersKingNothing extends NewDashPreset {
             case SNIFFER -> "sniffer";
             case SOMETHING -> "something";
             case RAM -> "ram";
+            case CHRISTMAS -> "christmas";
             default -> "manga";
         };
     }
@@ -864,7 +868,7 @@ public class PowersKingNothing extends NewDashPreset {
                     startPhaseTickAfter = false;
                     startPhaseMovement(getStandEntity(getSelf()));
                 }
-                if (this.attackTimeDuring == 108) {
+                else if (this.attackTimeDuring == 108) {
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                     playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);
                     animateStand(KingNothingEntity.RETURN);
@@ -989,6 +993,9 @@ public class PowersKingNothing extends NewDashPreset {
                         }
                     }
                 }
+            }
+            else {
+               startPhaseTickAfter = false;
             }
         }
     }
@@ -1564,7 +1571,7 @@ public class PowersKingNothing extends NewDashPreset {
                         stand.setHeldItem(ItemStack.EMPTY);
                         didThing = true;
                     }
-                    else if ($$4.isAttackable() && !($$4 instanceof Player PE && (PE.isCreative() || PE.isSpectator()))
+                    else if ($$4.isAttackable() && $$4.isPickable() && !($$4 instanceof Player PE && (PE.isCreative() || PE.isSpectator()))
                             && !($$4 instanceof OwnableEntity OE && Objects.equals(OE.getOwner(), getSelf())) && !(
                             $$4 instanceof Boat || $$4 instanceof Minecart)) {
                         cooldown = ClientNetworking.getAppropriateConfig().kingNothingSettings.kingNothingPhaseAttackCd;
@@ -1757,9 +1764,11 @@ public class PowersKingNothing extends NewDashPreset {
     public boolean dropPhaseItem() {
         StandEntity stand = getStandEntity(getSelf());
         if (!isClient()) {
+            Vec3 standPos = stand.getBoundingBox().getCenter();
             ItemEntity $$4 =
-                    new ItemEntity(this.getSelf().level(), stand.getX(), stand.getY() + (stand.getEyeHeight() / 2.0),
-                            stand.getZ(), stand.getHeldItem(), 0, 0.2, 0);
+                    new ItemEntity(this.getSelf().level(), standPos.x(),
+                            standPos.y(),
+                            standPos.z(), stand.getHeldItem(), 0, 0.2, 0);
             $$4.setPickUpDelay(40);
             $$4.setThrower(this.getSelf().getUUID());
             PowerTypes.copyPlaneOfExisting(self, $$4);

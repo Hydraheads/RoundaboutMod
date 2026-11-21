@@ -37,7 +37,8 @@ public class KingNothingEntity extends FollowingStandEntity {
             WARDEN = 5,
             SNIFFER = 6,
             SOMETHING = 7,
-            RAM = 8;
+            RAM = 8,
+            CHRISTMAS = 9;
 
     @Override
     public void setupAnimationStates() {

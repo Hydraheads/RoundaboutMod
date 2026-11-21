@@ -179,6 +179,7 @@ public class VisageData {
     public boolean rendersPlayerBreast(){
         return false;
     }
+    public boolean renderPolpoNose(){return false;}
     public boolean renderJohngalliaHair(){return false;}
     public boolean renderJohngalliaTie(){return false;}
     public boolean rendersArmor(){

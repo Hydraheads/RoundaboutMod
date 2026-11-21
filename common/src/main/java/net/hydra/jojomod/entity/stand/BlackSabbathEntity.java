@@ -1308,8 +1308,8 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         return false;
     }
     public boolean isTouchingTarget(LivingEntity lent){
-        AABB abba = this.getBoundingBox().expandTowards(0.15, 8, 0.15);
-        AABB abba2 = this.getBoundingBox().expandTowards(0.15, 0.15, 0.15);
+        AABB abba = this.getBoundingBox().expandTowards(0.2, 8, 0.2);
+        AABB abba2 = this.getBoundingBox().expandTowards(0.2, 0.2, 0.2);
         AABB aBBa = (lent instanceof Allay || lent instanceof Vex) ? abba2 : abba;
             List<LivingEntity> lvent = this.level().getEntitiesOfClass(LivingEntity.class, aBBa, (livingEntity) -> {
                 return true;
@@ -1576,9 +1576,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                                 ((StandUser) targetSabbath()).roundabout$tryPower(PowerIndex.NONE, true);
                                                 createSoul();
                                             }
-                                            if(!(targetSabbath() instanceof Vex || targetSabbath() instanceof Allay)) {
-                                                targetSabbath().knockback(0.3f, this.getX() - targetSabbath().getX(), this.getZ() - targetSabbath().getZ());
-                                            }
                                         }
                                     }
                                 } else if (lungeTicks < 185 && lungeTicks > 165) {
@@ -1817,17 +1814,27 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     }
     boolean isWalking = false;
     protected void createShadowParticles() {
-        if(this.level() instanceof ServerLevel SL){
-            Random random = new Random();
-            Float flute5 = random.nextFloat(-0F, 0.15F);
-            if(this.onGround()) {
-                ((ServerLevel) this.level()).sendParticles((new DustParticleOptions(new Vector3f(flute5, flute5, flute5), 1.75f)), this.getX(),
-                        this.getY() - 0.175, this.getZ(),
-                        200,
-                        0.01, 0.01, 0.01,
-                        0.1);
+            if(this.getUser() != null && ((StandUser)this.getUser()).roundabout$getStandPowers() != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pbs) {
+                if (this.getDeltaMovement().length() <= 0.075) {
+                    if(this.tickCount % 7 == 0) {
+                        pbs.getSelf().level().addParticle(
+                                ModParticles.BLACK_SABBATH_IDLE_RIPPLE,
+                                this.getX(),
+                                this.getY() + 0.05,
+                                this.getZ(),
+                                0.0, 0.0, 0.0
+                        );
+                    }
+                } else {
+                    pbs.getSelf().level().addParticle(
+                            ModParticles.BLACK_SABBATH_MOVING_RIPPLE,
+                            this.getX(),
+                            this.getY() + 0.05,
+                            this.getZ(),
+                            0.0, 0.0, 0.0
+                    );
+                }
             }
-        }
     }
     int lungeTicks = 0;
     protected void attemptGrab(){

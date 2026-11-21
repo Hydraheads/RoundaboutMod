@@ -329,6 +329,14 @@ public class ForgeParticles {
             "mold",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> BLACK_SABBATH_MOVING_RIPPLE = PARTICLES.register(
+            "black_sabbath_moving_ripple",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> BLACK_SABBATH_IDLE_RIPPLE = PARTICLES.register(
+            "black_sabbath_idle_ripple",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> PW_FIREBALL_EXPLOSION = PARTICLES.register(
             "pw_fireball_explosion",
             () -> new SimpleParticleType(true)

@@ -1,6 +1,8 @@
 package net.hydra.jojomod.entity;
 
+import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.access.IItemEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntityServer;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.corpses.FallenMob;
@@ -15,6 +17,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.Util;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -23,8 +26,10 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.*;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -35,13 +40,16 @@ import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.animal.horse.Donkey;
 import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -68,7 +76,7 @@ public class D4CCloneEntity extends CloneEntity implements ContainerListener,Has
     }
 
     public int getInventorySize() {
-        return 17;
+        return 15;
     }
     protected void createInventory() {
         SimpleContainer simplecontainer = this.inventory;
@@ -143,9 +151,6 @@ public class D4CCloneEntity extends CloneEntity implements ContainerListener,Has
         ));
     }
 
-    public void dropAllItems(){
-
-    }
     public void peaceOut(){
         MainUtil.playSoundIfPossible(this,this.level(),null, this.blockPosition(), ModSounds.D4C_CLONE_EVENT,
                 SoundSource.PLAYERS, 0.95F, 1F);
@@ -157,7 +162,7 @@ public class D4CCloneEntity extends CloneEntity implements ContainerListener,Has
                 ), this.getEyePosition().x,
                 this.getEyePosition().y, this.getEyePosition().z,
                 20, 0.3, 0.3, 0.3, 0.3);
-        dropAllItems();
+        dropAll();
         this.discard();
     }
 
@@ -200,7 +205,7 @@ public class D4CCloneEntity extends CloneEntity implements ContainerListener,Has
 
         ListTag listTag = new ListTag();
 
-        for(int i = 2; i < this.inventory.getContainerSize(); ++i) {
+        for(int i = 0; i < this.inventory.getContainerSize(); ++i) {
             ItemStack itemStack = this.inventory.getItem(i);
             if (!itemStack.isEmpty()) {
                 CompoundTag compoundTag2 = new CompoundTag();
@@ -223,44 +228,16 @@ public class D4CCloneEntity extends CloneEntity implements ContainerListener,Has
         for(int i = 0; i < listTag.size(); ++i) {
             CompoundTag compoundTag2 = listTag.getCompound(i);
             int j = compoundTag2.getByte("Slot") & 255;
-            if (j >= 2 && j < this.inventory.getContainerSize()) {
+            if (j < this.inventory.getContainerSize()) {
                 this.inventory.setItem(j, ItemStack.of(compoundTag2));
             }
         }
     }
     public SlotAccess getSlot(int i) {
-        int j = i - 400;
-        if (j >= 0 && j < 2 && j < this.inventory.getContainerSize()) {
-            if (j == 0) {
-                return this.createEquipmentSlotAccess(j, (itemStack) -> itemStack.isEmpty() || itemStack.is(Items.SADDLE));
-            }
-
-            if (j == 1) {
-                    return SlotAccess.NULL;
-            }
-        }
-
-        int k = i - 500 + 2;
-        return k >= 2 && k < this.inventory.getContainerSize() ? SlotAccess.forContainer(this.inventory, k) : super.getSlot(i);
+        int k = i - 500;
+        return k < this.inventory.getContainerSize() ? SlotAccess.forContainer(this.inventory, k) : super.getSlot(i);
     }
 
-    public SlotAccess createEquipmentSlotAccess(final int i, final Predicate<ItemStack> predicate) {
-        return new SlotAccess() {
-            public ItemStack get() {
-                return inventory.getItem(i);
-            }
-
-            public boolean set(ItemStack itemStack) {
-                if (!predicate.test(itemStack)) {
-                    return false;
-                } else {
-                    inventory.setItem(i, itemStack);
-                    updateContainerEquipment();
-                    return true;
-                }
-            }
-        };
-    }
     public boolean hasInventoryChanged(Container p_149512_) {
         return this.inventory != p_149512_;
     }
@@ -682,7 +659,74 @@ public class D4CCloneEntity extends CloneEntity implements ContainerListener,Has
 
     public void aiStep() {
         this.updateSwingTime();
+        if (this.getHealth() > 0.0F && !this.isSpectator()) {
+            AABB aabb;
+            if (this.isPassenger() && !this.getVehicle().isRemoved()) {
+                aabb = this.getBoundingBox().minmax(this.getVehicle().getBoundingBox()).inflate(1.0D, 0.0D, 1.0D);
+            } else {
+                aabb = this.getBoundingBox().inflate(1.0D, 0.5D, 1.0D);
+            }
+
+            List<Entity> list = this.level().getEntities(this, aabb);
+            List<Entity> list1 = Lists.newArrayList();
+
+            for(int i = 0; i < list.size(); ++i) {
+                Entity entity = list.get(i);
+                if (entity.getType() == EntityType.EXPERIENCE_ORB) {
+                    list1.add(entity);
+                } else if (!entity.isRemoved()) {
+                    this.touch(entity);
+                }
+            }
+
+            if (!list1.isEmpty()) {
+                this.touch(Util.getRandom(list1, this.random));
+            }
+        }
         super.aiStep();
+    }
+    public void die(DamageSource sauce) {
+        if (!this.isRemoved() && !this.dead) {
+            dropAll();
+        }
+        super.die(sauce);
+    }
+    public void dropAll() {
+        for(int i = 0; i < this.inventory.getContainerSize(); ++i) {
+            ItemStack itemStack = this.inventory.getItem(i);
+            if (!itemStack.isEmpty()) {
+                double d = this.getEyeY() - (double)0.3F;
+                ItemEntity itemEntity = new ItemEntity(this.level(), this.getX(), d, this.getZ(), itemStack);
+                itemEntity.setPickUpDelay(40);
+                float f = this.random.nextFloat() * 0.5F;
+                float g = this.random.nextFloat() * ((float)Math.PI * 2F);
+                itemEntity.setDeltaMovement((double)(-Mth.sin(g) * f), (double)0.2F, (double)(Mth.cos(g) * f));
+                level().addFreshEntity(itemEntity);
+            }
+        }
+        this.inventory.clearContent();
+    }
+
+    private void touch(Entity entity) {
+        if (entity instanceof ItemEntity item){
+            if (!this.level().isClientSide) {
+                ItemStack $$1 = item.getItem();
+                Item $$2 = $$1.getItem();
+                int $$3 = $$1.getCount();
+                if (((IItemEntityAccess)item).roundabout$getPickupDelay() == 0 &&
+                        (((IItemEntityAccess)item).roundabout$getTarget() == null ||
+                                ((IItemEntityAccess)item).roundabout$getTarget().equals(this.getUUID()))) {
+                    if (inventory.canAddItem($$1)) {
+                        inventory.addItem($$1);
+                        this.take(item, $$3);
+                        item.discard();
+
+                        this.onItemPickup(item);
+                    }
+                }
+
+            }
+        }
     }
     private void avoidAnnihilator(Entity entity) {
         double distance = this.distanceTo(entity);

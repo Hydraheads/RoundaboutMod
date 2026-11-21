@@ -12,6 +12,8 @@ import net.hydra.jojomod.client.models.badCompanyTroops.*;
 import net.hydra.jojomod.client.models.badCompanyTroops.renderers.*;
 import net.hydra.jojomod.client.models.corpses.renderers.*;
 import net.hydra.jojomod.client.models.gold_experience.*;
+import net.hydra.jojomod.client.models.layers.DiverArmsLayer;
+import net.hydra.jojomod.client.models.layers.DiverLegsLayer;
 import net.hydra.jojomod.client.models.minions.*;
 import net.hydra.jojomod.client.models.minions.head_parts.*;
 import net.hydra.jojomod.client.models.minions.renderers.*;
@@ -507,6 +509,7 @@ public class FabricEntityClient {
         ModStrayModels.LeftLeg = new LeftLegPart();
         ModStrayModels.RightHeel = new RightHeelPart();
         ModStrayModels.JohngalliaTiePart = new JohngalliaTiePart();
+        ModStrayModels.PolpoNosePart = new PolpoNosePart();
         ModStrayModels.extraHairPart = new ExtraHairPart();
         ModStrayModels.oyecomovaHatPart = new OyecomovaHatPart();
         ModStrayModels.extraHairDecorationPart = new ExtraHairDecorationPart();
@@ -542,6 +545,9 @@ public class FabricEntityClient {
         ModStrayModels.OasisSlimRightArm = new OasisSlimRightArmPart();
         ModStrayModels.OasisLeftArm = new OasisLeftArmPart();
         ModStrayModels.OasisSlimLeftArm = new OasisSlimLeftArmPart();
+
+        ModStrayModels.diverArmsLayer = new DiverArmsLayer<>();
+        ModStrayModels.diverLegsLayer = new DiverLegsLayer<>();
 
         ModStrayModels.VampireHairOne = new VampireHairOnePart();
         ModStrayModels.VampireHairTwo = new VampireHairTwoPart();

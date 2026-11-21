@@ -11,6 +11,8 @@ import net.hydra.jojomod.client.models.badCompanyTroops.*;
 import net.hydra.jojomod.client.models.badCompanyTroops.renderers.*;
 import net.hydra.jojomod.client.models.corpses.renderers.*;
 import net.hydra.jojomod.client.models.gold_experience.*;
+import net.hydra.jojomod.client.models.layers.DiverArmsLayer;
+import net.hydra.jojomod.client.models.layers.DiverLegsLayer;
 import net.hydra.jojomod.client.models.minions.*;
 import net.hydra.jojomod.client.models.minions.head_parts.*;
 import net.hydra.jojomod.client.models.minions.renderers.*;
@@ -536,6 +538,7 @@ public class ClientForgeEvents {
         ModStrayModels.LeftHeel = new LeftHeelPart();
         ModStrayModels.RightHeel = new RightHeelPart();
         ModStrayModels.JohngalliaTiePart = new JohngalliaTiePart();
+        ModStrayModels.PolpoNosePart = new PolpoNosePart();
         ModStrayModels.extraHairPart = new ExtraHairPart();
         ModStrayModels.oyecomovaHatPart = new OyecomovaHatPart();
         ModStrayModels.extraHairDecorationPart = new ExtraHairDecorationPart();
@@ -571,6 +574,9 @@ public class ClientForgeEvents {
         ModStrayModels.OasisSlimRightArm = new OasisSlimRightArmPart();
         ModStrayModels.OasisLeftArm = new OasisLeftArmPart();
         ModStrayModels.OasisSlimLeftArm = new OasisSlimLeftArmPart();
+
+        ModStrayModels.diverArmsLayer = new DiverArmsLayer();
+        ModStrayModels.diverLegsLayer = new DiverLegsLayer();
 
         ModStrayModels.VampireHairOne = new VampireHairOnePart();
         ModStrayModels.VampireHairTwo = new VampireHairTwoPart();
@@ -692,6 +698,8 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.GOLDEN_SPIRAL.get(), GoldenSpiralParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.KILLER_QUEEN_EXPLOSION.get(), KQExplosionParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.TOOTH.get(), ToothParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.BLACK_SABBATH_MOVING_RIPPLE.get(), BlackSabbathMovingRippleParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.BLACK_SABBATH_IDLE_RIPPLE.get(), BlackSabbathIdleRippleParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.PW_FIREBALL_EXPLOSION.get(), PWFireballExplosionParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.PW_BLASTWAVE_EXPLOSION.get(), PWBlastwaveExplosionParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.PW_MUSHROOM_EXPLOSION.get(), PWMushroomExplosionParticle.Provider::new);

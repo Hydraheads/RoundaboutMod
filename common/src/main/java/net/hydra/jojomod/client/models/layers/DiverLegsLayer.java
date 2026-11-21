@@ -3,13 +3,17 @@ package net.hydra.jojomod.client.models.layers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.ModStrayModels;
+import net.hydra.jojomod.client.models.stand.DiverDownBetaModel;
+import net.hydra.jojomod.client.models.stand.DiverDownModel;
+import net.hydra.jojomod.client.models.stand.DiverDownWorldModel;
+import net.hydra.jojomod.client.models.stand.DiverDrownedModel;
 import net.hydra.jojomod.client.models.stand.renderers.DiverDownBaseRenderer;
 import net.hydra.jojomod.entity.stand.DiverDownEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersDiverDown;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -30,20 +34,24 @@ public class DiverLegsLayer<T extends LivingEntity, A extends HumanoidModel<T>> 
     private final Map<Byte, LegPair> skinLegModels = new HashMap<>();
     private final LegPair defaultLegs;
 
-    public DiverLegsLayer(EntityRendererProvider.Context context, LivingEntityRenderer<T, A> livingEntityRenderer) {
-        super(livingEntityRenderer);
+    public DiverLegsLayer() {
+        super(null);
 
-        this.defaultLegs = bakeDiverLegs(context, ModEntityRendererClient.DIVER_DOWN_LAYER);
+        this.defaultLegs = bakeDiverLegs(DiverDownModel.getTexturedModelData().bakeRoot());
         this.skinLegModels.put((byte) 0, this.defaultLegs);
-        this.skinLegModels.put(DiverDownEntity.BETA_DIVER, bakeDiverLegs(context, ModEntityRendererClient.DIVER_DOWN_BETA_LAYER));
-        this.skinLegModels.put(DiverDownEntity.WORLD_DIVER, bakeDiverLegs(context, ModEntityRendererClient.DIVER_DOWN_WORLD_LAYER));
-        this.skinLegModels.put(DiverDownEntity.DIVER_DROWNED, bakeDiverLegs(context, ModEntityRendererClient.DIVER_DROWNED_LAYER));
+        this.skinLegModels.put(DiverDownEntity.BETA_DIVER, bakeDiverLegs(DiverDownBetaModel.getTexturedModelData().bakeRoot()));
+        this.skinLegModels.put(DiverDownEntity.WORLD_DIVER, bakeDiverLegs(DiverDownWorldModel.getTexturedModelData().bakeRoot()));
+        this.skinLegModels.put(DiverDownEntity.DIVER_DROWNED, bakeDiverLegs(DiverDrownedModel.getTexturedModelData().bakeRoot()));
         // In the future, follow this template to add more
-        // this.skinLegModels.put(DiverDownEntity.MODEL_NAME, bakeDiverLegs(context, ModEntityRendererClient.MODEL_NAME_LAYER));
+        // this.skinLegModels.put(DiverDownEntity.MODEL_NAME, bakeDiverLegs(DiverDownModelNameModel.getTexturedModelData().bakeRoot()));
     }
 
-    private static LegPair bakeDiverLegs(EntityRendererProvider.Context context, ModelLayerLocation layer) {
-        ModelPart standRoot = context.bakeLayer(layer);
+    public DiverLegsLayer(EntityRendererProvider.Context context, LivingEntityRenderer<T, A> livingEntityRenderer) {
+        super(livingEntityRenderer);
+        this.defaultLegs = null;
+    }
+
+    private static LegPair bakeDiverLegs(ModelPart standRoot) {
         ModelPart standLegs = standRoot.getChild("stand").getChild("stand2").getChild("body").getChild("body2").getChild("legs");
         return new LegPair(standLegs.getChild("left_leg"), standLegs.getChild("right_leg"));
     }
@@ -54,6 +62,7 @@ public class DiverLegsLayer<T extends LivingEntity, A extends HumanoidModel<T>> 
                        float ageInTicks, float netHeadYaw, float headPitch) {
 
         if (entity == null || entity.isInvisible() || !MainUtil.isHumanoid2(entity)) return;
+        if (ModStrayModels.diverLegsLayer == null) return;
 
         if (entity instanceof StandUser su && su.roundabout$hasDiverLegs()) {
             if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) return;
@@ -68,7 +77,7 @@ public class DiverLegsLayer<T extends LivingEntity, A extends HumanoidModel<T>> 
             byte skinByte = (diverOwner != null) ? diverOwner.roundabout$getStandSkin() : (byte) 0;
             ResourceLocation texture = DiverDownBaseRenderer.getSkin(skinByte);
 
-            LegPair legs = this.skinLegModels.getOrDefault(skinByte, this.defaultLegs);
+            LegPair legs = (LegPair) ModStrayModels.diverLegsLayer.skinLegModels.getOrDefault(skinByte, ModStrayModels.diverLegsLayer.defaultLegs);
 
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(texture));
 
