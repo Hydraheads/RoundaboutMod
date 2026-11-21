@@ -994,6 +994,9 @@ public class PowersKingNothing extends NewDashPreset {
                     }
                 }
             }
+            else {
+               startPhaseTickAfter = false;
+            }
         }
     }
 
