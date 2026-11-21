@@ -137,7 +137,7 @@ public class PowersKingNothing extends NewDashPreset {
 
     // memorized scent cloud stuff
     TrackingCloudEntity trackingCloud = null;
-    private boolean trackingCloudOut = false;
+    private boolean isTrackingMemorizedScent = false;
 
     // memorized scents
     private Block memorizedBlock = null;
@@ -555,6 +555,10 @@ public class PowersKingNothing extends NewDashPreset {
         return getVisualInfo().highlightColor();
     }
 
+    public int getParticleColor(VisualData pdata) {
+        return Roundabout.RANDOM.nextFloat() > pdata.percentOther() ? pdata.color1() : pdata.color2();
+    }
+
     @Override
     public void tickPower() {
         super.tickPower();
@@ -631,7 +635,7 @@ public class PowersKingNothing extends NewDashPreset {
                 }
             }
         }
-        if (trackingCloudOut && (trackingCloud != null && trackingCloud.isRemoved())) {
+        if (isTrackingMemorizedScent && (trackingCloud != null && trackingCloud.isRemoved())) {
             syncTracking(false);
             trackingCloud = null;
             playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);
@@ -1000,10 +1004,6 @@ public class PowersKingNothing extends NewDashPreset {
         }
     }
 
-    public int getParticleColor(VisualData pdata) {
-        return Roundabout.RANDOM.nextFloat() > pdata.percentOther() ? pdata.color1() : pdata.color2();
-    }
-
     private boolean tryBucketPlace(BucketItem bucket, StandEntity stand, BlockPos bpos, BlockHitResult blockHit) {
         BlockPos placePos = bpos.relative(blockHit.getDirection());
         boolean placesNotfr = getSelf().level().isFluidAtPosition(placePos,
@@ -1171,7 +1171,7 @@ public class PowersKingNothing extends NewDashPreset {
     }
 
     public boolean isTrackingMemorizedScent() {
-        return trackingCloudOut;
+        return isTrackingMemorizedScent;
     }
 
     public boolean isStandHere() {
@@ -1260,10 +1260,10 @@ public class PowersKingNothing extends NewDashPreset {
         switch (activePower) {
             case SYNC_TRACKING -> {
                 if (data == 0) {
-                    this.trackingCloudOut = false;
+                    this.isTrackingMemorizedScent = false;
                 }
                 else if (data == 1) {
-                    trackingCloudOut = true;
+                    isTrackingMemorizedScent = true;
                 }
             }
         }
@@ -1273,7 +1273,7 @@ public class PowersKingNothing extends NewDashPreset {
     private boolean startMemorizedScentTrack() {
         animateStand(KingNothingEntity.DISINTEGRATE);
         playSoundsIfNearby(DISINTEGRATE, 27, false);
-        trackingCloudOut = true;
+        isTrackingMemorizedScent = true;
         disintegrateAnimTicks = 0;
         if (!isClient()) {
             TrackingCloudEntity tc = ModEntities.TRACKING_CLOUD.create(this.getSelf().level());
@@ -1362,7 +1362,7 @@ public class PowersKingNothing extends NewDashPreset {
 
     private boolean endMemorizedScentTrack() {
         if (isTrackingMemorizedScent() && !onCooldown(PowerIndex.SKILL_1)) {
-            this.trackingCloudOut = false;
+            this.isTrackingMemorizedScent = false;
             if (!this.isClient()) {
                 this.trackingCloud.discard();
                 this.trackingCloud = null;
@@ -1538,8 +1538,9 @@ public class PowersKingNothing extends NewDashPreset {
     }
 
     public void tryPhaseInteractMob(StandEntity stand, AABB bb1, AABB bb2) {
-        bb1 = bb1.inflate(1.6F);
-        bb2 = bb2.inflate(1.6F);
+        double yShrink = 0.6;
+        bb1 = bb1.contract(0, yShrink, 0).contract(0, -yShrink, 0);
+        bb2 = bb2.contract(0, yShrink, 0).contract(0, -yShrink, 0);
 
         AABB $$2 = bb1.minmax(bb2);
         List<Entity> $$3 = stand.level().getEntities(stand, $$2);
@@ -1795,7 +1796,7 @@ public class PowersKingNothing extends NewDashPreset {
             this.foundItemYet = false;
             this.itemHoldingEntities.clear();
             this.itemHoldingBlocks.clear();
-            this.trackingCloudOut = false;
+            this.isTrackingMemorizedScent = false;
             if (trackingCloud != null) {
                 this.trackingCloud.discard();
                 this.trackingCloud = null;
