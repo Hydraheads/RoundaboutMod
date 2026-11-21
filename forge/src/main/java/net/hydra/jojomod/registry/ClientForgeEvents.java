@@ -697,6 +697,8 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.GOLDEN_SPIRAL.get(), GoldenSpiralParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.KILLER_QUEEN_EXPLOSION.get(), KQExplosionParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.TOOTH.get(), ToothParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.BLACK_SABBATH_MOVING_RIPPLE.get(), BlackSabbathMovingRippleParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.BLACK_SABBATH_IDLE_RIPPLE.get(), BlackSabbathIdleRippleParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.PW_FIREBALL_EXPLOSION.get(), PWFireballExplosionParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.PW_BLASTWAVE_EXPLOSION.get(), PWBlastwaveExplosionParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.PW_MUSHROOM_EXPLOSION.get(), PWMushroomExplosionParticle.Provider::new);

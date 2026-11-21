@@ -88,6 +88,8 @@ public class ModParticles {
     public static SimpleParticleType WAKE_RIPPLE;
     public static SimpleParticleType DIVER_DOWN_FINAL;
     public static SimpleParticleType RIBCAGE;
+    public static SimpleParticleType BLACK_SABBATH_MOVING_RIPPLE;
+    public static SimpleParticleType BLACK_SABBATH_IDLE_RIPPLE;
 
     public static SimpleParticleType OCCULT;
 
