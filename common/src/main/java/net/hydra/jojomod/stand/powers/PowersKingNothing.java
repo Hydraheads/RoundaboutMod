@@ -99,7 +99,8 @@ public class PowersKingNothing extends NewDashPreset {
     // sounds
     public static final byte
             DISINTEGRATE = 32,
-            PHASE = 33;
+            PHASE = 33,
+            FOUND_ITEM = 34;
 
     public static final byte SYNC_TRACKING = 50;
 
@@ -127,6 +128,7 @@ public class PowersKingNothing extends NewDashPreset {
     public final Set<Entity> itemHoldingEntities = new HashSet<>();
     public final Set<BlockPos> itemHoldingBlocks = new HashSet<>();
     public final Set<Pair<BlockPos, BlockPos>> itemHoldingBlockPairs = new HashSet<>();
+    private boolean foundItemYet = false;
 
     // idk what this is exactly but its used in the phase grab stuff
     public Vec3 moveVec = Vec3.ZERO;
@@ -239,6 +241,9 @@ public class PowersKingNothing extends NewDashPreset {
             }
             case PHASE -> {
                 return ModSounds.KING_NOTHING_PHASE_EVENT;
+            }
+            case FOUND_ITEM -> {
+                return SoundEvents.EXPERIENCE_ORB_PICKUP;
             }
         }
         return super.getSoundFromByte(soundChoice);
@@ -594,8 +599,14 @@ public class PowersKingNothing extends NewDashPreset {
             boolean foundTem = itemTrackEnt(checkRangeEnt, level);
             // chest code!!
             foundTem = itemTrackBlock(checkRangeChest, level) || foundTem;
+            if (foundTem && !foundItemYet) {
+                foundItemYet = true;
+                // FIND BETTER SOUND
+                playSoundsIfNearby(FOUND_ITEM, 27, false);
+            }
             // passive particles
             if (!foundTem) {
+                foundItemYet = false;
                 if (this.getSelf().tickCount % 5 == 0) {
                     VisualData pdata = getVisualInfo();
                     for (int i = 0; i < 2; i++) {
@@ -1276,6 +1287,7 @@ public class PowersKingNothing extends NewDashPreset {
                 playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);
             }
             trackedItem = null;
+            foundItemYet = false;
             dimension = getSelf().level().dimension();
         }
         return true;
@@ -1312,6 +1324,7 @@ public class PowersKingNothing extends NewDashPreset {
     public boolean endItemTrack() {
         if (isTrackingItem() && !onCooldown(PowerIndex.SKILL_1_SNEAK)) {
             this.trackedItem = null;
+            this.foundItemYet = false;
             this.itemHoldingEntities.clear();
             this.itemHoldingBlocks.clear();
             disintegrateAnimTicks = 0;
@@ -1756,6 +1769,7 @@ public class PowersKingNothing extends NewDashPreset {
             }
             this.isOut = false;
             this.trackedItem = null;
+            this.foundItemYet = false;
             this.itemHoldingEntities.clear();
             this.itemHoldingBlocks.clear();
             this.trackingCloudOut = false;
