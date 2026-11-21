@@ -936,6 +936,8 @@ public class ForgeEvents {
         ModParticles.GOLDEN_SPIRAL = ForgeParticles.GOLDEN_SPIRAL.get();
         ModParticles.KILLER_QUEEN_EXPLOSION = ForgeParticles.KILLER_QUEEN_EXPLOSION.get();
         ModParticles.TOOTH = ForgeParticles.TOOTH.get();
+        ModParticles.BLACK_SABBATH_MOVING_RIPPLE = ForgeParticles.BLACK_SABBATH_MOVING_RIPPLE.get();
+        ModParticles.BLACK_SABBATH_IDLE_RIPPLE = ForgeParticles.BLACK_SABBATH_IDLE_RIPPLE.get();
         ModParticles.PW_FIREBALL_EXPLOSION = ForgeParticles.PW_FIREBALL_EXPLOSION.get();
         ModParticles.PW_BLASTWAVE_EXPLOSION = ForgeParticles.PW_BLASTWAVE_EXPLOSION.get();
         ModParticles.PW_MUSHROOM_EXPLOSION = ForgeParticles.PW_MUSHROOM_EXPLOSION.get();
