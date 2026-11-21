@@ -1226,6 +1226,18 @@ public class StandIcons {
             "textures/gui/icons/gold_experience/item_imbue.png");
     public static final ResourceLocation GOLD_EXPERIENCE_LIFE_SENSOR = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/gold_experience/life_sensor.png");
+    public static final ResourceLocation GOLD_EXPERIENCE_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/gold_experience/barrage.png");
+    public static final ResourceLocation GOLD_EXPERIENCE_DOUBLE_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/gold_experience/double_punch.png");
+    public static final ResourceLocation GOLD_EXPERIENCE_GUARD = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/gold_experience/guard.png");
+    public static final ResourceLocation GOLD_EXPERIENCE_KICK_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/gold_experience/kick_barrage.png");
+    public static final ResourceLocation GOLD_EXPERIENCE_MINING = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/gold_experience/mining.png");
+    public static final ResourceLocation GOLD_EXPERIENCE_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/gold_experience/punch.png");
 
     // gold experience icons end
 

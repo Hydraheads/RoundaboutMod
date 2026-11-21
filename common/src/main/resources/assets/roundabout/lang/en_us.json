@@ -2912,8 +2912,6 @@
   "text.roundabout.lyin_eyes.tension_highlight": "Tension Highlight On",
   "text.roundabout.lyin_eyes.tension_highlight_off": "Tension Highlight Off",
 
-  "ability.roundabout.gold_experience_placeholder": "I can't believe 88 is making popularslop.",
-  "ability.roundabout.gold_experience_placeholder.desc": "He should make less standslop.",
   "ability.roundabout.gold_experience_life_punch": "Life Infusion Punch",
   "ability.roundabout.gold_experience_life_punch.desc": "Your stand infused whatever you hit with life. This punch can act as bonemeal, make trees wilt and explode, or make your enemy's senses go berserk.",
   "ability.roundabout.gold_experience_dna_creation": "DNA Creation",
@@ -2937,7 +2935,9 @@
   "ability.roundabout.gold_experience_item_imbue": "Item Imbue",
   "ability.roundabout.gold_experience_item_imbue.desc": "This move opens a menu that lets you imbue an item with life energy. This lets you give unique properties to the item, such as being able to turn the item into an animal, root enemies in place, and disguise the item. Only 1 item may be imbued at a time.",
   "ability.roundabout.gold_experience_life_sensor": "Life Sensor",
-  "ability.roundabout.gold_experience_life_sensor.desc": "Gold experience scans the nearby area for lifeforms. If someone has an imbued item on them, you will be able to see their aura from a lot further away. The aura reading persists until you stop blocking.",
+  "ability.roundabout.gold_experience_life_sensor.desc": "Gold Experience scans the nearby area for lifeforms. If someone has an imbued item on them, you will be able to see their aura from a lot further away. The aura reading persists until you stop blocking.",
+  "ability.roundabout.gold_experience_double_punch": "Double Punch",
+  "ability.roundabout.gold_experience_double_punch.desc": "Throw out a 1-2 punch. This does as much damage as the last hit in a punch string, but deals more knockback.",
 
   "ability.roundabout.emperor_shoot": "Shoot",
   "ability.roundabout.emperor_shoot.desc": "Shoot a bullet from the emperor.",
