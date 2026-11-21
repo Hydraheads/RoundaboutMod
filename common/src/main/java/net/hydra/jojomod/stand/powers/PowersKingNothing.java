@@ -1793,11 +1793,16 @@ public class PowersKingNothing extends NewDashPreset {
             else if (held.is(ModItems.KNIFE)) {
                 projectile = new KnifeEntity(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z());
             }
+            else if (held.getItem() instanceof FireworkRocketItem) {
+                projectile = new FireworkRocketEntity(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z(), held);
+            }
             if (projectile != null) {
                 if (projectile instanceof ThrowableItemProjectile TP) {
                     TP.setItem(held);
                 }
-                projectile.setDeltaMovement(0, 0.2, 0);
+                if (!(projectile instanceof FireworkRocketEntity)) {
+                    projectile.setDeltaMovement(0, 0.2, 0);
+                }
                 projectile.setOwner(this.getSelf());
                 PowerTypes.copyPlaneOfExisting(self, projectile);
                 this.getSelf().level().addFreshEntity(projectile);
