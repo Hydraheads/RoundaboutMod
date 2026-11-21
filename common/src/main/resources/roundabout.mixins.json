@@ -512,7 +512,6 @@
     "whitesnake.hallucination.HallucinationAcidRenderMixin",
     "whitesnake.hallucination.HallucinationBlockOutlineMixin",
     "whitesnake.hallucination.HallucinationClientTickMixin",
-    "whitesnake.hallucination.HallucinationEffectParticleMixin",
     "whitesnake.hallucination.HallucinationEntityDisplacementMixin",
     "whitesnake.hallucination.HallucinationInventoryMixin",
     "whitesnake.inventory.WhitesnakeHotbarMixin",
