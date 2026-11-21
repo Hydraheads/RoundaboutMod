@@ -29,6 +29,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.*;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -48,6 +49,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -149,9 +151,6 @@ public class D4CCloneEntity extends CloneEntity implements ContainerListener,Has
         ));
     }
 
-    public void dropAllItems(){
-
-    }
     public void peaceOut(){
         MainUtil.playSoundIfPossible(this,this.level(),null, this.blockPosition(), ModSounds.D4C_CLONE_EVENT,
                 SoundSource.PLAYERS, 0.95F, 1F);
@@ -163,7 +162,7 @@ public class D4CCloneEntity extends CloneEntity implements ContainerListener,Has
                 ), this.getEyePosition().x,
                 this.getEyePosition().y, this.getEyePosition().z,
                 20, 0.3, 0.3, 0.3, 0.3);
-        dropAllItems();
+        dropAll();
         this.discard();
     }
 
@@ -206,7 +205,7 @@ public class D4CCloneEntity extends CloneEntity implements ContainerListener,Has
 
         ListTag listTag = new ListTag();
 
-        for(int i = 2; i < this.inventory.getContainerSize(); ++i) {
+        for(int i = 0; i < this.inventory.getContainerSize(); ++i) {
             ItemStack itemStack = this.inventory.getItem(i);
             if (!itemStack.isEmpty()) {
                 CompoundTag compoundTag2 = new CompoundTag();
@@ -229,7 +228,7 @@ public class D4CCloneEntity extends CloneEntity implements ContainerListener,Has
         for(int i = 0; i < listTag.size(); ++i) {
             CompoundTag compoundTag2 = listTag.getCompound(i);
             int j = compoundTag2.getByte("Slot") & 255;
-            if (j >= 2 && j < this.inventory.getContainerSize()) {
+            if (j < this.inventory.getContainerSize()) {
                 this.inventory.setItem(j, ItemStack.of(compoundTag2));
             }
         }
@@ -685,6 +684,27 @@ public class D4CCloneEntity extends CloneEntity implements ContainerListener,Has
             }
         }
         super.aiStep();
+    }
+    public void die(DamageSource sauce) {
+        if (!this.isRemoved() && !this.dead) {
+            dropAll();
+        }
+        super.die(sauce);
+    }
+    public void dropAll() {
+        for(int i = 0; i < this.inventory.getContainerSize(); ++i) {
+            ItemStack itemStack = this.inventory.getItem(i);
+            if (!itemStack.isEmpty()) {
+                double d = this.getEyeY() - (double)0.3F;
+                ItemEntity itemEntity = new ItemEntity(this.level(), this.getX(), d, this.getZ(), itemStack);
+                itemEntity.setPickUpDelay(40);
+                float f = this.random.nextFloat() * 0.5F;
+                float g = this.random.nextFloat() * ((float)Math.PI * 2F);
+                itemEntity.setDeltaMovement((double)(-Mth.sin(g) * f), (double)0.2F, (double)(Mth.cos(g) * f));
+                level().addFreshEntity(itemEntity);
+            }
+        }
+        this.inventory.clearContent();
     }
 
     private void touch(Entity entity) {
