@@ -594,7 +594,7 @@ public class PowersKingNothing extends NewDashPreset {
         }
         if (getSelf().isAlive() && !getSelf().isRemoved() && isTrackingItem()) {
             Level level = getSelf().level();
-            float checkRangeEnt = 32;
+            float checkRangeEnt = 22;
             int checkRangeChest = 16;
             boolean foundTem = itemTrackEnt(checkRangeEnt, level);
             // chest code!!
@@ -602,7 +602,9 @@ public class PowersKingNothing extends NewDashPreset {
             if (foundTem && !foundItemYet) {
                 foundItemYet = true;
                 // FIND BETTER SOUND
-                playSoundsIfNearby(FOUND_ITEM, 27, false);
+                if (this.self instanceof ServerPlayer pl) {
+                    S2CPacketUtil.sendPlaySoundPacket(pl, this.self.getId(), FOUND_ITEM);
+                }
             }
             // passive particles
             if (!foundTem) {
