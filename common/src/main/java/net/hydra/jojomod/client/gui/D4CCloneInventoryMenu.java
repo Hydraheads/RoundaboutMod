@@ -51,7 +51,7 @@ public class D4CCloneInventoryMenu extends AbstractContainerMenu {
         if (this.hasChest(p_39659_)) { */
             for(int k = 0; k < 3; ++k) {
                 for(int l = 0; l < (p_39659_).getInventoryColumns(); ++l) {
-                    this.addSlot(new Slot(this.horseContainer, 2 + l + k * (p_39659_).getInventoryColumns(), 80 + l * 18, 18 + k * 18));
+                    this.addSlot(new Slot(this.horseContainer, l + k * (p_39659_).getInventoryColumns(), 80 + l * 18, 18 + k * 18));
                 }
             }
        // }

@@ -15,8 +15,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import javax.annotation.Nullable;
+import java.util.UUID;
+
 @Mixin(ItemEntity.class)
 public abstract class RaidItemEntity extends Entity implements IItemEntityAccess {
+
 
 
     /**This mixin makes designated reward items sparkle when drop, the executioner axe's template sparkles
@@ -39,6 +43,16 @@ public abstract class RaidItemEntity extends Entity implements IItemEntityAccess
     public void roundabout$setRaidSparkle(boolean sparkle){
         roundabout$raidSparkle = sparkle;
     }
+    @Override
+    @Unique
+    public int roundabout$getPickupDelay(){
+        return pickupDelay;
+    }
+    @Override
+    @Unique
+    public UUID roundabout$getTarget(){
+        return target;
+    }
 
 
 
@@ -57,4 +71,10 @@ public abstract class RaidItemEntity extends Entity implements IItemEntityAccess
 
     @Shadow public abstract int getAge();
 
+    @Shadow
+    private int pickupDelay;
+
+    @Shadow
+    @Nullable
+    private UUID target;
 }

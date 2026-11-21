@@ -3201,6 +3201,7 @@
   "skins.roundabout.king_nothing.sniffer": "Sniffer",
   "skins.roundabout.king_nothing.something": "Something",
   "skins.roundabout.king_nothing.ram": "Ram King",
+  "skins.roundabout.king_nothing.christmas": "Xmas King",
 
   "skins.roundabout.star_platinum.base": "Part 3",
   "skins.roundabout.star_platinum.manga": "Manga",
@@ -4787,6 +4788,8 @@
   "config.roundabout.creamVoidTime.desc": "How long you are able to stay in the void mode attack for",
 
   "config.roundabout.kingNothingSettings.name": "King Nothing",
+  "config.roundabout.kingNothingParticleSpawnInterval.name": "Particle Spawn Interval",
+  "config.roundabout.kingNothingParticleSpawnInterval.desc": "The number ticks King Nothing must wait to spawn particles after spawning particles, higher values can increase performance on lower end computers.",
   "config.roundabout.kingNothingPhaseAttackCd.name": "Phase Item Attack Cooldown",
   "config.roundabout.kingNothingPhaseAttackCd.desc": "The cooldown for Phase Item after Attacking Mobs and Players.",
   "config.roundabout.kingNothingDynamicPhaseAttackCd.name": "Dynamic Phase Item Attack Cooldown",

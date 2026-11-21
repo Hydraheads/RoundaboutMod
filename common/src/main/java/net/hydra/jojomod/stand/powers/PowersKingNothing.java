@@ -94,7 +94,8 @@ public class PowersKingNothing extends NewDashPreset {
             WARDEN = 5,
             SNIFFER = 6,
             SOMETHING = 7,
-            RAM = 8;
+            RAM = 8,
+            CHRISTMAS = 9;
 
     // sounds
     public static final byte
@@ -122,6 +123,7 @@ public class PowersKingNothing extends NewDashPreset {
         VISUAL_INFO.put(SNIFFER, new VisualData(0x93311d, 0x459d8a, 0x459d8a, 0.25f));
         VISUAL_INFO.put(SOMETHING, new VisualData(0xA8DF81, 0x58E990, 0xA8DF81, 0.2f));
         VISUAL_INFO.put(RAM, new VisualData(0xde9c64, 0xd77f5b, 0xde9c64, 0.2f));
+        VISUAL_INFO.put(CHRISTMAS, new VisualData(0xec4040, 0xe6e1e1, 0xec4040, 0.2f));
     }
 
     // item tracking sets
@@ -165,6 +167,7 @@ public class PowersKingNothing extends NewDashPreset {
         $$1.add(MANGA);
         $$1.add(SPINE);
         $$1.add(SOMETHING);
+        $$1.add(CHRISTMAS);
         $$1.add(NOTE);
         $$1.add(WARDEN);
         $$1.add(SNIFFER);
@@ -182,6 +185,7 @@ public class PowersKingNothing extends NewDashPreset {
             case SNIFFER -> "sniffer";
             case SOMETHING -> "something";
             case RAM -> "ram";
+            case CHRISTMAS -> "christmas";
             default -> "manga";
         };
     }
@@ -316,6 +320,11 @@ public class PowersKingNothing extends NewDashPreset {
 
     public VisualData getVisualInfo() {
         return VISUAL_INFO.getOrDefault(standSkin, VISUAL_INFO.get(MANGA));
+    }
+
+    public boolean spawnsParticlesThisTick() {
+        return getSelf().tickCount
+                % ClientNetworking.getAppropriateConfig().kingNothingSettings.kingNothingParticleSpawnInterval == 0;
     }
 
     public ItemStack getMemorizedScentIcon() {
@@ -594,7 +603,7 @@ public class PowersKingNothing extends NewDashPreset {
         }
         if (getSelf().isAlive() && !getSelf().isRemoved() && isTrackingItem()) {
             Level level = getSelf().level();
-            float checkRangeEnt = 32;
+            float checkRangeEnt = 22;
             int checkRangeChest = 16;
             boolean foundTem = itemTrackEnt(checkRangeEnt, level);
             // chest code!!
@@ -602,12 +611,15 @@ public class PowersKingNothing extends NewDashPreset {
             if (foundTem && !foundItemYet) {
                 foundItemYet = true;
                 // FIND BETTER SOUND
-                playSoundsIfNearby(FOUND_ITEM, 27, false);
+                if (this.self instanceof ServerPlayer pl) {
+                    S2CPacketUtil.sendPlaySoundPacket(pl, this.self.getId(), FOUND_ITEM);
+                }
             }
             // passive particles
             if (!foundTem) {
                 foundItemYet = false;
-                if (this.getSelf().tickCount % 5 == 0) {
+                int particleInterval = ClientNetworking.getAppropriateConfig().kingNothingSettings.kingNothingParticleSpawnInterval;
+                if (particleInterval <= 5 ? this.getSelf().tickCount % 5 == 0 : spawnsParticlesThisTick()) {
                     VisualData pdata = getVisualInfo();
                     for (int i = 0; i < 2; i++) {
                         int color = getParticleColor(pdata);
@@ -624,7 +636,7 @@ public class PowersKingNothing extends NewDashPreset {
             trackingCloud = null;
             playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);
         }
-        if (getSelf().isAlive() && !getSelf().isRemoved() && trackingCloud != null) {
+        if (getSelf().isAlive() && !getSelf().isRemoved() && trackingCloud != null && spawnsParticlesThisTick()) {
             VisualData pdata = getVisualInfo();
             for (int i = 0; i < 2; i++) {
                 int color = getParticleColor(pdata);
@@ -726,12 +738,15 @@ public class PowersKingNothing extends NewDashPreset {
                             pos.above()) instanceof RandomizableContainerBlockEntity) || otherChestPos != null && (
                             level.getBlockState(otherChestPos).isAir() || (level.getBlockEntity(
                                     otherChestPos.above()) instanceof RandomizableContainerBlockEntity)) ? 0 : 1);
-                    for (int i = 0; i < 2 + (otherChestPos == null ? 0 : 2); i++) {
-                        int color = getParticleColor(pdata);
-                        MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
-                                PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
-                                spawnPos.x(), spawnPos.y() + yOffset, spawnPos.z(), 1 + (otherChestPos == null ? 0 : 1),
-                                0.1 + xSpreadBonus, 0.1, 0.1 + zSpreadBonus, 0.01);
+                    if (spawnsParticlesThisTick()) {
+                        for (int i = 0; i < 2 + (otherChestPos == null ? 0 : 2); i++) {
+                            int color = getParticleColor(pdata);
+                            MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
+                                    PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
+                                    spawnPos.x(), spawnPos.y() + yOffset, spawnPos.z(),
+                                    1 + (otherChestPos == null ? 0 : 1),
+                                    0.1 + xSpreadBonus, 0.1, 0.1 + zSpreadBonus, 0.01);
+                        }
                     }
                 }
                 else {
@@ -821,7 +836,7 @@ public class PowersKingNothing extends NewDashPreset {
                 }
                 if (foundItem) {
                     foundTem = true;
-                    if (!level.isClientSide()) {
+                    if (!level.isClientSide() && spawnsParticlesThisTick()) {
                         VisualData pdata = getVisualInfo();
                         for (int j = 0; j < 2; j++) {
                             int color = getParticleColor(pdata);
@@ -853,7 +868,7 @@ public class PowersKingNothing extends NewDashPreset {
                     startPhaseTickAfter = false;
                     startPhaseMovement(getStandEntity(getSelf()));
                 }
-                if (this.attackTimeDuring == 108) {
+                else if (this.attackTimeDuring == 108) {
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                     playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);
                     animateStand(KingNothingEntity.RETURN);
@@ -866,11 +881,14 @@ public class PowersKingNothing extends NewDashPreset {
                         double x = BB1.getCenter().x();
                         double y = BB1.getCenter().y() + (((FollowingStandEntity) stand).getSizePercent() - 1) / 2;
                         double z = BB1.getCenter().z();
-                        for (int i = 0; i < 2; i++) {
-                            int color = getParticleColor(pdata);
-                            MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
-                                    PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color), x, y,
-                                    z, 1, 0.1, 0.1, 0.1, 0.01);
+                        if (spawnsParticlesThisTick()) {
+                            for (int i = 0; i < 2; i++) {
+                                int color = getParticleColor(pdata);
+                                MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
+                                        PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
+                                        x, y,
+                                        z, 1, 0.1, 0.1, 0.1, 0.01);
+                            }
                         }
                         Vec3 vec3d = this.getSelf().getEyePosition(0);
                         Vec3 vec3d2 = this.getSelf().getViewVector(0);
