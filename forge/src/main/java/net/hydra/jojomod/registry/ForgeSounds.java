@@ -772,6 +772,13 @@ public class ForgeSounds {
     public static final RegistryObject<SoundEvent> CINDERELLA_VISAGE_CREATION_EVENT =
             register(ModSounds.CINDERELLA_VISAGE_CREATION, ModSounds.CINDERELLA_VISAGE_CREATION_ID);
 
+    public static final RegistryObject<SoundEvent> KING_NOTHING_SUMMON_EVENT =
+            register(ModSounds.KING_NOTHING_SUMMON, ModSounds.KING_NOTHING_SUMMON_ID);
+    public static final RegistryObject<SoundEvent> KING_NOTHING_PHASE_EVENT =
+            register(ModSounds.KING_NOTHING_PHASE, ModSounds.KING_NOTHING_PHASE_ID);
+    public static final RegistryObject<SoundEvent> KING_NOTHING_DESUMMON_EVENT =
+            register(ModSounds.KING_NOTHING_DESUMMON, ModSounds.KING_NOTHING_DESUMMON_ID);
+
     public static final RegistryObject<SoundEvent> RATT_SUMMON_EVENT =
             register(ModSounds.RATT_SUMMON, ModSounds.RATT_SUMMON_ID);
     public static final RegistryObject<SoundEvent> RATT_PLACE_EVENT =

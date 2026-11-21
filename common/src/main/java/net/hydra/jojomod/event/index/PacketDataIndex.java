@@ -140,6 +140,10 @@ public class PacketDataIndex {
     public static final byte S2C_IN_PURPLE_HAZE_TICKS = 31;
     public static final byte S2C_IN_DISTORTION_HAZE_TICKS = 32;
     public static final byte S2C_PURPLE_HAZE_SKIN = 33;
+    public static final byte S2C_KN_ADD_HIGHLIGHT_ENTITY = 34;
+    public static final byte S2C_KN_REMOVE_HIGHLIGHT_ENTITY = 35;
+    public static final byte S2C_KN_SYNC_FORM_PREDICT_BLOCK = 36;
+    public static final byte S2C_KN_SYNC_FORM_PREDICT_ENTITY = 37;
 
 
     /**S2C BUNDLE packets*/

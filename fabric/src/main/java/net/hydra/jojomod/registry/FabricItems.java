@@ -59,6 +59,8 @@ public class FabricItems {
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersJustice(null)));
     public static Item MAX_STAND_DISC_JUSTICE= registerItem("max_justice_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersJustice(null)));
+    public static Item STAND_DISC_KING_NOTHING = registerItem("king_nothing_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersKingNothing(null)));
 
     /*public static Item STAND_DISC_D4C = registerItem("d4c_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));
@@ -427,6 +429,7 @@ public class FabricItems {
     public static Item JOTARO_4_MASK = registerItem("jotaro_4_mask", new MaskItem(new Item.Properties().stacksTo(1), new JotaroFourVisage(null)));
     public static Item JOTARO_6_MASK = registerItem("jotaro_6_mask", new MaskItem(new Item.Properties().stacksTo(1), new JotaroSixVisage(null)));
     public static Item JOHNGALLIA_MASK = registerItem("johngallia_mask", new MaskItem(new Item.Properties().stacksTo(1), new JohngalliaVisage(null)));
+    public static Item POLPO_MASK = registerItem("polpo_mask", new MaskItem(new Item.Properties().stacksTo(1), new PolpoVisage(null)));
     public static Item DOT_HAN_MASK = registerItem("dot_han_mask", new MaskItem(new Item.Properties().stacksTo(1), new DotHanVisage(null)));
     public static Item AVDUL_MASK = registerItem("avdul_mask", new MaskItem(new Item.Properties().stacksTo(1), new AvdulVisage(null)));
     public static Item DIO_MASK = registerItem("dio_mask", new MaskItem(new Item.Properties().stacksTo(1), new DIOVisage(null)));
@@ -457,6 +460,7 @@ public class FabricItems {
     public static Item ANAKISS_MASK = registerItem("anakiss_mask", new MaskItem(new Item.Properties().stacksTo(1), new AnakissVisage(null)));
     public static Item BLACKMORE_MASK = registerItem("blackmore_mask", new MaskItem(new Item.Properties().stacksTo(1), new BlackmoreVisage(null)));
     public static Item HATO_MASK = registerItem("hato_mask", new MaskItem(new Item.Properties().stacksTo(1), new HatoVisage(null)));
+    public static Item NORISUKE_MASK = registerItem("norisuke_mask", new MaskItem(new Item.Properties().stacksTo(1), new NorisukeVisage(null)));
     public static Item SHIZUKA_MASK = registerItem("shizuka_mask", new MaskItem(new Item.Properties().stacksTo(1), new ShizukaVisage(null)));
     public static Item CHAKA_MASK = registerItem("chaka_mask", new MaskItem(new Item.Properties().stacksTo(1), new ChakaVisage(null)));
     public static Item ENYA_MASK = registerItem("enya_mask", new MaskItem(new Item.Properties().stacksTo(1), new EnyaVisage(null)));
@@ -503,7 +507,7 @@ public class FabricItems {
 
    // public static Item INTERDIMENSIONAL_KEY = registerItem("interdimensional_key", new InterdimensionalKeyItem(new Item.Properties().stacksTo(1)));
 
-    public static Item FLESH_BUCKET = registerItem("flesh_bucket", new FleshBucketItem(new Item.Properties().stacksTo(1).durability(16)));
+    public static Item FLESH_BUCKET = registerItem("flesh_bucket", new FleshBucketItem(new Item.Properties().stacksTo(1)));
     public static final FoodProperties CHERRY =new FoodProperties.Builder().nutrition(1).saturationMod(0.0F).alwaysEat()
             .effect(new MobEffectInstance(ModEffects.WARDING, 2400, 0), 1.0F)
             .build();
@@ -671,6 +675,7 @@ public class FabricItems {
                         entries.accept(CHAKA_MASK);
                         entries.accept(JOTARO_4_MASK);
                         entries.accept(AYA_MASK);
+                        entries.accept(POLPO_MASK);
                         entries.accept(MISTA_MASK);
                         entries.accept(ABBACCHIO_MASK);
                         entries.accept(FUGO_MASK);
@@ -966,6 +971,7 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_SILVER_CHARIOT);
                         entries.accept(STAND_DISC_WHITESNAKE);
                         entries.accept(MAX_STAND_DISC_WHITESNAKE);
+                        entries.accept(STAND_DISC_KING_NOTHING);
                         if (ClientNetworking.getAppropriateConfig().whitesnakeSettings.sightDiscStealEnabled) {
                             entries.accept(SIGHT_DISC);
                         }
@@ -986,6 +992,8 @@ public class FabricItems {
                         entries.accept(HALLUCINATORY_ACID_WALL);
                         entries.accept(ModBlocks.GAMBLING_TABLE);
                         entries.accept(ModBlocks.MAGICIANS_STATUE_BLOCK);
+                        entries.accept(NORISUKE_MASK);
+
                         entries.accept(ZOMBIE_HORSE_THREAD);
                         entries.accept(ZOMBIE_HORSE_MURAL);
                         entries.accept(PAINTING_ZOMBIE_HORSE);
@@ -1287,6 +1295,7 @@ public class FabricItems {
         ModItems.GHIACCIO_MASK = GHIACCIO_MASK;
         ModItems.JOHNNY_MASK = JOHNNY_MASK;
         ModItems.JOHNGALLIA_MASK = JOHNGALLIA_MASK;
+        ModItems.POLPO_MASK = POLPO_MASK;
         ModItems.DOT_HAN_MASK = DOT_HAN_MASK;
         ModItems.AVDUL_MASK = AVDUL_MASK;
         ModItems.JOSUKE_PART_EIGHT_MASK = JOSUKE_PART_EIGHT_MASK;
@@ -1296,6 +1305,7 @@ public class FabricItems {
         ModItems.BLACKMORE_MASK = BLACKMORE_MASK;
         ModItems.GUCCIO_MASK = GUCCIO_MASK;
         ModItems.HATO_MASK = HATO_MASK;
+        ModItems.NORISUKE_MASK = NORISUKE_MASK;
         ModItems.SHIZUKA_MASK = SHIZUKA_MASK;
         ModItems.CHAKA_MASK = CHAKA_MASK;
         ModItems.DAIYA_MASK = DAIYA_MASK;

@@ -4,9 +4,11 @@ import net.hydra.jojomod.client.models.RoadRollerStrayModel;
 import net.hydra.jojomod.client.models.UVBlasterModel;
 import net.hydra.jojomod.client.models.WornBloodyStoneMaskModel;
 import net.hydra.jojomod.client.models.WornStoneMaskModel;
+import net.hydra.jojomod.client.models.layers.DiverArmsLayer;
+import net.hydra.jojomod.client.models.layers.DiverLegsLayer;
+import net.hydra.jojomod.client.models.layers.SilverChariotArmsLayer;
 import net.hydra.jojomod.client.models.minions.head_parts.*;
 import net.hydra.jojomod.client.models.projectile.*;
-import net.hydra.jojomod.client.models.stand.AnubisHumanoidModel;
 import net.hydra.jojomod.client.models.stand.AnubisModel;
 import net.hydra.jojomod.client.models.stand.EmperorModel;
 import net.hydra.jojomod.client.models.stand.SilverChariotSwordModel;
@@ -66,6 +68,7 @@ public class ModStrayModels {
     public static DoppioHairPart DoppioHairPart;
     public static JohnnyHatPart JohnnyHatPart;
     public static DaiyaEarsPart DaiyaEarsPart;
+    public static NorisukeHairPart NorisukeHairPart;
     public static DaiyaFluffPart DaiyaFluffPart;
     public static LaemBreastsPart laemBreastsPart;
     public static LaemHolstersPart laemHolstersPart;
@@ -107,6 +110,7 @@ public class ModStrayModels {
     public static LeftHeelPart LeftHeel;
     public static RightHeelPart RightHeel;
     public static JohngalliaTiePart JohngalliaTiePart;
+    public static PolpoNosePart PolpoNosePart;
     public static ExtraHairPart extraHairPart;
     public static OyecomovaHatPart oyecomovaHatPart;
     public static ExtraHairDecorationPart extraHairDecorationPart;
@@ -151,6 +155,10 @@ public class ModStrayModels {
     public static MoldSpineModel MoldSpine;
     public static MoldRightArm MoldRightArm;
     public static MoldLeftArm MoldLeftArm;
+
+    public static DiverArmsLayer diverArmsLayer;
+    public static DiverLegsLayer diverLegsLayer;
+    public static SilverChariotArmsLayer chariotArmsLayer;
 
     public static RoadRollerStrayModel ROAD_ROLLER;
 

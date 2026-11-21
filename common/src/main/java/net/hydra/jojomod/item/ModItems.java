@@ -96,6 +96,7 @@ public class ModItems {
     public static Item MAX_STAND_DISC_CREAM;
     public static Item STAND_DISC_EMPEROR;
     public static Item MAX_STAND_DISC_EMPEROR;
+    public static Item STAND_DISC_KING_NOTHING;
     public static Item STAND_DISC;
     public static Item SIGHT_DISC;
     public static Item MEMORY_DISC;
@@ -283,6 +284,7 @@ public class ModItems {
     public static Item GHIACCIO_MASK;
     public static Item JOHNNY_MASK;
     public static Item JOHNGALLIA_MASK;
+    public static Item POLPO_MASK;
     public static Item DOT_HAN_MASK;
     public static Item AVDUL_MASK;
     public static Item LUCY_MASK;
@@ -303,6 +305,7 @@ public class ModItems {
     public static Item BLACKMORE_MASK;
     public static Item GUCCIO_MASK;
     public static Item HATO_MASK;
+    public static Item NORISUKE_MASK;
     public static Item SHIZUKA_MASK;
     public static Item CHAKA_MASK;
     public static Item DAIYA_MASK;
@@ -403,6 +406,7 @@ public class ModItems {
         addToVisageStore(KIRASAKU_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(KOSAKU_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(HAYATO_KAWAJIRI_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(POLPO_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(MISTA_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(ABBACCHIO_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(FUGO_MASK,page, characterCostExp, characterCostEmerald);

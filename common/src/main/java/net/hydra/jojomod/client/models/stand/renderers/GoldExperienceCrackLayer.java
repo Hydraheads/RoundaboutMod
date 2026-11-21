@@ -6,6 +6,8 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.models.stand.GoldExperienceModel;
 import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.entity.stand.GoldExperienceEntity;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersGoldExperience;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
@@ -26,9 +28,9 @@ public class GoldExperienceCrackLayer extends RenderLayer<GoldExperienceEntity, 
 
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, GoldExperienceEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (entity.thisIsRequiemAnimation.isStarted()) {
+        if (entity.thisIsRequiemAnimation.isStarted() && entity.getUser() != null && ((StandUser)entity.getUser()).roundabout$getStandPowers() instanceof PowersGoldExperience GE) {
 
-            ResourceLocation crack = getCrackByTime(entity.thisIsRequiemAnimation.getAccumulatedTime());
+            ResourceLocation crack = getCrackByTime(GE.attackTimeDuring / 20.0f);
             if (crack != null) {
                 GoldExperienceModel<GoldExperienceEntity> model = (GoldExperienceModel<GoldExperienceEntity>) this.getParentModel();
 
@@ -39,14 +41,14 @@ public class GoldExperienceCrackLayer extends RenderLayer<GoldExperienceEntity, 
         }
     }
 
-    private ResourceLocation getCrackByTime(Long time) {
-        if (time >= 8.54) {
+    private ResourceLocation getCrackByTime(float time) {
+        if (time >= 8.54f) {
             return CRACK_3;
         }
-        if (time >= 4.71) {
+        if (time >= 4.71f) {
             return CRACK_2;
         }
-        if (time >= 0.96) {
+        if (time >= 0.96f) {
             return CRACK_1;
         }
 

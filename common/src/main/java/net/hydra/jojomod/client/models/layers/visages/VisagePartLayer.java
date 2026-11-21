@@ -1,10 +1,8 @@
 package net.hydra.jojomod.client.models.layers.visages;
 
-import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerEntityAbstractClient;
 import net.hydra.jojomod.access.IPlayerModel;
@@ -40,15 +38,11 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.hydra.jojomod.item.BowlerHatItem;
-
-import java.util.Map;
 
 public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>> extends RenderLayer<T, A> {
 
@@ -349,6 +343,10 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             renderDaiyaEars(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
+                        if (vd.rendersNorisukeHair() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !hideExtraPartsWithSuit) {
+                            renderNorisukeHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
+                                    path, r, g, b);
+                        }
                         if (vd.rendersLaemBreasts() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !isHoldingBowlerHat
                                 && !hideExtraPartsWithSuit) {
                             renderLaemBreasts(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
@@ -461,6 +459,10 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                         }
                         if(vd.renderJohngalliaTie() && !hideExtraPartsWithSuit){
                             renderJohngalliaTiePart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
+                                    r, g, b);
+                        }
+                        if(vd.renderPolpoNose() && !hideExtraPartsWithSuit){
+                            renderPolpoNose(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
                                     r, g, b);
                         }
                     }
@@ -991,6 +993,14 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 r, g, b, 1, path);
         ClientUtil.popPoseAndCooperate(poseStack,36);
     }
+    public void renderNorisukeHair(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                   float r, float g, float b) {
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.NorisukeHairPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
     public void renderLaemBreasts(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
                                 float r, float g, float b) {
 
@@ -1508,6 +1518,14 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         ModStrayModels.JohngalliaTiePart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, "johngallia");
         ClientUtil.popPoseAndCooperate(poseStack,47);
+    }
+    public void  renderPolpoNose(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                                         float r, float g, float b) {
+        ClientUtil.pushPoseAndCooperate(poseStack,50);
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.PolpoNosePart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, "polpo");
+        ClientUtil.popPoseAndCooperate(poseStack,50);
     }
 
     public void  renderExtraHairPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity,

@@ -179,6 +179,7 @@ public class VisageData {
     public boolean rendersPlayerBreast(){
         return false;
     }
+    public boolean renderPolpoNose(){return false;}
     public boolean renderJohngalliaHair(){return false;}
     public boolean renderJohngalliaTie(){return false;}
     public boolean rendersArmor(){
@@ -187,6 +188,8 @@ public class VisageData {
     public boolean rendersCape(){
         return false;
     }
+    public boolean rendersNorisukeHair() { return false; }
+
     public boolean rendersExtraHair() {return false;}
     public boolean rendersExtraHairDetails() {return false;}
     public boolean rendersOyecomovaHat() {return false;}

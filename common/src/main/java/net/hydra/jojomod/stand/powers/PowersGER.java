@@ -18,6 +18,7 @@ import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -79,6 +80,10 @@ public class PowersGER extends PowersGoldExperience {
         super.addAdditionalSaveData(tag);
     }
 
+    protected boolean giveArrowOnLoad() {
+        return false; // prevent from the requiem transformation giving this arrow back before it is time
+    }
+
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         if (tag.contains("roundabout.originalDisc", 10)) {
@@ -111,7 +116,9 @@ public class PowersGER extends PowersGoldExperience {
             ((StandUser) self).roundabout$getStand().discard();
             ((StandUser) self).roundabout$setStand(null);
         }
-        ((StandUser) self).roundabout$summonStand(self.level(), true, true);
+        if (standArrow != null && !standArrow.isEmpty()) {
+            giveStandArrowBack();
+        }
     }
 
     public void tickPower() {
@@ -120,6 +127,7 @@ public class PowersGER extends PowersGoldExperience {
             resolvePoints -= 0.25f;
             if (resolvePoints <= 0f) {
                 goBackToGE();
+                ((StandUser) self).roundabout$summonStand(self.level(), true, true);
             }
         }
     }
@@ -214,5 +222,19 @@ public class PowersGER extends PowersGoldExperience {
         poseStand(OffsetIndex.ATTACK);
         return true;
     }
+
+    // for skins start
+
+    @Override
+    /**The stand is named on the disc so we just use that*/
+    public Component getStandName(){
+        ItemStack disc = ((StandUser)this.getSelf()).roundabout$getStandDisc();
+        if (!disc.isEmpty() && disc.getItem() instanceof StandDiscItem SDI){
+            return Component.translatable(SDI.getDescriptionId() + ".desc.short");
+        }
+        return Component.empty();
+    }
+
+    // for skins end
 
 }

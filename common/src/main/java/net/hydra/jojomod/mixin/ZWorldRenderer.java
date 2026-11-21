@@ -10,6 +10,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.stand.powers.PowersDiverDown;
+import net.hydra.jojomod.stand.powers.PowersKingNothing;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -32,6 +33,11 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+import oshi.util.tuples.Pair;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 @Mixin(LevelRenderer.class)
 public class ZWorldRenderer {
@@ -242,6 +248,39 @@ public class ZWorldRenderer {
                             0.85F, // B (makes diver down's green/teal color for highlighting)
                             1.0F // A
                     );
+            }
+        }
+        // what is a mere president to the king?
+        if (ClientUtil.getPlayer() != null
+                && ((StandUser) ClientUtil.getPlayer()).roundabout$getStandPowers() instanceof PowersKingNothing pkn) {
+            if (pkn.isTrackingItem()) {
+                int color = pkn.getVisualInfo().highlightColor();
+                Set<BlockPos> alreadyRendered = new HashSet<>();
+                for (Pair<BlockPos, BlockPos> posPair : pkn.itemHoldingBlockPairs) {
+                    ClientEffectUtil.renderPurpleBox(poseStack,
+                            mc.renderBuffers().bufferSource(),
+                            camera,
+                            posPair.getA(),
+                            posPair.getB(),
+                         ((color >> 16) & 0xFF) / 255.0F,
+                         ((color >> 8) & 0xFF) / 255.0F,
+                         (color & 0xFF) / 255.0F,
+                         1.0f);
+                    alreadyRendered.add(posPair.getA());
+                    alreadyRendered.add(posPair.getB());
+                }
+                for (BlockPos pos : pkn.itemHoldingBlocks) {
+                    if (alreadyRendered.contains(pos)) continue;
+                    ClientEffectUtil.renderPurpleBox(poseStack,
+                            mc.renderBuffers().bufferSource(),
+                            camera,
+                            pos,
+                            pos,
+                            ((color >> 16) & 0xFF) / 255.0F,
+                            ((color >> 8) & 0xFF) / 255.0F,
+                            (color & 0xFF) / 255.0F,
+                            1.0f);
+                }
             }
         }
     }

@@ -79,6 +79,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation PEARL_JAM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "pearl_jam"), "main");
     public static final ModelLayerLocation JUSTICE_PIRATE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "justice_pirate"), "main");
     public static final ModelLayerLocation DARK_MIRAGE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "dark_mirage"), "main");
+    public static final ModelLayerLocation KING_NOTHING_LAYER = new ModelLayerLocation(Roundabout.location("king_nothing"), "main");
     public static final ModelLayerLocation TUSK_A1_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "tusk_a1"), "main");
     public static final ModelLayerLocation TUSK_A2_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "tusk_a2"), "main");
     public static final ModelLayerLocation TUSK_A3_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "tusk_a3"), "main");

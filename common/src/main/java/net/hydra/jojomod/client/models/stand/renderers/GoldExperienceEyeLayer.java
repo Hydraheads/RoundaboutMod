@@ -13,6 +13,7 @@ import net.hydra.jojomod.entity.stand.GoldExperienceEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersGoldExperience;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -37,14 +38,18 @@ public class GoldExperienceEyeLayer<T extends GoldExperienceEntity, M extends St
 
     @Override
     public void render(PoseStack $$0, MultiBufferSource $$1, int i, T mobEntity, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9) {
-        if (!mobEntity.thisIsRequiemAnimation.isStarted() || mobEntity.thisIsRequiemAnimation.getAccumulatedTime() < 10.42) {
+        if (!mobEntity.thisIsRequiemAnimation.isStarted()) {
             return;
         }
 
         LivingEntity User = mobEntity.getUser();
 
-        if (((User != null && ((IEntityAndData)User).roundabout$getTrueInvisibility() > -1) ||
-                ((IEntityAndData)mobEntity).roundabout$getTrueInvisibility() > -1)){
+        if (User == null) {return; }
+
+        if (((((IEntityAndData)User).roundabout$getTrueInvisibility() > -1) ||
+                ((IEntityAndData)mobEntity).roundabout$getTrueInvisibility() > -1)
+                || !(((StandUser)User).roundabout$getStandPowers() instanceof PowersGoldExperience GE
+                && (GE.attackTimeDuring/20f) >= 10.42)){
             return;
         }
 

@@ -506,8 +506,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
         if (!this.level().isClientSide) {
             if (!this.getItem().isEmpty()) {
                 // gold experience transformation thing
-                Vec3 landingPos = $$0.getLocation().add(0, 0.1, 0);
-                if (tryTransformIntoLifeform(landingPos)) {
+                if (tryTransformIntoLifeform($$0)) {
                     return;
                 }
 
@@ -951,8 +950,7 @@ private void bridgePlace(BlockHitResult $$0,Player P) {
                     Item tem = stack.getItem();
                     if (stack.isDamageableItem()
                     ) {
-                        if (!(tem instanceof FleshBucketItem)
-                                && !(tem instanceof FishingRodItem)
+                        if (!(tem instanceof FishingRodItem)
                                 && !(tem instanceof LuckyLipstickItem)
                                 && !(tem instanceof MemoryChessPieceItem)
                                 && !(tem instanceof ExperienceBishopItem)
@@ -1139,16 +1137,7 @@ private void bridgePlace(BlockHitResult $$0,Player P) {
             StandPowers powers = entity.roundabout$getStandPowers();
 
             if (powers instanceof PowersGoldExperience gePowers) {
-                byte selectedAnimal = gePowers.getSelectedAnimalType();
-                EntityType<?> typeToSpawn = ModEntities.GE_FROG;
-
-                if (selectedAnimal == AnimalTypes.BAT.id) typeToSpawn = ModEntities.GE_BAT;
-                else if (selectedAnimal == AnimalTypes.BEE.id) typeToSpawn = ModEntities.GE_BEE;
-                else if (selectedAnimal == AnimalTypes.FISH.id) typeToSpawn = ModEntities.GE_FISH;
-                else if (selectedAnimal == AnimalTypes.FOX.id) typeToSpawn = ModEntities.GE_FOX;
-                else if (selectedAnimal == AnimalTypes.SNAKE.id) typeToSpawn = ModEntities.GE_SNAKE;
-                else if (selectedAnimal == AnimalTypes.PIRAHNA.id) typeToSpawn = ModEntities.GE_PIRANHA;
-                else if (selectedAnimal == AnimalTypes.BUTTERFLY.id) typeToSpawn = ModEntities.GE_BUTTERFLY;
+                EntityType<?> typeToSpawn = getGELifeformType(gePowers.getSelectedAnimalType());
 
                 if (gePowers.spawnLifeform(typeToSpawn, spawnPos, this.getItem())) {
                     this.discard();
@@ -1157,6 +1146,69 @@ private void bridgePlace(BlockHitResult $$0,Player P) {
             }
         }
         return false;
+    }
+
+    private boolean tryTransformIntoLifeform(BlockHitResult hitResult) {
+        if (this.getStyle() == GETHROW && this.getOwner() instanceof StandUser entity) {
+            StandPowers powers = entity.roundabout$getStandPowers();
+
+            if (powers instanceof PowersGoldExperience gePowers) {
+                EntityType<?> typeToSpawn = getGELifeformType(gePowers.getSelectedAnimalType());
+                Vec3 safePos = findSafeLifeformSpawnPos(hitResult, typeToSpawn);
+
+                if (gePowers.spawnLifeform(typeToSpawn, safePos, this.getItem())) {
+                    this.discard();
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private EntityType<?> getGELifeformType(byte selectedAnimal) {
+        if (selectedAnimal == AnimalTypes.BAT.id) return ModEntities.GE_BAT;
+        if (selectedAnimal == AnimalTypes.BEE.id) return ModEntities.GE_BEE;
+        if (selectedAnimal == AnimalTypes.FISH.id) return ModEntities.GE_FISH;
+        if (selectedAnimal == AnimalTypes.FOX.id) return ModEntities.GE_FOX;
+        if (selectedAnimal == AnimalTypes.SNAKE.id) return ModEntities.GE_SNAKE;
+        if (selectedAnimal == AnimalTypes.PIRAHNA.id) return ModEntities.GE_PIRANHA;
+        if (selectedAnimal == AnimalTypes.BUTTERFLY.id) return ModEntities.GE_BUTTERFLY;
+        return ModEntities.GE_FROG;
+    }
+
+    private Vec3 findSafeLifeformSpawnPos(BlockHitResult hitResult, EntityType<?> entityType) {
+        Direction face = hitResult.getDirection();
+        Vec3 hitLoc = hitResult.getLocation();
+        EntityDimensions dims = entityType.getDimensions();
+        double halfWidth = dims.width * 0.5D + 0.05D;
+        double height = dims.height;
+
+        // basically, all of these checks look for possible places to spawn the mob in, the spawn it there, with a fallback just in case it doesn't find one
+        Vec3 candidate = switch (face) {
+            case UP -> hitLoc.add(0.0D, 0.02D, 0.0D);
+            case DOWN -> hitLoc.add(0.0D, -(height + 0.05D), 0.0D);
+            default -> hitLoc.add(
+                    face.getStepX() * halfWidth,
+                    0.02D,
+                    face.getStepZ() * halfWidth
+            );
+        };
+        if (this.level().noCollision(entityType.getAABB(candidate.x, candidate.y, candidate.z))) {
+            return candidate;
+        }
+        BlockPos adjacentPos = hitResult.getBlockPos().relative(face);
+        Vec3 blockCenter = new Vec3(adjacentPos.getX() + 0.5D, adjacentPos.getY() + 0.02D, adjacentPos.getZ() + 0.5D);
+        if (this.level().noCollision(entityType.getAABB(blockCenter.x, blockCenter.y, blockCenter.z))) {
+            return blockCenter;
+        }
+
+        BlockPos abovePos = adjacentPos.above();
+        Vec3 aboveCenter = new Vec3(abovePos.getX() + 0.5D, abovePos.getY() + 0.02D, abovePos.getZ() + 0.5D);
+        if (this.level().noCollision(entityType.getAABB(aboveCenter.x, aboveCenter.y, aboveCenter.z))) {
+            return aboveCenter;
+        }
+
+        return blockCenter;
     }
 
     public void shootWithVariance(double $$0, double $$1, double $$2, float $$3, float $$4) {

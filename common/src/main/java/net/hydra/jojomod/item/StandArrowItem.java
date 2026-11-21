@@ -265,6 +265,11 @@ public class StandArrowItem extends RoundaboutArrowItem {
             }
         } else {
             C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_ITEM_STOP_SOUND);
+            if (!((StandUser) $$2).roundabout$getStandDisc().isEmpty()) {
+                if (((StandUser) $$2).roundabout$getStandPowers().canUseStandArrow()) {
+                    ((StandUser) $$2).roundabout$getStandPowers().onStandArrowUseClient();
+                }
+            }
         }
     }
 

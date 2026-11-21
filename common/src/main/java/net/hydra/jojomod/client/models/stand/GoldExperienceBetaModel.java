@@ -262,6 +262,7 @@ public class GoldExperienceBetaModel<T extends GoldExperienceEntity> extends Sta
         this.animate(pEntity.healOthers, GoldExperienceAnimations.HEAL_OTHERS, pAgeInTicks, 1f);
         this.animate(pEntity.healSelf, GoldExperienceAnimations.HEAL_SELF, pAgeInTicks, 1.1f);
         this.animate(pEntity.groundPunch, GoldExperienceAnimations.TREE, pAgeInTicks, 1f);
+        this.animate(pEntity.thisIsRequiemAnimation, GoldExperienceAnimations.awaken_GE, pAgeInTicks, 1f);
 
         this.animate(pEntity.hideLeg, StandAnimations.HIDE_LEG, pAgeInTicks, 1f);
         this.animate(pEntity.kick_barrage, StandAnimations.KICK_BARRAGE, pAgeInTicks, 1.25f);

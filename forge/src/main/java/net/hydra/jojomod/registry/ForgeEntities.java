@@ -10,11 +10,7 @@ import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.objects.*;
 import net.hydra.jojomod.entity.paintings.*;
-import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
-import net.hydra.jojomod.entity.pathfinding.CommandDiscPossession;
-import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
-import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
-import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
+import net.hydra.jojomod.entity.pathfinding.*;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.*;
@@ -679,6 +675,16 @@ public class ForgeEntities {
                     EntityType.Builder.of(DarkMirageEntity::new, MobCategory.MISC).sized(ModEntities.justiceWidth, ModEntities.justiceHeight).
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "dark_mirage").toString())
+            );
+    public static final RegistryObject<EntityType<KingNothingEntity>> KING_NOTHING =
+            ENTITY_TYPES.register("king_nothing", () ->
+                    EntityType.Builder.of(KingNothingEntity::new, MobCategory.MISC).sized(0.75f, 2.05f)
+                            .clientTrackingRange(14).build(Roundabout.location("king_nothing").toString())
+            );
+    public static final RegistryObject<EntityType<TrackingCloudEntity>> TRACKING_CLOUD =
+            ENTITY_TYPES.register("tracking_cloud",
+                    () -> EntityType.Builder.of(TrackingCloudEntity::new, MobCategory.MISC).sized(0.5f,
+                            0.5f).clientTrackingRange(14).build(Roundabout.location("tracking_cloud").toString())
             );
     public static final RegistryObject<EntityType<TuskEntity>> TUSK_A1 =
             ENTITY_TYPES.register("tusk_a1", () ->

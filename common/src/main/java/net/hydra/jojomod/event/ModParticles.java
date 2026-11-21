@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event;
 
 import net.hydra.jojomod.particles.HazeColorParticleOptions;
+import net.hydra.jojomod.particles.PuzzleColorParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 
@@ -87,6 +88,8 @@ public class ModParticles {
     public static SimpleParticleType WAKE_RIPPLE;
     public static SimpleParticleType DIVER_DOWN_FINAL;
     public static SimpleParticleType RIBCAGE;
+    public static SimpleParticleType BLACK_SABBATH_MOVING_RIPPLE;
+    public static SimpleParticleType BLACK_SABBATH_IDLE_RIPPLE;
 
     public static SimpleParticleType OCCULT;
 
@@ -133,6 +136,8 @@ public class ModParticles {
     public static ParticleType<HazeColorParticleOptions> PURPLE_HAZE_SMOKE;
     public static SimpleParticleType DISTORTION_SMOKE;
     public static ParticleType<HazeColorParticleOptions> PURPLE_HAZE_BLASTWAVE;
+
+    public static ParticleType<PuzzleColorParticleOptions> PUZZLE_PARTICLE;
 
     public static SimpleParticleType AUTUMN_LEAVES;
     public static SimpleParticleType GINKGO_LEAVES;
