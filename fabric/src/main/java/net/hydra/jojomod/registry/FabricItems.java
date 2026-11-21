@@ -711,6 +711,7 @@ public class FabricItems {
                         entries.accept(VALENTINE_MASK);
                         entries.accept(DOT_HAN_MASK);
                         entries.accept(AVDUL_MASK);
+                        entries.accept(BLACKMORE_MASK);
                         entries.accept(JOSUKE_PART_EIGHT_MASK);
                         entries.accept(DAIYA_MASK);
                         entries.accept(DAIYA_2_MASK);
@@ -965,7 +966,6 @@ public class FabricItems {
                         entries.accept(STAND_DISC_JJF);
                         entries.accept(MAX_STAND_DISC_JJF);
                         entries.accept(STAND_DISC_CATCH_THE_RAINBOW);
-                        entries.accept(BLACKMORE_MASK);
 
                         entries.accept(STAND_DISC_SILVER_CHARIOT);
                         entries.accept(MAX_STAND_DISC_SILVER_CHARIOT);
