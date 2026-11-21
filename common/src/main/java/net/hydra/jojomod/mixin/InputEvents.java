@@ -1294,7 +1294,8 @@ public abstract class InputEvents implements IInputEvents {
                         roundabout$sameKeyTwo(KeyInputRegistry.guardKey) || options.keyUse.isDown());
                 /**Time Stop Levitation*/
                 boolean TSJumping = ((StandUser)player).roundabout$getTSJump();
-                if (((TimeStop)player.level()).isTimeStoppingEntity(player) || PowerTypes.isErasingTime(player)) {
+                if (((TimeStop)player.level()).isTimeStoppingEntity(player) || PowerTypes.isErasingTime(player)
+                        || ((StandUser)player).roundabout$getStandPowers() instanceof PowersGER) {
                     if (player.getAbilities().flying && TSJumping) {
                         this.roundabout$SetTSJump(false);
                     } else {
