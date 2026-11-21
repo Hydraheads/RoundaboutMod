@@ -884,10 +884,10 @@ public class PowersKingNothing extends NewDashPreset {
                     if (Objects.nonNull(stand)) {
                         VisualData pdata = getVisualInfo();
                         AABB BB1 = stand.getBoundingBox();
-                        double x = BB1.getCenter().x();
-                        double y = BB1.getCenter().y() + (((FollowingStandEntity) stand).getSizePercent() - 1) / 2;
-                        double z = BB1.getCenter().z();
-                        if (spawnsParticlesThisTick()) {
+                        if (spawnsParticlesThisTick() && ClientNetworking.getAppropriateConfig().kingNothingSettings.spawnPhaseGrabParticles) {
+                            double x = BB1.getCenter().x();
+                            double y = BB1.getCenter().y() + (((FollowingStandEntity) stand).getSizePercent() - 1) / 2;
+                            double z = BB1.getCenter().z();
                             for (int i = 0; i < 2; i++) {
                                 int color = getParticleColor(pdata);
                                 MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
