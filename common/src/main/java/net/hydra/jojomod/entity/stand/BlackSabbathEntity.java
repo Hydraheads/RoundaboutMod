@@ -135,18 +135,19 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             MINT = 10,
             TACO = 11,
             WOOL = 12,
-            FUNGUS = 13,
-            DAPPER = 14,
-            COPPER = 15,
-            PHANTOM = 16,
-            SWEET = 17,
-            MAGMA = 18,
-            OCULUS = 19,
-            CRIMSON = 20,
-            SACTHOTH = 21,
-            COWBOY = 22,
-            BEACH = 23,
-            SANTA = 24;
+            WOODEN = 13,
+            FUNGUS = 14,
+            DAPPER = 15,
+            COPPER = 16,
+            PHANTOM = 17,
+            SWEET = 18,
+            MAGMA = 19,
+            OCULUS = 20,
+            CRIMSON = 21,
+            SACTHOTH = 22,
+            COWBOY = 23,
+            BEACH = 24,
+            SANTA = 25;
 
     public final AnimationState coat_open = new AnimationState();
     public final AnimationState chest_open = new AnimationState();
@@ -2494,7 +2495,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                 ItemStack itemstack = bs.getItem(i);
                 if (itemstack.isEmpty()) {
                     bs.setItem(i, item.copyAndClear());
-                    System.out.println("2a");
                     it.discard();
                     return;
                 }
@@ -2509,7 +2509,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                 ItemStack itemstack = bs.getItem(i);
                 if (ItemStack.isSameItemSameTags(itemstack, item)) {
                     this.moveItemsBetweenStacks(item, itemstack, bs, it);
-                    System.out.println("2b");
                     if (item.isEmpty()) {
                         return;
                     }
@@ -2528,7 +2527,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             p_19186_.shrink(j);
             it.getItem().setCount(it.getItem().getCount() - j);
             bs.setChanged();
-            System.out.println("3");
             if(it.getItem().getCount() == 0){
                 it.discard();
             }
