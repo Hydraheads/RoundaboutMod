@@ -461,6 +461,10 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             renderJohngalliaTiePart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
                                     r, g, b);
                         }
+                        if(vd.renderPolpoNose() && !hideExtraPartsWithSuit){
+                            renderPolpoNose(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
+                                    r, g, b);
+                        }
                     }
                 }
 
@@ -1514,6 +1518,14 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         ModStrayModels.JohngalliaTiePart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, "johngallia");
         ClientUtil.popPoseAndCooperate(poseStack,47);
+    }
+    public void  renderPolpoNose(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                                         float r, float g, float b) {
+        ClientUtil.pushPoseAndCooperate(poseStack,50);
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.PolpoNosePart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, "polpo");
+        ClientUtil.popPoseAndCooperate(poseStack,50);
     }
 
     public void  renderExtraHairPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity,
