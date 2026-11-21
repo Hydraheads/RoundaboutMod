@@ -15,6 +15,9 @@ import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.LifePunchCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
+import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
+import net.hydra.jojomod.entity.projectile.KnifeEntity;
+import net.hydra.jojomod.entity.projectile.MatchEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.KingNothingEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -25,10 +28,7 @@ import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
-import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.item.RoadRollerItem;
-import net.hydra.jojomod.item.SignBlockItem;
-import net.hydra.jojomod.item.StrayCatItem;
+import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.particles.PuzzleColorParticleOptions;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
@@ -63,6 +63,7 @@ import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.*;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.entity.vehicle.Minecart;
 import net.minecraft.world.item.*;
@@ -769,14 +770,12 @@ public class PowersKingNothing extends NewDashPreset {
                     }
                 }
             }
-            Set<BlockPos> removalSet = new HashSet<>();
             for (BlockPos pos : itemHoldingBlocks) {
                 if (!locatedChests.contains(pos)) {
-                    removalSet.add(pos);
                     S2CPacketUtil.knRemoveItemContainer(((Player) getSelf()), pos);
                 }
             }
-            itemHoldingBlocks.removeAll(removalSet);
+            itemHoldingBlocks.removeIf(pos -> !locatedChests.contains(pos));
         }
         return foundTem;
     }
@@ -1282,8 +1281,6 @@ public class PowersKingNothing extends NewDashPreset {
             TrackingCloudEntity tc = ModEntities.TRACKING_CLOUD.create(this.getSelf().level());
             if (tc != null) {
                 tc.setUser(this.getSelf());
-                tc.setXRot(getStandEntity(getSelf()).getXRot());
-                tc.setYRot(getStandEntity(getSelf()).getYRot());
                 tc.setPos(getStandEntity(getSelf()).getBoundingBox().getCenter());
                 this.getSelf().level().addFreshEntity(tc);
                 this.trackingCloud = tc;
@@ -1768,15 +1765,53 @@ public class PowersKingNothing extends NewDashPreset {
     public boolean dropPhaseItem() {
         StandEntity stand = getStandEntity(getSelf());
         if (!isClient()) {
+            ItemStack held = stand.getHeldItem();
             Vec3 standPos = stand.getBoundingBox().getCenter();
-            ItemEntity $$4 =
-                    new ItemEntity(this.getSelf().level(), standPos.x(),
-                            standPos.y(),
-                            standPos.z(), stand.getHeldItem(), 0, 0.2, 0);
-            $$4.setPickUpDelay(40);
-            $$4.setThrower(this.getSelf().getUUID());
-            PowerTypes.copyPlaneOfExisting(self, $$4);
-            this.getSelf().level().addFreshEntity($$4);
+            Projectile projectile = null;
+            if (held.getItem() instanceof ThrowablePotionItem) {
+                projectile = new ThrownPotion(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z());
+            }
+            else if (held.getItem() instanceof EggItem) {
+                projectile = new ThrownEgg(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z());
+            }
+            else if (held.getItem() instanceof ExperienceBottleItem) {
+                projectile = new ThrownExperienceBottle(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z());
+            }
+            else if (held.getItem() instanceof EnderpearlItem) {
+                projectile = new ThrownEnderpearl(this.getSelf().level(), getSelf());
+                projectile.setPos(standPos);
+            }
+            else if (held.getItem() instanceof SnowballItem) {
+                projectile = new Snowball(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z());
+            }
+            else if (held.getItem() instanceof GasolineCanItem) {
+                projectile = new GasolineCanEntity(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z());
+            }
+            else if (held.is(ModItems.MATCH)) {
+                projectile = new MatchEntity(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z());
+            }
+            else if (held.is(ModItems.KNIFE)) {
+                projectile = new KnifeEntity(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z());
+            }
+            if (projectile != null) {
+                if (projectile instanceof ThrowableItemProjectile TP) {
+                    TP.setItem(held);
+                }
+                projectile.setDeltaMovement(0, 0.2, 0);
+                projectile.setOwner(this.getSelf());
+                PowerTypes.copyPlaneOfExisting(self, projectile);
+                this.getSelf().level().addFreshEntity(projectile);
+            }
+            else {
+                ItemEntity $$4 =
+                        new ItemEntity(this.getSelf().level(), standPos.x(),
+                                standPos.y(),
+                                standPos.z(), stand.getHeldItem(), 0, 0.2, 0);
+                $$4.setPickUpDelay(40);
+                $$4.setThrower(this.getSelf().getUUID());
+                PowerTypes.copyPlaneOfExisting(self, $$4);
+                this.getSelf().level().addFreshEntity($$4);
+            }
             stand.setHeldItem(ItemStack.EMPTY);
             setPowerNone();
             animateStand(KingNothingEntity.RETURN);
