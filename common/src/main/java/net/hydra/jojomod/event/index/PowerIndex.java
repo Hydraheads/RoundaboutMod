@@ -93,7 +93,7 @@ public class PowerIndex {
     public static final byte GENERAL_EXTRA_2 = 29;
 
 
-    /**You can define any other number after 51 in your own stand's clas if you don't want to use
+    /**You can define any other number after 51 in your own stand's class if you don't want to use
      * the old naming convention and it really doesn't matter that much as long as you are
      * keeping track of it internally**/
     public static final byte SKILL_1_GUARD = 60;

@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -105,7 +106,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             TREE = 61,
             LIFE_SENSOR = 63,
             HEAL_CHARGE = 64,
-            REQUIEM = 65;
+            REQUIEM = 90;
 
     // move bytes found in other moves
     public static final byte ITEM_IMBUE = 62;
@@ -796,7 +797,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public boolean setPowerOther(int move, int lastMove) {
         if (move == REQUIEM) {
-            inventoryGrab();
+            //inventoryGrab();
             return setRequiem();
         }
 
@@ -882,11 +883,6 @@ public class PowersGoldExperience extends BlockGrabPreset {
             resolveRenderTicks = 50;
             return;
         }
-        /*if (activePower == REQUIEM) {
-            this.tryPower(REQUIEM, true);
-            tryPowerPacket(REQUIEM);
-            return;
-        }*/
         super.updatePowerInt(activePower, data);
     }
 
@@ -2181,7 +2177,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                             withStyle(ChatFormatting.YELLOW), true);
                 }
 
-                return true;
+                return false;
             }else {
                 if (!isClient()) {
                     ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.requiem_failed").
@@ -2196,15 +2192,16 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public boolean onStandArrowUseClient() {
         if (this.self instanceof Player && activePower == PowerIndex.NONE) {
             if (isPossibleToRequiem()) {
-                /*((StandUser)self).roundabout$tryPower(REQUIEM, true);
-                tryPowerPacket(REQUIEM);*/
+
                 if (!isAppropriateToGrab()) {
-                    putDownClient();
+                    //putDownClient();
                 }
-                ((StandUser) this.getSelf()).roundabout$tryIntPower(REQUIEM, true,
+                /*((StandUser) this.getSelf()).roundabout$tryIntPower(REQUIEM, true,
                         ((Player) this.getSelf()).getInventory().selected);
                 tryIntPowerPacket(REQUIEM,
-                        ((Player) this.getSelf()).getInventory().selected);
+                        ((Player) this.getSelf()).getInventory().selected);*/
+                ((StandUser) this.getSelf()).roundabout$tryPower(REQUIEM, true);
+                tryPowerPacket(REQUIEM);
 
                 return true;
             }
@@ -2278,7 +2275,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
     }
 
     private void updateRequiem() {
-        if (attackTimeDuring >= 240 && activePower == REQUIEM) {
+        if (attackTimeDuring >= 240) {
+            Roundabout.LOGGER.info("update requiem");
             setPowerNone();
 
             ItemStack discy = ((StandUser)self).roundabout$getStandDisc();
@@ -2295,8 +2293,6 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
                 GER.setOriginalDisc(savedDisc);
             }
-
-
 
             if (((StandUser)self).roundabout$getStand() != null) {
                 ((StandUser)self).roundabout$getStand().discard();
