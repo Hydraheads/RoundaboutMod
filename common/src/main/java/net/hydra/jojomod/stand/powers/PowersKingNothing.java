@@ -318,6 +318,11 @@ public class PowersKingNothing extends NewDashPreset {
         return VISUAL_INFO.getOrDefault(standSkin, VISUAL_INFO.get(MANGA));
     }
 
+    public boolean spawnsParticlesThisTick() {
+        return getSelf().tickCount
+                % ClientNetworking.getAppropriateConfig().kingNothingSettings.kingNothingParticleSpawnInterval == 0;
+    }
+
     public ItemStack getMemorizedScentIcon() {
         if (memorizedBlock != null) {
             return memorizedBlock.asItem().getDefaultInstance();
@@ -609,7 +614,8 @@ public class PowersKingNothing extends NewDashPreset {
             // passive particles
             if (!foundTem) {
                 foundItemYet = false;
-                if (this.getSelf().tickCount % 5 == 0) {
+                int particleInterval = ClientNetworking.getAppropriateConfig().kingNothingSettings.kingNothingParticleSpawnInterval;
+                if (particleInterval <= 5 ? this.getSelf().tickCount % 5 == 0 : spawnsParticlesThisTick()) {
                     VisualData pdata = getVisualInfo();
                     for (int i = 0; i < 2; i++) {
                         int color = getParticleColor(pdata);
@@ -626,7 +632,7 @@ public class PowersKingNothing extends NewDashPreset {
             trackingCloud = null;
             playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);
         }
-        if (getSelf().isAlive() && !getSelf().isRemoved() && trackingCloud != null) {
+        if (getSelf().isAlive() && !getSelf().isRemoved() && trackingCloud != null && spawnsParticlesThisTick()) {
             VisualData pdata = getVisualInfo();
             for (int i = 0; i < 2; i++) {
                 int color = getParticleColor(pdata);
@@ -728,12 +734,15 @@ public class PowersKingNothing extends NewDashPreset {
                             pos.above()) instanceof RandomizableContainerBlockEntity) || otherChestPos != null && (
                             level.getBlockState(otherChestPos).isAir() || (level.getBlockEntity(
                                     otherChestPos.above()) instanceof RandomizableContainerBlockEntity)) ? 0 : 1);
-                    for (int i = 0; i < 2 + (otherChestPos == null ? 0 : 2); i++) {
-                        int color = getParticleColor(pdata);
-                        MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
-                                PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
-                                spawnPos.x(), spawnPos.y() + yOffset, spawnPos.z(), 1 + (otherChestPos == null ? 0 : 1),
-                                0.1 + xSpreadBonus, 0.1, 0.1 + zSpreadBonus, 0.01);
+                    if (spawnsParticlesThisTick()) {
+                        for (int i = 0; i < 2 + (otherChestPos == null ? 0 : 2); i++) {
+                            int color = getParticleColor(pdata);
+                            MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
+                                    PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
+                                    spawnPos.x(), spawnPos.y() + yOffset, spawnPos.z(),
+                                    1 + (otherChestPos == null ? 0 : 1),
+                                    0.1 + xSpreadBonus, 0.1, 0.1 + zSpreadBonus, 0.01);
+                        }
                     }
                 }
                 else {
@@ -823,7 +832,7 @@ public class PowersKingNothing extends NewDashPreset {
                 }
                 if (foundItem) {
                     foundTem = true;
-                    if (!level.isClientSide()) {
+                    if (!level.isClientSide() && spawnsParticlesThisTick()) {
                         VisualData pdata = getVisualInfo();
                         for (int j = 0; j < 2; j++) {
                             int color = getParticleColor(pdata);
@@ -868,11 +877,14 @@ public class PowersKingNothing extends NewDashPreset {
                         double x = BB1.getCenter().x();
                         double y = BB1.getCenter().y() + (((FollowingStandEntity) stand).getSizePercent() - 1) / 2;
                         double z = BB1.getCenter().z();
-                        for (int i = 0; i < 2; i++) {
-                            int color = getParticleColor(pdata);
-                            MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
-                                    PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color), x, y,
-                                    z, 1, 0.1, 0.1, 0.1, 0.01);
+                        if (spawnsParticlesThisTick()) {
+                            for (int i = 0; i < 2; i++) {
+                                int color = getParticleColor(pdata);
+                                MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
+                                        PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
+                                        x, y,
+                                        z, 1, 0.1, 0.1, 0.1, 0.01);
+                            }
                         }
                         Vec3 vec3d = this.getSelf().getEyePosition(0);
                         Vec3 vec3d2 = this.getSelf().getViewVector(0);
