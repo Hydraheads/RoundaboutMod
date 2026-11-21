@@ -1,6 +1,7 @@
 package net.hydra.jojomod.particles;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -12,11 +13,12 @@ public class PuzzleParticle extends TextureSheetParticle {
     protected PuzzleParticle(ClientLevel level, double xPos, double yPos, double zPos, SpriteSet set,
                              double xd, double yd, double zd) {
         super(level, xPos, yPos, zPos, xd, yd, zd);
+        int ticleInterval = ClientNetworking.getAppropriateConfig().kingNothingSettings.kingNothingParticleSpawnInterval;
 
         this.xd = xd;
         this.yd = yd;
         this.zd = zd;
-        this.lifetime = 10;
+        this.lifetime = Math.max(ticleInterval, 10);
         setSpriteFromAge(set);
     }
 

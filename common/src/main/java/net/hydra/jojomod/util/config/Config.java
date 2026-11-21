@@ -1268,6 +1268,8 @@ public class Config implements Cloneable {
     public static class KingNothingSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableKingNothing;
+        @IntOption(group = "inherit", value = 2, min = 1)
+        public Integer kingNothingParticleSpawnInterval;
         @IntOption(group = "inherit", value = 70, min = 0, max = 72000)
         public Integer kingNothingPhaseAttackCd;
         @BooleanOption(group = "inherit", value = true)

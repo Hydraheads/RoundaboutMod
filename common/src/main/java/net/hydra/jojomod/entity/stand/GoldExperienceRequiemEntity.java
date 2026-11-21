@@ -11,9 +11,6 @@ public class GoldExperienceRequiemEntity extends FollowingStandEntity {
         super(entityType, world);
     }
 
-    public static final byte PART_5 = 0,
-            BETA = 1;
-
     public final AnimationState lifePunch = new AnimationState();
     public final AnimationState doublePunch = new AnimationState();
     public final AnimationState healWindup = new AnimationState();

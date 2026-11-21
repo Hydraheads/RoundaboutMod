@@ -13,6 +13,9 @@ import org.jetbrains.annotations.Nullable;
 public class GoldExperienceBaseRenderer extends StandRenderer<GoldExperienceEntity> {
     public static final ResourceLocation PART_5 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience/base.png");
     public static final ResourceLocation BETA = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience/beta.png");
+    public static final ResourceLocation DIAMOND = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience/diamond.png");
+    public static final ResourceLocation GUARD = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience/guard.png");
+    public static final ResourceLocation PS2 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience/ps2.png");
 
     public GoldExperienceBaseRenderer(EntityRendererProvider.Context context, StandModel<GoldExperienceEntity> entityModel, float f) {
         super(context, entityModel, f);
@@ -24,6 +27,15 @@ public class GoldExperienceBaseRenderer extends StandRenderer<GoldExperienceEnti
     public static ResourceLocation getSkin(byte bt) {
         if (bt == GoldExperienceEntity.BETA) {
             return BETA;
+        }
+        if (bt == GoldExperienceEntity.DIAMOND) {
+            return DIAMOND;
+        }
+        if (bt == GoldExperienceEntity.GUARD) {
+            return GUARD;
+        }
+        if (bt == GoldExperienceEntity.PS2) {
+            return PS2;
         }
         return PART_5;
     }

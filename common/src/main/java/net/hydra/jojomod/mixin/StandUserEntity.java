@@ -4856,7 +4856,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (((LivingEntity) (Object) this) instanceof Player
                 && ((TimeStop) ((LivingEntity) (Object) this).level())
                         .isTimeStoppingEntity((LivingEntity) (Object) this)
-                || PowerTypes.isErasingTime(this)) {
+                || PowerTypes.isErasingTime(this) || roundabout$getStandPowers() instanceof PowersGER) {
 
             boolean TSJumping = ((IPlayerEntity) this).roundabout$GetPos() == PlayerPosIndex.TS_FLOAT;
             if (TSJumping) {
@@ -5148,9 +5148,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         if (!((StandUser) this).roundabout$getStandDisc().isEmpty()) {
             basis = ((StandUser) this).roundabout$getStandPowers().inputSpeedModifiers(basis);
-            if (((StandUser) this).roundabout$getStandPowers() instanceof PowersGoldExperience GE && GE.getActivePower() == PowerIndex.SPECIAL) {
-                return 0;
-            }
         }
         if (rdbt$this() instanceof Player pl) {
             basis = ((IFatePlayer) this).rdbt$getFatePowers().inputSpeedModifiers(basis);

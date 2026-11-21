@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -105,7 +106,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             TREE = 61,
             LIFE_SENSOR = 63,
             HEAL_CHARGE = 64,
-            REQUIEM = 65;
+            REQUIEM = 90;
 
     // move bytes found in other moves
     public static final byte ITEM_IMBUE = 62;
@@ -796,7 +797,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public boolean setPowerOther(int move, int lastMove) {
         if (move == REQUIEM) {
-            inventoryGrab();
+            //inventoryGrab();
             return setRequiem();
         }
 
@@ -882,11 +883,6 @@ public class PowersGoldExperience extends BlockGrabPreset {
             resolveRenderTicks = 50;
             return;
         }
-        /*if (activePower == REQUIEM) {
-            this.tryPower(REQUIEM, true);
-            tryPowerPacket(REQUIEM);
-            return;
-        }*/
         super.updatePowerInt(activePower, data);
     }
 
@@ -929,6 +925,13 @@ public class PowersGoldExperience extends BlockGrabPreset {
             updateRequiem();
         }
         super.updateUniqueMoves();
+    }
+
+    public boolean isAttackInept(byte activeP){
+        if (activeP == REQUIEM) {
+            return this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()));
+        }
+        return super.isAttackInept(activeP);
     }
 
     @Override
@@ -2130,11 +2133,18 @@ public class PowersGoldExperience extends BlockGrabPreset {
                     BlockPos groundPos = findGroundPosition(level, BlockPos.containing(targetX, this.self.getY(), targetZ));
 
                     if (groundPos != null) {
-                        GEThornEntity rootEntity = new GEThornEntity(ModEntities.GE_THORN, level);
-                        rootEntity.setOwner(this.getSelf());
-                        rootEntity.setPos(targetX, groundPos.getY() + 1.0, targetZ);
+                        Vec3 spawnPos = new Vec3(targetX, groundPos.getY() + 1.0, targetZ);
+                        boolean tooClose = !level.getEntitiesOfClass(
+                                GEThornEntity.class, new AABB(spawnPos, spawnPos).inflate(0.35D)).isEmpty();
 
-                        level.addFreshEntity(rootEntity);
+                        // z fighting fix. i couldn't find any other way to fix it, so i'm just gonna prevent them from overlapping in the first place.
+                        if (!tooClose) {
+                            GEThornEntity rootEntity = new GEThornEntity(ModEntities.GE_THORN, level);
+                            rootEntity.setOwner(this.getSelf());
+                            rootEntity.setPos(spawnPos.x, spawnPos.y, spawnPos.z);
+
+                            level.addFreshEntity(rootEntity);
+                        }
                     }
                 }
             }
@@ -2181,7 +2191,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                             withStyle(ChatFormatting.YELLOW), true);
                 }
 
-                return true;
+                return false;
             }else {
                 if (!isClient()) {
                     ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.requiem_failed").
@@ -2196,15 +2206,16 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public boolean onStandArrowUseClient() {
         if (this.self instanceof Player && activePower == PowerIndex.NONE) {
             if (isPossibleToRequiem()) {
-                /*((StandUser)self).roundabout$tryPower(REQUIEM, true);
-                tryPowerPacket(REQUIEM);*/
+
                 if (!isAppropriateToGrab()) {
-                    putDownClient();
+                    //putDownClient();
                 }
-                ((StandUser) this.getSelf()).roundabout$tryIntPower(REQUIEM, true,
+                /*((StandUser) this.getSelf()).roundabout$tryIntPower(REQUIEM, true,
                         ((Player) this.getSelf()).getInventory().selected);
                 tryIntPowerPacket(REQUIEM,
-                        ((Player) this.getSelf()).getInventory().selected);
+                        ((Player) this.getSelf()).getInventory().selected);*/
+                ((StandUser) this.getSelf()).roundabout$tryPower(REQUIEM, true);
+                tryPowerPacket(REQUIEM);
 
                 return true;
             }
@@ -2267,7 +2278,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     private boolean setRequiem() {
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)) {
-            this.setAttackTimeDuring(0);
+            this.setAttackTimeDuring(1);
             this.setActivePower(REQUIEM);
             //playSoundsIfNearby(IMPALE_NOISE, 27, false);
             this.animateStand(GoldExperienceEntity.REQUIEM);
@@ -2278,7 +2289,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
     }
 
     private void updateRequiem() {
-        if (attackTimeDuring >= 240 && activePower == REQUIEM) {
+        if (attackTimeDuring > 240) {
+            Roundabout.LOGGER.info("update requiem");
             setPowerNone();
 
             ItemStack discy = ((StandUser)self).roundabout$getStandDisc();
@@ -2295,8 +2307,6 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
                 GER.setOriginalDisc(savedDisc);
             }
-
-
 
             if (((StandUser)self).roundabout$getStand() != null) {
                 ((StandUser)self).roundabout$getStand().discard();
@@ -3834,6 +3844,15 @@ public class PowersGoldExperience extends BlockGrabPreset {
             case GoldExperienceEntity.BETA -> {
                 return Component.translatable("skins.roundabout.gold_experience.beta");
             }
+            case GoldExperienceEntity.DIAMOND -> {
+                return Component.translatable("skins.roundabout.gold_experience.diamond");
+            }
+            case GoldExperienceEntity.GUARD -> {
+                return Component.translatable("skins.roundabout.gold_experience.guard");
+            }
+            case GoldExperienceEntity.PS2 -> {
+                return Component.translatable("skins.roundabout.gold_experience.ps2");
+            }
             default -> {
                 return Component.translatable("skins.roundabout.gold_experience.base");
             }
@@ -3853,15 +3872,19 @@ public class PowersGoldExperience extends BlockGrabPreset {
             if (Level > 2 || bypass) {
             }
             if (Level > 3 || bypass) {
+                l.add(GoldExperienceEntity.PS2);
             }
             if (Level > 4 || bypass) {
+                l.add(GoldExperienceEntity.DIAMOND);
             }
             if (Level > 5 || bypass) {
+                l.add(GoldExperienceEntity.GUARD);
             }
             if (Level > 6 || bypass) {
                 l.add(GoldExperienceEntity.BETA);
             }
             if (((IPlayerEntity) PE).roundabout$getUnlockedBonusSkin() || bypass) {
+                // deimos GE goes here
             }
         }
 

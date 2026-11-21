@@ -6,6 +6,9 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -30,7 +33,14 @@ public class GEBatEntity extends Bat implements GELifeform {
     private LivingEntity creator;
     private int lifespan = 600;
 
-    private ItemStack sourceItem = ItemStack.EMPTY;
+    private static final EntityDataAccessor<ItemStack> DATA_SOURCE_ITEM =
+            SynchedEntityData.defineId(GEBatEntity.class, EntityDataSerializers.ITEM_STACK);
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(DATA_SOURCE_ITEM, ItemStack.EMPTY);
+    }
 
     public GEBatEntity(EntityType<? extends Bat> entityType, Level level) {
         super(entityType, level);
@@ -122,9 +132,9 @@ public class GEBatEntity extends Bat implements GELifeform {
     @Override
     public void setLifespan(int ticks) { this.lifespan = ticks; }
     @Override
-    public ItemStack getSourceItem() { return sourceItem; }
+    public void setSourceItem(ItemStack stack) {this.entityData.set(DATA_SOURCE_ITEM, stack);}
     @Override
-    public void setSourceItem(ItemStack stack) { this.sourceItem = stack; }
+    public ItemStack getSourceItem() {return this.entityData.get(DATA_SOURCE_ITEM);}
     @Nullable
     private UUID creatorUUID;
 
@@ -146,8 +156,8 @@ public class GEBatEntity extends Bat implements GELifeform {
             tag.putUUID("CreatorUUID", this.creatorUUID);
         }
         tag.putInt("GELifespan", this.lifespan);
-        if (!this.sourceItem.isEmpty()) {
-            tag.put("GESourceItem", this.sourceItem.save(new CompoundTag()));
+        if (!this.getSourceItem().isEmpty()) {
+            tag.put("GESourceItem", this.getSourceItem().save(new CompoundTag()));
         }
     }
 
@@ -161,7 +171,7 @@ public class GEBatEntity extends Bat implements GELifeform {
             this.lifespan = tag.getInt("GELifespan");
         }
         if (tag.contains("GESourceItem")) {
-            this.sourceItem = ItemStack.of(tag.getCompound("GESourceItem"));
+            this.setSourceItem(ItemStack.of(tag.getCompound("GESourceItem")));
         }
     }
 }

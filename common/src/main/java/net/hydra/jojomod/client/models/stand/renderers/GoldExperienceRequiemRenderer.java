@@ -16,7 +16,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class GoldExperienceRequiemRenderer extends StandRenderer<GoldExperienceRequiemEntity> {
     public static final ResourceLocation PART_5 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience_requiem/base.png");
-    //public static final ResourceLocation BETA = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience_requiem/beta.png");
+    public static final ResourceLocation DIAMOND = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience_requiem/diamond.png");
+    public static final ResourceLocation GUARD = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience_requiem/guard.png");
+    public static final ResourceLocation PS2 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience_requiem/ps2.png");
 
     public GoldExperienceRequiemRenderer(EntityRendererProvider.Context context) {
         super(context, new GoldExperienceRequiemModel<>(context.bakeLayer(ModEntityRendererClient.GOLD_EXPERIENCE_REQUIEM_LAYER)), 0f);
@@ -24,9 +26,18 @@ public class GoldExperienceRequiemRenderer extends StandRenderer<GoldExperienceR
     }
 
     public static ResourceLocation getSkin(byte bt) {
-        /*if (bt == GoldExperienceEntity.BETA) {
-            return BETA;
-        }*/
+        if (bt == GoldExperienceEntity.BETA) {
+            return PART_5;
+        }
+        if (bt == GoldExperienceEntity.DIAMOND) {
+            return DIAMOND;
+        }
+        if (bt == GoldExperienceEntity.GUARD) {
+            return GUARD;
+        }
+        if (bt == GoldExperienceEntity.PS2) {
+            return PS2;
+        }
         return PART_5;
     }
 

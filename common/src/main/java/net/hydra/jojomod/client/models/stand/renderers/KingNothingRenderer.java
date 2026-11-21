@@ -23,6 +23,7 @@ public class KingNothingRenderer extends StandRenderer<KingNothingEntity> {
     private static final ResourceLocation SNIFFER = Roundabout.location("textures/stand/king_nothing/sniffer.png");
     private static final ResourceLocation SOMETHING = Roundabout.location("textures/stand/king_nothing/something.png");
     private static final ResourceLocation RAM = Roundabout.location("textures/stand/king_nothing/ram.png");
+    private static final ResourceLocation CHRISTMAS = Roundabout.location("textures/stand/king_nothing/christmas.png");
 
     public KingNothingRenderer(EntityRendererProvider.Context context) {
         super(context, new KingNothingModel<>(context.bakeLayer(ModEntityRendererClient.KING_NOTHING_LAYER)), 0f);
@@ -38,6 +39,7 @@ public class KingNothingRenderer extends StandRenderer<KingNothingEntity> {
             case KingNothingEntity.SNIFFER -> SNIFFER;
             case KingNothingEntity.SOMETHING -> SOMETHING;
             case KingNothingEntity.RAM -> RAM;
+            case KingNothingEntity.CHRISTMAS -> CHRISTMAS;
             default -> MANGA;
         };
     }
