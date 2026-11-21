@@ -152,7 +152,8 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             STRIDER = 7,
             LALI_HO = 8,
             EYE = 9,
-            UMVUTHI = 10;
+            KNIGHT = 10,
+            UMVUTHI = 11;
 
     @Override
     public List<Byte> getSkinList() {
@@ -166,6 +167,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                 STRIDER,
                 LALI_HO,
                 EYE,
+                KNIGHT,
                 UMVUTHI
         );
     }
@@ -179,10 +181,11 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                     case EYE -> Component.translatable("skins.roundabout.catch_the_rainbow.eye_white");
                     case NEON -> Component.translatable("skins.roundabout.catch_the_rainbow.neon_off");
                     case SKELETONCTR -> Component.translatable("skins.roundabout.catch_the_rainbow.skeleton");
-                    case STRIDER -> Component.translatable("skins.roundabout.catch_the_rainbow.strider_sick");
+                    case STRIDER -> Component.translatable("skins.roundabout.catch_the_rainbow.strider_healthy");
                     case MAGMA -> Component.translatable("skins.roundabout.catch_the_rainbow.magma");
                     case CMY -> Component.translatable("skins.roundabout.catch_the_rainbow.cmy");
                     case UMVUTHI -> Component.translatable("skins.roundabout.catch_the_rainbow.umvuthi_off");
+                    case KNIGHT -> Component.translatable("skins.roundabout.catch_the_rainbow.knight");
                     default -> Component.translatable("skins.roundabout.catch_the_rainbow.base");
                 };
             } else {
@@ -192,14 +195,16 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                     case EYE -> Component.translatable("skins.roundabout.catch_the_rainbow.eye_red");
                     case NEON -> Component.translatable("skins.roundabout.catch_the_rainbow.neon_on");
                     case SKELETONCTR -> Component.translatable("skins.roundabout.catch_the_rainbow.skeleton");
-                    case STRIDER -> Component.translatable("skins.roundabout.catch_the_rainbow.strider_healthy");
+                    case STRIDER -> Component.translatable("skins.roundabout.catch_the_rainbow.strider_sick");
                     case MAGMA -> Component.translatable("skins.roundabout.catch_the_rainbow.magma");
                     case CMY -> Component.translatable("skins.roundabout.catch_the_rainbow.cmy");
                     case UMVUTHI -> Component.translatable("skins.roundabout.catch_the_rainbow.umvuthi_on");
+                    case KNIGHT -> Component.translatable("skins.roundabout.catch_the_rainbow.knight");
                     default -> Component.translatable("skins.roundabout.catch_the_rainbow.base");
                 };
             }
         }
+        //avoids a game crash when hovering over the stand disc item :/
         else{
             return switch (skinId) {
                 case GHAST -> Component.translatable("skins.roundabout.catch_the_rainbow.ghast_dry");
@@ -207,10 +212,11 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                 case EYE -> Component.translatable("skins.roundabout.catch_the_rainbow.eye_white");
                 case NEON -> Component.translatable("skins.roundabout.catch_the_rainbow.neon_off");
                 case SKELETONCTR -> Component.translatable("skins.roundabout.catch_the_rainbow.skeleton");
-                case STRIDER -> Component.translatable("skins.roundabout.catch_the_rainbow.strider_sick");
+                case STRIDER -> Component.translatable("skins.roundabout.catch_the_rainbow.strider_healthy");
                 case MAGMA -> Component.translatable("skins.roundabout.catch_the_rainbow.magma");
                 case CMY -> Component.translatable("skins.roundabout.catch_the_rainbow.cmy");
                 case UMVUTHI -> Component.translatable("skins.roundabout.catch_the_rainbow.umvuthi_off");
+                case KNIGHT -> Component.translatable("skins.roundabout.catch_the_rainbow.knight");
                 default -> Component.translatable("skins.roundabout.catch_the_rainbow.base");
             };
         }
