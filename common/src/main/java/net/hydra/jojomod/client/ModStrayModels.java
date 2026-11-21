@@ -109,6 +109,7 @@ public class ModStrayModels {
     public static LeftHeelPart LeftHeel;
     public static RightHeelPart RightHeel;
     public static JohngalliaTiePart JohngalliaTiePart;
+    public static PolpoNosePart PolpoNosePart;
     public static ExtraHairPart extraHairPart;
     public static OyecomovaHatPart oyecomovaHatPart;
     public static ExtraHairDecorationPart extraHairDecorationPart;
