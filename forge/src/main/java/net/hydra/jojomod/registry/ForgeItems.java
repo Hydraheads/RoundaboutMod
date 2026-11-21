@@ -1113,7 +1113,7 @@ public class ForgeItems {
             "kira_part_eight_mask", () -> new MaskItem(new Item.Properties().stacksTo(1), new KiraPartEightVisage(null))));
     public static final RegistryObject<Item> JOHNGALLIA_MASK = addToTab(ITEMS.register("johngallia_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new JohngalliaVisage(null))));
-    public static final RegistryObject<Item> POLPO_MASK = addToTab(ITEMS.register("polpo_mask",
+    public static final RegistryObject<Item> POLPO_MASK = addToWIPTab(ITEMS.register("polpo_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new PolpoVisage(null))));
     public static final RegistryObject<Item> JOHNNY_MASK = addToTab(ITEMS.register("johnny_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new JohnnyVisage(null))));
