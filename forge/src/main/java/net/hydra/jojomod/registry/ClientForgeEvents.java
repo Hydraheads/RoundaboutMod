@@ -11,6 +11,8 @@ import net.hydra.jojomod.client.models.badCompanyTroops.*;
 import net.hydra.jojomod.client.models.badCompanyTroops.renderers.*;
 import net.hydra.jojomod.client.models.corpses.renderers.*;
 import net.hydra.jojomod.client.models.gold_experience.*;
+import net.hydra.jojomod.client.models.layers.DiverArmsLayer;
+import net.hydra.jojomod.client.models.layers.DiverLegsLayer;
 import net.hydra.jojomod.client.models.minions.*;
 import net.hydra.jojomod.client.models.minions.head_parts.*;
 import net.hydra.jojomod.client.models.minions.renderers.*;
@@ -571,6 +573,9 @@ public class ClientForgeEvents {
         ModStrayModels.OasisSlimRightArm = new OasisSlimRightArmPart();
         ModStrayModels.OasisLeftArm = new OasisLeftArmPart();
         ModStrayModels.OasisSlimLeftArm = new OasisSlimLeftArmPart();
+
+        ModStrayModels.diverArmsLayer = new DiverArmsLayer();
+        ModStrayModels.diverLegsLayer = new DiverLegsLayer();
 
         ModStrayModels.VampireHairOne = new VampireHairOnePart();
         ModStrayModels.VampireHairTwo = new VampireHairTwoPart();
