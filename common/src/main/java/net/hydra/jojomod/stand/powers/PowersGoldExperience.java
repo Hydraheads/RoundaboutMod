@@ -927,6 +927,13 @@ public class PowersGoldExperience extends BlockGrabPreset {
         super.updateUniqueMoves();
     }
 
+    public boolean isAttackInept(byte activeP){
+        if (activeP == REQUIEM) {
+            return this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()));
+        }
+        return super.isAttackInept(activeP);
+    }
+
     @Override
     public void updateMovesFromPacket(byte activePower){
         if (activePower == PowerIndex.BARRAGE_2){
@@ -2271,7 +2278,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     private boolean setRequiem() {
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)) {
-            this.setAttackTimeDuring(0);
+            this.setAttackTimeDuring(1);
             this.setActivePower(REQUIEM);
             //playSoundsIfNearby(IMPALE_NOISE, 27, false);
             this.animateStand(GoldExperienceEntity.REQUIEM);
@@ -2282,7 +2289,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     }
 
     private void updateRequiem() {
-        if (attackTimeDuring >= 240) {
+        if (attackTimeDuring > 240) {
             Roundabout.LOGGER.info("update requiem");
             setPowerNone();
 

@@ -5148,9 +5148,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         if (!((StandUser) this).roundabout$getStandDisc().isEmpty()) {
             basis = ((StandUser) this).roundabout$getStandPowers().inputSpeedModifiers(basis);
-            if (((StandUser) this).roundabout$getStandPowers() instanceof PowersGoldExperience GE && GE.getActivePower() == PowerIndex.SPECIAL) {
-                return 0;
-            }
         }
         if (rdbt$this() instanceof Player pl) {
             basis = ((IFatePlayer) this).rdbt$getFatePowers().inputSpeedModifiers(basis);
