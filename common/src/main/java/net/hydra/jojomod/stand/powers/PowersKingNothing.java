@@ -10,6 +10,7 @@ import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.LifePunchCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
@@ -560,7 +561,7 @@ public class PowersKingNothing extends NewDashPreset {
             }
             if (stand.getAnimation() == KingNothingEntity.RETURN) {
                 if (returnAnimTicks < 26) {
-                    summonAnimTicks++;
+                    returnAnimTicks++;
                 }
                 else {
                     animateStand(StandEntity.IDLE);
@@ -641,7 +642,7 @@ public class PowersKingNothing extends NewDashPreset {
         if (!level.isClientSide()) {
             Set<BlockPos> locatedChests = new HashSet<>();
             for (BlockPos itpos : itter) {
-                // iterables are stupid
+                // this iterable in particular is stupid
                 BlockPos pos = new BlockPos(itpos);
                 boolean chestHasItem = false;
                 if (checked > 16) {
@@ -776,6 +777,19 @@ public class PowersKingNothing extends NewDashPreset {
                         itemHoldingEntities.add(ent);
                     }
                     foundItem = true;
+                }
+                if (!foundItem && checkedEnt instanceof D4CCloneEntity D4C) {
+                    if (D4C.inventory.countItem(trackedItem) > 0) {
+                        if (!level.isClientSide() && !itemHoldingEntities.contains(ent)) {
+                            S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) getSelf()),
+                                    PacketDataIndex.S2C_KN_ADD_HIGHLIGHT_ENTITY, ent.getId());
+                        }
+                        foundItem = true;
+                    }
+                    else if (!level.isClientSide() && itemHoldingEntities.contains(ent)) {
+                        S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) getSelf()),
+                                PacketDataIndex.S2C_KN_REMOVE_HIGHLIGHT_ENTITY, ent.getId());
+                    }
                 }
                 if (!foundItem && checkedEnt instanceof CloneEntity CE && (CE instanceof KingCrimsonCloneEntity || (
                         CE instanceof LifePunchCloneEntity && !CE.getPlayer().is(getSelf())))) {
@@ -1753,6 +1767,7 @@ public class PowersKingNothing extends NewDashPreset {
         else if (!isOut && canSummonStandAsEntity()) {
             isOut = true;
             summonAnimTicks = 0;
+            returnAnimTicks = 0;
             animateStand(KingNothingEntity.SUMMON);
             startPhaseTickAfter = true;
         }
