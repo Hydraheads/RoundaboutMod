@@ -1019,14 +1019,6 @@ public class PowersGoldExperience extends BlockGrabPreset {
         return super.buttonInputGuard(keyIsDown, options);
     }
 
-    @Override
-    public byte getSoundCancelingGroupByte(byte soundChoice) {
-        if (soundChoice == SoundIndex.ALT_CHARGE_SOUND_1) {
-            return SoundIndex.BARRAGE_SOUND_GROUP;
-        }
-        return super.getSoundCancelingGroupByte(soundChoice);
-    }
-
     // item interactions (lifeform creation) start
 
     private static Vec3 getRevertBoost(Level level, Vec3 pos, LivingEntity entity, LivingEntity owner, double speed) {
@@ -3832,6 +3824,16 @@ public class PowersGoldExperience extends BlockGrabPreset {
         }
 
         return super.tryPower(move, forced);
+    }
+
+    @Override
+    public byte getSoundCancelingGroupByte(byte soundChoice) {
+        if (soundChoice == BARRAGE_NOISE) {
+            return SoundIndex.BARRAGE_SOUND_GROUP;
+        } else if (soundChoice == SoundIndex.ALT_CHARGE_SOUND_1) {
+            return SoundIndex.BARRAGE_SOUND_GROUP;
+        }
+        return super.getSoundCancelingGroupByte(soundChoice);
     }
 
     // sounds end
