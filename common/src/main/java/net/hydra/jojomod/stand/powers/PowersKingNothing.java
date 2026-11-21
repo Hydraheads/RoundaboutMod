@@ -994,6 +994,9 @@ public class PowersKingNothing extends NewDashPreset {
                     }
                 }
             }
+            else {
+               startPhaseTickAfter = false;
+            }
         }
     }
 
@@ -1568,7 +1571,7 @@ public class PowersKingNothing extends NewDashPreset {
                         stand.setHeldItem(ItemStack.EMPTY);
                         didThing = true;
                     }
-                    else if ($$4.isAttackable() && !($$4 instanceof Player PE && (PE.isCreative() || PE.isSpectator()))
+                    else if ($$4.isAttackable() && $$4.isPickable() && !($$4 instanceof Player PE && (PE.isCreative() || PE.isSpectator()))
                             && !($$4 instanceof OwnableEntity OE && Objects.equals(OE.getOwner(), getSelf())) && !(
                             $$4 instanceof Boat || $$4 instanceof Minecart)) {
                         cooldown = ClientNetworking.getAppropriateConfig().kingNothingSettings.kingNothingPhaseAttackCd;
@@ -1761,9 +1764,11 @@ public class PowersKingNothing extends NewDashPreset {
     public boolean dropPhaseItem() {
         StandEntity stand = getStandEntity(getSelf());
         if (!isClient()) {
+            Vec3 standPos = stand.getBoundingBox().getCenter();
             ItemEntity $$4 =
-                    new ItemEntity(this.getSelf().level(), stand.getX(), stand.getY() + (stand.getEyeHeight() / 2.0),
-                            stand.getZ(), stand.getHeldItem(), 0, 0.2, 0);
+                    new ItemEntity(this.getSelf().level(), standPos.x(),
+                            standPos.y(),
+                            standPos.z(), stand.getHeldItem(), 0, 0.2, 0);
             $$4.setPickUpDelay(40);
             $$4.setThrower(this.getSelf().getUUID());
             PowerTypes.copyPlaneOfExisting(self, $$4);
