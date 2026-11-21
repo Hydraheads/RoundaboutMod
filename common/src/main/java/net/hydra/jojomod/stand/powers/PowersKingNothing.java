@@ -635,7 +635,10 @@ public class PowersKingNothing extends NewDashPreset {
                 }
             }
         }
-        if (isTrackingMemorizedScent && (trackingCloud != null && trackingCloud.isRemoved())) {
+        if (isTrackingMemorizedScent && (trackingCloud != null && (trackingCloud.isRemoved() || trackingCloud.distanceToSqr(getSelf()) > 4096))) {
+            if (trackingCloud != null && !trackingCloud.isRemoved()) {
+                trackingCloud.discard();
+            }
             syncTracking(false);
             trackingCloud = null;
             playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);
@@ -866,7 +869,7 @@ public class PowersKingNothing extends NewDashPreset {
     public void tickPowerEnd() {
         super.tickPowerEnd();
         if (getSelf().isAlive() && !getSelf().isRemoved()) {
-            /**Tick Phase Grab*/
+            // Tick Phase
             if (isPhasing() && !this.isClient()) {
                 if (startPhaseTickAfter) {
                     startPhaseTickAfter = false;
