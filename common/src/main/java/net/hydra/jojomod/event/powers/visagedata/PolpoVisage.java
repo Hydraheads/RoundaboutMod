@@ -29,7 +29,7 @@ public class PolpoVisage extends VisageData{
     }
     @Override
     public Vec3i getHairColor(){
-        return new Vec3i(208,73,94);
+        return new Vec3i(65,52,44);
     }
     @Override
     public Vector3f scale(){
