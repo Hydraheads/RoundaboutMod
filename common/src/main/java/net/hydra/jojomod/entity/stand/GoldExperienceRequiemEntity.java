@@ -12,7 +12,9 @@ public class GoldExperienceRequiemEntity extends FollowingStandEntity {
     }
 
     public static final byte PART_5 = 0,
-            BETA = 1;
+            BETA = 1,
+            DIAMOND = 2,
+            GUARD = 3;
 
     public final AnimationState lifePunch = new AnimationState();
     public final AnimationState doublePunch = new AnimationState();

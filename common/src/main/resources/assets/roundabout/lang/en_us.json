@@ -282,6 +282,7 @@
   "item.roundabout.gold_experience_disc.desc": "Gold Experience",
   "item.roundabout.max_gold_experience_disc.desc": "Gold Experience",
   "item.roundabout.creative_gold_experience_requiem_disc.desc": "Gold Experience Requiem",
+  "item.roundabout.creative_gold_experience_requiem_disc.desc.short": "GE Requiem",
   "item.roundabout.lyin_eyes_disc.desc": "Lyin' Eyes",
   "item.roundabout.manhattan_transfer_disc.desc": "Manhattan Transfer",
   "item.roundabout.black_sabbath_disc.desc": "Black Sabbath",
@@ -3541,6 +3542,9 @@
 
   "skins.roundabout.gold_experience.base": "Part 5",
   "skins.roundabout.gold_experience.beta": "Beta",
+  "skins.roundabout.gold_experience.diamond": "Diamond Exp",
+  "skins.roundabout.gold_experience.guard": "Guard Exp",
+  "skins.roundabout.gold_experience.ps2": "PS2",
 
   "skins.roundabout.20_centuryboy.manga": "Manga",
   "skins.roundabout.20_centuryboy.bedrock": "Bedrock",

@@ -18,6 +18,7 @@ import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -214,5 +215,19 @@ public class PowersGER extends PowersGoldExperience {
         poseStand(OffsetIndex.ATTACK);
         return true;
     }
+
+    // for skins start
+
+    @Override
+    /**The stand is named on the disc so we just use that*/
+    public Component getStandName(){
+        ItemStack disc = ((StandUser)this.getSelf()).roundabout$getStandDisc();
+        if (!disc.isEmpty() && disc.getItem() instanceof StandDiscItem SDI){
+            return Component.translatable(SDI.getDescriptionId() + ".desc.short");
+        }
+        return Component.empty();
+    }
+
+    // for skins end
 
 }
