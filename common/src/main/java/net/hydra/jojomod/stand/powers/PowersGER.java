@@ -80,6 +80,10 @@ public class PowersGER extends PowersGoldExperience {
         super.addAdditionalSaveData(tag);
     }
 
+    protected boolean giveArrowOnLoad() {
+        return false; // prevent from the requiem transformation giving this arrow back before it is time
+    }
+
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         if (tag.contains("roundabout.originalDisc", 10)) {
@@ -112,7 +116,9 @@ public class PowersGER extends PowersGoldExperience {
             ((StandUser) self).roundabout$getStand().discard();
             ((StandUser) self).roundabout$setStand(null);
         }
-        ((StandUser) self).roundabout$summonStand(self.level(), true, true);
+        if (standArrow != null && !standArrow.isEmpty()) {
+            giveStandArrowBack();
+        }
     }
 
     public void tickPower() {
@@ -121,6 +127,7 @@ public class PowersGER extends PowersGoldExperience {
             resolvePoints -= 0.25f;
             if (resolvePoints <= 0f) {
                 goBackToGE();
+                ((StandUser) self).roundabout$summonStand(self.level(), true, true);
             }
         }
     }

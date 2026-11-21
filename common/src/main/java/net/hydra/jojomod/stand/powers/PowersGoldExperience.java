@@ -13,6 +13,7 @@ import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.*;
 import net.hydra.jojomod.entity.gold_experience.*;
 import net.hydra.jojomod.entity.projectile.*;
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.GoldExperienceEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
@@ -64,6 +65,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.monster.Creeper;
@@ -116,16 +118,48 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         tag.putFloat("resolvePoints", resolvePoints);
+        if (standArrow != null && !standArrow.isEmpty()) {
+            CompoundTag tag2 = new CompoundTag();
+            tag.put("StandArrow", standArrow.save(tag2));
+        }else {
+            tag.remove("StandArrow"); // dupe prevention
+        }
 
         super.addAdditionalSaveData(tag);
     }
+    protected boolean giveArrowOnLoad() {
+        return activePower != REQUIEM; // prevent from the requiem transformation giving this arrow back before it is time
+    }
+
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         if (tag.contains("resolvePoints")) {
             resolvePoints = tag.getFloat("resolvePoints");
         }
+        if (tag.contains("StandArrow")) {
+            CompoundTag compoundtag = tag.getCompound("StandArrow");
+            standArrow = ItemStack.of(compoundtag);
+            if (standArrow != null && !standArrow.isEmpty() && giveArrowOnLoad()) {
+                giveStandArrowBack();
+            }
+        }
 
         super.readAdditionalSaveData(tag);
+    }
+
+    protected void giveStandArrowBack() {
+        if (canAddItem(standArrow, ((Player) this.getSelf()).getInventory())) {
+            ((Player) this.getSelf()).addItem(standArrow);
+        } else {
+            ItemEntity $$4 = new ItemEntity(this.getSelf().level(), this.getSelf().getX(),
+                    this.getSelf().getY() + this.getSelf().getEyeHeight(), this.getSelf().getZ(),
+                    standArrow);
+            $$4.setPickUpDelay(40);
+            $$4.setThrower(this.getSelf().getUUID());
+            PowerTypes.copyPlaneOfExisting(self,$$4);
+            this.getSelf().level().addFreshEntity($$4);
+        }
+        standArrow = null;
     }
 
     @Override
@@ -2201,14 +2235,25 @@ public class PowersGoldExperience extends BlockGrabPreset {
             if (isPossibleToRequiem()) {
 
                 if (!isAppropriateToGrab()) {
-                    //putDownClient();
+                    putDownClient();
                 }
-                /*((StandUser) this.getSelf()).roundabout$tryIntPower(REQUIEM, true,
+
+                StandEntity standEntity = getStandEntity(self);
+
+                if (standEntity != null && standEntity.canAcquireHeldItem) {
+                    if ((this.getActivePower() == PowerIndex.POWER_2 || this.getActivePower() == PowerIndex.POWER_2_SNEAK
+                            || this.getActivePower() == PowerIndex.POWER_2_SNEAK_EXTRA)){
+                        this.addItem(standEntity);
+                        standEntity.setHeldItem(ItemStack.EMPTY);
+                    }
+                }
+
+                ((StandUser) this.getSelf()).roundabout$tryIntPower(REQUIEM, true,
                         ((Player) this.getSelf()).getInventory().selected);
                 tryIntPowerPacket(REQUIEM,
-                        ((Player) this.getSelf()).getInventory().selected);*/
-                ((StandUser) this.getSelf()).roundabout$tryPower(REQUIEM, true);
-                tryPowerPacket(REQUIEM);
+                        ((Player) this.getSelf()).getInventory().selected);
+                /*((StandUser) this.getSelf()).roundabout$tryPower(REQUIEM, true);
+                tryPowerPacket(REQUIEM);*/
 
                 return true;
             }
@@ -2268,9 +2313,23 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     // requiem animation start
 
+    // to make sure the arrow isn't lost
+    protected ItemStack standArrow = null;
+
     private boolean setRequiem() {
         StandEntity stand = getStandEntity(this.self);
-        if (Objects.nonNull(stand)) {
+        if (Objects.nonNull(stand) && !stand.isRemoved()) {
+            if (!this.getSelf().level().isClientSide()) {
+                ItemStack stack = ((Player)this.getSelf()).getInventory().getItem(this.grabInventorySlot);
+                if (stack.is(ModItems.STAND_ARROW) || stack.is(ModItems.STAND_BEETLE_ARROW)) {
+                    stand.canAcquireHeldItem = true;
+                    stand.setHeldItem(stack.copyWithCount(1));
+                    stack.shrink(1);
+                    standArrow = null;
+                }else {
+                    return false; // how isn't your main hand a stand arrow?
+                }
+            }
             this.setAttackTimeDuring(0);
             this.setActivePower(REQUIEM);
             //playSoundsIfNearby(IMPALE_NOISE, 27, false);
@@ -2282,8 +2341,15 @@ public class PowersGoldExperience extends BlockGrabPreset {
     }
 
     private void updateRequiem() {
+        if (!isClient() && standArrow == null && attackTimeDuring >= 20) {
+            StandEntity standEntity = ((StandUser)self).roundabout$getStand();
+            if (standEntity != null) {
+                standArrow = standEntity.getHeldItem();
+            }
+        }
+
         if (attackTimeDuring >= 240) {
-            setPowerNone();
+            //setPowerNone();
 
             ItemStack discy = ((StandUser)self).roundabout$getStandDisc();
             ItemStack savedDisc = MainUtil.saveToDiscData(self, discy);
@@ -2292,19 +2358,57 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
             ((StandUser)self).roundabout$setStandDisc(new ItemStack(ModItems.CREATIVE_STAND_DISC_GER));
             ((StandUser)self).roundabout$getStandPowers().onStandSwitchInto();
+            StandEntity GERequiem = null;
+
             if (((StandUser)self).roundabout$getStandPowers() instanceof PowersGER GER) {
                 GER.idlePos = idlePos;
                 GER.standSkin = standSkin;
                 GER.resolvePoints = resolvePoints;
 
                 GER.setOriginalDisc(savedDisc);
+
+                GERequiem = GER.getNewStandEntity();
             }
 
             if (((StandUser)self).roundabout$getStand() != null) {
-                ((StandUser)self).roundabout$getStand().discard();
-                ((StandUser)self).roundabout$setStand(null);
+                StandEntity oldMe = ((StandUser)self).roundabout$getStand();
+                if (GERequiem != null) {
+                    GERequiem.absMoveTo(oldMe.getX(), oldMe.getY(), oldMe.getZ(), oldMe.getYRot(), oldMe.getXRot());
+
+                    GERequiem.setSkin(((StandUser)self).roundabout$getStandSkin());
+                    GERequiem.setIdleAnimation(((StandUser)self).roundabout$getIdlePos());
+
+                    if (self instanceof Player PE) {
+                        GERequiem.playerSetProperties(PE);
+                        if (GERequiem instanceof FollowingStandEntity FE) {
+                            FE.setDistanceOut(((IPlayerEntity) PE).roundabout$getDistanceOut());
+                            FE.setAnchorPlace(((IPlayerEntity) PE).roundabout$getAnchorPlace());
+                            FE.setAnchorPlaceAttack(((IPlayerEntity) PE).roundabout$getAnchorPlaceAttack());
+                            FE.setSizePercent(((IPlayerEntity) PE).roundabout$getSizePercent());
+                            FE.setIdleRotation(((IPlayerEntity) PE).roundabout$getIdleRotation());
+                            FE.setIdleYOffset(((IPlayerEntity) PE).roundabout$getIdleYOffset());
+                        }
+                        if (!self.level().isClientSide()) {
+                            IPlayerEntity ipe = ((IPlayerEntity) self);
+                            S2CPacketUtil.sendPowerInventorySettings(
+                                    PE, ipe.roundabout$getAnchorPlace(),
+                                    ipe.roundabout$getDistanceOut(),
+                                    ipe.roundabout$getSizePercent(),
+                                    ipe.roundabout$getIdleRotation(),
+                                    ipe.roundabout$getIdleYOffset(),
+                                    ipe.roundabout$getAnchorPlaceAttack());
+                        }
+                    }
+                    oldMe.discard();
+                    self.level().addFreshEntity(GERequiem);
+                    ((StandUser)self).roundabout$standMount(GERequiem);
+                }
+            }else {
+                ((StandUser)self).roundabout$summonStand(self.level(), true, false);
             }
-            ((StandUser)self).roundabout$summonStand(self.level(), true, true);
+
+            ((StandUser)self).roundabout$setStand(GERequiem);
+
         }
     }
 
