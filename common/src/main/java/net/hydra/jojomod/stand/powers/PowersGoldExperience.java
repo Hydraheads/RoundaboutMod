@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -105,7 +106,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             TREE = 61,
             LIFE_SENSOR = 63,
             HEAL_CHARGE = 64,
-            REQUIEM = 65;
+            REQUIEM = 90;
 
     // move bytes found in other moves
     public static final byte ITEM_IMBUE = 62;
@@ -795,6 +796,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     @Override
     public boolean setPowerOther(int move, int lastMove) {
+        if (move == REQUIEM) {
+            //inventoryGrab();
+            return setRequiem();
+        }
+
         if (move == LIFE_PUNCH) {
             return startLifePunch();
         }
@@ -858,7 +864,12 @@ public class PowersGoldExperience extends BlockGrabPreset {
         else if (move == HEAL_CHARGE) {
             this.healOthers = (passedInt == 1);
             return false;
+        } else if (move == REQUIEM) {
+            grabInventorySlot = passedInt;
+            return false;
         }
+
+
         return super.tryIntPower(move, forced, passedInt);
     }
 
@@ -914,6 +925,13 @@ public class PowersGoldExperience extends BlockGrabPreset {
             updateRequiem();
         }
         super.updateUniqueMoves();
+    }
+
+    public boolean isAttackInept(byte activeP){
+        if (activeP == REQUIEM) {
+            return this.isDazed(this.self) || (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()));
+        }
+        return super.isAttackInept(activeP);
     }
 
     @Override
@@ -2115,11 +2133,18 @@ public class PowersGoldExperience extends BlockGrabPreset {
                     BlockPos groundPos = findGroundPosition(level, BlockPos.containing(targetX, this.self.getY(), targetZ));
 
                     if (groundPos != null) {
-                        GEThornEntity rootEntity = new GEThornEntity(ModEntities.GE_THORN, level);
-                        rootEntity.setOwner(this.getSelf());
-                        rootEntity.setPos(targetX, groundPos.getY() + 1.0, targetZ);
+                        Vec3 spawnPos = new Vec3(targetX, groundPos.getY() + 1.0, targetZ);
+                        boolean tooClose = !level.getEntitiesOfClass(
+                                GEThornEntity.class, new AABB(spawnPos, spawnPos).inflate(0.35D)).isEmpty();
 
-                        level.addFreshEntity(rootEntity);
+                        // z fighting fix. i couldn't find any other way to fix it, so i'm just gonna prevent them from overlapping in the first place.
+                        if (!tooClose) {
+                            GEThornEntity rootEntity = new GEThornEntity(ModEntities.GE_THORN, level);
+                            rootEntity.setOwner(this.getSelf());
+                            rootEntity.setPos(spawnPos.x, spawnPos.y, spawnPos.z);
+
+                            level.addFreshEntity(rootEntity);
+                        }
                     }
                 }
             }
@@ -2134,7 +2159,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // requiem system start
 
     @Override
-    public boolean canUseStandArrow() { return canUseRequiem(); }
+    public boolean canUseStandArrow() { return canUseRequiem() && ((StandUser)self).roundabout$getActive(); }
 
     @Override public boolean shouldStandArrowShake() { return isPossibleToRequiem() && canUseRequiem(); }
 
@@ -2166,14 +2191,33 @@ public class PowersGoldExperience extends BlockGrabPreset {
                             withStyle(ChatFormatting.YELLOW), true);
                 }
 
-                setRequiem();
-
-                return true;
+                return false;
             }else {
                 if (!isClient()) {
                     ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.requiem_failed").
                             withStyle(ChatFormatting.RED), true);
                 }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onStandArrowUseClient() {
+        if (this.self instanceof Player && activePower == PowerIndex.NONE) {
+            if (isPossibleToRequiem()) {
+
+                if (!isAppropriateToGrab()) {
+                    //putDownClient();
+                }
+                /*((StandUser) this.getSelf()).roundabout$tryIntPower(REQUIEM, true,
+                        ((Player) this.getSelf()).getInventory().selected);
+                tryIntPowerPacket(REQUIEM,
+                        ((Player) this.getSelf()).getInventory().selected);*/
+                ((StandUser) this.getSelf()).roundabout$tryPower(REQUIEM, true);
+                tryPowerPacket(REQUIEM);
+
+                return true;
             }
         }
         return false;
@@ -2231,20 +2275,24 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     // requiem animation start
 
-    private void setRequiem() {
-        this.setAttackTimeDuring(0);
-        setActivePower(REQUIEM);
-        //tryPower(REQUIEM, true);
-        //syncActivePower();
-
-        this.animateStand(GoldExperienceEntity.REQUIEM);
-        this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
+    private boolean setRequiem() {
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand)) {
+            this.setAttackTimeDuring(1);
+            this.setActivePower(REQUIEM);
+            //playSoundsIfNearby(IMPALE_NOISE, 27, false);
+            this.animateStand(GoldExperienceEntity.REQUIEM);
+            this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
+            return true;
+        }
+        return false;
     }
 
     private void updateRequiem() {
-        if (attackTimeDuring >= 240) {
+        if (attackTimeDuring > 240) {
+            Roundabout.LOGGER.info("update requiem");
             setPowerNone();
-            // TODO: Change to GER
+
             ItemStack discy = ((StandUser)self).roundabout$getStandDisc();
             ItemStack savedDisc = MainUtil.saveToDiscData(self, discy);
 
@@ -2259,8 +2307,6 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
                 GER.setOriginalDisc(savedDisc);
             }
-
-
 
             if (((StandUser)self).roundabout$getStand() != null) {
                 ((StandUser)self).roundabout$getStand().discard();

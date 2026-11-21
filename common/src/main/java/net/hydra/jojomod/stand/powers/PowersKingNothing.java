@@ -10,6 +10,7 @@ import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.LifePunchCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
@@ -98,7 +99,8 @@ public class PowersKingNothing extends NewDashPreset {
     // sounds
     public static final byte
             DISINTEGRATE = 32,
-            PHASE = 33;
+            PHASE = 33,
+            FOUND_ITEM = 34;
 
     public static final byte SYNC_TRACKING = 50;
 
@@ -126,6 +128,7 @@ public class PowersKingNothing extends NewDashPreset {
     public final Set<Entity> itemHoldingEntities = new HashSet<>();
     public final Set<BlockPos> itemHoldingBlocks = new HashSet<>();
     public final Set<Pair<BlockPos, BlockPos>> itemHoldingBlockPairs = new HashSet<>();
+    private boolean foundItemYet = false;
 
     // idk what this is exactly but its used in the phase grab stuff
     public Vec3 moveVec = Vec3.ZERO;
@@ -147,11 +150,10 @@ public class PowersKingNothing extends NewDashPreset {
     // anim stuff
     private boolean isOut = false;
     private int returnAnimTicks = 0;
+    private int summonAnimTicks = 0;
     private int disintegrateAnimTicks = 0;
 
     private boolean startPhaseTickAfter = false;
-    private boolean startingGrab = false;
-    private boolean startingItem = false;
 
     public PowersKingNothing(LivingEntity self) {
         super(self);
@@ -240,6 +242,9 @@ public class PowersKingNothing extends NewDashPreset {
             case PHASE -> {
                 return ModSounds.KING_NOTHING_PHASE_EVENT;
             }
+            case FOUND_ITEM -> {
+                return SoundEvents.EXPERIENCE_ORB_PICKUP;
+            }
         }
         return super.getSoundFromByte(soundChoice);
     }
@@ -311,6 +316,11 @@ public class PowersKingNothing extends NewDashPreset {
 
     public VisualData getVisualInfo() {
         return VISUAL_INFO.getOrDefault(standSkin, VISUAL_INFO.get(MANGA));
+    }
+
+    public boolean spawnsParticlesThisTick() {
+        return getSelf().tickCount
+                % ClientNetworking.getAppropriateConfig().kingNothingSettings.kingNothingParticleSpawnInterval == 0;
     }
 
     public ItemStack getMemorizedScentIcon() {
@@ -547,8 +557,20 @@ public class PowersKingNothing extends NewDashPreset {
         // handle idle stuffs
         if (getSelf().isAlive() && !getSelf().isRemoved() && getStandEntity(getSelf()) != null) {
             StandEntity stand = getStandEntity(getSelf());
+            if (stand.getAnimation() == KingNothingEntity.SUMMON) {
+                if (summonAnimTicks < 17) {
+                    summonAnimTicks++;
+                }
+                else {
+                    animateStand(StandEntity.IDLE);
+                    summonAnimTicks = 0;
+                }
+            }
+            else {
+                summonAnimTicks = 0;
+            }
             if (stand.getAnimation() == KingNothingEntity.RETURN) {
-                if (returnAnimTicks < 27) {
+                if (returnAnimTicks < 26) {
                     returnAnimTicks++;
                 }
                 else {
@@ -577,14 +599,23 @@ public class PowersKingNothing extends NewDashPreset {
         }
         if (getSelf().isAlive() && !getSelf().isRemoved() && isTrackingItem()) {
             Level level = getSelf().level();
-            float checkRangeEnt = 32;
+            float checkRangeEnt = 22;
             int checkRangeChest = 16;
             boolean foundTem = itemTrackEnt(checkRangeEnt, level);
             // chest code!!
             foundTem = itemTrackBlock(checkRangeChest, level) || foundTem;
+            if (foundTem && !foundItemYet) {
+                foundItemYet = true;
+                // FIND BETTER SOUND
+                if (this.self instanceof ServerPlayer pl) {
+                    S2CPacketUtil.sendPlaySoundPacket(pl, this.self.getId(), FOUND_ITEM);
+                }
+            }
             // passive particles
             if (!foundTem) {
-                if (this.getSelf().tickCount % 5 == 0) {
+                foundItemYet = false;
+                int particleInterval = ClientNetworking.getAppropriateConfig().kingNothingSettings.kingNothingParticleSpawnInterval;
+                if (particleInterval <= 5 ? this.getSelf().tickCount % 5 == 0 : spawnsParticlesThisTick()) {
                     VisualData pdata = getVisualInfo();
                     for (int i = 0; i < 2; i++) {
                         int color = getParticleColor(pdata);
@@ -601,7 +632,7 @@ public class PowersKingNothing extends NewDashPreset {
             trackingCloud = null;
             playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);
         }
-        if (getSelf().isAlive() && !getSelf().isRemoved() && trackingCloud != null) {
+        if (getSelf().isAlive() && !getSelf().isRemoved() && trackingCloud != null && spawnsParticlesThisTick()) {
             VisualData pdata = getVisualInfo();
             for (int i = 0; i < 2; i++) {
                 int color = getParticleColor(pdata);
@@ -630,7 +661,7 @@ public class PowersKingNothing extends NewDashPreset {
         if (!level.isClientSide()) {
             Set<BlockPos> locatedChests = new HashSet<>();
             for (BlockPos itpos : itter) {
-                // iterables are stupid
+                // this iterable in particular is stupid
                 BlockPos pos = new BlockPos(itpos);
                 boolean chestHasItem = false;
                 if (checked > 16) {
@@ -703,12 +734,15 @@ public class PowersKingNothing extends NewDashPreset {
                             pos.above()) instanceof RandomizableContainerBlockEntity) || otherChestPos != null && (
                             level.getBlockState(otherChestPos).isAir() || (level.getBlockEntity(
                                     otherChestPos.above()) instanceof RandomizableContainerBlockEntity)) ? 0 : 1);
-                    for (int i = 0; i < 2 + (otherChestPos == null ? 0 : 2); i++) {
-                        int color = getParticleColor(pdata);
-                        MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
-                                PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
-                                spawnPos.x(), spawnPos.y() + yOffset, spawnPos.z(), 1 + (otherChestPos == null ? 0 : 1),
-                                0.1 + xSpreadBonus, 0.1, 0.1 + zSpreadBonus, 0.01);
+                    if (spawnsParticlesThisTick()) {
+                        for (int i = 0; i < 2 + (otherChestPos == null ? 0 : 2); i++) {
+                            int color = getParticleColor(pdata);
+                            MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
+                                    PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
+                                    spawnPos.x(), spawnPos.y() + yOffset, spawnPos.z(),
+                                    1 + (otherChestPos == null ? 0 : 1),
+                                    0.1 + xSpreadBonus, 0.1, 0.1 + zSpreadBonus, 0.01);
+                        }
                     }
                 }
                 else {
@@ -766,6 +800,19 @@ public class PowersKingNothing extends NewDashPreset {
                     }
                     foundItem = true;
                 }
+                if (!foundItem && checkedEnt instanceof D4CCloneEntity D4C) {
+                    if (D4C.inventory.countItem(trackedItem) > 0) {
+                        if (!level.isClientSide() && !itemHoldingEntities.contains(ent)) {
+                            S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) getSelf()),
+                                    PacketDataIndex.S2C_KN_ADD_HIGHLIGHT_ENTITY, ent.getId());
+                        }
+                        foundItem = true;
+                    }
+                    else if (!level.isClientSide() && itemHoldingEntities.contains(ent)) {
+                        S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) getSelf()),
+                                PacketDataIndex.S2C_KN_REMOVE_HIGHLIGHT_ENTITY, ent.getId());
+                    }
+                }
                 if (!foundItem && checkedEnt instanceof CloneEntity CE && (CE instanceof KingCrimsonCloneEntity || (
                         CE instanceof LifePunchCloneEntity && !CE.getPlayer().is(getSelf())))) {
                     checkedEnt = CE.getPlayer();
@@ -785,7 +832,7 @@ public class PowersKingNothing extends NewDashPreset {
                 }
                 if (foundItem) {
                     foundTem = true;
-                    if (!level.isClientSide()) {
+                    if (!level.isClientSide() && spawnsParticlesThisTick()) {
                         VisualData pdata = getVisualInfo();
                         for (int j = 0; j < 2; j++) {
                             int color = getParticleColor(pdata);
@@ -811,26 +858,13 @@ public class PowersKingNothing extends NewDashPreset {
     public void tickPowerEnd() {
         super.tickPowerEnd();
         if (getSelf().isAlive() && !getSelf().isRemoved()) {
-            if (startPhaseTickAfter) {
-                boolean didAnything = false;
-                startPhaseTickAfter = false;
-                if (startingGrab) {
-                    phaseGrab();
-                    didAnything = true;
-                }
-                else if (startingItem) {
-                    phaseItem();
-                    didAnything = true;
-                }
-                if (didAnything) {
-                    getStandEntity(getSelf()).setFadePercent(100);
-                }
-                startingGrab = false;
-                startingItem = false;
-            }
             /**Tick Phase Grab*/
             if (isPhasing() && !this.isClient()) {
-                if (this.attackTimeDuring == 108) {
+                if (startPhaseTickAfter) {
+                    startPhaseTickAfter = false;
+                    startPhaseMovement(getStandEntity(getSelf()));
+                }
+                else if (this.attackTimeDuring == 108) {
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                     playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);
                     animateStand(KingNothingEntity.RETURN);
@@ -843,11 +877,14 @@ public class PowersKingNothing extends NewDashPreset {
                         double x = BB1.getCenter().x();
                         double y = BB1.getCenter().y() + (((FollowingStandEntity) stand).getSizePercent() - 1) / 2;
                         double z = BB1.getCenter().z();
-                        for (int i = 0; i < 2; i++) {
-                            int color = getParticleColor(pdata);
-                            MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
-                                    PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color), x, y,
-                                    z, 1, 0.1, 0.1, 0.1, 0.01);
+                        if (spawnsParticlesThisTick()) {
+                            for (int i = 0; i < 2; i++) {
+                                int color = getParticleColor(pdata);
+                                MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
+                                        PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
+                                        x, y,
+                                        z, 1, 0.1, 0.1, 0.1, 0.01);
+                            }
                         }
                         Vec3 vec3d = this.getSelf().getEyePosition(0);
                         Vec3 vec3d2 = this.getSelf().getViewVector(0);
@@ -1264,6 +1301,7 @@ public class PowersKingNothing extends NewDashPreset {
                 playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);
             }
             trackedItem = null;
+            foundItemYet = false;
             dimension = getSelf().level().dimension();
         }
         return true;
@@ -1300,6 +1338,7 @@ public class PowersKingNothing extends NewDashPreset {
     public boolean endItemTrack() {
         if (isTrackingItem() && !onCooldown(PowerIndex.SKILL_1_SNEAK)) {
             this.trackedItem = null;
+            this.foundItemYet = false;
             this.itemHoldingEntities.clear();
             this.itemHoldingBlocks.clear();
             disintegrateAnimTicks = 0;
@@ -1358,13 +1397,8 @@ public class PowersKingNothing extends NewDashPreset {
     public boolean phaseGrab() {
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)) {
-            if (startPhaseTickAfter) {
-                startingGrab = true;
-            }
-            else {
-                this.setActivePower(PowerIndex.POWER_2);
-                startPhaseMovement(stand);
-            }
+            this.setActivePower(PowerIndex.POWER_2);
+            startPhaseMovement(stand);
             return true;
         }
         return false;
@@ -1388,10 +1422,6 @@ public class PowersKingNothing extends NewDashPreset {
     public boolean phaseItem() {
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)) {
-            if (startPhaseTickAfter) {
-                startingItem = true;
-                return true;
-            }
             if (this.inventoryGrab()) {
                 this.setActivePower(PowerIndex.POWER_2_SNEAK);
                 startPhaseMovement(stand);
@@ -1402,22 +1432,24 @@ public class PowersKingNothing extends NewDashPreset {
     }
 
     public void startPhaseMovement(StandEntity stand) {
-        this.poseStand(OffsetIndex.LOOSE);
-        animateStand(KingNothingEntity.REACH);
-        this.attackTimeDuring = 0;
-        playSoundsIfNearby(PHASE, 27, false);
+        if (!startPhaseTickAfter) {
+            this.poseStand(OffsetIndex.LOOSE);
+            animateStand(KingNothingEntity.REACH);
+            this.attackTimeDuring = 0;
+            playSoundsIfNearby(PHASE, 27, false);
 
-        Vec2 twoVec = new Vec2((this.getSelf().getYHeadRot() % 360), (this.getSelf().getXRot()));
-        Direction gdir = ((IGravityEntity) this.self).roundabout$getGravityDirection();
-        Vec2 twoVecGrav = RotationUtil.rotPlayerToWorld(twoVec, gdir);
-        Vec3 threeVec = new Vec3(0, 0.25, 0);
-        threeVec = RotationUtil.vecPlayerToWorld(threeVec, gdir);
+            Vec2 twoVec = new Vec2((this.getSelf().getYHeadRot() % 360), (this.getSelf().getXRot()));
+            Direction gdir = ((IGravityEntity) this.self).roundabout$getGravityDirection();
+            Vec2 twoVecGrav = RotationUtil.rotPlayerToWorld(twoVec, gdir);
+            Vec3 threeVec = new Vec3(0, 0.25, 0);
+            threeVec = RotationUtil.vecPlayerToWorld(threeVec, gdir);
 
-        stand.setYRot(twoVec.x);
-        stand.setXRot(twoVec.y);
-        moveVec = DamageHandler.getRotationVector(twoVecGrav.y, twoVecGrav.x).scale(1.8).add(threeVec.x,
-                threeVec.y, threeVec.z);
-        stand.setPos(this.getSelf().getPosition(1).add(moveVec));
+            stand.setYRot(twoVec.x);
+            stand.setXRot(twoVec.y);
+            moveVec = DamageHandler.getRotationVector(twoVecGrav.y, twoVecGrav.x).scale(1.8).add(threeVec.x,
+                    threeVec.y, threeVec.z);
+            stand.setPos(this.getSelf().getPosition(1).add(moveVec));
+        }
     }
 
     public boolean inventoryGrab() {
@@ -1751,6 +1783,7 @@ public class PowersKingNothing extends NewDashPreset {
             }
             this.isOut = false;
             this.trackedItem = null;
+            this.foundItemYet = false;
             this.itemHoldingEntities.clear();
             this.itemHoldingBlocks.clear();
             this.trackingCloudOut = false;
@@ -1761,8 +1794,9 @@ public class PowersKingNothing extends NewDashPreset {
         }
         else if (!isOut && canSummonStandAsEntity()) {
             isOut = true;
+            summonAnimTicks = 0;
             returnAnimTicks = 0;
-            animateStand(KingNothingEntity.RETURN);
+            animateStand(KingNothingEntity.SUMMON);
             startPhaseTickAfter = true;
         }
     }

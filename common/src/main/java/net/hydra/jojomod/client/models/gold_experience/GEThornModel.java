@@ -35,20 +35,22 @@ public class GEThornModel extends HierarchicalModel<GEThornEntity> {
 
         PartDefinition vine = partdefinition.addOrReplaceChild("vine", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
 
-        PartDefinition f1 = vine.addOrReplaceChild("f1", CubeListBuilder.create().texOffs(-16, 0).addBox(-8.0F, -0.25F, -8.0F, 16.0F, 0.0F, 16.0F, new CubeDeformation(0.0F))
-                .texOffs(32, -12).addBox(0.0F, -6.25F, -6.0F, 0.0F, 6.0F, 12.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition f1 = vine.addOrReplaceChild("f1", CubeListBuilder.create().texOffs(-16, 0).addBox(-8.0F, -0.25F, -8.0F, 16.0F, 0.01F, 16.0F, new CubeDeformation(0.0F))
+                .texOffs(32, -12).addBox(-0.005F, -6.25F, -6.0F, 0.01F, 6.0F, 12.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition cube_r1 = f1.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(32, -12).addBox(0.0F, -4.5F, -6.0F, 0.0F, 6.0F, 12.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -1.75F, 0.0F, 0.0F, -1.5708F, 0.0F));
+        PartDefinition cube_r1 = f1.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(32, -12).addBox(-0.005F, -4.5F, -6.0F, 0.01F, 6.0F, 12.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -1.75F, 0.0F, 0.0F, -1.5708F, 0.0F));
 
-        PartDefinition f2 = vine.addOrReplaceChild("f2", CubeListBuilder.create().texOffs(-16, 16).addBox(-8.0F, -0.25F, -8.0F, 16.0F, 0.0F, 16.0F, new CubeDeformation(0.0F))
-                .texOffs(32, -6).addBox(0.0F, -6.25F, -6.0F, 0.0F, 6.0F, 12.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition f2 = vine.addOrReplaceChild("f2", CubeListBuilder.create().texOffs(-16, 16).addBox(-8.0F, -0.27F, -8.0F, 16.0F, 0.01F, 16.0F, new CubeDeformation(0.0F))
+                .texOffs(32, -6).addBox(0.01F, -6.25F, -6.0F, 0.01F, 6.0F, 12.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition cube_r2 = f2.addOrReplaceChild("cube_r2", CubeListBuilder.create().texOffs(32, -6).addBox(0.0F, -4.5F, -6.0F, 0.0F, 6.0F, 12.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -1.75F, 0.0F, 0.0F, -1.5708F, 0.0F));
+        PartDefinition cube_r2 = f2.addOrReplaceChild("cube_r2", CubeListBuilder.create()
+                .texOffs(32, -6).addBox(0.01F, -4.5F, -6.0F, 0.01F, 6.0F, 12.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -1.75F, 0.0F, 0.0F, -1.5708F, 0.0F));
 
-        PartDefinition f3 = vine.addOrReplaceChild("f3", CubeListBuilder.create().texOffs(-16, 32).addBox(-8.0F, -0.25F, -8.0F, 16.0F, 0.0F, 16.0F, new CubeDeformation(0.0F))
-                .texOffs(32, 0).addBox(0.0F, -6.25F, -6.0F, 0.0F, 6.0F, 12.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition f3 = vine.addOrReplaceChild("f3", CubeListBuilder.create().texOffs(-16, 32).addBox(-8.0F, -0.29F, -8.0F, 16.0F, 0.01F, 16.0F, new CubeDeformation(0.0F))
+                .texOffs(32, 0).addBox(-0.02F, -6.25F, -6.0F, 0.01F, 6.0F, 12.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition cube_r3 = f3.addOrReplaceChild("cube_r3", CubeListBuilder.create().texOffs(32, 0).addBox(0.0F, -4.5F, -6.0F, 0.0F, 6.0F, 12.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -1.75F, 0.0F, 0.0F, -1.5708F, 0.0F));
+        PartDefinition cube_r3 = f3.addOrReplaceChild("cube_r3", CubeListBuilder.create()
+                .texOffs(32, 0).addBox(-0.02F, -4.5F, -6.0F, 0.01F, 6.0F, 12.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -1.75F, 0.0F, 0.0F, -1.5708F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 64, 64);
     }
