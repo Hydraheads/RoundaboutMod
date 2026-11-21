@@ -2126,11 +2126,18 @@ public class PowersGoldExperience extends BlockGrabPreset {
                     BlockPos groundPos = findGroundPosition(level, BlockPos.containing(targetX, this.self.getY(), targetZ));
 
                     if (groundPos != null) {
-                        GEThornEntity rootEntity = new GEThornEntity(ModEntities.GE_THORN, level);
-                        rootEntity.setOwner(this.getSelf());
-                        rootEntity.setPos(targetX, groundPos.getY() + 1.0, targetZ);
+                        Vec3 spawnPos = new Vec3(targetX, groundPos.getY() + 1.0, targetZ);
+                        boolean tooClose = !level.getEntitiesOfClass(
+                                GEThornEntity.class, new AABB(spawnPos, spawnPos).inflate(0.35D)).isEmpty();
 
-                        level.addFreshEntity(rootEntity);
+                        // z fighting fix. i couldn't find any other way to fix it, so i'm just gonna prevent them from overlapping in the first place.
+                        if (!tooClose) {
+                            GEThornEntity rootEntity = new GEThornEntity(ModEntities.GE_THORN, level);
+                            rootEntity.setOwner(this.getSelf());
+                            rootEntity.setPos(spawnPos.x, spawnPos.y, spawnPos.z);
+
+                            level.addFreshEntity(rootEntity);
+                        }
                     }
                 }
             }
