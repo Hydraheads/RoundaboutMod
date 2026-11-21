@@ -150,7 +150,7 @@ public class PowersGER extends PowersGoldExperience {
             if (culprit instanceof Mob mb && !MainUtil.isBossMob(mb)){
                 mb.getNavigation().stop();
                 if (!MainUtil.blockConfusionTicks(mb)) {
-                    ((IMob) mb).roundabout$setConfusionTicks(7);
+                    ((IMob) mb).roundabout$setConfusionTicks(15);
                 }
             }
 

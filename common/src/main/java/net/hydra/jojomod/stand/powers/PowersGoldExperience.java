@@ -900,7 +900,6 @@ public class PowersGoldExperience extends BlockGrabPreset {
             return false;
         } else if (move == REQUIEM) {
             grabInventorySlot = passedInt;
-            return false;
         }
 
 
