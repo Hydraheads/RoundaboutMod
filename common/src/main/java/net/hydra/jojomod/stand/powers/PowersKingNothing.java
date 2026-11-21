@@ -94,7 +94,8 @@ public class PowersKingNothing extends NewDashPreset {
             WARDEN = 5,
             SNIFFER = 6,
             SOMETHING = 7,
-            RAM = 8;
+            RAM = 8,
+            CHRISTMAS = 9;
 
     // sounds
     public static final byte
@@ -122,6 +123,7 @@ public class PowersKingNothing extends NewDashPreset {
         VISUAL_INFO.put(SNIFFER, new VisualData(0x93311d, 0x459d8a, 0x459d8a, 0.25f));
         VISUAL_INFO.put(SOMETHING, new VisualData(0xA8DF81, 0x58E990, 0xA8DF81, 0.2f));
         VISUAL_INFO.put(RAM, new VisualData(0xde9c64, 0xd77f5b, 0xde9c64, 0.2f));
+        VISUAL_INFO.put(CHRISTMAS, new VisualData(0xec4040, 0xe6e1e1, 0xec4040, 0.2f));
     }
 
     // item tracking sets
@@ -165,6 +167,7 @@ public class PowersKingNothing extends NewDashPreset {
         $$1.add(MANGA);
         $$1.add(SPINE);
         $$1.add(SOMETHING);
+        $$1.add(CHRISTMAS);
         $$1.add(NOTE);
         $$1.add(WARDEN);
         $$1.add(SNIFFER);
@@ -182,6 +185,7 @@ public class PowersKingNothing extends NewDashPreset {
             case SNIFFER -> "sniffer";
             case SOMETHING -> "something";
             case RAM -> "ram";
+            case CHRISTMAS -> "christmas";
             default -> "manga";
         };
     }
