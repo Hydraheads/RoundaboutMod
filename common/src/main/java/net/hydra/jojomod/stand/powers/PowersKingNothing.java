@@ -864,7 +864,7 @@ public class PowersKingNothing extends NewDashPreset {
                     startPhaseTickAfter = false;
                     startPhaseMovement(getStandEntity(getSelf()));
                 }
-                if (this.attackTimeDuring == 108) {
+                else if (this.attackTimeDuring == 108) {
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                     playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);
                     animateStand(KingNothingEntity.RETURN);
