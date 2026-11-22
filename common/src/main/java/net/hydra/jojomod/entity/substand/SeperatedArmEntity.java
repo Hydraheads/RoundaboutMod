@@ -476,8 +476,10 @@ public class SeperatedArmEntity extends StandEntity {
                     }doAttack();
                 }
                 attractMobs();
-                pickUpItems();
                 doSpin();
+                if (grabbedEntity == null){
+                    pickUpItems();
+                }
 
                 if (FireworkLaunchTicks > 0) {
                     FireworkLaunchTicks--;
@@ -825,8 +827,6 @@ public class SeperatedArmEntity extends StandEntity {
                                 if (grabbedEntity == null) {
                                     grabbedEntity = entity;
                                     chokeTimer = 80;
-                                    spawnAtLocation(this.getMainHandItem());
-                                    this.entityData.set(HELD_ITEM,this.getMainHandItem());
                                 }
                             }
                         }
