@@ -1792,6 +1792,9 @@ public class PowersKingNothing extends NewDashPreset {
                 else if (held.getItem() instanceof EnderpearlItem) {
                     projectile = new ThrownEnderpearl(this.getSelf().level(), getSelf());
                     projectile.setPos(standPos);
+                    if (getSelf() instanceof Player PE) {
+                        PE.getCooldowns().addCooldown(held.getItem(), 20);
+                    }
                 }
                 else if (held.getItem() instanceof SnowballItem) {
                     projectile = new Snowball(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z());
@@ -1799,6 +1802,30 @@ public class PowersKingNothing extends NewDashPreset {
                 else if (held.getItem() instanceof GasolineCanItem) {
                     projectile =
                             new GasolineCanEntity(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z());
+                    if (getSelf() instanceof Player PE) {
+                        PE.getCooldowns().addCooldown(held.getItem(), 40);
+                        Inventory inv = PE.getInventory();
+                        for (ItemStack stack : inv.items) {
+                            if (stack.getItem() instanceof BowItem) {
+                                PE.getCooldowns().addCooldown(stack.getItem(), 30);
+                            }
+                        }
+                        for (ItemStack stack : inv.offhand) {
+                            if (stack.getItem() instanceof CrossbowItem) {
+                                PE.getCooldowns().addCooldown(stack.getItem(), 30);
+                            }
+                        }
+
+                        PE.getCooldowns().addCooldown(Items.FLINT_AND_STEEL, 30);
+                        PE.getCooldowns().addCooldown(Items.FIRE_CHARGE, 30);
+                        PE.getCooldowns().addCooldown(Items.BOW, 30);
+                        PE.getCooldowns().addCooldown(ModItems.MATCH, 30);
+                        PE.getCooldowns().addCooldown(ModItems.GASOLINE_BUCKET, 30);
+                        PE.getCooldowns().addCooldown(ModItems.IRON_BALL_CROSSBOW, 30);
+                        PE.getCooldowns().addCooldown(Items.LAVA_BUCKET, 30);
+                        PE.getCooldowns().addCooldown(Items.CROSSBOW, 30);
+                        PE.getCooldowns().addCooldown(ModItems.MATCH_BUNDLE, 30);
+                    }
                 }
                 else if (held.is(ModItems.MATCH)) {
                     projectile = new MatchEntity(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z());
