@@ -397,6 +397,8 @@ public interface StandUser {
     void DoMoldTick();
     void SetInMoldTicks(int e);
     int getMoldTicks();
+    void setMoldSkin(byte b);
+    byte getMoldSkin();
     void MoldFieldExit();
     void rdbt$SetCrawlTicks(int ticks);
 

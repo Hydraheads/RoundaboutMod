@@ -12,7 +12,6 @@ import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.SilverChariotMountEntity;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
-import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.substand.PurpleSmokeEntity;
 import net.hydra.jojomod.event.ModEffects;
@@ -36,7 +35,6 @@ import net.hydra.jojomod.event.powers.visagedata.JosukePartEightVisage;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
-import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.Util;
@@ -61,7 +59,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
@@ -233,7 +230,10 @@ public abstract class HudRendering implements IHudAccess {
 
                 }
                 if(MainUtil.isInMold(this.minecraft.player)) {
-                    this.renderTextureOverlay($$1, StandIcons.MOLD_OVERLAY, 0.7F);
+                    RenderSystem.enableBlend();
+                    float[] moldTint = roundabout$getMoldTint(MainUtil.getMoldSkin(this.minecraft.player));
+                    roundabout$renderTextureOverlay($$1, StandIcons.MOLD_OVERLAY, 0.7F,
+                            moldTint[0], moldTint[1], moldTint[2]);
                 }
                 //Purple Haze overlay
                 if (MainUtil.isInPurpleHaze(this.minecraft.player)) {
@@ -487,6 +487,14 @@ public abstract class HudRendering implements IHudAccess {
     @Unique
     private static float[] roundabout$getPurpleHazeTint(byte skin) {
         int color = PurpleSmokeEntity.SKIN_COLORS.getOrDefault(skin, PurpleSmokeEntity.DEFAULT_HAZE_COLOR);
+        float r = ((color >> 16) & 0xFF) / 255.0F;
+        float g = ((color >> 8) & 0xFF) / 255.0F;
+        float b = (color & 0xFF) / 255.0F;
+        return new float[]{r, g, b};
+    }
+    @Unique
+    private static float[] roundabout$getMoldTint(byte skin) {
+        int color = PowersGreenDay.MOLD_COLOR_MAP.getOrDefault(skin, PowersGreenDay.defaultMoldColor());
         float r = ((color >> 16) & 0xFF) / 255.0F;
         float g = ((color >> 8) & 0xFF) / 255.0F;
         float b = (color & 0xFF) / 255.0F;

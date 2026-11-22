@@ -31,6 +31,7 @@ import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
+import net.hydra.jojomod.entity.substand.MoldSporesEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.ModEffects;
@@ -4651,6 +4652,13 @@ public class MainUtil {
             return ((StandUser) LE).getMoldTicks() > 0;
         }
         return false;
+    }
+
+    public static byte getMoldSkin(Entity ent) {
+        if (ent instanceof LivingEntity LE) {
+            return ((StandUser) LE).getMoldSkin();
+        }
+        return PowersGreenDay.PART_FIVE_GREEN_DAY;
     }
 
     public static Boolean isInPurpleHaze(Entity entity) {
