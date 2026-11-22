@@ -66,7 +66,7 @@ public abstract class FirearmItem extends Item {
     public FirearmItem(Item.Properties $$3) {
         super($$3);
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Tool modifier", -2, AttributeModifier.Operation.ADDITION));
+        builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Tool modifier", -1.3, AttributeModifier.Operation.ADDITION));
         this.defaultModifiers = builder.build();
 
     }
@@ -160,9 +160,7 @@ public abstract class FirearmItem extends Item {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
         if (!(itemStack.getItem() instanceof FirearmItem)) return InteractionResultHolder.fail(itemStack);
-        if(player.getAttackStrengthScale(1) < 1F || (player.level().isClientSide && ClientUtil.hasAttributeSwapped(Minecraft.getInstance())) ) {
-            return InteractionResultHolder.fail(itemStack);
-        }
+
 
         if ((isCrouchingOrSomething(player, itemStack) && hasAmmoInInventory(player) && getAmmo(itemStack) != getMaxAmmo()) || (isCrouchingOrSomething(player, itemStack) && player.isCreative())) {
             if (!isReloading(itemStack)) {

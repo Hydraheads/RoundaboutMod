@@ -6,6 +6,7 @@ import net.hydra.jojomod.client.models.WornBloodyStoneMaskModel;
 import net.hydra.jojomod.client.models.WornStoneMaskModel;
 import net.hydra.jojomod.client.models.layers.DiverArmsLayer;
 import net.hydra.jojomod.client.models.layers.DiverLegsLayer;
+import net.hydra.jojomod.client.models.layers.FalconShoulderLayer;
 import net.hydra.jojomod.client.models.layers.SilverChariotArmsLayer;
 import net.hydra.jojomod.client.models.minions.head_parts.*;
 import net.hydra.jojomod.client.models.projectile.*;
@@ -159,6 +160,8 @@ public class ModStrayModels {
     public static DiverArmsLayer diverArmsLayer;
     public static DiverLegsLayer diverLegsLayer;
     public static SilverChariotArmsLayer chariotArmsLayer;
+
+    public static FalconShoulderLayer falconShoulderLayer;
 
     public static RoadRollerStrayModel ROAD_ROLLER;
 

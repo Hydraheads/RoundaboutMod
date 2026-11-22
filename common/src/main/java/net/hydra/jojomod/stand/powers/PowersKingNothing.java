@@ -29,7 +29,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.*;
-import net.hydra.jojomod.particles.PuzzleColorParticleOptions;
+import net.hydra.jojomod.particles.ColorParticleOptions;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
@@ -630,7 +630,7 @@ public class PowersKingNothing extends NewDashPreset {
                         int color = getParticleColor(pdata);
                         Vec3 offset = getSelf().getEyePosition().offsetRandom(level.getRandom(), 5);
                         MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
-                                PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
+                                ColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
                                 offset.x(), offset.y(), offset.z(), 1, 0.5, 0.5, 0.5, 0.05);
                     }
                 }
@@ -649,7 +649,7 @@ public class PowersKingNothing extends NewDashPreset {
             for (int i = 0; i < 2; i++) {
                 int color = getParticleColor(pdata);
                 MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
-                        PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
+                        ColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
                         trackingCloud.getX(), trackingCloud.getY(), trackingCloud.getZ(), 1, 0.1, 0.1, 0.1, 0.01);
             }
         }
@@ -750,7 +750,7 @@ public class PowersKingNothing extends NewDashPreset {
                         for (int i = 0; i < 2 + (otherChestPos == null ? 0 : 2); i++) {
                             int color = getParticleColor(pdata);
                             MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
-                                    PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
+                                    ColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
                                     spawnPos.x(), spawnPos.y() + yOffset, spawnPos.z(),
                                     1 + (otherChestPos == null ? 0 : 1),
                                     0.1 + xSpreadBonus, 0.1, 0.1 + zSpreadBonus, 0.01);
@@ -847,7 +847,7 @@ public class PowersKingNothing extends NewDashPreset {
                         for (int j = 0; j < 2; j++) {
                             int color = getParticleColor(pdata);
                             MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
-                                    PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
+                                    ColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
                                     ent.getX(), ent.getY() + ent.getEyeHeight() + 0.5, ent.getZ(), 1, 0.1, 0.05, 0.1,
                                     0.01);
                         }
@@ -884,14 +884,14 @@ public class PowersKingNothing extends NewDashPreset {
                     if (Objects.nonNull(stand)) {
                         VisualData pdata = getVisualInfo();
                         AABB BB1 = stand.getBoundingBox();
-                        double x = BB1.getCenter().x();
-                        double y = BB1.getCenter().y() + (((FollowingStandEntity) stand).getSizePercent() - 1) / 2;
-                        double z = BB1.getCenter().z();
-                        if (spawnsParticlesThisTick()) {
+                        if (spawnsParticlesThisTick() && ClientNetworking.getAppropriateConfig().kingNothingSettings.spawnPhaseGrabParticles) {
+                            double x = BB1.getCenter().x();
+                            double y = BB1.getCenter().y() + (((FollowingStandEntity) stand).getSizePercent() - 1) / 2;
+                            double z = BB1.getCenter().z();
                             for (int i = 0; i < 2; i++) {
                                 int color = getParticleColor(pdata);
                                 MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
-                                        PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
+                                        ColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
                                         x, y,
                                         z, 1, 0.1, 0.1, 0.1, 0.01);
                             }
@@ -1184,7 +1184,7 @@ public class PowersKingNothing extends NewDashPreset {
     public void powerActivate(PowerContext context) {
         if ((context == PowerContext.SKILL_1_NORMAL || context == PowerContext.SKILL_1_CROUCH)) {
             if (getActivePower() == PowerIndex.POWER_2_SNEAK && getStandEntity(getSelf()) != null) {
-                tryDropPhaseItem();
+                tryPhaseDropItem();
                 return;
             }
             else if (isTrackingItem()) {
@@ -1242,7 +1242,10 @@ public class PowersKingNothing extends NewDashPreset {
                 return this.formPredict();
             }
             case PowerIndex.EXTRA -> {
-                return this.dropPhaseItem();
+                return this.phaseDropItem(true);
+            }
+            case PowerIndex.EXTRA_2_FINISH -> {
+                return this.phaseDropItem(false);
             }
             case PowerIndex.EXTRA_2 -> {
                 return this.endItemTrack();
@@ -1381,9 +1384,15 @@ public class PowersKingNothing extends NewDashPreset {
         }
     }
 
-    public void tryDropPhaseItem() {
-        getStandUserSelf().roundabout$tryPower(PowerIndex.EXTRA, true);
-        tryPowerPacket(PowerIndex.EXTRA);
+    public void tryPhaseDropItem() {
+        if (isHoldingSneak()) {
+            getStandUserSelf().roundabout$tryPower(PowerIndex.EXTRA_2_FINISH, true);
+            tryPowerPacket(PowerIndex.EXTRA_2_FINISH);
+        }
+        else {
+            getStandUserSelf().roundabout$tryPower(PowerIndex.EXTRA, true);
+            tryPowerPacket(PowerIndex.EXTRA);
+        }
     }
 
     public void phaseGrabClient() {
@@ -1762,47 +1771,60 @@ public class PowersKingNothing extends NewDashPreset {
         }
     }
 
-    public boolean dropPhaseItem() {
+    public boolean phaseDropItem(boolean doInteractions) {
         StandEntity stand = getStandEntity(getSelf());
         if (!isClient()) {
             ItemStack held = stand.getHeldItem();
             Vec3 standPos = stand.getBoundingBox().getCenter();
-            Projectile projectile = null;
-            if (held.getItem() instanceof ThrowablePotionItem) {
-                projectile = new ThrownPotion(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z());
-            }
-            else if (held.getItem() instanceof EggItem) {
-                projectile = new ThrownEgg(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z());
-            }
-            else if (held.getItem() instanceof ExperienceBottleItem) {
-                projectile = new ThrownExperienceBottle(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z());
-            }
-            else if (held.getItem() instanceof EnderpearlItem) {
-                projectile = new ThrownEnderpearl(this.getSelf().level(), getSelf());
-                projectile.setPos(standPos);
-            }
-            else if (held.getItem() instanceof SnowballItem) {
-                projectile = new Snowball(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z());
-            }
-            else if (held.getItem() instanceof GasolineCanItem) {
-                projectile = new GasolineCanEntity(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z());
-            }
-            else if (held.is(ModItems.MATCH)) {
-                projectile = new MatchEntity(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z());
-            }
-            else if (held.is(ModItems.KNIFE)) {
-                projectile = new KnifeEntity(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z());
-            }
-            if (projectile != null) {
-                if (projectile instanceof ThrowableItemProjectile TP) {
-                    TP.setItem(held);
+            boolean specialInteraction = false;
+            if (doInteractions) {
+                Projectile projectile = null;
+                if (held.getItem() instanceof ThrowablePotionItem) {
+                    projectile = new ThrownPotion(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z());
                 }
-                projectile.setDeltaMovement(0, 0.2, 0);
-                projectile.setOwner(this.getSelf());
-                PowerTypes.copyPlaneOfExisting(self, projectile);
-                this.getSelf().level().addFreshEntity(projectile);
+                else if (held.getItem() instanceof EggItem) {
+                    projectile = new ThrownEgg(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z());
+                }
+                else if (held.getItem() instanceof ExperienceBottleItem) {
+                    projectile = new ThrownExperienceBottle(this.getSelf().level(), standPos.x(), standPos.y(),
+                            standPos.z());
+                }
+                else if (held.getItem() instanceof EnderpearlItem) {
+                    projectile = new ThrownEnderpearl(this.getSelf().level(), getSelf());
+                    projectile.setPos(standPos);
+                }
+                else if (held.getItem() instanceof SnowballItem) {
+                    projectile = new Snowball(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z());
+                }
+                else if (held.getItem() instanceof GasolineCanItem) {
+                    projectile =
+                            new GasolineCanEntity(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z());
+                }
+                else if (held.is(ModItems.MATCH)) {
+                    projectile = new MatchEntity(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z());
+                }
+                else if (held.is(ModItems.KNIFE)) {
+                    projectile = new KnifeEntity(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z());
+                }
+                else if (held.getItem() instanceof FireworkRocketItem) {
+                    projectile =
+                            new FireworkRocketEntity(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z(),
+                                    held);
+                }
+                if (projectile != null) {
+                    if (projectile instanceof ThrowableItemProjectile TP) {
+                        TP.setItem(held);
+                    }
+                    if (!(projectile instanceof FireworkRocketEntity)) {
+                        projectile.setDeltaMovement(0, 0.2, 0);
+                    }
+                    projectile.setOwner(this.getSelf());
+                    PowerTypes.copyPlaneOfExisting(self, projectile);
+                    this.getSelf().level().addFreshEntity(projectile);
+                    specialInteraction = true;
+                }
             }
-            else {
+            if (!specialInteraction) {
                 ItemEntity $$4 =
                         new ItemEntity(this.getSelf().level(), standPos.x(),
                                 standPos.y(),
