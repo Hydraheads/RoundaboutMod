@@ -1030,7 +1030,7 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "ctr_barrier"),
                     EntityType.Builder.<CTRbarrierEntity>of(CTRbarrierEntity::new, MobCategory.MISC).
-                            sized(4f, 4f).
+                            sized(4f, 10f).
                             clientTrackingRange(15).build(Roundabout.MOD_ID+":ctrbarrier")
             );
     public static final EntityType<BlockWallEntity> BLOCK_WALL =

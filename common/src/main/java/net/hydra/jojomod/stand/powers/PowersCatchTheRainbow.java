@@ -745,7 +745,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             if (barrier != null) {
                 barrier.setUser(this.self);
                 PowerTypes.copyPlaneOfExisting(self, barrier);
-                barrier.setPos(getRayBlock(this.self, 0.0f).add(0, -1.6, 0));
+                barrier.setPos(getRayBlock(this.self, 4.0f).add(0, -5.6, 0));
                 this.self.level().addFreshEntity(barrier);
             }
 
