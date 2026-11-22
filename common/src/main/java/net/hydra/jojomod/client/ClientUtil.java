@@ -495,7 +495,6 @@ public class ClientUtil {
         ent.setYHeadRot(lerpYRot);
         LivingEntity user = ent.getUser();
         LivingEntity user2 = ent.getUser();
-        if (user != null){
             if(se != null) {
                 ent.travelAheadSoulRender($$4, se, null);
             } else {
@@ -503,7 +502,6 @@ public class ClientUtil {
                     ent.travelAheadSoulRender($$4, null, allayVex);
                 }
             }
-        }
     }
 
     public static void preRenderCrossfire(CrossfireHurricaneEntity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6){
