@@ -2262,7 +2262,7 @@ public class StandPowers extends AbilityScapeBasis {
                         }
                     }
                 }
-                if (meleeSwapped){
+                if (meleeSwapped && ClientNetworking.getAppropriateConfig().miscellaneousSettings.meleeSwapPenalty){
                     if (self.tickCount % 2 == 0){
                         this.attackTime++;
                     }
@@ -2278,6 +2278,11 @@ public class StandPowers extends AbilityScapeBasis {
                 //}
                     this.setActivePowerPhase((byte) 0);
                 }
+                if (getActivePowerPhase() == 0){
+                    meleeSwapped = false;
+                }
+            } else {
+                meleeSwapped = false;
             }
             if (this.interruptCD > 0) {
                 this.interruptCD--;

@@ -4334,6 +4334,9 @@
   "config.roundabout.hexTwoSealsPotions.name": "Banish Blocks Potions",
   "config.roundabout.hexTwoSealsPotions.desc": "Whether banish prevents drinking and splashing potions while applied",
 
+  "config.roundabout.meleeSwapPenalty.name": "Melee Swap Penalty",
+  "config.roundabout.meleeSwapPenalty.desc": "If attacking with melee slows down your stand punch recharge. Reduces toxic hugging in pvp and forces people to use their brains more.",
+
 
   "config.roundabout.bonusStandDmgByMaxLevel.name": "Bonus Levelup Damage",
   "config.roundabout.bonusStandDmgByMaxLevel.desc": "By default stands don't get any bonus damage, because JoJo is not an RPG series. But if you want to turn the game into an RPG, this option is on the table. A percentage of damage increase for all stands, distributed across their levelups. If you set it to 100, you will do double damage by the max level.",
