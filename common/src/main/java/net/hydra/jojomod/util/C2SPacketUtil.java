@@ -1,9 +1,13 @@
 package net.hydra.jojomod.util;
 
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.networking.ClientToServerPackets;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -375,6 +379,10 @@ public class C2SPacketUtil {
 
     /**Fire the gun when left-clicking*/
     public static void gunShot(){
+        Player player = Minecraft.getInstance().player;
+        if(player == null || player.getAttackStrengthScale(1) < 1F || (player.level().isClientSide && ClientUtil.hasAttributeSwapped(Minecraft.getInstance())) ) {
+            return;
+        }
         ModMessageEvents.sendToServer(
                 ClientToServerPackets.StandPowerPackets.MESSAGES.GunShot.value
         );
