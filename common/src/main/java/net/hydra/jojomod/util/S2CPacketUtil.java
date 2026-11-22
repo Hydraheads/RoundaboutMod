@@ -541,4 +541,15 @@ public class S2CPacketUtil {
             );
         }
     }
+    public static void sendStartRTZPacket(Player player, Vec3 startPos, Vec3 endPos,
+                                          float startYaw, float startPitch, float endYaw, float endPitch) {
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.StartRTZ.value,
+                    startPos.x, startPos.y, startPos.z,
+                    endPos.x, endPos.y, endPos.z,
+                    startYaw, startPitch, endYaw, endPitch
+            );
+        }
+    }
 }

@@ -10,7 +10,6 @@ import net.hydra.jojomod.client.ClientEffectUtil;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
-import net.hydra.jojomod.entity.KingCrimsonProjectionEntity;
 import net.hydra.jojomod.entity.TimeSkipSnapshot;
 import net.hydra.jojomod.entity.objects.GrabbedMobSoul;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
@@ -20,44 +19,40 @@ import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
-import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.TerrainFragments;
 import net.hydra.jojomod.event.index.AnubisMemory;
-import net.hydra.jojomod.event.index.PowerTypes;
+import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.hydra.jojomod.util.MainUtil;
-import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
-import net.minecraft.client.renderer.block.BlockRenderDispatcher;
-import net.minecraft.client.renderer.culling.Frustum;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.animal.allay.Allay;
-import net.minecraft.world.entity.monster.Vex;
-import net.minecraft.world.level.LightLayer;
-import net.minecraft.world.level.material.FogType;
-import net.zetalasis.client.shader.RPostShaderRegistry;
-import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
-import net.hydra.jojomod.event.powers.StandPowers;
-import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.allay.Allay;
+import net.minecraft.world.entity.monster.Vex;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FogType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.zetalasis.client.shader.RPostShaderRegistry;
+import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
 import org.joml.Matrix4f;
 import org.joml.Vector3d;
 import org.spongepowered.asm.mixin.Final;
@@ -423,14 +418,14 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
     @Inject(method = "renderClouds",
             at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$renderClouds(PoseStack $$0, Matrix4f $$1, float $$2, double $$3, double $$4, double $$5, CallbackInfo ci) {
-        if (ClientUtil.isUsingTimeErase) {
+        if (ClientUtil.isUsingTimeErase || ClientUtil.isUnderRTZ()) {
             ci.cancel();
         }
     }
     @Inject(method = "renderEndSky",
             at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$renderEndSky(PoseStack $$0, CallbackInfo ci) {
-        if (ClientUtil.renderTimeErase()) {
+        if (ClientUtil.renderTimeErase() || ClientUtil.isUnderRTZ()) {
             ci.cancel();
         }
     }
@@ -519,6 +514,78 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                 }
             }
         }
+
+            if (ClientUtil.isUnderRTZ()) {
+                if (!$$4) {
+                    FogType $$6 = $$3.getFluidInCamera();
+                    if ($$6 != FogType.POWDER_SNOW && $$6 != FogType.LAVA && !this.doesMobEffectBlockSky($$3)) {
+
+                        float rtzProgress = (ClientUtil.rtzTicks + ($$2 % 1)) / (float) ClientUtil.RTZ_DURATION;
+                        float alpha = Mth.clamp(Math.min(rtzProgress * 6.0F, (1.0F - rtzProgress) * 6.0F), 0.0F, 1.0F);
+
+                        RenderSystem.enableBlend();
+                        RenderSystem.depthMask(false);
+                        RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
+                        Tesselator tess = Tesselator.getInstance();
+                        BufferBuilder bufferBuilder = tess.getBuilder();
+                        RenderSystem.setShaderTexture(0, StandIcons.RTZ_SKYBOX[0]);
+
+                        for (int integer = 0; integer < 6; ++integer) {
+                            $$0.pushPose();
+                            //Time erase rotates to the camera and then slowly drifts
+                            //float yaw = $$3.getYRot();
+                            //float spin = (ClientUtil.clientTicker + ($$2%1)) * 0.1F;
+                            //$$0.mulPose(Axis.YP.rotationDegrees(-yaw - spin));
+                            float spin = (ClientUtil.clientTicker + ($$2 % 1)) * 1.4F;
+                            $$0.mulPose(Axis.YP.rotationDegrees(spin));
+
+                            $$0.mulPose(com.mojang.math.Axis.YP.rotationDegrees(-90.0F));
+                            $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(90.0F));
+                            if (integer == 0) {
+                                $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(90.0F));
+                                RenderSystem.setShaderTexture(0, StandIcons.RTZ_SKYBOX[0]);
+                            }
+
+                            if (integer == 1) {
+                                $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(-90.0F));
+                                RenderSystem.setShaderTexture(0, StandIcons.RTZ_SKYBOX[1]);
+                            }
+
+                            if (integer == 2) {
+                                $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(180.0F));
+                                RenderSystem.setShaderTexture(0, StandIcons.RTZ_SKYBOX[2]);
+                            }
+                            if (integer == 3) {
+                                $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(0));
+                                RenderSystem.setShaderTexture(0, StandIcons.RTZ_SKYBOX[3]);
+                            }
+
+                            if (integer == 4) {
+                                $$0.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(90.0F));
+                                RenderSystem.setShaderTexture(0, StandIcons.RTZ_SKYBOX[4]);
+                            }
+
+                            if (integer == 5) {
+                                $$0.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(-90.0F));
+                                RenderSystem.setShaderTexture(0, StandIcons.RTZ_SKYBOX[5]);
+                            }
+
+                            Matrix4f stack = $$0.last().pose();
+                            bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+                            bufferBuilder.vertex(stack, -100.0F, -100.0F, -100.0F).uv(0.0F, 0.0F).color(1F, 1F, 1F, alpha).endVertex();
+                            bufferBuilder.vertex(stack, -100.0F, -100.0F, 100.0F).uv(0.0F, 1).color(1F, 1F, 1F, alpha).endVertex();
+                            bufferBuilder.vertex(stack, 100.0F, -100.0F, 100.0F).uv(1, 1).color(1F, 1F, 1F, alpha).endVertex();
+                            bufferBuilder.vertex(stack, 100.0F, -100.0F, -100.0F).uv(1, 0.0F).color(1F, 1F, 1F, alpha).endVertex();
+                            BufferUploader.drawWithShader(bufferBuilder.end());
+                            $$0.popPose();
+                        }
+
+                        RenderSystem.depthMask(true);
+                        RenderSystem.disableBlend();
+                    }
+                }
+            }
+
         MultiBufferSource.BufferSource buffer = this.renderBuffers.bufferSource();
 
         rdbt$renderTerrainFragments(
