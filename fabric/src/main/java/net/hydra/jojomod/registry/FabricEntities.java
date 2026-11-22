@@ -1942,12 +1942,12 @@ public class FabricEntities {
                         .or(BiomeSelectors.tag(BiomeTags.IS_BADLANDS))
                         .or(BiomeSelectors.tag(BiomeTags.IS_SAVANNA)),
                 MobCategory.CREATURE,
-                ModEntities.SNAKE, 8, 1, 2
+                ModEntities.SNAKE, 4, 1, 2
         );
         BiomeModifications.addSpawn(
                 BiomeSelectors.tag(BiomeTags.IS_JUNGLE),
                 MobCategory.CREATURE,
-                ModEntities.SNAKE, 10, 1, 3
+                ModEntities.SNAKE, 6, 1, 3
         );
         BiomeModifications.addSpawn(
                 BiomeSelectors.includeByKey(
@@ -1957,7 +1957,7 @@ public class FabricEntities {
                         Biomes.DEEP_FROZEN_OCEAN, Biomes.FROZEN_RIVER
                 ),
                 MobCategory.CREATURE,
-                ModEntities.SNAKE, 7, 1, 2
+                ModEntities.SNAKE, 3, 1, 2
         );
         BiomeModifications.addSpawn(
                 BiomeSelectors.tag(BiomeTags.IS_FOREST)
@@ -1967,7 +1967,7 @@ public class FabricEntities {
                                 Biomes.SWAMP, Biomes.MANGROVE_SWAMP, Biomes.MEADOW
                         )),
                 MobCategory.CREATURE,
-                ModEntities.SNAKE, 6, 1, 2
+                ModEntities.SNAKE, 2, 1, 2
         );
         BiomeModifications.addSpawn(
                 BiomeSelectors.tag(BiomeTags.IS_RIVER).or(BiomeSelectors.tag(BiomeTags.IS_OCEAN)),
