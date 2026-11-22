@@ -1445,6 +1445,15 @@ public class MainUtil {
                     return ItemStack.EMPTY;
                 }
             }
+            if (su.roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PowerTypes.hasStandActive(pl) && PowerTypes.hasHandsActive(pl)) {
+                if (ES == EquipmentSlot.MAINHAND) {
+                    if (PSC.self.getMainArm() == HumanoidArm.RIGHT) {
+                        return ItemStack.EMPTY;
+                    } else if (PSC.self.getMainArm() == HumanoidArm.LEFT) {
+                        return ItemStack.EMPTY;
+                    }
+                }
+            }
             if (pl.isUsingItem()) {
                 return stack;
             }

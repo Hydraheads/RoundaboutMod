@@ -11,6 +11,7 @@ import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
 import net.hydra.jojomod.client.models.substand.zsabbathsouls.animations.MobSoulAnimation;
 import net.hydra.jojomod.entity.stand.SilverChariotEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersSilverChariot;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;
@@ -332,6 +333,14 @@ public class SilverChariotModel<T extends SilverChariotEntity> extends StandMode
 			} else {
 				this.left_sword.visible = true;
 			}
+		}
+
+		if (((StandUser) pEntity.getUser()).roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PSC.onCooldown(PowersSilverChariot.SKILL_SILVER_CHARIOT_SWORD_SHOOT_INDEX)) {
+			this.right_blade.visible = false;
+			this.left_blade.visible = false;
+		} else {
+			this.right_blade.visible = true;
+			this.left_blade.visible = true;
 		}
 
 		this.animate(pEntity.scFallBrace, SilverChariotAnimations.FallBrace(), pAgeInTicks, 1f);
