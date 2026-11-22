@@ -462,15 +462,6 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                                     r, g, b);
                         }
                         if(vd.renderPolpoNose() && !hideExtraPartsWithSuit){
-                           // if (entity instanceof Player PE){
-                               // if (((IFatePlayer)PE).rdbt$getFatePowers() instanceof ZombieFate ZP && ZP.isDisguised()){
-                            if (((IFatePlayer)entity).rdbt$getFatePowers() instanceof ZombieFate ZP && !ZP.isDisguised()){
-                                    //TODO:ADD ZOMBIE LOOKALIKE COLOURS
-                                    r=0.1f;
-                                    g=0.1f;
-                                    b=0.1f;
-                                }
-                          //  }
                             renderPolpoNose(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
                                     r, g, b);
                         }
@@ -1532,8 +1523,13 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                                          float r, float g, float b) {
         ClientUtil.pushPoseAndCooperate(poseStack,50);
         getParentModel().head.translateAndRotate(poseStack);
-        ModStrayModels.PolpoNosePart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
-                r, g, b, 1, "polpo");
+        if(entity instanceof Player p && ((IFatePlayer)p).rdbt$getFatePowers() instanceof ZombieFate ZF && !ZF.isDisguised()){
+            ModStrayModels.PolpoNosePart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                    r, g, b, 1, "polpo_zombie");
+        } else {
+            ModStrayModels.PolpoNosePart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                    r, g, b, 1, "polpo");
+        }
         ClientUtil.popPoseAndCooperate(poseStack,50);
     }
 
