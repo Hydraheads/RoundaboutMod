@@ -2,6 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -11,6 +12,7 @@ import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -107,40 +109,49 @@ public class PowersBlackSabbath extends NewDashPreset {
         if (!fogControlledEntities2.isEmpty()){
             for (LivingEntity value : fogControlledEntities2) {
                 if (value != null) {
-                    if (value.isRemoved() || !value.isAlive() || value.isDeadOrDying() || value instanceof Player P && (P.isSpectator() || P.isCreative())) {
-                        if(this.getStandEntity(self) instanceof BlackSabbathEntity BE){
-                            BE.setMeleeInteractionTicks(-1);
-                            if(MainUtil.cheapDistanceTo(BE.getX(), BE.getY(), BE.getZ(), value.getX(), value.getY(), value.getZ()) < 10) {
-                                BE.pickUpTheItemsAroundTheCadaver(value);
-                            }
-                        }
-                        if (this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity BE) {
-                            if (BE.getGrabbing() != 0) {
-                                Entity ent = BE.level().getEntity(BE.getGrabbing());
-                                if (ent != null && ent instanceof LivingEntity LE && LE.is(value)) {
-                                    BE.setMeleeInteractionTicks(-1);
-                                    ((StandUser) LE).roundabout$setGrabbedSoul(false);
-                                    BE.killSoul();
-                                    ((StandUser) LE).roundabout$setGrabberSabbath(0);
+                    if(!isClient()) {
+                        if (value.isRemoved() || !value.isAlive() || value.isDeadOrDying() || value instanceof Player P && (P.isSpectator() || P.isCreative())) {
+                            if (this.getStandEntity(self) instanceof BlackSabbathEntity BE) {
+                                BE.setMeleeInteractionTicks(-1);
+                                if (MainUtil.cheapDistanceTo(BE.getX(), BE.getY(), BE.getZ(), value.getX(), value.getY(), value.getZ()) < 10) {
+                                    BE.pickUpTheItemsAroundTheCadaver(value);
                                 }
                             }
-                        }
-                        removeTargetEntities(value);
-                    }
-                    if(this.getStandEntity(self) instanceof BlackSabbathEntity BE){
-                        DimensionType t = BE.level().dimensionType();
-                        DimensionType T = value.level().dimensionType();
-                        if (t != T) {
-                            if (BE.getGrabbing() != 0) {
-                                Entity ent = BE.level().getEntity(BE.getGrabbing());
-                                if (ent != null && ent instanceof LivingEntity LE && ent.is(value)) {
-                                    BE.setMeleeInteractionTicks(-1);
-                                    ((StandUser) LE).roundabout$setGrabbedSoul(false);
-                                    BE.killSoul();
-                                    ((StandUser) LE).roundabout$setGrabberSabbath(0);
+                            if (this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity BE) {
+                                if (BE.getGrabbing() != 0) {
+                                    Entity ent = BE.level().getEntity(BE.getGrabbing());
+                                    if (ent != null && ent instanceof LivingEntity LE && LE.is(value)) {
+                                        BE.setMeleeInteractionTicks(-1);
+                                        ((StandUser) LE).roundabout$setGrabbedSoul(false);
+                                        BE.killSoul();
+                                        ((StandUser) LE).roundabout$setGrabberSabbath(0);
+                                    }
                                 }
                             }
                             removeTargetEntities(value);
+                        }
+                        if (this.getStandEntity(self) instanceof BlackSabbathEntity BE) {
+                            DimensionType t = BE.level().dimensionType();
+                            DimensionType T = value.level().dimensionType();
+                            if (t != T) {
+                                if (BE.getGrabbing() != 0) {
+                                    Entity ent = BE.level().getEntity(BE.getGrabbing());
+                                    if (ent != null && ent instanceof LivingEntity LE && ent.is(value)) {
+                                        BE.setMeleeInteractionTicks(-1);
+                                        ((StandUser) LE).roundabout$setGrabbedSoul(false);
+                                        BE.killSoul();
+                                        ((StandUser) LE).roundabout$setGrabberSabbath(0);
+                                    }
+                                }
+                                removeTargetEntities(value);
+                            }
+                        }
+                        if(value.isRemoved()){
+                            if (blackSabbathTargets.isEmpty()) {
+                                this.clearTargetEntities();
+                                setTickDown2(40);
+                                clearTargetEntitiesOnStandDeath();
+                            }
                         }
                     }
                 }
@@ -201,12 +212,10 @@ public class PowersBlackSabbath extends NewDashPreset {
                 this.clearTargetEntities();
             }
             case PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET -> {
-                if(this.getSelf() != null) {
                     Entity ent = this.getSelf().level().getEntity(data);
                     if(ent instanceof LivingEntity lent) {
                         this.removeTargetEntities(lent);
                     }
-                }
             }
         }
         super.updatePowerInt(activePower,data);
@@ -797,7 +806,21 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             tickBeforeHunt--;
             if(tickBeforeHunt == 1){
                 if(!this.isClient() && this.spawnTarget() != null && this.self.level() instanceof ServerLevel sl){
-                    createTheMightyHunterOfTheShadows((findBlackSabbathSpawnPosition(sl,spawnTarget(), 25D)));
+                    //createTheMightyHunterOfTheShadows((findBlackSabbathSpawnPosition(sl,spawnTarget(), 25D)));
+
+                    if(findBlackSabbathSpawnPosition(sl,spawnTarget(), 25D) != null) {
+                        createTheMightyHunterOfTheShadows((findBlackSabbathSpawnPosition(sl, spawnTarget(), 25D)));
+                    } else {
+                        if(this.checkIfBposIsInDark(self.position())){
+                            createTheMightyHunterOfTheShadows(self.position());
+                        } else {
+                            setNull();
+                            if(this.getSelf() instanceof Player PE){
+                                PE.displayClientMessage(Component.translatable("text.roundabout.failed_black_sabbath_summon"), true);
+                            }
+                            return;
+                        }
+                    }
                 }
             }
         }
@@ -956,6 +979,18 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             test = "Level is Serverside";
         }
 
+        if(active && this.getStandEntity(self) != null){
+            if(this.getStandEntity(self).tickCount % 6 == 0) {
+                this.getStandEntity(self).level().addParticle(
+                        ModParticles.BLACK_SABBATH_IDLE_RIPPLE,
+                        this.getStandEntity(self).getX(),
+                        this.getStandEntity(self).getY() + 0.05,
+                        this.getStandEntity(self).getZ(),
+                        0.0, 0.0, 0.0
+                );
+            }
+        }
+
         //System.out.println(tickDown2 + ". " + test);
        // System.out.println(blackSabbathTargets + ". " + test);
        // System.out.println(moveMode + ". " + test);
@@ -1024,7 +1059,9 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
                                     ts = BE.targetSabbath();
                                 }
                                 if(!this.isClient() && this.self.level() instanceof ServerLevel sl) {
-                                    spawnTp(ts);
+                                    if(findBlackSabbathSpawnPosition(sl, ts, 25D) != null) {
+                                        spawnTp(ts);
+                                    }
                                 }
                             }
                         }
@@ -1094,51 +1131,76 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
         int attempts = 100;
         double minDistance = 1D;
 
-        for (int yOffset = 0; yOffset <= 13; yOffset++) {
-            for (int i = 0; i < attempts; i++) {
-                double angle = Math.random() * Math.PI * 2.0D;
-                double distance = minDistance
-                        + Math.sqrt(Math.random()) * (radius - minDistance);
-                double x = lent.getX() + Math.cos(angle) * distance;
-                double z = lent.getZ() + Math.sin(angle) * distance;
-                int baseY = Mth.floor(lent.getY());
-                double y = Mth.floor(baseY + yOffset);
-                Vec3 candidate = new Vec3(x, y, z);
-                BlockPos bpos = BlockPos.containing(x, y, z);
-                var blockState = this.self.level().getBlockState(bpos);
-                AABB yesbox = ModEntities.BLACK_SABBATH.getAABB(lent.getX(), Mth.floor(lent.getY()), lent.getZ());
-                AABB testBox = yesbox.move(
-                        candidate.x - lent.getX(),
-                        candidate.y - lent.getY(),
-                        candidate.z - lent.getZ()
-                );;
-                if (level.noCollision(lent, testBox) && !blockState.is(Blocks.LAVA) && !blockState.isAir() && checkIfBposIsInDark(candidate)) {
-                    return candidate;
-                } else if(yOffset == 13){
-                    for (int yOffset2 = 0; yOffset2 >= -13; yOffset2--) {
-                    for (int i2 = 0; i2 < attempts; i2++) {
-                        double distance2 = minDistance
+        /*Just to make sure it summons in the right place :)*/
+
+        for (int i = 0; i < attempts; i++) {
+            double angle = Math.random() * Math.PI * 2.0D;
+            double distance = minDistance
+                    + Math.sqrt(Math.random()) * (radius - minDistance);
+            double x = lent.getX() + Math.cos(angle) * distance;
+            double z = lent.getZ() + Math.sin(angle) * distance;
+            int baseY = Mth.floor(lent.getY());
+            double y = Mth.floor(baseY);
+            Vec3 candidate = new Vec3(x, y, z);
+            BlockPos bpos = BlockPos.containing(x, y, z);
+            var blockState = this.self.level().getBlockState(bpos);
+            AABB yesbox = ModEntities.BLACK_SABBATH.getAABB(lent.getX(), Mth.floor(lent.getY()), lent.getZ());
+            AABB testBox = yesbox.move(
+                    candidate.x - lent.getX(),
+                    candidate.y - lent.getY(),
+                    candidate.z - lent.getZ()
+            );
+            if (level.noCollision(lent, testBox) && !blockState.isAir() && checkIfBposIsInDark(candidate)) {
+                return candidate;
+            } else if (i > 90) {
+                for (int yOffset = 0; yOffset <= 13; yOffset++) {
+                    for (int i3 = 0; i3 < attempts; i3++) {
+                        double angle3 = Math.random() * Math.PI * 2.0D;
+                        double distance3 = minDistance
                                 + Math.sqrt(Math.random()) * (radius - minDistance);
-                        double x2 = lent.getX() + Math.cos(angle) * distance2;
-                        double z2 = lent.getZ() + Math.sin(angle) * distance2;
-                        double y2 = Mth.floor(baseY + yOffset2);
-                        Vec3 candidate2 = new Vec3(x2, y2, z2);
-                        BlockPos bpos2 = BlockPos.containing(x, y2, z);
-                        var blockState2 = this.self.level().getBlockState(bpos2);
-                        AABB yesbox2 = ModEntities.BLACK_SABBATH.getAABB(lent.getX(), lent.getY(), lent.getZ());
-                        AABB testBox2 = yesbox2.move(
-                                candidate2.x - lent.getX(),
-                                candidate2.y - lent.getY(),
-                                candidate2.z - lent.getZ()
-                        );
-                        if (level.noCollision(lent, testBox2) && !blockState.is(Blocks.LAVA) && !blockState2.isAir() && checkIfBposIsInDark(candidate)) {
-                        return candidate2;
+                        double x3 = lent.getX() + Math.cos(angle3) * distance3;
+                        double z3 = lent.getZ() + Math.sin(angle3) * distance3;
+                        int baseY3 = Mth.floor(lent.getY());
+                        double y3 = Mth.floor(baseY3 + yOffset);
+                        Vec3 candidate3 = new Vec3(x3, y3, z3);
+                        BlockPos bpos3 = BlockPos.containing(x3, y3, z3);
+                        var blockState3 = this.self.level().getBlockState(bpos3);
+                        AABB yesbox3 = ModEntities.BLACK_SABBATH.getAABB(lent.getX(), Mth.floor(lent.getY()), lent.getZ());
+                        AABB testBox3 = yesbox3.move(
+                                candidate.x - lent.getX(),
+                                candidate.y - lent.getY(),
+                                candidate.z - lent.getZ()
+                        );;
+                        if (level.noCollision(lent, testBox3) && !blockState3.is(Blocks.LAVA) && !blockState3.isAir() && checkIfBposIsInDark(candidate3)) {
+                            return candidate3;
+                        } else if (yOffset == 13 && i3 > 90){
+                            for (int yOffset2 = 0; yOffset2 >= -13; yOffset2--) {
+                                for (int i2 = 0; i2 < attempts; i2++) {
+                                    double distance2 = minDistance
+                                            + Math.sqrt(Math.random()) * (radius - minDistance);
+                                    double x2 = lent.getX() + Math.cos(angle) * distance2;
+                                    double z2 = lent.getZ() + Math.sin(angle) * distance2;
+                                    double y2 = Mth.floor(baseY + yOffset2);
+                                    Vec3 candidate2 = new Vec3(x2, y2, z2);
+                                    BlockPos bpos2 = BlockPos.containing(x, y2, z);
+                                    var blockState2 = this.self.level().getBlockState(bpos2);
+                                    AABB yesbox2 = ModEntities.BLACK_SABBATH.getAABB(lent.getX(), lent.getY(), lent.getZ());
+                                    AABB testBox2 = yesbox2.move(
+                                            candidate2.x - lent.getX(),
+                                            candidate2.y - lent.getY(),
+                                            candidate2.z - lent.getZ()
+                                    );
+                                    if (level.noCollision(lent, testBox2) && !blockState.is(Blocks.LAVA) && !blockState2.isAir() && checkIfBposIsInDark(candidate)) {
+                                        return candidate2;
+                                    }
+                                }
+                            }
                         }
-                    }
                     }
                 }
             }
         }
+
         return null;
     }
     private LivingEntity spawnTarget(){
@@ -1456,9 +1518,7 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
                 Entity target = this.getSelf().level().getEntity(value);
                 if(value != 0) {
                     if (target != null && target instanceof LivingEntity LE) {
-                        if(blackSabbathTargets.contains(LE)) {
-                            this.removeTargetEntities(LE);
-                        }
+                        this.removeTargetEntities(LE);
                     }
                 }
             }
@@ -1513,6 +1573,13 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
             if(this.getSelf() instanceof Player P) {
                 S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET, LE.getId());
             }
+        } else {
+                this.removeTargetEntities(LE);
+                tryIntPower(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET, true, LE.getId());
+                tryIntPowerPacket(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET, LE.getId());
+                if(this.getSelf() instanceof Player P) {
+                    S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET, LE.getId());
+                }
         }
     }
     public void unselectClient(){

@@ -8,6 +8,7 @@
   "text.roundabout.riding_flying_creature.dimension": "Cannot fly in this dimension.",
   "text.roundabout.warn_trap_triggered": " has been triggered!",
   "text.roundabout.warn_unnamed_trap_triggered": "A fog trap has been triggered!",
+  "text.roundabout.failed_black_sabbath_summon": "Unable to find a safe spot.",
   "text.roundabout.stole_minion": "Claimed Minion",
   "text.roundabout.inactive_piece": "Inactive",
   "text.roundabout.memory.0": "Happy Memory",
@@ -1464,6 +1465,7 @@
   "sounds.roundabout.ge_menu":  "Selection",
   "sounds.roundabout.ge_dna_grow":  "Lifeform Thumps",
   "sounds.roundabout.ge_spikes":  "Brambles Snap",
+  "sounds.roundabout.return_to_zero": "Returning To Zero",
 
   "sounds.roundabout.vampire_dive":  "Whoosh",
   "sounds.roundabout.punch_sfx1":  "Air Cracks",
@@ -2941,6 +2943,8 @@
   "ability.roundabout.gold_experience_life_sensor.desc": "Gold Experience scans the nearby area for lifeforms. If someone has an imbued item on them, you will be able to see their aura from a lot further away. The aura reading persists until you stop blocking.",
   "ability.roundabout.gold_experience_double_punch": "Double Punch",
   "ability.roundabout.gold_experience_double_punch.desc": "Throw out a 1-2 punch. This does as much damage as the last hit in a punch string, but deals more knockback.",
+  "ability.roundabout.gold_experience_requiem": "Gold Experience Requiem",
+  "ability.roundabout.gold_experience_requiem.desc": "Fill up your resolve bar by killing enemies in order to evolve your stand to a temporary higher form. It's abilities are unknown even to you, the user.",
 
   "ability.roundabout.emperor_shoot": "Shoot",
   "ability.roundabout.emperor_shoot.desc": "Shoot a bullet from the emperor.",
@@ -4689,6 +4693,8 @@
   "config.roundabout.silverChariotBonusMobDMGArmSummon.desc": "This % melee damage increase from Arm Summon against players.",
   "config.roundabout.silverChariotAfterimageSpeed.name": "Afterimage Speed Modifier",
   "config.roundabout.silverChariotAfterimageSpeed.desc": "% increase in speed where lower values make the afteriamges slower.",
+  "config.roundabout.silverChariotShouldForceLeftMainArmWithPart5SkinInArmSummonMode.name": "Left Arm as Main Arm in Arm Summon Mode",
+  "config.roundabout.silverChariotShouldForceLeftMainArmWithPart5SkinInArmSummonMode.desc": "In arm summon mode while using a part 5 skin, force the user to use the left arm as the main arm.",
 
   "config.roundabout.enableCatchTheRainbow.name": "Enable Catch The Rainbow",
   "config.roundabout.enableCatchTheRainbow.desc": "Enable Catch The Rainbow",

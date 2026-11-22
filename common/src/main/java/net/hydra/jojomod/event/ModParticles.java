@@ -92,8 +92,8 @@ public class ModParticles {
 
     public static SimpleParticleType OCCULT;
 
-    public static SimpleParticleType MOLD_DUST;
-    public static SimpleParticleType MOLD;
+    public static ParticleType<ColorParticleOptions> MOLD_DUST;
+    public static ParticleType<ColorParticleOptions> MOLD;
     public static SimpleParticleType RAGING_LIGHT; // anubis particles
     public static SimpleParticleType ALLURING_LIGHT;
 

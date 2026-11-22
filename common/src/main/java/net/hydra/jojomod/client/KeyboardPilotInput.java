@@ -21,6 +21,7 @@ import java.util.Optional;
 public class KeyboardPilotInput extends Input {
     private final Options options;
     public boolean dashKeyDown;
+    public boolean jumpKeyChange = false;
     public KeyboardPilotInput(Options $$0) {
         this.options = $$0;
     }
@@ -83,7 +84,11 @@ public class KeyboardPilotInput extends Input {
                 
             } else if (player.isPassenger() && player.getVehicle() instanceof SilverChariotMountEntity scme) {
                 byte jumpData = (byte) (this.jumping ? 1 : 0);
-                C2SPacketUtil.byteToServerPacket(PacketDataIndex.BYTE_MOUNT_HOVER_INPUT, jumpData);
+                if (this.jumping != jumpKeyChange) {
+                    C2SPacketUtil.byteToServerPacket(PacketDataIndex.BYTE_MOUNT_HOVER_INPUT, jumpData);
+                    this.jumpKeyChange = this.jumping;
+                }
+                // C2SPacketUtil.byteToServerPacket(PacketDataIndex.BYTE_MOUNT_HOVER_INPUT, jumpData);
             }
         }
     }

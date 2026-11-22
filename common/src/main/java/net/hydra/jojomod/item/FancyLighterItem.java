@@ -121,6 +121,10 @@ public class FancyLighterItem extends BlockItem {
                             if(user != $$0){
                                 if(((StandUser)user).roundabout$getStandPowers() instanceof PowersBlackSabbath pbs){
                                     if(pbs.tickDown2 <= -9) {
+                                        if(!((StandUser) user).roundabout$getActive()){
+                                            ((StandUser) user).roundabout$setActive(true);
+                                        }
+
                                         if (!pbs.blackSabbathTargets.contains($$0)) {
                                             pbs.selectTargetSecond($$0);
                                         }

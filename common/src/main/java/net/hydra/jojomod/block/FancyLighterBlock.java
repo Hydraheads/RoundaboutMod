@@ -153,6 +153,10 @@ public class FancyLighterBlock extends BaseEntityBlock {
                 if (ownerEntity instanceof ServerPlayer spl) {
                     if (stepper.getUUID() != fbe.getOwner()) {
                         if (bs.tickDown2 <= -9) {
+                            if(!((StandUser) se).roundabout$getActive()){
+                                ((StandUser) se).roundabout$setActive(true);
+                            }
+
                             if (!bs.blackSabbathTargets.contains(stepper)) {
                                 bs.selectTargetSecond(stepper);
                             }

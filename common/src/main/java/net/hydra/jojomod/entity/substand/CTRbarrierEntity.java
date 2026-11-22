@@ -51,19 +51,13 @@ public class CTRbarrierEntity extends StandEntity {
 
     private int lifespan = 160;
 
-    public int followTimer = 1;
-
     @Override
     public void tick() {
         if (!this.level().isClientSide()) {
-            if (User != null && ((StandUser) User).roundabout$getStandPowers() instanceof PowersCatchTheRainbow PCR
-                    && PCR.isInRain()
-                    && User.isAlive()) {
-                if (followTimer != 10) {
-                    this.setPos(User.getX(), User.getY(), User.getZ());
-                    followTimer++;
-                }
-            } else {
+            if (User == null
+                    || !(((StandUser) User).roundabout$getStandPowers() instanceof PowersCatchTheRainbow PCR)
+                    || !PCR.isInRain()
+                    || !User.isAlive()) {
                 this.discard();
             }
 
@@ -93,7 +87,7 @@ public class CTRbarrierEntity extends StandEntity {
             }
             double randX = Roundabout.RANDOM.nextDouble(-2, 2);
             double randZ = Roundabout.RANDOM.nextDouble(-2, 2);
-            double randY = Roundabout.RANDOM.nextDouble(0, 4);
+            double randY = Roundabout.RANDOM.nextDouble(0, 10);
             if (Math.random() > 0.3) {
                 sendParticlesIfPossible(this, level(), ParticleTypes.DRIPPING_DRIPSTONE_WATER,
                         this.getX() + randX,

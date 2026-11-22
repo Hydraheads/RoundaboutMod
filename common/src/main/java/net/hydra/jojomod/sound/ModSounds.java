@@ -2244,6 +2244,9 @@ public class ModSounds {
     public static final String GOLD_EXPERIENCE_VINE = "ge_vine";
     public static final ResourceLocation GOLD_EXPERIENCE_VINE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+GOLD_EXPERIENCE_VINE);
     public static SoundEvent GOLD_EXPERIENCE_VINE_EVENT = SoundEvent.createVariableRangeEvent(GOLD_EXPERIENCE_VINE_ID);
+    public static final String RETURN_TO_ZERO = "return_to_zero";
+    public static final ResourceLocation RETURN_TO_ZERO_ID = new ResourceLocation(Roundabout.MOD_ID+":"+RETURN_TO_ZERO);
+    public static SoundEvent RETURN_TO_ZERO_EVENT = SoundEvent.createVariableRangeEvent(RETURN_TO_ZERO_ID);
 
     public static final String GE_REQUIEM_ARROW = "ge_requiem_obtain";
     public static final ResourceLocation GE_REQUIEM_ARROW_ID = new ResourceLocation(Roundabout.MOD_ID+":"+GE_REQUIEM_ARROW);
