@@ -273,4 +273,11 @@ public abstract class PlayerEntityClient extends AbstractClientPlayer implements
         C2SPacketUtil.barrageClashUpdatePacket(((StandUser) this).roundabout$getStandPowers().getClashProgress(),
                 ((StandUser) this).roundabout$getStandPowers().getClashDone());
     }
+
+    @Inject(method = "sendPosition", at = @At(value = "HEAD"), cancellable = true)
+    private void roundabout$sendPosition(CallbackInfo ci) {
+        if (ClientUtil.isUnderRTZ()) {
+            ci.cancel();
+        }
+    }
 }

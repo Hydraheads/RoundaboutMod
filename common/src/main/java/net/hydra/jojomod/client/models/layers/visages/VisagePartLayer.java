@@ -3,6 +3,7 @@ package net.hydra.jojomod.client.models.layers.visages;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerEntityAbstractClient;
 import net.hydra.jojomod.access.IPlayerModel;
@@ -13,12 +14,11 @@ import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
-import net.hydra.jojomod.event.index.LocacacaCurseIndex;
-import net.hydra.jojomod.event.index.PlayerPosIndex;
-import net.hydra.jojomod.event.index.PowerTypes;
-import net.hydra.jojomod.event.index.ShapeShifts;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
+import net.hydra.jojomod.fates.powers.VampireFate;
+import net.hydra.jojomod.fates.powers.ZombieFate;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.stand.powers.*;
@@ -1523,8 +1523,13 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                                          float r, float g, float b) {
         ClientUtil.pushPoseAndCooperate(poseStack,50);
         getParentModel().head.translateAndRotate(poseStack);
-        ModStrayModels.PolpoNosePart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
-                r, g, b, 1, "polpo");
+        if(entity instanceof Player p && ((IFatePlayer)p).rdbt$getFatePowers() instanceof ZombieFate ZF && !ZF.isDisguised()){
+            ModStrayModels.PolpoNosePart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                    r, g, b, 1, "polpo_zombie");
+        } else {
+            ModStrayModels.PolpoNosePart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                    r, g, b, 1, "polpo");
+        }
         ClientUtil.popPoseAndCooperate(poseStack,50);
     }
 

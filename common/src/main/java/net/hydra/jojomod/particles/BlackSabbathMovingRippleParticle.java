@@ -13,7 +13,6 @@ import org.joml.Vector3f;
 
 public class BlackSabbathMovingRippleParticle extends TextureSheetParticle {
     private final SpriteSet sprites;
-    private final Direction face;
 
     protected BlackSabbathMovingRippleParticle(ClientLevel level, double x, double y, double z, double xd, double yd, double zd, SpriteSet spriteSet) {
         super(level, x, y, z, 0.0, 0.0, 0.0);
@@ -24,15 +23,6 @@ public class BlackSabbathMovingRippleParticle extends TextureSheetParticle {
         this.setSpriteFromAge(spriteSet);
 
         // Detect surface normal from xd, yd, zd, or default to UP (horizontal ground)
-        if (Math.abs(yd) > 0.5) {
-            this.face = yd > 0 ? Direction.UP : Direction.DOWN;
-        } else if (Math.abs(xd) > 0.5) {
-            this.face = xd > 0 ? Direction.EAST : Direction.WEST;
-        } else if (Math.abs(zd) > 0.5) {
-            this.face = zd > 0 ? Direction.SOUTH : Direction.NORTH;
-        } else {
-            this.face = Direction.UP;
-        }
     }
 
     @Override
@@ -50,26 +40,12 @@ public class BlackSabbathMovingRippleParticle extends TextureSheetParticle {
         };
         float quadSize = this.getQuadSize(partialTicks);
 
-        Quaternionf rotation = switch (this.face) {
-            case UP -> new Quaternionf().fromAxisAngleDeg(1, 0, 0, 90);
-            case DOWN -> new Quaternionf().fromAxisAngleDeg(1, 0, 0, -90);
-            case NORTH -> new Quaternionf().fromAxisAngleDeg(0, 1, 0, 180);
-            case SOUTH -> new Quaternionf();
-            case WEST -> new Quaternionf().fromAxisAngleDeg(0, 1, 0, -90);
-            case EAST -> new Quaternionf().fromAxisAngleDeg(0, 1, 0, 90);
-        };
-
-        float ageOffset = (this.age + partialTicks) * -0.002F;
-        float normalX = this.face.getStepX() * ageOffset;
-        float normalY = this.face.getStepY() * ageOffset;
-        float normalZ = this.face.getStepZ() * ageOffset;
-
         for (int i = 0; i < 4; i++) {
             Vector3f uv = uvList[i];
             uv.mul(quadSize);
             uv.mul(0.5f, 0.5f, 0.5f);
-            uv.rotate(rotation);
-            uv.add(lerpX + normalX, lerpY + normalY, lerpZ + normalZ);
+            uv.rotate(new Quaternionf().fromAxisAngleDeg(1, 0, 0, -90));
+            uv.add(lerpX, lerpY, lerpZ);
         }
 
         float u0 = this.getU0();

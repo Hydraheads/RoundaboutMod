@@ -1,14 +1,7 @@
 package net.hydra.jojomod.particles;
 
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
-import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.util.Mth;
-import net.minecraft.world.phys.Vec3;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
 public class PurpleHazeSmokeParticle extends SimpleAnimatedParticle {
     protected PurpleHazeSmokeParticle(ClientLevel clientLevel, double d, double e, double f, double g, double h, double i, SpriteSet spriteSet) {
@@ -33,7 +26,7 @@ public class PurpleHazeSmokeParticle extends SimpleAnimatedParticle {
         return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
     }
 
-    public static class Provider implements ParticleProvider<HazeColorParticleOptions> {
+    public static class Provider implements ParticleProvider<ColorParticleOptions> {
         private final SpriteSet sprites;
 
         public Provider(SpriteSet sprites) {
@@ -41,7 +34,7 @@ public class PurpleHazeSmokeParticle extends SimpleAnimatedParticle {
         }
 
         @Override
-        public Particle createParticle(HazeColorParticleOptions options, ClientLevel level,
+        public Particle createParticle(ColorParticleOptions options, ClientLevel level,
                                        double x, double y, double z, double xd, double yd, double zd) {
             PurpleHazeSmokeParticle particle = new PurpleHazeSmokeParticle(level, x, y, z, xd, yd, zd, sprites);
             particle.setColor(options.getR(), options.getG(), options.getB());

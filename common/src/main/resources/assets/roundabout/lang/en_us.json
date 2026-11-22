@@ -388,6 +388,9 @@
   "item.roundabout.jotaro_mask": "Jotaro Visage",
   "item.roundabout.jotaro_mask.desc": "Jotaro Kujo (Part 3)",
   "item.roundabout.jotaro_mask.tag": "Jotaro",
+  "item.roundabout.polpo_mask": "Polpo Visage",
+  "item.roundabout.polpo_mask.desc": "Polpo",
+  "item.roundabout.polpo_mask.tag": "Polpo",
   "item.roundabout.jotaro_4_mask": "Jotaro Visage",
   "item.roundabout.jotaro_4_mask.desc": "Jotaro Kujo (Part 4)",
   "item.roundabout.jotaro_4_mask.tag": "Jotaro",
@@ -1461,6 +1464,7 @@
   "sounds.roundabout.ge_menu":  "Selection",
   "sounds.roundabout.ge_dna_grow":  "Lifeform Thumps",
   "sounds.roundabout.ge_spikes":  "Brambles Snap",
+  "sounds.roundabout.return_to_zero": "Returning To Zero",
 
   "sounds.roundabout.vampire_dive":  "Whoosh",
   "sounds.roundabout.punch_sfx1":  "Air Cracks",
@@ -2619,7 +2623,7 @@
   "ability.roundabout.kn_phase_item": "Phase Item",
   "ability.roundabout.kn_phase_item.desc": "King Nothing will take your held item and use it to do different things. It can do things like place blocks, mine blocks, and even attack enemies!",
   "ability.roundabout.kn_drop_item": "Drop Item",
-  "ability.roundabout.kn_drop_item.desc": "King Nothing will drop its currently held item where it is. This is so I DONT NEED TO MAKE PILOT MODE LETS GO!!!",
+  "ability.roundabout.kn_drop_item.desc": "King Nothing will drop its currently held item where it is. Certain items like ender pearls and potions will do special things when dropped. Holding sneak will disable any special interactions, in case you don't want to do them.",
   "ability.roundabout.kn_form_predict": "Form Prediction",
   "ability.roundabout.kn_form_predict.desc": "Memorize the scent of the original form of your currently held item.",
   "ability.roundabout.kn_sniff": "Memorize Scent",
@@ -2938,6 +2942,8 @@
   "ability.roundabout.gold_experience_life_sensor.desc": "Gold Experience scans the nearby area for lifeforms. If someone has an imbued item on them, you will be able to see their aura from a lot further away. The aura reading persists until you stop blocking.",
   "ability.roundabout.gold_experience_double_punch": "Double Punch",
   "ability.roundabout.gold_experience_double_punch.desc": "Throw out a 1-2 punch. This does as much damage as the last hit in a punch string, but deals more knockback.",
+  "ability.roundabout.gold_experience_requiem": "Gold Experience Requiem",
+  "ability.roundabout.gold_experience_requiem.desc": "Fill up your resolve bar by killing enemies in order to evolve your stand to a temporary higher form. It's abilities are unknown even to you, the user.",
 
   "ability.roundabout.emperor_shoot": "Shoot",
   "ability.roundabout.emperor_shoot.desc": "Shoot a bullet from the emperor.",
@@ -3587,6 +3593,7 @@
   "skins.roundabout.catch_the_rainbow.magma": "Magmatic",
   "skins.roundabout.catch_the_rainbow.umvuthi_on": "Sun Bird",
   "skins.roundabout.catch_the_rainbow.umvuthi_off": "Sun Bird",
+  "skins.roundabout.catch_the_rainbow.knight": "Knight",
 
   "skins.roundabout.manhattan_transfer.manhattan_part_6": "Part 6",
   "skins.roundabout.manhattan_transfer.manhattan_manga_part_6": "Manga",
@@ -3619,6 +3626,7 @@
   "skins.roundabout.black_sabbath.cherry": "Cherry",
   "skins.roundabout.black_sabbath.grape": "Grape",
   "skins.roundabout.black_sabbath.woven": "Woven",
+  "skins.roundabout.black_sabbath.wooden": "Wooden Doll",
   "skins.roundabout.black_sabbath.santa": "Santa",
   "skins.roundabout.black_sabbath.cowboy": "Cowboy",
   "skins.roundabout.black_sabbath.crimson": "Cyclops",
@@ -4329,6 +4337,9 @@
   "config.roundabout.hexTwoSealsPotions.name": "Banish Blocks Potions",
   "config.roundabout.hexTwoSealsPotions.desc": "Whether banish prevents drinking and splashing potions while applied",
 
+  "config.roundabout.meleeSwapPenalty.name": "Melee Swap Penalty",
+  "config.roundabout.meleeSwapPenalty.desc": "If attacking with melee slows down your stand punch recharge. Reduces toxic hugging in pvp and forces people to use their brains more.",
+
 
   "config.roundabout.bonusStandDmgByMaxLevel.name": "Bonus Levelup Damage",
   "config.roundabout.bonusStandDmgByMaxLevel.desc": "By default stands don't get any bonus damage, because JoJo is not an RPG series. But if you want to turn the game into an RPG, this option is on the table. A percentage of damage increase for all stands, distributed across their levelups. If you set it to 100, you will do double damage by the max level.",
@@ -4792,6 +4803,8 @@
   "config.roundabout.kingNothingSettings.name": "King Nothing",
   "config.roundabout.kingNothingParticleSpawnInterval.name": "Particle Spawn Interval",
   "config.roundabout.kingNothingParticleSpawnInterval.desc": "The number ticks King Nothing must wait to spawn particles after spawning particles, higher values can increase performance on lower end computers.",
+  "config.roundabout.spawnPhaseGrabParticles.name": "Spawn Phase Particles",
+  "config.roundabout.spawnPhaseGrabParticles.desc": "Toggles if King Nothing's phase moves spawn particles as it moves. Disabling can improve performance and make it easier to control but it looks less cool.",
   "config.roundabout.kingNothingPhaseAttackCd.name": "Phase Item Attack Cooldown",
   "config.roundabout.kingNothingPhaseAttackCd.desc": "The cooldown for Phase Item after Attacking Mobs and Players.",
   "config.roundabout.kingNothingDynamicPhaseAttackCd.name": "Dynamic Phase Item Attack Cooldown",

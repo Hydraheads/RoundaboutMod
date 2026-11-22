@@ -25,6 +25,7 @@ public class BlackSabbathBaseRenderer extends StandRenderer<BlackSabbathEntity> 
     private static final ResourceLocation MINT = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/mint.png");
     private static final ResourceLocation TACO = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/taco.png");
     private static final ResourceLocation WOOL = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/woven.png");
+    private static final ResourceLocation WOODEN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/wooden_doll.png");
     private static final ResourceLocation PHANTOM = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/phantom.png");
     private static final ResourceLocation SWEET = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/sweet.png");
     private static final ResourceLocation SACTHOTH = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/sacthoth_sabbath.png");
@@ -81,6 +82,9 @@ public class BlackSabbathBaseRenderer extends StandRenderer<BlackSabbathEntity> 
         }
         if (BT == BlackSabbathEntity.WOOL) {
             return WOOL;
+        }
+        if (BT == BlackSabbathEntity.WOODEN) {
+            return WOODEN;
         }
         if (BT == BlackSabbathEntity.DAPPER) {
             return DAPPER;

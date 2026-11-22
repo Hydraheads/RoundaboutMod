@@ -11,6 +11,7 @@ import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -107,40 +108,49 @@ public class PowersBlackSabbath extends NewDashPreset {
         if (!fogControlledEntities2.isEmpty()){
             for (LivingEntity value : fogControlledEntities2) {
                 if (value != null) {
-                    if (value.isRemoved() || !value.isAlive() || value.isDeadOrDying() || value instanceof Player P && (P.isSpectator() || P.isCreative())) {
-                        if(this.getStandEntity(self) instanceof BlackSabbathEntity BE){
-                            BE.setMeleeInteractionTicks(-1);
-                            if(MainUtil.cheapDistanceTo(BE.getX(), BE.getY(), BE.getZ(), value.getX(), value.getY(), value.getZ()) < 10) {
-                                BE.pickUpTheItemsAroundTheCadaver(value);
-                            }
-                        }
-                        if (this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity BE) {
-                            if (BE.getGrabbing() != 0) {
-                                Entity ent = BE.level().getEntity(BE.getGrabbing());
-                                if (ent != null && ent instanceof LivingEntity LE && LE.is(value)) {
-                                    BE.setMeleeInteractionTicks(-1);
-                                    ((StandUser) LE).roundabout$setGrabbedSoul(false);
-                                    BE.killSoul();
-                                    ((StandUser) LE).roundabout$setGrabberSabbath(0);
+                    if(!isClient()) {
+                        if (value.isRemoved() || !value.isAlive() || value.isDeadOrDying() || value instanceof Player P && (P.isSpectator() || P.isCreative())) {
+                            if (this.getStandEntity(self) instanceof BlackSabbathEntity BE) {
+                                BE.setMeleeInteractionTicks(-1);
+                                if (MainUtil.cheapDistanceTo(BE.getX(), BE.getY(), BE.getZ(), value.getX(), value.getY(), value.getZ()) < 10) {
+                                    BE.pickUpTheItemsAroundTheCadaver(value);
                                 }
                             }
-                        }
-                        removeTargetEntities(value);
-                    }
-                    if(this.getStandEntity(self) instanceof BlackSabbathEntity BE){
-                        DimensionType t = BE.level().dimensionType();
-                        DimensionType T = value.level().dimensionType();
-                        if (t != T) {
-                            if (BE.getGrabbing() != 0) {
-                                Entity ent = BE.level().getEntity(BE.getGrabbing());
-                                if (ent != null && ent instanceof LivingEntity LE && ent.is(value)) {
-                                    BE.setMeleeInteractionTicks(-1);
-                                    ((StandUser) LE).roundabout$setGrabbedSoul(false);
-                                    BE.killSoul();
-                                    ((StandUser) LE).roundabout$setGrabberSabbath(0);
+                            if (this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity BE) {
+                                if (BE.getGrabbing() != 0) {
+                                    Entity ent = BE.level().getEntity(BE.getGrabbing());
+                                    if (ent != null && ent instanceof LivingEntity LE && LE.is(value)) {
+                                        BE.setMeleeInteractionTicks(-1);
+                                        ((StandUser) LE).roundabout$setGrabbedSoul(false);
+                                        BE.killSoul();
+                                        ((StandUser) LE).roundabout$setGrabberSabbath(0);
+                                    }
                                 }
                             }
                             removeTargetEntities(value);
+                        }
+                        if (this.getStandEntity(self) instanceof BlackSabbathEntity BE) {
+                            DimensionType t = BE.level().dimensionType();
+                            DimensionType T = value.level().dimensionType();
+                            if (t != T) {
+                                if (BE.getGrabbing() != 0) {
+                                    Entity ent = BE.level().getEntity(BE.getGrabbing());
+                                    if (ent != null && ent instanceof LivingEntity LE && ent.is(value)) {
+                                        BE.setMeleeInteractionTicks(-1);
+                                        ((StandUser) LE).roundabout$setGrabbedSoul(false);
+                                        BE.killSoul();
+                                        ((StandUser) LE).roundabout$setGrabberSabbath(0);
+                                    }
+                                }
+                                removeTargetEntities(value);
+                            }
+                        }
+                        if(value.isRemoved()){
+                            if (blackSabbathTargets.isEmpty()) {
+                                this.clearTargetEntities();
+                                setTickDown2(40);
+                                clearTargetEntitiesOnStandDeath();
+                            }
                         }
                     }
                 }
@@ -201,12 +211,10 @@ public class PowersBlackSabbath extends NewDashPreset {
                 this.clearTargetEntities();
             }
             case PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET -> {
-                if(this.getSelf() != null) {
                     Entity ent = this.getSelf().level().getEntity(data);
                     if(ent instanceof LivingEntity lent) {
                         this.removeTargetEntities(lent);
                     }
-                }
             }
         }
         super.updatePowerInt(activePower,data);
@@ -956,6 +964,18 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             test = "Level is Serverside";
         }
 
+        if(active && this.getStandEntity(self) != null){
+            if(this.getStandEntity(self).tickCount % 6 == 0) {
+                this.getStandEntity(self).level().addParticle(
+                        ModParticles.BLACK_SABBATH_IDLE_RIPPLE,
+                        this.getStandEntity(self).getX(),
+                        this.getStandEntity(self).getY() + 0.05,
+                        this.getStandEntity(self).getZ(),
+                        0.0, 0.0, 0.0
+                );
+            }
+        }
+
         //System.out.println(tickDown2 + ". " + test);
        // System.out.println(blackSabbathTargets + ". " + test);
        // System.out.println(moveMode + ". " + test);
@@ -1456,9 +1476,7 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
                 Entity target = this.getSelf().level().getEntity(value);
                 if(value != 0) {
                     if (target != null && target instanceof LivingEntity LE) {
-                        if(blackSabbathTargets.contains(LE)) {
-                            this.removeTargetEntities(LE);
-                        }
+                        this.removeTargetEntities(LE);
                     }
                 }
             }
@@ -1513,6 +1531,13 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
             if(this.getSelf() instanceof Player P) {
                 S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET, LE.getId());
             }
+        } else {
+                this.removeTargetEntities(LE);
+                tryIntPower(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET, true, LE.getId());
+                tryIntPowerPacket(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET, LE.getId());
+                if(this.getSelf() instanceof Player P) {
+                    S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET, LE.getId());
+                }
         }
     }
     public void unselectClient(){
@@ -1638,6 +1663,8 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
             return Component.translatable("skins.roundabout.black_sabbath.taco");
         } else if (skinId == BlackSabbathEntity.WOOL) {
             return Component.translatable("skins.roundabout.black_sabbath.woven");
+        } else if (skinId == BlackSabbathEntity.WOODEN) {
+            return Component.translatable("skins.roundabout.black_sabbath.wooden");
         } else if (skinId == BlackSabbathEntity.DAPPER){
             return Component.translatable("skins.roundabout.black_sabbath.dapper");
         } else if (skinId == BlackSabbathEntity.COPPER){
@@ -1721,18 +1748,19 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
             MINT = 10,
             TACO = 11,
             WOVEN = 12,
-            FUNGUS = 13,
-            DAPPER = 14,
-            COPPER = 15,
-            PHANTOM_SKIN = 16,
-            SWEET_SKIN = 17,
-            MAGMA = 18,
-            OCULUS = 19,
-            CRIMSON = 20,
-            SACTHOTH_SKIN = 21,
-            COWBOY = 22,
-            BEACH = 23,
-            SANTA = 24;
+            WOODEN = 13,
+            FUNGUS = 14,
+            DAPPER = 15,
+            COPPER = 16,
+            PHANTOM_SKIN = 17,
+            SWEET_SKIN = 18,
+            MAGMA = 19,
+            OCULUS = 20,
+            CRIMSON = 21,
+            SACTHOTH_SKIN = 22,
+            COWBOY = 23,
+            BEACH = 24,
+            SANTA = 25;
     @Override
     public List<Byte> getSkinList() {
         if (isPlaced()) {
@@ -1755,6 +1783,7 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
             list.add(MINT);
             list.add(TACO);
             list.add(WOVEN);
+            list.add(WOODEN);
             list.add(DAPPER);
             list.add(COPPER);
             list.add(FUNGUS);

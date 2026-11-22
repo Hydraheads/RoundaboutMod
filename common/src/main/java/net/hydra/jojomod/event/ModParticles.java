@@ -1,7 +1,6 @@
 package net.hydra.jojomod.event;
 
-import net.hydra.jojomod.particles.HazeColorParticleOptions;
-import net.hydra.jojomod.particles.PuzzleColorParticleOptions;
+import net.hydra.jojomod.particles.ColorParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 
@@ -93,8 +92,8 @@ public class ModParticles {
 
     public static SimpleParticleType OCCULT;
 
-    public static SimpleParticleType MOLD_DUST;
-    public static SimpleParticleType MOLD;
+    public static ParticleType<ColorParticleOptions> MOLD_DUST;
+    public static ParticleType<ColorParticleOptions> MOLD;
     public static SimpleParticleType RAGING_LIGHT; // anubis particles
     public static SimpleParticleType ALLURING_LIGHT;
 
@@ -133,11 +132,11 @@ public class ModParticles {
     public static SimpleParticleType PW_BLUE_BLASTWAVE_EXPLOSION;
     public static SimpleParticleType PW_BLUE_MUSHROOM_EXPLOSION;
 
-    public static ParticleType<HazeColorParticleOptions> PURPLE_HAZE_SMOKE;
+    public static ParticleType<ColorParticleOptions> PURPLE_HAZE_SMOKE;
     public static SimpleParticleType DISTORTION_SMOKE;
-    public static ParticleType<HazeColorParticleOptions> PURPLE_HAZE_BLASTWAVE;
+    public static ParticleType<ColorParticleOptions> PURPLE_HAZE_BLASTWAVE;
 
-    public static ParticleType<PuzzleColorParticleOptions> PUZZLE_PARTICLE;
+    public static ParticleType<ColorParticleOptions> PUZZLE_PARTICLE;
 
     public static SimpleParticleType AUTUMN_LEAVES;
     public static SimpleParticleType GINKGO_LEAVES;

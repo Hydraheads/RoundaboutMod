@@ -1,11 +1,10 @@
 {
   "textures": [
-    "roundabout:energy_ripple0",
-    "roundabout:energy_ripple1",
-    "roundabout:energy_ripple2",
-    "roundabout:energy_ripple3",
-    "roundabout:energy_ripple4",
-    "roundabout:energy_ripple5",
-    "roundabout:energy_ripple6"
+    "roundabout:idle_shadow_ripple_0",
+    "roundabout:idle_shadow_ripple_1",
+    "roundabout:idle_shadow_ripple_2",
+    "roundabout:idle_shadow_ripple_2",
+    "roundabout:idle_shadow_ripple_1",
+    "roundabout:idle_shadow_ripple_0"
   ]
 }

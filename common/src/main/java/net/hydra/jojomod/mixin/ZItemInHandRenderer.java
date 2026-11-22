@@ -571,15 +571,15 @@ public abstract class ZItemInHandRenderer {
                 }
             } else {
                 if (itemStack.getItem() instanceof StandArrowItem SI){
+                    boolean standsCanUse = false;
                     if (((StandUser)abstractClientPlayer).roundabout$getStandPowers() != null) {
-                        if (((StandUser) abstractClientPlayer).roundabout$getStandPowers().shouldStandArrowShake()){
-                            shakeMod = 1;
-                        }
-                    }else {
-                        LivingEntity ME = MainUtil.homeOnWorthy(abstractClientPlayer.level(), abstractClientPlayer.position(), 5);
-                        if ((ME != null && SI.isWorthinessType(itemStack, ME))) {
-                            shakeMod = (5 - Math.min(5, ME.distanceTo(abstractClientPlayer))) / 5;
-                        }
+                        standsCanUse = ((StandUser)abstractClientPlayer).roundabout$getStandPowers().shouldStandArrowShake();
+                    }
+                    LivingEntity ME =  MainUtil.homeOnWorthy(abstractClientPlayer.level(),abstractClientPlayer.position(),5);
+                    if (standsCanUse) {
+                        shakeMod = 1;
+                    } else if(ME != null && SI.isWorthinessType(itemStack,ME)) {
+                        shakeMod = (5-Math.min(5,ME.distanceTo(abstractClientPlayer)))/5;
                     }
                 }
             }

@@ -4,6 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.ModStrayModels;
+import net.hydra.jojomod.client.models.stand.SilverChariotModel;
 import net.hydra.jojomod.client.models.stand.renderers.SilverChariotBaseRenderer;
 import net.hydra.jojomod.entity.stand.SilverChariotEntity;
 import net.hydra.jojomod.event.index.PowerTypes;
@@ -37,17 +39,19 @@ public class SilverChariotArmsLayer<T extends LivingEntity, A extends HumanoidMo
     private final Map<Byte, ArmPair> skinArmModels = new HashMap<>();
     private final ArmPair defaultArms;
 
+    public SilverChariotArmsLayer() {
+        super(null);
+        INSTANCE = this;
+        this.defaultArms = bakeSilverChariotArms(SilverChariotModel.getTexturedModelData().bakeRoot());
+        this.skinArmModels.put((byte) 0, this.defaultArms);
+        this.skinArmModels.put(SilverChariotEntity.PHARAOH, bakeSilverChariotArms(SilverChariotModel.getTexturedModelData().bakeRoot()));
+    }
     public SilverChariotArmsLayer(EntityRendererProvider.Context context, LivingEntityRenderer<T, A> livingEntityRenderer) {
         super(livingEntityRenderer);
-        INSTANCE = this;
-
-        this.defaultArms = bakeSilverChariotArms(context, ModEntityRendererClient.SILVER_CHARIOT_LAYER);
-        this.skinArmModels.put((byte) 0, this.defaultArms);
-        this.skinArmModels.put(SilverChariotEntity.PHARAOH, bakeSilverChariotArms(context, ModEntityRendererClient.SILVER_CHARIOT_PHARAOH_LAYER));
+        this.defaultArms = null;
     }
 
-    private static ArmPair bakeSilverChariotArms(EntityRendererProvider.Context context, ModelLayerLocation layer) {
-        ModelPart standRoot = context.bakeLayer(layer);
+    private static ArmPair bakeSilverChariotArms(ModelPart standRoot) {
         ModelPart standArms = standRoot.getChild("stand").getChild("stand2").getChild("body").getChild("body2").getChild("torso").getChild("upper_chest");
         return new ArmPair(standArms.getChild("left_arm"), standArms.getChild("right_arm"));
     }
@@ -57,12 +61,13 @@ public class SilverChariotArmsLayer<T extends LivingEntity, A extends HumanoidMo
                        T entity, float limbSwing, float limbSwingAmount, float partialTicks,
                        float ageInTicks, float netHeadYaw, float headPitch) {
         if (entity == null || entity.isInvisible() || !MainUtil.isHumanoid2(entity)) return;
+        if (ModStrayModels.chariotArmsLayer == null) return;
 
         if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) return;
         if (entity instanceof StandUser SU) {
             byte skin = SU.roundabout$getStandSkin();
             ResourceLocation texture = SilverChariotBaseRenderer.getSkin(skin);
-            ArmPair arms = skinArmModels.getOrDefault(skin, defaultArms);
+            ArmPair arms = (ArmPair) ModStrayModels.chariotArmsLayer.skinArmModels.getOrDefault(skin, ModStrayModels.chariotArmsLayer.defaultArms);
 
             VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.entityTranslucent(texture));
 

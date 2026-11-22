@@ -11,6 +11,8 @@ import net.hydra.jojomod.event.PermanentZoneCastInstance;
 
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.particles.ColorParticleOptions;
+import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.*;
 
@@ -46,9 +48,12 @@ public abstract class ZProjectile extends Entity implements TraceableEntity {
             if(!(mold_caster == null)){
                 Boolean lower = mold_caster.getY() > this.getY();
                 if(Moldable && lower) {
+                    int color = PowersGreenDay.defaultMoldDustColor();
+                    if (((StandUser) mold_caster).roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
+                        color = PGD.getMoldDustParticleColor();
+                    }
                     for (int i = 0; i < 1; i = i + 1) {
-
-                        this.level().addParticle(ModParticles.MOLD_DUST,
+                        this.level().addParticle(ColorParticleOptions.fromPackedColor(ModParticles.MOLD_DUST, color),
                                 this.getX(),
                                 this.getY(),
                              this.getZ(),
@@ -63,7 +68,7 @@ public abstract class ZProjectile extends Entity implements TraceableEntity {
                             double randX = (double) randXf;
                             double randy = (double) randYf;
                             double randz = (double) randZf;
-                            this.level().addParticle(ModParticles.MOLD,
+                            this.level().addParticle(ColorParticleOptions.fromPackedColor(ModParticles.MOLD_DUST, color),
                                 this.getX() + randX * 2,
                                 this.getY() + randy * 2,
                                 this.getZ() + randz * 2,

@@ -4,6 +4,7 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.GoldExperienceEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -16,15 +17,19 @@ import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 
 public class PowersGER extends PowersGoldExperience {
     public PowersGER(LivingEntity self) {
@@ -80,6 +85,10 @@ public class PowersGER extends PowersGoldExperience {
         super.addAdditionalSaveData(tag);
     }
 
+    protected boolean giveArrowOnLoad() {
+        return false; // prevent from the requiem transformation giving this arrow back before it is time
+    }
+
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         if (tag.contains("roundabout.originalDisc", 10)) {
@@ -112,7 +121,9 @@ public class PowersGER extends PowersGoldExperience {
             ((StandUser) self).roundabout$getStand().discard();
             ((StandUser) self).roundabout$setStand(null);
         }
-        ((StandUser) self).roundabout$summonStand(self.level(), true, true);
+        if (standArrow != null && !standArrow.isEmpty()) {
+            giveStandArrowBack();
+        }
     }
 
     public void tickPower() {
@@ -121,29 +132,60 @@ public class PowersGER extends PowersGoldExperience {
             resolvePoints -= 0.25f;
             if (resolvePoints <= 0f) {
                 goBackToGE();
+                ((StandUser) self).roundabout$summonStand(self.level(), true, true);
             }
         }
     }
 
     @Override
     public boolean interceptIncomingHarm(DamageSource source, float amount) {
-        Entity culprit = source.getDirectEntity();
-        if (culprit == null) {
-            source.getEntity();
-        }
+        Entity direct = source.getDirectEntity();
+        Entity shooter = source.getEntity();
+        Entity culprit = shooter != null ? shooter : direct;
+
         if (culprit != null) {
-            IEntityAndData iData = (IEntityAndData) culprit;
-            SavedSecond lastSecond = iData.roundabout$getLastSavedSecond();
-            if (lastSecond != null) {
-                lastSecond.loadTime(culprit);
+            if (direct != null && direct != shooter && direct instanceof IEntityAndData directData) {
+                SavedSecond projectileSecond = directData.roundabout$getLastSavedSecond();
+                if (projectileSecond != null) {
+                    projectileSecond.loadTime(direct);
+                }
             }
-            if (culprit instanceof LivingEntity LE && LE.isUsingItem()){
-                LE.stopUsingItem();
-            }
-            if (culprit instanceof Mob mb && !MainUtil.isBossMob(mb)){
-                mb.getNavigation().stop();
-                if (!MainUtil.blockConfusionTicks(mb)) {
-                    ((IMob) mb).roundabout$setConfusionTicks(7);
+
+            if (culprit instanceof LivingEntity livingCulprit) {
+                IEntityAndData iData = (IEntityAndData) livingCulprit;
+                SavedSecond lastSecond = iData.roundabout$getLastSavedSecond();
+                if (lastSecond != null) {
+                    Vec3 startPos = livingCulprit.position();
+                    float startYaw = livingCulprit.getYRot();
+                    float startPitch = livingCulprit.getXRot();
+
+                    lastSecond.resetHealth = false;
+                    lastSecond.loadTime(livingCulprit);
+                    setDazed(livingCulprit, (byte) 60);
+
+                    if (livingCulprit instanceof ServerPlayer victim) {
+                        Vec3 endPos = victim.position();
+                        float endYaw = victim.getYRot();
+                        float endPitch = victim.getXRot();
+                        S2CPacketUtil.sendStartRTZPacket(
+                                victim,
+                                startPos,
+                                endPos,
+                                startYaw,
+                                startPitch,
+                                endYaw,
+                                endPitch
+                        );
+                    }
+                }
+                if (livingCulprit.isUsingItem()) {
+                    livingCulprit.stopUsingItem();
+                }
+                if (livingCulprit instanceof Mob mb && !MainUtil.isBossMob(mb)) {
+                    mb.getNavigation().stop();
+                    if (!MainUtil.blockConfusionTicks(mb)) {
+                        ((IMob) mb).roundabout$setConfusionTicks(60);
+                    }
                 }
             }
 
@@ -152,9 +194,10 @@ public class PowersGER extends PowersGoldExperience {
 
         return super.interceptIncomingHarm(source, amount);
     }
+
     // Buffs
 
-    // for damage
+    // for damage start
 
     @Override
     public float getPunchStrength(Entity entity){
@@ -216,6 +259,8 @@ public class PowersGER extends PowersGoldExperience {
         return true;
     }
 
+    // for damage end
+
     // for skins start
 
     @Override
@@ -229,5 +274,14 @@ public class PowersGER extends PowersGoldExperience {
     }
 
     // for skins end
+
+    // for icons start
+
+    @Override
+    public ResourceLocation getIconYes(int slot) {
+        return StandIcons.SQUARE_REQUIEM;
+    }
+
+    // for icons end
 
 }

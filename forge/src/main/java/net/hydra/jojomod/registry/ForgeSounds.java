@@ -1199,6 +1199,8 @@ public class ForgeSounds {
             register(ModSounds.GOLD_EXPERIENCE_TREE, ModSounds.GOLD_EXPERIENCE_TREE_ID);
     public static final RegistryObject<SoundEvent> GOLD_EXPERIENCE_VINE =
             register(ModSounds.GOLD_EXPERIENCE_VINE, ModSounds.GOLD_EXPERIENCE_VINE_ID);
+    public static final RegistryObject<SoundEvent> RETURN_TO_ZERO =
+            register(ModSounds.RETURN_TO_ZERO, ModSounds.RETURN_TO_ZERO_ID);
 
     public static final RegistryObject<SoundEvent> GE_REQUIEM_ARROW =
             register(ModSounds.GE_REQUIEM_ARROW, ModSounds.GE_REQUIEM_ARROW_ID);
