@@ -1281,7 +1281,7 @@ public class ForgeEntities {
     public static final RegistryObject<EntityType<CTRbarrierEntity>> CTR_BARRIER =
             ENTITY_TYPES.register("ctrbarrier", () ->
                     EntityType.Builder.<CTRbarrierEntity>of(CTRbarrierEntity::new, MobCategory.MISC).
-                            sized(4f, 4f).
+                            sized(4f, 10f).
                             clientTrackingRange(15).
                             build(new ResourceLocation(Roundabout.MOD_ID, "ctrbarrier").toString())
             );

@@ -57,7 +57,7 @@ public class CTRbarrierRenderer extends EntityRenderer<CTRbarrierEntity> {
             // Horizontal distance (XZ plane)
             double horizontal = Math.sqrt(dx * dx + dz * dz);
             this.model.renderToBuffer($$3, $$6, $$5, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F,
-                    Math.min((((float) $$0.followTimer) / 10) + ($$2 * 0.1F), 1f));
+                    Math.min(1 + ($$2 * 0.1F), 1f));
             $$3.popPose();
             super.render($$0, $$1, $$2, $$3, $$4, $$5);
         }
