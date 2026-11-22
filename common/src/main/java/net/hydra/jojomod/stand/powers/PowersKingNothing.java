@@ -1834,7 +1834,9 @@ public class PowersKingNothing extends NewDashPreset {
                 PowerTypes.copyPlaneOfExisting(self, $$4);
                 this.getSelf().level().addFreshEntity($$4);
             }
-            stand.setHeldItem(ItemStack.EMPTY);
+            if (!(specialInteraction && getSelf() instanceof Player PE && PE.isCreative())) {
+                stand.setHeldItem(ItemStack.EMPTY);
+            }
             setPowerNone();
             animateStand(KingNothingEntity.RETURN);
             playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);
