@@ -1639,6 +1639,10 @@ public class Config implements Cloneable {
         public Float silverChariotBonusPlayerDMGArmSummon;
         @FloatOption(group = "inherit", value = 6.0F, min = 0, max = 72000F)
         public Float silverChariotBonusMobDMGArmSummon;
+        // @FloatOption(group = "inherit", value = 1.6F, min = 0.01F, max = 72000F)
+        // public Float silverChariotAttackSpeedModifierArmSummon;
+        @IntOption(group = "inherit", value = 13, min = 0, max = 72000)
+        public Integer silverChariotAttackMaxTicksArmSummon;
 
         // Debugging, please do not remove it yet, I will remove it later
         /*
@@ -1680,7 +1684,67 @@ public class Config implements Cloneable {
         public Float poseStack_Scale_z;
         @FloatOption(group = "inherit", value = 0.3F, min = -100F, max = 100F)
         public Float poseStack_Depth_Offset;
+
+        @FloatOption(group = "inherit", value = 1.0F, min = 0F, max = 10F)
+        public Float cooldownArmouredModifier;
+        @FloatOption(group = "inherit", value = 1.0F, min = 0F, max = 10F)
+        public Float cooldownUnarmouredModifier;
         */
+
+        @IntOption(group = "inherit", value = 4, min = 1, max = 72000)
+        public Integer punchUpdateArmoured;
+        @IntOption(group = "inherit", value = 5, min = 1, max = 72000)
+        public Integer lastPunchUpdateArmoured;
+        @IntOption(group = "inherit", value = 3, min = 1, max = 72000)
+        public Integer punchUpdateUnarmoured;
+        @IntOption(group = "inherit", value = 4, min = 1, max = 72000)
+        public Integer lastPunchUpdateUnarmoured;
+        @FloatOption(group = "inherit", value = 0.75F, min = 0F, max = 10F)
+        public Float cooldownArmouredModifierPunch;
+        @FloatOption(group = "inherit", value = 0.50F, min = 0F, max = 10F)
+        public Float cooldownUnarmouredModifierPunch;
+        @FloatOption(group = "inherit", value = 0.75F, min = 0F, max = 10F)
+        public Float cooldownArmouredModifierLastPunch;
+        @FloatOption(group = "inherit", value = 0.50F, min = 0F, max = 10F)
+        public Float cooldownUnarmouredModifierLastPunch;
+        @FloatOption(group = "inherit", value = 0.90F, min = 0F, max = 10F)
+        public Float cooldownArmouredModifierBarrageCharge;
+        @FloatOption(group = "inherit", value = 0.90F, min = 0F, max = 10F)
+        public Float cooldownUnarmouredModifierBarrageCharge;
+        @FloatOption(group = "inherit", value = 0.80F, min = 0F, max = 10F)
+        public Float cooldownArmouredModifierBarrageRecoil;
+        @FloatOption(group = "inherit", value = 0.90F, min = 0F, max = 10F)
+        public Float cooldownUnarmouredModifierBarrageRecoil;
+        @FloatOption(group = "inherit", value = 0.90F, min = 0F, max = 10F)
+        public Float barrageDamageModifier;
+        @FloatOption(group = "inherit", value = 0.75F, min = 0F, max = 10F)
+        public Float punchDamageModifier;
+        @FloatOption(group = "inherit", value = 1.0F, min = 0F, max = 10F)
+        public Float sneakAttackDamageModifier;
+        @FloatOption(group = "inherit", value = 1.25F, min = 0F, max = 10F)
+        public Float selfThrowMagnitudeModifierX;
+        @FloatOption(group = "inherit", value = 1.25F, min = 0F, max = 10F)
+        public Float selfThrowMagnitudeModifierY;
+        @FloatOption(group = "inherit", value = 1.25F, min = 0F, max = 10F)
+        public Float selfThrowMagnitudeModifierZ;
+        @FloatOption(group = "inherit", value = 0.05F, min = 0F, max = 10F)
+        public Float selfCarryHoverVerticalVelocity;
+        @FloatOption(group = "inherit", value = 0.75F, min = 0F, max = 10F)
+        public Float selfCarryHoverVelocityModifierX;
+        @FloatOption(group = "inherit", value = 0.75F, min = 0F, max = 10F)
+        public Float selfCarryHoverVelocityModifierZ;
+        @FloatOption(group = "inherit", value = 1.5F, min = 0F, max = 10F)
+        public Float controlModeVelocityUnarmouredModifier;
+        @FloatOption(group = "inherit", value = 0.5F, min = 0F, max = 10F)
+        public Float controlModeVelocityModifier;
+        @FloatOption(group = "inherit", value = 0.67F, min = 0F, max = 10F)
+        public Float controlModeVelocityModifierX;
+        @FloatOption(group = "inherit", value = 0.4F, min = 0F, max = 10F)
+        public Float controlModeVelocityModifierY;
+        @FloatOption(group = "inherit", value = 0.67F, min = 0F, max = 10F)
+        public Float controlModeVelocityModifierZ;
+        @FloatOption(group = "inherit", value = 0.5F, min = 0F, max = 10F)
+        public Float cooldownUnarmouredModifierSneakAttack;
     }
 
     public static class CatchTheRainbowSettings {

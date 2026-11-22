@@ -5,7 +5,9 @@ import net.hydra.jojomod.RoundaboutLoadServer;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -13,6 +15,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.mixin.PlayerEntity;
 import net.hydra.jojomod.mixin.justice.JusticeCreeper;
 import net.hydra.jojomod.mixin.justice.JusticeZombie;
+import net.hydra.jojomod.particles.ColorParticleOptions;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
@@ -110,11 +113,14 @@ public class MoldSporesEntity extends StandEntity {
         }
         List<Entity> damages = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), range, range, range);
         for (int j = 0; j < damages.size(); j++) {
-
             if (Objects.nonNull(this.getUser())) {
                 Entity entity = damages.get(j);
                 if (entity instanceof LivingEntity) {
-
+                byte skin = PowersGreenDay.PART_FIVE_GREEN_DAY;
+                if (StandUU.roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
+                    skin = PGD.standSkin;
+                }
+                ((StandUser) entity).setMoldSkin(skin);
                     ((StandUser) entity).SetInMoldTicks(3);
                 }
 
@@ -122,13 +128,19 @@ public class MoldSporesEntity extends StandEntity {
         }
         if (!client) {
             tickeffect();
-            ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST,
+            int color = PowersGreenDay.defaultMoldDustColor();
+            Vector3f dustColor = PowersGreenDay.defaultFloatDustColor();
+            if (User != null && ((StandUser) User).roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
+                color = PGD.getMoldParticleColor();
+                dustColor = PGD.getFloatDustParticleColor();
+            }
+            ((ServerLevel) this.level()).sendParticles(ColorParticleOptions.fromPackedColor(ModParticles.MOLD_DUST, color),
                     this.getX(),
                     this.getY(),
                     this.getZ(),
                     (int) (((int) range ^ 3) * 0.5) + 1, range / 2, range / 2, range / 2, 0.005);
 
-            ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(0.76F, 1.0F, 0.9F), 2f),
+            ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(dustColor, 2f),
                     this.getX(),
                     this.getY(),
                     this.getZ(),
@@ -173,15 +185,12 @@ public class MoldSporesEntity extends StandEntity {
 
                             float fallDistance = (((StandUser) entity).getStaringYPos() - (float) entity.getPosition(1).y());
 
-
-                                double width = entity.getBbWidth() / 2;
-                                double height = entity.getBbHeight() / 2;
-                                ((ServerLevel) level()).sendParticles(ModParticles.MOLD
-                                    , entity.getX(),
-                                    (entity.getY() + height / 2),
-                                    entity.getZ(),
-                                    13, width, height, width, 0)
-                                ;
+                            int color = ((PowersGreenDay) ((StandUser) User).roundabout$getStandPowers()).getMoldParticleColor();
+                            double width = entity.getBbWidth() / 2;
+                            double height = entity.getBbHeight() / 2;
+                            ((ServerLevel) level()).sendParticles(
+                                    ColorParticleOptions.fromPackedColor(ModParticles.MOLD, color), entity.getX(),
+                                    (entity.getY() + height / 2), entity.getZ(), 13, width, height, width, 0);
 
 
                             //((StandUser) entity).DoMoldTick();

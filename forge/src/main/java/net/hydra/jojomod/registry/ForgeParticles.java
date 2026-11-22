@@ -320,14 +320,28 @@ public class ForgeParticles {
             "killer_queen_explosion",
             () -> new SimpleParticleType(true)
     );
-    public static final RegistryObject<SimpleParticleType> MOLD_DUST = PARTICLES.register(
-            "mold_dust",
-            () -> new SimpleParticleType(true)
-    );
-    public static final RegistryObject<SimpleParticleType> MOLD = PARTICLES.register(
-            "mold",
-            () -> new SimpleParticleType(true)
-    );
+    // public static final RegistryObject<SimpleParticleType> MOLD_DUST = PARTICLES.register(
+    //         "mold_dust",
+    //         () -> new SimpleParticleType(true)
+    // );
+    public static final RegistryObject<ParticleType<ColorParticleOptions>> MOLD_DUST =
+            PARTICLES.register("mold_dust", () -> new ParticleType<>(false, ColorParticleOptions.DESERIALIZER) {
+                @Override
+                public com.mojang.serialization.Codec<ColorParticleOptions> codec() {
+                    return ColorParticleOptions.codec(this);
+                }
+            });
+    // public static final RegistryObject<SimpleParticleType> MOLD = PARTICLES.register(
+    //         "mold",
+    //         () -> new SimpleParticleType(true)
+    // );
+    public static final RegistryObject<ParticleType<ColorParticleOptions>> MOLD =
+            PARTICLES.register("mold", () -> new ParticleType<>(false, ColorParticleOptions.DESERIALIZER) {
+                @Override
+                public com.mojang.serialization.Codec<ColorParticleOptions> codec() {
+                    return ColorParticleOptions.codec(this);
+                }
+            });
     public static final RegistryObject<SimpleParticleType> BLACK_SABBATH_MOVING_RIPPLE = PARTICLES.register(
             "black_sabbath_moving_ripple",
             () -> new SimpleParticleType(true)

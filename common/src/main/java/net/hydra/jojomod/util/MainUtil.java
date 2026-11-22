@@ -31,6 +31,7 @@ import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
+import net.hydra.jojomod.entity.substand.MoldSporesEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.ModEffects;
@@ -1443,6 +1444,15 @@ public class MainUtil {
             if (su.roundabout$getStandPowers() instanceof PowersGreenDay PGD && ES == EquipmentSlot.OFFHAND) {
                 if (!PGD.HasOffHand && (PGD.self.getMainArm() == HumanoidArm.LEFT)) {
                     return ItemStack.EMPTY;
+                }
+            }
+            if (su.roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PowerTypes.hasStandActive(pl) && PowerTypes.hasHandsActive(pl)) {
+                if (ES == EquipmentSlot.MAINHAND) {
+                    if (PSC.self.getMainArm() == HumanoidArm.RIGHT) {
+                        return ItemStack.EMPTY;
+                    } else if (PSC.self.getMainArm() == HumanoidArm.LEFT) {
+                        return ItemStack.EMPTY;
+                    }
                 }
             }
             if (pl.isUsingItem()) {
@@ -4651,6 +4661,13 @@ public class MainUtil {
             return ((StandUser) LE).getMoldTicks() > 0;
         }
         return false;
+    }
+
+    public static byte getMoldSkin(Entity ent) {
+        if (ent instanceof LivingEntity LE) {
+            return ((StandUser) LE).getMoldSkin();
+        }
+        return PowersGreenDay.PART_FIVE_GREEN_DAY;
     }
 
     public static Boolean isInPurpleHaze(Entity entity) {

@@ -170,6 +170,18 @@ public class SilverChariotMountEntity extends LivingEntity {
         // return (isVehicle()) || super.isNoGravity();
     }
 
+    public static double getSelfCarryHoverVerticalVelocity() {
+        return (double) ClientNetworking.getAppropriateConfig().silverChariotSettings.selfCarryHoverVerticalVelocity;
+    }
+
+    public static double getSelfCarryHoverVelocityModifierX() {
+        return (double) ClientNetworking.getAppropriateConfig().silverChariotSettings.selfCarryHoverVelocityModifierX;
+    }
+
+    public static double getSelfCarryHoverVelocityModifierZ() {
+        return (double) ClientNetworking.getAppropriateConfig().silverChariotSettings.selfCarryHoverVelocityModifierZ;
+    }
+
     @Override
     public void travel(Vec3 $$0) {
         if (isVehicle() && getControllingPassenger() instanceof Player player) {
@@ -183,7 +195,7 @@ public class SilverChariotMountEntity extends LivingEntity {
         if (isVehicle() && isHovering() && getHoverTicks() > 0) {
             Vec3 velocity = getDeltaMovement();
 
-            setDeltaMovement(velocity.x, 0.1D, velocity.z);
+            setDeltaMovement(velocity.x * getSelfCarryHoverVelocityModifierX(), getSelfCarryHoverVerticalVelocity(), velocity.z * getSelfCarryHoverVelocityModifierZ());
             hasImpulse = true;
         }
 
@@ -215,15 +227,12 @@ public class SilverChariotMountEntity extends LivingEntity {
 
     }
 
-    public float yaccel = 0f;
-    public final float verticalSpeed = 0.1f;
-    public final float changeByHeight = 0.4f;
-
     @Override
     protected Vec3 getRiddenInput(Player $$0, Vec3 $$1) {
-        float $$2 = $$0.xxa / 1.5F;
-        float $$3 = yaccel;
-        float $$4 = $$0.zza / 1.5F;
+        // float $$2 = $$0.xxa / 1.5F;
+        // float $$4 = $$0.zza / 1.5F;
+        float $$2 = $$0.xxa;
+        float $$4 = $$0.zza;
         // float $$4 = $$0.zza * 2;
         if ($$4 <= 0.0F) {
             $$4 *= 0.25F;

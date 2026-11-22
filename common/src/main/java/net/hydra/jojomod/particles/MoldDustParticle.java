@@ -52,18 +52,36 @@ public class MoldDustParticle extends TextureSheetParticle {
         return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
     }
 
-    public static class CosyProvider implements ParticleProvider<SimpleParticleType> {
+    // public static class CosyProvider implements ParticleProvider<SimpleParticleType> {
+    //     private final SpriteSet sprites;
+    //
+    //     public CosyProvider(SpriteSet spriteSet) {
+    //         this.sprites = spriteSet;
+    //     }
+    //
+    //     public Particle createParticle(SimpleParticleType simpleParticleType, ClientLevel clientLevel, double d, double e, double f, double g, double h, double i) {
+    //         MoldDustParticle campfireSmokeParticle = new MoldDustParticle(clientLevel, d, e, f, g, h, i, false);
+    //         campfireSmokeParticle.setAlpha(0.6F);
+    //         campfireSmokeParticle.pickSprite(this.sprites);
+    //         return campfireSmokeParticle;
+    //     }
+    // }
+
+    public static class Provider implements ParticleProvider<ColorParticleOptions> {
         private final SpriteSet sprites;
 
-        public CosyProvider(SpriteSet spriteSet) {
-            this.sprites = spriteSet;
+        public Provider(SpriteSet sprites) {
+            this.sprites = sprites;
         }
 
-        public Particle createParticle(SimpleParticleType simpleParticleType, ClientLevel clientLevel, double d, double e, double f, double g, double h, double i) {
-            MoldDustParticle campfireSmokeParticle = new MoldDustParticle(clientLevel, d, e, f, g, h, i, false);
-            campfireSmokeParticle.setAlpha(0.6F);
-            campfireSmokeParticle.pickSprite(this.sprites);
-            return campfireSmokeParticle;
+        @Override
+        public Particle createParticle(ColorParticleOptions options, ClientLevel level,
+                double x, double y, double z, double xd, double yd, double zd) {
+            MoldDustParticle particle = new MoldDustParticle(level, x, y, z, xd, yd, zd, false);
+            particle.setAlpha(0.6f);
+            particle.pickSprite(this.sprites);
+            particle.setColor(options.getR(), options.getG(), options.getB());
+            return particle;
         }
     }
 }

@@ -54,7 +54,7 @@ public class MoldRightArm<T extends Entity> extends EntityModel<T> {
 
 	public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int light, float r, float g, float b, float heyFull) {
 		VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityCutout(getTextureLocation()));
-		root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
+		root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b , heyFull);
 	}
 
 	@Override
