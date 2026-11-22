@@ -245,6 +245,9 @@ public class ClientUtil {
             if (rtzTicks > -1) {
                 if (pl instanceof LocalPlayer lp) {
                     applyRTZClientDrag(lp, 0.0F);
+                    if (rtzTicks % 4 == 0) {
+                        rtzAfterimages.add(new RTZAfterimage(lp, 24));
+                    }
                 }
                 rtzTicks++;
                 if (rtzTicks >= RTZ_DURATION) {
@@ -263,6 +266,17 @@ public class ClientUtil {
                     rtzTicks = -1;
                     rtzStartPos = null;
                     rtzEndPos = null;
+                }
+            }
+
+            if (!rtzAfterimages.isEmpty()) {
+                Iterator<RTZAfterimage> it = rtzAfterimages.iterator();
+                while (it.hasNext()) {
+                    RTZAfterimage img = it.next();
+                    img.age++;
+                    if (img.age >= img.maxAge) {
+                        it.remove();
+                    }
                 }
             }
         }
@@ -3082,4 +3096,27 @@ public class ClientUtil {
         player.yRotO = yaw;
         player.xRotO = pitch;
     }
+
+    public static class RTZAfterimage {
+        public final double x, y, z;
+        public final float yRot, bodyRot, headRot, xRot;
+        public final float walkDist, walkSpeed;
+        public int age = 0;
+        public final int maxAge;
+
+        public RTZAfterimage(LocalPlayer player, int maxAge) {
+            this.x = player.getX();
+            this.y = player.getY();
+            this.z = player.getZ();
+            this.yRot = player.getYRot();
+            this.bodyRot = player.yBodyRot;
+            this.headRot = player.yHeadRot;
+            this.xRot = player.getXRot();
+            this.walkDist = player.walkAnimation.position();
+            this.walkSpeed = player.walkAnimation.speed();
+            this.maxAge = maxAge;
+        }
+    }
+
+    public static final List<RTZAfterimage> rtzAfterimages = new ArrayList<>();
 }

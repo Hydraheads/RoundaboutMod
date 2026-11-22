@@ -150,6 +150,7 @@ public class PowersGER extends PowersGoldExperience {
                 float startPitch = culprit.getXRot();
 
                 lastSecond.loadTime(culprit);
+                setDazed((LivingEntity) culprit, (byte) 60);
 
                 if (culprit instanceof ServerPlayer victim) {
                     Vec3 endPos = victim.position();
