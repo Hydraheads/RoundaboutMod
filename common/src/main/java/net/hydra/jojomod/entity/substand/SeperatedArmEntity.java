@@ -827,6 +827,8 @@ public class SeperatedArmEntity extends StandEntity {
                                 if (grabbedEntity == null) {
                                     grabbedEntity = entity;
                                     chokeTimer = 80;
+                                    spawnAtLocation(this.getMainHandItem());
+                                    this.setItemInHand(InteractionHand.MAIN_HAND,ItemStack.EMPTY);
                                 }
                             }
                         }
