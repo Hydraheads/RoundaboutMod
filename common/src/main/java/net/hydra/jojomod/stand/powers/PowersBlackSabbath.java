@@ -1638,6 +1638,8 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
             return Component.translatable("skins.roundabout.black_sabbath.taco");
         } else if (skinId == BlackSabbathEntity.WOOL) {
             return Component.translatable("skins.roundabout.black_sabbath.woven");
+        } else if (skinId == BlackSabbathEntity.WOODEN) {
+            return Component.translatable("skins.roundabout.black_sabbath.wooden");
         } else if (skinId == BlackSabbathEntity.DAPPER){
             return Component.translatable("skins.roundabout.black_sabbath.dapper");
         } else if (skinId == BlackSabbathEntity.COPPER){
@@ -1721,18 +1723,19 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
             MINT = 10,
             TACO = 11,
             WOVEN = 12,
-            FUNGUS = 13,
-            DAPPER = 14,
-            COPPER = 15,
-            PHANTOM_SKIN = 16,
-            SWEET_SKIN = 17,
-            MAGMA = 18,
-            OCULUS = 19,
-            CRIMSON = 20,
-            SACTHOTH_SKIN = 21,
-            COWBOY = 22,
-            BEACH = 23,
-            SANTA = 24;
+            WOODEN = 13,
+            FUNGUS = 14,
+            DAPPER = 15,
+            COPPER = 16,
+            PHANTOM_SKIN = 17,
+            SWEET_SKIN = 18,
+            MAGMA = 19,
+            OCULUS = 20,
+            CRIMSON = 21,
+            SACTHOTH_SKIN = 22,
+            COWBOY = 23,
+            BEACH = 24,
+            SANTA = 25;
     @Override
     public List<Byte> getSkinList() {
         if (isPlaced()) {
@@ -1755,6 +1758,7 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
             list.add(MINT);
             list.add(TACO);
             list.add(WOVEN);
+            list.add(WOODEN);
             list.add(DAPPER);
             list.add(COPPER);
             list.add(FUNGUS);
