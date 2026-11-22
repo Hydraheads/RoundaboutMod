@@ -1,5 +1,6 @@
 {
 	"credit": "Made with Blockbench",
+	"render_type": "minecraft:cutout",
 	"texture_size": [128, 128],
 	"textures": {
 		"3": "roundabout:block/mr_statue_texture",

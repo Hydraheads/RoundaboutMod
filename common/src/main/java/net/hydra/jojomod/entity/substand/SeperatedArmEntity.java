@@ -266,6 +266,8 @@ public class SeperatedArmEntity extends StandEntity {
         return CurrentCheckPos;
     }
 
+    private int chokeTimer;
+
     @Override
     public void tick() {
         this.entityData.set(HELD_ITEM,this.getMainHandItem());
@@ -282,6 +284,12 @@ public class SeperatedArmEntity extends StandEntity {
                             this.setPos(rayCastFromGrabbedEntity(0.5).subtract(0, 0.35, 0));
                             this.lookAt(EntityAnchorArgument.Anchor.EYES, grabbedEntity.getEyePosition());
 
+                            if (chokeTimer == 0) {
+                                grabbedEntity.hurt(ModDamageTypes.of(this.level(), DamageTypes.DROWN), 2);
+                                chokeTimer = 15;
+                            } else {
+                                chokeTimer--;
+                            }
                             ((LivingEntity) grabbedEntity).addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, 2), grabbedEntity);
                         } else {
                             grabbedEntity = null;
@@ -299,6 +307,12 @@ public class SeperatedArmEntity extends StandEntity {
                                 StartupTicks--;
                             else
                                 StartupTicks = 0;
+                        }
+                    }
+                    if (User != null) {
+                        if (MainUtil.cheapDistanceTo(this.getX(), this.getY(), this.getZ(), User.getX(), User.getY(), User.getZ()) > 16) {
+                            grabbedEntity = null;
+                            StartupTicks = 0;
                         }
                     }
                 }
@@ -462,8 +476,10 @@ public class SeperatedArmEntity extends StandEntity {
                     }doAttack();
                 }
                 attractMobs();
-                pickUpItems();
                 doSpin();
+                if (grabbedEntity == null){
+                    pickUpItems();
+                }
 
                 if (FireworkLaunchTicks > 0) {
                     FireworkLaunchTicks--;
@@ -810,6 +826,7 @@ public class SeperatedArmEntity extends StandEntity {
                             if (((((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersCatchTheRainbow))){
                                 if (grabbedEntity == null) {
                                     grabbedEntity = entity;
+                                    chokeTimer = 80;
                                 }
                             }
                         }
@@ -913,6 +930,10 @@ public class SeperatedArmEntity extends StandEntity {
     }
 
     public boolean standCanShowName() {
+        return false;
+    }
+
+    public boolean canChangeDimensions() {
         return false;
     }
 }

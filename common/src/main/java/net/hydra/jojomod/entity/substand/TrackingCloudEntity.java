@@ -29,6 +29,7 @@ public class TrackingCloudEntity extends StandEntity {
 
     @Override
     public void tick() {
+        this.setFadeOut(((byte) 1));
         if (getUser() == null || !getUser().isAlive() || !(getUserData(
                 getUser()).roundabout$getStandPowers() instanceof PowersKingNothing)) {
                     this.discard();
@@ -37,12 +38,17 @@ public class TrackingCloudEntity extends StandEntity {
         if (this.tickCount % 10 == 0) {
             recalculateMovementVector();
         }
+        super.tick();
     }
 
     private void recalculateMovementVector() {
 
     }
 
+    @Override
+    public boolean isNoGravity() {
+        return true;
+    }
 
     public static AttributeSupplier.Builder createStandAttributes() {
         return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED,

@@ -64,6 +64,22 @@ public class StandIcons {
             new ResourceLocation(Roundabout.MOD_ID, "textures/environment/time_erase_t.png"),
             new ResourceLocation(Roundabout.MOD_ID, "textures/environment/time_erase_b.png")
     };
+    public static final ResourceLocation[] RTZ_SKYBOX = new ResourceLocation[]{
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/return_to_zero_t.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/return_to_zero_b.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/return_to_zero_n.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/return_to_zero_s.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/return_to_zero_w.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/return_to_zero_e.png")
+    };
+    public static final ResourceLocation[] RTZ_STAR_SKYBOX = new ResourceLocation[]{
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/rtz_stars_t.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/rtz_stars_b.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/rtz_stars_n.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/rtz_stars_s.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/rtz_stars_w.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/rtz_stars_e.png")
+    };
 
     public static final ResourceLocation NONE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/none.png");

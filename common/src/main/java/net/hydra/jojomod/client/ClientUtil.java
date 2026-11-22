@@ -242,6 +242,43 @@ public class ClientUtil {
                     ClientUtil.setCameraEntity(null);
                 }
             }
+            if (rtzTicks > -1) {
+                if (pl instanceof LocalPlayer lp) {
+                    applyRTZClientDrag(lp, 0.0F);
+                    if (rtzTicks % 4 == 0) {
+                        rtzAfterimages.add(new RTZAfterimage(lp, 24));
+                    }
+                }
+                rtzTicks++;
+                if (rtzTicks >= RTZ_DURATION) {
+                    if (pl instanceof LocalPlayer lp && rtzEndPos != null) {
+                        lp.setPos(rtzEndPos.x, rtzEndPos.y, rtzEndPos.z);
+                        lp.xo = rtzEndPos.x;
+                        lp.yo = rtzEndPos.y;
+                        lp.zo = rtzEndPos.z;
+                        lp.setYRot(rtzEndYaw);
+                        lp.setXRot(rtzEndPitch);
+                        lp.yRotO = rtzEndYaw;
+                        lp.xRotO = rtzEndPitch;
+                        lp.setDeltaMovement(Vec3.ZERO);
+                        lp.noPhysics = false;
+                    }
+                    rtzTicks = -1;
+                    rtzStartPos = null;
+                    rtzEndPos = null;
+                }
+            }
+
+            if (!rtzAfterimages.isEmpty()) {
+                Iterator<RTZAfterimage> it = rtzAfterimages.iterator();
+                while (it.hasNext()) {
+                    RTZAfterimage img = it.next();
+                    img.age++;
+                    if (img.age >= img.maxAge) {
+                        it.remove();
+                    }
+                }
+            }
         }
 
         if (roadRollerPickingRRE != null) {
@@ -1133,6 +1170,23 @@ public class ClientUtil {
                     if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingNothing pkn) {
                         pkn.removeItemBlockPos(pos);
                     }
+                }
+                else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.StartRTZ.value)) {
+                    double sx = (double) vargs[0];
+                    double sy = (double) vargs[1];
+                    double sz = (double) vargs[2];
+                    double ex = (double) vargs[3];
+                    double ey = (double) vargs[4];
+                    double ez = (double) vargs[5];
+                    float sYaw = (float) vargs[6];
+                    float sPitch = (float) vargs[7];
+                    float eYaw = (float) vargs[8];
+                    float ePitch = (float) vargs[9];
+                    ClientUtil.startRTZClient(
+                            new Vec3(sx, sy, sz),
+                            new Vec3(ex, ey, ez),
+                            sYaw, sPitch, eYaw, ePitch
+                    );
                 }
 
                 // theoretical deregister dynamic worlds packet
@@ -2984,4 +3038,85 @@ public class ClientUtil {
         boolean strafe = client.options.keyLeft.isDown() || client.options.keyRight.isDown();
         return forwardOrBack && strafe;
     }
+
+    // return to zero stuff for interp, etc.
+    public static int rtzTicks = -1;
+    public static final int RTZ_DURATION = 60;
+    public static Vec3 rtzStartPos = null;
+    public static Vec3 rtzEndPos = null;
+    public static float rtzStartYaw = 0.0F;
+    public static float rtzStartPitch = 0.0F;
+    public static float rtzEndYaw = 0.0F;
+    public static float rtzEndPitch = 0.0F;
+
+    public static boolean isUnderRTZ() {
+        return rtzTicks > -1;
+    }
+
+    public static void startRTZClient(Vec3 startPos, Vec3 endPos, float startYaw, float startPitch, float endYaw, float endPitch) {
+        rtzTicks = 0;
+        rtzStartPos = startPos;
+        rtzEndPos = endPos;
+        rtzStartYaw = startYaw;
+        rtzStartPitch = startPitch;
+        rtzEndYaw = endYaw;
+        rtzEndPitch = endPitch;
+
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null && startPos != null) {
+            player.setPos(startPos.x, startPos.y, startPos.z);
+            player.xo = startPos.x;
+            player.yo = startPos.y;
+            player.zo = startPos.z;
+            player.setDeltaMovement(Vec3.ZERO);
+        }
+    }
+
+    public static void applyRTZClientDrag(LocalPlayer player, float partialTick) {
+        if (!isUnderRTZ() || rtzStartPos == null || rtzEndPos == null) return;
+
+        float progress = Mth.clamp((rtzTicks + partialTick) / (float) RTZ_DURATION, 0.0F, 1.0F);
+        float eased = progress * progress * (3.0F - 2.0F * progress);
+
+        double x = Mth.lerp(eased, rtzStartPos.x, rtzEndPos.x);
+        double y = Mth.lerp(eased, rtzStartPos.y, rtzEndPos.y);
+        double z = Mth.lerp(eased, rtzStartPos.z, rtzEndPos.z);
+
+        player.setPos(x, y, z);
+        player.xo = x;
+        player.yo = y;
+        player.zo = z;
+        player.setDeltaMovement(Vec3.ZERO);
+        player.noPhysics = true;
+
+        float yaw = Mth.rotLerp(eased, rtzStartYaw, rtzEndYaw);
+        float pitch = Mth.lerp(eased, rtzStartPitch, rtzEndPitch);
+        player.setYRot(yaw);
+        player.setXRot(pitch);
+        player.yRotO = yaw;
+        player.xRotO = pitch;
+    }
+
+    public static class RTZAfterimage {
+        public final double x, y, z;
+        public final float yRot, bodyRot, headRot, xRot;
+        public final float walkDist, walkSpeed;
+        public int age = 0;
+        public final int maxAge;
+
+        public RTZAfterimage(LocalPlayer player, int maxAge) {
+            this.x = player.getX();
+            this.y = player.getY();
+            this.z = player.getZ();
+            this.yRot = player.getYRot();
+            this.bodyRot = player.yBodyRot;
+            this.headRot = player.yHeadRot;
+            this.xRot = player.getXRot();
+            this.walkDist = player.walkAnimation.position();
+            this.walkSpeed = player.walkAnimation.speed();
+            this.maxAge = maxAge;
+        }
+    }
+
+    public static final List<RTZAfterimage> rtzAfterimages = new ArrayList<>();
 }

@@ -277,6 +277,70 @@ public class JusticeFogRenderer {
         fogBlue =b;
     }
 
+
+    @Inject(method = "setupFog", at = @At("TAIL"))
+    private static void roundabout$RTZFog(
+            Camera camera,
+            FogRenderer.FogMode mode,
+            float renderDistance,
+            boolean thickFog,
+            float partialTick,
+            CallbackInfo ci) {
+
+        if (!ClientUtil.isUnderRTZ())
+            return;
+        FogType $$5 = camera.getFluidInCamera();
+        if ($$5 != FogType.NONE)
+            return;
+
+        float s = 23F;
+        float e = 45.0F;
+
+        float rtzProgress = (ClientUtil.rtzTicks + partialTick) / (float) ClientUtil.RTZ_DURATION;
+        float progress = Mth.clamp(Math.min(rtzProgress * 6.0F, (1.0F - rtzProgress) * 6.0F), 0.0F, 1.0F);
+        progress = progress * progress * (3.0F - 2.0F * progress);
+
+        float start = Mth.lerp(progress, renderDistance * 0.75F, s);
+        float end = Mth.lerp(progress, renderDistance, e);
+
+        RenderSystem.setShaderFogStart(start);
+        RenderSystem.setShaderFogEnd(end);
+    }
+
+    @Inject(method = "setupColor", at = @At("RETURN"))
+    private static void roundabout$RTZFogColor(
+            Camera camera,
+            float partialTick,
+            ClientLevel level,
+            int renderDistance,
+            float darkenWorldAmount,
+            CallbackInfo ci) {
+
+        if (!ClientUtil.isUnderRTZ())
+            return;
+
+        FogType $$5 = camera.getFluidInCamera();
+        if ($$5 != FogType.NONE)
+            return;
+
+        float rtzProgress = (ClientUtil.rtzTicks + partialTick) / (float) ClientUtil.RTZ_DURATION;
+        float progress = Mth.clamp(Math.min(rtzProgress * 6.0F, (1.0F - rtzProgress) * 6.0F), 0.0F, 1.0F);
+        progress = progress * progress * (3.0F - 2.0F * progress);
+
+        float targetR = 0.07F;
+        float targetG = 0.02F;
+        float targetB = 0.14F;
+
+        float r = Mth.lerp(progress, fogRed, targetR);
+        float g = Mth.lerp(progress, fogGreen, targetG);
+        float b = Mth.lerp(progress, fogBlue, targetB);
+
+        RenderSystem.clearColor(r, g, b, 1.0F);
+        fogRed = r;
+        fogGreen = g;
+        fogBlue = b;
+    }
+
     //basically the same checks as above, but this time for color
     @Inject(method = "setupColor", at = @At("HEAD"), cancellable = true)
     private static void roundabout$diverDownXrayColorBlock(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, CallbackInfo ci) {

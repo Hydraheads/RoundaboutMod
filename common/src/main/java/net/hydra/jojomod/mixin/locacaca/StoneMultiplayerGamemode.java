@@ -1,16 +1,19 @@
 package net.hydra.jojomod.mixin.locacaca;
 
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(MultiPlayerGameMode.class)
@@ -40,6 +43,15 @@ public class StoneMultiplayerGamemode {
                     cir.setReturnValue(InteractionResult.FAIL);
                 }
 
+            }
+        }
+    }
+    @Inject(method = "attack", at = @At("HEAD"), cancellable = true,require = 0)
+    public void roundabout$attackDat(Player $$0, Entity $$1, CallbackInfo ci) {
+        if ($$0 != null){
+            StandPowers powers = ((StandUser)$$0).roundabout$getStandPowers();
+            if (powers.activePowerPhase != 0){
+                powers.meleeSwapped = true;
             }
         }
     }

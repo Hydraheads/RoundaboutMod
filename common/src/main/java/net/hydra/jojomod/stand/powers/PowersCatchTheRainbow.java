@@ -627,7 +627,6 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                     PE.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 60, 10), PE);
                     getStandUserSelf().roundabout$setDazed((byte) 0);
                     OffHandReturnServer();
-                    this.ctrDodgeTicks = 30;
                     playSoundIfPossible(self.level(), null, self.blockPosition(), ModSounds.VAMPIRE_AWAKEN_EVENT,
                             SoundSource.PLAYERS, 1F, 1F);
                     playSoundIfPossible(self.level(), null, self.blockPosition(), ModSounds.CTR_LIFE_CLUTCH_EVENT,
@@ -724,7 +723,9 @@ public class PowersCatchTheRainbow extends NewDashPreset {
 
     @Override
     public void onActuallyHurt(DamageSource $$0, float $$1){
-        stunTicks = 10;
+        if ($$1 >= 6.0f) {
+            stunTicks = 10;
+        }
     }
 
     //barrier

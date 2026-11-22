@@ -243,8 +243,8 @@ public class KingNothingEntity extends FollowingStandEntity {
                                     && Shapes.joinIsNotEmpty(
                                     $$2.getCollisionShape(this.level(), $$1x).move($$1x.getX(),
                                             $$1x.getY(), $$1x.getZ()), Shapes.create($$1),
-                                    BooleanOp.AND
-                            );
+                                    BooleanOp.AND)
+                                    || ($$2.getBlock() instanceof GlassBlock);
                         }
                 );
     }
@@ -262,8 +262,8 @@ public class KingNothingEntity extends FollowingStandEntity {
                                     && Shapes.joinIsNotEmpty(
                                     $$2.getCollisionShape(this.level(), $$1x).move((double)$$1x.getX(), (double)$$1x.getY(), (double)$$1x.getZ()),
                                     Shapes.create($$1),
-                                    BooleanOp.AND
-                            );
+                                    BooleanOp.AND)
+                                    || ($$2.getBlock() instanceof GlassBlock);
                         }
                 );
     }

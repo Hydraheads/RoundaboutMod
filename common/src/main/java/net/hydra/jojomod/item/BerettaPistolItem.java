@@ -13,7 +13,7 @@ import net.minecraft.world.phys.Vec3;
 public class BerettaPistolItem extends FirearmItem implements Vanishable {
 
     public BerettaPistolItem(Properties properties) {
-        super(properties.durability(300));
+        super(properties.durability(300),-1);
     }
 
     @Override
