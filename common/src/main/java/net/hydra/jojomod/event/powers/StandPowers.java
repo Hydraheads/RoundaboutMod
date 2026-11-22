@@ -2113,6 +2113,8 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
+    public boolean meleeSwapped = false;
+
     @Override
     public void baseTickPower(){
 
@@ -2260,7 +2262,13 @@ public class StandPowers extends AbilityScapeBasis {
                         }
                     }
                 }
-                this.attackTime++;
+                if (meleeSwapped){
+                    if (self.tickCount % 2 == 0){
+                        this.attackTime++;
+                    }
+                } else {
+                    this.attackTime++;
+                }
                 if (this.attackTime > this.attackTimeMax) {
                 //if (activePowerPhase != 0){
                     //if (this.self.level().isClientSide()){
