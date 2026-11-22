@@ -296,6 +296,8 @@ public class Config implements Cloneable {
         public Boolean bleedRemovesStrength;
         @BooleanOption(group = "inherit", value = true)
         public Boolean hexTwoSealsPotions;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean meleeSwapPenalty;
     }
     public static class VampireSettings {
         @BooleanOption(group = "inherit", value = true)
