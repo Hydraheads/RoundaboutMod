@@ -112,29 +112,29 @@ public class FabricParticles {
     public static final SimpleParticleType BLACK_SABBATH_MOVING_RIPPLE = FabricParticleTypes.simple();
     public static final SimpleParticleType BLACK_SABBATH_IDLE_RIPPLE = FabricParticleTypes.simple();
 
-    public static final ParticleType<HazeColorParticleOptions> PURPLE_HAZE_SMOKE =
-            new net.minecraft.core.particles.ParticleType<>(false, HazeColorParticleOptions.DESERIALIZER) {
+    public static final ParticleType<ColorParticleOptions> PURPLE_HAZE_SMOKE =
+            new net.minecraft.core.particles.ParticleType<>(false, ColorParticleOptions.DESERIALIZER) {
                 @Override
-                public Codec<HazeColorParticleOptions> codec() {
-                    return HazeColorParticleOptions.codec(this);
+                public Codec<ColorParticleOptions> codec() {
+                    return ColorParticleOptions.codec(this);
                 }
             };
     public static final SimpleParticleType DISTORTION_SMOKE = FabricParticleTypes.simple();
-    public static final ParticleType<HazeColorParticleOptions> PURPLE_HAZE_BLASTWAVE =
-            new net.minecraft.core.particles.ParticleType<>(false, HazeColorParticleOptions.DESERIALIZER) {
+    public static final ParticleType<ColorParticleOptions> PURPLE_HAZE_BLASTWAVE =
+            new net.minecraft.core.particles.ParticleType<>(false, ColorParticleOptions.DESERIALIZER) {
                 @Override
-                public Codec<HazeColorParticleOptions> codec() {
-                    return HazeColorParticleOptions.codec(this);
+                public Codec<ColorParticleOptions> codec() {
+                    return ColorParticleOptions.codec(this);
                 }
             };
     public static final SimpleParticleType AUTUMN_LEAVES = FabricParticleTypes.simple();
     public static final SimpleParticleType GINKGO_LEAVES = FabricParticleTypes.simple();
 
-    public static final ParticleType<PuzzleColorParticleOptions> PUZZLE_PARTICLE =
-            new ParticleType<>(false, PuzzleColorParticleOptions.DESERIALIZER) {
+    public static final ParticleType<ColorParticleOptions> PUZZLE_PARTICLE =
+            new ParticleType<>(false, ColorParticleOptions.DESERIALIZER) {
                 @Override
-                public Codec<PuzzleColorParticleOptions> codec() {
-                    return PuzzleColorParticleOptions.codec(this);
+                public Codec<ColorParticleOptions> codec() {
+                    return ColorParticleOptions.codec(this);
                 }
             };
 

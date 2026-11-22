@@ -1230,7 +1230,6 @@ public class FabricItems {
         ((StreetSignBlock)FabricBlocks.STREET_SIGN_STOP).referenceItem = STREET_SIGN_STOP_BLOCK_ITEM.getDefaultInstance();
         ((StreetSignBlock)FabricBlocks.STREET_SIGN_YIELD).referenceItem = STREET_SIGN_YIELD_BLOCK_ITEM.getDefaultInstance();
         ((StreetSignBlock)FabricBlocks.STREET_SIGN_DANGER).referenceItem = STREET_SIGN_DANGER_BLOCK_ITEM.getDefaultInstance();
-        ((FancyLighterBlock)FabricBlocks.FANCY_LIGHTER_BLOCK).referenceItem = FANCY_LIGHTER.getDefaultInstance();
         ((AbstractHandBlock)FabricBlocks.HAND).referenceItem = HAND_BLOCK_ITEM.getDefaultInstance();
         ModItems.FANCY_LIGHTER = FANCY_LIGHTER;
         ModItems.HAND = HAND_BLOCK_ITEM;

@@ -547,6 +547,8 @@ public class FabricEntityClient {
         ModStrayModels.diverLegsLayer = new DiverLegsLayer<>();
         ModStrayModels.chariotArmsLayer = new SilverChariotArmsLayer<>();
 
+        ModStrayModels.falconShoulderLayer = new FalconShoulderLayer();
+
         ModStrayModels.VampireHairOne = new VampireHairOnePart();
         ModStrayModels.VampireHairTwo = new VampireHairTwoPart();
         ModStrayModels.VampireHairFlesh = new VampireHairFleshBudLayer();

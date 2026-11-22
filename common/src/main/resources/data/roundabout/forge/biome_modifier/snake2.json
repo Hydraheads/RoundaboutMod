@@ -3,7 +3,7 @@
   "biomes": "#minecraft:is_jungle",
   "spawners": {
     "type": "roundabout:snake",
-    "weight": 10,
+    "weight": 6,
     "minCount": 1,
     "maxCount": 3
   }

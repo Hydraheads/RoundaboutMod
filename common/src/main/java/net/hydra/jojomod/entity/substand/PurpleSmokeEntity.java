@@ -12,7 +12,7 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.ModEffects;
-import net.hydra.jojomod.particles.HazeColorParticleOptions;
+import net.hydra.jojomod.particles.ColorParticleOptions;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -43,15 +43,10 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Vector3f;
-import org.spongepowered.asm.mixin.injection.struct.InjectorGroupInfo;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public class PurpleSmokeEntity extends StandEntity {
@@ -279,7 +274,7 @@ public class PurpleSmokeEntity extends StandEntity {
             return ModParticles.DISTORTION_SMOKE;
         }
         int color = SKIN_COLORS.getOrDefault(skin, DEFAULT_HAZE_COLOR);
-        return HazeColorParticleOptions.fromPackedColor(ModParticles.PURPLE_HAZE_SMOKE, color);
+        return ColorParticleOptions.fromPackedColor(ModParticles.PURPLE_HAZE_SMOKE, color);
     }
 
     private int lastTier = 0;

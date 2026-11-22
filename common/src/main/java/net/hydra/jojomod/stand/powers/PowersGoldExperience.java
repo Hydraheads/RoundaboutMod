@@ -900,7 +900,6 @@ public class PowersGoldExperience extends BlockGrabPreset {
             return false;
         } else if (move == REQUIEM) {
             grabInventorySlot = passedInt;
-            return false;
         }
 
 
@@ -2274,14 +2273,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
                 if (!((StandUser)victim).roundabout$getStandDisc().isEmpty() && (victim instanceof Monster ||
                         victim instanceof NeutralMob)){
-                    if (victim.getMaxHealth() >= 100){
-                        amount = (int)( amount*0.5);
-                    }
-                    amount = amount * 2.5f;
-                } else {
-                    if (victim.getMaxHealth() >= 100){
-                        amount = (int)( amount*0.5);
-                    }
+
+                    amount = amount * 1.25f;
                 }
 
                 addResolvePoints(amount);
@@ -2295,7 +2288,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
         if (!(canUseRequiem())) {
             return;
         }
-        addResolvePoints(damage*3.5f);
+        addResolvePoints(damage*1.75f);
     }
 
     private void addResolvePoints(float amount) {
@@ -2322,10 +2315,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
             if (!this.getSelf().level().isClientSide()) {
                 ItemStack stack = ((Player)this.getSelf()).getInventory().getItem(this.grabInventorySlot);
                 if (stack.is(ModItems.STAND_ARROW) || stack.is(ModItems.STAND_BEETLE_ARROW)) {
-                    stand.canAcquireHeldItem = true;
-                    stand.setHeldItem(stack.copyWithCount(1));
+                    standArrow = stack.copyWithCount(1);
                     stack.shrink(1);
-                    standArrow = null;
+                    saveDiscAndSync();
                 }else {
                     return false; // how isn't your main hand a stand arrow?
                 }
@@ -2341,12 +2333,6 @@ public class PowersGoldExperience extends BlockGrabPreset {
     }
 
     private void updateRequiem() {
-        if (!isClient() && standArrow == null && attackTimeDuring >= 20) {
-            StandEntity standEntity = ((StandUser)self).roundabout$getStand();
-            if (standEntity != null) {
-                standArrow = standEntity.getHeldItem();
-            }
-        }
 
         if (attackTimeDuring >= 240) {
             //setPowerNone();
