@@ -2,7 +2,6 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -19,7 +18,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.MaxStandDiscItem;
-import net.hydra.jojomod.particles.HazeColorParticleOptions;
+import net.hydra.jojomod.particles.ColorParticleOptions;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -1898,7 +1897,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         int color = PurpleSmokeEntity.SKIN_COLORS.getOrDefault(getStandSkin(), PurpleSmokeEntity.DEFAULT_HAZE_COLOR);
 
         sendParticlesIfPossible(self.level(),
-                HazeColorParticleOptions.fromPackedColor(ModParticles.PURPLE_HAZE_BLASTWAVE, color),
+                ColorParticleOptions.fromPackedColor(ModParticles.PURPLE_HAZE_BLASTWAVE, color),
                 pos.x, pos.y + 0.05, pos.z,
                 1, 0.005, 0.01, 0.005, 0.02);
         /*sendParticlesIfPossible(self.level(),
