@@ -2268,7 +2268,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 return 0;
         }
         // diver down legs jump boost
-        if (this.roundabout$hasDiverLegs()) {
+        if (this.roundabout$hasDiverLegs() && !isUsingItem()) {
             TOT += 2; // same jump boost that vamp has
         }
         // life punch jump height
@@ -5350,7 +5350,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             $$1 /= 2;
             adj = true;
         }
-        if ((LivingEntity) (Object) this instanceof Player pl) {
+            if ((LivingEntity) (Object) this instanceof Player pl) {
             StandUser SU = (StandUser) pl;
             float fd = ((IFatePlayer) pl).rdbt$getFatePowers().getJumpHeightAddonMax();
             if (SU.roundabout$getStandPowers() != null) {
