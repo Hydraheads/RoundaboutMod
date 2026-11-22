@@ -417,6 +417,64 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
             poseStack.popPose();
         }
     }
+
+    @Unique
+    public void rdbt$renderRTZBlockFragments(
+            PoseStack poseStack,
+            MultiBufferSource buffer,
+            Camera camera,
+            float partialTick
+    ) {
+        if (!ClientUtil.isUnderRTZ() || ClientUtil.rtzBlockFragments.isEmpty()) return;
+
+        Minecraft mc = Minecraft.getInstance();
+        BlockRenderDispatcher dispatcher = mc.getBlockRenderer();
+        Vec3 cam = camera.getPosition();
+
+        float progress = Mth.clamp((ClientUtil.rtzTicks + (partialTick % 1.0F)) / (float) ClientUtil.RTZ_DURATION, 0.0F, 1.0F);
+
+        float scatterFactor;
+        if (progress < 0.25F) {
+            float t = progress / 0.25F;
+            scatterFactor = 1.0F - (1.0F - t) * (1.0F - t);
+        } else if (progress < 0.72F) {
+            float drift = (progress - 0.25F) / 0.47F;
+            scatterFactor = 1.0F + Mth.sin(drift * (float) Math.PI) * 0.12F;
+        } else {
+            float t = (progress - 0.72F) / 0.28F;
+            float eased = t * t * (3.0F - 2.0F * t);
+            scatterFactor = 1.0F - eased;
+        }
+
+        for (ClientUtil.RTZBlockFragment frag : ClientUtil.rtzBlockFragments) {
+            poseStack.pushPose();
+
+            double x = Mth.lerp(scatterFactor, frag.originPos.x, frag.scatteredPos.x) - cam.x;
+            double y = Mth.lerp(scatterFactor, frag.originPos.y, frag.scatteredPos.y) - cam.y;
+            double z = Mth.lerp(scatterFactor, frag.originPos.z, frag.scatteredPos.z) - cam.z;
+
+            poseStack.translate(x, y, z);
+
+            poseStack.mulPose(Axis.XP.rotationDegrees(frag.spinX * scatterFactor));
+            poseStack.mulPose(Axis.YP.rotationDegrees(frag.spinY * scatterFactor));
+            poseStack.mulPose(Axis.ZP.rotationDegrees(frag.spinZ * scatterFactor));
+
+            float scale = Mth.lerp(Math.min(scatterFactor, 1.0F), 1.0F, 0.78F);
+            poseStack.scale(scale, scale, scale);
+            poseStack.translate(-0.5, -0.5, -0.5);
+
+            dispatcher.renderSingleBlock(
+                    frag.state,
+                    poseStack,
+                    buffer,
+                    frag.packedLight,
+                    OverlayTexture.NO_OVERLAY
+            );
+
+            poseStack.popPose();
+        }
+    }
+
     @Inject(method = "renderClouds",
             at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$renderClouds(PoseStack $$0, Matrix4f $$1, float $$2, double $$3, double $$4, double $$5, CallbackInfo ci) {
@@ -921,6 +979,9 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                 float oldPitchO = lp.xRotO;
 
                 for (ClientUtil.RTZAfterimage img : ClientUtil.rtzAfterimages) {
+                    if (img.age < 2) continue;
+                    if (lp.distanceToSqr(img.x, img.y, img.z) < 0.64D) continue;
+
                     float lifeProgress = Mth.clamp((img.age + partialTick) / (float) img.maxAge, 0.0F, 1.0F);
                     float alpha = (1.0F - lifeProgress) * 0.55F;
                     if (alpha <= 0.01F) continue;
@@ -1015,7 +1076,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
             return;
     }
 
-    @Inject(method = "renderChunkLayer", at = @At("HEAD"))
+    @Inject(method = "renderChunkLayer", at = @At("HEAD"), cancellable = true)
     private void roundabout$renderChunkLayer(RenderType renderType, PoseStack matrices, double cameraX, double cameraY, double cameraZ, Matrix4f positionMatrix, CallbackInfo ci)
     {
         if (renderType == RenderType.solid())
@@ -1024,6 +1085,9 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
             RPostShaderRegistry.InverseProjectionMatrix.mul(positionMatrix);
             RPostShaderRegistry.InverseProjectionMatrix.mul(matrices.last().pose());
             RPostShaderRegistry.InverseProjectionMatrix.invert();
+        }
+        if (ClientUtil.isUnderRTZ() && ClientUtil.rtzTicks >= 4 && ClientUtil.rtzTicks < ClientUtil.RTZ_DURATION - 4) {
+            ci.cancel();
         }
     }
 }
