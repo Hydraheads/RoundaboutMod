@@ -41,7 +41,7 @@ public class PuzzleParticle extends TextureSheetParticle {
         return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
     }
 
-    public static class Provider implements ParticleProvider<PuzzleColorParticleOptions> {
+    public static class Provider implements ParticleProvider<ColorParticleOptions> {
         private final SpriteSet sprites;
 
         public Provider(SpriteSet sprites) {
@@ -49,7 +49,7 @@ public class PuzzleParticle extends TextureSheetParticle {
         }
 
         @Override
-        public Particle createParticle(PuzzleColorParticleOptions options, ClientLevel level,
+        public Particle createParticle(ColorParticleOptions options, ClientLevel level,
                                        double x, double y, double z, double xd, double yd, double zd) {
             PuzzleParticle particle = new PuzzleParticle(level, x, y, z, sprites, xd, yd, zd);
             particle.setColor(options.getR(), options.getG(), options.getB());

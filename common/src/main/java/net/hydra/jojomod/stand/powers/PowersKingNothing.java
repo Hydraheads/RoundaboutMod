@@ -29,7 +29,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.*;
-import net.hydra.jojomod.particles.PuzzleColorParticleOptions;
+import net.hydra.jojomod.particles.ColorParticleOptions;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
@@ -630,7 +630,7 @@ public class PowersKingNothing extends NewDashPreset {
                         int color = getParticleColor(pdata);
                         Vec3 offset = getSelf().getEyePosition().offsetRandom(level.getRandom(), 5);
                         MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
-                                PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
+                                ColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
                                 offset.x(), offset.y(), offset.z(), 1, 0.5, 0.5, 0.5, 0.05);
                     }
                 }
@@ -649,7 +649,7 @@ public class PowersKingNothing extends NewDashPreset {
             for (int i = 0; i < 2; i++) {
                 int color = getParticleColor(pdata);
                 MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
-                        PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
+                        ColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
                         trackingCloud.getX(), trackingCloud.getY(), trackingCloud.getZ(), 1, 0.1, 0.1, 0.1, 0.01);
             }
         }
@@ -750,7 +750,7 @@ public class PowersKingNothing extends NewDashPreset {
                         for (int i = 0; i < 2 + (otherChestPos == null ? 0 : 2); i++) {
                             int color = getParticleColor(pdata);
                             MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
-                                    PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
+                                    ColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
                                     spawnPos.x(), spawnPos.y() + yOffset, spawnPos.z(),
                                     1 + (otherChestPos == null ? 0 : 1),
                                     0.1 + xSpreadBonus, 0.1, 0.1 + zSpreadBonus, 0.01);
@@ -847,7 +847,7 @@ public class PowersKingNothing extends NewDashPreset {
                         for (int j = 0; j < 2; j++) {
                             int color = getParticleColor(pdata);
                             MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
-                                    PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
+                                    ColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
                                     ent.getX(), ent.getY() + ent.getEyeHeight() + 0.5, ent.getZ(), 1, 0.1, 0.05, 0.1,
                                     0.01);
                         }
@@ -891,7 +891,7 @@ public class PowersKingNothing extends NewDashPreset {
                             for (int i = 0; i < 2; i++) {
                                 int color = getParticleColor(pdata);
                                 MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
-                                        PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
+                                        ColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
                                         x, y,
                                         z, 1, 0.1, 0.1, 0.1, 0.01);
                             }
