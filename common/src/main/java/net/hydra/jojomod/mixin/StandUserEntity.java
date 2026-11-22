@@ -4858,7 +4858,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         .isTimeStoppingEntity((LivingEntity) (Object) this)
                 || PowerTypes.isErasingTime(this) || roundabout$getStandPowers() instanceof PowersGER) {
 
-            boolean TSJumping = ((IPlayerEntity) this).roundabout$GetPos() == PlayerPosIndex.TS_FLOAT;
+            boolean TSJumping =  ((LivingEntity) (Object) this) instanceof Player pl && ((IPlayerEntity) pl).roundabout$GetPos() == PlayerPosIndex.TS_FLOAT;
             if (TSJumping) {
                 float cooking2 = (float) (((LivingEntity) (Object) this).getDeltaMovement().y + 0.2);
                 if (((LivingEntity) (Object) this) instanceof Player && ((Player) (Object) this).isCrouching()) {
