@@ -2147,6 +2147,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+
+
+    @Override
+    @Unique
+    public void roundabout$setStuckSpeedMulti(Vec3 vec) {
+        stuckSpeedMultiplier = vec;
+    }
+
     @Unique
     public int roundabout$getGasolineTime() {
         return this.roundabout$gasTicks;
