@@ -66,7 +66,7 @@ public abstract class FirearmItem extends Item {
     public FirearmItem(Item.Properties $$3) {
         super($$3);
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Tool modifier", -2, AttributeModifier.Operation.ADDITION));
+        builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Tool modifier", -1.3, AttributeModifier.Operation.ADDITION));
         this.defaultModifiers = builder.build();
 
     }
