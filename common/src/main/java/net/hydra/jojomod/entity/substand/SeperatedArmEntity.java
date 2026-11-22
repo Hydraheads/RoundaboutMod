@@ -915,4 +915,8 @@ public class SeperatedArmEntity extends StandEntity {
     public boolean standCanShowName() {
         return false;
     }
+
+    public boolean canChangeDimensions() {
+        return false;
+    }
 }
