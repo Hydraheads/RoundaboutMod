@@ -1837,6 +1837,16 @@ public class PowersGreenDay extends NewPunchingStand {
     }
 
     @Override
+    public float getBarrageDamagePlayer(){
+        return 8;
+    }
+
+    @Override
+    public float getBarrageDamageMob(){
+        return 18;
+    }
+
+    @Override
     public void tickStandRejection(MobEffectInstance effect) {
         if (!this.self.level().isClientSide) {
             ((ServerLevel)this.self.level()).sendParticles(ModParticles.MOLD_DUST,

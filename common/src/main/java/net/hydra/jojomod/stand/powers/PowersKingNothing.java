@@ -1778,7 +1778,7 @@ public class PowersKingNothing extends NewDashPreset {
             Vec3 standPos = stand.getBoundingBox().getCenter();
             boolean specialInteraction = false;
             if (doInteractions) {
-                Projectile projectile = null;
+                Entity projectile = null;
                 if (held.getItem() instanceof ThrowablePotionItem) {
                     projectile = new ThrownPotion(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z());
                 }
@@ -1811,6 +1811,28 @@ public class PowersKingNothing extends NewDashPreset {
                             new FireworkRocketEntity(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z(),
                                     held);
                 }
+                else if (held.getItem() instanceof StrayCatItem SC) {
+                    StrayCatEntity stray = ModEntities.STRAY_CAT.create(this.getSelf().level());
+                    if (stray != null) {
+                        CompoundTag tag = held.getOrCreateTag();
+
+                        if (tag.contains(StrayCatItem.OWNER_UUID_TAG)) {
+                            stray.setOwnerUUID(tag.getUUID(StrayCatItem.OWNER_UUID_TAG));
+                            stray.setTame(true);
+                        }
+                        if (tag.contains(StrayCatItem.HEALTH_TAG)) {
+                            stray.setHealth(tag.getFloat(StrayCatItem.HEALTH_TAG));
+                        }
+                        stray.setBreed(SC.breed);
+                        if (held.hasCustomHoverName()) {
+                            stray.setCustomName(held.getHoverName());
+                        }
+                        stray.setPotted(true);
+                        stray.setPos(standPos);
+                        stray.setYRot(stand.getYRot());
+                        projectile = stray;
+                    }
+                }
                 if (projectile != null) {
                     if (projectile instanceof ThrowableItemProjectile TP) {
                         TP.setItem(held);
@@ -1818,7 +1840,9 @@ public class PowersKingNothing extends NewDashPreset {
                     if (!(projectile instanceof FireworkRocketEntity)) {
                         projectile.setDeltaMovement(0, 0.2, 0);
                     }
-                    projectile.setOwner(this.getSelf());
+                    if (projectile instanceof Projectile PE) {
+                        PE.setOwner(this.getSelf());
+                    }
                     PowerTypes.copyPlaneOfExisting(self, projectile);
                     this.getSelf().level().addFreshEntity(projectile);
                     specialInteraction = true;
