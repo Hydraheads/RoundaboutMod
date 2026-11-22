@@ -137,43 +137,53 @@ public class PowersGER extends PowersGoldExperience {
 
     @Override
     public boolean interceptIncomingHarm(DamageSource source, float amount) {
-        Entity culprit = source.getDirectEntity();
-        if (culprit == null) {
-            culprit = source.getEntity();
-        }
+        Entity direct = source.getDirectEntity();
+        Entity shooter = source.getEntity();
+        Entity culprit = shooter != null ? shooter : direct;
+
         if (culprit != null) {
-            IEntityAndData iData = (IEntityAndData) culprit;
-            SavedSecond lastSecond = iData.roundabout$getLastSavedSecond();
-            if (lastSecond != null) {
-                Vec3 startPos = culprit.position();
-                float startYaw = culprit.getYRot();
-                float startPitch = culprit.getXRot();
-
-                lastSecond.loadTime(culprit);
-                setDazed((LivingEntity) culprit, (byte) 60);
-
-                if (culprit instanceof ServerPlayer victim) {
-                    Vec3 endPos = victim.position();
-                    float endYaw = victim.getYRot();
-                    float endPitch = victim.getXRot();
-                    S2CPacketUtil.sendStartRTZPacket(
-                            victim,
-                            startPos,
-                            endPos,
-                            startYaw,
-                            startPitch,
-                            endYaw,
-                            endPitch
-                    );
+            if (direct != null && direct != shooter && direct instanceof IEntityAndData directData) {
+                SavedSecond projectileSecond = directData.roundabout$getLastSavedSecond();
+                if (projectileSecond != null) {
+                    projectileSecond.loadTime(direct);
                 }
             }
-            if (culprit instanceof LivingEntity LE && LE.isUsingItem()){
-                LE.stopUsingItem();
-            }
-            if (culprit instanceof Mob mb && !MainUtil.isBossMob(mb)){
-                mb.getNavigation().stop();
-                if (!MainUtil.blockConfusionTicks(mb)) {
-                    ((IMob) mb).roundabout$setConfusionTicks(15);
+
+            if (culprit instanceof LivingEntity livingCulprit) {
+                IEntityAndData iData = (IEntityAndData) livingCulprit;
+                SavedSecond lastSecond = iData.roundabout$getLastSavedSecond();
+                if (lastSecond != null) {
+                    Vec3 startPos = livingCulprit.position();
+                    float startYaw = livingCulprit.getYRot();
+                    float startPitch = livingCulprit.getXRot();
+
+                    lastSecond.resetHealth = false;
+                    lastSecond.loadTime(livingCulprit);
+                    setDazed(livingCulprit, (byte) 60);
+
+                    if (livingCulprit instanceof ServerPlayer victim) {
+                        Vec3 endPos = victim.position();
+                        float endYaw = victim.getYRot();
+                        float endPitch = victim.getXRot();
+                        S2CPacketUtil.sendStartRTZPacket(
+                                victim,
+                                startPos,
+                                endPos,
+                                startYaw,
+                                startPitch,
+                                endYaw,
+                                endPitch
+                        );
+                    }
+                }
+                if (livingCulprit.isUsingItem()) {
+                    livingCulprit.stopUsingItem();
+                }
+                if (livingCulprit instanceof Mob mb && !MainUtil.isBossMob(mb)) {
+                    mb.getNavigation().stop();
+                    if (!MainUtil.blockConfusionTicks(mb)) {
+                        ((IMob) mb).roundabout$setConfusionTicks(60);
+                    }
                 }
             }
 

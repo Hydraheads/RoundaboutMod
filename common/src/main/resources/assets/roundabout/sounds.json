@@ -586,6 +586,15 @@
       "roundabout:ge_vine"
     ]
   },
+  "return_to_zero": {
+    "subtitle": "sounds.roundabout.return_to_zero",
+    "sounds": [
+      "roundabout:return_to_zero_1",
+      "roundabout:return_to_zero_2",
+      "roundabout:return_to_zero_3",
+      "roundabout:return_to_zero_4"
+    ]
+  },
   "summon_king_crimson": {
     "subtitle": "sounds.roundabout.summon_king_crimson",
     "sounds": [

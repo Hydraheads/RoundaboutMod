@@ -22,6 +22,7 @@ import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
+import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.entity.substand.MoldSporesEntity;
 import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
@@ -245,8 +246,12 @@ public class ClientUtil {
             if (rtzTicks > -1) {
                 if (pl instanceof LocalPlayer lp) {
                     applyRTZClientDrag(lp, 0.0F);
-                    if (rtzTicks % 4 == 0) {
-                        rtzAfterimages.add(new RTZAfterimage(lp, 24));
+                    if (rtzTicks >= 6) {
+                        Vec3 currentPos = lp.position();
+                        if (lastRTZAfterimagePos == null || currentPos.distanceToSqr(lastRTZAfterimagePos) >= 1.5D) {
+                            rtzAfterimages.add(new RTZAfterimage(lp, 24));
+                            lastRTZAfterimagePos = currentPos;
+                        }
                     }
                 }
                 rtzTicks++;
@@ -266,6 +271,8 @@ public class ClientUtil {
                     rtzTicks = -1;
                     rtzStartPos = null;
                     rtzEndPos = null;
+                    lastRTZAfterimagePos = null;
+                    rtzBlockFragments.clear();
                 }
             }
 
@@ -3064,11 +3071,18 @@ public class ClientUtil {
 
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null && startPos != null) {
+            double rand = Math.random();
+            if (rand > 0.15) {
+                playSound(ModSounds.RETURN_TO_ZERO_EVENT, player, 1.0F, 1.0F);
+            }
             player.setPos(startPos.x, startPos.y, startPos.z);
             player.xo = startPos.x;
             player.yo = startPos.y;
             player.zo = startPos.z;
             player.setDeltaMovement(Vec3.ZERO);
+            if (player.level() instanceof ClientLevel cl) {
+                captureRTZBlocks(cl, endPos != null ? endPos : startPos);
+            }
         }
     }
 
@@ -3119,4 +3133,78 @@ public class ClientUtil {
     }
 
     public static final List<RTZAfterimage> rtzAfterimages = new ArrayList<>();
+    public static Vec3 lastRTZAfterimagePos = null;
+
+    public static class RTZBlockFragment {
+        public final net.minecraft.world.level.block.state.BlockState state;
+        public final Vec3 originPos;
+        public final Vec3 scatteredPos;
+        public final float spinX, spinY, spinZ;
+        public final int packedLight;
+
+        public RTZBlockFragment(net.minecraft.world.level.block.state.BlockState state,
+                                Vec3 originPos, Vec3 scatteredPos,
+                                float spinX, float spinY, float spinZ, int packedLight) {
+            this.state = state;
+            this.originPos = originPos;
+            this.scatteredPos = scatteredPos;
+            this.spinX = spinX;
+            this.spinY = spinY;
+            this.spinZ = spinZ;
+            this.packedLight = packedLight;
+        }
+    }
+
+    public static final List<RTZBlockFragment> rtzBlockFragments = new ArrayList<>();
+
+    public static void captureRTZBlocks(ClientLevel level, Vec3 center) {
+        rtzBlockFragments.clear();
+        if (level == null || center == null) return;
+
+        int radius = 10;
+        BlockPos origin = BlockPos.containing(center);
+        RandomSource rng = level.random;
+
+        for (BlockPos pos : BlockPos.betweenClosed(
+                origin.offset(-radius, -radius, -radius),
+                origin.offset(radius, radius, radius))) {
+
+            if (pos.distSqr(origin) > radius * radius) continue;
+
+            net.minecraft.world.level.block.state.BlockState state = level.getBlockState(pos);
+            if (state.isAir() || !state.getFluidState().isEmpty()) continue;
+
+            // only a few blocks around the client are snapshotted because otherwise their pcs would literally explode
+            boolean exposed = false;
+            for (Direction dir : Direction.values()) {
+                if (!level.getBlockState(pos.relative(dir)).isSolidRender(level, pos.relative(dir))) {
+                    exposed = true;
+                    break;
+                }
+            }
+            if (!exposed) continue;
+
+            Vec3 blockCenter = Vec3.atCenterOf(pos);
+            Vec3 away = blockCenter.subtract(center);
+            if (away.lengthSqr() < 0.01) {
+                away = new Vec3(rng.nextDouble() - 0.5, 0.5, rng.nextDouble() - 0.5);
+            }
+            Vec3 dir = away.normalize();
+
+            double scatterDist = 8.0 + rng.nextDouble() * 14.0;
+            double verticalOffset = (rng.nextDouble() - 0.35) * 10.0;
+            Vec3 scattered = blockCenter
+                    .add(dir.scale(scatterDist))
+                    .add(0.0, verticalOffset, 0.0);
+
+            float sx = (rng.nextFloat() - 0.5F) * 540.0F;
+            float sy = (rng.nextFloat() - 0.5F) * 540.0F;
+            float sz = (rng.nextFloat() - 0.5F) * 540.0F;
+
+            int light = LevelRenderer.getLightColor(level, pos);
+            rtzBlockFragments.add(new RTZBlockFragment(
+                    state, blockCenter, scattered, sx, sy, sz, light
+            ));
+        }
+    }
 }
