@@ -4,6 +4,7 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.GoldExperienceEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -20,6 +21,7 @@ import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -192,9 +194,10 @@ public class PowersGER extends PowersGoldExperience {
 
         return super.interceptIncomingHarm(source, amount);
     }
+
     // Buffs
 
-    // for damage
+    // for damage start
 
     @Override
     public float getPunchStrength(Entity entity){
@@ -256,6 +259,8 @@ public class PowersGER extends PowersGoldExperience {
         return true;
     }
 
+    // for damage end
+
     // for skins start
 
     @Override
@@ -269,5 +274,14 @@ public class PowersGER extends PowersGoldExperience {
     }
 
     // for skins end
+
+    // for icons start
+
+    @Override
+    public ResourceLocation getIconYes(int slot) {
+        return StandIcons.SQUARE_REQUIEM;
+    }
+
+    // for icons end
 
 }

@@ -2942,6 +2942,8 @@
   "ability.roundabout.gold_experience_life_sensor.desc": "Gold Experience scans the nearby area for lifeforms. If someone has an imbued item on them, you will be able to see their aura from a lot further away. The aura reading persists until you stop blocking.",
   "ability.roundabout.gold_experience_double_punch": "Double Punch",
   "ability.roundabout.gold_experience_double_punch.desc": "Throw out a 1-2 punch. This does as much damage as the last hit in a punch string, but deals more knockback.",
+  "ability.roundabout.gold_experience_requiem": "Gold Experience Requiem",
+  "ability.roundabout.gold_experience_requiem.desc": "Fill up your resolve bar by killing enemies in order to evolve your stand to a temporary higher form. It's abilities are unknown even to you, the user.",
 
   "ability.roundabout.emperor_shoot": "Shoot",
   "ability.roundabout.emperor_shoot.desc": "Shoot a bullet from the emperor.",

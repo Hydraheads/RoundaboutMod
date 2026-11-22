@@ -4116,7 +4116,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 "instruction.roundabout.press_skill_crouch", StandIcons.GOLD_EXPERIENCE_ITEM_IMBUE, 4, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 118, getBushLevel(), "ability.roundabout.gold_experience_bramble_trap",
                 "instruction.roundabout.press_skill_block", StandIcons.GOLD_EXPERIENCE_BRAMBLE_TRAP, 4, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 134, topPos + 80, getBrambleLevel(), "ability.roundabout.mining",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 134, topPos + 80, getBrambleLevel(), "ability.roundabout.gold_experience_requiem",
+                "instruction.roundabout.stand_arrow", StandIcons.GOLD_EXPERIENCE_REQUIEM, 4, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 134, topPos + 99, getBrambleLevel(), "ability.roundabout.mining",
                 "instruction.roundabout.hold_attack", StandIcons.GOLD_EXPERIENCE_MINING, 4, level, bypas));
         return $$1;
     }
