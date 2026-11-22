@@ -160,9 +160,7 @@ public abstract class FirearmItem extends Item {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
         if (!(itemStack.getItem() instanceof FirearmItem)) return InteractionResultHolder.fail(itemStack);
-        if(player.getAttackStrengthScale(1) < 1F || (player.level().isClientSide && ClientUtil.hasAttributeSwapped(Minecraft.getInstance())) ) {
-            return InteractionResultHolder.fail(itemStack);
-        }
+
 
         if ((isCrouchingOrSomething(player, itemStack) && hasAmmoInInventory(player) && getAmmo(itemStack) != getMaxAmmo()) || (isCrouchingOrSomething(player, itemStack) && player.isCreative())) {
             if (!isReloading(itemStack)) {
