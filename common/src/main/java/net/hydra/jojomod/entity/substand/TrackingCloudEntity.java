@@ -1,17 +1,31 @@
 package net.hydra.jojomod.entity.substand;
 
+import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.entity.projectile.StrayCatAirBubble;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersKingNothing;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 public class TrackingCloudEntity extends StandEntity {
+
+    public static final double SPEED = 0.2;
 
     public static final byte
             NONE = 0,
@@ -36,14 +50,35 @@ public class TrackingCloudEntity extends StandEntity {
                     return;
                 }
         if (this.tickCount % 10 == 0) {
-            recalculateMovementVector();
+            redirectVector();
         }
         super.tick();
     }
 
-    private void recalculateMovementVector() {
+    public void redirectVector() {
+        // Entity currentTarget = getTarget();
+        // if (currentTarget == null) { return; }
 
+        // Vec3 pos = currentTarget.getPosition(0);
+        // Vec3 addToPosition = new Vec3(0, currentTarget.getBbHeight() * 0.5f, 0);
+        // Direction direction = ((IGravityEntity) currentTarget).roundabout$getGravityDirection();
+        // if (direction != Direction.DOWN) {
+        //     addToPosition = RotationUtil.vecPlayerToWorld(addToPosition, direction);
+        // }
+
+        // Vec3 targetPos = pos.add(addToPosition);
+        Vec3 targetPos = new Vec3(0, 0, 0);
+
+        Vec3 vector = new Vec3(
+                (targetPos.x() - this.getX()),
+                (targetPos.y() - this.getY()),
+                (targetPos.z() - this.getZ())
+        ).normalize().scale(SPEED * 0.75);
+
+        this.setDeltaMovement(vector);
     }
+
+
 
     @Override
     public boolean isNoGravity() {

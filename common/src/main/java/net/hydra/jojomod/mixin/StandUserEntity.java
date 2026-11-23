@@ -24,6 +24,7 @@ import net.hydra.jojomod.entity.zombie_minion.VillagerMinion;
 import net.hydra.jojomod.event.*;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
+import net.hydra.jojomod.particles.ColorParticleOptions;
 import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
@@ -2147,6 +2148,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+
+
+    @Override
+    @Unique
+    public void roundabout$setStuckSpeedMulti(Vec3 vec) {
+        stuckSpeedMultiplier = vec;
+    }
+
     @Unique
     public int roundabout$getGasolineTime() {
         return this.roundabout$gasTicks;
@@ -2259,7 +2268,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 return 0;
         }
         // diver down legs jump boost
-        if (this.roundabout$hasDiverLegs()) {
+        if (this.roundabout$hasDiverLegs() && !isUsingItem()) {
             TOT += 2; // same jump boost that vamp has
         }
         // life punch jump height
@@ -4858,7 +4867,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         .isTimeStoppingEntity((LivingEntity) (Object) this)
                 || PowerTypes.isErasingTime(this) || roundabout$getStandPowers() instanceof PowersGER) {
 
-            boolean TSJumping = ((IPlayerEntity) this).roundabout$GetPos() == PlayerPosIndex.TS_FLOAT;
+            boolean TSJumping =  ((LivingEntity) (Object) this) instanceof Player pl && ((IPlayerEntity) pl).roundabout$GetPos() == PlayerPosIndex.TS_FLOAT;
             if (TSJumping) {
                 float cooking2 = (float) (((LivingEntity) (Object) this).getDeltaMovement().y + 0.2);
                 if (((LivingEntity) (Object) this) instanceof Player && ((Player) (Object) this).isCrouching()) {
@@ -5341,7 +5350,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             $$1 /= 2;
             adj = true;
         }
-        if ((LivingEntity) (Object) this instanceof Player pl) {
+            if ((LivingEntity) (Object) this instanceof Player pl) {
             StandUser SU = (StandUser) pl;
             float fd = ((IFatePlayer) pl).rdbt$getFatePowers().getJumpHeightAddonMax();
             if (SU.roundabout$getStandPowers() != null) {
@@ -6886,7 +6895,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 if (!PowerTypes.isExistentiallyElsewhere(rdbt$this())) {
                     for (int i = 0; i < 4; i = i + 1) {
                         if (this.tickCount % 20 == 0) {
-                            MainUtil.sendParticlesIfPossible(this, level(), ModParticles.MOLD_DUST, this.getX(),
+                            MainUtil.sendParticlesIfPossible(this, level(),
+                                    ColorParticleOptions.fromPackedColor(ModParticles.MOLD_DUST,
+                                            PowersGreenDay.MOLD_DUST_COLOR_MAP.getOrDefault(getMoldSkin(),
+                                                    PowersGreenDay.defaultMoldDustColor())),
+                                    this.getX(),
                                     this.getY() + 1, this.getZ(),
                                     1,
                                     0, 0, 0,
@@ -7124,6 +7137,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     public int MoldTicks;
 
+    public byte moldSkin;
+
     @Override
     public void SetInMoldTicks(int e) {
         if (this.level().isClientSide) {
@@ -7131,11 +7146,19 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    public void setMoldSkin(byte b) {
+        this.moldSkin = b;
+    }
+
     @Override
     public int getMoldTicks() {
         return MoldTicks;
     }
 
+    @Override
+    public byte getMoldSkin() {
+        return moldSkin;
+    }
 
     @Unique
     public byte purpleHazeSkin = PurpleHazeEntity.ANIME;

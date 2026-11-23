@@ -118,6 +118,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.SURVIVOR.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.DARK_MIRAGE.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.KING_NOTHING.get(), KingNothingEntity.createStandAttributes().build());
+        event.put(ForgeEntities.TRACKING_CLOUD.get(), TrackingCloudEntity.createStandAttributes().build());
         event.put(ForgeEntities.TUSK_A1.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.TUSK_A2.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.TUSK_A3.get(), StandEntity.createStandAttributes().build());

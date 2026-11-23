@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.CakeBlock;
@@ -33,7 +34,7 @@ public class BlackSabbathItemRenderer <T extends BlackSabbathEntity, M extends S
          if(!it.isEmpty() && !blackSabbathEntity.getNotRenderItem() && !(it.getItem() instanceof BlockItem && !((it.is(Items.HOPPER)) || it.is(Items.BELL) ||
                  (it.getItem().getFoodProperties() != null && it.isEdible() && !it.is(Items.CAKE)))) && blackSabbathEntity.getGrabbing() != 0){
              boolean flag2 = it.getItem() instanceof ShearsItem && !(blackSabbathEntity.level().getEntity(id) instanceof Sheep) || it.getItem() instanceof RoundaboutArrowItem || it.getItem() instanceof SacrificialDaggerItem || it.getItem() instanceof SwordItem || it.getItem() instanceof GlaiveItem || it.getItem() instanceof HoeItem || it.getItem() instanceof PickaxeItem || it.getItem() instanceof AxeItem || it.getItem() instanceof ShovelItem || it.getItem() instanceof ShearsItem || it.getItem() instanceof BrushItem || it.getItem() instanceof WarhammerItem;
-             boolean flag3 =  it.getItem().getFoodProperties() != null && it.isEdible() && !it.is(Items.CAKE) || it.getItem() instanceof ShearsItem && blackSabbathEntity.level().getEntity(id) instanceof Sheep || it.getItem() instanceof PotionItem || it.getItem() instanceof MilkBucketItem || it.getItem() instanceof BottleItem || it.getItem() instanceof ElytraItem || it.getItem() instanceof ArmorItem || it.getItem() instanceof BucketItem || it.is(Items.HOPPER) /*|| it.is(Items.BELL)*/;
+             boolean flag3 =  it.getItem().getFoodProperties() != null && it.isEdible() && !it.is(Items.CAKE) || it.getItem() instanceof ShearsItem && blackSabbathEntity.level().getEntity(id) instanceof Sheep || it.getItem() instanceof PotionItem || it.getItem() instanceof MilkBucketItem || it.getItem() instanceof BottleItem || it.getItem() instanceof ElytraItem || it.getItem() instanceof ArmorItem || it.getItem() instanceof BucketItem || it.is(Items.HOPPER) || blackSabbathEntity.level().getEntity(id) instanceof Animal an && an.isFood(it)/*|| it.is(Items.BELL)*/;
              boolean flag4 = it.getItem() instanceof InstrumentItem && it.is(Items.GOAT_HORN);
             poseStack.pushPose();
             if(!flag1 && !flag2) {

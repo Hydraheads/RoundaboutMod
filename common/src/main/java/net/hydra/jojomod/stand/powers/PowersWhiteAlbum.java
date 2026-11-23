@@ -1784,6 +1784,10 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return false;
     }
     private boolean prevKey = false;
+
+    @Override
+    public void preCheckButtonInputBarrage(boolean keyIsDown, Options options) {
+    }
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (self instanceof Player pl &&  ((IPlayerEntity)pl).roundabout$getAttackStrengthTicker() < 5) {

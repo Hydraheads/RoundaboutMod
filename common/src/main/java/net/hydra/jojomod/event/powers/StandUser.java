@@ -37,6 +37,7 @@ public interface StandUser {
     void roundabout$removeQueForTargetDeletion();
     void roundabout$onStandOutLookAround(StandEntity passenger);
     boolean roundabout$getUniqueStandModeToggle();
+    void roundabout$setStuckSpeedMulti(Vec3 vec);
     void roundabout$setUniqueStandModeToggle(boolean mode);
     boolean roundabout$skipFriction();
     void rdbt$onSyncedDataUpdated2(EntityDataAccessor<?> $$0);
@@ -397,6 +398,8 @@ public interface StandUser {
     void DoMoldTick();
     void SetInMoldTicks(int e);
     int getMoldTicks();
+    void setMoldSkin(byte b);
+    byte getMoldSkin();
     void MoldFieldExit();
     void rdbt$SetCrawlTicks(int ticks);
 

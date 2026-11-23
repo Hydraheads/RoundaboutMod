@@ -33,7 +33,7 @@ public class PolpoVisage extends VisageData{
     }
     @Override
     public Vector3f scale(){
-        return new Vector3f(1.47F, 1.12F, 1.47F);
+        return new Vector3f(1.47F, 1.05F, 1.47F);
     }
     @Override
     public float getNametagHeight(){

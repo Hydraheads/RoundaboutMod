@@ -3,17 +3,11 @@ package net.hydra.jojomod.client.models.layers;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IEntityAndData;
-import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
-import net.hydra.jojomod.stand.powers.PowersMandom;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.PlayerModel;
-import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -50,10 +44,15 @@ public class MoldSpineLayer<T extends LivingEntity, A extends HumanoidModel<T>> 
             }
             if (!entity.isInvisible()) {
                 if (ExposedSpine) {
+                    int color = ((PowersGreenDay) user.roundabout$getStandPowers()).getMoldParticleColor();
+                    float r = ((color >> 16) & 0xFF) / 255.0F;
+                    float g = ((color >> 8) & 0xFF) / 255.0F;
+                    float b = (color & 0xFF) / 255.0F;
                     poseStack.pushPose();
                     getParentModel().body.translateAndRotate(poseStack);
-                    ModStrayModels.MoldSpine.render(entity, partialTicks, poseStack, bufferSource, packedLight,
-                                10, 10, 10, 1F, (byte)0);
+                    ModStrayModels.Spine.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                                r, g, b, 1F, (byte)0);
+                    ModStrayModels.SpineMold.render(entity, partialTicks, poseStack, bufferSource, packedLight, r, g, b, 1f);
                     poseStack.popPose();
                 }
             }

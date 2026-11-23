@@ -70,7 +70,8 @@ public class ServerToClientPackets {
             SyncGamblingState( "sync_gambling_state "),
             SyncKqInflaton("sync_kq_inflation"),
             KnAddItemContainer("kn_add_item_container"),
-            KnRemoveItemContainer("kn_remove_item_container");
+            KnRemoveItemContainer("kn_remove_item_container"),
+            StartRTZ("start_rtz");
 
 
 

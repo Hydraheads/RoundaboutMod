@@ -131,7 +131,7 @@ public class TuskAct3Model<T extends TuskEntity> extends StandModel<T> {
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
         super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
         this.defaultModifiers(pEntity);
-        this.animate(pEntity.idleAnimationState, TuskAnimations.ACT_2_IDLE,pAgeInTicks,1F);
+        this.animate(pEntity.idleAnimationState, TuskAnimations.ACT_3_IDLE,pAgeInTicks,1F);
     }
 
 }

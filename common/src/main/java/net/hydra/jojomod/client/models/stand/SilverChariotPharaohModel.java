@@ -8,6 +8,8 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.client.models.stand.animations.SilverChariotAnimations;
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
 import net.hydra.jojomod.entity.stand.SilverChariotEntity;
+import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersSilverChariot;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;
@@ -322,6 +324,12 @@ public class SilverChariotPharaohModel<T extends SilverChariotEntity> extends St
         if (pEntity.isRightHanded()) {
             this.right_sword.visible = true;
             this.left_sword.visible = false;
+
+            if (((StandUser) pEntity.getUser()).roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PSC.onCooldown(PowersSilverChariot.SKILL_SILVER_CHARIOT_SWORD_SHOOT_INDEX)) {
+                this.right_blade.visible = false;
+            } else {
+                this.right_blade.visible = true;
+            }
         } else {
             this.right_sword.visible = false;
             // this.left_sword.visible = true;
@@ -330,7 +338,22 @@ public class SilverChariotPharaohModel<T extends SilverChariotEntity> extends St
             } else {
                 this.left_sword.visible = true;
             }
+            if (((StandUser) pEntity.getUser()).roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PSC.onCooldown(PowersSilverChariot.SKILL_SILVER_CHARIOT_SWORD_SHOOT_INDEX)) {
+                this.left_blade.visible = false;
+            } else {
+                this.left_blade.visible = true;
+            }
         }
+
+        /*
+        if (((StandUser) pEntity.getUser()).roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PSC.onCooldown(PowersSilverChariot.SKILL_SILVER_CHARIOT_SWORD_SHOOT_INDEX)) {
+            this.right_blade.visible = false;
+            this.left_blade.visible = false;
+        } else {
+            this.right_blade.visible = true;
+            this.left_blade.visible = true;
+        }
+        */
 
         this.animate(pEntity.scFallBrace, SilverChariotAnimations.FallBrace(), pAgeInTicks, 1f);
         this.animate(pEntity.scGuardLeftBreak, SilverChariotAnimations.LeftGuardBreak(), pAgeInTicks, 1.8f);

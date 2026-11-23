@@ -41,6 +41,7 @@ public class SavedSecond {
     public boolean hasHadParticle = false;
     public Entity isTickingParticles = null;
     public Direction gravityDirection = Direction.DOWN;
+    public boolean resetHealth = true;
 
     public float fallDistance = 0;
     public ResourceKey<DimensionType> dimensionTypeId = null;

@@ -63,20 +63,11 @@ public class BlackSabbathIdleRippleParticle extends SimpleAnimatedParticle {
         };
         float quadSize = this.getQuadSize(partialTicks);
 
-        Quaternionf rotation = switch (this.face) {
-            case UP -> new Quaternionf().fromAxisAngleDeg(1, 0, 0, 90);
-            case DOWN -> new Quaternionf().fromAxisAngleDeg(1, 0, 0, -90);
-            case NORTH -> new Quaternionf().fromAxisAngleDeg(0, 1, 0, 180);
-            case SOUTH -> new Quaternionf();
-            case WEST -> new Quaternionf().fromAxisAngleDeg(0, 1, 0, -90);
-            case EAST -> new Quaternionf().fromAxisAngleDeg(0, 1, 0, 90);
-        };
-
         for (int i = 0; i < 4; i++) {
             Vector3f uv = uvList[i];
             uv.mul(quadSize);
             uv.mul(0.5f,0.5f,0.5f);
-            uv.rotate(rotation);
+            uv.rotate(new Quaternionf().fromAxisAngleDeg(1, 0, 0, -90));
             uv.add(lerpX, lerpY, lerpZ);
         }
 

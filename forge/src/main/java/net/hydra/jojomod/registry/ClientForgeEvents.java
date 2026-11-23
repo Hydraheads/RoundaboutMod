@@ -473,7 +473,8 @@ public class ClientForgeEvents {
         ModStrayModels.theWorldArmsPart = new TheWorldArmsPart();
         ModStrayModels.starPlatinumArmsPart = new StarPlatinumArmsPart();
         ModStrayModels.silverChariotArmsPart = new SilverChariotArmsPart();
-        ModStrayModels.MoldSpine = new MoldSpineModel();
+        ModStrayModels.Spine = new SpineModel();
+        ModStrayModels.SpineMold = new SpineMoldModel();
         ModStrayModels.MoldRightArm = new MoldRightArm<>();
         ModStrayModels.MoldLeftArm = new MoldLeftArm();
         ModStrayModels.ChestPart = new ChestPart();
@@ -679,7 +680,7 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.METALLICA_D.get(), MetallicaStickParticle.Factory::new);
         event.registerSpriteSet(ForgeParticles.METALLICA_FIELD_PNG.get(), MetallicaFieldParticle.Factory::new);
         event.registerSpriteSet(ForgeParticles.MOLD.get(), MoldParticle.Provider::new);
-        event.registerSpriteSet(ForgeParticles.MOLD_DUST.get(), MoldDustParticle.CosyProvider::new);
+        event.registerSpriteSet(ForgeParticles.MOLD_DUST.get(), MoldDustParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.RAGING_LIGHT.get(), AnubisLightParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.ALLURING_LIGHT.get(), AnubisLightParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.HYPNO_SWIRL.get(), HypnoSwirlParticle.Provider::new);

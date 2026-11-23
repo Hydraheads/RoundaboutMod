@@ -29,7 +29,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.*;
-import net.hydra.jojomod.particles.PuzzleColorParticleOptions;
+import net.hydra.jojomod.particles.ColorParticleOptions;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
@@ -630,7 +630,7 @@ public class PowersKingNothing extends NewDashPreset {
                         int color = getParticleColor(pdata);
                         Vec3 offset = getSelf().getEyePosition().offsetRandom(level.getRandom(), 5);
                         MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
-                                PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
+                                ColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
                                 offset.x(), offset.y(), offset.z(), 1, 0.5, 0.5, 0.5, 0.05);
                     }
                 }
@@ -649,7 +649,7 @@ public class PowersKingNothing extends NewDashPreset {
             for (int i = 0; i < 2; i++) {
                 int color = getParticleColor(pdata);
                 MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
-                        PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
+                        ColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
                         trackingCloud.getX(), trackingCloud.getY(), trackingCloud.getZ(), 1, 0.1, 0.1, 0.1, 0.01);
             }
         }
@@ -750,7 +750,7 @@ public class PowersKingNothing extends NewDashPreset {
                         for (int i = 0; i < 2 + (otherChestPos == null ? 0 : 2); i++) {
                             int color = getParticleColor(pdata);
                             MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
-                                    PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
+                                    ColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
                                     spawnPos.x(), spawnPos.y() + yOffset, spawnPos.z(),
                                     1 + (otherChestPos == null ? 0 : 1),
                                     0.1 + xSpreadBonus, 0.1, 0.1 + zSpreadBonus, 0.01);
@@ -847,7 +847,7 @@ public class PowersKingNothing extends NewDashPreset {
                         for (int j = 0; j < 2; j++) {
                             int color = getParticleColor(pdata);
                             MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
-                                    PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
+                                    ColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
                                     ent.getX(), ent.getY() + ent.getEyeHeight() + 0.5, ent.getZ(), 1, 0.1, 0.05, 0.1,
                                     0.01);
                         }
@@ -891,7 +891,7 @@ public class PowersKingNothing extends NewDashPreset {
                             for (int i = 0; i < 2; i++) {
                                 int color = getParticleColor(pdata);
                                 MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
-                                        PuzzleColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
+                                        ColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
                                         x, y,
                                         z, 1, 0.1, 0.1, 0.1, 0.01);
                             }
@@ -1778,7 +1778,7 @@ public class PowersKingNothing extends NewDashPreset {
             Vec3 standPos = stand.getBoundingBox().getCenter();
             boolean specialInteraction = false;
             if (doInteractions) {
-                Projectile projectile = null;
+                Entity projectile = null;
                 if (held.getItem() instanceof ThrowablePotionItem) {
                     projectile = new ThrownPotion(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z());
                 }
@@ -1792,6 +1792,9 @@ public class PowersKingNothing extends NewDashPreset {
                 else if (held.getItem() instanceof EnderpearlItem) {
                     projectile = new ThrownEnderpearl(this.getSelf().level(), getSelf());
                     projectile.setPos(standPos);
+                    if (getSelf() instanceof Player PE) {
+                        PE.getCooldowns().addCooldown(held.getItem(), 20);
+                    }
                 }
                 else if (held.getItem() instanceof SnowballItem) {
                     projectile = new Snowball(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z());
@@ -1799,6 +1802,30 @@ public class PowersKingNothing extends NewDashPreset {
                 else if (held.getItem() instanceof GasolineCanItem) {
                     projectile =
                             new GasolineCanEntity(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z());
+                    if (getSelf() instanceof Player PE) {
+                        PE.getCooldowns().addCooldown(held.getItem(), 40);
+                        Inventory inv = PE.getInventory();
+                        for (ItemStack stack : inv.items) {
+                            if (stack.getItem() instanceof BowItem) {
+                                PE.getCooldowns().addCooldown(stack.getItem(), 30);
+                            }
+                        }
+                        for (ItemStack stack : inv.offhand) {
+                            if (stack.getItem() instanceof CrossbowItem) {
+                                PE.getCooldowns().addCooldown(stack.getItem(), 30);
+                            }
+                        }
+
+                        PE.getCooldowns().addCooldown(Items.FLINT_AND_STEEL, 30);
+                        PE.getCooldowns().addCooldown(Items.FIRE_CHARGE, 30);
+                        PE.getCooldowns().addCooldown(Items.BOW, 30);
+                        PE.getCooldowns().addCooldown(ModItems.MATCH, 30);
+                        PE.getCooldowns().addCooldown(ModItems.GASOLINE_BUCKET, 30);
+                        PE.getCooldowns().addCooldown(ModItems.IRON_BALL_CROSSBOW, 30);
+                        PE.getCooldowns().addCooldown(Items.LAVA_BUCKET, 30);
+                        PE.getCooldowns().addCooldown(Items.CROSSBOW, 30);
+                        PE.getCooldowns().addCooldown(ModItems.MATCH_BUNDLE, 30);
+                    }
                 }
                 else if (held.is(ModItems.MATCH)) {
                     projectile = new MatchEntity(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z());
@@ -1811,6 +1838,28 @@ public class PowersKingNothing extends NewDashPreset {
                             new FireworkRocketEntity(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z(),
                                     held);
                 }
+                else if (held.getItem() instanceof StrayCatItem SC) {
+                    StrayCatEntity stray = ModEntities.STRAY_CAT.create(this.getSelf().level());
+                    if (stray != null) {
+                        CompoundTag tag = held.getOrCreateTag();
+
+                        if (tag.contains(StrayCatItem.OWNER_UUID_TAG)) {
+                            stray.setOwnerUUID(tag.getUUID(StrayCatItem.OWNER_UUID_TAG));
+                            stray.setTame(true);
+                        }
+                        if (tag.contains(StrayCatItem.HEALTH_TAG)) {
+                            stray.setHealth(tag.getFloat(StrayCatItem.HEALTH_TAG));
+                        }
+                        stray.setBreed(SC.breed);
+                        if (held.hasCustomHoverName()) {
+                            stray.setCustomName(held.getHoverName());
+                        }
+                        stray.setPotted(true);
+                        stray.setPos(standPos);
+                        stray.setYRot(stand.getYRot());
+                        projectile = stray;
+                    }
+                }
                 if (projectile != null) {
                     if (projectile instanceof ThrowableItemProjectile TP) {
                         TP.setItem(held);
@@ -1818,7 +1867,9 @@ public class PowersKingNothing extends NewDashPreset {
                     if (!(projectile instanceof FireworkRocketEntity)) {
                         projectile.setDeltaMovement(0, 0.2, 0);
                     }
-                    projectile.setOwner(this.getSelf());
+                    if (projectile instanceof Projectile PE) {
+                        PE.setOwner(this.getSelf());
+                    }
                     PowerTypes.copyPlaneOfExisting(self, projectile);
                     this.getSelf().level().addFreshEntity(projectile);
                     specialInteraction = true;
@@ -1834,7 +1885,9 @@ public class PowersKingNothing extends NewDashPreset {
                 PowerTypes.copyPlaneOfExisting(self, $$4);
                 this.getSelf().level().addFreshEntity($$4);
             }
-            stand.setHeldItem(ItemStack.EMPTY);
+            if (!(specialInteraction && getSelf() instanceof Player PE && PE.isCreative())) {
+                stand.setHeldItem(ItemStack.EMPTY);
+            }
             setPowerNone();
             animateStand(KingNothingEntity.RETURN);
             playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);

@@ -215,47 +215,47 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return 1.15F;
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.15F));
         } else {
-            return 4;
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(4F));
         }
     }
     @Override
     public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return 1.6F;
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.6F));
         } else {
-            return 5;
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(5F));
         }
     }
     @Override
     public float getBarrageFinisherStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return 1.8F;
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.8F));
         } else {
-            return 6;
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(6F));
         }
     }
     @Override
     public float getBarrageDamagePlayer(){
-        return 7;
+        return levelupDamageMod(multiplyPowerByStandConfigPlayers(7));
     }
     @Override
     public float getBarrageDamageMob(){
-        return 14;
+        return levelupDamageMod(multiplyPowerByStandConfigMobs(14));
     }
     public float getBrambleDamage(Entity entity){
         if (this.getReducedDamage(entity)){
-            return 1.5F;
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.5F));
         } else {
-            return 6;
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(6F));
         }
     }
     public float getThornDamage(Entity entity){
         if (this.getReducedDamage(entity)){
-            return 0.6F;
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(0.6F));
         } else {
-            return 4F;
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(4F));
         }
     }
 
@@ -4120,7 +4120,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 "instruction.roundabout.press_skill_crouch", StandIcons.GOLD_EXPERIENCE_ITEM_IMBUE, 4, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 118, getBushLevel(), "ability.roundabout.gold_experience_bramble_trap",
                 "instruction.roundabout.press_skill_block", StandIcons.GOLD_EXPERIENCE_BRAMBLE_TRAP, 4, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 134, topPos + 80, getBrambleLevel(), "ability.roundabout.mining",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 134, topPos + 80, getBrambleLevel(), "ability.roundabout.gold_experience_requiem",
+                "instruction.roundabout.stand_arrow", StandIcons.GOLD_EXPERIENCE_REQUIEM, 4, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 134, topPos + 99, getBrambleLevel(), "ability.roundabout.mining",
                 "instruction.roundabout.hold_attack", StandIcons.GOLD_EXPERIENCE_MINING, 4, level, bypas));
         return $$1;
     }

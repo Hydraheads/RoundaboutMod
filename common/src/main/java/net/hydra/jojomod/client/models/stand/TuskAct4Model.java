@@ -173,7 +173,7 @@ public class TuskAct4Model<T extends TuskEntity> extends StandModel<T> {
         this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1f);
         this.animate(pEntity.barrageChargeAnimationState, StandAnimations.BARRAGECHARGE, pAgeInTicks, 1f);
         this.animate(pEntity.barrageAnimationState, TuskAnimations.Barrage, pAgeInTicks, 1f);
-        this.animate(pEntity.deathPunch, TuskAnimations.DeathPunch, pAgeInTicks, 0.66666F);
+        this.animate(pEntity.deathPunch, TuskAnimations.DeathPunch, pAgeInTicks, 1F);
         if (pEntity.getUser() != null && pEntity.getUserData(pEntity.getUser()).roundabout$getStandPowers() instanceof PowersTusk PT && PT.getActivePower() == PowersTusk.DEATH_PUNCH) {
 
             if (PT.deathTarget != null) {

@@ -64,6 +64,22 @@ public class StandIcons {
             new ResourceLocation(Roundabout.MOD_ID, "textures/environment/time_erase_t.png"),
             new ResourceLocation(Roundabout.MOD_ID, "textures/environment/time_erase_b.png")
     };
+    public static final ResourceLocation[] RTZ_SKYBOX = new ResourceLocation[]{
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/return_to_zero_t.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/return_to_zero_b.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/return_to_zero_n.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/return_to_zero_s.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/return_to_zero_w.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/return_to_zero_e.png")
+    };
+    public static final ResourceLocation[] RTZ_STAR_SKYBOX = new ResourceLocation[]{
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/rtz_stars_t.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/rtz_stars_b.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/rtz_stars_n.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/rtz_stars_s.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/rtz_stars_w.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/rtz_stars_e.png")
+    };
 
     public static final ResourceLocation NONE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/none.png");
@@ -87,6 +103,8 @@ public class StandIcons {
             "textures/gui/move_square3.png");
     public static final ResourceLocation UNLOCK_SQUARE_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/move_square5.png");
+    public static final ResourceLocation SQUARE_REQUIEM = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/move_square_requiem.png");
     public static final ResourceLocation COOLDOWN_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/move_cooldown.png");
     public static final ResourceLocation FROZEN_COOLDOWN_ICON = new ResourceLocation(Roundabout.MOD_ID,
@@ -1236,6 +1254,8 @@ public class StandIcons {
             "textures/gui/icons/gold_experience/mining.png");
     public static final ResourceLocation GOLD_EXPERIENCE_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/gold_experience/punch.png");
+    public static final ResourceLocation GOLD_EXPERIENCE_REQUIEM = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/gold_experience/requiem.png");
 
     // gold experience icons end
 
