@@ -440,6 +440,38 @@ public abstract class HudRendering implements IHudAccess {
                 // prints :0
                 graphics.drawString(this.getFont(), ammoText, x, y, color, true);
             }
+
+            ItemStack otherItem = this.minecraft.player.getOffhandItem();
+
+            // check if the main hand item is a firearm, don't render with jackal rifle cuz like... it's 1 ammo...
+            if (otherItem.getItem() instanceof FirearmItem gun && PowersGoldExperience.getDisguisedDisplayStack(otherItem).isEmpty()) {
+                String ammoText;
+                int color = 0xFFFFFF; // white
+
+                // if gun is reloading, print dots to indicate  an action
+                if (gun.isReloading(otherItem)) {
+                    ammoText = "...";
+                    color = 0xFFFF55; // yellow
+                } else {
+                    // self explanatory, just print the current and max ammo
+                    int currentAmmo = gun.getAmmo(otherItem);
+                    int maxAmmo = gun.getMaxAmmo();
+                    ammoText = currentAmmo + " / " + maxAmmo;
+
+                    // if low, make it red
+                    if (currentAmmo < maxAmmo * 0.25) {
+                        color = 0xFF5555; // red
+                    }
+                }
+
+                // put the thing bottom right
+                int x = 15;
+                int paddingBottom = 20;
+                int y = this.screenHeight - paddingBottom;
+
+                // prints :0
+                graphics.drawString(this.getFont(), ammoText, x, y, color, true);
+            }
         }
     }
 
