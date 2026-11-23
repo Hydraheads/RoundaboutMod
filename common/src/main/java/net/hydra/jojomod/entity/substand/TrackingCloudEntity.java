@@ -51,9 +51,7 @@ public class TrackingCloudEntity extends StandEntity {
                     this.discard();
                     return;
                 }
-        if (this.tickCount % 10 == 0) {
-            redirectVector();
-        }
+        redirectVector();
         super.tick();
     }
 
@@ -75,10 +73,10 @@ public class TrackingCloudEntity extends StandEntity {
                     targetPos = player.getBoundingBox().getCenter();
                 }
                 case MOB -> {
-
+                    if (this.tickCount % 10 != 0) return;
                 }
                 case BLOCK -> {
-
+                    if (this.tickCount % 10 != 0) return;
                 }
             }
         }
