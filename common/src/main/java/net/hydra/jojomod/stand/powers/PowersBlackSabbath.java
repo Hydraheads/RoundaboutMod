@@ -1419,7 +1419,11 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
     }
 
     public int highlightsEntityColor(Entity ent, Player player){
-        return 14877186;
+        if(blackSabbathTargets.contains(ent)) {
+            return 14877186;
+        } else {
+            return 9371857;
+        }
     }
 
     public void placeBlackChest(Vec3 pos) {
@@ -1481,10 +1485,10 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
             if (!holdAttack) {
                 holdAttack = true;
                 if (moveMode == 2) {
-                    if(this.isHoldingSneak()){
-                        unselectClient();
-                    } else {
+                    if(!this.blackSabbathTargets.contains(getTarget())){
                         selectTargetClient();
+                    } else {
+                        unselectClient();
                     }
                 }
             }

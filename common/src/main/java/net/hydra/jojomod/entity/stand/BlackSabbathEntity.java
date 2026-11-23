@@ -2778,7 +2778,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     }
 
     public void travelAheadSoulRender(float render, StandEntity se, Entity allayVex){
-        System.out.println("aaa");
         if (se != null) {
             Vec3 junkPos = MainUtil.getAheadVecRender(this, (float) horizontalOffset(), render).getLocation();
             Vec3 junkPosY = MainUtil.getAheadVecRender(this, 0f, render).getLocation();

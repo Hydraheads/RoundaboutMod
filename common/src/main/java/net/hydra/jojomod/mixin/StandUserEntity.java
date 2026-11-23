@@ -1692,7 +1692,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if(this.roundabout$getGrabbedSoul()){
             Entity ent = this.level().getEntity(roundabout$getGrabberSabbath());
             if(ent == null){
-                System.out.println("aaa");
                 this.roundabout$setGrabbedSoul(false);
                 this.roundabout$setGrabberSabbath(0);
             } else if(ent instanceof LivingEntity lent) {
