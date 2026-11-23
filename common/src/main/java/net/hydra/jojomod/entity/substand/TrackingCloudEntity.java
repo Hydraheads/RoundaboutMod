@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity.substand;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.entity.projectile.StrayCatAirBubble;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersD4C;
@@ -66,9 +67,12 @@ public class TrackingCloudEntity extends StandEntity {
                     if (((StandUser) player).roundabout$getLifePunchClone() != null) {
                         player = ((StandUser) player).roundabout$getLifePunchClone();
                     }
-                    if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC
+                    else if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC
                             && PKC.timeEraseActive && PKC.activeClone != null) {
                         player = PKC.activeClone;
+                    }
+                    else if (PowerTypes.isInADifferentExistence(player, this)) {
+                        return;
                     }
                     targetPos = player.getBoundingBox().getCenter();
                 }
@@ -97,8 +101,9 @@ public class TrackingCloudEntity extends StandEntity {
                 (targetPos.y() - this.getY()),
                 (targetPos.z() - this.getZ())
         ).normalize().scale(SPEED * 0.75);
-
-        this.setDeltaMovement(vector);
+        if (!vector.equals(Vec3.ZERO)) {
+            this.setDeltaMovement(vector);
+        }
     }
 
     @Override
