@@ -13,6 +13,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 
 public class GoldExperienceRequiemModel<T extends GoldExperienceRequiemEntity> extends StandModel<T>{
@@ -275,5 +276,24 @@ public class GoldExperienceRequiemModel<T extends GoldExperienceRequiemEntity> e
         this.animate(pEntity.itemThrowAnimation, GoldExperienceAnimations.GER_ITEM_THROW, pAgeInTicks, 1.25f);
         this.animate(pEntity.blockRetractAnimation, StandAnimations.RETRACT_BLOCK, pAgeInTicks, 1.25f);
         this.animate(pEntity.itemRetractAnimation, StandAnimations.RETRACT_ITEM, pAgeInTicks, 1.25f);
+    }
+
+    @Override
+    public void defaultAnimations(T entity, float animationProgress, float windupLength){
+        this.animateIdles(entity, animationProgress);
+
+        Entity owner = entity.getUser();
+
+        animatePunches(entity, animationProgress);
+
+        this.animate(entity.blockAnimationState, StandAnimations.BLOCK, animationProgress, 1f);
+        this.animate(entity.barrageChargeAnimationState, GoldExperienceAnimations.BARRAGECHARGE, animationProgress, windupLength);
+        this.animate(entity.barrageAnimationState, GoldExperienceAnimations.BARRAGE, animationProgress, 1f);
+        this.animate(entity.miningBarrageAnimationState, StandAnimations.MINING_BARRAGE, animationProgress, 1.65f);
+        this.animate(entity.barrageEndAnimationState, StandAnimations.COMBO3, animationProgress, 2.2f);
+        this.animate(entity.barrageHurtAnimationState, StandAnimations.BARRAGEDAMAGE, animationProgress, 2.5f);
+        this.animate(entity.brokenBlockAnimationState, StandAnimations.BLOCKBREAK, animationProgress, 1.8f);
+        this.animate(entity.standLeapAnimationState, StandAnimations.STAND_LEAP, animationProgress, 1f);
+        this.animate(entity.standLeapEndAnimationState, StandAnimations.STAND_LEAP_END, animationProgress, 3.0f);
     }
 }

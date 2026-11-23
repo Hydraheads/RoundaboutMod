@@ -12,11 +12,14 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.SavedSecond;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
+import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.nbt.CompoundTag;
@@ -24,6 +27,8 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -237,6 +242,7 @@ public class PowersGER extends PowersGoldExperience {
             return 6;
         }
     }
+
     @Override
     public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
@@ -297,6 +303,42 @@ public class PowersGER extends PowersGoldExperience {
     }
 
     // for damage end
+
+    // for sounds start
+
+    @Override
+    public SoundEvent getBarrageChargeSound() {
+        if (!PowerTypes.hasStandActive(self)) {
+            return super.getBarrageChargeSound();
+        }
+        return ModSounds.GER_BARRAGE_WINDUP_EVENT;
+    }
+
+    @Override
+    public void playBarrageNoise(int hitNumber, Entity entity) {
+        if (!this.self.level().isClientSide()) {
+            if (hitNumber % 3 == 0)
+                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GER_BARRAGE_HIT_EVENT, SoundSource.PLAYERS, 1.3F, 1F);
+        }
+    }
+
+    @Override
+    public float getBarrageChargePitch() {
+        if (!PowerTypes.hasStandActive(self)) {
+            return super.getBarrageChargePitch();
+        }
+        return 1.0F;
+    }
+
+    @Override
+    public SoundEvent getSoundFromByte(byte soundChoice) {
+        if (soundChoice == BARRAGE_NOISE) {
+            return ModSounds.GER_MUDA_RUSH_EVENT;
+        }
+        return super.getSoundFromByte(soundChoice);
+    }
+
+    // for sounds end
 
     // for skins start
 

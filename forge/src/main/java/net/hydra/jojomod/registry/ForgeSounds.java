@@ -1203,6 +1203,12 @@ public class ForgeSounds {
             register(ModSounds.RETURN_TO_ZERO, ModSounds.RETURN_TO_ZERO_ID);
     public static final RegistryObject<SoundEvent> RETURN_TO_ZERO_REWIND =
             register(ModSounds.RETURN_TO_ZERO_REWIND, ModSounds.RETURN_TO_ZERO_REWIND_ID);
+    public static final RegistryObject<SoundEvent> GER_BARRAGE_HIT =
+            register(ModSounds.GER_BARRAGE_HIT, ModSounds.GER_BARRAGE_HIT_ID);
+    public static final RegistryObject<SoundEvent> GER_BARRAGE_WINDUP =
+            register(ModSounds.GER_BARRAGE_WINDUP, ModSounds.GER_BARRAGE_WINDUP_ID);
+    public static final RegistryObject<SoundEvent> GER_MUDA_RUSH =
+            register(ModSounds.GER_MUDA_RUSH, ModSounds.GER_MUDA_RUSH_ID);
 
     public static final RegistryObject<SoundEvent> GE_REQUIEM_ARROW =
             register(ModSounds.GE_REQUIEM_ARROW, ModSounds.GE_REQUIEM_ARROW_ID);

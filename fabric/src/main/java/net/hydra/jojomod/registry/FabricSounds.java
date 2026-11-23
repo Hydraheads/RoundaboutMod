@@ -646,6 +646,9 @@ public class FabricSounds {
         addSound(ModSounds.GOLD_EXPERIENCE_VINE_ID, ModSounds.GOLD_EXPERIENCE_VINE_EVENT);
         addSound(ModSounds.RETURN_TO_ZERO_ID, ModSounds.RETURN_TO_ZERO_EVENT);
         addSound(ModSounds.RETURN_TO_ZERO_REWIND_ID, ModSounds.RETURN_TO_ZERO_REWIND_EVENT);
+        addSound(ModSounds.GER_BARRAGE_HIT_ID, ModSounds.GER_BARRAGE_HIT_EVENT);
+        addSound(ModSounds.GER_BARRAGE_WINDUP_ID, ModSounds.GER_BARRAGE_WINDUP_EVENT);
+        addSound(ModSounds.GER_MUDA_RUSH_ID, ModSounds.GER_MUDA_RUSH_EVENT);
 
         addSound(ModSounds.GE_REQUIEM_ARROW_ID, ModSounds.GE_REQUIEM_ARROW_EVENT);
 
