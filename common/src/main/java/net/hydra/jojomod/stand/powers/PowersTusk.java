@@ -3011,7 +3011,7 @@ public class PowersTusk extends NewDashPreset {
             "jack",
             "magma",
             "ruby",
-            "creaking"
+            "creaking",
     };
     @Override
     public List<Byte> getSkinList() {
@@ -3021,7 +3021,6 @@ public class PowersTusk extends NewDashPreset {
                 AMETHYST,
                 DARK,
                 GREEN,
-                HAMON,
                 JACK,
                 MAGMA,
                 RUBY,
