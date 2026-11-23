@@ -72,7 +72,7 @@ public class TrackingCloudEntity extends StandEntity {
                             && PKC.timeEraseActive && PKC.activeClone != null) {
                         player = PKC.activeClone;
                     }
-                    targetPos = player.position();
+                    targetPos = player.getBoundingBox().getCenter();
                 }
                 case MOB -> {
 

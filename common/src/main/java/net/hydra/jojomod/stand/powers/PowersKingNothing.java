@@ -2054,7 +2054,7 @@ public class PowersKingNothing extends NewDashPreset {
         if (ent instanceof LivingEntity LE && !MainUtil.isMobSniffBlacklisted(ent)) {
             setMemorizedScent(LE);
             if (this.getSelf() instanceof Player PE) {
-                PE.displayClientMessage(LE.getDisplayName().copy().withStyle(ChatFormatting.DARK_PURPLE), true);
+                PE.displayClientMessage(LE.getName().copy().withStyle(ChatFormatting.DARK_PURPLE), true);
             }
         }
         return true;
