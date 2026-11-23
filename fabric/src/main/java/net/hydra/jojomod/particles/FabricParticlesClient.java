@@ -17,6 +17,9 @@ public class FabricParticlesClient {
         ParticleFactoryRegistry.getInstance().register(FabricParticles.GOLD_PUNCH_IMPACT_A, GoldPunchImpactParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.GOLD_PUNCH_IMPACT_B, GoldPunchImpactParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.GOLD_PUNCH_IMPACT_C, GoldPunchImpactParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.REQUIEM_PUNCH_IMPACT_A, PunchImpactParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.REQUIEM_PUNCH_IMPACT_B, PunchImpactParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.REQUIEM_PUNCH_IMPACT_C, PunchImpactParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.MELTING, BloodParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.BLOOD, BloodParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.SWEAT, BloodParticle.Provider::new);

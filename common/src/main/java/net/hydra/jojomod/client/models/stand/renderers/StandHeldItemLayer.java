@@ -5,6 +5,7 @@ import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.stand.StandModel;
+import net.hydra.jojomod.entity.stand.GoldExperienceRequiemEntity;
 import net.hydra.jojomod.entity.stand.KingNothingEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
@@ -13,10 +14,13 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.AnubisItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.BlockItem;
@@ -84,8 +88,50 @@ public class StandHeldItemLayer <T extends StandEntity, M extends StandModel<T>>
                 }
             } else if (livingEntity instanceof StarPlatinumEntity SP){
                 shiftZ = -1F;
+            } else if (livingEntity instanceof GoldExperienceRequiemEntity GER) {
+                float time = livingEntity.tickCount + Minecraft.getInstance().getFrameTime();
+                // bobbing the item up and down while idle
+                float bobOffset = Mth.sin(time * 0.1F) * 0.5F;
+
+                float peakTime = 0.25F;       // seconds when item hits highest point
+                float startBelow = -8.0F;     // starting offset below resting (negative = lower)
+                float overshootAbove = 2.0F;  // peak offset slightly above resting (positive = higher)
+
+                // first tick snapping somewhere fix
+                float grabRise = (!GER.itemThrowAnimation.isStarted() && !GER.itemRetractAnimation.isStarted())
+                        ? startBelow : 0.0F;
+
+                if (GER.itemGrabAnimation.isStarted()) {
+                    // for the initial grab, the item should quickly rise up to the finger like the anime
+                    float grabSec = GER.itemGrabAnimation.getAccumulatedTime() / 1000.0F;
+                    if (grabSec < 0.625F) {
+                        if (grabSec < peakTime) {
+                            float t = grabSec / peakTime;
+                            float eased = t * t * (3.0F - 2.0F * t);
+                            grabRise = Mth.lerp(eased, startBelow, overshootAbove);
+                        } else {
+                            float t = (grabSec - peakTime) / (0.625F - peakTime);
+                            float eased = t * t * (3.0F - 2.0F * t);
+                            grabRise = Mth.lerp(eased, overshootAbove, 0.0F);
+                        }
+                    } else {
+                        grabRise = 0.0F;
+                    }
+                }
+
+                shiftZ = -12.3F;
+                shiftY = 15.5F + bobOffset + grabRise;
+                shiftX = 3.8F;
             }
             this.getParentModel().translateToHand(humanoidArm, poseStack, shiftZ, shiftY, shiftX);
+            if (livingEntity instanceof GoldExperienceRequiemEntity GER
+                    && !MainUtil.isThrownBlockItem(itemStack.getItem())
+                    && !GER.itemThrowAnimation.isStarted()) {
+                ModelPart hand = this.getParentModel().rightHand;
+                poseStack.mulPose(Axis.XP.rotation(-hand.xRot));
+                poseStack.mulPose(Axis.YP.rotation(-hand.yRot));
+                poseStack.mulPose(Axis.ZP.rotation(-hand.zRot));
+            }
             if (livingEntity instanceof KingNothingEntity) {
                 poseStack.mulPose(Axis.XP.rotationDegrees(livingEntity.getViewXRot(0) - 65));
             }
@@ -105,6 +151,10 @@ public class StandHeldItemLayer <T extends StandEntity, M extends StandModel<T>>
             boolean flag = humanoidArm == HumanoidArm.LEFT;
             poseStack.translate((float)(flag ? -1 : 1) / 16.0F, 0.125F, -0.625F);
 
+            if (livingEntity instanceof GoldExperienceRequiemEntity) {
+                poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1, 0, 0, 110.0F), 0.0F, 0.25F, 0.0F);
+                poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0, 0, 1, 2.5F), 0.0F, 0.25F, 0.0F);
+            }
             if (!(livingEntity instanceof SeperatedArmEntity || livingEntity instanceof KingNothingEntity) && MainUtil.isThrownBlockItem(itemStack.getItem())){
                 poseStack.scale(3,3,3);
             }

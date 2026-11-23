@@ -34,12 +34,16 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.MangrovePropaguleBlock;
+import net.minecraft.world.level.block.SaplingBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.LeverBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -595,6 +599,11 @@ public class JJFProjectileEntity extends ThrowableItemProjectile {
             return;
         }
 
+        if (jjf$tryPlantAmmo(result)) {
+            discard();
+            return;
+        }
+
         if (jjf$specialBlockHit(result)) {
             discard();
             return;
@@ -932,6 +941,75 @@ public class JJFProjectileEntity extends ThrowableItemProjectile {
         return true;
     }
 
+    public static boolean isPlantableAmmo(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) {
+            return false;
+        }
+        if (stack.getItem() instanceof BlockItem blockItem) {
+            Block block = blockItem.getBlock();
+            if (block instanceof SaplingBlock || block instanceof MangrovePropaguleBlock
+                    || block == Blocks.AZALEA || block == Blocks.FLOWERING_AZALEA) {
+                return true;
+            }
+        }
+        return stack.is(Items.WHEAT_SEEDS)
+                || stack.is(Items.BEETROOT_SEEDS)
+                || stack.is(Items.PUMPKIN_SEEDS)
+                || stack.is(Items.MELON_SEEDS)
+                || stack.is(Items.TORCHFLOWER_SEEDS)
+                || stack.is(Items.PITCHER_POD)
+                || stack.is(Items.CARROT)
+                || stack.is(Items.POTATO)
+                || stack.is(Items.NETHER_WART)
+                || stack.is(Items.SWEET_BERRIES);
+    }
+
+    private boolean jjf$tryPlantAmmo(BlockHitResult hit) {
+        if (hit.getDirection() != Direction.UP) {
+            return false;
+        }
+        ItemStack ammo = getItem();
+        if (!isPlantableAmmo(ammo)) {
+            return false;
+        }
+        BlockState plant;
+        if (ammo.is(Items.WHEAT_SEEDS)) {
+            plant = Blocks.WHEAT.defaultBlockState();
+        } else if (ammo.is(Items.BEETROOT_SEEDS)) {
+            plant = Blocks.BEETROOTS.defaultBlockState();
+        } else if (ammo.is(Items.PUMPKIN_SEEDS)) {
+            plant = Blocks.PUMPKIN_STEM.defaultBlockState();
+        } else if (ammo.is(Items.MELON_SEEDS)) {
+            plant = Blocks.MELON_STEM.defaultBlockState();
+        } else if (ammo.is(Items.TORCHFLOWER_SEEDS)) {
+            plant = Blocks.TORCHFLOWER_CROP.defaultBlockState();
+        } else if (ammo.is(Items.PITCHER_POD)) {
+            plant = Blocks.PITCHER_CROP.defaultBlockState();
+        } else if (ammo.is(Items.CARROT)) {
+            plant = Blocks.CARROTS.defaultBlockState();
+        } else if (ammo.is(Items.POTATO)) {
+            plant = Blocks.POTATOES.defaultBlockState();
+        } else if (ammo.is(Items.NETHER_WART)) {
+            plant = Blocks.NETHER_WART.defaultBlockState();
+        } else if (ammo.is(Items.SWEET_BERRIES)) {
+            plant = Blocks.SWEET_BERRY_BUSH.defaultBlockState();
+        } else if (ammo.getItem() instanceof BlockItem blockItem) {
+            plant = blockItem.getBlock().defaultBlockState();
+        } else {
+            return false;
+        }
+        BlockPos pos = hit.getBlockPos().above();
+        if (!level().getBlockState(pos).canBeReplaced() || !plant.canSurvive(level(), pos)) {
+            return false;
+        }
+        if (getOwner() instanceof Player player
+                && (!level().mayInteract(player, pos)
+                || !player.mayUseItemAt(pos, Direction.UP, ammo)
+                || !net.hydra.jojomod.util.MainUtil.canPlaceOnClaim(player, hit))) {
+            return false;
+        }
+        return level().setBlock(pos, plant, 3);
+    }
     private boolean jjf$specialBlockHit(BlockHitResult hit) {
         ItemStack ammo = getItem();
         if (ammo.is(Items.END_ROD)) {

@@ -608,6 +608,9 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.GOLD_PUNCH_IMPACT_A.get(), GoldPunchImpactParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.GOLD_PUNCH_IMPACT_B.get(), GoldPunchImpactParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.GOLD_PUNCH_IMPACT_C.get(), GoldPunchImpactParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.REQUIEM_PUNCH_IMPACT_A.get(), PunchImpactParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.REQUIEM_PUNCH_IMPACT_B.get(), PunchImpactParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.REQUIEM_PUNCH_IMPACT_C.get(), PunchImpactParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.PUNCH_MISS.get(), PunchMissParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.MELTING.get(), BloodParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.BLOOD.get(), BloodParticle.Provider::new);

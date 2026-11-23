@@ -1,6 +1,8 @@
 package net.hydra.jojomod.client.models.stand.renderers;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.stand.JumpinJackFlashModel;
 import net.hydra.jojomod.entity.stand.JumpinJackFlashEntity;
@@ -26,6 +28,15 @@ public class JumpinJackFlashRenderer
                 ),
                 0.0F
         );
+    }
+
+    @Override
+    public void render(JumpinJackFlashEntity mobEntity, float f, float g,
+                       PoseStack matrixStack, MultiBufferSource buffers, int light) {
+        float factor = 0.5F + mobEntity.getSizePercent() / 2.0F;
+        float size = (mobEntity.isBaby() ? 0.5F : 0.87F) * factor;
+        matrixStack.scale(size, size, size);
+        super.render(mobEntity, f, g, matrixStack, buffers, light);
     }
 
     @Override

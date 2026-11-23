@@ -1689,18 +1689,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
 
-        if(this.roundabout$getGrabbedSoul()){
+        if(this.roundabout$getGrabberSabbath() != 0){
             Entity ent = this.level().getEntity(roundabout$getGrabberSabbath());
             if(ent == null){
-                System.out.println("aaa");
-                this.roundabout$setGrabbedSoul(false);
                 this.roundabout$setGrabberSabbath(0);
             } else if(ent instanceof LivingEntity lent) {
                 if (lent != null && (lent.isRemoved() || !lent.isAlive() || lent.isDeadOrDying())) {
-                    this.roundabout$setGrabbedSoul(false);
                     this.roundabout$setGrabberSabbath(0);
                 } else if (lent == null) {
-                    this.roundabout$setGrabbedSoul(false);
                     this.roundabout$setGrabberSabbath(0);
                 }
             }
@@ -1890,11 +1886,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                                 1, 0, 0, 0, 0.1);
                     }
                 }
-            }
-        }
-        if(!this.roundabout$getGrabbedSoul()){
-            if(this.roundabout$getGrabberSabbath() != 0){
-                roundabout$setGrabberSabbath(0);
             }
         }
         if (roundabout$isSealed() && !level().isClientSide()) {
@@ -3753,7 +3744,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     @Unique
     public boolean roundabout$isSealed() {
-        return roundabout$sealedTicks > -1 || (rdbt$this() instanceof Player PE && PE.isSpectator()) || roundabout$getGrabbedSoul();
+        return roundabout$sealedTicks > -1 || (rdbt$this() instanceof Player PE && PE.isSpectator()) || roundabout$getGrabberSabbath() != 0;
     }
 
     @Override
@@ -4020,7 +4011,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DIVER_ARMS, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$RIBCAGE_TRAP, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$SPRING_LEGS, false);
-            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$GRABBED_SOUL, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$GRABBER_ID, 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$GE_TREE_ROOT, false);
         }
@@ -5167,7 +5157,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (this.roundabout$hasDiverLegs()) {
             basis *= 1F + (ClientNetworking.getAppropriateConfig().diverDownSettings.legSpeedBoost * 0.01F); //0% speed boost default
         }
-        if(this.roundabout$getGrabbedSoul()){
+        if(this.roundabout$getGrabberSabbath() != 0){
             basis *= 0.025F;
         }
         if(PowerTypes.getPlaneOfExisting(rdbt$this()) == 12) {
@@ -5538,7 +5528,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if(this.roundabout$getGrabberSabbath() != 0){
             Entity z = this.level().getEntity(roundabout$getGrabberSabbath());
             if(z != null && z instanceof BlackSabbathEntity be){
-                if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);be.killSoul();((StandUser)e).roundabout$setGrabberSabbath(0);}
+                if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){be.killSoul();((StandUser)e).roundabout$setGrabberSabbath(0);}
             }
         }
 
@@ -5548,7 +5538,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     Entity ent = BE.level().getEntity(BE.getGrabbing());
                     if (ent != null && ent instanceof LivingEntity LE) {
                         BE.setMeleeInteractionTicks(-1);
-                        ((StandUser) LE).roundabout$setGrabbedSoul(false);
                         BE.killSoul();
                         ((StandUser) LE).roundabout$setGrabberSabbath(0);
                     }
@@ -7278,22 +7267,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     //black sabbath soul methods
-
-    @Unique
-    private static final EntityDataAccessor<Boolean> ROUNDABOUT$GRABBED_SOUL = SynchedEntityData.defineId(
-            LivingEntity.class, EntityDataSerializers.BOOLEAN);
-
-    @Unique
-    @Override
-    public void roundabout$setGrabbedSoul(boolean boleean) {
-        this.entityData.set(ROUNDABOUT$GRABBED_SOUL, boleean);
-    }
-
-    @Unique
-    @Override
-    public boolean roundabout$getGrabbedSoul() {
-        return this.entityData.get(ROUNDABOUT$GRABBED_SOUL);
-    }
 
     @Unique
     private static final EntityDataAccessor<Integer> ROUNDABOUT$GRABBER_ID = SynchedEntityData.defineId(
