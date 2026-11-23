@@ -10,6 +10,7 @@ public class ZeroGravityState {
     private UUID ownerUUID;
     private int zeroGravityTicks = 0;
     private int airPressureTicks = 0;
+    private boolean jjf$commandPressureActive = false;
     private int outsideOwnerRangeTicks = 0;
     private float radius = 0.0F;
     private int restorationTicks = 0;
@@ -62,6 +63,14 @@ public class ZeroGravityState {
 
     public void resetZeroGravityTicks() {
         zeroGravityTicks = 0;
+    }
+
+    public boolean isCommandPressureActive() {
+        return jjf$commandPressureActive;
+    }
+
+    public void setCommandPressureActive(boolean active) {
+        jjf$commandPressureActive = active;
     }
 
     public int getAirPressureTicks() {

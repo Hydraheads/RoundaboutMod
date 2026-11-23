@@ -14,6 +14,7 @@ public class RoundaboutCom {
 
     protected static final int DEFAULT_LVL = 1;
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+        JJFAirPressureCommand.register(dispatcher);
         dispatcher.register(Commands.literal("roundaboutSetStandLevel")
                 .requires(source
                         -> source.hasPermission(2))
