@@ -3625,7 +3625,7 @@ public class PowersSilverChariot extends NewPunchingStand {
             return false;
         }
         if (hasArmsOut) {
-            // setAttack();
+            setAttack();
             return false;
         }
         /*
@@ -3687,6 +3687,8 @@ public class PowersSilverChariot extends NewPunchingStand {
                 mountEntity.ejectPassengers();
                 mountEntity.discard();
                 mountEntity = null;
+            } else {
+
             }
 
             bonusLeapCount = 3;
@@ -3771,12 +3773,17 @@ public class PowersSilverChariot extends NewPunchingStand {
     @Override
     public void setAttack() {
         // TODO: Implement support for faster rapier swings while armour is removed
+        float ratio = 12F / 7F;
         if (HeatUtil.isArmsFrozen(self)){
             // this.attackTimeMax = 36;
-            this.attackTimeMax = armoured ? 21 : 10;
+            // this.attackTimeMax = 12;
+            // this.attackTimeMax = armoured ? 21 : 10;
+            this.attackTimeMax = (int) (this.armSummonAttackMaxTicks() * ratio);
         } else {
             // this.attackTimeMax = 21;
-            this.attackTimeMax = armoured ? 12 : 6;
+            // this.attackTimeMax = 7;
+            // this.attackTimeMax = armoured ? 12 : 6;
+            this.attackTimeMax = this.armSummonAttackMaxTicks();
         }
         this.attackTimeDuring = 0;
         this.setAttackTime(0);
@@ -4747,7 +4754,7 @@ public class PowersSilverChariot extends NewPunchingStand {
     @Override
     public boolean interceptAttack() {
         // return (!hasHandsOut() && !isRegainingArmourFromDesummon() && !onCooldown(SKILL_SILVER_CHARIOT_SWORD_SHOOT_INDEX));
-        return (!hasHandsOut() && !isRegainingArmourFromDesummon());
+        return (!isRegainingArmourFromDesummon());
     }
 
     @Override
