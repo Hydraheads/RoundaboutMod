@@ -1491,6 +1491,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                     if (lungeTicks >= 1) {
                         if (lungeTicks < 140 && lungeTicks > 62) {
                             lungeTicks--;
+                            lungeTicks--;
                         }
                         lungeTicks--;
                     }
@@ -1575,7 +1576,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                     }
                                 }
                                 if (lungeTicks > 200) {
-                                    this.getNavigation().setSpeedModifier(0.70);
+                                    this.getNavigation().setSpeedModifier(0.75);
                                 } else if (lungeTicks > 185 && lungeTicks < 195) {
                                     if(!level().isClientSide()) {
                                         setUnrender(false);
