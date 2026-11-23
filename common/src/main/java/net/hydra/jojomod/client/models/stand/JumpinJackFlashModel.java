@@ -1,6 +1,8 @@
 
 package net.hydra.jojomod.client.models.stand;
 
+import net.hydra.jojomod.client.models.stand.animations.JumpinJackFlashAnimations;
+import net.hydra.jojomod.entity.stand.JumpinJackFlashEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -386,6 +388,57 @@ public class JumpinJackFlashModel<T extends FollowingStandEntity> extends StandM
         }
     }
 
+    private void jjf$applyForwardChargePose(T entity, float ageInTicks) {
+        boolean spinCharge = entity.getAnimation() == StandEntity.BARRAGE_CHARGE;
+        boolean shootWindup = false;
+        boolean shootLoop = false;
+        float elapsed = 0.5F;
+
+        if (entity instanceof net.hydra.jojomod.entity.stand.JumpinJackFlashEntity jjf) {
+            shootWindup = entity.getAnimation() == net.hydra.jojomod.entity.stand.JumpinJackFlashEntity.JJF_SHOOT_WINDUP_ANIMATION;
+            shootLoop = entity.getAnimation() == net.hydra.jojomod.entity.stand.JumpinJackFlashEntity.JJF_SHOOT_LOOP_ANIMATION;
+            if (spinCharge) {
+                elapsed = jjf.jjfPunchAnimationState.getAccumulatedTime() / 1000.0F;
+            } else if (shootWindup) {
+                elapsed = jjf.jjfShootWindupAnimationState.getAccumulatedTime() / 1000.0F;
+            }
+        }
+
+        if (!spinCharge && !shootWindup && !shootLoop) {
+            return;
+        }
+
+        float progress = shootLoop ? 1.0F :
+                net.minecraft.util.Mth.clamp(elapsed / (spinCharge ? 0.34F : 0.42F), 0.0F, 1.0F);
+        float eased = progress * progress * (3.0F - 2.0F * progress);
+        float target = spinCharge ? -1.35F : -1.47F;
+        float shoulderPitch = net.minecraft.util.Mth.lerp(eased, -0.20F, target);
+        float movement = (float) Math.sin(ageInTicks * (spinCharge ? 0.16F : 0.36F))
+                * (spinCharge ? 0.024F : 0.016F) * eased;
+
+        stand.resetPose();
+        stand2.resetPose();
+        upper_chest.resetPose();
+        right_arm.resetPose();
+        left_arm.resetPose();
+        lower_right_arm.resetPose();
+        lower_left_arm.resetPose();
+
+        right_arm.xRot = shoulderPitch + movement;
+        left_arm.xRot = shoulderPitch - movement;
+        right_arm.yRot = -0.075F;
+        left_arm.yRot = 0.075F;
+        right_arm.zRot = 0.08F;
+        left_arm.zRot = -0.08F;
+
+        right_spin_on.resetPose();
+        left_spin_on.resetPose();
+        setCuffsSpinning(true);
+        float spin = ageInTicks * 1.90F;
+        right_spin_on.yRot = spin;
+        left_spin_on.yRot = -spin;
+    }
+
     @Override
     public void setupAnim(
             T entity,
@@ -406,6 +459,24 @@ public class JumpinJackFlashModel<T extends FollowingStandEntity> extends StandM
 
         defaultModifiers(entity);
         defaultAnimations(entity, ageInTicks, 1.0F);
-        jjf$applySpinAnimation(entity, ageInTicks);
+        if (entity instanceof JumpinJackFlashEntity jjf) {
+            boolean importedActive = jjf.jjfPunchAnimationState.isStarted()
+                    || jjf.jjfShootWindupAnimationState.isStarted()
+                    || jjf.jjfShootLoopAnimationState.isStarted();
+            if (importedActive) {
+                right_spin_on.visible = true;
+                left_spin_on.visible = true;
+                right_spin_off.visible = true;
+                left_spin_off.visible = true;
+                this.animate(jjf.jjfPunchAnimationState, JumpinJackFlashAnimations.PUNCH, ageInTicks, 1.0F);
+                this.animate(jjf.jjfShootWindupAnimationState, JumpinJackFlashAnimations.SHOOT_WINDUP, ageInTicks, 1.0F);
+                this.animate(jjf.jjfShootLoopAnimationState, JumpinJackFlashAnimations.SHOOT_LOOP, ageInTicks, 1.0F);
+            } else {
+                jjf$applySpinAnimation(entity, ageInTicks);
+            }
+        } else {
+            jjf$applySpinAnimation(entity, ageInTicks);
+        }
+        jjf$applyForwardChargePose(entity, ageInTicks);
     }
 }

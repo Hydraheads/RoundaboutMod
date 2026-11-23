@@ -10,6 +10,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -94,6 +95,9 @@ public class SacrificialDaggerItem extends TieredItem implements Vanishable {
                         $$2.hurt(ModDamageTypes.of($$1, ModDamageTypes.DAGGER), 2.01F);
                     }
                     $$1.playSound(null, $$2, ModSounds.KNIFE_IMPACT_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    if ($$2 instanceof Player P) {
+                        P.awardStat(Stats.ITEM_USED.get(this));
+                    }
                 }
             }
         }

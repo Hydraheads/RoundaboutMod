@@ -37,6 +37,7 @@ public interface StandUser {
     void roundabout$removeQueForTargetDeletion();
     void roundabout$onStandOutLookAround(StandEntity passenger);
     boolean roundabout$getUniqueStandModeToggle();
+    void roundabout$setStuckSpeedMulti(Vec3 vec);
     void roundabout$setUniqueStandModeToggle(boolean mode);
     boolean roundabout$skipFriction();
     void rdbt$onSyncedDataUpdated2(EntityDataAccessor<?> $$0);
