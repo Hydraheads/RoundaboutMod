@@ -504,6 +504,20 @@ public class StandPowers extends AbilityScapeBasis {
         return power;
     }
 
+    public float getPunchStrengthBase(Entity entity){
+        float ps = getPunchStrength(entity);
+        if (hasTangibleNerf(self,entity)){
+            ps*=0.5F;
+        }
+        return ps;
+    }public float getHeavyPunchStrengthBase(Entity entity){
+        float ps = getHeavyPunchStrength(entity);
+        if (hasTangibleNerf(self,entity)){
+            ps*=0.5F;
+        }
+        return ps;
+    }
+
     /**Override these methods to fine tune the attack strength of the stand*/
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){

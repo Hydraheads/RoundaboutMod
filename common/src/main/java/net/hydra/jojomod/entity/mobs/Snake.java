@@ -12,6 +12,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BiomeTags;
+import net.minecraft.util.TimeUtil;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
@@ -26,6 +28,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.entity.animal.Fox;
+import net.minecraft.world.entity.animal.PolarBear;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -34,13 +37,42 @@ import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-public class Snake extends Animal {
+import java.util.UUID;
+
+public class Snake extends Animal implements NeutralMob  {
     private static final EntityDataAccessor<Integer> VARIANT_ID = SynchedEntityData.defineId(Snake.class, EntityDataSerializers.INT);
 
     public Snake(EntityType<? extends Animal> entity, Level level) {
         super(entity, level);
     }
 
+    private static final UniformInt PERSISTENT_ANGER_TIME;
+    static {
+        PERSISTENT_ANGER_TIME = TimeUtil.rangeOfSeconds(20, 39);
+    }
+    private int remainingPersistentAngerTime;
+    @javax.annotation.Nullable
+    private UUID persistentAngerTarget;
+
+    public void startPersistentAngerTimer() {
+        this.setRemainingPersistentAngerTime(PERSISTENT_ANGER_TIME.sample(this.random));
+    }
+    public void setRemainingPersistentAngerTime(int $$0) {
+        this.remainingPersistentAngerTime = $$0;
+    }
+
+    public int getRemainingPersistentAngerTime() {
+        return this.remainingPersistentAngerTime;
+    }
+
+    public void setPersistentAngerTarget(@javax.annotation.Nullable UUID $$0) {
+        this.persistentAngerTarget = $$0;
+    }
+
+    @javax.annotation.Nullable
+    public UUID getPersistentAngerTarget() {
+        return this.persistentAngerTarget;
+    }
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
