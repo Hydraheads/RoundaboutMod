@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.event.powers.jumpingJackFlash.JJFFloatingBlocks;
 import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravityAccess;
 import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravitySource;
 import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravityState;
@@ -174,7 +175,8 @@ public class JJFSpitEntity extends ThrowableProjectile {
     protected void onHitBlock(
             BlockHitResult result
     ) {
-        if (!level().isClientSide()) {
+        if (level() instanceof ServerLevel server) {
+            JJFFloatingBlocks.floatBlock(server, result.getBlockPos(), getOwner());
             spawnMissParticles();
         }
 
