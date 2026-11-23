@@ -9,6 +9,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.GoldExperienceEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.SavedSecond;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -22,6 +23,7 @@ import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
@@ -363,4 +365,21 @@ public class PowersGER extends PowersGoldExperience {
 
     // for icons end
 
+    // for particles start
+
+    @Override
+    public SimpleParticleType getImpactParticle() {
+        SimpleParticleType punchpart;
+        float random = (float) (Math.random()*3);
+        if (random > 2){
+            punchpart = ModParticles.REQUIEM_PUNCH_IMPACT_A;
+        } else if (random > 1){
+            punchpart = ModParticles.REQUIEM_PUNCH_IMPACT_B;
+        } else {
+            punchpart = ModParticles.REQUIEM_PUNCH_IMPACT_C;
+        }
+        return punchpart;
+    }
+
+    // for particles end
 }

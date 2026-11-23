@@ -36,7 +36,9 @@ public class ModParticles {
     public static SimpleParticleType GOLD_PUNCH_IMPACT_A;
     public static SimpleParticleType GOLD_PUNCH_IMPACT_B;
     public static SimpleParticleType GOLD_PUNCH_IMPACT_C;
-
+    public static SimpleParticleType REQUIEM_PUNCH_IMPACT_A;
+    public static SimpleParticleType REQUIEM_PUNCH_IMPACT_B;
+    public static SimpleParticleType REQUIEM_PUNCH_IMPACT_C;
 
     public static SimpleParticleType DISC_STEAL_HIT;
 
