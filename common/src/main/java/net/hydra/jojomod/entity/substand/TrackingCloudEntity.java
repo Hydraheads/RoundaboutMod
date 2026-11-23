@@ -1,48 +1,33 @@
 package net.hydra.jojomod.entity.substand;
 
-import net.hydra.jojomod.access.IGravityEntity;
-import net.hydra.jojomod.entity.projectile.StrayCatAirBubble;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.sound.ModSounds;
-import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.hydra.jojomod.stand.powers.PowersKingNothing;
-import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 public class TrackingCloudEntity extends StandEntity {
 
-    public static final double SPEED = 0.2;
+    public static final double SPEED = 0.3;
+
     public static final byte
             PLAYER = 0,
             MOB = 1,
             BLOCK = 2;
+
     public TrackingCloudEntity(
             EntityType<? extends Mob> entityType,
             Level world) {
         super(entityType, world);
     }
-
-    public BlockPos targetBlockPos = null;
-    public Entity targetEntity = null;
 
     @Override
     public void tick() {
