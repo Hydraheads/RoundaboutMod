@@ -2102,6 +2102,28 @@ public class PowersKingNothing extends NewDashPreset {
         }
     }
 
+    public byte getMemorizedScentType() {
+        if (memorizedPlayer != null) {
+            return TrackingCloudEntity.PLAYER;
+        }
+        else if (memorizedEntityType != null) {
+            return TrackingCloudEntity.MOB;
+        }
+        return TrackingCloudEntity.BLOCK;
+    }
+
+    public Block getMemorizedBlock() {
+        return memorizedBlock;
+    }
+
+    public EntityType<?> getMemorizedEntityType() {
+        return memorizedEntityType;
+    }
+
+    public UUID getMemorizedPlayer() {
+        return memorizedPlayer;
+    }
+
     @Override
     public boolean isWip() {
         return true;

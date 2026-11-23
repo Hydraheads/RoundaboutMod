@@ -3,7 +3,10 @@ package net.hydra.jojomod.entity.substand;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.entity.projectile.StrayCatAirBubble;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersD4C;
+import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.hydra.jojomod.stand.powers.PowersKingNothing;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
@@ -19,6 +22,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -26,12 +30,10 @@ import net.minecraft.world.phys.Vec3;
 public class TrackingCloudEntity extends StandEntity {
 
     public static final double SPEED = 0.2;
-
     public static final byte
-            NONE = 0,
-            ENTITY = 1,
+            PLAYER = 0,
+            MOB = 1,
             BLOCK = 2;
-
     public TrackingCloudEntity(
             EntityType<? extends Mob> entityType,
             Level world) {
@@ -56,6 +58,30 @@ public class TrackingCloudEntity extends StandEntity {
     }
 
     public void redirectVector() {
+        Vec3 targetPos = new Vec3(0, 0, 0);
+        boolean hasFoundTarget = false;
+        if (((StandUser) getUser()).roundabout$getStandPowers() instanceof PowersKingNothing PKN) {
+            switch (PKN.getMemorizedScentType()) {
+                case PLAYER -> {
+                    Entity player = this.level().getPlayerByUUID(PKN.getMemorizedPlayer());
+                    if (player == null) return;
+                    if (((StandUser) player).roundabout$getLifePunchClone() != null) {
+                        player = ((StandUser) player).roundabout$getLifePunchClone();
+                    }
+                    if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC
+                            && PKC.timeEraseActive && PKC.activeClone != null) {
+                        player = PKC.activeClone;
+                    }
+                    targetPos = player.position();
+                }
+                case MOB -> {
+
+                }
+                case BLOCK -> {
+
+                }
+            }
+        }
         // Entity currentTarget = getTarget();
         // if (currentTarget == null) { return; }
 
@@ -67,7 +93,6 @@ public class TrackingCloudEntity extends StandEntity {
         // }
 
         // Vec3 targetPos = pos.add(addToPosition);
-        Vec3 targetPos = new Vec3(0, 0, 0);
 
         Vec3 vector = new Vec3(
                 (targetPos.x() - this.getX()),
@@ -77,8 +102,6 @@ public class TrackingCloudEntity extends StandEntity {
 
         this.setDeltaMovement(vector);
     }
-
-
 
     @Override
     public boolean isNoGravity() {
