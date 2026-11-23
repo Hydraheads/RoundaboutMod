@@ -645,6 +645,7 @@ public class FabricSounds {
         addSound(ModSounds.GOLD_EXPERIENCE_TREE_ID, ModSounds.GOLD_EXPERIENCE_TREE_EVENT);
         addSound(ModSounds.GOLD_EXPERIENCE_VINE_ID, ModSounds.GOLD_EXPERIENCE_VINE_EVENT);
         addSound(ModSounds.RETURN_TO_ZERO_ID, ModSounds.RETURN_TO_ZERO_EVENT);
+        addSound(ModSounds.RETURN_TO_ZERO_REWIND_ID, ModSounds.RETURN_TO_ZERO_REWIND_EVENT);
 
         addSound(ModSounds.GE_REQUIEM_ARROW_ID, ModSounds.GE_REQUIEM_ARROW_EVENT);
 

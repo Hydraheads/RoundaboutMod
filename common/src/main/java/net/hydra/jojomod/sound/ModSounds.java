@@ -2247,6 +2247,9 @@ public class ModSounds {
     public static final String RETURN_TO_ZERO = "return_to_zero";
     public static final ResourceLocation RETURN_TO_ZERO_ID = new ResourceLocation(Roundabout.MOD_ID+":"+RETURN_TO_ZERO);
     public static SoundEvent RETURN_TO_ZERO_EVENT = SoundEvent.createVariableRangeEvent(RETURN_TO_ZERO_ID);
+    public static final String RETURN_TO_ZERO_REWIND = "return_to_zero_rewind";
+    public static final ResourceLocation RETURN_TO_ZERO_REWIND_ID = new ResourceLocation(Roundabout.MOD_ID+":"+RETURN_TO_ZERO_REWIND);
+    public static SoundEvent RETURN_TO_ZERO_REWIND_EVENT = SoundEvent.createVariableRangeEvent(RETURN_TO_ZERO_REWIND_ID);
 
     public static final String GE_REQUIEM_ARROW = "ge_requiem_obtain";
     public static final ResourceLocation GE_REQUIEM_ARROW_ID = new ResourceLocation(Roundabout.MOD_ID+":"+GE_REQUIEM_ARROW);

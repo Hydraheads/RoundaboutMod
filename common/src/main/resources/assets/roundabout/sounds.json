@@ -595,6 +595,12 @@
       "roundabout:return_to_zero_4"
     ]
   },
+  "return_to_zero_rewind": {
+    "subtitle": "sounds.roundabout.return_to_zero",
+    "sounds": [
+      "roundabout:return_to_zero_rewind"
+    ]
+  },
   "summon_king_crimson": {
     "subtitle": "sounds.roundabout.summon_king_crimson",
     "sounds": [
