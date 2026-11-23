@@ -718,7 +718,7 @@ public abstract class EntityAndData implements IEntityAndData {
                 ci.cancel();
                 return;
             }
-            if(((StandUser)this).roundabout$getGrabbedSoul()){
+            if(((StandUser)this).roundabout$getGrabberSabbath() != 0){
                 ci.cancel();
                 return;
             }
