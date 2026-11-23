@@ -7,6 +7,7 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.NotNull;
 
 public class ForgeParticles {
     public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, Roundabout.MOD_ID);
@@ -320,28 +321,13 @@ public class ForgeParticles {
             "killer_queen_explosion",
             () -> new SimpleParticleType(true)
     );
-    // public static final RegistryObject<SimpleParticleType> MOLD_DUST = PARTICLES.register(
-    //         "mold_dust",
-    //         () -> new SimpleParticleType(true)
-    // );
+
     public static final RegistryObject<ParticleType<ColorParticleOptions>> MOLD_DUST =
-            PARTICLES.register("mold_dust", () -> new ParticleType<>(false, ColorParticleOptions.DESERIALIZER) {
-                @Override
-                public com.mojang.serialization.Codec<ColorParticleOptions> codec() {
-                    return ColorParticleOptions.codec(this);
-                }
-            });
-    // public static final RegistryObject<SimpleParticleType> MOLD = PARTICLES.register(
-    //         "mold",
-    //         () -> new SimpleParticleType(true)
-    // );
+            PARTICLES.register("mold_dust", () -> createColorParticleType(true));
+
     public static final RegistryObject<ParticleType<ColorParticleOptions>> MOLD =
-            PARTICLES.register("mold", () -> new ParticleType<>(false, ColorParticleOptions.DESERIALIZER) {
-                @Override
-                public com.mojang.serialization.Codec<ColorParticleOptions> codec() {
-                    return ColorParticleOptions.codec(this);
-                }
-            });
+            PARTICLES.register("mold", () -> createColorParticleType(false));
+
     public static final RegistryObject<SimpleParticleType> BLACK_SABBATH_MOVING_RIPPLE = PARTICLES.register(
             "black_sabbath_moving_ripple",
             () -> new SimpleParticleType(true)
@@ -376,32 +362,18 @@ public class ForgeParticles {
     );
 
     public static final RegistryObject<ParticleType<ColorParticleOptions>> PURPLE_HAZE_SMOKE =
-            PARTICLES.register("purple_haze_smoke", () -> new ParticleType<>(false, ColorParticleOptions.DESERIALIZER) {
-                @Override
-                public com.mojang.serialization.Codec<ColorParticleOptions> codec() {
-                    return ColorParticleOptions.codec(this);
-                }
-            });
+            PARTICLES.register("purple_haze_smoke", () -> createColorParticleType(true));
 
     public static final RegistryObject<ParticleType<ColorParticleOptions>> PUZZLE_PARTICLE =
-            PARTICLES.register("kn_piece", () -> new ParticleType<>(false, ColorParticleOptions.DESERIALIZER) {
-                @Override
-                public com.mojang.serialization.Codec<ColorParticleOptions> codec() {
-                    return ColorParticleOptions.codec(this);
-                }
-            });
+            PARTICLES.register("kn_piece", () -> createColorParticleType(true));
 
     public static final RegistryObject<SimpleParticleType> DISTORTION_SMOKE = PARTICLES.register(
             "distortion_smoke",
             () -> new SimpleParticleType(true)
     );
+
     public static final RegistryObject<ParticleType<ColorParticleOptions>> PURPLE_HAZE_BLASTWAVE =
-            PARTICLES.register("purple_haze_blastwave", () -> new ParticleType<>(false, ColorParticleOptions.DESERIALIZER) {
-                @Override
-                public com.mojang.serialization.Codec<ColorParticleOptions> codec() {
-                    return ColorParticleOptions.codec(this);
-                }
-            });
+            PARTICLES.register("purple_haze_blastwave", () -> createColorParticleType(false));
     public static final RegistryObject<SimpleParticleType> AUTUMN_LEAVES = PARTICLES.register(
             "autumn_leaves",
             () -> new SimpleParticleType(true)
@@ -483,4 +455,13 @@ public class ForgeParticles {
             "rain_bubble",
             () -> new SimpleParticleType(true)
     );
+
+    public static @NotNull ParticleType<ColorParticleOptions> createColorParticleType(boolean alwaysSpawn) {
+        return new ParticleType<>(alwaysSpawn, ColorParticleOptions.DESERIALIZER) {
+            @Override
+            public com.mojang.serialization.Codec<ColorParticleOptions> codec() {
+                return ColorParticleOptions.codec(this);
+            }
+        };
+    }
 }
