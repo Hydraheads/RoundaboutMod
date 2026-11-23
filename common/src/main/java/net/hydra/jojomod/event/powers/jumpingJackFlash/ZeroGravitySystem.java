@@ -941,6 +941,7 @@ public class ZeroGravitySystem {
         }
 
         if (entity instanceof Player player) {
+
             HitResult hit = player.pick(
                     4.5D,
                     0.0F,
