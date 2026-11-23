@@ -410,10 +410,10 @@ public abstract class ConfigManager {
             MainUtil.standBlockGrabBlacklist.clear();
             MainUtil.standBlockGrabBlacklist.addAll(getAdvancedConfig().standBlockGrabBlacklist);
         }
-        if (getAdvancedConfig().standDisassemblyBlacklistv2 != null)
+        if (getAdvancedConfig().standDisassemblyBlacklistv3 != null)
         {
             MainUtil.standDisassemblyBlacklist.clear();
-            MainUtil.standDisassemblyBlacklist.addAll(getAdvancedConfig().standDisassemblyBlacklistv2);
+            MainUtil.standDisassemblyBlacklist.addAll(getAdvancedConfig().standDisassemblyBlacklistv3);
         }
         if (getAdvancedConfig().lootPoolForD4CChests != null)
         {
