@@ -6,6 +6,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.GoldExperienceEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.SavedSecond;
@@ -197,6 +198,35 @@ public class PowersGER extends PowersGoldExperience {
 
     // Buffs
 
+    // for item throw (raw spaghetti laser beam) start
+
+    @Override
+    public boolean canSnipe() {
+        return true;
+    }
+
+    @Override
+    public float getShotAccuracy() {
+        return 0.0F;
+    }
+
+    @Override
+    public float getThrowAngle() {
+        return 0.0F;
+    }
+
+    @Override
+    public float getThrowAngle2() {
+        return 0.0F;
+    }
+
+    @Override
+    public byte getThrowStyleType(){
+        return ThrownObjectEntity.GERTHROW;
+    }
+
+    // for item throw (raw spaghetti laser beam) start
+
     // for damage start
 
     @Override
@@ -235,8 +265,15 @@ public class PowersGER extends PowersGoldExperience {
     private float attackSpeedModifier() {return 0.65f; } /// faster than Silver Chariot
 
     @Override
-    public boolean setPowerAttack(){
-        if (this.activePowerPhase >= 3){
+    public boolean setPowerAttack() {
+        //dogael forgot to add the item throw check
+        StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
+        if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()
+                && (!standEntity.getHeldItem().isEmpty() || standEntity.getFirstPassenger() != null)) {
+            return super.setPowerAttack();
+        }
+
+        if (this.activePowerPhase >= 3) {
             this.activePowerPhase = 1;
         } else {
             this.activePowerPhase++;
@@ -264,7 +301,7 @@ public class PowersGER extends PowersGoldExperience {
     // for skins start
 
     @Override
-    /**The stand is named on the disc so we just use that*/
+    /*The stand is named on the disc so we just use that*/
     public Component getStandName(){
         ItemStack disc = ((StandUser)this.getSelf()).roundabout$getStandDisc();
         if (!disc.isEmpty() && disc.getItem() instanceof StandDiscItem SDI){

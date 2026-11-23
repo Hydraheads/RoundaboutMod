@@ -1,5 +1,6 @@
 package net.hydra.jojomod.client.models.stand;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.client.models.stand.animations.GoldExperienceAnimations;
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
 import net.hydra.jojomod.entity.stand.GoldExperienceEntity;
@@ -12,6 +13,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.HumanoidArm;
 
 public class GoldExperienceRequiemModel<T extends GoldExperienceRequiemEntity> extends StandModel<T>{
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
@@ -82,6 +84,8 @@ public class GoldExperienceRequiemModel<T extends GoldExperienceRequiemEntity> e
         this.LeftArmBAM = this.BAM.getChild("LeftArmBAM");
         this.LeftArmBAM4 = this.BAM.getChild("LeftArmBAM4");
         this.LeftArmBAM3 = this.BAM.getChild("LeftArmBAM3");
+        this.rightHand = this.lower_right_arm;
+        this.leftHand = this.lower_left_arm;
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -267,14 +271,9 @@ public class GoldExperienceRequiemModel<T extends GoldExperienceRequiemEntity> e
         this.animate(pEntity.entityGrabAnimation, StandAnimations.GRAB_BLOCK, pAgeInTicks, 3f);
         this.animate(pEntity.blockGrabAnimation, StandAnimations.GRAB_BLOCK, pAgeInTicks, 1f);
         this.animate(pEntity.blockThrowAnimation, StandAnimations.THROW_BLOCK, pAgeInTicks, 1.7f);
-        this.animate(pEntity.itemGrabAnimation, StandAnimations.GRAB_ITEM, pAgeInTicks, 1f);
-        this.animate(pEntity.itemThrowAnimation, StandAnimations.THROW_ITEM, pAgeInTicks, 1.25f);
+        this.animate(pEntity.itemGrabAnimation, GoldExperienceAnimations.GER_ITEM_GRAB, pAgeInTicks, 1f);
+        this.animate(pEntity.itemThrowAnimation, GoldExperienceAnimations.GER_ITEM_THROW, pAgeInTicks, 1.25f);
         this.animate(pEntity.blockRetractAnimation, StandAnimations.RETRACT_BLOCK, pAgeInTicks, 1.25f);
         this.animate(pEntity.itemRetractAnimation, StandAnimations.RETRACT_ITEM, pAgeInTicks, 1.25f);
-    }
-
-    @Override
-    public ModelPart root() {
-        return stand;
     }
 }
