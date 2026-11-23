@@ -1,10 +1,13 @@
 package net.hydra.jojomod.item;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IFatePlayer;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
@@ -119,7 +122,8 @@ public class FancyLighterItem extends BlockItem {
                         Entity user = $$8.getEntity(tag.getUUID("StuffOther"));
                         if (user != null && $$0 != null) {
                             if(user != $$0){
-                                if(((StandUser)user).roundabout$getStandPowers() instanceof PowersBlackSabbath pbs){
+                                boolean userPowers = !(user instanceof Player) || user instanceof Player p && ((IPlayerEntity)p).roundabout$getPower() == PowerTypes.STAND.ordinal();
+                                if(userPowers && ((StandUser)user).roundabout$getStandPowers() instanceof PowersBlackSabbath pbs){
                                     if(pbs.tickDown2 <= -9) {
                                         if(!((StandUser) user).roundabout$getActive()){
                                             ((StandUser) user).roundabout$setActive(true);
