@@ -2054,7 +2054,7 @@ public class PowersKingNothing extends NewDashPreset {
         if (ent instanceof LivingEntity LE && !MainUtil.isMobSniffBlacklisted(ent)) {
             setMemorizedScent(LE);
             if (this.getSelf() instanceof Player PE) {
-                PE.displayClientMessage(LE.getDisplayName().copy().withStyle(ChatFormatting.DARK_PURPLE), true);
+                PE.displayClientMessage(LE.getName().copy().withStyle(ChatFormatting.DARK_PURPLE), true);
             }
         }
         return true;
@@ -2100,6 +2100,28 @@ public class PowersKingNothing extends NewDashPreset {
                 tity.discard();
             }
         }
+    }
+
+    public byte getMemorizedScentType() {
+        if (memorizedPlayer != null) {
+            return TrackingCloudEntity.PLAYER;
+        }
+        else if (memorizedEntityType != null) {
+            return TrackingCloudEntity.MOB;
+        }
+        return TrackingCloudEntity.BLOCK;
+    }
+
+    public Block getMemorizedBlock() {
+        return memorizedBlock;
+    }
+
+    public EntityType<?> getMemorizedEntityType() {
+        return memorizedEntityType;
+    }
+
+    public UUID getMemorizedPlayer() {
+        return memorizedPlayer;
     }
 
     @Override

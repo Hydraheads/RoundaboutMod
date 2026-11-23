@@ -9,6 +9,7 @@ import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
+import net.hydra.jojomod.entity.LifePunchCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.TridentsIgnoreThis;
 import net.hydra.jojomod.entity.corpses.FallenMob;
@@ -4455,6 +4456,19 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             return this.getEntityData().get(ROUNDABOUT$TRUE_INVISIBILITY);
         }
         return -1;
+    }
+
+    @Unique
+    LifePunchCloneEntity roundaboutMod$lifePunchClone = null;
+
+    @Override
+    public void roundabout$setLifePunchClone(LifePunchCloneEntity clone) {
+        this.roundaboutMod$lifePunchClone = clone;
+    }
+
+    @Override
+    public LifePunchCloneEntity roundabout$getLifePunchClone() {
+        return roundaboutMod$lifePunchClone;
     }
 
     @Shadow
