@@ -69,6 +69,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
     public static final byte POWER_SHOOT_WINDUP_ANIMATION = 81;
     public static final byte POWER_SHOOT_LOOP_ANIMATION = 82;
     public static final byte POWER_SHOOT_STOP_ANIMATION = 83;
+    public static final byte POWER_ARMS_TOGGLE = 84;
 
     private static final int MAX_LOADED_AMMO = 64;
 
@@ -112,10 +113,15 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
     private static final int SPIT_COOLDOWN_TICKS = 80;
     private static final float SPIT_SPEED = 1.6F;
 
+    private static final int JJF_SPIN_HOLD_DELAY_TICKS = 10;
+    private boolean jjf$attackWasDown = false;
+    private int jjf$attackHoldTicks = 0;
+
     private boolean jjf$spinAttackHeld = false;
     private int jjf$spinAttackTicks = 0;
 
     private boolean jjf$skill4WasDown = false;
+    private boolean jjf$armsMode = false;
 
 
     private boolean jjf$useWasDown = false;
@@ -127,10 +133,65 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
 
     private boolean jjf$fireRightSide = true;
 
+    @Override
+    public boolean hasHandsOut() {
+        return jjf$armsMode;
+    }
+
+    @Override
+    public boolean hasHandsOutRendering() {
+        return jjf$armsMode;
+    }
+
+    @Override
+    public void addAdditionalSaveData(net.minecraft.nbt.CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putBoolean("JJFArmsMode", jjf$armsMode);
+    }
+
+    @Override
+    public void readAdditionalSaveData(net.minecraft.nbt.CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        jjf$armsMode = tag.getBoolean("JJFArmsMode");
+        jjf$updateArmsStand();
+    }
+    public boolean jjf$isArmsMode() {
+        return jjf$armsMode;
+    }
+
+    public boolean jjf$isUsingLauncherClient() {
+        return jjf$useWasDown || jjf$autoShooting;
+    }
+
+    private void jjf$updateArmsStand() {
+        if (getSelf() instanceof StandUser user
+                && user.roundabout$getStand() instanceof net.hydra.jojomod.entity.stand.JumpinJackFlashEntity stand) {
+            stand.jjf$setArmsMode(jjf$armsMode);
+        }
+    }
     public PowersJumpinJackFlash(LivingEntity self) {
         super(self);
     }
 
+    @Override
+    public boolean canGuard() {
+        return false;
+    }
+
+    @Override
+    public boolean interceptGuard() {
+        return false;
+    }
+
+    @Override
+    public boolean buttonInputGuard(boolean keyIsDown, Options options) {
+        return false;
+    }
+
+    @Override
+    public boolean setPowerGuard() {
+        return false;
+    }
     @Override
     public StandPowers generateStandPowers(LivingEntity entity) {
         return new PowersJumpinJackFlash(entity);
@@ -164,22 +225,17 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
 
     @Override
     public void punchImpact(Entity entity) {
+        super.punchImpact(entity);
     }
 
     @Override
     public void standPunch() {
+        super.standPunch();
     }
 
     @Override
     public boolean interceptAttack() {
-        if (shouldUseZeroGravityBlockPush() || shouldUseZeroGravityItemSwing()) {
-            return false;
-        }
-        if (!isHoldingSneak() && getSelf().level().isClientSide()
-                && Minecraft.getInstance().hitResult instanceof net.minecraft.world.phys.EntityHitResult) {
-            return false;
-        }
-        return true;
+        return !jjf$armsMode;
     }
 
     @Override
@@ -264,8 +320,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
 
     @Override
     public boolean setPowerAttack() {
-        if (shouldUseZeroGravityBlockPush() || shouldUseZeroGravityItemSwing()) {
-            jjf$tryNavigationSwing();
+        if (jjf$armsMode) {
             return false;
         }
         if (isHoldingSneak()) {
@@ -275,65 +330,66 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
             jjf$shotgunThisClick = true;
             return true;
         }
-        return false;
+        return super.setPowerAttack();
     }
 
     @Override
     public void updateAttack() {
-        if (shouldUseZeroGravityBlockPush() || shouldUseZeroGravityItemSwing()) {
-            jjf$tryNavigationSwing();
-        } else if (isHoldingSneak() && !jjf$shotgunThisClick) {
-            setPowerAttack();
-        }
+        super.updateAttack();
     }
 
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (!keyIsDown) {
+            jjf$attackWasDown = false;
+            jjf$attackHoldTicks = 0;
             return;
         }
-        if (jjf$isSpinComboPressed()) {
-            jjf$tryStartSpinCombo();
-            return;
-        }
-        if (shouldUseZeroGravityBlockPush() || shouldUseZeroGravityItemSwing()) {
-            jjf$tryNavigationSwing();
+        if (jjf$armsMode) {
+            jjf$attackWasDown = false;
+            jjf$attackHoldTicks = 0;
             return;
         }
         if (isHoldingSneak()) {
-            super.buttonInputAttack(keyIsDown, options);
+            jjf$attackWasDown = false;
+            jjf$attackHoldTicks = 0;
+            super.buttonInputAttack(true, options);
+            return;
+        }
+        if (!jjf$attackWasDown) {
+            jjf$attackWasDown = true;
+            jjf$attackHoldTicks = 0;
+            if (!jjf$spinAttackHeld) {
+                super.buttonInputAttack(true, options);
+            }
         }
     }
 
     @Override
     public void buttonInputBarrage(boolean keyIsDown, Options options) {
-        if (keyIsDown && jjf$isSpinComboPressed()) {
-            jjf$tryStartSpinCombo();
-        }
     }
 
     private boolean jjf$spinOwnsUse = false;
 
     private boolean jjf$isSpinComboPressed() {
-        if (!getSelf().level().isClientSide() || !isPacketPlayer()
-                || !(getSelf() instanceof Player player)) {
+        if (jjf$armsMode || isHoldingSneak() || !getSelf().level().isClientSide()
+                || !isPacketPlayer() || !(getSelf() instanceof Player player)) {
             return false;
         }
         Minecraft minecraft = Minecraft.getInstance();
         return net.hydra.jojomod.event.index.PowerTypes.hasStandActive(player)
                 && minecraft.player != null
                 && minecraft.player.getId() == player.getId()
-                && minecraft.options.keyAttack.isDown()
-                && minecraft.options.keyUse.isDown();
+                && minecraft.options.keyAttack.isDown();
     }
 
     private void jjf$tryStartSpinCombo() {
-        if (!jjf$isSpinComboPressed() || jjf$spinAttackHeld
-                || (!canAttack() && !(isGuarding() && canAttackHeavy()))) {
+        if (!jjf$attackWasDown || jjf$attackHoldTicks < JJF_SPIN_HOLD_DELAY_TICKS
+                || !jjf$isSpinComboPressed() || jjf$spinAttackHeld || !canAttack()) {
             return;
         }
-        jjf$spinOwnsUse = true;
-        jjf$shotgunThisClick = true;
+        jjf$spinOwnsUse = false;
+        jjf$shotgunThisClick = false;
         this.tryPower(PowerIndex.BARRAGE_CHARGE, true);
         tryPowerPacket(PowerIndex.BARRAGE_CHARGE);
     }
@@ -376,15 +432,26 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
         super.tickPower();
         jjf$tickMobAI();
 
-        if (!jjf$spinAttackHeld && jjf$isSpinComboPressed()) {
-            jjf$tryStartSpinCombo();
-        }
-
         if (getSelf().level().isClientSide() && isPacketPlayer()
-                && getSelf() instanceof Player player
-                && !Minecraft.getInstance().options.keyAttack.isDown()) {
-            jjf$shotgunThisClick = false;
-            jjf$navigationSwingThisClick = false;
+                && getSelf() instanceof Player player) {
+            Minecraft minecraft = Minecraft.getInstance();
+            if (minecraft.player != null && minecraft.player.getId() == player.getId()) {
+                if (!minecraft.options.keyAttack.isDown()) {
+                    jjf$attackWasDown = false;
+                    jjf$attackHoldTicks = 0;
+                    jjf$shotgunThisClick = false;
+                    jjf$navigationSwingThisClick = false;
+                } else if (jjf$attackWasDown && jjf$isSpinComboPressed() && !jjf$spinAttackHeld) {
+                    if (jjf$attackHoldTicks < JJF_SPIN_HOLD_DELAY_TICKS) {
+                        jjf$attackHoldTicks++;
+                    }
+                    if (jjf$attackHoldTicks >= JJF_SPIN_HOLD_DELAY_TICKS) {
+                        jjf$tryStartSpinCombo();
+                    }
+                } else if (jjf$armsMode || isHoldingSneak()) {
+                    jjf$attackHoldTicks = 0;
+                }
+            }
         }
 
         if (!jjf$spinAttackHeld) {
@@ -394,26 +461,14 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
         this.poseStand(net.hydra.jojomod.event.index.OffsetIndex.ATTACK);
         animateStand(StandEntity.BARRAGE_CHARGE);
 
-        if (!(this.getSelf() instanceof Player)) {
-            return;
-        }
-
-        if (!this.getSelf().level().isClientSide()) {
-            return;
-        }
-
-        if (!isPacketPlayer()) {
+        if (!(this.getSelf() instanceof Player) || !this.getSelf().level().isClientSide()
+                || !isPacketPlayer()) {
             return;
         }
 
         Minecraft minecraft = Minecraft.getInstance();
-
-        if (minecraft.player == null
-                || minecraft.player.getId() != this.getSelf().getId()) {
-            return;
-        }
-
-        if (!minecraft.options.keyAttack.isDown() || !minecraft.options.keyUse.isDown()) {
+        if (minecraft.player != null && minecraft.player.getId() == this.getSelf().getId()
+                && (!minecraft.options.keyAttack.isDown() || jjf$armsMode)) {
             releaseJJFSpinAttackClient();
         }
     }
@@ -551,14 +606,13 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
         if (jjf$skill4WasDown) {
             return;
         }
-
         jjf$skill4WasDown = true;
         cancelPlayerPose();
-        if (isHoldingSneak() && isGuarding()) {
-            powerActivate(PowerContext.SKILL_4_CROUCH_GUARD);
-        } else if (isHoldingSneak()) {
-            powerActivate(PowerContext.SKILL_4_CROUCH);
-        } else if (isGuarding()) {
+        if (isHoldingSneak()) {
+            jjf$armsMode = !jjf$armsMode;
+            jjf$updateArmsStand();
+            tryPowerPacket(POWER_ARMS_TOGGLE);
+        } else if (net.hydra.jojomod.client.KeyInputRegistry.guardKey.isDown()) {
             powerActivate(PowerContext.SKILL_4_GUARD);
         } else {
             powerActivate(PowerContext.SKILL_4_NORMAL);
@@ -623,15 +677,12 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
 
     @Override
     public boolean clickRelease() {
-        return jjf$spinAttackHeld || jjf$spinOwnsUse || jjf$useWasDown;
+        return jjf$spinOwnsUse || jjf$useWasDown;
     }
 
     @Override
     public boolean onClickRelease() {
-        if (jjf$spinAttackHeld || jjf$spinOwnsUse) {
-            if (jjf$spinAttackHeld) {
-                releaseJJFSpinAttackClient();
-            }
+        if (jjf$spinOwnsUse) {
             jjf$spinOwnsUse = false;
             jjf$useWasDown = false;
             jjf$useHoldTicks = 0;
@@ -641,7 +692,6 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
         if (!jjf$useWasDown) {
             return false;
         }
-
         int charge = jjf$useHoldTicks;
         if (!jjf$autoShooting) {
             if (charge >= BURST_6_TICKS) {
@@ -656,7 +706,6 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
                 tryPowerPacket(POWER_FIRE_ITEM);
             }
         }
-
         jjf$useWasDown = false;
         jjf$useHoldTicks = 0;
         jjf$autoShooting = false;
@@ -733,6 +782,15 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
                     SPIT_COOLDOWN_TICKS
             );
 
+            return true;
+        }
+
+        if (move == POWER_ARMS_TOGGLE) {
+            if (!getSelf().level().isClientSide()) {
+                jjf$armsMode = !jjf$armsMode;
+                jjf$updateArmsStand();
+                saveDiscAndSync();
+            }
             return true;
         }
 
@@ -2261,6 +2319,10 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
 
                 if (validState) {
                     performSpinAttack(finalCharge);
+                    if (getSelf() instanceof Player player) {
+                        JJFFloatingBlocks.knockBackCone(player,
+                                0.45D + 0.85D * getSpinForceCharge(finalCharge));
+                    }
                 }
 
                 finishSpinAttackState();

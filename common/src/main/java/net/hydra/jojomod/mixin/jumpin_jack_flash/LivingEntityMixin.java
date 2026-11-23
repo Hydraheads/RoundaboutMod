@@ -93,6 +93,11 @@ public abstract class LivingEntityMixin implements ZeroGravityAccess {
         LivingEntity entity =
                 (LivingEntity) (Object) this;
 
+        if (entity instanceof net.minecraft.world.entity.player.Player player
+                && !player.level().isClientSide()) {
+            net.hydra.jojomod.event.powers.jumpingJackFlash.JJFFloatingBlocks.nudgeNearby(player);
+        }
+
         ZeroGravitySystem.applySwingImpulse(
                 entity
         );
