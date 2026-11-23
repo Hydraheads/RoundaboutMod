@@ -1719,17 +1719,17 @@ public class Config implements Cloneable {
         public Float durationArmouredModifierBarrage;
         @FloatOption(group = "inherit", value = 1.00F, min = 0.01F, max = 10F)
         public Float durationUnarmouredModifierBarrage;
-        @FloatOption(group = "inherit", value = 0.90F, min = 0.01F, max = 10F)
+        @FloatOption(group = "inherit", value = 0.85F, min = 0.01F, max = 10F)
         public Float barrageDamageModifier;
-        @FloatOption(group = "inherit", value = 0.75F, min = 0.01F, max = 10F)
+        @FloatOption(group = "inherit", value = 0.85F, min = 0.01F, max = 10F)
         public Float punchDamageModifier;
         @FloatOption(group = "inherit", value = 1.0F, min = 0.01F, max = 10F)
         public Float sneakAttackDamageModifier;
-        @FloatOption(group = "inherit", value = 1.25F, min = 0.01F, max = 10F)
+        @FloatOption(group = "inherit", value = 1.55F, min = 0.01F, max = 10F)
         public Float selfThrowMagnitudeModifierX;
-        @FloatOption(group = "inherit", value = 1.25F, min = 0.01F, max = 10F)
+        @FloatOption(group = "inherit", value = 1.55F, min = 0.01F, max = 10F)
         public Float selfThrowMagnitudeModifierY;
-        @FloatOption(group = "inherit", value = 1.25F, min = 0.01F, max = 10F)
+        @FloatOption(group = "inherit", value = 1.5F, min = 0.01F, max = 10F)
         public Float selfThrowMagnitudeModifierZ;
         @FloatOption(group = "inherit", value = 0.05F, min = 0.01F, max = 10F)
         public Float selfCarryHoverVerticalVelocity;
@@ -1749,6 +1749,18 @@ public class Config implements Cloneable {
         public Float controlModeVelocityModifierZ;
         @FloatOption(group = "inherit", value = 1.0F, min = 0.01F, max = 10F)
         public Float cooldownUnarmouredModifierSneakAttack;
+        @FloatOption(group = "inherit", value = 40.0F, min = -360.0F, max = 360.0F)
+        public Float rightSwordModelRotateX;
+        @FloatOption(group = "inherit", value = 40.0F, min = -360.0F, max = 360.0F)
+        public Float leftSwordModelRotateX;
+        @FloatOption(group = "inherit", value = 60.0F, min = -360.0F, max = 360.0F)
+        public Float rightSwordModelRotateY;
+        @FloatOption(group = "inherit", value = -60.0F, min = -360.0F, max = 360.0F)
+        public Float leftSwordModelRotateY;
+        @FloatOption(group = "inherit", value = 15.0F, min = -360.0F, max = 360.0F)
+        public Float rightSwordModelRotateZ;
+        @FloatOption(group = "inherit", value = 15.0F, min = -360.0F, max = 360.0F)
+        public Float leftSwordModelRotateZ;
     }
 
     public static class CatchTheRainbowSettings {

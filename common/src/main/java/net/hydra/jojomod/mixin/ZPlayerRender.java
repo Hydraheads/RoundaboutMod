@@ -170,8 +170,8 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         } else if (((StandUser) player).roundabout$hasDiverArms()) {
             // had my own diver arms thing that i made before realizing it should also appear in first person, so all the code for that goes there.
             DiverArmsLayer.renderFirstPersonArm(poseStack, bufferSource, packedLight, player, this.model.rightArm, true, 1.0F);
-        } else if (((StandUser) player).roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PowerTypes.hasStandActive(player) && PSC.hasHandsOut() && !SilverChariotEntity.isPart5Skin(((StandUser) player).roundabout$getStandSkin())) {
-            // SilverChariotArmsLayer.renderFirstPersonArm(poseStack, bufferSource, packedLight, player, this.model.rightArm, true, 1.0F);
+        } else if (((StandUser) player).roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PowerTypes.hasStandActive(player) && PSC.hasHandsOut() && (!SilverChariotEntity.isPart5Skin(((StandUser) player).roundabout$getStandSkin()) && player.getMainArm() == HumanoidArm.RIGHT)) {
+            SilverChariotArmsLayer.renderFirstPersonArm(poseStack, bufferSource, packedLight, player, this.model.rightArm, true, 1.0F);
         } else if (curse == LocacacaCurseIndex.RIGHT_HAND) {
             this.model.rightSleeve.xScale += 0.04F;
             this.model.rightSleeve.zScale += 0.04F;
@@ -272,8 +272,8 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         } else if (((StandUser) player).roundabout$hasDiverArms()) {
             // had my own diver arms thing that i made before realizing it should also appear in first person, so all the code for that goes there.
             DiverArmsLayer.renderFirstPersonArm(poseStack, bufferSource, packedLight, player, this.model.leftArm, false, 1.0F);
-        } else if (((StandUser) player).roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PowerTypes.hasStandActive(player) && PSC.hasHandsOut() && SilverChariotEntity.isPart5Skin(((StandUser) player).roundabout$getStandSkin())) {
-            // SilverChariotArmsLayer.renderFirstPersonArm(poseStack, bufferSource, packedLight, player, this.model.leftArm, false, 1.0F);
+        } else if (((StandUser) player).roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PowerTypes.hasStandActive(player) && PSC.hasHandsOut() && (SilverChariotEntity.isPart5Skin(((StandUser) player).roundabout$getStandSkin()) || player.getMainArm() == HumanoidArm.LEFT)) {
+            SilverChariotArmsLayer.renderFirstPersonArm(poseStack, bufferSource, packedLight, player, this.model.leftArm, false, 1.0F);
         } else if (curse == LocacacaCurseIndex.LEFT_HAND) {
             this.model.leftSleeve.xScale += 0.04F;
             this.model.leftSleeve.zScale += 0.04F;

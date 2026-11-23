@@ -342,7 +342,7 @@ public class PowersSilverChariot extends NewPunchingStand {
 
         // Unable to switch skin if the stand is in control mode
         // or is not armoured
-        if (isPiloting() || getRegainingArmourFromDesummon() || getArmoured() || this.activePower == SILVER_CHARIOT_SELF_GRAB) {
+        if (isPiloting() || getRegainingArmourFromDesummon() || !getArmoured() || this.activePower == SILVER_CHARIOT_SELF_GRAB) {
             if (this.getStandEntity(self) instanceof SilverChariotEntity SCE) {
                 $$1.add(SCE.getSkin());
                 return $$1;
@@ -2369,15 +2369,17 @@ public class PowersSilverChariot extends NewPunchingStand {
         if (hasArmsOut && !onCooldown(SKILL_SILVER_CHARIOT_SWORD_SHOOT_INDEX)) {
             if (keyIsDown) {
                 if (activePowerPhase == 0) {
-                    // this.tryPower(PowerIndex.ATTACK);
+                    this.tryPower(PowerIndex.ATTACK);
                 }
 
+                /*
                 if (attackTimeDuring > 0) {
                     if (attackTimeDuring >= armSummonAttackMaxTicks()) {
                         tryPower(SILVER_CHARIOT_ARM_SUMMON_ATTACK, true);
                         tryPowerPacket(SILVER_CHARIOT_ARM_SUMMON_ATTACK);
                     }
                 }
+                */
             }
             holdDownClick = false;
             return;
@@ -4706,9 +4708,9 @@ public class PowersSilverChariot extends NewPunchingStand {
     @Override
     public float getBrawlPunchStrength(Entity entity) {
         if (this.getReducedDamage(entity)){
-            return this.multiplyPowerByStandConfigPlayers(2.1F);
+            return this.multiplyPowerByStandConfigPlayers(ClientNetworking.getAppropriateConfig().silverChariotSettings.silverChariotBonusPlayerDMGArmSummon);
         } else {
-            return this.multiplyPowerByStandConfigPlayers(6.0F);
+            return this.multiplyPowerByStandConfigPlayers(ClientNetworking.getAppropriateConfig().silverChariotSettings.silverChariotBonusMobDMGArmSummon);
         }
     }
 
