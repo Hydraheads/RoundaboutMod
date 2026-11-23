@@ -12,12 +12,12 @@ public class SyncedDataIndex {
      * - byte would limit us to 8 flags, int would allow us to 32 (or maybe 64?) flags.
      * if we really need, we can start using longs, but I doubt we would even get more than that
     */
-    public static final int ONLY_BLEEDING = 0;
-    public static final int STAND_ACTIVE = 1;
-    public static final int UNIQUE_STAND_MODE_TOGGLE = 2;
-    public static final int DIVER_LEGS = 3;
-    public static final int DIVER_ARMS = 4;
-    public static final int RIBCAGE_TRAP = 5;
-    public static final int SPRING_LEGS = 6;
-    public static final int GE_TREE_ROOT = 7;
+    public static final int ONLY_BLEEDING = 0; // 1
+    public static final int STAND_ACTIVE = 1; // 2
+    public static final int UNIQUE_STAND_MODE_TOGGLE = 2; // 4
+    public static final int DIVER_LEGS = 3; // 8
+    public static final int DIVER_ARMS = 4; // 16
+    public static final int RIBCAGE_TRAP = 5; // 32
+    public static final int SPRING_LEGS = 6; // 64
+    public static final int GE_TREE_ROOT = 7; // 128
 }
