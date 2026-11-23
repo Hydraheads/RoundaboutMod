@@ -1,5 +1,6 @@
 package net.hydra.jojomod.networking;
 
+import net.hydra.jojomod.event.powers.jumpingJackFlash.LauncherAmmoSync;
 import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravitySync;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkDirection;
@@ -12,7 +13,7 @@ import java.util.function.Supplier;
 
 public final class ForgeJJFNetwork {
 
-    private static final String PROTOCOL_VERSION = "1";
+    private static final String PROTOCOL_VERSION = "2";
 
     private static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
             new ResourceLocation("roundabout", "jjf_network"),
@@ -30,21 +31,38 @@ public final class ForgeJJFNetwork {
                 ZeroGravitySync.Snapshot.class,
                 (snapshot, buffer) -> ZeroGravitySync.write(buffer, snapshot),
                 ZeroGravitySync::read,
-                ForgeJJFNetwork::handle
+                ForgeJJFNetwork::handleGravity
+        );
+
+        CHANNEL.registerMessage(
+                1,
+                LauncherAmmoSync.Snapshot.class,
+                (snapshot, buffer) -> LauncherAmmoSync.write(buffer, snapshot),
+                LauncherAmmoSync::read,
+                ForgeJJFNetwork::handleAmmo
         );
 
         ZeroGravitySync.registerSender((player, snapshot) ->
                 CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), snapshot));
+        LauncherAmmoSync.registerSender((player, snapshot) ->
+                CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), snapshot));
     }
 
-    private static void handle(ZeroGravitySync.Snapshot snapshot,
-                               Supplier<NetworkEvent.Context> supplier) {
+    private static void handleGravity(ZeroGravitySync.Snapshot snapshot,
+                                      Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
-        context.enqueueWork(() -> {
-            if (context.getDirection() == NetworkDirection.PLAY_TO_CLIENT) {
-                ForgeJJFClientPackets.apply(snapshot);
-            }
-        });
+        if (context.getDirection() == NetworkDirection.PLAY_TO_CLIENT) {
+            context.enqueueWork(() -> ForgeJJFClientPackets.apply(snapshot));
+        }
+        context.setPacketHandled(true);
+    }
+
+    private static void handleAmmo(LauncherAmmoSync.Snapshot snapshot,
+                                   Supplier<NetworkEvent.Context> supplier) {
+        NetworkEvent.Context context = supplier.get();
+        if (context.getDirection() == NetworkDirection.PLAY_TO_CLIENT) {
+            context.enqueueWork(() -> ForgeJJFClientPackets.apply(snapshot));
+        }
         context.setPacketHandled(true);
     }
 }
