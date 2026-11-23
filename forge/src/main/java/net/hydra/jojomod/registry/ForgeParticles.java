@@ -365,7 +365,7 @@ public class ForgeParticles {
             PARTICLES.register("purple_haze_smoke", () -> createColorParticleType(true));
 
     public static final RegistryObject<ParticleType<ColorParticleOptions>> PUZZLE_PARTICLE =
-            PARTICLES.register("kn_piece", () -> createColorParticleType(true));
+            PARTICLES.register("kn_piece", () -> createColorParticleType(false));
 
     public static final RegistryObject<SimpleParticleType> DISTORTION_SMOKE = PARTICLES.register(
             "distortion_smoke",
@@ -373,7 +373,8 @@ public class ForgeParticles {
     );
 
     public static final RegistryObject<ParticleType<ColorParticleOptions>> PURPLE_HAZE_BLASTWAVE =
-            PARTICLES.register("purple_haze_blastwave", () -> createColorParticleType(false));
+            PARTICLES.register("purple_haze_blastwave", () -> createColorParticleType(true));
+
     public static final RegistryObject<SimpleParticleType> AUTUMN_LEAVES = PARTICLES.register(
             "autumn_leaves",
             () -> new SimpleParticleType(true)
