@@ -70,6 +70,23 @@ import java.util.Optional;
 public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityModel<T>> extends LivingEntityRenderer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> implements IPlayerRenderer {
 
 
+    @Inject(method = "renderRightHand", at = @At("TAIL"))
+    private void jjf$renderRightHand(PoseStack poseStack, MultiBufferSource bufferSource,
+                                     int light, AbstractClientPlayer player, CallbackInfo ci) {
+        if (net.hydra.jojomod.client.models.layers.JJFPlayerArmsOverlay.shouldRender(player)) {
+            net.hydra.jojomod.client.models.layers.JJFPlayerArmsOverlay.renderArm(
+                    poseStack, bufferSource, light, this.model.rightArm, true, player.tickCount);
+        }
+    }
+
+    @Inject(method = "renderLeftHand", at = @At("TAIL"))
+    private void jjf$renderLeftHand(PoseStack poseStack, MultiBufferSource bufferSource,
+                                    int light, AbstractClientPlayer player, CallbackInfo ci) {
+        if (net.hydra.jojomod.client.models.layers.JJFPlayerArmsOverlay.shouldRender(player)) {
+            net.hydra.jojomod.client.models.layers.JJFPlayerArmsOverlay.renderArm(
+                    poseStack, bufferSource, light, this.model.leftArm, false, player.tickCount);
+        }
+    }
     @Shadow protected abstract void renderHand(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, AbstractClientPlayer abstractClientPlayer, ModelPart modelPart, ModelPart modelPart2);
 
     public ZPlayerRender(EntityRendererProvider.Context $$0, PlayerModel<AbstractClientPlayer> $$1, float $$2) {
