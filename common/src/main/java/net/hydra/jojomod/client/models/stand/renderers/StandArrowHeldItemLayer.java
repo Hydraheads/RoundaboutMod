@@ -44,7 +44,7 @@ public class StandArrowHeldItemLayer<T extends GoldExperienceEntity, M extends S
         }
 
         ItemStack itemstack = GE.getStandArrow();
-        if (!itemstack.isEmpty()) {
+        if (itemstack != null && !itemstack.isEmpty()) {
             stack.pushPose();
             if (this.getParentModel().young) {
                 //float f = 0.5F;

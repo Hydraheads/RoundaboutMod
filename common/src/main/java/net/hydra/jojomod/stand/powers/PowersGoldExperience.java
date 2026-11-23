@@ -3444,6 +3444,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                                     }
                                     clone.setTarget((LivingEntity) this.self);
                                     this.self.level().addFreshEntity(clone);
+                                    ((StandUser) LE).roundabout$setLifePunchClone(clone);
                                     // track the victim
                                     lifePunchVictim = LE;
                                     lifePunchClone = clone;
@@ -3623,6 +3624,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     private void restoreLifePunchVictim() {
         if (lifePunchVictim != null) {
             PowerTypes.setPlaneOfExisting(lifePunchVictim, (byte)0);
+            ((StandUser) lifePunchVictim).roundabout$setLifePunchClone(null);
         }
         if (lifePunchClone != null) {
             lifePunchClone.discard();
