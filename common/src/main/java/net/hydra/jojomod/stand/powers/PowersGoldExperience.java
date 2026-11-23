@@ -2309,6 +2309,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // to make sure the arrow isn't lost
     protected ItemStack standArrow = null;
 
+    public ItemStack getStandArrow() {
+        return standArrow;
+    }
+
     private boolean setRequiem() {
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand) && !stand.isRemoved()) {
