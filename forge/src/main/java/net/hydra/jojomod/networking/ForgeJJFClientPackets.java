@@ -1,5 +1,6 @@
 package net.hydra.jojomod.networking;
 
+import net.hydra.jojomod.event.powers.jumpingJackFlash.LauncherAmmoSync;
 import net.hydra.jojomod.event.powers.jumpingJackFlash.ZeroGravitySync;
 import net.minecraft.client.Minecraft;
 
@@ -12,6 +13,13 @@ public final class ForgeJJFClientPackets {
         Minecraft client = Minecraft.getInstance();
         if (client.player != null) {
             ZeroGravitySync.applyClient(client.player, snapshot);
+        }
+    }
+
+    public static void apply(LauncherAmmoSync.Snapshot snapshot) {
+        Minecraft client = Minecraft.getInstance();
+        if (client.player != null) {
+            LauncherAmmoSync.applyClient(client.player, snapshot);
         }
     }
 }
