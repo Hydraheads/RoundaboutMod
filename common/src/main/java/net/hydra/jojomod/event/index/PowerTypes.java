@@ -284,6 +284,7 @@ public enum PowerTypes {
     //10 = time erase
     //11 = man in the mirror
     //12 = gold experience life punch
+    //13 = GER infinite death loop
     public static byte getPlaneOfExisting(Entity entity){
         if (entity != null){
             if (PowerTypes.isErasingTime(entity)){
@@ -482,6 +483,10 @@ public enum PowerTypes {
         }
         if (worldType == 11){
             return 400;
+        }
+        // making infinite death transfer time a short number for now so i can test stuff, eventually make it return -1
+        if (worldType == 13){
+            return 100;
         }
         return 1000;
     }

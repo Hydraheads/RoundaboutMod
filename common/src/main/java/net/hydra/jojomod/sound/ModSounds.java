@@ -2247,6 +2247,18 @@ public class ModSounds {
     public static final String RETURN_TO_ZERO = "return_to_zero";
     public static final ResourceLocation RETURN_TO_ZERO_ID = new ResourceLocation(Roundabout.MOD_ID+":"+RETURN_TO_ZERO);
     public static SoundEvent RETURN_TO_ZERO_EVENT = SoundEvent.createVariableRangeEvent(RETURN_TO_ZERO_ID);
+    public static final String RETURN_TO_ZERO_REWIND = "return_to_zero_rewind";
+    public static final ResourceLocation RETURN_TO_ZERO_REWIND_ID = new ResourceLocation(Roundabout.MOD_ID+":"+RETURN_TO_ZERO_REWIND);
+    public static SoundEvent RETURN_TO_ZERO_REWIND_EVENT = SoundEvent.createVariableRangeEvent(RETURN_TO_ZERO_REWIND_ID);
+    public static final String GER_BARRAGE_HIT = "ger_barrage";
+    public static final ResourceLocation GER_BARRAGE_HIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+GER_BARRAGE_HIT);
+    public static SoundEvent GER_BARRAGE_HIT_EVENT = SoundEvent.createVariableRangeEvent(GER_BARRAGE_HIT_ID);
+    public static final String GER_BARRAGE_WINDUP = "ger_barrage_windup";
+    public static final ResourceLocation GER_BARRAGE_WINDUP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+GER_BARRAGE_WINDUP);
+    public static SoundEvent GER_BARRAGE_WINDUP_EVENT = SoundEvent.createVariableRangeEvent(GER_BARRAGE_WINDUP_ID);
+    public static final String GER_MUDA_RUSH = "requiem_muda";
+    public static final ResourceLocation GER_MUDA_RUSH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+GER_MUDA_RUSH);
+    public static SoundEvent GER_MUDA_RUSH_EVENT = SoundEvent.createVariableRangeEvent(GER_MUDA_RUSH_ID);
 
     public static final String GE_REQUIEM_ARROW = "ge_requiem_obtain";
     public static final ResourceLocation GE_REQUIEM_ARROW_ID = new ResourceLocation(Roundabout.MOD_ID+":"+GE_REQUIEM_ARROW);

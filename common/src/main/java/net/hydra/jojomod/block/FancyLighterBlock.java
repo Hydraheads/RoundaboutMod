@@ -1,9 +1,11 @@
 package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.access.CancelDataDrivenDropLimits;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.FancyLighterItem;
 import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
@@ -151,35 +153,38 @@ public class FancyLighterBlock extends BaseEntityBlock {
                     ownerEntity != null && !stepper.is(ownerEntity)
                     && ownerEntity instanceof StandUser se && se.roundabout$getStandPowers() instanceof PowersBlackSabbath bs) {
                 if (ownerEntity instanceof ServerPlayer spl) {
+                    boolean userPowers = ownerEntity instanceof Player p && ((IPlayerEntity)p).roundabout$getPower() == PowerTypes.STAND.ordinal();
                     if (stepper.getUUID() != fbe.getOwner()) {
-                        if (bs.tickDown2 <= -9) {
-                            if(!((StandUser) se).roundabout$getActive()){
-                                ((StandUser) se).roundabout$setActive(true);
-                            }
-
-                            if (!bs.blackSabbathTargets.contains(stepper)) {
-                                bs.selectTargetSecond(stepper);
-                            }
-                            if (bs.moveMode != 3) {
-                                bs.setThree();
-                                bs.setTickBeforeHunt(20);
-
-                                if (bs.blackSelect != null) {
-                                    bs.blackSelect.forceDespawnSet = true;
+                        if(userPowers) {
+                            if (bs.tickDown2 <= -9) {
+                                if (!((StandUser) se).roundabout$getActive()) {
+                                    ((StandUser) se).roundabout$setActive(true);
                                 }
-                                if (bs.getStandEntity(bs.self) != null) {
-                                    bs.getStandEntity(bs.self).forceDespawnSet = true;
-                                }
-                            }
 
-                            List<LivingEntity> lvent = stepper.level().getEntitiesOfClass(LivingEntity.class, stepper.getBoundingBox().inflate(ClientNetworking.getAppropriateConfig().blackSabbathSettings.lighterWitnessRange), (livingEntity) -> {
-                                return true;
-                            });
-                            if (lvent != null && !lvent.isEmpty()) {
-                                for (LivingEntity value : lvent) {
-                                    if (value.hasLineOfSight(stepper)) {
-                                        if (!(value instanceof StandEntity || value instanceof RoadRollerEntity || value.is(bs.self))) {
-                                            bs.selectTargetSecond(value);
+                                if (!bs.blackSabbathTargets.contains(stepper)) {
+                                    bs.selectTargetSecond(stepper);
+                                }
+                                if (bs.moveMode != 3) {
+                                    bs.setThree();
+                                    bs.setTickBeforeHunt(20);
+
+                                    if (bs.blackSelect != null) {
+                                        bs.blackSelect.forceDespawnSet = true;
+                                    }
+                                    if (bs.getStandEntity(bs.self) != null) {
+                                        bs.getStandEntity(bs.self).forceDespawnSet = true;
+                                    }
+                                }
+
+                                List<LivingEntity> lvent = stepper.level().getEntitiesOfClass(LivingEntity.class, stepper.getBoundingBox().inflate(ClientNetworking.getAppropriateConfig().blackSabbathSettings.lighterWitnessRange), (livingEntity) -> {
+                                    return true;
+                                });
+                                if (lvent != null && !lvent.isEmpty()) {
+                                    for (LivingEntity value : lvent) {
+                                        if (value.hasLineOfSight(stepper)) {
+                                            if (!(value instanceof StandEntity || value instanceof RoadRollerEntity || value.is(bs.self))) {
+                                                bs.selectTargetSecond(value);
+                                            }
                                         }
                                     }
                                 }

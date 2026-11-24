@@ -466,6 +466,7 @@ public class ClientForgeEvents {
         ModStrayModels.CHAIR_RATT_SHOULDER = new ChairRattShoulderModel();
         ModStrayModels.MANDOM = new MandomModel();
         ModStrayModels.ANUBIS = new AnubisModel();
+        ModStrayModels.SILVER_CHARIOT_SWORD = new SilverChariotSwordModel();
         ModStrayModels.MANDOM_WATCH = new WatchModel();
         ModStrayModels.MANDOM_WATCH_SMALL = new SmallWatchModel();
         ModStrayModels.kingCrimsonArmsPart = new KingCrimsonArmsPart();
@@ -608,6 +609,9 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.GOLD_PUNCH_IMPACT_A.get(), GoldPunchImpactParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.GOLD_PUNCH_IMPACT_B.get(), GoldPunchImpactParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.GOLD_PUNCH_IMPACT_C.get(), GoldPunchImpactParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.REQUIEM_PUNCH_IMPACT_A.get(), PunchImpactParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.REQUIEM_PUNCH_IMPACT_B.get(), PunchImpactParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.REQUIEM_PUNCH_IMPACT_C.get(), PunchImpactParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.PUNCH_MISS.get(), PunchMissParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.MELTING.get(), BloodParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.BLOOD.get(), BloodParticle.Provider::new);

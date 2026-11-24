@@ -595,10 +595,35 @@
       "roundabout:return_to_zero_4"
     ]
   },
+  "return_to_zero_rewind": {
+    "subtitle": "sounds.roundabout.return_to_zero",
+    "sounds": [
+      "roundabout:return_to_zero_rewind"
+    ]
+  },
   "summon_king_crimson": {
     "subtitle": "sounds.roundabout.summon_king_crimson",
     "sounds": [
       "roundabout:summon_king_crimson"
+    ]
+  },
+  "ger_barrage": {
+    "subtitle": "sounds.roundabout.stand_barrage_hit",
+    "sounds": [
+      "roundabout:ger_barrage_1",
+      "roundabout:ger_barrage_2"
+    ]
+  },
+  "ger_barrage_windup": {
+    "subtitle": "sounds.roundabout.stand_barrage_windup",
+    "sounds": [
+      "roundabout:ger_barrage_windup"
+    ]
+  },
+  "requiem_muda": {
+    "subtitle": "sounds.roundabout.the_world_muda",
+    "sounds": [
+      "roundabout:requiem_muda"
     ]
   },
   "king_crimson_impale": {

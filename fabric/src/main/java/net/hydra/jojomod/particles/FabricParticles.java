@@ -22,6 +22,9 @@ public class FabricParticles {
     public static final SimpleParticleType GOLD_PUNCH_IMPACT_A = FabricParticleTypes.simple();
     public static final SimpleParticleType GOLD_PUNCH_IMPACT_B = FabricParticleTypes.simple();
     public static final SimpleParticleType GOLD_PUNCH_IMPACT_C = FabricParticleTypes.simple();
+    public static final SimpleParticleType REQUIEM_PUNCH_IMPACT_A = FabricParticleTypes.simple();
+    public static final SimpleParticleType REQUIEM_PUNCH_IMPACT_B = FabricParticleTypes.simple();
+    public static final SimpleParticleType REQUIEM_PUNCH_IMPACT_C = FabricParticleTypes.simple();
     public static final SimpleParticleType MELTING = FabricParticleTypes.simple();
     public static final SimpleParticleType BLOOD = FabricParticleTypes.simple();
     public static final SimpleParticleType SWEAT = FabricParticleTypes.simple();
@@ -153,6 +156,9 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("gold_punch_impact_a"), GOLD_PUNCH_IMPACT_A);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("gold_punch_impact_b"), GOLD_PUNCH_IMPACT_B);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("gold_punch_impact_c"), GOLD_PUNCH_IMPACT_C);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("requiem_punch_impact_a"), REQUIEM_PUNCH_IMPACT_A);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("requiem_punch_impact_b"), REQUIEM_PUNCH_IMPACT_B);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("requiem_punch_impact_c"), REQUIEM_PUNCH_IMPACT_C);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("melting"), MELTING);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("blood"), BLOOD);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("sweat"), SWEAT);
@@ -289,6 +295,9 @@ public class FabricParticles {
         ModParticles.GOLD_PUNCH_IMPACT_A = GOLD_PUNCH_IMPACT_A;
         ModParticles.GOLD_PUNCH_IMPACT_B = GOLD_PUNCH_IMPACT_B;
         ModParticles.GOLD_PUNCH_IMPACT_C = GOLD_PUNCH_IMPACT_C;
+        ModParticles.REQUIEM_PUNCH_IMPACT_A = REQUIEM_PUNCH_IMPACT_A;
+        ModParticles.REQUIEM_PUNCH_IMPACT_B = REQUIEM_PUNCH_IMPACT_B;
+        ModParticles.REQUIEM_PUNCH_IMPACT_C = REQUIEM_PUNCH_IMPACT_C;
         ModParticles.PUNCH_MISS = PUNCH_MISS;
         ModParticles.VACUUM = VACUUM;
         ModParticles.FLASH = FLASH;

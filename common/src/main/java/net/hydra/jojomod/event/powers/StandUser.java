@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers;
 
 import com.mojang.authlib.GameProfile;
+import net.hydra.jojomod.entity.LifePunchCloneEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -353,7 +354,8 @@ public interface StandUser {
     void roundabout$setTrueInvis(int bound);
     int roundabout$getTrueInvis();
 
-
+    void roundabout$setLifePunchClone(LifePunchCloneEntity clone);
+    LifePunchCloneEntity roundabout$getLifePunchClone();
 
     /**Metallica*/
     void roundabout$setMetallicaInvis(int invis);

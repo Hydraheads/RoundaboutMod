@@ -613,11 +613,12 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:ancient_debris"
             )
     );
-    public Set<String> standDisassemblyBlacklistv2 = new HashSet<>(
+    public Set<String> standDisassemblyBlacklistv3 = new HashSet<>(
             Arrays.asList(
                     "roundabout:melon_parfait",
                     "minecraft:lodestone",
-                    "minecraft:grass_block"
+                    "minecraft:grass_block",
+                    "roundabout:shiny_quartz_tiles"
             )
     );
     public Set<String> standBlockExplosionBlacklist = new HashSet<>(

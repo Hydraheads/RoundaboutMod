@@ -509,6 +509,16 @@ public abstract class InputEvents implements IInputEvents {
             if (player != null) {
                 StandUser standComp = ((StandUser) player);
                 StandPowers powers = standComp.roundabout$getStandPowers();
+                if (powers instanceof net.hydra.jojomod.stand.powers.PowersJumpinJackFlash jjf
+                        && PowerTypes.hasStandActive(player)
+                        && jjf.jjf$shouldSuppressMining()) {
+                    if (this.gameMode != null) {
+                        this.gameMode.stopDestroyBlock();
+                    }
+                    roundabout$activeMining = false;
+                    ci.cancel();
+                    return;
+                }
 
                 if (standComp.roundabout$isPossessed()) {
                     ci.cancel();
