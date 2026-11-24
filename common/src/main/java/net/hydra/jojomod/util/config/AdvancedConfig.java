@@ -426,9 +426,10 @@ public class AdvancedConfig implements Cloneable {
             )
     );
 
-    public Set<String> kingNothingMobSniffBlacklist = new HashSet<>(
+    public Set<String> kingNothingMobSniffBlacklistv2 = new HashSet<>(
             Arrays.asList(
-                    "roundabout:fog_clone"
+                    "roundabout:fog_clone",
+                    "minecraft:armor_stand"
             )
     );
 

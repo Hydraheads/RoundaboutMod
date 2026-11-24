@@ -251,9 +251,9 @@ public abstract class ConfigManager {
             MainUtil.kingNothingBlockSniffBlacklist.addAll(getAdvancedConfig().kingNothingBlockSniffBlacklist);
         }
 
-        if (getAdvancedConfig().kingNothingMobSniffBlacklist != null) {
+        if (getAdvancedConfig().kingNothingMobSniffBlacklistv2 != null) {
             MainUtil.kingNothingMobSniffBlacklist.clear();
-            MainUtil.kingNothingMobSniffBlacklist.addAll(getAdvancedConfig().kingNothingMobSniffBlacklist);
+            MainUtil.kingNothingMobSniffBlacklist.addAll(getAdvancedConfig().kingNothingMobSniffBlacklistv2);
         }
 
         if (getAdvancedConfig().silverChariotBlocksToSlabsV2 != null)
