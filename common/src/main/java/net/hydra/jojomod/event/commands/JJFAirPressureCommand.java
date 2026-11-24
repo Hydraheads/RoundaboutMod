@@ -49,6 +49,9 @@ public final class JJFAirPressureCommand {
             }
 
             ZeroGravityState state = access.jjf$getZeroGravityState();
+            if (AirPressureSystem.isJJFUser(target)) {
+                continue;
+            }
             state.setCommandPressureActive(true);
             state.setAirPressureTicks(ticks);
             ZeroGravitySync.send(target, state);

@@ -37,6 +37,7 @@ public final class AirPressureSystem {
         }
 
         if (!isAirPressureActive(entity, state)) {
+            state.setCommandPressureActive(false);
             state.resetAirPressureTicks();
             return;
         }
@@ -100,7 +101,9 @@ public final class AirPressureSystem {
     }
 
     public static boolean isAirPressureActive(LivingEntity entity, ZeroGravityState state) {
-        return state.isSpread() || state.isCommandPressureActive();
+        boolean exposed = state.isSpread() || state.getSource() == ZeroGravitySource.FLOATING_BLOCK
+                || state.isCommandPressureActive();
+        return exposed && !isJJFUser(entity);
     }
 
     public static float getPressure(ZeroGravityState state) {
