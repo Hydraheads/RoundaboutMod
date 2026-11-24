@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.access.ISuperThrownAbstractArrow;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.objects.GentlyWeepsEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -19,6 +20,7 @@ import net.hydra.jojomod.stand.powers.PowersCatchTheRainbow;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
@@ -51,12 +53,21 @@ public class CTRbarrierEntity extends StandEntity {
 
     private int lifespan = 160;
 
+    private boolean isInRain(Entity ent) {
+        if (ClientNetworking.getAppropriateConfig().catchTheRainbowSettings.catchTheRainbowCanAlwaysUse) {
+            return true;
+        }else{
+            BlockPos $$0 = ent.blockPosition();
+            return ent.level().isRainingAt($$0)
+                    || ent.level().isRainingAt(BlockPos.containing((double) $$0.getX(), ent.getBoundingBox().maxY, (double) $$0.getZ()));
+        }
+    }
+
     @Override
     public void tick() {
         if (!this.level().isClientSide()) {
             if (User == null
                     || !(((StandUser) User).roundabout$getStandPowers() instanceof PowersCatchTheRainbow PCR)
-                    || !PCR.isInRain()
                     || !User.isAlive()) {
                 this.discard();
             }
@@ -78,10 +89,14 @@ public class CTRbarrierEntity extends StandEntity {
                         continue;
                     }
                     if (mob instanceof Projectile pj){
-                        dealWithProjectile(pj,this);
+                        if (isInRain(pj)) {
+                            dealWithProjectile(pj, this);
+                        }
                     } else if (mob instanceof LivingEntity && mob != User){
-                        MainUtil.makeBleed(mob, 1, 40, User);
-                        mob.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SHARP_RAINDROP), 2);
+                        if (isInRain(mob)) {
+                            MainUtil.makeBleed(mob, 1, 40, User);
+                            mob.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SHARP_RAINDROP), 2);
+                        }
                     }
                 }
             }
