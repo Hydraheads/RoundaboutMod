@@ -65,6 +65,7 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.Animal;
@@ -1064,7 +1065,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
 
             Entity e = this.level().getEntity(this.getGrabbing());
             if(e != null && e instanceof LivingEntity l) {
-                ((StandUser)l).roundabout$setGrabbedSoul(false);
                 ((StandUser)l).roundabout$setGrabberSabbath(0);
                 this.killSoul();
             }
@@ -1148,7 +1148,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                 targent2.remove(value);
                             }
                             if(this.isUnderSunlight(value)){
-                                if(!((StandUser)value).roundabout$getGrabbedSoul()) {
+                                if(((StandUser)value).roundabout$getGrabberSabbath() != 0) {
                                     targent2.remove(value);
                                 }
                             }
@@ -1181,24 +1181,26 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             if (source.getEntity() != null && source.getEntity() != this.getUser()) {
                 if (this.getUser() != null) {
                     if (source.is(DamageTypes.ON_FIRE) || source.is(DamageTypes.IN_FIRE) || source.is(ModDamageTypes.STAND_FIRE) || source.is(DamageTypes.HOT_FLOOR) || source.is(DamageTypes.LAVA)) {
-                        return super.hurt(source, amount + 2);
+                        return super.hurt(source, amount + 0.5f);
                     } else if (source.is(ModDamageTypes.GO_BEYOND)) {
-                        return super.hurt(source, amount * 30);
+                        return super.hurt(source, amount * 60);
                     } else if (source.is(ModDamageTypes.INFINITE_SPIN)){
                         return super.hurt(source, amount * 1.618f);
+                    }else if (MainUtil.isStandDamage(source) && (this.getRemainingFireTicks() > 0 || isBlackSabbathUnderLight())) {
+                        return super.hurt(source, amount);
                     }
                 }
             } else if (source.is(DamageTypes.ON_FIRE) || source.is(DamageTypes.IN_FIRE) || source.is(ModDamageTypes.STAND_FIRE) || source.is(DamageTypes.HOT_FLOOR) || source.is(DamageTypes.LAVA)) {
-                return super.hurt(source, amount);
+                return super.hurt(source, amount + 0.5f);
             } else if (source.is(ModDamageTypes.GO_BEYOND)) {
-                return super.hurt(source, amount * 30);
+                return super.hurt(source, amount * 60);
             }else if (source.is(ModDamageTypes.INFINITE_SPIN)){
                 return super.hurt(source, amount * 1.618f);
             } else if (MainUtil.isStandDamage(source) && (this.getRemainingFireTicks() > 0 || isBlackSabbathUnderLight())) {
-                return super.hurt(source, amount * 3);
+                return super.hurt(source, amount);
             }
             this.markHurt();
-            return super.hurt(source, 0.0F);
+            return super.hurt(source, 0);
         } else {
             if (source.is(ModDamageTypes.GO_BEYOND)) {
                 return super.hurt(source, amount * 30);
@@ -1492,6 +1494,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                     if (lungeTicks >= 1) {
                         if (lungeTicks < 140 && lungeTicks > 62) {
                             lungeTicks--;
+                            lungeTicks--;
                         }
                         lungeTicks--;
                     }
@@ -1576,7 +1579,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                     }
                                 }
                                 if (lungeTicks > 200) {
-                                    this.getNavigation().setSpeedModifier(0.70);
+                                    this.getNavigation().setSpeedModifier(0.75);
                                 } else if (lungeTicks > 185 && lungeTicks < 195) {
                                     if(!level().isClientSide()) {
                                         setUnrender(false);
@@ -1586,7 +1589,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                         if (!isBlackSabbathUnderLight()) {
                                             if (!this.level().isClientSide()) {
                                                 setGrabbing(targetSabbath().getId());
-                                                if(level().getEntity(getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(true); ((StandUser)e).roundabout$setGrabberSabbath(this.getId());}
+                                                if(level().getEntity(getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabberSabbath(this.getId());}
                                                 this.level().playSound(null, this, ModSounds.BLACK_SABBATH_GRAB_EVENT, SoundSource.HOSTILE, 0.95F, (float) (0.85F + Math.random() * 0.12f));
                                             }
                                             lungeTicks = 51;
@@ -1616,7 +1619,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                             }
                         }
                     } else {
-                        if(level().getEntity(getGrabbing()) != null && level().getEntity(getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);killSoul();((StandUser)e).roundabout$setGrabberSabbath(0);}
+                        if(level().getEntity(getGrabbing()) != null && level().getEntity(getGrabbing()) instanceof LivingEntity e){killSoul();((StandUser)e).roundabout$setGrabberSabbath(0);}
                         setGrabbing(0);
                         setGrabbingSoul(0);
                         setMeleeInteractionTicks(-1);
@@ -1652,7 +1655,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                 }
                             }
                         } else {
-                            if(level().getEntity(getGrabbing()) != null && level().getEntity(getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);killSoul();((StandUser)e).roundabout$setGrabberSabbath(0);}
+                            if(level().getEntity(getGrabbing()) != null && level().getEntity(getGrabbing()) instanceof LivingEntity e){killSoul();((StandUser)e).roundabout$setGrabberSabbath(0);}
                             setGrabbing(0);
                             setGrabbingSoul(0);
                             setMeleeInteractionTicks(-1);
@@ -2143,10 +2146,10 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         boolean flag2 = i.getItem() instanceof StandArrowItem && !(i.getDamageValue() >= i.getMaxDamage()) || i.getItem() instanceof WorthyArrowItem && this.getUser() instanceof Player p && p.isCreative();
         boolean flag2visual = i.getItem() instanceof StandArrowItem || i.getItem() instanceof WorthyArrowItem && this.getUser() instanceof Player p && p.isCreative();
         boolean flag3 = i.getItem() instanceof ArmorItem || i.getItem() instanceof ElytraItem;
-        boolean flag4 = i.getItem() instanceof PotionItem || i.getItem().getFoodProperties() != null || i.getItem() instanceof MilkBucketItem;
+        boolean flag4 = i.getItem() instanceof PotionItem || i.getItem().getFoodProperties() != null || i.getItem() instanceof MilkBucketItem || le instanceof Animal a && a.isFood(i);
         boolean flag5 = (i.getItem() instanceof ShearsItem || i.getItem() instanceof ScissorItem) && le instanceof Sheep sheep && !(sheep.isSheared());
 
-        boolean allYouCanEat = le instanceof Player p && i.getItem().getFoodProperties() != null && p.canEat(i.getItem().getFoodProperties().canAlwaysEat()) || le instanceof Animal || le instanceof Villager || i.getItem() instanceof MilkBucketItem;
+        boolean allYouCanEat = le instanceof Player p && i.getItem().getFoodProperties() != null && p.canEat(i.getItem().getFoodProperties().canAlwaysEat()) || le instanceof Animal a && a.isFood(i) || le instanceof Villager || i.getItem() instanceof MilkBucketItem;
         if(!level().isClientSide && this.getUser() != null){
             setSlider(slideTicks);
         }
@@ -2182,7 +2185,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             if (le != null && le instanceof LivingEntity e) {
                 if (meleeInteractionTicks > 1) {
                     lungeTicks = 51;
-                    ((StandUser) e).roundabout$setGrabbedSoul(true);
                     ((StandUser) e).roundabout$setGrabberSabbath(this.getId());
                     Entity ent = this.level().getEntity(this.getGrabbingSoul());
                     if (ent == null && !(e instanceof Allay || e instanceof Vex)) {
@@ -2210,9 +2212,13 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                         }
                     }
                     if(flag2visual){
-                        if(meleeInteractionTicks == 110){
-                            setShouldSlide(true);
-                        } else if (meleeInteractionTicks == 70){
+                        if(!(i.getDamageValue() >= i.getMaxDamage())) {
+                            if (meleeInteractionTicks == 110) {
+                                setShouldSlide(true);
+                            } else if (meleeInteractionTicks == 70) {
+                                setShouldSlide(false);
+                            }
+                        } else {
                             setShouldSlide(false);
                         }
                     }
@@ -2307,13 +2313,19 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                     if (this.getUser() instanceof Player pl) {
                                         IPlayerEntity play = ((IPlayerEntity) pl);
                                         play.roundabout$getBlckSabbathPlayerInventory().setItem(0, new ItemStack(Items.GLASS_BOTTLE));
+                                        if (!level().isClientSide) {
+                                            setNotRenderItem(true);
+                                        }
                                     } else {
                                         this.setHeldItemSabbath(new ItemStack(Items.GLASS_BOTTLE));
+                                        if (!level().isClientSide) {
+                                            setNotRenderItem(true);
+                                        }
                                     }
                                 }
                             }
                         }
-                        if (i.getItem().getFoodProperties() != null || i.getItem() instanceof MilkBucketItem) {
+                        if (i.getItem().getFoodProperties() != null || i.getItem() instanceof MilkBucketItem || le instanceof Animal a && a.isFood(i)) {
                             if (i.getItem() instanceof MilkBucketItem || (e instanceof Player && i.isEdible() || e instanceof Animal a && a.isFood(i) || e instanceof Villager)) {
                                 if ((meleeInteractionTicks == 140 || meleeInteractionTicks == 110 || meleeInteractionTicks == 85 || meleeInteractionTicks == 70 && i.getItem() instanceof NewLocacacaItem) && allYouCanEat) {
                                     if(i.getItem() instanceof MilkBucketItem){
@@ -2354,7 +2366,11 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                             }
                                         } else if (e instanceof Animal an) {
                                             if (an.getHealth() < an.getMaxHealth()) {
-                                                an.heal((float) i.getItem().getFoodProperties().getNutrition());
+                                                if(i.getItem().getFoodProperties().getNutrition() == 0 && an.isFood(i)){
+                                                    an.heal((float) 4);
+                                                } else if (an.isFood(i)){
+                                                    an.heal((float) i.getItem().getFoodProperties().getNutrition());
+                                                }
                                             } else if (an.canFallInLove()) {
                                                 if (this.getUser() instanceof Player P) {
                                                     an.setInLove(P);
@@ -2438,7 +2454,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                         }
                         lungeTicks = 51;
                         setShouldSlidePotionsAndFood(false);
-                        ((StandUser) e).roundabout$setGrabbedSoul(false);
                         ((StandUser)e).roundabout$setGrabberSabbath(0);
                         killSoul();
                         if(getNotRenderItem() || i.is(Items.BUCKET) && hasStabbed){
@@ -2768,7 +2783,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     }
 
     public void travelAheadSoulRender(float render, StandEntity se, Entity allayVex){
-        System.out.println("aaa");
         if (se != null) {
             Vec3 junkPos = MainUtil.getAheadVecRender(this, (float) horizontalOffset(), render).getLocation();
             Vec3 junkPosY = MainUtil.getAheadVecRender(this, 0f, render).getLocation();

@@ -381,7 +381,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     private int sensedImbueEntityId = -1;
 
     // for sounds
-    private static final byte BARRAGE_NOISE = 20;
+    protected static final byte BARRAGE_NOISE = 20;
     private static final byte LAST_HIT_NOISE = 21;
 
     // basic stand registry stuff
@@ -2309,6 +2309,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // to make sure the arrow isn't lost
     protected ItemStack standArrow = null;
 
+    public ItemStack getStandArrow() {
+        return standArrow;
+    }
+
     private boolean setRequiem() {
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand) && !stand.isRemoved()) {
@@ -3440,6 +3444,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                                     }
                                     clone.setTarget((LivingEntity) this.self);
                                     this.self.level().addFreshEntity(clone);
+                                    ((StandUser) LE).roundabout$setLifePunchClone(clone);
                                     // track the victim
                                     lifePunchVictim = LE;
                                     lifePunchClone = clone;
@@ -3619,6 +3624,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     private void restoreLifePunchVictim() {
         if (lifePunchVictim != null) {
             PowerTypes.setPlaneOfExisting(lifePunchVictim, (byte)0);
+            ((StandUser) lifePunchVictim).roundabout$setLifePunchClone(null);
         }
         if (lifePunchClone != null) {
             lifePunchClone.discard();
@@ -3842,6 +3848,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     @Override
     public SoundEvent getBarrageChargeSound() {
+        if (!PowerTypes.hasStandActive(self)) {
+            return super.getBarrageChargeSound();
+        }
         return ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_WINDUP_EVENT;
     }
 

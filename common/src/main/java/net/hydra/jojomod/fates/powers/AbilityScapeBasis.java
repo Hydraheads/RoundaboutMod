@@ -1368,6 +1368,22 @@ public class AbilityScapeBasis {
     } public boolean hasActive(LivingEntity User){
         return ((StandUser)User).roundabout$getActive();
     }
+    public boolean standFullyTangible(LivingEntity User){
+        StandEntity standent = this.getUserData(User).roundabout$getStand();
+        return (standent != null && standent.getFadeOut() >= standent.MaxFade);
+    }
+    public boolean standOutLongEnough(LivingEntity User){
+        StandEntity standent = this.getUserData(User).roundabout$getStand();
+        return (standent != null && standent.tickCount >= 11);
+    }
+    public boolean hasTangibleNerf(LivingEntity User, Entity target){
+        boolean test = !standOutLongEnough(User) && ClientNetworking.getAppropriateConfig().miscellaneousSettings.meleeSwapPenalty
+                && getReducedDamage(target)
+                && !ClientNetworking.getAppropriateConfig().experimentalSettings.summonPunch; // summon punch testing won't conflict with the nerfs
+                ;
+        //Roundabout.LOGGER.info("test"+test);
+        return test;
+    }
 
     /**set an ability on cooldown*/
     public void setCooldown(byte power, int cooldown){

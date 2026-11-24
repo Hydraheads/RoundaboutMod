@@ -242,7 +242,6 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.PURPLE_SMOKE.get(), NoRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BAD_COMPANY_SOLDIER.get(), BCSoldierRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BAD_COMPANY_TANK.get(), BCTankRenderer::new);
-        event.registerEntityRenderer(ForgeEntities.CTR_BARRIER.get(), CTRbarrierRenderer::new);
         event.registerEntityRenderer(ForgeEntities.OVA_ENYA.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ENYA.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.JOTARO.get(), VisageBasisRenderer::new);
@@ -466,6 +465,7 @@ public class ClientForgeEvents {
         ModStrayModels.CHAIR_RATT_SHOULDER = new ChairRattShoulderModel();
         ModStrayModels.MANDOM = new MandomModel();
         ModStrayModels.ANUBIS = new AnubisModel();
+        ModStrayModels.SILVER_CHARIOT_SWORD = new SilverChariotSwordModel();
         ModStrayModels.MANDOM_WATCH = new WatchModel();
         ModStrayModels.MANDOM_WATCH_SMALL = new SmallWatchModel();
         ModStrayModels.kingCrimsonArmsPart = new KingCrimsonArmsPart();
@@ -473,7 +473,8 @@ public class ClientForgeEvents {
         ModStrayModels.theWorldArmsPart = new TheWorldArmsPart();
         ModStrayModels.starPlatinumArmsPart = new StarPlatinumArmsPart();
         ModStrayModels.silverChariotArmsPart = new SilverChariotArmsPart();
-        ModStrayModels.MoldSpine = new MoldSpineModel();
+        ModStrayModels.Spine = new SpineModel();
+        ModStrayModels.SpineMold = new SpineMoldModel();
         ModStrayModels.MoldRightArm = new MoldRightArm<>();
         ModStrayModels.MoldLeftArm = new MoldLeftArm();
         ModStrayModels.ChestPart = new ChestPart();
@@ -607,6 +608,9 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.GOLD_PUNCH_IMPACT_A.get(), GoldPunchImpactParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.GOLD_PUNCH_IMPACT_B.get(), GoldPunchImpactParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.GOLD_PUNCH_IMPACT_C.get(), GoldPunchImpactParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.REQUIEM_PUNCH_IMPACT_A.get(), PunchImpactParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.REQUIEM_PUNCH_IMPACT_B.get(), PunchImpactParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.REQUIEM_PUNCH_IMPACT_C.get(), PunchImpactParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.PUNCH_MISS.get(), PunchMissParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.MELTING.get(), BloodParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.BLOOD.get(), BloodParticle.Provider::new);
@@ -679,7 +683,7 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.METALLICA_D.get(), MetallicaStickParticle.Factory::new);
         event.registerSpriteSet(ForgeParticles.METALLICA_FIELD_PNG.get(), MetallicaFieldParticle.Factory::new);
         event.registerSpriteSet(ForgeParticles.MOLD.get(), MoldParticle.Provider::new);
-        event.registerSpriteSet(ForgeParticles.MOLD_DUST.get(), MoldDustParticle.CosyProvider::new);
+        event.registerSpriteSet(ForgeParticles.MOLD_DUST.get(), MoldDustParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.RAGING_LIGHT.get(), AnubisLightParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.ALLURING_LIGHT.get(), AnubisLightParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.HYPNO_SWIRL.get(), HypnoSwirlParticle.Provider::new);
@@ -713,7 +717,11 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.VITAL_ESSENCE.get(), VitalEssenceParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.GE_WAVE.get(), GEWaveParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.AUTUMN_LEAVES.get(), AutumnLeavesParticle.Provider::new);
-        event.registerSpriteSet(ForgeParticles.GINKGO_LEAVES.get(), GinkgoLeavesParticle.Provider::new
+        event.registerSpriteSet(ForgeParticles.GINKGO_LEAVES.get(), GinkgoLeavesParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.RAIN_BUBBLE.get(), RainBubbleParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.RAIN_SHARD_1.get(), RainShardParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.RAIN_SHARD_2.get(), RainShardParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.RAIN_SHARD_3.get(), RainShardParticle.Provider::new
 
         );
     }

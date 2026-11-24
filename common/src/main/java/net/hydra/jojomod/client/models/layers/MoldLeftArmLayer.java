@@ -49,11 +49,14 @@ public class MoldLeftArmLayer<T extends LivingEntity, A extends HumanoidModel<T>
             }
             if (!entity.isInvisible()) {
                 if (MoldedRightArm) {
-
+                    int color = ((PowersGreenDay) user.roundabout$getStandPowers()).getMoldParticleColor();
+                    float r = ((color >> 16) & 0xFF) / 255.0F;
+                    float g = ((color >> 8) & 0xFF) / 255.0F;
+                    float b = (color & 0xFF) / 255.0F;
                     poseStack.pushPose();
                     getParentModel().body.translateAndRotate(poseStack);
                     ModStrayModels.MoldLeftArm.render(entity, partialTicks, poseStack, bufferSource, packedLight,
-                                10, 10, 10, 1F);
+                                r, g, b, 1F);
                     poseStack.popPose();
                 }
             }

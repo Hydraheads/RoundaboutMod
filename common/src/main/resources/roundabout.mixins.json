@@ -55,6 +55,7 @@
     "access.AccessEgg",
     "access.AccessEnderMan",
     "access.AccessFire",
+    "access.AccessAxeItem",
     "access.AccessFireworkRocket",
     "access.AccessInstrumentItem",
     "access.AccessInventory",

@@ -13,6 +13,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.FleshBucketItem;
 import net.hydra.jojomod.item.GlaiveItem;
 import net.hydra.jojomod.item.KnifeItem;
+import net.hydra.jojomod.particles.ColorParticleOptions;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersCatchTheRainbow;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
@@ -114,8 +115,8 @@ public class SeperatedArmEntity extends StandEntity {
 
     public void jump(Vec3 jumpT0Pos){
         Vec3 location = new Vec3(this.getX(),this.getY(),this.getZ());
-        if (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersGreenDay) {
-            ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST, location.x,
+        if (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
+            ((ServerLevel) this.level()).sendParticles(ColorParticleOptions.fromPackedColor(ModParticles.MOLD_DUST, PGD.getMoldDustParticleColor()), location.x,
                     location.y, location.z,
                     24,
                     0.005, 0.005, 0.005,
@@ -144,8 +145,8 @@ public class SeperatedArmEntity extends StandEntity {
 
     public void jump2(Vec3 jumpT0Pos){
         Vec3 location = new Vec3(this.getX(),this.getY(),this.getZ());
-        if (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersGreenDay) {
-            ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST, location.x,
+        if (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
+            ((ServerLevel) this.level()).sendParticles(ColorParticleOptions.fromPackedColor(ModParticles.MOLD_DUST, PGD.getMoldDustParticleColor()), location.x,
                     location.y, location.z,
                     24,
                     0.005, 0.005, 0.005,
@@ -495,8 +496,8 @@ public class SeperatedArmEntity extends StandEntity {
                     double randX = Roundabout.RANDOM.nextDouble(-0.2, 0.2);
                     double randY = Roundabout.RANDOM.nextDouble(-0.1, 0.1);
                     double randZ = Roundabout.RANDOM.nextDouble(-0.2, 0.2);
-                    if (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersGreenDay) {
-                        ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD,
+                    if (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
+                        ((ServerLevel) this.level()).sendParticles(ColorParticleOptions.fromPackedColor(ModParticles.MOLD, PGD.getMoldParticleColor()),
                                 this.getX() + randX,
                                 this.getY() + randY + 0.15,
                                 this.getZ() + randZ,
@@ -510,8 +511,8 @@ public class SeperatedArmEntity extends StandEntity {
                     }
                 }
                 if (Can_activate && !onGround()) {
-                    if (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersGreenDay) {
-                        ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST,
+                    if (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
+                        ((ServerLevel) this.level()).sendParticles(ColorParticleOptions.fromPackedColor(ModParticles.MOLD_DUST, PGD.getMoldDustParticleColor()),
                                 this.getX(),
                                 this.getY() + 0.15,
                                 this.getZ(),
@@ -568,11 +569,14 @@ public class SeperatedArmEntity extends StandEntity {
                     }
                 }
                 for (int i = 0; i < 1; i = i + 1) {
+                    Vector3f dustColor = PowersGreenDay.defaultFloatDustColor();
+                    if (User != null && ((StandUser) User).roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
+                        dustColor = PGD.getFloatDustParticleColor();
+                    }
                     double randX = Roundabout.RANDOM.nextDouble(-0.3, 0.3);
                     double randY = Roundabout.RANDOM.nextDouble(-0.3, 0.3);
                     double randZ = Roundabout.RANDOM.nextDouble(-0.3, 0.3);
-                    ((ServerLevel) level()).sendParticles(new DustParticleOptions(new Vector3f(0.76F, 1.0F, 0.9F
-                            ), 2f),
+                    ((ServerLevel) level()).sendParticles(new DustParticleOptions(dustColor, 2f),
                             this.getX() + randX,
                             this.getY() + randY,
                             this.getZ() + randZ,

@@ -484,17 +484,17 @@ public class NewPunchingStand extends NewDashPreset {
             boolean lasthit = false;
             if (this.getActivePowerPhase() >= this.getActivePowerPhaseMax()) {
                 /*The last hit in a string has more power and knockback if you commit to it*/
-                pow = getHeavyPunchStrength(entity);
+                pow = getHeavyPunchStrengthBase(entity);
                 if (didSummonPunch()) {
                     if (!MainUtil.getReducedDamage(entity)) {
                         Roundabout.LOGGER.info("boost");
-                        pow += getPunchStrength(entity) * 2;
+                        pow += getPunchStrengthBase(entity) * 2;
                     }
                 }
                 knockbackStrength = 1F;
                 lasthit = true;
             } else {
-                pow = getPunchStrength(entity);
+                pow = getPunchStrengthBase(entity);
                 knockbackStrength = 0.2F;
             }
             if (StandDamageEntityAttack(entity, pow, 0, this.self)) {

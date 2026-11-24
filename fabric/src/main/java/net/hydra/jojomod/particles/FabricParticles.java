@@ -8,6 +8,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
+import org.jetbrains.annotations.NotNull;
 
 
 public class FabricParticles {
@@ -21,6 +22,9 @@ public class FabricParticles {
     public static final SimpleParticleType GOLD_PUNCH_IMPACT_A = FabricParticleTypes.simple();
     public static final SimpleParticleType GOLD_PUNCH_IMPACT_B = FabricParticleTypes.simple();
     public static final SimpleParticleType GOLD_PUNCH_IMPACT_C = FabricParticleTypes.simple();
+    public static final SimpleParticleType REQUIEM_PUNCH_IMPACT_A = FabricParticleTypes.simple();
+    public static final SimpleParticleType REQUIEM_PUNCH_IMPACT_B = FabricParticleTypes.simple();
+    public static final SimpleParticleType REQUIEM_PUNCH_IMPACT_C = FabricParticleTypes.simple();
     public static final SimpleParticleType MELTING = FabricParticleTypes.simple();
     public static final SimpleParticleType BLOOD = FabricParticleTypes.simple();
     public static final SimpleParticleType SWEAT = FabricParticleTypes.simple();
@@ -82,7 +86,6 @@ public class FabricParticles {
 
     public static final SimpleParticleType BRIEF_MAGIC_DUST = FabricParticleTypes.simple();
     public static final SimpleParticleType STITCH = FabricParticleTypes.simple();
-    public static final SimpleParticleType MOLD_DUST = FabricParticleTypes.simple();
     public static final SimpleParticleType ZOMBIE_STITCH = FabricParticleTypes.simple();
     public static final SimpleParticleType OCCULT = FabricParticleTypes.simple();
     public static final SimpleParticleType AIRBUBBLE_PINK = FabricParticleTypes.simple();
@@ -97,7 +100,6 @@ public class FabricParticles {
     public static final SimpleParticleType RIBCAGE = FabricParticleTypes.simple();
     public static final SimpleParticleType HYPNO_SWIRL = FabricParticleTypes.simple();
     public static final SimpleParticleType TUSK_VORTEX = FabricParticleTypes.simple();
-    public static final SimpleParticleType MOLD = FabricParticleTypes.simple();
     public static final SimpleParticleType RAGING_LIGHT = FabricParticleTypes.simple();
     public static final SimpleParticleType ALLURING_LIGHT = FabricParticleTypes.simple();
     public static final SimpleParticleType TUSK_HOLE = FabricParticleTypes.simple();
@@ -112,31 +114,17 @@ public class FabricParticles {
     public static final SimpleParticleType BLACK_SABBATH_MOVING_RIPPLE = FabricParticleTypes.simple();
     public static final SimpleParticleType BLACK_SABBATH_IDLE_RIPPLE = FabricParticleTypes.simple();
 
-    public static final ParticleType<ColorParticleOptions> PURPLE_HAZE_SMOKE =
-            new net.minecraft.core.particles.ParticleType<>(false, ColorParticleOptions.DESERIALIZER) {
-                @Override
-                public Codec<ColorParticleOptions> codec() {
-                    return ColorParticleOptions.codec(this);
-                }
-            };
-    public static final SimpleParticleType DISTORTION_SMOKE = FabricParticleTypes.simple();
-    public static final ParticleType<ColorParticleOptions> PURPLE_HAZE_BLASTWAVE =
-            new net.minecraft.core.particles.ParticleType<>(false, ColorParticleOptions.DESERIALIZER) {
-                @Override
-                public Codec<ColorParticleOptions> codec() {
-                    return ColorParticleOptions.codec(this);
-                }
-            };
+    public static final ParticleType<ColorParticleOptions> PURPLE_HAZE_SMOKE = createColorParticleType(true);
+    public static final SimpleParticleType DISTORTION_SMOKE = FabricParticleTypes.simple(true);
+    public static final ParticleType<ColorParticleOptions> PURPLE_HAZE_BLASTWAVE = createColorParticleType(true);
     public static final SimpleParticleType AUTUMN_LEAVES = FabricParticleTypes.simple();
     public static final SimpleParticleType GINKGO_LEAVES = FabricParticleTypes.simple();
 
-    public static final ParticleType<ColorParticleOptions> PUZZLE_PARTICLE =
-            new ParticleType<>(false, ColorParticleOptions.DESERIALIZER) {
-                @Override
-                public Codec<ColorParticleOptions> codec() {
-                    return ColorParticleOptions.codec(this);
-                }
-            };
+    public static final ParticleType<ColorParticleOptions> PUZZLE_PARTICLE = createColorParticleType(false);
+
+    public static final ParticleType<ColorParticleOptions> MOLD_DUST = createColorParticleType(true);
+
+    public static final ParticleType<ColorParticleOptions> MOLD = createColorParticleType(false);
 
     public static final SimpleParticleType DUST_CRUMBLE = FabricParticleTypes.simple();
     public static final SimpleParticleType FIRE_CRUMBLE = FabricParticleTypes.simple();
@@ -157,6 +145,9 @@ public class FabricParticles {
     public static final SimpleParticleType GE_WAVE = FabricParticleTypes.simple();
 
     public static final SimpleParticleType RAIN_BUBBLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType RAIN_SHARD_1 = FabricParticleTypes.simple();
+    public static final SimpleParticleType RAIN_SHARD_2 = FabricParticleTypes.simple();
+    public static final SimpleParticleType RAIN_SHARD_3 = FabricParticleTypes.simple();
 
     public static void registerParticles(){
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("hit_impact"), HIT_IMPACT);
@@ -168,6 +159,9 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("gold_punch_impact_a"), GOLD_PUNCH_IMPACT_A);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("gold_punch_impact_b"), GOLD_PUNCH_IMPACT_B);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("gold_punch_impact_c"), GOLD_PUNCH_IMPACT_C);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("requiem_punch_impact_a"), REQUIEM_PUNCH_IMPACT_A);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("requiem_punch_impact_b"), REQUIEM_PUNCH_IMPACT_B);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("requiem_punch_impact_c"), REQUIEM_PUNCH_IMPACT_C);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("melting"), MELTING);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("blood"), BLOOD);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("sweat"), SWEAT);
@@ -285,6 +279,9 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("ge_wave"), GE_WAVE);
 
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("rain_bubble"), RAIN_BUBBLE);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("rain_shard_1"), RAIN_SHARD_1);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("rain_shard_2"), RAIN_SHARD_2);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("rain_shard_3"), RAIN_SHARD_3);
 
         ModParticles.MELTING = MELTING;
         ModParticles.HALLUCINATORY_ACID_DRIP = HALLUCINATORY_ACID_DRIP;
@@ -304,6 +301,9 @@ public class FabricParticles {
         ModParticles.GOLD_PUNCH_IMPACT_A = GOLD_PUNCH_IMPACT_A;
         ModParticles.GOLD_PUNCH_IMPACT_B = GOLD_PUNCH_IMPACT_B;
         ModParticles.GOLD_PUNCH_IMPACT_C = GOLD_PUNCH_IMPACT_C;
+        ModParticles.REQUIEM_PUNCH_IMPACT_A = REQUIEM_PUNCH_IMPACT_A;
+        ModParticles.REQUIEM_PUNCH_IMPACT_B = REQUIEM_PUNCH_IMPACT_B;
+        ModParticles.REQUIEM_PUNCH_IMPACT_C = REQUIEM_PUNCH_IMPACT_C;
         ModParticles.PUNCH_MISS = PUNCH_MISS;
         ModParticles.VACUUM = VACUUM;
         ModParticles.FLASH = FLASH;
@@ -412,5 +412,17 @@ public class FabricParticles {
         ModParticles.GE_WAVE = GE_WAVE;
 
         ModParticles.RAIN_BUBBLE = RAIN_BUBBLE;
+        ModParticles.RAIN_SHARD_1 = RAIN_SHARD_1;
+        ModParticles.RAIN_SHARD_2 = RAIN_SHARD_2;
+        ModParticles.RAIN_SHARD_3 = RAIN_SHARD_3;
+    }
+
+    public static @NotNull ParticleType<ColorParticleOptions> createColorParticleType(boolean alwaysSpawn) {
+        return new ParticleType<>(alwaysSpawn, ColorParticleOptions.DESERIALIZER) {
+            @Override
+            public Codec<ColorParticleOptions> codec() {
+                return ColorParticleOptions.codec(this);
+            }
+        };
     }
 }

@@ -138,6 +138,7 @@ public abstract class ZItemInHandRenderer {
                 poseStack.mulPose(Axis.XP.rotationDegrees(290.0F));
                 poseStack.mulPose(Axis.YP.rotationDegrees(135.0F));
                 poseStack.mulPose(Axis.ZP.rotationDegrees(-30.0F));
+                ModStrayModels.SILVER_CHARIOT_SWORD.renderToBuffer(poseStack, bufferSource.getBuffer(RenderType.entityTranslucent(ModStrayModels.SILVER_CHARIOT_SWORD.getTextureLocation(user.roundabout$getStandSkin()))), light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
                 poseStack.scale(0.9F, 0.9F, 0.9F);
                 */
             }

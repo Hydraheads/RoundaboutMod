@@ -5,6 +5,7 @@ import net.hydra.jojomod.event.powers.jumpingJackFlash.JJFLauncherState;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,6 +20,9 @@ public abstract class PlayerMixin implements JJFLauncherAccess {
 
     @Unique
     private int jjf$loadedAmmoCount = 0;
+
+    @Unique
+    private ItemStack jjf$loadedAmmoIcon = ItemStack.EMPTY;
 
     @Override
     public JJFLauncherState jjf$getLauncherState() {
@@ -35,6 +39,21 @@ public abstract class PlayerMixin implements JJFLauncherAccess {
         jjf$loadedAmmoCount = Math.max(0, count);
     }
 
+    @Override
+    public ItemStack jjf$getLoadedAmmoIcon() {
+        return jjf$loadedAmmoIcon.copy();
+    }
+
+    @Override
+    public void jjf$setLoadedAmmoIcon(ItemStack item) {
+        if (item == null || item.isEmpty()) {
+            jjf$loadedAmmoIcon = ItemStack.EMPTY;
+        } else {
+            jjf$loadedAmmoIcon = item.copy();
+            jjf$loadedAmmoIcon.setCount(1);
+        }
+    }
+
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
     private void jjf$saveLauncherState(CompoundTag tag, CallbackInfo ci) {
         CompoundTag jjfTag = tag.getCompound("jjf");
@@ -46,6 +65,7 @@ public abstract class PlayerMixin implements JJFLauncherAccess {
     private void jjf$loadLauncherState(CompoundTag tag, CallbackInfo ci) {
         jjf$launcherState.clearLoadedItem();
         jjf$setLoadedAmmoCount(0);
+        jjf$setLoadedAmmoIcon(ItemStack.EMPTY);
 
         if (!tag.contains("jjf", Tag.TAG_COMPOUND)) {
             return;
@@ -58,5 +78,6 @@ public abstract class PlayerMixin implements JJFLauncherAccess {
 
         jjf$launcherState.load(jjfTag.getCompound("Launcher"));
         jjf$setLoadedAmmoCount(jjf$launcherState.getLoadedCount());
+        jjf$setLoadedAmmoIcon(jjf$launcherState.getLoadedItem());
     }
 }

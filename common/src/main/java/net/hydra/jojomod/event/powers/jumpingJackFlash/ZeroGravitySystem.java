@@ -3,6 +3,7 @@ package net.hydra.jojomod.event.powers.jumpingJackFlash;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.item.BowItem;
@@ -449,6 +450,22 @@ public class ZeroGravitySystem {
             Player player,
             ZeroGravityState state
     ) {
+        if (state.suctionBlockId >= 0) {
+            if (player.level().getEntity(state.suctionBlockId) instanceof FallingBlockEntity block
+                    && block.isAlive() && JJFFloatingBlocks.isFloating(block)
+                    && makeSurfaceProbe(player, state.getSuctionSurface(), SURFACE_HOLD_DISTANCE)
+                            .intersects(block.getBoundingBox())) {
+                if (player.isShiftKeyDown()) {
+                    holdFloatingSurface(player, block, state.getSuctionSurface());
+                    return;
+                }
+                releaseSuction(player, state.getSuctionSurface(), state);
+            }
+            state.setSuctioned(false);
+            state.setSuctionSurface(null);
+            state.suctionBlockId = -1;
+            return;
+        }
         if (state.isSuctioned()) {
             Direction surface = state.getSuctionSurface();
 
@@ -494,6 +511,10 @@ public class ZeroGravitySystem {
             return;
         }
 
+        if (attachToFloatingBlock(player, state)) {
+            return;
+        }
+
         Direction surface = chooseSuctionSurface(player);
 
         if (surface != null) {
@@ -503,6 +524,62 @@ public class ZeroGravitySystem {
             beginSuction(player, surface);
         }
     }
+    private static boolean attachToFloatingBlock(Player player, ZeroGravityState state) {
+        AABB bounds = player.getBoundingBox();
+        FallingBlockEntity nearest = null;
+        Direction face = null;
+        double closest = Double.MAX_VALUE;
+        for (FallingBlockEntity block : player.level().getEntitiesOfClass(FallingBlockEntity.class,
+                bounds.inflate(SURFACE_ATTACH_DISTANCE + player.getDimensions(Pose.STANDING).height - player.getBbHeight()),
+                JJFFloatingBlocks::isFloating)) {
+            for (Direction direction : Direction.values()) {
+                AABB probe = makeSurfaceProbe(player, direction, SURFACE_ATTACH_DISTANCE);
+                double gap = floatingSurfaceGap(bounds, block.getBoundingBox(), direction);
+                if (gap >= -SURFACE_HOLD_DISTANCE && Math.abs(gap) < closest
+                        && probe.intersects(block.getBoundingBox())) {
+                    nearest = block;
+                    face = direction;
+                    closest = Math.abs(gap);
+                }
+            }
+        }
+        if (nearest == null) {
+            return false;
+        }
+        state.suctionBlockId = nearest.getId();
+        state.setSuctioned(true);
+        state.setSuctionSurface(face);
+        holdFloatingSurface(player, nearest, face);
+        return true;
+    }
+
+    private static double floatingSurfaceGap(AABB player, AABB block, Direction direction) {
+        return switch (direction) {
+            case UP -> block.minY - player.maxY;
+            case DOWN -> player.minY - block.maxY;
+            case EAST -> block.minX - player.maxX;
+            case WEST -> player.minX - block.maxX;
+            case SOUTH -> block.minZ - player.maxZ;
+            case NORTH -> player.minZ - block.maxZ;
+        };
+    }
+
+    private static void holdFloatingSurface(Player player, FallingBlockEntity block, Direction face) {
+        Vec3 normal = directionVector(face);
+        Vec3 look = player.getLookAngle();
+        Vec3 tangent = look.subtract(normal.scale(look.dot(normal)));
+        double gap = floatingSurfaceGap(player.getBoundingBox(), block.getBoundingBox(), face);
+        double clearance = face == Direction.UP
+                ? player.getDimensions(Pose.STANDING).height - player.getBbHeight() : 0.0D;
+        Vec3 movement = block.getDeltaMovement().add(normal.scale(clamp(gap - clearance, -0.20D, 0.20D)));
+        if (face != Direction.UP && tangent.lengthSqr() > 0.0001D) {
+            movement = movement.add(tangent.normalize().scale(SUCTION_MOVE_SPEED * player.zza));
+        }
+        player.setDeltaMovement(movement);
+        player.fallDistance = 0.0F;
+        player.hasImpulse = true;
+    }
+
     private static Direction chooseCornerSurface(
             LivingEntity entity,
             Direction oldSurface
@@ -941,6 +1018,7 @@ public class ZeroGravitySystem {
         }
 
         if (entity instanceof Player player) {
+
             HitResult hit = player.pick(
                     4.5D,
                     0.0F,
@@ -1020,6 +1098,9 @@ public class ZeroGravitySystem {
 
         ZeroGravityState state = access.jjf$getZeroGravityState();
 
+        if (!entity.level().isClientSide()) {
+            JJFFloatingBlocks.tickExposure(entity, state);
+        }
         state.tickSuctionLaunchSoundCooldown();
 
         if (state.isRestoringWeight()) {

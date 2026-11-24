@@ -22,6 +22,7 @@ public class GoldExperienceBaseRenderer extends StandRenderer<GoldExperienceEnti
         this.addLayer(new GoldExperienceLifePunchLayer(this));
         this.addLayer(new GoldExperienceCrackLayer(this));
         this.addLayer(new GoldExperienceEyeLayer<>(this, this));
+        this.addLayer(new StandArrowHeldItemLayer<>(this, context.getItemInHandRenderer()));
     }
 
     public static ResourceLocation getSkin(byte bt) {

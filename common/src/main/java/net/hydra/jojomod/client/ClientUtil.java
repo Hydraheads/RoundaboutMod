@@ -3070,9 +3070,10 @@ public class ClientUtil {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null && startPos != null) {
             double rand = Math.random();
-            if (rand > 0.15) {
+            if (rand > 0.25) {
                 playSound(ModSounds.RETURN_TO_ZERO_EVENT, player, 1.0F, 1.0F);
             }
+            playSound(ModSounds.RETURN_TO_ZERO_REWIND_EVENT, player, 1.0F, 1.0F);
             player.setPos(startPos.x, startPos.y, startPos.z);
             player.xo = startPos.x;
             player.yo = startPos.y;

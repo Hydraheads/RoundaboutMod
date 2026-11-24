@@ -118,6 +118,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.SURVIVOR.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.DARK_MIRAGE.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.KING_NOTHING.get(), KingNothingEntity.createStandAttributes().build());
+        event.put(ForgeEntities.TRACKING_CLOUD.get(), TrackingCloudEntity.createStandAttributes().build());
         event.put(ForgeEntities.TUSK_A1.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.TUSK_A2.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.TUSK_A3.get(), StandEntity.createStandAttributes().build());
@@ -954,6 +955,9 @@ public class ForgeEvents {
         ModParticles.AUTUMN_LEAVES = ForgeParticles.AUTUMN_LEAVES.get();
         ModParticles.GINKGO_LEAVES = ForgeParticles.GINKGO_LEAVES.get();
         ModParticles.RAIN_BUBBLE = ForgeParticles.RAIN_BUBBLE.get();
+        ModParticles.RAIN_SHARD_1 = ForgeParticles.RAIN_SHARD_1.get();
+        ModParticles.RAIN_SHARD_2 = ForgeParticles.RAIN_SHARD_2.get();
+        ModParticles.RAIN_SHARD_3 = ForgeParticles.RAIN_SHARD_3.get();
 
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();
