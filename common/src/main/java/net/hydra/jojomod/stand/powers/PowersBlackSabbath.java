@@ -1108,10 +1108,27 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
         }
     }
 
+    boolean sealStandPenalty = false;
+    int lostHp = 0;
+
     public void tickPowerEnd() {
         if (blackSelect != null && this.getStandEntity(self) != null) {
             if (!this.self.level().isClientSide()) {
                 blackRotation((BlackSabbathEntity) this.getStandEntity(self));
+                int difference = (int) this.getStandEntity(self).getMaxHealth() - (int) this.getStandEntity(self).getHealth();
+                lostHp = difference;
+                if(this.getStandEntity(self) instanceof BlackSabbathEntity bs && bs.isBlackSabbathUnderLight() && bs.getHunting()){
+                    sealStandPenalty = true;
+                }
+            }
+        } else {
+            if(!isClient() && sealStandPenalty){
+                sealStandPenalty = false;
+                if(lostHp >= 3) {
+                    ((StandUser) this.getSelf()).roundabout$setSealedTicks(lostHp * 15);
+                    this.setTickDown2(20);
+                    lostHp = 0;
+                }
             }
         }
     }
@@ -1161,9 +1178,9 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
                         var blockState3 = this.self.level().getBlockState(bpos3);
                         AABB yesbox3 = ModEntities.BLACK_SABBATH.getAABB(lent.getX(), Mth.floor(lent.getY()), lent.getZ());
                         AABB testBox3 = yesbox3.move(
-                                candidate.x - lent.getX(),
-                                candidate.y - lent.getY(),
-                                candidate.z - lent.getZ()
+                                candidate3.x - lent.getX(),
+                                candidate3.y - lent.getY(),
+                                candidate3.z - lent.getZ()
                         );;
                         if (level.noCollision(lent, testBox3) && !blockState3.is(Blocks.LAVA) && !blockState3.isAir() && checkIfBposIsInDark(candidate3)) {
                             return candidate3;
@@ -1280,7 +1297,11 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
                                         }
                                     }
                                 }else if (self instanceof Evoker){
-                                    stack = new ItemStack(ModItems.STAND_ARROW);
+                                    Random weaponRandom = new Random();
+                                    int weapon = weaponRandom.nextInt(0, 5);
+                                    if(weapon == 4) {
+                                        stack = new ItemStack(ModItems.STAND_ARROW);
+                                    }
                                 }else if (self instanceof Vindicator){
                                     stack = new ItemStack(Items.IRON_AXE);
                                 }else if (self instanceof PiglinBrute){
