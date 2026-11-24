@@ -74,7 +74,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                                      int light, AbstractClientPlayer player, CallbackInfo ci) {
         if (net.hydra.jojomod.client.models.layers.JJFPlayerArmsOverlay.shouldRender(player)) {
             net.hydra.jojomod.client.models.layers.JJFPlayerArmsOverlay.renderArm(
-                    poseStack, bufferSource, light, this.model.rightArm, true, player.tickCount);
+                    poseStack, bufferSource, light, this.model.rightArm, true, player);
         }
     }
 
@@ -83,7 +83,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                                     int light, AbstractClientPlayer player, CallbackInfo ci) {
         if (net.hydra.jojomod.client.models.layers.JJFPlayerArmsOverlay.shouldRender(player)) {
             net.hydra.jojomod.client.models.layers.JJFPlayerArmsOverlay.renderArm(
-                    poseStack, bufferSource, light, this.model.leftArm, false, player.tickCount);
+                    poseStack, bufferSource, light, this.model.leftArm, false, player);
         }
     }
     @Shadow protected abstract void renderHand(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, AbstractClientPlayer abstractClientPlayer, ModelPart modelPart, ModelPart modelPart2);
