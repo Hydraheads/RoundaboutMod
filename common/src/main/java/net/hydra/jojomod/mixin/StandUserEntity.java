@@ -4665,6 +4665,23 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    // Same as above, but lets totems run first
+    @Inject(method = "checkTotemDeathProtection(Lnet/minecraft/world/damagesource/DamageSource;)Z", at = @At(value = "RETURN"), cancellable = true, require = 0)
+    public void rdbt$checkTotemDeathProtection2(DamageSource dsource, CallbackInfoReturnable<Boolean> cir) {
+        // GER death loop
+        if (!this.level().isClientSide()
+                && rdbt$this() instanceof ServerPlayer victim
+                && dsource.getEntity() instanceof LivingEntity attacker
+                && ((StandUser) attacker).roundabout$getStandPowers() instanceof PowersGER pger) {
+            victim.setHealth(victim.getMaxHealth());
+            victim.removeAllEffects();
+            victim.clearFire();
+            pger.startInfiniteDeath(victim);
+            cir.setReturnValue(true);
+            return;
+        }
+    }
+
     @Unique
     public void rdbt$spawnZombieMinion(Entity ent) {
         if (!this.level().isClientSide()) {
@@ -5053,8 +5070,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
             }
 
-            if ($$0.getEntity() != null
-                    && !$$0.is(DamageTypes.THORNS)) {
+            if ($$0.getEntity() != null && !$$0.is(DamageTypes.THORNS)) {
                 if ($$0.getEntity() instanceof Player pe) {
                     if (((StandUser) pe).roundabout$getStandPowers().interceptSuccessfulDamageDealtEvent($$0, $$1,
                             ((LivingEntity) (Object) this))) {
@@ -5606,6 +5622,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "die(Lnet/minecraft/world/damagesource/DamageSource;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;setPose(Lnet/minecraft/world/entity/Pose;)V", shift = At.Shift.BEFORE), cancellable = true, require = 0)
     public void roundabout$die2(DamageSource $$0, CallbackInfo ci) {
+        //GER infinite death loop corpse deletion
+        if (!this.level().isClientSide()
+                && !(rdbt$this() instanceof Player)
+                && $$0.getEntity() instanceof LivingEntity attacker
+                && ((StandUser) attacker).roundabout$getStandPowers() instanceof PowersGER) {
+            discard();
+            ci.cancel();
+            return;
+        }
+
         /** Corspe dropping, for Justice */
         //if ($$0.getDirectEntity() != null) {
             if ($$0.getDirectEntity() instanceof Player PE && ((PE.getMainHandItem().is(ModItems.EXECUTIONER_AXE)

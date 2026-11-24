@@ -15,6 +15,7 @@ import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaxStandDiscItem;
@@ -28,9 +29,11 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -202,6 +205,17 @@ public class PowersGER extends PowersGoldExperience {
 
         return super.interceptIncomingHarm(source, amount);
     }
+
+    // infinite death start
+
+    public void startInfiniteDeath(ServerPlayer victim) {
+        victim.removeAllEffects();
+        victim.clearFire();
+        PowerTypes.forcePlaneOfExisting(victim, (byte) 13);
+        // start cutscene here i guess
+    }
+
+    // infinite death end
 
     // Buffs
 
