@@ -329,7 +329,9 @@ public class StandArrowItem extends RoundaboutArrowItem {
             ((StandUser) target).roundabout$setActive(false);
             ((StandUser) target).roundabout$setStandDisc(discStack.copy());
             ((StandUser) target).roundabout$getStandPowers().rollSkin();
-            ((StandUser) target).roundabout$summonStand(target.level(),true,false);
+            if(((StandUser)target).roundabout$getGrabberSabbath() == 0) {
+                ((StandUser) target).roundabout$summonStand(target.level(), true, false);
+            }
             return true;
         }
         return false;
