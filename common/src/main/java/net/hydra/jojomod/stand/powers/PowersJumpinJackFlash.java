@@ -101,7 +101,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
     private static final float SPIN_ATTACK_MAX_DAMAGE = 5.0F;
 
     private static final double SPIN_ATTACK_MIN_KNOCKBACK = 0.70D;
-    private static final double SPIN_ATTACK_MAX_KNOCKBACK = 3.25D;
+    private static final double SPIN_ATTACK_MAX_KNOCKBACK = 3.85D;
     private static final double SPIN_ATTACK_ZERO_G_MULTIPLIER = 1.80D;
 
     public static final byte POWER_SPIT =
@@ -118,7 +118,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
     private int jjf$attackHoldTicks = 0;
 
     private boolean jjf$spinAttackHeld = false;
-    private int jjf$spinAttackTicks = 0;
+    private int jjf$spinStartTick;
 
     private boolean jjf$skill4WasDown = false;
     private boolean jjf$armsMode = false;
@@ -204,9 +204,11 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
 
     @Override
     public StandEntity getNewStandEntity() {
-        return ModEntities.JUMPIN_JACK_FLASH.create(
-                this.getSelf().level()
-        );
+        var stand = ModEntities.JUMPIN_JACK_FLASH.create(getSelf().level());
+        if (stand != null && !getSelf().level().isClientSide()) {
+            stand.jjf$setArmsMode(jjf$armsMode);
+        }
+        return stand;
     }
 
     @Override
@@ -416,7 +418,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
         jjf$useHoldTicks = 0;
         jjf$autoShooting = false;
         jjf$spinAttackHeld = true;
-        jjf$spinAttackTicks = 0;
+        jjf$spinStartTick = getSelf().tickCount;
         this.attackTimeDuring = 0;
         this.setAttackTime(0);
         this.setAttackTimeMax(SPIN_ATTACK_FULL_TICKS);
@@ -2196,12 +2198,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
             return;
         }
 
-        jjf$spinAttackTicks =
-                Mth.clamp(
-                        this.attackTimeDuring,
-                        0,
-                        SPIN_ATTACK_FULL_TICKS
-                );
+        int chargeTicks = getSpinChargeTicks();
 
         if (this.attackTimeDuring > SPIN_ATTACK_FULL_TICKS) {
             this.attackTimeDuring = SPIN_ATTACK_FULL_TICKS;
@@ -2211,13 +2208,12 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
                 Math.max(
                         0,
                         SPIN_ATTACK_FULL_TICKS
-                                - jjf$spinAttackTicks
+                                - chargeTicks
                 )
         );
 
         if (!(this.getSelf() instanceof Player)
-                && jjf$spinAttackTicks >= SPIN_ATTACK_FULL_TICKS) {
-            int chargeTicks = jjf$spinAttackTicks;
+                && chargeTicks >= SPIN_ATTACK_FULL_TICKS) {
             performSpinAttack(chargeTicks);
             finishSpinAttackState();
         }
@@ -2233,6 +2229,12 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
     @Override
     public int getBarrageLength() {
         return SPIN_ATTACK_FULL_TICKS;
+    }
+
+    private int getSpinChargeTicks() {
+        return jjf$spinAttackHeld
+                ? Mth.clamp(getSelf().tickCount - jjf$spinStartTick, 0, SPIN_ATTACK_FULL_TICKS)
+                : 0;
     }
 
     private double getSpinRawCharge(int chargeTicks) {
@@ -2260,7 +2262,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
                 Mth.clamp(
                         Math.max(
                                 SPIN_ATTACK_MIN_TICKS,
-                                jjf$spinAttackTicks
+                                getSpinChargeTicks()
                         ),
                         SPIN_ATTACK_MIN_TICKS,
                         SPIN_ATTACK_FULL_TICKS
@@ -2286,7 +2288,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
                         Mth.clamp(
                                 Math.max(
                                         SPIN_ATTACK_MIN_TICKS,
-                                        jjf$spinAttackTicks
+                                        getSpinChargeTicks()
                                 ),
                                 SPIN_ATTACK_MIN_TICKS,
                                 SPIN_ATTACK_FULL_TICKS
@@ -2340,7 +2342,6 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
 
     private void finishSpinAttackState() {
         jjf$spinAttackHeld = false;
-        jjf$spinAttackTicks = 0;
         animateStand(StandEntity.BARRAGE_FINISHER);
         this.attackTimeDuring = -10;
         this.setAttackTimeMax(10);
@@ -2394,7 +2395,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
                         + (
                         SPIN_ATTACK_MAX_KNOCKBACK
                                 - SPIN_ATTACK_MIN_KNOCKBACK
-                ) * forceCharge;
+                ) * rawCharge;
 
         if (target instanceof LivingEntity living
                 && living instanceof ZeroGravityAccess access
@@ -2423,7 +2424,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
         double vertical =
                 direction.y * knockback
                         + 0.16D
-                        + 0.44D * forceCharge;
+                        + 0.75D * rawCharge;
 
         target.setDeltaMovement(
                 direction.x * knockback,
@@ -2573,7 +2574,8 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
             ZeroGravityState state =
                     access.jjf$getZeroGravityState();
 
-            if (state.getSource() != ZeroGravitySource.SPREAD) {
+            if (state.getSource() != ZeroGravitySource.SPREAD
+                    && state.getSource() != ZeroGravitySource.FLOATING_BLOCK) {
                 continue;
             }
 
@@ -2620,8 +2622,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
         ZeroGravityState state =
                 access.jjf$getZeroGravityState();
 
-        if (state.getSource()
-                == ZeroGravitySource.SPREAD) {
+        if (state.isSpread() || state.getSource() == ZeroGravitySource.FLOATING_BLOCK) {
             return;
         }
 
@@ -2811,7 +2812,9 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
         ResourceLocation launcherIcon =
                 StandIcons.JJF_LOADING_ICON;
 
-        if (jjf$useWasDown) {
+        if (isHoldingSneak()) {
+            launcherIcon = StandIcons.JJF_ARMS_MODE_ICON;
+        } else if (jjf$useWasDown) {
             launcherIcon =
                     StandIcons.JJF_SHOOTING_ICON;
         } else if (isGuarding()) {
@@ -2955,6 +2958,20 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
                 bypass
         ));
 
+        icons.add(drawSingleGUIIcon(
+                context,
+                18,
+                leftPos + 77,
+                topPos + 80,
+                0,
+                "ability.jjf.arms_mode",
+                "instruction.roundabout.press_skill_crouch",
+                StandIcons.JJF_ARMS_MODE_ICON,
+                4,
+                level,
+                bypass
+        ));
+
         return icons;
     }
 
@@ -2973,7 +2990,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
         if (jjf$spinAttackHeld) {
             int cx = scaledWidth / 2 - 8;
             int cy = scaledHeight / 2 - 11;
-            int length = Mth.clamp(Math.round(15.0F * jjf$spinAttackTicks
+            int length = Mth.clamp(Math.round(15.0F * getSpinChargeTicks()
                     / SPIN_ATTACK_FULL_TICKS), 0, 15);
             context.blit(StandIcons.JOJO_ICONS, cx, cy, 193, 6, 15, 6);
             if (length > 0) {

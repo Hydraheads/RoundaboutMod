@@ -8,6 +8,9 @@ public class ZeroGravityState {
 
     private ZeroGravitySource source = ZeroGravitySource.NONE;
     private UUID ownerUUID;
+    UUID pressureBlock;
+    boolean resumeUserGravity;
+    int lastOwnPlatformTick = Integer.MIN_VALUE;
     private int zeroGravityTicks = 0;
     private int airPressureTicks = 0;
     private boolean jjf$commandPressureActive = false;
@@ -17,6 +20,7 @@ public class ZeroGravityState {
     private int swingImpulseCooldown = 0;
     private int zeroGravityToggleCooldown = 0;
     private int suctionLaunchSoundCooldown = 0;
+    int suctionBlockId = -1;
     private boolean suctioned = false;
     private boolean suctionLaunchSoundEnabled = false;
     private Direction suctionSurface;
@@ -38,6 +42,10 @@ public class ZeroGravityState {
     }
 
     public void setSource(ZeroGravitySource source) {
+        if (source != ZeroGravitySource.FLOATING_BLOCK) {
+            pressureBlock = null;
+            resumeUserGravity = false;
+        }
         this.source = source;
         if (source != ZeroGravitySource.SPREAD) {
             resetAirPressureTicks();
@@ -198,12 +206,13 @@ public class ZeroGravityState {
     }
 
     public void clearZeroGravity() {
-        source = ZeroGravitySource.NONE;
+        setSource(ZeroGravitySource.NONE);
         ownerUUID = null;
         zeroGravityTicks = 0;
         airPressureTicks = 0;
         outsideOwnerRangeTicks = 0;
         radius = 0.0F;
+        suctionBlockId = -1;
         suctioned = false;
         suctionSurface = null;
         swingImpulseCooldown = 0;

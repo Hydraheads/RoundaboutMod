@@ -251,9 +251,9 @@ public abstract class ConfigManager {
             MainUtil.kingNothingBlockSniffBlacklist.addAll(getAdvancedConfig().kingNothingBlockSniffBlacklist);
         }
 
-        if (getAdvancedConfig().kingNothingMobSniffBlacklist != null) {
+        if (getAdvancedConfig().kingNothingMobSniffBlacklistv2 != null) {
             MainUtil.kingNothingMobSniffBlacklist.clear();
-            MainUtil.kingNothingMobSniffBlacklist.addAll(getAdvancedConfig().kingNothingMobSniffBlacklist);
+            MainUtil.kingNothingMobSniffBlacklist.addAll(getAdvancedConfig().kingNothingMobSniffBlacklistv2);
         }
 
         if (getAdvancedConfig().silverChariotBlocksToSlabsV2 != null)
@@ -659,12 +659,12 @@ public abstract class ConfigManager {
     }
 
     public static void loadFoodClear(){
-        if (getAdvancedConfig().pearlJamFoodEffect != null){
+        if (getAdvancedConfig().pearlJamFoodEffectv2 != null){
             MainUtil.foodCuresThat.clear();
             MainUtil.foodAddsThat.clear();
             MainUtil.specialFoodRemoves.clear();
             MainUtil.pearlJamFallback = null;
-            for (String entry : getAdvancedConfig().pearlJamFoodEffect){
+            for (String entry : getAdvancedConfig().pearlJamFoodEffectv2){
                 try {
                     String[] split = entry.split(":");
                     if (split[0].equals("fallback")){

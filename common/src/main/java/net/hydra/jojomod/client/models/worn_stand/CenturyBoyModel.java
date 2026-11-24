@@ -152,6 +152,8 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 			"textures/stand/20_centuryboy/wandering.png");
 	public static ResourceLocation parasite = new ResourceLocation(Roundabout.MOD_ID,
 			"textures/stand/20_centuryboy/parasite.png");
+	public static ResourceLocation chorus = new ResourceLocation(Roundabout.MOD_ID,
+			"textures/stand/20_centuryboy/chorus.png");
 
 	public static ResourceLocation parasite_overlay = new ResourceLocation(Roundabout.MOD_ID,
 			"textures/stand/20_centuryboy/parasite_overlay.png");
@@ -181,6 +183,7 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 			case Powers20thCenturyBoy.GHOST -> {return  ghost;}
 			case Powers20thCenturyBoy.WANDERING -> {return  wandering;}
 			case Powers20thCenturyBoy.PARASITE -> {return  parasite;}
+			case Powers20thCenturyBoy.CHORUS -> {return  chorus;}
 			default -> {return manga;}
 		}
 	}
