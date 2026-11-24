@@ -175,6 +175,7 @@ public class PowersGER extends PowersGoldExperience {
                     lastSecond.resetHealth = false;
                     lastSecond.loadTime(livingCulprit);
                     setDazed(livingCulprit, (byte) 60);
+                    ((StandUser)livingCulprit).roundabout$sealStand(60);
 
                     if (livingCulprit instanceof ServerPlayer victim) {
                         Vec3 endPos = victim.position();
