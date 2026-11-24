@@ -955,6 +955,9 @@ public class ForgeEvents {
         ModParticles.AUTUMN_LEAVES = ForgeParticles.AUTUMN_LEAVES.get();
         ModParticles.GINKGO_LEAVES = ForgeParticles.GINKGO_LEAVES.get();
         ModParticles.RAIN_BUBBLE = ForgeParticles.RAIN_BUBBLE.get();
+        ModParticles.RAIN_SHARD_1 = ForgeParticles.RAIN_SHARD_1.get();
+        ModParticles.RAIN_SHARD_2 = ForgeParticles.RAIN_SHARD_2.get();
+        ModParticles.RAIN_SHARD_3 = ForgeParticles.RAIN_SHARD_3.get();
 
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();

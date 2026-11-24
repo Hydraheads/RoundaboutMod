@@ -135,5 +135,8 @@ public class FabricParticlesClient {
         ParticleFactoryRegistry.getInstance().register(FabricParticles.GINKGO_LEAVES, GinkgoLeavesParticle.Provider::new);
 
         ParticleFactoryRegistry.getInstance().register(FabricParticles.RAIN_BUBBLE, RainBubbleParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.RAIN_SHARD_1, RainShardParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.RAIN_SHARD_2, RainShardParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.RAIN_SHARD_3, RainShardParticle.Provider::new);
     }
 }

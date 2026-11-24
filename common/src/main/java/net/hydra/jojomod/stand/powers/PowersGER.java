@@ -15,6 +15,7 @@ import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaxStandDiscItem;
@@ -28,13 +29,17 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.NeutralMob;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -170,6 +175,7 @@ public class PowersGER extends PowersGoldExperience {
                     lastSecond.resetHealth = false;
                     lastSecond.loadTime(livingCulprit);
                     setDazed(livingCulprit, (byte) 60);
+                    ((StandUser)livingCulprit).roundabout$sealStand(60);
 
                     if (livingCulprit instanceof ServerPlayer victim) {
                         Vec3 endPos = victim.position();
@@ -202,6 +208,19 @@ public class PowersGER extends PowersGoldExperience {
 
         return super.interceptIncomingHarm(source, amount);
     }
+
+    // infinite death start
+
+    public boolean onKilledEntity(ServerLevel $$0, LivingEntity victim) {
+        if ( victim.getLastDamageSource() != null &&  victim.getLastDamageSource().is(ModDamageTypes.GER_STAND)) {
+            if (victim instanceof ServerPlayer serverPlayer) {
+                ((IPlayerEntity) serverPlayer).rdbt$setPendingGerCutscene(true);
+            }
+        }
+        return super.onKilledEntity($$0, victim);
+    }
+
+    // infinite death end
 
     // Buffs
 

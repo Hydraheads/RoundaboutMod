@@ -168,6 +168,13 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             EntityDataSerializers.ROTATIONS);
 
     @Unique
+    private boolean roundabout$pendingGerCutscene = false;
+    @Override
+    public boolean rdbt$isPendingGerCutscene() {return this.roundabout$pendingGerCutscene;}
+    @Override
+    public void rdbt$setPendingGerCutscene(boolean pending) {this.roundabout$pendingGerCutscene = pending;}
+
+    @Unique
     public Deque<Vec3> rdbt$movementHistory = new ArrayDeque<>();
 
     @Unique

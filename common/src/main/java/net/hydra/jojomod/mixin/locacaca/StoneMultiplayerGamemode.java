@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin.locacaca;
 
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -46,11 +47,11 @@ public class StoneMultiplayerGamemode {
             }
         }
     }
-    @Inject(method = "attack", at = @At("HEAD"), cancellable = true,require = 0)
+    @Inject(method = "attack", at = @At("HEAD"), require = 0)
     public void roundabout$attackDat(Player $$0, Entity $$1, CallbackInfo ci) {
         if ($$0 != null){
             StandPowers powers = ((StandUser)$$0).roundabout$getStandPowers();
-            if (powers.activePowerPhase != 0){
+            if (powers.activePowerPhase != 0 && !ClientNetworking.getAppropriateConfig().experimentalSettings.summonPunch){
                 powers.meleeSwapped = true;
             }
         }

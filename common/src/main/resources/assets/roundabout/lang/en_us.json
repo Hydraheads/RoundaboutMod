@@ -1356,7 +1356,10 @@
   "death.attack.air_pressure.player": "%1$s ran out of air",
   "death.attack.bramble": "%1$s was pricked to death by %2$s",
   "death.attack.bramble.player": "%1$s was pricked to death by %2$s",
-
+  "death.attack.ger_stand": "%1$s will never reach the truth",
+  "death.attack.ger_stand.item": "%1$s will never reach the truth",
+  "death.attack.ger_stand.player": "%1$s will never reach the truth",
+  "death.attack.ger_stand.player.item": "%1$s will never reach the truth",
 
   "item.glaive.charge_power": "Charge Attack",
 

@@ -4388,6 +4388,21 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
             this.roundabout$setIdleTime(-1);
         }
+
+        // all GER damage gets converted into GER stand damage for the infinite death and kill message
+        if (!this.level().isClientSide() && !$$0.is(ModDamageTypes.GER_STAND)) {
+            boolean isGERHit = MainUtil.isStandDamage($$0)
+                    && $$0.getEntity() instanceof LivingEntity attacker
+                    && ((StandUser) attacker).roundabout$getStandPowers() instanceof PowersGER
+                    || ($$0.getDirectEntity() instanceof ThrownObjectEntity thrown
+                    && thrown.getStyle() == ThrownObjectEntity.GERTHROW);
+
+            if (isGERHit) {
+                ci.setReturnValue(hurt(
+                        ModDamageTypes.of(this.level(), ModDamageTypes.GER_STAND, $$0.getDirectEntity(), $$0.getEntity()),
+                        $$1));
+            }
+        }
     }
 
     /**
@@ -5071,8 +5086,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
             }
 
-            if ($$0.getEntity() != null
-                    && !$$0.is(DamageTypes.THORNS)) {
+            if ($$0.getEntity() != null && !$$0.is(DamageTypes.THORNS)) {
                 if ($$0.getEntity() instanceof Player pe) {
                     if (((StandUser) pe).roundabout$getStandPowers().interceptSuccessfulDamageDealtEvent($$0, $$1,
                             ((LivingEntity) (Object) this))) {
@@ -5623,6 +5637,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "die(Lnet/minecraft/world/damagesource/DamageSource;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;setPose(Lnet/minecraft/world/entity/Pose;)V", shift = At.Shift.BEFORE), cancellable = true, require = 0)
     public void roundabout$die2(DamageSource $$0, CallbackInfo ci) {
+
         /** Corspe dropping, for Justice */
         //if ($$0.getDirectEntity() != null) {
             if ($$0.getDirectEntity() instanceof Player PE && ((PE.getMainHandItem().is(ModItems.EXECUTIONER_AXE)
@@ -5821,6 +5836,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 S2CPacketUtil.shatterIce(getId());
                 ci.cancel();
                 return;
+            }
+        }
+
+        // GER entity dissapear thing
+        if (damageSource.getEntity() != null && damageSource.is(ModDamageTypes.GER_STAND)) {
+            if (!level().isClientSide()) {
+                S2CPacketUtil.shatterIce(getId());
             }
         }
 
