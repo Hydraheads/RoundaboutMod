@@ -2,12 +2,15 @@ package net.hydra.jojomod.event.powers.jumpingJackFlash;
 
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.util.MainUtil;
+import java.util.UUID;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
@@ -21,8 +24,113 @@ public final class JJFFloatingBlocks {
     private JJFFloatingBlocks() {
     }
 
+    public interface SyncedFloatingBlock {
+        boolean jjf$isFloating();
+        UUID jjf$getFloatOwner();
+        void jjf$setFloatOwner(UUID owner);
+    }
+
     public static boolean isFloating(FallingBlockEntity block) {
+        if (block.level().isClientSide()) {
+            return ((SyncedFloatingBlock) block).jjf$isFloating();
+        }
         return block.getTags().contains(REAL_TAG) || block.getTags().contains(FAKE_TAG);
+    }
+
+    public static void carryRiders(FallingBlockEntity block, AABB before, Vec3 movement) {
+        double top = block.getBoundingBox().maxY;
+        AABB deck = new AABB(before.minX, before.maxY - 0.25D, before.minZ,
+                before.maxX, before.maxY + 0.06D, before.maxZ);
+        for (LivingEntity rider : block.level().getEntitiesOfClass(LivingEntity.class, deck)) {
+            double feet = rider.getBoundingBox().minY;
+            if (rider.noPhysics || rider.isPassenger() || rider.isSpectator()
+                    || feet < deck.minY || rider.getDeltaMovement().y > 0.01D
+                    || (block.level().isClientSide() && !rider.isControlledByLocalInstance())) {
+                continue;
+            }
+            if (rider instanceof ZeroGravityAccess access
+                    && access.jjf$getZeroGravityState().suctionBlockId == block.getId()) {
+                if (!block.level().isClientSide()
+                        && access.jjf$getZeroGravityState().getSuctionSurface() == net.minecraft.core.Direction.DOWN) {
+                    touchPlatform(block, rider);
+                }
+                continue;
+            }
+
+            rider.move(MoverType.SHULKER, new Vec3(movement.x, top - feet, movement.z));
+            AABB body = rider.getBoundingBox();
+            AABB platform = block.getBoundingBox();
+            if (Math.abs(body.minY - top) <= 0.001D
+                    && body.maxX > platform.minX && body.minX < platform.maxX
+                    && body.maxZ > platform.minZ && body.minZ < platform.maxZ) {
+                Vec3 velocity = rider.getDeltaMovement();
+                if (velocity.y < 0.0D) {
+                    rider.setDeltaMovement(velocity.x, 0.0D, velocity.z);
+                }
+                if (!block.level().isClientSide()) {
+                    touchPlatform(block, rider);
+                }
+                rider.setOnGround(true);
+                rider.fallDistance = 0.0F;
+            }
+        }
+    }
+
+    private static void touchPlatform(FallingBlockEntity block, LivingEntity rider) {
+        if (!(rider instanceof Player) || !(rider instanceof ZeroGravityAccess access)) {
+            return;
+        }
+        UUID owner = ((SyncedFloatingBlock) block).jjf$getFloatOwner();
+        ZeroGravityState state = access.jjf$getZeroGravityState();
+        if (owner == null) {
+            return;
+        }
+        if (owner.equals(rider.getUUID())) {
+            state.lastOwnPlatformTick = rider.tickCount;
+            return;
+        }
+        if (state.isSpread()) {
+            return;
+        }
+        if (state.getSource() != ZeroGravitySource.FLOATING_BLOCK) {
+            state.resumeUserGravity = state.isSafeUserZeroGravity();
+            state.setSource(ZeroGravitySource.FLOATING_BLOCK);
+            state.resetZeroGravityTicks();
+            state.setRestorationTicks(0);
+        }
+        state.pressureBlock = block.getUUID();
+        state.setOwnerUUID(owner);
+        rider.setNoGravity(true);
+        rider.fallDistance = 0;
+    }
+
+    static void tickExposure(LivingEntity rider, ZeroGravityState state) {
+        if (state.lastOwnPlatformTick != Integer.MIN_VALUE
+                && rider.tickCount - state.lastOwnPlatformTick > 1) {
+            state.lastOwnPlatformTick = Integer.MIN_VALUE;
+            if (!rider.onGround() && !state.isZeroGravity()) {
+                state.setRestorationTicks(20);
+            }
+        }
+        if (state.getSource() != ZeroGravitySource.FLOATING_BLOCK
+                || !(rider.level() instanceof ServerLevel level)) {
+            return;
+        }
+        Entity anchor = state.pressureBlock == null ? null : level.getEntity(state.pressureBlock);
+        if (anchor instanceof FallingBlockEntity block && block.isAlive() && isFloating(block)
+                && rider.position().distanceToSqr(block.getBoundingBox().getCenter()) <= 25.0D) {
+            return;
+        }
+        boolean resumeToggle = state.resumeUserGravity;
+        state.clearZeroGravity();
+        if (resumeToggle) {
+            state.setSource(ZeroGravitySource.USER_TOGGLE);
+            state.setOwnerUUID(rider.getUUID());
+        } else {
+            rider.setNoGravity(false);
+            state.setRestorationTicks(20);
+        }
+        rider.fallDistance = 0;
     }
 
     public static boolean floatBlock(ServerLevel level, BlockPos pos, Entity owner) {
@@ -62,6 +170,7 @@ public final class JJFFloatingBlocks {
             block.addTag(FAKE_TAG);
             level.addFreshEntity(block);
         }
+        ((SyncedFloatingBlock) block).jjf$setFloatOwner(owner.getUUID());
         block.setNoGravity(true);
         block.setDeltaMovement(owner.getLookAngle().scale(0.07D).add(0.0D, 0.07D, 0.0D));
         block.hasImpulse = true;
