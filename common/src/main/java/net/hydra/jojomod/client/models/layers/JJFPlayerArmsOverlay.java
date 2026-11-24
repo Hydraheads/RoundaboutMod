@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.stand.JumpinJackFlashModel;
 import net.hydra.jojomod.client.models.stand.renderers.JumpinJackFlashRenderer;
+import net.hydra.jojomod.entity.stand.JumpinJackFlashEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.stand.powers.PowersJumpinJackFlash;
@@ -28,7 +29,8 @@ public final class JJFPlayerArmsOverlay {
     public static boolean shouldRender(LivingEntity entity) {
         return entity instanceof StandUser user
                 && user.roundabout$getStandPowers() instanceof PowersJumpinJackFlash powers
-                && powers.jjf$isArmsMode()
+                && (user.roundabout$getStand() instanceof JumpinJackFlashEntity stand
+                        ? stand.jjf$isArmsMode() : powers.jjf$isArmsMode())
                 && entity.isAlive()
                 && PowerTypes.hasStandActive(entity)
                 && ClientUtil.canSeeStands(ClientUtil.getPlayer());
