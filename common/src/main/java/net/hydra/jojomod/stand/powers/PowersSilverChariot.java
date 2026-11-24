@@ -3678,10 +3678,11 @@ public class PowersSilverChariot extends NewPunchingStand {
             }
         }
         */
-        if (freezeAttackInput <= 0  && (isUsableMountEntity(mountEntity)) && this.activePower != SILVER_CHARIOT_THROW_USER) {
+        if (!onCooldown(PowerIndex.SKILL_4) && freezeAttackInput <= 0  && (isUsableMountEntity(mountEntity)) && this.activePower != SILVER_CHARIOT_THROW_USER) {
             // Self throw ability
             if (!this.self.level().isClientSide() && hardBlocker < 0) {
                 hardBlocker = 3;
+
                 return false;
             }
 
@@ -3695,6 +3696,14 @@ public class PowersSilverChariot extends NewPunchingStand {
 
             bonusLeapCount = 3;
             freezeAttackInput = 40;
+            if (!this.self.level().isClientSide()) {
+                int cdr = getCooldownSelfThrow();
+
+                if (this.self instanceof Player player) {
+                    S2CPacketUtil.sendCooldownSyncPacket((ServerPlayer) player, PowerIndex.SKILL_4, cdr);
+                }
+                this.setCooldown(PowerIndex.SKILL_4, cdr);
+            }
             bigLeap(this.getSelf(), 20, 1);
             ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
             ((StandUser) this.getSelf()).roundabout$setLeapIntentionally(true);
