@@ -597,6 +597,8 @@ public class StandIcons {
             "textures/gui/icons/silver_chariot/fall_brace.png");
     public static final ResourceLocation SILVER_CHARIOT_VAULT = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/silver_chariot/stand_ledge_grab.png");
+    public static final ResourceLocation SILVER_CHARIOT_VAULT_2 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/silver_chariot/stand_ledge_grab_2.png");
     public static final ResourceLocation SILVER_CHARIOT_SLAB_CUTTING = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/silver_chariot/slab_cutting.png");
     public static final ResourceLocation SILVER_CHARIOT_STATUE_CUTTING = new ResourceLocation(Roundabout.MOD_ID,
