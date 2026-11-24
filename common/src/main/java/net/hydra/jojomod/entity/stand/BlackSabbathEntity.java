@@ -194,7 +194,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
      switch (bt) {
          case 0 -> {
              coat_open.startIfStopped(this.tickCount);
-             this.emerge.start(this.tickCount);
          }
          /* 1 and 2: Black Sabbath chest */
          case 1 -> {
@@ -1249,7 +1248,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         }
     }
 
-    /*Mob AI*/
+    /*The REAL stand behaviour*/
     public LivingEntity shadowHidTarget() {
         if (this.level() != null) {
             List<LivingEntity> lvent = this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(3.5, 9, 3.5), (livingEntity) -> {
@@ -1499,12 +1498,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                         lungeTicks--;
                     }
                 }
-                String test = "";
-                if(this.level().isClientSide()){
-                    test = "Level is Clientside";
-                } else {
-                    test = "Level is Serverside";
-                }
                 if(getThrowable() || getTridentLoyalty() || getMoveMode() == 1){
                     if(getHasTargets()){
                         if(getStrafing()) {
@@ -1533,7 +1526,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                         setGrabbingSoul(0);
                     }
                     if(getGrabbing() != 0 && meleeInteractionTicks == -1){
-                    //    System.out.println(getGrabbing());
                         setMeleeInteractionTicks(220);
                     }
                     if (!isBlackSabbathUnderLight()) {
@@ -1668,7 +1660,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                             lungeTicks = 51;
                         }
                     } else {
-                        //setUnrender(false);
                         if(this.getNavigation() != null) {
                             this.getNavigation().setSpeedModifier(0);
                         }
