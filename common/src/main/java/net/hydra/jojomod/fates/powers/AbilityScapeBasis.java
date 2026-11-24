@@ -1379,6 +1379,7 @@ public class AbilityScapeBasis {
     public boolean hasTangibleNerf(LivingEntity User, Entity target){
         boolean test = !standOutLongEnough(User) && ClientNetworking.getAppropriateConfig().miscellaneousSettings.meleeSwapPenalty
                 && getReducedDamage(target)
+                && !ClientNetworking.getAppropriateConfig().experimentalSettings.summonPunch; // summon punch testing won't conflict with the nerfs
                 ;
         //Roundabout.LOGGER.info("test"+test);
         return test;
