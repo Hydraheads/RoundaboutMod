@@ -33,6 +33,9 @@ public class JumpinJackFlashRenderer
     @Override
     public void render(JumpinJackFlashEntity mobEntity, float f, float g,
                        PoseStack matrixStack, MultiBufferSource buffers, int light) {
+        if (mobEntity.jjf$isArmsMode()) {
+            return;
+        }
         float factor = 0.5F + mobEntity.getSizePercent() / 2.0F;
         float size = (mobEntity.isBaby() ? 0.5F : 0.87F) * factor;
         matrixStack.scale(size, size, size);
