@@ -71,6 +71,9 @@ public class ModItemModels {
     public static ModelResourceLocation IRON_BALL_CROSSBOW_PULLING_2 =
             new ModelResourceLocation(Roundabout.MOD_ID, "iron_ball_crossbow_pulling_2", "inventory");
 
+    public static ModelResourceLocation ZOMBIE_HORSE_THREAD_BROKEN = new ModelResourceLocation(Roundabout.MOD_ID, "zombie_horse_thread_broken", "inventory");
+    public static ModelResourceLocation ZOMBIE_HORSE_THREAD = new ModelResourceLocation(Roundabout.MOD_ID, "zombie_horse_thread", "inventory");
+
     public static HarpoonModel HARPOON_MODEL;
     public static SnubnoseRevolverModel SNUBNOSE_MODEL;
     public static TommyGunModel TOMMY_GUN_MODEL;

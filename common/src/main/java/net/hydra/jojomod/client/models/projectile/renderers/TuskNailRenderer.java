@@ -105,15 +105,17 @@ public class TuskNailRenderer extends EntityRenderer<TuskNailEntity> {
                 );
 
                 /// spiral
-                TrailRenderer.drawTrailRaw(
-                        anchor,
-                        spirals,
-                        poseStack.last(),
-                        $$5,
-                        partialTicks,
-                        golden,
-                        bufferSource
-                );
+                if ($$0.getExtra() == TuskNailEntity.GOLDEN || $$0.getAct() == 4) {
+                    TrailRenderer.drawTrailRaw(
+                            anchor,
+                            spirals,
+                            poseStack.last(),
+                            $$5,
+                            partialTicks,
+                            golden,
+                            bufferSource
+                    );
+                }
 
 
                 poseStack.popPose();

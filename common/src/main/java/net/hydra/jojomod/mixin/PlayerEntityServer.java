@@ -5,9 +5,13 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerEntityServer;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.gui.BlackSabbathPlayerInventoryMenu;
+import net.hydra.jojomod.client.gui.D4CCloneInventoryMenu;
+import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -24,10 +28,12 @@ import net.minecraft.world.Container;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -106,6 +112,11 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
             }
             ((IPlayerEntity) this).roundabout$getMaskInventory().update();
             ((IPlayerEntity) this).roundabout$getBlckSabbathPlayerInventory().update();
+            IPlayerEntity ipe = (IPlayerEntity) this;
+            if (ipe.rdbt$isPendingGerCutscene() && this.isAlive()) {
+                ipe.rdbt$setPendingGerCutscene(false);
+                PowerTypes.setPlaneOfExisting((Entity) this, (byte) 13);
+            }
         }
     }
 
@@ -185,6 +196,10 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
 
             ipe.rdbt$setVampireData(((IPlayerEntity) $$0).rdbt$getVampireData());
             ipe.roundabout$setPower(((IPlayerEntity) $$0).roundabout$getPower());
+
+            if (!$$1 && ((IPlayerEntity) $$0).rdbt$isPendingGerCutscene()) {
+                ipe.rdbt$setPendingGerCutscene(true);
+            }
         }
     }
 
@@ -196,6 +211,16 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
         this.nextContainerCounter();
         Services.PACKET_HELPER.sendBlackSabbathChestOpenPacket((ServerPlayer) (Object) this, $$1);
         this.containerMenu = new BlackSabbathPlayerInventoryMenu(this.getInventory(), this, this.containerCounter);
+        this.initMenu(this.containerMenu);
+    }
+    public void roundabout$openD4CCloneInventory(D4CCloneEntity $$0, Container $$1) {
+        ServerPlayer player = (ServerPlayer) (Object) this;
+        if(this.containerMenu != this.inventoryMenu){
+            this.closeContainer();
+        }
+        this.nextContainerCounter();
+        Services.PACKET_HELPER.sendD4CCloneInventoryOpenPacket((ServerPlayer) (Object) this, $$0, $$1);
+        this.containerMenu = new D4CCloneInventoryMenu(this.containerCounter, this.getInventory(), $$0, $$0.inventory);
         this.initMenu(this.containerMenu);
     }
 

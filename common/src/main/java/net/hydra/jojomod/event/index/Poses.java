@@ -55,7 +55,9 @@ public enum Poses {
 
     UNCOWER((byte) 36, PoseAnimations.Uncower),
 
-    BITE_FINGERS((byte) 37, PoseAnimations.Finger_bite);
+    BITE_FINGERS((byte) 37, PoseAnimations.Finger_bite),
+
+    FULLBODYDODGE((byte) 43, PoseAnimations.FULLBODYDODGE);
 
     public final byte id;
 
@@ -147,6 +149,8 @@ public enum Poses {
             return UNCOWER;
         } if (bt == BITE_FINGERS.id){
             return BITE_FINGERS;
+        } if (bt == FULLBODYDODGE.id){
+            return FULLBODYDODGE;
         }
         return NONE;
     }
@@ -189,6 +193,8 @@ public enum Poses {
             emote = Poses.UNCOWER.ad;
         } else if (Poses.BITE_FINGERS.id == poseEmote) {
             return Poses.BITE_FINGERS.ad;
+        } else if (Poses.FULLBODYDODGE.id == poseEmote) {
+            return Poses.FULLBODYDODGE.ad;
         }
         return emote;
     }

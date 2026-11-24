@@ -3,6 +3,8 @@ package net.hydra.jojomod.mixin.gravity;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityLivingEntity;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.HallucinationRenderOffset;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.mixin.StandUserEntity;
@@ -620,9 +622,10 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
             cancellable = true, require = 0
     )
     private void roundabout$tickEffects(CallbackInfo ci) {
-        Entity ent = ((Entity) (Object) this);
+        LivingEntity ent = ((LivingEntity) (Object) this);
+        MobEffectInstance effect = ent.getEffect(ModEffects.HALLUCINATION);
         Direction gravityDirection = GravityAPI.getGravityDirection(ent);
-        if (gravityDirection == Direction.DOWN) return;
+        if (gravityDirection == Direction.DOWN && (effect == null || effect.getAmplifier() < 1)) return;
         ci.cancel();
         if (PowerTypes.isExistentiallyElsewhere(ent) &&
                 !(level().isClientSide() && !PowerTypes.isInADifferentExistence(ent,
@@ -714,7 +717,9 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
                 this.level()
                         .addParticle(
                                 $$4 ? ParticleTypes.AMBIENT_ENTITY_EFFECT : ParticleTypes.ENTITY_EFFECT,
-                                vec3d.x,vec3d.y,vec3d.z,
+                                vec3d.x + HallucinationRenderOffset.forEntity((LivingEntity) (Object) this).x
+                                ,vec3d.y,
+                                vec3d.z + HallucinationRenderOffset.forEntity((LivingEntity) (Object) this).z,
                                 $$7,
                                 $$8,
                                 $$9

@@ -5,14 +5,11 @@ import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
 import net.hydra.jojomod.entity.stand.GoldExperienceEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.stand.powers.PowersGoldExperience;
-import net.minecraft.client.animation.AnimationDefinition;
-import net.minecraft.client.animation.KeyframeAnimations;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.AnimationState;
 
 public class GoldExperienceModel<T extends GoldExperienceEntity> extends StandModel<T>{
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
@@ -92,6 +89,8 @@ public class GoldExperienceModel<T extends GoldExperienceEntity> extends StandMo
         this.Two = this.kick_barrage.getChild("Two");
         this.Three = this.kick_barrage.getChild("Three");
         this.Four = this.kick_barrage.getChild("Four");
+        this.rightHand = this.lower_right_arm;
+        this.leftHand = this.lower_left_arm;
     }
 
     public static LayerDefinition getTexturedModelData() {
@@ -258,11 +257,26 @@ public class GoldExperienceModel<T extends GoldExperienceEntity> extends StandMo
         defaultModifiers(pEntity);
         defaultAnimations(pEntity, pAgeInTicks, 1/((float) Power.getBarrageWindup() /20));
         this.animate(pEntity.lifePunch, GoldExperienceAnimations.LIFE_PUNCH, pAgeInTicks, 1f);
+        this.animate(pEntity.doublePunch, GoldExperienceAnimations.DOUBLE_PUNCH, pAgeInTicks, 1f);
+        this.animate(pEntity.healWindup, GoldExperienceAnimations.HEAL_WINDUP, pAgeInTicks, 1f);
+        this.animate(pEntity.healOthers, GoldExperienceAnimations.HEAL_OTHERS, pAgeInTicks, 1f);
+        this.animate(pEntity.healSelf, GoldExperienceAnimations.HEAL_SELF, pAgeInTicks, 1.1f);
+        this.animate(pEntity.groundPunch, GoldExperienceAnimations.TREE, pAgeInTicks, 1f);
+        this.animate(pEntity.thisIsRequiemAnimation, GoldExperienceAnimations.awaken_GE, pAgeInTicks, 1f);
+
         this.animate(pEntity.hideLeg, StandAnimations.HIDE_LEG, pAgeInTicks, 1f);
         this.animate(pEntity.kick_barrage, StandAnimations.KICK_BARRAGE, pAgeInTicks, 1.25f);
         this.animate(pEntity.kick_barrage_windup, StandAnimations.KICK_BARRAGE_CHARGE, pAgeInTicks, 1f);
         this.animate(pEntity.kick_barrage_end, StandAnimations.KICK_BARRAGE_END, pAgeInTicks, 1f);
         this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1f);
+
+        this.animate(pEntity.entityGrabAnimation, StandAnimations.GRAB_BLOCK, pAgeInTicks, 3f);
+        this.animate(pEntity.blockGrabAnimation, StandAnimations.GRAB_BLOCK, pAgeInTicks, 1f);
+        this.animate(pEntity.blockThrowAnimation, StandAnimations.THROW_BLOCK, pAgeInTicks, 1.7f);
+        this.animate(pEntity.itemGrabAnimation, StandAnimations.GRAB_ITEM, pAgeInTicks, 1f);
+        this.animate(pEntity.itemThrowAnimation, StandAnimations.THROW_ITEM, pAgeInTicks, 1.25f);
+        this.animate(pEntity.blockRetractAnimation, StandAnimations.RETRACT_BLOCK, pAgeInTicks, 1.25f);
+        this.animate(pEntity.itemRetractAnimation, StandAnimations.RETRACT_ITEM, pAgeInTicks, 1.25f);
     }
 
     @Override

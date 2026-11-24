@@ -13,7 +13,6 @@ import net.hydra.jojomod.client.gui.diverdown.*;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.client.models.visages.parts.FirstPersonArmsModel;
 import net.hydra.jojomod.client.models.visages.parts.FirstPersonArmsSlimModel;
-import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.KingCrimsonProjectionEntity;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerAmbientSound;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerExplosionSound;
@@ -23,6 +22,7 @@ import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
+import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.entity.substand.MoldSporesEntity;
 import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
@@ -40,7 +40,6 @@ import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.entity.TickableSoundInstances.BowlerHatFlyingSound;
 import net.hydra.jojomod.menu.GamblingTableMenu;
 import net.hydra.jojomod.menu.gambling_games.CoinDropGame;
-import net.hydra.jojomod.platform.ClientServices;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
@@ -67,10 +66,8 @@ import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.hydra.jojomod.networking.ServerToClientPackets;
@@ -87,6 +84,8 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.animal.allay.Allay;
+import net.minecraft.world.entity.monster.Vex;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.*;
 import net.hydra.jojomod.entity.corpses.FallenMob;
@@ -242,6 +241,49 @@ public class ClientUtil {
                     ipe.roundabout$setIsControlling(0);
                     C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_UPDATE_PILOT,0);
                     ClientUtil.setCameraEntity(null);
+                }
+            }
+            if (rtzTicks > -1) {
+                if (pl instanceof LocalPlayer lp) {
+                    applyRTZClientDrag(lp, 0.0F);
+                    if (rtzTicks >= 6) {
+                        Vec3 currentPos = lp.position();
+                        if (lastRTZAfterimagePos == null || currentPos.distanceToSqr(lastRTZAfterimagePos) >= 1.5D) {
+                            rtzAfterimages.add(new RTZAfterimage(lp, 24));
+                            lastRTZAfterimagePos = currentPos;
+                        }
+                    }
+                }
+                rtzTicks++;
+                if (rtzTicks >= RTZ_DURATION) {
+                    if (pl instanceof LocalPlayer lp && rtzEndPos != null) {
+                        lp.setPos(rtzEndPos.x, rtzEndPos.y, rtzEndPos.z);
+                        lp.xo = rtzEndPos.x;
+                        lp.yo = rtzEndPos.y;
+                        lp.zo = rtzEndPos.z;
+                        lp.setYRot(rtzEndYaw);
+                        lp.setXRot(rtzEndPitch);
+                        lp.yRotO = rtzEndYaw;
+                        lp.xRotO = rtzEndPitch;
+                        lp.setDeltaMovement(Vec3.ZERO);
+                        lp.noPhysics = false;
+                    }
+                    rtzTicks = -1;
+                    rtzStartPos = null;
+                    rtzEndPos = null;
+                    lastRTZAfterimagePos = null;
+                    rtzBlockFragments.clear();
+                }
+            }
+
+            if (!rtzAfterimages.isEmpty()) {
+                Iterator<RTZAfterimage> it = rtzAfterimages.iterator();
+                while (it.hasNext()) {
+                    RTZAfterimage img = it.next();
+                    img.age++;
+                    if (img.age >= img.maxAge) {
+                        it.remove();
+                    }
                 }
             }
         }
@@ -466,7 +508,7 @@ public class ClientUtil {
         }
     }
 
-    public static void preRenderGrabbedSoul(BlackSabbathEntity ent, StandEntity se, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6) {
+    public static void preRenderGrabbedSoul(BlackSabbathEntity ent, StandEntity se, Entity allayVex , double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6) {
         float lerpYRot = (float) ((ILivingEntityAccess)ent).roundabout$getLerpYRot();
         ent.yRotO = lerpYRot;
         ent.setYRot(lerpYRot);
@@ -474,9 +516,13 @@ public class ClientUtil {
         ent.setYHeadRot(lerpYRot);
         LivingEntity user = ent.getUser();
         LivingEntity user2 = ent.getUser();
-        if (user != null){
-            ent.travelAheadSoulRender($$4, se);
-        }
+            if(se != null) {
+                ent.travelAheadSoulRender($$4, se, null);
+            } else {
+                if(allayVex != null && (allayVex instanceof Allay || allayVex instanceof Vex)) {
+                    ent.travelAheadSoulRender($$4, null, allayVex);
+                }
+            }
     }
 
     public static void preRenderCrossfire(CrossfireHurricaneEntity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6){
@@ -1104,6 +1150,49 @@ public class ClientUtil {
                         }
                     }
                 }
+                else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncKqInflaton.value)) {
+                    Player pl = Minecraft.getInstance().player;
+
+                    if (pl != null && pl.level() != null) {
+                        int targetID = (int) vargs[0];
+                        int inflation = (int) vargs[1];
+                        if (pl.level().getEntity(targetID) instanceof LivingEntity LE) {
+                            ((StandUser)LE).roundabout$setExplosionInflation(inflation);
+                        }
+                    }
+                }
+
+                else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.KnAddItemContainer.value)) {
+                    BlockPos pos = (BlockPos) vargs[0];
+                    BlockPos pos2 = (BlockPos) vargs[1];
+                    if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingNothing pkn) {
+                        pkn.addItemBlockPos(pos, pos2);
+                    }
+                }
+
+                else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.KnRemoveItemContainer.value)) {
+                    BlockPos pos = (BlockPos) vargs[0];
+                    if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingNothing pkn) {
+                        pkn.removeItemBlockPos(pos);
+                    }
+                }
+                else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.StartRTZ.value)) {
+                    double sx = (double) vargs[0];
+                    double sy = (double) vargs[1];
+                    double sz = (double) vargs[2];
+                    double ex = (double) vargs[3];
+                    double ey = (double) vargs[4];
+                    double ez = (double) vargs[5];
+                    float sYaw = (float) vargs[6];
+                    float sPitch = (float) vargs[7];
+                    float eYaw = (float) vargs[8];
+                    float ePitch = (float) vargs[9];
+                    ClientUtil.startRTZClient(
+                            new Vec3(sx, sy, sz),
+                            new Vec3(ex, ey, ez),
+                            sYaw, sPitch, eYaw, ePitch
+                    );
+                }
 
                 // theoretical deregister dynamic worlds packet
                 // String name = buf.readUtf();
@@ -1243,6 +1332,12 @@ public class ClientUtil {
             if (user.roundabout$getStandPowers() instanceof PowersCalifornia ckb){
                 ckb.leadedInt = data;
             }
+        } else if (context == PacketDataIndex.S2C_IN_PURPLE_HAZE_TICKS) {
+            ((StandUser) player).SetInPurpleHazeTicks(data);
+        } else if (context == PacketDataIndex.S2C_IN_DISTORTION_HAZE_TICKS) {
+            ((StandUser) player).SetInDistortionHazeTicks(data);
+        } else if (context == PacketDataIndex.S2C_PURPLE_HAZE_SKIN) {
+            ((StandUser) player).SetPurpleHazeSkin((byte)data);
         } else if (context == PacketDataIndex.S2C_INT_LVL_DECREASE) {
             IPlayerEntity ipe = ((IPlayerEntity) player);
             ipe.rdbt$setLevelDecreaseTicks(data);
@@ -1250,6 +1345,22 @@ public class ClientUtil {
             StandUser user = ((StandUser) player);
             if (user.roundabout$getStandPowers() instanceof PowersKingCrimson ckb){
                 ckb.disengageTargetInt = data;
+            }
+        } else if (context == PacketDataIndex.S2C_KN_ADD_HIGHLIGHT_ENTITY) {
+            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingNothing kn) {
+                kn.addItemEntity(data);
+            }
+        } else if (context == PacketDataIndex.S2C_KN_REMOVE_HIGHLIGHT_ENTITY) {
+            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingNothing kn) {
+                kn.removeItemEntity(data);
+            }
+        } else if (context == PacketDataIndex.S2C_KN_SYNC_FORM_PREDICT_BLOCK) {
+            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingNothing kn) {
+                kn.setMemorizedScent(BuiltInRegistries.BLOCK.byId(data));
+            }
+        } else if (context == PacketDataIndex.S2C_KN_SYNC_FORM_PREDICT_ENTITY) {
+            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingNothing kn) {
+                kn.setMemorizedScent(BuiltInRegistries.ENTITY_TYPE.byId(data));
             }
         }
     }
@@ -1300,6 +1411,16 @@ public class ClientUtil {
             }
         }
         return false;
+    }
+
+    public static boolean canSilverChariotControlModeSeeParticles() {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PSC.isPiloting()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static float getGameTimeStart(){
@@ -1784,7 +1905,9 @@ public class ClientUtil {
     public static void openDisguiseScreen() {Minecraft.getInstance().setScreen(new DiverDownDisguiseScreen());}
     //Diver Down UI end
 
+    //GE UI
     public static void openAnimalSelect(){Minecraft.getInstance().setScreen(new AnimalSelectScreen());}
+    public static void openItemImbue(){Minecraft.getInstance().setScreen(new ItemImbueScreen());}
 
     public static void strikePose(Player player, Minecraft C, boolean keyIsDown, Options option) {
         if (keyIsDown){
@@ -2577,7 +2700,7 @@ public class ClientUtil {
             }
 
             Item item = play.getUseItem().getItem();
-            if (item instanceof FirearmItem) {
+            if (item instanceof FirearmItem && PowersGoldExperience.getDisguisedDisplayStack(play.getUseItem()).isEmpty()) {
                 stack.pushPose();
 
                 FirstPersonArmsModel.player = play;
@@ -2919,5 +3042,168 @@ public class ClientUtil {
         boolean forwardOrBack = client.options.keyUp.isDown() || client.options.keyDown.isDown();
         boolean strafe = client.options.keyLeft.isDown() || client.options.keyRight.isDown();
         return forwardOrBack && strafe;
+    }
+
+    // return to zero stuff for interp, etc.
+    public static int rtzTicks = -1;
+    public static final int RTZ_DURATION = 60;
+    public static Vec3 rtzStartPos = null;
+    public static Vec3 rtzEndPos = null;
+    public static float rtzStartYaw = 0.0F;
+    public static float rtzStartPitch = 0.0F;
+    public static float rtzEndYaw = 0.0F;
+    public static float rtzEndPitch = 0.0F;
+
+    public static boolean isUnderRTZ() {
+        return rtzTicks > -1;
+    }
+
+    public static void startRTZClient(Vec3 startPos, Vec3 endPos, float startYaw, float startPitch, float endYaw, float endPitch) {
+        rtzTicks = 0;
+        rtzStartPos = startPos;
+        rtzEndPos = endPos;
+        rtzStartYaw = startYaw;
+        rtzStartPitch = startPitch;
+        rtzEndYaw = endYaw;
+        rtzEndPitch = endPitch;
+
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null && startPos != null) {
+            double rand = Math.random();
+            if (rand > 0.25) {
+                playSound(ModSounds.RETURN_TO_ZERO_EVENT, player, 1.0F, 1.0F);
+            }
+            playSound(ModSounds.RETURN_TO_ZERO_REWIND_EVENT, player, 1.0F, 1.0F);
+            player.setPos(startPos.x, startPos.y, startPos.z);
+            player.xo = startPos.x;
+            player.yo = startPos.y;
+            player.zo = startPos.z;
+            player.setDeltaMovement(Vec3.ZERO);
+            if (player.level() instanceof ClientLevel cl) {
+                captureRTZBlocks(cl, endPos != null ? endPos : startPos);
+            }
+        }
+    }
+
+    public static void applyRTZClientDrag(LocalPlayer player, float partialTick) {
+        if (!isUnderRTZ() || rtzStartPos == null || rtzEndPos == null) return;
+
+        float progress = Mth.clamp((rtzTicks + partialTick) / (float) RTZ_DURATION, 0.0F, 1.0F);
+        float eased = progress * progress * (3.0F - 2.0F * progress);
+
+        double x = Mth.lerp(eased, rtzStartPos.x, rtzEndPos.x);
+        double y = Mth.lerp(eased, rtzStartPos.y, rtzEndPos.y);
+        double z = Mth.lerp(eased, rtzStartPos.z, rtzEndPos.z);
+
+        player.setPos(x, y, z);
+        player.xo = x;
+        player.yo = y;
+        player.zo = z;
+        player.setDeltaMovement(Vec3.ZERO);
+        player.noPhysics = true;
+
+        float yaw = Mth.rotLerp(eased, rtzStartYaw, rtzEndYaw);
+        float pitch = Mth.lerp(eased, rtzStartPitch, rtzEndPitch);
+        player.setYRot(yaw);
+        player.setXRot(pitch);
+        player.yRotO = yaw;
+        player.xRotO = pitch;
+    }
+
+    public static class RTZAfterimage {
+        public final double x, y, z;
+        public final float yRot, bodyRot, headRot, xRot;
+        public final float walkDist, walkSpeed;
+        public int age = 0;
+        public final int maxAge;
+
+        public RTZAfterimage(LocalPlayer player, int maxAge) {
+            this.x = player.getX();
+            this.y = player.getY();
+            this.z = player.getZ();
+            this.yRot = player.getYRot();
+            this.bodyRot = player.yBodyRot;
+            this.headRot = player.yHeadRot;
+            this.xRot = player.getXRot();
+            this.walkDist = player.walkAnimation.position();
+            this.walkSpeed = player.walkAnimation.speed();
+            this.maxAge = maxAge;
+        }
+    }
+
+    public static final List<RTZAfterimage> rtzAfterimages = new ArrayList<>();
+    public static Vec3 lastRTZAfterimagePos = null;
+
+    public static class RTZBlockFragment {
+        public final net.minecraft.world.level.block.state.BlockState state;
+        public final Vec3 originPos;
+        public final Vec3 scatteredPos;
+        public final float spinX, spinY, spinZ;
+        public final int packedLight;
+
+        public RTZBlockFragment(net.minecraft.world.level.block.state.BlockState state,
+                                Vec3 originPos, Vec3 scatteredPos,
+                                float spinX, float spinY, float spinZ, int packedLight) {
+            this.state = state;
+            this.originPos = originPos;
+            this.scatteredPos = scatteredPos;
+            this.spinX = spinX;
+            this.spinY = spinY;
+            this.spinZ = spinZ;
+            this.packedLight = packedLight;
+        }
+    }
+
+    public static final List<RTZBlockFragment> rtzBlockFragments = new ArrayList<>();
+
+    public static void captureRTZBlocks(ClientLevel level, Vec3 center) {
+        rtzBlockFragments.clear();
+        if (level == null || center == null) return;
+
+        int radius = 10;
+        BlockPos origin = BlockPos.containing(center);
+        RandomSource rng = level.random;
+
+        for (BlockPos pos : BlockPos.betweenClosed(
+                origin.offset(-radius, -radius, -radius),
+                origin.offset(radius, radius, radius))) {
+
+            if (pos.distSqr(origin) > radius * radius) continue;
+
+            net.minecraft.world.level.block.state.BlockState state = level.getBlockState(pos);
+            if (state.isAir() || !state.getFluidState().isEmpty()) continue;
+
+            // only a few blocks around the client are snapshotted because otherwise their pcs would literally explode
+            boolean exposed = false;
+            for (Direction dir : Direction.values()) {
+                if (!level.getBlockState(pos.relative(dir)).isSolidRender(level, pos.relative(dir))) {
+                    exposed = true;
+                    break;
+                }
+            }
+            if (!exposed) continue;
+
+            Vec3 blockCenter = Vec3.atCenterOf(pos);
+            Vec3 away = blockCenter.subtract(center);
+            if (away.lengthSqr() < 0.01) {
+                away = new Vec3(rng.nextDouble() - 0.5, 0.5, rng.nextDouble() - 0.5);
+            }
+            Vec3 dir = away.normalize();
+
+            double scatterDist = 8.0 + rng.nextDouble() * 14.0;
+            double verticalOffset = (rng.nextDouble() - 0.35) * 10.0;
+            Vec3 scattered = blockCenter
+                    .add(dir.scale(scatterDist))
+                    .add(0.0, verticalOffset, 0.0);
+
+            float sx = (rng.nextFloat() - 0.5F) * 540.0F;
+            float sy = (rng.nextFloat() - 0.5F) * 540.0F;
+            float sz = (rng.nextFloat() - 0.5F) * 540.0F;
+
+            int light = LevelRenderer.getLightColor(level, pos);
+            rtzBlockFragments.add(new RTZBlockFragment(
+                    state, blockCenter, scattered, sx, sy, sz, light
+            ));
+        }
     }
 }

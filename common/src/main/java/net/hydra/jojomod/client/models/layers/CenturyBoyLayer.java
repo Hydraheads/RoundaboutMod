@@ -12,6 +12,9 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
+import net.hydra.jojomod.stand.powers.PowersHeyYa;
+import net.hydra.jojomod.stand.powers.PowersMandom;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -46,15 +49,28 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 boolean hasCB = (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy);
                 boolean standOut = (PowerTypes.hasStandActive(entity) && hasCB);
                 if (!entity.isInvisible()) {
-                    int CBticks = user.roundabout$getCBVanishTicks();
+                    int CBticks = MainUtil.getWornStandVanishticksSafe(user, Powers20thCenturyBoy.class);
+
+                    /*
+                    int CBticks = 0;
+                    if (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy) {
+                        CBticks = user.roundabout$getCurrentStandVanishTicks();
+                    }else if (user.roundabout$getPreviousStandPowers() instanceof Powers20thCenturyBoy) {
+                        CBticks = user.roundabout$getPreviousStandVanishTicks();
+                    }*/
 
                     /// skin definition
                     if (CBticks > 0 || standOut) {
                         byte skin = user.roundabout$getStandSkin();
-                        if (user.roundabout$getLastStandSkin() != skin) {
-                            user.roundabout$setLastStandSkin(skin);
-                            CBticks = 0;
-                            user.roundabout$setCBVanishTicks(0);
+                        if (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy) {
+                            if (user.roundabout$getLastStandSkin() != skin) {
+                                user.roundabout$setLastStandSkin(skin);
+                                CBticks = 0;
+
+                                user.roundabout$setCurrentStandVanishTicks(0);
+                            }
+                        }else {
+                            skin = user.roundabout$getPreviousSkin();
                         }
 
                         /// from my understanding these are the ticks that 20thcb are able to render basically
@@ -98,10 +114,16 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                         /// ps. translate means moving it
                         getParentModel().body.translateAndRotate(poseStack);
 
-
+                        byte idle = MainUtil.getWornStandIdleSafe(user, Powers20thCenturyBoy.class);
+                        /* (byte)0;
+                        if (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy) {
+                            idle = user.roundabout$getIdlePos();
+                        }else if (user.roundabout$getPreviousStandPowers() instanceof Powers20thCenturyBoy) {
+                            idle = user.roundabout$getPreviousPose();
+                        }*/
 
                         /// for unlatch...
-                        if (user.roundabout$getIdlePos() == 1) {
+                        if (idle == 1) {
                             poseStack.translate(0.0, -0.2, 0.3);
                             ModStrayModels.CENTURY_BOY.renderAll(entity, partialTicks, poseStack, bufferSource,
                                     packedLight, r, g, b, heyfull, skin);
@@ -182,7 +204,7 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             if (entity instanceof  IPlayerEntity IPL && IPL.roundabout$getMaskSlot().getItem() instanceof
                                     MaskItem MI) {
                                 if (MI.visageData.generateVisageData(entity).rendersBreast() || MI.visageData.generateVisageData(entity).rendersPlayerBreastPart() ||
-                                        (MI.visageData.generateVisageData(entity).rendersSmallBreast() && user.roundabout$getIdlePos() != 0)){
+                                        (MI.visageData.generateVisageData(entity).rendersSmallBreast() && idle != 0)){
                                     ClientUtil.pushPoseAndCooperate(poseStack, 26);
                                 if (entity.isBaby()) {
                                     poseStack.scale(0.6F, 0.6F, 0.6F);

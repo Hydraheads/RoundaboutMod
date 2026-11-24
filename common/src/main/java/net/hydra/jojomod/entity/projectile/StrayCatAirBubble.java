@@ -59,6 +59,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
     public LivingEntity standUser;
     public UUID standUserUUID;
 
+    private float speed = 1F;
 
     public boolean getActivated() {
         return this.getEntityData().get(ACTIVATED);
@@ -73,10 +74,10 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         this.getEntityData().set(LAUNCHED, activ);
     }
     public float getSped() {
-        return this.getEntityData().get(SPEED);
+        return speed;
     }
     public void setSped(float sped) {
-        this.getEntityData().set(SPEED, sped);
+        speed = sped;
     }
     public byte getSkin() {
         return this.getEntityData().get(SKIN);
@@ -499,7 +500,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         this.entityData.define(ACTIVATED, false);
         this.entityData.define(LAUNCHED, false);
         this.entityData.define(USER_ID, -1);
-        this.entityData.define(SPEED, 1F);
+        //this.entityData.define(SPEED, 1F);
         this.entityData.define(SKIN, (byte)0);
         this.entityData.define(TARGET, -1);
     }

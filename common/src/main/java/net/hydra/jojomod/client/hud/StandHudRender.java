@@ -11,10 +11,12 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.TimeStopInstance;
 import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.event.index.AnubisMemory;
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -425,16 +427,18 @@ public class StandHudRender {
             int st = PCB.getMaxDefenceTicks();
             int sc = PCB.getDefenceTicks();
             sc = Mth.clamp(sc, 0, st);
-            int blt2 = 182 - (int) Math.floor(((double) 182 / st) * (sc));
+            //int blt2 = 182 - (int) Math.floor(((double) 182 / st) * (sc));
+            int blt2 = (int) Math.floor(((double) 182 / st) * (sc));
+
 
             int bleh = 71;
-            if (!PCB.invincibleState){
-                bleh+=5;
-            }
 
             context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, bleh, 182, 5);
             if (blt2 > 0) {
                 bleh+=5;
+                if (!PCB.invincibleState){
+                    bleh+=5;
+                }
                 context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, bleh, blt2, 5);
             }
 
@@ -450,6 +454,44 @@ public class StandHudRender {
                 context.blit(StandIcons.JOJO_ICONS_2, k, l, u, 0, 9, 9);
             }*/
         }
+
+    }
+
+    public static void renderRequiemBarr(GuiGraphics context, Player playerEntity,
+                                           int scaledWidth, int scaledHeight, int x, int amount,int max) {
+
+        StandUser standUser = ((StandUser) playerEntity);
+
+
+        int l;
+        int k;
+        l = scaledHeight - 32 + 3;
+
+        amount = Mth.clamp(amount, 0, max);
+        //int blt2 = 182 - (int) Math.floor(((double) 182 / st) * (sc));
+        int blt2 = (int) Math.floor(((double) 182 / max) * (amount));
+
+
+        int bleh = 144;
+
+        context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, bleh, 182, 5);
+        if (blt2 > 0) {
+            bleh+=5;
+            context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, bleh, blt2, 5);
+        }
+
+//        int u = 182;
+//        k = scaledWidth / 2 - 5;
+//        l = scaledHeight - 31 - 8;
+
+        //context.blit(StandIcons.JOJO_ICONS_2, k, l, u, 40, 9, 11);
+
+        /*if (st >= sc) {
+            context.blit(StandIcons.JOJO_ICONS_2, k, l, u, 0, 9, 9);
+        } else {
+            context.blit(StandIcons.JOJO_ICONS_2, k, l, u, 0, 9, 9);
+        }*/
+
 
     }
 
@@ -1345,6 +1387,30 @@ public class StandHudRender {
                 int heat = Mth.clamp(HeatUtil.getHeat(playerEntity), 0, 100);
                 k = Math.min((int) Math.floor(((float)19 / 100F) * (float) heat), 19);
                 context.blit(StandIcons.JOJO_ICONS_2, x, l+(20-k), 211, 52+(19-k), 7, k);
+            }
+        }
+    }
+
+    public static void renderSelfCarryHoverHud(GuiGraphics context, Player playerEntity,
+                                               int scaledWidth, int scaledHeight, int x, PowersSilverChariot PSC) {
+        if (PSC.getActivePower() == PowersSilverChariot.SILVER_CHARIOT_SELF_GRAB) {
+            Minecraft client = Minecraft.getInstance();
+            int l;
+            int k;
+            int v;
+            StandUser standUser = ((StandUser)playerEntity);
+
+            int hoverCharge = PSC.mountEntity.getHoverTicks();
+            int maxHoverCharge = PSC.mountEntity.getMaxHoverTicks();
+
+            if (hoverCharge > maxHoverCharge) {
+                hoverCharge = maxHoverCharge;
+            }
+            int blt = (int) Math.floor(((double) 182 /maxHoverCharge)*(hoverCharge));
+            l = scaledHeight - 32 + 3;
+            context.blit(StandIcons.JOJO_ICONS, x, l, 0, 131, 182, 5);
+            if (blt > 0) {
+                context.blit(StandIcons.JOJO_ICONS, x, l, 0, 136, blt, 5);
             }
         }
     }

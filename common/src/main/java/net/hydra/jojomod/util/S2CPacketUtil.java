@@ -1,10 +1,10 @@
 package net.hydra.jojomod.util;
 
 import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.entity.substand.MoldSporesEntity;
 import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.util.config.ConfigManager;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -25,6 +25,23 @@ public class S2CPacketUtil {
                     ServerToClientPackets.S2CPackets.MESSAGES.SyncDaze.value,
                     time
             );
+        }
+    }
+
+    public static void knAddItemContainer(Player player, BlockPos pos, BlockPos pos2) {
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.KnAddItemContainer.value,
+                    pos,
+                    pos2);
+        }
+    }
+
+    public static void knRemoveItemContainer(Player player, BlockPos pos) {
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.KnRemoveItemContainer.value,
+                    pos);
         }
     }
 
@@ -513,6 +530,25 @@ public class S2CPacketUtil {
             ModMessageEvents.sendToPlayer(SP,
                     ServerToClientPackets.S2CPackets.MESSAGES.SyncGamblingState.value,
                     tension, lastSpillage, lastQuality, isHostTurn, gameOver
+            );
+        }
+    }
+    public static void syncKqInflaton(Player player, int targetID, int inflate) {
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.SyncKqInflaton.value,
+                    targetID, inflate
+            );
+        }
+    }
+    public static void sendStartRTZPacket(Player player, Vec3 startPos, Vec3 endPos,
+                                          float startYaw, float startPitch, float endYaw, float endPitch) {
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.StartRTZ.value,
+                    startPos.x, startPos.y, startPos.z,
+                    endPos.x, endPos.y, endPos.z,
+                    startYaw, startPitch, endYaw, endPitch
             );
         }
     }

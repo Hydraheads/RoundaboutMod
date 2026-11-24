@@ -1,6 +1,6 @@
 package net.hydra.jojomod.event;
 
-import net.hydra.jojomod.particles.HazeColorParticleOptions;
+import net.hydra.jojomod.particles.ColorParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 
@@ -36,7 +36,9 @@ public class ModParticles {
     public static SimpleParticleType GOLD_PUNCH_IMPACT_A;
     public static SimpleParticleType GOLD_PUNCH_IMPACT_B;
     public static SimpleParticleType GOLD_PUNCH_IMPACT_C;
-
+    public static SimpleParticleType REQUIEM_PUNCH_IMPACT_A;
+    public static SimpleParticleType REQUIEM_PUNCH_IMPACT_B;
+    public static SimpleParticleType REQUIEM_PUNCH_IMPACT_C;
 
     public static SimpleParticleType DISC_STEAL_HIT;
 
@@ -87,11 +89,13 @@ public class ModParticles {
     public static SimpleParticleType WAKE_RIPPLE;
     public static SimpleParticleType DIVER_DOWN_FINAL;
     public static SimpleParticleType RIBCAGE;
+    public static SimpleParticleType BLACK_SABBATH_MOVING_RIPPLE;
+    public static SimpleParticleType BLACK_SABBATH_IDLE_RIPPLE;
 
     public static SimpleParticleType OCCULT;
 
-    public static SimpleParticleType MOLD_DUST;
-    public static SimpleParticleType MOLD;
+    public static ParticleType<ColorParticleOptions> MOLD_DUST;
+    public static ParticleType<ColorParticleOptions> MOLD;
     public static SimpleParticleType RAGING_LIGHT; // anubis particles
     public static SimpleParticleType ALLURING_LIGHT;
 
@@ -120,6 +124,7 @@ public class ModParticles {
     public static SimpleParticleType TOOTH;
 
     public static SimpleParticleType TUSK_HOLE;
+    public static SimpleParticleType GOLDEN_SPIRAL;
     public static SimpleParticleType KILLER_QUEEN_EXPLOSION;
 
     public static SimpleParticleType PW_FIREBALL_EXPLOSION;
@@ -129,9 +134,20 @@ public class ModParticles {
     public static SimpleParticleType PW_BLUE_BLASTWAVE_EXPLOSION;
     public static SimpleParticleType PW_BLUE_MUSHROOM_EXPLOSION;
 
-    public static ParticleType<HazeColorParticleOptions> PURPLE_HAZE_SMOKE;
+    public static ParticleType<ColorParticleOptions> PURPLE_HAZE_SMOKE;
     public static SimpleParticleType DISTORTION_SMOKE;
-    public static ParticleType<HazeColorParticleOptions> PURPLE_HAZE_BLASTWAVE;
+    public static ParticleType<ColorParticleOptions> PURPLE_HAZE_BLASTWAVE;
+
+    public static ParticleType<ColorParticleOptions> PUZZLE_PARTICLE;
+
+    public static SimpleParticleType AUTUMN_LEAVES;
+    public static SimpleParticleType GINKGO_LEAVES;
 
     public static SimpleParticleType VITAL_ESSENCE;
+    public static SimpleParticleType GE_WAVE;
+
+    public static SimpleParticleType RAIN_BUBBLE;
+    public static SimpleParticleType RAIN_SHARD_1;
+    public static SimpleParticleType RAIN_SHARD_2;
+    public static SimpleParticleType RAIN_SHARD_3;
 }

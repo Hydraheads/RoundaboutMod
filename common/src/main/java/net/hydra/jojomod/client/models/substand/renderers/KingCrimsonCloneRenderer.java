@@ -4,12 +4,15 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.scores.Team;
 import org.joml.Vector3f;
 
 public class KingCrimsonCloneRenderer<T extends KingCrimsonCloneEntity> extends CloneRenderer<T> {
@@ -19,7 +22,38 @@ public class KingCrimsonCloneRenderer<T extends KingCrimsonCloneEntity> extends 
     }
 
 
-
+    /// borrowed code from LivingEntityRenderer
+    @Override
+    protected boolean shouldShowName(T $$0) {
+        if ($$0.getPlayer() != null) {
+            if (!ClientUtil.isPlayer($$0) && Minecraft.getInstance().player != null) {
+                Team team2 = Minecraft.getInstance().player.getTeam();
+                Team team = $$0.getPlayer().getTeam();
+                if (team != null) {
+                    Team.Visibility vis = team.getNameTagVisibility();
+                    boolean $$5 = !$$0.isInvisibleTo(Minecraft.getInstance().player);
+                    switch (vis) {
+                        case ALWAYS -> {
+                            return $$5;
+                        }
+                        case NEVER -> {
+                            return false;
+                        }
+                        case HIDE_FOR_OTHER_TEAMS -> {
+                            return team2 == null ? $$5 : team.isAlliedTo(team2) && (team.canSeeFriendlyInvisibles() || $$5);
+                        }
+                        case HIDE_FOR_OWN_TEAM -> {
+                            return team2 == null ? $$5 : !team.isAlliedTo(team2) && $$5;
+                        }
+                        default -> {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return super.shouldShowName($$0);
+    }
 
     @Override
     public void render(T entity, float entityYaw, float partialTick, PoseStack matrices, MultiBufferSource bufferSource, int packedLight) {

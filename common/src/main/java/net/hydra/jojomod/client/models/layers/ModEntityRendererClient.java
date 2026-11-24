@@ -79,6 +79,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation PEARL_JAM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "pearl_jam"), "main");
     public static final ModelLayerLocation JUSTICE_PIRATE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "justice_pirate"), "main");
     public static final ModelLayerLocation DARK_MIRAGE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "dark_mirage"), "main");
+    public static final ModelLayerLocation KING_NOTHING_LAYER = new ModelLayerLocation(Roundabout.location("king_nothing"), "main");
     public static final ModelLayerLocation TUSK_A1_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "tusk_a1"), "main");
     public static final ModelLayerLocation TUSK_A2_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "tusk_a2"), "main");
     public static final ModelLayerLocation TUSK_A3_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "tusk_a3"), "main");
@@ -91,10 +92,12 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation DIVER_DROWNED_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "diver_drowned"), "main");
     public static final ModelLayerLocation GOLD_EXPERIENCE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "gold_experience"), "main");
     public static final ModelLayerLocation GOLD_EXPERIENCE_BETA_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "gold_experience_beta"), "main");
+    public static final ModelLayerLocation GOLD_EXPERIENCE_REQUIEM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "gold_experience_requiem"), "main");
     public static final ModelLayerLocation GE_BRAMBLE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "ge_bramble"), "main");
+    public static final ModelLayerLocation GE_THORN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "ge_thorn"), "main");
     public static final ModelLayerLocation SILVER_CHARIOT_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot"), "main");
     public static final ModelLayerLocation SILVER_CHARIOT_PHARAOH_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_pharaoh"), "main");
-    public static final ModelLayerLocation SILVER_CHARIOT_RAPIER_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_rapier"), "main");
+    public static final ModelLayerLocation SILVER_CHARIOT_SWORD_PROJECTILE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_sword_projectile"), "main");
     public static final ModelLayerLocation SILVER_CHARIOT_RAPIER_PLATFORM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_rapier_platform"), "main");
     public static final ModelLayerLocation HARPOON_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "harpoon"), "main");
     //public static final ModelLayerLocation CHESSBOARD_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "chessboard"), "main");
@@ -147,6 +150,8 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation PAINTING_VAN_GOUGH_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "van_gough"), "main");
     public static final ModelLayerLocation MONA_LISA_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "mona_lisa"), "main");
     public static final ModelLayerLocation BIRTH_OF_VENUS_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "venus"), "main");
+    public static final ModelLayerLocation ZOMBIE_HORSE_PAINTING_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "zombie_horse_painting"), "main");
+    public static final ModelLayerLocation ZOMBIE_HORSE_MURAL_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "zombie_horse_mural"), "main");
 
     public static final ModelLayerLocation SHEER_HEART_ATTACK_LAYER =  new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "sheer_heart_attack"), "main");
     public static final ModelLayerLocation BAD_COMPANY_SOLDIER_LAYER =  new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "bad_company_soldier"), "main");

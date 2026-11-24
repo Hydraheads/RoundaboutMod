@@ -2714,7 +2714,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
     public float getBloodSplashStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers((float) (2F)));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers((float) (3F)));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs((float) (6F * (ClientNetworking.getAppropriateConfig().
                     generalStandSettings.generalImpaleAttackMultiplier *0.01))));
@@ -3155,7 +3155,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         setCooldown(PowerIndex.SKILL_3, 140);
         animateStand(KingCrimsonEntity.BLOOD_SPLASH_WINDUP);
         if (self.level() instanceof ServerLevel sl) {
-            int bloodTime = 240;
+            int bloodTime = 120;
             MobEffectInstance instance = self.getEffect(ModEffects.BLEED);
             boolean isBigOuchie = false;
             if (instance != null){
@@ -3914,11 +3914,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
 
     @Override
-    public int getExtraPunchTime(){
-        return 0;
-    }
-
-    @Override
     public void setAttack(){
         if (!self.level().isClientSide()){
             if (isUsingTimeErase()){
@@ -4351,7 +4346,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (this.getReducedDamage(entity)){
             if (entity instanceof KingCrimsonCloneEntity &&
                     ClientNetworking.getAppropriateConfig().kingCrimsonSettings.nerfedTEDamage){
-                return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.02F));
+                return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.28F));
             } else {
                 return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.28F));
             }
@@ -4364,7 +4359,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (this.getReducedDamage(entity)){
             if (entity instanceof KingCrimsonCloneEntity &&
                     ClientNetworking.getAppropriateConfig().kingCrimsonSettings.nerfedTEDamage){
-                return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.5F));
+                return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.73F));
             } else {
                 return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.73F));
             }

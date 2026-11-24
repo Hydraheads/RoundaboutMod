@@ -18,6 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import org.joml.Vector3f;
 
 import java.util.Map;
 
@@ -49,10 +50,14 @@ public class MoldRightArmLayer<T extends LivingEntity, A extends HumanoidModel<T
             }
             if (!entity.isInvisible()) {
                 if (MoldedRightArm) {
+                    int color = ((PowersGreenDay) user.roundabout$getStandPowers()).getMoldParticleColor();
+                    float r = ((color >> 16) & 0xFF) / 255.0F;
+                    float g = ((color >> 8) & 0xFF) / 255.0F;
+                    float b = (color & 0xFF) / 255.0F;
                     poseStack.pushPose();
                     getParentModel().body.translateAndRotate(poseStack);
                     ModStrayModels.MoldRightArm.render(entity, partialTicks, poseStack, bufferSource, packedLight,
-                                10, 10, 10, 1F);
+                                r, g, b, 1F);
                     poseStack.popPose();
                 }
             }

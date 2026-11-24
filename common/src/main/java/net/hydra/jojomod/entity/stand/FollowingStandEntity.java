@@ -233,7 +233,7 @@ public class FollowingStandEntity extends StandEntity{
         } else if (ot == OffsetIndex.BENEATH_CARRY_USER) {
             // Silver Chariot's control mode
             Vec3 frontVectors = FrontVectors(standUser, 0, 0F);
-            return new Vec3(frontVectors.x, frontVectors.y - 1.85, frontVectors.z);
+            return new Vec3(frontVectors.x, frontVectors.y - 1.85*0.75, frontVectors.z);
         } else {
             float distanceFront;
             float standrotDir2 = 0;
@@ -456,4 +456,7 @@ public class FollowingStandEntity extends StandEntity{
     }
 
 
+    public boolean standCanShowName() {
+        return true;
+    }
 }

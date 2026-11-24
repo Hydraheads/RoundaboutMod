@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers;
 
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.*;
@@ -14,6 +15,7 @@ import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
@@ -22,6 +24,7 @@ import net.hydra.jojomod.event.powers.whitesnake.disc.DiscItemData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -263,30 +266,23 @@ public class StandPowers extends AbilityScapeBasis {
      *   and Killer Queen (Bites the Dust)
      */
     public boolean canUseStandArrow() { return false; }
+    public boolean shouldStandArrowShake() { return false; }
 
     /** called when the standArrow is used (and the method above is true),
      * Returns false when it fails, and true when sucessfull
      * override it to yours needs*/
     public boolean onStandArrowUse() {
-        /** Requiem stands like Golden Experience and silver chariot should
-         * probably make something like this
-         *
-         * if (this.self instanceof Player PL) {
-         *      if (PL.experienceLevel >= 50) {
-         *          // do requiem stuff here
-         *
-         *          if (!PE.isCreative()) {
-         *              PE.giveExperienceLevels(-50);
-         *          }
-         *          return true;
-         *      }else {
-         *          return false;
-         *      }
-         * }
-         */
 
         return false;
     }
+
+    /// Intended for requiem
+    public boolean onStandArrowUseClient() {
+
+        return false;
+    }
+
+    public boolean isRequiemStand() {return false;}
 
     /**This gets set to true when you begin using a forward barrage, not many stands will use this mechanic likely*/
     public boolean forwardBarrage = false;
@@ -508,6 +504,20 @@ public class StandPowers extends AbilityScapeBasis {
         return power;
     }
 
+    public float getPunchStrengthBase(Entity entity){
+        float ps = getPunchStrength(entity);
+        if (hasTangibleNerf(self,entity)){
+            ps*=0.5F;
+        }
+        return ps;
+    }public float getHeavyPunchStrengthBase(Entity entity){
+        float ps = getHeavyPunchStrength(entity);
+        if (hasTangibleNerf(self,entity)){
+            ps*=0.5F;
+        }
+        return ps;
+    }
+
     /**Override these methods to fine tune the attack strength of the stand*/
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
@@ -626,6 +636,11 @@ public class StandPowers extends AbilityScapeBasis {
                     this.setPowerNone();
                 } else if (move == PowerIndex.ATTACK) {
                     this.setPowerAttack();
+                    if (this instanceof NewPunchingStand NPS) {
+                        if (NPS.didSummonPunch()) {
+                            NPS.trySummonPunchCooldown();
+                        }
+                    }
                 } else if (move == PowerIndex.GUARD) {
                     this.setPowerGuard();
                 } else if (move == PowerIndex.BARRAGE_CHARGE) {
@@ -1035,8 +1050,6 @@ public class StandPowers extends AbilityScapeBasis {
             return SoundIndex.ITEM_GROUP;
         } else if (soundChoice <= SoundIndex.GLAIVE_CHARGE) {
             return SoundIndex.ITEM_GROUP;
-        } else if (soundChoice <= SoundIndex.ZOMBIEHORSE_STITCHING) {
-            return SoundIndex.ITEM_GROUP;
         }
 
         return soundChoice;
@@ -1194,6 +1207,47 @@ public class StandPowers extends AbilityScapeBasis {
         $$1.add((byte) 1);
         return $$1;
     }
+
+    /** The list of humanoid poses, so even non-punching humanoid stands can use it */
+    public static List<Byte> humanoidPosList() {
+        List<Byte> $$1 = Lists.newArrayList();
+        $$1.add((byte) 0);
+        $$1.add((byte) 1);
+        $$1.add((byte) 2);
+        $$1.add((byte) 3);
+        $$1.add((byte) 4);
+        $$1.add((byte) 5);
+        $$1.add((byte) 6);
+        $$1.add((byte) 7);
+        $$1.add((byte) 8);
+        $$1.add((byte) 9);
+        $$1.add((byte) 10);
+        $$1.add((byte) 11);
+        $$1.add((byte) 12);
+        $$1.add((byte) 13);
+        $$1.add((byte) 14);
+        $$1.add((byte) 15);
+        $$1.add((byte) 16);
+        $$1.add((byte) 17);
+        $$1.add((byte) 18);
+        $$1.add((byte) 19);
+        $$1.add((byte) 20);
+        $$1.add((byte) 21);
+        $$1.add((byte) 22);
+        $$1.add((byte) 23);
+        $$1.add((byte) 24);
+        $$1.add((byte) 25);
+        $$1.add((byte) 26);
+        $$1.add((byte) 27);
+        $$1.add((byte) 28);
+        $$1.add((byte) 29);
+        $$1.add((byte) 30);
+        $$1.add((byte) 31);
+        $$1.add((byte) 32);
+        $$1.add((byte) 33);
+        $$1.add((byte) 34);
+        return $$1;
+    }
     /**The name for your stand's poses to display in the power inventory HUD*/
     public Component getPosName(byte posID){
         if (posID == 1){
@@ -1277,8 +1331,17 @@ public class StandPowers extends AbilityScapeBasis {
         return !hasStandActive(self);
     }
 
+    //Called immediately
     public boolean cancelAllRandomMiningThatBreaksMoves(){
         return isBarraging() || isBarrageCharging();
+    }
+    //Called Later as to not bother with roundabout intercepts (like m1s)
+    public boolean cancelAllRandomMiningThatBreaksMoves2(){
+        return false;
+    }
+    //This is a more deep mining problem that needs to be addressed
+    public boolean superCancelMining(){
+        return false;
     }
 
     /**if the above is true, override this to actually create a fake stand for the power inventory display.*/
@@ -2064,6 +2127,8 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
+    public boolean meleeSwapped = false;
+
     @Override
     public void baseTickPower(){
 
@@ -2211,7 +2276,13 @@ public class StandPowers extends AbilityScapeBasis {
                         }
                     }
                 }
-                this.attackTime++;
+                if (meleeSwapped && ClientNetworking.getAppropriateConfig().miscellaneousSettings.meleeSwapPenalty){
+                    if (self.tickCount % 2 == 0){
+                        this.attackTime++;
+                    }
+                } else {
+                    this.attackTime++;
+                }
                 if (this.attackTime > this.attackTimeMax) {
                 //if (activePowerPhase != 0){
                     //if (this.self.level().isClientSide()){
@@ -2221,6 +2292,11 @@ public class StandPowers extends AbilityScapeBasis {
                 //}
                     this.setActivePowerPhase((byte) 0);
                 }
+                if (getActivePowerPhase() == 0){
+                    meleeSwapped = false;
+                }
+            } else {
+                meleeSwapped = false;
             }
             if (this.interruptCD > 0) {
                 this.interruptCD--;
@@ -2319,6 +2395,15 @@ public class StandPowers extends AbilityScapeBasis {
                 SE.roundabout$setIdlePosX(poses.get(skinind));
             }
         }
+    }
+
+    /// For further context look at pearl jam and killer queen
+    public boolean shouldRenderIconEntity(LivingEntity entity) {
+        return false;
+    }
+
+    public void renderIconEntity(LivingEntity LE, PoseStack matrixStack, MultiBufferSource bufferSource) {
+
     }
 
 

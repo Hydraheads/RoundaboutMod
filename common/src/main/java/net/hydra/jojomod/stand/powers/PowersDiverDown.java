@@ -3,16 +3,13 @@ package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.logging.LogUtils;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.DiverLimbBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
-import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.client.ClientUtil;
-import net.hydra.jojomod.client.DiverDownControlsClient;
-import net.hydra.jojomod.client.KeyboardPilotInput;
-import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.client.*;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.BoneProjectileEntity;
 import net.hydra.jojomod.entity.stand.*;
@@ -41,6 +38,7 @@ import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerPlayer;
@@ -188,7 +186,6 @@ public class PowersDiverDown extends NewPunchingStand {
         public int ticks;
         public Direction face;
         public Vec3 launchVector;
-        public int playerContactTicks = 0;
 
         public KickTrap(int ticks, Direction face, Vec3 launchVector) {
             this.ticks = ticks;
@@ -238,9 +235,8 @@ public class PowersDiverDown extends NewPunchingStand {
     // for cooldowns
     private final int getAfflictionCooldown() {
         return 200;
-    }
+    };
 
-    ;
     /* TAKING NOTE OF GENERAL COOLDOWNS HERE:
         GENERAL_1 = AFFLICTION SELECTION
         GENERAL_2 = SELF DIVE
@@ -1053,7 +1049,7 @@ public class PowersDiverDown extends NewPunchingStand {
             }
         }
         // force crawl mode in zippy time
-        if (inZipMode()) {
+        if (inZipMode() && MainUtil.isHumanoid(this.self)) {
             this.self.setSprinting(false);
             ((StandUser) this.self).rdbt$SetCrawlTicks(5);
             this.self.setPose(Pose.SWIMMING);
@@ -1271,40 +1267,19 @@ public class PowersDiverDown extends NewPunchingStand {
                     if (this.isAutoRelease) {
                         List<LivingEntity> victims = detectTrapTrigger(trapPos, trap.face);
                         if (!victims.isEmpty()) {
-                            boolean hasPlayer = false;
-                            boolean hasMob = false;
-
-                            for (LivingEntity v : victims) {
-                                if (v instanceof Player) {
-                                    hasPlayer = true;
-                                    // doesn't trigger if it's a pet
-                                } else if (!(v instanceof TamableAnimal TA && TA.getOwner() != null && TA.getOwner().is(this.getSelf()))) {
-                                    hasMob = true;
-                                }
-                            }
-
-                            if (hasPlayer) {
-                                trap.playerContactTicks++;
-                            } else {
-                                trap.playerContactTicks = 0;
-                            }
+                            int ticksActive = MAX_TRAP_DURATION - trap.ticks;
+                            boolean isArmedForPlayers = ticksActive >= 20; //1 second windup for players
 
                             // trigger the traps auto on mobs, or after 1 second has passed for players
-                            boolean shouldTrigger = hasMob || (trap.playerContactTicks >= 20);
+                            victims.removeIf(v ->
+                                    (v instanceof TamableAnimal TA && TA.getOwner() != null && TA.getOwner().is(this.getSelf()))
+                                            || (v instanceof Player && !isArmedForPlayers)
+                            );
 
-                            if (shouldTrigger) {
-                                // remove players from the victim list, in case they were standing with mobs
-                                if (trap.playerContactTicks < 20) {
-                                    victims.removeIf(v -> v instanceof Player);
-                                }
-                                if (!victims.isEmpty()) {
-                                    triggerKickTrap(victims, trapPos, trap);
-                                    it.remove(); // delete the triggered trap
-                                }
+                            if (!victims.isEmpty()) {
+                                triggerKickTrap(victims, trapPos, trap);
+                                it.remove(); // delete the triggered trap
                             }
-                        } else {
-                            // reset timer if player leaves the trap block
-                            trap.playerContactTicks = 0;
                         }
                     }
                 }
@@ -2745,6 +2720,17 @@ public class PowersDiverDown extends NewPunchingStand {
         super.getReplacementHUD(context, cameraPlayer, screenWidth, screenHeight, x, removeNum);
     }
 
+    public boolean shouldRenderIconEntity(LivingEntity LE) {
+        if (isDiveActive() && !isSelfDive() && submergedTarget == LE && LE != self) {
+            return true;
+        }
+        return false;
+    }
+
+    public void renderIconEntity(LivingEntity LE, PoseStack matrixStack, MultiBufferSource bufferSource) {
+        DiverDownPointerRenderer.render(LE, matrixStack, bufferSource);
+    }
+
     /**
      * Checks if a position is within a 4x4 horizontal area around Diver Down,
      * with the 4 outer 1x1 corners removed to simulate a circle.
@@ -2829,7 +2815,8 @@ public class PowersDiverDown extends NewPunchingStand {
         // this is like my third attempt to fix claims with chests. bruh
         StandEntity stand = getStandEntity(this.self);
         BlockPos standPos = stand != null ? stand.blockPosition() : serverPlayer.blockPosition();
-        if (!MainUtil.canInteractWithBlock(serverPlayer, chestPos) || !MainUtil.canPlaceOnClaim(serverPlayer, standPos)) {
+        if (!MainUtil.canInteractWithBlock(serverPlayer, chestPos) ||
+                (ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims)) {
             return false;
         }
 
@@ -3084,9 +3071,11 @@ public class PowersDiverDown extends NewPunchingStand {
 
     public void toggleZip(boolean toggle) {
         if (!toggle) {
-            ((StandUser) this.self).rdbt$SetCrawlTicks(0);
-            this.self.setSwimming(false);
-            this.self.setPose(Pose.STANDING);
+            if (MainUtil.isHumanoid(this.self)) {
+                ((StandUser) this.self).rdbt$SetCrawlTicks(0);
+                this.self.setSwimming(false);
+                this.self.setPose(Pose.STANDING);
+            }
             this.setPowerNone();
             if (inZipMode())
                 setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().diverDownSettings.diverZipCooldown);
@@ -3481,7 +3470,7 @@ public class PowersDiverDown extends NewPunchingStand {
     private List<LivingEntity> detectTrapTrigger(BlockPos pos, Direction face) {
         // Check area directly on top of the trapped block
         BlockPos triggerPos = pos.relative(face);
-        AABB triggerBox = new AABB(triggerPos).inflate(-0.05);
+        AABB triggerBox = new AABB(triggerPos).inflate(0.15);
         List<LivingEntity> victims = new ArrayList<>();
         for (LivingEntity target : this.self.level().getEntitiesOfClass(LivingEntity.class, triggerBox)) {
             if (target.equals(this.self)
@@ -3682,7 +3671,9 @@ public class PowersDiverDown extends NewPunchingStand {
             }
             // transfers stand hits into the user of the stand
             if (target instanceof StandEntity stand && stand.getUser() != null) {
-                target = stand.getUser();
+                if(!(stand instanceof BlackSabbathEntity)) {
+                    target = stand.getUser();
+                }
             }
             // cooldown if whiffed
             if (!(target instanceof LivingEntity) || target instanceof StandEntity || target == null) {
@@ -3706,8 +3697,11 @@ public class PowersDiverDown extends NewPunchingStand {
                 S2CPacketUtil.sendIntPowerDataPacket(player, DIVER_SUBMERGE_START, this.submergedTarget.getId());
             }
             StandEntity stand = this.getStandEntity(this.self);
-            if (stand instanceof DiverDownEntity ddEntity) {
-                ddEntity.setSubmerged(true);
+            if (stand != null) {
+                if (stand instanceof DiverDownEntity ddEntity) {
+                    ddEntity.setSubmerged(true);
+                }
+                stand.discard(); // Despawns the Stand for everyone, just like Self Dive
             }
             // desummon stand in renderer
             addEXP(3);
@@ -4752,7 +4746,7 @@ public class PowersDiverDown extends NewPunchingStand {
             if (!level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) return false;
             if (PE.blockActionRestricted(PE.serverLevel(), pos, PE.gameMode.getGameModeForPlayer())) return false;
             if (!level.mayInteract(PE, pos)) return false;
-            if (!MainUtil.canPlaceOnClaim(PE, pos)) return false;
+            if (ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims) return false;
         }
 
         // must have an associated Item
@@ -5096,18 +5090,20 @@ public class PowersDiverDown extends NewPunchingStand {
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
 
-        if (standOn && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
-            float charge = (float) this.attackTimeDuring / this.getMaxPhasePunchTime();
-            int barWidth = Math.min(15, Math.round(charge * 15));
-            // Background frame
-            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
-            // There was this light green bar with some pink in the center that's perfect
-            // for
-            // a DD charge punch. I'm using that.
-            context.blit(StandIcons.JOJO_ICONS, k, j, 213, 89, barWidth, 6);
-        } else {
-            super.renderAttackHud(context, playerEntity, scaledWidth, scaledHeight, ticks,
-                    vehicleHeartCount, flashAlpha, otherFlashAlpha);
+        if (!isDiveActive() && !hasLimbsDeployed() && !isPiloting()) {
+            if (standOn && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+                float charge = (float) this.attackTimeDuring / this.getMaxPhasePunchTime();
+                int barWidth = Math.min(15, Math.round(charge * 15));
+                // Background frame
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+                // There was this light green bar with some pink in the center that's perfect
+                // for
+                // a DD charge punch. I'm using that.
+                context.blit(StandIcons.JOJO_ICONS, k, j, 213, 89, barWidth, 6);
+            } else {
+                super.renderAttackHud(context, playerEntity, scaledWidth, scaledHeight, ticks,
+                        vehicleHeartCount, flashAlpha, otherFlashAlpha);
+            }
         }
     }
 

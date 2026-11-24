@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "roundabout:stripped_ginkgo_log"
+    }
+  },
+  "result": {
+    "item": "roundabout:stripped_ginkgo_wood",
+    "count": 3
+  }
+}

@@ -83,7 +83,9 @@ public class SavedSecondLiving extends SavedSecond {
                 }
             }
 
-            LE.setHealth(this.health);
+            if (this.resetHealth) {
+                LE.setHealth(this.health);
+            }
 
             LE.setRemainingFireTicks(onFireTicks);
             StandUser user = ((StandUser) LE);

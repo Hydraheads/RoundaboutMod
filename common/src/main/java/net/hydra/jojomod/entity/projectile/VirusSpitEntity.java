@@ -91,7 +91,9 @@ public class VirusSpitEntity extends ThrowableProjectile {
             if (isRemoved())
                 return;
             if (getSplatterType() != 2) {
-                ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.VIRUS_SPIT_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
+                ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.VIRUS_SPIT_SPLATTER.defaultBlockState()), this.getX(),
+                        this.getY(),
+                        this.getZ(),
                         15, 0.4, 0.4, 0.25, 0.4);
                 SoundEvent $$6 = SoundEvents.GENERIC_SPLASH;
                 this.playSound($$6, 1F, 1.5F);
@@ -102,12 +104,23 @@ public class VirusSpitEntity extends ThrowableProjectile {
     }
 
     @Override
-    public void tick(){
-        if (!this.level().isClientSide){
-            ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.VIRUS_SPIT_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
-                    15, 0.4, 0.4, 0.25, 0.4);
-        }
+    public void tick() {
         super.tick();
+
+        if (!this.level().isClientSide && !this.isRemoved()) {
+            ((ServerLevel) this.level()).sendParticles(
+                    new BlockParticleOption(
+                            ParticleTypes.BLOCK,
+                            ModBlocks.VIRUS_SPIT_SPLATTER.defaultBlockState()
+                    ),
+                    this.getX(),
+                    this.getY(),
+                    this.getZ(),
+                    5,
+                    0.05, 0.05, 0.05,
+                    0.02
+            );
+        }
     }
 
     @Override
@@ -121,18 +134,20 @@ public class VirusSpitEntity extends ThrowableProjectile {
                 ((IEnderMan) em).roundabout$teleport();
                 return;
             }
-            ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.VIRUS_SPIT_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
+            ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.VIRUS_SPIT_SPLATTER.defaultBlockState()), this.getX(),
+                    this.getY(),
+                    this.getZ(),
                     15, 0.4, 0.4, 0.25, 0.4);
 
             SoundEvent $$6 = SoundEvents.GENERIC_SPLASH;
             this.playSound($$6, 1F, 1.5F);
             if ($$0.getEntity() instanceof LivingEntity LE ) {
-                LE.addEffect(new MobEffectInstance(ModEffects.HAZE_VIRUS, 200,0), getOwner());
+                LE.addEffect(new MobEffectInstance(ModEffects.DISTORTION_VIRUS, 60,2), getOwner());
             }
             if (getOwner() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers()
                     instanceof PowersPurpleHaze pph){
 
-                pph.addEXP(4);
+                pph.addEXP(6);
             }
 
             this.discard();

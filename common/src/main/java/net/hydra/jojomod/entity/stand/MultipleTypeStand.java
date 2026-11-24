@@ -55,4 +55,9 @@ public class MultipleTypeStand extends StandEntity {
         //this.setDeltaMovement(0.15,this.getDeltaMovement().y,0);
         //Roundabout.LOGGER.info("position: "+this.getPosition(1f));
     }
+
+
+    public boolean standCanShowName() {
+        return false;
+    }
 }

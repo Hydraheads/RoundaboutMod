@@ -3,9 +3,11 @@ package net.hydra.jojomod.client.models.stand.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.models.layers.StandGlowingLayer;
 import net.hydra.jojomod.client.models.stand.KillerQueenModel;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
+import net.hydra.jojomod.entity.stand.PurpleHazeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
@@ -115,6 +117,7 @@ public class KillerQueenRenderer extends StandRenderer<KillerQueenEntity>{
     
     public KillerQueenRenderer(EntityRendererProvider.Context context) {
         super(context, new KillerQueenModel<>(context.bakeLayer(ModEntityRendererClient.KILLER_QUEEN_LAYER)), 0f);
+        this.addLayer(new StandGlowingLayer<>(this, this));
     }
     @Override
     public void render(KillerQueenEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
@@ -142,5 +145,51 @@ public class KillerQueenRenderer extends StandRenderer<KillerQueenEntity>{
     @Override
     public boolean skipLighting(KillerQueenEntity entity){
         return entity.getSkin() == KillerQueenEntity.SPIRIT;
+    }
+
+
+    private static final RenderType AGOGO_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/agogo.png"));
+    private static final RenderType DEADLY_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/deadly.png"));
+    private static final RenderType STRAY_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/stray.png"));
+    private static final RenderType NIGHTMARE_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/nightmare.png"));
+    private static final RenderType TAMA_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/tama.png"));
+    private static final RenderType SAMURAI_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/samurai.png"));
+    private static final RenderType UMBRA_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/umbra.png"));
+    private static final RenderType SPIRIT_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/highlights/spirit.png"));
+
+    @Override
+    public boolean hasGlowingParts(byte skin, int packedLight) {
+        return skin == KillerQueenEntity.UMBRA
+                || skin == KillerQueenEntity.GOGO
+                || skin == KillerQueenEntity.STRAY
+                || skin == KillerQueenEntity.NIGHTMARE
+                || skin == KillerQueenEntity.DEADLY
+                || skin == KillerQueenEntity.TAMA
+                || skin == KillerQueenEntity.SAMURAI
+                || skin == KillerQueenEntity.SPIRIT;
+    }
+
+
+    @Override
+    public  RenderType getGlowingReference(byte BT) {
+        if (BT == KillerQueenEntity.UMBRA) {
+            return UMBRA_GLOW;
+        } else if (BT == KillerQueenEntity.GOGO) {
+            return AGOGO_GLOW;
+        } else if (BT == KillerQueenEntity.STRAY) {
+            return STRAY_GLOW;
+        } else if (BT == KillerQueenEntity.NIGHTMARE) {
+            return NIGHTMARE_GLOW;
+        } else if (BT == KillerQueenEntity.DEADLY) {
+            return DEADLY_GLOW;
+        } else if (BT == KillerQueenEntity.TAMA) {
+            return TAMA_GLOW;
+        } else if (BT == KillerQueenEntity.SAMURAI) {
+            return SAMURAI_GLOW;
+        } else if (BT == KillerQueenEntity.SPIRIT) {
+           return SPIRIT_GLOW;
+        }
+
+        return null;
     }
 }

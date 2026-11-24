@@ -540,10 +540,90 @@
       "roundabout:ge_life_punch_windup"
     ]
   },
+  "ge_muda_rush": {
+    "subtitle": "sounds.roundabout.the_world_muda",
+    "sounds": [
+      "roundabout:ge_muda_rush_1",
+      "roundabout:ge_muda_rush_2",
+      "roundabout:ge_muda_rush_3"
+    ]
+  },
+  "ge_muda": {
+    "subtitle": "sounds.roundabout.the_world_muda",
+    "sounds": [
+      "roundabout:ge_muda_1",
+      "roundabout:ge_muda_2",
+      "roundabout:ge_muda_3"
+    ]
+  },
+  "ge_menu": {
+    "subtitle": "sounds.roundabout.ge_menu",
+    "sounds": [
+      "roundabout:ge_menu"
+    ]
+  },
+  "ge_dna_grow": {
+    "subtitle": "sounds.roundabout.ge_dna_grow",
+    "sounds": [
+      "roundabout:ge_dna_grow"
+    ]
+  },
+  "ge_spikes": {
+    "subtitle": "sounds.roundabout.ge_spikes",
+    "sounds": [
+      "roundabout:ge_spikes"
+    ]
+  },
+  "ge_tree": {
+    "subtitle": "sounds.roundabout.ge_life",
+    "sounds": [
+      "roundabout:ge_tree"
+    ]
+  },
+  "ge_vine": {
+    "subtitle": "sounds.roundabout.ge_life",
+    "sounds": [
+      "roundabout:ge_vine"
+    ]
+  },
+  "return_to_zero": {
+    "subtitle": "sounds.roundabout.return_to_zero",
+    "sounds": [
+      "roundabout:return_to_zero_1",
+      "roundabout:return_to_zero_2",
+      "roundabout:return_to_zero_3",
+      "roundabout:return_to_zero_4"
+    ]
+  },
+  "return_to_zero_rewind": {
+    "subtitle": "sounds.roundabout.return_to_zero",
+    "sounds": [
+      "roundabout:return_to_zero_rewind"
+    ]
+  },
   "summon_king_crimson": {
     "subtitle": "sounds.roundabout.summon_king_crimson",
     "sounds": [
       "roundabout:summon_king_crimson"
+    ]
+  },
+  "ger_barrage": {
+    "subtitle": "sounds.roundabout.stand_barrage_hit",
+    "sounds": [
+      "roundabout:ger_barrage_1",
+      "roundabout:ger_barrage_2"
+    ]
+  },
+  "ger_barrage_windup": {
+    "subtitle": "sounds.roundabout.stand_barrage_windup",
+    "sounds": [
+      "roundabout:ger_barrage_windup"
+    ]
+  },
+  "requiem_muda": {
+    "subtitle": "sounds.roundabout.the_world_muda",
+    "sounds": [
+      "roundabout:requiem_muda"
     ]
   },
   "king_crimson_impale": {
@@ -712,6 +792,24 @@
     "subtitle": "sounds.roundabout.chess_break",
     "sounds": [
       "roundabout:chess_break"
+    ]
+  },
+  "king_nothing_summon": {
+    "subtitle": "sounds.roundabout.summon_stand",
+    "sounds": [
+      "roundabout:king_nothing_summon"
+    ]
+  },
+  "king_nothing_phase": {
+    "subtitle": "sounds.roundabout.king_nothing_phase",
+    "sounds": [
+      "roundabout:king_nothing_phase"
+    ]
+  },
+  "king_nothing_desummon": {
+    "subtitle": "sounds.roundabout.king_nothing_desummon",
+    "sounds": [
+      "roundabout:king_nothing_desummon"
     ]
   },
   "ice_blast_charge": {
@@ -1020,6 +1118,12 @@
     "subtitle": "sounds.roundabout.btd_arrow",
     "sounds": [
       "roundabout:btd_arrow"
+    ]
+  },
+  "ge_requiem_obtain": {
+    "subtitle": "sounds.roundabout.ge_requiem_obtain",
+    "sounds": [
+      "roundabout:ge_requiem_obtain"
     ]
   },
   "killer_queen_bomb_detonate": {
@@ -1507,6 +1611,24 @@
     "subtitle": "sounds.roundabout.bs_select_confirm",
     "sounds": [
       "roundabout:bs_select_confirm"
+    ]
+  },
+  "bs_hurt": {
+    "subtitle": "sounds.roundabout.bs_hurt",
+    "sounds": [
+      "roundabout:bs_hurt"
+    ]
+  },
+  "bs_grab": {
+    "subtitle": "sounds.roundabout.bs_grab",
+    "sounds": [
+      "roundabout:bs_grab"
+    ]
+  },
+  "bs_stab": {
+    "subtitle": "sounds.roundabout.bs_stab",
+    "sounds": [
+      "roundabout:bs_stab"
     ]
   },
   "century_boy_summon": {
@@ -3152,7 +3274,39 @@
       "roundabout:snake_die"
     ]
   },
-
+  "snake_step": {
+    "subtitle": "sounds.roundabout.snake_step",
+    "sounds": [
+      "roundabout:snake_step_1",
+      "roundabout:snake_step_2",
+      "roundabout:snake_step_3",
+      "roundabout:snake_step_4"
+    ]
+  },
+  "piranha_hurt": {
+    "subtitle": "sounds.roundabout.piranha_hurt",
+    "sounds": [
+      "roundabout:piranha_hurt_1",
+      "roundabout:piranha_hurt_2",
+      "roundabout:piranha_hurt_3",
+      "roundabout:piranha_hurt_4"
+    ]
+  },
+  "piranha_dies": {
+    "subtitle": "sounds.roundabout.piranha_dies",
+    "sounds": [
+      "roundabout:piranha_dies"
+    ]
+  },
+  "piranha_flop": {
+    "subtitle": "sounds.roundabout.piranha_flop",
+    "sounds": [
+      "minecraft:entity/fish/flop1",
+      "minecraft:entity/fish/flop2",
+      "minecraft:entity/fish/flop3",
+      "minecraft:entity/fish/flop4"
+    ]
+  },
   "summon_world": {
     "subtitle": "sounds.roundabout.summon_world",
     "sounds": [
@@ -4245,6 +4399,49 @@
       "roundabout:ph_type_switch"
     ]
   },
+  "ph_kick": {
+    "subtitle": "sounds.roundabout.ph_kick",
+    "sounds": [
+      "roundabout:ph_kick"
+    ]
+  },
+  "ph_phase_1": {
+    "subtitle": "sounds.roundabout.ph_phase_1",
+    "sounds": [
+      "roundabout:ph_phase_1"
+    ]
+  },
+  "ph_phase_2": {
+    "subtitle": "sounds.roundabout.ph_phase_2",
+    "sounds": [
+      "roundabout:ph_phase_2"
+    ]
+  },
+  "ph_phase_3": {
+    "subtitle": "sounds.roundabout.ph_phase_3",
+    "sounds": [
+      "roundabout:ph_phase_3"
+    ]
+  },
+  "ph_spit": {
+    "subtitle": "sounds.roundabout.ph_spit",
+    "sounds": [
+      "roundabout:ph_spit"
+    ]
+  },
+
+  "al_charge": {
+    "subtitle": "sounds.roundabout.al_charge",
+    "sounds": [
+      "roundabout:al_charge"
+    ]
+  },
+  "al_move": {
+    "subtitle": "sounds.roundabout.al_move",
+    "sounds": [
+      "roundabout:al_move"
+    ]
+  },
   "planet_waves_summon": {
     "subtitle": "sounds.roundabout.planet_waves_summon",
     "sounds": [
@@ -4897,6 +5094,18 @@
       "roundabout:silver_chariot_rapier_spin"
     ]
   },
+  "silver_chariot_vault": {
+    "subtitle": "sounds.roundabout.silver_chariot_vault",
+    "sounds": [
+      "roundabout:silver_chariot_vault"
+    ]
+  },
+  "silver_chariot_rebound": {
+    "subtitle": "sounds.roundabout.silver_chariot_rebound",
+    "sounds": [
+      "roundabout:silver_chariot_rebound"
+    ]
+  },
   "bc_parachute_open": {
     "subtitle" : "sounds.roundabout.bc_parachute_open",
     "sounds": [
@@ -4999,22 +5208,22 @@
       "roundabout:ctr_rain_step_3"
     ]
   },
-  "ctr_rain_step_4": {
-    "subtitle": "sounds.roundabout.ctr_rain_step_4",
-    "sounds": [
-      "roundabout:ctr_rain_step_4"
-    ]
-  },
-  "ctr_rain_step_5": {
-    "subtitle": "sounds.roundabout.ctr_rain_step_5",
-    "sounds": [
-      "roundabout:ctr_rain_step_5"
-    ]
-  },
   "ctr_stabilizing_rain": {
     "subtitle": "sounds.roundabout.ctr_stabilizing_rain",
     "sounds": [
       "roundabout:ctr_stabilizing_rain"
+    ]
+  },
+  "ctr_barrier": {
+    "subtitle": "sounds.roundabout.ctr_barrier",
+    "sounds": [
+      "roundabout:ctr_barrier"
+    ]
+  },
+  "ctr_full_body_dodge": {
+    "subtitle": "sounds.roundabout.ctr_full_body_dodge",
+    "sounds": [
+      "roundabout:ctr_full_body_dodge"
     ]
   },
   "jumpin_jack_flash_summon": {

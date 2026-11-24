@@ -24,13 +24,16 @@ public class VisageRenderContext {
         float heyFull = 0;
 
         boolean hasWhiteAlbumOut =user.roundabout$getStandPowers() instanceof PowersWhiteAlbum pw && pw.renderHelmet();
-        int whiteAlbumTicks = user.roundabout$getWhiteAlbumVanishTicks();
+        //int whiteAlbumTicks = user.roundabout$getWhiteAlbumVanishTicks();
+        int whiteAlbumTicks = MainUtil.getWornStandVanishticksSafe(user, PowersWhiteAlbum.class);
         byte skin = user.roundabout$getStandSkin();
         if (hasWhiteAlbumOut || whiteAlbumTicks > 0){
-            if (user.roundabout$getLastStandSkin() != skin){
-                user.roundabout$setLastStandSkin(skin);
-                whiteAlbumTicks = 0;
-                user.roundabout$setWhiteAlbumVanishTicks(0);
+            if (user.roundabout$getStandPowers() instanceof PowersWhiteAlbum) {
+                if (user.roundabout$getLastStandSkin() != skin){
+                    user.roundabout$setLastStandSkin(skin);
+                    whiteAlbumTicks = 0;
+                    user.roundabout$setCurrentStandVanishTicks(0);
+                }
             }
 
             float partialTicks2 = partialTicks % 1;

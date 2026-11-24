@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin.keyboard;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyboardPilotInput;
 import net.hydra.jojomod.entity.SilverChariotMountEntity;
 import net.hydra.jojomod.entity.corpses.FallenPhantom;
@@ -37,7 +38,7 @@ public abstract class KeysKeyboardInput extends Input {
                     || (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy CB && CB.invincibleState)
                     || (user.roundabout$getStandPowers() instanceof PowersCream PC && PC.getTransformTimer() > 0)
                     || (user.roundabout$getStandPowers() instanceof PowersTusk PT && PT.getActivePower() == PowersTusk.FLATTEN)
-                    || user.roundabout$hasSpringLegs();
+                    || user.roundabout$hasSpringLegs() || user.roundabout$hasGERooted();
                     // || (user.roundabout$getStand() instanceof SilverChariotEntity sc && sc.isSelfCarryModeActive());
 
             boolean forwardKeys = user.roundabout$hasRibcageTrap();
@@ -59,7 +60,7 @@ public abstract class KeysKeyboardInput extends Input {
                 }
                 roundabout$keyRider.tick($$0,$$1);
 
-            } else if (user.roundabout$getStandPowers() instanceof PowersSilverChariot psc && psc.getSelfCarryMode()) {
+            } else if (player.isPassenger() && player.getVehicle() instanceof SilverChariotMountEntity scme) {
                 if (roundabout$keyRider == null){
                     roundabout$keyRider = new KeyboardPilotInput(this.options);
                 }

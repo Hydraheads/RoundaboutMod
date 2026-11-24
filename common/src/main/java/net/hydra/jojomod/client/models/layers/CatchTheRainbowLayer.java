@@ -8,8 +8,10 @@ import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
 import net.hydra.jojomod.stand.powers.PowersCatchTheRainbow;
 import net.hydra.jojomod.stand.powers.PowersHeyYa;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
@@ -39,16 +41,28 @@ public class CatchTheRainbowLayer<T extends LivingEntity, A extends HumanoidMode
             if (!entity.isInvisible()) {
                 if (entity != null) {
                     StandUser user = ((StandUser) livent);
-                    int heyTicks = user.roundabout$getCatchTheRainbowVanishTicks();
                     boolean hasCatchTheRainbowOut = (PowerTypes.hasStandActive(livent) && user.roundabout$getStandPowers() instanceof PowersCatchTheRainbow);
 
+                    //int heyTicks = user.roundabout$getCatchTheRainbowVanishTicks();
+                    int rainbowTicks = MainUtil.getWornStandVanishticksSafe(user, PowersCatchTheRainbow.class);/*0;
 
-                    if (heyTicks > 0 || hasCatchTheRainbowOut) {
+                    if (user.roundabout$getStandPowers() instanceof PowersCatchTheRainbow) {
+                        rainbowTicks = user.roundabout$getCurrentStandVanishTicks();
+                    }else if (user.roundabout$getPreviousStandPowers() instanceof PowersCatchTheRainbow) {
+                        rainbowTicks = user.roundabout$getPreviousStandVanishTicks();
+                    }*/
+
+                    if (rainbowTicks > 0 || hasCatchTheRainbowOut) {
                         byte skin = user.roundabout$getStandSkin();
-                        if (user.roundabout$getLastStandSkin() != skin){
-                            user.roundabout$setLastStandSkin(skin);
-                            heyTicks = 0;
-                            user.roundabout$setCatchTheRainbowVanishTicks(0);
+                        if (user.roundabout$getStandPowers() instanceof PowersCatchTheRainbow) {
+                            if (user.roundabout$getLastStandSkin() != skin) {
+                                user.roundabout$setLastStandSkin(skin);
+                                rainbowTicks = 0;
+
+                                user.roundabout$setCurrentStandVanishTicks(0);
+                            }
+                        }else {
+                            skin = user.roundabout$getPreviousSkin();
                         }
 
                         float heyFull = 0;
@@ -57,10 +71,10 @@ public class CatchTheRainbowLayer<T extends LivingEntity, A extends HumanoidMode
                             fixedPartial = 0;
                         }
                         if (hasCatchTheRainbowOut){
-                            heyFull = heyTicks+fixedPartial;
+                            heyFull = rainbowTicks+fixedPartial;
                             heyFull = Math.min(heyFull/10,1f);
                         } else {
-                            heyFull = heyTicks-fixedPartial;
+                            heyFull = rainbowTicks-fixedPartial;
                             heyFull = Math.max(heyFull/10,0);
                         }
                         ClientUtil.pushPoseAndCooperate(poseStack,24);
@@ -78,16 +92,12 @@ public class CatchTheRainbowLayer<T extends LivingEntity, A extends HumanoidMode
                             poseStack.scale(0.6F, 0.6F, 0.6F);
                             poseStack.translate(0.3, 3, -0.3);
                             }
-                        boolean isHurt = livent.hurtTime > 0;
-                        float r = isHurt ? 1.0F : 1.0F;
-                        float g = isHurt ? 0.0F : 1.0F;
-                        float b = isHurt ? 0.0F : 1.0F;
-                        if (((StandUser) entity).roundabout$getStandSkin() != 10) {
+                        if (skin != 11) {
                             ModStrayModels.CATCH_THE_RAINBOW.render(livent, partialTicks, poseStack, bufferSource, packedLight,
-                                    r, g, b, heyFull, skin);
+                                    1, 1, 1, heyFull, skin);
                         }else {
                             ModStrayModels.CATCH_THE_RAINBOW_UMVUTHI.render(livent, partialTicks, poseStack, bufferSource, packedLight,
-                                    r, g, b, heyFull, skin);
+                                    1, 1, 1, heyFull, skin);
                         }
                         ClientUtil.popPoseAndCooperate(poseStack,24);
                     }
@@ -96,4 +106,3 @@ public class CatchTheRainbowLayer<T extends LivingEntity, A extends HumanoidMode
         }
     }
 }
-

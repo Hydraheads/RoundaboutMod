@@ -11,6 +11,7 @@ import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
 import net.hydra.jojomod.client.models.substand.zsabbathsouls.animations.MobSoulAnimation;
 import net.hydra.jojomod.entity.stand.SilverChariotEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersSilverChariot;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;
@@ -303,10 +304,6 @@ public class SilverChariotModel<T extends SilverChariotEntity> extends StandMode
 		super.translateToHand(p_103778_, p_103779_, zshift, yshift, xshift);
 	}
 
-	public ModelPart getOffhandPart(T entity) {
-		return entity.getSkin() != SilverChariotEntity.PART_5 ? this.right_offhand_item : this.left_offhand_item;
-	}
-
 	PowersSilverChariot powers = new PowersSilverChariot(null);
 
 	@Override
@@ -314,7 +311,6 @@ public class SilverChariotModel<T extends SilverChariotEntity> extends StandMode
 		Minecraft minecraft = Minecraft.getInstance();
 		super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
 		defaultModifiers(pEntity);
-		// defaultAnimations(pEntity, pAgeInTicks, 1 / ((float) Power.getBarrageWindup() / 20));
 		float windupLength = 1/((float) powers.getBarrageWindup() / 20f);
 		float partial = 1.4f;
 		float full = 1.16666f;
@@ -322,26 +318,29 @@ public class SilverChariotModel<T extends SilverChariotEntity> extends StandMode
 			partial = 1.4f - Math.min(0.5f,0.9f*((float) pEntity.getMeltLevel()));
 			full = 1.16666f - Math.min(0.5f,0.07f*((float) pEntity.getMeltLevel()));
 		}
-
-		// this.animate(pEntity.scBlock, SilverChariotAnimations.Block, pAgeInTicks, 1f);
-		// this.animate(pEntity.scBarrage, SilverChariotAnimations.Barrage, pAgeInTicks, 1f);
-		// this.animate(pEntity.scBarrageDamage, SilverChariotAnimations.BarrageDamage, pAgeInTicks, 1f);
-		// this.animate(pEntity.scBarrageCharge, SilverChariotAnimations.BarrageCharge, pAgeInTicks, 1f);
-		// this.animate(pEntity, SilverChariotAnimations, pAgeInTicks, 1f);
 		this.head.visible = !(pEntity.isRemoteControlled()
 				&& pEntity.getUser() == minecraft.player
 				&& minecraft.options.getCameraType().isFirstPerson());
-		if (!pEntity.isPart5Skin()) {
+		// if (!pEntity.isPart5Skin()) {
+		if (pEntity.isRightHanded()) {
 			this.right_sword.visible = true;
 			this.left_sword.visible = false;
 		} else {
 			this.right_sword.visible = false;
 			// this.left_sword.visible = true;
-			if (pEntity.getAnimation() == SilverChariotEntity.SC_OFFHAND_WEAPON_SWIPE) {
+			if (pEntity.isPart5Skin() && pEntity.getAnimation() == SilverChariotEntity.SC_OFFHAND_WEAPON_SWIPE) {
 				this.left_sword.visible = false;
 			} else {
 				this.left_sword.visible = true;
 			}
+		}
+
+		if (((StandUser) pEntity.getUser()).roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PSC.onCooldown(PowersSilverChariot.SKILL_SILVER_CHARIOT_SWORD_SHOOT_INDEX)) {
+			this.right_blade.visible = false;
+			this.left_blade.visible = false;
+		} else {
+			this.right_blade.visible = true;
+			this.left_blade.visible = true;
 		}
 
 		this.animate(pEntity.scFallBrace, SilverChariotAnimations.FallBrace(), pAgeInTicks, 1f);
@@ -366,18 +365,19 @@ public class SilverChariotModel<T extends SilverChariotEntity> extends StandMode
 		this.animate(pEntity.scIdleNotArmoured, SilverChariotAnimations.IdleArmorless(), pAgeInTicks, 1f);
 		this.animate(pEntity.scPart3Pose, SilverChariotAnimations.Part3Pose(), pAgeInTicks, 1f);
 		this.animate(pEntity.scPart5Pose, SilverChariotAnimations.Part5Pose(), pAgeInTicks, 1f);
+		this.animate(pEntity.scIdleArmouredFake, SilverChariotAnimations.Idle(), pAgeInTicks, 1f);
+		this.animate(pEntity.scPart3PoseFake, SilverChariotAnimations.Part3Pose(), pAgeInTicks, 1f);
+		this.animate(pEntity.scPart5PoseFake, SilverChariotAnimations.Part5Pose(), pAgeInTicks, 1f);
 		this.animate(pEntity.scToggleRightSword, SilverChariotAnimations.RightSword(), pAgeInTicks, 1f);
 		this.animate(pEntity.scToggleLeftSword, SilverChariotAnimations.LeftSword(), pAgeInTicks, 1f);
 		this.animate(pEntity.scHideRapiers, StandAnimations.HIDE_FISTS, pAgeInTicks, 1f);
 		this.animate(pEntity.scToggleNotArmouredState, SilverChariotAnimations.Armorless(), pAgeInTicks, 1f);
-		this.animate(pEntity.scRightVault, SilverChariotAnimations.RightVault(), pAgeInTicks, 1f);
-		this.animate(pEntity.scLeftVault, SilverChariotAnimations.LeftVault(), pAgeInTicks, 1f);
+		this.animate(pEntity.scRightVault, SilverChariotAnimations.RightVault(), pAgeInTicks, 1.5f);
+		this.animate(pEntity.scLeftVault, SilverChariotAnimations.LeftVault(), pAgeInTicks, 1.5f);
 		this.animate(pEntity.scRightRapierSpin, SilverChariotAnimations.RightRapierSpin(), pAgeInTicks, 1f);
 		this.animate(pEntity.scLeftRapierSpin, SilverChariotAnimations.LeftRapierSpin(), pAgeInTicks, 1f);
 		this.animate(pEntity.scRightRapierSlash, SilverChariotAnimations.RightRapierSlash(), pAgeInTicks, 1.3f);
 		this.animate(pEntity.scLeftRapierSlash, SilverChariotAnimations.LeftRapierSlash(), pAgeInTicks, 1.3f);
-		// this.animate(pEntity.scRightRapierSlash, SilverChariotAnimations.RightHit2(), pAgeInTicks, 1.3f);
-		// this.animate(pEntity.scLeftRapierSlash, SilverChariotAnimations.LeftHit2(), pAgeInTicks, 1.3f);
 		this.animate(pEntity.scRightSlabCutting, SilverChariotAnimations.RightHit2(), pAgeInTicks, 1.3f);
 		this.animate(pEntity.scLeftSlabCutting, SilverChariotAnimations.LeftHit2(), pAgeInTicks, 1.3f);
 		this.animate(pEntity.scRightOffhandSwipe, SilverChariotAnimations.RightOffhandSwipe(), pAgeInTicks, 1.4f);
@@ -399,11 +399,24 @@ public class SilverChariotModel<T extends SilverChariotEntity> extends StandMode
 		this.animate(pEntity.scBarrageFinisherRight, SilverChariotAnimations.RightHit3(), pAgeInTicks, 2.2f);
 		this.animate(pEntity.scBarrageFinisherLeft, SilverChariotAnimations.LeftHit3(), pAgeInTicks, 2.2f);
         this.animate(pEntity.grabbedStandByBlackSabbath, MobSoulAnimation.grabbed_humanoid_stand,  pAgeInTicks, 1f);
+		if (!pEntity.getArmoured()) {
+			float time = (pEntity.tickCount + pAgeInTicks) * 0.1F;
+			float minAlpha = 0.35F;
+			float maxAlpha = 0.85F;
+			float alphaRange = maxAlpha - minAlpha;
+			float afterimageAlpha = minAlpha +
+					(Mth.sin(time) + 1.0F) / 2.0F * alphaRange;
+			this.setAlpha(afterimageAlpha);
+		}
 	}
 
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
 		// stand.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		if (alpha < 0F) {
+			stand.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, -alpha);
+			return;
+		}
 		super.renderToBuffer(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
 	}
 

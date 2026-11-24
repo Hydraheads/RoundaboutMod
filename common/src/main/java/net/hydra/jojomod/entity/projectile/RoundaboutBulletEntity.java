@@ -11,6 +11,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersGoldExperience;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -283,6 +284,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
 
                 if (didDamage) {
                     applyEffect(livingEntity);
+                    PowersGoldExperience.applyTreeImbueOnProjectileHit(this, livingEntity);
                 }
 
                 if (didDamage && getAmmoType() == SNUBNOSE || getAmmoType() == BERETTA && outsideOfTimeStop == 0) {
@@ -294,6 +296,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
 
                 if (didDamage) {
                     applyEffect(livingEntity);
+                    PowersGoldExperience.applyTreeImbueOnProjectileHit(this, livingEntity);
                 }
 
                 if (didDamage && getAmmoType() == SNUBNOSE || getAmmoType() == BERETTA && outsideOfTimeStop == 0) {
@@ -304,8 +307,6 @@ public class RoundaboutBulletEntity extends AbstractArrow {
                 if (livingEntity.isAlive()) {
                     doPostHurtXtraDamage(livingEntity);
                 }
-
-
             }
         }else if (entity instanceof GentlyWeepsEntity gwe){
                 GentlyWeepsEntity.dealWithProjectile(this,gwe);
@@ -452,6 +453,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
 
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
+        PowersGoldExperience.applyTreeImbueOnBlockHit(this, $$0);
         this.setSuperThrown(false);
         this.setDeltaMovement(Vec3.ZERO);
         if (!level().isClientSide) {

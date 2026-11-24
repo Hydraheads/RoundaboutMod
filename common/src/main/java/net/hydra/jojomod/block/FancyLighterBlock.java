@@ -1,9 +1,11 @@
 package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.access.CancelDataDrivenDropLimits;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.FancyLighterItem;
 import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
@@ -23,6 +25,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -38,7 +41,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FancyLighterBlock extends BaseEntityBlock implements CancelDataDrivenDropLimits {
+public class FancyLighterBlock extends BaseEntityBlock {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty LIT = ModBlocks.LIT;
@@ -82,6 +85,29 @@ public class FancyLighterBlock extends BaseEntityBlock implements CancelDataDriv
     }
 
     @Override
+    public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
+        if (level.getBlockEntity(pos) instanceof FancyLighterBlockEntity $$5) {
+            ItemStack stack = $$5.getStoredStack();
+            if (stack != null){
+                return stack;
+            }
+        }
+        return super.getCloneItemStack(level,pos,state);
+
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public boolean canSurvive(BlockState $$0, LevelReader $$1, BlockPos $$2) {
+        BlockState blockstate = $$1.getBlockState($$2.below());
+        if (blockstate.is(ModBlocks.INVISIBLOCK)){
+            return true;
+        }
+        BlockPos $$3 = $$2.below();
+        return $$1.getBlockState($$3).isFaceSturdy($$1, $$3, Direction.UP);
+    }
+
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> $$0) {
         $$0.add(FACING);
         $$0.add(LIT);
@@ -109,47 +135,65 @@ public class FancyLighterBlock extends BaseEntityBlock implements CancelDataDriv
     public void stepped(ServerLevel $$0, BlockPos $$1, BlockState $$2, Entity stepper) {
         FancyLighterBlockEntity fbe = (FancyLighterBlockEntity) $$0.getBlockEntity($$1);
         Entity ownerEntity = null;
-        if(fbe != null && fbe.getOwner() != null) {
-            ownerEntity = $$0.getEntity(fbe.getOwner());
+        if(fbe == null){
+            return;
         }
-        if($$2.getValue(LIT) &&
-                ownerEntity != null && !stepper.is(ownerEntity)
-                && ownerEntity instanceof StandUser se && se.roundabout$getStandPowers() instanceof PowersBlackSabbath bs){
+        ItemStack it = fbe.getStoredStack();
+        if(it.getItem() instanceof FancyLighterItem FIT) {
+            if (fbe.getOwner() != null) {
+                CompoundTag tag = it.getTag();
+                if (tag == null){
+                    return;
+                }
+                if (!tag.hasUUID("StuffOther")){
+                    return;
+                }
+                ownerEntity = $$0.getEntity(tag.getUUID("StuffOther"));
+            if ($$2.getValue(LIT) &&
+                    ownerEntity != null && !stepper.is(ownerEntity)
+                    && ownerEntity instanceof StandUser se && se.roundabout$getStandPowers() instanceof PowersBlackSabbath bs) {
+                if (ownerEntity instanceof ServerPlayer spl) {
+                    boolean userPowers = ownerEntity instanceof Player p && ((IPlayerEntity)p).roundabout$getPower() == PowerTypes.STAND.ordinal();
+                    if (stepper.getUUID() != fbe.getOwner()) {
+                        if(userPowers) {
+                            if (bs.tickDown2 <= -9) {
+                                if (!((StandUser) se).roundabout$getActive()) {
+                                    ((StandUser) se).roundabout$setActive(true);
+                                }
 
-            if(ownerEntity instanceof ServerPlayer spl){
-                       if(stepper.getUUID() != fbe.getOwner()){
-                           if(bs.tickDown2 <= -9) {
-                               if (!bs.blackSabbathTargets.contains(stepper)) {
-                                   bs.selectTargetSecond(stepper);
-                               }
-                                   if (bs.moveMode != 3) {
-                                       bs.setThree();
-                                       bs.setTickBeforeHunt(20);
+                                if (!bs.blackSabbathTargets.contains(stepper)) {
+                                    bs.selectTargetSecond(stepper);
+                                }
+                                if (bs.moveMode != 3) {
+                                    bs.setThree();
+                                    bs.setTickBeforeHunt(20);
 
-                                       if (bs.blackSelect != null) {
-                                           bs.blackSelect.forceDespawnSet = true;
-                                       }
-                                       if (bs.getStandEntity(bs.self) != null) {
-                                           bs.getStandEntity(bs.self).forceDespawnSet = true;
-                                       }
-                                   }
+                                    if (bs.blackSelect != null) {
+                                        bs.blackSelect.forceDespawnSet = true;
+                                    }
+                                    if (bs.getStandEntity(bs.self) != null) {
+                                        bs.getStandEntity(bs.self).forceDespawnSet = true;
+                                    }
+                                }
 
-                                   List<LivingEntity> lvent = stepper.level().getEntitiesOfClass(LivingEntity.class, stepper.getBoundingBox().inflate(ClientNetworking.getAppropriateConfig().blackSabbathSettings.lighterWitnessRange), (livingEntity) -> {
-                                       return true;
-                                   });
-                                   if (lvent != null && !lvent.isEmpty()) {
-                                       for (LivingEntity value : lvent) {
-                                           if (value.hasLineOfSight(stepper)) {
-                                               if (!(value instanceof StandEntity || value instanceof RoadRollerEntity || value.is(bs.self))) {
-                                                   bs.selectTargetSecond(value);
-                                               }
-                                           }
-                                       }
-                                   }
-                               }
-                       }
+                                List<LivingEntity> lvent = stepper.level().getEntitiesOfClass(LivingEntity.class, stepper.getBoundingBox().inflate(ClientNetworking.getAppropriateConfig().blackSabbathSettings.lighterWitnessRange), (livingEntity) -> {
+                                    return true;
+                                });
+                                if (lvent != null && !lvent.isEmpty()) {
+                                    for (LivingEntity value : lvent) {
+                                        if (value.hasLineOfSight(stepper)) {
+                                            if (!(value instanceof StandEntity || value instanceof RoadRollerEntity || value.is(bs.self))) {
+                                                bs.selectTargetSecond(value);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
-
+            }
         }
         super.stepOn($$0, $$1, $$2, stepper);
     }
@@ -193,9 +237,10 @@ public class FancyLighterBlock extends BaseEntityBlock implements CancelDataDriv
     @Override
     public void onRemove(BlockState $$0, Level $$1, BlockPos $$2, BlockState $$3, boolean $$4) {
         if (!$$0.is($$3.getBlock())) {
-            if ($$1.getBlockEntity($$2) instanceof FancyLighterBlockEntity FE) {
-                 /*It seems dumb to leave an empty method but it's necessary to save the user when it gets broken*/
+            if ($$1.getBlockEntity($$2) instanceof FancyLighterBlockEntity $$5) {
+                $$5.popOutRecord();
             }
+            super.onRemove($$0, $$1, $$2, $$3, $$4);
         }
     }
 
@@ -240,38 +285,5 @@ public class FancyLighterBlock extends BaseEntityBlock implements CancelDataDriv
     }
 
     public ItemStack referenceItem = ItemStack.EMPTY;
-    public List<ItemStack> dropGen(BlockState state, ServerLevel sl, BlockPos bpos, @Nullable BlockEntity be){
-        if (state.getBlock() instanceof FancyLighterBlock FB) {
-            List<ItemStack> drops = new ArrayList<>();
-            ItemStack stack = referenceItem.copy();
-            if (sl.getBlockEntity(bpos) instanceof FancyLighterBlockEntity FE) {
-                CompoundTag compoundtag = stack.getTagElement("UserIdUUID");
-                if (!stack.hasTag()) {
-                    if(compoundtag == null || !compoundtag.hasUUID("StuffOther")) {
-                        if (FE.getOwner() != null) {
-                            stack.getOrCreateTagElement("UserIdUUID").putUUID("StuffOther", FE.getOwner());
-                            System.out.println(stack.getOrCreateTagElement("UserIdUUID").getUUID("StuffOther"));
-                        }
-                    }
-                }
-            }
-            if(stack.getItem() instanceof FancyLighterItem FI){
-                FI.setIsNotLit(stack, !state.getValue(LIT));
-            }
-            drops.add(stack);
-            return drops;
-        }
-        return new ArrayList<>();
-    }
-
-    @Override
-    public List<ItemStack> getRealDrops(BlockState state, ServerLevel sl, BlockPos bpos, @Nullable BlockEntity be) {
-        return dropGen(state,sl,bpos,be);
-    }
-
-    @Override
-    public List<ItemStack> getRealDrops(BlockState state, ServerLevel sl, BlockPos bpos, @Nullable BlockEntity be, @Nullable Entity p_49879_, ItemStack p_49880_) {
-        return dropGen(state,sl,bpos,be);
-    }
 
 }

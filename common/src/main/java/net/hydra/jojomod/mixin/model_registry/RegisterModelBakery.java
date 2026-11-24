@@ -69,6 +69,8 @@ public abstract class RegisterModelBakery {
         this.loadTopLevel(ModItemModels.STREET_SIGN_DANGER_HELD);
         this.loadTopLevel(ModItemModels.STREET_SIGN_DANGER_HELD_D);
         this.loadTopLevel(ModItemModels.STREET_SIGN_DANGER_HELD_D2);
+        this.loadTopLevel(ModItemModels.ZOMBIE_HORSE_THREAD_BROKEN);
+        this.loadTopLevel(ModItemModels.ZOMBIE_HORSE_THREAD);
         this.topLevelModels.get(ModItemModels.HARPOON_IN_HAND).resolveParents(this::getModel);
         this.topLevelModels.get(ModItemModels.ANUBIS_IN_HAND).resolveParents(this::getModel);
         this.topLevelModels.get(ModItemModels.STAND_BOW).resolveParents(this::getModel);
@@ -109,6 +111,8 @@ public abstract class RegisterModelBakery {
         this.topLevelModels.get(ModItemModels.STREET_SIGN_DANGER_HELD).resolveParents(this::getModel);
         this.topLevelModels.get(ModItemModels.STREET_SIGN_DANGER_HELD_D).resolveParents(this::getModel);
         this.topLevelModels.get(ModItemModels.STREET_SIGN_DANGER_HELD_D2).resolveParents(this::getModel);
+        this.topLevelModels.get(ModItemModels.ZOMBIE_HORSE_THREAD_BROKEN).resolveParents(this::getModel);
+        this.topLevelModels.get(ModItemModels.ZOMBIE_HORSE_THREAD).resolveParents(this::getModel);
     }
 
     /**Shadows, ignore

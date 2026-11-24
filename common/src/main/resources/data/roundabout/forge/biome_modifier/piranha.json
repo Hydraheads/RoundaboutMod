@@ -1,0 +1,16 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": {
+    "type": "forge:or",
+    "values": [
+      "#minecraft:is_river",
+      "#minecraft:is_ocean"
+    ]
+  },
+  "spawners": {
+    "type": "roundabout:piranha",
+    "weight": 15,
+    "minCount": 3,
+    "maxCount": 6
+  }
+}

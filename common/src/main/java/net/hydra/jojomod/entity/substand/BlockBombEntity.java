@@ -253,6 +253,11 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
     @Override
     public boolean mayInteract(Level $$0, BlockPos pos) { return false;}
 
+
+	public boolean standCanShowName() {
+		return false;
+	}
+
     //@Override
     /*public boolean forceVisualRotation(){
         return true;

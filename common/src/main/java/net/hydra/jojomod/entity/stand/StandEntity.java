@@ -14,6 +14,7 @@ import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -256,12 +257,12 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                     if (mr.emitsFlameCycle() && !isInWaterOrRain()){
                         mr.cycleFlames.startIfStopped(this.tickCount);
                         mr.hideFlames.stop();
-                        System.out.println("aaa");
                     } else {
                         mr.cycleFlames.stop();
                         mr.hideFlames.startIfStopped(this.tickCount);
-                        System.out.println("bbb");
                     }
+                } else if (this instanceof KillerQueenEntity kq){
+                    kq.hideBubble.startIfStopped(this.tickCount);
                 }
                 return;
             }
@@ -883,13 +884,22 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
 
     @Override
     public void push(Entity $$0) {
+        if(this instanceof BlackSabbathEntity bs && (bs.getStrafing() || bs.getGrabbing() != 0) && !bs.getUnrender()){
+            super.push($$0);
+        }
     }
 
     @Override
     protected void pushEntities() {
+        if(this instanceof BlackSabbathEntity bs && (bs.getStrafing() || bs.getGrabbing() != 0) && !bs.getUnrender()){
+            super.pushEntities();
+        }
     }
     @Override
     public void doPush(Entity $$0) {
+        if(this instanceof BlackSabbathEntity bs && (bs.getStrafing() || bs.getGrabbing() != 0) && !bs.getUnrender()){
+            super.doPush($$0);
+        }
     }
 
     public void forceTick(){
@@ -1276,5 +1286,19 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
     //For people with nasa space shuttle eyes complaining about perfect rotations on stands on time erase
     public void tryHardTimeEraseRendering(){
 
+    }
+
+    public boolean standCanShowName() {
+        return false;
+    }
+
+    public boolean shouldShowName() {
+        if (!standCanShowName() || ClientUtil.isPlayer(getUser()) || MainUtil.getEntityIsTrulyInvisible(this)
+                || !(ClientUtil.getPlayer() != null && ClientUtil.getPlayer().hasLineOfSight(this))
+        ) {
+            return super.shouldShowName();
+        }
+
+        return ConfigManager.getClientConfig().generalSettings.standShowName;
     }
 }

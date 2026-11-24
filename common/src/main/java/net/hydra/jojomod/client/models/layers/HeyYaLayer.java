@@ -10,6 +10,7 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersHeyYa;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
@@ -39,16 +40,28 @@ public class HeyYaLayer<T extends LivingEntity, A extends HumanoidModel<T>> exte
             if (!entity.isInvisible()) {
                 if (entity != null) {
                     StandUser user = ((StandUser) livent);
-                    int heyTicks = user.roundabout$getHeyYaVanishTicks();
+                    int heyTicks = MainUtil.getWornStandVanishticksSafe(user, PowersHeyYa.class);
+                    /*int heyTicks = 0;
+                    if (user.roundabout$getStandPowers() instanceof PowersHeyYa) {
+                        heyTicks = user.roundabout$getCurrentStandVanishTicks();
+                    }else if (user.roundabout$getPreviousStandPowers() instanceof PowersHeyYa) {
+                        heyTicks = user.roundabout$getPreviousStandVanishTicks();
+                    }*/
+
                     boolean hasHeyYaOut = (PowerTypes.hasStandActive(livent) && user.roundabout$getStandPowers() instanceof PowersHeyYa);
 
 
                     if (heyTicks > 0 || hasHeyYaOut) {
                         byte skin = user.roundabout$getStandSkin();
-                        if (user.roundabout$getLastStandSkin() != skin){
-                            user.roundabout$setLastStandSkin(skin);
-                            heyTicks = 0;
-                            user.roundabout$setHeyYaVanishTicks(0);
+                        if (user.roundabout$getStandPowers() instanceof PowersHeyYa) {
+                            if (user.roundabout$getLastStandSkin() != skin){
+                                user.roundabout$setLastStandSkin(skin);
+                                heyTicks = 0;
+
+                                user.roundabout$setCurrentStandVanishTicks(0);
+                            }
+                        }else {
+                            skin = user.roundabout$getPreviousSkin();
                         }
 
                         float heyFull = 0;

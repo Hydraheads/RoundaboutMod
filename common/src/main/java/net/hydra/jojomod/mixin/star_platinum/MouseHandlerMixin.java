@@ -1,11 +1,11 @@
 package net.hydra.jojomod.mixin.star_platinum;
 
 import com.mojang.blaze3d.Blaze3D;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.index.AnubisMemory;
 import net.hydra.jojomod.event.index.AnubisMoment;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.JackalRifleItem;
+import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
 import net.hydra.jojomod.util.HeatUtil;
@@ -24,7 +24,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import oshi.util.tuples.Pair;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -116,6 +115,12 @@ public abstract class MouseHandlerMixin {
                 ci.cancel();
                 return;
             }
+
+            if(((StandUser)player).roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB && PCB.isCameraMovementLocked()){
+                ci.cancel();
+                return;
+            }
+
 
             if (Minecraft.getInstance().options.getCameraType().isFirstPerson()) {
                 int scopelvl = ((StandUser)player).roundabout$getStandPowers().scopeLevel;

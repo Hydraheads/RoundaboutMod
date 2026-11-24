@@ -18,6 +18,7 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.AnubisItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
+import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.Minecraft;
@@ -242,9 +243,9 @@ public class AnubisModel extends PsuedoHierarchicalModel {
         byte skin = (byte) 0;
 
         StandUser user = (StandUser) entity;
-        float ticks = user.roundabout$getAnubisVanishTicks();
-        float alphaTicks = AnubisLayer.getTicks(entity,partialTicks);
+        int ticks = MainUtil.getWornStandVanishticksSafe(user, PowersAnubis.class);
 
+        float alphaTicks = AnubisLayer.getTicks(entity,partialTicks);
 
         if (user.roundabout$getPossessor() instanceof AnubisPossessorEntity) {
             skin = (byte)1;
@@ -257,7 +258,7 @@ public class AnubisModel extends PsuedoHierarchicalModel {
                 }
             } */
         } else if ( (user.roundabout$getStandPowers() instanceof PowersAnubis && PowerTypes.hasStandActive(entity) ) || (ticks != 0 && !entity.getMainHandItem().is(ModItems.ANUBIS_ITEM)   ) ) {
-            skin = user.roundabout$getStandSkin();
+            skin = MainUtil.getWornStandSkinSafe(user, PowersAnubis.class);
         } else if (entity.getMainHandItem().getItem() instanceof AnubisItem && !user.roundabout$getEffectiveCombatMode()) {
             CompoundTag tag = entity.getMainHandItem().getTag();
             if (tag != null) {

@@ -88,6 +88,8 @@ public class StickyIceCoatingBlock
                             }
                         }
                     }
+                } else {
+                    ((StandUser)LE).roundabout$setStuckSpeedMulti(Vec3.ZERO);
                 }
             }
             if (!$$1.isClientSide) {

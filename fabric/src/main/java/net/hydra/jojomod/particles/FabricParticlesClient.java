@@ -17,6 +17,9 @@ public class FabricParticlesClient {
         ParticleFactoryRegistry.getInstance().register(FabricParticles.GOLD_PUNCH_IMPACT_A, GoldPunchImpactParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.GOLD_PUNCH_IMPACT_B, GoldPunchImpactParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.GOLD_PUNCH_IMPACT_C, GoldPunchImpactParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.REQUIEM_PUNCH_IMPACT_A, PunchImpactParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.REQUIEM_PUNCH_IMPACT_B, PunchImpactParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.REQUIEM_PUNCH_IMPACT_C, PunchImpactParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.MELTING, BloodParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.BLOOD, BloodParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.SWEAT, BloodParticle.Provider::new);
@@ -70,7 +73,7 @@ public class FabricParticlesClient {
         ParticleFactoryRegistry.getInstance().register(FabricParticles.FRICTIONLESS, PlunderParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.EXCLAMATION, ExclamationParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.STITCH, StitchParticle.Provider::new);
-        ParticleFactoryRegistry.getInstance().register(FabricParticles.MOLD_DUST, MoldDustParticle.CosyProvider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.MOLD_DUST, MoldDustParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.ZOMBIE_STITCH, ZombieStitchParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.OCCULT, OccultParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.AIRBUBBLE_PINK, AirBubbleParticle.Provider::new);
@@ -89,6 +92,7 @@ public class FabricParticlesClient {
         ParticleFactoryRegistry.getInstance().register(FabricParticles.RAGING_LIGHT, AnubisLightParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.ALLURING_LIGHT, AnubisLightParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.TUSK_HOLE, TuskHoleParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.GOLDEN_SPIRAL, GoldenSpiralParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.KILLER_QUEEN_EXPLOSION, KQExplosionParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.PW_FIREBALL_EXPLOSION, PWFireballExplosionParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.PW_BLASTWAVE_EXPLOSION, PWBlastwaveExplosionParticle.Provider::new);
@@ -96,9 +100,12 @@ public class FabricParticlesClient {
         ParticleFactoryRegistry.getInstance().register(FabricParticles.PW_BLUE_FIREBALL_EXPLOSION, PWBlueFireballExplosionParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.PW_BLUE_BLASTWAVE_EXPLOSION, PWBlueBlastwaveExplosionParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.PW_BLUE_MUSHROOM_EXPLOSION, PWBlueMushroomExplosionParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.BLACK_SABBATH_MOVING_RIPPLE, BlackSabbathMovingRippleParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.BLACK_SABBATH_IDLE_RIPPLE, BlackSabbathIdleRippleParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.PURPLE_HAZE_SMOKE, PurpleHazeSmokeParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.DISTORTION_SMOKE, DistortionSmokeParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.PURPLE_HAZE_BLASTWAVE, PurpleHazeBlastwaveParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.PUZZLE_PARTICLE, PuzzleParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.BABY_CRACKLE, BabyCrackleParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.COLD_CRACKLE, ColdCrackleParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.MAGIC_DUST, MagicDustParticle.Provider::new);
@@ -122,5 +129,14 @@ public class FabricParticlesClient {
         ParticleFactoryRegistry.getInstance().register(FabricParticles.TOOTH, ToothParticle.Provider::new);
 
         ParticleFactoryRegistry.getInstance().register(FabricParticles.VITAL_ESSENCE, VitalEssenceParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.GE_WAVE, GEWaveParticle.Provider::new);
+
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.AUTUMN_LEAVES, AutumnLeavesParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.GINKGO_LEAVES, GinkgoLeavesParticle.Provider::new);
+
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.RAIN_BUBBLE, RainBubbleParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.RAIN_SHARD_1, RainShardParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.RAIN_SHARD_2, RainShardParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.RAIN_SHARD_3, RainShardParticle.Provider::new);
     }
 }

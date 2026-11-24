@@ -62,13 +62,13 @@ public class GroundPathfindingStandAttackEntity extends PathfinderMob {
         return false;
     }
 
-    @Override
-    public boolean fireImmune() {
+    @Override public boolean fireImmune() {
         return true;
     }
-    public boolean isInvulnerable() {
+    @Override public boolean isInvulnerable() {
         return true;
     }
+    @Override public boolean isAffectedByPotions() {return false;}
 
     @Override
     protected void registerGoals() {

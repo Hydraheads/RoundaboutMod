@@ -2,32 +2,35 @@ package net.hydra.jojomod.entity.mobs;
 
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.TimeUtil;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.AnimationState;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FollowFlockLeaderGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomSwimmingGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.AbstractFish;
 import net.minecraft.world.entity.animal.AbstractSchoolingFish;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 
+import javax.annotation.Nullable;
 import java.util.List;
+import java.util.UUID;
 
-public class Piranha extends AbstractSchoolingFish {
+public class Piranha extends AbstractSchoolingFish implements NeutralMob {
     public Piranha(EntityType<? extends Piranha> $$0, Level $$1) {
         super($$0, $$1);
     }
@@ -36,11 +39,40 @@ public class Piranha extends AbstractSchoolingFish {
 
     private byte ATTACK = 4;
 
+    private static final UniformInt PERSISTENT_ANGER_TIME;
+    static {
+        PERSISTENT_ANGER_TIME = TimeUtil.rangeOfSeconds(20, 39);
+    }
+    private int remainingPersistentAngerTime;
+    @javax.annotation.Nullable
+    private UUID persistentAngerTarget;
+
+    public void startPersistentAngerTimer() {
+        this.setRemainingPersistentAngerTime(PERSISTENT_ANGER_TIME.sample(this.random));
+    }
+    public void setRemainingPersistentAngerTime(int $$0) {
+        this.remainingPersistentAngerTime = $$0;
+    }
+
+    public int getRemainingPersistentAngerTime() {
+        return this.remainingPersistentAngerTime;
+    }
+
+    public void setPersistentAngerTarget(@javax.annotation.Nullable UUID $$0) {
+        this.persistentAngerTarget = $$0;
+    }
+
+    @javax.annotation.Nullable
+    public UUID getPersistentAngerTarget() {
+        return this.persistentAngerTarget;
+    }
     @Override
     protected void registerGoals() {
         // eeeek bitey fish :(
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.4D, true));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 10, false, false,
+                (target) -> target != null && !(target instanceof Piranha)  && target.isAlive() && target.hasEffect(ModEffects.BLEED)));
         // other goals, can't call super because panic goal is higher than the biter fish goal
         this.goalSelector.addGoal(4, new RandomSwimmingGoal(this, 1.0D, 40) {
             @Override
@@ -107,6 +139,20 @@ public class Piranha extends AbstractSchoolingFish {
     }
 
     @Override
+    public void setTarget(@Nullable LivingEntity target) {
+        super.setTarget(target);
+        // KILL KILL KILL KILL KILL KILL
+        if (target != null && target.isAlive() && !this.level().isClientSide()) {
+            List<Piranha> nearby = this.level().getEntitiesOfClass(Piranha.class, this.getBoundingBox().inflate(12.0D));
+            for (Piranha piranha : nearby) {
+                if (piranha.isAlive() && piranha.getTarget() == null) {
+                    piranha.setTarget(target);
+                }
+            }
+        }
+    }
+
+    @Override
     public void handleEntityEvent(byte id) {
         if (id == ATTACK) {
             this.attackAnimationState.start(this.tickCount);
@@ -117,7 +163,7 @@ public class Piranha extends AbstractSchoolingFish {
 
     @Override
     protected SoundEvent getFlopSound() {
-        return SoundEvents.COD_FLOP;
+        return ModSounds.PIRANHA_FLOP_EVENT;
     }
 
     @Override
@@ -132,12 +178,12 @@ public class Piranha extends AbstractSchoolingFish {
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.SALMON_DEATH;
+        return ModSounds.PIRANHA_DIES_EVENT;
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource $$0) {
-        return SoundEvents.SALMON_HURT;
+        return ModSounds.PIRANHA_HURT_EVENT;
     }
 
     public static AttributeSupplier.Builder createAttributes() {

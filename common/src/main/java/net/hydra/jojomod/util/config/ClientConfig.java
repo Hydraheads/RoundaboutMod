@@ -105,6 +105,8 @@ public class ClientConfig implements Cloneable {
     @NestedOption(group = "modded")
     public ClientConfig.KillerQueenSettings killerQueenSettings;
     @NestedOption(group = "modded")
+    public ClientConfig.PurpleHazeSettings purpleHazeSettings;
+    @NestedOption(group = "modded")
     public ClientConfig.WhitesnakeSettings whitesnakeSettings;
     @NestedOption(group = "modded")
     public ClientConfig.DiverDownSettings diverDownSettings;
@@ -112,6 +114,10 @@ public class ClientConfig implements Cloneable {
     public ClientConfig.SilverChariotSettings silverChariotSettings;
     @NestedOption(group = "modded")
     public ClientConfig.LyinEyesSettings lyinEyesSettings;
+    @NestedOption(group = "modded")
+    public ClientConfig.KingNothingSettings kingNothingSettings;
+    @NestedOption(group = "modded")
+    public ClientConfig.CatchTheRainbowSettings catchTheRainbowSettings;
   /*  @NestedOption(group = "modded")
     public ClientConfig.StandTweakSettings standTweakSettings; */
 
@@ -140,6 +146,10 @@ public class ClientConfig implements Cloneable {
         public Float timeSkipOpacity;
         @FloatOption(group = "inherit", value = 0.6F, min = 0, max = 1)
         public Float bitesTheDustOpacity;
+        @FloatOption(group = "inherit", value = 0.7F, min = 0, max = 1)
+        public Float hazeFieldOpacity;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean standShowName;
     }
     public static class ConfigSettings {
 
@@ -217,6 +227,8 @@ public class ClientConfig implements Cloneable {
         public Integer killerQueenCurrentBombSize;
         @IntOption(group = "inherit", value = 1, min = 1, max = 8)
         public Integer goldExperienceCurrentAnimal;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 1)
+        public Integer silverChariotSwordProjectileType;
     }
     public static class VanillaMCTweaks {
         @BooleanOption(group = "inherit", value = true)
@@ -236,6 +248,10 @@ public class ClientConfig implements Cloneable {
         @BooleanOption(group = "inherit", value = true)
         public Boolean simpleTimeStopShader;
     }
+    public static class PurpleHazeSettings {
+    	@BooleanOption(group = "inherit", value = false)
+        public Boolean disablePHazeOverlayAnimation;
+    }
     public static class KillerQueenSettings {
     	@BooleanOption(group = "inherit", value = true)
         public Boolean bombOverlayHideOnF1;
@@ -243,6 +259,10 @@ public class ClientConfig implements Cloneable {
         public Boolean bombConfigFastToggle;
         @BooleanOption(group = "inherit", value = true)
         public Boolean itemToolsProtection;
+    }
+    public static class KingNothingSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean highlightInItemTrack;
     }
     public static class WhitesnakeSettings {
         @BooleanOption(group = "inherit", value = false)
@@ -265,22 +285,38 @@ public class ClientConfig implements Cloneable {
         // public Boolean silverChariotControlModeVisualEffectLostSight;
         @BooleanOption(group = "inherit", value = true)
         public Boolean silverChariotRenderAfterimages;
-        @IntOption(group = "inherit", value = 5, min = 2, max = 10)
+        @IntOption(group = "inherit", value = 4, min = 2, max = 10)
         public Integer silverChariotAfterimagesMaxAmount;
-        @IntOption(group = "inherit", value = 10, min = 1, max = 20)
+        @IntOption(group = "inherit", value = 5, min = 1, max = 20)
         public Integer silverChariotTickIntervalBetweenAfterimage;
         // @FloatOption(group = "inherit", value = 1F, min = 0, max = 1)
         // public Float silverChariotAfterimageOpacity;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean silverChariotShouldRenderAfterimagesWhileUserInFirstPerson;
+        @FloatOption(group = "inherit", value = 0.9F, min = 0.01F, max = 1F)
+        public Float silverChariotAfterimageSpeed;
         @BooleanOption(group = "inherit", value = true)
-        public Boolean silverChariotShouldRenderAfterimagesForUserWhileInFirstPerson;
+        public Boolean silverChariotShouldForceLeftMainArmWithPart5SkinInArmSummonMode;
     }
     public static class LyinEyesSettings {
         @BooleanOption(group = "inherit", value = false)
         public Boolean spinMapInsteadOfArrow;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean scoleciphobiaMode;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean scoleciphobiaModeUsing;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean liyingEyesColorBlindMode;
+        @FloatOption(group = "inherit", value = 0.7F, min = 0, max = 1)
+        public Float highlightSize;
         @FloatOption(group = "inherit", value = 1F, min = 0, max = 1)
         public Float nematodeOpacity;
         @FloatOption(group = "inherit", value = 1F, min = 0, max = 1)
         public Float mapOpacity;
+    }
+    public static class CatchTheRainbowSettings {
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean catchTheRainbowAlternateRainWalk;
     }
     public static class AnubisSettings {
         @BooleanOption(group = "inherit", value = false)

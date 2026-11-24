@@ -10,6 +10,7 @@ import net.hydra.jojomod.event.powers.visagedata.MistaVisage;
 import net.hydra.jojomod.item.IronBallCrossbowItem;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.ZombieHorseThreadItem;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -123,7 +124,16 @@ public abstract class RegisterItemRenderer implements IItemRenderer {
             if (ctd == 2) {
                 return this.itemModelShaper.getModelManager().getModel(ModItemModels.STREET_SIGN_DANGER_D2);
             }
+        } if ($$0.is(ModItems.ZOMBIE_HORSE_THREAD)){
+            if ($$2 != null) {
+                if (ZombieHorseThreadItem.isBroken($$0)){
+                    return this.itemModelShaper.getModelManager().getModel(ModItemModels.ZOMBIE_HORSE_THREAD_BROKEN);
+                } else {
+                    return this.itemModelShaper.getModelManager().getModel(ModItemModels.ZOMBIE_HORSE_THREAD);
+                }
+            }
         }
+
         rdbt$tempent = $$2;
 
 

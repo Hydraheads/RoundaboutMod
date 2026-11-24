@@ -1075,7 +1075,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
             if (!((StandUser) this).roundabout$getStandDisc().isEmpty()) {
                 if (!this.roundabout$getFightOrFlight()) {
-                    if (!((StandUser) this).roundabout$getGrabbedSoul() && !(((StandUser) this).roundabout$getSealedTicks() > -1)) {
+                    if (((StandUser) this).roundabout$getGrabberSabbath() == 0 && !(((StandUser) this).roundabout$getSealedTicks() > -1)) {
                         if (this.getTarget() != null) {
                             if (this.getVehicle() != null && (this.getVehicle() instanceof Boat ||
                                     this.getVehicle() instanceof Minecart)) {
@@ -1115,7 +1115,8 @@ public abstract class ZMob extends LivingEntity implements IMob {
                                 }
                             }
                             if (candoit) {
-                                if (!vec3d3.equals(Vec3.ZERO) && vec3d3.distanceTo(SE.getUser().position()) < 100) {
+                                if (!vec3d3.equals(Vec3.ZERO) && vec3d3.distanceTo(SE.getUser().position()) < 100 &&
+                                        vec3d3.distanceTo(Vec3.ZERO) > 5) {
                                     this.dismountTo(vec3d3.x, vec3d3.y, vec3d3.z);
                                 }
                             } else {

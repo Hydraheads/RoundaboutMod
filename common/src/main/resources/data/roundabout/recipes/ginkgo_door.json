@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WW",
+    "WW",
+    "WW"
+  ],
+  "key": {
+    "W": {
+      "item": "roundabout:ginkgo_planks"
+    }
+  },
+  "result": {
+    "item": "roundabout:ginkgo_door",
+    "count": 3
+  }
+}
