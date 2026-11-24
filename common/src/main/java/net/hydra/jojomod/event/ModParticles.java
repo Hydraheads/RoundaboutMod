@@ -147,4 +147,7 @@ public class ModParticles {
     public static SimpleParticleType GE_WAVE;
 
     public static SimpleParticleType RAIN_BUBBLE;
+    public static SimpleParticleType RAIN_SHARD_1;
+    public static SimpleParticleType RAIN_SHARD_2;
+    public static SimpleParticleType RAIN_SHARD_3;
 }

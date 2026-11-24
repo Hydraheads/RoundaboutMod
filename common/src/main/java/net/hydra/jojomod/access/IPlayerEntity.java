@@ -153,4 +153,6 @@ public interface IPlayerEntity {
     byte roundabout$getPurpleHazePods();
     void roundabout$setPurpleHazePods(byte pods);
 
+    boolean rdbt$isPendingGerCutscene();
+    void rdbt$setPendingGerCutscene(boolean pending);
 }

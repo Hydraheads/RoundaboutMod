@@ -23,6 +23,8 @@ import net.minecraft.world.phys.Vec3;
 
 public class CTRbarrierRenderer extends EntityRenderer<CTRbarrierEntity> {
 
+    //idk how to stop the game from crashing so here's a renderer that uses the gently weeps model with an invisible texture 🥀
+
     private final GentlyWeepsModel model;
 
     public CTRbarrierRenderer(EntityRendererProvider.Context context) {
@@ -30,43 +32,9 @@ public class CTRbarrierRenderer extends EntityRenderer<CTRbarrierEntity> {
         this.model = new GentlyWeepsModel<>(context.bakeLayer(ModEntityRendererClient.GENTLY_WEEPS_LAYER));
     }
 
-    public void render(CTRbarrierEntity $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5) {
-
-        if (ClientUtil.checkIfClientCanSeeMobsForWindVision() ||
-                (ClientUtil.getPlayer() != null &&
-                        ((StandUser)ClientUtil.getPlayer()).roundabout$getStandPowers() instanceof PowersCatchTheRainbow)) {
-            if (((TimeStop) $$0.level()).inTimeStopRange($$0)) {
-                $$2 = 0;
-            }
-
-            $$3.pushPose();
-            $$3.mulPose(Axis.ZP.rotationDegrees(180f));
-            $$3.translate(0, -2, 0);
-
-            this.model.root().getAllParts().forEach(ModelPart::resetPose);
-            $$0.spin.startIfStopped($$0.tickCount);
-            this.model.animate2($$0.spin, RipperEyesAnimation.SPIN_2, $$0.tickCount + $$2, 1f);
-            VertexConsumer $$6 = $$4.getBuffer(RenderType.entityTranslucent(getTextureLocation($$0)));
-
-
-            Vec3 motion = $$0.getDeltaMovement();
-
-            double dx = motion.x;
-            double dy = motion.y;
-            double dz = motion.z;
-            // Horizontal distance (XZ plane)
-            double horizontal = Math.sqrt(dx * dx + dz * dz);
-            this.model.renderToBuffer($$3, $$6, $$5, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F,
-                    Math.min(1 + ($$2 * 0.1F), 1f));
-            $$3.popPose();
-            super.render($$0, $$1, $$2, $$3, $$4, $$5);
-        }
-
-    }
-
     @Override
     public ResourceLocation getTextureLocation(CTRbarrierEntity ctrbarrierEntity) {
         return new ResourceLocation(Roundabout.MOD_ID,
-                "textures/stand/white_album/projectiles/gently_weeps.png");
+                "textures/stand/achtung_baby/very_badass_texture.png");
     }
 }

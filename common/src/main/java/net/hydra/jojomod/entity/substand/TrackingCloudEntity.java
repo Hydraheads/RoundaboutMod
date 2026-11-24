@@ -1,6 +1,9 @@
 package net.hydra.jojomod.entity.substand;
 
+import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
+import net.hydra.jojomod.entity.LifePunchCloneEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersKingCrimson;
@@ -18,12 +21,14 @@ import java.util.List;
 
 public class TrackingCloudEntity extends StandEntity {
 
-    public static final double SPEED = 0.3;
+    public static final double SPEED = 0.2;
 
     public static final byte
             PLAYER = 0,
             MOB = 1,
             BLOCK = 2;
+
+    private boolean hasTarget = false;
 
     public TrackingCloudEntity(
             EntityType<? extends Mob> entityType,
@@ -40,14 +45,21 @@ public class TrackingCloudEntity extends StandEntity {
                     return;
                 }
         redirectVector();
-        List<Entity> list = this.level().getEntities(this, this.getBoundingBox(), entity ->
-                entity.getType().equals(PKN.getMemorizedEntityType()) ||
-                        entity.getUUID().equals(PKN.getMemorizedPlayer()));
+        List<Entity> list = this.level().getEntities(this, this.getBoundingBox().inflate(0.5f), entity ->
+                entity.getType().equals(PKN.getMemorizedEntityType())
+                        || entity.getUUID().equals(PKN.getMemorizedPlayer())
+                        || (entity instanceof CloneEntity CE && (entity instanceof KingCrimsonCloneEntity
+                        || entity instanceof LifePunchCloneEntity) && CE.getPlayerUUID().isPresent()
+                        && CE.getPlayerUUID().get().equals(PKN.getMemorizedPlayer())));
         if (!list.isEmpty()) {
             PKN.setTrackedEntity(list.get(0));
         }
         else {
             PKN.clearTrackedEntity();
+        }
+        if (!hasTarget) {
+            this.discard();
+            return;
         }
         super.tick();
     }
@@ -60,7 +72,7 @@ public class TrackingCloudEntity extends StandEntity {
                 case PLAYER -> {
                     Entity player = this.level().getPlayerByUUID(PKN.getMemorizedPlayer());
                     if (player == null) {
-                        targetPos = this.getPosition(1);
+                        hasTarget = false;
                         break;
                     }
                     if (((StandUser) player).roundabout$getLifePunchClone() != null) {
@@ -71,10 +83,11 @@ public class TrackingCloudEntity extends StandEntity {
                         player = PKC.activeClone;
                     }
                     else if (PowerTypes.isInADifferentExistence(player, this)) {
-                        targetPos = this.getPosition(1);
+                        hasTarget = false;
                         break;
                     }
                     targetPos = player.getBoundingBox().getCenter();
+                    hasTarget = true;
                 }
                 case MOB -> {
                     Entity closest = null;
@@ -93,13 +106,17 @@ public class TrackingCloudEntity extends StandEntity {
                             }
                         }
                     }
-                    if (closest == null) targetPos = this.getPosition(1);
+                    if (closest == null) {
+                        targetPos = this.getPosition(1);
+                        hasTarget = false;
+                    }
                     else {
                         targetPos = closest.getBoundingBox().getCenter();
+                        hasTarget = true;
                     }
                 }
                 case BLOCK -> {
-                    if (this.tickCount % 10 != 0) return;
+                    hasTarget = false;
                 }
             }
 

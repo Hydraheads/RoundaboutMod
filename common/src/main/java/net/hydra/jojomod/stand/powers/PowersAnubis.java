@@ -707,13 +707,16 @@ public class PowersAnubis extends NewDashPreset {
     int pogoCounter = 0;
     @Override
     public void tickPower() {
-
-       // Roundabout.LOGGER.info("CA: " + this.getActivePower() + " | " + this.getAttackTime() + " | "+ this.getAttackTimeDuring() + "/" + this.getAttackTimeMax() + " PHASE: " + this.getActivePowerPhase());
-
+        //Roundabout.LOGGER.info("CA: " + this.getActivePower() + " | " + this.getAttackTime() + " | "+ this.getAttackTimeDuring() + "/" + this.getAttackTimeMax() + " PHASE: " + this.getActivePowerPhase());
         StandUser SU = this.getStandUserSelf();
 
         if (SU.roundabout$isSealed()) {MemoryCancelClient();}
 
+        if (isPacketPlayer()) {
+            if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE && this.getAttackTimeDuring() > this.getBarrageWindup()) {
+                tryPowerPackets(PowerIndex.BARRAGE);
+            }
+        }
 
         if (pogoTime > 0) {pogoTime -= 1;}
         if (this.getSelf().onGround() && this.isClient()) {
@@ -2173,9 +2176,8 @@ public class PowersAnubis extends NewDashPreset {
     public boolean isBarrageAttacking() {return super.isBarrageAttacking() || this.getActivePower() == PowerIndex.BARRAGE_2;}
     @Override
     public boolean isBarrageCharging() {return super.isBarrageCharging() || this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2;}
-    public int getBarrageMinimum() {return getBarrageWindup();}
     @Override
-    public int getBarrageWindup() {return super.getBarrageWindup()+10;}
+    public int getBarrageWindup() {return super.getBarrageWindup()+5;}
 
     public int getCleaveWindup() {return 20;}
     public int getSpinWindup() {return 7;}
@@ -2189,13 +2191,7 @@ public class PowersAnubis extends NewDashPreset {
     }
     @Override
     public boolean onClickRelease() {
-        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE) {
-            if (this.getAttackTimeDuring() > this.getBarrageMinimum()) {
-                tryPowerPackets(PowerIndex.BARRAGE);
-                return true;
-            }
-
-        } else if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
+        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
             if (this.getAttackTimeDuring() >= this.getKickBarrageWindup()) {
                 tryPowerPackets(PowerIndex.BARRAGE_2);
                 return true;

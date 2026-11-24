@@ -1789,6 +1789,11 @@ public class PowersGreenDay extends NewPunchingStand {
     }
 
     @Override
+    public float getBarrageFinisherKnockback() {
+        return 0.9F;
+    }
+
+    @Override
     public byte getMaxLevel(){
         return 5;
     }
