@@ -1,6 +1,9 @@
 package net.hydra.jojomod.entity.substand;
 
+import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
+import net.hydra.jojomod.entity.LifePunchCloneEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersKingCrimson;
@@ -41,8 +44,11 @@ public class TrackingCloudEntity extends StandEntity {
                 }
         redirectVector();
         List<Entity> list = this.level().getEntities(this, this.getBoundingBox(), entity ->
-                entity.getType().equals(PKN.getMemorizedEntityType()) ||
-                        entity.getUUID().equals(PKN.getMemorizedPlayer()));
+                entity.getType().equals(PKN.getMemorizedEntityType())
+                        || entity.getUUID().equals(PKN.getMemorizedPlayer())
+                        || (entity instanceof CloneEntity CE && (entity instanceof KingCrimsonCloneEntity
+                        || entity instanceof LifePunchCloneEntity) && CE.getPlayerUUID().isPresent()
+                        && CE.getPlayerUUID().get().equals(PKN.getMemorizedPlayer())));
         if (!list.isEmpty()) {
             PKN.setTrackedEntity(list.get(0));
         }
