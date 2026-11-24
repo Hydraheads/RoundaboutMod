@@ -659,12 +659,12 @@ public abstract class ConfigManager {
     }
 
     public static void loadFoodClear(){
-        if (getAdvancedConfig().pearlJamFoodEffect != null){
+        if (getAdvancedConfig().pearlJamFoodEffectv2 != null){
             MainUtil.foodCuresThat.clear();
             MainUtil.foodAddsThat.clear();
             MainUtil.specialFoodRemoves.clear();
             MainUtil.pearlJamFallback = null;
-            for (String entry : getAdvancedConfig().pearlJamFoodEffect){
+            for (String entry : getAdvancedConfig().pearlJamFoodEffectv2){
                 try {
                     String[] split = entry.split(":");
                     if (split[0].equals("fallback")){
