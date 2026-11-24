@@ -9,14 +9,8 @@ import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.objects.*;
-import net.hydra.jojomod.entity.paintings.BirthOfVenusPainting;
-import net.hydra.jojomod.entity.paintings.MonaLisaPainting;
-import net.hydra.jojomod.entity.paintings.VanGoughPainting;
-import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
-import net.hydra.jojomod.entity.pathfinding.CommandDiscPossession;
-import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
-import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
-import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
+import net.hydra.jojomod.entity.paintings.*;
+import net.hydra.jojomod.entity.pathfinding.*;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.*;
@@ -54,7 +48,7 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<Piranha>> PIRANHA =
             ENTITY_TYPES.register("piranha", () ->
-                    EntityType.Builder.of(Piranha::new, MobCategory.CREATURE)
+                    EntityType.Builder.of(Piranha::new, MobCategory.WATER_CREATURE)
                             .sized(0.6f, 0.5f).clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "piranha").toString())
             );
@@ -340,6 +334,16 @@ public class ForgeEntities {
             ENTITY_TYPES.register("painting_venus", () ->
                     EntityType.Builder.of(BirthOfVenusPainting::new, MobCategory.MISC).sized(0.5F, 0.5F).updateInterval(Integer.MAX_VALUE).clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "painting_venus").toString())
+            );
+    public static final RegistryObject<EntityType<ZombieHorsePainting>> ZOMBIE_HORSE_PAINTING =
+            ENTITY_TYPES.register("zombie_horse_painting", () ->
+                    EntityType.Builder.of(ZombieHorsePainting::new, MobCategory.MISC).sized(0.5F, 0.5F).updateInterval(Integer.MAX_VALUE).clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "zombie_horse_painting").toString())
+            );
+    public static final RegistryObject<EntityType<ZombieHorseMural>> ZOMBIE_HORSE_MURAL =
+            ENTITY_TYPES.register("zombie_horse_mural", () ->
+                    EntityType.Builder.of(ZombieHorseMural::new, MobCategory.MISC).sized(0.5F, 0.5F).updateInterval(Integer.MAX_VALUE).clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "zombei_horse_mural").toString())
             );
 
     public static final RegistryObject<EntityType<TheWorldEntity>> THE_WORLD =
@@ -672,6 +676,16 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "dark_mirage").toString())
             );
+    public static final RegistryObject<EntityType<KingNothingEntity>> KING_NOTHING =
+            ENTITY_TYPES.register("king_nothing", () ->
+                    EntityType.Builder.of(KingNothingEntity::new, MobCategory.MISC).sized(0.75f, 2.05f)
+                            .clientTrackingRange(14).build(Roundabout.location("king_nothing").toString())
+            );
+    public static final RegistryObject<EntityType<TrackingCloudEntity>> TRACKING_CLOUD =
+            ENTITY_TYPES.register("tracking_cloud",
+                    () -> EntityType.Builder.of(TrackingCloudEntity::new, MobCategory.MISC).sized(0.5f,
+                            0.5f).clientTrackingRange(14).build(Roundabout.location("tracking_cloud").toString())
+            );
     public static final RegistryObject<EntityType<TuskEntity>> TUSK_A1 =
             ENTITY_TYPES.register("tusk_a1", () ->
                     EntityType.Builder.of(TuskEntity::new, MobCategory.MISC).sized(0.5F, 0.5F).
@@ -750,6 +764,12 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "gold_experience").toString())
             );
+    public static final RegistryObject<EntityType<GoldExperienceRequiemEntity>> GOLD_EXPERIENCE_REQUIEM =
+            ENTITY_TYPES.register("gold_experience_requiem", () ->
+                    EntityType.Builder.of(GoldExperienceRequiemEntity::new, MobCategory.MISC).sized(0.75f, 2.05f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "gold_experience_requiem").toString())
+            );
     public static final RegistryObject<EntityType<GoldExperienceBetaEntity>> GOLD_EXPERIENCE_BETA =
             ENTITY_TYPES.register("gold_experience_beta", () ->
                     EntityType.Builder.of(GoldExperienceBetaEntity::new, MobCategory.MISC)
@@ -763,6 +783,12 @@ public class ForgeEntities {
                     .clientTrackingRange(16)
                     .updateInterval(20)
                     .build(new ResourceLocation(Roundabout.MOD_ID, "ge_bramble").toString()));
+    public static final RegistryObject<EntityType<GEThornEntity>> GE_THORN = ENTITY_TYPES.register("ge_thorn",
+            () -> EntityType.Builder.<GEThornEntity>of(GEThornEntity::new, MobCategory.MISC)
+                    .sized(1f, 0.5f)
+                    .clientTrackingRange(16)
+                    .updateInterval(20)
+                    .build(new ResourceLocation(Roundabout.MOD_ID, "ge_thorn").toString()));
     public static final RegistryObject<EntityType<GEBatEntity>> GE_BAT = ENTITY_TYPES.register("ge_bat",
             () -> EntityType.Builder.of(GEBatEntity::new, MobCategory.AMBIENT)
                     .sized(0.5f, 0.9f)
@@ -793,23 +819,33 @@ public class ForgeEntities {
                     .sized(0.6f, 0.4f)
                     .clientTrackingRange(5)
                     .build(Roundabout.MOD_ID + ":ge_snake"));
+    public static final RegistryObject<EntityType<GEPiranhaEntity>> GE_PIRANHA = ENTITY_TYPES.register("ge_piranha",
+            () -> EntityType.Builder.of(GEPiranhaEntity::new, MobCategory.CREATURE)
+                    .sized(0.6f, 0.5f)
+                    .clientTrackingRange(5)
+                    .build(Roundabout.MOD_ID + ":ge_piranha"));
+    public static final RegistryObject<EntityType<GEButterflyEntity>> GE_BUTTERFLY = ENTITY_TYPES.register("ge_butterfly",
+            () -> EntityType.Builder.of(GEButterflyEntity::new, MobCategory.AMBIENT)
+                    .sized(0.5f, 0.5f)
+                    .clientTrackingRange(5)
+                    .build(Roundabout.MOD_ID + ":ge_butterfly"));
     public static final RegistryObject<EntityType<SilverChariotEntity>> SILVER_CHARIOT =
             ENTITY_TYPES.register("silver_chariot", () ->
-                    EntityType.Builder.of(SilverChariotEntity::new, MobCategory.MISC).sized(0.75f, 2.05f).
+                    EntityType.Builder.of(SilverChariotEntity::new, MobCategory.MISC).sized(SilverChariotEntity.eWidth, SilverChariotEntity.eHeight).
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot").toString())
             );
     public static final RegistryObject<EntityType<SilverChariotEntity>> SILVER_CHARIOT_PHARAOH =
             ENTITY_TYPES.register("silver_chariot_pharaoh", () ->
-                    EntityType.Builder.of(SilverChariotEntity::new, MobCategory.MISC).sized(0.75f, 2.05f).
+                    EntityType.Builder.of(SilverChariotEntity::new, MobCategory.MISC).sized(SilverChariotEntity.eWidth, SilverChariotEntity.eHeight).
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_pharaoh").toString())
             );
-    public static final RegistryObject<EntityType<SilverChariotRapierShotEntity>> SILVER_CHARIOT_RAPIER =
-            ENTITY_TYPES.register("silver_chariot_rapier", () ->
-                    EntityType.Builder.<SilverChariotRapierShotEntity>of(SilverChariotRapierShotEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).
+    public static final RegistryObject<EntityType<SilverChariotSwordProjectile>> SILVER_CHARIOT_SWORD_PROJECTILE =
+            ENTITY_TYPES.register("silver_chariot_sword_projectile", () ->
+                    EntityType.Builder.<SilverChariotSwordProjectile>of(SilverChariotSwordProjectile::new, MobCategory.MISC).sized(0.5f, 0.5f).
                             clientTrackingRange(16).
-                            build(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_rapier").toString())
+                            build(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_sword_projectile").toString())
             );
     public static final RegistryObject<EntityType<SilverChariotRapierPlatformEntity>> SILVER_CHARIOT_RAPIER_PLATFORM =
             ENTITY_TYPES.register("silver_chariot_rapier_platform", () ->
@@ -819,7 +855,7 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<SilverChariotMountEntity>> SC_MOUNT =
             ENTITY_TYPES.register("sc_mount", () ->
-                    EntityType.Builder.<SilverChariotMountEntity>of(SilverChariotMountEntity::new, MobCategory.MISC).sized(0.6f, 2f).
+                    EntityType.Builder.<SilverChariotMountEntity>of(SilverChariotMountEntity::new, MobCategory.MISC).sized((float) SilverChariotMountEntity.eWidth, (float) SilverChariotMountEntity.eHeight).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "sc_mount").toString())
             );
@@ -1228,10 +1264,24 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "ph_capsule").toString())
             );
+    public static final RegistryObject<EntityType<GinkgoBoatEntity>> GINKGO_BOAT =
+            ENTITY_TYPES.register("ginkgo_boat", () ->
+                    EntityType.Builder.<GinkgoBoatEntity>of(GinkgoBoatEntity::new, MobCategory.MISC).
+                            sized(1.375F, 0.5625F).
+                            clientTrackingRange(10).
+                            build("roundabout:ginkgo_boat"));
+
+    public static final RegistryObject<EntityType<GinkgoChestBoatEntity>> GINKGO_CHEST_BOAT =
+            ENTITY_TYPES.register("ginkgo_chest_boat", () ->
+                    EntityType.Builder.<GinkgoChestBoatEntity>of(
+                            GinkgoChestBoatEntity::new, MobCategory.MISC).
+                            sized(1.375F, 0.5625F).
+                            clientTrackingRange(10).
+                            build("roundabout:ginkgo_chest_boat"));
     public static final RegistryObject<EntityType<CTRbarrierEntity>> CTR_BARRIER =
             ENTITY_TYPES.register("ctrbarrier", () ->
                     EntityType.Builder.<CTRbarrierEntity>of(CTRbarrierEntity::new, MobCategory.MISC).
-                            sized(4f, 4f).
+                            sized(4f, 10f).
                             clientTrackingRange(15).
                             build(new ResourceLocation(Roundabout.MOD_ID, "ctrbarrier").toString())
             );

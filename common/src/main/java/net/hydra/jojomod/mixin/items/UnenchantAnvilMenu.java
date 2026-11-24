@@ -1,6 +1,5 @@
 package net.hydra.jojomod.mixin.items;
 
-import net.hydra.jojomod.item.FleshBucketItem;
 import net.hydra.jojomod.item.LuckyLipstickItem;
 import net.hydra.jojomod.item.MemoryChessPieceItem;
 import net.hydra.jojomod.item.RoundaboutArrowItem;
@@ -28,10 +27,6 @@ public abstract class UnenchantAnvilMenu extends ItemCombinerMenu {
             ItemStack itemstack2 = this.inputSlots.getItem(1);
             if (!itemstack2.isEmpty()) {
                 if (itemstack.getItem() instanceof RoundaboutArrowItem && itemstack2.getItem() instanceof EnchantedBookItem) {
-                    this.resultSlots.setItem(0, ItemStack.EMPTY);
-                    this.cost.set(0);
-                    ci.cancel();
-                } else if (itemstack.getItem() instanceof FleshBucketItem && itemstack2.getItem() instanceof EnchantedBookItem) {
                     this.resultSlots.setItem(0, ItemStack.EMPTY);
                     this.cost.set(0);
                     ci.cancel();

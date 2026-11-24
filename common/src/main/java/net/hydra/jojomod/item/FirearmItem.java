@@ -1,13 +1,22 @@
 package net.hydra.jojomod.item;
 
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
+import net.hydra.jojomod.access.IGEProjectile;
+import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersGoldExperience;
 import net.hydra.jojomod.stand.powers.PowersWhitesnake;
 import net.hydra.jojomod.event.powers.whitesnake.WhitesnakeControlInventory;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,15 +27,16 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
@@ -37,12 +47,29 @@ public abstract class FirearmItem extends Item {
 
     public static final String AMMO_COUNT_TAG = "AmmoCount";
     public static final String RELOADING_TAG = "IsReloading";
+    public static final String TREE_IMBUED_SHOTS_TAG = "TreeImbuedShots";
+    public static final String TREE_IMBUED_OWNER_TAG = "TreeImbuedOwner";
     public static boolean cycleReload = false;
 
-    public FirearmItem(Properties properties) {
-        super(properties);
+    private final Multimap<Attribute, AttributeModifier> defaultModifiers;
+    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot equipmentSlot) {
+        return equipmentSlot == EquipmentSlot.MAINHAND ? this.defaultModifiers : super.getDefaultAttributeModifiers(equipmentSlot);
     }
 
+    public FirearmItem(Item.Properties $$3,float speed) {
+        super($$3);
+
+        ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
+        builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Tool modifier", speed, AttributeModifier.Operation.ADDITION));
+        this.defaultModifiers = builder.build();
+    }
+    public FirearmItem(Item.Properties $$3) {
+        super($$3);
+        ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
+        builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Tool modifier", -1.3, AttributeModifier.Operation.ADDITION));
+        this.defaultModifiers = builder.build();
+
+    }
     // checks if there's ammo in inventory
     protected boolean hasAmmoInInventory(Player player) {
         if (canWhitesnakeUse() && WhitesnakeControlInventory.isActive(player)) {
@@ -59,13 +86,52 @@ public abstract class FirearmItem extends Item {
     }
 
     // ammo consumption
-    protected int consumeAmmoFromInventory(Player player, int amount) {
+    protected int consumeAmmoFromInventory(Player player, ItemStack gunStack, int amount) {
         if (canWhitesnakeUse() && WhitesnakeControlInventory.isActive(player)) {
             return player.isCreative() ? getMaxAmmo() : WhitesnakeControlInventory.consumeAmmo(player, amount);
         }
         Inventory inv = player.getInventory();
         int consumed = 0;
 
+        // prioritizes imbue shots first
+        if (!gunStack.isEmpty()) {
+            for (int i = 0; i < inv.offhand.size() && amount > 0; i++) {
+                ItemStack stack = inv.offhand.get(i);
+                if (stack.getItem() == getAmmoItem() && PowersGoldExperience.isTreeImbuedProjectileItem(stack)) {
+                    int remove = Math.min(stack.getCount(), amount);
+                    int currentImbued = gunStack.getOrCreateTag().getInt(TREE_IMBUED_SHOTS_TAG);
+                    gunStack.getOrCreateTag().putInt(TREE_IMBUED_SHOTS_TAG, currentImbued + remove);
+                    CompoundTag imbue = PowersGoldExperience.getImbueData(stack);
+                    if (imbue != null && imbue.hasUUID("Owner")) {
+                        gunStack.getOrCreateTag().putUUID(TREE_IMBUED_OWNER_TAG, imbue.getUUID("Owner"));
+                    }
+                    PowersGoldExperience.clearImbueFromConsumedStack(player.level(), stack);
+                    if (!player.isCreative()) {
+                        stack.shrink(remove);
+                    }
+                    consumed += remove;
+                    amount -= remove;
+                }
+            }
+            for (int i = 0; i < inv.items.size() && amount > 0; i++) {
+                ItemStack stack = inv.items.get(i);
+                if (stack.getItem() == getAmmoItem() && PowersGoldExperience.isTreeImbuedProjectileItem(stack)) {
+                    int remove = Math.min(stack.getCount(), amount);
+                    int currentImbued = gunStack.getOrCreateTag().getInt(TREE_IMBUED_SHOTS_TAG);
+                    gunStack.getOrCreateTag().putInt(TREE_IMBUED_SHOTS_TAG, currentImbued + remove);
+                    CompoundTag imbue = PowersGoldExperience.getImbueData(stack);
+                    if (imbue != null && imbue.hasUUID("Owner")) {
+                        gunStack.getOrCreateTag().putUUID(TREE_IMBUED_OWNER_TAG, imbue.getUUID("Owner"));
+                    }
+                    PowersGoldExperience.clearImbueFromConsumedStack(player.level(), stack);
+                    if (!player.isCreative()) {
+                        stack.shrink(remove);
+                    }
+                    consumed += remove;
+                    amount -= remove;
+                }
+            }
+        }
         for (int i = 0; i < inv.items.size() && amount > 0; i++) {
             ItemStack stack = inv.items.get(i);
             if (stack.getItem() == getAmmoItem() && !player.isCreative()) {
@@ -94,6 +160,7 @@ public abstract class FirearmItem extends Item {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
         if (!(itemStack.getItem() instanceof FirearmItem)) return InteractionResultHolder.fail(itemStack);
+
 
         if ((isCrouchingOrSomething(player, itemStack) && hasAmmoInInventory(player) && getAmmo(itemStack) != getMaxAmmo()) || (isCrouchingOrSomething(player, itemStack) && player.isCreative())) {
             if (!isReloading(itemStack)) {
@@ -138,7 +205,7 @@ public abstract class FirearmItem extends Item {
 
         if (isReloading(stack) && !player.getCooldowns().isOnCooldown(this) && (player.getMainHandItem() == stack || player.getOffhandItem() == stack)) {
             int ammoNeeded = getMaxAmmo() - getAmmo(stack);
-            int ammoLoaded = consumeAmmoFromInventory(player, ammoNeeded);
+            int ammoLoaded = consumeAmmoFromInventory(player, stack, ammoNeeded);
 
             if (ammoLoaded > 0) {
                 setAmmo(stack, player.isCreative() ? getMaxAmmo() : getAmmo(stack) + ammoLoaded);
@@ -150,6 +217,11 @@ public abstract class FirearmItem extends Item {
     // firing logic
     public void fireBullet(Level level, Player player, InteractionHand hand) {
         if (!level.isClientSide && player.getCooldowns().isOnCooldown(this)) return;
+        if (ClientNetworking.getAppropriateConfig().timeStopSettings.timestopCancelsGuns &&
+                ((TimeStop) player.level()).inTimeStopRange(player)
+        ){
+            return;
+        }
 
         ItemStack itemStack = player.getItemInHand(hand);
         if (getAmmo(itemStack) > 0) {
@@ -168,8 +240,19 @@ public abstract class FirearmItem extends Item {
                 bullet.setPos(shotSource.getX(), shotSource.getEyeY() - 0.15D, shotSource.getZ());
             }
 
+            int imbuedShots = itemStack.getOrCreateTag().getInt(TREE_IMBUED_SHOTS_TAG);
             configureBulletTrajectory(bullet, shotSource);
             bullet.setAmmoType(getBulletType());
+            if (imbuedShots > 0) {
+                itemStack.getOrCreateTag().putInt(TREE_IMBUED_SHOTS_TAG, imbuedShots - 1);
+                ((IGEProjectile) bullet).roundabout$setGETreeImbue(true);
+                if (itemStack.getOrCreateTag().hasUUID(TREE_IMBUED_OWNER_TAG)) {
+                    ((IGEProjectile) bullet).roundabout$setGETreeImbueOwner(itemStack.getOrCreateTag().getUUID(TREE_IMBUED_OWNER_TAG));
+                    if (imbuedShots - 1 <= 0) {
+                        itemStack.getOrCreateTag().remove(TREE_IMBUED_OWNER_TAG);
+                    }
+                }
+            }
             level.addFreshEntity(bullet);
             applyRecoil(player);
 

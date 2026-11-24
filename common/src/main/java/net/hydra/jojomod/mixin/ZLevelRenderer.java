@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
@@ -10,7 +11,6 @@ import net.hydra.jojomod.client.ClientEffectUtil;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
-import net.hydra.jojomod.entity.KingCrimsonProjectionEntity;
 import net.hydra.jojomod.entity.TimeSkipSnapshot;
 import net.hydra.jojomod.entity.objects.GrabbedMobSoul;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
@@ -20,42 +20,41 @@ import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
-import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.TerrainFragments;
 import net.hydra.jojomod.event.index.AnubisMemory;
-import net.hydra.jojomod.event.index.PowerTypes;
+import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.hydra.jojomod.util.MainUtil;
-import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
-import net.minecraft.client.renderer.block.BlockRenderDispatcher;
-import net.minecraft.client.renderer.culling.Frustum;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.level.LightLayer;
-import net.minecraft.world.level.material.FogType;
-import net.zetalasis.client.shader.RPostShaderRegistry;
-import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
-import net.hydra.jojomod.event.powers.StandPowers;
-import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.allay.Allay;
+import net.minecraft.world.entity.monster.Vex;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FogType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.zetalasis.client.shader.RPostShaderRegistry;
+import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
 import org.joml.Matrix4f;
 import org.joml.Vector3d;
 import org.spongepowered.asm.mixin.Final;
@@ -326,13 +325,20 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                     } else if (entity instanceof LifeTrackerEntity pre) {
                         ClientUtil.preRenderLifeTracker(pre, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
                     } else if(entity instanceof BlackSabbathEntity bs){
-                        ClientUtil.preRenderFloatSabbath(bs, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
+                        if(!bs.getHunting()) {
+                            ClientUtil.preRenderFloatSabbath(bs, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
+                        }
                     } else if (entity instanceof StandEntity se) {
                         if(se.getBsGrabbed() != 0 || se instanceof GrabbedMobSoul) {
                             Entity e = level.getEntity(se.getBsGrabbed());
                             if(e instanceof BlackSabbathEntity bs) {
-                                ClientUtil.preRenderGrabbedSoul(bs, se, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
+                                ClientUtil.preRenderGrabbedSoul(bs, se,null, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
                             }
+                        }
+                    } else if(entity instanceof Allay || entity instanceof Vex){
+                        Entity e = this.level.getEntity(((StandUser)entity).roundabout$getGrabberSabbath());
+                        if(e instanceof BlackSabbathEntity bs) {
+                            ClientUtil.preRenderGrabbedSoul(bs, null,entity, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
                         }
                     }
                 }
@@ -411,17 +417,75 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
             poseStack.popPose();
         }
     }
+
+    @Unique
+    public void rdbt$renderRTZBlockFragments(
+            PoseStack poseStack,
+            MultiBufferSource buffer,
+            Camera camera,
+            float partialTick
+    ) {
+        if (!ClientUtil.isUnderRTZ() || ClientUtil.rtzBlockFragments.isEmpty()) return;
+
+        Minecraft mc = Minecraft.getInstance();
+        BlockRenderDispatcher dispatcher = mc.getBlockRenderer();
+        Vec3 cam = camera.getPosition();
+
+        float progress = Mth.clamp((ClientUtil.rtzTicks + (partialTick % 1.0F)) / (float) ClientUtil.RTZ_DURATION, 0.0F, 1.0F);
+
+        float scatterFactor;
+        if (progress < 0.25F) {
+            float t = progress / 0.25F;
+            scatterFactor = 1.0F - (1.0F - t) * (1.0F - t);
+        } else if (progress < 0.72F) {
+            float drift = (progress - 0.25F) / 0.47F;
+            scatterFactor = 1.0F + Mth.sin(drift * (float) Math.PI) * 0.12F;
+        } else {
+            float t = (progress - 0.72F) / 0.28F;
+            float eased = t * t * (3.0F - 2.0F * t);
+            scatterFactor = 1.0F - eased;
+        }
+
+        for (ClientUtil.RTZBlockFragment frag : ClientUtil.rtzBlockFragments) {
+            poseStack.pushPose();
+
+            double x = Mth.lerp(scatterFactor, frag.originPos.x, frag.scatteredPos.x) - cam.x;
+            double y = Mth.lerp(scatterFactor, frag.originPos.y, frag.scatteredPos.y) - cam.y;
+            double z = Mth.lerp(scatterFactor, frag.originPos.z, frag.scatteredPos.z) - cam.z;
+
+            poseStack.translate(x, y, z);
+
+            poseStack.mulPose(Axis.XP.rotationDegrees(frag.spinX * scatterFactor));
+            poseStack.mulPose(Axis.YP.rotationDegrees(frag.spinY * scatterFactor));
+            poseStack.mulPose(Axis.ZP.rotationDegrees(frag.spinZ * scatterFactor));
+
+            float scale = Mth.lerp(Math.min(scatterFactor, 1.0F), 1.0F, 0.78F);
+            poseStack.scale(scale, scale, scale);
+            poseStack.translate(-0.5, -0.5, -0.5);
+
+            dispatcher.renderSingleBlock(
+                    frag.state,
+                    poseStack,
+                    buffer,
+                    frag.packedLight,
+                    OverlayTexture.NO_OVERLAY
+            );
+
+            poseStack.popPose();
+        }
+    }
+
     @Inject(method = "renderClouds",
             at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$renderClouds(PoseStack $$0, Matrix4f $$1, float $$2, double $$3, double $$4, double $$5, CallbackInfo ci) {
-        if (ClientUtil.isUsingTimeErase) {
+        if (ClientUtil.isUsingTimeErase || ClientUtil.isUnderRTZ()) {
             ci.cancel();
         }
     }
     @Inject(method = "renderEndSky",
             at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$renderEndSky(PoseStack $$0, CallbackInfo ci) {
-        if (ClientUtil.renderTimeErase()) {
+        if (ClientUtil.renderTimeErase() || ClientUtil.isUnderRTZ()) {
             ci.cancel();
         }
     }
@@ -510,6 +574,116 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                 }
             }
         }
+
+            if (ClientUtil.isUnderRTZ()) {
+                if (!$$4) {
+                    FogType $$6 = $$3.getFluidInCamera();
+                    if ($$6 != FogType.POWDER_SNOW && $$6 != FogType.LAVA && !this.doesMobEffectBlockSky($$3)) {
+
+                        float rtzProgress = (ClientUtil.rtzTicks + ($$2 % 1)) / (float) ClientUtil.RTZ_DURATION;
+                        float alpha = Mth.clamp(Math.min(rtzProgress * 6.0F, (1.0F - rtzProgress) * 6.0F), 0.0F, 1.0F);
+
+                        RenderSystem.enableBlend();
+                        RenderSystem.depthMask(false);
+                        RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
+                        Tesselator tess = Tesselator.getInstance();
+                        BufferBuilder bufferBuilder = tess.getBuilder();
+                        RenderSystem.setShaderTexture(0, StandIcons.RTZ_SKYBOX[0]);
+
+                        for (int integer = 0; integer < 6; ++integer) {
+                            $$0.pushPose();
+                            //Time erase rotates to the camera and then slowly drifts
+                            //float yaw = $$3.getYRot();
+                            //float spin = (ClientUtil.clientTicker + ($$2%1)) * 0.1F;
+                            //$$0.mulPose(Axis.YP.rotationDegrees(-yaw - spin));
+                            float spin = (ClientUtil.clientTicker + ($$2 % 1)) * 0.8F;
+                            $$0.mulPose(Axis.YP.rotationDegrees(spin));
+
+                            $$0.mulPose(com.mojang.math.Axis.YP.rotationDegrees(-90.0F));
+                            $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(90.0F));
+                            if (integer == 0) {
+                                $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(90.0F));
+                                RenderSystem.setShaderTexture(0, StandIcons.RTZ_SKYBOX[0]);
+                            }
+
+                            if (integer == 1) {
+                                $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(-90.0F));
+                                RenderSystem.setShaderTexture(0, StandIcons.RTZ_SKYBOX[1]);
+                            }
+
+                            if (integer == 2) {
+                                $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(180.0F));
+                                RenderSystem.setShaderTexture(0, StandIcons.RTZ_SKYBOX[2]);
+                            }
+                            if (integer == 3) {
+                                $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(0));
+                                RenderSystem.setShaderTexture(0, StandIcons.RTZ_SKYBOX[3]);
+                            }
+
+                            if (integer == 4) {
+                                $$0.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(90.0F));
+                                RenderSystem.setShaderTexture(0, StandIcons.RTZ_SKYBOX[4]);
+                            }
+
+                            if (integer == 5) {
+                                $$0.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(-90.0F));
+                                RenderSystem.setShaderTexture(0, StandIcons.RTZ_SKYBOX[5]);
+                            }
+
+                            Matrix4f stack = $$0.last().pose();
+                            bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+                            bufferBuilder.vertex(stack, -100.0F, -100.0F, -100.0F).uv(0.0F, 0.0F).color(1F, 1F, 1F, alpha).endVertex();
+                            bufferBuilder.vertex(stack, -100.0F, -100.0F, 100.0F).uv(0.0F, 1).color(1F, 1F, 1F, alpha).endVertex();
+                            bufferBuilder.vertex(stack, 100.0F, -100.0F, 100.0F).uv(1, 1).color(1F, 1F, 1F, alpha).endVertex();
+                            bufferBuilder.vertex(stack, 100.0F, -100.0F, -100.0F).uv(1, 0.0F).color(1F, 1F, 1F, alpha).endVertex();
+                            BufferUploader.drawWithShader(bufferBuilder.end());
+                            $$0.popPose();
+                        }
+
+                        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+                        float starSpin = (ClientUtil.clientTicker + ($$2 % 1)) * 2.2F;
+                        for (int integer = 0; integer < 6; ++integer) {
+                            $$0.pushPose();
+                            $$0.mulPose(Axis.YP.rotationDegrees(starSpin));
+                            $$0.mulPose(Axis.YP.rotationDegrees(-90.0F));
+                            $$0.mulPose(Axis.XP.rotationDegrees(90.0F));
+
+                            if (integer == 0) {
+                                $$0.mulPose(Axis.XP.rotationDegrees(90.0F));
+                                RenderSystem.setShaderTexture(0, StandIcons.RTZ_STAR_SKYBOX[0]);
+                            } else if (integer == 1) {
+                                $$0.mulPose(Axis.XP.rotationDegrees(-90.0F));
+                                RenderSystem.setShaderTexture(0, StandIcons.RTZ_STAR_SKYBOX[1]);
+                            } else if (integer == 2) {
+                                $$0.mulPose(Axis.XP.rotationDegrees(180.0F));
+                                RenderSystem.setShaderTexture(0, StandIcons.RTZ_STAR_SKYBOX[2]);
+                            } else if (integer == 3) {
+                                RenderSystem.setShaderTexture(0, StandIcons.RTZ_STAR_SKYBOX[3]);
+                            } else if (integer == 4) {
+                                $$0.mulPose(Axis.ZP.rotationDegrees(90.0F));
+                                RenderSystem.setShaderTexture(0, StandIcons.RTZ_STAR_SKYBOX[4]);
+                            } else if (integer == 5) {
+                                $$0.mulPose(Axis.ZP.rotationDegrees(-90.0F));
+                                RenderSystem.setShaderTexture(0, StandIcons.RTZ_STAR_SKYBOX[5]);
+                            }
+
+                            Matrix4f stack = $$0.last().pose();
+                            bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+                            bufferBuilder.vertex(stack, -98.0F, -98.0F, -98.0F).uv(0.0F, 0.0F).color(1F, 1F, 1F, alpha).endVertex();
+                            bufferBuilder.vertex(stack, -98.0F, -98.0F, 98.0F).uv(0.0F, 1).color(1F, 1F, 1F, alpha).endVertex();
+                            bufferBuilder.vertex(stack, 98.0F, -98.0F, 98.0F).uv(1, 1).color(1F, 1F, 1F, alpha).endVertex();
+                            bufferBuilder.vertex(stack, 98.0F, -98.0F, -98.0F).uv(1, 0.0F).color(1F, 1F, 1F, alpha).endVertex();
+                            BufferUploader.drawWithShader(bufferBuilder.end());
+                            $$0.popPose();
+                        }
+
+                        RenderSystem.defaultBlendFunc();
+                        RenderSystem.depthMask(true);
+                        RenderSystem.disableBlend();
+                    }
+                }
+            }
+
         MultiBufferSource.BufferSource buffer = this.renderBuffers.bufferSource();
 
         rdbt$renderTerrainFragments(
@@ -791,6 +965,66 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                     ((IEntityAndData)player).roundabout$setExclusiveLayers(false);
                 }
             }
+            if (player instanceof LocalPlayer lp && !ClientUtil.rtzAfterimages.isEmpty()) {
+                Vec3 cameraPos = $$4.getPosition();
+                MultiBufferSource.BufferSource bufferSource = this.renderBuffers.bufferSource();
+
+                float oldBody = lp.yBodyRot;
+                float oldBodyO = lp.yBodyRotO;
+                float oldHead = lp.yHeadRot;
+                float oldHeadO = lp.yHeadRotO;
+                float oldYaw = lp.getYRot();
+                float oldYawO = lp.yRotO;
+                float oldPitch = lp.getXRot();
+                float oldPitchO = lp.xRotO;
+
+                for (ClientUtil.RTZAfterimage img : ClientUtil.rtzAfterimages) {
+                    if (img.age < 2) continue;
+                    if (lp.distanceToSqr(img.x, img.y, img.z) < 0.64D) continue;
+
+                    float lifeProgress = Mth.clamp((img.age + partialTick) / (float) img.maxAge, 0.0F, 1.0F);
+                    float alpha = (1.0F - lifeProgress) * 0.55F;
+                    if (alpha <= 0.01F) continue;
+
+                    ClientUtil.setThrowFadeToTheEther(alpha);
+                    ClientUtil.forceFade = true;
+                    ClientUtil.forceFade2 = alpha;
+
+                    lp.yBodyRot = img.bodyRot;
+                    lp.yBodyRotO = img.bodyRot;
+                    lp.yHeadRot = img.headRot;
+                    lp.yHeadRotO = img.headRot;
+                    lp.setYRot(img.yRot);
+                    lp.yRotO = img.yRot;
+                    lp.setXRot(img.xRot);
+                    lp.xRotO = img.xRot;
+
+                    this.entityRenderDispatcher.render(
+                            lp,
+                            img.x - cameraPos.x,
+                            img.y - cameraPos.y,
+                            img.z - cameraPos.z,
+                            img.yRot,
+                            partialTick,
+                            $$0,
+                            bufferSource,
+                            LightTexture.FULL_BRIGHT
+                    );
+                }
+
+                ClientUtil.forceFade = false;
+                ClientUtil.forceFade2 = 1.0F;
+                ClientUtil.setThrowFadeToTheEther(1.0F);
+
+                lp.yBodyRot = oldBody;
+                lp.yBodyRotO = oldBodyO;
+                lp.yHeadRot = oldHead;
+                lp.yHeadRotO = oldHeadO;
+                lp.setYRot(oldYaw);
+                lp.yRotO = oldYawO;
+                lp.setXRot(oldPitch);
+                lp.xRotO = oldPitchO;
+            }
         }
 
         if (player != null && Minecraft.getInstance().options.getCameraType().isFirstPerson()) {
@@ -842,7 +1076,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
             return;
     }
 
-    @Inject(method = "renderChunkLayer", at = @At("HEAD"))
+    @Inject(method = "renderChunkLayer", at = @At("HEAD"), cancellable = true)
     private void roundabout$renderChunkLayer(RenderType renderType, PoseStack matrices, double cameraX, double cameraY, double cameraZ, Matrix4f positionMatrix, CallbackInfo ci)
     {
         if (renderType == RenderType.solid())
@@ -851,6 +1085,9 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
             RPostShaderRegistry.InverseProjectionMatrix.mul(positionMatrix);
             RPostShaderRegistry.InverseProjectionMatrix.mul(matrices.last().pose());
             RPostShaderRegistry.InverseProjectionMatrix.invert();
+        }
+        if (ClientUtil.isUnderRTZ() && ClientUtil.rtzTicks >= 4 && ClientUtil.rtzTicks < ClientUtil.RTZ_DURATION - 4) {
+            ci.cancel();
         }
     }
 }

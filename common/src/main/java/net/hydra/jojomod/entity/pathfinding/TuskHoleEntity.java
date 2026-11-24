@@ -24,6 +24,8 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -51,6 +53,7 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
     public int getTimeInHole() {
         return timeInHole;
     }
+    public void resetTime() {timeInHole = 0;}
     private static final EntityDataAccessor<Boolean> VORTEX = SynchedEntityData.defineId(TuskHoleEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Direction> CLINGING = SynchedEntityData.defineId(TuskHoleEntity.class, EntityDataSerializers.DIRECTION);
     @Override
@@ -96,6 +99,8 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
             if (target.hurt(ModDamageTypes.of(this.level(),ModDamageTypes.PENETRATING_STAND,this,this.getUser()),PT.getHoleDamage(target) ) ){
                 this.level().playSound(null,this.blockPosition(),ModSounds.TUSK_HOLE_IMPACT_EVENT,SoundSource.PLAYERS,1F,0.9F+((float) Math.random()*0.2F));
                 bleedTarget(target);
+
+                PT.addEXP(1);
                 
                 if (!target.isAlive()) {
                     LivingEntity nearest = MainUtil.findClosestEntity(this.level(),target.getPosition(0),10,livingEntity -> (
@@ -163,6 +168,10 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
         boolean client = this.level().isClientSide();
         LivingEntity user = this.getUser();
         super.tick();
+
+        if (this.onClimbable() && !isPiloted()) {
+            this.setDeltaMovement(0,this.getDeltaMovement().y(),0);
+        }
 
         if (this.level().isClientSide()) {
             if (isPiloted()) {
@@ -405,9 +414,13 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
        }
     }
 
+    protected PathNavigation createNavigation(Level level) {
+        return new WallClimberNavigation(this, level);
+    }
+
     @Override
     public boolean onClimbable() {
-        return this.isPiloted() && this.horizontalCollision;
+        return this.horizontalCollision && (isPiloted() || (this.getTarget() != null && this.getTarget().getY() >= this.getY()) );
     }
 
     public Vec3 alignToDirection(Direction dir) {return alignToDirection(this.getPosition(0),dir);}
@@ -442,7 +455,7 @@ class TuskHoleAttackGoal extends MeleeAttackGoal {
 
     @Override
     protected void checkAndPerformAttack(LivingEntity $$0, double $$1) {
-        double $$2 = 2;
+        double $$2 = 1.5F;
         if ($$1 <= $$2) {
             this.mob.doHurtTarget($$0);
         }

@@ -13,9 +13,7 @@ import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.visagedata.*;
 import net.hydra.jojomod.event.powers.visagedata.aesthetician.*;
 import net.hydra.jojomod.item.*;
-import net.hydra.jojomod.item.paintings.BirthOfVenusPaintingItem;
-import net.hydra.jojomod.item.paintings.MonaLisaPaintingItem;
-import net.hydra.jojomod.item.paintings.VanGoughPaintingItem;
+import net.hydra.jojomod.item.paintings.*;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.item.CommandDiscItem;
@@ -61,6 +59,8 @@ public class FabricItems {
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersJustice(null)));
     public static Item MAX_STAND_DISC_JUSTICE= registerItem("max_justice_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersJustice(null)));
+    public static Item STAND_DISC_KING_NOTHING = registerItem("king_nothing_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersKingNothing(null)));
 
     /*public static Item STAND_DISC_D4C = registerItem("d4c_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));
@@ -86,7 +86,6 @@ public class FabricItems {
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersKingCrimson(null)));
     public static Item MAX_STAND_DISC_KING_CRIMSON = registerItem("max_king_crimson_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersKingCrimson(null)));
-
     public static final Item STAND_DISC_JJF = registerItem("jumpin_jack_flash_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersJumpinJackFlash(null)));
     public static final Item MAX_STAND_DISC_JJF = registerItem("max_jumpin_jack_flash_disc",
@@ -227,6 +226,8 @@ public class FabricItems {
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersGoldExperience(null)));
     public static Item MAX_STAND_DISC_GOLD_EXPERIENCE = registerItem("max_gold_experience_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersGoldExperience(null)));
+    public static Item CREATIVE_STAND_DISC_GER = registerItem("creative_gold_experience_requiem_disc",
+            new CreativeStandDiscItem(new Item.Properties().stacksTo(1), new PowersGER(null)));
 
  /*   public static Item STAND_DISC_CREAM = registerItem("cream_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCream(null)));
@@ -312,6 +313,47 @@ public class FabricItems {
     public static Item STAND_DISC = registerItem("stand_disc", new EmptyStandDiscItem(new Item.Properties().stacksTo(1)));
     public static Item COFFEE_GUM = registerItem("coffee_gum", new Item(new Item.Properties().food(ModFoodComponents.COFFEE_GUM)));
 
+    public static Item GINKGO_LOG = ModBlocks.GINKGO_LOG.asItem();
+    public static Item GINKGO_PLANKS = ModBlocks.GINKGO_PLANKS.asItem();
+    public static Item GINKGO_LEAVES = ModBlocks.GINKGO_LEAVES.asItem();
+    public static Item GINKGO_WOOD = ModBlocks.GINKGO_WOOD.asItem();
+
+    public static Item STRIPPED_GINKGO_LOG = ModBlocks.STRIPPED_GINKGO_LOG.asItem();
+    public static Item STRIPPED_GINKGO_WOOD = ModBlocks.STRIPPED_GINKGO_WOOD.asItem();
+
+    public static Item GINKGO_SAPLING = ModBlocks.GINKGO_SAPLING.asItem();
+    public static Item GINKGO_DOOR = ModBlocks.GINKGO_DOOR.asItem();
+    public static Item FANCY_GINKGO_DOOR = ModBlocks.FANCY_GINKGO_DOOR.asItem();
+
+    public static Item GINKGO_SIGN = registerItem("ginkgo_sign",
+            new SignItem(
+                    new Item.Properties(),
+                    ModBlocks.GINKGO_SIGN,
+                    ModBlocks.GINKGO_WALL_SIGN
+            )
+    );
+
+    public static Item GINKGO_HANGING_SIGN = registerItem("ginkgo_hanging_sign",
+            new HangingSignItem(
+                    ModBlocks.GINKGO_HANGING_SIGN,
+                    ModBlocks.GINKGO_WALL_HANGING_SIGN,
+                    new Item.Properties()
+            )
+    );
+    public static Item GINKGO_TRAPDOOR = ModBlocks.GINKGO_TRAPDOOR.asItem();
+    public static Item AUTUMN_LEAVES = ModBlocks.AUTUMN_LEAVES.asItem();
+    public static Item GINKGO_STAIRS = ModBlocks.GINKGO_STAIRS.asItem();
+    public static Item GINKGO_SLAB = ModBlocks.GINKGO_SLAB.asItem();
+    public static Item GINKGO_FENCE = ModBlocks.GINKGO_FENCE.asItem();
+    public static Item GINKGO_FENCE_GATE = ModBlocks.GINKGO_FENCE_GATE.asItem();
+    public static Item GINKGO_PRESSURE_PLATE = ModBlocks.GINKGO_PRESSURE_PLATE.asItem();
+    public static Item GINKGO_BUTTON = ModBlocks.GINKGO_BUTTON.asItem();
+    public static Item GINKGO_BOAT = registerItem("ginkgo_boat",
+            new GinkgoBoatItem(false, new Item.Properties().stacksTo(1)));
+
+    public static Item GINKGO_CHEST_BOAT = registerItem("ginkgo_chest_boat",
+            new GinkgoBoatItem(true, new Item.Properties().stacksTo(1)));
+    public static Item GINKGO_FALLEN_LEAVES = ModBlocks.GINKGO_FALLEN_LEAVES.asItem();
 
     public static Item CHAMOMILE_SEEDS = registerItem("chamomile_seeds", new ItemNameBlockItem(ModBlocks.CHAMOMILE, new Item.Properties()));
     public static Item CHAMOMILE = registerItem("chamomile", new Item(new Item.Properties()
@@ -350,7 +392,7 @@ public class FabricItems {
     public static Item NEW_LOCACACA = registerItem("new_locacaca", new NewLocacacaItem(new Item.Properties().food(ModFoodComponents.LOCACACA)));
     public static Item LUCKY_LIPSTICK = registerItem("lucky_lipstick", new LuckyLipstickItem(new Item.Properties().stacksTo(1)));
     public static Item SNAKE_SKIN = registerItem("snake_skin", new Item(new Item.Properties()));
-    public static Item SNAKE_OIL = registerItem("snake_oil", new DrinkableItem(new Item.Properties()));
+    public static Item SNAKE_OIL = registerItem("snake_oil", new DrinkableItem(new Item.Properties().stacksTo(1)));
     public static Item SNAKE_SKIN_BOOTS = registerItem("snake_skin_boots", new ArmorItem(SnakeSkinBootsItem.SNAKE_ARMOR, ArmorItem.Type.BOOTS, new Item.Properties()));
     public static final Item PIRANHA_BUCKET = Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Roundabout.MOD_ID, "piranha_bucket"),
             new MobBucketItem(FabricEntities.PIRANHA, Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1)));
@@ -387,6 +429,7 @@ public class FabricItems {
     public static Item JOTARO_4_MASK = registerItem("jotaro_4_mask", new MaskItem(new Item.Properties().stacksTo(1), new JotaroFourVisage(null)));
     public static Item JOTARO_6_MASK = registerItem("jotaro_6_mask", new MaskItem(new Item.Properties().stacksTo(1), new JotaroSixVisage(null)));
     public static Item JOHNGALLIA_MASK = registerItem("johngallia_mask", new MaskItem(new Item.Properties().stacksTo(1), new JohngalliaVisage(null)));
+    public static Item POLPO_MASK = registerItem("polpo_mask", new MaskItem(new Item.Properties().stacksTo(1), new PolpoVisage(null)));
     public static Item DOT_HAN_MASK = registerItem("dot_han_mask", new MaskItem(new Item.Properties().stacksTo(1), new DotHanVisage(null)));
     public static Item AVDUL_MASK = registerItem("avdul_mask", new MaskItem(new Item.Properties().stacksTo(1), new AvdulVisage(null)));
     public static Item DIO_MASK = registerItem("dio_mask", new MaskItem(new Item.Properties().stacksTo(1), new DIOVisage(null)));
@@ -417,6 +460,7 @@ public class FabricItems {
     public static Item ANAKISS_MASK = registerItem("anakiss_mask", new MaskItem(new Item.Properties().stacksTo(1), new AnakissVisage(null)));
     public static Item BLACKMORE_MASK = registerItem("blackmore_mask", new MaskItem(new Item.Properties().stacksTo(1), new BlackmoreVisage(null)));
     public static Item HATO_MASK = registerItem("hato_mask", new MaskItem(new Item.Properties().stacksTo(1), new HatoVisage(null)));
+    public static Item NORISUKE_MASK = registerItem("norisuke_mask", new MaskItem(new Item.Properties().stacksTo(1), new NorisukeVisage(null)));
     public static Item SHIZUKA_MASK = registerItem("shizuka_mask", new MaskItem(new Item.Properties().stacksTo(1), new ShizukaVisage(null)));
     public static Item CHAKA_MASK = registerItem("chaka_mask", new MaskItem(new Item.Properties().stacksTo(1), new ChakaVisage(null)));
     public static Item ENYA_MASK = registerItem("enya_mask", new MaskItem(new Item.Properties().stacksTo(1), new EnyaVisage(null)));
@@ -429,6 +473,7 @@ public class FabricItems {
     public static Item POCOLOCO_MASK = registerItem("pocoloco_mask", new MaskItem(new Item.Properties().stacksTo(1), new PocolocoVisage(null)));
     public static Item POLNAREFF_MASK = registerItem("polnareff_mask", new MaskItem(new Item.Properties().stacksTo(1), new PolnareffVisage(null)));
     public static Item BLACK_POLNAREFF_MASK = registerItem("black_polnareff_mask", new MaskItem(new Item.Properties().stacksTo(1), new BlackPolnareffVisage(null)));
+    public static Item CIOCCOLATA_MASK = registerItem("cioccolata_mask", new MaskItem(new Item.Properties().stacksTo(1), new CioccolataVisage(null)));
 
     public static Item COFFIN_BLOCK_ITEM = registerItem("coffin_block",
             new CoffinBlockItem(DyeColor.BLACK, FabricBlocks.COFFIN_BLOCK, new Item.Properties().stacksTo(1)));
@@ -462,7 +507,7 @@ public class FabricItems {
 
    // public static Item INTERDIMENSIONAL_KEY = registerItem("interdimensional_key", new InterdimensionalKeyItem(new Item.Properties().stacksTo(1)));
 
-    public static Item FLESH_BUCKET = registerItem("flesh_bucket", new FleshBucketItem(new Item.Properties().stacksTo(1).durability(16)));
+    public static Item FLESH_BUCKET = registerItem("flesh_bucket", new FleshBucketItem(new Item.Properties().stacksTo(1)));
     public static final FoodProperties CHERRY =new FoodProperties.Builder().nutrition(1).saturationMod(0.0F).alwaysEat()
             .effect(new MobEffectInstance(ModEffects.WARDING, 2400, 0), 1.0F)
             .build();
@@ -471,7 +516,9 @@ public class FabricItems {
     public static Item PAINTING_BIRTH_OF_VENUS = registerItem("painting_venus", new BirthOfVenusPaintingItem(new Item.Properties().stacksTo(1)));
     public static Item PAINTING_VAN_GOUGH = registerItem("painting_van_gough", new VanGoughPaintingItem(new Item.Properties().stacksTo(1)));
     public static Item PAINTING_MONA_LISA = registerItem("painting_mona_lisa", new MonaLisaPaintingItem(new Item.Properties().stacksTo(1)));
+    public static Item PAINTING_ZOMBIE_HORSE = registerItem("zombie_horse_painting_item", new ZombieHorsePaintingItem(new Item.Properties().stacksTo(1)));
 
+    public static Item ZOMBIE_HORSE_MURAL = registerItem("zombie_horse_mural_item", new ZombieHorseMuralItem(new Item.Properties().stacksTo(1)));
     public static Item ZOMBIE_HORSE_THREAD = registerItem("zombie_horse_thread", new ZombieHorseThreadItem(new Item.Properties().stacksTo(1).durability(16)));
 
     public static Item MUSIC_DISC_TORTURE_DANCE = registerItem("music_disc_torture_dance",
@@ -583,6 +630,8 @@ public class FabricItems {
                         entries.accept(ANUBIS_GUARDIAN_SPAWN_EGG);
                         entries.accept(ZOMBIE_MINION_SPAWN_EGG);
                         entries.accept(SNAKE_SPAWN_EGG);
+                        entries.accept(PIRANHA_SPAWN_EGG);
+                        entries.accept(BUTTERFLY_SPAWN_EGG);
                         entries.accept(COFFEE_GUM);
                         entries.accept(LOCACACA_PIT.asItem());
                         entries.accept(LOCACACA);
@@ -592,6 +641,9 @@ public class FabricItems {
                         entries.accept(SNAKE_SKIN);
                         entries.accept(SNAKE_SKIN_BOOTS);
                         entries.accept(SNAKE_OIL);
+                        entries.accept(PIRANHA_BUCKET);
+                        entries.accept(PIRANHA);
+                        entries.accept(COOKED_PIRANHA);
                         entries.accept(METEORITE);
                         entries.accept(METEORITE_INGOT);
                         entries.accept(AJA);
@@ -623,6 +675,7 @@ public class FabricItems {
                         entries.accept(CHAKA_MASK);
                         entries.accept(JOTARO_4_MASK);
                         entries.accept(AYA_MASK);
+                        entries.accept(POLPO_MASK);
                         entries.accept(MISTA_MASK);
                         entries.accept(ABBACCHIO_MASK);
                         entries.accept(FUGO_MASK);
@@ -631,6 +684,7 @@ public class FabricItems {
                         entries.accept(DIAVOLO_MASK);
                         entries.accept(DOPPIO_MASK);
                         entries.accept(GHIACCIO_MASK);
+                        entries.accept(CIOCCOLATA_MASK);
                         entries.accept(JOTARO_6_MASK);
                         entries.accept(KIRA_PART_FOUR_MASK);
                         entries.accept(KOSAKU_MASK);
@@ -657,6 +711,7 @@ public class FabricItems {
                         entries.accept(VALENTINE_MASK);
                         entries.accept(DOT_HAN_MASK);
                         entries.accept(AVDUL_MASK);
+                        entries.accept(BLACKMORE_MASK);
                         entries.accept(JOSUKE_PART_EIGHT_MASK);
                         entries.accept(DAIYA_MASK);
                         entries.accept(DAIYA_2_MASK);
@@ -764,6 +819,29 @@ public class FabricItems {
                         entries.accept(ModBlocks.SHINY_QUARTZ_TILES);
                         entries.accept(ModBlocks.REGAL_FLOOR);
                         entries.accept(ModBlocks.REGAL_WALL);
+
+                        entries.accept(ModBlocks.GINKGO_LOG);
+                        entries.accept(ModBlocks.GINKGO_PLANKS);
+                        entries.accept(ModBlocks.GINKGO_LEAVES);
+                        entries.accept(ModBlocks.GINKGO_WOOD);
+                        entries.accept(ModBlocks.STRIPPED_GINKGO_WOOD);
+                        entries.accept(ModBlocks.STRIPPED_GINKGO_LOG);
+                        entries.accept(ModBlocks.GINKGO_SAPLING);
+                        entries.accept(ModBlocks.GINKGO_DOOR);
+                        entries.accept(ModBlocks.FANCY_GINKGO_DOOR);
+                        entries.accept(ModBlocks.GINKGO_SIGN);
+                        entries.accept(ModBlocks.GINKGO_HANGING_SIGN);
+                        entries.accept(ModBlocks.GINKGO_TRAPDOOR);
+                        entries.accept(ModBlocks.AUTUMN_LEAVES);
+                        entries.accept(ModBlocks.GINKGO_STAIRS);
+                        entries.accept(ModBlocks.GINKGO_SLAB);
+                        entries.accept(ModBlocks.GINKGO_FENCE);
+                        entries.accept(ModBlocks.GINKGO_FENCE_GATE);
+                        entries.accept(ModBlocks.GINKGO_PRESSURE_PLATE);
+                        entries.accept(ModBlocks.GINKGO_BUTTON);
+                        entries.accept(GINKGO_BOAT);
+                        entries.accept(GINKGO_CHEST_BOAT);
+                        entries.accept(ModBlocks.GINKGO_FALLEN_LEAVES);
                         entries.accept(ModBlocks.GODDESS_STATUE_BLOCK);
                         entries.accept(ModBlocks.WALL_STREET_SIGN_DIO);
                         entries.accept(ModBlocks.WALL_STREET_SIGN_RIGHT);
@@ -827,6 +905,8 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_RATT);
                         entries.accept(STAND_DISC_KILLER_QUEEN);
                         entries.accept(MAX_STAND_DISC_KILLER_QUEEN);
+                        entries.accept(STAND_DISC_PURPLE_HAZE);
+                        entries.accept(MAX_STAND_DISC_PURPLE_HAZE);
                         entries.accept(STAND_DISC_WHITE_ALBUM);
                         entries.accept(MAX_STAND_DISC_WHITE_ALBUM);
                         entries.accept(STAND_DISC_KING_CRIMSON);
@@ -857,15 +937,11 @@ public class FabricItems {
                         //Add all items from the Jojo mod tab here
                     	//entries.accept(ModBlocks.CHESSBOARD_BLOCK);
                         entries.accept(FALCON_SPAWN_EGG);
-                        entries.accept(PIRANHA_SPAWN_EGG);
-                        entries.accept(PIRANHA_BUCKET);
-                        entries.accept(PIRANHA);
-                        entries.accept(COOKED_PIRANHA);
-                        entries.accept(BUTTERFLY_SPAWN_EGG);
                         entries.accept(STAND_DISC_D4C);
                         entries.accept(MAX_STAND_DISC_D4C);
                         entries.accept(STAND_DISC_GOLD_EXPERIENCE);
                         entries.accept(MAX_STAND_DISC_GOLD_EXPERIENCE);
+                        entries.accept(CREATIVE_STAND_DISC_GER);
                         entries.accept(STAND_DISC_20_CENTURY_BOY);
                         entries.accept(STAND_DISC_TUSK);
                         entries.accept(MAX_STAND_DISC_TUSK);
@@ -876,8 +952,6 @@ public class FabricItems {
                         entries.accept(HERB_TEA);
                         entries.accept(STAND_DISC_METALLICA);
                         entries.accept(MAX_STAND_DISC_METALLICA);
-                        entries.accept(STAND_DISC_PURPLE_HAZE);
-                        entries.accept(MAX_STAND_DISC_PURPLE_HAZE);
                         entries.accept(STAND_DISC_BAD_COMPANY);
                         entries.accept(MAX_STAND_DISC_BAD_COMPANY);
                         entries.accept(STAND_DISC_EMPEROR);
@@ -892,12 +966,12 @@ public class FabricItems {
                         entries.accept(STAND_DISC_JJF);
                         entries.accept(MAX_STAND_DISC_JJF);
                         entries.accept(STAND_DISC_CATCH_THE_RAINBOW);
-                        entries.accept(BLACKMORE_MASK);
 
                         entries.accept(STAND_DISC_SILVER_CHARIOT);
                         entries.accept(MAX_STAND_DISC_SILVER_CHARIOT);
                         entries.accept(STAND_DISC_WHITESNAKE);
                         entries.accept(MAX_STAND_DISC_WHITESNAKE);
+                        entries.accept(STAND_DISC_KING_NOTHING);
                         if (ClientNetworking.getAppropriateConfig().whitesnakeSettings.sightDiscStealEnabled) {
                             entries.accept(SIGHT_DISC);
                         }
@@ -918,8 +992,11 @@ public class FabricItems {
                         entries.accept(HALLUCINATORY_ACID_WALL);
                         entries.accept(ModBlocks.GAMBLING_TABLE);
                         entries.accept(ModBlocks.MAGICIANS_STATUE_BLOCK);
+                        entries.accept(NORISUKE_MASK);
 
                         entries.accept(ZOMBIE_HORSE_THREAD);
+                        entries.accept(ZOMBIE_HORSE_MURAL);
+                        entries.accept(PAINTING_ZOMBIE_HORSE);
                     }).build());
     public static final CreativeModeTab FOG_BLOCK_ITEMS = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
             new ResourceLocation(Roundabout.MOD_ID, "justice_fog_items"),
@@ -1044,6 +1121,7 @@ public class FabricItems {
         ModItems.STAND_DISC_GOLD_EXPERIENCE = STAND_DISC_GOLD_EXPERIENCE;
         ((MaxStandDiscItem)MAX_STAND_DISC_GOLD_EXPERIENCE).baseDisc = ((StandDiscItem)STAND_DISC_GOLD_EXPERIENCE);
         ModItems.MAX_STAND_DISC_GOLD_EXPERIENCE = MAX_STAND_DISC_GOLD_EXPERIENCE;
+        ModItems.CREATIVE_STAND_DISC_GER = CREATIVE_STAND_DISC_GER;
        /* ModItems.STAND_DISC_CREAM = STAND_DISC_CREAM;
         ((MaxStandDiscItem)MAX_STAND_DISC_CREAM).baseDisc = ((StandDiscItem)STAND_DISC_CREAM);
         ModItems.MAX_STAND_DISC_CREAM = MAX_STAND_DISC_CREAM;*/
@@ -1099,6 +1177,30 @@ public class FabricItems {
         ModItems.MINT_SEEDS = MINT_SEEDS;
         ModItems.CHAMOMILE = CHAMOMILE;
         ModItems.MINT = MINT;
+        ModItems.GINKGO_LOG = GINKGO_LOG;
+        ModItems.GINKGO_PLANKS = GINKGO_PLANKS;
+        ModItems.GINKGO_LEAVES = GINKGO_LEAVES;
+        ModItems.GINKGO_WOOD = GINKGO_WOOD;
+        ModItems.STRIPPED_GINKGO_WOOD = STRIPPED_GINKGO_WOOD;
+        ModItems.STRIPPED_GINKGO_LOG = STRIPPED_GINKGO_LOG;
+        ModItems.GINKGO_SAPLING = GINKGO_SAPLING;
+        ModItems.GINKGO_DOOR = GINKGO_DOOR;
+        ModItems.FANCY_GINKGO_DOOR = FANCY_GINKGO_DOOR;
+        ModItems.GINKGO_SIGN = GINKGO_SIGN;
+        ModItems.GINKGO_HANGING_SIGN = GINKGO_HANGING_SIGN;
+        ModItems.GINKGO_TRAPDOOR = GINKGO_TRAPDOOR;
+        ModItems.AUTUMN_LEAVES = AUTUMN_LEAVES;
+        ModItems.GINKGO_STAIRS = GINKGO_STAIRS;
+        ModItems.GINKGO_SLAB = GINKGO_SLAB;
+        ModItems.GINKGO_FENCE = GINKGO_FENCE;
+        ModItems.GINKGO_FENCE_GATE = GINKGO_FENCE_GATE;
+        ModItems.GINKGO_PRESSURE_PLATE = GINKGO_PRESSURE_PLATE;
+        ModItems.GINKGO_BUTTON = GINKGO_BUTTON;
+        ModItems.GINKGO_BOAT = GINKGO_BOAT;
+        ModItems.GINKGO_CHEST_BOAT = GINKGO_CHEST_BOAT;
+        ModItems.GINKGO_FALLEN_LEAVES = GINKGO_FALLEN_LEAVES ;
+
+
 
         ModItems.HERB_TEA = HERB_TEA;
         ModItems.ANUBIS_2D = ANUBIS_2D;
@@ -1128,7 +1230,6 @@ public class FabricItems {
         ((StreetSignBlock)FabricBlocks.STREET_SIGN_STOP).referenceItem = STREET_SIGN_STOP_BLOCK_ITEM.getDefaultInstance();
         ((StreetSignBlock)FabricBlocks.STREET_SIGN_YIELD).referenceItem = STREET_SIGN_YIELD_BLOCK_ITEM.getDefaultInstance();
         ((StreetSignBlock)FabricBlocks.STREET_SIGN_DANGER).referenceItem = STREET_SIGN_DANGER_BLOCK_ITEM.getDefaultInstance();
-        ((FancyLighterBlock)FabricBlocks.FANCY_LIGHTER_BLOCK).referenceItem = FANCY_LIGHTER.getDefaultInstance();
         ((AbstractHandBlock)FabricBlocks.HAND).referenceItem = HAND_BLOCK_ITEM.getDefaultInstance();
         ModItems.FANCY_LIGHTER = FANCY_LIGHTER;
         ModItems.HAND = HAND_BLOCK_ITEM;
@@ -1193,6 +1294,7 @@ public class FabricItems {
         ModItems.GHIACCIO_MASK = GHIACCIO_MASK;
         ModItems.JOHNNY_MASK = JOHNNY_MASK;
         ModItems.JOHNGALLIA_MASK = JOHNGALLIA_MASK;
+        ModItems.POLPO_MASK = POLPO_MASK;
         ModItems.DOT_HAN_MASK = DOT_HAN_MASK;
         ModItems.AVDUL_MASK = AVDUL_MASK;
         ModItems.JOSUKE_PART_EIGHT_MASK = JOSUKE_PART_EIGHT_MASK;
@@ -1202,6 +1304,7 @@ public class FabricItems {
         ModItems.BLACKMORE_MASK = BLACKMORE_MASK;
         ModItems.GUCCIO_MASK = GUCCIO_MASK;
         ModItems.HATO_MASK = HATO_MASK;
+        ModItems.NORISUKE_MASK = NORISUKE_MASK;
         ModItems.SHIZUKA_MASK = SHIZUKA_MASK;
         ModItems.CHAKA_MASK = CHAKA_MASK;
         ModItems.DAIYA_MASK = DAIYA_MASK;
@@ -1220,6 +1323,7 @@ public class FabricItems {
         ModItems.KIRA_PART_EIGHT_MASK = KIRA_PART_EIGHT_MASK;
         ModItems.KOSAKU_MASK = KOSAKU_MASK;
         ModItems.FUGO_MASK = FUGO_MASK;
+        ModItems.CIOCCOLATA_MASK = CIOCCOLATA_MASK;
         ModItems.FUGO_FEEDBACK_MASK = FUGO_FEEDBACK_MASK;
         ModItems.KIRASAKU_MASK = KIRASAKU_MASK;
         ModItems.HAYATO_KAWAJIRI_MASK = HAYATO_KAWAJIRI_MASK;
@@ -1257,7 +1361,9 @@ public class FabricItems {
         ModItems.PAINTING_VAN_GOUGH = PAINTING_VAN_GOUGH;
         ModItems.PAINTING_MONA_LISA = PAINTING_MONA_LISA;
         ModItems.PAINTING_BIRTH_OF_VENUS = PAINTING_BIRTH_OF_VENUS;
+        ModItems.PAINTING_ZOMBIE_HORSE = PAINTING_ZOMBIE_HORSE;
 
+        ModItems.ZOMBIE_HORSE_MURAL = ZOMBIE_HORSE_MURAL;
         ModItems.ZOMBIE_HORSE_THREAD = ZOMBIE_HORSE_THREAD;
 
         ModItems.initializeVisageStore();

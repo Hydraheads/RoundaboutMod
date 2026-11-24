@@ -1,12 +1,13 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.particles.HazeColorParticleOptions;
+import net.hydra.jojomod.particles.ColorParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.NotNull;
 
 public class ForgeParticles {
     public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, Roundabout.MOD_ID);
@@ -154,6 +155,18 @@ public class ForgeParticles {
     );
     public static final RegistryObject<SimpleParticleType> GOLD_PUNCH_IMPACT_C = PARTICLES.register(
             "gold_punch_impact_c",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> REQUIEM_PUNCH_IMPACT_A = PARTICLES.register(
+            "requiem_punch_impact_a",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> REQUIEM_PUNCH_IMPACT_B = PARTICLES.register(
+            "requiem_punch_impact_b",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> REQUIEM_PUNCH_IMPACT_C = PARTICLES.register(
+            "requiem_punch_impact_c",
             () -> new SimpleParticleType(true)
     );
     public static final RegistryObject<SimpleParticleType> DISC_STEAL_HIT = PARTICLES.register(
@@ -320,12 +333,19 @@ public class ForgeParticles {
             "killer_queen_explosion",
             () -> new SimpleParticleType(true)
     );
-    public static final RegistryObject<SimpleParticleType> MOLD_DUST = PARTICLES.register(
-            "mold_dust",
+
+    public static final RegistryObject<ParticleType<ColorParticleOptions>> MOLD_DUST =
+            PARTICLES.register("mold_dust", () -> createColorParticleType(true));
+
+    public static final RegistryObject<ParticleType<ColorParticleOptions>> MOLD =
+            PARTICLES.register("mold", () -> createColorParticleType(false));
+
+    public static final RegistryObject<SimpleParticleType> BLACK_SABBATH_MOVING_RIPPLE = PARTICLES.register(
+            "black_sabbath_moving_ripple",
             () -> new SimpleParticleType(true)
     );
-    public static final RegistryObject<SimpleParticleType> MOLD = PARTICLES.register(
-            "mold",
+    public static final RegistryObject<SimpleParticleType> BLACK_SABBATH_IDLE_RIPPLE = PARTICLES.register(
+            "black_sabbath_idle_ripple",
             () -> new SimpleParticleType(true)
     );
     public static final RegistryObject<SimpleParticleType> PW_FIREBALL_EXPLOSION = PARTICLES.register(
@@ -353,25 +373,28 @@ public class ForgeParticles {
             () -> new SimpleParticleType(true)
     );
 
-    public static final RegistryObject<ParticleType<HazeColorParticleOptions>> PURPLE_HAZE_SMOKE =
-            PARTICLES.register("purple_haze_smoke", () -> new ParticleType<>(false, HazeColorParticleOptions.DESERIALIZER) {
-                @Override
-                public com.mojang.serialization.Codec<HazeColorParticleOptions> codec() {
-                    return HazeColorParticleOptions.codec(this);
-                }
-            });
+    public static final RegistryObject<ParticleType<ColorParticleOptions>> PURPLE_HAZE_SMOKE =
+            PARTICLES.register("purple_haze_smoke", () -> createColorParticleType(true));
+
+    public static final RegistryObject<ParticleType<ColorParticleOptions>> PUZZLE_PARTICLE =
+            PARTICLES.register("kn_piece", () -> createColorParticleType(false));
 
     public static final RegistryObject<SimpleParticleType> DISTORTION_SMOKE = PARTICLES.register(
             "distortion_smoke",
             () -> new SimpleParticleType(true)
     );
-    public static final RegistryObject<ParticleType<HazeColorParticleOptions>> PURPLE_HAZE_BLASTWAVE =
-            PARTICLES.register("purple_haze_blastwave", () -> new ParticleType<>(false, HazeColorParticleOptions.DESERIALIZER) {
-                @Override
-                public com.mojang.serialization.Codec<HazeColorParticleOptions> codec() {
-                    return HazeColorParticleOptions.codec(this);
-                }
-            });
+
+    public static final RegistryObject<ParticleType<ColorParticleOptions>> PURPLE_HAZE_BLASTWAVE =
+            PARTICLES.register("purple_haze_blastwave", () -> createColorParticleType(true));
+
+    public static final RegistryObject<SimpleParticleType> AUTUMN_LEAVES = PARTICLES.register(
+            "autumn_leaves",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> GINKGO_LEAVES = PARTICLES.register(
+            "ginkgo_leaves",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> RAGING_LIGHT = PARTICLES.register(
             "raging_light",
             () -> new SimpleParticleType(true)
@@ -408,6 +431,10 @@ public class ForgeParticles {
             "tusk_hole",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> GOLDEN_SPIRAL = PARTICLES.register(
+            "golden_spiral",
+            () -> new SimpleParticleType(true)
+    );
 
     public static final RegistryObject<SimpleParticleType> METALLICA_FIELD_PNG = PARTICLES.register("metallica_field_png", () -> new SimpleParticleType(true));
 
@@ -433,6 +460,33 @@ public class ForgeParticles {
             () -> new SimpleParticleType(true));
 
     public static final RegistryObject<SimpleParticleType> VITAL_ESSENCE = PARTICLES.register("vital_essence",
+            () -> new SimpleParticleType(true));
+    public static final RegistryObject<SimpleParticleType> GE_WAVE = PARTICLES.register("ge_wave",
+            () -> new SimpleParticleType(true));
+
+    public static final RegistryObject<SimpleParticleType> RAIN_BUBBLE = PARTICLES.register(
+            "rain_bubble",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> RAIN_SHARD_1 = PARTICLES.register(
+            "rain_shard_1",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> RAIN_SHARD_2 = PARTICLES.register(
+            "rain_shard_2",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> RAIN_SHARD_3 = PARTICLES.register(
+            "rain_shard_3",
+            () -> new SimpleParticleType(true)
+    );
+
+    public static @NotNull ParticleType<ColorParticleOptions> createColorParticleType(boolean alwaysSpawn) {
+        return new ParticleType<>(alwaysSpawn, ColorParticleOptions.DESERIALIZER) {
+            @Override
+            public com.mojang.serialization.Codec<ColorParticleOptions> codec() {
+                return ColorParticleOptions.codec(this);
+            }
+        };
+    }
 }

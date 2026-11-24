@@ -30,10 +30,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.OptionalDouble;
+import java.util.*;
 
 import org.joml.Matrix4f;
 
@@ -121,7 +118,11 @@ public class ClientEffectUtil {
             MultiBufferSource buffer,
             Camera camera,
             BlockPos pos1,
-            BlockPos pos2
+            BlockPos pos2,
+            float r,
+            float g,
+            float b,
+            float a
     ) {
         int minX = Math.min(pos1.getX(), pos2.getX());
         int minY = Math.min(pos1.getY(), pos2.getY());
@@ -160,10 +161,10 @@ public class ClientEffectUtil {
                 poseStack,
                 vertexConsumer,
                 box,
-                0.7F,  // R
-                0.0F,  // G
-                1.0F,  // B
-                1.0F   // A
+                r,  // R
+                g,  // G
+                b,  // B
+                a   // A
         );
 
         poseStack.popPose();

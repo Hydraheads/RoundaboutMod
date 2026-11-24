@@ -19,10 +19,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.fates.FatePowers;
-import net.hydra.jojomod.item.ExperienceBishopItem;
-import net.hydra.jojomod.item.FirearmItem;
-import net.hydra.jojomod.item.MemoryChessPieceItem;
-import net.hydra.jojomod.item.WarhammerItem;
+import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.mixin.access.MinecraftAccessor;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.stand.powers.*;
@@ -281,6 +278,16 @@ public abstract class InputEvents implements IInputEvents {
                 }
             }
 
+            // Silver Chariot's arm should render over the player and functions as a sword.
+            /*
+            if (powers instanceof PowersSilverChariot PSC) {
+                if (PSC.getArmSummonActive()) {
+                    ci.setReturnValue(false);
+                    return;
+                }
+            }
+            */
+
             if (powers.isPiloting()){
                 ci.setReturnValue(false);
                 powers.pilotInputAttack();
@@ -307,7 +314,8 @@ public abstract class InputEvents implements IInputEvents {
                 return;
             } else if ((PowerTypes.hasStandActive(player) && standComp.roundabout$getStandPowers().interceptAttack())
                     || (PowerTypes.hasPowerActive(player) && (((IPowersPlayer)player).rdbt$getPowers().interceptAttack()))
-            || (((IFatePlayer)player).rdbt$getFatePowers().interceptAttack())) {
+            || (((IFatePlayer)player).rdbt$getFatePowers().interceptAttack())
+            || (player.getUseItem().getItem() instanceof FirearmItem) ) {
                 if (this.hitResult != null) {
                     boolean $$1 = false;
                     if (isMining) {
@@ -451,7 +459,12 @@ public abstract class InputEvents implements IInputEvents {
 
                 }
             }
+            if (powers.cancelAllRandomMiningThatBreaksMoves2()){
+                ci.setReturnValue(false);
+                return;
+            }
         }
+
     }
 
     @Unique
@@ -523,9 +536,21 @@ public abstract class InputEvents implements IInputEvents {
                         return;
                     }
                 }
+                if (powers.superCancelMining()){
+                    ci.cancel();
+                    return;
+                }
                 if (powers instanceof Powers20thCenturyBoy PCB){
                     if (PCB.invincibleState) ci.cancel(); return;
                 }
+                /*
+                if (powers instanceof PowersSilverChariot PSC) {
+                    if (PSC.getArmSummonActive()) {
+                        ci.cancel();
+                        return;
+                    }
+                }
+                */
 
 
                 if (powers.isPiloting()){
@@ -1279,7 +1304,8 @@ public abstract class InputEvents implements IInputEvents {
                         roundabout$sameKeyTwo(KeyInputRegistry.guardKey) || options.keyUse.isDown());
                 /**Time Stop Levitation*/
                 boolean TSJumping = ((StandUser)player).roundabout$getTSJump();
-                if (((TimeStop)player.level()).isTimeStoppingEntity(player) || PowerTypes.isErasingTime(player)) {
+                if (((TimeStop)player.level()).isTimeStoppingEntity(player) || PowerTypes.isErasingTime(player)
+                        || ((StandUser)player).roundabout$getStandPowers() instanceof PowersGER) {
                     if (player.getAbilities().flying && TSJumping) {
                         this.roundabout$SetTSJump(false);
                     } else {
@@ -1343,7 +1369,7 @@ public abstract class InputEvents implements IInputEvents {
                 }
 
                 Poses poseEmote = Poses.getPosFromByte(((IPlayerEntity) player).roundabout$GetPoseEmote());
-                if (poseEmote != Poses.NONE && poseEmote != Poses.VAMPIRE_TRANSFORMATION){
+                if (poseEmote != Poses.NONE && poseEmote != Poses.VAMPIRE_TRANSFORMATION && poseEmote != Poses.FULLBODYDODGE){
                     if (((options.keyUp.isDown() || options.keyDown.isDown() ||
                     options.keyLeft.isDown() || options.keyRight.isDown() || options.keyJump.isDown())
                             && (poseEmote != Poses.COWER && poseEmote != Poses.BITE_FINGERS))

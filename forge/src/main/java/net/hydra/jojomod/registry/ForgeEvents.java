@@ -19,10 +19,7 @@ import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
-import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
-import net.hydra.jojomod.entity.stand.CaliforniaKingBedEntity;
-import net.hydra.jojomod.entity.stand.CinderellaEntity;
-import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.*;
 import net.hydra.jojomod.entity.visages.mobs.*;
 import net.hydra.jojomod.entity.zombie_minion.*;
@@ -33,11 +30,9 @@ import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.ambient.AmbientCreature;
 import net.minecraft.world.entity.ambient.Bat;
-import net.minecraft.world.entity.animal.Bee;
-import net.minecraft.world.entity.animal.Fox;
-import net.minecraft.world.entity.animal.Salmon;
-import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.item.ItemStack;
@@ -46,6 +41,7 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FireBlock;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
@@ -55,6 +51,11 @@ import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.hydra.jojomod.mixin.access.AccessBlockEntityType;
+import net.minecraft.world.level.block.Block;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Collections;
 
 @Mod.EventBusSubscriber(modid = Roundabout.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ForgeEvents {
@@ -116,6 +117,8 @@ public class ForgeEvents {
         event.put(ForgeEntities.MAGICIANS_RED_OVA.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SURVIVOR.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.DARK_MIRAGE.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.KING_NOTHING.get(), KingNothingEntity.createStandAttributes().build());
+        event.put(ForgeEntities.TRACKING_CLOUD.get(), TrackingCloudEntity.createStandAttributes().build());
         event.put(ForgeEntities.TUSK_A1.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.TUSK_A2.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.TUSK_A3.get(), StandEntity.createStandAttributes().build());
@@ -126,6 +129,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.DIVER_DOWN_WORLD.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.DIVER_DROWNED.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.GOLD_EXPERIENCE.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.GOLD_EXPERIENCE_REQUIEM.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.GOLD_EXPERIENCE_BETA.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SILVER_CHARIOT.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SILVER_CHARIOT_PHARAOH.get(), StandEntity.createStandAttributes().build());
@@ -169,6 +173,8 @@ public class ForgeEvents {
         event.put(ForgeEntities.GE_FISH.get(), Salmon.createAttributes().build());
         event.put(ForgeEntities.GE_FOX.get(), Fox.createAttributes().build());
         event.put(ForgeEntities.GE_SNAKE.get(), Snake.createAttributes().build());
+        event.put(ForgeEntities.GE_PIRANHA.get(), Piranha.createAttributes().build());
+        event.put(ForgeEntities.GE_BUTTERFLY.get(), Butterfly.createAttributes().build());
         event.put(ForgeEntities.VILLAGER_MINION.get(), VillagerMinion.createAttributes().build());
         event.put(ForgeEntities.AXOLOTL_MINION.get(), AxolotlMinion.createAttributes().build());
         event.put(ForgeEntities.OCELOT_MINION.get(), OcelotMinion.createAttributes().build());
@@ -178,6 +184,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.GROUND_HURRICANE.get(), GroundHurricaneEntity.createStandAttributes().build());
         event.put(ForgeEntities.TUSK_HOLE.get(), TuskHoleEntity.createStandAttributes().build());
         event.put(ForgeEntities.ANUBIS_POSSESSOR.get(), AnubisPossessorEntity.createStandAttributes().build());
+        event.put(ForgeEntities.SC_MOUNT.get(), SilverChariotMountEntity.createStandAttributes().build());
         event.put(ForgeEntities.COMMAND_DISC_POSSESSION.get(), CommandDiscPossession.createAttributes().build());
         event.put(ForgeEntities.GROUND_BUBBLE.get(), GroundBubbleEntity.createStandAttributes().build());
         event.put(ForgeEntities.LIFE_TRACKER.get(), LifeTrackerEntity.createStandAttributes().build());
@@ -209,6 +216,20 @@ public class ForgeEvents {
                 SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Snake::checkMobSpawnRules,
+                SpawnPlacementRegisterEvent.Operation.OR
+        );
+        event.register(
+                ForgeEntities.PIRANHA.get(),
+                SpawnPlacements.Type.IN_WATER,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Piranha::checkSurfaceWaterAnimalSpawnRules,
+                SpawnPlacementRegisterEvent.Operation.OR
+        );
+        event.register(
+                ForgeEntities.BUTTERFLY.get(),
+                SpawnPlacements.Type.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Butterfly::canSpawn,
                 SpawnPlacementRegisterEvent.Operation.OR
         );
     }
@@ -364,6 +385,41 @@ public class ForgeEvents {
         ModBlocks.MELON_PARFAIT = ForgeBlocks.MELON_PARFAIT.get();
         ModBlocks.CHAMOMILE = ForgeBlocks.CHAMOMILE.get();
         ModBlocks.MINT = ForgeBlocks.MINT.get();
+        ModBlocks.GINKGO_LOG = ForgeBlocks.GINKGO_LOG.get();
+        ModBlocks.GINKGO_PLANKS = ForgeBlocks.GINKGO_PLANKS.get();
+        ModBlocks.GINKGO_LEAVES = ForgeBlocks.GINKGO_LEAVES.get();
+        ModBlocks.GINKGO_WOOD = ForgeBlocks.GINKGO_WOOD.get();
+        ModBlocks.STRIPPED_GINKGO_WOOD = ForgeBlocks.STRIPPED_GINKGO_WOOD.get();
+        ModBlocks.STRIPPED_GINKGO_LOG = ForgeBlocks.STRIPPED_GINKGO_LOG.get();
+        ModBlocks.GINKGO_SAPLING = ForgeBlocks.GINKGO_SAPLING.get();
+        ModBlocks.GINKGO_DOOR = ForgeBlocks.GINKGO_DOOR.get();
+        ModBlocks.FANCY_GINKGO_DOOR  = ForgeBlocks.FANCY_GINKGO_DOOR .get();
+        ModBlocks.GINKGO_SIGN = ForgeBlocks.GINKGO_SIGN.get();
+        ModBlocks.GINKGO_WALL_SIGN = ForgeBlocks.GINKGO_WALL_SIGN.get();
+        ModBlocks.GINKGO_HANGING_SIGN  = ForgeBlocks.GINKGO_HANGING_SIGN .get();
+        ModBlocks.GINKGO_WALL_HANGING_SIGN = ForgeBlocks.GINKGO_WALL_HANGING_SIGN.get();
+        addSupportedBlocks(
+                BlockEntityType.SIGN,
+                ModBlocks.GINKGO_SIGN,
+                ModBlocks.GINKGO_WALL_SIGN
+        );
+
+        addSupportedBlocks(
+                BlockEntityType.HANGING_SIGN,
+                ModBlocks.GINKGO_HANGING_SIGN,
+                ModBlocks.GINKGO_WALL_HANGING_SIGN
+        );
+        ModBlocks.GINKGO_TRAPDOOR  = ForgeBlocks.GINKGO_TRAPDOOR .get();
+        ModBlocks.AUTUMN_LEAVES  = ForgeBlocks.AUTUMN_LEAVES .get();
+        ModBlocks.GINKGO_STAIRS  = ForgeBlocks.GINKGO_STAIRS .get();
+        ModBlocks.GINKGO_SLAB  = ForgeBlocks.GINKGO_SLAB .get();
+        ModBlocks.GINKGO_FENCE  = ForgeBlocks.GINKGO_FENCE.get();
+        ModBlocks.GINKGO_FENCE_GATE  = ForgeBlocks.GINKGO_FENCE_GATE.get();
+        ModBlocks.GINKGO_PRESSURE_PLATE  = ForgeBlocks.GINKGO_PRESSURE_PLATE.get();
+        ModBlocks.GINKGO_BUTTON  = ForgeBlocks.GINKGO_BUTTON.get();
+        ModBlocks.GINKGO_FALLEN_LEAVES  = ForgeBlocks.GINKGO_FALLEN_LEAVES .get();
+        ModItems.GINKGO_BOAT = ForgeItems.GINKGO_BOAT.get();
+        ModItems.GINKGO_CHEST_BOAT = ForgeItems.GINKGO_CHEST_BOAT.get();
 
         ModBlocks.ORANGE_FIRE = ForgeBlocks.ORANGE_FIRE.get();
         ModBlocks.BLUE_FIRE = ForgeBlocks.BLUE_FIRE.get();
@@ -538,6 +594,7 @@ public class ForgeEvents {
         ModItems.STAND_DISC_GOLD_EXPERIENCE = ForgeItems.STAND_DISC_GOLD_EXPERIENCE.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_GOLD_EXPERIENCE.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_GOLD_EXPERIENCE.get());
         ModItems.MAX_STAND_DISC_GOLD_EXPERIENCE = ForgeItems.MAX_STAND_DISC_GOLD_EXPERIENCE.get();
+        ModItems.CREATIVE_STAND_DISC_GER = ForgeItems.CREATIVE_STAND_DISC_GER.get();
 
         /*ModItems.STAND_DISC_CREAM = ForgeItems.STAND_DISC_CREAM.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_CREAM.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_CREAM.get());
@@ -563,6 +620,8 @@ public class ForgeEvents {
         ModItems.STAND_DISC_D4C = ForgeItems.STAND_DISC_D4C.get();
         ModItems.MAX_STAND_DISC_D4C = ForgeItems.MAX_STAND_DISC_D4C.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_D4C.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_D4C.get());
+
+        ModItems.STAND_DISC_KING_NOTHING = ForgeItems.STAND_DISC_KING_NOTHING.get();
 
 
         ModItems.STAND_DISC_EMPEROR = ForgeItems.STAND_DISC_EMPEROR.get();
@@ -601,7 +660,6 @@ public class ForgeEvents {
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_STOP.get()).referenceItem = ForgeItems.STREET_SIGN_STOP_BLOCK_ITEM.get().getDefaultInstance();
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_YIELD.get()).referenceItem = ForgeItems.STREET_SIGN_YIELD_BLOCK_ITEM.get().getDefaultInstance();
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_DANGER.get()).referenceItem = ForgeItems.STREET_SIGN_DANGER_BLOCK_ITEM.get().getDefaultInstance();
-        ((FancyLighterBlock)ForgeBlocks.FANCY_LIGHTER_BLOCK.get()).referenceItem = ForgeItems.FANCY_LIGHTER.get().getDefaultInstance();
         ((AbstractHandBlock)ForgeBlocks.HAND_BLOCK.get()).referenceItem = ForgeItems.HAND_ITEM.get().getDefaultInstance();
         ModItems.STREET_SIGN_DIO_BLOCK_ITEM = ForgeItems.STREET_SIGN_DIO_BLOCK_ITEM.get();
         ModItems.STREET_SIGN_RIGHT_BLOCK_ITEM = ForgeItems.STREET_SIGN_RIGHT_BLOCK_ITEM.get();
@@ -649,6 +707,29 @@ public class ForgeEvents {
         ModItems.HAYATO_KAWAJIRI_MASK = ForgeItems.HAYATO_KAWAJIRI_MASK.get();
 
         ModItems.IRON_BALL_CROSSBOW = ForgeItems.IRON_BALL_CROSSBOW.get();
+
+        ModBlocks.GINKGO_LOG = ForgeBlocks.GINKGO_LOG.get();
+        ModBlocks.GINKGO_PLANKS = ForgeBlocks.GINKGO_PLANKS.get();
+        ModBlocks.GINKGO_LEAVES = ForgeBlocks.GINKGO_LEAVES.get();
+        ModBlocks.GINKGO_WOOD = ForgeBlocks.GINKGO_WOOD.get();
+        ModBlocks.STRIPPED_GINKGO_WOOD = ForgeBlocks.STRIPPED_GINKGO_WOOD.get();
+        ModBlocks.STRIPPED_GINKGO_LOG = ForgeBlocks.STRIPPED_GINKGO_LOG.get();
+        ModBlocks.GINKGO_SAPLING = ForgeBlocks.GINKGO_SAPLING.get();
+        ModBlocks.GINKGO_DOOR = ForgeBlocks.GINKGO_DOOR.get();
+        ModBlocks.FANCY_GINKGO_DOOR = ForgeBlocks.FANCY_GINKGO_DOOR.get();
+        ModBlocks.GINKGO_SIGN = ForgeBlocks.GINKGO_SIGN.get();
+        ModBlocks.GINKGO_WALL_SIGN = ForgeBlocks.GINKGO_WALL_SIGN.get();
+        ModBlocks.GINKGO_HANGING_SIGN = ForgeBlocks.GINKGO_HANGING_SIGN.get();
+        ModBlocks.GINKGO_WALL_HANGING_SIGN = ForgeBlocks.GINKGO_WALL_HANGING_SIGN.get();
+        ModBlocks.GINKGO_TRAPDOOR = ForgeBlocks.GINKGO_TRAPDOOR.get();
+        ModBlocks.AUTUMN_LEAVES = ForgeBlocks.AUTUMN_LEAVES.get();
+        ModBlocks.GINKGO_STAIRS = ForgeBlocks.GINKGO_STAIRS.get();
+        ModBlocks.GINKGO_SLAB = ForgeBlocks.GINKGO_SLAB.get();
+        ModBlocks.GINKGO_FENCE = ForgeBlocks.GINKGO_FENCE.get();
+        ModBlocks.GINKGO_FENCE_GATE = ForgeBlocks.GINKGO_FENCE_GATE.get();
+        ModBlocks.GINKGO_PRESSURE_PLATE = ForgeBlocks.GINKGO_PRESSURE_PLATE.get();
+        ModBlocks.GINKGO_BUTTON = ForgeBlocks.GINKGO_BUTTON.get();
+        ModBlocks.GINKGO_FALLEN_LEAVES = ForgeBlocks.GINKGO_FALLEN_LEAVES.get();
 
         ModItems.CAT_REMAINS = ForgeItems.CAT_REMAINS.get();
         ModItems.OCELOT_REMAINS = ForgeItems.OCELOT_REMAINS.get();
@@ -711,10 +792,13 @@ public class ForgeEvents {
         ModItems.SHERIFF_MASK = ForgeItems.SHERIFF_MASK.get();
         ModItems.RINGO_MASK = ForgeItems.RINGO_MASK.get();
         ModItems.HATO_MASK = ForgeItems.HATO_MASK.get();
+        ModItems.NORISUKE_MASK = ForgeItems.NORISUKE_MASK.get();
         ModItems.LAEM_MASK = ForgeItems.LAEM_MASK.get();
+        ModItems.CIOCCOLATA_MASK = ForgeItems.CIOCCOLATA_MASK.get();
         ModItems.SHIZUKA_MASK = ForgeItems.SHIZUKA_MASK.get();
         ModItems.JOHNNY_MASK = ForgeItems.JOHNNY_MASK.get();
         ModItems.JOHNGALLIA_MASK = ForgeItems.JOHNGALLIA_MASK.get();
+        ModItems.POLPO_MASK = ForgeItems.POLPO_MASK.get();
         ModItems.DOT_HAN_MASK = ForgeItems.DOT_HAN_MASK.get();
         ModItems.AVDUL_MASK = ForgeItems.AVDUL_MASK.get();
         ModItems.LUCY_MASK = ForgeItems.LUCY_MASK.get();
@@ -739,6 +823,8 @@ public class ForgeEvents {
         ModItems.MUSIC_DISC_HALLELUJAH = ForgeItems.MUSIC_DISC_HALLELUJAH.get();
         ModItems.MUSIC_DISC_CHAKA_HFTF = ForgeItems.MUSIC_DISC_CHAKA_HFTF.get();
         ModItems.ZOMBIE_HORSE_THREAD = ForgeItems.ZOMBIE_HORSE_THREAD.get();
+        ModItems.ZOMBIE_HORSE_MURAL = ForgeItems.ZOMBIE_HORSE_MURAL.get();
+        ModItems.PAINTING_ZOMBIE_HORSE = ForgeItems.PAINTING_ZOMBIE_HORSE.get();
         ModItems.FOG_BLOCK_ITEMS = ForgeCreativeTab.FOG_GROUP.get();
 
      //   ModItems.INTERDIMENSIONAL_KEY = ForgeItems.INTERDIMENSIONAL_KEY.get();
@@ -848,8 +934,11 @@ public class ForgeEvents {
         ModParticles.ROAD_ROLLER_EXPLOSION = ForgeParticles.ROAD_ROLLER_EXPLOSION.get();
         ModParticles.ROAD_ROLLER_SMOKE = ForgeParticles.ROAD_ROLLER_SMOKE.get();
         ModParticles.TUSK_HOLE = ForgeParticles.TUSK_HOLE.get();
+        ModParticles.GOLDEN_SPIRAL = ForgeParticles.GOLDEN_SPIRAL.get();
         ModParticles.KILLER_QUEEN_EXPLOSION = ForgeParticles.KILLER_QUEEN_EXPLOSION.get();
         ModParticles.TOOTH = ForgeParticles.TOOTH.get();
+        ModParticles.BLACK_SABBATH_MOVING_RIPPLE = ForgeParticles.BLACK_SABBATH_MOVING_RIPPLE.get();
+        ModParticles.BLACK_SABBATH_IDLE_RIPPLE = ForgeParticles.BLACK_SABBATH_IDLE_RIPPLE.get();
         ModParticles.PW_FIREBALL_EXPLOSION = ForgeParticles.PW_FIREBALL_EXPLOSION.get();
         ModParticles.PW_BLASTWAVE_EXPLOSION = ForgeParticles.PW_BLASTWAVE_EXPLOSION.get();
         ModParticles.PW_MUSHROOM_EXPLOSION = ForgeParticles.PW_MUSHROOM_EXPLOSION.get();
@@ -860,7 +949,15 @@ public class ForgeEvents {
         ModParticles.PURPLE_HAZE_SMOKE = ForgeParticles.PURPLE_HAZE_SMOKE.get();
         ModParticles.PURPLE_HAZE_BLASTWAVE = ForgeParticles.PURPLE_HAZE_BLASTWAVE.get();
         ModParticles.DISTORTION_SMOKE = ForgeParticles.DISTORTION_SMOKE.get();
+        ModParticles.PUZZLE_PARTICLE = ForgeParticles.PUZZLE_PARTICLE.get();
         ModParticles.VITAL_ESSENCE = ForgeParticles.VITAL_ESSENCE.get();
+        ModParticles.GE_WAVE = ForgeParticles.GE_WAVE.get();
+        ModParticles.AUTUMN_LEAVES = ForgeParticles.AUTUMN_LEAVES.get();
+        ModParticles.GINKGO_LEAVES = ForgeParticles.GINKGO_LEAVES.get();
+        ModParticles.RAIN_BUBBLE = ForgeParticles.RAIN_BUBBLE.get();
+        ModParticles.RAIN_SHARD_1 = ForgeParticles.RAIN_SHARD_1.get();
+        ModParticles.RAIN_SHARD_2 = ForgeParticles.RAIN_SHARD_2.get();
+        ModParticles.RAIN_SHARD_3 = ForgeParticles.RAIN_SHARD_3.get();
 
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();
@@ -903,6 +1000,8 @@ public class ForgeEvents {
         ModEntities.VAN_GOUGH_PAINTING = ForgeEntities.VAN_GOUGH_PAINTING.get();
         ModEntities.MONA_LISA_PAINTING = ForgeEntities.MONA_LISA_PAINTING.get();
         ModEntities.BIRTH_OF_VENUS_PAINTING = ForgeEntities.BIRTH_OF_VENUS_PAINTING.get();
+        ModEntities.ZOMBIE_HORSE_MURAL = ForgeEntities.ZOMBIE_HORSE_MURAL.get();
+        ModEntities.ZOMBIE_HORSE_PAINTING = ForgeEntities.ZOMBIE_HORSE_PAINTING.get();
         ModEntities.THE_WORLD = ForgeEntities.THE_WORLD.get();
         ModEntities.THE_WORLD_ULTIMATE = ForgeEntities.THE_WORLD_ULTIMATE.get();
         ModEntities.KING_CRIMSON = ForgeEntities.KING_CRIMSON.get();
@@ -962,6 +1061,8 @@ public class ForgeEvents {
         ModEntities.WALKING_HEART = ForgeEntities.WALKING_HEART.get();
         ModEntities.JUSTICE_PIRATE = ForgeEntities.JUSTICE_PIRATE.get();
         ModEntities.DARK_MIRAGE = ForgeEntities.DARK_MIRAGE.get();
+        ModEntities.KING_NOTHING = ForgeEntities.KING_NOTHING.get();
+        ModEntities.TRACKING_CLOUD = ForgeEntities.TRACKING_CLOUD.get();
         ModEntities.TUSK_A1 = ForgeEntities.TUSK_A1.get();
         ModEntities.TUSK_A2 = ForgeEntities.TUSK_A2.get();
         ModEntities.TUSK_A3 = ForgeEntities.TUSK_A3.get();
@@ -975,17 +1076,21 @@ public class ForgeEvents {
         ModEntities.DIVER_KICK = ForgeEntities.DIVER_KICK.get();
         ModEntities.BONE_PROJECTILE = ForgeEntities.BONE_PROJECTILE.get();
         ModEntities.GOLD_EXPERIENCE = ForgeEntities.GOLD_EXPERIENCE.get();
+        ModEntities.GOLD_EXPERIENCE_REQUIEM = ForgeEntities.GOLD_EXPERIENCE_REQUIEM.get();
         ModEntities.GOLD_EXPERIENCE_BETA = ForgeEntities.GOLD_EXPERIENCE_BETA.get();
         ModEntities.GE_BRAMBLE = ForgeEntities.GE_BRAMBLE.get();
+        ModEntities.GE_THORN = ForgeEntities.GE_THORN.get();
         ModEntities.GE_BAT = ForgeEntities.GE_BAT.get();
         ModEntities.GE_FROG = ForgeEntities.GE_FROG.get();
         ModEntities.GE_BEE = ForgeEntities.GE_BEE.get();
         ModEntities.GE_FISH = ForgeEntities.GE_FISH.get();
         ModEntities.GE_FOX = ForgeEntities.GE_FOX.get();
         ModEntities.GE_SNAKE = ForgeEntities.GE_SNAKE.get();
+        ModEntities.GE_PIRANHA = ForgeEntities.GE_PIRANHA.get();
+        ModEntities.GE_BUTTERFLY = ForgeEntities.GE_BUTTERFLY.get();
         ModEntities.SILVER_CHARIOT = ForgeEntities.SILVER_CHARIOT.get();
         ModEntities.SILVER_CHARIOT_PHARAOH = ForgeEntities.SILVER_CHARIOT_PHARAOH.get();
-        ModEntities.SILVER_CHARIOT_RAPIER = ForgeEntities.SILVER_CHARIOT_RAPIER.get();
+        ModEntities.SILVER_CHARIOT_SWORD_PROJECTILE = ForgeEntities.SILVER_CHARIOT_SWORD_PROJECTILE.get();
         ModEntities.SILVER_CHARIOT_RAPIER_PLATFORM = ForgeEntities.SILVER_CHARIOT_RAPIER_PLATFORM.get();
         ModEntities.SC_MOUNT = ForgeEntities.SC_MOUNT.get();
         ModEntities.THROWN_HARPOON = ForgeEntities.THROWN_HARPOON.get();
@@ -1036,6 +1141,7 @@ public class ForgeEvents {
         ModEntities.VIRUS_SPIT = ForgeEntities.VIRUS_SPIT.get();
 
         ModEntities.THROWN_OBJECT = ForgeEntities.THROWN_OBJECT.get();
+        ModEntities.RETURNING_OBJECT = ForgeEntities.RETURNING_OBJECT.get();
         ModEntities.THROWN_ANUBIS = ForgeEntities.THROWN_ANUBIS.get();
         ModEntities.CONCEALED_FLAME_OBJECT = ForgeEntities.CONCEALED_FLAME_OBJECT.get();
         ModEntities.GROUND_HURRICANE = ForgeEntities.GROUND_HURRICANE.get();
@@ -1103,6 +1209,8 @@ public class ForgeEvents {
         ModEntities.LIFE_PUNCH_CLONE = ForgeEntities.LIFE_PUNCH_CLONE.get();
         ModEntities.KING_CRIMSON_PROJECTION = ForgeEntities.KING_CRIMSON_PROJECTION.get();
         ModEntities.DNA_CREATION_SPAWNER = ForgeEntities.DNA_CREATION_SPAWNER.get();
+        ModEntities.GINKGO_BOAT = ForgeEntities.GINKGO_BOAT.get();
+        ModEntities.GINKGO_CHEST_BOAT = ForgeEntities.GINKGO_CHEST_BOAT.get();
 
         ForgeItems.assignStupidForge();
         ConfigManager.loadBlacklists2();
@@ -1110,7 +1218,17 @@ public class ForgeEvents {
         ConfigManager.foodParticleParser();
         MinecraftForge.EVENT_BUS.addListener(ForgeEvents::onVillagerTrades);
     }
+    private static void addSupportedBlocks(BlockEntityType<?> type, Block... blocks) {
+        AccessBlockEntityType accessor = (AccessBlockEntityType) type;
 
+        Set<Block> validBlocks = new HashSet<>(
+                accessor.roundabout$getValidBlocks()
+        );
+
+        Collections.addAll(validBlocks, blocks);
+
+        accessor.roundabout$setValidBlocks(validBlocks);
+    }
     /**
     @SubscribeEvent
     public static void commonSetup(FMLCommonSetupEvent event) {

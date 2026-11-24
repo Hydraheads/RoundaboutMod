@@ -13,6 +13,7 @@ import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.SoundIndex;
@@ -292,7 +293,7 @@ public class PowersRatt extends NewDashPreset {
             }
         } else {
             ResourceLocation ScopeIcon = StandIcons.RATT_SCOPE_IN;
-            if (scopeLevel == 1) {
+            if (scopeLevel > 0) {
                 ScopeIcon = StandIcons.RATT_SCOPE_OUT;
             }
             LockedOrNot(context,x,y,1,ScopeIcon,PowersRatt.SCOPE,2);
@@ -442,6 +443,13 @@ public class PowersRatt extends NewDashPreset {
     public void tickPower() {
         super.tickPower();
 
+        if (isPacketPlayer() && scopeLevel > 0) {
+            if (isHoldingSneak()) {
+                scopeLevel = 2;
+            } else {
+                scopeLevel = 1;
+            }
+        }
 
         if (!active) {this.Placement = null;}
         if (isPlaced()) {
@@ -611,20 +619,32 @@ public class PowersRatt extends NewDashPreset {
     static final float balancingSpeed = 0.85F;
     static final float balancingSpeedCharged = 1F;
 
+    private void muzzleFlash(ServerLevel SL, Vec3 pos) {
+        SL.sendParticles(ModParticles.FLASH,pos.x,pos.y,pos.z,0,220,71,122,1.0);
+    }
+
     public void placeBurst() {
         this.animateStand(RattEntity.FIRE);
         this.setPowerNone();
-        playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.RATT_FIRING_EVENT, SoundSource.PLAYERS, 1.7F, 0.9F+(float)Math.random()*0.2F);
-        for (int i = 0; i < 3; i++) {
-            if (this.getStandEntity(this.getSelf()) instanceof RattEntity RE) {
+        if (this.getStandEntity(this.getSelf()) instanceof RattEntity RE && this.getSelf().level() instanceof ServerLevel SL) {
+            Vec3 v = this.getRotations(this.getShootTarget());
+
+
+            playSoundIfPossible(self.level(), null, this.getSelf().blockPosition(), ModSounds.RATT_FIRING_EVENT, SoundSource.PLAYERS, 1.7F, 0.9F + (float) Math.random() * 0.2F);
+            for (int i = 0; i < 3; i++) {
                 RattDartEntity e = new RattDartEntity(RE.level(), this.getSelf());
-                Vec3 v = this.getRotations(this.getShootTarget());
                 float rand = 0.84F;
-                if (isAutoMining()){e.setBlockBreak(true); rand = 0.74F;}
+                if (isAutoMining()) {
+                    e.setBlockBreak(true);
+                    rand = 0.74F;
+                }
                 e.shootFromRotation(RE, (float) v.x * 180 / (float) Math.PI + 180, (float) v.y * 180 / (float) Math.PI,
-                        -0.5F, ShotPowerFloats[1]*balancingSpeed, rand);
+                        -0.5F, ShotPowerFloats[1] * balancingSpeed, rand);
                 e.setSuperthrowTicks(50);
                 RE.level().addFreshEntity(e);
+
+                Vec3 pos = RE.getEyeP(0).add(e.getDeltaMovement().normalize().scale(0.75F)).add(0,0.1,0);
+                muzzleFlash(SL,pos);
             }
         }
 
@@ -656,7 +676,7 @@ public class PowersRatt extends NewDashPreset {
                 }
             }
             case SKILL_2_NORMAL, SKILL_2_CROUCH -> {
-                if (scopeLevel != 0)  {
+                if (scopeLevel > 0)  {
                     if(canExecuteMoveWithLevel(3)) {
                         ToggleBursting();
                     }
@@ -702,10 +722,10 @@ public class PowersRatt extends NewDashPreset {
     }
     public void RattScope() {
         if (!this.onCooldown(PowersRatt.SCOPE)) {
-            int nl = scopeLevel + 1;
-            tryIntPower(PowersRatt.NET_SCOPE, true,nl == 2 ? 0 : nl);
-            tryIntPowerPacket(PowersRatt.NET_SCOPE,nl == 2 ? 0 : nl);
-            this.getSelf().playSound(nl != 2 ? ModSounds.RATT_SCOPE_EVENT : ModSounds.RATT_DESCOPE_EVENT, 1.0F, (float) (0.98F + (Math.random() * 0.04F)));
+            int nl = scopeLevel > 0 ? 0 : 1;
+            tryIntPower(PowersRatt.NET_SCOPE, true, nl);
+            tryIntPowerPacket(PowersRatt.NET_SCOPE, nl);
+            this.getSelf().playSound(ModSounds.RATT_SCOPE_EVENT, 1.0F, (float) (0.98F + (Math.random() * 0.04F)));
         }
 
     }
@@ -723,7 +743,7 @@ public class PowersRatt extends NewDashPreset {
                 this.setCooldown(PowersRatt.SCOPE,5);
                 this.setAttackTime(-1);
                 setScopeLevel(chargeTime);
-                this.getStandUserSelf().roundabout$setCombatMode(scopeLevel != 0);
+                this.getStandUserSelf().roundabout$setCombatMode(scopeLevel > 0);
             }
             case PowersRatt.UPDATE_CHARGE -> this.chargeTime = chargeTime;
 
@@ -769,6 +789,9 @@ public class PowersRatt extends NewDashPreset {
 
 
     public void FireDart(byte type, float accuracy, float modifier) {
+        if (this.getSelf().level() instanceof ServerLevel SL) {
+            muzzleFlash(SL,this.getSelf().getEyePosition().add(this.getSelf().getViewVector(0).scale(0.7F)));
+        }
         RattDartEntity e = new RattDartEntity(this.getSelf().level(),this.getSelf(), type );
         e.shootFromRotation(this.getSelf(), this.getSelf().getXRot(), this.getSelf().getYRot(), -0.5F, ShotPowerFloats[1]*modifier, accuracy);
         e.setSuperthrowTicks(50);
@@ -777,6 +800,10 @@ public class PowersRatt extends NewDashPreset {
     }
 
     public void FireDart(int i, float accuracy) {
+        if (this.getSelf().level() instanceof ServerLevel SL) {
+            muzzleFlash(SL,this.getSelf().getEyePosition().add(this.getSelf().getViewVector(0).scale(0.7F)));
+        }
+
         float power = 0;
         for (int b=ShotThresholds.length-1;b>=0;b--) {
             if ( (i == -1 ? 51 : i) >= ShotThresholds[b]) {
@@ -923,7 +950,7 @@ public class PowersRatt extends NewDashPreset {
 
     @Override
     public float inputSpeedModifiers(float basis) {
-        if (scopeLevel != 0){
+        if (scopeLevel > 0){
             basis*=0.7f;
         }
         return super.inputSpeedModifiers(basis);
@@ -958,7 +985,7 @@ public class PowersRatt extends NewDashPreset {
                 }
             }
             case PowersRatt.CHANGE_MODE -> {
-                if (scopeLevel != 0) {
+                if (scopeLevel > 0) {
                     if (getChargeTime() <= MinThreshold || shotcooldown != 0) {
                         return true;
                     }
@@ -981,11 +1008,11 @@ public class PowersRatt extends NewDashPreset {
     }
 
     @Override
-    public boolean interceptAttack() {return  scopeLevel != 0;}
+    public boolean interceptAttack() {return  scopeLevel > 0;}
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (keyIsDown) {
-            if (scopeLevel != 0 && this.chargeTime >= PowersRatt.MinThreshold) {
+            if (scopeLevel > 0 && this.chargeTime >= PowersRatt.MinThreshold) {
                 if (this.getActivePower() == PowerIndex.NONE) {
                     if (!isAttackIneptVisually(PowersRatt.CHANGE_MODE, 2)) {
                         this.getSelf().playSound(ModSounds.RATT_FIRING_EVENT, 1.0F, (float) (0.98F + (Math.random() * 0.04F)));
@@ -1004,7 +1031,7 @@ public class PowersRatt extends NewDashPreset {
     }
 
     @Override
-    public boolean interceptGuard() {return scopeLevel != 0;}
+    public boolean interceptGuard() {return scopeLevel > 0;}
     @Override
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
         if (this.getActivePower() == PowerIndex.NONE) {
@@ -1114,7 +1141,7 @@ public class PowersRatt extends NewDashPreset {
 
         if(PowerTypes.hasStandActive(self)) {
 
-            if (getValidPlacement() != null && !isPlaced() || shotcooldown != 0 || scopeLevel != 0) {
+            if (getValidPlacement() != null && !isPlaced() || shotcooldown != 0 || scopeLevel > 0) {
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             }
 

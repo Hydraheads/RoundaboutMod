@@ -57,18 +57,34 @@ public class MoldParticle extends SimpleAnimatedParticle {
         return this.sprite.getV1();
     }
 
-    public static class Provider implements ParticleProvider<SimpleParticleType> {
+    // public static class Provider implements ParticleProvider<SimpleParticleType> {
+    //     private final SpriteSet sprites;
+    //
+    //     public Provider(SpriteSet $$0) {
+    //         this.sprites = $$0;
+    //     }
+    //
+    //     public Particle createParticle(SimpleParticleType $$0, ClientLevel $$1, double $$2, double $$3, double $$4, double $$5, double $$6, double $$7) {
+    //         MoldParticle part = new MoldParticle($$1, $$2, $$3, $$4, $$5,$$6,$$7, this.sprites);
+    //         part.setColor(0.9F, 0.9F, 0.9F);
+    //         part.setAlpha(0.7F);
+    //         return part;
+    //     }
+    // }
+    public static class Provider implements ParticleProvider<ColorParticleOptions> {
         private final SpriteSet sprites;
 
-        public Provider(SpriteSet $$0) {
-            this.sprites = $$0;
+        public Provider(SpriteSet sprites) {
+            this.sprites = sprites;
         }
 
-        public Particle createParticle(SimpleParticleType $$0, ClientLevel $$1, double $$2, double $$3, double $$4, double $$5, double $$6, double $$7) {
-            MoldParticle part = new MoldParticle($$1, $$2, $$3, $$4, $$5,$$6,$$7, this.sprites);
-            part.setColor(0.9F, 0.9F, 0.9F);
-            part.setAlpha(0.7F);
-            return part;
+        @Override
+        public Particle createParticle(ColorParticleOptions options, ClientLevel level,
+                double x, double y, double z, double xd, double yd, double zd) {
+            MoldParticle particle = new MoldParticle(level, x, y, z, xd, yd, zd, sprites);
+            particle.setColor(options.getR(), options.getG(), options.getB());
+            particle.setAlpha(0.7f);
+            return particle;
         }
     }
 }

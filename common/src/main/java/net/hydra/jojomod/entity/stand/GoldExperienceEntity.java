@@ -12,18 +12,40 @@ public class GoldExperienceEntity extends FollowingStandEntity {
     }
 
     public static final byte PART_5 = 0,
-            BETA = 1;
+            BETA = 1,
+            DIAMOND = 2,
+            GUARD = 3,
+            PS2 = 4;
 
     public final AnimationState lifePunch = new AnimationState();
+    public final AnimationState doublePunch = new AnimationState();
+    public final AnimationState healWindup = new AnimationState();
+    public final AnimationState healOthers = new AnimationState();
+    public final AnimationState healSelf = new AnimationState();
+    public final AnimationState groundPunch = new AnimationState();
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState hideLeg = new AnimationState();
     public final AnimationState kick_barrage = new AnimationState();
     public final AnimationState kick_barrage_end = new AnimationState();
     public final AnimationState kick_barrage_windup = new AnimationState();
+    public final AnimationState entityGrabAnimation = new AnimationState();
+    public final AnimationState blockThrowAnimation = new AnimationState();
+    public final AnimationState blockGrabAnimation = new AnimationState();
+    public final AnimationState itemGrabAnimation = new AnimationState();
+    public final AnimationState itemThrowAnimation = new AnimationState();
+    public final AnimationState blockRetractAnimation = new AnimationState();
+    public final AnimationState itemRetractAnimation = new AnimationState();
+    public final AnimationState thisIsRequiemAnimation = new AnimationState();
 
     //used for animations later
     public static final byte
-        LIFE_PUNCH = 82;
+        LIFE_PUNCH = 82,
+        DOUBLE_PUNCH = 83,
+        HEAL_WINDUP = 84,
+        HEAL_OTHERS = 85,
+        HEAL_SELF = 86,
+        GROUND_PUNCH = 87,
+        REQUIEM = 88;
 
     @Override
     public void setupAnimationStates() {
@@ -39,6 +61,40 @@ public class GoldExperienceEntity extends FollowingStandEntity {
             this.lifePunch.startIfStopped(this.tickCount);
         } else {
             this.lifePunch.stop();
+        }
+
+        if (animation == DOUBLE_PUNCH) {
+            this.doublePunch.startIfStopped(this.tickCount);
+        } else {
+            this.doublePunch.stop();
+        }
+
+        if (animation == HEAL_WINDUP) {
+            this.healWindup.startIfStopped(this.tickCount);
+        } else {
+            this.healWindup.stop();
+        }
+        if (animation == HEAL_OTHERS) {
+            this.healOthers.startIfStopped(this.tickCount);
+        } else {
+            this.healOthers.stop();
+        }
+        if (animation == HEAL_SELF) {
+            this.healSelf.startIfStopped(this.tickCount);
+        } else {
+            this.healSelf.stop();
+        }
+
+        if (animation == GROUND_PUNCH) {
+            this.groundPunch.startIfStopped(this.tickCount);
+        } else {
+            this.groundPunch.stop();
+        }
+
+        if (animation == REQUIEM) {
+            this.thisIsRequiemAnimation.startIfStopped(this.tickCount);
+        } else {
+            this.thisIsRequiemAnimation.stop();
         }
 
         if (this.getAnimation() != KICK_BARRAGE) {
@@ -59,5 +115,40 @@ public class GoldExperienceEntity extends FollowingStandEntity {
             this.kick_barrage_end.stop();
         }
 
+        if (this.getAnimation() == ITEM_GRAB) {
+            this.itemGrabAnimation.startIfStopped(this.tickCount);
+        } else {
+            this.itemGrabAnimation.stop();
+        }
+        if (this.getAnimation() == ITEM_THROW) {
+            this.itemThrowAnimation.startIfStopped(this.tickCount);
+        } else {
+            this.itemThrowAnimation.stop();
+        }
+        if (this.getAnimation() == ITEM_RETRACT) {
+            this.itemRetractAnimation.startIfStopped(this.tickCount);
+        } else {
+            this.itemRetractAnimation.stop();
+        }
+        if (this.getAnimation() == BLOCK_GRAB) {
+            this.blockGrabAnimation.startIfStopped(this.tickCount);
+        } else {
+            this.blockGrabAnimation.stop();
+        }
+        if (this.getAnimation() == BLOCK_THROW) {
+            this.blockThrowAnimation.startIfStopped(this.tickCount);
+        } else {
+            this.blockThrowAnimation.stop();
+        }
+        if (this.getAnimation() == BLOCK_RETRACT) {
+            this.blockRetractAnimation.startIfStopped(this.tickCount);
+        } else {
+            this.blockRetractAnimation.stop();
+        }
+        if (this.getAnimation() == ENTITY_GRAB) {
+            this.entityGrabAnimation.startIfStopped(this.tickCount);
+        } else {
+            this.entityGrabAnimation.stop();
+        }
     }
 }

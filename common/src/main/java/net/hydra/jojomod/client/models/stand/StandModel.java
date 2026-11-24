@@ -70,6 +70,8 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
         return stand;
     }
 
+    public boolean useStandRotations(StandEntity stand) {return true;}
+
     public void animateIdles(T entity, float animationProgress) {
         this.animate(entity.idleAnimationState, StandAnimations.STAND_IDLE_FLOAT, animationProgress, 1f);
         this.animate(entity.idleAnimationState2, StandAnimations.IDLE_2, animationProgress, 1f);

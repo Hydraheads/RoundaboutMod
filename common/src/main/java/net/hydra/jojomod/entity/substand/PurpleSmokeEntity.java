@@ -1,42 +1,35 @@
 package net.hydra.jojomod.entity.substand;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.RoundaboutLoadServer;
 import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.stand.PurpleHazeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
-import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.mixin.PlayerEntity;
 import net.hydra.jojomod.event.ModEffects;
-import net.hydra.jojomod.particles.HazeColorParticleOptions;
+import net.hydra.jojomod.particles.ColorParticleOptions;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.sounds.SoundEvents;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.hydra.jojomod.mixin.justice.JusticeCreeper;
-import net.hydra.jojomod.mixin.justice.JusticeZombie;
 import net.hydra.jojomod.stand.powers.PowersPurpleHaze;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
-import net.minecraft.core.Holder;
-import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -48,9 +41,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -78,6 +71,7 @@ public class PurpleSmokeEntity extends StandEntity {
         SKIN_COLORS.put(PurpleHazeEntity.GREEN_DSITORTION, 0x60ed24);//
         SKIN_COLORS.put(PurpleHazeEntity.PLAGUE_BLUE, 0xA62AAD);//
         SKIN_COLORS.put(PurpleHazeEntity.PLAGUE_RED, 0x980909);//
+        SKIN_COLORS.put(PurpleHazeEntity.CREAKING, 0xFFEB6123);//
     }
     public static final int DEFAULT_HAZE_COLOR = 0xA62AAD;
 
@@ -147,13 +141,13 @@ public class PurpleSmokeEntity extends StandEntity {
             for (int j = 0; j < damages.size(); j++) {
                 if (Objects.nonNull(this.getUser())) {
                     Entity entity = damages.get(j);
-                    if (entity instanceof LivingEntity LE) {
+                    if (entity instanceof ServerPlayer LE) {
                         if (/*!((StandUser) LE).roundabout$isBubbleEncased() && !(LE instanceof StrayCatEntity c && c.getBubbleShield()) && */PowerTypes.isExistentiallyElsewhereTogether(this, LE)) {
                             if (isDistortionMode()) {
-                                ((StandUser) LE).SetInDistortionHazeTicks(5);
+                                S2CPacketUtil.sendGenericIntToClientPacket(LE, PacketDataIndex.S2C_IN_DISTORTION_HAZE_TICKS, 5);
                             } else {
-                                ((StandUser) LE).SetInPurpleHazeTicks(5);
-                                ((StandUser) LE).SetPurpleHazeSkin(this.getStandSkin());
+                                S2CPacketUtil.sendGenericIntToClientPacket(LE, PacketDataIndex.S2C_IN_PURPLE_HAZE_TICKS, 5);
+                                S2CPacketUtil.sendGenericIntToClientPacket(LE, PacketDataIndex.S2C_PURPLE_HAZE_SKIN, this.getStandSkin());
                             }
                         }
                     }
@@ -217,7 +211,17 @@ public class PurpleSmokeEntity extends StandEntity {
         Block block = state.getBlock();
         if (MainUtil.PURPLE_HAZE_DECAY_BLOCKS.containsKey(block) && MainUtil.PURPLE_HAZE_DECAY_RATE.containsKey(block)) {
             if (Roundabout.RANDOM.nextFloat() < MainUtil.PURPLE_HAZE_DECAY_RATE.get(block)) {
-                return MainUtil.PURPLE_HAZE_DECAY_BLOCKS.get(block).defaultBlockState();
+                BlockState replacement = MainUtil.PURPLE_HAZE_DECAY_BLOCKS.get(block).defaultBlockState();
+                if (state.hasProperty(BlockStateProperties.WATERLOGGED) && state.getValue(BlockStateProperties.WATERLOGGED)
+                        && replacement.getBlock() == Blocks.AIR) {
+                    return Blocks.WATER.defaultBlockState();
+                }
+                for (Property<?> prop : state.getProperties()) {
+                    if (replacement.hasProperty(prop)) {
+                        replacement = MainUtil.copyBlockStateProperty(state, replacement, prop);
+                    }
+                }
+                return replacement;
             }
         }
         return null;
@@ -270,13 +274,14 @@ public class PurpleSmokeEntity extends StandEntity {
             return ModParticles.DISTORTION_SMOKE;
         }
         int color = SKIN_COLORS.getOrDefault(skin, DEFAULT_HAZE_COLOR);
-        return HazeColorParticleOptions.fromPackedColor(ModParticles.PURPLE_HAZE_SMOKE, color);
+        return ColorParticleOptions.fromPackedColor(ModParticles.PURPLE_HAZE_SMOKE, color);
     }
 
     private int lastTier = 0;
 
     private void spawnTierBurst(int tier) {
         if (!(this.level() instanceof ServerLevel sl)) return;
+        if (tier < 1) return;
 
         double cx = this.getX();
         double cy = this.getY();
@@ -294,13 +299,24 @@ public class PurpleSmokeEntity extends StandEntity {
             double dirY = y;
             double dirZ = Math.sin(theta) * ring;
 
-
             sl.sendParticles(ModParticles.DISTORTION_SMOKE,
                     cx + dirX * radius * 0.5, cy + dirY * radius * 0.5, cz + dirZ * radius * 0.5,
                     0, dirX, dirY, dirZ, speed);
         }
 
-        sl.playSound(null, this.blockPosition(), ModSounds.PURPLE_HAZE_DISTORTION_SMOKE_EVENT, SoundSource.HOSTILE, 0.6F, 0.5F + tier * 0.2F);
+        SoundEvent tierSound = (tier == 1)
+                ? ModSounds.PURPLE_HAZE_PHASE_2_EVENT  // Distortion Virus II
+                : ModSounds.PURPLE_HAZE_PHASE_3_EVENT; // Distortion Virus III
+        float volume = (tier == 1) ? 0.8F : 1.0F;
+        float pitch = (float) (1.00f + Math.random() * 0.03f);
+
+        LivingEntity user = this.getUser();
+        if (user != null) {
+            ((StandUser) user).roundabout$getStandPowers().playSoundIfPossible(
+                    sl, null, this.blockPosition(), tierSound, SoundSource.HOSTILE, volume, pitch);
+        } else {
+            sl.playSound(null, this.blockPosition(), tierSound, SoundSource.HOSTILE, volume, pitch);
+        }
     }
     private void spawnFieldParticles(byte skin) {
         if (!(this.level() instanceof ServerLevel sl)) return;
@@ -379,7 +395,7 @@ public class PurpleSmokeEntity extends StandEntity {
 
             if (!((StandUser) living).roundabout$isBubbleEncased() && !(living instanceof StrayCatEntity c && c.getBubbleShield()) && PowerTypes.isExistentiallyElsewhereTogether(this, living)) {
 
-                int effectDuration = living instanceof Player ? 160 : 160; //for when it was less duration to you. It was 100 : 150
+                int effectDuration = living instanceof Player ? 80 : 80; //for when it was less duration to you. It was 100 : 150
                 boolean isSelf = living == user;
 
                 if (isDistortionMode()) {
@@ -392,19 +408,19 @@ public class PurpleSmokeEntity extends StandEntity {
                         ((StandUser) user).roundabout$getStandPowers().addEXP(2);
                     }
                     if (ClientNetworking.getAppropriateConfig().PurpleHazeSettings.HazeMelts) {
-                        living.addEffect(new MobEffectInstance(ModEffects.MELTING, 160, 2));
+                        living.addEffect(new MobEffectInstance(ModEffects.MELTING, 80, 2));
                     }
                 } else {
                     boolean alreadyHasVirus = living.hasEffect(ModEffects.HAZE_VIRUS);
                     ((StandUser) living).SetInPurpleHazeTicks(5);
                     ((StandUser) living).SetPurpleHazeSkin(this.getStandSkin());
-                    living.addEffect(new MobEffectInstance(ModEffects.HAZE_VIRUS, 150));
+                    living.addEffect(new MobEffectInstance(ModEffects.HAZE_VIRUS, 75));
 
                     if (!isSelf && !alreadyHasVirus && expGrantedTo.add(living.getId())) {
                         ((StandUser) user).roundabout$getStandPowers().addEXP(3);
                     }
                     if (ClientNetworking.getAppropriateConfig().PurpleHazeSettings.HazeMelts) {
-                        living.addEffect(new MobEffectInstance(ModEffects.MELTING, 150, 1));
+                        living.addEffect(new MobEffectInstance(ModEffects.MELTING, 75, 1));
                     }
                 }
             }
@@ -490,6 +506,11 @@ public class PurpleSmokeEntity extends StandEntity {
 
     @Override
     public boolean standHasGravity() {
+        return false;
+    }
+
+
+    public boolean standCanShowName() {
         return false;
     }
 

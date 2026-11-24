@@ -1,15 +1,20 @@
 package net.hydra.jojomod.mixin.stand_users;
 
+import net.hydra.jojomod.event.IVillagerAccess;
+import net.hydra.jojomod.util.TradeLockoutHelper;
 import net.hydra.jojomod.util.loot.WanderingTrades;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandArrowItem;
 import net.hydra.jojomod.util.config.Config;
 import net.hydra.jojomod.util.config.ConfigManager;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.npc.WanderingTrader;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
@@ -20,6 +25,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import oshi.util.tuples.Pair;
 
 @Mixin(WanderingTrader.class)
@@ -130,7 +136,24 @@ public abstract class WanderingTraderMixin
         pick = -1;
     }
 
+    @Inject(method = "aiStep", at = @At("HEAD"))
+    private void roundabout$traderTickLockout(CallbackInfo ci) {
+        if (!this.level().isClientSide()) {
+            IVillagerAccess access = (IVillagerAccess) this;
+            int lockout = access.roundabout$getSnakeOilLockout();
+            if (lockout > 0) {
+                access.roundabout$setSnakeOilLockout(lockout - 1);
+            }
+        }
+    }
 
+    @Inject(method = "mobInteract", at = @At("HEAD"))
+    private void roundabout$trackClientTrader(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
+        WanderingTrader self = (WanderingTrader) (Object) this;
+        if (self.level().isClientSide()) {
+            TradeLockoutHelper.CLIENT_INTERACTED_VILLAGER = self;
+        }
+    }
 
 
 }

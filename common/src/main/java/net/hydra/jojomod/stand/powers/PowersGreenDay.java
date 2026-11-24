@@ -5,16 +5,12 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.access.IPlayerEntityAbstractClient;
 import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
-
-import net.hydra.jojomod.entity.stand.CinderellaEntity;
 import net.hydra.jojomod.entity.stand.GreenDayEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.stand.WalkingHeartEntity;
+import net.hydra.jojomod.entity.substand.LeftSeperatedArmEntity;
 import net.hydra.jojomod.entity.substand.MoldSporesEntity;
 import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
 import net.hydra.jojomod.entity.substand.SeperatedLegsEntity;
@@ -33,7 +29,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.MaxStandDiscItem;
-import net.hydra.jojomod.mixin.PlayerEntity;
+import net.hydra.jojomod.particles.ColorParticleOptions;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
@@ -47,31 +43,25 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SculkChargeParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-
-import net.minecraft.server.Main;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.FlyingMob;
-import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Phantom;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AirItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
@@ -355,7 +345,7 @@ public class PowersGreenDay extends NewPunchingStand {
                 return StitchHeal(1.0f, this.self);
             }
             case PowerIndex.POWER_2 -> {
-                return OffHandThrowServer(ModEntities.SEPERATED_ARM.create(this.self.level()));
+                return OffHandThrowServer(ModEntities.LEFT_SEPERATED_ARM.create(this.self.level()));
             }
 
             case PowerIndex.POWER_2_SNEAK -> {
@@ -367,7 +357,7 @@ public class PowersGreenDay extends NewPunchingStand {
             }
 
             case OFF_HAND_THROW_SLIM -> {
-                return OffHandThrowServer(ModEntities.SEPERATED_ARM_SLIM.create(this.self.level()));
+                return OffHandThrowServer(ModEntities.LEFT_SEPERATED_ARM_SLIM.create(this.self.level()));
             }
             case PowerIndex.POWER_1 -> {
                 return MainArmThrowServer(ModEntities.SEPERATED_ARM.create(this.self.level()));
@@ -497,7 +487,7 @@ public class PowersGreenDay extends NewPunchingStand {
                     double randX = Roundabout.RANDOM.nextDouble(-0.4, 0.4);
                     double randY = Roundabout.RANDOM.nextDouble(-0.4, 0.4);
                     double randZ = Roundabout.RANDOM.nextDouble(-0.4, 0.4);
-                    sendParticlesIfPossible(self.level(),ModParticles.MOLD,
+                    sendParticlesIfPossible(self.level(),ColorParticleOptions.fromPackedColor(ModParticles.MOLD, getMoldParticleColor()),
                             this.getSelf().getX() + randX,
                             this.getSelf().getY()+0.2 + randY,
                             this.getSelf().getZ() + randZ,
@@ -880,7 +870,7 @@ public class PowersGreenDay extends NewPunchingStand {
     public ItemStack OffhandItemToReturn;
 
 
-    public boolean OffHandThrowServer(SeperatedArmEntity SAE){
+    public boolean OffHandThrowServer(LeftSeperatedArmEntity SAE){
 
         if (Off_hand_entity == null) {
             if (SAE != null) {
@@ -1047,7 +1037,7 @@ public class PowersGreenDay extends NewPunchingStand {
     }
 
     public void OffHandSpinAndThrow(){
-        OffHandThrowServer(ModEntities.SEPERATED_ARM.create(this.self.level()));
+        OffHandThrowServer(ModEntities.LEFT_SEPERATED_ARM.create(this.self.level()));
         playSoundIfPossible(self.level(),null, Off_hand_entity.blockPosition(), ModSounds.GREEN_DAY_ARM_SPIN_EVENT, SoundSource.PLAYERS, 1.0F, 2.0F);
         Off_hand_entity.setNeuteredSpinTicks(25);
         Off_hand_entity.setSpinTicks(ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinDuration);
@@ -1055,7 +1045,7 @@ public class PowersGreenDay extends NewPunchingStand {
     }
 
     public void OffHandSpinAndThrowSlim(){
-        OffHandThrowServer(ModEntities.SEPERATED_ARM_SLIM.create(this.self.level()));
+        OffHandThrowServer(ModEntities.LEFT_SEPERATED_ARM_SLIM.create(this.self.level()));
         Off_hand_entity.setNeuteredSpinTicks(25);
         playSoundIfPossible(self.level(),null, Off_hand_entity.blockPosition(), ModSounds.GREEN_DAY_ARM_SPIN_EVENT, SoundSource.PLAYERS, 1.0F, 2.0F);
         Off_hand_entity.setSpinTicks(ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinDuration);
@@ -1563,7 +1553,7 @@ public class PowersGreenDay extends NewPunchingStand {
             double randX = Roundabout.RANDOM.nextDouble(-0.5, 0.5);
             double randY = Roundabout.RANDOM.nextDouble(-0.2, 0.2);
             double randZ = Roundabout.RANDOM.nextDouble(-0.5, 0.5);
-            sendParticlesIfPossible(self.level(),ModParticles.MOLD,
+            sendParticlesIfPossible(self.level(),ColorParticleOptions.fromPackedColor(ModParticles.MOLD, getMoldParticleColor()),
                     this.getSelf().getX(),
                     this.getSelf().getY() + 1 ,
                     this.getSelf().getZ(),
@@ -1672,7 +1662,8 @@ public class PowersGreenDay extends NewPunchingStand {
                     double randX = Roundabout.RANDOM.nextDouble(-50, 50);
                     double randY = Roundabout.RANDOM.nextDouble(-50, 50);
                     double randZ = Roundabout.RANDOM.nextDouble(-50, 50);
-                    sendParticlesIfPossible(self.level(),ModParticles.MOLD_DUST,
+                    sendParticlesIfPossible(self.level(),
+                            ColorParticleOptions.fromPackedColor(ModParticles.MOLD_DUST, getMoldDustParticleColor()),
                             this.getSelf().getX() + randX,
                             this.getSelf().getY() + randY,
                             this.getSelf().getZ() + randZ,
@@ -1716,8 +1707,8 @@ public class PowersGreenDay extends NewPunchingStand {
                 double randX = Roundabout.RANDOM.nextDouble(-1, 1);
                 double randY = Roundabout.RANDOM.nextDouble(-1, 2);
                 double randZ = Roundabout.RANDOM.nextDouble(-1, 1);
-                sendParticlesIfPossible(self.level(),new DustParticleOptions(new Vector3f(0.76F, 1.0F, 0.9F
-                ), 2f),
+                int color = getMoldDustParticleColor();
+                sendParticlesIfPossible(self.level(),new DustParticleOptions(getFloatDustParticleColor(), 2f),
                         this.getSelf().getX() + randX,
                         this.getSelf().getY() + randY,
                         this.getSelf().getZ() + randZ,
@@ -1829,21 +1820,32 @@ public class PowersGreenDay extends NewPunchingStand {
     @Override
     public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.87F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.7F));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(5.0F));
         }
     }
 
     @Override
+    public float getBarrageDamagePlayer(){
+        return 8;
+    }
+
+    @Override
+    public float getBarrageDamageMob(){
+        return 18;
+    }
+
+    @Override
     public void tickStandRejection(MobEffectInstance effect) {
         if (!this.self.level().isClientSide) {
-            ((ServerLevel)this.self.level()).sendParticles(ModParticles.MOLD_DUST,
+            int color = getMoldParticleColor();
+            ((ServerLevel)this.self.level()).sendParticles(ColorParticleOptions.fromPackedColor(ModParticles.MOLD_DUST, getMoldDustParticleColor()),
                     this.self.getX(),
                     this.self.getY(),
                     this.self.getZ(),
                     4, 2, 2, 2, 0.005);
-            ((ServerLevel)this.self.level()).sendParticles(new DustParticleOptions(new Vector3f(0.76F, 1.0F, 0.9F), 2f),
+            ((ServerLevel)this.self.level()).sendParticles(new DustParticleOptions(getFloatDustParticleColor(), 2f),
                     this.self.getX(),
                     this.self.getY(),
                     this.self.getZ(),
@@ -1853,7 +1855,7 @@ public class PowersGreenDay extends NewPunchingStand {
 
             double width = entity.getBbWidth() / 2;
             double height = entity.getBbHeight() / 2;
-            ((ServerLevel) this.self.level()).sendParticles(ModParticles.MOLD
+            ((ServerLevel) this.self.level()).sendParticles(ColorParticleOptions.fromPackedColor(ModParticles.MOLD, color)
                     , entity.getX(),
                     (entity.getY() + height / 2),
                     entity.getZ(),
@@ -1893,6 +1895,52 @@ public class PowersGreenDay extends NewPunchingStand {
             SAVIOURS = 11,
             MOUTH = 12;
 
+    public static final HashMap<Byte, Integer> MOLD_COLOR_MAP = new HashMap<>();
+    public static final HashMap<Byte, Integer> MOLD_DUST_COLOR_MAP = new HashMap<>();
+
+    public int getMoldParticleColor() {
+        return MOLD_COLOR_MAP.getOrDefault(this.standSkin, defaultMoldDustColor());
+    }
+    public static int defaultMoldColor() {
+        return MOLD_COLOR_MAP.get(PART_FIVE_GREEN_DAY);
+    }
+    public int getMoldDustParticleColor() {
+        return MOLD_DUST_COLOR_MAP.getOrDefault(this.standSkin, defaultMoldDustColor());
+    }
+    public static int defaultMoldDustColor() {
+        return MOLD_COLOR_MAP.get(PART_FIVE_GREEN_DAY);
+    }
+    public Vector3f getFloatDustParticleColor() {
+        int color = getMoldDustParticleColor();
+        return new Vector3f(((color >> 16) & 0xFF) / 255.0F,
+                ((color >> 8) & 0xFF) / 255.0F,
+                (color & 0xFF) / 255.0F);
+    }
+    public static Vector3f defaultFloatDustColor() {
+        int color = defaultMoldDustColor();
+        return new Vector3f(((color >> 16) & 0xFF) / 255.0F,
+                ((color >> 8) & 0xFF) / 255.0F,
+                (color & 0xFF) / 255.0F);
+    }
+
+    static {
+        MOLD_COLOR_MAP.put(PART_FIVE_GREEN_DAY, 0x88d5ab);
+        MOLD_DUST_COLOR_MAP.put(PART_FIVE_GREEN_DAY, 0x88d5ab);
+        MOLD_COLOR_MAP.put(SAVIOURS, 0xe90380);
+        MOLD_DUST_COLOR_MAP.put(SAVIOURS, 0xe90380);
+        MOLD_COLOR_MAP.put(NIMROD, 0xf8da3a);
+        MOLD_DUST_COLOR_MAP.put(NIMROD, 0xf8da3a);
+        MOLD_COLOR_MAP.put(TF_CENTURY, 0xc85a01);
+        MOLD_DUST_COLOR_MAP.put(TF_CENTURY, 0xc85a01);
+        MOLD_COLOR_MAP.put(GORGONZOLA, 0xe60707f);
+        MOLD_DUST_COLOR_MAP.put(GORGONZOLA, 0x60707f);
+        MOLD_COLOR_MAP.put(AMERICAN_IDIOT, 0xb3172c);
+        MOLD_DUST_COLOR_MAP.put(AMERICAN_IDIOT, 0xb3172c);
+        MOLD_COLOR_MAP.put(MOUTH, 0xebb7373);
+        MOLD_DUST_COLOR_MAP.put(MOUTH, 0xebb7373);
+        MOLD_COLOR_MAP.put(SILENCE, 0x29dfeb);
+        MOLD_DUST_COLOR_MAP.put(SILENCE, 0x29dfeb);
+    }
 
     @Override
     public Component getSkinName(byte skinId) {
@@ -1928,8 +1976,6 @@ public class PowersGreenDay extends NewPunchingStand {
 
         return Component.translatable(  "skins.roundabout.green_day.part_five_green_day");
     }
-
-
 
     @Override
     public List<Byte> getSkinList() {

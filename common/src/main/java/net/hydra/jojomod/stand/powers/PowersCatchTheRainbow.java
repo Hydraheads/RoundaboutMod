@@ -5,20 +5,21 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.substand.CTRbarrierEntity;
 import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
-import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.index.PowerTypes;
-import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
-import net.hydra.jojomod.mixin.StandUserEntity;
+import net.hydra.jojomod.item.FirearmItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -34,6 +35,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -48,7 +50,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import com.google.common.collect.Lists;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -151,7 +152,8 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             STRIDER = 7,
             LALI_HO = 8,
             EYE = 9,
-            UMVUTHI = 10;
+            KNIGHT = 10,
+            UMVUTHI = 11;
 
     @Override
     public List<Byte> getSkinList() {
@@ -165,6 +167,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                 STRIDER,
                 LALI_HO,
                 EYE,
+                KNIGHT,
                 UMVUTHI
         );
     }
@@ -178,10 +181,11 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                     case EYE -> Component.translatable("skins.roundabout.catch_the_rainbow.eye_white");
                     case NEON -> Component.translatable("skins.roundabout.catch_the_rainbow.neon_off");
                     case SKELETONCTR -> Component.translatable("skins.roundabout.catch_the_rainbow.skeleton");
-                    case STRIDER -> Component.translatable("skins.roundabout.catch_the_rainbow.strider_sick");
+                    case STRIDER -> Component.translatable("skins.roundabout.catch_the_rainbow.strider_healthy");
                     case MAGMA -> Component.translatable("skins.roundabout.catch_the_rainbow.magma");
                     case CMY -> Component.translatable("skins.roundabout.catch_the_rainbow.cmy");
                     case UMVUTHI -> Component.translatable("skins.roundabout.catch_the_rainbow.umvuthi_off");
+                    case KNIGHT -> Component.translatable("skins.roundabout.catch_the_rainbow.knight");
                     default -> Component.translatable("skins.roundabout.catch_the_rainbow.base");
                 };
             } else {
@@ -191,14 +195,16 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                     case EYE -> Component.translatable("skins.roundabout.catch_the_rainbow.eye_red");
                     case NEON -> Component.translatable("skins.roundabout.catch_the_rainbow.neon_on");
                     case SKELETONCTR -> Component.translatable("skins.roundabout.catch_the_rainbow.skeleton");
-                    case STRIDER -> Component.translatable("skins.roundabout.catch_the_rainbow.strider_healthy");
+                    case STRIDER -> Component.translatable("skins.roundabout.catch_the_rainbow.strider_sick");
                     case MAGMA -> Component.translatable("skins.roundabout.catch_the_rainbow.magma");
                     case CMY -> Component.translatable("skins.roundabout.catch_the_rainbow.cmy");
                     case UMVUTHI -> Component.translatable("skins.roundabout.catch_the_rainbow.umvuthi_on");
+                    case KNIGHT -> Component.translatable("skins.roundabout.catch_the_rainbow.knight");
                     default -> Component.translatable("skins.roundabout.catch_the_rainbow.base");
                 };
             }
         }
+        //avoids a game crash when hovering over the stand disc item :/
         else{
             return switch (skinId) {
                 case GHAST -> Component.translatable("skins.roundabout.catch_the_rainbow.ghast_dry");
@@ -206,10 +212,11 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                 case EYE -> Component.translatable("skins.roundabout.catch_the_rainbow.eye_white");
                 case NEON -> Component.translatable("skins.roundabout.catch_the_rainbow.neon_off");
                 case SKELETONCTR -> Component.translatable("skins.roundabout.catch_the_rainbow.skeleton");
-                case STRIDER -> Component.translatable("skins.roundabout.catch_the_rainbow.strider_sick");
+                case STRIDER -> Component.translatable("skins.roundabout.catch_the_rainbow.strider_healthy");
                 case MAGMA -> Component.translatable("skins.roundabout.catch_the_rainbow.magma");
                 case CMY -> Component.translatable("skins.roundabout.catch_the_rainbow.cmy");
                 case UMVUTHI -> Component.translatable("skins.roundabout.catch_the_rainbow.umvuthi_off");
+                case KNIGHT -> Component.translatable("skins.roundabout.catch_the_rainbow.knight");
                 default -> Component.translatable("skins.roundabout.catch_the_rainbow.base");
             };
         }
@@ -287,8 +294,13 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                 return true;
             }
         }
-        if (slot == 1 && !canUseRainMend() && isHoldingSneak())
+        if (slot == 1) {
+            if ((!canUseRainMend() && isHoldingSneak()) || ctrDodgeTicks != 0)
+                return true;
+        }
+        if (slot == 2 && ctrDodgeTicks != 0){
             return true;
+        }
 
         return super.isAttackIneptVisually(activeP, slot);
     }
@@ -310,9 +322,13 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     private static final byte
     RAINMEND = 53,
     DROPDOWN = 54,
-    OFF_HAND_THROW_SLIM = 55,
-    RETURN = 56,
-    DEATH_TIMER = 57;
+    DROP_TIMER = 55,
+    OFF_HAND_THROW_SLIM = 56,
+    RETURN = 57,
+    DEATH_TIMER = 58,
+    DODGE_TICKS = 59,
+    FULL_DODGE = 60,
+    STUN_TICKS = 61;
 
     @Override
     public void powerActivate(PowerContext context){
@@ -340,6 +356,15 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             case SKILL_2_CROUCH -> {
                 if (isInRain())
                 {OffHandThrow();}
+            }
+
+            case SKILL_4_NORMAL -> {
+                if (isInRain())
+                {fullDodgeClient();}
+            }
+            case SKILL_4_CROUCH -> {
+                if (isInRain())
+                {fullDodgeClient();}
             }
         }
     }
@@ -378,6 +403,9 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         else if (move == RETURN) {
             return OffHandReturnServer();
         }
+        else if (move == FULL_DODGE) {
+            fullDodgeServer();
+        }
         return super.setPowerOther(move,lastMove);
     }
     @Override
@@ -389,6 +417,15 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             }
             case DEATH_TIMER -> {
                 deathTimer = data;
+            }
+            case DROP_TIMER -> {
+                dropTimer = data;
+            }
+            case DODGE_TICKS -> {
+                ctrDodgeTicks = data;
+            }
+            case STUN_TICKS -> {
+                stunTicks = data;
             }
         }
         super.updatePowerInt(activePower,data);
@@ -405,6 +442,10 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     private int LeftArmState = 0;
 
     public boolean isInRain() {
+        return rainExtraTime != 0;
+    }
+
+    private boolean isActuallyInRain() {
         if (ClientNetworking.getAppropriateConfig().catchTheRainbowSettings.catchTheRainbowCanAlwaysUse) {
             return true;
         }else{
@@ -417,7 +458,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     //rain speed
     @Override
     public float inputSpeedModifiers(float basis) {
-        if (isInRain() && PowerTypes.hasStandActive(self) && !getStandUserSelf().roundabout$getIsRainWalking()){
+        if (isInRain() && PowerTypes.hasStandActive(self)){
             if (!(this.getSelf() instanceof Mob)) {
                 basis *= this.getSelf().isSprinting() ? 1.35F : 1F;
             }
@@ -425,13 +466,35 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         return super.inputSpeedModifiers(basis);
     }
 
+    @Override
+    public int getJumpHeightAddon(){
+        if (isInRain() && PowerTypes.hasStandActive(self)){
+            if (!isHoldingSneak()) return 1;
+        }
+        return super.getJumpHeightAddon();
+    }
+
     private int deathTimer = 0;
-    private int dropTimer = 0;
+    public int dropTimer = 0;
+
+    private int rainExtraTime = 0;
 
     @Override
     public void tickPower() {
         super.tickPower();
         if (deathTimer != 0) deathTimer --;
+        if (stunTicks != 0) stunTicks --;
+
+        if (ctrDodgeTicks != 0){
+            ctrDodgeTicks --;
+            if (this.self.getItemInHand(this.self.getUsedItemHand()).getItem() instanceof FirearmItem){
+                ItemStack stack = this.self.getItemInHand(this.self.getUsedItemHand());
+                FirearmItem gun = (FirearmItem) stack.getItem();
+                gun.cancelReload(stack, (Player)this.self);
+            }
+        }else{
+            if (!self.level().isClientSide()) setNoAnimation();
+        }
 
         if (self.onGround()) {
             dropTimer = 0;
@@ -462,20 +525,27 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             List<Entity> getNearEntity = MainUtil.getEntitiesInRange(this.self.level(), this.getSelf().blockPosition(), 2F, this.self);
             AABB dropHitbox = this.self.getBoundingBox().move(0,0.4,0).inflate(0.4F);
 
-            for (Entity ent : getNearEntity){
-                if (dropHitbox.intersects(ent.getBoundingBox())) {
-                    MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 0.8F,
-                            0,
-                            -1,
-                            0);
-                    ent.hurt(ModDamageTypes.of(this.self.level(), ModDamageTypes.SHARP_RAINDROP, self, self), 5);
-                    dropTimer = 0;
+            for (Entity ent : getNearEntity) {
+                if (ent instanceof LivingEntity && !(ent instanceof StandEntity)) {
+                    if (dropHitbox.intersects(ent.getBoundingBox())) {
+                        if (this.ctrDodgeTicks == 0) {
+                            MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 0.8F,
+                                    0,
+                                    -1,
+                                    0);
+                            ent.hurt(ModDamageTypes.of(this.self.level(), ModDamageTypes.SHARP_RAINDROP, self, self), 5);
+                            dropTimer = 0;
+                        }
+                    }
                 }
             }
         }
 
-        if (isInRain() && hasStandActive(self)) {
+        if (isActuallyInRain() && hasStandActive(self)) {
             this.getSelf().resetFallDistance();
+            rainExtraTime = 20;
+        } else if (rainExtraTime != 0){
+            rainExtraTime --;
         }
         if(this.self instanceof Player) {
             if(armGoneTicks>0) {
@@ -494,6 +564,15 @@ public class PowersCatchTheRainbow extends NewDashPreset {
 
                 this.updatePowerInt(DEATH_TIMER, deathTimer);
                 S2CPacketUtil.sendIntPowerDataPacket((Player) this.self, PowersCatchTheRainbow.DEATH_TIMER, deathTimer);
+
+                this.updatePowerInt(DROP_TIMER, dropTimer);
+                S2CPacketUtil.sendIntPowerDataPacket((Player) this.self, PowersCatchTheRainbow.DROP_TIMER, dropTimer);
+
+                this.updatePowerInt(DODGE_TICKS, ctrDodgeTicks);
+                S2CPacketUtil.sendIntPowerDataPacket((Player) this.self, PowersCatchTheRainbow.DODGE_TICKS, ctrDodgeTicks);
+
+                this.updatePowerInt(STUN_TICKS, stunTicks);
+                S2CPacketUtil.sendIntPowerDataPacket((Player) this.self, PowersCatchTheRainbow.STUN_TICKS, stunTicks);
 
                 if(Off_hand_entity == null){
                     HasOffHand = true;
@@ -545,7 +624,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                     deathTimer = (ClientNetworking.getAppropriateConfig().catchTheRainbowSettings.catchTheRainbowLifeClutchCooldown);
                     PE.setHealth(1);
                     PE.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 1), PE);
-                    PE.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 40, 10), PE);
+                    PE.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 60, 10), PE);
                     getStandUserSelf().roundabout$setDazed((byte) 0);
                     OffHandReturnServer();
                     playSoundIfPossible(self.level(), null, self.blockPosition(), ModSounds.VAMPIRE_AWAKEN_EVENT,
@@ -577,7 +656,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     }
 
     private boolean canUseRainMend(){
-        if (isInRain()) {
+        if (isInRain() && ctrDodgeTicks == 0) {
             return (self.getHealth() < self.getMaxHealth() || self.hasEffect(ModEffects.BLEED)) ||
                     (self instanceof Player PE && PE.isCreative() || getMendTarget() != null);
         }
@@ -609,9 +688,10 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                 double diameter = 0.6d;
                 playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.CTR_HEAL_EVENT, SoundSource.PLAYERS, 0.6F, (float)Roundabout.RANDOM.nextDouble(0.9, 1.1));
                 for (int i = 0; i < 11; i = i + 1) {
-                    sendParticlesIfPossible(self.level(), ParticleTypes.SPLASH,
+                    double randY = Roundabout.RANDOM.nextDouble(-0.5, 0.25);
+                    sendParticlesIfPossible(self.level(), ModParticles.RAIN_BUBBLE,
                             this.getSelf().getX() + (diameter * Math.sin(i * 4)) * Math.cos(Xangle),
-                            this.getSelf().getY() + (this.getSelf().getEyeHeight() * 0.7),
+                            this.getSelf().getY() + (this.getSelf().getEyeHeight() * 0.7) + randY,
                             this.getSelf().getZ() + (diameter * Math.cos(i * 4)) * Math.cos(Zangle),
                             0, 0, 0, 0, 0);
                 }
@@ -639,10 +719,19 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         }
     }
 
+    public int stunTicks = 0;
+
+    @Override
+    public void onActuallyHurt(DamageSource $$0, float $$1){
+        if ($$1 >= 6.0f) {
+            stunTicks = 10;
+        }
+    }
+
     //barrier
 
     private void barrierClient(){
-        if (!this.onCooldown(PowerIndex.SKILL_1) && isInRain()) {
+        if (!this.onCooldown(PowerIndex.SKILL_1) && isInRain() && ctrDodgeTicks == 0) {
             this.tryPower(POWER_1, true);
             tryPowerPacket(POWER_1);
         }
@@ -656,9 +745,12 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             if (barrier != null) {
                 barrier.setUser(this.self);
                 PowerTypes.copyPlaneOfExisting(self, barrier);
-                barrier.setPos(getRayBlock(this.self, 0.0f).add(0, -1.6, 0));
+                barrier.setPos(getRayBlock(this.self, 4.0f).add(0, -5.6, 0));
                 this.self.level().addFreshEntity(barrier);
             }
+
+            playSoundIfPossible(self.level(), null, self.blockPosition(), ModSounds.CTR_BARRIER_EVENT,
+                    SoundSource.PLAYERS, 1F, 1F);
         }
     }
 
@@ -772,7 +864,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     }
 
     private void OffHandThrow(){
-        if (!this.onCooldown(PowerIndex.SKILL_2) && isInRain() && !this.self.isUsingItem()) {
+        if (!this.onCooldown(PowerIndex.SKILL_2) && isInRain() && !this.self.isUsingItem() && ctrDodgeTicks == 0) {
 
                 if (HasOffHandCharge && !HasOffHand) {
                     HasOffHandCharge = false;
@@ -820,7 +912,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
 
             playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.CTR_HEAL_EVENT, SoundSource.PLAYERS, 0.35F, (float)Roundabout.RANDOM.nextDouble(0.65, 0.85));
             for (int i = 0; i < 11; i = i + 1) {
-                sendParticlesIfPossible(self.level(), ParticleTypes.SPLASH,
+                sendParticlesIfPossible(self.level(), ModParticles.RAIN_BUBBLE,
                         this.getSelf().getX() + (diameter * Math.sin(i * 4)) * Math.cos(Xangle),
                         this.getSelf().getY() + (this.getSelf().getEyeHeight() * 0.7),
                         this.getSelf().getZ() + (diameter * Math.cos(i * 4)) * Math.cos(Zangle),
@@ -833,6 +925,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     public void addAdditionalSaveData(CompoundTag $$0) {
         super.addAdditionalSaveData($$0);
         $$0.putBoolean("hasoffhand",HasOffHand);
+        $$0.putInt("ctrDodgeTicks", ctrDodgeTicks);
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
@@ -840,6 +933,71 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         if ($$0.contains("hasoffhand")) {
             HasOffHand = $$0.getBoolean("hasoffhand");
         }
+        if ($$0.contains("ctrDodgeTicks")) {
+            ctrDodgeTicks = $$0.getInt("ctrDodgeTicks");
+        }
+    }
+
+    //come the dawn
+    public int ctrDodgeTicks = 0;
+
+    private void fullDodgeClient(){
+        if (!this.onCooldown(PowerIndex.SKILL_4)) {
+            this.setCooldown(PowerIndex.SKILL_4, ClientNetworking.getAppropriateConfig().catchTheRainbowSettings.catchTheRainbowFullDodgeCooldown);
+            this.tryPower(FULL_DODGE, true);
+            tryPowerPacket(FULL_DODGE);
+        }
+    }
+
+    private void fullDodgeServer(){
+        ctrDodgeTicks = 25;
+        setFullDodgeAnimation();
+        this.self.stopUsingItem();
+        this.self.unRide();
+
+        playSoundIfPossible(self.level(), null, self.blockPosition(), ModSounds.CTR_FULL_BODY_DODGE_EVENT,
+                SoundSource.PLAYERS, 1F, 1F);
+    }
+
+    public void setFullDodgeAnimation(){
+        if (self instanceof Player pl ){
+            ((IPlayerEntity)pl).roundabout$SetPoseEmote((byte) 43);
+        }
+    }
+    public void setNoAnimation(){
+        if (self instanceof Player pl ){
+            ((IPlayerEntity)pl).roundabout$SetPoseEmote((byte) 0);
+        }
+    }
+
+    @Override
+    public boolean interceptDamageEvent(DamageSource $$0, float $$1){
+        if (!MainUtil.isSpecialDamage($$0) &&
+                !$$0.is(DamageTypes.LAVA) &&
+                !$$0.is(ModDamageTypes.BITES_THE_DUST) &&
+                !$$0.is(ModDamageTypes.HAZE_VIRUS) &&
+                !$$0.is(DamageTypes.STARVE) &&
+                !$$0.is(DamageTypes.WITHER)){
+            return ctrDodgeTicks != 0;
+        }
+        return false;
+    }
+    @Override
+    public boolean phaseThroughProjectile(Entity ent){
+        return this.ctrDodgeTicks != 0;
+    }
+
+    @Override
+    public boolean interceptAttack(){
+        return ctrDodgeTicks != 0;
+    }
+    @Override
+    public boolean interceptAllInteractions(){
+            return ctrDodgeTicks != 0;
+    }
+    @Override
+    public boolean superCancelMining(){
+        return this.ctrDodgeTicks != 0;
     }
 
     //rain dodge
@@ -895,7 +1053,9 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                         ((IPlayerEntity) this.getSelf()).roundabout$setClientDodgeTime(0);
                     }
                     if (this.self instanceof StandUser su){
-                        su.roundabout$setIsRainWalking(false);
+                        if (!ConfigManager.getClientConfig().catchTheRainbowSettings.catchTheRainbowAlternateRainWalk) {
+                            su.roundabout$setIsRainWalking(false);
+                        }
                     }
                     this.setCooldown(PowerIndex.GLOBAL_DASH, cdTime);
                     MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 0.91F,
@@ -905,6 +1065,21 @@ public class PowersCatchTheRainbow extends NewDashPreset {
 
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.MOVEMENT, true);
                     tryIntPowerPacket(PowerIndex.MOVEMENT, backwards+buffer);
+                }
+            }
+        }
+    }
+
+    /*so ugly even the weather rejects me 💔*/
+    public void tickStandRejection(MobEffectInstance effect){
+        if (!this.getSelf().level().isClientSide()) {
+            if (this.isInRain()){
+                MainUtil.makeBleed(this.self, 1, 25, this.self);
+                if (this.self.getDeltaMovement().y < 0.75) {
+                    MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), 0.5F,
+                            0,
+                            1,
+                            0);
                 }
             }
         }

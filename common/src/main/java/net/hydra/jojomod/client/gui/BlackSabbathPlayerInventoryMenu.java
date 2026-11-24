@@ -14,6 +14,7 @@ import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
+import org.apache.logging.log4j.core.pattern.AbstractStyleNameConverter;
 
 public class BlackSabbathPlayerInventoryMenu extends AbstractContainerMenu {
     private final ResultContainer resultSlots = new ResultContainer();
@@ -25,7 +26,6 @@ public class BlackSabbathPlayerInventoryMenu extends AbstractContainerMenu {
         this.owner = $$2;
         IPlayerEntity play = ((IPlayerEntity)this.owner);
         BlackSabbathPlayerInventory bsinv = play.roundabout$getBlckSabbathPlayerInventory();
-
         this.addSlot(new Slot(bsinv, 0, 70, 36) {
             @Override
             public int getMaxStackSize() {
@@ -34,6 +34,10 @@ public class BlackSabbathPlayerInventoryMenu extends AbstractContainerMenu {
 
             @Override
             public boolean mayPlace(ItemStack $$0) {
+                    StandPowers pbs = ((StandUser)owner).roundabout$getStandPowers();
+                    if(pbs instanceof PowersBlackSabbath bs && bs.moveMode == 3){
+                        return false;
+                    }
                 return (!($$0.getItem() instanceof BlockItem BI && BI.getBlock() instanceof ShulkerBoxBlock));
             }
 
@@ -45,9 +49,7 @@ public class BlackSabbathPlayerInventoryMenu extends AbstractContainerMenu {
                 this.addSlot(new Slot(bsinv,1 + $$9 + $$10 * 4, 96 + $$9 * 18, 18 * ($$10 + 1) + 9) {
 
                     @Override
-                    public boolean mayPlace(ItemStack $$0) {
-                        return (!($$0.getItem() instanceof BlockItem BI && BI.getBlock() instanceof ShulkerBoxBlock));
-                    }
+                    public boolean mayPlace(ItemStack $$0) {return !($$0.getItem() instanceof BlockItem BI && BI.getBlock() instanceof ShulkerBoxBlock);}
 
                 });
             }
@@ -84,7 +86,6 @@ public class BlackSabbathPlayerInventoryMenu extends AbstractContainerMenu {
                     return true;
                 }
             } else {
-                System.out.println($$0.level());
                 StandUser user = ((StandUser) $$0);
                 StandPowers powers = user.roundabout$getStandPowers();
                 if(powers instanceof PowersBlackSabbath pb){
@@ -133,9 +134,5 @@ public class BlackSabbathPlayerInventoryMenu extends AbstractContainerMenu {
         }
 
         return $$2;
-    }
-
-    public CraftingContainer getCraftSlots() {
-        return this.craftSlots;
     }
 }

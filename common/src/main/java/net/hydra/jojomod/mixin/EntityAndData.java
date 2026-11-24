@@ -6,6 +6,7 @@ import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
+import net.hydra.jojomod.entity.SilverChariotMountEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.event.SavedSecond;
@@ -689,13 +690,13 @@ public abstract class EntityAndData implements IEntityAndData {
                         && ((StandUser)LE).roundabout$getStand() != null
                         && ((StandUser)LE).roundabout$getStand() instanceof SilverChariotEntity silverChariotEntity
                         && silverChariotEntity.isSelfCarryModeActive()
+                        && $$0 instanceof SilverChariotMountEntity scme
         ) {
-            this.setShiftKeyDown(false);
-            cir.setReturnValue(true);
+            // cir.setReturnValue(true);
         } else if (((Entity)(Object)this) instanceof LivingEntity LE
                 && ((StandUser)LE).roundabout$getStand() != null
                 && ($$0.getRootVehicle().is(((StandUser)LE).roundabout$getStand()) || $$0.getRootVehicle().hasPassenger(((StandUser)LE).roundabout$getStand()))
-                && !($$0 instanceof SilverChariotEntity sc)
+                // && !($$0 instanceof SilverChariotMountEntity sc)
         ){
             cir.setReturnValue(false);
         }
@@ -714,6 +715,10 @@ public abstract class EntityAndData implements IEntityAndData {
         }
         if (thirs instanceof LivingEntity LE) {
             if (((StandUser) this).roundabout$getStandPowers().cancelSprintParticles()) {
+                ci.cancel();
+                return;
+            }
+            if(((StandUser)this).roundabout$getGrabberSabbath() != 0){
                 ci.cancel();
                 return;
             }

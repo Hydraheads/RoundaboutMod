@@ -122,9 +122,57 @@ public class PowerInventoryMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public ItemStack quickMoveStack(Player $$0, int $$1) {
-        ItemStack $$2 = ItemStack.EMPTY;
-        return $$2;
+    public ItemStack quickMoveStack(Player player, int index) {
+        if (index < 0 || index >= this.slots.size()) {
+            return ItemStack.EMPTY;
+        }
+
+        Slot slot = this.slots.get(index);
+
+        if (slot == null || !slot.hasItem()) {
+            return ItemStack.EMPTY;
+        }
+
+        ItemStack stack = slot.getItem();
+        ItemStack original = stack.copy();
+
+        if (index >= 2) {
+            // Hotbar -> visage inventory
+            if (!(stack.getItem() instanceof MaskItem)) {
+                return ItemStack.EMPTY;
+            }
+
+            boolean moved = false;
+
+            for (int i = 0; i < 2 && !stack.isEmpty(); i++) {
+                Slot target = this.getSlot(i);
+
+                if (!target.hasItem() && target.mayPlace(stack)) {
+                    ItemStack toMove = stack.copyWithCount(1);
+                    stack.shrink(1);
+                    target.setByPlayer(toMove);
+                    target.setChanged();
+                    moved = true;
+                }
+            }
+
+            if (!moved) {
+                return ItemStack.EMPTY;
+            }
+        } else {
+            // Visage inventory -> hotbar
+            if (!this.moveItemStackTo(stack, 2, 11, false)) {
+                return ItemStack.EMPTY;
+            }
+        }
+
+        if (stack.isEmpty()) {
+            slot.setByPlayer(ItemStack.EMPTY);
+        } else {
+            slot.setChanged();
+        }
+
+        return original;
     }
 
     @Override

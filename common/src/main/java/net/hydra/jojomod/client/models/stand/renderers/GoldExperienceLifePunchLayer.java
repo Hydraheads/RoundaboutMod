@@ -3,6 +3,7 @@ package net.hydra.jojomod.client.models.stand.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.models.stand.GoldExperienceBetaModel;
 import net.hydra.jojomod.client.models.stand.GoldExperienceModel;
 import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.entity.stand.GoldExperienceEntity;
@@ -26,10 +27,13 @@ public class GoldExperienceLifePunchLayer extends RenderLayer<GoldExperienceEnti
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, GoldExperienceEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (entity.lifePunch.isStarted()) {
 
-            GoldExperienceModel<GoldExperienceEntity> model = (GoldExperienceModel<GoldExperienceEntity>) this.getParentModel();
+            StandModel<GoldExperienceEntity> model = this.getParentModel();
 
-            // hide left arm so it only renders on the right hand
-            model.left_arm.visible = false;
+            if (model instanceof GoldExperienceModel<GoldExperienceEntity> GEM) {
+                GEM.left_arm.visible = false;
+            }else if (model instanceof GoldExperienceBetaModel<GoldExperienceEntity> GEM) {
+                GEM.left_arm.visible = false;
+            }
 
             VertexConsumer coreConsumer = bufferSource.getBuffer(RenderType.entityTranslucentEmissive(CORE_TEXTURE));
             model.renderToBuffer(
@@ -49,7 +53,11 @@ public class GoldExperienceLifePunchLayer extends RenderLayer<GoldExperienceEnti
                     0.4F, 0.4F, 0.2F, 0.3F
             );
 
-            model.left_arm.visible = true;
+            if (model instanceof GoldExperienceModel<GoldExperienceEntity> GEM) {
+                GEM.left_arm.visible = true;
+            }else if (model instanceof GoldExperienceBetaModel<GoldExperienceEntity> GEM) {
+                GEM.left_arm.visible = true;
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -37,6 +38,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.joml.Vector3f;
 import org.slf4j.Logger;
 
@@ -59,6 +61,8 @@ public class BlockWallEntity extends Entity {
     public int timing = -1;
     @Nullable
     public CompoundTag blockData;
+    @Nullable
+    public LivingEntity creator;
     protected static final EntityDataAccessor<BlockPos> DATA_START_POS;
     protected static final EntityDataAccessor<Vector3f> DATA_FINAL_POS;
 
@@ -152,6 +156,7 @@ public class BlockWallEntity extends Entity {
     }
 
     public boolean isWhiteAlbumWall = false;
+    public boolean isGoldExperienceTree = false;
 
     @Override
     public boolean hurt(DamageSource $$0, float damage) {
@@ -180,6 +185,21 @@ public class BlockWallEntity extends Entity {
                     this.discard();
                 }
                 return true;
+            }
+
+            // GE tree reflection
+            if (!level().isClientSide() && isGoldExperienceTree && $$0.getEntity() instanceof LivingEntity LE) {
+                if (this.creator == null || LE != this.creator) {
+                    LE.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.STAND, this), damage / 0.5f);
+                    if (this.level() instanceof ServerLevel serverLevel) {
+                        serverLevel.sendParticles(
+                                ModParticles.VITAL_ESSENCE,
+                                LE.getX(), LE.getY() + 1.0, LE.getZ(),
+                                12, 0.2, 0.2, 0.2, 0.1
+                        );
+                    }
+                    return false;
+                }
             }
         }
 
@@ -236,14 +256,20 @@ public class BlockWallEntity extends Entity {
         refreshDimensions();
 
         AABB wallBox = this.getBoundingBox();
+        Vec3 target = new Vec3(getFinalPos().x, getFinalPos().y, getFinalPos().z);
+        boolean isStillGrowing = this.position().distanceToSqr(target) > 0.01;
 
-        for (LivingEntity mob : level().getEntitiesOfClass(
-                LivingEntity.class,
-                wallBox.inflate(0.1))) {
+        if (!this.isGoldExperienceTree || (this.tsmove && isStillGrowing)) {
+            for (LivingEntity mob : level().getEntitiesOfClass(
+                    LivingEntity.class,
+                    wallBox.inflate(0.1))) {
 
-            if (mob.getBoundingBox().intersects(wallBox)) {
-                if (mob.isControlledByLocalInstance()) {
-                    mob.push(0, 0.2, 0);
+                if (mob.getBoundingBox().intersects(wallBox)) {
+                    if (mob.isControlledByLocalInstance()) {
+                        if (mob.getDeltaMovement().y < 0.35) {
+                            mob.push(0, 0.2, 0);
+                        }
+                    }
                 }
             }
         }
@@ -293,6 +319,7 @@ public class BlockWallEntity extends Entity {
         $$0.putInt("Time", this.time);
         $$0.putInt("DeathTimer", this.timing);
         $$0.putBoolean("WhiteAlbum", this.isWhiteAlbumWall);
+        $$0.putBoolean("GoldExperience", this.isGoldExperienceTree);
         $$0.putBoolean("DropItem", this.dropItem);
         $$0.putBoolean("HurtEntities", this.hurtEntities);
         $$0.putBoolean("CanGrief", this.canGrief);
@@ -313,6 +340,7 @@ public class BlockWallEntity extends Entity {
         this.time = $$0.getInt("Time");
         this.timing = $$0.getInt("DeathTimer");
         this.isWhiteAlbumWall = $$0.getBoolean("WhiteAlbum");
+        this.isGoldExperienceTree = $$0.getBoolean("GoldExperience");
         this.canGrief = $$0.getBoolean("CanGrief");
         if ($$0.contains("HurtEntities", 99)) {
             this.hurtEntities = $$0.getBoolean("HurtEntities");

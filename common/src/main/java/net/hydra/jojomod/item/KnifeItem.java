@@ -6,6 +6,7 @@ import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersGoldExperience;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -68,6 +69,10 @@ public class KnifeItem extends Item{
                     for (int i = 0; i< knifeCount; i++) {
 
                         KnifeEntity $$7 = new KnifeEntity($$1, $$4, $$0);
+                        if (PowersGoldExperience.isTreeImbuedProjectileItem($$0)) {
+                            PowersGoldExperience.transferTreeImbueToProjectile($$1, $$0, $$7);
+                            $$7.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
+                        }
                         if (bundle){
                             $$7.shootFromRotationWithVariance($$4, $$4.getXRot(), $$4.getYRot(), -0.5F, SHOOT_POWER, 1.0F);
                         } else {

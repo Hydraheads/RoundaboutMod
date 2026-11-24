@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.gui;
 
 import net.hydra.jojomod.client.JJFHudSettings;
-import net.hydra.jojomod.stand.powers.PowersJumpinJackFlash;
+import net.hydra.jojomod.stand.powers.*;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.Lighting;
@@ -27,8 +27,6 @@ import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.powers.GeneralPowers;
-import net.hydra.jojomod.stand.powers.PowersKillerQueen;
-import net.hydra.jojomod.stand.powers.PowersTusk;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.ChatFormatting;
@@ -257,12 +255,16 @@ public class PowerInventoryScreen
                 byte level = ((IPlayerEntity) pl).roundabout$getStandLevel();
                 int exp = ((IPlayerEntity) pl).roundabout$getStandExp();
                 int maxXP = standUser.roundabout$getStandPowers().getExpForLevelUp(level);
+
                 Component display;
                 if (level == standUser.roundabout$getStandPowers().getMaxLevel() ||
                         (!standUser.roundabout$getStandDisc().isEmpty() && standUser.roundabout$getStandDisc().getItem()
                                 instanceof MaxStandDiscItem)) {
                     exp = maxXP;
                     display = Component.translatable("leveling.roundabout.disc_maxed");
+
+
+
                 } else {
                     display = Component.translatable("leveling.roundabout.disc_development_potential_level",
                             level);
@@ -271,6 +273,15 @@ public class PowerInventoryScreen
                 int blt = (int) Math.floor(((double) 92 / maxXP) * (exp));
                 context.blit(POWER_INVENTORY_LOCATION, ss, sss, 10, 244, 92, 4);
                 context.blit(POWER_INVENTORY_LOCATION, ss, sss, 10, 240, blt, 4);
+
+                if (standUser.roundabout$getStandPowers() instanceof PowersGoldExperience PGE && PGE.canUseRequiem()) {
+                    float resolvePoints = PGE.getResolvePoints();
+                    float resolvePointsMax = PGE.getNeededResolvePoints();
+
+                    int blt2 = (int) Math.floor(((double) 92 / resolvePointsMax) * (resolvePoints));
+                    context.blit(POWER_INVENTORY_LOCATION, ss, sss, 10, 236, blt2, 4);
+                }
+
             } else if (shouldPowers && tab == 3) {
                 renderEntityInInventoryFollowsMouse2(
                         context, i + 51, j + 75, 30, (float) (i + 51) - this.xMouse, (float) (j + 75 - 50) - this.yMouse, this.minecraft.player
@@ -284,6 +295,7 @@ public class PowerInventoryScreen
             } else {
                 context.blit(POWER_INVENTORY_LOCATION, leftGearPos, topGearPos, 178, 0, 19, 18);
             }
+
         }
 
         $$2.set($$3);
@@ -1139,6 +1151,12 @@ public class PowerInventoryScreen
                 soundmanager.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
                 return true;
             }
+            if (isSurelyHovering(leftGearPos, topGearPos-19, 18, 18, mouseX, mouseY)) {
+                openAccesibilityTab();
+                SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
+                soundmanager.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                return true;
+            }
 
 
 
@@ -1209,6 +1227,10 @@ public class PowerInventoryScreen
             this.isOptionsOut = true;
             this.leftPos += leftposModifier;
         }
+    }
+
+    public void openAccesibilityTab(){
+
     }
 
     @Override

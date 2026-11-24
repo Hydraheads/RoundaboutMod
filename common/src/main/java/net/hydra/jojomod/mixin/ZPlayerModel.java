@@ -374,7 +374,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
             byte poseEmote = ipe.roundabout$GetPoseEmote();
             boolean pose = poseEmote != Poses.NONE.id;
             if (pose && !P.isPassenger() && !P.isVisuallySwimming() && !P.isFallFlying()) {
-                if (poseEmote != Poses.SITTING.id) {
+                if (poseEmote != Poses.SITTING.id && poseEmote != Poses.FULLBODYDODGE.id) {
                     this.head.resetPose();
                 }
                 this.body.resetPose();
@@ -393,8 +393,12 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         ipe.roundabout$SetPoseEmote(Poses.NONE.id);
                     }
 
-                    this.leftArm.resetPose();
-                    this.rightArm.resetPose();
+                    if (PT.isShooting(HumanoidArm.LEFT) || animByte == PowersTusk.DRILL) {
+                        this.leftArm.resetPose();
+                    }
+                    if (PT.isShooting(HumanoidArm.RIGHT) || animByte == PowersTusk.DRILL) {
+                        this.rightArm.resetPose();
+                    }
                     if (animByte == PowersTusk.FLATTEN
                             || animByte == PowersTusk.PILOT
                             || animByte == PowersTusk.PILOT_EXIT) {
@@ -405,12 +409,12 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                     this.roundabout$animate(SU.roundabout$getWornStandAnimation(),anim,$$3,1F);
 
                     if (PT.isShooting(HumanoidArm.RIGHT)) {
-                        this.rightArm.yRot = -0.1F + this.head.yRot;
-                        this.rightArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
+                        this.rightArm.yRot += -0.1F + this.head.yRot;
+                        this.rightArm.xRot += (float) (-Math.PI / 2) + this.head.xRot;
                     }
                     if (PT.isShooting(HumanoidArm.LEFT)) {
-                        this.leftArm.yRot = 0.1F + this.head.yRot;
-                        this.leftArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
+                        this.leftArm.yRot += 0.1F + this.head.yRot;
+                        this.leftArm.xRot += (float) (-Math.PI / 2) + this.head.xRot;
                     }
 
                 } else {
@@ -488,6 +492,9 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                     } else {
                         SU.roundabout$getWornStandAnimation().stop();
                     }
+                }
+                if (SU.roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PowerTypes.hasStandActive(P) && PSC.hasHandsOut()) {
+
                 }
                 if (SU.roundabout$hasSpringLegs() && !P.isPassenger() && !P.isSleeping()) {
                     this.leftLeg.resetPose();

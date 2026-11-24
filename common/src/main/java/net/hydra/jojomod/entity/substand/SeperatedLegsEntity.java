@@ -6,6 +6,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.mixin.PlayerEntity;
+import net.hydra.jojomod.particles.ColorParticleOptions;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -81,10 +82,14 @@ public class SeperatedLegsEntity extends StandEntity {
             }
 
             for(int i = 0; i < 4; i = i + 1) {
+                int color = PowersGreenDay.defaultMoldColor();
+                if (User != null && ((StandUser) User).roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
+                    color = PGD.getMoldParticleColor();
+                }
                 double randX = Roundabout.RANDOM.nextDouble(-0.2, 0.2);
                 double randY = Roundabout.RANDOM.nextDouble(-0.1, 0.1);
                 double randZ = Roundabout.RANDOM.nextDouble(-0.2, 0.2);
-                ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD,
+                ((ServerLevel) this.level()).sendParticles(ColorParticleOptions.fromPackedColor(ModParticles.MOLD, color),
                         this.getX()+randX,
                         this.getY() + 1.2 +randY ,
                         this.getZ() + randZ,
@@ -132,4 +137,7 @@ public class SeperatedLegsEntity extends StandEntity {
     }
 
 
+    public boolean standCanShowName() {
+        return false;
+    }
 }

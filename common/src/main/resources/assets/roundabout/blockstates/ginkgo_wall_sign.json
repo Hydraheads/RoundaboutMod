@@ -1,0 +1,9 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "roundabout:block/ginkgo_wall_sign"
+      }
+    }
+  ]
+}

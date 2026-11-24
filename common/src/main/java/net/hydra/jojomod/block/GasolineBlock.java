@@ -3,10 +3,14 @@ package net.hydra.jojomod.block;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.projectile.MatchEntity;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.item.GasolineBucketItem;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -24,6 +28,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BucketPickup;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -35,7 +40,9 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class GasolineBlock extends Block {
+import java.util.Optional;
+
+public class GasolineBlock extends Block implements BucketPickup {
     public static final IntegerProperty LEVEL = ModBlocks.GAS_CAN_LEVEL;
     public static final IntegerProperty AGE = BlockStateProperties.AGE_15;
     public static final BooleanProperty IGNITED = ModBlocks.IGNITED;
@@ -193,4 +200,17 @@ public class GasolineBlock extends Block {
         }
     }
 
+    @Override
+    public ItemStack pickupBlock(LevelAccessor levelAccessor, BlockPos blockPos, BlockState blockState) {
+        if (blockState.getValue(LEVEL) < 2) {
+            levelAccessor.setBlock(blockPos, Blocks.AIR.defaultBlockState(), 11);
+            return new ItemStack(ModItems.GASOLINE_BUCKET);
+        }
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public Optional<SoundEvent> getPickupSound() {
+        return Optional.of(SoundEvents.BUCKET_FILL);
+    }
 }

@@ -91,7 +91,11 @@ public class StrayCatAirBubbleRenderer extends EntityRenderer<StrayCatAirBubble>
             vertexConsumer.vertex(matrix, -size, size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
 
             poseStack.popPose();
-            super.render(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
+            int light = packedLight;
+            if (entity.getSkin() == 5) {
+                light = 15728880;
+            }
+            super.render(entity, entityYaw, partialTicks, poseStack, buffer, light);
             //}
         }
     }

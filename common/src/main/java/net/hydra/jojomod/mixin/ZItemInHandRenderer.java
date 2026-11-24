@@ -19,10 +19,7 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.*;
-import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
-import net.hydra.jojomod.stand.powers.PowersEmperor;
-import net.hydra.jojomod.stand.powers.PowersGreenDay;
-import net.hydra.jojomod.stand.powers.PowersRatt;
+import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
@@ -132,6 +129,18 @@ public abstract class ZItemInHandRenderer {
 
             } else if (user.roundabout$getStandPowers() instanceof PowersEmperor emperor && user.roundabout$getCombatMode() && emperor.emperorZoomActive()){
                 ci.cancel();
+            }
+
+            if (user.roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PowerTypes.hasStandActive(localPlayer) && PowerTypes.hasHandsActive(localPlayer)) {
+                /*
+                poseStack.pushPose();
+                poseStack.translate(0.3, -0.25, -0.7);
+                poseStack.mulPose(Axis.XP.rotationDegrees(290.0F));
+                poseStack.mulPose(Axis.YP.rotationDegrees(135.0F));
+                poseStack.mulPose(Axis.ZP.rotationDegrees(-30.0F));
+                ModStrayModels.SILVER_CHARIOT_SWORD.renderToBuffer(poseStack, bufferSource.getBuffer(RenderType.entityTranslucent(ModStrayModels.SILVER_CHARIOT_SWORD.getTextureLocation(user.roundabout$getStandSkin()))), light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+                poseStack.scale(0.9F, 0.9F, 0.9F);
+                */
             }
 
 
@@ -247,6 +256,16 @@ public abstract class ZItemInHandRenderer {
             return;
         }
 
+        if (((StandUser)abstractClientPlayer).roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PSC.isRenderingArms) {
+            ci.cancel();
+            return;
+        }
+
+        if (((StandUser)abstractClientPlayer).roundabout$getStandPowers() instanceof PowersCatchTheRainbow PCR && PCR.ctrDodgeTicks != 0) {
+            ci.cancel();
+            return;
+        }
+
         if (ClientUtil.isRenderingFlag(abstractClientPlayer)) {
 
             ItemStack renderedStack = this.mainHandItem;
@@ -276,6 +295,13 @@ public abstract class ZItemInHandRenderer {
             if (!((PowersGreenDay)standUser.roundabout$getStandPowers()).HasOffHand && interactionHand == InteractionHand.OFF_HAND){
                 ci.cancel();
                 return;
+            }
+        }
+
+        if (standUser.roundabout$getStandPowers() instanceof PowersSilverChariot PSC) {
+            if (PowerTypes.hasStandActive(abstractClientPlayer) && PSC.hasHandsOut()) {
+                // ci.cancel();
+                // return;
             }
         }
 
@@ -546,10 +572,15 @@ public abstract class ZItemInHandRenderer {
                 }
             } else {
                 if (itemStack.getItem() instanceof StandArrowItem SI){
+                    boolean standsCanUse = false;
+                    if (((StandUser)abstractClientPlayer).roundabout$getStandPowers() != null) {
+                        standsCanUse = ((StandUser)abstractClientPlayer).roundabout$getStandPowers().shouldStandArrowShake();
+                    }
                     LivingEntity ME =  MainUtil.homeOnWorthy(abstractClientPlayer.level(),abstractClientPlayer.position(),5);
-                    if (ME != null && SI.isWorthinessType(itemStack,ME)) {
+                    if (standsCanUse) {
+                        shakeMod = 1;
+                    } else if(ME != null && SI.isWorthinessType(itemStack,ME)) {
                         shakeMod = (5-Math.min(5,ME.distanceTo(abstractClientPlayer)))/5;
-
                     }
                 }
             }

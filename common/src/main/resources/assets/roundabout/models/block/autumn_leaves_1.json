@@ -1,0 +1,6 @@
+{
+  "parent": "roundabout:block/autumn_leaves_base",
+  "textures": {
+    "texture": "roundabout:block/autumn_leaves_1"
+  }
+}

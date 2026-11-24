@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers;
 
 import com.mojang.authlib.GameProfile;
+import net.hydra.jojomod.entity.LifePunchCloneEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -37,6 +38,7 @@ public interface StandUser {
     void roundabout$removeQueForTargetDeletion();
     void roundabout$onStandOutLookAround(StandEntity passenger);
     boolean roundabout$getUniqueStandModeToggle();
+    void roundabout$setStuckSpeedMulti(Vec3 vec);
     void roundabout$setUniqueStandModeToggle(boolean mode);
     boolean roundabout$skipFriction();
     void rdbt$onSyncedDataUpdated2(EntityDataAccessor<?> $$0);
@@ -101,7 +103,7 @@ public interface StandUser {
     void roundabout$updateStandDisc(ItemStack stack);
     void roundabout$setStandSkinLight(byte skin);
     void roundabout$setIdlePosLight(byte pos);
-    void roundabout$setMetallicaInvisibility(int fade);
+    //void roundabout$setMetallicaInvisibility(int fade);
     int roundabout$getMetallicaInvisibility();
     void roundabout$setMetalMeter(float amount);
     float roundabout$getMetalMeter();
@@ -129,33 +131,32 @@ public interface StandUser {
     AnimationState roundabout$getWornStandAnimation();
 
     // TODO: fix this shit below, make it so that we don't add a new vanishticks every stand :/
-    int roundabout$getHeyYaVanishTicks();
-    void roundabout$setHeyYaVanishTicks(int set);
+    // TODO: transfer these vanish ticks to the new fade system if possible.
+
     int roundabout$getArmVanishTicks();
     void roundabout$setArmVanishTicks(int set);
     int roundabout$getRattShoulderVanishTicks();
     void roundabout$setRattShoulderVanishTicks(int set);
-    int roundabout$getMandomVanishTicks();
-    void roundabout$setMandomVanishTicks(int set);
-    int roundabout$getAnubisVanishTicks();
-    void roundabout$setAnubisVanishTicks(int set);
-    int roundabout$getCBVanishTicks();
-    void roundabout$setCBVanishTicks(int set);
     int roundabout$getWhiteAlbumVanishTicks();
     void roundabout$setWhiteAlbumVanishTicks(int set);
     int roundabout$getOasisVanishTicks();
     void roundabout$setOasisVanishTicks(int set);
     int roundabout$getDiverDownVanishTicks();
     void roundabout$setDiverDownVanishTicks(int set);
-    int roundabout$getCatchTheRainbowVanishTicks();
-    void roundabout$setCatchTheRainbowVanishTicks(int set);
+    int roundabout$getAnubisVanishTicks();
+    void roundabout$setAnubisVanishTicks(int set);
 
+    /// Worn stand vanishticks system
     int roundabout$getCurrentStandVanishTicks();
     void roundabout$setCurrentStandVanishTicks(int set);
     int roundabout$getPreviousStandVanishTicks();
     void roundabout$setPreviousStandVanishTicks(int set);
     StandPowers roundabout$getPreviousStandPowers();
     void roundabout$setPreviousStandPowers(StandPowers SP);
+    void roundabout$setPreviousSkin(byte skin);
+    byte roundabout$getPreviousSkin();
+    void roundabout$setPreviousPose(byte pose);
+    byte roundabout$getPreviousPose();
 
 
     int getJumpImmunityTicks();
@@ -353,11 +354,13 @@ public interface StandUser {
     void roundabout$setTrueInvis(int bound);
     int roundabout$getTrueInvis();
 
-
+    void roundabout$setLifePunchClone(LifePunchCloneEntity clone);
+    LifePunchCloneEntity roundabout$getLifePunchClone();
 
     /**Metallica*/
     void roundabout$setMetallicaInvis(int invis);
     int roundabout$getMetallicaInvis();
+
     Vec3 roundabout$calculateViewVectorButICanUseIt(float $$0, float $$1);
 
     /**Gravity Direction*/
@@ -397,6 +400,8 @@ public interface StandUser {
     void DoMoldTick();
     void SetInMoldTicks(int e);
     int getMoldTicks();
+    void setMoldSkin(byte b);
+    byte getMoldSkin();
     void MoldFieldExit();
     void rdbt$SetCrawlTicks(int ticks);
 
@@ -439,11 +444,17 @@ public interface StandUser {
     void roundabout$setRibcageTrap(boolean trap);
     boolean roundabout$hasSpringLegs();
     void roundabout$setSpringLegs(boolean legs);
-    /// dw about these, I'm not sure if I'll use them yet
-    boolean roundabout$hasInfiniteSpin();
-    void roundabout$clearInfiniteSpin();
+
+    boolean roundabout$hasGERooted();
+    void roundabout$setGERooted(boolean tree);
+    ItemStack roundabout$getGERootedItem();
+    void roundabout$setGERootedItem(ItemStack stack);
+    AnimationState roundabout$getGERootsAnimation();
+    int roundabout$getGERootsShrinkTicks();
 
     /** catch the rainbow **/
     boolean roundabout$getIsRainWalking();
     void roundabout$setIsRainWalking(boolean bool);
+
+    void roundabout$setInfiniteSpinPoint(Vec3 v);
 }

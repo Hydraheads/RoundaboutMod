@@ -236,7 +236,7 @@ public class RattDartEntity extends AbstractArrow {
                 return;
             } else if (getBounces() > 0) {
 
-                if (this.getShotType() != BASIC && this.getOwner() != null && this.distanceTo(this.getOwner()) > 10) {
+                if (this.getShotType() != BASIC && this.getOwner() != null && this.distanceTo(this.getOwner()) > 15) {
                     targetBounce($$0);
                 } else {
                     bounce($$0);
@@ -480,11 +480,15 @@ public class RattDartEntity extends AbstractArrow {
                     if (LE.hasEffect(ModEffects.STAND_MELTING)){
                         MobEffectInstance mei = LE.getEffect(ModEffects.STAND_MELTING);
                         if (mei != null){
-                            LE.addEffect(new MobEffectInstance(ModEffects.STAND_MELTING,240,
-                                    Math.min(6,mei.getAmplifier()+1)));
+                            if (!level().isClientSide) {
+                                LE.addEffect(new MobEffectInstance(ModEffects.STAND_MELTING, 240,
+                                        Math.min(6, mei.getAmplifier() + 1)));
+                            }
                         }
                     } else {
-                        LE.addEffect(new MobEffectInstance(ModEffects.STAND_MELTING,240,0));
+                        if (!level().isClientSide) {
+                            LE.addEffect(new MobEffectInstance(ModEffects.STAND_MELTING, 240, 0));
+                        }
                     }
                 }
             }
@@ -535,7 +539,7 @@ public class RattDartEntity extends AbstractArrow {
         /// trail ticking
         if (this.level().isClientSide()) {
             if (!this.isRemoved()) {
-                this.trailPoints.add(this.position().add(0, 0.3, 0));
+                this.trailPoints.add(this.position());
                 if (this.trailPoints.size() > MAX_TRAIL_POINTS) {
                     this.trailPoints.remove(0);
                 }

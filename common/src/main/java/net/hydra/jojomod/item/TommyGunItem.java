@@ -15,7 +15,7 @@ import java.util.Random;
 public class TommyGunItem extends FirearmItem implements Vanishable {
 
     public TommyGunItem(Properties properties) {
-        super(properties.durability(1500));
+        super(properties.durability(1500),-2);
     }
 
     @Override

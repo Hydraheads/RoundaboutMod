@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.objects;
 
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.visages.CloneEntity;
@@ -8,6 +9,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
@@ -77,7 +79,11 @@ public class IceTwisterEntity extends WhiteAlbumFreezingEntity {
                         if (mob instanceof Player || mob instanceof CloneEntity){
                             if (this.tickCount%2==0){
                                 if (HeatUtil.getHeat(mob)> -102 && this.tickCount > 4) {
-                                    HeatUtil.addHeat(mob, -1);
+                                    int amt = -1;
+                                    if (!HeatUtil.isArmsFrozen(mob) && ClientNetworking.getAppropriateConfig().experimentalSettings.whiteAlbumTwisterFast) {
+                                        amt = -2;
+                                    }
+                                    HeatUtil.addHeat(mob, amt);
                                 }
                             }
                         } else {
@@ -88,10 +94,8 @@ public class IceTwisterEntity extends WhiteAlbumFreezingEntity {
                                 }
                             }
                         }
-                        if (this.tickCount <5){
-                            if (!mob.onGround()){
-                                MainUtil.takeLiteralUnresistableKnockbackWithY(mob,0,-0.5F,0);
-                            }
+                        if (!mob.onGround() && !(mob instanceof Player)){
+                            MainUtil.takeLiteralUnresistableKnockbackWithY(mob,0,-0.5F,0);
                         }
                     }
                 }
@@ -126,6 +130,24 @@ public class IceTwisterEntity extends WhiteAlbumFreezingEntity {
             if (!started && !((TimeStop) level()).inTimeStopRange(this)) {
                 started = true;
                 ClientUtil.handleTwisterSound(this);
+            }
+
+            AABB wallBox = this.getBoundingBox().inflate(0.1);
+
+            for (Player mob : level().getEntitiesOfClass(
+                    Player.class,
+                    wallBox.inflate(0.1))) {
+                if (PowerTypes.isInADifferentExistence(mob,this)){
+                    continue;
+                }
+                if (mob.getBoundingBox().intersects(wallBox)) {
+                    if (!mob.onGround()){
+                        if (!(((StandUser)mob).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW &&
+                                PowerTypes.hasStandActive(mob))) {
+                            MainUtil.takeLiteralUnresistableKnockbackWithY(mob, 0, -0.5F, 0);
+                        }
+                    }
+                }
             }
         }
         super.tick();

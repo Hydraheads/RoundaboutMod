@@ -27,8 +27,11 @@ public class TuskEntity extends FollowingStandEntity {
         return -1;
     }
 
-    public static final byte DEATH_PUNCH = 50;
-    public static final byte SHRINK = 51;
+    public static final byte
+            DEATH_PUNCH = 50,
+            SHRINK = 51,
+            WALL_BREAKER = 52;
+
 
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState deathPunch = new AnimationState();
@@ -41,7 +44,7 @@ public class TuskEntity extends FollowingStandEntity {
         this.hideFists.animateWhen(this.getAnimation() != BARRAGE,this.tickCount);
         this.barrageAnimationState.animateWhen(this.getAnimation() == BARRAGE,this.tickCount);
         this.barrageChargeAnimationState.animateWhen(this.getAnimation() == BARRAGE_CHARGE,this.tickCount);
-        this.deathPunch.animateWhen(this.getAnimation() == DEATH_PUNCH,this.tickCount);
+        this.deathPunch.animateWhen(this.getAnimation() == DEATH_PUNCH || this.getAnimation() == WALL_BREAKER,this.tickCount);
         this.shrink.animateWhen(this.getAnimation() == SHRINK,this.tickCount);
     }
 

@@ -25,9 +25,11 @@ public class TuskAct4Model<T extends TuskEntity> extends StandModel<T> {
 
     public TuskAct4Model(ModelPart root) {
         this.stand = root.getChild("stand");
-        this.head = stand.getChild("stand2").getChild("head");
-        this.body = stand.getChild("stand2").getChild("body");
+        ModelPart stand2 = this.stand.getChild("stand2");
+        this.head = stand2.getChild("head");
+        this.body = stand2.getChild("body");
     }
+
     public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
@@ -38,8 +40,8 @@ public class TuskAct4Model<T extends TuskEntity> extends StandModel<T> {
 
         PartDefinition head = stand2.addOrReplaceChild("head", CubeListBuilder.create(), PartPose.offset(0.0F, -24.15F, 0.0F));
 
-        PartDefinition head2 = head.addOrReplaceChild("head2", CubeListBuilder.create().texOffs(52, 0).addBox(-3.5F, -1.85F, -8.0F, 7.0F, 7.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(52, 11).addBox(-3.5F, -1.85F, -8.0F, 7.0F, 7.0F, 4.0F, new CubeDeformation(0.25F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition head2 = head.addOrReplaceChild("head2", CubeListBuilder.create().texOffs(52, 0).addBox(-3.5F, -3.85F, -4.0F, 7.0F, 7.0F, 4.0F, new CubeDeformation(0.0F))
+                .texOffs(52, 11).addBox(-3.5F, -3.85F, -4.0F, 7.0F, 7.0F, 4.0F, new CubeDeformation(0.25F)), PartPose.offset(0.0F, 2.0F, -4.0F));
 
         PartDefinition body = stand2.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, -24.0F, 0.0F));
 
@@ -53,15 +55,28 @@ public class TuskAct4Model<T extends TuskEntity> extends StandModel<T> {
                 .texOffs(9, 51).addBox(-8.0F, -8.0F, -4.5F, 16.0F, 7.0F, 0.0F, new CubeDeformation(0.0F))
                 .texOffs(11, 43).addBox(-6.0F, -8.0F, 4.25F, 12.0F, 7.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition trail = upper_chest_only.addOrReplaceChild("trail", CubeListBuilder.create().texOffs(0, 0).addBox(-13.0F, -27.0F, -4.0F, 17.0F, 15.0F, 8.0F, new CubeDeformation(0.15F))
-                .texOffs(2, 84).addBox(-13.0F, -27.25F, -4.0F, 17.0F, 15.0F, 8.0F, new CubeDeformation(-0.25F)), PartPose.offset(4.5F, 27.0F, 0.0F));
+        PartDefinition trail = upper_chest_only.addOrReplaceChild("trail", CubeListBuilder.create(), PartPose.offset(-8.5F, 1.0F, -4.0F));
+
+        PartDefinition inner = trail.addOrReplaceChild("inner", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        PartDefinition front2 = inner.addOrReplaceChild("front2", CubeListBuilder.create(), PartPose.offset(0.5F, 0.0F, 0.4F));
+
+        PartDefinition outer = trail.addOrReplaceChild("outer", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        PartDefinition front = outer.addOrReplaceChild("front", CubeListBuilder.create().texOffs(0, 0).addBox(-8.5F, 0.0F, 0.0F, 17.0F, 15.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(8.5F, 0.0F, 0.0F));
+
+        PartDefinition back = outer.addOrReplaceChild("back", CubeListBuilder.create().texOffs(0, 0).addBox(-8.5F, 0.0F, 0.0F, 17.0F, 15.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(8.5F, 0.0F, 8.0F));
+
+        PartDefinition left = outer.addOrReplaceChild("left", CubeListBuilder.create().texOffs(34, -8).addBox(0.0F, 0.0F, -4.0F, 0.0F, 15.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(17.5F, 0.0F, 4.0F));
+
+        PartDefinition right = outer.addOrReplaceChild("right", CubeListBuilder.create().texOffs(34, -8).addBox(0.0F, 0.0F, -4.0F, 0.0F, 15.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(-0.5F, 0.0F, 4.0F));
 
         PartDefinition right_arm = upper_chest.addOrReplaceChild("right_arm", CubeListBuilder.create(), PartPose.offset(-9.0F, -7.25F, 0.0F));
 
         PartDefinition upper_right_arm = right_arm.addOrReplaceChild("upper_right_arm", CubeListBuilder.create().texOffs(22, 58).addBox(-4.0F, -0.85F, -2.0F, 4.0F, 7.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(52, 29).addBox(-4.75F, -1.85F, -3.0F, 5.0F, 1.0F, 6.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 58).addBox(-4.75F, -1.85F, -3.0F, 5.0F, 1.0F, 6.0F, new CubeDeformation(0.2F))
-                .texOffs(32, 70).addBox(-4.0F, -0.85F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.2F)), PartPose.offset(0.0F, 0.1F, 0.0F));
+                .texOffs(32, 70).addBox(-4.0F, -0.85F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.2F))
+                .texOffs(52, 22).mirror().addBox(-4.75F, -1.85F, -3.0F, 5.0F, 2.0F, 6.0F, new CubeDeformation(0.0F)).mirror(false)
+                .texOffs(50, 52).mirror().addBox(-4.75F, -1.85F, -3.0F, 5.0F, 2.0F, 6.0F, new CubeDeformation(0.2F)).mirror(false), PartPose.offset(0.0F, 0.1F, 0.0F));
 
         PartDefinition lower_right_arm = right_arm.addOrReplaceChild("lower_right_arm", CubeListBuilder.create().texOffs(38, 59).addBox(-2.0F, -0.25F, -2.0F, 4.0F, 7.0F, 4.0F, new CubeDeformation(0.0F))
                 .texOffs(48, 70).addBox(-2.0F, 0.75F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.21F)), PartPose.offset(-2.0F, 6.5F, 0.0F));
@@ -69,8 +84,8 @@ public class TuskAct4Model<T extends TuskEntity> extends StandModel<T> {
         PartDefinition left_arm = upper_chest.addOrReplaceChild("left_arm", CubeListBuilder.create(), PartPose.offset(9.0F, -7.25F, 0.0F));
 
         PartDefinition upper_left_arm = left_arm.addOrReplaceChild("upper_left_arm", CubeListBuilder.create().texOffs(70, 59).addBox(0.0F, -0.85F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.2F))
-                .texOffs(52, 22).addBox(-0.25F, -1.85F, -3.0F, 5.0F, 1.0F, 6.0F, new CubeDeformation(0.0F))
-                .texOffs(50, 52).addBox(-0.25F, -1.85F, -3.0F, 5.0F, 1.0F, 6.0F, new CubeDeformation(0.2F))
+                .texOffs(52, 22).addBox(-0.25F, -1.85F, -3.0F, 5.0F, 2.0F, 6.0F, new CubeDeformation(0.0F))
+                .texOffs(50, 52).addBox(-0.25F, -1.85F, -3.0F, 5.0F, 2.0F, 6.0F, new CubeDeformation(0.2F))
                 .texOffs(22, 58).mirror().addBox(0.0F, -0.85F, -2.0F, 4.0F, 7.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(0.0F, 0.1F, 0.0F));
 
         PartDefinition lower_left_arm = left_arm.addOrReplaceChild("lower_left_arm", CubeListBuilder.create().texOffs(0, 65).addBox(-2.0F, -0.25F, -2.0F, 4.0F, 7.0F, 4.0F, new CubeDeformation(0.0F))
@@ -105,7 +120,7 @@ public class TuskAct4Model<T extends TuskEntity> extends StandModel<T> {
         PartDefinition cube_r1 = RightArmBAM.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(72, 52).addBox(-10.75F, -4.25F, -5.0F, 4.0F, 3.0F, 4.0F, new CubeDeformation(0.0F))
                 .texOffs(74, 0).addBox(-10.75F, -1.25F, -5.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-2.25F, 7.25F, -1.0F, -1.5708F, 0.0F, 1.5708F));
 
-        PartDefinition RightArm_r1 = RightArmBAM.addOrReplaceChild("Right Arm_r1", CubeListBuilder.create().texOffs(90, 9).addBox(-10.75F, -2.25F, -5.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.3F)), PartPose.offsetAndRotation(-2.25F, 7.25F, -2.0F, -1.5708F, 0.0F, 1.5708F));
+        PartDefinition Right_Arm_r1 = RightArmBAM.addOrReplaceChild("Right Arm_r1", CubeListBuilder.create().texOffs(90, 9).addBox(-10.75F, -2.25F, -5.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.3F)), PartPose.offsetAndRotation(-2.25F, 7.25F, -2.0F, -1.5708F, 0.0F, 1.5708F));
 
         PartDefinition RightArmBAM2 = BAM.addOrReplaceChild("RightArmBAM2", CubeListBuilder.create(), PartPose.offset(-14.5F, -2.75F, 0.0F));
 
@@ -126,7 +141,7 @@ public class TuskAct4Model<T extends TuskEntity> extends StandModel<T> {
         PartDefinition cube_r4 = LeftArmBAM.addOrReplaceChild("cube_r4", CubeListBuilder.create().texOffs(72, 52).mirror().addBox(6.75F, -4.25F, -5.0F, 4.0F, 3.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false)
                 .texOffs(74, 0).mirror().addBox(6.75F, -1.25F, -5.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(2.25F, 7.25F, -1.0F, -1.5708F, 0.0F, -1.5708F));
 
-        PartDefinition LeftArm_r1 = LeftArmBAM.addOrReplaceChild("Left Arm_r1", CubeListBuilder.create().texOffs(90, 9).mirror().addBox(6.75F, -2.25F, -5.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.3F)).mirror(false), PartPose.offsetAndRotation(2.25F, 7.25F, -2.0F, -1.5708F, 0.0F, -1.5708F));
+        PartDefinition Left_Arm_r1 = LeftArmBAM.addOrReplaceChild("Left Arm_r1", CubeListBuilder.create().texOffs(90, 9).mirror().addBox(6.75F, -2.25F, -5.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.3F)).mirror(false), PartPose.offsetAndRotation(2.25F, 7.25F, -2.0F, -1.5708F, 0.0F, -1.5708F));
 
         PartDefinition LeftArmBAM4 = BAM.addOrReplaceChild("LeftArmBAM4", CubeListBuilder.create(), PartPose.offset(14.5F, -2.75F, 0.0F));
 
@@ -145,6 +160,8 @@ public class TuskAct4Model<T extends TuskEntity> extends StandModel<T> {
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
 
+
+
     PowersTusk Power = new PowersTusk(null);
 
 
@@ -152,20 +169,24 @@ public class TuskAct4Model<T extends TuskEntity> extends StandModel<T> {
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
         super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
 
+        this.defaultAnimations(pEntity, pAgeInTicks,1/((float) Power.getBarrageWindup() ));
+        this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1f);
+        this.animate(pEntity.barrageChargeAnimationState, StandAnimations.BARRAGECHARGE, pAgeInTicks, 1f);
+        this.animate(pEntity.barrageAnimationState, TuskAnimations.Barrage, pAgeInTicks, 1f);
+        this.animate(pEntity.deathPunch, TuskAnimations.DeathPunch, pAgeInTicks, 1F);
         if (pEntity.getUser() != null && pEntity.getUserData(pEntity.getUser()).roundabout$getStandPowers() instanceof PowersTusk PT && PT.getActivePower() == PowersTusk.DEATH_PUNCH) {
 
             if (PT.deathTarget != null) {
                 float pitch = MainUtil.getLookAtEntityPitch(pEntity, PT.deathTarget);
                 float yaw = MainUtil.getLookAtEntityYaw(pEntity, PT.deathTarget);
-                stand.xRot = pitch * Mth.DEG_TO_RAD;
-                stand.yRot = yaw * Mth.DEG_TO_RAD;
+                stand.xRot += pitch * Mth.DEG_TO_RAD;
+                stand.yRot += (yaw) * Mth.DEG_TO_RAD;
             }
 
-            float scale = Mth.lerp(Math.min(pEntity.deathPunch.getAccumulatedTime()/500F,1),0,1);
+            float scale = Mth.lerp(Math.min(pEntity.deathPunch.getAccumulatedTime()/100F,1),0,1);
             stand.xScale = scale;
             stand.yScale = scale;
-            float scale2 = Mth.lerp(Mth.clamp(pEntity.deathPunch.getAccumulatedTime()/500F-0.5F,0,1),0,1);
-            stand.zScale = scale2;
+            stand.zScale = scale;
         } else {
             this.defaultModifiers(pEntity);
         }
@@ -175,11 +196,6 @@ public class TuskAct4Model<T extends TuskEntity> extends StandModel<T> {
             stand.yScale = scale;
             stand.zScale = scale;
         }
-        this.defaultAnimations(pEntity, pAgeInTicks,1/((float) Power.getBarrageWindup() ));
-        this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1f);
-        this.animate(pEntity.barrageChargeAnimationState, StandAnimations.BARRAGECHARGE, pAgeInTicks, 1f);
-        this.animate(pEntity.barrageAnimationState, TuskAnimations.Barrage, pAgeInTicks, 1f);
-        this.animate(pEntity.deathPunch, TuskAnimations.DeathPunch, pAgeInTicks, 1.75F);
     }
 
 }

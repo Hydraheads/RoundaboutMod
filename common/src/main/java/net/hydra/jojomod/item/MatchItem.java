@@ -3,6 +3,7 @@ package net.hydra.jojomod.item;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.projectile.MatchEntity;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersGoldExperience;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -56,6 +57,9 @@ public class MatchItem extends Item implements Vanishable {
                     for (int i = 0; i< knifeCount; i++) {
 
                         MatchEntity $$7 = new MatchEntity($$4, $$1);
+                        if (PowersGoldExperience.isTreeImbuedProjectileItem($$0)) {
+                            PowersGoldExperience.transferTreeImbueToProjectile($$1, $$0, $$7);
+                        }
                         if (bundle){
                             $$7.isBundle = true;
                             $$7.shootFromRotationWithVariance($$4, $$4.getXRot(), $$4.getYRot(), -3F, SHOOT_POWER, 1.0F);
