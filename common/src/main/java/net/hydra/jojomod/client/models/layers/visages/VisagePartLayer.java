@@ -710,6 +710,10 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
 
 
                 //dibbo
+                if (net.hydra.jojomod.client.models.layers.JJFPlayerArmsOverlay.shouldRender(ogEnt)) {
+                    net.hydra.jojomod.client.models.layers.JJFPlayerArmsOverlay.render(
+                            ogEnt, getParentModel(), poseStack, bufferSource, packedLight);
+                }
                 if (((StandUser)ogEnt).roundabout$getArmVanishTicks() > 0 ||
                         (((StandUser)ogEnt).roundabout$getStandPowers().hasHandsOut() && ClientUtil.inPowerInventory)){
                     renderKingCrimsonArms(poseStack, bufferSource, packedLight, (T) ogEnt, xx, yy, zz, partialTicks,

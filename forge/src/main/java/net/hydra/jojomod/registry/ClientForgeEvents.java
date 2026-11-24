@@ -466,6 +466,7 @@ public class ClientForgeEvents {
         ModStrayModels.CHAIR_RATT_SHOULDER = new ChairRattShoulderModel();
         ModStrayModels.MANDOM = new MandomModel();
         ModStrayModels.ANUBIS = new AnubisModel();
+        ModStrayModels.SILVER_CHARIOT_SWORD = new SilverChariotSwordModel();
         ModStrayModels.MANDOM_WATCH = new WatchModel();
         ModStrayModels.MANDOM_WATCH_SMALL = new SmallWatchModel();
         ModStrayModels.kingCrimsonArmsPart = new KingCrimsonArmsPart();
