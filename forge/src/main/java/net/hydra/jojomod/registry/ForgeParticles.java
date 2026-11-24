@@ -469,4 +469,16 @@ public class ForgeParticles {
             "rain_bubble",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> RAIN_SHARD_1 = PARTICLES.register(
+            "rain_shard_1",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> RAIN_SHARD_2 = PARTICLES.register(
+            "rain_shard_2",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> RAIN_SHARD_3 = PARTICLES.register(
+            "rain_shard_3",
+            () -> new SimpleParticleType(true)
+    );
 }

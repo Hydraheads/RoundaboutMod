@@ -242,7 +242,6 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.PURPLE_SMOKE.get(), NoRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BAD_COMPANY_SOLDIER.get(), BCSoldierRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BAD_COMPANY_TANK.get(), BCTankRenderer::new);
-        event.registerEntityRenderer(ForgeEntities.CTR_BARRIER.get(), CTRbarrierRenderer::new);
         event.registerEntityRenderer(ForgeEntities.OVA_ENYA.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ENYA.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.JOTARO.get(), VisageBasisRenderer::new);
@@ -713,7 +712,11 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.VITAL_ESSENCE.get(), VitalEssenceParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.GE_WAVE.get(), GEWaveParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.AUTUMN_LEAVES.get(), AutumnLeavesParticle.Provider::new);
-        event.registerSpriteSet(ForgeParticles.GINKGO_LEAVES.get(), GinkgoLeavesParticle.Provider::new
+        event.registerSpriteSet(ForgeParticles.GINKGO_LEAVES.get(), GinkgoLeavesParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.RAIN_BUBBLE.get(), RainBubbleParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.RAIN_SHARD_1.get(), RainShardParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.RAIN_SHARD_2.get(), RainShardParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.RAIN_SHARD_3.get(), RainShardParticle.Provider::new
 
         );
     }

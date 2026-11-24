@@ -95,6 +95,29 @@ public class CTRbarrierEntity extends StandEntity {
                         this.getZ() + randZ,
                         1, 0, 0, 0, 0);
             }
+
+            if (Math.random() > 0.6) {
+                int randParticle = Roundabout.RANDOM.nextInt(0, 3);
+                if (randParticle == 0) {
+                    sendParticlesIfPossible(this, level(), ModParticles.RAIN_SHARD_1,
+                            this.getX() + randX,
+                            this.getY() + randY,
+                            this.getZ() + randZ,
+                            1, 0, 0, 0, 0);
+                } else if (randParticle == 1) {
+                    sendParticlesIfPossible(this, level(), ModParticles.RAIN_SHARD_2,
+                            this.getX() + randX,
+                            this.getY() + randY,
+                            this.getZ() + randZ,
+                            1, 0, 0, 0, 0);
+                } else if (randParticle == 2) {
+                    sendParticlesIfPossible(this, level(), ModParticles.RAIN_SHARD_3,
+                            this.getX() + randX,
+                            this.getY() + randY,
+                            this.getZ() + randZ,
+                            1, 0, 0, 0, 0);
+                }
+            }
         }
         super.tick();
     }
