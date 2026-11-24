@@ -1445,6 +1445,15 @@ public class MainUtil {
                     return ItemStack.EMPTY;
                 }
             }
+            if (su.roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PowerTypes.hasStandActive(pl) && PowerTypes.hasHandsActive(pl)) {
+                if (ES == EquipmentSlot.MAINHAND) {
+                    if (PSC.self.getMainArm() == HumanoidArm.RIGHT) {
+                        // return ItemStack.EMPTY;
+                    } else if (PSC.self.getMainArm() == HumanoidArm.LEFT) {
+                        // return ItemStack.EMPTY;
+                    }
+                }
+            }
             if (pl.isUsingItem()) {
                 return stack;
             }
@@ -1958,7 +1967,7 @@ public class MainUtil {
     }
 
     public static float gasDamageMultiplier() {
-        return (float) (0.78F * (ClientNetworking.getAppropriateConfig().itemSettings.gasolineExplosionDamage * 0.01));
+        return (float) (0.82F * (ClientNetworking.getAppropriateConfig().itemSettings.gasolineExplosionDamage * 0.01));
     }
 
     public static void makeBleed(Entity entity, int level, int ticks, Entity source) {
@@ -2827,7 +2836,8 @@ public class MainUtil {
                 || sauce.is(ModDamageTypes.DISTORTION_VIRUS)
                 || sauce.is(ModDamageTypes.POD_BITE)
                 || sauce.is(ModDamageTypes.BITES_THE_DUST)
-                || sauce.is(ModDamageTypes.BRAMBLE)){
+                || sauce.is(ModDamageTypes.BRAMBLE)
+                || sauce.is(ModDamageTypes.GER_STAND)){
             return true;
         }
         return false;
@@ -2858,7 +2868,8 @@ public class MainUtil {
                 || sauce.is(ModDamageTypes.EXPLOSIVE_STAND) || sauce.is(ModDamageTypes.HEEL_SPIKE) ||
                 sauce.is(ModDamageTypes.CORPSE_ARROW) || sauce.is(ModDamageTypes.STAND_RUSH)
                 || sauce.is(ModDamageTypes.CROSSFIRE) ||
-                sauce.is(ModDamageTypes.CORPSE_EXPLOSION) || sauce.is(ModDamageTypes.BRAMBLE)) {
+                sauce.is(ModDamageTypes.CORPSE_EXPLOSION) || sauce.is(ModDamageTypes.BRAMBLE)
+                || sauce.is(ModDamageTypes.GER_STAND)) {
             return true;
         }
         return false;
@@ -4651,6 +4662,13 @@ public class MainUtil {
             return ((StandUser) LE).getMoldTicks() > 0;
         }
         return false;
+    }
+
+    public static byte getMoldSkin(Entity ent) {
+        if (ent instanceof LivingEntity LE) {
+            return ((StandUser) LE).getMoldSkin();
+        }
+        return PowersGreenDay.PART_FIVE_GREEN_DAY;
     }
 
     public static Boolean isInPurpleHaze(Entity entity) {

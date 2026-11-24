@@ -22,15 +22,11 @@ import net.minecraft.world.entity.LivingEntity;
 public class SilverChariotSwordModel extends PsuedoHierarchicalModel {
 
     private final ModelPart sword;
-    private final ModelPart blade;
-    private final ModelPart tip;
 
     public SilverChariotSwordModel() {
         super(RenderType::entityTranslucent);
 
         this.sword = createBodyLayer().bakeRoot();
-        this.blade = this.sword.getChild("blade");
-        this.tip = this.blade.getChild("tip");
 
         ModStrayModels.SILVER_CHARIOT_SWORD = this;
     }
@@ -93,7 +89,7 @@ public class SilverChariotSwordModel extends PsuedoHierarchicalModel {
     private static final ResourceLocation PHARAOH = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/silver_chariot/pharaoh_silver_chariot.png");
 
 
-    public ResourceLocation getTextureLocation(Entity context, byte skin) {
+    public ResourceLocation getTextureLocation(byte skin) {
         switch (skin) {
             case SilverChariotEntity.PART_3_GREY -> {
                 return PART_3_GREY;
@@ -167,7 +163,7 @@ public class SilverChariotSwordModel extends PsuedoHierarchicalModel {
     }
 
     public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int light, float rr, float gg, float bb, float v) {
-        VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(context, (byte)0)));
+        VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation((byte)0)));
         root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
     }
 
@@ -181,7 +177,7 @@ public class SilverChariotSwordModel extends PsuedoHierarchicalModel {
             StandUser user = ((StandUser) LE);
         }
 
-        VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
+        VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(skin)));
         root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
     }
 }

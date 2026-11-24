@@ -675,6 +675,7 @@ public class FabricItems {
                         entries.accept(CHAKA_MASK);
                         entries.accept(JOTARO_4_MASK);
                         entries.accept(AYA_MASK);
+                        entries.accept(POLPO_MASK);
                         entries.accept(MISTA_MASK);
                         entries.accept(ABBACCHIO_MASK);
                         entries.accept(FUGO_MASK);
@@ -965,7 +966,6 @@ public class FabricItems {
                         entries.accept(STAND_DISC_JJF);
                         entries.accept(MAX_STAND_DISC_JJF);
                         entries.accept(STAND_DISC_CATCH_THE_RAINBOW);
-                        entries.accept(POLPO_MASK);
 
                         entries.accept(STAND_DISC_SILVER_CHARIOT);
                         entries.accept(MAX_STAND_DISC_SILVER_CHARIOT);

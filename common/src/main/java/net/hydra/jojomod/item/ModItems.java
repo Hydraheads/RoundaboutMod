@@ -406,6 +406,7 @@ public class ModItems {
         addToVisageStore(KIRASAKU_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(KOSAKU_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(HAYATO_KAWAJIRI_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(POLPO_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(MISTA_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(ABBACCHIO_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(FUGO_MASK,page, characterCostExp, characterCostEmerald);

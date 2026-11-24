@@ -17,6 +17,9 @@ public class FabricParticlesClient {
         ParticleFactoryRegistry.getInstance().register(FabricParticles.GOLD_PUNCH_IMPACT_A, GoldPunchImpactParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.GOLD_PUNCH_IMPACT_B, GoldPunchImpactParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.GOLD_PUNCH_IMPACT_C, GoldPunchImpactParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.REQUIEM_PUNCH_IMPACT_A, PunchImpactParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.REQUIEM_PUNCH_IMPACT_B, PunchImpactParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.REQUIEM_PUNCH_IMPACT_C, PunchImpactParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.MELTING, BloodParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.BLOOD, BloodParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.SWEAT, BloodParticle.Provider::new);
@@ -70,7 +73,7 @@ public class FabricParticlesClient {
         ParticleFactoryRegistry.getInstance().register(FabricParticles.FRICTIONLESS, PlunderParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.EXCLAMATION, ExclamationParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.STITCH, StitchParticle.Provider::new);
-        ParticleFactoryRegistry.getInstance().register(FabricParticles.MOLD_DUST, MoldDustParticle.CosyProvider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.MOLD_DUST, MoldDustParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.ZOMBIE_STITCH, ZombieStitchParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.OCCULT, OccultParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.AIRBUBBLE_PINK, AirBubbleParticle.Provider::new);

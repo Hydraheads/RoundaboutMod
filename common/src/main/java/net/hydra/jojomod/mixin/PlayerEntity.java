@@ -168,6 +168,13 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             EntityDataSerializers.ROTATIONS);
 
     @Unique
+    private boolean roundabout$pendingGerCutscene = false;
+    @Override
+    public boolean rdbt$isPendingGerCutscene() {return this.roundabout$pendingGerCutscene;}
+    @Override
+    public void rdbt$setPendingGerCutscene(boolean pending) {this.roundabout$pendingGerCutscene = pending;}
+
+    @Unique
     public Deque<Vec3> rdbt$movementHistory = new ArrayDeque<>();
 
     @Unique
@@ -1617,7 +1624,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Inject(method = "jumpFromGround", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$Jump(CallbackInfo ci) {
         if (((StandUser) this).roundabout$isClashing() || ((StandUser) this).roundabout$getStandPowers().cancelJump()
-                || ((IFatePlayer)this).rdbt$getFatePowers().cancelJump() || ((StandUser)this).roundabout$getGrabbedSoul()
+                || ((IFatePlayer)this).rdbt$getFatePowers().cancelJump() || ((StandUser)this).roundabout$getGrabberSabbath() != 0
         || FateTypes.isTransforming(this) ||
         FateTypes.takesSunlightDamage(this) && FateTypes.isInSunlight(this)
                 && !FateTypes.canCurrentlyAvoidSunlight(this)&& !FateTypes.isHidden(this)) {

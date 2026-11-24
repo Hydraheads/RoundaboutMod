@@ -131,6 +131,9 @@ public class PowersKingNothing extends NewDashPreset {
     public final Set<Entity> itemHoldingEntities = new HashSet<>();
     public final Set<BlockPos> itemHoldingBlocks = new HashSet<>();
     public final Set<Pair<BlockPos, BlockPos>> itemHoldingBlockPairs = new HashSet<>();
+    private Entity trackedEntity = null;
+    private BlockPos trackedBlockPos = null;
+
     private boolean foundItemYet = false;
 
     // idk what this is exactly but its used in the phase grab stuff
@@ -333,7 +336,12 @@ public class PowersKingNothing extends NewDashPreset {
             return memorizedBlock.asItem().getDefaultInstance();
         }
         else if (memorizedEntityType != null) {
-            return Items.ZOMBIE_SPAWN_EGG.getDefaultInstance();
+            if (memorizedEntityType.equals(ModEntities.STRAY_CAT)) {
+                return ModItems.STRAY_CAT_ANIME.getDefaultInstance();
+            }
+            SpawnEggItem egg = Objects.requireNonNullElse(SpawnEggItem.byId(memorizedEntityType),
+                    SpawnEggItem.byId(EntityType.ZOMBIE));
+            return egg.getDefaultInstance();
         }
         else if (memorizedPlayer != null) {
             return new ItemStack(Items.PLAYER_HEAD, 1);
@@ -547,7 +555,7 @@ public class PowersKingNothing extends NewDashPreset {
 
     @Override
     public boolean highlightsEntity(Entity ent, Player player) {
-        return itemHoldingEntities.contains(ent) && player.hasLineOfSight(ent)
+        return (itemHoldingEntities.contains(ent) || ent.equals(trackedEntity)) && player.hasLineOfSight(ent)
                 && ConfigManager.getClientConfig().kingNothingSettings.highlightInItemTrack;
     }
 
@@ -558,6 +566,14 @@ public class PowersKingNothing extends NewDashPreset {
 
     public int getParticleColor(VisualData pdata) {
         return Roundabout.RANDOM.nextFloat() > pdata.percentOther() ? pdata.color1() : pdata.color2();
+    }
+
+    public void setTrackedEntity(Entity ent) {
+        trackedEntity = ent;
+    }
+
+    public void clearTrackedEntity() {
+        trackedEntity = null;
     }
 
     @Override
@@ -642,15 +658,17 @@ public class PowersKingNothing extends NewDashPreset {
             }
             syncTracking(false);
             trackingCloud = null;
+            clearTrackedEntity();
             playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);
         }
+        if (!isTrackingMemorizedScent) clearTrackedEntity();
         if (getSelf().isAlive() && !getSelf().isRemoved() && trackingCloud != null && spawnsParticlesThisTick()) {
             VisualData pdata = getVisualInfo();
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < 4; i++) {
                 int color = getParticleColor(pdata);
                 MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
                         ColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
-                        trackingCloud.getX(), trackingCloud.getY(), trackingCloud.getZ(), 1, 0.1, 0.1, 0.1, 0.01);
+                        trackingCloud.getX(), trackingCloud.getY(), trackingCloud.getZ(), 1, 0.2, 0.2, 0.2, 0.01);
             }
         }
     }
@@ -1792,6 +1810,9 @@ public class PowersKingNothing extends NewDashPreset {
                 else if (held.getItem() instanceof EnderpearlItem) {
                     projectile = new ThrownEnderpearl(this.getSelf().level(), getSelf());
                     projectile.setPos(standPos);
+                    if (getSelf() instanceof Player PE) {
+                        PE.getCooldowns().addCooldown(held.getItem(), 20);
+                    }
                 }
                 else if (held.getItem() instanceof SnowballItem) {
                     projectile = new Snowball(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z());
@@ -1799,6 +1820,30 @@ public class PowersKingNothing extends NewDashPreset {
                 else if (held.getItem() instanceof GasolineCanItem) {
                     projectile =
                             new GasolineCanEntity(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z());
+                    if (getSelf() instanceof Player PE) {
+                        PE.getCooldowns().addCooldown(held.getItem(), 40);
+                        Inventory inv = PE.getInventory();
+                        for (ItemStack stack : inv.items) {
+                            if (stack.getItem() instanceof BowItem) {
+                                PE.getCooldowns().addCooldown(stack.getItem(), 30);
+                            }
+                        }
+                        for (ItemStack stack : inv.offhand) {
+                            if (stack.getItem() instanceof CrossbowItem) {
+                                PE.getCooldowns().addCooldown(stack.getItem(), 30);
+                            }
+                        }
+
+                        PE.getCooldowns().addCooldown(Items.FLINT_AND_STEEL, 30);
+                        PE.getCooldowns().addCooldown(Items.FIRE_CHARGE, 30);
+                        PE.getCooldowns().addCooldown(Items.BOW, 30);
+                        PE.getCooldowns().addCooldown(ModItems.MATCH, 30);
+                        PE.getCooldowns().addCooldown(ModItems.GASOLINE_BUCKET, 30);
+                        PE.getCooldowns().addCooldown(ModItems.IRON_BALL_CROSSBOW, 30);
+                        PE.getCooldowns().addCooldown(Items.LAVA_BUCKET, 30);
+                        PE.getCooldowns().addCooldown(Items.CROSSBOW, 30);
+                        PE.getCooldowns().addCooldown(ModItems.MATCH_BUNDLE, 30);
+                    }
                 }
                 else if (held.is(ModItems.MATCH)) {
                     projectile = new MatchEntity(this.getSelf().level(), standPos.x(), standPos.y(), standPos.z());
@@ -2027,7 +2072,7 @@ public class PowersKingNothing extends NewDashPreset {
         if (ent instanceof LivingEntity LE && !MainUtil.isMobSniffBlacklisted(ent)) {
             setMemorizedScent(LE);
             if (this.getSelf() instanceof Player PE) {
-                PE.displayClientMessage(LE.getDisplayName().copy().withStyle(ChatFormatting.DARK_PURPLE), true);
+                PE.displayClientMessage(LE.getName().copy().withStyle(ChatFormatting.DARK_PURPLE), true);
             }
         }
         return true;
@@ -2073,6 +2118,28 @@ public class PowersKingNothing extends NewDashPreset {
                 tity.discard();
             }
         }
+    }
+
+    public byte getMemorizedScentType() {
+        if (memorizedPlayer != null) {
+            return TrackingCloudEntity.PLAYER;
+        }
+        else if (memorizedEntityType != null) {
+            return TrackingCloudEntity.MOB;
+        }
+        return TrackingCloudEntity.BLOCK;
+    }
+
+    public Block getMemorizedBlock() {
+        return memorizedBlock;
+    }
+
+    public EntityType<?> getMemorizedEntityType() {
+        return memorizedEntityType;
+    }
+
+    public UUID getMemorizedPlayer() {
+        return memorizedPlayer;
     }
 
     @Override

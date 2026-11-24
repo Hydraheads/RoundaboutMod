@@ -8,6 +8,7 @@
   "text.roundabout.riding_flying_creature.dimension": "Cannot fly in this dimension.",
   "text.roundabout.warn_trap_triggered": " has been triggered!",
   "text.roundabout.warn_unnamed_trap_triggered": "A fog trap has been triggered!",
+  "text.roundabout.failed_black_sabbath_summon": "Unable to find a safe spot.",
   "text.roundabout.stole_minion": "Claimed Minion",
   "text.roundabout.inactive_piece": "Inactive",
   "text.roundabout.memory.0": "Happy Memory",
@@ -1355,7 +1356,10 @@
   "death.attack.air_pressure.player": "%1$s ran out of air",
   "death.attack.bramble": "%1$s was pricked to death by %2$s",
   "death.attack.bramble.player": "%1$s was pricked to death by %2$s",
-
+  "death.attack.ger_stand": "%1$s will never reach the truth",
+  "death.attack.ger_stand.item": "%1$s will never reach the truth",
+  "death.attack.ger_stand.player": "%1$s will never reach the truth",
+  "death.attack.ger_stand.player.item": "%1$s will never reach the truth",
 
   "item.glaive.charge_power": "Charge Attack",
 
@@ -2854,7 +2858,7 @@
   "ability.roundabout.black_sabbath_target_selection_tutorial": "Target Selection",
   "ability.roundabout.black_sabbath_target_selection_tutorial.desc": "Summons Black Sabbath on your back and he will follow you, helping you to see better in the dark. In this mode you can select the targets which Black Sabbath will hunt down (see 'How to select and unselect targets?').",
   "ability.roundabout.black_sabbath_target_selection_tutorial_2": "How to select and unselect targets?",
-  "ability.roundabout.black_sabbath_target_selection_tutorial_2.desc": "When in selection mode, left click on a mob will select them, pressing sneak while selecting a target will remove them from the list, pressing again this skill once some entities are selected will confirm the list and it will send the stand and if you are sneaking and you press this skill when having some targets selected cancels the whole list. If the list is confirmed, pressing this skill while looking at and entity will remove them from the list and if you do this while sneaking all targets will be removed from the list, thus ending the hunt.",
+  "ability.roundabout.black_sabbath_target_selection_tutorial_2.desc": "When in selection mode, left click on a mob will select them, if you do it on a selected target they will be removed from the list, pressing again this skill once some entities are selected will confirm the list and it will send the stand and if you are sneaking and you press this skill when having some targets selected cancels the whole list. If the list is confirmed, pressing this skill while looking at and entity will remove them from the list and if you do this while sneaking all targets will be removed from the list, thus ending the hunt.",
   "ability.roundabout.black_sabbath_inventory": "Shadow's Depot",
   "ability.roundabout.black_sabbath_inventory.desc": "Black Sabbath emerges from the shadows and opens his mouth. You have nine slots in which you can put any item as long as it's not a Shulker Box and the item put in the first one will determine what Black Sabbath does to it's target once they're grabbed (see 'Attack Slot Mechanics')",
   "ability.roundabout.black_sabbath_biting_finger": "Finger Bite",
@@ -4692,6 +4696,8 @@
   "config.roundabout.silverChariotBonusMobDMGArmSummon.desc": "This % melee damage increase from Arm Summon against players.",
   "config.roundabout.silverChariotAfterimageSpeed.name": "Afterimage Speed Modifier",
   "config.roundabout.silverChariotAfterimageSpeed.desc": "% increase in speed where lower values make the afteriamges slower.",
+  "config.roundabout.silverChariotShouldForceLeftMainArmWithPart5SkinInArmSummonMode.name": "Left Arm as Main Arm in Arm Summon Mode",
+  "config.roundabout.silverChariotShouldForceLeftMainArmWithPart5SkinInArmSummonMode.desc": "In arm summon mode while using a part 5 skin, force the user to use the left arm as the main arm.",
 
   "config.roundabout.enableCatchTheRainbow.name": "Enable Catch The Rainbow",
   "config.roundabout.enableCatchTheRainbow.desc": "Enable Catch The Rainbow",

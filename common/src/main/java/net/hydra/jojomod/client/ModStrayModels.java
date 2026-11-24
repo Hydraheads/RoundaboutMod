@@ -153,7 +153,8 @@ public class ModStrayModels {
     public static OasisSlimLeftArmPart OasisSlimLeftArm;
     public static OasisSlimRightArmPart OasisSlimRightArm;
 
-    public static MoldSpineModel MoldSpine;
+    public static SpineModel Spine;
+    public static SpineMoldModel SpineMold;
     public static MoldRightArm MoldRightArm;
     public static MoldLeftArm MoldLeftArm;
 

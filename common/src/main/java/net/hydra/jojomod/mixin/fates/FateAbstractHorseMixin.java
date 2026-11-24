@@ -26,7 +26,8 @@ public abstract class FateAbstractHorseMixin extends Animal {
     }
     @Inject(method = "calculateFallDamage(FF)I", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$calculateFallDamageVampHorse(float $$0, float $$1, CallbackInfoReturnable<Integer> cir) {
-        if (((IMob)this).roundabout$isVampire()) {
+        if (((IMob)this).roundabout$isVampire() ||
+                ((StandUser)this).roundabout$hasDiverLegs()) {
             cir.setReturnValue(Mth.ceil((($$0/2) * 0.5F - 3.0F) * $$1));
             return;
         }
