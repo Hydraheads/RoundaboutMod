@@ -2895,12 +2895,8 @@ public class MainUtil {
             return;
         }
 
-        DamageSource source = attacker instanceof Player player
-                ? GERuser.damageSources().playerAttack(player)
-                : GERuser.damageSources().mobAttack(attacker);
-
         GERuser.invulnerableTime = 0;
-        GERuser.hurt(source, 1.0F);
+        GERuser.hurt(GERuser.damageSources().mobAttack(attacker), 1.0F);
     }
 
     /** Returns the vertical angle between two mobs in degrees */
