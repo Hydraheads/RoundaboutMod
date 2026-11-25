@@ -2759,7 +2759,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
         if (entity != null) {
             // for some reason halfing the damage made it stronger thaan the normal punches so.. i need to make it slightly more than a half reduction
-            float pow = getHeavyPunchStrength(entity) * 0.42F;
+            float pow = getHeavyPunchStrength(entity) * 0.43F;
 
             float knockbackStrength = isSecondHit ? 1.4F : 0.3F;
 
