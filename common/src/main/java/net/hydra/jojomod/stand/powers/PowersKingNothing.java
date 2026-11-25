@@ -2056,6 +2056,7 @@ public class PowersKingNothing extends NewDashPreset {
 
     private void memorizeBlock(BlockPos blockPos) {
         Block block = this.getSelf().level().getBlockState(blockPos).getBlock();
+        block = MainUtil.KING_NOTHING_BLOCK_SNIFF_OVERRIDES.getOrDefault(block, block);
         if (isMemorizableBlock(block)) {
             if (getSelf() instanceof Player PE) {
                 PE.displayClientMessage(block.getName().withStyle(ChatFormatting.DARK_PURPLE), true);
@@ -2090,7 +2091,7 @@ public class PowersKingNothing extends NewDashPreset {
     }
 
     private boolean isMemorizableBlock(Block block) {
-        return !block.asItem().equals(Items.AIR) && !(block instanceof FogBlock) && block.defaultDestroyTime() >= 0
+        return !(block.asItem().equals(Items.AIR)) && !(block instanceof FogBlock) && block.defaultDestroyTime() >= 0
                 && !MainUtil.isBlockSniffBlacklisted(block);
     }
 
@@ -2111,7 +2112,7 @@ public class PowersKingNothing extends NewDashPreset {
             this.memorizedEntityType = null;
         }
         else {
-            this.memorizedEntityType = entity.getType();
+            this.memorizedEntityType = MainUtil.KING_NOTHING_ENTITY_SNIFF_OVERRIDES.getOrDefault(entity.getType(), entity.getType());
             this.memorizedPlayer = null;
         }
         this.memorizedBlock = null;
