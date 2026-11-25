@@ -1656,8 +1656,8 @@ public class PowersKingNothing extends NewDashPreset {
     }
 
     private void damageHeld(ItemStack held, StandEntity stand, LivingEntity self) {
-        if (held.isDamageableItem() && !getCreative()) {
-            if (held.hurt(1, stand.level().getRandom(), null)) {
+        if (held.isDamageableItem()) {
+            if (held.hurt(1, stand.level().getRandom(), ((ServerPlayer) getSelf()))) {
                 stand.setHeldItem(ItemStack.EMPTY);
                 playSoundIfPossible(self.level(), null, self.blockPosition(), SoundEvents.ITEM_BREAK,
                         SoundSource.PLAYERS, 1.7f, 1.3f);
