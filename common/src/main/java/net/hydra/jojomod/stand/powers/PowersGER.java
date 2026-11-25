@@ -19,10 +19,12 @@ import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.presets.TWAndSPSharedPowers;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -166,6 +168,10 @@ public class PowersGER extends PowersGoldExperience {
             }
 
             if (culprit instanceof LivingEntity livingCulprit) {
+                if (((TimeStop) livingCulprit.level()).isTimeStoppingEntity(livingCulprit)
+                        && ((StandUser) livingCulprit).roundabout$getStandPowers() instanceof TWAndSPSharedPowers tsPowers) {
+                    tsPowers.resumeTime();
+                }
                 IEntityAndData iData = (IEntityAndData) livingCulprit;
                 SavedSecond lastSecond = iData.roundabout$getLastSavedSecond();
                 if (lastSecond != null) {
