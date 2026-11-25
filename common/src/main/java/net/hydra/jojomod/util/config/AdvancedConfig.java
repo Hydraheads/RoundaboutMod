@@ -283,7 +283,7 @@ public class AdvancedConfig implements Cloneable {
             )
     );
 
-    public Set<String> kingNothingBlockFormPredictionsv2 = new HashSet<>(
+    public Set<String> kingNothingBlockFormPredictionsv3 = new HashSet<>(
             Arrays.asList(
                     "minecraft:coal:minecraft:coal_ore",
                     "minecraft:raw_iron:minecraft:iron_ore",
@@ -513,10 +513,57 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:iron_trapdoor:minecraft:iron_ore",
                     "minecraft:heavy_weighted_pressure_plate:minecraft:iron_ore",
                     "minecraft:light_weighted_pressure_plate:minecraft:gold_ore",
-                    "roundabout:locacaca_branch:roundabout:new_locacaca_plant"
+                    "roundabout:locacaca_branch:roundabout:new_locacaca_plant",
+                    "minecraft:coal_block:minecraft:coal_ore",
+                    "minecraft:iron_block:minecraft:iron_ore",
+                    "minecraft:gold_block:minecraft:gold_ore",
+                    "minecraft:copper_block:minecraft:copper_ore",
+                    "minecraft:redstone_block:minecraft:redstone_ore",
+                    "minecraft:emerald_block:minecraft:emerald_ore",
+                    "minecraft:lapis_block:minecraft:lapis_ore",
+                    "minecraft:diamond_block:minecraft:diamond_ore",
+                    "roundabout:aja_block:roundabout:aja_ore",
+                    "minecraft:netherite_block:minecraft:ancient_debris",
+                    "minecraft:quartz_block:minecraft:nether_quartz_ore",
+                    "minecraft:raw_copper_block:minecraft:copper_ore",
+                    "minecraft:raw_iron_block:minecraft:iron_ore",
+                    "minecraft:raw_gold_block:minecraft:gold_ore",
+                    "minecraft:torchflower:minecraft:torchflower_seeds",
+                    "minecraft:pitcher_plant:minecraft:pitcher_pod",
+                    "minecraft:cut_copper:minecraft:copper_ore",
+                    "minecraft:cut_copper_stairs:minecraft:copper_ore",
+                    "minecraft:cut_copper_slab:minecraft:copper_ore",
+                    "minecraft:waxed_copper_block:minecraft:copper_ore",
+                    "minecraft:waxed_cut_copper:minecraft:copper_ore",
+                    "minecraft:waxed_cut_copper_stairs:minecraft:copper_ore",
+                    "minecraft:waxed_cut_copper_slab:minecraft:copper_ore",
+                    "minecraft:exposed_copper:minecraft:copper_ore",
+                    "minecraft:exposed_cut_copper:minecraft:copper_ore",
+                    "minecraft:exposed_cut_copper_stairs:minecraft:copper_ore",
+                    "minecraft:exposed_cut_copper_slab:minecraft:copper_ore",
+                    "minecraft:waxed_exposed_copper:minecraft:copper_ore",
+                    "minecraft:waxed_exposed_cut_copper:minecraft:copper_ore",
+                    "minecraft:waxed_exposed_cut_copper_stairs:minecraft:copper_ore",
+                    "minecraft:waxed_exposed_cut_copper_slab:minecraft:copper_ore",
+                    "minecraft:weathered_copper:minecraft:copper_ore",
+                    "minecraft:weathered_cut_copper:minecraft:copper_ore",
+                    "minecraft:weathered_cut_copper_stairs:minecraft:copper_ore",
+                    "minecraft:weathered_cut_copper_slab:minecraft:copper_ore",
+                    "minecraft:waxed_weathered_copper:minecraft:copper_ore",
+                    "minecraft:waxed_weathered_cut_copper:minecraft:copper_ore",
+                    "minecraft:waxed_weathered_cut_copper_stairs:minecraft:copper_ore",
+                    "minecraft:waxed_weathered_cut_copper_slab:minecraft:copper_ore",
+                    "minecraft:oxidized_copper:minecraft:copper_ore",
+                    "minecraft:oxidized_cut_copper:minecraft:copper_ore",
+                    "minecraft:oxidized_cut_copper_stairs:minecraft:copper_ore",
+                    "minecraft:oxidized_cut_copper_slab:minecraft:copper_ore",
+                    "minecraft:waxed_oxidized_copper:minecraft:copper_ore",
+                    "minecraft:waxed_oxidized_cut_copper:minecraft:copper_ore",
+                    "minecraft:waxed_oxidized_cut_copper_stairs:minecraft:copper_ore",
+                    "minecraft:waxed_oxidized_cut_copper_slab:minecraft:copper_ore"
             )
     );
-    public Set<String> kingNothingEntityFormPredictionsv3 = new HashSet<>(
+    public Set<String> kingNothingEntityFormPredictionsv4 = new HashSet<>(
             Arrays.asList(
                     "minecraft:phantom_membrane:minecraft:phantom",
                     "minecraft:wither_skeleton_skull:minecraft:wither_skeleton",
@@ -589,7 +636,9 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:piranha_bucket:roundabout:piranha",
                     "minecraft:goat_horn:minecraft:goat",
                     "minecraft:leather_horse_armor:minecraft:cow",
-                    "minecraft:dragon_egg:minecraft:ender_dragon"
+                    "minecraft:dragon_egg:minecraft:ender_dragon",
+                    "minecraft:turtle_egg:minecraft:turtle",
+                    "minecraft:frogspawn:minecraft:tadpole"
             )
     );
 
