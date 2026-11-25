@@ -306,6 +306,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.PH_CAPSULE.get(), PHCapsuleRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GINKGO_BOAT.get(), context -> new GinkgoBoatRenderer(context, false));
         event.registerEntityRenderer(ForgeEntities.GINKGO_CHEST_BOAT.get(), context -> new GinkgoBoatRenderer(context, true));
+        event.registerEntityRenderer(ForgeEntities.CTR_BARRIER.get(), CTRbarrierRenderer::new);
     }
 
     @SubscribeEvent
