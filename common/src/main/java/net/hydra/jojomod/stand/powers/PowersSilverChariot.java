@@ -3573,8 +3573,15 @@ public class PowersSilverChariot extends NewPunchingStand {
                         origin, DamageHandler.genHitbox(origin, origin.getEyePosition().x, origin.getEyePosition().y, origin.getEyePosition().z, dist, dist, dist), dist, angle
                 );
                 // }
+                this.setCooldown(PowerIndex.SKILL_1, this.getCooldownRapierSpin());
+                if (this.getSelf() instanceof Player) {
+                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, this.getCooldownRapierSpin());
+                }
             } else {
                 this.setCooldown(PowerIndex.SKILL_1, this.getCooldownRapierSpin());
+                if (this.getSelf() instanceof Player) {
+                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, this.getCooldownRapierSpin());
+                }
                 this.setPowerNone();
             }
         }
