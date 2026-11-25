@@ -7481,17 +7481,53 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private void roundabout$tickInfiniteSpin(CallbackInfo ci) {
         MobEffectInstance instance = this.getEffect(ModEffects.INFINITE_SPIN);
         if (instance != null) {
+            Vec3 pos = this.position().add(0,this.getEyeHeight()*0.6F,0);
+            this.level().addParticle(ModParticles.INFINITE_SPIN,
+                    pos.x+(Math.random()-0.5F),
+                    pos.y+(Math.random()-0.5F)*2,
+                    pos.z+(Math.random()-0.5F),
+                    (Math.random()-0.5F), (Math.random()-0.35F), (Math.random()-0.5F));
+
             if (this.tickCount % 10 == 0 && !this.roundabout$isDazed() && this.isAlive() && this.isAttackable() && !MainUtil.isBossMob(rdbt$this()) ) {
-                this.level().playSound(null,this.blockPosition(),ModSounds.VAMPIRE_CRUMBLE_EVENT,SoundSource.PLAYERS,0.3F,1F);
-                this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.INFINITE_SPIN), (float)Math.min(Math.pow(1.4F, 1+instance.getAmplifier()*0.4F),20) );
-                this.addEffect(new MobEffectInstance(ModEffects.INFINITE_SPIN, instance.getDuration(), instance.getAmplifier() + 1));
+                if (this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.INFINITE_SPIN), (float)Math.min(Math.pow(1.4F, 1+instance.getAmplifier()*0.4F),20))) {
+                    this.level().playSound(null, this.blockPosition(), ModSounds.VAMPIRE_CRUMBLE_EVENT, SoundSource.PLAYERS, 0.3F, 1F);
+                    this.addEffect(new MobEffectInstance(ModEffects.INFINITE_SPIN, instance.getDuration(), instance.getAmplifier() + 1));
+
+                    if (!rdbt$this().isAlive()) {
+                        if (!this.level().isClientSide()) {
+                            /// this unrenders the body
+                            S2CPacketUtil.shatterIce(this.getId());
+                        }
+                        Vec3 position = this.getPosition(1);
+                        Vec3 position2 = this.getEyePosition();
+                        Vec3 position3 = this.getEyePosition().subtract(this.getPosition(1)).multiply(new Vec3(0.5F,
+                                0.5F, 0.5F));
+
+                        MainUtil.sendParticlesIfPossible(this, level(), ModParticles.FIRE_CRUMBLE,
+                                position3.x, position3.y, position3.z,
+                                0, 0.2, 0.2, 0.2, 0.1);
+
+                        MainUtil.sendParticlesIfPossible(this, level(), ModParticles.DUST_CRUMBLE,
+                                position.x, position.y, position.z,
+                                0, 0.2, 0.5, 0.2, 0.5);
+                        MainUtil.sendParticlesIfPossible(this, level(), ModParticles.DUST_CRUMBLE,
+                                position2.x, position2.y, position2.z,
+                                0, 0.2, 0.5, 0.2, 0.2);
+                        MainUtil.sendParticlesIfPossible(this, level(), ModParticles.DUST_CRUMBLE,
+                                position3.x, position3.y, position3.z,
+                                0, 0.2, 0.5, 0.2, 0.2);
+
+                        MainUtil.sendParticlesIfPossible(this, level(), ModParticles.INFINITE_SPIN,
+                                position3.x, position3.y, position3.z,
+                                10, 0.6F, 0.6F, 0.6F, 0.8F);
+                    }
+                }
 
                 if (roundabout$spinLocation != null) {
                     if (rdbt$this().position().distanceTo(roundabout$spinLocation) > 10 && !PowerTypes.isExistentiallyElsewhere(rdbt$this()) ) {
                         rdbt$this().teleportTo(roundabout$spinLocation.x,roundabout$spinLocation.y,roundabout$spinLocation.z);
                         MainUtil.takeKnockbackWithY(rdbt$this(),0,0,1,0);
                         this.roundabout$setDazed((byte)2);
-                        /// TODO: PLAY INFINITE SPIN PARTICLES
                     }
                 }
             }

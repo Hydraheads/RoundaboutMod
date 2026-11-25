@@ -145,6 +145,7 @@ public class PacketDataIndex {
     public static final byte S2C_KN_REMOVE_HIGHLIGHT_ENTITY = 35;
     public static final byte S2C_KN_SYNC_FORM_PREDICT_BLOCK = 36;
     public static final byte S2C_KN_SYNC_FORM_PREDICT_ENTITY = 37;
+    public static final byte S2C_TUSK_DEATH_TARGET_SYNC = 38;
 
 
     /**S2C BUNDLE packets*/
