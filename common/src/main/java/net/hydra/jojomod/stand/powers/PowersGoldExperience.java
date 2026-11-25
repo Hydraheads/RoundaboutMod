@@ -2106,8 +2106,12 @@ public class PowersGoldExperience extends BlockGrabPreset {
         Entity targetInCrosshair = getTargetEntity(this.self, punchRange);
         BlockHitResult blockHit = this.getRayBlockOutline(this.self, punchRange);
 
+        boolean hittingBlockSurface = blockHit.getType() == HitResult.Type.BLOCK
+                && blockHit.getDirection() == Direction.UP
+                && this.self.level().getBlockState(blockHit.getBlockPos().above()).canBeReplaced();
+
         // entity vs block check
-        if (this.activePower != PowerIndex.BARRAGE_2 && (targetInCrosshair == null || targetInCrosshair instanceof GEThornEntity) && blockHit.getType() == HitResult.Type.BLOCK) {
+        if (this.activePower != PowerIndex.BARRAGE_2 && (targetInCrosshair == null || targetInCrosshair instanceof GEThornEntity) && hittingBlockSurface) {
             this.isGroundBarraging = true;
 
             if (this.self instanceof Player) {
@@ -2146,30 +2150,45 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 double currentDist = startDist + (progress * (maxReach - startDist));
                 double spreadWidth = 0.8 + (currentDist * 0.4);
 
-                int entitiesPerHit = 2;
+                double traceY = blockHit.getBlockPos().getY() + 1.0;
+                double reachableDist = 0.0;
+                for (double step = 0.8; step <= currentDist; step += 0.8) {
+                    double checkX = this.self.getX() + dir.x * step;
+                    double checkZ = this.self.getZ() + dir.z * step;
+                    BlockPos stepGround = findGroundPosition(level, BlockPos.containing(checkX, traceY, checkZ));
+                    if (stepGround == null) {
+                        break;
+                    }
+                    traceY = stepGround.getY() + 1.0;
+                    reachableDist = step;
+                }
 
-                for (int i = 0; i < entitiesPerHit; i++) {
-                    double sideBias = (i == 0 ? -0.5 : 0.5) + (level.random.nextDouble() - 0.5D) * 0.8D;
-                    double offset = sideBias * spreadWidth;
-                    double lengthJitter = (level.random.nextDouble() - 0.5D) * 1.2D;
+                if (reachableDist >= 0.8) {
+                    int entitiesPerHit = 2;
 
-                    double targetX = this.self.getX() + dir.x * (currentDist + lengthJitter) + right.x * offset;
-                    double targetZ = this.self.getZ() + dir.z * (currentDist + lengthJitter) + right.z * offset;
+                    for (int i = 0; i < entitiesPerHit; i++) {
+                        double sideBias = (i == 0 ? -0.5 : 0.5) + (level.random.nextDouble() - 0.5D) * 0.8D;
+                        double offset = sideBias * spreadWidth;
+                        double clampedDist = Math.min(reachableDist, Math.max(0.8, currentDist + (level.random.nextDouble() - 0.5D) * 1.2D));
 
-                    BlockPos groundPos = findGroundPosition(level, BlockPos.containing(targetX, this.self.getY(), targetZ));
+                        double targetX = this.self.getX() + dir.x * clampedDist + right.x * offset;
+                        double targetZ = this.self.getZ() + dir.z * clampedDist + right.z * offset;
 
-                    if (groundPos != null) {
-                        Vec3 spawnPos = new Vec3(targetX, groundPos.getY() + 1.0, targetZ);
-                        boolean tooClose = !level.getEntitiesOfClass(
-                                GEThornEntity.class, new AABB(spawnPos, spawnPos).inflate(0.35D)).isEmpty();
+                        BlockPos groundPos = findGroundPosition(level, BlockPos.containing(targetX, traceY, targetZ));
 
-                        // z fighting fix. i couldn't find any other way to fix it, so i'm just gonna prevent them from overlapping in the first place.
-                        if (!tooClose) {
-                            GEThornEntity rootEntity = new GEThornEntity(ModEntities.GE_THORN, level);
-                            rootEntity.setOwner(this.getSelf());
-                            rootEntity.setPos(spawnPos.x, spawnPos.y, spawnPos.z);
+                        if (groundPos != null) {
+                            Vec3 spawnPos = new Vec3(targetX, groundPos.getY() + 1.0, targetZ);
+                            boolean tooClose = !level.getEntitiesOfClass(
+                                    GEThornEntity.class, new AABB(spawnPos, spawnPos).inflate(0.35D)).isEmpty();
 
-                            level.addFreshEntity(rootEntity);
+                            // z fighting fix. i couldn't find any other way to fix it, so i'm just gonna prevent them from overlapping in the first place.
+                            if (!tooClose) {
+                                GEThornEntity rootEntity = new GEThornEntity(ModEntities.GE_THORN, level);
+                                rootEntity.setOwner(this.getSelf());
+                                rootEntity.setPos(spawnPos.x, spawnPos.y, spawnPos.z);
+
+                                level.addFreshEntity(rootEntity);
+                            }
                         }
                     }
                 }
@@ -2759,7 +2778,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
         if (entity != null) {
             // for some reason halfing the damage made it stronger thaan the normal punches so.. i need to make it slightly more than a half reduction
-            float pow = getHeavyPunchStrength(entity) * 0.42F;
+            float pow = getHeavyPunchStrength(entity) * 0.43F;
 
             float knockbackStrength = isSecondHit ? 1.4F : 0.3F;
 
@@ -2950,7 +2969,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             Vec3 dir = new Vec3(lookVec.x, 0, lookVec.z).normalize();
 
             double startX = this.self.getX();
-            double startY = this.self.getY();
+            double currentY = this.self.getY();
             double startZ = this.self.getZ();
 
             int spikeCount = geConfig().brambleAmount;
@@ -2964,11 +2983,14 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 double targetX = startX + dir.x * (i * spacing);
                 double targetZ = startZ + dir.z * (i * spacing);
 
-                BlockPos groundPos = findGroundPosition(level, BlockPos.containing(targetX, startY, targetZ));
-                if (groundPos != null) {
-                    Vec3 spawnPos = new Vec3(targetX, groundPos.getY() + 1.0, targetZ);
-                    pendingBrambles.add(new BrambleSpawnData(spawnPos, this.self.getYRot()));
+                BlockPos groundPos = findGroundPosition(level, BlockPos.containing(targetX, currentY, targetZ));
+                if (groundPos == null) {
+                    break;
                 }
+
+                currentY = groundPos.getY() + 1.0;
+                Vec3 spawnPos = new Vec3(targetX, currentY, targetZ);
+                pendingBrambles.add(new BrambleSpawnData(spawnPos, this.self.getYRot()));
             }
 
             playSoundIfPossible(level, null, this.self.blockPosition(),
@@ -3226,23 +3248,42 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
             int radius = 4;
             double radiusSq = radius * radius;
-            for (BlockPos columnPos : BlockPos.betweenClosed(
-                    origin.offset(-radius, 0, -radius),
-                    origin.offset(radius, 0, radius))) {
 
-                double distSq = columnPos.distSqr(origin);
-                if (distSq > radiusSq) continue;
-                if (level.random.nextFloat() > 0.70F) continue;
+            BlockPos startGround = findGroundPosition(level, origin);
+            if (startGround != null) {
+                Queue<BlockPos> queue = new ArrayDeque<>();
+                Set<Long> visitedColumns = new HashSet<>();
 
-                for (int yOffset : new int[]{0, 1, -1}) {
-                    BlockPos checkPos = columnPos.above(yOffset);
-                    BlockState checkState = level.getBlockState(checkPos);
+                BlockPos startAir = startGround.above();
+                queue.add(startAir);
+                visitedColumns.add(BlockPos.asLong(startAir.getX(), 0, startAir.getZ()));
 
-                    if (checkState.canBeReplaced()
-                            && !checkState.is(ModBlocks.GE_BUSH)
-                            && bushState.canSurvive(level, checkPos)) {
-                        this.pendingBushes.add(new BushSpawnData(checkPos.immutable(), distSq));
-                        break;
+                while (!queue.isEmpty()) {
+                    BlockPos current = queue.poll();
+                    double distSq = current.distSqr(origin);
+
+                    if (current.getY() >= origin.getY() - 1
+                            && current.getY() <= origin.getY() + 1
+                            && level.random.nextFloat() <= 0.70F) {
+                        BlockState checkState = level.getBlockState(current);
+                        if (checkState.canBeReplaced()
+                                && !checkState.is(ModBlocks.GE_BUSH)
+                                && bushState.canSurvive(level, current)) {
+                            this.pendingBushes.add(new BushSpawnData(current.immutable(), distSq));
+                        }
+                    }
+
+                    for (Direction dir : Direction.Plane.HORIZONTAL) {
+                        BlockPos nextCol = current.relative(dir);
+                        long colKey = BlockPos.asLong(nextCol.getX(), 0, nextCol.getZ());
+                        if (visitedColumns.contains(colKey)) continue;
+                        if (nextCol.distSqr(origin) > radiusSq) continue;
+
+                        visitedColumns.add(colKey);
+                        BlockPos nextGround = findGroundPosition(level, nextCol);
+                        if (nextGround != null) {
+                            queue.add(nextGround.above());
+                        }
                     }
                 }
             }

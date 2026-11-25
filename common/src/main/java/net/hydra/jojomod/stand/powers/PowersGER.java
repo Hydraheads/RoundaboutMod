@@ -263,35 +263,35 @@ public class PowersGER extends PowersGoldExperience {
     @Override
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return 2.55F;
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(2.55F));
         } else {
-            return 6;
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(6));
         }
     }
 
     @Override
     public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return 2.6F;
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(2.7F));
         } else {
-            return 8;
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(8));
         }
     }
     @Override
     public float getBarrageFinisherStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return 3.8F;
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(3.8F));
         } else {
-            return 8;
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(8));
         }
     }
     @Override
     public float getBarrageDamagePlayer(){
-        return 8;
+        return levelupDamageMod(multiplyPowerByStandConfigPlayers(9));
     }
     @Override
     public float getBarrageDamageMob(){
-        return 19;
+        return levelupDamageMod(multiplyPowerByStandConfigMobs(19));
     }
 
     private float attackSpeedModifier() {return 0.65f; } /// faster than Silver Chariot
