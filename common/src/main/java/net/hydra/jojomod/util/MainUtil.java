@@ -4064,6 +4064,10 @@ public class MainUtil {
                 fm.use(player.level(), player, hand);
                 FirearmItem.cycleReload = false;
             }
+        } else if (context == PacketDataIndex.EXIT_GER_CUTSCENE) {
+            if (PowerTypes.getPlaneOfExisting(player) == 13) {
+                PowerTypes.setPlaneOfExisting(player, (byte) 0);
+            }
         }
     }
 

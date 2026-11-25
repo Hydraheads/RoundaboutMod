@@ -409,6 +409,7 @@
     "freezing.FrozenAbstractZombieModel",
     "freezing.FrozenHumanoidModel",
     "freezing.FrozenSkeletonModel",
+    "gold_experience.GERNetherDisguise",
     "gravity.client.GravityBiomeAmbientSoundsHandlerMixin",
     "gravity.client.GravityCameraMixin",
     "gravity.client.GravityClientPacketListener",

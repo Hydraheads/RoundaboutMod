@@ -211,10 +211,15 @@ public class PowersGER extends PowersGoldExperience {
 
     // infinite death start
 
+    @Override
     public boolean onKilledEntity(ServerLevel $$0, LivingEntity victim) {
         if ( victim.getLastDamageSource() != null &&  victim.getLastDamageSource().is(ModDamageTypes.GER_STAND)) {
             if (victim instanceof ServerPlayer serverPlayer) {
-                ((IPlayerEntity) serverPlayer).rdbt$setPendingGerCutscene(true);
+                // look at PlayerEntityServer for how the death loop is handled
+                IPlayerEntity ipe = (IPlayerEntity) serverPlayer;
+                if (ipe.rdbt$getGerDeathLoops() <= 0) {
+                    ipe.rdbt$setGerDeathLoops(10);
+                }
             }
         }
         return super.onKilledEntity($$0, victim);

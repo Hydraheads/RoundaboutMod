@@ -9,6 +9,7 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.ILevelRenderer;
 import net.hydra.jojomod.client.ClientEffectUtil;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.GERNetherIllusionHelper;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.TimeSkipSnapshot;
@@ -478,7 +479,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
     @Inject(method = "renderClouds",
             at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$renderClouds(PoseStack $$0, Matrix4f $$1, float $$2, double $$3, double $$4, double $$5, CallbackInfo ci) {
-        if (ClientUtil.isUsingTimeErase || ClientUtil.isUnderRTZ()) {
+        if (ClientUtil.isUsingTimeErase || ClientUtil.isUnderRTZ() || GERNetherIllusionHelper.active) {
             ci.cancel();
         }
     }
@@ -1087,6 +1088,14 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
             RPostShaderRegistry.InverseProjectionMatrix.invert();
         }
         if (ClientUtil.isUnderRTZ() && ClientUtil.rtzTicks >= 4 && ClientUtil.rtzTicks < ClientUtil.RTZ_DURATION - 4) {
+            ci.cancel();
+        }
+    }
+
+    @Inject(method = "renderSky",
+            at = @At(value = "HEAD"), cancellable = true)
+    private void roundabout$cancelNetherIllusionSky(PoseStack $$0, Matrix4f $$1, float $$2, Camera $$3, boolean $$4, Runnable $$5, CallbackInfo ci) {
+        if (GERNetherIllusionHelper.active) {
             ci.cancel();
         }
     }

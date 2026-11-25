@@ -1,11 +1,14 @@
 package net.hydra.jojomod.mixin.gravity.client;
 
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.renderer.ScreenEffectRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -23,6 +26,12 @@ public abstract class GravityScreenEffectRenderer {
             cancellable = true
     )
     private static void inject_getInWallBlockState(Player player, CallbackInfoReturnable<BlockState> cir) {
+        if (player != null
+                && PowerTypes.getPlaneOfExisting(player) == 13
+                && player.hasEffect(MobEffects.MOVEMENT_SLOWDOWN)) {
+            cir.setReturnValue(Blocks.SAND.defaultBlockState());
+        }
+
         Direction gravityDirection = GravityAPI.getGravityDirection(player);
         if (gravityDirection == Direction.DOWN) return;
 
