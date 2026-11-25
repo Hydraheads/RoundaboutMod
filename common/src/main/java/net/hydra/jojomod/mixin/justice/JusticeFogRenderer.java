@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.access.IClientLevel;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.DiverDownControlsClient;
+import net.hydra.jojomod.client.GERNetherIllusionHelper;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -275,6 +276,44 @@ public class JusticeFogRenderer {
         fogRed = r;
         fogGreen = g;
         fogBlue =b;
+    }
+
+    @Inject(method = "setupFog", at = @At("TAIL"))
+    private static void roundabout$gerNetherIllusionFog(
+            Camera camera,
+            FogRenderer.FogMode mode,
+            float renderDistance,
+            boolean thickFog,
+            float partialTick,
+            CallbackInfo ci) {
+        if ((!GERNetherIllusionHelper.active && !GERNetherIllusionHelper.endActive)
+                || camera.getFluidInCamera() != FogType.NONE) return;
+
+        RenderSystem.setShaderFogStart(0.0F);
+        RenderSystem.setShaderFogEnd(Math.min(renderDistance, 48.0F));
+    }
+
+    @Inject(method = "setupColor", at = @At("RETURN"))
+    private static void roundabout$gerNetherIllusionFogColor(
+            Camera camera,
+            float partialTick,
+            ClientLevel level,
+            int renderDistance,
+            float darkenWorldAmount,
+            CallbackInfo ci) {
+        if ((!GERNetherIllusionHelper.active && !GERNetherIllusionHelper.endActive)
+                || camera.getFluidInCamera() != FogType.NONE) return;
+
+        if (GERNetherIllusionHelper.endActive) {
+            fogRed = 0.05F;
+            fogGreen = 0.03F;
+            fogBlue = 0.08F;
+        } else {
+            fogRed = 0.2F;
+            fogGreen = 0.03F;
+            fogBlue = 0.03F;
+        }
+        RenderSystem.clearColor(fogRed, fogGreen, fogBlue, 1.0F);
     }
 
     //basically the same checks as above, but this time for color

@@ -6,6 +6,7 @@ import net.hydra.jojomod.client.KeyboardPilotInput;
 import net.hydra.jojomod.entity.SilverChariotMountEntity;
 import net.hydra.jojomod.entity.corpses.FallenPhantom;
 import net.hydra.jojomod.entity.stand.SilverChariotEntity;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.*;
 import net.minecraft.client.Minecraft;
@@ -13,6 +14,7 @@ import net.minecraft.client.Options;
 import net.minecraft.client.player.Input;
 import net.minecraft.client.player.KeyboardInput;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -38,7 +40,8 @@ public abstract class KeysKeyboardInput extends Input {
                     || (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy CB && CB.invincibleState)
                     || (user.roundabout$getStandPowers() instanceof PowersCream PC && PC.getTransformTimer() > 0)
                     || (user.roundabout$getStandPowers() instanceof PowersTusk PT && PT.getActivePower() == PowersTusk.FLATTEN)
-                    || user.roundabout$hasSpringLegs() || user.roundabout$hasGERooted();
+                    || user.roundabout$hasSpringLegs() || user.roundabout$hasGERooted()
+                    || (PowerTypes.getPlaneOfExisting(player) == 13 && !player.level().getEntitiesOfClass(FallingBlockEntity.class, player.getBoundingBox().inflate(8.0D, 40.0D, 8.0D)).isEmpty());
                     // || (user.roundabout$getStand() instanceof SilverChariotEntity sc && sc.isSelfCarryModeActive());
 
             boolean forwardKeys = user.roundabout$hasRibcageTrap();

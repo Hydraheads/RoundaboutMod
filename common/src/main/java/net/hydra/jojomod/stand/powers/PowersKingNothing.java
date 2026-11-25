@@ -104,8 +104,6 @@ public class PowersKingNothing extends NewDashPreset {
             PHASE = 33,
             FOUND_ITEM = 34;
 
-    public static final byte SYNC_TRACKING = 50;
-
     // tags
     public static final String
             MEMORIZED_BLOCK_TAG = "memorizedBlock",
@@ -364,7 +362,7 @@ public class PowersKingNothing extends NewDashPreset {
             normalXIcon = false;
         }
         else if (isTrackingItem() || isTrackingMemorizedScent()) {
-            setSkillIcon(context, x, y, 1, StandIcons.KING_NOTHING_REFORM, PowerIndex.SKILL_1_SNEAK);
+            setSkillIcon(context, x, y, 1, StandIcons.KING_NOTHING_REFORM, isTrackingItem() ? PowerIndex.SKILL_1_SNEAK : PowerIndex.SKILL_1);
             normalZIcon = false;
         }
         if (isHoldingSneak()) {
@@ -660,7 +658,7 @@ public class PowersKingNothing extends NewDashPreset {
                                 && PKC.timeEraseActive && PKC.activeClone != null) {
                             player = PKC.activeClone;
                         }
-                        hasTarget = player == null || PowerTypes.isInADifferentExistence(player, this.getSelf());
+                        hasTarget = player == null || PowerTypes.isInADifferentExistence(player, this.getSelf()) || player.distanceTo(getSelf()) > 64;
                     }
                     case TrackingCloudEntity.MOB -> {
                         List<Entity> list = this.getSelf().level().getEntities(this.getSelf(), this.getSelf().getBoundingBox().inflate(64f),
@@ -702,14 +700,6 @@ public class PowersKingNothing extends NewDashPreset {
                             offset.x(), offset.y(), offset.z(), 1, 0.5, 0.5, 0.5, 0.05);
                 }
             }
-        }
-    }
-
-    private void syncTracking(boolean isOut) {
-        int status = (isOut ? 1 : 0);
-        this.updatePowerInt(SYNC_TRACKING, status);
-        if (this.getSelf() instanceof Player) {
-            S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), SYNC_TRACKING, status);
         }
     }
 
@@ -1310,26 +1300,17 @@ public class PowersKingNothing extends NewDashPreset {
         return super.setPowerOther(move, lastMove);
     }
 
-    @Override
-    public void updatePowerInt(byte activePower, int data) {
-        switch (activePower) {
-            case SYNC_TRACKING -> {
-                if (data == 0) {
-                    this.isTrackingMemorizedScent = false;
-                }
-                else if (data == 1) {
-                    isTrackingMemorizedScent = true;
-                }
-            }
-        }
-        super.updatePowerInt(activePower, data);
-    }
-
     private boolean startMemorizedScentTrack() {
-        animateStand(KingNothingEntity.DISINTEGRATE);
-        playSoundsIfNearby(DISINTEGRATE, 27, false);
-        isTrackingMemorizedScent = true;
-        disintegrateAnimTicks = 0;
+        if (!onCooldown(PowerIndex.SKILL_1)) {
+            if (!isClient()) {
+                S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, 20);
+                this.setCooldown(PowerIndex.SKILL_1, 20);
+            }
+            animateStand(KingNothingEntity.DISINTEGRATE);
+            playSoundsIfNearby(DISINTEGRATE, 27, false);
+            isTrackingMemorizedScent = true;
+            disintegrateAnimTicks = 0;
+        }
         return true;
     }
 
@@ -1376,14 +1357,14 @@ public class PowersKingNothing extends NewDashPreset {
     }
 
     public void tryTrackMemorizedScent() {
-        if (!isPhasing()) {
+        if (!isPhasing() && !onCooldown(PowerIndex.SKILL_1)) {
             this.getStandUserSelf().roundabout$tryPower(PowerIndex.POWER_1, true);
             tryPowerPacket(PowerIndex.POWER_1);
         }
     }
 
     private void tryEndMemorizedScentTrack() {
-        if (!onCooldown(PowerIndex.POWER_1)) {
+        if (!onCooldown(PowerIndex.SKILL_1)) {
             this.getStandUserSelf().roundabout$tryPower(PowerIndex.POWER_1_BONUS, true);
             tryPowerPacket(PowerIndex.POWER_1_BONUS);
         }
@@ -1408,11 +1389,15 @@ public class PowersKingNothing extends NewDashPreset {
     }
 
     private boolean endMemorizedScentTrack() {
-        if (isTrackingMemorizedScent() && !onCooldown(PowerIndex.SKILL_1)) {
+        if (!onCooldown(PowerIndex.SKILL_1)) {
             this.isTrackingMemorizedScent = false;
-            if (!this.isClient() && trackingCloud != null) {
-                this.trackingCloud.discard();
-                this.trackingCloud = null;
+            if (!this.isClient()) {
+                S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, 20);
+                this.setCooldown(PowerIndex.SKILL_1, 20);
+                if (trackingCloud != null) {
+                    this.trackingCloud.discard();
+                    this.trackingCloud = null;
+                }
             }
             playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);
             animateStand(KingNothingEntity.RETURN);
@@ -1671,8 +1656,8 @@ public class PowersKingNothing extends NewDashPreset {
     }
 
     private void damageHeld(ItemStack held, StandEntity stand, LivingEntity self) {
-        if (held.isDamageableItem() && !getCreative()) {
-            if (held.hurt(1, stand.level().getRandom(), null)) {
+        if (held.isDamageableItem()) {
+            if (held.hurt(1, stand.level().getRandom(), ((ServerPlayer) getSelf()))) {
                 stand.setHeldItem(ItemStack.EMPTY);
                 playSoundIfPossible(self.level(), null, self.blockPosition(), SoundEvents.ITEM_BREAK,
                         SoundSource.PLAYERS, 1.7f, 1.3f);
@@ -2071,6 +2056,7 @@ public class PowersKingNothing extends NewDashPreset {
 
     private void memorizeBlock(BlockPos blockPos) {
         Block block = this.getSelf().level().getBlockState(blockPos).getBlock();
+        block = MainUtil.KING_NOTHING_BLOCK_SNIFF_OVERRIDES.getOrDefault(block, block);
         if (isMemorizableBlock(block)) {
             if (getSelf() instanceof Player PE) {
                 PE.displayClientMessage(block.getName().withStyle(ChatFormatting.DARK_PURPLE), true);
@@ -2105,7 +2091,7 @@ public class PowersKingNothing extends NewDashPreset {
     }
 
     private boolean isMemorizableBlock(Block block) {
-        return !block.asItem().equals(Items.AIR) && !(block instanceof FogBlock) && block.defaultDestroyTime() >= 0
+        return !(block.asItem().equals(Items.AIR)) && !(block instanceof FogBlock) && block.defaultDestroyTime() >= 0
                 && !MainUtil.isBlockSniffBlacklisted(block);
     }
 
@@ -2126,7 +2112,7 @@ public class PowersKingNothing extends NewDashPreset {
             this.memorizedEntityType = null;
         }
         else {
-            this.memorizedEntityType = entity.getType();
+            this.memorizedEntityType = MainUtil.KING_NOTHING_ENTITY_SNIFF_OVERRIDES.getOrDefault(entity.getType(), entity.getType());
             this.memorizedPlayer = null;
         }
         this.memorizedBlock = null;

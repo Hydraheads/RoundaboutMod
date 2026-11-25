@@ -475,7 +475,7 @@ public enum PowerTypes {
         return 200;
     }
     public static int getForeignWorldMaxTime(byte worldType){
-        if (worldType == 0 || worldType == 10){
+        if (worldType == 0 || worldType == 10 || worldType == 13){
             return -1;
         }
         if (worldType <= 8){
@@ -483,10 +483,6 @@ public enum PowerTypes {
         }
         if (worldType == 11){
             return 400;
-        }
-        // making infinite death transfer time a short number for now so i can test stuff, eventually make it return -1
-        if (worldType == 13){
-            return 100;
         }
         return 1000;
     }

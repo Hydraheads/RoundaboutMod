@@ -82,7 +82,7 @@ public class TrackingCloudEntity extends StandEntity {
                             && PKC.timeEraseActive && PKC.activeClone != null) {
                         player = PKC.activeClone;
                     }
-                    else if (PowerTypes.isInADifferentExistence(player, this)) {
+                    else if (PowerTypes.isInADifferentExistence(player, this) || distanceTo(player) > 64) {
                         hasTarget = false;
                         break;
                     }

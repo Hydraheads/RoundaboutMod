@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 public interface StandUserClient {
     /**This is for EVERY client to individually save sounds and other client variables on entities clientside.
      * It's how we cancel out barrage sounds on a per entity basis.*/
-    void roundabout$clientQueSound(byte soundChoice);
+    void roundabout$clientQueSound(byte soundChoice, boolean isVoice);
     void roundabout$clientPlaySound();
     void roundabout$clientPlaySoundIfNoneActive(byte soundChoice);
 

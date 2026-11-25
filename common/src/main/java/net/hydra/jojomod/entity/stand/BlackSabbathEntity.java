@@ -1579,6 +1579,12 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                     this.getNavigation().setSpeedModifier(2.25);
                                     if (targetSabbath() != null && isTouchingTarget(targetSabbath())) {
                                         if (!isBlackSabbathUnderLight()) {
+                                            if (!this.level().isClientSide() && ((StandUser) targetSabbath()).roundabout$getStandPowers() instanceof PowersGER) {
+                                                // trigger RTZ for both BS and the user
+                                                MainUtil.triggerRTZ(this.getUser(), targetSabbath());
+                                                MainUtil.triggerRTZ(this, targetSabbath());
+                                                return;
+                                            }
                                             if (!this.level().isClientSide()) {
                                                 setGrabbing(targetSabbath().getId());
                                                 if(level().getEntity(getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabberSabbath(this.getId());}

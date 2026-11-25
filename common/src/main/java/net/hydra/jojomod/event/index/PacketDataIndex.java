@@ -81,6 +81,7 @@ public class PacketDataIndex {
     public static final byte FIX_COOLDOWN_FOR_SERVER = 50;
     public static final byte SINGLE_STAND_TRIGGER = 52;
     public static final byte SINGLE_STAND_TRIGGER_2 = 53;
+    public static final byte EXIT_GER_CUTSCENE = 55;
 
     /**Byte packets*/
     public static final byte BYTE_CHANGE_MORPH = 6;
@@ -144,6 +145,7 @@ public class PacketDataIndex {
     public static final byte S2C_KN_REMOVE_HIGHLIGHT_ENTITY = 35;
     public static final byte S2C_KN_SYNC_FORM_PREDICT_BLOCK = 36;
     public static final byte S2C_KN_SYNC_FORM_PREDICT_ENTITY = 37;
+    public static final byte S2C_TUSK_DEATH_TARGET_SYNC = 38;
 
 
     /**S2C BUNDLE packets*/

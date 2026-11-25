@@ -435,6 +435,10 @@ public class ForgeParticles {
             "golden_spiral",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> INFINITE_SPIN = PARTICLES.register(
+            "infinite_spin",
+            () -> new SimpleParticleType(true)
+    );
 
     public static final RegistryObject<SimpleParticleType> METALLICA_FIELD_PNG = PARTICLES.register("metallica_field_png", () -> new SimpleParticleType(true));
 
