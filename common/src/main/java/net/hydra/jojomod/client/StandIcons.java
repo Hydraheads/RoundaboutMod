@@ -580,6 +580,8 @@ public class StandIcons {
             "textures/gui/icons/jjf/shoot.png");
     public static final ResourceLocation JJF_UNLOADING_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/jjf/unload.png" );
+    public static final ResourceLocation JJF_LOAD_SPIT_ICON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/jjf/load_spit.png");
     public static final ResourceLocation JJF_SPIT_ICON = new ResourceLocation( Roundabout.MOD_ID,
             "textures/gui/icons/jjf/spit.png");
     public static final ResourceLocation JJF_PUNCH_ICON = new ResourceLocation(Roundabout.MOD_ID,

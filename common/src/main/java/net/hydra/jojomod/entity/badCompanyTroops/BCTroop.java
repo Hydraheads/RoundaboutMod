@@ -85,12 +85,13 @@ public class BCTroop extends MultipleTypeStand {
     public static int getTroopValue() {
         return 1;
     }
+    public boolean isDisplay = false;
 
     public void tick() {
         super.tick();
-        if ((getCurrentTactic() == BadCompanyTactics.RETURN.id) && distanceTo(getUser()) < 1.8
+        if (!isDisplay && ((getCurrentTactic() == BadCompanyTactics.RETURN.id) && distanceTo(getUser()) < 1.8
                 || (getUser() != null && MainUtil.cheapDistanceTo2(this.getX(), this.getZ(), getUser().getX(), getUser().getZ())
-                > getMaximumRange())) {
+                > getMaximumRange()))) {
             discard();
         }
         if (fireCooldown > 0) {

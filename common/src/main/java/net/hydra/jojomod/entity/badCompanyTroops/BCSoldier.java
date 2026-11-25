@@ -6,6 +6,7 @@ import net.hydra.jojomod.entity.goals.badCompanyGoals.*;
 import net.hydra.jojomod.entity.projectile.BadCompanyBulletEntity;
 import net.hydra.jojomod.event.index.BadCompanyTactics;
 import net.hydra.jojomod.sound.ModSounds;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -70,7 +71,7 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
 
     public final static float width = 0.35f;
     public final static float height = 0.32f;
-    public boolean isDisplay = false;
+
     public boolean isShooting = false;
 
     public final AnimationState releaseParachute = new AnimationState();
@@ -222,7 +223,7 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
         return shootAtPosition(target, true);
     }
     public boolean shootAtPosition(Vec3 target, boolean look) {
-        if (look) getLookControl().setLookAt(target);
+        if (look) lookAt(EntityAnchorArgument.Anchor.FEET, target);
 
         getNavigation().stop();
         shootingTicks = getFireCooldownMax()+5;

@@ -18,6 +18,21 @@ public class JumpinJackFlashRenderer
                     "textures/stand/jjf/jumpin_jack_flash.png"
             );
 
+    private static final ResourceLocation BLACK_FLASH =
+            new ResourceLocation(Roundabout.MOD_ID, "textures/stand/jjf/black_flash.png");
+
+    private static final ResourceLocation ASTRONAUT =
+            new ResourceLocation(Roundabout.MOD_ID, "textures/stand/jjf/astronaut.png");
+
+    public static ResourceLocation textureForSkin(byte skin) {
+        return switch (skin) {
+            case 1 -> BLACK_FLASH;
+            case 2 -> ASTRONAUT;
+            default -> TEXTURE;
+        };
+    }
+
+
     public JumpinJackFlashRenderer(EntityRendererProvider.Context context) {
         super(
                 context,
@@ -46,6 +61,6 @@ public class JumpinJackFlashRenderer
     public ResourceLocation getTextureLocation(
             JumpinJackFlashEntity entity
     ) {
-        return TEXTURE;
+        return textureForSkin(entity.getSkin());
     }
 }
