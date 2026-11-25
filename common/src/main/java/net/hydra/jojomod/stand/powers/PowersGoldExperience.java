@@ -305,7 +305,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     private LifePunchCloneEntity lifePunchClone = null;
     private LivingEntity lifePunchVictim = null;
     private int lifePunchTimer = 0;
-    private float lastKnownHealth = 0;
+    private float lifePunchStartHealth = 0.0F;
     private final Map<Integer, Integer> disabledMobTimers = new HashMap<>();
 
     // for brambles
@@ -413,37 +413,13 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // stand rejection start
 
     @Override
-    public void tickStandRejection(MobEffectInstance effect){
+    public void tickStandRejection(MobEffectInstance effect) {
         if (!this.getSelf().level().isClientSide()) {
             if (effect.getDuration() == 200) {
                 playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GOLD_EXPERIENCE_LIFE_PUNCH_EVENT, SoundSource.PLAYERS, 0.95F, 1.1F);
                 LivingEntity LE = this.getSelf();
-                if (LE instanceof Player) {
-                    // IMPORTANT FAILSAFE: If someone else gets Life Punched, restore previous victim first
-                    if (lifePunchVictim != null && lifePunchVictim != LE) {
-                        restoreLifePunchVictim();
-                    }
-                    // punch the SOUL outta them
-                    PowerTypes.setPlaneOfExisting(LE, (byte) 12);
-                    // spawn a Life Punch Clone in their place
-                    LifePunchCloneEntity clone = ModEntities.LIFE_PUNCH_CLONE.create(this.self.level());
-                    if (clone != null) {
-                        clone.setPlayer((Player) LE);
-                        clone.copyPosition(LE);
-                        clone.setHealth(LE.getHealth());
-                        clone.getAttribute(Attributes.MAX_HEALTH).setBaseValue(LE.getMaxHealth());
-                        // copy inventory
-                        for (EquipmentSlot slot : EquipmentSlot.values()) {
-                            clone.setItemSlot(slot, LE.getItemBySlot(slot).copy());
-                        }
-                        clone.setTarget((LivingEntity) this.self);
-                        this.self.level().addFreshEntity(clone);
-                        // track the victim
-                        lifePunchVictim = LE;
-                        lifePunchClone = clone;
-                        lifePunchTimer = 180; // 9 seconds
-                        lastKnownHealth = clone.getHealth();
-                    }
+                if (LE instanceof Player player) {
+                    startLifePunchOnPlayer(player, 180);
                 } else if (LE instanceof Mob mob) {
                     ((StandUser) mob).roundabout$deeplyRemoveAttackTarget();
                     mob.getNavigation().stop();
@@ -451,12 +427,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 }
             }
             tickLifePunch();
-            // failsafe just in case it doesn't tick properly
             if (effect.getDuration() <= 1 && lifePunchVictim != null) {
-                if (lifePunchClone != null) {
-                    lifePunchVictim.teleportTo(lifePunchClone.getX(), lifePunchClone.getY(), lifePunchClone.getZ());
-                }
-                restoreLifePunchVictim();
+                finishLifePunch(true);
             }
         }
     }
@@ -3465,33 +3437,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
                     if (entity instanceof LivingEntity LE) {
                         addEXP(5, LE);
                         if (!this.self.level().isClientSide()) {
-                            if(LE instanceof Player) {
-                                // IMPORTANT FAILSAFE: If someone else gets Life Punched, restore previous victim first
-                                if (lifePunchVictim != null && lifePunchVictim != LE) {
-                                    restoreLifePunchVictim();
-                                }
-                                // punch the SOUL outta them
-                                PowerTypes.setPlaneOfExisting(LE, (byte) 12);
-                                // spawn a Life Punch Clone in their place
-                                LifePunchCloneEntity clone = ModEntities.LIFE_PUNCH_CLONE.create(this.self.level());
-                                if (clone != null) {
-                                    clone.setPlayer((Player) LE);
-                                    clone.copyPosition(LE);
-                                    clone.setHealth(LE.getHealth());
-                                    clone.getAttribute(Attributes.MAX_HEALTH).setBaseValue(LE.getMaxHealth());
-                                    // copy inventory
-                                    for (EquipmentSlot slot : EquipmentSlot.values()) {
-                                        clone.setItemSlot(slot, LE.getItemBySlot(slot).copy());
-                                    }
-                                    clone.setTarget((LivingEntity) this.self);
-                                    this.self.level().addFreshEntity(clone);
-                                    ((StandUser) LE).roundabout$setLifePunchClone(clone);
-                                    // track the victim
-                                    lifePunchVictim = LE;
-                                    lifePunchClone = clone;
-                                    lifePunchTimer = 40; // 2 seconds
-                                    lastKnownHealth = clone.getHealth();
-                                }
+                            if (LE instanceof Player player) {
+                                startLifePunchOnPlayer(player, 40);
                             } else if (LE instanceof Mob mob) {
                                 ((StandUser) mob).roundabout$deeplyRemoveAttackTarget();
                                 mob.getNavigation().stop();
@@ -3662,18 +3609,119 @@ public class PowersGoldExperience extends BlockGrabPreset {
         }
     }
 
-    private void restoreLifePunchVictim() {
-        if (lifePunchVictim != null) {
-            PowerTypes.setPlaneOfExisting(lifePunchVictim, (byte)0);
-            ((StandUser) lifePunchVictim).roundabout$setLifePunchClone(null);
+    private void startLifePunchOnPlayer(Player victim, int durationTicks) {
+        // IMPORTANT FAILSAFE: If someone else gets Life Punched, restore previous victim first
+        if (lifePunchVictim != null && lifePunchVictim != victim) {
+            finishLifePunch(true);
         }
-        if (lifePunchClone != null) {
-            lifePunchClone.discard();
+        // punch the SOUL outta them
+        PowerTypes.setPlaneOfExisting(victim, (byte) 12);
+        // spawn a Life Punch Clone in their place
+        LifePunchCloneEntity clone = ModEntities.LIFE_PUNCH_CLONE.create(this.self.level());
+        if (clone != null) {
+            clone.setPlayer(victim);
+            clone.copyPosition(victim);
+            clone.getAttribute(Attributes.MAX_HEALTH).setBaseValue(victim.getMaxHealth());
+            clone.setHealth(victim.getHealth());
+            // copy inventory
+            for (EquipmentSlot slot : EquipmentSlot.values()) {
+                clone.setItemSlot(slot, victim.getItemBySlot(slot).copy());
+                clone.setDropChance(slot, 0.0F);
+            }
+            for (MobEffectInstance effect : victim.getActiveEffects()) {
+                clone.addEffect(new MobEffectInstance(effect));
+            }
+            clone.setRemainingFireTicks(victim.getRemainingFireTicks());
+
+            StandUser victimUser = (StandUser) victim;
+            StandUser cloneUser = (StandUser) clone;
+            cloneUser.roundabout$setDazeTime(victimUser.roundabout$getDazeTime());
+            cloneUser.roundabout$setOnStandFire(victimUser.roundabout$getOnStandFire());
+            cloneUser.roundabout$setRemainingStandFireTicks(victimUser.roundabout$getRemainingFireTicks());
+            cloneUser.roundabout$setBubbleEncased(victimUser.roundabout$getBubbleEncased());
+            cloneUser.roundabout$setLocacacaCurse(victimUser.roundabout$getLocacacaCurse());
+            cloneUser.roundabout$setGasolineTime(victimUser.roundabout$getGasolineTime());
+
+            clone.setTarget((LivingEntity) this.self);
+            this.self.level().addFreshEntity(clone);
+            victimUser.roundabout$setLifePunchClone(clone);
+            // track the victim
+            lifePunchVictim = victim;
+            lifePunchClone = clone;
+            lifePunchTimer = durationTicks;
+            lifePunchStartHealth = victim.getHealth();
         }
+    }
+
+    private void finishLifePunch(boolean applyDamage) {
+        LivingEntity victim = lifePunchVictim;
+        LifePunchCloneEntity clone = lifePunchClone;
+        float startHealth = lifePunchStartHealth;
+
         lifePunchVictim = null;
         lifePunchClone = null;
         lifePunchTimer = 0;
-        lastKnownHealth = 0;
+        lifePunchStartHealth = 0.0F;
+
+        if (victim != null) {
+            PowerTypes.setPlaneOfExisting(victim, (byte) 0);
+            ((StandUser) victim).roundabout$setLifePunchClone(null);
+
+            if (clone != null && victim.isAlive()) {
+                // restore the victim
+                Vector3f blipVec = new Vector3f(
+                        (float) clone.getX(),
+                        (float) clone.getY(),
+                        (float) clone.getZ()
+                );
+                packetNearby(blipVec, victim.getId());
+                victim.teleportTo(clone.getX(), clone.getY(), clone.getZ());
+                victim.setYRot(clone.getYRot());
+                victim.setXRot(clone.getXRot());
+                victim.setDeltaMovement(Vec3.ZERO);
+
+                // transfer effects from clone to victim
+                for (MobEffectInstance effect : clone.getActiveEffects()) {
+                    if (!victim.hasEffect(effect.getEffect())) {
+                        victim.addEffect(new MobEffectInstance(effect));
+                    }
+                }
+                if (clone.getRemainingFireTicks() > victim.getRemainingFireTicks()) {
+                    victim.setRemainingFireTicks(clone.getRemainingFireTicks());
+                }
+
+                // transfer damage from clone to victim
+                if (applyDamage) {
+                    LivingEntity attacker = clone.getLastHurtByMob() != null ? clone.getLastHurtByMob() : this.self;
+                    DamageSource transferSource = attacker instanceof Player player
+                            ? victim.damageSources().playerAttack(player)
+                            : victim.damageSources().mobAttack(attacker);
+
+                    if (!clone.isAlive() || clone.getHealth() <= 0.0F) {
+                        // clone died, victim takes fatal damage
+                        victim.getCombatTracker().recordDamage(transferSource, victim.getHealth());
+                        victim.setHealth(0.0F);
+                        victim.die(transferSource);
+                    } else if (clone.getHealth() < startHealth) {
+                        float damageTaken = startHealth - clone.getHealth();
+                        float newHealth = Math.max(0.0F, victim.getHealth() - damageTaken);
+                        victim.getCombatTracker().recordDamage(transferSource, damageTaken);
+                        if (attacker instanceof Player player) {
+                            victim.setLastHurtByPlayer(player);
+                        } else {
+                            victim.setLastHurtByMob(attacker);
+                        }
+                        victim.setHealth(newHealth);
+                        if (newHealth <= 0.0F) {
+                            victim.die(transferSource);
+                        }
+                    }
+                }
+            }
+        }
+        if (clone != null && !clone.isRemoved()) {
+            clone.discard();
+        }
     }
 
     // no lerp when teleporting
@@ -3701,55 +3749,24 @@ public class PowersGoldExperience extends BlockGrabPreset {
         // tick down Life Punch timer
         if (lifePunchTimer > 0 && lifePunchVictim != null && lifePunchClone != null) {
             if (!this.self.isAlive()) {
-                restoreLifePunchVictim();
+                finishLifePunch(true);
             }
             // check if either entity is gone
-            if (!lifePunchVictim.isAlive() || !lifePunchClone.isAlive()) {
-                if (lifePunchVictim.isAlive()) {
-                    // clone died, victim takes fatal damage
-                    lifePunchVictim.hurt(lifePunchVictim.damageSources().generic(), 9999);
-                }
-                restoreLifePunchVictim();
+            else if (!lifePunchVictim.isAlive() || !lifePunchClone.isAlive()) {
+                finishLifePunch(true);
             } else {
-                // transfer damage from clone to victim
-                float currentHealth = lifePunchClone.getHealth();
-                if (currentHealth < lastKnownHealth) {
-                    float damage = lastKnownHealth - currentHealth;
-                    lifePunchVictim.hurt(lifePunchVictim.damageSources().generic(), damage);
-                    lifePunchClone.setHealth(lastKnownHealth); // reset clone health
-                }
-                lastKnownHealth = lifePunchClone.getHealth();
-
-                // transfer effects from clone to victim
-                for (MobEffectInstance effect : lifePunchClone.getActiveEffects()) {
-                    if (!lifePunchVictim.hasEffect(effect.getEffect())) {
-                        lifePunchVictim.addEffect(new MobEffectInstance(effect));
-                    }
-                }
-
                 // tick down timer
                 lifePunchTimer--;
                 if (lifePunchTimer <= 0) {
-                    // restore the victim
-                    Vector3f blipVec = new Vector3f(
-                            (float) lifePunchClone.getX(),
-                            (float) lifePunchClone.getY(),
-                            (float) lifePunchClone.getZ()
-                    );
-                    packetNearby(blipVec, lifePunchVictim.getId());
-                    lifePunchVictim.teleportTo(lifePunchClone.getX(), lifePunchClone.getY(), lifePunchClone.getZ());
-                    lifePunchVictim.setYRot(lifePunchClone.getYRot());
-                    lifePunchVictim.setXRot(lifePunchClone.getXRot());
-                    lifePunchVictim.setDeltaMovement(Vec3.ZERO);
-                    restoreLifePunchVictim();
+                    finishLifePunch(true);
                 }
             }
         }
 
         // for mob life punch stuff
-        Iterator<Map.Entry<Integer, Integer>> it = disabledMobTimers.entrySet().iterator();
+        var it = disabledMobTimers.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry<Integer, Integer> entry = it.next();
+            var entry = it.next();
             int mobId = entry.getKey();
             int ticksLeft = entry.getValue();
             Entity mobEntity = this.self.level().getEntity(mobId);
