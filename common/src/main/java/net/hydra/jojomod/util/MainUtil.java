@@ -3025,14 +3025,21 @@ public class MainUtil {
     }
 
     public static boolean hidesPotionEffectSwirl(MobEffect value) {
-        return value.equals(ModEffects.BLEED) || value.equals(ModEffects.CAPTURING_LOVE)
+        return value.equals(ModEffects.BLEED)
+                || value.equals(ModEffects.CAPTURING_LOVE)
                 || value.equals(ModEffects.FACELESS)
-                || value.equals(ModEffects.BANISH) || value.equals(ModEffects.WARDING) || value.equals(ModEffects.HEX)
+                || value.equals(ModEffects.BANISH)
+                || value.equals(ModEffects.WARDING)
+                || value.equals(ModEffects.HEX)
                 || value.equals(ModEffects.DOOMED)
-                || value.equals(ModEffects.SWITCH) || value.equals(ModEffects.MELTING) ||
-                value.equals(ModEffects.IMPRINTING) || value.equals(ModEffects.SWAPPED)
-                || value.equals(ModEffects.STAND_MELTING) ||
-                value.equals(ModEffects.SINGE) || value.equals(ModEffects.STITCHED);
+                || value.equals(ModEffects.SWITCH)
+                || value.equals(ModEffects.MELTING)
+                || value.equals(ModEffects.IMPRINTING)
+                || value.equals(ModEffects.SWAPPED)
+                || value.equals(ModEffects.STAND_MELTING)
+                || value.equals(ModEffects.SINGE)
+                || value.equals(ModEffects.INFINITE_SPIN)
+                || value.equals(ModEffects.STITCHED);
     }
 
     public static boolean isKnockbackResilient(LivingEntity LE) {

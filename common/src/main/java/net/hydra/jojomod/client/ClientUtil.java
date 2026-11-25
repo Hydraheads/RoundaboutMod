@@ -1363,6 +1363,11 @@ public class ClientUtil {
             if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingNothing kn) {
                 kn.setMemorizedScent(BuiltInRegistries.ENTITY_TYPE.byId(data));
             }
+        } else if (context == PacketDataIndex.S2C_TUSK_DEATH_TARGET_SYNC) {
+            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersTusk PT) {
+                Roundabout.LOGGER.info(""+player.level().getEntity(data));
+                PT.deathTarget = player.level().getEntity(data);
+            }
         }
     }
     public static void handleDoubleIntPacketS2C(Player player, int data, int data2, byte context) {

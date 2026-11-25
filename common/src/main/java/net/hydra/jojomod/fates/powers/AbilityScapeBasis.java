@@ -3781,13 +3781,13 @@ public class AbilityScapeBasis {
             if (isInfiniteSpinning()) {
                 if (this.getSelf().tickCount%10 == 0) {
                     if (!isClient()) {
-                        Vec3 pos = this.getSelf().getEyePosition(0);
-                        pos.add(Math.random()-0.5F,Math.random()-0.5F,Math.random()-0.5F);
-                        sendParticlesIfPossible(self.level(), ModParticles.GOLDEN_SPIRAL, pos.x(),
-                                pos.y(), pos.z(),
-                                0   ,
-                                1,0.5,1,
-                                1);
+                        Vec3 pos = this.getSelf().position().add(0,this.getSelf().getEyeHeight()*0.6F,0);
+                        this.getSelf().level().addParticle(ModParticles.GOLDEN_SPIRAL,
+                                pos.x+(Math.random()-0.5F),
+                                pos.y+(Math.random()-0.5F)*2,
+                                pos.z+(Math.random()-0.5F),
+                                (Math.random()-0.5F), (Math.random()-0.35F), (Math.random()-0.5F));
+
                     }
                 }
             }

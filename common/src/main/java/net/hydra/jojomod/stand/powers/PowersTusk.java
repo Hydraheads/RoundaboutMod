@@ -28,6 +28,7 @@ import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.mixin.access.AccessAxeItem;
+import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
@@ -2441,6 +2442,7 @@ public class PowersTusk extends NewDashPreset {
             this.setActivePower(PowersTusk.DEATH_PUNCH);
             if (this.getSelf() instanceof Player P) {
                 S2CPacketUtil.sendActivePowerPacket(P,PowersTusk.DEATH_PUNCH);
+             //   sendIntPacketIfNearby(PacketDataIndex.S2C_TUSK_DEATH_TARGET_SYNC, deathTarget.getId(),50);
                 S2CPacketUtil.sendIntPowerDataPacket(P,PowersTusk.DEATH_PUNCH,deathTarget.getId());
             }
             this.setAttackTimeDuring(0);
