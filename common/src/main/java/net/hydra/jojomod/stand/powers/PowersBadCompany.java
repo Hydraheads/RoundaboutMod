@@ -206,20 +206,12 @@ public class PowersBadCompany extends NewDashPreset {
         }
     }
 
-    private void openTroopSelector() {
-        ClientUtil.openTroopSelectionScreen();
-    }
-    private void openTroopTactics() {
-        ClientUtil.openTroopTacticsScreen();
-    }
+    private void openTroopSelector() { ClientUtil.openTroopSelectionScreen(); }
+    private void openTroopTactics() { ClientUtil.openTroopTacticsScreen(); }
 
-    public void returnTroops() {
-        tryPowerPacket(PowerIndex.POWER_1_SNEAK);
-    }
+    public void returnTroops() { tryPowerPacket(PowerIndex.POWER_1_SNEAK); }
 
-    public void selectedTroop(int id) {
-        tryIntPowerPacket(PowerIndex.POWER_1, id);
-    }
+    public void selectedTroop(int id) { tryIntPowerPacket(PowerIndex.POWER_1, id); }
 
     public void selectedTactics(int id) {
         if (id == TACTIC_FIRE) {
