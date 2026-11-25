@@ -163,9 +163,10 @@ public class PowersGER extends PowersGoldExperience {
                 if (projectileSecond != null) {
                     projectileSecond.loadTime(direct);
                 }
+                return true;
             }
 
-            if (culprit instanceof LivingEntity livingCulprit) {
+            if (culprit instanceof LivingEntity livingCulprit && livingCulprit != this.getSelf()) {
                 IEntityAndData iData = (IEntityAndData) livingCulprit;
                 SavedSecond lastSecond = iData.roundabout$getLastSavedSecond();
                 if (lastSecond != null) {
@@ -202,9 +203,8 @@ public class PowersGER extends PowersGoldExperience {
                         ((IMob) mb).roundabout$setConfusionTicks(60);
                     }
                 }
+                return true;
             }
-
-            return true;
         }
 
         return super.interceptIncomingHarm(source, amount);
