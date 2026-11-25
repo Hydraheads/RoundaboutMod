@@ -9,6 +9,7 @@ import net.hydra.jojomod.event.powers.jumpingJackFlash.*;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.hydra.jojomod.entity.stand.JumpinJackFlashEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -71,6 +72,16 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
     public static final byte POWER_SHOOT_STOP_ANIMATION = 83;
     public static final byte POWER_ARMS_TOGGLE = 84;
 
+    private static final byte POWER_LOAD_SPIT = 85;
+    private static final byte POWER_STOP_LOAD_SPIT = 86;
+    private static final int SPIT_CAPACITY = 16;
+    private static final int SPIT_LOAD_INTERVAL = 20;
+    private boolean skillTwoDown;
+    private boolean spitLoadInput;
+    private int nextLoadSignal;
+    private long nextSpitRound;
+    private long nextAmmoNotice;
+
     private static final int MAX_LOADED_AMMO = 64;
 
 
@@ -101,7 +112,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
     private static final float SPIN_ATTACK_MAX_DAMAGE = 5.0F;
 
     private static final double SPIN_ATTACK_MIN_KNOCKBACK = 0.70D;
-    private static final double SPIN_ATTACK_MAX_KNOCKBACK = 3.25D;
+    private static final double SPIN_ATTACK_MAX_KNOCKBACK = 3.85D;
     private static final double SPIN_ATTACK_ZERO_G_MULTIPLIER = 1.80D;
 
     public static final byte POWER_SPIT =
@@ -118,7 +129,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
     private int jjf$attackHoldTicks = 0;
 
     private boolean jjf$spinAttackHeld = false;
-    private int jjf$spinAttackTicks = 0;
+    private int jjf$spinStartTick;
 
     private boolean jjf$skill4WasDown = false;
     private boolean jjf$armsMode = false;
@@ -198,15 +209,32 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
     }
 
     @Override
+    public List<Byte> getSkinList() {
+        return List.of((byte) 0, (byte) 1, (byte) 2);
+    }
+
+    @Override
+    public net.minecraft.network.chat.Component getSkinName(byte skinId) {
+        String key = switch (skinId) {
+            case 1 -> "skins.roundabout.jjf.black_flash";
+            case 2 -> "skins.roundabout.jjf.astronaut";
+            default -> "skins.roundabout.jjf.original";
+        };
+        return net.minecraft.network.chat.Component.translatable(key);
+    }
+
+    @Override
     public boolean canSummonStand() {
         return true;
     }
 
     @Override
     public StandEntity getNewStandEntity() {
-        return ModEntities.JUMPIN_JACK_FLASH.create(
-                this.getSelf().level()
-        );
+        var stand = ModEntities.JUMPIN_JACK_FLASH.create(getSelf().level());
+        if (stand != null && !getSelf().level().isClientSide()) {
+            stand.jjf$setArmsMode(jjf$armsMode);
+        }
+        return stand;
     }
 
     @Override
@@ -416,7 +444,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
         jjf$useHoldTicks = 0;
         jjf$autoShooting = false;
         jjf$spinAttackHeld = true;
-        jjf$spinAttackTicks = 0;
+        jjf$spinStartTick = getSelf().tickCount;
         this.attackTimeDuring = 0;
         this.setAttackTime(0);
         this.setAttackTimeMax(SPIN_ATTACK_FULL_TICKS);
@@ -431,6 +459,14 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
     public void tickPower() {
         super.tickPower();
         jjf$tickMobAI();
+        JumpinJackFlashEntity loadingStand = activeStand();
+        if (loadingStand != null && loadingStand.isLoadingSpit()) {
+            Vec3 motion = getSelf().getDeltaMovement();
+            double y = getSelf() instanceof ZeroGravityAccess access && access.jjf$getZeroGravityState().isZeroGravity()
+                    ? motion.y * 0.35D : motion.y;
+            getSelf().setDeltaMovement(motion.x * 0.35D, y, motion.z * 0.35D);
+            getSelf().setSprinting(false);
+        }
 
         if (getSelf().level().isClientSide() && isPacketPlayer()
                 && getSelf() instanceof Player player) {
@@ -506,11 +542,13 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
         start = start.add(direction.scale(0.35D));
         spit.setPos(start.x, start.y, start.z);
         spit.shoot(direction.x, direction.y, direction.z, 1.6F, 0.6F);
-        mob.level().addFreshEntity(spit);
+        spawnSpit(mob, spit);
     }
 
     @Override
     public float inputSpeedModifiers(float basis) {
+        var stand = activeStand();
+        if (stand != null && stand.isLoadingSpit()) return 0.0F;
         float modified = super.inputSpeedModifiers(basis);
 
         if (!jjf$spinAttackHeld) {
@@ -595,6 +633,91 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
             default -> {
             }
         }
+    }
+
+    @Override
+    public void buttonInput2(boolean down, Options options) {
+        var skillKey = net.hydra.jojomod.client.KeyInputRegistry.abilityTwoKey;
+        if (!down && (isHoldingSneak() || spitLoadInput)
+                && (skillKey.same(options.keyLoadHotbarActivator) || skillKey.same(options.keySaveHotbarActivator))) {
+            var key = com.mojang.blaze3d.platform.InputConstants.getKey(skillKey.saveString());
+            if (key.getType() == com.mojang.blaze3d.platform.InputConstants.Type.KEYSYM && key.getValue() >= 0) {
+                down = com.mojang.blaze3d.platform.InputConstants.isKeyDown(
+                        Minecraft.getInstance().getWindow().getWindow(), key.getValue());
+            }
+        }
+        if (down && !skillTwoDown) {
+            spitLoadInput = isHoldingSneak();
+            nextLoadSignal = getSelf().tickCount;
+        }
+        skillTwoDown = down;
+        if (spitLoadInput) {
+            if (!down || !isHoldingSneak()) {
+                if (nextLoadSignal != Integer.MAX_VALUE) {
+                    tryPowerPacket(POWER_STOP_LOAD_SPIT);
+                    nextLoadSignal = Integer.MAX_VALUE;
+                }
+                if (!down) spitLoadInput = false;
+            } else if (getSelf().tickCount >= nextLoadSignal) {
+                tryPowerPacket(POWER_LOAD_SPIT);
+                nextLoadSignal = getSelf().tickCount + 4;
+            }
+            return;
+        }
+        super.buttonInput2(down, options);
+    }
+
+    private JumpinJackFlashEntity activeStand() {
+        return getSelf() instanceof StandUser user
+                && user.roundabout$getStand() instanceof JumpinJackFlashEntity stand
+                && stand.isAlive() && net.hydra.jojomod.event.index.PowerTypes.hasStandActive(getSelf())
+                ? stand : null;
+    }
+
+    private static boolean isSpitAmmo(ItemStack stack) {
+        return stack.is(Items.SLIME_BALL) && stack.hasTag() && stack.getTag().getBoolean("JJFSpitAmmo");
+    }
+
+    private ResourceLocation getLoadSpitIcon() {
+        return Minecraft.getInstance().getResourceManager().getResource(StandIcons.JJF_LOAD_SPIT_ICON).isPresent()
+                ? StandIcons.JJF_LOAD_SPIT_ICON : StandIcons.JJF_SPIT_ICON;
+    }
+
+    private boolean canLoadSpit(Player player, JJFLauncherState launcher) {
+        ItemStack loaded = launcher.getLoadedItem();
+        return player.isAlive() && !player.isSpectator() && !player.isUsingItem()
+                && !jjf$spinAttackHeld && !((StandUser) player).roundabout$isSealed()
+                && (loaded.isEmpty() || isSpitAmmo(loaded)) && loaded.getCount() < SPIT_CAPACITY;
+    }
+
+    private void loadSpitRound(Player player, JJFLauncherAccess access) {
+        JJFLauncherState launcher = access.jjf$getLauncherState();
+        long now = player.level().getGameTime();
+        ItemStack loaded = launcher.getLoadedItem();
+        if (!loaded.isEmpty() && !isSpitAmmo(loaded)) {
+            if (now >= nextAmmoNotice) {
+                player.displayClientMessage(Component.translatable("ability.jjf.load_spit.empty_first"), true);
+                nextAmmoNotice = now + 40;
+            }
+            return;
+        }
+        if (!canLoadSpit(player, launcher)) return;
+        JumpinJackFlashEntity stand = activeStand();
+        if (stand != null) stand.refreshSpitLoad();
+        if (now < nextSpitRound) return;
+
+        if (loaded.isEmpty()) {
+            loaded = new ItemStack(Items.SLIME_BALL);
+            loaded.getOrCreateTag().putBoolean("JJFSpitAmmo", true);
+            loaded.setHoverName(Component.translatable("item.roundabout.jjf_spit_ammo"));
+        } else {
+            loaded.grow(1);
+        }
+        nextSpitRound = now + SPIT_LOAD_INTERVAL;
+        launcher.setLoadedItem(loaded);
+        access.jjf$setLoadedAmmoCount(loaded.getCount());
+        access.jjf$setLoadedAmmoIcon(loaded);
+        if (stand != null && loaded.getCount() >= SPIT_CAPACITY) stand.stopSpitLoad();
     }
 
     @Override
@@ -717,6 +840,18 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
             int move,
             int lastMove
     ) {
+        if (move == POWER_LOAD_SPIT || move == POWER_STOP_LOAD_SPIT) {
+            if (!getSelf().level().isClientSide() && getSelf() instanceof Player player) {
+                if (move == POWER_STOP_LOAD_SPIT) {
+                    JumpinJackFlashEntity stand = activeStand();
+                    if (stand != null) stand.stopSpitLoad();
+                } else if (net.hydra.jojomod.event.index.PowerTypes.hasStandActive(player)
+                        && player instanceof JJFLauncherAccess access) {
+                    loadSpitRound(player, access);
+                }
+            }
+            return true;
+        }
         if (move == POWER_SHOOT_WINDUP_ANIMATION) {
             if (!this.getSelf().level().isClientSide()) {
                 animateStand(net.hydra.jojomod.entity.stand.JumpinJackFlashEntity.JJF_SHOOT_WINDUP_ANIMATION);
@@ -936,10 +1071,14 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
                 0.6F
         );
 
-        player.level()
-                .addFreshEntity(
-                        spit
-                );
+        spawnSpit(player, spit);
+    }
+
+    private void spawnSpit(LivingEntity shooter, JJFSpitEntity spit) {
+        if (shooter.level().addFreshEntity(spit) && shooter instanceof StandUser user
+                && user.roundabout$getStand() instanceof JumpinJackFlashEntity stand) {
+            stand.playSpitAnimation();
+        }
     }
 
     private boolean isSupportedAmmo(
@@ -1244,6 +1383,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
 
         access.jjf$setLoadedAmmoCount(0);
         access.jjf$setLoadedAmmoIcon(ItemStack.EMPTY);
+        if (isSpitAmmo(loaded)) return;
 
         if (player.getAbilities()
                 .instabuild) {
@@ -1973,6 +2113,9 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
             ItemStack firedItem,
             Vec3 spawnPos
     ) {
+        if (isSpitAmmo(firedItem)) {
+            return new JJFSpitEntity(player.level(), player);
+        }
         if (firedItem.is(Items.ARROW)
                 || firedItem.is(Items.SPECTRAL_ARROW)
                 || firedItem.is(Items.TIPPED_ARROW)) {
@@ -2196,12 +2339,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
             return;
         }
 
-        jjf$spinAttackTicks =
-                Mth.clamp(
-                        this.attackTimeDuring,
-                        0,
-                        SPIN_ATTACK_FULL_TICKS
-                );
+        int chargeTicks = getSpinChargeTicks();
 
         if (this.attackTimeDuring > SPIN_ATTACK_FULL_TICKS) {
             this.attackTimeDuring = SPIN_ATTACK_FULL_TICKS;
@@ -2211,13 +2349,12 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
                 Math.max(
                         0,
                         SPIN_ATTACK_FULL_TICKS
-                                - jjf$spinAttackTicks
+                                - chargeTicks
                 )
         );
 
         if (!(this.getSelf() instanceof Player)
-                && jjf$spinAttackTicks >= SPIN_ATTACK_FULL_TICKS) {
-            int chargeTicks = jjf$spinAttackTicks;
+                && chargeTicks >= SPIN_ATTACK_FULL_TICKS) {
             performSpinAttack(chargeTicks);
             finishSpinAttackState();
         }
@@ -2233,6 +2370,12 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
     @Override
     public int getBarrageLength() {
         return SPIN_ATTACK_FULL_TICKS;
+    }
+
+    private int getSpinChargeTicks() {
+        return jjf$spinAttackHeld
+                ? Mth.clamp(getSelf().tickCount - jjf$spinStartTick, 0, SPIN_ATTACK_FULL_TICKS)
+                : 0;
     }
 
     private double getSpinRawCharge(int chargeTicks) {
@@ -2260,7 +2403,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
                 Mth.clamp(
                         Math.max(
                                 SPIN_ATTACK_MIN_TICKS,
-                                jjf$spinAttackTicks
+                                getSpinChargeTicks()
                         ),
                         SPIN_ATTACK_MIN_TICKS,
                         SPIN_ATTACK_FULL_TICKS
@@ -2286,7 +2429,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
                         Mth.clamp(
                                 Math.max(
                                         SPIN_ATTACK_MIN_TICKS,
-                                        jjf$spinAttackTicks
+                                        getSpinChargeTicks()
                                 ),
                                 SPIN_ATTACK_MIN_TICKS,
                                 SPIN_ATTACK_FULL_TICKS
@@ -2340,7 +2483,6 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
 
     private void finishSpinAttackState() {
         jjf$spinAttackHeld = false;
-        jjf$spinAttackTicks = 0;
         animateStand(StandEntity.BARRAGE_FINISHER);
         this.attackTimeDuring = -10;
         this.setAttackTimeMax(10);
@@ -2394,7 +2536,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
                         + (
                         SPIN_ATTACK_MAX_KNOCKBACK
                                 - SPIN_ATTACK_MIN_KNOCKBACK
-                ) * forceCharge;
+                ) * rawCharge;
 
         if (target instanceof LivingEntity living
                 && living instanceof ZeroGravityAccess access
@@ -2423,7 +2565,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
         double vertical =
                 direction.y * knockback
                         + 0.16D
-                        + 0.44D * forceCharge;
+                        + 0.75D * rawCharge;
 
         target.setDeltaMovement(
                 direction.x * knockback,
@@ -2573,7 +2715,8 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
             ZeroGravityState state =
                     access.jjf$getZeroGravityState();
 
-            if (state.getSource() != ZeroGravitySource.SPREAD) {
+            if (state.getSource() != ZeroGravitySource.SPREAD
+                    && state.getSource() != ZeroGravitySource.FLOATING_BLOCK) {
                 continue;
             }
 
@@ -2620,8 +2763,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
         ZeroGravityState state =
                 access.jjf$getZeroGravityState();
 
-        if (state.getSource()
-                == ZeroGravitySource.SPREAD) {
+        if (state.isSpread() || state.getSource() == ZeroGravitySource.FLOATING_BLOCK) {
             return;
         }
 
@@ -2795,8 +2937,8 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
                 x,
                 y,
                 2,
-                StandIcons.JJF_SPIT_ICON,
-                PowerIndex.SKILL_2
+                isHoldingSneak() ? getLoadSpitIcon() : StandIcons.JJF_SPIT_ICON,
+                isHoldingSneak() ? (byte) -1 : PowerIndex.SKILL_2
         );
 
         setSkillIcon(
@@ -2811,7 +2953,9 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
         ResourceLocation launcherIcon =
                 StandIcons.JJF_LOADING_ICON;
 
-        if (jjf$useWasDown) {
+        if (isHoldingSneak()) {
+            launcherIcon = StandIcons.JJF_ARMS_MODE_ICON;
+        } else if (jjf$useWasDown) {
             launcherIcon =
                     StandIcons.JJF_SHOOTING_ICON;
         } else if (isGuarding()) {
@@ -2955,6 +3099,23 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
                 bypass
         ));
 
+        icons.add(drawSingleGUIIcon(
+                context,
+                18,
+                leftPos + 77,
+                topPos + 80,
+                0,
+                "ability.jjf.arms_mode",
+                "instruction.roundabout.press_skill_crouch",
+                StandIcons.JJF_ARMS_MODE_ICON,
+                4,
+                level,
+                bypass
+        ));
+
+        icons.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 99, 0,
+                "ability.jjf.load_spit", "instruction.jjf.load_spit", getLoadSpitIcon(),
+                2, level, bypass));
         return icons;
     }
 
@@ -2973,7 +3134,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
         if (jjf$spinAttackHeld) {
             int cx = scaledWidth / 2 - 8;
             int cy = scaledHeight / 2 - 11;
-            int length = Mth.clamp(Math.round(15.0F * jjf$spinAttackTicks
+            int length = Mth.clamp(Math.round(15.0F * getSpinChargeTicks()
                     / SPIN_ATTACK_FULL_TICKS), 0, 15);
             context.blit(StandIcons.JOJO_ICONS, cx, cy, 193, 6, 15, 6);
             if (length > 0) {
@@ -3172,7 +3333,11 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
         int x = width / 2 + 57;
         int y = height - 69;
         if (!icon.isEmpty()) {
-            context.renderItem(icon, x, y - 4);
+            if (isSpitAmmo(icon)) {
+                context.blit(StandIcons.JJF_SPIT_ICON, x, y - 4, 16, 16, 0.0F, 0.0F, 18, 18, 18, 18);
+            } else {
+                context.renderItem(icon, x, y - 4);
+            }
             x += 19;
         }
         context.drawString(Minecraft.getInstance().font, "AMMO " + ammoCount,

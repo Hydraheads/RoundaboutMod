@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.stand.JumpinJackFlashModel;
 import net.hydra.jojomod.client.models.stand.renderers.JumpinJackFlashRenderer;
+import net.hydra.jojomod.entity.stand.JumpinJackFlashEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.stand.powers.PowersJumpinJackFlash;
@@ -28,7 +29,8 @@ public final class JJFPlayerArmsOverlay {
     public static boolean shouldRender(LivingEntity entity) {
         return entity instanceof StandUser user
                 && user.roundabout$getStandPowers() instanceof PowersJumpinJackFlash powers
-                && powers.jjf$isArmsMode()
+                && (user.roundabout$getStand() instanceof JumpinJackFlashEntity stand
+                        ? stand.jjf$isArmsMode() : powers.jjf$isArmsMode())
                 && entity.isAlive()
                 && PowerTypes.hasStandActive(entity)
                 && ClientUtil.canSeeStands(ClientUtil.getPlayer());
@@ -39,12 +41,12 @@ public final class JJFPlayerArmsOverlay {
         if (!shouldRender(entity)) {
             return;
         }
-        renderArm(poseStack, bufferSource, packedLight, playerModel.rightArm, true, entity.tickCount);
-        renderArm(poseStack, bufferSource, packedLight, playerModel.leftArm, false, entity.tickCount);
+        renderArm(poseStack, bufferSource, packedLight, playerModel.rightArm, true, entity);
+        renderArm(poseStack, bufferSource, packedLight, playerModel.leftArm, false, entity);
     }
 
     public static void renderArm(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight,
-                                 ModelPart playerArm, boolean right, float ageInTicks) {
+                                 ModelPart playerArm, boolean right, LivingEntity entity) {
         ModelPart arm = right ? RIGHT : LEFT;
         arm.resetPose();
         arm.setPos(0.0F, 0.0F, 0.0F);
@@ -57,7 +59,9 @@ public final class JJFPlayerArmsOverlay {
         poseStack.pushPose();
         playerArm.translateAndRotate(poseStack);
         poseStack.translate((right ? 1.5D : -1.5D) / 16.0D, 0.0D, 0.0D);
-        VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(JumpinJackFlashRenderer.TEXTURE));
+        byte skin = ((StandUser) entity).roundabout$getStandSkin();
+        VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(
+                JumpinJackFlashRenderer.textureForSkin(skin)));
         arm.render(poseStack, consumer, packedLight, OverlayTexture.NO_OVERLAY);
         poseStack.popPose();
     }

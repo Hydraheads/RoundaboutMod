@@ -145,6 +145,9 @@ public class FabricParticles {
     public static final SimpleParticleType GE_WAVE = FabricParticleTypes.simple();
 
     public static final SimpleParticleType RAIN_BUBBLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType RAIN_SHARD_1 = FabricParticleTypes.simple();
+    public static final SimpleParticleType RAIN_SHARD_2 = FabricParticleTypes.simple();
+    public static final SimpleParticleType RAIN_SHARD_3 = FabricParticleTypes.simple();
 
     public static void registerParticles(){
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("hit_impact"), HIT_IMPACT);
@@ -276,6 +279,9 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("ge_wave"), GE_WAVE);
 
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("rain_bubble"), RAIN_BUBBLE);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("rain_shard_1"), RAIN_SHARD_1);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("rain_shard_2"), RAIN_SHARD_2);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("rain_shard_3"), RAIN_SHARD_3);
 
         ModParticles.MELTING = MELTING;
         ModParticles.HALLUCINATORY_ACID_DRIP = HALLUCINATORY_ACID_DRIP;
@@ -406,6 +412,9 @@ public class FabricParticles {
         ModParticles.GE_WAVE = GE_WAVE;
 
         ModParticles.RAIN_BUBBLE = RAIN_BUBBLE;
+        ModParticles.RAIN_SHARD_1 = RAIN_SHARD_1;
+        ModParticles.RAIN_SHARD_2 = RAIN_SHARD_2;
+        ModParticles.RAIN_SHARD_3 = RAIN_SHARD_3;
     }
 
     public static @NotNull ParticleType<ColorParticleOptions> createColorParticleType(boolean alwaysSpawn) {

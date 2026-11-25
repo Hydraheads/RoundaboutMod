@@ -65,6 +65,7 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.Animal;
@@ -193,7 +194,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
      switch (bt) {
          case 0 -> {
              coat_open.startIfStopped(this.tickCount);
-             this.emerge.start(this.tickCount);
          }
          /* 1 and 2: Black Sabbath chest */
          case 1 -> {
@@ -1180,24 +1180,26 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             if (source.getEntity() != null && source.getEntity() != this.getUser()) {
                 if (this.getUser() != null) {
                     if (source.is(DamageTypes.ON_FIRE) || source.is(DamageTypes.IN_FIRE) || source.is(ModDamageTypes.STAND_FIRE) || source.is(DamageTypes.HOT_FLOOR) || source.is(DamageTypes.LAVA)) {
-                        return super.hurt(source, amount + 2);
+                        return super.hurt(source, amount + 0.5f);
                     } else if (source.is(ModDamageTypes.GO_BEYOND)) {
-                        return super.hurt(source, amount * 30);
+                        return super.hurt(source, amount * 60);
                     } else if (source.is(ModDamageTypes.INFINITE_SPIN)){
                         return super.hurt(source, amount * 1.618f);
+                    }else if (MainUtil.isStandDamage(source) && (this.getRemainingFireTicks() > 0 || isBlackSabbathUnderLight())) {
+                        return super.hurt(source, amount);
                     }
                 }
             } else if (source.is(DamageTypes.ON_FIRE) || source.is(DamageTypes.IN_FIRE) || source.is(ModDamageTypes.STAND_FIRE) || source.is(DamageTypes.HOT_FLOOR) || source.is(DamageTypes.LAVA)) {
-                return super.hurt(source, amount);
+                return super.hurt(source, amount + 0.5f);
             } else if (source.is(ModDamageTypes.GO_BEYOND)) {
-                return super.hurt(source, amount * 30);
+                return super.hurt(source, amount * 60);
             }else if (source.is(ModDamageTypes.INFINITE_SPIN)){
                 return super.hurt(source, amount * 1.618f);
             } else if (MainUtil.isStandDamage(source) && (this.getRemainingFireTicks() > 0 || isBlackSabbathUnderLight())) {
-                return super.hurt(source, amount * 3);
+                return super.hurt(source, amount);
             }
             this.markHurt();
-            return super.hurt(source, 0.0F);
+            return super.hurt(source, 0);
         } else {
             if (source.is(ModDamageTypes.GO_BEYOND)) {
                 return super.hurt(source, amount * 30);
@@ -1246,7 +1248,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         }
     }
 
-    /*Mob AI*/
+    /*The REAL stand behaviour*/
     public LivingEntity shadowHidTarget() {
         if (this.level() != null) {
             List<LivingEntity> lvent = this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(3.5, 9, 3.5), (livingEntity) -> {
@@ -1496,12 +1498,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                         lungeTicks--;
                     }
                 }
-                String test = "";
-                if(this.level().isClientSide()){
-                    test = "Level is Clientside";
-                } else {
-                    test = "Level is Serverside";
-                }
                 if(getThrowable() || getTridentLoyalty() || getMoveMode() == 1){
                     if(getHasTargets()){
                         if(getStrafing()) {
@@ -1530,7 +1526,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                         setGrabbingSoul(0);
                     }
                     if(getGrabbing() != 0 && meleeInteractionTicks == -1){
-                    //    System.out.println(getGrabbing());
                         setMeleeInteractionTicks(220);
                     }
                     if (!isBlackSabbathUnderLight()) {
@@ -1665,7 +1660,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                             lungeTicks = 51;
                         }
                     } else {
-                        //setUnrender(false);
                         if(this.getNavigation() != null) {
                             this.getNavigation().setSpeedModifier(0);
                         }
@@ -2209,9 +2203,13 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                         }
                     }
                     if(flag2visual){
-                        if(meleeInteractionTicks == 110){
-                            setShouldSlide(true);
-                        } else if (meleeInteractionTicks == 70){
+                        if(!(i.getDamageValue() >= i.getMaxDamage())) {
+                            if (meleeInteractionTicks == 110) {
+                                setShouldSlide(true);
+                            } else if (meleeInteractionTicks == 70) {
+                                setShouldSlide(false);
+                            }
+                        } else {
                             setShouldSlide(false);
                         }
                     }

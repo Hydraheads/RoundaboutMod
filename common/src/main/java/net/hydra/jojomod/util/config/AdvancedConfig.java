@@ -426,9 +426,10 @@ public class AdvancedConfig implements Cloneable {
             )
     );
 
-    public Set<String> kingNothingMobSniffBlacklist = new HashSet<>(
+    public Set<String> kingNothingMobSniffBlacklistv2 = new HashSet<>(
             Arrays.asList(
-                    "roundabout:fog_clone"
+                    "roundabout:fog_clone",
+                    "minecraft:armor_stand"
             )
     );
 
@@ -816,7 +817,7 @@ public class AdvancedConfig implements Cloneable {
             )
     );
 
-    public Set<String> pearlJamFoodEffect = new HashSet<>(
+    public Set<String> pearlJamFoodEffectv2 = new HashSet<>(
             /*
                 ! -> Adds the effect instead of removing
                 % -> Deals with stuff that isn't MobEffect related
@@ -846,6 +847,8 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:cooked_salmon:%fire:%gasoline",
                     "minecraft:tropical_fish:%fire:%gasoline",
                     "minecraft:pufferfish:%fire:%gasoline",
+                    "roundabout:piranha:%fire:%gasoline",
+                    "roundabout:cooked_piranha:%fire:%gasoline",
                     "minecraft:potion:%insomnia",
                     "fallback:minecraft:weakness"
             )

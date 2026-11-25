@@ -4388,6 +4388,21 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
             this.roundabout$setIdleTime(-1);
         }
+
+        // all GER damage gets converted into GER stand damage for the infinite death and kill message
+        if (!this.level().isClientSide() && !$$0.is(ModDamageTypes.GER_STAND)) {
+            boolean isGERHit = MainUtil.isStandDamage($$0)
+                    && $$0.getEntity() instanceof LivingEntity attacker
+                    && ((StandUser) attacker).roundabout$getStandPowers() instanceof PowersGER
+                    || ($$0.getDirectEntity() instanceof ThrownObjectEntity thrown
+                    && thrown.getStyle() == ThrownObjectEntity.GERTHROW);
+
+            if (isGERHit) {
+                ci.setReturnValue(hurt(
+                        ModDamageTypes.of(this.level(), ModDamageTypes.GER_STAND, $$0.getDirectEntity(), $$0.getEntity()),
+                        $$1));
+            }
+        }
     }
 
     /**
@@ -4680,23 +4695,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     }
                 }
             }
-        }
-    }
-
-    // Same as above, but lets totems run first
-    @Inject(method = "checkTotemDeathProtection(Lnet/minecraft/world/damagesource/DamageSource;)Z", at = @At(value = "RETURN"), cancellable = true, require = 0)
-    public void rdbt$checkTotemDeathProtection2(DamageSource dsource, CallbackInfoReturnable<Boolean> cir) {
-        // GER death loop
-        if (!this.level().isClientSide()
-                && rdbt$this() instanceof ServerPlayer victim
-                && dsource.getEntity() instanceof LivingEntity attacker
-                && ((StandUser) attacker).roundabout$getStandPowers() instanceof PowersGER pger) {
-            victim.setHealth(victim.getMaxHealth());
-            victim.removeAllEffects();
-            victim.clearFire();
-            pger.startInfiniteDeath(victim);
-            cir.setReturnValue(true);
-            return;
         }
     }
 
@@ -5639,15 +5637,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "die(Lnet/minecraft/world/damagesource/DamageSource;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;setPose(Lnet/minecraft/world/entity/Pose;)V", shift = At.Shift.BEFORE), cancellable = true, require = 0)
     public void roundabout$die2(DamageSource $$0, CallbackInfo ci) {
-        //GER infinite death loop corpse deletion
-        if (!this.level().isClientSide()
-                && !(rdbt$this() instanceof Player)
-                && $$0.getEntity() instanceof LivingEntity attacker
-                && ((StandUser) attacker).roundabout$getStandPowers() instanceof PowersGER) {
-            discard();
-            ci.cancel();
-            return;
-        }
 
         /** Corspe dropping, for Justice */
         //if ($$0.getDirectEntity() != null) {
@@ -5847,6 +5836,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 S2CPacketUtil.shatterIce(getId());
                 ci.cancel();
                 return;
+            }
+        }
+
+        // GER entity dissapear thing
+        if (damageSource.getEntity() != null && damageSource.is(ModDamageTypes.GER_STAND)) {
+            if (!level().isClientSide()) {
+                S2CPacketUtil.shatterIce(getId());
             }
         }
 

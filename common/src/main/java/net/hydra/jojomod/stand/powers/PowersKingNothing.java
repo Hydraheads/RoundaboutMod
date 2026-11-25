@@ -622,11 +622,12 @@ public class PowersKingNothing extends NewDashPreset {
                 disintegrateAnimTicks = 0;
             }
         }
+        boolean foundTem = false;
         if (getSelf().isAlive() && !getSelf().isRemoved() && isTrackingItem()) {
             Level level = getSelf().level();
             float checkRangeEnt = 22;
             int checkRangeChest = 16;
-            boolean foundTem = itemTrackEnt(checkRangeEnt, level);
+            foundTem = itemTrackEnt(checkRangeEnt, level);
             // chest code!!
             foundTem = itemTrackBlock(checkRangeChest, level) || foundTem;
             if (foundTem && !foundItemYet) {
@@ -637,38 +638,69 @@ public class PowersKingNothing extends NewDashPreset {
                 }
             }
             // passive particles
-            if (!foundTem) {
-                foundItemYet = false;
-                int particleInterval = ClientNetworking.getAppropriateConfig().kingNothingSettings.kingNothingParticleSpawnInterval;
-                if (particleInterval <= 5 ? this.getSelf().tickCount % 5 == 0 : spawnsParticlesThisTick()) {
-                    VisualData pdata = getVisualInfo();
-                    for (int i = 0; i < 2; i++) {
-                        int color = getParticleColor(pdata);
-                        Vec3 offset = getSelf().getEyePosition().offsetRandom(level.getRandom(), 5);
-                        MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
-                                ColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
-                                offset.x(), offset.y(), offset.z(), 1, 0.5, 0.5, 0.5, 0.05);
+        }
+        if (isTrackingMemorizedScent) {
+            if ((trackingCloud != null && (trackingCloud.isRemoved() || trackingCloud.distanceToSqr(getSelf()) > 4096))) {
+                if (trackingCloud != null && !trackingCloud.isRemoved()) {
+                    trackingCloud.discard();
+                }
+                trackingCloud = null;
+                clearTrackedEntity();
+            }
+            if (trackingCloud == null) {
+                boolean hasTarget = false;
+                switch (getMemorizedScentType()) {
+                    case TrackingCloudEntity.PLAYER -> {
+                        Entity player = this.getSelf().level().getPlayerByUUID(getMemorizedPlayer());
+                        if (player != null && ((StandUser) player).roundabout$getLifePunchClone() != null) {
+                            ((StandUser) player).roundabout$getLifePunchClone();
+                        }
+                        else if (player != null
+                                && ((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC
+                                && PKC.timeEraseActive && PKC.activeClone != null) {
+                            player = PKC.activeClone;
+                        }
+                        hasTarget = player == null || PowerTypes.isInADifferentExistence(player, this.getSelf());
+                    }
+                    case TrackingCloudEntity.MOB -> {
+                        List<Entity> list = this.getSelf().level().getEntities(this.getSelf(), this.getSelf().getBoundingBox().inflate(64f),
+                                entity -> entity.getType().equals(getMemorizedEntityType()));
+                        hasTarget = !list.isEmpty();
+                    }
+                }
+                if (hasTarget) {
+                    TrackingCloudEntity tc = ModEntities.TRACKING_CLOUD.create(this.getSelf().level());
+                    if (tc != null) {
+                        tc.setUser(this.getSelf());
+                        tc.setPos(getSelf().getBoundingBox().getCenter());
+                        this.getSelf().level().addFreshEntity(tc);
+                        this.trackingCloud = tc;
                     }
                 }
             }
-        }
-        if (isTrackingMemorizedScent && (trackingCloud != null && (trackingCloud.isRemoved() || trackingCloud.distanceToSqr(getSelf()) > 4096))) {
-            if (trackingCloud != null && !trackingCloud.isRemoved()) {
-                trackingCloud.discard();
+            if (getSelf().isAlive() && !getSelf().isRemoved() && trackingCloud != null && spawnsParticlesThisTick()) {
+                VisualData pdata = getVisualInfo();
+                for (int i = 0; i < 4; i++) {
+                    int color = getParticleColor(pdata);
+                    MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
+                            ColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
+                            trackingCloud.getX(), trackingCloud.getY(), trackingCloud.getZ(), 1, 0.2, 0.2, 0.2, 0.01);
+                }
             }
-            syncTracking(false);
-            trackingCloud = null;
-            clearTrackedEntity();
-            playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);
         }
         if (!isTrackingMemorizedScent) clearTrackedEntity();
-        if (getSelf().isAlive() && !getSelf().isRemoved() && trackingCloud != null && spawnsParticlesThisTick()) {
-            VisualData pdata = getVisualInfo();
-            for (int i = 0; i < 4; i++) {
-                int color = getParticleColor(pdata);
-                MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
-                        ColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
-                        trackingCloud.getX(), trackingCloud.getY(), trackingCloud.getZ(), 1, 0.2, 0.2, 0.2, 0.01);
+        if ((!foundTem && isTrackingItem()) || (isTrackingMemorizedScent && trackingCloud == null)) {
+            foundItemYet = false;
+            int particleInterval = ClientNetworking.getAppropriateConfig().kingNothingSettings.kingNothingParticleSpawnInterval;
+            if (particleInterval <= 5 ? this.getSelf().tickCount % 5 == 0 : spawnsParticlesThisTick()) {
+                VisualData pdata = getVisualInfo();
+                for (int i = 0; i < 2; i++) {
+                    int color = getParticleColor(pdata);
+                    Vec3 offset = getSelf().getEyePosition().offsetRandom(this.getSelf().getRandom(), 5);
+                    MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
+                            ColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
+                            offset.x(), offset.y(), offset.z(), 1, 0.5, 0.5, 0.5, 0.05);
+                }
             }
         }
     }
@@ -1298,15 +1330,6 @@ public class PowersKingNothing extends NewDashPreset {
         playSoundsIfNearby(DISINTEGRATE, 27, false);
         isTrackingMemorizedScent = true;
         disintegrateAnimTicks = 0;
-        if (!isClient()) {
-            TrackingCloudEntity tc = ModEntities.TRACKING_CLOUD.create(this.getSelf().level());
-            if (tc != null) {
-                tc.setUser(this.getSelf());
-                tc.setPos(getStandEntity(getSelf()).getBoundingBox().getCenter());
-                this.getSelf().level().addFreshEntity(tc);
-                this.trackingCloud = tc;
-            }
-        }
         return true;
     }
 
@@ -1325,11 +1348,14 @@ public class PowersKingNothing extends NewDashPreset {
         }
         // server-client desync fix
         if (!getSelf().level().dimension().equals(dimension)) {
-            if (isTrackingItem()) {
+            if (isTrackingItem() || isTrackingMemorizedScent) {
                 playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);
             }
             trackedItem = null;
             foundItemYet = false;
+            trackedEntity = null;
+            trackingCloud = null;
+            isTrackingMemorizedScent = false;
             dimension = getSelf().level().dimension();
         }
         return true;
@@ -1384,7 +1410,7 @@ public class PowersKingNothing extends NewDashPreset {
     private boolean endMemorizedScentTrack() {
         if (isTrackingMemorizedScent() && !onCooldown(PowerIndex.SKILL_1)) {
             this.isTrackingMemorizedScent = false;
-            if (!this.isClient()) {
+            if (!this.isClient() && trackingCloud != null) {
                 this.trackingCloud.discard();
                 this.trackingCloud = null;
             }

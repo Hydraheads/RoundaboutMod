@@ -31,7 +31,6 @@ import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
-import net.hydra.jojomod.entity.substand.MoldSporesEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.ModEffects;
@@ -2837,7 +2836,8 @@ public class MainUtil {
                 || sauce.is(ModDamageTypes.DISTORTION_VIRUS)
                 || sauce.is(ModDamageTypes.POD_BITE)
                 || sauce.is(ModDamageTypes.BITES_THE_DUST)
-                || sauce.is(ModDamageTypes.BRAMBLE)){
+                || sauce.is(ModDamageTypes.BRAMBLE)
+                || sauce.is(ModDamageTypes.GER_STAND)){
             return true;
         }
         return false;
@@ -2868,7 +2868,8 @@ public class MainUtil {
                 || sauce.is(ModDamageTypes.EXPLOSIVE_STAND) || sauce.is(ModDamageTypes.HEEL_SPIKE) ||
                 sauce.is(ModDamageTypes.CORPSE_ARROW) || sauce.is(ModDamageTypes.STAND_RUSH)
                 || sauce.is(ModDamageTypes.CROSSFIRE) ||
-                sauce.is(ModDamageTypes.CORPSE_EXPLOSION) || sauce.is(ModDamageTypes.BRAMBLE)) {
+                sauce.is(ModDamageTypes.CORPSE_EXPLOSION) || sauce.is(ModDamageTypes.BRAMBLE)
+                || sauce.is(ModDamageTypes.GER_STAND)) {
             return true;
         }
         return false;
