@@ -157,16 +157,15 @@ public class PowersGER extends PowersGoldExperience {
         Entity shooter = source.getEntity();
         Entity culprit = shooter != null ? shooter : direct;
 
-        if (culprit != null && !source.is(ModDamageTypes.GO_BEYOND)) {
+        if (culprit != null && !source.is(ModDamageTypes.GO_BEYOND) && culprit != this.getSelf()) {
             if (direct != null && direct != shooter && direct instanceof IEntityAndData directData) {
                 SavedSecond projectileSecond = directData.roundabout$getLastSavedSecond();
                 if (projectileSecond != null) {
                     projectileSecond.loadTime(direct);
                 }
-                return true;
             }
 
-            if (culprit instanceof LivingEntity livingCulprit && livingCulprit != this.getSelf()) {
+            if (culprit instanceof LivingEntity livingCulprit) {
                 IEntityAndData iData = (IEntityAndData) livingCulprit;
                 SavedSecond lastSecond = iData.roundabout$getLastSavedSecond();
                 if (lastSecond != null) {
@@ -203,8 +202,9 @@ public class PowersGER extends PowersGoldExperience {
                         ((IMob) mb).roundabout$setConfusionTicks(60);
                     }
                 }
-                return true;
             }
+
+            return true;
         }
 
         return super.interceptIncomingHarm(source, amount);
