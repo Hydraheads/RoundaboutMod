@@ -1702,6 +1702,7 @@ public class PowersDiverDown extends NewPunchingStand {
             } else {
                 this.submergedTarget = this.self.level().getEntity(data);
             }
+            this.setAttackTimeDuring(-15);
         } else if (activePower == DIVER_EMERGE) {
             this.submergedTargetId = -1;
             this.submergedTarget = null;
@@ -1922,7 +1923,8 @@ public class PowersDiverDown extends NewPunchingStand {
         }
         if (this.getActivePower() == DIVER_SUBMERGE_START) {
             completeDiveServer();
-        }/*
+        }
+        /*
         if (this.getActivePower() == TRANSFER) {
             triggerTransfer();
         }*/
@@ -3663,6 +3665,9 @@ public class PowersDiverDown extends NewPunchingStand {
 
     //actually does the dive
     public void completeDiveServer() {
+        if (this.self.level().isClientSide()) {
+            return;
+        }
         if (this.getAttackTimeDuring() > DIVE_WINDUP_MAX) {
             // run the get target method to find a target
             Entity target = getTargetEntity(self, DIVE_REACH);

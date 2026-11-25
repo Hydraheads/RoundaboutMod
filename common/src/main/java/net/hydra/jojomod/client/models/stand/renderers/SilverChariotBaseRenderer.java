@@ -267,6 +267,10 @@ public class SilverChariotBaseRenderer<T extends StandEntity> extends StandRende
         }
     }
 
+    public void renderAfterimagesIdle() {
+
+    }
+
     private Vec3 getInterpolatedFakePos(SilverChariotEntity mobEntity, int posIndex, float pt) {
         List<SilverChariotAfterimageState> states =
                 new ArrayList<>(mobEntity.getAfterimageStates());
