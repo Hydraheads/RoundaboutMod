@@ -6,32 +6,26 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.access.ISuperThrownAbstractArrow;
 import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.entity.objects.GentlyWeepsEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.visages.CloneEntity;
-import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersCatchTheRainbow;
-import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
-import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Fireball;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -94,7 +88,7 @@ public class CTRbarrierEntity extends StandEntity {
                         }
                     } else if (mob instanceof LivingEntity && mob != User){
                         if (isInRain(mob)) {
-                            MainUtil.makeBleed(mob, 1, 40, User);
+                            MainUtil.makeBleed(mob, 1, 80, User);
                             mob.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SHARP_RAINDROP), 2);
                         }
                     }
@@ -159,7 +153,8 @@ public class CTRbarrierEntity extends StandEntity {
                                         pj.getX(),
                                         pj.getY(),
                                         pj.getZ(),
-                                        10, 0, 0, 0, 0.2);
+                                        8, 0, 0, 0, 0.2);
+                                    //change the sound
                                 pj.level().playSound(null, pj.blockPosition(), ModSounds.ICE_BREAKER_EVENT,
                                         SoundSource.PLAYERS, 1.0F, 2.0F);
                                 if (pj instanceof RoundaboutBulletEntity) {
@@ -172,6 +167,17 @@ public class CTRbarrierEntity extends StandEntity {
                                 pj.yRotO += 180.0F;
                             }
                         }
+                    }
+
+                    if (pj instanceof Fireball || pj instanceof StandFireballEntity) {
+                        ((ServerLevel) this2.level()).sendParticles(ParticleTypes.SMOKE,
+                                pj.getX(),
+                                pj.getY(),
+                                pj.getZ(),
+                                6, 0, 0, 0, 0.2);
+                        pj.level().playSound(null, pj.blockPosition(), SoundEvents.GENERIC_EXTINGUISH_FIRE,
+                                SoundSource.PLAYERS, 1.0F, 2.0F);
+                        pj.discard();
                     }
                 }
             }
