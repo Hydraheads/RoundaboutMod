@@ -17,6 +17,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersGER;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
 import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
@@ -783,6 +784,12 @@ public class SheerHeartAttackEntity extends StandEntity {
 					if (LE.isDeadOrDying()) {
 						this.entityTarget = null;
 						this.setTargetType(NONE);
+					}
+				}
+
+				if (getEntityTarget() instanceof LivingEntity LE) {
+					if (((StandUser)LE).roundabout$getStandPowers() instanceof PowersGER) {
+						setReturnStatus(true);
 					}
 				}
 			}
