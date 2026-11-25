@@ -3,6 +3,7 @@ package net.hydra.jojomod.stand.powers;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IPlayerEntityServer;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
@@ -219,6 +220,7 @@ public class PowersGER extends PowersGoldExperience {
                 IPlayerEntity ipe = (IPlayerEntity) serverPlayer;
                 if (ipe.rdbt$getGerDeathLoops() <= 0) {
                     ipe.rdbt$setGerDeathLoops(10);
+                    ((IPlayerEntityServer) serverPlayer).roundabout$setTemporaryGerSpawn(serverPlayer.blockPosition());
                 }
             }
         }

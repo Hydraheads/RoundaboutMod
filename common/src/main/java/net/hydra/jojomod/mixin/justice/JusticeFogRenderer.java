@@ -286,7 +286,8 @@ public class JusticeFogRenderer {
             boolean thickFog,
             float partialTick,
             CallbackInfo ci) {
-        if (!GERNetherIllusionHelper.active || camera.getFluidInCamera() != FogType.NONE) return;
+        if ((!GERNetherIllusionHelper.active && !GERNetherIllusionHelper.endActive)
+                || camera.getFluidInCamera() != FogType.NONE) return;
 
         RenderSystem.setShaderFogStart(0.0F);
         RenderSystem.setShaderFogEnd(Math.min(renderDistance, 48.0F));
@@ -300,11 +301,18 @@ public class JusticeFogRenderer {
             int renderDistance,
             float darkenWorldAmount,
             CallbackInfo ci) {
-        if (!GERNetherIllusionHelper.active || camera.getFluidInCamera() != FogType.NONE) return;
+        if ((!GERNetherIllusionHelper.active && !GERNetherIllusionHelper.endActive)
+                || camera.getFluidInCamera() != FogType.NONE) return;
 
-        fogRed = 0.2F;
-        fogGreen = 0.03F;
-        fogBlue = 0.03F;
+        if (GERNetherIllusionHelper.endActive) {
+            fogRed = 0.05F;
+            fogGreen = 0.03F;
+            fogBlue = 0.08F;
+        } else {
+            fogRed = 0.2F;
+            fogGreen = 0.03F;
+            fogBlue = 0.03F;
+        }
         RenderSystem.clearColor(fogRed, fogGreen, fogBlue, 1.0F);
     }
 
