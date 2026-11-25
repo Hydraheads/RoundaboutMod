@@ -617,14 +617,13 @@ public class PowersCatchTheRainbow extends NewDashPreset {
 
     @Override
     public boolean cheatDeath(DamageSource dsource){
-        if (!dsource.is(ModDamageTypes.SUNLIGHT) && !dsource.is(DamageTypes.GENERIC_KILL) && !dsource.is(ModDamageTypes.INFINITE_SPIN)
-                && self instanceof Player PE) {
+        if (!dsource.is(ModDamageTypes.SUNLIGHT) && !dsource.is(DamageTypes.GENERIC_KILL) && !dsource.is(ModDamageTypes.INFINITE_SPIN)) {
             if (isInRain() && deathTimer == 0 && hasStandActive(self)) {
                 if (!this.self.level().isClientSide) {
                     deathTimer = (ClientNetworking.getAppropriateConfig().catchTheRainbowSettings.catchTheRainbowLifeClutchCooldown);
-                    PE.setHealth(1);
-                    PE.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 1), PE);
-                    PE.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 60, 10), PE);
+                    self.setHealth(1);
+                    self.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 1), this.self);
+                    self.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 60, 10), this.self);
                     getStandUserSelf().roundabout$setDazed((byte) 0);
                     OffHandReturnServer();
                     playSoundIfPossible(self.level(), null, self.blockPosition(), ModSounds.VAMPIRE_AWAKEN_EVENT,
@@ -669,7 +668,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
 
             if (ent instanceof LivingEntity LV && ent.isAlive()) {
                 this.setCooldown(PowerIndex.SKILL_1_SNEAK, (ClientNetworking.getAppropriateConfig().catchTheRainbowSettings.catchTheRainbowRainMendCooldown));
-                LV.heal(2f);
+                LV.heal(3f);
 
                 MobEffectInstance bleed = LV.getEffect(ModEffects.BLEED);
                 if (bleed != null) {
@@ -1080,6 +1079,18 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                             0,
                             1,
                             0);
+                }
+            }
+        }
+    }
+
+    // mob ai yippee
+    public void tickMobAI(LivingEntity attackTarget){
+        if (attackTarget != null && attackTarget.isAlive()) {
+            if (!this.onCooldown(PowerIndex.SKILL_1) && isInRain()) {
+                if (MainUtil.cheapDistanceTo
+                        (this.self.getX(), this.self.getY(), this.self.getZ(), attackTarget.getX(), attackTarget.getY(), attackTarget.getZ()) < 5) {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
                 }
             }
         }
