@@ -2144,7 +2144,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         boolean flag2visual = i.getItem() instanceof StandArrowItem || i.getItem() instanceof WorthyArrowItem && this.getUser() instanceof Player p && p.isCreative();
         boolean flag3 = i.getItem() instanceof ArmorItem || i.getItem() instanceof ElytraItem;
         boolean flag4 = i.getItem() instanceof PotionItem || i.getItem().getFoodProperties() != null || i.getItem() instanceof MilkBucketItem || le instanceof Animal a && a.isFood(i);
-        boolean flag5 = (i.getItem() instanceof ShearsItem || i.getItem() instanceof ScissorItem) && le instanceof Sheep sheep && !(sheep.isSheared());
+        boolean flag5 = (i.getItem() instanceof ShearsItem || i.getItem() instanceof ScissorItem) && le instanceof Sheep;
 
         boolean allYouCanEat = le instanceof Player p && i.getItem().getFoodProperties() != null && p.canEat(i.getItem().getFoodProperties().canAlwaysEat()) || le instanceof Animal a && a.isFood(i) || le instanceof Villager || i.getItem() instanceof MilkBucketItem;
         if(!level().isClientSide && this.getUser() != null){
@@ -2203,7 +2203,9 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                     }
                     if(flag5){
                         if(meleeInteractionTicks == 150){
-                            setShouldSlide(true);
+                            if(e instanceof Sheep sheep && !(sheep.isSheared())) {
+                                setShouldSlide(true);
+                            }
                         } else if (meleeInteractionTicks == 100){
                             setShouldSlide(false);
                         }
@@ -2416,10 +2418,18 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                     if (this.getUser() != null && this.getUser() instanceof Player p) {
                                         sheep.shear(SoundSource.HOSTILE);
                                         sheep.gameEvent(GameEvent.SHEAR, p);
+                                        this.pickUpTheItemsAroundTheCadaver(sheep);
                                         i.hurtAndBreak(1, this, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
                                     }
                                 }
-                           }
+                           } else if (e instanceof Sheep sheep && sheep.isSheared()) {
+                                if (meleeInteractionTicks == 5){
+                                    if (this.getUser() != null && this.getUser() instanceof Player p) {
+                                        pbs.removeTargetSingular(e);
+                                        pbs.removeTargetEntities(e);
+                                    }
+                                }
+                            }
                         }
 
                         /*Stand Arrow!*/
