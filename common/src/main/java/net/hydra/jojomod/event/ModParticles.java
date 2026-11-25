@@ -125,6 +125,7 @@ public class ModParticles {
 
     public static SimpleParticleType TUSK_HOLE;
     public static SimpleParticleType GOLDEN_SPIRAL;
+    public static SimpleParticleType INFINITE_SPIN;
     public static SimpleParticleType KILLER_QUEEN_EXPLOSION;
 
     public static SimpleParticleType PW_FIREBALL_EXPLOSION;

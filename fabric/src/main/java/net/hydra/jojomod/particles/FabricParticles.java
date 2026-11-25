@@ -104,6 +104,7 @@ public class FabricParticles {
     public static final SimpleParticleType ALLURING_LIGHT = FabricParticleTypes.simple();
     public static final SimpleParticleType TUSK_HOLE = FabricParticleTypes.simple();
     public static final SimpleParticleType GOLDEN_SPIRAL = FabricParticleTypes.simple();
+    public static final SimpleParticleType INFINITE_SPIN = FabricParticleTypes.simple();
     public static final SimpleParticleType KILLER_QUEEN_EXPLOSION = FabricParticleTypes.simple();
     public static final SimpleParticleType PW_FIREBALL_EXPLOSION = FabricParticleTypes.simple();
     public static final SimpleParticleType PW_BLASTWAVE_EXPLOSION = FabricParticleTypes.simple();
@@ -224,6 +225,7 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("alluring_light"), ALLURING_LIGHT);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("tusk_hole"), TUSK_HOLE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("golden_spiral"), GOLDEN_SPIRAL);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("infinite_spin"), INFINITE_SPIN);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("hypno_swirl"), HYPNO_SWIRL);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("tusk_vortex"), TUSK_VORTEX);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("clock"), CLOCK);
@@ -370,6 +372,7 @@ public class FabricParticles {
         ModParticles.ALLURING_LIGHT = ALLURING_LIGHT;
         ModParticles.TUSK_HOLE = TUSK_HOLE;
         ModParticles.GOLDEN_SPIRAL = GOLDEN_SPIRAL;
+        ModParticles.INFINITE_SPIN = INFINITE_SPIN;
         ModParticles.KILLER_QUEEN_EXPLOSION = KILLER_QUEEN_EXPLOSION;
         ModParticles.PW_FIREBALL_EXPLOSION = PW_FIREBALL_EXPLOSION;
         ModParticles.PW_BLASTWAVE_EXPLOSION = PW_BLASTWAVE_EXPLOSION;

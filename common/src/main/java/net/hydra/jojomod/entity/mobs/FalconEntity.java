@@ -51,6 +51,27 @@ public class FalconEntity extends ShoulderRidingEntity implements VariantHolder<
 
     private static final Set<Item> TAME_FOOD = Sets.newHashSet(Items.CHICKEN, Items.BEEF, Items.RABBIT);
 
+    private static final EntityDataAccessor<Byte> ANIM = SynchedEntityData.defineId(StrayCatEntity.class,
+            EntityDataSerializers.BYTE);
+
+    private final byte
+        IDLE = 0,
+        FLAPPING = 1,
+        FLYING = 2;
+
+    public Byte getAnimation() {
+        return this.entityData.get(ANIM);
+    }
+
+    public void setAnimation(Byte anim) {
+        this.entityData.set(ANIM, anim);
+    }
+
+    public final AnimationState sitAnimation = new AnimationState();
+    public final AnimationState flappingAnimation = new AnimationState();
+    public final AnimationState flyingAnimation = new AnimationState();
+    public final AnimationState flyingFlapAnimation = new AnimationState();
+
     public FalconEntity(EntityType<? extends FalconEntity> $$0, Level $$1) {
         super($$0, $$1);
         this.moveControl = new FlyingMoveControl(this, 10, false);
@@ -73,6 +94,51 @@ public class FalconEntity extends ShoulderRidingEntity implements VariantHolder<
         flyingpathnavigation.setCanFloat(true);
         flyingpathnavigation.setCanPassDoors(true);
         return flyingpathnavigation;
+    }
+
+    private int flyingTicks = 0;
+
+    private void setupAnimationStates() {
+        byte animation = getAnimation();
+
+        if (animation == FLAPPING) {
+            flappingAnimation.startIfStopped(tickCount);
+        }else {
+            flappingAnimation.stop();
+        }
+
+        if (animation == FLYING) {
+            flyingAnimation.startIfStopped(tickCount);
+        }else {
+            flyingAnimation.stop();
+        }
+
+        if (isOrderedToSit()) {
+            sitAnimation.startIfStopped(tickCount);
+        }else {
+            sitAnimation.stop();
+        }
+    }
+
+    public void tick() {
+        super.tick();
+        if (level().isClientSide) {
+            setupAnimationStates();
+        } else {
+            if (!onGround()) {
+                flyingTicks++;
+                if (flyingTicks < 35) {
+                    setAnimation(FLAPPING);
+                }else {
+                    setAnimation(FLYING);
+                }
+            }else {
+                flyingTicks = 0;
+                setAnimation(IDLE);
+            }
+        }
+
+
     }
 
     @Override
@@ -120,6 +186,7 @@ public class FalconEntity extends ShoulderRidingEntity implements VariantHolder<
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_VARIANT_ID, 0);
+        this.entityData.define(ANIM, (byte) 0);
     }
 
     public boolean isFlying() {

@@ -3,6 +3,7 @@ package net.hydra.jojomod.stand.powers;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IPlayerEntityServer;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
@@ -156,7 +157,7 @@ public class PowersGER extends PowersGoldExperience {
         Entity shooter = source.getEntity();
         Entity culprit = shooter != null ? shooter : direct;
 
-        if (culprit != null) {
+        if (culprit != null && !source.is(ModDamageTypes.GO_BEYOND) && culprit != this.getSelf()) {
             if (direct != null && direct != shooter && direct instanceof IEntityAndData directData) {
                 SavedSecond projectileSecond = directData.roundabout$getLastSavedSecond();
                 if (projectileSecond != null) {
@@ -211,10 +212,16 @@ public class PowersGER extends PowersGoldExperience {
 
     // infinite death start
 
+    @Override
     public boolean onKilledEntity(ServerLevel $$0, LivingEntity victim) {
         if ( victim.getLastDamageSource() != null &&  victim.getLastDamageSource().is(ModDamageTypes.GER_STAND)) {
             if (victim instanceof ServerPlayer serverPlayer) {
-                ((IPlayerEntity) serverPlayer).rdbt$setPendingGerCutscene(true);
+                // look at PlayerEntityServer for how the death loop is handled
+                IPlayerEntity ipe = (IPlayerEntity) serverPlayer;
+                if (ipe.rdbt$getGerDeathLoops() <= 0) {
+                    ipe.rdbt$setGerDeathLoops(10);
+                    ((IPlayerEntityServer) serverPlayer).roundabout$setTemporaryGerSpawn(serverPlayer.blockPosition());
+                }
             }
         }
         return super.onKilledEntity($$0, victim);
@@ -258,35 +265,35 @@ public class PowersGER extends PowersGoldExperience {
     @Override
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return 2.55F;
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(2.55F));
         } else {
-            return 6;
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(6));
         }
     }
 
     @Override
     public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return 2.6F;
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(2.7F));
         } else {
-            return 8;
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(8));
         }
     }
     @Override
     public float getBarrageFinisherStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return 3.8F;
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(3.8F));
         } else {
-            return 8;
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(8));
         }
     }
     @Override
     public float getBarrageDamagePlayer(){
-        return 8;
+        return levelupDamageMod(multiplyPowerByStandConfigPlayers(9));
     }
     @Override
     public float getBarrageDamageMob(){
-        return 19;
+        return levelupDamageMod(multiplyPowerByStandConfigMobs(19));
     }
 
     private float attackSpeedModifier() {return 0.65f; } /// faster than Silver Chariot

@@ -214,6 +214,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         GHOST = 21,
         WANDERING = 22,
         PARASITE = 23,
+        CHORUS = 24,
 
         // dont mind me
         CLIENT_SYNC = 100;
@@ -242,7 +243,8 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                 EVIL_PUMPKIN,
                 GHOST,
                 WANDERING,
-                PARASITE
+                PARASITE,
+                CHORUS
 
         );
     }
@@ -272,6 +274,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             case Powers20thCenturyBoy.GHOST -> Component.translatable("skins.roundabout.20_centuryboy.ghost");
             case Powers20thCenturyBoy.WANDERING -> Component.translatable("skins.roundabout.20_centuryboy.wandering");
             case Powers20thCenturyBoy.PARASITE -> Component.translatable("skins.roundabout.20_centuryboy.parasite");
+            case Powers20thCenturyBoy.CHORUS -> Component.translatable("skins.roundabout.20_centuryboy.chorus");
             default -> Component.translatable("skins.roundabout.20_centuryboy.manga");
         };
     }

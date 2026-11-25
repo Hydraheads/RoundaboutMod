@@ -424,12 +424,12 @@ public class SeperatedArmEntity extends StandEntity {
 
                                     this.setDeltaMovement(0, 0, 0);
 
-
-                                        if (!((Player) user).isCreative()) {
-                                            if (!(this.getMainHandItem().getItem() instanceof FleshBucketItem)) {
-                                                this.getMainHandItem().hurt(1, this.level().getRandom(), null);
-                                            }
-                                        }
+                                    if (user instanceof ServerPlayer SP) {
+                                        this.getMainHandItem().hurt(1, this.level().getRandom(), SP);
+                                    }
+                                    else {
+                                        this.getMainHandItem().hurt(1, this.level().getRandom(), null);
+                                    }
 
                                     Can_activate = false;
                                 }
@@ -443,11 +443,12 @@ public class SeperatedArmEntity extends StandEntity {
                                     this.setDeltaMovement(0, 0, 0);
                                     level.destroyBlock(targetpos, false);
 
-                                        if (!((Player) user).isCreative()) {
-                                            if (!(this.getMainHandItem().getItem() instanceof FleshBucketItem)) {
-                                                this.getMainHandItem().hurt(1, this.level().getRandom(), null);
-                                            }
-                                        }
+                                        if (user instanceof ServerPlayer SP) {
+                                        this.getMainHandItem().hurt(1, this.level().getRandom(), SP);
+                                    }
+                                    else {
+                                        this.getMainHandItem().hurt(1, this.level().getRandom(), null);
+                                    }
 
                                     Can_activate = false;
                                 }
@@ -461,11 +462,12 @@ public class SeperatedArmEntity extends StandEntity {
                                     level.destroyBlock(targetpos, false);
                                     this.setDeltaMovement(0, 0, 0);
 
-                                        if (!((Player) user).isCreative()) {
-                                            if (!(this.getMainHandItem().getItem() instanceof FleshBucketItem)) {
-                                                this.getMainHandItem().hurt(1, this.level().getRandom(), null);
-                                            }
-                                        }
+                                        if (user instanceof ServerPlayer SP) {
+                                        this.getMainHandItem().hurt(1, this.level().getRandom(), SP);
+                                    }
+                                    else {
+                                        this.getMainHandItem().hurt(1, this.level().getRandom(), null);
+                                    }
 
                                     Can_activate = false;
                                 }
@@ -726,10 +728,11 @@ public class SeperatedArmEntity extends StandEntity {
 
                 if(SpinTicks == 0) {
                     if (this.getMainHandItem().isDamageableItem()) {
-                        if(!((Player)user).isCreative()) {
-                            if(!(this.getMainHandItem().getItem() instanceof FleshBucketItem)) {
-                                this.getMainHandItem().hurt(1, this.level().getRandom(), null);
-                            }
+                        if (user instanceof ServerPlayer SP) {
+                            this.getMainHandItem().hurt(1, this.level().getRandom(), SP);
+                        }
+                        else {
+                            this.getMainHandItem().hurt(1, this.level().getRandom(), null);
                         }
                     }
                 }

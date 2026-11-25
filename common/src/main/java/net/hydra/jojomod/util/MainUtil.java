@@ -249,6 +249,8 @@ public class MainUtil {
 
     public static final Map<Item, Block> KING_NOTHING_BLOCK_FORM_PREDICT = new HashMap<>();
     public static final Map<Item, EntityType<?>> KING_NOTHING_ENTITY_FORM_PREDICT = new HashMap<>();
+    public static final Map<Block, Block> KING_NOTHING_BLOCK_SNIFF_OVERRIDES = new HashMap<>();
+    public static final Map<EntityType<?>, EntityType<?>> KING_NOTHING_ENTITY_SNIFF_OVERRIDES = new HashMap<>();
     public static final Map<Block, Set<Block>> KING_NOTHING_BLOCK_GROUPS = new HashMap<>();
     public static final Map<Block, Block> KING_NOTHING_BLOCK_KEYS = new HashMap<>();
 
@@ -2887,6 +2889,20 @@ public class MainUtil {
         ));
     }
 
+    // call this at the top of things that should logically trigger RTZ (ex. black sabbath grab)
+    public static final void triggerRTZ(LivingEntity attacker, LivingEntity GERuser) {
+        if (attacker == null || GERuser == null || attacker == GERuser) {
+            return;
+        }
+
+        DamageSource source = attacker instanceof Player player
+                ? GERuser.damageSources().playerAttack(player)
+                : GERuser.damageSources().mobAttack(attacker);
+
+        GERuser.invulnerableTime = 0;
+        GERuser.hurt(source, 1.0F);
+    }
+
     /** Returns the vertical angle between two mobs in degrees */
     public static float getLookAtEntityPitch(Entity user, Entity targetEntity) {
         double f;
@@ -3004,26 +3020,42 @@ public class MainUtil {
     }
 
     public static boolean isSpecialEffect(MobEffect value) {
-        return value.equals(ModEffects.BLEED) || value.equals(ModEffects.FACELESS)
-                || value.equals(ModEffects.BANISH) || value.equals(ModEffects.WARDING) || value.equals(ModEffects.HEX)
-                || value.equals(ModEffects.DOOMED) || value.equals(ModEffects.DOOM_IMMUNITY)
-                || value.equals(ModEffects.SWITCH) || value.equals(ModEffects.STAND_VIRUS) ||
-                value.equals(ModEffects.IMPRINTING) || value.equals(ModEffects.SWAPPED) ||
-                value.equals(ModEffects.SINGE)
-                || value.equals(ModEffects.STAND_MELTING) ||
-                value.equals(ModEffects.CAPTURING_LOVE) || value.equals(ModEffects.MELTING)
-                || value.equals(ModEffects.MOLD) || value.equals(ModEffects.STITCHED) || value.equals(ModEffects.RECONSTRUCTION);
+        return value.equals(ModEffects.BLEED)
+                || value.equals(ModEffects.FACELESS)
+                || value.equals(ModEffects.BANISH)
+                || value.equals(ModEffects.WARDING)
+                || value.equals(ModEffects.HEX)
+                || value.equals(ModEffects.DOOMED)
+                || value.equals(ModEffects.DOOM_IMMUNITY)
+                || value.equals(ModEffects.SWITCH)
+                || value.equals(ModEffects.STAND_VIRUS)
+                || value.equals(ModEffects.IMPRINTING)
+                || value.equals(ModEffects.SWAPPED)
+                || value.equals(ModEffects.SINGE)
+                || value.equals(ModEffects.STAND_MELTING)
+                || value.equals(ModEffects.CAPTURING_LOVE) || value.equals(ModEffects.MELTING)
+                || value.equals(ModEffects.MOLD)
+                || value.equals(ModEffects.STITCHED)
+                || value.equals(ModEffects.INFINITE_SPIN)
+                || value.equals(ModEffects.RECONSTRUCTION);
     }
 
     public static boolean hidesPotionEffectSwirl(MobEffect value) {
-        return value.equals(ModEffects.BLEED) || value.equals(ModEffects.CAPTURING_LOVE)
+        return value.equals(ModEffects.BLEED)
+                || value.equals(ModEffects.CAPTURING_LOVE)
                 || value.equals(ModEffects.FACELESS)
-                || value.equals(ModEffects.BANISH) || value.equals(ModEffects.WARDING) || value.equals(ModEffects.HEX)
+                || value.equals(ModEffects.BANISH)
+                || value.equals(ModEffects.WARDING)
+                || value.equals(ModEffects.HEX)
                 || value.equals(ModEffects.DOOMED)
-                || value.equals(ModEffects.SWITCH) || value.equals(ModEffects.MELTING) ||
-                value.equals(ModEffects.IMPRINTING) || value.equals(ModEffects.SWAPPED)
-                || value.equals(ModEffects.STAND_MELTING) ||
-                value.equals(ModEffects.SINGE) || value.equals(ModEffects.STITCHED);
+                || value.equals(ModEffects.SWITCH)
+                || value.equals(ModEffects.MELTING)
+                || value.equals(ModEffects.IMPRINTING)
+                || value.equals(ModEffects.SWAPPED)
+                || value.equals(ModEffects.STAND_MELTING)
+                || value.equals(ModEffects.SINGE)
+                || value.equals(ModEffects.INFINITE_SPIN)
+                || value.equals(ModEffects.STITCHED);
     }
 
     public static boolean isKnockbackResilient(LivingEntity LE) {
@@ -4063,6 +4095,10 @@ public class MainUtil {
                 }
                 fm.use(player.level(), player, hand);
                 FirearmItem.cycleReload = false;
+            }
+        } else if (context == PacketDataIndex.EXIT_GER_CUTSCENE) {
+            if (PowerTypes.getPlaneOfExisting(player) == 13) {
+                PowerTypes.setPlaneOfExisting(player, (byte) 0);
             }
         }
     }

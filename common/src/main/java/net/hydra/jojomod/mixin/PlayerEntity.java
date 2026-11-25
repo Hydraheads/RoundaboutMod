@@ -9,6 +9,7 @@ import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StoneMaskBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.GERNetherIllusionHelper;
 import net.hydra.jojomod.entity.SilverChariotMountEntity;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
@@ -34,6 +35,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Rotations;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -167,12 +169,32 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     private static final EntityDataAccessor<Rotations> ROUNDABOUT$HAIR_COLOR = SynchedEntityData.defineId(Player.class,
             EntityDataSerializers.ROTATIONS);
 
+    // In your Player mixin
     @Unique
-    private boolean roundabout$pendingGerCutscene = false;
+    private int roundabout$gerDeathLoops = 0;
+
+    @Unique
+    private ListTag roundabout$gerSavedInventory = null;
+
     @Override
-    public boolean rdbt$isPendingGerCutscene() {return this.roundabout$pendingGerCutscene;}
+    public int rdbt$getGerDeathLoops() {
+        return this.roundabout$gerDeathLoops;
+    }
+
     @Override
-    public void rdbt$setPendingGerCutscene(boolean pending) {this.roundabout$pendingGerCutscene = pending;}
+    public void rdbt$setGerDeathLoops(int loops) {
+        this.roundabout$gerDeathLoops = loops;
+    }
+
+    @Override
+    public ListTag rdbt$getGerSavedInventory() {
+        return this.roundabout$gerSavedInventory;
+    }
+
+    @Override
+    public void rdbt$setGerSavedInventory(ListTag inv) {
+        this.roundabout$gerSavedInventory = inv;
+    }
 
     @Unique
     public Deque<Vec3> rdbt$movementHistory = new ArrayDeque<>();
@@ -1901,6 +1923,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
         roundabout$tickStandOrStandless();
         if (this.level().isClientSide()) {
+            if (ClientUtil.isPlayer(this)) {
+                GERNetherIllusionHelper.update((Player) (Object) this);
+            }
             if (MainUtil.isHoldingBanner(this)){
                 if (rdbt$flagTicks < 5){
                     rdbt$flagTicks++;

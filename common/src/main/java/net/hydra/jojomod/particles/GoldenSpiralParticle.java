@@ -1,6 +1,7 @@
 package net.hydra.jojomod.particles;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.minecraft.client.Camera;
@@ -30,6 +31,10 @@ public class GoldenSpiralParticle extends TextureSheetParticle {
         this.quadSize = 0.35F;
         this.sprites = $$7;
         this.setSpriteFromAge($$7);
+
+        this.xd = $$4;
+        this.yd = $$5 + (double)(this.random.nextFloat());
+        this.zd = $$6;
     }
     public void render(VertexConsumer $$0, Camera $$1, float $$2) {
         Vec3 $$3 = $$1.getPosition();
@@ -92,13 +97,13 @@ public class GoldenSpiralParticle extends TextureSheetParticle {
         this.xo = this.x;
         this.yo = this.y;
         this.zo = this.z;
+        this.quadSize *= 0.88F;
         if (this.age++ >= this.lifetime) {
             this.remove();
         } else {
             this.setSpriteFromAge(this.sprites);
         }
     }
-
 
     @Override
     public int getLightColor(float $$0) {

@@ -71,7 +71,13 @@ public class PowersAchtungBaby extends NewDashPreset {
     public boolean isStandEnabled(){
         return ClientNetworking.getAppropriateConfig().achtungSettings.enableAchtungBaby;
     }
-
+    @Override
+    public void onStandSwitch(){
+        if (!self.level().isClientSide()) {
+            ((IEntityAndData) self).roundabout$setTrueInvisibility(-1);
+        }
+        super.onStandSwitch();
+    }
     public boolean invisibleVisionOn(){
         return !getStandUserSelf().roundabout$getUniqueStandModeToggle();
     }

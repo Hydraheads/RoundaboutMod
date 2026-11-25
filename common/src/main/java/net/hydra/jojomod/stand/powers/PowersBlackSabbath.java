@@ -546,9 +546,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                     }
                 }
             }
-            if(isClient()){
-                //makeSoulTest();
-            }
         } else {
             if (!this.getSelf().level().isClientSide()) {
                 blackSelect.forceDespawnSet = true;
@@ -558,11 +555,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         }
         return true;
     }
-
-    public boolean isWideSkin(Player p) {
-        return ((AbstractClientPlayer) p).getModelName().equals("default");
-    }
-
     private boolean biteFingers(LivingEntity ojiroSasame){
         if(this.self.isAlive()) {
             if (!isClient()) {
@@ -585,30 +577,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             }
         }
          return true;
-    }
-    public boolean checkIfYouAreInDark(){
-        Entity $$0 = this.getSelf();
-        BlockPos pos = $$0.blockPosition();
-        long timeOfDay = $$0.level().getDayTime() % 24000L;
-        Vec3 yes = $$0.getEyePosition();
-        BlockPos atVec = BlockPos.containing(yes);
-        boolean isDay = timeOfDay < 12555L || timeOfDay > 23470;
-        if($$0.level().getBrightness(LightLayer.BLOCK, pos) < 12){
-            if(isDay){
-                 if ($$0.level().isRaining() || $$0.level().isThundering()){
-                    return true;
-                } else if ( $$0.level().getBrightness(LightLayer.SKY, atVec) < 14){
-                    return true;
-                }else {
-                    return false;
-                }
-            } else if (!isDay){
-                return true;
-            } else {
-                return false;
-            }
-        }
-        return  false;
     }
     public boolean checkIfBposIsInDark(Vec3 bla){
         Entity $$0 = this.getSelf();
@@ -680,16 +648,14 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                 self.hurt(ModDamageTypes.of(this.self.level(), ModDamageTypes.STAND), 4f);
             }
             if(effect.getDuration() > 35 && effect.getDuration() < 65){
-                Random random = new Random();
-                float flute5 = random.nextFloat(0F, 0.15F);
-                float flute6 = random.nextFloat(-0.35F, 0.35F);
-                float flute7 = random.nextFloat(-0.35F, 0.35F);
                 if(this.self.onGround()) {
-                    ((ServerLevel) self.level()).sendParticles((new DustParticleOptions(new Vector3f(flute5, flute5, flute5), 1.75f)), self.getX() + flute6,
-                            self.getY() - 0.175, self.getZ() + flute7,
-                            200,
-                            0.01, 0.01, 0.01,
-                            0.1);
+                    ((ServerLevel) self.level()).addParticle(
+                            ModParticles.BLACK_SABBATH_MOVING_RIPPLE,
+                            self.getX(),
+                            self.getY() + 0.05f,
+                            self.getZ(),
+                            0.0, 0.0, 0.0
+                    );
                 }
             }
         }
@@ -751,10 +717,10 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         if(slot == 4 && this.getSelf().getHealth() <= 1) {
             return  true;
         }
-        if (slot == 2 && ((!this.checkIfYouAreInDark() && !(moveMode == 3) || this.getStandEntity(self) != null && moveMode != 2 && moveMode != 3|| this.securityTickDown > 1 && this.blackSabbathTargets.isEmpty()))) {
+        if (slot == 2 && ((!checkIfBposIsInDark(self.position()) && !(moveMode == 3) || this.getStandEntity(self) != null && moveMode != 2 && moveMode != 3|| this.securityTickDown > 1 && this.blackSabbathTargets.isEmpty()))) {
             return true;
         }
-        if(slot == 1 && (!this.checkIfYouAreInDark() || getValidPlacement() == null || self.isSwimming() || this.getStandEntity(self) != null || this.moveMode == 3 || this.securityTickDown > 1 || gravityDirection != Direction.DOWN || !self.onGround())){
+        if(slot == 1 && (!checkIfBposIsInDark(self.position()) || getValidPlacement() == null || self.isSwimming() || this.getStandEntity(self) != null || this.moveMode == 3 || this.securityTickDown > 1 || gravityDirection != Direction.DOWN || !self.onGround())){
             return true;
         }
         return super.isAttackIneptVisually(activeP, slot);
@@ -802,8 +768,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             tickBeforeHunt--;
             if(tickBeforeHunt == 1){
                 if(!this.isClient() && this.spawnTarget() != null && this.self.level() instanceof ServerLevel sl){
-                    //createTheMightyHunterOfTheShadows((findBlackSabbathSpawnPosition(sl,spawnTarget(), 25D)));
-
                     if(findBlackSabbathSpawnPosition(sl,spawnTarget(), 25D) != null) {
                         createTheMightyHunterOfTheShadows((findBlackSabbathSpawnPosition(sl, spawnTarget(), 25D)));
                     } else {
@@ -926,7 +890,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             }
 
             if(this.getGrabbed() != null){
-               /* ((StandUser) getGrabbed()).roundabout$updateSealedTicks(-1);*/
                 setGrabbed(null);
                 if(getGrabbedSoul() != null && getGrabbedSoul() instanceof StandEntity se){
                     se.forceDespawn(true);
@@ -950,13 +913,13 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                             BSE.openCustomInventoryScreen(PL);
                         }
                     }
-                    if(!checkIfYouAreInDark()){
+                    if(!checkIfBposIsInDark(self.position())){
                         this.active = false;
                         this.RecallClient();
                     }
                 }
                 if(selecting){
-                    if(!checkIfYouAreInDark()){
+                    if(!checkIfBposIsInDark(self.position())){
                         playSoundIfPossible(self.level(),null, this.self.getX(), this.self.getY(),
                                 this.self.getZ(), ModSounds.RATT_DEPLACE_EVENT, this.self.getSoundSource(), 1F, 1.1F);
                         this.selecting = false;
@@ -965,15 +928,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                 }
             }
         }
-
-        String test = "";
-
-        if(this.isClient()){
-            test = "Level is Clientside";
-        } else {
-            test = "Level is Serverside";
-        }
-
         if(active && this.getStandEntity(self) != null){
             if(this.getStandEntity(self).tickCount % 6 == 0) {
                 this.getStandEntity(self).level().addParticle(
@@ -986,9 +940,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             }
         }
 
-        //System.out.println(tickDown2 + ". " + test);
-       // System.out.println(blackSabbathTargets + ". " + test);
-       // System.out.println(moveMode + ". " + test);
 if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be) {
     DimensionType t = be.level().dimensionType();
     DimensionType T = this.getSelf().level().dimensionType();
@@ -1108,10 +1059,27 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
         }
     }
 
+    boolean sealStandPenalty = false;
+    int lostHp = 0;
+
     public void tickPowerEnd() {
         if (blackSelect != null && this.getStandEntity(self) != null) {
             if (!this.self.level().isClientSide()) {
-                blackRotation((BlackSabbathEntity) this.getStandEntity(self));
+                //blackRotation((BlackSabbathEntity) this.getStandEntity(self));
+                int difference = (int) this.getStandEntity(self).getMaxHealth() - (int) this.getStandEntity(self).getHealth();
+                lostHp = difference;
+                if(this.getStandEntity(self) instanceof BlackSabbathEntity bs && bs.isBlackSabbathUnderLight() && bs.getHunting()){
+                    sealStandPenalty = true;
+                }
+            }
+        } else {
+            if(!isClient() && sealStandPenalty){
+                sealStandPenalty = false;
+                if(lostHp >= 3) {
+                    ((StandUser) this.getSelf()).roundabout$setSealedTicks(lostHp * 15);
+                    this.setTickDown2(20);
+                    lostHp = 0;
+                }
             }
         }
     }
@@ -1161,9 +1129,9 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
                         var blockState3 = this.self.level().getBlockState(bpos3);
                         AABB yesbox3 = ModEntities.BLACK_SABBATH.getAABB(lent.getX(), Mth.floor(lent.getY()), lent.getZ());
                         AABB testBox3 = yesbox3.move(
-                                candidate.x - lent.getX(),
-                                candidate.y - lent.getY(),
-                                candidate.z - lent.getZ()
+                                candidate3.x - lent.getX(),
+                                candidate3.y - lent.getY(),
+                                candidate3.z - lent.getZ()
                         );;
                         if (level.noCollision(lent, testBox3) && !blockState3.is(Blocks.LAVA) && !blockState3.isAir() && checkIfBposIsInDark(candidate3)) {
                             return candidate3;
@@ -1280,7 +1248,11 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
                                         }
                                     }
                                 }else if (self instanceof Evoker){
-                                    stack = new ItemStack(ModItems.STAND_ARROW);
+                                    Random weaponRandom = new Random();
+                                    int weapon = weaponRandom.nextInt(0, 5);
+                                    if(weapon == 4) {
+                                        stack = new ItemStack(ModItems.STAND_ARROW);
+                                    }
                                 }else if (self instanceof Vindicator){
                                     stack = new ItemStack(Items.IRON_AXE);
                                 }else if (self instanceof PiglinBrute){
@@ -1444,7 +1416,6 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
         StandEntity stand = getNewStandEntity();
         Vec3 lvec = getLookAngleChest(self.getYRot(), self);
         Position pn = self.getEyePosition().add(lvec.scale(1));
-        BlockPos position = this.getValidPlacement();
         if (self.level() instanceof ServerLevel sl){
             playSoundIfPossible(self.level(),null, this.self.blockPosition(),
                     ModSounds.OPEN_BLACK_SABBATH_CHEST_EVENT, SoundSource.PLAYERS, 1F,

@@ -35,7 +35,7 @@ import java.util.List;
 
 public class PowersBadCompany extends NewDashPreset {
     @Override public boolean isWip(){return true;}
-    @Override public Component ifWipListDevStatus(){ return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.GREEN);}
+    @Override public Component ifWipListDevStatus(){ return Component.translatable(  "roundabout.dev_status.paused").withStyle(ChatFormatting.YELLOW);}
     @Override public Component ifWipListDev(){ return Component.literal("DOGael Arts").withStyle(ChatFormatting.AQUA);}
 
     public PowersBadCompany(LivingEntity self) { super(self); }
@@ -64,7 +64,8 @@ public class PowersBadCompany extends NewDashPreset {
         BUNDLE_SUMMON = 51,
         HELICOPTER_SUMMON = 52,
         TANK_SUMMON = 53,
-        MINE_PLANT = 54;
+        MINE_PLANT = 54,
+        SUMMON_SOUNDS = 55;
 
     @Override
     public List<Byte> getSkinList() {
@@ -180,13 +181,22 @@ public class PowersBadCompany extends NewDashPreset {
     }
 
     public float getSoundVolumeFromByte(byte soundChoice){
-        if (soundChoice == SoundIndex.SUMMON_SOUND) {
-            return 0.6f;
-        }else if (soundChoice == SoundIndex.SUMMON_SOUND_2) {
+        if (soundChoice == SoundIndex.SUMMON_SOUND || soundChoice == SoundIndex.SUMMON_SOUND_2
+                || soundChoice == BUNDLE_SUMMON) {
             return 0.6f;
         }
 
         return super.getSoundVolumeFromByte(soundChoice);
+    }
+
+    @Override
+    public byte getSoundCancelingGroupByte(byte soundChoice) {
+        if (soundChoice == TANK_SUMMON || soundChoice == SOLDIER_SUMMON
+                || soundChoice == BUNDLE_SUMMON || soundChoice == HELICOPTER_SUMMON) {
+            return SUMMON_SOUNDS;
+        }
+
+        return super.getSoundCancelingGroupByte(soundChoice);
     }
 
     HashSet<BCTroop> activeTroops = new HashSet<>();
@@ -196,20 +206,12 @@ public class PowersBadCompany extends NewDashPreset {
         }
     }
 
-    private void openTroopSelector() {
-        ClientUtil.openTroopSelectionScreen();
-    }
-    private void openTroopTactics() {
-        ClientUtil.openTroopTacticsScreen();
-    }
+    private void openTroopSelector() { ClientUtil.openTroopSelectionScreen(); }
+    private void openTroopTactics() { ClientUtil.openTroopTacticsScreen(); }
 
-    public void returnTroops() {
-        tryPowerPacket(PowerIndex.POWER_1_SNEAK);
-    }
+    public void returnTroops() { tryPowerPacket(PowerIndex.POWER_1_SNEAK); }
 
-    public void selectedTroop(int id) {
-        tryIntPowerPacket(PowerIndex.POWER_1, id);
-    }
+    public void selectedTroop(int id) { tryIntPowerPacket(PowerIndex.POWER_1, id); }
 
     public void selectedTactics(int id) {
         if (id == TACTIC_FIRE) {
@@ -304,6 +306,8 @@ public class PowersBadCompany extends NewDashPreset {
         if (move == PowerIndex.POWER_1) {
             syncTotalTroopsOut();
 
+            this.stopSoundsIfNearby(SUMMON_SOUNDS, 100, true);
+
             if (chargeTime == TROOP) {
                 spawnSoldier(false);
             }else if (chargeTime == BUNDLE) {
@@ -312,7 +316,6 @@ public class PowersBadCompany extends NewDashPreset {
                 playStandUserOnlySoundsIfNearby(HELICOPTER_SUMMON, 8, false, false);
             }else if (chargeTime == TANK) {
                 spawnTank();
-
             }
 
             syncTotalTroopsOut();
