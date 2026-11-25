@@ -2889,6 +2889,20 @@ public class MainUtil {
         ));
     }
 
+    // call this at the top of things that should logically trigger RTZ (ex. black sabbath grab)
+    public static final void triggerRTZ(LivingEntity attacker, LivingEntity GERuser) {
+        if (attacker == null || GERuser == null || attacker == GERuser) {
+            return;
+        }
+
+        DamageSource source = attacker instanceof Player player
+                ? GERuser.damageSources().playerAttack(player)
+                : GERuser.damageSources().mobAttack(attacker);
+
+        GERuser.invulnerableTime = 0;
+        GERuser.hurt(source, 1.0F);
+    }
+
     /** Returns the vertical angle between two mobs in degrees */
     public static float getLookAtEntityPitch(Entity user, Entity targetEntity) {
         double f;
