@@ -597,7 +597,7 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
 
         StrayCatAirBubble bubble = ModEntities.STRAY_CAT_AIRBUBBLE.create(this.level());
         if (bubble != null) {
-            bubble.setSped(0.15f);
+            bubble.setSped(0.28f);
             bubble.setOwner(this);
             bubble.setSkin(this.getBubbleSkin());
             bubble.strayCatEntityMade = true;

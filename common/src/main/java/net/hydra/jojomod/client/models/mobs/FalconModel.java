@@ -1,5 +1,6 @@
 package net.hydra.jojomod.client.models.mobs;
 
+import net.hydra.jojomod.client.models.mobs.animations.FalconAnimations;
 import net.hydra.jojomod.client.models.stand.StandModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -103,6 +104,11 @@ public class FalconModel<T extends FalconEntity> extends HierarchicalModel<T> im
 		this.root().getAllParts().forEach(ModelPart::resetPose);
 		this.getHead().yRot = pNetHeadYaw * ((float) Math.PI / 180F);
 		this.getHead().xRot = pHeadPitch * ((float) Math.PI / 180F);
+
+		animate(falcon.sitAnimation, FalconAnimations.sit, pAgeInTicks);
+		animate(falcon.flyingAnimation, FalconAnimations.flying, pAgeInTicks);
+		animate(falcon.flappingAnimation, FalconAnimations.flap, pAgeInTicks);
+		animate(falcon.flyingFlapAnimation, FalconAnimations.wing_flap, pAgeInTicks);
 	}
 
 	public void renderOnShoulder(PoseStack $$0, VertexConsumer $$1, int $$2, int $$3, float $$4, float $$5, float pNetHeadYaw, float pHeadPitch, int ticks) {

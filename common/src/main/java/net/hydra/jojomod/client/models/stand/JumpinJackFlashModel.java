@@ -480,6 +480,8 @@ public class JumpinJackFlashModel<T extends FollowingStandEntity> extends StandM
         defaultModifiers(entity);
         defaultAnimations(entity, ageInTicks, 1.0F);
         if (entity instanceof JumpinJackFlashEntity jjf) {
+            this.animate(jjf.driftAnimationState, JumpinJackFlashAnimations.ZERO_G_DRIFT, ageInTicks);
+            this.animate(jjf.spitAnimationState, JumpinJackFlashAnimations.ZERO_G_SPIT, ageInTicks);
             boolean importedActive = jjf.jjfPunchAnimationState.isStarted()
                     || jjf.jjfShootWindupAnimationState.isStarted()
                     || jjf.jjfShootLoopAnimationState.isStarted();

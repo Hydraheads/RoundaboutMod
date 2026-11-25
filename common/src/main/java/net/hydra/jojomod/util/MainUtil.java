@@ -3004,15 +3004,24 @@ public class MainUtil {
     }
 
     public static boolean isSpecialEffect(MobEffect value) {
-        return value.equals(ModEffects.BLEED) || value.equals(ModEffects.FACELESS)
-                || value.equals(ModEffects.BANISH) || value.equals(ModEffects.WARDING) || value.equals(ModEffects.HEX)
-                || value.equals(ModEffects.DOOMED) || value.equals(ModEffects.DOOM_IMMUNITY)
-                || value.equals(ModEffects.SWITCH) || value.equals(ModEffects.STAND_VIRUS) ||
-                value.equals(ModEffects.IMPRINTING) || value.equals(ModEffects.SWAPPED) ||
-                value.equals(ModEffects.SINGE)
-                || value.equals(ModEffects.STAND_MELTING) ||
-                value.equals(ModEffects.CAPTURING_LOVE) || value.equals(ModEffects.MELTING)
-                || value.equals(ModEffects.MOLD) || value.equals(ModEffects.STITCHED) || value.equals(ModEffects.RECONSTRUCTION);
+        return value.equals(ModEffects.BLEED)
+                || value.equals(ModEffects.FACELESS)
+                || value.equals(ModEffects.BANISH)
+                || value.equals(ModEffects.WARDING)
+                || value.equals(ModEffects.HEX)
+                || value.equals(ModEffects.DOOMED)
+                || value.equals(ModEffects.DOOM_IMMUNITY)
+                || value.equals(ModEffects.SWITCH)
+                || value.equals(ModEffects.STAND_VIRUS)
+                || value.equals(ModEffects.IMPRINTING)
+                || value.equals(ModEffects.SWAPPED)
+                || value.equals(ModEffects.SINGE)
+                || value.equals(ModEffects.STAND_MELTING)
+                || value.equals(ModEffects.CAPTURING_LOVE) || value.equals(ModEffects.MELTING)
+                || value.equals(ModEffects.MOLD)
+                || value.equals(ModEffects.STITCHED)
+                || value.equals(ModEffects.INFINITE_SPIN)
+                || value.equals(ModEffects.RECONSTRUCTION);
     }
 
     public static boolean hidesPotionEffectSwirl(MobEffect value) {

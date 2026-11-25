@@ -78,7 +78,7 @@ public class ZombieHorseMural extends RoundaboutPainting {
 
     @Override
     public void dropItem(@Nullable Entity $$0) {
-        this.playSound(SoundEvents.PAINTING_BREAK, 1.0F, 1.0F);
+        this.playSound(SoundEvents.THORNS_HIT, 1.0F, 1.0F);
         if ($$0 instanceof Player $$1 && $$1.getAbilities().instabuild) {
             return;
         }

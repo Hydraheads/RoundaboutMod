@@ -295,8 +295,8 @@ public class ClientConfig implements Cloneable {
         public Boolean silverChariotShouldRenderAfterimagesWhileUserInFirstPerson;
         @FloatOption(group = "inherit", value = 0.9F, min = 0.01F, max = 1F)
         public Float silverChariotAfterimageSpeed;
-        @BooleanOption(group = "inherit", value = true)
-        public Boolean silverChariotShouldForceLeftMainArmWithPart5SkinInArmSummonMode;
+        // @BooleanOption(group = "inherit", value = true)
+        // public Boolean silverChariotShouldForceLeftMainArmWithPart5SkinInArmSummonMode;
     }
     public static class LyinEyesSettings {
         @BooleanOption(group = "inherit", value = false)
