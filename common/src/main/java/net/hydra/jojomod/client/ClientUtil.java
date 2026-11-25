@@ -789,10 +789,11 @@ public class ClientUtil {
                     /**Read in Sent config*/
                     int entId = (int) vargs[0];
                     byte soundID = (byte) vargs[1];
+                    boolean isVoice = (boolean) vargs[2];
                     Entity User = player.level().getEntity(entId);
                     if (User instanceof LivingEntity){
                         if (!PowerTypes.isInADifferentExistenceNoTE(User,player)){
-                            ((StandUserClient) User).roundabout$clientQueSound(soundID);
+                            ((StandUserClient) User).roundabout$clientQueSound(soundID, isVoice);
                         }
                     }
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.StopSound.value)) {
@@ -2037,7 +2038,7 @@ public class ClientUtil {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
             Entity User = player.level().getEntity(startPlayerID);
-            ((StandUserClient) User).roundabout$clientQueSound(soundQue);
+            ((StandUserClient) User).roundabout$clientQueSound(soundQue, false);
         }
     }
 

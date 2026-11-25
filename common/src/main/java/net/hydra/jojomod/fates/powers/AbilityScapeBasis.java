@@ -709,17 +709,17 @@ public class AbilityScapeBasis {
                 BlockPos blockPos = serverPlayerEntity.blockPosition();
                 if (blockPos.closerToCenterThan(userLocation, range)) {
                     if (onSelf) {
-                        S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, serverPlayerEntity.getId(), soundNo);
+                        S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, serverPlayerEntity.getId(), soundNo, isVoice);
                     } else if (soundEmitter != self) {
                         SoundEvent sound = getSoundFromByte(soundNo);
                         if (sound != null) {
                             serverPlayerEntity.connection.send(new ClientboundSoundPacket(Holder.direct(sound),
-                                    SoundSource.NEUTRAL, userLocation.x, userLocation.y, userLocation.z,
-                                    getSoundVolumeFromByte(soundNo), getSoundPitchFromByte(soundNo),
+                                    isVoice ? SoundSource.VOICE : SoundSource.NEUTRAL, userLocation.x, userLocation.y,
+                                    userLocation.z, getSoundVolumeFromByte(soundNo), getSoundPitchFromByte(soundNo),
                                     serverWorld.random.nextLong()));
                         }
                     } else {
-                        S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, soundEmitter.getId(), soundNo);
+                        S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, soundEmitter.getId(), soundNo, isVoice);
                     }
                 }
             }
@@ -809,9 +809,9 @@ public class AbilityScapeBasis {
                 BlockPos blockPos = serverPlayerEntity.blockPosition();
                 if (blockPos.closerToCenterThan(userLocation, range) && !((StandUser)serverPlayerEntity).roundabout$getStandDisc().isEmpty()) {
                     if (onSelf) {
-                        S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, serverPlayerEntity.getId(), soundNo);
+                        S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, serverPlayerEntity.getId(), soundNo, isVoice);
                     } else {
-                        S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, this.self.getId(), soundNo);
+                        S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, this.self.getId(), soundNo, isVoice);
                     }
                 }
             }

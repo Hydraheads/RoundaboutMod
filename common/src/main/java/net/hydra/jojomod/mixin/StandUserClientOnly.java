@@ -157,11 +157,11 @@ public abstract class StandUserClientOnly extends Entity implements StandUserCli
     /**This is called second by the packets, it sets up the client to play the sound on a game tick.
      * If you play it during the packet, it can crash the client because of HashMap problems*/
     @Override
-    public void roundabout$clientQueSound(byte soundChoice){
+    public void roundabout$clientQueSound(byte soundChoice, boolean isVoice){
        SoundEvent soundE = ((StandUser) this).roundabout$getStandPowers().getSoundFromByte(soundChoice);
        if (soundE != null) {
            if (!ClientUtil.getScreenFreeze()){
-               roundabout$AddSound(new QueueSoundInstance(soundE, soundChoice));
+               roundabout$AddSound(new QueueSoundInstance(soundE, soundChoice, isVoice));
            }
        }
     }
@@ -226,7 +226,7 @@ public abstract class StandUserClientOnly extends Entity implements StandUserCli
                     QueueSoundInstance soundI = $$1.get(i);
                     SoundInstance qSound = new EntityBoundSoundInstance(
                             soundI.roundaboutSoundEvent,
-                            SoundSource.NEUTRAL,
+                            soundI.roundaboutIsVoice ? SoundSource.VOICE : SoundSource.NEUTRAL,
                             ((StandUser) this).roundabout$getStandPowers().getSoundVolumeFromByte(soundI.roundaboutSoundByte),
                             ((StandUser) this).roundabout$getStandPowers().getSoundPitchFromByte(soundI.roundaboutSoundByte),
                             ((Entity) (Object) this),
