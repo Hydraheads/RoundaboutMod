@@ -157,7 +157,7 @@ public class PowersGER extends PowersGoldExperience {
         Entity shooter = source.getEntity();
         Entity culprit = shooter != null ? shooter : direct;
 
-        if (culprit != null) {
+        if (culprit != null && !source.is(ModDamageTypes.GO_BEYOND)) {
             if (direct != null && direct != shooter && direct instanceof IEntityAndData directData) {
                 SavedSecond projectileSecond = directData.roundabout$getLastSavedSecond();
                 if (projectileSecond != null) {
