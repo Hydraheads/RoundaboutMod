@@ -113,8 +113,8 @@ public class FalconEntity extends ShoulderRidingEntity implements VariantHolder<
 
         if (animation == FLYING) {
             flyingAnimation.startIfStopped(tickCount);
-            if (tickCount % 120 == 30) {
-                flappingAnimation.start(tickCount);
+            if (tickCount % 110 == 30) {
+                flappingAnimation.startIfStopped(tickCount);
             }
         }else {
             flyingAnimation.stop();
