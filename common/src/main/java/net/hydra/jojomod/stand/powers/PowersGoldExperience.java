@@ -2355,7 +2355,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
         MOB_KILL(3.0F),
         STAND_USER_KILL(7.0F),
         DEAL_PLAYER_DAMAGE(5.0F),
-        RAID_WIN(50);
+        RAID_WIN(50),
+        HARVEST_CROP(1.0F),
+        ANIMAL_CREATION(1.5F);
         // rest of stuff go here
 
         public final float amount;
@@ -2395,6 +2397,53 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // look at ExecutionerAxeRaid
     public void onRaidWon() {
         grantResolve(ResolveSource.RAID_WIN, ResolveSource.RAID_WIN.amount);
+    }
+
+    // look at MemoryServerPlayerGameMode
+    public static boolean isMatureCrop(BlockState state) {
+        Block block = state.getBlock();
+        if (block instanceof CropBlock crop) {
+            return crop.isMaxAge(state);
+        }
+        if (block instanceof NetherWartBlock) {
+            return state.getValue(NetherWartBlock.AGE) >= 3;
+        }
+        if (block instanceof CocoaBlock) {
+            return state.getValue(CocoaBlock.AGE) >= 2;
+        }
+        if (block instanceof SweetBerryBushBlock) {
+            return state.getValue(SweetBerryBushBlock.AGE) >= 3;
+        }
+        return block instanceof StemGrownBlock; // pumpkin and melon
+    }
+
+    public static boolean isRightClickHarvestable(BlockState state) {
+        Block block = state.getBlock();
+        if (block instanceof SweetBerryBushBlock) {
+            return state.getValue(SweetBerryBushBlock.AGE) >= 2;
+        }
+        return isMatureCrop(state);
+    }
+
+    public static boolean wasRightClickHarvested(BlockState before, BlockState after) {
+        if (before.getBlock() != after.getBlock()) {
+            return false;
+        }
+        Block block = before.getBlock();
+        if (block instanceof SweetBerryBushBlock) {
+            return before.getValue(SweetBerryBushBlock.AGE) >= 2 && after.getValue(SweetBerryBushBlock.AGE) == 1;
+        }
+        if (block instanceof CropBlock crop) {
+            return crop.isMaxAge(before) && !crop.isMaxAge(after);
+        }
+        if (block instanceof NetherWartBlock) {
+            return before.getValue(NetherWartBlock.AGE) >= 3 && after.getValue(NetherWartBlock.AGE) == 0;
+        }
+        return false;
+    }
+
+    public void onCropHarvested() {
+        grantResolve(ResolveSource.HARVEST_CROP, ResolveSource.HARVEST_CROP.amount);
     }
 
     // requiem system end
@@ -2993,6 +3042,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 mob.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(mob.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
             }
 
+            grantResolve(ResolveSource.ANIMAL_CREATION, ResolveSource.ANIMAL_CREATION.amount);
             this.self.level().addFreshEntity(livingEntity);
             playSoundIfPossible(this.self.level(), null, BlockPos.containing(spawnPos),
                     ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
