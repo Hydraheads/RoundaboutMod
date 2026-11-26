@@ -29,6 +29,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.*;
+import net.hydra.jojomod.mixin.stand_users.PowersItemStack;
 import net.hydra.jojomod.particles.ColorParticleOptions;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
@@ -405,7 +406,7 @@ public class PowersKingNothing extends NewDashPreset {
             }
             case 3 -> {
                 if ((isHoldingSneak() && (isTrackingItem()
-                        || !hasFormPrediction(getSelf().getMainHandItem().getItem())))) {
+                        || !(hasFormPrediction(getSelf().getMainHandItem()))))) {
                     return true;
                 }
             }
@@ -1955,7 +1956,11 @@ public class PowersKingNothing extends NewDashPreset {
 
     public boolean formPredict() {
         if (!isClient()) {
-            Item held = this.getSelf().getMainHandItem().getItem();
+            ItemStack stack = this.getSelf().getMainHandItem();
+            if (!PowersGoldExperience.getDisguisedDisplayStack(stack).isEmpty()) {
+                stack = PowersGoldExperience.getDisguisedDisplayStack(stack);
+            }
+            Item held = stack.getItem();
             Block potentialBlock = getBlockFormPrediction(held);
             if (potentialBlock != null) {
                 this.setMemorizedScent(potentialBlock);
@@ -1978,7 +1983,11 @@ public class PowersKingNothing extends NewDashPreset {
         return true;
     }
 
-    public boolean hasFormPrediction(Item item) {
+    public boolean hasFormPrediction(ItemStack stack) {
+        if (!PowersGoldExperience.getDisguisedDisplayStack(stack).isEmpty()) {
+            stack = PowersGoldExperience.getDisguisedDisplayStack(stack);
+        }
+        Item item = stack.getItem();
         return getEntityFormPrediction(item) != null || getBlockFormPrediction(item) != null;
     }
 

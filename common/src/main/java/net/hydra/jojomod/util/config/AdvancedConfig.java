@@ -686,9 +686,16 @@ public class AdvancedConfig implements Cloneable {
             )
     );
 
-    public Set<String> kingNothingEntitySniffOverrides = new HashSet<>(
+    public Set<String> kingNothingEntitySniffOverridesv2 = new HashSet<>(
             Arrays.asList(
-                    "mod_id:add_mob_A_here:mod_id:add_mob_B_here"
+                    "roundabout:ge_fish:minecraft:salmon",
+                    "roundabout:ge_piranha:roundabout:piranha",
+                    "roundabout:ge_bee:minecraft:bee",
+                    "roundabout:ge_snake:roundabout:snake",
+                    "roundabout:ge_fox:minecraft:fox",
+                    "roundabout:ge_frog:minecraft:frog",
+                    "roundabout:ge_butterfly:roundabout:butterfly",
+                    "roundabout:ge_bat:minecraft:bat"
             )
     );
 

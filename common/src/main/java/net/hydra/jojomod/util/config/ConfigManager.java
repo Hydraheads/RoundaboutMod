@@ -288,11 +288,10 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getAdvancedConfig().kingNothingEntitySniffOverrides != null) {
+        if (getAdvancedConfig().kingNothingEntitySniffOverridesv2 != null) {
             MainUtil.KING_NOTHING_ENTITY_SNIFF_OVERRIDES.clear();
-            for (String entry : getAdvancedConfig().kingNothingEntitySniffOverrides) {
+            for (String entry : getAdvancedConfig().kingNothingEntitySniffOverridesv2) {
                 try {
-                    if (entry.equals("mod_id:add_mob_A_here:mod_id:add_mob_B_here")) continue;
                     String[] split = entry.split(":");
 
                     if (split.length != 4) {

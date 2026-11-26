@@ -44,7 +44,6 @@ public class TrackingCloudEntity extends StandEntity {
                     this.discard();
                     return;
                 }
-        redirectVector();
         List<Entity> list = this.level().getEntities(this, this.getBoundingBox().inflate(0.5f), entity ->
                 entity.getType().equals(PKN.getMemorizedEntityType())
                         || entity.getUUID().equals(PKN.getMemorizedPlayer())
@@ -56,6 +55,7 @@ public class TrackingCloudEntity extends StandEntity {
         }
         else {
             PKN.clearTrackedEntity();
+            redirectVector();
         }
         if (!hasTarget) {
             this.discard();
