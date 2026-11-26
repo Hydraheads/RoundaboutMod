@@ -671,7 +671,8 @@ public class PowersKingNothing extends NewDashPreset {
                     TrackingCloudEntity tc = ModEntities.TRACKING_CLOUD.create(this.getSelf().level());
                     if (tc != null) {
                         tc.setUser(this.getSelf());
-                        tc.setPos(getSelf().getBoundingBox().getCenter());
+                        tc.setPos(getStandEntity(getSelf()) == null ? getSelf().getBoundingBox().getCenter() :
+                                getStandEntity(getSelf()).getBoundingBox().getCenter());
                         this.getSelf().level().addFreshEntity(tc);
                         this.trackingCloud = tc;
                     }

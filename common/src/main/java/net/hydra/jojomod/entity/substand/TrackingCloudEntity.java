@@ -55,6 +55,8 @@ public class TrackingCloudEntity extends StandEntity {
         }
         else {
             PKN.clearTrackedEntity();
+        }
+        if (tickCount % 2 == 1) {
             redirectVector();
         }
         if (!hasTarget) {
