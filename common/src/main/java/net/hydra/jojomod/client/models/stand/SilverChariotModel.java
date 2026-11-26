@@ -335,6 +335,15 @@ public class SilverChariotModel<T extends SilverChariotEntity> extends StandMode
 			}
 		}
 
+		if (pEntity.getHasRapier()) {
+			this.right_blade.visible = true;
+			this.left_blade.visible = true;
+		} else {
+			this.right_blade.visible = false;
+			this.left_blade.visible = false;
+		}
+
+		/*
 		if (((StandUser) pEntity.getUser()).roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PSC.onCooldown(PowersSilverChariot.SKILL_SILVER_CHARIOT_SWORD_SHOOT_INDEX)) {
 			this.right_blade.visible = false;
 			this.left_blade.visible = false;
@@ -342,6 +351,7 @@ public class SilverChariotModel<T extends SilverChariotEntity> extends StandMode
 			this.right_blade.visible = true;
 			this.left_blade.visible = true;
 		}
+		*/
 
 		this.animate(pEntity.scFallBrace, SilverChariotAnimations.FallBrace(), pAgeInTicks, 1f);
 		this.animate(pEntity.scGuardLeftBreak, SilverChariotAnimations.LeftGuardBreak(), pAgeInTicks, 1.8f);

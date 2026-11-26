@@ -110,6 +110,9 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
     @Shadow
     protected abstract boolean doesMobEffectBlockSky(Camera $$0);
 
+    @Shadow
+    protected abstract void renderEndSky(PoseStack $$0);
+
     @Override
     @Unique
     public ViewArea roundabout$getViewArea(){
@@ -479,7 +482,8 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
     @Inject(method = "renderClouds",
             at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$renderClouds(PoseStack $$0, Matrix4f $$1, float $$2, double $$3, double $$4, double $$5, CallbackInfo ci) {
-        if (ClientUtil.isUsingTimeErase || ClientUtil.isUnderRTZ() || GERNetherIllusionHelper.active) {
+        if (ClientUtil.isUsingTimeErase || ClientUtil.isUnderRTZ()
+                || GERNetherIllusionHelper.active || GERNetherIllusionHelper.endActive) {
             ci.cancel();
         }
     }
@@ -1092,10 +1096,12 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
         }
     }
 
-    @Inject(method = "renderSky",
-            at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method = "renderSky", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$cancelNetherIllusionSky(PoseStack $$0, Matrix4f $$1, float $$2, Camera $$3, boolean $$4, Runnable $$5, CallbackInfo ci) {
-        if (GERNetherIllusionHelper.active) {
+        if (GERNetherIllusionHelper.endActive) {
+            this.renderEndSky($$0);
+            ci.cancel();
+        } else if (GERNetherIllusionHelper.active) {
             ci.cancel();
         }
     }

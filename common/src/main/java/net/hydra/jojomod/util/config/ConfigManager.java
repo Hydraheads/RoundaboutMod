@@ -145,9 +145,9 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getAdvancedConfig().kingNothingBlockFormPredictions != null) {
+        if (getAdvancedConfig().kingNothingBlockFormPredictionsv3 != null) {
             MainUtil.KING_NOTHING_BLOCK_FORM_PREDICT.clear();
-            for (String entry : getAdvancedConfig().kingNothingBlockFormPredictions) {
+            for (String entry : getAdvancedConfig().kingNothingBlockFormPredictionsv3) {
                 try {
                     String[] split = entry.split(":");
 
@@ -176,9 +176,9 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getAdvancedConfig().kingNothingEntityFormPredictionsv2 != null) {
+        if (getAdvancedConfig().kingNothingEntityFormPredictionsv4 != null) {
             MainUtil.KING_NOTHING_ENTITY_FORM_PREDICT.clear();
-            for (String entry : getAdvancedConfig().kingNothingEntityFormPredictionsv2) {
+            for (String entry : getAdvancedConfig().kingNothingEntityFormPredictionsv4) {
                 try {
                     String[] split = entry.split(":");
 
@@ -199,7 +199,8 @@ public abstract class ConfigManager {
                     }
                     ResourceLocation targetId = new ResourceLocation(split[2], split[3]);
                     EntityType<?> targetEntity = BuiltInRegistries.ENTITY_TYPE.get(targetId);
-                    if (targetEntity.equals(EntityType.PIG) && !targetId.equals(new ResourceLocation("minecraft", "pig"))) {
+                    if ((targetEntity.equals(EntityType.PIG) && !targetId.equals(new ResourceLocation("minecraft", "pig")))
+                            || targetEntity.equals(EntityType.PLAYER)) {
                         Roundabout.LOGGER.warn("Invalid entity form predict output: {}", targetId);
                         continue;
                     }
@@ -254,6 +255,70 @@ public abstract class ConfigManager {
         if (getAdvancedConfig().kingNothingMobSniffBlacklistv2 != null) {
             MainUtil.kingNothingMobSniffBlacklist.clear();
             MainUtil.kingNothingMobSniffBlacklist.addAll(getAdvancedConfig().kingNothingMobSniffBlacklistv2);
+        }
+
+        if (getAdvancedConfig().kingNothingBlockSniffOverrides != null) {
+            MainUtil.KING_NOTHING_BLOCK_SNIFF_OVERRIDES.clear();
+            for (String entry : getAdvancedConfig().kingNothingBlockSniffOverrides) {
+                try {
+                    String[] split = entry.split(":");
+
+                    if (split.length != 4) {
+                        Roundabout.LOGGER.warn("Invalid block sniff override entry: {}", entry);
+                        continue;
+                    }
+
+                    ResourceLocation sourceId = new ResourceLocation(split[0], split[1]);
+                    Block sourceItem = BuiltInRegistries.BLOCK.get(sourceId);
+                    if (sourceItem.equals(Blocks.AIR)) {
+                        Roundabout.LOGGER.warn("Invalid block sniff override input: {}", sourceId);
+                        continue;
+                    }
+                    ResourceLocation targetId = new ResourceLocation(split[2], split[3]);
+                    Block targetBlock = BuiltInRegistries.BLOCK.get(targetId);
+                    if (targetBlock.asItem().equals(Items.AIR) || targetBlock.equals(Blocks.AIR)
+                            || targetBlock.defaultDestroyTime() < 0) {
+                        Roundabout.LOGGER.warn("Invalid block sniff override output: {}", targetId);
+                        continue;
+                    }
+                    MainUtil.KING_NOTHING_BLOCK_SNIFF_OVERRIDES.put(sourceItem, targetBlock);
+                } catch (Exception e) {
+                    Roundabout.LOGGER.error("Failed to parse block sniff override entry '{}'", entry, e);
+                }
+            }
+        }
+
+        if (getAdvancedConfig().kingNothingEntitySniffOverrides != null) {
+            MainUtil.KING_NOTHING_ENTITY_SNIFF_OVERRIDES.clear();
+            for (String entry : getAdvancedConfig().kingNothingEntitySniffOverrides) {
+                try {
+                    if (entry.equals("mod_id:add_mob_A_here:mod_id:add_mob_B_here")) continue;
+                    String[] split = entry.split(":");
+
+                    if (split.length != 4) {
+                        Roundabout.LOGGER.warn("Invalid entity sniff override entry: {}", entry);
+                        continue;
+                    }
+
+                    ResourceLocation sourceId = new ResourceLocation(split[0], split[1]);
+                    EntityType<?> sourceType = BuiltInRegistries.ENTITY_TYPE.get(sourceId);
+                    if ((sourceType.equals(EntityType.PIG) && !sourceId.equals(
+                            new ResourceLocation("minecraft", "pig"))) || sourceType.equals(EntityType.PLAYER)) {
+                        Roundabout.LOGGER.warn("Invalid entity sniff override input: {}", sourceId);
+                        continue;
+                    }
+                    ResourceLocation targetId = new ResourceLocation(split[2], split[3]);
+                    EntityType<?> targetType = BuiltInRegistries.ENTITY_TYPE.get(targetId);
+                    if ((targetType.equals(EntityType.PIG) && !targetId.equals(
+                            new ResourceLocation("minecraft", "pig"))) || sourceType.equals(EntityType.PLAYER)) {
+                        Roundabout.LOGGER.warn("Invalid entity sniff override input: {}", targetId);
+                        continue;
+                    }
+                    MainUtil.KING_NOTHING_ENTITY_SNIFF_OVERRIDES.put(sourceType, targetType);
+                } catch (Exception e) {
+                    Roundabout.LOGGER.error("Failed to parse block sniff override entry '{}'", entry, e);
+                }
+            }
         }
 
         if (getAdvancedConfig().silverChariotBlocksToSlabsV2 != null)

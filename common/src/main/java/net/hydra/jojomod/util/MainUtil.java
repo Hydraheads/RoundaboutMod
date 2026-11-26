@@ -249,6 +249,8 @@ public class MainUtil {
 
     public static final Map<Item, Block> KING_NOTHING_BLOCK_FORM_PREDICT = new HashMap<>();
     public static final Map<Item, EntityType<?>> KING_NOTHING_ENTITY_FORM_PREDICT = new HashMap<>();
+    public static final Map<Block, Block> KING_NOTHING_BLOCK_SNIFF_OVERRIDES = new HashMap<>();
+    public static final Map<EntityType<?>, EntityType<?>> KING_NOTHING_ENTITY_SNIFF_OVERRIDES = new HashMap<>();
     public static final Map<Block, Set<Block>> KING_NOTHING_BLOCK_GROUPS = new HashMap<>();
     public static final Map<Block, Block> KING_NOTHING_BLOCK_KEYS = new HashMap<>();
 
@@ -2885,6 +2887,16 @@ public class MainUtil {
                 || source.is(DamageTypes.UNATTRIBUTED_FIREBALL)
                 || source.is(DamageTypes.FALLING_STALACTITE)
         ));
+    }
+
+    // call this at the top of things that should logically trigger RTZ (ex. black sabbath grab)
+    public static final void triggerRTZ(LivingEntity attacker, LivingEntity GERuser) {
+        if (attacker == null || GERuser == null || attacker == GERuser) {
+            return;
+        }
+
+        GERuser.invulnerableTime = 0;
+        GERuser.hurt(GERuser.damageSources().mobAttack(attacker), 1.0F);
     }
 
     /** Returns the vertical angle between two mobs in degrees */

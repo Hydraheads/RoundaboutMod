@@ -3,27 +3,33 @@ package net.hydra.jojomod.client;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.monster.Blaze;
+import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
 
 public class GERNetherIllusionHelper {
     public static boolean active = false;
+    public static boolean endActive = false;
 
     public static void update(Player player) {
         boolean inGerPlane = player.isAlive() && PowerTypes.getPlaneOfExisting(player) == 13;
 
-        boolean shouldBeActive;
+        boolean shouldBeNether;
+        boolean shouldBeEnd;
         if (!inGerPlane) {
-            shouldBeActive = false;
-        } else if (active) {
-            shouldBeActive = true;
+            shouldBeNether = false;
+            shouldBeEnd = false;
         } else {
-            shouldBeActive = !player.level().getEntitiesOfClass(
+            shouldBeNether = active || !player.level().getEntitiesOfClass(
                     Blaze.class, player.getBoundingBox().inflate(16.0D)
+            ).isEmpty();
+            shouldBeEnd = endActive || !player.level().getEntitiesOfClass(
+                    EnderMan.class, player.getBoundingBox().inflate(16.0D)
             ).isEmpty();
         }
 
-        if (shouldBeActive != active) {
-            active = shouldBeActive;
+        if (shouldBeNether != active || shouldBeEnd != endActive) {
+            active = shouldBeNether;
+            endActive = shouldBeEnd;
             Minecraft mc = Minecraft.getInstance();
             int x = player.getBlockX();
             int y = player.getBlockY();

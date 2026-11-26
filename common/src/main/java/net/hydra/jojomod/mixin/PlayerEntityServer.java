@@ -21,9 +21,13 @@ import net.hydra.jojomod.stand.powers.PowersDiverDown;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
 import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
@@ -38,10 +42,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.FallingBlockEntity;
-import net.minecraft.world.entity.monster.Blaze;
-import net.minecraft.world.entity.monster.Creeper;
-import net.minecraft.world.entity.monster.Skeleton;
-import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Arrow;
@@ -66,6 +67,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,6 +110,8 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
     @Unique private int roundabout$gerScenarioTicks = 0;
     @Unique private boolean roundabout$gerScenarioStarted = false;
     @Unique private final List<Entity> roundabout$gerTempEntities = new ArrayList<>();
+    @Unique private ResourceKey<Level> roundabout$gerLoopDeathDim = Level.OVERWORLD;
+    @Unique @Nullable private Vec3 roundabout$gerLoopDeathVec = null;
 
     @Override
     public void roundabout$setInvincibleTicks(int ticks){
@@ -252,10 +256,45 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
                 }
                 ipe.rdbt$setGerSavedInventory(savedInv);
                 this.getInventory().clearContent();
+
+                this.roundabout$copySavedGerSpawnFrom((IPlayerEntityServer) $$0);
+                if (this.roundabout$gerLoopDeathVec != null && this.getServer() != null) {
+                    ServerLevel targetLevel = this.getServer().getLevel(this.roundabout$gerLoopDeathDim);
+                    if (targetLevel != null) {
+                        ((ServerPlayer) (Object) this).teleportTo(
+                                targetLevel,
+                                this.roundabout$gerLoopDeathVec.x,
+                                this.roundabout$gerLoopDeathVec.y,
+                                this.roundabout$gerLoopDeathVec.z,
+                                this.getYRot(),
+                                this.getXRot()
+                        );
+                    }
+                }
             } else if (!$$1 && savedInv != null) {
                 this.getInventory().load(savedInv);
                 ipe.rdbt$setGerSavedInventory(null);
             }
+        }
+    }
+
+    @Inject(method = "disconnect", at = @At("HEAD"))
+    public void roundabout$onDisconnect(CallbackInfo ci) {
+        IPlayerEntity ipe = (IPlayerEntity) this;
+        if (this.roundabout$gerLoopDeathVec != null || ipe.rdbt$getGerDeathLoops() > 0) {
+            roundabout$cleanupGerScenario();
+            ipe.rdbt$setGerDeathLoops(0);
+            roundabout$gerScenarioStarted = false;
+            roundabout$gerScenarioTicks = 0;
+            this.roundabout$gerLoopDeathVec = null;
+
+            ListTag savedInv = ipe.rdbt$getGerSavedInventory();
+            if (savedInv != null) {
+                this.getInventory().load(savedInv);
+                ipe.rdbt$setGerSavedInventory(null);
+            }
+
+            PowerTypes.setPlaneOfExisting(this, (byte) 0);
         }
     }
 
@@ -295,9 +334,14 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
         int loops = ipe.rdbt$getGerDeathLoops();
         if (loops > 0) {
             roundabout$cleanupGerScenario();
-            ipe.rdbt$setGerDeathLoops(loops - 1);
+            int remaining = loops - 1;
+            ipe.rdbt$setGerDeathLoops(remaining);
             roundabout$gerScenarioStarted = false;
             roundabout$gerScenarioTicks = 0;
+
+            if (remaining <= 0) {
+                this.roundabout$gerLoopDeathVec = null;
+            }
         }
     }
 
@@ -401,10 +445,19 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
             case 7 -> {
                 this.playNotifySound(SoundEvents.TNT_PRIMED, SoundSource.BLOCKS, 1.0F, 1.0F);
             }
-            // void
+            // enderman jumpscare
             case 8 -> {
-                double belowBedrockY = sl.getMinBuildHeight() - 2.0D;
-                this.teleportTo(this.getX(), belowBedrockY, this.getZ());
+                EnderMan enderman = EntityType.ENDERMAN.create(sl);
+                if (enderman != null) {
+                    enderman.moveTo(this.getX() + 2.5, this.getY(), this.getZ());
+                    enderman.setTarget(this);
+                    enderman.setPersistentAngerTarget(this.getUUID());
+                    enderman.setRemainingPersistentAngerTime(1200);
+                    enderman.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(8.0);
+                    PowerTypes.setPlaneOfExisting(enderman, (byte) 13);
+                    sl.addFreshEntity(enderman);
+                    roundabout$gerTempEntities.add(enderman);
+                }
             }
             // lightning storm (in tick)
             case 9 -> {
@@ -513,6 +566,12 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
                 sl.addFreshEntity(fireball);
             }
 
+            if (e instanceof EnderMan enderman) {
+                if (enderman.getTarget() != this) {
+                    enderman.setTarget(this);
+                }
+            }
+
             // creeper anti grief
             if (e instanceof Creeper creeper && creeper.getSwelling(0.0F) >= 0.9F) {
                 double x = creeper.getX(), y = creeper.getY(), z = creeper.getZ();
@@ -600,5 +659,22 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
             }
         }
         roundabout$gerTempEntities.clear();
+    }
+
+    @Override
+    @Unique
+    public void roundabout$setTemporaryGerSpawn(BlockPos deathPos) {
+        ServerPlayer sp = (ServerPlayer) (Object) this;
+        this.roundabout$gerLoopDeathDim = sp.level().dimension();
+        this.roundabout$gerLoopDeathVec = sp.position();
+    }
+
+    @Override
+    @Unique
+    public void roundabout$copySavedGerSpawnFrom(IPlayerEntityServer oldPlayer) {
+        if (oldPlayer instanceof PlayerEntityServer oldPes && oldPes.roundabout$gerLoopDeathVec != null) {
+            this.roundabout$gerLoopDeathDim = oldPes.roundabout$gerLoopDeathDim;
+            this.roundabout$gerLoopDeathVec = oldPes.roundabout$gerLoopDeathVec;
+        }
     }
 }

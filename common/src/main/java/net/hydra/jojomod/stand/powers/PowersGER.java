@@ -3,6 +3,7 @@ package net.hydra.jojomod.stand.powers;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IPlayerEntityServer;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
@@ -18,10 +19,12 @@ import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.presets.TWAndSPSharedPowers;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -156,7 +159,7 @@ public class PowersGER extends PowersGoldExperience {
         Entity shooter = source.getEntity();
         Entity culprit = shooter != null ? shooter : direct;
 
-        if (culprit != null) {
+        if (culprit != null && !source.is(ModDamageTypes.GO_BEYOND) && culprit != this.getSelf()) {
             if (direct != null && direct != shooter && direct instanceof IEntityAndData directData) {
                 SavedSecond projectileSecond = directData.roundabout$getLastSavedSecond();
                 if (projectileSecond != null) {
@@ -165,6 +168,10 @@ public class PowersGER extends PowersGoldExperience {
             }
 
             if (culprit instanceof LivingEntity livingCulprit) {
+                if (((TimeStop) livingCulprit.level()).isTimeStoppingEntity(livingCulprit)
+                        && ((StandUser) livingCulprit).roundabout$getStandPowers() instanceof TWAndSPSharedPowers tsPowers) {
+                    tsPowers.resumeTime();
+                }
                 IEntityAndData iData = (IEntityAndData) livingCulprit;
                 SavedSecond lastSecond = iData.roundabout$getLastSavedSecond();
                 if (lastSecond != null) {
@@ -219,6 +226,7 @@ public class PowersGER extends PowersGoldExperience {
                 IPlayerEntity ipe = (IPlayerEntity) serverPlayer;
                 if (ipe.rdbt$getGerDeathLoops() <= 0) {
                     ipe.rdbt$setGerDeathLoops(10);
+                    ((IPlayerEntityServer) serverPlayer).roundabout$setTemporaryGerSpawn(serverPlayer.blockPosition());
                 }
             }
         }

@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.mobs;
 
 import com.google.common.collect.Sets;
 import com.mojang.serialization.Codec;
+import net.hydra.jojomod.entity.ModEntities;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -22,15 +23,14 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.BodyRotationControl;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
+import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.util.LandRandomPos;
-import net.minecraft.world.entity.animal.FlyingAnimal;
-import net.minecraft.world.entity.animal.Parrot;
-import net.minecraft.world.entity.animal.ShoulderRidingEntity;
-import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -41,8 +41,9 @@ import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
 import java.util.Set;
 import java.util.function.IntFunction;
 
@@ -88,12 +89,15 @@ public class FalconEntity extends ShoulderRidingEntity implements VariantHolder<
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 14.0D).add(Attributes.FLYING_SPEED, (double)0.6F).add(Attributes.MOVEMENT_SPEED, (double)0.3F);
     }
 
-    protected PathNavigation createNavigation(Level p_29417_) {
+    protected @NotNull PathNavigation createNavigation(Level p_29417_) {
         FlyingPathNavigation flyingpathnavigation = new FlyingPathNavigation(this, p_29417_);
         flyingpathnavigation.setCanOpenDoors(false);
         flyingpathnavigation.setCanFloat(true);
-        flyingpathnavigation.setCanPassDoors(true);
         return flyingpathnavigation;
+    }
+
+    protected @NotNull BodyRotationControl createBodyControl() {
+        return new FalconFlyingRotationControl( this);
     }
 
     private int flyingTicks = 0;
@@ -109,8 +113,12 @@ public class FalconEntity extends ShoulderRidingEntity implements VariantHolder<
 
         if (animation == FLYING) {
             flyingAnimation.startIfStopped(tickCount);
+            if (tickCount % 110 == 30) {
+                flyingFlapAnimation.startIfStopped(tickCount);
+            }
         }else {
             flyingAnimation.stop();
+            flyingFlapAnimation.stop();
         }
 
         if (isOrderedToSit()) {
@@ -127,10 +135,10 @@ public class FalconEntity extends ShoulderRidingEntity implements VariantHolder<
         } else {
             if (!onGround()) {
                 flyingTicks++;
-                if (flyingTicks < 35) {
-                    setAnimation(FLAPPING);
-                }else {
+                if (isPlaning()) {
                     setAnimation(FLYING);
+                }else {
+                    setAnimation(FLAPPING);
                 }
             }else {
                 flyingTicks = 0;
@@ -146,7 +154,7 @@ public class FalconEntity extends ShoulderRidingEntity implements VariantHolder<
         super.aiStep();
         Vec3 vec3 = this.getDeltaMovement();
         if (!this.onGround() && vec3.y < 0.0D) {
-            this.setDeltaMovement(vec3.multiply(1.0D, 0.6D, 1.0D));
+            this.setDeltaMovement(vec3.multiply(1.0D, isPlaning() ? 0.4D : 0.6D, 1.0D));
         }
     }
 
@@ -159,11 +167,26 @@ public class FalconEntity extends ShoulderRidingEntity implements VariantHolder<
         return super.finalizeSpawn(p_29389_, p_29390_, p_29391_, p_29392_, p_29393_);
     }
 
-    @Override
-    public @Nullable AgeableMob getBreedOffspring(ServerLevel serverLevel, AgeableMob ageableMob) {
-        return null;
+    public boolean canMate(Animal p_28127_) {
+        if (!this.isTame()) {
+            return false;
+        } else if (!(p_28127_ instanceof FalconEntity)) {
+            return false;
+        } else {
+            FalconEntity falcon = (FalconEntity)p_28127_;
+            return falcon.isTame() && super.canMate(p_28127_);
+        }
     }
 
+    @Override
+    public FalconEntity getBreedOffspring(ServerLevel level, AgeableMob p_148913_) {
+        FalconEntity falcon = ModEntities.FALCON.create(level);
+        if (falcon != null) {
+            falcon.setVariant(this.random.nextBoolean() ? this.getVariant() : ((FalconEntity)p_148913_).getVariant());
+        }
+
+        return falcon;
+    }
 
     public FalconEntity.Variant getVariant() {
         return FalconEntity.Variant.byId(this.entityData.get(DATA_VARIANT_ID));
@@ -193,6 +216,8 @@ public class FalconEntity extends ShoulderRidingEntity implements VariantHolder<
         return !this.onGround();
     }
 
+    public boolean isPlaning() {return flyingTicks >= 35; }
+
     protected void checkFallDamage(double p_29370_, boolean p_29371_, BlockState p_29372_, BlockPos p_29373_) {
     }
 
@@ -209,6 +234,7 @@ public class FalconEntity extends ShoulderRidingEntity implements VariantHolder<
         this.goalSelector.addGoal(2, new FalconWanderGoal(this, 1.0D));
         this.goalSelector.addGoal(3, new LandOnOwnersShoulderGoal(this));
         this.goalSelector.addGoal(3, new FollowMobGoal(this, 1.0D, 3.0F, 7.0F));
+        this.goalSelector.addGoal(10, new BreedGoal(this, 0.8D));
 
     }
 
@@ -310,6 +336,81 @@ public class FalconEntity extends ShoulderRidingEntity implements VariantHolder<
 
         public String getSerializedName() {
             return this.name;
+        }
+    }
+
+    // Phantom like movement
+
+    Vec3 moveTargetPoint;
+    BlockPos anchorPoint;
+    //Phantom.AttackPhase attackPhase;
+
+    class FalconFlyingRotationControl extends BodyRotationControl {
+        private final FalconEntity falcon;
+
+        public FalconFlyingRotationControl(FalconEntity mob) {
+            super(mob);
+            falcon = mob;
+        }
+
+        public void clientTick() {
+            falcon.yHeadRot = falcon.yBodyRot;
+            falcon.yBodyRot = falcon.getYRot();
+        }
+    }
+
+    class FalconFlyingMoveControl extends MoveControl {
+        private float speed = 0.6F;
+        private final FalconEntity falcon;
+
+        public FalconFlyingMoveControl(FalconEntity $$0) {
+            super($$0);
+            falcon = $$0;
+        }
+
+        public void tick() {
+            if (!falcon.isPlaning()) {
+                super.tick();
+                return;
+            }
+
+            if (falcon.horizontalCollision) {
+                falcon.setYRot(falcon.getYRot() + 180.0F);
+                this.speed = 0.1F;
+            }
+
+            double $$0 = falcon.moveTargetPoint.x - falcon.getX();
+            double $$1 = falcon.moveTargetPoint.y - falcon.getY();
+            double $$2 = falcon.moveTargetPoint.z - falcon.getZ();
+            double $$3 = Math.sqrt($$0 * $$0 + $$2 * $$2);
+            if (Math.abs($$3) > (double)1.0E-5F) {
+                double $$4 = (double)1.0F - Math.abs($$1 * (double)0.7F) / $$3;
+                $$0 *= $$4;
+                $$2 *= $$4;
+                $$3 = Math.sqrt($$0 * $$0 + $$2 * $$2);
+                double $$5 = Math.sqrt($$0 * $$0 + $$2 * $$2 + $$1 * $$1);
+                float $$6 = falcon.getYRot();
+                float $$7 = (float)Mth.atan2($$2, $$0);
+                float $$8 = Mth.wrapDegrees(falcon.getYRot() + 90.0F);
+                float $$9 = Mth.wrapDegrees($$7 * (180F / (float)Math.PI));
+                falcon.setYRot(Mth.approachDegrees($$8, $$9, 4.0F) - 90.0F);
+                falcon.yBodyRot = falcon.getYRot();
+                if (Mth.degreesDifferenceAbs($$6, falcon.getYRot()) < 3.0F) {
+                    this.speed = Mth.approach(this.speed, 2.2F, 0.005F * (1.8F / this.speed));
+                } else {
+                    this.speed = Mth.approach(this.speed, 0.6F, 0.025F);
+                }
+
+                float $$10 = (float)(-(Mth.atan2(-$$1, $$3) * (double)(180F / (float)Math.PI)));
+                falcon.setXRot($$10);
+                float $$11 = falcon.getYRot() + 90.0F;
+                double $$12 = (double)(this.speed * Mth.cos($$11 * ((float)Math.PI / 180F))) * Math.abs($$0 / $$5);
+                double $$13 = (double)(this.speed * Mth.sin($$11 * ((float)Math.PI / 180F))) * Math.abs($$2 / $$5);
+                double $$14 = (double)(this.speed * Mth.sin($$10 * ((float)Math.PI / 180F))) * Math.abs($$1 / $$5);
+                Vec3 $$15 = falcon.getDeltaMovement();
+                falcon.setDeltaMovement($$15.add((new Vec3($$12, $$14, $$13)).subtract($$15).scale(0.2)));
+            }
+
         }
     }
 }

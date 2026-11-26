@@ -86,7 +86,15 @@ public class FalconModel<T extends FalconEntity> extends HierarchicalModel<T> im
 
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		falcon.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		if (young) {
+			poseStack.pushPose();
+			poseStack.scale(0.55f, 0.55f, 0.55f);
+			poseStack.translate(0.0F, 19.0f / 16.0F, 0.0F);
+			this.root().render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+			poseStack.popPose();
+		}else {
+			this.root().render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		}
 	}
 
 	@Override
@@ -114,6 +122,15 @@ public class FalconModel<T extends FalconEntity> extends HierarchicalModel<T> im
 	public void renderOnShoulder(PoseStack $$0, VertexConsumer $$1, int $$2, int $$3, float $$4, float $$5, float pNetHeadYaw, float pHeadPitch, int ticks) {
 		this.getHead().yRot = pNetHeadYaw * ((float) Math.PI / 180F);
 		this.getHead().xRot = pHeadPitch * ((float) Math.PI / 180F);
-		this.root().render($$0, $$1, $$2, $$3);
+		if (young) {
+			$$0.pushPose();
+			$$0.scale(0.55f, 0.55f, 0.55f);
+			$$0.translate(0.0F, 19.0f / 16.0F, 0.0F);
+			this.root().render($$0, $$1, $$2, $$3);
+			$$0.popPose();
+		}else {
+			this.root().render($$0, $$1, $$2, $$3);
+		}
+
 	}	
 }

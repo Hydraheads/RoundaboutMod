@@ -19,13 +19,23 @@ public abstract class GERNetherDisguise {
 
     @Inject(method = "getBlockState", at = @At("RETURN"), cancellable = true)
     private void roundabout$netherIllusionBlockState(BlockPos pos, CallbackInfoReturnable<BlockState> cir) {
-        if (!GERNetherIllusionHelper.active) return;
+        if (!GERNetherIllusionHelper.active && !GERNetherIllusionHelper.endActive) return;
 
         BlockState real = cir.getReturnValue();
         if (real.isAir()) return;
 
         RenderChunkRegion region = (RenderChunkRegion) (Object) this;
         boolean hasCollision = !real.getCollisionShape(region, pos).isEmpty();
+
+        if (GERNetherIllusionHelper.endActive) {
+            if (!hasCollision) {
+                cir.setReturnValue(Blocks.AIR.defaultBlockState());
+            } else {
+                cir.setReturnValue(Blocks.END_STONE.defaultBlockState());
+            }
+            return;
+        }
+
         FluidState fluid = real.getFluidState();
 
         // disguises water as lava
