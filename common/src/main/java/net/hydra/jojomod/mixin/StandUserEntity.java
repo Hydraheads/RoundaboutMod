@@ -5199,6 +5199,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (this.roundabout$hasDiverLegs()) {
             basis *= 1F + (ClientNetworking.getAppropriateConfig().diverDownSettings.legSpeedBoost * 0.01F); //0% speed boost default
         }
+        //inputspeedmodifier doesnt work on mobs idk maybe im stupid
+        if (roundabout$getStandPowers() instanceof PowersCatchTheRainbow PCR && PCR.isInRain() && PCR.hasStandActive(PCR.self)) {
+            basis *= 1.35;
+        }
         if(this.roundabout$getGrabberSabbath() != 0){
             basis *= 0.025F;
         }

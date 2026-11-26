@@ -131,7 +131,7 @@ public class CTRbarrierEntity extends StandEntity {
         super.tick();
     }
 
-    private static void dealWithProjectile(Projectile pj, CTRbarrierEntity this2){
+    private void dealWithProjectile(Projectile pj, CTRbarrierEntity this2){
         if (pj.level() instanceof ServerLevel sl) {
             if (!(pj.getOwner() instanceof LivingEntity LE &&
                     ((StandUser) LE).roundabout$getStandPowers() instanceof PowersCatchTheRainbow)) {
@@ -170,6 +170,12 @@ public class CTRbarrierEntity extends StandEntity {
                     }
 
                     if (pj instanceof Fireball || pj instanceof StandFireballEntity) {
+                        if (lifespan - 30 < 0){
+                            lifespan = 0;
+                        } else {
+                            lifespan = lifespan - 30;
+                        }
+
                         ((ServerLevel) this2.level()).sendParticles(ParticleTypes.SMOKE,
                                 pj.getX(),
                                 pj.getY(),
