@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.GoldExperienceEntity;
+import net.hydra.jojomod.entity.stand.GoldExperienceRequiemEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.SavedSecond;
@@ -59,6 +60,10 @@ public class PowersGER extends PowersGoldExperience {
 
     @Override
     public StandEntity getNewStandEntity() {
+        byte skin = ((StandUser) this.getSelf()).roundabout$getStandSkin();
+        if (skin == GoldExperienceEntity.DEIMOS) {
+            return ModEntities.GOLD_EXPERIENCE_REQUIEM_DEIMOS.create(this.getSelf().level());
+        }
         return ModEntities.GOLD_EXPERIENCE_REQUIEM.create(this.getSelf().level());
     }
 

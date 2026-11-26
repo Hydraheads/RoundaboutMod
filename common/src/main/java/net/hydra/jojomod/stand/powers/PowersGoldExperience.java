@@ -4220,6 +4220,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
             case GoldExperienceEntity.PS2 -> {
                 return Component.translatable("skins.roundabout.gold_experience.ps2");
             }
+            case GoldExperienceEntity.DEIMOS -> {
+                return Component.translatable("skins.roundabout.gold_experience.deimos");
+            }
             default -> {
                 return Component.translatable("skins.roundabout.gold_experience.base");
             }
@@ -4251,7 +4254,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 l.add(GoldExperienceEntity.BETA);
             }
             if (((IPlayerEntity) PE).roundabout$getUnlockedBonusSkin() || bypass) {
-                // deimos GE goes here
+                l.add(GoldExperienceEntity.DEIMOS);
             }
         }
 

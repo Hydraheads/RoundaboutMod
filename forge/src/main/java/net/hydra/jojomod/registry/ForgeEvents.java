@@ -131,6 +131,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.GOLD_EXPERIENCE.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.GOLD_EXPERIENCE_REQUIEM.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.GOLD_EXPERIENCE_BETA.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.GOLD_EXPERIENCE_REQUIEM_DEIMOS.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SILVER_CHARIOT.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SILVER_CHARIOT_PHARAOH.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.OVA_ENYA.get(), OVAEnyaNPC.createAttributes().build());
@@ -1079,6 +1080,7 @@ public class ForgeEvents {
         ModEntities.GOLD_EXPERIENCE = ForgeEntities.GOLD_EXPERIENCE.get();
         ModEntities.GOLD_EXPERIENCE_REQUIEM = ForgeEntities.GOLD_EXPERIENCE_REQUIEM.get();
         ModEntities.GOLD_EXPERIENCE_BETA = ForgeEntities.GOLD_EXPERIENCE_BETA.get();
+        ModEntities.GOLD_EXPERIENCE_REQUIEM_DEIMOS = ForgeEntities.GOLD_EXPERIENCE_REQUIEM_DEIMOS.get();
         ModEntities.GE_BRAMBLE = ForgeEntities.GE_BRAMBLE.get();
         ModEntities.GE_THORN = ForgeEntities.GE_THORN.get();
         ModEntities.GE_BAT = ForgeEntities.GE_BAT.get();

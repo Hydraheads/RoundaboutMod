@@ -16,6 +16,7 @@ public class GoldExperienceBaseRenderer extends StandRenderer<GoldExperienceEnti
     public static final ResourceLocation DIAMOND = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience/diamond.png");
     public static final ResourceLocation GUARD = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience/guard.png");
     public static final ResourceLocation PS2 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience/ps2.png");
+    public static final ResourceLocation DEIMOS = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience/deimos.png");
 
     public GoldExperienceBaseRenderer(EntityRendererProvider.Context context, StandModel<GoldExperienceEntity> entityModel, float f) {
         super(context, entityModel, f);
@@ -37,6 +38,9 @@ public class GoldExperienceBaseRenderer extends StandRenderer<GoldExperienceEnti
         }
         if (bt == GoldExperienceEntity.PS2) {
             return PS2;
+        }
+        if (bt == GoldExperienceEntity.DEIMOS) {
+            return DEIMOS;
         }
         return PART_5;
     }
