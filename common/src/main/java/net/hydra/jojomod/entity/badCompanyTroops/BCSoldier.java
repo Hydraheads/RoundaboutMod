@@ -286,4 +286,6 @@ public class BCSoldier extends BCTroop implements RangedAttackMob {
         }
         return false;
     }
+
+    public boolean isRecharging() {return chargeTicks > 0;}
 }
