@@ -117,6 +117,12 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
+        if (this.self instanceof ServerPlayer sp && sp.hasDisconnected()
+                && standArrow != null && !standArrow.isEmpty()
+                && !(this instanceof PowersGER)) {
+            giveStandArrowBack();
+        }
+
         tag.putFloat("resolvePoints", resolvePoints);
         if (standArrow != null && !standArrow.isEmpty()) {
             CompoundTag tag2 = new CompoundTag();
@@ -139,9 +145,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
         if (tag.contains("StandArrow")) {
             CompoundTag compoundtag = tag.getCompound("StandArrow");
             standArrow = ItemStack.of(compoundtag);
-            if (standArrow != null && !standArrow.isEmpty() && giveArrowOnLoad()) {
-                giveStandArrowBack();
-            }
+        } else {
+            standArrow = null;
         }
 
         super.readAdditionalSaveData(tag);
