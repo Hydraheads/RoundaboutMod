@@ -253,6 +253,8 @@ public class MainUtil {
     public static final Map<EntityType<?>, EntityType<?>> KING_NOTHING_ENTITY_SNIFF_OVERRIDES = new HashMap<>();
     public static final Map<Block, Set<Block>> KING_NOTHING_BLOCK_GROUPS = new HashMap<>();
     public static final Map<Block, Block> KING_NOTHING_BLOCK_KEYS = new HashMap<>();
+    public static final Map<EntityType<?>, Set<EntityType<?>>> KING_NOTHING_ENTITY_GROUPS = new HashMap<>();
+    public static final Map<EntityType<?>, EntityType<?>> KING_NOTHING_ENTITY_KEYS = new HashMap<>();
 
     public static final Map<Item, EntityType> GOLD_EXPERIENCE_DNA_DROPS = new HashMap<>();
     public static final Map<Item, Float> GOLD_EXPERIENCE_TRANSFORM_RATE = new HashMap<>();
@@ -634,8 +636,8 @@ public class MainUtil {
                 && kingNothingBlockSniffBlacklist.contains(rl.toString());
     }
 
-    public static boolean isMobSniffBlacklisted(Entity ent) {
-        ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
+    public static boolean isMobSniffBlacklisted(EntityType ent) {
+        ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent);
         return kingNothingMobSniffBlacklist != null && !kingNothingMobSniffBlacklist.isEmpty()
                 && kingNothingMobSniffBlacklist.contains(rl.toString());
     }

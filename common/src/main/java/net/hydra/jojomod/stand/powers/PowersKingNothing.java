@@ -639,7 +639,7 @@ public class PowersKingNothing extends NewDashPreset {
             // passive particles
         }
         if (isTrackingMemorizedScent) {
-            if ((trackingCloud != null && (trackingCloud.isRemoved() || trackingCloud.distanceToSqr(getSelf()) > 4096))) {
+            if ((trackingCloud != null && (trackingCloud.isRemoved() || trackingCloud.distanceTo(getSelf()) > 64))) {
                 if (trackingCloud != null && !trackingCloud.isRemoved()) {
                     trackingCloud.discard();
                 }
@@ -663,7 +663,7 @@ public class PowersKingNothing extends NewDashPreset {
                     }
                     case TrackingCloudEntity.MOB -> {
                         List<Entity> list = this.getSelf().level().getEntities(this.getSelf(), this.getSelf().getBoundingBox().inflate(64f),
-                                entity -> entity.getType().equals(getMemorizedEntityType()));
+                                entity -> isInEntityGroup(entity.getType()));
                         hasTarget = !list.isEmpty();
                     }
                 }
@@ -1783,7 +1783,7 @@ public class PowersKingNothing extends NewDashPreset {
     public void tryMemorize() {
         if (isStandHere()) {
             Entity targEnt = MainUtil.getTargetEntity(this.getSelf(), SMELL_RANGE, 0);
-            if (targEnt instanceof LivingEntity && !MainUtil.isMobSniffBlacklisted(targEnt)) {
+            if (targEnt instanceof LivingEntity) {
                 this.getStandUserSelf().roundabout$tryPower(PowerIndex.POWER_4_BONUS, true);
                 tryPowerPacket(PowerIndex.POWER_4_BONUS);
                 return;
@@ -2024,6 +2024,12 @@ public class PowersKingNothing extends NewDashPreset {
             }
             return toReturn;
         }
+        else if (item instanceof SpawnEggItem SE) {
+            EntityType<?> type = SE.getType(null);
+            if (!MainUtil.isMobSniffBlacklisted(type)) {
+                return type;
+            }
+        }
         return null;
     }
 
@@ -2090,7 +2096,7 @@ public class PowersKingNothing extends NewDashPreset {
 
     public boolean memorizeEntity() {
         Entity ent = MainUtil.getTargetEntity(this.getSelf(), SMELL_RANGE, 0);
-        if (ent instanceof LivingEntity LE && !MainUtil.isMobSniffBlacklisted(ent)) {
+        if (ent instanceof LivingEntity LE && !MainUtil.isMobSniffBlacklisted(ent.getType())) {
             setMemorizedScent(LE);
             if (this.getSelf() instanceof Player PE) {
                 PE.displayClientMessage(LE.getName().copy().withStyle(ChatFormatting.DARK_PURPLE), true);
@@ -2161,6 +2167,18 @@ public class PowersKingNothing extends NewDashPreset {
 
     public UUID getMemorizedPlayer() {
         return memorizedPlayer;
+    }
+
+    public boolean isInBlockGroup(Block block) {
+        return MainUtil.KING_NOTHING_BLOCK_KEYS.containsKey(block)
+                && MainUtil.KING_NOTHING_BLOCK_GROUPS.get(
+                        MainUtil.KING_NOTHING_BLOCK_KEYS.get(block)).contains(memorizedBlock);
+    }
+
+    public boolean isInEntityGroup(EntityType<?> entityType) {
+        return MainUtil.KING_NOTHING_ENTITY_KEYS.containsKey(entityType)
+                && MainUtil.KING_NOTHING_ENTITY_GROUPS.get(
+                        MainUtil.KING_NOTHING_ENTITY_KEYS.get(entityType)).contains(memorizedEntityType);
     }
 
     @Override
