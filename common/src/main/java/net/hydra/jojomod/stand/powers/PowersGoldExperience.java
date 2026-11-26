@@ -148,18 +148,24 @@ public class PowersGoldExperience extends BlockGrabPreset {
     }
 
     protected void giveStandArrowBack() {
-        if (canAddItem(standArrow, ((Player) this.getSelf()).getInventory())) {
-            ((Player) this.getSelf()).addItem(standArrow);
-        } else {
-            ItemEntity $$4 = new ItemEntity(this.getSelf().level(), this.getSelf().getX(),
-                    this.getSelf().getY() + this.getSelf().getEyeHeight(), this.getSelf().getZ(),
-                    standArrow);
-            $$4.setPickUpDelay(40);
-            $$4.setThrower(this.getSelf().getUUID());
-            PowerTypes.copyPlaneOfExisting(self,$$4);
-            this.getSelf().level().addFreshEntity($$4);
+        if (this.getSelf() instanceof Player player && standArrow != null && !standArrow.isEmpty()) {
+            ItemStack toGive = standArrow.copy();
+            if (canAddItem(toGive, player.getInventory())) {
+                player.addItem(toGive);
+            } else {
+                ItemEntity drop = new ItemEntity(this.getSelf().level(), this.getSelf().getX(),
+                        this.getSelf().getY() + this.getSelf().getEyeHeight(), this.getSelf().getZ(),
+                        toGive);
+                drop.setPickUpDelay(40);
+                drop.setThrower(this.getSelf().getUUID());
+                PowerTypes.copyPlaneOfExisting(self, drop);
+                this.getSelf().level().addFreshEntity(drop);
+            }
+            player.getInventory().setChanged();
+            player.inventoryMenu.broadcastChanges();
         }
         standArrow = null;
+        saveDiscAndSync();
     }
 
     @Override
@@ -390,6 +396,16 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public StandPowers generateStandPowers(LivingEntity entity) {return new PowersGoldExperience(entity);}
     @Override
     public boolean isStandEnabled(){return geConfig().enableGoldExperience;}
+
+    // stand switching
+
+    @Override
+    public void onStandSwitch() {
+        if (!this.self.level().isClientSide() && standArrow != null && !standArrow.isEmpty()) {
+            giveStandArrowBack();
+        }
+        super.onStandSwitch();
+    }
 
     // configs start
 
@@ -2221,7 +2237,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     @Override
     public boolean onStandArrowUseClient() {
-        if (this.self instanceof Player && activePower == PowerIndex.NONE) {
+        if (this.self instanceof Player player && activePower == PowerIndex.NONE) {
             if (isPossibleToRequiem()) {
 
                 if (!isAppropriateToGrab()) {
@@ -2238,10 +2254,14 @@ public class PowersGoldExperience extends BlockGrabPreset {
                     }
                 }
 
-                ((StandUser) this.getSelf()).roundabout$tryIntPower(REQUIEM, true,
-                        ((Player) this.getSelf()).getInventory().selected);
-                tryIntPowerPacket(REQUIEM,
-                        ((Player) this.getSelf()).getInventory().selected);
+                // checks for offhand too, which fixes offhand usage not doing anything
+                ItemStack mainHand = player.getMainHandItem();
+                int slot = (mainHand.is(ModItems.STAND_ARROW) || mainHand.is(ModItems.STAND_BEETLE_ARROW))
+                        ? player.getInventory().selected
+                        : 40;
+
+                ((StandUser) this.getSelf()).roundabout$tryIntPower(REQUIEM, true, slot);
+                tryIntPowerPacket(REQUIEM, slot);
                 /*((StandUser) this.getSelf()).roundabout$tryPower(REQUIEM, true);
                 tryPowerPacket(REQUIEM);*/
 
@@ -2307,18 +2327,23 @@ public class PowersGoldExperience extends BlockGrabPreset {
     private boolean setRequiem() {
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand) && !stand.isRemoved()) {
-            if (!this.getSelf().level().isClientSide()) {
-                ItemStack stack = ((Player)this.getSelf()).getInventory().getItem(this.grabInventorySlot);
-                if (stack.is(ModItems.STAND_ARROW) || stack.is(ModItems.STAND_BEETLE_ARROW)) {
-                    standArrow = stack.copyWithCount(1);
-                    stack.shrink(1);
-                    saveDiscAndSync();
-                }else {
+            ItemStack stack = ItemStack.EMPTY;
+            if (this.getSelf() instanceof Player player) {
+                stack = player.getInventory().getItem(this.grabInventorySlot);
+                if (!stack.is(ModItems.STAND_ARROW) && !stack.is(ModItems.STAND_BEETLE_ARROW)) {
+                    // wtf did dogael mean by this?
                     return false; // how isn't your main hand a stand arrow?
                 }
             }
             this.setAttackTimeDuring(0);
             this.setActivePower(REQUIEM);
+            if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player player) {
+                standArrow = stack.copyWithCount(1);
+                stack.shrink(1);
+                player.getInventory().setChanged();
+                player.inventoryMenu.broadcastChanges();
+                saveDiscAndSync();
+            }
             //playSoundsIfNearby(IMPALE_NOISE, 27, false);
             this.animateStand(GoldExperienceEntity.REQUIEM);
             this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
@@ -2331,6 +2356,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
         if (attackTimeDuring >= 240) {
             //setPowerNone();
+            ItemStack arrowForGER = standArrow;
+            standArrow = null;
 
             ItemStack discy = ((StandUser)self).roundabout$getStandDisc();
             ItemStack savedDisc = MainUtil.saveToDiscData(self, discy);
@@ -2345,6 +2372,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 GER.idlePos = idlePos;
                 GER.standSkin = standSkin;
                 GER.resolvePoints = resolvePoints;
+                GER.standArrow = arrowForGER;
 
                 GER.setOriginalDisc(savedDisc);
 
