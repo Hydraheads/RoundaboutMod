@@ -19,6 +19,11 @@ public class GoldExperienceRequiemBaseRenderer extends StandRenderer<GoldExperie
     public static final ResourceLocation GUARD = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience_requiem/guard.png");
     public static final ResourceLocation PS2 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience_requiem/ps2.png");
     public static final ResourceLocation DEIMOS = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience_requiem/deimos.png");
+    public static final ResourceLocation MANGA = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience_requiem/manga.png");
+    public static final ResourceLocation AGOGO = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience_requiem/agogo.png");
+    public static final ResourceLocation JOJOVELLER = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience_requiem/jojoveller.png");
+    public static final ResourceLocation TITLE_PAGE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience_requiem/title_page.png");
+    public static final ResourceLocation CATERPILLAR = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience_requiem/caterpillar.png");
 
     public GoldExperienceRequiemBaseRenderer(EntityRendererProvider.Context context, StandModel<GoldExperienceRequiemEntity> entityModel, float f) {
         super(context, entityModel, f);
@@ -40,6 +45,21 @@ public class GoldExperienceRequiemBaseRenderer extends StandRenderer<GoldExperie
         }
         if (bt == GoldExperienceEntity.DEIMOS) {
             return DEIMOS;
+        }
+        if (bt == GoldExperienceEntity.MANGA) {
+            return MANGA;
+        }
+        if (bt == GoldExperienceEntity.AGOGO) {
+            return AGOGO;
+        }
+        if (bt == GoldExperienceEntity.JOJOVELLER) {
+            return JOJOVELLER;
+        }
+        if (bt == GoldExperienceEntity.TITLE_PAGE) {
+            return TITLE_PAGE;
+        }
+        if (bt == GoldExperienceEntity.CATERPILLAR) {
+            return CATERPILLAR;
         }
         return PART_5;
     }

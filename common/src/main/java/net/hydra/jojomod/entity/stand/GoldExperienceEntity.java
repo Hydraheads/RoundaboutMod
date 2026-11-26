@@ -16,7 +16,12 @@ public class GoldExperienceEntity extends FollowingStandEntity {
             DIAMOND = 2,
             GUARD = 3,
             PS2 = 4,
-            DEIMOS = 5;
+            DEIMOS = 5,
+            MANGA = 6,
+            AGOGO = 7,
+            JOJOVELLER = 8,
+            TITLE_PAGE = 9,
+            CATERPILLAR = 10;
 
     public final AnimationState lifePunch = new AnimationState();
     public final AnimationState doublePunch = new AnimationState();

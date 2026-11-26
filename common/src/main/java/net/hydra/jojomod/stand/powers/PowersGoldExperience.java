@@ -4223,6 +4223,21 @@ public class PowersGoldExperience extends BlockGrabPreset {
             case GoldExperienceEntity.DEIMOS -> {
                 return Component.translatable("skins.roundabout.gold_experience.deimos");
             }
+            case GoldExperienceEntity.MANGA -> {
+                return Component.translatable("skins.roundabout.gold_experience.manga");
+            }
+            case GoldExperienceEntity.AGOGO -> {
+                return Component.translatable("skins.roundabout.gold_experience.agogo");
+            }
+            case GoldExperienceEntity.JOJOVELLER -> {
+                return Component.translatable("skins.roundabout.gold_experience.jojoveller");
+            }
+            case GoldExperienceEntity.TITLE_PAGE -> {
+                return Component.translatable("skins.roundabout.gold_experience.title_page");
+            }
+            case GoldExperienceEntity.CATERPILLAR -> {
+                return Component.translatable("skins.roundabout.gold_experience.caterpillar");
+            }
             default -> {
                 return Component.translatable("skins.roundabout.gold_experience.base");
             }
@@ -4233,13 +4248,16 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public List<Byte> getSkinList() {
         List<Byte> l = Lists.newArrayList();
         l.add(GoldExperienceEntity.PART_5);
+        l.add(GoldExperienceEntity.MANGA);
         if (this.getSelf() instanceof Player PE) {
             byte Level = ((IPlayerEntity) PE).roundabout$getStandLevel();
             ItemStack goldDisc = ((StandUser) PE).roundabout$getStandDisc();
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
             if (Level > 1 || bypass) {
+                l.add(GoldExperienceEntity.AGOGO);
             }
             if (Level > 2 || bypass) {
+                l.add(GoldExperienceEntity.JOJOVELLER);
             }
             if (Level > 3 || bypass) {
                 l.add(GoldExperienceEntity.PS2);
@@ -4248,9 +4266,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 l.add(GoldExperienceEntity.DIAMOND);
             }
             if (Level > 5 || bypass) {
+                l.add(GoldExperienceEntity.CATERPILLAR);
                 l.add(GoldExperienceEntity.GUARD);
             }
             if (Level > 6 || bypass) {
+                l.add(GoldExperienceEntity.TITLE_PAGE);
                 l.add(GoldExperienceEntity.BETA);
             }
             if (((IPlayerEntity) PE).roundabout$getUnlockedBonusSkin() || bypass) {
