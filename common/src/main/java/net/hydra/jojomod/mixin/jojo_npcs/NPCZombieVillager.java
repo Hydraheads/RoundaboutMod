@@ -3,7 +3,11 @@ package net.hydra.jojomod.mixin.jojo_npcs;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersGoldExperience;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;
@@ -15,10 +19,15 @@ import net.minecraft.world.entity.npc.VillagerDataHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import javax.annotation.Nullable;
+import java.util.UUID;
 
 @Mixin(ZombieVillager.class)
 public abstract class NPCZombieVillager extends Zombie implements VillagerDataHolder {
@@ -50,6 +59,15 @@ public abstract class NPCZombieVillager extends Zombie implements VillagerDataHo
         }
     }
 
+    @Inject(method = "finishConversion", at = @At("HEAD"))
+    private void roundabout$onZombieVillagerCured(ServerLevel level, CallbackInfo ci) {
+        if (this.conversionStarter != null
+                && level.getPlayerByUUID(this.conversionStarter) instanceof ServerPlayer player
+                && ((StandUser) player).roundabout$getStandPowers() instanceof PowersGoldExperience ge) {
+            ge.onZombieVillagerCured();
+        }
+    }
+
 
     /**Shadows, ignore
      * -------------------------------------------------------------------------------------------------------------
@@ -58,5 +76,7 @@ public abstract class NPCZombieVillager extends Zombie implements VillagerDataHo
     public NPCZombieVillager(EntityType<? extends Zombie> $$0, Level $$1) {
         super($$0, $$1);
     }
+
+    @Shadow @Nullable private UUID conversionStarter;
 
 }

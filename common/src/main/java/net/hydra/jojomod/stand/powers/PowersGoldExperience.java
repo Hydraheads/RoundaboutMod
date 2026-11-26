@@ -2357,7 +2357,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
         DEAL_PLAYER_DAMAGE(5.0F),
         RAID_WIN(50),
         HARVEST_CROP(1.0F),
-        ANIMAL_CREATION(1.5F);
+        ANIMAL_CREATION(1.5F),
+        ZOMBIE_VILLAGER_CURE(10),
+        HEAL_OTHERS(2);
         // rest of stuff go here
 
         public final float amount;
@@ -2444,6 +2446,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     public void onCropHarvested() {
         grantResolve(ResolveSource.HARVEST_CROP, ResolveSource.HARVEST_CROP.amount);
+    }
+
+    // look at NPCZombieVillager
+    public void onZombieVillagerCured() {
+        grantResolve(ResolveSource.ZOMBIE_VILLAGER_CURE, ResolveSource.ZOMBIE_VILLAGER_CURE.amount);
     }
 
     // requiem system end
@@ -2553,7 +2560,6 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
         }
     }
-
 
     // requiem animation end
 
@@ -3245,6 +3251,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                     livingHeal.heal(geConfig().initialHealBurst);
                     livingHeal.addEffect(new MobEffectInstance(ModEffects.RECONSTRUCTION, 400, 0, false, true, true));
                     playSoundIfPossible(this.self.level(), livingHeal, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    grantResolve(ResolveSource.HEAL_OTHERS, ResolveSource.HEAL_OTHERS.amount);
                 }
             } else {
                 this.self.heal(geConfig().initialHealBurst);
