@@ -89,7 +89,7 @@ public class FalconModel<T extends FalconEntity> extends HierarchicalModel<T> im
 		if (young) {
 			poseStack.pushPose();
 			poseStack.scale(0.55f, 0.55f, 0.55f);
-			poseStack.translate(0.0F, 18.0f / 16.0F, 0.0F);
+			poseStack.translate(0.0F, 19.0f / 16.0F, 0.0F);
 			this.root().render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
 			poseStack.popPose();
 		}else {
@@ -125,7 +125,7 @@ public class FalconModel<T extends FalconEntity> extends HierarchicalModel<T> im
 		if (young) {
 			$$0.pushPose();
 			$$0.scale(0.55f, 0.55f, 0.55f);
-			$$0.translate(0.0F, 18.0f / 16.0F, 0.0F);
+			$$0.translate(0.0F, 19.0f / 16.0F, 0.0F);
 			this.root().render($$0, $$1, $$2, $$3);
 			$$0.popPose();
 		}else {
