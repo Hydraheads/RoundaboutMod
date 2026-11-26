@@ -2367,7 +2367,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
         FISH_CAUGHT(3),
         TAME_ANIMAL(15.0F),
         LOW_HEALTH(7.5F),
-        ITEM_IMBUE(2.5F);
+        ITEM_IMBUE(2.5F),
+        BOSS_KILL(70),
+        MINE_PRECIOUS_ORE(5);;
         // rest of stuff go here
 
         public final float amount;
@@ -2389,7 +2391,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     @Override
     public boolean onKilledEntity(ServerLevel $$0, LivingEntity victim) {
-        if (!((StandUser) victim).roundabout$getStandDisc().isEmpty()) {
+        if (MainUtil.isBossMob(victim)) {
+            grantResolve(ResolveSource.BOSS_KILL, ResolveSource.BOSS_KILL.amount);
+        }
+        else if (!((StandUser) victim).roundabout$getStandDisc().isEmpty()) {
             grantResolve(ResolveSource.STAND_USER_KILL, ResolveSource.STAND_USER_KILL.amount);
         }
         else if ((victim instanceof Monster || victim instanceof NeutralMob)) {
@@ -2474,6 +2479,17 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // look at ZTameAnimalTriggerMixin
     public void onAnimalTamed() {
         grantResolve(ResolveSource.TAME_ANIMAL, ResolveSource.TAME_ANIMAL.amount);
+    }
+
+    public static boolean isPreciousOre(BlockState state) {
+        return state.is(BlockTags.DIAMOND_ORES)
+                || state.is(BlockTags.EMERALD_ORES)
+                || state.is(ModBlocks.AJA_ORE)
+                || state.is(ModBlocks.DEEPSLATE_AJA_ORE);
+    }
+
+    public void onPreciousOreMined() {
+        grantResolve(ResolveSource.MINE_PRECIOUS_ORE, ResolveSource.MINE_PRECIOUS_ORE.amount);
     }
 
     // requiem system end

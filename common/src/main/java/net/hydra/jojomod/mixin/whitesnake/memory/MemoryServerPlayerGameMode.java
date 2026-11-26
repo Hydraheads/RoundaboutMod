@@ -71,13 +71,14 @@ public abstract class MemoryServerPlayerGameMode {
     }
 
     @Inject(method = "destroyBlock", at = @At("HEAD"))
-    private void roundabout$onCropHarvest(BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
+    private void roundabout$onBlockMined(BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
         ServerPlayer player = ((ServerPlayerGameModeAccessor) this).roundabout$getPlayer();
-        if (!player.isCreative()) {
+        if (!player.isCreative() && ((StandUser) player).roundabout$getStandPowers() instanceof PowersGoldExperience ge) {
             BlockState state = player.level().getBlockState(pos);
-            if (PowersGoldExperience.isMatureCrop(state)
-                    && ((StandUser) player).roundabout$getStandPowers() instanceof PowersGoldExperience ge) {
+            if (PowersGoldExperience.isMatureCrop(state)) {
                 ge.onCropHarvested();
+            } else if (PowersGoldExperience.isPreciousOre(state) && player.hasCorrectToolForDrops(state)) {
+                ge.onPreciousOreMined();
             }
         }
     }
