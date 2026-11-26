@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.GoldExperienceEntity;
+import net.hydra.jojomod.entity.stand.GoldExperienceRequiemEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.SavedSecond;
@@ -19,10 +20,12 @@ import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.presets.TWAndSPSharedPowers;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -57,6 +60,10 @@ public class PowersGER extends PowersGoldExperience {
 
     @Override
     public StandEntity getNewStandEntity() {
+        byte skin = ((StandUser) this.getSelf()).roundabout$getStandSkin();
+        if (skin == GoldExperienceEntity.DEIMOS) {
+            return ModEntities.GOLD_EXPERIENCE_REQUIEM_DEIMOS.create(this.getSelf().level());
+        }
         return ModEntities.GOLD_EXPERIENCE_REQUIEM.create(this.getSelf().level());
     }
 
@@ -77,6 +84,20 @@ public class PowersGER extends PowersGoldExperience {
     public void setOriginalDisc(ItemStack disc) {
         originalDisc = disc;
         saveDiscAndSync();
+    }
+
+    @Override
+    public void onStandSwitch() {
+        if (!this.self.level().isClientSide()) {
+            if (standArrow != null && !standArrow.isEmpty()) {
+                giveStandArrowBack();
+            }
+            if (hasNormalGEDisc()) {
+                ((StandUser) self).roundabout$setStandDisc(originalDisc);
+                originalDisc = null;
+            }
+        }
+        super.onStandSwitch();
     }
 
     @Override
@@ -120,23 +141,26 @@ public class PowersGER extends PowersGoldExperience {
 
     public void goBackToGE(){
         setPowerNone();
+        ItemStack arrowToReturn = standArrow;
+        standArrow = null;
 
         ((StandUser) self).roundabout$setStandDisc(originalDisc);
         ((StandUser) self).roundabout$getStandPowers().onStandSwitchInto();
-        if (((StandUser) self).roundabout$getStandPowers() instanceof PowersGoldExperience GER) {
-            GER.idlePos = idlePos;
-            GER.standSkin = standSkin;
-            GER.resolvePoints = resolvePoints;
-
-            GER.saveDiscAndSync();
+        if (((StandUser) self).roundabout$getStandPowers() instanceof PowersGoldExperience GE) {
+            GE.idlePos = idlePos;
+            GE.standSkin = standSkin;
+            GE.resolvePoints = resolvePoints;
+            if (arrowToReturn != null && !arrowToReturn.isEmpty()) {
+                GE.standArrow = arrowToReturn;
+                GE.giveStandArrowBack();
+            } else {
+                GE.saveDiscAndSync();
+            }
         }
 
         if (((StandUser) self).roundabout$getStand() != null) {
             ((StandUser) self).roundabout$getStand().discard();
             ((StandUser) self).roundabout$setStand(null);
-        }
-        if (standArrow != null && !standArrow.isEmpty()) {
-            giveStandArrowBack();
         }
     }
 
@@ -144,7 +168,7 @@ public class PowersGER extends PowersGoldExperience {
         super.tickPower();
         if (hasNormalGEDisc()) {
             resolvePoints -= 0.25f;
-            if (resolvePoints <= 0f) {
+            if (!this.self.level().isClientSide() && resolvePoints <= 0f) {
                 goBackToGE();
                 ((StandUser) self).roundabout$summonStand(self.level(), true, true);
             }
@@ -166,6 +190,10 @@ public class PowersGER extends PowersGoldExperience {
             }
 
             if (culprit instanceof LivingEntity livingCulprit) {
+                if (((TimeStop) livingCulprit.level()).isTimeStoppingEntity(livingCulprit)
+                        && ((StandUser) livingCulprit).roundabout$getStandPowers() instanceof TWAndSPSharedPowers tsPowers) {
+                    tsPowers.resumeTime();
+                }
                 IEntityAndData iData = (IEntityAndData) livingCulprit;
                 SavedSecond lastSecond = iData.roundabout$getLastSavedSecond();
                 if (lastSecond != null) {
@@ -345,8 +373,8 @@ public class PowersGER extends PowersGoldExperience {
     @Override
     public void playBarrageNoise(int hitNumber, Entity entity) {
         if (!this.self.level().isClientSide()) {
-            if (hitNumber % 3 == 0)
-                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GER_BARRAGE_HIT_EVENT, SoundSource.PLAYERS, 1.3F, 1F);
+            if (hitNumber % 2 == 0)
+                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GER_BARRAGE_HIT_EVENT, SoundSource.PLAYERS, 1.1F, 1F);
         }
     }
 

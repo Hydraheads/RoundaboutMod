@@ -401,7 +401,7 @@ public class PowersBlackSabbath extends NewDashPreset {
         switch (context)
         {
             case SKILL_1_NORMAL, SKILL_1_CROUCH ->{
-                if(!onCooldown(PowerIndex.SKILL_1) && !isAttackIneptVisually(PowerIndex.SKILL_1, 1)) {
+                if(!onCooldown(PowerIndex.SKILL_1) && !isAttackIneptVisually(PowerIndex.SKILL_1, 1) && self.onGround()) {
                     blackChestClient();
                 }
             }
@@ -720,7 +720,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         if (slot == 2 && ((!checkIfBposIsInDark(self.position()) && !(moveMode == 3) || this.getStandEntity(self) != null && moveMode != 2 && moveMode != 3|| this.securityTickDown > 1 && this.blackSabbathTargets.isEmpty()))) {
             return true;
         }
-        if(slot == 1 && (!checkIfBposIsInDark(self.position()) || getValidPlacement() == null || self.isSwimming() || this.getStandEntity(self) != null || this.moveMode == 3 || this.securityTickDown > 1 || gravityDirection != Direction.DOWN || !self.onGround())){
+        if(slot == 1 && (!checkIfBposIsInDark(self.position()) || getValidPlacement() == null || self.isSwimming() || this.getStandEntity(self) != null || this.moveMode == 3 || this.securityTickDown > 1 || gravityDirection != Direction.DOWN)){
             return true;
         }
         return super.isAttackIneptVisually(activeP, slot);
@@ -1373,10 +1373,14 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
           if(self != null) {
               if(moveMode == 2 || moveMode == 3 && this.blackSabbathTargets.contains(entity)) {
                   Entity TE = MainUtil.getTargetEntity(self, 100, 10);
-                  if (TE != null && TE.is(entity) && !(TE instanceof StandEntity) && !TE.isInvisible() && TE instanceof LivingEntity && !(TE instanceof RoadRollerEntity)) {
-                      if(TE instanceof Player p && (p.isCreative() || p.isSpectator())){
-                          return false;
+                  if(TE != null && TE.is(entity)) {
+                      if (!(TE instanceof StandEntity) && !TE.isInvisible() && TE instanceof LivingEntity && !(TE instanceof RoadRollerEntity)) {
+                          if (TE instanceof Player p && (p.isCreative() || p.isSpectator())) {
+                              return false;
+                          }
+                          return true;
                       }
+                  } else if (this.blackSabbathTargets.contains(entity) && self.hasLineOfSight(entity) && !entity.isInvisible() && !(entity instanceof RoadRollerEntity)){
                       return true;
                   }
               }
@@ -1385,8 +1389,11 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
     }
 
     public int highlightsEntityColor(Entity ent, Player player){
-        if(blackSabbathTargets.contains(ent)) {
+        Entity TE = MainUtil.getTargetEntity(self, 100, 10);
+        if(blackSabbathTargets.contains(ent) && TE != null && TE.is(ent)) {
             return 14877186;
+        } else if (blackSabbathTargets.contains(ent) && self.hasLineOfSight(ent) && !ent.isInvisible() && !(ent instanceof RoadRollerEntity)){
+            return 6684708;
         } else {
             return 9371857;
         }

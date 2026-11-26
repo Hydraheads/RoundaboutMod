@@ -4322,7 +4322,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if ((bitesTheDustPlantedEntity != null && !bitesTheDustPlantedEntity.isRemoved() && bitesTheDustPlantedEntity.isAlive()
                         && !((StandUser)bitesTheDustPlantedEntity).roundabout$hasAStand()) && canExecuteMoveWithLevel(getBitesTheDustLevel())
                         && (canExecuteMoveWithLevel(getBitesTheDustDayLevel()) || currentBombStatus != BITES_THE_DUST_BIGGER)
-                        && PowerTypes.isUsingStand(self)
+                        && PowerTypes.hasStandActivelyEquipped(self)
                 ) {
                     if (Objects.nonNull(stand) && stand instanceof KillerQueenEntity KQE) {
                         stand.setFadePercent(30);

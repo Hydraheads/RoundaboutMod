@@ -118,6 +118,23 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         tag.putFloat("resolvePoints", resolvePoints);
+
+        CompoundTag trackersTag = new CompoundTag();
+        for (Map.Entry<ResolveSource, SourceProgress> entry : resolveProgress.entrySet()) {
+            SourceProgress progress = entry.getValue();
+            if (progress.timer > 0) {
+                CompoundTag entryTag = new CompoundTag();
+                entryTag.putInt("Timer", progress.timer);
+                entryTag.putFloat("Gained", progress.gained);
+                trackersTag.put(entry.getKey().name(), entryTag);
+            }
+        }
+        if (!trackersTag.isEmpty()) {
+            tag.put("ResolveTrackers", trackersTag);
+        } else {
+            tag.remove("ResolveTrackers");
+        }
+
         if (standArrow != null && !standArrow.isEmpty()) {
             CompoundTag tag2 = new CompoundTag();
             tag.put("StandArrow", standArrow.save(tag2));
@@ -127,45 +144,77 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
         super.addAdditionalSaveData(tag);
     }
-    protected boolean giveArrowOnLoad() {
-        return activePower != REQUIEM; // prevent from the requiem transformation giving this arrow back before it is time
-    }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         if (tag.contains("resolvePoints")) {
             resolvePoints = tag.getFloat("resolvePoints");
         }
+
+        resolveProgress.clear();
+        if (tag.contains("ResolveTrackers", Tag.TAG_COMPOUND)) {
+            CompoundTag trackersTag = tag.getCompound("ResolveTrackers");
+            for (String key : trackersTag.getAllKeys()) {
+                try {
+                    ResolveSource source = ResolveSource.valueOf(key);
+                    CompoundTag entryTag = trackersTag.getCompound(key);
+                    int timer = entryTag.getInt("Timer");
+                    float gained = entryTag.getFloat("Gained");
+                    if (timer > 0) {
+                        resolveProgress.put(source, new SourceProgress(timer, gained));
+                    }
+                } catch (IllegalArgumentException ignored) {
+                }
+            }
+        }
+
         if (tag.contains("StandArrow")) {
             CompoundTag compoundtag = tag.getCompound("StandArrow");
             standArrow = ItemStack.of(compoundtag);
-            if (standArrow != null && !standArrow.isEmpty() && giveArrowOnLoad()) {
-                giveStandArrowBack();
-            }
+        } else {
+            standArrow = null;
         }
 
         super.readAdditionalSaveData(tag);
     }
 
+    protected void copyResolveStateTo(PowersGoldExperience target) {
+        target.resolvePoints = this.resolvePoints;
+        target.resolveProgress.clear();
+        for (Map.Entry<ResolveSource, SourceProgress> entry : this.resolveProgress.entrySet()) {
+            SourceProgress p = entry.getValue();
+            target.resolveProgress.put(entry.getKey(), new SourceProgress(p.timer, p.gained));
+        }
+    }
+
     protected void giveStandArrowBack() {
-        if (canAddItem(standArrow, ((Player) this.getSelf()).getInventory())) {
-            ((Player) this.getSelf()).addItem(standArrow);
-        } else {
-            ItemEntity $$4 = new ItemEntity(this.getSelf().level(), this.getSelf().getX(),
-                    this.getSelf().getY() + this.getSelf().getEyeHeight(), this.getSelf().getZ(),
-                    standArrow);
-            $$4.setPickUpDelay(40);
-            $$4.setThrower(this.getSelf().getUUID());
-            PowerTypes.copyPlaneOfExisting(self,$$4);
-            this.getSelf().level().addFreshEntity($$4);
+        if (this.getSelf() instanceof Player player && standArrow != null && !standArrow.isEmpty()) {
+            ItemStack toGive = standArrow.copy();
+            if (canAddItem(toGive, player.getInventory())) {
+                player.addItem(toGive);
+            } else {
+                ItemEntity drop = new ItemEntity(this.getSelf().level(), this.getSelf().getX(),
+                        this.getSelf().getY() + this.getSelf().getEyeHeight(), this.getSelf().getZ(),
+                        toGive);
+                drop.setPickUpDelay(40);
+                drop.setThrower(this.getSelf().getUUID());
+                PowerTypes.copyPlaneOfExisting(self, drop);
+                this.getSelf().level().addFreshEntity(drop);
+            }
+            player.getInventory().setChanged();
+            player.inventoryMenu.broadcastChanges();
         }
         standArrow = null;
+        saveDiscAndSync();
     }
 
     @Override
     public boolean interceptIncomingHarm(DamageSource source, float amount) {
         if (activePower == REQUIEM) {
             return !source.is(DamageTypes.GENERIC_KILL);
+        }
+        if (this.getSelf().getHealth() < 6.0F) {
+            grantResolve(ResolveSource.LOW_HEALTH, ResolveSource.LOW_HEALTH.amount);
         }
 
         return super.interceptIncomingHarm(source, amount);
@@ -391,6 +440,16 @@ public class PowersGoldExperience extends BlockGrabPreset {
     @Override
     public boolean isStandEnabled(){return geConfig().enableGoldExperience;}
 
+    // stand switching
+
+    @Override
+    public void onStandSwitch() {
+        if (!this.self.level().isClientSide() && standArrow != null && !standArrow.isEmpty()) {
+            giveStandArrowBack();
+        }
+        super.onStandSwitch();
+    }
+
     // configs start
 
     @Override
@@ -563,6 +622,14 @@ public class PowersGoldExperience extends BlockGrabPreset {
             resolveRenderTicks--;
         }
         if (!this.self.level().isClientSide()) {
+            Iterator<SourceProgress> resolveIt = resolveProgress.values().iterator();
+            while (resolveIt.hasNext()) {
+                SourceProgress progress = resolveIt.next();
+                progress.timer--;
+                if (progress.timer <= 0) {
+                    resolveIt.remove();
+                }
+            }
             // 1 second knife animal fire delay
             if (!this.pendingKnives.isEmpty()) {
                 Level level = this.getSelf().level();
@@ -2188,6 +2255,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     }
 
     protected float resolvePoints = 0F;
+    protected final Map<ResolveSource, SourceProgress> resolveProgress = new EnumMap<>(ResolveSource.class);
 
     public float getResolvePoints() { return resolvePoints; }
     public float getNeededResolvePoints() { return 300.0F; }
@@ -2221,7 +2289,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     @Override
     public boolean onStandArrowUseClient() {
-        if (this.self instanceof Player && activePower == PowerIndex.NONE) {
+        if (this.self instanceof Player player && activePower == PowerIndex.NONE) {
             if (isPossibleToRequiem()) {
 
                 if (!isAppropriateToGrab()) {
@@ -2238,10 +2306,14 @@ public class PowersGoldExperience extends BlockGrabPreset {
                     }
                 }
 
-                ((StandUser) this.getSelf()).roundabout$tryIntPower(REQUIEM, true,
-                        ((Player) this.getSelf()).getInventory().selected);
-                tryIntPowerPacket(REQUIEM,
-                        ((Player) this.getSelf()).getInventory().selected);
+                // checks for offhand too, which fixes offhand usage not doing anything
+                ItemStack mainHand = player.getMainHandItem();
+                int slot = (mainHand.is(ModItems.STAND_ARROW) || mainHand.is(ModItems.STAND_BEETLE_ARROW))
+                        ? player.getInventory().selected
+                        : 40;
+
+                ((StandUser) this.getSelf()).roundabout$tryIntPower(REQUIEM, true, slot);
+                tryIntPowerPacket(REQUIEM, slot);
                 /*((StandUser) this.getSelf()).roundabout$tryPower(REQUIEM, true);
                 tryPowerPacket(REQUIEM);*/
 
@@ -2251,46 +2323,173 @@ public class PowersGoldExperience extends BlockGrabPreset {
         return false;
     }
 
-    private float getResolvePointsObtainingCap() { return 30.0F; }
-
-    public boolean onKilledEntity(ServerLevel $$0, LivingEntity victim){
-        if (!(canUseRequiem())) {
-            return super.onKilledEntity($$0, victim);
+    protected void grantResolve(ResolveSource source, float amount) {
+        if (this.self.level().isClientSide() || !canUseRequiem() || resolvePoints >= getNeededResolvePoints()) {
+            return;
         }
 
-        if (resolvePoints < getNeededResolvePoints()) {
-            if (victim instanceof Mob) {
-                float amount = victim.getMaxHealth();
+        SourceProgress progress = resolveProgress.computeIfAbsent(
+                source, s -> new SourceProgress(geConfig().resolveInterval, 0F)
+        );
+        if (progress.timer <= 0) {
+            progress.timer = geConfig().resolveInterval;
+            progress.gained = 0F;
+        }
 
-                if (!((StandUser)victim).roundabout$getStandDisc().isEmpty() && (victim instanceof Monster ||
-                        victim instanceof NeutralMob)){
+        float remainingCap = geConfig().resolveTypeCapPerDay - progress.gained;
+        if (remainingCap <= 0F) {
+            return;
+        }
 
-                    amount = amount * 1.25f;
-                }
+        float granted = Math.min(amount, remainingCap);
+        progress.gained += granted;
 
-                addResolvePoints(amount);
+        float before = resolvePoints;
+        resolvePoints = Math.min(getNeededResolvePoints(), resolvePoints + granted);
+        if (resolvePoints > before) {
+            saveDiscAndSync();
+            if (self instanceof Player PL) {
+                S2CPacketUtil.sendIntPowerDataPacket(PL, PowerIndex.SPECIAL_CHARGED, 0);
             }
         }
+    }
 
-        return super.onKilledEntity($$0,victim); // DO NOT RETURN 'true' OR ELSE IT WILL STOP ENTITIES FROM DYIENG
+    public enum ResolveSource {
+        MOB_KILL(3.0F),
+        STAND_USER_KILL(7.0F),
+        DEAL_PLAYER_DAMAGE(5.0F),
+        RAID_WIN(50),
+        HARVEST_CROP(1.0F),
+        ANIMAL_CREATION(1.5F),
+        ZOMBIE_VILLAGER_CURE(10),
+        HEAL_OTHERS(2),
+        PET_INJURED(2.5F),
+        FISH_CAUGHT(3),
+        TAME_ANIMAL(15.0F),
+        LOW_HEALTH(7.5F),
+        ITEM_IMBUE(2.5F),
+        BOSS_KILL(70),
+        MINE_PRECIOUS_ORE(5);;
+        // rest of stuff go here
+
+        public final float amount;
+
+        ResolveSource(float amount) {
+            this.amount = amount;
+        }
+    }
+
+    private static final class SourceProgress {
+        int timer;
+        float gained;
+
+        SourceProgress(int timer, float gained) {
+            this.timer = timer;
+            this.gained = gained;
+        }
+    }
+
+    @Override
+    public boolean onKilledEntity(ServerLevel $$0, LivingEntity victim) {
+        if (MainUtil.isBossMob(victim)) {
+            grantResolve(ResolveSource.BOSS_KILL, ResolveSource.BOSS_KILL.amount);
+        }
+        else if (!((StandUser) victim).roundabout$getStandDisc().isEmpty()) {
+            grantResolve(ResolveSource.STAND_USER_KILL, ResolveSource.STAND_USER_KILL.amount);
+        }
+        else if ((victim instanceof Monster || victim instanceof NeutralMob)) {
+            grantResolve(ResolveSource.MOB_KILL, ResolveSource.MOB_KILL.amount);
+        }
+        return super.onKilledEntity($$0, victim);
     }
 
     public void onPlayerHurt(Player PL, DamageSource src, float damage) {
-        if (!(canUseRequiem())) {
-            return;
+        if (damage > 0.0F) {
+            grantResolve(ResolveSource.DEAL_PLAYER_DAMAGE, damage * ResolveSource.DEAL_PLAYER_DAMAGE.amount);
         }
-        addResolvePoints(damage*1.75f);
     }
 
-    private void addResolvePoints(float amount) {
-        resolvePoints += Math.min(amount, getResolvePointsObtainingCap());
-        if (resolvePoints > getNeededResolvePoints()) {
-            resolvePoints = getNeededResolvePoints();
+    // look at ExecutionerAxeRaid
+    public void onRaidWon() {
+        grantResolve(ResolveSource.RAID_WIN, ResolveSource.RAID_WIN.amount);
+    }
+
+    // look at MemoryServerPlayerGameMode
+    public static boolean isMatureCrop(BlockState state) {
+        Block block = state.getBlock();
+        if (block instanceof CropBlock crop) {
+            return crop.isMaxAge(state);
         }
-        saveDiscAndSync();
-        if (!isClient() && self instanceof Player PL) {
-            S2CPacketUtil.sendIntPowerDataPacket(PL, PowerIndex.SPECIAL_CHARGED, 0);
+        if (block instanceof NetherWartBlock) {
+            return state.getValue(NetherWartBlock.AGE) >= 3;
         }
+        if (block instanceof CocoaBlock) {
+            return state.getValue(CocoaBlock.AGE) >= 2;
+        }
+        if (block instanceof SweetBerryBushBlock) {
+            return state.getValue(SweetBerryBushBlock.AGE) >= 3;
+        }
+        return block instanceof StemGrownBlock; // pumpkin and melon
+    }
+
+    public static boolean isRightClickHarvestable(BlockState state) {
+        Block block = state.getBlock();
+        if (block instanceof SweetBerryBushBlock) {
+            return state.getValue(SweetBerryBushBlock.AGE) >= 2;
+        }
+        return isMatureCrop(state);
+    }
+
+    public static boolean wasRightClickHarvested(BlockState before, BlockState after) {
+        if (before.getBlock() != after.getBlock()) {
+            return false;
+        }
+        Block block = before.getBlock();
+        if (block instanceof SweetBerryBushBlock) {
+            return before.getValue(SweetBerryBushBlock.AGE) >= 2 && after.getValue(SweetBerryBushBlock.AGE) == 1;
+        }
+        if (block instanceof CropBlock crop) {
+            return crop.isMaxAge(before) && !crop.isMaxAge(after);
+        }
+        if (block instanceof NetherWartBlock) {
+            return before.getValue(NetherWartBlock.AGE) >= 3 && after.getValue(NetherWartBlock.AGE) == 0;
+        }
+        return false;
+    }
+
+    public void onCropHarvested() {
+        grantResolve(ResolveSource.HARVEST_CROP, ResolveSource.HARVEST_CROP.amount);
+    }
+
+    // look at NPCZombieVillager
+    public void onZombieVillagerCured() {
+        grantResolve(ResolveSource.ZOMBIE_VILLAGER_CURE, ResolveSource.ZOMBIE_VILLAGER_CURE.amount);
+    }
+
+    // look at StandUserEntity
+    public void onPetInjured(float damage) {
+        grantResolve(ResolveSource.PET_INJURED, damage * ResolveSource.PET_INJURED.amount);
+    }
+
+    // look at FishingLootMixin
+    public void onFishCaught() {
+        grantResolve(ResolveSource.FISH_CAUGHT, ResolveSource.FISH_CAUGHT.amount);
+    }
+
+    // look at ZTameAnimalTriggerMixin
+    public void onAnimalTamed() {
+        grantResolve(ResolveSource.TAME_ANIMAL, ResolveSource.TAME_ANIMAL.amount);
+    }
+
+    public static boolean isPreciousOre(BlockState state) {
+        return state.is(BlockTags.DIAMOND_ORES)
+                || state.is(BlockTags.EMERALD_ORES)
+                || state.is(ModBlocks.AJA_ORE)
+                || state.is(ModBlocks.DEEPSLATE_AJA_ORE);
+    }
+
+    public void onPreciousOreMined() {
+        grantResolve(ResolveSource.MINE_PRECIOUS_ORE, ResolveSource.MINE_PRECIOUS_ORE.amount);
     }
 
     // requiem system end
@@ -2307,18 +2506,23 @@ public class PowersGoldExperience extends BlockGrabPreset {
     private boolean setRequiem() {
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand) && !stand.isRemoved()) {
-            if (!this.getSelf().level().isClientSide()) {
-                ItemStack stack = ((Player)this.getSelf()).getInventory().getItem(this.grabInventorySlot);
-                if (stack.is(ModItems.STAND_ARROW) || stack.is(ModItems.STAND_BEETLE_ARROW)) {
-                    standArrow = stack.copyWithCount(1);
-                    stack.shrink(1);
-                    saveDiscAndSync();
-                }else {
+            ItemStack stack = ItemStack.EMPTY;
+            if (this.getSelf() instanceof Player player) {
+                stack = player.getInventory().getItem(this.grabInventorySlot);
+                if (!stack.is(ModItems.STAND_ARROW) && !stack.is(ModItems.STAND_BEETLE_ARROW)) {
+                    // wtf did dogael mean by this?
                     return false; // how isn't your main hand a stand arrow?
                 }
             }
             this.setAttackTimeDuring(0);
             this.setActivePower(REQUIEM);
+            if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player player) {
+                standArrow = stack.copyWithCount(1);
+                stack.shrink(1);
+                player.getInventory().setChanged();
+                player.inventoryMenu.broadcastChanges();
+                saveDiscAndSync();
+            }
             //playSoundsIfNearby(IMPALE_NOISE, 27, false);
             this.animateStand(GoldExperienceEntity.REQUIEM);
             this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
@@ -2331,6 +2535,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
         if (attackTimeDuring >= 240) {
             //setPowerNone();
+            ItemStack arrowForGER = standArrow;
+            standArrow = null;
 
             ItemStack discy = ((StandUser)self).roundabout$getStandDisc();
             ItemStack savedDisc = MainUtil.saveToDiscData(self, discy);
@@ -2345,6 +2551,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 GER.idlePos = idlePos;
                 GER.standSkin = standSkin;
                 GER.resolvePoints = resolvePoints;
+                GER.standArrow = arrowForGER;
 
                 GER.setOriginalDisc(savedDisc);
 
@@ -2392,7 +2599,6 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
         }
     }
-
 
     // requiem animation end
 
@@ -2881,6 +3087,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 mob.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(mob.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
             }
 
+            grantResolve(ResolveSource.ANIMAL_CREATION, ResolveSource.ANIMAL_CREATION.amount);
             this.self.level().addFreshEntity(livingEntity);
             playSoundIfPossible(this.self.level(), null, BlockPos.containing(spawnPos),
                     ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
@@ -3083,6 +3290,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                     livingHeal.heal(geConfig().initialHealBurst);
                     livingHeal.addEffect(new MobEffectInstance(ModEffects.RECONSTRUCTION, 400, 0, false, true, true));
                     playSoundIfPossible(this.self.level(), livingHeal, ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    grantResolve(ResolveSource.HEAL_OTHERS, ResolveSource.HEAL_OTHERS.amount);
                 }
             } else {
                 this.self.heal(geConfig().initialHealBurst);
@@ -4012,6 +4220,24 @@ public class PowersGoldExperience extends BlockGrabPreset {
             case GoldExperienceEntity.PS2 -> {
                 return Component.translatable("skins.roundabout.gold_experience.ps2");
             }
+            case GoldExperienceEntity.DEIMOS -> {
+                return Component.translatable("skins.roundabout.gold_experience.deimos");
+            }
+            case GoldExperienceEntity.MANGA -> {
+                return Component.translatable("skins.roundabout.gold_experience.manga");
+            }
+            case GoldExperienceEntity.AGOGO -> {
+                return Component.translatable("skins.roundabout.gold_experience.agogo");
+            }
+            case GoldExperienceEntity.JOJOVELLER -> {
+                return Component.translatable("skins.roundabout.gold_experience.jojoveller");
+            }
+            case GoldExperienceEntity.TITLE_PAGE -> {
+                return Component.translatable("skins.roundabout.gold_experience.title_page");
+            }
+            case GoldExperienceEntity.CATERPILLAR -> {
+                return Component.translatable("skins.roundabout.gold_experience.caterpillar");
+            }
             default -> {
                 return Component.translatable("skins.roundabout.gold_experience.base");
             }
@@ -4022,13 +4248,16 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public List<Byte> getSkinList() {
         List<Byte> l = Lists.newArrayList();
         l.add(GoldExperienceEntity.PART_5);
+        l.add(GoldExperienceEntity.MANGA);
         if (this.getSelf() instanceof Player PE) {
             byte Level = ((IPlayerEntity) PE).roundabout$getStandLevel();
             ItemStack goldDisc = ((StandUser) PE).roundabout$getStandDisc();
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
             if (Level > 1 || bypass) {
+                l.add(GoldExperienceEntity.AGOGO);
             }
             if (Level > 2 || bypass) {
+                l.add(GoldExperienceEntity.JOJOVELLER);
             }
             if (Level > 3 || bypass) {
                 l.add(GoldExperienceEntity.PS2);
@@ -4037,13 +4266,15 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 l.add(GoldExperienceEntity.DIAMOND);
             }
             if (Level > 5 || bypass) {
+                l.add(GoldExperienceEntity.CATERPILLAR);
                 l.add(GoldExperienceEntity.GUARD);
             }
             if (Level > 6 || bypass) {
+                l.add(GoldExperienceEntity.TITLE_PAGE);
                 l.add(GoldExperienceEntity.BETA);
             }
             if (((IPlayerEntity) PE).roundabout$getUnlockedBonusSkin() || bypass) {
-                // deimos GE goes here
+                l.add(GoldExperienceEntity.DEIMOS);
             }
         }
 

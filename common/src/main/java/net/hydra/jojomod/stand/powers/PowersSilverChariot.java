@@ -61,6 +61,7 @@ import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -320,6 +321,22 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     public static float getSwordProjectileSpeedModifier() {
         return ClientNetworking.getAppropriateConfig().silverChariotSettings.silverChariotRapierShotSpeedModifier;
+    }
+
+
+
+    // Synching
+    public static final byte
+            RAPIER_NOT_ACTIVE = 0,
+            RAPIER_ACTIVE = 1;
+
+    private byte rapierStatus = RAPIER_ACTIVE;
+
+    public void syncRapierStatus(byte status) {
+        this.updatePowerInt(SILVER_CHARIOT_HAS_RAPIER, status);
+        if (self instanceof Player) {
+            S2CPacketUtil.sendIntPowerDataPacket((Player) self, SILVER_CHARIOT_HAS_RAPIER, status);
+        }
     }
 
     @Override
@@ -2351,12 +2368,25 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public void updatePowerInt(byte activePower, int data) {
+        StandEntity stand = getStandEntity(self);
         switch (activePower) {
             case SILVER_CHARIOT_CONTROL_MODE -> {
                 if (data == 0) {
                     setPiloting(0);
-                    return;
+                    // return;
                 }
+            }
+            case SILVER_CHARIOT_HAS_RAPIER -> {
+                setHasRapier(data != 0);
+                if (stand instanceof SilverChariotEntity SCE) {
+                    SCE.setHasRapier(data != 0);
+                }
+            }
+            case SILVER_CHARIOT_ARMOURED -> {
+
+            }
+            case SILVER_CHARIOT_REGAINING_ARMOUR_FROM_DESUMMON -> {
+
             }
         }
         /*
@@ -2670,7 +2700,18 @@ public class PowersSilverChariot extends NewPunchingStand {
     @Override
     public void tickPower() {
         StandEntity stand = this.getStandEntity(self);
-        if (!isClient()) {
+        Level level = this.self.level();
+        boolean isClient = level.isClientSide();
+
+        if (!isClient) {
+            if (!onCooldown(SKILL_SILVER_CHARIOT_SWORD_SHOOT_INDEX) && !hasRapier) {
+                hasRapier = true;
+                if (stand instanceof SilverChariotEntity SCE) {
+                    SCE.setHasRapier(true);
+                }
+                syncRapierStatus(RAPIER_ACTIVE);
+            }
+
             if (PowerTypes.hasHandsActive(self)) {
                 StandUser userSelf = getStandUserSelf();
                 byte animationType = userSelf.roundabout$getStandAnimation();
@@ -5173,6 +5214,8 @@ public class PowersSilverChariot extends NewPunchingStand {
                 playSoundIfPossible(self.level(),null, origin.blockPosition(), ModSounds.SILVER_CHARIOT_RAPIER_SHOT_EVENT,
                         SoundSource.PLAYERS, 1.0F, 1.0F);
             }
+            this.hasRapier = false;
+            syncRapierStatus(RAPIER_NOT_ACTIVE);
         }
     }
 
@@ -5262,6 +5305,8 @@ public class PowersSilverChariot extends NewPunchingStand {
                 playSoundIfPossible(self.level(),null, origin.blockPosition(), ModSounds.SILVER_CHARIOT_RAPIER_SHOT_EVENT,
                         SoundSource.PLAYERS, 1.0F, 1.0F);
             }
+            this.hasRapier = false;
+            syncRapierStatus(RAPIER_NOT_ACTIVE);
         }
     }
 

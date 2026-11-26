@@ -161,6 +161,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.GOLD_EXPERIENCE.get(), GoldExperienceRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GOLD_EXPERIENCE_REQUIEM.get(), GoldExperienceRequiemRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GOLD_EXPERIENCE_BETA.get(), GoldExperienceBetaRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.GOLD_EXPERIENCE_REQUIEM_DEIMOS.get(), GoldExperienceRequiemDeimosRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GE_BRAMBLE.get(), GEBrambleRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GE_THORN.get(), GEThornRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GE_BAT.get(), GEBatRenderer::new);
@@ -401,6 +402,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.GOLD_EXPERIENCE_LAYER, GoldExperienceModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.GOLD_EXPERIENCE_BETA_LAYER, GoldExperienceBetaModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.GOLD_EXPERIENCE_REQUIEM_LAYER, GoldExperienceRequiemModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.GOLD_EXPERIENCE_REQUIEM_DEIMOS_LAYER, GoldExperienceRequiemDeimosModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.GE_BRAMBLE_LAYER, GEBrambleModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.GE_THORN_LAYER, GEThornModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.SILVER_CHARIOT_LAYER, SilverChariotModel::getTexturedModelData);

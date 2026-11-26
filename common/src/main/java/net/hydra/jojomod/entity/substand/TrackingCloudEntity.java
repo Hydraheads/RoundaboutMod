@@ -44,9 +44,8 @@ public class TrackingCloudEntity extends StandEntity {
                     this.discard();
                     return;
                 }
-        redirectVector();
         List<Entity> list = this.level().getEntities(this, this.getBoundingBox().inflate(0.5f), entity ->
-                entity.getType().equals(PKN.getMemorizedEntityType())
+                PKN.isInEntityGroup(entity.getType())
                         || entity.getUUID().equals(PKN.getMemorizedPlayer())
                         || (entity instanceof CloneEntity CE && (entity instanceof KingCrimsonCloneEntity
                         || entity instanceof LifePunchCloneEntity) && CE.getPlayerUUID().isPresent()
@@ -56,6 +55,7 @@ public class TrackingCloudEntity extends StandEntity {
         }
         else {
             PKN.clearTrackedEntity();
+            redirectVector();
         }
         if (!hasTarget) {
             this.discard();
@@ -93,7 +93,7 @@ public class TrackingCloudEntity extends StandEntity {
                     Entity closest = null;
                     float closestDist = Float.MAX_VALUE;
                     List<Entity> list = this.level().getEntities(this, this.getBoundingBox().inflate(64f),
-                            entity -> entity.getType().equals(PKN.getMemorizedEntityType()));
+                            entity -> PKN.isInEntityGroup(entity.getType()));
                     for (Entity ent : list) {
                         if (ent == null || ((LivingEntity) ent).isDeadOrDying() || PowerTypes.isInADifferentExistence(
                                 this, ent)) continue;

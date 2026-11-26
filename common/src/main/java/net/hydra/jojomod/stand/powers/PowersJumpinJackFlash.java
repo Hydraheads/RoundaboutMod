@@ -63,9 +63,6 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
     public static final byte POWER_FIRE_ITEM = PowerIndex.POWER_4_EXTRA;
 
     public static final byte POWER_FIRE_BURST_3 = 74;
-    public static final byte POWER_FIRE_BURST_4 = 75;
-    public static final byte POWER_FIRE_BURST_5 = 76;
-    public static final byte POWER_FIRE_BURST_6 = 77;
     public static final byte POWER_FIRE_CONE = 78;
     public static final byte POWER_SHOOT_WINDUP_ANIMATION = 81;
     public static final byte POWER_SHOOT_LOOP_ANIMATION = 82;
@@ -85,18 +82,14 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
     private static final int MAX_LOADED_AMMO = 64;
 
 
-    private static final int BURST_READY_TICKS = 8;
-    private static final int BURST_4_TICKS = 20;
-    private static final int BURST_5_TICKS = 32;
-    private static final int BURST_6_TICKS = 44;
-    private static final int CONE_READY_TICKS = 50;
+    private static final int FULL_CHARGE_TICKS = 50;
+    private static final int VOLLEY_READY_TICKS = FULL_CHARGE_TICKS / 2;
+    private static final int VOLLEY_SIZE = 3;
 
     private static final int SINGLE_SHOT_COOLDOWN_TICKS = 5;
-    private static final int MULTI_SHOT_COOLDOWN_TICKS = 2;
     private static final int SHOTGUN_COOLDOWN_TICKS = 50;
 
     private static final float PROJECTILE_SPEED = 3.0F;
-    private static final float BURST_SPREAD = 0.35F;
     private static final float CONE_SPREAD = 5.0F;
 
     private static final double LAUNCHER_RECOIL_MAX_HORIZONTAL = 1.2D;
@@ -142,7 +135,10 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
     private boolean jjf$shotgunThisClick = false;
     private boolean jjf$navigationSwingThisClick = false;
 
-    private boolean jjf$fireRightSide = true;
+    private int launcherChargeStartTick;
+    private int volleyShotsRemaining;
+    private long nextVolleyShot;
+    private ItemStack volleyAmmo = ItemStack.EMPTY;
 
     @Override
     public boolean hasHandsOut() {
@@ -459,6 +455,9 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
     public void tickPower() {
         super.tickPower();
         jjf$tickMobAI();
+        if (volleyShotsRemaining > 0 && !getSelf().level().isClientSide() && getSelf() instanceof Player player) {
+            tickLauncherVolley(player);
+        }
         JumpinJackFlashEntity loadingStand = activeStand();
         if (loadingStand != null && loadingStand.isLoadingSpit()) {
             Vec3 motion = getSelf().getDeltaMovement();
@@ -780,14 +779,13 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
         }
         if (!jjf$useWasDown) {
             jjf$useWasDown = true;
+            launcherChargeStartTick = player.tickCount;
             jjf$useHoldTicks = 0;
             jjf$autoShooting = false;
             return;
         }
-        if (jjf$useHoldTicks < CONE_READY_TICKS) {
-            jjf$useHoldTicks++;
-        }
-        if (jjf$useHoldTicks >= CONE_READY_TICKS) {
+        jjf$useHoldTicks = Mth.clamp(player.tickCount - launcherChargeStartTick, 0, FULL_CHARGE_TICKS);
+        if (jjf$useHoldTicks >= FULL_CHARGE_TICKS) {
             jjf$autoShooting = true;
             if (player.tickCount >= jjf$nextShotClientTick
                     && player instanceof JJFLauncherAccess access
@@ -815,19 +813,8 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
         if (!jjf$useWasDown) {
             return false;
         }
-        int charge = jjf$useHoldTicks;
-        if (!jjf$autoShooting) {
-            if (charge >= BURST_6_TICKS) {
-                tryPowerPacket(POWER_FIRE_BURST_6);
-            } else if (charge >= BURST_5_TICKS) {
-                tryPowerPacket(POWER_FIRE_BURST_5);
-            } else if (charge >= BURST_4_TICKS) {
-                tryPowerPacket(POWER_FIRE_BURST_4);
-            } else if (charge >= BURST_READY_TICKS) {
-                tryPowerPacket(POWER_FIRE_BURST_3);
-            } else {
-                tryPowerPacket(POWER_FIRE_ITEM);
-            }
+        if (!jjf$autoShooting && jjf$useHoldTicks >= VOLLEY_READY_TICKS) {
+            tryPowerPacket(POWER_FIRE_BURST_3);
         }
         jjf$useWasDown = false;
         jjf$useHoldTicks = 0;
@@ -966,51 +953,14 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
         }
 
         if (move == POWER_FIRE_BURST_3) {
-            if (!this.getSelf()
-                    .level()
-                    .isClientSide()
-                    && this.getSelf()
-                    instanceof Player player) {
-                fireBurst(player, 3);
+            if (!getSelf().level().isClientSide() && getSelf() instanceof Player player
+                    && player instanceof JJFLauncherAccess access && volleyShotsRemaining == 0) {
+                ItemStack loaded = access.jjf$getLauncherState().getLoadedItem();
+                volleyShotsRemaining = Math.min(VOLLEY_SIZE, loaded.getCount());
+                volleyAmmo = loaded;
+                nextVolleyShot = player.level().getGameTime();
+                tickLauncherVolley(player);
             }
-
-            return true;
-        }
-
-        if (move == POWER_FIRE_BURST_4) {
-            if (!this.getSelf()
-                    .level()
-                    .isClientSide()
-                    && this.getSelf()
-                    instanceof Player player) {
-                fireBurst(player, 4);
-            }
-
-            return true;
-        }
-
-        if (move == POWER_FIRE_BURST_5) {
-            if (!this.getSelf()
-                    .level()
-                    .isClientSide()
-                    && this.getSelf()
-                    instanceof Player player) {
-                fireBurst(player, 5);
-            }
-
-            return true;
-        }
-
-
-        if (move == POWER_FIRE_BURST_6) {
-            if (!this.getSelf()
-                    .level()
-                    .isClientSide()
-                    && this.getSelf()
-                    instanceof Player player) {
-                fireBurst(player, 6);
-            }
-
             return true;
         }
 
@@ -1406,19 +1356,19 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
                 .setChanged();
     }
 
-    private void fireSingleShot(
+    private boolean fireSingleShot(
             Player player
     ) {
         if (!(player
                 instanceof JJFLauncherAccess access)) {
-            return;
+            return false;
         }
 
         JJFLauncherState launcher =
                 access.jjf$getLauncherState();
 
         if (!launcher.hasLoadedItem()) {
-            return;
+            return false;
         }
 
         long gameTime =
@@ -1429,7 +1379,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
                 gameTime,
                 SINGLE_SHOT_COOLDOWN_TICKS
         )) {
-            return;
+            return false;
         }
 
         ItemStack loaded =
@@ -1440,7 +1390,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
                 loaded,
                 0.0F
         )) {
-            return;
+            return false;
         }
 
         float soundPitch =
@@ -1479,6 +1429,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
                 soundVolume,
                 soundPitch
         );
+        return true;
     }
 
     private int getAmmoCapacity(ItemStack stack) {
@@ -1573,98 +1524,20 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
         return PROJECTILE_SPEED;
     }
 
-    private void fireBurst(
-            Player player,
-            int requestedShots
-    ) {
-        if (!(player
-                instanceof JJFLauncherAccess access)) {
-            return;
+    private void tickLauncherVolley(Player player) {
+        long now = player.level().getGameTime();
+        if (now < nextVolleyShot) return;
+        if (volleyShotsRemaining > 0 && player.isAlive()
+                && net.hydra.jojomod.event.index.PowerTypes.hasStandActive(player)
+                && player instanceof JJFLauncherAccess access
+                && ItemStack.isSameItemSameTags(volleyAmmo, access.jjf$getLauncherState().getLoadedItem())
+                && fireSingleShot(player)) {
+            volleyShotsRemaining--;
+            nextVolleyShot = now + SINGLE_SHOT_COOLDOWN_TICKS;
+        } else {
+            volleyShotsRemaining = 0;
         }
-
-        JJFLauncherState launcher =
-                access.jjf$getLauncherState();
-
-        if (!launcher.hasLoadedItem()) {
-            return;
-        }
-
-        long gameTime =
-                player.level()
-                        .getGameTime();
-
-        if (!launcher.canFire(
-                gameTime,
-                MULTI_SHOT_COOLDOWN_TICKS
-        )) {
-            return;
-        }
-
-        ItemStack loaded =
-                launcher.getLoadedItem();
-
-        int shots =
-                Math.min(
-                        requestedShots,
-                        loaded.getCount()
-                );
-
-        if (shots <= 0) {
-            return;
-        }
-
-        int actuallyFired = 0;
-
-        for (int i = 0; i < shots; i++) {
-            if (spawnLauncherProjectile(
-                    player,
-                    loaded,
-                    BURST_SPREAD
-            )) {
-                actuallyFired++;
-            }
-        }
-
-        if (actuallyFired <= 0) {
-            return;
-        }
-
-        float soundPitch =
-                getLauncherSoundPitch(
-                        loaded
-                );
-
-        float soundVolume =
-                getLauncherSoundVolume(
-                        loaded
-                );
-
-        applyLauncherRecoil(
-                player,
-                loaded,
-                actuallyFired,
-                false
-        );
-
-        consumeLoadedAmmo(
-                player,
-                launcher,
-                loaded,
-                actuallyFired
-        );
-
-        launcher.markFired(
-                gameTime
-        );
-
-        player.level().playSound(
-                null,
-                player.blockPosition(),
-                ModSounds.LAUNCHER_BURST_EVENT,
-                SoundSource.PLAYERS,
-                soundVolume,
-                soundPitch
-        );
+        if (volleyShotsRemaining == 0) volleyAmmo = ItemStack.EMPTY;
     }
 
     private void fireCone(
@@ -2043,11 +1916,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
 
         firedItem.setCount(1);
 
-        Vec3 spawnPos =
-                getLauncherSpawnPosition(
-                        player,
-                        jjf$fireRightSide
-                );
+        Vec3 spawnPos = player.getEyePosition();
 
         float spread =
                 baseSpread
@@ -2094,18 +1963,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
                 spread
         );
 
-        boolean spawned =
-                player.level()
-                        .addFreshEntity(
-                                projectile
-                        );
-
-        if (spawned) {
-            jjf$fireRightSide =
-                    !jjf$fireRightSide;
-        }
-
-        return spawned;
+        return player.level().addFreshEntity(projectile);
     }
 
     private Projectile createNativeLauncherProjectile(
@@ -2220,79 +2078,6 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
         }
 
         return null;
-    }
-
-    private Vec3 getLauncherSpawnPosition(
-            Player player,
-            boolean rightSide
-    ) {
-        Vec3 forward =
-                player.getLookAngle();
-
-        Vec3 horizontalForward =
-                new Vec3(
-                        forward.x,
-                        0.0D,
-                        forward.z
-                );
-
-        if (horizontalForward.lengthSqr()
-                > 0.0001D) {
-            horizontalForward =
-                    horizontalForward.normalize();
-        }
-
-        Vec3 right =
-                new Vec3(
-                        -horizontalForward.z,
-                        0.0D,
-                        horizontalForward.x
-                );
-
-        Vec3 base =
-                new Vec3(
-                        player.getX(),
-                        player.getEyeY() - 0.15D,
-                        player.getZ()
-                );
-
-        StandEntity stand =
-                ((StandUser) player)
-                        .roundabout$getStand();
-
-        if (stand != null
-                && !stand.isRemoved()) {
-            base =
-                    new Vec3(
-                            stand.getX(),
-                            stand.getY()
-                                    + stand.getBbHeight()
-                                    * 0.62D,
-                            stand.getZ()
-                    );
-        }
-
-        double sideOffset =
-                rightSide
-                        ? 0.30D
-                        : -0.30D;
-
-        return base
-                .add(
-                        right.scale(
-                                sideOffset
-                        )
-                )
-                .add(
-                        horizontalForward.scale(
-                                0.20D
-                        )
-                )
-                .add(
-                        0.0D,
-                        0.06D,
-                        0.0D
-                );
     }
 
     private void consumeLoadedAmmo(
@@ -3131,197 +2916,24 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
             float otherFlashAlpha
     ) {
         jjf$renderAmmoCounter(context, playerEntity, scaledWidth, scaledHeight);
-        if (jjf$spinAttackHeld) {
-            int cx = scaledWidth / 2 - 8;
-            int cy = scaledHeight / 2 - 11;
-            int length = Mth.clamp(Math.round(15.0F * getSpinChargeTicks()
-                    / SPIN_ATTACK_FULL_TICKS), 0, 15);
-            context.blit(StandIcons.JOJO_ICONS, cx, cy, 193, 6, 15, 6);
-            if (length > 0) {
-                context.blit(StandIcons.JOJO_ICONS, cx, cy, 193, 30, length, 6);
+        if (jjf$spinAttackHeld || jjf$useWasDown) {
+            boolean launcher = !jjf$spinAttackHeld;
+            int charge = launcher ? jjf$useHoldTicks : getSpinChargeTicks();
+            int full = launcher ? FULL_CHARGE_TICKS : SPIN_ATTACK_FULL_TICKS;
+            int x = scaledWidth / 2 - 8;
+            int y = scaledHeight / 2 - 11;
+            int width = Mth.clamp(Math.round(15.0F * charge / full), 0, 15);
+            context.blit(StandIcons.JOJO_ICONS, x, y, 193, 6, 15, 6);
+            if (width > 0) {
+                context.blit(StandIcons.JOJO_ICONS, x, y, 193, 30, width, 6);
+            }
+            if (launcher) {
+                context.fill(x + 7, y, x + 8, y + 2, 0xFFFFFFFF);
             }
             return;
         }
-        if (!jjf$useWasDown) {
-            super.renderAttackHud(
-                    context,
-                    playerEntity,
-                    scaledWidth,
-                    scaledHeight,
-                    ticks,
-                    vehicleHeartCount,
-                    flashAlpha,
-                    otherFlashAlpha
-            );
-
-            return;
-        }
-
-        int barWidth = 96;
-        int barHeight = 7;
-
-        int x =
-                scaledWidth / 2
-                        - barWidth / 2;
-
-        int y =
-                scaledHeight - 65;
-
-        int ammoCount =
-                playerEntity
-                        instanceof JJFLauncherAccess access
-                        ? access.jjf$getLoadedAmmoCount()
-                        : 0;
-
-        boolean noAmmo =
-                ammoCount <= 0;
-
-        int charge =
-                Mth.clamp(
-                        jjf$useHoldTicks,
-                        0,
-                        CONE_READY_TICKS
-                );
-
-        float progress = (float) charge / (float) CONE_READY_TICKS;
-
-        int fillWidth =
-                Mth.clamp(
-                        (int) (
-                                barWidth
-                                        * progress
-                        ),
-                        0,
-                        barWidth
-                );
-
-        context.fill(
-                x - 1,
-                y - 1,
-                x + barWidth + 1,
-                y + barHeight + 1,
-                0xFF000000
-        );
-
-        context.fill(
-                x,
-                y,
-                x + barWidth,
-                y + barHeight,
-                0xFF404040
-        );
-
-        if (fillWidth > 0) {
-            int chargeColor = charge >= CONE_READY_TICKS ? 0xFFFFD46B
-                    : charge >= BURST_6_TICKS ? 0xFF63E6BA
-                    : charge >= BURST_4_TICKS ? 0xFF56C8F4
-                    : charge >= BURST_READY_TICKS ? 0xFF509FFF
-                    : 0xFF4569DE;
-            context.fill(x, y, x + fillWidth, y + barHeight, chargeColor);
-            context.fill(x, y, x + fillWidth, y + 1, 0xFFBDEFFF);
-            context.fill(x + fillWidth - 1, y, x + fillWidth, y + barHeight, 0xFFFFFFFF);
-        }
-
-        drawChargeMarker(
-                context,
-                x,
-                y,
-                barWidth,
-                barHeight,
-                BURST_READY_TICKS
-        );
-
-        drawChargeMarker(
-                context,
-                x,
-                y,
-                barWidth,
-                barHeight,
-                BURST_4_TICKS
-        );
-
-        drawChargeMarker(
-                context,
-                x,
-                y,
-                barWidth,
-                barHeight,
-                BURST_5_TICKS
-        );
-
-        drawChargeMarker(
-                context,
-                x,
-                y,
-                barWidth,
-                barHeight,
-                BURST_6_TICKS
-        );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        super.renderAttackHud(context, playerEntity, scaledWidth, scaledHeight, ticks,
+                vehicleHeartCount, flashAlpha, otherFlashAlpha);
     }
 
     private void jjf$renderAmmoCounter(GuiGraphics context, Player player, int width, int height) {
@@ -3343,37 +2955,6 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
         context.drawString(Minecraft.getInstance().font, "AMMO " + ammoCount,
                 x, y, ammoCount > 0 ? 0xFFEFC4 : 0xB9B9B9, true);
     }
-
-    private void drawChargeMarker(
-            GuiGraphics context,
-            int x,
-            int y,
-            int barWidth,
-            int barHeight,
-            int chargeTick
-    ) {
-        int markerX =
-                x + Mth.clamp(
-                        Math.round(
-                                barWidth
-                                        * (
-                                        chargeTick
-                                                / (float) CONE_READY_TICKS
-                                )
-                        ),
-                        0,
-                        barWidth
-                );
-
-        context.fill(
-                markerX,
-                y - 1,
-                markerX + 1,
-                y + barHeight + 1,
-                0xFF808080
-        );
-    }
-
 
     @Override
     public boolean isWip() {
