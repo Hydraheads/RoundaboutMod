@@ -261,7 +261,6 @@ public abstract class ConfigManager {
             MainUtil.KING_NOTHING_BLOCK_SNIFF_OVERRIDES.clear();
             for (String entry : getAdvancedConfig().kingNothingBlockSniffOverrides) {
                 try {
-                    if (entry.equals("mod_id:add_mob_A_here:mod_id:add_mob_B_here")) continue;
                     String[] split = entry.split(":");
 
                     if (split.length != 4) {
@@ -293,6 +292,7 @@ public abstract class ConfigManager {
             MainUtil.KING_NOTHING_ENTITY_SNIFF_OVERRIDES.clear();
             for (String entry : getAdvancedConfig().kingNothingEntitySniffOverrides) {
                 try {
+                    if (entry.equals("mod_id:add_mob_A_here:mod_id:add_mob_B_here")) continue;
                     String[] split = entry.split(":");
 
                     if (split.length != 4) {
