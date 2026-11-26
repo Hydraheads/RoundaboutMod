@@ -117,13 +117,24 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
-        if (this.self instanceof ServerPlayer sp && sp.hasDisconnected()
-                && standArrow != null && !standArrow.isEmpty()
-                && !(this instanceof PowersGER)) {
-            giveStandArrowBack();
+        tag.putFloat("resolvePoints", resolvePoints);
+
+        CompoundTag trackersTag = new CompoundTag();
+        for (Map.Entry<ResolveSource, SourceProgress> entry : resolveProgress.entrySet()) {
+            SourceProgress progress = entry.getValue();
+            if (progress.timer > 0) {
+                CompoundTag entryTag = new CompoundTag();
+                entryTag.putInt("Timer", progress.timer);
+                entryTag.putFloat("Gained", progress.gained);
+                trackersTag.put(entry.getKey().name(), entryTag);
+            }
+        }
+        if (!trackersTag.isEmpty()) {
+            tag.put("ResolveTrackers", trackersTag);
+        } else {
+            tag.remove("ResolveTrackers");
         }
 
-        tag.putFloat("resolvePoints", resolvePoints);
         if (standArrow != null && !standArrow.isEmpty()) {
             CompoundTag tag2 = new CompoundTag();
             tag.put("StandArrow", standArrow.save(tag2));
@@ -133,15 +144,30 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
         super.addAdditionalSaveData(tag);
     }
-    protected boolean giveArrowOnLoad() {
-        return activePower != REQUIEM; // prevent from the requiem transformation giving this arrow back before it is time
-    }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         if (tag.contains("resolvePoints")) {
             resolvePoints = tag.getFloat("resolvePoints");
         }
+
+        resolveProgress.clear();
+        if (tag.contains("ResolveTrackers", Tag.TAG_COMPOUND)) {
+            CompoundTag trackersTag = tag.getCompound("ResolveTrackers");
+            for (String key : trackersTag.getAllKeys()) {
+                try {
+                    ResolveSource source = ResolveSource.valueOf(key);
+                    CompoundTag entryTag = trackersTag.getCompound(key);
+                    int timer = entryTag.getInt("Timer");
+                    float gained = entryTag.getFloat("Gained");
+                    if (timer > 0) {
+                        resolveProgress.put(source, new SourceProgress(timer, gained));
+                    }
+                } catch (IllegalArgumentException ignored) {
+                }
+            }
+        }
+
         if (tag.contains("StandArrow")) {
             CompoundTag compoundtag = tag.getCompound("StandArrow");
             standArrow = ItemStack.of(compoundtag);
@@ -150,6 +176,15 @@ public class PowersGoldExperience extends BlockGrabPreset {
         }
 
         super.readAdditionalSaveData(tag);
+    }
+
+    protected void copyResolveStateTo(PowersGoldExperience target) {
+        target.resolvePoints = this.resolvePoints;
+        target.resolveProgress.clear();
+        for (Map.Entry<ResolveSource, SourceProgress> entry : this.resolveProgress.entrySet()) {
+            SourceProgress p = entry.getValue();
+            target.resolveProgress.put(entry.getKey(), new SourceProgress(p.timer, p.gained));
+        }
     }
 
     protected void giveStandArrowBack() {
@@ -584,6 +619,14 @@ public class PowersGoldExperience extends BlockGrabPreset {
             resolveRenderTicks--;
         }
         if (!this.self.level().isClientSide()) {
+            Iterator<SourceProgress> resolveIt = resolveProgress.values().iterator();
+            while (resolveIt.hasNext()) {
+                SourceProgress progress = resolveIt.next();
+                progress.timer--;
+                if (progress.timer <= 0) {
+                    resolveIt.remove();
+                }
+            }
             // 1 second knife animal fire delay
             if (!this.pendingKnives.isEmpty()) {
                 Level level = this.getSelf().level();
@@ -2209,6 +2252,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     }
 
     protected float resolvePoints = 0F;
+    protected final Map<ResolveSource, SourceProgress> resolveProgress = new EnumMap<>(ResolveSource.class);
 
     public float getResolvePoints() { return resolvePoints; }
     public float getNeededResolvePoints() { return 300.0F; }
@@ -2276,45 +2320,72 @@ public class PowersGoldExperience extends BlockGrabPreset {
         return false;
     }
 
-    private float getResolvePointsObtainingCap() { return 30.0F; }
-
-    public boolean onKilledEntity(ServerLevel $$0, LivingEntity victim){
-        if (!(canUseRequiem())) {
-            return super.onKilledEntity($$0, victim);
+    @Override
+    public boolean onKilledEntity(ServerLevel $$0, LivingEntity victim) {
+        if (canUseRequiem() && victim instanceof Mob) {
+            boolean isStandUserMob = !((StandUser) victim).roundabout$getStandDisc().isEmpty()
+                    && (victim instanceof Monster || victim instanceof NeutralMob);
+            grantResolve(ResolveSource.MOB_KILL, ResolveSource.MOB_KILL.amount);
         }
-
-        if (resolvePoints < getNeededResolvePoints()) {
-            if (victim instanceof Mob) {
-                float amount = victim.getMaxHealth();
-
-                if (!((StandUser)victim).roundabout$getStandDisc().isEmpty() && (victim instanceof Monster ||
-                        victim instanceof NeutralMob)){
-
-                    amount = amount * 1.25f;
-                }
-
-                addResolvePoints(amount);
-            }
-        }
-
-        return super.onKilledEntity($$0,victim); // DO NOT RETURN 'true' OR ELSE IT WILL STOP ENTITIES FROM DYIENG
+        return super.onKilledEntity($$0, victim);
     }
 
     public void onPlayerHurt(Player PL, DamageSource src, float damage) {
-        if (!(canUseRequiem())) {
-            return;
+        if (damage > 0.0F) {
+            grantResolve(ResolveSource.DEAL_PLAYER_DAMAGE, damage * ResolveSource.DEAL_PLAYER_DAMAGE.amount);
         }
-        addResolvePoints(damage*1.75f);
     }
 
-    private void addResolvePoints(float amount) {
-        resolvePoints += Math.min(amount, getResolvePointsObtainingCap());
-        if (resolvePoints > getNeededResolvePoints()) {
-            resolvePoints = getNeededResolvePoints();
+    protected void grantResolve(ResolveSource source, float amount) {
+        if (this.self.level().isClientSide() || !canUseRequiem() || resolvePoints >= getNeededResolvePoints()) {
+            return;
         }
-        saveDiscAndSync();
-        if (!isClient() && self instanceof Player PL) {
-            S2CPacketUtil.sendIntPowerDataPacket(PL, PowerIndex.SPECIAL_CHARGED, 0);
+
+        SourceProgress progress = resolveProgress.computeIfAbsent(
+                source, s -> new SourceProgress(geConfig().resolveInterval, 0F)
+        );
+        if (progress.timer <= 0) {
+            progress.timer = geConfig().resolveInterval;
+            progress.gained = 0F;
+        }
+
+        float remainingCap = geConfig().resolveTypeCapPerDay - progress.gained;
+        if (remainingCap <= 0F) {
+            return;
+        }
+
+        float granted = Math.min(amount, remainingCap);
+        progress.gained += granted;
+
+        float before = resolvePoints;
+        resolvePoints = Math.min(getNeededResolvePoints(), resolvePoints + granted);
+        if (resolvePoints > before) {
+            saveDiscAndSync();
+            if (self instanceof Player PL) {
+                S2CPacketUtil.sendIntPowerDataPacket(PL, PowerIndex.SPECIAL_CHARGED, 0);
+            }
+        }
+    }
+
+    public enum ResolveSource {
+        MOB_KILL(5.0F),
+        DEAL_PLAYER_DAMAGE(1.0F);
+        // rest of stuff go here
+
+        public final float amount;
+
+        ResolveSource(float amount) {
+            this.amount = amount;
+        }
+    }
+
+    private static final class SourceProgress {
+        int timer;
+        float gained;
+
+        SourceProgress(int timer, float gained) {
+            this.timer = timer;
+            this.gained = gained;
         }
     }
 

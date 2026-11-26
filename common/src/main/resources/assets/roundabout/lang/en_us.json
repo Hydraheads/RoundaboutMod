@@ -2950,7 +2950,7 @@
   "ability.roundabout.gold_experience_double_punch": "Double Punch",
   "ability.roundabout.gold_experience_double_punch.desc": "Throw out a 1-2 punch. This does as much damage as the last hit in a punch string, but deals more knockback.",
   "ability.roundabout.gold_experience_requiem": "Gold Experience Requiem",
-  "ability.roundabout.gold_experience_requiem.desc": "Fill up your resolve bar by killing enemies in order to evolve your stand to a temporary higher form. It's abilities are unknown even to you, the user.",
+  "ability.roundabout.gold_experience_requiem.desc": "Fill up your resolve bar by performing various tasks in order to evolve your stand to a temporary higher form. It's abilities are unknown even to you, the user.",
 
   "ability.roundabout.emperor_shoot": "Shoot",
   "ability.roundabout.emperor_shoot.desc": "Shoot a bullet from the emperor.",
@@ -4926,6 +4926,10 @@
   "config.roundabout.lifeSenseImbueRange.desc": "How far can you detect someone that's holding an imbued item with life sense. The default is 150.",
   "config.roundabout.brambleAmount.name": "Bramble Amount",
   "config.roundabout.brambleAmount.desc": "How many brambles do you grow with Bramble Creation. The default is 8.",
+  "config.roundabout.resolveTypeCapPerDay.name": "Resolve Cap Per Type",
+  "config.roundabout.resolveTypeCapPerDay.desc": "Increase to let you get more resolve type daily. it is kept low to prevent the need for massive farms and to make it ahrder to obtain for every fight.",
+  "config.roundabout.resolveInterval.name": "Resolve Refresh Intervals",
+  "config.roundabout.resolveInterval.desc": "Change how many ticks between resolve refresh.",
 
   "config.roundabout.disablePHazeOverlayAnimation.name": "Disable Haze Overlay Animation",
   "config.roundabout.disablePHazeOverlayAnimation.desc": "Disables the idle animation of the haze in first person.",
