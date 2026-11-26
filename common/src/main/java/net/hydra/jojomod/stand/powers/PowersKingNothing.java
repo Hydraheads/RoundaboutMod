@@ -2176,9 +2176,9 @@ public class PowersKingNothing extends NewDashPreset {
     }
 
     public boolean isInEntityGroup(EntityType<?> entityType) {
-        return MainUtil.KING_NOTHING_ENTITY_KEYS.containsKey(entityType)
+        return entityType.equals(memorizedEntityType) ||(MainUtil.KING_NOTHING_ENTITY_KEYS.containsKey(entityType)
                 && MainUtil.KING_NOTHING_ENTITY_GROUPS.get(
-                        MainUtil.KING_NOTHING_ENTITY_KEYS.get(entityType)).contains(memorizedEntityType);
+                        MainUtil.KING_NOTHING_ENTITY_KEYS.get(entityType)).contains(memorizedEntityType));
     }
 
     @Override
